@@ -11,7 +11,7 @@ from test_embedded_dispatch import local_setup, qualified_contract, admit, wait_
 from test_canonical_delivery import connected_local
 
 
-def prepare(setup, binding, monkeypatch):
+def prepare(setup, binding, monkeypatch, *, workspace_id=None):
     monkeypatch.syspath_prepend(str(Path(__file__).parents[1]))
     from test_pr34_remediation import tool
     deps, _, client, headers, *_, root = setup
@@ -19,8 +19,9 @@ def prepare(setup, binding, monkeypatch):
     with deps.connection_factory.unit_of_work() as uow:
         uow.connection.execute("UPDATE agent_endpoints SET consumption='exclusive',response_policy='none' WHERE endpoint_id=?", (binding["endpoint_id"],))
     def call(name, actor="subject", **kwargs):
+        selector = dict(workspace_id=workspace_id) if workspace_id is not None else dict(project_root=str(root))
         return tool(client, headers[actor]["Authorization"].removeprefix("Bearer "), name,
-                    dict(project_root=str(root), **kwargs))
+                    dict(**selector, **kwargs))
     created = call("handoff_create", actor="operator", from_agent_id="operator", visibility="eligible",
                    target=dict(strategy="direct", agent_id="subject"), payload="Perform this governed review.")
     assert created["ok"], created

@@ -281,8 +281,13 @@ add_resource(
     slug="tool-docs/handoff",
     name="Tool docs - handoff",
     description="Full reference for the handoff lifecycle (create/list_available/claim/complete/verify/reject/cancel/get), including the opt-in VERIFYING cycle and DAG dependencies.",
-    version="4",
+    version="5",
     body="""\
+All handoff operations accept exactly one project_root or existing workspace_id.
+Use workspace_id for a logical or remote workspace without a Server-local path.
+Managed sessions must use their bound workspace; the selector does not change
+actor, claim, visibility, approval or execution-grant authorization.
+
 Handoffs are the CANONICAL mechanism for inter-agent task delegation. Every
 request that expects another agent to execute work or produce a deliverable
 must use handoff_create; a direct or broadcast message must never be its sole

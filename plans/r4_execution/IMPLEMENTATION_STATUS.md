@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.03 logical handoff workspace - October 1, 2026
+
+Installed verification: **334 distinct product passes**, plus **3 architecture checks**. Public MCP handoffs and HTTP callers now use existing logical workspaces without Server-local paths, preserving claim, capability and approval authority. See [scope](M12_NS15_03_HANDOFF_WORKSPACE.md) and [manifest](test_runs_20261001_ns15_03_handoff_workspace.json). Combined claim competition, canonical structured results, result/event publication, cross-protocol fallback and native loader removal remain pending; normative acceptance/release gates stay open.
+
 ## NS15.03 canonical managed handoff - October 1, 2026
 
 Installed verification: **111 distinct passes**, plus **3 architecture checks**. Managed claims atomically retain work grants, exclusive delivery and canonical opening/turn admission. Claim/grant authority is revalidated before effects; native terminal does not complete the handoff. Authorized history exposes canonical operation/session references. See [scope](M12_NS15_03_HANDOFF.md) and [manifest](test_runs_20261001_ns15_03_handoff.json). Path-free handoff surfaces, combined claim competition, canonical structured results, result/event publication, cross-protocol fallback and native loader removal remain pending; normative TR4-06-05/TR4-15-03 and release gates remain open.

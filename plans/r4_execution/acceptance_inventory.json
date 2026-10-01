@@ -739,7 +739,9 @@
         "plans/r4_execution/M12_NS15_03_DELIVERY.md",
         "plans/r4_execution/test_runs_20261001_ns15_03_delivery.json",
         "plans/r4_execution/M12_NS15_03_HANDOFF.md",
-        "plans/r4_execution/test_runs_20261001_ns15_03_handoff.json"
+        "plans/r4_execution/test_runs_20261001_ns15_03_handoff.json",
+        "plans/r4_execution/M12_NS15_03_HANDOFF_WORKSPACE.md",
+        "plans/r4_execution/test_runs_20261001_ns15_03_handoff_workspace.json"
       ],
       "notes": "Conversation and managed handoff claims now join R4 admission atomically. Native terminal does not complete a handoff. Full MCP/local/remote claim competition remains unverified; TR4-06-05 remains NOT_RUN."
     },
@@ -1533,7 +1535,7 @@
       "collected_nodeids": [],
       "effective_test_command": null,
       "test_availability": "MISSING",
-      "implementation": "PARTIAL_CANONICAL_MANAGED_HANDOFF_DELIVERY",
+      "implementation": "PARTIAL_CANONICAL_LOGICAL_HANDOFF_WORKSPACE",
       "acceptance": "NOT_RUN",
       "required_scenarios": [
         "TR4-15-03"
@@ -1558,9 +1560,11 @@
         "plans/r4_execution/M12_NS15_03_DELIVERY_SELECTION.md",
         "plans/r4_execution/test_runs_20261001_ns15_03_delivery_selection.json",
         "plans/r4_execution/M12_NS15_03_HANDOFF.md",
-        "plans/r4_execution/test_runs_20261001_ns15_03_handoff.json"
+        "plans/r4_execution/test_runs_20261001_ns15_03_handoff.json",
+        "plans/r4_execution/M12_NS15_03_HANDOFF_WORKSPACE.md",
+        "plans/r4_execution/test_runs_20261001_ns15_03_handoff_workspace.json"
       ],
-      "notes": "Managed handoff claim now atomically joins work grant, exclusive delivery and R4/Core open/turn, with claim/grant revalidation and explicit governed completion. Path-free handoff surface, combined claim competition, canonical structured results, result/event publication, cross-protocol fallback and native loader/codecs removal remain pending; normative TR4-15-03 remains NOT_RUN."
+      "notes": "Logical MCP/HTTP handoff workspaces verified without Server-local paths; approval and session scope preserved. Combined claim competition, structured results, result/event publication, cross-protocol fallback and native loader removal remain pending. TR4-15-03 remains NOT_RUN."
     },
     "NS15.04": {
       "proposed_nodeid": "tests/execution_r4/test_ns15.py::test_ns15_04",

@@ -273,7 +273,8 @@ class HandoffService:
     def handoff_create(
         self,
         *,
-        project_root: Any,
+        project_root: Any = None,
+        workspace_id: Any = None,
         from_agent_id: Any,
         target: Any,
         visibility: Any,
@@ -312,7 +313,8 @@ class HandoffService:
         invalid target/visibility, and ``CONTENT_TOO_LARGE`` for an oversized
         inline payload.
         """
-        workspace_id = self._resolve_workspace(project_root)
+        logical_workspace = workspace_id is not None
+        workspace_id = self._resolve_workspace(project_root, workspace_id)
         if not _is_nonempty_str(from_agent_id):
             raise OktoNexusError(
                 ErrorCode.VALIDATION_ERROR,
@@ -421,6 +423,7 @@ class HandoffService:
         }
 
         with self._create_uow(workspace_id=workspace_id, agent_id=from_agent_id) as uow:
+            self._require_logical_workspace(uow, workspace_id, logical_workspace)
             creator_binding = self._require_actor(uow, from_agent_id) if not _approved_execution else _creator_binding
             if _approved_execution and creator_binding:
                 creator = self._agents.get(uow, from_agent_id) if self._agents else None
@@ -533,6 +536,8 @@ class HandoffService:
                         "payload": payload,
                         "trace_id": resolved_trace,
                     }
+                    if logical_workspace:
+                        approval_kwargs["workspace_id"] = workspace_id
                     if creator_binding:
                         approval_kwargs["_creator_binding"] = creator_binding
                     if criteria_list is not None:
@@ -671,7 +676,8 @@ class HandoffService:
     def handoff_list_available(
         self,
         *,
-        project_root: Any,
+        project_root: Any = None,
+        workspace_id: Any = None,
         agent_id: Any,
         cursor: Any = None,
         limit: Any = None,
@@ -693,7 +699,8 @@ class HandoffService:
           ``direct_with_fallback`` opening (eligibility widens with no write);
           see :meth:`_next_wake_epoch`.
         """
-        workspace_id = self._resolve_workspace(project_root)
+        logical_workspace = workspace_id is not None
+        workspace_id = self._resolve_workspace(project_root, workspace_id)
         if not _is_nonempty_str(agent_id):
             raise OktoNexusError(
                 ErrorCode.VALIDATION_ERROR,
@@ -716,6 +723,7 @@ class HandoffService:
         while True:
             now = self._clock.now_iso()
             with self._cf.unit_of_work() as uow:
+                self._require_logical_workspace(uow, workspace_id, logical_workspace)
                 self._require_actor(uow, agent_id)
                 agent = self._routing_agent(uow, agent_id, workspace_id)
                 available = self._available_handoffs(uow, workspace_id, agent, now)
@@ -857,7 +865,8 @@ class HandoffService:
     def handoff_claim(
         self,
         *,
-        project_root: Any,
+        project_root: Any = None,
+        workspace_id: Any = None,
         handoff_id: Any,
         agent_id: Any,
         session_id: Any = None,
@@ -875,7 +884,8 @@ class HandoffService:
         Zero affected rows map to ``HANDOFF_ALREADY_CLAIMED`` /
         ``WORKSPACE_MISMATCH`` / ``NOT_FOUND`` with no event emitted.
         """
-        workspace_id = self._resolve_workspace(project_root)
+        logical_workspace = workspace_id is not None
+        workspace_id = self._resolve_workspace(project_root, workspace_id)
         self._require_id("handoff_id", handoff_id)
         self._require_id("agent_id", agent_id)
         now = self._clock.now_iso()
@@ -901,6 +911,7 @@ class HandoffService:
         reused = False
 
         with self._cf.unit_of_work() as uow:
+            self._require_logical_workspace(uow, workspace_id, logical_workspace)
             if managed:
                 context = self._request_context_provider() if self._request_context_provider else None
                 authorized = self.runtime_work.authorize(uow, context=context, endpoint_id=runtime_endpoint_id,
@@ -1044,7 +1055,8 @@ class HandoffService:
     def handoff_complete(
         self,
         *,
-        project_root: Any,
+        project_root: Any = None,
+        workspace_id: Any = None,
         handoff_id: Any,
         agent_id: Any,
         result: Any = None,
@@ -1071,7 +1083,8 @@ class HandoffService:
         verifier is dynamic, so observers rely on the event) - completion is
         then decided by ``handoff_verify``.
         """
-        workspace_id = self._resolve_workspace(project_root)
+        logical_workspace = workspace_id is not None
+        workspace_id = self._resolve_workspace(project_root, workspace_id)
         self._require_id("handoff_id", handoff_id)
         self._require_id("agent_id", agent_id)
         self._check_inline_size("result", result)
@@ -1079,6 +1092,7 @@ class HandoffService:
         now = self._clock.now_iso()
 
         with self._cf.unit_of_work() as uow:
+            self._require_logical_workspace(uow, workspace_id, logical_workspace)
             if _runtime_result_id is not None:
                 if not self.runtime_work:
                     raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Runtime work is unavailable.", {})
@@ -1202,7 +1216,8 @@ class HandoffService:
     def handoff_verify(
         self,
         *,
-        project_root: Any,
+        project_root: Any = None,
+        workspace_id: Any = None,
         handoff_id: Any,
         agent_id: Any,
         verdict: Any,
@@ -1231,13 +1246,15 @@ class HandoffService:
         accepted with ``fail`` (``VALIDATION_ERROR`` on ``pass`` - it exists
         to direct rework, not to be accepted-and-discarded).
         """
-        workspace_id = self._resolve_workspace(project_root)
+        logical_workspace = workspace_id is not None
+        workspace_id = self._resolve_workspace(project_root, workspace_id)
         self._require_id("handoff_id", handoff_id)
         self._require_id("agent_id", agent_id)
         verdict_value, feedback_value = validate_verdict(verdict, feedback)
         now = self._clock.now_iso()
 
         with self._cf.unit_of_work() as uow:
+            self._require_logical_workspace(uow, workspace_id, logical_workspace)
             self._require_actor(uow, agent_id)
             permission_set_for(self._agents, uow, agent_id).require("handoffs", "work")
             handoff = self._load_in_workspace(uow, workspace_id, handoff_id)
@@ -1450,7 +1467,8 @@ class HandoffService:
     def handoff_reject(
         self,
         *,
-        project_root: Any,
+        project_root: Any = None,
+        workspace_id: Any = None,
         handoff_id: Any,
         agent_id: Any,
         reason: Any = None,
@@ -1473,7 +1491,8 @@ class HandoffService:
         registered and not the rejecting agent) also gets an inbox
         notification (``notified`` in the response).
         """
-        workspace_id = self._resolve_workspace(project_root)
+        logical_workspace = workspace_id is not None
+        workspace_id = self._resolve_workspace(project_root, workspace_id)
         self._require_id("handoff_id", handoff_id)
         self._require_id("agent_id", agent_id)
         self._check_inline_size("reason", reason)
@@ -1481,6 +1500,7 @@ class HandoffService:
         now = self._clock.now_iso()
 
         with self._cf.unit_of_work() as uow:
+            self._require_logical_workspace(uow, workspace_id, logical_workspace)
             if _runtime_result_id is not None:
                 if not self.runtime_work:
                     raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Runtime work is unavailable.", {})
@@ -1609,7 +1629,8 @@ class HandoffService:
     def handoff_cancel(
         self,
         *,
-        project_root: Any,
+        project_root: Any = None,
+        workspace_id: Any = None,
         handoff_id: Any,
         agent_id: Any,
         reason: Any = None,
@@ -1626,13 +1647,15 @@ class HandoffService:
         Emits ``handoff.cancelled`` in the same transaction; the optional
         ``reason`` rides the event payload.
         """
-        workspace_id = self._resolve_workspace(project_root)
+        logical_workspace = workspace_id is not None
+        workspace_id = self._resolve_workspace(project_root, workspace_id)
         self._require_id("handoff_id", handoff_id)
         self._require_id("agent_id", agent_id)
         self._check_inline_size("reason", reason)
         now = self._clock.now_iso()
 
         with self._cf.unit_of_work() as uow:
+            self._require_logical_workspace(uow, workspace_id, logical_workspace)
             self._require_actor(uow, agent_id)
             permission_set_for(self._agents, uow, agent_id).require(
                 "handoffs", "cancel"
@@ -1714,7 +1737,8 @@ class HandoffService:
     def handoff_get(
         self,
         *,
-        project_root: Any,
+        project_root: Any = None,
+        workspace_id: Any = None,
         handoff_id: Any,
         agent_id: Any,
     ) -> dict[str, Any]:
@@ -1733,12 +1757,14 @@ class HandoffService:
         ``acceptance_criteria``/``verify_by`` (decoded) and
         ``verification_feedback`` - each omitted when NULL.
         """
-        workspace_id = self._resolve_workspace(project_root)
+        logical_workspace = workspace_id is not None
+        workspace_id = self._resolve_workspace(project_root, workspace_id)
         self._require_id("handoff_id", handoff_id)
         self._require_id("agent_id", agent_id)
         now = self._clock.now_iso()
 
         with self._cf.unit_of_work() as uow:
+            self._require_logical_workspace(uow, workspace_id, logical_workspace)
             self._require_actor(uow, agent_id)
             self._expire_old_leases(uow, workspace_id=workspace_id, now_iso=now)
             handoff = self._load_in_workspace(uow, workspace_id, handoff_id)
@@ -2022,7 +2048,22 @@ class HandoffService:
         return (creator_revision + ":" +
                 self._governance.authorization_revision(uow, worker.agent_id)) if self._governance else "unbound"
 
-    def _resolve_workspace(self, project_root: Any) -> str:
+    @staticmethod
+    def _require_logical_workspace(uow, workspace_id, logical):
+        if logical and not uow.connection.execute(
+                'SELECT 1 FROM workspaces WHERE workspace_id=?', (workspace_id,)).fetchone():
+            raise OktoNexusError(ErrorCode.NOT_FOUND, 'Workspace is not registered.', {})
+
+    def _resolve_workspace(self, project_root: Any, workspace_id: Any = None) -> str:
+        if workspace_id is not None:
+            if (project_root is not None or type(workspace_id) is not str
+                    or not 1 <= len(workspace_id) <= 160 or not workspace_id.isprintable()):
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                    'Select exactly one project_root or existing workspace_id.', {})
+            from ..domain.execution_principal import current_execution_principal
+            if current_execution_principal.get() is not None:
+                return resolve_workspace_id(workspace_id)
+            return workspace_id
         if not _is_nonempty_str(project_root):
             raise OktoNexusError(
                 ErrorCode.WORKSPACE_REQUIRED,

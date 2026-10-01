@@ -44,7 +44,7 @@ def check_tool_arguments(name, arguments):
                           ('session_id', 'session_id'), ('workspace_id', 'workspace_id')):
         if arguments.get(field) is not None and arguments[field] != principal.scope[target]:
             raise denied()
-    if 'project_root' in arguments:
+    if arguments.get('project_root') is not None:
         resolve_tool_workspace(arguments['project_root'])
     if arguments.get('session_secret') is not None:
         raise denied('A managed session uses its capability, not a separate session secret.')

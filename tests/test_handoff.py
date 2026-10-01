@@ -264,7 +264,9 @@ def make_service(
 
 
 def make_deps(factory, config, clock, emitter=None):
+    from okto_nexus.application.runtime_admission_fence import RuntimeAdmissionFence
     return SimpleNamespace(
+        runtime_admission_fence=RuntimeAdmissionFence(),
         config=config,
         connection_factory=factory,
         clock=clock,

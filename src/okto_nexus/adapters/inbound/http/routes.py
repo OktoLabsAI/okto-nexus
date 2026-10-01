@@ -3236,12 +3236,9 @@ def build_router() -> APIRouter:
         service = _build_message_service(deps)
 
         def _send():
-            # The dashboard addresses workspaces by id; the use case takes a
-            # path - resolve through the registered root (same derivation:
-            # workspace_id = sha256(realpath)).
             with deps.connection_factory.unit_of_work(write=False) as uow:
                 ws = deps.repos.workspaces.get(uow, body.workspace)
-            if ws is None or not ws.root_realpath:
+            if ws is None:
                 raise OktoNexusError(
                     ErrorCode.NOT_FOUND,
                     f"workspace '{body.workspace}' is not registered.",
@@ -3251,7 +3248,7 @@ def build_router() -> APIRouter:
             # deny/quota and even HITL interception all apply to the
             # operator's own sends - steering has no delivery privilege.
             return service.create_message(
-                project_root=ws.root_realpath,
+                workspace_id=ws.workspace_id,
                 from_agent_id=OPERATOR_AGENT_ID,
                 subject=body.subject or "Operator steering",
                 body=body.body,
@@ -3291,7 +3288,7 @@ def build_router() -> APIRouter:
 
             with deps.connection_factory.unit_of_work(write=False) as uow:
                 ws = deps.repos.workspaces.get(uow, body.workspace)
-            if ws is None or not ws.root_realpath:
+            if ws is None:
                 raise OktoNexusError(
                     ErrorCode.NOT_FOUND,
                     f"workspace '{body.workspace}' is not registered.",
@@ -3317,7 +3314,7 @@ def build_router() -> APIRouter:
             )
             if body.kind == "message":
                 result = _build_message_service(deps).create_message(
-                    project_root=ws.root_realpath,
+                    workspace_id=ws.workspace_id,
                     from_agent_id=OPERATOR_AGENT_ID,
                     subject=body.subject or "Meta-harness message",
                     body=body.body,
@@ -3326,7 +3323,7 @@ def build_router() -> APIRouter:
                 )
             else:
                 result = _build_handoff_service(deps).handoff_create(
-                    project_root=ws.root_realpath,
+                    workspace_id=ws.workspace_id,
                     from_agent_id=OPERATOR_AGENT_ID,
                     target=target,
                     visibility=(
@@ -3419,9 +3416,9 @@ def build_router() -> APIRouter:
         def _claim():
             with deps.connection_factory.unit_of_work(write=False) as uow:
                 ws = deps.repos.workspaces.get(uow, workspace_id)
-            if ws is None or not ws.root_realpath:
+            if ws is None:
                 raise OktoNexusError(ErrorCode.NOT_FOUND, "Workspace is not registered.", {})
-            return service.handoff_claim(project_root=ws.root_realpath, handoff_id=handoff_id, agent_id=represented,
+            return service.handoff_claim(workspace_id=ws.workspace_id, handoff_id=handoff_id, agent_id=represented,
                 session_id=body.session_id, session_secret=body.session_secret,
                 runtime_endpoint_id=body.runtime_endpoint_id, execution_grant_id=body.execution_grant_id,
                 idempotency_key=body.idempotency_key, claim_epoch=body.claim_epoch, completion_mode=body.completion_mode)
@@ -3449,19 +3446,16 @@ def build_router() -> APIRouter:
         service = _build_handoff_service(deps)
 
         def _verify():
-            # The dashboard addresses workspaces by id; the use case takes a
-            # path - resolve through the registered root (same derivation:
-            # workspace_id = sha256(realpath), the steering precedent).
             with deps.connection_factory.unit_of_work(write=False) as uow:
                 ws = deps.repos.workspaces.get(uow, workspace_id)
-            if ws is None or not ws.root_realpath:
+            if ws is None:
                 raise OktoNexusError(
                     ErrorCode.NOT_FOUND,
                     f"workspace '{workspace_id}' is not registered.",
                     {"workspace": workspace_id},
                 )
             return service.handoff_verify(
-                project_root=ws.root_realpath,
+                workspace_id=ws.workspace_id,
                 handoff_id=handoff_id,
                 agent_id=caller,
                 verdict=body.verdict,
