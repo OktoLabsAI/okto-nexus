@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Lease-authorized remote native capture - September 30, 2026
+
+Nexus 301ed04 and Connector f49d48e adopt Core a061960 / 0.2.43.dev0. The public Core factory derives native capture at launch from an applied R4 lease with both decision actions; Connector opts in before installing the lease. Installed tests passed: Core 65, Connector 78, Nexus 101 and 83 overlapping cases without Connector. Four new loopback WebSocket cases exercise canonical approval/input approval and denial through the automatic daemon with a technical native peer. Initial test-contract errors were corrected; an isolated lease-renewal timeout did not recur in the unchanged standalone test or sequential full rerun, but its cause remains undetermined. [Evidence index](test_runs_20260930_native_lease.json). Previous real Pi/Codex/Claude results belong to Core 0.2.42. Next: existing M03/M10 public Connector discovery/configuration/realization onboarding, then real remote provider journeys. No milestone or release gate closes.
+
+
 ## Real local Pi, Codex and Claude on Core 0.2.42 - September 30, 2026
 
 Nexus 75f1af5 and Connector a308cf6 adopt Core c7aa63d / 0.2.42.dev0. Actual Codex permission was observed as an empty elicitation form; the validator now accepts that form only with an explicit response, without persistent permission metadata. Installed tests passed: Core 75, Connector 45, Nexus 83 and the same 83 overlapping cases without Connector. Real Windows journeys passed for Pi, Codex and Claude on the same installed Nexus/Core wheels, with completed handoffs, successful turns/closes and credential cleanup. Codex and Claude each required three explicit operator decisions; Pi used three native actions. Server release gates were test-only overridden; native qualification was unchanged. [Evidence index](test_runs_20260930_native_elicitation.json). Next: remote native capture under applied lease authority and remaining M08 acceptance. No milestone or release gate closes.

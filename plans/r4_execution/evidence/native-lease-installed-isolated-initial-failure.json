@@ -1,0 +1,42 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-embedded-inventory-2z7k3itc\\isolated\\Scripts\\python.exe",
+    "-I",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed\\pytest.ini",
+    "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4",
+    "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4",
+    "-o",
+    "asyncio_mode=auto",
+    "-o",
+    "asyncio_default_fixture_loop_scope=function",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_native_decisions.py",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_native_request_ingress.py",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_embedded_tools.py",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_dispatch_pump.py",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_open_bootstrap.py",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_binding_operator.py",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_remote_connection.py",
+    "-q",
+    "--maxfail=3",
+    "-k",
+    "not connector",
+    "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\evidence\\native-lease-installed-isolated.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed",
+  "verified_packages": {
+    "nexus": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-embedded-inventory-2z7k3itc\\isolated\\Lib\\site-packages\\okto_nexus",
+      "files": 354
+    },
+    "core": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-embedded-inventory-2z7k3itc\\isolated\\Lib\\site-packages\\nexus_connector_core",
+      "files": 93
+    }
+  },
+  "connector_absent": true,
+  "exit_code": 1,
+  "scope": "Canonical operator decisions, input retention and dispatch fences with technical native fixtures. No real-provider acceptance."
+}

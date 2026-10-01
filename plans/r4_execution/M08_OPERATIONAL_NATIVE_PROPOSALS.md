@@ -119,3 +119,42 @@ See test_runs_20260930_native_elicitation.json for exact hashes, commands, JUnit
 results, diagnostics and retained failures. These local results resolve the
 observed Codex permission translation defect. Remote native capture and the
 remaining M08/fixed-plan acceptance remain pending; no gate is closed.
+
+## Remote capture from the applied lease - Core 0.2.43
+
+Core a061960 adds the public native_approvals_from_lease composition option.
+Hosts may construct a runtime before lease installation; the copied native
+factory enables capture at launch only when the R4 context includes both
+approval.decide and input.provide. A legacy context, missing action or partial
+action set leaves capture disabled. The existing explicit opt-in keeps its
+strict requirement for both actions. Neither option confirms a human decision.
+
+Connector f49d48e opts into that mode through the public Core factory and calls
+the public decision method with named operation/context arguments. Its existing
+effect-free composition, approved selection, lease installation and dispatch
+revalidation remain in force. Nexus adopts the same Core package.
+
+The final installed Core passed 65 composition/runtime/lease tests with both
+application packages absent, byte equality checks and pip check. The first
+installed run passed 64 cases and failed one shared test-helper import; the runner
+now exposes the test repository root, never src, and asserts Core still comes
+from the installed wheel. The normalized package and embedded/remote import
+smokes passed. Connector installed tests passed 78 cases.
+
+The new loopback WSS cases exercise the automatic daemon, canonical event queue,
+operator decision API, reserved control dispatch and receipt return for approval
+and input, with both approval and denial. They use a technical native peer;
+they do not qualify a real remote provider or separate hosts. Nexus 301ed04
+passed 101 installed cases and 83 overlapping cases without Connector. Exact
+artifacts and results are recorded in test_runs_20260930_native_lease.json.
+
+Initial remote assertions incorrectly included schema_version in the frozen
+native callback request; input denial expects cancel while approval denial uses
+decline. The expectations now match the existing contract. An initial isolated
+lease-renewal timeout did not recur in the unchanged standalone test or sequential
+full campaign. Its cause remains undetermined and the failure evidence is retained.
+
+The next real remote journey also needs the existing M03/M10 public onboarding:
+the current daemon discovery does not accept persisted trusted roots, and the
+CLI does not yet expose the R4 realization/configuration staging services.
+These are fixed-plan gaps, not closed by the technical WSS cases.

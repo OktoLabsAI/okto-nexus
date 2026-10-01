@@ -1,0 +1,50 @@
+...............................................F........................ [ 86%]
+...........                                                              [100%]
+================================== FAILURES ===================================
+_______ test_automatic_mcp_configuration_claims_work_and_cleans_secret ________
+
+connected_local = ((Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4236/test_aut...agent_id': 'subject', ...}, <test_embedded_dispatch.connect_local.<locals>.NativeFactory object at 0x000002ADE395F380>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002ADE6BB4B40>
+
+    def test_automatic_mcp_configuration_claims_work_and_cleans_secret(connected_local,monkeypatch):
+        setup,binding,native,vault,environments=enable_tools(connected_local)
+        deps,app,client,headers,*_=setup
+        monkeypatch.setattr(app.state.embedded_dispatch_owner.leases,"max_duration_ms",2000)
+        opened=admit(setup,binding,"tools-open","runtime.start",new_session=True)
+        wait_receipt(setup,opened)
+        assert len(vault.values)==1 and native.opens==1
+        config_path=Path(environments[0]["HOME"])/".codex/config.toml"
+        entry=tomllib.loads(config_path.read_text())["mcp_servers"]["nexus"]
+        secret=environments[0][entry["bearer_token_env_var"]]
+        assert secret in vault.values.values() and secret not in config_path.read_text()
+        assert entry["url"]=="http://127.0.0.1:8202/mcp"
+        who=envelope(rpc(setup,secret))
+        assert who["ok"] and who["data"]["session_scope"]==opened["scope"]
+        workspace=opened["scope"]["workspace_id"]
+        seed_work(setup,workspace=workspace)
+        parameters=args(project_root=workspace)
+        claim=envelope(rpc(setup,secret,"handoff_claim",parameters))
+        assert claim["ok"],claim
+        done=envelope(rpc(setup,secret,"handoff_complete",parameters|dict(claim_epoch=claim["data"]["claim_epoch"],result="Reviewed.")))
+        assert done["ok"],done
+        until=time.monotonic()+5
+        while True:
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                serial=uow.connection.execute("SELECT MAX(lease_serial) FROM execution_leases WHERE status='ACTIVE'").fetchone()[0]
+            if serial>=2:
+                break
+>           assert time.monotonic()<until
+E           assert 674472.8035374 < 674472.7775496
+E            +  where 674472.8035374 = <built-in function monotonic>()
+E            +    where <built-in function monotonic> = time.monotonic
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_embedded_tools.py:66: AssertionError
+============================== warnings summary ===============================
+..\okto-r4-embedded-inventory-2z7k3itc\isolated\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\okto-r4-embedded-inventory-2z7k3itc\isolated\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_embedded_tools.py::test_automatic_mcp_configuration_claims_work_and_cleans_secret
+1 failed, 82 passed, 18 deselected, 1 warning in 269.05s (0:04:29)
