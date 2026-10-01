@@ -42,6 +42,7 @@ class ExecutionOperationHistory:
     dispatch_state: str | None = None
     dispatch_error: dict | None = None
     execution_scope: dict | None = None
+    follow_up_operation_ids: tuple[str, ...] = ()
 
     def public_view(self) -> dict[str, Any]:
         latest = self.receipts[-1] if self.receipts else None
@@ -67,7 +68,7 @@ class ExecutionOperationHistory:
                        "possible_effect": latest["possible_effect"], "retry_safe": latest["retry_safe"],
                        "operation_id": self.operation_id, "action": "Query this operation before requesting new work."}
                       if latest and latest.get("error_code") else self.dispatch_error if not latest else None),
-            "follow_up_operation_ids": [],
+            "follow_up_operation_ids": list(self.follow_up_operation_ids),
         }
 
 
@@ -146,6 +147,11 @@ def read_execution_operation_history(factory: ConnectionFactory, *,
             dispatch['dispatch_state'] if dispatch else None,
             json.loads(dispatch['last_error']) if dispatch and dispatch['last_error'] else None,
             json.loads(operation['expected_revisions_json']) or None,
+            tuple(row[0] for row in conn.execute(
+                "SELECT operation_id FROM execution_operations WHERE server_id=? AND executor_id=? "
+                "AND parent_operation_id=? ORDER BY created_at,operation_id",
+                (server_id, executor_id, operation_id))),
+
         )
 
 

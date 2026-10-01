@@ -248,6 +248,9 @@ def submit_execution_operation(
                 "operation_id,dispatch_state,next_attempt_at) VALUES (?,?,?,'PENDING',?)",
                 (*key, now),
             )
+        from .execution_initial_turns import admit_initial_turn
+        admit_initial_turn(conn, server_id=server_id, actor_agent_id=actor_agent_id,
+                           client_intent_id=request["client_intent_id"])
     view = read_execution_operation_history(
         factory, server_id=server_id, executor_id=executor_id,
         operation_id=operation_id, subject_agent_id=actor_agent_id,

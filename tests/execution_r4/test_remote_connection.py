@@ -31,7 +31,7 @@ from test_vertical_inventory import _NativeFactory
     (True, None, False, 0, 'unsent'), (True, None, False, 0, 'ack_lost'),
     (True, None, False, 0, 'cold_unsent'), (True, None, False, 0, 'cold_ack_lost'),
     (True, None, False, 0, 'active_disconnect'), (True, None, False, 0, 'lease_renewal')])
-def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery, native_decision=None, cli_admission=False):
+def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery, native_decision=None, cli_admission=False, initial_prompt=False):
     from okto_nexus_connector.transport.https_client import NexusHTTPClient, R4BindingView
     from okto_nexus_connector.transport.wss_r4 import connect_r4_connection
     from okto_nexus_connector.services.execution_selection import acknowledge_execution_binding
@@ -54,7 +54,7 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
     server_id, executor_id = binding['server_id'], binding['executor_id']
     granted = client.post('/api/v1/harness/grants', headers=headers['operator'], json={
         'actor_agent_id': 'subject', 'endpoint_id': binding['endpoint_id'],
-        'actions': ['open', 'send', 'steer', 'interrupt', 'close'], 'max_executions': 2,
+        'actions': ['open', 'send', 'steer', 'interrupt', 'close'], 'max_executions': 2 + bool(initial_prompt),
         'expires_at': iso_plus(deps.clock.now_iso(), 600)})
     assert granted.status_code == 200, granted.text
     registered = client.post('/v1/connections/executors:register', headers=headers['subject'], json={
@@ -193,6 +193,7 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                     observed = client.get('/v1/runtime/operations/' + resolution['operation_id'],
                                           headers=headers['subject'])
                     assert observed.status_code == 200, observed.text
+                    assert observed.json()['error'] is None, observed.json()
                     if observed.json()['receipt_revision'] > 0:
                         receipt = observed.json()
                         assert receipt['operation_id'] == resolution['operation_id']
@@ -286,7 +287,8 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                     assert view["scope"] == opened["scope"] and view["lifecycle_state"] == "READY"
                     assert view["process_state"] == "UNKNOWN"
                     reused = await run_runtime(build_parser().parse_args(
-                        ["runtime", "start", "assistant", "--client-intent-id", "reuse-opening"]),
+                        ["runtime", "start", "assistant", "--client-intent-id", "reuse-opening"] +
+                        (["--text", "Initial CLI request"] if initial_prompt else [])),
                         Output(json_mode=True), daemon_root)
                     assert reused["reused"] and reused["operation_id"] == opened["operation_id"]
                     assert reused["session_id"] == session_id
@@ -295,6 +297,17 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                         ["runtime", "operation", "--alias", "assistant", "--client-intent-id", "reuse-opening"]),
                         Output(json_mode=True), daemon_root)
                     assert recovered == reused
+                    if initial_prompt:
+                        child, = reused["operation"]["follow_up_operation_ids"]
+                        operations.append(child)
+                        async with asyncio.timeout(8):
+                            while True:
+                                result = client.get("/v1/runtime/operations/" + child, headers=headers["subject"])
+                                assert result.status_code == 200, result.text
+                                if result.json()["executor_stage"] in {"SUBMITTED", "SUCCEEDED"}:
+                                    break
+                                assert execution.failure is None, repr(execution.failure)
+                                await asyncio.sleep(.01)
                 turned = await admit('turn.submit', session_id=session_id, text='Hello')
                 if native_decision is not None:
                     from nexus_connector_core import RuntimeEvent
@@ -617,10 +630,12 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                     view = await run_runtime(args, Output(json_mode=True), daemon_root)
                     assert view["operation"]["receipt_revision"] == 1
                     assert view["operation"]["error"] is None
-            assert [kind for kind, _ in native.native.sent] == ['send_turn', 'steer', 'interrupt']
+            assert [kind for kind, _ in native.native.sent] == (['send_turn'] if initial_prompt else []) + ['send_turn', 'steer', 'interrupt']
             with deps.connection_factory.unit_of_work(write=False) as uow:
-                assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 5 + history_count + bool(native_decision)
-                assert uow.connection.execute('SELECT COUNT(*) FROM execution_receipts').fetchone()[0] == 5 + history_count + bool(native_decision)
+                if initial_prompt:
+                    assert uow.connection.execute("SELECT SUM(used_executions) FROM runtime_execution_grants").fetchone()[0] == 3
+                assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 5 + history_count + bool(native_decision) + bool(initial_prompt)
+                assert uow.connection.execute('SELECT COUNT(*) FROM execution_receipts').fetchone()[0] == 5 + history_count + bool(native_decision) + bool(initial_prompt)
                 assert uow.connection.execute('SELECT COUNT(*) FROM execution_dispatch_outbox WHERE attempt_no<>1').fetchone()[0] == 0
                 expected_session = ('READY', 'SUPERSEDED') if publication_failure in ('before_commit', 'core_commit') and not reconcile_closed else ('CLOSED', 'CLOSED')
                 # Receipt ingress preserves history after disconnect. Adoption
@@ -652,3 +667,10 @@ def test_canonical_native_decision_roundtrip_through_automatic_connector(onboard
 def test_public_runtime_cli_dispatches_five_actions_through_automatic_daemon(onboarding, tmp_path, monkeypatch):
     test_owned_connector_reader_dispatches_five_actions_over_real_websocket(
         onboarding, tmp_path, monkeypatch, True, None, False, 0, None, cli_admission=True)
+
+
+@pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
+def test_public_runtime_cli_start_prompt_runs_as_child(onboarding, tmp_path, monkeypatch):
+    test_owned_connector_reader_dispatches_five_actions_over_real_websocket(
+        onboarding, tmp_path, monkeypatch, True, None, False, 0, None,
+        cli_admission=True, initial_prompt=True)

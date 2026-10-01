@@ -104,6 +104,8 @@ def reserve_execution_dispatch(
                     "AND owner_instance_id=? AND generation=? AND control_state='CONTROL_READY' AND revoked_at IS NULL",
                     (server_id, executor_id, channel.connection_id, channel.connection_generation)).fetchone() is None:
                 return None
+        from .execution_initial_turns import release_ready_initial_turns
+        release_ready_initial_turns(conn, server_id=server_id, executor_id=executor_id)
         used = {"regular": [0, 0], "control": [0, 0]}
         for row in conn.execute(
             "SELECT reservation_class,COUNT(*) AS items,"
@@ -245,6 +247,9 @@ def begin_execution_send(
                     "ACCEPTED", "DISPATCH_PENDING"}):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The dispatch reservation changed.", {})
+        from .execution_initial_turns import require_current_parent_readiness
+        require_current_parent_readiness(conn, server_id=server_id,
+            executor_id=reservation.executor_id, operation_id=reservation.operation_id)
         provenance = conn.execute(
             "SELECT source_guard_digest FROM execution_client_intents "
             "WHERE server_id=? AND actor_agent_id=? AND operation_id=? "

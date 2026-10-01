@@ -47,12 +47,12 @@ def resolve_execution_intent(
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                               "Invalid session selection.", {})
     if (request["intent"] == "runtime.start" and
-            (request.get("text") is not None or
+            ((request.get("text") is not None and (type(request["text"]) is not str or not 1 <= len(request["text"]) <= 65536)) or
              (request.get("new_session") is True and request.get("session_id") is not None) or
              (request.get("session_id") is not None and
               (type(request["session_id"]) is not str or not 1 <= len(request["session_id"]) <= 160)))):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
-                              "Select either a new session or an existing session; submit text separately.", {})
+                              "Select either a new session or an existing session with valid optional turn text.", {})
     if request["intent"] != "runtime.start" and (
             type(request.get("session_id")) is not str or
             not 1 <= len(request["session_id"]) <= 160 or
@@ -208,6 +208,8 @@ def resolve_execution_intent(
         # count. An oversized intent must not enter an undispatchable outbox.
         if len(canonical_json(payload)) > 65536:
             blockers.append("operation_payload_too_large")
+        if action == "runtime.open" and request.get("text") is not None and len(canonical_json({"text": request["text"]})) > 65536:
+            blockers.append("operation_payload_too_large")
         if action == "runtime.open" and (
                 profile is None or not profile["enabled"]):
             blockers.append("profile_unresolved")
@@ -253,6 +255,9 @@ def resolve_execution_intent(
              _agent_guard(conn, actor_agent_id), "reuse" if reuse is not None else
              "automatic" if action == "runtime.open" and request.get("new_session") is not True else "explicit"),
         )
+        if action == "runtime.open" and request.get("text") is not None:
+            from .execution_initial_turns import plan_initial_turn
+            plan_initial_turn(conn, resolved=resolved, text=request["text"])
         return resolved
 
 
