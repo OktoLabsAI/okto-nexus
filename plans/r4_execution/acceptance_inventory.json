@@ -1358,9 +1358,10 @@
       "proposed_nodeid": "tests/execution_r4/test_ns14.py::test_ns14_03",
       "collected_nodeids": [
         "tests/execution_r4/test_embedded_inventory.py::test_close_interrupts_passive_core_read_without_publishing",
-        "tests/execution_r4/test_embedded_inventory.py::test_close_waits_for_started_inventory_publication"
+        "tests/execution_r4/test_embedded_inventory.py::test_close_waits_for_started_inventory_publication",
+        "tests/execution_r4/test_shutdown_storage_order.py::test_native_containment_precedes_cleanup_and_preserves_stores"
       ],
-      "effective_test_command": "Run plans/r4_execution/run_parallel_identity_installed.py with its verified installed artifacts; run_parallel_identity_stop.py pi_rpc and run_parallel_identity_positive.py pi_rpc exercise the actual Connector lifecycle.",
+      "effective_test_command": "Run plans/r4_execution/run_shutdown_order_installed.py --only-nexus with its verified artifacts; prior Pi discovery-stop and normal provider evidence remains in the parallel-identity manifest.",
       "test_availability": "COLLECTED_ALTERNATIVE_ENTRY",
       "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
       "acceptance": "PARTIAL",
@@ -1369,7 +1370,8 @@
       ],
       "evidence": [
         "plans/r4_execution/test_runs_20261001_discovery_stop.json",
-        "plans/r4_execution/test_runs_20261001_parallel_identity.json"
+        "plans/r4_execution/test_runs_20261001_parallel_identity.json",
+        "plans/r4_execution/test_runs_20261001_shutdown_order.json"
       ],
       "remaining_acceptance": "This increment interrupts passive discovery and preserves publication ownership. The complete single public deadline, per-resource DRAINING_PENDING report, retained recovery loop, second recovery of the same native owners, and platform fault matrix remain pending."
     },

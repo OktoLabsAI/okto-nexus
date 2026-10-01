@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="3" time="17.901" timestamp="2026-10-01T08:32:31.813263-03:00" hostname="Alienware_m15"><testcase classname="test_shutdown_storage_order" name="test_native_containment_precedes_cleanup_and_preserves_stores[quiesce]" time="5.896"><failure message="TimeoutError">tests\execution_r4\test_shutdown_storage_order.py:73: in scenario
+    await asyncio.sleep(.01)
+C:\Python313\Lib\asyncio\tasks.py:718: in sleep
+    return await future
+           ^^^^^^^^^^^^
+E   asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+tests\execution_r4\test_shutdown_storage_order.py:91: in test_native_containment_precedes_cleanup_and_preserves_stores
+    client.portal.call(scenario)
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\execution_r4\test_shutdown_storage_order.py:71: in scenario
+    async with asyncio.timeout(2):
+               ^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\timeouts.py:116: in __aexit__
+    raise TimeoutError from exc_val
+E   TimeoutError</failure></testcase><testcase classname="test_shutdown_storage_order" name="test_native_containment_precedes_cleanup_and_preserves_stores[pump]" time="5.790"><failure message="TimeoutError">tests\execution_r4\test_shutdown_storage_order.py:73: in scenario
+    await asyncio.sleep(.01)
+C:\Python313\Lib\asyncio\tasks.py:718: in sleep
+    return await future
+           ^^^^^^^^^^^^
+E   asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+tests\execution_r4\test_shutdown_storage_order.py:91: in test_native_containment_precedes_cleanup_and_preserves_stores
+    client.portal.call(scenario)
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\execution_r4\test_shutdown_storage_order.py:71: in scenario
+    async with asyncio.timeout(2):
+               ^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\timeouts.py:116: in __aexit__
+    raise TimeoutError from exc_val
+E   TimeoutError</failure></testcase><testcase classname="test_shutdown_storage_order" name="test_native_containment_precedes_cleanup_and_preserves_stores[history]" time="4.844"><failure message="TimeoutError">tests\execution_r4\test_shutdown_storage_order.py:73: in scenario
+    await asyncio.sleep(.01)
+C:\Python313\Lib\asyncio\tasks.py:718: in sleep
+    return await future
+           ^^^^^^^^^^^^
+E   asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+tests\execution_r4\test_shutdown_storage_order.py:91: in test_native_containment_precedes_cleanup_and_preserves_stores
+    client.portal.call(scenario)
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\execution_r4\test_shutdown_storage_order.py:71: in scenario
+    async with asyncio.timeout(2):
+               ^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\timeouts.py:116: in __aexit__
+    raise TimeoutError from exc_val
+E   TimeoutError</failure></testcase></testsuite></testsuites>

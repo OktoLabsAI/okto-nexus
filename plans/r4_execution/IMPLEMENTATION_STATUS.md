@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## Containment before shutdown storage waits — October 1, 2026
+
+Nexus db3e019 starts retained Core containment before quiesce, outbox stop or historical-reader waits. Journals and ledger remain owned until producers return and Core resources are resolved. Three two-session fault cases failed before the fix and passed after it; 99 installed regression cases passed, including technical Pi child ownership. Core/Connector wheels are unchanged. See [details](M11_SHUTDOWN_STORAGE_ORDER.md) and [manifest](test_runs_20261001_shutdown_order.json). The full public DRAINING_PENDING deadline/recovery contract remains pending; NS14.03 partial and all gates open.
+
 ## Bounded parallel identity reads — October 1, 2026
 
 Core c2aed11 / 0.2.49.dev0 preserves full Pi content verification with four bounded readers and ordered results. Connector dca0863 and Nexus 43711b8 adopt the identical wheel. Installed regressions passed: 142 Core, 165 Connector, 89 Nexus. Actual Pi discovery stop passed in 0.0158 seconds; normal handoff/rebind/second-turn journey passed with the unchanged readiness deadline. Source discovery measured 12.51 seconds versus the prior sequential 66.18 seconds, with identical qualified build identity. See [details](M11_PARALLEL_IDENTITY.md) and [manifest](test_runs_20261001_parallel_identity.json). NS14.03 remains partial; all gates open.

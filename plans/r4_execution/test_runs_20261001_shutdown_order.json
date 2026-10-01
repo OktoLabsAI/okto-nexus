@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-01",
+  "status": "INCREMENT_PASSED_NS14_03_PARTIAL",
+  "commits": {
+    "nexus": "db3e019dff0dd1686859dde8c5d902a901461ea5",
+    "core": "c2aed115ea8add6dacf82bb892ff1415dcca652c",
+    "connector": "dca08630cd5f5a8150a01249845f9e55ee41ca70"
+  },
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-parallel-identity-core-dx3j4u5a\\dist\\nexus_connector_core-0.2.49.dev0-py3-none-any.whl",
+      "sha256": "b2787c4670c276b5310f7631552fdc53759d99a020f30cd7152154697e125963"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-parallel-identity-connector-1lc4uz_w\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "930e66148b1132a434859b4747524682c821324cc8d53dfd7ae9ce9eabf74f03"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-shutdown-order-nexus-my_mevhu\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "d5d47464a0f119713bdc04e51f60910b07f58c71e9667c9e0ab88f37ad45300e"
+    }
+  },
+  "results": {
+    "source-before": {
+      "tests": "3",
+      "failures": "3",
+      "errors": "0",
+      "skipped": "0",
+      "time": "17.901"
+    },
+    "source": {
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "10.798"
+    },
+    "nexus-installed": {
+      "tests": "99",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "295.360"
+    }
+  },
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "topology": "Installed Nexus/Core/Connector wheels, Windows, technical native handles and owned technical Pi child. No actual provider qualification."
+  },
+  "checks": {
+    "pip_check": "passed",
+    "package_bytes": "source/wheel/installed packages compared by runner",
+    "credential_pattern_scan": "no matches"
+  },
+  "proof": [
+    "Two sessions stop while quiesce, pump stop or a historical reader is blocked.",
+    "Both Core journals remain readable before the blocked producer is released.",
+    "Cleanup closes resolved stores after producers finish; no duplicate native open.",
+    "Installed regression includes observer cancellation, failure containment, historical replay, technical Pi native ownership and CLI child integration."
+  ],
+  "limitations": [
+    "Full single public deadline, per-resource DRAINING_PENDING report and retained administrative recovery loop remain pending.",
+    "Late native open, durable release, second public recovery and platform matrix remain required for NS14.03.",
+    "The three source cases overlap the 99 installed cases; do not sum them as unique coverage.",
+    "Core and Connector wheels are unchanged. Their prior regression and actual provider results remain tied to their original manifests.",
+    "Preexisting modified UI assets are present in the Nexus wheel but not accepted by this campaign. All release gates remain open."
+  ],
+  "evidence": {
+    "evidence/shutdown-order-artifacts.json": "3a1e613fa790138a5190b2593f579e61711386adc205437e88245e5911e2fd25",
+    "evidence/shutdown-order-install.log": "64c41213e888c7f379129e0fc1bbbcddd9a5ff848853e2dd2013819ca5a049e3",
+    "evidence/shutdown-order-nexus-build.log": "79b4d66b753f4e8a6341f5ad0473cf43c8dd5a8b82f36246fce79db0f1b9473a",
+    "evidence/shutdown-order-nexus-installed.json": "5878886266c68692bf44603a1a0a94f42143fd0aed1fb1a5be17fb7622794054",
+    "evidence/shutdown-order-nexus-installed.log": "fea0e8c7dc2ce0b791928d8dbe47bd18f1f7a89d4b2da34817507854e0c3377a",
+    "evidence/shutdown-order-nexus-installed.xml": "829b1f9d1a686ff8d2d5216a67fd671cbdc0a97aa65ecbcee10f3b649d7bd6a6",
+    "evidence/shutdown-order-source-before.xml": "b2fe7e2daccfe6d7b31db5f3519b9c113e1b8bbda44ac6a3f13769a49971bbc1",
+    "evidence/shutdown-order-source.xml": "34f7d9ea0f7776ed92a8691481d61bde9af38181f538ebb0a20367f5a2504ef1"
+  }
+}
