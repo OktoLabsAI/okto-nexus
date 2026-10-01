@@ -31,7 +31,7 @@ from test_vertical_inventory import _NativeFactory
     (True, None, False, 0, 'unsent'), (True, None, False, 0, 'ack_lost'),
     (True, None, False, 0, 'cold_unsent'), (True, None, False, 0, 'cold_ack_lost'),
     (True, None, False, 0, 'active_disconnect'), (True, None, False, 0, 'lease_renewal')])
-def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery, native_decision=None, cli_admission=False, initial_prompt=False):
+def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery, native_decision=None, cli_admission=False, initial_prompt=False, domain_delivery=False):
     from okto_nexus_connector.transport.https_client import NexusHTTPClient, R4BindingView
     from okto_nexus_connector.transport.wss_r4 import connect_r4_connection
     from okto_nexus_connector.services.execution_selection import acknowledge_execution_binding
@@ -50,7 +50,6 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
     assert response.status_code == 200, response.text
     binding = response.json()
     store = StateStore(tmp_path / 'connector-state.json')
-    acknowledge_execution_binding(store, binding=R4BindingView(**binding))
     server_id, executor_id = binding['server_id'], binding['executor_id']
     granted = client.post('/api/v1/harness/grants', headers=headers['operator'], json={
         'actor_agent_id': 'subject', 'endpoint_id': binding['endpoint_id'],
@@ -73,6 +72,17 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
     monkeypatch.setattr(runtime_v1, 'protocol_info', lambda: qualified)
     from okto_nexus.adapters.inbound.http import connections_v1
     monkeypatch.setattr(connections_v1, 'protocol_info', lambda: qualified)
+    if domain_delivery:
+        from okto_nexus.bootstrap import execution_compat
+        monkeypatch.setattr(execution_compat, 'protocol_info', lambda: qualified)
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute("UPDATE agent_endpoints SET consumption='exclusive',response_policy='conversation' WHERE endpoint_id=?",
+                                   (binding['endpoint_id'],))
+        # This fixture configures domain policy after binding approval. Retain
+        # the resulting current authority in the Connector fixture as well.
+        _, current, _ = current_agent_revisions(deps.connection_factory, agent_id='subject')
+        binding['configuration_revision'] = current.configuration
+    acknowledge_execution_binding(store, binding=R4BindingView(**binding))
 
     if event_recovery in ('active_disconnect', 'lease_renewal'):
         from functools import partial
@@ -169,6 +179,23 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 saved = next(r for r in daemon.store.load().runtime_intents
                              if r.client_intent_id == "mux-" + intent)
                 resolution = saved.resolution
+            elif domain_delivery and intent == 'turn.submit':
+                from pathlib import Path
+                monkeypatch.syspath_prepend(str(Path(__file__).parents[1]))
+                from test_pr34_remediation import tool
+                client.headers['host'] = '127.0.0.1:8000'
+                created = tool(client, headers['operator']['Authorization'].removeprefix('Bearer '),
+                    'message_create', dict(workspace_id=binding['workspace_id'], from_agent_id='operator',
+                        subject='Remote exclusive claim', body='Hello', target=dict(strategy='direct', agent_id='subject')))
+                assert created['ok'], created
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    resolution = dict(uow.connection.execute("SELECT operation_id,intent_hash FROM execution_operations WHERE action='turn.submit'").fetchone())
+                    claim = uow.connection.execute('SELECT consumer_kind,consumer_operation_id FROM message_deliveries').fetchone()
+                    assert claim[0] == 'push'
+                    assert uow.connection.execute('SELECT COUNT(*) FROM execution_domain_deliveries').fetchone()[0] == 1
+                pulled = tool(client, headers['subject']['Authorization'].removeprefix('Bearer '),
+                              'inbox_pull', dict(agent_id='subject'))
+                assert pulled['ok'] and pulled['data']['messages'] == [], pulled
             else:
                 resolved = client.post('/v1/runtime/intents:resolve', headers=headers['subject'], json={
                     'client_intent_id': 'mux-' + intent, 'intent': intent, 'binding_id': binding['binding_id'],
@@ -226,6 +253,18 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 if automatic:
                     from functools import partial
                     from okto_nexus_connector.daemon import r4_control, r4_execution
+                    startup_errors = []
+                    original_attempt = r4_control.R4DaemonControl._attempt
+                    async def diagnosed_attempt(control):
+                        try:
+                            return await original_attempt(control)
+                        except Exception as error:
+                            import traceback
+                            failure = getattr(control.connection, 'failure', None)
+                            startup_errors.append((type(error).__name__, getattr(error, 'code', None),
+                                repr(failure), traceback.extract_tb(error.__traceback__).format()))
+                            raise
+                    monkeypatch.setattr(r4_control.R4DaemonControl, '_attempt', diagnosed_attempt)
                     async def discover():
                         return [candidate]
                     monkeypatch.setattr(r4_control, 'R4DaemonControl',
@@ -237,7 +276,7 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                     async with asyncio.timeout(10):
                         while not control.status()['execution_ready']:
                             if control.error_code:
-                                raise AssertionError(control.status())
+                                raise AssertionError((control.status(), startup_errors))
                             await asyncio.sleep(.01)
                     owner = control.connection
                     execution = control.execution.owner
@@ -654,6 +693,12 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 await asyncio.wait_for(serving, 5)
                 sock.close()
     asyncio.run(run())
+
+
+@pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
+def test_remote_domain_delivery_keeps_exclusive_claim_from_mcp(onboarding, tmp_path, monkeypatch):
+    test_owned_connector_reader_dispatches_five_actions_over_real_websocket(
+        onboarding, tmp_path, monkeypatch, True, None, False, 0, None, domain_delivery=True)
 
 
 @pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)

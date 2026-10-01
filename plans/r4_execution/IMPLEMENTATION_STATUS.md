@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS06.05 canonical consumption - October 1, 2026
+
+Installed verification: **7 distinct product passes**, plus **3 architecture checks**. MCP pull exclusion for embedded and automatic remote domain delivery; sequential and concurrent pull/managed handoff claims preserve one winner and grant budget. See [scope](M12_NS06_05_CONSUMPTION.md) and [manifest](test_runs_20261001_ns06_05_consumption.json). Combined local/remote endpoint competition on one delivery, final normative TR4-06-05 acceptance and release gates remain open.
+
 ## NS15.03 canonical event reads - October 1, 2026
 
 Installed verification: **78 distinct product passes**, plus **3 architecture checks**. Canonical MCP/REST event reads share session authority and contiguous persisted history, with scoped pagination, integrity checks and closed-session replay. See [scope](M12_NS15_03_EVENT_VIEWS.md) and [manifest](test_runs_20261001_ns15_03_event_views.json). Combined claim competition, context-only observation, remaining subscriber parity audit, cross-protocol fallback, capture retention, native loader removal and final restore/release acceptance remain pending. TR4-15-03 remains NOT_RUN.
