@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## Scoped executor recovery guidance — October 1, 2026
+
+Nexus 6184739 adds US English corrective actions for verified executor receipt codes, naming the canonical executor/binding and preserving effect/retry facts. Possible native effects require reconciliation before new work. Installed verification passed 21 Nexus and 60 Connector cases; no Core/Connector product changes or migration. Native missing-login detection is still unproven by this projection test. See [details](M03_EXECUTOR_DIAGNOSTICS.md) and [evidence](test_runs_20261001_executor_diagnostics.json). No release gate closed.
+
+
 ## Reviewed binding lane continuity — October 1, 2026
 
 Connector 2c84b52 adopts a confirmed idle binding replacement without disconnecting other lanes. The exact prior snapshot, complete applied result, unchanged authority, closed/released target observations and post-observation revalidation are required; the ticket deadline is preserved. Installed verification passed 244 Connector tests, four Nexus journeys and two additional continuity/race tests. Real Pi, Codex and Claude each passed initial handoff/close, approved replacement and a second native turn/close on the same installed artifacts. Earlier control-timeout and stale-generation failures remain recorded. This is single-host Windows evidence with test-only Server release readiness; native qualification remains enabled. No release gate is closed. See [details](M03_BINDING_LANE_CONTINUITY.md) and [evidence](test_runs_20261001_binding_lanes.json).
