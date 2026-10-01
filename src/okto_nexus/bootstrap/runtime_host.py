@@ -47,6 +47,7 @@ class EmbeddedRuntimeHost:
         self._native_action_owners = {}
         self.local_launch_factory = None
         self._history_tasks = set()
+        self._released_compositions = set()
 
     def _journal_path(self, executor_id, session_id):
         digest = hashlib.sha256((executor_id + "\0" + session_id).encode("ascii")).hexdigest()
@@ -162,6 +163,7 @@ class EmbeddedRuntimeHost:
         except BaseException:
             if journal is not None:
                 await journal.aclose()
+            self._released_compositions.add(key)
             raise
 
     async def close_native_actions(self, *, executor_id, session_id, timeout_seconds=0):
@@ -201,7 +203,14 @@ class EmbeddedRuntimeHost:
             try:
                 runtime, journal = await asyncio.shield(task)
             except Exception:
-                return key, None, False  # _compose closed its failed journal.
+                # Only discard an initialization after its journal cleanup
+                # completed. A failed cleanup still retains uncertain ownership.
+                released = key in self._released_compositions
+                if released:
+                    self._runtime_tasks.pop(key, None)
+                    self._selections.pop(key, None)
+                    self._released_compositions.discard(key)
+                return key, None, not released
             owner = self._native_action_owners.get(key)
             if owner is not None:
                 await owner.close(timeout_seconds=0)

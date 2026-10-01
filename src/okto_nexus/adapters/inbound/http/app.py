@@ -613,7 +613,12 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
             embedded_shutdown_error: Exception | None = None
             if embedded_dispatch is not None:
                 try:
-                    await embedded_dispatch.close()
+                    report = await embedded_dispatch.request_shutdown()
+                    app.state.embedded_shutdown_report = report
+                    # A bounded pending answer cannot authorize disposal of
+                    # this loop, the stores or the serve lock.
+                    await embedded_dispatch.wait_shutdown()
+                    app.state.embedded_shutdown_report = embedded_dispatch.shutdown_status()
                 except Exception as exc:
                     embedded_shutdown_error = exc
             if embedded_inventory is not None:

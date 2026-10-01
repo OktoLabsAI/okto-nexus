@@ -2,6 +2,7 @@
 import asyncio
 from contextlib import asynccontextmanager
 import json
+import math
 import secrets
 import time
 
@@ -45,6 +46,10 @@ class EmbeddedDispatchOwner:
         self.failure = None
         self._stopping = asyncio.Event()
         self._close_task = None
+        self._shutdown_started = None
+        self._shutdown_deadline = None
+        self._shutdown_policy = ShutdownPolicy()
+        self._shutdown_recovery_task = None
         self._after = 0
         self._publish_lock = asyncio.Lock()
         self._containment_task = None
@@ -339,10 +344,83 @@ class EmbeddedDispatchOwner:
             self.failure = error
             await self.failed()
 
-    async def close(self):
+    def _start_close(self):
         if self._close_task is None:
-            self._close_task = asyncio.create_task(self._close(),name="embedded-dispatch-close")
-        await asyncio.shield(self._close_task)
+            if self._shutdown_started is None:
+                self._shutdown_started = asyncio.get_running_loop().time()
+            self._close_task = asyncio.create_task(self._close(), name="embedded-dispatch-close")
+        return self._close_task
+
+    def shutdown_status(self):
+        """Read retained ownership without waiting for storage or a native probe."""
+        task = self._close_task
+        error = None
+        if task is not None and task.done():
+            if task.cancelled():
+                error = "SHUTDOWN_INTERRUPTED"
+            elif task.exception() is not None:
+                error = "SHUTDOWN_RECOVERY_REQUIRED"
+        resources = [
+            {"executor_id": executor_id, "session_id": session_id,
+             "outcome": "unknown", "store_retained": True}
+            for executor_id, session_id in sorted(self.host._runtime_tasks)]
+        drained = task is not None and task.done() and error is None and not resources
+        return {"state": "DRAINED" if drained else (
+                    "DRAINING_PENDING" if self._shutdown_started is not None else "RUNNING"),
+                "deadline_monotonic": self._shutdown_deadline,
+                "resources": resources, "error_code": error}
+
+    async def request_shutdown(self, *, timeout_seconds=50.0):
+        """Bound the observation, never the lifetime of the retained owner.
+
+        The first request fixes one deadline for all resources. Subsequent
+        requests neither extend it nor cancel an in-flight cleanup. A finished
+        uncertain/failed pass can recover the same runtime owners.
+        """
+        if (isinstance(timeout_seconds, bool)
+                or not isinstance(timeout_seconds, (int, float))
+                or not math.isfinite(timeout_seconds) or timeout_seconds < 0):
+            raise ValueError("The shutdown timeout must be finite and nonnegative.")
+        loop = asyncio.get_running_loop()
+        if self._shutdown_deadline is None:
+            started = self._shutdown_started if self._shutdown_started is not None else loop.time()
+            deadline = started + timeout_seconds
+            if not math.isfinite(deadline):
+                raise ValueError("The shutdown deadline must be finite.")
+            self._shutdown_deadline = deadline
+            # Reserve up to five seconds for observation and reporting.
+            budget = max(0.0, timeout_seconds - 5.0)
+            self._shutdown_policy = ShutdownPolicy(min(30.0, budget),
+                min(15.0, max(0.0, budget - 30.0)))
+        if self._shutdown_recovery_task is None:
+            self._start_close()
+            self._shutdown_recovery_task = asyncio.create_task(
+                self._recover_shutdown(), name="embedded-shutdown-recovery")
+        await asyncio.wait((self._shutdown_recovery_task,),
+            timeout=max(0.0, self._shutdown_deadline - loop.time()))
+        return self.shutdown_status()
+
+    async def _recover_shutdown(self):
+        while True:
+            try:
+                await asyncio.shield(self._start_close())
+            except Exception:
+                # An error is not proof that the stores or native owners were
+                # released. Keep the same host and retry only a finished pass.
+                pass
+            if self.shutdown_status()["state"] == "DRAINED":
+                return
+            await asyncio.sleep(.1)
+            self._close_task = None
+
+    async def wait_shutdown(self):
+        """Keep the owning loop alive until the requested shutdown resolves."""
+        if self._shutdown_recovery_task is None:
+            raise RuntimeError("Shutdown must be requested before waiting for recovery.")
+        await asyncio.shield(self._shutdown_recovery_task)
+
+    async def close(self):
+        await asyncio.shield(self._start_close())
 
     async def _close(self):
         self._stopping.set()
@@ -350,9 +428,17 @@ class EmbeddedDispatchOwner:
         # wait. Keep the journals alive for the producers joined below.
         if self.pump is not None:
             self.pump._stopping.set()
+        if (self._containment_task is not None and self._containment_task.done()
+                and (self._containment_task.cancelled()
+                     or self._containment_task.exception() is not None)):
+            self._containment_task = None
         if self._containment_task is None:
+            policy = self._shutdown_policy
+            if (self._shutdown_deadline is not None
+                    and asyncio.get_running_loop().time() >= self._shutdown_deadline):
+                policy = ShutdownPolicy(0, 0)
             self._containment_task = asyncio.create_task(
-                self.host.shutdown(close_stores=False), name="embedded-core-drain")
+                self.host.shutdown(policy, close_stores=False), name="embedded-core-drain")
         failures = []
         try:
             await asyncio.to_thread(self._quiesce)

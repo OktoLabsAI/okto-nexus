@@ -237,3 +237,29 @@ def test_ns07_02(tmp_path):
                 "operation_id": "open_one", "message": "STALE_GENERATION"}
 
     asyncio.run(scenario())
+
+
+def test_failed_composition_does_not_leave_a_pending_shutdown_resource(tmp_path, monkeypatch):
+    from okto_nexus.bootstrap import runtime_host
+
+    async def scenario():
+        host = EmbeddedRuntimeHost(tmp_path / "failed-core")
+
+        def fail(**kwargs):
+            raise OSError("Technical composition failure")
+
+        async def environment(_launch):
+            return {}
+
+        monkeypatch.setattr(runtime_host, "create_runtime", fail)
+        with pytest.raises(OSError, match="Technical composition failure"):
+            await host.acquire(executor_id="executor", session_id="failed",
+                candidates={"codex": _candidate()},
+                workspace_roots={"workspace": str(tmp_path)},
+                environment=environment)
+        await host.shutdown(ShutdownPolicy(0, 0))
+        assert not host._runtime_tasks
+        assert not host._selections
+        assert await host.shutdown(ShutdownPolicy(0, 0)) == {}
+
+    asyncio.run(scenario())
