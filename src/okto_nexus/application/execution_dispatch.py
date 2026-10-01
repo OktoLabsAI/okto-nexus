@@ -248,7 +248,7 @@ def begin_execution_send(
         provenance = conn.execute(
             "SELECT source_guard_digest FROM execution_client_intents "
             "WHERE server_id=? AND actor_agent_id=? AND operation_id=? "
-            "AND intent_id GLOB ?",
+            "AND intent_id GLOB ? AND session_selection<>\'reuse\'",
             (server_id, row["actor_agent_id"], reservation.operation_id,
              'r4decisionintent_*' if row["action"] in {"approval.decide", "input.provide"} else 'r4intent_*'),
         ).fetchall()

@@ -285,6 +285,16 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                         ["runtime", "inspect", session_id]), Output(json_mode=True), daemon_root)
                     assert view["scope"] == opened["scope"] and view["lifecycle_state"] == "READY"
                     assert view["process_state"] == "UNKNOWN"
+                    reused = await run_runtime(build_parser().parse_args(
+                        ["runtime", "start", "assistant", "--client-intent-id", "reuse-opening"]),
+                        Output(json_mode=True), daemon_root)
+                    assert reused["reused"] and reused["operation_id"] == opened["operation_id"]
+                    assert reused["session_id"] == session_id
+                    assert reused["operation"]["client_intent_id"] == "mux-runtime.start"
+                    recovered = await run_runtime(build_parser().parse_args(
+                        ["runtime", "operation", "--alias", "assistant", "--client-intent-id", "reuse-opening"]),
+                        Output(json_mode=True), daemon_root)
+                    assert recovered == reused
                 turned = await admit('turn.submit', session_id=session_id, text='Hello')
                 if native_decision is not None:
                     from nexus_connector_core import RuntimeEvent
@@ -592,7 +602,7 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 from okto_nexus_connector.cli.commands.runtime import run_runtime
                 from okto_nexus_connector.cli.output import Output
                 retained = daemon.store.load().runtime_intents
-                assert len(retained) == 5
+                assert len(retained) == 6
                 daemon.store.update(lambda state: state.binding_intents.clear())
                 inspected = await run_runtime(build_parser().parse_args(
                     ["runtime", "inspect", session_id]), Output(json_mode=True), daemon_root)

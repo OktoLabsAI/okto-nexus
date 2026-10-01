@@ -348,3 +348,10 @@ def test_ns05_03(tmp_path):
             "SELECT status FROM execution_realizations WHERE realization_ref=?",
             (realization["realization_ref"],)).fetchone()
         assert row["status"] == "READY"
+
+
+from test_session_reuse import reuse_connected, reuse_qualified, local_setup, check_reuse_selection
+
+
+def test_ns05_04(reuse_connected):
+    check_reuse_selection(reuse_connected)

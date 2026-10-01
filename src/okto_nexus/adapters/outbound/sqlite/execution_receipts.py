@@ -124,7 +124,7 @@ def read_execution_operation_history(factory: ConnectionFactory, *,
                                  "Stored operation receipt history is invalid.", {}) from exc
         intent_rows = conn.execute(
             "SELECT client_intent_id FROM execution_client_intents WHERE "
-            "server_id=? AND actor_agent_id=? AND operation_id=? LIMIT 2",
+            "server_id=? AND actor_agent_id=? AND operation_id=? AND session_selection<>\'reuse\' LIMIT 2",
             (server_id, operation["actor_agent_id"], operation_id),
         ).fetchall()
         if len(intent_rows) > 1:

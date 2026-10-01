@@ -87,7 +87,7 @@ class ResolveIntentRequest(BaseModel):
     binding_id: _Id
     workspace_binding_id: _Id
     session_id: _Id | None = None
-    new_session: bool | None = None
+    new_session: Annotated[bool, Field(strict=True)] | None = None
     text: Annotated[str, Field(max_length=65536, strict=True)] | None = None
     target: dict[str, object] | None = None
 
@@ -388,7 +388,9 @@ def build_router() -> APIRouter:
                     factory, actor_agent_id=agent.agent_id,
                     request=body.model_dump(exclude_none=True),
                     remote_ready=protocol_info()["remote_execution_ready"],
-                    fresh_publications=request.app.state.inventory_fresh_publications))
+                    fresh_publications=request.app.state.inventory_fresh_publications,
+                    access=build_execution_access(request.app.state.deps),
+                    context=RuntimeRequestContext(agent.agent_id, "agent_key", credential_binding=agent.api_key_hash)))
         except OktoNexusError as error:
             return runtime_error(error, "intent.resolve")
         return JSONResponse(resolution, headers={"Cache-Control": "no-store"})
@@ -423,6 +425,8 @@ def build_router() -> APIRouter:
                     request=body.model_dump(),
                     fresh_publications=request.app.state.inventory_fresh_publications,
                     remote_ready=protocol_info()["remote_execution_ready"],
+                    access=build_execution_access(request.app.state.deps),
+                    context=RuntimeRequestContext(agent.agent_id, "agent_key", credential_binding=agent.api_key_hash),
                 ))
         except OktoNexusError as error:
             return runtime_error(error, "operation.admit")

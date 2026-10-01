@@ -23,7 +23,7 @@ from .execution_semantics import execution_intent_hash, validate_execution_targe
 def submit_execution_operation(
     factory: ConnectionFactory, *, actor_agent_id: str,
     request: Mapping[str, Any], fresh_publications: Mapping,
-    remote_ready: bool,
+    remote_ready: bool, access=None, context=None,
 ) -> tuple[dict[str, Any], bool]:
     """Commit one operation, dispatch row and optional session claim before ACK.
 
@@ -49,7 +49,7 @@ def submit_execution_operation(
     with factory.unit_of_work() as uow:
         conn = uow.connection
         intent = conn.execute(
-            "SELECT resolved_json,operation_id,source_guard_digest FROM "
+            "SELECT resolved_json,operation_id,source_guard_digest,session_selection,reuse_admitted_at FROM "
             "execution_client_intents WHERE server_id=? AND actor_agent_id=? "
             "AND client_intent_id=? AND intent_id GLOB 'r4intent_*'",
             (server_id, actor_agent_id, request["client_intent_id"]),
@@ -73,7 +73,26 @@ def submit_execution_operation(
             "SELECT operation_id FROM execution_operations WHERE server_id=? "
             "AND executor_id=? AND operation_id=?", key,
         ).fetchone()
-        if prior is not None:
+        if resolved["reuse"]:
+            if prior is None or intent["session_selection"] != "reuse":
+                raise OktoNexusError(ErrorCode.CONFLICT, "The reused opening is unavailable.", {})
+            if intent["reuse_admitted_at"] is None:
+                if (not remote_ready or not resolved["can_submit"] or resolved["blockers"]
+                        or datetime.fromisoformat(resolved["expires_at"]) <= datetime.now(timezone.utc)
+                        or intent["source_guard_digest"] != _agent_guard(conn, actor_agent_id)):
+                    raise OktoNexusError(ErrorCode.CONFLICT, "The reuse intent is no longer eligible.", {})
+                from .execution_session_reuse import reusable_opening
+                selected = reusable_opening(uow, factory=factory, access=access, context=context,
+                    server_id=server_id, executor_id=executor_id, binding_id=scope["binding_id"],
+                    session_id=scope["session_id"], payload=resolved["semantic_intent"]["payload"],
+                    fresh_publications=fresh_publications)
+                if selected["operation_id"] != operation_id or selected["intent_hash"] != request["intent_hash"]:
+                    raise OktoNexusError(ErrorCode.CONFLICT, "The reused opening changed.", {})
+                conn.execute("UPDATE execution_client_intents SET reuse_admitted_at=? WHERE server_id=? "
+                    "AND actor_agent_id=? AND client_intent_id=? AND reuse_admitted_at IS NULL",
+                    (datetime.now(timezone.utc).isoformat(), server_id, actor_agent_id, request["client_intent_id"]))
+            reused = True
+        elif prior is not None:
             reused = True
         else:
             if (not remote_ready or not resolved["can_submit"] or
@@ -156,6 +175,12 @@ def submit_execution_operation(
                                       "The selected candidate has changed.", {})
             action = resolved["semantic_intent"]["action"]
             session_id = scope["session_id"]
+            if action == "runtime.open" and intent["session_selection"] == "automatic":
+                existing = conn.execute("SELECT 1 FROM execution_sessions WHERE server_id=? AND executor_id=? "
+                    "AND binding_id=? AND lifecycle_state NOT IN ('CLOSED','FAILED') LIMIT 1",
+                    (server_id, executor_id, scope["binding_id"])).fetchone()
+                if existing:
+                    raise OktoNexusError(ErrorCode.CONFLICT, "Another session claim requires explicit selection.", {})
             if action == "runtime.open":
                 profile = conn.execute(
                     "SELECT enabled,revision FROM runtime_profiles "

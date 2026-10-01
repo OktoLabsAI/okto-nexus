@@ -30,7 +30,7 @@ _INTENTS = {"runtime.start": "runtime.open", "turn.submit": "turn.submit",
 def resolve_execution_intent(
     factory: ConnectionFactory, *, actor_agent_id: str,
     request: Mapping[str, Any], remote_ready: bool = False,
-    fresh_publications: Mapping | None = None,
+    fresh_publications: Mapping | None = None, access=None, context=None,
 ) -> dict[str, Any]:
     """Store a stable resolution; never write an effect outbox or call Core."""
     required = {"client_intent_id", "intent", "binding_id",
@@ -47,11 +47,12 @@ def resolve_execution_intent(
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                               "Invalid session selection.", {})
     if (request["intent"] == "runtime.start" and
-            (request.get("session_id") is not None or
-             request.get("text") is not None or
-             request.get("new_session") is not True)):
+            (request.get("text") is not None or
+             (request.get("new_session") is True and request.get("session_id") is not None) or
+             (request.get("session_id") is not None and
+              (type(request["session_id"]) is not str or not 1 <= len(request["session_id"]) <= 160)))):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
-                              "An explicit new session is required to start.", {})
+                              "Select either a new session or an existing session; submit text separately.", {})
     if request["intent"] != "runtime.start" and (
             type(request.get("session_id")) is not str or
             not 1 <= len(request["session_id"]) <= 160 or
@@ -217,12 +218,22 @@ def resolve_execution_intent(
                 "configuration_revision")},
             "action": action, "target": dict(target), "payload": payload,
         }
+        reuse = None
+        if action == "runtime.open" and request.get("new_session") is not True:
+            from .execution_session_reuse import reusable_opening
+            reuse = reusable_opening(uow, factory=factory, access=access, context=context,
+                server_id=server_id, executor_id=binding["executor_id"], binding_id=binding["binding_id"],
+                session_id=request.get("session_id"), payload=payload, fresh_publications=fresh_publications)
+            if reuse is not None:
+                scope, semantic, session_id = reuse["scope"], reuse["semantic_intent"], reuse["session_id"]
         operation_id = "op_" + secrets.token_hex(16)
+        if reuse is not None:
+            operation_id = reuse["operation_id"]
         intent_id = "r4intent_" + secrets.token_hex(16)
         resolved = {
             "client_intent_id": request["client_intent_id"],
             "intent_id": intent_id, "operation_id": operation_id,
-            "session_id": session_id, "reuse": False,
+            "session_id": session_id, "reuse": reuse is not None,
             "scope": scope, "semantic_intent": semantic,
             "intent_hash": execution_intent_hash(semantic),
             "resolution_revision": 1,
@@ -234,12 +245,13 @@ def resolve_execution_intent(
         conn.execute(
             "INSERT INTO execution_client_intents(server_id,actor_agent_id,"
             "client_intent_id,body_hash,intent_id,operation_id,"
-            "resolution_revision,resolved_json,created_at,source_guard_digest) "
-            "VALUES (?,?,?,?,?,?,1,?,strftime('%Y-%m-%dT%H:%M:%fZ','now'),?)",
+            "resolution_revision,resolved_json,created_at,source_guard_digest,session_selection) "
+            "VALUES (?,?,?,?,?,?,1,?,strftime('%Y-%m-%dT%H:%M:%fZ','now'),?,?)",
             (server_id, actor_agent_id, request["client_intent_id"],
              body_hash, intent_id, operation_id,
              canonical_json(resolved).decode("utf-8"),
-             _agent_guard(conn, actor_agent_id)),
+             _agent_guard(conn, actor_agent_id), "reuse" if reuse is not None else
+             "automatic" if action == "runtime.open" and request.get("new_session") is not True else "explicit"),
         )
         return resolved
 

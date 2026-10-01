@@ -79,8 +79,10 @@ def publish_executor_realization(
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                                   "Invalid realization publication field.",
                                   {"field": name})
-    if (request["agent_id"] != principal.agent_id or
-            not _LOCAL_REF.fullmatch(request["local_realization_ref"]) or
+    if request["agent_id"] != principal.agent_id:
+        raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                            "The realization subject is outside this ticket's scope.", {})
+    if (not _LOCAL_REF.fullmatch(request["local_realization_ref"]) or
             type(request["realization_revision"]) is not int or
             request["realization_revision"] < 1 or
             (request["workspace_id"] is not None and

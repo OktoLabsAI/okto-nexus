@@ -40,7 +40,7 @@ class SqliteExecutionLeaseRepository:
             "JOIN execution_workspace_bindings w ON w.server_id=s.server_id AND w.executor_id=s.executor_id AND w.workspace_binding_id=s.workspace_binding_id "
             "JOIN execution_realizations r ON r.server_id=b.server_id AND r.executor_id=b.executor_id AND r.realization_ref=b.realization_ref "
             "JOIN execution_operations p ON p.server_id=s.server_id AND p.executor_id=s.executor_id AND p.operation_id=s.open_operation_id "
-            "JOIN execution_client_intents i ON i.server_id=p.server_id AND i.actor_agent_id=p.actor_agent_id AND i.operation_id=p.operation_id AND i.intent_id GLOB 'r4intent_*' "
+            "JOIN execution_client_intents i ON i.server_id=p.server_id AND i.actor_agent_id=p.actor_agent_id AND i.operation_id=p.operation_id AND i.intent_id GLOB 'r4intent_*' AND i.session_selection<>'reuse' "
             "LEFT JOIN execution_dispatch_outbox o ON o.server_id=p.server_id AND o.executor_id=p.executor_id AND o.operation_id=p.operation_id "
             "WHERE s.server_id=? AND s.executor_id=? AND s.session_id=?",
             self.key(scope)).fetchone()
