@@ -18,7 +18,9 @@ from test_ns09 import admit, negotiate, setup_authority
 
 @pytest.fixture
 def opening(tmp_path, monkeypatch, request):
-    state = setup_authority(tmp_path, monkeypatch, trust_mode=getattr(request, "param", None))
+    options = getattr(request, "param", None)
+    options = options if isinstance(options, dict) else {"trust_mode": options}
+    state = setup_authority(tmp_path, monkeypatch, **options)
     deps, app, access, operator, grant, candidate, info, revisions, link, lane, server, executor = state
     with TestClient(app, base_url='https://127.0.0.1:8202') as client:
         with client.websocket_connect(f'wss://127.0.0.1:8202/v1/runtime/executors/{executor}/link',
@@ -27,6 +29,7 @@ def opening(tmp_path, monkeypatch, request):
             resolution = admit(deps, app)
             reservation = reserve_execution_dispatch(deps.connection_factory,
                 server_id=server, executor_id=executor, remote_ready=True)
+            app.state.test_opening_socket = ws
             yield deps, app, access, operator, grant, channel, resolution, reservation
 
 

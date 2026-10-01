@@ -120,7 +120,7 @@ def setup_authority(tmp_path, monkeypatch, *, lease_authority=True,
     return deps, app, access, operator, canonical, candidate, info, revisions, link_ticket, lane_ticket, server_id, executor_id
 
 
-def negotiate(ws, info, revisions, lane_ticket, server_id, executor_id, *, binding_id="binding"):
+def negotiate(ws, info, revisions, lane_ticket, server_id, executor_id, *, binding_id="binding", agent_id="subject"):
     base = dict(protocol_major=1, contract_revision=R4_PREVIEW_REVISION, server_id=server_id, executor_id=executor_id)
     ws.send_text(encode_r4_frame(dict(**base, type='hello', link_attempt_id='attempt',
         core_version=info['core_version'], management_revision=info['management_revision'],
@@ -136,7 +136,7 @@ def negotiate(ws, info, revisions, lane_ticket, server_id, executor_id, *, bindi
     assert ws.receive_json()['recovery_remaining'] is False
     ws.send_text(encode_r4_frame(dict(**base, connection_id=connection['connection_id'],
         expected_connection_generation=connection['connection_generation'], type='binding.attach',
-        attach_request_id='attach', binding_id=binding_id, agent_id='subject', ticket=lane_ticket,
+        attach_request_id='attach', binding_id=binding_id, agent_id=agent_id, ticket=lane_ticket,
         credential_epoch=revisions.credential_epoch, authorization_revision=revisions.authorization,
         configuration_revision=revisions.configuration)).decode())
     assert ws.receive_json()['type'] == 'binding.attached'

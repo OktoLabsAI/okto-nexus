@@ -1413,10 +1413,12 @@
     },
     "NS14.04": {
       "proposed_nodeid": "tests/execution_r4/test_ns14.py::test_ns14_04",
-      "collected_nodeids": [],
-      "effective_test_command": null,
-      "test_availability": "MISSING",
-      "implementation": "PARTIAL",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns14.py::test_ns14_04[load]"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns14.py::test_ns14_04 -q",
+      "test_availability": "COLLECTED_NORMATIVE_ENTRY",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
       "acceptance": "PARTIAL",
       "required_scenarios": [
         "TR4-14-04"
@@ -1438,9 +1440,10 @@
         "plans/r4_execution/test_runs_20261001_auth_cache.json",
         "plans/r4_execution/test_runs_20261001_dispatch_capacity.json",
         "plans/r4_execution/test_runs_20261001_admission_capacity.json",
-        "plans/r4_execution/test_runs_20261001_capacity_metrics.json"
+        "plans/r4_execution/test_runs_20261001_capacity_metrics.json",
+        "plans/r4_execution/test_runs_20261001_ns14_04.json"
       ],
-      "notes": "Bounded cache/100k identity churn, retained dispatch costs, atomic pending admission budgets and operator-only fixed-cardinality gauges implemented. Latest installed increment: 16 R4 + 37 telemetry/auth/cache/architecture passed. Normative combined flood/control measurement and sustained executor fairness remain open."
+      "notes": "Normative TR4-14-04 passed at the load layer on installed packages: 100k identity churn, bounded cache/memory, flooded executor quotas, reserved control and another executor progress; 47 affected cases passed. Synthetic transport sinks; task dependencies and broader milestone acceptance remain open."
     },
     "NS14.05": {
       "proposed_nodeid": "tests/execution_r4/test_ns14.py::test_ns14_05",
@@ -2456,9 +2459,14 @@
         "NS14.04"
       ],
       "layer": "load",
-      "candidate_nodeids": [],
-      "coverage": "REQUIRES_REVIEW",
-      "execution": "NOT_RUN"
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns14.py::test_ns14_04[load]"
+      ],
+      "coverage": "VERIFIED_NORMATIVE_SCENARIO",
+      "execution": "PASSED",
+      "evidence": [
+        "plans/r4_execution/test_runs_20261001_ns14_04.json"
+      ]
     },
     "TR4-14-05": {
       "task_ids": [

@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## TR4-14-04 combined load — October 1, 2026
+
+Installed verification: **47 passed**, including the normative 100k-identity load scenario and affected authority fixtures. Cache occupancy remains 4,096; measured control emission was 276 ms and the second executor progressed in 104 ms while the first executor was saturated. Product packages remain the capacity-metrics tuple. See [scope and failed preparations](M11_NS14_04_LOAD.md) and [manifest](test_runs_20261001_ns14_04.json). TR4-14-04 passes at the synthetic load layer; task dependencies, provider/platform acceptance and all release gates remain open.
+
+
 ## NS14.04 aggregate operator capacity gauges — October 1, 2026
 
 Nexus 1be8b8e adds pending/dispatch item-byte totals and cache occupancy to the existing local metrics summary for operators, using fixed regular/control categories and no identity labels. Storage failure is reported unavailable; totals retain uncertain reservations. Installed verification: **16 R4 + 37 telemetry/auth/cache/architecture = 53 passed**, including the 100k cache workload. See [scope](M11_CAPACITY_METRICS.md) and [manifest](test_runs_20261001_capacity_metrics.json). NS14.04 remains partial pending combined load and sustained executor fairness; all gates remain open.

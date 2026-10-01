@@ -1,0 +1,160 @@
+{
+  "date": "2026-10-01",
+  "status": "TR4_14_04_LOAD_PASSED_TASK_DEPENDENCIES_PARTIAL",
+  "commits": {
+    "core": "18e172781b018ae09960fafc1bf7e2c4b1e8410f",
+    "connector": "211be74009a7f3c4f48eb25961f9860a91825df9",
+    "nexus": "1be8b8ee59d5e7957a9fe3bc910f4233ac5e3d25"
+  },
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-core-3msf4qiz\\dist\\nexus_connector_core-0.2.51.dev0-py3-none-any.whl",
+      "sha256": "4c4c0c58d25b93f4f08ba8515d8476ffc29d1f0a27cc577c9fccb610716d1d1c"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-connector-pmt6y5x7\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "baf837251f654ab6385f5fba4e22d1a1b69da1839e8f47752795d1518dd29fe7"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capacity-metrics-nexus-ycmz2rq7\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "9d1177dd8ad4d87ba4871152e31dfb131c1b181d2b3a3f2a4453109ecf1e26c9"
+    }
+  },
+  "results": {
+    "ns14-04-batched.xml": {
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "72.865"
+    },
+    "ns14-04-budget.xml": {
+      "tests": "2",
+      "failures": "1",
+      "errors": "1",
+      "skipped": "0",
+      "time": "20.846"
+    },
+    "ns14-04-initial.xml": {
+      "tests": "1",
+      "failures": "1",
+      "errors": "0",
+      "skipped": "0",
+      "time": "42.579"
+    },
+    "ns14-04-nexus-installed.xml": {
+      "tests": "47",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "154.472"
+    }
+  },
+  "installed_passed": 47,
+  "load_measurements": {
+    "identities": 100000,
+    "identity_seconds": 29.307369200047106,
+    "memory": [
+      {
+        "identities": 25000,
+        "current_bytes": 3749462,
+        "peak_bytes": 4194923,
+        "cache_entries": 4096
+      },
+      {
+        "identities": 50000,
+        "current_bytes": 3777159,
+        "peak_bytes": 4215448,
+        "cache_entries": 4096
+      },
+      {
+        "identities": 75000,
+        "current_bytes": 3772322,
+        "peak_bytes": 4223059,
+        "cache_entries": 4096
+      },
+      {
+        "identities": 100000,
+        "current_bytes": 3773528,
+        "peak_bytes": 4223059,
+        "cache_entries": 4096
+      }
+    ],
+    "query_plan": [
+      "SEARCH agents USING INDEX idx_agents_api_key_hash (api_key_hash=?)"
+    ],
+    "logical_cpus": 16,
+    "processor": "Intel64 Family 6 Model 141 Stepping 1, GenuineIntel",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "topology": "One real SQLite store; public HTTP/WSS authority; real dispatch pumps with synthetic send sinks withholding ACKs.",
+    "rejected_during_progress": 20,
+    "sent_frames": 5,
+    "control_latency_seconds": 0.2760531000094488,
+    "second_executor_latency_seconds": 0.10383839998394251,
+    "gauges": {
+      "status": "available",
+      "pending_totals": {
+        "regular": {
+          "items": 33,
+          "bytes": 13556
+        },
+        "control": {
+          "items": 1,
+          "bytes": 457
+        }
+      },
+      "dispatch_totals": {
+        "regular": {
+          "items": 5,
+          "bytes": 2552
+        },
+        "control": {
+          "items": 1,
+          "bytes": 457
+        }
+      },
+      "pending_limits_per_executor": {
+        "regular": {
+          "items": 32,
+          "bytes": 2097152
+        },
+        "control": {
+          "items": 8,
+          "bytes": 524288
+        }
+      }
+    }
+  },
+  "checks": {
+    "package_bytes": "Source, wheel and installed bytes of all three packages compared",
+    "credential_pattern_scan": "No matches"
+  },
+  "overlap": "The earlier single batched passing run overlaps the final 47 installed tests.",
+  "proof": [
+    "100k real SQLite identity lookups use an index and retain a bounded 4096-entry cache.",
+    "A flooded executor retains its 32-item pending and 4-item regular dispatch quotas while a second executor progresses.",
+    "Reserved runtime.close control progresses during 20 additional quota refusals; operator gauges account for all held work."
+  ],
+  "limitations": [
+    "One Windows host and synthetic qualified peers; send sinks withhold ACKs and do not run providers.",
+    "Identity churn precedes queue saturation in the same store.",
+    "Initial failed preparations and two explicitly terminated retained teardowns are preserved, not counted as passing shutdown.",
+    "Task dependency acceptance, full provider/platform matrix and all release gates remain open."
+  ],
+  "evidence": {
+    "plans/r4_execution/evidence/ns14-04-batched.xml": "e1836ade7961b0ab6ff646be4cac43e6e0030bcaeff330e4601d3d5a4a4b4171",
+    "plans/r4_execution/evidence/ns14-04-budget-failure.log": "ba932451c948a48a1a5d986693b2dbb12bfc77006b4b29a6f8b1c9e83891ed2d",
+    "plans/r4_execution/evidence/ns14-04-budget.xml": "cef2e1ce26d1d9e1c1684d7d7f8c95ffecbbdff4c8f7333266da7b5d91a29222",
+    "plans/r4_execution/evidence/ns14-04-heartbeat-live-failure.log": "3cbcb0290d44badf632bd6fbad3664c76ae352fee573756514ff187d3c35e707",
+    "plans/r4_execution/evidence/ns14-04-heartbeat-shutdown-stack.log": "2256f0903967cf0ecb355141fcb969055b3f75e70a667bc50d8da889d66c0663",
+    "plans/r4_execution/evidence/ns14-04-heartbeat-termination.json": "de0eb5befb4b9560dcf41945cbd169a565693d25d27927fa7fb9fec99cdf2cb0",
+    "plans/r4_execution/evidence/ns14-04-initial.xml": "cbaa8dfa4393997bd27195b3a5572827eda2da004dea8901593a2442a6f1781d",
+    "plans/r4_execution/evidence/ns14-04-nexus-installed.json": "ae1255361e307819007c7ea63a50a01df15c789e018c436fc7ba7ee6e8e9b5d2",
+    "plans/r4_execution/evidence/ns14-04-nexus-installed.log": "09597039e72a3d7376c6def024122aa8e46a63dab24ac26890b7c125a069f8a0",
+    "plans/r4_execution/evidence/ns14-04-nexus-installed.xml": "7cf9a35de6760d900e4d85e09656c7d2ededb0c2a408a8502720a7336a6688ce",
+    "plans/r4_execution/evidence/ns14-04-qualified-shutdown-stack.log": "9ac8bcf2d55ec3be7705b10d12494e354e8ca91d5cc255509f590247ef72f3c6",
+    "plans/r4_execution/evidence/ns14-04-qualified-termination.json": "859d8024b1c01c2f3d12cd275a96792cc9c23c6ad7fa691da3a0fb48d485c6a8",
+    "plans/r4_execution/run_ns14_04_installed.py": "2a41ec7fa60d8c5ddf3bb5fdc384c07d3ed037bbc9fb6c051f6e26bc55bb73ed",
+    "plans/r4_execution/M11_NS14_04_LOAD.md": "38eb04bf95e92b0bb96f5870a070094c44c717b4b97af16e7ab38357145ba3dc"
+  }
+}

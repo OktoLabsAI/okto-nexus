@@ -1,0 +1,10 @@
+{
+  "process_id": 55572,
+  "observed_utc": "2026-10-01T15:52:16.040676+00:00",
+  "reason": "Failed synthetic load case retained in TestClient shutdown; Python stack and read-only store inspection captured before terminating this owned test process.",
+  "observations": [
+    "Both remote executors DISCONNECTED; two ACCEPTED preparation operations only.",
+    "Legacy owner heartbeat continues; workers idle; main thread waits in TestClient shutdown."
+  ],
+  "disposition": "Incomplete failing run, not acceptance; explicit owned-process termination."
+}

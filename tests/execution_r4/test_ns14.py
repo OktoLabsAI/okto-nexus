@@ -302,3 +302,15 @@ def test_ns14_03(connected_local, monkeypatch):
     assert deps.runtime_dispatcher._shutdown_finished.is_set()
     assert len(store_closures) >= 3
     assert all(states == (True, True, True) for states in store_closures)
+
+
+from test_native_decisions import decision_state, opening
+
+
+@pytest.mark.parametrize("opening", [{"max_executions": 100}], indirect=True, ids=["load"])
+def test_ns14_04(opening, decision_state, tmp_path, record_property, monkeypatch):
+    from okto_nexus.adapters.inbound.http import runtime_v1
+    info = runtime_v1.protocol_info()
+    monkeypatch.setattr(runtime_v1, "protocol_info", lambda: {**info, "remote_execution_ready": True})
+    from ns14_load import run_load
+    run_load(opening, tmp_path, record_property)

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="42.579" timestamp="2026-10-01T12:44:29.396981-03:00" hostname="Alienware_m15"><testcase classname="test_ns14" name="test_ns14_04" file="test_ns14.py" line="309" time="41.209"><failure message="AssertionError: {&quot;error&quot;:{&quot;code&quot;:&quot;CONFLICT&quot;,&quot;stage&quot;:&quot;operation.admit&quot;,&quot;message&quot;:&quot;This intent is not eligible for execution.&quot;,&quot;possible_effect&quot;:false,&quot;retry_safe&quot;:false,&quot;operation_id&quot;:null,&quot;action&quot;:&quot;&quot;}}">tests\execution_r4\test_ns14.py:312: in test_ns14_04
+    run_load(opening, tmp_path, record_property)
+tests\execution_r4\ns14_load.py:132: in run_load
+    assert response.status_code == 202, response.text
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {"error":{"code":"CONFLICT","stage":"operation.admit","message":"This intent is not eligible for execution.","possible_effect":false,"retry_safe":false,"operation_id":null,"action":""}}</failure></testcase></testsuite></testsuites>

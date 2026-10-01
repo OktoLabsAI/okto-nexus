@@ -1,0 +1,18 @@
+tests\execution_r4\test_ns14.py:315: in test_ns14_04
+    run_load(opening, tmp_path, record_property)
+tests\execution_r4\ns14_load.py:201: in run_load
+    queue_result = asyncio.run(exercise())
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests\execution_r4\ns14_load.py:182: in exercise
+    assert response.status_code == 429, response.text
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {"operation_id":"op_fda4914a12eb390d70583c7f5e0f0b93","client_intent_id":"load-overflow-0","scope":{"agent_id":"subject","authorization_revision":1,"binding_id":"binding","binding_revision":1,"configuration_revision":1,"credential_epoch":1,"executor_id":"exe_2ac6c506e4b62e68e8a3beafb097a1b7","server_id":"srv_a7c9ba140a4642061607fa9b34528ecf","session_id":"ses_9ee676cc099de47c59bad576277f9ee7","session_owner_generation":1,"workspace_binding_id":"wxb","workspace_id":"ws"},"action":"turn.submit","intent_hash":"sha256:7e8b74e9b152f4b1b47f0a51af22fd2eeda61873df5b75384a234a8cc46aa0dc","admission_state":"ACCEPTED","executor_stage":null,"possible_effect":false,"retry_safe":false,"receipt_revision":0,"last_observed_at":"2026-10-01T15:54:39.804510+00:00","error":null,"follow_up_operation_ids":[]}
