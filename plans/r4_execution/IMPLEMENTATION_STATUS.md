@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.03 canonical managed handoff - October 1, 2026
+
+Installed verification: **111 distinct passes**, plus **3 architecture checks**. Managed claims atomically retain work grants, exclusive delivery and canonical opening/turn admission. Claim/grant authority is revalidated before effects; native terminal does not complete the handoff. Authorized history exposes canonical operation/session references. See [scope](M12_NS15_03_HANDOFF.md) and [manifest](test_runs_20261001_ns15_03_handoff.json). Path-free handoff surfaces, combined claim competition, canonical structured results, result/event publication, cross-protocol fallback and native loader removal remain pending; normative TR4-06-05/TR4-15-03 and release gates remain open.
+
 ## NS15.03 mixed delivery selection - October 1, 2026
 
 Installed verification: **57 distinct passes**, plus **3 architecture checks**. Canonical ready sessions now participate in existing delivery priority/equivalence selection; ambiguous or unresolved ownership refuses before claims/effects. Canonical IDs stay out of legacy harness foreign keys and legacy fallback cannot call the canonical target through old constructors. See [scope](M12_NS15_03_DELIVERY_SELECTION.md) and [manifest](test_runs_20261001_ns15_03_delivery_selection.json). Cross-protocol post-failure fallback, handoff delivery, result/event publication and native loader removal remain pending; normative TR4-06-05/TR4-15-03 and release gates remain open.

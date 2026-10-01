@@ -259,10 +259,12 @@ def build_service(deps: Any, *, register_approval_executor: bool = True) -> Hand
     from okto_nexus.adapters.outbound.sqlite.runtime_outbox_repo import SqliteRuntimeOutboxRepo
     from .harness import build_access_service
     from .messages import wake_runtime
+    from okto_nexus.bootstrap.execution_compat import admit_delivery
     service.runtime_work = RuntimeWorkService(access=build_access_service(deps), outbox=SqliteRuntimeOutboxRepo(),
         messages=repos.messages, deliveries=repos.deliveries, clock=deps.clock, sessions=repos.sessions,
         validate_claim=service.validate_managed_claim, wake=lambda: wake_runtime(deps),
-        owner_provider=lambda: getattr(deps, "runtime_dispatcher", None))
+        owner_provider=lambda: getattr(deps, "runtime_dispatcher", None),
+        canonical_admit=lambda uow, operation_id: admit_delivery(deps, uow, operation_id))
 
     # Approved re-execution (BR2): the persisted kwargs re-enter the REAL use
     # case with the one-shot interception bypass; every other gate stays live.

@@ -18,11 +18,12 @@ def denied():
 
 
 class RuntimeWorkService:
-    def __init__(self, *, access, outbox, messages, deliveries, clock, validate_claim, wake, sessions, owner_provider=None):
+    def __init__(self, *, access, outbox, messages, deliveries, clock, validate_claim, wake, sessions, owner_provider=None, canonical_admit=None):
         self.access, self.outbox = access, outbox
         self.messages, self.deliveries, self.clock = messages, deliveries, clock
         self.validate_claim, self.wake = validate_claim, wake
         self.owner_provider = owner_provider
+        self.canonical_admit = canonical_admit
         self.external = ExternalWorkChannel(access=access, sessions=sessions)
 
     def authorize(self, uow, *, context, endpoint_id, grant_id, agent_id, workspace_id, consume=False, audit=True,
@@ -36,9 +37,17 @@ class RuntimeWorkService:
         if not grant:
             raise denied()
         endpoint = self.access.endpoints.get(uow, endpoint_id)
-        descriptor = self.access.registry.get(endpoint["adapter_id"])
         if endpoint["consumption"] != "exclusive":
             raise denied()
+        if endpoint["protocol"] == "nxl-r4":
+            from nexus_connector_core import get_runtime_catalog
+            descriptor = next((r for r in get_runtime_catalog().runtimes if r.adapter_id == endpoint["adapter_id"]), None)
+            profile = self.access.endpoints.profile(uow, endpoint["profile_id"]) if endpoint["profile_id"] else None
+            if (descriptor is None or descriptor.connection_mode != "managed" or not profile or not profile["enabled"]
+                    or "managed_work" in profile["config"].get("disabled_capabilities", ())):
+                raise denied()
+            return context, grant, endpoint, profile, None
+        descriptor = self.access.registry.get(endpoint["adapter_id"])
         if descriptor.substrate == "attach":
             proof = self.external.current(uow, context=context, endpoint=endpoint, proof=external_proof,
                 session_id=session_id, session_secret=session_secret)
@@ -75,6 +84,10 @@ class RuntimeWorkService:
 
     def enqueue(self, uow, *, handoff, authorized, key, digest, now, completion_mode="authenticated_nexus_call"):
         context, grant, endpoint, profile, proof = authorized
+        canonical = endpoint["protocol"] == "nxl-r4"
+        if canonical and (self.canonical_admit is None or completion_mode != "authenticated_nexus_call"):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                "Canonical work requires authenticated Nexus completion.", {})
         if proof and completion_mode != "authenticated_nexus_call":
             raise denied()
         if uow.connection.execute("SELECT 1 FROM runtime_handoff_bindings WHERE handoff_id=? AND claim_epoch=?",
@@ -83,7 +96,7 @@ class RuntimeWorkService:
         revision = self.validate_claim(uow, handoff=handoff)
         active = uow.connection.execute("SELECT count(*),COALESCE(sum(recipient_agent_id=?),0),"
             "COALESCE(sum(workspace_id=?),0) FROM delivery_outbox WHERE external_completed_at IS NULL AND (status IN ('PENDING','CLAIMED','SENDING','OUTCOME_UNKNOWN') "
-            "OR (status IN ('ACCEPTED','SENT_UNCONFIRMED') AND terminal_event_id IS NULL))",
+            "OR (status IN ('ACCEPTED','SENT_UNCONFIRMED') AND terminal_event_id IS NULL AND canonical_terminal_operation_id IS NULL))",
             (handoff.claimed_by, handoff.workspace_id)).fetchone()
         if any(count >= limit for count, limit in zip(active, (256, 32, 128))):
             raise OktoNexusError(ErrorCode.QUOTA_EXCEEDED, "Managed delivery capacity is exhausted.", {})
@@ -128,7 +141,7 @@ class RuntimeWorkService:
             message_id=message.message_id, delivery_id=delivery.delivery_id, context_id=handoff.handoff_id,
             subject=message.subject, handoff_id=handoff.handoff_id, claim_epoch=handoff.claim_epoch,
             runtime_context=bootstrap)
-        live = self.outbox.live_sessions(uow, endpoint_id=endpoint["endpoint_id"])
+        live = [] if canonical else self.outbox.live_sessions(uow, endpoint_id=endpoint["endpoint_id"])
         if len(live) > 1:
             raise OktoNexusError(ErrorCode.CONFLICT, "AMBIGUOUS_BINDING", {})
         if live:
@@ -140,6 +153,8 @@ class RuntimeWorkService:
             (handoff.handoff_id, handoff.claim_epoch, operation_id, grant["grant_id"], grant["revision"],
              context.actor_agent_id, key, digest, now, completion_mode,
              proof.session_id if proof else None, proof.secret_binding if proof else None))
+        if canonical:
+            self.canonical_admit(uow, operation_id)
         return dict(operation_id=operation_id, claim_epoch=handoff.claim_epoch, status="PENDING", grant_id=grant["grant_id"])
 
     def revalidate(self, uow, *, operation):
@@ -323,4 +338,12 @@ class RuntimeWorkService:
             "FROM runtime_handoff_bindings b "
             "JOIN delivery_outbox o ON o.operation_id=b.operation_id WHERE b.handoff_id=? AND b.claim_epoch=?",
             (handoff_id, claim_epoch)).fetchone()
-        return dict(row) if row else None
+        if row is None:
+            return None
+        result = dict(row)
+        canonical = uow.connection.execute("SELECT p.operation_id,p.session_id,p.action,p.admission_state "
+            "FROM execution_domain_deliveries m JOIN execution_operations p USING(server_id,executor_id,operation_id) "
+            "WHERE m.domain_operation_id=? ORDER BY p.created_at,p.operation_id LIMIT 3", (row["operation_id"],)).fetchall()
+        if canonical:
+            result["canonical_operations"] = [dict(item) for item in canonical]
+        return result

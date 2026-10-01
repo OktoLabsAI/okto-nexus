@@ -27,6 +27,11 @@ def build_execution_access(deps):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "The delivery no longer owns its logical claim.", {})
         planner = RuntimeDeliveryPlanner(endpoints=access.endpoints, outbox=SqliteRuntimeOutboxRepo(),
             agents=access.agents, registry=None, config=deps.config)
+        if uow.connection.execute("SELECT 1 FROM runtime_handoff_bindings WHERE operation_id=?", (operation["operation_id"],)).fetchone():
+            from ..adapters.inbound.mcp.tools.handoff import build_service as build_handoff
+            build_handoff(deps, register_approval_executor=False).runtime_work.revalidate(uow, operation=operation)
+            planner.causality.validate_dispatch(uow, operation=operation, now=deps.clock.now_iso())
+            return
         planner.revalidate(uow, operation=operation, config=deps.config)
         messages = build_service(deps)
         messages.revalidate_runtime_delivery(uow, operation)
