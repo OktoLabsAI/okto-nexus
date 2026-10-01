@@ -1,0 +1,66 @@
+{
+  "adapter": "codex_app_server",
+  "missing_login": true,
+  "server_release_gate_override": true,
+  "native_qualification_override": false,
+  "synthetic_native_factory": false,
+  "public_connector_cli": true,
+  "cli_subprocess": true,
+  "protected_os_vault": true,
+  "topology": "Single Windows host; actual loopback HTTP/WSS; separate Server and daemon processes.",
+  "phase": "finished",
+  "vault_backend": "keyring:Windows WinVaultKeyring",
+  "candidate_ref": "nexus-install-v1:24d6773e4cffb30762d80c87461061629bd2937636ab099786d74dc00e0bee48",
+  "open_stage": "SUBMITTED",
+  "scope": {
+    "agent_id": "subject",
+    "authorization_revision": 2,
+    "binding_id": "bind_c4ead3a31154d198296f17d22d29263c",
+    "binding_revision": 1,
+    "configuration_revision": 2,
+    "credential_epoch": 1,
+    "executor_id": "exe_e829819e59c7d607801b27e1f6861543",
+    "server_id": "srv_181364252db1894e885be0df0d9a0a65",
+    "session_id": "ses_700c3284f9edbb1d38f6bd437c7feefd",
+    "session_owner_generation": 1,
+    "workspace_binding_id": "wxb_6c26013401cf97adb3882d39fa514da4",
+    "workspace_id": "wsr_56093ba10f10e747c487005d554a32d7"
+  },
+  "failure_type": "TimeoutError",
+  "failure_phase": "runtime.operation",
+  "failure_frames": [
+    {
+      "file": "test_real_connector_providers.py",
+      "function": "run",
+      "line": 283
+    },
+    {
+      "file": "test_real_connector_providers.py",
+      "function": "receipt",
+      "line": 251
+    },
+    {
+      "file": "timeouts.py",
+      "function": "__aexit__",
+      "line": 116
+    }
+  ],
+  "control_failures": [
+    {
+      "state": "CONTROL_READY",
+      "executor_id": "exe_e829819e59c7d607801b27e1f6861543",
+      "control_ready": true,
+      "execution_ready": true,
+      "error_code": null,
+      "recovery_required": false,
+      "cleanup_pending": false,
+      "publication_sequence": 5,
+      "inventory_revision": "sha256:b5f98851b570c54ab02adf6df245c30353fb64af2dd9f135dbe55449edc5b5c1",
+      "connection_generation": 3,
+      "attempts": 2
+    }
+  ],
+  "daemon_exit_code": 0,
+  "campaign_credentials_removed": true,
+  "server_exit_code": 0
+}

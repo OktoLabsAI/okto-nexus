@@ -634,18 +634,28 @@
     },
     "NS05.05": {
       "proposed_nodeid": "tests/execution_r4/test_ns05.py::test_ns05_05",
-      "collected_nodeids": [],
-      "effective_test_command": null,
-      "test_availability": "MISSING",
-      "implementation": "UNVERIFIED",
-      "acceptance": "NOT_RUN",
+      "collected_nodeids": [
+        "tests/execution_r4/test_real_connector_providers.py::test_real_provider_through_public_connector_cli[pi_rpc]",
+        "tests/execution_r4/test_real_connector_providers.py::test_real_provider_through_public_connector_cli[codex_app_server]",
+        "tests/execution_r4/test_real_connector_providers.py::test_real_provider_through_public_connector_cli[claude_stream]"
+      ],
+      "effective_test_command": "Run plans/r4_execution/run_real_consumer_auth.py once per adapter using the verified installed artifact set.",
+      "test_availability": "COLLECTED_ALTERNATIVE_ENTRY",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "PARTIAL",
       "required_scenarios": [
         "TR4-05-05",
         "TN-13",
         "TN-14",
         "TN-15",
         "TN-16"
-      ]
+      ],
+      "evidence": [
+        "plans/r4_execution/test_runs_20261001_native_auth.json",
+        "plans/r4_execution/test_runs_20261001_provider_home.json",
+        "plans/r4_execution/test_runs_20261001_binding_lanes.json"
+      ],
+      "remaining_acceptance": "Public UI recovery, complete drift/qualification refusal journeys, and replacement while an unrelated real session is running remain pending. This partial authentication campaign does not close TR4-05-05, the four TN cases, NS05.05 or a release gate."
     },
     "NS06.01": {
       "proposed_nodeid": "tests/execution_r4/test_ns06.py::test_ns06_01",

@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## Approved Codex home and public authentication failures — October 1, 2026
+
+Core 016821f / 0.2.47.dev0 fixes Codex state-directory selection from the approved provider home. Connector 10a123a and Nexus 5d90a85 adopt the same wheel. Installed results: 89 Core, 122 Connector and 21 Nexus cases passed; real public Pi/Codex/Claude missing-login journeys passed; authenticated Codex passed MCP handoff and approved rebinding. A concurrent Pi readiness/shutdown timeout is retained and remains unresolved despite the isolated pass. NS05.05 remains partial; all gates open. See [details](M03_PROVIDER_HOME_ISOLATION.md) and [manifest](test_runs_20261001_provider_home.json).
+
+
 ## Qualified Pi/Codex authentication diagnostics — October 1, 2026
 
 Core 3982f6b / 0.2.46.dev0 adds durable correlated Pi prompt rejection and Codex terminal HTTP 401 classification. Connector 96d11cf and Nexus 581df44 adopt the identical wheel. Installed tests passed: 72 Core (including actual missing-login Pi, Codex and Claude), 122 Connector and 21 Nexus. Retry remains unsafe after a protocol write; operation replay does not send again. Public consumer missing-login journeys and full platform/host acceptance remain pending. See [details](M03_QUALIFIED_NATIVE_AUTH.md) and [manifest](test_runs_20261001_native_auth.json). No gate closed.
