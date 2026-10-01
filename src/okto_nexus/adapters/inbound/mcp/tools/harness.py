@@ -331,6 +331,10 @@ def prepare_runtime(deps, *, agent_id, kind, project_root, substrate=None, endpo
 
 
 def open_runtime(deps, **arguments):
+    from okto_nexus.bootstrap.execution_compat import canonical_endpoint, open_session
+    canonical = canonical_endpoint(deps, arguments.get("endpoint_id"))
+    if canonical:
+        return open_session(deps, request_context(), canonical, arguments)
     context = authorize_request(deps, action="access", substrate=arguments.get("substrate"))
     for name in ("metadata", "notify_target", "backend"):
         arguments[name] = runtime_object(name, arguments.get(name))
@@ -348,6 +352,10 @@ def open_runtime(deps, **arguments):
 
 
 def connect_own_endpoint(deps, *, endpoint_id, idempotency_key):
+    from okto_nexus.bootstrap.execution_compat import canonical_endpoint, connect_endpoint
+    canonical = canonical_endpoint(deps, endpoint_id)
+    if canonical:
+        return connect_endpoint(deps, request_context(), canonical, idempotency_key)
     from okto_nexus.application.agent_connections import AgentConnectionService
     context = request_context()
     arguments = AgentConnectionService(build_access_service(deps)).prepare_self_open(

@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.03 canonical opening - October 1, 2026
+
+Installed verification: **80 distinct passes**, plus **3 architecture checks**. Explicit canonical REST/MCP opening and path-free MCP endpoint connect now use R4/Core, with stable retries, approved-realization validation and endpoint authority. See [scope](M12_NS15_03_OPEN.md) and [manifest](test_runs_20261001_ns15_03_open.json). Implicit selection, boot/delivery, connection-key open, event parity and duplicated native loader removal remain pending; normative TR4-15-03 and release gates remain open.
+
 ## NS15.03 canonical session callers - October 1, 2026
 
 Installed verification: **65 distinct passes**, plus **3 architecture checks**. Existing MCP/REST commands and reads for canonical sessions now use R4 admission and Core dispatch, retaining endpoint/grant authorization and stable retries. See [scope](M12_NS15_03_CALLERS.md) and [manifest](test_runs_20261001_ns15_03_callers.json). Opening, boot/delivery, event parity and removal of duplicated native loaders remain pending; normative TR4-15-03 and release gates remain open.

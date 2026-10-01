@@ -129,3 +129,109 @@ def test_canonical_callers_fail_closed(connected_local, monkeypatch, denial):
     assert native.native.sent == []
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations").fetchone()[0] == 1
+
+
+@pytest.mark.parametrize("transport", ["rest", "mcp"])
+def test_existing_open_uses_approved_realization_and_core(connected_local, monkeypatch, transport):
+    setup, binding, native = connected_local
+    deps, _, client, headers, *_, root = setup
+    def forbidden(*args, **kwargs):
+        raise AssertionError("Canonical open reached legacy native construction")
+    monkeypatch.setattr(harness, "construct_profile_connector", forbidden)
+    body = dict(agent_id="subject", kind="codex", project_root=str(root),
+                endpoint_id=binding["endpoint_id"], idempotency_key="compat-public-open")
+    if transport == "mcp":
+        monkeypatch.syspath_prepend(str(Path(__file__).parents[1]))
+        from test_pr34_remediation import tool
+        client.headers["host"] = "127.0.0.1:8000"
+        key = headers["subject"]["Authorization"].removeprefix("Bearer ")
+        invoke = lambda payload: tool(client, key, "harness_open", payload)
+    else:
+        def invoke(payload):
+            response = client.post("/api/v1/harness/sessions", headers=headers["subject"], json=payload)
+            assert response.status_code == 200, response.text
+            return response.json()
+    opened = invoke(body)
+    assert opened["ok"], opened
+    wait_receipt(setup, opened["data"])
+    replay = invoke(body)
+    assert replay["ok"] and replay["data"]["reused"], replay
+    assert replay["data"]["operation_id"] == opened["data"]["operation_id"]
+    assert native.opens == 1
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT COUNT(*) FROM harness_sessions").fetchone()[0] == 0
+        assert uow.connection.execute("SELECT COUNT(*) FROM execution_sessions").fetchone()[0] == 1
+    session = opened["data"]["scope"]["session_id"]
+    close = client.post(f"/api/v1/harness/sessions/{session}/close", headers=headers["subject"],
+                        json={"idempotency_key": "close-public-open"})
+    assert close.status_code == 200, close.text
+    wait_receipt(setup, close.json()["data"], stages=("SUCCEEDED",))
+    assert native.native.stopped
+
+
+@pytest.mark.parametrize("change", [
+    {"project_root": "C:/unapproved-root"}, {"kind": "pi"}, {"agent_id": "operator"},
+    {"backend": {"env": {}}}, {"metadata": {}}, {"notify_target": {}},
+    {"target_pid": 123}, {"substrate": "attach"}, {"idempotency_key": None},
+])
+def test_canonical_open_rejects_legacy_override_without_effect(connected_local, change):
+    setup, binding, native = connected_local
+    deps, _, client, headers, *_, root = setup
+    body = dict(agent_id="subject", kind="codex", project_root=str(root),
+                endpoint_id=binding["endpoint_id"], idempotency_key="invalid-open")
+    response = client.post("/api/v1/harness/sessions", headers=headers["subject"], json=body | change)
+    assert response.status_code in (400, 403, 422), response.text
+    assert native.opens == 0
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations").fetchone()[0] == 0
+        assert uow.connection.execute("SELECT COUNT(*) FROM harness_sessions").fetchone()[0] == 0
+
+
+def test_endpoint_connect_uses_canonical_binding_without_legacy_catalog(connected_local, monkeypatch):
+    setup, binding, native = connected_local
+    _, _, client, headers, *_ = setup
+    monkeypatch.syspath_prepend(str(Path(__file__).parents[1]))
+    from test_pr34_remediation import tool
+    from okto_nexus.application.agent_connections import AgentConnectionService
+    def forbidden(*args, **kwargs):
+        raise AssertionError("Canonical connect reached legacy catalog preparation")
+    monkeypatch.setattr(AgentConnectionService, "prepare_self_open", forbidden)
+    client.headers["host"] = "127.0.0.1:8000"
+    key = headers["subject"]["Authorization"].removeprefix("Bearer ")
+    body = dict(view="connections", maintenance=dict(action="connect",
+                endpoint_id=binding["endpoint_id"], idempotency_key="canonical-connect"))
+    opened = tool(client, key, "harness_list", body)
+    assert opened["ok"], opened
+    wait_receipt(setup, opened["data"])
+    replay = tool(client, key, "harness_list", body)
+    assert replay["ok"] and replay["data"]["reused"], replay
+    assert replay["data"]["operation_id"] == opened["data"]["operation_id"]
+    assert native.opens == 1
+    closed = tool(client, key, "harness_close", dict(
+        session_id=opened["data"]["scope"]["session_id"], idempotency_key="connect-close"))
+    assert closed["ok"], closed
+    wait_receipt(setup, closed["data"], stages=("SUCCEEDED",))
+
+
+@pytest.mark.parametrize("denial", ["grant", "endpoint", "readiness"])
+def test_canonical_open_preserves_admission_denials(connected_local, monkeypatch, denial):
+    setup, binding, native = connected_local
+    deps, _, client, headers, *_, root = setup
+    if denial == "readiness":
+        info = execution_compat.protocol_info()
+        monkeypatch.setattr(execution_compat, "protocol_info",
+                            lambda: {**info, "remote_execution_ready": False})
+    else:
+        with deps.connection_factory.unit_of_work() as uow:
+            if denial == "grant":
+                uow.connection.execute("DELETE FROM runtime_execution_grants")
+            else:
+                uow.connection.execute("UPDATE agent_endpoints SET enabled=0 WHERE endpoint_id=?",
+                                       (binding["endpoint_id"],))
+    response = client.post("/api/v1/harness/sessions", headers=headers["subject"], json=dict(
+        agent_id="subject", kind="codex", project_root=str(root),
+        endpoint_id=binding["endpoint_id"], idempotency_key="denied-open"))
+    assert response.status_code in (403, 409), response.text
+    assert native.opens == 0
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations").fetchone()[0] == 0
