@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-01",
+  "nexus_commit": "1ce29ab",
+  "connector_commit": "e2012a3",
+  "core_commit": "9c778719c3892d9742bb358b0020e39ed43df08d",
+  "scope": "Public authenticated SessionView observation; canonical execution mutations unchanged.",
+  "artifact": "evidence/session-views-artifact.json",
+  "verification": {
+    "installed_passed": 68,
+    "installed_manifest": "evidence/session-views-installed.json",
+    "installed_xml": "evidence/session-views-installed.xml",
+    "pip_check": "passed"
+  },
+  "preserved_attempts": {
+    "before_operator_passed": 67,
+    "fixture_failure": "evidence/session-views-collision-fixture-failure.xml",
+    "reason": "The synthetic second executor reused a globally unique workspace binding ID; the fixture now uses a separate ID."
+  },
+  "limits": [
+    "Process state and ownership remain UNKNOWN until independently verified observations are projected.",
+    "Control availability is a Server observation, not authority to execute; admission still applies.",
+    "Release-pending projects an admitted close without canonical CLOSED lifecycle.",
+    "No CLI/UI consumption or session-reuse implementation is claimed.",
+    "Native provider evidence from the previous campaign remains tied to the previous Nexus wheel; it is not promoted to this artifact.",
+    "The wheel includes preexisting UI assets; no UI/US English acceptance. All milestones and release gates remain open."
+  ]
+}

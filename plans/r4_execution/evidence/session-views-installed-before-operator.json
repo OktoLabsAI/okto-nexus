@@ -1,0 +1,55 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+    "-I",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed\\pytest.ini",
+    "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4",
+    "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_session_views.py",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_ns02_receipts.py",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_embedded_dispatch.py",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_session_capabilities.py",
+    "-q",
+    "--tb=short",
+    "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\evidence\\session-views-installed.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed",
+  "verified_packages": {
+    "nexus": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus",
+      "artifact": {
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-session-views-6qpz_mww\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+        "sha256": "1689577b1db6d821958567e1e212eb629c8927894a4d885f7863c68124afb9b8",
+        "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-session-views-6qpz_mww"
+      }
+    },
+    "connector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus_connector",
+      "artifact": {
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-running-launch-connector-uygma6jy\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+        "sha256": "8a0edc3404f9ccf2410282a20b8b40530e036a6b41fc4fb8e4bbdfd2f1840a2e",
+        "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-running-launch-connector-uygma6jy",
+        "source_commit": "e2012a3"
+      }
+    },
+    "core": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\nexus_connector_core",
+      "artifact": {
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-opening-core-nzdtg0fa\\dist\\nexus_connector_core-0.2.44.dev0-py3-none-any.whl",
+        "sha256": "c6f8555adeadb68959daa8e2ad91ec755eab49183049112a3d719470321e8db0",
+        "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-opening-core-nzdtg0fa",
+        "source_commit": "9c778719c3892d9742bb358b0020e39ed43df08d"
+      }
+    }
+  },
+  "exit_code": 0,
+  "test_hashes": {
+    "test_session_views.py": "32f55972a49f7f2b9391794c2d94058a333028616e153afbf2937166331afbcb",
+    "test_ns02_receipts.py": "d805840fc2f0a9ddb36144b2c462a75e252c134ab00641bc22173c0cc94404fd",
+    "test_embedded_dispatch.py": "76aeefc578220eb1d77a56964f52d2cb6127ea99d44eab4e718758b21414b161",
+    "test_session_capabilities.py": "49d3c933ccbc01d9ad3ab3d338cee9781ce77a3aa32b4884b3804c2d23e3b0e3"
+  }
+}
