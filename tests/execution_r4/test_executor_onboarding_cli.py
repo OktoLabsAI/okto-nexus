@@ -139,6 +139,18 @@ def test_connector_public_commands_publish_realization_over_tcp(tmp_path, monkey
                 local = store.load()
                 assert len(local.execution_bindings) == 1 and not local.bindings
                 assert local.realizations[0].status == "BOUND"
+                from okto_nexus_connector.cli.commands.runtime import run_runtime
+                runtime_args = parser.parse_args(["runtime", "start", "assistant", "--new-session",
+                                                  "--client-intent-id", "open-runtime"])
+                reserved = await run_runtime(runtime_args, output, root)
+                assert reserved["state"] == "RESOLVED" and reserved["blockers"]
+                assert await run_runtime(runtime_args, output, root) == reserved
+                query_args = parser.parse_args(["runtime", "operation", "--alias", "assistant",
+                                                "--client-intent-id", "open-runtime"])
+                observed = await run_runtime(query_args, output, root)
+                assert observed["operation_id"] == reserved["operation_id"]
+                assert observed["operation_found"] is False
+                assert len(store.load().runtime_intents) == 1
                 import json
                 import subprocess
                 for command in (["show", "assistant"], ["list"]):

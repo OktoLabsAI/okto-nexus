@@ -368,6 +368,13 @@ def build_router() -> APIRouter:
             headers={"Cache-Control": "no-store"},
         )
 
+    def runtime_error(error, stage):
+        status = {ErrorCode.NOT_FOUND: 404, ErrorCode.PERMISSION_DENIED: 403,
+                  ErrorCode.CONFLICT: 409, ErrorCode.VALIDATION_ERROR: 422}.get(error.code, 500)
+        response = v1_err(status, error.code, error.message, stage=stage)
+        response.headers["Cache-Control"] = "no-store"
+        return response
+
     @router.post("/runtime/intents:resolve")
     async def resolve_intent(body: ResolveIntentRequest,
                              request: Request) -> JSONResponse:
@@ -375,12 +382,15 @@ def build_router() -> APIRouter:
         if agent is None:
             return v1_err(401, "AUTH_FAILED", "Authentication is required.")
         factory = request.app.state.deps.connection_factory
-        resolution = await anyio.to_thread.run_sync(
-            lambda: resolve_execution_intent(
-                factory, actor_agent_id=agent.agent_id,
-                request=body.model_dump(exclude_none=True),
-                remote_ready=protocol_info()["remote_execution_ready"],
-                fresh_publications=request.app.state.inventory_fresh_publications))
+        try:
+            resolution = await anyio.to_thread.run_sync(
+                lambda: resolve_execution_intent(
+                    factory, actor_agent_id=agent.agent_id,
+                    request=body.model_dump(exclude_none=True),
+                    remote_ready=protocol_info()["remote_execution_ready"],
+                    fresh_publications=request.app.state.inventory_fresh_publications))
+        except OktoNexusError as error:
+            return runtime_error(error, "intent.resolve")
         return JSONResponse(resolution, headers={"Cache-Control": "no-store"})
 
     @router.get("/runtime/intents/{client_intent_id}")
@@ -390,10 +400,13 @@ def build_router() -> APIRouter:
         if agent is None:
             return v1_err(401, "AUTH_FAILED", "Authentication is required.")
         factory = request.app.state.deps.connection_factory
-        view = await anyio.to_thread.run_sync(
-            lambda: read_execution_intent(
-                factory, actor_agent_id=agent.agent_id,
-                client_intent_id=client_intent_id))
+        try:
+            view = await anyio.to_thread.run_sync(
+                lambda: read_execution_intent(
+                    factory, actor_agent_id=agent.agent_id,
+                    client_intent_id=client_intent_id))
+        except OktoNexusError as error:
+            return runtime_error(error, "intent.read")
         return JSONResponse(view, headers={"Cache-Control": "no-store"})
 
     @router.post("/runtime/operations")
@@ -403,13 +416,16 @@ def build_router() -> APIRouter:
         if agent is None:
             return v1_err(401, "AUTH_FAILED", "Authentication is required.")
         factory = request.app.state.deps.connection_factory
-        view, reused = await anyio.to_thread.run_sync(
-            lambda: submit_execution_operation(
-                factory, actor_agent_id=agent.agent_id,
-                request=body.model_dump(),
-                fresh_publications=request.app.state.inventory_fresh_publications,
-                remote_ready=protocol_info()["remote_execution_ready"],
-            ))
+        try:
+            view, reused = await anyio.to_thread.run_sync(
+                lambda: submit_execution_operation(
+                    factory, actor_agent_id=agent.agent_id,
+                    request=body.model_dump(),
+                    fresh_publications=request.app.state.inventory_fresh_publications,
+                    remote_ready=protocol_info()["remote_execution_ready"],
+                ))
+        except OktoNexusError as error:
+            return runtime_error(error, "operation.admit")
         return JSONResponse(view, status_code=200 if reused else 202,
                             headers={"Cache-Control": "no-store"})
 
@@ -489,7 +505,10 @@ def build_router() -> APIRouter:
                 actor_agent_id=None if history_ticket is not None else agent.agent_id,
             ).public_view()
 
-        view = await anyio.to_thread.run_sync(_read)
+        try:
+            view = await anyio.to_thread.run_sync(_read)
+        except OktoNexusError as error:
+            return runtime_error(error, "operation.read")
         return JSONResponse(view, headers={"Cache-Control": "no-store"})
 
     @router.get("/agents/{agent_id}/runtime-options")
