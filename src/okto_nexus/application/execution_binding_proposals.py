@@ -120,7 +120,7 @@ def prepare_execution_binding(
         "client_intent_id", "executor_id", "adapter_id", "candidate_ref",
         "inventory_revision", "realization_ref", "workspace_id", "alias",
     }
-    allowed = required | {"agent_id_hint"}
+    allowed = required | {"agent_id_hint", "replace_binding_id"}
     if (not isinstance(request, Mapping) or not required <= set(request) or
             not set(request) <= allowed):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
@@ -132,6 +132,9 @@ def prepare_execution_binding(
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                                   "Invalid binding preparation field.",
                                   {"field": name})
+    if request.get("replace_binding_id") is not None and (
+            type(request["replace_binding_id"]) is not str or not 1 <= len(request["replace_binding_id"]) <= 160):
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid replacement binding ID.", {})
     subject_agent_id = request.get("agent_id_hint") or actor_agent_id
     if type(subject_agent_id) is not str or not 1 <= len(subject_agent_id) <= 160:
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
@@ -226,7 +229,16 @@ def prepare_execution_binding(
             subject_agent_id=subject_agent_id, executor_id=request["executor_id"],
             workspace_id=request["workspace_id"], adapter_id=request["adapter_id"],
             alias=request["alias"])
+        replacement = None
+        if request.get("replace_binding_id") is not None:
+            from .execution_binding_replacement import replacement_target
+            replacement = replacement_target(conn, server_id=server_id, subject_agent_id=subject_agent_id,
+                executor_id=request["executor_id"], workspace_id=request["workspace_id"],
+                adapter_id=request["adapter_id"], alias=request["alias"],
+                binding_id=request["replace_binding_id"])
+            legacy = [row for row in legacy if row["endpoint_id"] != replacement["endpoint_id"]]
         blockers = (["existing_endpoint_requires_review"] if legacy else [])
+
         request_operator_proof = bool(
             not operator and access is not None and
             access.config.feature_harness_integrations)
@@ -234,6 +246,8 @@ def prepare_execution_binding(
             raise OktoNexusError(ErrorCode.INTERNAL_ERROR,
                                   "Binding approval is not available.", {})
         enable_requested = operator or request_operator_proof
+        if replacement is not None and not enable_requested:
+            blockers.append("replacement_requires_operator")
         if enable_requested:
             _require_binding_method(conn, subject_agent_id=subject_agent_id,
                                     adapter_id=request["adapter_id"])
@@ -253,6 +267,9 @@ def prepare_execution_binding(
         proposal_id = "prop_" + secrets.token_hex(16)
         binding_id = "bind_" + secrets.token_hex(16)
         endpoint_id = "ep_" + secrets.token_hex(16)
+        if replacement is not None:
+            binding_id, endpoint_id, profile_id = (replacement["binding_id"],
+                replacement["endpoint_id"], replacement["profile_id"])
         now = datetime.now(timezone.utc)
         expires_at = (now + timedelta(minutes=10)).isoformat()
         expected = {
@@ -270,6 +287,8 @@ def prepare_execution_binding(
             "configuration_digest": realization["configuration_digest"],
             "alias": request["alias"],
         }
+        if replacement is not None:
+            expected["replacement"] = replacement
         diff_semantic = {
             "server_id": server_id, "executor_id": request["executor_id"],
             "agent_id": subject_agent_id, "binding_id": binding_id,
@@ -292,7 +311,11 @@ def prepare_execution_binding(
         summary = (f"Connect {agent_name} to {request['adapter_id']} "
                    f"installation {request['candidate_ref']} on {host_name} "
                    f"for {project_name} as {request['alias']}.")
-        if enable_requested:
+        if replacement is not None:
+            summary = (f"Replace binding {binding_id} revision {replacement['binding_revision']} "
+                       f"from realization {replacement['realization_ref']} to {request['realization_ref']}. "
+                       "Preserve the agent, endpoint and profile. " + summary)
+        if enable_requested and replacement is None:
             summary += (" Enable the approved endpoint and its managed profile."
                         if profile_id else " Enable the approved attach endpoint.")
             summary += " Execution still requires a separate scoped grant."
@@ -313,8 +336,9 @@ def prepare_execution_binding(
             "configuration_revision": revisions.configuration,
             "required_approvals": ["operator_confirmation" if operator else "agent_confirmation"] + ([approval_id] if approval_id else []),
             "diff": {
-                "fields_changed": ["agent", "host", "installation",
-                                   "project", "scope", "endpoint", "binding"] + (["profile", "enabled"] if enable_requested else []),
+                "fields_changed": (["realization", "installation", "workspace_binding", "binding_revision"] if replacement else
+                    ["agent", "host", "installation", "project", "scope", "endpoint", "binding"] +
+                    (["profile", "enabled"] if enable_requested else [])),
                 "approved_diff_hash": diff_hash,
                 "requires_operator": enable_requested or bool(blockers),
                 "summary": summary,
@@ -506,38 +530,48 @@ def apply_execution_binding(
             subject_agent_id=subject_agent_id, executor_id=proposal["executor_id"],
             workspace_id=proposal["workspace_id"], adapter_id=proposal["adapter_id"],
             alias=expected["alias"])
+        replacement = expected.get("replacement")
+        if replacement is not None:
+            from .execution_binding_replacement import replacement_target
+            actual = replacement_target(conn, server_id=server_id, subject_agent_id=subject_agent_id,
+                executor_id=proposal["executor_id"], workspace_id=proposal["workspace_id"],
+                adapter_id=proposal["adapter_id"], alias=expected["alias"], binding_id=proposal["binding_id"])
+            if actual != replacement or not operator_approved:
+                raise OktoNexusError(ErrorCode.CONFLICT, "The replacement binding changed after review.", {})
+            existing = [item for item in existing if item["endpoint_id"] != replacement["endpoint_id"]]
         if existing:
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The binding alias is already in use in this executor and workspace.", {})
         now = datetime.now(timezone.utc).isoformat()
         profile_id = proposal["profile_id"] if operator_approved else None
-        endpoint_repo = SqliteEndpointRepo()
-        if profile_id:
-            # Technical configuration remains in the approved realization on
-            # the executor. No remote command, path or secret is resolved here.
-            endpoint_repo.put_profile(
-                uow, profile_id=profile_id, adapter_id=proposal["adapter_id"],
-                config={}, secret_refs={}, inherit_ambient=False,
-                enabled=True, now=now)
-            endpoint_repo.audit_configuration(
-                uow, context=context, kind="profile", resource_id=profile_id,
-                old_revision=None, new_revision=1,
-                fields=["enabled", "config"], now=now)
-        conn.execute(
-            "INSERT INTO agent_endpoints(endpoint_id,agent_id,workspace_id,"
-            "adapter_id,protocol,profile_id,enabled,activation_state,public_config,"
-            "created_at,updated_at) VALUES (?,?,?,?,'nxl-r4',?,?,'approved',?,?,?)",
-            (proposal["endpoint_id"], subject_agent_id, proposal["workspace_id"],
-             proposal["adapter_id"], profile_id, int(operator_approved),
-             canonical_json({"alias": expected["alias"]}).decode("utf-8"),
-             now, now),
-        )
-        if context is not None:
-            endpoint_repo.audit_configuration(
-                uow, context=context, kind="endpoint",
-                resource_id=proposal["endpoint_id"], old_revision=None,
-                new_revision=1, fields=["enabled", "profile_id", "public_config"],
-                now=now)
+        if replacement is None:
+            endpoint_repo = SqliteEndpointRepo()
+            if profile_id:
+                # Technical configuration remains in the approved realization on
+                # the executor. No remote command, path or secret is resolved here.
+                endpoint_repo.put_profile(
+                    uow, profile_id=profile_id, adapter_id=proposal["adapter_id"],
+                    config={}, secret_refs={}, inherit_ambient=False,
+                    enabled=True, now=now)
+                endpoint_repo.audit_configuration(
+                    uow, context=context, kind="profile", resource_id=profile_id,
+                    old_revision=None, new_revision=1,
+                    fields=["enabled", "config"], now=now)
+            conn.execute(
+                "INSERT INTO agent_endpoints(endpoint_id,agent_id,workspace_id,"
+                "adapter_id,protocol,profile_id,enabled,activation_state,public_config,"
+                "created_at,updated_at) VALUES (?,?,?,?,'nxl-r4',?,?,'approved',?,?,?)",
+                (proposal["endpoint_id"], subject_agent_id, proposal["workspace_id"],
+                 proposal["adapter_id"], profile_id, int(operator_approved),
+                 canonical_json({"alias": expected["alias"]}).decode("utf-8"),
+                 now, now),
+            )
+            if context is not None:
+                endpoint_repo.audit_configuration(
+                    uow, context=context, kind="endpoint",
+                    resource_id=proposal["endpoint_id"], old_revision=None,
+                    new_revision=1, fields=["enabled", "profile_id", "public_config"],
+                    now=now)
         conn.execute(
             "UPDATE execution_workspace_bindings SET status='READY',revision=revision+1 "
             "WHERE server_id=? AND executor_id=? AND workspace_binding_id=?",
@@ -550,16 +584,20 @@ def apply_execution_binding(
             (server_id, proposal["executor_id"],
              proposal["realization_ref"]),
         )
-        conn.execute(
-            "INSERT INTO execution_bindings(server_id,binding_id,executor_id,"
-            "endpoint_id,workspace_binding_id,candidate_ref,inventory_revision,"
-            "realization_ref,realization_revision,binding_revision) "
-            "VALUES (?,?,?,?,?,?,?,?,?,1)",
-            (server_id, proposal["binding_id"], proposal["executor_id"],
-             proposal["endpoint_id"], proposal["workspace_binding_id"],
-             proposal["candidate_ref"], proposal["inventory_revision"],
-             proposal["realization_ref"], proposal["realization_revision"]),
-        )
+        if replacement is not None:
+            from .execution_binding_replacement import apply_replacement
+            apply_replacement(conn, proposal=proposal, expected=replacement)
+        else:
+            conn.execute(
+                "INSERT INTO execution_bindings(server_id,binding_id,executor_id,"
+                "endpoint_id,workspace_binding_id,candidate_ref,inventory_revision,"
+                "realization_ref,realization_revision,binding_revision) "
+                "VALUES (?,?,?,?,?,?,?,?,?,1)",
+                (server_id, proposal["binding_id"], proposal["executor_id"],
+                 proposal["endpoint_id"], proposal["workspace_binding_id"],
+                 proposal["candidate_ref"], proposal["inventory_revision"],
+                 proposal["realization_ref"], proposal["realization_revision"]),
+            )
         view = {
             "binding_id": proposal["binding_id"], "server_id": server_id,
             "executor_id": proposal["executor_id"],
@@ -571,9 +609,9 @@ def apply_execution_binding(
             "inventory_revision": proposal["inventory_revision"],
             "realization_ref": proposal["realization_ref"],
             "realization_revision": proposal["realization_revision"],
-            "binding_revision": 1,
-            "authorization_revision": revisions.authorization + 1,
-            "configuration_revision": revisions.configuration + 1,
+            "binding_revision": replacement["binding_revision"] + 1 if replacement else 1,
+            "authorization_revision": revisions.authorization + int(replacement is None),
+            "configuration_revision": revisions.configuration + int(replacement is None),
             "state": "APPROVED",
         }
         conn.execute(

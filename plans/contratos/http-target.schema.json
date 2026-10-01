@@ -1134,6 +1134,11 @@
             }
           ]
         },
+        "replace_binding_id": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 160
+        },
         "executor_id": {
           "type": "string",
           "minLength": 1,

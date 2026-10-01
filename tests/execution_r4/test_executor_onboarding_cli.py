@@ -14,7 +14,7 @@ from okto_nexus.bootstrap.dependencies import bootstrap
 
 
 @pytest.mark.parametrize("bind_flow", [False, True])
-def test_connector_public_commands_publish_realization_over_tcp(tmp_path, monkeypatch, bind_flow):
+def test_connector_public_commands_publish_realization_over_tcp(tmp_path, monkeypatch, bind_flow, replacement_flow=False):
     from okto_nexus_connector.daemon import app as daemon_module
     from okto_nexus_connector.cli.main import build_parser
     from okto_nexus_connector.cli.output import Output
@@ -139,6 +139,34 @@ def test_connector_public_commands_publish_realization_over_tcp(tmp_path, monkey
                 local = store.load()
                 assert len(local.execution_bindings) == 1 and not local.bindings
                 assert local.realizations[0].status == "BOUND"
+                if replacement_flow:
+                    replacement_project = tmp_path / "replacement-project"
+                    replacement_project.mkdir()
+                    replacement_words = list(words)
+                    replacement_words[replacement_words.index("--client-intent-id") + 1] = "realize-replacement"
+                    replacement_words[replacement_words.index("--project") + 1] = str(replacement_project)
+                    replacement_words += ["--workspace-id", bound["binding"]["workspace_id"]]
+                    replacement = await execute(replacement_words)
+                    draft = await bind(["prepare", "--identity", "subject", "--realization-ref", replacement["realization_ref"],
+                        "--alias", "assistant", "--client-intent-id", "prepare-replacement",
+                        "--replace-binding-id", bound["binding"]["binding_id"]])
+                    proposal = draft["proposal"]
+                    assert "Replace binding" in proposal["summary"]
+                    proof = next(ref for ref in proposal["required_approvals"] if ref.startswith("apr_"))
+                    async with httpx.AsyncClient() as http:
+                        decision = await http.post(base + "/api/v1/approvals/" + proof + "/decision",
+                            json={"decision": "approve"}, headers={"Authorization": "Bearer " + operator_key})
+                    assert decision.status_code == 200, decision.text
+                    replaced = await bind(["apply", "--identity", "subject", "--prepare-intent-id", "prepare-replacement",
+                        "--client-intent-id", "apply-replacement", "--approved-diff-hash", proposal["approved_diff_hash"],
+                        "--operator-proof-ref", proof])
+                    assert replaced["binding"]["binding_id"] == bound["binding"]["binding_id"]
+                    assert replaced["binding"]["binding_revision"] == bound["binding"]["binding_revision"] + 1
+                    assert replaced["binding"]["realization_ref"] == replacement["realization_ref"]
+                    assert (await bind(apply_words))["binding"] == bound["binding"]
+                    assert await bind(["show", "assistant"]) == replaced
+                    assert (await bind(["list"]))["execution_bindings"] == [replaced]
+                    assert len(store.load().execution_bindings) == 1
                 from okto_nexus_connector.cli.commands.runtime import run_runtime
                 runtime_args = parser.parse_args(["runtime", "start", "assistant", "--new-session",
                                                   "--client-intent-id", "open-runtime"])
@@ -164,7 +192,7 @@ def test_connector_public_commands_publish_realization_over_tcp(tmp_path, monkey
             assert key not in store.path.read_text() and "nxt4_" not in store.path.read_text()
             assert str(project) not in str(result) and str(binary) not in str(result)
             with deps.connection_factory.unit_of_work(write=False) as uow:
-                assert uow.connection.execute("SELECT COUNT(*) FROM execution_realizations").fetchone()[0] == 1
+                assert uow.connection.execute("SELECT COUNT(*) FROM execution_realizations").fetchone()[0] == 1 + int(replacement_flow)
                 assert uow.connection.execute("SELECT COUNT(*) FROM execution_bindings").fetchone()[0] == int(bind_flow)
                 assert uow.connection.execute("SELECT COUNT(*) FROM execution_sessions").fetchone()[0] == 0
                 assert uow.connection.execute("SELECT COUNT(*) FROM execution_dispatch_outbox").fetchone()[0] == 0
@@ -176,3 +204,7 @@ def test_connector_public_commands_publish_realization_over_tcp(tmp_path, monkey
             await asyncio.wait_for(serving, 15)
             sock.close()
     asyncio.run(run())
+
+
+def test_connector_public_replacement_commands_preserve_binding_identity(tmp_path, monkeypatch):
+    test_connector_public_commands_publish_realization_over_tcp(tmp_path, monkeypatch, True, replacement_flow=True)

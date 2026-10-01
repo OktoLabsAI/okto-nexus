@@ -57,6 +57,7 @@ class BindingPrepareRequest(BaseModel):
 
     client_intent_id: _Id
     agent_id_hint: _Id | None = None
+    replace_binding_id: _Id | None = None
     executor_id: _Id
     adapter_id: _Id
     candidate_ref: Annotated[str, Field(
