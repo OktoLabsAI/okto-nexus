@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-01",
+  "connector_commit": "ee8294c",
+  "nexus_product_commit": "1ce29ab",
+  "nexus_test_commit": "363686e",
+  "core_commit": "9c778719c3892d9742bb358b0020e39ed43df08d",
+  "artifacts": "evidence/session-cli-artifacts.json",
+  "passed": {
+    "installed_connector": 74,
+    "installed_nexus_tcp": 1,
+    "directed_source": 37
+  },
+  "evidence": [
+    "evidence/session-cli-connector-installed.json",
+    "evidence/session-cli-connector-installed.xml",
+    "evidence/session-cli-nexus-installed.json",
+    "evidence/session-cli-nexus-installed.xml",
+    "evidence/session-cli-source.xml",
+    "evidence/session-cli-source-fixture-failure.xml"
+  ],
+  "verified": [
+    "Public parsed CLI inspects READY and CLOSED sessions through actual loopback HTTP, alongside automatic daemon WSS and Core execution.",
+    "Status deduplicates sessions referenced by retained runtime intents.",
+    "Reads continue after binding mapping removal and do not create another operation or native runtime.",
+    "Current canonical subject credential is verified before and after reads; rotation discards responses, including aggregated status.",
+    "HTTP session views enforce the closed schema shape, IDs, integer revisions, booleans, timestamp and wire revision."
+  ],
+  "limitations": [
+    "The integration native peer is synthetic; this does not refresh real-provider acceptance.",
+    "Status covers locally retained intents, not every session on the Server.",
+    "Full process/ownership observation, logs, UI, reuse and retention remain pending.",
+    "No milestone or release gate closes. Core and Nexus production bytes are unchanged from session-view adoption."
+  ],
+  "fixture_correction": "Seven initial transport cases compared httpx.QueryParams directly with dict; converting the query to dict fixed the assertion. Failure XML is retained."
+}

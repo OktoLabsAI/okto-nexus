@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="7" skipped="0" tests="37" time="9.345" timestamp="2026-10-01T03:47:40.794894-03:00" hostname="Alienware_m15"><testcase classname="tests.unit.test_runtime_session_reads" name="test_session_query_is_read_only_and_independent_of_launch_mapping[none]" time="0.432" /><testcase classname="tests.unit.test_runtime_session_reads" name="test_session_query_is_read_only_and_independent_of_launch_mapping[mapping]" time="0.258" /><testcase classname="tests.unit.test_runtime_session_reads" name="test_session_query_is_read_only_and_independent_of_launch_mapping[root]" time="0.295" /><testcase classname="tests.unit.test_runtime_session_reads" name="test_session_query_is_read_only_and_independent_of_launch_mapping[binding]" time="0.229" /><testcase classname="tests.unit.test_runtime_session_reads" name="test_changed_session_or_identity_is_not_disclosed[scope]" time="0.217" /><testcase classname="tests.unit.test_runtime_session_reads" name="test_changed_session_or_identity_is_not_disclosed[rotation]" time="0.241" /><testcase classname="tests.unit.test_runtime_session_reads" name="test_changed_session_or_identity_is_not_disclosed[revoked]" time="0.296" /><testcase classname="tests.unit.test_runtime_session_reads" name="test_public_cli_session_reads_never_call_legacy_daemon" time="0.312" /><testcase classname="tests.unit.test_runtime_session_reads" name="test_session_transport_validates_closed_shape_and_revision[None]" time="0.004"><failure message="AssertionError: assert QueryParams('..._id=executor') == {'executor_id': 'executor'}&#10;  &#10;  Omitting 1 identical items, use -vv to show&#10;  Use -v to get more diff">tests\unit\test_runtime_session_reads.py:113: in test_session_transport_validates_closed_shape_and_revision
+    assert await http.get_r4_session("test-key", session_id="session", executor_id="executor") == view
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus_connector\transport\https_client.py:1034: in get_r4_session
+    payload = await self._request("GET", "/v1/runtime/sessions/" + quote(session_id, safe="") +
+src\okto_nexus_connector\transport\https_client.py:341: in _request
+    response = await self._client.request(
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1540: in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1629: in send
+    response = await self._send_handling_auth(
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1657: in _send_handling_auth
+    response = await self._send_handling_redirects(
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1694: in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1730: in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_transports\mock.py:34: in handle_async_request
+    response = self.handler(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_runtime_session_reads.py:107: in handler
+    assert request.url.params == {"executor_id": "executor"}
+E   AssertionError: assert QueryParams('..._id=executor') == {'executor_id': 'executor'}
+E     
+E     Omitting 1 identical items, use -vv to show
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.unit.test_runtime_session_reads" name="test_session_transport_validates_closed_shape_and_revision[scope]" time="0.004"><failure message="AssertionError: assert QueryParams('..._id=executor') == {'executor_id': 'executor'}&#10;  &#10;  Omitting 1 identical items, use -vv to show&#10;  Use -v to get more diff">tests\unit\test_runtime_session_reads.py:116: in test_session_transport_validates_closed_shape_and_revision
+    await http.get_r4_session("test-key", session_id="session", executor_id="executor")
+src\okto_nexus_connector\transport\https_client.py:1034: in get_r4_session
+    payload = await self._request("GET", "/v1/runtime/sessions/" + quote(session_id, safe="") +
+src\okto_nexus_connector\transport\https_client.py:341: in _request
+    response = await self._client.request(
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1540: in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1629: in send
+    response = await self._send_handling_auth(
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1657: in _send_handling_auth
+    response = await self._send_handling_redirects(
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1694: in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1730: in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_transports\mock.py:34: in handle_async_request
+    response = self.handler(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_runtime_session_reads.py:107: in handler
+    assert request.url.params == {"executor_id": "executor"}
+E   AssertionError: assert QueryParams('..._id=executor') == {'executor_id': 'executor'}
+E     
+E     Omitting 1 identical items, use -vv to show
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.unit.test_runtime_session_reads" name="test_session_transport_validates_closed_shape_and_revision[extra]" time="0.005"><failure message="AssertionError: assert QueryParams('..._id=executor') == {'executor_id': 'executor'}&#10;  &#10;  Omitting 1 identical items, use -vv to show&#10;  Use -v to get more diff">tests\unit\test_runtime_session_reads.py:116: in test_session_transport_validates_closed_shape_and_revision
+    await http.get_r4_session("test-key", session_id="session", executor_id="executor")
+src\okto_nexus_connector\transport\https_client.py:1034: in get_r4_session
+    payload = await self._request("GET", "/v1/runtime/sessions/" + quote(session_id, safe="") +
+src\okto_nexus_connector\transport\https_client.py:341: in _request
+    response = await self._client.request(
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1540: in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1629: in send
+    response = await self._send_handling_auth(
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1657: in _send_handling_auth
+    response = await self._send_handling_redirects(
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1694: in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1730: in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_transports\mock.py:34: in handle_async_request
+    response = self.handler(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_runtime_session_reads.py:107: in handler
+    assert request.url.params == {"executor_id": "executor"}
+E   AssertionError: assert QueryParams('..._id=executor') == {'executor_id': 'executor'}
+E     
+E     Omitting 1 identical items, use -vv to show
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.unit.test_runtime_session_reads" name="test_session_transport_validates_closed_shape_and_revision[boolean]" time="0.004"><failure message="AssertionError: assert QueryParams('..._id=executor') == {'executor_id': 'executor'}&#10;  &#10;  Omitting 1 identical items, use -vv to show&#10;  Use -v to get more diff">tests\unit\test_runtime_session_reads.py:116: in test_session_transport_validates_closed_shape_and_revision
+    await http.get_r4_session("test-key", session_id="session", executor_id="executor")
+src\okto_nexus_connector\transport\https_client.py:1034: in get_r4_session
+    payload = await self._request("GET", "/v1/runtime/sessions/" + quote(session_id, safe="") +
+src\okto_nexus_connector\transport\https_client.py:341: in _request
+    response = await self._client.request(
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1540: in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1629: in send
+    response = await self._send_handling_auth(
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1657: in _send_handling_auth
+    response = await self._send_handling_redirects(
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1694: in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1730: in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_transports\mock.py:34: in handle_async_request
+    response = self.handler(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_runtime_session_reads.py:107: in handler
+    assert request.url.params == {"executor_id": "executor"}
+E   AssertionError: assert QueryParams('..._id=executor') == {'executor_id': 'executor'}
+E     
+E     Omitting 1 identical items, use -vv to show
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.unit.test_runtime_session_reads" name="test_session_transport_validates_closed_shape_and_revision[revision]" time="0.004"><failure message="AssertionError: assert QueryParams('..._id=executor') == {'executor_id': 'executor'}&#10;  &#10;  Omitting 1 identical items, use -vv to show&#10;  Use -v to get more diff">tests\unit\test_runtime_session_reads.py:116: in test_session_transport_validates_closed_shape_and_revision
+    await http.get_r4_session("test-key", session_id="session", executor_id="executor")
+src\okto_nexus_connector\transport\https_client.py:1034: in get_r4_session
+    payload = await self._request("GET", "/v1/runtime/sessions/" + quote(session_id, safe="") +
+src\okto_nexus_connector\transport\https_client.py:341: in _request
+    response = await self._client.request(
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1540: in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1629: in send
+    response = await self._send_handling_auth(
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1657: in _send_handling_auth
+    response = await self._send_handling_redirects(
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1694: in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1730: in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_transports\mock.py:34: in handle_async_request
+    response = self.handler(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_runtime_session_reads.py:107: in handler
+    assert request.url.params == {"executor_id": "executor"}
+E   AssertionError: assert QueryParams('..._id=executor') == {'executor_id': 'executor'}
+E     
+E     Omitting 1 identical items, use -vv to show
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.unit.test_runtime_session_reads" name="test_session_transport_validates_closed_shape_and_revision[timestamp]" time="0.004"><failure message="AssertionError: assert QueryParams('..._id=executor') == {'executor_id': 'executor'}&#10;  &#10;  Omitting 1 identical items, use -vv to show&#10;  Use -v to get more diff">tests\unit\test_runtime_session_reads.py:116: in test_session_transport_validates_closed_shape_and_revision
+    await http.get_r4_session("test-key", session_id="session", executor_id="executor")
+src\okto_nexus_connector\transport\https_client.py:1034: in get_r4_session
+    payload = await self._request("GET", "/v1/runtime/sessions/" + quote(session_id, safe="") +
+src\okto_nexus_connector\transport\https_client.py:341: in _request
+    response = await self._client.request(
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1540: in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1629: in send
+    response = await self._send_handling_auth(
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1657: in _send_handling_auth
+    response = await self._send_handling_redirects(
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1694: in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1730: in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_transports\mock.py:34: in handle_async_request
+    response = self.handler(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_runtime_session_reads.py:107: in handler
+    assert request.url.params == {"executor_id": "executor"}
+E   AssertionError: assert QueryParams('..._id=executor') == {'executor_id': 'executor'}
+E     
+E     Omitting 1 identical items, use -vv to show
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.unit.test_runtime_session_reads" name="test_session_transport_validates_closed_shape_and_revision[wire]" time="0.004"><failure message="AssertionError: assert QueryParams('..._id=executor') == {'executor_id': 'executor'}&#10;  &#10;  Omitting 1 identical items, use -vv to show&#10;  Use -v to get more diff">tests\unit\test_runtime_session_reads.py:116: in test_session_transport_validates_closed_shape_and_revision
+    await http.get_r4_session("test-key", session_id="session", executor_id="executor")
+src\okto_nexus_connector\transport\https_client.py:1034: in get_r4_session
+    payload = await self._request("GET", "/v1/runtime/sessions/" + quote(session_id, safe="") +
+src\okto_nexus_connector\transport\https_client.py:341: in _request
+    response = await self._client.request(
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1540: in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1629: in send
+    response = await self._send_handling_auth(
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1657: in _send_handling_auth
+    response = await self._send_handling_redirects(
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1694: in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1730: in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_transports\mock.py:34: in handle_async_request
+    response = self.handler(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_runtime_session_reads.py:107: in handler
+    assert request.url.params == {"executor_id": "executor"}
+E   AssertionError: assert QueryParams('..._id=executor') == {'executor_id': 'executor'}
+E     
+E     Omitting 1 identical items, use -vv to show
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.unit.test_runtime_admission" name="test_lost_resolution_and_admission_recover_one_intent" time="0.282" /><testcase classname="tests.unit.test_runtime_admission" name="test_blocked_resolution_never_admits_or_replaces" time="0.245" /><testcase classname="tests.unit.test_runtime_admission" name="test_changed_intent_content_is_refused_before_network" time="0.284" /><testcase classname="tests.unit.test_runtime_admission" name="test_authority_changes_cannot_be_acknowledged[resolve]" time="0.253" /><testcase classname="tests.unit.test_runtime_admission" name="test_authority_changes_cannot_be_acknowledged[submit]" time="0.291" /><testcase classname="tests.unit.test_runtime_admission" name="test_tampered_resolution_never_admits" time="0.288" /><testcase classname="tests.unit.test_runtime_admission" name="test_session_actions_preserve_exact_target_and_content[turn.submit-A bounded prompt.-target0]" time="0.272" /><testcase classname="tests.unit.test_runtime_admission" name="test_session_actions_preserve_exact_target_and_content[turn.steer-A correction.-target1]" time="0.264" /><testcase classname="tests.unit.test_runtime_admission" name="test_session_actions_preserve_exact_target_and_content[turn.interrupt-User requested interruption.-target2]" time="0.260" /><testcase classname="tests.unit.test_runtime_admission" name="test_session_actions_preserve_exact_target_and_content[runtime.close-User requested shutdown.-target3]" time="0.256" /><testcase classname="tests.unit.test_runtime_admission" name="test_cli_routes_r4_start_and_query_without_legacy_owner" time="0.336" /><testcase classname="tests.unit.test_runtime_admission" name="test_schema_ten_migration_adds_no_runtime_authority" time="0.001" /><testcase classname="tests.unit.test_runtime_admission" name="test_cross_scope_operation_read_cannot_overwrite_intent" time="0.258" /><testcase classname="tests.unit.test_runtime_admission" name="test_invalid_start_does_not_reserve_or_call_network[change0]" time="0.168" /><testcase classname="tests.unit.test_runtime_admission" name="test_invalid_start_does_not_reserve_or_call_network[change1]" time="0.186" /><testcase classname="tests.unit.test_runtime_admission" name="test_invalid_start_does_not_reserve_or_call_network[change2]" time="0.190" /><testcase classname="tests.unit.test_runtime_admission" name="test_old_receipt_cannot_replace_new_receipt" time="0.314" /><testcase classname="tests.unit.test_runtime_admission" name="test_query_recovers_after_local_launch_evidence_changes[root]" time="0.281" /><testcase classname="tests.unit.test_runtime_admission" name="test_query_recovers_after_local_launch_evidence_changes[mapping]" time="0.277" /><testcase classname="tests.unit.test_runtime_admission" name="test_query_recovers_after_local_launch_evidence_changes[binding]" time="0.290" /><testcase classname="tests.unit.test_runtime_admission" name="test_query_uses_current_credential_but_refuses_mid_read_rotation" time="0.295" /><testcase classname="tests.unit.test_runtime_admission" name="test_revoked_read_identity_never_contacts_server" time="0.268" /></testsuite></testsuites>
