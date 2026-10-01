@@ -234,7 +234,7 @@ def begin_execution_send(
             "o.reservation_class,o.reserved_bytes,o.reservation_owner,o.reservation_generation,"
             "p.subject_agent_id,p.actor_agent_id,p.binding_id,p.workspace_id,"
             "p.workspace_binding_id,p.session_id,p.action,p.semantic_payload,"
-            "p.expected_revisions_json,p.admission_state,p.intent_hash,p.decision_id "
+            "p.expected_revisions_json,p.admission_state,p.intent_hash,p.decision_id,p.boot_authority_json "
             "FROM execution_dispatch_outbox o JOIN execution_operations p "
             "ON p.server_id=o.server_id AND p.executor_id=o.executor_id "
             "AND p.operation_id=o.operation_id WHERE o.server_id=? "
@@ -390,6 +390,10 @@ def begin_execution_send(
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The session has no canonical execution mode.", {})
         if row["action"] == "runtime.open":
+            if row["boot_authority_json"] is not None:
+                from .execution_boot_authority import require_boot_authority
+                require_boot_authority(uow, access=access, agent_id=row["subject_agent_id"],
+                    endpoint_id=binding["endpoint_id"], proof=json.loads(row["boot_authority_json"]))
             profile = conn.execute(
                 "SELECT enabled,revision FROM runtime_profiles WHERE profile_id=?",
                 (binding["profile_id"],),

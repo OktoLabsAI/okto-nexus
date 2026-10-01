@@ -129,6 +129,20 @@ def connect_endpoint(deps, context, binding, key):
     return _start(deps, context, access, binding, key)
 
 
+def boot_endpoint(deps, context, endpoint_id, key):
+    from dataclasses import replace
+    from ..application.execution_boot_authority import require_boot_authority
+    binding = canonical_endpoint(deps, endpoint_id)
+    if binding is None:
+        raise OktoNexusError(ErrorCode.CONFLICT, "Canonical boot requires an approved binding.", {})
+    access = build_execution_access(deps)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        require_boot_authority(uow, access=access, agent_id=binding["agent_id"],
+                               endpoint_id=endpoint_id, context=context)
+    # The host keeps the runtime_boot source; it never constructs an agent key.
+    return _start(deps, replace(context, actor_agent_id=binding["agent_id"]), access, binding, key)
+
+
 def _start(deps, context, access, binding, key):
     if not isinstance(key, str) or not 1 <= len(key) <= 160 or key == "<unique-key-for-this-opening>":
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,

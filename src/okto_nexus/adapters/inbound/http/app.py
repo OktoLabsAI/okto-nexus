@@ -589,8 +589,6 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
                 acquired = await anyio.to_thread.run_sync(build_dispatcher(deps).start)
                 if not acquired:
                     raise RuntimeError("Another runtime owner holds this store; serve startup refused.")
-                if deps.config.feature_harness_integrations:
-                    await anyio.to_thread.run_sync(run_runtime_boot, deps)
             # Composition is owned by serve's lifespan. No Core stores or
             # native workers are opened until an approved local selection is
             # passed to acquire().
@@ -608,6 +606,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
                 embedded_dispatch = EmbeddedDispatchOwner(embedded_inventory, embedded_core_host)
                 app.state.embedded_dispatch_owner = embedded_dispatch
                 await embedded_dispatch.start()
+                await anyio.to_thread.run_sync(run_runtime_boot, deps)
             from ....bootstrap.server_shutdown import ServerShutdownCoordinator
             def server_drained():
                 server = getattr(app.state, "server", None)

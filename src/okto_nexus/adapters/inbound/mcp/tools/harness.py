@@ -389,9 +389,11 @@ def build_open_service(deps):
 
 def run_runtime_boot(deps):
     from okto_nexus.application.runtime_boot import RuntimeBootService
+    from okto_nexus.bootstrap.execution_compat import boot_endpoint
     service = RuntimeBootService(connection_factory=deps.connection_factory, endpoints=SqliteEndpointRepo(),
         registry=build_connector_factories(deps), open_service=build_open_service(deps),
-        owner_id=deps.runtime_dispatcher.owner_id, owner_epoch=deps.runtime_dispatcher.epoch)
+        owner_id=deps.runtime_dispatcher.owner_id, owner_epoch=deps.runtime_dispatcher.epoch,
+        canonical_open=lambda context, endpoint_id, key: boot_endpoint(deps, context, endpoint_id, key))
     deps.runtime_boot_status = service.run()
     return deps.runtime_boot_status
 

@@ -68,6 +68,16 @@ def submit_execution_operation(
                                   "The operation does not match its resolution.", {})
         scope = resolved["scope"]
         connection_key_id = None
+        boot_authority = None
+        if context is not None and context.authentication_source == "runtime_boot":
+            from .execution_boot_authority import require_boot_authority
+            endpoint = conn.execute(
+                "SELECT endpoint_id FROM execution_bindings WHERE server_id=? AND executor_id=? AND binding_id=?",
+                (server_id, scope["executor_id"], scope["binding_id"])).fetchone()
+            if resolved["semantic_intent"]["action"] != "runtime.open" or endpoint is None or access is None:
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Boot authority permits opening only.", {})
+            boot_authority = canonical_json(require_boot_authority(uow, access=access,
+                agent_id=actor_agent_id, endpoint_id=endpoint[0], context=context)).decode()
         if context is not None and context.authentication_source == "connection_key":
             from .execution_connection_keys import require_connection_key
             endpoint = conn.execute(
@@ -81,11 +91,13 @@ def submit_execution_operation(
         executor_id = scope["executor_id"]
         key = (server_id, executor_id, operation_id)
         prior = conn.execute(
-            "SELECT operation_id,connection_key_id FROM execution_operations WHERE server_id=? "
+            "SELECT operation_id,connection_key_id,boot_authority_json FROM execution_operations WHERE server_id=? "
             "AND executor_id=? AND operation_id=?", key,
         ).fetchone()
         if prior is not None and connection_key_id is not None and prior["connection_key_id"] != connection_key_id:
             raise OktoNexusError(ErrorCode.CONFLICT, "The opening belongs to a different connection credential.", {})
+        if prior is not None and boot_authority is not None and prior["boot_authority_json"] != boot_authority:
+            raise OktoNexusError(ErrorCode.CONFLICT, "The opening belongs to a different boot authority.", {})
         if resolved["reuse"]:
             if prior is None or intent["session_selection"] != "reuse":
                 raise OktoNexusError(ErrorCode.CONFLICT, "The reused opening is unavailable.", {})
@@ -190,6 +202,11 @@ def submit_execution_operation(
                                       "The selected candidate has changed.", {})
             action = resolved["semantic_intent"]["action"]
             session_id = scope["session_id"]
+            if boot_authority is not None and conn.execute(
+                    "SELECT 1 FROM execution_sessions WHERE server_id=? AND executor_id=? AND binding_id=? "
+                    "AND lifecycle_state NOT IN ('CLOSED','FAILED') LIMIT 1",
+                    (server_id, executor_id, scope["binding_id"])).fetchone():
+                raise OktoNexusError(ErrorCode.CONFLICT, "An existing session requires reconciliation before boot.", {})
             if action == "runtime.open" and intent["session_selection"] == "automatic":
                 existing = conn.execute("SELECT 1 FROM execution_sessions WHERE server_id=? AND executor_id=? "
                     "AND binding_id=? AND lifecycle_state NOT IN ('CLOSED','FAILED') LIMIT 1",
@@ -243,13 +260,13 @@ def submit_execution_operation(
                 "operation_id,subject_agent_id,actor_agent_id,binding_id,"
                 "workspace_id,workspace_binding_id,session_id,action,intent_hash,"
                 "semantic_payload,expected_revisions_json,delivery_id,"
-                "admission_state,created_at,admission_bytes,connection_key_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                "admission_state,created_at,admission_bytes,connection_key_id,boot_authority_json) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 (*key, actor_agent_id, actor_agent_id, scope["binding_id"],
                  scope["workspace_id"], scope["workspace_binding_id"],
                  session_id, action, request["intent_hash"],
                  encoded_semantic.decode("utf-8"),
                  canonical_json(scope).decode("utf-8"),
-                 "delivery_" + secrets.token_hex(16), "ACCEPTED", now, len(encoded_semantic), connection_key_id),
+                 "delivery_" + secrets.token_hex(16), "ACCEPTED", now, len(encoded_semantic), connection_key_id, boot_authority),
             )
             if action == "runtime.open":
                 conn.execute(

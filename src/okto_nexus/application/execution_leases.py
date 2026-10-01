@@ -116,6 +116,10 @@ class ExecutionLeaseService:
                 source['credential_binding'] != row['api_key_hash']):
             raise _conflict('A current canonical execution grant is required.')
         expires = _stamp(source['expires_at'])
+        if row["boot_authority_json"] is not None and row["lifecycle_state"] == "OPEN_PENDING":
+            from .execution_boot_authority import require_boot_authority
+            require_boot_authority(uow, access=self.access, agent_id=scope["agent_id"],
+                endpoint_id=row["endpoint_id"], proof=json.loads(row["boot_authority_json"]))
         if row["connection_key_id"] is not None:
             from .execution_connection_keys import require_connection_key
             key = require_connection_key(uow, access=self.access,

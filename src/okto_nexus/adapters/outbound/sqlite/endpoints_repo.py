@@ -25,7 +25,7 @@ class SqliteEndpointRepo:
         return dict(row) if row else None
 
     def boot_candidates(self, uow):
-        return [dict(r) for r in uow.connection.execute("SELECT b.*,e.agent_id,e.adapter_id,e.workspace_id,w.root_realpath "
+        return [dict(r) for r in uow.connection.execute("SELECT b.*,e.agent_id,e.adapter_id,e.protocol,e.workspace_id,w.root_realpath "
             "FROM runtime_boot_bindings b JOIN agent_endpoints e ON e.endpoint_id=b.endpoint_id "
             "JOIN workspaces w ON w.workspace_id=e.workspace_id WHERE b.enabled=1 ORDER BY e.priority DESC,b.endpoint_id")]
 

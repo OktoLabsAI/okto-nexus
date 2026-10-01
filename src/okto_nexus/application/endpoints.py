@@ -134,7 +134,14 @@ class EndpointService:
                 raise OktoNexusError(ErrorCode.CONFLICT, "Endpoint revision changed.", {})
             if enabled and (not endpoint["enabled"] or endpoint["health"] == "quarantined"):
                 raise OktoNexusError(ErrorCode.CONFLICT, "Enable and reconcile the endpoint before configuring boot.", {})
-            if enabled and self.registry.get(endpoint["adapter_id"]).substrate == "attach":
+            if endpoint["protocol"] == "nxl-r4":
+                from nexus_connector_core import get_runtime_catalog
+                descriptor = next((item for item in get_runtime_catalog().runtimes
+                                   if item.adapter_id == endpoint["adapter_id"]), None)
+                attach = descriptor is None or descriptor.connection_mode != "managed"
+            else:
+                attach = enabled and self.registry.get(endpoint["adapter_id"]).substrate == "attach"
+            if enabled and attach:
                 raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "External attach targets require explicit selection in the current session; PID alone cannot authorize boot.", {})
             profile = self.repo.profile(uow, endpoint["profile_id"]) if endpoint["profile_id"] else None
             if enabled and (not profile or not profile["enabled"]):

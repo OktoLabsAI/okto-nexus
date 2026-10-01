@@ -7,9 +7,10 @@ from ..errors import OktoNexusError
 
 
 class RuntimeBootService:
-    def __init__(self, *, connection_factory, endpoints, registry, open_service, owner_id, owner_epoch):
+    def __init__(self, *, connection_factory, endpoints, registry, open_service, owner_id, owner_epoch, canonical_open=None):
         self.cf, self.endpoints, self.registry, self.open_service = connection_factory, endpoints, registry, open_service
         self.owner_id, self.owner_epoch = owner_id, owner_epoch
+        self.canonical_open = canonical_open
 
     def run(self, *, budget_seconds=30):
         deadline = time.monotonic() + min(max(budget_seconds, 0), 30)
@@ -26,11 +27,18 @@ class RuntimeBootService:
                 represented_agent_id=binding["agent_id"], endpoint_id=endpoint_id, workspace_id=binding["workspace_id"],
                 runtime_owner_id=self.owner_id, runtime_owner_epoch=self.owner_epoch)
             try:
+                key = f"boot:{self.owner_epoch}:" + hashlib.sha256(endpoint_id.encode()).hexdigest()
+                if binding.get("protocol") == "nxl-r4" and self.canonical_open is not None:
+                    operation = self.canonical_open(context, endpoint_id, key)
+                    results.append(dict(endpoint_id=endpoint_id, state=operation["admission_state"],
+                        session_id=operation["scope"]["session_id"], operation_id=operation["operation_id"],
+                        reused=operation["reused"]))
+                    continue
                 descriptor = self.registry.get(binding["adapter_id"])
                 session, _, reused, request_id = self.open_service.open(context,
                     agent_id=binding["agent_id"], kind=descriptor.kind, substrate=descriptor.substrate,
                     project_root=binding["root_realpath"], endpoint_id=endpoint_id,
-                    idempotency_key=f"boot:{self.owner_epoch}:" + hashlib.sha256(endpoint_id.encode()).hexdigest(), startup_timeout_s=remaining)
+                    idempotency_key=key, startup_timeout_s=remaining)
                 results.append({"endpoint_id": endpoint_id, "state": session.lifecycle_state,
                     "session_id": session.session_id, "request_id": request_id, "reused": reused})
             except OktoNexusError as exc:

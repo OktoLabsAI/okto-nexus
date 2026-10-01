@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.03 approved canonical boot - October 1, 2026
+
+Installed verification: **138 distinct passes**, plus **3 architecture checks**. Operator-approved serve boot now uses R4/Core after embedded composition is ready. Schema 093 persists approval/owner authority for admission, dispatch and initial lease checks; stable replay and existing-session guards prevent duplicate boot opening. See [scope](M12_NS15_03_BOOT.md) and [manifest](test_runs_20261001_ns15_03_boot.json). Delivery, event projection and duplicated native loader removal remain pending; normative TR4-15-03 and release gates remain open.
+
 ## NS15.03 implicit canonical selection - October 1, 2026
 
 Installed verification: **85 distinct passes**, plus **3 architecture checks**. REST/MCP opening without endpoint_id selects one matching local canonical realization and refuses canonical/legacy ambiguity before effects. Selection retains subject authority, grants and stable retries. See [scope](M12_NS15_03_SELECTION.md) and [manifest](test_runs_20261001_ns15_03_selection.json). Boot, delivery, event projection and duplicated native loader removal remain pending; normative TR4-15-03 and release gates remain open.

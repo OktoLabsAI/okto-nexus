@@ -49,7 +49,8 @@ def test_limited_key_opens_core_once_and_cannot_control(connected_local, issuer)
     wait_receipt(setup, close.json()["data"], stages=("SUCCEEDED",))
 
 
-def test_additive_key_migration_preserves_existing_r4_history(connected_local, tmp_path):
+@pytest.mark.parametrize("migration", [92, 93])
+def test_additive_open_authority_migrations_preserve_existing_r4_history(connected_local, tmp_path, migration):
     import sqlite3
     from okto_nexus.config import NexusConfig
     from okto_nexus.adapters.outbound.sqlite.connection import ConnectionFactory
@@ -66,16 +67,19 @@ def test_additive_key_migration_preserves_existing_r4_history(connected_local, t
     with sqlite3.connect(config.db_path) as target:
         with deps.connection_factory.unit_of_work(write=False) as uow:
             uow.connection.backup(target)
-        target.execute("ALTER TABLE execution_operations DROP COLUMN connection_key_id")
-        target.execute("DELETE FROM schema_migrations WHERE version=92")
+        target.execute("ALTER TABLE execution_operations DROP COLUMN boot_authority_json")
+        if migration == 92:
+            target.execute("ALTER TABLE execution_operations DROP COLUMN connection_key_id")
+        target.execute("DELETE FROM schema_migrations WHERE version>=?", (migration,))
         expected = target.execute("SELECT * FROM execution_operations ORDER BY operation_id").fetchall()
         receipts = target.execute("SELECT * FROM execution_receipts ORDER BY operation_id,receipt_revision").fetchall()
-    assert MigrationRunner(factory).apply() == [92]
+    assert MigrationRunner(factory).apply() == list(range(migration, 94))
     assert MigrationRunner(factory).apply() == []
     with factory.unit_of_work(write=False) as uow:
         rows = uow.connection.execute("SELECT * FROM execution_operations ORDER BY operation_id").fetchall()
-        assert [tuple(row)[:-1] for row in rows] == expected
+        assert [tuple(row)[:-(94 - migration)] for row in rows] == expected
         assert all(row["connection_key_id"] is None for row in rows)
+        assert all(row["boot_authority_json"] is None for row in rows)
         assert [tuple(row) for row in uow.connection.execute("SELECT * FROM execution_receipts ORDER BY operation_id,receipt_revision")] == receipts
         assert uow.connection.execute("PRAGMA foreign_key_check").fetchall() == []
 
