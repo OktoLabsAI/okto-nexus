@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Canonical native decisions and real Claude - September 30, 2026
+
+Nexus dfa48d5 adds operator CAS, transactional decision/outbox admission, input retention and embedded native application on Core 0.2.41 (6cf2ecc); Connector remains ab6bfaf. Installed verification passed 83 cases in each overlapping normal/no-Connector campaign. The actual Claude journey passed with three explicit operator decisions, completed handoff, successful turn/close and credential cleanup. Codex still rejects the MCP call before any canonical request is captured; its handoff remains OPEN. The Windows standby interruption and all earlier failures are retained. See [M08 increment](M08_OPERATIONAL_NATIVE_PROPOSALS.md) and [test index](test_runs_20260930_native_decisions.json). Next: actual Codex request translation and remote capture under the applied lease. M08 and release gates remain open.
+
+
 ## Transactional native request ingress and Core adoption - September 30, 2026
 
 Nexus 49b2422 and Connector ab6bfaf adopt Core 0.2.41 (6cf2ecc). [M08 ingress increment](M08_OPERATIONAL_NATIVE_PROPOSALS.md) persists intact operational proposals separately from redacted display, with scoped typed IDs, replay/conflict handling, fixed expiry and atomic event ACKs. Installed regressions passed 55 Nexus cases in each overlapping normal/no-Connector campaign and 45 Connector cases; pip checks passed. Initial inventory-version mismatch failures are retained. Operator CAS, native application, input retention and real Codex/Claude reruns remain pending. M08 and release gates remain open.

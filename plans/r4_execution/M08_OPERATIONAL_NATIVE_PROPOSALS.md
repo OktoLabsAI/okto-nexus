@@ -21,3 +21,59 @@ Evidence: [consumer test index](test_runs_20260930_native_requests.json), [consu
 Next work remains the existing M08 scope: authenticated operator CAS, one decision/input outbox operation, native capture/application in both hosts, explicit sensitive-input retention, then real-provider replay and failure tests. The actual Codex MCP permission request still needs observation before choosing its translation.
 
 Evidence: [working checkpoint](m08_native_approval_working_checkpoint.json), [installed runner](run_native_approval_core_installed.py), and evidence/native-approvals-core-*. No milestone or release gate closes.
+
+## Canonical operator decisions and embedded application
+
+The next Nexus increment adds migration 088, per-request CAS tokens, canonical
+approval queue projection in the event ACK transaction, and the public
+approval-decisions POST/GET routes. Only an authenticated operator can confirm;
+the subject agent key alone is refused. Confirmation persists the decision,
+client intent, operation and outbox together. A competing decision loses CAS,
+and an identical client intent returns the original operation.
+
+Dispatch revalidates the operator, subject, binding, grant, lease, source turn
+and immutable proposal before SENDING. Native controls use the reserved control
+path while the original turn waits. They do not consume a second turn budget.
+The embedded host enables the supported native channel only under the HITL
+configuration and explicit lease actions. It applies the public Core decision
+operation with sanitized receipt binding.
+
+Input responses are held only in bounded producer memory (256 entries, 16 KiB
+each, with a usable TTL of at most 120 seconds). Expired entries are discarded on producer access or shutdown. The operation stores a reference and digest. At
+dispatch, the exact response is reconstructed into the existing inline NXL
+payload and checked against the admitted intent hash. Loss before send produces
+AUTHORIZED_INPUT_UNAVAILABLE. An explicit matching replay can resupply input
+while PENDING/RESERVED; it cannot resend an operation already SENDING. Operation
+metadata is available to its authenticated deciding actor without exposing raw
+input. A confirmed canonical decision remains confirmed after a native refusal.
+
+Installed technical verification passed 83 cases in the normal environment and
+the same 83 overlapping cases without Connector installed. Source/wheel/installed
+bytes and artifact hashes were checked before each run. The final artifact and
+results are indexed in test_runs_20260930_native_decisions.json. Source failures, the initial installed
+artifact, and the final batch interrupted by Windows modern standby are retained.
+Kernel-Power events 506/507 document approximately 834 seconds of standby during
+that batch; tickets and leases expired. The real runner now archives a previous
+successful journey report before starting, so a failed attempt cannot inherit it.
+
+Remaining M08 acceptance: native capture in the remote host under its applied
+lease; actual Codex permission/input mapping; real negative/input/recovery paths;
+explicit provider observation for APPLIED_OBSERVED; UI/CLI decisions and their
+races; migration and full restart qualification. SUCCEEDED receipt metadata is
+currently shown as SUBMITTED, without claiming explicit provider observation.
+M08 and all release gates remain open.
+
+### Final installed and real results for Nexus dfa48d5
+
+The Claude journey passed in 88.06 seconds on the final Nexus wheel: three
+explicit operator decisions, lease serial 2 before the turn, handoff COMPLETED,
+turn and close SUCCEEDED, one tool claim, no WSS tickets and protected credential
+cleanup. The native build qualification was not overridden; the Server release
+gate was test-only overridden.
+
+The Codex journey failed after 96.08 seconds: its turn completed but handoff_get
+was rejected with user rejected MCP tool call. No canonical native request or
+tool claim was captured, and the handoff remained OPEN. Selected event metadata
+is retained in evidence/real-native-decision-codex-observed-refusal.json. This is
+a concrete remaining permission translation defect, not successful domain work.
+Core and Connector packages are unchanged in this Nexus increment.
