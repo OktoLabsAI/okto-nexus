@@ -182,3 +182,61 @@ def test_shutdown_retry_recovers_inventory_release_and_cancelled_observer(connec
         client.portal.call(coordinator.wait)
     assert coordinator.status()["state"] == "DRAINED"
     assert coordinator.status()["error_codes"] == []
+
+
+def test_two_runtime_shutdown_reports_stopped_release_and_unknown_separately(connected_local, monkeypatch):
+    setup, binding, factory = connected_local
+    _, app, client, headers, *_ = setup
+    natives = []
+    original_open = factory.open
+    async def capture(*args, **kwargs):
+        native = await original_open(*args, **kwargs)
+        natives.append(native)
+        return native
+    monkeypatch.setattr(factory, "open", capture)
+    operations = []
+    for index in range(2):
+        operation = admit(setup, binding, f"shutdown-facts-{index}", "runtime.start", new_session=True)
+        wait_receipt(setup, operation)
+        operations.append(operation)
+    owner = app.state.embedded_dispatch_owner
+    ledger = owner.host._ledger_task.result()
+    release = ledger.release_owned_slot
+    restore = threading.Event()
+    first = operations[0]["scope"]["session_id"]
+    second = operations[1]["scope"]["session_id"]
+    async def blocked_release(key, session_id):
+        if session_id == first:
+            await asyncio.to_thread(restore.wait)
+        return await release(key, session_id)
+    original_close = natives[1].close
+    async def unknown_close():
+        if not restore.is_set():
+            return "unknown"
+        return await original_close()
+    monkeypatch.setattr(ledger, "release_owned_slot", blocked_release)
+    monkeypatch.setattr(natives[1], "close", unknown_close)
+    before = dict(owner.host._runtime_tasks)
+    try:
+        response = client.post("/v1/runtime/shutdown", headers=headers["operator"], json={"timeout_seconds": .1})
+        assert response.status_code == 202
+        until = time.monotonic() + 3
+        while True:
+            response = client.get("/v1/runtime/shutdown", headers=headers["operator"])
+            rows = {r.get("session_id"): r for r in response.json()["resources"] if r["owner"] == "embedded"}
+            if rows[first]["process_state"] == "STOPPED":
+                break
+            assert time.monotonic() < until
+            time.sleep(.01)
+        assert rows[first]["core_release_pending"] is True
+        assert rows[second]["process_state"] == "UNKNOWN"
+        assert all(r["store_retained"] for r in rows.values())
+        assert owner.host._runtime_tasks == before
+        assert client.get("/healthz").status_code == 200
+    finally:
+        restore.set()
+        until = time.monotonic() + 15
+        while app.state.runtime_shutdown.status()["state"] != "DRAINED":
+            assert time.monotonic() < until
+            time.sleep(.02)
+    assert factory.opens == 2 and all(native.stopped for native in natives)

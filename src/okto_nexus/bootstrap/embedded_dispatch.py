@@ -360,10 +360,7 @@ class EmbeddedDispatchOwner:
                 error = "SHUTDOWN_INTERRUPTED"
             elif task.exception() is not None:
                 error = "SHUTDOWN_RECOVERY_REQUIRED"
-        resources = [
-            {"executor_id": executor_id, "session_id": session_id,
-             "outcome": "unknown", "store_retained": True}
-            for executor_id, session_id in sorted(self.host._runtime_tasks)]
+        resources = self.host.shutdown_resources()
         drained = task is not None and task.done() and error is None and not resources
         return {"state": "DRAINED" if drained else (
                     "DRAINING_PENDING" if self._shutdown_started is not None else "RUNNING"),

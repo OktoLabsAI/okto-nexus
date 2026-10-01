@@ -178,6 +178,21 @@ class EmbeddedRuntimeHost:
         _, journal = await asyncio.shield(task)
         return await journal.get_receipt(key)
 
+    def shutdown_resources(self):
+        resources = []
+        for (executor_id, session_id), task in sorted(self._runtime_tasks.items()):
+            resource = {"executor_id": executor_id, "session_id": session_id,
+                        "outcome": "unknown", "store_retained": True,
+                        "process_state": "UNKNOWN", "core_release_pending": True}
+            if task.done() and not task.cancelled() and task.exception() is None:
+                runtime, _ = task.result()
+                for key, facts in runtime.shutdown_resources().items():
+                    if key.executor_id == executor_id and key.session_id == session_id:
+                        resource.update(process_state=facts["process_state"],
+                                        core_release_pending=facts["release_pending"])
+            resources.append(resource)
+        return resources
+
     async def shutdown(self, policy: ShutdownPolicy | None = None,
                        *, close_stores: bool = True
                        ) -> dict[tuple[str, str], object]:

@@ -1,3 +1,11 @@
+## Current development artifact: 0.2.50.dev0
+
+nexus_connector_core-0.2.50.dev0-py3-none-any.whl
+
+SHA-256: 797e28d34ba43800e5ad800b0fb344ce53a4160389ac817b4687505187c25215
+
+Public memory-only shutdown_resources distinguishes observed STOPPED from pending durable release. It does not authorize disposal or replace shutdown outcomes. R4 release gates remain open.
+
 ## Current development artifact: 0.2.44.dev0
 
 nexus_connector_core-0.2.44.dev0-py3-none-any.whl, SHA-256
