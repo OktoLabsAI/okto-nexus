@@ -556,36 +556,10 @@ def test_harness_open_schema_describes_canonical_identity_and_approved_profile(c
 # _default_connector_factories() would otherwise only surface when a real
 # binary spawns.
 # --------------------------------------------------------------------------- #
-def test_default_connector_factories_pass_backend_into_the_real_pi_connector():
-    factories = harness_tools._default_connector_factories()
-    conn = factories["pi"](
-        project_root="/tmp",
-        substrate=None,
-        target_pid=None,
-        backend={"provider": "zai", "model": "glm-5.3", "extra_args": ["--foo"]},
-    )
-    assert conn._provider == "zai"
-    assert conn._model == "glm-5.3"
-    assert conn._extra_args == ["--foo"]
-
-
-def test_default_connector_factories_pass_backend_env_into_the_real_codex_connector():
-    factories = harness_tools._default_connector_factories()
-    conn = factories["codex"](
-        project_root="/tmp",
-        substrate=None,
-        target_pid=None,
-        backend={"env": {"CODEX_HOME": "/tmp/codex_home"}},
-    )
-    assert conn._env == {"CODEX_HOME": "/tmp/codex_home"}
-
-
-def test_default_connector_factories_pass_backend_env_into_the_real_claude_code_stream_connector():
-    factories = harness_tools._default_connector_factories()
-    conn = factories["claude_code"](
-        project_root="/tmp",
-        substrate="stream",
-        target_pid=None,
-        backend={"env": {"ANTHROPIC_BASE_URL": "https://example.invalid"}},
-    )
-    assert conn._env == {"ANTHROPIC_BASE_URL": "https://example.invalid"}
+@pytest.mark.parametrize('kind,substrate', [('pi', None), ('codex', None), ('claude_code', 'stream'), ('claude_code', 'attach')])
+def test_default_connector_factories_require_canonical_migration(kind, substrate):
+    from okto_nexus.errors import OktoNexusError
+    with pytest.raises(OktoNexusError, match='moved to Core') as error:
+        harness_tools._default_connector_factories()[kind](
+            project_root='/tmp', substrate=substrate, target_pid=123, backend={})
+    assert error.value.code == 'CONFLICT'

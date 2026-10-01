@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.03 production loader cutover - October 1, 2026
+
+Installed verification: **86 product passes and 3 architecture checks**. Production Server composition no longer imports or constructs the four duplicate native connectors. Default legacy factories require canonical binding migration; canonical callers execute through Core. See [scope](M12_NS15_03_LOADER_CUTOVER.md) and [manifest](test_runs_20261001_ns15_03_loader_cutover.json). Physical duplicate-code removal, canonical-attempt re-selection policy, full restore and final provider/platform/release acceptance remain pending.
+
 ## NS15.03 legacy-to-canonical fallback - October 1, 2026
 
 Installed verification: **44 product passes and 3 architecture checks**. Typed legacy pre-write proof can transfer the same approved conversational claim into atomic R4 admission at the persisted retry deadline. No canonical target enters a legacy worker. Revocation and failed admission roll back; uncertain effects never transfer. See [scope](M12_NS15_03_FALLBACK.md) and [manifest](test_runs_20261001_ns15_03_fallback.json). Canonical-attempt re-selection, native loader removal, full restore and final provider/platform/release acceptance remain pending.

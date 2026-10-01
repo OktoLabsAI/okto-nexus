@@ -28,17 +28,6 @@ from okto_nexus.adapters.inbound.http.identity_ctx import get_authenticated_agen
 from okto_nexus.adapters.inbound.mcp.tools.messages import (
     build_service as build_message_service,
 )
-from okto_nexus.adapters.outbound.harness.claude_code_attach import (
-    CAPABILITIES as _CLAUDE_CODE_ATTACH_CAPABILITIES,
-)
-from okto_nexus.adapters.outbound.harness.claude_code_attach import (
-    ClaudeCodeAttachConnector,
-)
-from okto_nexus.adapters.outbound.harness.claude_code_stream import (
-    ClaudeCodeStreamConnector,
-)
-from okto_nexus.adapters.outbound.harness.codex import CodexAppServerConnector
-from okto_nexus.adapters.outbound.harness.pi import PiRpcConnector
 from okto_nexus.adapters.outbound.harness.subscribers import (
     InMemoryHarnessSubscriberRegistry,
 )
@@ -735,58 +724,16 @@ def capabilities_catalog(registry=None) -> list[dict[str, Any]]:
 
 
 def _legacy_capabilities_catalog() -> list[dict[str, Any]]:
-    """List every (kind, substrate) this server can open, with capabilities
-    read straight off each REAL connector class (never hand-typed into a
-    table - the task's explicit "from each connector's OWN declaration"
-    requirement). Safe to call freely: every connector's ``__init__`` only
-    sets instance attributes (locks/queues/config) - nothing here spawns a
-    process or opens a socket (verified against all four connector modules;
-    ``claude_code_attach`` skips construction entirely and reads its
-    module-level ``CAPABILITIES`` constant, which its own ``__init__`` also
-    just assigns unchanged).
-    """
-    entries: list[dict[str, Any]] = []
-    for kind in sorted(HARNESS_KINDS):
-        if kind == "pi":
-            entries.append(
-                {
-                    "kind": kind,
-                    "substrate": None,
-                    "capabilities": capabilities_to_dict(PiRpcConnector().capabilities),
-                }
-            )
-        elif kind == "codex":
-            entries.append(
-                {
-                    "kind": kind,
-                    "substrate": None,
-                    "capabilities": capabilities_to_dict(
-                        CodexAppServerConnector().capabilities
-                    ),
-                }
-            )
-        elif kind == "claude_code":
-            entries.append(
-                {
-                    "kind": kind,
-                    "substrate": SUBSTRATE_STREAM,
-                    "capabilities": capabilities_to_dict(
-                        ClaudeCodeStreamConnector().capabilities
-                    ),
-                }
-            )
-            entries.append(
-                {
-                    "kind": kind,
-                    "substrate": SUBSTRATE_ATTACH,
-                    "capabilities": capabilities_to_dict(
-                        _CLAUDE_CODE_ATTACH_CAPABILITIES
-                    ),
-                }
-            )
-        else:  # pragma: no cover - defensive: HARNESS_KINDS is frozen at these 3
-            continue
-    return entries
+    # Historical metadata for stored endpoints and explicitly injected adapters.
+    # Live R4 capability/availability comes from Core, never these aliases.
+    rows = (
+        ('claude_code', SUBSTRATE_STREAM, HarnessCapabilities(False, 'IMMEDIATE', False, False, True)),
+        ('claude_code', SUBSTRATE_ATTACH, HarnessCapabilities(True, None, False, False, False)),
+        ('codex', None, HarnessCapabilities(False, 'IMMEDIATE', False, True, True)),
+        ('pi', None, HarnessCapabilities(False, 'NEXT_TURN_BOUNDARY', True, False, True)),
+    )
+    return [dict(kind=kind, substrate=substrate, capabilities=capabilities_to_dict(caps))
+            for kind, substrate, caps in rows]
 
 
 def normalize_payload(value: Any, *, required: bool) -> dict[str, Any]:
@@ -862,46 +809,11 @@ def build_service(deps: Any) -> HarnessSupervisor:
 
 
 def _default_connector_factories() -> dict[str, Any]:
-    def _pi(
-        *, project_root: str, backend: Mapping[str, Any] | None = None, **_ignored: Any
-    ) -> HarnessConnector:
-        backend = backend or {}
-        return PiRpcConnector(
-            command=backend.get("command", ("pi", "--mode", "rpc")),
-            cwd=project_root,
-            provider=backend.get("provider"),
-            model=backend.get("model"),
-            extra_args=backend.get("extra_args") or (),
-            env=backend.get("env"),
-        )
-
-    def _codex(
-        *, project_root: str, backend: Mapping[str, Any] | None = None, **_ignored: Any
-    ) -> HarnessConnector:
-        backend = backend or {}
-        return CodexAppServerConnector(cwd=project_root, env=backend.get("env"),
-            command=backend.get("command", ("codex", "app-server")),
-            thread_start_overrides=backend.get("thread_start_overrides"))
-
-    def _claude_code(
-        *,
-        project_root: str,
-        substrate: str,
-        target_pid: int | None,
-        backend: Mapping[str, Any] | None = None,
-        **_ignored: Any,
-    ) -> HarnessConnector:
-        if substrate == SUBSTRATE_ATTACH:
-            # build_connector() already enforced target_pid is not None (and
-            # backend is empty) for this substrate; a defensive re-check
-            # would only duplicate that message, so this branch trusts its
-            # caller (private helper).
-            return ClaudeCodeAttachConnector(target_pid)  # type: ignore[arg-type]
-        backend = backend or {}
-        return ClaudeCodeStreamConnector(cwd=project_root, env=backend.get("env"),
-            binary=backend.get("binary", "claude"))
-
-    return {"pi": _pi, "codex": _codex, "claude_code": _claude_code}
+    def require_canonical_binding(**_):
+        raise OktoNexusError(ErrorCode.CONFLICT,
+            'Legacy native execution has moved to Core. Prepare and approve a canonical runtime binding before opening this endpoint.',
+            {'migration_required': True})
+    return {kind: require_canonical_binding for kind in HARNESS_KINDS}
 
 
 def build_connector_factories(deps: Any):
