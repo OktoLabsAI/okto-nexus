@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.03 legacy-to-canonical fallback - October 1, 2026
+
+Installed verification: **44 product passes and 3 architecture checks**. Typed legacy pre-write proof can transfer the same approved conversational claim into atomic R4 admission at the persisted retry deadline. No canonical target enters a legacy worker. Revocation and failed admission roll back; uncertain effects never transfer. See [scope](M12_NS15_03_FALLBACK.md) and [manifest](test_runs_20261001_ns15_03_fallback.json). Canonical-attempt re-selection, native loader removal, full restore and final provider/platform/release acceptance remain pending.
+
 ## NS15.03 capture retention and subscriber parity - October 1, 2026
 
 Installed verification: **21 product passes and 3 architecture checks**. Core compacts only Server-committed events; old Core cursors report EVENT_GAP. Server retention preserves canonical result provenance and authorized history. Legacy subscriber registry has no production consumers to migrate. See [scope](M12_NS15_03_RETENTION.md) and [manifest](test_runs_20261001_ns15_03_retention.json). Cross-protocol fallback, native loader removal, full restore and final provider/platform/release acceptance remain pending.

@@ -1547,7 +1547,7 @@
       "collected_nodeids": [],
       "effective_test_command": null,
       "test_availability": "MISSING",
-      "implementation": "PARTIAL_CANONICAL_RETENTION_AND_CALLER_PARITY",
+      "implementation": "PARTIAL_LEGACY_TO_CANONICAL_FALLBACK",
       "acceptance": "NOT_RUN",
       "required_scenarios": [
         "TR4-15-03"
@@ -1588,9 +1588,11 @@
         "plans/r4_execution/M12_NS15_03_RECOVERY.md",
         "plans/r4_execution/test_runs_20261001_ns15_03_recovery.json",
         "plans/r4_execution/M12_NS15_03_RETENTION.md",
-        "plans/r4_execution/test_runs_20261001_ns15_03_retention.json"
+        "plans/r4_execution/test_runs_20261001_ns15_03_retention.json",
+        "plans/r4_execution/M12_NS15_03_FALLBACK.md",
+        "plans/r4_execution/test_runs_20261001_ns15_03_fallback.json"
       ],
-      "notes": "Canonical callers, domain publication, consumption, recovery and capture retention have installed evidence. Core compacts only Server-committed events; old Core cursors report EVENT_GAP. Server retention preserves canonical result provenance and authorized history. Legacy subscriber registry has no production consumers to migrate. Cross-protocol fallback, native loader removal, full restore and final provider/platform/release acceptance remain pending."
+      "notes": "Typed legacy pre-write proof can transfer the same approved conversational claim into atomic R4 admission at the persisted retry deadline. No canonical target enters a legacy worker. Revocation and failed admission roll back; uncertain effects never transfer. Caller, consumption, recovery and retention evidence is retained. Canonical-attempt re-selection, native loader removal, full restore and final provider/platform/release acceptance remain pending."
     },
     "NS15.04": {
       "proposed_nodeid": "tests/execution_r4/test_ns15.py::test_ns15_04",

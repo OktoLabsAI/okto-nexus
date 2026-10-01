@@ -230,8 +230,8 @@ class RuntimeDeliveryPlanner:
         candidates = [candidate for candidate in self.candidates(uow,
             agent_id=operation["recipient_agent_id"], workspace_id=operation["workspace_id"])
             if candidate[0]["selection_group"] == admission["selection_group"]
-            and candidate[0]["protocol"] != "nxl-r4"
-            and self.registry.get(candidate[0]["adapter_id"]).input_schema.get("transport_binding_contract") == 1
+            and (candidate[0]["protocol"] == "nxl-r4"
+                 or self.registry.get(candidate[0]["adapter_id"]).input_schema.get("transport_binding_contract") == 1)
             and candidate[0]["endpoint_id"] not in tried]
         if not candidates:
             return None
@@ -241,5 +241,6 @@ class RuntimeDeliveryPlanner:
         endpoint, profile, session = min((candidate for candidate in candidates if candidate[0]["priority"] == priority),
             key=lambda candidate: candidate[0]["endpoint_id"])
         return {"endpoint_id": endpoint["endpoint_id"], "endpoint_revision": endpoint["revision"],
-            "profile_revision": profile["revision"] if profile else None, "runtime_session_id": session,
+            "profile_revision": profile["revision"] if profile else None,
+            "runtime_session_id": None if endpoint['protocol'] == 'nxl-r4' else session,
             "admission": admission}

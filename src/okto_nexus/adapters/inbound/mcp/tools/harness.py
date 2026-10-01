@@ -565,6 +565,18 @@ def build_dispatcher(deps):
         validate_dispatch(uow, operation)
         return planner.fallback(uow, operation=operation)
     dispatcher.select_fallback = select_fallback
+    def admit_canonical(uow, operation):
+        endpoint = endpoints.get(uow, operation['endpoint_id'])
+        if not endpoint or endpoint['protocol'] != 'nxl-r4':
+            return False
+        from okto_nexus.bootstrap.execution_compat import admit_delivery
+        admit_delivery(deps, uow, operation['operation_id'])
+        # The R4 outbox now owns physical dispatch. Keep the legacy attempt in
+        # history, but do not leave a live claim under its worker owner epoch.
+        uow.connection.execute("UPDATE delivery_outbox SET status='PENDING',owner_epoch=NULL,"
+            "attempt_id=NULL,lease_expires_at=NULL WHERE operation_id=?", (operation['operation_id'],))
+        return True
+    dispatcher.admit_canonical = admit_canonical
     dispatcher.event_ingress = supervisor.event_ingress
     dispatcher.event_ingress.capture_health_changed = dispatcher.capture_health_changed
     def publish_results():

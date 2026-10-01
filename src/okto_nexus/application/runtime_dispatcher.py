@@ -19,6 +19,7 @@ class RuntimeDispatcher:
         self.recovery_seconds, self.send_timeout_seconds = recovery_seconds, send_timeout_seconds
         self.retry_jitter = retry_jitter or random.random
         self.select_fallback = None
+        self.admit_canonical = None
         self.owner_id, self.epoch = new_id("owner"), None
         self._wake_condition = threading.Condition()
         self._wake_generation = 0
@@ -261,7 +262,22 @@ class RuntimeDispatcher:
                 attempt = new_id("attempt")
                 if self.repo.claim(uow, operation_id=operation["operation_id"], epoch=self.epoch,
                                    attempt_id=attempt, lease_expires_at=iso_plus(now, 40), now=now):
-                    accepted.append((self.repo.get(uow, operation["operation_id"]), attempt))
+                    claimed = self.repo.get(uow, operation["operation_id"])
+                    canonical = False
+                    if self.admit_canonical:
+                        uow.connection.execute('SAVEPOINT canonical_fallback')
+                        try:
+                            canonical = self.admit_canonical(uow, claimed)
+                        except OktoNexusError:
+                            uow.connection.execute('ROLLBACK TO canonical_fallback')
+                            self.repo.observe(uow, operation_id=claimed['operation_id'], epoch=self.epoch,
+                                attempt_id=attempt, expected='CLAIMED', status='REJECTED', now=now,
+                                reason='canonical_fallback_refused')
+                            canonical = True
+                        finally:
+                            uow.connection.execute('RELEASE canonical_fallback')
+                    if not canonical:
+                        accepted.append((claimed, attempt))
                     selected_endpoints.add(operation["endpoint_id"])
         for operation, attempt in accepted:
             with self._lock:
