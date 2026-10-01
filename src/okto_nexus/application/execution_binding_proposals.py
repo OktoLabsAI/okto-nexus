@@ -120,7 +120,7 @@ def prepare_execution_binding(
         "client_intent_id", "executor_id", "adapter_id", "candidate_ref",
         "inventory_revision", "realization_ref", "workspace_id", "alias",
     }
-    allowed = required | {"agent_id_hint", "replace_binding_id"}
+    allowed = required | {"agent_id_hint", "replace_binding_id", "adopt_endpoint_id"}
     if (not isinstance(request, Mapping) or not required <= set(request) or
             not set(request) <= allowed):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
@@ -135,6 +135,10 @@ def prepare_execution_binding(
     if request.get("replace_binding_id") is not None and (
             type(request["replace_binding_id"]) is not str or not 1 <= len(request["replace_binding_id"]) <= 160):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid replacement binding ID.", {})
+    if request.get("adopt_endpoint_id") is not None and (
+            type(request["adopt_endpoint_id"]) is not str or not 1 <= len(request["adopt_endpoint_id"]) <= 160
+            or request.get("replace_binding_id") is not None):
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid endpoint adoption request.", {})
     subject_agent_id = request.get("agent_id_hint") or actor_agent_id
     if type(subject_agent_id) is not str or not 1 <= len(subject_agent_id) <= 160:
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
@@ -237,6 +241,15 @@ def prepare_execution_binding(
                 adapter_id=request["adapter_id"], alias=request["alias"],
                 binding_id=request["replace_binding_id"])
             legacy = [row for row in legacy if row["endpoint_id"] != replacement["endpoint_id"]]
+        adoption = None
+        if request.get("adopt_endpoint_id") is not None:
+            if not operator:
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Endpoint migration requires an operator.", {})
+            from .execution_binding_migration import migration_target
+            adoption = migration_target(conn, server_id=server_id, executor_id=request["executor_id"],
+                subject_agent_id=subject_agent_id, workspace_id=request["workspace_id"],
+                adapter_id=request["adapter_id"], endpoint_id=request["adopt_endpoint_id"])
+            legacy = [item for item in legacy if item["endpoint_id"] != adoption["endpoint_id"]]
         blockers = (["existing_endpoint_requires_review"] if legacy else [])
 
         request_operator_proof = bool(
@@ -267,6 +280,8 @@ def prepare_execution_binding(
         proposal_id = "prop_" + secrets.token_hex(16)
         binding_id = "bind_" + secrets.token_hex(16)
         endpoint_id = "ep_" + secrets.token_hex(16)
+        if adoption is not None:
+            endpoint_id = adoption["endpoint_id"]
         if replacement is not None:
             binding_id, endpoint_id, profile_id = (replacement["binding_id"],
                 replacement["endpoint_id"], replacement["profile_id"])
@@ -289,6 +304,8 @@ def prepare_execution_binding(
         }
         if replacement is not None:
             expected["replacement"] = replacement
+        if adoption is not None:
+            expected["migration_adoption"] = adoption
         diff_semantic = {
             "server_id": server_id, "executor_id": request["executor_id"],
             "agent_id": subject_agent_id, "binding_id": binding_id,
@@ -315,7 +332,11 @@ def prepare_execution_binding(
             summary = (f"Replace binding {binding_id} revision {replacement['binding_revision']} "
                        f"from realization {replacement['realization_ref']} to {request['realization_ref']}. "
                        "Preserve the agent, endpoint and profile. " + summary)
-        if enable_requested and replacement is None:
+        if adoption is not None:
+            summary = (f"Adopt legacy endpoint {endpoint_id} revision {adoption['revision']}. "
+                       f"Preserve enabled={bool(adoption['enabled'])} and activation_state={adoption['activation_state']}. "
+                       "Retain the legacy profile and use the newly approved realization configuration. " + summary)
+        if enable_requested and replacement is None and adoption is None:
             summary += (" Enable the approved endpoint and its managed profile."
                         if profile_id else " Enable the approved attach endpoint.")
             summary += " Execution still requires a separate scoped grant."
@@ -336,7 +357,8 @@ def prepare_execution_binding(
             "configuration_revision": revisions.configuration,
             "required_approvals": ["operator_confirmation" if operator else "agent_confirmation"] + ([approval_id] if approval_id else []),
             "diff": {
-                "fields_changed": (["realization", "installation", "workspace_binding", "binding_revision"] if replacement else
+                "fields_changed": (["adapter", "protocol", "profile", "public_config", "binding", "workspace_binding", "endpoint_revision"] if adoption else
+                    ["realization", "installation", "workspace_binding", "binding_revision"] if replacement else
                     ["agent", "host", "installation", "project", "scope", "endpoint", "binding"] +
                     (["profile", "enabled"] if enable_requested else [])),
                 "approved_diff_hash": diff_hash,
@@ -539,6 +561,15 @@ def apply_execution_binding(
             if actual != replacement or not operator_approved:
                 raise OktoNexusError(ErrorCode.CONFLICT, "The replacement binding changed after review.", {})
             existing = [item for item in existing if item["endpoint_id"] != replacement["endpoint_id"]]
+        adoption = expected.get("migration_adoption")
+        if adoption is not None:
+            from .execution_binding_migration import migration_target
+            actual = migration_target(conn, server_id=server_id, executor_id=proposal["executor_id"],
+                subject_agent_id=subject_agent_id, workspace_id=proposal["workspace_id"],
+                adapter_id=proposal["adapter_id"], endpoint_id=proposal["endpoint_id"])
+            if actual != adoption or not operator_approved:
+                raise OktoNexusError(ErrorCode.CONFLICT, "The migrated endpoint changed after review.", {})
+            existing = [item for item in existing if item["endpoint_id"] != adoption["endpoint_id"]]
         if existing:
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The binding alias is already in use in this executor and workspace.", {})
@@ -557,20 +588,26 @@ def apply_execution_binding(
                     uow, context=context, kind="profile", resource_id=profile_id,
                     old_revision=None, new_revision=1,
                     fields=["enabled", "config"], now=now)
-            conn.execute(
-                "INSERT INTO agent_endpoints(endpoint_id,agent_id,workspace_id,"
-                "adapter_id,protocol,profile_id,enabled,activation_state,public_config,"
-                "created_at,updated_at) VALUES (?,?,?,?,'nxl-r4',?,?,'approved',?,?,?)",
-                (proposal["endpoint_id"], subject_agent_id, proposal["workspace_id"],
-                 proposal["adapter_id"], profile_id, int(operator_approved),
-                 canonical_json({"alias": expected["alias"]}).decode("utf-8"),
-                 now, now),
-            )
+            if adoption is not None:
+                from .execution_binding_migration import apply_migration
+                apply_migration(conn, proposal=proposal, expected=adoption,
+                                profile_id=profile_id, alias=expected["alias"], now=now)
+            else:
+                conn.execute(
+                    "INSERT INTO agent_endpoints(endpoint_id,agent_id,workspace_id,"
+                    "adapter_id,protocol,profile_id,enabled,activation_state,public_config,"
+                    "created_at,updated_at) VALUES (?,?,?,?,'nxl-r4',?,?,'approved',?,?,?)",
+                    (proposal["endpoint_id"], subject_agent_id, proposal["workspace_id"],
+                     proposal["adapter_id"], profile_id, int(operator_approved),
+                     canonical_json({"alias": expected["alias"]}).decode("utf-8"),
+                     now, now),
+                )
             if context is not None:
                 endpoint_repo.audit_configuration(
                     uow, context=context, kind="endpoint",
-                    resource_id=proposal["endpoint_id"], old_revision=None,
-                    new_revision=1, fields=["enabled", "profile_id", "public_config"],
+                    resource_id=proposal["endpoint_id"], old_revision=adoption["revision"] if adoption else None,
+                    new_revision=adoption["revision"]+1 if adoption else 1,
+                    fields=["adapter_id", "protocol", "profile_id", "public_config"] if adoption else ["enabled", "profile_id", "public_config"],
                     now=now)
         conn.execute(
             "UPDATE execution_workspace_bindings SET status='READY',revision=revision+1 "

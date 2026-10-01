@@ -1135,7 +1135,10 @@
           ]
         },
         "replace_binding_id": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "minLength": 1,
           "maxLength": 160
         },
@@ -1171,6 +1174,14 @@
           "type": "string",
           "minLength": 1,
           "maxLength": 120
+        },
+        "adopt_endpoint_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 160
         }
       },
       "required": [
