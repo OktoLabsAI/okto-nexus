@@ -1,5 +1,6 @@
 """Transactional R4 event ingress; acknowledge only committed contiguous facts."""
 import hashlib
+import json
 from datetime import datetime, timezone
 
 from nexus_connector_core import (
@@ -10,6 +11,7 @@ from nexus_connector_core.protocol import canonical_json
 from ..adapters.outbound.sqlite.execution_agent_revisions import current_agent_revisions
 from ..adapters.outbound.sqlite.execution_leases import SqliteExecutionLeaseRepository
 from .execution_leases import require_execution_lane
+from .execution_native_requests import project_native_request
 
 
 def commit_execution_events(factory, *, channel, frame, embedded_owner=None):
@@ -49,7 +51,7 @@ def commit_execution_events(factory, *, channel, frame, embedded_owner=None):
                     "AND l.binding_id=? AND l.agent_id=?",
                     (*key,frame["binding_id"],frame["agent_id"])).fetchone() is None:
                 raise ValueError("The event has no approved embedded stream.")
-        session = conn.execute("SELECT s.stream_epoch,ep.agent_id,a.is_active FROM execution_sessions s "
+        session = conn.execute("SELECT s.*,ep.agent_id,a.is_active FROM execution_sessions s "
             "JOIN execution_bindings b ON b.server_id=s.server_id AND b.executor_id=s.executor_id AND b.binding_id=s.binding_id "
             "JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id JOIN agents a ON a.agent_id=ep.agent_id "
             "WHERE s.server_id=? AND s.executor_id=? AND s.session_id=? AND s.binding_id=?",
@@ -93,6 +95,16 @@ def commit_execution_events(factory, *, channel, frame, embedded_owner=None):
             conn.execute("INSERT OR IGNORE INTO execution_event_ingress(server_id,executor_id,session_id,stream_epoch,"
                 "sequence,event_hash,event_type,payload_json,received_at) VALUES (?,?,?,?,?,?,?,?,strftime('%Y-%m-%dT%H:%M:%fZ','now'))",
                 (*key,event["sequence"],digest,event["category"],raw))
+        # Materialize only newly contiguous events, including previously stored
+        # gaps. A projection failure rolls back rows, watermark and ACK together.
+        for saved in conn.execute(
+                "SELECT payload_json,received_at FROM execution_event_ingress WHERE "
+                "server_id=? AND executor_id=? AND session_id=? AND stream_epoch=? "
+                "AND sequence>? AND sequence<=? ORDER BY sequence",
+                (*key,watermark,projection.watermark)).fetchall():
+            project_native_request(conn,event=json.loads(saved["payload_json"]),
+                                   session=session,channel=channel,
+                                   received_at=saved["received_at"])
         conn.execute("UPDATE execution_sessions SET stream_epoch=? WHERE server_id=? AND executor_id=? AND session_id=?",
                      (key[3],*key[:3]))
         conn.execute("INSERT INTO execution_event_watermarks(server_id,executor_id,session_id,stream_epoch,"
