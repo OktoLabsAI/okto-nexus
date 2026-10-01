@@ -1,3 +1,11 @@
+## Current development artifact: 0.2.51.dev0
+
+nexus_connector_core-0.2.51.dev0-py3-none-any.whl
+
+SHA-256: 4c4c0c58d25b93f4f08ba8515d8476ffc29d1f0a27cc577c9fccb610716d1d1c
+
+Lost R4 revocation acknowledgements recover only from the exact durable fence row, without another CAS. Mismatched rows do not authorize an ACK or native work. Release gates remain open.
+
 ## Current development artifact: 0.2.50.dev0
 
 nexus_connector_core-0.2.50.dev0-py3-none-any.whl

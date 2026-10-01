@@ -2,10 +2,104 @@
 import asyncio
 import threading
 import time
+from dataclasses import replace
+
+import pytest
+from nexus_connector_core import CoreError, SessionKey, TurnOperation
 
 from test_embedded_dispatch import (
     local_setup, connected_local, qualified_contract, admit, wait_receipt,
 )
+
+
+@pytest.mark.parametrize("fault", ["newer_generation", "rollback", "unknown", "revoke_ack_lost"])
+def test_ns14_02(connected_local, monkeypatch, fault):
+    setup, binding, native = connected_local
+    _, app, client, *_ = setup
+    opened = admit(setup, binding, "ns14-authority-open", "runtime.start", new_session=True)
+    wait_receipt(setup, opened)
+    owner = app.state.embedded_dispatch_owner
+    sid = opened["scope"]["session_id"]
+    executor = owner.sessions[sid]["executor"]
+
+    async def scenario():
+        runtime, journal = owner.host._runtime_tasks[(opened["scope"]["executor_id"], sid)].result()
+        base = executor.context
+        key = SessionKey(base.server_id, base.executor_id, sid)
+        original_cas, original_read = journal.cas_session_lease, journal.get_session_lease
+        readable = fault == "newer_generation"
+        writes = []
+        async def unavailable_read(*args, **kwargs):
+            if not readable:
+                raise CoreError("STORAGE_UNAVAILABLE", "test_lease_read")
+            return await original_read(*args, **kwargs)
+        async def ambiguous_write(*args, **kwargs):
+            writes.append(dict(kwargs))
+            if fault == "revoke_ack_lost":
+                await original_cas(*args, **kwargs)
+            raise CoreError("STORAGE_UNAVAILABLE", "test_lease_confirmation", possible_effect=True)
+        if fault == "newer_generation":
+            await original_cas(key, expected_connection_generation=base.connection_generation,
+                connection_generation=base.connection_generation + 2,
+                owner_generation=base.session_owner_generation,
+                authorization_revision=base.authorization_revision,
+                configuration_revision=base.configuration_revision, revoked=False)
+        else:
+            monkeypatch.setattr(journal, "cas_session_lease", ambiguous_write)
+            monkeypatch.setattr(journal, "get_session_lease", unavailable_read)
+        try:
+            with pytest.raises(CoreError) as failure:
+                if fault == "revoke_ack_lost":
+                    await executor.revoke_r4(authorization_revision=base.authorization_revision + 1)
+                else:
+                    await runtime.renew_lease(key, replace(base,
+                        connection_generation=base.connection_generation + 1,
+                        lease_deadline_monotonic=base.lease_deadline_monotonic + .001),
+                        expected_connection_generation=base.connection_generation)
+            assert failure.value.stage in {"test_lease_confirmation", "lease_cas"}, (failure.value.code, failure.value.stage)
+            for index in range(3):
+                with pytest.raises(CoreError):
+                    await runtime.submit(TurnOperation(f"old-context-{index}", sid, "Must not reach native"), base)
+                await asyncio.sleep(.05)
+            assert native.native.sent == [] and native.opens == 1
+            snapshot = await runtime.inspect(key)
+            assert snapshot.session_id == sid
+            if fault == "unknown":
+                # A concluded producer and elapsed time do not prove rollback.
+                assert len(writes) == 1
+                return
+            readable = True
+            if fault == "rollback":
+                async with asyncio.timeout(3):
+                    while True:
+                        try:
+                            receipt = await runtime.submit(TurnOperation("rollback-recovered", sid, "Allowed after proof"), base)
+                            break
+                        except CoreError:
+                            await asyncio.sleep(.02)
+                assert receipt.stage == "SUBMITTED" and len(native.native.sent) == 1
+            elif fault == "revoke_ack_lost":
+                async with asyncio.timeout(3):
+                    while True:
+                        try:
+                            applied = await executor.revoke_r4(authorization_revision=base.authorization_revision + 1)
+                            break
+                        except CoreError as error:
+                            if error.code not in {"REVOKE_BUSY", "LEASE_UPDATE_PENDING"}:
+                                raise
+                            await asyncio.sleep(.02)
+                assert applied.acknowledgement["application_stage"] == "REVOKED"
+                assert len(writes) == 1, "Lost confirmation must not repeat the durable revoke"
+                assert (await original_read(key)).revoked
+            if fault != "rollback":
+                with pytest.raises(CoreError):
+                    await runtime.submit(TurnOperation("old-after-recovery", sid, "Still forbidden"), base)
+                assert native.native.sent == []
+        finally:
+            readable = True
+            monkeypatch.setattr(journal, "cas_session_lease", original_cas)
+            monkeypatch.setattr(journal, "get_session_lease", original_read)
+    client.portal.call(scenario)
 
 
 def test_ns14_03(connected_local, monkeypatch):
