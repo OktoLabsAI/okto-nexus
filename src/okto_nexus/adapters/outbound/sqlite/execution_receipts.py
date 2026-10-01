@@ -11,6 +11,7 @@ from nexus_connector_core import CoreError, decode_r4_frame, reduce_r4_receipt
 from nexus_connector_core.protocol import canonical_json
 
 from ....errors import ErrorCode, OktoNexusError
+from ....domain.execution_diagnostics import executor_receipt_error
 from .connection import ConnectionFactory
 from .execution_tickets import VerifiedExecutionTicket
 
@@ -63,10 +64,8 @@ class ExecutionOperationHistory:
             "retry_safe": latest["retry_safe"] if latest else False,
             "receipt_revision": latest["receipt_revision"] if latest else 0,
             "last_observed_at": self.last_observed_at,
-            "error": ({"code": latest["error_code"], "stage": "executor",
-                       "message": f"The executor reported {latest['error_code']}.",
-                       "possible_effect": latest["possible_effect"], "retry_safe": latest["retry_safe"],
-                       "operation_id": self.operation_id, "action": "Query this operation before requesting new work."}
+            "error": (executor_receipt_error(latest, operation_id=self.operation_id,
+                       executor_id=self.executor_id, binding_id=self.binding_id)
                       if latest and latest.get("error_code") else self.dispatch_error if not latest else None),
             "follow_up_operation_ids": list(self.follow_up_operation_ids),
         }
