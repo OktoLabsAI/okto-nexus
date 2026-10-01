@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## Executor-scoped binding aliases - October 1, 2026
+
+Nexus 7398130 fixes the broad endpoint collision guard in prepare and apply. The same agent/workspace may bind the same alias on different executors or different aliases on one executor; same-scope collisions and unscoped legacy endpoints remain refused. The previous installed wheel reproduced both incorrect refusals. Verification passed 24 installed tests, including onboarding, NS05 and the public HTTP/WSS Connector initial-turn/control journey; 19 source cases overlap. Existing endpoint and agent credential fields remain unchanged. Connector 358fd4d and Core44 are unchanged. [Evidence](test_runs_20261001_binding_aliases.json), [scope and limits](M03_BINDING_ALIAS_SCOPE.md). Explicit replacement and live-session revision isolation remain pending; no milestone or release gate closes.
+
+
 ## Durable initial prompt operation - October 1, 2026
 
 Nexus 5d14e58 and Connector 358fd4d accept start text as a separate durable child turn. Opening admission persists the parent relationship; repeated admission preserves IDs. Dispatch waits for READY, an ACTIVE lease and a current SUBMITTED/SUCCEEDED opening receipt, then revalidates source authority and the ordinary send grant before effect. Reuse with text does not open another process. Migration 090 preserves existing rows. Final installed verification passed 77 Connector and 35 Nexus tests, including actual HTTP/WSS public parsed CLI, exact grant consumption, parent outcome changes and upgrade idempotency. Core44 is unchanged. [Evidence](test_runs_20261001_initial_turns.json), [behavior and limits](M04_INITIAL_TURNS.md). Earlier fixture failures and the parent-readiness defect are retained. This implements the initial-child criterion of NS05.04; full M03/M04 acceptance and all release gates remain open. No real-provider or UI acceptance is promoted to these new wheels.
