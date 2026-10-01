@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="2.212" timestamp="2026-10-01T04:24:30.050298-03:00" hostname="Alienware_m15"><testcase classname="" name="tests.execution_r4.test_initial_turns" time="0.000"><error message="collection failure">ImportError while importing test module 'D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_initial_turns.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+C:\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\execution_r4\test_initial_turns.py:2: in &lt;module&gt;
+    from test_session_reuse import reuse_qualified, reuse_connected, resolve, admit
+tests\execution_r4\test_session_reuse.py:5: in &lt;module&gt;
+    from test_embedded_dispatch import connect_local, wait_receipt
+tests\execution_r4\test_embedded_dispatch.py:12: in &lt;module&gt;
+    from okto_nexus.bootstrap import embedded_dispatch
+src\okto_nexus\bootstrap\embedded_dispatch.py:8: in &lt;module&gt;
+    from nexus_connector_core import (
+E   ImportError: cannot import name 'prepare_r4_receipt_binding' from 'nexus_connector_core' (D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\nexus_connector_core\__init__.py)</error></testcase></testsuite></testsuites>

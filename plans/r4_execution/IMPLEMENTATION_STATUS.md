@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## Durable initial prompt operation - October 1, 2026
+
+Nexus 5d14e58 and Connector 358fd4d accept start text as a separate durable child turn. Opening admission persists the parent relationship; repeated admission preserves IDs. Dispatch waits for READY, an ACTIVE lease and a current SUBMITTED/SUCCEEDED opening receipt, then revalidates source authority and the ordinary send grant before effect. Reuse with text does not open another process. Migration 090 preserves existing rows. Final installed verification passed 77 Connector and 35 Nexus tests, including actual HTTP/WSS public parsed CLI, exact grant consumption, parent outcome changes and upgrade idempotency. Core44 is unchanged. [Evidence](test_runs_20261001_initial_turns.json), [behavior and limits](M04_INITIAL_TURNS.md). Earlier fixture failures and the parent-readiness defect are retained. This implements the initial-child criterion of NS05.04; full M03/M04 acceptance and all release gates remain open. No real-provider or UI acceptance is promoted to these new wheels.
+
+
 ## Canonical session reuse - October 1, 2026
 
 Nexus 2ac9b1c and Connector 8dbd92f implement automatic reuse, explicit existing selection and distinct explicit new sessions under current canonical authority. Confirmation preserves the original opening identity without a second operation, dispatch or native opening. Ambiguity, unresolved claims and authority drift refuse reuse; concurrent automatic admission is serialized. Installed verification passed 76 Connector tests, 82 Nexus tests and one 088-to-089 upgrade/idempotency case. [Evidence](test_runs_20261001_session_reuse.json), [behavior and limits](M04_SESSION_REUSE.md). Core44 is unchanged. The preexisting wrong-agent realization response was corrected from validation 422 to permission-denied 403 after baseline reproduction. Initial prompt as a durable child turn remains pending, so NS05.04 and M03/M04 do not close. Historical real-provider evidence is not promoted to these wheels; all release gates remain open.

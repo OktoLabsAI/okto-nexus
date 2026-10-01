@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="7" time="45.199" timestamp="2026-10-01T04:36:48.683175-03:00" hostname="Alienware_m15"><testcase classname="test_initial_turn_parent_loss" name="test_initial_turn_does_not_use_stale_opening_readiness[OUTCOME_UNKNOWN-reserve]" time="5.301" /><testcase classname="test_initial_turn_parent_loss" name="test_initial_turn_does_not_use_stale_opening_readiness[OUTCOME_UNKNOWN-send]" time="3.245" /><testcase classname="test_initial_turn_parent_loss" name="test_initial_turn_does_not_use_stale_opening_readiness[FAILED-reserve]" time="3.341" /><testcase classname="test_initial_turn_parent_loss" name="test_initial_turn_does_not_use_stale_opening_readiness[FAILED-send]" time="3.251" /><testcase classname="test_initial_turn_parent_loss" name="test_initial_turn_does_not_use_stale_opening_readiness[CANCELLED-reserve]" time="3.158" /><testcase classname="test_initial_turn_parent_loss" name="test_initial_turn_does_not_use_stale_opening_readiness[CANCELLED-send]" time="3.950" /><testcase classname="test_remote_connection" name="test_public_runtime_cli_start_prompt_runs_as_child[connector-configured]" time="20.391"><failure message="TimeoutError">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:205: in admit
+    await asyncio.sleep(0.01)
+C:\Python313\Lib\asyncio\tasks.py:718: in sleep
+    return await future
+           ^^^^^^^^^^^^
+E   asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:671: in test_public_runtime_cli_start_prompt_runs_as_child
+    test_owned_connector_reader_dispatches_five_actions_over_real_websocket(
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:653: in test_owned_connector_reader_dispatches_five_actions_over_real_websocket
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:459: in run
+    await admit('turn.steer', session_id=session_id, text='Continue carefully.',
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:189: in admit
+    async with asyncio.timeout(8):
+               ^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\timeouts.py:116: in __aexit__
+    raise TimeoutError from exc_val
+E   TimeoutError</failure></testcase></testsuite></testsuites>
