@@ -331,8 +331,9 @@ def prepare_runtime(deps, *, agent_id, kind, project_root, substrate=None, endpo
 
 
 def open_runtime(deps, **arguments):
-    from okto_nexus.bootstrap.execution_compat import canonical_endpoint, open_session
-    canonical = canonical_endpoint(deps, arguments.get("endpoint_id"))
+    from okto_nexus.bootstrap.execution_compat import select_open_endpoint, open_session
+    canonical = select_open_endpoint(deps, request_context(), arguments,
+        legacy_descriptor=lambda adapter_id: build_connector_factories(deps).get(adapter_id))
     if canonical:
         return open_session(deps, request_context(), canonical, arguments)
     context = authorize_request(deps, action="access", substrate=arguments.get("substrate"))

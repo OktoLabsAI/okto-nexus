@@ -30,6 +30,63 @@ def canonical_endpoint(deps, endpoint_id):
     return dict(rows[0]) if rows else None
 
 
+def select_open_endpoint(deps, context, arguments, *, legacy_descriptor):
+    """Select one local canonical target without preferring it over a legacy peer."""
+    if arguments.get("endpoint_id"):
+        return canonical_endpoint(deps, arguments["endpoint_id"])
+    access = build_execution_access(deps)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        access.authenticate(context, uow=uow)
+        rows = uow.connection.execute(
+            "SELECT ep.endpoint_id,ep.adapter_id,l.local_record_json FROM execution_bindings b "
+            "JOIN execution_installation i ON i.server_id=b.server_id "
+            "JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id "
+            "JOIN execution_local_realizations l ON l.server_id=b.server_id "
+            "AND l.executor_id=b.executor_id AND l.realization_ref=b.realization_ref "
+            "WHERE ep.agent_id=? AND ep.enabled=1 ORDER BY ep.endpoint_id LIMIT 101",
+            (arguments["agent_id"],)).fetchall()
+        if not rows:
+            return None
+        if len(rows) > 100:
+            raise OktoNexusError(ErrorCode.CONFLICT, "Specify an explicit endpoint_id for this agent.", {})
+        from ..domain.ids import resolve_realpath
+        root = Path(resolve_realpath(arguments["project_root"]))
+        descriptors = {item.adapter_id: item for item in get_runtime_catalog().runtimes}
+        candidates = []
+        for row in rows:
+            descriptor = descriptors.get(row["adapter_id"])
+            if (descriptor and descriptor.native_kind == arguments["kind"] and
+                    descriptor.connection_mode == "managed" and arguments.get("substrate") in (None, "stream") and
+                    Path(json.loads(row["local_record_json"])["root"]["path"]) == root):
+                candidates.append(row["endpoint_id"])
+        if not candidates:
+            return None
+        if context.actor_agent_id != arguments["agent_id"]:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                "Canonical endpoint selection requires its subject identity.", {})
+        # Do not use authorization filtering to hide a competing configured target.
+        legacy = uow.connection.execute(
+            "SELECT ep.adapter_id,w.root_realpath FROM agent_endpoints ep "
+            "JOIN workspaces w ON w.workspace_id=ep.workspace_id "
+            "WHERE ep.agent_id=? AND ep.enabled=1 AND ep.protocol<>'nxl-r4' LIMIT 101",
+            (arguments["agent_id"],)).fetchall()
+        if len(legacy) > 100:
+            raise OktoNexusError(ErrorCode.CONFLICT, "Specify an explicit endpoint_id for this agent.", {})
+        for row in legacy:
+            if Path(row["root_realpath"]) != root:
+                continue
+            descriptor = legacy_descriptor(row["adapter_id"])
+            if descriptor.kind == arguments["kind"] and descriptor.substrate == (
+                    arguments.get("substrate") or ("stream" if arguments["kind"] == "claude_code" else None)):
+                candidates.append(None)
+        if len(candidates) != 1:
+            raise OktoNexusError(ErrorCode.CONFLICT, "AMBIGUOUS_BINDING", {})
+    selected = canonical_endpoint(deps, candidates[0])
+    if selected is None:
+        raise OktoNexusError(ErrorCode.CONFLICT, "The selected canonical endpoint changed.", {})
+    return selected
+
+
 def open_session(deps, context, binding, arguments):
     access = build_execution_access(deps)
     access.authorize(context, action="open", endpoint_id=binding["endpoint_id"],

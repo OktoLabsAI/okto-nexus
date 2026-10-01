@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.03 implicit canonical selection - October 1, 2026
+
+Installed verification: **85 distinct passes**, plus **3 architecture checks**. REST/MCP opening without endpoint_id selects one matching local canonical realization and refuses canonical/legacy ambiguity before effects. Selection retains subject authority, grants and stable retries. See [scope](M12_NS15_03_SELECTION.md) and [manifest](test_runs_20261001_ns15_03_selection.json). Boot, delivery, event projection and duplicated native loader removal remain pending; normative TR4-15-03 and release gates remain open.
+
 ## NS15.03 canonical connection discovery - October 1, 2026
 
 Installed verification: **128 distinct passes**, plus **3 architecture checks**. Existing connection discovery/settings and binding history now project Core catalog and R4 state, with read-only freshness/authority gates and method-disable key revocation. Migrated one obsolete stdio parity test to real MCP HTTP on the same wheel. See [scope](M12_NS15_03_DISCOVERY.md) and [manifest](test_runs_20261001_ns15_03_discovery.json). Implicit selection, boot/delivery, event projection and duplicated native loader removal remain pending; normative TR4-15-03 and release gates remain open.

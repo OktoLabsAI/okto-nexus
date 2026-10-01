@@ -132,7 +132,8 @@ def test_canonical_callers_fail_closed(connected_local, monkeypatch, denial):
 
 
 @pytest.mark.parametrize("transport", ["rest", "mcp"])
-def test_existing_open_uses_approved_realization_and_core(connected_local, monkeypatch, transport):
+@pytest.mark.parametrize("selection", ["explicit", "implicit"])
+def test_existing_open_uses_approved_realization_and_core(connected_local, monkeypatch, transport, selection):
     setup, binding, native = connected_local
     deps, _, client, headers, *_, root = setup
     def forbidden(*args, **kwargs):
@@ -140,6 +141,8 @@ def test_existing_open_uses_approved_realization_and_core(connected_local, monke
     monkeypatch.setattr(harness, "construct_profile_connector", forbidden)
     body = dict(agent_id="subject", kind="codex", project_root=str(root),
                 endpoint_id=binding["endpoint_id"], idempotency_key="compat-public-open")
+    if selection == "implicit":
+        body.pop("endpoint_id")
     if transport == "mcp":
         monkeypatch.syspath_prepend(str(Path(__file__).parents[1]))
         from test_pr34_remediation import tool
@@ -214,7 +217,8 @@ def test_endpoint_connect_uses_canonical_binding_without_legacy_catalog(connecte
 
 
 @pytest.mark.parametrize("denial", ["grant", "endpoint", "readiness"])
-def test_canonical_open_preserves_admission_denials(connected_local, monkeypatch, denial):
+@pytest.mark.parametrize("selection", ["explicit", "implicit"])
+def test_canonical_open_preserves_admission_denials(connected_local, monkeypatch, denial, selection):
     setup, binding, native = connected_local
     deps, _, client, headers, *_, root = setup
     if denial == "readiness":
@@ -230,8 +234,37 @@ def test_canonical_open_preserves_admission_denials(connected_local, monkeypatch
                                        (binding["endpoint_id"],))
     response = client.post("/api/v1/harness/sessions", headers=headers["subject"], json=dict(
         agent_id="subject", kind="codex", project_root=str(root),
-        endpoint_id=binding["endpoint_id"], idempotency_key="denied-open"))
-    assert response.status_code in (403, 409), response.text
+        endpoint_id=binding["endpoint_id"] if selection == "explicit" else None, idempotency_key="denied-open"))
+    assert response.status_code in (403, 404, 409), response.text
     assert native.opens == 0
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations").fetchone()[0] == 0
+
+
+@pytest.mark.parametrize("competitor", ["canonical", "legacy"])
+def test_implicit_open_refuses_competing_targets_without_native_effect(connected_local, competitor):
+    setup, binding, native = connected_local
+    deps, _, client, headers, *_, root = setup
+    with deps.connection_factory.unit_of_work() as uow:
+        conn = uow.connection
+        def copy(table, record, **changes):
+            values = dict(record) | changes
+            conn.execute("INSERT INTO " + table + " (" + ",".join(values) + ") VALUES (" +
+                         ",".join("?" for _ in values) + ")", tuple(values.values()))
+        endpoint = conn.execute("SELECT * FROM agent_endpoints WHERE endpoint_id=?", (binding["endpoint_id"],)).fetchone()
+        if competitor == "canonical":
+            copy("agent_endpoints", endpoint, endpoint_id="competing-endpoint")
+            stored = conn.execute("SELECT * FROM execution_bindings WHERE binding_id=?", (binding["binding_id"],)).fetchone()
+            copy("execution_bindings", stored, binding_id="competing-binding", endpoint_id="competing-endpoint")
+        else:
+            workspace = conn.execute("SELECT * FROM workspaces WHERE workspace_id=?", (endpoint["workspace_id"],)).fetchone()
+            copy("workspaces", workspace, workspace_id="competing-workspace", root_realpath=str(root.resolve()))
+            copy("agent_endpoints", endpoint, endpoint_id="competing-endpoint", workspace_id="competing-workspace",
+                 adapter_id="codex", protocol="codex-app-server")
+    response = client.post("/api/v1/harness/sessions", headers=headers["subject"], json=dict(
+        agent_id="subject", kind="codex", project_root=str(root), idempotency_key="ambiguous-open"))
+    assert response.status_code == 409 and "AMBIGUOUS_BINDING" in response.text, response.text
+    assert native.opens == 0
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations").fetchone()[0] == 0
+        assert uow.connection.execute("SELECT COUNT(*) FROM harness_sessions").fetchone()[0] == 0
