@@ -221,7 +221,7 @@ def test_lifespan_retains_embedded_owner_until_pending_recovery(tmp_path, monkey
                 return "unknown"
             return await original_close()
 
-        async def short_request():
+        async def short_request(**kwargs):
             return await original_request(timeout_seconds=.05)
 
         monkeypatch.setattr(native.native, "close", held_close)

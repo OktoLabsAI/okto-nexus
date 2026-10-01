@@ -126,6 +126,11 @@ class NativeDecisionRequest(BaseModel):
     response: dict[str, object] | None = Field(default=None, repr=False)
 
 
+class ShutdownRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+    timeout_seconds: Annotated[float, Field(ge=0, le=300, allow_inf_nan=False)] = 50.0
+
+
 class CapabilityRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -138,6 +143,49 @@ class CapabilityRequest(BaseModel):
 
 def build_router() -> APIRouter:
     router = APIRouter()
+
+    async def shutdown_authority(request, *, mutate):
+        agent = get_authenticated_agent()
+        if agent is None:
+            return v1_err(401, "AUTH_FAILED", "Authentication is required.")
+        access = build_execution_access(request.app.state.deps)
+        context = RuntimeRequestContext(agent.agent_id, "agent_key",
+            credential_binding=agent.api_key_hash)
+        def authorize():
+            if mutate:
+                access.authorize_maintenance(context)
+            else:
+                with access.cf.unit_of_work(write=False) as uow:
+                    if not access.authenticate(context, uow=uow, require_feature=False):
+                        raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                            "Operator authority is required for shutdown recovery.", {})
+        try:
+            await anyio.to_thread.run_sync(authorize)
+        except OktoNexusError as error:
+            return v1_err(403, error.code, error.message)
+        return None
+
+    @router.post("/runtime/shutdown")
+    async def request_shutdown(body: ShutdownRequest, request: Request):
+        denied = await shutdown_authority(request, mutate=True)
+        if denied is not None:
+            return denied
+        owner = getattr(request.app.state, "runtime_shutdown", None)
+        if owner is None:
+            return v1_err(503, "RECONCILIATION_REQUIRED", "The shutdown owner is unavailable.")
+        view = await owner.request(timeout_seconds=body.timeout_seconds)
+        return JSONResponse(view, status_code=200 if view["state"] == "DRAINED" else 202,
+                            headers={"Cache-Control": "no-store"})
+
+    @router.get("/runtime/shutdown")
+    async def shutdown_status(request: Request):
+        denied = await shutdown_authority(request, mutate=False)
+        if denied is not None:
+            return denied
+        owner = getattr(request.app.state, "runtime_shutdown", None)
+        if owner is None:
+            return v1_err(503, "RECONCILIATION_REQUIRED", "The shutdown owner is unavailable.")
+        return JSONResponse(owner.status(), headers={"Cache-Control": "no-store"})
 
     def native_error(error):
         status = {"NOT_FOUND": 404, "PERMISSION_DENIED": 403, "APPROVAL_AUTHORITY_REQUIRED": 403,

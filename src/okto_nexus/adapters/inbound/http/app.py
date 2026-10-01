@@ -555,6 +555,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
         embedded_core_host: EmbeddedRuntimeHost | None = None
         embedded_inventory = None
         embedded_dispatch = None
+        shutdown_coordinator = None
         if lock is not None:
 
             async def _beat() -> None:
@@ -607,10 +608,23 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
                 embedded_dispatch = EmbeddedDispatchOwner(embedded_inventory, embedded_core_host)
                 app.state.embedded_dispatch_owner = embedded_dispatch
                 await embedded_dispatch.start()
+            from ....bootstrap.server_shutdown import ServerShutdownCoordinator
+            def server_drained():
+                server = getattr(app.state, "server", None)
+                if server is not None:
+                    server.should_exit = True
+            shutdown_coordinator = ServerShutdownCoordinator(deps,
+                embedded=embedded_dispatch, inventory=embedded_inventory,
+                host=embedded_core_host, on_drained=server_drained,
+                on_embedded_report=lambda report: setattr(app.state, "embedded_shutdown_report", report))
+            app.state.runtime_shutdown = shutdown_coordinator
             async with mcp_server.session_manager.run():
                 yield
         finally:
             deps.runtime_admission_fence.close()
+            if shutdown_coordinator is not None:
+                await shutdown_coordinator.request()
+                await shutdown_coordinator.wait()
             embedded_shutdown_error: Exception | None = None
             if embedded_dispatch is not None:
                 try:

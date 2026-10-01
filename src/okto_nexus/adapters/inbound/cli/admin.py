@@ -65,6 +65,13 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
+    for name in ("shutdown", "shutdown-status"):
+        shutdown = sub.add_parser(name, help="Request or inspect Server shutdown.")
+        shutdown.add_argument("--url", required=True, help="Running Server base URL.")
+        if name == "shutdown":
+            shutdown.add_argument("--timeout-seconds", type=float, default=50.0,
+                                  help="First shutdown deadline, in seconds (0 to 300).")
+
     prune = sub.add_parser(
         "prune",
         help=(
@@ -347,6 +354,11 @@ def run_admin(
     ns, extra = parser.parse_known_args(list(argv))
     environ = env if env is not None else os.environ
     sink = out if out is not None else sys.stdout
+    if ns.command in {"shutdown", "shutdown-status"}:
+        from .server_shutdown import run_shutdown
+        if extra:
+            parser.error("Unknown shutdown option.")
+        return run_shutdown(ns, environ, sink)
     if ns.command == "migrate-mcp-entry":
         from pathlib import Path
         from .mcp_config_migration import (

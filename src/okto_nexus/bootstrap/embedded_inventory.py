@@ -140,14 +140,21 @@ class EmbeddedInventoryOwner:
                 (self.key.server_id, self.key.executor_id,
                  self.dispatcher.owner_id, self.generation))
 
+    def begin_shutdown(self):
+        self._discovery_stopped.set()
+        self._stop.set()
+
     async def close(self):
+        if (self._close_task is not None and self._close_task.done()
+                and not self._close_task.cancelled()
+                and self._close_task.exception() is not None):
+            self._close_task = None
         if self._close_task is None:
             self._close_task = asyncio.create_task(self._close(), name="embedded-inventory-close")
         return await asyncio.shield(self._close_task)
 
     async def _close(self):
-        self._discovery_stopped.set()
-        self._stop.set()
+        self.begin_shutdown()
         if self._startup_task is not None:
             await asyncio.gather(self._startup_task, return_exceptions=True)
         if self._task is not None:
