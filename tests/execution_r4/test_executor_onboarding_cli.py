@@ -13,10 +13,13 @@ from okto_nexus.adapters.inbound.http.app import build_app
 from okto_nexus.bootstrap.dependencies import bootstrap
 
 
-def test_connector_public_commands_publish_realization_over_tcp(tmp_path, monkeypatch):
+@pytest.mark.parametrize("bind_flow", [False, True])
+def test_connector_public_commands_publish_realization_over_tcp(tmp_path, monkeypatch, bind_flow):
     from okto_nexus_connector.daemon import app as daemon_module
     from okto_nexus_connector.cli.main import build_parser
     from okto_nexus_connector.cli.output import Output
+    from okto_nexus_connector.cli.commands.bind import run_bind
+    from okto_nexus_connector.cli.commands import identity as identity_cli
     from okto_nexus_connector.cli.commands.executor import run_executor
     from okto_nexus_connector.cli.commands.discover import run_discover
     from okto_nexus_connector.cli.commands import executor as executor_cli
@@ -29,6 +32,9 @@ def test_connector_public_commands_publish_realization_over_tcp(tmp_path, monkey
         uow.connection.execute("INSERT OR IGNORE INTO agents(agent_id,created_at) VALUES (?,?)",
                                ("subject", deps.clock.now_iso()))
         key = app.state.auth.issue_key(uow, agent_id="subject")
+        uow.connection.execute("INSERT OR IGNORE INTO agents(agent_id,created_at) VALUES (?,?)",
+                               ("operator", deps.clock.now_iso()))
+        operator_key = app.state.auth.issue_key(uow, agent_id="operator")
         server_id = uow.connection.execute("SELECT server_id FROM execution_installation").fetchone()[0]
     binary_root = tmp_path / "binaries"
     binary_root.mkdir()
@@ -45,6 +51,7 @@ def test_connector_public_commands_publish_realization_over_tcp(tmp_path, monkey
             assert handle == "vault:identity"
             return key
     monkeypatch.setattr(executor_cli, "_vault", lambda *args: Vault())
+    monkeypatch.setattr(identity_cli, "_vault", lambda *args: Vault())
     monkeypatch.setattr(daemon_module, "open_vault", lambda *args, **kwargs: Vault())
 
     async def run():
@@ -105,11 +112,48 @@ def test_connector_public_commands_publish_realization_over_tcp(tmp_path, monkey
             assert denied.status_code == 403, denied.text
             assert denied.headers["X-Nexus-Connections-Revision"] == MANAGEMENT_REVISION
             assert denied.json()["error"]["code"] == "PERMISSION_DENIED"
+            if bind_flow:
+                from okto_nexus_connector.errors import ConnectorError
+                async def bind(words):
+                    return await run_bind(parser.parse_args(["bind", *words]), output, root)
+                draft = await bind(["prepare", "--identity", "subject", "--realization-ref", result["realization_ref"],
+                                   "--alias", "assistant", "--client-intent-id", "prepare-binding"])
+                proposal = draft["proposal"]
+                proof = next(ref for ref in proposal["required_approvals"] if ref.startswith("apr_"))
+                apply_words = ["apply", "--identity", "subject", "--prepare-intent-id", "prepare-binding",
+                    "--client-intent-id", "apply-binding", "--approved-diff-hash", proposal["approved_diff_hash"],
+                    "--operator-proof-ref", proof]
+                with pytest.raises(ConnectorError) as pending:
+                    await bind(apply_words)
+                assert pending.value.code == "PERMISSION_DENIED"
+                assert not store.load().execution_bindings
+                async with httpx.AsyncClient() as http:
+                    decision = await http.post(base + "/api/v1/approvals/" + proof + "/decision",
+                        json={"decision": "approve"}, headers={"Authorization": "Bearer " + operator_key})
+                assert decision.status_code == 200, decision.text
+                bound = await bind(apply_words)
+                assert bound["state"] == "APPLIED"
+                assert await bind(apply_words) == bound
+                assert await bind(["show", "assistant"]) == bound
+                assert (await bind(["list"]))["execution_bindings"] == [bound]
+                local = store.load()
+                assert len(local.execution_bindings) == 1 and not local.bindings
+                assert local.realizations[0].status == "BOUND"
+                import json
+                import subprocess
+                for command in (["show", "assistant"], ["list"]):
+                    process = await asyncio.to_thread(subprocess.run,
+                        [sys.executable, "-I", "-m", "okto_nexus_connector.cli.main", "--json",
+                         "--state-dir", str(root), "bind", *command],
+                        capture_output=True, text=True, encoding="utf-8", timeout=30)
+                    assert process.returncode == 0, process.stderr
+                    payload = json.loads(process.stdout)
+                    assert payload["state"] == "APPLIED" if command[0] == "show" else len(payload["execution_bindings"]) == 1
             assert key not in store.path.read_text() and "nxt4_" not in store.path.read_text()
             assert str(project) not in str(result) and str(binary) not in str(result)
             with deps.connection_factory.unit_of_work(write=False) as uow:
                 assert uow.connection.execute("SELECT COUNT(*) FROM execution_realizations").fetchone()[0] == 1
-                assert uow.connection.execute("SELECT COUNT(*) FROM execution_bindings").fetchone()[0] == 0
+                assert uow.connection.execute("SELECT COUNT(*) FROM execution_bindings").fetchone()[0] == int(bind_flow)
                 assert uow.connection.execute("SELECT COUNT(*) FROM execution_sessions").fetchone()[0] == 0
                 assert uow.connection.execute("SELECT COUNT(*) FROM execution_dispatch_outbox").fetchone()[0] == 0
         finally:

@@ -12,7 +12,7 @@ from ....domain.permissions import PERMISSION_REGISTRY, PermissionSet
 from ....application.execution_binding_proposals import (
     apply_execution_binding, prepare_execution_binding,
 )
-from ....errors import OktoNexusError
+from ....errors import ErrorCode, OktoNexusError
 from ....bootstrap.execution_authority import build_execution_access
 from ....domain.runtime_context import RuntimeRequestContext
 from ...outbound.sqlite.execution_agent_revisions import current_agent_revisions
@@ -87,6 +87,13 @@ _BINDING_TICKET_SCOPES = frozenset({
 
 def build_router() -> APIRouter:
     router = APIRouter()
+
+    def binding_error(error, stage):
+        status = {ErrorCode.NOT_FOUND: 404, ErrorCode.PERMISSION_DENIED: 403,
+                  ErrorCode.CONFLICT: 409, ErrorCode.VALIDATION_ERROR: 422}.get(error.code, 500)
+        result = v1_err(status, error.code, error.message, stage=stage)
+        result.headers["Cache-Control"] = "no-store"
+        return result
 
     @router.get("/connections/protocol")
     async def protocol() -> JSONResponse:
@@ -206,7 +213,10 @@ def build_router() -> APIRouter:
                 access=build_execution_access(request.app.state.deps),
             )
 
-        proposal = await anyio.to_thread.run_sync(_prepare)
+        try:
+            proposal = await anyio.to_thread.run_sync(_prepare)
+        except OktoNexusError as error:
+            return binding_error(error, "binding.prepare")
         return JSONResponse(proposal, headers={"Cache-Control": "no-store"})
 
     @router.post("/connections/bindings:apply")
@@ -228,7 +238,10 @@ def build_router() -> APIRouter:
                 access=build_execution_access(request.app.state.deps),
             )
 
-        view = await anyio.to_thread.run_sync(_apply)
+        try:
+            view = await anyio.to_thread.run_sync(_apply)
+        except OktoNexusError as error:
+            return binding_error(error, "binding.apply")
         return JSONResponse(view, headers={"Cache-Control": "no-store"})
 
     @router.post("/connections/bindings/{binding_id}/ticket")
