@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-01",
+  "nexus_commit": "2ac9b1cccb22e94eb75720e76063071aecf81628",
+  "connector_commit": "8dbd92f3297d4f89025e822b9f1a54c6e3c9b744",
+  "core_commit": "9c778719c3892d9742bb358b0020e39ed43df08d",
+  "artifacts": "evidence/session-reuse-artifacts.json",
+  "installed": {
+    "connector_passed": 76,
+    "nexus_passed": 82,
+    "migration_passed": 1
+  },
+  "source": {
+    "connector_passed": 76,
+    "nexus_passed": 17,
+    "overlap": "These are overlapping executions, not additive coverage."
+  },
+  "verified": [
+    "Automatic start reuses exactly one compatible READY session under the current applied lease and canonical source authority.",
+    "Explicit new-session creates a distinct opening; explicit existing selection disambiguates.",
+    "Ambiguous, unresolved, revoked, expired and generation/revision-drifted claims refuse reuse at resolution and confirmation.",
+    "Concurrent automatic resolutions cannot both create session claims.",
+    "Reuse confirmation is durable without another operation, dispatch or native opening; original opening provenance is preserved.",
+    "Confirmed reuse history remains readable after closure.",
+    "Installed public CLI performs reuse over actual HTTP/WSS and continues all five execution actions.",
+    "Migration 088 to 089 preserves original journal columns, defaults prior rows to explicit selection and is idempotent."
+  ],
+  "limitations": [
+    "The installed integration native peer is synthetic; prior real Pi/Codex/Claude runs are historical and not promoted to these new consumer wheels.",
+    "Initial prompt as a durable child turn remains pending; callers must submit a separate turn.",
+    "NS05.04, M03/M04 and all release gates remain open.",
+    "Session process/ownership observations, logs, UI and retention remain pending.",
+    "Wheels contain the preexisting local static UI bytes; this campaign does not accept or commit those assets."
+  ],
+  "retained_failures": [
+    "Initial pump fixture used a nonexistent quiesce method; corrected to stop.",
+    "Wrong-agent realization returned 422 in both baseline installed Nexus and source; corrected to permission-denied 403 and verified."
+  ],
+  "evidence": {
+    "evidence/session-reuse-artifacts.json": "11c74da403c45cde634a1cea2ae76c643d6f548c81c31865f054c51d09fe6b79",
+    "evidence/session-reuse-baseline-ns05.xml": "ee8ef701b4e48b452adb3090e43034c265dde5693a422dcac2be95cdef1d3bae",
+    "evidence/session-reuse-connector-build.log": "1eb390c810f803a7d6c8128db6f97254b5adbfb450bf8bdf1fa4dba4b7cd832a",
+    "evidence/session-reuse-connector-installed.json": "e89c3a844805d68111e66d97c6ddc0dbd94009b5933bb2b1176785a91e7fd8dd",
+    "evidence/session-reuse-connector-installed.log": "ed3aa9fc291ecfbd2b39650471f5d5cf3219c91344874f4abc0151036611c160",
+    "evidence/session-reuse-connector-installed.xml": "a834e4b5df19d3184e64ed5b310a260570cbd5552b8fcec8217594e7f961e2c5",
+    "evidence/session-reuse-connector-source.xml": "76003eb4739423a7e90e686f9f5f9c499e04b3654825f98581b561b7aab670b2",
+    "evidence/session-reuse-install.log": "1b7a8e0c806d6878593c540e8294adacb1595ce8de5cc40d03ae8fa639d09bf3",
+    "evidence/session-reuse-migration-installed.xml": "5ac66ec6d40dcf84ecde4876d653c1f7f6b0f62ce641094844f7371ff8216b45",
+    "evidence/session-reuse-nexus-build.log": "6bd175d79e50586091414ff2b98724fd654a32555ab8801577d7d9b20e33905e",
+    "evidence/session-reuse-nexus-installed.json": "77ede253075ee14cc0d3d4dacd59dd1ad7eb9c3ce90b5960ed5d91798eaeb5da",
+    "evidence/session-reuse-nexus-installed.log": "5f2e30997107c8ed7622bf51001425ebbcf7c1821ab68e0720e9883a9a8b60bc",
+    "evidence/session-reuse-nexus-installed.xml": "c6df68a55affb5ca9e11b524cf7886b61823ab2bd1e2096e9c4eabbb59075942",
+    "evidence/session-reuse-source-before-scope-fix.xml": "e493d6b5b07ae977854205ebc3af1988707c3ae9dfe0f5acb8608c6906eac43a",
+    "evidence/session-reuse-source-fixture-failure.xml": "81ce84ed5822580b63d94beac2a772209a1e7b7b1add353246d6508e3a10e1f9",
+    "evidence/session-reuse-source.xml": "9064da1276278bf4568f2c7ac9de7ce9e5a4b0abe70806eb1f79530e36e045fc"
+  },
+  "migration_test_sha256": "aba2d30f1fe3c64b8281988b30e262563df9ec05284ac6d28eec02e1df6bd85e",
+  "migration_command": [
+    "C:/Users/jpamb/AppData/Local/Temp/okto-r4-native-installed-zk_r383i/Scripts/python.exe",
+    "-I",
+    "-m",
+    "pytest",
+    "-c",
+    "pytest.ini",
+    "--rootdir=D:/Projetos/Techridy/okto_labs_okto_nexus/tests/execution_r4",
+    "--confcutdir=D:/Projetos/Techridy/okto_labs_okto_nexus/tests/execution_r4",
+    "D:/Projetos/Techridy/okto_labs_okto_nexus/tests/execution_r4/test_session_reuse_migration.py",
+    "-q",
+    "--tb=short",
+    "--junitxml=D:/Projetos/Techridy/okto_labs_okto_nexus/plans/r4_execution/evidence/session-reuse-migration-installed.xml"
+  ],
+  "migration_cwd": "C:/Users/jpamb/AppData/Local/Temp/okto-r4-canonical-installed"
+}

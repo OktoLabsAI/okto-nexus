@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## Canonical session reuse - October 1, 2026
+
+Nexus 2ac9b1c and Connector 8dbd92f implement automatic reuse, explicit existing selection and distinct explicit new sessions under current canonical authority. Confirmation preserves the original opening identity without a second operation, dispatch or native opening. Ambiguity, unresolved claims and authority drift refuse reuse; concurrent automatic admission is serialized. Installed verification passed 76 Connector tests, 82 Nexus tests and one 088-to-089 upgrade/idempotency case. [Evidence](test_runs_20261001_session_reuse.json), [behavior and limits](M04_SESSION_REUSE.md). Core44 is unchanged. The preexisting wrong-agent realization response was corrected from validation 422 to permission-denied 403 after baseline reproduction. Initial prompt as a durable child turn remains pending, so NS05.04 and M03/M04 do not close. Historical real-provider evidence is not promoted to these wheels; all release gates remain open.
+
+
 ## Canonical session observation through Connector CLI - October 1, 2026
 
 Connector ee8294c routes runtime inspect SESSION_ID [--alias ALIAS] and runtime status --alias ALIAS to authenticated Server session reads without starting the legacy daemon. Historical queries tolerate local mapping changes, preserve scope and discard results after credential rotation. The HTTP client validates the closed SessionView shape and negotiated revision; status lists deduplicated sessions referenced by retained intents. Installed verification passed 74 Connector cases and one actual HTTP/WSS public parsed CLI journey, including READY/CLOSED reads after mapping removal and no extra operation or native opening. Nexus test 363686e, product 1ce29ab, Core44 unchanged. [Evidence](test_runs_20261001_session_cli.json). Initial test-query assertion failures are retained. This does not claim complete Server-wide status, process/ownership observations, logs, UI, reuse or retention. Next fixed-plan work is session reuse and its admission/intent correlation; all milestones and release gates remain open.
