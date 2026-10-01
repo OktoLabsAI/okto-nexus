@@ -169,6 +169,12 @@ class AgentKeyAuthService:
     # ------------------------------------------------------------------ #
     # Cache management
     # ------------------------------------------------------------------ #
+    def cache_stats(self) -> dict[str, int | float]:
+        """Return aggregate cache gauges without keys or identity labels."""
+        with self._lock:
+            return {"entries": len(self._by_hash), "capacity": self._capacity,
+                    "ttl_seconds": self._ttl}
+
     def invalidate_agent(self, agent_id: str) -> None:
         """Drop the cached resolution for an agent (rotation/revocation)."""
         with self._lock:

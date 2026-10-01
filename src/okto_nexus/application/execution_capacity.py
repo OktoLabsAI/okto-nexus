@@ -35,3 +35,33 @@ def require_admission_capacity(conn, *, server_id, executor_id, action, byte_cos
         raise OktoNexusError(ErrorCode.QUOTA_EXCEEDED,
             "The executor pending operation capacity is full. Retry after pending work is acknowledged.",
             {"retry_after_seconds": 1})
+
+
+def execution_capacity_snapshot(factory):
+    """Return fixed-cardinality local gauges, never per-identity metric labels."""
+    pending = {lane: {"items": 0, "bytes": 0} for lane in ("regular", "control")}
+    dispatch = {lane: {"items": 0, "bytes": 0} for lane in ("regular", "control")}
+    with factory.unit_of_work(write=False) as uow:
+        for row in uow.connection.execute(
+            "SELECT CASE WHEN action IN ('runtime.open','turn.submit') THEN 'regular' "
+            "ELSE 'control' END AS lane,COUNT(*) AS items,"
+            "SUM(max(admission_bytes,length(CAST(semantic_payload AS BLOB)))) AS bytes "
+            "FROM execution_operations "
+            "WHERE admission_state IN ('ACCEPTED','DISPATCH_PENDING','RECONCILING') "
+            "GROUP BY lane"
+        ):
+            pending[row["lane"]] = {"items": row["items"], "bytes": row["bytes"]}
+        for row in uow.connection.execute(
+            "SELECT reservation_class AS lane,COUNT(*) AS items,SUM(reserved_bytes) AS bytes "
+            "FROM execution_dispatch_outbox "
+            "WHERE dispatch_state IN ('RESERVED','SENDING','RECONCILING') "
+            "AND reservation_class IN ('regular','control') GROUP BY reservation_class"
+        ):
+            dispatch[row["lane"]] = {"items": row["items"], "bytes": row["bytes"]}
+    return {
+        "status": "available", "pending_totals": pending, "dispatch_totals": dispatch,
+        "pending_limits_per_executor": {
+            "regular": {"items": REGULAR_ITEMS, "bytes": REGULAR_BYTES},
+            "control": {"items": CONTROL_ITEMS, "bytes": CONTROL_BYTES},
+        },
+    }

@@ -705,9 +705,25 @@ def build_router() -> APIRouter:
     @router.get("/metrics/local/summary")
     async def metrics_local_summary(request: Request) -> JSONResponse:
         telemetry = getattr(request.app.state.deps, "telemetry", None)
-        if telemetry is None:
-            return _ok({"mode": "unavailable", "event_count": 0, "pending_count": 0})
-        return _ok(await anyio.to_thread.run_sync(telemetry.summary))
+        data = ({"mode": "unavailable", "event_count": 0, "pending_count": 0}
+                if telemetry is None else await anyio.to_thread.run_sync(telemetry.summary))
+        try:
+            _require_operator()
+        except OktoNexusError:
+            return _ok(data)
+        from ....application.execution_capacity import execution_capacity_snapshot
+        try:
+            data["runtime_capacity"] = await anyio.to_thread.run_sync(
+                execution_capacity_snapshot, request.app.state.deps.connection_factory)
+        except Exception:
+            # Storage failure is unknown, never a fabricated zero backlog.
+            data["runtime_capacity"] = {"status": "unavailable"}
+        auth = request.app.state.auth
+        data["authentication_cache"] = (auth.cache_stats() if hasattr(auth, "cache_stats")
+                                        else {"status": "unavailable"})
+        response = _ok(data)
+        response.headers["Cache-Control"] = "no-store"
+        return response
 
     @router.get("/metrics/publish-health")
     async def metrics_publish_health(request: Request) -> JSONResponse:
