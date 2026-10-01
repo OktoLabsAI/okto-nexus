@@ -31,7 +31,7 @@ from test_vertical_inventory import _NativeFactory
     (True, None, False, 0, 'unsent'), (True, None, False, 0, 'ack_lost'),
     (True, None, False, 0, 'cold_unsent'), (True, None, False, 0, 'cold_ack_lost'),
     (True, None, False, 0, 'active_disconnect'), (True, None, False, 0, 'lease_renewal')])
-def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery):
+def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery, native_decision=None):
     from okto_nexus_connector.transport.https_client import NexusHTTPClient, R4BindingView
     from okto_nexus_connector.transport.wss_r4 import connect_r4_connection
     from okto_nexus_connector.services.execution_selection import acknowledge_execution_binding
@@ -42,6 +42,8 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
     from okto_nexus_connector.storage.state_store import StateStore, IdentityRecord, ServerProfileRecord, ExecutionExecutorRecord
 
     deps, client, headers, prepare = onboarding
+    if native_decision is not None:
+        deps.config.feature_hitl = True
     _, apply, approval_id = prepare_delegated(client, headers, prepare)
     assert decide_binding(client, headers, approval_id).status_code == 200
     response = client.post('/v1/connections/bindings:apply', json=apply, headers=headers['subject'])
@@ -116,6 +118,10 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 self.stream_epoch = stream_epoch
                 return await super().open(prepared, session_id, context, stream_epoch=stream_epoch)
         native = CountedFactory()
+        native_decisions = []
+        async def reply_native_approval(request, decision, response):
+            native_decisions.append((request, decision, response))
+        native.native.reply_native_approval = reply_native_approval
         async def environment(_):
             return {}
         async def candidates(_):
@@ -231,6 +237,59 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 opened = await admit('runtime.start', new_session=True)
                 session_id = opened['scope']['session_id']
                 turned = await admit('turn.submit', session_id=session_id, text='Hello')
+                if native_decision is not None:
+                    from nexus_connector_core import RuntimeEvent
+                    kind, choice = native_decision
+                    request = dict(schema_version=1, request_id=7, request_hash='a'*64,
+                        method='item/tool/requestUserInput' if kind == 'input' else 'item/commandExecution/requestApproval',
+                        params={'threadId':'native-thread','turnId':'turn-from-native','itemId':'item'})
+                    if kind == 'input':
+                        request['params'].update(isBlocking=True,questions=[
+                            {'id':'question','header':'Response','question':'Provide input.','isOther':True}])
+                    await native.native.queue.put(RuntimeEvent(server_id, executor_id, session_id,
+                        native.stream_epoch, 0, 'input_request' if kind == 'input' else 'approval_request',
+                        request['method'], {'native_approval':request, 'native_approval_display':dict(request)},
+                        turned['operation_id']))
+                    async with asyncio.timeout(8):
+                        while True:
+                            queued = client.get('/api/v1/approvals', headers=headers['operator'],
+                                params={'workspace':binding['workspace_id'],'status':'pending'})
+                            assert queued.status_code == 200, queued.text
+                            rows = [row for row in queued.json()['data']['items'] if row['action']=='execution.native.respond']
+                            if rows: break
+                            assert execution.failure is None, repr(execution.failure)
+                            await asyncio.sleep(.01)
+                    assert len(rows) == 1
+                    detail = client.get('/api/v1/approvals/'+rows[0]['approval_id'],headers=headers['operator'])
+                    proposal = detail.json()['data']['request_payload']['kwargs']
+                    body = {k:proposal[k] for k in ('approval_key','expected_revision','request_hash','cas_token')}
+                    body.update(client_intent_id='remote-native-decision',decision=choice)
+                    response = {'answers':{'question':{'answers':['remote-private-input-marker']}}} if kind=='input' and choice=='approve' else None
+                    if response is not None: body['response']=response
+                    assert client.post('/v1/runtime/approval-decisions',headers=headers['subject'],json=body).status_code == 403
+                    confirmed = client.post('/v1/runtime/approval-decisions',headers=headers['operator'],json=body)
+                    assert confirmed.status_code == 202, confirmed.text
+                    decision = confirmed.json()
+                    repeated = client.post('/v1/runtime/approval-decisions',headers=headers['operator'],json=body)
+                    assert repeated.status_code == 200, repeated.text
+                    assert repeated.json()['native_operation_id'] == decision['native_operation_id']
+                    operations.append(decision['native_operation_id'])
+                    async with asyncio.timeout(8):
+                        while True:
+                            result = client.get('/v1/runtime/approval-decisions/'+decision['decision_id'],headers=headers['operator'])
+                            assert result.status_code == 200, result.text
+                            view = result.json()
+                            if view['native_stage']=='SUBMITTED': break
+                            assert view['native_stage']=='DISPATCH_PENDING', view
+                            assert execution.failure is None, repr(execution.failure)
+                            await asyncio.sleep(.01)
+                    assert view['canonical_state'] == ('CONFIRMED' if choice=='approve' else 'DENIED')
+                    assert len(native_decisions) == 1
+                    frozen_request = {key: request[key] for key in ('request_id','request_hash','method','params')}
+                    expected_decision = 'accept' if choice=='approve' else 'cancel' if kind=='input' else 'decline'
+                    assert native_decisions[0] == (frozen_request,expected_decision,response)
+                    with deps.connection_factory.unit_of_work(write=False) as uow:
+                        assert 'remote-private-input-marker' not in '\n'.join(uow.connection.iterdump())
                 if event_recovery == 'active_disconnect':
                     import time
                     await owner.close()
@@ -279,7 +338,7 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                         row = uow.connection.execute(
                             'SELECT lease_serial,status FROM execution_leases ORDER BY lease_serial DESC LIMIT 1').fetchone()
                         assert row['lease_serial'] >= 2 and row['status'] == 'ACTIVE'
-                if (automatic and event_recovery != 'lease_renewal') or (reconcile_closed and not publication_failure and not history_count):
+                if native_decision is None and ((automatic and event_recovery != 'lease_renewal') or (reconcile_closed and not publication_failure and not history_count)):
                     from nexus_connector_core import RuntimeEvent
                     journal = await daemon.host.ensure_history_journal()
                     original_ack = journal.acknowledge_events
@@ -481,8 +540,8 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
             assert native.opens == 1
             assert [kind for kind, _ in native.native.sent] == ['send_turn', 'steer', 'interrupt']
             with deps.connection_factory.unit_of_work(write=False) as uow:
-                assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 5 + history_count
-                assert uow.connection.execute('SELECT COUNT(*) FROM execution_receipts').fetchone()[0] == 5 + history_count
+                assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 5 + history_count + bool(native_decision)
+                assert uow.connection.execute('SELECT COUNT(*) FROM execution_receipts').fetchone()[0] == 5 + history_count + bool(native_decision)
                 assert uow.connection.execute('SELECT COUNT(*) FROM execution_dispatch_outbox WHERE attempt_no<>1').fetchone()[0] == 0
                 expected_session = ('READY', 'SUPERSEDED') if publication_failure in ('before_commit', 'core_commit') and not reconcile_closed else ('CLOSED', 'CLOSED')
                 # Receipt ingress preserves history after disconnect. Adoption
@@ -501,3 +560,10 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 await asyncio.wait_for(serving, 5)
                 sock.close()
     asyncio.run(run())
+
+
+@pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
+@pytest.mark.parametrize('kind,choice', [('approval','approve'),('approval','deny'),('input','approve'),('input','deny')])
+def test_canonical_native_decision_roundtrip_through_automatic_connector(onboarding, tmp_path, monkeypatch, kind, choice):
+    test_owned_connector_reader_dispatches_five_actions_over_real_websocket(
+        onboarding,tmp_path,monkeypatch,True,None,False,0,None,native_decision=(kind,choice))
