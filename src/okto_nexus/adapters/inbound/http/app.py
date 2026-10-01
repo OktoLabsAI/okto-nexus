@@ -722,7 +722,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
         )
 
     app.state.deps = deps
-    app.state.inventory_fresh_publications = {}
+    app.state.inventory_fresh_publications = deps.execution_fresh_publications
     app.state.auth = auth
     app.state.observability = observability
     app.state.search = search_service

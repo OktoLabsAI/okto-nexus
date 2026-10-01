@@ -1526,11 +1526,16 @@
       "collected_nodeids": [],
       "effective_test_command": null,
       "test_availability": "MISSING",
-      "implementation": "UNVERIFIED",
+      "implementation": "PARTIAL_CANONICAL_SESSION_CALLERS",
       "acceptance": "NOT_RUN",
       "required_scenarios": [
         "TR4-15-03"
-      ]
+      ],
+      "evidence": [
+        "plans/r4_execution/M12_NS15_03_CALLERS.md",
+        "plans/r4_execution/test_runs_20261001_ns15_03_callers.json"
+      ],
+      "notes": "Existing MCP/REST canonical session commands and reads route through R4 admission and Core. Open, boot, delivery, event parity and native loader/codecs removal remain pending; normative TR4-15-03 remains NOT_RUN."
     },
     "NS15.04": {
       "proposed_nodeid": "tests/execution_r4/test_ns15.py::test_ns15_04",

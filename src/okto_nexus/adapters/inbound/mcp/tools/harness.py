@@ -102,6 +102,16 @@ def authorize_request(deps, *, substrate=None, action="admin", session_id=None, 
                       represented_agent_id=None, workspace_id=None, consume=False, check_budget=True):
     """Same authenticated admission policy for MCP, REST and local HTTP."""
     context = request_context()
+    from okto_nexus.bootstrap.execution_compat import canonical_session, session_view
+    if action in {"send", "steer", "interrupt", "close", "read"} and canonical_session(deps, session_id):
+        from okto_nexus.bootstrap.execution_authority import build_execution_access
+        if action == "read":
+            session_view(deps, context, session_id)
+        else:
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                build_execution_access(deps).authenticate(context, uow=uow)
+        # Mutations receive full scoped authorization in R4 resolve/admit.
+        return context
     build_access_service(deps).authorize(context, action=action, substrate=substrate,
         session_id=session_id, endpoint_id=endpoint_id, represented_agent_id=represented_agent_id,
         workspace_id=workspace_id, consume=consume, check_budget=check_budget)
@@ -109,6 +119,10 @@ def authorize_request(deps, *, substrate=None, action="admin", session_id=None, 
 
 
 def authorized_send(deps, supervisor, session_id, verb, payload, **options):
+    from okto_nexus.bootstrap.execution_compat import canonical_session, command
+    canonical = canonical_session(deps, session_id)
+    if canonical:
+        return command(deps, request_context(), canonical, verb, payload, options)
     context = authorize_request(deps, action="send" if verb == "send_turn" else verb, session_id=session_id, check_budget=False)
     if not is_local_runtime_owner(deps):
         action = "send" if verb == "send_turn" else verb
@@ -120,6 +134,10 @@ def authorized_send(deps, supervisor, session_id, verb, payload, **options):
 
 
 def authorized_close(deps, supervisor, session_id, **options):
+    from okto_nexus.bootstrap.execution_compat import canonical_session, command
+    canonical = canonical_session(deps, session_id)
+    if canonical:
+        return command(deps, request_context(), canonical, "close", None, options)
     context = authorize_request(deps, action="close", session_id=session_id)
     if not is_local_runtime_owner(deps):
         return call_runtime_owner(deps.config.home_dir, f"/api/v1/harness/sessions/{quote(session_id, safe='')}/close", options)
@@ -127,6 +145,21 @@ def authorized_close(deps, supervisor, session_id, **options):
 
 
 def read_operation(deps, operation_id):
+    from okto_nexus.adapters.outbound.sqlite.execution_receipts import read_execution_operation_history
+    from okto_nexus.adapters.outbound.sqlite.execution_identity import ensure_execution_installation
+    from okto_nexus.bootstrap.execution_authority import build_execution_access
+    context = request_context()
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        canonical = uow.connection.execute(
+            "SELECT 1 FROM execution_operations o JOIN execution_installation i "
+            "ON i.server_id=o.server_id WHERE operation_id=? LIMIT 1", (operation_id,)).fetchone()
+        if canonical:
+            build_execution_access(deps).authenticate(context, uow=uow, require_feature=False)
+    if canonical:
+        return read_execution_operation_history(deps.connection_factory,
+            server_id=ensure_execution_installation(deps.connection_factory).server_id,
+            executor_id=None, operation_id=operation_id,
+            subject_agent_id=context.actor_agent_id, actor_agent_id=context.actor_agent_id).public_view()
     from okto_nexus.adapters.outbound.sqlite.runtime_commands_repo import SqliteRuntimeCommandRepo
     context = authorize_request(deps, action="access")
     service = RuntimeControlService(access=build_access_service(deps), supervisor=None, commands=SqliteRuntimeCommandRepo())
@@ -1095,6 +1128,9 @@ def read_session(deps: Any, supervisor: HarnessSupervisor, session_id: str) -> d
     else the last durable row (never a fabricated liveness signal - a row
     left ``RUNNING`` after an unclean exit is NOT proof of liveness, per
     ``HarnessSessionRepo``'s own docstring)."""
+    from okto_nexus.bootstrap.execution_compat import canonical_session, session_view
+    if canonical_session(deps, session_id):
+        return session_view(deps, request_context(), session_id)
     session = supervisor.get(session_id)
     if session is not None:
         return {**session_to_dict(session), "live": True}

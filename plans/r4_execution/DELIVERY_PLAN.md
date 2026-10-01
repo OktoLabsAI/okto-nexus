@@ -37,7 +37,9 @@ A [correção de admissão durante cutover](M12_MIGRATION_CUTOVER_FENCE.md)
 impede contornar endpoints legados usando o ID canônico do adapter.
 O [incremento TR4-15-02](M12_NS15_02_DRAIN.md) integra drenagem do owner,
 incerteza preservada e restore combinado no binário HTTP atual. A próxima
-fronteira é NS15.03: retirar loaders/codecs nativos duplicados após paridade;
+fronteira é NS15.03: os comandos e leituras MCP/REST de sessões canônicas
+já usam R4/Core; converter abertura, boot e delivery antes de retirar os
+loaders/codecs nativos duplicados após paridade;
 NS15.04 mantém o aceite completo de configuração e recuperação após efeitos R4.
 Nenhum gate de release é encerrado por estes incrementos.
 

@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.03 canonical session callers - October 1, 2026
+
+Installed verification: **65 distinct passes**, plus **3 architecture checks**. Existing MCP/REST commands and reads for canonical sessions now use R4 admission and Core dispatch, retaining endpoint/grant authorization and stable retries. See [scope](M12_NS15_03_CALLERS.md) and [manifest](test_runs_20261001_ns15_03_callers.json). Opening, boot/delivery, event parity and removal of duplicated native loaders remain pending; normative TR4-15-03 and release gates remain open.
+
 ## TR4-15-02 legacy drain and offline restore — October 1, 2026
 
 Final installed verification: **94 distinct passes**, plus **3 architecture checks**. The normative migration-runtime scenario now drains two sessions through the actual TCP Server owner, preserves one uncertain result and restores DB/journal/artifacts into a new home with execution disabled. Fixed actual ENDED casing in adoption and authorized historical reads during disabled execution; mutations and unauthorized reads remain denied. See [scope](M12_NS15_02_DRAIN.md) and [manifest](test_runs_20261001_ns15_02.json). Native runtime deduplication NS15.03, full NS15.04 configuration/post-R4-effect restore and release gates remain open.

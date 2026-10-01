@@ -105,6 +105,7 @@ class Deps:
     telemetry: TelemetryPort | None = None
     native_decisions: Any = None
     runtime_admission_fence: RuntimeAdmissionFence = field(default_factory=RuntimeAdmissionFence)
+    execution_fresh_publications: dict = field(default_factory=dict)
 
 
 def build_repos(clock: Clock, config: NexusConfig) -> tuple[Repos, EventEmitter]:
