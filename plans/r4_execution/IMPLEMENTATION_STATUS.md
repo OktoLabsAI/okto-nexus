@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS14.04 dispatch capacity and eligible lanes — October 1, 2026
+
+Nexus c8a07f3 fixes a blocked control backlog hiding eligible work and keeps RECONCILING reservations charged against item/byte limits. Five failing reproductions preceded the fix; six directed cases now pass. Installed acceptance by unique test: **81 Nexus + 53 Connector**, combining the candidate results with a corrected 13-case control follow-up on the same wheel. The raw failures and overlapping runs remain recorded. See [scope](M11_DISPATCH_CAPACITY.md) and [manifest](test_runs_20261001_dispatch_capacity.json). Pending admission quotas, full flood/control load, executor fairness and all release gates remain open.
+
+
 ## NS14.04 bounded authentication cache — October 1, 2026
 
 Nexus a329503 limits positive authentication caching to 4096 entries and TTL to 60 seconds, evicts both indexes together, and prevents a lookup from refilling the cache across invalidation. Installed validation: **100 authentication/HTTP plus 27 R4 cases passed**. Actual SQLite 100k-identity load retained 4096 entries with a memory plateau; hardware, timings, initial failures and fixture corrections are recorded in the [manifest](test_runs_20261001_auth_cache.json) and [scope](M11_AUTH_CACHE_LIMITS.md). Core 0.2.51 and Connector artifacts are unchanged. NS14.04 remains partial; normative flood/control acceptance and all release gates remain open.

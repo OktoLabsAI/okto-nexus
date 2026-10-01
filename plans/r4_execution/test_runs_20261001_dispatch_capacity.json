@@ -1,0 +1,111 @@
+{
+  "date": "2026-10-01",
+  "status": "NS14_04_DISPATCH_CAPACITY_INCREMENT_PASSED_TASK_PARTIAL",
+  "commits": {
+    "core": "18e172781b018ae09960fafc1bf7e2c4b1e8410f",
+    "connector": "211be74009a7f3c4f48eb25961f9860a91825df9",
+    "nexus": "c8a07f3e96fe9adf0c4c364726a11cfcfb3f1974"
+  },
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-core-3msf4qiz\\dist\\nexus_connector_core-0.2.51.dev0-py3-none-any.whl",
+      "sha256": "4c4c0c58d25b93f4f08ba8515d8476ffc29d1f0a27cc577c9fccb610716d1d1c"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-connector-pmt6y5x7\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "baf837251f654ab6385f5fba4e22d1a1b69da1839e8f47752795d1518dd29fe7"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-dispatch-capacity-nexus-78ifhvlw\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "26fd5b1c03500fb7ff758510d411e8547ff9023d5801a783a8c0108bd780da0f"
+    }
+  },
+  "results": {
+    "dispatch-capacity-connector-installed.xml": {
+      "tests": "53",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "13.843"
+    },
+    "dispatch-capacity-controls-corrected.xml": {
+      "tests": "13",
+      "failures": "1",
+      "errors": "0",
+      "skipped": "0",
+      "time": "7.772"
+    },
+    "dispatch-capacity-controls-installed.xml": {
+      "tests": "13",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "8.597"
+    },
+    "dispatch-capacity-initial.xml": {
+      "tests": "5",
+      "failures": "5",
+      "errors": "0",
+      "skipped": "0",
+      "time": "10.789"
+    },
+    "dispatch-capacity-nexus-candidate.xml": {
+      "tests": "81",
+      "failures": "2",
+      "errors": "0",
+      "skipped": "0",
+      "time": "180.590"
+    },
+    "dispatch-capacity-source.xml": {
+      "tests": "9",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "17.809"
+    }
+  },
+  "installed_unique_passed": {
+    "nexus": 81,
+    "connector": 53,
+    "total": 134
+  },
+  "accounting": "Connector 53 passed; Nexus candidate 79 passed and two failed before their substantive paths. The corrected controls file passed all 13, replacing those two failures and overlapping 11 already-passed cases. Union verified by classname/name = 81 Nexus. No full-suite rerun claimed.",
+  "checks": {
+    "package_bytes": "All three source/wheel/installed packages compared, including the controls-only follow-up",
+    "pip_check": "passed",
+    "credential_pattern_scan": "no matches"
+  },
+  "initial_findings": [
+    "Five initial cases reproduce scheduler starvation and omitted uncertain reservation costs.",
+    "Broader candidate had two outdated expectations for HTTP 400; R4 contract requires 422.",
+    "First corrected control run exposed an outdated SUBMITTED expectation; Core close_runtime.py completes R4 close as SUCCEEDED. Both corrected control variants passed in the final installed follow-up."
+  ],
+  "limitations": [
+    "Synthetic scheduler backlog seeded after canonical admission; no native-effect claim for those rows.",
+    "NS14.04 remains partial; pending admission quotas, full flood/control load, executor fairness and aggregate metrics remain open.",
+    "Core and Connector artifacts unchanged. Preexisting UI assets included without UI acceptance. All gates remain open."
+  ],
+  "raw_evidence_whitespace_exceptions": {
+    "plans/r4_execution/evidence/dispatch-capacity-controls-corrected.xml": [
+      15
+    ]
+  },
+  "evidence": {
+    "plans/r4_execution/evidence/dispatch-capacity-artifacts.json": "80076ea0325ba7b137f146f04606dbbea8a40e65395078ca21963f4f0fde666e",
+    "plans/r4_execution/evidence/dispatch-capacity-build.log": "f765da18a2fcbef611429fe14febb60fba8fd4fe28951749d2e1c6120399bf6a",
+    "plans/r4_execution/evidence/dispatch-capacity-connector-installed.json": "33f4b3215eddd49b85c96216d7ddf8e0b86d0fbe8459deffc4a8479b4c6257fe",
+    "plans/r4_execution/evidence/dispatch-capacity-connector-installed.log": "0630b1ce53dc305e426d3cb4bf9951efe49bddda0d8e7f04eab8988146ec12e6",
+    "plans/r4_execution/evidence/dispatch-capacity-connector-installed.xml": "a7681fa2318c958e2fd3983ec5e12bcdae28560450e58eca9359bc8c2c79e2c3",
+    "plans/r4_execution/evidence/dispatch-capacity-controls-corrected.xml": "16e24bf8d2dd2e02db8e3a7eeb539c00d19e6af1bbce71847104d97747cd2b70",
+    "plans/r4_execution/evidence/dispatch-capacity-controls-installed.json": "81ab75137d493bcd40d7abc6341717efa6c00dd0d6a9d3b65777902c4f96dd9f",
+    "plans/r4_execution/evidence/dispatch-capacity-controls-installed.log": "ad8e806ae9ed0b3b4bf0bde4479de396601bbff180b1b5ae31ae97d48fd5435e",
+    "plans/r4_execution/evidence/dispatch-capacity-controls-installed.xml": "df8902940fa808759b2f76b99bc4bfda0f710378877b69d5f1be62256c1a1a31",
+    "plans/r4_execution/evidence/dispatch-capacity-initial.xml": "f8dade7bf34b2b40be6bc9770a065f6a9ec912512bc9e855d98679479e26716a",
+    "plans/r4_execution/evidence/dispatch-capacity-install.log": "9ffd2ad22ed0ff33d6a3270bda59018d872e730635aa40095b61ce0ae414a0aa",
+    "plans/r4_execution/evidence/dispatch-capacity-nexus-candidate.json": "fe52277edc411d0dd9abd1eb503765fdababad066d7ed3e9482bdb704e792f73",
+    "plans/r4_execution/evidence/dispatch-capacity-nexus-candidate.log": "b791befd1bf6c0f9d1aa62e94da73557c29afb7f2133acf5d063509a01a8c1f2",
+    "plans/r4_execution/evidence/dispatch-capacity-nexus-candidate.xml": "2afec5c88436a06a518e6a6b407f68fbf062960d104a3bdb342f876488daf4dc",
+    "plans/r4_execution/evidence/dispatch-capacity-source.xml": "d859fd737b669c1f0f20977e7b3ae448ba6f4d3929a465333089b31e468d6e0a",
+    "plans/r4_execution/run_dispatch_capacity_installed.py": "75c0f34f6dc2ba2bcaf5930cd0faefad60970e0dbe1efe8baadab219333e592f"
+  }
+}
