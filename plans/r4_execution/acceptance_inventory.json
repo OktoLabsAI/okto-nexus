@@ -1334,14 +1334,18 @@
     },
     "NS14.01": {
       "proposed_nodeid": "tests/execution_r4/test_ns14.py::test_ns14_01",
-      "collected_nodeids": [],
-      "effective_test_command": null,
-      "test_availability": "MISSING",
-      "implementation": "UNVERIFIED",
-      "acceptance": "NOT_RUN",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns14.py::test_ns14_01"
+      ],
+      "effective_test_command": "python -I plans/r4_execution/run_ns14_01_installed.py (installed venv, external cwd)",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL",
+      "acceptance": "PARTIAL",
       "required_scenarios": [
         "TR4-14-01"
-      ]
+      ],
+      "evidence": "plans/r4_execution/test_runs_20261001_ns14_01.json",
+      "notes": "Normative restart scenario passed on installed Windows tuple; full recovery obligations, prerequisite tasks and final platform/topology coverage remain open."
     },
     "NS14.02": {
       "proposed_nodeid": "tests/execution_r4/test_ns14.py::test_ns14_02",
@@ -2388,9 +2392,13 @@
         "NS14.01"
       ],
       "layer": "restart_integration",
-      "candidate_nodeids": [],
-      "coverage": "REQUIRES_REVIEW",
-      "execution": "NOT_RUN"
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns14.py::test_ns14_01"
+      ],
+      "coverage": "COVERED",
+      "execution": "PASSED",
+      "evidence": "plans/r4_execution/test_runs_20261001_ns14_01.json",
+      "notes": "Two real application processes; abrupt death, real lease expiry, removed binary, persisted journal/ledger, loopback HTTP history and unknown ownership; synthetic native port in producer."
     },
     "TR4-14-02": {
       "task_ids": [

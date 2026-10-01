@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## TR4-14-01 crash/restart history — October 1, 2026
+
+The normative restart test passed with two application processes, an abrupt producer exit, natural dispatcher lease expiry and the provider executable removed. Historical intent/operation/session queries and replay work over real HTTP, while ownership remains UNKNOWN, the slot remains reserved and no runtime is constructed. Related installed regression: **33 passed** on the unchanged Core 0.2.51 tuple. See [scope](M11_NS14_01_RESTART.md) and [manifest](test_runs_20261001_ns14_01.json). NS14.01 remains partial; broader dependencies and all release gates remain open.
+
+
 ## TR4-14-02 authority uncertainty and lost revoke ACK — October 1, 2026
 
 Core 18e1727 / 0.2.51.dev0 recovers a committed R4 revoke acknowledgement only after comparing the complete durable fence row, without repeating CAS. Connector 211be74 and Nexus 901fd09 pin the identical wheel. Final installed results: 43 Core, 53 Connector and 36 Nexus cases passed, including four normative NS14.02 variants and NS14.03. See [scope and defect](M11_NS14_02_AUTHORITY.md) and [manifest](test_runs_20261001_ns14_02.json). TR4-14-02 passes at unit_contract; NS14.01 and full task/platform acceptance remain open. No release gate closed.

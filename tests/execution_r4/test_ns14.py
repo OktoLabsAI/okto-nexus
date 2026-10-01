@@ -2,14 +2,93 @@
 import asyncio
 import threading
 import time
+import json
+import os
+from pathlib import Path
+import socket
+import subprocess
+import sys
 from dataclasses import replace
+from datetime import datetime, timezone
 
 import pytest
+import httpx
+import okto_nexus
 from nexus_connector_core import CoreError, SessionKey, TurnOperation
 
 from test_embedded_dispatch import (
     local_setup, connected_local, qualified_contract, admit, wait_receipt,
 )
+
+
+def test_ns14_01(tmp_path):
+    helper = Path(__file__).with_name("ns14_restart_process.py")
+    package_root = str(Path(okto_nexus.__file__).resolve().parent.parent)
+    env = {k: v for k, v in os.environ.items() if k.upper() in {"SYSTEMROOT", "WINDIR", "TEMP", "TMP"}}
+    env.update(PATH=str(Path(os.environ.get("SYSTEMROOT", "C:/Windows")) / "System32"),
+               HOME=str(tmp_path), USERPROFILE=str(tmp_path), PYTHONIOENCODING="utf-8", OKTO_NEXUS_NO_BANNER="1")
+    command = [sys.executable, "-I", str(helper), package_root, str(tmp_path)]
+    produced = subprocess.run(command + ["produce"], cwd=tmp_path, env=env,
+                              capture_output=True, text=True, timeout=30)
+    assert produced.returncode == 0, produced.stderr
+    record = json.loads((tmp_path / "restart-record.json").read_text(encoding="utf-8"))
+    Path(record["binary"]).unlink()
+    # Respect the crashed owner's real durable lease; never clear or rewrite it.
+    expiry = datetime.fromisoformat(record["owner_expiry"].replace("Z", "+00:00"))
+    remaining = (expiry - datetime.now(timezone.utc)).total_seconds()
+    assert remaining <= 45
+    if remaining > 0:
+        time.sleep(remaining + .1)
+    with socket.socket() as sock:
+        sock.bind(("127.0.0.1", 0))
+        port = sock.getsockname()[1]
+    log_path = tmp_path / "restarted-server.log"
+    with log_path.open("w", encoding="utf-8") as log:
+        process = subprocess.Popen(command + ["serve", "--home", record["home"],
+            "--host", "127.0.0.1", "--port", str(port), "--feature-harness-integrations", "true",
+            "--embedding-mode", "off", "--harness-root", str(tmp_path)],
+            cwd=tmp_path, env=env, stdin=subprocess.DEVNULL, stdout=log, stderr=subprocess.STDOUT,
+            creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
+        try:
+            until = time.monotonic() + 20
+            probe_path = tmp_path / "restart-probe.json"
+            while not probe_path.exists():
+                assert process.poll() is None, log_path.read_text(encoding="utf-8")
+                assert time.monotonic() < until, log_path.read_text(encoding="utf-8")
+                time.sleep(.02)
+            facts = json.loads(probe_path.read_text(encoding="utf-8"))
+            opened = record["opened"]
+            sid = opened["scope"]["session_id"]
+            assert facts["pid"] != record["pid"]
+            assert facts["operation_id"] == opened["operation_id"] and facts["stage"] == "SUBMITTED"
+            assert facts["claim_ids"] == facts["reservations"] == [sid]
+            assert facts["slot_released"] is False and facts["runtimes"] == 0
+            with httpx.Client(base_url=f"http://127.0.0.1:{port}", trust_env=False, timeout=5,
+                              headers=record["headers"]["subject"]) as client:
+                intent = client.get("/v1/runtime/intents/" + opened["client_intent_id"])
+                operation = client.get("/v1/runtime/operations/" + opened["operation_id"])
+                session = client.get("/v1/runtime/sessions/" + sid)
+                assert intent.status_code == operation.status_code == session.status_code == 200
+                assert operation.json()["executor_stage"] == record["view"]["executor_stage"]
+                assert session.json()["ownership"] == session.json()["process_state"] == "UNKNOWN"
+                assert not session.json()["control_available"]
+                replay = client.post("/v1/runtime/operations", json={k:opened[k] for k in
+                    ("client_intent_id", "operation_id", "resolution_revision", "intent_hash")})
+                assert replay.status_code == 200 and replay.json()["operation_id"] == opened["operation_id"]
+                refused = client.post("/v1/runtime/intents:resolve", json={
+                    "client_intent_id": "ns14-after-restart", "intent": "runtime.start",
+                    "binding_id": record["binding"]["binding_id"],
+                    "workspace_binding_id": record["binding"]["workspace_binding_id"], "new_session": True})
+                assert refused.status_code == 200 and not refused.json()["can_submit"]
+                assert not (tmp_path / "unexpected-runtime").exists()
+                response = client.post("/v1/runtime/shutdown", headers=record["headers"]["operator"],
+                                       json={"timeout_seconds": 1})
+                assert response.status_code in {200, 202}
+            assert process.wait(timeout=15) == 0
+        finally:
+            if process.poll() is None:
+                process.kill()
+                process.wait(timeout=10)
 
 
 @pytest.mark.parametrize("fault", ["newer_generation", "rollback", "unknown", "revoke_ack_lost"])

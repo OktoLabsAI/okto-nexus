@@ -1,0 +1,84 @@
+{
+  "date": "2026-10-01",
+  "status": "TR4_14_01_RESTART_INTEGRATION_PASSED_TASK_PARTIAL",
+  "scenario": "TR4-14-01",
+  "commits": {
+    "core": "18e172781b018ae09960fafc1bf7e2c4b1e8410f",
+    "connector": "211be74009a7f3c4f48eb25961f9860a91825df9",
+    "nexus": "901fd09409ca560e0712b0a110fc2c2e9ca46d74"
+  },
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-core-3msf4qiz\\dist\\nexus_connector_core-0.2.51.dev0-py3-none-any.whl",
+      "sha256": "4c4c0c58d25b93f4f08ba8515d8476ffc29d1f0a27cc577c9fccb610716d1d1c"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-connector-pmt6y5x7\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "baf837251f654ab6385f5fba4e22d1a1b69da1839e8f47752795d1518dd29fe7"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-nexus-mleygi83\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "00822f6548efd3162c7b594e91baab388273b95d72e8d383c1924a67db88d0ce"
+    }
+  },
+  "results": {
+    "ns14-01-expiry-installed.xml": {
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "47.709"
+    },
+    "ns14-01-initial-installed.xml": {
+      "tests": "1",
+      "failures": "1",
+      "errors": "0",
+      "skipped": "0",
+      "time": "7.441"
+    },
+    "ns14-01-nexus-installed.xml": {
+      "tests": "33",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "118.220"
+    }
+  },
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "layer": "restart_integration",
+    "topology": "Two application processes, actual disk stores and loopback HTTP; synthetic native port only in the producer; provider executable removed before production serve restart."
+  },
+  "checks": {
+    "package_bytes": "All three source/wheel/installed packages compared by runner",
+    "credential_pattern_scan": "no matches"
+  },
+  "proof": [
+    "Abrupt producer exit preserves receipt, claim, fence and unreleased slot.",
+    "Restart after natural durable owner lease expiry answers intent, operation and session without provider binary.",
+    "Ownership and process state remain UNKNOWN; no runtime construction; new start refused; original admission replay retains operation ID."
+  ],
+  "initial_failure": "Immediate restart correctly refused while the crashed dispatcher owner lease remained valid. Corrected test waits for the actual stored expiry without modifying the row.",
+  "overlap": "The standalone passing case overlaps the final 33 installed cases; initial failure is not acceptance.",
+  "limitations": [
+    "NS14.01 remains partial; prerequisite tasks, full paginated recovery and remote/platform/provider qualification remain open.",
+    "No production source or artifact changes in this increment; prior actual provider and UI evidence retains its recorded scope.",
+    "All release gates remain open."
+  ],
+  "evidence": {
+    "plans/r4_execution/evidence/ns14-01-expiry-installed.xml": "066fe77bb929dc7dd2a6ec3e401d509a01cef1d73f59480a26b6b01fac4a4387",
+    "plans/r4_execution/evidence/ns14-01-initial-installed.xml": "ba8c48f8b0ac53f6ddfd36e96fa7df1398ea418deb3f8b910be2384b5ef552b8",
+    "plans/r4_execution/evidence/ns14-01-nexus-installed.json": "a09944b1088e4f0bed7956be52ab4e7d20b7910cf03222a3670e79babe2acc6e",
+    "plans/r4_execution/evidence/ns14-01-nexus-installed.log": "f193135a0fa7e7f6f6e49c860d9f42b09a8dd8d4741c22819aff8271326a9839",
+    "plans/r4_execution/evidence/ns14-01-nexus-installed.xml": "e618ab59ee06f483c32c6719684ebc5b99c56ec19ade334c7bd8b3972a7a1d6a",
+    "plans/r4_execution/run_ns14_01_installed.py": "56060060a99191513fdfa862a4e5f817cd13e1f0e4724914ecb7ba05ed64e4f4",
+    "tests/execution_r4/test_ns14.py": "eaabdae7808f01f44a8fdedbe5bbcc331c93f0526bce66634ed221abbec7c9b4",
+    "tests/execution_r4/ns14_restart_process.py": "baa606e3511ba8ad8117a9ae7c8d8ee4f9af42b4da0af0789336a30ab12be322"
+  },
+  "raw_evidence_whitespace_exceptions": {
+    "evidence/ns14-01-initial-installed.xml": [
+      55,
+      57
+    ]
+  }
+}
