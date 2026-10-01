@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## Qualified Pi/Codex authentication diagnostics — October 1, 2026
+
+Core 3982f6b / 0.2.46.dev0 adds durable correlated Pi prompt rejection and Codex terminal HTTP 401 classification. Connector 96d11cf and Nexus 581df44 adopt the identical wheel. Installed tests passed: 72 Core (including actual missing-login Pi, Codex and Claude), 122 Connector and 21 Nexus. Retry remains unsafe after a protocol write; operation replay does not send again. Public consumer missing-login journeys and full platform/host acceptance remain pending. See [details](M03_QUALIFIED_NATIVE_AUTH.md) and [manifest](test_runs_20261001_native_auth.json). No gate closed.
+
+
 ## Native terminal failure diagnostics — October 1, 2026
 
 Core 3823ae3 / 0.2.45.dev0 preserves structured Claude/Codex authentication failure codes in durable terminal receipts and concludes Claude result-error operations. Connector e67eb87 and Nexus 12e2c41 adopt the same wheel; Nexus inventory pin and uv.lock are updated. Installed evidence: 58 Core regression cases plus one real Claude missing-login case using the normal qualified factory, 122 Connector cases and 21 Nexus cases. Missing-login evidence for real Codex/Pi and public consumer journeys remains pending; no gate closed. See [details](M03_NATIVE_AUTH_FAILURES.md) and [manifest](test_runs_20261001_native_failures.json).

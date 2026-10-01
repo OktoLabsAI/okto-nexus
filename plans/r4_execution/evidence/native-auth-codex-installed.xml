@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="28.416" timestamp="2026-10-01T06:21:13.797872-03:00" hostname="Alienware_m15"><testcase classname="test_real_native_auth_failure" name="test_real_codex_missing_login_has_durable_authentication_error" time="27.807"><failure message="AssertionError: assert 'NATIVE_OPERATION_FAILED' == 'PROVIDER_AUTH_REQUIRED'&#10;  &#10;  - PROVIDER_AUTH_REQUIRED&#10;  + NATIVE_OPERATION_FAILED">D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_real_native_auth_failure.py:90: in test_real_codex_missing_login_has_durable_authentication_error
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_real_native_auth_failure.py:85: in run
+    assert receipt.error_code == "PROVIDER_AUTH_REQUIRED"
+E   AssertionError: assert 'NATIVE_OPERATION_FAILED' == 'PROVIDER_AUTH_REQUIRED'
+E     
+E     - PROVIDER_AUTH_REQUIRED
+E     + NATIVE_OPERATION_FAILED</failure></testcase></testsuite></testsuites>
