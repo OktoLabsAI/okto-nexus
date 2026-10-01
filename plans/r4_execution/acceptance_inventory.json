@@ -1373,9 +1373,10 @@
         "tests/execution_r4/test_server_signal_shutdown.py::test_signal_keeps_serve_process_and_http_until_inventory_release[http-SIGINT]",
         "tests/execution_r4/test_server_signal_shutdown.py::test_signal_keeps_serve_process_and_http_until_inventory_release[http-SIGTERM]",
         "tests/execution_r4/test_server_signal_shutdown.py::test_signal_during_startup_waits_for_owner_without_hanging_failed_startup[False]",
-        "tests/execution_r4/test_server_signal_shutdown.py::test_signal_during_startup_waits_for_owner_without_hanging_failed_startup[True]"
+        "tests/execution_r4/test_server_signal_shutdown.py::test_signal_during_startup_waits_for_owner_without_hanging_failed_startup[True]",
+        "tests/execution_r4/test_server_shutdown.py::test_two_runtime_shutdown_reports_stopped_release_and_unknown_separately"
       ],
-      "effective_test_command": "Run plans/r4_execution/run_server_signal_installed.py against its verified artifacts; broader administrative regression is recorded in the preceding server-shutdown manifest.",
+      "effective_test_command": "Run plans/r4_execution/run_shutdown_facts_installed.py against its verified final tuple.",
       "test_availability": "COLLECTED_ALTERNATIVE_ENTRY",
       "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
       "acceptance": "PARTIAL",
@@ -1389,9 +1390,10 @@
         "plans/r4_execution/test_runs_20261001_shutdown_deadline.json",
         "plans/r4_execution/test_runs_20261001_shutdown_admission.json",
         "plans/r4_execution/test_runs_20261001_server_shutdown.json",
-        "plans/r4_execution/test_runs_20261001_server_signal.json"
+        "plans/r4_execution/test_runs_20261001_server_signal.json",
+        "plans/r4_execution/test_runs_20261001_shutdown_facts.json"
       ],
-      "remaining_acceptance": "Retained administrative HTTP/CLI and Python-delivered Windows signal recovery are verified, including actual serve child processes. External Windows console/Linux signals, the complete two-runtime late-open/stuck-close/release fault matrix, qualified process-versus-durable-release projection, authorization-store outage, explicit force-exit qualification and platform/provider acceptance remain pending."
+      "remaining_acceptance": "Core-backed stopped-versus-pending-release reporting and recovery are verified through public Server HTTP for two runtimes. The combined public late-open/stuck-close/independent-force matrix, external Windows console/Linux signals, authorization-store outage, explicit force-exit qualification and platform/provider acceptance remain pending."
     },
     "NS14.04": {
       "proposed_nodeid": "tests/execution_r4/test_ns14.py::test_ns14_04",

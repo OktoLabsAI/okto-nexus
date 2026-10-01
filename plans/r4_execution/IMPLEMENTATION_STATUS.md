@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## Observed stop and durable release — October 1, 2026
+
+Core 29197d2 / 0.2.50.dev0 exposes memory-only shutdown resource facts and fixes stale release markers after stopped-session eviction. Connector 6fc8654 and Nexus 4b63b55 pin the identical wheel. Nexus reports STOPPED/release-pending separately from unknown native state through operator HTTP. Final installed results: 91 Core, 53 Connector, 46 Nexus passed. The failing expiry recovery seed and prior candidate results are retained. See [details](M11_SHUTDOWN_FACTS.md) and [manifest](test_runs_20261001_shutdown_facts.json). Combined late-open/stuck-close/force and platform qualification remain pending; NS14.03 partial, all gates open.
+
 ## Retained Server signal shutdown — October 1, 2026
 
 Nexus 23a3ba4 routes signals through the existing retained coordinator instead of stopping HTTP or forcing exit on repetition. Installed verification passed nine R4 and eight legacy cases, including actual serve child processes, Python-delivered SIGINT/SIGTERM, unavailable inventory release, repeated signals, restoration and startup races. See [details](M11_SERVER_SIGNALS.md) and [manifest](test_runs_20261001_server_signal.json). External console/Linux signal qualification and the remaining NS14.03 fault/report/platform matrix stay open; no release gate closed.

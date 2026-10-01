@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.628" timestamp="2026-10-01T09:58:47.965231-03:00" hostname="Alienware_m15"><testcase classname="test_shutdown_resources" name="test_expired_stopped_session_reconciles_release_after_eviction" time="0.261"><failure message="AssertionError: assert {'process_sta...ending': True} == {'process_sta...nding': False}&#10;  &#10;  Omitting 1 identical items, use -vv to show&#10;  Differing items:&#10;  {'release_pending': True} != {'release_pending': False}&#10;  Use -v to get more diff">..\okto-nexus-connector-core\tests\test_shutdown_resources.py:83: in test_expired_stopped_session_reconciles_release_after_eviction
+    asyncio.run(scenario())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+..\okto-nexus-connector-core\tests\test_shutdown_resources.py:76: in scenario
+    assert runtime.shutdown_resources()[key] == {"process_state": "STOPPED", "release_pending": False}
+E   AssertionError: assert {'process_sta...ending': True} == {'process_sta...nding': False}
+E     
+E     Omitting 1 identical items, use -vv to show
+E     Differing items:
+E     {'release_pending': True} != {'release_pending': False}
+E     Use -v to get more diff</failure></testcase></testsuite></testsuites>
