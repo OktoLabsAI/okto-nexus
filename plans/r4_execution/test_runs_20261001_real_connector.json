@@ -1,0 +1,129 @@
+{
+  "date": "2026-10-01",
+  "branch": "feature/v0.2.0",
+  "commits": {
+    "nexus": "e272103bb099576aceb6e8dc0effd9e015f63b53",
+    "connector": "ab1969b49ec72365428df98b7d04e22a53256613",
+    "core": "a061960"
+  },
+  "nexus_package_source_commit": "a0c6160",
+  "core_version": "0.2.43.dev0",
+  "artifacts": {
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-real-connector-receipts-ueoaidr3\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "e327616295eda285cad52fa4dc0c8b3c22a6ced00d81d6b3917caef8aefe75ac"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-runtime-admission-nexus-tmvzlmoh\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "e218c5569551e335023de98d2d0988241a601eb59a412c4e24086685c0ee9889"
+    }
+  },
+  "core_artifact": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-lease-core-hi9n9umw\\dist\\nexus_connector_core-0.2.43.dev0-py3-none-any.whl",
+    "sha256": "7403611bb37050700fc325b2002f74b5ac507a79af8badba0bea0cd1b775087b",
+    "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-lease-core-hi9n9umw"
+  },
+  "test_sha256": "01ebb33ed4142631711f4f288e6c8e9dc2724d870380328c28d9f9231a09c895",
+  "installed": {
+    "connector": {
+      "file": "evidence/real-connector-regression-installed.xml",
+      "tests": 252,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "seconds": 60.114
+    },
+    "nexus": {
+      "file": "evidence/real-connector-regression-tcp-installed.xml",
+      "tests": 33,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "seconds": 110.786
+    }
+  },
+  "source": {
+    "file": "evidence/real-connector-terminal-source.xml",
+    "tests": 56,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "seconds": 36.644
+  },
+  "real_providers": {
+    "codex_app_server": {
+      "result": {
+        "file": "evidence/real-connector-codex_app_server-installed.xml",
+        "tests": 1,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "seconds": 156.685
+      },
+      "report": "evidence/real-connector-codex_app_server.json",
+      "completed": true,
+      "credentials_removed": true,
+      "turn_stage": "SUCCEEDED",
+      "close_stage": "SUCCEEDED",
+      "decisions": 3
+    },
+    "claude_stream": {
+      "result": {
+        "file": "evidence/real-connector-claude_stream-installed.xml",
+        "tests": 1,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "seconds": 142.946
+      },
+      "report": "evidence/real-connector-claude_stream.json",
+      "completed": true,
+      "credentials_removed": true,
+      "turn_stage": "SUCCEEDED",
+      "close_stage": "SUCCEEDED",
+      "decisions": 3
+    },
+    "pi_rpc": {
+      "result": {
+        "file": "evidence/real-connector-pi_rpc-installed.xml",
+        "tests": 1,
+        "errors": 0,
+        "failures": 1,
+        "skipped": 0,
+        "seconds": 392.124
+      },
+      "report": "evidence/real-connector-pi_rpc.json",
+      "completed": false,
+      "credentials_removed": true,
+      "turn_stage": null,
+      "close_stage": null,
+      "decisions": null
+    }
+  },
+  "changes": [
+    "Default daemon discovery now uses the approved persisted discovery configuration when no injected discovery callback exists.",
+    "Connector observes acknowledged nonterminal Core facts and durably projects later receipt revisions before publication.",
+    "Restart recovery advances durable Core facts without repeating native effects; exact receipt acknowledgment and retained shutdown are tested.",
+    "The optional keyring extra declares the protected OS credential backend dependency.",
+    "Actual public parsed CLI onboarding, authenticated realization IPC, operator binding approval, runtime admission, automatic daemon WSS, Core and native provider are exercised together."
+  ],
+  "failure_history": [
+    "Pi initially refused identity import without an installed protected vault backend. keyring 25.7.0 and its dependencies were installed; the campaign does not approve plaintext fallback.",
+    "An initial Pi inventory timeout remained unexplained; isolated discovery later measured 16.90 seconds. Original reports and diagnostic are retained.",
+    "Pi exposed the default discovery callback defect; the callback fallback was fixed and source tests passed.",
+    "Codex completed its handoff but the Server retained SUBMITTED because later Core facts were never published. The receipt observer/recovery fix now passes the actual Codex and Claude journeys.",
+    "An eager receipt observer initially opened the journal before its parent directory existed. Lazy start after the first acknowledged receipt corrected three source failures; the failed XML remains.",
+    "Final Pi on the same wheels failed after 392.27 seconds with an opening timeout and a shutdown timeout. A stack snapshot shows Pi build-identity hashing inside resolve_execution_selection. No final Pi receipt or provider completion is claimed. Temporary campaign credentials were removed."
+  ],
+  "limitations": [
+    "Codex and Claude passed; Pi remains failed and requires diagnosis/correction of slow opening and shutdown.",
+    "The Server protocol release gates are overridden only in the test. Native provider qualification is unchanged.",
+    "This is one Windows host with loopback HTTP/WSS; it does not qualify independent hosts, Linux, TLS deployment, UI or all seven native operations.",
+    "Successful Codex/Claude input/approval decisions remain conservative SUBMITTED; APPLIED_OBSERVED acceptance is pending.",
+    "Nexus production bytes remain a0c6160; preexisting UI assets in its wheel remain outside this acceptance.",
+    "Source and installed suites overlap; their counts are not unique totals.",
+    "Session reuse, observation/retention, remaining M00-M13 criteria and G0-G3 remain open."
+  ],
+  "next_step": "Diagnose and correct Pi build-identity validation latency during Connector opening and retained shutdown, then repeat the real provider campaign on the final same wheels.",
+  "milestone_complete": false
+}

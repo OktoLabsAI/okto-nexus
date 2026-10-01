@@ -1,0 +1,22 @@
+{
+  "core_version": "0.2.43.dev0",
+  "core_commit": "a061960",
+  "isolated_discovery_seconds": 16.9015311000403,
+  "candidates": 1,
+  "versions": [
+    "0.87.1"
+  ],
+  "prior_attempt": "pytest-4275",
+  "prior_live_stack": [
+    "candidate_pi_node_cli",
+    "pi_build_identity",
+    "_add_tree",
+    "_add_entry",
+    "_file_digest_counted",
+    "pathlib.open"
+  ],
+  "prior_runtime_admitted": false,
+  "prior_terminal_test_seconds": 239.15,
+  "prior_ephemeral_identity_removed_after_terminal_process": true,
+  "conclusion": "The isolated follow-up discovery completed. The earlier full daemon inventory delay remains unexplained; no native readiness or timeout policy was weakened."
+}

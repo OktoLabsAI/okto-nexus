@@ -1,0 +1,30 @@
+{
+  "adapter": "codex_app_server",
+  "server_release_gate_override": true,
+  "native_qualification_override": false,
+  "synthetic_native_factory": false,
+  "public_connector_cli": true,
+  "protected_os_vault": true,
+  "topology": "Single Windows host; actual loopback HTTP/WSS; Server and daemon owners.",
+  "phase": "finished",
+  "vault_backend": "keyring:Windows WinVaultKeyring",
+  "candidate_ref": "nexus-install-v1:24d6773e4cffb30762d80c87461061629bd2937636ab099786d74dc00e0bee48",
+  "open_stage": "SUBMITTED",
+  "scope": {
+    "agent_id": "subject",
+    "authorization_revision": 2,
+    "binding_id": "bind_f565e9754e6971c9628944a5f5a994d3",
+    "binding_revision": 1,
+    "configuration_revision": 2,
+    "credential_epoch": 1,
+    "executor_id": "exe_01af2e97088ef6a0f14137aa5ad38ef3",
+    "server_id": "srv_e6957b3a45fc650ac7baed3c3fec3c47",
+    "session_id": "ses_d59db81890750295db87649f06864bd4",
+    "session_owner_generation": 1,
+    "workspace_binding_id": "wxb_892c5b54b5837f032d4acec419733cc0",
+    "workspace_id": "wsr_7aa76d4c3d34d474aac5f50b8de863b8"
+  },
+  "lease_serial_before_turn": 2,
+  "failure_type": "TimeoutError",
+  "campaign_credentials_removed": true
+}
