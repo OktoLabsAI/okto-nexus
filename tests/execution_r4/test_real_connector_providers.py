@@ -159,6 +159,7 @@ def test_real_provider_through_public_connector_cli(tmp_path, monkeypatch, adapt
                 report["protected_os_vault"] = True
                 report["vault_backend"] = daemon.vault.backend_name()
                 daemon_task = asyncio.create_task(daemon.run_forever())
+                checkpoint("waiting_for_control_readiness")
                 async with asyncio.timeout(120):
                     while True:
                         control = daemon.r4_controls.get(server_id)
@@ -249,6 +250,7 @@ def test_real_provider_through_public_connector_cli(tmp_path, monkeypatch, adapt
                                 assert failures == 0, "Native event observation failed."
                             view = await cli("runtime", "operation", "--alias", "assistant", "--client-intent-id", intent_id)
                             operation = view.get("operation") or {}
+                            assert operation.get("error") is None, operation
                             stage = operation.get("executor_stage")
                             assert stage not in ("FAILED", "REJECTED", "OUTCOME_UNKNOWN"), operation
                             assert owner.failure is None, type(owner.failure).__name__
@@ -301,9 +303,80 @@ def test_real_provider_through_public_connector_cli(tmp_path, monkeypatch, adapt
                 assert report["native_action_count"] >= 3 if adapter == "pi_rpc" else report["tool_claim_count"] >= 1
                 await cli("runtime", "stop", session, "--alias", "assistant", "--client-intent-id", "close")
                 report["close_stage"] = (await receipt("close", ("SUCCEEDED",)))["executor_stage"]
+                if os.environ.get("OKTO_NEXUS_REAL_REBIND") == "1":
+                    replacement_root = tmp_path / "replacement-workspace"
+                    replacement_root.mkdir()
+                    current_inventory = await cli("discover", "--server-id", server_id)
+                    current_row = next(r for r in current_inventory["availability"]["rows"]
+                        if r["adapter_id"] == adapter and r["candidate_ref"] == row["candidate_ref"])
+                    replacement = await cli("executor", "realize", "--identity", "subject",
+                        "--client-intent-id", "replacement-realize", "--harness", adapter,
+                        "--candidate-ref", current_row["candidate_ref"],
+                        "--inventory-revision", current_inventory["availability"]["executor_revision"],
+                        "--configuration-digest", config["configuration_digest"], "--project", str(replacement_root),
+                        "--workspace-id", binding["workspace_id"], "--label", "Replacement Connector work")
+                    proposed = (await cli("bind", "prepare", "--identity", "subject",
+                        "--realization-ref", replacement["realization_ref"], "--alias", "assistant",
+                        "--client-intent-id", "replacement-prepare",
+                        "--replace-binding-id", binding["binding_id"]))["proposal"]
+                    replacement_proof = next(r for r in proposed["required_approvals"] if r.startswith("apr_"))
+                    await post("/api/v1/approvals/" + replacement_proof + "/decision", {"decision": "approve"})
+                    rebound = (await cli("bind", "apply", "--identity", "subject",
+                        "--prepare-intent-id", "replacement-prepare", "--client-intent-id", "replacement-apply",
+                        "--approved-diff-hash", proposed["approved_diff_hash"],
+                        "--operator-proof-ref", replacement_proof))["binding"]
+                    assert rebound["binding_id"] == binding["binding_id"]
+                    assert rebound["endpoint_id"] == binding["endpoint_id"]
+                    assert rebound["binding_revision"] == binding["binding_revision"] + 1
+                    assert rebound["realization_ref"] == replacement["realization_ref"] != binding["realization_ref"]
+                    checkpoint("waiting_for_replacement_readiness")
+                    async with asyncio.timeout(120):
+                        while True:
+                            control = daemon.r4_controls.get(server_id)
+                            execution = control.execution if control else None
+                            lane = execution.lanes.get(binding["binding_id"]) if execution else None
+                            if (control and control.status()["execution_ready"] and lane
+                                    and lane.binding.binding_revision == rebound["binding_revision"]):
+                                break
+                            assert not daemon_task.done(), "The Connector exited during replacement reconciliation."
+                            await asyncio.sleep(.1)
+                    previous_scope = scope
+                    reopened = await cli("runtime", "start", "assistant", "--new-session",
+                                         "--client-intent-id", "replacement-open")
+                    assert reopened["state"] == "ADMITTED", reopened
+                    saved = next(r for r in store.load().runtime_intents if r.client_intent_id == "replacement-open")
+                    scope = saved.resolution["scope"]
+                    assert scope["session_id"] != session
+                    assert scope["workspace_binding_id"] != previous_scope["workspace_binding_id"]
+                    owner = control.execution.owner
+                    report["replacement_open_stage"] = (await receipt("replacement-open", ("SUBMITTED", "SUCCEEDED")))["executor_stage"]
+                    current_local = next(r for r in store.load().realizations if r.realization_ref == rebound["realization_ref"])
+                    assert Path(current_local.workspace_root) == replacement_root
+                    report["replacement_workspace_selected"] = True
+                    report["replacement_scope"] = scope
+                    await cli("runtime", "submit", scope["session_id"], "Do not call tools. Reply with OK.",
+                              "--alias", "assistant", "--client-intent-id", "replacement-turn")
+                    report["replacement_turn_stage"] = (await receipt("replacement-turn", ("SUCCEEDED",)))["executor_stage"]
+                    await cli("runtime", "stop", scope["session_id"], "--alias", "assistant",
+                              "--client-intent-id", "replacement-close")
+                    report["replacement_close_stage"] = (await receipt("replacement-close", ("SUCCEEDED",)))["executor_stage"]
+                    with deps.connection_factory.unit_of_work(write=False) as uow:
+                        states = uow.connection.execute("SELECT session_id,lifecycle_state FROM execution_sessions").fetchall()
+                        assert {r["session_id"]: r["lifecycle_state"] for r in states} == {
+                            session: "CLOSED", scope["session_id"]: "CLOSED"}
+                        assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='runtime.open'").fetchone()[0] == 2
+                    report["replacement_completed"] = True
                 report["completed"] = True
             except BaseException as error:
+                import traceback
                 report["failure_type"] = type(error).__name__
+                report["failure_phase"] = report.get("phase")
+                report["failure_frames"] = [
+                    dict(file=Path(frame.filename).name, function=frame.name, line=frame.lineno)
+                    for frame in traceback.extract_tb(error.__traceback__)]
+                if daemon is not None:
+                    report["control_failures"] = [c.status() for c in daemon.r4_controls.values()]
+                checkpoint("failed")
                 raise
             finally:
                 try:

@@ -1,0 +1,68 @@
+{
+  "adapter": "pi_rpc",
+  "server_release_gate_override": true,
+  "native_qualification_override": false,
+  "synthetic_native_factory": false,
+  "public_connector_cli": true,
+  "cli_subprocess": true,
+  "protected_os_vault": true,
+  "topology": "Single Windows host; actual loopback HTTP/WSS; separate Server and daemon processes.",
+  "phase": "finished",
+  "vault_backend": "keyring:Windows WinVaultKeyring",
+  "candidate_ref": "nexus-install-v1:b64f7d489758234ac44fa9004bec00163e29efe01b8772ace8836ffc6001b3d5",
+  "open_stage": "SUBMITTED",
+  "scope": {
+    "agent_id": "subject",
+    "authorization_revision": 2,
+    "binding_id": "bind_c89fb36602d0376e7d929a85a904b75a",
+    "binding_revision": 1,
+    "configuration_revision": 2,
+    "credential_epoch": 1,
+    "executor_id": "exe_470547ed94db9dc65cc19f134422eeb1",
+    "server_id": "srv_c6cfcda5764308aa4f42282eae186274",
+    "session_id": "ses_9184d54a6beae1b5f55129270ec6e137",
+    "session_owner_generation": 1,
+    "workspace_binding_id": "wxb_afecbc2f0bbd17547257738f6682cc17",
+    "workspace_id": "wsr_bcc633b0cadded7ed8754cadf840dff7"
+  },
+  "lease_serial_before_turn": 2,
+  "turn_stage": "SUCCEEDED",
+  "explicit_operator_decisions": 0,
+  "handoff_status": "COMPLETED",
+  "native_action_count": 3,
+  "tool_claim_count": 1,
+  "wss_ticket_count": 4,
+  "close_stage": "SUCCEEDED",
+  "failure_type": "TimeoutError",
+  "failure_phase": "waiting_for_replacement_readiness",
+  "failure_frames": [
+    {
+      "file": "test_real_connector_providers.py",
+      "function": "run",
+      "line": 333
+    },
+    {
+      "file": "timeouts.py",
+      "function": "__aexit__",
+      "line": 116
+    }
+  ],
+  "control_failures": [
+    {
+      "state": "RETRY_WAIT",
+      "executor_id": "exe_470547ed94db9dc65cc19f134422eeb1",
+      "control_ready": false,
+      "execution_ready": false,
+      "error_code": "STALE_GENERATION",
+      "recovery_required": false,
+      "cleanup_pending": false,
+      "publication_sequence": 9,
+      "inventory_revision": "sha256:8a0d08021a435878197e13a8415052beeea5c689cab6e0f8e574e054c361610e",
+      "connection_generation": null,
+      "attempts": 7
+    }
+  ],
+  "daemon_exit_code": 0,
+  "campaign_credentials_removed": true,
+  "server_exit_code": 0
+}

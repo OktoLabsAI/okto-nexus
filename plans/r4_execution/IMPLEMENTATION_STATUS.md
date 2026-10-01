@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## Reviewed binding lane continuity — October 1, 2026
+
+Connector 2c84b52 adopts a confirmed idle binding replacement without disconnecting other lanes. The exact prior snapshot, complete applied result, unchanged authority, closed/released target observations and post-observation revalidation are required; the ticket deadline is preserved. Installed verification passed 244 Connector tests, four Nexus journeys and two additional continuity/race tests. Real Pi, Codex and Claude each passed initial handoff/close, approved replacement and a second native turn/close on the same installed artifacts. Earlier control-timeout and stale-generation failures remain recorded. This is single-host Windows evidence with test-only Server release readiness; native qualification remains enabled. No release gate is closed. See [details](M03_BINDING_LANE_CONTINUITY.md) and [evidence](test_runs_20261001_binding_lanes.json).
+
+
 ## Explicit reviewed binding replacement - October 1, 2026
 
 Nexus 2a37eda and Connector 4cb5ccf add replace_binding_id / --replace-binding-id, exact reviewed replacement, one binding-revision advance, unchanged endpoint/profile/global agent revisions, scoped target checks and refusal while the target has non-CLOSED claims. Connector schema 12 retains historical applications as SUPERSEDED, uses the current alias and recovers lost acknowledgments without another replacement. The TCP CLI journey exposed an obsolete administrative publication ticket after first apply; the daemon now obtains a current derivative via idempotent registration when canonical authority differs. Final installed verification passed 196 Connector tests and four TCP/HTTP/WSS journeys. The earlier installed campaign passed 34 Nexus cases on the same Nexus wheel and retained the stale-ticket failure; results overlap. [Evidence](test_runs_20261001_binding_replacement.json), [behavior and limits](M03_BINDING_REPLACEMENT.md). Core44 is unchanged. Native opening after rebind, drift/login diagnostics and live unrelated-process continuity remain pending for NS05.05; no milestone or release gate closes.

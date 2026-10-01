@@ -1,0 +1,27 @@
+{
+  "command": [
+    "C:/Users/jpamb/AppData/Local/Temp/okto-r4-native-installed-zk_r383i/Scripts/python.exe",
+    "-I",
+    "-c",
+    "import sys,pytest; sys.path.insert(0,'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector'); raise SystemExit(pytest.main(['-c', 'C:/Users/jpamb/AppData/Local/Temp/okto-r4-canonical-installed/pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests', '-o', 'asyncio_mode=auto', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests\\\\unit\\\\test_r4_binding_replacement_continuity.py', '-q', '--tb=short', '--junitxml=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\plans\\\\r4_execution\\\\evidence\\\\binding-lane-continuity-installed.xml']))"
+  ],
+  "exit_code": 0,
+  "test_sha256": "6ee39539570414b2a07cb0c3d9c41e8bdea5b72283526f5025d547167cdd72a1",
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-opening-core-nzdtg0fa\\dist\\nexus_connector_core-0.2.44.dev0-py3-none-any.whl",
+      "sha256": "c6f8555adeadb68959daa8e2ad91ec755eab49183049112a3d719470321e8db0",
+      "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-opening-core-nzdtg0fa",
+      "source_commit": "9c778719c3892d9742bb358b0020e39ed43df08d"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-binding-replacement-nexus-2uhl00gd\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "49a90a614814fb18b07f3cd229f223ec9563bf287ed3e89b5261dab408072d85",
+      "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-binding-replacement-nexus-2uhl00gd"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-binding-lanes-hxg8f3ku\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "f0c24269d1141505e31bbc6a0bb6872af1dcfd22a72e80eb36d3e684a0754f25"
+    }
+  }
+}
