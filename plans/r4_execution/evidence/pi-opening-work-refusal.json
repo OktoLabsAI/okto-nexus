@@ -1,0 +1,10 @@
+{
+  "native_tool_responses": [
+    "EXECUTOR_OFFLINE",
+    "OUTCOME_UNKNOWN"
+  ],
+  "native_actions_committed": 1,
+  "handoff_status": "OPEN",
+  "turn_stage": "SUCCEEDED",
+  "finding": "Provider did not receive a claim epoch and correctly refused to fabricate one. The CLI shared the Python process with Server/daemon owners."
+}

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="477.435" timestamp="2026-10-01T02:02:04.008152-03:00" hostname="Alienware_m15"><testcase classname="test_real_connector_providers" name="test_real_provider_through_public_connector_cli[pi_rpc]" time="475.632"><failure message="TimeoutError">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_real_connector_providers.py:200: in receipt
+    view = await cli("runtime", "operation", "--alias", "assistant", "--client-intent-id", intent_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_real_connector_providers.py:89: in cli
+    result = await caller(args, output, root)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus_connector\cli\commands\runtime.py:64: in run_runtime
+    return await service.inspect(alias=alias, client_intent_id=args.client_intent_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus_connector\services\runtime_admission.py:214: in inspect
+    me = await http.me(key)
+         ^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus_connector\transport\https_client.py:420: in me
+    payload = await self._request("GET", "/v1/connections/me", key=key,
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus_connector\transport\https_client.py:341: in _request
+    response = await self._client.request(
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1540: in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1629: in send
+    response = await self._send_handling_auth(
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1657: in _send_handling_auth
+    response = await self._send_handling_redirects(
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1694: in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_client.py:1730: in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpx\_transports\default.py:394: in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpcore\_async\connection_pool.py:256: in handle_async_request
+    raise exc from None
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpcore\_async\connection_pool.py:236: in handle_async_request
+    response = await connection.handle_async_request(
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpcore\_async\connection.py:101: in handle_async_request
+    raise exc
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpcore\_async\connection.py:78: in handle_async_request
+    stream = await self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpcore\_async\connection.py:124: in _connect
+    stream = await self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpcore\_backends\auto.py:31: in connect_tcp
+    return await self._backend.connect_tcp(
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\httpcore\_backends\anyio.py:115: in connect_tcp
+    stream: anyio.abc.ByteStream = await anyio.connect_tcp(
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\_core\_sockets.py:252: in connect_tcp
+    async with create_task_group() as tg:
+               ^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\_backends\_asyncio.py:851: in __aexit__
+    raise exc_val
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\_core\_sockets.py:257: in connect_tcp
+    await event.wait()
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\_backends\_asyncio.py:1936: in wait
+    await self._event.wait()
+C:\Python313\Lib\asyncio\locks.py:213: in wait
+    await fut
+E   asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_real_connector_providers.py:286: in test_real_provider_through_public_connector_cli
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_real_connector_providers.py:242: in run
+    report["turn_stage"] = (await receipt("work", ("SUCCEEDED",)))["executor_stage"]
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_real_connector_providers.py:197: in receipt
+    async with asyncio.timeout(240):
+               ^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\timeouts.py:116: in __aexit__
+    raise TimeoutError from exc_val
+E   TimeoutError</failure></testcase></testsuite></testsuites>

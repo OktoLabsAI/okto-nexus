@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="314.926" timestamp="2026-10-01T02:30:26.357845-03:00" hostname="Alienware_m15"><testcase classname="test_real_connector_providers" name="test_real_provider_through_public_connector_cli[pi_rpc]" time="313.558"><failure message="AssertionError: Native event observation failed.&#10;assert 1 == 0">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_real_connector_providers.py:296: in test_real_provider_through_public_connector_cli
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_real_connector_providers.py:252: in run
+    report["turn_stage"] = (await receipt("work", ("SUCCEEDED",)))["executor_stage"]
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_real_connector_providers.py:209: in receipt
+    assert failures == 0, "Native event observation failed."
+E   AssertionError: Native event observation failed.
+E   assert 1 == 0</failure></testcase></testsuite></testsuites>
