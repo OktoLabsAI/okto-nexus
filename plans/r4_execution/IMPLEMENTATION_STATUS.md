@@ -2,6 +2,12 @@
 
 ## Current acceptance reconciliation: executable Core .53
 
+NS15.05 operational reconciliation now removes stale R3/legacy guidance and
+verifies the actual R4 bundle in Connector doctor. Eight installed tests, 34
+Connector command examples and the Nexus guide's seven help commands/14 routes
+passed. See [scope and remaining scenario work](M12_NS15_05_OPERATIONAL_RECONCILIATION.md).
+This is supporting documentation evidence, not full NS15.05 or gate closure.
+
 Connector `8ff791c` adds explicit, byte-bound installation observation. Real
 installed CLI probes passed for Codex 0.159.0 and Claude 2.1.282; 54 installed Nexus
 integration tests passed with unchanged inputs. The full Connector run retained

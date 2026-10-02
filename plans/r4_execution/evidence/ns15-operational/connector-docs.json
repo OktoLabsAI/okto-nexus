@@ -1,0 +1,531 @@
+{
+  "status": "PASS",
+  "scope": "Installed parser/help and local-link audit; not scenario acceptance",
+  "package": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\connector-observation-packaging-env\\Lib\\site-packages\\okto_nexus_connector",
+  "documents": {
+    "docs\\architecture.md": "628a289c7303c5c53042bb2d2fbdab8a538d024aa25a2736306b38e5de8969aa",
+    "docs\\runbook.md": "1ab4d192f8fc030177c564943c34b0f5981f6eb51fca22f23674739b17cd7f5e",
+    "docs\\threat-model.md": "9ee469bf2c5f683261eac9b49c06604d9f9c25ed059aa57df73e1067511bd4ec",
+    "README.md": "2078fb28e9fa1eff3453930f0d76691fdc31a84c84deaa22b6aa9bf9fa48f954"
+  },
+  "commands": [
+    {
+      "document": "docs\\runbook.md",
+      "line": 11,
+      "argv": [
+        "doctor"
+      ],
+      "exit_code": 0,
+      "help_sha256": "e6586956477e966ac901bda0a1b9e647f71ca70c1e6909257a76728114513720"
+    },
+    {
+      "document": "docs\\runbook.md",
+      "line": 61,
+      "argv": [
+        "identity",
+        "add",
+        "--server",
+        "https://nexus.example",
+        "--agent",
+        "AGENT_ID",
+        "--alias",
+        "SUBJECT"
+      ],
+      "exit_code": 0,
+      "help_sha256": "ac77f30bf06cde21ef56706a59eecd80a839307afa26cdfa825918c3e3ecb939"
+    },
+    {
+      "document": "docs\\runbook.md",
+      "line": 62,
+      "argv": [
+        "executor",
+        "register",
+        "--identity",
+        "SUBJECT",
+        "--label",
+        "Execution host"
+      ],
+      "exit_code": 0,
+      "help_sha256": "c001f0ddd4b98d8bc7901a0eee85f29e9a6db7b9dc7f295f2f01a3107ed05798"
+    },
+    {
+      "document": "docs\\runbook.md",
+      "line": 63,
+      "argv": [
+        "executor",
+        "list"
+      ],
+      "exit_code": 0,
+      "help_sha256": "f80df3810fe5ed03aef546da15892521d49702dbc36b3731389e5e82956c13aa"
+    },
+    {
+      "document": "docs\\runbook.md",
+      "line": 78,
+      "argv": [
+        "runtime",
+        "start",
+        "ALIAS",
+        "--client-intent-id",
+        "OPEN_INTENT"
+      ],
+      "exit_code": 0,
+      "help_sha256": "ce2a0d29e9dac776746363fefd9ab05c4a1843a866f337ae2abef509cd891ec9"
+    },
+    {
+      "document": "docs\\runbook.md",
+      "line": 79,
+      "argv": [
+        "runtime",
+        "operation",
+        "--alias",
+        "ALIAS",
+        "--client-intent-id",
+        "OPEN_INTENT"
+      ],
+      "exit_code": 0,
+      "help_sha256": "285c8b0aa8494d3147d7ae10c81de2eee44ba78e09fa5b2abe5988a4a1badc04"
+    },
+    {
+      "document": "docs\\runbook.md",
+      "line": 80,
+      "argv": [
+        "runtime",
+        "status",
+        "--alias",
+        "ALIAS"
+      ],
+      "exit_code": 0,
+      "help_sha256": "708f5fe904a93aa9947d868d453ee91ef016030c4122a9194feec7d1ff57aa3c"
+    },
+    {
+      "document": "docs\\runbook.md",
+      "line": 81,
+      "argv": [
+        "runtime",
+        "inspect",
+        "SESSION_ID",
+        "--alias",
+        "ALIAS"
+      ],
+      "exit_code": 0,
+      "help_sha256": "0dcc10f32b813c5986d7551a216593db907f81ab7db44f145cbe5b800155eb9c"
+    },
+    {
+      "document": "docs\\runbook.md",
+      "line": 82,
+      "argv": [
+        "runtime",
+        "stop",
+        "SESSION_ID",
+        "--alias",
+        "ALIAS",
+        "--client-intent-id",
+        "CLOSE_INTENT",
+        "--reason",
+        "Work completed."
+      ],
+      "exit_code": 0,
+      "help_sha256": "4a476474d9d0635990bbc8e59bf0b4c7cedfb3d133e4bcb47e070be41dff8f41"
+    },
+    {
+      "document": "docs\\runbook.md",
+      "line": 110,
+      "argv": [
+        "identity",
+        "replace-credential",
+        "work",
+        "--credential-stdin"
+      ],
+      "exit_code": 0,
+      "help_sha256": "6f08196d3cb747086c6d3e32f4df3c0cac2607897852526014d69cc3982d8d5a"
+    },
+    {
+      "document": "docs\\runbook.md",
+      "line": 172,
+      "argv": [
+        "--json",
+        "doctor",
+        "--probe"
+      ],
+      "exit_code": 0,
+      "help_sha256": "e6586956477e966ac901bda0a1b9e647f71ca70c1e6909257a76728114513720"
+    },
+    {
+      "document": "README.md",
+      "line": 58,
+      "argv": [
+        "identity",
+        "add",
+        "--server",
+        "https://nexus.example",
+        "--agent",
+        "AGENT_ID",
+        "--alias",
+        "SUBJECT"
+      ],
+      "exit_code": 0,
+      "help_sha256": "ac77f30bf06cde21ef56706a59eecd80a839307afa26cdfa825918c3e3ecb939"
+    },
+    {
+      "document": "README.md",
+      "line": 59,
+      "argv": [
+        "executor",
+        "register",
+        "--identity",
+        "SUBJECT",
+        "--label",
+        "Execution host"
+      ],
+      "exit_code": 0,
+      "help_sha256": "c001f0ddd4b98d8bc7901a0eee85f29e9a6db7b9dc7f295f2f01a3107ed05798"
+    },
+    {
+      "document": "README.md",
+      "line": 60,
+      "argv": [
+        "executor",
+        "list"
+      ],
+      "exit_code": 0,
+      "help_sha256": "f80df3810fe5ed03aef546da15892521d49702dbc36b3731389e5e82956c13aa"
+    },
+    {
+      "document": "README.md",
+      "line": 100,
+      "argv": [
+        "--json",
+        "discover"
+      ],
+      "exit_code": 0,
+      "help_sha256": "6528a04ee6da30eca00e38d3c5689290fb9bf2573c3662c4d339136c2c2b6f7f"
+    },
+    {
+      "document": "README.md",
+      "line": 112,
+      "argv": [
+        "executor",
+        "configure-discovery",
+        "--server-id",
+        "SERVER_ID",
+        "--harness-root",
+        "C:/Harnesses"
+      ],
+      "exit_code": 0,
+      "help_sha256": "6421800c84a33c0cce4806834b2249ea487facdc94709ea0a0bdb081fd8914e4"
+    },
+    {
+      "document": "README.md",
+      "line": 113,
+      "argv": [
+        "discover",
+        "--server-id",
+        "SERVER_ID"
+      ],
+      "exit_code": 0,
+      "help_sha256": "6528a04ee6da30eca00e38d3c5689290fb9bf2573c3662c4d339136c2c2b6f7f"
+    },
+    {
+      "document": "README.md",
+      "line": 114,
+      "argv": [
+        "executor",
+        "show",
+        "SERVER_ID"
+      ],
+      "exit_code": 0,
+      "help_sha256": "68145cc4818b72a47b3573b8b66633ab9c545749c73f354301d368c203b1eb1b"
+    },
+    {
+      "document": "README.md",
+      "line": 134,
+      "argv": [
+        "executor",
+        "configure-discovery",
+        "--server-id",
+        "SERVER_ID"
+      ],
+      "exit_code": 0,
+      "help_sha256": "6421800c84a33c0cce4806834b2249ea487facdc94709ea0a0bdb081fd8914e4"
+    },
+    {
+      "document": "README.md",
+      "line": 150,
+      "argv": [
+        "discover",
+        "--server-id",
+        "SERVER_ID"
+      ],
+      "exit_code": 0,
+      "help_sha256": "6528a04ee6da30eca00e38d3c5689290fb9bf2573c3662c4d339136c2c2b6f7f"
+    },
+    {
+      "document": "README.md",
+      "line": 151,
+      "argv": [
+        "executor",
+        "probe",
+        "--server-id",
+        "SERVER_ID",
+        "--harness",
+        "codex_app_server",
+        "--candidate-ref",
+        "CANDIDATE_REF",
+        "--inventory-revision",
+        "INVENTORY_REVISION"
+      ],
+      "exit_code": 0,
+      "help_sha256": "6c10c80377825be282b43e136bb8e822c546a3f18e5f7f4d5f7be19ea2303414"
+    },
+    {
+      "document": "README.md",
+      "line": 152,
+      "argv": [
+        "discover",
+        "--server-id",
+        "SERVER_ID"
+      ],
+      "exit_code": 0,
+      "help_sha256": "6528a04ee6da30eca00e38d3c5689290fb9bf2573c3662c4d339136c2c2b6f7f"
+    },
+    {
+      "document": "README.md",
+      "line": 175,
+      "argv": [
+        "executor",
+        "configure-launch",
+        "--identity",
+        "SUBJECT",
+        "--harness",
+        "codex_app_server",
+        "--local-consent-id",
+        "CONSENT_ID",
+        "--profile-revision",
+        "1",
+        "--provider-home",
+        "C:/Users/USER"
+      ],
+      "exit_code": 0,
+      "help_sha256": "1e2e69952f492da02b317c8d9d61cf85858f26a06a796f4f2a2496df94df2fe5"
+    },
+    {
+      "document": "README.md",
+      "line": 186,
+      "argv": [
+        "daemon",
+        "start"
+      ],
+      "exit_code": 0,
+      "help_sha256": "1e3975ce001c7d1b8be4818d0bd3f05076f3cd1285daf31b93fa68d64e02eb3e"
+    },
+    {
+      "document": "README.md",
+      "line": 187,
+      "argv": [
+        "discover",
+        "--server-id",
+        "SERVER_ID"
+      ],
+      "exit_code": 0,
+      "help_sha256": "6528a04ee6da30eca00e38d3c5689290fb9bf2573c3662c4d339136c2c2b6f7f"
+    },
+    {
+      "document": "README.md",
+      "line": 188,
+      "argv": [
+        "executor",
+        "realize",
+        "--identity",
+        "SUBJECT",
+        "--client-intent-id",
+        "REALIZATION_INTENT",
+        "--harness",
+        "codex_app_server",
+        "--candidate-ref",
+        "CANDIDATE_REF",
+        "--inventory-revision",
+        "INVENTORY_REVISION",
+        "--configuration-digest",
+        "CONFIGURATION_DIGEST",
+        "--project",
+        "D:/Projects/Workspace",
+        "--label",
+        "Workspace"
+      ],
+      "exit_code": 0,
+      "help_sha256": "37b99f2f65d97e3a8505aead348f6b1dcf2d3b107f449afdaf442ca0e5a7edb5"
+    },
+    {
+      "document": "README.md",
+      "line": 212,
+      "argv": [
+        "bind",
+        "prepare",
+        "--identity",
+        "SUBJECT",
+        "--realization-ref",
+        "REALIZATION_REF",
+        "--alias",
+        "assistant",
+        "--client-intent-id",
+        "PREPARE_INTENT"
+      ],
+      "exit_code": 0,
+      "help_sha256": "537c9c717ddb6cdc13316b921f4f6659483faf445fff7ca1e3b89f2ff8778d08"
+    },
+    {
+      "document": "README.md",
+      "line": 213,
+      "argv": [
+        "bind",
+        "show",
+        "assistant"
+      ],
+      "exit_code": 0,
+      "help_sha256": "7f67d68e90bfc2ffb43a56ba5686088fabe1b52ee2c40990814afb4c3a350625"
+    },
+    {
+      "document": "README.md",
+      "line": 221,
+      "argv": [
+        "bind",
+        "apply",
+        "--identity",
+        "SUBJECT",
+        "--prepare-intent-id",
+        "PREPARE_INTENT",
+        "--client-intent-id",
+        "APPLY_INTENT",
+        "--approved-diff-hash",
+        "REVIEWED_HASH",
+        "--operator-proof-ref",
+        "APPROVAL_REF"
+      ],
+      "exit_code": 0,
+      "help_sha256": "90bf47a21dc976e0ea56c4b819e5932eefdd9a91758e25cb48c166c3b72be62a"
+    },
+    {
+      "document": "README.md",
+      "line": 222,
+      "argv": [
+        "bind",
+        "list"
+      ],
+      "exit_code": 0,
+      "help_sha256": "4710d030699aa316d16ad4eec43ed0cd5fddd3e5e4b00e0976ac449640d899ec"
+    },
+    {
+      "document": "README.md",
+      "line": 243,
+      "argv": [
+        "runtime",
+        "start",
+        "assistant",
+        "--new-session",
+        "--client-intent-id",
+        "OPEN_INTENT"
+      ],
+      "exit_code": 0,
+      "help_sha256": "ce2a0d29e9dac776746363fefd9ab05c4a1843a866f337ae2abef509cd891ec9"
+    },
+    {
+      "document": "README.md",
+      "line": 244,
+      "argv": [
+        "runtime",
+        "operation",
+        "--alias",
+        "assistant",
+        "--client-intent-id",
+        "OPEN_INTENT"
+      ],
+      "exit_code": 0,
+      "help_sha256": "285c8b0aa8494d3147d7ae10c81de2eee44ba78e09fa5b2abe5988a4a1badc04"
+    },
+    {
+      "document": "README.md",
+      "line": 245,
+      "argv": [
+        "runtime",
+        "submit",
+        "SESSION_ID",
+        "Your prompt",
+        "--alias",
+        "assistant",
+        "--client-intent-id",
+        "TURN_INTENT"
+      ],
+      "exit_code": 0,
+      "help_sha256": "491765d1b20383cc6c5690b8aad58f510ea60836bdef487679f0c0d0530ab83a"
+    },
+    {
+      "document": "README.md",
+      "line": 246,
+      "argv": [
+        "runtime",
+        "stop",
+        "SESSION_ID",
+        "--alias",
+        "assistant",
+        "--client-intent-id",
+        "CLOSE_INTENT",
+        "--reason",
+        "Work completed."
+      ],
+      "exit_code": 0,
+      "help_sha256": "4a476474d9d0635990bbc8e59bf0b4c7cedfb3d133e4bcb47e070be41dff8f41"
+    }
+  ],
+  "links": [
+    {
+      "document": "docs\\architecture.md",
+      "target": "runbook.md"
+    },
+    {
+      "document": "docs\\architecture.md",
+      "target": "../README.md#quickstart"
+    },
+    {
+      "document": "docs\\architecture.md",
+      "target": "../plans/implementation/"
+    },
+    {
+      "document": "docs\\runbook.md",
+      "target": "../README.md#persisted-r4-executor-discovery"
+    },
+    {
+      "document": "docs\\runbook.md",
+      "target": "../README.md#persisted-r4-executor-discovery"
+    },
+    {
+      "document": "README.md",
+      "target": "plans/implementation/IMPLEMENTATION_STATUS.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/runbook.md#unsupported-executor-platform"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/architecture.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/runbook.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/threat-model.md"
+    },
+    {
+      "document": "README.md",
+      "target": "plans/implementation/"
+    },
+    {
+      "document": "README.md",
+      "target": "LICENSE"
+    }
+  ],
+  "command_count": 34,
+  "full_release_accepted": false
+}

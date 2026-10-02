@@ -7,6 +7,7 @@ Run with an installed campaign interpreter using -I.
 from __future__ import annotations
 
 import ast
+import argparse
 import hashlib
 import json
 from pathlib import Path
@@ -19,6 +20,9 @@ import okto_nexus
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--output', type=Path, help='Write a separate evidence artifact for this campaign')
+    args = parser.parse_args()
     root = Path(__file__).resolve().parents[2]
     package = Path(okto_nexus.__file__).resolve().parent
     assert not package.is_relative_to(root), 'Use an installed interpreter with -I'
@@ -61,7 +65,8 @@ def main():
               'links_checked': len(links), 'status': 'PASSED',
               'remaining': ['resource/dashboard review', 'TN-38', 'TN-39', 'TN-40',
                             'final artifact and release acceptance']}
-    output = root / 'plans/r4_execution/evidence/ns15-05-docs.json'
+    output = args.output or root / 'plans/r4_execution/evidence/ns15-05-docs.json'
+    output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
     print(json.dumps(report, indent=2))
 
