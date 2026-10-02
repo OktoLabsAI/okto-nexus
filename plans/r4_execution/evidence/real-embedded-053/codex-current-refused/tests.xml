@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="29.944" timestamp="2026-10-02T00:16:28.518068-03:00" hostname="Alienware_m15"><testcase classname="test_real_embedded_mcp" name="test_real_provider_uses_automatic_local_dispatch_and_http_work[codex_app_server]" time="28.352"><failure message="AssertionError: CoreError('NATIVE_VERSION_UNQUALIFIED')&#10;assert CoreError('NATIVE_VERSION_UNQUALIFIED') is None&#10; +  where CoreError('NATIVE_VERSION_UNQUALIFIED') = &lt;okto_nexus.bootstrap.embedded_dispatch.EmbeddedDispatchOwner object at 0x000001E81C4D7770&gt;.failure">test_real_embedded_mcp.py:182: in test_real_provider_uses_automatic_local_dispatch_and_http_work
+    report['open_stage']=receipt(opened,('SUBMITTED','SUCCEEDED'))['executor_stage']
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_real_embedded_mcp.py:178: in receipt
+    assert owner.failure is None,repr(owner.failure)
+E   AssertionError: CoreError('NATIVE_VERSION_UNQUALIFIED')
+E   assert CoreError('NATIVE_VERSION_UNQUALIFIED') is None
+E    +  where CoreError('NATIVE_VERSION_UNQUALIFIED') = &lt;okto_nexus.bootstrap.embedded_dispatch.EmbeddedDispatchOwner object at 0x000001E81C4D7770&gt;.failure</failure></testcase></testsuite></testsuites>

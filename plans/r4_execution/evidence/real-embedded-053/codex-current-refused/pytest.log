@@ -1,0 +1,20 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+_ test_real_provider_uses_automatic_local_dispatch_and_http_work[codex_app_server] _
+test_real_embedded_mcp.py:182: in test_real_provider_uses_automatic_local_dispatch_and_http_work
+    report['open_stage']=receipt(opened,('SUBMITTED','SUCCEEDED'))['executor_stage']
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_real_embedded_mcp.py:178: in receipt
+    assert owner.failure is None,repr(owner.failure)
+E   AssertionError: CoreError('NATIVE_VERSION_UNQUALIFIED')
+E   assert CoreError('NATIVE_VERSION_UNQUALIFIED') is None
+E    +  where CoreError('NATIVE_VERSION_UNQUALIFIED') = <okto_nexus.bootstrap.embedded_dispatch.EmbeddedDispatchOwner object at 0x000001E81C4D7770>.failure
+============================== warnings summary ===============================
+..\okto-nexus-r4-053-env\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\okto-nexus-r4-053-env\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED test_real_embedded_mcp.py::test_real_provider_uses_automatic_local_dispatch_and_http_work[codex_app_server]
+1 failed, 1 warning in 30.28s
