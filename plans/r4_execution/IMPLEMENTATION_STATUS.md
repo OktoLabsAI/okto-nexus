@@ -7,6 +7,13 @@ with separate local/remote processes and environments. Cross-machine acceptance
 is reserved for a later manual session with the user; it remains pending and must
 not be inferred from same-machine results.
 
+The .54 installed Claude remote CLI journey now passes on this Windows machine:
+actual HTTP/WSS, real provider, lease renewal, three native decisions, completed
+handoff, successful close and zero-exit cleanup with campaign credentials removed.
+The initial missing-keyring environment refusal is retained. See
+[same-machine native evidence](M13_SAME_MACHINE_054.md). Other providers and the
+remaining full acceptance scope are still open.
+
 Core `1c7cf79` fixes the reproduced zero-candidate defect: unapproved PATH
 installations remain visible and untrusted, including the Windows Codex npm and
 managed Pi layouts. Connector `07e78f2` adopts the same shared discovery facade.
