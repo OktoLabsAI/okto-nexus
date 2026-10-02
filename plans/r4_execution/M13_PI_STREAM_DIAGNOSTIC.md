@@ -1,5 +1,42 @@
 # Pi native event diagnostic, same Windows machine
 
+## Current uninstrumented .56 observation — 2026-10-02
+
+`evidence/native-056-pi-current-ui/` records one successful real-provider cycle
+in 322.48 s on Windows/Python 3.13.1, through public Connector CLI subprocesses,
+separate Server/daemon processes, actual loopback HTTP/WSS and Windows WinVault.
+The diagnostic environment flag was explicitly removed. No synthetic native
+factory, native qualification override or Server release-gate override was used.
+
+Opening reached SUBMITTED; lease serial reached 2 before the turn. The turn
+succeeded, completed the handoff and executed three native actions (one tool
+claim). Close succeeded. Server and daemon exited zero, and campaign credentials
+were removed. The test's native-event-pump failure assertion remained enabled.
+Installed byte/import verification passed, campaign status is PASS, exit code 0,
+and `changed_inputs=[]`.
+
+Verified development wheel SHA-256 values:
+
+- Nexus: `38e0b232fba2703d4c5bba4ebb345919a31ce2f4d061c7a158e89b46d11c1777`.
+- Core .56: `7f19885f28b16dbfce66b969ab42c79b9947246416c71147315006b6e618b1f6`.
+- Connector: `93d78a75c5ad81bbdd96e648be136f0f6b2cfd0a53f350266a1c9f96fc449104`.
+
+Reproduce in the installed Windows environment with
+`OKTO_NEXUS_REAL_CONNECTOR=1`, no `OKTO_NEXUS_PI_STREAM_DIAGNOSTIC`, and
+`OKTO_NEXUS_REAL_CONNECTOR_REPORT` set to an absolute output prefix in an existing
+evidence directory. Invoke `tools/ci_installed.py test --wheel <nexus-wheel>
+--output <fresh-directory> --tests
+tests/execution_r4/test_real_connector_providers.py::test_real_provider_through_public_connector_cli[pi_rpc]`.
+The campaign requires the user's already configured local Pi sign-in; credentials
+are not copied into evidence. The final report is `provider-pi_rpc.json`.
+
+This extends actual Pi evidence to the current development packages without the
+diagnostic wrappers. One successful cycle neither identifies nor fixes the prior
+intermittent .55 stream failure, and does not establish sustained-load, browser,
+independent-host or complete provider/platform acceptance. Those remain open.
+
+## Earlier .55 observations
+
 The .55 application tuple is unchanged from [the discovery/native report](M13_SAME_MACHINE_055.md).
 The test-only `OKTO_NEXUS_PI_STREAM_DIAGNOSTIC=1` wrapper now measures queue
 high-water event count/serialized bytes and queue/history append refusals, in

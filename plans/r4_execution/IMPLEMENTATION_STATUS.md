@@ -2,6 +2,14 @@
 
 ## Current acceptance reconciliation: executable Core .56
 
+A real Pi public-CLI cycle now passes on the current Nexus native-decision UI
+wheel and Core .56, without diagnostic instrumentation: 322.48 s, completed
+handoff/three native actions, successful close, clean process exits and temporary
+credential removal. Installed inputs remained unchanged. See
+[current Pi evidence and its limits](M13_PI_STREAM_DIAGNOSTIC.md).
+The earlier intermittent stream failure remains unresolved; this is one
+same-machine Windows cycle, not independent-host or sustained-load acceptance.
+
 The installed dashboard now provides reviewed start/reuse, turn submission,
 steering, interruption and close through canonical operator/subject authority.
 Durable request recovery, explicit targets and initial-turn status are covered
