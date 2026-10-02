@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="7.382" timestamp="2026-10-02T05:16:31.034808-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_link_storage_failure" name="test_heartbeat_storage_failure_closes_link_and_releases_owner[normalized]" time="3.238"><failure message="starlette.websockets.WebSocketDisconnect">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4803/test_heartbeat_storage_failure0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002014C3D95B0&gt;
+failure = 'normalized'
+
+    @pytest.mark.parametrize("failure", ["normalized", "sqlite"])
+    def test_heartbeat_storage_failure_closes_link_and_releases_owner(tmp_path, monkeypatch, failure):
+        deps, app, _, _, _, _, info, _, ticket, _, server, executor = setup_authority(tmp_path, monkeypatch)
+        factory = deps.connection_factory
+        original = factory.unit_of_work
+        touches = []
+    
+        class Connection:
+            def __init__(self, connection):
+                self.connection = connection
+    
+            def __getattr__(self, name):
+                return getattr(self.connection, name)
+    
+            def execute(self, sql, *args):
+                if sql.startswith("UPDATE execution_executors SET last_seen_at="):
+                    touches.append(sql)
+                    if failure == "normalized":
+                        raise OktoNexusError("DB_ERROR", "fixture private storage diagnostic", retryable=True)
+                    raise sqlite3.OperationalError("fixture private storage diagnostic")
+                return self.connection.execute(sql, *args)
+    
+        @contextmanager
+        def faulty_uow(*args, **kwargs):
+            with original(*args, **kwargs) as uow:
+                connection = uow.connection
+                uow.connection = Connection(connection)
+                try:
+                    yield uow
+                finally:
+                    uow.connection = connection
+    
+        monkeypatch.setattr(factory, "unit_of_work", faulty_uow)
+        base = dict(protocol_major=1, contract_revision=R4_PREVIEW_REVISION,
+                    server_id=server, executor_id=executor)
+        with TestClient(app, base_url="https://127.0.0.1:8202") as client:
+&gt;           with client.websocket_connect(f"/v1/runtime/executors/{executor}/link",
+                    headers={"Authorization": "Bearer " + ticket}, subprotocols=["nxl.v1"]) as ws:
+
+tests\execution_r4\test_link_storage_failure.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\testclient.py:123: in __enter__
+    self._raise_on_close(message)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;starlette.testclient.WebSocketTestSession object at 0x000002014D096900&gt;
+message = {'type': 'websocket.close', 'code': 4406, 'reason': ''}
+
+    def _raise_on_close(self, message: Message) -&gt; None:
+        if message["type"] == "websocket.close":
+&gt;           raise WebSocketDisconnect(code=message.get("code", 1000), reason=message.get("reason", ""))
+E           starlette.websockets.WebSocketDisconnect
+
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\testclient.py:150: WebSocketDisconnect</failure></testcase><testcase classname="tests.execution_r4.test_link_storage_failure" name="test_heartbeat_storage_failure_closes_link_and_releases_owner[sqlite]" time="2.535"><failure message="starlette.websockets.WebSocketDisconnect">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4803/test_heartbeat_storage_failure1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002014BF309D0&gt;
+failure = 'sqlite'
+
+    @pytest.mark.parametrize("failure", ["normalized", "sqlite"])
+    def test_heartbeat_storage_failure_closes_link_and_releases_owner(tmp_path, monkeypatch, failure):
+        deps, app, _, _, _, _, info, _, ticket, _, server, executor = setup_authority(tmp_path, monkeypatch)
+        factory = deps.connection_factory
+        original = factory.unit_of_work
+        touches = []
+    
+        class Connection:
+            def __init__(self, connection):
+                self.connection = connection
+    
+            def __getattr__(self, name):
+                return getattr(self.connection, name)
+    
+            def execute(self, sql, *args):
+                if sql.startswith("UPDATE execution_executors SET last_seen_at="):
+                    touches.append(sql)
+                    if failure == "normalized":
+                        raise OktoNexusError("DB_ERROR", "fixture private storage diagnostic", retryable=True)
+                    raise sqlite3.OperationalError("fixture private storage diagnostic")
+                return self.connection.execute(sql, *args)
+    
+        @contextmanager
+        def faulty_uow(*args, **kwargs):
+            with original(*args, **kwargs) as uow:
+                connection = uow.connection
+                uow.connection = Connection(connection)
+                try:
+                    yield uow
+                finally:
+                    uow.connection = connection
+    
+        monkeypatch.setattr(factory, "unit_of_work", faulty_uow)
+        base = dict(protocol_major=1, contract_revision=R4_PREVIEW_REVISION,
+                    server_id=server, executor_id=executor)
+        with TestClient(app, base_url="https://127.0.0.1:8202") as client:
+&gt;           with client.websocket_connect(f"/v1/runtime/executors/{executor}/link",
+                    headers={"Authorization": "Bearer " + ticket}, subprotocols=["nxl.v1"]) as ws:
+
+tests\execution_r4\test_link_storage_failure.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\testclient.py:123: in __enter__
+    self._raise_on_close(message)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;starlette.testclient.WebSocketTestSession object at 0x000002014D015E50&gt;
+message = {'type': 'websocket.close', 'code': 4406, 'reason': ''}
+
+    def _raise_on_close(self, message: Message) -&gt; None:
+        if message["type"] == "websocket.close":
+&gt;           raise WebSocketDisconnect(code=message.get("code", 1000), reason=message.get("reason", ""))
+E           starlette.websockets.WebSocketDisconnect
+
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\testclient.py:150: WebSocketDisconnect</failure></testcase></testsuite></testsuites>

@@ -488,7 +488,17 @@ def build_router() -> APIRouter:
                              connection_id, generation),
                         ).rowcount
 
-                if await anyio.to_thread.run_sync(_touch) != 1:
+                try:
+                    touched = await anyio.to_thread.run_sync(_touch)
+                except (OktoNexusError, sqlite3.DatabaseError) as error:
+                    # A heartbeat is not authority to continue through an
+                    # unavailable store. Close explicitly before owner cleanup;
+                    # do not expose storage diagnostics or retry the frame.
+                    storage_failure = (isinstance(error, sqlite3.DatabaseError)
+                                       or error.code == "DB_ERROR")
+                    await ws.close(code=1011 if storage_failure else 4403)
+                    break
+                if touched != 1:
                     await ws.close(code=4403)
                     break
                 if pending_reconcile is None:

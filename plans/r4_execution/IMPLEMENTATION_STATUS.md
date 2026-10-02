@@ -2,6 +2,12 @@
 
 ## Current acceptance reconciliation: executable Core .53
 
+Heartbeat storage failures now explicitly close the accepted control link without
+retry or private diagnostics, then follow existing scoped cleanup. A fresh Nexus
+development wheel passed 19 installed checks with unchanged inputs. This fixes
+the uncaught-error path, not NS14 writer starvation; persistent-store cleanup and
+hosted acceptance remain open. See [failure scope and artifacts](M13_LINK_STORAGE_FAILURE.md).
+
 Capture/projection isolation now separates progress from throughput and queue
 overflow. Three installed checks passed, including real fsync with delayed storage
 and the unchanged overflow/unknown-result negative case. No application behavior
