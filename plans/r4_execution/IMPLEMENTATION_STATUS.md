@@ -2,6 +2,24 @@
 
 ## Current acceptance reconciliation: executable Core .56
 
+Per the user's latest direction, defer CI work and continue independent local
+implementation; final hosted gates remain pending. Cross-machine acceptance
+still requires the user's manual intervention.
+
+Connector `23dc4ab` addresses new issue #2: discovery's human summary separates
+host containment from adapter OS support, preserves found/untrusted facts and
+links the runbook. Its 52 installed checks passed on Windows and WSL Linux;
+37 documented commands/12 local links passed. Updated Connector #1 links Core
+#1's unprototyped macOS proposal; no native Mac support or weaker containment
+contract has been adopted. See [the issue reconciliation](https://github.com/OktoLabsAI/okto-nexus-connector/blob/23dc4ab/plans/implementation/ISSUES_20261002.md).
+Nexus adopted its wheel as a test dependency (SHA-256
+`93d78a75c5ad81bbdd96e648be136f0f6b2cfd0a53f350266a1c9f96fc449104`).
+Windows/Linux smokes verified the three installed packages against their wheels
+in `evidence/issue2-summary-{windows,linux}/installed.json`; Nexus/Core package
+bytes remain those of the .56 integration campaign. This display-only change
+does not repeat or close full runtime acceptance. The pending embedded version
+check UI remains independent implementation work.
+
 Core `43f31ec` corrects the C10 cancellation fixture after a delayed durable
 lookup reproduced its missing-obligation setup failure. The test now observes
 native-factory admission before cancellation; production package bytes are
