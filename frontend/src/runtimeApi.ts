@@ -17,6 +17,21 @@ export interface RuntimeChoice {
   can_prepare: boolean;
   can_bind: boolean;
   can_start: boolean;
+  preparation: {realization_ref: string; realization_revision: number; workspace_binding_id: string} | null;
+  binding: BindingView | null;
+}
+
+export interface BindingView {
+  binding_id: string; binding_revision: number; state: string;
+  executor_id: string; agent_id: string; workspace_id: string;
+  workspace_binding_id: string; adapter_id: string; candidate_ref: string;
+  inventory_revision: string; realization_ref: string; realization_revision: number;
+}
+
+export interface BindingProposal extends Omit<BindingView, "binding_revision" | "state"> {
+  proposal_id: string; proposal_revision: number; expires_at: string;
+  can_apply: boolean; required_approvals: string[];
+  diff: {summary: string; approved_diff_hash: string; fields_changed: string[]};
 }
 
 export interface RuntimeOptions {
@@ -28,23 +43,55 @@ export interface RuntimeOptions {
 }
 
 // R4 uses Bearer authentication and direct JSON, unlike the legacy /api envelope.
-async function read<T>(path: string, signal: AbortSignal): Promise<T> {
+async function read<T>(path: string, signal: AbortSignal | undefined, body?: unknown): Promise<T> {
   const headers = new Headers();
   const key = getApiKey();
   if (key) headers.set("Authorization", `Bearer ${key}`);
-  const response = await fetch(path, { headers, signal, cache: "no-store" });
+  if (body !== undefined) headers.set("Content-Type", "application/json");
+  const response = await fetch(path, { headers, signal, cache: "no-store",
+    method: body === undefined ? "GET" : "POST", body: body === undefined ? undefined : JSON.stringify(body) });
   const raw = await response.text();
-  let body;
-  try { body = JSON.parse(raw); }
+  let value;
+  try { value = JSON.parse(raw); }
   catch { throw new ApiError(response.status, `HTTP_${response.status}`, response.statusText || "Invalid server response"); }
   if (!response.ok) {
-    const error = body.error ?? body;
+    const error = value.error ?? value;
     throw new ApiError(response.status, error.code ?? `HTTP_${response.status}`, error.message ?? response.statusText);
   }
-  return body as T;
+  return value as T;
+}
+
+// Save the complete immutable request before sending it. Retrying an uncertain
+// request uses the same identity/body; credentials never enter this record.
+export function durableBindingRequest(key: string, payload: Record<string, unknown>): Record<string, unknown> {
+  const storageKey = `okto-nexus:r4-binding:${key}`;
+  const saved = sessionStorage.getItem(storageKey);
+  if (saved) {
+    const request = JSON.parse(saved) as Record<string, unknown>;
+    const {client_intent_id, ...previous} = request;
+    if (typeof client_intent_id !== "string" || JSON.stringify(previous) !== JSON.stringify(payload)) {
+      throw new Error("The saved connection request differs. Review the selection before continuing.");
+    }
+    return request;
+  }
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  const request = {client_intent_id: `ui_${Array.from(bytes, byte => byte.toString(16).padStart(2, "0")).join("")}`, ...payload};
+  sessionStorage.setItem(storageKey, JSON.stringify(request));
+  return request;
+}
+
+export function discardExpiredBindingReview(key: string): void {
+  sessionStorage.removeItem(`okto-nexus:r4-binding:${key}`);
+}
+
+export function bindingRequestExists(key: string): boolean {
+  return sessionStorage.getItem(`okto-nexus:r4-binding:${key}`) !== null;
 }
 
 export const runtimeApi = {
+  prepareBinding: (body: Record<string, unknown>) => read<BindingProposal>("/v1/connections/bindings:prepare", undefined, body),
+  applyBinding: (body: Record<string, unknown>) => read<BindingView>("/v1/connections/bindings:apply", undefined, body),
+  binding: (id: string) => read<BindingView>(`/v1/connections/bindings/${encodeURIComponent(id)}`, undefined),
   async executors(agentId: string, signal: AbortSignal): Promise<ExecutorChoice[]> {
     const items: ExecutorChoice[] = [];
     let cursor: string | null = null;

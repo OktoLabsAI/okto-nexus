@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api, type WorkspaceListItem } from "../api";
 import { runtimeApi, type ExecutorChoice, type RuntimeOptions } from "../runtimeApi";
+import { BindingConsent } from "./BindingConsent";
 
 const fieldClass = "rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5 text-xs";
 type Selection = {executorId: string; adapterId: string; candidateRef: string; inventoryRevision: string};
@@ -99,7 +100,11 @@ export function RuntimeSelection({agentId}: {agentId: string}) {
     </>}
     {selected && !busy && <div data-testid="runtime-selection-summary">
       <p>Selected: {selected.label}. Preparation: {selected.can_prepare ? "available" : "unavailable"}; binding approval: {selected.can_bind ? "available" : "unavailable"}; start: {selected.can_start ? "available" : "unavailable"}.</p>
-      <p>Consent and runtime operations are not yet available in this panel. Complete setup through the authenticated R4 API and, for a remote host, the Connector CLI.</p>
+      <BindingConsent key={JSON.stringify([agentId, executorId, workspaceId, selection?.candidateRef, selection?.inventoryRevision, selected.preparation?.realization_ref])}
+        agentId={agentId} executorId={executorId} hostLabel={hosts.find(host => host.executor_id === executorId)?.label || executorId}
+        workspaceId={workspaceId} workspaceLabel={workspaces.find(project => project.workspace_id === workspaceId)?.display_name || workspaceId}
+        inventoryRevision={options!.inventory_revision} choice={selected} onApplied={() => setRevision(value => value + 1)} />
+      <p>Runtime operations are not yet available in this panel.</p>
     </div>}
   </section>;
 }

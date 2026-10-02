@@ -2,6 +2,14 @@
 
 ## Current acceptance reconciliation: executable Core .53
 
+The dashboard now reviews/applies a unique host-published preparation and reuses
+its approved binding. Eighteen corrected installed checks passed, including
+response-loss recovery with the same request and refusal before unrecorded writes.
+First-use embedded preparation and runtime operations remain pending. The full
+Linux/Python 3.12 CI cell at `0e9274b` also completed with 43 failures and one error;
+these regressions require investigation before release. See
+[consent scope and CI findings](M10_BINDING_CONSENT.md).
+
 The dashboard now provides explicit R4 executor/installation/workspace selection
 using current scoped API facts. Twenty-four installed checks passed, including
 real Edge with packaged assets, reference-preserving reorder and stale/revoked

@@ -9,7 +9,14 @@ provider, operating system or remote topology.
 The development dashboard now reads scoped executor choices and current runtime
 options, with explicit host, installation and workspace selection. It invalidates
 the selected installation when inventory revisions/freshness or host access change.
-Consent, binding apply and runtime operations are not yet implemented in that panel.
+For a unique preparation already published by the host, the panel now reviews
+the Server proposal and applies explicit operator consent. It reuses an existing
+binding on subsequent visits. Preparation references and scoped binding state
+come from runtime-options; the browser never reconstructs them from display order.
+Requests are recorded in tab storage before submission. After a lost approval
+response, retry the same request or inspect its binding; do not generate another
+approval to guess the outcome. Embedded preparation and runtime operations are
+not yet implemented in that panel.
 Legacy endpoint/profile controls remain in a collapsed maintenance section. Use
 the authenticated R4 HTTP and Connector CLI flows to complete development setup;
 do not treat a legacy connection command as remote Connector setup. Full browser

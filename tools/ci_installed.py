@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def input_hashes():
     paths = [ROOT / name for name in ('pyproject.toml', 'uv.lock', 'README.md', 'vendor/ci/manifest.json')]
-    for directory in ('tests', 'src', 'docs', 'plans/r4_execution'):
+    for directory in ('tests', 'src', 'docs', 'plans/r4_execution', 'plans/contratos'):
         paths.extend(p for p in (ROOT / directory).rglob('*')
                      if p.is_file() and p.suffix in ('.py', '.json', '.md', '.sql')
                      and 'evidence' not in p.parts and '__pycache__' not in p.parts)

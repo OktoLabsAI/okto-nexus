@@ -1,8 +1,12 @@
 """Eligibility combines executor evidence and authority without creating effects."""
 from dataclasses import replace
+import json
+from pathlib import Path
 
 import pytest
+from jsonschema import Draft202012Validator
 import nexus_connector_core.availability as availability
+from nexus_connector_core import get_executor_inventory_schema
 import test_binding_operator
 from test_binding_operator import onboarding, prepare_operator
 from okto_nexus.domain.base import iso_plus
@@ -35,6 +39,11 @@ def option(host, actor='subject', workspace=True):
     assert response.status_code == 200, response.text
     assert response.headers['Cache-Control'] == 'no-store'
     result = response.json()
+    contract = json.loads((Path(__file__).resolve().parents[2] / 'plans/contratos/http-target.schema.json').read_text(encoding='utf-8'))
+    # Core owns the current catalog/inventory definitions; the HTTP plan owns
+    # the application projection, as in the NS04 contract test.
+    contract['$defs'].update(get_executor_inventory_schema()['$defs'])
+    Draft202012Validator({'$defs': contract['$defs'], **contract['$defs']['RuntimeOptions']}).validate(result)
     selected = next(row for row in result['options'] if row['candidate_ref'] == scope['candidate_ref'])
     return result, selected
 
@@ -64,11 +73,18 @@ def test_workspace_binding_and_grant_each_gate_a_different_action(options_host, 
     assert 'WORKSPACE_REQUIRED' in first['policy_reasons']
     _, pending = option(options_host, actor='operator')
     assert pending['can_bind'] and not pending['can_start']
+    assert pending['preparation']['realization_ref'] == options_host[3]['realization_ref']
+    assert set(pending['preparation']) == {'realization_ref', 'realization_revision', 'workspace_binding_id'}
+    assert pending['binding'] is None
     _, subject = option(options_host)
     assert not subject['can_bind'] and 'OPERATOR_APPROVAL_REQUIRED' in subject['policy_reasons']
+    assert subject['preparation'] is None
     binding = bind(options_host)
     _, unauthorized = option(options_host)
     assert not unauthorized['can_start'] and 'AUTHORIZATION_REQUIRED' in unauthorized['policy_reasons']
+    assert unauthorized['binding']['binding_id'] == binding['binding_id']
+    assert unauthorized['binding']['state'] == 'APPROVED'
+    assert unauthorized['preparation'] is None
     grant(options_host, binding)
     # A Server read must use the published executor assessment, not probe or
     # reassess a provider under the Server's own platform/containment state.

@@ -1603,10 +1603,28 @@
         "can_bind": {
           "type": "boolean"
         },
-        "can_start": {
-          "type": "boolean"
-        },
-        "policy_reasons": {
+      "can_start": {
+        "type": "boolean"
+      },
+      "preparation": {
+        "anyOf": [
+          {"type": "null"},
+          {
+            "type": "object",
+            "properties": {
+              "realization_ref": {"type": "string", "minLength": 1, "maxLength": 160},
+              "realization_revision": {"type": "integer", "minimum": 1},
+              "workspace_binding_id": {"type": "string", "minLength": 1, "maxLength": 160}
+            },
+            "required": ["realization_ref", "realization_revision", "workspace_binding_id"],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "binding": {
+        "anyOf": [{"type": "null"}, {"$ref": "#/$defs/BindingView"}]
+      },
+      "policy_reasons": {
           "type": "array",
           "items": {
             "type": "string",

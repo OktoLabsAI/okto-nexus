@@ -62,12 +62,14 @@ def read_runtime_options(factory, *, server_id, executor_id, agent_id, workspace
             if selectable and kind == 'embedded' and not operator:
                 reasons.append('LOCAL_OPERATOR_REQUIRED')
             can_bind = can_start = False
+            preparation = binding_view = None
             if workspace_id is None:
                 reasons.append('WORKSPACE_REQUIRED')
             elif selectable:
                 # Never choose one realization/binding by list order.
                 pending = conn.execute(
-                    'SELECT r.realization_ref FROM execution_realizations r JOIN execution_workspace_bindings w '
+                    'SELECT r.realization_ref,r.revision AS realization_revision,r.workspace_binding_id '
+                    'FROM execution_realizations r JOIN execution_workspace_bindings w '
                     'ON w.server_id=r.server_id AND w.executor_id=r.executor_id '
                     'AND w.workspace_binding_id=r.workspace_binding_id '
                     "WHERE r.server_id=? AND r.executor_id=? AND r.subject_agent_id=? AND w.workspace_id=? "
@@ -83,6 +85,7 @@ def read_runtime_options(factory, *, server_id, executor_id, agent_id, workspace
                     reasons.append('REALIZATION_SELECTION_REQUIRED')
                 elif pending:
                     can_bind = operator
+                    preparation = dict(pending[0]) if operator else None
                     if not operator:
                         reasons.append('OPERATOR_APPROVAL_REQUIRED')
                 elif not bindings:
@@ -94,6 +97,7 @@ def read_runtime_options(factory, *, server_id, executor_id, agent_id, workspace
                 else:
                     binding = read_execution_binding(factory, server_id=server_id,
                         binding_id=bindings[0]['binding_id'], context=context, access=access, uow=uow)
+                    binding_view = binding
                     if binding['state'] != 'APPROVED':
                         reasons.append('BINDING_' + binding['state'])
                     elif not remote_ready:
@@ -117,6 +121,7 @@ def read_runtime_options(factory, *, server_id, executor_id, agent_id, workspace
             options.append(dict(adapter_id=adapter, candidate_ref=candidate, label=technical['label'],
                 technical_state=technical['state'], technical_reasons=list(technical['reasons']),
                 can_prepare=can_prepare, can_bind=can_bind, can_start=can_start,
+                preparation=preparation, binding=binding_view,
                 policy_reasons=list(dict.fromkeys(reasons))))
         return dict(agent_id=agent_id, executor_id=executor_id, inventory_revision=snapshot['inventory_revision'],
                     catalog=snapshot['catalog'], availability=snapshot['availability'],

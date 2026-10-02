@@ -1320,11 +1320,20 @@
       "collected_nodeids": [],
       "effective_test_command": null,
       "test_availability": "MISSING",
-      "implementation": "UNVERIFIED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
       "acceptance": "NOT_RUN",
       "required_scenarios": [
         "TR4-13-02"
-      ]
+      ],
+      "supporting_evidence": [
+        "plans/r4_execution/M10_BINDING_CONSENT.md",
+        "plans/r4_execution/evidence/binding-consent/corrected/campaign.json"
+      ],
+      "remaining": [
+        "First-use embedded preparation and full local/remote consent/reuse journey",
+        "Ambiguous preparation/binding selection and normative UI acceptance"
+      ],
+      "notes": "Browser review/apply/reuse for a unique host-published preparation passed supporting installed tests; no native or independent-host acceptance claimed."
     },
     "NS13.03": {
       "proposed_nodeid": "tests/execution_r4/test_ns13.py::test_ns13_03",
