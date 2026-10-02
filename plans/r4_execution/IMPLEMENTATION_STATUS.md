@@ -10,6 +10,14 @@ by 25 installed Windows/Edge checks with unchanged inputs. See
 Native approval/input, complete history/recovery and remaining integrated
 provider/platform/accessibility acceptance are still open; no gate is closed.
 
+Core `7a84ff9` now provides a separate native launchd/SCM_RIGHTS prototype
+(`tools/macos_launchd_probe.py`) for the user-operated Intel Mac. Portable tests
+passed five cases on Windows (three Unix skips) and eight on WSL, including real
+fixture pipe transfer. Native user/gui job domains, owner NOTE_EXIT and job
+cleanup await the Mac reports. This tool is not a production containment backend:
+arbitrary-tree cleanup and slot retention remain unimplemented, and production
+preflight and the shared Core .56 package bytes are unchanged.
+
 The machine-readable `delivery_plan.json` checkpoint is reconciled to published
 Nexus `6cf2ec1`, Connector `ad0933e` and Core `0c4333f`. The September 30 checkpoint
 is preserved in `evidence/delivery-checkpoint-20260930.json`; its pending-work

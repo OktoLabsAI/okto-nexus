@@ -12,7 +12,7 @@
     "published_heads": {
       "nexus": "6cf2ec199dd1242ec9ce6a0e49034040512b5b7d",
       "connector": "ad0933e0f71b71fc6d8d420db4c77c1d9c60836c",
-      "core": "0c4333fd1363244ecbab6b505764685e1c9334d1"
+      "core": "7a84ff98e9cd559dd24309f1275f9aa54693f6c3"
     },
     "heads_are_final_release_tuple": false,
     "shared_core_version": "0.2.56.dev0",
@@ -37,13 +37,15 @@
     "clean_install_scope": "Core .56 coordinated clean-install evidence predates the latest Nexus runtime UI wheel. Final current tuple clean installation remains required.",
     "macos": {
       "source_commit": "1975e88",
-      "plan_commit": "0c4333fd1363244ecbab6b505764685e1c9334d1",
+      "plan_commit": "7a84ff98e9cd559dd24309f1275f9aa54693f6c3",
       "target": "Intel x86_64 / macOS 26.4.1 / Python 3.12.4",
       "provenance": "User-operated native synthetic probes; source Git hash and issue report matched.",
       "parent_tracking_escape_leaks": "24/24",
       "coalition_escape_cleanup": "10/10 stopped",
       "containment_qualified": false,
-      "next": "Implement and natively qualify launchd coalition guardian, pipes, owner death, census/stop proof, cleanup and stress acceptance."
+      "next": "User runs tools/macos_launchd_probe.py in user/gui domains on the Intel Mac; use results to implement arbitrary coalition census, stop proof, capacity retention and production integration.",
+      "prototype_commit": "7a84ff98e9cd559dd24309f1275f9aa54693f6c3",
+      "prototype_validation": "Five portable Windows passes and three Unix skips; eight WSL passes including native fixture descriptor handoff. Native Mac launchd reports pending."
     },
     "remaining": [
       "Complete remaining M10 native approval/input, full history and uncertain-session recovery, onboarding, US English/accessibility and actual remote/provider browser acceptance.",
