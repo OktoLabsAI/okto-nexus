@@ -52,6 +52,7 @@ def test_checked_bytes_survive_passive_refresh_without_another_probe(checking):
     Draft202012Validator({'$defs': schema['$defs'], '$ref': '#/$defs/LocalInstallationCheckRequest'}).validate(body)
     response = client.post(route, json=body, headers=headers['operator'])
     assert response.status_code == 200, response.text
+    Draft202012Validator({'$defs': schema['$defs'], '$ref': '#/$defs/LocalInstallationCheckView'}).validate(response.json())
     assert response.json()['runtime_authorized'] is False
     assert response.json()['version'] == '0.159.0'
     assert source.executable not in response.text

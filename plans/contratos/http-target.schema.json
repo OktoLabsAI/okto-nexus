@@ -4063,6 +4063,39 @@
         "inventory_revision",
         "approved"
       ]
+    },
+    "LocalInstallationCheckView": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "executor_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "candidate_ref": {
+          "type": "string",
+          "pattern": "^nexus-install-v1:[0-9a-f]{64}$"
+        },
+        "version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "runtime_authorized": {
+          "const": false
+        },
+        "publication_pending": {
+          "const": false
+        }
+      },
+      "required": [
+        "executor_id",
+        "candidate_ref",
+        "version",
+        "runtime_authorized",
+        "publication_pending"
+      ]
     }
   }
 }

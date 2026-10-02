@@ -2,6 +2,11 @@
 
 ## Current acceptance reconciliation: executable Core .56
 
+The machine-readable `delivery_plan.json` checkpoint is reconciled to published
+Nexus `92521e0`, Connector `ad0933e` and Core `a96957d`. The September 30 checkpoint
+is preserved in `evidence/delivery-checkpoint-20260930.json`; its pending-work
+statements are historical. These heads are not the final frozen release tuple.
+
 Operator runtime initiation now accepts an explicit represented `agent_id`,
 retains actor/subject provenance and still consumes the subject's separate grant.
 Migration 099 records operator authority for admission, dispatch and later lease/
@@ -22,7 +27,12 @@ operation controls and full provider/platform acceptance remain pending.
 
 The user confirmed a native Intel Mac (macOS 26.4.1, Python 3.12.4) for manual
 development/test iterations. Core's `plans/MACOS_INTEL_IMPLEMENTATION.md` records
-the first native diagnostic and remaining containment acceptance. This authorizes
+the native diagnostics and remaining containment acceptance. Core `1975e88`
+contains the user's extended probe and Intel results, with source hash verified.
+Parent tracking leaked 24/24 fast escaped orphans; coalition census stopped
+10/10. Core `a96957d` records the revised launchd guardian plan. Backend
+implementation, stop-proof races, pipes, job lifecycle and stress/provider
+acceptance remain open. This authorizes
 Intel-target development, not weaker ownership guarantees or a macOS support claim.
 
 Per the user's latest direction, defer CI work and continue independent local
@@ -33,15 +43,15 @@ Connector `23dc4ab` addresses new issue #2: discovery's human summary separates
 host containment from adapter OS support, preserves found/untrusted facts and
 links the runbook. Its 52 installed checks passed on Windows and WSL Linux;
 37 documented commands/12 local links passed. Updated Connector #1 links Core
-#1's unprototyped macOS proposal; no native Mac support or weaker containment
+#1's macOS proposal, now informed by the native evidence above; no native Mac support or weaker containment
 contract has been adopted. See [the issue reconciliation](https://github.com/OktoLabsAI/okto-nexus-connector/blob/23dc4ab/plans/implementation/ISSUES_20261002.md).
 Nexus adopted its wheel as a test dependency (SHA-256
 `93d78a75c5ad81bbdd96e648be136f0f6b2cfd0a53f350266a1c9f96fc449104`).
 Windows/Linux smokes verified the three installed packages against their wheels
 in `evidence/issue2-summary-{windows,linux}/installed.json`; Nexus/Core package
 bytes remain those of the .56 integration campaign. This display-only change
-does not repeat or close full runtime acceptance. The pending embedded version
-check UI remains independent implementation work.
+does not repeat or close full runtime acceptance. The embedded version-check UI
+was subsequently delivered as recorded above; runtime operation controls remain.
 
 Core `43f31ec` corrects the C10 cancellation fixture after a delayed durable
 lookup reproduced its missing-obligation setup failure. The test now observes
@@ -81,8 +91,9 @@ The embedded-host panel now prepares existing/new workspaces through the actual
 local-realization API, with explicit folder/reference consent and durable
 same-request recovery after a lost reply or tab reload. Installed Edge/API/SQLite
 and documentation acceptance passed 27 checks with unchanged inputs; no runtime
-was started by preparation or binding. Build probing, runtime operations and the
-remaining onboarding/platform matrix are still pending. Connector `0385ed0`
+was started by preparation or binding. Build probing was subsequently delivered
+as recorded above; runtime operations and the remaining onboarding/platform
+matrix are still pending. Connector `0385ed0`
 adds the requested compact discovery table and `--verbose`, preserves full JSON,
 and incorporates the updated macOS issue. Nexus adopted its exact wheel and
 passed 21 installed integration checks. See

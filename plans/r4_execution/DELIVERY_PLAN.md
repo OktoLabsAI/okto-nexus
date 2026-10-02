@@ -1,5 +1,13 @@
 # Plano de entrega completa do Nexus, Connector e Core
 
+Checkpoint corrente: 2 de outubro de 2026. Os commits, hashes e pendências atuais
+estão no campo `review_checkpoint` de [delivery_plan.json](delivery_plan.json) e
+no [ledger](IMPLEMENTATION_STATUS.md). O checkpoint anterior foi preservado em
+[evidência histórica](evidence/delivery-checkpoint-20260930.json). As narrativas
+datadas abaixo registram a evolução; não substituem o checkpoint corrente.
+M13 e G0–G3 continuam abertos. CI está adiado por orientação do usuário e o aceite
+entre hosts depende de sua intervenção manual.
+
 Este plano organiza a conclusão dos três produtos na branch `feature/v0.2.0`, com implementação, integração, testes, migração e aceite final. O resultado exigido é utilizar os harnesses diretamente no Nexus e remotamente pelo Connector, pelas entradas reais de UI, CLI e API, com o mesmo Core instalado. Todos os textos produzidos pelas aplicações devem estar em inglês dos Estados Unidos, inclusive superfícies legadas e mensagens de retorno.
 
 Data da baseline: 29 de setembro de 2026. Revisão de planejamento: 30 de setembro de 2026. Este documento é um plano de conclusão; sua validação documental não executa testes de produto nem encerra gates de release. O trabalho anterior é aproveitado como implementação parcial a verificar.
@@ -111,7 +119,7 @@ O aceite final exige todos os casos obrigatórios aprovados no conjunto congelad
 
 A ordem normativa continua sendo [arquitetura R4](../01_ARQUITETURA_E_PLANO_MESTRE.md), [contratos](../02_CONTRATOS_HTTP_NXL_E_ESTADOS.md), [dados e migração](../03_DADOS_MIGRACAO_E_RECUPERACAO.md), [backlog](../04_BACKLOG_EXECUCAO.md), [testes e aceite](../05_TESTES_E_ACEITE.md) e [handoff Core e Connector](../06_HANDOFF_CORE_CONNECTOR.md). Este documento organiza a execução e acrescenta o requisito de idioma; não reduz requisitos nem cria uma autoridade de contrato concorrente.
 
-A cobertura inclui as 85 tarefas NS00–NS16, os 164 cenários originais (85 TR4, 45 TN e 34 J), as quatro entregas CORE-R4, as oito entregas CON-R4, os quatro achados CN5, as 23 rotas HTTP/WSS originais e a consulta adicional de metadata (24 rotas) e os sete verbos de operação. Acrescenta quatro cenários de idioma. O mapeamento completo é verificável em [delivery_plan.json](delivery_plan.json) e [delivery_coverage.json](delivery_coverage.json).
+A cobertura inclui as 85 tarefas NS00–NS16, os 164 cenários originais (85 TR4, 45 TN e 34 J), as quatro entregas CORE-R4, as oito entregas CON-R4, os quatro achados CN5, as 23 rotas HTTP/WSS originais, a consulta de metadata, o claim de refresh e a verificação local de versão (26 rotas), além dos sete verbos de operação. Acrescenta quatro cenários de idioma. O mapeamento completo é verificável em [delivery_plan.json](delivery_plan.json) e [delivery_coverage.json](delivery_coverage.json).
 
 Cada tarefa mantém seus critérios e dependências originais. O marco indica quando ela deve ser encerrada, não quando é permitido começar um protótipo. Dentro do mesmo marco, vale o grafo do backlog. Um componente necessário a um marco posterior pode receber contratos e fixtures antes, sem declarar a integração pronta.
 

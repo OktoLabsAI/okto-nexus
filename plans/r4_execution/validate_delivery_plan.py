@@ -153,8 +153,8 @@ def validate() -> dict:
 
     routes = {row["method"] + " " + row["path"]
               for row in read_json(sources["http_routes"])["routes"]}
-    require(set(plan["http_route_closure"]) == routes and len(routes) == 24,
-            "The 24 HTTP and WebSocket routes are not fully mapped.")
+    require(set(plan["http_route_closure"]) == routes and len(routes) == 26,
+            "The 26 HTTP and WebSocket routes are not fully mapped.")
     require(set(plan["http_route_closure"].values()) <= set(milestones),
             "Unknown route closing milestone.")
     actions = set(read_json(sources["nxl_delta"])["operation_submit"]["payload_definitions"])

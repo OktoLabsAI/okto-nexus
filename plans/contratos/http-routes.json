@@ -308,6 +308,18 @@
       ],
       "effect": "claim passive observation request; no execution authority",
       "implementation_status": "IMPLEMENTED_DIRECTED_TESTS"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/executors/{id}/installations:check",
+      "principal": "embedded_operator_with_explicit_candidate_consent",
+      "request_definition": "LocalInstallationCheckRequest",
+      "response_definition": "LocalInstallationCheckView",
+      "success_codes": [
+        200
+      ],
+      "effect": "contained local version probe; durable byte-bound observation; no runtime authorization",
+      "implementation_status": "IMPLEMENTED_DIRECTED_TESTS"
     }
   ]
 }
