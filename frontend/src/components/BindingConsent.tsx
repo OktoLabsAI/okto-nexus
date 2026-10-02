@@ -45,7 +45,7 @@ export function BindingConsent({agentId, executorId, hostLabel, workspaceId, wor
   </section>;
 
   if (!workspaceId) return <p>Select a workspace to review connection consent.</p>;
-  if (!choice.preparation || !choice.can_bind) return <p>The execution host must publish an approved local preparation before connection review. For remote hosts, configure and realize the workspace through the Connector CLI. Embedded preparation in this panel is still pending.</p>;
+  if (!choice.preparation || !choice.can_bind) return <p>The execution host must publish a local preparation before connection review. For remote hosts, configure and realize the workspace through the Connector CLI. Review any selection or operator restrictions shown above.</p>;
 
   return <section aria-label="Connection consent" className="space-y-2">
     <p>Review access for {agentId} on {hostLabel}, workspace {workspaceLabel}, using {choice.label}.</p>

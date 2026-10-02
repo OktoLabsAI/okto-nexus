@@ -3,6 +3,7 @@ import { api, type WorkspaceListItem } from "../api";
 import { runtimeApi, type ExecutorChoice, type RuntimeOptions } from "../runtimeApi";
 import { BindingConsent } from "./BindingConsent";
 import { InventoryRefresh } from "./InventoryRefresh";
+import { EmbeddedPreparation } from "./EmbeddedPreparation";
 
 const fieldClass = "rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5 text-xs";
 type Selection = {executorId: string; adapterId: string; candidateRef: string; inventoryRevision: string};
@@ -21,7 +22,7 @@ export function RuntimeSelection({agentId}: {agentId: string}) {
 
   useEffect(() => {
     const controller = new AbortController();
-    setBusy(true); setError(""); setOptions(null);
+    setBusy(true); setError("");
     void (async () => {
       try {
         const [directory, projects] = await Promise.all([
@@ -37,7 +38,7 @@ export function RuntimeSelection({agentId}: {agentId: string}) {
           setWorkspaceId(""); setSelection(null); setNotice("The selected workspace is no longer available. Select a workspace again.");
           return;
         }
-        if (!executorId) return;
+        if (!executorId) { setOptions(null); return; }
         const next = await runtimeApi.options(agentId, executorId, workspaceId, controller.signal);
         if (controller.signal.aborted) return;
         setOptions(next);
@@ -101,13 +102,21 @@ export function RuntimeSelection({agentId}: {agentId: string}) {
         </label>)}
       </fieldset>
     </>}
-    {selected && !busy && <div data-testid="runtime-selection-summary">
+    {selected && <fieldset disabled={busy} data-testid="runtime-selection-summary">
       <p>Selected: {selected.label}. Preparation: {selected.can_prepare ? "available" : "unavailable"}; binding approval: {selected.can_bind ? "available" : "unavailable"}; start: {selected.can_start ? "available" : "unavailable"}.</p>
+      {hosts.find(host => host.executor_id === executorId)?.kind === "embedded" &&
+        selected.can_prepare && !selected.preparation && !selected.binding &&
+        !selected.policy_reasons.includes("REALIZATION_SELECTION_REQUIRED") &&
+        <EmbeddedPreparation key={JSON.stringify([agentId, executorId, workspaceId, selection?.candidateRef, selection?.inventoryRevision])}
+          agentId={agentId} executorId={executorId} hostLabel={hosts.find(host => host.executor_id === executorId)?.label || executorId}
+          workspaceId={workspaceId} workspaceLabel={workspaces.find(project => project.workspace_id === workspaceId)?.display_name || ""}
+          inventoryRevision={options!.inventory_revision} choice={selected}
+          onPrepared={id => { setWorkspaceId(id); setRevision(value => value + 1); }} />}
       <BindingConsent key={JSON.stringify([agentId, executorId, workspaceId, selection?.candidateRef, selection?.inventoryRevision, selected.preparation?.realization_ref])}
         agentId={agentId} executorId={executorId} hostLabel={hosts.find(host => host.executor_id === executorId)?.label || executorId}
         workspaceId={workspaceId} workspaceLabel={workspaces.find(project => project.workspace_id === workspaceId)?.display_name || workspaceId}
         inventoryRevision={options!.inventory_revision} choice={selected} onApplied={() => setRevision(value => value + 1)} />
       <p>Runtime operations are not yet available in this panel.</p>
-    </div>}
+    </fieldset>}
   </section>;
 }

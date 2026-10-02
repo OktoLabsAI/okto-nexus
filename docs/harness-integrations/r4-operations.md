@@ -15,8 +15,21 @@ binding on subsequent visits. Preparation references and scoped binding state
 come from runtime-options; the browser never reconstructs them from display order.
 Requests are recorded in tab storage before submission. After a lost approval
 response, retry the same request or inspect its binding; do not generate another
-approval to guess the outcome. Embedded preparation and runtime operations are
-not yet implemented in that panel.
+approval to guess the outcome. For an embedded host, an operator can now prepare
+an existing workspace or create one using an existing absolute directory on the
+Server's computer. Select the installation, enter its workspace directory and
+optional provider home/protected credential references, then explicitly approve
+that configuration. Only reference names (`NAME=vault:reference` or
+`NAME=provider:reference`) belong in the form; never enter credential values.
+A blank provider home does not configure a login directory. Preparation neither
+probes an unobserved build nor approves its binding or starts a runtime.
+
+After a lost preparation response, retry the same recorded request, including
+after reloading the tab. The browser preserves its original directories and
+consent. A first request explicitly rejected by the Server can be edited and
+approved again; an uncertain request is retained. Storage failure prevents
+submission. The panel then selects the returned workspace and offers the separate
+binding review. Runtime operations and embedded build probing remain pending.
 Legacy endpoint/profile controls remain in a collapsed maintenance section. Use
 the authenticated R4 HTTP and Connector CLI flows to complete development setup;
 do not treat a legacy connection command as remote Connector setup. Full browser

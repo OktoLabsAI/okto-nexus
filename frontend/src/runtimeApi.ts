@@ -42,6 +42,18 @@ export interface RuntimeOptions {
   options: RuntimeChoice[];
 }
 
+export interface LocalPreparationRequest {
+  client_intent_id: string; local_consent_id: string; approved: true;
+  agent_id: string; adapter_id: string; candidate_ref: string; inventory_revision: string;
+  workspace_id: string | null; workspace_label: string; workspace_root: string;
+  provider_home: string | null; secret_bindings: Record<string, string>;
+}
+
+export interface PreparationView {
+  executor_id: string; agent_id: string; workspace_id: string;
+  inventory_revision: string; realization_ref: string;
+}
+
 // R4 uses Bearer authentication and direct JSON, unlike the legacy /api envelope.
 async function read<T>(path: string, signal: AbortSignal | undefined, body?: unknown): Promise<T> {
   const headers = new Headers();
@@ -89,6 +101,8 @@ export function bindingRequestExists(key: string): boolean {
 }
 
 export const runtimeApi = {
+  prepareLocal: (executorId: string, body: LocalPreparationRequest) =>
+    read<PreparationView>(`/v1/runtime/executors/${encodeURIComponent(executorId)}/realizations`, undefined, body),
   me: (signal?: AbortSignal) => read<{server_id: string; agent_id: string}>("/v1/connections/me", signal),
   refreshInventory: (executorId: string, clientIntentId: string, signal?: AbortSignal) =>
     read<{client_intent_id: string; refresh_id: string; executor_id: string; state: "PENDING" | "REQUESTED" | "UPDATED" | "OFFLINE"}>(

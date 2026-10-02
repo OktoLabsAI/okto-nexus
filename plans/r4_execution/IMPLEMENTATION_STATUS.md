@@ -2,6 +2,17 @@
 
 ## Current acceptance reconciliation: executable Core .55
 
+The embedded-host panel now prepares existing/new workspaces through the actual
+local-realization API, with explicit folder/reference consent and durable
+same-request recovery after a lost reply or tab reload. Installed Edge/API/SQLite
+and documentation acceptance passed 27 checks with unchanged inputs; no runtime
+was started by preparation or binding. Build probing, runtime operations and the
+remaining onboarding/platform matrix are still pending. Connector `0385ed0`
+adds the requested compact discovery table and `--verbose`, preserves full JSON,
+and incorporates the updated macOS issue. Nexus adopted its exact wheel and
+passed 21 installed integration checks. See
+[embedded preparation and consumer evidence](M10_EMBEDDED_PREPARATION_UI.md).
+
 The .55 same-machine Pi buffer diagnostic passed with unchanged installed bytes:
 peak queue 64 events / 49,045 serialized bytes, no queue/history refusal, three
 native actions and successful turn/close/cleanup. This did not reproduce or solve
