@@ -1,0 +1,42 @@
+[
+  {
+    "pid": 77272,
+    "command": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-migration-resume-bkj6ies1\\venv313\\Scripts\\python.exe",
+      "-I",
+      "-c",
+      "import pytest; raise SystemExit(pytest.main(['-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\okto-r4-ns15-05-by411exj\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4', '-o', 'asyncio_mode=auto', '-o', 'asyncio_default_fixture_loop_scope=function', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4', '-q', '--tb=short', '--junitxml=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\plans\\\\r4_execution\\\\evidence\\\\ns15-05-all_r4.xml']))"
+    ],
+    "diagnostic": "plans\\r4_execution\\evidence\\vault-refusal-hang-77272.log",
+    "reason": "Confirmed pre-native credential refusal retained unknown Core slot; test teardown cannot drain"
+  },
+  {
+    "pid": 18784,
+    "command": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-nexus-ci-staged-env\\Scripts\\python.exe",
+      "-I",
+      "-m",
+      "pytest",
+      "-c",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ci-installed-in2qhydp\\pytest.ini",
+      "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+      "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_provider_vault.py",
+      "-q",
+      "--tb=short",
+      "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\ci\\tests.xml"
+    ],
+    "diagnostic": "plans\\r4_execution\\evidence\\vault-refusal-hang-18784.log",
+    "reason": "Confirmed pre-native credential refusal retained unknown Core slot; test teardown cannot drain"
+  },
+  {
+    "pid": 23892,
+    "command": [
+      "C:/Users/jpamb/AppData/Local/Temp/okto-nexus-ci-staged-env/Scripts\\python.exe",
+      "-I",
+      "C:/Users/jpamb/AppData/Local/Temp/nexus_shutdown_probe.py"
+    ],
+    "diagnostic": "plans\\r4_execution\\evidence\\vault-refusal-hang-23892.log",
+    "reason": "Confirmed pre-native credential refusal retained unknown Core slot; test teardown cannot drain"
+  }
+]

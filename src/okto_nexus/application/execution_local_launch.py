@@ -33,14 +33,14 @@ class ProviderSecretResolver:
             try:
                 return await asyncio.to_thread(self.vault.resolve,reference)
             except ProviderVaultError:
-                raise CoreError("PROVIDER_AUTH_REQUIRED", "environment") from None
+                raise CoreError("PROVIDER_AUTH_REQUIRED", "environment", retry_safe=True) from None
         if prefix != "provider" or not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]{0,127}", name):
-            raise CoreError("PROVIDER_AUTH_REQUIRED", "environment")
+            raise CoreError("PROVIDER_AUTH_REQUIRED", "environment", retry_safe=True)
         value = os.environ.get(name)
         try:
             return validate_provider_secret(value)
         except ProviderVaultError:
-            raise CoreError("PROVIDER_AUTH_REQUIRED", "environment")
+            raise CoreError("PROVIDER_AUTH_REQUIRED", "environment", retry_safe=True)
 
 
 class ApprovedLocalLaunch:

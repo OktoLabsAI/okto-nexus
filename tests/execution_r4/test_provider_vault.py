@@ -92,9 +92,15 @@ def test_public_local_launch_resolves_only_approved_agent_vault(local_setup,back
         while owner.failure is None:
             assert time.monotonic()<until
             time.sleep(.02)
-        assert owner.failure.code=="PROVIDER_AUTH_REQUIRED"
+        assert getattr(owner.failure,"code",None)=="PROVIDER_AUTH_REQUIRED", str(owner.failure)
+        assert owner.failure.retry_safe and not owner.failure.possible_effect
         receipt={"code":owner.failure.code}
         assert native.opens==0 and not observed
+        # Resolution failed before native open: no uncertain process should
+        # retain the Core slot and prevent application shutdown.
+        async def shutdown():
+            return await owner.request_shutdown(timeout_seconds=2)
+        assert client.portal.call(shutdown)["state"] == "DRAINED"
     assert "technical-provider-secret" not in json.dumps(receipt)
     with deps.connection_factory.unit_of_work(write=False) as uow:
         raw=uow.connection.execute("SELECT local_record_json FROM execution_local_realizations").fetchone()[0]

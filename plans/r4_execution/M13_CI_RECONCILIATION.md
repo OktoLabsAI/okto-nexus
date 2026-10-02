@@ -2,6 +2,47 @@
 
 This is preparation evidence, not M13 acceptance or a final artifact freeze.
 
+## Connector issue #1 and provider-credential shutdown diagnosis
+
+The user's requested issue review found one open Connector issue:
+https://github.com/OktoLabsAI/okto-nexus-connector/issues/1. Connector commit
+`0f01d63` implements its documented unsupported-platform alternative: a platform
+matrix before quickstart, explicit doctor `unsupported` / `UNSUPPORTED_PLATFORM`
+output, a runbook link and Windows/Linux executor or Linux-VM guidance. Discovery
+visibility is distinguished from containment and provider qualification. Fifteen
+tests passed with one platform skip; the darwin diagnostic is simulated. No
+macOS containment backend or native macOS acceptance is claimed. The issue was
+not closed or commented on externally. Nexus pins the rebuilt Connector artifact.
+
+The historical local R4 run did not merely run slowly: stack inspection showed
+TestClient teardown waiting for shutdown after the missing-provider-credential
+case. A separate installed .52 reproduction reported an unknown retained Core
+slot, despite zero native opens. ProviderSecretResolver omitted the pre-effect
+`retry_safe` classification; Core correctly retained uncertainty for that error.
+The resolver now explicitly classifies its own credential-resolution refusals
+as safe before native open. The regression asserts no possible effect, zero
+opens and DRAINED within the requested two-second observation budget.
+
+The corrected provider-vault suite passed nine tests, and the missing-credential
+case passed five additional separate executions. One initial preparation exposed
+an intermittent RuntimeError replacing the expected error; it did not reproduce
+in those five runs and remains a full-regression concern, not silently discarded.
+Three old reproducer processes were inspected, confirmed to have no child
+processes, and terminated only after the stuck state was diagnosed. Their stack
+reports and commands are retained in `evidence/vault-refusal-aborted.json`.
+The historical .51 all_r4 run is ABORTED with failures and no terminal JUnit;
+its end-of-run source hashes include edits made during execution and cannot
+establish an immutable test revision. No acceptance scenario or gate is promoted.
+
+The 52 Connector tests associated with hosted R4 timeouts passed locally on the
+installed artifact. Hosted short-lease/observation failures remain unresolved.
+The expanded installed Nexus campaign passed 35 tests covering provider vault,
+local launch, shutdown storage ordering, Server shutdown and import boundaries;
+see `evidence/vault-refusal.json` for exact wheel/sdist hashes and reports.
+Superseded Nexus hosted runs on the six earlier commits were cancelled to free
+capacity for the corrected artifact. Their prior states and IDs are retained
+in `evidence/superseded-nexus-runs.json`; cancellation is not a passing result.
+
 ## Windows daemon supervision diagnosis
 
 Connector commit `9824b47` replaces the unhandled WinError 5 with a typed
