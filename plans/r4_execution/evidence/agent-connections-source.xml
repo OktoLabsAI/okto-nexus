@@ -62,7 +62,7 @@ lost_reply = False
         permission.get_by_role('button', name='Authorize local execution', exact=True).click()
 &gt;       expect(permission).to_have_count(0)
 E       AssertionError: Locator expected to have count '0'
-E       Actual value: 1 
+E       Actual value: 1
 E       Call log:
 E         - Expect "to_have_count" get_by_test_id("runtime-selection").get_by_role("region", name="Local execution permission", exact=True) with timeout 5000ms
 E         - waiting for get_by_test_id("runtime-selection").get_by_role("region", name="Local execution permission", exact=True)
@@ -133,7 +133,7 @@ lost_reply = True
         permission.get_by_role('button', name='Authorize local execution', exact=True).click()
 &gt;       expect(permission).to_have_count(0)
 E       AssertionError: Locator expected to have count '0'
-E       Actual value: 1 
+E       Actual value: 1
 E       Call log:
 E         - Expect "to_have_count" get_by_test_id("runtime-selection").get_by_role("region", name="Local execution permission", exact=True) with timeout 5000ms
 E         - waiting for get_by_test_id("runtime-selection").get_by_role("region", name="Local execution permission", exact=True)
@@ -224,11 +224,11 @@ tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest
 &gt;               expect(panel.get_by_test_id('inventory-refresh').get_by_text('The host published a new inventory. Review the current choices.')).to_be_visible()
 E               AssertionError: Locator expected to be visible
 E               Actual value: None
-E               Error: element(s) not found 
+E               Error: element(s) not found
 E               Call log:
 E                 - Expect "to_be_visible" get_by_test_id("runtime-selection").get_by_test_id("inventory-refresh").get_by_text("The host published a new inventory. Review the current choices.") with timeout 5000ms
 E                 - waiting for get_by_test_id("runtime-selection").get_by_test_id("inventory-refresh").get_by_text("The host published a new inventory. Review the current choices.")
-E               
+E
 E               Aria snapshot:
 E               - banner:
 E                 - button "Collapse menu"

@@ -1,5 +1,7 @@
 # Agent connections and contextual execution
 
+Implementation commit: `83834912e207674e75ae6929e5ef331a7be2c264`.
+
 User-approved scope, updated 2026-10-02:
 
 - Remove legacy connection setup and scoped opening credentials. Keep original
