@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { RuntimeHistory } from "./RuntimeHistory";
 import { runtimeApi, type BindingView, type RuntimeIntent, type RuntimeOperation,
   type RuntimeRequest, type RuntimeResolution, type RuntimeScope, type RuntimeSession } from "../runtimeApi";
 
@@ -211,6 +212,7 @@ export function RuntimeOperations({agentId, binding, canStart}: {
         {operation.result && <pre className="whitespace-pre-wrap break-words">{operation.result.output_text}{operation.result.output_truncated ? "\n[Output truncated]" : ""}</pre>}
       </div>}
       {session && <p>Session: {session.lifecycle_state}. Lease: {session.lease_state}.{session.durable_release_pending ? " Release confirmation pending." : ""}</p>}
+      {session && <RuntimeHistory key={JSON.stringify([session.scope.server_id, session.scope.executor_id, session.scope.session_id])} scope={session.scope} />}
       {canClear && <button className="btn btn-secondary" disabled={busy} onClick={() => {
         sessionStorage.removeItem(storageKey); currentRecord.current = null; setSaved(null); setOperation(null); setFollowUps([]); setText(""); setError("");
         if (sessionId) setIntent("turn.submit");

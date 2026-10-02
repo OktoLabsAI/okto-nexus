@@ -80,6 +80,13 @@ export interface RuntimeSession {
   scope: RuntimeScope; lifecycle_state: string; process_state: string; lease_state: string;
   control_available: boolean; durable_release_pending: boolean;
 }
+export interface RuntimeEventPage {
+  scope: RuntimeScope; stream_epoch: string | null;
+  events: {server_id: string; executor_id: string; session_id: string; stream_epoch: string;
+    sequence: number; category: string; native_type: string | null; payload: unknown; received_at: string}[];
+  count: number; next_after_sequence: number; committed_contiguous: number;
+  gap_pending: boolean; has_more: boolean;
+}
 
 export interface NativeDecisionRequest {
   client_intent_id: string; approval_key: Record<string, string | number>;
@@ -150,6 +157,11 @@ export const runtimeApi = {
   }),
   operation: (id: string, signal?: AbortSignal) => read<RuntimeOperation>(`/v1/runtime/operations/${encodeURIComponent(id)}`, signal),
   session: (id: string, signal?: AbortSignal) => read<RuntimeSession>(`/v1/runtime/sessions/${encodeURIComponent(id)}`, signal),
+  events: (scope: RuntimeScope, after: number, epoch: string | null, signal?: AbortSignal) => {
+    const query = new URLSearchParams({executor_id: scope.executor_id, after_sequence: String(after), limit: "100"});
+    if (epoch !== null) query.set("stream_epoch", epoch);
+    return read<RuntimeEventPage>(`/v1/runtime/sessions/${encodeURIComponent(scope.session_id)}/events?${query}`, signal);
+  },
   checkLocalInstallation: (executorId: string, body: {agent_id: string; adapter_id: string;
       candidate_ref: string; inventory_revision: string; approved: true}) =>
     read<{version: string; runtime_authorized: false}>(

@@ -111,6 +111,15 @@ initial-turn status and available captured output are shown separately. An
 unknown result is retained for reconciliation. This panel does not qualify a
 provider or replace full history and independent-host browser acceptance.
 
+The selected operation's **Session history** panel reads recorded events in pages
+of up to 100. Use **Previous events**, **Next events** and **Refresh history page**
+to browse without sending runtime commands. Expand an event for its timestamp
+and recorded payload. A missing-event warning means the displayed history is
+incomplete. Refresh stays on the current stream and page; errors retain the last
+successful page with an explicit warning. Reload recovers the selected operation
+and reads history from the first page. This panel does not list all past sessions
+or repair uncertain runtime state.
+
 Request a passive inventory refresh with
 `POST /v1/runtime/executors/{executor_id}/inventory:refresh` and a stable
 `{"client_intent_id":"your-request-id"}` under the authorized agent's bearer key.

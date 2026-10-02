@@ -2,6 +2,12 @@
 
 ## Current acceptance reconciliation: executable Core .56
 
+The selected runtime operation now includes paginated canonical session events,
+gap warnings and read-only reload. Seven installed Windows/Edge checks passed
+with unchanged inputs, including NS15.05. See [session-history UI scope and
+artifacts](M10_SESSION_HISTORY_UI.md). Cross-session browsing, uncertain-session
+repair and the wider acceptance matrix remain open; this does not close M10.
+
 A real Pi public-CLI cycle now passes on the current Nexus native-decision UI
 wheel and Core .56, without diagnostic instrumentation: 322.48 s, completed
 handoff/three native actions, successful close, clean process exits and temporary

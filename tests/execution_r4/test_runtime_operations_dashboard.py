@@ -72,6 +72,51 @@ def submit(panel, stage='SUBMITTED'):
     expect(panel.get_by_role('button', name='Prepare another action', exact=True)).to_be_enabled()
 
 
+def test_browser_session_history_pagination_gap_reload_and_scope(ready_runtime, request, tmp_path):
+    from playwright.sync_api import expect
+    from test_canonical_event_views import publish
+    setup, binding, native = ready_runtime
+    page, trace = request.getfixturevalue('local_browser')
+    panel = panel_for(page, setup, binding)
+    submit(panel)
+    session_id = panel.get_by_test_id('runtime-operation-session').inner_text()
+    published = publish(setup, native, session_id, count=103)
+    history = panel.get_by_role('region', name='Runtime session history', exact=True)
+    expect(history.get_by_role('button', name='Refresh history page')).to_be_enabled()
+    history.get_by_role('button', name='Refresh history page').click()
+    expect(history.get_by_role('listitem')).to_have_count(100)
+    expect(history.get_by_role('listitem').first).to_contain_text('fixture.output')
+    expect(history).to_contain_text('Showing 1–100 of 103')
+    history.get_by_role('button', name='Next events', exact=True).click()
+    expect(history.get_by_role('listitem')).to_have_count(3)
+    expect(history).to_contain_text('Showing 101–103 of 103')
+    expect(history.get_by_role('button', name='Next events', exact=True)).to_be_disabled()
+    history.get_by_role('button', name='Previous events', exact=True).click()
+    expect(history.get_by_role('listitem')).to_have_count(100)
+    with setup[0].connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE execution_event_watermarks SET gap_state='pending' WHERE session_id=?", (session_id,))
+    history.get_by_role('button', name='Refresh history page').click()
+    expect(history.get_by_role('alert')).to_contain_text('History is incomplete')
+    screenshot_root = Path(os.environ.get('OKTO_NEXUS_UI_SCREENSHOT_DIR', str(tmp_path)))
+    screenshot_root.mkdir(parents=True, exist_ok=True)
+    history.screenshot(path=str(screenshot_root / 'session-history-gap.png'))
+    writes = len([r for r in trace['requests'] if r[0] == 'POST'])
+    page.reload()
+    panel = panel_for(page, setup, binding)
+    history = panel.get_by_role('region', name='Runtime session history', exact=True)
+    expect(history.get_by_role('listitem')).to_have_count(100)
+    assert len([r for r in trace['requests'] if r[0] == 'POST']) == writes
+    assert native.opens == 1
+    # Reject a successful HTTP response whose event scope belongs elsewhere.
+    altered = {**published, 'events': published['events'][:100], 'count': 100,
+               'next_after_sequence': 100, 'has_more': True,
+               'scope': {**published['scope'], 'executor_id': 'foreign'}}
+    page.route('**/v1/runtime/sessions/*/events?*', lambda route: route.fulfill(json=altered))
+    history.get_by_role('button', name='Refresh history page').click()
+    expect(history.get_by_role('alert').filter(has_text='could not be refreshed')).to_contain_text('does not match')
+    assert len([r for r in trace['requests'] if r[0] == 'POST']) == writes
+
+
 @pytest.mark.parametrize('lost_reply', ['none', 'resolve', 'admit'])
 def test_browser_runtime_cycle_and_lost_reply_recovery(ready_runtime, request, tmp_path, lost_reply):
     from playwright.sync_api import expect
