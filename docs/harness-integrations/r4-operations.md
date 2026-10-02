@@ -35,8 +35,24 @@ preserved. Eligibility is a preview, and admission revalidates current authority
 An operator inspecting another agent currently receives
 `SUBJECT_IDENTITY_REQUIRED` for start: the public intent route still requires
 that subject's authenticated identity. Operator inspection does not create an
-agent credential or delegate execution. The contract's inventory-refresh HTTP
-route and complete browser onboarding remain pending.
+agent credential or delegate execution. Complete browser onboarding remains pending.
+
+Request a passive inventory refresh with
+`POST /v1/runtime/executors/{executor_id}/inventory:refresh` and a stable
+`{"client_intent_id":"your-request-id"}` under the authorized agent's bearer key.
+Repeat the same request to read its current state: `PENDING`, `REQUESTED`,
+`UPDATED` or `OFFLINE`. A `202` response records the request, not its completion.
+An offline request stays queued. The embedded host consumes requests through its
+existing 30-second refresh loop; a compatible connected Connector polls every
+five seconds and then performs passive discovery. Discovery duration adds to
+these intervals. At most 32 unresolved requests can be queued per executor.
+
+`UPDATED` requires a new observation correlated with that delivery. A routine
+inventory publication alone does not acknowledge a request. Refresh neither
+probes CLI versions nor grants runtime authority. Older Connectors can continue
+periodic publication but cannot consume these requests. The new Connector checks
+`inventory_refresh_supported` before using the HTTP extension. UI refresh controls
+and independent-host acceptance of this flow remain pending.
 
 On a remote Connector host, explicitly observe a selected `NOT_PROBED`
 installation with `okto-nexus-connector executor probe --help`. Select the exact

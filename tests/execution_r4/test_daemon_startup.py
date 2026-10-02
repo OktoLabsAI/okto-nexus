@@ -1,7 +1,7 @@
 """Real daemon startup from CLI registration, with HTTP/WSS and IPC.
 
-The positive preview explicitly supplies synthetic Server qualification.
-It qualifies automatic control startup, not providers or runtime effects.
+The positive path uses advertised qualification and passive empty discovery.
+It qualifies control startup and refresh transport, not provider runtime effects.
 """
 
 import asyncio
@@ -10,6 +10,7 @@ import io
 import json
 import socket
 
+import httpx
 import pytest
 import uvicorn
 from nexus_connector_core import R4_PREVIEW_REVISION
@@ -70,6 +71,13 @@ def test_daemon_starts_registered_r4_control_without_legacy_fallback(onboarding,
             server_id, executor_id = registered['server_id'], registered['executor_id']
             last_generation = 0
             for boot in range(2 if qualified else 1):
+                refresh_path = f'http://127.0.0.1:{port}/v1/runtime/executors/{executor_id}/inventory:refresh'
+                refresh_body = {'client_intent_id': f'daemon-refresh-{boot}'}
+                if qualified and boot == 0:
+                    async with httpx.AsyncClient(trust_env=False) as http:
+                        queued = await http.post(refresh_path, json=refresh_body, headers=headers['subject'])
+                        assert queued.status_code == 202, queued.text
+                        assert queued.json()['state'] == 'OFFLINE'
                 daemon = DaemonApp(root)
                 running = asyncio.create_task(daemon.run_forever())
                 def ipc(op):
@@ -105,6 +113,20 @@ def test_daemon_starts_registered_r4_control_without_legacy_fallback(onboarding,
                         last_generation = executor['generation']
                     else:
                         assert executor['control_state'] == 'DISCONNECTED'
+                if qualified:
+                    async with httpx.AsyncClient(trust_env=False) as http:
+                        async with asyncio.timeout(10):
+                            while True:
+                                refreshed = await http.post(refresh_path, json=refresh_body, headers=headers['subject'])
+                                assert refreshed.status_code == 202, refreshed.text
+                                if refreshed.json()['state'] == 'UPDATED':
+                                    break
+                                await asyncio.sleep(0.05)
+                    with deps.connection_factory.unit_of_work(write=False) as uow:
+                        result = uow.connection.execute('SELECT completed_sequence FROM execution_inventory_refresh '
+                            'WHERE client_intent_id=?', (refresh_body['client_intent_id'],)).fetchone()
+                        assert result[0] >= control['publication_sequence'] + boot
+                        assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 0
                 stopped = await asyncio.to_thread(ipc, 'shutdown')
                 assert stopped['ok']
                 assert await asyncio.wait_for(running, 10) == 0

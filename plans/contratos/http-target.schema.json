@@ -158,38 +158,62 @@
         "protocol_major": {
           "const": 1
         },
-        "nxl_revision": {
-          "const": "nxl-1-agent-centric-http-only-2026-09-29-r4"
+        "nxl_accepted": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "nxl_historical_revision": {
+          "type": "string"
+        },
+        "core_version": {
+          "type": "string"
         },
         "catalog_format": {
-          "const": 1
+          "const": 2
         },
         "availability_format": {
           "const": 2
         },
         "executor_snapshot_format": {
-          "const": 1
+          "const": 2
         },
-        "max_frame_bytes": {
-          "const": 1048576
+        "limits": {
+          "type": "object",
+          "properties": {
+            "inventory_candidates": {
+              "const": 128
+            },
+            "snapshot_age_ms": {
+              "const": 300000
+            }
+          },
+          "required": [
+            "inventory_candidates",
+            "snapshot_age_ms"
+          ],
+          "additionalProperties": false
         },
-        "max_payload_bytes": {
-          "const": 65536
+        "remote_execution_ready": {
+          "type": "boolean"
         },
-        "max_candidates_per_snapshot": {
-          "const": 128
+        "inventory_refresh_supported": {
+          "type": "boolean"
         }
       },
       "required": [
         "management_revision",
         "protocol_major",
-        "nxl_revision",
+        "nxl_accepted",
+        "nxl_historical_revision",
+        "core_version",
         "catalog_format",
         "availability_format",
         "executor_snapshot_format",
-        "max_frame_bytes",
-        "max_payload_bytes",
-        "max_candidates_per_snapshot"
+        "limits",
+        "remote_execution_ready"
       ],
       "additionalProperties": false
     },
@@ -1603,28 +1627,52 @@
         "can_bind": {
           "type": "boolean"
         },
-      "can_start": {
-        "type": "boolean"
-      },
-      "preparation": {
-        "anyOf": [
-          {"type": "null"},
-          {
-            "type": "object",
-            "properties": {
-              "realization_ref": {"type": "string", "minLength": 1, "maxLength": 160},
-              "realization_revision": {"type": "integer", "minimum": 1},
-              "workspace_binding_id": {"type": "string", "minLength": 1, "maxLength": 160}
+        "can_start": {
+          "type": "boolean"
+        },
+        "preparation": {
+          "anyOf": [
+            {
+              "type": "null"
             },
-            "required": ["realization_ref", "realization_revision", "workspace_binding_id"],
-            "additionalProperties": false
-          }
-        ]
-      },
-      "binding": {
-        "anyOf": [{"type": "null"}, {"$ref": "#/$defs/BindingView"}]
-      },
-      "policy_reasons": {
+            {
+              "type": "object",
+              "properties": {
+                "realization_ref": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160
+                },
+                "realization_revision": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "workspace_binding_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160
+                }
+              },
+              "required": [
+                "realization_ref",
+                "realization_revision",
+                "workspace_binding_id"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "binding": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/BindingView"
+            }
+          ]
+        },
+        "policy_reasons": {
           "type": "array",
           "items": {
             "type": "string",
@@ -3923,6 +3971,59 @@
         "workspace_root",
         "approved"
       ]
+    },
+    "InventoryRefreshClaimRequest": {
+      "type": "object",
+      "properties": {
+        "producer_instance_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        }
+      },
+      "required": [
+        "producer_instance_id"
+      ],
+      "additionalProperties": false
+    },
+    "InventoryRefreshClaimView": {
+      "type": "object",
+      "properties": {
+        "server_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "executor_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "producer_instance_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "delivery_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "server_id",
+        "executor_id",
+        "producer_instance_id",
+        "delivery_id"
+      ],
+      "additionalProperties": false
     }
   }
 }

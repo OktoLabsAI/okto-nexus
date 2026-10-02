@@ -89,6 +89,18 @@ def claim_inventory_refresh(uow, *, server_id, executor_id, producer_instance_id
     return delivery_id
 
 
+def claim_remote_inventory_refresh(factory, *, principal, publication_ticket_id, producer_instance_id):
+    from .executor_inventory import inventory_publication_authority
+    with factory.unit_of_work() as uow:
+        authority = inventory_publication_authority(uow, principal=principal,
+            publication_ticket_id=publication_ticket_id)
+        if authority['bound_connection_id'] != producer_instance_id:
+            raise OktoNexusError(ErrorCode.CONFLICT, "The inventory refresh channel is not current.", {})
+        return claim_inventory_refresh(uow, server_id=principal.server_id,
+            executor_id=principal.executor_id, producer_instance_id=producer_instance_id,
+            connection_generation=authority['generation'])
+
+
 def complete_inventory_refresh(uow, *, delivery_id, server_id, executor_id, producer_instance_id, sequence):
     """Join correlation to a validated publication in the SAME transaction."""
     conn = uow.connection

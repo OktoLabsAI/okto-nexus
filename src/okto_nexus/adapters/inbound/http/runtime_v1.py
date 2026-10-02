@@ -12,6 +12,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from nexus_connector_core.protocol import strict_json
 
 from ....application.executor_inventory import publish_executor_inventory
+from ....application.execution_inventory_refresh import request_inventory_refresh, claim_remote_inventory_refresh
 from ....application.execution_realizations import publish_executor_realization
 from ....application.execution_intents import (
     read_execution_intent, resolve_execution_intent,
@@ -45,6 +46,16 @@ _Id = Annotated[str, Field(min_length=1, max_length=160, strict=True)]
 _Digest = Annotated[str, Field(pattern=r"^sha256:[0-9a-f]{64}$", strict=True)]
 _CandidateRef = Annotated[str, Field(
     pattern=r"^nexus-install-v1:[0-9a-f]{64}$", strict=True)]
+
+
+class InventoryRefreshRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    client_intent_id: _Id
+
+
+class InventoryRefreshClaim(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    producer_instance_id: _Id
 
 
 class RealizationPublishRequest(BaseModel):
@@ -283,6 +294,51 @@ def build_router() -> APIRouter:
             return response
         return JSONResponse(issued, headers={"Cache-Control": "no-store"})
 
+    @router.post("/runtime/executors/{executor_id}/inventory:refresh")
+    async def refresh_inventory(executor_id: str, body: InventoryRefreshRequest,
+                                request: Request) -> JSONResponse:
+        agent = get_authenticated_agent()
+        if agent is None:
+            return v1_err(401, "AUTH_FAILED", "Authentication is required.")
+        if request.query_params:
+            return v1_err(422, "VALIDATION_ERROR", "Query parameters are not supported.")
+        deps = request.app.state.deps
+        def _request():
+            return request_inventory_refresh(deps.connection_factory,
+                context=RuntimeRequestContext(agent.agent_id, 'agent_key', credential_binding=agent.api_key_hash),
+                access=build_execution_access(deps),
+                server_id=ensure_execution_installation(deps.connection_factory).server_id,
+                executor_id=executor_id, client_intent_id=body.client_intent_id)
+        try:
+            view = await anyio.to_thread.run_sync(_request)
+        except OktoNexusError as error:
+            return runtime_error(error, 'inventory.refresh')
+        return JSONResponse(view, status_code=202, headers={"Cache-Control": "no-store"})
+
+    @router.post("/runtime/executors/{executor_id}/inventory:claim-refresh")
+    async def claim_refresh(executor_id: str, body: InventoryRefreshClaim,
+                            request: Request) -> JSONResponse:
+        token = extract_bearer(request)
+        if token is None:
+            return v1_err(401, "AUTH_FAILED", "An execution ticket is required.")
+        if request.query_params or request.headers.get('x-api-key'):
+            return v1_err(422, "VALIDATION_ERROR", "Use only the execution bearer ticket.")
+        factory = request.app.state.deps.connection_factory
+        def _claim():
+            installation = ensure_execution_installation(factory)
+            verified = verify_execution_ticket(factory, ticket=token, server_id=installation.server_id,
+                executor_id=executor_id, scope='inventory:publish')
+            delivery = claim_remote_inventory_refresh(factory,
+                principal=ExecutorKey(installation.server_id, executor_id),
+                publication_ticket_id=verified.ticket_id, producer_instance_id=body.producer_instance_id)
+            return dict(server_id=installation.server_id, executor_id=executor_id,
+                        producer_instance_id=body.producer_instance_id, delivery_id=delivery)
+        try:
+            view = await anyio.to_thread.run_sync(_claim)
+        except OktoNexusError as error:
+            return runtime_error(error, 'inventory.refresh.claim')
+        return JSONResponse(view, headers={"Cache-Control": "no-store"})
+
     @router.put("/runtime/executors/{executor_id}/inventory")
     async def publish_inventory(executor_id: str,
                                 request: Request) -> JSONResponse:
@@ -290,6 +346,9 @@ def build_router() -> APIRouter:
         if token is None:
             return v1_err(401, "AUTH_FAILED",
                           "An execution ticket is required.")
+        refresh_delivery_id = request.headers.get('X-Nexus-Inventory-Refresh')
+        if refresh_delivery_id is not None and not 1 <= len(refresh_delivery_id) <= 160:
+            return v1_err(422, "VALIDATION_ERROR", "Invalid inventory refresh delivery ID.")
         content_length = request.headers.get("content-length")
         if content_length is not None and (
                 not content_length.isdecimal() or
@@ -328,6 +387,7 @@ def build_router() -> APIRouter:
                 producer_instance_id=snapshot.get("producer_instance_id"),
                 snapshot=snapshot,
                 publication_ticket_id=verified.ticket_id,
+                refresh_delivery_id=refresh_delivery_id,
             )
 
         try:
@@ -428,7 +488,7 @@ def build_router() -> APIRouter:
         status = {ErrorCode.NOT_FOUND: 404, ErrorCode.PERMISSION_DENIED: 403,
                   'SCOPE_MISMATCH': 403,
                   ErrorCode.CONFLICT: 409, ErrorCode.VALIDATION_ERROR: 422,
-                  ErrorCode.QUOTA_EXCEEDED: 429}.get(error.code, 500)
+                    ErrorCode.QUOTA_EXCEEDED: 429, 'CAPACITY_EXCEEDED': 429}.get(error.code, 500)
         response = v1_err(status, error.code, error.message, stage=stage)
         response.headers["Cache-Control"] = "no-store"
         if error.code == ErrorCode.QUOTA_EXCEEDED:

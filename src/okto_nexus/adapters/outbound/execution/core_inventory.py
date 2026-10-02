@@ -53,6 +53,7 @@ def protocol_info() -> dict[str, Any]:
         "executor_snapshot_format": core.SNAPSHOT_FORMAT_VERSION,
         "limits": {"inventory_candidates": 128, "snapshot_age_ms": 300000},
         "remote_execution_ready": remote_ready,
+        "inventory_refresh_supported": True,
     }
 
 

@@ -14,7 +14,7 @@
         200
       ],
       "effect": "metadados públicos apenas",
-      "implementation_status": "SPECIFIED_NOT_IMPLEMENTED"
+      "implementation_status": "IMPLEMENTED_DIRECTED_TESTS"
     },
     {
       "method": "GET",
@@ -75,7 +75,7 @@
         202
       ],
       "effect": "pedido de inventário passivo",
-      "implementation_status": "SPECIFIED_NOT_IMPLEMENTED"
+      "implementation_status": "IMPLEMENTED_DIRECTED_TESTS"
     },
     {
       "method": "POST",
@@ -296,6 +296,18 @@
       ],
       "effect": "Consulta correlacionada da autoridade ativa; sem material, emissão, renovação ou efeito nativo; no-store.",
       "implementation_status": "IMPLEMENTED_PARTIAL_ACCEPTANCE"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/executors/{id}/inventory:claim-refresh",
+      "principal": "current_reconciled_inventory_publish_ticket",
+      "request_definition": "InventoryRefreshClaimRequest",
+      "response_definition": "InventoryRefreshClaimView",
+      "success_codes": [
+        200
+      ],
+      "effect": "claim passive observation request; no execution authority",
+      "implementation_status": "IMPLEMENTED_DIRECTED_TESTS"
     }
   ]
 }

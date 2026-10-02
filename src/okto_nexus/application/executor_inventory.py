@@ -102,30 +102,8 @@ def publish_executor_inventory(factory, *, principal: ExecutorKey,
             # Revalidate the authenticated ticket inside the publication
             # transaction. A current reconciled channel is the only proof
             # that permits replacing an earlier inventory producer.
-            authority = conn.execute(
-                "SELECT e.owner_instance_id,e.control_state,e.generation,"
-                "e.revoked_at AS executor_revoked_at,e.registered_by_agent_id,"
-                "t.agent_id,t.binding_id,t.bound_connection_id,t.revoked_at,"
-                "t.expires_at,t.audience,t.scopes_json,t.credential_epoch,"
-                "t.authorization_revision,r.credential_epoch AS current_epoch,"
-                "r.authorization_revision AS current_authorization "
-                "FROM execution_executors e JOIN execution_link_tickets t "
-                "ON t.server_id=e.server_id AND t.executor_id=e.executor_id "
-                "JOIN execution_agent_revisions r ON r.server_id=t.server_id "
-                "AND r.agent_id=t.agent_id WHERE e.server_id=? AND e.executor_id=? "
-                "AND t.ticket_id=?",
-                (principal.server_id, principal.executor_id, publication_ticket_id),
-            ).fetchone()
-            if (authority is None or authority['revoked_at'] is not None or
-                    authority['executor_revoked_at'] is not None or authority['binding_id'] is not None or
-                    authority['agent_id'] != authority['registered_by_agent_id'] or
-                    authority['audience'] != 'nexus-executor-control' or
-                    'inventory:publish' not in json.loads(authority['scopes_json']) or
-                    authority['credential_epoch'] != authority['current_epoch'] or
-                    authority['authorization_revision'] != authority['current_authorization'] or
-                    datetime.fromisoformat(authority['expires_at'].replace('Z', '+00:00')) <= datetime.now(timezone.utc)):
-                raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
-                                      "The inventory publication authority has changed.", {})
+            authority = inventory_publication_authority(uow, principal=principal,
+                publication_ticket_id=publication_ticket_id)
             reconciled_producer = (authority['control_state'] == 'CONTROL_READY' and
                 authority['owner_instance_id'] == producer_instance_id and
                 authority['bound_connection_id'] == producer_instance_id)
@@ -201,3 +179,33 @@ def publish_executor_inventory(factory, *, principal: ExecutorKey,
         )
     return InventoryPublication(principal.server_id, principal.executor_id,
                                 sequence, revision, False)
+
+
+def inventory_publication_authority(uow, *, principal, publication_ticket_id):
+    """Revalidate a verified control ticket inside the caller's transaction."""
+    conn = uow.connection
+    authority = conn.execute(
+        "SELECT e.owner_instance_id,e.control_state,e.generation,"
+        "e.revoked_at AS executor_revoked_at,e.registered_by_agent_id,"
+        "t.agent_id,t.binding_id,t.bound_connection_id,t.revoked_at,"
+        "t.expires_at,t.audience,t.scopes_json,t.credential_epoch,"
+        "t.authorization_revision,r.credential_epoch AS current_epoch,"
+        "r.authorization_revision AS current_authorization "
+        "FROM execution_executors e JOIN execution_link_tickets t "
+        "ON t.server_id=e.server_id AND t.executor_id=e.executor_id "
+        "JOIN execution_agent_revisions r ON r.server_id=t.server_id "
+        "AND r.agent_id=t.agent_id WHERE e.server_id=? AND e.executor_id=? "
+        "AND t.ticket_id=?",
+        (principal.server_id, principal.executor_id, publication_ticket_id),
+    ).fetchone()
+    if (authority is None or authority['revoked_at'] is not None or
+            authority['executor_revoked_at'] is not None or authority['binding_id'] is not None or
+            authority['agent_id'] != authority['registered_by_agent_id'] or
+            authority['audience'] != 'nexus-executor-control' or
+            'inventory:publish' not in json.loads(authority['scopes_json']) or
+            authority['credential_epoch'] != authority['current_epoch'] or
+            authority['authorization_revision'] != authority['current_authorization'] or
+            datetime.fromisoformat(authority['expires_at'].replace('Z', '+00:00')) <= datetime.now(timezone.utc)):
+        raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                              "The inventory publication authority has changed.", {})
+    return authority
