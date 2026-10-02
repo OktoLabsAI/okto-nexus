@@ -12,10 +12,10 @@ from okto_nexus.bootstrap.dependencies import bootstrap
 
 
 async def serve(home, port):
-    info = executor_link.protocol_info()
-    qualified = {**info, "remote_execution_ready": True, "nxl_accepted": [R4_PREVIEW_REVISION]}
     for module in (connections_v1, executor_link, runtime_v1):
-        module.protocol_info = lambda: qualified
+        info = module.protocol_info()
+        assert info['remote_execution_ready']
+        assert R4_PREVIEW_REVISION in info['nxl_accepted']
     deps = bootstrap({}, ["--home", home, "--feature-harness-integrations", "true",
                           "--feature-hitl", "true"])
     origin = "http://127.0.0.1:" + str(port)

@@ -1,4 +1,32 @@
- # Execução R4 — estado verificado em 2026-10-01
+ # Execução R4 — estado verificado em 2026-10-02
+
+## Current acceptance reconciliation: executable Core .53
+
+Core `3a1e884` and Connector `4724cc6` passed their complete six-cell hosted
+Windows/Linux Python 3.11–3.13 matrices. Installed directed Nexus R4 checks
+passed 38 cases on both Windows and WSL Linux. Six real Windows provider/mode
+journeys passed without readiness overrides; their exact scope and limitations
+are recorded in [native evidence](evidence/native-053-acceptance/README.md).
+
+The complete immutable-input Nexus R4 regression finished with 708 passed,
+6 failed, 2 setup errors and 6 opt-in skips. All monitored inputs were unchanged.
+The failures exposed stale pre-promotion expectations and fixtures competing
+with the now-active dispatcher. Corrections passed 25 source-level directed
+tests. A fresh wheel installation then passed all 26 directed cases (including
+packaged OpenAPI) in 109.76 seconds with unchanged campaign inputs and compatible
+dependencies; see [installed corrections](evidence/r4-053-installed-corrections/campaign.json).
+The original failure is retained in
+[full regression evidence](evidence/r4-053-full/campaign.json).
+
+Actual packaged-browser inspection confirms M10/NS13 remains incomplete:
+legacy setup UI, duplicated adapter labels and untranslated graph text.
+Two normative HTTP routes remain absent, and runtime-options eligibility and
+operator scope still need completion. OpenAPI's packaged FileResponse annotation
+failure has a code fix and a regression test. See the
+[acceptance audit](evidence/acceptance-audit-053.md). Final artifact freeze,
+complete Nexus regression, UI/CLI/fault/platform and independent-host acceptance
+remain open. Historical sections below retain their original revision scope;
+they do not override this current status. No G0–G3 gate is closed.
 
 ## M13 Core 0.2.52 consumer qualification in progress
 

@@ -73,11 +73,18 @@ def test_ns08_01(tmp_path, monkeypatch):
                     subprotocols=["nxl.v1"]):
                 pass
         assert wrong_target.value.code == 4401
-        with pytest.raises(WebSocketDisconnect) as no_revision:
-            with client.websocket_connect(
-                    path, headers={"Authorization": f"Bearer {ticket}"},
-                    subprotocols=["nxl.v1"]):
-                pass
+        info = executor_link.protocol_info()
+        assert info["remote_execution_ready"]
+        assert R4_PREVIEW_REVISION in info["nxl_accepted"]
+        with monkeypatch.context() as unavailable:
+            unavailable.setattr(executor_link, "protocol_info", lambda: {
+                **info, "remote_execution_ready": False, "nxl_accepted": [],
+            })
+            with pytest.raises(WebSocketDisconnect) as no_revision:
+                with client.websocket_connect(
+                        path, headers={"Authorization": f"Bearer {ticket}"},
+                        subprotocols=["nxl.v1"]):
+                    pass
         assert no_revision.value.code == 4406
         with factory.unit_of_work(write=False) as uow:
             row = uow.connection.execute(
@@ -85,11 +92,6 @@ def test_ns08_01(tmp_path, monkeypatch):
                 "WHERE executor_id=?", (registration.executor_id,),
             ).fetchone()
             assert tuple(row) == (1, "DISCONNECTED")
-        info = executor_link.protocol_info()
-        monkeypatch.setattr(executor_link, "protocol_info", lambda: {
-            **info, "remote_execution_ready": True,
-            "nxl_accepted": [R4_PREVIEW_REVISION],
-        })
         hello = {
             "protocol_major": 1, "contract_revision": R4_PREVIEW_REVISION,
             "type": "hello", "link_attempt_id": "attempt",

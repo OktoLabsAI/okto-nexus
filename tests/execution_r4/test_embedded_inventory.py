@@ -43,14 +43,14 @@ def test_serve_publishes_path_free_local_inventory_without_runtime_or_wss(tmp_pa
         assert viewed.status_code == 200, viewed.text
         assert str(tmp_path) not in viewed.text
         assert viewed.json()["snapshot"]["evidence"][0]["candidate_ref"]
-        assert viewed.json()["freshness"] == "OFFLINE"
+        assert viewed.json()["freshness"] == "FRESH"
         assert viewed.json()["eligible_for_new_start"] is False
         options = client.get("/v1/agents/viewer/runtime-options",
             params={"executor_id":owner.key.executor_id}, headers=headers)
         assert options.status_code == 200, options.text
         assert all(not item["can_start"] for item in options.json()["options"])
         with deps.connection_factory.unit_of_work(write=False) as uow:
-            assert uow.connection.execute("SELECT control_state FROM execution_executors WHERE kind='embedded'").fetchone()[0] == "RECOVERING"
+            assert uow.connection.execute("SELECT control_state FROM execution_executors WHERE kind='embedded'").fetchone()[0] == "CONTROL_READY"
             assert uow.connection.execute("SELECT COUNT(*) FROM execution_link_tickets").fetchone()[0] == 0
             assert uow.connection.execute("SELECT COUNT(*) FROM execution_sessions").fetchone()[0] == 0
     assert not (tmp_path / "home/core-runtime").exists()

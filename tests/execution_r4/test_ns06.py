@@ -128,7 +128,8 @@ def test_ns06_01(tmp_path):
         assert resolution["scope"]["binding_id"] == "binding"
         assert resolution["semantic_intent"]["action"] == "runtime.open"
         assert resolution["can_submit"] is False
-        assert "remote_execution_unavailable" in resolution["blockers"]
+        assert "executor_not_ready" in resolution["blockers"]
+        assert "remote_execution_unavailable" not in resolution["blockers"]
         refused = client.post("/v1/runtime/operations", json={
             "client_intent_id": body["client_intent_id"],
             "operation_id": resolution["operation_id"],

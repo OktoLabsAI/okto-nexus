@@ -36,9 +36,11 @@ def test_daemon_starts_registered_r4_control_without_legacy_fallback(onboarding,
     empty_path = tmp_path / 'empty-path'
     empty_path.mkdir()
     monkeypatch.setenv('PATH', str(empty_path))
-    if qualified:
-        info = {**executor_link.protocol_info(), 'remote_execution_ready': True,
-                'nxl_accepted': [R4_PREVIEW_REVISION]}
+    info = executor_link.protocol_info()
+    assert info['remote_execution_ready'] and R4_PREVIEW_REVISION in info['nxl_accepted']
+    if not qualified:
+        # Explicit negative negotiation case; the installed product is now R4 ready.
+        info = {**info, 'remote_execution_ready': False, 'nxl_accepted': []}
         monkeypatch.setattr(executor_link, 'protocol_info', lambda: info)
         monkeypatch.setattr(connections_v1, 'protocol_info', lambda: info)
 

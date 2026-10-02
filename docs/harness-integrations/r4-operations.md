@@ -6,6 +6,20 @@ the scope actually verified. G0–G3 and final release acceptance remain open.
 Historical native captures and synthetic peers do not qualify the current Core,
 provider, operating system or remote topology.
 
+The current development dashboard still exposes legacy endpoint/profile setup.
+It does not yet provide the complete R4 executor → installation → workspace
+journey. Use the implemented authenticated R4 HTTP and Connector CLI flows for
+development validation; do not treat the legacy connection command as remote
+Connector setup. Full browser acceptance remains pending.
+
+The runtime-options projection currently reports all eligibility flags as false
+and accepts only the authenticated subject, even though the target contract
+also requires operator access and workspace-aware eligibility. Inventory facts
+remain useful, but this projection is not yet a complete onboarding decision.
+The contract's inventory-refresh and binding-read HTTP routes are also pending.
+Preserve references returned by prepare/apply and consult existing operation
+and session routes rather than relying on those unimplemented endpoints.
+
 ## Start and connect
 
 Install the approved Nexus artifact with its `serve-lite` or `serve` extra and

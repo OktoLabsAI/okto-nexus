@@ -29,7 +29,7 @@ import anyio.to_thread
 from fastapi import FastAPI, Request, Response
 from fastapi.exception_handlers import request_validation_exception_handler
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from ....application.auth import AgentKeyAuthService
@@ -751,7 +751,6 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     index_html = static_dir / "index.html"
 
     if index_html.is_file():
-        from fastapi.responses import FileResponse
         from fastapi.staticfiles import StaticFiles
 
         assets_dir = static_dir / "assets"

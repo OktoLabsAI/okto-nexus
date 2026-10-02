@@ -167,6 +167,13 @@ def test_connector_public_commands_publish_realization_over_tcp(tmp_path, monkey
                     assert await bind(["show", "assistant"]) == replaced
                     assert (await bind(["list"]))["execution_bindings"] == [replaced]
                     assert len(store.load().execution_bindings) == 1
+                # This is an onboarding-only journey with an unqualified native
+                # binary. Establish a real disconnected executor before testing
+                # durable blocked intents instead of relying on global R4 being
+                # unavailable or racing the daemon's initial handshake.
+                daemon.request_stop()
+                assert await asyncio.wait_for(daemon_task, 15) == 0
+                daemon = None
                 from okto_nexus_connector.cli.commands.runtime import run_runtime
                 runtime_args = parser.parse_args(["runtime", "start", "assistant", "--new-session",
                                                   "--client-intent-id", "open-runtime"])

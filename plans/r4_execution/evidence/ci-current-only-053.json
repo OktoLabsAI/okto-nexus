@@ -1,0 +1,218 @@
+{
+  "reason": "Superseded pre-promotion source runs and duplicate evidence-only commits; keep current HEAD run",
+  "retained_run": 36961059133,
+  "before": [
+    {
+      "conclusion": "",
+      "databaseId": 36961059133,
+      "displayTitle": "test: complete Windows real Pi Connector campaign evidence",
+      "headSha": "92380e102af4e5dfd5018ac056ffb0192d1db466",
+      "status": "queued"
+    },
+    {
+      "conclusion": "",
+      "databaseId": 36960996811,
+      "displayTitle": "test: record installed native local and Connector acceptance progress",
+      "headSha": "f254f92b4fbe6e0f3d945669df0cbfa10b40b78f",
+      "status": "queued"
+    },
+    {
+      "conclusion": "",
+      "databaseId": 36960152857,
+      "displayTitle": "test: retain remote onboarding refusal without keyring backend",
+      "headSha": "9438a0aa823b45a1af7f0fd5a55dd6534c985feb",
+      "status": "queued"
+    },
+    {
+      "conclusion": "",
+      "databaseId": 36960050407,
+      "displayTitle": "test: record real Codex and Claude journeys with executable R4",
+      "headSha": "b0cf31b842562ba5b992fd2f8f4830211d249062",
+      "status": "queued"
+    },
+    {
+      "conclusion": "",
+      "databaseId": 36959290966,
+      "displayTitle": "feat: enable verified R4 negotiation with installed consumer conformance",
+      "headSha": "f763ff60709d6b17b19dddb028f7366616ed860e",
+      "status": "queued"
+    },
+    {
+      "conclusion": "",
+      "databaseId": 36958253256,
+      "displayTitle": "test: verify embedded native decisions against installed Core",
+      "headSha": "2d389db8dfada1ad00ea526d67b4da323180f406",
+      "status": "queued"
+    },
+    {
+      "conclusion": "",
+      "databaseId": 36957929700,
+      "displayTitle": "docs: record installed Core conformance and remaining promotion coverage",
+      "headSha": "5f961d229e3b88cd141c17ef58545fed1ae66244",
+      "status": "in_progress"
+    },
+    {
+      "conclusion": "",
+      "databaseId": 36957247078,
+      "displayTitle": "test(nexus): reconcile installed R4 regressions and baseline inventory",
+      "headSha": "1ee58485e1cd37c44151c4ca22967bd596ac47a3",
+      "status": "in_progress"
+    },
+    {
+      "conclusion": "",
+      "databaseId": 36954101750,
+      "displayTitle": "test: record campaign inputs before installed regression execution",
+      "headSha": "fee1a4c2d8816486402a7e6f6f2000ea8bc274e6",
+      "status": "in_progress"
+    },
+    {
+      "conclusion": "",
+      "databaseId": 36953770797,
+      "displayTitle": "fix: release pre-effect provider credential refusals during shutdown",
+      "headSha": "74059773f161098653f2cedfc50f64d2ec1965df",
+      "status": "in_progress"
+    },
+    {
+      "conclusion": "cancelled",
+      "databaseId": 36952496656,
+      "displayTitle": "test: pin Connector Windows supervision diagnostic artifact",
+      "headSha": "7462a9b7a59a4cf50a29a1a4080b3687d003911c",
+      "status": "completed"
+    },
+    {
+      "conclusion": "cancelled",
+      "databaseId": 36951788879,
+      "displayTitle": "test: verify staged clean installs and current Core packaging",
+      "headSha": "e8fbf61087e54463325c680a44244a0ee330697e",
+      "status": "completed"
+    },
+    {
+      "conclusion": "cancelled",
+      "databaseId": 36951377462,
+      "displayTitle": "docs: record hosted regression and remote lab readiness",
+      "headSha": "76914182c42c0994b08cb8bc16f9f7cfa01e2d3b",
+      "status": "completed"
+    },
+    {
+      "conclusion": "cancelled",
+      "databaseId": 36951078377,
+      "displayTitle": "fix: qualify Nexus with Core 0.2.52 artifacts",
+      "headSha": "62e61c67288f7ee32b63f715cf7fbc1a6634370f",
+      "status": "completed"
+    },
+    {
+      "conclusion": "cancelled",
+      "databaseId": 36949902277,
+      "displayTitle": "ci: verify local bootstrap before installing Connector test dependency",
+      "headSha": "ec1b73705b1976bd672144566d70106e61a168b8",
+      "status": "completed"
+    }
+  ],
+  "after": [
+    {
+      "conclusion": "",
+      "databaseId": 36961059133,
+      "displayTitle": "test: complete Windows real Pi Connector campaign evidence",
+      "headSha": "92380e102af4e5dfd5018ac056ffb0192d1db466",
+      "status": "in_progress"
+    },
+    {
+      "conclusion": "cancelled",
+      "databaseId": 36960996811,
+      "displayTitle": "test: record installed native local and Connector acceptance progress",
+      "headSha": "f254f92b4fbe6e0f3d945669df0cbfa10b40b78f",
+      "status": "completed"
+    },
+    {
+      "conclusion": "cancelled",
+      "databaseId": 36960152857,
+      "displayTitle": "test: retain remote onboarding refusal without keyring backend",
+      "headSha": "9438a0aa823b45a1af7f0fd5a55dd6534c985feb",
+      "status": "completed"
+    },
+    {
+      "conclusion": "cancelled",
+      "databaseId": 36960050407,
+      "displayTitle": "test: record real Codex and Claude journeys with executable R4",
+      "headSha": "b0cf31b842562ba5b992fd2f8f4830211d249062",
+      "status": "completed"
+    },
+    {
+      "conclusion": "cancelled",
+      "databaseId": 36959290966,
+      "displayTitle": "feat: enable verified R4 negotiation with installed consumer conformance",
+      "headSha": "f763ff60709d6b17b19dddb028f7366616ed860e",
+      "status": "completed"
+    },
+    {
+      "conclusion": "cancelled",
+      "databaseId": 36958253256,
+      "displayTitle": "test: verify embedded native decisions against installed Core",
+      "headSha": "2d389db8dfada1ad00ea526d67b4da323180f406",
+      "status": "completed"
+    },
+    {
+      "conclusion": "cancelled",
+      "databaseId": 36957929700,
+      "displayTitle": "docs: record installed Core conformance and remaining promotion coverage",
+      "headSha": "5f961d229e3b88cd141c17ef58545fed1ae66244",
+      "status": "completed"
+    },
+    {
+      "conclusion": "cancelled",
+      "databaseId": 36957247078,
+      "displayTitle": "test(nexus): reconcile installed R4 regressions and baseline inventory",
+      "headSha": "1ee58485e1cd37c44151c4ca22967bd596ac47a3",
+      "status": "completed"
+    },
+    {
+      "conclusion": "cancelled",
+      "databaseId": 36954101750,
+      "displayTitle": "test: record campaign inputs before installed regression execution",
+      "headSha": "fee1a4c2d8816486402a7e6f6f2000ea8bc274e6",
+      "status": "completed"
+    },
+    {
+      "conclusion": "cancelled",
+      "databaseId": 36953770797,
+      "displayTitle": "fix: release pre-effect provider credential refusals during shutdown",
+      "headSha": "74059773f161098653f2cedfc50f64d2ec1965df",
+      "status": "completed"
+    },
+    {
+      "conclusion": "cancelled",
+      "databaseId": 36952496656,
+      "displayTitle": "test: pin Connector Windows supervision diagnostic artifact",
+      "headSha": "7462a9b7a59a4cf50a29a1a4080b3687d003911c",
+      "status": "completed"
+    },
+    {
+      "conclusion": "cancelled",
+      "databaseId": 36951788879,
+      "displayTitle": "test: verify staged clean installs and current Core packaging",
+      "headSha": "e8fbf61087e54463325c680a44244a0ee330697e",
+      "status": "completed"
+    },
+    {
+      "conclusion": "cancelled",
+      "databaseId": 36951377462,
+      "displayTitle": "docs: record hosted regression and remote lab readiness",
+      "headSha": "76914182c42c0994b08cb8bc16f9f7cfa01e2d3b",
+      "status": "completed"
+    },
+    {
+      "conclusion": "cancelled",
+      "databaseId": 36951078377,
+      "displayTitle": "fix: qualify Nexus with Core 0.2.52 artifacts",
+      "headSha": "62e61c67288f7ee32b63f715cf7fbc1a6634370f",
+      "status": "completed"
+    },
+    {
+      "conclusion": "cancelled",
+      "databaseId": 36949902277,
+      "displayTitle": "ci: verify local bootstrap before installing Connector test dependency",
+      "headSha": "ec1b73705b1976bd672144566d70106e61a168b8",
+      "status": "completed"
+    }
+  ]
+}

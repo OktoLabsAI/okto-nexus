@@ -2,6 +2,31 @@
 
 This is preparation evidence, not M13 acceptance or a final artifact freeze.
 
+## Current full regression and hosted matrices — October 2, 2026
+
+Core `3a1e884` and Connector `4724cc6` passed all six hosted Windows/Linux
+Python 3.11–3.13 jobs. See [Core CI](evidence/core-3a1e884-ci.json) and
+[Connector CI](evidence/connector-4724cc6-ci.json). The prior Core documentation
+and Connector receipt-observation failures remain preserved historical evidence.
+
+The .53 full installed Nexus R4 campaign completed in 3019.10 seconds:
+708 passed, 6 failed, 2 setup errors and 6 skipped, with no changed monitored
+inputs. See [campaign](evidence/r4-053-full/campaign.json) and
+[JUnit](evidence/r4-053-full/tests.xml). Corrected fixtures now exercise explicit
+negative readiness, actual fresh embedded inventory and manual dispatch without
+racing the automatic owner; onboarding blocked-intent checks establish an actual
+disconnected executor. Twenty-five source-level directed tests passed. A fresh
+wheel installation passed 26 directed cases including packaged OpenAPI in
+109.76 seconds, with unchanged campaign inputs and a passing dependency check.
+See [installed campaign](evidence/r4-053-installed-corrections/campaign.json).
+This is not a replacement passing full campaign.
+
+Linux installed directed conformance passed 38 tests with unchanged inputs;
+see [scope](evidence/r4-053-linux-conformance/README.md). Packaged-browser review
+identified unresolved UI and route gaps, detailed in the
+[acceptance audit](evidence/acceptance-audit-053.md). These must be completed
+before final M13 freeze and gates, alongside independent-host/native matrices.
+
 ## Executable R4 development tuple — October 2, 2026
 
 Core `33f3a2d` (0.2.53.dev0) promotes the separate R4 contract after the

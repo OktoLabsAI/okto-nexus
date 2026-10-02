@@ -29,8 +29,8 @@ def test_real_provider_through_public_connector_cli(tmp_path, monkeypatch, adapt
 
     user_home = Path.home()
     missing_login = os.environ.get("OKTO_NEXUS_REAL_CONNECTOR_MISSING_LOGIN") == "1"
-    codex = user_home / "AppData/Roaming/npm/node_modules/@openai/codex/node_modules/@openai/codex-win32-x64/vendor/x86_64-pc-windows-msvc/bin/codex.exe"
-    claude = user_home / ".local/bin/claude.exe"
+    codex = Path(os.environ.get("OKTO_NEXUS_REAL_CODEX_BINARY", str(user_home / "AppData/Roaming/npm/node_modules/@openai/codex/node_modules/@openai/codex-win32-x64/vendor/x86_64-pc-windows-msvc/bin/codex.exe")))
+    claude = Path(os.environ.get("OKTO_NEXUS_REAL_CLAUDE_BINARY", str(user_home / ".local/bin/claude.exe")))
     node = Path(os.environ.get("OKTO_NEXUS_REAL_PI_NODE", "C:/Program Files/nodejs/node.exe"))
     pi_install = Path(os.environ.get("OKTO_NEXUS_REAL_PI_HOME", str(user_home / ".pi/agent"))) / "install"
     provider_home = user_home
@@ -63,7 +63,7 @@ def test_real_provider_through_public_connector_cli(tmp_path, monkeypatch, adapt
     root, workspace = tmp_path / "connector", tmp_path / "workspace"
     workspace.mkdir()
     store = StateStore(paths.state_file(root))
-    report = dict(adapter=adapter, missing_login=missing_login, server_release_gate_override=True, native_qualification_override=False,
+    report = dict(adapter=adapter, missing_login=missing_login, server_release_gate_override=False, native_qualification_override=False,
                   synthetic_native_factory=False, public_connector_cli=True, cli_subprocess=True, protected_os_vault=False,
                   topology="Single Windows host; actual loopback HTTP/WSS; separate Server and daemon processes.")
     def checkpoint(phase):

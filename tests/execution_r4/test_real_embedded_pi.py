@@ -25,9 +25,8 @@ def test_real_pi_uses_automatic_local_dispatch_and_native_work(tmp_path, monkeyp
     discovery, rest = split_discovery_args(['--harness-root',str(node.parent),
         '--harness-root',str(home/'install'),'--pi-install-root',str(home/'install'),'--pi-node',str(node)])
     assert not rest
-    info = runtime_v1.protocol_info()
-    monkeypatch.setattr(runtime_v1,'protocol_info',lambda:{**info,'remote_execution_ready':True})
-    monkeypatch.setattr(embedded_dispatch,'protocol_info',lambda:{**info,'remote_execution_ready':True})
+    assert runtime_v1.protocol_info()['remote_execution_ready']
+    assert embedded_dispatch.protocol_info()['remote_execution_ready']
     deps=bootstrap({},['--home',str(tmp_path/'nexus'),'--feature-harness-integrations','true'])
     deps.local_discovery=discovery
     app=build_app(deps,runtime_owner_api_url='http://127.0.0.1:8202')
@@ -38,7 +37,7 @@ def test_real_pi_uses_automatic_local_dispatch_and_native_work(tmp_path, monkeyp
             headers[actor]={'Authorization':'Bearer '+app.state.auth.issue_key(uow,agent_id=actor)}
     workspace=tmp_path/'workspace'
     workspace.mkdir()
-    report={'adapter':'pi_rpc','server_release_gate_override':True,'native_qualification_override':False,
+    report={'adapter':'pi_rpc','server_release_gate_override':False,'native_qualification_override':False,
             'protected_os_vault':True,'synthetic_native_factory':False}
     with TestClient(app,raise_server_exceptions=False) as client:
         owner=app.state.embedded_dispatch_owner

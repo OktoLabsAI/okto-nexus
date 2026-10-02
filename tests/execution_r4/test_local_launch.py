@@ -1,4 +1,4 @@
-"""Approved local configuration reaches Core; readiness remains a technical fixture."""
+"""Approved local configuration reaches Core through manually owned dispatch."""
 import json
 from pathlib import Path
 from types import SimpleNamespace
@@ -22,6 +22,11 @@ from test_vertical_inventory import _NativeFactory
 @pytest.fixture
 def admitted_local(local_setup, monkeypatch):
     deps, app, client, headers, body, candidate, root = local_setup
+    # This boundary test sends manually. Stop the real automatic sender before
+    # admitting anything so it cannot consume or refuse this test's operation.
+    dispatch = app.state.embedded_dispatch_owner
+    assert dispatch.pump is not None
+    client.portal.call(dispatch.pump.stop)
     first = publish(local_setup, changes={"secret_bindings":{"OPENAI_API_KEY":"provider:LOCAL_TEST_KEY"}})
     assert first.status_code == 201, first.text
     view = first.json()
@@ -39,8 +44,7 @@ def admitted_local(local_setup, monkeypatch):
     assert grant.status_code == 200, grant.text
     # This fixture explicitly qualifies only the selection/lease/Core boundary.
     # Automatic embedded dispatch and provider qualification are separate work.
-    info = runtime_v1.protocol_info()
-    monkeypatch.setattr(runtime_v1,"protocol_info",lambda:{**info,"remote_execution_ready":True})
+    assert runtime_v1.protocol_info()["remote_execution_ready"]
     with deps.connection_factory.unit_of_work() as uow:
         uow.connection.execute("UPDATE execution_executors SET control_state='CONTROL_READY' WHERE kind='embedded'")
     resolved = client.post("/v1/runtime/intents:resolve", headers=headers["subject"], json={
@@ -57,6 +61,7 @@ def admitted_local(local_setup, monkeypatch):
     access = build_execution_access(deps)
     reserved = reserve_execution_dispatch(deps.connection_factory,server_id=channel.server_id,
         executor_id=channel.executor_id,remote_ready=True,channel=channel)
+    assert reserved is not None
     sent = begin_execution_send(deps.connection_factory,reservation=reserved,remote_ready=True,
         fresh_publications=owner.fresh,access=access,channel=channel)
     monkeypatch.setenv("LOCAL_TEST_KEY","technical-provider-secret")

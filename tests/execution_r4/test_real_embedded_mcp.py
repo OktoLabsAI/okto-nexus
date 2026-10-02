@@ -57,16 +57,15 @@ def live_server(app,listener,origin):
 @pytest.mark.skipif(os.environ.get("OKTO_NEXUS_REAL_MCP") != "1", reason="Real provider campaign is opt-in.")
 @pytest.mark.parametrize("adapter",["codex_app_server","claude_stream"])
 def test_real_provider_uses_automatic_local_dispatch_and_http_work(tmp_path,monkeypatch,adapter, native_request_observer):
-    codex=Path.home()/"AppData/Roaming/npm/node_modules/@openai/codex/node_modules/@openai/codex-win32-x64/vendor/x86_64-pc-windows-msvc/bin/codex.exe"
-    claude=Path.home()/".local/bin/claude.exe"
+    codex=Path(os.environ.get("OKTO_NEXUS_REAL_CODEX_BINARY", str(Path.home()/"AppData/Roaming/npm/node_modules/@openai/codex/node_modules/@openai/codex-win32-x64/vendor/x86_64-pc-windows-msvc/bin/codex.exe")))
+    claude=Path(os.environ.get("OKTO_NEXUS_REAL_CLAUDE_BINARY", str(Path.home()/".local/bin/claude.exe")))
     binary=codex if adapter=="codex_app_server" else claude
     assert binary.is_file(),"The selected real provider executable must be installed."
     monkeypatch.setenv("PATH",str(binary.parent)+os.pathsep+os.environ.get("PATH",""))
     discovery,rest=split_discovery_args(["--harness-root",str(binary.parent)])
     assert not rest
-    info = runtime_v1.protocol_info()
-    monkeypatch.setattr(runtime_v1,'protocol_info',lambda:{**info,'remote_execution_ready':True})
-    monkeypatch.setattr(embedded_dispatch,'protocol_info',lambda:{**info,'remote_execution_ready':True})
+    assert runtime_v1.protocol_info()['remote_execution_ready']
+    assert embedded_dispatch.protocol_info()['remote_execution_ready']
     deps=bootstrap({},['--home',str(tmp_path/'nexus'),'--feature-harness-integrations','true',
                        '--feature-hitl','true'])
     deps.local_discovery=discovery
@@ -81,7 +80,7 @@ def test_real_provider_uses_automatic_local_dispatch_and_http_work(tmp_path,monk
             headers[actor]={'Authorization':'Bearer '+app.state.auth.issue_key(uow,agent_id=actor)}
     workspace=tmp_path/'workspace'
     workspace.mkdir()
-    report={'adapter':adapter,'server_release_gate_override':True,'native_qualification_override':False,
+    report={'adapter':adapter,'server_release_gate_override':False,'native_qualification_override':False,
             'protected_os_vault':True,'synthetic_native_factory':False}
     with live_server(app,listener,origin) as client:
         owner=app.state.embedded_dispatch_owner
