@@ -271,7 +271,9 @@ def test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown(tm
                             else:
                                 await runtime.close(CloseOperation("close", scope["session_id"], "Done.",
                                                                  ShutdownPolicy(1,1)), applied.context)
-                                await host.close_native_actions(ExecutionRuntimeKey(server_id, executor_id, "binding", scope["session_id"]))
+                                assert await host.close_native_actions(
+                                    ExecutionRuntimeKey(server_id, executor_id, "binding", scope["session_id"]),
+                                    timeout_seconds=5), "Native action shutdown did not finish."
                             with pytest.raises((ConnectionError, OSError)):
                                 await asyncio.open_connection("127.0.0.1", result["port"])
                         with deps.connection_factory.unit_of_work(write=False) as uow:

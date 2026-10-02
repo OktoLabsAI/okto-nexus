@@ -47,10 +47,10 @@ def second_executor(state, root):
              executor_id=executor, binding_id="binding-load-second", endpoint_id="ep-load-second",
              workspace_binding_id="wxb-load-second", candidate_ref=candidate_ref, inventory_revision=revision)
         copy(conn, "execution_inventory_snapshots", "executor_id=?", (channel.executor_id,),
-             executor_id=executor, inventory_revision=revision, canonical_projection=json.dumps(snapshot),
+             executor_id=executor, publication_sequence=1, inventory_revision=revision, canonical_projection=json.dumps(snapshot),
              producer_instance_id="load-second")
         copy(conn, "execution_inventory_current", "executor_id=?", (channel.executor_id,),
-             executor_id=executor, inventory_revision=revision)
+             executor_id=executor, publication_sequence=1, inventory_revision=revision)
     app.state.inventory_fresh_publications[(server, executor)] = (1, time.monotonic(), 0)
     access.issue(operator, actor_agent_id="other", endpoint_id="ep-load-second",
                  actions=["open", "send", "interrupt", "close"],
@@ -115,6 +115,26 @@ def run_load(state, root, record_property):
     assert any("SEARCH" in line and "INDEX" in line for line in plan)
 
     heartbeat()
+    # Identity churn can outlive the 120 s inventory freshness window. Observe
+    # the fixture binary again and publish through the authenticated API, as a
+    # live executor would; replaying or re-anchoring old evidence is not enough.
+    binary = root / "codex.exe"
+    candidate = InstallationCandidate("codex_app_server", str(binary), fingerprint(binary), "explicit", "selected")
+    with factory.unit_of_work(write=False) as uow:
+        current = uow.connection.execute(
+            "SELECT c.publication_sequence,c.inventory_revision,s.producer_instance_id "
+            "FROM execution_inventory_current c JOIN execution_inventory_snapshots s "
+            "USING(server_id,executor_id,publication_sequence) WHERE c.server_id=? AND c.executor_id=?",
+            (first.server_id, first.executor_id)).fetchone()
+    refreshed = build_executor_inventory_snapshot([candidate], server_id=first.server_id,
+        executor_id=first.executor_id, producer_instance_id=first.connection_id,
+        publication_sequence=current["publication_sequence"] + 1)
+    assert refreshed["inventory_revision"] == current["inventory_revision"]
+    published = client.put(f"/v1/runtime/executors/{first.executor_id}/inventory",
+        headers={"Authorization": "Bearer " + app.state.test_opening_ticket}, json=refreshed)
+    assert published.status_code == 200, published.text
+    assert published.json()["publication_sequence"] == current["publication_sequence"] + 1
+    assert published.json()["fresh_for_ms"] > 0
     executor, revisions, lane, link = second_executor(state, root)
     from okto_nexus.adapters.inbound.http import executor_link
     info = executor_link.protocol_info()

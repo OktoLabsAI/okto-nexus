@@ -2,6 +2,12 @@
 
 ## Current acceptance reconciliation: executable Core .53
 
+The NS14 load fixture now republishes a newly observed inventory through its
+reconciled channel; the technical Pi test observes shutdown completion before
+checking its listener. Six installed checks passed with unchanged inputs.
+Linux contention, Windows capture and a newly inspected Connector CI timeout
+remain unresolved. See [Windows CI follow-up](M13_CI_LOAD_REFRESH.md).
+
 Boot-budget accounting now has deterministic coverage, with independent real-thread
 stuck-slot checks retained. Fourteen installed tests passed with unchanged inputs.
 Historical CI is terminal and Windows findings still require diagnosis; no release

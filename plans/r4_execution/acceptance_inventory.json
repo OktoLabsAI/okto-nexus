@@ -1482,7 +1482,7 @@
         "plans/r4_execution/test_runs_20261001_capacity_metrics.json",
         "plans/r4_execution/test_runs_20261001_ns14_04.json"
       ],
-      "notes": "Normative TR4-14-04 passed at the load layer on installed packages: 100k identity churn, bounded cache/memory, flooded executor quotas, reserved control and another executor progress; 47 affected cases passed. Synthetic transport sinks; task dependencies and broader milestone acceptance remain open."
+      "notes": "Historical TR4-14-04 installed load pass retained. October 2 Windows CI exposed expired fixture inventory; corrected authenticated republication passed installed Windows/Python 3.13.1 with 100k identities, bounded cache/memory, flooded quotas, reserved control and second executor progress. See M13_CI_LOAD_REFRESH.md. Linux/Python 3.12 SQLite contention remains unresolved; no full-matrix or independent-host acceptance. Synthetic transport sinks; task dependencies and broader milestone acceptance remain open."
     },
     "NS14.05": {
       "proposed_nodeid": "tests/execution_r4/test_ns14.py::test_ns14_05",
@@ -2633,8 +2633,10 @@
       "coverage": "VERIFIED_NORMATIVE_SCENARIO",
       "execution": "PASSED",
       "evidence": [
-        "plans/r4_execution/test_runs_20261001_ns14_04.json"
-      ]
+        "plans/r4_execution/test_runs_20261001_ns14_04.json",
+        "plans/r4_execution/evidence/ci-load-refresh/campaign.json"
+      ],
+      "notes": "Installed Windows/Python 3.13.1 pass after fixture inventory republication. Historical Linux/Python 3.12 contention remains unresolved; PASSED is scoped to the recorded campaigns, not the full platform matrix. See M13_CI_LOAD_REFRESH.md."
     },
     "TR4-14-05": {
       "task_ids": [

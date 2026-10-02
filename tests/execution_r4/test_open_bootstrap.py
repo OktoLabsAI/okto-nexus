@@ -30,6 +30,7 @@ def opening(tmp_path, monkeypatch, request):
             reservation = reserve_execution_dispatch(deps.connection_factory,
                 server_id=server, executor_id=executor, remote_ready=True)
             app.state.test_opening_socket = ws
+            app.state.test_opening_ticket = link
             yield deps, app, access, operator, grant, channel, resolution, reservation
 
 
