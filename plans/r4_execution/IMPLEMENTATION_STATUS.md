@@ -1,6 +1,6 @@
  # Execução R4 — estado verificado em 2026-10-02
 
-## Current acceptance reconciliation: executable Core .55
+## Current acceptance reconciliation: executable Core .56
 
 Core .56 (`7a964db`) now provides passive npm/managed POSIX layout
 resolution. An official Linux Codex npm installation demonstrates the change
@@ -10,8 +10,12 @@ The initial Linux full suite retained two fixture failures; reviewed focused
 checks passed after isolating ambient PATH and observing idle-socket admission.
 The complete reviewed Linux suite then passed 1192 tests/24 skips. Clean Core
 wheel installation, resources and consumer smokes passed outside the checkout.
-Consumers still pin .55. Core's [DISCOVERY_056 report](https://github.com/OktoLabsAI/okto-nexus-connector-core/blob/7a964db/plans/DISCOVERY_056.md) tracks exact evidence;
-this work neither qualifies native macOS nor freezes the final delivery tuple.
+Both consumers now pin the same reviewed .56 wheel. Nexus passed 35 installed
+integration checks on each OS with unchanged inputs; Connector passed 48 per OS.
+Windows/Linux clean installation, base/local boot without Connector, artifact-byte
+verification and dependency checks passed. See [coordinated evidence and hashes](M13_POSIX_DISCOVERY_056.md).
+Core's [DISCOVERY_056 report](https://github.com/OktoLabsAI/okto-nexus-connector-core/blob/7a964db/plans/DISCOVERY_056.md) retains its original failures and reviewed suites.
+This work neither qualifies native macOS nor freezes the final delivery tuple.
 
 Later hosted Core .55 run 37000873878 passed five matrix cells but failed a
 retained-obligation test on Windows Python 3.11. The failure occurs in setup
