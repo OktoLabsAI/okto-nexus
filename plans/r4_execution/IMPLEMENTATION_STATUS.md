@@ -2,6 +2,15 @@
 
 ## Current acceptance reconciliation: executable Core .56
 
+Native Mac launchd reports are now retained in Core `f5d552e`; their script SHA-256
+matches the published prototype. All three gui/501 scenarios passed pipe handoff,
+descriptor hygiene, owner/cancel/EOF cleanup and label removal. All three user/501
+bootstraps failed with error 5; headless operation remains unverified. Core
+`19ed94d` reconciles the implementation plan. This supersedes the pending-probe
+statements below, but not the missing production containment backend: both reports
+still declare tree_stop_proven=false and containment_qualified=false. Provider
+execution, arbitrary escaped-tree stop proof and slot integration remain open.
+
 Offline/stale executor inventory no longer prevents recovering a recorded
 operation after browser reload: selection remains readable and the API retains
 authorized historical bindings while execution eligibility stays disabled.

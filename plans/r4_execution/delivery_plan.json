@@ -12,7 +12,7 @@
     "published_heads": {
       "nexus": "c61254d1f3bc0dcc9d721b90404d38f053eda4a5",
       "connector": "ad0933e0f71b71fc6d8d420db4c77c1d9c60836c",
-      "core": "7a84ff98e9cd559dd24309f1275f9aa54693f6c3"
+      "core": "19ed94d18f8e372cdf582de7e6a47c1dfed43779"
     },
     "heads_are_final_release_tuple": false,
     "shared_core_version": "0.2.56.dev0",
@@ -41,15 +41,16 @@
     "clean_install_scope": "Coordinated clean-install evidence predates the latest Nexus offline-recovery wheel. Final current tuple clean installation remains required.",
     "macos": {
       "source_commit": "1975e88",
-      "plan_commit": "7a84ff98e9cd559dd24309f1275f9aa54693f6c3",
+      "plan_commit": "19ed94d18f8e372cdf582de7e6a47c1dfed43779",
       "target": "Intel x86_64 / macOS 26.4.1 / Python 3.12.4",
       "provenance": "User-operated native synthetic probes; source Git hash and issue report matched.",
       "parent_tracking_escape_leaks": "24/24",
       "coalition_escape_cleanup": "10/10 stopped",
       "containment_qualified": false,
-      "next": "User runs tools/macos_launchd_probe.py in user/gui domains on the Intel Mac; use results to implement arbitrary coalition census, stop proof, capacity retention and production integration.",
+      "next": "Implement bounded coalition census and escaped-tree stop proof, autonomous job lifecycle, capacity retention and production integration using observed GUI-domain primitives; diagnose user-domain bootstrap failure before claiming headless operation.",
       "prototype_commit": "7a84ff98e9cd559dd24309f1275f9aa54693f6c3",
-      "prototype_validation": "Five portable Windows passes and three Unix skips; eight WSL passes including native fixture descriptor handoff. Native Mac launchd reports pending."
+      "prototype_validation": "Native Intel gui/501: all three fixed-fixture scenarios passed pipe handoff, descriptor hygiene, cleanup and label removal. user/501: all three bootstraps failed with error 5. Report script hash matches published 7a84ff9. No production containment or provider qualification.",
+      "launchd_report_commit": "f5d552e"
     },
     "remaining": [
       "Complete remaining M10 archive access independent of installation selection, uncertain-session recovery, onboarding, US English/accessibility and actual remote/provider browser acceptance.",
