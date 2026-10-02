@@ -2,6 +2,12 @@
 
 ## Current acceptance reconciliation: executable Core .53
 
+Capture/projection isolation now separates progress from throughput and queue
+overflow. Three installed checks passed, including real fsync with delayed storage
+and the unchanged overflow/unknown-result negative case. No application behavior
+changed; the historical CI occurrence still needs hosted confirmation. See
+[scope and measurements](M13_CI_CAPTURE_PROGRESS.md).
+
 Connector `37726bd5657e9961e9d14a77e035993d9f118e5f` removes checkout injection
 from the CLI E2E subprocesses: three scenarios passed with isolated installed CLI
 and daemon processes. The preceding full suite passed 699 tests with two skips,

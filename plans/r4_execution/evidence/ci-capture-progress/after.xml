@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="32.359" timestamp="2026-10-02T05:08:02.919345-03:00" hostname="Alienware_m15"><testcase classname="tests.test_runtime_capture_projection_isolation" name="test_native_burst_is_journaled_while_projection_is_blocked[normal]" time="11.726"><properties><property name="capture_seconds" value="0.6582859000191092" /><property name="capture_watermark" value="261" /><property name="projection_seconds" value="4.353966400027275" /><property name="projection_watermark" value="261" /></properties></testcase><testcase classname="tests.test_runtime_capture_projection_isolation" name="test_native_burst_is_journaled_while_projection_is_blocked[slow-storage]" time="18.891"><failure message="AssertionError: capture stalled at 139&#10;assert (782418.9497764 - 782410.9439346) &lt; 8">runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4800/test_nati...t', [], 'nxs_0d1a8c491b174bb88debda9b1b3f5bbdb08c2895154fae5c', 'nxs_1650b21d1290574ad85202107a4cbe009786f13ebe047e88')
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4800/test_native_burst_is_journaled1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001C0F6A90770&gt;
+capture_delay = 0.04
+record_property = &lt;function record_property.&lt;locals&gt;.append_property at 0x000001C0F80F0CC0&gt;
+
+    @pytest.mark.parametrize("capture_delay", [0, .04], ids=["normal", "slow-storage"])
+    def test_native_burst_is_journaled_while_projection_is_blocked(runtime, tmp_path, monkeypatch, capture_delay, record_property):
+        deps, client, root, _, operator, _ = runtime
+        gate = tmp_path / "emit-burst"
+        source = _FAKE_SERVER_SOURCE.replace('if "TRIGGER_HOLD" in text:\n        return',
+            'if "TRIGGER_HOLD" in text:\n'
+            '        deadline = time.monotonic() + 10\n'
+            f'        while not os.path.exists({str(gate)!r}) and time.monotonic() &lt; deadline: time.sleep(.01)\n'
+            '        for index in range(256):\n'
+            '            write_msg({"method": "item/agentMessage/delta", "params": {"threadId": thread_id, "turnId": turn_id, "delta": "x"}})\n'
+            '            time.sleep(.002)\n'
+            '        text = "BURST_COMPLETE"')
+        peers = []
+        def factory(**options):
+            peer = CodexAppServerConnector(command=[sys.executable, "-u", "-c", source], cwd=root,
+                env=options["backend"]["env"])
+            peers.append(peer)
+            return peer
+        deps.harness_connector_factories["codex"] = factory
+        opened = client.post("/api/v1/harness/sessions", headers={"x-api-key": operator}, json={
+            "agent_id": "worker", "kind": "codex", "endpoint_id": "endpoint-codex", "project_root": root})
+        assert opened.status_code == 200, opened.text
+        sid = opened.json()["data"]["session_id"]
+        sent = tool(client, operator, "harness_send", {"session_id": sid, "payload": {"text": "TRIGGER_HOLD"}})
+        assert sent["ok"], sent
+        op = sent["data"]["operation_id"]
+        wait_operation(runtime, op, lambda row: row["external_acceptance"] == "harness_accepted")
+        ingress = deps.harness_supervisor.event_ingress
+        append = ingress.journal.append
+        terminal_captured = threading.Event()
+        def delayed_append(event, **kwargs):
+            if capture_delay:
+                time.sleep(capture_delay)
+            record = append(event, **kwargs)  # Real file write and fsync remain required.
+            if event.session_id == sid and event.delivery_phase == "terminal":
+                terminal_captured.set()
+            return record
+        monkeypatch.setattr(ingress.journal, "append", delayed_append)
+        assert ingress._project_lock.acquire(timeout=3)
+        try:
+            before = ingress.journal.watermark
+            gate.write_text("ready")
+&gt;           wait_progress(lambda: (ingress.journal.watermark, ingress.journal.watermark),
+                lambda watermark: watermark &gt;= before + 260 and terminal_captured.is_set(),
+                stage="capture", stall_seconds=8, record_property=record_property)
+
+tests\test_runtime_capture_projection_isolation.py:76: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+read = &lt;function test_native_burst_is_journaled_while_projection_is_blocked.&lt;locals&gt;.&lt;lambda&gt; at 0x000001C0F808AB60&gt;
+complete = &lt;function test_native_burst_is_journaled_while_projection_is_blocked.&lt;locals&gt;.&lt;lambda&gt; at 0x000001C0F808B240&gt;
+stage = 'capture', stall_seconds = 8
+record_property = &lt;function record_property.&lt;locals&gt;.append_property at 0x000001C0F80F0CC0&gt;
+
+    def wait_progress(read, complete, *, stage, stall_seconds, record_property):
+        """Bound stalls independently of the duration of a progressing disk backlog."""
+        began = advanced = time.monotonic()
+        previous = None
+        while True:
+            value, progress = read()
+            now = time.monotonic()
+            if complete(value):
+                record_property(stage + "_seconds", now - began)
+                record_property(stage + "_watermark", progress)
+                return value
+            if progress != previous:
+                previous, advanced = progress, now
+&gt;           assert now - advanced &lt; stall_seconds, f"{stage} stalled at {progress}"
+E           AssertionError: capture stalled at 139
+E           assert (782418.9497764 - 782410.9439346) &lt; 8
+
+tests\test_runtime_capture_projection_isolation.py:29: AssertionError</failure></testcase></testsuite></testsuites>
