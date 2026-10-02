@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import importlib
+import importlib.metadata
 import json
 import subprocess
 import sys
@@ -34,15 +35,23 @@ def test_basic_bootstrap_does_not_import_optional_core(tmp_path):
     probe = subprocess.run(
         [sys.executable, "-I", "-c", """
 import importlib.abc
+import importlib.util
 import sys
 class NoCore(importlib.abc.MetaPathFinder):
     def find_spec(self, fullname, path=None, target=None):
         if fullname == 'nexus_connector_core' or fullname.startswith('nexus_connector_core.'):
             raise ModuleNotFoundError('Core intentionally unavailable')
 sys.meta_path.insert(0, NoCore())
+# Absent optional modules are discovered as None. Keep the import blocker
+# separately so any actual Core import still fails the bootstrap check.
+original_find_spec = importlib.util.find_spec
+importlib.util.find_spec = lambda name, package=None: (
+    None if name == 'nexus_connector_core' else original_find_spec(name, package))
 from okto_nexus.bootstrap.dependencies import bootstrap
 deps = bootstrap({}, ['--home', sys.argv[1]])
 assert deps.approvals is not None
+assert deps.native_decisions is None
+assert 'nexus_connector_core' not in sys.modules
 print('ok')
 """, str(tmp_path / "base-home")],
         cwd=tmp_path, capture_output=True, text=True, timeout=15,
@@ -68,11 +77,10 @@ def test_ns01_01(tmp_path):
     )
     probe = subprocess.run(
         [sys.executable, "-I", "-c",
-         "import sys; sys.path.insert(0, r'%s'); "
          "import okto_nexus.bootstrap.dependencies; "
          "import okto_nexus.adapters.inbound.mcp.registration; "
-         "print('ok')" % (ROOT / "src")],
-        capture_output=True, text=True, timeout=10,
+         "print('ok')"],
+        cwd=tmp_path, capture_output=True, text=True, timeout=10,
     )
     assert probe.returncode == 0, probe.stderr
     assert probe.stdout.strip() == "ok"
@@ -88,17 +96,24 @@ def test_ns01_02(tmp_path, capsys):
 def test_ns01_03(capsys):
     """Packaged serve-lite pins a local, byte-verified Core wheel."""
     project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    version = importlib.metadata.version("nexus-connector-core")
+    required_core = f"nexus-connector-core=={version}"
     assert project["project"]["scripts"]["okto-nexus"].endswith("cli.main:main")
     for extra in ("serve", "serve-lite"):
         requirements = project["project"]["optional-dependencies"][extra]
-        assert "nexus-connector-core==0.2.38.dev0" in requirements
+        assert required_core in requirements
         assert not any(item.startswith("okto-nexus-connector") for item in requirements)
     assert "mcp>=1.0,<2" in project["project"]["dependencies"]
-    wheel = (ROOT / "vendor/wheels/"
-             "nexus_connector_core-0.2.38.dev0-py3-none-any.whl")
-    assert hashlib.sha256(wheel.read_bytes()).hexdigest() == (
-            "f9bc5c3002593845416187b91802dfe914fd89b04036fd699be48e81dfff321b"
-    )
+    manifest = json.loads((ROOT / "vendor/ci/manifest.json").read_text(encoding="utf-8"))
+    artifact, = (item for item in manifest["artifacts"]
+                 if Path(item["path"]).name.startswith("nexus_connector_core-"))
+    wheel = ROOT / artifact["path"]
+    assert wheel.name == f"nexus_connector_core-{version}-py3-none-any.whl"
+    assert hashlib.sha256(wheel.read_bytes()).hexdigest() == artifact["sha256"]
+    installed_requirements = importlib.metadata.requires("okto-nexus") or []
+    for extra in ("serve", "serve-lite"):
+        assert any(required_core in requirement and f'"{extra}"' in requirement
+                   for requirement in installed_requirements)
     assert main(["--help"]) == 0
     assert "HTTP" in capsys.readouterr().out
 

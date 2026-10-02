@@ -38,6 +38,27 @@ def main():
     assert len(nexus) == 1, 'Build exactly one Nexus wheel in dist first'
     wheel = nexus[0]
     if args.action == 'install':
+        # The base distribution must bootstrap before any serve/Core extras.
+        subprocess.run([sys.executable, '-m', 'pip', 'install', str(wheel)], check=True)
+        with tempfile.TemporaryDirectory(prefix='nexus-ci-base-') as temp:
+            probe = '''import importlib.util, json, sys
+for module in ("nexus_connector_core", "okto_nexus_connector", "torch"):
+    assert importlib.util.find_spec(module) is None, module
+from okto_nexus.bootstrap.dependencies import bootstrap
+deps = bootstrap({}, ["--home", sys.argv[1]])
+assert deps.approvals is not None
+assert deps.native_decisions is None
+print(json.dumps({"base_boot_without_core": True, "connector_installed": False,
+                  "torch_installed": False, "provider_qualified": False}))
+'''
+            result = subprocess.run([sys.executable, '-I', '-c', probe, str(Path(temp)/'home')],
+                                    cwd=temp, capture_output=True, text=True)
+            output = ROOT / 'build/ci'
+            output.mkdir(parents=True, exist_ok=True)
+            (output / 'base-without-core.log').write_text(result.stdout + result.stderr, encoding='utf-8')
+            if result.returncode:
+                print(result.stdout + result.stderr, file=sys.stderr)
+                raise SystemExit(result.returncode)
         subprocess.run([sys.executable, '-m', 'pip', 'install',
             '--find-links', str(ROOT / 'vendor/wheels'),
             str(wheel) + '[serve-lite,dev]', str(wheels[0])], check=True)

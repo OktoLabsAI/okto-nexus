@@ -2,6 +2,31 @@
 
 This is preparation evidence, not M13 acceptance or a final artifact freeze.
 
+## Staged package installation and current Connector failures
+
+The installation runner now starts with the base wheel in a fresh environment,
+proves bootstrap without Core/Connector/Torch, then installs serve-lite and
+proves HTTP bootstrap without Connector/Torch, before adding Connector test
+dependencies. All three installed trees are compared with their wheels.
+Ten installed NS01/import-boundary checks passed on Windows/Python 3.13;
+see `evidence/m13-staged.json` and its logs/JUnit.
+
+NS01's obsolete .38 packaging expectation now checks the current manifest hash,
+the installed Core version and Nexus extras metadata together. Its bootstrap
+subprocess no longer prepends checkout src. The absent-Core fixture now models
+find_spec returning None while still prohibiting actual imports; a separate
+fresh base-only environment confirmed that the real bootstrap already worked.
+These test edits happened while the historical .51 R4 campaign remained live,
+so its final source snapshot cannot establish an immutable test revision.
+
+Connector run 36950960934 completed: all Linux cells passed, all Windows cells
+failed. Windows/Python 3.11 reports 11 failures, 662 passes and two skips. The
+new diagnostic exposes WinError 5 at daemon manager CreateProcess (the launcher
+requests CREATE_BREAKAWAY_FROM_JOB), plus R4 observation timeouts and a lease
+expiry. These remain unresolved; investigate process/job policy and fixture
+timing before changing product guarantees. The two earlier LEASE_INVALID
+integration failures no longer appear in this run.
+
 ## Hosted follow-up and remote laboratory availability
 
 Core run 36950397170 finished with five successful platform/Python cells.
