@@ -10,14 +10,16 @@ negotiation and the existing exact native qualification checks:
 | Local, Connector absent from environment | Pi 0.87.1 | PASS |
 | Connector public CLI, actual HTTP/WSS loopback | Codex 0.159.0 | PASS |
 | Connector public CLI, actual HTTP/WSS loopback | Claude Code 2.1.282 | PASS |
+| Connector public CLI, actual HTTP/WSS loopback | Pi 0.87.1 | PASS |
 
 Each completed open, lease renewal, real provider work, canonical handoff
 completion and native close. Codex/Claude exercised explicit operator decisions
 and HTTP MCP tools. Local Pi executed three native work actions. Local routes
-created no WSS tickets. Both completed Connector campaigns used Windows Vault,
+created no WSS tickets. All three Connector campaigns used Windows Vault,
 exited Server and daemon with code zero, and removed campaign credentials.
 The separate earlier missing-keyring refusal remains preserved as a failed run.
-Remote Pi is still pending; no success is inferred from local Pi.
+Remote Pi separately passed in 386.66 seconds, including actual native work
+actions, lease renewal, successful close and credential cleanup.
 
 The local-only runner asserts that Connector cannot be imported. The installed
 attestations verify every package file byte-for-byte against the recorded wheels
