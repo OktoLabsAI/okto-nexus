@@ -2,6 +2,15 @@
 
 ## Current acceptance reconciliation: executable Core .55
 
+The .55 same-machine Pi buffer diagnostic passed with unchanged installed bytes:
+peak queue 64 events / 49,045 serialized bytes, no queue/history refusal, three
+native actions and successful turn/close/cleanup. This did not reproduce or solve
+the earlier stream loss. The preceding instrumented pass lacked its detailed
+report and is retained with that limitation. See [diagnostic evidence](M13_PI_STREAM_DIAGNOSTIC.md).
+Core hosted .55 completed all six OS/Python cells with only the same stale-doc
+version failure; Core `9a19ebe` corrects it and `10585bb` retains Windows/Linux
+installed documentation evidence. New hosted qualification remains pending.
+
 Core `beed295` removes identical overlapping PATH/explicit Pi candidates while
 refusing conflicting observations of the same reference. Connector `7cf54e1`
 pins that wheel. Nexus installed discovery, inventory, daemon and refresh checks

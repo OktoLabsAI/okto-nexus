@@ -1,6 +1,11 @@
 # NS15.05 documentation cutover — October 1, 2026
 
-Status: implementation in progress; normative scenario acceptance remains NOT_RUN.
+Historical increment: the checks below describe the October 1 documentation
+cutover. Later [scenario reconciliation](M12_NS15_05_MCP_RECONCILIATION.md)
+records scoped passes for TR4-15-05 and TN-38/39/40, including
+[supported recovery](M12_TN40_ROLLBACK.md). Those scenarios are no longer missing
+evidence. NS15.05 remains partial for dashboard/dependency and final-artifact
+acceptance; this historical report does not override the current ledger.
 
 The README now routes execution setup to `docs/harness-integrations/r4-operations.md`.
 That guide describes embedded Core without the Connector application, remote

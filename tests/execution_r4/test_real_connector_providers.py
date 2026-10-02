@@ -76,12 +76,33 @@ def test_real_provider_through_public_connector_cli(tmp_path, monkeypatch, adapt
     if os.environ.get("OKTO_NEXUS_PI_STREAM_DIAGNOSTIC") == "1" and adapter == "pi_rpc":
         import traceback
         from nexus_connector_core.runtime import LocalRuntimeCore
+        from nexus_connector_core.native.event_buffers import NativeEventHistory, NativeEventQueue
         from okto_nexus_connector.services import launch_configuration
         from okto_nexus_connector.transport.native_actions import RefreshingNativeActionBridge
         report["stream_diagnostic"] = True
         original_loss = LocalRuntimeCore._record_stream_loss
         original_resolve = launch_configuration._resolve
         original_invoke = RefreshingNativeActionBridge.invoke
+        original_put = NativeEventQueue.put
+        original_append = NativeEventHistory.append
+        buffer_metrics = report["native_buffer_diagnostic"] = dict(
+            queue_peak_events=0, queue_peak_bytes=0, queue_refusals=0,
+            history_refusals=0)
+        def observed_put(queue, event):
+            accepted = original_put(queue, event)
+            with queue._changed:
+                buffer_metrics["queue_peak_events"] = max(
+                    buffer_metrics["queue_peak_events"], len(queue._items))
+                buffer_metrics["queue_peak_bytes"] = max(
+                    buffer_metrics["queue_peak_bytes"], queue._bytes)
+                if not accepted:
+                    buffer_metrics["queue_refusals"] += 1
+            return accepted
+        def observed_append(history, event):
+            accepted = original_append(history, event)
+            if not accepted:
+                buffer_metrics["history_refusals"] += 1
+            return accepted
         async def observed_loss(runtime, session, binding):
             error = sys.exception()
             report.setdefault("stream_failures", []).append(dict(
@@ -111,6 +132,8 @@ def test_real_provider_through_public_connector_cli(tmp_path, monkeypatch, adapt
         monkeypatch.setattr(LocalRuntimeCore, "_record_stream_loss", observed_loss)
         monkeypatch.setattr(launch_configuration, "_resolve", observed_resolve)
         monkeypatch.setattr(RefreshingNativeActionBridge, "invoke", observed_invoke)
+        monkeypatch.setattr(NativeEventQueue, "put", observed_put)
+        monkeypatch.setattr(NativeEventHistory, "append", observed_append)
     async def run():
         server = await asyncio.create_subprocess_exec(
             sys.executable, "-I", str(Path(__file__).with_name("real_provider_server.py")),

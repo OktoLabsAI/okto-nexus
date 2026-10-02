@@ -29,9 +29,13 @@ across repeated runs. See `test_runs_20261001_ns15_05.json`.
 
 ## Remaining acceptance
 
-TN-40 still needs explicit supported-version rollback after backfill and execution,
-including policy preservation. NS15.04 restore results are supporting evidence;
-they do not alone establish that entire scenario. Task dependencies and G0–G3
+The original TN-40 evidence gap was subsequently addressed by the
+[supported recovery campaign](M12_TN40_ROLLBACK.md): three installed checks passed
+after backfill and a synthetic uncertain native effect, preserving policies and
+history. It proves same-version snapshot recovery, not reverse SQL migration or
+old-binary compatibility. [Scenario reconciliation](M12_NS15_05_MCP_RECONCILIATION.md)
+records the exact historical artifacts for all four NS15.05 scenarios.
+Task dependencies and G0–G3
 remain open. This campaign uses Windows/Python 3.13 and does not establish the
 final platform/provider matrix, independently hosted remote execution, browser
 interaction, CI or release artifact acceptance.
