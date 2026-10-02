@@ -40,7 +40,34 @@ def main():
     if args.action == 'install':
         subprocess.run([sys.executable, '-m', 'pip', 'install',
             '--find-links', str(ROOT / 'vendor/wheels'),
-            str(wheel) + '[serve-lite,dev]', *map(str, wheels)], check=True)
+            str(wheel) + '[serve-lite,dev]', str(wheels[0])], check=True)
+        # Prove the local package boots before adding the remote application's
+        # test-only dependency. This must run in a fresh CI environment.
+        with tempfile.TemporaryDirectory(prefix='nexus-ci-local-') as temp:
+            probe = '''import importlib.util, json, pathlib, sys
+assert importlib.util.find_spec("okto_nexus_connector") is None
+assert importlib.util.find_spec("torch") is None
+from okto_nexus.bootstrap.dependencies import bootstrap
+from okto_nexus.adapters.inbound.http.app import build_app
+from fastapi.testclient import TestClient
+deps = bootstrap({}, ["--home", sys.argv[1]])
+with TestClient(build_app(deps)) as client:
+    protocol = client.get("/v1/connections/protocol")
+    assert protocol.status_code == 200, protocol.text
+    assert client.get("/").status_code == 200
+    assert client.get("/v1/connections/me").status_code == 401
+print(json.dumps({"local_boot_without_connector": True, "torch_installed": False,
+                  "protocol_status": protocol.status_code, "provider_qualified": False}))
+'''
+            result = subprocess.run([sys.executable, '-I', '-c', probe, str(Path(temp)/'home')],
+                                    cwd=temp, capture_output=True, text=True)
+            output = ROOT / 'build/ci'
+            output.mkdir(parents=True, exist_ok=True)
+            (output / 'local-without-connector.log').write_text(result.stdout + result.stderr, encoding='utf-8')
+            if result.returncode:
+                print(result.stdout + result.stderr, file=sys.stderr)
+                raise SystemExit(result.returncode)
+        subprocess.run([sys.executable, '-m', 'pip', 'install', str(wheels[1]) + '[test]'], check=True)
         return
     output = ROOT / 'build/ci'
     output.mkdir(parents=True, exist_ok=True)

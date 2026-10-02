@@ -2,6 +2,30 @@
 
 This is preparation evidence, not M13 acceptance or a final artifact freeze.
 
+## Clean local bootstrap and lease-boundary defect
+
+A new Python 3.13 venv installed the NS15.05 Nexus wheel with `serve-lite,dev`
+and Core before the Connector test dependency. With neither Connector nor Torch
+installed, the HTTP lifecycle served protocol/dashboard (200) and denied an
+unauthenticated identity request (401). The CI runner now enforces this order and
+installs Connector's test extra afterward for asyncio regression support.
+Three installed import-boundary tests also passed. Evidence:
+`evidence/m13-local-without-connector.json` and its log. This is bootstrap-only
+evidence, not native lifecycle/provider acceptance or the final release tuple.
+
+Connector's Windows CI exposed a reproducible Core arithmetic defect:
+`(100.002 + 120.0) - 100.002` exceeds 120 due to floating-point subtraction.
+Core commit `e0745bb` publishes 0.2.52.dev0, comparing absolute deadlines instead
+of introducing any tolerance. A new regression accepts the exact maximum but
+rejects the next representable deadline before native open. All 63 installed
+runtime tests passed in a separate fresh venv; the wheel SHA-256 is
+`470eb23b28d917a3a154c2ef7cd9fdddf972ca6402c0668961b4c01909f1b732`.
+The wheel is at `C:/Users/jpamb/AppData/Local/Temp/okto-core-lease-052-dist/`.
+Consumer pins/artifacts must now be updated and the affected integration rerun.
+The live Nexus R4 campaign still uses the unchanged 0.2.51 tuple; at this
+checkpoint session `1133` was alive past 70%, with failures pending its terminal
+report. Do not change that interpreter while it is running.
+
 ## Nexus hosted regression workflow
 
 The Nexus workflow now builds the dashboard from its lockfile, builds wheel and
