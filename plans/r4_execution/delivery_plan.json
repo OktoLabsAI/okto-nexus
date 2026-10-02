@@ -10,7 +10,7 @@
     "branch": "feature/v0.2.0",
     "historical_checkpoint": "plans/r4_execution/evidence/delivery-checkpoint-20260930.json",
     "published_heads": {
-      "nexus": "e9dc2e81201872dde36ad1d5b53561627e5ca133",
+      "nexus": "c61254d1f3bc0dcc9d721b90404d38f053eda4a5",
       "connector": "ad0933e0f71b71fc6d8d420db4c77c1d9c60836c",
       "core": "7a84ff98e9cd559dd24309f1275f9aa54693f6c3"
     },
@@ -18,12 +18,13 @@
     "shared_core_version": "0.2.56.dev0",
     "shared_core_wheel_sha256": "7f19885f28b16dbfce66b969ab42c79b9947246416c71147315006b6e618b1f6",
     "latest_tested_wheels": {
-      "nexus": "bdcaa07b84f826a6b87d055b8eddc2daad14472c264a5269f3aea79381878d61",
+      "nexus": "d07e746c8e71b842eb944ecd0244432cb66a7098bc0f599a91474c1422e30a44",
       "connector": "93d78a75c5ad81bbdd96e648be136f0f6b2cfd0a53f350266a1c9f96fc449104",
       "core": "7f19885f28b16dbfce66b969ab42c79b9947246416c71147315006b6e618b1f6"
     },
     "closed_product_gates": [],
     "evidence": [
+      "plans/r4_execution/M10_OFFLINE_RECOVERY.md",
       "plans/r4_execution/M10_SESSION_BROWSER.md",
       "plans/r4_execution/M10_SESSION_HISTORY_UI.md",
       "plans/r4_execution/M10_NATIVE_DECISIONS_UI.md",
@@ -35,9 +36,9 @@
       "plans/r4_execution/M12_NS15_05_ACCEPTANCE.md",
       "plans/r4_execution/M12_NS15_05_OPERATIONAL_RECONCILIATION.md"
     ],
-    "latest_increment": "Authenticated paginated session list and selected-connection browser for closed and active session event history.",
-    "verification_scope": "Eight installed Windows/Edge checks and one supplemental visual browser check passed with unchanged inputs, including session authority, pagination, event navigation and NS15.05. Contract mapping covers 27 catalogue routes. Actual provider and independent-host qualification remains separate.",
-    "clean_install_scope": "Coordinated clean-install evidence predates the latest Nexus session-browser wheel. Final current tuple clean installation remains required.",
+    "latest_increment": "Offline/stale inventory retains authorized binding and operation visibility for read-only recovery; execution eligibility remains disabled.",
+    "verification_scope": "Seventeen installed Windows/Edge checks passed with unchanged inputs, including a synthetic native effect with lost confirmation, two browser reloads without replay, policy restrictions and NS15.05. Native outcome reconciliation remains open.",
+    "clean_install_scope": "Coordinated clean-install evidence predates the latest Nexus offline-recovery wheel. Final current tuple clean installation remains required.",
     "macos": {
       "source_commit": "1975e88",
       "plan_commit": "7a84ff98e9cd559dd24309f1275f9aa54693f6c3",
