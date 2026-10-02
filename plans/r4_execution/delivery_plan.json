@@ -10,7 +10,7 @@
     "branch": "feature/v0.2.0",
     "historical_checkpoint": "plans/r4_execution/evidence/delivery-checkpoint-20260930.json",
     "published_heads": {
-      "nexus": "2e5c43dd9a8e52d038f0e38ae9be1b5564d1ecc6",
+      "nexus": "e9dc2e81201872dde36ad1d5b53561627e5ca133",
       "connector": "ad0933e0f71b71fc6d8d420db4c77c1d9c60836c",
       "core": "7a84ff98e9cd559dd24309f1275f9aa54693f6c3"
     },
@@ -18,12 +18,13 @@
     "shared_core_version": "0.2.56.dev0",
     "shared_core_wheel_sha256": "7f19885f28b16dbfce66b969ab42c79b9947246416c71147315006b6e618b1f6",
     "latest_tested_wheels": {
-      "nexus": "74c549b93a9c7b312ddad19c2642ff3bd4edfc7d7b95eb2fae832766b8502cf5",
+      "nexus": "bdcaa07b84f826a6b87d055b8eddc2daad14472c264a5269f3aea79381878d61",
       "connector": "93d78a75c5ad81bbdd96e648be136f0f6b2cfd0a53f350266a1c9f96fc449104",
       "core": "7f19885f28b16dbfce66b969ab42c79b9947246416c71147315006b6e618b1f6"
     },
     "closed_product_gates": [],
     "evidence": [
+      "plans/r4_execution/M10_SESSION_BROWSER.md",
       "plans/r4_execution/M10_SESSION_HISTORY_UI.md",
       "plans/r4_execution/M10_NATIVE_DECISIONS_UI.md",
       "plans/r4_execution/M10_RUNTIME_OPERATIONS.md",
@@ -34,9 +35,9 @@
       "plans/r4_execution/M12_NS15_05_ACCEPTANCE.md",
       "plans/r4_execution/M12_NS15_05_OPERATIONAL_RECONCILIATION.md"
     ],
-    "latest_increment": "Selected-session event history: bounded pagination, scope/cursor validation, gap warnings and read-only reload in Runtime operations.",
-    "verification_scope": "Seven installed Windows/Edge checks passed with unchanged inputs, including history replay, runtime cycle, canonical event API and NS15.05. The earlier real uninstrumented Pi CLI cycle passed on the preceding native-decision UI wheel; provider/browser and independent-host qualification remain distinct.",
-    "clean_install_scope": "Coordinated clean-install evidence predates the latest Nexus session-history UI wheel. Final current tuple clean installation remains required.",
+    "latest_increment": "Authenticated paginated session list and selected-connection browser for closed and active session event history.",
+    "verification_scope": "Eight installed Windows/Edge checks and one supplemental visual browser check passed with unchanged inputs, including session authority, pagination, event navigation and NS15.05. Contract mapping covers 27 catalogue routes. Actual provider and independent-host qualification remains separate.",
+    "clean_install_scope": "Coordinated clean-install evidence predates the latest Nexus session-browser wheel. Final current tuple clean installation remains required.",
     "macos": {
       "source_commit": "1975e88",
       "plan_commit": "7a84ff98e9cd559dd24309f1275f9aa54693f6c3",
@@ -50,7 +51,7 @@
       "prototype_validation": "Five portable Windows passes and three Unix skips; eight WSL passes including native fixture descriptor handoff. Native Mac launchd reports pending."
     },
     "remaining": [
-      "Complete remaining M10 cross-session history and uncertain-session recovery, onboarding, US English/accessibility and actual remote/provider browser acceptance, including native decisions.",
+      "Complete remaining M10 archive access independent of installation selection, uncertain-session recovery, onboarding, US English/accessibility and actual remote/provider browser acceptance.",
       "Resolve or delimit Pi stream-loss reproduction with sufficient provider evidence; complete required provider/platform/Python/fault matrix.",
       "Implement native macOS containment and qualify each provider independently on the user-operated Intel Mac.",
       "Freeze final immutable three-repository tuple, build packages and verify clean installations without checkout dependencies.",
