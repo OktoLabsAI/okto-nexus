@@ -12,11 +12,21 @@ journey. Use the implemented authenticated R4 HTTP and Connector CLI flows for
 development validation; do not treat the legacy connection command as remote
 Connector setup. Full browser acceptance remains pending.
 
-The runtime-options projection currently reports all eligibility flags as false;
-workspace-aware eligibility remains incomplete. The subject and an authenticated
-operator can inspect its executor-owned technical facts. This projection is not
-yet a complete onboarding decision. The contract's inventory-refresh HTTP route
-is still pending.
+Request runtime options with `executor_id` and, for binding/start eligibility,
+the explicitly selected `workspace_id`. The subject and an authenticated operator
+can inspect executor-owned technical facts. Eligibility combines current inventory
+freshness, connectivity, configuration and authorization in one transaction.
+Preparation can remain available for an unqualified installation, but start
+requires `READY_FOR_RUNTIME`, an approved current binding and execution authority.
+Reads neither consume grants nor create operations. Missing or ambiguous choices
+remain blocked with separate policy reasons; Core's technical assessment is
+preserved. Eligibility is a preview, and admission revalidates current authority.
+
+An operator inspecting another agent currently receives
+`SUBJECT_IDENTITY_REQUIRED` for start: the public intent route still requires
+that subject's authenticated identity. Operator inspection does not create an
+agent credential or delegate execution. The contract's inventory-refresh HTTP
+route and complete browser onboarding remain pending.
 
 Read the current binding with `GET /v1/connections/bindings/{binding_id}` as its
 subject or an operator. It returns the current references, revisions and canonical

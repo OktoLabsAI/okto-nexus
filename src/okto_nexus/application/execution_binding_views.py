@@ -1,15 +1,17 @@
 """Current canonical binding facts, without provider discovery or execution."""
 
+from contextlib import nullcontext
+
 from ..adapters.outbound.sqlite.execution_agent_revisions import current_agent_revisions
 from ..errors import ErrorCode, OktoNexusError
 
 
-def read_execution_binding(factory, *, server_id, binding_id, context, access):
+def read_execution_binding(factory, *, server_id, binding_id, context, access, uow=None):
     if not isinstance(binding_id, str) or not 1 <= len(binding_id) <= 160:
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid binding ID.", {})
     # Revision materialization shares the authorization snapshot. As with /me,
     # it may advance revision counters, but never creates authority or work.
-    with factory.unit_of_work() as uow:
+    with nullcontext(uow) if uow is not None else factory.unit_of_work() as uow:
         operator = access.authenticate(context, uow=uow, require_feature=False)
         conn = uow.connection
         row = conn.execute(

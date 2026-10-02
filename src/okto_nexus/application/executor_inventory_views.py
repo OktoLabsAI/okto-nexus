@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import time
+from contextlib import nullcontext
 
 from ..errors import ErrorCode, OktoNexusError
 
@@ -15,13 +16,13 @@ def read_executor_inventory(factory, *, server_id: str, executor_id: str,
                             agent_id: str,
                             fresh_publications: dict,
                             monotonic_now: float | None = None,
-                            context=None, access=None) -> dict:
+                            context=None, access=None, uow=None) -> dict:
     """Read only the authenticated agent's executor and current projection.
 
     After restart the in-memory receipt time is gone. A persisted snapshot
     remains viewable but cannot be treated as fresh for new execution.
     """
-    with factory.unit_of_work(write=False) as uow:
+    with nullcontext(uow) if uow is not None else factory.unit_of_work(write=False) as uow:
         operator = False
         if context is not None or access is not None:
             if context is None or access is None:
@@ -68,35 +69,3 @@ def read_executor_inventory(factory, *, server_id: str, executor_id: str,
         freshness = "FRESH"
     return {"snapshot": snapshot, "freshness": freshness,
             "eligible_for_new_start": False}
-
-
-def runtime_options_from_inventory(*, agent_id: str, inventory_view: dict) -> dict:
-    """Keep Core's technical assessment separate from Nexus authority."""
-    snapshot = inventory_view["snapshot"]
-    freshness = inventory_view["freshness"]
-    options = []
-    for row in snapshot["availability"]["availability"]:
-        policy_reasons = ["BINDING_REQUIRED"]
-        if freshness == "OFFLINE":
-            policy_reasons.insert(0, "EXECUTOR_OFFLINE")
-        elif freshness != "FRESH":
-            policy_reasons.insert(0, "INVENTORY_STALE")
-        if row["state"] != "READY_FOR_RUNTIME":
-            policy_reasons.append("TECHNICAL_NOT_READY")
-        options.append({
-            "adapter_id": row["adapter_id"],
-            "candidate_ref": row["candidate_ref"],
-            "label": row["label"],
-            "technical_state": row["state"],
-            "technical_reasons": list(row["reasons"]),
-            "can_prepare": False,
-            "can_bind": False,
-            "can_start": False,
-            "policy_reasons": policy_reasons,
-        })
-    return {"agent_id": agent_id,
-            "executor_id": snapshot["executor_id"],
-            "inventory_revision": snapshot["inventory_revision"],
-            "catalog": snapshot["catalog"],
-            "availability": snapshot["availability"],
-            "freshness": freshness, "options": options}

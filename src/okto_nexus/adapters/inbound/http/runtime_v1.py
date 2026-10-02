@@ -21,8 +21,9 @@ from ....application.execution_capabilities import ExecutionCapabilityService
 from ....bootstrap.execution_authority import build_execution_access
 from ....domain.runtime_context import RuntimeRequestContext
 from ....application.executor_inventory_views import (
-    read_executor_inventory, runtime_options_from_inventory,
+    read_executor_inventory,
 )
+from ....application.execution_runtime_options import read_runtime_options
 from ....domain.execution.keys import ExecutorKey
 from ....errors import ErrorCode, OktoNexusError
 from ...outbound.execution.core_inventory import protocol_info
@@ -618,30 +619,30 @@ def build_router() -> APIRouter:
 
     @router.get("/agents/{agent_id}/runtime-options")
     async def runtime_options(agent_id: str, executor_id: str,
-                              request: Request) -> JSONResponse:
+                              request: Request, workspace_id: str | None = None) -> JSONResponse:
         agent = get_authenticated_agent()
         if agent is None:
             return v1_err(401, "AUTH_FAILED", "Authentication is required.")
+        query = request.query_params
+        if set(query) - {'executor_id', 'workspace_id'} or len(query.multi_items()) != len(query):
+            return v1_err(422, 'VALIDATION_ERROR', 'Invalid runtime-options query.')
         factory = request.app.state.deps.connection_factory
 
         def _read():
             server_id = ensure_execution_installation(factory).server_id
-            return read_executor_inventory(
+            return read_runtime_options(
                 factory, server_id=server_id, executor_id=executor_id,
-                agent_id=agent_id,
+                agent_id=agent_id, workspace_id=workspace_id,
                 fresh_publications=request.app.state.inventory_fresh_publications,
                 context=RuntimeRequestContext(agent.agent_id, 'agent_key', credential_binding=agent.api_key_hash),
                 access=build_execution_access(request.app.state.deps),
+                remote_ready=protocol_info()['remote_execution_ready'],
             )
 
         try:
             view = await anyio.to_thread.run_sync(_read)
         except OktoNexusError as error:
             return runtime_error(error, 'runtime-options.read')
-        return JSONResponse(
-            runtime_options_from_inventory(agent_id=agent_id,
-                                           inventory_view=view),
-            headers={"Cache-Control": "no-store"},
-        )
+        return JSONResponse(view, headers={"Cache-Control": "no-store"})
 
     return router
