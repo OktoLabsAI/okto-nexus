@@ -2,6 +2,16 @@
 
 ## Current acceptance reconciliation: executable Core .53
 
+Connector `d2e240eb21c6a40523d2a5bb585cc0b44285c4b8` isolates cleanup-ordering
+acceptance from its synthetic lease clock: a delayed event loop reproduced the
+pre-renewal timeout, then both normal/delayed cases passed with the shared public
+Core clock. A separate expiry case refuses another renewal request. The same 59
+installed cases passed on Windows and WSL Linux; after adding failure-observer
+diagnostics, 43 overlapping cases passed on each. Product/package bytes and
+three-second observation limits are unchanged. The exact hosted cause and four
+other Connector timeouts remain unconfirmed. See the
+[Connector report](https://github.com/OktoLabsAI/okto-nexus-connector/blob/d2e240eb21c6a40523d2a5bb585cc0b44285c4b8/plans/implementation/CI_RENEWAL_SCHEDULING.md).
+
 Writer admission now rechecks its deadline after notification, before taking a
 free slot. Two controlled-clock cases failed before and pass after the fix;
 29 installed checks passed on each of Windows/Python 3.13.1 and WSL Linux/Python
