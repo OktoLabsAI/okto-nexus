@@ -151,36 +151,40 @@ def test_failed_native_start_persists_quarantine_and_boot_cannot_replay(runtime)
     assert starts == [1]
 
 
-def test_global_boot_budget_defers_remaining_bindings_and_retains_stuck_slot(runtime):
-    import threading
-    import time
+@pytest.mark.parametrize("budget_seconds, expected_timeout", [(0.1, 0.1), (60, 30), (0, None)])
+def test_global_boot_budget_defers_remaining_bindings(runtime, monkeypatch, budget_seconds, expected_timeout):
+    from types import SimpleNamespace
+    from okto_nexus.application import runtime_boot
     from okto_nexus.application.runtime_boot import RuntimeBootService
-    from okto_nexus.adapters.inbound.mcp.tools.harness import build_open_service, build_connector_factories
+    from okto_nexus.adapters.inbound.mcp.tools.harness import build_connector_factories
     from okto_nexus.adapters.outbound.sqlite.endpoints_repo import SqliteEndpointRepo
     deps = runtime[0]
     for endpoint in ("endpoint-codex", "endpoint-pi"):
         assert configure(runtime, endpoint).status_code == 200
-    release, started = threading.Event(), threading.Event()
-    original = deps.harness_connector_factories["codex"]
-    def construct(**kwargs):
-        peer = original(**kwargs)
-        start = peer.start
-        def blocked(**args):
-            started.set()
-            assert release.wait(5)
-            return start(**args)
-        peer.start = blocked
-        return peer
-    deps.harness_connector_factories["codex"] = construct
+    # Control only the boot service's clock, leaving HTTP owner threads alone.
+    # Native stuck-slot retention is exercised independently in
+    # test_runtime_process_ownership::test_wedged_starts_and_controls_hold_bounded_slots.
+    clock = SimpleNamespace(now=0.0)
+    monkeypatch.setattr(runtime_boot, "time", SimpleNamespace(monotonic=lambda: clock.now))
+    calls = []
+    def timed_out(context, **kwargs):
+        calls.append((context, kwargs))
+        clock.now += kwargs["startup_timeout_s"]
+        raise OktoNexusError("INTERNAL_ERROR", "fixture exhausted startup budget")
     service = RuntimeBootService(connection_factory=deps.connection_factory, endpoints=SqliteEndpointRepo(),
-        registry=build_connector_factories(deps), open_service=build_open_service(deps),
+        registry=build_connector_factories(deps), open_service=SimpleNamespace(open=timed_out),
         owner_id=deps.runtime_dispatcher.owner_id, owner_epoch=deps.runtime_dispatcher.epoch)
-    began = time.monotonic()
-    try:
-        result = service.run(budget_seconds=.1)
-        assert time.monotonic() - began < 1
-        assert started.is_set()
-        assert result[0]["state"] == "blocked" and result[1]["state"] == "deferred"
-        assert len(runtime[3]) == 1 and not deps.harness_supervisor.list_live()
-    finally:
-        release.set()
+    result = service.run(budget_seconds=budget_seconds)
+    assert [item["endpoint_id"] for item in result] == ["endpoint-codex", "endpoint-pi"]
+    if expected_timeout is None:
+        assert not calls
+        assert all(item["state"] == "deferred" for item in result)
+    else:
+        assert len(calls) == 1
+        context, kwargs = calls[0]
+        assert context.authentication_source == "runtime_boot"
+        assert kwargs["endpoint_id"] == "endpoint-codex"
+        assert kwargs["startup_timeout_s"] == pytest.approx(expected_timeout)
+        assert result[0]["state"] == "blocked" and result[0]["reason"] == "INTERNAL_ERROR"
+    assert result[1] == {"endpoint_id": "endpoint-pi", "state": "deferred", "reason": "startup_budget"}
+    assert not runtime[3] and not deps.harness_supervisor.list_live()

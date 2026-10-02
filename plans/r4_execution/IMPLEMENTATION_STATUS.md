@@ -2,11 +2,16 @@
 
 ## Current acceptance reconciliation: executable Core .53
 
+Boot-budget accounting now has deterministic coverage, with independent real-thread
+stuck-slot checks retained. Fourteen installed tests passed with unchanged inputs.
+Historical CI is terminal and Windows findings still require diagnosis; no release
+gate is closed. See [budget scope and remaining findings](M13_CI_BOOT_BUDGET.md).
+
 Embedded execution, renewal and maintenance now preserve the first failure instead
 of replacing its diagnostic during containment. A new development wheel passed 48
 installed checks with unchanged inputs, including vault refusal and shutdown recovery.
-Hosted confirmation remains pending; NS14 contention and boot-budget timing remain
-open. See [failure-cause evidence and CI queue reconciliation](M13_CI_FAILURE_CAUSE.md).
+Hosted confirmation and NS14 contention remain pending. The boot-budget fixture
+is addressed above. See [failure-cause evidence and CI queue reconciliation](M13_CI_FAILURE_CAUSE.md).
 
 Native factory cutover and canonical session reuse passed 42 installed checks
 with unchanged inputs. Production tests now assert migration refusal for retired
