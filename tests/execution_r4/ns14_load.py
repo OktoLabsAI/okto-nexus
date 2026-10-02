@@ -3,8 +3,10 @@ import asyncio
 import json
 import os
 import platform
+import sys
 import threading
 import time
+import traceback
 import tracemalloc
 
 from fastapi.testclient import TestClient
@@ -64,16 +66,46 @@ def second_executor(state, root):
     return executor, revisions, lane, link
 
 
+def refresh_inventory(state, root, client):
+    deps, app, _, _, _, channel, _, _ = state
+    binary = root / "codex.exe"
+    candidate = InstallationCandidate("codex_app_server", str(binary), fingerprint(binary), "explicit", "selected")
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        current = uow.connection.execute(
+            "SELECT publication_sequence,inventory_revision FROM execution_inventory_current "
+            "WHERE server_id=? AND executor_id=?", (channel.server_id, channel.executor_id)).fetchone()
+    refreshed = build_executor_inventory_snapshot([candidate], server_id=channel.server_id,
+        executor_id=channel.executor_id, producer_instance_id=channel.connection_id,
+        publication_sequence=current["publication_sequence"] + 1)
+    assert refreshed["inventory_revision"] == current["inventory_revision"]
+    published = client.put(f"/v1/runtime/executors/{channel.executor_id}/inventory",
+        headers={"Authorization": "Bearer " + app.state.test_opening_ticket}, json=refreshed)
+    assert published.status_code == 200, published.text
+    assert published.json()["publication_sequence"] == current["publication_sequence"] + 1
+    assert published.json()["fresh_for_ms"] > 0
+
+
 def run_load(state, root, record_property):
     deps, app, access, _, _, first, opened, _ = state
     factory = deps.connection_factory
     client = TestClient(app, base_url="https://127.0.0.1:8202")
     auth = app.state.auth
+    async def executor_snapshot():
+        # Test-only introspection of the actual CPython executor. Its lazy
+        # expansion is bounded by its configured capacity, not a +4 heuristic.
+        pool = asyncio.get_running_loop()._default_executor
+        assert pool is not None
+        return dict(identity=id(pool), limit=pool._max_workers,
+                    threads=[thread.ident for thread in pool._threads])
+    def pool_snapshot():
+        return app.state.test_opening_socket.portal.call(executor_snapshot)
     now = deps.clock.now_iso()
     count = 100_000
     last_heartbeat = 0.0
-    def heartbeat():
-        nonlocal last_heartbeat
+    last_maintenance = time.monotonic()
+    lease_serial = 1  # decision_state applied the initial fixture lease.
+    def heartbeat(*, maintain=False):
+        nonlocal last_heartbeat, last_maintenance, lease_serial
         if time.monotonic() - last_heartbeat >= 5:
             app.state.test_opening_socket.send_text(encode_r4_frame(dict(
                 protocol_major=1, contract_revision=R4_PREVIEW_REVISION, type="heartbeat",
@@ -81,6 +113,36 @@ def run_load(state, root, record_property):
                 connection_id=first.connection_id,
                 connection_generation=first.connection_generation)).decode())
             last_heartbeat = time.monotonic()
+        if maintain or time.monotonic() - last_maintenance >= 30:
+            refresh_inventory(state, root, client)
+            ws = app.state.test_opening_socket
+            renewal = dict(protocol_major=1, contract_revision=R4_PREVIEW_REVISION,
+                type="lease.renew", request_id=f"load-renew-{lease_serial}",
+                grant_id=state[4]["grant_id"], expected_lease_serial=lease_serial,
+                purpose="renew", scope=opened["scope"], connection_id=first.connection_id,
+                connection_generation=first.connection_generation)
+            raw = encode_r4_frame(renewal).decode()
+            ws.send_text(raw)
+            granted = ws.receive_json()
+            assert granted["type"] == "lease.granted", granted
+            assert granted["request_id"] == renewal["request_id"]
+            assert granted["scope"] == opened["scope"]
+            assert granted["lease_serial"] == lease_serial + 1
+            ack = {key: granted[key] for key in ("protocol_major", "contract_revision", "request_id",
+                "grant_id", "lease_id", "lease_serial", "scope")}
+            ack.update(type="lease.applied", application_stage="RENEWED",
+                connection_id=first.connection_id, connection_generation=first.connection_generation)
+            ws.send_text(encode_r4_frame(ack).decode())
+            # Sequential wire replay observes the preceding ACK commit. It must
+            # return the same grant, not create another lease or extend expiry.
+            ws.send_text(raw)
+            assert ws.receive_json() == granted
+            with factory.unit_of_work(write=False) as uow:
+                row = uow.connection.execute("SELECT status,lease_serial FROM execution_leases WHERE lease_id=?",
+                    (granted["lease_id"],)).fetchone()
+                assert tuple(row) == ("ACTIVE", lease_serial + 1)
+            lease_serial += 1
+            last_maintenance = time.monotonic()
     heartbeat()
     for offset in range(0, count, 500):
         heartbeat()
@@ -89,7 +151,7 @@ def run_load(state, root, record_property):
                 ((f"load-{i}", now, hash_api_key("nxs_" + format(i, "048x"))) for i in range(offset, offset + 500)))
         time.sleep(.001)
     threads_before_snapshot = [(t.ident, t.name) for t in threading.enumerate()]
-    threads_before = len(threads_before_snapshot)
+    pool_before = pool_snapshot()
     samples = []
     write_batches = []
     started = time.perf_counter()
@@ -121,36 +183,32 @@ def run_load(state, root, record_property):
     identity_seconds = time.perf_counter() - started
     assert samples[-1]["current_bytes"] < samples[0]["current_bytes"] * 1.5 + 524288
     threads_after_snapshot = [(t.ident, t.name) for t in threading.enumerate()]
+    pool_after = pool_snapshot()
+    frames = sys._current_frames()
+    before_ids = {ident for ident, _ in threads_before_snapshot}
+    new_stacks = {str(ident): [(os.path.basename(frame.filename), frame.name, frame.lineno)
+                              for frame in traceback.extract_stack(frames[ident])]
+                  for ident, _ in threads_after_snapshot if ident not in before_ids and ident in frames}
+    del frames
     record_property("identity_threads", json.dumps(dict(
-        before=threads_before_snapshot, after=threads_after_snapshot)))
-    assert len(threads_after_snapshot) <= threads_before + 4
+        before=threads_before_snapshot, after=threads_after_snapshot, new_stacks=new_stacks,
+        pool_before=pool_before, pool_after=pool_after)))
+    assert pool_after["identity"] == pool_before["identity"]
+    assert pool_after["limit"] == pool_before["limit"]
+    assert len(pool_after["threads"]) <= pool_after["limit"]
+    outside_before = {ident for ident, _ in threads_before_snapshot} - set(pool_before["threads"])
+    outside_after = {ident for ident, _ in threads_after_snapshot} - set(pool_after["threads"])
+    assert len(outside_after - outside_before) <= 4
     with factory.unit_of_work(write=False) as uow:
         plan = [r[3] for r in uow.connection.execute(
             "EXPLAIN QUERY PLAN SELECT * FROM agents WHERE api_key_hash=? AND is_active=1",
             (hash_api_key("nxs_" + format(0, "048x")),))]
     assert any("SEARCH" in line and "INDEX" in line for line in plan)
 
-    heartbeat()
-    # Identity churn can outlive the 120 s inventory freshness window. Observe
-    # the fixture binary again and publish through the authenticated API, as a
-    # live executor would; replaying or re-anchoring old evidence is not enough.
-    binary = root / "codex.exe"
-    candidate = InstallationCandidate("codex_app_server", str(binary), fingerprint(binary), "explicit", "selected")
-    with factory.unit_of_work(write=False) as uow:
-        current = uow.connection.execute(
-            "SELECT c.publication_sequence,c.inventory_revision,s.producer_instance_id "
-            "FROM execution_inventory_current c JOIN execution_inventory_snapshots s "
-            "USING(server_id,executor_id,publication_sequence) WHERE c.server_id=? AND c.executor_id=?",
-            (first.server_id, first.executor_id)).fetchone()
-    refreshed = build_executor_inventory_snapshot([candidate], server_id=first.server_id,
-        executor_id=first.executor_id, producer_instance_id=first.connection_id,
-        publication_sequence=current["publication_sequence"] + 1)
-    assert refreshed["inventory_revision"] == current["inventory_revision"]
-    published = client.put(f"/v1/runtime/executors/{first.executor_id}/inventory",
-        headers={"Authorization": "Bearer " + app.state.test_opening_ticket}, json=refreshed)
-    assert published.status_code == 200, published.text
-    assert published.json()["publication_sequence"] == current["publication_sequence"] + 1
-    assert published.json()["fresh_for_ms"] > 0
+    # The synthetic peer must maintain its real authority during a slow load,
+    # just as an executor does. Neither inventory nor lease TTL is extended.
+    heartbeat(maintain=True)
+    record_property("load_lease_serial", lease_serial)
     executor, revisions, lane, link = second_executor(state, root)
     from okto_nexus.adapters.inbound.http import executor_link
     info = executor_link.protocol_info()

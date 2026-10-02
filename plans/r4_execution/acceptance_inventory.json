@@ -1482,7 +1482,7 @@
         "plans/r4_execution/test_runs_20261001_capacity_metrics.json",
         "plans/r4_execution/test_runs_20261001_ns14_04.json"
       ],
-      "notes": "Historical TR4-14-04 installed load pass retained. October 2 Windows CI exposed expired fixture inventory; corrected authenticated republication passed installed Windows/Python 3.13.1 with 100k identities, bounded cache/memory, flooded quotas, reserved control and second executor progress. See M13_CI_LOAD_REFRESH.md. Linux/Python 3.12 SQLite contention remains unresolved; no full-matrix or independent-host acceptance. Synthetic transport sinks; task dependencies and broader milestone acceptance remain open."
+      "notes": "Historical TR4-14-04 evidence retained. October 2 FIFO writer admission shares the existing SQLite budget; final installed Windows/Python 3.13.1 and WSL Linux/Python 3.12.13 load passed with 100k identities, actual bounded executor pool, bounded cache/memory, flooded quotas, reserved control and second executor progress. The synthetic peer periodically republishes observed inventory and renews/applies its lease through authenticated HTTP/WSS; no TTL or timestamp is forced. See M13_WRITER_FAIRNESS.md and its failed and passing campaigns. No full-matrix, cross-process FIFO, real provider or independent-host acceptance. Task dependencies and broader milestone acceptance remain open."
     },
     "NS14.05": {
       "proposed_nodeid": "tests/execution_r4/test_ns14.py::test_ns14_05",

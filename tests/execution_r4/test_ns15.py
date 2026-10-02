@@ -27,7 +27,7 @@ def test_tn40(tmp_path, monkeypatch, request, qualified_contract):
     restore_case(tmp_path, monkeypatch, request, backfilled_policies=True)
 
 
-def test_ns15_05():
+def test_ns15_05(tmp_path):
     """Documentation commands/routes and shipped HTTP-only dashboard guidance."""
     import importlib.util
     import okto_nexus
@@ -36,7 +36,9 @@ def test_ns15_05():
     spec = importlib.util.spec_from_file_location('ns15_docs_audit', path)
     audit = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(audit)
-    audit.main()
+    report_path = tmp_path / 'documentation-audit.json'
+    audit.main(['--output', str(report_path)])
+    assert json.loads(report_path.read_text(encoding='utf-8'))['status'] == 'PASSED'
     package = Path(okto_nexus.__file__).resolve().parent
     resources = (package / 'adapters/inbound/mcp/resources_docs.py').read_text(encoding='utf-8')
     assert 'authenticated stdio proxy' not in resources

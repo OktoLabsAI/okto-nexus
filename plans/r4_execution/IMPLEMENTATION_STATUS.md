@@ -2,6 +2,15 @@
 
 ## Current acceptance reconciliation: executable Core .53
 
+SQLite writers now enter a FIFO queue within their connection factory, sharing
+the existing timeout with SQLite and preserving read snapshots and no replay.
+Installed Linux regression passed 42 checks. Final load/docs/vault/lease campaigns
+passed 24 checks on Windows and 23 with one platform skip on Linux. The load
+fixture now checks actual executor-pool bounds and maintains real inventory and
+lease authority over HTTP/WSS. NS15.05 no longer consumes pytest arguments or
+overwrites the default evidence artifact from its test. Full hosted and
+independent-host acceptance remain open; see [scope and artifacts](M13_WRITER_FAIRNESS.md).
+
 Two installed Linux/Python 3.12.13 NS14.04 runs failed the unchanged thread-growth
 assertion. Identity transactions stayed below 228 ms; the instrumented run added
 11 default asyncio pool threads while named Nexus workers stayed unchanged.

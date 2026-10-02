@@ -31,6 +31,7 @@ from ....errors import (
     is_retryable_db_exception,
 )
 from ..waiter import SleepPollWaiter
+from .write_gate import WriteGate
 
 # Retry budget for the one-time WAL conversion of a fresh database (see
 # ConnectionFactory._enable_wal): attempts x sleep bounds the wait to ~1s.
@@ -47,23 +48,39 @@ class SqliteUnitOfWork:
     opens a deferred read snapshot.
     """
 
-    def __init__(self, connection: sqlite3.Connection, write: bool = True, before_write=None) -> None:
+    def __init__(self, connection: sqlite3.Connection, write: bool = True, before_write=None,
+                 writer_gate=None, busy_timeout_ms=5000) -> None:
         self.connection = connection
         self._write = write
         self._active = False
         self._before_write = before_write
+        self._writer_gate = writer_gate if write else None
+        self._busy_timeout_ms = busy_timeout_ms
+        self._gate_acquired = False
 
     def __enter__(self) -> "SqliteUnitOfWork":
         statement = "BEGIN IMMEDIATE" if self._write else "BEGIN"
         try:
+            if self._writer_gate is not None:
+                try:
+                    remaining = self._writer_gate.acquire(self._busy_timeout_ms / 1000)
+                except TimeoutError as exc:
+                    raise OktoNexusError(ErrorCode.DB_ERROR,
+                        "SQLite writer admission timed out. Retry the transaction.", {}, retryable=True) from exc
+                self._gate_acquired = True
+                self.connection.execute(f"PRAGMA busy_timeout={int(remaining * 1000)}")
             self.connection.execute(statement)
+            if self._gate_acquired:
+                self.connection.execute(f"PRAGMA busy_timeout={int(self._busy_timeout_ms)}")
             if self._write and self._before_write:
                 self._before_write(self.connection)
-        except sqlite3.Error as exc:
+        except BaseException as exc:
             # __exit__ never runs when __enter__ raises: close the connection
             # here. Lock/busy contention surfaces as a retryable DB_ERROR.
-            self.connection.close()
-            raise db_error_from_exception("starting a transaction", exc) from exc
+            self._close()
+            if isinstance(exc, sqlite3.Error):
+                raise db_error_from_exception("starting a transaction", exc) from exc
+            raise
         self._active = True
         return self
 
@@ -74,9 +91,17 @@ class SqliteUnitOfWork:
             else:
                 self.commit()
         finally:
-            self.connection.close()
+            self._close()
         # Do not suppress exceptions raised inside the with-block.
         return False
+
+    def _close(self):
+        try:
+            self.connection.close()
+        finally:
+            if self._gate_acquired:
+                self._gate_acquired = False
+                self._writer_gate.release()
 
     def commit(self) -> None:
         if self._active:
@@ -103,6 +128,7 @@ class ConnectionFactory:
         # by a lock because FastMCP may run tool calls on multiple threads.
         self._probe_conn: sqlite3.Connection | None = None
         self._probe_lock = threading.Lock()
+        self._writer_gate = WriteGate()
         self.ensure_home_dir()
 
     @property
@@ -262,7 +288,8 @@ class ConnectionFactory:
         ``write=False`` ONLY for scopes that never write (deferred snapshot
         read that does not queue behind writers).
         """
-        return SqliteUnitOfWork(self.get_connection(), write=write, before_write=self._sync_runtime_writer_mode)
+        return SqliteUnitOfWork(self.get_connection(), write=write, before_write=self._sync_runtime_writer_mode,
+                               writer_gate=self._writer_gate, busy_timeout_ms=self._config.busy_timeout_ms)
 
     def configure_runtime_owner(self, owner_id, epoch, *, clock=None):
         self._runtime_owner = (owner_id, epoch) if owner_id is not None else None

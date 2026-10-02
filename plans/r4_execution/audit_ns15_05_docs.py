@@ -19,10 +19,10 @@ import sys
 import okto_nexus
 
 
-def main():
+def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('--output', type=Path, help='Write a separate evidence artifact for this campaign')
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     root = Path(__file__).resolve().parents[2]
     package = Path(okto_nexus.__file__).resolve().parent
     assert not package.is_relative_to(root), 'Use an installed interpreter with -I'
