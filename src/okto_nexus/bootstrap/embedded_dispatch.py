@@ -199,7 +199,10 @@ class EmbeddedDispatchOwner:
         except Exception as error:
             # A SENDING reservation has crossed the dispatch fence. Preserve it
             # for reconciliation; neither synthesize a receipt nor retry work.
-            self.failure = error
+            # Other in-flight producers may fail as containment begins. Keep
+            # the initiating diagnostic instead of replacing it with shutdown.
+            if self.failure is None:
+                self.failure = error
             await self.failed()
 
     async def _execute(self, frame):
@@ -315,7 +318,8 @@ class EmbeddedDispatchOwner:
                 session["renew_at"] = time.monotonic() + max(0,applied.context.lease_deadline_monotonic-time.monotonic())/2
         except Exception as error:
             if self.sessions.get(session_id) is session:
-                self.failure = error
+                if self.failure is None:
+                    self.failure = error
                 await self.failed()
 
     async def _maintain(self):
@@ -341,7 +345,8 @@ class EmbeddedDispatchOwner:
                 except asyncio.TimeoutError:
                     pass
         except Exception as error:
-            self.failure = error
+            if self.failure is None:
+                self.failure = error
             await self.failed()
 
     def _start_close(self):

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="3" time="0.646" timestamp="2026-10-02T04:20:20.008080-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_embedded_failure_cause" name="test_secondary_producer_failure_preserves_first_cause[execute]" time="0.005"><failure message="AssertionError: assert [CoreError('P...tting down.')] == [CoreError('P...TH_REQUIRED')]&#10;  &#10;  At index 1 diff: RuntimeError('The embedded Core host is shutting down.') != CoreError('PROVIDER_AUTH_REQUIRED')&#10;  Use -v to get more diff">later_producer = 'execute'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("later_producer", ["execute", "renew", "maintain"])
+    async def test_secondary_producer_failure_preserves_first_cause(later_producer):
+        # Unit boundary: isolate producer error arbitration from real containment,
+        # which provider-vault and shutdown integration suites exercise separately.
+        owner = object.__new__(EmbeddedDispatchOwner)
+        owner.failure = None
+        owner._stopping = asyncio.Event()
+        first_seen = asyncio.Event()
+        observed = []
+        primary = CoreError("PROVIDER_AUTH_REQUIRED", "provider_vault", retry_safe=True)
+        secondary = RuntimeError("The embedded Core host is shutting down.")
+    
+        async def contain(*args):
+            # Preserve failed() error recording after its production refactor,
+            # while replacing only containment and store activity below it.
+            if args and owner.failure is None:
+                owner.failure = args[0]
+            observed.append(owner.failure)
+            first_seen.set()
+    
+        async def execute(frame):
+            if frame == "primary":
+                raise primary
+            await first_seen.wait()
+            raise secondary
+    
+        async def renew(**kwargs):
+            await first_seen.wait()
+            raise secondary
+    
+        def page():
+            raise secondary
+    
+        owner.failed = contain
+        owner._execute = execute
+        owner._page = page
+        owner.channel = SimpleNamespace(connection_id="fixture", connection_generation=1)
+        owner._request_grant = None
+        session = dict(gate=asyncio.Lock(), executor=SimpleNamespace(renew_r4=renew), scope={}, renew_at=None)
+        owner.sessions = {"session": session}
+    
+        async def later():
+            await first_seen.wait()
+            if later_producer == "execute":
+                await owner._execute_owned("secondary")
+            elif later_producer == "renew":
+                await owner._renew_owned("session", session)
+            else:
+                await owner._maintain()
+    
+        await asyncio.wait_for(asyncio.gather(owner._execute_owned("primary"), later()), 5)
+&gt;       assert observed == [primary, primary]
+E       AssertionError: assert [CoreError('P...tting down.')] == [CoreError('P...TH_REQUIRED')]
+E         
+E         At index 1 diff: RuntimeError('The embedded Core host is shutting down.') != CoreError('PROVIDER_AUTH_REQUIRED')
+E         Use -v to get more diff
+
+tests\execution_r4\test_embedded_failure_cause.py:62: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_embedded_failure_cause" name="test_secondary_producer_failure_preserves_first_cause[renew]" time="0.004"><failure message="AssertionError: assert [CoreError('P...tting down.')] == [CoreError('P...TH_REQUIRED')]&#10;  &#10;  At index 1 diff: RuntimeError('The embedded Core host is shutting down.') != CoreError('PROVIDER_AUTH_REQUIRED')&#10;  Use -v to get more diff">later_producer = 'renew'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("later_producer", ["execute", "renew", "maintain"])
+    async def test_secondary_producer_failure_preserves_first_cause(later_producer):
+        # Unit boundary: isolate producer error arbitration from real containment,
+        # which provider-vault and shutdown integration suites exercise separately.
+        owner = object.__new__(EmbeddedDispatchOwner)
+        owner.failure = None
+        owner._stopping = asyncio.Event()
+        first_seen = asyncio.Event()
+        observed = []
+        primary = CoreError("PROVIDER_AUTH_REQUIRED", "provider_vault", retry_safe=True)
+        secondary = RuntimeError("The embedded Core host is shutting down.")
+    
+        async def contain(*args):
+            # Preserve failed() error recording after its production refactor,
+            # while replacing only containment and store activity below it.
+            if args and owner.failure is None:
+                owner.failure = args[0]
+            observed.append(owner.failure)
+            first_seen.set()
+    
+        async def execute(frame):
+            if frame == "primary":
+                raise primary
+            await first_seen.wait()
+            raise secondary
+    
+        async def renew(**kwargs):
+            await first_seen.wait()
+            raise secondary
+    
+        def page():
+            raise secondary
+    
+        owner.failed = contain
+        owner._execute = execute
+        owner._page = page
+        owner.channel = SimpleNamespace(connection_id="fixture", connection_generation=1)
+        owner._request_grant = None
+        session = dict(gate=asyncio.Lock(), executor=SimpleNamespace(renew_r4=renew), scope={}, renew_at=None)
+        owner.sessions = {"session": session}
+    
+        async def later():
+            await first_seen.wait()
+            if later_producer == "execute":
+                await owner._execute_owned("secondary")
+            elif later_producer == "renew":
+                await owner._renew_owned("session", session)
+            else:
+                await owner._maintain()
+    
+        await asyncio.wait_for(asyncio.gather(owner._execute_owned("primary"), later()), 5)
+&gt;       assert observed == [primary, primary]
+E       AssertionError: assert [CoreError('P...tting down.')] == [CoreError('P...TH_REQUIRED')]
+E         
+E         At index 1 diff: RuntimeError('The embedded Core host is shutting down.') != CoreError('PROVIDER_AUTH_REQUIRED')
+E         Use -v to get more diff
+
+tests\execution_r4\test_embedded_failure_cause.py:62: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_embedded_failure_cause" name="test_secondary_producer_failure_preserves_first_cause[maintain]" time="0.005"><failure message="AssertionError: assert [CoreError('P...tting down.')] == [CoreError('P...TH_REQUIRED')]&#10;  &#10;  At index 1 diff: RuntimeError('The embedded Core host is shutting down.') != CoreError('PROVIDER_AUTH_REQUIRED')&#10;  Use -v to get more diff">later_producer = 'maintain'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("later_producer", ["execute", "renew", "maintain"])
+    async def test_secondary_producer_failure_preserves_first_cause(later_producer):
+        # Unit boundary: isolate producer error arbitration from real containment,
+        # which provider-vault and shutdown integration suites exercise separately.
+        owner = object.__new__(EmbeddedDispatchOwner)
+        owner.failure = None
+        owner._stopping = asyncio.Event()
+        first_seen = asyncio.Event()
+        observed = []
+        primary = CoreError("PROVIDER_AUTH_REQUIRED", "provider_vault", retry_safe=True)
+        secondary = RuntimeError("The embedded Core host is shutting down.")
+    
+        async def contain(*args):
+            # Preserve failed() error recording after its production refactor,
+            # while replacing only containment and store activity below it.
+            if args and owner.failure is None:
+                owner.failure = args[0]
+            observed.append(owner.failure)
+            first_seen.set()
+    
+        async def execute(frame):
+            if frame == "primary":
+                raise primary
+            await first_seen.wait()
+            raise secondary
+    
+        async def renew(**kwargs):
+            await first_seen.wait()
+            raise secondary
+    
+        def page():
+            raise secondary
+    
+        owner.failed = contain
+        owner._execute = execute
+        owner._page = page
+        owner.channel = SimpleNamespace(connection_id="fixture", connection_generation=1)
+        owner._request_grant = None
+        session = dict(gate=asyncio.Lock(), executor=SimpleNamespace(renew_r4=renew), scope={}, renew_at=None)
+        owner.sessions = {"session": session}
+    
+        async def later():
+            await first_seen.wait()
+            if later_producer == "execute":
+                await owner._execute_owned("secondary")
+            elif later_producer == "renew":
+                await owner._renew_owned("session", session)
+            else:
+                await owner._maintain()
+    
+        await asyncio.wait_for(asyncio.gather(owner._execute_owned("primary"), later()), 5)
+&gt;       assert observed == [primary, primary]
+E       AssertionError: assert [CoreError('P...tting down.')] == [CoreError('P...TH_REQUIRED')]
+E         
+E         At index 1 diff: RuntimeError('The embedded Core host is shutting down.') != CoreError('PROVIDER_AUTH_REQUIRED')
+E         Use -v to get more diff
+
+tests\execution_r4\test_embedded_failure_cause.py:62: AssertionError</failure></testcase></testsuite></testsuites>

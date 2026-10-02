@@ -2,6 +2,12 @@
 
 ## Current acceptance reconciliation: executable Core .53
 
+Embedded execution, renewal and maintenance now preserve the first failure instead
+of replacing its diagnostic during containment. A new development wheel passed 48
+installed checks with unchanged inputs, including vault refusal and shutdown recovery.
+Hosted confirmation remains pending; NS14 contention and boot-budget timing remain
+open. See [failure-cause evidence and CI queue reconciliation](M13_CI_FAILURE_CAUSE.md).
+
 Native factory cutover and canonical session reuse passed 42 installed checks
 with unchanged inputs. Production tests now assert migration refusal for retired
 constructors; public R4 tests cover concurrent start admission and sibling lifecycle
