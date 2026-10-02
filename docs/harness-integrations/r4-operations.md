@@ -12,13 +12,19 @@ journey. Use the implemented authenticated R4 HTTP and Connector CLI flows for
 development validation; do not treat the legacy connection command as remote
 Connector setup. Full browser acceptance remains pending.
 
-The runtime-options projection currently reports all eligibility flags as false
-and accepts only the authenticated subject, even though the target contract
-also requires operator access and workspace-aware eligibility. Inventory facts
-remain useful, but this projection is not yet a complete onboarding decision.
-The contract's inventory-refresh and binding-read HTTP routes are also pending.
-Preserve references returned by prepare/apply and consult existing operation
-and session routes rather than relying on those unimplemented endpoints.
+The runtime-options projection currently reports all eligibility flags as false;
+workspace-aware eligibility remains incomplete. The subject and an authenticated
+operator can inspect its executor-owned technical facts. This projection is not
+yet a complete onboarding decision. The contract's inventory-refresh HTTP route
+is still pending.
+
+Read the current binding with `GET /v1/connections/bindings/{binding_id}` as its
+subject or an operator. It returns the current references, revisions and canonical
+state, including replacement, disabled, stale and revoked bindings. An APPROVED
+binding records consent; it does not promise a fresh inventory, an online executor
+or authority to start. Inspection remains available to an operator when execution
+is disabled or the provider has been removed. Responses never include executor
+paths, local configuration or credentials.
 
 ## Start and connect
 
@@ -65,6 +71,7 @@ envelope. Consult the returned schema/revision rather than mixing body formats.
 | Prepare an approved local realization | `POST /v1/runtime/executors/{executor_id}/realizations` |
 | Prepare a binding | `POST /v1/connections/bindings:prepare` |
 | Apply the reviewed binding proposal | `POST /v1/connections/bindings:apply` |
+| Read the current scoped binding | `GET /v1/connections/bindings/{binding_id}` |
 | Resolve an intent | `POST /v1/runtime/intents:resolve` |
 | Submit the resolved operation | `POST /v1/runtime/operations` |
 | Inspect a durable operation | `GET /v1/runtime/operations/{operation_id}` |

@@ -369,9 +369,14 @@ def build_router() -> APIRouter:
                 factory, server_id=server_id, executor_id=executor_id,
                 agent_id=agent.agent_id,
                 fresh_publications=request.app.state.inventory_fresh_publications,
+                context=RuntimeRequestContext(agent.agent_id, 'agent_key', credential_binding=agent.api_key_hash),
+                access=build_execution_access(request.app.state.deps),
             )
 
-        view = await anyio.to_thread.run_sync(_read)
+        try:
+            view = await anyio.to_thread.run_sync(_read)
+        except OktoNexusError as error:
+            return runtime_error(error, 'inventory.read')
         return JSONResponse(view, headers={"Cache-Control": "no-store"})
 
     @router.post("/runtime/executors/{executor_id}/realizations")
@@ -420,6 +425,7 @@ def build_router() -> APIRouter:
 
     def runtime_error(error, stage):
         status = {ErrorCode.NOT_FOUND: 404, ErrorCode.PERMISSION_DENIED: 403,
+                  'SCOPE_MISMATCH': 403,
                   ErrorCode.CONFLICT: 409, ErrorCode.VALIDATION_ERROR: 422,
                   ErrorCode.QUOTA_EXCEEDED: 429}.get(error.code, 500)
         response = v1_err(status, error.code, error.message, stage=stage)
@@ -616,20 +622,22 @@ def build_router() -> APIRouter:
         agent = get_authenticated_agent()
         if agent is None:
             return v1_err(401, "AUTH_FAILED", "Authentication is required.")
-        if agent.agent_id != agent_id:
-            return v1_err(403, "SCOPE_MISMATCH",
-                          "The requested agent is outside this credential's scope.")
         factory = request.app.state.deps.connection_factory
 
         def _read():
             server_id = ensure_execution_installation(factory).server_id
             return read_executor_inventory(
                 factory, server_id=server_id, executor_id=executor_id,
-                agent_id=agent.agent_id,
+                agent_id=agent_id,
                 fresh_publications=request.app.state.inventory_fresh_publications,
+                context=RuntimeRequestContext(agent.agent_id, 'agent_key', credential_binding=agent.api_key_hash),
+                access=build_execution_access(request.app.state.deps),
             )
 
-        view = await anyio.to_thread.run_sync(_read)
+        try:
+            view = await anyio.to_thread.run_sync(_read)
+        except OktoNexusError as error:
+            return runtime_error(error, 'runtime-options.read')
         return JSONResponse(
             runtime_options_from_inventory(agent_id=agent_id,
                                            inventory_view=view),

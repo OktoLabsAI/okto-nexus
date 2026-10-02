@@ -2,6 +2,13 @@
 
 ## Current acceptance reconciliation: executable Core .53
 
+The binding-read route and operator inventory/runtime-options scope are now
+implemented; see [canonical reads](M10_BINDING_INVENTORY_READS.md). Current
+replacement/revocation facts are projected without provider access or execution.
+Installed verification passed 37 tests with unchanged campaign inputs.
+The earlier route-audit finding remains historical evidence. Effective
+workspace-aware eligibility and inventory refresh are still incomplete.
+
 Core `3a1e884` and Connector `4724cc6` passed their complete six-cell hosted
 Windows/Linux Python 3.11–3.13 matrices. Installed directed Nexus R4 checks
 passed 38 cases on both Windows and WSL Linux. Six real Windows provider/mode
@@ -20,8 +27,8 @@ The original failure is retained in
 
 Actual packaged-browser inspection confirms M10/NS13 remains incomplete:
 legacy setup UI, duplicated adapter labels and untranslated graph text.
-Two normative HTTP routes remain absent, and runtime-options eligibility and
-operator scope still need completion. OpenAPI's packaged FileResponse annotation
+The inventory-refresh route and effective workspace-aware runtime-options
+eligibility still need completion. OpenAPI's packaged FileResponse annotation
 failure has a code fix and a regression test. See the
 [acceptance audit](evidence/acceptance-audit-053.md). Final artifact freeze,
 complete Nexus regression, UI/CLI/fault/platform and independent-host acceptance

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from contextlib import nullcontext
 import hashlib
 import json
 
@@ -24,21 +25,24 @@ def _digest(value: object) -> str:
 
 
 def current_agent_revisions(factory: ConnectionFactory, *,
-                            agent_id: str) -> tuple[str, AgentExecutionRevisions, dict]:
+                            agent_id: str, uow=None,
+                            require_active: bool = True) -> tuple[str, AgentExecutionRevisions, dict]:
     """Advance only changed revision dimensions, scoped to one agent.
 
     The writer reads the same persisted identity/policy rows used by existing
     auth and connection admission. No global agent scan, provider call or
     filesystem resolution occurs in this short transaction.
+    Authorized historical readers may include inactive subjects; authentication
+    callers retain the active-only default.
     """
-    with factory.unit_of_work() as uow:
+    with nullcontext(uow) if uow is not None else factory.unit_of_work() as uow:
         conn = uow.connection
         installation = conn.execute(
             "SELECT server_id FROM execution_installation WHERE singleton=1"
         ).fetchone()
         agent = conn.execute(
-            "SELECT * FROM agents WHERE agent_id=? AND is_active=1",
-            (agent_id,),
+            "SELECT * FROM agents WHERE agent_id=? AND (is_active=1 OR ?)",
+            (agent_id, not require_active),
         ).fetchone()
         if installation is None or agent is None:
             raise OktoNexusError(ErrorCode.NOT_FOUND,

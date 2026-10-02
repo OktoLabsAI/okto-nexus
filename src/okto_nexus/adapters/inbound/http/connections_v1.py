@@ -92,7 +92,8 @@ def build_router() -> APIRouter:
 
     def binding_error(error, stage):
         status = {ErrorCode.NOT_FOUND: 404, ErrorCode.PERMISSION_DENIED: 403,
-                  ErrorCode.CONFLICT: 409, ErrorCode.VALIDATION_ERROR: 422}.get(error.code, 500)
+                  ErrorCode.CONFLICT: 409, ErrorCode.VALIDATION_ERROR: 422,
+                  'RECONCILIATION_REQUIRED': 409}.get(error.code, 500)
         result = v1_err(status, error.code, error.message, stage=stage)
         result.headers["Cache-Control"] = "no-store"
         return result
@@ -245,6 +246,27 @@ def build_router() -> APIRouter:
         except OktoNexusError as error:
             return binding_error(error, "binding.apply")
         return JSONResponse(view, headers={"Cache-Control": "no-store"})
+
+    @router.get("/connections/bindings/{binding_id}")
+    async def binding_view(binding_id: str, request: Request) -> JSONResponse:
+        agent = get_authenticated_agent()
+        if agent is None:
+            return v1_err(401, 'AUTH_FAILED', 'Authentication is required.')
+        if request.query_params:
+            return v1_err(422, 'VALIDATION_ERROR', 'Invalid binding query.')
+        from ....application.execution_binding_views import read_execution_binding
+        deps = request.app.state.deps
+        def read():
+            server_id = ensure_execution_installation(deps.connection_factory).server_id
+            return read_execution_binding(deps.connection_factory, server_id=server_id,
+                binding_id=binding_id,
+                context=RuntimeRequestContext(agent.agent_id, 'agent_key', credential_binding=agent.api_key_hash),
+                access=build_execution_access(deps))
+        try:
+            view = await anyio.to_thread.run_sync(read)
+        except OktoNexusError as error:
+            return binding_error(error, 'binding.read')
+        return JSONResponse(view, headers={'Cache-Control': 'no-store'})
 
     @router.post("/connections/bindings/{binding_id}/ticket")
     async def binding_ticket(binding_id: str, body: BindingTicketRequest,
