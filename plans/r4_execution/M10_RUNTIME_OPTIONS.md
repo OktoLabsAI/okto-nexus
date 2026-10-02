@@ -57,6 +57,11 @@ version `null`, and native qualification happens later during authorized opening
 Those captures do not prove READY eligibility through this new projection.
 Do not reinterpret `NOT_PROBED` as READY to bridge that gap.
 
+Follow-up: the Connector now provides explicit byte-bound observation through
+`executor probe`; see [implementation and evidence](M03_INSTALLATION_OBSERVATION.md).
+The equivalent embedded Server API/UI and full independent-host journey remain
+pending. The earlier passive captures above retain their original scope.
+
 Inventory refresh, the full R4 UI journey, delegated eligibility/proposal
 selection, independent-host/fault/platform acceptance, final package freeze and
 G0–G3 remain open. This change closes the hardcoded-false projection defect;

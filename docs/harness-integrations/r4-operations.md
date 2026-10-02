@@ -28,6 +28,15 @@ that subject's authenticated identity. Operator inspection does not create an
 agent credential or delegate execution. The contract's inventory-refresh HTTP
 route and complete browser onboarding remain pending.
 
+On a remote Connector host, explicitly observe a selected `NOT_PROBED`
+installation with `okto-nexus-connector executor probe --help`. Select the exact
+candidate and inventory revision from `discover --server-id SERVER_ID`.
+The probe runs Core's contained version observation, persists byte-bound local
+evidence and leaves publication to the daemon. Wait for the updated Server
+inventory before preparing a realization/binding. A recorded version does not
+override Core qualification or grant execution. The embedded Server's equivalent
+explicit qualification surface remains pending.
+
 Read the current binding with `GET /v1/connections/bindings/{binding_id}` as its
 subject or an operator. It returns the current references, revisions and canonical
 state, including replacement, disabled, stale and revoked bindings. An APPROVED

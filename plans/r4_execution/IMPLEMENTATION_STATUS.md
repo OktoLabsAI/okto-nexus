@@ -2,6 +2,15 @@
 
 ## Current acceptance reconciliation: executable Core .53
 
+Connector `8ff791c` adds explicit, byte-bound installation observation. Real
+installed CLI probes passed for Codex 0.159.0 and Claude 2.1.282; 54 installed Nexus
+integration tests passed with unchanged inputs. The full Connector run retained
+693 passes, two skips and two missing-build-dependency errors; both packaging
+cases subsequently passed in a clean environment. See
+[observation scope and evidence](M03_INSTALLATION_OBSERVATION.md). Connector
+documentation follow-up `e235e3b` removes the legacy quickstart. Embedded
+qualification and full browser onboarding remain pending.
+
 The binding-read route and operator inventory/runtime-options scope are now
 implemented; see [canonical reads](M10_BINDING_INVENTORY_READS.md). Current
 replacement/revocation facts are projected without provider access or execution.
