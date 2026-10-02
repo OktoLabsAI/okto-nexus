@@ -1,4 +1,4 @@
-"""Native terminal evidence must not pretend a blocked transport worker returned."""
+"""Retained legacy workers stay occupied after a synthetic peer emits a result."""
 import threading
 
 import pytest
@@ -10,9 +10,15 @@ from test_runtime_commands import wait_operation
 runtime = runtime_fixture
 
 
-@pytest.mark.parametrize("runtime", ["production"], indirect=True)
 def test_observed_native_result_does_not_free_a_still_blocked_agent_worker(runtime, monkeypatch):
     deps, client, root, _, operator, _ = runtime
+    import sys
+    from legacy_native_fixture.codex import CodexAppServerConnector
+    from test_harness_codex_connector import _FAKE_SERVER_SOURCE
+    # Explicit historical fixture; current production never loads this adapter.
+    deps.harness_connector_factories["codex"] = lambda **options: CodexAppServerConnector(
+        command=[sys._base_executable, "-u", "-c", _FAKE_SERVER_SOURCE],
+        cwd=root, env=options["backend"]["env"])
     configure(runtime)
     first = open_endpoint(runtime)
     with deps.connection_factory.unit_of_work() as uow:

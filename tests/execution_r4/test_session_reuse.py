@@ -6,12 +6,12 @@ from test_embedded_dispatch import connect_local, wait_receipt
 
 
 @pytest.fixture
-def reuse_qualified(monkeypatch):
+def reuse_qualified():
     from okto_nexus.adapters.inbound.http import runtime_v1
     from okto_nexus.bootstrap import embedded_dispatch
     info = runtime_v1.protocol_info()
-    monkeypatch.setattr(runtime_v1, "protocol_info", lambda: {**info, "remote_execution_ready": True})
-    monkeypatch.setattr(embedded_dispatch, "protocol_info", lambda: {**info, "remote_execution_ready": True})
+    assert info["remote_execution_ready"] is True
+    assert embedded_dispatch.protocol_info() == info
 
 
 @pytest.fixture
@@ -74,10 +74,45 @@ def test_default_starts_cannot_admit_two_concurrent_claims(reuse_connected):
     first = resolve(setup, binding, "first").json()
     other = resolve(setup, binding, "concurrent").json()
     assert first["session_id"] != other["session_id"]
-    admit(setup, first)
-    admit(setup, other, 409)
-    wait_receipt(setup, first)
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Barrier
+    barrier = Barrier(2)
+    def submit(resolution):
+        barrier.wait(timeout=5)
+        return setup[2].post("/v1/runtime/operations", headers=setup[3]["subject"],
+            json={name: resolution[name] for name in
+                  ("client_intent_id", "operation_id", "resolution_revision", "intent_hash")})
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        responses = list(executor.map(submit, (first, other)))
+    assert sorted(response.status_code for response in responses) == [202, 409], [r.text for r in responses]
+    winner = first if responses[0].status_code == 202 else other
+    wait_receipt(setup, winner)
     assert native.opens == 1
+
+
+def test_closing_one_explicit_session_preserves_its_sibling(reuse_connected):
+    from test_embedded_dispatch import admit as action
+    setup, binding, native = reuse_connected
+    first = resolve(setup, binding, "sibling-first", new_session=True).json()
+    admit(setup, first)
+    wait_receipt(setup, first)
+    first_peer = native.native
+    second = resolve(setup, binding, "sibling-second", new_session=True).json()
+    admit(setup, second)
+    wait_receipt(setup, second)
+    second_peer = native.native
+    assert first_peer is not second_peer and native.opens == 2
+    closed = action(setup, binding, "close-first", "runtime.close", session_id=first["session_id"])
+    wait_receipt(setup, closed, ("SUCCEEDED",))
+    assert first_peer.stopped and not second_peer.stopped
+    sent = action(setup, binding, "send-second", "turn.submit",
+                  session_id=second["session_id"], text="sibling survives")
+    wait_receipt(setup, sent)
+    assert [verb for verb, _ in second_peer.sent] == ["send_turn"]
+    assert not first_peer.sent
+    closed = action(setup, binding, "close-second", "runtime.close", session_id=second["session_id"])
+    wait_receipt(setup, closed, ("SUCCEEDED",))
+    assert first_peer.stopped and second_peer.stopped and native.opens == 2
 
 
 def test_uncertain_opening_is_not_replaced(reuse_connected):

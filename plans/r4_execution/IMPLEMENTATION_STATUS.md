@@ -2,6 +2,12 @@
 
 ## Current acceptance reconciliation: executable Core .53
 
+Native factory cutover and canonical session reuse passed 42 installed checks
+with unchanged inputs. Production tests now assert migration refusal for retired
+constructors; public R4 tests cover concurrent start admission and sibling lifecycle
+using actual protocol readiness. Linux/Python 3.11 revealed two additional historical
+CI failures requiring diagnosis. See [scope and evidence](M13_CI_FACTORY_CUTOVER.md).
+
 Seven positive-stdio CI findings are now covered through an independent MCP HTTP
 client or an explicit test-only store writer. Eighteen installed checks passed in
 a fresh environment with unchanged inputs; no product transport was restored.
