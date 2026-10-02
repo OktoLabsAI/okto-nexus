@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="3.933" timestamp="2026-10-02T11:36:03.079540-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_runtime_operations_dashboard" name="test_browser_runtime_cycle_and_lost_reply_recovery[none]" time="2.861"><error message="failed on setup with &quot;AssertionError: {'adapter_id': 'codex_app_server', 'candidate_ref': 'nexus-install-v1:0415ef84093b79829296fb5161e0446097805d6f54b4f92a08a55d11e12ac002', 'label': 'codex.exe · e12ac002', 'technical_state': 'NOT_PROBED', ...}&#10;assert False&quot;">local_setup = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4889/test_brow...rust='selected', version=None, architecture=None, launch_script=None, build_identity=None, installation_ref=None), ...)
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000017AFB7E8770&gt;
+
+    @pytest.fixture
+    def ready_runtime(local_setup, monkeypatch):
+        from okto_nexus.bootstrap import embedded_inventory
+        from test_embedded_dispatch import connect_local
+        setup = list(local_setup)
+        candidate = replace(setup[5], version='0.159.0')
+        monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+                            lambda **_: SimpleNamespace(candidates=(candidate,)))
+        owner = setup[1].state.embedded_inventory_owner
+        setup[2].portal.call(owner.refresh)
+        snapshot = setup[2].get(f'/v1/runtime/executors/{owner.key.executor_id}/inventory',
+                               headers=setup[3]['operator']).json()['snapshot']
+        setup[4].update(inventory_revision=snapshot['inventory_revision'],
+                        candidate_ref=snapshot['evidence'][0]['candidate_ref'])
+        setup[5] = candidate
+        connected = connect_local(tuple(setup))
+        binding = connected[1]
+        options = setup[2].get('/v1/agents/subject/runtime-options', params={
+            'executor_id': binding['executor_id'], 'workspace_id': binding['workspace_id']},
+            headers=setup[3]['operator']).json()
+        choice = next(row for row in options['options'] if row['candidate_ref'] == setup[4]['candidate_ref'])
+&gt;       assert choice['can_start'], choice
+E       AssertionError: {'adapter_id': 'codex_app_server', 'candidate_ref': 'nexus-install-v1:0415ef84093b79829296fb5161e0446097805d6f54b4f92a08a55d11e12ac002', 'label': 'codex.exe · e12ac002', 'technical_state': 'NOT_PROBED', ...}
+E       assert False
+
+tests\execution_r4\test_runtime_operations_dashboard.py:38: AssertionError</error></testcase></testsuite></testsuites>

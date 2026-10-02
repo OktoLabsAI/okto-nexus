@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="4" failures="0" skipped="0" tests="4" time="9.621" timestamp="2026-10-02T11:35:22.334052-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_runtime_operations_dashboard" name="test_browser_runtime_cycle_and_lost_reply_recovery[none]" time="2.919"><error message="failed on setup with &quot;AssertionError: {'agent_id': 'subject', 'executor_id': 'exe_5b2dd4af79a98987aeee83efeb8a5585', 'inventory_revision': 'sha256:0592d05a7...e_turn_id': 'forbidden', 'requires_active_run': False, 'steer_timing': None, ...}], 'discoverable': False, ...}]}, ...}&#10;assert False&quot;">local_setup = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4888/test_brow...rust='selected', version=None, architecture=None, launch_script=None, build_identity=None, installation_ref=None), ...)
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000193BA658640&gt;
+
+    @pytest.fixture
+    def ready_runtime(local_setup, monkeypatch):
+        from okto_nexus.bootstrap import embedded_inventory
+        from test_embedded_dispatch import connect_local
+        setup = list(local_setup)
+        candidate = replace(setup[5], version='0.159.0')
+        monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+                            lambda **_: SimpleNamespace(candidates=(candidate,)))
+        owner = setup[1].state.embedded_inventory_owner
+        setup[2].portal.call(owner.refresh)
+        snapshot = setup[2].get(f'/v1/runtime/executors/{owner.key.executor_id}/inventory',
+                               headers=setup[3]['operator']).json()['snapshot']
+        setup[4].update(inventory_revision=snapshot['inventory_revision'],
+                        candidate_ref=snapshot['evidence'][0]['candidate_ref'])
+        setup[5] = candidate
+        connected = connect_local(tuple(setup))
+        binding = connected[1]
+        options = setup[2].get('/v1/agents/subject/runtime-options', params={
+            'executor_id': binding['executor_id'], 'workspace_id': binding['workspace_id']},
+            headers=setup[3]['operator']).json()
+&gt;       assert options['options'][0]['can_start'], options
+E       AssertionError: {'agent_id': 'subject', 'executor_id': 'exe_5b2dd4af79a98987aeee83efeb8a5585', 'inventory_revision': 'sha256:0592d05a7...e_turn_id': 'forbidden', 'requires_active_run': False, 'steer_timing': None, ...}], 'discoverable': False, ...}]}, ...}
+E       assert False
+
+tests\execution_r4\test_runtime_operations_dashboard.py:37: AssertionError</error></testcase><testcase classname="tests.execution_r4.test_runtime_operations_dashboard" name="test_browser_runtime_cycle_and_lost_reply_recovery[resolve]" time="1.953"><error message="failed on setup with &quot;AssertionError: {'agent_id': 'subject', 'executor_id': 'exe_f3eed84ec5338c375da6eb2dffe4f887', 'inventory_revision': 'sha256:0bcf904aa...e_turn_id': 'forbidden', 'requires_active_run': False, 'steer_timing': None, ...}], 'discoverable': False, ...}]}, ...}&#10;assert False&quot;">local_setup = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4888/test_brow...rust='selected', version=None, architecture=None, launch_script=None, build_identity=None, installation_ref=None), ...)
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000193BA659A70&gt;
+
+    @pytest.fixture
+    def ready_runtime(local_setup, monkeypatch):
+        from okto_nexus.bootstrap import embedded_inventory
+        from test_embedded_dispatch import connect_local
+        setup = list(local_setup)
+        candidate = replace(setup[5], version='0.159.0')
+        monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+                            lambda **_: SimpleNamespace(candidates=(candidate,)))
+        owner = setup[1].state.embedded_inventory_owner
+        setup[2].portal.call(owner.refresh)
+        snapshot = setup[2].get(f'/v1/runtime/executors/{owner.key.executor_id}/inventory',
+                               headers=setup[3]['operator']).json()['snapshot']
+        setup[4].update(inventory_revision=snapshot['inventory_revision'],
+                        candidate_ref=snapshot['evidence'][0]['candidate_ref'])
+        setup[5] = candidate
+        connected = connect_local(tuple(setup))
+        binding = connected[1]
+        options = setup[2].get('/v1/agents/subject/runtime-options', params={
+            'executor_id': binding['executor_id'], 'workspace_id': binding['workspace_id']},
+            headers=setup[3]['operator']).json()
+&gt;       assert options['options'][0]['can_start'], options
+E       AssertionError: {'agent_id': 'subject', 'executor_id': 'exe_f3eed84ec5338c375da6eb2dffe4f887', 'inventory_revision': 'sha256:0bcf904aa...e_turn_id': 'forbidden', 'requires_active_run': False, 'steer_timing': None, ...}], 'discoverable': False, ...}]}, ...}
+E       assert False
+
+tests\execution_r4\test_runtime_operations_dashboard.py:37: AssertionError</error></testcase><testcase classname="tests.execution_r4.test_runtime_operations_dashboard" name="test_browser_runtime_cycle_and_lost_reply_recovery[admit]" time="1.812"><error message="failed on setup with &quot;AssertionError: {'agent_id': 'subject', 'executor_id': 'exe_9acdc43a38e3dd0c9d7180f46d09c900', 'inventory_revision': 'sha256:b7bab3355...e_turn_id': 'forbidden', 'requires_active_run': False, 'steer_timing': None, ...}], 'discoverable': False, ...}]}, ...}&#10;assert False&quot;">local_setup = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4888/test_brow...rust='selected', version=None, architecture=None, launch_script=None, build_identity=None, installation_ref=None), ...)
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000193BB972330&gt;
+
+    @pytest.fixture
+    def ready_runtime(local_setup, monkeypatch):
+        from okto_nexus.bootstrap import embedded_inventory
+        from test_embedded_dispatch import connect_local
+        setup = list(local_setup)
+        candidate = replace(setup[5], version='0.159.0')
+        monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+                            lambda **_: SimpleNamespace(candidates=(candidate,)))
+        owner = setup[1].state.embedded_inventory_owner
+        setup[2].portal.call(owner.refresh)
+        snapshot = setup[2].get(f'/v1/runtime/executors/{owner.key.executor_id}/inventory',
+                               headers=setup[3]['operator']).json()['snapshot']
+        setup[4].update(inventory_revision=snapshot['inventory_revision'],
+                        candidate_ref=snapshot['evidence'][0]['candidate_ref'])
+        setup[5] = candidate
+        connected = connect_local(tuple(setup))
+        binding = connected[1]
+        options = setup[2].get('/v1/agents/subject/runtime-options', params={
+            'executor_id': binding['executor_id'], 'workspace_id': binding['workspace_id']},
+            headers=setup[3]['operator']).json()
+&gt;       assert options['options'][0]['can_start'], options
+E       AssertionError: {'agent_id': 'subject', 'executor_id': 'exe_9acdc43a38e3dd0c9d7180f46d09c900', 'inventory_revision': 'sha256:b7bab3355...e_turn_id': 'forbidden', 'requires_active_run': False, 'steer_timing': None, ...}], 'discoverable': False, ...}]}, ...}
+E       assert False
+
+tests\execution_r4\test_runtime_operations_dashboard.py:37: AssertionError</error></testcase><testcase classname="tests.execution_r4.test_runtime_operations_dashboard" name="test_browser_refuses_changed_authority_after_review" time="1.826"><error message="failed on setup with &quot;AssertionError: {'agent_id': 'subject', 'executor_id': 'exe_471c6ae581b8f4378baad0d42cdfd16f', 'inventory_revision': 'sha256:8aac894ab...e_turn_id': 'forbidden', 'requires_active_run': False, 'steer_timing': None, ...}], 'discoverable': False, ...}]}, ...}&#10;assert False&quot;">local_setup = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4888/test_brow...rust='selected', version=None, architecture=None, launch_script=None, build_identity=None, installation_ref=None), ...)
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000193BCF8C7C0&gt;
+
+    @pytest.fixture
+    def ready_runtime(local_setup, monkeypatch):
+        from okto_nexus.bootstrap import embedded_inventory
+        from test_embedded_dispatch import connect_local
+        setup = list(local_setup)
+        candidate = replace(setup[5], version='0.159.0')
+        monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+                            lambda **_: SimpleNamespace(candidates=(candidate,)))
+        owner = setup[1].state.embedded_inventory_owner
+        setup[2].portal.call(owner.refresh)
+        snapshot = setup[2].get(f'/v1/runtime/executors/{owner.key.executor_id}/inventory',
+                               headers=setup[3]['operator']).json()['snapshot']
+        setup[4].update(inventory_revision=snapshot['inventory_revision'],
+                        candidate_ref=snapshot['evidence'][0]['candidate_ref'])
+        setup[5] = candidate
+        connected = connect_local(tuple(setup))
+        binding = connected[1]
+        options = setup[2].get('/v1/agents/subject/runtime-options', params={
+            'executor_id': binding['executor_id'], 'workspace_id': binding['workspace_id']},
+            headers=setup[3]['operator']).json()
+&gt;       assert options['options'][0]['can_start'], options
+E       AssertionError: {'agent_id': 'subject', 'executor_id': 'exe_471c6ae581b8f4378baad0d42cdfd16f', 'inventory_revision': 'sha256:8aac894ab...e_turn_id': 'forbidden', 'requires_active_run': False, 'steer_timing': None, ...}], 'discoverable': False, ...}]}, ...}
+E       assert False
+
+tests\execution_r4\test_runtime_operations_dashboard.py:37: AssertionError</error></testcase></testsuite></testsuites>

@@ -47,6 +47,16 @@ def local_browser(local_setup, assets):
                     trace['drop_check'] = False
                     route.abort('failed')
                     return
+                if url.path == '/v1/runtime/operations' and request.method == 'POST' and trace.get('drop_operation'):
+                    assert response.status_code in (200, 202), response.text
+                    trace['drop_operation'] = False
+                    route.abort('failed')
+                    return
+                if url.path == '/v1/runtime/intents:resolve' and trace.get('drop_resolution'):
+                    assert response.status_code == 200, response.text
+                    trace['drop_resolution'] = False
+                    route.abort('failed')
+                    return
                 route.fulfill(status=response.status_code, body=response.content,
                               content_type=response.headers.get('content-type', 'application/json'))
                 return

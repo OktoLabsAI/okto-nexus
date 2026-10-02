@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="3.490" timestamp="2026-10-02T11:36:30.019333-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_runtime_operations_dashboard" name="test_browser_runtime_cycle_and_lost_reply_recovery[none]" time="2.265"><error message="failed on setup with &quot;AssertionError: {&quot;error&quot;:{&quot;code&quot;:&quot;CONFLICT&quot;,&quot;stage&quot;:&quot;installation.check&quot;,&quot;message&quot;:&quot;Refresh the local inventory and select the installation again.&quot;,&quot;possible_effect&quot;:false,&quot;retry_safe&quot;:false,&quot;operation_id&quot;:null,&quot;action&quot;:&quot;&quot;}}&#10;assert 409 == 200&#10; +  where 409 = &lt;Response [409 Conflict]&gt;.status_code&quot;">local_setup = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4890/test_brow...rust='selected', version=None, architecture=None, launch_script=None, build_identity=None, installation_ref=None), ...)
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000025128758770&gt;
+
+    @pytest.fixture
+    def ready_runtime(local_setup, monkeypatch):
+        from okto_nexus.bootstrap import embedded_inventory
+        from okto_nexus.application import execution_local_observations
+        from test_embedded_dispatch import connect_local
+        setup = list(local_setup)
+        candidate = replace(setup[5], version='0.159.0')
+        monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+                            lambda **_: SimpleNamespace(candidates=(candidate,)))
+        owner = setup[1].state.embedded_inventory_owner
+        setup[2].portal.call(owner.refresh)
+        async def probe(selected):
+            return replace(selected, version='0.159.0')
+        monkeypatch.setattr(execution_local_observations, 'probe_version', probe)
+        checked = setup[2].post(f'/v1/runtime/executors/{owner.key.executor_id}/installations:check',
+            headers=setup[3]['operator'], json={key: setup[4][key] for key in
+            ('agent_id', 'adapter_id', 'candidate_ref', 'inventory_revision', 'approved')})
+&gt;       assert checked.status_code == 200, checked.text
+E       AssertionError: {"error":{"code":"CONFLICT","stage":"installation.check","message":"Refresh the local inventory and select the installation again.","possible_effect":false,"retry_safe":false,"operation_id":null,"action":""}}
+E       assert 409 == 200
+E        +  where 409 = &lt;Response [409 Conflict]&gt;.status_code
+
+tests\execution_r4\test_runtime_operations_dashboard.py:34: AssertionError</error></testcase></testsuite></testsuites>

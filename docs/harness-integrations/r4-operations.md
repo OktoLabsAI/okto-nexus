@@ -38,8 +38,9 @@ evidence, Core version and platform; a file change requires a new check.
 After a lost check response, refresh inventory first. A passive refresh can
 recover a committed observation without executing the command again. Another
 version check requires another explicit approval. This does not grant runtime
-authority or qualify an unsupported build/platform. Runtime operations in the
-panel remain pending.
+authority or qualify an unsupported build/platform. The runtime operations panel
+provides separate review and submission for start/reuse, send, steer, interrupt
+and close after selecting a binding.
 Legacy endpoint/profile controls remain in a collapsed maintenance section. Use
 the authenticated R4 HTTP and Connector CLI flows to complete development setup;
 do not treat a legacy connection command as remote Connector setup. Full browser
@@ -92,8 +93,24 @@ administrative privilege as runtime authority. The subject still needs a separat
 issued, current canonical execution grant. Operator identity/policy changes after
 resolution invalidate admission and pending dispatch; changes after opening also
 invalidate lease renewal and capability authority. Subject revocation, grants,
-budgets, inventory and binding checks remain in force. Complete browser operation
-controls remain pending.
+budgets, inventory and binding checks remain in force.
+
+In **Agents → Connections → Runtime operations**, select an action and review
+its session, message and target before **Submit reviewed action**. Start can
+reuse an unambiguous session, create a new one explicitly, or reuse an entered
+session ID. An initial message becomes a separate tracked turn. Steer and
+interrupt distinguish a specific native turn ID from the current run at execution
+time; those choices are not interchangeable.
+
+The tab stores the immutable request, including its message, under the current
+Server, actor and binding before sending it. If browser storage fails, nothing
+is submitted. Reloading only reads the original intent and operation. After a
+lost response, use **Check action result** or retry the same recorded review or
+submission; do not create a replacement action. Admission, executor stage,
+initial-turn status and available captured output are shown separately. An
+unknown result is retained for reconciliation. This panel does not qualify a
+provider or replace remaining native-decision, full history and independent-host
+browser acceptance.
 
 Request a passive inventory refresh with
 `POST /v1/runtime/executors/{executor_id}/inventory:refresh` and a stable

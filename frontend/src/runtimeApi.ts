@@ -54,6 +54,33 @@ export interface PreparationView {
   inventory_revision: string; realization_ref: string;
 }
 
+export type RuntimeIntent = "runtime.start" | "turn.submit" | "turn.steer" | "turn.interrupt" | "runtime.close";
+export interface RuntimeRequest {
+  client_intent_id: string; agent_id: string; intent: RuntimeIntent;
+  binding_id: string; workspace_binding_id: string;
+  session_id?: string; new_session?: boolean; text?: string;
+  target?: {kind: "native_turn_id" | "current_run"; expected_turn_id: string | null};
+}
+export interface RuntimeScope {
+  server_id: string; agent_id: string; executor_id: string; binding_id: string;
+  workspace_id: string; workspace_binding_id: string; session_id: string;
+}
+export interface RuntimeResolution {
+  client_intent_id: string; operation_id: string; session_id: string; scope: RuntimeScope;
+  resolution_revision: number; intent_hash: string; expires_at: string;
+  can_submit: boolean; blockers: string[]; reuse: boolean;
+}
+export interface RuntimeOperation {
+  operation_id: string; scope: RuntimeScope; action: string; admission_state: string;
+  executor_stage: string | null; possible_effect: boolean; retry_safe: boolean;
+  error: {code: string; message: string} | null; follow_up_operation_ids: string[];
+  result?: {output_text: string; output_truncated: number} | null;
+}
+export interface RuntimeSession {
+  scope: RuntimeScope; lifecycle_state: string; process_state: string; lease_state: string;
+  control_available: boolean; durable_release_pending: boolean;
+}
+
 // R4 uses Bearer authentication and direct JSON, unlike the legacy /api envelope.
 async function read<T>(path: string, signal: AbortSignal | undefined, body?: unknown): Promise<T> {
   const headers = new Headers();
@@ -101,6 +128,15 @@ export function bindingRequestExists(key: string): boolean {
 }
 
 export const runtimeApi = {
+  resolve: (body: RuntimeRequest) => read<RuntimeResolution>("/v1/runtime/intents:resolve", undefined, body),
+  intent: (id: string, signal?: AbortSignal) => read<{resolution: RuntimeResolution; operation: RuntimeOperation | null}>(
+    `/v1/runtime/intents/${encodeURIComponent(id)}`, signal),
+  submit: (resolution: RuntimeResolution) => read<RuntimeOperation>("/v1/runtime/operations", undefined, {
+    client_intent_id: resolution.client_intent_id, operation_id: resolution.operation_id,
+    resolution_revision: resolution.resolution_revision, intent_hash: resolution.intent_hash,
+  }),
+  operation: (id: string, signal?: AbortSignal) => read<RuntimeOperation>(`/v1/runtime/operations/${encodeURIComponent(id)}`, signal),
+  session: (id: string, signal?: AbortSignal) => read<RuntimeSession>(`/v1/runtime/sessions/${encodeURIComponent(id)}`, signal),
   checkLocalInstallation: (executorId: string, body: {agent_id: string; adapter_id: string;
       candidate_ref: string; inventory_revision: string; approved: true}) =>
     read<{version: string; runtime_authorized: false}>(

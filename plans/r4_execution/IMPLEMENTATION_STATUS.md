@@ -2,6 +2,14 @@
 
 ## Current acceptance reconciliation: executable Core .56
 
+The installed dashboard now provides reviewed start/reuse, turn submission,
+steering, interruption and close through canonical operator/subject authority.
+Durable request recovery, explicit targets and initial-turn status are covered
+by 25 installed Windows/Edge checks with unchanged inputs. See
+[runtime UI scope, hashes and retained failures](M10_RUNTIME_OPERATIONS.md).
+Native approval/input, complete history/recovery and remaining integrated
+provider/platform/accessibility acceptance are still open; no gate is closed.
+
 The machine-readable `delivery_plan.json` checkpoint is reconciled to published
 Nexus `92521e0`, Connector `ad0933e` and Core `a96957d`. The September 30 checkpoint
 is preserved in `evidence/delivery-checkpoint-20260930.json`; its pending-work
@@ -14,7 +22,7 @@ capability checks. Installed Windows and WSL Linux each passed 143 regressions
 with unchanged inputs; a supplemental remote HTTP/WSS lease case passed on each.
 See [operator runtime scope, artifacts and retained failures](M04_OPERATOR_RUNTIME.md).
 The older `SUBJECT_IDENTITY_REQUIRED` limitation is superseded; the actual runtime
-operation controls in the browser remain unfinished. No release gate is closed.
+operation controls in the browser are now implemented as recorded above. No release gate is closed.
 
 The embedded local version-check API/UI is now implemented and verified: 59
 installed Windows and 50 WSL Linux checks passed, followed by 9 reviewed packaged
@@ -22,8 +30,8 @@ UI checks, all with unchanged campaign inputs. A real Codex version command via
 the installed HTTP endpoint returned 0.159.3 without creating runtime resources.
 Exact hashes, recovery scope and remaining acceptance are in
 [the local version-check ledger](M10_LOCAL_INSTALLATION_CHECK.md). Older references
-below to this control being pending are superseded by this evidence; runtime
-operation controls and full provider/platform acceptance remain pending.
+below to this control being pending are superseded by this evidence; basic runtime
+controls are now delivered, while full provider/platform acceptance remains pending.
 
 The user confirmed a native Intel Mac (macOS 26.4.1, Python 3.12.4) for manual
 development/test iterations. Core's `plans/MACOS_INTEL_IMPLEMENTATION.md` records
