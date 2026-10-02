@@ -157,6 +157,11 @@ export const runtimeApi = {
   }),
   operation: (id: string, signal?: AbortSignal) => read<RuntimeOperation>(`/v1/runtime/operations/${encodeURIComponent(id)}`, signal),
   session: (id: string, signal?: AbortSignal) => read<RuntimeSession>(`/v1/runtime/sessions/${encodeURIComponent(id)}`, signal),
+  sessions: (agentId: string, binding: BindingView, after: string, signal?: AbortSignal) => {
+    const query = new URLSearchParams({agent_id: agentId, executor_id: binding.executor_id,
+      binding_id: binding.binding_id, after_session_id: after, limit: "25"});
+    return read<{sessions: RuntimeSession[]; has_more: boolean; next_after_session_id: string}>(`/v1/runtime/sessions?${query}`, signal);
+  },
   events: (scope: RuntimeScope, after: number, epoch: string | null, signal?: AbortSignal) => {
     const query = new URLSearchParams({executor_id: scope.executor_id, after_sequence: String(after), limit: "100"});
     if (epoch !== null) query.set("stream_epoch", epoch);

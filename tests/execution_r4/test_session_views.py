@@ -11,6 +11,45 @@ from test_embedded_dispatch import (
 from test_local_realization import local_setup
 
 
+def test_session_list_pages_closed_history_and_enforces_scope(connected_local):
+    setup, binding, native = connected_local
+    deps, app, client, headers, *_ = setup
+    ids = []
+    for index in range(3):
+        opened = admit(setup, binding, f'list-open-{index}', 'runtime.start', new_session=True)
+        wait_receipt(setup, opened)
+        ids.append(opened['session_id'])
+        wait_receipt(setup, admit(setup, binding, f'list-close-{index}', 'runtime.close',
+                     session_id=opened['session_id']), stages=('SUCCEEDED',))
+    path = '/v1/runtime/sessions'
+    query = dict(executor_id=binding['executor_id'], binding_id=binding['binding_id'], agent_id='subject', limit=2)
+    first = client.get(path, params=query, headers=headers['operator'])
+    assert first.status_code == 200, first.text
+    assert first.headers['cache-control'] == 'no-store'
+    data = first.json()
+    schema = json.loads((Path(__file__).resolve().parents[2] / 'plans/contratos/http-target.schema.json').read_text())
+    jsonschema.Draft202012Validator({'$ref': '#/$defs/SessionListView', '$defs': schema['$defs']}).validate(data)
+    assert [s['scope']['session_id'] for s in data['sessions']] == sorted(ids)[:2]
+    assert data['has_more']
+    assert all(s['lifecycle_state'] == 'CLOSED' and s['process_state'] == 'UNKNOWN' for s in data['sessions'])
+    second = client.get(path, params={**query, 'after_session_id': data['next_after_session_id']}, headers=headers['subject']).json()
+    assert [s['scope']['session_id'] for s in second['sessions']] == sorted(ids)[2:]
+    assert not second['has_more']
+    assert client.get(path, params=query).status_code == 401
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("INSERT INTO agents(agent_id,created_at) VALUES('foreign',?)", (deps.clock.now_iso(),))
+        key = app.state.auth.issue_key(uow, agent_id='foreign')
+    assert client.get(path, params=query, headers={'Authorization': 'Bearer ' + key}).json()['sessions'] == []
+    for name in ('executor_id', 'binding_id', 'agent_id'):
+        assert client.get(path, params={**query, name: 'foreign'}, headers=headers['operator']).json()['sessions'] == []
+    for extra in ({'limit': 0}, {'limit': 101}, {'unknown': 'x'}, {'executor_id': ''}, {'after_session_id': 'x' * 161}):
+        assert client.get(path, params={**query, **extra}, headers=headers['operator']).status_code == 422
+    assert client.get(path, params=[*query.items(), ('limit', 1)], headers=headers['operator']).status_code == 422
+    assert native.opens == 3
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 6
+
+
 def test_public_session_view_survives_close_without_inventing_process_facts(connected_local):
     setup, binding, native = connected_local
     deps, app, client, headers, *_ = setup

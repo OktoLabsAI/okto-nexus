@@ -3062,6 +3062,16 @@
       ],
       "additionalProperties": false
     },
+    "SessionListView": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sessions", "has_more", "next_after_session_id"],
+      "properties": {
+        "sessions": {"type": "array", "maxItems": 100, "items": {"$ref": "#/$defs/SessionView"}},
+        "has_more": {"type": "boolean"},
+        "next_after_session_id": {"type": "string", "maxLength": 160}
+      }
+    },
     "SessionView": {
       "type": "object",
       "properties": {

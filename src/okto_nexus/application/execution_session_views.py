@@ -6,6 +6,33 @@ import json
 from ..errors import ErrorCode, OktoNexusError
 
 
+def list_execution_sessions(factory, *, server_id, context, access, executor_id,
+                            binding_id, agent_id, after_session_id="", limit=25):
+    for value in (executor_id, binding_id, agent_id):
+        if not isinstance(value, str) or not 1 <= len(value) <= 160 or not value.isprintable():
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid session list scope.", {})
+    if (not isinstance(after_session_id, str) or len(after_session_id) > 160
+            or (after_session_id and not after_session_id.isprintable())
+            or type(limit) is not int or not 1 <= limit <= 100):
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid session list cursor or limit.", {})
+    with factory.unit_of_work(write=False) as uow:
+        operator = access.authenticate(context, uow=uow, require_feature=False)
+        rows = uow.connection.execute(
+            "SELECT s.session_id FROM execution_sessions s JOIN execution_operations o "
+            "ON o.server_id=s.server_id AND o.executor_id=s.executor_id "
+            "AND o.operation_id=s.open_operation_id AND o.session_id=s.session_id "
+            "WHERE s.server_id=? AND s.executor_id=? AND s.binding_id=? "
+            "AND o.subject_agent_id=? AND (o.subject_agent_id=? OR o.actor_agent_id=? OR ?) "
+            "AND s.session_id>? ORDER BY s.session_id LIMIT ?",
+            (server_id, executor_id, binding_id, agent_id, context.actor_agent_id,
+             context.actor_agent_id, operator, after_session_id, limit + 1)).fetchall()
+        sessions = [read_execution_session(factory, server_id=server_id,
+            session_id=row['session_id'], context=context, access=access,
+            executor_id=executor_id, _uow=uow) for row in rows[:limit]]
+        return dict(sessions=sessions, has_more=len(rows) > limit,
+                    next_after_session_id=sessions[-1]['scope']['session_id'] if sessions else after_session_id)
+
+
 def read_execution_session(factory, *, server_id, session_id, context, access,
                            executor_id=None, _uow=None):
     actor_agent_id = context.actor_agent_id

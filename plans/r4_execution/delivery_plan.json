@@ -130,6 +130,7 @@
     "GET /v1/runtime/operations/{id}": "M04",
     "POST /v1/runtime/operations/{id}/receipts": "M07",
     "GET /v1/runtime/sessions/{id}": "M06",
+    "GET /v1/runtime/sessions": "M10",
     "POST /v1/runtime/sessions/{id}/capability": "M02",
     "POST /v1/runtime/approval-decisions": "M08",
     "GET /v1/runtime/approval-decisions/{id}": "M08",

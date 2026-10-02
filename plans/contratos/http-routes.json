@@ -213,6 +213,16 @@
     },
     {
       "method": "GET",
+      "path": "/v1/runtime/sessions",
+      "principal": "subject_opening_actor_or_operator",
+      "request_definition": null,
+      "response_definition": "SessionListView",
+      "success_codes": [200],
+      "effect": "Read-only paginated session history scoped by executor, binding and subject.",
+      "implementation_status": "IMPLEMENTED_PENDING_FINAL_ACCEPTANCE"
+    },
+    {
+      "method": "GET",
       "path": "/v1/runtime/sessions/{id}",
       "principal": "subject_or_operator",
       "request_definition": null,

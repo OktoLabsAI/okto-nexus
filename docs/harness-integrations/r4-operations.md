@@ -120,6 +120,16 @@ successful page with an explicit warning. Reload recovers the selected operation
 and reads history from the first page. This panel does not list all past sessions
 or repair uncertain runtime state.
 
+Use **Previous sessions → Refresh session list** on the selected connection to
+browse earlier sessions, including closed ones. **View history** opens their
+recorded events without resuming execution. The list is ordered by session ID
+and paginated; refresh starts at the first page. Sessions opened under older
+workspace realizations of the same binding remain historical records, not
+authority to execute under the current realization. The API equivalent is
+`GET /v1/runtime/sessions` with required `executor_id`, `binding_id`, `agent_id`
+and optional `after_session_id`/`limit` (1–100). Subject, recorded opening actor
+and current verified operator visibility matches individual session reads.
+
 Request a passive inventory refresh with
 `POST /v1/runtime/executors/{executor_id}/inventory:refresh` and a stable
 `{"client_intent_id":"your-request-id"}` under the authorized agent's bearer key.

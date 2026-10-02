@@ -6,6 +6,7 @@ import { InventoryRefresh } from "./InventoryRefresh";
 import { EmbeddedPreparation } from "./EmbeddedPreparation";
 import { LocalInstallationCheck } from "./LocalInstallationCheck";
 import { RuntimeOperations } from "./RuntimeOperations";
+import { RuntimeSessions } from "./RuntimeSessions";
 
 const fieldClass = "rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5 text-xs";
 type Selection = {executorId: string; adapterId: string; candidateRef: string; inventoryRevision: string};
@@ -127,6 +128,8 @@ export function RuntimeSelection({agentId}: {agentId: string}) {
         inventoryRevision={options!.inventory_revision} choice={selected} onApplied={() => setRevision(value => value + 1)} />
       {selected.binding && <RuntimeOperations key={JSON.stringify([agentId, selected.binding.binding_id])}
         agentId={agentId} binding={selected.binding} canStart={selected.can_start} />}
+      {selected.binding && <RuntimeSessions key={JSON.stringify([agentId, executorId, selected.binding.binding_id])}
+        agentId={agentId} binding={selected.binding} />}
     </fieldset>}
   </section>;
 }

@@ -2,6 +2,14 @@
 
 ## Current acceptance reconciliation: executable Core .56
 
+Selected connections now offer a paginated table of previous sessions, including
+closed sessions, through the canonical authenticated session-list API. Eight
+installed tests and one supplemental visual browser test passed with unchanged
+inputs. See [session browser implementation and boundaries](M10_SESSION_BROWSER.md).
+This supersedes the missing selected-connection cross-session navigation noted
+below; archive access independent of installation selection and uncertain-session
+repair remain open. No milestone or product gate is closed.
+
 The selected runtime operation now includes paginated canonical session events,
 gap warnings and read-only reload. Seven installed Windows/Edge checks passed
 with unchanged inputs, including NS15.05. See [session-history UI scope and

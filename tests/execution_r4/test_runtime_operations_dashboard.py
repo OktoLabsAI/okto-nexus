@@ -72,6 +72,35 @@ def submit(panel, stage='SUBMITTED'):
     expect(panel.get_by_role('button', name='Prepare another action', exact=True)).to_be_enabled()
 
 
+def test_browser_browses_closed_sessions_without_runtime_mutations(ready_runtime, request, tmp_path):
+    from playwright.sync_api import expect
+    from test_embedded_dispatch import admit, wait_receipt
+    from test_canonical_event_views import publish
+    setup, binding, native = ready_runtime
+    ids = []
+    for index in range(2):
+        opened = admit(setup, binding, f'browse-open-{index}', 'runtime.start', new_session=True)
+        wait_receipt(setup, opened)
+        ids.append(opened['session_id'])
+        publish(setup, native, opened['session_id'], count=index + 1)
+        wait_receipt(setup, admit(setup, binding, f'browse-close-{index}', 'runtime.close', session_id=opened['session_id']), stages=('SUCCEEDED',))
+    page, trace = request.getfixturevalue('local_browser')
+    panel_for(page, setup, binding)
+    browser = page.get_by_role('region', name='Previous runtime sessions', exact=True)
+    baseline = len([r for r in trace['requests'] if r[0] == 'POST'])
+    browser.get_by_role('button', name='Refresh session list', exact=True).click()
+    expect(browser.get_by_role('row')).to_have_count(3)
+    for index, session_id in enumerate(ids):
+        browser.get_by_role('button', name=f'View history {session_id}', exact=True).click()
+        expect(browser.get_by_role('listitem')).to_have_count(index + 1)
+        expect(browser).to_contain_text('Process: UNKNOWN')
+    assert len([r for r in trace['requests'] if r[0] == 'POST']) == baseline
+    assert native.opens == 2
+    screenshot_root = Path(os.environ.get('OKTO_NEXUS_UI_SCREENSHOT_DIR', str(tmp_path)))
+    screenshot_root.mkdir(parents=True, exist_ok=True)
+    browser.screenshot(path=str(screenshot_root / 'closed-session-browser.png'))
+
+
 def test_browser_session_history_pagination_gap_reload_and_scope(ready_runtime, request, tmp_path):
     from playwright.sync_api import expect
     from test_canonical_event_views import publish

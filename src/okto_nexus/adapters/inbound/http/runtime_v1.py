@@ -614,6 +614,30 @@ def build_router() -> APIRouter:
             "stage": accepted.stage, "accepted": True, "reused": accepted.reused,
         }, headers={"Cache-Control": "no-store"})
 
+    @router.get("/runtime/sessions")
+    async def session_list(request: Request, executor_id: str, binding_id: str,
+                           agent_id: str, after_session_id: str = "", limit: int = 25) -> JSONResponse:
+        agent = get_authenticated_agent()
+        if agent is None:
+            return v1_err(401, "AUTH_FAILED", "Authentication is required.")
+        query = request.query_params
+        if (set(query) - {"executor_id", "binding_id", "agent_id", "after_session_id", "limit"}
+                or len(query.multi_items()) != len(query)):
+            return v1_err(422, "VALIDATION_ERROR", "Invalid session list query.")
+        from ....application.execution_session_views import list_execution_sessions
+        deps = request.app.state.deps
+        def read():
+            return list_execution_sessions(deps.connection_factory,
+                server_id=ensure_execution_installation(deps.connection_factory).server_id,
+                context=RuntimeRequestContext(agent.agent_id, "agent_key", credential_binding=agent.api_key_hash),
+                access=build_execution_access(deps), executor_id=executor_id,
+                binding_id=binding_id, agent_id=agent_id, after_session_id=after_session_id, limit=limit)
+        try:
+            result = await anyio.to_thread.run_sync(read)
+        except OktoNexusError as error:
+            return runtime_error(error, "session.list")
+        return JSONResponse(result, headers={"Cache-Control": "no-store"})
+
     @router.get("/runtime/sessions/{session_id}")
     async def session_view(session_id: str, request: Request) -> JSONResponse:
         agent = get_authenticated_agent()
