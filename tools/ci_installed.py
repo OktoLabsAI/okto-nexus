@@ -20,11 +20,18 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def input_hashes():
-    paths = [ROOT / name for name in ('pyproject.toml', 'uv.lock', 'README.md', 'vendor/ci/manifest.json')]
+    paths = [ROOT / name for name in ('pyproject.toml', 'uv.lock', 'README.md', 'vendor/ci/manifest.json',
+        'tools/ci_installed.py', 'tools/build_validation_artifacts.py', '.github/workflows/ci.yml')]
     for directory in ('tests', 'src', 'docs', 'plans/r4_execution', 'plans/contratos'):
         paths.extend(p for p in (ROOT / directory).rglob('*')
                      if p.is_file() and p.suffix in ('.py', '.json', '.md', '.sql')
                      and 'evidence' not in p.parts and '__pycache__' not in p.parts)
+    # UI source and build inputs are part of the accepted package. Do not let
+    # a campaign report unchanged inputs while these change underneath it.
+    for directory in ('frontend/src', 'frontend/public'):
+        paths.extend(p for p in (ROOT / directory).rglob('*') if p.is_file())
+    paths.extend(p for p in (ROOT / 'frontend').glob('*') if p.is_file()
+                 and p.suffix in ('.json', '.ts', '.js', '.mjs', '.html'))
     return {p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
             for p in sorted(set(paths)) if p.is_file()}
 

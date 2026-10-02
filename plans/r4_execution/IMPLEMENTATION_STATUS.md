@@ -2,6 +2,16 @@
 
 ## Current acceptance reconciliation: executable Core .53
 
+Installed campaigns now freeze frontend/build/runner inputs too: the Windows and
+Linux checks each recorded 77 frontend files and no mutations. Connector `beead27`
+reproduced the two renewal-entry scheduling failures as LEASE_EXPIRED, corrected
+the synthetic clock tests and retained actual expiry refusal. Its complete
+installed Windows suite passed 716 tests with two skips; Linux passed 710 with
+six skips, then its two packaging setup errors passed after installing the
+declared missing build dependency. Subsequent directed observer/boundary checks
+passed on both. Hosted event-recovery timeout and final qualification remain open.
+See [campaign guard and current regression evidence](M13_CAMPAIGN_INPUTS.md).
+
 The dashboard can now request and observe passive host refresh, retaining the
 same intent across lost replies, host switches and tab reload. A packaged Edge
 case passed after a test-only theme-logo selector correction; nine companion
