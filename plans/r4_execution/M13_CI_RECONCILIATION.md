@@ -2,6 +2,33 @@
 
 This is preparation evidence, not M13 acceptance or a final artifact freeze.
 
+## Follow-up: hosted failures reproduced and fixtures corrected
+
+Core run 36948182442 passed all three Linux/Python jobs. Windows reached the
+tests after the R3 checkout correction and exposed native-schema CRLF conversion,
+an owned crash fixture releasing its Job too early after effect return, and a
+30 ms revocation timing assumption. Commit
+`b5c66b93905c540275745776e0476a1d87e4d04b` fixes those fixture/checkout issues;
+10 directed tests passed locally. The socket connection-refusal race observed
+on Windows passed locally but is not yet declared resolved. Current hosted
+verification: [36948904945](https://github.com/OktoLabsAI/okto-nexus-connector-core/actions/runs/36948904945).
+
+Connector run 36948290057 completed its Linux jobs with nine failures and 662
+passes on Python 3.11. The failures identified synthetic executables without
+POSIX execute permission, an incomplete `__new__` host fixture, and expectations
+predating Core's protected CODEX_HOME directory and POSIX Pi discovery. Commit
+`7f9320832a0659b9eecc3b9376abdb576e7c313e` corrects those test inputs/expectations
+without relaxing product checks. Local affected suite: 44 passed, one platform
+skip. Current hosted verification:
+[36948913588](https://github.com/OktoLabsAI/okto-nexus-connector/actions/runs/36948913588).
+
+Nexus exec session `1133` was re-polled alive after 30% of the full R4 suite.
+No terminal result is available yet. Do not replace or restart this campaign
+without checking its process/handle and final manifest. The current artifact
+tuple still contains the same production runtime bytes: the two external
+increments above changed tests, documentation and checkout policy, not runtime
+implementation. They do not constitute the final M13 artifact freeze.
+
 ## Verified findings and corrections
 
 - Nexus HEAD before this increment: `28d38c6`. No workflows are currently
