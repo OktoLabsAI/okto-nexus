@@ -2,6 +2,28 @@
 
 This is preparation evidence, not M13 acceptance or a final artifact freeze.
 
+## Nexus hosted regression workflow
+
+The Nexus workflow now builds the dashboard from its lockfile, builds wheel and
+sdist, installs the wheel with `serve-lite,dev`, and runs tests from a temporary
+cwd with `-I` and an independent pytest configuration. Its matrix covers
+Windows/Linux and Python 3.11–3.13. Logs, JUnit and packages are retained as
+Actions artifacts even on failure. This does not claim that hosted checks have
+already passed or replace live-provider and independent-host acceptance.
+
+The private Connector repository is not implicitly accessible from a Nexus
+Actions token. A small, SHA-pinned Connector wheel under `vendor/ci` supplies
+the cross-repository test dependency instead. Its runtime bytes were compared
+against current Connector source before copying; the corresponding provenance
+and exact Core hash are documented in that directory. Nexus package requirements
+are checked to ensure they do not acquire a Connector application dependency.
+
+`tools/ci_installed.py` was exercised locally with the existing NS15.05 wheel:
+all three installed package trees matched their wheels, CLI help exited zero,
+and the three import-boundary checks passed from the temporary cwd. The workflow
+YAML parses with the intended six-cell matrix. The full hosted install/build/test
+path remains pending execution. No running local interpreter was reinstalled.
+
 ## Follow-up: hosted failures reproduced and fixtures corrected
 
 Core run 36948182442 passed all three Linux/Python jobs. Windows reached the

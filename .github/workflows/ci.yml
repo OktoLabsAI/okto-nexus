@@ -1,0 +1,54 @@
+name: Nexus installed regression
+
+on:
+  push:
+    branches: [main, feature/v0.2.0]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  installed:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2022]
+        python: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: ${{ matrix.python }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install frontend dependencies from lock
+        working-directory: frontend
+        run: npm ci
+      - name: Build packaged dashboard
+        working-directory: frontend
+        run: npm run build
+      - name: Build wheel and sdist
+        run: |
+          python -m pip install build
+          python -m build
+      - name: Install built wheel and pinned test artifacts
+        run: python tools/ci_installed.py install
+      - name: Run installed regression outside the checkout
+        run: python tools/ci_installed.py test
+      - name: Preserve artifact and test evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: nexus-${{ matrix.os }}-py${{ matrix.python }}
+          path: |
+            dist/*
+            build/ci/*
+          if-no-files-found: warn
+          retention-days: 7
