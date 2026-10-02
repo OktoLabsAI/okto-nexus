@@ -147,6 +147,11 @@ def test_current_policy_or_evidence_changes_disable_start(options_host, change, 
             scope['workspace_id'] = 'different-workspace'
     after, row = option(options_host)
     assert not row['can_start'] and reason in row['policy_reasons'], row
+    if change in ('offline', 'stale', 'feature', 'method'):
+        assert row['binding']['binding_id'] == binding['binding_id']
+        assert not row['can_prepare'] and not row['can_bind']
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            assert uow.connection.execute('SELECT used_executions FROM runtime_execution_grants').fetchone()[0] == 0
     assert after['availability'] == before['availability']
 
 

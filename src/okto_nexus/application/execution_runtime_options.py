@@ -66,7 +66,9 @@ def read_runtime_options(factory, *, server_id, executor_id, agent_id, workspace
             preparation = binding_view = None
             if workspace_id is None:
                 reasons.append('WORKSPACE_REQUIRED')
-            elif selectable:
+            else:
+                # Historical binding reads remain available when inventory or
+                # execution readiness is lost. Eligibility still gates writes.
                 # Never choose one realization/binding by list order.
                 pending = conn.execute(
                     'SELECT r.realization_ref,r.revision AS realization_revision,r.workspace_binding_id '
@@ -85,8 +87,8 @@ def read_runtime_options(factory, *, server_id, executor_id, agent_id, workspace
                 if len(pending) > 1:
                     reasons.append('REALIZATION_SELECTION_REQUIRED')
                 elif pending:
-                    can_bind = operator
-                    preparation = dict(pending[0]) if operator else None
+                    can_bind = operator and selectable
+                    preparation = dict(pending[0]) if operator and selectable else None
                     if not operator:
                         reasons.append('OPERATOR_APPROVAL_REQUIRED')
                 elif not bindings:
@@ -101,6 +103,8 @@ def read_runtime_options(factory, *, server_id, executor_id, agent_id, workspace
                     binding_view = binding
                     if binding['state'] != 'APPROVED':
                         reasons.append('BINDING_' + binding['state'])
+                    elif not selectable:
+                        pass
                     elif not remote_ready:
                         reasons.append('EXECUTION_UNAVAILABLE')
                     elif context.actor_agent_id != agent_id and not operator:

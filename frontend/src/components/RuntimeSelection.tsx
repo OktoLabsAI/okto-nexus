@@ -48,7 +48,7 @@ export function RuntimeSelection({agentId}: {agentId: string}) {
         setSelection(previous => {
           if (!previous) return null;
           const exists = next.options.some(item => item.adapter_id === previous.adapterId && item.candidate_ref === previous.candidateRef);
-          if (previous.executorId !== next.executor_id || previous.inventoryRevision !== next.inventory_revision || !exists || next.freshness !== "FRESH") {
+          if (previous.executorId !== next.executor_id || previous.inventoryRevision !== next.inventory_revision || !exists) {
             setNotice("The inventory changed or became unavailable. Review the current options and select the installation again.");
             return null;
           }
@@ -72,7 +72,9 @@ export function RuntimeSelection({agentId}: {agentId: string}) {
     return () => { window.removeEventListener("focus", refresh); window.clearInterval(timer); };
   }, []);
 
-  const selected = options?.options.find(item => item.adapter_id === selection?.adapterId && item.candidate_ref === selection?.candidateRef);
+  const candidate = options?.options.find(item => item.adapter_id === selection?.adapterId && item.candidate_ref === selection?.candidateRef);
+  const selected = candidate && options?.freshness !== "FRESH"
+    ? {...candidate, can_prepare: false, can_bind: false, can_start: false} : candidate;
   return <section className="space-y-3 mt-3" aria-label="Runtime selection" data-testid="runtime-selection">
     <h4 className="font-semibold">Execution host and installation</h4>
     <p>Choose where this agent runs. Installation discovery and workspace selection do not approve or start a runtime.</p>
@@ -94,7 +96,8 @@ export function RuntimeSelection({agentId}: {agentId: string}) {
     {notice && <p role="status">{notice}</p>}
     {options && <>
       <p>Inventory: {options.freshness}</p>
-      <fieldset disabled={busy || options.freshness !== "FRESH"} className="space-y-2">
+      {options.freshness !== "FRESH" && <p role="status">Published inventory is not current. Select a recorded connection to inspect its history or recover an existing request. Preparation, binding and runtime start remain unavailable.</p>}
+      <fieldset disabled={busy} className="space-y-2">
         <legend>Provider installation</legend>
         {options.options.map(item => <label key={JSON.stringify([item.adapter_id, item.candidate_ref])} data-testid={`runtime-candidate-${item.candidate_ref}`} className="block rounded border border-surface-200 dark:border-surface-700 p-2">
           <input type="radio" name={`runtime-installation-${agentId}`} disabled={!item.candidate_ref}

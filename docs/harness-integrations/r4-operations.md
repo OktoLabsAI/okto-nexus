@@ -130,6 +130,15 @@ authority to execute under the current realization. The API equivalent is
 and optional `after_session_id`/`limit` (1–100). Subject, recorded opening actor
 and current verified operator visibility matches individual session reads.
 
+If the executor goes offline or its published inventory becomes stale, select
+the recorded installation and workspace to recover the existing request or read
+previous sessions. Historical connection visibility does not enable preparation,
+new binding approval or runtime start. An admitted operation with an uncertain
+effect remains in reconciliation; reload and **Check action result** only read
+its original identity. Keep that request and the executor's durable journals for
+reconciliation. Missing confirmation does not establish that the action failed
+or that repeating it is safe.
+
 Request a passive inventory refresh with
 `POST /v1/runtime/executors/{executor_id}/inventory:refresh` and a stable
 `{"client_intent_id":"your-request-id"}` under the authorized agent's bearer key.

@@ -2,6 +2,15 @@
 
 ## Current acceptance reconciliation: executable Core .56
 
+Offline/stale executor inventory no longer prevents recovering a recorded
+operation after browser reload: selection remains readable and the API retains
+authorized historical bindings while execution eligibility stays disabled.
+Seventeen installed Windows/Edge checks passed with unchanged inputs, including
+one actual synthetic native effect followed by lost confirmation and two reloads
+without replay. See [offline recovery fix and retained failures](M10_OFFLINE_RECOVERY.md).
+The native outcome remains unresolved; this increment restores observation and
+identity preservation, not automatic repair or a closed acceptance gate.
+
 Selected connections now offer a paginated table of previous sessions, including
 closed sessions, through the canonical authenticated session-list API. Eight
 installed tests and one supplemental visual browser test passed with unchanged

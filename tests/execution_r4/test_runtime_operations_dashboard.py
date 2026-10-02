@@ -72,6 +72,41 @@ def submit(panel, stage='SUBMITTED'):
     expect(panel.get_by_role('button', name='Prepare another action', exact=True)).to_be_enabled()
 
 
+def test_browser_retains_uncertain_effect_without_replacement_or_replay(ready_runtime, request, monkeypatch):
+    from playwright.sync_api import expect
+    from nexus_connector_core import CoreError
+    setup, binding, native = ready_runtime
+    page, trace = request.getfixturevalue('local_browser')
+    panel = panel_for(page, setup, binding)
+    submit(panel)
+    panel.get_by_role('button', name='Prepare another action', exact=True).click()
+    send = native.native.send
+    async def lose_confirmation(*args, **kwargs):
+        await send(*args, **kwargs)
+        raise CoreError('OUTCOME_UNKNOWN', 'submit', possible_effect=True)
+    monkeypatch.setattr(native.native, 'send', lose_confirmation)
+    panel.get_by_label('Runtime message', exact=True).fill('One uncertain effect')
+    panel.get_by_role('button', name='Review runtime action', exact=True).click()
+    panel.get_by_role('button', name='Submit reviewed action', exact=True).click()
+    expect(panel.get_by_test_id('runtime-operation-status')).to_contain_text('RECONCILING')
+    expect(panel.get_by_test_id('runtime-operation-status')).to_contain_text('may have taken effect')
+    expect(panel.get_by_role('button', name='Prepare another action', exact=True)).to_have_count(0)
+    expect(panel.get_by_role('button', name='Retry the same submission', exact=True)).to_have_count(0)
+    stored = page.evaluate('JSON.stringify(sessionStorage)')
+    writes = len([r for r in trace['requests'] if r[0] == 'POST'])
+    for _ in range(2):
+        page.reload()
+        panel = panel_for(page, setup, binding)
+        panel.get_by_role('button', name='Check action result', exact=True).click()
+        expect(panel.get_by_test_id('runtime-operation-status')).to_contain_text('RECONCILING')
+        expect(panel.get_by_role('button', name='Prepare another action', exact=True)).to_have_count(0)
+    assert page.evaluate('JSON.stringify(sessionStorage)') == stored
+    assert len([r for r in trace['requests'] if r[0] == 'POST']) == writes
+    assert native.opens == 1 and len(native.native.sent) == 1
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.submit'").fetchone()[0] == 1
+
+
 def test_browser_browses_closed_sessions_without_runtime_mutations(ready_runtime, request, tmp_path):
     from playwright.sync_api import expect
     from test_embedded_dispatch import admit, wait_receipt
