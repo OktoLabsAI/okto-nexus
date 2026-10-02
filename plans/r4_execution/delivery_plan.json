@@ -10,20 +10,21 @@
     "branch": "feature/v0.2.0",
     "historical_checkpoint": "plans/r4_execution/evidence/delivery-checkpoint-20260930.json",
     "published_heads": {
-      "nexus": "92521e085539527fc0ac9a85e53b1255bde30d66",
+      "nexus": "6cf2ec199dd1242ec9ce6a0e49034040512b5b7d",
       "connector": "ad0933e0f71b71fc6d8d420db4c77c1d9c60836c",
-      "core": "a96957db8c39b944ed7c10f1aab8c2e7f7fb2586"
+      "core": "0c4333fd1363244ecbab6b505764685e1c9334d1"
     },
     "heads_are_final_release_tuple": false,
     "shared_core_version": "0.2.56.dev0",
     "shared_core_wheel_sha256": "7f19885f28b16dbfce66b969ab42c79b9947246416c71147315006b6e618b1f6",
     "latest_tested_wheels": {
-      "nexus": "b09dbba597ab8d109298afedd60b32a4f995b203d7a98bfd8443cf6b08756b4b",
+      "nexus": "4705d1de073b8bd81be49d6045dbea7d4cca001c89776660a7a5a8069a22db2f",
       "connector": "93d78a75c5ad81bbdd96e648be136f0f6b2cfd0a53f350266a1c9f96fc449104",
       "core": "7f19885f28b16dbfce66b969ab42c79b9947246416c71147315006b6e618b1f6"
     },
     "closed_product_gates": [],
     "evidence": [
+      "plans/r4_execution/M10_RUNTIME_OPERATIONS.md",
       "plans/r4_execution/M04_OPERATOR_RUNTIME.md",
       "plans/r4_execution/M10_LOCAL_INSTALLATION_CHECK.md",
       "plans/r4_execution/M13_POSIX_DISCOVERY_056.md",
@@ -31,12 +32,12 @@
       "plans/r4_execution/M12_NS15_05_ACCEPTANCE.md",
       "plans/r4_execution/M12_NS15_05_OPERATIONAL_RECONCILIATION.md"
     ],
-    "latest_increment": "Operator representation preserves actor/subject identity and subject grant authority; embedded version-check API/UI already implemented.",
-    "verification_scope": "Operator regressions: 143 passes per Windows and WSL Linux, unchanged inputs; supplemental HTTP/WSS lease case one pass per OS. Synthetic peers do not qualify providers or independent hosts.",
-    "clean_install_scope": "Core .56 coordinated clean-install evidence predates latest Nexus operator wheel. Final current tuple clean installation remains required.",
+    "latest_increment": "Installed dashboard: reviewed start/reuse, turn submission, steering, interruption and close, with durable request recovery and actor/subject grant authority.",
+    "verification_scope": "25 installed Windows/Edge checks passed with unchanged inputs, covering runtime UI, prior selection/preparation, operator authority and NS15.05. Earlier operator regressions: 143 passes per Windows and WSL Linux. Synthetic peers do not qualify providers or independent hosts.",
+    "clean_install_scope": "Core .56 coordinated clean-install evidence predates the latest Nexus runtime UI wheel. Final current tuple clean installation remains required.",
     "macos": {
       "source_commit": "1975e88",
-      "plan_commit": "a96957db8c39b944ed7c10f1aab8c2e7f7fb2586",
+      "plan_commit": "0c4333fd1363244ecbab6b505764685e1c9334d1",
       "target": "Intel x86_64 / macOS 26.4.1 / Python 3.12.4",
       "provenance": "User-operated native synthetic probes; source Git hash and issue report matched.",
       "parent_tracking_escape_leaks": "24/24",
@@ -45,7 +46,7 @@
       "next": "Implement and natively qualify launchd coalition guardian, pipes, owner death, census/stop proof, cleanup and stress acceptance."
     },
     "remaining": [
-      "Complete browser runtime operation controls and remaining M10 onboarding, targeting, native decision and US English/accessibility acceptance.",
+      "Complete remaining M10 native approval/input, full history and uncertain-session recovery, onboarding, US English/accessibility and actual remote/provider browser acceptance.",
       "Resolve or delimit Pi stream-loss reproduction with sufficient provider evidence; complete required provider/platform/Python/fault matrix.",
       "Implement native macOS containment and qualify each provider independently on the user-operated Intel Mac.",
       "Freeze final immutable three-repository tuple, build packages and verify clean installations without checkout dependencies.",

@@ -11,7 +11,7 @@ Native approval/input, complete history/recovery and remaining integrated
 provider/platform/accessibility acceptance are still open; no gate is closed.
 
 The machine-readable `delivery_plan.json` checkpoint is reconciled to published
-Nexus `92521e0`, Connector `ad0933e` and Core `a96957d`. The September 30 checkpoint
+Nexus `6cf2ec1`, Connector `ad0933e` and Core `0c4333f`. The September 30 checkpoint
 is preserved in `evidence/delivery-checkpoint-20260930.json`; its pending-work
 statements are historical. These heads are not the final frozen release tuple.
 
@@ -59,7 +59,7 @@ Windows/Linux smokes verified the three installed packages against their wheels
 in `evidence/issue2-summary-{windows,linux}/installed.json`; Nexus/Core package
 bytes remain those of the .56 integration campaign. This display-only change
 does not repeat or close full runtime acceptance. The embedded version-check UI
-was subsequently delivered as recorded above; runtime operation controls remain.
+was subsequently delivered as recorded above, followed by the basic runtime controls.
 
 Core `43f31ec` corrects the C10 cancellation fixture after a delayed durable
 lookup reproduced its missing-obligation setup failure. The test now observes
@@ -100,8 +100,8 @@ local-realization API, with explicit folder/reference consent and durable
 same-request recovery after a lost reply or tab reload. Installed Edge/API/SQLite
 and documentation acceptance passed 27 checks with unchanged inputs; no runtime
 was started by preparation or binding. Build probing was subsequently delivered
-as recorded above; runtime operations and the remaining onboarding/platform
-matrix are still pending. Connector `0385ed0`
+as recorded above, followed by basic runtime operations. The remaining
+onboarding/platform matrix is still pending. Connector `0385ed0`
 adds the requested compact discovery table and `--verbose`, preserves full JSON,
 and incorporates the updated macOS issue. Nexus adopted its exact wheel and
 passed 21 installed integration checks. See
