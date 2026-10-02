@@ -2,6 +2,28 @@
 
 This is preparation evidence, not M13 acceptance or a final artifact freeze.
 
+## Hosted follow-up and remote laboratory availability
+
+Core run 36950397170 finished with five successful platform/Python cells.
+Windows/Python 3.12 alone failed W03 (1102 passed, 77 skipped). The test cancelled
+open after 200 ms without confirming factory entry. Injecting 300 ms into the
+receipt lookup reproduces that same failure on the installed .52 runtime:
+there is no late handle to force-stop. Core test-only commit `85b25b8` waits for
+factory entry, tests both admission delays and retains the held-close-barrier
+and force-stop assertions. All 10 C7 audit cases passed locally; hosted rerun
+is pending. No runtime artifact or consumer pin changes for this fixture fix.
+
+The user confirmed a second computer on the same network with Connector already
+installed and requested the two-machine test once preparation is complete.
+Record it as an available laboratory candidate, not a qualified executor:
+host identity, installed versions, connectivity and provider setup still need
+verification before the campaign. Prepare and validate locally first. This
+supersedes the earlier statement that no remote computer was identified.
+The A/B/C independent-host isolation topology remains a separate requirement.
+
+Current consumer runs: Connector `36950960934` at `acaa192` and Nexus
+`36951078377` at `62e61c6`. Both were pending terminal results at this checkpoint.
+
 ## Core 0.2.52 consumer integration
 
 Nexus now pins 0.2.52 in pyproject, uv.lock and the inventory version; Connector
