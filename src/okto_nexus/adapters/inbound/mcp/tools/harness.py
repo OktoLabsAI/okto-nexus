@@ -649,7 +649,8 @@ _P_NOTIFY_TARGET = (
 )
 _P_SESSION_ID = "Runtime session returned by harness_open; harness_get may select operation_id instead."
 _P_PAYLOAD_TURN = (
-    'Use {"text":"prompt"} or {"schema_version":1,"content":[{"type":"text","text":"prompt"}]}. '
+    'For R4 sessions use exactly {"text":"prompt"}. Retained legacy sessions also accept '
+    '{"schema_version":1,"content":[{"type":"text","text":"prompt"}]}. '
     "Identity and authority are server-owned; native options are rejected."
 )
 _P_PAYLOAD_STEER = _P_PAYLOAD_TURN
@@ -1159,7 +1160,7 @@ def register(server: Any, deps: Any) -> None:
         notify_target: Annotated[Any, Field(description=_P_NOTIFY_TARGET)] = None,
         idempotency_key: Annotated[str | None, Field(description="Stable key for this open request; retries never create another runtime.")] = None,
     ) -> dict[str, Any]:
-        """Open an approved runtime for an existing agent using operator authority or a current scoped grant; never changes the agent profile."""
+        """Open an approved local runtime. R4 requires its subject identity, approved binding and stable idempotency_key; remote selection uses the path-free R4 intent API. Never changes the agent profile."""
         return await anyio.to_thread.run_sync(functools.partial(
             open_runtime, deps, agent_id=agent_id, kind=kind, project_root=project_root,
             substrate=substrate, target_pid=target_pid, backend=backend, endpoint_id=endpoint_id,
@@ -1194,7 +1195,7 @@ def register(server: Any, deps: Any) -> None:
         expected_turn_id: str | None = None,
         expected_owner_epoch: int | None = None,
     ) -> dict[str, Any]:
-        """Steer a live session's in-flight turn. Rejected if the connector's steer_timing is null (unsupported - check harness_list). NEXT_TURN_BOUNDARY buffers until the next turn; IMMEDIATE can land mid-turn."""
+        """Request steering with a stable idempotency_key. For R4, inspect effective session capabilities; Core validates expected_turn_id and native targeting. Admission is not proof of native application. Retained legacy sessions use their recorded steer_timing contract."""
         body = normalize_payload(payload, required=True)
         return await anyio.to_thread.run_sync(
             functools.partial(authorized_send, deps, supervisor, session_id, "steer", body, idempotency_key=idempotency_key,
@@ -1212,7 +1213,7 @@ def register(server: Any, deps: Any) -> None:
         expected_turn_id: str | None = None,
         expected_owner_epoch: int | None = None,
     ) -> dict[str, Any]:
-        """Interrupt a live session's in-flight turn (abort). If interrupt_requires_settle_wait is true, a send/steer right after may be refused (CONFLICT) until the aborted turn's settle event lands."""
+        """Request interruption with a stable idempotency_key. Core validates R4 capability and expected_turn_id targeting; inspect correlated events for application. A following turn may be refused until native settling completes."""
         body = normalize_payload(payload, required=False)
         return await anyio.to_thread.run_sync(
             functools.partial(authorized_send, deps, supervisor, session_id, "interrupt", body, idempotency_key=idempotency_key,

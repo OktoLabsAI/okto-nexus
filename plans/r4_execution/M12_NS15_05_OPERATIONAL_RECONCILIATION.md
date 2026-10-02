@@ -67,7 +67,12 @@ explicit redundancy cancellation. `git diff 58b38b5 abd402a -- src tests vendor
 pyproject.toml uv.lock README.md .github` was empty. The `58b38b5` run was preserved;
 the cancellation was not a timeout retry and supplies no passing evidence.
 
-NS15.05 remains open for resource/dashboard reconciliation and complete TN-38,
-TN-39 and TN-40 scenario evidence. Embedded qualification, operator delegation,
+Correction after inspecting the scenario manifests and JUnit reports: TN-38,
+TN-39 and TN-40 already have passing evidence at their declared layers on the
+October 1 artifact tuple (Core .51). They do not need implementation from scratch;
+final-artifact regression remains required. The earlier remaining-work statement
+overlooked those records. See [MCP and ledger reconciliation](M12_NS15_05_MCP_RECONCILIATION.md).
+NS15.05 remains open for complete dashboard/dependency acceptance and final
+artifact verification. Embedded qualification, operator delegation,
 inventory refresh, full UI, independent-host/fault/platform acceptance and final
 M13 artifact freeze also remain open. No G0–G3 closure is claimed.

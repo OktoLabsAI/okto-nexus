@@ -430,8 +430,46 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="29",
+    version="30",
     body="""\
+# Current R4 execution
+An Agent is the authenticated identity. An executor owns provider installations
+and physical workspaces; an approved binding selects a realization for that Agent.
+Discovery, consent, technical qualification and execution authority are separate.
+Local execution embeds Core in Nexus. Remote execution requires a registered
+Connector publishing its own inventory over the authenticated R4 link.
+
+Operator setup uses authenticated HTTP: inspect GET /v1/connections/protocol,
+GET /v1/runtime/executors/{executor_id}/inventory and
+GET /v1/agents/{agent_id}/runtime-options?executor_id=...&workspace_id=... .
+Select exact current references, prepare the realization and use
+POST /v1/connections/bindings:prepare then POST /v1/connections/bindings:apply.
+GET /v1/connections/bindings/{binding_id} reads the current scoped approval.
+Do not invent installation IDs, copy remote paths into Server configuration or
+create legacy profiles/endpoints as a substitute for R4 onboarding.
+
+The subject resolves runtime.start with POST /v1/runtime/intents:resolve using
+the selected binding_id, workspace_binding_id and stable client_intent_id.
+Only submit a resolution whose can_submit is true to POST /v1/runtime/operations,
+preserving its operation_id, resolution_revision and intent_hash. Admission
+revalidates authority; a read preview consumes no grant and starts no process.
+Inspect the original operation after uncertainty instead of creating a new one.
+Operator inspection of another Agent does not provide that Agent's credentials
+or authorize impersonation. The public intent route requires the subject identity.
+
+Core owns the catalog IDs codex_app_server, pi_rpc, claude_stream and claude_attach,
+native version qualification, containment and effective capabilities. Read current
+inventory and session facts; a catalog entry, configured method, connected socket
+or APPROVED binding alone does not establish READY_FOR_RUNTIME. Unknown versions
+remain unavailable. Native acceptance and canonical handoff completion differ.
+RECONCILING, possible_effect=true and retry_safe=false never authorize blind replay.
+
+Current limitations: the dashboard still contains legacy setup; complete R4
+browser onboarding, inventory refresh and embedded explicit version observation
+are pending. Remote explicit observation is an operator action on the Connector
+host; it does not grant execution. Agents must not shell out to configure providers
+or copy credentials. Request operator setup when prerequisites are missing.
+
 Canonical event history: harness_event_list and GET /api/v1/runtime/sessions/{session_id}/events
 accept executor_id, stream_epoch, after_sequence (default 0) and limit (1..1000,
 default 200). Agent-key authorization matches session reads. Omitted stream_epoch
@@ -441,7 +479,16 @@ committed_contiguous, gap_pending and has_more. Pages are bounded to 512 KiB of
 stored event payloads. History remains readable after close. Legacy harness
 sessions retain their existing event response; canonical events retain Core fields.
 
-Runtime conversational command contract v3: harness_send/harness_steer accept
+For canonical sessions, harness_send/harness_steer accept payload={"text":"prompt"}
+and require a stable idempotency_key. Steer/interrupt targeting is validated by
+Core using expected_turn_id where required; inspect effective session capabilities.
+Legacy expected_operation_id/expected_owner_epoch guards cannot target R4 sessions.
+harness_open is local compatibility only and cannot select a remote path; use the
+path-free R4 intent API for explicit remote selection. Connection self-service can
+open an already-approved, unambiguous canonical endpoint as its subject.
+
+Retained legacy sessions use conversational command contract v3:
+harness_send/harness_steer accept
 canonical input {"schema_version":1,"content":[{"type":"text","text":"prompt"}]},
 optional subject, intent="conversation" and boolean response_requested. The server
 fills identity, operation/root IDs, workspace and untrusted-content provenance;
@@ -551,93 +598,20 @@ opt-in defense-in-depth). When an actor is known, workspace_list requires
 ``workspaces.list`` and include_paths additionally requires
 ``workspaces.include_paths``.
 
-# Runtime discovery (surface 41; opt-in)
+# Retained binding discovery
 `harness_list(view="bindings", maintenance={"agent_id":"worker","limit":50})`
-and GET /api/v1/harness/bindings share one authorized SQLite projection.
-agent_id is an optional filter, never authentication. Ordinary callers need a
-current endpoint-scoped discover grant and canonical events.read/reachability;
-no visible grants yields an empty agents list. Discovery never grants control.
-Revocation, expiry, key/profile changes and feature flags are checked per read.
+and GET /api/v1/harness/bindings expose the retained endpoint projection.
+agent_id is an optional filter, never authentication. Discovery grants no control.
+Use the R4 inventory, runtime-options and binding reads above for current executor
+selection and qualification. Historical compatibility reports and legacy native
+version lists do not qualify the current Core/provider tuple.
 
-Results group endpoint bindings under one agent_id with canonical skill_names.
-They omit private config, paths, secrets, metadata and notification audiences.
-Session compatibility_report is server-owned and separate from caller metadata.
-It may include a bounded native_version observed during initialize (Codex) or a
-bounded owned --version probe (Claude stream); this is not capability verification.
-Unrecognized formats remain null, capabilities_verified=false.
-No native home path, full user-agent or arbitrary handshake fields are exposed.
-compatible_native_requests lists the exact tested-version protocol contract; it
-is not a grant or proof of every capability. Profile required_native_requests
-must also match this server-owned runtime report before readiness or any turn.
-Unverified requirements fail with native_requirements_unverified. Native command
-approval rejection uses decline, or cancel when the peer offers cancel only;
-accept never selects session-wide or policy-amendment grants.
-Claude stream probes the approved executable with the sealed profile environment,
-without starting a model turn. Exact version2.1.280 covers Write/Edit/Bash and
-AskUserQuestion; version2.1.281 covers only qualified Write and AskUserQuestion.
-Other versions do not satisfy explicit requirements merely by sharing a prefix.
-Attach requires exact integer peerProtocol=1 in its external registry at open and
-before each send. Missing/null/boolean/float values fail protocol_mismatch. Its
-server-owned report records attach_registry_protocol and cc_socks_peer_1 without
-tokens or socket paths. ack_level=NONE; no native request/approval, managed work,
-interrupt or result guarantee is inferred. Successful writes stay unconfirmed.
-Steer/interrupt also require a server-owned compatible_controls entry and tested
-control_contract_basis at admission, dispatch revalidation and native send.
-Unknown versions or missing reports return native_control_unverified before a
-new control intent. Current version contracts: Codex0.156.1, Claude2.1.281,
-Pi0.85.1. Pi is observed with a bounded owned --version probe; its contract has
-protocol-fixture coverage, not a native provider campaign in this remediation.
-Surface52 adds effective_capability_contract=1 and effective_capabilities to the
-server-owned report. A trusted installed adapter probe intersects its observed
-contract with descriptor capabilities and approved profile disabled_capabilities.
-Missing probes or unknown versions cannot enable conversation or managed work.
-Managed work also requires events and correlated results. HITL must be enabled
-for approvals. These capabilities never replace authorization or native sandbox.
-The bindings projection exposes effective capabilities only for current-owner
-ready records; the stored report remains historical evidence after close.
-capabilities_verified remains false: no general native guarantee is inferred.
-Direct admission, dispatch and the native-send boundary enforce this contract.
-An on-demand open may discover an unsupported version after durable admission;
-the attempt becomes REJECTED/native_write_not_started with ACK NONE before any
-turn is written. Its logical delivery remains reserved pending explicit recovery.
-Cleanup remains available. No deduplication, replay or agent ACK is invented.
-Surface53 bounds unresolved logical push reservations to256 globally,32 per actor,
-32 per recipient,128 per workspace and4MiB canonical envelope bytes. Admission
-returns QUOTA_EXCEEDED/runtime_delivery_backpressure before partial message or
-managed claim/grant commit. Existing deliveries stay durable; explicit safe
-recovery can release capacity. Informational delivery without execution is separate.
-Normal dispatch reserves one in-flight transport call per represented agent across
-inbox and command workers. More endpoints do not multiply that budget. Native
-acceptance or a durable terminal does not release a worker whose call has not
-returned. Accepted inference can remain concurrent after transport returns.
-Controls retain independent priority lanes; unknown writes retain their fence
-until reconciliation. Selection considers eligible lanes before batch truncation.
-Surface49 reuses live multiplexing connections through the production factory
-only for the same agent/workspace/adapter/profile revision and resolved backend
-environment, with matching HITL mode. Each opening still creates an independent
-logical session; closing a sibling detaches it without stopping the others.
-The final close observes owned process shutdown. No cross-agent sharing occurs.
-Surface50/schema057 records a store-wide writer contract when the runtime owner
-starts. Incompatible legacy connections cannot mutate protected identity, session,
-inbox or handoff rows. Message producers must match the owner's integration mode:
-runtime_writer_mode_mismatch is CONFIG_ERROR, not a retryable transport failure.
-Align the client flag with the owner; never retry a different native operation.
-Disabling admission retains the writer-version fence and pending operation facts;
-compatible OFF clients can still create ordinary canonical deliveries. These
-internal SQLite compatibility markers are not authentication or execution grants.
-A false conversation capability excludes the adapter from logical-message transport
-selection and rejects direct turns before a durable command is admitted. Pending
-operations revalidate the registered descriptor before send-intent; an operator
-grant never grants a technical capability. Close remains available for cleanup.
-declared_capabilities are adapter contract declarations; capability_verification
-and process_liveness are not_probed. current_owner_ready_record describes a
-persisted ready session under the current live owner lease/profile, not a native
-liveness probe or an effective version-negotiation claim.
-
-limit is an integer 1..100 (default50); pass next_endpoint_id back as
-after_endpoint_id while has_more is true. Only visible endpoint IDs become
-cursors. Up to ten latest sessions per endpoint are returned with
-sessions_has_more. A bounded scan may require a narrower agent_id filter.
+# Retained connection self-service and recovery
+The following surfaces preserve endpoint configuration and legacy history.
+An existing canonical endpoint can connect through its approved R4 binding;
+creating a legacy endpoint/profile does not create that binding. Reads may describe
+retained state rather than a live native process. All effects require current
+authorization, qualification and canonical admission.
 
 # Runtime attempt and canonical claim recovery (surface 43)
 Connection self-service (surface revision 60, identity docs v27):
@@ -734,55 +708,17 @@ Managed handoffs require canonical claim recovery and cannot be released as
 conversation. This maintenance remains operator-authorized with new admission
 OFF; it does not restore disabled sending or fabricate completion.
 
-# Runtime administration (surface 40; opt-in)
-An Agent remains the canonical identity. Approved endpoints and runtime profiles
-do not register another agent or replace its role, capabilities or permissions.
-With feature_harness_integrations enabled, an authenticated operator can call
-`harness_list(view="endpoints"|"profiles", maintenance={...})`. Ordinary agent
-credentials cannot administer these resources. The default action is `list`;
-endpoint listing optionally accepts `agent_id`. Results are `{items:[...]}`.
-Profiles omit command paths, environment values and secret reference names.
-
-Actions share the REST application services and strict input models. Unknown
-fields, coercible strings in place of booleans, and non-positive revisions are
-rejected. maintenance accepts an object or a JSON-encoded object:
-
-- profiles/create: profile_id, adapter_id, optional config, secret_refs,
-  inherit_ambient=false, enabled=false. Matches POST /api/v1/harness/profiles.
-- profiles/update: profile_id, expected_revision and any of config, secret_refs,
-  inherit_ambient, enabled. Matches PATCH /api/v1/harness/profiles/{id}.
-  Omitted fields are preserved; objects replace their entire previous value.
-  Use enabled=false to retire a profile while preserving history.
-- endpoints/create: endpoint_id, agent_id, adapter_id, absolute project_root,
-  profile_id for managed processes; optional enabled=false, priority=0,
-  selection_group, response_policy="explicit", consumption="exclusive",
-  public_config={}. Matches POST /api/v1/harness/endpoints.
-- endpoints/update: endpoint_id, expected_revision and any of public_config,
-  enabled, priority, selection_group, response_policy, consumption, profile_id.
-  Omitted fields are preserved; public_config replaces its entire previous value.
-  Null only clears selection_group or an optional attach profile. Identity,
-  adapter and workspace are immutable. Changing profile requires all prior
-  sessions stopped/detached and no pending start. Matches PATCH of the endpoint.
-- endpoints/boot: endpoint_id, expected_revision, enabled. Matches PUT of the
-  endpoint's /boot resource. A dedicated external attach target cannot auto-boot.
-- endpoints/reconcile: endpoint_id, expected_revision, idempotency_key, reason,
-  acknowledge_uncertain_effects=true. Matches POST of /reconcile; only a closed,
-  quarantined binding is eligible. This never resends ambiguous operations.
-
-Example (an existing worker and approved profile are prerequisites):
-`harness_list(view="endpoints", maintenance={"action":"create",
-"endpoint_id":"worker-code","agent_id":"worker","adapter_id":"codex",
-"project_root":"/approved/project","profile_id":"approved-codex",
-"enabled":true,"response_policy":"conversation"})`.
-
-GET /api/v1/harness/profiles and /endpoints return the same authorized listings.
-All configuration edits atomically revoke affected delegations and disable prior
-boot approvals. Re-enabling configuration does not resurrect that authority;
-issue new grants and approve boot explicitly. Profile edits require live sessions
-to be closed/reopened before new sends. The operator can still close old sessions.
-Audit stores revision/field names, never values, under configuration_changes in
-GET /api/v1/harness/diagnostics. Deactivation never deletes history or replays work.
-Boot/profile updates do not silently authorize a caller's backend override.
+# Retained runtime administration
+Operator views endpoints/profiles and /api/v1/harness/endpoints or /profiles
+remain available for inspecting, disabling and reconciling retained records.
+They are not the R4 onboarding API. New R4 setup requires executor inventory,
+realization consent and binding prepare/apply as described above.
+Configuration edits invalidate affected authority; re-enabling a record does not
+restore grants. Close and inspect old sessions through their authorized surfaces.
+Legacy outbox maintenance above requires its exact operation/attempt/owner guards;
+do not apply those guards to canonical R4 operations. Read R4 operation/session
+state and preserve uncertain effects. No maintenance command proves that an
+external process stopped or permits replay of an uncertain native write.
 For artifacts view, maintenance retains inspect/cleanup/retry/quota actions;
 retry names result_id, writes require idempotency_key and reason, and quota also
 requires quota_bytes. Journal compaction uses view="journal", compact=true.

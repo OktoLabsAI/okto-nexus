@@ -1640,10 +1640,14 @@
       "supporting_evidence": [
         "plans/r4_execution/M12_NS15_05_DOCUMENTATION.md",
         "plans/r4_execution/evidence/ns15-05-docs.json",
-        "plans/r4_execution/evidence/ns15-05-resources.xml"
+        "plans/r4_execution/evidence/ns15-05-resources.xml",
+        "plans/r4_execution/M12_NS15_05_OPERATIONAL_RECONCILIATION.md",
+        "plans/r4_execution/M12_NS15_05_MCP_RECONCILIATION.md",
+        "plans/r4_execution/evidence/ns15-mcp-resources/campaign.json"
       ],
       "remaining": [
-        "Task dependency acceptance and final M13 installed artifacts/browser/provider/platform gates"
+        "Complete R4 dashboard onboarding and task dependency acceptance",
+        "Final M13 artifact regression and independent-host/browser/provider/platform/fault acceptance"
       ],
       "evidence": [
         "plans/r4_execution/M12_NS15_05_ACCEPTANCE.md",
@@ -1651,7 +1655,7 @@
         "plans/r4_execution/M12_TN40_ROLLBACK.md",
         "plans/r4_execution/test_runs_20261001_tn40.json"
       ],
-      "notes": "TR4-15-05 and TN-38/39/40 passed at their declared layers; task dependency acceptance remains open."
+      "notes": "TR4-15-05 and TN-38/39/40 passed at their declared layers on the October 1 artifact tuple. October 2 resource/surface/OpenAPI checks passed 23 installed cases on Core .53; no fresh complete scenario or release acceptance is claimed."
     },
     "NS16.01": {
       "proposed_nodeid": "tests/execution_r4/test_ns16.py::test_ns16_01",

@@ -2,6 +2,13 @@
 
 ## Current acceptance reconciliation: executable Core .53
 
+MCP identity resource v30 / surface 63 now describes current R4 onboarding and
+controls, removes obsolete provider-version claims and scopes retained legacy
+maintenance. Twenty-three installed resource/surface/OpenAPI checks passed with
+unchanged inputs. The NS15.05 ledger review also confirms TN-38/39/40 already have
+historical scoped passes; final-artifact regression and dashboard acceptance remain
+open. See [MCP and ledger reconciliation](M12_NS15_05_MCP_RECONCILIATION.md).
+
 NS15.05 operational reconciliation now removes stale R3/legacy guidance and
 verifies the actual R4 bundle in Connector doctor. Eight installed tests, 34
 Connector command examples and the Nexus guide's seven help commands/14 routes
