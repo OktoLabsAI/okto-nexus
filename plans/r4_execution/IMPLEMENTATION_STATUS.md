@@ -2,6 +2,15 @@
 
 ## Current acceptance reconciliation: executable Core .53
 
+Connector `37726bd5657e9961e9d14a77e035993d9f118e5f` removes checkout injection
+from the CLI E2E subprocesses: three scenarios passed with isolated installed CLI
+and daemon processes. The preceding full suite passed 699 tests with two skips,
+but still used source paths in those CLI children; that limitation is recorded.
+Fifty-four affected discovery/control checks passed after adding public daemon
+status to timeout diagnostics. Two hosted Windows timeouts remain unreproduced
+and unresolved. Application bytes and pinned wheels are unchanged. See the
+[Connector report and evidence](https://github.com/OktoLabsAI/okto-nexus-connector/blob/37726bd5657e9961e9d14a77e035993d9f118e5f/plans/implementation/CI_DISCOVERY_RECHECK.md).
+
 The NS14 load fixture now republishes a newly observed inventory through its
 reconciled channel; the technical Pi test observes shutdown completion before
 checking its listener. Six installed checks passed with unchanged inputs.
