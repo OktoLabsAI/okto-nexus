@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="0.219" timestamp="2026-10-02T06:05:29.425130-03:00" hostname="Alienware_m15"><testcase classname="tests.test_sqlite_writer_fairness" name="test_late_wakeup_cannot_admit_expired_writer[0.02]" time="0.020"><failure message="Failed: DID NOT RAISE OktoNexusError">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4811/test_late_wakeup_cannot_admit_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000027866695810&gt;
+elapsed = 0.02
+
+    @pytest.mark.parametrize("elapsed", [.02, .021])
+    def test_late_wakeup_cannot_admit_expired_writer(tmp_path, monkeypatch, elapsed):
+        from okto_nexus.adapters.outbound.sqlite import write_gate
+        factory = factory_at(tmp_path, budget=20)
+        gate = factory._writer_gate
+        clock = SimpleNamespace(now=0.0)
+        monkeypatch.setattr(write_gate, "time", SimpleNamespace(monotonic=lambda: clock.now))
+        gate.acquire(1)
+        def wake_after_release(timeout):
+            assert timeout == .02
+            # Deterministically model the holder releasing while this waiter is
+            # descheduled until its deadline. No real sleep or global clock patch.
+            gate.release()
+            clock.now = elapsed
+        monkeypatch.setattr(gate._condition, "wait", wake_after_release)
+        work = factory.unit_of_work()
+        statements = []
+        work.connection.set_trace_callback(statements.append)
+&gt;       with pytest.raises(OktoNexusError) as error:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE OktoNexusError
+
+tests\test_sqlite_writer_fairness.py:140: Failed</failure></testcase><testcase classname="tests.test_sqlite_writer_fairness" name="test_late_wakeup_cannot_admit_expired_writer[0.021]" time="0.010"><failure message="Failed: DID NOT RAISE OktoNexusError">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4811/test_late_wakeup_cannot_admit_1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000027866695480&gt;
+elapsed = 0.021
+
+    @pytest.mark.parametrize("elapsed", [.02, .021])
+    def test_late_wakeup_cannot_admit_expired_writer(tmp_path, monkeypatch, elapsed):
+        from okto_nexus.adapters.outbound.sqlite import write_gate
+        factory = factory_at(tmp_path, budget=20)
+        gate = factory._writer_gate
+        clock = SimpleNamespace(now=0.0)
+        monkeypatch.setattr(write_gate, "time", SimpleNamespace(monotonic=lambda: clock.now))
+        gate.acquire(1)
+        def wake_after_release(timeout):
+            assert timeout == .02
+            # Deterministically model the holder releasing while this waiter is
+            # descheduled until its deadline. No real sleep or global clock patch.
+            gate.release()
+            clock.now = elapsed
+        monkeypatch.setattr(gate._condition, "wait", wake_after_release)
+        work = factory.unit_of_work()
+        statements = []
+        work.connection.set_trace_callback(statements.append)
+&gt;       with pytest.raises(OktoNexusError) as error:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE OktoNexusError
+
+tests\test_sqlite_writer_fairness.py:140: Failed</failure></testcase></testsuite></testsuites>

@@ -21,8 +21,13 @@ class WriteGate:
                     if remaining <= 0:
                         raise TimeoutError("SQLite writer admission timed out.")
                     self._condition.wait(remaining)
+                remaining = deadline - time.monotonic()
+                # Notification does not guarantee the waiter resumed before
+                # its deadline, even when the preceding holder has released.
+                if remaining <= 0 and timeout_seconds > 0:
+                    raise TimeoutError("SQLite writer admission timed out.")
                 self._active = True
-                return max(0, deadline - time.monotonic())
+                return max(0, remaining)
             finally:
                 self._waiting.remove(ticket)
                 self._condition.notify_all()

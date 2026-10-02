@@ -3,6 +3,7 @@ from concurrent.futures import ThreadPoolExecutor
 import sqlite3
 import threading
 import time
+from types import SimpleNamespace
 
 import pytest
 
@@ -116,3 +117,44 @@ def test_queue_wait_reduces_sqlite_lock_wait_budget(tmp_path):
     budget = int(statements[0].split("=")[1])
     assert budget == int(remaining[-1] * 1000) and budget < 1000
     assert statements[1:3] == ["BEGIN IMMEDIATE", "PRAGMA busy_timeout=1000"]
+
+
+@pytest.mark.parametrize("elapsed", [.02, .021])
+def test_late_wakeup_cannot_admit_expired_writer(tmp_path, monkeypatch, elapsed):
+    from okto_nexus.adapters.outbound.sqlite import write_gate
+    factory = factory_at(tmp_path, budget=20)
+    gate = factory._writer_gate
+    clock = SimpleNamespace(now=0.0)
+    monkeypatch.setattr(write_gate, "time", SimpleNamespace(monotonic=lambda: clock.now))
+    gate.acquire(1)
+    def wake_after_release(timeout):
+        assert timeout == .02
+        # Deterministically model the holder releasing while this waiter is
+        # descheduled until its deadline. No real sleep or global clock patch.
+        gate.release()
+        clock.now = elapsed
+    monkeypatch.setattr(gate._condition, "wait", wake_after_release)
+    work = factory.unit_of_work()
+    statements = []
+    work.connection.set_trace_callback(statements.append)
+    with pytest.raises(OktoNexusError) as error:
+        with work as uow:
+            uow.connection.execute("INSERT INTO writes VALUES('expired')")
+    assert error.value.code == "DB_ERROR" and error.value.retryable
+    assert not statements  # Even BEGIN must not run after queue expiry.
+    with pytest.raises(sqlite3.ProgrammingError):
+        work.connection.execute("SELECT 1")
+    assert not gate._waiting and not gate._active
+    with factory.unit_of_work() as uow:
+        assert uow.connection.execute("SELECT COUNT(*) FROM writes").fetchone()[0] == 0
+
+
+def test_zero_budget_allows_only_an_immediately_available_slot():
+    from okto_nexus.adapters.outbound.sqlite.write_gate import WriteGate
+    gate = WriteGate()
+    assert gate.acquire(0) == 0
+    with pytest.raises(TimeoutError):
+        gate.acquire(0)
+    gate.release()
+    assert gate.acquire(0) == 0
+    gate.release()

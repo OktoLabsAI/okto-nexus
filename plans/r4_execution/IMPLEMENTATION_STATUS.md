@@ -2,6 +2,12 @@
 
 ## Current acceptance reconciliation: executable Core .53
 
+Writer admission now rechecks its deadline after notification, before taking a
+free slot. Two controlled-clock cases failed before and pass after the fix;
+29 installed checks passed on each of Windows/Python 3.13.1 and WSL Linux/Python
+3.12.13 with unchanged inputs. This development artifact has not repeated the
+full load/hosted acceptance. See [deadline race and evidence](M13_WRITER_DEADLINE.md).
+
 SQLite writers now enter a FIFO queue within their connection factory, sharing
 the existing timeout with SQLite and preserving read snapshots and no replay.
 Installed Linux regression passed 42 checks. Final load/docs/vault/lease campaigns
