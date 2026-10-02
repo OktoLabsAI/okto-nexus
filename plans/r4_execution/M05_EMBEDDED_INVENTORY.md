@@ -2,6 +2,13 @@
 
 Status: partial P5.1 foundation. M05 and G1 remain open.
 
+Historical increment: the RECOVERING-only behavior and Core .38 evidence below
+describe this original campaign. Current serve startup can reach CONTROL_READY
+through the [embedded dispatcher](M05_EMBEDDED_DISPATCH.md). Correlated passive
+refresh now has an [embedded consumer and newer package evidence](M10_INVENTORY_REFRESH.md).
+Consult [current acceptance status](IMPLEMENTATION_STATUS.md) for remaining work;
+the original evidence and limitations below are preserved.
+
 ## Implemented path
 
 With harness integrations enabled, the real serve lifespan acquires the existing exclusive store owner before starting an embedded inventory owner. The embedded executor is tied to that owner and a new generation. Core discovery runs outside database transactions. Complete candidates remain on the Nexus host; only the public Core path-free snapshot reaches inventory storage and HTTP views.

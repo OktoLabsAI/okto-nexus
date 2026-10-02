@@ -2,6 +2,14 @@
 
 ## Current acceptance reconciliation: executable Core .53
 
+Passive inventory refresh now has a durable scoped request/delivery queue and an
+embedded consumer that claims before discovery and completes with the correlated
+publication. The same 33 installed checks passed on Windows/Python 3.13.1 and WSL
+Linux/Python 3.12.13 with unchanged inputs. Public HTTP, remote Connector and UI
+integration remain open; no refresh endpoint is advertised yet. This is a
+development artifact, not M13's final tuple. See
+[implementation, evidence and remaining transport work](M10_INVENTORY_REFRESH.md).
+
 Connector `d2e240eb21c6a40523d2a5bb585cc0b44285c4b8` isolates cleanup-ordering
 acceptance from its synthetic lease clock: a delayed event loop reproduced the
 pre-renewal timeout, then both normal/delayed cases passed with the shared public

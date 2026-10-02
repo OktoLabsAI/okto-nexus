@@ -26,6 +26,82 @@ def agent_key(deps, app):
         return app.state.auth.issue_key(uow, agent_id="viewer")
 
 
+def request_refresh(deps, owner, intent):
+    from okto_nexus.application.execution_inventory_refresh import request_inventory_refresh
+    from okto_nexus.bootstrap.execution_authority import build_execution_access
+    from okto_nexus.domain.runtime_context import RuntimeRequestContext
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        credential = uow.connection.execute(
+            "SELECT api_key_hash FROM agents WHERE agent_id='viewer'").fetchone()[0]
+    return request_inventory_refresh(deps.connection_factory,
+        context=RuntimeRequestContext('viewer', 'agent_key', credential_binding=credential),
+        access=build_execution_access(deps), server_id=owner.key.server_id,
+        executor_id=owner.key.executor_id, client_intent_id=intent)
+
+
+def test_embedded_refresh_only_completes_requests_claimed_before_discovery(tmp_path, monkeypatch):
+    monkeypatch.setattr(embedded_inventory, "discover_local_candidates",
+                        lambda **_: SimpleNamespace(candidates=()))
+    deps, app = app_for(tmp_path / 'home')
+    agent_key(deps, app)
+    with TestClient(app) as client:
+        owner = app.state.embedded_inventory_owner
+        assert request_refresh(deps, owner, 'before')['state'] == 'PENDING'
+        entered, release = threading.Event(), threading.Event()
+
+        def held(**_):
+            entered.set()
+            assert release.wait(5)
+            return SimpleNamespace(candidates=())
+
+        monkeypatch.setattr(embedded_inventory, 'discover_local_candidates', held)
+
+        async def scenario():
+            refreshing = asyncio.create_task(owner.refresh())
+            try:
+                assert await asyncio.to_thread(entered.wait, 3)
+                assert request_refresh(deps, owner, 'before')['state'] == 'REQUESTED'
+                assert request_refresh(deps, owner, 'during')['state'] == 'PENDING'
+            finally:
+                release.set()
+                await asyncio.wait_for(refreshing, 3)
+
+        client.portal.call(scenario)
+        assert request_refresh(deps, owner, 'before')['state'] == 'UPDATED'
+        assert request_refresh(deps, owner, 'during')['state'] == 'PENDING'
+        client.portal.call(owner.refresh)
+        assert request_refresh(deps, owner, 'during')['state'] == 'UPDATED'
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            assert uow.connection.execute('SELECT COUNT(*) FROM execution_sessions').fetchone()[0] == 0
+            assert uow.connection.execute('SELECT COUNT(*) FROM execution_link_tickets').fetchone()[0] == 0
+
+
+def test_embedded_failed_discovery_keeps_request_for_retry(tmp_path, monkeypatch):
+    monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+                        lambda **_: SimpleNamespace(candidates=()))
+    deps, app = app_for(tmp_path / 'home')
+    agent_key(deps, app)
+    with TestClient(app) as client:
+        owner = app.state.embedded_inventory_owner
+        request_refresh(deps, owner, 'retry')
+        previous = owner.publication.publication_sequence
+
+        def failed(**_):
+            raise OSError('discovery failed')
+
+        monkeypatch.setattr(embedded_inventory, 'discover_local_candidates', failed)
+        with pytest.raises(OSError, match='discovery failed'):
+            client.portal.call(owner.refresh)
+        assert request_refresh(deps, owner, 'retry')['state'] == 'REQUESTED'
+        assert owner.publication.publication_sequence == previous
+        monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+                            lambda **_: SimpleNamespace(candidates=()))
+        client.portal.call(owner.refresh)
+        assert request_refresh(deps, owner, 'retry')['state'] == 'UPDATED'
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            assert uow.connection.execute('SELECT COUNT(*) FROM execution_inventory_refresh_deliveries').fetchone()[0] == 1
+
+
 def test_serve_publishes_path_free_local_inventory_without_runtime_or_wss(tmp_path, monkeypatch):
     binary = tmp_path / "codex.exe"
     binary.write_bytes(b"Discovery-only technical candidate")

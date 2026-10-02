@@ -54,7 +54,8 @@ def publish_executor_inventory(factory, *, principal: ExecutorKey,
                                producer_instance_id: str,
                                snapshot: Mapping[str, Any],
                                publication_ticket_id: str | None = None,
-                               embedded_owner: tuple[str, int, int] | None = None) -> InventoryPublication:
+                               embedded_owner: tuple[str, int, int] | None = None,
+                               refresh_delivery_id: str | None = None) -> InventoryPublication:
     """Store one authenticated snapshot; same sequence/content is idempotent."""
     from nexus_connector_core import CoreError, __version__, verify_executor_inventory_snapshot
     from nexus_connector_core.protocol import canonical_json
@@ -150,6 +151,11 @@ def publish_executor_inventory(factory, *, principal: ExecutorKey,
                 raise OktoNexusError(ErrorCode.CONFLICT,
                                       "Stale or conflicting inventory sequence.", {})
             if sequence == old_sequence:
+                if refresh_delivery_id is not None:
+                    from .execution_inventory_refresh import complete_inventory_refresh
+                    complete_inventory_refresh(uow, delivery_id=refresh_delivery_id,
+                        server_id=principal.server_id, executor_id=principal.executor_id,
+                        producer_instance_id=producer_instance_id, sequence=sequence)
                 return InventoryPublication(principal.server_id,
                                             principal.executor_id, sequence,
                                             revision, True)
@@ -179,6 +185,11 @@ def publish_executor_inventory(factory, *, principal: ExecutorKey,
                 (sequence, revision, existing["inventory_revision"],
                  principal.server_id, principal.executor_id),
             )
+        if refresh_delivery_id is not None:
+            from .execution_inventory_refresh import complete_inventory_refresh
+            complete_inventory_refresh(uow, delivery_id=refresh_delivery_id,
+                server_id=principal.server_id, executor_id=principal.executor_id,
+                producer_instance_id=producer_instance_id, sequence=sequence)
         # Keep the current and immediately previous publication only.
         conn.execute(
             "DELETE FROM execution_inventory_snapshots WHERE server_id=? AND executor_id=? "

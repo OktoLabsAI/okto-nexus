@@ -10,7 +10,9 @@ from ..adapters.outbound.execution.core_inventory import (
 )
 from ..adapters.outbound.sqlite.execution_identity import ensure_execution_installation
 from ..application.executor_inventory import publish_executor_inventory
+from ..application.execution_inventory_refresh import claim_inventory_refresh
 from ..domain.execution.keys import ExecutorKey
+from ..errors import ErrorCode, OktoNexusError
 
 
 class EmbeddedInventoryOwner:
@@ -88,6 +90,7 @@ class EmbeddedInventoryOwner:
             raise
 
     async def _refresh(self):
+        delivery_id = await asyncio.to_thread(self._claim_refresh)
         observed_at = time.monotonic()
         configuration = getattr(self.deps, 'local_discovery', None)
         discovery = await asyncio.to_thread(discover_local_candidates,
@@ -97,14 +100,35 @@ class EmbeddedInventoryOwner:
             return
         candidates = tuple(discovery.candidates)
         age_ms = max(0, int((time.monotonic() - observed_at) * 1000))
-        publication = await asyncio.to_thread(self._publish, candidates, age_ms)
+        publication = await asyncio.to_thread(self._publish, candidates, age_ms, delivery_id)
         self.candidates = candidates
         self.publication = publication
         self.failure = None
         self.fresh[(self.key.server_id, self.key.executor_id)] = (
             publication.publication_sequence, time.monotonic(), age_ms)
 
-    def _publish(self, candidates, age_ms):
+    def _claim_refresh(self):
+        # Claim before discovery: requests arriving during a scan must wait for
+        # the next observation. Revalidate the exclusive store lease here too.
+        with self.deps.connection_factory.unit_of_work() as uow:
+            row = uow.connection.execute(
+                "SELECT control_state FROM execution_executors WHERE server_id=? AND executor_id=? "
+                "AND kind='embedded' AND owner_instance_id=? AND generation=? AND revoked_at IS NULL",
+                (self.key.server_id, self.key.executor_id, self.dispatcher.owner_id, self.generation)).fetchone()
+            if row is None or not self.dispatcher.repo.owns(uow,
+                    owner_id=self.dispatcher.owner_id, epoch=self.dispatcher.epoch,
+                    now=self.deps.clock.now_iso()):
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                    "The embedded inventory owner is no longer current.", {})
+            # Initial reconciliation publishes the baseline before the runtime
+            # owner marks this executor CONTROL_READY.
+            if row['control_state'] == 'RECOVERING':
+                return None
+            return claim_inventory_refresh(uow, server_id=self.key.server_id,
+                executor_id=self.key.executor_id, producer_instance_id=self.dispatcher.owner_id,
+                connection_generation=self.generation)
+
+    def _publish(self, candidates, age_ms, delivery_id=None):
         with self.deps.connection_factory.unit_of_work(write=False) as uow:
             previous = uow.connection.execute(
                 "SELECT publication_sequence FROM execution_inventory_current "
@@ -117,7 +141,8 @@ class EmbeddedInventoryOwner:
             observation_age_ms=age_ms)
         return publish_executor_inventory(self.deps.connection_factory,
             principal=self.key, producer_instance_id=self.dispatcher.owner_id,
-            snapshot=snapshot, embedded_owner=(self.dispatcher.owner_id, self.dispatcher.epoch, self.generation))
+            snapshot=snapshot, embedded_owner=(self.dispatcher.owner_id, self.dispatcher.epoch, self.generation),
+            refresh_delivery_id=delivery_id)
 
     async def _run(self):
         while not self._stop.is_set():
