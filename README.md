@@ -80,6 +80,20 @@ the derived `shared.md` view live outside that database.
 - **Token-aware MCP docs.** First-use guidance remains resident; deeper
   reference material is available through versioned MCP resources on demand.
 
+## R4 execution status
+
+For current local and remote execution setup, use the
+[R4 operations guide](docs/harness-integrations/r4-operations.md). Nexus embeds
+Core locally; the Connector application is required only on remote execution
+hosts. Agents connect directly to HTTP `/mcp`. Legacy native launch factories
+and Nexus MCP stdio have been retired.
+
+This is a development release. Four adapter catalog entries do not establish
+four qualified native integrations. The [acceptance ledger](plans/r4_execution/acceptance_inventory.json)
+and [evidence index](docs/harness-integrations/evidence-index.md) distinguish
+installed contract tests from final provider/platform/multi-host qualification.
+Final G0–G3 acceptance remains open.
+
 ## Install
 
 The recommended install includes the HTTP hub, dashboard, local embedding

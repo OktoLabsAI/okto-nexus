@@ -1,8 +1,10 @@
 # Runtime administration — surface 58
 
-This reference describes the implemented 0.2.0 administrative subset. The release
-and complete P11/P12 gates are still pending; consult the
-[execution status](../../plans/pr34-remediation/IMPLEMENTATION_STATUS.md).
+This is the legacy administrative reference for retained records and migration.
+Use [R4 execution operations](r4-operations.md) for current onboarding and
+canonical operation admission. Legacy profile creation is not sufficient to
+launch through the retired native factories. Final G0–G3 acceptance remains open;
+consult the [current evidence index](evidence-index.md).
 
 Native integrations and attach default to enabled; explicit stored/env/CLI
 `false` overrides remain honored. Endpoint/profile approval and per-agent method
@@ -76,8 +78,8 @@ While has_more=true, pass next_endpoint_id as after_endpoint_id. Cursors only
 contain visible endpoint IDs. Each endpoint shows at most ten latest sessions
 and sessions_has_more. A scan exceeding 1000 candidate endpoints without finding
 the requested page fails with QUOTA_EXCEEDED; narrow agent_id. Reads neither
-contact the harness nor resolve credentials or modify presence. REST, MCP HTTP
-and authenticated MCP stdio use the same persisted projection.
+contact the harness nor resolve credentials or modify presence. REST and authenticated MCP HTTP use the same persisted projection. Nexus MCP
+stdio has been removed.
 
 List responses use `{ok:true,data:{items:[...]}}`. Profile discovery omits command
 paths, environment values and secret reference names. It exposes the profile ID,

@@ -94,8 +94,8 @@ _P_INCLUDE_PATHS = (
     "agent_list / capability_list."
 )
 _P_WORKSPACE_LIST_AGENT = (
-    "Your agent_id for permission evaluation in open stdio mode (optional; "
-    "authenticated HTTP MCP uses the API-key identity)."
+    "Optional agent_id assertion for permission evaluation; "
+    "authenticated HTTP MCP uses the API-key identity."
 )
 
 

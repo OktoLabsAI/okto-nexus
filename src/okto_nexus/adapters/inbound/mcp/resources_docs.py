@@ -430,7 +430,7 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="28",
+    version="29",
     body="""\
 Canonical event history: harness_event_list and GET /api/v1/runtime/sessions/{session_id}/events
 accept executor_id, stream_epoch, after_sequence (default 0) and limit (1..1000,
@@ -463,9 +463,9 @@ upsert it.
 # agent_whoami
 Return YOUR OWN profile, derived from your API key (no parameters): agent_id,
 operator-assigned role, capabilities, metadata, permissions (null = unrestricted).
-The recommended FIRST call. VALIDATION_ERROR on a connection with no
-authenticated identity (open cooperative stdio): there, read profiles with
-agent_get. When you have policy/communication bindings the profile ALSO carries
+The recommended FIRST call. HTTP MCP requires an authenticated Agent key;
+an agent_id argument cannot replace that credential. When you have
+policy/communication bindings the profile ALSO carries
 ``effective_policies`` (``<policy_id>@<version>`` / ``inline``), a
 ``governance`` rule list and a ``communication`` style block - each absent
 otherwise.
@@ -651,7 +651,7 @@ returned. Obtain an operator-approved endpoint and a current open grant first.
 Use a returned call:
 `harness_list(view="connections", maintenance={"action":"connect","endpoint_id":"own-endpoint","idempotency_key":"unique-opening-id"})`.
 This revalidates identity/policy/grants and uses the existing durable open service
-and serve owner, over HTTP MCP or authenticated stdio proxy. Reuse the same
+and serve owner, over authenticated HTTP MCP. Reuse the same
 idempotency key for the same opening; never blindly create a new key after an
 uncertain outcome. Opening does not authorize a task or adopt your current chat.
 REST equivalents: GET /api/v1/connections/available and POST /api/v1/connections/connect

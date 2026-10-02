@@ -1,10 +1,11 @@
 # Harness integrations — operator guide for 0.2.0
 
-This guide describes the implemented remediation on `feature/v0.2.0`, including
-surface60 connection self-service. See [implementation status](../../plans/pr34-remediation/IMPLEMENTATION_STATUS.md)
-for executed tests and remaining work. Captures under `evidence/` describe older
-builds, not current configuration instructions or permission to reuse their
-accounts, endpoints or sessions.
+For current R4 setup, use [R4 execution operations](r4-operations.md).
+The notes below document retained legacy records and compatibility contracts.
+They do not qualify the current Core or authorize a legacy native launch.
+See the [current evidence index](evidence-index.md) for actual acceptance scope.
+Historical captures are not configuration instructions or permission to reuse
+their accounts, endpoints or sessions.
 
 ## Identity and setup
 
@@ -17,8 +18,8 @@ logical delivery has one selected executor, not one execution per endpoint.
 Native integrations and attach are enabled by default. Explicit stored,
 environment or CLI `false` settings remain effective; defaults do not overwrite
 operator choices. Use `OKTO_NEXUS_FEATURE_HARNESS_INTEGRATIONS=false` or
-`OKTO_NEXUS_FEATURE_HARNESS_ATTACH=false` to disable them. `serve` owns native runtimes and the durable dispatcher. MCP stdio uses the
-authenticated owner proxy instead of spawning independent copies. Use existing
+`OKTO_NEXUS_FEATURE_HARNESS_ATTACH=false` to disable them. `serve` owns the durable dispatcher and embeds Core for local native execution.
+Agents connect directly to HTTP `/mcp`; Nexus MCP stdio has been removed. Use existing
 Nexus operator authentication for administration. A payload `agent_id` is an
 identifier, never a credential. Ordinary agents require current scoped grants and
 canonical permissions; REST and MCP share application authorization.
@@ -27,19 +28,11 @@ The dashboard supports **Agents → Connections → Configure endpoint** and cop
 a scoped connection command. See the [self-service guide](../../plans/pr34-remediation/SELF_CONNECTIONS.md)
 for setup, MCP opening authorization and remote-operation boundaries.
 
-For an existing Agent such as `worker`:
-
-1. Create an approved runtime profile for the adapter. Profiles default to disabled
-   and `inherit_ambient=false`. Configure executable, provider/model and dedicated
-   tool home for the authorized environment. Use supported secret references;
-   never forward the Nexus operator credential to the subprocess.
-2. Create an enabled endpoint linking Agent, profile, adapter and absolute project
-   path. This configures a connection without spawning it.
-3. Open the endpoint on demand, or explicitly approve its revision for boot.
-   Configuration edits revoke grants and boot approvals; re-enabling a record
-   does not restore them.
-4. Grant only the actions needed by each caller. Preserve sandbox and native
-   approvals; an approved profile is not permission to bypass them.
+For a new R4 connection, select the executor inventory candidate, prepare an
+approved realization, and prepare/apply its canonical binding as described in
+[R4 execution operations](r4-operations.md). The legacy profile and endpoint
+records below remain useful for migration and history. The retired default
+native factories refuse direct legacy launches with a migration-required conflict.
 
 Exact shared MCP/REST configuration requests, revisions and grant restrictions
 are documented in [runtime administration](runtime-administration.md).
@@ -53,25 +46,12 @@ still requires its original authorized decision. See the
 [redaction evidence and limits](../../plans/pr34-remediation/P03_BACKEND_SECRET_REDACTION.md);
 this does not discover unknown secrets inside external credential files. The protection applies to new captures; existing append-only journals and results are not rewritten or replayed. If historical exposure is confirmed, rotate the affected credential and use the approved retention/incident procedure.
 
-For Codex, configure a dedicated `CODEX_HOME` in the approved profile and use
-`adapter_id="codex"`. After approving that profile and endpoint, a typical
-operator request to `harness_open` or `POST /api/v1/harness/sessions` is:
+Use dedicated approved provider configuration on the execution host. Do not
+use the old `kind`/`project_root` open request to bypass canonical binding
+admission. Keep returned operation/session IDs; readiness does not prove work
+completion.
 
-```json
-{
-  "agent_id": "worker",
-  "kind": "codex",
-  "endpoint_id": "worker-code",
-  "project_root": "/approved/project"
-}
-```
-
-Replace identifiers/path with actual approved configuration. Opening cannot
-arbitrarily override its stored backend or inherit personal provider settings.
-Keep the returned session identifier for explicit controls. Readiness is not
-proof that later work completed.
-
-## Four preserved connectors
+## Historical connector contracts
 
 | Kind / substrate | Transport | Distinction |
 |---|---|---|
@@ -293,7 +273,7 @@ Restore into a new home and start with an explicit `--feature-harness-integratio
 
 A known journal quota or write/fsync failure pauses new executable delivery,
 send/steer and open admission in the shared store. Updated REST/MCP callers
-receive `CONFLICT` with reason `runtime_capture_unavailable`; independent stdio
+receive `CONFLICT` with reason `runtime_capture_unavailable`; retired independent stdio
 writers see the same fence. Database triggers also reject inserts by already-open
 older writers. A rejected transaction preserves no new message, reservation,
 grant charge or executable intent. Existing authorized idempotent replies remain

@@ -620,7 +620,7 @@ okto-nexus serve --port 9000 --host 0.0.0.0
 okto-nexus tail --project-root .   # events as NDJSON
 okto-nexus admin prune --project-root . --dry-run
 okto-nexus admin issue-keys --project-root .
-okto-nexus                  # stdio MCP server (V1 mode)`}</Code>
+okto-nexus --help           # command reference; MCP uses HTTP /mcp`}</Code>
         <H>Binding beyond loopback</H>
         <P>
           With `--host` outside 127.0.0.1, the dashboard and REST start

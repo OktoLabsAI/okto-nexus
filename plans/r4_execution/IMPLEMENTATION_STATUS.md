@@ -1,5 +1,11 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.05 documentation cutover - October 1, 2026
+
+Current R4 operations and evidence entry points replace obsolete stdio/legacy-open guidance. MCP resource identity v29 and surface revision 62 expose updated authentication instructions; dashboard source help reflects HTTP MCP. Supporting checks: seven installed CLI help commands, thirteen installed route declarations and **26 source regression passes**. See [scope and remaining work](M12_NS15_05_DOCUMENTATION.md). TR4-15-05 and TN-38/39/40 remain NOT_RUN; packaged dashboard and final artifact qualification remain required.
+
+Entries below are a chronological evidence history. Their remaining-work statements describe their own capture time; later entries supersede resolved items. The acceptance inventory remains authoritative for scenario acceptance.
+
 ## NS15.04 configuration and post-effect restore - October 1, 2026
 
 **TR4-15-04 PASSED at migration**, configuration and restore cases. Installed campaign: **14 distinct passes and 3 architecture checks**. TR4-15-04 passed at migration: atomic selected configuration retry, foreign-owner refusal, and joint offline restore of Nexus/Core journals and session config after a possible native effect. RECONCILING history and no-retry facts are preserved; unsafe restore/overwrite and missing Core journals are refused. See [scope](M12_NS15_04_CONFIG_RESTORE.md) and [manifest](test_runs_20261001_ns15_04.json). Task dependency acceptance and final M13 provider/platform/multi-host/release gates remain open.

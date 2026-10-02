@@ -1040,8 +1040,8 @@ export function AgentsView({
                             }
                           />
                           <p className="text-[10px] text-surface-400 dark:text-surface-500">
-                            Changes apply immediately to every transport (MCP HTTP and
-                            stdio). “Full access” agents have no stored flags.
+                            Changes apply immediately to MCP HTTP and REST.
+                            “Full access” agents have no stored flags.
                           </p>
                         </div>
                       )}

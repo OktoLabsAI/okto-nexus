@@ -358,7 +358,7 @@ def connect_own_endpoint(deps, *, endpoint_id, idempotency_key):
         configured_key = os.environ.get("OKTO_NEXUS_API_KEY")
         if not configured_key or hash_api_key(configured_key) != context.credential_binding:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
-                "Connect through the active serve owner or a stdio client configured with your own agent key.", {})
+                "Connect through the active serve owner's HTTP /mcp endpoint with your own agent key.", {})
     # Reuse the normal owner/proxy and durable open path; no second executor.
     return open_runtime(deps, **arguments)
 
