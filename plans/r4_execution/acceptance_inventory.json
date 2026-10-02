@@ -1643,13 +1643,15 @@
         "plans/r4_execution/evidence/ns15-05-resources.xml"
       ],
       "remaining": [
-        "TN-40 supported rollback after backfill/execution including policies",
         "Task dependency acceptance and final M13 installed artifacts/browser/provider/platform gates"
       ],
       "evidence": [
         "plans/r4_execution/M12_NS15_05_ACCEPTANCE.md",
-        "plans/r4_execution/test_runs_20261001_ns15_05.json"
-      ]
+        "plans/r4_execution/test_runs_20261001_ns15_05.json",
+        "plans/r4_execution/M12_TN40_ROLLBACK.md",
+        "plans/r4_execution/test_runs_20261001_tn40.json"
+      ],
+      "notes": "TR4-15-05 and TN-38/39/40 passed at their declared layers; task dependency acceptance remains open."
     },
     "NS16.01": {
       "proposed_nodeid": "tests/execution_r4/test_ns16.py::test_ns16_01",
@@ -3139,9 +3141,15 @@
         "NS15.05"
       ],
       "layer": "legacy_acceptance",
-      "candidate_nodeids": [],
-      "coverage": "REQUIRES_REVIEW",
-      "execution": "NOT_RUN"
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns15.py::test_tn40"
+      ],
+      "coverage": "VERIFIED_NORMATIVE_SCENARIO",
+      "execution": "PASSED",
+      "evidence": [
+        "plans/r4_execution/M12_TN40_ROLLBACK.md",
+        "plans/r4_execution/test_runs_20261001_tn40.json"
+      ]
     },
     "TN-41": {
       "task_ids": [

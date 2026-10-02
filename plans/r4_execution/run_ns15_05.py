@@ -10,7 +10,7 @@ import zipfile
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--resume', action='store_true')
-parser.add_argument('--campaign', choices=('r4', 'legacy', 'architecture'))
+parser.add_argument('--campaign', choices=('r4', 'legacy', 'architecture', 'recovery'))
 options = parser.parse_args()
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -72,6 +72,10 @@ verification = "ARTIFACTS=" + repr(str(OUT / "ns15-05-artifacts.json")) + "\nROO
 subprocess.run(["rtk", "proxy", str(PYTHON), "-I", "-c", verification], check=True, cwd=WORK)
 (WORK / "pytest.ini").write_text("[pytest]\n", encoding="utf-8")
 campaigns = {
+    'recovery': [
+        'execution_r4/test_ns15.py::test_tn40',
+        'execution_r4/test_ns15.py::test_ns15_04',
+    ],
     'r4': [
         'execution_r4/test_ns15.py::test_ns15_05',
         'execution_r4/test_ns03.py::test_ns03_01',

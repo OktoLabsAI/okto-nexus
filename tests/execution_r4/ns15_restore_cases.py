@@ -66,7 +66,7 @@ def configuration_case(tmp_path, monkeypatch, request):
     assert owner.read_bytes() == foreign_marker and home.config.read_bytes() == before
 
 
-def restore_case(tmp_path, monkeypatch, request):
+def restore_case(tmp_path, monkeypatch, request, *, backfilled_policies=False):
     monkeypatch.syspath_prepend(str(Path(__file__).parents[2] / 'tools'))
     import offline_runtime_backup as recovery
     import test_local_realization as local
@@ -76,12 +76,48 @@ def restore_case(tmp_path, monkeypatch, request):
     from fastapi.testclient import TestClient
     tables = ('execution_operations', 'execution_receipts', 'execution_dispatch_outbox',
               'execution_event_ingress', 'execution_event_watermarks', 'execution_sessions')
+    if backfilled_policies:
+        from okto_nexus.adapters.outbound.sqlite.migration_backup import create_migration_backup
+        from okto_nexus.bootstrap.execution_migration import migrate_execution_catalog
+        original_app_for = local.app_for
+
+        def seeded(home):
+            deps, app = original_app_for(home)
+            with deps.connection_factory.unit_of_work() as uow:
+                c = uow.connection
+                stamp = deps.clock.now_iso()
+                c.execute("INSERT INTO agents(agent_id,created_at,permissions) VALUES (?,?,?)",
+                          ('policy-owner', stamp, '{"messages":{"send_direct":false}}'))
+                c.execute("INSERT INTO policies(policy_id,name,created_at) VALUES (?,?,?)",
+                          ('retained-policy', 'Rollback policy', stamp))
+                c.execute("INSERT INTO policy_versions(policy_id,version,audience,governance,published_at) "
+                          "VALUES (?,1,?,?,?)", ('retained-policy', '["agent:policy-owner"]', '[]', stamp))
+                c.execute("INSERT INTO agent_policy_bindings(agent_id,position,source,policy_id,mode,pinned_version,created_at) "
+                          "VALUES (?,0,'global',?,'pinned',1,?)", ('policy-owner', 'retained-policy', stamp))
+                c.execute("INSERT INTO runtime_profiles(profile_id,adapter_id,config,created_at,updated_at) "
+                          "VALUES ('rollback-legacy','codex','{}',?,?)", (stamp, stamp))
+            baseline = tmp_path / 'tn40-before-backfill'
+            create_migration_backup(deps.config.db_path, baseline)
+            result = migrate_execution_catalog(deps.config.db_path, baseline)
+            assert result['status'] == 'CATALOG_BACKFILL_COMPLETE'
+            assert result['processed'] > 0 and not result['execution_activated']
+            return deps, app
+
+        monkeypatch.setattr(local, 'app_for', seeded)
+        tables += ('policies', 'policy_versions', 'agent_policy_bindings', 'execution_migration_map')
     def rows(home):
         with closing(sqlite3.connect(home / 'nexus.db')) as db:
             return {table: db.execute('SELECT * FROM ' + table + ' ORDER BY rowid').fetchall() for table in tables}
     with contextmanager(local.local_setup.__wrapped__)(tmp_path, monkeypatch, request) as setup:
         _, binding, native = connect_local(setup)
         deps, app, client, headers, *_ = setup
+        if backfilled_policies:
+            with deps.connection_factory.unit_of_work() as uow:
+                policy_key = app.state.auth.issue_key(uow, agent_id='policy-owner')
+            policy_headers = {'Authorization': 'Bearer ' + policy_key}
+            policy_before = client.get('/v1/connections/me', headers=policy_headers)
+            assert policy_before.status_code == 200, policy_before.text
+            assert 'messages.send_direct' not in policy_before.json()['permissions']
         opened = admit(setup, binding, 'restore-open', 'runtime.start', new_session=True)
         wait_receipt(setup, opened)
         session = opened['scope']['session_id']
@@ -113,6 +149,8 @@ def restore_case(tmp_path, monkeypatch, request):
     assert native.native.stopped
     home = deps.config.home_dir
     original = rows(home)
+    if backfilled_policies:
+        assert all(original[table] for table in ('policies', 'policy_versions', 'agent_policy_bindings', 'execution_migration_map'))
     snapshot = tmp_path / 'r4-snapshot'
     report = recovery.backup(home, snapshot, stopped=True)
     assert report['version'] == 2
@@ -139,6 +177,11 @@ def restore_case(tmp_path, monkeypatch, request):
     assert not (tmp_path / 'incomplete').exists()
     restored_deps = bootstrap({}, ['--home', str(restored), '--feature-harness-integrations', 'false'])
     with TestClient(build_app(restored_deps)) as restored_client:
+        if backfilled_policies:
+            policy_after = restored_client.get('/v1/connections/me', headers=policy_headers)
+            assert policy_after.status_code == 200, policy_after.text
+            for field in ('agent_id', 'permissions', 'revisions'):
+                assert policy_after.json()[field] == policy_before.json()[field]
         queried = restored_client.get('/v1/runtime/operations/' + turn['operation_id'], headers=headers['subject'])
         assert queried.status_code == 200, queried.text
         assert queried.json()['possible_effect'] is True

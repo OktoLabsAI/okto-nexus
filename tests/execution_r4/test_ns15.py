@@ -21,6 +21,12 @@ from test_binding_migration import proposal_request
 from test_binding_operator import prepare_operator
 
 
+def test_tn40(tmp_path, monkeypatch, request, qualified_contract):
+    """Supported same-version recovery after backfill and a possible native effect."""
+    from ns15_restore_cases import restore_case
+    restore_case(tmp_path, monkeypatch, request, backfilled_policies=True)
+
+
 def test_ns15_05():
     """Documentation commands/routes and shipped HTTP-only dashboard guidance."""
     import importlib.util
