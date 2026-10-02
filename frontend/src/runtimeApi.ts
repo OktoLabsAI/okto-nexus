@@ -81,6 +81,17 @@ export interface RuntimeSession {
   control_available: boolean; durable_release_pending: boolean;
 }
 
+export interface NativeDecisionRequest {
+  client_intent_id: string; approval_key: Record<string, string | number>;
+  expected_revision: number; request_hash: string; cas_token: string;
+  decision: "approve" | "deny"; response?: Record<string, unknown>;
+}
+export interface NativeDecisionView {
+  decision_id: string; client_intent_id: string; approval_key: Record<string, string | number>;
+  canonical_state: string; native_stage: string; native_operation_id: string;
+  possible_effect: boolean; retry_safe: boolean; response_digest: string | null;
+}
+
 // R4 uses Bearer authentication and direct JSON, unlike the legacy /api envelope.
 async function read<T>(path: string, signal: AbortSignal | undefined, body?: unknown): Promise<T> {
   const headers = new Headers();
@@ -128,6 +139,8 @@ export function bindingRequestExists(key: string): boolean {
 }
 
 export const runtimeApi = {
+  decideNative: (body: NativeDecisionRequest) => read<NativeDecisionView>("/v1/runtime/approval-decisions", undefined, body),
+  nativeDecision: (id: string, signal?: AbortSignal) => read<NativeDecisionView>(`/v1/runtime/approval-decisions/${encodeURIComponent(id)}`, signal),
   resolve: (body: RuntimeRequest) => read<RuntimeResolution>("/v1/runtime/intents:resolve", undefined, body),
   intent: (id: string, signal?: AbortSignal) => read<{resolution: RuntimeResolution; operation: RuntimeOperation | null}>(
     `/v1/runtime/intents/${encodeURIComponent(id)}`, signal),

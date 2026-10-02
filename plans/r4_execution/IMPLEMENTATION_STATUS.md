@@ -7,8 +7,12 @@ steering, interruption and close through canonical operator/subject authority.
 Durable request recovery, explicit targets and initial-turn status are covered
 by 25 installed Windows/Edge checks with unchanged inputs. See
 [runtime UI scope, hashes and retained failures](M10_RUNTIME_OPERATIONS.md).
-Native approval/input, complete history/recovery and remaining integrated
-provider/platform/accessibility acceptance are still open; no gate is closed.
+Canonical native approval/input controls are now implemented as well. Installed
+Windows/Edge evidence records eleven passes followed by two corrected form
+fixture passes on the same wheel, with unchanged inputs in both campaigns.
+See [native decision scope and retained failures](M10_NATIVE_DECISIONS_UI.md).
+Complete history/recovery and remaining integrated provider/platform/accessibility
+acceptance are still open; no gate is closed.
 
 Core `7a84ff9` now provides a separate native launchd/SCM_RIGHTS prototype
 (`tools/macos_launchd_probe.py`) for the user-operated Intel Mac. Portable tests
@@ -19,7 +23,8 @@ arbitrary-tree cleanup and slot retention remain unimplemented, and production
 preflight and the shared Core .56 package bytes are unchanged.
 
 The machine-readable `delivery_plan.json` checkpoint is reconciled to published
-Nexus `6cf2ec1`, Connector `ad0933e` and Core `0c4333f`. The September 30 checkpoint
+the published implementation heads recorded there, including Core `7a84ff9`.
+The September 30 checkpoint
 is preserved in `evidence/delivery-checkpoint-20260930.json`; its pending-work
 statements are historical. These heads are not the final frozen release tuple.
 

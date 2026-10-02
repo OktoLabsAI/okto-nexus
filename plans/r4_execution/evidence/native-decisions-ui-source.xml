@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="2" time="52.628" timestamp="2026-10-02T12:10:54.174855-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_native_decision_dashboard" name="test_native_ui_confirm_and_recover_without_persisting_answers[False-None]" time="23.112" /><testcase classname="tests.execution_r4.test_native_decision_dashboard" name="test_native_ui_confirm_and_recover_without_persisting_answers[False-input]" time="27.374"><error message="failed on setup with &quot;playwright._impl._errors.TimeoutError: Locator.click: Timeout 10000ms exceeded.&#10;Call log:&#10;  - waiting for get_by_role(&quot;button&quot;, name=&quot;Approvals&quot;, exact=True)&quot;">decision_state = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4896/test_nati...801746ce1ffaff414607fd821f30eb07d4683f5f82acbd4cd07', 'cas_token': 'fbg70BGZ-VTGnndBu6JrwZNpKrl0ciVVGVcJXas0Btk', ...})
+assets = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4896/r4-selection-assets0')
+
+    @pytest.fixture
+    def native_browser(decision_state, assets):
+        from playwright.sync_api import sync_playwright
+        _, app, body = decision_state
+        client = TestClient(app)
+        trace = {'requests': [], 'drop': False}
+        with sync_playwright() as driver:
+            browser = driver.chromium.launch(channel='msedge', headless=True)
+            context = browser.new_context(viewport={'width': 1440, 'height': 1100})
+            context.add_init_script('sessionStorage.setItem("okto_nexus_operator_key", ' + json.dumps(app.state.test_agent_keys['operator']) + ');')
+            context.add_init_script('localStorage.setItem("okto-nexus:metrics-opt-in-prompt-dismissed:1.0.0", "fixture");')
+            def route_request(route):
+                request = route.request
+                url = urlsplit(request.url)
+                if url.netloc != 'nexus.test':
+                    route.abort()
+                elif url.path == '/api/v1/stream':
+                    route.fulfill(status=200, body=': isolated native UI\n\n', content_type='text/event-stream')
+                elif url.path.startswith(('/api/', '/v1/')):
+                    trace['requests'].append((request.method, url.path, request.post_data))
+                    response = client.request(request.method, url.path + ('?' + url.query if url.query else ''),
+                        headers={key: value for key, value in request.headers.items()
+                                 if key.lower() in ('authorization', 'x-api-key', 'content-type')}, content=request.post_data)
+                    if url.path == '/v1/runtime/approval-decisions' and request.method == 'POST' and trace['drop']:
+                        assert response.status_code == 202, response.text
+                        trace['drop'] = False
+                        route.abort('failed')
+                    else:
+                        route.fulfill(status=response.status_code, body=response.content,
+                                      content_type=response.headers.get('content-type', 'application/json'))
+                else:
+                    target = (assets / ('index.html' if url.path == '/' else url.path.lstrip('/'))).resolve()
+                    if target.is_relative_to(assets.resolve()) and target.is_file():
+                        route.fulfill(path=str(target))
+                    else:
+                        route.fulfill(status=404)
+            context.route('**/*', route_request)
+            page = context.new_page()
+            page.set_default_timeout(10000)
+            try:
+                page.goto('http://nexus.test/')
+                page.get_by_test_id('onboarding-close').click()
+&gt;               page.get_by_role('button', name='Approvals', exact=True).click()
+
+tests\execution_r4\test_native_decision_dashboard.py:59: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\playwright\sync_api\_generated.py:18032: in click
+    self._sync(
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\playwright\_impl\_locator.py:165: in click
+    return await self._frame._click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\playwright\_impl\_frame.py:594: in _click
+    await self._channel.send("click", self._timeout, locals_to_params(locals()))
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\playwright\_impl\_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;playwright._impl._connection.Connection object at 0x000001DC94E9B9D0&gt;
+cb = &lt;function Channel.send.&lt;locals&gt;.&lt;lambda&gt; at 0x000001DC94AFFCE0&gt;
+is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -&gt; Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+&gt;           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Locator.click: Timeout 10000ms exceeded.
+E           Call log:
+E             - waiting for get_by_role("button", name="Approvals", exact=True)
+
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\playwright\_impl\_connection.py:632: TimeoutError</error></testcase></testsuite></testsuites>

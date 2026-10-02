@@ -35,10 +35,22 @@ def decision_state(opening, request):
     submit_execution_operation(deps.connection_factory, actor_agent_id="subject",
         request={key: turn[key] for key in ("client_intent_id", "operation_id", "resolution_revision", "intent_hash")},
         remote_ready=True, fresh_publications=app.state.inventory_fresh_publications)
-    is_input = getattr(request, "param", None) == "input"
+    native_case = getattr(request, "param", None)
+    is_input = native_case in {"input", "form"}
     proposal = dict(schema_version=1, request_id=7, request_hash="a"*64,
         method="item/tool/requestUserInput" if is_input else "item/commandExecution/requestApproval",
         params={"turnId": "native-turn", "itemId": "item", "authorization": "Bearer private-marker"})
+    if is_input:
+        proposal['params']['questions'] = [{'id': 'question', 'header': 'Choice', 'question': 'Choose the next step',
+            'isOther': True, 'options': [{'label': 'Continue', 'description': 'Proceed with the reviewed work'},
+                                      {'label': 'Stop', 'description': 'End this work'}]}]
+    if native_case == 'form':
+        proposal['method'] = 'mcpServer/elicitation/request'
+        proposal['params'] = {'turnId': 'native-turn', 'message': 'Review fixture values', 'requestedSchema': {
+            'type': 'object', 'properties': {
+                'count': {'type': 'integer', 'minimum': 1, 'maximum': 5, 'default': 2},
+                'enabled': {'type': 'boolean', 'default': True},
+                'note': {'type': 'string'}}, 'required': ['count', 'enabled']}}
     scope = resolution["scope"]
     frame = {key: scope[key] for key in ("server_id", "executor_id", "binding_id", "agent_id", "session_id")}
     frame.update(protocol_major=1, contract_revision=R4_PREVIEW_REVISION, type="event.batch",
@@ -47,7 +59,7 @@ def decision_state(opening, request):
             server_id=channel.server_id, executor_id=channel.executor_id, session_id=scope["session_id"],
             stream_epoch="native-epoch", sequence=1, category="input_request" if is_input else "approval_request",
             operation_id=turn["operation_id"], payload={"native_approval": proposal,
-                "native_approval_display": {**proposal, "params": {"turnId": "native-turn", "authorization": "[REDACTED]"}}})])
+                "native_approval_display": {**proposal, "params": {**proposal['params'], "authorization": "[REDACTED]"}}})])
     commit_execution_events(deps.connection_factory, channel=channel, frame=frame, approvals=deps.approvals)
     with deps.connection_factory.unit_of_work(write=False) as uow:
         row = uow.connection.execute("SELECT * FROM approvals WHERE action='execution.native.respond'").fetchone()
@@ -57,6 +69,7 @@ def decision_state(opening, request):
     body = {key: details[key] for key in ("approval_key", "expected_revision", "request_hash", "cas_token")}
     body.update(client_intent_id="decision", decision="approve")
     if is_input: body["response"] = {"answers": {"question": {"answers": ["sensitive-input-marker"]}}}
+    if native_case == 'form': body['response'] = {'content': {'count': 3, 'enabled': False, 'note': ''}}
     return deps, app, body
 
 

@@ -109,8 +109,7 @@ lost response, use **Check action result** or retry the same recorded review or
 submission; do not create a replacement action. Admission, executor stage,
 initial-turn status and available captured output are shown separately. An
 unknown result is retained for reconciliation. This panel does not qualify a
-provider or replace remaining native-decision, full history and independent-host
-browser acceptance.
+provider or replace full history and independent-host browser acceptance.
 
 Request a passive inventory refresh with
 `POST /v1/runtime/executors/{executor_id}/inventory:refresh` and a stable
@@ -256,6 +255,22 @@ Approval and input decisions require current scoped authority and correlation
 to the pending request. Inspect the decision using the operation/session views;
 neither a notification nor a submitted decision proves that Core applied it.
 Revocation, expired grants and changed ownership continue to deny new effects.
+
+In **Approvals**, R4 runtime requests use **Review request**. The detail panel
+shows the agent, host and session, then asks for an explicit permission decision
+or answer. **Approve request**, **Send answer** and **Deny runtime request** send
+the original canonical request reference, revision, hash and CAS token to the
+R4 decision endpoint. They do not use the legacy generic approval action.
+Only a currently authenticated operator may confirm the decision.
+
+After a lost response, **Check native decision** or reopen the recorded item in
+Recent decisions. Reloading only reads; it does not submit another decision.
+The tab stores immutable decision metadata but never the input response. An
+uncertain input retry requires the same answer to be explicitly supplied again;
+the Server verifies its digest and retained authority. No form value or provider
+default is automatically chosen. Expiry disables new answers while leaving
+recorded decision and delivery status readable. Confirmation, denial, pending
+dispatch and uncertain native delivery remain separate facts.
 
 ## Shutdown, migration and recovery
 

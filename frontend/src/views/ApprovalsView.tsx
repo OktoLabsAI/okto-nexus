@@ -18,6 +18,7 @@ import { api, type ApprovalDetail, type ApprovalRow } from "../api";
 import { PageContainer } from "../components/PageContainer";
 import { useWorkspaceName } from "../components/WorkspaceNames";
 import { NativeApprovalInput } from "../components/NativeApprovalInput";
+import { CanonicalNativeDecision } from "../components/CanonicalNativeDecision";
 
 const inputCls =
   "rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-accent-500/40";
@@ -35,7 +36,7 @@ function ago(iso: string | null): string {
 
 // Compact "who does it address" line from the BR5 metadata (never content).
 function describeTarget(meta: ApprovalRow["payload_meta"]): string {
-  if (meta.kind === "runtime_native_approval") return "Runtime request";
+  if (["runtime_native_approval", "execution.native.respond"].includes(meta.kind)) return "Runtime request";
   const target = meta.target as
     | {
         strategy?: string;
@@ -66,9 +67,10 @@ function actionChip(action: string): string {
     : "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300";
 }
 
-function DetailPanel({ detail, busy = false, onApprove }: {
+function DetailPanel({ detail, busy = false, onApprove, onChanged = () => {} }: {
   detail: ApprovalDetail | null; busy?: boolean;
   onApprove?: (response?: Record<string, unknown>) => void;
+  onChanged?: () => void;
 }) {
   const workspaceName = useWorkspaceName(detail?.workspace_id);
   if (detail === null) {
@@ -98,9 +100,11 @@ function DetailPanel({ detail, busy = false, onApprove }: {
       </div>
       {detail.action === "runtime_native_approval" && <NativeApprovalInput key={detail.approval_id}
         detail={detail} busy={busy} onApprove={onApprove ?? (() => {})} />}
+      {detail.action === "execution.native.respond" && <CanonicalNativeDecision key={detail.approval_id}
+        detail={detail} onChanged={onChanged} />}
       <div>
         <div className="text-[11px] uppercase tracking-wide text-surface-400 dark:text-surface-500 mb-1">
-          {detail.action === "runtime_native_approval" ? "Original runtime request" : "Request payload (executed verbatim on approve)"}
+          {["runtime_native_approval", "execution.native.respond"].includes(detail.action) ? "Runtime request details" : "Request payload (executed verbatim on approve)"}
         </div>
         <pre className="font-mono text-[11px] whitespace-pre-wrap break-all max-h-64 overflow-y-auto bg-white dark:bg-surface-950 rounded-lg border border-surface-200 dark:border-surface-800 p-2">
           {JSON.stringify(detail.request_payload, null, 2)}
@@ -368,7 +372,9 @@ export function ApprovalsView({
                         {row.policy_id.slice(0, 12)}…
                       </td>
                       <td className="py-2 pr-0 text-right whitespace-nowrap">
-                        {rejecting === row.approval_id ? (
+                        {row.action === "execution.native.respond" ? <button className="btn btn-secondary"
+                          onClick={() => detailOpen !== row.approval_id && openDetail(row.approval_id)}
+                          data-testid={`approve-${row.approval_id}`}>Review request</button> : rejecting === row.approval_id ? (
                           <span className="inline-flex items-center gap-1">
                             <input
                               autoFocus
@@ -434,6 +440,7 @@ export function ApprovalsView({
                         <td colSpan={7} className="py-2">
                           <DetailPanel detail={detail?.approval_id === row.approval_id ? detail : null}
                             busy={busy === row.approval_id}
+                            onChanged={() => { void reload(); onChanged(); }}
                             onApprove={response => decide(row.approval_id, "approve", undefined, response)} />
                         </td>
                       </tr>
@@ -490,7 +497,8 @@ export function ApprovalsView({
                     {detailOpen === row.approval_id && (
                       <tr>
                         <td colSpan={6} className="py-2">
-                          <DetailPanel detail={detail?.approval_id === row.approval_id ? detail : null} />
+                          <DetailPanel detail={detail?.approval_id === row.approval_id ? detail : null}
+                            onChanged={() => { void reload(); onChanged(); }} />
                         </td>
                       </tr>
                     )}

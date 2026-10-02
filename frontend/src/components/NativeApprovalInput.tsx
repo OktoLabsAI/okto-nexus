@@ -17,8 +17,9 @@ type NativeRequest = { method: string; params: {
 const fieldClass = "block w-full mt-1 rounded border border-surface-300 dark:border-surface-600 bg-white dark:bg-surface-800 p-2 text-sm";
 
 /** No defaults, credential inputs, remote schemas or automatic submissions. */
-export function NativeApprovalInput({ detail, busy, onApprove }: {
+export function NativeApprovalInput({ detail, busy, onApprove, canonicalPermission = false }: {
   detail: ApprovalDetail; busy: boolean;
+  canonicalPermission?: boolean;
   onApprove: (response?: Record<string, unknown>) => void;
 }) {
   const [values, setValues] = useState<Record<string, string>>({});
@@ -26,10 +27,10 @@ export function NativeApprovalInput({ detail, busy, onApprove }: {
   const [error, setError] = useState<string | null>(null);
   const request = detail.request_payload?.kwargs?.payload as NativeRequest | undefined;
   const params = request?.params;
-  const codex = request?.method === "item/tool/requestUserInput";
-  const claude = request?.method === "control_request:can_use_tool" && params?.tool_name === "AskUserQuestion";
-  const form = request?.method === "mcpServer/elicitation/request";
-  const permission = ["item/commandExecution/requestApproval", "item/fileChange/requestApproval"].includes(request?.method ?? "") ||
+  const codex = !canonicalPermission && request?.method === "item/tool/requestUserInput";
+  const claude = !canonicalPermission && request?.method === "control_request:can_use_tool" && params?.tool_name === "AskUserQuestion";
+  const form = !canonicalPermission && request?.method === "mcpServer/elicitation/request";
+  const permission = canonicalPermission || ["item/commandExecution/requestApproval", "item/fileChange/requestApproval"].includes(request?.method ?? "") ||
     (request?.method === "control_request:can_use_tool" && ["Write", "Edit", "Bash"].includes(params?.tool_name ?? ""));
   const questions = (claude ? params?.input?.questions : params?.questions) ?? [];
   const properties = params?.requestedSchema?.properties ?? {};
