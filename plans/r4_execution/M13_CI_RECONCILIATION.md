@@ -2,6 +2,29 @@
 
 This is preparation evidence, not M13 acceptance or a final artifact freeze.
 
+## Installed conformance and Connector observation — October 2, 2026
+
+The isolated installed Core `.52` conformance runner completed **151 passed**
+in 10.61 seconds. It verified wheel/package bytes and exercised R4 contracts,
+R3 history, controls and synthetic consumers without importing Core checkout
+source. See [manifest](evidence/core052-promotion-conformance/manifest.json)
+and [JUnit](evidence/core052-promotion-conformance/results.xml). This remains
+technical contract evidence, not native-provider or independent-host acceptance.
+
+Connector run `36957189122` at `0b71e23` passed five matrix cells; Windows/Python
+3.11 failed five receipt observations while waiting in durable storage routines.
+The controlled-clock renewal cases passed. Connector `dd534b6` separates the
+test watchdog (fifteen seconds) from unchanged production lease and cancellation
+deadlines. The affected 66 tests passed locally in 39.72 seconds; hosted
+confirmation is pending. The failed run remains failed.
+
+Protocol promotion still requires review of both installed consumer paths for
+all seven actions. The existing embedded five-action scenario and remote
+approval/input variants passed in the preserved full campaign. Embedded native
+approval/input round-trip evidence must also be established before promotion;
+server-only decision/admission tests cannot substitute for that host path.
+No readiness flag or acceptance gate was promoted.
+
 ## Immutable-input R4 regression and Core matrix — October 2, 2026
 
 The installed Nexus/Core .52/Connector campaign completed: **702 passed,
