@@ -2,6 +2,15 @@
 
 ## Current acceptance reconciliation: executable Core .56
 
+Operator runtime initiation now accepts an explicit represented `agent_id`,
+retains actor/subject provenance and still consumes the subject's separate grant.
+Migration 099 records operator authority for admission, dispatch and later lease/
+capability checks. Installed Windows and WSL Linux each passed 143 regressions
+with unchanged inputs; a supplemental remote HTTP/WSS lease case passed on each.
+See [operator runtime scope, artifacts and retained failures](M04_OPERATOR_RUNTIME.md).
+The older `SUBJECT_IDENTITY_REQUIRED` limitation is superseded; the actual runtime
+operation controls in the browser remain unfinished. No release gate is closed.
+
 The embedded local version-check API/UI is now implemented and verified: 59
 installed Windows and 50 WSL Linux checks passed, followed by 9 reviewed packaged
 UI checks, all with unchanged campaign inputs. A real Codex version command via

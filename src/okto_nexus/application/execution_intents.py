@@ -35,7 +35,7 @@ def resolve_execution_intent(
     """Store a stable resolution; never write an effect outbox or call Core."""
     required = {"client_intent_id", "intent", "binding_id",
                 "workspace_binding_id"}
-    allowed = required | {"session_id", "new_session", "text", "target"}
+    allowed = required | {"agent_id", "session_id", "new_session", "text", "target"}
     if (not isinstance(request, Mapping) or not required <= set(request) or
             not set(request) <= allowed or
             any(type(request[name]) is not str or
@@ -69,11 +69,20 @@ def resolve_execution_intent(
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                               "The control reason must contain at most 1024 characters.", {})
     target = request.get("target", {"kind": "none", "expected_turn_id": None})
+    subject_agent_id = request.get("agent_id", actor_agent_id)
+    if type(subject_agent_id) is not str or not 1 <= len(subject_agent_id) <= 160:
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Invalid represented agent.', {})
+    from .execution_operator_authority import require_operator_request
+    with factory.unit_of_work(write=False) as uow:
+        require_operator_request(uow, actor=actor_agent_id, subject=subject_agent_id,
+                                 access=access, context=context)
     server_id, revisions, _ = current_agent_revisions(
-        factory, agent_id=actor_agent_id)
+        factory, agent_id=subject_agent_id)
     body_hash = "sha256:" + hashlib.sha256(canonical_json(dict(request))).hexdigest()
     with factory.unit_of_work() as uow:
         conn = uow.connection
+        actor_guard = require_operator_request(uow, actor=actor_agent_id, subject=subject_agent_id,
+                                               access=access, context=context)
         prior = conn.execute(
             "SELECT body_hash,resolved_json FROM execution_client_intents "
             "WHERE server_id=? AND actor_agent_id=? AND client_intent_id=?",
@@ -100,7 +109,7 @@ def resolve_execution_intent(
             "JOIN execution_executors e ON e.server_id=b.server_id "
             "AND e.executor_id=b.executor_id "
             "WHERE b.server_id=? AND b.binding_id=? AND ep.agent_id=?",
-            (server_id, request["binding_id"], actor_agent_id),
+            (server_id, request["binding_id"], subject_agent_id),
         ).fetchone()
         if (binding is None or
                 binding["workspace_binding_id"] != request["workspace_binding_id"]):
@@ -182,7 +191,7 @@ def resolve_execution_intent(
         scope = {
             "server_id": server_id, "executor_id": binding["executor_id"],
             "binding_id": binding["binding_id"],
-            "agent_id": actor_agent_id,
+            "agent_id": subject_agent_id,
             "workspace_id": binding["workspace_id"],
             "workspace_binding_id": binding["workspace_binding_id"],
             "session_id": session_id,
@@ -254,22 +263,22 @@ def resolve_execution_intent(
         conn.execute(
             "INSERT INTO execution_client_intents(server_id,actor_agent_id,"
             "client_intent_id,body_hash,intent_id,operation_id,"
-            "resolution_revision,resolved_json,created_at,source_guard_digest,session_selection) "
-            "VALUES (?,?,?,?,?,?,1,?,strftime('%Y-%m-%dT%H:%M:%fZ','now'),?,?)",
+            "resolution_revision,resolved_json,created_at,source_guard_digest,session_selection,actor_guard_digest) "
+            "VALUES (?,?,?,?,?,?,1,?,strftime('%Y-%m-%dT%H:%M:%fZ','now'),?,?,?)",
             (server_id, actor_agent_id, request["client_intent_id"],
              body_hash, intent_id, operation_id,
              canonical_json(resolved).decode("utf-8"),
-             _agent_guard(conn, actor_agent_id), "reuse" if reuse is not None else
-             "automatic" if action == "runtime.open" and request.get("new_session") is not True else "explicit"),
+             _agent_guard(conn, subject_agent_id), "reuse" if reuse is not None else
+             "automatic" if action == "runtime.open" and request.get("new_session") is not True else "explicit", actor_guard),
         )
         if action == "runtime.open" and request.get("text") is not None:
             from .execution_initial_turns import plan_initial_turn
-            plan_initial_turn(conn, resolved=resolved, text=request["text"])
+            plan_initial_turn(conn, resolved=resolved, text=request["text"], actor_agent_id=actor_agent_id)
         return resolved
 
 
 def read_execution_intent(factory: ConnectionFactory, *, actor_agent_id: str,
-                          client_intent_id: str) -> dict[str, Any]:
+                          client_intent_id: str, access=None, context=None) -> dict[str, Any]:
     """Recover the original resolution; never resolve a missing intent."""
     if not isinstance(client_intent_id, str) or not 1 <= len(client_intent_id) <= 160:
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
@@ -286,6 +295,11 @@ def read_execution_intent(factory: ConnectionFactory, *, actor_agent_id: str,
         raise OktoNexusError(ErrorCode.NOT_FOUND,
                               "The client intent was not found.", {})
     resolution = json.loads(row["resolved_json"])
+    subject = resolution['scope']['agent_id']
+    from .execution_operator_authority import require_operator_request
+    with factory.unit_of_work(write=False) as uow:
+        require_operator_request(uow, actor=actor_agent_id, subject=subject,
+                                 access=access, context=context, require_feature=False)
     from ..adapters.outbound.sqlite.execution_receipts import (
         read_execution_operation_history,
     )
@@ -294,7 +308,7 @@ def read_execution_intent(factory: ConnectionFactory, *, actor_agent_id: str,
             factory, server_id=server_id,
             executor_id=resolution["scope"]["executor_id"],
             operation_id=resolution["operation_id"],
-            subject_agent_id=actor_agent_id,
+            subject_agent_id=subject, actor_agent_id=actor_agent_id,
         ).public_view()
     except OktoNexusError as exc:
         if exc.code != ErrorCode.NOT_FOUND:

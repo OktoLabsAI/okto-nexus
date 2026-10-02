@@ -104,6 +104,7 @@ class ResolveIntentRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     client_intent_id: _Id
+    agent_id: _Id | None = None
     intent: Annotated[str, Field(strict=True)]
     binding_id: _Id
     workspace_binding_id: _Id
@@ -535,7 +536,9 @@ def build_router() -> APIRouter:
             view = await anyio.to_thread.run_sync(
                 lambda: read_execution_intent(
                     factory, actor_agent_id=agent.agent_id,
-                    client_intent_id=client_intent_id))
+                    client_intent_id=client_intent_id,
+                    access=build_execution_access(request.app.state.deps),
+                    context=RuntimeRequestContext(agent.agent_id, "agent_key", credential_binding=agent.api_key_hash)))
         except OktoNexusError as error:
             return runtime_error(error, "intent.read")
         return JSONResponse(view, headers={"Cache-Control": "no-store"})

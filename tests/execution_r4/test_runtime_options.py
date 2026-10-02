@@ -93,8 +93,8 @@ def test_workspace_binding_and_grant_each_gate_a_different_action(options_host, 
     _, authorized = option(options_host)
     assert authorized['can_start'], authorized
     _, operator = option(options_host, actor='operator')
-    assert not operator['can_start']
-    assert 'SUBJECT_IDENTITY_REQUIRED' in operator['policy_reasons']
+    assert operator['can_start'], operator
+    assert 'SUBJECT_IDENTITY_REQUIRED' not in operator['policy_reasons']
     deps = options_host[0]
     with deps.connection_factory.unit_of_work(write=False) as uow:
         for table in ('execution_operations', 'execution_dispatch_outbox', 'execution_sessions'):

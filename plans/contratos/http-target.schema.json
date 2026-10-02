@@ -2588,6 +2588,11 @@
     "ResolveIntentRequest": {
       "type": "object",
       "properties": {
+        "agent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
         "client_intent_id": {
           "type": "string",
           "minLength": 1,

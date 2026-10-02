@@ -7,6 +7,7 @@ from .execution_binding_views import read_execution_binding
 from .executor_inventory import load_current_executor_inventory
 from .executor_inventory_views import read_executor_inventory
 from ..errors import ErrorCode, OktoNexusError
+from ..domain.runtime_context import RuntimeRequestContext
 
 
 def read_runtime_options(factory, *, server_id, executor_id, agent_id, workspace_id,
@@ -102,16 +103,19 @@ def read_runtime_options(factory, *, server_id, executor_id, agent_id, workspace
                         reasons.append('BINDING_' + binding['state'])
                     elif not remote_ready:
                         reasons.append('EXECUTION_UNAVAILABLE')
-                    elif context.actor_agent_id != agent_id:
-                        # The current public intent API takes the binding's
-                        # subject identity. Operator inspection is not delegated
-                        # execution or permission to manufacture an agent key.
-                        reasons.append('SUBJECT_IDENTITY_REQUIRED')
+                    elif context.actor_agent_id != agent_id and not operator:
+                        reasons.append('OPERATOR_REQUIRED')
                     else:
                         try:
-                            access.authorize(context, action='open', endpoint_id=binding['endpoint_id'],
+                            # Project the exact grant that the dispatcher will
+                            # consume. Operator status alone does not create it.
+                            execution_context = RuntimeRequestContext(agent_id, 'agent_key',
+                                credential_binding=subject.api_key_hash) if operator else context
+                            grant = access.authorize(execution_context, action='open', endpoint_id=binding['endpoint_id'],
                                 represented_agent_id=agent_id, workspace_id=workspace_id,
                                 consume=False, audit=False, uow=uow)
+                            if grant is None:
+                                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'A canonical execution grant is required.', {})
                         except OktoNexusError:
                             reasons.append('AUTHORIZATION_REQUIRED')
                         else:

@@ -29,7 +29,7 @@ class SqliteExecutionLeaseRepository:
             "r.revision AS current_realization_revision,r.subject_agent_id,"
             "e.kind,e.control_state,e.generation,e.owner_instance_id,e.revoked_at,"
             "a.api_key_hash,a.is_active,p.semantic_payload,p.expected_revisions_json,"
-            "p.admission_state,p.actor_agent_id,p.connection_key_id,p.boot_authority_json,i.source_guard_digest,"
+            "p.admission_state,p.actor_agent_id,p.connection_key_id,p.boot_authority_json,i.source_guard_digest,i.actor_guard_digest,"
             "o.dispatch_phase,o.dispatch_grant_id,o.dispatch_connection_id,"
             "o.connection_generation AS dispatch_connection_generation "
             "FROM execution_sessions s "

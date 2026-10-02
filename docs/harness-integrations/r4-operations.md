@@ -77,10 +77,23 @@ probe, and authority/identity drift prevents committing its result. Up to 64
 local observations are retained per executor. A successful response reports
 the observed version and `runtime_authorized: false`.
 
-An operator inspecting another agent currently receives
-`SUBJECT_IDENTITY_REQUIRED` for start: the public intent route still requires
-that subject's authenticated identity. Operator inspection does not create an
-agent credential or delegate execution. Complete browser onboarding remains pending.
+An authenticated operator can include `agent_id` in
+`POST /v1/runtime/intents:resolve` to request an action for that agent. Omitting
+it retains the authenticated agent's own scope. An ordinary agent cannot use
+this field to represent another identity. The operator remains the recorded
+actor; session, workspace, lease and runtime grant belong to the subject.
+Resolution creates no native effect. Review the returned resolution, then submit
+its exact `client_intent_id`, `operation_id`, `resolution_revision` and `intent_hash`
+to `POST /v1/runtime/operations`. Recover a lost response by reading the same
+`GET /v1/runtime/intents/{client_intent_id}`; do not mint a replacement operation.
+
+Operator initiation does not issue a grant or consume the operator's unrestricted
+administrative privilege as runtime authority. The subject still needs a separately
+issued, current canonical execution grant. Operator identity/policy changes after
+resolution invalidate admission and pending dispatch; changes after opening also
+invalidate lease renewal and capability authority. Subject revocation, grants,
+budgets, inventory and binding checks remain in force. Complete browser operation
+controls remain pending.
 
 Request a passive inventory refresh with
 `POST /v1/runtime/executors/{executor_id}/inventory:refresh` and a stable
@@ -116,7 +129,8 @@ The probe runs Core's contained version observation, persists byte-bound local
 evidence and leaves publication to the daemon. Wait for the updated Server
 inventory before preparing a realization/binding. A recorded version does not
 override Core qualification or grant execution. The embedded Server's equivalent
-explicit qualification surface remains pending.
+explicit version-check surface is described above; it does not qualify an
+unsupported provider build.
 
 Read the current binding with `GET /v1/connections/bindings/{binding_id}` as its
 subject or an operator. It returns the current references, revisions and canonical

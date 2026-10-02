@@ -265,7 +265,7 @@ def begin_execution_send(
         require_current_parent_readiness(conn, server_id=server_id,
             executor_id=reservation.executor_id, operation_id=reservation.operation_id)
         provenance = conn.execute(
-            "SELECT source_guard_digest FROM execution_client_intents "
+            "SELECT source_guard_digest,actor_guard_digest FROM execution_client_intents "
             "WHERE server_id=? AND actor_agent_id=? AND operation_id=? "
             "AND intent_id GLOB ? AND session_selection<>\'reuse\'",
             (server_id, row["actor_agent_id"], reservation.operation_id,
@@ -277,12 +277,15 @@ def begin_execution_send(
                 not provenance[0]["source_guard_digest"] or
                 provenance[0]["source_guard_digest"] !=
                 _agent_guard(conn, row["subject_agent_id"]) or
-                (not native_decision and row["actor_agent_id"] != row["subject_agent_id"]) or
                 scope["authorization_revision"] != revisions.authorization or
                 scope["configuration_revision"] != revisions.configuration or
                 scope["credential_epoch"] != revisions.credential_epoch):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The dispatch authority changed.", {})
+        if not native_decision:
+            from .execution_operator_authority import require_recorded_operator
+            require_recorded_operator(uow, actor=row['actor_agent_id'], subject=row['subject_agent_id'],
+                                      guard=provenance[0]['actor_guard_digest'], access=access)
         binding = conn.execute(
             "SELECT b.endpoint_id,b.binding_revision,b.inventory_revision,b.candidate_ref,"
             "b.realization_revision,ep.agent_id,ep.adapter_id,ep.protocol,"
@@ -452,7 +455,9 @@ def begin_execution_send(
             require_execution_lane(uow, scope=scope,
                 channel=ExecutionChannel(server_id, reservation.executor_id,
                     connection_id, connection_generation), now=authority_now)
-        actor = access.agents.get(uow, row['subject_agent_id'] if native_decision else row['actor_agent_id'])
+        # The operator initiates and remains audited; execution still consumes
+        # the represented subject's separately issued canonical grant.
+        actor = access.agents.get(uow, row['subject_agent_id'])
         if actor is None or not actor.is_active:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "The dispatch actor is unavailable.", {})
         context = RuntimeRequestContext(

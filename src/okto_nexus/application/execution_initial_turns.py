@@ -8,7 +8,7 @@ from .execution_semantics import execution_intent_hash
 from ..errors import ErrorCode, OktoNexusError
 
 
-def plan_initial_turn(conn, *, resolved, text):
+def plan_initial_turn(conn, *, resolved, text, actor_agent_id=None):
     child = {**resolved, "operation_id": "op_" + secrets.token_hex(16),
              "client_intent_id": "initial_" + secrets.token_hex(16),
              "intent_id": "r4intent_" + secrets.token_hex(16), "reuse": False}
@@ -19,7 +19,7 @@ def plan_initial_turn(conn, *, resolved, text):
     conn.execute("UPDATE execution_client_intents SET initial_turn_json=? WHERE server_id=? "
                  "AND actor_agent_id=? AND client_intent_id=?",
                  (canonical_json(child).decode(), resolved["scope"]["server_id"],
-                  resolved["scope"]["agent_id"], resolved["client_intent_id"]))
+                  actor_agent_id or resolved["scope"]["agent_id"], resolved["client_intent_id"]))
 
 
 def admit_initial_turn(conn, *, server_id, actor_agent_id, client_intent_id):
@@ -40,10 +40,10 @@ def admit_initial_turn(conn, *, server_id, actor_agent_id, client_intent_id):
                                action="turn.submit", byte_cost=len(encoded_semantic))
     conn.execute(
         "INSERT INTO execution_client_intents(server_id,actor_agent_id,client_intent_id,body_hash,"
-        "intent_id,operation_id,resolution_revision,resolved_json,created_at,source_guard_digest) "
-        "VALUES (?,?,?,?,?,?,1,?,strftime('%Y-%m-%dT%H:%M:%fZ','now'),?)",
+        "intent_id,operation_id,resolution_revision,resolved_json,created_at,source_guard_digest,actor_guard_digest) "
+        "VALUES (?,?,?,?,?,?,1,?,strftime('%Y-%m-%dT%H:%M:%fZ','now'),?,?)",
         (server_id, actor_agent_id, child["client_intent_id"], child["intent_hash"],
-         child["intent_id"], child["operation_id"], canonical_json(child).decode(), source["source_guard_digest"]))
+         child["intent_id"], child["operation_id"], canonical_json(child).decode(), source["source_guard_digest"], source['actor_guard_digest']))
     conn.execute(
         "INSERT INTO execution_operations(server_id,executor_id,operation_id,subject_agent_id,"
         "actor_agent_id,binding_id,workspace_id,workspace_binding_id,session_id,action,intent_hash,"

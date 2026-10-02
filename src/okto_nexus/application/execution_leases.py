@@ -90,7 +90,6 @@ class ExecutionLeaseService:
         row = self.repo.authority(uow, scope)
         if (row is None or not row['is_active'] or not row['api_key_hash'] or
                 row['agent_id'] != scope['agent_id'] or row['subject_agent_id'] != scope['agent_id'] or
-                row['actor_agent_id'] != scope['agent_id'] or
                 row['binding_id'] != scope['binding_id'] or row['workspace_id'] != scope['workspace_id'] or
                 row['workspace_binding_id'] != scope['workspace_binding_id'] or
                 row['binding_workspace_binding_id'] != scope['workspace_binding_id'] or
@@ -107,6 +106,9 @@ class ExecutionLeaseService:
                 not row['source_guard_digest'] or row['source_guard_digest'] != _agent_guard(uow.connection, scope['agent_id']) or
                 json.loads(row['expected_revisions_json']) != scope):
             raise _conflict('The admitted session authority is no longer current.')
+        from .execution_operator_authority import require_recorded_operator
+        require_recorded_operator(uow, actor=row['actor_agent_id'], subject=scope['agent_id'],
+                                  guard=row['actor_guard_digest'], access=self.access)
         source = self.repo.source_grant(uow, grant_id)
         if row['dispatch_grant_id'] is not None and row['dispatch_grant_id'] != grant_id:
             raise _conflict('The lease grant does not match the dispatched operation.')

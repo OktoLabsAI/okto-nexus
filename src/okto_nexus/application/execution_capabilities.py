@@ -67,7 +67,7 @@ class ExecutionCapabilityService:
                 row['realization_status'] != 'READY' or
                 row['realization_revision'] != row['current_realization_revision'] or
                 row['agent_id'] != scope['agent_id'] or row['subject_agent_id'] != scope['agent_id'] or
-                row['actor_agent_id'] != scope['agent_id'] or row['binding_id'] != scope['binding_id'] or
+                row['binding_id'] != scope['binding_id'] or
                 row['binding_revision'] != scope['binding_revision'] or
                 row['workspace_id'] != scope['workspace_id'] or
                 any(row[k] != scope['workspace_binding_id'] for k in (
@@ -77,6 +77,9 @@ class ExecutionCapabilityService:
                 row['admission_state'] not in ('ACCEPTED', 'DISPATCH_PENDING', 'DISPATCHED', 'RESOLVED_TERMINAL') or
                 row['source_guard_digest'] != _agent_guard(uow.connection, scope['agent_id'])):
             raise _error(ErrorCode.CONFLICT, 'The session capability authority changed.')
+        from .execution_operator_authority import require_recorded_operator
+        require_recorded_operator(uow, actor=row['actor_agent_id'], subject=scope['agent_id'],
+                                  guard=row['actor_guard_digest'], access=self.access)
         semantic = json.loads(row['semantic_payload'])
         if semantic['action'] != 'runtime.open':
             raise _error(ErrorCode.CONFLICT, 'A canonical opening operation is required.')

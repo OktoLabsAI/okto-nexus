@@ -31,8 +31,10 @@ def reusable_opening(uow, *, factory, access, context, server_id, executor_id,
     session = rows[0]
     scope = json.loads(session["expected_revisions_json"])
     semantic = json.loads(session["semantic_payload"])
+    from .execution_operator_authority import require_operator_request
+    require_operator_request(uow, actor=context.actor_agent_id, subject=scope['agent_id'],
+                             access=access, context=context)
     if (session["lifecycle_state"] != "READY" or session["lease_state"] != "ACTIVE"
-            or scope["agent_id"] != context.actor_agent_id
             or semantic["action"] != "runtime.open"
             or execution_intent_hash(semantic) != session["intent_hash"]
             or (payload is not None and semantic["payload"] != payload)):

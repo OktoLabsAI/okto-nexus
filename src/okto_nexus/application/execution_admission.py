@@ -49,7 +49,7 @@ def submit_execution_operation(
     with factory.unit_of_work() as uow:
         conn = uow.connection
         intent = conn.execute(
-            "SELECT resolved_json,operation_id,source_guard_digest,session_selection,reuse_admitted_at FROM "
+            "SELECT resolved_json,operation_id,source_guard_digest,actor_guard_digest,session_selection,reuse_admitted_at FROM "
             "execution_client_intents WHERE server_id=? AND actor_agent_id=? "
             "AND client_intent_id=? AND intent_id GLOB 'r4intent_*'",
             (server_id, actor_agent_id, request["client_intent_id"]),
@@ -67,6 +67,13 @@ def submit_execution_operation(
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The operation does not match its resolution.", {})
         scope = resolved["scope"]
+        subject_agent_id = scope['agent_id']
+        from .execution_operator_authority import require_operator_request, require_recorded_operator
+        require_operator_request(uow, actor=actor_agent_id, subject=subject_agent_id, access=access, context=context)
+        require_recorded_operator(uow, actor=actor_agent_id, subject=subject_agent_id,
+                                  guard=intent['actor_guard_digest'], access=access)
+        if subject_agent_id != actor_agent_id:
+            _, revisions, _ = current_agent_revisions(factory, agent_id=subject_agent_id, uow=uow)
         connection_key_id = None
         boot_authority = None
         if context is not None and context.authentication_source == "runtime_boot":
@@ -104,7 +111,7 @@ def submit_execution_operation(
             if intent["reuse_admitted_at"] is None:
                 if (not remote_ready or not resolved["can_submit"] or resolved["blockers"]
                         or datetime.fromisoformat(resolved["expires_at"]) <= datetime.now(timezone.utc)
-                        or intent["source_guard_digest"] != _agent_guard(conn, actor_agent_id)):
+                        or intent["source_guard_digest"] != _agent_guard(conn, subject_agent_id)):
                     raise OktoNexusError(ErrorCode.CONFLICT, "The reuse intent is no longer eligible.", {})
                 from .execution_session_reuse import reusable_opening
                 selected = reusable_opening(uow, factory=factory, access=access, context=context,
@@ -132,7 +139,7 @@ def submit_execution_operation(
                                       "The intent resolution has expired.", {})
             if (not intent["source_guard_digest"] or
                     intent["source_guard_digest"] !=
-                    _agent_guard(conn, actor_agent_id) or
+                    _agent_guard(conn, subject_agent_id) or
                     scope["authorization_revision"] != revisions.authorization or
                     scope["configuration_revision"] != revisions.configuration or
                     scope["credential_epoch"] != revisions.credential_epoch):
@@ -156,7 +163,7 @@ def submit_execution_operation(
                 "WHERE b.server_id=? AND b.executor_id=? AND b.binding_id=?",
                 (server_id, executor_id, scope["binding_id"]),
             ).fetchone()
-            if (binding is None or binding["agent_id"] != actor_agent_id or
+            if (binding is None or binding["agent_id"] != subject_agent_id or
                     binding["protocol"] != "nxl-r4" or
                     binding["control_state"] != "CONTROL_READY" or
                     binding["revoked_at"] is not None or
@@ -261,7 +268,7 @@ def submit_execution_operation(
                 "workspace_id,workspace_binding_id,session_id,action,intent_hash,"
                 "semantic_payload,expected_revisions_json,delivery_id,"
                 "admission_state,created_at,admission_bytes,connection_key_id,boot_authority_json) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                (*key, actor_agent_id, actor_agent_id, scope["binding_id"],
+                (*key, subject_agent_id, actor_agent_id, scope["binding_id"],
                  scope["workspace_id"], scope["workspace_binding_id"],
                  session_id, action, request["intent_hash"],
                  encoded_semantic.decode("utf-8"),
@@ -289,6 +296,6 @@ def submit_execution_operation(
                            client_intent_id=request["client_intent_id"])
     view = read_execution_operation_history(
         factory, server_id=server_id, executor_id=executor_id,
-        operation_id=operation_id, subject_agent_id=actor_agent_id,
+        operation_id=operation_id, subject_agent_id=subject_agent_id,
     ).public_view()
     return view, reused
