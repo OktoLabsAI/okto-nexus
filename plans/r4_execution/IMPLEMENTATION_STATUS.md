@@ -1,6 +1,21 @@
  # Execução R4 — estado verificado em 2026-10-02
 
-## Current acceptance reconciliation: executable Core .53
+## Current acceptance reconciliation: executable Core .54
+
+Acceptance topology: by explicit user direction, continue testing on this machine
+with separate local/remote processes and environments. Cross-machine acceptance
+is reserved for a later manual session with the user; it remains pending and must
+not be inferred from same-machine results.
+
+Core `1c7cf79` fixes the reproduced zero-candidate defect: unapproved PATH
+installations remain visible and untrusted, including the Windows Codex npm and
+managed Pi layouts. Connector `07e78f2` adopts the same shared discovery facade.
+A fresh installed Windows CLI found all three real providers in 13.50 seconds
+without launching them. Nexus adopted the exact .54 wheel and passed 57 installed
+integration checks on each of Windows and WSL Linux with unchanged inputs.
+The initial failed adoption and the corrected artifacts are retained in
+[discovery presence evidence](M03_DISCOVERY_PRESENCE.md). These passes do not close
+the full provider/host matrix, NS15.05, M13 or any release gate.
 
 Connector audit A10 now exercises the current R4 daemon/selection/capability
 and real Core environment renderer instead of skipping a legacy startup refusal.

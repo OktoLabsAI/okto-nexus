@@ -32,6 +32,16 @@ Reads neither consume grants nor create operations. Missing or ambiguous choices
 remain blocked with separate policy reasons; Core's technical assessment is
 preserved. Eligibility is a preview, and admission revalidates current authority.
 
+Core 0.2.54 observes PATH installations even before local trust selection. These
+appear with `untrusted` and `selection_required`, not as absent installations.
+Windows discovery reads fixed Codex npm and Pi npm/managed release payloads
+without executing shell or JavaScript launchers. Unknown custom wrappers are not
+interpreted. Approve physical discovery roots on the execution host before a
+version probe or runtime preparation; finding an installation grants no authority.
+The embedded Server accepts `--harness-root`; registered remote hosts use
+`executor configure-discovery`. Neither option adds directories to PATH. Pi's
+content identity includes its package dependencies, so discovery can take seconds.
+
 An operator inspecting another agent currently receives
 `SUBJECT_IDENTITY_REQUIRED` for start: the public intent route still requires
 that subject's authenticated identity. Operator inspection does not create an
