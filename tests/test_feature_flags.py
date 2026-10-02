@@ -222,22 +222,22 @@ def test_feature_flag_fields_constant_matches_the_7_flags():
     assert set(FEATURE_FLAG_FIELDS) == set(FEATURE_FIELDS)
 
 
-def test_nexus_info_features_identical_on_stdio_and_http(tmp_path):
-    """TS6: the features block is identical across transports, with exactly
-    the 7 keys, and surface_revision is 34 on both."""
+def test_nexus_info_features_identical_on_inprocess_and_http_composition(tmp_path):
+    """Both server compositions publish current features and revision.
+
+    create_server is an in-process SDK surface, not the retired stdio transport.
+    """
     deps = bootstrap({}, ["--home", str(tmp_path / "home")])
-    stdio_env = _call(create_server(deps), "nexus_info")
+    local_env = _call(create_server(deps), "nexus_info")
     http_env = _call(create_http_mcp_server(deps), "nexus_info")
 
-    stdio_info = stdio_env["data"] if "data" in stdio_env else stdio_env
+    local_info = local_env["data"] if "data" in local_env else local_env
     http_info = http_env["data"] if "data" in http_env else http_env
 
-    assert stdio_info["features"] == http_info["features"]
-    assert set(stdio_info["features"]) == set(FEATURE_FIELDS)
-    assert stdio_info["features"] == {field: field in DEFAULT_ON for field in FEATURE_FIELDS}
-    assert stdio_info["surface_revision"] == 60
-    assert http_info["surface_revision"] == 60
-    assert SURFACE_REVISION == 60
+    assert local_info["features"] == http_info["features"]
+    assert set(local_info["features"]) == set(FEATURE_FIELDS)
+    assert local_info["features"] == {field: field in DEFAULT_ON for field in FEATURE_FIELDS}
+    assert local_info["surface_revision"] == http_info["surface_revision"] == SURFACE_REVISION
 
 
 def test_nexus_info_reflects_env_pinned_flag(tmp_path):

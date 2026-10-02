@@ -2,6 +2,12 @@
 
 ## Current acceptance reconciliation: executable Core .53
 
+MCP surface 64 now documents all harness parameters and both message workspace
+selectors. Installed CI corrections passed 59 tests with one existing manual skip
+and unchanged inputs. Hosted checkout, marker preservation, migration and historical
+surface assertions were corrected; the full CI failure and remaining runtime/trust
+findings remain open. See [corrections and evidence](M13_CI_SURFACE_REPAIR.md).
+
 The dashboard now reviews/applies a unique host-published preparation and reuses
 its approved binding. Eighteen corrected installed checks passed, including
 response-loss recovery with the same request and refusal before unrecorded writes.
@@ -13,7 +19,8 @@ these regressions require investigation before release. See
 The dashboard now provides explicit R4 executor/installation/workspace selection
 using current scoped API facts. Twenty-four installed checks passed, including
 real Edge with packaged assets, reference-preserving reorder and stale/revoked
-selection invalidation. Consent and runtime mutations remain pending. See
+selection invalidation. The consent follow-up is described above; runtime operations
+remain pending. See
 [selection scope and remaining NS13 work](M10_RUNTIME_SELECTION.md).
 
 MCP identity resource v30 / surface 63 now describes current R4 onboarding and

@@ -1109,9 +1109,10 @@ def register(server: Any, deps: Any) -> None:
     @server.tool()
     @tool_envelope
     @runtime_tool_guard(deps)
-    def harness_list(view: str = "adapters", compact: bool = False,
+    def harness_list(view: Annotated[str, Field(description="View: adapters, connections, bindings, endpoints, profiles, outbox, journal, artifacts or diagnostics.")] = "adapters",
+                     compact: Annotated[bool, Field(description="Compact retained journal records; valid only for view=journal.")] = False,
                      maintenance: Annotated[Any, Field(description="Object for selected view (connections: action available (your methods), connect (your endpoint_id + unique idempotency_key), list/configure/issue/revoke; admin agent_id; issue requires endpoint_id): profile/endpoint admin; outbox inspect/cancel_pending/release_to_inbox/abandon_command/recover_handoff; artifact maintenance. Fields: okto-nexus://reference/tool-docs/identity.")] = None) -> dict[str, Any]:
-        """Discover your connection methods with view=connections, maintenance={action:available}; use returned connect calls to open authorized endpoints. Discover delegated runtimes with view=bindings. Operator views: adapters, endpoints, profiles, outbox, journal, artifacts, diagnostics. Outbox recovery never replays native calls. compact requires journal."""
+        """Inspect connections or delegated bindings; operator views manage retained records. See okto-nexus://reference/tool-docs/identity. Discovery grants no execution authority."""
         if view == "diagnostics" and not compact and maintenance is None:
             return build_endpoint_service(deps).diagnostics(authorize_request(deps))
         if view == "connections" and not compact:
@@ -1172,10 +1173,10 @@ def register(server: Any, deps: Any) -> None:
     async def harness_send(
         session_id: Annotated[str, Field(description=_P_SESSION_ID)],
         payload: Annotated[Any, Field(description=_P_PAYLOAD_TURN)],
-        idempotency_key: str | None = None,
-        expected_operation_id: str | None = None,
-        expected_turn_id: str | None = None,
-        expected_owner_epoch: int | None = None,
+        idempotency_key: Annotated[str | None, Field(description="Stable request key, required for R4; reuse after uncertain outcomes.")] = None,
+        expected_operation_id: Annotated[str | None, Field(description="Legacy operation guard; omit for R4 sessions.")] = None,
+        expected_turn_id: Annotated[str | None, Field(description="Native turn target; Core validates whether this control requires it.")] = None,
+        expected_owner_epoch: Annotated[int | None, Field(description="Legacy owner guard; omit for R4 sessions.")] = None,
     ) -> dict[str, Any]:
         """Durably queue a turn. Supply idempotency_key for safe request retries. Admission does not confirm native acceptance; results arrive as correlated events."""
         body = normalize_payload(payload, required=True)
@@ -1190,12 +1191,12 @@ def register(server: Any, deps: Any) -> None:
     async def harness_steer(
         session_id: Annotated[str, Field(description=_P_SESSION_ID)],
         payload: Annotated[Any, Field(description=_P_PAYLOAD_STEER)],
-        idempotency_key: str | None = None,
-        expected_operation_id: str | None = None,
-        expected_turn_id: str | None = None,
-        expected_owner_epoch: int | None = None,
+        idempotency_key: Annotated[str | None, Field(description="Stable request key, required for R4; reuse after uncertain outcomes.")] = None,
+        expected_operation_id: Annotated[str | None, Field(description="Legacy operation guard; omit for R4 sessions.")] = None,
+        expected_turn_id: Annotated[str | None, Field(description="Native turn target; Core validates whether this control requires it.")] = None,
+        expected_owner_epoch: Annotated[int | None, Field(description="Legacy owner guard; omit for R4 sessions.")] = None,
     ) -> dict[str, Any]:
-        """Request steering with a stable idempotency_key. For R4, inspect effective session capabilities; Core validates expected_turn_id and native targeting. Admission is not proof of native application. Retained legacy sessions use their recorded steer_timing contract."""
+        """Request steering using current session capabilities and Core turn targeting. Use a stable idempotency_key; admission does not prove native application. Legacy sessions retain their steer_timing."""
         body = normalize_payload(payload, required=True)
         return await anyio.to_thread.run_sync(
             functools.partial(authorized_send, deps, supervisor, session_id, "steer", body, idempotency_key=idempotency_key,
@@ -1208,12 +1209,12 @@ def register(server: Any, deps: Any) -> None:
     async def harness_interrupt(
         session_id: Annotated[str, Field(description=_P_SESSION_ID)],
         payload: Annotated[Any, Field(description=_P_PAYLOAD_INTERRUPT)] = None,
-        idempotency_key: str | None = None,
-        expected_operation_id: str | None = None,
-        expected_turn_id: str | None = None,
-        expected_owner_epoch: int | None = None,
+        idempotency_key: Annotated[str | None, Field(description="Stable request key, required for R4; reuse after uncertain outcomes.")] = None,
+        expected_operation_id: Annotated[str | None, Field(description="Legacy operation guard; omit for R4 sessions.")] = None,
+        expected_turn_id: Annotated[str | None, Field(description="Native turn target; Core validates whether this control requires it.")] = None,
+        expected_owner_epoch: Annotated[int | None, Field(description="Legacy owner guard; omit for R4 sessions.")] = None,
     ) -> dict[str, Any]:
-        """Request interruption with a stable idempotency_key. Core validates R4 capability and expected_turn_id targeting; inspect correlated events for application. A following turn may be refused until native settling completes."""
+        """Request interruption with a stable idempotency_key and Core-validated turn target. Inspect correlated events; following turns may be refused until native settling completes."""
         body = normalize_payload(payload, required=False)
         return await anyio.to_thread.run_sync(
             functools.partial(authorized_send, deps, supervisor, session_id, "interrupt", body, idempotency_key=idempotency_key,
@@ -1225,8 +1226,8 @@ def register(server: Any, deps: Any) -> None:
     @runtime_tool_guard(deps)
     async def harness_close(
         session_id: Annotated[str, Field(description=_P_SESSION_ID)],
-        idempotency_key: str | None = None,
-        expected_owner_epoch: int | None = None,
+        idempotency_key: Annotated[str | None, Field(description="Stable request key, required for R4; reuse after uncertain outcomes.")] = None,
+        expected_owner_epoch: Annotated[int | None, Field(description="Legacy owner guard; omit for R4 sessions.")] = None,
     ) -> dict[str, Any]:
         """Durably request closure. The operation tracks stop/detach/unknown; admission does not claim native termination."""
         session = await anyio.to_thread.run_sync(
@@ -1240,7 +1241,7 @@ def register(server: Any, deps: Any) -> None:
     @runtime_tool_guard(deps)
     def harness_get(
         session_id: Annotated[str | None, Field(description=_P_SESSION_ID)] = None,
-        operation_id: str | None = None,
+        operation_id: Annotated[str | None, Field(description="Durable operation to inspect; mutually exclusive with session_id.")] = None,
     ) -> dict[str, Any]:
         """Read exactly one session_id or operation_id. Operation state separates queueing, native acceptance and durable result; historical session rows do not prove liveness."""
         if bool(session_id) == bool(operation_id):

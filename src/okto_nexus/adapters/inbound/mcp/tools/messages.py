@@ -290,7 +290,7 @@ def register(server: Any, deps: Any) -> None:
         from_agent_id: Annotated[str, Field(description=_P_FROM_AGENT)],
         subject: Annotated[str, Field(description=_P_SUBJECT)],
         body: Annotated[str, Field(description=_P_BODY)],
-        project_root: Annotated[str | None, Field(description=_P_ROOT)] = None,
+        project_root: Annotated[str | None, Field(description="Absolute local project path. Supply exactly one of project_root or existing workspace_id.")] = None,
         workspace_id: Annotated[str | None, Field(description="Existing logical workspace ID. Select this or project_root, never both.")] = None,
         channel_id: Annotated[str | None, Field(description=_P_CHANNEL)] = None,
         from_session_id: Annotated[

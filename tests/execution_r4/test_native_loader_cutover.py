@@ -29,6 +29,6 @@ for name in ('pi', 'codex', 'claude_code_stream', 'claude_code_attach',
     assert importlib.util.find_spec('okto_nexus.adapters.outbound.harness.' + name) is None
 assert importlib.util.find_spec('legacy_native_fixture') is None
 '''
-    result = subprocess.run(['rtk', 'proxy', sys.executable, '-I', '-c', program],
+    result = subprocess.run([sys.executable, '-I', '-c', program],
                             capture_output=True, text=True, timeout=30)
     assert result.returncode == 0, result.stderr

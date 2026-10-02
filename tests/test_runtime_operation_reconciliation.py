@@ -271,7 +271,7 @@ def test_retired_stdio_refuses_recovery_and_http_uses_active_owner(runtime):
     _, row = uncertain_delivery(runtime)
     env = stdio_environment(runtime)
     env['OKTO_NEXUS_API_KEY'] = operator
-    retired = subprocess.run(['rtk', 'proxy', sys.executable, '-m', 'okto_nexus.adapters.inbound.mcp.server',
+    retired = subprocess.run([sys.executable, '-m', 'okto_nexus.adapters.inbound.mcp.server',
         '--home', str(deps.config.home_dir)], env=env, capture_output=True, text=True, timeout=30)
     assert retired.returncode != 0
     assert 'MCP stdio is no longer available' in retired.stderr
