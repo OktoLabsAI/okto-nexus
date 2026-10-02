@@ -2,6 +2,12 @@
 
 ## Current acceptance reconciliation: executable Core .53
 
+Two installed Linux/Python 3.12.13 NS14.04 runs failed the unchanged thread-growth
+assertion. Identity transactions stayed below 228 ms; the instrumented run added
+11 default asyncio pool threads while named Nexus workers stayed unchanged.
+Background storage failures remain unresolved. No application behavior or test
+limit changed. See [measurements and failed campaigns](M13_CI_LINUX_LOAD_DIAGNOSIS.md).
+
 Heartbeat storage failures now explicitly close the accepted control link without
 retry or private diagnostics, then follow existing scoped cleanup. A fresh Nexus
 development wheel passed 19 installed checks with unchanged inputs. This fixes

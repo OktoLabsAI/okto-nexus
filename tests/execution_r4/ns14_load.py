@@ -88,16 +88,21 @@ def run_load(state, root, record_property):
             uow.connection.executemany("INSERT INTO agents(agent_id,created_at,api_key_hash,is_active) VALUES(?,?,?,1)",
                 ((f"load-{i}", now, hash_api_key("nxs_" + format(i, "048x"))) for i in range(offset, offset + 500)))
         time.sleep(.001)
-    threads_before = threading.active_count()
+    threads_before_snapshot = [(t.ident, t.name) for t in threading.enumerate()]
+    threads_before = len(threads_before_snapshot)
     samples = []
+    write_batches = []
     started = time.perf_counter()
     tracemalloc.start()
     try:
         for offset in range(0, count, 500):
             heartbeat()
+            requested = time.perf_counter()
             with factory.unit_of_work() as uow:
+                acquired = time.perf_counter()
                 for i in range(offset, offset + 500):
                     assert auth.resolve(uow, "nxs_" + format(i, "048x")).agent_id == f"load-{i}"
+            write_batches.append((acquired - requested, time.perf_counter() - acquired))
             if (offset + 500) % 25_000 == 0:
                 current, peak = tracemalloc.get_traced_memory()
                 samples.append(dict(identities=offset + 500, current_bytes=current, peak_bytes=peak,
@@ -105,9 +110,20 @@ def run_load(state, root, record_property):
                 assert auth.cache_stats()["entries"] == 4096
     finally:
         tracemalloc.stop()
+        # Preserve bounded timing evidence even if a later heartbeat finds a
+        # closed channel. Do not turn lock contention into a read-only touch.
+        record_property("identity_write_batches", json.dumps(dict(
+            completed=len(write_batches), identities_per_batch=500,
+            max_acquire_seconds=max((row[0] for row in write_batches), default=0),
+            max_held_seconds=max((row[1] for row in write_batches), default=0),
+            total_acquire_seconds=sum(row[0] for row in write_batches),
+            total_held_seconds=sum(row[1] for row in write_batches))))
     identity_seconds = time.perf_counter() - started
     assert samples[-1]["current_bytes"] < samples[0]["current_bytes"] * 1.5 + 524288
-    assert threading.active_count() <= threads_before + 4
+    threads_after_snapshot = [(t.ident, t.name) for t in threading.enumerate()]
+    record_property("identity_threads", json.dumps(dict(
+        before=threads_before_snapshot, after=threads_after_snapshot)))
+    assert len(threads_after_snapshot) <= threads_before + 4
     with factory.unit_of_work(write=False) as uow:
         plan = [r[3] for r in uow.connection.execute(
             "EXPLAIN QUERY PLAN SELECT * FROM agents WHERE api_key_hash=? AND is_active=1",
