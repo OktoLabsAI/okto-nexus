@@ -2,6 +2,26 @@
 
 This is preparation evidence, not M13 acceptance or a final artifact freeze.
 
+## Windows daemon supervision diagnosis
+
+Connector commit `9824b47` replaces the unhandled WinError 5 with a typed
+DAEMON_UNAVAILABLE refusal and an explicit foreground/supervisor remedy. A real
+restrictive Windows Job Object reproduces the failure on the previous wheel.
+An attempted retry without breakaway was rejected: it can briefly report IPC
+readiness and then lose the daemon when its starting CLI exits. The shipped
+behavior preserves independent-lifetime guarantees and does not change job
+policy. Both restricted detached refusal and foreground IPC stop passed on the
+installed corrected wheel; three CLI cases also passed (five tests total).
+Hosted CLI tests now exercise the explicit foreground remedy if the supervisor
+prohibits detached start; they still require successful connect and lifecycle.
+
+The new Connector wheel is fixed in `vendor/ci/manifest.json`; Core and Nexus
+runtime artifacts are unchanged. All installed package bytes were verified
+and three Nexus import-boundary checks passed with the updated test dependency.
+Evidence: Connector `plans/implementation/evidence/windows-job-start.json` and
+Nexus `evidence/m13-job-start-installed.json` / `m13-job-start-tests.xml`.
+Hosted confirmation and the separate R4 observation/lease timeouts remain open.
+
 ## Staged package installation and current Connector failures
 
 The installation runner now starts with the base wheel in a fresh environment,

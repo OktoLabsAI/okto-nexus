@@ -7,10 +7,10 @@ in pull-request jobs. `manifest.json` fixes both consumer test dependencies by
 SHA-256; `tools/ci_installed.py` verifies them before installation and compares
 installed package files with the wheels before testing.
 
-The Connector wheel was rebuilt with the Core 0.2.52.dev0 dependency, matching
-consumer commit `acaa192`. Its runtime source is unchanged from `7f93208`;
-the new metadata pins the corrected Core lease deadline comparison. Its SHA-256
-is `332f5aa8c683f7732a56925598968a3bba61a9d6fb5dcc3909762b016a0340ae`.
+The Connector wheel matches consumer commit `9824b47`, including a typed
+refusal when Windows denies independent daemon creation. The documented
+foreground remedy is tested under a real restrictive Job Object. Its SHA-256
+is `31f7c55beb1c457ddd2626b5841a5f7b28f6c92a2f6c4902f9cbf079e7a2e380`.
 The Core wheel is identical in both consumers, SHA-256
 `470eb23b28d917a3a154c2ef7cd9fdddf972ca6402c0668961b4c01909f1b732`.
 These are regression inputs, not a final release freeze or provider/remote
