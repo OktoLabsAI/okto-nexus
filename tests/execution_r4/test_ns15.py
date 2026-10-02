@@ -21,6 +21,35 @@ from test_binding_migration import proposal_request
 from test_binding_operator import prepare_operator
 
 
+def test_ns15_05():
+    """Documentation commands/routes and shipped HTTP-only dashboard guidance."""
+    import importlib.util
+    import okto_nexus
+    root = Path(__file__).resolve().parents[2]
+    path = root / 'plans/r4_execution/audit_ns15_05_docs.py'
+    spec = importlib.util.spec_from_file_location('ns15_docs_audit', path)
+    audit = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(audit)
+    audit.main()
+    package = Path(okto_nexus.__file__).resolve().parent
+    resources = (package / 'adapters/inbound/mcp/resources_docs.py').read_text(encoding='utf-8')
+    assert 'authenticated stdio proxy' not in resources
+    assert 'open cooperative stdio' not in resources
+    assets = package / 'adapters/inbound/http/static'
+    html = (assets / 'index.html').read_text(encoding='utf-8')
+    import re
+    scripts = re.findall(r'src="/assets/([^"]+\.js)"', html)
+    assert scripts
+    shipped = '\n'.join((assets / 'assets' / name).read_text(encoding='utf-8') for name in scripts)
+    assert 'stdio MCP server (V1 mode)' not in shipped
+    assert 'command reference; MCP uses HTTP /mcp' in shipped
+    guide = (root / 'docs/harness-integrations/r4-operations.md').read_text(encoding='utf-8')
+    for required in ('G0–G3', 'remote_execution_ready', 'possible_effect=true',
+                     'retry_safe=false', 'does not require the Connector',
+                     'catalog entry is not proof'):
+        assert required in guide
+
+
 @pytest.mark.parametrize("scenario", ["configuration", "restore"])
 def test_ns15_04(tmp_path, monkeypatch, request, qualified_contract, scenario):
     """TR4-15-04: failure-safe config apply and joint post-effect restore."""

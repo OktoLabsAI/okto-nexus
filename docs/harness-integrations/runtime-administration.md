@@ -50,7 +50,7 @@ input models and application services. Unknown fields and implicit type coercion
 are rejected: send JSON `true`, not the string `"true"`. Revisions must be positive
 integers. Surface 39 introduced strict validation; surface 40 extends edits.
 Clients caching older schemas should refresh `nexus_info`. Reference resource
-`tool-docs/identity` is currently version25 (version9 accompanied the earlier administrative contract). Surface 41 adds scoped binding discovery;
+`tool-docs/identity` is currently version29 (version9 accompanied the earlier administrative contract). Surface 41 adds scoped binding discovery;
 surface 42 adds explicit operation recovery.
 
 The `bindings` view is also available to authenticated agents with current

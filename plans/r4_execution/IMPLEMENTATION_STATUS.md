@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.05 documentation and identity/cache acceptance - October 1, 2026
+
+**TR4-15-05, TN-38 and TN-39 PASSED** at their declared layers. Installed campaign: **55 distinct passes and 3 architecture checks**. Normative documentation checks cover real CLI help/routes, Core IDs and rebuilt dashboard assets. Public scoped authentication among 100,000 Agents, indexed 100,000-key churn, bounded memory, unchanged thread count, invalidation races and credential epoch rotation reuse existing tests. See [crosswalk and limitations](M12_NS15_05_ACCEPTANCE.md) and [manifest](test_runs_20261001_ns15_05.json). TN-40, dependency acceptance and final G0–G3 remain open. This supersedes the earlier NS15.05 partial documentation note; final release README metadata still requires the M13 rebuild.
+
 ## NS15.05 documentation cutover - October 1, 2026
 
 Current R4 operations and evidence entry points replace obsolete stdio/legacy-open guidance. MCP resource identity v29 and surface revision 62 expose updated authentication instructions; dashboard source help reflects HTTP MCP. Supporting checks: seven installed CLI help commands, thirteen installed route declarations and **26 source regression passes**. See [scope and remaining work](M12_NS15_05_DOCUMENTATION.md). TR4-15-05 and TN-38/39/40 remain NOT_RUN; packaged dashboard and final artifact qualification remain required.

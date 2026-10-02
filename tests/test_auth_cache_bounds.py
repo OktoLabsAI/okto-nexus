@@ -97,6 +97,7 @@ def test_100k_sqlite_identities_use_indexed_lookup_and_bounded_cache(migrated_fa
     repo = SqliteAgentRepo(clock)
     service = AgentKeyAuthService(repo, clock)
     count = 100_000
+    threads_before = threading.active_count()
     with migrated_factory.unit_of_work() as uow:
         uow.connection.executemany(
             "INSERT INTO agents(agent_id,created_at,api_key_hash,is_active) VALUES(?,?,?,1)",
@@ -130,7 +131,10 @@ def test_100k_sqlite_identities_use_indexed_lookup_and_bounded_cache(migrated_fa
         elapsed = time.perf_counter() - started
     # Stable fixture payloads must plateau after capacity, independent of row count.
     assert samples[-1]["current_bytes"] < samples[0]["current_bytes"] * 1.5 + 262144
+    threads_after = threading.active_count()
+    assert threads_after == threads_before
     record_property("auth_cache_load", json.dumps(dict(
         identities=count, elapsed_seconds=elapsed, samples=samples, query_plan=plan,
+        threads_before=threads_before, threads_after=threads_after,
         platform=platform.platform(), processor=platform.processor(), logical_cpus=os.cpu_count(),
         topology="Actual SQLite adapter and migrated database; one transaction for measured lookups; no providers.")))

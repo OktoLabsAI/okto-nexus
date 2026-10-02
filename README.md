@@ -21,11 +21,11 @@ the derived `shared.md` view live outside that database.
 |---|---|
 | Package | `okto-nexus 0.2.0` (development) |
 | Python | `>=3.11` |
-| MCP surface | 43 tools by default; 46 with memory enabled |
+| MCP surface | Use `tools/list` for the active feature configuration |
 | MCP resources | 12 versioned reference resources |
 | MCP prompts | 0 |
-| Surface revision | 33 |
-| Database schema | 28 migrations, 34 tables |
+| Surface revision | 62 |
+| Database schema | Read the installed revision through `nexus_info` |
 | Storage | local SQLite/WAL catalog + adapter-backed artifact payloads |
 
 - PyPI: [pypi.org/project/okto-nexus](https://pypi.org/project/okto-nexus/)
@@ -600,10 +600,10 @@ Nuances:
 
 ## MCP surface
 
-The default server exposes **43 tools**: 42 across tool modules plus
-`nexus_info`. Enabling `feature_memory` at startup adds three tools, for 46.
-Both transports expose the same effective tool/resource surface for the same
-configuration.
+HTTP MCP publishes the tools enabled by the startup configuration. Use
+`tools/list` and `nexus_info` for the effective surface and resource revisions.
+Memory adds three tools; enabled harness integration adds the eight runtime
+tools listed below. Nexus MCP stdio is no longer supported.
 
 | Area | Tools |
 |---|---|
@@ -619,6 +619,7 @@ configuration.
 | Catalog | `tag_list` |
 | Ephemeral monitor tokens | `poll_token_issue`, `poll_token_renew`, `poll_token_revoke` |
 | Optional memory | `memory_put`, `memory_get`, `memory_search` |
+| Optional runtime | `harness_list`, `harness_open`, `harness_send`, `harness_steer`, `harness_interrupt`, `harness_close`, `harness_get`, `harness_event_list` |
 
 `message_get`, `message_list`, and `message_wait` are intentional migration
 shims. They return `MIGRATED` with replacements in the inbox/event surface
@@ -699,8 +700,8 @@ For the 0.1.10 default surface:
 | Total measured surface | 37,345 (~9,336 tokens) |
 
 Deep explanations live in resources so clients load them only when needed.
-The current measured cuttable reduction against the frozen baseline is about
-44.3%.
+That historical measurement reported a cuttable reduction of about 44.3%
+against its frozen baseline; it is not a measurement of the R4 surface.
 
 ## Configuration
 
@@ -897,7 +898,7 @@ and revoke it on teardown. The raw token is returned only on issue/renew.
 
 ## Data model and migrations
 
-The current schema contains 34 tables:
+The core coordination tables include:
 
 | Area | Tables |
 |---|---|
@@ -910,7 +911,8 @@ Not every table is workspace-scoped: agents and catalogs are global, inbox
 deliveries are keyed by recipient identity, and bindings/control-plane records
 have their own ownership rules.
 
-Migrations are embedded in the package and applied in order:
+Migrations are embedded in the package and applied in order. The following list
+describes the early coordination migrations; it is not the complete R4 schema:
 
 - **001–008:** core schema, close metadata, handoff payload/result, presence,
   durable inbox deliveries, leases, and session secrets;
@@ -991,7 +993,7 @@ src/okto_nexus/
     inbound/
       cli/                  serve, tail, admin
       http/                 FastAPI, REST, SSE, packaged SPA
-      mcp/                  server, resources, projections, 43/46 tools
+      mcp/                  HTTP server, resources, projections, configured tools
     outbound/
       sqlite/               repositories and migrations adapter
       embedding/            optional semantic provider

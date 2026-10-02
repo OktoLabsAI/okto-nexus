@@ -1624,10 +1624,12 @@
     },
     "NS15.05": {
       "proposed_nodeid": "tests/execution_r4/test_ns15.py::test_ns15_05",
-      "collected_nodeids": [],
-      "effective_test_command": null,
-      "test_availability": "MISSING",
-      "implementation": "PARTIAL_DOCUMENTATION_CUTOVER",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns15.py::test_ns15_05"
+      ],
+      "effective_test_command": "python plans/r4_execution/run_ns15_05.py",
+      "test_availability": "COLLECTED_NORMATIVE_ENTRY",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
       "acceptance": "PARTIAL",
       "required_scenarios": [
         "TR4-15-05",
@@ -1641,10 +1643,12 @@
         "plans/r4_execution/evidence/ns15-05-resources.xml"
       ],
       "remaining": [
-        "Complete active resources/help review and packaged dashboard verification",
-        "Execute TR4-15-05; supporting command/route checks are not full scenario acceptance",
-        "TN-38 100,000 identities; TN-39 bounded cache/revocation; TN-40 supported rollback",
-        "Dependency and final installed artifact acceptance"
+        "TN-40 supported rollback after backfill/execution including policies",
+        "Task dependency acceptance and final M13 installed artifacts/browser/provider/platform gates"
+      ],
+      "evidence": [
+        "plans/r4_execution/M12_NS15_05_ACCEPTANCE.md",
+        "plans/r4_execution/test_runs_20261001_ns15_05.json"
       ]
     },
     "NS16.01": {
@@ -2692,9 +2696,15 @@
         "NS15.05"
       ],
       "layer": "unit_contract",
-      "candidate_nodeids": [],
-      "coverage": "REQUIRES_REVIEW",
-      "execution": "NOT_RUN"
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns15.py::test_ns15_05"
+      ],
+      "coverage": "VERIFIED_NORMATIVE_SCENARIO",
+      "execution": "PASSED",
+      "evidence": [
+        "plans/r4_execution/M12_NS15_05_ACCEPTANCE.md",
+        "plans/r4_execution/test_runs_20261001_ns15_05.json"
+      ]
     },
     "TR4-16-01": {
       "task_ids": [
@@ -3095,18 +3105,34 @@
         "NS15.05"
       ],
       "layer": "legacy_acceptance",
-      "candidate_nodeids": [],
-      "coverage": "REQUIRES_REVIEW",
-      "execution": "NOT_RUN"
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns03.py::test_ns03_01",
+        "tests/test_auth_cache_bounds.py::test_100k_sqlite_identities_use_indexed_lookup_and_bounded_cache"
+      ],
+      "coverage": "VERIFIED_NORMATIVE_SCENARIO",
+      "execution": "PASSED",
+      "evidence": [
+        "plans/r4_execution/M12_NS15_05_ACCEPTANCE.md",
+        "plans/r4_execution/test_runs_20261001_ns15_05.json"
+      ]
     },
     "TN-39": {
       "task_ids": [
         "NS15.05"
       ],
       "layer": "legacy_acceptance",
-      "candidate_nodeids": [],
-      "coverage": "REQUIRES_REVIEW",
-      "execution": "NOT_RUN"
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns03.py::test_ns03_01",
+        "tests/test_auth_cache_bounds.py::test_100k_sqlite_identities_use_indexed_lookup_and_bounded_cache",
+        "tests/test_auth_cache_bounds.py::test_lookup_started_before_invalidation_cannot_repopulate_cache[agent]",
+        "tests/test_auth_cache_bounds.py::test_lookup_started_before_invalidation_cannot_repopulate_cache[all]"
+      ],
+      "coverage": "VERIFIED_NORMATIVE_SCENARIO",
+      "execution": "PASSED",
+      "evidence": [
+        "plans/r4_execution/M12_NS15_05_ACCEPTANCE.md",
+        "plans/r4_execution/test_runs_20261001_ns15_05.json"
+      ]
     },
     "TN-40": {
       "task_ids": [
