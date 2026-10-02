@@ -10,7 +10,7 @@
     "branch": "feature/v0.2.0",
     "historical_checkpoint": "plans/r4_execution/evidence/delivery-checkpoint-20260930.json",
     "published_heads": {
-      "nexus": "6cf2ec199dd1242ec9ce6a0e49034040512b5b7d",
+      "nexus": "ca368912e3c91fd0fe6c66d94b0f9d889f173f94",
       "connector": "ad0933e0f71b71fc6d8d420db4c77c1d9c60836c",
       "core": "7a84ff98e9cd559dd24309f1275f9aa54693f6c3"
     },
@@ -18,12 +18,13 @@
     "shared_core_version": "0.2.56.dev0",
     "shared_core_wheel_sha256": "7f19885f28b16dbfce66b969ab42c79b9947246416c71147315006b6e618b1f6",
     "latest_tested_wheels": {
-      "nexus": "4705d1de073b8bd81be49d6045dbea7d4cca001c89776660a7a5a8069a22db2f",
+      "nexus": "38e0b232fba2703d4c5bba4ebb345919a31ce2f4d061c7a158e89b46d11c1777",
       "connector": "93d78a75c5ad81bbdd96e648be136f0f6b2cfd0a53f350266a1c9f96fc449104",
       "core": "7f19885f28b16dbfce66b969ab42c79b9947246416c71147315006b6e618b1f6"
     },
     "closed_product_gates": [],
     "evidence": [
+      "plans/r4_execution/M10_NATIVE_DECISIONS_UI.md",
       "plans/r4_execution/M10_RUNTIME_OPERATIONS.md",
       "plans/r4_execution/M04_OPERATOR_RUNTIME.md",
       "plans/r4_execution/M10_LOCAL_INSTALLATION_CHECK.md",
@@ -32,9 +33,9 @@
       "plans/r4_execution/M12_NS15_05_ACCEPTANCE.md",
       "plans/r4_execution/M12_NS15_05_OPERATIONAL_RECONCILIATION.md"
     ],
-    "latest_increment": "Installed dashboard: reviewed start/reuse, turn submission, steering, interruption and close, with durable request recovery and actor/subject grant authority.",
-    "verification_scope": "25 installed Windows/Edge checks passed with unchanged inputs, covering runtime UI, prior selection/preparation, operator authority and NS15.05. Earlier operator regressions: 143 passes per Windows and WSL Linux. Synthetic peers do not qualify providers or independent hosts.",
-    "clean_install_scope": "Core .56 coordinated clean-install evidence predates the latest Nexus runtime UI wheel. Final current tuple clean installation remains required.",
+    "latest_increment": "Canonical native permission/question/form review and denial in Approvals, metadata-only durable recovery and separate native delivery status.",
+    "verification_scope": "29 source passes. Installed Windows/Edge: eleven passes and two form fixture setup errors, then two corrected form passes on the same wheel; both campaigns changed_inputs=[]. Synthetic requests do not qualify actual provider application or independent hosts. Prior runtime UI and operator evidence retained separately.",
+    "clean_install_scope": "Coordinated clean-install evidence predates the latest Nexus native-decision UI wheel. Final current tuple clean installation remains required.",
     "macos": {
       "source_commit": "1975e88",
       "plan_commit": "7a84ff98e9cd559dd24309f1275f9aa54693f6c3",
@@ -48,7 +49,7 @@
       "prototype_validation": "Five portable Windows passes and three Unix skips; eight WSL passes including native fixture descriptor handoff. Native Mac launchd reports pending."
     },
     "remaining": [
-      "Complete remaining M10 native approval/input, full history and uncertain-session recovery, onboarding, US English/accessibility and actual remote/provider browser acceptance.",
+      "Complete remaining M10 full history and uncertain-session recovery, onboarding, US English/accessibility and actual remote/provider browser acceptance, including native decisions.",
       "Resolve or delimit Pi stream-loss reproduction with sufficient provider evidence; complete required provider/platform/Python/fault matrix.",
       "Implement native macOS containment and qualify each provider independently on the user-operated Intel Mac.",
       "Freeze final immutable three-repository tuple, build packages and verify clean installations without checkout dependencies.",
