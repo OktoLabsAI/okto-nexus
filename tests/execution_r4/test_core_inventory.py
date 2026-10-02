@@ -57,7 +57,7 @@ def test_two_copies_keep_distinct_installation_refs(tmp_path):
     assert str(tmp_path) not in str(snapshot)
 
 
-def test_protocol_is_direct_object_and_does_not_claim_remote_ready(tmp_path):
+def test_protocol_advertises_executable_r4_and_preserves_historical_r3(tmp_path):
     deps = bootstrap({}, ["--home", str(tmp_path / "home")])
     app = build_app(deps)
     with TestClient(app) as client:
@@ -66,5 +66,22 @@ def test_protocol_is_direct_object_and_does_not_claim_remote_ready(tmp_path):
     assert response.headers["X-Nexus-Connections-Revision"] == MANAGEMENT_REVISION
     body = response.json()
     assert "ok" not in body and "data" not in body
-    assert body["nxl_accepted"] == []
-    assert body["remote_execution_ready"] is False
+    assert body["nxl_accepted"] == ["nxl-1-agent-centric-http-only-2026-09-29-r4"]
+    assert body["remote_execution_ready"] is True
+    assert body["nxl_historical_revision"].endswith("-r3")
+
+
+def test_contract_promotion_does_not_override_host_readiness(monkeypatch):
+    from okto_nexus.adapters.outbound.execution import core_inventory
+    monkeypatch.setattr(core_inventory, "SERVER_R4_EXECUTION_READY", False)
+    info = core_inventory.protocol_info()
+    assert info["remote_execution_ready"] is False
+    assert info["nxl_accepted"] == []
+
+
+def test_revision_alias_alone_cannot_enable_unexecutable_bundle(monkeypatch):
+    from okto_nexus.adapters.outbound.execution import core_inventory
+    import nexus_connector_core as core
+    facts = core.verify_r4_bundle()
+    monkeypatch.setattr(core, "verify_r4_bundle", lambda: {**facts, "executable": False})
+    assert core_inventory.protocol_info()["remote_execution_ready"] is False

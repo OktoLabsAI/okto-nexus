@@ -7,14 +7,14 @@ in pull-request jobs. `manifest.json` fixes both consumer test dependencies by
 SHA-256; `tools/ci_installed.py` verifies them before installation and compares
 installed package files with the wheels before testing.
 
-The Connector wheel matches consumer commit `0f01d63`, including a typed
+The Connector wheel uses the Core 0.2.53.dev0 pin, including a typed
 refusal when Windows denies independent daemon creation. The documented
 foreground remedy is tested under a real restrictive Job Object. Its SHA-256
-is `6e294c0ed92993a93f5a16b01eee86e3ff4f8e8c63f941300d3e25fd88a165fc`.
+is `68df39616fd8567306f2de8c63fe7a41380ae7603f3e03b244705266083d75cd`.
 Issue #1 adds an explicit unsupported-platform diagnostic and documents macOS
 managed-execution limits, separate from discovery and package installation.
 The Core wheel is identical in both consumers, SHA-256
-`470eb23b28d917a3a154c2ef7cd9fdddf972ca6402c0668961b4c01909f1b732`.
+`cc873031378793d374a9bbc00572c7a525f99c4246324a941713d866cc62c6b1`.
 These are regression inputs, not a final release freeze or provider/remote
 qualification. See the M13 reconciliation report for installed checks and
 the remaining hosted Windows failures.

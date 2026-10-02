@@ -15,9 +15,9 @@ if TYPE_CHECKING:
 
 R4_NXL_REVISION = "nxl-1-agent-centric-http-only-2026-09-29-r4"
 MANAGEMENT_REVISION = "nexus-connections-2026-09-29-r4"
-CORE_INVENTORY_VERSION = "0.2.52.dev0"
+CORE_INVENTORY_VERSION = "0.2.53.dev0"
 # Promoted only after admission, lease, dispatcher and Connector conformance.
-SERVER_R4_EXECUTION_READY = False
+SERVER_R4_EXECUTION_READY = True
 
 
 def _core():
@@ -34,10 +34,13 @@ def _core():
 def protocol_info() -> dict[str, Any]:
     """Advertise implemented facts; r3 never masquerades as r4 readiness."""
     core = _core()
+    bundle = core.verify_r4_bundle()
     remote_ready = bool(
         SERVER_R4_EXECUTION_READY
         and getattr(core, "R4_BUNDLE_EXECUTABLE", False)
-        and core.CONTRACT_REVISION == R4_NXL_REVISION
+        and bundle["executable"]
+        and bundle["status"] == "executable"
+        and bundle["revision"] == core.R4_CONTRACT_REVISION == R4_NXL_REVISION
     )
     return {
         "management_revision": MANAGEMENT_REVISION,

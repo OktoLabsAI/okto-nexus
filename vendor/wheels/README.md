@@ -1,4 +1,13 @@
-## Current development artifact: 0.2.52.dev0
+## Current development artifact: 0.2.53.dev0
+
+nexus_connector_core-0.2.53.dev0-py3-none-any.whl
+
+SHA-256: cc873031378793d374a9bbc00572c7a525f99c4246324a941713d866cc62c6b1
+
+Executable R4 contract with an explicit revision identity; historical R3 bytes
+remain unchanged. Provider and final release acceptance remain separate.
+
+## Previous development artifact: 0.2.52.dev0
 
 nexus_connector_core-0.2.52.dev0-py3-none-any.whl
 

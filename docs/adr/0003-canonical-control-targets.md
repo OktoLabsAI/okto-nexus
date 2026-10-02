@@ -77,7 +77,9 @@ Public close effects wait for their journal frontier. Containment during
 pending lease CAS and blocked initial durable admission remains explicit
 follow-up work; the independent runtime shutdown path remains available.
 
-The R4 executable and Server readiness gates remain false. Tests qualify
-these application services with installed Core and a strict native test
-peer. They do not demonstrate a dispatcher loop, daemon, native provider,
-separate hosts, UI/CLI completion or final release acceptance.
+Core 0.2.53.dev0 promotes the executable R4 bundle after installed contract
+and consumer conformance. Server readiness now checks that verified bundle
+and its explicit R4 revision independently of historical R3. Installed
+dispatcher and daemon tests use a strict synthetic native peer; native
+providers, separate hosts, UI/CLI acceptance and the final release gates
+remain separate requirements. See the current M13 reconciliation evidence.

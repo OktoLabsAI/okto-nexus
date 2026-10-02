@@ -40,7 +40,9 @@ e resposta HTTP positiva não equivalem a prontidão nem a efeito aplicado.
 ## Estado de implementação
 
 Este ADR fixa o alvo descrito em `plans/02_CONTRATOS_HTTP_NXL_E_ESTADOS.md`.
-O endpoint `/v1/connections/protocol` já segue a representação direta e
-anuncia `remote_execution_ready=false` enquanto o bundle R4 não está pronto.
-As demais rotas e o dispatcher ainda exigem implementação e evidência dos
-gates G0–G3. Nenhum cliente deve promover capacidade a partir deste ADR.
+O endpoint `/v1/connections/protocol` segue a representação direta e verifica
+o bundle executável R4 do Core 0.2.53.dev0 antes de anunciar readiness.
+A revisão histórica R3 permanece separada. A conformance instalada cobre
+os dispatchers local e remoto; providers reais, hosts independentes e gates
+G0–G3 ainda exigem aceite. Nenhum cliente deve inferir qualificação de provider
+a partir da readiness do protocolo ou deste ADR.

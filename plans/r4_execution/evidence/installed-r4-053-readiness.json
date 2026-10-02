@@ -1,0 +1,51 @@
+{
+  "scope": "Installed executable R4 development tuple; not final acceptance",
+  "core_version": "0.2.53.dev0",
+  "historical_revision": "nxl-1-agent-centric-http-only-2026-09-25-r3",
+  "r4_bundle": {
+    "manifest_sha256": "sha256:b73072190acea0b458d80ff666095ab4081291c7fac2448be0a7c1f4328255a7",
+    "revision": "nxl-1-agent-centric-http-only-2026-09-29-r4",
+    "status": "executable",
+    "supported_frames": [
+      "hello",
+      "welcome",
+      "binding.attach",
+      "binding.detach",
+      "binding.attached",
+      "reconcile.request",
+      "reconcile.report",
+      "reconcile.accepted",
+      "lease.renew",
+      "lease.granted",
+      "lease.applied",
+      "operation.submit",
+      "operation.receipt",
+      "operation.query",
+      "event.batch",
+      "event.ack",
+      "approval.request",
+      "approval.decision",
+      "heartbeat",
+      "error",
+      "goaway"
+    ],
+    "executable": true
+  },
+  "nexus_protocol": {
+    "management_revision": "nexus-connections-2026-09-29-r4",
+    "protocol_major": 1,
+    "nxl_accepted": [
+      "nxl-1-agent-centric-http-only-2026-09-29-r4"
+    ],
+    "nxl_historical_revision": "nxl-1-agent-centric-http-only-2026-09-25-r3",
+    "core_version": "0.2.53.dev0",
+    "catalog_format": 2,
+    "availability_format": 2,
+    "executor_snapshot_format": 2,
+    "limits": {
+      "inventory_candidates": 128,
+      "snapshot_age_ms": 300000
+    },
+    "remote_execution_ready": true
+  }
+}

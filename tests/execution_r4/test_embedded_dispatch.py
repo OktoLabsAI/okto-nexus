@@ -23,10 +23,10 @@ from fastapi.testclient import TestClient
 
 @pytest.fixture(autouse=True)
 def qualified_contract(monkeypatch):
-    # Qualifies only this technical campaign. Production readiness stays false.
+    # Exercise real installed negotiation; native peers remain synthetic.
     info = runtime_v1.protocol_info()
-    monkeypatch.setattr(runtime_v1,"protocol_info",lambda:{**info,"remote_execution_ready":True})
-    monkeypatch.setattr(embedded_dispatch,"protocol_info",lambda:{**info,"remote_execution_ready":True})
+    assert info["remote_execution_ready"] is True
+    assert embedded_dispatch.protocol_info() == info
 
 
 @pytest.fixture

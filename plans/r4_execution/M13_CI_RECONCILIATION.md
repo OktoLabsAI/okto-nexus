@@ -2,6 +2,36 @@
 
 This is preparation evidence, not M13 acceptance or a final artifact freeze.
 
+## Executable R4 development tuple — October 2, 2026
+
+Core `33f3a2d` (0.2.53.dev0) promotes the separate R4 contract after the
+pre-promotion installed conformance below. It exports an explicit R4 revision
+and bundle verifier while preserving R3 codec/bundle bytes. Post-promotion
+Core conformance passed 151 tests; Connector `4724cc6` passed 66 directed
+installed tests with the identical Core wheel. These supersede the old
+readiness-gap observations below without changing historical evidence.
+
+Nexus now verifies the executable manifest and explicit R4 identity, retaining
+its independent host readiness gate and historical R3 field. The principal
+local/remote scenarios no longer patch readiness to true. Fresh wheel installs
+verified base Nexus without Core/Connector/Torch, then local serve-lite without
+Connector, then both consumers with the same Core. The installed campaign
+passed **38 tests in 291.10 seconds**, with all captured inputs unchanged:
+negotiation, R3 history, local seven-action coverage, remote seven-action
+coverage, approval/input refusal, replay, lost publication/ACK, reconciliation,
+disconnection and lease renewal. Native peers remain synthetic.
+
+Evidence: [campaign](evidence/r4-053-conformance/campaign.json),
+[installed hashes](evidence/r4-053-conformance/installed.json),
+[JUnit](evidence/r4-053-conformance/tests.xml) and
+[actual installed protocol](evidence/installed-r4-053-readiness.json).
+The package reports `remote_execution_ready=true` with R4 accepted and R3
+historical. The lock passed `uv lock --check --offline`.
+
+Final freeze, complete regressions/CI, provider/platform qualification,
+UI/CLI acceptance and independent machines remain open. No G0–G3 gate is
+closed by this development contract promotion.
+
 ## Installed conformance and Connector observation — October 2, 2026
 
 Embedded decision coverage is now established by an additional installed

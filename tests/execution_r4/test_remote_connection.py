@@ -67,11 +67,12 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
         ticket = ticketed.json()['ticket']
     _, revisions, _ = current_agent_revisions(deps.connection_factory, agent_id='subject')
     info = executor_link.protocol_info()
-    qualified = {**info, 'remote_execution_ready': True, 'nxl_accepted': [R4_PREVIEW_REVISION]}
-    monkeypatch.setattr(executor_link, 'protocol_info', lambda: qualified)
-    monkeypatch.setattr(runtime_v1, 'protocol_info', lambda: qualified)
+    qualified = info
+    assert info['remote_execution_ready'] is True
+    assert info['nxl_accepted'] == [R4_PREVIEW_REVISION]
+    assert runtime_v1.protocol_info() == info
     from okto_nexus.adapters.inbound.http import connections_v1
-    monkeypatch.setattr(connections_v1, 'protocol_info', lambda: qualified)
+    assert connections_v1.protocol_info() == info
     if combined_winner:
         from test_combined_consumption import prepare_embedded
         embedded = prepare_embedded(onboarding, binding, tmp_path, monkeypatch, qualified)
