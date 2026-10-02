@@ -7,9 +7,12 @@ in pull-request jobs. `manifest.json` fixes both consumer test dependencies by
 SHA-256; `tools/ci_installed.py` verifies them before installation and compares
 installed package files with the wheels before testing.
 
-The Connector runtime bytes match source commit
-`7f9320832a0659b9eecc3b9376abdb576e7c313e`; that commit and its two predecessors
-only changed workflow/tests relative to the previously built artifact at
-`211be74009a7f3c4f48eb25961f9860a91825df9`. The Core wheel is the same 0.2.51.dev0
-artifact already pinned by Nexus and Connector. These are regression inputs,
-not a final release freeze or provider/remote qualification.
+The Connector wheel was rebuilt with the Core 0.2.52.dev0 dependency, matching
+consumer commit `acaa192`. Its runtime source is unchanged from `7f93208`;
+the new metadata pins the corrected Core lease deadline comparison. Its SHA-256
+is `332f5aa8c683f7732a56925598968a3bba61a9d6fb5dcc3909762b016a0340ae`.
+The Core wheel is identical in both consumers, SHA-256
+`470eb23b28d917a3a154c2ef7cd9fdddf972ca6402c0668961b4c01909f1b732`.
+These are regression inputs, not a final release freeze or provider/remote
+qualification. See the M13 reconciliation report for installed checks and
+the remaining hosted Windows failures.

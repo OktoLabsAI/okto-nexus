@@ -2,6 +2,31 @@
 
 This is preparation evidence, not M13 acceptance or a final artifact freeze.
 
+## Core 0.2.52 consumer integration
+
+Nexus now pins 0.2.52 in pyproject, uv.lock and the inventory version; Connector
+commit `acaa192` uses the identical Core wheel. Its rebuilt test wheel is fixed
+in `vendor/ci/manifest.json`. Connector installed integration/CLI checks passed
+8 tests on Windows/Python 3.13. Hosted verification remains required, including
+the Windows CLI PermissionError now reported with full stderr.
+
+The isolated Nexus builder recompiles the dashboard without overwriting existing
+worktree static assets, then produces wheel/sdist and a source-hash manifest.
+The first preparation failed clean boot because inventory still required .51;
+after correcting that pin and rebuilding, installation passed without Connector
+or Torch, followed by 27 installed dispatch/bootstrap/import-boundary tests.
+Package files for all three applications matched their wheels. Evidence and
+exact artifact hashes: `evidence/m13-core052.json` and linked reports.
+
+These checks do not qualify real providers or independent hosts. The previous
+full R4 campaign still runs on .51; some tests start checkout subprocesses,
+and consumer source pins changed while it was running. Its results must not be
+represented as an immutable final .52 campaign. Core hosted run 36950397170
+passed Linux 3.11/3.12/3.13 at this checkpoint; Windows jobs remain in progress.
+Core test-only commit `9a3741d` corrects a reused 60-second stress-test context
+and a Windows queued socket-handshake race without changing the .52 runtime.
+Nine installed tests covering those fixtures passed before push.
+
 ## Clean local bootstrap and lease-boundary defect
 
 A new Python 3.13 venv installed the NS15.05 Nexus wheel with `serve-lite,dev`

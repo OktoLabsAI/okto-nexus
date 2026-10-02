@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## M13 Core 0.2.52 consumer qualification in progress
+
+Both consumers now pin the same Core lease-boundary fix. Nexus clean boot without Connector/Torch and 27 installed dispatch/bootstrap/import checks passed; Connector installed integration/CLI checks passed 8 tests. Dashboard, wheel and sdist were rebuilt in an isolated source copy. See [M13 reconciliation](M13_CI_RECONCILIATION.md) and [artifact evidence](evidence/m13-core052.json). Full regressions, hosted Windows checks, real providers, UI and independent-host acceptance remain open; no gate is promoted.
+
 ## TN-40 supported rollback - October 1, 2026
 
 **TN-40 PASSED** at legacy_acceptance. The installed recovery campaign passed **3 tests**, including both NS15.04 regressions. Nonempty versioned policies/pinned bindings, public permissions/revisions, migration records and uncertain execution history survive same-version snapshot recovery after real backfill and Core dispatch with a synthetic peer. Unsafe restore/overwrite and missing journals are refused without replay. See [scope](M12_TN40_ROLLBACK.md) and [manifest](test_runs_20261001_tn40.json). NS15.05's four scenarios now have passing evidence; task dependencies and M13/G0–G3 remain open.

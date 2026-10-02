@@ -1,4 +1,14 @@
-## Current development artifact: 0.2.51.dev0
+## Current development artifact: 0.2.52.dev0
+
+nexus_connector_core-0.2.52.dev0-py3-none-any.whl
+
+SHA-256: 470eb23b28d917a3a154c2ef7cd9fdddf972ca6402c0668961b4c01909f1b732
+
+Lease limits compare absolute deadlines, accepting the exact maximum without floating-point subtraction drift. The next representable deadline remains rejected before native effects. Both consumers use identical bytes; final release gates remain open.
+
+Earlier entries below describe historical artifacts, not the current dependency.
+
+## Previous development artifact: 0.2.51.dev0
 
 nexus_connector_core-0.2.51.dev0-py3-none-any.whl
 
@@ -6,7 +16,7 @@ SHA-256: 4c4c0c58d25b93f4f08ba8515d8476ffc29d1f0a27cc577c9fccb610716d1d1c
 
 Lost R4 revocation acknowledgements recover only from the exact durable fence row, without another CAS. Mismatched rows do not authorize an ACK or native work. Release gates remain open.
 
-## Current development artifact: 0.2.50.dev0
+## Previous development artifact: 0.2.50.dev0
 
 nexus_connector_core-0.2.50.dev0-py3-none-any.whl
 
@@ -14,7 +24,7 @@ SHA-256: 797e28d34ba43800e5ad800b0fb344ce53a4160389ac817b4687505187c25215
 
 Public memory-only shutdown_resources distinguishes observed STOPPED from pending durable release. It does not authorize disposal or replace shutdown outcomes. R4 release gates remain open.
 
-## Current development artifact: 0.2.44.dev0
+## Previous development artifact: 0.2.44.dev0
 
 nexus_connector_core-0.2.44.dev0-py3-none-any.whl, SHA-256
 c6f8555adeadb68959daa8e2ad91ec755eab49183049112a3d719470321e8db0.
