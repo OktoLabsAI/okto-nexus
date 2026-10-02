@@ -1,5 +1,5 @@
 """A live store's transport guarantees cannot depend on the producer's flags."""
-import asyncio
+import subprocess
 import json
 import sys
 import sqlite3
@@ -18,7 +18,8 @@ def test_writer_migration_trigger_failure_rolls_back_and_upgrade_repeats(tmp_pat
     from okto_nexus.adapters.outbound.sqlite.migrations import MigrationRunner
     from okto_nexus.config import NexusConfig
     from okto_nexus.errors import OktoNexusError
-    source = Path(__file__).resolve().parents[1] / "src/okto_nexus/migrations"
+    from okto_nexus.adapters.outbound.sqlite.migrations import _default_migrations_dir
+    source = _default_migrations_dir()
     migrations = tmp_path / "migrations"
     migrations.mkdir()
     for path in source.glob("*.sql"):
@@ -92,29 +93,21 @@ def test_preexisting_legacy_connection_is_fenced_only_after_activation(tmp_path)
         legacy.close()
 
 
-def stdio_create(runtime, *, enabled):
-    deps, _, root, _, _, _ = runtime
-    async def create():
-        from mcp import ClientSession, StdioServerParameters
-        from mcp.client.stdio import stdio_client
-        params = StdioServerParameters(command=sys.executable,
-            args=["-m", "okto_nexus.adapters.inbound.mcp.server", "--home", str(deps.config.home_dir),
-                  "--feature-harness-integrations", "true" if enabled else "false"], env=stdio_environment(runtime))
-        async with stdio_client(params) as (reader, writer):
-            async with ClientSession(reader, writer) as session:
-                await session.initialize()
-                response = await session.call_tool("message_create", {"project_root": root,
-                    "from_agent_id": "caller", "subject": "writer fence fixture", "body": "isolated fixture",
-                    "target": {"strategy": "direct", "agent_id": "worker"}})
-                return response.structuredContent or json.loads(response.content[0].text)
-
-    return asyncio.run(asyncio.wait_for(create(), timeout=30))
+def independent_writer_create(runtime, *, enabled):
+    # Exercise the retained store fence independently of any removed transport.
+    deps, _, root, _, _, caller = runtime
+    response = subprocess.run([sys.executable, '-I',
+        str(Path(__file__).with_name('runtime_writer_process.py').resolve())],
+        input=json.dumps(dict(home=str(deps.config.home_dir), root=root, key=caller, enabled=enabled)),
+        cwd=root, env=stdio_environment(runtime), capture_output=True, text=True, timeout=30)
+    assert response.returncode == 0, response.stderr
+    return json.loads(response.stdout)
 
 
-def test_feature_off_stdio_cannot_commit_unreserved_delivery_to_active_store(runtime):
+def test_feature_off_writer_cannot_commit_unreserved_delivery_to_active_store(runtime):
     deps, _, _, peers, _, _ = runtime
     assert open_rest(runtime).status_code == 200
-    response = stdio_create(runtime, enabled=False)
+    response = independent_writer_create(runtime, enabled=False)
     assert not response["ok"], "Feature-OFF producer committed outside the active store's runtime admission"
     assert "runtime_writer_mode_mismatch" in json.dumps(response), response
     assert response["error"]["code"] == "CONFIG_ERROR" and not response["error"].get("retryable", False)
@@ -135,10 +128,10 @@ def test_operator_disable_changes_writer_mode_atomically_and_retains_fences(runt
     with deps.connection_factory.unit_of_work(write=False) as uow:
         contract = dict(uow.connection.execute("SELECT * FROM runtime_writer_contract").fetchone())
     assert contract["required_contract"] == 1 and contract["admission_enabled"] == 0
-    stale = stdio_create(runtime, enabled=True)
+    stale = independent_writer_create(runtime, enabled=True)
     assert not stale["ok"], "Cached ON producer admitted runtime work after operator disable"
     assert "runtime_writer_mode_mismatch" in json.dumps(stale), stale
-    compatible = stdio_create(runtime, enabled=False)
+    compatible = independent_writer_create(runtime, enabled=False)
     assert compatible["ok"], compatible
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute("SELECT count(*) FROM messages WHERE subject='writer fence fixture'").fetchone()[0] == 1
@@ -146,11 +139,11 @@ def test_operator_disable_changes_writer_mode_atomically_and_retains_fences(runt
     assert all(not peer.sent for peer in peers)
 
 
-def test_compatible_stdio_still_enqueues_the_canonical_delivery(runtime):
+def test_compatible_writer_still_enqueues_the_canonical_delivery(runtime):
     from test_pr34_remediation import wait_sent
     deps, _, _, peers, _, _ = runtime
     assert open_rest(runtime).status_code == 200
-    response = stdio_create(runtime, enabled=True)
+    response = independent_writer_create(runtime, enabled=True)
     assert response["ok"], response
     assert len(response["data"]["runtime_operations"]) == 1
     wait_sent(peers)

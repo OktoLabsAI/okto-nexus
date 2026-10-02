@@ -1,15 +1,13 @@
 """Known capture failure must stop new executable admission across writers."""
 import errno
 import os
-import asyncio
-import json
 import sqlite3
-import sys
 
 import pytest
 
 from okto_nexus.domain.harness import HarnessEvent
-from test_pr34_remediation import runtime as runtime_fixture, open_rest, tool, stdio_environment, send_message, wait_sent
+from test_pr34_remediation import runtime as runtime_fixture, open_rest, tool, send_message, wait_sent
+from runtime_http_client import process_tool
 from test_runtime_commands import wait_operation
 
 runtime = runtime_fixture
@@ -32,7 +30,7 @@ def capture_runtime(runtime):
 
 
 @pytest.mark.parametrize("fault", ["quota", "fsync"])
-@pytest.mark.parametrize("surface", ["command", "message", "stdio"])
+@pytest.mark.parametrize("surface", ["command", "message", "http_process"])
 def test_known_capture_failure_rejects_new_execution_before_intent(capture_runtime, monkeypatch, caplog, fault, surface):
     runtime = capture_runtime
     deps, client, root, peers, operator, caller = runtime
@@ -66,20 +64,9 @@ def test_known_capture_failure_rejects_new_execution_before_intent(capture_runti
         reply = tool(client, caller, "message_create", {"project_root": root, "from_agent_id": "caller",
             "target": {"strategy": "direct", "agent_id": "worker"}, "body": "must not admit", "subject": "capture fault"})
     else:
-        async def produce():
-            from mcp import ClientSession, StdioServerParameters
-            from mcp.client.stdio import stdio_client
-            params = StdioServerParameters(command=sys.executable,
-                args=["-m", "okto_nexus.adapters.inbound.mcp.server", "--home", str(deps.config.home_dir),
-                    "--feature-harness-integrations", "true"], env=stdio_environment(runtime))
-            async with stdio_client(params) as (read, write):
-                async with ClientSession(read, write) as session:
-                    await session.initialize()
-                    response = await session.call_tool("message_create", {"project_root": root,
-                        "from_agent_id": "caller", "target": {"strategy": "direct", "agent_id": "worker"},
-                        "body": "independent writer must not admit", "subject": "capture fault"})
-                    return response.structuredContent or json.loads(response.content[0].text)
-        reply = asyncio.run(asyncio.wait_for(produce(), timeout=30))
+        reply = process_tool(runtime, "message_create", {"project_root": root,
+            "from_agent_id": "caller", "target": {"strategy": "direct", "agent_id": "worker"},
+            "body": "independent client must not admit", "subject": "capture fault"})
     assert not reply["ok"], reply
     assert reply["error"]["code"] == "CONFLICT", reply
     with deps.connection_factory.unit_of_work(write=False) as uow:

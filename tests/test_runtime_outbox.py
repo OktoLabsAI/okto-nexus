@@ -1,9 +1,7 @@
 """Production composition: canonical delivery, durable dispatch and exclusive consumption."""
 import threading
 import time
-import asyncio
 import json
-import sys
 from contextlib import contextmanager
 from concurrent.futures import ThreadPoolExecutor
 
@@ -11,7 +9,8 @@ import pytest
 
 from okto_nexus.application.runtime_dispatcher import RuntimeDispatcher
 from okto_nexus.domain.base import iso_plus
-from test_pr34_remediation import runtime as runtime_fixture, open_rest, send_message, wait_sent, tool, stdio_environment
+from test_pr34_remediation import runtime as runtime_fixture, open_rest, send_message, wait_sent, tool
+from runtime_http_client import process_tool
 
 runtime = runtime_fixture
 
@@ -166,28 +165,16 @@ def test_p05_unverified_internal_sender_only_gets_logical_inbox(runtime):
     assert peers[0].sent == []
 
 
-def test_p06_stdio_producer_wakes_serve_without_owning_runtime(runtime):
+def test_p06_http_process_producer_wakes_serve_without_owning_runtime(runtime):
     deps, _, root, peers, _, _ = runtime
     assert open_rest(runtime).status_code == 200
     owner = deps.runtime_dispatcher.owner_id
 
-    async def produce():
-        from mcp import ClientSession, StdioServerParameters
-        from mcp.client.stdio import stdio_client
-        params = StdioServerParameters(command=sys.executable,
-            args=["-m", "okto_nexus.adapters.inbound.mcp.server", "--home", str(deps.config.home_dir),
-                  "--feature-harness-integrations", "true"], env=stdio_environment(runtime))
-        async with stdio_client(params) as (reader, writer):
-            async with ClientSession(reader, writer) as client:
-                await client.initialize()
-                result = await client.call_tool("message_create", {"project_root": root, "from_agent_id": "caller",
-                    "subject": "cross-process fixture", "body": "one durable intent",
-                    "target": {"strategy": "direct", "agent_id": "worker"}})
-                result = result.structuredContent or json.loads(result.content[0].text)
-                assert result["ok"], result
-                return result["data"]["runtime_operations"][0]
-
-    operation_id = asyncio.run(asyncio.wait_for(produce(), timeout=30))
+    result = process_tool(runtime, "message_create", {"project_root": root, "from_agent_id": "caller",
+        "subject": "cross-process fixture", "body": "one durable intent",
+        "target": {"strategy": "direct", "agent_id": "worker"}})
+    assert result["ok"], result
+    operation_id = result["data"]["runtime_operations"][0]
     wait_sent(peers)
     wait_status(runtime, operation_id, "SENT_UNCONFIRMED")
     with deps.connection_factory.unit_of_work(write=False) as uow:
@@ -244,10 +231,10 @@ def test_p05_open_reply_persistence_failure_does_not_repeat_start(runtime, monke
     assert len(peers) == 1
 
 
-def test_p06_stdio_open_runs_only_in_the_existing_serve_owner(runtime):
+def test_p06_http_process_open_runs_only_in_the_existing_serve_owner(runtime):
     deps, client, root, peers, operator, _ = runtime
     from pathlib import Path
-    # If the stdio process incorrectly spawns locally, it can only attempt an
+    # If a client process incorrectly spawns locally, it can only attempt an
     # absent fixture executable. Never probe an ambient Pi installation.
     with deps.connection_factory.unit_of_work() as uow:
         uow.connection.execute("UPDATE runtime_profiles SET config=? WHERE profile_id='profile-pi'",
@@ -257,21 +244,9 @@ def test_p06_stdio_open_runs_only_in_the_existing_serve_owner(runtime):
         "expires_at": iso_plus(deps.clock.now_iso(), 3600)})
     assert grant.status_code == 200, grant.text
 
-    async def request_open():
-        from mcp import ClientSession, StdioServerParameters
-        from mcp.client.stdio import stdio_client
-        params = StdioServerParameters(command=sys.executable,
-            args=["-m", "okto_nexus.adapters.inbound.mcp.server", "--home", str(deps.config.home_dir),
-                  "--feature-harness-integrations", "true"], env=stdio_environment(runtime))
-        async with stdio_client(params) as (reader, writer):
-            async with ClientSession(reader, writer) as session:
-                await session.initialize()
-                result = await session.call_tool("harness_open", {"agent_id": "worker", "kind": "pi",
-                    "endpoint_id": "endpoint-pi", "project_root": root, "idempotency_key": "stdio-owner"})
-                result = result.structuredContent or json.loads(result.content[0].text)
-                assert result["ok"], result
-                return result["data"]["session_id"]
-
-    session_id = asyncio.run(asyncio.wait_for(request_open(), timeout=30))
+    result = process_tool(runtime, "harness_open", {"agent_id": "worker", "kind": "pi",
+        "endpoint_id": "endpoint-pi", "project_root": root, "idempotency_key": "http-process-owner"})
+    assert result["ok"], result
+    session_id = result["data"]["session_id"]
     assert len(peers) == 1
     assert deps.harness_supervisor.get(session_id) is not None

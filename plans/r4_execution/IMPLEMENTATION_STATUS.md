@@ -2,6 +2,12 @@
 
 ## Current acceptance reconciliation: executable Core .53
 
+Seven positive-stdio CI findings are now covered through an independent MCP HTTP
+client or an explicit test-only store writer. Eighteen installed checks passed in
+a fresh environment with unchanged inputs; no product transport was restored.
+See [HTTP client and writer scope](M13_CI_HTTP_CLIENTS.md). Native factory migration,
+load contention, complete current regression and release acceptance remain open.
+
 Trust and retained recovery follow-up passed 46 installed tests across two
 unchanged-input campaigns. The missing fixture admission fence, constructor-time
 revocation expectation and retired-stdio handoff recovery test are corrected.
