@@ -105,6 +105,11 @@ timeouts despite passing directed tests. Full hosted qualification remains open.
 
 ## Remaining integration
 
+The [NS15.05 supporting documentation audit](evidence/inventory-refresh-ns15-docs.json)
+passed against the installed Nexus package and updated guide. It checks command
+help, documented routes and links; it does not prove browser or final-artifact
+scenario acceptance.
+
 Integrate UI request/status, preserve intent IDs across retry and scope changes,
 then exercise independent-host/provider/fault acceptance on final packages.
 Browser support, full NS15.05 closure and M13/G0-G3 are not implied by these tests.
