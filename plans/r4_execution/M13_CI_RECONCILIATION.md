@@ -2,6 +2,45 @@
 
 This is preparation evidence, not M13 acceptance or a final artifact freeze.
 
+## Immutable-input R4 regression and Core matrix — October 2, 2026
+
+The installed Nexus/Core .52/Connector campaign completed: **702 passed,
+3 failed, 6 skipped** in 2207.09 seconds. All 1109 captured input hashes were
+unchanged. Original JUnit, log, installed wheel hashes and input inventory are
+in [the campaign evidence](evidence/vault-fixed-r4-campaign/campaign.json).
+The six skips are opt-in real-provider local/Connector scenarios; they remain
+unaccepted. This campaign completed shutdown; the previous vault-refusal hang
+did not recur.
+
+Two failures were stale migration expectations (82/90 versus current 96).
+The third waited for a terminal receipt while deliberately blocking event
+commit. The retention test now checks pre-commit compaction before releasing
+the barrier, then waits for the terminal receipt. Updated migration tests keep
+the preservation, replay and isolation assertions; NS02 reads installed SQL
+resources. The affected suite passed **12 tests** with unchanged installed
+packages and unchanged inputs during that run. See
+[directed results](evidence/r4-regression-corrections/tests.xml).
+
+The baseline collector now inventories current wheel/sdist files, handles
+NUL-separated rename records and hashes nested untracked files. A dedicated
+dirty laboratory regression passed, preserving HEAD, status and every file
+through repeated capture. The static crosswalk audit verified all 70 original
+tasks and 79 TN/J destinations; neither audit promotes product acceptance.
+
+Core commit `189c9cc` passed all six hosted Windows/Linux Python 3.11–3.13
+cells, offline installation and SBOM. Linux cells each reported 1169 passes
+and 21 skips; Windows cells 1113 passes and 77 skips. See
+[CI evidence](evidence/core-189c9cc-ci.json). Connector's latest completed
+matrix at `64c9e9a` passed five cells but failed Windows/Python 3.13 on a
+1600 ms test lease. Its ordering fixture is being corrected with a shared
+controlled clock and an explicit expired-grant negative case.
+
+Installed readiness remains false. The explicit
+[R4 promotion audit](evidence/r4-promotion-audit.json) identifies generated
+manifest/negotiation changes needed while preserving historical r3 codecs.
+Full corrected regressions, protocol promotion, real providers, UI and
+independent-host acceptance remain open. No G0–G3 gate is closed.
+
 ## Connector issue #1 and provider-credential shutdown diagnosis
 
 The user's requested issue review found one open Connector issue:

@@ -1,5 +1,6 @@
 """Namespace isolation for future durable R4 execution tables."""
 
+import importlib.resources
 import shutil
 import sqlite3
 from datetime import datetime, timezone
@@ -63,7 +64,7 @@ def test_ns02_02(tmp_path):
     home = tmp_path / "home"
     config = load_config({}, ["--home", str(home)])
     factory = ConnectionFactory(config)
-    migration_source = Path(__file__).resolve().parents[2] / "src/okto_nexus/migrations"
+    migration_source = Path(str(importlib.resources.files('okto_nexus').joinpath('migrations')))
     old_dir = tmp_path / "old-migrations"
     old_dir.mkdir()
     for path in migration_source.glob("[0-9]*_*.sql"):
@@ -84,15 +85,16 @@ def test_ns02_02(tmp_path):
         conn.commit()
     finally:
         conn.close()
-    assert MigrationRunner(factory).apply() == [66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82]
+    assert MigrationRunner(factory).apply() == list(range(66, 97))
     assert MigrationRunner(factory).apply() == []
     conn = factory.get_connection()
     try:
         names = {row[0] for row in conn.execute(
             "SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'execution_%'")}
-        assert len(names) == 24
+        assert len(names) == 31
         assert {"execution_operations", "execution_dispatch_outbox",
-                "execution_event_ingress", "execution_event_watermarks"} <= names
+                "execution_event_ingress", "execution_event_watermarks",
+                "execution_results"} <= names
         assert conn.execute("SELECT enabled FROM agent_endpoints WHERE endpoint_id='ep-a'").fetchone()[0] == 0
         indexes = {row[1] for row in conn.execute("PRAGMA index_list('execution_dispatch_outbox')")}
         assert "idx_execution_dispatch_pending" in indexes

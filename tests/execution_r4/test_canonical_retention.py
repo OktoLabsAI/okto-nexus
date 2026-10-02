@@ -38,13 +38,17 @@ def test_compaction_waits_for_server_commit_and_preserves_published_result(conne
             return await journal.compact_acked(max_rows=128)
         return await host.with_history(executor_id=stream['executor_id'], session_id=stream['session_id'], read=read)
     try:
-        emit(setup, native, turn, 'Retain this canonical result.')
+        # Hold the Server commit before observing pre-ACK compaction. A
+        # terminal receipt can depend on that commit, so wait for it only
+        # after releasing this barrier.
+        emit(setup, native, turn, 'Retain this canonical result.', wait_for_terminal=False)
         assert entered.wait(10)
         assert client.portal.call(compact) == (0, 0)
         with deps.connection_factory.unit_of_work(write=False) as uow:
             assert uow.connection.execute('SELECT COUNT(*) FROM execution_results').fetchone()[0] == 0
     finally:
         release.set()
+    wait_receipt(setup, turn, stages=('SUCCEEDED',))
     published = wait_result(setup, 'PUBLISHED')
     deadline = time.monotonic() + 10
     while True:

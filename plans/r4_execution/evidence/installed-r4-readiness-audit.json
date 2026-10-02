@@ -1,0 +1,22 @@
+{
+  "core_version": "0.2.52.dev0",
+  "core_contract_revision": "nxl-1-agent-centric-http-only-2026-09-25-r3",
+  "r4_bundle_executable": false,
+  "nexus_protocol": {
+    "management_revision": "nexus-connections-2026-09-29-r4",
+    "protocol_major": 1,
+    "nxl_accepted": [],
+    "nxl_historical_revision": "nxl-1-agent-centric-http-only-2026-09-25-r3",
+    "core_version": "0.2.52.dev0",
+    "catalog_format": 2,
+    "availability_format": 2,
+    "executor_snapshot_format": 2,
+    "limits": {
+      "inventory_candidates": 128,
+      "snapshot_age_ms": 300000
+    },
+    "remote_execution_ready": false
+  },
+  "scope": "Installed development tuple readiness; not final acceptance",
+  "required_next_step": "Coordinated R4 contract promotion after admission, lease, dispatcher and Connector conformance; retain explicit historical r3 codec"
+}

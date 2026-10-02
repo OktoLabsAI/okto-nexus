@@ -29,7 +29,7 @@ def test_upgrade_088_preserves_original_intent_and_is_idempotent(tmp_path):
         before = dict(conn.execute("SELECT * FROM execution_client_intents").fetchone())
     finally:
         conn.close()
-    assert MigrationRunner(factory).apply() == [89, 90]
+    assert MigrationRunner(factory).apply() == list(range(89, 97))
     assert MigrationRunner(factory).apply() == []
     conn = factory.get_connection()
     try:

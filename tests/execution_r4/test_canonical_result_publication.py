@@ -11,14 +11,15 @@ from test_canonical_handoff import prepare
 from test_message_workspace import call as send_message
 
 
-def emit(setup, native, turn, text):
+def emit(setup, native, turn, text, *, wait_for_terminal=True):
     deps, _, client, *_ = setup
     with deps.connection_factory.unit_of_work(write=False) as uow:
         stream = dict(uow.connection.execute('SELECT * FROM execution_local_streams').fetchone())
     client.portal.call(native.native.queue.put, RuntimeEvent(stream['server_id'], stream['executor_id'],
         stream['session_id'], stream['stream_epoch'], 0, 'turn_state', 'fixture.result',
         dict(delivery_phase='terminal', delivery_outcome='success', output_text=text), operation_id=turn['operation_id']))
-    wait_receipt(setup, turn, stages=('SUCCEEDED',))
+    if wait_for_terminal:
+        wait_receipt(setup, turn, stages=('SUCCEEDED',))
 
 
 def wait_result(setup, state):

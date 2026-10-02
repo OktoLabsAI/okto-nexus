@@ -29,18 +29,32 @@ def git(root: Path, *args: str) -> str:
 def source_facts(root: Path) -> dict:
     # NUL records preserve filenames containing spaces. No reset/clean/staging.
     records = subprocess.check_output(
-        ["git", "status", "--porcelain=v1", "-z"], cwd=root
+        ["git", "status", "--porcelain=v1", "-z", "--untracked-files=all"], cwd=root
     ).decode("utf-8").split("\0")
-    changes = [record for record in records if record]
+    changes = []
+    entries = iter(records)
+    for record in entries:
+        if not record:
+            continue
+        changes.append(record)
+        # Under -z a rename/copy has a separate original-path field. It is
+        # part of the status fingerprint, not another changed-file record.
+        if "R" in record[:2] or "C" in record[:2]:
+            next(entries)
     protected = {}
     for record in changes:
         path = root / record[3:]
         if path.is_file():
             protected[record[3:]] = digest(path)
     project = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))
-    wheels = {str(p.relative_to(root)): digest(p) for folder in (
-        root / "artifacts", root / "vendor/wheels")
-        for p in folder.glob("nexus_connector_core-0.2.22.dev0-*.whl")}
+    artifacts = {p.relative_to(root).as_posix(): digest(p)
+                 for folder in (root / "artifacts", root / "dist",
+                                root / "vendor/wheels", root / "vendor/ci")
+                 for pattern in ("*.whl", "*.tar.gz")
+                 for p in sorted(folder.glob(pattern)) if p.is_file()}
+    wheels = {name: sha for name, sha in artifacts.items()
+              if Path(name).name.startswith("nexus_connector_core-")
+              and name.endswith(".whl")}
     return {
         "branch": git(root, "branch", "--show-current"),
         "head": git(root, "rev-parse", "HEAD"),
@@ -48,8 +62,9 @@ def source_facts(root: Path) -> dict:
         "pyproject_sha256": digest(root / "pyproject.toml"),
         "lockfiles": {p.name: digest(p) for p in (root / "uv.lock", root / "package-lock.json") if p.exists()},
         "dirty_counts": dict(Counter(record[:2] for record in changes)),
-        "dirty_status_sha256": hashlib.sha256("\0".join(changes).encode()).hexdigest(),
+        "dirty_status_sha256": hashlib.sha256("\0".join(records).encode()).hexdigest(),
         "preexisting_file_hashes": protected, "core_wheels": wheels,
+        "distribution_artifacts": artifacts,
     }
 
 
