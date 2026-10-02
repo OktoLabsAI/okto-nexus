@@ -4,6 +4,22 @@ This is preparation evidence, not M13 acceptance or a final artifact freeze.
 
 ## Installed conformance and Connector observation — October 2, 2026
 
+Embedded decision coverage is now established by an additional installed
+campaign: **8 passed in 45.77 seconds**, covering approval/input, approve/deny,
+and HITL enabled/disabled. The public operator flow reaches the same synthetic
+native peer used by the remote campaign. It asserts unauthorized subject refusal,
+idempotent submission, exact native request/response, one effect, no private input
+in Server persistence, no link tickets, and clean native close. Disabled HITL
+asserts `REFUSED_BEFORE_EFFECT` and zero native replies. See
+[campaign](evidence/embedded-native-decisions/campaign.json) and
+[JUnit](evidence/embedded-native-decisions/tests.xml).
+
+The initial four-case fixture omitted HITL activation and therefore observed
+the correct pre-effect refusal in all cases. The final test deliberately covers
+both configurations. No runtime code or readiness flag was changed to obtain a
+passing result. The wheel verifier checked the same Nexus/Core/Connector bytes
+as the prior consumer campaign, and the final campaign captured unchanged inputs.
+
 The isolated installed Core `.52` conformance runner completed **151 passed**
 in 10.61 seconds. It verified wheel/package bytes and exercised R4 contracts,
 R3 history, controls and synthetic consumers without importing Core checkout
@@ -20,9 +36,10 @@ confirmation is pending. The failed run remains failed.
 
 Protocol promotion still requires review of both installed consumer paths for
 all seven actions. The existing embedded five-action scenario and remote
-approval/input variants passed in the preserved full campaign. Embedded native
-approval/input round-trip evidence must also be established before promotion;
-server-only decision/admission tests cannot substitute for that host path.
+approval/input variants passed in the preserved full campaign. The additional
+embedded native approval/input round trips above close the previously identified
+host-path coverage gap; server-only decision/admission tests were not used as
+a substitute. Generated contract promotion and consumer negotiation are next.
 No readiness flag or acceptance gate was promoted.
 
 ## Immutable-input R4 regression and Core matrix — October 2, 2026
