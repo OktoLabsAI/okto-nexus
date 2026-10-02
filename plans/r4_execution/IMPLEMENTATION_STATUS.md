@@ -2,6 +2,12 @@
 
 ## Current acceptance reconciliation: executable Core .53
 
+The dashboard now provides explicit R4 executor/installation/workspace selection
+using current scoped API facts. Twenty-four installed checks passed, including
+real Edge with packaged assets, reference-preserving reorder and stale/revoked
+selection invalidation. Consent and runtime mutations remain pending. See
+[selection scope and remaining NS13 work](M10_RUNTIME_SELECTION.md).
+
 MCP identity resource v30 / surface 63 now describes current R4 onboarding and
 controls, removes obsolete provider-version claims and scopes retained legacy
 maintenance. Twenty-three installed resource/surface/OpenAPI checks passed with

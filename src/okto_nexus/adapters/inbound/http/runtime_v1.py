@@ -617,6 +617,31 @@ def build_router() -> APIRouter:
             return runtime_error(error, "operation.read")
         return JSONResponse(view, headers={"Cache-Control": "no-store"})
 
+    @router.get("/agents/{agent_id}/executors")
+    async def agent_executors(agent_id: str, request: Request,
+                              after_executor_id: str | None = None, limit: int = 50) -> JSONResponse:
+        agent = get_authenticated_agent()
+        if agent is None:
+            return v1_err(401, 'AUTH_FAILED', 'Authentication is required.')
+        query = request.query_params
+        if set(query) - {'after_executor_id', 'limit'} or len(query.multi_items()) != len(query):
+            return v1_err(422, 'VALIDATION_ERROR', 'Invalid executor directory query.')
+        factory = request.app.state.deps.connection_factory
+
+        def _read():
+            from ....application.executor_directory import list_agent_executors
+            return list_agent_executors(factory,
+                server_id=ensure_execution_installation(factory).server_id,
+                agent_id=agent_id, after_executor_id=after_executor_id, limit=limit,
+                context=RuntimeRequestContext(agent.agent_id, 'agent_key', credential_binding=agent.api_key_hash),
+                access=build_execution_access(request.app.state.deps))
+
+        try:
+            view = await anyio.to_thread.run_sync(_read)
+        except OktoNexusError as error:
+            return runtime_error(error, 'executors.read')
+        return JSONResponse(view, headers={'Cache-Control': 'no-store'})
+
     @router.get("/agents/{agent_id}/runtime-options")
     async def runtime_options(agent_id: str, executor_id: str,
                               request: Request, workspace_id: str | None = None) -> JSONResponse:

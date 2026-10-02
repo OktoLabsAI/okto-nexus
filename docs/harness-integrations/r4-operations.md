@@ -6,11 +6,14 @@ the scope actually verified. G0–G3 and final release acceptance remain open.
 Historical native captures and synthetic peers do not qualify the current Core,
 provider, operating system or remote topology.
 
-The current development dashboard still exposes legacy endpoint/profile setup.
-It does not yet provide the complete R4 executor → installation → workspace
-journey. Use the implemented authenticated R4 HTTP and Connector CLI flows for
-development validation; do not treat the legacy connection command as remote
-Connector setup. Full browser acceptance remains pending.
+The development dashboard now reads scoped executor choices and current runtime
+options, with explicit host, installation and workspace selection. It invalidates
+the selected installation when inventory revisions/freshness or host access change.
+Consent, binding apply and runtime operations are not yet implemented in that panel.
+Legacy endpoint/profile controls remain in a collapsed maintenance section. Use
+the authenticated R4 HTTP and Connector CLI flows to complete development setup;
+do not treat a legacy connection command as remote Connector setup. Full browser
+acceptance remains pending.
 
 Request runtime options with `executor_id` and, for binding/start eligibility,
 the explicitly selected `workspace_id`. The subject and an authenticated operator
@@ -85,6 +88,7 @@ envelope. Consult the returned schema/revision rather than mixing body formats.
 |---|---|
 | Inspect protocols and readiness | `GET /v1/connections/protocol` |
 | Inspect the authenticated identity | `GET /v1/connections/me` |
+| List scoped execution hosts | `GET /v1/agents/{agent_id}/executors` |
 | Read scoped choices for an Agent | `GET /v1/agents/{agent_id}/runtime-options` |
 | Read executor inventory | `GET /v1/runtime/executors/{executor_id}/inventory` |
 | Prepare an approved local realization | `POST /v1/runtime/executors/{executor_id}/realizations` |

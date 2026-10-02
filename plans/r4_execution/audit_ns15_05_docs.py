@@ -63,8 +63,10 @@ def main():
               'package_path': str(package), 'guide_sha256': hashlib.sha256(guide.read_bytes()).hexdigest(),
               'commands': results, 'routes': documented, 'route_source_sha256': route_sources,
               'links_checked': len(links), 'status': 'PASSED',
-              'remaining': ['resource/dashboard review', 'TN-38', 'TN-39', 'TN-40',
-                            'final artifact and release acceptance']}
+              'not_verified_by_this_audit': ['interactive browser journeys',
+                            'TN-38/39/40 scenario execution on final artifacts',
+                            'final artifact and release acceptance'],
+              'scenario_status_source': 'plans/r4_execution/acceptance_inventory.json'}
     output = args.output or root / 'plans/r4_execution/evidence/ns15-05-docs.json'
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')

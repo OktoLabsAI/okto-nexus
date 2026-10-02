@@ -44,8 +44,15 @@ def onboarding(tmp_path, request):
         candidate = InstallationCandidate(
             "codex_app_server", str(binary),
             fingerprint(binary), "explicit", "selected")
+        candidates = [candidate]
+        if getattr(request, 'param', None) == 'duplicate-installations':
+            second = binary.parent / 'second-copy' / 'codex.exe'
+            second.parent.mkdir()
+            second.write_bytes(binary.read_bytes())
+            candidates.append(InstallationCandidate('codex_app_server', str(second),
+                fingerprint(second), 'explicit', 'selected'))
         snapshot = local_inventory_snapshot(
-            [candidate], server_id=registration["server_id"], executor_id=executor,
+            candidates, server_id=registration["server_id"], executor_id=executor,
             producer_instance_id="peer", publication_sequence=1)
         response = client.put(f"/v1/runtime/executors/{executor}/inventory",
                               json=snapshot, headers=ticket)

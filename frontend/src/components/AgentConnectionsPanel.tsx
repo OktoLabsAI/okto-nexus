@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { api, type AgentConnections } from "../api";
 import { AgentEndpointSetup } from "./AgentEndpointSetup";
+import { RuntimeSelection } from "./RuntimeSelection";
 
 const fieldClass = "rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5 text-xs text-surface-700 dark:text-surface-200 focus:outline-none focus:ring-2 focus:ring-accent-500/40 disabled:opacity-50";
 
@@ -44,8 +45,9 @@ export function AgentConnectionsPanel({agentId, onClose}: {agentId: string; onCl
     data-testid={`agent-connections-${agentId}`}>
     <div className="flex justify-between items-center"><h3 className="font-medium">Connection methods · {agentId}</h3><button className="btn btn-secondary" onClick={onClose}>Close</button></div>
     {error && <p role="alert" className="text-red-500 mt-2">{error}</p>}
-    {data && <div className="space-y-3 mt-3">
-      <p>Enable the connection methods this agent may use. Native methods also require an approved endpoint and runtime profile.</p>
+    <RuntimeSelection key={agentId} agentId={agentId} />
+    {data && <details className="mt-3"><summary>Legacy connection policy and records</summary><div className="space-y-3 mt-3">
+      <p>These controls maintain retained connection records. Creating a legacy endpoint or profile does not prepare an R4 binding.</p>
       <div className="flex flex-wrap gap-4">{data.methods.map(m => <label key={m.method}>
         <input type="checkbox" checked={methods[m.method]} disabled={busy} onChange={e => {setMethods({...methods, [m.method]: e.target.checked}); setDirty(true); setSnippet("");}} /> {labels[m.method] || m.method}
       </label>)}</div>
@@ -61,7 +63,7 @@ export function AgentConnectionsPanel({agentId, onClose}: {agentId: string; onCl
       <button className="btn btn-secondary" disabled={busy || dirty} onClick={() => setSetup(true)}>Configure endpoint</button>
       {dirty && <p>Save the connection policy before configuring an endpoint.</p>}
       {setup && <AgentEndpointSetup agentId={agentId} methods={data.methods} onCancel={() => setSetup(false)} onCreated={async () => {apply(await api.agentConnections(agentId)); setSetup(false); setNotice("Endpoint configured. Generate a command below, or authorize MCP opening for this agent.");}} />}
-      <p>For a harness without MCP, generate a command and paste it into its terminal or give it to the harness to execute. Pi RPC, Codex app-server and Claude stream open a managed runtime; they do not adopt the caller’s existing conversation. Attach uses the approved external target. Managed runtimes run on the Nexus server; this command does not bridge a harness running on another machine.</p>
+      <p>Connection commands use an existing approved endpoint. An R4 endpoint also requires its canonical binding and current execution authority. The binding selects the execution host; issuing a key does not configure a remote Connector or adopt an existing conversation.</p>
       {!data.endpoints.length && <p>No endpoints configured. Use Configure endpoint above to select the connector, project directory and runtime profile.</p>}
       <p>MCP clients use their own Nexus agent API key. Authorize MCP opening below grants discovery and opening for 1 hour, without task execution permission.</p>
       {!data.has_agent_key && <p>Generate an API key on this agent’s card before authorizing MCP opening. The copied command for a harness without MCP uses its own scoped connection key.</p>}
@@ -85,7 +87,7 @@ export function AgentConnectionsPanel({agentId, onClose}: {agentId: string; onCl
       {data.keys.map(key => <div key={key.key_id} className="flex flex-wrap gap-2 items-center"><code>{key.key_id}</code><span>{key.endpoint_id} · {key.revoked_at ? "revoked" : key.expires_at || "no expiration"}</span>
         {!key.revoked_at && <button className="btn btn-secondary" disabled={busy} onClick={() => void run(async () => {await api.revokeConnectionKey(agentId, key.key_id); setSnippet(""); apply(await api.agentConnections(agentId));})}>Revoke</button>}
       </div>)}
-    </div>}
+    </div></details>}
     {notice && <p role="status" className="mt-2">{notice}</p>}
   </div>;
 }

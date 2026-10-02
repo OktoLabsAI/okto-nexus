@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="14.550" timestamp="2026-10-02T02:58:47.415665-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_runtime_selection_dashboard" name="test_selection_uses_refs_and_invalidates_on_revocation[duplicate-installations]" time="12.881"><failure message="AssertionError: assert (2 == 2 and 'codex.exe · 2dafe2cb' == 'codex.exe · bb1886ae'&#10; +  where 2 = len([{'adapter_id': 'codex_app_server', 'candidate_ref': 'nexus-install-v1:82ea4285e07ff1850a78659a33b3db1d60ff4123f610809...9f2571d334aad7366ea5436b6cc3fc4615ea4bb1886ae', 'label': 'codex.exe · bb1886ae', 'technical_state': 'NOT_PROBED', ...}])&#10;  &#10;  - codex.exe · bb1886ae&#10;  + codex.exe · 2dafe2cb)">onboarding = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4757/test_sele...ent_id_hint': 'subject', 'executor_id': 'exe_17f1d136e664cf1738664a85766d0d67', 'adapter_id': 'codex_app_server', ...})
+assets = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4757/r4-selection-assets0')
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4757/test_selection_uses_refs_and_i0')
+
+    @pytest.mark.parametrize('onboarding', ['duplicate-installations'], indirect=True)
+    def test_selection_uses_refs_and_invalidates_on_revocation(onboarding, assets, tmp_path):
+        from playwright.sync_api import sync_playwright, expect
+        deps, client, headers, scope = onboarding
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute("UPDATE execution_executors SET control_state='CONTROL_READY' WHERE executor_id=?", (scope['executor_id'],))
+        requests = []
+        inventory = client.get(f"/v1/agents/subject/runtime-options?executor_id={scope['executor_id']}", headers=headers['operator']).json()
+        copies = [row for row in inventory['options'] if row['candidate_ref']]
+&gt;       assert len(copies) == 2 and copies[0]['label'] == copies[1]['label']
+E       AssertionError: assert (2 == 2 and 'codex.exe · 2dafe2cb' == 'codex.exe · bb1886ae'
+E        +  where 2 = len([{'adapter_id': 'codex_app_server', 'candidate_ref': 'nexus-install-v1:82ea4285e07ff1850a78659a33b3db1d60ff4123f610809...9f2571d334aad7366ea5436b6cc3fc4615ea4bb1886ae', 'label': 'codex.exe · bb1886ae', 'technical_state': 'NOT_PROBED', ...}])
+E         
+E         - codex.exe · bb1886ae
+E         + codex.exe · 2dafe2cb)
+
+tests\execution_r4\test_runtime_selection_dashboard.py:37: AssertionError</failure></testcase></testsuite></testsuites>
