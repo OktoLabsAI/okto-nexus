@@ -312,9 +312,23 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
                 )
             from .identity_ctx import trusted_local_operator
             local_token = trusted_local_operator.set(True)
+            dashboard_token = None
             try:
+                if path.startswith('/api/v1/runtime-management/'):
+                    # Dashboard management uses the existing loopback operator
+                    # authority. Public /v1 and MCP still require their bearers.
+                    deps = request.app.state.deps
+                    def local_actor():
+                        with deps.connection_factory.unit_of_work(write=False) as uow:
+                            return deps.repos.agents.get(uow, 'operator')
+                    actor = await anyio.to_thread.run_sync(local_actor)
+                    if actor is None or not actor.is_active:
+                        return v1_err(403, 'PERMISSION_DENIED', 'The local operator is unavailable.')
+                    dashboard_token = current_agent.set(actor)
                 return await call_next(request)
             finally:
+                if dashboard_token is not None:
+                    current_agent.reset(dashboard_token)
                 trusted_local_operator.reset(local_token)
 
         if bearer_is_allowed_poll:
@@ -783,6 +797,10 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     app.include_router(connection_router(), prefix="/api/v1")
     app.include_router(connection_v1_router(), prefix="/v1")
     app.include_router(runtime_v1_router(), prefix="/v1")
+    # Only UI management routes are shared. Connector registration, tickets,
+    # capability issuance and executor publication are not dashboard surfaces.
+    from .dashboard_runtime import build_router as dashboard_runtime_router
+    app.include_router(dashboard_runtime_router(), prefix="/api/v1/runtime-management")
     from .native_actions_v1 import build_router as native_actions_router
     app.include_router(native_actions_router(), prefix="/v1")
     app.include_router(executor_link_router(), prefix="/v1")

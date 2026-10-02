@@ -1624,6 +1624,9 @@
         "can_prepare": {
           "type": "boolean"
         },
+        "can_configure": {
+          "type": "boolean"
+        },
         "can_bind": {
           "type": "boolean"
         },

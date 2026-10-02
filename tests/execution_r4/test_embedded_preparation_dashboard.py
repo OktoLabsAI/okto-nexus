@@ -13,14 +13,20 @@ pytestmark = pytest.mark.skipif(os.environ.get('OKTO_NEXUS_UI_CAMPAIGN') != '1',
 
 
 @pytest.fixture
-def local_browser(local_setup, assets):
+def local_browser(local_setup, assets, request):
     from playwright.sync_api import sync_playwright
-    _, _, client, headers, _, _, _ = local_setup
+    deps, app, client, headers, _, _, _ = local_setup
+    keyless = getattr(request, 'param', False)
+    if keyless:
+        app.state.local_open = True
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute("UPDATE agents SET api_key_hash=NULL WHERE agent_id='operator'")
     trace = {'requests': [], 'drop_response': False}
     with sync_playwright() as driver:
         browser = driver.chromium.launch(channel='msedge', headless=True)
         context = browser.new_context(viewport={'width': 1440, 'height': 1200})
-        context.add_init_script('sessionStorage.setItem("okto_nexus_operator_key", ' + json.dumps(headers['operator']['Authorization'][7:]) + ');')
+        if not keyless:
+            context.add_init_script('sessionStorage.setItem("okto_nexus_operator_key", ' + json.dumps(headers['operator']['Authorization'][7:]) + ');')
         context.add_init_script('localStorage.setItem("okto-nexus:metrics-opt-in-prompt-dismissed:1.0.0", "fixture");')
 
         def route_request(route):
@@ -87,9 +93,7 @@ def select_local(page, setup):
     page.get_by_test_id('connections-subject').click()
     configure_local_integration(page, body['adapter_id'])
     panel = page.get_by_test_id('runtime-selection')
-    host = panel.get_by_label('Execution host', exact=True)
-    expect(host).to_be_enabled()
-    host.select_option(app.state.embedded_inventory_owner.key.executor_id)
+    expect(panel.get_by_label('Execution host', exact=True)).to_have_count(0)
     candidate = panel.get_by_test_id('runtime-candidate-' + body['candidate_ref']).get_by_role('radio')
     expect(candidate).to_be_enabled()
     candidate.check()
@@ -99,10 +103,10 @@ def select_local(page, setup):
 def configure_local_integration(page, adapter_id='codex_app_server'):
     from playwright.sync_api import expect
     connections = page.get_by_test_id('agent-connections-subject')
-    integration = connections.get_by_label('Local runtime integration', exact=True)
+    integration = connections.get_by_test_id('local-runtime-' + adapter_id)
     expect(integration).to_be_visible()
-    if integration.input_value() != adapter_id:
-        integration.select_option(adapter_id)
+    if integration.get_attribute('aria-pressed') != 'true':
+        integration.click()
         connections.get_by_role('button', name='Save execution policy', exact=True).click()
         expect(connections.get_by_text('Execution policy saved.', exact=True)).to_be_visible()
 

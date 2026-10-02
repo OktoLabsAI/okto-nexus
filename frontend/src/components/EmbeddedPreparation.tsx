@@ -5,9 +5,10 @@ import { runtimeApi, type LocalPreparationRequest, type RuntimeChoice } from "..
 const inputClass = "block w-full rounded border p-2 dark:bg-surface-800";
 
 export function EmbeddedPreparation({agentId, executorId, hostLabel, workspaceId, workspaceLabel,
-  inventoryRevision, choice, onPrepared}: {
+  inventoryRevision, choice, onPrepared, beforePrepare}: {
   agentId: string; executorId: string; hostLabel: string; workspaceId: string; workspaceLabel: string;
   inventoryRevision: string; choice: RuntimeChoice; onPrepared: (workspaceId: string) => void;
+  beforePrepare?: () => Promise<void>;
 }) {
   const storageKey = "okto-nexus:r4-local-preparation:" + JSON.stringify([
     agentId, executorId, workspaceId, choice.adapter_id, choice.candidate_ref, inventoryRevision,
@@ -38,6 +39,12 @@ export function EmbeddedPreparation({agentId, executorId, hostLabel, workspaceId
   const [approved, setApproved] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(saved.error);
+  const runtimeSettings: Record<string, {name: string; home: string; credential: string}> = {
+    codex_app_server: {name: 'Codex', home: 'The approved home supplies .codex state and login. CODEX_HOME is set to its .codex directory.', credential: 'OPENAI_API_KEY=vault:provider-key'},
+    claude_stream: {name: 'Claude Code', home: 'Use the home directory containing the Claude Code login you want this agent to use.', credential: 'ANTHROPIC_API_KEY=vault:provider-key'},
+    pi_rpc: {name: 'Pi', home: 'Use the home directory containing the Pi settings for the selected provider.', credential: 'OPENAI_API_KEY=vault:provider-key'},
+  };
+  const settings = runtimeSettings[choice.adapter_id];
   const mounted = useRef(true);
   useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
 
@@ -68,6 +75,7 @@ export function EmbeddedPreparation({agentId, executorId, hostLabel, workspaceId
         sessionStorage.setItem(storageKey, JSON.stringify(request));
         setPending(request);
       }
+      await beforePrepare?.();
       const result = await runtimeApi.prepareLocal(executorId, request);
       if (result.executor_id !== executorId || result.agent_id !== agentId ||
           result.inventory_revision !== inventoryRevision || !result.realization_ref || !result.workspace_id ||
@@ -90,7 +98,8 @@ export function EmbeddedPreparation({agentId, executorId, hostLabel, workspaceId
   };
 
   return <section aria-label="Local workspace preparation" className="space-y-3 rounded border p-3">
-    <h5 className="font-semibold">Prepare folders on {hostLabel}</h5>
+    <h5 className="font-semibold">{settings?.name || choice.adapter_id} configuration</h5>
+    <p>Prepare folders on {hostLabel}.</p>
     <p>These paths belong to the computer running this Nexus Server, even if your browser is on another computer. Select existing absolute directories.</p>
     <fieldset disabled={busy || pending !== null || !!saved.error} className="space-y-2">
       <label className="block">Workspace directory<input aria-label="Workspace directory" className={inputClass} value={root} maxLength={4096} onChange={event => setRoot(event.target.value)} /></label>
@@ -98,7 +107,8 @@ export function EmbeddedPreparation({agentId, executorId, hostLabel, workspaceId
       {workspaceId && <p>Workspace: {workspaceLabel || workspaceId}</p>}
       <label className="block">Provider home directory (optional)<input aria-label="Provider home directory" className={inputClass} value={home} maxLength={4096} onChange={event => setHome(event.target.value)} /></label>
       <p>Use an existing provider home for its login, or protected references configured on this host. A blank home does not configure a login directory.</p>
-      <label className="block">Protected credential references (optional)<textarea aria-label="Protected credential references" className={inputClass} value={references} maxLength={25000} rows={2} placeholder="OPENAI_API_KEY=vault:provider-key" onChange={event => setReferences(event.target.value)} /></label>
+      {settings && <p>{settings.home}</p>}
+      <label className="block">Protected credential references (optional)<textarea aria-label="Protected credential references" className={inputClass} value={references} maxLength={25000} rows={2} placeholder={settings?.credential} onChange={event => setReferences(event.target.value)} /></label>
       <p>Enter reference names only, never API keys or tokens.</p>
       <label className="block"><input type="checkbox" checked={approved} onChange={event => setApproved(event.target.checked)} /> I approve these folders and protected references for this agent and installation.</label>
     </fieldset>

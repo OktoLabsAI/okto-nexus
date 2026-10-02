@@ -368,6 +368,14 @@ class SqliteAgentRepo(_ClockBacked):
         this.)
         """
         try:
+            # Configuration/revision caches belong to the identity. Execution
+            # records intentionally retain their restrictive foreign keys.
+            uow.connection.execute(
+                "DELETE FROM agent_execution_policies WHERE agent_id = ?", (agent_id,)
+            )
+            uow.connection.execute(
+                "DELETE FROM execution_agent_revisions WHERE agent_id = ?", (agent_id,)
+            )
             uow.connection.execute(
                 "DELETE FROM message_deliveries WHERE recipient_agent_id = ?",
                 (agent_id,),
@@ -378,6 +386,16 @@ class SqliteAgentRepo(_ClockBacked):
             cur = uow.connection.execute(
                 "DELETE FROM agents WHERE agent_id = ?", (agent_id,)
             )
+        except sqlite3.IntegrityError as exc:
+            if (getattr(exc, "sqlite_errorcode", None) == sqlite3.SQLITE_CONSTRAINT_FOREIGNKEY or
+                    str(exc) == "FOREIGN KEY constraint failed"):
+                raise OktoNexusError(
+                    ErrorCode.CONFLICT,
+                    "This agent is referenced by runtime connections or execution history. "
+                    "Deactivate it to revoke access while preserving those records.",
+                    {"agent_id": agent_id, "reason": "AGENT_IN_USE"},
+                ) from exc
+            raise _db_error("deleting agent", exc) from exc
         except sqlite3.Error as exc:
             raise _db_error("deleting agent", exc) from exc
         return cur.rowcount > 0

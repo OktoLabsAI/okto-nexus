@@ -85,9 +85,7 @@ def consent_browser(onboarding, assets):
 def select(page, scope):
     from playwright.sync_api import expect
     panel = page.get_by_test_id('runtime-selection')
-    host = panel.get_by_label('Execution host', exact=True)
-    expect(host).to_be_enabled()
-    host.select_option(scope['executor_id'])
+    expect(panel.get_by_label('Execution host', exact=True)).to_have_count(0)
     workspace = panel.get_by_label('Runtime workspace', exact=True)
     expect(workspace).to_be_enabled()
     workspace.select_option(scope['workspace_id'])

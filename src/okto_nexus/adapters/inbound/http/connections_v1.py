@@ -14,7 +14,6 @@ from ....application.execution_binding_proposals import (
 )
 from ....errors import ErrorCode, OktoNexusError
 from ....bootstrap.execution_authority import build_execution_access
-from ....domain.runtime_context import RuntimeRequestContext
 from ...outbound.sqlite.execution_agent_revisions import current_agent_revisions
 from ...outbound.sqlite.execution_identity import (
     ensure_execution_installation, register_remote_executor,
@@ -25,7 +24,7 @@ from ...outbound.sqlite.execution_tickets import (
 from ...outbound.execution.core_inventory import (
     MANAGEMENT_REVISION, protocol_info,
 )
-from .identity_ctx import get_authenticated_agent
+from .identity_ctx import get_authenticated_agent, runtime_request_context
 from .app import v1_err
 
 
@@ -210,9 +209,7 @@ def build_router() -> APIRouter:
                 approvals=request.app.state.deps.approvals,
                 request=body.model_dump(exclude_none=True),
                 fresh_publications=request.app.state.inventory_fresh_publications,
-                context=RuntimeRequestContext(
-                    actor_agent_id=agent.agent_id, authentication_source="agent_key",
-                    credential_binding=agent.api_key_hash),
+                context=runtime_request_context(),
                 access=build_execution_access(request.app.state.deps),
             )
 
@@ -235,9 +232,7 @@ def build_router() -> APIRouter:
                 factory, actor_agent_id=agent.agent_id,
                 request=body.model_dump(exclude_none=True),
                 fresh_publications=request.app.state.inventory_fresh_publications,
-                context=RuntimeRequestContext(
-                    actor_agent_id=agent.agent_id, authentication_source="agent_key",
-                    credential_binding=agent.api_key_hash),
+                context=runtime_request_context(),
                 access=build_execution_access(request.app.state.deps),
             )
 
@@ -260,7 +255,7 @@ def build_router() -> APIRouter:
             server_id = ensure_execution_installation(deps.connection_factory).server_id
             return read_execution_binding(deps.connection_factory, server_id=server_id,
                 binding_id=binding_id,
-                context=RuntimeRequestContext(agent.agent_id, 'agent_key', credential_binding=agent.api_key_hash),
+                context=runtime_request_context(),
                 access=build_execution_access(deps))
         try:
             view = await anyio.to_thread.run_sync(read)

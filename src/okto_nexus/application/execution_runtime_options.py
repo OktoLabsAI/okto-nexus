@@ -59,6 +59,8 @@ def read_runtime_options(factory, *, server_id, executor_id, agent_id, workspace
             except OktoNexusError:
                 reasons.append('METHOD_DISABLED')
             selectable = not reasons
+            # Reviewing configuration does not grant execution authority.
+            can_configure = bool(selectable and kind == 'embedded' and operator)
             from .agent_execution_policy import require_execution_location
             try:
                 require_execution_location(uow, agent_id=agent_id, executor_id=executor_id, adapter_id=adapter)
@@ -134,6 +136,7 @@ def read_runtime_options(factory, *, server_id, executor_id, agent_id, workspace
                 reasons.append('TECHNICAL_NOT_READY')
             options.append(dict(adapter_id=adapter, candidate_ref=candidate, label=technical['label'],
                 technical_state=technical['state'], technical_reasons=list(technical['reasons']),
+                can_configure=can_configure,
                 can_prepare=can_prepare, can_bind=can_bind, can_start=can_start,
                 preparation=preparation, binding=binding_view,
                 policy_reasons=list(dict.fromkeys(reasons))))

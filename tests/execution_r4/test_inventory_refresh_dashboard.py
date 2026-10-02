@@ -66,19 +66,13 @@ def test_local_refresh_survives_lost_reply_selection_and_reload(onboarding, asse
             page.goto('http://nexus.test/')
             page.get_by_test_id('onboarding-close').click()
             panel = open_panel()
-            host = panel.get_by_label('Execution host', exact=True)
-            expect(host).to_be_enabled()
-            expect(host.locator(f'option[value="{remote}"]')).to_have_count(0)
-            host.select_option(local.key.executor_id)
+            expect(panel.get_by_label('Execution host', exact=True)).to_have_count(0)
             refresh = panel.get_by_test_id('inventory-refresh')
             refresh.get_by_role('button', name='Request host inventory refresh').click()
             expect(refresh.get_by_role('alert')).to_contain_text('Retry to check the same request')
             refresh.get_by_role('button', name='Retry inventory refresh').click()
             assert len(seen) >= 2 and seen[0][1] == seen[1][1]
             local_intent = seen[0][1]
-            expect(host).to_be_enabled()
-            host.select_option('')
-            host.select_option(local.key.executor_id)
             client.portal.call(local.refresh)
             with deps.connection_factory.unit_of_work(write=False) as uow:
                 assert uow.connection.execute('SELECT completed_sequence FROM execution_inventory_refresh '
@@ -88,9 +82,7 @@ def test_local_refresh_survives_lost_reply_selection_and_reload(onboarding, asse
             expect(refresh.get_by_text('The host published a new inventory. Review the current choices.')).to_be_visible(timeout=15000)
             page.reload()
             panel = open_panel()
-            host = panel.get_by_label('Execution host', exact=True)
-            expect(host).to_be_enabled()
-            host.select_option(local.key.executor_id)
+            expect(panel.get_by_label('Execution host', exact=True)).to_have_count(0)
             expect(panel.get_by_test_id('inventory-refresh').get_by_role('button', name='Request host inventory refresh', exact=True)).to_be_enabled()
             # A confirmed completion clears the pending request, so reloading
             # offers a new refresh without automatically issuing one.

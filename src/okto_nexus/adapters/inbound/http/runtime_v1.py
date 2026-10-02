@@ -20,7 +20,6 @@ from ....application.execution_intents import (
 from ....application.execution_admission import submit_execution_operation
 from ....application.execution_capabilities import ExecutionCapabilityService
 from ....bootstrap.execution_authority import build_execution_access
-from ....domain.runtime_context import RuntimeRequestContext
 from ....application.executor_inventory_views import (
     read_executor_inventory,
 )
@@ -36,7 +35,7 @@ from ...outbound.sqlite.execution_tickets import (
     verify_execution_history_ticket, verify_execution_ticket,
 )
 from .app import extract_bearer, v1_err
-from .identity_ctx import get_authenticated_agent
+from .identity_ctx import get_authenticated_agent, runtime_request_context, trusted_local_operator
 
 
 MAX_INVENTORY_BODY_BYTES = 1024 * 1024
@@ -171,8 +170,7 @@ def build_router() -> APIRouter:
         if agent is None:
             return v1_err(401, "AUTH_FAILED", "Authentication is required.")
         access = build_execution_access(request.app.state.deps)
-        context = RuntimeRequestContext(agent.agent_id, "agent_key",
-            credential_binding=agent.api_key_hash)
+        context = runtime_request_context()
         def authorize():
             if mutate:
                 access.authorize_maintenance(context)
@@ -225,7 +223,7 @@ def build_router() -> APIRouter:
         if agent is None:
             return v1_err(401, "AUTH_FAILED", "Authentication is required.")
         service = request.app.state.deps.native_decisions
-        context = RuntimeRequestContext(agent.agent_id, "agent_key", credential_binding=agent.api_key_hash)
+        context = runtime_request_context()
         try:
             view, replay = await anyio.to_thread.run_sync(lambda: service.confirm(
                 context=context, request=body.model_dump()))
@@ -239,7 +237,7 @@ def build_router() -> APIRouter:
         if agent is None:
             return v1_err(401, "AUTH_FAILED", "Authentication is required.")
         service = request.app.state.deps.native_decisions
-        context = RuntimeRequestContext(agent.agent_id, "agent_key", credential_binding=agent.api_key_hash)
+        context = runtime_request_context()
         try:
             view = await anyio.to_thread.run_sync(lambda: service.read(context=context, decision_id=decision_id))
         except OktoNexusError as error:
@@ -260,8 +258,7 @@ def build_router() -> APIRouter:
                                              access=build_execution_access(deps))
         try:
             metadata = await anyio.to_thread.run_sync(lambda: service.describe(
-                context=RuntimeRequestContext(agent.agent_id, "agent_key",
-                                              credential_binding=agent.api_key_hash),
+                context=runtime_request_context(),
                 session_id=session_id, **dict(query),
                 mcp_url=str(request.base_url).rstrip("/") + "/mcp"))
         except OktoNexusError as error:
@@ -283,8 +280,7 @@ def build_router() -> APIRouter:
                                              access=build_execution_access(deps))
         try:
             issued = await anyio.to_thread.run_sync(lambda: service.issue(
-                context=RuntimeRequestContext(agent.agent_id, "agent_key",
-                                              credential_binding=agent.api_key_hash),
+                context=runtime_request_context(),
                 session_id=session_id, request=body.model_dump(exclude_none=True),
                 mcp_url=str(request.base_url).rstrip("/") + "/mcp"))
         except OktoNexusError as error:
@@ -315,7 +311,7 @@ def build_router() -> APIRouter:
         deps = request.app.state.deps
         def _request():
             return request_inventory_refresh(deps.connection_factory,
-                context=RuntimeRequestContext(agent.agent_id, 'agent_key', credential_binding=agent.api_key_hash),
+                context=runtime_request_context(),
                 access=build_execution_access(deps),
                 server_id=ensure_execution_installation(deps.connection_factory).server_id,
                 executor_id=executor_id, client_intent_id=body.client_intent_id)
@@ -440,7 +436,7 @@ def build_router() -> APIRouter:
                 factory, server_id=server_id, executor_id=executor_id,
                 agent_id=agent.agent_id,
                 fresh_publications=request.app.state.inventory_fresh_publications,
-                context=RuntimeRequestContext(agent.agent_id, 'agent_key', credential_binding=agent.api_key_hash),
+                context=runtime_request_context(),
                 access=build_execution_access(request.app.state.deps),
             )
 
@@ -455,7 +451,7 @@ def build_router() -> APIRouter:
                                   body: RealizationPublishRequest | LocalRealizationPrepareRequest,
                                   request: Request) -> JSONResponse:
         token = extract_bearer(request)
-        if token is None:
+        if token is None and not (trusted_local_operator.get() and isinstance(body, LocalRealizationPrepareRequest)):
             return v1_err(401, "AUTH_FAILED",
                           "Authentication is required to prepare a realization.")
         factory = request.app.state.deps.connection_factory
@@ -471,8 +467,7 @@ def build_router() -> APIRouter:
                 return stage_embedded_realization(factory,
                     owner=getattr(request.app.state, "embedded_inventory_owner", None),
                     executor_id=executor_id, access=build_execution_access(request.app.state.deps),
-                    context=RuntimeRequestContext(agent.agent_id, "agent_key",
-                                                   credential_binding=agent.api_key_hash),
+                    context=runtime_request_context(),
                     request=body.model_dump())
             installation = ensure_execution_installation(factory)
             principal = verify_execution_ticket(
@@ -520,7 +515,7 @@ def build_router() -> APIRouter:
                     remote_ready=protocol_info()["remote_execution_ready"],
                     fresh_publications=request.app.state.inventory_fresh_publications,
                     access=build_execution_access(request.app.state.deps),
-                    context=RuntimeRequestContext(agent.agent_id, "agent_key", credential_binding=agent.api_key_hash)))
+                    context=runtime_request_context()))
         except OktoNexusError as error:
             return runtime_error(error, "intent.resolve")
         return JSONResponse(resolution, headers={"Cache-Control": "no-store"})
@@ -538,7 +533,7 @@ def build_router() -> APIRouter:
                     factory, actor_agent_id=agent.agent_id,
                     client_intent_id=client_intent_id,
                     access=build_execution_access(request.app.state.deps),
-                    context=RuntimeRequestContext(agent.agent_id, "agent_key", credential_binding=agent.api_key_hash)))
+                    context=runtime_request_context()))
         except OktoNexusError as error:
             return runtime_error(error, "intent.read")
         return JSONResponse(view, headers={"Cache-Control": "no-store"})
@@ -558,7 +553,7 @@ def build_router() -> APIRouter:
                     fresh_publications=request.app.state.inventory_fresh_publications,
                     remote_ready=protocol_info()["remote_execution_ready"],
                     access=build_execution_access(request.app.state.deps),
-                    context=RuntimeRequestContext(agent.agent_id, "agent_key", credential_binding=agent.api_key_hash),
+                    context=runtime_request_context(),
                 ))
         except OktoNexusError as error:
             return runtime_error(error, "operation.admit")
@@ -629,7 +624,7 @@ def build_router() -> APIRouter:
         def read():
             return list_execution_sessions(deps.connection_factory,
                 server_id=ensure_execution_installation(deps.connection_factory).server_id,
-                context=RuntimeRequestContext(agent.agent_id, "agent_key", credential_binding=agent.api_key_hash),
+                context=runtime_request_context(),
                 access=build_execution_access(deps), executor_id=executor_id,
                 binding_id=binding_id, agent_id=agent_id, after_session_id=after_session_id, limit=limit)
         try:
@@ -651,7 +646,7 @@ def build_router() -> APIRouter:
         def read():
             server_id = ensure_execution_installation(factory).server_id
             return read_execution_session(factory, server_id=server_id, session_id=session_id,
-                context=RuntimeRequestContext(agent.agent_id, "agent_key", credential_binding=agent.api_key_hash),
+                context=runtime_request_context(),
                 access=build_execution_access(request.app.state.deps), executor_id=query.get("executor_id"))
         try:
             view = await anyio.to_thread.run_sync(read)
@@ -671,7 +666,7 @@ def build_router() -> APIRouter:
                 or len(query.multi_items()) != len(query)):
             return v1_err(422, "VALIDATION_ERROR", "Invalid event query.")
         from ....bootstrap.execution_compat import events_view
-        context = RuntimeRequestContext(agent.agent_id, "agent_key", credential_binding=agent.api_key_hash)
+        context = runtime_request_context()
         try:
             result = await anyio.to_thread.run_sync(lambda: events_view(request.app.state.deps,
                 context, session_id, after_sequence=after_sequence, limit=limit,
@@ -729,7 +724,7 @@ def build_router() -> APIRouter:
             return list_agent_executors(factory,
                 server_id=ensure_execution_installation(factory).server_id,
                 agent_id=agent_id, after_executor_id=after_executor_id, limit=limit,
-                context=RuntimeRequestContext(agent.agent_id, 'agent_key', credential_binding=agent.api_key_hash),
+                context=runtime_request_context(),
                 access=build_execution_access(request.app.state.deps))
 
         try:
@@ -749,7 +744,7 @@ def build_router() -> APIRouter:
             return v1_err(403, "PERMISSION_DENIED", "Version checks require this Server's local executor.")
         try:
             view = await owner.check_installation(access=build_execution_access(request.app.state.deps),
-                context=RuntimeRequestContext(agent.agent_id, 'agent_key', credential_binding=agent.api_key_hash),
+                context=runtime_request_context(),
                 request=body.model_dump())
         except OktoNexusError as error:
             return runtime_error(error, 'installation.check')
@@ -772,7 +767,7 @@ def build_router() -> APIRouter:
                 factory, server_id=server_id, executor_id=executor_id,
                 agent_id=agent_id, workspace_id=workspace_id,
                 fresh_publications=request.app.state.inventory_fresh_publications,
-                context=RuntimeRequestContext(agent.agent_id, 'agent_key', credential_binding=agent.api_key_hash),
+                context=runtime_request_context(),
                 access=build_execution_access(request.app.state.deps),
                 remote_ready=protocol_info()['remote_execution_ready'],
             )

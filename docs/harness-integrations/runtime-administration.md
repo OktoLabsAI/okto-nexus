@@ -480,6 +480,32 @@ restoration neither opens a runtime nor replays unread work.
 
 ## Disabling admission with captured results pending
 
+Agents > Connections shows the local Core catalog as a single selection of
+runtime buttons. Missing installations, unsupported platforms/builds and
+unavailable containment are disabled. An installed but unprobed candidate can
+be selected for an explicit version check; discovery alone does not run it or
+authorize execution. The local host is selected automatically. Runtime options
+appear after selection, and saving local preparation saves the draft execution
+policy before preparing the selected folders. The workspace mapping remains
+separate from agent identity.
+
+Remote and All also show a copyable `okto-nexus-connector connect --server=…
+--agent=…` command. Supply the Server's HTTPS address reachable from the remote
+computer. The Connector prompts for the existing agent key and runtime choice;
+the copied command contains no credentials and does not request a runtime start.
+
+The keyless loopback dashboard uses `/api/v1/runtime-management` adapters for
+the canonical services, under existing local operator and origin checks. Public
+`/v1` and `/mcp` still require their canonical authentication. Invalid supplied
+credentials never fall back to loopback trust. These dashboard adapters do not
+offer Connector registration, link-ticket issuance or executor publication.
+
+Deleting an otherwise unused agent also removes its execution policy and
+revision caches. Connections and execution history retain their foreign-key
+protection: deletion returns a conflict directing the operator to deactivate
+the agent, with no partial cleanup. The confirmation dialog displays failures
+and prevents another submission while a request is pending.
+
 Deactivating a canonical Agent (`is_active=false`) also blocks new open, send,
 steer and managed-work actions through its existing endpoints, including
 operator requests and repeated command keys. Operator read, interrupt and close

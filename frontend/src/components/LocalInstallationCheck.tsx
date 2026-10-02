@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { runtimeApi } from "../runtimeApi";
 
-export function LocalInstallationCheck({agentId, executorId, adapterId, candidateRef, inventoryRevision, onChecked}: {
+export function LocalInstallationCheck({agentId, executorId, adapterId, candidateRef, inventoryRevision, onChecked, beforeCheck}: {
   agentId: string; executorId: string; adapterId: string; candidateRef: string;
   inventoryRevision: string; onChecked: () => void;
+  beforeCheck?: () => Promise<void>;
 }) {
   const [approved, setApproved] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -15,6 +16,7 @@ export function LocalInstallationCheck({agentId, executorId, adapterId, candidat
     if (!approved || busy) return;
     setBusy(true); setError(""); setChecked("");
     try {
+      await beforeCheck?.();
       const result = await runtimeApi.checkLocalInstallation(executorId, {
         agent_id: agentId, adapter_id: adapterId, candidate_ref: candidateRef,
         inventory_revision: inventoryRevision, approved: true,

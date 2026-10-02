@@ -33,7 +33,7 @@ def local_setup(tmp_path, monkeypatch, request):
             uow.connection.execute("INSERT OR IGNORE INTO agents(agent_id,created_at) VALUES (?,?)", (actor,deps.clock.now_iso()))
             existing = getattr(app.state, "test_existing_keys", {})
             headers[actor] = {"Authorization":"Bearer " + (existing.get(actor) or app.state.auth.issue_key(uow,agent_id=actor))}
-    with TestClient(app, raise_server_exceptions=False) as client:
+    with TestClient(app, raise_server_exceptions=False, client=('127.0.0.1', 50000)) as client:
         owner = app.state.embedded_inventory_owner
         inventory = client.get(f"/v1/runtime/executors/{owner.key.executor_id}/inventory",headers=headers["operator"]).json()["snapshot"]
         body = dict(client_intent_id="local-setup",agent_id="subject",workspace_root=str(root),

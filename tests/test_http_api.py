@@ -493,11 +493,20 @@ def test_regenerate_key_invalidates_previous_immediately(serve_env):
     assert first != second
 
 
-def test_delete_agent_removes_and_404s_afterwards(serve_env):
-    _, client, operator_key = serve_env
+@pytest.mark.parametrize("configured", [False, True])
+def test_delete_agent_removes_and_404s_afterwards(serve_env, configured):
+    deps, client, operator_key = serve_env
     key = client.post(
         "/api/v1/agents", json={"agent_id": "ephemeral"}, headers=_h(operator_key)
     ).json()["data"]["api_key"]
+    if configured:
+        response = client.put('/api/v1/agents/ephemeral/execution-policy', headers=_h(operator_key),
+                              json=dict(expected_revision=0, execution_location='local', local_adapter_id='pi_rpc'))
+        assert response.status_code == 200, response.text
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute(
+                "INSERT INTO execution_agent_revisions VALUES (?, ?, 1, 1, 1, ?, ?, ?)",
+                ('test-server', 'ephemeral', 'auth', 'config', 'credential'))
     assert (
         client.delete("/api/v1/agents/ephemeral", headers=_h(operator_key)).status_code
         == 200
@@ -507,6 +516,38 @@ def test_delete_agent_removes_and_404s_afterwards(serve_env):
         client.get("/api/v1/agents/ephemeral", headers=_h(operator_key)).status_code
         == 404
     )
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert not uow.connection.execute('PRAGMA foreign_key_check').fetchall()
+
+
+@pytest.mark.parametrize('reference', ['executor', 'endpoint'])
+def test_delete_agent_with_execution_references_conflicts_without_partial_cleanup(serve_env, reference):
+    deps, client, operator_key = serve_env
+    client.post('/api/v1/agents', json={'agent_id': 'registered'}, headers=_h(operator_key))
+    client.put('/api/v1/agents/registered/execution-policy', headers=_h(operator_key),
+               json=dict(expected_revision=0, execution_location='remote'))
+    with deps.connection_factory.unit_of_work() as uow:
+        if reference == 'executor':
+            uow.connection.execute(
+                "INSERT INTO execution_executors "
+                "(server_id,executor_id,connector_id,registered_by_agent_id,kind,control_state,generation) "
+                "VALUES ('test-server','executor','connector','registered','remote','OFFLINE',1)")
+        else:
+            deps.repos.workspaces.upsert(uow, workspace_id='retained')
+            uow.connection.execute(
+                "INSERT INTO agent_endpoints(endpoint_id,agent_id,workspace_id,adapter_id,protocol,created_at,updated_at) "
+                "VALUES ('retained-endpoint','registered','retained','pi_rpc','nxl-r4','now','now')")
+    response = client.delete('/api/v1/agents/registered', headers=_h(operator_key))
+    assert response.status_code == 409, response.text
+    assert 'Deactivate' in response.json()['error']['message']
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert deps.repos.agents.get(uow, 'registered').is_active
+        assert uow.connection.execute("SELECT 1 FROM agent_execution_policies WHERE agent_id='registered'").fetchone()
+        if reference == 'executor':
+            assert uow.connection.execute("SELECT 1 FROM execution_executors WHERE executor_id='executor'").fetchone()
+        else:
+            assert uow.connection.execute("SELECT 1 FROM agent_endpoints WHERE endpoint_id='retained-endpoint'").fetchone()
+        assert not uow.connection.execute('PRAGMA foreign_key_check').fetchall()
 
 
 def test_delete_operator_is_rejected_and_identity_survives(serve_env):
@@ -1303,7 +1344,9 @@ def test_sse_streams_new_events_and_resumes_after_cursor(tmp_path):
     import uvicorn
 
     home = tmp_path / "nexus_home"
-    deps = bootstrap({}, ["--home", str(home)])
+    # These transport tests do not depend on native harness discovery.
+    # Keep their startup budget independent of installed user binaries.
+    deps = bootstrap({}, ["--home", str(home), "--feature-harness-integrations", "false", "--embedding-mode", "off"])
     auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
     issued = ensure_operator_key(deps, auth)
     assert issued is not None
@@ -1394,7 +1437,9 @@ def test_sse_open_stream_does_not_wedge_server_shutdown(tmp_path):
     import uvicorn
 
     home = tmp_path / "nexus_home"
-    deps = bootstrap({}, ["--home", str(home)])
+    # These transport tests do not depend on native harness discovery.
+    # Keep their startup budget independent of installed user binaries.
+    deps = bootstrap({}, ["--home", str(home), "--feature-harness-integrations", "false", "--embedding-mode", "off"])
     auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
     issued = ensure_operator_key(deps, auth)
     assert issued is not None

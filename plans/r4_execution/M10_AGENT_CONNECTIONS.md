@@ -83,3 +83,44 @@ Synthetic peers do not qualify providers or independent hosts. CI remains
 deferred, cross-machine acceptance requires manual user participation, and the
 macOS production implementation remains queued behind these architecture changes.
 No product gate is closed by this increment.
+
+## Follow-up: availability, loopback dashboard and agent deletion
+
+The user's installed-screen feedback exposed a missing acceptance case: the
+keyless loopback dashboard called the bearer-only `/v1` inventory API. The
+dashboard now reuses canonical services through an explicit allowlist under
+`/api/v1/runtime-management`, with the existing loopback/operator/origin checks.
+MCP and public `/v1` remain keyed; no credential is minted for the UI. Regression
+tests include an operator with no key, invalid credentials, foreign origins,
+rebound hosts and a nonlocal server configuration.
+
+The static integration dropdown and manual local-host selection are replaced
+by Core inventory-backed, single-selection runtime buttons. Unsupported or
+missing installations are disabled; unprobed installations need explicit
+version-check consent. The chosen runtime reveals its configuration, and local
+preparation can save the policy draft. Remote/All show a copyable Connector
+command with the agent ID, reachable HTTPS origin and masked interactive key
+entry on the remote machine. No provider is started by configuration.
+
+Agent deletion now cleans its policy/revision caches. Restrictive execution
+references remain intact and produce a 409 explaining deactivation, instead
+of a SQLite 503. UI confirmation errors are caught and rendered in the dialog.
+
+Focused source validation passed 20 authentication/local-preparation tests,
+9 initial browser tests, 21 browser/runtime-options tests and 6 agent-deletion
+checks. The final follow-up package campaign is pending; the installed wheel
+recorded above remains the previous version until that campaign is completed.
+
+The first follow-up installed campaign retained 105 passes and three failures
+in 925.60 seconds, with unchanged inputs, on wheel
+`4ce45519a34b5b06541c0c0d2b32b401717028d428d45e0d7d0a261d697dfb08`.
+Two SSE transport fixtures assumed default startup within ten seconds while
+real passive discovery took 17.82 seconds on the previous global package and
+18.40 seconds on the new package. Both started successfully with three candidates.
+The SSE fixtures now explicitly disable unrelated harness discovery/embeddings;
+the real-host inventory probe separately confirmed Codex, Pi and Claude with
+keyless dashboard authentication. The third failure expected UI text removed by
+the simplification; it now checks unavailable start and the disabled action.
+The final UI also gives selection an accent color/checkmark and keeps the chosen
+runtime's fields directly below its buttons. The retained campaign is
+`evidence/runtime-availability-installed`; final targeted validation follows.

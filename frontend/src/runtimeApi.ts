@@ -15,6 +15,7 @@ export interface RuntimeChoice {
   technical_reasons: string[];
   policy_reasons: string[];
   can_prepare: boolean;
+  can_configure: boolean;
   can_bind: boolean;
   can_start: boolean;
   preparation: {realization_ref: string; realization_revision: number; workspace_binding_id: string} | null;
@@ -40,6 +41,26 @@ export interface RuntimeOptions {
   inventory_revision: string;
   freshness: string;
   options: RuntimeChoice[];
+  catalog: {runtimes: {adapter_id: string; display_name: string; support_status: string; implementation_platforms: string[]}[]};
+  availability: {platform: string};
+}
+
+export function localInstallationAvailable(item: RuntimeChoice): boolean {
+  return !!item.candidate_ref && ['NOT_PROBED', 'PREPARATION_REQUIRED', 'READY_FOR_RUNTIME'].includes(item.technical_state) &&
+    !item.technical_reasons.some(reason => reason.startsWith('containment_unavailable:') || reason.startsWith('containment_unverified:'));
+}
+
+export function localRuntimeAvailability(options: RuntimeOptions, adapterId: string): {available: boolean; label: string} {
+  const runtime = options.catalog.runtimes.find(item => item.adapter_id === adapterId);
+  if (!runtime || runtime.support_status !== 'managed_supported') return {available: false, label: 'Not supported'};
+  if (!runtime.implementation_platforms.includes(options.availability.platform)) return {available: false, label: 'Not supported on this system'};
+  const candidates = options.options.filter(item => item.adapter_id === adapterId && item.candidate_ref);
+  if (!candidates.length) return {available: false, label: 'Not installed'};
+  if (options.freshness !== 'FRESH') return {available: false, label: 'Inventory unavailable'};
+  const usable = candidates.filter(localInstallationAvailable);
+  if (!usable.length) return {available: false, label: 'Installation not supported'};
+  if (usable.every(item => !item.can_configure)) return {available: false, label: 'Configuration unavailable'};
+  return {available: true, label: usable.every(item => item.technical_state === 'NOT_PROBED') ? 'Installed · version check required' : 'Available'};
 }
 
 export interface LocalPreparationRequest {
@@ -105,7 +126,8 @@ async function read<T>(path: string, signal: AbortSignal | undefined, body?: unk
   const key = getApiKey();
   if (key) headers.set("Authorization", `Bearer ${key}`);
   if (body !== undefined) headers.set("Content-Type", "application/json");
-  const response = await fetch(path, { headers, signal, cache: "no-store",
+  const url = key ? path : path.replace(/^\/v1\//, "/api/v1/runtime-management/");
+  const response = await fetch(url, { headers, signal, cache: "no-store",
     method: body === undefined ? "GET" : "POST", body: body === undefined ? undefined : JSON.stringify(body) });
   const raw = await response.text();
   let value;
