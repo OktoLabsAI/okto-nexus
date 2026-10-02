@@ -58,7 +58,10 @@ This online dependency installation is not an offline wheelhouse proof.
 These development packages do not freeze the final three commits or close M13.
 Full current Nexus/Connector regression and hosted CI, remaining UI/native
 provider journeys, fault recovery and final matrix still require completion.
-The Pi event-stream intermittency and hosted Core retained-obligation failure
-remain open. All local Linux work is WSL on the same machine. Independent-host
+The Pi event-stream intermittency remains open. Core `43f31ec` subsequently
+corrected the reproduced retained-obligation test fixture; its hosted
+requalification remains pending, with GitHub account billing restrictions
+preventing jobs from starting in run 37001262922.
+All local Linux work is WSL on the same machine. Independent-host
 acceptance remains manual with the user; no remote-machine result is inferred.
 The user's global CLI installation was not replaced.

@@ -2,6 +2,17 @@
 
 ## Current acceptance reconciliation: executable Core .56
 
+Core `43f31ec` corrects the C10 cancellation fixture after a delayed durable
+lookup reproduced its missing-obligation setup failure. The test now observes
+native-factory admission before cancellation; production package bytes are
+unchanged. Eight affected checks passed on Windows Python 3.11/3.13 and WSL
+Linux Python 3.12. See [Core reproduction and evidence](https://github.com/OktoLabsAI/okto-nexus-connector-core/blob/43f31ec/plans/implementation/evidence/c10-admission-review.md).
+Hosted run 37001262922 is now terminal: its Windows Python 3.12 cell passed,
+while five jobs never started because GitHub reported failed account payments
+or a spending-limit restriction. This requires account intervention before
+full hosted qualification; it does not prevent independent local work. The
+earlier pending/failed-run descriptions below retain their historical scope.
+
 Core .56 (`7a964db`) now provides passive npm/managed POSIX layout
 resolution. An official Linux Codex npm installation demonstrates the change
 from launcher-script discovery to native-payload discovery, without execution
@@ -20,8 +31,9 @@ This work neither qualifies native macOS nor freezes the final delivery tuple.
 Later hosted Core .55 run 37000873878 passed five matrix cells but failed a
 retained-obligation test on Windows Python 3.11. The failure occurs in setup
 after cancelling open on a fixed 200 ms delay, before testing cross-resource
-shutdown; its cause remains under investigation. The newer run 37001262922
-is not yet wholly terminal. The earlier documentation-only failure below is
+shutdown; a corresponding fixture defect is reproduced and corrected above.
+The newer run 37001262922 terminated with the infrastructure refusal recorded
+above. The earlier documentation-only failure below is
 historical and must not be read as the latest complete hosted result.
 
 The embedded-host panel now prepares existing/new workspaces through the actual
