@@ -10,7 +10,7 @@ import zipfile
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--resume', action='store_true')
-parser.add_argument('--campaign', choices=('r4', 'legacy', 'architecture', 'recovery'))
+parser.add_argument('--campaign', choices=('r4', 'legacy', 'architecture', 'recovery', 'all_r4'))
 options = parser.parse_args()
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -72,6 +72,7 @@ verification = "ARTIFACTS=" + repr(str(OUT / "ns15-05-artifacts.json")) + "\nROO
 subprocess.run(["rtk", "proxy", str(PYTHON), "-I", "-c", verification], check=True, cwd=WORK)
 (WORK / "pytest.ini").write_text("[pytest]\n", encoding="utf-8")
 campaigns = {
+    'all_r4': ['execution_r4'],
     'recovery': [
         'execution_r4/test_ns15.py::test_tn40',
         'execution_r4/test_ns15.py::test_ns15_04',
@@ -111,7 +112,8 @@ for campaign, files in campaigns.items():
         assert previous["artifacts"] == artifacts
         results.update(previous["results"])
     results[campaign] = dict(command=command, exit_code=result.returncode,
-        test_hashes={str(p.relative_to(ROOT)): hashlib.sha256(Path(str(p).split("::")[0]).read_bytes()).hexdigest() for p in paths})
+        test_hashes={str(p.relative_to(ROOT)): hashlib.sha256(Path(str(p).split("::")[0]).read_bytes()).hexdigest()
+                     for path in paths for p in (sorted(path.rglob('*.py')) if path.is_dir() else [path])})
     print(log_path.read_text(encoding="utf-8")[-4500:], flush=True)
     (OUT / "ns15-05-installed.json").write_text(json.dumps(dict(
         cwd=str(WORK), artifacts=artifacts, results=results), indent=2) + "\n", encoding="utf-8")
