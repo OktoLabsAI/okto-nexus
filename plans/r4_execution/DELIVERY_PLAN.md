@@ -58,7 +58,9 @@ conectores nativos duplicados foram [retirados do pacote](M12_NS15_03_NATIVE_REM
 os helpers físicos também foram retirados e [TR4-15-03 passou](M12_NS15_03_HELPER_REMOVAL.md)
 com REST/MCP pelo Core e verificação do pacote instalado. Tentativas canônicas
 mantêm reconciliação explícita antes de novo trabalho;
-NS15.04 mantém o aceite completo de configuração e recuperação após efeitos R4.
+[TR4-15-04 passou](M12_NS15_04_CONFIG_RESTORE.md): configuração com owner marker,
+apply/retry e restore conjunto após efeito possível preservam histórico e incerteza.
+Restam o aceite das dependências e os gates finais M13 nos artefatos coordenados.
 Nenhum gate de release é encerrado por estes incrementos.
 
 Esta revisão atende à solicitação de estruturar a entrega total. O escopo de implementação continua sendo M00–M13, com os critérios detalhados abaixo e o backlog normativo preservado. A sequência de fechamento é:

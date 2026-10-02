@@ -1,0 +1,22 @@
+.F.                                                                      [100%]
+================================== FAILURES ===================================
+____________________________ test_ns15_04[restore] ____________________________
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_ns15.py:28: in test_ns15_04
+    {"configuration": configuration_case, "restore": restore_case}[scenario](tmp_path, monkeypatch, request)
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\ns15_restore_cases.py:117: in restore_case
+    report = recovery.backup(home, snapshot, stopped=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tools\offline_runtime_backup.py:237: in backup
+    validate(destination)
+D:\Projetos\Techridy\okto_labs_okto_nexus\tools\offline_runtime_backup.py:192: in validate
+    raise ValueError("Snapshot changed during validation")
+E   ValueError: Snapshot changed during validation
+============================== warnings summary ===============================
+..\okto-r4-migration-resume-bkj6ies1\venv313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\okto-r4-migration-resume-bkj6ies1\venv313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_ns15.py::test_ns15_04[restore]
+1 failed, 2 passed, 1 warning in 10.21s

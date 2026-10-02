@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.04 configuration and post-effect restore - October 1, 2026
+
+**TR4-15-04 PASSED at migration**, configuration and restore cases. Installed campaign: **14 distinct passes and 3 architecture checks**. TR4-15-04 passed at migration: atomic selected configuration retry, foreign-owner refusal, and joint offline restore of Nexus/Core journals and session config after a possible native effect. RECONCILING history and no-retry facts are preserved; unsafe restore/overwrite and missing Core journals are refused. See [scope](M12_NS15_04_CONFIG_RESTORE.md) and [manifest](test_runs_20261001_ns15_04.json). Task dependency acceptance and final M13 provider/platform/multi-host/release gates remain open.
+
 ## NS15.03 physical helper removal and normative acceptance - October 1, 2026
 
 **TR4-15-03 PASSED at unit_contract**, REST and MCP. Installed campaign: **98 distinct passes and 3 architecture checks**, 11 skips. TR4-15-03 passed in both REST and MCP cases. Retired process ownership, framing, event buffers and version probes are absent from the Server package; only inert legacy metadata and redaction error identities remain. Core owns physical native runtime. See [scope](M12_NS15_03_HELPER_REMOVAL.md) and [manifest](test_runs_20261001_ns15_03_helper_removal.json). Task dependency acceptance, NS15.04 configuration/restore and final provider/platform/release gates remain open.

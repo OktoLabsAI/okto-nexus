@@ -3,6 +3,7 @@ from dataclasses import dataclass
 import hashlib
 import json
 import os
+import tempfile
 from pathlib import Path
 from nexus_connector_core import CoreError
 from nexus_connector_core.harness_config import render_codex_toml_fragment
@@ -48,14 +49,23 @@ class SessionMCPHome:
 
 def _write_once(path, content):
     _plain(path)
+    descriptor, name = tempfile.mkstemp(prefix=".mcp-", dir=path.parent)
+    temporary = Path(name)
     try:
-        with path.open("xb") as stream:
+        with os.fdopen(descriptor, "wb") as stream:
             stream.write(content)
             stream.flush()
             os.fsync(stream.fileno())
-    except FileExistsError:
-        if path.stat().st_size != len(content) or path.read_bytes() != content:
-            _refuse()
+        try:
+            # Atomic publication without replacing another owner's file. A
+            # failed write leaves no partial config that poisons a safe retry.
+            os.link(temporary, path)
+        except FileExistsError:
+            _plain(path)
+            if path.stat().st_size != len(content) or path.read_bytes() != content:
+                _refuse()
+    finally:
+        temporary.unlink(missing_ok=True)
 
 
 def session_mcp_home(root, *, frame, configuration_digest, template):

@@ -21,6 +21,13 @@ from test_binding_migration import proposal_request
 from test_binding_operator import prepare_operator
 
 
+@pytest.mark.parametrize("scenario", ["configuration", "restore"])
+def test_ns15_04(tmp_path, monkeypatch, request, qualified_contract, scenario):
+    """TR4-15-04: failure-safe config apply and joint post-effect restore."""
+    from ns15_restore_cases import configuration_case, restore_case
+    {"configuration": configuration_case, "restore": restore_case}[scenario](tmp_path, monkeypatch, request)
+
+
 @pytest.mark.parametrize("surface", ["rest", "mcp"])
 def test_ns15_03(connected_local, qualified_contract, monkeypatch, surface):
     """TR4-15-03: physical adapters only in Core; public callers survive removal."""

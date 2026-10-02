@@ -1605,13 +1605,21 @@
     },
     "NS15.04": {
       "proposed_nodeid": "tests/execution_r4/test_ns15.py::test_ns15_04",
-      "collected_nodeids": [],
-      "effective_test_command": null,
-      "test_availability": "MISSING",
-      "implementation": "UNVERIFIED",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns15.py::test_ns15_04[configuration]",
+        "tests/execution_r4/test_ns15.py::test_ns15_04[restore]"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns15.py::test_ns15_04 -q",
+      "test_availability": "COLLECTED_NORMATIVE_ENTRY",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
       "acceptance": "NOT_RUN",
       "required_scenarios": [
         "TR4-15-04"
+      ],
+      "notes": "TR4-15-04 passed at migration: atomic selected configuration retry, foreign-owner refusal, and joint offline restore of Nexus/Core journals and session config after a possible native effect. RECONCILING history and no-retry facts are preserved; unsafe restore/overwrite and missing Core journals are refused. Task dependency acceptance and final M13 provider/platform/multi-host/release gates remain open.",
+      "evidence": [
+        "plans/r4_execution/M12_NS15_04_CONFIG_RESTORE.md",
+        "plans/r4_execution/test_runs_20261001_ns15_04.json"
       ]
     },
     "NS15.05": {
@@ -2657,9 +2665,16 @@
         "NS15.04"
       ],
       "layer": "migration",
-      "candidate_nodeids": [],
-      "coverage": "REQUIRES_REVIEW",
-      "execution": "NOT_RUN"
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns15.py::test_ns15_04[configuration]",
+        "tests/execution_r4/test_ns15.py::test_ns15_04[restore]"
+      ],
+      "coverage": "VERIFIED_NORMATIVE_SCENARIO",
+      "execution": "PASSED",
+      "evidence": [
+        "plans/r4_execution/M12_NS15_04_CONFIG_RESTORE.md",
+        "plans/r4_execution/test_runs_20261001_ns15_04.json"
+      ]
     },
     "TR4-15-05": {
       "task_ids": [

@@ -1,11 +1,12 @@
 """Offline, operator-run recovery procedure; never starts Nexus or a native peer.
 
-Requires a quiesced schema-057 store and explicit acknowledgement that all its
-writers/native owners have stopped. Copies only the DB, journal and artifacts.
+Requires a quiesced store and explicit acknowledgement that all its
+writers/native owners have stopped. Copies the DB, journals, artifacts and
+Server-owned R4 session configuration; never copies ambient provider homes.
 The backup contains private store data; protect it like the original home.
 """
 import argparse
-from contextlib import contextmanager
+from contextlib import contextmanager, ExitStack, closing
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -90,15 +91,83 @@ def database_report(db):
                                      "handoffs", "delivery_outbox", "runtime_commands", "runtime_results", "artifacts")}}
 
 
+def required_core_files(db):
+    tables = {row[0] for row in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+    if "execution_local_streams" not in tables:
+        return set()
+    sessions = db.execute("SELECT executor_id,session_id FROM execution_local_streams").fetchall()
+    files = {"session-" + hashlib.sha256((executor + "\0" + session).encode("ascii")).hexdigest() + ".db"
+             for executor, session in sessions}
+    return files | {"owned-slots.db"} if files else set()
+
+
+def validate_r4(snapshot, db):
+    """Verify Nexus-owned layout, treating Core databases as opaque SQLite."""
+    core = snapshot / "core-runtime"
+    if any(not (core / name).is_file() for name in required_core_files(db)):
+        raise ValueError("Referenced embedded Core journal or slot ledger is missing")
+    if core.exists():
+        for path in regular_tree(core):
+            if path.suffix != ".db":
+                raise ValueError("Core recovery snapshot contains an unexpected journal file")
+            # The offline backup API has already folded WAL into this DB.
+            # Immutable reads cannot create WAL/SHM files in the snapshot.
+            with closing(sqlite3.connect(path.as_uri() + "?mode=ro&immutable=1", uri=True)) as journal:
+                if journal.execute("PRAGMA integrity_check").fetchall() != [("ok",)]:
+                    raise ValueError("Core journal integrity check failed")
+                if journal.execute("PRAGMA foreign_key_check").fetchone():
+                    raise ValueError("Core journal foreign key check failed")
+    homes = snapshot / "session-mcp"
+    if homes.exists():
+        for home in homes.iterdir():
+            if not home.is_dir():
+                raise ValueError("Session configuration entry is not a directory")
+            marker = home / ".owner.json"
+            if not marker.is_file() or marker.stat().st_size > 16384:
+                raise ValueError("Session configuration owner marker is missing or invalid")
+            raw = marker.read_bytes()
+            try:
+                owner = json.loads(raw)
+            except (ValueError, UnicodeError) as exc:
+                raise ValueError("Session configuration owner marker is invalid") from exc
+            if owner.get("layout") != "r4-mcp-v1" or hashlib.sha256(raw).hexdigest() != home.name:
+                raise ValueError("Session configuration owner digest mismatch")
+            scope = owner.get("scope", {})
+            if not isinstance(scope, dict) or not all(scope.get(key) for key in (
+                    "server_id", "executor_id", "binding_id", "session_id", "session_owner_generation")):
+                raise ValueError("Session configuration owner scope is invalid")
+
+
+def copy_core_databases(home, destination, stack):
+    source = home / "core-runtime"
+    if not source.exists():
+        return
+    files = list(regular_tree(source))
+    databases = [path for path in files if path.suffix == ".db"]
+    allowed = {str(path) + suffix for path in databases for suffix in ("", "-wal", "-shm")}
+    if any(str(path) not in allowed or path.parent != source for path in files):
+        raise ValueError("Core runtime contains an unrecognized recovery file")
+    target_dir = destination / "core-runtime"
+    target_dir.mkdir()
+    for path in databases:
+        # Locks remain held until the combined source snapshot has finished.
+        fence = stack.enter_context(closing(sqlite3.connect(path.as_uri() + "?mode=rw", uri=True, timeout=1)))
+        fence.execute("BEGIN IMMEDIATE")
+        with closing(sqlite3.connect(path.as_uri() + "?mode=ro", uri=True)) as reader:
+            with closing(sqlite3.connect(target_dir / path.name)) as target:
+                reader.backup(target)
+
+
 def validate(snapshot):
     snapshot = safe_path(snapshot)
     list(regular_tree(snapshot))
     manifest = json.loads((snapshot / "backup-manifest.json").read_text(encoding="utf-8"))
-    if manifest.get("version") != 1 or inventory(snapshot) != manifest["files"]:
+    if manifest.get("version") not in (1, 2) or inventory(snapshot) != manifest["files"]:
         raise ValueError("Backup inventory/checksum mismatch")
     with sqlite3.connect((snapshot / "nexus.db").as_uri() + "?mode=ro", uri=True) as db:
         if database_report(db) != manifest["database"]:
             raise ValueError("Backup database metadata mismatch")
+        validate_r4(snapshot, db)
         for storage_path, size in db.execute("SELECT storage_path,size_bytes FROM artifacts WHERE storage_path IS NOT NULL"):
             payload = snapshot / "artifacts" / storage_path
             if not payload.resolve().is_relative_to((snapshot / "artifacts").resolve()) or not payload.is_file():
@@ -139,7 +208,7 @@ def backup(home, destination, *, stopped=False, db_path=None):
         raise FileExistsError("Backup destination already exists; refusing overwrite")
     # These are exclusion locks, not permission to stop another process. The
     # operator must first stop every writer, including artifact maintenance.
-    with journal_lock(home), sqlite3.connect(database.as_uri() + "?mode=rw", uri=True, timeout=1) as fence:
+    with ExitStack() as stack, journal_lock(home), sqlite3.connect(database.as_uri() + "?mode=rw", uri=True, timeout=1) as fence:
         fence.execute("BEGIN IMMEDIATE")
         owner = fence.execute("SELECT lease_expires_at FROM runtime_dispatcher_owner WHERE owner_key='dispatcher'").fetchone()
         if owner and datetime.fromisoformat(owner[0].replace("Z", "+00:00")) > datetime.now(timezone.utc):
@@ -149,7 +218,8 @@ def backup(home, destination, *, stopped=False, db_path=None):
             with sqlite3.connect(destination / "nexus.db") as target:
                 reader.backup(target)
                 report = database_report(target)
-        for name in ("runtime-journal-v1", "artifacts"):
+        copy_core_databases(home, destination, stack)
+        for name in ("runtime-journal-v1", "artifacts", "session-mcp"):
             if (home / name).exists():
                 shutil.copytree(home / name, destination / name,
                     ignore=shutil.ignore_patterns("writer.lock") if name == "runtime-journal-v1" else None)
@@ -163,7 +233,7 @@ def backup(home, destination, *, stopped=False, db_path=None):
             raise ValueError("Source journal has an incomplete tail; preserve and reconcile it before backup")
     finally:
         journal.close()
-    manifest = {"version": 1, "database": report, "journal": state, "files": inventory(destination)}
+    manifest = {"version": 2, "database": report, "journal": state, "files": inventory(destination)}
     sync_tree(destination)
     (destination / "backup-manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     validate(destination)
