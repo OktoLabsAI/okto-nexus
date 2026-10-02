@@ -2,6 +2,17 @@
 
 ## Current acceptance reconciliation: executable Core .56
 
+The current user-approved architecture increment keeps complete local harness
+configuration in Agents > Connections, remote configuration in the Connector,
+and execution workspace in message/task context. Local/Remote/All is enforced
+by backend policy and source guards; legacy connection setup and scoped-key
+opening are retired. Final installed validation passed 87 Windows/Edge checks on
+wheel `a303388da14cbfe2efc848f833046f0274c50bb92bf45596d998c3b527705265`,
+with unchanged inputs, including original MCP HTTP, policy restrictions, old-writer
+fencing, complete local setup and message-scoped operations. See
+[scope and retained evidence](M10_AGENT_CONNECTIONS.md). Mac production work is
+queued behind this increment; CI and manual cross-machine boundaries are unchanged.
+
 Native Mac launchd reports are now retained in Core `f5d552e`; their script SHA-256
 matches the published prototype. All three gui/501 scenarios passed pipe handoff,
 descriptor hygiene, owner/cancel/EOF cleanup and label removal. All three user/501

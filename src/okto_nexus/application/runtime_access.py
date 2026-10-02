@@ -1,6 +1,7 @@
 """Authenticated runtime delegation. Grants restrict canonical policy."""
 from contextlib import nullcontext
 from dataclasses import replace
+from datetime import datetime, timezone
 from ..domain.base import iso_to_epoch, iso_plus, new_id
 from ..domain.permissions import PermissionSet
 from ..domain.tag_selector import reachable
@@ -62,6 +63,8 @@ class RuntimeAccessService:
             if session_id:
                 endpoint_id = self.grants.runtime_endpoint(uow, session_id)
             endpoint = self.endpoints.get(uow, endpoint_id) if endpoint_id else None
+            if endpoint and endpoint['protocol'] != 'nxl-r4' and action not in {'read', 'events'}:
+                raise denied()
             adapter_available = True
             if endpoint and endpoint["protocol"] == "nxl-r4":
                 from nexus_connector_core import get_runtime_catalog
@@ -81,6 +84,15 @@ class RuntimeAccessService:
                 adapter_available and self.config.feature_harness_integrations and (
                     substrate != "attach" or self.config.feature_harness_attach))
             if endpoint and action in {"open", "send", "steer", "execute_work"}:
+                if endpoint['protocol'] != 'nxl-r4':
+                    raise denied()
+                from .agent_execution_policy import require_execution_location
+                binding = uow.connection.execute('SELECT b.executor_id FROM execution_bindings b '
+                    'JOIN execution_installation i ON i.server_id=b.server_id AND i.singleton=1 '
+                    'WHERE b.endpoint_id=? LIMIT 2', (endpoint_id,)).fetchall()
+                if len(binding) != 1:
+                    raise denied()
+                require_execution_location(uow, agent_id=endpoint['agent_id'], executor_id=binding[0]['executor_id'], adapter_id=endpoint['adapter_id'])
                 # Deactivation revokes execution for the represented identity,
                 # including operator/boot paths and cached idempotent requests.
                 # Read, interrupt and close remain available for recovery.
@@ -171,7 +183,10 @@ class RuntimeAccessService:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Grant actions must be supported runtime actions.", {})
         now = self.clock.now_iso()
         try:
-            expires_at = iso_plus(expires_at, 0)
+            # API/browser timestamps may have millisecond precision. Normalize
+            # external input before persisting the fixed-width lease format.
+            expires_at = datetime.fromtimestamp(iso_to_epoch(expires_at), timezone.utc).isoformat(
+                timespec="microseconds").replace("+00:00", "Z")
             remaining = iso_to_epoch(expires_at) - iso_to_epoch(now)
         except (ValueError, TypeError, OverflowError):
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Grant expiry must be a valid timestamp.", {}) from None
@@ -182,6 +197,18 @@ class RuntimeAccessService:
             endpoint = self.endpoints.get(uow, endpoint_id)
             if not actor or not actor.is_active or not actor.api_key_hash or not endpoint or not endpoint["enabled"]:
                 raise denied()
+            if endpoint["protocol"] != "nxl-r4":
+                raise denied()
+            if set(actions) & {"open", "send", "steer", "execute_work"}:
+                binding = uow.connection.execute(
+                    "SELECT b.executor_id FROM execution_bindings b JOIN execution_installation i "
+                    "ON i.server_id=b.server_id AND i.singleton=1 WHERE b.endpoint_id=? LIMIT 2",
+                    (endpoint_id,)).fetchall()
+                if len(binding) != 1:
+                    raise denied()
+                from .agent_execution_policy import require_execution_location
+                require_execution_location(uow, agent_id=endpoint["agent_id"],
+                    executor_id=binding[0]["executor_id"], adapter_id=endpoint["adapter_id"])
             represented = self.agents.get(uow, endpoint["agent_id"])
             if not represented or not represented.is_active:
                 raise denied()

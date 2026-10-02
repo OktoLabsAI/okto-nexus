@@ -12,7 +12,7 @@ pytestmark = pytest.mark.skipif(os.environ.get('OKTO_NEXUS_UI_CAMPAIGN') != '1',
                                reason='Isolated browser campaign not enabled')
 
 
-def test_refresh_survives_lost_reply_host_switch_and_reload(onboarding, assets, tmp_path):
+def test_local_refresh_survives_lost_reply_selection_and_reload(onboarding, assets, tmp_path):
     from playwright.sync_api import sync_playwright, expect
     deps, client, headers, scope = onboarding
     remote = scope['executor_id']
@@ -59,6 +59,8 @@ def test_refresh_survives_lost_reply_host_switch_and_reload(onboarding, assets, 
         def open_panel():
             page.get_by_role('button', name='Agents', exact=True).click()
             page.get_by_test_id('connections-subject').click()
+            from test_embedded_preparation_dashboard import configure_local_integration
+            configure_local_integration(page)
             return page.get_by_test_id('runtime-selection')
         try:
             page.goto('http://nexus.test/')
@@ -66,18 +68,17 @@ def test_refresh_survives_lost_reply_host_switch_and_reload(onboarding, assets, 
             panel = open_panel()
             host = panel.get_by_label('Execution host', exact=True)
             expect(host).to_be_enabled()
-            host.select_option(remote)
+            expect(host.locator(f'option[value="{remote}"]')).to_have_count(0)
+            host.select_option(local.key.executor_id)
             refresh = panel.get_by_test_id('inventory-refresh')
             refresh.get_by_role('button', name='Request host inventory refresh').click()
             expect(refresh.get_by_role('alert')).to_contain_text('Retry to check the same request')
             refresh.get_by_role('button', name='Retry inventory refresh').click()
-            expect(refresh.get_by_text('The host is offline. The refresh request will remain queued.')).to_be_visible()
             assert len(seen) >= 2 and seen[0][1] == seen[1][1]
-            remote_intent = seen[0][1]
+            local_intent = seen[0][1]
             expect(host).to_be_enabled()
+            host.select_option('')
             host.select_option(local.key.executor_id)
-            refresh.get_by_role('button', name='Request host inventory refresh').click()
-            expect(refresh.get_by_text('Inventory refresh queued. Waiting for the host.')).to_be_visible()
             client.portal.call(local.refresh)
             with deps.connection_factory.unit_of_work(write=False) as uow:
                 assert uow.connection.execute('SELECT completed_sequence FROM execution_inventory_refresh '
@@ -85,22 +86,20 @@ def test_refresh_survives_lost_reply_host_switch_and_reload(onboarding, assets, 
             # The production poll interval is five seconds, equal to Playwright's
             # default assertion timeout. Observe up to three polling intervals.
             expect(refresh.get_by_text('The host published a new inventory. Review the current choices.')).to_be_visible(timeout=15000)
-            expect(host).to_be_enabled()
-            host.select_option(remote)
-            expect(refresh.get_by_text('The host is offline. The refresh request will remain queued.')).to_be_visible()
             page.reload()
             panel = open_panel()
             host = panel.get_by_label('Execution host', exact=True)
             expect(host).to_be_enabled()
-            host.select_option(remote)
-            expect(panel.get_by_test_id('inventory-refresh').get_by_text('The host is offline. The refresh request will remain queued.')).to_be_visible()
-            assert {intent for path, intent, _ in seen if remote in path} == {remote_intent}
+            host.select_option(local.key.executor_id)
+            expect(panel.get_by_test_id('inventory-refresh').get_by_role('button', name='Request host inventory refresh', exact=True)).to_be_enabled()
+            # A confirmed completion clears the pending request, so reloading
+            # offers a new refresh without automatically issuing one.
+            assert {intent for path, intent, _ in seen} == {local_intent}
             assert page.get_by_role('img', name='Okto Nexus', exact=True).evaluate('(image) => image.complete && image.naturalWidth > 0')
             page.screenshot(path=str(tmp_path / 'refresh-offline-restored.png'), full_page=True)
             with deps.connection_factory.unit_of_work(write=False) as uow:
                 rows = uow.connection.execute('SELECT executor_id,completed_sequence FROM execution_inventory_refresh').fetchall()
-                assert len(rows) == 2
-                assert next(row for row in rows if row['executor_id'] == remote)['completed_sequence'] is None
+                assert len(rows) == 1
                 assert next(row for row in rows if row['executor_id'] == local.key.executor_id)['completed_sequence'] is not None
                 assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 0
         finally:

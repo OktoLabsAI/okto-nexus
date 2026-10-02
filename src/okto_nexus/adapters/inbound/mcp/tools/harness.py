@@ -1111,7 +1111,7 @@ def register(server: Any, deps: Any) -> None:
     @runtime_tool_guard(deps)
     def harness_list(view: Annotated[str, Field(description="View: adapters, connections, bindings, endpoints, profiles, outbox, journal, artifacts or diagnostics.")] = "adapters",
                      compact: Annotated[bool, Field(description="Compact retained journal records; valid only for view=journal.")] = False,
-                     maintenance: Annotated[Any, Field(description="Object for selected view (connections: action available (your methods), connect (your endpoint_id + unique idempotency_key), list/configure/issue/revoke; admin agent_id; issue requires endpoint_id): profile/endpoint admin; outbox inspect/cancel_pending/release_to_inbox/abandon_command/recover_handoff; artifact maintenance. Fields: okto-nexus://reference/tool-docs/identity.")] = None) -> dict[str, Any]:
+                     maintenance: Annotated[Any, Field(description="Object for selected view (connections: action available (your methods), connect (your endpoint_id + unique idempotency_key), list/revoke historical credentials; admin agent_id): retained profile/endpoint administration; outbox inspect/cancel_pending/release_to_inbox/abandon_command/recover_handoff; artifact maintenance. Local setup: Agents > Connections. Remote setup: Connector. Fields: okto-nexus://reference/tool-docs/identity.")] = None) -> dict[str, Any]:
         """Inspect connections or delegated bindings; operator views manage retained records. See okto-nexus://reference/tool-docs/identity. Discovery grants no execution authority."""
         if view == "diagnostics" and not compact and maintenance is None:
             return build_endpoint_service(deps).diagnostics(authorize_request(deps))
@@ -1120,7 +1120,7 @@ def register(server: Any, deps: Any) -> None:
             args = runtime_object("maintenance", maintenance) or {}
             action = args.pop("action", "list")
             service = build_connection_service(deps)
-            methods = {"list": service.view, "configure": service.configure, "issue": service.issue, "revoke": service.revoke, "available": service.available,
+            methods = {"list": service.view, "revoke": service.revoke, "available": service.available,
                        "connect": lambda context, endpoint_id, idempotency_key: connect_own_endpoint(deps, endpoint_id=endpoint_id, idempotency_key=idempotency_key)}
             if action not in methods:
                 raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Unknown connection action.", {})

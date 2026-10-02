@@ -86,6 +86,9 @@ def _authority(uow, *, owner, access, context, subject, adapter_id):
     if current is None or agent is None:
         raise _error("The local executor or represented agent is unavailable.")
     _require_binding_method(uow.connection, subject_agent_id=subject, adapter_id=adapter_id)
+    from .agent_execution_policy import require_execution_location
+    require_execution_location(uow, agent_id=subject,
+        executor_id=owner.key.executor_id, adapter_id=adapter_id)
     return (_agent_guard(uow.connection, context.actor_agent_id), _agent_guard(uow.connection, subject))
 
 

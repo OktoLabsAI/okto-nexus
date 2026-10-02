@@ -718,9 +718,9 @@ export function AgentsView({
                         <MessageSquare size={14} />
                       </button>
                       <button className={`${ICON_BTN} inline-flex items-center gap-1 ${showConnections ? ICON_BTN_ACTIVE : ""}`}
-                        title="Connection methods" data-testid={`connections-${agent.agent_id}`}
+                        title="Connections" aria-label={`Connections for ${agent.agent_id}`} data-testid={`connections-${agent.agent_id}`}
                         onClick={() => setConnectionsOpen(open => open === agent.agent_id ? null : agent.agent_id)}>
-                        <Cable size={14} /><span className="text-xs">Connections</span>
+                        <Cable size={14} />
                       </button>
                       {/* Steering to yourself is a no-op — hide it for the
                           reserved operator identity. */}

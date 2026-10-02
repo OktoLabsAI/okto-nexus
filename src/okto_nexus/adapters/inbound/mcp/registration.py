@@ -381,7 +381,8 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: 57 = canonical conversational command payload contract3.
 #: 58 = authenticated external attach work v1 and separate Nexus acknowledgement/completion facts.
 # R4 tool schemas: document runtime guards and retain compact descriptions.
-SURFACE_REVISION = 64
+# 65 removes legacy connection issuance/configuration and documents local UI ownership.
+SURFACE_REVISION = 65
 
 
 # Tool modules whose publication is controlled by a config flag. These gates

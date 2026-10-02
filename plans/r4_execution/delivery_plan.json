@@ -18,12 +18,13 @@
     "shared_core_version": "0.2.56.dev0",
     "shared_core_wheel_sha256": "7f19885f28b16dbfce66b969ab42c79b9947246416c71147315006b6e618b1f6",
     "latest_tested_wheels": {
-      "nexus": "d07e746c8e71b842eb944ecd0244432cb66a7098bc0f599a91474c1422e30a44",
+      "nexus": "a303388da14cbfe2efc848f833046f0274c50bb92bf45596d998c3b527705265",
       "connector": "93d78a75c5ad81bbdd96e648be136f0f6b2cfd0a53f350266a1c9f96fc449104",
       "core": "7f19885f28b16dbfce66b969ab42c79b9947246416c71147315006b6e618b1f6"
     },
     "closed_product_gates": [],
     "evidence": [
+      "plans/r4_execution/M10_AGENT_CONNECTIONS.md",
       "plans/r4_execution/M10_OFFLINE_RECOVERY.md",
       "plans/r4_execution/M10_SESSION_BROWSER.md",
       "plans/r4_execution/M10_SESSION_HISTORY_UI.md",
@@ -36,9 +37,9 @@
       "plans/r4_execution/M12_NS15_05_ACCEPTANCE.md",
       "plans/r4_execution/M12_NS15_05_OPERATIONAL_RECONCILIATION.md"
     ],
-    "latest_increment": "Offline/stale inventory retains authorized binding and operation visibility for read-only recovery; execution eligibility remains disabled.",
-    "verification_scope": "Seventeen installed Windows/Edge checks passed with unchanged inputs, including a synthetic native effect with lost confirmation, two browser reloads without replay, policy restrictions and NS15.05. Native outcome reconciliation remains open.",
-    "clean_install_scope": "Coordinated clean-install evidence predates the latest Nexus offline-recovery wheel. Final current tuple clean installation remains required.",
+    "latest_increment": "Complete local integration in Agents > Connections; remote configuration by Connector; backend-enforced Local/Remote/All; contextual message workspace; legacy connection setup and scoped opening keys removed.",
+    "verification_scope": "87 installed Windows/Edge checks passed with unchanged inputs, including local configuration/permission, message operations, recovery, old-writer fencing, original MCP HTTP and NS15.05. Synthetic peers; no independent-host or provider qualification.",
+    "clean_install_scope": "Final increment validated in an isolated installed environment. Coordinated final three-product clean-install acceptance remains required.",
     "macos": {
       "source_commit": "1975e88",
       "plan_commit": "19ed94d18f8e372cdf582de7e6a47c1dfed43779",
@@ -47,7 +48,7 @@
       "parent_tracking_escape_leaks": "24/24",
       "coalition_escape_cleanup": "10/10 stopped",
       "containment_qualified": false,
-      "next": "Implement bounded coalition census and escaped-tree stop proof, autonomous job lifecycle, capacity retention and production integration using observed GUI-domain primitives; diagnose user-domain bootstrap failure before claiming headless operation.",
+      "next": "Queued after the user-approved Agents/Connections corrections. Implement bounded coalition census and escaped-tree stop proof, autonomous job lifecycle, capacity retention and production integration using observed GUI-domain primitives; diagnose user-domain bootstrap failure before claiming headless operation.",
       "prototype_commit": "7a84ff98e9cd559dd24309f1275f9aa54693f6c3",
       "prototype_validation": "Native Intel gui/501: all three fixed-fixture scenarios passed pipe handoff, descriptor hygiene, cleanup and label removal. user/501: all three bootstraps failed with error 5. Report script hash matches published 7a84ff9. No production containment or provider qualification.",
       "launchd_report_commit": "f5d552e"

@@ -85,6 +85,8 @@ class EndpointService:
             endpoint = self.repo.get(uow, endpoint_id)
             if not endpoint or endpoint["revision"] != expected_revision:
                 raise OktoNexusError(ErrorCode.CONFLICT, "Endpoint revision changed.", {})
+            if endpoint["protocol"] != "nxl-r4":
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Legacy connection configuration was removed.", {})
             updated = endpoint | changes
             if (type(updated["enabled"]) not in {bool, int} or updated["enabled"] not in (0, 1)
                     or "enabled" in changes and type(changes["enabled"]) is not bool
@@ -134,6 +136,8 @@ class EndpointService:
                 raise OktoNexusError(ErrorCode.CONFLICT, "Endpoint revision changed.", {})
             if enabled and (not endpoint["enabled"] or endpoint["health"] == "quarantined"):
                 raise OktoNexusError(ErrorCode.CONFLICT, "Enable and reconcile the endpoint before configuring boot.", {})
+            if enabled and endpoint["protocol"] != "nxl-r4":
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Legacy connection boot was removed.", {})
             if endpoint["protocol"] == "nxl-r4":
                 from nexus_connector_core import get_runtime_catalog
                 descriptor = next((item for item in get_runtime_catalog().runtimes
@@ -180,15 +184,7 @@ class EndpointService:
 
     def create_profile(self, context, *, profile_id, adapter_id, config=None, secret_refs=None,
                        inherit_ambient=False, enabled=False):
-        self.authorize(context)
-        config, secret_refs = self.validate_profile(adapter_id, config, secret_refs, inherit_ambient, enabled)
-        with self.cf.unit_of_work() as uow:
-            self.repo.put_profile(uow, profile_id=profile_id, adapter_id=adapter_id, config=config,
-                secret_refs=secret_refs, inherit_ambient=inherit_ambient, enabled=enabled, now=self.clock.now_iso())
-            self.repo.audit_configuration(uow, context=context, kind="profile", resource_id=profile_id,
-                old_revision=None, new_revision=1, fields=["config", "secret_refs", "inherit_ambient", "enabled"], now=self.clock.now_iso())
-        return {"profile_id": profile_id, "adapter_id": adapter_id, "enabled": bool(enabled),
-                "inherit_ambient": bool(inherit_ambient), "revision": 1}
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Legacy connection setup was removed. Use canonical runtime integration with the agent API key.", {})
 
     def update_profile(self, context, *, profile_id, expected_revision, **changes):
         self.authorize(context)
@@ -200,6 +196,9 @@ class EndpointService:
             profile = self.repo.profile(uow, profile_id)
         if not profile or profile["revision"] != expected_revision:
             raise OktoNexusError(ErrorCode.CONFLICT, "Runtime profile revision changed.", {})
+        from nexus_connector_core import get_runtime_catalog
+        if profile["adapter_id"] not in {item.adapter_id for item in get_runtime_catalog().runtimes}:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Legacy runtime profile configuration was removed.", {})
         merged = profile | changes
         config, refs = self.validate_profile(profile["adapter_id"], merged["config"], merged["secret_refs"],
             bool(profile["inherit_ambient"]) if "inherit_ambient" not in changes else changes["inherit_ambient"],
@@ -271,36 +270,7 @@ class EndpointService:
     def create_endpoint(self, context, *, endpoint_id, agent_id, adapter_id, project_root,
                         profile_id=None, enabled=False, priority=0, selection_group=None,
                         response_policy="explicit", consumption="exclusive", public_config=None):
-        self.authorize(context)
-        require_runtime_agent(agents=self.agents, connection_factory=self.cf, agent_id=agent_id)
-        descriptor = self.registry.get(adapter_id)
-        public_config = self.validate_public_config(descriptor, response_policy, public_config)
-        if not Path(project_root).is_absolute():
-            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Workspace root must be absolute.", {})
-        root = resolve_realpath(project_root)
-        if not Path(root).is_dir():
-            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Workspace root must be a directory.", {})
-        workspace_id = resolve_workspace_id(root)
-        if consumption == "mirror_only" and not descriptor.capabilities.context_without_execution:
-            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Adapter cannot mirror without starting execution.", {})
-        endpoint = AgentEndpoint(endpoint_id, agent_id, adapter_id, workspace_id, descriptor.protocol,
-            runtime_profile_id=profile_id, enabled=enabled, activation_state="approved" if enabled else "pending_review",
-            priority=priority, selection_group=selection_group, response_policy=response_policy,
-            delivery_consumption=consumption, public_config=public_config)
-        with self.cf.unit_of_work() as uow:
-            self.validate_work_session_reference(uow, public_config=public_config,
-                agent_id=agent_id, workspace_id=workspace_id)
-            if profile_id:
-                profile = self.repo.profile(uow, profile_id)
-                if profile is None or profile["adapter_id"] != adapter_id or not profile["enabled"]:
-                    raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Endpoint requires an enabled compatible runtime profile.", {})
-            elif descriptor.substrate != "attach":
-                raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Process endpoints require an approved profile.", {})
-            self.workspaces.upsert(uow, workspace_id=workspace_id, root_realpath=root)
-            self.repo.create(uow, endpoint=endpoint, now=self.clock.now_iso())
-            self.repo.audit_configuration(uow, context=context, kind="endpoint", resource_id=endpoint_id,
-                old_revision=None, new_revision=1, fields=["enabled", "profile_id", "public_config", "response_policy", "consumption"], now=self.clock.now_iso())
-        return {"endpoint_id": endpoint_id, "agent_id": agent_id, "workspace_id": workspace_id, "revision": 1}
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Legacy connection setup was removed. Use canonical runtime integration with the agent API key.", {})
 
     def list(self, context, *, agent_id=None):
         self.authorize(context)

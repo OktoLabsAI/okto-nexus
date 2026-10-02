@@ -2,8 +2,10 @@
 
 This is the legacy administrative reference for retained records and migration.
 Use [R4 execution operations](r4-operations.md) for current onboarding and
-canonical operation admission. Legacy profile creation is not sufficient to
-launch through the retired native factories. Final G0–G3 acceptance remains open;
+canonical operation admission. Legacy profile/endpoint creation and scoped-key
+opening have been removed; historical commands below are not supported connection
+setup. Configure local integrations entirely in Agents → Connections and remote
+integrations through the Connector. Final G0–G3 acceptance remains open;
 consult the [current evidence index](evidence-index.md).
 
 Native integrations and attach default to enabled; explicit stored/env/CLI
@@ -50,7 +52,7 @@ input models and application services. Unknown fields and implicit type coercion
 are rejected: send JSON `true`, not the string `"true"`. Revisions must be positive
 integers. Surface 39 introduced strict validation; surface 40 extends edits.
 Clients caching older schemas should refresh `nexus_info`. Reference resource
-`tool-docs/identity` is currently version30 (version9 accompanied the earlier administrative contract). Its current R4 guidance supersedes legacy onboarding examples below. Surface 41 added scoped binding discovery;
+`tool-docs/identity` is currently version31 (version9 accompanied the earlier administrative contract). Its current R4 guidance supersedes legacy onboarding examples below. Surface 41 added scoped binding discovery;
 surface 42 adds explicit operation recovery.
 
 The `bindings` view is also available to authenticated agents with current

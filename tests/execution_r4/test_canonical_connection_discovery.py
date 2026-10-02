@@ -44,7 +44,7 @@ def test_discovered_canonical_connect_call_opens_once(connected_local, monkeypat
     wait_receipt(setup, closed["data"], stages=("SUCCEEDED",))
 
 
-def test_operator_can_configure_core_method_and_revokes_its_keys(connected_local):
+def test_operator_restricts_execution_without_issuing_connection_keys(connected_local):
     setup, binding, native = connected_local
     _, _, client, headers, *_ = setup
     path = "/api/v1/agents/subject/connections"
@@ -53,19 +53,19 @@ def test_operator_can_configure_core_method_and_revokes_its_keys(connected_local
     assert method(view.json()["data"])["platform_authority"] == "executor"
     key = client.post("/api/v1/agents/subject/connection-keys", headers=headers["subject"],
                       json={"endpoint_id": binding["endpoint_id"]})
-    assert key.status_code == 200, key.text
-    change = dict(expected_revision=view.json()["data"]["revision"], methods={"codex_app_server": False})
+    assert key.status_code in (404, 405), key.text
+    path = '/api/v1/agents/subject/execution-policy'
+    change = dict(expected_revision=0, execution_location='remote')
     denied = client.put(path, headers=headers["subject"], json=change)
     assert denied.status_code == 403, denied.text
     response = client.put(path, headers=headers["operator"], json=change)
     assert response.status_code == 200, response.text
-    assert not method(response.json()["data"])["enabled"]
+    assert response.json()['data']['execution_location'] == 'remote'
     available = client.get("/api/v1/connections/available", headers=headers["subject"])
     found = method(available.json()["data"])
     assert not found["available"] and "connect" not in found["endpoints"][0]
     assert client.put(path, headers=headers["operator"], json=change).status_code == 409
-    opened = client.post("/api/v1/connections/open", headers={"Authorization": "Bearer " + key.json()["data"]["connection_key"]}, json={})
-    assert opened.status_code in (401, 403) and native.opens == 0, opened.text
+    assert native.opens == 0
 
 
 @pytest.mark.parametrize("cause", ["grant", "stale", "offline", "readiness"])

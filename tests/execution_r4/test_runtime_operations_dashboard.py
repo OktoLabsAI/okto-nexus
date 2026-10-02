@@ -7,7 +7,7 @@ from types import SimpleNamespace
 
 import pytest
 from test_local_realization import local_setup
-from test_embedded_preparation_dashboard import local_browser, select_local
+from test_embedded_preparation_dashboard import local_browser, open_message_runtime
 from test_runtime_selection_dashboard import assets
 
 pytestmark = pytest.mark.skipif(os.environ.get('OKTO_NEXUS_UI_CAMPAIGN') != '1',
@@ -56,8 +56,11 @@ def ready_runtime(local_setup, monkeypatch):
 
 def panel_for(page, setup, binding):
     from playwright.sync_api import expect
-    panel = select_local(page, setup)
-    panel.get_by_label('Runtime workspace', exact=True).select_option(binding['workspace_id'])
+    open_message_runtime(page, setup[2], setup[3], binding['workspace_id'])
+    panel = page.get_by_test_id('runtime-selection')
+    host = panel.get_by_label('Execution host', exact=True)
+    expect(host).to_be_enabled()
+    host.select_option(binding['executor_id'])
     candidate = panel.get_by_test_id('runtime-candidate-' + setup[4]['candidate_ref']).get_by_role('radio')
     expect(candidate).to_be_enabled()
     candidate.check()

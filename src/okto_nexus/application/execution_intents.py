@@ -118,6 +118,10 @@ def resolve_execution_intent(
         action = _INTENTS[request["intent"]]
         validate_execution_target(binding["adapter_id"], action, target)
         containment = action in {"turn.interrupt", "runtime.close"}
+        if not containment:
+            from .agent_execution_policy import require_execution_location
+            require_execution_location(uow, agent_id=subject_agent_id,
+                executor_id=binding["executor_id"], adapter_id=binding["adapter_id"])
         blockers = []
         if access is not None:
             try:

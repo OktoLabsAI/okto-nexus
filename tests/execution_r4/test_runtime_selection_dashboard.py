@@ -40,7 +40,9 @@ def test_selection_uses_refs_and_invalidates_on_revocation(onboarding, assets, t
     inventory = client.get(f"/v1/agents/subject/runtime-options?executor_id={scope['executor_id']}", headers=headers['operator']).json()
     copies = [row for row in inventory['options'] if row['candidate_ref']]
     assert len(copies) == 2 and copies[0]['candidate_ref'] != copies[1]['candidate_ref']
-    chosen = copies[1]['candidate_ref']
+    from test_runtime_options import bind
+    bind(onboarding)
+    chosen = scope['candidate_ref']
     options_reads = 0
     with sync_playwright() as driver:
         browser = driver.chromium.launch(channel='msedge', headless=True)
@@ -91,19 +93,20 @@ def test_selection_uses_refs_and_invalidates_on_revocation(onboarding, assets, t
         try:
             page.goto('http://nexus.test/')
             page.get_by_test_id('onboarding-close').click()
-            page.get_by_role('button', name='Agents', exact=True).click()
-            page.get_by_test_id('connections-subject').click()
+            from test_embedded_preparation_dashboard import open_message_runtime
+            open_message_runtime(page, client, headers, scope['workspace_id'])
             panel = page.get_by_test_id('runtime-selection')
             host = panel.get_by_label('Execution host', exact=True)
             expect(host).to_be_enabled()
             expect(host).to_have_value('')
             host.select_option(scope['executor_id'])
-            project = panel.get_by_label('Runtime workspace', exact=True)
-            expect(project).to_be_enabled()
-            project.select_option(scope['workspace_id'])
+            expect(panel.get_by_label('Runtime workspace', exact=True)).to_have_count(0)
             choice = panel.get_by_test_id('runtime-candidate-' + chosen).get_by_role('radio')
             expect(choice).to_be_enabled()
             choice.check()
+            expect(panel.get_by_role('radio')).to_have_count(1)
+            expect(panel.get_by_role('button', name='Review connection', exact=True)).to_have_count(0)
+            expect(panel.get_by_role('button', name='Request host inventory refresh', exact=True)).to_have_count(0)
             expect(panel.get_by_test_id('runtime-selection-summary')).to_be_visible()
             panel.get_by_role('button', name='Reload published inventory').click()
             expect(panel.get_by_role('button', name='Reload published inventory')).to_be_enabled()

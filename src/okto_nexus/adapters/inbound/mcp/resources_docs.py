@@ -430,7 +430,7 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="30",
+    version="31",
     body="""\
 # Current R4 execution
 An Agent is the authenticated identity. An executor owns provider installations
@@ -609,7 +609,7 @@ version lists do not qualify the current Core/provider tuple.
 # Retained connection self-service and recovery
 The following surfaces preserve endpoint configuration and legacy history.
 An existing canonical endpoint can connect through its approved R4 binding;
-creating a legacy endpoint/profile does not create that binding. Reads may describe
+legacy endpoint/profile creation is removed. Reads may describe
 retained state rather than a live native process. All effects require current
 authorization, qualification and canonical admission.
 
@@ -631,22 +631,19 @@ uncertain outcome. Opening does not authorize a task or adopt your current chat.
 REST equivalents: GET /api/v1/connections/available and POST /api/v1/connections/connect
 with endpoint_id and idempotency_key, authenticated using the agent's own API key.
 
-Connection credential management (surface revision 59):
-`harness_list(view="connections", maintenance={"action":"issue","agent_id":"worker","endpoint_id":"approved-endpoint"})`
-returns a one-time-visible scoped connection credential and a POST request template
-for `/api/v1/connections/open`. An operator can issue it for an existing agent;
-an agent needs an existing open grant for its own endpoint. The derived credential
-cannot outlive or bypass that grant. Never paste another agent/operator API key.
-The credential authenticates only this opening route and cannot select identity,
-workspace, executable or profile in the payload. Repeating its empty-body request
-uses the same durable opening; uncertain starts are not replayed. Managed Pi RPC,
-Codex app-server and Claude stream do not adopt the caller's current conversation.
-An operator can also use connections actions list/configure/revoke. Configuration
-requires agent_id, expected_revision, methods (method-to-boolean map), and
-key_ttl_seconds: null inherits the global default (24h), 0 means unlimited, a
-positive integer is an override. Existing keys retain their issued expiration.
-Disabling a method revokes its opening credentials and blocks new dispatches;
-read/interrupt/close remain available for recovery. Keys do not authorize work.
+Connect using the original agent API key over MCP HTTP. Scoped connection-key
+issuance and the legacy opening route are removed. Historical credentials can
+still be listed/revoked, but cannot authenticate a connection.
+Configure the entire local integration in Agents > Connections: Local/Remote/All
+execution access, local runtime integration, installation check, environment,
+workspace mapping, connection approval and bounded execution permission.
+Remote identity and runtime integration are configured by the Connector using
+the agent ID and its existing API key. Selecting Remote or All grants no access
+by itself. Workspaces belong to messages/tasks, never to agent identity; mappings
+authorize directories on their execution host. Runtime actions in the dashboard
+use Messages > message > Execution recipient and that message's workspace.
+Changing execution restrictions invalidates reviewed and pending work. Current
+authenticated containment remains available for sessions already opened.
 
 Operator-only `harness_list(view="outbox", maintenance={...})` shares
 GET/POST /api/v1/harness/outbox. action=inspect (default) accepts operation_id,

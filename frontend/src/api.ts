@@ -1100,22 +1100,16 @@ async function uploadArtifact(workspace: string, file: File): Promise<ArtifactIt
   return envelope.data as ArtifactItem;
 }
 
-export interface AgentConnections {
-  agent_id: string; has_agent_key: boolean; revision: number; key_ttl_seconds: number | null; effective_key_ttl_seconds: number;
-  methods: Array<{ method: string; protocol: string; enabled: boolean; substrate?: string | null; platform_compatible?: boolean }>;
-  endpoints: Array<{endpoint_id: string; adapter_id: string; enabled: boolean; activation_state: string; can_issue: boolean}>;
-  keys: Array<{key_id: string; endpoint_id: string; expires_at: string | null; revoked_at: string | null}>;
+export interface AgentExecutionPolicy {
+  agent_id: string; revision: number; execution_location: 'local' | 'remote' | 'all';
+  local_adapter_id: string | null; local_integrations: Array<{adapter_id: string; label: string}>;
 }
 
 export const api = {
-  runtimeProfiles: () => call<{items: Array<{profile_id: string; adapter_id: string; enabled: boolean}>}>("/api/v1/harness/profiles"),
-  createRuntimeProfile: (body: {profile_id: string; adapter_id: string; config: Record<string, unknown>; enabled: boolean; inherit_ambient: boolean}) => call("/api/v1/harness/profiles", {method: "POST", body: JSON.stringify(body)}),
-  createRuntimeEndpoint: (body: {endpoint_id: string; agent_id: string; adapter_id: string; project_root: string; profile_id: string | null; enabled: boolean; public_config: Record<string, unknown>}) => call("/api/v1/harness/endpoints", {method: "POST", body: JSON.stringify(body)}),
-  authorizeConnectionOpening: (agent_id: string, endpoint_id: string) => call("/api/v1/harness/grants", {method: "POST", body: JSON.stringify({actor_agent_id: agent_id, endpoint_id, actions: ["discover", "open"], expires_at: new Date(Date.now() + 60 * 60 * 1000).toISOString().replace("Z", "000Z")})}),
-  agentConnections: (id: string) => call<AgentConnections>(`/api/v1/agents/${encodeURIComponent(id)}/connections`),
-  saveAgentConnections: (id: string, body: {expected_revision: number; methods: Record<string, boolean>; key_ttl_seconds: number | null}) => call<AgentConnections>(`/api/v1/agents/${encodeURIComponent(id)}/connections`, {method: "PUT", body: JSON.stringify(body)}),
-  issueConnectionKey: (id: string, endpoint_id: string) => call<{expires_at: string | null; request: {method: string; path: string; headers: Record<string, string>; body: object}}>(`/api/v1/agents/${encodeURIComponent(id)}/connection-keys`, {method: "POST", body: JSON.stringify({endpoint_id})}),
-  revokeConnectionKey: (id: string, key: string) => call(`/api/v1/agents/${encodeURIComponent(id)}/connection-keys/${encodeURIComponent(key)}`, {method: "DELETE"}),
+  authorizeRuntimeExecution: (body: {actor_agent_id: string; endpoint_id: string; actions: string[]; max_executions: number; expires_at: string}) =>
+    call<{grant_id: string}>("/api/v1/harness/grants", {method: "POST", body: JSON.stringify(body)}),
+  agentExecutionPolicy: (id: string) => call<AgentExecutionPolicy>(`/api/v1/agents/${encodeURIComponent(id)}/execution-policy`),
+  saveAgentExecutionPolicy: (id: string, body: {expected_revision: number; execution_location: 'local' | 'remote' | 'all'; local_adapter_id: string | null}) => call<AgentExecutionPolicy>(`/api/v1/agents/${encodeURIComponent(id)}/execution-policy`, {method: 'PUT', body: JSON.stringify(body)}),
   runtimeBindings: (after?: string) => call<{
     agents: RuntimeBindingAgent[]; has_more: boolean; next_endpoint_id: string | null;
   }>(`/api/v1/harness/bindings?limit=50${after ? `&after_endpoint_id=${encodeURIComponent(after)}` : ""}`),

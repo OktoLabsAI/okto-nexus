@@ -65,6 +65,8 @@ def _agent_guard(conn, agent_id: str) -> str:
         "inherit_ambient", "enabled", "revision",
     )
     return _digest({
+        "execution_policy": [dict(row) for row in conn.execute(
+            "SELECT * FROM agent_execution_policies WHERE agent_id=?", (agent_id,))],
         "agent": {key: agent[key] for key in agent_fields},
         "methods": methods,
         "endpoints": [{key: row[key] for key in endpoint_fields}
@@ -199,6 +201,9 @@ def prepare_execution_binding(
         if realization is None:
             raise OktoNexusError(ErrorCode.NOT_FOUND,
                                   "The realization was not found in this scope.", {})
+        from .agent_execution_policy import require_execution_location
+        require_execution_location(uow, agent_id=subject_agent_id,
+            executor_id=request["executor_id"], adapter_id=request["adapter_id"])
         if (realization["workspace_id"] != request["workspace_id"] or
                 realization["candidate_ref"] != request["candidate_ref"] or
                 realization["inventory_revision"] != request["inventory_revision"] or

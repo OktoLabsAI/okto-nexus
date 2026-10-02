@@ -8,6 +8,13 @@ datadas abaixo registram a evolução; não substituem o checkpoint corrente.
 M13 e G0–G3 continuam abertos. CI está adiado por orientação do usuário e o aceite
 entre hosts depende de sua intervenção manual.
 
+Prioridade aprovada em 2 de outubro: concluir as [adequações de Agents e
+Connections](M10_AGENT_CONNECTIONS.md) antes da implementação macOS. Toda a
+configuração local deve ser realizável em Agents > Connections; a remota fica no
+Connector. O workspace permanece contextual à mensagem/tarefa, e Local/Remote/All
+é uma restrição de execução aplicada também no backend. Métodos legados de conexão
+e chaves derivadas de abertura são removidos, preservando o MCP HTTP original.
+
 Este plano organiza a conclusão dos três produtos na branch `feature/v0.2.0`, com implementação, integração, testes, migração e aceite final. O resultado exigido é utilizar os harnesses diretamente no Nexus e remotamente pelo Connector, pelas entradas reais de UI, CLI e API, com o mesmo Core instalado. Todos os textos produzidos pelas aplicações devem estar em inglês dos Estados Unidos, inclusive superfícies legadas e mensagens de retorno.
 
 Data da baseline: 29 de setembro de 2026. Revisão de planejamento: 30 de setembro de 2026. Este documento é um plano de conclusão; sua validação documental não executa testes de produto nem encerra gates de release. O trabalho anterior é aproveitado como implementação parcial a verificar.

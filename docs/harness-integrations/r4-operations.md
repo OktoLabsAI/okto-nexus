@@ -6,8 +6,27 @@ the scope actually verified. G0–G3 and final release acceptance remain open.
 Historical native captures and synthetic peers do not qualify the current Core,
 provider, operating system or remote topology.
 
-The development dashboard now reads scoped executor choices and current runtime
-options, with explicit host, installation and workspace selection. It invalidates
+**Agents → Connections** (the cable icon) owns the complete local configuration:
+select Local, Remote or All access, choose and save the local runtime integration,
+discover/check an installation, configure its environment and workspace mappings,
+approve its binding and explicitly authorize execution with a duration and action
+budget. The MCP HTTP address uses the agent's original API key. There is no
+additional connection key or legacy connection setup.
+
+Remote identity, installation and integration are configured in the Connector.
+The agent ID selects the identity; its existing API key authenticates it. Local,
+Remote and All restrict execution and do not grant a Connector authority by
+themselves. The backend checks these restrictions during preparation, resolution
+and before dispatch. Changing them invalidates earlier reviewed work. Existing
+sessions retain their authenticated containment path.
+
+Workspaces belong to messages/tasks, not agent identity. A local workspace mapping
+authorizes a directory for that work; it does not set the agent's default
+workspace. Runtime actions and history are in **Messages → message → Execution
+recipient** and use that message's workspace. The remote view selects connections
+already configured by the Connector, without choosing its runtime integration.
+
+The dashboard reads scoped executor choices and current runtime options. It invalidates
 the selected installation when inventory revisions/freshness or host access change.
 For a unique preparation already published by the host, the panel now reviews
 the Server proposal and applies explicit operator consent. It reuses an existing
@@ -41,10 +60,9 @@ version check requires another explicit approval. This does not grant runtime
 authority or qualify an unsupported build/platform. The runtime operations panel
 provides separate review and submission for start/reuse, send, steer, interrupt
 and close after selecting a binding.
-Legacy endpoint/profile controls remain in a collapsed maintenance section. Use
-the authenticated R4 HTTP and Connector CLI flows to complete development setup;
-do not treat a legacy connection command as remote Connector setup. Full browser
-acceptance remains pending.
+Legacy endpoint/profile setup and scoped-key opening routes have been removed.
+Historical records remain readable for audit and recovery. Full product acceptance
+remains pending; see the current ledger for verified browser coverage.
 
 Request runtime options with `executor_id` and, for binding/start eligibility,
 the explicitly selected `workspace_id`. The subject and an authenticated operator
@@ -95,7 +113,7 @@ resolution invalidate admission and pending dispatch; changes after opening also
 invalidate lease renewal and capability authority. Subject revocation, grants,
 budgets, inventory and binding checks remain in force.
 
-In **Agents → Connections → Runtime operations**, select an action and review
+In **Messages → message → Execution recipient → Runtime operations**, select an action and review
 its session, message and target before **Submit reviewed action**. Start can
 reuse an unambiguous session, create a new one explicitly, or reuse an entered
 session ID. An initial message becomes a separate tracked turn. Steer and

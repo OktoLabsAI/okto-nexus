@@ -36,7 +36,7 @@ export function BindingConsent({agentId, executorId, hostLabel, workspaceId, wor
 
   if (binding) return <section aria-label="Connection status" className="space-y-2">
     <p>Connection: {binding.state}. Agent {agentId} · {hostLabel} · {workspaceLabel} · {choice.label}.</p>
-    <p>{binding.state === "APPROVED" ? "This binding can be reused without issuing another connection key." : "This connection requires operator review before reuse."} Runtime start still requires current technical readiness and separate execution authority.</p>
+    <p>{binding.state === "APPROVED" ? "This connection uses the agent's existing API key." : "This connection requires operator review before reuse."} Runtime start still requires current technical readiness and separate execution authority.</p>
     <button className="btn btn-secondary" disabled={busy} onClick={() => void run(async () => {
       const current = await runtimeApi.binding(binding.binding_id);
       if (mounted.current) { setBinding(current); onApplied(); }

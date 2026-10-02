@@ -22,7 +22,7 @@ export interface RuntimeChoice {
 }
 
 export interface BindingView {
-  binding_id: string; binding_revision: number; state: string;
+  binding_id: string; binding_revision: number; state: string; endpoint_id: string;
   executor_id: string; agent_id: string; workspace_id: string;
   workspace_binding_id: string; adapter_id: string; candidate_ref: string;
   inventory_revision: string; realization_ref: string; realization_revision: number;

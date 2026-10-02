@@ -4,6 +4,8 @@
 // `MessageDetailModal` keeps the old overlay form as a thin wrapper.
 
 import { X } from "lucide-react";
+import { useState } from "react";
+import { RuntimeSelection } from "./RuntimeSelection";
 import type { MessageRow } from "../api";
 import { Markdown } from "./Markdown";
 import { TraceChip } from "./TraceChip";
@@ -39,6 +41,7 @@ export function MessageDetail({
 }) {
   const body = message.body ?? message.preview ?? "";
   const workspaceName = useWorkspaceName(message.workspace_id);
+  const [executionAgent, setExecutionAgent] = useState("");
   return (
     <div className="flex flex-col h-full min-h-0" data-testid="message-detail">
       <header className="shrink-0 flex items-start gap-2 pb-3 border-b border-surface-200/50 dark:border-surface-700/50">
@@ -77,6 +80,14 @@ export function MessageDetail({
       </header>
 
       <div className="flex-1 min-h-0 overflow-y-auto pt-4 space-y-5 text-xs">
+        <section aria-label="Message runtime execution" className="space-y-2">
+          <label>Execution recipient <select aria-label="Execution recipient" value={executionAgent} onChange={event => setExecutionAgent(event.target.value)}>
+            <option value="">Select a recipient</option>
+            {Array.from(new Set(message.deliveries.map(item => item.recipient_agent_id))).map(id => <option key={id} value={id}>{id}</option>)}
+          </select></label>
+          {executionAgent && message.deliveries.some(item => item.recipient_agent_id === executionAgent) &&
+            <RuntimeSelection key={JSON.stringify([message.message_id, executionAgent])} agentId={executionAgent} contextWorkspaceId={message.workspace_id} />}
+        </section>
         {/* Metadata */}
         <section className="space-y-1">
           <h3 className="text-surface-500 dark:text-surface-400 font-medium uppercase tracking-wider mb-1.5">

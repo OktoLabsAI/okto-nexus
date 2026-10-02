@@ -59,6 +59,12 @@ def read_runtime_options(factory, *, server_id, executor_id, agent_id, workspace
             except OktoNexusError:
                 reasons.append('METHOD_DISABLED')
             selectable = not reasons
+            from .agent_execution_policy import require_execution_location
+            try:
+                require_execution_location(uow, agent_id=agent_id, executor_id=executor_id, adapter_id=adapter)
+            except OktoNexusError as error:
+                reasons.append(error.details.get('reason', 'EXECUTION_LOCATION_RESTRICTED'))
+                selectable = False
             can_prepare = selectable and (kind != 'embedded' or operator)
             if selectable and kind == 'embedded' and not operator:
                 reasons.append('LOCAL_OPERATOR_REQUIRED')

@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "installed_packages": 72,
+  "dependency_versions_preserved": true,
+  "surface_revision": 65,
+  "packages": {
+    "okto_nexus": {
+      "path": "C:\\Users\\jpamb\\AppData\\Roaming\\uv\\tools\\okto-nexus\\Lib\\site-packages\\okto_nexus",
+      "files_verified": 385,
+      "wheel_sha256": "a303388da14cbfe2efc848f833046f0274c50bb92bf45596d998c3b527705265"
+    },
+    "nexus_connector_core": {
+      "path": "C:\\Users\\jpamb\\AppData\\Roaming\\uv\\tools\\okto-nexus\\Lib\\site-packages\\nexus_connector_core",
+      "files_verified": 96,
+      "wheel_sha256": "7f19885f28b16dbfce66b969ab42c79b9947246416c71147315006b6e618b1f6"
+    }
+  },
+  "server_restarted": false,
+  "note": "Restart the existing Server to load the updated application and dashboard."
+}

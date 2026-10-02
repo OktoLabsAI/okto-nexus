@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="30" time="279.506" timestamp="2026-10-02T14:20:33.331770-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_agent_execution_policy" name="test_local_restriction_rechecks_admission_and_preserves_close" time="5.673" /><testcase classname="tests.execution_r4.test_agent_execution_policy" name="test_remote_location_policy_is_enforced_in_runtime_resolution[local-False]" time="14.134" /><testcase classname="tests.execution_r4.test_agent_execution_policy" name="test_remote_location_policy_is_enforced_in_runtime_resolution[remote-True]" time="13.147" /><testcase classname="tests.execution_r4.test_agent_execution_policy" name="test_remote_location_policy_is_enforced_in_runtime_resolution[all-True]" time="13.059" /><testcase classname="tests.execution_r4.test_agent_execution_policy" name="test_local_integration_restriction_does_not_create_authority" time="2.108" /><testcase classname="tests.execution_r4.test_canonical_connection_keys" name="test_scoped_key_issuance_and_opening_routes_are_removed[subject]" time="2.974" /><testcase classname="tests.execution_r4.test_canonical_connection_keys" name="test_scoped_key_issuance_and_opening_routes_are_removed[operator]" time="3.075" /><testcase classname="tests.execution_r4.test_canonical_connection_keys" name="test_retained_scoped_key_cannot_authenticate_or_resolve" time="2.165" /><testcase classname="tests.execution_r4.test_canonical_connection_keys" name="test_policy_migration_preserves_existing_execution_history" time="4.873" /><testcase classname="tests.execution_r4.test_canonical_connection_discovery" name="test_discovered_canonical_connect_call_opens_once" time="4.147" /><testcase classname="tests.execution_r4.test_canonical_connection_discovery" name="test_operator_restricts_execution_without_issuing_connection_keys" time="2.865" /><testcase classname="tests.execution_r4.test_canonical_connection_discovery" name="test_canonical_discovery_does_not_advertise_unready_binding[grant]" time="2.927" /><testcase classname="tests.execution_r4.test_canonical_connection_discovery" name="test_canonical_discovery_does_not_advertise_unready_binding[stale]" time="2.360" /><testcase classname="tests.execution_r4.test_canonical_connection_discovery" name="test_canonical_discovery_does_not_advertise_unready_binding[offline]" time="2.289" /><testcase classname="tests.execution_r4.test_canonical_connection_discovery" name="test_canonical_discovery_does_not_advertise_unready_binding[readiness]" time="2.139" /><testcase classname="tests.execution_r4.test_canonical_connection_discovery" name="test_binding_discovery_reads_canonical_history_without_native_registry" time="4.322" /><testcase classname="tests.execution_r4.test_agent_connections_dashboard" name="test_agent_connections_has_original_mcp_policy_and_local_configuration" time="15.970" /><testcase classname="tests.execution_r4.test_embedded_preparation_dashboard" name="test_local_preparation_reaches_binding_without_start_and_retries_same_consent[False]" time="23.353"><failure message="AssertionError: Locator expected to have count '0'&#10;Actual value: 1 &#10;Call log:&#10;  - Expect &quot;to_have_count&quot; get_by_test_id(&quot;runtime-selection&quot;).get_by_role(&quot;region&quot;, name=&quot;Local execution permission&quot;, exact=True) with timeout 5000ms&#10;  - waiting for get_by_test_id(&quot;runtime-selection&quot;).get_by_role(&quot;region&quot;, name=&quot;Local execution permission&quot;, exact=True)&#10;    14 × locator resolved to 1 element&#10;       - unexpected value &quot;1&quot;">local_setup = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4914/test_loca...rust='selected', version=None, architecture=None, launch_script=None, build_identity=None, installation_ref=None), ...)
+local_browser = (&lt;Page url='http://nexus.test/'&gt;, {'requests': [('GET', '/api/v1/agents', None), ('GET', '/api/v1/info', None), ('GET'.../workspaces', None), ('GET', '/api/v1/workspaces', None), ('GET', '/api/v1/info', None), ...], 'drop_response': False})
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4914/test_local_preparation_reaches0')
+lost_reply = False
+
+    @pytest.mark.parametrize('lost_reply', [False, True])
+    def test_local_preparation_reaches_binding_without_start_and_retries_same_consent(local_setup, local_browser, tmp_path, lost_reply):
+        from playwright.sync_api import expect
+        deps, _, _, _, _, _, root = local_setup
+        page, trace = local_browser
+        panel = select_local(page, local_setup)
+        fill_preparation(panel, root)
+        # Refresh must not unmount the form and discard a partially reviewed draft.
+        panel.get_by_role('button', name='Reload published inventory', exact=True).click()
+        expect(panel.get_by_label('Workspace directory', exact=True)).to_have_value(str(root))
+        approve = panel.get_by_role('button', name='Approve local preparation', exact=True)
+        expect(approve).to_be_disabled()
+        panel.get_by_role('checkbox', name='I approve these folders', exact=False).check()
+        expect(approve).to_be_enabled()
+        target = Path(os.environ.get('OKTO_NEXUS_UI_SCREENSHOT_DIR', str(tmp_path)))
+        target.mkdir(parents=True, exist_ok=True)
+        panel.get_by_role('region', name='Local workspace preparation').screenshot(path=str(target / f'embedded-preparation-form-{lost_reply}.png'))
+        trace['drop_response'] = lost_reply
+        approve.click()
+        if lost_reply:
+            expect(panel.get_by_role('button', name='Retry the same preparation', exact=True)).to_be_enabled()
+            expect(panel.get_by_role('alert')).to_be_visible()
+            page.reload()
+            if page.get_by_test_id('onboarding-close').is_visible():
+                page.get_by_test_id('onboarding-close').click()
+            panel = select_local(page, local_setup)
+            expect(panel.get_by_label('Workspace directory', exact=True)).to_have_value(str(root))
+            expect(panel.get_by_label('Workspace directory', exact=True)).to_be_disabled()
+            panel.get_by_role('button', name='Retry the same preparation', exact=True).click()
+        expect(panel.get_by_label('Connection name', exact=True)).to_be_visible()
+        requests = [json.loads(body) for _, path, body in trace['requests'] if path.endswith('/realizations')]
+        assert len(requests) == (2 if lost_reply else 1)
+        assert all(body == requests[0] for body in requests)
+        assert requests[0]['approved'] is True
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            assert uow.connection.execute('SELECT COUNT(*) FROM execution_local_realizations').fetchone()[0] == 1
+            record = json.loads(uow.connection.execute('SELECT local_record_json FROM execution_local_realizations').fetchone()[0])
+            assert record['root']['path'] == str(root.resolve())
+            assert record['provider_home']['path'] == str(root.parent.resolve())
+            assert record['configuration']['secret_bindings'] == {'OPENAI_API_KEY': 'vault:provider-key'}
+            assert uow.connection.execute('SELECT COUNT(*) FROM execution_bindings').fetchone()[0] == 0
+        panel.get_by_label('Connection name', exact=True).fill('Local workbench')
+        panel.get_by_role('button', name='Review connection', exact=True).click()
+        panel.get_by_role('button', name='Approve connection', exact=True).click()
+        expect(panel.get_by_role('region', name='Connection status')).to_contain_text('Connection: APPROVED')
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            assert uow.connection.execute('SELECT COUNT(*) FROM execution_bindings').fetchone()[0] == 1
+            for table in ('execution_operations', 'execution_sessions', 'runtime_execution_grants'):
+                assert uow.connection.execute('SELECT COUNT(*) FROM ' + table).fetchone()[0] == 0
+        expect(panel.get_by_role('button', name='Reload published inventory', exact=True)).to_be_enabled()
+        page.screenshot(path=str(target / f'embedded-preparation-{lost_reply}.png'), full_page=True)
+        permission = panel.get_by_role('region', name='Local execution permission', exact=True)
+        expect(permission).to_be_visible()
+        permission.get_by_label('Permission duration', exact=True).fill('30')
+        permission.get_by_label('Permission action budget', exact=True).fill('10')
+        permission.get_by_role('checkbox', name='I authorize execution within these limits.').check()
+        permission.get_by_role('button', name='Authorize local execution', exact=True).click()
+&gt;       expect(permission).to_have_count(0)
+E       AssertionError: Locator expected to have count '0'
+E       Actual value: 1 
+E       Call log:
+E         - Expect "to_have_count" get_by_test_id("runtime-selection").get_by_role("region", name="Local execution permission", exact=True) with timeout 5000ms
+E         - waiting for get_by_test_id("runtime-selection").get_by_role("region", name="Local execution permission", exact=True)
+E           14 × locator resolved to 1 element
+E              - unexpected value "1"
+
+tests\execution_r4\test_embedded_preparation_dashboard.py:176: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_embedded_preparation_dashboard" name="test_local_preparation_reaches_binding_without_start_and_retries_same_consent[True]" time="14.055"><failure message="AssertionError: Locator expected to have count '0'&#10;Actual value: 1 &#10;Call log:&#10;  - Expect &quot;to_have_count&quot; get_by_test_id(&quot;runtime-selection&quot;).get_by_role(&quot;region&quot;, name=&quot;Local execution permission&quot;, exact=True) with timeout 5000ms&#10;  - waiting for get_by_test_id(&quot;runtime-selection&quot;).get_by_role(&quot;region&quot;, name=&quot;Local execution permission&quot;, exact=True)&#10;    14 × locator resolved to 1 element&#10;       - unexpected value &quot;1&quot;">local_setup = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4914/test_loca...rust='selected', version=None, architecture=None, launch_script=None, build_identity=None, installation_ref=None), ...)
+local_browser = (&lt;Page url='http://nexus.test/'&gt;, {'requests': [('GET', '/api/v1/agents', None), ('GET', '/api/v1/info', None), ('GET'.../workspaces', None), ('GET', '/api/v1/workspaces', None), ('GET', '/api/v1/info', None), ...], 'drop_response': False})
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4914/test_local_preparation_reaches1')
+lost_reply = True
+
+    @pytest.mark.parametrize('lost_reply', [False, True])
+    def test_local_preparation_reaches_binding_without_start_and_retries_same_consent(local_setup, local_browser, tmp_path, lost_reply):
+        from playwright.sync_api import expect
+        deps, _, _, _, _, _, root = local_setup
+        page, trace = local_browser
+        panel = select_local(page, local_setup)
+        fill_preparation(panel, root)
+        # Refresh must not unmount the form and discard a partially reviewed draft.
+        panel.get_by_role('button', name='Reload published inventory', exact=True).click()
+        expect(panel.get_by_label('Workspace directory', exact=True)).to_have_value(str(root))
+        approve = panel.get_by_role('button', name='Approve local preparation', exact=True)
+        expect(approve).to_be_disabled()
+        panel.get_by_role('checkbox', name='I approve these folders', exact=False).check()
+        expect(approve).to_be_enabled()
+        target = Path(os.environ.get('OKTO_NEXUS_UI_SCREENSHOT_DIR', str(tmp_path)))
+        target.mkdir(parents=True, exist_ok=True)
+        panel.get_by_role('region', name='Local workspace preparation').screenshot(path=str(target / f'embedded-preparation-form-{lost_reply}.png'))
+        trace['drop_response'] = lost_reply
+        approve.click()
+        if lost_reply:
+            expect(panel.get_by_role('button', name='Retry the same preparation', exact=True)).to_be_enabled()
+            expect(panel.get_by_role('alert')).to_be_visible()
+            page.reload()
+            if page.get_by_test_id('onboarding-close').is_visible():
+                page.get_by_test_id('onboarding-close').click()
+            panel = select_local(page, local_setup)
+            expect(panel.get_by_label('Workspace directory', exact=True)).to_have_value(str(root))
+            expect(panel.get_by_label('Workspace directory', exact=True)).to_be_disabled()
+            panel.get_by_role('button', name='Retry the same preparation', exact=True).click()
+        expect(panel.get_by_label('Connection name', exact=True)).to_be_visible()
+        requests = [json.loads(body) for _, path, body in trace['requests'] if path.endswith('/realizations')]
+        assert len(requests) == (2 if lost_reply else 1)
+        assert all(body == requests[0] for body in requests)
+        assert requests[0]['approved'] is True
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            assert uow.connection.execute('SELECT COUNT(*) FROM execution_local_realizations').fetchone()[0] == 1
+            record = json.loads(uow.connection.execute('SELECT local_record_json FROM execution_local_realizations').fetchone()[0])
+            assert record['root']['path'] == str(root.resolve())
+            assert record['provider_home']['path'] == str(root.parent.resolve())
+            assert record['configuration']['secret_bindings'] == {'OPENAI_API_KEY': 'vault:provider-key'}
+            assert uow.connection.execute('SELECT COUNT(*) FROM execution_bindings').fetchone()[0] == 0
+        panel.get_by_label('Connection name', exact=True).fill('Local workbench')
+        panel.get_by_role('button', name='Review connection', exact=True).click()
+        panel.get_by_role('button', name='Approve connection', exact=True).click()
+        expect(panel.get_by_role('region', name='Connection status')).to_contain_text('Connection: APPROVED')
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            assert uow.connection.execute('SELECT COUNT(*) FROM execution_bindings').fetchone()[0] == 1
+            for table in ('execution_operations', 'execution_sessions', 'runtime_execution_grants'):
+                assert uow.connection.execute('SELECT COUNT(*) FROM ' + table).fetchone()[0] == 0
+        expect(panel.get_by_role('button', name='Reload published inventory', exact=True)).to_be_enabled()
+        page.screenshot(path=str(target / f'embedded-preparation-{lost_reply}.png'), full_page=True)
+        permission = panel.get_by_role('region', name='Local execution permission', exact=True)
+        expect(permission).to_be_visible()
+        permission.get_by_label('Permission duration', exact=True).fill('30')
+        permission.get_by_label('Permission action budget', exact=True).fill('10')
+        permission.get_by_role('checkbox', name='I authorize execution within these limits.').check()
+        permission.get_by_role('button', name='Authorize local execution', exact=True).click()
+&gt;       expect(permission).to_have_count(0)
+E       AssertionError: Locator expected to have count '0'
+E       Actual value: 1 
+E       Call log:
+E         - Expect "to_have_count" get_by_test_id("runtime-selection").get_by_role("region", name="Local execution permission", exact=True) with timeout 5000ms
+E         - waiting for get_by_test_id("runtime-selection").get_by_role("region", name="Local execution permission", exact=True)
+E           14 × locator resolved to 1 element
+E              - unexpected value "1"
+
+tests\execution_r4\test_embedded_preparation_dashboard.py:176: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_embedded_preparation_dashboard" name="test_existing_workspace_keeps_identity_and_display_name" time="6.183" /><testcase classname="tests.execution_r4.test_embedded_preparation_dashboard" name="test_local_preparation_refusal_has_no_persistent_effect[storage]" time="5.812" /><testcase classname="tests.execution_r4.test_embedded_preparation_dashboard" name="test_local_preparation_refusal_has_no_persistent_effect[plaintext]" time="6.861" /><testcase classname="tests.execution_r4.test_embedded_preparation_dashboard" name="test_local_preparation_refusal_has_no_persistent_effect[directory]" time="6.230" /><testcase classname="tests.execution_r4.test_embedded_preparation_dashboard" name="test_local_preparation_refusal_has_no_persistent_effect[authority]" time="6.180" /><testcase classname="tests.execution_r4.test_binding_consent_dashboard" name="test_consent_applies_once_and_second_visit_reuses_binding[False]" time="17.173" /><testcase classname="tests.execution_r4.test_binding_consent_dashboard" name="test_consent_applies_once_and_second_visit_reuses_binding[True]" time="8.052" /><testcase classname="tests.execution_r4.test_binding_consent_dashboard" name="test_stale_inventory_after_review_refuses_approval" time="6.510" /><testcase classname="tests.execution_r4.test_binding_consent_dashboard" name="test_storage_failure_prevents_sending_unrecorded_intent" time="6.914" /><testcase classname="tests.execution_r4.test_runtime_selection_dashboard" name="test_selection_uses_refs_and_invalidates_on_revocation[duplicate-installations]" time="27.149" /><testcase classname="tests.execution_r4.test_inventory_refresh_dashboard" name="test_local_refresh_survives_lost_reply_selection_and_reload" time="44.487"><failure message="AssertionError: Locator expected to be visible&#10;Actual value: None&#10;Error: element(s) not found &#10;Call log:&#10;  - Expect &quot;to_be_visible&quot; get_by_test_id(&quot;runtime-selection&quot;).get_by_test_id(&quot;inventory-refresh&quot;).get_by_text(&quot;The host published a new inventory. Review the current choices.&quot;) with timeout 5000ms&#10;  - waiting for get_by_test_id(&quot;runtime-selection&quot;).get_by_test_id(&quot;inventory-refresh&quot;).get_by_text(&quot;The host published a new inventory. Review the current choices.&quot;)&#10;&#10;Aria snapshot:&#10;- banner:&#10;  - button &quot;Collapse menu&quot;&#10;  - img &quot;Okto Nexus&quot;&#10;  - text: / Agents&#10;  - combobox &quot;Workspace scope&quot;:&#10;    - option &quot;All workspaces&quot; [selected]&#10;    - option &quot;Project&quot;&#10;  - text: ● Reconnecting&#10;  - button &quot;Refresh Agents&quot;&#10;  - button &quot;Forget this tab's key&quot;&#10;  - button&#10;- complementary:&#10;  - navigation:&#10;    - heading &quot;Observability&quot; [level=3]&#10;    - list:&#10;      - listitem:&#10;        - button &quot;Graph&quot;&#10;      - listitem:&#10;        - button &quot;Messages&quot;&#10;      - listitem:&#10;        - button &quot;Handoffs&quot;&#10;      - listitem:&#10;        - button &quot;Meta-harness&quot;&#10;      - listitem:&#10;        - button &quot;Events&quot;&#10;      - listitem:&#10;        - button &quot;Artifacts&quot;&#10;      - listitem:&#10;        - button &quot;Workspaces&quot;&#10;      - listitem:&#10;        - button &quot;Agents&quot;&#10;      - listitem:&#10;        - button &quot;Registry&quot;&#10;      - listitem:&#10;        - button &quot;Policies&quot;&#10;      - listitem:&#10;        - button &quot;Guardrails&quot;&#10;      - listitem:&#10;        - button &quot;Communication&quot;&#10;      - listitem:&#10;        - button &quot;Approvals&quot;&#10;      - listitem:&#10;        - button &quot;Runtimes&quot;&#10;- main:&#10;  - button &quot;Agents&quot;&#10;  - button &quot;Permission presets&quot;&#10;  - button &quot;New agent&quot;&#10;  - text: operator operator · key issued last seen 2026-10-02T17:25:06.806132Z Full access active&#10;  - button &quot;Edit identity (role / capabilities / metadata)&quot;&#10;  - button &quot;Permissions&quot;&#10;  - button &quot;Tags &amp; outbound audience&quot;&#10;  - button &quot;Communication style (how the agent should communicate)&quot;&#10;  - button &quot;Connections for operator&quot;&#10;  - button &quot;Regenerate key&quot;&#10;  - button &quot;Deactivate&quot;&#10;  - text: subject — · key issued last seen 2026-10-02T17:24:49.329098Z Full access active&#10;  - button &quot;Edit identity (role / capabilities / metadata)&quot;&#10;  - button &quot;Permissions&quot;&#10;  - button &quot;Tags &amp; outbound audience&quot;&#10;  - button &quot;Communication style (how the agent should communicate)&quot;&#10;  - button &quot;Connections for subject&quot;&#10;  - button &quot;Steer (direct message as operator)&quot;&#10;  - button &quot;Regenerate key&quot;&#10;  - button &quot;Deactivate&quot;&#10;  - button &quot;Delete agent&quot;&#10;  - heading &quot;Connections · subject&quot; [level=3]&#10;  - button &quot;Close&quot;&#10;  - paragraph:&#10;    - text: &quot;MCP HTTP:&quot;&#10;    - code: http://nexus.test/mcp&#10;    - text: . Authenticate with this agent's existing API key.&#10;  - text: Execution access&#10;  - combobox &quot;Execution access&quot;:&#10;    - option &quot;Local&quot;&#10;    - option &quot;Remote&quot;&#10;    - option &quot;All&quot; [selected]&#10;  - paragraph: Restricts where this agent may execute. All permits both local and authorized remote hosts.&#10;  - text: Local runtime integration&#10;  - combobox &quot;Local runtime integration&quot;:&#10;    - option &quot;Select an integration&quot; [selected]&#10;    - option &quot;codex_app_server&quot;&#10;    - option &quot;pi_rpc&quot;&#10;    - option &quot;claude_stream&quot;&#10;  - paragraph: Configure remote identity, installation and runtime integration in the Connector using this agent's ID and API key.&#10;  - paragraph: The workspace comes from the message or task. It is not part of the agent identity.&#10;  - button &quot;Save execution policy&quot; [disabled]&#10;  - region &quot;Runtime selection&quot;:&#10;    - heading &quot;Local harness configuration&quot; [level=4]&#10;    - paragraph: Select a local installation and configure its environment here. Workspace mappings authorize folders for work; they do not set a default workspace for this agent.&#10;    - text: Execution host&#10;    - combobox &quot;Execution host&quot;:&#10;      - option &quot;Select a host&quot;&#10;      - option &quot;exe_329e632fbc266fd74030bf903768a649 · embedded · CONTROL_READY&quot; [selected]&#10;    - text: Workspace mapping&#10;    - combobox &quot;Runtime workspace&quot;:&#10;      - option &quot;Register a workspace mapping&quot; [selected]&#10;      - option &quot;Project&quot;&#10;    - button &quot;Reload published inventory&quot;&#10;    - button &quot;Request host inventory refresh&quot;&#10;    - paragraph: Ask the host to discover installations again. This does not run a version probe or start a runtime.&#10;    - paragraph: &quot;Inventory: FRESH&quot;&#10;    - group &quot;Local installation&quot;:&#10;      - text: Local installation&#10;      - radio &quot;codex.exe · 0e0bee48 · NOT_PROBED no_build_observation · selection_required · WORKSPACE_REQUIRED · TECHNICAL_NOT_READY&quot;&#10;      - text: codex.exe · 0e0bee48 · NOT_PROBED no_build_observation · selection_required · WORKSPACE_REQUIRED · TECHNICAL_NOT_READY&#10;      - radio &quot;node.exe · 6001b3d5 · PREPARATION_REQUIRED selection_required · WORKSPACE_REQUIRED · TECHNICAL_NOT_READY&quot;&#10;      - text: node.exe · 6001b3d5 · PREPARATION_REQUIRED selection_required · WORKSPACE_REQUIRED · TECHNICAL_NOT_READY&#10;      - radio &quot;claude.exe · 7e79e2fa · NOT_PROBED no_build_observation · selection_required · WORKSPACE_REQUIRED · TECHNICAL_NOT_READY&quot;&#10;      - text: claude.exe · 7e79e2fa · NOT_PROBED no_build_observation · selection_required · WORKSPACE_REQUIRED · TECHNICAL_NOT_READY&#10;  - text: other — · key issued last seen never Full access active&#10;  - button &quot;Edit identity (role / capabilities / metadata)&quot;&#10;  - button &quot;Permissions&quot;&#10;  - button &quot;Tags &amp; outbound audience&quot;&#10;  - button &quot;Communication style (how the agent should communicate)&quot;&#10;  - button &quot;Connections for other&quot;&#10;  - button &quot;Steer (direct message as operator)&quot;&#10;  - button &quot;Regenerate key&quot;&#10;  - button &quot;Deactivate&quot;&#10;  - button &quot;Delete agent&quot;">onboarding = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4914/test_loca...ent_id_hint': 'subject', 'executor_id': 'exe_f43ad09669adf3de115bae83224dc07e', 'adapter_id': 'codex_app_server', ...})
+assets = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4914/r4-selection-assets4')
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4914/test_local_refresh_survives_lo0')
+
+    def test_local_refresh_survives_lost_reply_selection_and_reload(onboarding, assets, tmp_path):
+        from playwright.sync_api import sync_playwright, expect
+        deps, client, headers, scope = onboarding
+        remote = scope['executor_id']
+        local = client.app.state.embedded_inventory_owner
+        seen = []
+        lose_reply = True
+        with sync_playwright() as driver:
+            browser = driver.chromium.launch(channel='msedge', headless=True)
+            context = browser.new_context(viewport={'width': 1440, 'height': 1100})
+            context.add_init_script('sessionStorage.setItem("okto_nexus_operator_key", ' + json.dumps(headers['operator']['Authorization'][7:]) + ');')
+            context.add_init_script('localStorage.setItem("okto-nexus:metrics-opt-in-prompt-dismissed:1.0.0", "fixture");')
+            def routed(route):
+                nonlocal lose_reply
+                request = route.request
+                url = urlsplit(request.url)
+                if url.netloc != 'nexus.test':
+                    route.abort()
+                elif url.path == '/':
+                    route.fulfill(path=str(assets / 'index.html'), content_type='text/html')
+                elif url.path.startswith('/assets/'):
+                    route.fulfill(path=str(assets / 'assets' / Path(url.path).name))
+                elif url.path.startswith('/logos/'):
+                    route.fulfill(path=str(assets / 'logos' / Path(url.path).name))
+                elif url.path == '/api/v1/stream':
+                    route.fulfill(status=200, body=': isolated refresh test\n\n', content_type='text/event-stream')
+                elif url.path.startswith(('/api/', '/v1/')):
+                    response = client.request(request.method, url.path + ('?' + url.query if url.query else ''),
+                        headers={k:v for k,v in request.headers.items() if k.lower() in ('authorization','x-api-key','content-type')},
+                        content=request.post_data)
+                    if url.path.endswith('/inventory:refresh'):
+                        seen.append((url.path, json.loads(request.post_data)['client_intent_id'], response.status_code))
+                        if lose_reply:
+                            lose_reply = False
+                            assert response.status_code == 202
+                            route.abort('failed')
+                            return
+                    route.fulfill(status=response.status_code, body=response.content,
+                                  content_type=response.headers.get('content-type','application/json'))
+                else:
+                    route.fulfill(status=404)
+            context.route('**/*', routed)
+            page = context.new_page()
+            page.set_default_timeout(15000)
+            def open_panel():
+                page.get_by_role('button', name='Agents', exact=True).click()
+                page.get_by_test_id('connections-subject').click()
+                return page.get_by_test_id('runtime-selection')
+            try:
+                page.goto('http://nexus.test/')
+                page.get_by_test_id('onboarding-close').click()
+                panel = open_panel()
+                host = panel.get_by_label('Execution host', exact=True)
+                expect(host).to_be_enabled()
+                expect(host.locator(f'option[value="{remote}"]')).to_have_count(0)
+                host.select_option(local.key.executor_id)
+                refresh = panel.get_by_test_id('inventory-refresh')
+                refresh.get_by_role('button', name='Request host inventory refresh').click()
+                expect(refresh.get_by_role('alert')).to_contain_text('Retry to check the same request')
+                refresh.get_by_role('button', name='Retry inventory refresh').click()
+                assert len(seen) &gt;= 2 and seen[0][1] == seen[1][1]
+                local_intent = seen[0][1]
+                expect(host).to_be_enabled()
+                host.select_option('')
+                host.select_option(local.key.executor_id)
+                client.portal.call(local.refresh)
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    assert uow.connection.execute('SELECT completed_sequence FROM execution_inventory_refresh '
+                        'WHERE executor_id=?', (local.key.executor_id,)).fetchone()[0] is not None
+                # The production poll interval is five seconds, equal to Playwright's
+                # default assertion timeout. Observe up to three polling intervals.
+                expect(refresh.get_by_text('The host published a new inventory. Review the current choices.')).to_be_visible(timeout=15000)
+                page.reload()
+                panel = open_panel()
+                host = panel.get_by_label('Execution host', exact=True)
+                expect(host).to_be_enabled()
+                host.select_option(local.key.executor_id)
+&gt;               expect(panel.get_by_test_id('inventory-refresh').get_by_text('The host published a new inventory. Review the current choices.')).to_be_visible()
+E               AssertionError: Locator expected to be visible
+E               Actual value: None
+E               Error: element(s) not found 
+E               Call log:
+E                 - Expect "to_be_visible" get_by_test_id("runtime-selection").get_by_test_id("inventory-refresh").get_by_text("The host published a new inventory. Review the current choices.") with timeout 5000ms
+E                 - waiting for get_by_test_id("runtime-selection").get_by_test_id("inventory-refresh").get_by_text("The host published a new inventory. Review the current choices.")
+E               
+E               Aria snapshot:
+E               - banner:
+E                 - button "Collapse menu"
+E                 - img "Okto Nexus"
+E                 - text: / Agents
+E                 - combobox "Workspace scope":
+E                   - option "All workspaces" [selected]
+E                   - option "Project"
+E                 - text: ● Reconnecting
+E                 - button "Refresh Agents"
+E                 - button "Forget this tab's key"
+E                 - button
+E               - complementary:
+E                 - navigation:
+E                   - heading "Observability" [level=3]
+E                   - list:
+E                     - listitem:
+E                       - button "Graph"
+E                     - listitem:
+E                       - button "Messages"
+E                     - listitem:
+E                       - button "Handoffs"
+E                     - listitem:
+E                       - button "Meta-harness"
+E                     - listitem:
+E                       - button "Events"
+E                     - listitem:
+E                       - button "Artifacts"
+E                     - listitem:
+E                       - button "Workspaces"
+E                     - listitem:
+E                       - button "Agents"
+E                     - listitem:
+E                       - button "Registry"
+E                     - listitem:
+E                       - button "Policies"
+E                     - listitem:
+E                       - button "Guardrails"
+E                     - listitem:
+E                       - button "Communication"
+E                     - listitem:
+E                       - button "Approvals"
+E                     - listitem:
+E                       - button "Runtimes"
+E               - main:
+E                 - button "Agents"
+E                 - button "Permission presets"
+E                 - button "New agent"
+E                 - text: operator operator · key issued last seen 2026-10-02T17:25:06.806132Z Full access active
+E                 - button "Edit identity (role / capabilities / metadata)"
+E                 - button "Permissions"
+E                 - button "Tags &amp; outbound audience"
+E                 - button "Communication style (how the agent should communicate)"
+E                 - button "Connections for operator"
+E                 - button "Regenerate key"
+E                 - button "Deactivate"
+E                 - text: subject — · key issued last seen 2026-10-02T17:24:49.329098Z Full access active
+E                 - button "Edit identity (role / capabilities / metadata)"
+E                 - button "Permissions"
+E                 - button "Tags &amp; outbound audience"
+E                 - button "Communication style (how the agent should communicate)"
+E                 - button "Connections for subject"
+E                 - button "Steer (direct message as operator)"
+E                 - button "Regenerate key"
+E                 - button "Deactivate"
+E                 - button "Delete agent"
+E                 - heading "Connections · subject" [level=3]
+E                 - button "Close"
+E                 - paragraph:
+E                   - text: "MCP HTTP:"
+E                   - code: http://nexus.test/mcp
+E                   - text: . Authenticate with this agent's existing API key.
+E                 - text: Execution access
+E                 - combobox "Execution access":
+E                   - option "Local"
+E                   - option "Remote"
+E                   - option "All" [selected]
+E                 - paragraph: Restricts where this agent may execute. All permits both local and authorized remote hosts.
+E                 - text: Local runtime integration
+E                 - combobox "Local runtime integration":
+E                   - option "Select an integration" [selected]
+E                   - option "codex_app_server"
+E                   - option "pi_rpc"
+E                   - option "claude_stream"
+E                 - paragraph: Configure remote identity, installation and runtime integration in the Connector using this agent's ID and API key.
+E                 - paragraph: The workspace comes from the message or task. It is not part of the agent identity.
+E                 - button "Save execution policy" [disabled]
+E                 - region "Runtime selection":
+E                   - heading "Local harness configuration" [level=4]
+E                   - paragraph: Select a local installation and configure its environment here. Workspace mappings authorize folders for work; they do not set a default workspace for this agent.
+E                   - text: Execution host
+E                   - combobox "Execution host":
+E                     - option "Select a host"
+E                     - option "exe_329e632fbc266fd74030bf903768a649 · embedded · CONTROL_READY" [selected]
+E                   - text: Workspace mapping
+E                   - combobox "Runtime workspace":
+E                     - option "Register a workspace mapping" [selected]
+E                     - option "Project"
+E                   - button "Reload published inventory"
+E                   - button "Request host inventory refresh"
+E                   - paragraph: Ask the host to discover installations again. This does not run a version probe or start a runtime.
+E                   - paragraph: "Inventory: FRESH"
+E                   - group "Local installation":
+E                     - text: Local installation
+E                     - radio "codex.exe · 0e0bee48 · NOT_PROBED no_build_observation · selection_required · WORKSPACE_REQUIRED · TECHNICAL_NOT_READY"
+E                     - text: codex.exe · 0e0bee48 · NOT_PROBED no_build_observation · selection_required · WORKSPACE_REQUIRED · TECHNICAL_NOT_READY
+E                     - radio "node.exe · 6001b3d5 · PREPARATION_REQUIRED selection_required · WORKSPACE_REQUIRED · TECHNICAL_NOT_READY"
+E                     - text: node.exe · 6001b3d5 · PREPARATION_REQUIRED selection_required · WORKSPACE_REQUIRED · TECHNICAL_NOT_READY
+E                     - radio "claude.exe · 7e79e2fa · NOT_PROBED no_build_observation · selection_required · WORKSPACE_REQUIRED · TECHNICAL_NOT_READY"
+E                     - text: claude.exe · 7e79e2fa · NOT_PROBED no_build_observation · selection_required · WORKSPACE_REQUIRED · TECHNICAL_NOT_READY
+E                 - text: other — · key issued last seen never Full access active
+E                 - button "Edit identity (role / capabilities / metadata)"
+E                 - button "Permissions"
+E                 - button "Tags &amp; outbound audience"
+E                 - button "Communication style (how the agent should communicate)"
+E                 - button "Connections for other"
+E                 - button "Steer (direct message as operator)"
+E                 - button "Regenerate key"
+E                 - button "Deactivate"
+E                 - button "Delete agent"
+
+tests\execution_r4\test_inventory_refresh_dashboard.py:92: AssertionError</failure></testcase></testsuite></testsuites>

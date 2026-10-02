@@ -8,11 +8,21 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 import pytest
-from test_binding_operator import onboarding
+from test_local_realization import local_setup, publish
 from test_runtime_selection_dashboard import assets
 
 pytestmark = pytest.mark.skipif(os.environ.get('OKTO_NEXUS_UI_CAMPAIGN') != '1',
                                reason='Isolated browser campaign not enabled')
+
+
+@pytest.fixture
+def onboarding(local_setup):
+    deps, app, client, headers, body, *_ = local_setup
+    response = publish(local_setup)
+    assert response.status_code == 201, response.text
+    realization = response.json()
+    yield deps, client, headers, dict(executor_id=app.state.embedded_inventory_owner.key.executor_id,
+        workspace_id=realization['workspace_id'], candidate_ref=body['candidate_ref'])
 
 
 @pytest.fixture
@@ -64,6 +74,8 @@ def consent_browser(onboarding, assets):
             page.get_by_test_id('onboarding-close').click()
             page.get_by_role('button', name='Agents', exact=True).click()
             page.get_by_test_id('connections-subject').click()
+            from test_embedded_preparation_dashboard import configure_local_integration
+            configure_local_integration(page)
             yield page, trace
         finally:
             context.close()

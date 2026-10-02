@@ -37,6 +37,8 @@ def local_browser(local_setup, assets):
                 response = client.request(request.method, url.path + ('?' + url.query if url.query else ''),
                     headers={name: value for name, value in request.headers.items() if name.lower() in ('authorization', 'x-api-key', 'content-type')},
                     content=request.post_data)
+                if url.path == '/api/v1/harness/grants':
+                    trace.setdefault('grant_responses', []).append((response.status_code, response.json()))
                 if url.path.endswith('/realizations') and trace['drop_response']:
                     assert response.status_code == 201, response.text
                     trace['drop_response'] = False
@@ -83,6 +85,7 @@ def select_local(page, setup):
     _, app, _, _, body, _, _ = setup
     page.get_by_role('button', name='Agents', exact=True).click()
     page.get_by_test_id('connections-subject').click()
+    configure_local_integration(page, body['adapter_id'])
     panel = page.get_by_test_id('runtime-selection')
     host = panel.get_by_label('Execution host', exact=True)
     expect(host).to_be_enabled()
@@ -91,6 +94,33 @@ def select_local(page, setup):
     expect(candidate).to_be_enabled()
     candidate.check()
     return panel
+
+
+def configure_local_integration(page, adapter_id='codex_app_server'):
+    from playwright.sync_api import expect
+    connections = page.get_by_test_id('agent-connections-subject')
+    integration = connections.get_by_label('Local runtime integration', exact=True)
+    expect(integration).to_be_visible()
+    if integration.input_value() != adapter_id:
+        integration.select_option(adapter_id)
+        connections.get_by_role('button', name='Save execution policy', exact=True).click()
+        expect(connections.get_by_text('Execution policy saved.', exact=True)).to_be_visible()
+
+
+def open_message_runtime(page, client, headers, workspace_id):
+    from playwright.sync_api import expect
+    subject = 'Runtime context ' + workspace_id
+    existing = client.get('/api/v1/messages', headers=headers['operator']).json()['data']['items']
+    if not any(item['subject'] == subject for item in existing):
+        response = client.post('/api/v1/steering/messages', headers=headers['operator'], json=dict(
+            workspace=workspace_id, to_agent_id='subject', subject=subject, body='Review this work in its message workspace.'))
+        assert response.status_code == 200, response.text
+    page.get_by_role('button', name='Messages', exact=True).click()
+    page.get_by_test_id('message-row').filter(has_text=subject).first.click()
+    recipient = page.get_by_label('Execution recipient', exact=True)
+    expect(recipient).to_be_visible()
+    recipient.select_option('subject')
+    expect(page.get_by_test_id('runtime-selection').get_by_label('Runtime workspace', exact=True)).to_have_count(0)
 
 
 def fill_preparation(panel, root):
@@ -151,6 +181,19 @@ def test_local_preparation_reaches_binding_without_start_and_retries_same_consen
             assert uow.connection.execute('SELECT COUNT(*) FROM ' + table).fetchone()[0] == 0
     expect(panel.get_by_role('button', name='Reload published inventory', exact=True)).to_be_enabled()
     page.screenshot(path=str(target / f'embedded-preparation-{lost_reply}.png'), full_page=True)
+    permission = panel.get_by_role('region', name='Local execution permission', exact=True)
+    expect(permission).to_be_visible()
+    permission.get_by_label('Permission duration', exact=True).fill('30')
+    permission.get_by_label('Permission action budget', exact=True).fill('10')
+    permission.get_by_role('checkbox', name='I authorize execution within these limits.').check()
+    permission.get_by_role('button', name='Authorize local execution', exact=True).click()
+    assert trace.get('grant_responses') and trace['grant_responses'][-1][0] == 200, trace.get('grant_responses')
+    expect(permission).to_have_count(0)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        grant = uow.connection.execute('SELECT * FROM runtime_execution_grants').fetchone()
+        assert grant['actor_agent_id'] == 'subject' and grant['max_executions'] == 10
+        assert set(json.loads(grant['actions'])) == {'open', 'send', 'steer', 'interrupt', 'close'}
+        assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 0
 
 
 def test_existing_workspace_keeps_identity_and_display_name(local_setup, local_browser):

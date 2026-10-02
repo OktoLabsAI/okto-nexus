@@ -205,12 +205,6 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
         ):
             return await call_next(request)
 
-        # Bootstrap credentials are accepted only by this narrow handler,
-        # including on loopback; never inherit the local operator identity.
-        if path == "/api/v1/connections/open":
-            if request.query_params.get("api_key") or request.headers.get("x-api-key"):
-                return err(401, "AUTH_FAILED", "Use only the connection bearer credential.")
-            return await call_next(request)
         if request.method == "POST" and path == "/v1/runtime/native-actions":
             # This route authenticates only its own session audience, including
             # on loopback. It never inherits canonical-key/operator authority.
