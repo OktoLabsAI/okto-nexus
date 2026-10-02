@@ -2,6 +2,15 @@
 
 ## Current acceptance reconciliation: executable Core .53
 
+Connector audit A10 now exercises the current R4 daemon/selection/capability
+and real Core environment renderer instead of skipping a legacy startup refusal.
+Seventy installed audit/daemon/capability checks passed without skips on each of
+Windows Python 3.13.1 and WSL Linux Python 3.12.13. The native peer is synthetic;
+this closes that positive-control coverage gap, not provider or independent-host
+acceptance. See Connector `plans/implementation/AUDIT_R4_ENVIRONMENT.md`.
+Its sole open issue remains macOS containment (#1); documentation/diagnostic
+corrections do not constitute native macOS support. All release gates remain open.
+
 Installed campaigns now freeze frontend/build/runner inputs too: the Windows and
 Linux checks each recorded 77 frontend files and no mutations. Connector `beead27`
 reproduced the two renewal-entry scheduling failures as LEASE_EXPIRED, corrected
