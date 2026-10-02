@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { api, type WorkspaceListItem } from "../api";
 import { runtimeApi, type ExecutorChoice, type RuntimeOptions } from "../runtimeApi";
 import { BindingConsent } from "./BindingConsent";
+import { InventoryRefresh } from "./InventoryRefresh";
 
 const fieldClass = "rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5 text-xs";
 type Selection = {executorId: string; adapterId: string; candidateRef: string; inventoryRevision: string};
@@ -82,6 +83,8 @@ export function RuntimeSelection({agentId}: {agentId: string}) {
       {project.display_name || project.workspace_id}
     </option>)}</select></label>
     <button className="btn btn-secondary" disabled={busy} onClick={() => setRevision(value => value + 1)}>Reload published inventory</button>
+    {executorId && <InventoryRefresh key={JSON.stringify([agentId, executorId])} executorId={executorId}
+      onUpdated={() => { setSelection(null); setRevision(value => value + 1); }} />}
     {busy && <p role="status">Loading current choices…</p>}
     {error && <p role="alert">{error}</p>}
     {notice && <p role="status">{notice}</p>}

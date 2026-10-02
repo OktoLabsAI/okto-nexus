@@ -2,12 +2,20 @@
 
 ## Current acceptance reconciliation: executable Core .53
 
+The dashboard can now request and observe passive host refresh, retaining the
+same intent across lost replies, host switches and tab reload. A packaged Edge
+case passed after a test-only theme-logo selector correction; nine companion
+regressions passed in the initial installed campaign. Exact reports and the
+reviewed screenshot are in [the refresh ledger](M10_INVENTORY_REFRESH.md).
+This qualifies that Windows UI flow with synthetic discovery and a real API
+bridge, not the full onboarding/provider/platform matrix or final delivery.
+
 Passive inventory refresh now connects the durable scoped queue to public HTTP,
 the embedded consumer and Connector `c110246` through an explicitly negotiated
 HTTP extension. Only a correlated publication completes a claimed request. Each
 of Windows/Python 3.13.1 and WSL Linux/Python 3.12.13 passed 26 installed Nexus and
 79 Connector checks; the actual daemon completed offline/startup and online
-requests over HTTP/WSS/IPC on one host. UI and independent-host acceptance remain
+requests over HTTP/WSS/IPC on one host. Independent-host acceptance remains
 open. The preceding Connector hosted run at `d2e240e` has two Windows/Python 3.13
 renewal-entry timeouts; directed passes do not close that finding. See
 [implementation, artifacts and remaining work](M10_INVENTORY_REFRESH.md).

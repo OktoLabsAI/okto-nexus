@@ -89,6 +89,10 @@ export function bindingRequestExists(key: string): boolean {
 }
 
 export const runtimeApi = {
+  me: (signal?: AbortSignal) => read<{server_id: string; agent_id: string}>("/v1/connections/me", signal),
+  refreshInventory: (executorId: string, clientIntentId: string, signal?: AbortSignal) =>
+    read<{client_intent_id: string; refresh_id: string; executor_id: string; state: "PENDING" | "REQUESTED" | "UPDATED" | "OFFLINE"}>(
+      `/v1/runtime/executors/${encodeURIComponent(executorId)}/inventory:refresh`, signal, {client_intent_id: clientIntentId}),
   prepareBinding: (body: Record<string, unknown>) => read<BindingProposal>("/v1/connections/bindings:prepare", undefined, body),
   applyBinding: (body: Record<string, unknown>) => read<BindingView>("/v1/connections/bindings:apply", undefined, body),
   binding: (id: string) => read<BindingView>(`/v1/connections/bindings/${encodeURIComponent(id)}`, undefined),

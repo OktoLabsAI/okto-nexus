@@ -1,7 +1,7 @@
 # M10 — Correlated passive inventory refresh
 
-Status: durable queue, embedded consumer and negotiated remote HTTP delivery
-implemented. UI and independent-host acceptance remain open. No gate is closed.
+Status: durable queue, embedded consumer, negotiated remote HTTP delivery and UI
+implemented. Independent-host/full-platform acceptance remains open. No gate is closed.
 
 Migration 097 stores requests by Server, authenticated actor and client intent.
 Replays revalidate current credentials and executor visibility before returning
@@ -103,16 +103,62 @@ artifacts with verified installed bytes, not final frozen commits or clean-env
 M13 proof. The previous Connector hosted run has two unresolved Windows renewal
 timeouts despite passing directed tests. Full hosted qualification remains open.
 
-## Remaining integration
+## Dashboard integration on 2026-10-02
+
+The selection panel now has separate read-only reload and host-refresh controls.
+It resolves the authenticated Server/actor identity before persisting an intent
+in sessionStorage, scoped also to the executor. It persists before POST, reuses
+the ID after an uncertain reply, resumes pending requests on remount/reload and
+polls every five seconds. Host changes abort the old observer without discarding
+its request. UPDATED clears the stored request only if it still matches, clears
+the prior installation selection and reloads current choices. No credential is
+stored in the refresh record and no execution operation is requested.
+
+TypeScript compilation passed. Two source browser cases passed. The first enabled
+source run had the five-second poll racing Playwright's default five-second
+assertion limit; the database already recorded completion. The assertion now
+observes up to three poll intervals without changing production timing.
+
+The installed Windows/Python 3.13.1 Edge campaign recorded nine passes and one
+test-only strict-selector failure: both theme logos share alt text. The selector
+was corrected to the visible accessible image and that case passed separately
+in 13.81 seconds. The retained reports distinguish the initial failure from the
+successful follow-up; both campaigns had unchanged inputs. The new case uses
+the actual API, loses the first response after durable acceptance, retries the
+same ID, switches between offline remote and live embedded executors, completes
+the local observation, reloads the page and proves only two requests/no operations
+exist. Assets come from the installed package; HTTP is bridged through TestClient,
+SSE is excluded and discovery is synthetic/empty. This is not independent-host,
+Linux-browser or real-provider UI qualification.
+
+Nexus UI wheel: `62121869d6a19b374d61eab513b03d3bdc42973b6d6567e03620b621c869dcf0`.
+Sdist: `defc9cf627606b9e625133b7172c1a017a4b8c1ec291383215d778a169d03718`.
+Core and Connector pins are unchanged from the HTTP campaign. The dashboard was
+built outside the checkout's static tree, preserving preexisting user assets.
+
+[Build manifest](evidence/inventory-refresh-ui-build.json),
+[initial installed campaign](evidence/inventory-refresh-ui-installed/campaign.json),
+[corrected browser campaign](evidence/inventory-refresh-ui-installed-fixed/campaign.json),
+[reviewed screenshot](evidence/inventory-refresh-ui-offline.png),
+[updated-guide audit](evidence/inventory-refresh-ui-ns15-docs.json).
+
+Reproduce with the new wheel installed, Playwright and Edge available, and
+`OKTO_NEXUS_UI_CAMPAIGN=1` plus `OKTO_NEXUS_UI_INSTALLED=1` in the test environment:
+
+```powershell
+python tools/ci_installed.py test --wheel PATH_TO_WHEEL --output NEW_EVIDENCE_DIRECTORY --tests tests/execution_r4/test_inventory_refresh_dashboard.py tests/execution_r4/test_runtime_selection_dashboard.py tests/execution_r4/test_binding_consent_dashboard.py tests/execution_r4/test_inventory_refresh_http.py tests/execution_r4/test_packaged_openapi.py
+```
+
+## Remaining acceptance
 
 The [NS15.05 supporting documentation audit](evidence/inventory-refresh-ns15-docs.json)
 passed against the installed Nexus package and updated guide. It checks command
 help, documented routes and links; it does not prove browser or final-artifact
 scenario acceptance.
 
-Integrate UI request/status, preserve intent IDs across retry and scope changes,
-then exercise independent-host/provider/fault acceptance on final packages.
-Browser support, full NS15.05 closure and M13/G0-G3 are not implied by these tests.
+Exercise independent-host/provider/fault acceptance on final packages and complete
+the broader onboarding/runtime UI journeys. Full browser/platform support,
+NS15.05 closure and M13/G0-G3 are not implied by these directed tests.
 
 Connector issue #1 was rechecked and remains the only open issue. Its documented
 unsupported macOS managed-runtime state and Linux-guest workaround remain the

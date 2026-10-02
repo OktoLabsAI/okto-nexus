@@ -51,8 +51,18 @@ these intervals. At most 32 unresolved requests can be queued per executor.
 inventory publication alone does not acknowledge a request. Refresh neither
 probes CLI versions nor grants runtime authority. Older Connectors can continue
 periodic publication but cannot consume these requests. The new Connector checks
-`inventory_refresh_supported` before using the HTTP extension. UI refresh controls
-and independent-host acceptance of this flow remain pending.
+`inventory_refresh_supported` before using the HTTP extension. Independent-host
+acceptance of this flow remains pending.
+
+In **Agents → Connections**, select an execution host and use **Request host
+inventory refresh**. The panel reports queued, received, offline and updated
+states. **Reload published inventory** only rereads existing Server data. An
+uncertain reply offers **Retry inventory refresh**, which keeps the same request.
+Pending requests survive navigation and page reload within the same browser tab,
+scoped to the Server, authenticated identity and executor; credentials are not
+stored in the refresh record. Switching hosts restores each host's pending
+request. After completion, the panel reloads choices and clears the previous
+installation selection so the user reviews the new observation.
 
 On a remote Connector host, explicitly observe a selected `NOT_PROBED`
 installation with `okto-nexus-connector executor probe --help`. Select the exact
