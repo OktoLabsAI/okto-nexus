@@ -48,6 +48,7 @@ from okto_nexus.adapters.outbound.sqlite.messages_repo import (
 from okto_nexus.application.identity import IdentityService
 from okto_nexus.application.messages import MessageService
 from okto_nexus.application.ports import Repos
+from okto_nexus.application.runtime_admission_fence import RuntimeAdmissionFence
 from okto_nexus.application.shared_md import SharedMdView
 from okto_nexus.config import (
     DEFAULT_PRESENCE_TTL_SECONDS,
@@ -622,6 +623,7 @@ def _tool_deps(factory, config, clock):
         clock=clock,
         repos=Repos(),
         event_emitter=None,
+        runtime_admission_fence=RuntimeAdmissionFence(),
     )
 
 
@@ -776,7 +778,7 @@ def test_strict_inbox_pull_ack_extend_require_credentials(
     acked = server.tools["inbox_ack"](
         agent_id="validator", message_ids=[msg["message_id"]], **creds
     )
-    assert acked["ok"] is True and acked["data"]["acknowledged"] == 1
+    assert acked["ok"] is True and acked["data"]["acknowledged"] == 1, acked
 
 
 # =========================================================================== #

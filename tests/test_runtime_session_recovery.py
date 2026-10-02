@@ -21,7 +21,11 @@ def test_revoked_binding_during_constructor_does_not_start_peer(runtime):
         return peer
     deps.harness_connector_factories["pi"] = construct
     response = open_rest(runtime)
-    assert response.status_code == 409, response.text
+    assert len(peers) == 1, "test must revoke after construction, not fail initial admission"
+    # The current start authorizer rechecks authority before creating a session.
+    # Disabled endpoints are permission refusals, ahead of revision conflict checks.
+    assert response.status_code == 403, response.text
+    assert response.json()["error"]["code"] == "PERMISSION_DENIED"
     assert peers[0].session is None, "revoked binding still spawned a native runtime"
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute("SELECT count(*) FROM harness_sessions").fetchone()[0] == 0

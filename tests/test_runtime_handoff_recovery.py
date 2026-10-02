@@ -202,29 +202,25 @@ def test_terminal_native_turn_can_be_recovered_without_fabricating_handoff_compl
     response = client.post("/api/v1/harness/outbox", headers={"x-api-key": operator}, json=recovery(hid, claimed["data"]["claim_epoch"], row))
     assert response.status_code == 200 and response.json()["data"]["handoff"]["status"] == "OPEN", response.text
 
-def test_authenticated_stdio_work_recovery_uses_active_serve_owner(runtime):
-    import asyncio
-    import json
+def test_retired_stdio_refuses_work_recovery_and_http_uses_active_serve_owner(runtime):
+    import subprocess
     import sys
     from test_pr34_remediation import stdio_environment
     deps, client, _, peers, operator, _ = runtime
     hid, _, epoch, row = uncertain_work(runtime)
-    async def recover():
-        from mcp import ClientSession, StdioServerParameters
-        from mcp.client.stdio import stdio_client
-        env = stdio_environment(runtime)
-        env["OKTO_NEXUS_API_KEY"] = operator  # Disposable Nexus operator, never a native peer.
-        params = StdioServerParameters(command=sys.executable, args=["-m", "okto_nexus.adapters.inbound.mcp.server",
-            "--home", str(deps.config.home_dir), "--feature-harness-integrations", "true"], env=env)
-        async with stdio_client(params) as (reader, writer):
-            async with ClientSession(reader, writer) as session:
-                await session.initialize()
-                result = await session.call_tool("harness_list", {"view": "outbox", "maintenance": recovery(hid, epoch, row)})
-                result = result.structuredContent or json.loads(result.content[0].text)
-                assert result["ok"], result
-                return result["data"]
-    result = asyncio.run(asyncio.wait_for(recover(), timeout=30))
+    owner = (deps.runtime_dispatcher.owner_id, deps.runtime_dispatcher.epoch)
+    env = stdio_environment(runtime)
+    env["OKTO_NEXUS_API_KEY"] = operator
+    retired = subprocess.run([sys.executable, "-m", "okto_nexus.adapters.inbound.mcp.server",
+        "--home", str(deps.config.home_dir)], env=env, capture_output=True, text=True, timeout=30)
+    assert retired.returncode != 0
+    assert "MCP stdio is no longer available" in retired.stderr
+    response = tool(client, operator, "harness_list", {
+        "view": "outbox", "maintenance": recovery(hid, epoch, row)})
+    assert response["ok"], response
+    result = response["data"]
     retry = client.post("/api/v1/harness/outbox", headers={"x-api-key": operator}, json=recovery(hid, epoch, row))
     assert retry.status_code == 200 and retry.json()["data"] == result, retry.text
+    assert (deps.runtime_dispatcher.owner_id, deps.runtime_dispatcher.epoch) == owner
     assert sum(c.verb == "send_turn" for peer in peers for c in peer.sent) == 1
 

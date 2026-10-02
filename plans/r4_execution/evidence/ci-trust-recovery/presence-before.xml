@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="3" time="2.334" timestamp="2026-10-02T03:39:55.235224-03:00" hostname="Alienware_m15"><testcase classname="tests.test_presence_trust" name="test_strict_handoff_claim_complete_reject_require_credentials" time="0.779"><failure message="AttributeError: 'types.SimpleNamespace' object has no attribute 'runtime_admission_fence'">migrated_factory = &lt;okto_nexus.adapters.outbound.sqlite.connection.ConnectionFactory object at 0x0000015696519400&gt;
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4767/test_strict_handoff_claim_comp0')
+
+&gt;   ???
+
+/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_presence_trust.py:639: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\okto_nexus\adapters\inbound\mcp\tools\handoff.py:282: in register
+    service = build_service(deps)
+              ^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\mcp\tools\handoff.py:263: in build_service
+    service.runtime_work = RuntimeWorkService(access=build_access_service(deps), outbox=SqliteRuntimeOutboxRepo(),
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+deps = namespace(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4767/test_...B4D0&gt;, harness_adapter_registry=&lt;okto_nexus.application.adapter_registry.AdapterRegistry object at 0x0000015697D44AD0&gt;)
+
+    def build_access_service(deps):
+        return RuntimeAccessService(connection_factory=deps.connection_factory, agents=deps.repos.agents,
+            endpoints=SqliteEndpointRepo(), grants=SqliteRuntimeGrantRepo(), config=deps.config, clock=deps.clock,
+            registry=build_connector_factories(deps),
+&gt;           admission_fence=deps.runtime_admission_fence)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'runtime_admission_fence'
+
+src\okto_nexus\adapters\inbound\mcp\tools\harness.py:75: AttributeError</failure></testcase><testcase classname="tests.test_presence_trust" name="test_open_mode_handoff_claim_validates_supplied_secret" time="0.368"><failure message="AttributeError: 'types.SimpleNamespace' object has no attribute 'runtime_admission_fence'">migrated_factory = &lt;okto_nexus.adapters.outbound.sqlite.connection.ConnectionFactory object at 0x0000015697C97D90&gt;
+tmp_config = NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4767/test_open_mode_handoff..._roots_per_agent_per_minute=32, max_new_roots_per_workspace_per_minute=128, feature_health=False, feature_replay=False)
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4767/test_open_mode_handoff_claim_v0')
+
+&gt;   ???
+
+/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_presence_trust.py:696: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\okto_nexus\adapters\inbound\mcp\tools\handoff.py:282: in register
+    service = build_service(deps)
+              ^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\mcp\tools\handoff.py:263: in build_service
+    service.runtime_work = RuntimeWorkService(access=build_access_service(deps), outbox=SqliteRuntimeOutboxRepo(),
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+deps = namespace(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4767/test_...DD10&gt;, harness_adapter_registry=&lt;okto_nexus.application.adapter_registry.AdapterRegistry object at 0x0000015697E2E490&gt;)
+
+    def build_access_service(deps):
+        return RuntimeAccessService(connection_factory=deps.connection_factory, agents=deps.repos.agents,
+            endpoints=SqliteEndpointRepo(), grants=SqliteRuntimeGrantRepo(), config=deps.config, clock=deps.clock,
+            registry=build_connector_factories(deps),
+&gt;           admission_fence=deps.runtime_admission_fence)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'runtime_admission_fence'
+
+src\okto_nexus\adapters\inbound\mcp\tools\harness.py:75: AttributeError</failure></testcase><testcase classname="tests.test_presence_trust" name="test_strict_inbox_pull_ack_extend_require_credentials" time="0.488"><failure message="assert (False is True)">migrated_factory = &lt;okto_nexus.adapters.outbound.sqlite.connection.ConnectionFactory object at 0x0000015697E2EC10&gt;
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4767/test_strict_inbox_pull_ack_ext0')
+fake_clock = &lt;conftest.FakeClock object at 0x0000015697D44980&gt;
+
+&gt;   ???
+E   assert (False is True)
+
+/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_presence_trust.py:779: AssertionError</failure></testcase></testsuite></testsuites>

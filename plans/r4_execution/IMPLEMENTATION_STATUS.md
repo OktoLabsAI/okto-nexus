@@ -2,6 +2,12 @@
 
 ## Current acceptance reconciliation: executable Core .53
 
+Trust and retained recovery follow-up passed 46 installed tests across two
+unchanged-input campaigns. The missing fixture admission fence, constructor-time
+revocation expectation and retired-stdio handoff recovery test are corrected.
+The historical Linux/Python 3.13 job failed 42 tests; the NS14 contention difference
+between Python cells remains unresolved. See [scope](M13_CI_TRUST_RECOVERY.md).
+
 MCP surface 64 now documents all harness parameters and both message workspace
 selectors. Installed CI corrections passed 59 tests with one existing manual skip
 and unchanged inputs. Hosted checkout, marker preservation, migration and historical
