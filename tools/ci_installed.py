@@ -6,6 +6,7 @@ dependency. This regression runner does not qualify providers or remote hosts.
 from __future__ import annotations
 
 import argparse
+from datetime import datetime, timezone
 import hashlib
 import json
 from pathlib import Path
@@ -15,6 +16,16 @@ import tempfile
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def input_hashes():
+    paths = [ROOT / name for name in ('pyproject.toml', 'uv.lock', 'README.md', 'vendor/ci/manifest.json')]
+    for directory in ('tests', 'src', 'docs', 'plans/r4_execution'):
+        paths.extend(p for p in (ROOT / directory).rglob('*')
+                     if p.is_file() and p.suffix in ('.py', '.json', '.md', '.sql')
+                     and 'evidence' not in p.parts and '__pycache__' not in p.parts)
+    return {p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+            for p in sorted(set(paths)) if p.is_file()}
 
 
 def dependency_wheels():
@@ -32,7 +43,11 @@ def main():
     parser.add_argument('action', choices=('install', 'smoke', 'test'))
     parser.add_argument('--tests', nargs='+', default=['tests'])
     parser.add_argument('--wheel', type=Path, help='Existing built wheel; defaults to the single dist wheel')
+    parser.add_argument('--output', type=Path, default=ROOT / 'build/ci',
+                        help='Directory for this campaign reports')
     args = parser.parse_args()
+    output = args.output.resolve()
+    output.mkdir(parents=True, exist_ok=True)
     wheels = dependency_wheels()
     nexus = [args.wheel.resolve()] if args.wheel else list((ROOT / 'dist').glob('okto_nexus-*.whl'))
     assert len(nexus) == 1, 'Build exactly one Nexus wheel in dist first'
@@ -53,8 +68,6 @@ print(json.dumps({"base_boot_without_core": True, "connector_installed": False,
 '''
             result = subprocess.run([sys.executable, '-I', '-c', probe, str(Path(temp)/'home')],
                                     cwd=temp, capture_output=True, text=True)
-            output = ROOT / 'build/ci'
-            output.mkdir(parents=True, exist_ok=True)
             (output / 'base-without-core.log').write_text(result.stdout + result.stderr, encoding='utf-8')
             if result.returncode:
                 print(result.stdout + result.stderr, file=sys.stderr)
@@ -82,16 +95,12 @@ print(json.dumps({"local_boot_without_connector": True, "torch_installed": False
 '''
             result = subprocess.run([sys.executable, '-I', '-c', probe, str(Path(temp)/'home')],
                                     cwd=temp, capture_output=True, text=True)
-            output = ROOT / 'build/ci'
-            output.mkdir(parents=True, exist_ok=True)
             (output / 'local-without-connector.log').write_text(result.stdout + result.stderr, encoding='utf-8')
             if result.returncode:
                 print(result.stdout + result.stderr, file=sys.stderr)
                 raise SystemExit(result.returncode)
         subprocess.run([sys.executable, '-m', 'pip', 'install', str(wheels[1]) + '[test]'], check=True)
         return
-    output = ROOT / 'build/ci'
-    output.mkdir(parents=True, exist_ok=True)
     # Independent cwd and -I: pytest itself may import repo-owned helpers, but
     # no pytest pythonpath setting may replace the installed application.
     with tempfile.TemporaryDirectory(prefix='nexus-ci-installed-') as temp:
@@ -116,6 +125,11 @@ pathlib.Path(REPORT).write_text(json.dumps(results, indent=2) + "\\n", encoding=
         probe = 'ARTIFACTS=' + repr(artifacts) + '\nREPORT=' + repr(str(output / 'installed.json')) + '\n' + verification
         subprocess.run([sys.executable, '-I', '-c', probe], cwd=temp, check=True)
         if args.action == 'test':
+            before = input_hashes()
+            campaign = dict(started_at=datetime.now(timezone.utc).isoformat(),
+                            tests=args.tests, input_hashes=before, status='RUNNING')
+            campaign_path = output / 'campaign.json'
+            campaign_path.write_text(json.dumps(campaign, indent=2) + '\n', encoding='utf-8')
             config = Path(temp) / 'pytest.ini'
             config.write_text('[pytest]\nasyncio_mode=auto\nasyncio_default_fixture_loop_scope=function\n', encoding='utf-8')
             command = [sys.executable, '-I', '-m', 'pytest', '-c', str(config),
@@ -123,7 +137,15 @@ pathlib.Path(REPORT).write_text(json.dumps(results, indent=2) + "\\n", encoding=
                        *[str(ROOT / p) for p in args.tests], '-q', '--tb=short',
                        '--junitxml=' + str(output / 'tests.xml')]
             result = subprocess.run(command, cwd=temp)
-            raise SystemExit(result.returncode)
+            after = input_hashes()
+            changed = sorted(path for path in before.keys() | after.keys()
+                             if before.get(path) != after.get(path))
+            campaign.update(ended_at=datetime.now(timezone.utc).isoformat(),
+                            command=command, exit_code=result.returncode,
+                            changed_inputs=changed,
+                            status='INPUTS_CHANGED' if changed else 'PASS' if result.returncode == 0 else 'FAIL')
+            campaign_path.write_text(json.dumps(campaign, indent=2) + '\n', encoding='utf-8')
+            raise SystemExit(result.returncode or (2 if changed else 0))
 
 
 if __name__ == '__main__':
