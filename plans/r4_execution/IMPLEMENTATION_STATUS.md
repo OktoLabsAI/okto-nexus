@@ -1,6 +1,17 @@
  # Execução R4 — estado verificado em 2026-10-02
 
-## Current acceptance reconciliation: executable Core .54
+## Current acceptance reconciliation: executable Core .55
+
+Core `beed295` removes identical overlapping PATH/explicit Pi candidates while
+refusing conflicting observations of the same reference. Connector `7cf54e1`
+pins that wheel. Nexus installed discovery, inventory, daemon and refresh checks
+passed 21 cases on each of Windows and WSL Linux, with unchanged campaign inputs.
+The preceding .54 real Codex CLI cycle passed; its Pi attempt failed control
+publication. With .55, Pi passed publication but one native turn lost its event
+stream. A later instrumented cycle passed without an application change; the
+intermittent observation loss remains unresolved. See
+[same-machine .55 evidence and exact artifacts](M13_SAME_MACHINE_055.md).
+These development results do not freeze the final tuple or close any gate.
 
 Acceptance topology: by explicit user direction, continue testing on this machine
 with separate local/remote processes and environments. Cross-machine acceptance
