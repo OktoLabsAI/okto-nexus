@@ -124,3 +124,22 @@ the simplification; it now checks unavailable start and the disabled action.
 The final UI also gives selection an accent color/checkmark and keeps the chosen
 runtime's fields directly below its buttons. The retained campaign is
 `evidence/runtime-availability-installed`; final targeted validation follows.
+
+Final targeted installed validation passed **20 tests in 165.91 seconds**, with
+`changed_inputs=[]`, on Nexus wheel
+`5a3d4f357339c8162c80414060ca735b44af982dedf0b653485fbd5ba4b92647`
+(sdist `69d605c2c96fd490ee8bf66949c6c08a4941c9be36cebbaaec5f0ecb92315bf7`).
+All 376 Python/SQL files are byte-identical to the broad campaign's package;
+the final differences are dashboard assets. The three corrected failing tests
+passed along with local preparation, keyless binding approval, deletion,
+Remote/All command copying, inventory recovery and explicit version-check
+consent. See [final campaign](evidence/runtime-availability-final-installed/campaign.json),
+[JUnit](evidence/runtime-availability-final-installed/tests.xml) and
+[build](evidence/runtime-availability-final-build/manifest.json).
+
+The final wheel is installed globally. All 72 distribution versions were
+preserved, dependency checking passed, and byte checks verified 386 Nexus files
+and 96 Core files. The user stopped the previous Server; no Server was started
+by the installation. See [installation verification](evidence/runtime-availability-global-install.json)
+and [actual local inventory](evidence/runtime-availability-real-host.json).
+Code commit: `593ebacdafc212b8417c9c981ed1fc9243f8db42`.

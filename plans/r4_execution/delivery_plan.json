@@ -10,7 +10,7 @@
     "branch": "feature/v0.2.0",
     "historical_checkpoint": "plans/r4_execution/evidence/delivery-checkpoint-20260930.json",
     "published_heads": {
-      "nexus": "83834912e207674e75ae6929e5ef331a7be2c264",
+      "nexus": "593ebacdafc212b8417c9c981ed1fc9243f8db42",
       "connector": "ad0933e0f71b71fc6d8d420db4c77c1d9c60836c",
       "core": "19ed94d18f8e372cdf582de7e6a47c1dfed43779"
     },
@@ -18,7 +18,7 @@
     "shared_core_version": "0.2.56.dev0",
     "shared_core_wheel_sha256": "7f19885f28b16dbfce66b969ab42c79b9947246416c71147315006b6e618b1f6",
     "latest_tested_wheels": {
-      "nexus": "a303388da14cbfe2efc848f833046f0274c50bb92bf45596d998c3b527705265",
+      "nexus": "5a3d4f357339c8162c80414060ca735b44af982dedf0b653485fbd5ba4b92647",
       "connector": "93d78a75c5ad81bbdd96e648be136f0f6b2cfd0a53f350266a1c9f96fc449104",
       "core": "7f19885f28b16dbfce66b969ab42c79b9947246416c71147315006b6e618b1f6"
     },
@@ -37,8 +37,8 @@
       "plans/r4_execution/M12_NS15_05_ACCEPTANCE.md",
       "plans/r4_execution/M12_NS15_05_OPERATIONAL_RECONCILIATION.md"
     ],
-    "latest_increment": "Complete local integration in Agents > Connections; remote configuration by Connector; backend-enforced Local/Remote/All; contextual message workspace; legacy connection setup and scoped opening keys removed.",
-    "verification_scope": "87 installed Windows/Edge checks passed with unchanged inputs, including local configuration/permission, message operations, recovery, old-writer fencing, original MCP HTTP and NS15.05. Synthetic peers; no independent-host or provider qualification.",
+    "latest_increment": "Core-backed local runtime buttons and configuration; keyless loopback dashboard authority; Remote/All Connector command copying; configured-agent deletion and visible conflicts. Installed globally.",
+    "verification_scope": "Broad installed campaign: 105 passes and three retained test failures. Corrected targeted campaign: 20 passes with unchanged inputs; all 376 backend Python/SQL files identical. Real local inventory found Codex, Pi and Claude. Global install preserved 72 distribution versions and verified 386 Nexus/96 Core files. No independent-host or native provider qualification.",
     "clean_install_scope": "Final increment validated in an isolated installed environment. Coordinated final three-product clean-install acceptance remains required.",
     "macos": {
       "source_commit": "1975e88",

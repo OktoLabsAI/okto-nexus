@@ -2,7 +2,20 @@
 
 ## Current acceptance reconciliation: executable Core .56
 
-The current user-approved architecture increment keeps complete local harness
+The latest installed correction uses Core-backed runtime buttons in Agents >
+Connections, supports the keyless loopback dashboard, copies the Connector setup
+command for Remote/All and fixes agent deletion with policy/revision records.
+Code: `593ebacdafc212b8417c9c981ed1fc9243f8db42`. Final wheel:
+`5a3d4f357339c8162c80414060ca735b44af982dedf0b653485fbd5ba4b92647`.
+The broad installed campaign retained 105 passes and three test failures; the
+corrected targeted campaign passed 20 cases with unchanged inputs. Backend
+Python/SQL bytes are unchanged across those packages. Real local inventory
+recognized Codex, Pi and Claude without a dashboard operator key. Global
+installation preserved all 72 dependency versions and verified package bytes.
+The Server remains stopped for the user to start. Details and retained failures:
+[Agents/Connections follow-up](M10_AGENT_CONNECTIONS.md).
+
+The preceding user-approved architecture increment keeps complete local harness
 configuration in Agents > Connections, remote configuration in the Connector,
 and execution workspace in message/task context. Local/Remote/All is enforced
 by backend policy and source guards; legacy connection setup and scoped-key
