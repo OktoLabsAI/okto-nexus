@@ -53,6 +53,15 @@ class InventoryRefreshRequest(BaseModel):
     client_intent_id: _Id
 
 
+class LocalInstallationCheckRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+    agent_id: _Id
+    adapter_id: _Id
+    candidate_ref: _CandidateRef
+    inventory_revision: _Digest
+    approved: bool
+
+
 class InventoryRefreshClaim(BaseModel):
     model_config = ConfigDict(extra="forbid")
     producer_instance_id: _Id
@@ -701,6 +710,23 @@ def build_router() -> APIRouter:
         except OktoNexusError as error:
             return runtime_error(error, 'executors.read')
         return JSONResponse(view, headers={'Cache-Control': 'no-store'})
+
+    @router.post("/runtime/executors/{executor_id}/installations:check")
+    async def check_local_installation(executor_id: str, body: LocalInstallationCheckRequest,
+                                       request: Request) -> JSONResponse:
+        agent = get_authenticated_agent()
+        if agent is None:
+            return v1_err(401, "AUTH_FAILED", "Authentication is required.")
+        owner = getattr(request.app.state, "embedded_inventory_owner", None)
+        if owner is None or owner.key.executor_id != executor_id:
+            return v1_err(403, "PERMISSION_DENIED", "Version checks require this Server's local executor.")
+        try:
+            view = await owner.check_installation(access=build_execution_access(request.app.state.deps),
+                context=RuntimeRequestContext(agent.agent_id, 'agent_key', credential_binding=agent.api_key_hash),
+                request=body.model_dump())
+        except OktoNexusError as error:
+            return runtime_error(error, 'installation.check')
+        return JSONResponse(view, headers={"Cache-Control": "no-store"})
 
     @router.get("/agents/{agent_id}/runtime-options")
     async def runtime_options(agent_id: str, executor_id: str,

@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "http_status": 200,
+  "result": {
+    "executor_id": "exe_455b314b4769ec5c441003d6a08bb188",
+    "candidate_ref": "nexus-install-v1:24d6773e4cffb30762d80c87461061629bd2937636ab099786d74dc00e0bee48",
+    "version": "0.159.3",
+    "runtime_authorized": false,
+    "publication_pending": false
+  },
+  "counts": {
+    "execution_local_observations": 1,
+    "execution_sessions": 0,
+    "execution_bindings": 0,
+    "execution_realizations": 0
+  },
+  "scope": "Real installed Codex version command via local operator HTTP; no runtime session"
+}

@@ -29,7 +29,17 @@ after reloading the tab. The browser preserves its original directories and
 consent. A first request explicitly rejected by the Server can be edited and
 approved again; an uncertain request is retained. Storage failure prevents
 submission. The panel then selects the returned workspace and offers the separate
-binding review. Runtime operations and embedded build probing remain pending.
+binding review. For a local installation marked `NOT_PROBED`, the separate
+**Check installation version** control requests explicit operator consent to
+select those exact bytes and run the Core's contained version command. No
+workspace, provider login directory or provider credentials reach that process.
+The observation survives restart and is reused only for the same discovery
+evidence, Core version and platform; a file change requires a new check.
+After a lost check response, refresh inventory first. A passive refresh can
+recover a committed observation without executing the command again. Another
+version check requires another explicit approval. This does not grant runtime
+authority or qualify an unsupported build/platform. Runtime operations in the
+panel remain pending.
 Legacy endpoint/profile controls remain in a collapsed maintenance section. Use
 the authenticated R4 HTTP and Connector CLI flows to complete development setup;
 do not treat a legacy connection command as remote Connector setup. Full browser
@@ -49,11 +59,23 @@ Core 0.2.54 observes PATH installations even before local trust selection. These
 appear with `untrusted` and `selection_required`, not as absent installations.
 Windows discovery reads fixed Codex npm and Pi npm/managed release payloads
 without executing shell or JavaScript launchers. Unknown custom wrappers are not
-interpreted. Approve physical discovery roots on the execution host before a
-version probe or runtime preparation; finding an installation grants no authority.
+interpreted. Approve physical discovery roots on the execution host, or explicitly
+select a local installation using the operator version-check control. Finding
+an installation grants no authority.
 The embedded Server accepts `--harness-root`; registered remote hosts use
 `executor configure-discovery`. Neither option adds directories to PATH. Pi's
 content identity includes its package dependencies, so discovery can take seconds.
+
+The local version-check API is
+`POST /v1/runtime/executors/{executor_id}/installations:check`, with
+`agent_id`, `adapter_id`, `candidate_ref`, `inventory_revision` and `approved: true`.
+It accepts only this Server's embedded executor and an authenticated operator.
+It never accepts caller-supplied executable paths, command arguments or
+environment variables. Concurrent checks are refused; disconnecting the HTTP
+observer does not abandon the owned bounded Core probe. Shutdown waits for that
+probe, and authority/identity drift prevents committing its result. Up to 64
+local observations are retained per executor. A successful response reports
+the observed version and `runtime_authorized: false`.
 
 An operator inspecting another agent currently receives
 `SUBJECT_IDENTITY_REQUIRED` for start: the public intent route still requires

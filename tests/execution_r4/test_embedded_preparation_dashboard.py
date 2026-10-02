@@ -42,6 +42,11 @@ def local_browser(local_setup, assets):
                     trace['drop_response'] = False
                     route.abort('failed')
                     return
+                if url.path.endswith('/installations:check') and trace.get('drop_check'):
+                    assert response.status_code == 200, response.text
+                    trace['drop_check'] = False
+                    route.abort('failed')
+                    return
                 route.fulfill(status=response.status_code, body=response.content,
                               content_type=response.headers.get('content-type', 'application/json'))
                 return

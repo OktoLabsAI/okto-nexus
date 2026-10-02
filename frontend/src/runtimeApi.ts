@@ -101,6 +101,10 @@ export function bindingRequestExists(key: string): boolean {
 }
 
 export const runtimeApi = {
+  checkLocalInstallation: (executorId: string, body: {agent_id: string; adapter_id: string;
+      candidate_ref: string; inventory_revision: string; approved: true}) =>
+    read<{version: string; runtime_authorized: false}>(
+      `/v1/runtime/executors/${encodeURIComponent(executorId)}/installations:check`, undefined, body),
   prepareLocal: (executorId: string, body: LocalPreparationRequest) =>
     read<PreparationView>(`/v1/runtime/executors/${encodeURIComponent(executorId)}/realizations`, undefined, body),
   me: (signal?: AbortSignal) => read<{server_id: string; agent_id: string}>("/v1/connections/me", signal),

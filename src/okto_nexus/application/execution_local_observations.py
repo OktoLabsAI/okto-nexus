@@ -1,0 +1,118 @@
+"""Explicit operator version checks; observations never grant runtime authority."""
+import asyncio
+from dataclasses import asdict, replace
+import os
+from pathlib import Path
+import sys
+import tempfile
+import time
+
+from nexus_connector_core import CoreError, __version__ as CORE_VERSION, resolve_installation
+from nexus_connector_core.discovery import selected_fingerprint
+from nexus_connector_core.protocol import canonical_json
+
+from ..adapters.outbound.execution.core_inventory import resolve_local_installation_selection
+from ..errors import ErrorCode, OktoNexusError
+from .execution_local_realizations import _authority
+
+
+def _error(message, code=ErrorCode.CONFLICT):
+    return OktoNexusError(code, message, {})
+
+
+def apply_local_observations(factory, key, candidates):
+    with factory.unit_of_work(write=False) as uow:
+        rows = uow.connection.execute(
+            'SELECT source_json,version FROM execution_local_observations '
+            'WHERE server_id=? AND executor_id=? AND core_version=? AND platform=?',
+            (key.server_id, key.executor_id, CORE_VERSION, sys.platform)).fetchall()
+    observations = {row['source_json']: row['version'] for row in rows}
+    return tuple(replace(candidate, trust='selected', version=observations[canonical_json(asdict(candidate)).decode()])
+                 if canonical_json(asdict(candidate)).decode() in observations else candidate
+                 for candidate in candidates)
+
+
+def _authorize(owner, access, context, request, *, uow):
+    if owner._stop.is_set():
+        raise _error('The local executor is shutting down.')
+    guard = _authority(uow, owner=owner, access=access, context=context,
+                       subject=request['agent_id'], adapter_id=request['adapter_id'])
+    current = uow.connection.execute(
+        'SELECT publication_sequence,inventory_revision FROM execution_inventory_current '
+        'WHERE server_id=? AND executor_id=?', (owner.key.server_id, owner.key.executor_id)).fetchone()
+    fresh = owner.fresh.get((owner.key.server_id, owner.key.executor_id))
+    if (current is None or fresh is None or fresh[0] != current['publication_sequence']
+            or current['inventory_revision'] != request['inventory_revision']
+            or (time.monotonic() - fresh[1]) * 1000 + (fresh[2] if len(fresh) > 2 else 0) >= 120000):
+        raise _error('Refresh the local inventory and select the installation again.')
+    return guard
+
+
+async def probe_version(selected):
+    from nexus_connector_core.discovery import probe_selected_claude, probe_selected_codex, probe_selected_pi
+    probe = {'codex_app_server': probe_selected_codex, 'claude_stream': probe_selected_claude,
+             'pi_rpc': probe_selected_pi}.get(selected.adapter_id)
+    if probe is None:
+        raise _error('This harness does not support a local version check.')
+    essentials = {'SYSTEMROOT', 'WINDIR', 'COMSPEC', 'PATHEXT', 'PATH', 'TEMP', 'TMP', 'LANG', 'LC_ALL', 'TERM'}
+    env = {key: value for key, value in os.environ.items() if key.upper() in essentials}
+    # No workspace, provider home or credentials are supplied to the process.
+    with tempfile.TemporaryDirectory(prefix='nexus-version-check-') as directory:
+        return await probe(selected, cwd=Path(directory), env=env)
+
+
+async def observe_local_installation(owner, *, access, context, request):
+    """Called only by the owner-held task, under the inventory publication lock."""
+    factory = owner.deps.connection_factory
+    if request.get('approved') is not True:
+        raise _error('Explicit operator consent is required for a version check.', ErrorCode.VALIDATION_ERROR)
+    def authorize():
+        with factory.unit_of_work(write=False) as uow:
+            return _authorize(owner, access, context, request, uow=uow)
+    guard = await asyncio.to_thread(authorize)
+    try:
+        resolve_local_installation_selection(owner.candidates,
+            adapter_id=request['adapter_id'], candidate_ref=request['candidate_ref'],
+            expected_inventory_revision=request['inventory_revision'])
+        source = resolve_installation(owner.raw_candidates, request['adapter_id'], request['candidate_ref'])
+        if await asyncio.to_thread(selected_fingerprint, source) != source.fingerprint:
+            raise _error('The selected local installation changed.')
+        # Selection is an explicit local operator decision, scoped to these
+        # exact bytes. Core performs containment and pre/post-probe identity checks.
+        if guard != await asyncio.to_thread(authorize) or owner._stop.is_set():
+            raise _error('Operator authority changed before the version check.')
+        observed = await probe_version(replace(source, trust='selected'))
+        if (type(observed.version) is not str or not 1 <= len(observed.version) <= 160 or
+                replace(observed, trust=source.trust, version=source.version) != source):
+            raise _error('The selected installation version could not be verified.')
+        raw = await owner.discover_candidates()
+        if resolve_installation(raw, request['adapter_id'], request['candidate_ref']) != source:
+            raise _error('The local installation changed during the version check.')
+    except CoreError as error:
+        raise _error('The local version check was refused: ' + error.code + '.') from None
+    except (OSError, ValueError):
+        raise _error('The local installation is unavailable or changed.') from None
+    def commit():
+        with factory.unit_of_work() as uow:
+            if guard != _authorize(owner, access, context, request, uow=uow):
+                raise _error('Operator authority changed during the version check.')
+            conn = uow.connection
+            count = conn.execute('SELECT COUNT(*) FROM execution_local_observations WHERE server_id=? AND executor_id=?',
+                                 (owner.key.server_id, owner.key.executor_id)).fetchone()[0]
+            exists = conn.execute('SELECT 1 FROM execution_local_observations WHERE server_id=? AND executor_id=? AND candidate_ref=?',
+                                  (owner.key.server_id, owner.key.executor_id, request['candidate_ref'])).fetchone()
+            if count >= 64 and not exists:
+                raise _error('The local installation observation limit has been reached.')
+            conn.execute('INSERT INTO execution_local_observations VALUES (?,?,?,?,?,?,?,?,?) '
+                'ON CONFLICT(server_id,executor_id,candidate_ref) DO UPDATE SET '
+                'core_version=excluded.core_version,platform=excluded.platform,source_json=excluded.source_json,'
+                'version=excluded.version,actor_agent_id=excluded.actor_agent_id,observed_at=excluded.observed_at',
+                (owner.key.server_id, owner.key.executor_id, request['candidate_ref'], CORE_VERSION, sys.platform,
+                 canonical_json(asdict(source)).decode(), observed.version, context.actor_agent_id, access.clock.now_iso()))
+            access.authorize(context, uow=uow, audit=True, represented_agent_id=request['agent_id'])
+    await asyncio.to_thread(commit)
+    # Publication failure does not erase the durable observation. Passive
+    # refresh/restart can publish it without running --version again.
+    await owner._refresh()
+    return dict(executor_id=owner.key.executor_id, candidate_ref=request['candidate_ref'],
+                version=observed.version, runtime_authorized=False, publication_pending=False)

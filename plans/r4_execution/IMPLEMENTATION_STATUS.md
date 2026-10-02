@@ -2,6 +2,20 @@
 
 ## Current acceptance reconciliation: executable Core .56
 
+The embedded local version-check API/UI is now implemented and verified: 59
+installed Windows and 50 WSL Linux checks passed, followed by 9 reviewed packaged
+UI checks, all with unchanged campaign inputs. A real Codex version command via
+the installed HTTP endpoint returned 0.159.3 without creating runtime resources.
+Exact hashes, recovery scope and remaining acceptance are in
+[the local version-check ledger](M10_LOCAL_INSTALLATION_CHECK.md). Older references
+below to this control being pending are superseded by this evidence; runtime
+operation controls and full provider/platform acceptance remain pending.
+
+The user confirmed a native Intel Mac (macOS 26.4.1, Python 3.12.4) for manual
+development/test iterations. Core's `plans/MACOS_INTEL_IMPLEMENTATION.md` records
+the first native diagnostic and remaining containment acceptance. This authorizes
+Intel-target development, not weaker ownership guarantees or a macOS support claim.
+
 Per the user's latest direction, defer CI work and continue independent local
 implementation; final hosted gates remain pending. Cross-machine acceptance
 still requires the user's manual intervention.

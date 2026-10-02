@@ -4,6 +4,7 @@ import { runtimeApi, type ExecutorChoice, type RuntimeOptions } from "../runtime
 import { BindingConsent } from "./BindingConsent";
 import { InventoryRefresh } from "./InventoryRefresh";
 import { EmbeddedPreparation } from "./EmbeddedPreparation";
+import { LocalInstallationCheck } from "./LocalInstallationCheck";
 
 const fieldClass = "rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5 text-xs";
 type Selection = {executorId: string; adapterId: string; candidateRef: string; inventoryRevision: string};
@@ -104,6 +105,13 @@ export function RuntimeSelection({agentId}: {agentId: string}) {
     </>}
     {selected && <fieldset disabled={busy} data-testid="runtime-selection-summary">
       <p>Selected: {selected.label}. Preparation: {selected.can_prepare ? "available" : "unavailable"}; binding approval: {selected.can_bind ? "available" : "unavailable"}; start: {selected.can_start ? "available" : "unavailable"}.</p>
+      {hosts.find(host => host.executor_id === executorId)?.kind === "embedded" &&
+        selected.can_prepare && selected.technical_state === "NOT_PROBED" && selected.candidate_ref &&
+        <LocalInstallationCheck key={JSON.stringify([agentId, executorId, selected.candidate_ref, options!.inventory_revision])}
+          agentId={agentId} executorId={executorId} adapterId={selected.adapter_id}
+          candidateRef={selected.candidate_ref} inventoryRevision={options!.inventory_revision}
+          onChecked={() => { setNotice("Version checked. Review the refreshed installation before preparing its workspace.");
+            setSelection(null); setRevision(value => value + 1); }} />}
       {hosts.find(host => host.executor_id === executorId)?.kind === "embedded" &&
         selected.can_prepare && !selected.preparation && !selected.binding &&
         !selected.policy_reasons.includes("REALIZATION_SELECTION_REQUIRED") &&

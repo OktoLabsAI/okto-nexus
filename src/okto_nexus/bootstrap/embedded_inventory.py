@@ -25,6 +25,7 @@ class EmbeddedInventoryOwner:
         self.identity = ensure_execution_installation(deps.connection_factory)
         self.key = ExecutorKey(self.identity.server_id, self.identity.embedded_executor_id)
         self.candidates = ()
+        self.raw_candidates = ()
         self.publication = None
         self.failure = None
         self.refresh_seconds = refresh_seconds
@@ -35,6 +36,8 @@ class EmbeddedInventoryOwner:
         self._startup_task = None
         self._refresh_task = None
         self._close_task = None
+        self._inventory_lock = asyncio.Lock()
+        self._probe_task = None
 
     def _claim(self):
         dispatcher = self.dispatcher
@@ -77,7 +80,8 @@ class EmbeddedInventoryOwner:
     async def _refresh_owned(self):
         from nexus_connector_core import DiscoveryCancelled
         try:
-            return await self._refresh()
+            async with self._inventory_lock:
+                return await self._refresh()
         except DiscoveryCancelled as error:
             self.fresh.pop((self.key.server_id, self.key.executor_id), None)
             if not self._stop.is_set():
@@ -89,19 +93,36 @@ class EmbeddedInventoryOwner:
             self.fresh.pop((self.key.server_id, self.key.executor_id), None)
             raise
 
-    async def _refresh(self):
-        delivery_id = await asyncio.to_thread(self._claim_refresh)
-        observed_at = time.monotonic()
+    async def discover_candidates(self):
         configuration = getattr(self.deps, 'local_discovery', None)
         discovery = await asyncio.to_thread(discover_local_candidates,
             cancel_requested=self._discovery_stopped.is_set,
             **(configuration.arguments() if configuration is not None else {}))
+        return tuple(discovery.candidates)
+
+    async def check_installation(self, *, access, context, request):
+        if self._stop.is_set() or (self._probe_task is not None and not self._probe_task.done()):
+            raise OktoNexusError(ErrorCode.CONFLICT, 'A local version check is active or the executor is stopping.', {})
+        async def run():
+            from ..application.execution_local_observations import observe_local_installation
+            async with self._inventory_lock:
+                return await observe_local_installation(self, access=access, context=context, request=request)
+        self._probe_task = asyncio.create_task(run(), name='embedded-version-check')
+        self._probe_task.add_done_callback(lambda task: None if task.cancelled() else task.exception())
+        return await asyncio.shield(self._probe_task)
+
+    async def _refresh(self):
+        from ..application.execution_local_observations import apply_local_observations
+        delivery_id = await asyncio.to_thread(self._claim_refresh)
+        observed_at = time.monotonic()
+        raw = await self.discover_candidates()
         if self._stop.is_set():
             return
-        candidates = tuple(discovery.candidates)
+        candidates = await asyncio.to_thread(apply_local_observations, self.deps.connection_factory, self.key, raw)
         age_ms = max(0, int((time.monotonic() - observed_at) * 1000))
         publication = await asyncio.to_thread(self._publish, candidates, age_ms, delivery_id)
         self.candidates = candidates
+        self.raw_candidates = raw
         self.publication = publication
         self.failure = None
         self.fresh[(self.key.server_id, self.key.executor_id)] = (
@@ -186,5 +207,7 @@ class EmbeddedInventoryOwner:
             await self._task
         if self._refresh_task is not None:
             await asyncio.gather(self._refresh_task, return_exceptions=True)
+        if self._probe_task is not None:
+            await asyncio.gather(self._probe_task, return_exceptions=True)
         self.fresh.pop((self.key.server_id, self.key.executor_id), None)
         await asyncio.to_thread(self._release)

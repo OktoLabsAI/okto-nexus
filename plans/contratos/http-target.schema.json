@@ -4024,6 +4024,40 @@
         "delivery_id"
       ],
       "additionalProperties": false
+    },
+    "LocalInstallationCheckRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "agent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "adapter_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "candidate_ref": {
+          "type": "string",
+          "pattern": "^nexus-install-v1:[0-9a-f]{64}$"
+        },
+        "inventory_revision": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "approved": {
+          "const": true
+        }
+      },
+      "required": [
+        "agent_id",
+        "adapter_id",
+        "candidate_ref",
+        "inventory_revision",
+        "approved"
+      ]
     }
   }
 }
