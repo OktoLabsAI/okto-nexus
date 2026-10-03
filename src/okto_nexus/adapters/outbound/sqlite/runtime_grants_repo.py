@@ -5,6 +5,12 @@ import json
 class SqliteRuntimeGrantRepo:
     def insert(self, uow, *, grant):
         values = dict(grant)
+        values['no_expiry'] = values['expires_at'] is None
+        values['unlimited_actions'] = values['max_executions'] is None
+        if values['no_expiry']:
+            values['expires_at'] = values['created_at']
+        if values['unlimited_actions']:
+            values['max_executions'] = 1
         values["actions"] = json.dumps(sorted(values["actions"]))
         columns = tuple(values)
         uow.connection.execute(

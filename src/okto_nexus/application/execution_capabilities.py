@@ -94,7 +94,7 @@ class ExecutionCapabilityService:
             represented_agent_id=scope['agent_id'], workspace_id=scope['workspace_id'],
             substrate=semantic['payload']['mode'], uow=uow, audit=False, check_budget=False)
         if (grant is None or (grant_revision is not None and grant['revision'] != grant_revision) or
-                _stamp(grant['expires_at']) <= _stamp(self.access.clock.now_iso())):
+                (not grant['no_expiry'] and _stamp(grant['expires_at']) <= _stamp(self.access.clock.now_iso()))):
             raise _error(ErrorCode.PERMISSION_DENIED, 'A current session execution grant is required.')
         return row, grant
 
@@ -163,7 +163,9 @@ class ExecutionCapabilityService:
                     not self._replaceable(uow, authority, scope)):
                 raise _error(ErrorCode.CONFLICT, 'The session capability cannot be replaced safely.')
             now = _stamp(self.access.clock.now_iso())
-            expires = min(now + timedelta(seconds=120), _stamp(grant['expires_at']))
+            expires = now + timedelta(seconds=120)
+            if not grant['no_expiry']:
+                expires = min(expires, _stamp(grant['expires_at']))
             lease = self.repo.effective(uow, scope)
             if lease is not None:
                 if (lease['status'] != 'ACTIVE' or lease['scope_json'] != canonical_json(scope).decode() or

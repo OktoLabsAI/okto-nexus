@@ -8,6 +8,7 @@ export interface ExecutorChoice {
 }
 
 export interface RuntimeChoice {
+  provider_home_suggestion?: string | null;
   adapter_id: string;
   candidate_ref: string | null;
   label: string;

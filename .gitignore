@@ -44,3 +44,6 @@ frontend/tsconfig.tsbuildinfo
 
 # local-only harness credentials (never commit)
 .secrets/
+
+# Local dashboard test server data, logs and generated artifacts
+.nexus-policy-guardrail-test/

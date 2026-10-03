@@ -76,6 +76,67 @@ class EndpointService:
         if not valid:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "External Nexus work session is not available for this endpoint.", {})
 
+    def conversation_policy(self, context, *, endpoint_id, changes=None):
+        """Operator opt-in for canonical conversational delivery; never launch.
+
+        This narrow operation preserves executor-owned configuration and aliases.
+        Editing it invalidates existing grants just like other endpoint edits.
+        """
+        self.authorize(context)
+        if changes is not None and (not isinstance(changes, dict)
+                or not {"expected_revision", "enabled"} <= set(changes)
+                or set(changes) - {"expected_revision", "enabled", "session_policy"}
+                or type(changes["expected_revision"]) is not int or changes["expected_revision"] < 1
+                or type(changes["enabled"]) is not bool
+                or "session_policy" in changes and changes["session_policy"] not in ("shared", "per_sender")):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                "Use a positive expected_revision, boolean enabled and shared or per_sender session_policy.", {})
+        with self.cf.unit_of_work(write=changes is not None) as uow:
+            if self.access:
+                self.access.authorize(context, uow=uow, audit=False)
+            endpoint = self.repo.get(uow, endpoint_id)
+            if not endpoint or endpoint["protocol"] != "nxl-r4":
+                raise OktoNexusError(ErrorCode.NOT_FOUND, "The canonical connection is unavailable.", {})
+            from .runtime_policy import effective, set_legacy_session_override
+            endpoint['session_policy'] = effective(uow.connection, endpoint['agent_id'])['session_policy']
+            if changes is not None:
+                if endpoint["revision"] != changes["expected_revision"]:
+                    raise OktoNexusError(ErrorCode.CONFLICT, "Connection changed. Reload its message policy.", {})
+                if changes["enabled"]:
+                    from nexus_connector_core import get_runtime_catalog
+                    descriptor = next((item for item in get_runtime_catalog().runtimes
+                                       if item.adapter_id == endpoint["adapter_id"]), None)
+                    if (not descriptor or descriptor.connection_mode != "managed"
+                            or not endpoint["enabled"] or endpoint["activation_state"] != "approved"
+                            or endpoint["health"] == "quarantined"):
+                        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Approve an available managed connection first.", {})
+                response_policy = "conversation" if changes["enabled"] else "explicit"
+                session_policy = changes.get("session_policy", endpoint["session_policy"])
+                if "session_policy" in changes:
+                    set_legacy_session_override(uow, agent_id=endpoint['agent_id'], mode=session_policy,
+                                                access=self.access, now=self.clock.now_iso())
+                if session_policy != endpoint["session_policy"] and uow.connection.execute(
+                        "SELECT 1 FROM execution_sessions s JOIN execution_bindings b "
+                        "USING(server_id,executor_id,binding_id) WHERE b.endpoint_id=? "
+                        "AND s.lifecycle_state NOT IN ('CLOSED','FAILED') LIMIT 1", (endpoint_id,)).fetchone():
+                    raise OktoNexusError(ErrorCode.CONFLICT,
+                        "Close existing sessions before changing session isolation.", {})
+                if (endpoint["response_policy"] != response_policy or endpoint["consumption"] != "exclusive"
+                        or session_policy != endpoint["session_policy"]):
+                    now = self.clock.now_iso()
+                    uow.connection.execute("UPDATE agent_endpoints SET response_policy=?,session_policy=?,consumption='exclusive',"
+                        "revision=revision+1,updated_at=? WHERE endpoint_id=? AND revision=?",
+                        (response_policy, session_policy, now, endpoint_id, endpoint["revision"]))
+                    self.repo.invalidate_configuration(uow, endpoint_ids=[endpoint_id], now=now)
+                    self.repo.audit_configuration(uow, context=context, kind="endpoint", resource_id=endpoint_id,
+                        old_revision=endpoint["revision"], new_revision=endpoint["revision"] + 1,
+                        fields=["response_policy", "consumption", "session_policy"], now=now)
+                    endpoint = self.repo.get(uow, endpoint_id)
+            return {"endpoint_id": endpoint_id, "agent_id": endpoint["agent_id"],
+                    "workspace_id": endpoint["workspace_id"], "revision": endpoint["revision"],
+                    "enabled": endpoint["response_policy"] == "conversation" and endpoint["consumption"] == "exclusive",
+                    "session_policy": effective(uow.connection, endpoint['agent_id'])['session_policy']}
+
     def update_endpoint(self, context, *, endpoint_id, expected_revision, **changes):
         self.authorize(context)
         allowed = {"public_config", "enabled", "priority", "selection_group", "response_policy", "consumption", "profile_id"}

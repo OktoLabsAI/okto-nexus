@@ -2,6 +2,7 @@
 import asyncio
 from contextlib import asynccontextmanager
 import json
+import logging
 import math
 import secrets
 import time
@@ -139,6 +140,13 @@ class EmbeddedDispatchOwner:
             self._after = rows[-1]["rowid"]
 
     async def failed(self):
+        if self.failure is None and self.pump is not None:
+            self.failure = self.pump.error
+        if not self._stopping.is_set():
+            error = self.failure
+            logging.getLogger(__name__).error(
+                "Embedded runtime containment: type=%s code=%s stage=%s",
+                type(error).__name__, getattr(error, "code", None), getattr(error, "stage", None))
         self._stopping.set()
         if self.pump is not None:
             self.pump._stopping.set()
@@ -318,6 +326,31 @@ class EmbeddedDispatchOwner:
                 session["renew_at"] = time.monotonic() + max(0,applied.context.lease_deadline_monotonic-time.monotonic())/2
         except Exception as error:
             if self.sessions.get(session_id) is session:
+                # Expired/revoked session authority is an expected containment
+                # boundary, not a failure of every runtime on this executor.
+                expected = (isinstance(error, CoreError) and error.code in {
+                    'AGENT_REVOKED', 'SESSION_UNKNOWN', 'STALE_GENERATION'}) or (
+                    isinstance(error, OktoNexusError) and error.code in {
+                        ErrorCode.CONFLICT, ErrorCode.PERMISSION_DENIED})
+                if expected:
+                    try:
+                        await asyncio.to_thread(self.verify)
+                        runtime = await session['executor']._runtime()
+                        report = await runtime.shutdown(ShutdownPolicy(5, 5))
+                        if ('unknown' in report.session_outcomes.values() or any(
+                                facts['process_state'] != 'STOPPED' or facts['release_pending']
+                                for facts in runtime.shutdown_resources().values())):
+                            raise CoreError('RECONCILIATION_REQUIRED', 'embedded_session_containment')
+                        if not await self.host.close_native_actions(
+                                executor_id=self.channel.executor_id, session_id=session_id, timeout_seconds=5):
+                            raise CoreError('RECONCILIATION_REQUIRED', 'embedded_native_action_containment')
+                        await self.events.recover()
+                        from .embedded_reconciliation import EmbeddedReconciliation
+                        await EmbeddedReconciliation(self).release_session(session_id)
+                        self.sessions.pop(session_id, None)
+                        return
+                    except Exception as containment_error:
+                        error = containment_error
                 if self.failure is None:
                     self.failure = error
                 await self.failed()

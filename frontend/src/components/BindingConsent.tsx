@@ -28,13 +28,14 @@ export function BindingConsent({agentId, executorId, hostLabel, workspaceId, wor
     finally { if (mounted.current) setBusy(false); }
   };
   const expired = proposal !== null && Date.parse(proposal.expires_at) <= now;
-  const reviewKey = JSON.stringify(["prepare", agentId, executorId, inventoryRevision, choice.preparation?.realization_ref, workspaceId, alias.trim()]);
+  const replacement = binding && choice.preparation ? binding.binding_id : undefined;
+  const reviewKey = JSON.stringify(["prepare", agentId, executorId, inventoryRevision, choice.preparation?.realization_ref, workspaceId, alias.trim(), replacement]);
   const matches = (value: BindingView | BindingProposal) => value.agent_id === agentId &&
     value.executor_id === executorId && value.workspace_id === workspaceId &&
     value.adapter_id === choice.adapter_id && value.candidate_ref === choice.candidate_ref &&
     value.inventory_revision === inventoryRevision;
 
-  if (binding) return <section aria-label="Connection status" className="space-y-2">
+  if (binding && !(replacement && choice.can_bind && choice.preparation)) return <section aria-label="Connection status" className="space-y-2">
     <p>Connection: {binding.state}. Agent {agentId} · {hostLabel} · {workspaceLabel} · {choice.label}.</p>
     <p>{binding.state === "APPROVED" ? "This connection uses the agent's existing API key." : "This connection requires operator review before reuse."} Runtime start still requires current technical readiness and separate execution authority.</p>
     <button className="btn btn-secondary" disabled={busy} onClick={() => void run(async () => {
@@ -48,6 +49,7 @@ export function BindingConsent({agentId, executorId, hostLabel, workspaceId, wor
   if (!choice.preparation || !choice.can_bind) return <p>The execution host must publish a local preparation before connection review. For remote hosts, configure and realize the workspace through the Connector CLI. Review any selection or operator restrictions shown above.</p>;
 
   return <section aria-label="Connection consent" className="space-y-2">
+    {replacement && <p>Review the replacement configuration using the existing connection name. Close any active sessions before replacing it.</p>}
     <p>Review access for {agentId} on {hostLabel}, workspace {workspaceLabel}, using {choice.label}.</p>
     {!proposal && <>
       <label className="block">Connection name <input aria-label="Connection name" className="rounded border p-1 dark:bg-surface-800"
@@ -55,7 +57,8 @@ export function BindingConsent({agentId, executorId, hostLabel, workspaceId, wor
       <button className="btn btn-secondary" disabled={busy || !alias.trim() || /[\\/:]/.test(alias)} onClick={() => void run(async () => {
         const payload = {agent_id_hint: agentId, executor_id: executorId, adapter_id: choice.adapter_id,
           candidate_ref: choice.candidate_ref, inventory_revision: inventoryRevision,
-          realization_ref: choice.preparation!.realization_ref, workspace_id: workspaceId, alias: alias.trim()};
+          realization_ref: choice.preparation!.realization_ref, workspace_id: workspaceId, alias: alias.trim(),
+          ...(replacement ? {replace_binding_id: replacement} : {})};
         const result = await runtimeApi.prepareBinding(durableBindingRequest(reviewKey, payload));
         if (!matches(result) || result.realization_ref !== payload.realization_ref) throw new Error("The returned proposal does not match this selection.");
         if (mounted.current) {

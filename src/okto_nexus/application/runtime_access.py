@@ -139,7 +139,7 @@ class RuntimeAccessService:
                         continue
                     if endpoint_id and endpoint_id != grant["endpoint_id"]:
                         continue
-                    if grant["credential_binding"] != actor.api_key_hash or grant["expires_at"] <= now:
+                    if grant["credential_binding"] != actor.api_key_hash or (not grant['no_expiry'] and grant["expires_at"] <= now):
                         continue
                     if action != "access" and action not in grant["actions"]:
                         continue
@@ -164,7 +164,7 @@ class RuntimeAccessService:
                                   ("events", "read") if action in {"read", "events", "discover"} else ("messages", "send_direct"))
                     if not PermissionSet(actor.permissions).allows(*permission):
                         continue
-                    if (check_budget or consume) and action in {"send", "steer", "execute_work"} and grant["used_executions"] >= grant["max_executions"]:
+                    if (check_budget or consume) and action in {"send", "steer", "execute_work"} and not grant['unlimited_actions'] and grant["used_executions"] >= grant["max_executions"]:
                         continue
                     allowed, selected = True, grant
                     if consume and action in {"send", "steer", "execute_work"}:
@@ -185,12 +185,14 @@ class RuntimeAccessService:
         try:
             # API/browser timestamps may have millisecond precision. Normalize
             # external input before persisting the fixed-width lease format.
-            expires_at = datetime.fromtimestamp(iso_to_epoch(expires_at), timezone.utc).isoformat(
-                timespec="microseconds").replace("+00:00", "Z")
-            remaining = iso_to_epoch(expires_at) - iso_to_epoch(now)
+            if expires_at is not None:
+                expires_at = datetime.fromtimestamp(iso_to_epoch(expires_at), timezone.utc).isoformat(
+                    timespec="microseconds").replace("+00:00", "Z")
+                remaining = iso_to_epoch(expires_at) - iso_to_epoch(now)
         except (ValueError, TypeError, OverflowError):
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Grant expiry must be a valid timestamp.", {}) from None
-        if not 0 < remaining <= 86400 or type(max_executions) is not int or not 1 <= max_executions <= 1000:
+        if ((expires_at is not None and not 0 < remaining <= 86400) or
+                (max_executions is not None and (type(max_executions) is not int or not 1 <= max_executions <= 1000))):
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Grant expiry must be within 24 hours and budget within 1..1000.", {})
         with self.cf.unit_of_work() as uow:
             actor = self.agents.get(uow, actor_agent_id)
@@ -199,6 +201,15 @@ class RuntimeAccessService:
                 raise denied()
             if endpoint["protocol"] != "nxl-r4":
                 raise denied()
+            if expires_at is None or max_executions is None:
+                local = uow.connection.execute(
+                    "SELECT e.kind FROM execution_bindings b JOIN execution_installation i "
+                    "ON i.server_id=b.server_id AND i.singleton=1 JOIN execution_executors e "
+                    "ON e.server_id=b.server_id AND e.executor_id=b.executor_id "
+                    "WHERE b.endpoint_id=? LIMIT 2", (endpoint_id,)).fetchall()
+                if len(local) != 1 or local[0]['kind'] != 'embedded':
+                    raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                        "Unbounded permissions are supported only for local execution.", {})
             if set(actions) & {"open", "send", "steer", "execute_work"}:
                 binding = uow.connection.execute(
                     "SELECT b.executor_id FROM execution_bindings b JOIN execution_installation i "

@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { RuntimeHistory } from "./RuntimeHistory";
+import { ApiError } from "../api";
 import { runtimeApi, type BindingView, type RuntimeIntent, type RuntimeOperation,
   type RuntimeRequest, type RuntimeResolution, type RuntimeScope, type RuntimeSession } from "../runtimeApi";
 
-type Saved = {request: RuntimeRequest; resolution: RuntimeResolution | null; submissionAttempted: boolean};
+type Saved = {request: RuntimeRequest; resolution: RuntimeResolution | null; submissionAttempted: boolean; reviewError?: string};
 const labels: Record<RuntimeIntent, string> = {"runtime.start": "Start or reuse a runtime",
   "turn.submit": "Send a turn", "turn.steer": "Steer a turn", "turn.interrupt": "Interrupt a turn", "runtime.close": "Close the runtime"};
 const fieldClass = "block w-full rounded border p-2 dark:bg-surface-800";
@@ -77,14 +78,20 @@ export function RuntimeOperations({agentId, binding, canStart}: {
       try {
         const me = await runtimeApi.me(controller.signal);
         if (controller.signal.aborted) return;
-        const key = `okto-nexus:r4-runtime:${JSON.stringify([me.server_id, me.agent_id, agentId, binding.binding_id])}`;
-        const raw = sessionStorage.getItem(key);
+        const identity = [me.server_id, me.agent_id, agentId, binding.binding_id];
+        const key = `okto-nexus:r4-runtime:${JSON.stringify([...identity, binding.workspace_binding_id])}`;
+        let raw = sessionStorage.getItem(key);
+        if (!raw) {
+          const previous = sessionStorage.getItem(`okto-nexus:r4-runtime:${JSON.stringify(identity)}`);
+          if (previous && JSON.parse(previous)?.request?.workspace_binding_id === binding.workspace_binding_id) raw = previous;
+        }
         if (raw) {
           const record = JSON.parse(raw) as Saved;
           if (!record.request || record.request.agent_id !== agentId || record.request.binding_id !== binding.binding_id ||
               record.request.workspace_binding_id !== binding.workspace_binding_id || !record.request.client_intent_id ||
               typeof record.submissionAttempted !== "boolean") throw new Error("The saved runtime request is invalid. Keep it for recovery; no request was sent.");
           currentRecord.current = record; setSaved(record);
+          if (record.reviewError) setError(record.reviewError);
           setIntent(record.request.intent);
           setSessionId(record.resolution?.session_id || record.request.session_id || "");
         }
@@ -93,11 +100,11 @@ export function RuntimeOperations({agentId, binding, canStart}: {
     })();
     const timer = window.setInterval(() => setNow(Date.now()), 1000);
     return () => { mounted.current = false; controller.abort(); window.clearInterval(timer); };
-  }, [agentId, binding.binding_id]);
+  }, [agentId, binding.binding_id, binding.workspace_binding_id]);
 
   // Recovery only reads. Neither reload nor polling repeats a mutation.
   useEffect(() => {
-    if (!storageKey || !saved) return;
+    if (!storageKey || !saved || saved.reviewError) return;
     const controller = new AbortController();
     let active = false;
     const refresh = async () => {
@@ -112,7 +119,7 @@ export function RuntimeOperations({agentId, binding, canStart}: {
     return () => { controller.abort(); window.clearInterval(timer); };
     // The request identity is immutable; polling must not restart on each read.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [storageKey, saved?.request.client_intent_id]);
+  }, [storageKey, saved?.request.client_intent_id, saved?.reviewError]);
 
   const review = async () => {
     let record = saved;
@@ -130,7 +137,19 @@ export function RuntimeOperations({agentId, binding, canStart}: {
       record = {request, resolution: null, submissionAttempted: false};
       persist(record); // Storage failure must prevent the first POST.
     }
-    const resolution = await runtimeApi.resolve(record.request);
+    record = {...record, reviewError: undefined};
+    persist(record);
+    let resolution: RuntimeResolution;
+    try {
+      resolution = await runtimeApi.resolve(record.request);
+    } catch (failure) {
+      // A known refusal is not a lost response. Preserve its explanation across
+      // refreshes instead of polling an intent that was never admitted.
+      if (failure instanceof ApiError && failure.status >= 400 && failure.status < 500) {
+        persist({...record, reviewError: String(failure)});
+      }
+      throw failure;
+    }
     if (!matches(resolution.scope) || resolution.client_intent_id !== record.request.client_intent_id) {
       throw new Error("The resolved request does not match this selection.");
     }
@@ -214,7 +233,7 @@ export function RuntimeOperations({agentId, binding, canStart}: {
       {session && <p>Session: {session.lifecycle_state}. Lease: {session.lease_state}.{session.durable_release_pending ? " Release confirmation pending." : ""}</p>}
       {session && <RuntimeHistory key={JSON.stringify([session.scope.server_id, session.scope.executor_id, session.scope.session_id])} scope={session.scope} />}
       {canClear && <button className="btn btn-secondary" disabled={busy} onClick={() => {
-        sessionStorage.removeItem(storageKey); currentRecord.current = null; setSaved(null); setOperation(null); setFollowUps([]); setText(""); setError("");
+        sessionStorage.removeItem(storageKey); currentRecord.current = null; setSaved(null); setOperation(null); setFollowUps([]); setSession(null); setText(""); setError("");
         if (sessionId) setIntent("turn.submit");
       }}>{saved.submissionAttempted ? "Prepare another action" : "Discard review"}</button>}
       <p className="text-xs">This tab retains the request and message for recovery. Refreshing only checks the recorded result.</p>

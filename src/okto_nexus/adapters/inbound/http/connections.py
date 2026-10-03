@@ -42,6 +42,26 @@ def build_router():
         from ....application.agent_execution_policy import read_policy
         return await execute(lambda: read_policy(request.app.state.deps, request_context(), agent_id))
 
+    @router.get('/runtime-policy')
+    async def global_runtime_policy(request: Request):
+        from ....application.runtime_policy import read_policy
+        return await execute(lambda: read_policy(request.app.state.deps, request_context()))
+
+    @router.put('/runtime-policy')
+    async def update_global_runtime_policy(request: Request, body: dict):
+        from ....application.runtime_policy import save_policy
+        return await execute(lambda: save_policy(request.app.state.deps, request_context(), changes=body))
+
+    @router.get('/agents/{agent_id}/runtime-policy')
+    async def agent_runtime_policy(request: Request, agent_id: str):
+        from ....application.runtime_policy import read_policy
+        return await execute(lambda: read_policy(request.app.state.deps, request_context(), agent_id))
+
+    @router.put('/agents/{agent_id}/runtime-policy')
+    async def update_agent_runtime_policy(request: Request, agent_id: str, body: dict):
+        from ....application.runtime_policy import save_policy
+        return await execute(lambda: save_policy(request.app.state.deps, request_context(), agent_id=agent_id, changes=body))
+
     @router.put('/agents/{agent_id}/execution-policy')
     async def update_execution_policy(request: Request, agent_id: str, body: ExecutionPolicyBody):
         from ....application.agent_execution_policy import save_policy

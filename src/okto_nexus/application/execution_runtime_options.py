@@ -140,6 +140,9 @@ def read_runtime_options(factory, *, server_id, executor_id, agent_id, workspace
                 can_prepare=can_prepare, can_bind=can_bind, can_start=can_start,
                 preparation=preparation, binding=binding_view,
                 policy_reasons=list(dict.fromkeys(reasons))))
+            if kind == 'embedded' and operator and candidate:
+                from nexus_connector_core import discover_provider_home
+                options[-1]['provider_home_suggestion'] = discover_provider_home(adapter)
         return dict(agent_id=agent_id, executor_id=executor_id, inventory_revision=snapshot['inventory_revision'],
                     catalog=snapshot['catalog'], availability=snapshot['availability'],
                     freshness=view['freshness'], options=options)

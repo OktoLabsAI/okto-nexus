@@ -13,6 +13,7 @@ from ..domain.tag_selector import reachable
 from ..domain.targets import target_strategy
 from .permissions import permission_set_for
 from .execution_results import canonical_result_matches
+from .runtime_actor_authority import valid_actor_binding
 
 
 class RuntimeResultService:
@@ -213,7 +214,7 @@ class RuntimeResultService:
         if (not endpoint or not endpoint["enabled"] or endpoint["response_policy"] != "conversation" or
                 endpoint["revision"] != row["endpoint_revision"] or
                 not sender or not sender.is_active or not recipient or not recipient.is_active or
-                not actor or not actor.is_active or actor.api_key_hash != row["credential_binding"] or
+                not valid_actor_binding(uow, actor, row["credential_binding"]) or
                 (endpoint["profile_id"] and (not profile or not profile["enabled"] or profile["revision"] != row["profile_revision"]))):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Result publication authority changed.", {})
         expected = self.arguments(row)

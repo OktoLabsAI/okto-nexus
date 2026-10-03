@@ -64,7 +64,9 @@ def _agent_guard(conn, agent_id: str) -> str:
         "profile_id", "adapter_id", "config", "secret_refs",
         "inherit_ambient", "enabled", "revision",
     )
+    from .runtime_policy import guard
     return _digest({
+        "runtime_policy": guard(conn, agent_id),
         "execution_policy": [dict(row) for row in conn.execute(
             "SELECT * FROM agent_execution_policies WHERE agent_id=?", (agent_id,))],
         "agent": {key: agent[key] for key in agent_fields},

@@ -13,6 +13,62 @@ approve its binding and explicitly authorize execution with a duration and actio
 budget. The MCP HTTP address uses the agent's original API key. There is no
 additional connection key or legacy connection setup.
 
+The trusted loopback dashboard can initiate runtime actions as the reserved
+operator without minting an operator API key. Recorded operations and message
+deliveries retain that operator's policy snapshot and revalidate it before
+execution and result publication. The represented agent still needs its own
+current execution grant; remote callers still authenticate normally.
+
+For Meta-harness to run an agent automatically, enable **Reply automatically to
+messages in this workspace** in its local connection and save the message policy.
+This opt-in is scoped to that agent, connection and workspace. Changing the policy
+revokes existing execution permissions, so authorize a new duration/action budget
+after saving. The underlying Core output is published back into the conversation.
+A provider authentication error can also appear as a runtime result: configuring
+a connection does not itself log into the provider.
+
+**Settings → Global runtime defaults** controls runtime availability and
+conversation isolation. **Agents → Connections → Runtime policy for this agent**
+can inherit or override each setting independently. Explicit agent overrides
+take precedence over global defaults, including an enabled override when the
+global runtime default is disabled. The global setting is a default, not an
+unconditional kill switch. Existing per-sender connections migrate to an explicit
+per-sender agent override; other agents inherit the shared-session global default.
+
+Select **MCP only — runtime disabled** to block new runtime work for the affected
+agents while retaining authenticated MCP access and inbox delivery under their
+existing permissions. Pending resolutions and execution grants are invalidated.
+Active local sessions close when lease renewal detects revoked authority; the
+setting does not synchronously kill an already-running turn. Enabling runtime
+again requires fresh execution permission. Close/interrupt containment remains
+separate from admitting new work.
+
+**Conversation sessions** defaults to **Shared session**. Select **Separate
+session per sender** globally or in the agent override to keep one conversation per sender within the approved
+connection/workspace. Follow-up messages reuse that sender's live session;
+different senders can execute concurrently within existing Core capacity and
+execution budgets. Dispatch remains ordered within each sender's conversation,
+and result publication retains the original message and recipient correlation.
+This selection also applies to explicitly dispatched managed handoffs, using
+their creator as sender; creating a handoff alone still does not dispatch it.
+
+Close affected agents' existing sessions before changing isolation, then renew
+execution permission. Explicitly overridden agents are unaffected by changes to
+defaults they do not inherit. Sender affinity persists in SQLite and is committed with admission;
+unresolved sessions require reconciliation rather than silently opening a
+duplicate. A closed session is replaced on the next message. Manually opened
+sessions are not adopted by an isolated conversation. Context isolation does not
+isolate workspace files or tool permissions, and each live sender session uses
+additional runtime resources.
+
+Use **Reconfigure local environment** to change an existing local connection's
+workspace/provider home. Close its active sessions, prepare the new environment,
+then review and approve the replacement using the existing connection name.
+Stale connections expose the same preparation/review path. A replacement gets a
+new review and preparation identity while uncertain requests remain recoverable.
+For Claude Code, the provider home is the directory containing `.claude`, whose
+login must already be configured; a blank provider home supplies no login.
+
 Remote identity, installation and integration are configured in the Connector.
 The agent ID selects the identity; its existing API key authenticates it. Local,
 Remote and All restrict execution and do not grant a Connector authority by
@@ -317,6 +373,28 @@ the Server verifies its digest and retained authority. No form value or provider
 default is automatically chosen. Expiry disables new answers while leaving
 recorded decision and delivery status readable. Confirmation, denial, pending
 dispatch and uncertain native delivery remain separate facts.
+
+## Local execution permission limits
+
+Local preparation pre-fills the provider directory from Core discovery:
+`CODEX_HOME` or `~/.codex`, `CLAUDE_CONFIG_DIR` or `~/.claude`, and
+`PI_CODING_AGENT_DIR` or `~/.pi/agent`. Only existing directories are suggested;
+an invalid override does not silently fall back to another account. The local
+operator can edit or clear the field. Suggestions neither read credentials nor
+authorize access and are not included in the portable executor inventory.
+
+The **Authorize local execution** form offers independent **No expiration** and
+**Unlimited actions** options. Existing grants retain their original limits;
+new forms still default to 60 minutes and 20 actions. Select both options for
+consent that remains valid until revoked, without an action quota.
+
+The grants API accepts explicit `expires_at: null` and `max_executions: null`
+for local (embedded) bindings only. Bounded values retain the 24-hour and
+1..1000-action validation. Only an operator may issue these permissions.
+Unbounded consent does not bypass agent, workspace, connection, runtime policy,
+credential or profile checks, nor the independent causality limits.
+Core leases and session MCP credentials remain short-lived and renewable;
+revocation, deactivation and disabling runtime still stop execution.
 
 ## Shutdown, migration and recovery
 

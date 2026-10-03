@@ -8,6 +8,7 @@ import { LocalInstallationCheck } from "./LocalInstallationCheck";
 import { RuntimeOperations } from "./RuntimeOperations";
 import { RuntimeSessions } from "./RuntimeSessions";
 import { LocalExecutionPermission } from "./LocalExecutionPermission";
+import { RuntimeConversationPolicy } from "./RuntimeConversationPolicy";
 
 const fieldClass = "rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5 text-xs";
 type Selection = {executorId: string; adapterId: string; candidateRef: string; inventoryRevision: string};
@@ -28,6 +29,8 @@ export function RuntimeSelection({agentId, contextWorkspaceId = "", configureLoc
   const [busy, setBusy] = useState(true);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
+  const [reconfigure, setReconfigure] = useState(false);
+  useEffect(() => {setReconfigure(false);}, [agentId, executorId, workspaceId, selection?.candidateRef]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -86,7 +89,8 @@ export function RuntimeSelection({agentId, contextWorkspaceId = "", configureLoc
     return () => { window.removeEventListener("focus", refresh); window.clearInterval(timer); };
   }, []);
 
-  const candidate = options?.options.find(item => item.adapter_id === selection?.adapterId && item.candidate_ref === selection?.candidateRef);
+  const candidate = options?.options.find(item => item.adapter_id === selection?.adapterId && item.candidate_ref === selection?.candidateRef
+    && (!configureLocal || item.adapter_id === (localAdapterId || policy?.local_adapter_id)));
   const local = hosts.find(host => host.executor_id === executorId)?.kind === "embedded";
   const choices = options?.options.filter(item => configureLocal
     ? item.adapter_id === (localAdapterId || policy?.local_adapter_id) : !!item.binding) || [];
@@ -134,31 +138,35 @@ export function RuntimeSelection({agentId, contextWorkspaceId = "", configureLoc
       {!configureLocal && <p>Selected: {selected.label}. Start: {selected.can_start ? "available" : "unavailable"}.</p>}
       {configureLocal && local &&
         selected.can_configure && selected.technical_state === "NOT_PROBED" && selected.candidate_ref &&
-        <LocalInstallationCheck key={JSON.stringify([agentId, executorId, selected.candidate_ref, options!.inventory_revision])}
+        <LocalInstallationCheck key={JSON.stringify(["installation-check", agentId, executorId, selected.candidate_ref, options!.inventory_revision])}
           agentId={agentId} executorId={executorId} adapterId={selected.adapter_id}
           candidateRef={selected.candidate_ref} inventoryRevision={options!.inventory_revision}
           beforeCheck={beforeConfigure}
           onChecked={() => { setNotice("Version checked. Review the refreshed installation before preparing its workspace.");
             setSelection(null); setRevision(value => value + 1); onInventoryUpdated?.(); }} />}
+      {configureLocal && local && selected.can_configure && selected.binding && !selected.preparation && !reconfigure &&
+        <button className="btn btn-secondary" onClick={() => setReconfigure(true)}>Reconfigure local environment</button>}
       {configureLocal && local &&
-        selected.can_configure && !selected.preparation && !selected.binding &&
+        selected.can_configure && !selected.preparation && (!selected.binding || selected.binding.state === "STALE" || reconfigure) &&
         !selected.policy_reasons.includes("REALIZATION_SELECTION_REQUIRED") &&
-        <EmbeddedPreparation key={JSON.stringify([agentId, executorId, workspaceId, selection?.candidateRef, selection?.inventoryRevision])}
+        <EmbeddedPreparation key={JSON.stringify(["preparation", agentId, executorId, workspaceId, selection?.candidateRef, selection?.inventoryRevision, selected.binding?.binding_revision])}
           agentId={agentId} executorId={executorId} hostLabel={hosts.find(host => host.executor_id === executorId)?.label || executorId}
           workspaceId={workspaceId} workspaceLabel={workspaces.find(project => project.workspace_id === workspaceId)?.display_name || ""}
           inventoryRevision={options!.inventory_revision} choice={selected}
           beforePrepare={beforeConfigure}
-          onPrepared={id => { setMappingWorkspaceId(id); setRevision(value => value + 1); }} />}
-      {configureLocal && local && configurationSaved && <BindingConsent key={JSON.stringify([agentId, executorId, workspaceId, selection?.candidateRef, selection?.inventoryRevision, selected.preparation?.realization_ref])}
+          onPrepared={id => { setReconfigure(false); setMappingWorkspaceId(id); setRevision(value => value + 1); }} />}
+      {configureLocal && local && configurationSaved && <BindingConsent key={JSON.stringify(["binding-consent", agentId, executorId, workspaceId, selection?.candidateRef, selection?.inventoryRevision, selected.preparation?.realization_ref])}
         agentId={agentId} executorId={executorId} hostLabel={hosts.find(host => host.executor_id === executorId)?.label || executorId}
         workspaceId={workspaceId} workspaceLabel={workspaces.find(project => project.workspace_id === workspaceId)?.display_name || workspaceId}
         inventoryRevision={options!.inventory_revision} choice={selected} onApplied={() => setRevision(value => value + 1)} />}
-      {!configureLocal && selected.binding && <RuntimeOperations key={JSON.stringify([agentId, selected.binding.binding_id])}
+      {!configureLocal && selected.binding && <RuntimeOperations key={JSON.stringify(["operations", agentId, selected.binding.binding_id, selected.binding.workspace_binding_id])}
         agentId={agentId} binding={selected.binding} canStart={selected.can_start} />}
-      {configureLocal && local && configurationSaved && selected.binding?.state === "APPROVED" && selected.policy_reasons.includes("AUTHORIZATION_REQUIRED") &&
-        <LocalExecutionPermission key={selected.binding.binding_id} agentId={agentId} binding={selected.binding}
+      {configureLocal && local && configurationSaved && selected.binding?.state === "APPROVED" &&
+        <RuntimeConversationPolicy key={"messages:" + selected.binding.binding_id} binding={selected.binding} onUpdated={() => setRevision(value => value + 1)} />}
+      {configureLocal && local && configurationSaved && selected.binding?.state === "APPROVED" &&
+        <LocalExecutionPermission key={"permission:" + selected.binding.binding_id} agentId={agentId} binding={selected.binding}
           onUpdated={() => setRevision(value => value + 1)} />}
-      {!configureLocal && selected.binding && <RuntimeSessions key={JSON.stringify([agentId, executorId, selected.binding.binding_id])}
+      {!configureLocal && selected.binding && <RuntimeSessions key={JSON.stringify(["sessions", agentId, executorId, selected.binding.binding_id])}
         agentId={agentId} binding={selected.binding} />}
     </fieldset>}
   </section>;

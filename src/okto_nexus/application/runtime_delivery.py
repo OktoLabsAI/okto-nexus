@@ -9,6 +9,7 @@ from .runtime_bootstrap import delivery_context
 from .connection_policy import method_enabled, require_method
 from .runtime_requirements import validate_native_requirements
 from .runtime_causality import RuntimeCausalityService
+from .runtime_actor_authority import authenticated_message_context, valid_actor_binding
 
 
 class RuntimeDeliveryPlanner:
@@ -51,8 +52,11 @@ class RuntimeDeliveryPlanner:
                 candidates.append((endpoint, profile, live[0]))
         return candidates
 
-    def candidates(self, uow, *, agent_id, workspace_id):
+    def candidates(self, uow, *, agent_id, workspace_id, sender_agent_id=None):
         candidates = []
+        from .runtime_policy import effective
+        if not effective(uow.connection, agent_id)['runtime_enabled']:
+            return candidates
         for endpoint in self.endpoints.list(uow, agent_id=agent_id, workspace_id=workspace_id):
             if not method_enabled(uow, endpoint["agent_id"], endpoint["adapter_id"]):
                 continue
@@ -66,7 +70,7 @@ class RuntimeDeliveryPlanner:
                         and endpoint["health"] != "quarantined" and profile and profile["enabled"]
                         and "conversation" not in profile["config"].get("disabled_capabilities", ())):
                     from .execution_domain_delivery import select_delivery_session
-                    _, session_id = select_delivery_session(uow, endpoint["endpoint_id"])
+                    _, session_id = select_delivery_session(uow, endpoint["endpoint_id"], sender_agent_id=sender_agent_id)
                     candidates.append((endpoint, profile, session_id))
                 continue
             descriptor = self.registry.get(endpoint["adapter_id"])
@@ -105,11 +109,15 @@ class RuntimeDeliveryPlanner:
     def enqueue(self, uow, *, context, message, delivery, now, authorization_revision, result_source=None):
         # Legacy cooperative-trust messages still reach the logical inbox, but
         # cannot acquire execution authority from a sender ID in the payload.
-        source_kind = "captured_result" if result_source else "agent_key"
-        if not context or context.authentication_source != source_kind or not context.credential_binding:
+        if result_source:
+            if not context or context.authentication_source != "captured_result":
+                return None
+        else:
+            context = authenticated_message_context(uow, context, self.agents)
+        if not context or not context.credential_binding:
             return None
         actor = self.agents.get(uow, context.actor_agent_id)
-        if not actor or not actor.is_active or actor.api_key_hash != context.credential_binding:
+        if not valid_actor_binding(uow, actor, context.credential_binding):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Authenticated delivery actor is unavailable.", {})
         if result_source:
             if (result_source["recipient_agent_id"] != message.from_agent_id or result_source["actor_agent_id"] != actor.agent_id
@@ -117,7 +125,8 @@ class RuntimeDeliveryPlanner:
                 raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Captured result source does not match this delivery.", {})
         elif actor.agent_id != message.from_agent_id and actor.agent_id != "operator":
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Payload sender is not the authenticated actor.", {})
-        candidates = self.candidates(uow, agent_id=delivery.recipient_agent_id, workspace_id=message.workspace_id)
+        candidates = self.candidates(uow, agent_id=delivery.recipient_agent_id, workspace_id=message.workspace_id,
+                                     sender_agent_id=message.from_agent_id)
         if not candidates:
             return None
         ready = [c for c in candidates if c[2]]
@@ -180,7 +189,7 @@ class RuntimeDeliveryPlanner:
         if operation.get("admission_binding") and endpoint and endpoint["selection_group"] != admission["selection_group"]:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Fallback equivalence approval changed.", {})
         if (not config.feature_harness_integrations or not actor or not actor.is_active or
-                actor.api_key_hash != operation["credential_binding"] or not recipient or not recipient.is_active or
+                not valid_actor_binding(uow, actor, operation["credential_binding"]) or not recipient or not recipient.is_active or
                 not reachable(actor, recipient) or
                 not endpoint or not endpoint["enabled"] or endpoint["activation_state"] != "approved" or endpoint["revision"] != operation["endpoint_revision"] or
                 endpoint["health"] == "quarantined" or
@@ -228,7 +237,8 @@ class RuntimeDeliveryPlanner:
              "profile_id": source["profile_id"], "profile_revision": source_profile["revision"] if source_profile else None})
         tried = self.outbox.attempted_endpoints(uow, operation_id=operation["operation_id"])
         candidates = [candidate for candidate in self.candidates(uow,
-            agent_id=operation["recipient_agent_id"], workspace_id=operation["workspace_id"])
+            agent_id=operation["recipient_agent_id"], workspace_id=operation["workspace_id"],
+            sender_agent_id=envelope["sender_agent_id"])
             if candidate[0]["selection_group"] == admission["selection_group"]
             and (candidate[0]["protocol"] == "nxl-r4"
                  or self.registry.get(candidate[0]["adapter_id"]).input_schema.get("transport_binding_contract") == 1)

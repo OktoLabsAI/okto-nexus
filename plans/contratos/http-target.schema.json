@@ -1627,6 +1627,10 @@
         "can_configure": {
           "type": "boolean"
         },
+        "provider_home_suggestion": {
+          "type": ["string", "null"],
+          "maxLength": 4096
+        },
         "can_bind": {
           "type": "boolean"
         },

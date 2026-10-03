@@ -31,10 +31,10 @@ class ExecutionGrant:
     workspace_id: str
     endpoint_id: str
     actions: frozenset[str]
-    expires_at: str
+    expires_at: str | None
     revision: int = 1
     revoked_at: str | None = None
     runtime_profile_id: str | None = None
     handoff_id: str | None = None
     claim_epoch: int | None = None
-    max_executions: int = 1
+    max_executions: int | None = 1

@@ -60,6 +60,12 @@ def test_canonical_conversation_result_uses_current_message_policy(connected_loc
     assert sent['ok'], sent
     turn = current_turn(setup)
     wait_receipt(setup, turn)
+    from okto_nexus.adapters.inbound.mcp.tools.inbox import build_service as inbox_service
+    inbox = inbox_service(deps)
+    assert inbox.consume_canonical_runtime_results() == 0
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT status FROM message_deliveries WHERE message_id=? AND recipient_agent_id=?',
+            (sent['data']['message_id'], 'subject')).fetchone()[0] != 'read'
     if policy == 'deny':
         with deps.connection_factory.unit_of_work() as uow:
             uow.connection.execute('UPDATE agents SET permissions=? WHERE agent_id=?', (json.dumps(dict(messages=dict(send_direct=False))), 'subject'))
@@ -67,6 +73,17 @@ def test_canonical_conversation_result_uses_current_message_policy(connected_loc
     row = wait_result(setup, {'allow': 'PUBLISHED', 'deny': 'BLOCKED', 'approval': 'PENDING_APPROVAL'}[policy])
     assert row['event_id'] is None and row['runtime_session_id'] is None
     assert row['canonical_operation_id'] == turn['operation_id']
+    inbox.consume_canonical_runtime_results()
+    assert inbox.consume_canonical_runtime_results() == 0
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT status FROM message_deliveries WHERE message_id=? AND recipient_agent_id=?',
+            (sent['data']['message_id'], 'subject')).fetchone()[0] == 'read'
+        receipts = [json.loads(r[0]) for r in uow.connection.execute(
+            "SELECT body FROM messages WHERE subject LIKE 'runtime processing receipt:%'")]
+        assert len(receipts) == 1
+        assert receipts[0]['message_ids'] == [sent['data']['message_id']]
+        assert receipts[0]['canonical_operation_id'] == turn['operation_id']
+        assert receipts[0]['human_read'] is False
     if policy == 'approval':
         response = client.post('/api/v1/approvals/' + row['publication_approval_id'] + '/decision',
             headers=headers['operator'], json=dict(decision='approve'))

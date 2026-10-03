@@ -1,6 +1,6 @@
 """Resolve approved embedded selections at the Core launch boundary."""
 import asyncio
-from dataclasses import asdict
+from dataclasses import asdict, replace
 import json
 import os
 import re
@@ -126,7 +126,10 @@ class ApprovedLocalLaunch:
                 raise _refuse()
             if self._database() != (row, guard):
                 raise _refuse()
-            return _digest(dict(row=row, agent_guard=guard)), candidate, record
+            # Discovery is intentionally untrusted. The exact installation has
+            # now passed current binding, operator consent, identity and drift
+            # checks, so grant selection only to this scoped launch copy.
+            return _digest(dict(row=row, agent_guard=guard)), replace(candidate, trust='selected'), record
         except (KeyError, TypeError, ValueError, OSError):
             raise _refuse() from None
 

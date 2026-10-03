@@ -29,7 +29,7 @@ class RuntimeDiscoveryService:
                 values.append(agent_id)
             if not operator:
                 query += (" AND EXISTS (SELECT 1 FROM runtime_execution_grants g WHERE g.endpoint_id=e.endpoint_id"
-                          " AND g.actor_agent_id=? AND g.credential_binding=? AND g.revoked_at IS NULL AND g.expires_at>?)")
+                          " AND g.actor_agent_id=? AND g.credential_binding=? AND g.revoked_at IS NULL AND (g.no_expiry=1 OR g.expires_at>?))")
                 values.extend((context.actor_agent_id, context.credential_binding, now))
             # Scan bounds apply before authorization; never return a hidden ID as
             # a cursor. Filtering by agent allows callers to narrow large stores.

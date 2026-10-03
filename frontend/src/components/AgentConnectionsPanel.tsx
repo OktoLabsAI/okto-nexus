@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Check } from "lucide-react";
 import { api, type AgentExecutionPolicy } from "../api";
 import { RuntimeSelection } from "./RuntimeSelection";
+import { RuntimePolicy } from "./RuntimePolicy";
 import { RemoteConnectorCommand } from "./RemoteConnectorCommand";
 import { runtimeApi, localRuntimeAvailability, type RuntimeOptions } from "../runtimeApi";
 
@@ -9,6 +10,7 @@ const fieldClass = "ml-2 rounded-lg border border-surface-200 dark:border-surfac
 
 export function AgentConnectionsPanel({agentId, onClose}: {agentId: string; onClose: () => void}) {
   const [policy, setPolicy] = useState<AgentExecutionPolicy | null>(null);
+  const [runtimeEnabled, setRuntimeEnabled] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
@@ -54,7 +56,8 @@ export function AgentConnectionsPanel({agentId, onClose}: {agentId: string; onCl
     <div className="flex justify-between items-center"><h3>Connections · {agentId}</h3>
       <button className="btn btn-secondary" onClick={onClose}>Close</button></div>
     <p>MCP HTTP: <code>{window.location.origin}/mcp</code>. Authenticate with this agent's existing API key.</p>
-    {policy && <>
+    <RuntimePolicy agentId={agentId} onUpdated={enabled => {setRuntimeEnabled(enabled); setInventoryRevision(value => value + 1);}} />
+    {policy && runtimeEnabled && <>
       <label className="block">Execution access <select className={fieldClass} aria-label="Execution access" value={policy.execution_location} disabled={busy}
         onChange={event => {setDirty(true); setNotice(''); setPolicy({...policy, execution_location: event.target.value as AgentExecutionPolicy['execution_location']});}}>
         <option value="local">Local</option><option value="remote">Remote</option><option value="all">All</option>

@@ -1,6 +1,7 @@
 """Transactional causal admission; no session-local state, transport or telemetry."""
 from ..domain.base import iso_plus, new_id
 from ..errors import ErrorCode, OktoNexusError
+from .runtime_actor_authority import authenticated_message_context, valid_actor_binding
 
 
 class RuntimeCausalityService:
@@ -26,10 +27,11 @@ class RuntimeCausalityService:
                 return None  # Legacy result, never silently minted as a new root.
             purpose, depth, root = "observation", parent["hop_count"] + 1, parent["root_operation_id"]
         else:
-            if not context or context.authentication_source != "agent_key" or not context.credential_binding:
+            context = authenticated_message_context(uow, context, self.agents)
+            if context is None:
                 return None
             actor = self.agents.get(uow, context.actor_agent_id)
-            if (not actor or not actor.is_active or actor.api_key_hash != context.credential_binding or
+            if (not valid_actor_binding(uow, actor, context.credential_binding) or
                     (not authorized_work and actor.agent_id not in {message.from_agent_id, "operator"})):
                 raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Causal entry requires an authenticated sender.", {})
             if message.parent_message_id:

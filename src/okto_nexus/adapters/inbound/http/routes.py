@@ -399,8 +399,8 @@ class RuntimeGrantBody(BaseModel):
     actor_agent_id: str
     endpoint_id: str
     actions: list[str]
-    expires_at: str
-    max_executions: int = 1
+    expires_at: str | None
+    max_executions: int | None = 1
 
 
 def _tag_service(deps) -> TagCatalogService:
@@ -1050,6 +1050,26 @@ def build_router() -> APIRouter:
                 raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Expected optional compact boolean.", {})
             return _ok(await anyio.to_thread.run_sync(lambda: maintain_journal(
                 request.app.state.deps, compact=body.get("compact", False))))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.get("/harness/endpoints/{endpoint_id}/conversation-policy")
+    async def runtime_conversation_policy(request: Request, endpoint_id: str) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).conversation_policy(
+                context, endpoint_id=endpoint_id)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.put("/harness/endpoints/{endpoint_id}/conversation-policy")
+    async def runtime_conversation_policy_update(request: Request, endpoint_id: str, body: dict) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).conversation_policy(
+                context, endpoint_id=endpoint_id, changes=body)))
         except OktoNexusError as exc:
             return _map_error(exc)
 

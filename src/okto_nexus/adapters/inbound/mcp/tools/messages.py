@@ -71,7 +71,6 @@ from okto_nexus.application.messages import MessageService
 from okto_nexus.application.runtime_delivery import RuntimeDeliveryPlanner
 from okto_nexus.adapters.outbound.sqlite.runtime_observations_repo import SqliteRuntimeObservationRepo
 from okto_nexus.application.runtime_results import RuntimeResultService
-from okto_nexus.domain.runtime_context import RuntimeRequestContext
 from okto_nexus.adapters.outbound.sqlite.endpoints_repo import SqliteEndpointRepo
 from okto_nexus.adapters.outbound.sqlite.runtime_outbox_repo import SqliteRuntimeOutboxRepo
 from okto_nexus.adapters.outbound.runtime_wake import signal_runtime_owner
@@ -127,8 +126,8 @@ _P_TRACE = (
 
 
 def runtime_message_context():
-    actor = get_authenticated_agent()
-    return RuntimeRequestContext(actor.agent_id, "agent_key", credential_binding=actor.api_key_hash) if actor else None
+    from ...http.identity_ctx import runtime_request_context
+    return runtime_request_context()
 
 
 def wake_runtime(deps):

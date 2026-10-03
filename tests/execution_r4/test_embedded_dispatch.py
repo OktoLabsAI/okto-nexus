@@ -142,6 +142,41 @@ def test_serve_dispatches_local_open_turn_controls_and_close(connected_local):
     assert history.status_code==200 and history.json()["executor_stage"]=="SUCCEEDED"
 
 
+@pytest.mark.parametrize('failure', ['expired', 'revoked'])
+def test_denied_renewal_releases_only_its_session_and_keeps_executor_ready(connected_local, monkeypatch, failure):
+    from okto_nexus.errors import ErrorCode
+    setup, binding, native = connected_local
+    deps, app, client, *_ = setup
+    opened = admit(setup, binding, 'expiring-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    session_id = opened['scope']['session_id']
+    owner = app.state.embedded_dispatch_owner
+    other = admit(setup, binding, 'unrelated-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, other)
+    async def deny(**kwargs):
+        if failure == 'expired':
+            raise OktoNexusError(ErrorCode.CONFLICT, 'The authority has expired.', {})
+        raise CoreError('AGENT_REVOKED', 'lease_renew')
+    current = owner.sessions[session_id]
+    monkeypatch.setattr(current['executor'], 'renew_r4', deny)
+    client.portal.call(owner._renew_owned, session_id, current)
+    assert owner.failure is None and not owner._stopping.is_set()
+    assert session_id not in owner.sessions
+    assert other['scope']['session_id'] in owner.sessions
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT lifecycle_state,lease_state FROM execution_sessions WHERE session_id=?',
+            (session_id,)).fetchone()[:] == ('CLOSED', 'CLOSED')
+        assert uow.connection.execute('SELECT control_state FROM execution_executors').fetchone()[0] == 'CONTROL_READY'
+        assert uow.connection.execute('SELECT lifecycle_state FROM execution_sessions WHERE session_id=?',
+            (other['scope']['session_id'],)).fetchone()[0] == 'READY'
+    wait_receipt(setup, admit(setup, binding, 'unrelated-close', 'runtime.close',
+        session_id=other['scope']['session_id']), stages=('SUCCEEDED',))
+    again = admit(setup, binding, 'after-expiry-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, again)
+    wait_receipt(setup, admit(setup, binding, 'after-expiry-close', 'runtime.close',
+        session_id=again['scope']['session_id']), stages=('SUCCEEDED',))
+
+
 def test_stale_local_owner_cannot_start_native_work(connected_local):
     setup,binding,native=connected_local
     deps,app,*_=setup

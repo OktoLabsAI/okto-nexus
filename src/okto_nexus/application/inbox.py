@@ -116,6 +116,54 @@ class InboxService:
         self._external_work_provider = external_work_provider
         self._request_context_provider = request_context_provider
 
+    def consume_canonical_runtime_results(self):
+        """Acknowledge processing from durable R4 terminal evidence, once.
+
+        A dispatch or socket write is insufficient. Result publication policy
+        is independent: a processed request may have a blocked/private reply.
+        """
+        from .execution_results import canonical_result_matches
+        now = self._clock.now_iso()
+        count = 0
+        with self._cf.unit_of_work() as uow:
+            rows = uow.connection.execute(
+                "SELECT r.*,o.message_id,o.recipient_agent_id,o.delivery_id "
+                "FROM runtime_results r JOIN delivery_outbox o USING(operation_id) "
+                "JOIN message_deliveries d ON d.delivery_id=o.delivery_id "
+                "WHERE r.canonical_operation_id IS NOT NULL AND o.reconciliation_id IS NULL "
+                "AND d.consumer_kind='push' AND d.consumer_operation_id=o.operation_id "
+                "AND d.status IN ('unread','delivered') ORDER BY r.captured_at,r.result_id LIMIT 64"
+            ).fetchall()
+            for raw in rows:
+                row = dict(raw)
+                if not canonical_result_matches(uow.connection, row):
+                    continue
+                changed = uow.connection.execute(
+                    "UPDATE message_deliveries SET status='read',read_at=? "
+                    "WHERE delivery_id=? AND message_id=? AND recipient_agent_id=? "
+                    "AND consumer_kind='push' AND consumer_operation_id=? "
+                    "AND status IN ('unread','delivered')",
+                    (now, row['delivery_id'], row['message_id'], row['recipient_agent_id'], row['operation_id']))
+                if not changed.rowcount:
+                    continue
+                proof = uow.connection.execute(
+                    "SELECT stream_epoch,terminal_sequence FROM execution_results "
+                    "WHERE server_id=? AND executor_id=? AND operation_id=?",
+                    (row['canonical_server_id'],row['canonical_executor_id'],row['canonical_operation_id'])).fetchone()
+                acknowledgement = dict(ack_source='canonical_native_terminal', ack_level='HARNESS_ACCEPTED',
+                    human_read=False, operation_id=row['operation_id'],
+                    canonical_operation_id=row['canonical_operation_id'],
+                    stream_epoch=proof['stream_epoch'], terminal_sequence=proof['terminal_sequence'])
+                messages = self._messages.list_by_ids(uow, message_ids=[row['message_id']])
+                items = [dict(message_id=m.message_id, workspace_id=m.workspace_id,
+                              from_agent_id=m.from_agent_id) for m in messages]
+                self._emit_receipts(uow, items, type_=MESSAGE_READ_TYPE,
+                    recipient=row['recipient_agent_id'], at=now, acknowledgement=acknowledgement)
+                self._deliver_read_receipts(uow, messages, reader=row['recipient_agent_id'],
+                    at=now, acknowledgement=acknowledgement)
+                count += 1
+        return count
+
     # ------------------------------------------------------------------ #
     # inbox_pull
     # ------------------------------------------------------------------ #

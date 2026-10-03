@@ -12,6 +12,7 @@ export function EmbeddedPreparation({agentId, executorId, hostLabel, workspaceId
 }) {
   const storageKey = "okto-nexus:r4-local-preparation:" + JSON.stringify([
     agentId, executorId, workspaceId, choice.adapter_id, choice.candidate_ref, inventoryRevision,
+    ...(choice.binding ? [choice.binding.binding_id, choice.binding.binding_revision] : []),
   ]);
   const [saved] = useState(() => {
     try {
@@ -32,7 +33,7 @@ export function EmbeddedPreparation({agentId, executorId, hostLabel, workspaceId
   });
   const [pending, setPending] = useState<LocalPreparationRequest | null>(saved.request);
   const [root, setRoot] = useState(saved.request?.workspace_root || "");
-  const [home, setHome] = useState(saved.request?.provider_home || "");
+  const [home, setHome] = useState(saved.request ? saved.request.provider_home || "" : choice.provider_home_suggestion || "");
   const [label, setLabel] = useState(saved.request?.workspace_label || workspaceLabel);
   const [references, setReferences] = useState(saved.request
     ? Object.entries(saved.request.secret_bindings).map(([name, ref]) => `${name}=${ref}`).join("\n") : "");
@@ -40,9 +41,9 @@ export function EmbeddedPreparation({agentId, executorId, hostLabel, workspaceId
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(saved.error);
   const runtimeSettings: Record<string, {name: string; home: string; credential: string}> = {
-    codex_app_server: {name: 'Codex', home: 'The approved home supplies .codex state and login. CODEX_HOME is set to its .codex directory.', credential: 'OPENAI_API_KEY=vault:provider-key'},
-    claude_stream: {name: 'Claude Code', home: 'Use the home directory containing the Claude Code login you want this agent to use.', credential: 'ANTHROPIC_API_KEY=vault:provider-key'},
-    pi_rpc: {name: 'Pi', home: 'Use the home directory containing the Pi settings for the selected provider.', credential: 'OPENAI_API_KEY=vault:provider-key'},
+    codex_app_server: {name: 'Codex', home: 'Use the Codex configuration directory (.codex or CODEX_HOME) containing the login.', credential: 'OPENAI_API_KEY=vault:provider-key'},
+    claude_stream: {name: 'Claude Code', home: 'Use the Claude configuration directory (.claude or CLAUDE_CONFIG_DIR) containing the login.', credential: 'ANTHROPIC_API_KEY=vault:provider-key'},
+    pi_rpc: {name: 'Pi', home: 'Use the Pi agent directory (.pi/agent or PI_CODING_AGENT_DIR) containing settings.json and auth.json.', credential: 'OPENAI_API_KEY=vault:provider-key'},
   };
   const settings = runtimeSettings[choice.adapter_id];
   const mounted = useRef(true);
@@ -82,6 +83,7 @@ export function EmbeddedPreparation({agentId, executorId, hostLabel, workspaceId
           (workspaceId && result.workspace_id !== workspaceId)) {
         throw new Error("The returned preparation does not match this selection.");
       }
+      window.dispatchEvent(new Event("nexus-workspaces-changed"));
       if (mounted.current) onPrepared(result.workspace_id);
     } catch (failure) {
       // Only a first, explicitly rejected request can be edited. A retry may
@@ -106,6 +108,7 @@ export function EmbeddedPreparation({agentId, executorId, hostLabel, workspaceId
       {!workspaceId && <label className="block">New workspace name<input aria-label="New workspace name" className={inputClass} value={label} maxLength={160} onChange={event => setLabel(event.target.value)} /></label>}
       {workspaceId && <p>Workspace: {workspaceLabel || workspaceId}</p>}
       <label className="block">Provider home directory (optional)<input aria-label="Provider home directory" className={inputClass} value={home} maxLength={4096} onChange={event => setHome(event.target.value)} /></label>
+      {choice.provider_home_suggestion && <p>Detected by Core on this host: {choice.provider_home_suggestion}. Review before approving; detection does not grant access.</p>}
       <p>Use an existing provider home for its login, or protected references configured on this host. A blank home does not configure a login directory.</p>
       {settings && <p>{settings.home}</p>}
       <label className="block">Protected credential references (optional)<textarea aria-label="Protected credential references" className={inputClass} value={references} maxLength={25000} rows={2} placeholder={settings?.credential} onChange={event => setReferences(event.target.value)} /></label>

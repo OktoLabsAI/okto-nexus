@@ -392,10 +392,14 @@ function Dashboard({
   // derived from /sessions): every KNOWN workspace shows up, including ones
   // with no live session yet (TR8).
   useEffect(() => {
-    api
-      .workspaces()
-      .then(({ workspaces }) => setWorkspaces(workspaces))
-      .catch(() => undefined);
+    let active = true;
+    const reload = () => {
+      api.workspaces().then(({workspaces}) => {if (active) setWorkspaces(workspaces);})
+        .catch(() => undefined);
+    };
+    reload();
+    window.addEventListener("nexus-workspaces-changed", reload);
+    return () => {active = false; window.removeEventListener("nexus-workspaces-changed", reload);};
   }, [refreshTick]);
 
   // Default scope = the serve's --project-root workspace (AC1) - applied

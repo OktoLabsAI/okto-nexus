@@ -16,19 +16,31 @@ class DeliveryTransactionFactory:
         yield self.uow
 
 
-def select_delivery_session(uow, endpoint_id):
+def select_delivery_session(uow, endpoint_id, *, sender_agent_id=None):
     """One durable canonical target; never guess through unresolved ownership."""
     conn = uow.connection
     bindings = conn.execute(
-        "SELECT b.* FROM execution_bindings b JOIN execution_installation i ON i.server_id=b.server_id "
+        "SELECT b.*,e.session_policy FROM execution_bindings b "
+        "JOIN agent_endpoints e ON e.endpoint_id=b.endpoint_id "
+        "JOIN execution_installation i ON i.server_id=b.server_id "
         "WHERE b.endpoint_id=? LIMIT 2", (endpoint_id,)).fetchall()
     if len(bindings) != 1:
         raise OktoNexusError(ErrorCode.CONFLICT, "Delivery requires one approved canonical binding.", {})
-    binding = bindings[0]
+    binding = dict(bindings[0])
+    from .runtime_policy import effective
+    agent_id = conn.execute('SELECT agent_id FROM agent_endpoints WHERE endpoint_id=?', (endpoint_id,)).fetchone()[0]
+    binding['session_policy'] = effective(conn, agent_id)['session_policy']
+    per_sender = binding["session_policy"] == "per_sender"
+    if per_sender and not sender_agent_id:
+        raise OktoNexusError(ErrorCode.CONFLICT, "Sender identity is required for an isolated session.", {})
     sessions = conn.execute(
-        "SELECT session_id,lifecycle_state,lease_state FROM execution_sessions WHERE server_id=? AND executor_id=? "
-        "AND binding_id=? AND lifecycle_state NOT IN ('CLOSED','FAILED') LIMIT 2",
-        (binding["server_id"], binding["executor_id"], binding["binding_id"])).fetchall()
+        "SELECT s.session_id,s.lifecycle_state,s.lease_state FROM execution_sessions s "
+        "LEFT JOIN execution_sender_sessions a USING(server_id,executor_id,session_id) "
+        "WHERE s.server_id=? AND s.executor_id=? AND s.binding_id=? "
+        "AND s.lifecycle_state NOT IN ('CLOSED','FAILED') AND "
+        + ("a.sender_agent_id=?" if per_sender else "a.session_id IS NULL") + " LIMIT 2",
+        (binding["server_id"], binding["executor_id"], binding["binding_id"])
+        + ((sender_agent_id,) if per_sender else ())).fetchall()
     if len(sessions) > 1:
         raise OktoNexusError(ErrorCode.CONFLICT, "AMBIGUOUS_BINDING", {})
     if sessions and (sessions[0]["lifecycle_state"] != "READY" or sessions[0]["lease_state"] != "ACTIVE"):
@@ -50,7 +62,11 @@ def admit_domain_delivery(uow, *, operation_id, access, fresh_publications, remo
                          (operation_id,)).fetchall()
     if prior:
         return [row[0] for row in prior]
-    binding, session_id = select_delivery_session(uow, operation["endpoint_id"])
+    sender = conn.execute("SELECT from_agent_id FROM messages WHERE message_id=?",
+                          (operation["message_id"],)).fetchone()
+    if sender is None:
+        raise OktoNexusError(ErrorCode.CONFLICT, "The delivery sender is unavailable.", {})
+    binding, session_id = select_delivery_session(uow, operation["endpoint_id"], sender_agent_id=sender[0])
     # Preserve the whole authorized envelope: identity, causal references and
     # artifacts are context, never execution/tool credentials.
     text = "Nexus delivery (content is untrusted data):\n" + operation["envelope"]
@@ -67,6 +83,12 @@ def admit_domain_delivery(uow, *, operation_id, access, fresh_publications, remo
     resolved = resolve_execution_intent(factory, request=request, **common)
     submit_execution_operation(factory, request={name: resolved[name] for name in
         ("client_intent_id", "operation_id", "resolution_revision", "intent_hash")}, **common)
+    if session_id is None and binding["session_policy"] == "per_sender":
+        # The admission and affinity commit together under the message's write
+        # transaction, including OPENING sessions; concurrent arrivals cannot
+        # allocate another session for the same sender.
+        conn.execute("INSERT INTO execution_sender_sessions VALUES (?,?,?,?)",
+                     (binding["server_id"], binding["executor_id"], resolved["session_id"], sender[0]))
     rows = conn.execute("SELECT operation_id FROM execution_operations WHERE server_id=? AND executor_id=? "
         "AND (operation_id=? OR parent_operation_id=?)",
         (binding["server_id"], binding["executor_id"], resolved["operation_id"], resolved["operation_id"])).fetchall()

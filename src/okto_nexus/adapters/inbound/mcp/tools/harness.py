@@ -569,7 +569,10 @@ def build_dispatcher(deps):
     dispatcher.event_ingress = supervisor.event_ingress
     dispatcher.event_ingress.capture_health_changed = dispatcher.capture_health_changed
     def publish_results():
-        return native_approvals.scan_once() + handoffs.process_runtime_results() + messages._runtime_results.scan_once(messages)
+        from .inbox import build_service as build_inbox_service
+        return (build_inbox_service(deps).consume_canonical_runtime_results()
+                + native_approvals.scan_once() + handoffs.process_runtime_results()
+                + messages._runtime_results.scan_once(messages))
     dispatcher.publish_results = publish_results
     dispatcher.event_ingress.wake_dispatch = dispatcher.wake
     dispatcher.wake_channel = RuntimeWakeChannel(deps.config.home_dir, getattr(deps, "runtime_owner_api_url", None))

@@ -15,6 +15,9 @@ def policy_view(uow, agent_id):
 
 
 def require_execution_location(uow, *, agent_id, executor_id, adapter_id):
+    from .runtime_policy import effective
+    if not effective(uow.connection, agent_id)['runtime_enabled']:
+        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Runtime is disabled; this agent uses MCP only.', {'reason': 'RUNTIME_DISABLED'})
     row = uow.connection.execute('SELECT e.kind FROM execution_executors e JOIN execution_installation i '
         'ON i.server_id=e.server_id AND i.singleton=1 WHERE e.executor_id=? LIMIT 2', (executor_id,)).fetchall()
     if len(row) != 1:

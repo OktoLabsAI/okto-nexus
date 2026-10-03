@@ -112,12 +112,13 @@ class ExecutionLeaseService:
         source = self.repo.source_grant(uow, grant_id)
         if row['dispatch_grant_id'] is not None and row['dispatch_grant_id'] != grant_id:
             raise _conflict('The lease grant does not match the dispatched operation.')
-        if (source is None or source['revoked_at'] is not None or _stamp(source['expires_at']) <= now or
+        if (source is None or source['revoked_at'] is not None or (not source['no_expiry'] and _stamp(source['expires_at']) <= now) or
                 source['actor_agent_id'] != scope['agent_id'] or source['represented_agent_id'] != scope['agent_id'] or
                 source['endpoint_id'] != row['endpoint_id'] or source['workspace_id'] != scope['workspace_id'] or
                 source['credential_binding'] != row['api_key_hash']):
             raise _conflict('A current canonical execution grant is required.')
-        expires = _stamp(source['expires_at'])
+        expires = (now + timedelta(milliseconds=self.max_duration_ms)
+                   if source['no_expiry'] else _stamp(source['expires_at']))
         if row["lifecycle_state"] == "OPEN_PENDING":
             from .execution_domain_delivery import require_domain_delivery
             require_domain_delivery(uow, access=self.access, server_id=scope["server_id"],
