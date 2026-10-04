@@ -1,3 +1,4 @@
+import { ConfigurationHelp } from './ConfigurationHelp';
 import { useEffect, useState } from 'react';
 import { api, type RuntimePolicy as Policy } from '../api';
 
@@ -25,17 +26,17 @@ export function RuntimePolicy({agentId, onUpdated}: {agentId?: string; onUpdated
   }, [agentId, revision]);
   const effectiveEnabled = enabled ?? policy?.defaults?.runtime_enabled ?? true;
   const effectiveSessions = sessions ?? policy?.defaults?.session_policy ?? 'shared';
-  return <section className="panel p-4 space-y-3" aria-label={agentId ? 'Agent runtime override' : 'Global runtime defaults'}>
+  return <section className="space-y-3" aria-label={agentId ? 'Agent runtime override' : 'Global runtime defaults'}>
     <h3 className="font-semibold">{agentId ? 'Runtime policy for this agent' : 'Global runtime defaults'}</h3>
-    <p>{agentId ? 'Inherit the global settings or override each option for this agent, across all connections and workspaces.' : 'Defaults for all agents. An explicit agent override takes precedence.'}</p>
-    <label className="block">Runtime connection
+    <p className="text-xs text-surface-500">{agentId ? 'Inherit the global settings or override each option for this agent, across all connections and workspaces.' : 'Defaults for all agents. An explicit agent override takes precedence.'}</p>
+    <label className="block">Runtime connection <ConfigurationHelp label="Runtime connection">Runtime executes this harness through Nexus. MCP only keeps the existing MCP and inbox access. Disabling runtime blocks new work and closes existing sessions when their leases renew.</ConfigurationHelp>
       <select aria-label={agentId ? 'Agent runtime connection' : 'Global runtime connection'} className={fieldClass} value={enabled === null ? 'inherit' : enabled ? 'enabled' : 'disabled'} disabled={busy || !policy}
         onChange={event => {setEnabled(event.target.value === 'inherit' ? null : event.target.value === 'enabled'); setNotice('');}}>
         {agentId && <option value="inherit">Inherit global setting ({policy?.defaults?.runtime_enabled ? 'runtime enabled' : 'MCP only'})</option>}
         <option value="enabled">Runtime enabled</option><option value="disabled">MCP only — runtime disabled</option>
       </select>
     </label>
-    <label className="block">Conversation sessions
+    <label className="block">Conversation sessions <ConfigurationHelp label="Conversation sessions">Shared uses one conversation for senders. Per sender isolates conversation history. Close sessions before changing this option, then authorize execution again.</ConfigurationHelp>
       <select aria-label={agentId ? 'Agent conversation sessions' : 'Global conversation sessions'} className={fieldClass} value={sessions ?? 'inherit'} disabled={busy || !policy}
         onChange={event => {setSessions(event.target.value === 'inherit' ? null : event.target.value as 'shared' | 'per_sender'); setNotice('');}}>
         {agentId && <option value="inherit">Inherit global setting ({policy?.defaults?.session_policy === 'per_sender' ? 'per sender' : 'shared'})</option>}
@@ -43,8 +44,6 @@ export function RuntimePolicy({agentId, onUpdated}: {agentId?: string; onUpdated
       </select>
     </label>
     <p>Effective selection: {effectiveEnabled ? 'runtime enabled' : 'MCP only'} · {effectiveSessions === 'per_sender' ? 'separate session per sender' : 'shared session'}.</p>
-    <p>MCP access and inbox delivery remain available under the existing agent permissions. Disabling runtime blocks new runtime work; existing sessions lose execution permission and close when their leases are renewed.</p>
-    <p>Close affected sessions before changing conversation isolation. Policy changes affecting execution invalidate its permissions; authorize execution again after enabling runtime.</p>
     <button className="btn btn-primary" disabled={busy || !policy || (enabled === policy.runtime_enabled && sessions === policy.session_policy)} onClick={async () => {
       if (!policy) return;
       setBusy(true); setError(''); setNotice('');

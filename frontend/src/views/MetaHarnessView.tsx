@@ -302,7 +302,7 @@ function isAcknowledged(delivery: MessageRow["deliveries"][number]): boolean {
 function fullStamp(value: string | null | undefined): string {
   if (!value) return "—";
   const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? value : date.toLocaleString();
+  return Number.isNaN(date.getTime()) ? value : date.toLocaleString("en-US");
 }
 
 function receiptState(delivery: MessageRow["deliveries"][number]): string {
@@ -474,7 +474,7 @@ function shortWorkspace(id: string, workspaces: WorkspaceListItem[]): string {
 function stamp(value: string): string {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
-  return new Intl.DateTimeFormat(undefined, {
+  return new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "2-digit",
     hour: "2-digit",

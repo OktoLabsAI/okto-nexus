@@ -69,7 +69,7 @@ export function BindingConsent({agentId, executorId, hostLabel, workspaceId, wor
     </>}
     {proposal && <>
       <p>Approve this connection for the selected agent, host, installation and workspace. Provider paths and credentials remain on the execution host. This does not authorize task execution or start a runtime.</p>
-      <p>Changes: {proposal.diff.fields_changed.join(", ")}. Expires: {new Date(proposal.expires_at).toLocaleString()}.</p>
+      <p>Changes: {proposal.diff.fields_changed.join(", ")}. Expires: {new Date(proposal.expires_at).toLocaleString("en-US")}.</p>
       <details><summary>Full approval scope</summary><p>{proposal.diff.summary}</p></details>
       {expired && <><p role="alert">This review expired. Check any uncertain approval before requesting a new review.</p>
         {!uncertain && <button className="btn btn-secondary" disabled={busy} onClick={() => { discardExpiredBindingReview(reviewKey); setProposal(null); }}>Request a new review</button>}</>}

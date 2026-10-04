@@ -58,7 +58,7 @@ export function ExecutionLogView({ workspace }: { workspace: string }) {
         <div className="flex flex-wrap gap-3 items-center">
           <span className={`rounded px-2 py-1 text-xs font-semibold uppercase ${item.severity === "error" ? "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-200" : item.severity === "warning" ? "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-200" : "bg-surface-100 dark:bg-surface-800"}`}>{item.severity}</span>
           <strong className="break-all">{item.code}</strong>
-          <time dateTime={item.timestamp} className="text-sm text-surface-500">{new Date(item.timestamp).toLocaleString()}</time>
+          <time dateTime={item.timestamp} className="text-sm text-surface-500">{new Date(item.timestamp).toLocaleString("en-US")}</time>
         </div>
         <p className="text-sm break-all">{item.agent_id || "System"} · {item.adapter_id || "Nexus"} · {item.action} · {item.source}</p>
         {item.details.message && <p className="text-sm whitespace-pre-wrap break-words">{item.details.message}</p>}

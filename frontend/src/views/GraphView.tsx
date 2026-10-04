@@ -821,7 +821,7 @@ function Legend({ viewMode }: { viewMode: GraphViewMode }) {
       </div>
       <div>
         <span className="text-pink-500 text-sm align-middle">■</span> handoff
-        aberto <span className="text-surface-400">· aguarda claim</span>
+        open <span className="text-surface-400">· awaiting claim</span>
       </div>
       {viewMode === "detailed" ? (
         <>

@@ -1,3 +1,4 @@
+import { ConfigurationHelp, ConfigurationSection } from './ConfigurationHelp';
 import { useEffect, useState } from "react";
 import { Check } from "lucide-react";
 import { api, type AgentExecutionPolicy } from "../api";
@@ -55,16 +56,16 @@ export function AgentConnectionsPanel({agentId, onClose}: {agentId: string; onCl
   return <section className="rounded-lg border p-3 space-y-3 text-xs" data-testid={`agent-connections-${agentId}`}>
     <div className="flex justify-between items-center"><h3>Connections · {agentId}</h3>
       <button className="btn btn-secondary" onClick={onClose}>Close</button></div>
-    <p>MCP HTTP: <code>{window.location.origin}/mcp</code>. Authenticate with this agent's existing API key.</p>
-    <RuntimePolicy agentId={agentId} onUpdated={enabled => {setRuntimeEnabled(enabled); setInventoryRevision(value => value + 1);}} />
+    <details><summary className="cursor-pointer text-surface-500">MCP connection details</summary><p>MCP HTTP: <code>{window.location.origin}/mcp</code>. Authenticate with this agent's existing API key.</p></details>
+    <ConfigurationSection title="Runtime behavior" status={runtimeEnabled ? "Runtime enabled · optional overrides" : "MCP only · runtime disabled"}><RuntimePolicy agentId={agentId} onUpdated={enabled => {setRuntimeEnabled(enabled); setInventoryRevision(value => value + 1);}} /></ConfigurationSection>
     {policy && runtimeEnabled && <>
-      <label className="block">Execution access <select className={fieldClass} aria-label="Execution access" value={policy.execution_location} disabled={busy}
+      <label className="block">Execution host <span className="text-surface-500">Required</span><ConfigurationHelp label="Execution host">Local runs on this Nexus server. Remote uses a Connector. All permits both, subject to authorization.</ConfigurationHelp><select className={fieldClass} aria-label="Execution access" value={policy.execution_location} disabled={busy}
         onChange={event => {setDirty(true); setNotice(''); setPolicy({...policy, execution_location: event.target.value as AgentExecutionPolicy['execution_location']});}}>
         <option value="local">Local</option><option value="remote">Remote</option><option value="all">All</option>
       </select></label>
-      <p>Restricts where this agent may execute. All permits both local and authorized remote hosts.</p>
+
       {policy.execution_location !== 'remote' && <div className="space-y-2">
-        <h4 className="font-semibold">Local runtime</h4>
+        <h4 className="font-semibold">Harness <span className="text-xs font-normal text-surface-500">Required</span></h4>
         {loadingInventory && <p role="status">Detecting available runtimes…</p>}
         {inventoryError && <p role="alert">{inventoryError}</p>}
         <div role="group" aria-label="Local runtime" className="flex flex-wrap gap-2">
@@ -89,8 +90,8 @@ export function AgentConnectionsPanel({agentId, onClose}: {agentId: string; onCl
       </div>}
       {policy.execution_location !== 'local' && <p>Configure remote identity, installation and runtime integration in the Connector using this agent's ID and API key.</p>}
       {policy.execution_location !== 'local' && <RemoteConnectorCommand agentId={agentId} />}
-      <p>The workspace comes from the message or task. It is not part of the agent identity.</p>
-      <button className="btn btn-primary" disabled={busy || (policy.execution_location !== 'remote' && (!policy.local_adapter_id || !inventory || !localRuntimeAvailability(inventory, policy.local_adapter_id).available))} onClick={async () => {
+
+      <button className="btn btn-primary" disabled={busy || !dirty || (policy.execution_location !== 'remote' && (!policy.local_adapter_id || !inventory || !localRuntimeAvailability(inventory, policy.local_adapter_id).available))} onClick={async () => {
         setBusy(true); setError(''); setNotice('');
         try {await savePolicy();}
         catch (failure) {setError(String(failure));} finally {setBusy(false);}

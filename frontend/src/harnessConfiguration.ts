@@ -15,7 +15,7 @@ export function harnessSelectionError(schema: HarnessConfiguration, settings: Re
   for (const [name, value] of Object.entries(settings)) {
     if (!schema.parameters.some(field => field.name === name && field.core_applies) ||
         typeof value !== 'string' || value.length > 200 || /[\x00-\x1f]/.test(value)) {
-      return 'Parâmetro desconhecido ou valor inválido para este harness.';
+      return 'Unknown parameter or invalid value for this harness.';
     }
   }
   for (const field of schema.parameters) {
@@ -23,31 +23,31 @@ export function harnessSelectionError(schema: HarnessConfiguration, settings: Re
     const choices = harnessFieldValues(schema, field.name, settings);
     const modelEffort = field.name === 'effort' && schema.adapter_id === 'codex_app_server' && !!settings.model && !!schema.models.length;
     if (value && (field.type === 'enum' || modelEffort) && !choices.includes(value)) {
-      return `${field.label}: escolha um valor compatível com o harness e o modelo selecionados.`;
+      return `${field.label}: choose a value supported by this harness and model.`;
     }
     if (!value && schema.constraints?.[field.name] && field.default_source === 'core_adapter' && !choices.includes(String(field.default))) {
-      return `${field.label}: a política do harness exige uma escolha explícita.`;
+      return `${field.label}: the harness policy requires an explicit selection.`;
     }
   }
   if (schema.adapter_id === 'pi_rpc' && settings.model && schema.models.length) {
     const matches = schema.models.filter(m => m.id === settings.model && (!settings.provider || m.provider === settings.provider));
-    if (matches.length !== 1) return 'Selecione o provedor deste modelo.';
+    if (matches.length !== 1) return 'Select the provider for this model.';
   }
   return null;
 }
 
 export function parseHarnessConfigurationFile(text: string, schema: HarnessConfiguration): Record<string, string> {
-  if (new TextEncoder().encode(text).length > 65536) throw new Error('O arquivo deve ter no máximo 64 KiB.');
+  if (new TextEncoder().encode(text).length > 65536) throw new Error('The file must be 64 KiB or smaller.');
   const document = JSON.parse(text.replace(/^\uFEFF/, ''));
   if (!document || Array.isArray(document) || typeof document !== 'object' ||
       Object.keys(document).sort().join(',') !== 'adapter_id,format,settings,version' ||
       document.format !== 'nexus-harness-config' || document.version !== 1 || document.adapter_id !== schema.adapter_id ||
       !document.settings || Array.isArray(document.settings) || typeof document.settings !== 'object') {
-    throw new Error('Selecione um arquivo nexus-harness-config versão 1 para este harness.');
+    throw new Error('Select a version 1 nexus-harness-config file for this harness.');
   }
   const error = harnessSelectionError(schema, document.settings);
   if (error) throw new Error(error);
-  if (Object.values(document.settings).some(value => value === '')) throw new Error('Omita parâmetros vazios para usar o padrão.');
+  if (Object.values(document.settings).some(value => value === '')) throw new Error('Omit empty parameters to use the default.');
   return {...document.settings};
 }
 

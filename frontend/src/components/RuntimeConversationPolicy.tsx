@@ -1,3 +1,4 @@
+import { ConfigurationHelp } from './ConfigurationHelp';
 import { useEffect, useState } from "react";
 import { api } from "../api";
 import type { BindingView } from "../runtimeApi";
@@ -19,13 +20,10 @@ export function RuntimeConversationPolicy({binding, onUpdated}: {binding: Bindin
       .finally(() => {if (active) setBusy(false);});
     return () => {active = false;};
   }, [binding.endpoint_id, binding.agent_id, binding.workspace_id, refresh]);
-  return <section aria-label="Message execution policy" className="space-y-2 rounded border p-3">
-    <h5 className="font-semibold">Automatic message replies</h5>
-    <p>Run this harness when a message arrives for this agent in this workspace, including from Meta-harness. Execution still requires a current permission and available budget.</p>
+  return <section aria-label="Message execution policy" className="space-y-2 border-t pt-3">
+    <h5 className="font-semibold">Automatic replies <ConfigurationHelp label="Automatic replies">Run the harness when this agent receives a message in this workspace. Requires execution permission and budget. Save changes before authorizing execution. Conversation isolation follows the agent policy; files and tools still share the workspace.</ConfigurationHelp></h5>
     <label className="block"><input type="checkbox" checked={enabled} disabled={busy || !policy}
       onChange={event => {setEnabled(event.target.checked); setNotice("");}} /> Reply automatically to messages in this workspace</label>
-    <p>Changing this policy invalidates existing execution permissions. Authorize execution again after saving.</p>
-    <p>Conversation isolation follows the agent runtime policy, which can inherit the global defaults. Files and tools still share the workspace.</p>
     <button className="btn btn-secondary" disabled={busy || !policy || enabled === policy.enabled} onClick={async () => {
       if (!policy) return;
       setBusy(true); setError(""); setNotice("");

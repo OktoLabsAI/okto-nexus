@@ -1,3 +1,4 @@
+import { ConfigurationHelp } from './ConfigurationHelp';
 import { useEffect, useRef, useState } from "react";
 import { ApiError } from "../api";
 import { runtimeApi, type LocalPreparationRequest, type RuntimeChoice } from "../runtimeApi";
@@ -99,23 +100,23 @@ export function EmbeddedPreparation({agentId, executorId, hostLabel, workspaceId
     finally { if (mounted.current) setBusy(false); }
   };
 
-  return <section aria-label="Local workspace preparation" className="space-y-3 rounded border p-3">
-    <h5 className="font-semibold">{settings?.name || choice.adapter_id} configuration</h5>
-    <p>Prepare folders on {hostLabel}.</p>
-    <p>These paths belong to the computer running this Nexus Server, even if your browser is on another computer. Select existing absolute directories.</p>
+  return <section aria-label="Local workspace preparation" className="space-y-3">
+    <h5 className="font-semibold">Folders and login <ConfigurationHelp label="Folders and login">These paths are on the Nexus server, not the browser computer. Use existing absolute directories. Folder consent, connection approval, and execution authorization are separate.</ConfigurationHelp></h5>
+    <p className="text-xs text-surface-500">Host: {hostLabel}</p>
+
     <fieldset disabled={busy || pending !== null || !!saved.error} className="space-y-2">
-      <label className="block">Workspace directory<input aria-label="Workspace directory" className={inputClass} value={root} maxLength={4096} onChange={event => setRoot(event.target.value)} /></label>
-      {!workspaceId && <label className="block">New workspace name<input aria-label="New workspace name" className={inputClass} value={label} maxLength={160} onChange={event => setLabel(event.target.value)} /></label>}
+      <label className="block">Workspace directory <span className="text-xs text-surface-500">Required</span><ConfigurationHelp label="Workspace directory">Existing absolute directory this harness may use for the selected workspace.</ConfigurationHelp><input required aria-label="Workspace directory" className={inputClass} value={root} maxLength={4096} onChange={event => setRoot(event.target.value)} /></label>
+      {!workspaceId && <label className="block">New workspace name <span className="text-xs text-surface-500">Required</span><input required aria-label="New workspace name" className={inputClass} value={label} maxLength={160} onChange={event => setLabel(event.target.value)} /></label>}
       {workspaceId && <p>Workspace: {workspaceLabel || workspaceId}</p>}
-      <label className="block">Provider home directory (optional)<input aria-label="Provider home directory" className={inputClass} value={home} maxLength={4096} onChange={event => setHome(event.target.value)} /></label>
-      {choice.provider_home_suggestion && <p>Detected by Core on this host: {choice.provider_home_suggestion}. Review before approving; detection does not grant access.</p>}
-      <p>Use an existing provider home for its login, or protected references configured on this host. A blank home does not configure a login directory.</p>
-      {settings && <p>{settings.home}</p>}
-      <label className="block">Protected credential references (optional)<textarea aria-label="Protected credential references" className={inputClass} value={references} maxLength={25000} rows={2} placeholder={settings?.credential} onChange={event => setReferences(event.target.value)} /></label>
-      <p>Enter reference names only, never API keys or tokens.</p>
-      <label className="block"><input type="checkbox" checked={approved} onChange={event => setApproved(event.target.checked)} /> I approve these folders and protected references for this agent and installation.</label>
+      <label className="block">Login directory <span className="text-xs text-surface-500">Optional</span><ConfigurationHelp label="Login directory">{(settings?.home || "Use an existing provider login directory.") + " Leave blank when using protected credential references instead. Discovery does not grant access."}</ConfigurationHelp><input aria-label="Provider home directory" className={inputClass} value={home} maxLength={4096} onChange={event => setHome(event.target.value)} /></label>
+      {choice.provider_home_suggestion && <p className="text-xs text-surface-500">Detected login directory available.</p>}
+
+
+      <details><summary className="cursor-pointer text-surface-500">Advanced credentials · Optional</summary><label className="block mt-2">Protected credential references<ConfigurationHelp label="Protected credential references">Use NAME=vault:reference or NAME=provider:reference, one per line. Enter references only, never API keys or tokens.</ConfigurationHelp><textarea aria-label="Protected credential references" className={inputClass} value={references} maxLength={25000} rows={2} placeholder={settings?.credential} onChange={event => setReferences(event.target.value)} /></label>
+      </details>
+      <label className="block"><input type="checkbox" checked={approved} onChange={event => setApproved(event.target.checked)} /> I approve these folders and credential references. <span className="text-xs text-surface-500">Required</span></label>
     </fieldset>
-    <p>Preparation records local configuration. Connection approval and permission to execute remain separate steps.</p>
+
     {pending && <p role="status">This preparation request was recorded. Retry the same request to confirm its result; its folders and consent remain unchanged.</p>}
     <button className="btn btn-primary" disabled={busy || !!saved.error || (!pending && (!approved || !root.trim() || (!workspaceId && (!label.trim() || /[\\/:]/.test(label)))))}
       onClick={() => void submit()}>{pending ? "Retry the same preparation" : "Approve local preparation"}</button>
