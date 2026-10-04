@@ -217,3 +217,25 @@ def test_core_probe_uses_private_cwd_and_no_provider_credentials(tmp_path, monke
     monkeypatch.setattr(discovery, 'probe_selected_codex', probe)
     assert asyncio.run(observations.probe_version(candidate)).version == '0.159.0'
     assert not seen[0].exists()
+
+
+@pytest.mark.parametrize('expires_during_check', [False, True])
+def test_fresh_selection_survives_slow_identity_revalidation(checking, monkeypatch, expires_during_check):
+    deps, app, client, headers, body, route, _, calls = checking
+    owner = app.state.embedded_inventory_owner
+    key = (owner.key.server_id, owner.key.executor_id)
+    def expire():
+        sequence, timestamp, age = owner.fresh[key]
+        owner.fresh[key] = (sequence, timestamp - 121, age)
+    if expires_during_check:
+        original = owner.discover_candidates
+        async def discover():
+            result = await original()
+            expire()
+            return result
+        monkeypatch.setattr(owner, 'discover_candidates', discover)
+    else:
+        expire()
+    response = client.post(route, json=body, headers=headers['operator'])
+    assert response.status_code == (200 if expires_during_check else 409), response.text
+    assert len(rows(deps)) == len(calls) == int(expires_during_check)

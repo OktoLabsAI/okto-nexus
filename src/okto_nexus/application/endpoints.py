@@ -91,6 +91,19 @@ class EndpointService:
         if not valid:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "External Nexus work session is not available for this endpoint.", {})
 
+    def connection_summary(self, context, *, endpoint_id):
+        """Public connection identity for reviewing an existing configuration."""
+        self.authorize(context)
+        with self.cf.unit_of_work(write=False) as uow:
+            if self.access:
+                self.access.authorize(context, uow=uow, audit=False)
+            endpoint = self.repo.get(uow, endpoint_id)
+            if not endpoint or endpoint['protocol'] != 'nxl-r4':
+                raise OktoNexusError(ErrorCode.NOT_FOUND, 'The canonical connection is unavailable.', {})
+            return {'endpoint_id': endpoint_id, 'agent_id': endpoint['agent_id'],
+                    'workspace_id': endpoint['workspace_id'],
+                    'connection_name': endpoint['public_config'].get('alias', '')}
+
     def harness_settings(self, context, *, endpoint_id, changes=None):
         """Revisioned native launch settings, independent of Nexus tool policy."""
         from nexus_connector_core import validate_harness_configuration, CoreError

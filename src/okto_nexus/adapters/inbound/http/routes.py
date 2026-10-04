@@ -1053,6 +1053,15 @@ def build_router() -> APIRouter:
         except OktoNexusError as exc:
             return _map_error(exc)
 
+    @router.get("/harness/endpoints/{endpoint_id}/connection-summary")
+    async def runtime_connection_summary(request: Request, endpoint_id: str) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).connection_summary(context, endpoint_id=endpoint_id)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
     @router.get("/harness/endpoints/{endpoint_id}/harness-settings")
     async def runtime_harness_settings(request: Request, endpoint_id: str) -> JSONResponse:
         deps = request.app.state.deps

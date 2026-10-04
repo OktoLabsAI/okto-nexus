@@ -4,13 +4,13 @@ import { ApiError } from "../api";
 import { runtimeApi, type BindingView, type RuntimeIntent, type RuntimeOperation,
   type RuntimeRequest, type RuntimeResolution, type RuntimeScope, type RuntimeSession } from "../runtimeApi";
 
-type Saved = {request: RuntimeRequest; resolution: RuntimeResolution | null; submissionAttempted: boolean; reviewError?: string};
+type Saved = {request: RuntimeRequest; resolution: RuntimeResolution | null; submissionAttempted: boolean; reviewError?: string; connectionVerified?: boolean; startedAt?: number};
 const labels: Record<RuntimeIntent, string> = {"runtime.start": "Start or reuse a runtime",
   "turn.submit": "Send a turn", "turn.steer": "Steer a turn", "turn.interrupt": "Interrupt a turn", "runtime.close": "Close the runtime"};
 const fieldClass = "block w-full rounded border p-2 dark:bg-surface-800";
 
-export function RuntimeOperations({agentId, binding, canStart}: {
-  agentId: string; binding: BindingView; canStart: boolean;
+export function RuntimeOperations({agentId, binding, canStart, connectionTest = false, testConfigurationKey = '', onTestStateChange}: {
+  agentId: string; binding: BindingView; canStart: boolean; connectionTest?: boolean; testConfigurationKey?: string; onTestStateChange?: (state: string) => void;
 }) {
   const mounted = useRef(true);
   const lock = useRef(false);
@@ -22,8 +22,9 @@ export function RuntimeOperations({agentId, binding, canStart}: {
   const [session, setSession] = useState<RuntimeSession | null>(null);
   const [intent, setIntent] = useState<RuntimeIntent>("runtime.start");
   const [sessionId, setSessionId] = useState("");
-  const [selection, setSelection] = useState("automatic");
-  const [text, setText] = useState("");
+  const [selection, setSelection] = useState(connectionTest ? "new" : "automatic");
+  const testPrompt = "Reply with exactly NEXUS_CONNECTION_OK to confirm this connection.";
+  const [text, setText] = useState(connectionTest ? testPrompt : "");
   const [targetKind, setTargetKind] = useState<"native_turn_id" | "current_run">("native_turn_id");
   const [turnId, setTurnId] = useState("");
   const [busy, setBusy] = useState(false);
@@ -78,7 +79,7 @@ export function RuntimeOperations({agentId, binding, canStart}: {
       try {
         const me = await runtimeApi.me(controller.signal);
         if (controller.signal.aborted) return;
-        const identity = [me.server_id, me.agent_id, agentId, binding.binding_id];
+        const identity = [me.server_id, me.agent_id, agentId, binding.binding_id, ...(connectionTest ? ["connection-test", binding.binding_revision, testConfigurationKey] : [])];
         const key = `okto-nexus:r4-runtime:${JSON.stringify([...identity, binding.workspace_binding_id])}`;
         let raw = sessionStorage.getItem(key);
         if (!raw) {
@@ -134,7 +135,7 @@ export function RuntimeOperations({agentId, binding, canStart}: {
       if ((intent === "runtime.start" || intent === "turn.submit" || intent === "turn.steer") && text) request.text = text;
       if (intent === "turn.steer" || intent === "turn.interrupt") request.target = {
         kind: targetKind, expected_turn_id: targetKind === "native_turn_id" ? turnId.trim() : null};
-      record = {request, resolution: null, submissionAttempted: false};
+      record = {request, resolution: null, submissionAttempted: false, startedAt: Date.now()};
       persist(record); // Storage failure must prevent the first POST.
     }
     record = {...record, reviewError: undefined};
@@ -170,10 +171,49 @@ export function RuntimeOperations({agentId, binding, canStart}: {
   const observed = !!operation && isObserved(operation) && followUps.length === operation.follow_up_operation_ids.length && followUps.every(isObserved);
   const canClear = !!saved && (!saved.submissionAttempted || observed);
 
+  const testPassed = connectionTest && saved?.request.intent === 'runtime.start' && !!operation &&
+    !operation.error && followUps.length > 0 && followUps.length === operation.follow_up_operation_ids.length &&
+    followUps.every(child => !child.error && child.executor_stage === 'SUCCEEDED' && !!child.result?.output_text.includes('NEXUS_CONNECTION_OK'));
+  useEffect(() => {
+    if (!connectionTest) return;
+    const verified = testPassed || saved?.connectionVerified;
+    onTestStateChange?.(verified ? session?.lifecycle_state === 'CLOSED' ? 'Verified · test session closed' : 'Verified · close test session' :
+      saved ? 'Test in progress / review result' : 'Not tested');
+  }, [connectionTest, testPassed, saved?.connectionVerified, saved?.request.client_intent_id, session?.lifecycle_state, onTestStateChange]);
+  const submitReviewed = async () => {
+    const record = currentRecord.current;
+    if (!record?.resolution) throw new Error('Review this test before submitting it.');
+    const resolved = record.resolution;
+    if (!resolved.can_submit) throw new Error('Connection is not ready: ' + resolved.blockers.join(', '));
+    persist({...record, submissionAttempted: true});
+    const result = await runtimeApi.submit(resolved);
+    if (!matches(result.scope) || result.operation_id !== resolved.operation_id) throw new Error('The test result does not match this connection.');
+    if (mounted.current) {setOperation(result); setSessionId(resolved.session_id);}
+  };
+  const closeTest = async () => {
+    if (!session || !matches(session.scope)) throw new Error('The test session is unavailable.');
+    const request: RuntimeRequest = {client_intent_id: 'ui_' + crypto.randomUUID().replaceAll('-', ''),
+      agent_id: agentId, binding_id: binding.binding_id, workspace_binding_id: binding.workspace_binding_id,
+      intent: 'runtime.close', session_id: session.scope.session_id};
+    const record: Saved = {request, resolution: null, submissionAttempted: false, connectionVerified: testPassed || saved?.connectionVerified};
+    persist(record); setOperation(null); setFollowUps([]); setIntent('runtime.close');
+    const resolved = await runtimeApi.resolve(request);
+    if (!matches(resolved.scope) || resolved.session_id !== request.session_id) throw new Error('The close request does not match the test session.');
+    persist({...record, resolution: resolved});
+    await submitReviewed();
+  };
   return <section aria-label="Runtime operations" className="space-y-3 border-t pt-3">
-    <h4 className="font-semibold">Runtime operations</h4>
-    <p>Review an action, then submit it for this agent and connection. Execution requires the agent's current grant.</p>
-    {!saved && <fieldset disabled={busy || !storageKey} className="space-y-2">
+    <h4 className="font-semibold">{connectionTest ? 'Test connection' : 'Runtime operations'}</h4>
+    {connectionTest && <p>A short message opens a separate test session using the saved settings and account. Provider usage may apply.</p>}
+    {(testPassed || saved?.connectionVerified) && <div role="status" className="rounded-lg border border-green-500 p-3 text-green-700 dark:text-green-300"><strong>Connection verified</strong><p>The harness started and returned the expected response.</p></div>}
+    {connectionTest && saved?.submissionAttempted && !observed && !saved.connectionVerified && <p role="status">Testing connection…</p>}
+    {connectionTest && saved?.submissionAttempted && saved.startedAt && now - saved.startedAt > 90000 && !observed && <p role="status">The test is still pending. Check Execution log and Approvals for this agent. This page keeps tracking the same request; it does not start another session.</p>}
+    {connectionTest && observed && session && session.lifecycle_state !== 'CLOSED' && saved?.request.intent !== 'runtime.close' && <button className="btn btn-secondary" disabled={busy} onClick={() => void run(closeTest)}>Close test session</button>}
+    {connectionTest && saved?.request.intent === 'runtime.close' && session?.lifecycle_state === 'CLOSED' && <p role="status">Test session closed.</p>}
+    {connectionTest && !saved && <button className="btn btn-primary" disabled={busy || !storageKey || (intent === "runtime.start" && !canStart)} onClick={() => void run(async () => {await review(); await submitReviewed();})}>{busy ? 'Submitting…' : intent === "runtime.close" ? "Close test session" : "Test connection"}</button>}
+    {connectionTest && !canStart && !saved && <p role="alert">Execution is not authorized or the installation is unavailable. Return to Authorization and refresh readiness.</p>}
+    {!connectionTest && <p>Review an action, then submit it for this agent and connection. Execution requires the agent's current grant.</p>}
+    {!connectionTest && !saved && <fieldset disabled={busy || !storageKey} className="space-y-2">
       <label className="block">Action <select aria-label="Runtime action" className={fieldClass} value={intent}
         onChange={event => setIntent(event.target.value as RuntimeIntent)}>
         {Object.entries(labels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
@@ -199,7 +239,8 @@ export function RuntimeOperations({agentId, binding, canStart}: {
       {!canStart && intent === "runtime.start" && <p>Starting is unavailable. Review installation readiness and execution authority above.</p>}
       <button className="btn btn-secondary" disabled={!canReview} onClick={() => void run(review)}>Review runtime action</button>
     </fieldset>}
-    {saved && <>
+    {saved && <details open={!connectionTest || undefined} className="space-y-2">
+      <summary hidden={!connectionTest} className="cursor-pointer text-sm">Test details and recovery</summary>
       <p>{labels[saved.request.intent]}{saved.request.target && ` · ${saved.request.target.kind === "current_run" ? "Current run at execution time" : `Native turn ${saved.request.target.expected_turn_id}`}`}</p>
       {saved.request.text && <details><summary>Reviewed message</summary><pre className="whitespace-pre-wrap break-words">{saved.request.text}</pre></details>}
       {!resolution && <button className="btn btn-secondary" disabled={busy} onClick={() => void run(review)}>Retry the same review</button>}
@@ -231,13 +272,13 @@ export function RuntimeOperations({agentId, binding, canStart}: {
         {operation.result && <pre className="whitespace-pre-wrap break-words">{operation.result.output_text}{operation.result.output_truncated ? "\n[Output truncated]" : ""}</pre>}
       </div>}
       {session && <p>Session: {session.lifecycle_state}. Lease: {session.lease_state}.{session.durable_release_pending ? " Release confirmation pending." : ""}</p>}
-      {session && <RuntimeHistory key={JSON.stringify([session.scope.server_id, session.scope.executor_id, session.scope.session_id])} scope={session.scope} />}
-      {canClear && <button className="btn btn-secondary" disabled={busy} onClick={() => {
+      {!connectionTest && session && <RuntimeHistory key={JSON.stringify([session.scope.server_id, session.scope.executor_id, session.scope.session_id])} scope={session.scope} />}
+      {canClear && (!connectionTest || !session || session.lifecycle_state === "CLOSED") && <button className="btn btn-secondary" disabled={busy} onClick={() => {
         sessionStorage.removeItem(storageKey); currentRecord.current = null; setSaved(null); setOperation(null); setFollowUps([]); setSession(null); setText(""); setError("");
-        if (sessionId) setIntent("turn.submit");
-      }}>{saved.submissionAttempted ? "Prepare another action" : "Discard review"}</button>}
+        if (connectionTest) {setIntent(session && session.lifecycle_state !== "CLOSED" ? "runtime.close" : "runtime.start"); setText(testPrompt);} else if (sessionId) setIntent("turn.submit");
+      }}>{connectionTest ? (session && session.lifecycle_state !== "CLOSED" ? "Prepare to close test session" : "Reset test") : saved.submissionAttempted ? "Prepare another action" : "Discard review"}</button>}
       <p className="text-xs">This tab retains the request and message for recovery. Refreshing only checks the recorded result.</p>
-    </>}
+    </details>}
     {error && <p role="alert">{error}</p>}
   </section>;
 }

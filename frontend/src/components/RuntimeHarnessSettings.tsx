@@ -4,8 +4,8 @@ import { api } from "../api";
 import type { HarnessConfiguration } from "../runtimeApi";
 import { harnessFieldValues, harnessSelectionError, parseHarnessConfigurationFile, harnessConfigurationFile } from '../harnessConfiguration';
 
-export function RuntimeHarnessSettings({endpoint, schema, onUpdated}: {
-  endpoint: string; schema: HarnessConfiguration; onUpdated: () => void;
+export function RuntimeHarnessSettings({endpoint, schema, onUpdated, onPendingChange, onSummaryChange}: {
+  endpoint: string; schema: HarnessConfiguration; onUpdated: () => void; onSummaryChange?: (summary: string) => void; onPendingChange?: (pending: boolean) => void;
 }) {
   const [saved, setSaved] = useState<{revision: number; settings: Record<string,string>} | null>(null);
   const [values, setValues] = useState<Record<string,string>>({});
@@ -33,6 +33,8 @@ export function RuntimeHarnessSettings({endpoint, schema, onUpdated}: {
   const required = (field: HarnessConfiguration['parameters'][number]) => !!schema.constraints?.[field.name] &&
     field.default_source === 'core_adapter' && !harnessFieldValues(schema, field.name, values).includes(String(field.default));
   const selectionError = harnessSelectionError(schema, values);
+  useEffect(() => {onPendingChange?.(busy || !saved || !!selectionError || JSON.stringify(values) !== JSON.stringify(saved.settings));}, [busy, saved, values, selectionError, onPendingChange]);
+  useEffect(() => {onSummaryChange?.(saved ? Object.entries(saved.settings).map(([key, value]) => `${key}: ${value}`).join(" · ") || "Harness defaults" : "Loading settings");}, [saved, onSummaryChange]);
   return <section aria-label="Harness settings" className="space-y-3">
     <h5 className="font-semibold">Model and native behavior <ConfigurationHelp label="Harness settings">Defaults are used for omitted parameters. Close existing sessions before saving. Changes invalidate execution permission and apply to new sessions.</ConfigurationHelp></h5>
 

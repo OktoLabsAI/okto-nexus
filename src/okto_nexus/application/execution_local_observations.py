@@ -32,7 +32,7 @@ def apply_local_observations(factory, key, candidates):
                  for candidate in candidates)
 
 
-def _authorize(owner, access, context, request, *, uow):
+def _authorize(owner, access, context, request, *, uow, identity_reobserved=False):
     if owner._stop.is_set():
         raise _error('The local executor is shutting down.')
     guard = _authority(uow, owner=owner, access=access, context=context,
@@ -43,7 +43,8 @@ def _authorize(owner, access, context, request, *, uow):
     fresh = owner.fresh.get((owner.key.server_id, owner.key.executor_id))
     if (current is None or fresh is None or fresh[0] != current['publication_sequence']
             or current['inventory_revision'] != request['inventory_revision']
-            or (time.monotonic() - fresh[1]) * 1000 + (fresh[2] if len(fresh) > 2 else 0) >= 120000):
+            or (not identity_reobserved and
+                (time.monotonic() - fresh[1]) * 1000 + (fresh[2] if len(fresh) > 2 else 0) >= 120000)):
         raise _error('Refresh the local inventory and select the installation again.')
     return guard
 
@@ -94,7 +95,11 @@ async def observe_local_installation(owner, *, access, context, request):
         raise _error('The local installation is unavailable or changed.') from None
     def commit():
         with factory.unit_of_work() as uow:
-            if guard != _authorize(owner, access, context, request, uow=uow):
+            # The full discovery above revalidated the exact source identity
+            # under the publication lock. Its duration must not expire its own
+            # result. Keep checking ownership, authority and revision; this
+            # records a version observation, never execution authorization.
+            if guard != _authorize(owner, access, context, request, uow=uow, identity_reobserved=True):
                 raise _error('Operator authority changed during the version check.')
             conn = uow.connection
             count = conn.execute('SELECT COUNT(*) FROM execution_local_observations WHERE server_id=? AND executor_id=?',

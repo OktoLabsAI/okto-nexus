@@ -1122,6 +1122,8 @@ export type RuntimePolicy = {
 };
 
 export const api = {
+  runtimeConnectionSummary: (endpoint: string) => call<{endpoint_id: string; agent_id: string; workspace_id: string; connection_name: string}>(
+    `/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/connection-summary`),
   runtimeHarnessSettings: (endpoint: string) => call<{revision: number; settings: Record<string, string>}>(
     `/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/harness-settings`),
   saveRuntimeHarnessSettings: (endpoint: string, body: {expected_revision: number; settings: Record<string, string>}) =>

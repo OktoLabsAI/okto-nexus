@@ -117,9 +117,10 @@ export function EmbeddedPreparation({agentId, executorId, hostLabel, workspaceId
       <label className="block"><input type="checkbox" checked={approved} onChange={event => setApproved(event.target.checked)} /> I approve these folders and credential references. <span className="text-xs text-surface-500">Required</span></label>
     </fieldset>
 
-    {pending && <p role="status">This preparation request was recorded. Retry the same request to confirm its result; its folders and consent remain unchanged.</p>}
+    {busy && <p role="status">Saving folders and login…</p>}
+    {pending && !busy && <p role="status">This preparation request was recorded. Retry the same request to confirm its result; its folders and consent remain unchanged.</p>}
     <button className="btn btn-primary" disabled={busy || !!saved.error || (!pending && (!approved || !root.trim() || (!workspaceId && (!label.trim() || /[\\/:]/.test(label)))))}
-      onClick={() => void submit()}>{pending ? "Retry the same preparation" : "Approve local preparation"}</button>
+      onClick={() => void submit()}>{busy ? "Saving…" : pending ? "Retry the same preparation" : "Approve local preparation"}</button>
     {error && <p role="alert">{error}</p>}
   </section>;
 }

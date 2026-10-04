@@ -1,3 +1,4 @@
+import { ConnectionWorkflow } from "./ConnectionWorkflow";
 import { ConfigurationHelp, ConfigurationSection } from './ConfigurationHelp';
 import { useEffect, useState } from "react";
 import { Check } from "lucide-react";
@@ -10,6 +11,9 @@ import { runtimeApi, localRuntimeAvailability, type RuntimeOptions } from "../ru
 const fieldClass = "ml-2 rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5";
 
 export function AgentConnectionsPanel({agentId, onClose}: {agentId: string; onClose: () => void}) {
+  const [wizard, setWizard] = useState(false);
+  const [wizardStarted, setWizardStarted] = useState(false);
+  const [runtimePending, setRuntimePending] = useState(true);
   const [policy, setPolicy] = useState<AgentExecutionPolicy | null>(null);
   const [runtimeEnabled, setRuntimeEnabled] = useState(true);
   const [busy, setBusy] = useState(false);
@@ -56,8 +60,10 @@ export function AgentConnectionsPanel({agentId, onClose}: {agentId: string; onCl
   return <section className="rounded-lg border p-3 space-y-3 text-xs" data-testid={`agent-connections-${agentId}`}>
     <div className="flex justify-between items-center"><h3>Connections · {agentId}</h3>
       <button className="btn btn-secondary" onClick={onClose}>Close</button></div>
+    {!wizard && <ConnectionWorkflow step={0} summaries={[runtimeEnabled ? `${policy?.execution_location || "Loading"} · ${policy?.local_adapter_id || "Select a harness"}` : "MCP only"]} onStep={() => {}} />}
+    <div hidden={wizard} className="space-y-3">
     <details><summary className="cursor-pointer text-surface-500">MCP connection details</summary><p>MCP HTTP: <code>{window.location.origin}/mcp</code>. Authenticate with this agent's existing API key.</p></details>
-    <ConfigurationSection title="Runtime behavior" status={runtimeEnabled ? "Runtime enabled · optional overrides" : "MCP only · runtime disabled"}><RuntimePolicy agentId={agentId} onUpdated={enabled => {setRuntimeEnabled(enabled); setInventoryRevision(value => value + 1);}} /></ConfigurationSection>
+    <ConfigurationSection title="Runtime behavior" status={runtimeEnabled ? "Runtime enabled · optional overrides" : "MCP only · runtime disabled"}><RuntimePolicy agentId={agentId} onPendingChange={setRuntimePending} onUpdated={enabled => {setRuntimeEnabled(enabled); setInventoryRevision(value => value + 1);}} /></ConfigurationSection>
     {policy && runtimeEnabled && <>
       <label className="block">Execution host <span className="text-surface-500">Required</span><ConfigurationHelp label="Execution host">Local runs on this Nexus server. Remote uses a Connector. All permits both, subject to authorization.</ConfigurationHelp><select className={fieldClass} aria-label="Execution access" value={policy.execution_location} disabled={busy}
         onChange={event => {setDirty(true); setNotice(''); setPolicy({...policy, execution_location: event.target.value as AgentExecutionPolicy['execution_location']});}}>
@@ -80,13 +86,9 @@ export function AgentConnectionsPanel({agentId, onClose}: {agentId: string; onCl
           })}
         </div>
         <button className="btn btn-secondary" disabled={loadingInventory} onClick={() => {setError(''); setInventoryRevision(value => value + 1);}}>Reload runtime availability</button>
-        {dirty && <p role="status">Saving local preparation also saves this execution policy.</p>}
+        {dirty && <p role="status">Next saves the selected host and harness.</p>}
         {!policy.local_adapter_id && <p>Select an available runtime to configure it.</p>}
-        {policy.local_adapter_id && inventory && localRuntimeAvailability(inventory, policy.local_adapter_id).available &&
-          <RuntimeSelection key={JSON.stringify([agentId, policy.local_adapter_id])} agentId={agentId} configureLocal
-            localAdapterId={policy.local_adapter_id} configurationSaved={!dirty}
-            beforeConfigure={async () => {if (dirty) await savePolicy();}}
-            onInventoryUpdated={() => setInventoryRevision(value => value + 1)} />}
+
       </div>}
       {policy.execution_location !== 'local' && <p>Configure remote identity, installation and runtime integration in the Connector using this agent's ID and API key.</p>}
       {policy.execution_location !== 'local' && <RemoteConnectorCommand agentId={agentId} />}
@@ -96,7 +98,18 @@ export function AgentConnectionsPanel({agentId, onClose}: {agentId: string; onCl
         try {await savePolicy();}
         catch (failure) {setError(String(failure));} finally {setBusy(false);}
       }}>Save execution policy</button>
+      {policy.execution_location !== "remote" && <button className="btn btn-primary ml-2" disabled={busy || runtimePending || !policy.local_adapter_id || !inventory || !localRuntimeAvailability(inventory, policy.local_adapter_id).available} onClick={async () => {
+        setBusy(true); setError("");
+        try {if (dirty) await savePolicy(); setWizardStarted(true); setWizard(true);} catch (failure) {setError(String(failure));} finally {setBusy(false);}
+      }}>Next →</button>}
+      {runtimePending && <p role="status">Save the runtime behavior changes before continuing.</p>}
     </>}
+    </div>
+    {policy && runtimeEnabled && policy.execution_location !== "remote" && policy.local_adapter_id && <div hidden={!wizard}>
+      {wizardStarted && <RuntimeSelection key={JSON.stringify([agentId, policy.local_adapter_id])} agentId={agentId} configureLocal
+        localAdapterId={policy.local_adapter_id} configurationSaved={!dirty} onBackHost={() => setWizard(false)} onFinish={onClose}
+        onInventoryUpdated={() => setInventoryRevision(value => value + 1)} />}
+    </div>}
     {error && <p role="alert">{error}</p>}{notice && <p role="status">{notice}</p>}
   </section>;
 }

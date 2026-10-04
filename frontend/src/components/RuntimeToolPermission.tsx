@@ -2,7 +2,7 @@ import { ConfigurationHelp } from './ConfigurationHelp';
 import { useEffect, useState } from "react";
 import { api } from "../api";
 
-export function RuntimeToolPermission({endpoint, onUpdated}: {endpoint: string; onUpdated: () => void}) {
+export function RuntimeToolPermission({endpoint, onUpdated, onPendingChange, onSummaryChange}: {endpoint: string; onUpdated: () => void; onSummaryChange?: (summary: string) => void; onPendingChange?: (pending: boolean) => void}) {
   const [policy, setPolicy] = useState<{revision: number; mode: "ask" | "always_allow"} | null>(null);
   const [mode, setMode] = useState<"ask" | "always_allow">("ask");
   const [busy, setBusy] = useState(false);
@@ -17,6 +17,8 @@ export function RuntimeToolPermission({endpoint, onUpdated}: {endpoint: string; 
     }).catch(failure => {if (active) setError(String(failure));});
     return () => {active = false;};
   }, [endpoint, revision]);
+  useEffect(() => {onPendingChange?.(busy || !policy || mode !== policy.mode);}, [busy, policy, mode, onPendingChange]);
+  useEffect(() => {onSummaryChange?.(policy ? policy.mode === "always_allow" ? "Nexus tools: always allow" : "Nexus tools: ask" : "Loading permissions");}, [policy, onSummaryChange]);
   return <section aria-label="Nexus tool permissions" className="space-y-2 border-t pt-3">
     <h5 className="font-semibold">Nexus tool access</h5>
     <label className="block">Tool approval <span className="text-xs text-surface-500">Optional</span><ConfigurationHelp label="Nexus tool approval">Always allow skips harness approval for Nexus calls. Agent permissions and Nexus policies still apply. Pi native tools do not request harness approval. Close sessions before saving, then authorize execution again.</ConfigurationHelp>

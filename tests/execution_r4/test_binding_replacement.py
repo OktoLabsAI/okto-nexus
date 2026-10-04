@@ -100,3 +100,16 @@ def test_replacement_refuses_live_or_uncertain_target_claims(onboarding, tmp_pat
     assert response.status_code == 409, response.text
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute("SELECT realization_ref FROM execution_bindings WHERE binding_id=?", (old["binding_id"],)).fetchone()[0] == old["realization_ref"]
+
+
+def test_replacement_allows_a_failed_open_after_durable_release(onboarding, tmp_path):
+    deps, client, headers, old, _, request = prepared_pair(onboarding, tmp_path)
+    seed_claim(deps, old, 'FAILED')
+    with deps.connection_factory.unit_of_work() as uow:
+        # FAILED alone is insufficient (covered above). CLOSED lease is the
+        # canonical projection after the owner proves no remaining resources.
+        uow.connection.execute("UPDATE execution_sessions SET lease_state='CLOSED' WHERE session_id='claim'")
+    _, body = prepare_operator(client, headers, request)
+    response = client.post('/v1/connections/bindings:apply', headers=headers['operator'], json=body)
+    assert response.status_code == 200, response.text
+    assert response.json()['binding_revision'] == old['binding_revision'] + 1

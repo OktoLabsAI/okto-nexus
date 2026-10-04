@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { api } from "../api";
 import type { BindingView } from "../runtimeApi";
 
-export function RuntimeConversationPolicy({binding, onUpdated}: {binding: BindingView; onUpdated: () => void}) {
+export function RuntimeConversationPolicy({binding, onUpdated, onPendingChange, onSummaryChange}: {binding: BindingView; onUpdated: () => void; onSummaryChange?: (summary: string) => void; onPendingChange?: (pending: boolean) => void}) {
   const [policy, setPolicy] = useState<{revision: number; enabled: boolean; session_policy: "shared" | "per_sender"} | null>(null);
   const [enabled, setEnabled] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -20,6 +20,8 @@ export function RuntimeConversationPolicy({binding, onUpdated}: {binding: Bindin
       .finally(() => {if (active) setBusy(false);});
     return () => {active = false;};
   }, [binding.endpoint_id, binding.agent_id, binding.workspace_id, refresh]);
+  useEffect(() => {onPendingChange?.(busy || !policy || enabled !== policy.enabled);}, [busy, policy, enabled, onPendingChange]);
+  useEffect(() => {onSummaryChange?.(policy ? policy.enabled ? "Automatic replies on" : "Automatic replies off" : "Loading replies");}, [policy, onSummaryChange]);
   return <section aria-label="Message execution policy" className="space-y-2 border-t pt-3">
     <h5 className="font-semibold">Automatic replies <ConfigurationHelp label="Automatic replies">Run the harness when this agent receives a message in this workspace. Requires execution permission and budget. Save changes before authorizing execution. Conversation isolation follows the agent policy; files and tools still share the workspace.</ConfigurationHelp></h5>
     <label className="block"><input type="checkbox" checked={enabled} disabled={busy || !policy}

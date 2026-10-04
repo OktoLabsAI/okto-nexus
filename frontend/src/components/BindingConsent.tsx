@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ApiError } from "../api";
+import { api, ApiError } from "../api";
 import { bindingRequestExists, discardExpiredBindingReview, durableBindingRequest, runtimeApi, type BindingProposal, type BindingView, type RuntimeChoice } from "../runtimeApi";
 
 export function BindingConsent({agentId, executorId, hostLabel, workspaceId, workspaceLabel,
@@ -21,6 +21,14 @@ export function BindingConsent({agentId, executorId, hostLabel, workspaceId, wor
     return () => { mounted.current = false; window.clearInterval(timer); };
   }, []);
   useEffect(() => { setBinding(choice.binding); }, [choice.binding]);
+  useEffect(() => {
+    let active = true;
+    if (choice.binding) void api.runtimeConnectionSummary(choice.binding.endpoint_id).then(value => {
+      if (value.agent_id !== agentId || value.workspace_id !== workspaceId || value.endpoint_id !== choice.binding?.endpoint_id) throw new Error('Connection scope changed.');
+      if (active) setAlias(value.connection_name);
+    }).catch(failure => {if (active) setError(String(failure));});
+    return () => {active = false;};
+  }, [choice.binding?.endpoint_id, agentId, workspaceId]);
   const run = async (operation: () => Promise<void>) => {
     setBusy(true); setError("");
     try { await operation(); }

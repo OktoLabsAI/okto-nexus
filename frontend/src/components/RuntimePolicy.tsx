@@ -4,7 +4,7 @@ import { api, type RuntimePolicy as Policy } from '../api';
 
 const fieldClass = 'block rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5';
 
-export function RuntimePolicy({agentId, onUpdated}: {agentId?: string; onUpdated?: (enabled: boolean) => void}) {
+export function RuntimePolicy({agentId, onUpdated, onPendingChange}: {agentId?: string; onUpdated?: (enabled: boolean) => void; onPendingChange?: (pending: boolean) => void}) {
   const [policy, setPolicy] = useState<Policy | null>(null);
   const [enabled, setEnabled] = useState<boolean | null>(null);
   const [sessions, setSessions] = useState<'shared' | 'per_sender' | null>(null);
@@ -24,6 +24,7 @@ export function RuntimePolicy({agentId, onUpdated}: {agentId?: string; onUpdated
       .finally(() => {if (active) setBusy(false);});
     return () => {active = false;};
   }, [agentId, revision]);
+  useEffect(() => {onPendingChange?.(busy || !policy || enabled !== policy.runtime_enabled || sessions !== policy.session_policy);}, [busy, policy, enabled, sessions, onPendingChange]);
   const effectiveEnabled = enabled ?? policy?.defaults?.runtime_enabled ?? true;
   const effectiveSessions = sessions ?? policy?.defaults?.session_policy ?? 'shared';
   return <section className="space-y-3" aria-label={agentId ? 'Agent runtime override' : 'Global runtime defaults'}>
