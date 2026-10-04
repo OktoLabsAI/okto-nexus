@@ -803,14 +803,14 @@ wheels = [
 
 [[package]]
 name = "nexus-connector-core"
-version = "0.2.57.dev0"
+version = "0.2.58.dev0"
 source = { registry = "vendor/wheels" }
 dependencies = [
     { name = "jsonschema" },
     { name = "rfc8785" },
 ]
 wheels = [
-    { path = "nexus_connector_core-0.2.57.dev0-py3-none-any.whl" },
+    { path = "nexus_connector_core-0.2.58.dev0-py3-none-any.whl" },
 ]
 
 [[package]]
@@ -1089,8 +1089,8 @@ requires-dist = [
     { name = "keyring", marker = "sys_platform != 'win32' and extra == 'serve'" },
     { name = "keyring", marker = "sys_platform != 'win32' and extra == 'serve-lite'" },
     { name = "mcp", specifier = ">=1.0,<2" },
-    { name = "nexus-connector-core", marker = "extra == 'serve'", specifier = "==0.2.57.dev0" },
-    { name = "nexus-connector-core", marker = "extra == 'serve-lite'", specifier = "==0.2.57.dev0" },
+    { name = "nexus-connector-core", marker = "extra == 'serve'", specifier = "==0.2.58.dev0" },
+    { name = "nexus-connector-core", marker = "extra == 'serve-lite'", specifier = "==0.2.58.dev0" },
     { name = "pydantic", specifier = ">=2" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8" },
     { name = "pywin32", marker = "sys_platform == 'win32' and extra == 'serve'" },

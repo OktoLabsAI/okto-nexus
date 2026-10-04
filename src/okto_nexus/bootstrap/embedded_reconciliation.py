@@ -3,7 +3,8 @@ import asyncio
 import json
 from types import SimpleNamespace
 
-from nexus_connector_core import CoreError, EventCursor, OperationKey, project_r4_resource_release
+from nexus_connector_core import (CoreError, EventCursor, OperationKey,
+                                 project_r4_resource_release, project_r4_bound_receipt)
 
 from ..application.execution_reconciliation import ExecutionReconciliation
 
@@ -35,7 +36,7 @@ class EmbeddedReconciliation:
                 raise CoreError("EVENT_GAP","embedded_resource_stream")
             return row["committed_contiguous"] if row is not None else 0
 
-    async def release_session(self, session_id):
+    async def release_session(self, session_id, *, failed_open=False):
         """Project one contained session without quiescing unrelated runtimes."""
         owner, host = self.owner, self.owner.host
         rows = [row for row in await asyncio.to_thread(self._records) if row['session_id'] == session_id]
@@ -52,7 +53,22 @@ class EmbeddedReconciliation:
                 raise CoreError('SCOPE_MISMATCH', 'embedded_session_release')
             slot = await ledger.owned_slot_state(claim.key)
             receipt = await journal.get_receipt(OperationKey(claim.key.server_id, claim.key.executor_id, claim.opening_operation_id))
-            fact = project_r4_resource_release(json.loads(row['binding_json']), claim, slot, receipt)
+            binding = json.loads(row['binding_json'])
+            if failed_open:
+                projected = project_r4_bound_receipt(binding, receipt,
+                    key=OperationKey(claim.key.server_id, claim.key.executor_id, claim.opening_operation_id),
+                    receipt_revision=1)
+                if (projected['session_id'] != session_id or projected['stage'] != 'FAILED'
+                        or projected['possible_effect'] or not projected['retry_safe']
+                        or receipt.error_code != 'PROFILE_DRIFT'
+                        or slot.key != claim.key or not slot.released
+                        or slot.opening_operation_id != claim.opening_operation_id):
+                    raise CoreError('RECONCILIATION_REQUIRED', 'embedded_failed_open_release')
+                # No process existed: do not manufacture the EXITED proof used
+                # for successful openings, or a successful close receipt.
+                fact = {'owner_generation': claim.opening_owner_generation}
+            else:
+                fact = project_r4_resource_release(binding, claim, slot, receipt)
             cursor = EventCursor(claim.key.server_id, claim.key.executor_id, session_id, row['stream_epoch'])
             sequence = await journal.contiguous_watermark(cursor)
             if sequence != await asyncio.to_thread(self._committed_stream,
@@ -64,12 +80,19 @@ class EmbeddedReconciliation:
             with owner.factory.unit_of_work() as uow:
                 owner.verify(uow=uow)
                 changed = uow.connection.execute(
-                    "UPDATE execution_sessions SET lifecycle_state='CLOSED',lease_state='CLOSED' "
+                    "UPDATE execution_sessions SET lifecycle_state=?,lease_state='CLOSED' "
                     "WHERE server_id=? AND executor_id=? AND session_id=? AND owner_generation=? AND open_operation_id=?",
-                    (owner.channel.server_id, owner.channel.executor_id, session_id,
+                    ('FAILED' if failed_open else 'CLOSED', owner.channel.server_id, owner.channel.executor_id, session_id,
                      fact['owner_generation'], row['open_operation_id']))
                 if changed.rowcount != 1:
                     raise CoreError('STALE_GENERATION', 'embedded_session_release')
+                if failed_open:
+                    key = (owner.channel.server_id, owner.channel.executor_id, session_id)
+                    uow.connection.execute("UPDATE execution_leases SET status='REVOKED' "
+                        "WHERE server_id=? AND executor_id=? AND session_id=?", key)
+                    uow.connection.execute("UPDATE execution_session_capabilities SET revoked_at=? "
+                        "WHERE server_id=? AND executor_id=? AND session_id=? AND revoked_at IS NULL",
+                        (owner.deps.clock.now_iso(), *key))
         await asyncio.to_thread(commit)
 
     async def _empty_slots(self, source):
@@ -107,6 +130,13 @@ class EmbeddedReconciliation:
                     await self._recover_unstarted(row)
                     continue
                 raise CoreError("RECONCILIATION_REQUIRED","embedded_resource_binding")
+            opening_receipt = await host.historical_receipt(session_id=row['session_id'],
+                key=OperationKey(owner.channel.server_id, owner.channel.executor_id, row['open_operation_id']))
+            if (opening_receipt is not None and opening_receipt.stage == 'FAILED'
+                    and not opening_receipt.possible_effect and opening_receipt.retry_safe
+                    and opening_receipt.error_code == 'PROFILE_DRIFT'):
+                await self.release_session(row['session_id'], failed_open=True)
+                continue
             async def inspect(journal):
                 await self._empty_slots(journal)
                 page = await journal.claimed_sessions(owner.channel.server_id,owner.channel.executor_id,limit=2)
