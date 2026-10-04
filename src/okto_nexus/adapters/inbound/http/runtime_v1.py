@@ -52,6 +52,19 @@ class InventoryRefreshRequest(BaseModel):
     client_intent_id: _Id
 
 
+class ConnectionSetupRequest(BaseModel):
+    model_config = ConfigDict(extra='forbid', strict=True)
+    client_intent_id: Annotated[str, Field(min_length=1, max_length=100)]
+    agent_id: _Id
+    executor_id: str = ''
+    candidate_ref: str = ''
+    inventory_revision: str = ''
+    workspace_id: str | None = None
+    binding_id: str | None = None
+    baseline: dict[str, int | None]
+    configuration: dict
+
+
 class LocalInstallationCheckRequest(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
     agent_id: _Id
@@ -790,5 +803,71 @@ def build_router() -> APIRouter:
         except OktoNexusError as error:
             return runtime_error(error, 'runtime-options.read')
         return JSONResponse(view, headers={"Cache-Control": "no-store"})
+
+    @router.get('/connections/setup/{agent_id}')
+    async def connection_setup_read(agent_id: str, request: Request, binding_id: str | None = None):
+        from ....application.connection_setup import load_setup
+        try:
+            result = await anyio.to_thread.run_sync(lambda: load_setup(request.app.state.deps,
+                runtime_request_context(), agent_id, binding_id))
+            return JSONResponse(result, headers={'Cache-Control':'no-store'})
+        except OktoNexusError as error:
+            return runtime_error(error, 'connection.setup')
+
+    def setup_request(body):
+        from nexus_connector_core.connection_configuration import parse_connection_configuration
+        from nexus_connector_core import CoreError
+        result = body.model_dump()
+        try:
+            result['configuration'] = parse_connection_configuration(result['configuration'])
+        except (CoreError, ValueError, TypeError):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Invalid connection configuration file.', {}) from None
+        return result
+
+    @router.post('/connections/setup:test')
+    async def connection_setup_test(body: ConnectionSetupRequest, request: Request):
+        from nexus_connector_core import CoreError
+        try:
+            result = request.app.state.connection_tests.start(runtime_request_context(),
+                getattr(request.app.state,'embedded_inventory_owner',None), setup_request(body))
+            return JSONResponse(result, headers={'Cache-Control':'no-store'})
+        except CoreError as error:
+            return v1_err(409, error.code, 'Refresh installations and review the selected runtime.')
+        except OktoNexusError as error:
+            return runtime_error(error, 'connection.test')
+
+    @router.get('/connections/setup-tests/{test_id}')
+    async def connection_setup_test_read(test_id: str, request: Request):
+        manager = request.app.state.connection_tests
+        try:
+            return JSONResponse(manager.public(manager.get(runtime_request_context(), test_id)),
+                headers={'Cache-Control':'no-store'})
+        except OktoNexusError as error:
+            return runtime_error(error, 'connection.test')
+
+    @router.post('/connections/setup:finish')
+    async def connection_setup_finish(body: ConnectionSetupRequest, request: Request):
+        from ....application.connection_setup import finish_setup, require_operator, runtime_enabled
+        from nexus_connector_core import CoreError
+        try:
+            value = setup_request(body)
+            context = runtime_request_context()
+            owner = getattr(request.app.state,'embedded_inventory_owner',None)
+            # The application receipt handles successful retries after a restart.
+            with request.app.state.deps.connection_factory.unit_of_work(write=False) as uow:
+                require_operator(build_execution_access(request.app.state.deps), context, uow)
+                prior = uow.connection.execute('SELECT 1 FROM connection_setup_commits WHERE actor_agent_id=? AND client_intent_id=?',
+                    (context.actor_agent_id,value['client_intent_id'])).fetchone()
+                active = runtime_enabled(uow.connection, value['configuration'])
+            verified = None
+            if not prior and active and value['configuration']['execution_location'] != 'remote':
+                verified = request.app.state.connection_tests.verified(context, value, owner)
+            result = await anyio.to_thread.run_sync(lambda: finish_setup(request.app.state.deps, context,
+                owner, request.app.state.inventory_fresh_publications, value, verified=verified))
+            return JSONResponse(result, headers={'Cache-Control':'no-store'})
+        except CoreError as error:
+            return v1_err(409, error.code, 'Refresh installations and test the selected runtime again.')
+        except OktoNexusError as error:
+            return runtime_error(error, 'connection.finish')
 
     return router

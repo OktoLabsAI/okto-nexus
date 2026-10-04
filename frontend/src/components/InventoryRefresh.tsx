@@ -9,7 +9,7 @@ const messages: Record<RefreshState, string> = {
   OFFLINE: "The host is offline. The refresh request will remain queued.",
 };
 
-export function InventoryRefresh({executorId, onUpdated}: {executorId: string; onUpdated: () => void}) {
+export function InventoryRefresh({executorId, onUpdated, compact = false}: {executorId: string; onUpdated: () => void; compact?: boolean}) {
   const [storageKey, setStorageKey] = useState("");
   const [intent, setIntent] = useState("");
   const [state, setState] = useState<RefreshState | null>(null);
@@ -88,9 +88,9 @@ export function InventoryRefresh({executorId, onUpdated}: {executorId: string; o
   };
   return <div data-testid="inventory-refresh" className="space-y-1">
     <button className="btn btn-secondary" disabled={(!storageKey && !error) || sending || (!!intent && !error)} onClick={request}>
-      {error ? "Retry inventory refresh" : "Request host inventory refresh"}
+      {error ? "Retry inventory refresh" : compact ? "Refresh" : "Request host inventory refresh"}
     </button>
-    <p className="text-xs">Ask the host to discover installations again. This does not run a version probe or start a runtime.</p>
+    {!compact && <p className="text-xs">Ask the host to discover installations again. This does not run a version probe or start a runtime.</p>}
     {sending && <p role="status">Checking the inventory refresh request…</p>}
     {state && <p role="status">{messages[state]}</p>}
     {error && <p role="alert">{error}</p>}

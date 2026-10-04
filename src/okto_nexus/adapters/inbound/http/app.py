@@ -622,15 +622,20 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
                 server = getattr(app.state, "server", None)
                 if server is not None:
                     server.should_exit = True
+            from ....application.connection_test import ConnectionTests
+            app.state.connection_tests = ConnectionTests(deps)
             shutdown_coordinator = ServerShutdownCoordinator(deps,
                 embedded=embedded_dispatch, inventory=embedded_inventory,
                 host=embedded_core_host, on_drained=server_drained,
+                connection_tests=app.state.connection_tests,
                 on_embedded_report=lambda report: setattr(app.state, "embedded_shutdown_report", report))
             app.state.runtime_shutdown = shutdown_coordinator
             async with mcp_server.session_manager.run():
                 yield
         finally:
             deps.runtime_admission_fence.close()
+            if getattr(app.state, 'connection_tests', None) is not None:
+                await app.state.connection_tests.shutdown()
             if shutdown_coordinator is not None:
                 await shutdown_coordinator.request()
                 await shutdown_coordinator.wait()

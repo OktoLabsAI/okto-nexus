@@ -1,4 +1,5 @@
 import { ApiError, getApiKey, type ApprovalDetail } from "./api";
+import type { SetupRequest, SetupTest, SetupBaseline } from './connectionConfiguration';
 
 export interface ExecutorChoice {
   executor_id: string;
@@ -182,6 +183,15 @@ export function bindingRequestExists(key: string): boolean {
 }
 
 export const runtimeApi = {
+  setup: (agent: string, binding?: string, signal?: AbortSignal) => read<{baseline: SetupBaseline;
+    connections: Pick<BindingView,'binding_id' | 'candidate_ref' | 'executor_id' | 'workspace_id' | 'adapter_id'>[];
+    authorization?: {minutes: number | null; actions: number | null};
+    folders?: {workspace_root: string; provider_home: string | null; secret_bindings: Record<string,string>};
+    public_config?: {alias?: string; harness_settings?: Record<string,string>; nexus_tool_permission?: 'ask' | 'always_allow'};
+    automatic_reply?: boolean}>(`/v1/connections/setup/${encodeURIComponent(agent)}${binding ? `?binding_id=${encodeURIComponent(binding)}` : ''}`, signal),
+  testSetup: (body: SetupRequest) => read<SetupTest>('/v1/connections/setup:test', undefined, body),
+  setupTest: (id: string, signal?: AbortSignal) => read<SetupTest>(`/v1/connections/setup-tests/${encodeURIComponent(id)}`, signal),
+  finishSetup: (body: SetupRequest) => read<{saved: boolean}>('/v1/connections/setup:finish', undefined, body),
   nativeInputs: (workspace: string, signal?: AbortSignal) => read<{items: ApprovalDetail[]}>(
     `/v1/runtime/input-requests${workspace && workspace !== "all" ? `?workspace_id=${encodeURIComponent(workspace)}` : ""}`, signal),
   decideNative: (body: NativeDecisionRequest) => read<NativeDecisionView>("/v1/runtime/approval-decisions", undefined, body),

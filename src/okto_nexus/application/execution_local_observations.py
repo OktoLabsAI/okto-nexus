@@ -36,7 +36,7 @@ def _authorize(owner, access, context, request, *, uow, identity_reobserved=Fals
     if owner._stop.is_set():
         raise _error('The local executor is shutting down.')
     guard = _authority(uow, owner=owner, access=access, context=context,
-                       subject=request['agent_id'], adapter_id=request['adapter_id'])
+                       subject=request['agent_id'], adapter_id=request['adapter_id'], check_execution_policy=False)
     current = uow.connection.execute(
         'SELECT publication_sequence,inventory_revision FROM execution_inventory_current '
         'WHERE server_id=? AND executor_id=?', (owner.key.server_id, owner.key.executor_id)).fetchone()

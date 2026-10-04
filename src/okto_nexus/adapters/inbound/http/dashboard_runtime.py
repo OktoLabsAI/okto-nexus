@@ -12,6 +12,7 @@ def build_router():
         'intent_view', 'submit_operation', 'operation_view', 'session_list',
         'session_view', 'session_events', 'native_decision', 'native_decision_view',
         'native_input_requests',
+        'connection_setup_read', 'connection_setup_test', 'connection_setup_test_read', 'connection_setup_finish',
     }
     router = APIRouter()
     for source in (connections(), runtime()):

@@ -606,7 +606,7 @@ def apply_execution_binding(
                 conn.execute(
                     "INSERT INTO agent_endpoints(endpoint_id,agent_id,workspace_id,"
                     "adapter_id,protocol,profile_id,enabled,activation_state,public_config,"
-                    "created_at,updated_at) VALUES (?,?,?,?,'nxl-r4',?,?,'approved',?,?,?)",
+                    "created_at,updated_at,response_policy) VALUES (?,?,?,?,'nxl-r4',?,?,'approved',?,?,?,'conversation')",
                     (proposal["endpoint_id"], subject_agent_id, proposal["workspace_id"],
                      proposal["adapter_id"], profile_id, int(operator_approved),
                      canonical_json({"alias": expected["alias"]}).decode("utf-8"),

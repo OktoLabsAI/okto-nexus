@@ -191,6 +191,9 @@ class EndpointService:
         Editing it invalidates existing grants just like other endpoint edits.
         """
         self.authorize(context)
+        if isinstance(changes, dict) and changes.get('enabled') is False:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                'Active runtime connections always receive messages. Select MCP only to disable runtime delivery.', {})
         if changes is not None and (not isinstance(changes, dict)
                 or not {"expected_revision", "enabled"} <= set(changes)
                 or set(changes) - {"expected_revision", "enabled", "session_policy"}
@@ -257,6 +260,9 @@ class EndpointService:
             if endpoint["protocol"] != "nxl-r4":
                 raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Legacy connection configuration was removed.", {})
             updated = endpoint | changes
+            if updated['response_policy'] != 'conversation' or updated['consumption'] != 'exclusive':
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                    'Active runtime connections require automatic message delivery. Select MCP only to disable it.', {})
             if (type(updated["enabled"]) not in {bool, int} or updated["enabled"] not in (0, 1)
                     or "enabled" in changes and type(changes["enabled"]) is not bool
                     or type(updated["priority"]) is not int

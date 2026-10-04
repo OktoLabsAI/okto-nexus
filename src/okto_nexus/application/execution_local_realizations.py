@@ -70,7 +70,7 @@ def _validate(request):
         raise _error("Only protected secret references may be configured.", ErrorCode.VALIDATION_ERROR)
 
 
-def _authority(uow, *, owner, access, context, subject, adapter_id):
+def _authority(uow, *, owner, access, context, subject, adapter_id, check_execution_policy=True):
     if owner is None or not access.authenticate(context, uow=uow):
         raise _error("An authenticated operator must approve local directories.", ErrorCode.PERMISSION_DENIED)
     access.authorize(context, uow=uow, audit=False)
@@ -87,8 +87,9 @@ def _authority(uow, *, owner, access, context, subject, adapter_id):
         raise _error("The local executor or represented agent is unavailable.")
     _require_binding_method(uow.connection, subject_agent_id=subject, adapter_id=adapter_id)
     from .agent_execution_policy import require_execution_location
-    require_execution_location(uow, agent_id=subject,
-        executor_id=owner.key.executor_id, adapter_id=adapter_id)
+    if check_execution_policy:
+        require_execution_location(uow, agent_id=subject,
+            executor_id=owner.key.executor_id, adapter_id=adapter_id)
     return (_agent_guard(uow.connection, context.actor_agent_id), _agent_guard(uow.connection, subject))
 
 

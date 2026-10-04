@@ -9,11 +9,12 @@ from ..application.runtime_shutdown import shutdown_runtime
 
 
 class ServerShutdownCoordinator:
-    def __init__(self, deps, *, embedded, inventory, host, on_drained=None, on_embedded_report=None):
+    def __init__(self, deps, *, embedded, inventory, host, on_drained=None, on_embedded_report=None, connection_tests=None):
         self.deps = deps
         self.embedded, self.inventory, self.host = embedded, inventory, host
         self.on_drained = on_drained
         self.on_embedded_report = on_embedded_report
+        self.connection_tests = connection_tests
         self.deadline = None
         self._task = None
         self._embedded_done = threading.Event()
@@ -121,6 +122,8 @@ class ServerShutdownCoordinator:
     async def _run(self):
         # Legacy release is gated by embedded completion, but neither native
         # containment path waits for the other owner's storage/native calls.
+        if self.connection_tests is not None:
+            await self.connection_tests.shutdown()
         await asyncio.gather(self._embedded(), self._legacy())
         if self.on_drained is not None:
             self.on_drained()

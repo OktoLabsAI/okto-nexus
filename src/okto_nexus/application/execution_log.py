@@ -76,6 +76,19 @@ def read_execution_log(factory, *, workspace_id=None, severity=None, agent_id=No
         coalesce(ep.agent_id,a.actor_agent_id),ep.workspace_id,ep.adapter_id,a.endpoint_id,a.session_id,NULL,NULL,
         a.action,a.decision,json_object('actor',a.actor_agent_id,'decision',a.decision)
       FROM runtime_access_audit a LEFT JOIN agent_endpoints ep ON ep.endpoint_id=a.endpoint_id
+      UNION ALL
+      SELECT 'routing:'||d.delivery_id||':'||ep.endpoint_id,d.created_at,'routing snapshot','warning',
+        d.recipient_agent_id,m.workspace_id,ep.adapter_id,ep.endpoint_id,NULL,NULL,NULL,'message.route',
+        'AUTOMATIC_REPLY_DISABLED',
+        json_object('message','Message remains unread. Automatic replies are currently disabled for this connection. This is a legacy connection state. Reopen Connections and finish setup to update it. Timestamp is message creation; this is current routing state.')
+      FROM message_deliveries d JOIN messages m ON m.message_id=d.message_id
+      JOIN agent_endpoints ep ON ep.agent_id=d.recipient_agent_id AND ep.workspace_id=m.workspace_id
+      WHERE d.status='unread' AND ep.protocol='nxl-r4' AND ep.enabled=1
+        AND ep.activation_state='approved' AND ep.response_policy='explicit'
+        AND NOT EXISTS (SELECT 1 FROM delivery_outbox o WHERE o.delivery_id=d.delivery_id)
+        AND NOT EXISTS (SELECT 1 FROM agent_endpoints ready WHERE ready.agent_id=ep.agent_id
+          AND ready.workspace_id=ep.workspace_id AND ready.enabled=1 AND ready.activation_state='approved'
+          AND ready.response_policy='conversation' AND ready.consumption='exclusive')
     ) SELECT * FROM log WHERE 1=1
     """
     params = []

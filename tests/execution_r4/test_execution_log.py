@@ -61,6 +61,26 @@ def test_log_operator_gate_and_invalid_filters(opening):
         client.close()
 
 
+def test_unread_message_explains_disabled_automatic_replies(opening):
+    deps = opening[0]
+    with deps.connection_factory.unit_of_work() as uow:
+        ep = uow.connection.execute('SELECT * FROM agent_endpoints LIMIT 1').fetchone()
+        uow.connection.execute("UPDATE agent_endpoints SET response_policy='explicit',enabled=1,activation_state='approved' WHERE endpoint_id=?", (ep['endpoint_id'],))
+        uow.connection.execute('INSERT INTO messages(message_id,workspace_id,from_agent_id,body,created_at) VALUES(?,?,?,?,?)',
+            ('routing-test',ep['workspace_id'],'operator','PRIVATE PROMPT','2026-01-01T00:00:00Z'))
+        uow.connection.execute('INSERT INTO message_deliveries(delivery_id,message_id,recipient_agent_id,status,created_at) VALUES(?,?,?,?,?)',
+            ('routing-delivery','routing-test',ep['agent_id'],'unread','2026-01-01T00:00:00Z'))
+    query = dict(agent_id=ep['agent_id'], workspace_id=ep['workspace_id'],severity='warning')
+    items = read_execution_log(deps.connection_factory,**query)['items']
+    matching = [row for row in items if row['code']=='AUTOMATIC_REPLY_DISABLED']
+    assert len(matching)==1
+    assert matching[0]['source']=='routing snapshot'
+    assert 'PRIVATE PROMPT' not in json.dumps(items)
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE agent_endpoints SET response_policy='conversation' WHERE endpoint_id=?", (ep['endpoint_id'],))
+    assert not any(row['code']=='AUTOMATIC_REPLY_DISABLED' for row in read_execution_log(deps.connection_factory,**query)['items'])
+
+
 def test_log_committed_runtime_events_only(opening):
     deps = opening[0]
     with deps.connection_factory.unit_of_work() as uow:
