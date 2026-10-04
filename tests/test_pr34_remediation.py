@@ -25,7 +25,13 @@ from test_harness_tools import FakeConnector
 
 
 @pytest.fixture
-def runtime(tmp_path, request, monkeypatch):
+def runtime(tmp_path, request):
+    # Some process fixtures invoke __wrapped__ directly with these two args.
+    with pytest.MonkeyPatch.context() as monkeypatch:
+        yield from _runtime(tmp_path, request, monkeypatch)
+
+
+def _runtime(tmp_path, request, monkeypatch):
     # These legacy HTTP tests use synthetic peers. Do not scan the developer's
     # real installations during each production-app startup.
     from types import SimpleNamespace
