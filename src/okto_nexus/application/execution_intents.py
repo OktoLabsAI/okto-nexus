@@ -119,6 +119,9 @@ def resolve_execution_intent(
         validate_execution_target(binding["adapter_id"], action, target)
         containment = action in {"turn.interrupt", "runtime.close"}
         if not containment:
+            from .execution_identity_owner import require_identity_host
+            require_identity_host(conn, server_id=server_id,
+                                  agent_id=subject_agent_id, executor_id=binding["executor_id"])
             from .agent_execution_policy import require_execution_location
             require_execution_location(uow, agent_id=subject_agent_id,
                 executor_id=binding["executor_id"], adapter_id=binding["adapter_id"])

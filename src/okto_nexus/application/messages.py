@@ -469,6 +469,12 @@ class MessageService:
             recipients, warning, excluded_stale, filtered_by_audience = (
                 self._resolve_recipients(uow, workspace_id, from_agent_id, target, now)
             )
+            if (managed_binding or _runtime_result_id) and str(from_agent_id) in recipients:
+                raise OktoNexusError(
+                    ErrorCode.PERMISSION_DENIED,
+                    "Runtime agents cannot send messages to themselves.",
+                    {"reason": "SELF_MESSAGE_NOT_ALLOWED"},
+                )
             if _runtime_result_id and requires_known_recipient(target) and recipients != [target_echo["agent_id"]]:
                 raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Result recipient is outside the current authorized audience.", {})
             notification_actor = (self._runtime_results.authorize_notification_audience(uow,

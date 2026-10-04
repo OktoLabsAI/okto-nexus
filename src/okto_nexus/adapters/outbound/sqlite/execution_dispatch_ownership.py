@@ -36,6 +36,8 @@ def reject_unsent_dispatch(factory, *, reservation, error):
         conn.execute("UPDATE execution_sessions SET lifecycle_state='FAILED' WHERE server_id=? AND executor_id=? "
                      "AND open_operation_id=? AND lifecycle_state='OPEN_PENDING' AND lease_state='NONE'",
                      _key(reservation)[:3])
+        from ....application.execution_initial_turns import settle_failed_initial_turns
+        settle_failed_initial_turns(conn, server_id=reservation.server_id, executor_id=reservation.executor_id)
 
 
 def recover_fenced_reservations(factory, *, channel):

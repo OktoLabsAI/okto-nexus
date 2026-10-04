@@ -65,6 +65,17 @@ def test_recorded_message_sender_is_scoped_and_revocable(opening):
         assert not valid_actor_binding(uow, actor, binding, capabilities=authority, workspace_id='ws')
 
 
+def test_managed_self_message_rejected_without_delivery(opening):
+    cap = activate(opening, actions=['tools/call', 'message_create'])
+    result = envelope(rpc(opening, cap['capability'], 'message_create',
+                          message(target={'strategy': 'direct', 'agent_id': 'subject'})))
+    assert not result['ok'] and result['error']['code'] == 'PERMISSION_DENIED', result
+    assert result['error']['details']['reason'] == 'SELF_MESSAGE_NOT_ALLOWED'
+    with opening[0].connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT count(*) FROM messages').fetchone()[0] == 0
+        assert uow.connection.execute('SELECT count(*) FROM message_deliveries').fetchone()[0] == 0
+
+
 @pytest.mark.parametrize('revoke', [False, True])
 def test_managed_send_approval_keeps_sender_authority(opening, monkeypatch, revoke):
     from fastapi.testclient import TestClient

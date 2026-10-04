@@ -57,9 +57,11 @@ class ExecutionReconciliation:
         if self.pages >= 128:
             raise ValueError('The reconciliation page budget is exhausted.')
         c = self.channel
-        with self.factory.unit_of_work(write=False) as uow:
+        with self.factory.unit_of_work() as uow:
             conn = uow.connection
             self._owner(conn)
+            from .execution_initial_turns import settle_failed_initial_turns
+            settle_failed_initial_turns(conn, server_id=c.server_id, executor_id=c.executor_id)
             if self.op_high is None:
                 self.receipt_high = conn.execute('SELECT coalesce(max(rowid),0) FROM execution_receipts '
                     'WHERE server_id=? AND executor_id=?', (c.server_id,c.executor_id)).fetchone()[0]

@@ -74,6 +74,34 @@ def release_ready_initial_turns(conn, *, server_id, executor_id):
         (server_id, executor_id))
 
 
+def settle_failed_initial_turns(conn, *, server_id, executor_id):
+    """Resolve unsent children of failed openings; no executor receipt is invented."""
+    children = conn.execute(
+        "SELECT c.operation_id FROM execution_operations c "
+        "JOIN execution_operations p ON p.server_id=c.server_id AND p.executor_id=c.executor_id "
+        "AND p.operation_id=c.parent_operation_id "
+        "JOIN execution_sessions s ON s.server_id=p.server_id AND s.executor_id=p.executor_id "
+        "AND s.open_operation_id=p.operation_id AND s.session_id=c.session_id "
+        "WHERE c.server_id=? AND c.executor_id=? AND c.action='turn.submit' "
+        "AND c.admission_state='ACCEPTED' AND p.action='runtime.open' "
+        "AND p.admission_state='RESOLVED_TERMINAL' AND s.lifecycle_state='FAILED' "
+        "AND s.lease_state IN ('NONE','CLOSED') "
+        "AND NOT EXISTS (SELECT 1 FROM execution_dispatch_outbox d WHERE d.server_id=c.server_id "
+        "AND d.executor_id=c.executor_id AND d.operation_id=c.operation_id) "
+        "AND NOT EXISTS (SELECT 1 FROM execution_receipts r WHERE r.server_id=c.server_id "
+        "AND r.executor_id=c.executor_id AND r.operation_id=c.operation_id)",
+        (server_id, executor_id)).fetchall()
+    for child in children:
+        key = (server_id, executor_id, child['operation_id'])
+        error = json.dumps(dict(code='INITIAL_OPEN_FAILED', stage='dispatch',
+            message='The opening failed before its initial message was dispatched.',
+            possible_effect=False, retry_safe=False, operation_id=child['operation_id']))
+        conn.execute("INSERT INTO execution_dispatch_outbox(server_id,executor_id,operation_id,dispatch_state,last_error) "
+                     "VALUES (?,?,?,'RESOLVED_TERMINAL',?)", (*key, error))
+        conn.execute("UPDATE execution_operations SET admission_state='RESOLVED_TERMINAL' "
+                     "WHERE server_id=? AND executor_id=? AND operation_id=?", key)
+
+
 def require_current_parent_readiness(conn, *, server_id, executor_id, operation_id):
     child = conn.execute("SELECT parent_operation_id FROM execution_operations WHERE server_id=? "
                          "AND executor_id=? AND operation_id=?", (server_id, executor_id, operation_id)).fetchone()

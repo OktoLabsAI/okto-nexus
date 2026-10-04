@@ -221,6 +221,9 @@ def submit_execution_operation(
                 if existing:
                     raise OktoNexusError(ErrorCode.CONFLICT, "Another session claim requires explicit selection.", {})
             if action == "runtime.open":
+                from .execution_identity_owner import require_identity_host
+                require_identity_host(conn, server_id=server_id,
+                                      agent_id=subject_agent_id, executor_id=executor_id)
                 profile = conn.execute(
                     "SELECT enabled,revision FROM runtime_profiles "
                     "WHERE profile_id=?", (binding["profile_id"],),
