@@ -122,33 +122,23 @@ class EmbeddedDispatchOwner:
         (logger.info if code == 'RECOVERY_READY' else logger.warning)('Runtime recovery: %s %s',code,message)
 
     async def _recover_automatically(self):
-        attempts=0
-        was_enabled=await asyncio.to_thread(self._recovery_enabled)
-        while not self._stopping.is_set() and self.pump is None:
-            try:
-                await asyncio.wait_for(self._stopping.wait(),min(30,2**min(attempts+1,5)))
-                return
-            except asyncio.TimeoutError:
-                pass
-            enabled=await asyncio.to_thread(self._recovery_enabled)
-            if enabled and not was_enabled: attempts=0
-            was_enabled=enabled
-            if not enabled:
-                continue
-            # A blocked local owner must not starve independently recovered
-            # remote executors. Admission still checks each endpoint's owner.
-            from ..application.runtime_recovery import drain_pending
-            await asyncio.to_thread(drain_pending, self.deps)
-            if attempts>=5:
-                from ..application.runtime_recovery import mark_recovery_attention
-                await asyncio.to_thread(mark_recovery_attention,self)
-                continue
-            attempts+=1
+        from nexus_connector_core import RuntimeAutomation
+        from ..application.runtime_recovery import drain_pending, mark_recovery_attention
+        reported = False
+        async def attempt():
+            nonlocal reported
+            reported = False
             await self._start_attempt()
-            if attempts==5 and self.pump is None:
-                from ..application.runtime_recovery import mark_recovery_attention
-                await asyncio.to_thread(mark_recovery_attention,self)
+            return self.pump is not None
+        async def exhausted():
+            nonlocal reported
+            await asyncio.to_thread(mark_recovery_attention, self)
+            if not reported:
+                reported = True
                 await asyncio.to_thread(self._recovery_event,'RECOVERY_ATTENTION_REQUIRED','Automatic recovery attempts exhausted. Inspect retained runtime state; no work was replayed.')
+        await RuntimeAutomation().recover(attempt=attempt, stop=self._stopping,
+            enabled=lambda: asyncio.to_thread(self._recovery_enabled),
+            pending=lambda: asyncio.to_thread(drain_pending, self.deps), exhausted=exhausted)
 
     async def _start_attempt(self):
         if not protocol_info()["remote_execution_ready"]:
@@ -442,13 +432,14 @@ class EmbeddedDispatchOwner:
                 await self.failed()
 
     async def _maintain(self):
+        from nexus_connector_core import DEFAULT_RUNTIME_AUTOMATION
         pending_at=0
         try:
             while not self._stopping.is_set():
                 if time.monotonic()>=pending_at:
                     from ..application.runtime_recovery import drain_pending
                     await asyncio.to_thread(drain_pending,self.deps)
-                    pending_at=time.monotonic()+1
+                    pending_at=time.monotonic()+DEFAULT_RUNTIME_AUTOMATION.message_interval
                 for session_id, session in list(self.sessions.items()):
                     if (session["renew_at"] is not None and time.monotonic() >= session["renew_at"]
                             and (session.get("renew_task") is None or session["renew_task"].done())):

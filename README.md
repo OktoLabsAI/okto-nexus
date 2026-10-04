@@ -924,6 +924,9 @@ describes the early coordination migrations; it is not the complete R4 schema:
   colors, groups/guardrails, and ephemeral poll tokens.
 
 Automatic runtime recovery is enabled by default under **Settings → Global runtime defaults**.
+Recovery scheduling and delivery defaults come from Core's `RuntimeAutomation`
+API, also used by Connector CLI. Nexus retains its transactional inbox and
+authorization checks; the embedded host does not maintain a separate retry policy.
 On restart, Nexus reconciles retained local sessions against Core ownership,
 resource-release and event-history proofs before admitting new work. A dispatch
 refusal that provably never called Core does not require a nonexistent session
