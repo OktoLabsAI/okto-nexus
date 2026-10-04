@@ -355,7 +355,13 @@ The bundled dashboard provides:
 - **Guardrails** — groups, versioned content rules, assignments, and scrubbed
   denial audit;
 - **Communication** — versioned communication presets and bindings;
-- **Approvals** — pending and decided human-in-the-loop actions;
+- **Approvals** — pending, decided, and archived human-in-the-loop actions.
+  Use **Archive** to dismiss a stale or expired request and remove it from the
+  pending badge. The **Archived** tab retains the original request, decision,
+  result, archive time, and operator. Archiving does not grant permission,
+  send a native answer, cancel an already submitted action, or resume a waiting
+  harness. New decisions on archived requests are blocked. The operator-only
+  `POST /api/v1/approvals/{approval_id}/archive` endpoint is idempotent;
 - **Settings** — runtime-manageable settings, feature flags, retention, and
   database maintenance; metrics use their own header-menu panel.
 

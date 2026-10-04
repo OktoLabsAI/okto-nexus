@@ -1090,6 +1090,10 @@ class ApprovalRepo(Protocol):
         """Record the re-execution's result JSON on an approved row."""
         ...
 
+    def archive(self, uow: UnitOfWork, *, approval_id: str, archived_by: str, archived_at: str) -> None:
+        """Dismiss an approval without executing it; retain the original decision."""
+        ...
+
     def revert_to_pending(self, uow: UnitOfWork, *, approval_id: str) -> None:
         """Honest rollback (BR3): ``approved`` -> ``pending``, clearing the
         decision columns, after the re-execution failed a gate."""

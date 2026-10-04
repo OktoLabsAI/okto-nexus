@@ -24,7 +24,7 @@ class SqliteApprovalRepo:
     _COLUMNS = (
         "approval_id, workspace_id, agent_id, action, policy_id, "
         "request_payload, status, decided_by, justification, executed_result, "
-        "trace_id, created_at, decided_at"
+        "trace_id, created_at, decided_at, archived_at, archived_by"
     )
 
     def add(
@@ -94,8 +94,10 @@ class SqliteApprovalRepo:
         """Workspace-scoped, ASCENDING created_at (the oldest-first queue)."""
         sql = f"SELECT {self._COLUMNS} FROM approvals WHERE workspace_id = ?"
         params: list[Any] = [workspace_id]
-        if status is not None:
-            sql += " AND status = ?"
+        if status == "archived":
+            sql += " AND archived_at IS NOT NULL"
+        elif status is not None:
+            sql += " AND status = ? AND archived_at IS NULL"
             params.append(status)
         sql += " ORDER BY created_at, approval_id LIMIT ? OFFSET ?"
         params.extend((max(1, min(int(limit), 500)), max(0, int(offset))))
@@ -122,7 +124,7 @@ class SqliteApprovalRepo:
                 UPDATE approvals
                    SET status = ?, decided_by = ?, justification = ?,
                        decided_at = ?
-                 WHERE approval_id = ? AND status = ?
+                 WHERE approval_id = ? AND status = ? AND archived_at IS NULL
                 """,
                 (
                     status,
@@ -136,6 +138,13 @@ class SqliteApprovalRepo:
         except sqlite3.Error as exc:
             raise db_error_from_exception("deciding approval", exc) from exc
         return cur.rowcount > 0
+
+    def archive(self, uow: UnitOfWork, *, approval_id: str, archived_by: str, archived_at: str) -> None:
+        uow.connection.execute(
+            "UPDATE approvals SET archived_at=?, archived_by=? "
+            "WHERE approval_id=? AND archived_at IS NULL",
+            (archived_at, archived_by, approval_id),
+        )
 
     def set_executed_result(
         self, uow: UnitOfWork, *, approval_id: str, executed_result: str
@@ -179,4 +188,6 @@ class SqliteApprovalRepo:
             trace_id=row["trace_id"],
             created_at=row["created_at"],
             decided_at=row["decided_at"],
+            archived_at=row["archived_at"],
+            archived_by=row["archived_by"],
         )

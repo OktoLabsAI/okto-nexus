@@ -537,7 +537,7 @@ export interface CommPresetInUseDetails {
 // HITL approvals (spec 2948b2a2): operator-only queue behind the Approvals
 // screen. Queue reads and decisions work with feature_hitl OFF — the flag
 // gates only the interception of new actions.
-export type ApprovalStatus = "pending" | "approved" | "rejected";
+export type ApprovalStatus = "pending" | "approved" | "rejected" | "archived";
 
 export interface ApprovalRow {
   approval_id: string;
@@ -545,6 +545,9 @@ export interface ApprovalRow {
   agent_id: string;
   policy_id: string;
   status: ApprovalStatus;
+  archived_at?: string;
+  archived_by?: string;
+  original_status?: ApprovalStatus;
   created_at: string;
   decided_at: string | null;
   decided_by: string | null;
@@ -1659,6 +1662,8 @@ export const api = {
     ),
   // 409 CONFLICT when already decided (the first decision survives; its
   // details ride ApiError.details).
+  archiveApproval: (approvalId: string) => call<ApprovalRow>(
+    `/api/v1/approvals/${encodeURIComponent(approvalId)}/archive`, {method: "POST"}),
   decideApproval: (
     approvalId: string,
     decision: "approve" | "reject",

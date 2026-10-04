@@ -86,7 +86,7 @@ def approval_to_summary(approval: Approval) -> dict[str, Any]:
         "action": approval.action,
         "agent_id": approval.agent_id,
         "policy_id": approval.policy_id,
-        "status": approval.status,
+        "status": "archived" if approval.archived_at else approval.status,
         "created_at": approval.created_at,
         "decided_at": approval.decided_at,
         "decided_by": approval.decided_by,
@@ -94,6 +94,9 @@ def approval_to_summary(approval: Approval) -> dict[str, Any]:
     }
     if approval.trace_id is not None:
         item["trace_id"] = approval.trace_id
+    if approval.archived_at:
+        item.update(archived_at=approval.archived_at, archived_by=approval.archived_by,
+                    original_status=approval.status)
     if approval.justification is not None:
         item["justification"] = approval.justification
     return item
@@ -304,6 +307,8 @@ class ApprovalService:
             row = self._approvals.get(uow, aid)
             if row is None:
                 raise self._not_found(aid)
+            if row.archived_at:
+                raise OktoNexusError(ErrorCode.CONFLICT, "This approval has been archived.", {"approval_id": aid})
             transactional = self._transactional_decisions.get(row.action)
             if transactional is not None:
                 result = transactional(
@@ -497,6 +502,26 @@ class ApprovalService:
     # ------------------------------------------------------------------ #
     # Operator queue reads (FR8; work with the flag OFF - BR6)
     # ------------------------------------------------------------------ #
+    def archive(self, *, approval_id: str, archived_by: str) -> dict[str, Any]:
+        """Dismiss locally, including expired native requests, without runtime I/O.
+
+        The original state remains auditable. Archived requests cannot authorize
+        a later execution, and repeated archive requests do not change the audit.
+        """
+        with self._cf.unit_of_work() as uow:
+            row = self._approvals.get(uow, approval_id)
+            if row is None:
+                raise self._not_found(approval_id)
+            if not row.archived_at:
+                # An approved action can still be executing outside this UoW.
+                if row.status == STATUS_APPROVED and row.executed_result is None:
+                    raise OktoNexusError(ErrorCode.CONFLICT,
+                        "This approval is still executing. Wait for its result before archiving.", {})
+                self._approvals.archive(uow, approval_id=approval_id,
+                    archived_by=archived_by, archived_at=self._clock.now_iso())
+                self._emit_decision(uow, row, event_type="approval.archived", decided_by=archived_by)
+            return approval_to_summary(self._approvals.get(uow, approval_id))
+
     def list_approvals(
         self,
         *,

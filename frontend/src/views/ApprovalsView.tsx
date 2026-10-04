@@ -98,9 +98,10 @@ function DetailPanel({ detail, busy = false, onApprove, onChanged = () => {} }: 
           </span>
         )}
       </div>
-      {detail.action === "runtime_native_approval" && <NativeApprovalInput key={detail.approval_id}
+      {detail.status === "archived" && <p role="status">Archived by {detail.archived_by}. Previous status: {detail.original_status}. Archiving does not send a decision to the runtime.</p>}
+      {detail.status !== "archived" && detail.action === "runtime_native_approval" && <NativeApprovalInput key={detail.approval_id}
         detail={detail} busy={busy} onApprove={onApprove ?? (() => {})} />}
-      {detail.action === "execution.native.respond" && <CanonicalNativeDecision key={detail.approval_id}
+      {detail.status !== "archived" && detail.action === "execution.native.respond" && <CanonicalNativeDecision key={detail.approval_id}
         detail={detail} onChanged={onChanged} />}
       <div>
         <div className="text-[11px] uppercase tracking-wide text-surface-400 dark:text-surface-500 mb-1">
@@ -266,6 +267,25 @@ export function ApprovalsView({
     }
   };
 
+  const archive = async (approvalId: string) => {
+    setBusy(approvalId);
+    try {
+      await api.archiveApproval(approvalId);
+      detailRequest.current += 1;
+      setDetailOpen(null); setDetail(null); setRejecting(null); setActionError(null);
+    } catch (exc) {
+      setActionError((exc as Error).message);
+    } finally {
+      setBusy(null); await reload(); onChanged();
+    }
+  };
+
+  const archiveButton = (row: ApprovalRow) => row.status !== "archived" && (
+    <button className="btn btn-secondary ml-2" disabled={busy !== null}
+      title="Remove from the pending queue and badge. Keep the history without approving or sending a runtime decision."
+      data-testid={`archive-${row.approval_id}`} onClick={() => void archive(row.approval_id)}>Archive</button>
+  );
+
   const chevron = (row: ApprovalRow) => (
     <button
       className="p-1 rounded text-surface-400 hover:text-surface-600 dark:hover:text-surface-300"
@@ -324,7 +344,7 @@ export function ApprovalsView({
 
       <div className="panel p-3 mb-4 space-y-3">
         <div role="tablist" aria-label="Approval status" className="flex flex-wrap gap-2">
-          {(["all", "pending", "approved", "rejected"] as const).map(value => (
+          {(["all", "pending", "approved", "rejected", "archived"] as const).map(value => (
             <button key={value} role="tab" aria-selected={status === value}
               className={`rounded-lg px-3 py-2 text-xs font-medium ${status === value
                 ? "bg-accent-600 text-white" : "bg-surface-100 dark:bg-surface-800 text-surface-600 dark:text-surface-300"}`}
@@ -498,6 +518,7 @@ export function ApprovalsView({
                             </button>
                           </>
                         )}
+                        {archiveButton(row)}
                       </td>
                     </tr>
                     {detailOpen === row.approval_id && (
@@ -522,7 +543,7 @@ export function ApprovalsView({
       {decided.length > 0 && (
         <section className="mt-5 panel p-4" data-testid="recent-decisions">
           <h2 className="text-sm font-semibold text-surface-900 dark:text-surface-100 mb-3">
-            Decisions
+            History
           </h2>
           <div className="overflow-x-auto">
             <table className="w-full text-xs">
@@ -535,7 +556,7 @@ export function ApprovalsView({
                     >
                       <td className="py-1.5 pr-1 w-6">{chevron(row)}</td>
                       <td className="py-1.5 pr-3 whitespace-nowrap text-surface-500 dark:text-surface-400">
-                        {ago(row.decided_at)} ago
+                        {ago(row.archived_at ?? row.decided_at)} ago
                       </td>
                       <td className="py-1.5 pr-3 font-mono">{row.agent_id}</td>
                       <td className="py-1.5 pr-3 font-mono text-[11px]">
@@ -553,10 +574,11 @@ export function ApprovalsView({
                         </span>
                       </td>
                       <td className="py-1.5 pr-0 text-surface-400 dark:text-surface-500">
-                        by <span className="font-mono">{row.decided_by ?? "—"}</span>
+                        by <span className="font-mono">{row.archived_by ?? row.decided_by ?? "—"}</span>
                         {row.status === "rejected" && row.justification && (
                           <span> · “{row.justification}”</span>
                         )}
+                        {archiveButton(row)}
                       </td>
                     </tr>
                     {detailOpen === row.approval_id && (

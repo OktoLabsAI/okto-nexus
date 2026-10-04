@@ -3269,6 +3269,19 @@ def build_router() -> APIRouter:
             return _map_error(exc)
         return _ok(detail)
 
+    @router.post("/approvals/{approval_id}/archive")
+    async def archive_approval(request: Request, approval_id: str) -> JSONResponse:
+        try:
+            _require_operator()
+            service = _approval_service(request.app.state.deps)
+            agent = get_authenticated_agent()
+            actor = agent.agent_id if agent is not None else OPERATOR_AGENT_ID
+            result = await anyio.to_thread.run_sync(
+                lambda: service.archive(approval_id=approval_id, archived_by=actor))
+            return _ok(result)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
     @router.post("/approvals/{approval_id}/decision")
     async def decide_approval(
         request: Request, approval_id: str, body: DecisionBody
