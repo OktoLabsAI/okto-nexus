@@ -89,6 +89,11 @@ _BINDING_TICKET_SCOPES = frozenset({
 def build_router() -> APIRouter:
     router = APIRouter()
 
+    @router.get('/reach')
+    async def reach():
+        from ....application.reach import reach_info
+        return JSONResponse(reach_info(), headers={'Cache-Control': 'no-store'})
+
     def binding_error(error, stage):
         status = {ErrorCode.NOT_FOUND: 404, ErrorCode.PERMISSION_DENIED: 403,
                   ErrorCode.CONFLICT: 409, ErrorCode.VALIDATION_ERROR: 422,

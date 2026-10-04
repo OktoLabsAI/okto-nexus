@@ -66,7 +66,7 @@ from .lock import HEARTBEAT_INTERVAL_SECONDS, ServeLock
 #: data; every byte of data still rides the key-gated /api/v1 surface.
 PUBLIC_PATHS = frozenset(
     {"/", "/healthz", "/api/v1/info", "/api/v1/license",
-     "/v1/connections/protocol", "/favicon.ico"}
+     "/v1/connections/protocol", "/v1/reach", "/favicon.ico"}
 )
 PUBLIC_PREFIXES = ("/assets/", "/logos/")
 

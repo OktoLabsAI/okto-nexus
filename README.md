@@ -927,6 +927,12 @@ Automatic runtime recovery is enabled by default under **Settings → Global run
 Recovery scheduling and delivery defaults come from Core's `RuntimeAutomation`
 API, also used by Connector CLI. Nexus retains its transactional inbox and
 authorization checks; the embedded host does not maintain a separate retry policy.
+
+Connector clients can test reachability without credentials using `GET /v1/reach`
+or `okto-nexus-connector reach --server <base-url>`. The public, read-only endpoint
+returns the installed `server_version`, installed `server_core_version` (or
+`null` if Core is absent), and `minimum_cli_version`. The minimum CLI version is
+maintained in `application/reach.py` with the supported management contract.
 On restart, Nexus reconciles retained local sessions against Core ownership,
 resource-release and event-history proofs before admitting new work. A dispatch
 refusal that provably never called Core does not require a nonexistent session
