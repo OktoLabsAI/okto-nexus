@@ -51,20 +51,32 @@ def test_mixed_endpoint_selection_before_native_effects(connected_local, monkeyp
     wait_receipt(setup, closed, stages=("SUCCEEDED",))
 
 
-def test_unresolved_canonical_session_does_not_fall_back(connected_local, monkeypatch):
+@pytest.mark.parametrize('automatic_recovery', [True, False])
+def test_unresolved_canonical_session_does_not_fall_back(connected_local, monkeypatch, automatic_recovery):
     setup, binding, native = connected_local
     enable(setup, binding)
     legacy(setup, binding, priority=99, group="approved-equivalence")
     opened = admit(setup, binding, "unresolved-open", "runtime.start", new_session=True)
     wait_receipt(setup, opened)
     with setup[0].connection_factory.unit_of_work() as uow:
+        uow.connection.execute('UPDATE runtime_policy_defaults SET automatic_recovery=?', (automatic_recovery,))
         uow.connection.execute("UPDATE execution_sessions SET lease_state='NONE' WHERE session_id=?", (opened["scope"]["session_id"],))
     result = send(setup, monkeypatch)
-    assert not result["ok"] and "reconciliation" in str(result), result
+    if automatic_recovery:
+        assert result['ok'], result
+    else:
+        assert not result["ok"] and "reconciliation" in str(result), result
     with setup[0].connection_factory.unit_of_work() as uow:
-        assert uow.connection.execute("SELECT COUNT(*) FROM messages").fetchone()[0] == 0
+        assert uow.connection.execute("SELECT COUNT(*) FROM messages").fetchone()[0] == int(automatic_recovery)
         assert uow.connection.execute("SELECT COUNT(*) FROM delivery_outbox").fetchone()[0] == 0
+        if automatic_recovery:
+            assert uow.connection.execute('SELECT status FROM runtime_pending_deliveries').fetchone()[0] == 'waiting'
+            assert uow.connection.execute('SELECT consumer_kind FROM message_deliveries').fetchone()[0] is None
+            # A separate inbox consumer may finish the queued message first.
+            uow.connection.execute("UPDATE message_deliveries SET status='read'")
         uow.connection.execute("UPDATE execution_sessions SET lease_state='ACTIVE' WHERE session_id=?", (opened["scope"]["session_id"],))
+    from okto_nexus.application.runtime_recovery import drain_pending
+    drain_pending(setup[0])
     assert native.opens == 1 and not native.native.sent
     closed = admit(setup, binding, "unresolved-close", "runtime.close", session_id=opened["scope"]["session_id"])
     wait_receipt(setup, closed, stages=("SUCCEEDED",))
