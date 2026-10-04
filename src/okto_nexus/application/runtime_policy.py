@@ -70,7 +70,7 @@ def save_policy(deps, context, *, agent_id=None, changes):
             or 'automatic_recovery' in changes and (agent_id is not None or type(changes['automatic_recovery']) is not bool)
             or type(changes['expected_revision']) is not int or changes['expected_revision'] < (0 if agent_id else 1)
             or not (type(changes['runtime_enabled']) is bool or agent_id is not None and changes['runtime_enabled'] is None)
-            or changes['session_policy'] not in (('shared', 'per_sender', None) if agent_id else ('shared', 'per_sender'))):
+            or changes['session_policy'] not in (('shared', 'per_sender', 'per_sender_session', None) if agent_id else ('shared', 'per_sender', 'per_sender_session'))):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Invalid runtime policy; null means inherit only for agents.', {})
     with deps.connection_factory.unit_of_work() as uow:
         access.authorize_maintenance(context, uow=uow)
@@ -86,7 +86,7 @@ def save_policy(deps, context, *, agent_id=None, changes):
         affected = [agent_id] if agent_id else [row[0] for row in conn.execute('SELECT agent_id FROM agents')]
         before = {aid: effective(conn, aid) for aid in affected}
         if agent_id:
-            conn.execute('INSERT INTO agent_runtime_overrides VALUES(?,?,?,?) ON CONFLICT(agent_id) DO UPDATE SET '
+            conn.execute('INSERT INTO agent_runtime_overrides(agent_id,runtime_enabled,session_policy,revision) VALUES(?,?,?,?) ON CONFLICT(agent_id) DO UPDATE SET '
                 'runtime_enabled=excluded.runtime_enabled,session_policy=excluded.session_policy,revision=excluded.revision',
                 (agent_id, changes['runtime_enabled'], changes['session_policy'], current['revision'] + 1))
         else:
@@ -110,6 +110,6 @@ def set_legacy_session_override(uow, *, agent_id, mode, access, now):
     if current['effective']['session_policy'] != mode:
         require_closed(conn, [agent_id])
         invalidate(uow, access, [agent_id], now)
-    conn.execute('INSERT INTO agent_runtime_overrides VALUES(?,?,?,?) ON CONFLICT(agent_id) DO UPDATE SET '
+    conn.execute('INSERT INTO agent_runtime_overrides(agent_id,runtime_enabled,session_policy,revision) VALUES(?,?,?,?) ON CONFLICT(agent_id) DO UPDATE SET '
                  'session_policy=excluded.session_policy,revision=excluded.revision',
                  (agent_id, current['runtime_enabled'], mode, current['revision'] + 1))

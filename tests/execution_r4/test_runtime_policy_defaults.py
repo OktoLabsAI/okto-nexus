@@ -20,6 +20,16 @@ def save(setup, *, agent=None, **changes):
         session_policy=current['session_policy']) | changes)
 
 
+def test_source_session_policy_global_and_agent_override(connected_local):
+    setup = connected_local[0]
+    assert save(setup, session_policy='per_sender_session').status_code == 200
+    assert read(setup, 'subject')['effective']['session_policy'] == 'per_sender_session'
+    assert save(setup, agent='subject', session_policy='per_sender').status_code == 200
+    assert read(setup, 'subject')['effective']['session_policy'] == 'per_sender'
+    assert save(setup, agent='subject', session_policy=None).status_code == 200
+    assert read(setup, 'subject')['effective']['session_policy'] == 'per_sender_session'
+
+
 def test_global_disable_keeps_mcp_and_inbox_but_blocks_runtime(connected_local, monkeypatch):
     setup, binding, native = connected_local
     configure(setup, binding, 'shared')

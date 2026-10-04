@@ -22,6 +22,8 @@ def test_managed_message_uses_session_identity_and_records_causal_sender(opening
         row = uow.connection.execute('SELECT * FROM messages').fetchone()
         assert row['from_agent_id'] == 'subject' and row['workspace_id'] == 'ws'
         assert row['from_session_id'] is None
+        from okto_nexus.application.message_session_origin import for_message, runtime_key
+        assert for_message(uow.connection, row['message_id']) == runtime_key(cap['scope'])
         assert uow.connection.execute('SELECT count(*) FROM sessions').fetchone()[0] == 0
         assert uow.connection.execute('SELECT actor_agent_id FROM runtime_causal_roots').fetchone()[0] == 'subject'
         assert uow.connection.execute('SELECT recipient_agent_id FROM message_deliveries').fetchone()[0] == 'other'
@@ -89,3 +91,5 @@ def test_managed_send_approval_keeps_sender_authority(opening, monkeypatch, revo
         assert uow.connection.execute('SELECT count(*) FROM messages').fetchone()[0] == (0 if revoke else 1)
         if not revoke:
             assert uow.connection.execute('SELECT actor_agent_id FROM runtime_causal_roots').fetchone()[0] == 'subject'
+            from okto_nexus.application.message_session_origin import runtime_key
+            assert uow.connection.execute('SELECT source_session_key FROM execution_message_origins').fetchone()[0] == runtime_key(cap['scope'])

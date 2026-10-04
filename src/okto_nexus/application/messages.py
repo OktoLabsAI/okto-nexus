@@ -260,6 +260,7 @@ class MessageService:
         _runtime_result_id=None,
         _nonexecuting_notification=False,
         _managed_message_binding=None,
+        _source_session_key=None,
     ) -> dict[str, Any]:
         """Persist a message and emit ``message.created`` atomically.
 
@@ -296,6 +297,8 @@ class MessageService:
         """
         from ..domain.execution_principal import current_execution_principal
         principal = current_execution_principal.get()
+        if _source_session_key is not None and not _approved_execution:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Session provenance is internal to approval replay.', {})
         if principal is not None:
             if (from_agent_id != principal.scope['agent_id'] or from_session_id is not None
                     or session_secret is not None or _runtime_result_id or _managed_message_binding):
@@ -400,6 +403,11 @@ class MessageService:
                 advance_session_presence(
                     self._sessions, uow, session_id=from_session_id, at=now
                 )
+
+            from .message_session_origin import capture
+            source_session_key = _source_session_key if _approved_execution and _source_session_key is not None else capture(
+                uow.connection, managed_binding=managed_binding, result_id=_runtime_result_id,
+                verified_session_id=from_session_id if _is_nonempty_str(session_secret) else None)
 
             # Permission gate (migration 011): which SEND capability this is.
             # A channel post is gated by send_channel alone (its broadcast-ish
@@ -542,6 +550,7 @@ class MessageService:
                             "trace_id": resolved_trace,
                             **({"_runtime_result_id": _runtime_result_id} if _runtime_result_id else {}),
                             **({'_managed_message_binding': managed_binding} if managed_binding else {}),
+                            **({'_source_session_key': source_session_key} if source_session_key else {}),
                         },
                         trace_id=resolved_trace,
                     )
@@ -569,6 +578,9 @@ class MessageService:
                 created_at=now,
             )
 
+            if source_session_key:
+                uow.connection.execute('INSERT INTO execution_message_origins VALUES(?,?)',
+                                       (message.message_id, source_session_key))
             if self._runtime_planner and getattr(self._config, "feature_harness_integrations", False) and not _nonexecuting_notification:
                 self._runtime_planner.causality.record(uow, message=message, context=runtime_context,
                     now=now, source_result_id=_runtime_result_id)

@@ -4,7 +4,7 @@ import { api } from "../api";
 import type { BindingView } from "../runtimeApi";
 
 export function RuntimeConversationPolicy({binding, onUpdated, onPendingChange, onSummaryChange}: {binding: BindingView; onUpdated: () => void; onSummaryChange?: (summary: string) => void; onPendingChange?: (pending: boolean) => void}) {
-  const [policy, setPolicy] = useState<{revision: number; enabled: boolean; session_policy: "shared" | "per_sender"} | null>(null);
+  const [policy, setPolicy] = useState<{revision: number; enabled: boolean; session_policy: "shared" | "per_sender" | "per_sender_session"} | null>(null);
   const [enabled, setEnabled] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");

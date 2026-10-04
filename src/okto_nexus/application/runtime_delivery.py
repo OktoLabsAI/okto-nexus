@@ -10,6 +10,7 @@ from .connection_policy import method_enabled, require_method
 from .runtime_requirements import validate_native_requirements
 from .runtime_causality import RuntimeCausalityService
 from .runtime_actor_authority import authenticated_message_context, valid_actor_binding
+from .message_session_origin import for_message
 
 
 class RuntimeDeliveryPlanner:
@@ -53,7 +54,7 @@ class RuntimeDeliveryPlanner:
                 candidates.append((endpoint, profile, live[0]))
         return candidates
 
-    def candidates(self, uow, *, agent_id, workspace_id, sender_agent_id=None):
+    def candidates(self, uow, *, agent_id, workspace_id, sender_agent_id=None, source_session_key=''):
         candidates = []
         from .runtime_policy import effective
         if not effective(uow.connection, agent_id)['runtime_enabled']:
@@ -74,7 +75,8 @@ class RuntimeDeliveryPlanner:
                     recovering=uow.connection.execute("SELECT 1 FROM execution_bindings b JOIN execution_executors x USING(server_id,executor_id) WHERE b.endpoint_id=? AND x.control_state='RECOVERING'",(endpoint['endpoint_id'],)).fetchone()
                     if recovering:
                         raise OktoNexusError(ErrorCode.CONFLICT,'Delivery session requires reconciliation.',{})
-                    _, session_id = select_delivery_session(uow, endpoint["endpoint_id"], sender_agent_id=sender_agent_id)
+                    _, session_id = select_delivery_session(uow, endpoint["endpoint_id"], sender_agent_id=sender_agent_id,
+                                                            source_session_key=source_session_key)
                     candidates.append((endpoint, profile, session_id))
                 continue
             descriptor = self.registry.get(endpoint["adapter_id"])
@@ -133,7 +135,8 @@ class RuntimeDeliveryPlanner:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Payload sender is not the authenticated actor.", {})
         try:
             candidates = self.candidates(uow, agent_id=delivery.recipient_agent_id, workspace_id=message.workspace_id,
-                                         sender_agent_id=message.from_agent_id)
+                                         sender_agent_id=message.from_agent_id,
+                                         source_session_key=for_message(uow.connection, message.message_id))
         except OktoNexusError as error:
             from .runtime_policy import defaults
             if error.message != 'Delivery session requires reconciliation.' or not defaults(uow.connection)['automatic_recovery']:
@@ -254,7 +257,8 @@ class RuntimeDeliveryPlanner:
         tried = self.outbox.attempted_endpoints(uow, operation_id=operation["operation_id"])
         candidates = [candidate for candidate in self.candidates(uow,
             agent_id=operation["recipient_agent_id"], workspace_id=operation["workspace_id"],
-            sender_agent_id=envelope["sender_agent_id"])
+            sender_agent_id=envelope["sender_agent_id"],
+            source_session_key=for_message(uow.connection, operation['message_id']))
             if candidate[0]["selection_group"] == admission["selection_group"]
             and (candidate[0]["protocol"] == "nxl-r4"
                  or self.registry.get(candidate[0]["adapter_id"]).input_schema.get("transport_binding_contract") == 1)

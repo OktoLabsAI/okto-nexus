@@ -30,6 +30,8 @@ def test_native_message_replay_and_scope(opening):
     with opening[0].connection_factory.unit_of_work() as uow:
         assert uow.connection.execute('SELECT count(*) FROM messages').fetchone()[0]==1
         assert uow.connection.execute('SELECT from_agent_id FROM messages').fetchone()[0]=='subject'
+        from okto_nexus.application.message_session_origin import runtime_key
+        assert uow.connection.execute('SELECT source_session_key FROM execution_message_origins').fetchone()[0] == runtime_key(cap['scope'])
         assert uow.connection.execute('SELECT count(*) FROM execution_native_messages').fetchone()[0]==1
         assert uow.connection.execute('SELECT count(*) FROM sessions').fetchone()[0]==0
         uow.connection.execute('UPDATE execution_session_capabilities SET revoked_at=?',(opening[0].clock.now_iso(),))

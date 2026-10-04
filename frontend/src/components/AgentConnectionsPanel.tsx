@@ -221,9 +221,9 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
             aria-pressed={draft.adapter_id === r.adapter_id} data-testid={`local-runtime-${r.adapter_id}`}
             onClick={() => {patch({adapter_id:r.adapter_id,harness_settings:{}});setCandidateRef('');setBindingId(null);setVisited(0);}}>{r.display_name}</button>)}
         </div>}
-        <label>Session context <span className="text-surface-500">Optional</span><ConfigurationHelp label="Session context">One session per sender isolates conversation context. Shared sessions keep the agent context together.</ConfigurationHelp>
-          <select aria-label="Session context" className={input} value={draft.session_policy || ''} onChange={e => patch({session_policy:e.target.value as 'shared' | 'per_sender' || null})}>
-            <option value="">Use global setting</option><option value="shared">Shared</option><option value="per_sender">One session per sender</option></select></label>
+        <label>Session context <span className="text-surface-500">Optional</span><ConfigurationHelp label="Session context">Shared keeps all senders together. Per sender shares history across sessions of the same agent. Per sender + source session isolates each verified source session. Messages without a verified session, including the operator UI, share a separate session per sender.</ConfigurationHelp>
+          <select aria-label="Session context" className={input} value={draft.session_policy || ''} onChange={e => patch({session_policy:e.target.value as 'shared' | 'per_sender' | 'per_sender_session' || null})}>
+            <option value="">Use global setting</option><option value="shared">Shared</option><option value="per_sender">One session per sender</option><option value="per_sender_session">One session per sender + source session</option></select></label>
         {draft.execution_location === 'remote' && <RemoteConnectorCommand agentId={agentId} />}
       </>}
     </>}

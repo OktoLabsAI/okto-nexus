@@ -1,7 +1,7 @@
 export interface ConnectionConfiguration {
   format: 'okto-nexus-connection'; version: 1;
   adapter_id: string; execution_location: 'local' | 'remote' | 'all';
-  runtime_enabled: boolean | null; session_policy: 'shared' | 'per_sender' | null;
+  runtime_enabled: boolean | null; session_policy: 'shared' | 'per_sender' | 'per_sender_session' | null;
   workspace_root: string; workspace_label: string; provider_home: string | null;
   secret_bindings: Record<string,string>; alias: string; harness_settings: Record<string,string>;
   automatic_reply: boolean; tool_access: 'ask' | 'always_allow';
@@ -24,7 +24,7 @@ export function parseConnectionConfiguration(text: string): ConnectionConfigurat
   if (!value || Array.isArray(value) || Object.keys(value).sort().join() !== Object.keys(base).sort().join() ||
       value.format !== base.format || value.version !== 1 || !['local','remote','all'].includes(value.execution_location) ||
       (value.runtime_enabled !== null && typeof value.runtime_enabled !== 'boolean') || typeof value.automatic_reply !== 'boolean' ||
-      !['shared','per_sender',null].includes(value.session_policy) || !['ask','always_allow'].includes(value.tool_access))
+      !['shared','per_sender','per_sender_session',null].includes(value.session_policy) || !['ask','always_allow'].includes(value.tool_access))
     throw new Error('Use a complete Okto Nexus connection configuration (version 1).');
   for (const key of ['adapter_id','workspace_root','workspace_label','alias'])
     if (typeof value[key] !== 'string' || value[key].length > 4096) throw new Error(`Invalid ${key}.`);

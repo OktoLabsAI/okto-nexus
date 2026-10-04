@@ -69,12 +69,67 @@ def sender(setup, monkeypatch):
         token = app.state.auth.issue_key(uow, agent_id='sender-b')
         workspace = uow.connection.execute('SELECT workspace_id FROM workspaces').fetchone()[0]
     tokens = dict(operator=headers['operator']['Authorization'].removeprefix('Bearer '), **{'sender-b': token})
-    def send(actor, text='hello'):
+    def send(actor, text='hello', **changes):
         response = tool(client, tokens[actor], 'message_create', dict(from_agent_id=actor, workspace_id=workspace,
-            target=dict(strategy='direct', agent_id='subject'), subject='Sender isolation', body=text))
+            target=dict(strategy='direct', agent_id='subject'), subject='Sender isolation', body=text) | changes)
         assert response['ok'], response
         return response['data']['message_id']
     return send
+
+
+@pytest.mark.parametrize('local_setup', ['codex_app_server', 'claude_stream', 'pi_rpc'], indirect=True)
+@pytest.mark.parametrize('mode', ['per_sender_session', 'per_sender'])
+def test_same_agent_source_sessions_are_isolated_only_in_new_mode(connected_local, monkeypatch, mode):
+    setup, binding, _ = connected_local
+    peers = Peers()
+    setup[1].state.embedded_dispatch_owner.native_factory = peers
+    configure(setup, binding, mode)
+    send = sender(setup, monkeypatch)
+    from test_pr34_remediation import tool
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        workspace = uow.connection.execute('SELECT workspace_id FROM workspaces').fetchone()[0]
+    token = setup[3]['operator']['Authorization'].removeprefix('Bearer ')
+    def open_source():
+        result = tool(setup[2], token, 'session_open', dict(agent_id='operator', workspace_id=workspace))
+        assert result['ok'], result
+        return {k: result['data'][k] for k in ('session_id', 'session_secret')}
+    a, b = open_source(), open_source()
+    def from_session(source):
+        return send('operator', from_session_id=source['session_id'], session_secret=source['session_secret'])
+    first = turn_for(setup, from_session(a))
+    wait_receipt(setup, first)
+    second = turn_for(setup, from_session(b))
+    assert (first['session_id'] != second['session_id']) == (mode == 'per_sender_session')
+    if mode == 'per_sender_session':
+        # B must dispatch while A is still running, not just get a different ID.
+        wait_receipt(setup, second)
+        complete(setup, peers, second, 'B')
+    complete(setup, peers, first, 'A')
+    if mode == 'per_sender':
+        wait_receipt(setup, second)
+        complete(setup, peers, second, 'B')
+    again = turn_for(setup, from_session(a))
+    assert again['session_id'] == first['session_id']
+    wait_receipt(setup, again)
+    complete(setup, peers, again, 'A again')
+    sessionless = turn_for(setup, send('operator'))
+    assert (sessionless['session_id'] not in {first['session_id'], second['session_id']}) == (mode == 'per_sender_session')
+    wait_receipt(setup, sessionless)
+    complete(setup, peers, sessionless, 'No source')
+    repeated = turn_for(setup, send('operator', from_session_id='unverified-attribution'))
+    assert repeated['session_id'] == sessionless['session_id']
+    wait_receipt(setup, repeated)
+    complete(setup, peers, repeated, 'No verified source')
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        from okto_nexus.application.message_session_origin import for_message, runtime_key
+        for row in uow.connection.execute('SELECT r.publication_message_id,e.server_id,e.executor_id,e.session_id '
+                'FROM runtime_results r JOIN execution_results e ON e.server_id=r.canonical_server_id '
+                'AND e.executor_id=r.canonical_executor_id AND e.operation_id=r.canonical_operation_id '
+                'WHERE r.publication_message_id IS NOT NULL'):
+            assert for_message(uow.connection, row['publication_message_id']) == runtime_key(row)
+        assert not uow.connection.execute('PRAGMA foreign_key_check').fetchall()
+    for index, sid in enumerate({first['session_id'], second['session_id'], sessionless['session_id']}):
+        wait_receipt(setup, admit(setup, binding, f'close-origin-{index}', 'runtime.close', session_id=sid), stages=('SUCCEEDED',))
 
 
 @pytest.mark.parametrize('local_setup', ['codex_app_server', 'claude_stream', 'pi_rpc'], indirect=True)
@@ -172,9 +227,10 @@ def test_invalid_session_policy_and_missing_sender_fail_closed(connected_local):
         assert uow.connection.execute('SELECT COUNT(*) FROM execution_sessions').fetchone()[0] == 0
 
 
-def test_opening_sender_is_not_duplicated_and_manual_session_is_not_adopted(connected_local, monkeypatch):
+@pytest.mark.parametrize('mode', ['per_sender', 'per_sender_session'])
+def test_opening_sender_is_not_duplicated_and_manual_session_is_not_adopted(connected_local, monkeypatch, mode):
     setup, binding, _ = connected_local
-    configure(setup, binding, 'per_sender')
+    configure(setup, binding, mode)
     manual = admit(setup, binding, 'manual', 'runtime.start', new_session=True)
     wait_receipt(setup, manual)
     setup[2].portal.call(setup[1].state.embedded_dispatch_owner.pump.stop)

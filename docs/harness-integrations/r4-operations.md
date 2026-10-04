@@ -52,6 +52,25 @@ and result publication retains the original message and recipient correlation.
 This selection also applies to explicitly dispatched managed handoffs, using
 their creator as sender; creating a handoff alone still does not dispatch it.
 
+Select **Separate session per sender + source session** (`per_sender_session`)
+to isolate multiple conversations belonging to the same sending agent. For
+example, A/session-1 and A/session-2 receive different sessions at C; another
+message from A/session-1 reuses its existing session at C. Different source
+sessions can dispatch concurrently; ordering is retained within each session.
+The setting is available globally, as an agent override, in connection setup,
+and in portable JSON/Connector `configure` (Core 0.2.63.dev0 or later).
+
+Managed MCP and native tools use the authenticated runtime scope, including
+server, executor, and canonical session ID. Automatic runtime results retain
+their originating runtime session. Traditional MCP sends use `from_session_id`
+with its verified `session_secret`; a bare attribution ID does not establish
+session affinity. Approval replay preserves verified origin without storing
+credentials. Messages without verified session provenance (including operator
+UI messages, historical messages, and managed handoff dispatches without a
+creator session proof) share a separate session per sender. Browser tabs and
+message subjects are not session identifiers. Existing `shared` and `per_sender`
+settings are unchanged; this mode does not change reply recipient selection.
+
 Close affected agents' existing sessions before changing isolation, then renew
 execution permission. Explicitly overridden agents are unaffected by changes to
 defaults they do not inherit. Sender affinity persists in SQLite and is committed with admission;

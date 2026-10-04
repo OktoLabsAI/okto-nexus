@@ -1121,9 +1121,9 @@ export type RuntimePolicy = {
   automatic_recovery?: boolean;
   revision: number;
   runtime_enabled: boolean | null;
-  session_policy: 'shared' | 'per_sender' | null;
-  defaults?: {revision: number; runtime_enabled: boolean; session_policy: 'shared' | 'per_sender'};
-  effective?: {runtime_enabled: boolean; session_policy: 'shared' | 'per_sender'};
+  session_policy: 'shared' | 'per_sender' | 'per_sender_session' | null;
+  defaults?: {revision: number; runtime_enabled: boolean; session_policy: 'shared' | 'per_sender' | 'per_sender_session'};
+  effective?: {runtime_enabled: boolean; session_policy: 'shared' | 'per_sender' | 'per_sender_session'};
 };
 
 export const api = {
@@ -1138,10 +1138,10 @@ export const api = {
   saveRuntimeToolPermission: (endpoint: string, body: {expected_revision: number; mode: "ask" | "always_allow"}) =>
     call<{revision: number; mode: "ask" | "always_allow"}>(`/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/tool-permission`, {method: "PUT", body: JSON.stringify(body)}),
   runtimePolicy: (agentId?: string) => call<RuntimePolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/runtime-policy` : '/api/v1/runtime-policy'),
-  saveRuntimePolicy: (body: {expected_revision: number; runtime_enabled: boolean | null; session_policy: 'shared' | 'per_sender' | null; automatic_recovery?: boolean}, agentId?: string) => call<RuntimePolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/runtime-policy` : '/api/v1/runtime-policy', {method: 'PUT', body: JSON.stringify(body)}),
-  runtimeConversationPolicy: (endpoint: string) => call<{endpoint_id: string; agent_id: string; workspace_id: string; revision: number; enabled: boolean; session_policy: "shared" | "per_sender"}>(
+  saveRuntimePolicy: (body: {expected_revision: number; runtime_enabled: boolean | null; session_policy: 'shared' | 'per_sender' | 'per_sender_session' | null; automatic_recovery?: boolean}, agentId?: string) => call<RuntimePolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/runtime-policy` : '/api/v1/runtime-policy', {method: 'PUT', body: JSON.stringify(body)}),
+  runtimeConversationPolicy: (endpoint: string) => call<{endpoint_id: string; agent_id: string; workspace_id: string; revision: number; enabled: boolean; session_policy: "shared" | "per_sender" | "per_sender_session"}>(
     `/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/conversation-policy`),
-  saveRuntimeConversationPolicy: (endpoint: string, body: {expected_revision: number; enabled: boolean; session_policy?: "shared" | "per_sender"}) => call<{revision: number; enabled: boolean; session_policy: "shared" | "per_sender"}>(
+  saveRuntimeConversationPolicy: (endpoint: string, body: {expected_revision: number; enabled: boolean; session_policy?: "shared" | "per_sender" | "per_sender_session"}) => call<{revision: number; enabled: boolean; session_policy: "shared" | "per_sender" | "per_sender_session"}>(
     `/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/conversation-policy`, {method: "PUT", body: JSON.stringify(body)}),
   authorizeRuntimeExecution: (body: {actor_agent_id: string; endpoint_id: string; actions: string[]; max_executions: number | null; expires_at: string | null}) =>
     call<{grant_id: string}>("/api/v1/harness/grants", {method: "POST", body: JSON.stringify(body)}),

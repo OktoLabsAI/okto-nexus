@@ -199,9 +199,9 @@ class EndpointService:
                 or set(changes) - {"expected_revision", "enabled", "session_policy"}
                 or type(changes["expected_revision"]) is not int or changes["expected_revision"] < 1
                 or type(changes["enabled"]) is not bool
-                or "session_policy" in changes and changes["session_policy"] not in ("shared", "per_sender")):
+                or "session_policy" in changes and changes["session_policy"] not in ("shared", "per_sender", "per_sender_session")):
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
-                "Use a positive expected_revision, boolean enabled and shared or per_sender session_policy.", {})
+                "Use a positive expected_revision, boolean enabled and shared, per_sender or per_sender_session session_policy.", {})
         with self.cf.unit_of_work(write=changes is not None) as uow:
             if self.access:
                 self.access.authorize(context, uow=uow, audit=False)
