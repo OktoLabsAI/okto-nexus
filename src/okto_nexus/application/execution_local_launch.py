@@ -115,9 +115,12 @@ class ApprovedLocalLaunch:
                          agent_id=scope["agent_id"], server_id=scope["server_id"], executor_id=scope["executor_id"])
             if _digest(proof) != row["local_root_proof_digest"]:
                 raise _refuse()
-            candidate = resolve_local_installation_selection(owner.candidates,
-                adapter_id=row["adapter_id"], candidate_ref=row["candidate_ref"],
-                expected_inventory_revision=row["inventory_revision"])
+            # Admission and dispatch validate the current inventory (including
+            # automatic equivalence). Keep the original consent immutable here;
+            # exact local candidate and physical identity checks remain mandatory.
+            from nexus_connector_core import resolve_installation
+            candidate = resolve_installation(owner.candidates,
+                adapter_id=row["adapter_id"], candidate_ref=row["candidate_ref"])
             if asdict(candidate) != record["candidate"] or selected_fingerprint(candidate) != candidate.fingerprint:
                 raise _refuse()
             if directory_identity(record["root"]["path"]) != record["root"]:

@@ -35,6 +35,18 @@ def read_execution_log(factory, *, workspace_id=None, severity=None, agent_id=No
     # Dispatch has no update timestamp: its timestamp is explicitly operation creation.
     query = """
     WITH log AS (
+      SELECT 'inventory:'||b.binding_id id,v.checked_at timestamp,'inventory revalidation' source,
+        CASE WHEN v.compatible=1 THEN 'info' ELSE 'warning' END severity,
+        ep.agent_id,ep.workspace_id,ep.adapter_id,b.endpoint_id,NULL session_id,NULL operation_id,
+        b.executor_id,'inventory.revalidate' action,
+        CASE WHEN v.compatible=1 THEN 'INVENTORY_REVALIDATED' ELSE 'INVENTORY_REVIEW_REQUIRED' END code,
+        json_object('reason',v.reason,'approved_revision',v.approved_revision,'current_revision',v.current_revision) detail
+      FROM execution_inventory_revalidation v JOIN execution_bindings b
+        ON b.server_id=v.server_id AND b.executor_id=v.executor_id
+        AND b.inventory_revision=v.approved_revision AND b.candidate_ref=v.candidate_ref
+      JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id
+      WHERE v.approved_revision<>v.current_revision
+      UNION ALL
       SELECT 'recovery:'||r.id id,r.created_at timestamp,'runtime recovery' source,
         CASE WHEN r.code='RECOVERY_READY' THEN 'info' ELSE 'warning' END severity,
         NULL agent_id,NULL workspace_id,NULL adapter_id,NULL endpoint_id,NULL session_id,NULL operation_id,

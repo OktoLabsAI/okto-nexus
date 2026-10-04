@@ -136,7 +136,7 @@ def test_probe_result_cannot_outlive_its_authority_or_identity(checking, monkeyp
 
 
 @pytest.mark.parametrize('change', ['binary', 'core', 'platform'])
-def test_observation_reuse_requires_same_bytes_core_and_platform(checking, change):
+def test_observation_survives_core_upgrade_only_for_same_bytes_and_platform(checking, change):
     deps, app, client, headers, body, route, source, _ = checking
     assert client.post(route, json=body, headers=headers['operator']).status_code == 200
     if change == 'binary': Path(source.executable).write_bytes(b'new provider bytes')
@@ -146,7 +146,10 @@ def test_observation_reuse_requires_same_bytes_core_and_platform(checking, chang
             uow.connection.execute(f"UPDATE execution_local_observations SET {column}='different'")
     client.portal.call(app.state.embedded_inventory_owner.refresh)
     current = app.state.embedded_inventory_owner.candidates[0]
-    assert current.version is None and current.trust == 'untrusted'
+    if change == 'core':
+        assert current.version == '0.159.0' and current.trust == 'selected'
+    else:
+        assert current.version is None and current.trust == 'untrusted'
 
 
 @pytest.mark.parametrize('shutdown', [False, True])

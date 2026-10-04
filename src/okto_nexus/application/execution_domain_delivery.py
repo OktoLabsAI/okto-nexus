@@ -87,7 +87,9 @@ def admit_domain_delivery(uow, *, operation_id, access, fresh_publications, remo
         blockers = resolved['blockers']
         message = 'Runtime delivery is unavailable: ' + ', '.join(blockers) + '.'
         if 'inventory_not_fresh' in blockers:
-            message += ' Refresh the host inventory and review the connection installation.'
+            message += ' The host must publish a fresh inventory.'
+        if 'inventory_binding_review_required' in blockers:
+            message += ' Automatic revalidation could not confirm the selected installation. Review this connection.'
         raise OktoNexusError(ErrorCode.CONFLICT, message, {'blockers': blockers})
     submit_execution_operation(factory, request={name: resolved[name] for name in
         ("client_intent_id", "operation_id", "resolution_revision", "intent_hash")}, **common)

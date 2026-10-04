@@ -142,8 +142,9 @@ class ExecutionLeaseService:
             raise _conflict('The lease authority has expired.')
         inventory = self.repo.inventory(uow, scope)
         fresh = self.fresh_publications.get((scope['server_id'], scope['executor_id']))
+        from .execution_inventory_revalidation import accepts_binding
         if (inventory is None or fresh is None or fresh[0] != inventory['publication_sequence'] or
-                inventory['inventory_revision'] != row['inventory_revision'] or
+                not accepts_binding(uow.connection, row, inventory['inventory_revision'], scope['server_id'], scope['executor_id']) or
                 inventory['observation_age_ms'] + max(0, int((time.monotonic() - fresh[1]) * 1000)) >= 120000):
             raise _conflict('The lease inventory is no longer fresh.')
         snapshot = load_current_executor_inventory(inventory['canonical_projection'])

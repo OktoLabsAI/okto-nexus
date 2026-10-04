@@ -66,11 +66,14 @@ def canonical_available(uow, *, access, context, endpoints, fresh, remote_ready)
                     reasons.append("realization_not_ready")
                 receipt = fresh.get((binding["server_id"], binding["executor_id"]))
                 if (receipt is None or receipt[0] != binding["publication_sequence"] or
-                        binding["current_inventory_revision"] != binding["inventory_revision"] or
                         binding["observation_age_ms"] is None or binding["observation_age_ms"] +
                         max(0, int((time.monotonic() - receipt[1]) * 1000)) >= 120000):
                     reasons.append("inventory_not_fresh")
                 else:
+                    from .execution_inventory_revalidation import accepts_binding
+                    if not accepts_binding(uow.connection, binding, binding['current_inventory_revision'],
+                                           binding['server_id'], binding['executor_id']):
+                        reasons.append("inventory_binding_review_required")
                     try:
                         snapshot = load_current_executor_inventory(binding["canonical_projection"])
                         if not any(item["adapter_id"] == descriptor.adapter_id and

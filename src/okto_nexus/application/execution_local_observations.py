@@ -24,8 +24,10 @@ def apply_local_observations(factory, key, candidates):
     with factory.unit_of_work(write=False) as uow:
         rows = uow.connection.execute(
             'SELECT source_json,version FROM execution_local_observations '
-            'WHERE server_id=? AND executor_id=? AND core_version=? AND platform=?',
-            (key.server_id, key.executor_id, CORE_VERSION, sys.platform)).fetchall()
+            'WHERE server_id=? AND executor_id=? AND platform=?',
+            (key.server_id, key.executor_id, sys.platform)).fetchall()
+    # A version observation describes exact harness bytes, not a Core release.
+    # Reuse only an identical full source; current Core still qualifies it.
     observations = {row['source_json']: row['version'] for row in rows}
     return tuple(replace(candidate, trust='selected', version=observations[canonical_json(asdict(candidate)).decode()])
                  if canonical_json(asdict(candidate)).decode() in observations else candidate

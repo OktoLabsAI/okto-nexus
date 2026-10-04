@@ -68,9 +68,17 @@ def admitted_local(local_setup, monkeypatch):
     return local_setup, sent, channel, access
 
 
-def test_approved_local_configuration_reaches_core(admitted_local):
+@pytest.mark.parametrize('inventory_refresh', [False, True])
+def test_approved_local_configuration_reaches_core(admitted_local, monkeypatch, inventory_refresh):
     setup,sent,channel,access=admitted_local
     deps,app,client,_,_,candidate,root=setup
+    if inventory_refresh:
+        from dataclasses import replace
+        from okto_nexus.bootstrap import embedded_inventory
+        other = replace(candidate, executable=candidate.executable + '.other', installation_ref=None)
+        monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+            lambda **_: SimpleNamespace(candidates=(candidate, other)))
+        client.portal.call(app.state.embedded_inventory_owner.refresh)
     leases=ExecutionLeaseService(factory=deps.connection_factory,access=access,
                                  fresh_publications=app.state.inventory_fresh_publications)
     class Factory(_NativeFactory):

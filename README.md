@@ -1318,6 +1318,21 @@ the latest migration remains 026.
   receipts, semantic search, monitoring guidance, and dashboard observability
   waves.
 
+## Automatic inventory revalidation
+
+Authenticated host inventory publications automatically revalidate configured
+runtime connections. Core version changes and changes to unrelated installations
+do not require repeating agent setup when the selected installation evidence and
+runtime contract remain identical. Original bindings, permissions, grants, and
+running-session identities are preserved. Fresh inventory is still required.
+
+The Execution log shows `INVENTORY_REVALIDATED` or `INVENTORY_REVIEW_REQUIRED` per
+connection. Changed or missing installations, changed execution capabilities, or
+missing historical evidence require review. Legacy embedded connections can use
+their retained, digest-verified local installation record as the baseline.
+Version observations survive a Core upgrade only for the exact same host source
+and platform; current Core still evaluates runtime support and containment.
+
 ## License
 
 Copyright 2026 Okto Labs.

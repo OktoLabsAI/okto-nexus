@@ -54,8 +54,10 @@ def reusable_opening(uow, *, factory, access, context, server_id, executor_id,
         raise OktoNexusError(ErrorCode.CONFLICT, "The session connection requires reconciliation.", {})
     current = service.repo.inventory(uow, scope)
     fresh = (fresh_publications or {}).get((server_id, executor_id))
-    if (current is None or fresh is None or current["inventory_revision"] != semantic["payload"]["inventory_revision"]
-            or authority["inventory_revision"] != current["inventory_revision"]
+    from .execution_inventory_revalidation import accepts_binding
+    if (current is None or fresh is None
+            or authority['inventory_revision'] != semantic['payload']['inventory_revision']
+            or not accepts_binding(conn, authority, current['inventory_revision'], server_id, executor_id)
             or fresh[0] != current["publication_sequence"]
             or current["observation_age_ms"] + max(0, int((time.monotonic() - fresh[1]) * 1000)) >= 120_000):
         raise OktoNexusError(ErrorCode.CONFLICT, "The reusable installation inventory is no longer fresh.", {})

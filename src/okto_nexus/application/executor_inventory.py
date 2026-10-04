@@ -168,7 +168,9 @@ def publish_executor_inventory(factory, *, principal: ExecutorKey,
             complete_inventory_refresh(uow, delivery_id=refresh_delivery_id,
                 server_id=principal.server_id, executor_id=principal.executor_id,
                 producer_instance_id=producer_instance_id, sequence=sequence)
-        # Keep the current and immediately previous publication only.
+        from .execution_inventory_revalidation import revalidate_inventory
+        revalidate_inventory(conn, snapshot)
+        # Selected evidence is retained separately before pruning publications.
         conn.execute(
             "DELETE FROM execution_inventory_snapshots WHERE server_id=? AND executor_id=? "
             "AND publication_sequence NOT IN (SELECT publication_sequence FROM "
