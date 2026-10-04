@@ -83,6 +83,12 @@ def admit_domain_delivery(uow, *, operation_id, access, fresh_publications, remo
     common = dict(actor_agent_id=operation["recipient_agent_id"], access=access,
                   fresh_publications=fresh_publications, remote_ready=remote_ready)
     resolved = resolve_execution_intent(factory, request=request, **common)
+    if not resolved['can_submit']:
+        blockers = resolved['blockers']
+        message = 'Runtime delivery is unavailable: ' + ', '.join(blockers) + '.'
+        if 'inventory_not_fresh' in blockers:
+            message += ' Refresh the host inventory and review the connection installation.'
+        raise OktoNexusError(ErrorCode.CONFLICT, message, {'blockers': blockers})
     submit_execution_operation(factory, request={name: resolved[name] for name in
         ("client_intent_id", "operation_id", "resolution_revision", "intent_hash")}, **common)
     if session_id is None and binding["session_policy"] == "per_sender":

@@ -643,6 +643,8 @@ function ChatTurn({
                 {entry.outcome === "completed" ? <CheckCircle2 size={11} /> : entry.outcome === "rejected" ? <CircleAlert size={11} /> : null}
                 {entry.status}
               </span>
+              {entry.deliveries?.some(d=>d.runtime_recovery==='waiting') && <span role="status">Waiting for runtime recovery</span>}
+              {entry.deliveries?.some(d=>d.runtime_recovery==='attention') && <span role="status">Runtime recovery needs attention. See Execution log.</span>}
               {showReceiptFlags && outgoing && entry.kind === "message" && Boolean(entry.deliveries?.length) && (
                 <ReceiptStatusFlag deliveries={entry.deliveries ?? []} onOpen={() => onOpenReceipt(entry)} />
               )}

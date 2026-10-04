@@ -57,6 +57,7 @@ class EmbeddedDispatchOwner:
         self.containment_report = None
         self.state_failure = None
         self.recovery_failure = None
+        self._recovery_task = None
         from .embedded_events import EmbeddedEventPublisher
         self.events = EmbeddedEventPublisher(self)
         from .embedded_tools import EmbeddedToolsOwner
@@ -104,8 +105,57 @@ class EmbeddedDispatchOwner:
                 (c.server_id,c.executor_id,c.connection_id,c.connection_generation)).rowcount == 1
 
     async def start(self):
+        await self._start_attempt()
+        if self.pump is None and not self._stopping.is_set():
+            self._recovery_task = asyncio.create_task(self._recover_automatically(),name='automatic-runtime-recovery')
+
+    def _recovery_enabled(self):
+        from ..application.runtime_policy import defaults
+        with self.factory.unit_of_work(write=False) as uow:
+            return defaults(uow.connection)['automatic_recovery']
+
+    def _recovery_event(self, code, message):
+        with self.factory.unit_of_work() as uow:
+            uow.connection.execute('INSERT INTO runtime_recovery_events(executor_id,created_at,code,message) VALUES(?,?,?,?)',
+                (self.channel.executor_id,self.deps.clock.now_iso(),code,message))
+        logger = logging.getLogger(__name__)
+        (logger.info if code == 'RECOVERY_READY' else logger.warning)('Runtime recovery: %s %s',code,message)
+
+    async def _recover_automatically(self):
+        attempts=0
+        was_enabled=await asyncio.to_thread(self._recovery_enabled)
+        while not self._stopping.is_set() and self.pump is None:
+            try:
+                await asyncio.wait_for(self._stopping.wait(),min(30,2**min(attempts+1,5)))
+                return
+            except asyncio.TimeoutError:
+                pass
+            enabled=await asyncio.to_thread(self._recovery_enabled)
+            if enabled and not was_enabled: attempts=0
+            was_enabled=enabled
+            if not enabled:
+                continue
+            # A blocked local owner must not starve independently recovered
+            # remote executors. Admission still checks each endpoint's owner.
+            from ..application.runtime_recovery import drain_pending
+            await asyncio.to_thread(drain_pending, self.deps)
+            if attempts>=5:
+                from ..application.runtime_recovery import mark_recovery_attention
+                await asyncio.to_thread(mark_recovery_attention,self)
+                continue
+            attempts+=1
+            await self._start_attempt()
+            if attempts==5 and self.pump is None:
+                from ..application.runtime_recovery import mark_recovery_attention
+                await asyncio.to_thread(mark_recovery_attention,self)
+                await asyncio.to_thread(self._recovery_event,'RECOVERY_ATTENTION_REQUIRED','Automatic recovery attempts exhausted. Inspect retained runtime state; no work was replayed.')
+
+    async def _start_attempt(self):
         if not protocol_info()["remote_execution_ready"]:
             return
+        if not await asyncio.to_thread(self._recovery_enabled):
+            if not await asyncio.to_thread(self._activate): return
+        self.recovery_failure=None
         try:
             await self._recover_publications()
             await self.events.recover()
@@ -113,8 +163,12 @@ class EmbeddedDispatchOwner:
             recovered = await EmbeddedReconciliation(self).recover()
         except Exception as error:
             self.recovery_failure = error
+            await asyncio.to_thread(self._recovery_event,'RECOVERY_BLOCKED',
+                f"{type(error).__name__}: {getattr(error,'code','UNAVAILABLE')} at {getattr(error,'stage','retained runtime history')}")
             return
         if not recovered and not await asyncio.to_thread(self._activate):
+            return
+        if self._stopping.is_set():
             return
         self.pump = ExecutionDispatchPump(factory=self.factory, channel=self.channel, access=self.access,
             fresh_publications=self.inventory.fresh, send=self.enqueue, send_lock=asyncio.Lock(),
@@ -122,6 +176,7 @@ class EmbeddedDispatchOwner:
             resolve_native_input=self.deps.native_decisions.inputs.resolve)
         self.pump.start()
         self.maintenance = asyncio.create_task(self._maintain(), name="embedded-publications")
+        await asyncio.to_thread(self._recovery_event,'RECOVERY_READY','Runtime history reconciled. New messages can open a session; previous work was not replayed.')
 
     async def _recover_publications(self):
         """Publish retained facts once before any new dispatch is enabled."""
@@ -387,8 +442,13 @@ class EmbeddedDispatchOwner:
                 await self.failed()
 
     async def _maintain(self):
+        pending_at=0
         try:
             while not self._stopping.is_set():
+                if time.monotonic()>=pending_at:
+                    from ..application.runtime_recovery import drain_pending
+                    await asyncio.to_thread(drain_pending,self.deps)
+                    pending_at=time.monotonic()+1
                 for session_id, session in list(self.sessions.items()):
                     if (session["renew_at"] is not None and time.monotonic() >= session["renew_at"]
                             and (session.get("renew_task") is None or session["renew_task"].done())):
@@ -512,6 +572,7 @@ class EmbeddedDispatchOwner:
             self.state_failure = error
             failures.append(error)
         for task in (self.pump.stop() if self.pump is not None else None,
+                     asyncio.shield(self._recovery_task) if self._recovery_task is not None else None,
                      asyncio.shield(self.maintenance) if self.maintenance is not None else None):
             if task is not None:
                 try:

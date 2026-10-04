@@ -71,6 +71,9 @@ class RuntimeDeliveryPlanner:
                         and endpoint["health"] != "quarantined" and profile and profile["enabled"]
                         and "conversation" not in profile["config"].get("disabled_capabilities", ())):
                     from .execution_domain_delivery import select_delivery_session
+                    recovering=uow.connection.execute("SELECT 1 FROM execution_bindings b JOIN execution_executors x USING(server_id,executor_id) WHERE b.endpoint_id=? AND x.control_state='RECOVERING'",(endpoint['endpoint_id'],)).fetchone()
+                    if recovering:
+                        raise OktoNexusError(ErrorCode.CONFLICT,'Delivery session requires reconciliation.',{})
                     _, session_id = select_delivery_session(uow, endpoint["endpoint_id"], sender_agent_id=sender_agent_id)
                     candidates.append((endpoint, profile, session_id))
                 continue
@@ -128,8 +131,17 @@ class RuntimeDeliveryPlanner:
                 raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Captured result source does not match this delivery.", {})
         elif actor.agent_id != message.from_agent_id and actor.agent_id != "operator":
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Payload sender is not the authenticated actor.", {})
-        candidates = self.candidates(uow, agent_id=delivery.recipient_agent_id, workspace_id=message.workspace_id,
-                                     sender_agent_id=message.from_agent_id)
+        try:
+            candidates = self.candidates(uow, agent_id=delivery.recipient_agent_id, workspace_id=message.workspace_id,
+                                         sender_agent_id=message.from_agent_id)
+        except OktoNexusError as error:
+            from .runtime_policy import defaults
+            if error.message != 'Delivery session requires reconciliation.' or not defaults(uow.connection)['automatic_recovery']:
+                raise
+            from dataclasses import asdict
+            uow.connection.execute('INSERT OR IGNORE INTO runtime_pending_deliveries(delivery_id,context_json,authorization_revision,created_at,result_source_json) VALUES(?,?,?,?,?)',
+                (delivery.delivery_id,json.dumps(asdict(context)),authorization_revision,now,json.dumps(result_source) if result_source else None))
+            return None
         if not candidates:
             return None
         ready = [c for c in candidates if c[2]]

@@ -512,7 +512,8 @@ class SqliteObservabilityQueries:
                 deliveries = uow.connection.execute(
                     """
                     SELECT delivery_id, recipient_agent_id, status, created_at,
-                           delivered_at, read_at
+                           delivered_at, read_at,
+                           (SELECT p.status FROM runtime_pending_deliveries p WHERE p.delivery_id=message_deliveries.delivery_id AND p.status IN ('waiting','attention')) runtime_recovery
                     FROM message_deliveries WHERE message_id = ?
                     ORDER BY created_at, delivery_id
                     """,
@@ -529,7 +530,7 @@ class SqliteObservabilityQueries:
                     "target": _loads(row["target"]),
                     "trace_id": row["trace_id"],
                     "preview": body[:160],
-                    "deliveries": [dict(d) for d in deliveries],
+                    "deliveries": [{k:v for k,v in dict(d).items() if k!='runtime_recovery' or v is not None} for d in deliveries],
                 }
                 if include_body:
                     item["body"] = body

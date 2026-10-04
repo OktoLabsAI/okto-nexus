@@ -25,7 +25,13 @@ from test_harness_tools import FakeConnector
 
 
 @pytest.fixture
-def runtime(tmp_path, request):
+def runtime(tmp_path, request, monkeypatch):
+    # These legacy HTTP tests use synthetic peers. Do not scan the developer's
+    # real installations during each production-app startup.
+    from types import SimpleNamespace
+    from okto_nexus.bootstrap import embedded_inventory
+    monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+                        lambda **_: SimpleNamespace(candidates=()))
     root = tmp_path / "project"
     root.mkdir()
     deps = bootstrap({}, ["--home", str(tmp_path / "home")])

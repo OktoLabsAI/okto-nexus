@@ -923,6 +923,22 @@ describes the early coordination migrations; it is not the complete R4 schema:
 - **022–026:** versioned attachable policies, communication presets, display
   colors, groups/guardrails, and ephemeral poll tokens.
 
+Automatic runtime recovery is enabled by default under **Settings → Global runtime defaults**.
+On restart, Nexus reconciles retained local sessions against Core ownership,
+resource-release and event-history proofs before admitting new work. A dispatch
+refusal that provably never called Core does not require a nonexistent session
+journal. Previously submitted messages are never automatically replayed.
+
+New messages arriving during recovery stay unclaimed in a durable queue. The
+Meta-harness shows **Waiting for runtime recovery**; MCP can still consume them.
+Before admission, Nexus revalidates the original sender credentials and current
+execution authorization. Recovery uses five retries with bounded backoff. An
+unresolved message moves to **Runtime recovery needs attention** after bounded
+queue checks. Inspect **Execution log** for recovery diagnostics. Disabling the
+global option stops automatic retries and deferred delivery; it does not grant
+permission to reuse uncertain sessions. Changes to the Core installation or its
+inventory may still require reviewing the connection configuration.
+
 Nexus refuses to run against an unsupported newer schema. Runtime SQLite
 databases and their WAL/SHM/journal sidecars are ignored and must not be
 committed.

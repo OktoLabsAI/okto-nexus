@@ -3,8 +3,9 @@ from ..errors import ErrorCode, OktoNexusError
 
 
 def defaults(conn):
-    row = dict(conn.execute('SELECT runtime_enabled,session_policy,revision FROM runtime_policy_defaults WHERE singleton=1').fetchone())
+    row = dict(conn.execute('SELECT runtime_enabled,session_policy,revision,automatic_recovery FROM runtime_policy_defaults WHERE singleton=1').fetchone())
     row['runtime_enabled'] = bool(row['runtime_enabled'])
+    row['automatic_recovery'] = bool(row['automatic_recovery'])
     return row
 
 
@@ -64,7 +65,9 @@ def read_policy(deps, context, agent_id=None):
 def save_policy(deps, context, *, agent_id=None, changes):
     from ..bootstrap.execution_authority import build_execution_access
     access = build_execution_access(deps)
-    if (not isinstance(changes, dict) or set(changes) != {'expected_revision', 'runtime_enabled', 'session_policy'}
+    if (not isinstance(changes, dict) or set(changes) - {'expected_revision', 'runtime_enabled', 'session_policy', 'automatic_recovery'}
+            or not {'expected_revision','runtime_enabled','session_policy'} <= set(changes)
+            or 'automatic_recovery' in changes and (agent_id is not None or type(changes['automatic_recovery']) is not bool)
             or type(changes['expected_revision']) is not int or changes['expected_revision'] < (0 if agent_id else 1)
             or not (type(changes['runtime_enabled']) is bool or agent_id is not None and changes['runtime_enabled'] is None)
             or changes['session_policy'] not in (('shared', 'per_sender', None) if agent_id else ('shared', 'per_sender'))):
@@ -77,7 +80,8 @@ def save_policy(deps, context, *, agent_id=None, changes):
         current = view(conn, agent_id)
         if current['revision'] != changes['expected_revision']:
             raise OktoNexusError(ErrorCode.CONFLICT, 'Runtime policy changed; reload before saving.', {})
-        if all(current[key] == changes[key] for key in ('runtime_enabled', 'session_policy')):
+        if all(current[key] == changes[key] for key in ('runtime_enabled', 'session_policy')) and (
+                agent_id is not None or current['automatic_recovery']==changes.get('automatic_recovery',current['automatic_recovery'])):
             return current
         affected = [agent_id] if agent_id else [row[0] for row in conn.execute('SELECT agent_id FROM agents')]
         before = {aid: effective(conn, aid) for aid in affected}
@@ -86,15 +90,16 @@ def save_policy(deps, context, *, agent_id=None, changes):
                 'runtime_enabled=excluded.runtime_enabled,session_policy=excluded.session_policy,revision=excluded.revision',
                 (agent_id, changes['runtime_enabled'], changes['session_policy'], current['revision'] + 1))
         else:
-            conn.execute('UPDATE runtime_policy_defaults SET runtime_enabled=?,session_policy=?,revision=revision+1 WHERE singleton=1',
-                         (changes['runtime_enabled'], changes['session_policy']))
+            conn.execute('UPDATE runtime_policy_defaults SET runtime_enabled=?,session_policy=?,automatic_recovery=?,revision=revision+1 WHERE singleton=1',
+                         (changes['runtime_enabled'], changes['session_policy'],changes.get('automatic_recovery',current['automatic_recovery'])))
         changed = [aid for aid in affected if before[aid] != effective(conn, aid)]
         require_closed(conn, [aid for aid in changed if before[aid]['session_policy'] != effective(conn, aid)['session_policy']])
         now = deps.clock.now_iso()
         invalidate(uow, access, changed, now)
         access.endpoints.audit_configuration(uow, context=context, kind='runtime_policy', resource_id=agent_id or 'global',
             old_revision=current['revision'], new_revision=current['revision'] + 1,
-            fields=['runtime_enabled', 'session_policy'], now=now)
+            fields=[key for key in ('runtime_enabled', 'session_policy', 'automatic_recovery')
+                    if key in changes and current.get(key) != changes[key]], now=now)
         return view(conn, agent_id)
 
 

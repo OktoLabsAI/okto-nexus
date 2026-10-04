@@ -7,6 +7,7 @@ const fieldClass = 'block rounded-lg border border-surface-200 dark:border-surfa
 export function RuntimePolicy({agentId, onUpdated, onPendingChange}: {agentId?: string; onUpdated?: (enabled: boolean) => void; onPendingChange?: (pending: boolean) => void}) {
   const [policy, setPolicy] = useState<Policy | null>(null);
   const [enabled, setEnabled] = useState<boolean | null>(null);
+  const [recovery,setRecovery] = useState(true);
   const [sessions, setSessions] = useState<'shared' | 'per_sender' | null>(null);
   const [busy, setBusy] = useState(true);
   const [error, setError] = useState('');
@@ -14,6 +15,7 @@ export function RuntimePolicy({agentId, onUpdated, onPendingChange}: {agentId?: 
   const [revision, setRevision] = useState(0);
   const accept = (value: Policy) => {
     setPolicy(value); setEnabled(value.runtime_enabled); setSessions(value.session_policy);
+    setRecovery(value.automatic_recovery ?? true);
     onUpdated?.(value.effective?.runtime_enabled ?? value.runtime_enabled ?? true);
   };
   useEffect(() => {
@@ -24,11 +26,12 @@ export function RuntimePolicy({agentId, onUpdated, onPendingChange}: {agentId?: 
       .finally(() => {if (active) setBusy(false);});
     return () => {active = false;};
   }, [agentId, revision]);
-  useEffect(() => {onPendingChange?.(busy || !policy || enabled !== policy.runtime_enabled || sessions !== policy.session_policy);}, [busy, policy, enabled, sessions, onPendingChange]);
+  useEffect(() => {onPendingChange?.(busy || !policy || enabled !== policy.runtime_enabled || sessions !== policy.session_policy || (!agentId && recovery !== policy.automatic_recovery));}, [busy, policy, enabled, sessions, recovery, agentId, onPendingChange]);
   const effectiveEnabled = enabled ?? policy?.defaults?.runtime_enabled ?? true;
   const effectiveSessions = sessions ?? policy?.defaults?.session_policy ?? 'shared';
   return <section className="space-y-3" aria-label={agentId ? 'Agent runtime override' : 'Global runtime defaults'}>
     <h3 className="font-semibold">{agentId ? 'Runtime policy for this agent' : 'Global runtime defaults'}</h3>
+    {!agentId && <label className="block"><input type="checkbox" checked={recovery} disabled={busy} onChange={e=>setRecovery(e.target.checked)} /> Automatic runtime recovery<ConfigurationHelp label="Automatic runtime recovery">Recover retained runtime state after restart using Core ownership proofs. New messages wait during recovery. Previously submitted work is never replayed. Uncertain state requires attention after bounded retries.</ConfigurationHelp></label>}
     <p className="text-xs text-surface-500">{agentId ? 'Inherit the global settings or override each option for this agent, across all connections and workspaces.' : 'Defaults for all agents. An explicit agent override takes precedence.'}</p>
     <label className="block">Runtime connection <ConfigurationHelp label="Runtime connection">Runtime executes this harness through Nexus. MCP only keeps the existing MCP and inbox access. Disabling runtime blocks new work and closes existing sessions when their leases renew.</ConfigurationHelp>
       <select aria-label={agentId ? 'Agent runtime connection' : 'Global runtime connection'} className={fieldClass} value={enabled === null ? 'inherit' : enabled ? 'enabled' : 'disabled'} disabled={busy || !policy}
@@ -45,10 +48,10 @@ export function RuntimePolicy({agentId, onUpdated, onPendingChange}: {agentId?: 
       </select>
     </label>
     <p>Effective selection: {effectiveEnabled ? 'runtime enabled' : 'MCP only'} · {effectiveSessions === 'per_sender' ? 'separate session per sender' : 'shared session'}.</p>
-    <button className="btn btn-primary" disabled={busy || !policy || (enabled === policy.runtime_enabled && sessions === policy.session_policy)} onClick={async () => {
+    <button className="btn btn-primary" disabled={busy || !policy || (enabled === policy.runtime_enabled && sessions === policy.session_policy && (!!agentId || recovery === policy.automatic_recovery))} onClick={async () => {
       if (!policy) return;
       setBusy(true); setError(''); setNotice('');
-      try {accept(await api.saveRuntimePolicy({expected_revision: policy.revision, runtime_enabled: enabled, session_policy: sessions}, agentId)); setNotice('Runtime policy saved.');}
+      try {accept(await api.saveRuntimePolicy({expected_revision: policy.revision, runtime_enabled: enabled, session_policy: sessions,...(!agentId ? {automatic_recovery:recovery} : {})}, agentId)); setNotice('Runtime policy saved.');}
       catch (failure) {setError(String(failure));}
       finally {setBusy(false);}
     }}>{agentId ? 'Save agent runtime policy' : 'Save global runtime defaults'}</button>

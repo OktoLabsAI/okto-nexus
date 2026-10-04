@@ -35,6 +35,18 @@ def read_execution_log(factory, *, workspace_id=None, severity=None, agent_id=No
     # Dispatch has no update timestamp: its timestamp is explicitly operation creation.
     query = """
     WITH log AS (
+      SELECT 'recovery:'||r.id id,r.created_at timestamp,'runtime recovery' source,
+        CASE WHEN r.code='RECOVERY_READY' THEN 'info' ELSE 'warning' END severity,
+        NULL agent_id,NULL workspace_id,NULL adapter_id,NULL endpoint_id,NULL session_id,NULL operation_id,
+        r.executor_id,'runtime.recover' action,r.code,json_object('message',r.message) detail FROM runtime_recovery_events r
+      UNION ALL
+      SELECT 'pending:'||p.delivery_id,p.created_at,'runtime recovery',CASE WHEN p.status='attention' THEN 'error' ELSE 'warning' END,
+        d.recipient_agent_id,m.workspace_id,NULL,NULL,NULL,NULL,NULL,'message.wait',
+        CASE WHEN p.status='attention' THEN 'RECOVERY_ATTENTION_REQUIRED' ELSE 'WAITING_FOR_RUNTIME_RECOVERY' END,
+        json_object('message',coalesce(p.reason,'Waiting for runtime recovery'))
+      FROM runtime_pending_deliveries p JOIN message_deliveries d USING(delivery_id) JOIN messages m USING(message_id)
+      WHERE p.status IN ('waiting','attention')
+      UNION ALL
       SELECT 'receipt:'||r.server_id||':'||r.executor_id||':'||r.operation_id||':'||r.receipt_revision id,
         r.received_at timestamp, 'receipt' source,
         CASE WHEN r.error_code IS NOT NULL OR r.stage='FAILED' THEN 'error'
@@ -94,8 +106,16 @@ def read_execution_log(factory, *, workspace_id=None, severity=None, agent_id=No
     params = []
     for column, value in (('workspace_id', workspace_id), ('severity', severity), ('agent_id', agent_id), ('adapter_id', adapter_id)):
         if value:
-            query += f' AND {column}=?'
-            params.append(value)
+            if column in ('workspace_id', 'agent_id', 'adapter_id'):
+                # Executor recovery affects every connection on that host;
+                # keep it visible when filtering one affected connection.
+                query += f" AND ({column}=? OR (source='runtime recovery' AND log.agent_id IS NULL " \
+                    f"AND EXISTS (SELECT 1 FROM execution_bindings b JOIN agent_endpoints ep USING(endpoint_id) " \
+                    f"WHERE b.executor_id=log.executor_id AND ep.{column}=?)))"
+                params.extend((value, value))
+            else:
+                query += f' AND {column}=?'
+                params.append(value)
     for operator, value in (('>=', since), ('<=', until)):
         if value:
             query += f' AND julianday(timestamp){operator}julianday(?)'

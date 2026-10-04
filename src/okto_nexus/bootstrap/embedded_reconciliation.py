@@ -13,6 +13,26 @@ class EmbeddedReconciliation:
     def __init__(self, owner):
         self.owner = owner
 
+    def _never_started(self, row):
+        """A durable dispatch refusal before publication proves no Core call."""
+        with self.owner.factory.unit_of_work(write=False) as uow:
+            self.owner.verify(uow=uow)
+            key=(self.owner.channel.server_id,self.owner.channel.executor_id,row['session_id'])
+            state=uow.connection.execute('SELECT s.lifecycle_state,s.lease_state,d.dispatch_state,d.last_error '
+                'FROM execution_sessions s JOIN execution_dispatch_outbox d ON d.server_id=s.server_id '
+                'AND d.executor_id=s.executor_id AND d.operation_id=s.open_operation_id '
+                'WHERE s.server_id=? AND s.executor_id=? AND s.session_id=?',key).fetchone()
+            if not state or state['lifecycle_state']!='FAILED' or state['lease_state'] not in ('NONE','CLOSED') or state['dispatch_state']!='RESOLVED_TERMINAL':
+                return False
+            error=json.loads(state['last_error'] or '{}')
+            if error.get('stage')!='dispatch' or error.get('possible_effect') is not False:
+                return False
+            for table in ('execution_local_publications','execution_receipts'):
+                if uow.connection.execute(f'SELECT 1 FROM {table} p JOIN execution_operations o '
+                    'USING(server_id,executor_id,operation_id) WHERE o.server_id=? AND o.executor_id=? AND o.session_id=? LIMIT 1',key).fetchone():
+                    return False
+            return row['binding_json'] is None and row['stream_epoch'] is None
+
     def _records(self):
         with self.owner.factory.unit_of_work(write=False) as uow:
             self.owner.verify(uow=uow)
@@ -114,17 +134,29 @@ class EmbeddedReconciliation:
         records = await asyncio.to_thread(self._records)
         if not records:
             return False
-        expected = {host._journal_path(owner.channel.executor_id,r["session_id"]).name for r in records}
-        expected.add("owned-slots.db")
+        absent = set()
+        for row in records:
+            if not host._journal_path(owner.channel.executor_id,row['session_id']).exists() and await asyncio.to_thread(self._never_started,row):
+                absent.add(row['session_id'])
+        expected = {host._journal_path(owner.channel.executor_id,r["session_id"]).name for r in records if r['session_id'] not in absent}
+        # An installation containing only pre-dispatch refusals never opened
+        # Core, including its global ledger. Never waive a ledger for a session
+        # that might have reached the native boundary.
+        files = await asyncio.to_thread(lambda: {p.name for p in host.store_dir.iterdir()} if host.store_dir.exists() else set())
+        if len(absent) != len(records) or 'owned-slots.db' in files:
+            expected.add("owned-slots.db")
         allowed = expected | {name+suffix for name in expected for suffix in ("-wal","-shm")}
-        files = await asyncio.to_thread(lambda: {p.name for p in host.store_dir.iterdir()})
         if not files.issubset(allowed) or not expected.issubset(files):
             raise CoreError("JOURNAL_UNAVAILABLE","embedded_resource_files")
-        ledger = await host._ledger()
-        await self._empty_slots(ledger)
+        ledger = await host._ledger() if 'owned-slots.db' in expected else None
+        if ledger is not None:
+            await self._empty_slots(ledger)
         proofs = {}
         for row in records:
             await asyncio.to_thread(owner.verify)
+            if row['session_id'] in absent:
+                await self._recover_unstarted(row, proven_absent=True)
+                continue
             if row["binding_json"] is None or row["stream_epoch"] is None:
                 if row['binding_json'] is None and row['stream_epoch'] is None:
                     await self._recover_unstarted(row)
@@ -187,7 +219,7 @@ class EmbeddedReconciliation:
                 return not result["recovery_remaining"]
         raise CoreError("CAPACITY_EXCEEDED","embedded_reconciliation")
 
-    async def _recover_unstarted(self, row):
+    async def _recover_unstarted(self, row, *, proven_absent=False):
         """Prove an opening stopped before the durable native-call boundary.
 
         _execute commits a local publication binding before Core.open. A fenced
@@ -202,7 +234,11 @@ class EmbeddedReconciliation:
                 owner.channel.executor_id, row['open_operation_id']))
             if claims.claims or claims.next_after_rowid is not None or receipt is not None:
                 raise CoreError('RECONCILIATION_REQUIRED', 'embedded_preopen_history')
-        await owner.host.with_history(executor_id=owner.channel.executor_id, session_id=row['session_id'], read=inspect)
+        if proven_absent:
+            if not await asyncio.to_thread(self._never_started,row):
+                raise CoreError('RECONCILIATION_REQUIRED','embedded_preopen_history')
+        else:
+            await owner.host.with_history(executor_id=owner.channel.executor_id, session_id=row['session_id'], read=inspect)
         def commit():
             with owner.factory.unit_of_work() as uow:
                 owner.verify(uow=uow)
