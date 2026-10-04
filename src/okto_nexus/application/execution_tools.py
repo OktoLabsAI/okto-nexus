@@ -15,6 +15,8 @@ MANAGED_TOOLS = frozenset({
     'agent_whoami', 'handoff_list_available', 'handoff_get',
     'handoff_claim', 'handoff_complete',
     'event_get', 'event_cursor', 'event_wait',
+    'runtime_input_list', 'runtime_input_respond',
+    'message_create',
 })
 
 
@@ -48,12 +50,16 @@ def check_tool_arguments(name, arguments):
         resolve_tool_workspace(arguments['project_root'])
     if arguments.get('session_secret') is not None:
         raise denied('A managed session uses its capability, not a separate session secret.')
+    if name == 'message_create' and arguments.get('from_session_id') is not None:
+        raise denied('The managed sender session is supplied by the authenticated capability.')
     if any(arguments.get(k) is not None for k in (
             'runtime_endpoint_id', 'execution_grant_id', 'idempotency_key')):
         raise denied('A managed tool call cannot request another runtime execution.')
 
 
 NATIVE_ACTIONS = {
+    'message_create': 'message.create',
+    'input_list': 'runtime.input.list', 'input_respond': 'runtime.input.respond',
     'context': 'handoff.get', 'claim': 'handoff.claim', 'complete': 'handoff.complete',
 }
 

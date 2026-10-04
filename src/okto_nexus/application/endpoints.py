@@ -30,9 +30,24 @@ class EndpointService:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Public configuration must be an object.", {})
         public_config = dict(public_config or {})
         check_inline_size("endpoint public configuration", public_config, 65536)
-        allowed = {"relay_results", "notify_target"} | ({"target_pid", "nexus_work_session_id"} if descriptor.substrate == "attach" else set())
+        allowed = {"relay_results", "notify_target", "nexus_tool_permission", "harness_settings"} | ({"target_pid", "nexus_work_session_id"} if descriptor.substrate == "attach" else set())
         if set(public_config) - allowed:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Unsupported public endpoint configuration.", {})
+        if public_config.get("nexus_tool_permission", "ask") not in ("ask", "always_allow"):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid Nexus tool permission.", {})
+        if 'harness_settings' in public_config:
+            from nexus_connector_core import validate_harness_settings, CoreError
+            settings = public_config['harness_settings']
+            if not isinstance(settings, dict):
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Harness settings must be an object.', {})
+            settings = dict(settings)
+            model = settings.pop('model', None)
+            if model is not None and (not isinstance(model, str) or not 1 <= len(model) <= 200 or any(ord(c)<32 for c in model)):
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Invalid model identifier.', {})
+            try:
+                validate_harness_settings({'codex':'codex_app_server', 'claude_code':'claude_stream', 'pi':'pi_rpc'}.get(descriptor.kind), settings)
+            except CoreError as exc:
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Unsupported harness setting or value.', {}) from exc
         if "relay_results" in public_config and type(public_config["relay_results"]) is not bool:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "relay_results must be a boolean.", {})
         if public_config.get("relay_results") and (response_policy != "conversation" or not descriptor.capabilities.correlated_results):
@@ -75,6 +90,86 @@ class EndpointService:
             (session_id, agent_id, workspace_id)).fetchone()
         if not valid:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "External Nexus work session is not available for this endpoint.", {})
+
+    def harness_settings(self, context, *, endpoint_id, changes=None):
+        """Revisioned native launch settings, independent of Nexus tool policy."""
+        from nexus_connector_core import validate_harness_configuration, CoreError
+        from .execution_harness_configuration import read_harness_configuration
+        self.authorize(context)
+        if changes is not None and (not isinstance(changes, dict) or
+                set(changes) != {'expected_revision', 'settings'} or
+                type(changes['expected_revision']) is not int or not isinstance(changes['settings'], dict)):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Expected revision and settings object.', {})
+        with self.cf.unit_of_work(write=changes is not None) as uow:
+            if self.access:
+                self.access.authorize(context, uow=uow, audit=False)
+            endpoint = self.repo.get(uow, endpoint_id)
+            if not endpoint or endpoint['protocol'] != 'nxl-r4':
+                raise OktoNexusError(ErrorCode.NOT_FOUND, 'The canonical connection is unavailable.', {})
+            config = dict(endpoint['public_config'])
+            settings = config.get('harness_settings', {})
+            schema = read_harness_configuration(uow.connection, endpoint_id=endpoint_id,
+                                               adapter_id=endpoint['adapter_id'])
+            if changes is not None:
+                if changes['expected_revision'] != endpoint['revision']:
+                    raise OktoNexusError(ErrorCode.CONFLICT, 'Connection changed. Reload its settings.', {})
+                try:
+                    validate_harness_configuration(schema, changes['settings'])
+                except CoreError as exc:
+                    raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Unsupported harness setting or value.', {}) from exc
+                if changes['settings'] != settings:
+                    if uow.connection.execute("SELECT 1 FROM execution_sessions s JOIN execution_bindings b "
+                            "USING(server_id,executor_id,binding_id) WHERE b.endpoint_id=? "
+                            "AND s.lifecycle_state NOT IN ('CLOSED','FAILED') LIMIT 1", (endpoint_id,)).fetchone():
+                        raise OktoNexusError(ErrorCode.CONFLICT, 'Close existing runtime sessions before changing harness settings.', {})
+                    settings = dict(changes['settings'])
+                    config['harness_settings'] = settings
+                    now = self.clock.now_iso()
+                    uow.connection.execute('UPDATE agent_endpoints SET public_config=?,revision=revision+1,updated_at=? WHERE endpoint_id=?',
+                        (json.dumps(config), now, endpoint_id))
+                    self.repo.invalidate_configuration(uow, endpoint_ids=[endpoint_id], now=now)
+                    self.repo.audit_configuration(uow, context=context, kind='endpoint', resource_id=endpoint_id,
+                        old_revision=endpoint['revision'], new_revision=endpoint['revision']+1,
+                        fields=['harness_settings'], now=now)
+                    endpoint = self.repo.get(uow, endpoint_id)
+            return dict(endpoint_id=endpoint_id, adapter_id=endpoint['adapter_id'], revision=endpoint['revision'], settings=settings,
+                        configuration=schema)
+
+    def tool_permission(self, context, *, endpoint_id, changes=None):
+        """Operator policy for the generated Nexus client, applied at session start."""
+        self.authorize(context)
+        if changes is not None and (not isinstance(changes, dict)
+                or set(changes) != {"expected_revision", "mode"}
+                or type(changes["expected_revision"]) is not int
+                or changes["mode"] not in ("ask", "always_allow")):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Use expected_revision and ask or always_allow mode.", {})
+        with self.cf.unit_of_work(write=changes is not None) as uow:
+            if self.access:
+                self.access.authorize(context, uow=uow, audit=False)
+            endpoint = self.repo.get(uow, endpoint_id)
+            if not endpoint or endpoint["protocol"] != "nxl-r4":
+                raise OktoNexusError(ErrorCode.NOT_FOUND, "The canonical connection is unavailable.", {})
+            config = dict(endpoint["public_config"])
+            mode = config.get("nexus_tool_permission", "ask")
+            if changes is not None:
+                if changes["expected_revision"] != endpoint["revision"]:
+                    raise OktoNexusError(ErrorCode.CONFLICT, "Connection changed. Reload its tool permission.", {})
+                if changes["mode"] != mode:
+                    if uow.connection.execute("SELECT 1 FROM execution_sessions s JOIN execution_bindings b "
+                            "USING(server_id,executor_id,binding_id) WHERE b.endpoint_id=? "
+                            "AND s.lifecycle_state NOT IN ('CLOSED','FAILED') LIMIT 1", (endpoint_id,)).fetchone():
+                        raise OktoNexusError(ErrorCode.CONFLICT, "Close existing runtime sessions before changing Nexus tool permission.", {})
+                    mode = changes["mode"]
+                    config["nexus_tool_permission"] = mode
+                    now = self.clock.now_iso()
+                    uow.connection.execute("UPDATE agent_endpoints SET public_config=?,revision=revision+1,updated_at=? WHERE endpoint_id=?",
+                        (json.dumps(config), now, endpoint_id))
+                    self.repo.invalidate_configuration(uow, endpoint_ids=[endpoint_id], now=now)
+                    self.repo.audit_configuration(uow, context=context, kind="endpoint", resource_id=endpoint_id,
+                        old_revision=endpoint["revision"], new_revision=endpoint["revision"]+1,
+                        fields=["nexus_tool_permission"], now=now)
+                    endpoint = self.repo.get(uow, endpoint_id)
+            return {"endpoint_id": endpoint_id, "agent_id": endpoint["agent_id"], "revision": endpoint["revision"], "mode": mode}
 
     def conversation_policy(self, context, *, endpoint_id, changes=None):
         """Operator opt-in for canonical conversational delivery; never launch.
@@ -158,6 +253,13 @@ class EndpointService:
                 raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid endpoint configuration field.", {})
             descriptor = self.registry.get(endpoint["adapter_id"])
             config = self.validate_public_config(descriptor, updated["response_policy"], updated["public_config"])
+            if config.get('harness_settings', {}) != endpoint['public_config'].get('harness_settings', {}):
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Use the harness settings operation to change native configuration.', {})
+            if config.get("nexus_tool_permission", "ask") != endpoint["public_config"].get("nexus_tool_permission", "ask"):
+                if uow.connection.execute("SELECT 1 FROM execution_sessions s JOIN execution_bindings b "
+                        "USING(server_id,executor_id,binding_id) WHERE b.endpoint_id=? "
+                        "AND s.lifecycle_state NOT IN ('CLOSED','FAILED') LIMIT 1", (endpoint_id,)).fetchone():
+                    raise OktoNexusError(ErrorCode.CONFLICT, "Close existing runtime sessions before changing Nexus tool permission.", {})
             if "public_config" in changes or changes.get("enabled") is True:
                 self.validate_work_session_reference(uow, public_config=config,
                     agent_id=endpoint["agent_id"], workspace_id=endpoint["workspace_id"])

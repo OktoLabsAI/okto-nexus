@@ -5,8 +5,9 @@ from .runtime_actor_authority import authenticated_message_context, valid_actor_
 
 
 class RuntimeCausalityService:
-    def __init__(self, *, config, agents):
+    def __init__(self, *, config, agents, capabilities=None):
         self.config, self.agents = config, agents
+        self.capabilities = capabilities
 
     @staticmethod
     def node(uow, message_id):
@@ -27,11 +28,13 @@ class RuntimeCausalityService:
                 return None  # Legacy result, never silently minted as a new root.
             purpose, depth, root = "observation", parent["hop_count"] + 1, parent["root_operation_id"]
         else:
-            context = authenticated_message_context(uow, context, self.agents)
+            context = authenticated_message_context(uow, context, self.agents,
+                capabilities=self.capabilities, workspace_id=message.workspace_id)
             if context is None:
                 return None
             actor = self.agents.get(uow, context.actor_agent_id)
-            if (not valid_actor_binding(uow, actor, context.credential_binding) or
+            if (not valid_actor_binding(uow, actor, context.credential_binding,
+                    capabilities=self.capabilities, workspace_id=message.workspace_id) or
                     (not authorized_work and actor.agent_id not in {message.from_agent_id, "operator"})):
                 raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Causal entry requires an authenticated sender.", {})
             if message.parent_message_id:

@@ -31,7 +31,7 @@ def validate_request(method, params):
             _require(len({o["label"] for o in options}) == len(options))
     elif method == USER_INPUT:
         questions = params.get("questions")
-        _require(params.get("isBlocking") is True and isinstance(questions, list) and 1 <= len(questions) <= 16)
+        _require(type(params.get("isBlocking")) is bool and isinstance(questions, list) and 1 <= len(questions) <= 16)
         ids = set()
         for q in questions:
             _require(isinstance(q, dict) and isinstance(q.get("id"), str) and 1 <= len(q["id"]) <= 128)

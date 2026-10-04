@@ -224,6 +224,17 @@ def resolve_execution_intent(
             {"reason": request.get("text", "Interrupt requested by the authorized agent.")}
             if action == "turn.interrupt" else {"text": request["text"]}
         )
+        if action == 'runtime.open':
+            endpoint_config = conn.execute('SELECT public_config FROM agent_endpoints WHERE endpoint_id=?',
+                                          (binding['endpoint_id'],)).fetchone()
+            settings = dict(json.loads(endpoint_config[0]).get('harness_settings', {}))
+            model = settings.pop('model', None)
+            if model is not None:
+                payload['model'] = model
+            if settings:
+                from nexus_connector_core import validate_harness_settings
+                validate_harness_settings(binding['adapter_id'], settings)
+                payload['harness_settings'] = settings
         # The wire bound is UTF-8 JSON bytes, not the HTTP string's character
         # count. An oversized intent must not enter an undispatchable outbox.
         if len(canonical_json(payload)) > 65536:

@@ -171,7 +171,7 @@ class ExecutionLeaseService:
                 uow=uow, audit=False, check_budget=False)
             actions.append(_ACTIONS[action])
         if (self.access.config.feature_hitl and 'turn.submit' in actions and
-                row['adapter_id'] in {'codex_app_server', 'claude_stream'}):
+                row['adapter_id'] in {'codex_app_server', 'claude_stream', 'pi_rpc'}):
             actions.extend(('approval.decide', 'input.provide'))
         if row['lifecycle_state'] == 'OPEN_PENDING' and 'runtime.open' not in actions:
             raise _conflict('The canonical grant does not authorize opening this session.')

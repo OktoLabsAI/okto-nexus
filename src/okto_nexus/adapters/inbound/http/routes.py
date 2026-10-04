@@ -1053,6 +1053,42 @@ def build_router() -> APIRouter:
         except OktoNexusError as exc:
             return _map_error(exc)
 
+    @router.get("/harness/endpoints/{endpoint_id}/harness-settings")
+    async def runtime_harness_settings(request: Request, endpoint_id: str) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).harness_settings(context, endpoint_id=endpoint_id)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.put("/harness/endpoints/{endpoint_id}/harness-settings")
+    async def runtime_harness_settings_update(request: Request, endpoint_id: str, body: dict) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).harness_settings(context, endpoint_id=endpoint_id, changes=body)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.get("/harness/endpoints/{endpoint_id}/tool-permission")
+    async def runtime_tool_permission(request: Request, endpoint_id: str) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).tool_permission(context, endpoint_id=endpoint_id)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.put("/harness/endpoints/{endpoint_id}/tool-permission")
+    async def runtime_tool_permission_update(request: Request, endpoint_id: str, body: dict) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).tool_permission(context, endpoint_id=endpoint_id, changes=body)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
     @router.get("/harness/endpoints/{endpoint_id}/conversation-policy")
     async def runtime_conversation_policy(request: Request, endpoint_id: str) -> JSONResponse:
         deps = request.app.state.deps
@@ -1088,6 +1124,24 @@ def build_router() -> APIRouter:
         from okto_nexus.adapters.inbound.mcp.tools.harness import maintain_artifacts
         try:
             return _ok(await anyio.to_thread.run_sync(lambda: maintain_artifacts(request.app.state.deps, body)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.get("/harness/execution-log")
+    async def execution_log(request: Request, workspace_id: str | None = None,
+                            severity: str | None = None, agent_id: str | None = None,
+                            adapter_id: str | None = None, since: str | None = None,
+                            until: str | None = None, offset: int = 0, limit: int = 100) -> JSONResponse:
+        from ....application.execution_log import read_execution_log
+        try:
+            _require_operator()
+            result = await anyio.to_thread.run_sync(lambda: read_execution_log(
+                request.app.state.deps.connection_factory, workspace_id=workspace_id,
+                severity=severity, agent_id=agent_id, adapter_id=adapter_id,
+                since=since, until=until, offset=offset, limit=limit))
+            response = _ok(result)
+            response.headers["Cache-Control"] = "no-store"
+            return response
         except OktoNexusError as exc:
             return _map_error(exc)
 
@@ -3167,7 +3221,7 @@ def build_router() -> APIRouter:
     # ------------------------------------------------------------------ #
     @router.get("/approvals")
     async def list_approvals(
-        request: Request, workspace: str, status: str = "", limit: int = 100
+        request: Request, workspace: str, status: str = "", limit: int = 100, offset: int = 0
     ) -> JSONResponse:
         deps = request.app.state.deps
         try:
@@ -3179,7 +3233,7 @@ def build_router() -> APIRouter:
 
         def _list():
             return service.list_approvals(
-                workspace_id=workspace, status=status_filter, limit=limit
+                workspace_id=workspace, status=status_filter, limit=limit, offset=offset
             )
 
         try:

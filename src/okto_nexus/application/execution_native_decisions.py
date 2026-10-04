@@ -6,7 +6,7 @@ import secrets
 import threading
 import time
 
-from nexus_connector_core import CoreError, decode_r4_frame, reduce_r4_approval_request, r4_operational_request_hash
+from nexus_connector_core import CoreError, decode_r4_frame, reduce_r4_approval_request, r4_operational_request_hash, native_input_response
 from nexus_connector_core.protocol import canonical_json
 
 from ..adapters.outbound.sqlite.execution_agent_revisions import current_agent_revisions
@@ -17,6 +17,8 @@ from .execution_binding_proposals import _agent_guard
 from .execution_capabilities import ExecutionCapabilityService
 from .execution_leases import ExecutionChannel, require_execution_lane, _stamp
 from .execution_native_requests import NATIVE_APPROVAL_ACTION, _SCOPE
+from .execution_native_recipient import native_question_recipient
+from .execution_input_authority import input_authority, MANAGED_INPUT_PREFIX
 from .execution_semantics import execution_intent_hash
 
 
@@ -85,11 +87,61 @@ class ExecutionNativeDecisions:
             _fail("An authenticated operator must decide this native request.",
                   "APPROVAL_AUTHORITY_REQUIRED")
 
+    def _responder(self, uow, context, row, *, recorded_guard=None):
+        if context is None:
+            _fail("Authentication is required.", "APPROVAL_AUTHORITY_REQUIRED")
+        actor, guard, _ = input_authority(uow, factory=self.factory, access=self.access,
+            context=context, action='runtime_input_respond',
+            workspace_id=json.loads(row['operational_frame_json'])['workspace_id'],
+            recorded_guard=recorded_guard)
+        if guard.startswith(MANAGED_INPUT_PREFIX):
+            native = json.loads(row['operational_frame_json'])['operational_request']
+            metadata = native.get('params', {}).get('_meta')
+            if row['kind'] != 'native_input' or (
+                    native['method'] == 'mcpServer/elicitation/request' and isinstance(metadata, dict) and
+                    metadata.get('codex_approval_kind') == 'mcp_tool_call'):
+                _fail('Session tools cannot decide native execution permissions.', 'APPROVAL_AUTHORITY_REQUIRED')
+        recipient = native_question_recipient(uow.connection, row)
+        if not recipient or recipient != actor:
+            _fail("Only this request's recipient can answer it.", "APPROVAL_AUTHORITY_REQUIRED")
+        return guard
+
+    def pending_inputs(self, *, context, workspace_id=None):
+        """Return only live questions addressed to this authenticated caller."""
+        from .approvals import approval_to_detail
+        with self.factory.unit_of_work(write=False) as uow:
+            actor, _, workspace_id = input_authority(uow, factory=self.factory, access=self.access,
+                context=context, action='runtime_input_list', workspace_id=workspace_id)
+            result = []
+            rows = uow.connection.execute(
+                "SELECT * FROM execution_native_requests WHERE kind='native_input' "
+                "AND state='PENDING' ORDER BY received_at, canonical_request_id")
+            for row in rows:
+                if native_question_recipient(uow.connection, row) != actor:
+                    continue
+                frame = json.loads(row["operational_frame_json"])
+                if workspace_id is not None and frame["workspace_id"] != workspace_id:
+                    continue
+                try:
+                    self._live(uow, row, frame)
+                except OktoNexusError:
+                    continue
+                approval = self.approvals._approvals.get(uow, row["canonical_request_id"])
+                if approval is not None and approval.status == "pending":
+                    detail = approval_to_detail(approval)
+                    detail["request_payload"]["kwargs"]["recipient_agent_id"] = context.actor_agent_id or "operator"
+                    result.append(detail)
+            return result
+
     def confirm(self, *, context, request):
         # Freeze the submitted body before any database or producer work.
         body = self._body(request)
         with self.factory.unit_of_work(write=False) as uow:
-            self._operator(uow, context)
+            row = uow.connection.execute("SELECT * FROM execution_native_requests WHERE canonical_request_id=?",
+                (body["approval_key"]["canonical_request_id"],)).fetchone()
+            if row is None:
+                _fail("The native request was not found.", ErrorCode.NOT_FOUND)
+            self._responder(uow, context, row)
         current_agent_revisions(self.factory, agent_id=body["approval_key"]["agent_id"])
         result = self.approvals.decide(
             approval_id=body["approval_key"]["canonical_request_id"],
@@ -163,8 +215,9 @@ class ExecutionNativeDecisions:
         return scope
 
     def decide(self, uow, approval, *, approved, response, context, decided_by, replay):
-        self._operator(uow, context)
         body = self._body(response)
+        if context is None:
+            _fail("Authentication is required.", "APPROVAL_AUTHORITY_REQUIRED")
         if (approval.action != NATIVE_APPROVAL_ACTION or decided_by != (context.actor_agent_id or "operator") or
                 approved != (body["decision"] == "approve")):
             _fail("The native decision actor or proposal does not match.")
@@ -173,6 +226,7 @@ class ExecutionNativeDecisions:
                            (approval.approval_id,)).fetchone()
         if row is None:
             _fail("The native request was not found.", ErrorCode.NOT_FOUND)
+        actor_guard = self._responder(uow, context, row)
         frame = json.loads(row["operational_frame_json"])
         reduce_r4_approval_request(None, frame)
         if (r4_operational_request_hash(frame["operational_request"]) != row["request_hash"] or
@@ -185,6 +239,11 @@ class ExecutionNativeDecisions:
         if (answer is not None and (not approved or row["kind"] != "native_input")) or (
                 approved and row["kind"] == "native_input" and answer is None):
             _fail("This native decision requires a matching input response.", ErrorCode.VALIDATION_ERROR)
+        if row["kind"] == "native_input":
+            try:
+                native_input_response(frame["operational_request"], answer, approved=approved)
+            except (ValueError, TypeError, KeyError):
+                _fail("The response does not match the native question contract.", ErrorCode.VALIDATION_ERROR)
         response_digest = _digest(answer) if answer is not None else None
         semantic_body = {name: value for name, value in body.items() if name not in {"response", "operator_proof_ref"}}
         semantic_body["response_digest"] = response_digest
@@ -243,7 +302,7 @@ class ExecutionNativeDecisions:
             actor_agent_id=decided_by, decision=native_decision, canonical_state="CONFIRMED" if approved else "DENIED",
             native_operation_id=operation_id, response_digest=response_digest, response_ref=response_ref,
             expires_at=row["expires_at"], client_intent_id=body["client_intent_id"], body_hash=body_hash,
-            actor_guard_digest=_agent_guard(conn, decided_by))
+            actor_guard_digest=actor_guard)
         conn.execute("INSERT INTO execution_decisions (" + ",".join(values) + ") VALUES (" +
                      ",".join("?" for _ in values) + ")", tuple(values.values()))
         resolved = dict(scope=scope, intent_hash=intent_hash,
@@ -315,7 +374,7 @@ class ExecutionNativeDecisions:
         with self.factory.unit_of_work(write=False) as uow:
             operator = self.access.authenticate(context, uow=uow, require_feature=False)
             row = uow.connection.execute("SELECT * FROM execution_decisions WHERE decision_id=?", (decision_id,)).fetchone()
-            if row is None or (not operator and context.actor_agent_id != row["agent_id"]):
+            if row is None or (not operator and context.actor_agent_id not in {row["agent_id"], row["actor_agent_id"]}):
                 _fail("The native decision was not found in this credential scope.", ErrorCode.NOT_FOUND)
             return self._view(uow, row)
 
@@ -342,13 +401,15 @@ def validate_native_dispatch(uow, *, operation, semantic, access):
             decision["agent_id"] != operation["subject_agent_id"] or
             decision["proposal_json"] != request["operational_frame_json"] or
             decision["proposal_digest"] != request["request_hash"] or
-            not decision["actor_guard_digest"] or
-            decision["actor_guard_digest"] != _agent_guard(conn, operation["actor_agent_id"])):
+            not decision["actor_guard_digest"]):
         _fail("The native decision authority changed before dispatch.")
     actor = access.agents.get(uow, operation["actor_agent_id"])
     checker = ExecutionNativeDecisions(factory=access.cf, access=access, approvals=None)
-    checker._operator(uow, RuntimeRequestContext(operation["actor_agent_id"], "agent_key",
-        credential_binding=actor.api_key_hash if actor else None))
+    managed = decision['actor_guard_digest'].startswith(MANAGED_INPUT_PREFIX)
+    checker._responder(uow, RuntimeRequestContext(operation["actor_agent_id"],
+        'session_capability' if managed else 'agent_key',
+        credential_binding=None if managed else actor.api_key_hash if actor else None), request,
+        recorded_guard=decision['actor_guard_digest'])
     frame = json.loads(decision["proposal_json"])
     reduce_r4_approval_request(None, frame)
     scope = checker._live(uow, request, frame)

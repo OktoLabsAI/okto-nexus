@@ -453,7 +453,9 @@ def build_dispatcher(deps):
     outbox, endpoints = SqliteRuntimeOutboxRepo(), SqliteEndpointRepo()
     from okto_nexus.adapters.outbound.sqlite.runtime_observations_repo import SqliteRuntimeObservationRepo
     observations = SqliteRuntimeObservationRepo(clock=deps.clock)
+    from okto_nexus.bootstrap.execution_authority import build_message_capabilities
     planner = RuntimeDeliveryPlanner(endpoints=endpoints, outbox=outbox, agents=deps.repos.agents,
+                                    capabilities=build_message_capabilities(deps),
                                     registry=build_connector_factories(deps), config=deps.config,
                                     observations=observations)
     supervisor = build_service(deps)

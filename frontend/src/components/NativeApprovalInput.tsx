@@ -13,6 +13,8 @@ type Property = {
 type NativeRequest = { method: string; params: {
   tool_name?: string; questions?: Question[]; input?: { questions?: Question[] };
   message?: string; requestedSchema?: { properties: Record<string, Property>; required?: string[] };
+  mode?: string; _meta?: {codex_approval_kind?: string};
+  method?: string; title?: string; options?: string[]; placeholder?: string; prefill?: string;
 }};
 const fieldClass = "block w-full mt-1 rounded border border-surface-300 dark:border-surface-600 bg-white dark:bg-surface-800 p-2 text-sm";
 
@@ -30,11 +32,15 @@ export function NativeApprovalInput({ detail, busy, onApprove, canonicalPermissi
   const codex = !canonicalPermission && request?.method === "item/tool/requestUserInput";
   const claude = !canonicalPermission && request?.method === "control_request:can_use_tool" && params?.tool_name === "AskUserQuestion";
   const form = !canonicalPermission && request?.method === "mcpServer/elicitation/request";
+  const pi = !canonicalPermission && request?.method === "extension_ui_request" &&
+    ["select", "confirm", "input", "editor"].includes(params?.method ?? "");
   const permission = canonicalPermission || ["item/commandExecution/requestApproval", "item/fileChange/requestApproval"].includes(request?.method ?? "") ||
     (request?.method === "control_request:can_use_tool" && ["Write", "Edit", "Bash"].includes(params?.tool_name ?? ""));
   const questions = (claude ? params?.input?.questions : params?.questions) ?? [];
   const properties = params?.requestedSchema?.properties ?? {};
-  const supported = permission || ((codex || claude) && questions.length > 0) || (form && Object.keys(properties).length > 0);
+  const mcpPermission = form && params?.mode === "form" && params?._meta?.codex_approval_kind === "mcp_tool_call" &&
+    !!params.requestedSchema?.properties && Object.keys(properties).length === 0 && !(params.requestedSchema.required?.length);
+  const supported = permission || mcpPermission || pi || ((codex || claude) && questions.length > 0) || (form && Object.keys(properties).length > 0);
   const native = detail.decision_detail;
   const expired = !!native && new Date(native.expires_at).getTime() <= Date.now();
   const ready = detail.status === "pending" && native?.state === "PENDING" && !expired;
@@ -43,7 +49,10 @@ export function NativeApprovalInput({ detail, busy, onApprove, canonicalPermissi
   const submit = () => {
     try {
       let response: Record<string, unknown> | undefined;
-      if (codex || claude) {
+      if (pi) {
+        if (!Object.hasOwn(values, "pi")) throw new Error("Enter an explicit answer before sending.");
+        response = params?.method === "confirm" ? {confirmed: values.pi === "true"} : {value: values.pi};
+      } else if (codex || claude) {
         const answers = Object.fromEntries(questions.map((q, i) => {
           const key = String(i), custom = values[key] ?? "";
           const selected = (choices[key] ?? []).map(index => index === "custom" ? custom : q.options![Number(index)].label);
@@ -78,7 +87,18 @@ export function NativeApprovalInput({ detail, busy, onApprove, canonicalPermissi
     {native?.reason && <p>Delivery detail: {native.reason}</p>}
     {native?.response != null && <pre className="whitespace-pre-wrap break-all max-h-40 overflow-auto">{JSON.stringify(native.response, null, 2)}</pre>}
     {!supported && <p>This request cannot be answered in this view. Its original details remain available below.</p>}
-    {ready && supported && <form onSubmit={event => { event.preventDefault(); submit(); }} className="space-y-3">
+    {ready && supported && <form onSubmit={event => { event.preventDefault(); if (ready) submit(); }} className="space-y-3">
+      {pi && <label>{params?.title}
+        {params?.message && <p>{params.message}</p>}
+        {params?.method === "select" || params?.method === "confirm" ?
+          <select className={fieldClass} required value={values.pi ?? ""} onChange={event => set("pi", event.target.value)}>
+            <option value="" disabled>Choose an answer</option>
+            {params.method === "confirm" ? <><option value="true">Yes</option><option value="false">No</option></> :
+              params.options?.map(value => <option key={value} value={value}>{value}</option>)}
+          </select> : <textarea className={fieldClass} maxLength={4096} placeholder={params?.placeholder}
+            value={values.pi ?? ""} onChange={event => set("pi", event.target.value)} />}
+        {params?.prefill && <p>Suggested text: {params.prefill}</p>}
+      </label>}
       {(codex || claude) && questions.map((q, i) => {
         const key = String(i), id = `${detail.approval_id}-question-${i}`;
         const multiple = codex || q.multiSelect === true;
@@ -128,8 +148,8 @@ export function NativeApprovalInput({ detail, busy, onApprove, canonicalPermissi
         })}
       </>}
       {error && <p role="alert" className="text-red-600">{error}</p>}
-      <button type="submit" disabled={busy} className="rounded-lg bg-emerald-600 text-white px-3 py-2 disabled:opacity-50">
-        {permission ? "Approve request" : "Send answer"}
+      <button type="submit" disabled={busy || !ready} className="rounded-lg bg-emerald-600 text-white px-3 py-2 disabled:opacity-50">
+        {permission || mcpPermission ? "Approve request" : "Send answer"}
       </button>
     </form>}
   </div>;

@@ -32,7 +32,10 @@ def test_runtime_receives_its_canonical_identity_and_delivery_purpose(runtime, i
     assert context["workspace_id"] == envelope["workspace_id"]
     assert context["execution_profile"]["profile_id"] == ("profile-pi" if intent == "conversation" else "profile-codex")
     assert context["completion"]["automatic_on_turn_end"] is False
-    assert "untrusted" in context["instructions"]
+    assert "authenticated Nexus tools" in context["instructions"]
+    assert "available capabilities" in context["instructions"]
+    assert "untrusted" not in context["instructions"]
+    assert "not an executable" not in context["instructions"]
     assert set(context["agent"]) == {"agent_id", "role", "capabilities"}
     with deps.connection_factory.unit_of_work(write=False) as uow:
         agent = deps.repos.agents.get(uow, "worker")

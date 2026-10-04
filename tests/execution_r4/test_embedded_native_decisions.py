@@ -61,12 +61,16 @@ def test_embedded_native_decision_roundtrip(connected_local, kind, choice, enabl
     response = {"answers": {"question": {"answers": ["embedded-private-input-marker"]}}} if kind == "input" and choice == "approve" else None
     if response is not None:
         body["response"] = response
-    assert client.post("/v1/runtime/approval-decisions", headers=headers["subject"], json=body).status_code == 403
+    # This fixture's direct turn is initiated by subject, so questions return
+    # to subject. Permission decisions still belong to the operator.
+    recipient = "subject" if kind == "input" else "operator"
+    wrong_actor = "operator" if kind == "input" else "subject"
+    assert client.post("/v1/runtime/approval-decisions", headers=headers[wrong_actor], json=body).status_code == 403
     assert replies == []
-    confirmed = client.post("/v1/runtime/approval-decisions", headers=headers["operator"], json=body)
+    confirmed = client.post("/v1/runtime/approval-decisions", headers=headers[recipient], json=body)
     assert confirmed.status_code == 202, confirmed.text
     decision = confirmed.json()
-    repeated = client.post("/v1/runtime/approval-decisions", headers=headers["operator"], json=body)
+    repeated = client.post("/v1/runtime/approval-decisions", headers=headers[recipient], json=body)
     assert repeated.status_code == 200, repeated.text
     assert repeated.json()["native_operation_id"] == decision["native_operation_id"]
     until = time.monotonic() + 10

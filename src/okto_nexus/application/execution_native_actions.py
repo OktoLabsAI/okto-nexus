@@ -27,7 +27,8 @@ def validate_request(body):
             or type(body['payload']) is not dict):
         raise invalid()
     action, payload = body['action'], body['payload']
-    required = {'handoff_id'}
+    required = ({'message'} if action == 'message_create' else set() if action == 'input_list'
+                else {'request'} if action == 'input_respond' else {'handoff_id'})
     optional = set()
     if action == 'claim':
         required.add('idempotency_key')
@@ -36,7 +37,14 @@ def validate_request(body):
         required |= {'claim_epoch', 'result'}
     if not required <= payload.keys() or not payload.keys() <= required | optional:
         raise invalid()
-    if not identifier(payload['handoff_id']):
+    if action == 'message_create':
+        message = payload['message']
+        if (type(message) is not dict or not {'subject','body','target'} <= message.keys()
+                or message.keys() - {'subject','body','target','channel_id','parent_message_id','artifacts'}):
+            raise invalid('A native message supplies content and target; sender and workspace come from the session.')
+    if 'handoff_id' in payload and not identifier(payload['handoff_id']):
+        raise invalid()
+    if action == 'input_respond' and (not isinstance(payload['request'], dict) or 'client_intent_id' in payload['request']):
         raise invalid()
     if action == 'claim' and not identifier(payload['idempotency_key'], 128):
         raise invalid()
@@ -52,9 +60,11 @@ def validate_request(body):
 
 
 class NativeActionService:
-    def __init__(self, *, factory, capabilities, repository, build_handoff, clock):
+    def __init__(self, *, factory, capabilities, repository, build_handoff, clock, native_decisions=None, build_messages=None):
         self.factory, self.capabilities = factory, capabilities
         self.repository, self.build_handoff, self.clock = repository, build_handoff, clock
+        self.native_decisions = native_decisions
+        self.build_messages = build_messages
 
     def invoke(self, *, principal, body):
         encoded = validate_request(body)
@@ -66,10 +76,14 @@ class NativeActionService:
         principal_token = current_execution_principal.set(principal)
         action_token = current_execution_tool.set(NATIVE_ACTIONS[action])
         try:
+            if action in {'input_list', 'input_respond'}:
+                return self._input(principal, body)
             with self.factory.unit_of_work() as uow:
                 self.capabilities.authorize_principal(uow, principal=principal,
                                                       actions=(NATIVE_ACTIONS[action],))
                 factory = BoundExecutionConnectionFactory(self.factory, self.capabilities, uow)
+                if action == 'message_create':
+                    return self._message(uow, factory, principal, body, digest)
                 handoffs = self.build_handoff(factory)
                 prior = self.repository.get(uow, scope, body['action_id'])
                 if prior:
@@ -112,3 +126,42 @@ class NativeActionService:
         finally:
             current_execution_tool.reset(action_token)
             current_execution_principal.reset(principal_token)
+
+    def _message(self, uow, factory, principal, body, digest):
+        if self.build_messages is None:
+            raise denied('Native messaging is unavailable.')
+        scope = dict(principal.scope)
+        prior = self.repository.get(uow, scope, body['action_id'])
+        if prior:
+            if prior['request_digest'] != digest or prior['scope_json'] != canonical_json(scope).decode():
+                raise OktoNexusError(ErrorCode.CONFLICT, 'The native action ID has different content.', {})
+            return json.loads(prior['response_json'])
+        result = self.build_messages(factory).create_message(
+            workspace_id=scope['workspace_id'], from_agent_id=scope['agent_id'], **body['payload']['message'])
+        response = dict(action_id=body['action_id'], action='message_create',
+                        state=result.get('status', 'SUCCEEDED'), result=result)
+        encoded = canonical_json(response)
+        if len(encoded) > MAX_NATIVE_BYTES:
+            raise OktoNexusError('CAPACITY_EXCEEDED', 'The native message result is too large.', {})
+        self.repository.record_message(uow, scope=scope, action_id=body['action_id'], digest=digest,
+            response_json=encoded.decode(), now=self.clock.now_iso())
+        return response
+
+    def _input(self, principal, body):
+        """Native decisions own their transaction, replay and response retention."""
+        if self.native_decisions is None:
+            raise denied('Native question responses are unavailable.')
+        from ..domain.runtime_context import RuntimeRequestContext
+        context = RuntimeRequestContext(principal.scope['agent_id'], 'session_capability')
+        if body['action'] == 'input_list':
+            items = self.native_decisions.pending_inputs(context=context, workspace_id=principal.scope['workspace_id'])
+            result = {'items': [item['request_payload']['kwargs'] for item in items]}
+        else:
+            identity = canonical_json({'scope': dict(principal.scope), 'action_id': body['action_id']})
+            request = dict(body['payload']['request'], client_intent_id='native-input-'+hashlib.sha256(identity).hexdigest())
+            value, reused = self.native_decisions.confirm(context=context, request=request)
+            result = {'decision': value, 'reused': reused}
+        response = dict(action_id=body['action_id'], action=body['action'], state='SUCCEEDED', result=result)
+        if len(canonical_json(response)) > MAX_NATIVE_BYTES:
+            raise OktoNexusError('CAPACITY_EXCEEDED', 'The native question result is too large.', {})
+        return response

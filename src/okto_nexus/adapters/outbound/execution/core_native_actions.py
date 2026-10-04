@@ -40,6 +40,15 @@ class EmbeddedNativeActions:
     async def get_context(self, request, context):
         return await self._invoke(request)
 
+    async def create_message(self, request, context):
+        return await self._invoke(request)
+
+    async def list_runtime_inputs(self, request, context):
+        return await self._invoke(request)
+
+    async def respond_runtime_input(self, request, context):
+        return await self._invoke(request)
+
     async def claim_handoff(self, request, context):
         return await self._invoke(request)
 

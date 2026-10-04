@@ -72,6 +72,7 @@ import { GuardrailsView } from "./views/GuardrailsView";
 import { CommunicationView } from "./views/CommunicationView";
 import { ApprovalsView } from "./views/ApprovalsView";
 import { RuntimesView } from "./views/RuntimesView";
+import { ExecutionLogView } from "./views/ExecutionLogView";
 import { SettingsView } from "./views/SettingsView";
 import {
   WorkspaceNamesProvider,
@@ -105,6 +106,7 @@ const VIEWS = [
   // feature_hitl OFF); only the BADGE is gated — by the data, never the flag.
   { name: "Approvals", icon: CheckSquare },
   { name: "Runtimes", icon: Bot },
+  { name: "Execution log", icon: Activity },
   { name: "Settings", icon: Settings },
 ] as const;
 type View = (typeof VIEWS)[number]["name"];
@@ -693,6 +695,7 @@ function Dashboard({
           )}
           {view === "Registry" && <RegistryView />}
           {view === "Runtimes" && <RuntimesView onApprovals={() => setView("Approvals")} />}
+          {view === "Execution log" && <ExecutionLogView workspace={workspace} />}
           {view === "Policies" && <PoliciesView workspace={workspace} />}
           {view === "Guardrails" && <GuardrailsView workspace={workspace} />}
           {view === "Communication" && <CommunicationView />}

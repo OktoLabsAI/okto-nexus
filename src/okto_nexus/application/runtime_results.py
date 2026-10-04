@@ -18,11 +18,12 @@ from .runtime_actor_authority import valid_actor_binding
 
 class RuntimeResultService:
     ARTIFACT_QUOTA_BYTES = 64 * 1024 * 1024
-    def __init__(self, *, connection_factory, agents, endpoints, config, artifacts=None, owner_provider=None, work_validator=None):
+    def __init__(self, *, connection_factory, agents, endpoints, config, artifacts=None, owner_provider=None, work_validator=None, capabilities=None):
         self.cf, self.agents, self.endpoints, self.config = connection_factory, agents, endpoints, config
         self.artifacts = artifacts
         self.owner_provider = owner_provider
         self.work_validator = work_validator
+        self.capabilities = capabilities
 
     @staticmethod
     def artifact_id(row):
@@ -214,7 +215,8 @@ class RuntimeResultService:
         if (not endpoint or not endpoint["enabled"] or endpoint["response_policy"] != "conversation" or
                 endpoint["revision"] != row["endpoint_revision"] or
                 not sender or not sender.is_active or not recipient or not recipient.is_active or
-                not valid_actor_binding(uow, actor, row["credential_binding"]) or
+                not valid_actor_binding(uow, actor, row["credential_binding"],
+                    capabilities=self.capabilities, workspace_id=row['workspace_id']) or
                 (endpoint["profile_id"] and (not profile or not profile["enabled"] or profile["revision"] != row["profile_revision"]))):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Result publication authority changed.", {})
         expected = self.arguments(row)

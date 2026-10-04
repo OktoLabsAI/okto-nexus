@@ -1057,6 +1057,7 @@ class ApprovalRepo(Protocol):
         workspace_id: str,
         status: str | None = None,
         limit: int = 100,
+        offset: int = 0,
     ) -> list[Approval]:
         """Workspace-scoped rows, ASCENDING ``created_at`` (oldest first).
 

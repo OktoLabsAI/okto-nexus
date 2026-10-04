@@ -27,30 +27,42 @@ def decision_state(opening, request):
     leases.applied(ack, channel=channel)
     with deps.connection_factory.unit_of_work() as uow:
         uow.connection.execute("UPDATE execution_sessions SET lifecycle_state='READY',stream_epoch='native-epoch'")
-    turn = resolve_execution_intent(deps.connection_factory, actor_agent_id="subject",
-        request=dict(client_intent_id="turn", intent="turn.submit", binding_id="binding",
-                     workspace_binding_id="wxb", session_id=resolution["session_id"], text="Wait for permission"),
-        remote_ready=True, fresh_publications=app.state.inventory_fresh_publications)
-    assert turn["can_submit"], turn
-    submit_execution_operation(deps.connection_factory, actor_agent_id="subject",
-        request={key: turn[key] for key in ("client_intent_id", "operation_id", "resolution_revision", "intent_hash")},
-        remote_ready=True, fresh_publications=app.state.inventory_fresh_publications)
     native_case = getattr(request, "param", None)
-    is_input = native_case in {"input", "form"}
+    actor = "operator" if native_case in {"input", "nonblocking_input", "form", "mcp_permission"} else "subject"
+    from okto_nexus.bootstrap.execution_authority import build_execution_access
+    from okto_nexus.domain.runtime_context import RuntimeRequestContext
+    authority = dict(access=build_execution_access(deps), context=RuntimeRequestContext(
+        actor, "http_loopback", trusted_local_operator=actor == "operator"))
+    turn = resolve_execution_intent(deps.connection_factory, actor_agent_id=actor,
+        request=dict(client_intent_id="turn", intent="turn.submit", binding_id="binding", agent_id="subject",
+                     workspace_binding_id="wxb", session_id=resolution["session_id"], text="Wait for permission"),
+        remote_ready=True, fresh_publications=app.state.inventory_fresh_publications, **authority)
+    assert turn["can_submit"], turn
+    submit_execution_operation(deps.connection_factory, actor_agent_id=actor,
+        request={key: turn[key] for key in ("client_intent_id", "operation_id", "resolution_revision", "intent_hash")},
+        remote_ready=True, fresh_publications=app.state.inventory_fresh_publications, **authority)
+    native_case = getattr(request, "param", None)
+    is_input = native_case in {"input", "nonblocking_input", "agent_input", "form", "mcp_permission"}
     proposal = dict(schema_version=1, request_id=7, request_hash="a"*64,
         method="item/tool/requestUserInput" if is_input else "item/commandExecution/requestApproval",
         params={"turnId": "native-turn", "itemId": "item", "authorization": "Bearer private-marker"})
     if is_input:
+        proposal['params']['isBlocking'] = native_case != 'nonblocking_input'
         proposal['params']['questions'] = [{'id': 'question', 'header': 'Choice', 'question': 'Choose the next step',
             'isOther': True, 'options': [{'label': 'Continue', 'description': 'Proceed with the reviewed work'},
                                       {'label': 'Stop', 'description': 'End this work'}]}]
     if native_case == 'form':
         proposal['method'] = 'mcpServer/elicitation/request'
-        proposal['params'] = {'turnId': 'native-turn', 'message': 'Review fixture values', 'requestedSchema': {
+        proposal['params'] = {'turnId': 'native-turn', 'mode': 'form', 'serverName': 'fixture', 'message': 'Review fixture values', 'requestedSchema': {
             'type': 'object', 'properties': {
                 'count': {'type': 'integer', 'minimum': 1, 'maximum': 5, 'default': 2},
                 'enabled': {'type': 'boolean', 'default': True},
                 'note': {'type': 'string'}}, 'required': ['count', 'enabled']}}
+    if native_case == 'mcp_permission':
+        proposal['method'] = 'mcpServer/elicitation/request'
+        proposal['params'] = {'turnId': 'native-turn', 'mode': 'form', 'serverName': 'nexus_test',
+            'message': 'Allow Nexus agent_whoami?', '_meta': {'codex_approval_kind': 'mcp_tool_call'},
+            'requestedSchema': {'type': 'object', 'properties': {}}}
     scope = resolution["scope"]
     frame = {key: scope[key] for key in ("server_id", "executor_id", "binding_id", "agent_id", "session_id")}
     frame.update(protocol_major=1, contract_revision=R4_PREVIEW_REVISION, type="event.batch",
@@ -70,7 +82,38 @@ def decision_state(opening, request):
     body.update(client_intent_id="decision", decision="approve")
     if is_input: body["response"] = {"answers": {"question": {"answers": ["sensitive-input-marker"]}}}
     if native_case == 'form': body['response'] = {'content': {'count': 3, 'enabled': False, 'note': ''}}
+    if native_case == 'mcp_permission': body['response'] = {'content': {}}
     return deps, app, body
+
+
+@pytest.mark.parametrize("decision_state", ["input", "agent_input", "nonblocking_input"], indirect=True)
+def test_question_listing_and_decision_belong_to_originating_interlocutor(decision_state):
+    deps, app, body = decision_state
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        recipient = uow.connection.execute("SELECT actor_agent_id FROM execution_operations WHERE action='turn.submit'").fetchone()[0]
+    client = TestClient(app)
+    for actor in ("operator", "subject", "other"):
+        response = client.get("/v1/runtime/input-requests", headers={"Authorization": "Bearer " + app.state.test_agent_keys[actor]})
+        assert response.status_code == 200, response.text
+        assert len(response.json()["items"]) == (1 if actor == recipient else 0)
+        if actor != recipient:
+            assert post(decision_state, actor=actor).status_code == 403
+    invalid = copy.deepcopy(body)
+    invalid["response"] = {"answers": {"wrong-question": {"answers": ["no"]}}}
+    before = snapshot(decision_state)
+    assert post(decision_state, invalid, actor=recipient).status_code == 422
+    assert snapshot(decision_state) == before
+    accepted = post(decision_state, actor=recipient)
+    assert accepted.status_code == 202, accepted.text
+    from okto_nexus.application.execution_dispatch import reserve_execution_dispatch, begin_execution_send
+    from okto_nexus.bootstrap.execution_authority import build_execution_access
+    key = body["approval_key"]
+    reservation = reserve_execution_dispatch(deps.connection_factory,
+        server_id=key["server_id"], executor_id=key["executor_id"], remote_ready=True)
+    sent = begin_execution_send(deps.connection_factory, reservation=reservation,
+        remote_ready=True, fresh_publications=app.state.inventory_fresh_publications,
+        access=build_execution_access(deps), resolve_native_input=deps.native_decisions.inputs.resolve)
+    assert sent.frame["payload"]["response"] == body["response"]
 
 
 def post(state, body=None, actor="operator"):

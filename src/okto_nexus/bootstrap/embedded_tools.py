@@ -17,7 +17,7 @@ from ..domain.runtime_context import RuntimeRequestContext
 
 MCP_ACTIONS=("tools/call","resources/read","prompts/get","agent_whoami",
     "handoff_list_available","handoff_get","handoff_claim","handoff_complete",
-    "event_cursor","event_get","event_wait")
+    "event_cursor","event_get","event_wait","runtime_input_list","runtime_input_respond","message_create")
 
 
 class SessionToolVault:
@@ -97,11 +97,17 @@ class EmbeddedToolsOwner:
         await asyncio.to_thread(launch.check)
         adapter=launch.candidate.adapter_id
         native=adapter=="pi_rpc"
+        with self.owner.factory.unit_of_work(write=False) as uow:
+            row=uow.connection.execute("SELECT ep.public_config FROM execution_bindings b JOIN agent_endpoints ep USING(endpoint_id) "
+                "WHERE b.server_id=? AND b.executor_id=? AND b.binding_id=?",
+                tuple(frame[k] for k in ('server_id','executor_id','binding_id'))).fetchone()
+            always_allow = bool(row and json.loads(row[0]).get('nexus_tool_permission') == 'always_allow')
         if not native and adapter not in ("codex_app_server","claude_stream"):
             raise CoreError("CAPABILITY_UNSUPPORTED","local_tools")
-        process_http=not native and launch.record["provider_home"] is not None and not launch.auth_refs
+        provider_home_http=not native and launch.record["provider_home"] is not None and not launch.auth_refs
+        process_http=not native and (provider_home_http or always_allow)
         audience="nexus-native-session" if native else "nexus-mcp-session"
-        actions=("handoff.get","handoff.claim","handoff.complete") if native else MCP_ACTIONS
+        actions=("handoff.get","handoff.claim","handoff.complete","runtime.input.list","runtime.input.respond","message.create") if native else MCP_ACTIONS
         request_id,context=await asyncio.to_thread(self._stage,frame,audience,actions)
         service=ExecutionCapabilityService(factory=self.owner.factory,access=self.owner.access)
         start=time.monotonic()
@@ -147,8 +153,9 @@ class EmbeddedToolsOwner:
             loopback=urlsplit(self.origin).hostname in ("127.0.0.1","localhost","::1")
             entry_name="nexus_"+hashlib.sha256(cap["capability_ref"].encode()).hexdigest()[:16] if process_http else "nexus"
             template=harness_http_template(adapter,cap["mcp_url"],cap["capability_ref"],entry_name=entry_name,
-                approved_origins={self.origin},harness_is_local=loopback,loopback_reachable=loopback,format_qualified=True)
-            if not process_http:
+                approved_origins={self.origin},harness_is_local=loopback,loopback_reachable=loopback,format_qualified=True,
+                always_allow_tools=always_allow)
+            if not provider_home_http:
                 home=await asyncio.to_thread(session_mcp_home,self.owner.deps.config.home_dir/"session-mcp",
                     frame=frame,configuration_digest=launch._snapshot,template=template)
         self.configurations[frame["session_id"]]=dict(cap=cap,deadline=deadline,home=home,template=template,

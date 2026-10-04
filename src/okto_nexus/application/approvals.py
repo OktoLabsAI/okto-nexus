@@ -503,11 +503,12 @@ class ApprovalService:
         workspace_id: str,
         status: str | None = STATUS_PENDING,
         limit: int = 100,
+        offset: int = 0,
     ) -> list[dict[str, Any]]:
         """Oldest-first queue items (summaries - BR5), workspace-scoped."""
         with self._cf.unit_of_work(write=False) as uow:
             rows = self._approvals.list(
-                uow, workspace_id=workspace_id, status=status, limit=limit
+                uow, workspace_id=workspace_id, status=status, limit=limit, offset=offset
             )
         return [approval_to_summary(row) for row in rows]
 

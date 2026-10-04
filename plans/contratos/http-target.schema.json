@@ -1628,7 +1628,10 @@
           "type": "boolean"
         },
         "provider_home_suggestion": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "maxLength": 4096
         },
         "can_bind": {
@@ -1687,6 +1690,38 @@
             "maxLength": 160
           },
           "maxItems": 64
+        },
+        "harness_configuration": {
+          "type": "object",
+          "required": [
+            "schema_version",
+            "schema_revision",
+            "adapter_id",
+            "parameters",
+            "models",
+            "human_input"
+          ],
+          "properties": {
+            "schema_version": {
+              "const": 1
+            },
+            "schema_revision": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            "adapter_id": {
+              "type": "string"
+            },
+            "parameters": {
+              "type": "array"
+            },
+            "models": {
+              "type": "array"
+            },
+            "human_input": {
+              "type": "object"
+            }
+          }
         }
       },
       "required": [
@@ -3072,11 +3107,26 @@
     "SessionListView": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["sessions", "has_more", "next_after_session_id"],
+      "required": [
+        "sessions",
+        "has_more",
+        "next_after_session_id"
+      ],
       "properties": {
-        "sessions": {"type": "array", "maxItems": 100, "items": {"$ref": "#/$defs/SessionView"}},
-        "has_more": {"type": "boolean"},
-        "next_after_session_id": {"type": "string", "maxLength": 160}
+        "sessions": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "$ref": "#/$defs/SessionView"
+          }
+        },
+        "has_more": {
+          "type": "boolean"
+        },
+        "next_after_session_id": {
+          "type": "string",
+          "maxLength": 160
+        }
       }
     },
     "SessionView": {
@@ -3549,7 +3599,10 @@
           "enum": [
             "context",
             "claim",
-            "complete"
+            "complete",
+            "input_list",
+            "input_respond",
+            "message_create"
           ]
         },
         "payload": {
@@ -3662,6 +3715,153 @@
               }
             }
           }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "input_list"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "object",
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "input_respond"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "request": {
+                    "type": "object",
+                    "properties": {
+                      "approval_key": {
+                        "$ref": "#/$defs/ApprovalKey"
+                      },
+                      "expected_revision": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "request_hash": {
+                        "type": "string",
+                        "pattern": "^sha256:[0-9a-f]{64}$"
+                      },
+                      "decision": {
+                        "type": "string",
+                        "enum": [
+                          "approve",
+                          "deny"
+                        ]
+                      },
+                      "cas_token": {
+                        "type": "string",
+                        "minLength": 16,
+                        "maxLength": 4096
+                      },
+                      "operator_proof_ref": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 160
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "response": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "approval_key",
+                      "expected_revision",
+                      "request_hash",
+                      "decision",
+                      "cas_token"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "request"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "message_create"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "object",
+                    "properties": {
+                      "subject": {
+                        "type": "string"
+                      },
+                      "body": {
+                        "type": "string"
+                      },
+                      "target": {
+                        "type": "object"
+                      },
+                      "channel_id": {
+                        "type": "string"
+                      },
+                      "parent_message_id": {
+                        "type": "string"
+                      },
+                      "artifacts": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "required": [
+                      "subject",
+                      "body",
+                      "target"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "message"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
         }
       ]
     },
@@ -3678,7 +3878,10 @@
           "enum": [
             "context",
             "claim",
-            "complete"
+            "complete",
+            "input_list",
+            "input_respond",
+            "message_create"
           ]
         },
         "state": {

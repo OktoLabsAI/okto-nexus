@@ -8,7 +8,7 @@ import secrets
 import time
 
 from nexus_connector_core import (
-    CoreError, LaunchIntent, OpenOperation, TurnOperation, ControlOperation,
+    CoreError, LaunchIntent, OpenOperation, TurnOperation, ControlOperation, validate_harness_settings,
     OperationKey, prepare_r4_receipt_binding, project_r4_bound_receipt,
     r4_close_operation, r4_native_decision_operation, ShutdownPolicy,
 )
@@ -240,7 +240,7 @@ class EmbeddedDispatchOwner:
                     environment=setup.environment, native_factory=self.native_factory,
                     native_action_factory=tool_config["native_factory"] if tool_config else None,
                     native_approvals_enabled=bool(self.deps.config.feature_hitl and
-                        setup.candidate.adapter_id in {"codex_app_server", "claude_stream"}))
+                        setup.candidate.adapter_id in {"codex_app_server", "claude_stream", "pi_rpc"}))
                 await asyncio.to_thread(self.leases.applied, applied.acknowledgement, channel=self.channel)
                 session["executor"] = executor
                 session["renew_at"] = time.monotonic() + max(0, applied.context.lease_deadline_monotonic-time.monotonic())/2
@@ -253,7 +253,9 @@ class EmbeddedDispatchOwner:
                 await asyncio.to_thread(executor.local_launch.check)
                 prepared = await runtime.prepare(LaunchIntent(frame["agent_id"],frame["workspace_id"],
                     payload["adapter_id"],mode=payload["mode"],model=payload.get("model"),
-                    auth_refs=executor.local_launch.auth_refs),context)
+                    auth_refs=executor.local_launch.auth_refs,
+                    harness_settings=validate_harness_settings(
+                        payload['adapter_id'], payload.get('harness_settings', {}))),context)
                 epoch = "stream_" + secrets.token_hex(16)
                 options = dict(prepared=prepared,stream_epoch=epoch)
             elif action in ("approval.decide", "input.provide"):

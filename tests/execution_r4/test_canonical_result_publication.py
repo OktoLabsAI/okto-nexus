@@ -64,8 +64,11 @@ def test_canonical_conversation_result_uses_current_message_policy(connected_loc
     inbox = inbox_service(deps)
     assert inbox.consume_canonical_runtime_results() == 0
     with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute('SELECT status FROM message_deliveries WHERE message_id=? AND recipient_agent_id=?',
-            (sent['data']['message_id'], 'subject')).fetchone()[0] != 'read'
+        received = uow.connection.execute('SELECT status,delivered_at,read_at FROM message_deliveries WHERE message_id=? AND recipient_agent_id=?',
+            (sent['data']['message_id'], 'subject')).fetchone()
+        assert received['status'] == 'delivered'
+        assert received['delivered_at'] is not None and received['read_at'] is None
+        received_at = received['delivered_at']
     if policy == 'deny':
         with deps.connection_factory.unit_of_work() as uow:
             uow.connection.execute('UPDATE agents SET permissions=? WHERE agent_id=?', (json.dumps(dict(messages=dict(send_direct=False))), 'subject'))
@@ -78,6 +81,8 @@ def test_canonical_conversation_result_uses_current_message_policy(connected_loc
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute('SELECT status FROM message_deliveries WHERE message_id=? AND recipient_agent_id=?',
             (sent['data']['message_id'], 'subject')).fetchone()[0] == 'read'
+        assert uow.connection.execute('SELECT delivered_at FROM message_deliveries WHERE message_id=? AND recipient_agent_id=?',
+            (sent['data']['message_id'], 'subject')).fetchone()[0] == received_at
         receipts = [json.loads(r[0]) for r in uow.connection.execute(
             "SELECT body FROM messages WHERE subject LIKE 'runtime processing receipt:%'")]
         assert len(receipts) == 1

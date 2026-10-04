@@ -299,6 +299,40 @@ class ExecutionCapabilityService:
                                   MappingProxyType(credential['scope']))
 
     def authorize_principal(self, uow, *, principal, actions):
-        return self._authorize_hash(uow, digest=principal.secret_hash,
+        result = self._authorize_hash(uow, digest=principal.secret_hash,
             audience=principal.audience, actions=actions,
             expected_json=canonical_json(dict(principal.scope)).decode())
+        if result['capability_id'] != principal.capability_id:
+            raise _error(ErrorCode.PERMISSION_DENIED, 'The session capability identity does not match.')
+        return result
+
+    def principal_reference(self, uow, *, principal, actions):
+        """Capture non-secret provenance after checking the actual caller.
+
+        Only store this in a Server-owned decision/outbox record. This reference
+        is not a credential and must never authenticate an inbound request.
+        """
+        value = self.authorize_principal(uow, principal=principal, actions=actions)
+        return {name: value[name] for name in ('capability_id', 'audience', 'scope')}
+
+    def authorize_recorded_principal(self, uow, *, reference, actions):
+        """Recheck Server-recorded provenance at a deferred dispatch boundary.
+
+        The consumer supplies its required actions; a saved reference cannot
+        enlarge them. Reuses live grant, revision, owner and applied-lease checks.
+        No canonical agent credential or raw capability is reconstructed.
+        """
+        if (not isinstance(reference, dict) or set(reference) != {'capability_id', 'audience', 'scope'} or
+                not isinstance(reference['capability_id'], str) or
+                not isinstance(reference['audience'], str) or reference['audience'] not in AUDIENCES or
+                not isinstance(reference['scope'], dict)):
+            raise _error(ErrorCode.PERMISSION_DENIED, 'The recorded session authority is invalid.')
+        row = uow.connection.execute('SELECT secret_hash FROM execution_session_capabilities WHERE capability_id=?',
+                                     (reference['capability_id'],)).fetchone()
+        if row is None:
+            raise _error(ErrorCode.PERMISSION_DENIED, 'The recorded session authority is unavailable.')
+        result = self._authorize_hash(uow, digest=row['secret_hash'], audience=reference['audience'],
+            actions=actions, expected_json=canonical_json(reference['scope']).decode())
+        if result['capability_id'] != reference['capability_id']:
+            raise _error(ErrorCode.PERMISSION_DENIED, 'The recorded session authority changed.')
+        return result

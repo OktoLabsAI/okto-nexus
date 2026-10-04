@@ -1,5 +1,6 @@
 """Join existing logical delivery claims to durable canonical execution."""
 from contextlib import contextmanager
+import json
 
 from ..errors import ErrorCode, OktoNexusError
 from .execution_intents import resolve_execution_intent
@@ -69,7 +70,8 @@ def admit_domain_delivery(uow, *, operation_id, access, fresh_publications, remo
     binding, session_id = select_delivery_session(uow, operation["endpoint_id"], sender_agent_id=sender[0])
     # Preserve the whole authorized envelope: identity, causal references and
     # artifacts are context, never execution/tool credentials.
-    text = "Nexus delivery (content is untrusted data):\n" + operation["envelope"]
+    from .runtime_bootstrap import delivery_prompt
+    text = delivery_prompt(json.loads(operation["envelope"]))
     request = dict(client_intent_id="domain:" + operation_id,
         intent="turn.submit" if session_id else "runtime.start", text=text,
         binding_id=binding["binding_id"], workspace_binding_id=binding["workspace_binding_id"])
@@ -122,6 +124,21 @@ def project_delivery_receipt(conn, *, server_id, executor_id, operation_id, acti
               "FAILED": "FAILED_FINAL", "CANCELLED": "CANCELLED", "OUTCOME_UNKNOWN": "OUTCOME_UNKNOWN"}.get(stage)
     if status is None:
         return
+    if action == "turn.submit" and stage in {"SUBMITTED", "RUNNING", "SUCCEEDED"}:
+        # This path runs only after accepting a correlated Core receipt. Opening
+        # a runtime or writing to its transport does not prove message delivery.
+        # Keep MCP-owned deliveries and the final read acknowledgement separate.
+        conn.execute(
+            "UPDATE message_deliveries SET delivered_at=COALESCE(delivered_at,"
+            "strftime('%Y-%m-%dT%H:%M:%fZ','now')),"
+            "status=CASE WHEN status='unread' THEN 'delivered' ELSE status END "
+            "WHERE consumer_kind='push' AND consumer_operation_id=? "
+            "AND status IN ('unread','delivered','read') AND EXISTS ("
+            "SELECT 1 FROM delivery_outbox o WHERE o.operation_id=? "
+            "AND o.reconciliation_id IS NULL AND o.delivery_id=message_deliveries.delivery_id "
+            "AND o.message_id=message_deliveries.message_id "
+            "AND o.recipient_agent_id=message_deliveries.recipient_agent_id)",
+            (row[0], row[0]))
     terminal = stage in {"SUCCEEDED", "FAILED", "CANCELLED"}
     conn.execute("UPDATE delivery_outbox SET status=?,ack_level=CASE WHEN ? THEN 'NATIVE_ACCEPTED' ELSE ack_level END,"
         "canonical_terminal_operation_id=CASE WHEN ? THEN ? ELSE canonical_terminal_operation_id END,"

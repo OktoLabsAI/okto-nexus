@@ -217,6 +217,19 @@ def build_router() -> APIRouter:
             result.headers["Retry-After"] = "1"
         return result
 
+    @router.get("/runtime/input-requests")
+    async def native_input_requests(request: Request, workspace_id: str | None = None):
+        if get_authenticated_agent() is None:
+            return v1_err(401, "AUTH_FAILED", "Authentication is required.")
+        service = request.app.state.deps.native_decisions
+        context = runtime_request_context()
+        try:
+            items = await anyio.to_thread.run_sync(lambda: service.pending_inputs(
+                context=context, workspace_id=workspace_id))
+        except OktoNexusError as error:
+            return native_error(error)
+        return JSONResponse({"items": items}, headers={"Cache-Control": "no-store"})
+
     @router.post("/runtime/approval-decisions")
     async def native_decision(body: NativeDecisionRequest, request: Request):
         agent = get_authenticated_agent()

@@ -83,7 +83,7 @@ def test_invalid_form_answer_stays_pending_without_native_write(runtime, content
 
 @pytest.mark.parametrize("params", [
     {**QUESTION, "questions": [{**QUESTION["questions"][0], "isSecret": True}]},
-    {**QUESTION, "isBlocking": False},
+    {**QUESTION, "isBlocking": "false"},
 ])
 def test_unsupported_native_inputs_are_not_advertised_as_human_approvals(runtime, params):
     approval_peer(runtime, method="item/tool/requestUserInput", extra_params=params)

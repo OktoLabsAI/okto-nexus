@@ -69,6 +69,11 @@ def grant(host, binding):
 def test_workspace_binding_and_grant_each_gate_a_different_action(options_host, monkeypatch):
     _, first = option(options_host, workspace=False)
     assert first['technical_state'] == 'READY_FOR_RUNTIME'
+    configuration = first['harness_configuration']
+    assert configuration['adapter_id'] == 'codex_app_server'
+    assert configuration['version'] == '0.159.0'
+    assert configuration['models'] == []  # A passive read does not query the remote account.
+    assert configuration['human_input']['separate_from_tool_approval'] is True
     assert first['can_prepare'] and not first['can_bind'] and not first['can_start']
     assert 'WORKSPACE_REQUIRED' in first['policy_reasons']
     _, pending = option(options_host, actor='operator')

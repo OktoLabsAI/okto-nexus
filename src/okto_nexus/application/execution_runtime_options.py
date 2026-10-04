@@ -140,6 +140,15 @@ def read_runtime_options(factory, *, server_id, executor_id, agent_id, workspace
                 can_prepare=can_prepare, can_bind=can_bind, can_start=can_start,
                 preparation=preparation, binding=binding_view,
                 policy_reasons=list(dict.fromkeys(reasons))))
+            if descriptor and descriptor['support_status'] == 'managed_supported':
+                from nexus_connector_core import discover_harness_configuration
+                options[-1]['harness_configuration'] = discover_harness_configuration(
+                    adapter, version=technical.get('version'), candidate_ref=candidate or None)
+                if binding_view:
+                    from .execution_harness_configuration import read_harness_configuration
+                    options[-1]['harness_configuration'] = read_harness_configuration(conn,
+                        endpoint_id=binding_view['endpoint_id'], adapter_id=adapter,
+                        version=technical.get('version'), candidate_ref=candidate or None)
             if kind == 'embedded' and operator and candidate:
                 from nexus_connector_core import discover_provider_home
                 options[-1]['provider_home_suggestion'] = discover_provider_home(adapter)

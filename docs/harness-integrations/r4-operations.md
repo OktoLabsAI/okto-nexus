@@ -346,6 +346,13 @@ than a simulated success. Claude attach is an external session: a socket write
 does not prove native acceptance or completion, and detaching does not authorize
 termination of the external process.
 
+For runtime message delivery, `Received` (`delivered_at`) is recorded when a
+correlated `turn.submit` receipt first proves native acceptance (`SUBMITTED`,
+`RUNNING`, or `SUCCEEDED`). Session opening and transport writes alone do not
+mark a message received. Repeated receipts preserve the first timestamp;
+the final processing acknowledgement remains separate. MCP inbox pull/ack
+semantics are unchanged, and runtime receipts only update their own push delivery.
+
 Admission, transport delivery, native receipt and task completion are separate
 facts. `RECONCILING`, `possible_effect=true` or `retry_safe=false` require
 inspection/reconciliation; they do not authorize automatic replay or transfer.
@@ -396,6 +403,51 @@ credential or profile checks, nor the independent causality limits.
 Core leases and session MCP credentials remain short-lived and renewable;
 revocation, deactivation and disabling runtime still stop execution.
 
+## Runtime prompt context
+
+Nexus supplies its agent identity, delivery correlation and instructions for
+using Nexus tools. It does not instruct the harness to avoid tools or limit
+its available capabilities. Internal transport trust metadata stays in the
+stored envelope and is omitted from the model prompt. Nexus authorization
+continues to apply at the authenticated tool boundary.
+
+## Nexus tool approval policy
+
+In **Agents > Connections**, select the runtime workspace and installation.
+**Permissão para tools / MCP do Nexus** offers **Sempre permitir** for the Nexus
+server generated for that integration. Codex receives a per-server tool approval
+policy; Claude Code receives a scoped MCP tool allowlist. Pi native bridge tools
+already run without harness approval prompts. Agent capabilities and Nexus domain
+policies remain enforced, and other MCP servers and shell commands are unaffected.
+
+The default is **Solicitar aprovação do harness**. Only an operator can change
+this setting. Close the integration's runtime sessions before saving, then
+reauthorize execution and start a new session. Saving changes the endpoint
+revision and invalidates its execution grants; existing sessions are never
+silently granted broader tool permissions.
+
+Codex MCP permission requests with an empty form expose **Approve request**.
+The canonical response contains an empty content object. Expired requests remain
+readable but cannot be approved; trigger a new request to continue.
+
+## Execution log
+
+The **Execution log** menu is an operator-only, read-only troubleshooting view.
+It combines canonical receipts (including provider authentication failures),
+dispatch failures before opening, committed runtime error/lifecycle/turn/input
+events, and runtime authorization decisions. Filter by workspace, severity,
+agent ID, adapter ID and local date/time; results are paginated newest first.
+Use **Refresh log** to retrieve new records.
+
+Expand **Diagnostic details** for endpoint, executor, session, operation and
+structured error facts. Native prompts, tool arguments, full frames and stderr
+are excluded; known credential patterns in diagnostic messages are redacted.
+This view reads existing durable records, not the server console log. Dispatch
+failure rows are current snapshots and explicitly use operation creation time,
+because the dispatch table does not retain an error observation timestamp.
+Historical faults remain visible after recovery and do not establish current
+runtime health. MCP acknowledgement and execution behavior are unchanged.
+
 ## Shutdown, migration and recovery
 
 ```sh
@@ -422,3 +474,77 @@ regressions must be proved against the final artifact tuple before release.
 The older [operator notes](operator-guide.md) and
 [administration reference](runtime-administration.md) describe retained legacy
 records and contracts; their legacy profile/open examples are not R4 onboarding.
+# Native questions and interlocutors
+
+Native input requests resolve their recipient from the admitted source turn.
+For message delivery, Nexus follows the canonical delivery mapping to the
+original message sender; the runtime subject is not assumed to be the sender.
+This preserves A/C and B/C routing even when both turns share C's session.
+A missing domain message is not replaced with the operation actor. Direct
+runtime turns use their authenticated initiating actor.
+
+Only that authenticated recipient may submit an answer, and dispatch rechecks
+the same authority. Tool permission decisions, including Codex MCP permission
+elicitations, remain operator decisions. Core validates input answer shape
+before Nexus commits its decision; rejected input leaves the question pending.
+
+`GET /v1/runtime/input-requests` returns live questions for the current identity,
+optionally filtered by `workspace_id`. The local dashboard adapter exposes the
+same use case. Meta-Harness renders operator questions with the existing native
+choice/custom-text controls and canonical response submission.
+
+Managed MCP sessions expose `runtime_input_list` and `runtime_input_respond`.
+Both require explicit session capability actions; the listing is limited to the
+bound agent/workspace and responding preserves the native answer contract.
+Native permission requests cannot be decided through these session tools.
+A committed response records a non-secret capability reference and the actor
+revision guard. Before native dispatch, Nexus checks the same capability,
+actions, owner, grant, revisions and applied lease again. The reference is
+internal provenance, never an inbound credential or a reconstructed agent key.
+Canonical-key callers and the operator UI keep their existing authentication.
+
+Application and public HTTP MCP tests cover these tools, malformed answers,
+recipient isolation and revocation before dispatch. Pi exposes the equivalent
+`nexus_runtime_input_list` and `nexus_runtime_input_respond` tools through its
+Core-owned extension and scoped native socket. Native HTTP actions `input_list`
+and `input_respond` use the same decision service. Responses omit
+`client_intent_id`: Nexus derives it from the caller session scope and action ID,
+so replay cannot duplicate the decision or change an existing answer.
+The installed Pi 0.87.1 successfully called the list tool in an isolated campaign;
+the response path has native HTTP fixture coverage, not yet a provider-to-provider
+qualification. Automatic question delivery to another harness and the complete
+provider-to-provider question matrix remain to be integrated and qualified.
+
+Managed MCP sessions also expose `message_create` with explicit capability
+permission. Supply the bound `workspace_id` and `from_agent_id`; omit legacy
+`from_session_id` and `session_secret`. The existing domain sender permissions,
+audience, governance approvals and causal budgets still apply. A queued runtime
+delivery records a non-secret capability reference and revalidates that sender
+before dispatch and result publication. Approval re-execution retains the same
+sender reference and fails if it has been revoked; it cannot borrow the
+operator's identity. Canonical-key MCP authentication is unchanged.
+
+This enables a managed harness to activate another runtime through a private
+message. Its captured reply targets the original sender's inbox. Sending that
+reply into another runtime turn additionally requires the endpoint's existing
+`relay_results` policy; inbox publication alone does not imply that policy.
+Pi exposes the same domain operation as `nexus_message_create`. Pass
+`message={subject,body,target:{strategy:"direct",agent_id:"recipient"}}`, with
+optional channel, parent-message and artifact references. The Server supplies
+sender and workspace from the native session capability. The Core socket and
+Connector HTTP backend carry a typed `MessageCreate` request; they do not
+implement message delivery themselves. Native action receipts commit with the
+message or pending approval. Repeating a tool call ID returns its recorded
+result; changing its content conflicts. A failed receipt write rolls back the
+message. Deferred approval uses the normal durable executor, not the native
+request's transaction-bound connection.
+
+An isolated real campaign on 2026-10-03 qualified managed MCP message creation
+with Codex 0.159.0-alpha.12.1 and Claude 2.1.288. Both directions also completed
+native questions: Claude AskUserQuestion answered by Codex and Codex
+requestUserInput answered by Claude, with the canonical decision actor equal to
+the originating agent and native `input.provide` receipts. The initiating
+harness explicitly polled `runtime_input_list`; this is not evidence of an
+automatic question-triggered wake. Messages and returned Green answers were
+checked in the dashboard. Pi and deployment to the user's main server remain
+separate validation work.

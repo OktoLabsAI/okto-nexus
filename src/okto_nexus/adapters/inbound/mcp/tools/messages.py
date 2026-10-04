@@ -143,7 +143,7 @@ def validate_runtime_work(deps, uow, *, operation):
     return build_handoff_service(deps).runtime_work.revalidate(uow, operation=operation)
 
 
-def build_service(deps: Any) -> MessageService:
+def build_service(deps: Any, *, register_approval_executor=True) -> MessageService:
     """Wire the SQLite repos/emitter into ``deps`` and build the service.
 
     Idempotent: any repo / emitter already present is reused so this slice and
@@ -237,6 +237,8 @@ def build_service(deps: Any) -> MessageService:
 
     from .harness import build_connector_factories
     from okto_nexus.bootstrap.execution_compat import admit_delivery
+    from okto_nexus.bootstrap.execution_authority import build_message_capabilities
+    capabilities = build_message_capabilities(deps)
     service = MessageService(
         connection_factory=deps.connection_factory,
         channels=repos.channels,
@@ -257,10 +259,12 @@ def build_service(deps: Any) -> MessageService:
         guardrails=guardrails,
         inbox_notifier=deps.inbox_delivery_notifier,
         runtime_planner=RuntimeDeliveryPlanner(endpoints=SqliteEndpointRepo(), outbox=SqliteRuntimeOutboxRepo(), agents=repos.agents,
+            capabilities=capabilities,
             registry=build_connector_factories(deps), config=deps.config, observations=SqliteRuntimeObservationRepo(clock=deps.clock),
             canonical_admit=lambda uow, operation_id: admit_delivery(deps, uow, operation_id)),
         runtime_context_provider=runtime_message_context,
         runtime_results=RuntimeResultService(connection_factory=deps.connection_factory,
+            capabilities=capabilities,
             agents=repos.agents, endpoints=SqliteEndpointRepo(), config=deps.config,
             artifacts=build_artifact_service(deps), owner_provider=lambda: getattr(deps, "runtime_dispatcher", None),
             work_validator=lambda uow, **kwargs: validate_runtime_work(deps, uow, **kwargs)),
@@ -273,8 +277,9 @@ def build_service(deps: Any) -> MessageService:
     def _execute_message(kwargs: dict[str, Any]) -> dict[str, Any]:
         return service.create_message(**kwargs, _approved_execution=True)
 
-    approvals.register_executor(ACTION_MESSAGE_CREATE, _execute_message)
-    approvals.register_executor(ACTION_BROADCAST, _execute_message)
+    if register_approval_executor:
+        approvals.register_executor(ACTION_MESSAGE_CREATE, _execute_message)
+        approvals.register_executor(ACTION_BROADCAST, _execute_message)
 
     return service
 

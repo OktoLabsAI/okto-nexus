@@ -89,6 +89,7 @@ class SqliteApprovalRepo:
         workspace_id: str,
         status: str | None = None,
         limit: int = 100,
+        offset: int = 0,
     ) -> list[Approval]:
         """Workspace-scoped, ASCENDING created_at (the oldest-first queue)."""
         sql = f"SELECT {self._COLUMNS} FROM approvals WHERE workspace_id = ?"
@@ -96,8 +97,8 @@ class SqliteApprovalRepo:
         if status is not None:
             sql += " AND status = ?"
             params.append(status)
-        sql += " ORDER BY created_at, approval_id LIMIT ?"
-        params.append(int(limit))
+        sql += " ORDER BY created_at, approval_id LIMIT ? OFFSET ?"
+        params.extend((max(1, min(int(limit), 500)), max(0, int(offset))))
         try:
             rows = uow.connection.execute(sql, tuple(params)).fetchall()
         except sqlite3.Error as exc:

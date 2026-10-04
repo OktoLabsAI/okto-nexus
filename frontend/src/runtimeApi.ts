@@ -1,4 +1,4 @@
-import { ApiError, getApiKey } from "./api";
+import { ApiError, getApiKey, type ApprovalDetail } from "./api";
 
 export interface ExecutorChoice {
   executor_id: string;
@@ -8,6 +8,7 @@ export interface ExecutorChoice {
 }
 
 export interface RuntimeChoice {
+  harness_configuration?: HarnessConfiguration;
   provider_home_suggestion?: string | null;
   adapter_id: string;
   candidate_ref: string | null;
@@ -21,6 +22,17 @@ export interface RuntimeChoice {
   can_start: boolean;
   preparation: {realization_ref: string; realization_revision: number; workspace_binding_id: string} | null;
   binding: BindingView | null;
+}
+
+export interface HarnessConfiguration {
+  schema_version: number; schema_revision: string; adapter_id: string; version: string | null;
+  parameters: {name: string; label: string; type: string; native_parameter: string;
+    core_applies: boolean; scope: string; default: unknown; default_source: string;
+    values: string[]; availability: string}[];
+  models: {id: string; provider: string | null; efforts: string[]; default_effort: string | null}[];
+  constraints?: Record<string, string[]>;
+  human_input: {core_bridge: string; native_methods: string[]; recipient_policy: string;
+    recipient_routing_implemented: boolean; separate_from_tool_approval: boolean};
 }
 
 export interface BindingView {
@@ -43,7 +55,8 @@ export interface RuntimeOptions {
   freshness: string;
   options: RuntimeChoice[];
   catalog: {runtimes: {adapter_id: string; display_name: string; support_status: string; implementation_platforms: string[]}[]};
-  availability: {platform: string};
+  availability: {platform: string; availability?: {adapter_id: string; candidate_ref: string;
+    display_name: string; version: string | null; architecture: string | null; source: string}[]};
 }
 
 export function localInstallationAvailable(item: RuntimeChoice): boolean {
@@ -169,6 +182,8 @@ export function bindingRequestExists(key: string): boolean {
 }
 
 export const runtimeApi = {
+  nativeInputs: (workspace: string, signal?: AbortSignal) => read<{items: ApprovalDetail[]}>(
+    `/v1/runtime/input-requests${workspace && workspace !== "all" ? `?workspace_id=${encodeURIComponent(workspace)}` : ""}`, signal),
   decideNative: (body: NativeDecisionRequest) => read<NativeDecisionView>("/v1/runtime/approval-decisions", undefined, body),
   nativeDecision: (id: string, signal?: AbortSignal) => read<NativeDecisionView>(`/v1/runtime/approval-decisions/${encodeURIComponent(id)}`, signal),
   resolve: (body: RuntimeRequest) => read<RuntimeResolution>("/v1/runtime/intents:resolve", undefined, body),

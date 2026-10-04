@@ -59,6 +59,7 @@ def build_router():
         except OktoNexusError as error:
             status = {'VALIDATION_ERROR': 422, 'CAPACITY_EXCEEDED': 413,
                       'PERMISSION_DENIED': 403, 'NOT_OWNER': 403, 'NOT_ELIGIBLE_TO_CLAIM': 403,
+                      'APPROVAL_AUTHORITY_REQUIRED': 403,
                       'NOT_FOUND': 404, 'WORKSPACE_MISMATCH': 404,
                       'CONFLICT': 409, 'HANDOFF_ALREADY_CLAIMED': 409,
                       'INVALID_TRANSITION': 409, 'DEPENDENCY_NOT_MET': 409}.get(error.code, 500)

@@ -43,13 +43,13 @@ def test_canonical_content_reaches_adapter_with_server_identity(runtime, surface
     command = peers[0].sent[0]
     wire = command.payload["content" if adapter.startswith("claude_code") else "text"]
     banner, encoded = wire.split("\n", 1)
-    assert "untrusted" in banner.lower()
+    assert "available capabilities" in banner
     envelope = json.loads(encoded)
     assert envelope["content"] == payload["content"] and envelope["subject"] == payload["subject"]
     assert envelope["intent"] == "conversation" and envelope["response_requested"] is True
     assert envelope["operation_id"] == envelope["root_operation_id"] == op
     assert envelope["recipient_agent_id"] == "worker" and envelope["sender_agent_id"] == "operator"
-    assert envelope["workspace_id"] and envelope["trust"] == "untrusted_content"
+    assert envelope["workspace_id"] and "trust" not in envelope
     assert envelope["handoff_id"] is None and envelope["claim_epoch"] is None
     repeated = request(runtime, "rest" if surface == "mcp" else "mcp", sid, payload)
     assert repeated["ok"] and repeated["data"]["operation_id"] == op

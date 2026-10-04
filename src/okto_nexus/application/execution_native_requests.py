@@ -126,6 +126,8 @@ def project_native_request(conn, *, event, session, channel, received_at, uow=No
                   cas_token=secrets.token_urlsafe(32))
     conn.execute("INSERT INTO execution_native_requests (" + ",".join(values) + ") VALUES (" +
                  ",".join("?" for _ in values) + ")", tuple(values.values()))
+    from .execution_native_recipient import native_question_recipient
+    recipient = native_question_recipient(conn, values)
     if approvals is not None and state == "PENDING":
         # The canonical queue receives only a redacted presentation and the
         # immutable request reference. It must never serialize the original.
@@ -137,4 +139,5 @@ def project_native_request(conn, *, event, session, channel, received_at, uow=No
                     "session_id", "session_owner_generation", "canonical_request_id", "kind")},
                 "request_hash": digest, "expected_revision": 1,
                 "cas_token": values["cas_token"], "expires_at": values["expires_at"],
+                "recipient_agent_id": recipient,
                 "display": public_display})

@@ -6,9 +6,19 @@ class SqliteNativeActionRepository:
         return tuple(scope[k] for k in ('server_id', 'executor_id', 'session_id'))
 
     def get(self, uow, scope, action_id):
-        return uow.connection.execute(
+        prior = uow.connection.execute(
             'SELECT * FROM execution_native_actions WHERE server_id=? AND executor_id=? '
             'AND session_id=? AND action_id=?', (*self.key(scope), action_id)).fetchone()
+        return prior or uow.connection.execute(
+            'SELECT * FROM execution_native_messages WHERE server_id=? AND executor_id=? '
+            'AND session_id=? AND action_id=?', (*self.key(scope), action_id)).fetchone()
+
+    def record_message(self, uow, *, scope, action_id, digest, response_json, now):
+        from nexus_connector_core.protocol import canonical_json
+        uow.connection.execute(
+            'INSERT INTO execution_native_messages VALUES(?,?,?,?,?,?,?,?,?)',
+            (*self.key(scope), action_id, 'message_create', canonical_json(scope).decode(),
+             digest, response_json, now))
 
     def claim_key_owner(self, uow, scope, key):
         return uow.connection.execute(

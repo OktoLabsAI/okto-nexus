@@ -1,3 +1,4 @@
+import { NativeQuestions } from "../components/NativeQuestions";
 import {
   ArrowDown,
   Bot,
@@ -1058,6 +1059,7 @@ export function MetaHarnessView({
           data-testid="meta-harness-timeline"
         >
           <div className="mx-auto flex min-h-full max-w-5xl flex-col px-4 py-6 sm:px-6">
+            <NativeQuestions workspace={workspace} agent={filterAgent} />
             {loading ? (
               <div className="grid flex-1 place-items-center text-sm text-surface-400">
                 <LoaderCircle className="animate-spin" size={22} />

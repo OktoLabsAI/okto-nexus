@@ -259,6 +259,7 @@ class MessageService:
         _runtime_context=None,
         _runtime_result_id=None,
         _nonexecuting_notification=False,
+        _managed_message_binding=None,
     ) -> dict[str, Any]:
         """Persist a message and emit ``message.created`` atomically.
 
@@ -293,6 +294,16 @@ class MessageService:
         exactly the failure mode this flag surfaces (check it if you expected
         an existing workspace).
         """
+        from ..domain.execution_principal import current_execution_principal
+        principal = current_execution_principal.get()
+        if principal is not None:
+            if (from_agent_id != principal.scope['agent_id'] or from_session_id is not None
+                    or session_secret is not None or _runtime_result_id or _managed_message_binding):
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Use the identity of the managed runtime session.', {})
+            if workspace_id is None and project_root == principal.scope['workspace_id']:
+                workspace_id, project_root = project_root, None
+            if workspace_id != principal.scope['workspace_id'] or project_root is not None:
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Use the workspace ID bound to the managed session.', {})
         logical_workspace = workspace_id is not None
         if logical_workspace:
             if (project_root is not None or type(workspace_id) is not str
@@ -344,6 +355,20 @@ class MessageService:
         with self._send_uow(workspace_id=workspace_id, agent_id=from_agent_id) as uow:
             if logical_workspace and self._workspaces.get(uow, workspace_id) is None:
                 raise OktoNexusError(ErrorCode.NOT_FOUND, "The logical workspace was not found.", {})
+            from .runtime_actor_authority import managed_message_binding, valid_actor_binding
+            capabilities = getattr(self._runtime_planner, 'capabilities', None)
+            managed_binding = managed_message_binding(uow, capabilities=capabilities,
+                actor_id=from_agent_id, workspace_id=workspace_id)
+            if _managed_message_binding is not None:
+                if not _approved_execution or not valid_actor_binding(uow, self._agents.get(uow, from_agent_id),
+                        _managed_message_binding, capabilities=capabilities, workspace_id=workspace_id):
+                    raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The approved runtime sender is no longer authorized.', {})
+                managed_binding = _managed_message_binding
+            if managed_binding:
+                from ..domain.runtime_context import RuntimeRequestContext
+                runtime_context = RuntimeRequestContext(actor_agent_id=from_agent_id,
+                    authentication_source='session_capability', workspace_id=workspace_id,
+                    credential_binding=managed_binding)
             if _runtime_result_id:
                 if self._runtime_results is None or from_session_id or session_secret:
                     raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Invalid runtime result publication context.", {})
@@ -358,7 +383,7 @@ class MessageService:
             # uow back, so a forged sender never persists anything. Skipped on
             # approved re-execution (spec 2948b2a2): authenticity was verified
             # at interception time and the ephemeral session may be long gone.
-            if not _approved_execution and not _runtime_result_id:
+            if not _approved_execution and not _runtime_result_id and not managed_binding:
                 verify_session_credentials(
                     self._sessions,
                     uow,
@@ -516,6 +541,7 @@ class MessageService:
                             "parent_message_id": parent,
                             "trace_id": resolved_trace,
                             **({"_runtime_result_id": _runtime_result_id} if _runtime_result_id else {}),
+                            **({'_managed_message_binding': managed_binding} if managed_binding else {}),
                         },
                         trace_id=resolved_trace,
                     )

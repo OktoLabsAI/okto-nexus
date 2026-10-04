@@ -4,7 +4,7 @@ import { runtimeApi, type NativeDecisionRequest, type NativeDecisionView } from 
 import { NativeApprovalInput } from "./NativeApprovalInput";
 
 type Proposal = Omit<NativeDecisionRequest, "client_intent_id" | "decision" | "response"> & {
-  expires_at: string; display: unknown;
+  expires_at: string; display: unknown; recipient_agent_id?: string | null;
 };
 
 export function CanonicalNativeDecision({detail, onChanged}: {detail: ApprovalDetail; onChanged: () => void}) {
@@ -13,6 +13,7 @@ export function CanonicalNativeDecision({detail, onChanged}: {detail: ApprovalDe
   const locked = useRef(false);
   const attemptedAnswer = useRef<string | null>(null);
   const [key, setKey] = useState("");
+  const [canAnswer, setCanAnswer] = useState(false);
   const [saved, setSaved] = useState<NativeDecisionRequest | null>(null);
   const [view, setView] = useState<NativeDecisionView | null>(null);
   const [busy, setBusy] = useState(false);
@@ -43,6 +44,7 @@ export function CanonicalNativeDecision({detail, onChanged}: {detail: ApprovalDe
         const me = await runtimeApi.me(controller.signal);
         if (controller.signal.aborted || !proposal) return;
         if (me.server_id !== proposal.approval_key.server_id) throw new Error("The native request belongs to another Server.");
+        setCanAnswer(me.agent_id === (proposal.recipient_agent_id ?? "operator"));
         const storageKey = `okto-nexus:r4-native:${JSON.stringify([me.server_id, me.agent_id, detail.approval_id])}`;
         const raw = sessionStorage.getItem(storageKey);
         if (raw) {
@@ -75,7 +77,7 @@ export function CanonicalNativeDecision({detail, onChanged}: {detail: ApprovalDe
   }, [key]);
 
   const decide = async (decision: "approve" | "deny", response?: Record<string, unknown>) => {
-    if (locked.current || !key || !valid || !proposal || expired || view) return;
+    if (locked.current || !key || !valid || !proposal || expired || view || !canAnswer) return;
     locked.current = true; setBusy(true); setError("");
     try {
       if (saved && saved.decision !== decision) throw new Error("Recover the original decision before choosing another response.");
@@ -100,13 +102,14 @@ export function CanonicalNativeDecision({detail, onChanged}: {detail: ApprovalDe
     finally { locked.current = false; if (alive.current) setBusy(false); }
   };
   const formDetail: ApprovalDetail = {...detail,
-    status: view || expired || !valid || !key || saved?.decision === "deny" ? "approved" : detail.status,
+    status: view || expired || !valid || !key || !canAnswer || saved?.decision === "deny" ? "approved" : detail.status,
     request_payload: {kwargs: {payload: proposal?.display}},
     decision_detail: {operation_id: view?.native_operation_id || "", state: view ? view.native_stage : "PENDING",
       decision: null, reason: null, expires_at: proposal?.expires_at || "", response: null},
   };
   return <section aria-label="Native runtime decision" className="space-y-3">
     {!valid && <p role="alert">The canonical runtime request is incomplete. Refresh its details.</p>}
+    {key && !canAnswer && <p role="status">This request is addressed to {proposal?.recipient_agent_id ?? "operator"}.</p>}
     {proposal && <p>Agent {String(proposal.approval_key.agent_id)} · Host {String(proposal.approval_key.executor_id)} · Session {String(proposal.approval_key.session_id)}</p>}
     {view ? <div role="status" data-testid="canonical-native-status">
       <p>Decision: {view.canonical_state}. Native delivery: {view.native_stage}.</p>
@@ -117,7 +120,7 @@ export function CanonicalNativeDecision({detail, onChanged}: {detail: ApprovalDe
       <NativeApprovalInput detail={formDetail} busy={busy} canonicalPermission={proposal?.approval_key.kind === "native_approval"}
         onApprove={response => void decide("approve", response)} />
       {saved && <p role="status">A decision request was sent. Check its result before retrying the same choice. Answers are not saved in browser storage; re-enter the same answer if needed.</p>}
-      <button className="btn btn-secondary" disabled={busy || !key || !valid || expired || (!!saved && saved.decision !== "deny") || detail.status !== "pending"}
+      <button className="btn btn-secondary" disabled={busy || !key || !valid || !canAnswer || expired || (!!saved && saved.decision !== "deny") || detail.status !== "pending"}
         onClick={() => void decide("deny")}>{saved?.decision === "deny" ? "Retry the same denial" : "Deny runtime request"}</button>
     </>}
     <button className="btn btn-secondary" disabled={busy} onClick={() => {

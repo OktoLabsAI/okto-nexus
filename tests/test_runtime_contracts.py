@@ -85,5 +85,6 @@ def test_adapter_owns_native_envelope_translation(key):
                                         payload={"envelope": envelope().to_dict()}))
     assert list(native.sent[0].payload) == [key]
     assert '"sender_agent_id": "sender"' in native.sent[0].payload[key]
-    assert "untrusted" in native.sent[0].payload[key]
+    assert "available capabilities" in native.sent[0].payload[key]
+    assert '"trust"' not in native.sent[0].payload[key]
     adapter.close()

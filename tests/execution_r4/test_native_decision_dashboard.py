@@ -15,6 +15,42 @@ pytestmark = pytest.mark.skipif(os.environ.get('OKTO_NEXUS_UI_CAMPAIGN') != '1',
                                reason='Isolated browser campaign not enabled')
 
 
+def test_approval_status_tabs_filters_and_full_history(decision_state, native_browser):
+    from playwright.sync_api import expect
+    deps, _, body = decision_state
+    page, _ = native_browser
+    original = body['approval_key']['canonical_request_id']
+    with deps.connection_factory.unit_of_work() as uow:
+        for number in range(105):
+            uow.connection.execute(
+                "INSERT INTO approvals(approval_id,workspace_id,agent_id,action,policy_id,request_payload,status,created_at,decided_at) "
+                "SELECT ?,workspace_id,agent_id,'broadcast',policy_id,request_payload,'approved',?,? "
+                "FROM approvals WHERE approval_id=?",
+                (f'history-{number}', '2001-01-02T12:00:00Z', '2001-01-02T13:00:00Z', original))
+        uow.connection.execute(
+            "INSERT INTO approvals(approval_id,workspace_id,agent_id,action,policy_id,request_payload,status,created_at,decided_at) "
+            "SELECT 'history-rejected',workspace_id,'operator','message_create',policy_id,request_payload,'rejected',?,? "
+            "FROM approvals WHERE approval_id=?", ('2001-01-03T12:00:00Z','2001-01-03T13:00:00Z',original))
+    page.get_by_role('button', name='Refresh approvals', exact=True).click()
+    expect(page.get_by_role('tab', name='All 107', exact=True)).to_have_attribute('aria-selected','true')
+    page.get_by_role('tab', name='Approved 105', exact=True).click()
+    expect(page.get_by_test_id('recent-decisions').locator('tbody > tr')).to_have_count(105)
+    page.get_by_label('Created from',exact=True).fill('2001-01-03')
+    page.get_by_label('Created through',exact=True).fill('2001-01-03')
+    expect(page.get_by_text('No approvals match these filters.',exact=True)).to_be_visible()
+    page.get_by_role('tab',name='All 1',exact=True).click()
+    expect(page.get_by_test_id('decided-history-rejected')).to_be_visible()
+    page.get_by_label('Agent',exact=True).select_option('operator')
+    page.get_by_label('Action',exact=True).select_option('broadcast')
+    expect(page.get_by_text('No approvals match these filters.',exact=True)).to_be_visible()
+    page.get_by_label('Action',exact=True).select_option('message_create')
+    expect(page.get_by_test_id('decided-history-rejected')).to_be_visible()
+    page.get_by_role('button',name='Clear filters',exact=True).click()
+    page.get_by_role('tab',name='Pending 1',exact=True).click()
+    expect(page.get_by_test_id('approval-'+original)).to_be_visible()
+    expect(page.get_by_test_id('recent-decisions')).to_have_count(0)
+
+
 @pytest.fixture
 def native_browser(decision_state, assets):
     from playwright.sync_api import sync_playwright
@@ -116,6 +152,19 @@ def test_native_ui_confirm_and_recover_without_persisting_answers(decision_state
     target = Path(os.environ.get('OKTO_NEXUS_UI_SCREENSHOT_DIR', str(tmp_path)))
     target.mkdir(parents=True, exist_ok=True)
     panel.screenshot(path=str(target / f'native-decision-{is_input}-{is_form}-{lost_reply}.png'))
+
+
+@pytest.mark.parametrize('decision_state', ['mcp_permission'], indirect=True)
+def test_native_ui_empty_mcp_permission_has_approve_button(decision_state, native_browser):
+    from playwright.sync_api import expect
+    page, trace = native_browser
+    button = page.get_by_role('button', name='Approve request', exact=True)
+    expect(button).to_be_enabled()
+    button.click()
+    expect(page.get_by_test_id('canonical-native-status')).to_contain_text('Decision: CONFIRMED')
+    posts = [json.loads(data) for method, path, data in trace['requests']
+             if method == 'POST' and path == '/v1/runtime/approval-decisions']
+    assert len(posts) == 1 and posts[0]['response'] == {'content': {}}
 
 
 def test_native_ui_denial_is_canonical_and_cannot_use_legacy_decision(decision_state, native_browser):

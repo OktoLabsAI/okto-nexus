@@ -135,8 +135,28 @@ export function ApprovalsView({
   // Lets App refresh the sidebar badge right after a decision.
   onChanged: () => void;
 }) {
-  const [pending, setPending] = useState<ApprovalRow[]>([]);
-  const [decided, setDecided] = useState<ApprovalRow[]>([]);
+  const [rows, setRows] = useState<ApprovalRow[]>([]);
+  const [status, setStatus] = useState("all");
+  const [agent, setAgent] = useState("");
+  const [action, setAction] = useState("");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [loading, setLoading] = useState(false);
+  const loadRequest = useRef(0);
+  const invalidDates = !!(fromDate && toDate && fromDate > toDate);
+  const filtered = rows.filter(row => {
+    const created = new Date(row.created_at);
+    const start = fromDate ? new Date(`${fromDate}T00:00:00`) : null;
+    const end = toDate ? new Date(`${toDate}T00:00:00`) : null;
+    if (end) end.setDate(end.getDate() + 1);
+    return !invalidDates && (!agent || row.agent_id === agent) && (!action || row.action === action)
+      && (!start || created >= start) && (!end || created < end);
+  });
+  const visible = filtered.filter(row => status === "all" || row.status === status);
+  const pending = visible.filter(row => row.status === "pending")
+    .sort((a, b) => a.created_at.localeCompare(b.created_at));
+  const decided = visible.filter(row => row.status !== "pending")
+    .sort((a, b) => (b.decided_at ?? b.created_at).localeCompare(a.decided_at ?? a.created_at));
   // null = still probing /settings; the banner renders only on a firm false
   // (the PoliciesView enforcement-banner pattern).
   const [interceptionOn, setInterceptionOn] = useState<boolean | null>(null);
@@ -152,9 +172,14 @@ export function ApprovalsView({
     detailRequest.current += 1;
     setDetailOpen(null);
     setDetail(null);
+    setRows([]);
+    setAgent("");
+    setAction("");
   }, [workspace]);
 
   const reload = useCallback(async () => {
+    const generation = ++loadRequest.current;
+    setLoading(true);
     try {
       // GET /approvals is workspace-scoped; the "all" scope fans out over
       // every known workspace and merges client-side.
@@ -163,25 +188,23 @@ export function ApprovalsView({
           ? (await api.workspaces()).workspaces.map((w) => w.workspace_id)
           : [workspace];
       const pages = await Promise.all(
-        ids.map((id) => api.approvals(id, "all")),
+        ids.map(async (id) => {
+          const items: ApprovalRow[] = [];
+          for (let offset = 0; ; offset += 100) {
+            const page = await api.approvals(id, "all", offset);
+            items.push(...page.items);
+            if (page.items.length < 100 || generation !== loadRequest.current) break;
+          }
+          return items;
+        }),
       );
-      const rows = pages.flatMap((page) => page.items);
-      setPending(
-        rows
-          .filter((row) => row.status === "pending")
-          .sort((a, b) => a.created_at.localeCompare(b.created_at)),
-      );
-      setDecided(
-        rows
-          .filter((row) => row.status !== "pending")
-          .sort((a, b) =>
-            (b.decided_at ?? "").localeCompare(a.decided_at ?? ""),
-          )
-          .slice(0, 20),
-      );
+      if (generation !== loadRequest.current) return;
+      setRows([...new Map(pages.flat().map(row => [row.approval_id, row])).values()]);
       setLoadError(null);
     } catch (exc) {
-      setLoadError((exc as Error).message);
+      if (generation === loadRequest.current) setLoadError((exc as Error).message);
+    } finally {
+      if (generation === loadRequest.current) setLoading(false);
     }
     api
       .settings()
@@ -299,8 +322,50 @@ export function ApprovalsView({
         </p>
       )}
 
+      <div className="panel p-3 mb-4 space-y-3">
+        <div role="tablist" aria-label="Approval status" className="flex flex-wrap gap-2">
+          {(["all", "pending", "approved", "rejected"] as const).map(value => (
+            <button key={value} role="tab" aria-selected={status === value}
+              className={`rounded-lg px-3 py-2 text-xs font-medium ${status === value
+                ? "bg-accent-600 text-white" : "bg-surface-100 dark:bg-surface-800 text-surface-600 dark:text-surface-300"}`}
+              onClick={() => { setStatus(value); setDetailOpen(null); setRejecting(null); }}>
+              {value === "all" ? "All" : value[0].toUpperCase() + value.slice(1)}
+              {" "}
+              <span className="ml-2 opacity-75">{filtered.filter(row => value === "all" || row.status === value).length}</span>
+            </button>
+          ))}
+        </div>
+        <div className="flex flex-wrap items-end gap-3 text-xs">
+          <label className="flex flex-col gap-1">Created from
+            <input type="date" className={inputCls} value={fromDate} max={toDate || undefined}
+              onChange={event => setFromDate(event.target.value)} />
+          </label>
+          <label className="flex flex-col gap-1">Created through
+            <input type="date" className={inputCls} value={toDate} min={fromDate || undefined}
+              onChange={event => setToDate(event.target.value)} />
+          </label>
+          <label className="flex flex-col gap-1">Action
+            <select aria-label="Action" className={inputCls} value={action} onChange={event => setAction(event.target.value)}>
+              <option value="">All actions</option>
+              {[...new Set(rows.map(row => row.action))].sort().map(value => <option key={value}>{value}</option>)}
+            </select>
+          </label>
+          <label className="flex flex-col gap-1">Agent
+            <select aria-label="Agent" className={inputCls} value={agent} onChange={event => setAgent(event.target.value)}>
+              <option value="">All agents</option>
+              {[...new Set(rows.map(row => row.agent_id))].sort().map(value => <option key={value}>{value}</option>)}
+            </select>
+          </label>
+          <button className="btn btn-secondary" onClick={() => {setAgent(""); setAction(""); setFromDate(""); setToDate("");}}>Clear filters</button>
+          <button className="btn btn-secondary" onClick={reload} disabled={loading} aria-label="Refresh approvals"><RefreshCw size={12} /></button>
+        </div>
+        <p className="text-xs text-surface-500" role="status">{loading ? "Loading approvals…" : `${visible.length} approval(s)`} · Dates use local time.</p>
+        {invalidDates && <p role="alert" className="text-xs text-red-500">The start date must be on or before the end date.</p>}
+      </div>
+      {!loading && !visible.length && <p className="text-sm text-surface-500 py-4">No approvals match these filters.</p>}
+
       {/* Pending queue (oldest first) */}
-      <section className="panel p-4" data-testid="pending-approvals">
+      {(status === "all" || status === "pending") && <section className="panel p-4" data-testid="pending-approvals">
         <div className="flex items-center gap-2 mb-3">
           <h2 className="text-sm font-semibold text-surface-900 dark:text-surface-100">
             Pending
@@ -451,13 +516,13 @@ export function ApprovalsView({
             </table>
           </div>
         )}
-      </section>
+      </section>}
 
       {/* Recent decisions — self-gated by the data (the DenialsPanel pattern) */}
       {decided.length > 0 && (
         <section className="mt-5 panel p-4" data-testid="recent-decisions">
           <h2 className="text-sm font-semibold text-surface-900 dark:text-surface-100 mb-3">
-            Recent decisions
+            Decisions
           </h2>
           <div className="overflow-x-auto">
             <table className="w-full text-xs">

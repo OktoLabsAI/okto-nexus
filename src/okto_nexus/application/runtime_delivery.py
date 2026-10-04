@@ -13,12 +13,13 @@ from .runtime_actor_authority import authenticated_message_context, valid_actor_
 
 
 class RuntimeDeliveryPlanner:
-    def __init__(self, *, endpoints, outbox, agents, registry, config, observations=None, canonical_admit=None):
+    def __init__(self, *, endpoints, outbox, agents, registry, config, observations=None, canonical_admit=None, capabilities=None):
         self.endpoints, self.outbox, self.agents = endpoints, outbox, agents
         self.registry, self.config = registry, config
         self.observations = observations
         self.canonical_admit = canonical_admit
-        self.causality = RuntimeCausalityService(config=config, agents=agents)
+        self.capabilities = capabilities
+        self.causality = RuntimeCausalityService(config=config, agents=agents, capabilities=capabilities)
 
     def observer_candidates(self, uow, *, agent_id, workspace_id):
         candidates = []
@@ -113,11 +114,13 @@ class RuntimeDeliveryPlanner:
             if not context or context.authentication_source != "captured_result":
                 return None
         else:
-            context = authenticated_message_context(uow, context, self.agents)
+            context = authenticated_message_context(uow, context, self.agents,
+                capabilities=self.capabilities, workspace_id=message.workspace_id)
         if not context or not context.credential_binding:
             return None
         actor = self.agents.get(uow, context.actor_agent_id)
-        if not valid_actor_binding(uow, actor, context.credential_binding):
+        if not valid_actor_binding(uow, actor, context.credential_binding,
+                                   capabilities=self.capabilities, workspace_id=message.workspace_id):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Authenticated delivery actor is unavailable.", {})
         if result_source:
             if (result_source["recipient_agent_id"] != message.from_agent_id or result_source["actor_agent_id"] != actor.agent_id
@@ -189,7 +192,8 @@ class RuntimeDeliveryPlanner:
         if operation.get("admission_binding") and endpoint and endpoint["selection_group"] != admission["selection_group"]:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Fallback equivalence approval changed.", {})
         if (not config.feature_harness_integrations or not actor or not actor.is_active or
-                not valid_actor_binding(uow, actor, operation["credential_binding"]) or not recipient or not recipient.is_active or
+                not valid_actor_binding(uow, actor, operation["credential_binding"],
+                    capabilities=self.capabilities, workspace_id=operation['workspace_id']) or not recipient or not recipient.is_active or
                 not reachable(actor, recipient) or
                 not endpoint or not endpoint["enabled"] or endpoint["activation_state"] != "approved" or endpoint["revision"] != operation["endpoint_revision"] or
                 endpoint["health"] == "quarantined" or

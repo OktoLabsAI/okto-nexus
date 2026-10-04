@@ -11,6 +11,14 @@ export interface Envelope<T> {
   error?: { code: string; message: string; details?: unknown };
 }
 
+export interface ExecutionLogEntry {
+  id: string; timestamp: string; severity: "info" | "warning" | "error";
+  source: string; agent_id: string | null; workspace_id: string | null;
+  adapter_id: string | null; endpoint_id: string | null; session_id: string | null;
+  operation_id: string | null; executor_id: string | null; action: string; code: string;
+  details: Record<string, string>;
+}
+
 export interface RuntimeBindingAgent {
   agent_id: string;
   skill_names: string[];
@@ -1114,6 +1122,14 @@ export type RuntimePolicy = {
 };
 
 export const api = {
+  runtimeHarnessSettings: (endpoint: string) => call<{revision: number; settings: Record<string, string>}>(
+    `/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/harness-settings`),
+  saveRuntimeHarnessSettings: (endpoint: string, body: {expected_revision: number; settings: Record<string, string>}) =>
+    call<{revision: number; settings: Record<string, string>}>(`/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/harness-settings`, {method: "PUT", body: JSON.stringify(body)}),
+  runtimeToolPermission: (endpoint: string) => call<{revision: number; mode: "ask" | "always_allow"}>(
+    `/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/tool-permission`),
+  saveRuntimeToolPermission: (endpoint: string, body: {expected_revision: number; mode: "ask" | "always_allow"}) =>
+    call<{revision: number; mode: "ask" | "always_allow"}>(`/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/tool-permission`, {method: "PUT", body: JSON.stringify(body)}),
   runtimePolicy: (agentId?: string) => call<RuntimePolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/runtime-policy` : '/api/v1/runtime-policy'),
   saveRuntimePolicy: (body: {expected_revision: number; runtime_enabled: boolean | null; session_policy: 'shared' | 'per_sender' | null}, agentId?: string) => call<RuntimePolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/runtime-policy` : '/api/v1/runtime-policy', {method: 'PUT', body: JSON.stringify(body)}),
   runtimeConversationPolicy: (endpoint: string) => call<{endpoint_id: string; agent_id: string; workspace_id: string; revision: number; enabled: boolean; session_policy: "shared" | "per_sender"}>(
@@ -1127,6 +1143,9 @@ export const api = {
   runtimeBindings: (after?: string) => call<{
     agents: RuntimeBindingAgent[]; has_more: boolean; next_endpoint_id: string | null;
   }>(`/api/v1/harness/bindings?limit=50${after ? `&after_endpoint_id=${encodeURIComponent(after)}` : ""}`),
+  executionLog: (params: URLSearchParams) => call<{
+    items: ExecutionLogEntry[]; has_more: boolean; next_offset: number;
+  }>(`/api/v1/harness/execution-log?${params}`),
   runtimeOperations: (after?: string) => call<{
     items: RuntimeOperationRow[]; has_more: boolean; next_operation_id: string | null;
   }>(`/api/v1/harness/outbox?limit=50${after ? `&after_operation_id=${encodeURIComponent(after)}` : ""}`),
@@ -1624,10 +1643,10 @@ export const api = {
     ),
   // HITL approvals (spec 2948b2a2): operator-only. status defaults to
   // "pending" server-side; pass "approved" / "rejected" / "all" to widen.
-  approvals: (workspace: string, status?: string) =>
+  approvals: (workspace: string, status?: string, offset = 0) =>
     call<{ items: ApprovalRow[] }>(
       `/api/v1/approvals?workspace=${encodeURIComponent(workspace)}${
-        status ? `&status=${encodeURIComponent(status)}` : ""
+        (status ? `&status=${encodeURIComponent(status)}` : "") + `&limit=100&offset=${offset}`
       }`,
     ),
   approvalDetail: (approvalId: string) =>
