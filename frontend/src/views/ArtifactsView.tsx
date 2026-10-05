@@ -53,7 +53,7 @@ function bytes(value: number): string {
 
 function dateTime(iso: string): string {
   const value = new Date(iso);
-  return Number.isNaN(value.getTime()) ? iso : value.toLocaleString();
+  return Number.isNaN(value.getTime()) ? iso : value.toLocaleString("en-US");
 }
 
 function localDateBound(value: string, endOfDay: boolean): string {
@@ -699,8 +699,8 @@ function CsvTable({ content }: { content: string }) {
       </div>
       {allDataRows.length > visibleRows.length && (
         <p className="border-t border-surface-200 px-3 py-2 text-xs text-surface-500 dark:border-surface-700">
-          Showing the first {visibleRows.length.toLocaleString()} of{" "}
-          {allDataRows.length.toLocaleString()} data rows. Use Raw or Download
+          Showing the first {visibleRows.length.toLocaleString("en-US")} of{" "}
+          {allDataRows.length.toLocaleString("en-US")} data rows. Use Raw or Download
           for the complete file.
         </p>
       )}

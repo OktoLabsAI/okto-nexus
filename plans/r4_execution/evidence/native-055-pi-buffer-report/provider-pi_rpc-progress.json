@@ -1,0 +1,75 @@
+{
+  "adapter": "pi_rpc",
+  "missing_login": false,
+  "server_release_gate_override": false,
+  "native_qualification_override": false,
+  "synthetic_native_factory": false,
+  "public_connector_cli": true,
+  "cli_subprocess": true,
+  "protected_os_vault": true,
+  "topology": "Single Windows host; actual loopback HTTP/WSS; separate Server and daemon processes.",
+  "stream_diagnostic": true,
+  "native_buffer_diagnostic": {
+    "queue_peak_events": 64,
+    "queue_peak_bytes": 49045,
+    "queue_refusals": 0,
+    "history_refusals": 0
+  },
+  "phase": "finished",
+  "vault_backend": "keyring:Windows WinVaultKeyring",
+  "candidate_ref": "nexus-install-v1:b64f7d489758234ac44fa9004bec00163e29efe01b8772ace8836ffc6001b3d5",
+  "selection_check_seconds": [
+    7.719316200003959,
+    7.217950699967332,
+    7.433534000068903,
+    7.827284200000577,
+    7.41762480000034,
+    0.7116198999574408,
+    0.49990699999034405,
+    0.6065406000707299,
+    0.45336819998919964,
+    0.5510921000968665,
+    0.44878129998687655
+  ],
+  "open_stage": "SUBMITTED",
+  "scope": {
+    "agent_id": "subject",
+    "authorization_revision": 2,
+    "binding_id": "bind_7e5fe2b9d06d1c9bd973ccb4ed92e8ab",
+    "binding_revision": 1,
+    "configuration_revision": 2,
+    "credential_epoch": 1,
+    "executor_id": "exe_dd619ac847c456e01d4d10bb25636fe4",
+    "server_id": "srv_88f040e3aa2a6c92e1672dc307749f24",
+    "session_id": "ses_e28bd7bd1144331615a34c14d3ac4f73",
+    "session_owner_generation": 1,
+    "workspace_binding_id": "wxb_7faf058f24cfffc94ff4c8692b4b2d54",
+    "workspace_id": "wsr_eb02ac2faee7e77b5acb443e52deac3c"
+  },
+  "lease_serial_before_turn": 2,
+  "native_bridge_calls": [
+    {
+      "seconds": 1.4531273000175133,
+      "outcome": "returned"
+    },
+    {
+      "seconds": 1.2216620000544935,
+      "outcome": "returned"
+    },
+    {
+      "seconds": 1.186189099913463,
+      "outcome": "returned"
+    }
+  ],
+  "turn_stage": "SUCCEEDED",
+  "explicit_operator_decisions": 0,
+  "handoff_status": "COMPLETED",
+  "native_action_count": 3,
+  "tool_claim_count": 1,
+  "wss_ticket_count": 4,
+  "close_stage": "SUCCEEDED",
+  "completed": true,
+  "daemon_exit_code": 0,
+  "campaign_credentials_removed": true,
+  "server_exit_code": 0
+}

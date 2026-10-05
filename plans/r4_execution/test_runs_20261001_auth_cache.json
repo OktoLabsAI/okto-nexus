@@ -1,0 +1,221 @@
+{
+  "date": "2026-10-01",
+  "status": "NS14_04_AUTH_CACHE_INCREMENT_PASSED_TASK_PARTIAL",
+  "commits": {
+    "core": "18e172781b018ae09960fafc1bf7e2c4b1e8410f",
+    "connector": "211be74009a7f3c4f48eb25961f9860a91825df9",
+    "nexus": "a329503f466408d6a5e54a0a7c466348c3c83c53"
+  },
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-core-3msf4qiz\\dist\\nexus_connector_core-0.2.51.dev0-py3-none-any.whl",
+      "sha256": "4c4c0c58d25b93f4f08ba8515d8476ffc29d1f0a27cc577c9fccb610716d1d1c"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-connector-pmt6y5x7\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "baf837251f654ab6385f5fba4e22d1a1b69da1839e8f47752795d1518dd29fe7"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-auth-cache-nexus-e3uuyczn\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "9220364b70339a87182ee3d24feafa4fb5d58242b514f82bd8587a6e59dee2b5"
+    }
+  },
+  "results": {
+    "auth-cache-auth-initial.xml": {
+      "tests": "100",
+      "failures": "2",
+      "errors": "1",
+      "skipped": "0",
+      "time": "310.074"
+    },
+    "auth-cache-auth-installed.xml": {
+      "tests": "100",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "119.954"
+    },
+    "auth-cache-r4-installed.xml": {
+      "tests": "27",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "58.261"
+    },
+    "auth-cache-source.xml": {
+      "tests": "27",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "31.452"
+    }
+  },
+  "load_measurements": {
+    "auth-cache-auth-initial.xml": {
+      "identities": 100000,
+      "elapsed_seconds": 20.19322470005136,
+      "samples": [
+        {
+          "identities": 25000,
+          "current_bytes": 3624039,
+          "peak_bytes": 3822193,
+          "entries": 4096,
+          "reverse_entries": 4096
+        },
+        {
+          "identities": 50000,
+          "current_bytes": 3620007,
+          "peak_bytes": 3835857,
+          "entries": 4096,
+          "reverse_entries": 4096
+        },
+        {
+          "identities": 75000,
+          "current_bytes": 3615783,
+          "peak_bytes": 3835857,
+          "entries": 4096,
+          "reverse_entries": 4096
+        },
+        {
+          "identities": 100000,
+          "current_bytes": 3611687,
+          "peak_bytes": 3835857,
+          "entries": 4096,
+          "reverse_entries": 4096
+        }
+      ],
+      "query_plan": [
+        "SEARCH agents USING INDEX idx_agents_api_key_hash (api_key_hash=?)"
+      ],
+      "platform": "Windows-11-10.0.26200-SP0",
+      "processor": "Intel64 Family 6 Model 141 Stepping 1, GenuineIntel",
+      "logical_cpus": 16,
+      "topology": "Actual SQLite adapter and migrated database; one transaction for measured lookups; no providers."
+    },
+    "auth-cache-auth-installed.xml": {
+      "identities": 100000,
+      "elapsed_seconds": 12.697936699958518,
+      "samples": [
+        {
+          "identities": 25000,
+          "current_bytes": 3626543,
+          "peak_bytes": 3824697,
+          "entries": 4096,
+          "reverse_entries": 4096
+        },
+        {
+          "identities": 50000,
+          "current_bytes": 3622631,
+          "peak_bytes": 3838481,
+          "entries": 4096,
+          "reverse_entries": 4096
+        },
+        {
+          "identities": 75000,
+          "current_bytes": 3618527,
+          "peak_bytes": 3838481,
+          "entries": 4096,
+          "reverse_entries": 4096
+        },
+        {
+          "identities": 100000,
+          "current_bytes": 3614551,
+          "peak_bytes": 3838481,
+          "entries": 4096,
+          "reverse_entries": 4096
+        }
+      ],
+      "query_plan": [
+        "SEARCH agents USING INDEX idx_agents_api_key_hash (api_key_hash=?)"
+      ],
+      "platform": "Windows-11-10.0.26200-SP0",
+      "processor": "Intel64 Family 6 Model 141 Stepping 1, GenuineIntel",
+      "logical_cpus": 16,
+      "topology": "Actual SQLite adapter and migrated database; one transaction for measured lookups; no providers."
+    },
+    "auth-cache-source.xml": {
+      "identities": 100000,
+      "elapsed_seconds": 24.86892539996188,
+      "samples": [
+        {
+          "identities": 25000,
+          "current_bytes": 3619591,
+          "peak_bytes": 3817745,
+          "entries": 4096,
+          "reverse_entries": 4096
+        },
+        {
+          "identities": 50000,
+          "current_bytes": 3615559,
+          "peak_bytes": 3831409,
+          "entries": 4096,
+          "reverse_entries": 4096
+        },
+        {
+          "identities": 75000,
+          "current_bytes": 3611335,
+          "peak_bytes": 3831409,
+          "entries": 4096,
+          "reverse_entries": 4096
+        },
+        {
+          "identities": 100000,
+          "current_bytes": 3607239,
+          "peak_bytes": 3831409,
+          "entries": 4096,
+          "reverse_entries": 4096
+        }
+      ],
+      "query_plan": [
+        "SEARCH agents USING INDEX idx_agents_api_key_hash (api_key_hash=?)"
+      ],
+      "platform": "Windows-11-10.0.26200-SP0",
+      "processor": "Intel64 Family 6 Model 141 Stepping 1, GenuineIntel",
+      "logical_cpus": 16,
+      "topology": "Actual SQLite adapter and migrated database; one transaction for measured lookups; no providers."
+    }
+  },
+  "final_installed_passed": 127,
+  "checks": {
+    "package_bytes": "All three source/wheel/installed packages compared",
+    "pip_check": "passed",
+    "credential_pattern_scan": "No matches after redacting six test-credential patterns across two XML files; originals archived outside repository, hashes/paths/counts in auth-cache-redactions.json."
+  },
+  "overlap": "27 source cases and prior 97 successful installed cases overlap the final campaign. Initial failures/setup error are retained, not acceptance.",
+  "initial_findings": [
+    "Migration fixture expected schema 82; now checks all shipped migrations and identity preservation.",
+    "Removed MCP stdio was expected; test now uses the SDK over real HTTP.",
+    "Authentication HTTP fixture invoked ambient provider discovery and one startup lost inventory ownership. Fixture now disables integrations/embeddings; actual-provider startup ownership qualification remains open."
+  ],
+  "limitations": [
+    "NS14.04 partial; normative TR4-14-04 flood/control fairness and queue item/byte quotas remain unqualified.",
+    "100k synthetic identities with fixed payloads in actual SQLite; single transaction for measured lookups, tracing overhead included. No HTTP throughput or runtime concurrency claim.",
+    "Cache generation prevents stale refill, not requests already authorized before invalidation.",
+    "Core and Connector unchanged. Preexisting UI assets included without UI acceptance. All release gates open."
+  ],
+  "raw_evidence_whitespace_exceptions": {
+    "plans/r4_execution/evidence/auth-cache-auth-initial.log": [
+      128
+    ],
+    "plans/r4_execution/evidence/auth-cache-auth-initial.xml": [
+      7
+    ]
+  },
+  "evidence": {
+    "plans/r4_execution/evidence/auth-cache-artifacts.json": "8132ceb020620faa11d3590612e6c4fb06f38975a8f7a82eafac76c30f167b7b",
+    "plans/r4_execution/evidence/auth-cache-auth-initial.json": "23947ededd1235e5d5f867bbca41e767e417324a7e9cb27cfad17a04cb276b52",
+    "plans/r4_execution/evidence/auth-cache-auth-initial.log": "b40fba86e6319444f2c704065c90986fcec04f3e3459c880a8ed8f6ef1499d3d",
+    "plans/r4_execution/evidence/auth-cache-auth-initial.xml": "0e59ad4e3679c6834c82b1175d23c43b529e503678510d656e4f16d422b8f4d9",
+    "plans/r4_execution/evidence/auth-cache-auth-installed.json": "6c71aa4d48f57d570c6d74be921bf5105fc799dec0f5612f549fae703be983fa",
+    "plans/r4_execution/evidence/auth-cache-auth-installed.log": "cd829147c5cef0d93fe7831c690313febeebae437e8f685c285a7061c510986c",
+    "plans/r4_execution/evidence/auth-cache-auth-installed.xml": "98070a486c024e0c18fbcea1345fd047cd5eac174cbd51a17858e488c9f2d9a6",
+    "plans/r4_execution/evidence/auth-cache-build.log": "d9b78cda6eac05b88535f4a2aed32cded716547c3b94891a97ca39f2df4a2895",
+    "plans/r4_execution/evidence/auth-cache-install.log": "caa522fed7bfe9e460cff1c999acdd93e3baa6dfe58b1fd3291d7cf68e2e6958",
+    "plans/r4_execution/evidence/auth-cache-r4-installed.json": "ac0eadc73d92bd4f1e01da34cdc1d86b22b5f34ad373d29820965cba8d8f5037",
+    "plans/r4_execution/evidence/auth-cache-r4-installed.log": "27e95b95dd87f4dae841be3fae021275b7313497d685d3265009eee0502d1257",
+    "plans/r4_execution/evidence/auth-cache-r4-installed.xml": "59c045f2e1c8e1b8c1c9f4603fe8b145fd351ab9963aca4f9659b65a6d48a47c",
+    "plans/r4_execution/evidence/auth-cache-redactions.json": "245a37e60750a4cab7f3a26f09cb0ed6597199700eb06bb6521072bcac366394",
+    "plans/r4_execution/evidence/auth-cache-source.xml": "eb910ed3a4fd9d0591ebad91704dbd2f5edf4911cde52c06acdb58bf4c85db31",
+    "plans/r4_execution/run_auth_cache_installed.py": "57ca8cd486bf29214d1cbb037bc4e6a2347fbd9e45cc3e7b7f49f7ff53cac52f"
+  }
+}

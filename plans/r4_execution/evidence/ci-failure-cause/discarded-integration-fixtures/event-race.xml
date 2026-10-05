@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="14.817" timestamp="2026-10-02T04:18:13.947464-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_provider_vault" name="test_first_provider_failure_survives_secondary_maintenance_failure" time="13.435"><failure message="AssertionError: [TimeoutError()]&#10;assert 1 == 2&#10; +  where 1 = len([TimeoutError()])">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_provider_vault.py:61: in test_first_provider_failure_survives_secondary_maintenance_failure
+    assert len(failures) == 2, failures
+E   AssertionError: [TimeoutError()]
+E   assert 1 == 2
+E    +  where 1 = len([TimeoutError()])</failure></testcase></testsuite></testsuites>

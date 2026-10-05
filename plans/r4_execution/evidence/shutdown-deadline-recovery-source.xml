@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="8.478" timestamp="2026-10-01T08:45:28.064255-03:00" hostname="Alienware_m15"><testcase classname="test_shutdown_storage_order" name="test_bounded_shutdown_recovers_same_uncertain_runtime" time="3.816"><failure message="AssertionError: assert 'DRAINING_PENDING' == 'DRAINED'&#10;  &#10;  - DRAINED&#10;  + DRAINING_PENDING">tests\execution_r4\test_shutdown_storage_order.py:144: in test_bounded_shutdown_recovers_same_uncertain_runtime
+    client.portal.call(scenario)
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\execution_r4\test_shutdown_storage_order.py:136: in scenario
+    assert owner.shutdown_status()["state"] == "DRAINED"
+E   AssertionError: assert 'DRAINING_PENDING' == 'DRAINED'
+E     
+E     - DRAINED
+E     + DRAINING_PENDING</failure></testcase><testcase classname="test_shutdown_storage_order" name="test_cancelled_shutdown_request_keeps_cleanup_owned" time="3.335" /></testsuite></testsuites>

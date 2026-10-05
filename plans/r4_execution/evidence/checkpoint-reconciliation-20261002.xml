@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="4.767" timestamp="2026-10-02T11:26:03.138451-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_local_installation_check" name="test_checked_bytes_survive_passive_refresh_without_another_probe" time="3.183" /><testcase classname="tests.execution_r4.test_ns15" name="test_ns15_05" time="0.005"><failure message="AssertionError: Use an installed interpreter with -I">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4886/test_ns15_050')
+
+    def test_ns15_05(tmp_path):
+        """Documentation commands/routes and shipped HTTP-only dashboard guidance."""
+        import importlib.util
+        import okto_nexus
+        root = Path(__file__).resolve().parents[2]
+        path = root / 'plans/r4_execution/audit_ns15_05_docs.py'
+        spec = importlib.util.spec_from_file_location('ns15_docs_audit', path)
+        audit = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(audit)
+        report_path = tmp_path / 'documentation-audit.json'
+&gt;       audit.main(['--output', str(report_path)])
+
+tests\execution_r4\test_ns15.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+argv = ['--output', 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\pytest-of-jpamb\\pytest-4886\\test_ns15_050\\documentation-audit.json']
+
+    def main(argv=None):
+        parser = argparse.ArgumentParser()
+        parser.add_argument('--output', type=Path, help='Write a separate evidence artifact for this campaign')
+        args = parser.parse_args(argv)
+        root = Path(__file__).resolve().parents[2]
+        package = Path(okto_nexus.__file__).resolve().parent
+&gt;       assert not package.is_relative_to(root), 'Use an installed interpreter with -I'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Use an installed interpreter with -I
+
+plans\r4_execution\audit_ns15_05_docs.py:28: AssertionError</failure></testcase></testsuite></testsuites>

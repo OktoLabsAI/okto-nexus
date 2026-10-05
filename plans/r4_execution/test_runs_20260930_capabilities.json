@@ -1,0 +1,216 @@
+{
+  "generated_at": "2026-09-30T10:42:03.509497+00:00",
+  "status": "PARTIAL_INTEGRATION_VERIFIED",
+  "scope": "Partial NS03.04 / CON-R4-03 canonical session capability issuance, stable lease validity, authority port and installed consumer. Actual MCP/native handlers and approved daemon launch provider remain pending.",
+  "baseline_nexus_commit": "fa68cd33b30378b7fb7d8501ccd1de8909c62099",
+  "nexus_commit": "Commit containing M02_SESSION_CAPABILITIES.md",
+  "published_dependency_heads": {
+    "connector": "c97c9d41c223c2c728b810cf3d1ff5e62e2016d6",
+    "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
+  },
+  "source_sha256": {
+    "src/okto_nexus/application/execution_capabilities.py": "6c8f56dc6758283f51446cb26d030bdacfb58cefd41de42f861ad66974edf73d",
+    "src/okto_nexus/adapters/inbound/http/app.py": "6644ccb8ea849092e5fa88a44532fae822fe421fb1b92a11922320c192d916f9",
+    "src/okto_nexus/adapters/inbound/http/runtime_v1.py": "5d5317d73621521c884f7d53296d33f0b0e9f62e539470676cd83bc1e4c32469",
+    "src/okto_nexus/adapters/outbound/sqlite/execution_leases.py": "92a607238eab51b6fb9a4972d8e56caf116d4b77af85c3bf9d9af0f2f705e230",
+    "src/okto_nexus/migrations/080_execution_session_capability_requests.sql": "c812e336ed00fd1bf4ed6816c2a33d4b547829ad6510cf35b8fd9f50f8fc67a5",
+    "tests/execution_r4/test_session_capabilities.py": "aaf75ed80cf70fea922c1d49a32f45dc0711856332a5fe1d559363c04357fbff",
+    "tests/execution_r4/test_ns02.py": "6601747ff08d3c7bce16b83453ab7978819df675693174a61594dba8a120c57b"
+  },
+  "final_test_sources_sha256": {
+    "tests/execution_r4/lab_peer.py": "3e063db3fd57992ea91956460aaa26a4ff52b0de6c8dd1d5bcd52461aa0808c0",
+    "tests/execution_r4/test_binding_operator.py": "6ea384aa22e65ae6064b577bd3d8f858da418f432821b095ad271b4c23572a60",
+    "tests/execution_r4/test_canonical_controls.py": "6d144566588ce11f7f0f8e408e7c1d794420ff60f68287e0f6045ecd6211ecb9",
+    "tests/execution_r4/test_cli_http_only.py": "436d651c27c0ab429156d0a756ec124067ff2dcd37e6b47969cd9e8d0ce1ae2d",
+    "tests/execution_r4/test_core_inventory.py": "3ae53193dda8265363f1ee82bec268d10fe4c8a543c49e04e8451a8637492cc3",
+    "tests/execution_r4/test_daemon_startup.py": "8dc04fa0142e045e009236e1a4b5fd2e95843ce5ca769058d3df2678e26f7487",
+    "tests/execution_r4/test_dispatch_pump.py": "77acc7819c3e5a71532dd4e7ba70d39d08ad296a9830ab446018830021163f96",
+    "tests/execution_r4/test_executor_registration_cli.py": "33758230e61ee49b3f028d08d3f0b0fbe168342eddafeca167ffd1a5764570eb",
+    "tests/execution_r4/test_inventory_handoff.py": "95a5a187b533a39abfe0237065bfb36ee6db829e02749632112583f36721edec",
+    "tests/execution_r4/test_ns00.py": "71d3895c0e34efc1a69bdfe75dc15d39803ca7bd762d053d401f25724ee85bc5",
+    "tests/execution_r4/test_ns01.py": "76b4b6b02c9b4f64238c058e0cc3ead9fed96e97da4044ad835a47a1ec95aa1f",
+    "tests/execution_r4/test_ns02.py": "6601747ff08d3c7bce16b83453ab7978819df675693174a61594dba8a120c57b",
+    "tests/execution_r4/test_ns02_receipts.py": "d805840fc2f0a9ddb36144b2c462a75e252c134ab00641bc22173c0cc94404fd",
+    "tests/execution_r4/test_ns03.py": "33aeb0bb63e3ab1e8a0a74e04c624ade4b265c87402947821f3716e31c0aee70",
+    "tests/execution_r4/test_ns04.py": "88b03fc900844286d79bfd7c031d6820788a5686741696fde78207e46c7ee88c",
+    "tests/execution_r4/test_ns05.py": "81e5d83b500e1304bbafce43d22adcc0ba325de21e17bee71b180d73f0ecd99d",
+    "tests/execution_r4/test_ns06.py": "face7386be4f7806cdc6c78040113a19b8dd1a3af7e426053fcc2d8807c55c96",
+    "tests/execution_r4/test_ns07.py": "dead324488d2c41ece3d268cb5703b42f41b59005a8ad3850fa2e757c405ba4f",
+    "tests/execution_r4/test_ns08.py": "bffb3af20a3d2c854e406d16f7093bb0aba6e5d51ba9e82d710ddc8e8f2daaf6",
+    "tests/execution_r4/test_ns09.py": "1d0dcddc8e65fa321be4954e13c8d25704b563a6d3934552cff45dd83b49ebab",
+    "tests/execution_r4/test_ns10.py": "e9ff041a54e69dc4e05deb906a40994dc796bc6de25dec8198819f71114ed84d",
+    "tests/execution_r4/test_open_bootstrap.py": "6d29e7b70380f187413365b60628bfd9cd9058b9edf284a51c45b1ddbb9ed622",
+    "tests/execution_r4/test_public_open_bootstrap.py": "6359c4dc33a5138a6caaa1ed7e372061a6cef1607dd655787a16a9e65c9f534f",
+    "tests/execution_r4/test_remote_connection.py": "f50b8640691a56d7199d61686e41a83562940b26c7ab878f37511ecce1ad2d5a",
+    "tests/execution_r4/test_session_capabilities.py": "aaf75ed80cf70fea922c1d49a32f45dc0711856332a5fe1d559363c04357fbff",
+    "tests/execution_r4/test_vertical_inventory.py": "ac8881d612fe0368113331c467f91bbdc62420907eaecb3266c4952ef10e5ab8"
+  },
+  "artifacts": {
+    "nexus": {
+      "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-final-nexus-build-mnddj2qj",
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-final-nexus-wheel-1vb6846d\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "2a75ef3f815068bc39c5895efdc0653dabee72b00e3403cc6bd78d36f74562a9",
+      "build_log": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\evidence\\session-capabilities-contract-nexus-build.log",
+      "exit_code": 0
+    },
+    "connector": {
+      "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-connector-build-imemyxvm",
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-connector-wheel-9sxettlk\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "0dfe234062c4317ff7b1ff1e8af9799c1d3807b5058087ecfb12a0391d29e789",
+      "build_log": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\evidence\\session-capabilities-connector-build.log",
+      "exit_code": 0
+    },
+    "core": {
+      "wheel": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\wheels\\nexus_connector_core-0.2.28.dev0-py3-none-any.whl",
+      "sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c"
+    },
+    "environment": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-installed-pgqzez1h",
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-installed-pgqzez1h\\Scripts\\python.exe",
+    "requirements_sha256": "8144180643337aee64f3adc976ab1f4be1eeb47fb01e8a8a800ddfe807661e20"
+  },
+  "runs": [
+    {
+      "path": "plans/r4_execution/evidence/session-capabilities-directed-final.xml",
+      "sha256": "704aec26230522d73ae7f52d1cf58180dd172c6167d223831a59b821376293a4",
+      "tests": 46,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 46,
+      "scope": "46 passes before final revision-ledger and error-shape guards."
+    },
+    {
+      "path": "plans/r4_execution/evidence/session-capabilities-directed.xml",
+      "sha256": "58c42e9d259824a2c74604ab06956b44859f2c19563187198259d13bb915dedc",
+      "tests": 45,
+      "errors": 0,
+      "failures": 1,
+      "skipped": 0,
+      "passed": 44,
+      "scope": "44 passes and one test fixture failure: renewal ACK used INSTALLED rather than RENEWED."
+    },
+    {
+      "path": "plans/r4_execution/evidence/session-capabilities-initial.xml",
+      "sha256": "edb5eea9f16cda0724c31267527bf27f80d17450a65a3beb002f4ee6a8b43aab",
+      "tests": 23,
+      "errors": 0,
+      "failures": 6,
+      "skipped": 0,
+      "passed": 17,
+      "scope": "Initial: 17 passes and six failures (new-route 400/422 mismatch and invalid synthetic lease ACK)."
+    },
+    {
+      "path": "plans/r4_execution/evidence/session-capabilities-installed-contract.xml",
+      "sha256": "7f0e980539eab364cb99dc1d60d332778a9cae91e70f02f38bbb51bec9433630",
+      "tests": 120,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 120,
+      "scope": "Final installed integration: 120 passes, exact source/wheel/site-packages correspondence."
+    },
+    {
+      "path": "plans/r4_execution/evidence/session-capabilities-installed-final.xml",
+      "sha256": "401fa2ec563f342bec6e851117e4381b2455bd5c598d2bfc5426526fddc3f998",
+      "tests": 120,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 120,
+      "scope": "120 passes after revision-ledger guard, before final error action shape."
+    },
+    {
+      "path": "plans/r4_execution/evidence/session-capabilities-installed.xml",
+      "sha256": "caa4932f1ecf84f4f0b2b8b67a59f5ea6dccf69ad896e59d28baea5cfedd5da6",
+      "tests": 117,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 117,
+      "scope": "117 passes on initial wheel."
+    },
+    {
+      "path": "plans/r4_execution/evidence/session-capabilities-r4-source-final.xml",
+      "sha256": "a74c04e67d19b6bf9e597a678f94742506bd2bbc514ee7ba0b96a137845b0e9e",
+      "tests": 137,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 137,
+      "scope": "Final full Nexus R4 source campaign: 137 passes."
+    },
+    {
+      "path": "plans/r4_execution/evidence/session-capabilities-r4-source.xml",
+      "sha256": "44447e2d70a4fcf6328cb18f39de0bfeaf097987a6c2f9a640b5fd1abe2aa5e6",
+      "tests": 134,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 134,
+      "scope": "134 passes before final revision-ledger and error-shape guards."
+    }
+  ],
+  "commands": {
+    "nexus_directed": "rtk proxy .venv/Scripts/python.exe -X utf8 -c 'import sys,pytest; sys.path.insert(0,\"D:/Projetos/Techridy/okto-nexus-connector/src\"); raise SystemExit(pytest.main([\"tests/execution_r4/test_session_capabilities.py\",\"tests/execution_r4/test_ns02.py\",\"tests/execution_r4/test_open_bootstrap.py\",\"tests/execution_r4/test_ns09.py\",\"-q\",\"--tb=short\",\"--junitxml=plans/r4_execution/evidence/session-capabilities-directed-final.xml\"]))'",
+    "nexus_r4_before_final_guards": "rtk proxy .venv/Scripts/python.exe -X utf8 -c 'import sys,pytest; sys.path.insert(0,\"D:/Projetos/Techridy/okto-nexus-connector/src\"); raise SystemExit(pytest.main([\"tests/execution_r4\",\"-q\",\"--tb=short\",\"--junitxml=plans/r4_execution/evidence/session-capabilities-r4-source.xml\"]))'",
+    "nexus_r4_final": "rtk proxy .venv/Scripts/python.exe -X utf8 -c 'import sys,pytest; sys.path.insert(0,\"D:/Projetos/Techridy/okto-nexus-connector/src\"); raise SystemExit(pytest.main([\"tests/execution_r4\",\"-q\",\"--tb=short\",\"--junitxml=plans/r4_execution/evidence/session-capabilities-r4-source-final.xml\"]))'",
+    "installed_initial": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/okto-r4-capability-installed-pgqzez1h/Scripts/python.exe -I -X utf8 -c '\nimport json,hashlib,zipfile,sys,platform\nfrom pathlib import Path\nimport pytest,okto_nexus,okto_nexus_connector,nexus_connector_core\nroot=Path(\"D:/Projetos/Techridy/okto_labs_okto_nexus\")\nconnector=root.parent/\"okto-nexus-connector\"\nartifacts=json.loads(Path(\"C:/Users/jpamb/AppData/Local/Temp/r4-session-capability-wheels.json\").read_text())\nmanifest={}\nfor module,artifact,source in [\n(okto_nexus,Path(artifacts[\"nexus\"][\"wheel\"]),root/\"src\"),\n(okto_nexus_connector,Path(artifacts[\"connector\"][\"wheel\"]),connector/\"src\"),\n(nexus_connector_core,root/\"vendor/wheels/nexus_connector_core-0.2.28.dev0-py3-none-any.whl\",None)]:\n    package=Path(module.__file__).resolve().parent\n    assert \"site-packages\" in package.parts\n    files={}\n    with zipfile.ZipFile(artifact) as archive:\n        for name in archive.namelist():\n            if not name.startswith(module.__name__+\"/\") or name.endswith(\"/\"): continue\n            data=archive.read(name)\n            assert (package/name.split(\"/\",1)[1]).read_bytes()==data,name\n            if source is not None: assert (source/name).read_bytes()==data,name\n            files[name]=hashlib.sha256(data).hexdigest()\n    manifest[module.__name__]={\"path\":str(package),\"wheel\":str(artifact),\"wheel_sha256\":hashlib.sha256(artifact.read_bytes()).hexdigest(),\"files_sha256\":files}\nmanifest.update(python=sys.version,platform=platform.platform(),isolated=bool(sys.flags.isolated),\nscope=\"Canonical session capability reservation, authority verification, and applied-lease validity; synthetic qualification and selection fixtures, no MCP handler or provider acceptance\")\n(root/\"plans/r4_execution/evidence/session-capabilities-installed-modules.json\").write_text(json.dumps(manifest,indent=2)+\"\\n\",encoding=\"utf-8\")\nargs=[\"-c\",\"pytest.ini\",\"--rootdir=\"+str(root/\"tests\"),\"--confcutdir=\"+str(root/\"tests\"),\"-o\",\"asyncio_mode=auto\"]\nargs.extend(str(connector/\"tests\"/p) for p in [\n\"unit/test_r4_session_capability.py\",\"unit/test_redaction.py\",\"unit/test_r4_execution.py\",\n\"contract/test_r4_connection.py\",\"contract/test_wss_r4.py\"])\nargs.extend(str(root/\"tests/execution_r4\"/p) for p in [\n\"test_session_capabilities.py\",\"test_ns02.py\",\"test_ns03.py\",\"test_ns09.py\",\"test_ns10.py\",\"test_open_bootstrap.py\",\"test_canonical_controls.py\",\"test_remote_connection.py\"])\nargs.extend([\"-q\",\"--tb=line\",\"--junitxml=\"+str(root/\"plans/r4_execution/evidence/session-capabilities-installed.xml\")])\nraise SystemExit(pytest.main(args))\n'",
+    "installed_revision_guard": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/okto-r4-capability-installed-pgqzez1h/Scripts/python.exe -I -X utf8 -c '\nimport json,hashlib,zipfile,sys,platform\nfrom pathlib import Path\nimport pytest,okto_nexus,okto_nexus_connector,nexus_connector_core\nroot=Path(\"D:/Projetos/Techridy/okto_labs_okto_nexus\")\nconnector=root.parent/\"okto-nexus-connector\"\nartifacts=json.loads(Path(\"C:/Users/jpamb/AppData/Local/Temp/r4-session-capability-wheels.json\").read_text())\nmanifest={}\nfor module,artifact,source in [\n(okto_nexus,Path(artifacts[\"nexus\"][\"wheel\"]),root/\"src\"),\n(okto_nexus_connector,Path(artifacts[\"connector\"][\"wheel\"]),connector/\"src\"),\n(nexus_connector_core,root/\"vendor/wheels/nexus_connector_core-0.2.28.dev0-py3-none-any.whl\",None)]:\n    package=Path(module.__file__).resolve().parent\n    assert \"site-packages\" in package.parts\n    files={}\n    with zipfile.ZipFile(artifact) as archive:\n        for name in archive.namelist():\n            if not name.startswith(module.__name__+\"/\") or name.endswith(\"/\"): continue\n            data=archive.read(name)\n            assert (package/name.split(\"/\",1)[1]).read_bytes()==data,name\n            if source is not None: assert (source/name).read_bytes()==data,name\n            files[name]=hashlib.sha256(data).hexdigest()\n    manifest[module.__name__]={\"path\":str(package),\"wheel\":str(artifact),\"wheel_sha256\":hashlib.sha256(artifact.read_bytes()).hexdigest(),\"files_sha256\":files}\nmanifest.update(python=sys.version,platform=platform.platform(),isolated=bool(sys.flags.isolated),\nscope=\"Canonical session capability reservation, authority verification, and applied-lease validity; synthetic qualification and selection fixtures, no MCP handler or provider acceptance\")\n(root/\"plans/r4_execution/evidence/session-capabilities-installed-final-modules.json\").write_text(json.dumps(manifest,indent=2)+\"\\n\",encoding=\"utf-8\")\nargs=[\"-c\",\"pytest.ini\",\"--rootdir=\"+str(root/\"tests\"),\"--confcutdir=\"+str(root/\"tests\"),\"-o\",\"asyncio_mode=auto\"]\nargs.extend(str(connector/\"tests\"/p) for p in [\n\"unit/test_r4_session_capability.py\",\"unit/test_redaction.py\",\"unit/test_r4_execution.py\",\n\"contract/test_r4_connection.py\",\"contract/test_wss_r4.py\"])\nargs.extend(str(root/\"tests/execution_r4\"/p) for p in [\n\"test_session_capabilities.py\",\"test_ns02.py\",\"test_ns03.py\",\"test_ns09.py\",\"test_ns10.py\",\"test_open_bootstrap.py\",\"test_canonical_controls.py\",\"test_remote_connection.py\"])\nargs.extend([\"-q\",\"--tb=line\",\"--junitxml=\"+str(root/\"plans/r4_execution/evidence/session-capabilities-installed-final.xml\")])\nraise SystemExit(pytest.main(args))\n'",
+    "installed_final": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/okto-r4-capability-installed-pgqzez1h/Scripts/python.exe -I -X utf8 -c '\nimport json,hashlib,zipfile,sys,platform\nfrom pathlib import Path\nimport pytest,okto_nexus,okto_nexus_connector,nexus_connector_core\nroot=Path(\"D:/Projetos/Techridy/okto_labs_okto_nexus\")\nconnector=root.parent/\"okto-nexus-connector\"\nartifacts=json.loads(Path(\"C:/Users/jpamb/AppData/Local/Temp/r4-session-capability-wheels.json\").read_text())\nmanifest={}\nfor module,artifact,source in [\n(okto_nexus,Path(artifacts[\"nexus\"][\"wheel\"]),root/\"src\"),\n(okto_nexus_connector,Path(artifacts[\"connector\"][\"wheel\"]),connector/\"src\"),\n(nexus_connector_core,root/\"vendor/wheels/nexus_connector_core-0.2.28.dev0-py3-none-any.whl\",None)]:\n    package=Path(module.__file__).resolve().parent\n    assert \"site-packages\" in package.parts\n    files={}\n    with zipfile.ZipFile(artifact) as archive:\n        for name in archive.namelist():\n            if not name.startswith(module.__name__+\"/\") or name.endswith(\"/\"): continue\n            data=archive.read(name)\n            assert (package/name.split(\"/\",1)[1]).read_bytes()==data,name\n            if source is not None: assert (source/name).read_bytes()==data,name\n            files[name]=hashlib.sha256(data).hexdigest()\n    manifest[module.__name__]={\"path\":str(package),\"wheel\":str(artifact),\"wheel_sha256\":hashlib.sha256(artifact.read_bytes()).hexdigest(),\"files_sha256\":files}\nmanifest.update(python=sys.version,platform=platform.platform(),isolated=bool(sys.flags.isolated),\nscope=\"Canonical session capability reservation, authority verification, and applied-lease validity; synthetic qualification and selection fixtures, no MCP handler or provider acceptance\")\n(root/\"plans/r4_execution/evidence/session-capabilities-installed-contract-modules.json\").write_text(json.dumps(manifest,indent=2)+\"\\n\",encoding=\"utf-8\")\nargs=[\"-c\",\"pytest.ini\",\"--rootdir=\"+str(root/\"tests\"),\"--confcutdir=\"+str(root/\"tests\"),\"-o\",\"asyncio_mode=auto\"]\nargs.extend(str(connector/\"tests\"/p) for p in [\n\"unit/test_r4_session_capability.py\",\"unit/test_redaction.py\",\"unit/test_r4_execution.py\",\n\"contract/test_r4_connection.py\",\"contract/test_wss_r4.py\"])\nargs.extend(str(root/\"tests/execution_r4\"/p) for p in [\n\"test_session_capabilities.py\",\"test_ns02.py\",\"test_ns03.py\",\"test_ns09.py\",\"test_ns10.py\",\"test_open_bootstrap.py\",\"test_canonical_controls.py\",\"test_remote_connection.py\"])\nargs.extend([\"-q\",\"--tb=line\",\"--junitxml=\"+str(root/\"plans/r4_execution/evidence/session-capabilities-installed-contract.xml\")])\nraise SystemExit(pytest.main(args))\n'",
+    "connector_regression": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/okto-r4-connection-source-unf1oud0/Scripts/python.exe -m pytest tests -q --tb=short --junitxml=plans/implementation/evidence/r4-session-capability-regression.xml"
+  },
+  "connector_evidence": {
+    "path": "D:\\Projetos\\Techridy\\okto-nexus-connector\\plans\\implementation\\evidence\\r4-session-capability-report.json",
+    "sha256": "67c5a17f373ac6dc9a0c3494094ae65a57dd98d195d990262c3547a00e2d888b",
+    "final_regression": {
+      "passed": 343,
+      "skipped": 2
+    }
+  },
+  "installed_modules_manifest": {
+    "path": "plans/r4_execution/evidence/session-capabilities-installed-contract-modules.json",
+    "sha256": "f5bb48bc9585daeefebfab875a5b04428a93fe2fef3d5fdf997c4c89f85460e2",
+    "consumer_files_verified": 381
+  },
+  "evidence_sha256": {
+    "plans/r4_execution/evidence/session-capabilities-artifacts.json": "c17c380fe82529209b8f9e9fd82002038bb718315f3a5d45b07846ba0b8a5410",
+    "plans/r4_execution/evidence/session-capabilities-connector-build.log": "89ea1333ff926abb9f8098a96ebeed011405f2653f22e221ef041cfbbaaa5cd6",
+    "plans/r4_execution/evidence/session-capabilities-contract-artifacts.json": "fbafa5d7a5736d767e4056b773a497dbff4c8870154c093d610ec08e04073f67",
+    "plans/r4_execution/evidence/session-capabilities-contract-installation.json": "efb42ba6ad3723424e3174e5bddbb72018039889e4be10f94af4c6e91f38428f",
+    "plans/r4_execution/evidence/session-capabilities-contract-nexus-build.log": "641da87fa99f5c13b935a765f176a2a50294f02332c1ec9bd1f350a7e66e3092",
+    "plans/r4_execution/evidence/session-capabilities-directed-final.xml": "704aec26230522d73ae7f52d1cf58180dd172c6167d223831a59b821376293a4",
+    "plans/r4_execution/evidence/session-capabilities-directed.xml": "58c42e9d259824a2c74604ab06956b44859f2c19563187198259d13bb915dedc",
+    "plans/r4_execution/evidence/session-capabilities-final-artifacts.json": "77fe0e5ba202dcb1409492105009da59a55a9a99a7fbbac299b43c5e3e1cf7a9",
+    "plans/r4_execution/evidence/session-capabilities-final-installation.json": "e9d9a2aae98c0d54a1dabbf7796f3d33652de2813e2c73ecee3082f7f8d9e737",
+    "plans/r4_execution/evidence/session-capabilities-final-nexus-build.log": "77591b84d7bd591697dc4836f256a2a2197bbad5084e2bd254c89f3db54cce10",
+    "plans/r4_execution/evidence/session-capabilities-initial.xml": "edb5eea9f16cda0724c31267527bf27f80d17450a65a3beb002f4ee6a8b43aab",
+    "plans/r4_execution/evidence/session-capabilities-installation.json": "cd4fb2c30a433ee5279aecfad02480d42547ca19ea3e1c78803da6d8b66cc39e",
+    "plans/r4_execution/evidence/session-capabilities-installed-contract-modules.json": "f5bb48bc9585daeefebfab875a5b04428a93fe2fef3d5fdf997c4c89f85460e2",
+    "plans/r4_execution/evidence/session-capabilities-installed-contract.xml": "7f0e980539eab364cb99dc1d60d332778a9cae91e70f02f38bbb51bec9433630",
+    "plans/r4_execution/evidence/session-capabilities-installed-final-modules.json": "358a2ce044532d4eb23e605dcd925d16174064dbaead76c0885575b030c1828f",
+    "plans/r4_execution/evidence/session-capabilities-installed-final.xml": "401fa2ec563f342bec6e851117e4381b2455bd5c598d2bfc5426526fddc3f998",
+    "plans/r4_execution/evidence/session-capabilities-installed-modules.json": "ef4b11e7a59a25fb96d1c84905c30aeebaafb8ee52e00b501fd577f38cb20340",
+    "plans/r4_execution/evidence/session-capabilities-installed.xml": "caa4932f1ecf84f4f0b2b8b67a59f5ea6dccf69ad896e59d28baea5cfedd5da6",
+    "plans/r4_execution/evidence/session-capabilities-local-test-installation.json": "d6371c4f3441e38fa7e22ab577e11341f77d1318d7d69672f02e3e2bb4b6fbe1",
+    "plans/r4_execution/evidence/session-capabilities-nexus-build.log": "52490f4e5846bbc169c64bd06ceaf8f19396095ca5248faebd2da959b8dfdfa5",
+    "plans/r4_execution/evidence/session-capabilities-package-validation.json": "c804939824bc8fee6055eb2414de58492279aa0ed5bea5e0ad47a26eb19772cd",
+    "plans/r4_execution/evidence/session-capabilities-r4-source-final.xml": "a74c04e67d19b6bf9e597a678f94742506bd2bbc514ee7ba0b96a137845b0e9e",
+    "plans/r4_execution/evidence/session-capabilities-r4-source.xml": "44447e2d70a4fcf6328cb18f39de0bfeaf097987a6c2f9a640b5fd1abe2aa5e6"
+  },
+  "counts_overlap": true,
+  "closed_product_gates": [],
+  "readiness_promoted": false,
+  "tests_use_synthetic_provider_qualification": true,
+  "limitations": [
+    "Public issuance uses TestClient/ASGI with the real authentication and application routes; no real provider qualification.",
+    "Selection metadata and qualification are synthetic; READY is explicitly seeded only for the isolated authority-port test.",
+    "Final installed tests run with python -I outside the clones; the Nexus wheel includes the three preexisting modified static assets, excluded from this commit.",
+    "Source regression is Nexus R4, not the complete legacy Nexus suite. Two Connector skips remain nonacceptance.",
+    "MCP/native use-case guards, durable protected issuance and launch configuration, automatic runtime lanes/renewal/recovery, embedded/UI/migration/provider gates remain required."
+  ],
+  "setup_corrections": [
+    "The first dependency capture needed to exclude prior direct-wheel URL requirements; no packages were installed by that attempt.",
+    "The first venv preparation wrote a requirements file into the target; uv refused it. A fresh empty target and sibling requirements file were used successfully."
+  ],
+  "whitespace_policy": "Raw pip build logs and the initial failed-test XML are retained byte-for-byte. Trailing blank lines in build logs and four traceback lines (85, 96, 1658, 1697) in session-capabilities-initial.xml are excluded from source diff whitespace checks."
+}

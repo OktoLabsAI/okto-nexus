@@ -1,0 +1,74 @@
+FFFF                                                                     [100%]
+================================== FAILURES ===================================
+_ test_terminal_failure_is_durable_and_scoped[claude_auth-PROVIDER_AUTH_REQUIRED] _
+..\okto-nexus-connector-core\tests\test_native_failure_receipts.py:70: in test_terminal_failure_is_durable_and_scoped
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+..\okto-nexus-connector-core\tests\test_native_failure_receipts.py:64: in run
+    assert receipt.error_code == expected
+E   AssertionError: assert None == 'PROVIDER_AUTH_REQUIRED'
+E    +  where None = OperationReceipt(operation_id='turn', intent_hash='sha256:c7cbf439f5c9c8757bcf5fd803726196d10d66d3b8e502b39c41fe044c7d...stage='FAILED', possible_effect=True, retry_safe=False, session_id='session', native_id='native-turn', error_code=None).error_code
+_ test_terminal_failure_is_durable_and_scoped[claude_error-NATIVE_OPERATION_FAILED] _
+..\okto-nexus-connector-core\tests\test_native_failure_receipts.py:70: in test_terminal_failure_is_durable_and_scoped
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+..\okto-nexus-connector-core\tests\test_native_failure_receipts.py:59: in run
+    assert terminal.category == "turn_state"
+E   AssertionError: assert 'error' == 'turn_state'
+E     
+E     - turn_state
+E     + error
+_ test_terminal_failure_is_durable_and_scoped[claude_text-NATIVE_OPERATION_FAILED] _
+..\okto-nexus-connector-core\tests\test_native_failure_receipts.py:70: in test_terminal_failure_is_durable_and_scoped
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+..\okto-nexus-connector-core\tests\test_native_failure_receipts.py:64: in run
+    assert receipt.error_code == expected
+E   AssertionError: assert None == 'NATIVE_OPERATION_FAILED'
+E    +  where None = OperationReceipt(operation_id='turn', intent_hash='sha256:c7cbf439f5c9c8757bcf5fd803726196d10d66d3b8e502b39c41fe044c7d...stage='FAILED', possible_effect=True, retry_safe=False, session_id='session', native_id='native-turn', error_code=None).error_code
+_ test_terminal_failure_is_durable_and_scoped[codex_auth-PROVIDER_AUTH_REQUIRED] _
+..\okto-nexus-connector-core\tests\test_native_failure_receipts.py:70: in test_terminal_failure_is_durable_and_scoped
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+..\okto-nexus-connector-core\tests\test_native_failure_receipts.py:64: in run
+    assert receipt.error_code == expected
+E   AssertionError: assert None == 'PROVIDER_AUTH_REQUIRED'
+E    +  where None = OperationReceipt(operation_id='turn', intent_hash='sha256:c7cbf439f5c9c8757bcf5fd803726196d10d66d3b8e502b39c41fe044c7d...stage='FAILED', possible_effect=True, retry_safe=False, session_id='session', native_id='native-turn', error_code=None).error_code
+=========================== short test summary info ===========================
+FAILED ..\okto-nexus-connector-core\tests\test_native_failure_receipts.py::test_terminal_failure_is_durable_and_scoped[claude_auth-PROVIDER_AUTH_REQUIRED]
+FAILED ..\okto-nexus-connector-core\tests\test_native_failure_receipts.py::test_terminal_failure_is_durable_and_scoped[claude_error-NATIVE_OPERATION_FAILED]
+FAILED ..\okto-nexus-connector-core\tests\test_native_failure_receipts.py::test_terminal_failure_is_durable_and_scoped[claude_text-NATIVE_OPERATION_FAILED]
+FAILED ..\okto-nexus-connector-core\tests\test_native_failure_receipts.py::test_terminal_failure_is_durable_and_scoped[codex_auth-PROVIDER_AUTH_REQUIRED]
+4 failed in 0.99s

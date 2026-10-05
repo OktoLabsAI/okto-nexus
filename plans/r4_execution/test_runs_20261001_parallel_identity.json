@@ -1,0 +1,115 @@
+{
+  "date": "2026-10-01",
+  "status": "INCREMENT_PASSED_RELEASE_GATES_OPEN",
+  "commits": {
+    "core": "c2aed115ea8add6dacf82bb892ff1415dcca652c",
+    "connector": "dca08630cd5f5a8150a01249845f9e55ee41ca70",
+    "nexus": "43711b84ca851456318c6678698662cd0d885ae1"
+  },
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-parallel-identity-core-dx3j4u5a\\dist\\nexus_connector_core-0.2.49.dev0-py3-none-any.whl",
+      "sha256": "b2787c4670c276b5310f7631552fdc53759d99a020f30cd7152154697e125963"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-parallel-identity-connector-1lc4uz_w\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "930e66148b1132a434859b4747524682c821324cc8d53dfd7ae9ce9eabf74f03"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-parallel-identity-nexus-wxk0ixx4\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "c722152dfeefc0d36964b9664979062018697f0ca7363289fe05b0f79f2718fe"
+    }
+  },
+  "results": {
+    "core_installed": {
+      "tests": "142",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "73.780"
+    },
+    "connector_installed": {
+      "tests": "165",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "43.104"
+    },
+    "nexus_installed": {
+      "tests": "89",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "260.817"
+    },
+    "actual_pi_stop": {
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "14.757"
+    },
+    "actual_pi_journey": {
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "448.176"
+    }
+  },
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "topology": "Single Windows host; installed wheels outside clones; actual loopback HTTP/WSS, native Pi, CLI subprocesses and OS keyring. Server release gate override only; native qualification enabled."
+  },
+  "measurements": {
+    "source_discovery_seconds": 12.50884139991831,
+    "previous_sequential_seconds": 66.17574610002339,
+    "qualified_pi_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "stop_seconds": 0.0158000000519678
+  },
+  "checks": {
+    "source_regression": "142 passed; overlaps installed Core cases",
+    "pip_check": "passed",
+    "uv_lock_check": "passed",
+    "contract_generators": "legacy and R4 passed",
+    "credential_pattern_scan": "no matches"
+  },
+  "limitations": [
+    "Measurements are individual runs, not a controlled latency benchmark; worker bodies are absent from caller-thread cProfile.",
+    "Source profile observed stale egg-info; its implementation hash and source version are recorded separately.",
+    "Cancellation is cooperative between OS reads; complete per-resource shutdown recovery remains pending.",
+    "This campaign qualifies this Windows Pi journey only. Prior Codex/Claude evidence remains tied to its original wheels.",
+    "Preexisting modified UI assets are included in Nexus wheel bytes but not accepted by this campaign. Linux, independent hosts, UI, full matrix and all release gates remain pending."
+  ],
+  "prior_failure": "The Core 0.2.48 normal Pi readiness failure is preserved in test_runs_20261001_discovery_stop.json. The new journey passed the same 120-second readiness deadline.",
+  "evidence": {
+    "evidence/parallel-identity-artifacts.json": "bae3b7a18e958208b8bb25bf71183f8248af3948682801ef2d8506f9c00242c5",
+    "evidence/parallel-identity-connector-build.log": "3157c41a2b04882c537e205bd99174fa3ea7c1953cffd3c9d3c50d7edac85904",
+    "evidence/parallel-identity-connector-installed.json": "3a249eb6b027e506ef9efd28c3946e7ce2c5ba8eebe91b478a39f51349b78150",
+    "evidence/parallel-identity-connector-installed.log": "76718fdea8cb1ce50014132b1b8a7b6aecc281c6a17cfd29b15c06ad6863fb07",
+    "evidence/parallel-identity-connector-installed.xml": "8b114a80a53b1c338a15dff11729b784495fa37a49c2cc5c8fcbe69e34e0d0d4",
+    "evidence/parallel-identity-core-build.log": "bbf34d8da41f91317e0072b39dcaa925dfd08b28e2284def9908bdd0295de8ee",
+    "evidence/parallel-identity-core-installed.json": "4f7190dd57dbd0be389c2a82eb47a5a8126ced7558c78f00ee3981eba7791310",
+    "evidence/parallel-identity-core-installed.log": "8b85c3d09aeeab4c705a9aefe8b454f25d6e41eee631fcebff054dabd095deb0",
+    "evidence/parallel-identity-core-installed.xml": "1c82d1c8529a47eb973f440fa6a494a1383fb635f83b54348667934a063dad82",
+    "evidence/parallel-identity-core-source.log": "3d1b9e57c2e19abf956d29b7bd375204ecfcf44c4a982ef3d54fbf98ae172266",
+    "evidence/parallel-identity-core-source.xml": "745d4d94e3b75b92a5a4044d2c0a11a9dbd52440f8283975d46427015fb8b9dd",
+    "evidence/parallel-identity-install.log": "1aefaf8f3c85da680880a0c10721b4cb503847aa4b59728fb8f579ed2d6531d7",
+    "evidence/parallel-identity-nexus-build.log": "3fb0b5bd06bff8ea66d8ab4e179247dc3315c88b922a0f2a0c09ef465bc42327",
+    "evidence/parallel-identity-nexus-installed.json": "87f6b4c59f7e952d6be2b37da02b79fdc236433f2eaa7d354ac0ed5e0161f91a",
+    "evidence/parallel-identity-nexus-installed.log": "31d30a7ce9b87564df281e56747766dfeca5d025d153c7e38b1c1c40a048c43a",
+    "evidence/parallel-identity-nexus-installed.xml": "d1c6bd253be31b64f348c16ef3871b86d171d648dd1628d3d0f9fb0087bc0b23",
+    "evidence/parallel-identity-pip-check.log": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+    "evidence/parallel-identity-positive-pi_rpc-installed.json": "26043ad3aa6f638088a49a32515e9ce59439ecd9d933ba5155d75ee8bd451e7c",
+    "evidence/parallel-identity-positive-pi_rpc-installed.log": "fca5637e8738106e461726def433aee27c31ba675be3d4de1674fbf8e245ef07",
+    "evidence/parallel-identity-positive-pi_rpc-installed.xml": "202c80a0b89a9678e842fef2b2474fb3c6fe22f30b25a75e24a76a9fa83f0371",
+    "evidence/parallel-identity-positive-pi_rpc-progress.json": "eff5d6e1e9919da5aa37f460729563aef7b86a96f518997797c2c308a864bd3c",
+    "evidence/parallel-identity-positive-pi_rpc.json": "eff5d6e1e9919da5aa37f460729563aef7b86a96f518997797c2c308a864bd3c",
+    "evidence/parallel-identity-source-profile.json": "ef9859357d79df13927782acc4567939c2f4091e77322a51e5763aaa34e9ea67",
+    "evidence/real-parallel-identity-pi_rpc-installed.json": "e0b6c06d12a9ecba603133cd7efe99989076e96042b997d620f1bb59374d5a92",
+    "evidence/real-parallel-identity-pi_rpc-installed.log": "4b1a8f421c00726212b604b07c13251c7d553ab5606d70366bd4c912a988c0a1",
+    "evidence/real-parallel-identity-pi_rpc-installed.xml": "f4bf9ce1cd4ee11a59b0a08ace28729ebc51a042d1ade5bc1c8f8203614f03f9",
+    "evidence/real-parallel-identity-pi_rpc-progress.json": "18931a89d532deb92b50ff7164b5af64a0201b3b9c1a04cdbec75562af9fd321",
+    "evidence/real-parallel-identity-pi_rpc.json": "18931a89d532deb92b50ff7164b5af64a0201b3b9c1a04cdbec75562af9fd321"
+  }
+}

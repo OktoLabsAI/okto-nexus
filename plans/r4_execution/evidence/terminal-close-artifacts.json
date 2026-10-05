@@ -1,0 +1,48 @@
+{
+  "qualification": "Durable terminal receipt for confirmed R4 close; product lifecycle acceptance remains partial.",
+  "core": {
+    "wheel": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\artifacts\\nexus_connector_core-0.2.33.dev0-py3-none-any.whl",
+    "sha256": "1f119d5626e9de4c8dc2589b0941289d300e995b6a422ebc16b627be5b61fee1",
+    "command": [
+      "C:/Python313/python.exe",
+      "-m",
+      "pip",
+      "wheel",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\terminal-close-core-r0ydvuia",
+      "--no-deps",
+      "--no-build-isolation",
+      "--wheel-dir",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\terminal-close-core-r0ydvuia\\dist"
+    ]
+  },
+  "connector": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\terminal-close-connector-t3a29e__\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+    "sha256": "61e452739823530761a9f65006d4d0145bdd2ceda2cd8405d5e5cfcf8eba2aa6",
+    "command": [
+      "C:/Python313/python.exe",
+      "-m",
+      "pip",
+      "wheel",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\terminal-close-connector-t3a29e__",
+      "--no-deps",
+      "--no-build-isolation",
+      "--wheel-dir",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\terminal-close-connector-t3a29e__\\dist"
+    ]
+  },
+  "nexus": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\terminal-close-nexus-n7od0tcq\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+    "sha256": "a075b3b63a0dfa0b1c9f10e1f110267dc23fc6b4478342c50c6b80cdbfbfe9b8",
+    "command": [
+      "C:/Python313/python.exe",
+      "-m",
+      "pip",
+      "wheel",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\terminal-close-nexus-n7od0tcq",
+      "--no-deps",
+      "--no-build-isolation",
+      "--wheel-dir",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\terminal-close-nexus-n7od0tcq\\dist"
+    ]
+  }
+}

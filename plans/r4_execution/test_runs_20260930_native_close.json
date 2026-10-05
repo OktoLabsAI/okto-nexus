@@ -1,0 +1,42 @@
+{
+  "increment": "M11 confirmed native close classification",
+  "status": "PARTIAL_INSTALLED_INTEGRATION",
+  "core_commit": "e283a2f0daa3e17c1d17f28ee4b489fd4b28ff49",
+  "connector_commit": "d7084fb4df0135259d31561b5ce100f54ae958ed",
+  "artifacts": "evidence/native-close-artifacts.json",
+  "tests": {
+    "core": {
+      "tests": 1040,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 74,
+      "passed": 966
+    },
+    "connector": {
+      "tests": 337,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1,
+      "passed": 336
+    },
+    "nexus": {
+      "tests": 81,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 81
+    }
+  },
+  "limitations": [
+    "Locally constructed R4 grants; complete Server-issued authority journeys still pending.",
+    "Close receipt remains SUBMITTED; terminal publication not proven by these probes.",
+    "No milestone or release gate closed."
+  ],
+  "source_campaign": {
+    "focused_passed": 15,
+    "combined_passed": 48,
+    "combined_failed": 1,
+    "isolated_census_passed": 1,
+    "failure": "Global thread census saw an executor from another test; installed full suite passed."
+  }
+}

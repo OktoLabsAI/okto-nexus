@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="3" time="8.485" timestamp="2026-10-01T04:48:27.743084-03:00" hostname="Alienware_m15"><testcase classname="test_binding_alias_scope" name="test_same_alias_on_another_executor_preserves_both_bindings_and_agent" time="3.004"><failure message="AssertionError: {'proposal_id': 'prop_3eb1b315ae8597ad6ba5fa23210b4940', 'proposal_revision': 1, 'expires_at': '2026-10-01T07:58:30.734729+00:00', 'server_id': 'srv_004aba37e359d246bc2144f969a6617c', ...}&#10;assert False">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_binding_alias_scope.py:59: in test_same_alias_on_another_executor_preserves_both_bindings_and_agent
+    right = apply(client, headers, second, "second")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_binding_alias_scope.py:44: in apply
+    assert proposal["can_apply"], proposal
+E   AssertionError: {'proposal_id': 'prop_3eb1b315ae8597ad6ba5fa23210b4940', 'proposal_revision': 1, 'expires_at': '2026-10-01T07:58:30.734729+00:00', 'server_id': 'srv_004aba37e359d246bc2144f969a6617c', ...}
+E   assert False</failure></testcase><testcase classname="test_binding_alias_scope" name="test_alias_conflicts_are_scoped_within_the_selected_executor[assistant-False]" time="2.190" /><testcase classname="test_binding_alias_scope" name="test_alias_conflicts_are_scoped_within_the_selected_executor[reviewer-True]" time="2.182"><failure message="assert False is True">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_binding_alias_scope.py:78: in test_alias_conflicts_are_scoped_within_the_selected_executor
+    assert proposal["can_apply"] is allowed
+E   assert False is True</failure></testcase></testsuite></testsuites>

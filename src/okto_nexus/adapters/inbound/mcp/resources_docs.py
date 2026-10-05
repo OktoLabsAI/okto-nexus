@@ -125,9 +125,14 @@ add_resource(
     slug="tool-docs/messages",
     name="Tool docs - messages & channels",
     description="Full reference for message_create / channel_create / channel_list and the migrated message_get/list/wait shims.",
-    version="4",
+    version="5",
     body="""\
 # message_create
+Select either ``project_root`` or ``workspace_id``. An explicit ``workspace_id``
+must already exist; it requires no local path and never creates a workspace.
+Supplying both selectors is rejected. All message permissions, audience rules,
+channel/parent scope checks and approval requirements apply to either selector.
+
 Persist a message and emit ``message.created`` in one transaction. The response
 IS your delivery confirmation: ``recipients`` names exactly who received it in
 their inbox (the fan-out commits atomically with the send) and
@@ -276,8 +281,13 @@ add_resource(
     slug="tool-docs/handoff",
     name="Tool docs - handoff",
     description="Full reference for the handoff lifecycle (create/list_available/claim/complete/verify/reject/cancel/get), including the opt-in VERIFYING cycle and DAG dependencies.",
-    version="4",
+    version="5",
     body="""\
+All handoff operations accept exactly one project_root or existing workspace_id.
+Use workspace_id for a logical or remote workspace without a Server-local path.
+Managed sessions must use their bound workspace; the selector does not change
+actor, claim, visibility, approval or execution-grant authorization.
+
 Handoffs are the CANONICAL mechanism for inter-agent task delegation. Every
 request that expects another agent to execute work or produce a deliverable
 must use handoff_create; a direct or broadcast message must never be its sole
@@ -362,7 +372,7 @@ into a blocking long-poll until a claimable handoff appears.
 
 # handoff_claim
 Atomically claim an OPEN handoff; single winner, others get a structured error.
-Returns the ``payload`` plus ``claimed_by`` / ``lease_expires_at``. strict mode:
+Returns the ``payload`` plus ``claimed_by`` / ``lease_expires_at`` / ``claim_epoch``. strict mode:
 session_id + session_secret. A BLOCKED dependent is refused with
 DEPENDENCY_NOT_MET (details carry aggregate ``{handoff_id, pending, failed}``
 counts only - dependency ids are never disclosed): wait for its
@@ -376,7 +386,9 @@ Owner-only delivery of a CLAIMED handoff. Without acceptance_criteria:
 (exactly as always). With acceptance_criteria: -> VERIFYING, emit
 handoff.verification_requested (metadata-only: the contract, never the
 result) and notify a statically resolvable verifier; the outcome then belongs
-to handoff_verify. strict mode: session credentials.
+to handoff_verify. Pass the claim_epoch of this execution; it is mandatory
+after reclaim or verification rework. A stale result must not be relabelled
+with the current generation. strict mode: session credentials.
 
 # handoff_verify
 Verifier-only verdict on a VERIFYING handoff. The verifier is resolved from
@@ -389,12 +401,14 @@ rework: ``feedback`` (optional, max 2000 chars, only with 'fail') is persisted
 (each fail overwrites the previous; history lives in the event log), the
 claimant's lease is RENEWED and handoff.verification_failed is emitted +
 delivered to the claimant's inbox. VERIFYING is protected: reject/cancel
-refuse it and lease expiry never touches it. strict mode: session credentials.
+refuse it and lease expiry never touches it. Pass the delivery's claim_epoch;
+fail advances the generation for rework. strict mode: session credentials.
 
 # handoff_reject
 Reject a handoff (owner CLAIMED->REJECTED or direct-target OPEN->REJECTED).
 ``reason`` is persisted + delivered to the creator's inbox. A VERIFYING
 handoff cannot be rejected - only a 'fail' verdict returns it to CLAIMED.
+Pass the claim_epoch of claimed work, mandatory after reclaim/rework.
 
 # handoff_cancel
 Creator-only OPEN -> CANCELLED; retract a handoff nobody should take (e.g. a
@@ -416,8 +430,75 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="5",
+    version="31",
     body="""\
+# Current R4 execution
+An Agent is the authenticated identity. An executor owns provider installations
+and physical workspaces; an approved binding selects a realization for that Agent.
+Discovery, consent, technical qualification and execution authority are separate.
+Local execution embeds Core in Nexus. Remote execution requires a registered
+Connector publishing its own inventory over the authenticated R4 link.
+
+Operator setup uses authenticated HTTP: inspect GET /v1/connections/protocol,
+GET /v1/runtime/executors/{executor_id}/inventory and
+GET /v1/agents/{agent_id}/runtime-options?executor_id=...&workspace_id=... .
+Select exact current references, prepare the realization and use
+POST /v1/connections/bindings:prepare then POST /v1/connections/bindings:apply.
+GET /v1/connections/bindings/{binding_id} reads the current scoped approval.
+Do not invent installation IDs, copy remote paths into Server configuration or
+create legacy profiles/endpoints as a substitute for R4 onboarding.
+
+The subject resolves runtime.start with POST /v1/runtime/intents:resolve using
+the selected binding_id, workspace_binding_id and stable client_intent_id.
+Only submit a resolution whose can_submit is true to POST /v1/runtime/operations,
+preserving its operation_id, resolution_revision and intent_hash. Admission
+revalidates authority; a read preview consumes no grant and starts no process.
+Inspect the original operation after uncertainty instead of creating a new one.
+Operator inspection of another Agent does not provide that Agent's credentials
+or authorize impersonation. The public intent route requires the subject identity.
+
+Core owns the catalog IDs codex_app_server, pi_rpc, claude_stream and claude_attach,
+native version qualification, containment and effective capabilities. Read current
+inventory and session facts; a catalog entry, configured method, connected socket
+or APPROVED binding alone does not establish READY_FOR_RUNTIME. Unknown versions
+remain unavailable. Native acceptance and canonical handoff completion differ.
+RECONCILING, possible_effect=true and retry_safe=false never authorize blind replay.
+
+Current limitations: the dashboard still contains legacy setup; complete R4
+browser onboarding, inventory refresh and embedded explicit version observation
+are pending. Remote explicit observation is an operator action on the Connector
+host; it does not grant execution. Agents must not shell out to configure providers
+or copy credentials. Request operator setup when prerequisites are missing.
+
+Canonical event history: harness_event_list and GET /api/v1/runtime/sessions/{session_id}/events
+accept executor_id, stream_epoch, after_sequence (default 0) and limit (1..1000,
+default 200). Agent-key authorization matches session reads. Omitted stream_epoch
+selects the current stream; use the returned epoch and next_after_sequence for
+subsequent pages. Only contiguous committed events are returned, with scope,
+committed_contiguous, gap_pending and has_more. Pages are bounded to 512 KiB of
+stored event payloads. History remains readable after close. Legacy harness
+sessions retain their existing event response; canonical events retain Core fields.
+
+For canonical sessions, harness_send/harness_steer accept payload={"text":"prompt"}
+and require a stable idempotency_key. Steer/interrupt targeting is validated by
+Core using expected_turn_id where required; inspect effective session capabilities.
+Legacy expected_operation_id/expected_owner_epoch guards cannot target R4 sessions.
+harness_open is local compatibility only and cannot select a remote path; use the
+path-free R4 intent API for explicit remote selection. Connection self-service can
+open an already-approved, unambiguous canonical endpoint as its subject.
+
+Retained legacy sessions use conversational command contract v3:
+harness_send/harness_steer accept
+canonical input {"schema_version":1,"content":[{"type":"text","text":"prompt"}]},
+optional subject, intent="conversation" and boolean response_requested. The server
+fills identity, operation/root IDs, workspace and untrusted-content provenance;
+these fields cannot be supplied by the caller. Native options, artifact references
+and executable handoffs use their separately authorized canonical APIs. JSON-string
+objects are parsed; invalid JSON is rejected. Legacy text/content strings normalize to text;
+both may be present only when equal. Existing v2 alias-key retries remain valid.
+The adapter emits the complete canonical envelope for v1 input; legacy prompts
+retain their native text representation. Steer uses server intent runtime_control.
+
 Agents are GLOBAL identities; workspaces are per-project. workspace_list /
 agent_list / agent_get / capability_list are deliberately cross-workspace
 (discovery); everything else is workspace-scoped.
@@ -429,9 +510,9 @@ upsert it.
 # agent_whoami
 Return YOUR OWN profile, derived from your API key (no parameters): agent_id,
 operator-assigned role, capabilities, metadata, permissions (null = unrestricted).
-The recommended FIRST call. VALIDATION_ERROR on a connection with no
-authenticated identity (open cooperative stdio): there, read profiles with
-agent_get. When you have policy/communication bindings the profile ALSO carries
+The recommended FIRST call. HTTP MCP requires an authenticated Agent key;
+an agent_id argument cannot replace that credential. When you have
+policy/communication bindings the profile ALSO carries
 ``effective_policies`` (``<policy_id>@<version>`` / ``inline``), a
 ``governance`` rule list and a ``communication`` style block - each absent
 otherwise.
@@ -515,7 +596,131 @@ GLOBAL-ADMIN: enumerate ALL workspaces. By default paths are OMITTED
 only for an explicit admin/ops need (disclosing every project's on-disk layout is
 opt-in defense-in-depth). When an actor is known, workspace_list requires
 ``workspaces.list`` and include_paths additionally requires
-``workspaces.include_paths``.""",
+``workspaces.include_paths``.
+
+# Retained binding discovery
+`harness_list(view="bindings", maintenance={"agent_id":"worker","limit":50})`
+and GET /api/v1/harness/bindings expose the retained endpoint projection.
+agent_id is an optional filter, never authentication. Discovery grants no control.
+Use the R4 inventory, runtime-options and binding reads above for current executor
+selection and qualification. Historical compatibility reports and legacy native
+version lists do not qualify the current Core/provider tuple.
+
+# Retained connection self-service and recovery
+The following surfaces preserve endpoint configuration and legacy history.
+An existing canonical endpoint can connect through its approved R4 binding;
+legacy endpoint/profile creation is removed. Reads may describe
+retained state rather than a live native process. All effects require current
+authorization, qualification and canonical admission.
+
+# Runtime attempt and canonical claim recovery (surface 43)
+Connection self-service (surface revision 60, identity docs v27):
+`harness_list(view="connections", maintenance={"action":"available"})` returns
+only the authenticated agent's connection methods and own endpoints. No payload
+agent_id is accepted. enabled is configuration; available means the current
+configuration, platform, owner lease and open authorization allow requesting an
+opening, not that the binary/provider has been probed. unavailable_reasons explain
+missing prerequisites. No process paths, profile config, secret refs or keys are
+returned. Obtain an operator-approved endpoint and a current open grant first.
+Use a returned call:
+`harness_list(view="connections", maintenance={"action":"connect","endpoint_id":"own-endpoint","idempotency_key":"unique-opening-id"})`.
+This revalidates identity/policy/grants and uses the existing durable open service
+and serve owner, over authenticated HTTP MCP. Reuse the same
+idempotency key for the same opening; never blindly create a new key after an
+uncertain outcome. Opening does not authorize a task or adopt your current chat.
+REST equivalents: GET /api/v1/connections/available and POST /api/v1/connections/connect
+with endpoint_id and idempotency_key, authenticated using the agent's own API key.
+
+Connect using the original agent API key over MCP HTTP. Scoped connection-key
+issuance and the legacy opening route are removed. Historical credentials can
+still be listed/revoked, but cannot authenticate a connection.
+Configure the entire local integration in Agents > Connections: Local/Remote/All
+execution access, local runtime integration, installation check, environment,
+workspace mapping, connection approval and bounded execution permission.
+Remote identity and runtime integration are configured by the Connector using
+the agent ID and its existing API key. Selecting Remote or All grants no access
+by itself. Workspaces belong to messages/tasks, never to agent identity; mappings
+authorize directories on their execution host. Runtime actions in the dashboard
+use Messages > message > Execution recipient and that message's workspace.
+Changing execution restrictions invalidates reviewed and pending work. Current
+authenticated containment remains available for sessions already opened.
+
+Operator-only `harness_list(view="outbox", maintenance={...})` shares
+GET/POST /api/v1/harness/outbox. action=inspect (default) accepts operation_id,
+after_operation_id and limit1..100(default50), returns items/has_more/next_operation_id.
+It exposes attempt/owner/state/lifecycle and reconciliation metadata, never
+payload or credentials. harness_get(operation_id=...) also reports attempt_id,
+owner_epoch and reconciliation_id.
+Surface54: inspect with an exact delivery operation_id also returns its latest
+64 attempt_history observations in sequence order and attempt_history_truncated.
+Each includes attempt/epoch/binding/state/ACK/native references and provenance.
+Migration059 snapshots only the known current attempt; it does not reconstruct
+lost earlier history. The full append-only history stays in the local store.
+List inspection and administrative commands do not include delivery history.
+Surface55/schema060 adds next_attempt_at/retry_basis to delivery inspection and
+history. Only a typed local lane-busy refusal before native write schedules a
+retry: at most3 total attempts, exponential1s/2s delays plus0..25% jitter. Owner
+restart preserves the deadline; each attempt revalidates authority and keeps the
+same logical delivery/hash. Permanent rejection, ambiguous I/O and controls are
+not automatically retried. Exhausted non-delivery may be explicitly released.
+Surface56/schema061: operator-approved selection_group permits fallback of a new
+conversation after typed pre-write proof, at the persisted retry deadline. Both
+original and target endpoint/profile approvals are revalidated. A continuation,
+captured-result relay, control, managed handoff or uncertain send cannot transfer
+this way. Inspection/history expose admission_binding and next_binding with
+selection revisions. The envelope/hash and inbox remain unchanged; the adapter
+labels the current attempt binding separately from the original admission snapshot.
+Fallback targets require the trusted descriptor's transport_binding_contract=1;
+caller endpoint/profile metadata cannot advertise this adapter support.
+
+Mutations require action, operation_id, expected_state, expected_attempt_id,
+expected_owner_epoch, idempotency_key and reason. Null attempt/epoch match only
+a not-yet-claimed operation. Same key/body returns the committed decision;
+different body conflicts. No mutation starts a native request:
+- cancel_pending: PENDING/CLAIMED or proven-safe RETRY_WAIT. Cancels the intent
+  and releases its conversation inbox reservation without a receipt.
+- release_to_inbox: explicitly surrender an uncertain conversation push
+  reservation to the same logical inbox; acknowledge_duplicate_risk=true required.
+  A server-proven REJECTED/native_write_not_started attempt with ACK NONE and no
+  observed native thread/turn may instead be released with that flag false.
+  Its transport rejection is preserved; no runtime stop or quarantine is needed.
+  Generic rejection or ACK NONE alone never establishes this pre-write proof.
+- abandon_command: explicitly close administrative tracking of an uncertain
+  command, with the same risk acknowledgement; it creates no inbox delivery.
+- recover_handoff: requires expected_handoff_id, expected_claim_epoch and explicit
+  duplicate-risk acknowledgement. Reopens the exact CLAIMED handoff through its
+  canonical service; does not release the work payload as conversation. Audit
+  records transport abandonment and canonical_action=reopen_handoff together.
+  Completed/rejected/cancelled/VERIFYING handoffs cannot be reopened. A later
+  explicit claim advances the epoch; old completion/structured results stay fenced.
+
+Uncertain recovery requires no active call, no ready/closing runtime on the
+endpoint and no reserved start. It preserves the original transport state/ACK,
+adds immutable audit, quarantines the endpoint and revokes grants/boot approval.
+Unknown or detached runtime effects may remain; acknowledgement is not proof
+of external cancellation. Explicit endpoint reconciliation/fresh authorization
+is required before reusing it. Late correlated results remain durable but cannot
+consume the released inbox or publish/relay under the abandoned authority.
+Managed handoffs require canonical claim recovery and cannot be released as
+conversation. This maintenance remains operator-authorized with new admission
+OFF; it does not restore disabled sending or fabricate completion.
+
+# Retained runtime administration
+Operator views endpoints/profiles and /api/v1/harness/endpoints or /profiles
+remain available for inspecting, disabling and reconciling retained records.
+They are not the R4 onboarding API. New R4 setup requires executor inventory,
+realization consent and binding prepare/apply as described above.
+Configuration edits invalidate affected authority; re-enabling a record does not
+restore grants. Close and inspect old sessions through their authorized surfaces.
+Legacy outbox maintenance above requires its exact operation/attempt/owner guards;
+do not apply those guards to canonical R4 operations. Read R4 operation/session
+state and preserve uncertain effects. No maintenance command proves that an
+external process stopped or permits replay of an uncertain native write.
+For artifacts view, maintenance retains inspect/cleanup/retry/quota actions;
+retry names result_id, writes require idempotency_key and reason, and quota also
+requires quota_bytes. Journal compaction uses view="journal", compact=true.
+Native acceptance, durable result and handoff completion remain separate facts.
+Unknown transport outcomes require reconciliation, not blind retry.""",
 )
 
 add_resource(

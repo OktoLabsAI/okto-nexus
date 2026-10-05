@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="14.182" timestamp="2026-10-02T04:16:55.054844-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_provider_vault" name="test_first_provider_failure_survives_secondary_maintenance_failure" time="13.049"><failure message="assert False">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_provider_vault.py:60: in test_first_provider_failure_survives_secondary_maintenance_failure
+    client.portal.call(settled)
+..\..\..\..\.codex\tmp\nexus-http-ci-env\Lib\site-packages\anyio\from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+..\..\..\..\.codex\tmp\nexus-http-ci-env\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_provider_vault.py:58: in settled
+    assert await asyncio.to_thread(failure_recorded.wait, 10)
+E   assert False</failure></testcase></testsuite></testsuites>

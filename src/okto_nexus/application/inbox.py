@@ -100,6 +100,8 @@ class InboxService:
         max_limit: int = MAX_INBOX_LIMIT,
         event_emitter: Any = None,
         config: Any = None,
+        external_work_provider: Any = None,
+        request_context_provider: Any = None,
     ) -> None:
         self._config = config
         self._cf = connection_factory
@@ -111,6 +113,56 @@ class InboxService:
         self._lease_ttl = int(lease_ttl_seconds)
         self._default_limit = int(default_limit)
         self._max_limit = int(max_limit)
+        self._external_work_provider = external_work_provider
+        self._request_context_provider = request_context_provider
+
+    def consume_canonical_runtime_results(self):
+        """Acknowledge processing from durable R4 terminal evidence, once.
+
+        A dispatch or socket write is insufficient. Result publication policy
+        is independent: a processed request may have a blocked/private reply.
+        """
+        from .execution_results import canonical_result_matches
+        now = self._clock.now_iso()
+        count = 0
+        with self._cf.unit_of_work() as uow:
+            rows = uow.connection.execute(
+                "SELECT r.*,o.message_id,o.recipient_agent_id,o.delivery_id "
+                "FROM runtime_results r JOIN delivery_outbox o USING(operation_id) "
+                "JOIN message_deliveries d ON d.delivery_id=o.delivery_id "
+                "WHERE r.canonical_operation_id IS NOT NULL AND o.reconciliation_id IS NULL "
+                "AND d.consumer_kind='push' AND d.consumer_operation_id=o.operation_id "
+                "AND d.status IN ('unread','delivered') ORDER BY r.captured_at,r.result_id LIMIT 64"
+            ).fetchall()
+            for raw in rows:
+                row = dict(raw)
+                if not canonical_result_matches(uow.connection, row):
+                    continue
+                changed = uow.connection.execute(
+                    "UPDATE message_deliveries SET status='read',read_at=? "
+                    "WHERE delivery_id=? AND message_id=? AND recipient_agent_id=? "
+                    "AND consumer_kind='push' AND consumer_operation_id=? "
+                    "AND status IN ('unread','delivered')",
+                    (now, row['delivery_id'], row['message_id'], row['recipient_agent_id'], row['operation_id']))
+                if not changed.rowcount:
+                    continue
+                proof = uow.connection.execute(
+                    "SELECT stream_epoch,terminal_sequence FROM execution_results "
+                    "WHERE server_id=? AND executor_id=? AND operation_id=?",
+                    (row['canonical_server_id'],row['canonical_executor_id'],row['canonical_operation_id'])).fetchone()
+                acknowledgement = dict(ack_source='canonical_native_terminal', ack_level='HARNESS_ACCEPTED',
+                    human_read=False, operation_id=row['operation_id'],
+                    canonical_operation_id=row['canonical_operation_id'],
+                    stream_epoch=proof['stream_epoch'], terminal_sequence=proof['terminal_sequence'])
+                messages = self._messages.list_by_ids(uow, message_ids=[row['message_id']])
+                items = [dict(message_id=m.message_id, workspace_id=m.workspace_id,
+                              from_agent_id=m.from_agent_id) for m in messages]
+                self._emit_receipts(uow, items, type_=MESSAGE_READ_TYPE,
+                    recipient=row['recipient_agent_id'], at=now, acknowledgement=acknowledgement)
+                self._deliver_read_receipts(uow, messages, reader=row['recipient_agent_id'],
+                    at=now, acknowledgement=acknowledgement)
+                count += 1
+        return count
 
     # ------------------------------------------------------------------ #
     # inbox_pull
@@ -157,15 +209,20 @@ class InboxService:
     # ------------------------------------------------------------------ #
     # inbox_ack
     # ------------------------------------------------------------------ #
-    def ack(self, *, agent_id: Any, message_ids: Any) -> dict[str, Any]:
+    def ack(self, *, agent_id: Any, message_ids: Any, session_id=None, session_secret=None) -> dict[str, Any]:
         """Move the recipient's deliveries for ``message_ids`` to history (read)."""
         aid = self._require_agent_id(agent_id)
         ids = self._coerce_ids(message_ids)
         now = self._clock.now_iso()
+        work = self._external_work_provider() if self._external_work_provider else None
+        context = self._request_context_provider() if self._request_context_provider else None
         with self._cf.unit_of_work() as uow:
+            external = work.acknowledge_external(uow, context=context, agent_id=aid, message_ids=ids,
+                session_id=session_id, session_secret=session_secret, now=now) if work else {}
             acked_ids = self._deliveries.mark_read(
                 uow, recipient_agent_id=aid, message_ids=ids, read_at=now
             )
+            acked_ids = sorted(set(acked_ids) | external.keys())
             # Read receipts (sender-visible): one message.read per delivery
             # that ACTUALLY transitioned (an already-read or unknown id never
             # produces a receipt), atomic with the transition itself.
@@ -180,16 +237,48 @@ class InboxService:
                         }
                         for m in acked_messages
                     ]
-                    self._emit_receipts(
-                        uow,
-                        read_items,
-                        type_=MESSAGE_READ_TYPE,
-                        recipient=aid,
-                        at=now,
-                    )
-                self._deliver_read_receipts(uow, acked_messages, reader=aid, at=now)
+                    for item in read_items:
+                        self._emit_receipts(uow, [item], type_=MESSAGE_READ_TYPE,
+                            recipient=aid, at=now, acknowledgement=external.get(item["message_id"]))
+                # Preserve one grouped receipt per sender/workspace for ordinary
+                # inbox ACKs. External work carries operation-specific evidence
+                # and must not attribute that evidence to unrelated messages.
+                ordinary = [message for message in acked_messages if message.message_id not in external]
+                self._deliver_read_receipts(uow, ordinary, reader=aid, at=now)
+                for message in acked_messages:
+                    if message.message_id in external:
+                        self._deliver_read_receipts(uow, [message], reader=aid, at=now,
+                            acknowledgement=external[message.message_id])
             self._touch(uow, aid, now)
         return {"acknowledged": len(acked_ids), "read_message_ids": acked_ids}
+
+    def release_runtime_reservation(self, uow, *, operation_id):
+        """Internal operator reconciliation path; no new delivery or receipt."""
+        if not self._deliveries.release_runtime_reservation(uow, operation_id=operation_id):
+            raise OktoNexusError(ErrorCode.CONFLICT, "The original runtime no longer owns this inbox reservation.", {})
+
+    def consume_runtime_terminal(self, uow, event):
+        """Internal journal projector path; payload identity is never authority.
+
+        Repository CAS requires a durable, correlated terminal and matching push
+        reservation. Receipt and consumption share the caller's transaction.
+        This confirms runtime processing, not human reading or handoff completion.
+        """
+        if event.delivery_phase != "terminal" or not event.operation_id:
+            return
+        now = self._clock.now_iso()
+        changed = self._deliveries.mark_runtime_processed(uow,
+            operation_id=event.operation_id, terminal_event_id=event.event_id, at=now)
+        acknowledgement = {"ack_source": "native_terminal", "ack_level": "HARNESS_ACCEPTED",
+            "human_read": False, "operation_id": event.operation_id, "terminal_event_id": event.event_id}
+        for row in changed:
+            messages = self._messages.list_by_ids(uow, message_ids=[row["message_id"]])
+            items = [{"message_id": m.message_id, "workspace_id": m.workspace_id,
+                      "from_agent_id": m.from_agent_id} for m in messages]
+            self._emit_receipts(uow, items, type_=MESSAGE_READ_TYPE,
+                recipient=row["recipient_agent_id"], at=now, acknowledgement=acknowledgement)
+            self._deliver_read_receipts(uow, messages, reader=row["recipient_agent_id"],
+                                       at=now, acknowledgement=acknowledgement)
 
     # ------------------------------------------------------------------ #
     # inbox_extend
@@ -388,7 +477,7 @@ class InboxService:
     # Internal helpers
     # ------------------------------------------------------------------ #
     def _deliver_read_receipts(
-        self, uow: Any, acked_messages: Any, *, reader: str, at: str
+        self, uow: Any, acked_messages: Any, *, reader: str, at: str, acknowledgement=None
     ) -> None:
         """Land ONE read-receipt notification per original sender (opt-out).
 
@@ -430,6 +519,9 @@ class InboxService:
                 "message_ids": [m.message_id for m in batch],
                 "subjects": [m.subject for m in batch],
             }
+            if acknowledgement:
+                body.update(acknowledgement)
+                subject = f"runtime processing receipt: {count} message(s) processed by {reader}"
             message = self._messages.create(
                 uow,
                 message_id=new_id("msg"),
@@ -469,6 +561,7 @@ class InboxService:
         type_: str,
         recipient: str,
         at: str,
+        acknowledgement=None,
     ) -> None:
         """Emit one sender-visible receipt event per item (same transaction).
 
@@ -495,6 +588,7 @@ class InboxService:
                     "recipient_agent_id": recipient,
                     "from_agent_id": sender,
                     "at": at,
+                    **(acknowledgement or {}),
                 },
                 actor_agent_id=recipient,
                 visibility="eligible",

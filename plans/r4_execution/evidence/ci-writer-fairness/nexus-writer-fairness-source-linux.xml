@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="20" time="83.410" timestamp="2026-10-02T05:42:00.421331-03:00" hostname="Alienwarem15"><testcase classname="tests.test_connection" name="test_concurrent_read_then_write_uows_lose_no_update_and_raise_no_db_error" time="0.976" /><testcase classname="tests.test_connection" name="test_second_writer_gets_retryable_db_error_at_begin" time="0.903" /><testcase classname="tests.test_connection" name="test_read_uow_is_deferred_and_does_not_queue_behind_writers" time="0.782" /><testcase classname="tests.test_connection" name="test_db_error_helper_classifies_lock_as_retryable" time="0.001" /><testcase classname="tests.test_connection" name="test_retryable_flag_reaches_the_mcp_envelope" time="0.000" /><testcase classname="tests.test_connection" name="test_default_errors_are_not_retryable_and_envelope_is_unchanged" time="0.000" /><testcase classname="tests.test_connection" name="test_every_sqlite_repo_classifies_lock_contention_as_retryable[okto_nexus.adapters.outbound.sqlite.events_repo]" time="0.001" /><testcase classname="tests.test_connection" name="test_every_sqlite_repo_classifies_lock_contention_as_retryable[okto_nexus.adapters.outbound.sqlite.identity_repo]" time="0.001" /><testcase classname="tests.test_connection" name="test_every_sqlite_repo_classifies_lock_contention_as_retryable[okto_nexus.adapters.outbound.sqlite.artifacts_repo]" time="0.001" /><testcase classname="tests.test_connection" name="test_every_sqlite_repo_classifies_lock_contention_as_retryable[okto_nexus.adapters.outbound.sqlite.messages_repo]" time="0.001" /><testcase classname="tests.test_connection" name="test_every_sqlite_repo_classifies_lock_contention_as_retryable[okto_nexus.adapters.outbound.sqlite.handoff_repo]" time="0.001" /><testcase classname="tests.test_connection" name="test_error_catalogue_includes_migrated_code" time="0.000" /><testcase classname="tests.test_sqlite_writer_fairness" name="test_waiting_writers_precede_immediate_reacquisition" time="0.022" /><testcase classname="tests.test_sqlite_writer_fairness" name="test_expired_waiter_is_removed_without_writing_or_blocking_successor" time="0.029" /><testcase classname="tests.test_sqlite_writer_fairness" name="test_failed_transaction_releases_local_writer_admission[hook]" time="0.008" /><testcase classname="tests.test_sqlite_writer_fairness" name="test_failed_transaction_releases_local_writer_admission[body]" time="0.008" /><testcase classname="tests.test_sqlite_writer_fairness" name="test_failed_transaction_releases_local_writer_admission[begin]" time="0.028" /><testcase classname="tests.test_sqlite_writer_fairness" name="test_failed_transaction_releases_local_writer_admission[commit]" time="0.009" /><testcase classname="tests.test_sqlite_writer_fairness" name="test_queue_wait_reduces_sqlite_lock_wait_budget" time="0.059" /><testcase classname="tests.execution_r4.test_ns14" name="test_ns14_04[load]" time="63.759"><properties><property name="identity_write_batches" value="{&quot;completed&quot;: 200, &quot;identities_per_batch&quot;: 500, &quot;max_acquire_seconds&quot;: 0.044167026004288346, &quot;max_held_seconds&quot;: 0.2863326060032705, &quot;total_acquire_seconds&quot;: 1.955908858042676, &quot;total_held_seconds&quot;: 34.858620949991746}" /><property name="identity_threads" value="{&quot;before&quot;: [[139977964296000, &quot;MainThread&quot;], [139977917560384, &quot;asyncio-portal-7f4f176af0e0&quot;], [139977909167680, &quot;AnyIO worker thread&quot;], [139977892382272, &quot;nexus-runtime-wake&quot;], [139977900774976, &quot;nexus-command-close-0&quot;], [139977669383744, &quot;nexus-command-control-0&quot;], [139977660991040, &quot;nexus-command-control-1&quot;], [139977652598336, &quot;nexus-command-turn-0&quot;], [139977644205632, &quot;nexus-command-turn-1&quot;], [139977635812928, &quot;nexus-command-observation-0&quot;], [139977627420224, &quot;nexus-result-publication&quot;], [139977212032576, &quot;nexus-dispatch-0&quot;], [139977203639872, &quot;nexus-dispatch-1&quot;], [139977195247168, &quot;nexus-dispatch-owner&quot;], [139977186854464, &quot;asyncio_0&quot;], [139977178461760, &quot;asyncio_1&quot;], [139977170069056, &quot;asyncio_2&quot;], [139977161676352, &quot;asyncio_3&quot;]], &quot;after&quot;: [[139977964296000, &quot;MainThread&quot;], [139977917560384, &quot;asyncio-portal-7f4f176af0e0&quot;], [139977909167680, &quot;AnyIO worker thread&quot;], [139977892382272, &quot;nexus-runtime-wake&quot;], [139977900774976, &quot;nexus-command-close-0&quot;], [139977669383744, &quot;nexus-command-control-0&quot;], [139977660991040, &quot;nexus-command-control-1&quot;], [139977652598336, &quot;nexus-command-turn-0&quot;], [139977644205632, &quot;nexus-command-turn-1&quot;], [139977635812928, &quot;nexus-command-observation-0&quot;], [139977627420224, &quot;nexus-result-publication&quot;], [139977212032576, &quot;nexus-dispatch-0&quot;], [139977203639872, &quot;nexus-dispatch-1&quot;], [139977195247168, &quot;nexus-dispatch-owner&quot;], [139977186854464, &quot;asyncio_0&quot;], [139977178461760, &quot;asyncio_1&quot;], [139977170069056, &quot;asyncio_2&quot;], [139977161676352, &quot;asyncio_3&quot;], [139976608052800, &quot;asyncio_4&quot;], [139976599660096, &quot;asyncio_5&quot;], [139976591267392, &quot;asyncio_6&quot;], [139976582874688, &quot;asyncio_7&quot;], [139976574481984, &quot;asyncio_8&quot;], [139976566089280, &quot;asyncio_9&quot;], [139976557696576, &quot;asyncio_10&quot;], [139976071181888, &quot;asyncio_11&quot;], [139976062789184, &quot;asyncio_12&quot;], [139976054396480, &quot;asyncio_13&quot;], [139976046003776, &quot;asyncio_14&quot;], [139976037611072, &quot;asyncio_15&quot;], [139976029218368, &quot;asyncio_16&quot;], [139976020825664, &quot;asyncio_17&quot;], [139975534310976, &quot;asyncio_18&quot;], [139975525918272, &quot;asyncio_19&quot;]], &quot;new_stacks&quot;: {&quot;139976608052800&quot;: [[&quot;threading.py&quot;, &quot;_bootstrap&quot;, 1032], [&quot;threading.py&quot;, &quot;_bootstrap_inner&quot;, 1075], [&quot;threading.py&quot;, &quot;run&quot;, 1012], [&quot;thread.py&quot;, &quot;_worker&quot;, 90]], &quot;139976599660096&quot;: [[&quot;threading.py&quot;, &quot;_bootstrap&quot;, 1032], [&quot;threading.py&quot;, &quot;_bootstrap_inner&quot;, 1075], [&quot;threading.py&quot;, &quot;run&quot;, 1012], [&quot;thread.py&quot;, &quot;_worker&quot;, 90]], &quot;139976591267392&quot;: [[&quot;threading.py&quot;, &quot;_bootstrap&quot;, 1032], [&quot;threading.py&quot;, &quot;_bootstrap_inner&quot;, 1075], [&quot;threading.py&quot;, &quot;run&quot;, 1012], [&quot;thread.py&quot;, &quot;_worker&quot;, 90]], &quot;139976582874688&quot;: [[&quot;threading.py&quot;, &quot;_bootstrap&quot;, 1032], [&quot;threading.py&quot;, &quot;_bootstrap_inner&quot;, 1075], [&quot;threading.py&quot;, &quot;run&quot;, 1012], [&quot;thread.py&quot;, &quot;_worker&quot;, 90]], &quot;139976574481984&quot;: [[&quot;threading.py&quot;, &quot;_bootstrap&quot;, 1032], [&quot;threading.py&quot;, &quot;_bootstrap_inner&quot;, 1075], [&quot;threading.py&quot;, &quot;run&quot;, 1012], [&quot;thread.py&quot;, &quot;_worker&quot;, 90]], &quot;139976566089280&quot;: [[&quot;threading.py&quot;, &quot;_bootstrap&quot;, 1032], [&quot;threading.py&quot;, &quot;_bootstrap_inner&quot;, 1075], [&quot;threading.py&quot;, &quot;run&quot;, 1012], [&quot;thread.py&quot;, &quot;_worker&quot;, 90]], &quot;139976557696576&quot;: [[&quot;threading.py&quot;, &quot;_bootstrap&quot;, 1032], [&quot;threading.py&quot;, &quot;_bootstrap_inner&quot;, 1075], [&quot;threading.py&quot;, &quot;run&quot;, 1012], [&quot;thread.py&quot;, &quot;_worker&quot;, 90]], &quot;139976071181888&quot;: [[&quot;threading.py&quot;, &quot;_bootstrap&quot;, 1032], [&quot;threading.py&quot;, &quot;_bootstrap_inner&quot;, 1075], [&quot;threading.py&quot;, &quot;run&quot;, 1012], [&quot;thread.py&quot;, &quot;_worker&quot;, 90]], &quot;139976062789184&quot;: [[&quot;threading.py&quot;, &quot;_bootstrap&quot;, 1032], [&quot;threading.py&quot;, &quot;_bootstrap_inner&quot;, 1075], [&quot;threading.py&quot;, &quot;run&quot;, 1012], [&quot;thread.py&quot;, &quot;_worker&quot;, 90]], &quot;139976054396480&quot;: [[&quot;threading.py&quot;, &quot;_bootstrap&quot;, 1032], [&quot;threading.py&quot;, &quot;_bootstrap_inner&quot;, 1075], [&quot;threading.py&quot;, &quot;run&quot;, 1012], [&quot;thread.py&quot;, &quot;_worker&quot;, 90]], &quot;139976046003776&quot;: [[&quot;threading.py&quot;, &quot;_bootstrap&quot;, 1032], [&quot;threading.py&quot;, &quot;_bootstrap_inner&quot;, 1075], [&quot;threading.py&quot;, &quot;run&quot;, 1012], [&quot;thread.py&quot;, &quot;_worker&quot;, 90]], &quot;139976037611072&quot;: [[&quot;threading.py&quot;, &quot;_bootstrap&quot;, 1032], [&quot;threading.py&quot;, &quot;_bootstrap_inner&quot;, 1075], [&quot;threading.py&quot;, &quot;run&quot;, 1012], [&quot;thread.py&quot;, &quot;_worker&quot;, 90]], &quot;139976029218368&quot;: [[&quot;threading.py&quot;, &quot;_bootstrap&quot;, 1032], [&quot;threading.py&quot;, &quot;_bootstrap_inner&quot;, 1075], [&quot;threading.py&quot;, &quot;run&quot;, 1012], [&quot;thread.py&quot;, &quot;_worker&quot;, 90], [&quot;thread.py&quot;, &quot;run&quot;, 65], [&quot;embedded_dispatch.py&quot;, &quot;_page&quot;, 301], [&quot;connection.py&quot;, &quot;unit_of_work&quot;, 291], [&quot;connection.py&quot;, &quot;get_connection&quot;, 172]], &quot;139976020825664&quot;: [[&quot;threading.py&quot;, &quot;_bootstrap&quot;, 1032], [&quot;threading.py&quot;, &quot;_bootstrap_inner&quot;, 1075], [&quot;threading.py&quot;, &quot;run&quot;, 1012], [&quot;thread.py&quot;, &quot;_worker&quot;, 90]], &quot;139975534310976&quot;: [[&quot;threading.py&quot;, &quot;_bootstrap&quot;, 1032], [&quot;threading.py&quot;, &quot;_bootstrap_inner&quot;, 1075], [&quot;threading.py&quot;, &quot;run&quot;, 1012], [&quot;thread.py&quot;, &quot;_worker&quot;, 90]], &quot;139975525918272&quot;: [[&quot;threading.py&quot;, &quot;_bootstrap&quot;, 1032], [&quot;threading.py&quot;, &quot;_bootstrap_inner&quot;, 1075], [&quot;threading.py&quot;, &quot;run&quot;, 1012], [&quot;thread.py&quot;, &quot;_worker&quot;, 90]]}}" /></properties><failure message="AssertionError">opening = (Deps(config=NexusConfig(home_dir=PosixPath('/tmp/pytest-of-jpbraga/pytest-5/test_ns14_04_load_0/home'), db_path=Posix...f59527641e453d29be2c2cede5481df', connection_id='conn_c3dc8895d97104b42159de3951bdcba4', connection_generation=2), ...)
+decision_state = (Deps(config=NexusConfig(home_dir=PosixPath('/tmp/pytest-of-jpbraga/pytest-5/test_ns14_04_load_0/home'), db_path=Posix...dc5b24b9371acc991c2fb58c1355b265b91d13e4cf2b35778a7', 'cas_token': 'dJKBsRFD5VQdCBahcM2lgwstVBc0mI3dKxRiOhRhsT0', ...})
+tmp_path = PosixPath('/tmp/pytest-of-jpbraga/pytest-5/test_ns14_04_load_0')
+record_property = &lt;function record_property.&lt;locals&gt;.append_property at 0x7f4f174aef20&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7f4f265d7590&gt;
+
+    @pytest.mark.parametrize("opening", [{"max_executions": 100}], indirect=True, ids=["load"])
+    def test_ns14_04(opening, decision_state, tmp_path, record_property, monkeypatch):
+        from okto_nexus.adapters.inbound.http import runtime_v1
+        info = runtime_v1.protocol_info()
+        monkeypatch.setattr(runtime_v1, "protocol_info", lambda: {**info, "remote_execution_ready": True})
+        from ns14_load import run_load
+&gt;       run_load(opening, tmp_path, record_property)
+
+tests/execution_r4/test_ns14.py:316: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+state = (Deps(config=NexusConfig(home_dir=PosixPath('/tmp/pytest-of-jpbraga/pytest-5/test_ns14_04_load_0/home'), db_path=Posix...f59527641e453d29be2c2cede5481df', connection_id='conn_c3dc8895d97104b42159de3951bdcba4', connection_generation=2), ...)
+root = PosixPath('/tmp/pytest-of-jpbraga/pytest-5/test_ns14_04_load_0')
+record_property = &lt;function record_property.&lt;locals&gt;.append_property at 0x7f4f174aef20&gt;
+
+    def run_load(state, root, record_property):
+        deps, app, access, _, _, first, opened, _ = state
+        factory = deps.connection_factory
+        client = TestClient(app, base_url="https://127.0.0.1:8202")
+        auth = app.state.auth
+        now = deps.clock.now_iso()
+        count = 100_000
+        last_heartbeat = 0.0
+        def heartbeat():
+            nonlocal last_heartbeat
+            if time.monotonic() - last_heartbeat &gt;= 5:
+                app.state.test_opening_socket.send_text(encode_r4_frame(dict(
+                    protocol_major=1, contract_revision=R4_PREVIEW_REVISION, type="heartbeat",
+                    server_id=first.server_id, executor_id=first.executor_id,
+                    connection_id=first.connection_id,
+                    connection_generation=first.connection_generation)).decode())
+                last_heartbeat = time.monotonic()
+        heartbeat()
+        for offset in range(0, count, 500):
+            heartbeat()
+            with factory.unit_of_work() as uow:
+                uow.connection.executemany("INSERT INTO agents(agent_id,created_at,api_key_hash,is_active) VALUES(?,?,?,1)",
+                    ((f"load-{i}", now, hash_api_key("nxs_" + format(i, "048x"))) for i in range(offset, offset + 500)))
+            time.sleep(.001)
+        threads_before_snapshot = [(t.ident, t.name) for t in threading.enumerate()]
+        threads_before = len(threads_before_snapshot)
+        samples = []
+        write_batches = []
+        started = time.perf_counter()
+        tracemalloc.start()
+        try:
+            for offset in range(0, count, 500):
+                heartbeat()
+                requested = time.perf_counter()
+                with factory.unit_of_work() as uow:
+                    acquired = time.perf_counter()
+                    for i in range(offset, offset + 500):
+                        assert auth.resolve(uow, "nxs_" + format(i, "048x")).agent_id == f"load-{i}"
+                write_batches.append((acquired - requested, time.perf_counter() - acquired))
+                if (offset + 500) % 25_000 == 0:
+                    current, peak = tracemalloc.get_traced_memory()
+                    samples.append(dict(identities=offset + 500, current_bytes=current, peak_bytes=peak,
+                                        cache_entries=auth.cache_stats()["entries"]))
+                    assert auth.cache_stats()["entries"] == 4096
+        finally:
+            tracemalloc.stop()
+            # Preserve bounded timing evidence even if a later heartbeat finds a
+            # closed channel. Do not turn lock contention into a read-only touch.
+            record_property("identity_write_batches", json.dumps(dict(
+                completed=len(write_batches), identities_per_batch=500,
+                max_acquire_seconds=max((row[0] for row in write_batches), default=0),
+                max_held_seconds=max((row[1] for row in write_batches), default=0),
+                total_acquire_seconds=sum(row[0] for row in write_batches),
+                total_held_seconds=sum(row[1] for row in write_batches))))
+        identity_seconds = time.perf_counter() - started
+        assert samples[-1]["current_bytes"] &lt; samples[0]["current_bytes"] * 1.5 + 524288
+        threads_after_snapshot = [(t.ident, t.name) for t in threading.enumerate()]
+        frames = sys._current_frames()
+        before_ids = {ident for ident, _ in threads_before_snapshot}
+        new_stacks = {str(ident): [(os.path.basename(frame.filename), frame.name, frame.lineno)
+                                  for frame in traceback.extract_stack(frames[ident])]
+                      for ident, _ in threads_after_snapshot if ident not in before_ids and ident in frames}
+        del frames
+        record_property("identity_threads", json.dumps(dict(
+            before=threads_before_snapshot, after=threads_after_snapshot, new_stacks=new_stacks)))
+&gt;       assert len(threads_after_snapshot) &lt;= threads_before + 4
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError
+
+tests/execution_r4/ns14_load.py:134: AssertionError</failure></testcase></testsuite></testsuites>

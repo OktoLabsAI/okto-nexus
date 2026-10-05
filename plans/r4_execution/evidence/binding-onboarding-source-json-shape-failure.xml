@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="3" time="1.775" timestamp="2026-10-01T00:18:00.162540-03:00" hostname="Alienware_m15"><testcase classname="tests.unit.test_binding_onboarding" name="test_prepare_and_apply_lost_responses_keep_intents_and_one_binding" time="0.382"><failure message="ValueError: not a JSON value: tuple">tests\unit\test_binding_onboarding.py:63: in test_prepare_and_apply_lost_responses_keep_intents_and_one_binding
+    await service.prepare(**prepare)
+src\okto_nexus_connector\services\binding_onboarding.py:116: in prepare
+    state = await asyncio.to_thread(self.store.update, stage)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\threads.py:25: in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\thread.py:59: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus_connector\storage\state_store.py:326: in update
+    mutate(state)
+src\okto_nexus_connector\services\binding_onboarding.py:100: in stage
+    identity, profile, local, digest = self._context(state, identity_alias, realization_ref)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus_connector\services\binding_onboarding.py:58: in _context
+    digest = _hash(dict(identity=asdict(identity), profile=asdict(profile),
+src\okto_nexus_connector\services\binding_onboarding.py:20: in _hash
+    return "sha256:" + hashlib.sha256(canonical_json(value)).hexdigest()
+                                      ^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\protocol.py:75: in canonical_json
+    _validate(value)
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\protocol.py:68: in _validate
+    _validate(member)
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\protocol.py:68: in _validate
+    _validate(member)
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\protocol.py:70: in _validate
+    raise ValueError(f"not a JSON value: {type(value).__name__}")
+E   ValueError: not a JSON value: tuple</failure></testcase><testcase classname="tests.unit.test_binding_onboarding" name="test_prepare_intent_cannot_be_reused_with_different_content[alias]" time="0.130"><failure message="ValueError: not a JSON value: tuple">tests\unit\test_binding_onboarding.py:90: in test_prepare_intent_cannot_be_reused_with_different_content
+    await service.prepare(**prepare)
+src\okto_nexus_connector\services\binding_onboarding.py:116: in prepare
+    state = await asyncio.to_thread(self.store.update, stage)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\threads.py:25: in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\thread.py:59: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus_connector\storage\state_store.py:326: in update
+    mutate(state)
+src\okto_nexus_connector\services\binding_onboarding.py:100: in stage
+    identity, profile, local, digest = self._context(state, identity_alias, realization_ref)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus_connector\services\binding_onboarding.py:58: in _context
+    digest = _hash(dict(identity=asdict(identity), profile=asdict(profile),
+src\okto_nexus_connector\services\binding_onboarding.py:20: in _hash
+    return "sha256:" + hashlib.sha256(canonical_json(value)).hexdigest()
+                                      ^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\protocol.py:75: in canonical_json
+    _validate(value)
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\protocol.py:68: in _validate
+    _validate(member)
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\protocol.py:68: in _validate
+    _validate(member)
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\protocol.py:70: in _validate
+    raise ValueError(f"not a JSON value: {type(value).__name__}")
+E   ValueError: not a JSON value: tuple</failure></testcase><testcase classname="tests.unit.test_binding_onboarding" name="test_prepare_intent_cannot_be_reused_with_different_content[realization]" time="0.146"><failure message="ValueError: not a JSON value: tuple">tests\unit\test_binding_onboarding.py:90: in test_prepare_intent_cannot_be_reused_with_different_content
+    await service.prepare(**prepare)
+src\okto_nexus_connector\services\binding_onboarding.py:116: in prepare
+    state = await asyncio.to_thread(self.store.update, stage)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\threads.py:25: in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\thread.py:59: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus_connector\storage\state_store.py:326: in update
+    mutate(state)
+src\okto_nexus_connector\services\binding_onboarding.py:100: in stage
+    identity, profile, local, digest = self._context(state, identity_alias, realization_ref)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus_connector\services\binding_onboarding.py:58: in _context
+    digest = _hash(dict(identity=asdict(identity), profile=asdict(profile),
+src\okto_nexus_connector\services\binding_onboarding.py:20: in _hash
+    return "sha256:" + hashlib.sha256(canonical_json(value)).hexdigest()
+                                      ^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\protocol.py:75: in canonical_json
+    _validate(value)
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\protocol.py:68: in _validate
+    _validate(member)
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\protocol.py:68: in _validate
+    _validate(member)
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\protocol.py:70: in _validate
+    raise ValueError(f"not a JSON value: {type(value).__name__}")
+E   ValueError: not a JSON value: tuple</failure></testcase></testsuite></testsuites>

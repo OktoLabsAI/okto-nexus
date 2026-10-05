@@ -368,6 +368,14 @@ class SqliteAgentRepo(_ClockBacked):
         this.)
         """
         try:
+            # Configuration/revision caches belong to the identity. Execution
+            # records intentionally retain their restrictive foreign keys.
+            uow.connection.execute(
+                "DELETE FROM agent_execution_policies WHERE agent_id = ?", (agent_id,)
+            )
+            uow.connection.execute(
+                "DELETE FROM execution_agent_revisions WHERE agent_id = ?", (agent_id,)
+            )
             uow.connection.execute(
                 "DELETE FROM message_deliveries WHERE recipient_agent_id = ?",
                 (agent_id,),
@@ -378,6 +386,16 @@ class SqliteAgentRepo(_ClockBacked):
             cur = uow.connection.execute(
                 "DELETE FROM agents WHERE agent_id = ?", (agent_id,)
             )
+        except sqlite3.IntegrityError as exc:
+            if (getattr(exc, "sqlite_errorcode", None) == sqlite3.SQLITE_CONSTRAINT_FOREIGNKEY or
+                    str(exc) == "FOREIGN KEY constraint failed"):
+                raise OktoNexusError(
+                    ErrorCode.CONFLICT,
+                    "This agent is referenced by runtime connections or execution history. "
+                    "Deactivate it to revoke access while preserving those records.",
+                    {"agent_id": agent_id, "reason": "AGENT_IN_USE"},
+                ) from exc
+            raise _db_error("deleting agent", exc) from exc
         except sqlite3.Error as exc:
             raise _db_error("deleting agent", exc) from exc
         return cur.rowcount > 0
@@ -556,7 +574,8 @@ class SqliteSessionRepo(_ClockBacked):
         try:
             row = uow.connection.execute(
                 "SELECT COUNT(*) FROM sessions WHERE status = 'closed' "
-                "AND COALESCE(closed_at, last_heartbeat_at, started_at) < ?",
+                "AND COALESCE(closed_at, last_heartbeat_at, started_at) < ? "
+                "AND NOT EXISTS(SELECT 1 FROM runtime_handoff_bindings b WHERE b.external_session_id=sessions.session_id)",
                 (cutoff,),
             ).fetchone()
         except sqlite3.Error as exc:
@@ -572,6 +591,8 @@ class SqliteSessionRepo(_ClockBacked):
         sessions are never deleted regardless of age (the session reaper closes
         them first; only then do they age into this window). Bounded by
         ``limit`` per batch so the WAL writer lock is held briefly.
+        External work references retain their canonical session audit record;
+        skip those rows rather than failing the entire batch on their FK.
         """
         try:
             cur = uow.connection.execute(
@@ -580,6 +601,8 @@ class SqliteSessionRepo(_ClockBacked):
                     SELECT session_id FROM sessions
                     WHERE status = 'closed'
                       AND COALESCE(closed_at, last_heartbeat_at, started_at) < ?
+                      AND NOT EXISTS(SELECT 1 FROM runtime_handoff_bindings b
+                                     WHERE b.external_session_id=sessions.session_id)
                     ORDER BY COALESCE(closed_at, last_heartbeat_at, started_at) ASC,
                              session_id ASC
                     LIMIT ?

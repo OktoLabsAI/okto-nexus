@@ -1,0 +1,12 @@
+.......F.........                                                        [100%]
+================================== FAILURES ===================================
+_ test_factory_keeps_home_and_supplies_only_environment_reference_in_argv[codex_app_server] _
+..\okto-nexus-connector-core\tests\test_process_http_configuration.py:64: in test_factory_keeps_home_and_supplies_only_environment_reference_in_argv
+    assert not list(tmp_path.iterdir())
+E   AssertionError: assert not [WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4386/test_factory_keeps_home_and_su0/.codex')]
+E    +  where [WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4386/test_factory_keeps_home_and_su0/.codex')] = list(<map object at 0x00000278DED1FDC0>)
+E    +    where <map object at 0x00000278DED1FDC0> = iterdir()
+E    +      where iterdir = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4386/test_factory_keeps_home_and_su0').iterdir
+=========================== short test summary info ===========================
+FAILED ..\okto-nexus-connector-core\tests\test_process_http_configuration.py::test_factory_keeps_home_and_supplies_only_environment_reference_in_argv[codex_app_server]
+1 failed, 16 passed in 0.86s

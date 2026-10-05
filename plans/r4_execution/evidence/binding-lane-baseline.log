@@ -1,0 +1,11 @@
+F....                                                                    [100%]
+================================== FAILURES ===================================
+_ test_reviewed_idle_replacement_preserves_owner_connection_and_ticket[True] __
+..\okto-nexus-connector\tests\unit\test_r4_binding_replacement_lanes.py:43: in test_reviewed_idle_replacement_preserves_owner_connection_and_ticket
+    await execution.sync()
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus_connector\daemon\r4_execution.py:105: in sync
+    raise ConnectorError("RECONCILIATION_REQUIRED", "r4_lanes",
+E   okto_nexus_connector.errors.ConnectorError: RECONCILIATION_REQUIRED (r4_lanes): The execution lane requires authority reconciliation.
+=========================== short test summary info ===========================
+FAILED ..\okto-nexus-connector\tests\unit\test_r4_binding_replacement_lanes.py::test_reviewed_idle_replacement_preserves_owner_connection_and_ticket[True]
+1 failed, 4 passed in 1.80s

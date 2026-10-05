@@ -45,7 +45,7 @@ __all__ = [
 STATUS_PENDING = "pending"
 STATUS_APPROVED = "approved"
 STATUS_REJECTED = "rejected"
-STATUSES: frozenset[str] = frozenset({STATUS_PENDING, STATUS_APPROVED, STATUS_REJECTED})
+STATUSES: frozenset[str] = frozenset({STATUS_PENDING, STATUS_APPROVED, STATUS_REJECTED, "archived"})
 
 DECISION_APPROVE = "approve"
 DECISION_REJECT = "reject"
@@ -86,6 +86,8 @@ class Approval:
     trace_id: str | None
     created_at: str
     decided_at: str | None
+    archived_at: str | None = None
+    archived_by: str | None = None
 
 
 def is_reserved_agent_id(raw: Any) -> bool:

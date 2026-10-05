@@ -1,0 +1,743 @@
+{
+  "status": "SYNTHETIC_DOCUMENT_SCHEMA_EXAMPLES",
+  "hash_values": "placeholders sintaticamente válidos; não foram calculados com JCS e não autenticam inventário/operação",
+  "not_product_tests": true,
+  "cases": [
+    {
+      "id": "DOC-01",
+      "definition": "ExecutorInventorySnapshot",
+      "expect_valid": true,
+      "reason": "snapshot sintético sem caminhos e sem qualificação fictícia",
+      "data": {
+        "snapshot_format_version": 1,
+        "server_id": "srv_A",
+        "executor_id": "exe_B",
+        "producer_instance_id": "producer_B",
+        "publication_sequence": 1,
+        "inventory_revision": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "core_version": "0.2.10.dev0",
+        "catalog": {
+          "core_version": "0.2.10.dev0",
+          "format_version": 1,
+          "runtimes": [
+            {
+              "adapter_id": "codex_app_server",
+              "display_name": "Codex (app-server)",
+              "harness_family": "codex",
+              "native_kind": "codex",
+              "connection_mode": "managed",
+              "implementation_platforms": [
+                "linux",
+                "win32"
+              ],
+              "support_status": "managed_supported",
+              "discoverable": true
+            }
+          ]
+        },
+        "availability": {
+          "core_version": "0.2.10.dev0",
+          "format_version": 2,
+          "platform": "linux",
+          "availability": [
+            {
+              "adapter_id": "codex_app_server",
+              "candidate_ref": "nexus-install-v1:2222222222222222222222222222222222222222222222222222222222222222",
+              "display_name": "Codex (app-server)",
+              "connection_mode": "managed",
+              "state": "NOT_PROBED",
+              "reasons": [
+                "no_build_observation"
+              ],
+              "version": null,
+              "architecture": "x86_64",
+              "build_identity": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+              "trust": "selected",
+              "source": "trusted_root",
+              "qualification": "not_probed",
+              "containment": "unverified",
+              "label": "codex · 22222222"
+            }
+          ]
+        },
+        "evidence": [
+          {
+            "adapter_id": "codex_app_server",
+            "candidate_ref": "nexus-install-v1:2222222222222222222222222222222222222222222222222222222222222222",
+            "content_fingerprint": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "build_identity": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "version": null,
+            "architecture": "x86_64",
+            "trust": "selected",
+            "source": "trusted_root",
+            "support_status": "managed_supported",
+            "platform": "linux",
+            "state": "NOT_PROBED",
+            "reasons": [
+              "no_build_observation"
+            ],
+            "capability_report": null
+          }
+        ],
+        "observation_age_ms": 100
+      }
+    },
+    {
+      "id": "DOC-02",
+      "definition": "IntentResolution",
+      "expect_valid": true,
+      "reason": "resolução aponta dispatcher server, não efeito localCLI",
+      "data": {
+        "client_intent_id": "ci_A",
+        "intent_id": "intent_A",
+        "operation_id": "op_OPEN",
+        "session_id": "rs_A",
+        "reuse": false,
+        "scope": {
+          "server_id": "srv_A",
+          "executor_id": "exe_B",
+          "binding_id": "bind_B",
+          "agent_id": "ag_A",
+          "workspace_id": "ws_A",
+          "workspace_binding_id": "wb_B",
+          "session_id": "rs_A",
+          "session_owner_generation": 1,
+          "authorization_revision": 1,
+          "configuration_revision": 1,
+          "binding_revision": 1,
+          "credential_epoch": 1
+        },
+        "semantic_intent": {
+          "server_id": "srv_A",
+          "executor_id": "exe_B",
+          "binding_id": "bind_B",
+          "agent_id": "ag_A",
+          "workspace_id": "ws_A",
+          "workspace_binding_id": "wb_B",
+          "session_id": "rs_A",
+          "configuration_revision": 1,
+          "action": "runtime.open",
+          "target": {
+            "kind": "none",
+            "expected_turn_id": null
+          },
+          "payload": {
+            "adapter_id": "codex_app_server",
+            "candidate_ref": "nexus-install-v1:2222222222222222222222222222222222222222222222222222222222222222",
+            "inventory_revision": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "realization_ref": "real_B",
+            "realization_revision": 1,
+            "profile_revision": 1,
+            "mode": "managed"
+          }
+        },
+        "intent_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "resolution_revision": 1,
+        "expires_at": "2026-09-29T20:00:00Z",
+        "can_submit": true,
+        "blockers": [],
+        "dispatch_owner": "server"
+      }
+    },
+    {
+      "id": "DOC-03",
+      "definition": "OperationView",
+      "expect_valid": true,
+      "reason": "admissão pendente ainda sem receipt nativo",
+      "data": {
+        "operation_id": "op_OPEN",
+        "client_intent_id": "ci_A",
+        "scope": {
+          "server_id": "srv_A",
+          "executor_id": "exe_B",
+          "binding_id": "bind_B",
+          "agent_id": "ag_A",
+          "workspace_id": "ws_A",
+          "workspace_binding_id": "wb_B",
+          "session_id": "rs_A",
+          "session_owner_generation": 1,
+          "authorization_revision": 1,
+          "configuration_revision": 1,
+          "binding_revision": 1,
+          "credential_epoch": 1
+        },
+        "action": "runtime.open",
+        "intent_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "admission_state": "DISPATCH_PENDING",
+        "executor_stage": null,
+        "possible_effect": false,
+        "retry_safe": false,
+        "receipt_revision": 0,
+        "last_observed_at": null,
+        "error": null,
+        "follow_up_operation_ids": []
+      }
+    },
+    {
+      "id": "DOC-04",
+      "definition": "DecisionView",
+      "expect_valid": true,
+      "reason": "confirmação canônica separada da aplicação nativa",
+      "data": {
+        "decision_id": "dec_A",
+        "client_intent_id": "ci_dec",
+        "approval_key": {
+          "server_id": "srv_A",
+          "executor_id": "exe_B",
+          "binding_id": "bind_B",
+          "agent_id": "ag_A",
+          "workspace_id": "ws_A",
+          "session_id": "rs_A",
+          "session_owner_generation": 1,
+          "canonical_request_id": "apr_A",
+          "kind": "native_approval"
+        },
+        "request_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "request_revision": 1,
+        "proposal_decision": "approve",
+        "native_decision": "accept",
+        "actor_agent_id": "operator",
+        "subject_agent_id": "ag_A",
+        "canonical_state": "CONFIRMED",
+        "native_operation_id": "op_dec",
+        "native_stage": "DISPATCH_PENDING",
+        "possible_effect": false,
+        "retry_safe": false,
+        "response_digest": null,
+        "expires_at": "2026-09-29T20:00:00Z"
+      }
+    },
+    {
+      "id": "DOC-05",
+      "definition": "ResolveIntentRequest",
+      "expect_valid": true,
+      "reason": "pedido por intenção sem executable/argv",
+      "data": {
+        "client_intent_id": "ci_A",
+        "intent": "runtime.start",
+        "binding_id": "bind_B",
+        "workspace_binding_id": "wb_B",
+        "new_session": false
+      }
+    },
+    {
+      "id": "DOC-06",
+      "definition": "ErrorResponse",
+      "expect_valid": true,
+      "reason": "erro preserva incerteza e ID",
+      "data": {
+        "error": {
+          "code": "OUTCOME_UNKNOWN",
+          "stage": "dispatch",
+          "message": "Receipt ainda não observado.",
+          "possible_effect": true,
+          "retry_safe": false,
+          "operation_id": "op_OPEN",
+          "action": "Consultar a mesma operação."
+        }
+      }
+    },
+    {
+      "id": "DOC-07",
+      "definition": "ExecutorInventorySnapshot",
+      "expect_valid": false,
+      "reason": "formato availability desconhecido não aceito",
+      "data": {
+        "snapshot_format_version": 1,
+        "server_id": "srv_A",
+        "executor_id": "exe_B",
+        "producer_instance_id": "producer_B",
+        "publication_sequence": 1,
+        "inventory_revision": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "core_version": "0.2.10.dev0",
+        "catalog": {
+          "core_version": "0.2.10.dev0",
+          "format_version": 1,
+          "runtimes": [
+            {
+              "adapter_id": "codex_app_server",
+              "display_name": "Codex (app-server)",
+              "harness_family": "codex",
+              "native_kind": "codex",
+              "connection_mode": "managed",
+              "implementation_platforms": [
+                "linux",
+                "win32"
+              ],
+              "support_status": "managed_supported",
+              "discoverable": true
+            }
+          ]
+        },
+        "availability": {
+          "core_version": "0.2.10.dev0",
+          "format_version": 3,
+          "platform": "linux",
+          "availability": [
+            {
+              "adapter_id": "codex_app_server",
+              "candidate_ref": "nexus-install-v1:2222222222222222222222222222222222222222222222222222222222222222",
+              "display_name": "Codex (app-server)",
+              "connection_mode": "managed",
+              "state": "NOT_PROBED",
+              "reasons": [
+                "no_build_observation"
+              ],
+              "version": null,
+              "architecture": "x86_64",
+              "build_identity": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+              "trust": "selected",
+              "source": "trusted_root",
+              "qualification": "not_probed",
+              "containment": "unverified",
+              "label": "codex · 22222222"
+            }
+          ]
+        },
+        "evidence": [
+          {
+            "adapter_id": "codex_app_server",
+            "candidate_ref": "nexus-install-v1:2222222222222222222222222222222222222222222222222222222222222222",
+            "content_fingerprint": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "build_identity": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "version": null,
+            "architecture": "x86_64",
+            "trust": "selected",
+            "source": "trusted_root",
+            "support_status": "managed_supported",
+            "platform": "linux",
+            "state": "NOT_PROBED",
+            "reasons": [
+              "no_build_observation"
+            ],
+            "capability_report": null
+          }
+        ],
+        "observation_age_ms": 100
+      }
+    },
+    {
+      "id": "DOC-08",
+      "definition": "ExecutorInventorySnapshot",
+      "expect_valid": false,
+      "reason": "path não pertence à projeçãoremota",
+      "data": {
+        "snapshot_format_version": 1,
+        "server_id": "srv_A",
+        "executor_id": "exe_B",
+        "producer_instance_id": "producer_B",
+        "publication_sequence": 1,
+        "inventory_revision": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "core_version": "0.2.10.dev0",
+        "catalog": {
+          "core_version": "0.2.10.dev0",
+          "format_version": 1,
+          "runtimes": [
+            {
+              "adapter_id": "codex_app_server",
+              "display_name": "Codex (app-server)",
+              "harness_family": "codex",
+              "native_kind": "codex",
+              "connection_mode": "managed",
+              "implementation_platforms": [
+                "linux",
+                "win32"
+              ],
+              "support_status": "managed_supported",
+              "discoverable": true
+            }
+          ]
+        },
+        "availability": {
+          "core_version": "0.2.10.dev0",
+          "format_version": 2,
+          "platform": "linux",
+          "availability": [
+            {
+              "adapter_id": "codex_app_server",
+              "candidate_ref": "nexus-install-v1:2222222222222222222222222222222222222222222222222222222222222222",
+              "display_name": "Codex (app-server)",
+              "connection_mode": "managed",
+              "state": "NOT_PROBED",
+              "reasons": [
+                "no_build_observation"
+              ],
+              "version": null,
+              "architecture": "x86_64",
+              "build_identity": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+              "trust": "selected",
+              "source": "trusted_root",
+              "qualification": "not_probed",
+              "containment": "unverified",
+              "label": "codex · 22222222"
+            }
+          ]
+        },
+        "evidence": [
+          {
+            "adapter_id": "codex_app_server",
+            "candidate_ref": "nexus-install-v1:2222222222222222222222222222222222222222222222222222222222222222",
+            "content_fingerprint": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "build_identity": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "version": null,
+            "architecture": "x86_64",
+            "trust": "selected",
+            "source": "trusted_root",
+            "support_status": "managed_supported",
+            "platform": "linux",
+            "state": "NOT_PROBED",
+            "reasons": [
+              "no_build_observation"
+            ],
+            "capability_report": null,
+            "executable": "/tmp/private"
+          }
+        ],
+        "observation_age_ms": 100
+      }
+    },
+    {
+      "id": "DOC-09",
+      "definition": "IntentResolution",
+      "expect_valid": false,
+      "reason": "owner obrigatório",
+      "data": {
+        "client_intent_id": "ci_A",
+        "intent_id": "intent_A",
+        "operation_id": "op_OPEN",
+        "session_id": "rs_A",
+        "reuse": false,
+        "scope": {
+          "server_id": "srv_A",
+          "executor_id": "exe_B",
+          "binding_id": "bind_B",
+          "agent_id": "ag_A",
+          "workspace_id": "ws_A",
+          "workspace_binding_id": "wb_B",
+          "session_id": "rs_A",
+          "authorization_revision": 1,
+          "configuration_revision": 1,
+          "binding_revision": 1,
+          "credential_epoch": 1
+        },
+        "semantic_intent": {
+          "server_id": "srv_A",
+          "executor_id": "exe_B",
+          "binding_id": "bind_B",
+          "agent_id": "ag_A",
+          "workspace_id": "ws_A",
+          "workspace_binding_id": "wb_B",
+          "session_id": "rs_A",
+          "configuration_revision": 1,
+          "action": "runtime.open",
+          "target": {
+            "kind": "none",
+            "expected_turn_id": null
+          },
+          "payload": {
+            "adapter_id": "codex_app_server",
+            "candidate_ref": "nexus-install-v1:2222222222222222222222222222222222222222222222222222222222222222",
+            "inventory_revision": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "realization_ref": "real_B",
+            "realization_revision": 1,
+            "profile_revision": 1,
+            "mode": "managed"
+          }
+        },
+        "intent_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "resolution_revision": 1,
+        "expires_at": "2026-09-29T20:00:00Z",
+        "can_submit": true,
+        "blockers": [],
+        "dispatch_owner": "server"
+      }
+    },
+    {
+      "id": "DOC-10",
+      "definition": "IntentResolution",
+      "expect_valid": false,
+      "reason": "CLI não vira outrodispatcher",
+      "data": {
+        "client_intent_id": "ci_A",
+        "intent_id": "intent_A",
+        "operation_id": "op_OPEN",
+        "session_id": "rs_A",
+        "reuse": false,
+        "scope": {
+          "server_id": "srv_A",
+          "executor_id": "exe_B",
+          "binding_id": "bind_B",
+          "agent_id": "ag_A",
+          "workspace_id": "ws_A",
+          "workspace_binding_id": "wb_B",
+          "session_id": "rs_A",
+          "session_owner_generation": 1,
+          "authorization_revision": 1,
+          "configuration_revision": 1,
+          "binding_revision": 1,
+          "credential_epoch": 1
+        },
+        "semantic_intent": {
+          "server_id": "srv_A",
+          "executor_id": "exe_B",
+          "binding_id": "bind_B",
+          "agent_id": "ag_A",
+          "workspace_id": "ws_A",
+          "workspace_binding_id": "wb_B",
+          "session_id": "rs_A",
+          "configuration_revision": 1,
+          "action": "runtime.open",
+          "target": {
+            "kind": "none",
+            "expected_turn_id": null
+          },
+          "payload": {
+            "adapter_id": "codex_app_server",
+            "candidate_ref": "nexus-install-v1:2222222222222222222222222222222222222222222222222222222222222222",
+            "inventory_revision": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "realization_ref": "real_B",
+            "realization_revision": 1,
+            "profile_revision": 1,
+            "mode": "managed"
+          }
+        },
+        "intent_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "resolution_revision": 1,
+        "expires_at": "2026-09-29T20:00:00Z",
+        "can_submit": true,
+        "blockers": [],
+        "dispatch_owner": "connector_cli"
+      }
+    },
+    {
+      "id": "DOC-11",
+      "definition": "SemanticIntent",
+      "expect_valid": false,
+      "reason": "argv livre não é payload deopen",
+      "data": {
+        "server_id": "srv_A",
+        "executor_id": "exe_B",
+        "binding_id": "bind_B",
+        "agent_id": "ag_A",
+        "workspace_id": "ws_A",
+        "workspace_binding_id": "wb_B",
+        "session_id": "rs_A",
+        "configuration_revision": 1,
+        "action": "runtime.open",
+        "target": {
+          "kind": "none",
+          "expected_turn_id": null
+        },
+        "payload": {
+          "adapter_id": "codex_app_server",
+          "candidate_ref": "nexus-install-v1:2222222222222222222222222222222222222222222222222222222222222222",
+          "inventory_revision": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+          "realization_ref": "real_B",
+          "realization_revision": 1,
+          "profile_revision": 1,
+          "mode": "managed",
+          "argv": [
+            "sh",
+            "-c",
+            "noop"
+          ]
+        }
+      }
+    },
+    {
+      "id": "DOC-12",
+      "definition": "ExecutorInventorySnapshot",
+      "expect_valid": false,
+      "reason": "ID acima160 rejeitado em vez detruncar",
+      "data": {
+        "snapshot_format_version": 1,
+        "server_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "executor_id": "exe_B",
+        "producer_instance_id": "producer_B",
+        "publication_sequence": 1,
+        "inventory_revision": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "core_version": "0.2.10.dev0",
+        "catalog": {
+          "core_version": "0.2.10.dev0",
+          "format_version": 1,
+          "runtimes": [
+            {
+              "adapter_id": "codex_app_server",
+              "display_name": "Codex (app-server)",
+              "harness_family": "codex",
+              "native_kind": "codex",
+              "connection_mode": "managed",
+              "implementation_platforms": [
+                "linux",
+                "win32"
+              ],
+              "support_status": "managed_supported",
+              "discoverable": true
+            }
+          ]
+        },
+        "availability": {
+          "core_version": "0.2.10.dev0",
+          "format_version": 2,
+          "platform": "linux",
+          "availability": [
+            {
+              "adapter_id": "codex_app_server",
+              "candidate_ref": "nexus-install-v1:2222222222222222222222222222222222222222222222222222222222222222",
+              "display_name": "Codex (app-server)",
+              "connection_mode": "managed",
+              "state": "NOT_PROBED",
+              "reasons": [
+                "no_build_observation"
+              ],
+              "version": null,
+              "architecture": "x86_64",
+              "build_identity": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+              "trust": "selected",
+              "source": "trusted_root",
+              "qualification": "not_probed",
+              "containment": "unverified",
+              "label": "codex · 22222222"
+            }
+          ]
+        },
+        "evidence": [
+          {
+            "adapter_id": "codex_app_server",
+            "candidate_ref": "nexus-install-v1:2222222222222222222222222222222222222222222222222222222222222222",
+            "content_fingerprint": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "build_identity": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "version": null,
+            "architecture": "x86_64",
+            "trust": "selected",
+            "source": "trusted_root",
+            "support_status": "managed_supported",
+            "platform": "linux",
+            "state": "NOT_PROBED",
+            "reasons": [
+              "no_build_observation"
+            ],
+            "capability_report": null
+          }
+        ],
+        "observation_age_ms": 100
+      }
+    },
+    {
+      "id": "DOC-13",
+      "definition": "DecisionView",
+      "expect_valid": false,
+      "reason": "vocabulárioUI não é decisão nativa",
+      "data": {
+        "decision_id": "dec_A",
+        "client_intent_id": "ci_dec",
+        "approval_key": {
+          "server_id": "srv_A",
+          "executor_id": "exe_B",
+          "binding_id": "bind_B",
+          "agent_id": "ag_A",
+          "workspace_id": "ws_A",
+          "session_id": "rs_A",
+          "session_owner_generation": 1,
+          "canonical_request_id": "apr_A",
+          "kind": "native_approval"
+        },
+        "request_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "request_revision": 1,
+        "proposal_decision": "approve",
+        "native_decision": "approve",
+        "actor_agent_id": "operator",
+        "subject_agent_id": "ag_A",
+        "canonical_state": "CONFIRMED",
+        "native_operation_id": "op_dec",
+        "native_stage": "DISPATCH_PENDING",
+        "possible_effect": false,
+        "retry_safe": false,
+        "response_digest": null,
+        "expires_at": "2026-09-29T20:00:00Z"
+      }
+    },
+    {
+      "id": "DOC-14",
+      "definition": "OperationView",
+      "expect_valid": false,
+      "reason": "HTTP202 não é estágio nativo",
+      "data": {
+        "operation_id": "op_OPEN",
+        "client_intent_id": "ci_A",
+        "scope": {
+          "server_id": "srv_A",
+          "executor_id": "exe_B",
+          "binding_id": "bind_B",
+          "agent_id": "ag_A",
+          "workspace_id": "ws_A",
+          "workspace_binding_id": "wb_B",
+          "session_id": "rs_A",
+          "session_owner_generation": 1,
+          "authorization_revision": 1,
+          "configuration_revision": 1,
+          "binding_revision": 1,
+          "credential_epoch": 1
+        },
+        "action": "runtime.open",
+        "intent_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "admission_state": "DISPATCH_PENDING",
+        "executor_stage": "READY_BY_HTTP_202",
+        "possible_effect": false,
+        "retry_safe": false,
+        "receipt_revision": 0,
+        "last_observed_at": null,
+        "error": null,
+        "follow_up_operation_ids": []
+      }
+    },
+    {
+      "id": "DOC-15",
+      "definition": "CandidateAvailability",
+      "expect_valid": false,
+      "reason": "projeção não carrega classe",
+      "data": {
+        "adapter_id": "codex_app_server",
+        "candidate_ref": "nexus-install-v1:2222222222222222222222222222222222222222222222222222222222222222",
+        "display_name": "Codex (app-server)",
+        "connection_mode": "managed",
+        "state": "NOT_PROBED",
+        "reasons": [
+          "no_build_observation"
+        ],
+        "version": null,
+        "architecture": "x86_64",
+        "build_identity": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "trust": "selected",
+        "source": "trusted_root",
+        "qualification": "not_probed",
+        "containment": "unverified",
+        "label": "codex · 22222222",
+        "class_name": "Dynamic"
+      }
+    },
+    {
+      "id": "DOC-16",
+      "definition": "ExecutionScope",
+      "expect_valid": false,
+      "reason": "scope não autoriza grant por payload",
+      "data": {
+        "server_id": "srv_A",
+        "executor_id": "exe_B",
+        "binding_id": "bind_B",
+        "agent_id": "ag_A",
+        "workspace_id": "ws_A",
+        "workspace_binding_id": "wb_B",
+        "session_id": "rs_A",
+        "session_owner_generation": 1,
+        "authorization_revision": 1,
+        "configuration_revision": 1,
+        "binding_revision": 1,
+        "credential_epoch": 1,
+        "allowed_actions": [
+          "*"
+        ]
+      }
+    }
+  ]
+}

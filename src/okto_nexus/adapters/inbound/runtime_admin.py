@@ -1,0 +1,77 @@
+"""Versioned runtime administrative input models shared by HTTP and MCP."""
+from typing import Any
+
+from pydantic import BaseModel, Field
+
+
+class RuntimeAdminBody(BaseModel):
+    model_config = {"extra": "forbid", "strict": True}
+
+
+class RuntimeProfileBody(RuntimeAdminBody):
+    profile_id: str = Field(min_length=1, max_length=128)
+    adapter_id: str
+    config: dict[str, Any] = Field(default_factory=dict)
+    secret_refs: dict[str, str] = Field(default_factory=dict)
+    inherit_ambient: bool = False
+    enabled: bool = False
+
+
+class RuntimeEndpointBody(RuntimeAdminBody):
+    endpoint_id: str = Field(min_length=1, max_length=128)
+    agent_id: str
+    adapter_id: str
+    project_root: str
+    profile_id: str | None = None
+    enabled: bool = False
+    priority: int = 0
+    selection_group: str | None = None
+    response_policy: str = "explicit"
+    consumption: str = "exclusive"
+    public_config: dict[str, Any] = Field(default_factory=dict)
+
+
+class RuntimeBootBody(RuntimeAdminBody):
+    enabled: bool
+    expected_revision: int = Field(ge=1)
+
+
+class RuntimeEndpointUpdateBody(RuntimeAdminBody):
+    expected_revision: int = Field(ge=1)
+    public_config: dict[str, Any] | None = None
+    enabled: bool | None = None
+    priority: int | None = None
+    selection_group: str | None = None
+    response_policy: str | None = None
+    consumption: str | None = None
+    profile_id: str | None = None
+
+
+class RuntimeProfileUpdateBody(RuntimeAdminBody):
+    expected_revision: int = Field(ge=1)
+    config: dict[str, Any] | None = None
+    secret_refs: dict[str, str] | None = None
+    inherit_ambient: bool | None = None
+    enabled: bool | None = None
+
+
+class RuntimeReconcileBody(RuntimeAdminBody):
+    expected_revision: int = Field(ge=1)
+    idempotency_key: str
+    reason: str
+    acknowledge_uncertain_effects: bool = False
+
+
+class RuntimeOperationMaintenanceBody(RuntimeAdminBody):
+    action: str = "inspect"
+    operation_id: str | None = Field(default=None, min_length=1, max_length=128)
+    after_operation_id: str | None = Field(default=None, min_length=1, max_length=128)
+    limit: int = Field(default=50, ge=1, le=100)
+    expected_state: str | None = None
+    expected_attempt_id: str | None = Field(default=None, min_length=1, max_length=128)
+    expected_owner_epoch: int | None = Field(default=None, ge=1)
+    expected_handoff_id: str | None = Field(default=None, min_length=1, max_length=128)
+    expected_claim_epoch: int | None = Field(default=None, ge=1)
+    idempotency_key: str | None = Field(default=None, min_length=1, max_length=128)
+    reason: str | None = Field(default=None, min_length=1, max_length=512)
+    acknowledge_duplicate_risk: bool = False

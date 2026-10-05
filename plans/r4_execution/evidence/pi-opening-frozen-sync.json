@@ -1,0 +1,15 @@
+{
+  "command": [
+    "uv",
+    "sync",
+    "--frozen",
+    "--offline",
+    "--extra",
+    "serve-lite",
+    "--extra",
+    "dev",
+    "--no-editable"
+  ],
+  "environment": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-opening-frozen-us3wgoyl\\env",
+  "exit_code": 0
+}

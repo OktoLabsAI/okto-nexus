@@ -1,0 +1,6 @@
+{
+  "first_observation_age_ms": 207290,
+  "profile_seconds": 20.06967789999999,
+  "candidates": 1,
+  "conclusion": "The cold observation exceeded the existing 120-second freshness gate and was correctly refused. The opt-in journey must wait for a fresh scheduled publication; the independent profile took about 20 seconds. No hashing or TTL was weakened."
+}

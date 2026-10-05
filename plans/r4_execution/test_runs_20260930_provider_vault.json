@@ -1,0 +1,65 @@
+{
+  "date": "2026-09-30",
+  "scope": "Partial M05 protected provider references, approved launch and local owner CLI; no milestone or gate closure.",
+  "artifacts": {
+    "core": {
+      "wheel": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\artifacts\\nexus_connector_core-0.2.38.dev0-py3-none-any.whl",
+      "sha256": "f9bc5c3002593845416187b91802dfe914fd89b04036fd699be48e81dfff321b"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-lease-renewal-final-connector-g0xipv52\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "e540cd1ee34e1208399d0261d905d73068861ccec7f92065ec099d541c001683"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-provider-vault-39qbltr4\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "c4131a65a909b02d35662a0e807ae3f89ec3efa518430992859d133ff8c3a7a3"
+    },
+    "isolated_python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-embedded-inventory-2z7k3itc\\isolated\\Scripts\\python.exe"
+  },
+  "runs": {
+    "nexus": {
+      "passed": 122,
+      "seconds": 300.258,
+      "overlapping_subset": false,
+      "result": "evidence/provider-vault-installed-nexus.xml"
+    },
+    "isolated": {
+      "passed": 67,
+      "seconds": 185.899,
+      "overlapping_subset": true,
+      "result": "evidence/provider-vault-installed-isolated.xml"
+    }
+  },
+  "source": {
+    "initial": {
+      "passed": 7,
+      "failed": 2
+    },
+    "final": {
+      "passed": 9,
+      "failed": 0
+    },
+    "counting": "Successive source campaigns and installed overlapping suites are not additive coverage."
+  },
+  "cli_probe": "evidence/provider-vault-cli-installed.json",
+  "limitations": [
+    "Technical native factory and qualification fixtures for execution; actual Windows OS vault roundtrip and isolated CLI processes verified.",
+    "Session capability storage/renewal and automatic MCP/Pi composition remain open.",
+    "Linux/macOS protected backend qualification and full real-provider journeys remain open.",
+    "Preexisting UI edits included in wheel, excluded from commit and UI acceptance.",
+    "Existing Starlette/httpx deprecation warning."
+  ],
+  "evidence_sha256": {
+    "provider-vault-artifacts.json": "2718ab3092449d4e552d27ba2b984683311a6a28306cc14beda1d549887c9902",
+    "provider-vault-cli-installed.json": "a7c72dba5b89e34dfa8e08f5f801c77b10d6d0310a65c0af0a98095824e7eb9e",
+    "provider-vault-installed-isolated.json": "8bf5567e9c371c60419f2f554b2d144399d27d6880c12b25e8d80a26c70c6db4",
+    "provider-vault-installed-isolated.log": "0bb62538c984c7dc40bf819d9c9009f24aa7220ba7f0f171913b52a821c1104f",
+    "provider-vault-installed-isolated.xml": "373c48788e76ac6b97cffbde4eab38721e0164510734471a1a51a9c8ceb1342d",
+    "provider-vault-installed-nexus.json": "2240a11ae7e392b7f09a97507ed4c479eacd21e51a9db39482cd4785b196c603",
+    "provider-vault-installed-nexus.log": "0c9c7e1fa19f879bc25f9e37c3177712bd7635b1a544847214ca95c051cf5efa",
+    "provider-vault-installed-nexus.xml": "f745e5f6467cd46f7df47a13b5fa955240c4e451da84370e18f3d09c325a8832",
+    "provider-vault-isolated-installation.json": "156edd7d8655bc85ed3902f7f8a0e145f792b2e053d460c396547ae1ff9fc2cd",
+    "provider-vault-source-initial.xml": "9c28f0c8c34fcecf70222a3e40958c11ec33fa952a36c39027d826060d5aa41f",
+    "provider-vault-source.xml": "03d9502075ddf5e941207cf177b8c11fd81157e13f0e555b514083385137f3b1"
+  }
+}

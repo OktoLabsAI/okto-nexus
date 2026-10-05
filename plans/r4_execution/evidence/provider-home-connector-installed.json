@@ -1,0 +1,41 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+    "-I",
+    "-c",
+    "import sys,pytest; sys.path.insert(0,'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector'); raise SystemExit(pytest.main(['-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\okto-r4-canonical-installed\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests', '-o', 'asyncio_mode=auto', '-o', 'asyncio_default_fixture_loop_scope=function', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests\\\\unit\\\\test_r4_execution.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests\\\\unit\\\\test_r4_events.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests\\\\unit\\\\test_r4_publications.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests\\\\unit\\\\test_r4_daemon_execution.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests\\\\unit\\\\test_runtime_admission.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests\\\\contract\\\\test_https_client.py', '-q', '--tb=short', '--junitxml=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\plans\\\\r4_execution\\\\evidence\\\\provider-home-connector-installed.xml']))"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed",
+  "verified_packages": {
+    "nexus": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus",
+      "artifact": {
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-provider-home-nexus-_1776a_u\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+        "sha256": "c6759315f5cc56a3afa01ef9e1cd01b3786793fefec775b22dbe70a44822fe38"
+      }
+    },
+    "connector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus_connector",
+      "artifact": {
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-provider-home-connector-wuzgkcs2\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+        "sha256": "55c797f8bd5217394fa26ff72c89f7384703555e784dfbdf4e3cce5bfbd8c8a5"
+      }
+    },
+    "core": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\nexus_connector_core",
+      "artifact": {
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-provider-home-core-d5_bt65f\\dist\\nexus_connector_core-0.2.47.dev0-py3-none-any.whl",
+        "sha256": "5fa9eb1f583daf4fe3c84aa40bf782267243303c0d2b5a562288aa9de35a8a2b"
+      }
+    }
+  },
+  "exit_code": 0,
+  "test_hashes": {
+    "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_r4_execution.py": "dc26645da4c8f62609eb50713a4bfad83ccabe8772ca0fb921eff9ebe65a0ef8",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_r4_events.py": "0afe7fdaa87f82375badd96f933c1244ba589193e4c462a8160d4f9648e08eb0",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_r4_publications.py": "bdc3202b39cdf13a0bcdf1894b57e7a19d401bde5652760ba5c8addaf75411dd",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_r4_daemon_execution.py": "c22fd9699a59eca6173d241c40470fd6586f53394562411d04b2c6515ea8d39b",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_runtime_admission.py": "4520bfff8c44916d1a7ea84dd6b0551388c312414d2fb98db7e15400c38deb1d",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\contract\\test_https_client.py": "0065de7edaa045168248522572564dd53264228b65ffca3bc6f2866537dccd7c"
+  }
+}

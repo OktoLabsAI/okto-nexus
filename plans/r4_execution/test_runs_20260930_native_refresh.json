@@ -1,0 +1,78 @@
+{
+  "date": "2026-09-30",
+  "branch": "feature/v0.2.0",
+  "core_commit": "fb4c8df70a66b9d9df7729fee5cbff453b591d31",
+  "connector_commit": "40049af286bdc62317a8ec2dba7ebdb3e76c51c1",
+  "nexus_commit": "The commit containing this manifest.",
+  "artifacts": {
+    "core": {
+      "wheel": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\artifacts\\nexus_connector_core-0.2.38.dev0-py3-none-any.whl",
+      "sha256": "f9bc5c3002593845416187b91802dfe914fd89b04036fd699be48e81dfff321b"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-refresh-connector-54vhs2lo\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "7c8d2011c8c30b0e5a5b5efbd37bc21f37a90297427b0cc30b15f7ea60b29f26"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-refresh-nexus-qr1dvwf_\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "1fe21fc66e71704295179dc90fa5293adc28fc431e76b53effbc833867546b85"
+    },
+    "isolated_python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-embedded-inventory-2z7k3itc\\isolated\\Scripts\\python.exe"
+  },
+  "installed": {
+    "connector": {
+      "tests": 81,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 7.988,
+      "record": "evidence/native-refresh-installed-connector.json"
+    },
+    "nexus": {
+      "tests": 58,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 203.695,
+      "record": "evidence/native-refresh-installed-nexus.json"
+    },
+    "isolated": {
+      "tests": 49,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 182.128,
+      "record": "evidence/native-refresh-installed-isolated.json"
+    }
+  },
+  "pip_check": {
+    "normal": 0,
+    "isolated": 0
+  },
+  "evidence_sha256": {
+    "evidence\\native-refresh-artifacts.json": "e3864bf77bc6eb086cfc75689630178cbe156a2e1ad484d81da414bbca0b21d7",
+    "evidence\\native-refresh-initial-isolated.json": "8c7873cfffe19b9202639241de35733ff706e2ba5df0726e130b595c58bc7a90",
+    "evidence\\native-refresh-initial-isolated.log": "cd66127d1e26a2e84846bbd8bf9c72eab3adc75a38b78a18089c2761c9783f28",
+    "evidence\\native-refresh-initial-isolated.xml": "6991c0a75910c95fba61830d007c28fddbbd1ddc9f66c48bd4e4dcd677c5cf5e",
+    "evidence\\native-refresh-initial-nexus.json": "46db356ef7d2fddd4e7a0e473691cee0cbe48c165c67b69a073e3c97a9c8a443",
+    "evidence\\native-refresh-initial-nexus.log": "962ad3ac5fb0e32e8451c3737a6b40c93891157b07216797317ef8d7a222f5f7",
+    "evidence\\native-refresh-initial-nexus.xml": "555205abbef8d4ca1769740360b584cefed634ac9298bf7bcf6b300a066699b7",
+    "evidence\\native-refresh-installed-connector.json": "a92db8a97d2f087cd66775f63841df94b2476ffde6b86b3935ec0eee066925e7",
+    "evidence\\native-refresh-installed-connector.log": "1869f93a3a64af1b2569b104d77fce590ddcb071863bb629030253da17930249",
+    "evidence\\native-refresh-installed-connector.xml": "e2fa59f6df57c01259c7626be10f896a80d608180a1b418133e7c6413024ff93",
+    "evidence\\native-refresh-installed-isolated.json": "114cde7df1030dc8d552bd70bfcb51458372427d44ae9e0887fbd3871fc7675b",
+    "evidence\\native-refresh-installed-isolated.log": "38b9c2d0af6b5af95808c34ba739a9a5506355e15bbc5059462465d277ce679a",
+    "evidence\\native-refresh-installed-isolated.xml": "246bf3b96c2c831a5e2c4f18b244be7837e08e5061ce9e87b90e0f769ffaa67c",
+    "evidence\\native-refresh-installed-nexus.json": "892cb3b769482a510d90a47d03cd26cea6072233f773494169383bbb7ee33f4d",
+    "evidence\\native-refresh-installed-nexus.log": "31f442133bab18976ce7c0d9ccf2997bde46c33e3128d623f7957151a118f5c2",
+    "evidence\\native-refresh-installed-nexus.xml": "ada8e242aba569d6c775bc0721a414abf1614778aef0db1995feed1743019b06"
+  },
+  "limitations": [
+    "Technical native peers and injected vault; not real provider acceptance.",
+    "Isolated cases overlap the normal Nexus campaign; counts are not additive.",
+    "First installed Nexus/isolated attempts failed eight restart tests due to a changed fixture signature; initial records are preserved and the final campaigns pass after correcting direct fixture calls.",
+    "Core contract/artifact and production qualification flags are unchanged.",
+    "Preexisting UI assets are included in the Nexus wheel but outside this commit and UI acceptance.",
+    "Live configuration recovery and remaining fixed-plan milestones and gates remain open."
+  ]
+}

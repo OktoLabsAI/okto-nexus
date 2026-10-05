@@ -1,0 +1,33 @@
+{
+  "observed_at": "2026-10-02",
+  "nexus": {
+    "run": "https://github.com/OktoLabsAI/okto-nexus/actions/runs/36977089419",
+    "head": "43aa8de",
+    "overall_status_at_observation": "in_progress",
+    "linux_cells": [
+      {"python": "3.11", "job": 110743152780, "passed": 3512, "failed": 1, "skipped": 60,
+       "failures": ["test_ns15_05: audit argparse consumed pytest arguments"]},
+      {"python": "3.12", "job": 110743152732, "passed": 3511, "failed": 2, "skipped": 60,
+       "failures": ["test_ns14_04: thread count assertion", "test_ns15_05: audit argparse consumed pytest arguments"]},
+      {"python": "3.13", "job": 110743152819, "passed": 3511, "failed": 2, "skipped": 60,
+       "failures": ["test_ns15_05: audit argparse consumed pytest arguments", "test_public_local_launch_resolves_only_approved_agent_vault[False]: first failure overwritten"]}
+    ],
+    "subtests_per_linux_cell": 2,
+    "windows_cells_at_observation": "in_progress"
+  },
+  "connector": {
+    "run": "https://github.com/OktoLabsAI/okto-nexus-connector/actions/runs/36981974955",
+    "head": "37726bd5657e9961e9d14a77e035993d9f118e5f",
+    "conclusion": "failure",
+    "successful_cells": ["windows 3.11", "ubuntu 3.11", "ubuntu 3.12", "ubuntu 3.13"],
+    "failed_cells": [
+      {"platform": "windows", "python": "3.12", "passed": 695, "failed": 4, "skipped": 2,
+       "failures": ["test_lost_publication_reply_never_reuses_sequence", "test_local_change_during_discovery_fences_publication", "test_nonempty_or_unavailable_history_cannot_be_reported_empty[claim]", "test_recover_after_core_commit_before_wire_projection[True]"]},
+      {"platform": "windows", "python": "3.13", "passed": 698, "failed": 1, "skipped": 2,
+       "failures": ["test_cancelled_cleanup_observer_does_not_abandon_pending_renewal[True]"]}
+    ],
+    "failure_kind": "observation timeouts; not established as product defects or resolved",
+    "build": "skipped"
+  },
+  "acceptance": "Historical hosted revisions, not the new development wheel or final M13 artifacts. No release gate closes."
+}

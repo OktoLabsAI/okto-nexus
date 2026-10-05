@@ -1,0 +1,188 @@
+{
+  "increment": "Durable R4 session capability issuance",
+  "status": "PARTIAL_INSTALLED_INTEGRATION",
+  "created_at_utc": "2026-09-30T13:28:59.890618+00:00",
+  "connector_commit": "e5236fe99f39f14978c1dd063b3321a49d540b81",
+  "nexus_parent": "c7d3c50229893b9ae2de6def05f4172e6c68e543",
+  "core_commit": "770659b7f3404798fe6c59146c7ab9d12b84bbe4",
+  "artifacts": {
+    "core": {
+      "version": "0.2.30.dev0",
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-core-wheel-85cnb6ls\\nexus_connector_core-0.2.30.dev0-py3-none-any.whl",
+      "sha256": "e060e033be05fdd4c9aff5c90902d191483d400b3f6778fa7bb5395b66f561e6"
+    },
+    "qualification": "Durable session capability issuance; automatic approved configuration and restart authority reconciliation remain pending.",
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-nexus-wheel-q28o9u85\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "c09baa8c157ca1d0d52e5bbf16be07f021d43a5e52f1f626c1e20c8efee1d7b4",
+      "command": [
+        "C:\\Python313\\python.exe",
+        "-m",
+        "pip",
+        "wheel",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-nexus-stage-zn3h01ol",
+        "--no-deps",
+        "--no-build-isolation",
+        "--wheel-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-nexus-wheel-q28o9u85"
+      ]
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-owner-connector-p0zkzzy3\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "90f680155bac2159a3b7efc0e5985480d5c5faf95eddf082a5e0eac2175becb4",
+      "command": [
+        "C:\\Python313\\python.exe",
+        "-m",
+        "pip",
+        "wheel",
+        "D:\\Projetos\\Techridy\\okto-nexus-connector",
+        "--no-deps",
+        "--no-build-isolation",
+        "--wheel-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-owner-connector-p0zkzzy3"
+      ]
+    },
+    "installed_python": "C:/Users/jpamb/AppData/Local/Temp/okto-r4-native-installed-zk_r383i/Scripts/python.exe",
+    "install_command": [
+      "C:/Users/jpamb/AppData/Local/Temp/okto-r4-native-installed-zk_r383i/Scripts/python.exe",
+      "-I",
+      "-m",
+      "pip",
+      "install",
+      "--no-deps",
+      "--force-reinstall",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-owner-connector-p0zkzzy3\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl"
+    ]
+  },
+  "source_sha256": {
+    "src/okto_nexus_connector/services/session_capabilities.py": "31673c9def0ac0bb5aaa558cc74f532311df15ac156a048456912188c029853e",
+    "src/okto_nexus_connector/storage/state_store.py": "7b35bd53afcf62b190ead4b196a0a5646dd9c13fffca8ddf03b144800f87867d",
+    "tests/unit/test_session_capability_owner.py": "c7bf8aaefd0b7188200fef69e2e408907bc24d47c666933bf6ecd9d5c6964e7a",
+    "tests/unit/test_executor_registration.py": "a22eb165f5010998c7d9e9d726fe0bcf66cc8451d49f01d73eee2e58d8784673",
+    "tests/unit/test_execution_selection.py": "7c4af85a5148f96d6c853d55b5a1f658611dd1e9b34486a10aa859289ae0d3ac",
+    "tests/unit/test_r4_daemon_control.py": "777c3d202d3b52b33cb94f2425114b6fb1fd04da5a61a13643f02f7577bfc3c1"
+  },
+  "campaigns": [
+    {
+      "suite": "connector",
+      "junit": "plans/r4_execution/evidence/session-reservation-installed-connector.xml",
+      "sha256": "73130b57d12eac0da8b6df7d4375f745c41f20a15d76a8fe0238dcdf2f2289df",
+      "counts": {
+        "tests": 276,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 1,
+        "passed": 275
+      },
+      "execution": {
+        "command": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+          "-I",
+          "-m",
+          "pytest",
+          "-c",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed\\pytest.ini",
+          "--rootdir=D:\\Projetos\\Techridy\\okto-nexus-connector\\tests",
+          "--confcutdir=D:\\Projetos\\Techridy\\okto-nexus-connector\\tests",
+          "-o",
+          "asyncio_mode=auto",
+          "-o",
+          "asyncio_default_fixture_loop_scope=function",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\test_r4_native_actions.py",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\contract",
+          "-q",
+          "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\evidence\\session-reservation-installed-connector.xml"
+        ],
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed",
+        "verified_packages": {
+          "nexus": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus",
+            "files": 333
+          },
+          "connector": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus_connector",
+            "files": 59
+          },
+          "core": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\nexus_connector_core",
+            "files": 91
+          }
+        },
+        "exit_code": 0,
+        "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+        "limitations": "Technical harness peer; no real provider qualification or automatic host lifecycle."
+      }
+    },
+    {
+      "suite": "nexus",
+      "junit": "plans/r4_execution/evidence/session-reservation-installed-nexus.xml",
+      "sha256": "dacbdf78ef9d0c7f80c3258c5b3210ceb95da04735cc7f271644f55f0b21b38d",
+      "counts": {
+        "tests": 61,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 61
+      },
+      "execution": {
+        "command": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+          "-I",
+          "-m",
+          "pytest",
+          "-c",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed\\pytest.ini",
+          "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests",
+          "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests",
+          "-o",
+          "asyncio_mode=auto",
+          "-o",
+          "asyncio_default_fixture_loop_scope=function",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_capability_reservation.py",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_session_capabilities.py",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_ns07.py",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_ns09.py",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_ns01.py",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_core_native_actions.py",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_remote_connection.py",
+          "-q",
+          "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\evidence\\session-reservation-installed-nexus.xml"
+        ],
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed",
+        "verified_packages": {
+          "nexus": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus",
+            "files": 333
+          },
+          "connector": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus_connector",
+            "files": 59
+          },
+          "core": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\nexus_connector_core",
+            "files": 91
+          }
+        },
+        "exit_code": 0,
+        "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+        "limitations": "Technical harness peer; no real provider qualification or automatic host lifecycle."
+      }
+    }
+  ],
+  "product_gates_closed": [],
+  "limitations": [
+    "Technical opening peer and seeded selection/authority fixtures; no real provider or automatic daemon composition qualification.",
+    "CapabilityLaunchProvider is composed through the existing execution launch port; automatic approved-profile loader is still pending.",
+    "Protected material persists, but restart reuse requires authority reconciliation not yet implemented; no new deadline or automatic replacement is inferred.",
+    "Terminal reservation retention/cleanup remains pending; capacity is bounded at 128 by default.",
+    "Existing Nexus technical wheel includes preexisting UI changes and is not a clean UI release.",
+    "Suites overlap and are not unique coverage totals."
+  ],
+  "source_campaign": {
+    "repository": "connector",
+    "junit": "plans/implementation/evidence/session-capability-owner-source.xml",
+    "passed": 87,
+    "limitations": "Development run before the last three regression cases and metadata drift validation; final installed campaign supersedes it."
+  }
+}

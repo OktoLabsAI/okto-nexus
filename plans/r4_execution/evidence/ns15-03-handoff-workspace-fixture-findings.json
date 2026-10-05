@@ -1,0 +1,10 @@
+{
+  "status": "REPRODUCED_SOURCE_FAILURES",
+  "command": "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/test_handoff.py::test_register_tools_and_envelope tests/test_handoff.py::test_build_service_reuses_existing_repos tests/test_handoff_dependencies.py::test_ts11_surface_revision_feature_flag_and_budgets -q --tb=short",
+  "failures": {
+    "test_register_tools_and_envelope": "SimpleNamespace fixture lacks runtime_admission_fence",
+    "test_build_service_reuses_existing_repos": "SimpleNamespace fixture lacks runtime_admission_fence",
+    "test_ts11_surface_revision_feature_flag_and_budgets": "Pinned revision 59; current product revision 61"
+  },
+  "unrelated_preexisting_changes": "Preserved legacy plan deletions and static assets; excluded from artifact/staging."
+}

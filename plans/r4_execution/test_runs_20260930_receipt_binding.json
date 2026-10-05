@@ -1,0 +1,70 @@
+{
+  "increment": "M07 Core-to-wire receipt binding and recovery before projection",
+  "status": "PARTIAL_INSTALLED_INTEGRATION",
+  "artifacts": "evidence/receipt-binding-artifacts.json",
+  "reference_commits": {
+    "core": "97892edba088ac85c9977b8bd8fde27f725ea2a3",
+    "connector": "3c6e21757cb479796ab6d61d705cc69e4c242905",
+    "nexus": "5385e56ff8c6d8e3d326466d6e83143d44b39e15"
+  },
+  "nexus_commit_note": "Nexus reference is the parent of the commit containing this manifest.",
+  "tests": {
+    "core": {
+      "tests": 104,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 104
+    },
+    "connector": {
+      "tests": 354,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 1,
+      "passed": 353
+    },
+    "nexus": {
+      "tests": 84,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 84
+    }
+  },
+  "superseded_initial_tests": {
+    "core": {
+      "tests": 101,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 101
+    },
+    "connector": {
+      "tests": 354,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 1,
+      "passed": 353
+    },
+    "nexus": {
+      "tests": 84,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 84
+    }
+  },
+  "initial_artifacts": "evidence/receipt-binding-initial-artifacts.json",
+  "superseded_reason": "Preserve live projection error operation IDs after extracting shared source validation.",
+  "contract_checks": {
+    "R3 generator": 0,
+    "R4 generator": 0
+  },
+  "limits": [
+    "Recovers persisted associations with existing Core facts, without native replay. Missing receipts and legacy rows without a binding remain unresolved.",
+    "Nonempty claims/session adoption, history after publication acknowledgment, events, ticket rotation and embedded recovery remain pending.",
+    "The integration uses a technical native peer, fixture readiness and injected old-ticket expiry. No process-kill or new provider qualification is claimed.",
+    "One existing Connector skip; one existing Nexus dependency deprecation warning. Existing user UI assets are included in the Nexus wheel without UI acceptance.",
+    "All M00-M13 requirements and G0-G3 remain in scope; no milestone or gate closed."
+  ]
+}

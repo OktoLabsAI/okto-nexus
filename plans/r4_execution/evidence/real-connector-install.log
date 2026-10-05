@@ -1,0 +1,62 @@
+Processing c:\users\jpamb\appdata\local\temp\okto-r4-real-connector-urat0fab\dist\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl
+Installing collected packages: okto-nexus-connector
+  Attempting uninstall: okto-nexus-connector
+    Found existing installation: okto-nexus-connector 0.5.0.dev0
+    Uninstalling okto-nexus-connector-0.5.0.dev0:
+      Successfully uninstalled okto-nexus-connector-0.5.0.dev0
+Successfully installed okto-nexus-connector-0.5.0.dev0
+
+[notice] A new release of pip is available: 24.3.1 -> 26.2.1
+[notice] To update, run: C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Scripts\python.exe -m pip install --upgrade pip
+No broken requirements found.
+annotated-doc==0.0.5
+annotated-types==0.8.0
+anyio==4.15.1
+attrs==26.1.0
+certifi==2026.7.22
+cffi==2.1.1
+click==8.5.0
+colorama==0.4.6
+cryptography==50.0.1
+fastapi==0.142.1
+h11==0.16.0
+httpcore==1.0.9
+httpx==0.28.1
+httpx-sse==0.4.3
+idna==3.20
+iniconfig==2.3.0
+jaraco.classes==3.4.0
+jaraco.context==6.1.2
+jaraco.functools==4.6.0
+jsonschema==4.26.0
+jsonschema-specifications==2025.9.1
+keyring==25.7.0
+mcp==1.30.0
+more-itertools==11.1.0
+nexus-connector-core @ file:///C:/Users/jpamb/AppData/Local/Temp/okto-r4-native-lease-core-hi9n9umw/dist/nexus_connector_core-0.2.43.dev0-py3-none-any.whl#sha256=7403611bb37050700fc325b2002f74b5ac507a79af8badba0bea0cd1b775087b
+okto-nexus @ file:///C:/Users/jpamb/AppData/Local/Temp/okto-r4-runtime-admission-nexus-tmvzlmoh/dist/okto_nexus-0.2.0-py3-none-any.whl#sha256=e218c5569551e335023de98d2d0988241a601eb59a412c4e24086685c0ee9889
+okto-nexus-connector @ file:///C:/Users/jpamb/AppData/Local/Temp/okto-r4-real-connector-urat0fab/dist/okto_nexus_connector-0.5.0.dev0-py3-none-any.whl#sha256=9a978ff5ea3d84b20e1169456ffbe995fd73b2ea11f4e4dac6e78123744df801
+opentelemetry-api==1.45.0
+packaging==26.3
+pluggy==1.6.0
+pycparser==3.0
+pydantic==2.13.5
+pydantic-settings==2.15.0
+pydantic_core==2.46.5
+Pygments==2.21.0
+PyJWT==2.15.1
+pytest==9.1.1
+pytest-asyncio==1.4.0
+python-dotenv==1.2.3
+python-multipart==0.0.32
+pywin32==312
+pywin32-ctypes==0.2.3
+referencing==0.37.0
+rfc8785==0.1.4
+rpds-py==2026.6.3
+sse-starlette==3.5.0
+starlette==1.7.0
+typing-inspection==0.4.4
+typing_extensions==4.16.0
+uvicorn==0.54.0
+websockets==17.1

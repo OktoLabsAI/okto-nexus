@@ -1,0 +1,141 @@
+{
+  "recorded_at": "2026-09-30T08:31:50.174022+00:00",
+  "scope": "Partial M03/M06 approved physical selection, persisted binding and Core host composition in real loopback WSS; no product gate",
+  "parent_and_dependency_commits": {
+    "nexus": "b6e9ed883f45d6eb8d573bb6e93b134038444686",
+    "connector": "b1d87106f1ed3abffd438e81ae0ca2fb4383a0af",
+    "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
+  },
+  "source_sha256": {
+    "tests/execution_r4/test_binding_operator.py": "6ea384aa22e65ae6064b577bd3d8f858da418f432821b095ad271b4c23572a60",
+    "tests/execution_r4/test_remote_connection.py": "2780307c9f3cf7ee5b25b6edbb4cabae96cb23a4ab3b3dd9bb45f4021b9a4a1d"
+  },
+  "connector_evidence": {
+    "commit": "b1d87106f1ed3abffd438e81ae0ca2fb4383a0af",
+    "file": "plans/implementation/evidence/r4-selection-report.json",
+    "sha256": "8cab438d4ff1387fc30fee8fe29940c5596f244bc80fb552d7fd6dbf6a48a713"
+  },
+  "runs": [
+    {
+      "file": "plans/r4_execution/evidence/r4-selection-installed.xml",
+      "sha256": "e58ffb98a3666f460f07cd67e41578e3d7837a8817a3b9e2ec2bee758a2c456a",
+      "tests": 55,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 55,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "55",
+          "time": "48.877",
+          "timestamp": "2026-09-30T05:23:27.067318-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ]
+    },
+    {
+      "file": "plans/r4_execution/evidence/r4-selection-public.xml",
+      "sha256": "3a55465230af3c35ae9b36db53725d50bef34aaa06d462eaaaf816b61629799a",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 1,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "1",
+          "time": "7.182",
+          "timestamp": "2026-09-30T05:21:48.240932-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ]
+    },
+    {
+      "file": "plans/r4_execution/evidence/r4-selection-source.xml",
+      "sha256": "03532a32992b011594c4820daefd53c344e0c00fa4e67537c81d4170c70b034a",
+      "tests": 103,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 103,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "103",
+          "time": "153.291",
+          "timestamp": "2026-09-30T05:22:36.606817-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ]
+    }
+  ],
+  "connector_runs": {
+    "directed_passes": 27,
+    "regression_passes": 278,
+    "regression_skips": 2,
+    "counts_overlap": true
+  },
+  "source_commands": [
+    "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/execution_r4/test_remote_connection.py -q --tb=line --junitxml=plans/r4_execution/evidence/r4-selection-public.xml",
+    "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/execution_r4 -q --tb=line --junitxml=plans/r4_execution/evidence/r4-selection-source.xml"
+  ],
+  "installed_command": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/okto-r4-selection-installed-fia6c05_/Scripts/python.exe -I -X utf8 -c '\nimport json,hashlib,zipfile,sys,platform,os\nfrom pathlib import Path\nimport pytest,okto_nexus,okto_nexus_connector,nexus_connector_core\nroot=Path(\"D:/Projetos/Techridy/okto_labs_okto_nexus\")\nconnector=root.parent/\"okto-nexus-connector\"\nwheel=json.loads(Path(\"C:/Users/jpamb/AppData/Local/Temp/r4-selection-wheel.json\").read_text())[\"wheel\"]\nmanifest={}\nfor module,artifact,source in [\n(okto_nexus,Path(\"C:/Users/jpamb/AppData/Local/Temp/okto-dispatch-pump-wheel-fwgjf64l/okto_nexus-0.2.0-py3-none-any.whl\"),root/\"src\"),\n(okto_nexus_connector,Path(wheel),connector/\"src\"),\n(nexus_connector_core,root/\"vendor/wheels/nexus_connector_core-0.2.28.dev0-py3-none-any.whl\",None)]:\n    package=Path(module.__file__).resolve().parent\n    assert \"site-packages\" in package.parts\n    files={}\n    with zipfile.ZipFile(artifact) as archive:\n        for name in archive.namelist():\n            if not name.startswith(module.__name__+\"/\") or name.endswith(\"/\"): continue\n            data=archive.read(name)\n            assert (package/name.split(\"/\",1)[1]).read_bytes()==data,name\n            if source is not None: assert (source/name).read_bytes()==data,name\n            files[name]=hashlib.sha256(data).hexdigest()\n    manifest[module.__name__]={\"path\":str(package),\"wheel\":str(artifact),\"wheel_sha256\":hashlib.sha256(artifact.read_bytes()).hexdigest(),\"files_sha256\":files}\nmanifest.update(python=sys.version,platform=platform.platform(),isolated=bool(sys.flags.isolated),\nscope=\"Persisted approved physical selection, Core host composition, single-reader contracts and real loopback WSS integration; synthetic native peer, no daemon/provider qualification\")\n(root/\"plans/r4_execution/evidence/r4-selection-installed-modules.json\").write_text(json.dumps(manifest,indent=2)+\"\\n\",encoding=\"utf-8\")\nargs=[\"-c\",\"pytest.ini\",\"--rootdir=\"+str(root/\"tests\"),\"--confcutdir=\"+str(root/\"tests\"),\"-o\",\"asyncio_mode=auto\",\nstr(connector/\"tests/unit/test_execution_selection.py\"),str(connector/\"tests/unit/test_realization_service_r4.py\"),str(connector/\"tests/unit/test_state_store.py\"),str(connector/\"tests/contract/test_r4_connection.py\"),str(connector/\"tests/contract/test_wss_r4.py\"),\nstr(root/\"tests/execution_r4/test_remote_connection.py\"),str(root/\"tests/execution_r4/test_public_open_bootstrap.py\"),\nstr(root/\"tests/execution_r4/test_ns09.py\"),\"-q\",\"--tb=line\",\n\"--junitxml=\"+str(root/\"plans/r4_execution/evidence/r4-selection-installed.xml\")]\nraise SystemExit(pytest.main(args))\n'",
+  "installed_cwd": "C:/Users/jpamb/AppData/Local/Temp/okto-r4-canonical-installed",
+  "installed_modules_manifest_sha256": "2dae08f85517239e7ff9e69e8c54f07850d78c04cb15ef4ac9f283befea1cc7c",
+  "installation_log_sha256": "eca8a986362cb6c6844636fa1ce09b6b0a2b6a14d68c3686ccbe7a154f5e5f6e",
+  "artifact_manifest_sha256": "52cf491e9d7dbb9fa999b28f8632e89b5834f0ed396055c3a82dbfd5f7fe5215",
+  "connector_artifact": {
+    "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-selection-build-w5sygu_u",
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-selection-wheel-ga8dgxjq\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+    "sha256": "2d810b73a8b5b75263267cea5a5080d1d9fafad8093588c1858bb1840da71632",
+    "build_log": "plans/r4_execution/evidence/r4-selection-build.log",
+    "build_log_sha256": "c2f2d8f98eae49c36a61653bd098dc580647250b6447306ab4ae04a4f5a11817"
+  },
+  "installed_artifacts": {
+    "okto_nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-dispatch-pump-wheel-fwgjf64l\\okto_nexus-0.2.0-py3-none-any.whl",
+      "wheel_sha256": "405d2d37ff94616069c50ee8fff6d86a36c872b33c159aa63a30bb1f337cf64e"
+    },
+    "okto_nexus_connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-selection-wheel-ga8dgxjq\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "wheel_sha256": "2d810b73a8b5b75263267cea5a5080d1d9fafad8093588c1858bb1840da71632"
+    },
+    "nexus_connector_core": {
+      "wheel": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\wheels\\nexus_connector_core-0.2.28.dev0-py3-none-any.whl",
+      "wheel_sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c"
+    }
+  },
+  "environment": {
+    "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "isolated": true
+  },
+  "core_wheel_sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c",
+  "verification": [
+    "The real loopback WSS journey stages local physical evidence, publishes it through the Server route, persists the actual approved binding, and composes Core via CoreRuntimeHost.build_r4.",
+    "The Core refuses execution context before lease installation; the prepared workspace equals the approved physical root; the native peer opens once and completes open/submit/steer/interrupt/close.",
+    "Installed modules are site-packages files, verified byte for byte against wheels and the current Nexus/Connector production source. No production file changed after wheel construction.",
+    "Connector initial fixture failures, corrected reruns and regression skips are retained in its published report.",
+    "Raw pytest XML is preserved; whitespace checks exclude historical failure XML and validate authored source/tests/docs."
+  ],
+  "limitations": [
+    "State schema 4 persists approved R4 bindings separately; older binaries reject it. Full upgrade/rollback qualification remains M12.",
+    "Daemon/CLI consumers, persisted executor registry, canonical profile/environment and explicit approved-revision refresh are still pending.",
+    "The integration uses an actual Server and connection owner in one process over loopback WSS, with a synthetic native peer and readiness; it is not daemon/provider/independent-host acceptance.",
+    "Nonempty reconciliation, credential lifecycle, durable errors/receipts/events, all seven actions and embedded composition remain incomplete.",
+    "Core and Nexus production bytes and public wire are unchanged; R4 executable/readiness flags remain false.",
+    "Two Connector regression skips remain. Counts overlap; no Linux, UI, real provider or final product gate is qualified."
+  ],
+  "product_gates_closed": []
+}

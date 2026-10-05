@@ -1,0 +1,69 @@
+{
+  "adapter": "pi_rpc",
+  "missing_login": false,
+  "server_release_gate_override": false,
+  "native_qualification_override": false,
+  "synthetic_native_factory": false,
+  "public_connector_cli": true,
+  "cli_subprocess": true,
+  "protected_os_vault": true,
+  "topology": "Single Windows host; actual loopback HTTP/WSS; separate Server and daemon processes.",
+  "stream_diagnostic": true,
+  "phase": "finished",
+  "vault_backend": "keyring:Windows WinVaultKeyring",
+  "candidate_ref": "nexus-install-v1:b64f7d489758234ac44fa9004bec00163e29efe01b8772ace8836ffc6001b3d5",
+  "selection_check_seconds": [
+    6.81275809998624,
+    6.544803700060584,
+    6.494170999969356,
+    6.990953200031072,
+    8.502624099957757,
+    0.6615442999172956,
+    0.5682644000044093,
+    1.040491099935025,
+    0.4570110000204295,
+    0.5109544000588357,
+    0.3905061000259593
+  ],
+  "open_stage": "SUBMITTED",
+  "scope": {
+    "agent_id": "subject",
+    "authorization_revision": 2,
+    "binding_id": "bind_eddbaacb8a59d6e7d2570b11597dfd4c",
+    "binding_revision": 1,
+    "configuration_revision": 2,
+    "credential_epoch": 1,
+    "executor_id": "exe_b26d90ea7bc6bcd8852cef7bbc16b254",
+    "server_id": "srv_e9a1992ceff0ba815c0d72f5346ce062",
+    "session_id": "ses_d3cfbc887b4853bea8bd450426a8c940",
+    "session_owner_generation": 1,
+    "workspace_binding_id": "wxb_e1a3d6e4b74ae01e97c639ec52a599a6",
+    "workspace_id": "wsr_e5dc995b08385dbc681aa1b718e38d3a"
+  },
+  "lease_serial_before_turn": 2,
+  "native_bridge_calls": [
+    {
+      "seconds": 1.4642339999554679,
+      "outcome": "returned"
+    },
+    {
+      "seconds": 1.6824054999742657,
+      "outcome": "returned"
+    },
+    {
+      "seconds": 1.1017048999201506,
+      "outcome": "returned"
+    }
+  ],
+  "turn_stage": "SUCCEEDED",
+  "explicit_operator_decisions": 0,
+  "handoff_status": "COMPLETED",
+  "native_action_count": 3,
+  "tool_claim_count": 1,
+  "wss_ticket_count": 4,
+  "close_stage": "SUCCEEDED",
+  "completed": true,
+  "daemon_exit_code": 0,
+  "campaign_credentials_removed": true,
+  "server_exit_code": 0
+}

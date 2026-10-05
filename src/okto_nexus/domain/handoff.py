@@ -23,6 +23,7 @@ State machine (V1 + verification)::
     CLAIMED   --handoff_complete (with criteria)-->  VERIFYING
     CLAIMED   --handoff_reject (owner)-->            REJECTED
     CLAIMED   --expire_old_leases-->                 OPEN
+    CLAIMED   --recover_handoff (operator)-->        OPEN
     VERIFYING --handoff_verify pass-->               COMPLETED
     VERIFYING --handoff_verify fail-->               CLAIMED
 
@@ -82,6 +83,7 @@ __all__ = [
     "EVENT_REJECTED",
     "EVENT_CANCELLED",
     "EVENT_EXPIRED",
+    "EVENT_RECOVERED",
     "EVENT_VERIFICATION_REQUESTED",
     "EVENT_VERIFICATION_FAILED",
     "EVENT_UNBLOCKED",
@@ -164,6 +166,7 @@ EVENT_COMPLETED = "handoff.completed"
 EVENT_REJECTED = "handoff.rejected"
 EVENT_CANCELLED = "handoff.cancelled"
 EVENT_EXPIRED = "handoff.expired"
+EVENT_RECOVERED = "handoff.recovered"
 #: Verification adds exactly TWO event types. A verify "pass" does NOT get its
 #: own event: it emits the canonical EVENT_COMPLETED enriched with
 #: ``verified_by`` so consumers keep a single terminal signal.

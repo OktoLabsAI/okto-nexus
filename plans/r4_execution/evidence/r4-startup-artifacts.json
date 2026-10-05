@@ -1,0 +1,39 @@
+{
+  "nexus": {
+    "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-nexus-build-5o6cg1v0",
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-nexus-wheel-qqgmgauh\\okto_nexus-0.2.0-py3-none-any.whl",
+    "sha256": "b8041e69b2a7fc2d579645be5d5cab13de228550f064579eef89c0aba40dd830",
+    "build_log": "plans/r4_execution/evidence/r4-startup-nexus-build.log",
+    "command": [
+      "C:\\Python313\\python.exe",
+      "-m",
+      "pip",
+      "wheel",
+      "--no-deps",
+      "--no-build-isolation",
+      "--wheel-dir",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-nexus-wheel-qqgmgauh",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-nexus-build-5o6cg1v0"
+    ],
+    "build_log_sha256": "012a62db9796cb450a6ed6883b263e9cd903b81fd8338fa8b6093afefab796bb"
+  },
+  "connector": {
+    "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-final-build-4l_9nrfy",
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-final-wheel-md6q8vdz\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+    "sha256": "911c36d4b40256cd1f533654c77284c5ec7771b955515b71fb94e72541057ea4",
+    "build_log": "plans/r4_execution/evidence/r4-startup-connector-build.log",
+    "command": [
+      "C:\\Python313\\python.exe",
+      "-m",
+      "pip",
+      "wheel",
+      "--no-deps",
+      "--no-build-isolation",
+      "--wheel-dir",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-final-wheel-md6q8vdz",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-final-build-4l_9nrfy"
+    ],
+    "build_log_sha256": "ac10505435deb0ce6cc4f72522512a25822723b97b327875d2313e062a7a329a"
+  },
+  "installed_env": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-installed-8bpn7vjx"
+}

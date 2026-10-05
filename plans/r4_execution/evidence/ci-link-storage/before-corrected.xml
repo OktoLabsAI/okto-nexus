@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="8.050" timestamp="2026-10-02T05:16:55.375426-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_link_storage_failure" name="test_heartbeat_storage_failure_closes_link_and_releases_owner[normalized]" time="2.917"><failure message="okto_nexus.errors.OktoNexusError: DB_ERROR: fixture private storage diagnostic">tests\execution_r4\test_link_storage_failure.py:63: in test_heartbeat_storage_failure_closes_link_and_releases_owner
+    ws.receive_text()
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\testclient.py:186: in receive_text
+    message = self.receive()
+              ^^^^^^^^^^^^^^
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\testclient.py:183: in receive
+    return self.portal.call(self._send_rx.receive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\anyio\from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\anyio\streams\memory.py:133: in receive
+    raise EndOfStream from None
+E   anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+C:\Python313\Lib\contextlib.py:604: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:482: in _exit_wrapper
+    callback(*args, **kwds)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\testclient.py:180: in close
+    self.send({"type": "websocket.disconnect", "code": code, "reason": reason})
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\testclient.py:164: in send
+    self.portal.call(self._receive_tx.send, message)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\anyio\from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\anyio\streams\memory.py:250: in send
+    self.send_nowait(item)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\anyio\streams\memory.py:219: in send_nowait
+    raise ClosedResourceError
+E   anyio.ClosedResourceError
+
+During handling of the above exception, another exception occurred:
+tests\execution_r4\test_link_storage_failure.py:50: in test_heartbeat_storage_failure_closes_link_and_releases_owner
+    with client.websocket_connect(f"wss://127.0.0.1:8202/v1/runtime/executors/{executor}/link",
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\testclient.py:131: in __exit__
+    return self.exit_stack.__exit__(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:619: in __exit__
+    raise exc
+C:\Python313\Lib\contextlib.py:604: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:482: in _exit_wrapper
+    callback(*args, **kwds)
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\testclient.py:143: in _run
+    await self.app(self.scope, receive_rx.receive, send_tx.send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\fastapi\applications.py:1215: in __call__
+    await super().__call__(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\fastapi\telemetry\_asgi.py:151: in __call__
+    await self.app(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\middleware\exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\routing.py:676: in __call__
+    await self.middleware_stack(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\fastapi\routing.py:2786: in app
+    await route.handle(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\fastapi\routing.py:1817: in handle
+    await self.original_router.handle(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\fastapi\routing.py:2869: in handle
+    await included_router._handle_selected(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\fastapi\routing.py:1845: in _handle_selected
+    await route.handle(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\routing.py:356: in handle
+    await self.app(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\fastapi\routing.py:191: in app
+    await wrap_app_handling_exceptions(app, session)(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\fastapi\routing.py:188: in app
+    await func(session)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\fastapi\routing.py:829: in app
+    await dependant.call(**solved_result.values)
+src\okto_nexus\adapters\inbound\http\executor_link.py:491: in executor_link
+    if await anyio.to_thread.run_sync(_touch) != 1:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\anyio\to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\anyio\_backends\_asyncio.py:2706: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\anyio\_backends\_asyncio.py:1100: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\executor_link.py:481: in _touch
+    return uow.connection.execute(
+tests\execution_r4\test_link_storage_failure.py:32: in execute
+    raise OktoNexusError("DB_ERROR", "fixture private storage diagnostic", retryable=True)
+E   okto_nexus.errors.OktoNexusError: DB_ERROR: fixture private storage diagnostic</failure></testcase><testcase classname="tests.execution_r4.test_link_storage_failure" name="test_heartbeat_storage_failure_closes_link_and_releases_owner[sqlite]" time="2.211"><failure message="sqlite3.OperationalError: fixture private storage diagnostic">tests\execution_r4\test_link_storage_failure.py:63: in test_heartbeat_storage_failure_closes_link_and_releases_owner
+    ws.receive_text()
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\testclient.py:186: in receive_text
+    message = self.receive()
+              ^^^^^^^^^^^^^^
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\testclient.py:183: in receive
+    return self.portal.call(self._send_rx.receive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\anyio\from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\anyio\streams\memory.py:133: in receive
+    raise EndOfStream from None
+E   anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+C:\Python313\Lib\contextlib.py:604: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:482: in _exit_wrapper
+    callback(*args, **kwds)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\testclient.py:180: in close
+    self.send({"type": "websocket.disconnect", "code": code, "reason": reason})
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\testclient.py:164: in send
+    self.portal.call(self._receive_tx.send, message)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\anyio\from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\anyio\streams\memory.py:250: in send
+    self.send_nowait(item)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\anyio\streams\memory.py:219: in send_nowait
+    raise ClosedResourceError
+E   anyio.ClosedResourceError
+
+During handling of the above exception, another exception occurred:
+tests\execution_r4\test_link_storage_failure.py:50: in test_heartbeat_storage_failure_closes_link_and_releases_owner
+    with client.websocket_connect(f"wss://127.0.0.1:8202/v1/runtime/executors/{executor}/link",
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\testclient.py:131: in __exit__
+    return self.exit_stack.__exit__(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:619: in __exit__
+    raise exc
+C:\Python313\Lib\contextlib.py:604: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:482: in _exit_wrapper
+    callback(*args, **kwds)
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\testclient.py:143: in _run
+    await self.app(self.scope, receive_rx.receive, send_tx.send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\fastapi\applications.py:1215: in __call__
+    await super().__call__(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\fastapi\telemetry\_asgi.py:151: in __call__
+    await self.app(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\middleware\exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\routing.py:676: in __call__
+    await self.middleware_stack(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\fastapi\routing.py:2786: in app
+    await route.handle(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\fastapi\routing.py:1817: in handle
+    await self.original_router.handle(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\fastapi\routing.py:2869: in handle
+    await included_router._handle_selected(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\fastapi\routing.py:1845: in _handle_selected
+    await route.handle(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\routing.py:356: in handle
+    await self.app(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\fastapi\routing.py:191: in app
+    await wrap_app_handling_exceptions(app, session)(scope, receive, send)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\fastapi\routing.py:188: in app
+    await func(session)
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\fastapi\routing.py:829: in app
+    await dependant.call(**solved_result.values)
+src\okto_nexus\adapters\inbound\http\executor_link.py:491: in executor_link
+    if await anyio.to_thread.run_sync(_touch) != 1:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\anyio\to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\anyio\_backends\_asyncio.py:2706: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+C:\Users\jpamb\.codex\tmp\nexus-http-ci-env\Lib\site-packages\anyio\_backends\_asyncio.py:1100: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\executor_link.py:481: in _touch
+    return uow.connection.execute(
+tests\execution_r4\test_link_storage_failure.py:33: in execute
+    raise sqlite3.OperationalError("fixture private storage diagnostic")
+E   sqlite3.OperationalError: fixture private storage diagnostic</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,466 @@
+{
+  "review_type": "COMPLETE_DELIVERY_PLANNING",
+  "reviewed_at_utc": "2026-09-30T13:10:39.123055+00:00",
+  "document": "plans/r4_execution/DELIVERY_PLAN.md",
+  "product_tests_executed_by_this_review": false,
+  "product_gates_closed": [],
+  "repositories": {
+    "nexus": {
+      "head": "1c48ba40d8216cdbfc504fe96d877c4ab0fced6e",
+      "branch": "feature/v0.2.0",
+      "remote_head_verified": "1c48ba40d8216cdbfc504fe96d877c4ab0fced6e",
+      "dirty_entries": 634,
+      "tracked_deletions": 599,
+      "shared_core_sha256": "e060e033be05fdd4c9aff5c90902d191483d400b3f6778fa7bb5395b66f561e6"
+    },
+    "connector": {
+      "head": "f48ce20141a00a72bc67f8d0197bfad4a1f5cc75",
+      "branch": "feature/v0.2.0",
+      "remote_head_verified": "f48ce20141a00a72bc67f8d0197bfad4a1f5cc75",
+      "dirty_entries": 0,
+      "tracked_deletions": 0,
+      "shared_core_sha256": "e060e033be05fdd4c9aff5c90902d191483d400b3f6778fa7bb5395b66f561e6"
+    },
+    "core": {
+      "head": "770659b7f3404798fe6c59146c7ab9d12b84bbe4",
+      "branch": "feature/v0.2.0",
+      "remote_head_verified": "770659b7f3404798fe6c59146c7ab9d12b84bbe4",
+      "dirty_entries": 2,
+      "tracked_deletions": 0,
+      "shared_core_sha256": "e060e033be05fdd4c9aff5c90902d191483d400b3f6778fa7bb5395b66f561e6"
+    }
+  },
+  "observed_artifacts": {
+    "core": {
+      "version": "0.2.30.dev0",
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-core-wheel-85cnb6ls\\nexus_connector_core-0.2.30.dev0-py3-none-any.whl",
+      "sha256": "e060e033be05fdd4c9aff5c90902d191483d400b3f6778fa7bb5395b66f561e6"
+    },
+    "qualification": "Technical Pi CLI; real providers and automatic daemon/embedded composition remain pending.",
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-nexus-wheel-q28o9u85\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "c09baa8c157ca1d0d52e5bbf16be07f021d43a5e52f1f626c1e20c8efee1d7b4",
+      "command": [
+        "C:\\Python313\\python.exe",
+        "-m",
+        "pip",
+        "wheel",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-nexus-stage-zn3h01ol",
+        "--no-deps",
+        "--no-build-isolation",
+        "--wheel-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-nexus-wheel-q28o9u85"
+      ]
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-connector-wheel-aagrq2d_\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "396057dcb81f7a0645e6d54e94b5fc5d48fcc66ca5634db865076d60b51fa081",
+      "command": [
+        "C:\\Python313\\python.exe",
+        "-m",
+        "pip",
+        "wheel",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-connector-stage-ik09y4cw",
+        "--no-deps",
+        "--no-build-isolation",
+        "--wheel-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-connector-wheel-aagrq2d_"
+      ]
+    },
+    "installed_python": "C:/Users/jpamb/AppData/Local/Temp/okto-r4-native-installed-zk_r383i/Scripts/python.exe",
+    "install_command": [
+      "C:/Users/jpamb/AppData/Local/Temp/okto-r4-native-installed-zk_r383i/Scripts/python.exe",
+      "-m",
+      "pip",
+      "install",
+      "--no-deps",
+      "--force-reinstall",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-core-wheel-85cnb6ls\\nexus_connector_core-0.2.30.dev0-py3-none-any.whl",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-nexus-wheel-q28o9u85\\okto_nexus-0.2.0-py3-none-any.whl",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-connector-wheel-aagrq2d_\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl"
+    ]
+  },
+  "existing_campaigns": [
+    {
+      "source": "plans/r4_execution/evidence/pi-owner-installed-core.xml",
+      "sha256": "eb33ca1f3166560a4b39bffcb4c68d96ea979e9ed8437b53f6fd413c22de6677",
+      "results": {
+        "tests": 143,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 143
+      },
+      "execution": "Existing campaign inspected; not rerun during this planning review.",
+      "command_manifest": {
+        "command": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+          "-I",
+          "-c",
+          "import sys; sys.path.insert(0, 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core'); import nexus_connector_core, pytest; assert 'site-packages' in nexus_connector_core.__file__; raise SystemExit(pytest.main(sys.argv[1:]))",
+          "-c",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed\\pytest.ini",
+          "--rootdir=D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests",
+          "--confcutdir=D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests",
+          "-o",
+          "asyncio_mode=auto",
+          "-o",
+          "asyncio_default_fixture_loop_scope=function",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_native_action_ownership.py",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_pi_extension_resource.py",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_native_action_bridge.py",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_r4_native_actions.py",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_native_runtime_bridge.py",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_runtime.py",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_r4_runtime_leases.py",
+          "-q",
+          "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\evidence\\pi-owner-installed-core.xml"
+        ],
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed",
+        "verified_packages": {
+          "nexus": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus",
+            "files": 333
+          },
+          "connector": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus_connector",
+            "files": 58
+          },
+          "core": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\nexus_connector_core",
+            "files": 91
+          }
+        },
+        "exit_code": 0,
+        "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+        "limitations": "Technical harness peer; no real provider qualification or automatic host lifecycle."
+      },
+      "skipped_cases": []
+    },
+    {
+      "source": "plans/r4_execution/evidence/pi-owner-installed-connector.xml",
+      "sha256": "9584baf912cdc7998bfe500bedf7559285496ff548d95b7019be993706b808d8",
+      "results": {
+        "tests": 265,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 1,
+        "passed": 264
+      },
+      "execution": "Existing campaign inspected; not rerun during this planning review.",
+      "command_manifest": {
+        "command": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+          "-I",
+          "-m",
+          "pytest",
+          "-c",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed\\pytest.ini",
+          "--rootdir=D:\\Projetos\\Techridy\\okto-nexus-connector\\tests",
+          "--confcutdir=D:\\Projetos\\Techridy\\okto-nexus-connector\\tests",
+          "-o",
+          "asyncio_mode=auto",
+          "-o",
+          "asyncio_default_fixture_loop_scope=function",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\test_r4_native_actions.py",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\contract",
+          "-q",
+          "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\evidence\\pi-owner-installed-connector.xml"
+        ],
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed",
+        "verified_packages": {
+          "nexus": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus",
+            "files": 333
+          },
+          "connector": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus_connector",
+            "files": 58
+          },
+          "core": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\nexus_connector_core",
+            "files": 91
+          }
+        },
+        "exit_code": 0,
+        "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+        "limitations": "Technical harness peer; no real provider qualification or automatic host lifecycle."
+      },
+      "skipped_cases": [
+        {
+          "class": "unit.test_core02_integration",
+          "name": "test_shim_resolution_never_runs_outside_windows",
+          "skipped": true
+        }
+      ]
+    },
+    {
+      "source": "plans/r4_execution/evidence/pi-owner-installed-nexus.xml",
+      "sha256": "dc39466c76a737e6fcc8912b584138c166df6bdb1e64fe3fc40d1a43af0a0e91",
+      "results": {
+        "tests": 33,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 33
+      },
+      "execution": "Existing campaign inspected; not rerun during this planning review.",
+      "command_manifest": {
+        "command": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+          "-I",
+          "-m",
+          "pytest",
+          "-c",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed\\pytest.ini",
+          "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests",
+          "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests",
+          "-o",
+          "asyncio_mode=auto",
+          "-o",
+          "asyncio_default_fixture_loop_scope=function",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_pi_native_hosts.py",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_ns07.py",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_ns09.py",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_ns01.py",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_core_native_actions.py",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_remote_connection.py",
+          "-q",
+          "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\evidence\\pi-owner-installed-nexus.xml"
+        ],
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed",
+        "verified_packages": {
+          "nexus": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus",
+            "files": 333
+          },
+          "connector": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus_connector",
+            "files": 58
+          },
+          "core": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\nexus_connector_core",
+            "files": 91
+          }
+        },
+        "exit_code": 0,
+        "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+        "limitations": "Technical harness peer; no real provider qualification or automatic host lifecycle."
+      },
+      "skipped_cases": []
+    },
+    {
+      "source": "plans/r4_execution/evidence/pi-owner-no-connector.xml",
+      "sha256": "2ecf8eeb17fee88b3d735cf49dc32da48609bfc2145503491ea665be62b9285e",
+      "results": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 2
+      },
+      "execution": "Existing campaign inspected; not rerun during this planning review.",
+      "skipped_cases": []
+    }
+  ],
+  "limits": [
+    "Nexus Pi host source, runner and evidence are not committed at this checkpoint. Publishing that increment remains execution work.",
+    "Technical Pi Node peer with patched qualification does not qualify a real provider.",
+    "Embedded host test uses a WSS authority fixture and is not local-only product acceptance.",
+    "Core test helpers use the repository root while product imports are asserted to come from installed site-packages.",
+    "Nexus wheel includes preexisting modified UI assets; clean build and browser acceptance are pending.",
+    "Campaigns overlap and do not replace M00-M13 acceptance.",
+    "Preserve existing workspace changes and deletions; explicitly stage each increment."
+  ],
+  "completion_scope": {
+    "milestones": 14,
+    "nexus_tasks": 85,
+    "original_scenarios": 164,
+    "language_scenarios": 4,
+    "external_deliverables": 12,
+    "routes": 23,
+    "runtime_actions": 7,
+    "local_steps": 5,
+    "remote_steps": 5
+  },
+  "planning_changes": [
+    "Updated published dependency heads and verified identical Core 0.2.30.dev0 wheel hashes.",
+    "Separated unpublished Nexus work from published partial integration and final acceptance.",
+    "Added five local composition steps, preserving local execution without WSS or the Connector application.",
+    "Added eight required test campaigns with owners, timing, evidence and exit criteria.",
+    "Preserved normative scope, M00-M13 dependencies, G0-G3 and US English acceptance."
+  ],
+  "document_validation": [
+    {
+      "command": [
+        "rtk",
+        "proxy",
+        "C:\\Python313\\python.exe",
+        "-X",
+        "utf8",
+        "plans/validar_pacote.py",
+        "--output",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-delivery-plan-review-504tabvf\\normative-validation.json"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: contagens_e_estados_iniciais\nPASS: dependencias\nPASS: referencias_internas\nPASS: cobertura_original_R3\nPASS: integridade_referencias\nPASS: schemas_e_exemplos_de_forma\nPASS: delta_contratual_explicito\nPASS: entregaveis\nRelatório: C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-delivery-plan-review-504tabvf\\normative-validation.json\n"
+    },
+    {
+      "command": [
+        "rtk",
+        "proxy",
+        "C:\\Python313\\python.exe",
+        "-X",
+        "utf8",
+        "plans/r4_execution/validate_delivery_plan.py",
+        "--write-report"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"validation\": \"PASS_DOCUMENT_COVERAGE_ONLY\",\n  \"counts\": {\n    \"milestones\": 14,\n    \"completion_batches\": 13,\n    \"local_completion_steps\": 5,\n    \"remote_completion_steps\": 5,\n    \"nexus_tasks\": 85,\n    \"original_scenarios\": 164,\n    \"external_deliverables\": 12,\n    \"cn5_findings\": 4,\n    \"http_and_websocket_routes\": 23,\n    \"operation_actions\": 7,\n    \"language_scenarios\": 4\n  }\n}\n"
+    }
+  ],
+  "normative_validation": {
+    "generated_at_utc": "2026-09-30T13:11:57.140352+00:00",
+    "status": "PASS",
+    "scope": "document_consistency_and_synthetic_json_shapes_only",
+    "product_tests_executed": false,
+    "all_164_product_scenarios": "NOT_RUN",
+    "checks": [
+      {
+        "check": "contagens_e_estados_iniciais",
+        "status": "PASS",
+        "detail": {
+          "phases": 17,
+          "tasks": 85,
+          "product_scenarios_not_run": 164
+        }
+      },
+      {
+        "check": "dependencias",
+        "status": "PASS",
+        "detail": "DAG de fases e tarefas sem ciclos ou dependência inexistente."
+      },
+      {
+        "check": "referencias_internas",
+        "status": "PASS",
+        "detail": "Todas as referências tarefa/teste/crosswalk têm destino."
+      },
+      {
+        "check": "cobertura_original_R3",
+        "status": "PASS",
+        "detail": {
+          "original_tasks_mapped": 70,
+          "TN_preserved": 45,
+          "J_preserved": 34
+        }
+      },
+      {
+        "check": "integridade_referencias",
+        "status": "PASS",
+        "detail": "Referências anexadas preservadas byte a byte no pacote."
+      },
+      {
+        "check": "schemas_e_exemplos_de_forma",
+        "status": "PASS",
+        "detail": {
+          "definitions": 59,
+          "routes": 23,
+          "synthetic_shape_cases": [
+            {
+              "id": "DOC-01",
+              "expected_valid": true,
+              "observed_valid": true
+            },
+            {
+              "id": "DOC-02",
+              "expected_valid": true,
+              "observed_valid": true
+            },
+            {
+              "id": "DOC-03",
+              "expected_valid": true,
+              "observed_valid": true
+            },
+            {
+              "id": "DOC-04",
+              "expected_valid": true,
+              "observed_valid": true
+            },
+            {
+              "id": "DOC-05",
+              "expected_valid": true,
+              "observed_valid": true
+            },
+            {
+              "id": "DOC-06",
+              "expected_valid": true,
+              "observed_valid": true
+            },
+            {
+              "id": "DOC-07",
+              "expected_valid": false,
+              "observed_valid": false
+            },
+            {
+              "id": "DOC-08",
+              "expected_valid": false,
+              "observed_valid": false
+            },
+            {
+              "id": "DOC-09",
+              "expected_valid": false,
+              "observed_valid": false
+            },
+            {
+              "id": "DOC-10",
+              "expected_valid": false,
+              "observed_valid": false
+            },
+            {
+              "id": "DOC-11",
+              "expected_valid": false,
+              "observed_valid": false
+            },
+            {
+              "id": "DOC-12",
+              "expected_valid": false,
+              "observed_valid": false
+            },
+            {
+              "id": "DOC-13",
+              "expected_valid": false,
+              "observed_valid": false
+            },
+            {
+              "id": "DOC-14",
+              "expected_valid": false,
+              "observed_valid": false
+            },
+            {
+              "id": "DOC-15",
+              "expected_valid": false,
+              "observed_valid": false
+            },
+            {
+              "id": "DOC-16",
+              "expected_valid": false,
+              "observed_valid": false
+            }
+          ],
+          "not_product_tests": true
+        }
+      },
+      {
+        "check": "delta_contratual_explicito",
+        "status": "PASS",
+        "detail": "R4 é alvo separado, sem declarar o Core atual como produtor da revisão nova."
+      },
+      {
+        "check": "entregaveis",
+        "status": "PASS",
+        "detail": "Documentos, tarefas e versão integral encontrados."
+      }
+    ]
+  }
+}

@@ -1,0 +1,65 @@
+okto-nexus - local agent coordination bus
+
+Usage:
+  okto-nexus serve [options]   Start HTTP MCP, REST and dashboard
+  okto-nexus tail [options]    Stream the event log as NDJSON
+  okto-nexus admin <command>   Run maintenance commands
+  okto-nexus provider-credentials <set|remove>  Manage provider secrets
+
+Use `okto-nexus serve --help` for server options. Agents connect to /mcp
+over HTTP with their existing API key.
+
+........................................................................ [ 10%]
+...............................................F........................ [ 20%]
+........................................................................ [ 30%]
+........................................................................ [ 40%]
+........................................................................ [ 50%]
+........................................................................ [ 60%]
+............................................F........................... [ 70%]
+...........................................................ssssss....... [ 81%]
+........................................................................ [ 91%]
+...........................................F...................          [100%]
+================================== FAILURES ===================================
+___ test_compaction_waits_for_server_commit_and_preserves_published_result ____
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_retention.py:41: in test_compaction_waits_for_server_commit_and_preserves_published_result
+    emit(setup, native, turn, 'Retain this canonical result.')
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_result_publication.py:21: in emit
+    wait_receipt(setup, turn, stages=('SUCCEEDED',))
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_embedded_dispatch.py:93: in wait_receipt
+    assert time.monotonic()<until,view
+E   AssertionError: {'operation_id': 'op_010eb9f7ad793880dea7a93a809e5a06', 'client_intent_id': 'initial_c4c321a8ef1479e71f8a5fbc71291ac6'...': 2, 'binding_id': 'bind_84ab9755ce9543d2d9a945a1aeeb2c1d', 'binding_revision': 1, ...}, 'action': 'turn.submit', ...}
+E   assert 760958.9870309 < 760958.9435522
+E    +  where 760958.9870309 = <built-in function monotonic>()
+E    +    where <built-in function monotonic> = time.monotonic
+________________________________ test_ns02_02 _________________________________
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_ns02.py:87: in test_ns02_02
+    assert MigrationRunner(factory).apply() == [66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82]
+E   assert [66, 67, 68, 69, 70, 71, ...] == [66, 67, 68, 69, 70, 71, ...]
+E     
+E     Left contains 14 more items, first extra item: 83
+E     Use -v to get more diff
+________ test_upgrade_088_preserves_original_intent_and_is_idempotent _________
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_session_reuse_migration.py:32: in test_upgrade_088_preserves_original_intent_and_is_idempotent
+    assert MigrationRunner(factory).apply() == [89, 90]
+E   assert [89, 90, 91, 92, 93, 94, ...] == [89, 90]
+E     
+E     Left contains 6 more items, first extra item: 91
+E     Use -v to get more diff
+============================== warnings summary ===============================
+..\okto-nexus-vault-refusal-env\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\okto-nexus-vault-refusal-env\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/execution_r4/test_ns14.py::test_ns14_04[load]
+  tests\execution_r4\test_ns14.py:310: PytestWarning: record_property is incompatible with junit_family 'xunit2' (use 'legacy' or 'xunit1')
+
+tests/execution_r4/test_ns14.py::test_ns14_05[before_birth_record]
+tests/execution_r4/test_ns14.py::test_ns14_05[recorded]
+  tests\execution_r4\test_ns14.py:319: PytestWarning: record_property is incompatible with junit_family 'xunit2' (use 'legacy' or 'xunit1')
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_retention.py::test_compaction_waits_for_server_commit_and_preserves_published_result
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_ns02.py::test_ns02_02
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_session_reuse_migration.py::test_upgrade_088_preserves_original_intent_and_is_idempotent
+3 failed, 702 passed, 6 skipped, 4 warnings in 2207.09s (0:36:47)

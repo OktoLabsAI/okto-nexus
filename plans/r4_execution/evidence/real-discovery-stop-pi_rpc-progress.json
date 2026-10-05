@@ -1,0 +1,19 @@
+{
+  "adapter": "pi_rpc",
+  "missing_login": false,
+  "server_release_gate_override": true,
+  "native_qualification_override": false,
+  "synthetic_native_factory": false,
+  "public_connector_cli": true,
+  "cli_subprocess": true,
+  "protected_os_vault": true,
+  "topology": "Single Windows host; actual loopback HTTP/WSS; separate Server and daemon processes.",
+  "phase": "finished",
+  "vault_backend": "keyring:Windows WinVaultKeyring",
+  "discovery_stop_seconds": 0.014425199944525957,
+  "discovery_stopped_before_publication": true,
+  "completed": true,
+  "daemon_exit_code": 0,
+  "campaign_credentials_removed": true,
+  "server_exit_code": 0
+}

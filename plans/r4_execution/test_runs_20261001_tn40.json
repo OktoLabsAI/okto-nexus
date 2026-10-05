@@ -1,0 +1,46 @@
+{
+  "status": "VERIFIED_TN40_SUPPORTED_SNAPSHOT_RECOVERY",
+  "base_commit": "2248abd",
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-core-3msf4qiz\\dist\\nexus_connector_core-0.2.51.dev0-py3-none-any.whl",
+      "sha256": "4c4c0c58d25b93f4f08ba8515d8476ffc29d1f0a27cc577c9fccb610716d1d1c"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-connector-pmt6y5x7\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "baf837251f654ab6385f5fba4e22d1a1b69da1839e8f47752795d1518dd29fe7"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-ns15-05-by411exj\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "a72e24455b65aef550ee29bd2b077bb6ded0cf6498e4dbecfb9da9b736fd124e"
+    }
+  },
+  "result": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "3",
+    "time": "11.580",
+    "timestamp": "2026-10-01T21:46:05.454499-03:00",
+    "hostname": "Alienware_m15"
+  },
+  "command": [
+    "rtk",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-migration-resume-bkj6ies1\\venv313\\Scripts\\python.exe",
+    "-I",
+    "-c",
+    "import pytest; raise SystemExit(pytest.main(['-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\okto-r4-ns15-05-by411exj\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4', '-o', 'asyncio_mode=auto', '-o', 'asyncio_default_fixture_loop_scope=function', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4\\\\test_ns15.py::test_tn40', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4\\\\test_ns15.py::test_ns15_04', '-q', '--tb=short', '--junitxml=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\plans\\\\r4_execution\\\\evidence\\\\ns15-05-recovery.xml']))"
+  ],
+  "source_hashes": {
+    "tests/execution_r4/test_ns15.py": "267554271169ff6b191458eefb4d4d2aa3a3d8bbd2db6b04c0549046414794ab",
+    "tests/execution_r4/ns15_restore_cases.py": "11e3209c1c3a45d6befdb5d82fdceff3d9fd679d7e05c8a50a574eb52799f791",
+    "tools/offline_runtime_backup.py": "983eb67ae47b6678f342aaa644c7ddb273eb094454d0b23707ae658a88658694",
+    "docs/harness-integrations/migration-and-recovery.md": "6d983a75276343d9bbcbcbc1b9181079667a0602cd7a9c94a2f4860e39efa613"
+  },
+  "limitations": [
+    "Same-version supported snapshot recovery; no reverse migration or external-effect undo.",
+    "Synthetic peer/readiness; Windows/Python 3.13; final release gates remain open."
+  ]
+}

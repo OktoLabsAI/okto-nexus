@@ -1,0 +1,14 @@
+{
+  "command": [
+    "uv",
+    "pip",
+    "install",
+    "--python",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+    "--no-deps",
+    "--reinstall",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-connector-wheel-9sxettlk\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl"
+  ],
+  "exit_code": 0,
+  "output": "warning: Ignoring dangling temporary directory: `D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Lib\\site-packages\\~kto_nexus-0.1.5.dist-info`\nResolved 1 package in 3ms\nPrepared 1 package in 1ms\nUninstalled 1 package in 31ms\nwarning: Failed to hardlink files; falling back to full copy. This may lead to degraded performance.\n         If the cache and target directories are on different filesystems, hardlinking may not be supported.\n         If this is intentional, set `export UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.\nInstalled 1 package in 112ms\n - okto-nexus-connector==0.5.0.dev0 (from file:///C:/Users/jpamb/AppData/Local/Temp/okto-r4-startup-final-wheel-md6q8vdz/okto_nexus_connector-0.5.0.dev0-py3-none-any.whl)\n + okto-nexus-connector==0.5.0.dev0 (from file:///C:/Users/jpamb/AppData/Local/Temp/okto-r4-capability-connector-wheel-9sxettlk/okto_nexus_connector-0.5.0.dev0-py3-none-any.whl)\n"
+}

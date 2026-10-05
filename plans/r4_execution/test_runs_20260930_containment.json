@@ -1,0 +1,258 @@
+{
+  "date": "2026-09-30",
+  "status": "DEVELOPMENT_PARTIAL",
+  "branch": "feature/v0.2.0",
+  "source_parent_commits": {
+    "nexus": "3df1bedf7bfbeb10d25c940f786670ff9b6586d1",
+    "core": "2ac508fabaf9614a864e680e3e99599d1b822b5c",
+    "connector": "d761a44b8806d43b48656ed034e9f426f664a472"
+  },
+  "core_version": "0.2.26.dev0",
+  "core_wheel_sha256": "d1fd93375b84f68f14c7a6a84b609bcee0d14876b8c75ec00a71a11d8ec71977",
+  "core_sdist_sha256": "06d5dc8ac890db9060224a867e425d5083c285d58e506e997029ab653464ae6f",
+  "source_files_compared": 89,
+  "gates": {
+    "G0": "OPEN",
+    "G1": "OPEN",
+    "G2": "OPEN",
+    "G3": "OPEN"
+  },
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.1",
+  "runs": [
+    {
+      "name": "core_source_directed",
+      "counts": {
+        "tests": 90,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "passed": 90
+      },
+      "seconds": 5.406,
+      "timestamp": "2026-09-30T01:14:49.343581-03:00",
+      "junit": "plans/r4_execution/evidence/okto-core-026-directed.xml",
+      "junit_sha256": "2d40a29308432f8fb596d92cef075ea31cc0147663cd9455a510e1761cfdaf3a",
+      "exit_code": 0,
+      "skip_reasons": {},
+      "command_argv": [
+        "rtk",
+        "proxy",
+        "python",
+        "-X",
+        "utf8",
+        "-c",
+        "import sys; sys.path.insert(0,'src'); import pytest; raise SystemExit(pytest.main(['tests/test_r4_runtime_leases.py','tests/test_runtime.py','tests/test_r4_decision_bridge.py','-q','--tb=short','--junitxml=C:/Users/jpamb/AppData/Local/Temp/okto-core-026-directed.xml']))"
+      ],
+      "cwd": "D:/Projetos/Techridy/okto-nexus-connector-core"
+    },
+    {
+      "name": "core_source_full",
+      "counts": {
+        "tests": 966,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 74,
+        "passed": 892
+      },
+      "seconds": 286.248,
+      "timestamp": "2026-09-30T01:15:17.181764-03:00",
+      "junit": "plans/r4_execution/evidence/okto-core-026-full.xml",
+      "junit_sha256": "80e3761b757d8ed820f6a2f23f9297b3ec4f64bc818a08355a9d712f47c05a8e",
+      "exit_code": 0,
+      "skip_reasons": {
+        "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics": 55,
+        "requires non-root POSIX": 2,
+        "requires an explicitly configured isolated Claude campaign (OKTO_NEXUS_CLAUDE_LIVE=1)": 7,
+        "opt-in live test: needs the real `codex` binary AND OKTO_NEXUS_CODEX_LIVE=1": 1,
+        "opt-in live test: needs the real `pi` binary AND OKTO_NEXUS_PI_LIVE=1": 1,
+        "Claude attach uses POSIX checks": 4,
+        "Claude attach uses a POSIX socket": 1,
+        "Linux pidfd guardian contract": 2,
+        "process-group census is Linux-only": 1
+      },
+      "command_argv": [
+        "rtk",
+        "proxy",
+        "python",
+        "-X",
+        "utf8",
+        "-c",
+        "import sys; sys.path.insert(0,'src'); import pytest; raise SystemExit(pytest.main(['tests','-q','--tb=short','--junitxml=C:/Users/jpamb/AppData/Local/Temp/okto-core-026-full.xml']))"
+      ],
+      "cwd": "D:/Projetos/Techridy/okto-nexus-connector-core"
+    },
+    {
+      "name": "core_installed_initial",
+      "counts": {
+        "tests": 17,
+        "errors": 0,
+        "failures": 1,
+        "skipped": 0,
+        "passed": 16
+      },
+      "seconds": 2.74,
+      "timestamp": "2026-09-30T01:17:31.451893-03:00",
+      "junit": "plans/r4_execution/evidence/okto-core-026-installed.xml",
+      "junit_sha256": "8acecfd0a161bfb947685a0453977a088f19921f4ebbb276a4c209daa95cdbbd",
+      "exit_code": 1,
+      "skip_reasons": {},
+      "command_argv": [
+        "rtk",
+        "proxy",
+        "C:/Users/jpamb/AppData/Local/Temp/okto-r4-delivery-audit-py313/Scripts/python.exe",
+        "-I",
+        "-m",
+        "pytest",
+        "-c",
+        "pytest.ini",
+        "--confcutdir=D:/Projetos/Techridy/okto-nexus-connector-core/tests",
+        "D:/Projetos/Techridy/okto-nexus-connector-core/tests/test_r4_runtime_leases.py",
+        "-q",
+        "--tb=short",
+        "--junitxml=C:/Users/jpamb/AppData/Local/Temp/okto-core-026-installed.xml"
+      ],
+      "cwd": "C:/Users/jpamb/AppData/Local/Temp/okto-r4-canonical-installed"
+    },
+    {
+      "name": "core_installed_final",
+      "counts": {
+        "tests": 17,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "passed": 17
+      },
+      "seconds": 2.261,
+      "timestamp": "2026-09-30T01:18:22.627566-03:00",
+      "junit": "plans/r4_execution/evidence/okto-core-026-installed-final.xml",
+      "junit_sha256": "5f96649411268856d7524de40d1db0a15fcc15dc4e440043442c22616823cef8",
+      "exit_code": 0,
+      "skip_reasons": {},
+      "command_argv": [
+        "rtk",
+        "proxy",
+        "C:/Users/jpamb/AppData/Local/Temp/okto-r4-delivery-audit-py313/Scripts/python.exe",
+        "-m",
+        "pytest",
+        "tests/test_r4_runtime_leases.py",
+        "-q",
+        "--tb=short",
+        "--junitxml=C:/Users/jpamb/AppData/Local/Temp/okto-core-026-installed-final.xml"
+      ],
+      "cwd": "D:/Projetos/Techridy/okto-nexus-connector-core"
+    },
+    {
+      "name": "connector_full",
+      "counts": {
+        "tests": 241,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 2,
+        "passed": 239
+      },
+      "seconds": 249.932,
+      "timestamp": "2026-09-30T01:17:30.972625-03:00",
+      "junit": "plans/r4_execution/evidence/okto-connector-026-full.xml",
+      "junit_sha256": "e6bb5dbe49fb4265efc9e97d0e633f4e82bfbd58408942f52fd2ce652b77e32b",
+      "exit_code": 0,
+      "skip_reasons": {
+        "lab peer lacks full contract surface: BINDING_NOT_AUTHORIZED": 1,
+        "covered above": 1
+      },
+      "command_argv": [
+        "rtk",
+        "proxy",
+        "C:/Users/jpamb/AppData/Local/Temp/okto-r4-delivery-audit-py313/Scripts/python.exe",
+        "-m",
+        "pytest",
+        "tests",
+        "-q",
+        "--tb=short",
+        "--junitxml=C:/Users/jpamb/AppData/Local/Temp/okto-connector-026-full.xml"
+      ],
+      "cwd": "D:/Projetos/Techridy/okto-nexus-connector"
+    },
+    {
+      "name": "nexus_r4",
+      "counts": {
+        "tests": 56,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "passed": 56
+      },
+      "seconds": 91.382,
+      "timestamp": "2026-09-30T01:18:28.504781-03:00",
+      "junit": "plans/r4_execution/evidence/okto-nexus-r4-026.xml",
+      "junit_sha256": "e0cb5cb539e8bf0ed71fd4e4c289137bf3dec6df1064b00e06494be14c251223",
+      "exit_code": 0,
+      "skip_reasons": {},
+      "command_argv": [
+        "rtk",
+        "proxy",
+        ".venv/Scripts/python.exe",
+        "-m",
+        "pytest",
+        "tests/execution_r4",
+        "-q",
+        "--tb=short",
+        "--junitxml=C:/Users/jpamb/AppData/Local/Temp/okto-nexus-r4-026.xml"
+      ],
+      "cwd": "D:/Projetos/Techridy/okto_labs_okto_nexus"
+    },
+    {
+      "name": "nexus_installed",
+      "counts": {
+        "tests": 17,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "passed": 17
+      },
+      "seconds": 36.024,
+      "timestamp": "2026-09-30T01:21:41.680676-03:00",
+      "junit": "plans/r4_execution/evidence/okto-nexus-026-installed.xml",
+      "junit_sha256": "da069a1623d4c97d7c924c15f1302f439e71c6b8f91660a47aff3542d30d96f5",
+      "exit_code": 0,
+      "skip_reasons": {},
+      "command_argv": [
+        "rtk",
+        "proxy",
+        "C:/Users/jpamb/AppData/Local/Temp/okto-r4-delivery-audit-py313/Scripts/python.exe",
+        "-I",
+        "-m",
+        "pytest",
+        "-c",
+        "pytest.ini",
+        "--confcutdir=D:/Projetos/Techridy/okto_labs_okto_nexus/tests/execution_r4",
+        "D:/Projetos/Techridy/okto_labs_okto_nexus/tests/execution_r4/test_ns07.py",
+        "D:/Projetos/Techridy/okto_labs_okto_nexus/tests/execution_r4/test_ns09.py",
+        "D:/Projetos/Techridy/okto_labs_okto_nexus/tests/execution_r4/test_ns10.py",
+        "-q",
+        "--tb=short",
+        "--junitxml=C:/Users/jpamb/AppData/Local/Temp/okto-nexus-026-installed.xml"
+      ],
+      "cwd": "C:/Users/jpamb/AppData/Local/Temp/okto-r4-canonical-installed"
+    }
+  ],
+  "checks": [
+    "R3 and R4 generators --check",
+    "Core clean wheel verifier and embedded/remote consumer smokes",
+    "Three identical wheel copies",
+    "Nexus uv lock --check and uv sync --frozen",
+    "Isolated imports of all three packages from site-packages",
+    "Installed changed Core module bytes match source",
+    "Delivery plan coverage validator"
+  ],
+  "limits": [
+    "Pending lease CAS still refuses caller controls with LEASE_UPDATE_PENDING; nonblocking caller containment during CAS remains unqualified.",
+    "Nexus canonical control and decision callers remain incomplete; this increment changes Core capability.",
+    "No real provider or independent-host acceptance; skipped platform/live tests remain required where applicable.",
+    "Initial installed isolated pytest invocation lacked a tests.regression helper import; all 17 cases passed using installed Core from repository cwd without src on sys.path."
+  ],
+  "published_dependencies": {
+    "core": "ada37e30cfb8a09769e5cceb12fa3b34829095ba",
+    "connector": "47454d21f2cae22eba14d1b9302f764be323739d"
+  }
+}

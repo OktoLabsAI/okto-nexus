@@ -1,0 +1,89 @@
+--- a/plans/r4_execution/audit_delivery.py
++++ b/plans/r4_execution/audit_delivery.py
+@@ -29,18 +29,32 @@
+ def source_facts(root: Path) -> dict:
+     # NUL records preserve filenames containing spaces. No reset/clean/staging.
+     records = subprocess.check_output(
+-        ["git", "status", "--porcelain=v1", "-z"], cwd=root
++        ["git", "status", "--porcelain=v1", "-z", "--untracked-files=all"], cwd=root
+     ).decode("utf-8").split("\0")
+-    changes = [record for record in records if record]
++    changes = []
++    entries = iter(records)
++    for record in entries:
++        if not record:
++            continue
++        changes.append(record)
++        # Under -z a rename/copy has a separate original-path field. It is
++        # part of the status fingerprint, not another changed-file record.
++        if "R" in record[:2] or "C" in record[:2]:
++            next(entries)
+     protected = {}
+     for record in changes:
+         path = root / record[3:]
+         if path.is_file():
+             protected[record[3:]] = digest(path)
+     project = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))
+-    wheels = {str(p.relative_to(root)): digest(p) for folder in (
+-        root / "artifacts", root / "vendor/wheels")
+-        for p in folder.glob("nexus_connector_core-0.2.22.dev0-*.whl")}
++    artifacts = {p.relative_to(root).as_posix(): digest(p)
++                 for folder in (root / "artifacts", root / "dist",
++                                root / "vendor/wheels", root / "vendor/ci")
++                 for pattern in ("*.whl", "*.tar.gz")
++                 for p in sorted(folder.glob(pattern)) if p.is_file()}
++    wheels = {name: sha for name, sha in artifacts.items()
++              if Path(name).name.startswith("nexus_connector_core-")
++              and name.endswith(".whl")}
+     return {
+         "branch": git(root, "branch", "--show-current"),
+         "head": git(root, "rev-parse", "HEAD"),
+@@ -48,8 +62,9 @@
+         "pyproject_sha256": digest(root / "pyproject.toml"),
+         "lockfiles": {p.name: digest(p) for p in (root / "uv.lock", root / "package-lock.json") if p.exists()},
+         "dirty_counts": dict(Counter(record[:2] for record in changes)),
+-        "dirty_status_sha256": hashlib.sha256("\0".join(changes).encode()).hexdigest(),
++        "dirty_status_sha256": hashlib.sha256("\0".join(records).encode()).hexdigest(),
+         "preexisting_file_hashes": protected, "core_wheels": wheels,
++        "distribution_artifacts": artifacts,
+     }
+ 
+ 
+--- a/tests/execution_r4/test_ns02.py
++++ b/tests/execution_r4/test_ns02.py
+@@ -1,5 +1,6 @@
+ """Namespace isolation for future durable R4 execution tables."""
+ 
++import importlib.resources
+ import shutil
+ import sqlite3
+ from datetime import datetime, timezone
+@@ -63,7 +64,7 @@
+     home = tmp_path / "home"
+     config = load_config({}, ["--home", str(home)])
+     factory = ConnectionFactory(config)
+-    migration_source = Path(__file__).resolve().parents[2] / "src/okto_nexus/migrations"
++    migration_source = Path(str(importlib.resources.files('okto_nexus').joinpath('migrations')))
+     old_dir = tmp_path / "old-migrations"
+     old_dir.mkdir()
+     for path in migration_source.glob("[0-9]*_*.sql"):
+@@ -84,15 +85,16 @@
+         conn.commit()
+     finally:
+         conn.close()
+-    assert MigrationRunner(factory).apply() == [66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82]
++    assert MigrationRunner(factory).apply() == list(range(66, 97))
+     assert MigrationRunner(factory).apply() == []
+     conn = factory.get_connection()
+     try:
+         names = {row[0] for row in conn.execute(
+             "SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'execution_%'")}
+-        assert len(names) == 24
++        assert len(names) == 31
+         assert {"execution_operations", "execution_dispatch_outbox",
+-                "execution_event_ingress", "execution_event_watermarks"} <= names
++                "execution_event_ingress", "execution_event_watermarks",
++                "execution_results"} <= names
+         assert conn.execute("SELECT enabled FROM agent_endpoints WHERE endpoint_id='ep-a'").fetchone()[0] == 0
+         indexes = {row[1] for row in conn.execute("PRAGMA index_list('execution_dispatch_outbox')")}
+         assert "idx_execution_dispatch_pending" in indexes

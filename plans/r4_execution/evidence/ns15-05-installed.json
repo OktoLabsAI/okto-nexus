@@ -1,0 +1,189 @@
+{
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-ns15-05-by411exj",
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-core-3msf4qiz\\dist\\nexus_connector_core-0.2.51.dev0-py3-none-any.whl",
+      "sha256": "4c4c0c58d25b93f4f08ba8515d8476ffc29d1f0a27cc577c9fccb610716d1d1c"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-connector-pmt6y5x7\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "baf837251f654ab6385f5fba4e22d1a1b69da1839e8f47752795d1518dd29fe7"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-ns15-05-by411exj\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "a72e24455b65aef550ee29bd2b077bb6ded0cf6498e4dbecfb9da9b736fd124e"
+    }
+  },
+  "results": {
+    "r4": {
+      "command": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-migration-resume-bkj6ies1\\venv313\\Scripts\\python.exe",
+        "-I",
+        "-c",
+        "import pytest; raise SystemExit(pytest.main(['-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\okto-r4-ns15-05-by411exj\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4', '-o', 'asyncio_mode=auto', '-o', 'asyncio_default_fixture_loop_scope=function', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4\\\\test_ns15.py::test_ns15_05', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4\\\\test_ns03.py::test_ns03_01', '-q', '--tb=short', '--junitxml=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\plans\\\\r4_execution\\\\evidence\\\\ns15-05-r4.xml']))"
+      ],
+      "exit_code": 0,
+      "test_hashes": {
+        "tests\\execution_r4\\test_ns15.py::test_ns15_05": "642ff1ccf41a9a4efafe5f2959375bd2069de5462d3a40f94b74a1edebf86d29",
+        "tests\\execution_r4\\test_ns03.py::test_ns03_01": "33aeb0bb63e3ab1e8a0a74e04c624ade4b265c87402947821f3716e31c0aee70"
+      }
+    },
+    "legacy": {
+      "command": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-migration-resume-bkj6ies1\\venv313\\Scripts\\python.exe",
+        "-I",
+        "-c",
+        "import pytest; raise SystemExit(pytest.main(['-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\okto-r4-ns15-05-by411exj\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests', '-o', 'asyncio_mode=auto', '-o', 'asyncio_default_fixture_loop_scope=function', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_auth_cache_bounds.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_auth_service.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_frente1_resources.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_tools_surface.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_surface_metrics.py', '-q', '--tb=short', '--junitxml=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\plans\\\\r4_execution\\\\evidence\\\\ns15-05-legacy.xml']))"
+      ],
+      "exit_code": 0,
+      "test_hashes": {
+        "tests\\test_auth_cache_bounds.py": "3a77c34ddabfb26bd71fc1bcbb48d948f9efd229b8f636d7f8165bd3ba7c542c",
+        "tests\\test_auth_service.py": "d45f56c980deab411a4531f7163939876384b4b2eb09ca029e95f4762546dd87",
+        "tests\\test_frente1_resources.py": "610401e1a32a5a2327f5bca58d4b437d0db5f961643c9385cd613a1225411711",
+        "tests\\test_tools_surface.py": "cfe2227da5c784c0bfbbef7cc5b11849697a11b5ed655967b2eff7e19a8f2883",
+        "tests\\test_surface_metrics.py": "faa8ab8e8991d33a965355d89903215d249c109444f60f87c2f47da9d26c107a"
+      }
+    },
+    "architecture": {
+      "command": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-migration-resume-bkj6ies1\\venv313\\Scripts\\python.exe",
+        "-I",
+        "-c",
+        "import pytest; raise SystemExit(pytest.main(['-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\okto-r4-ns15-05-by411exj\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4', '-o', 'asyncio_mode=auto', '-o', 'asyncio_default_fixture_loop_scope=function', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_import_boundary.py', '-q', '--tb=short', '--junitxml=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\plans\\\\r4_execution\\\\evidence\\\\ns15-05-architecture.xml']))"
+      ],
+      "exit_code": 0,
+      "test_hashes": {
+        "tests\\test_import_boundary.py": "39e739ea7246c0defd1edbf37ff5a2f1f52c448ce5bd15aeb6be75e1e7e8f1c3"
+      }
+    },
+    "recovery": {
+      "command": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-migration-resume-bkj6ies1\\venv313\\Scripts\\python.exe",
+        "-I",
+        "-c",
+        "import pytest; raise SystemExit(pytest.main(['-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\okto-r4-ns15-05-by411exj\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4', '-o', 'asyncio_mode=auto', '-o', 'asyncio_default_fixture_loop_scope=function', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4\\\\test_ns15.py::test_tn40', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4\\\\test_ns15.py::test_ns15_04', '-q', '--tb=short', '--junitxml=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\plans\\\\r4_execution\\\\evidence\\\\ns15-05-recovery.xml']))"
+      ],
+      "exit_code": 0,
+      "test_hashes": {
+        "tests\\execution_r4\\test_ns15.py::test_tn40": "267554271169ff6b191458eefb4d4d2aa3a3d8bbd2db6b04c0549046414794ab",
+        "tests\\execution_r4\\test_ns15.py::test_ns15_04": "267554271169ff6b191458eefb4d4d2aa3a3d8bbd2db6b04c0549046414794ab"
+      }
+    },
+    "all_r4": {
+      "command": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-migration-resume-bkj6ies1\\venv313\\Scripts\\python.exe",
+        "-I",
+        "-c",
+        "import pytest; raise SystemExit(pytest.main(['-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\okto-r4-ns15-05-by411exj\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4', '-o', 'asyncio_mode=auto', '-o', 'asyncio_default_fixture_loop_scope=function', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4', '-q', '--tb=short', '--junitxml=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\plans\\\\r4_execution\\\\evidence\\\\ns15-05-all_r4.xml']))"
+      ],
+      "exit_code": 15,
+      "test_hashes": {
+        "tests\\execution_r4\\lab_peer.py": "3e063db3fd57992ea91956460aaa26a4ff52b0de6c8dd1d5bcd52461aa0808c0",
+        "tests\\execution_r4\\ns14_load.py": "ad96e53c2ebfac10152709a820a98417a573acfcc8dce4003064d67184ee0e29",
+        "tests\\execution_r4\\ns14_process_crash.py": "222d8e2f14122840048092a21cc5b0edc31a06cf92aa27536da127d73bc2dd9a",
+        "tests\\execution_r4\\ns14_restart_process.py": "baa606e3511ba8ad8117a9ae7c8d8ee4f9af42b4da0af0789336a30ab12be322",
+        "tests\\execution_r4\\ns15_restore_cases.py": "11e3209c1c3a45d6befdb5d82fdceff3d9fd679d7e05c8a50a574eb52799f791",
+        "tests\\execution_r4\\real_provider_server.py": "f6e92ec9abe089d2b4980806afa0e1fe363cbb7c82a0b8001017a5cf85480aad",
+        "tests\\execution_r4\\test_admission_capacity.py": "ca2a31cf021a3e84ad643c44c0a4a5c45564d7c226a6f3f0c88f37acb37a6201",
+        "tests\\execution_r4\\test_approved_mcp_host.py": "3cfb4c119b15f47134f6e78943387b1ef6b30c26d14a40c5ed18d055ad595530",
+        "tests\\execution_r4\\test_binding_alias_scope.py": "7fb4f535518cc109d86c480a3a0eaa6201b03b6899354900cfeb43044b0ac056",
+        "tests\\execution_r4\\test_binding_migration.py": "6a71c5c401936f6180a9262eef26d6355bc17b9660ea7c1d80b70524a98d1883",
+        "tests\\execution_r4\\test_binding_operator.py": "ee4a0f01a5d4b807b5c0a418f764f20f81dc79b64e23ba877644c78af5ad7fe8",
+        "tests\\execution_r4\\test_binding_replacement.py": "01098600f88f0feb794e71b6a4735dec5b3530249edef531eb5eb7286af25e40",
+        "tests\\execution_r4\\test_canonical_boot.py": "9f3d920a316a2f45ad176223f39bf38f5d34743a6069b985acc6bed63f770e69",
+        "tests\\execution_r4\\test_canonical_connection_discovery.py": "a24a2ca89b861266a5ee271c9c59e46996327073d94027cb7ec738022ed8af03",
+        "tests\\execution_r4\\test_canonical_connection_keys.py": "ad2260e99530394c82e120eaf6f8951875412723778a943ecd1ca4bccb818788",
+        "tests\\execution_r4\\test_canonical_consumption.py": "0ce97477fc84899d4bbbf728048b5893ff44be889d408fc2d484edab90431897",
+        "tests\\execution_r4\\test_canonical_controls.py": "98f4adc20d637343bddfa2eca033c3d98fb0b52cb808cf2992c518e1988c2e14",
+        "tests\\execution_r4\\test_canonical_delivery.py": "b4606d6a1e0f82cb6e99d8563b58e1aad66e63fd806282f5da36b9a063ad995e",
+        "tests\\execution_r4\\test_canonical_event_views.py": "95375cea2537883a1697036b228356d66e95176def619d7aa7904b58d0dbe415",
+        "tests\\execution_r4\\test_canonical_fallback.py": "ad15a79b60ccefff27dc8c6a379a40ed5408e16c0c9e0c8216277dfd7cafb98e",
+        "tests\\execution_r4\\test_canonical_handoff.py": "3600bc0cb9d2724a8dbb8eb4059d2636c635c41fbe634a6e6f7a79f52f83cfc3",
+        "tests\\execution_r4\\test_canonical_recovery.py": "52f4e7bcf40c3b57789d919f16a1045d37bb49f8775b0d8e4603ae610d74a1ee",
+        "tests\\execution_r4\\test_canonical_result_artifact.py": "574b4ece5773b3f21a2456138cd5b74d829c3883b1788ccfa2896dc1028f5fa7",
+        "tests\\execution_r4\\test_canonical_result_publication.py": "69e7d3cd45370ab6111ee3683a3ba40fea09f97369c3193d8316683e4de982d0",
+        "tests\\execution_r4\\test_canonical_retention.py": "6048ce0a6913a18ff44c8394e136ff268fea68d30e9c43bfa95b61b8effc9616",
+        "tests\\execution_r4\\test_capability_recovery.py": "b71f9fe43fddd9562501d70469e570eafece53cd847ad2ea3d935ffc71fdc7ee",
+        "tests\\execution_r4\\test_capability_reservation.py": "0fa6b310c50c321c040a744f468f934a52b3db45142e12a70d3916c05d58f94f",
+        "tests\\execution_r4\\test_capacity_metrics.py": "92fb92dfc4c92f16b3ed7dbb51ac4c70b119ece261d7ee78bfa7ab3a46c3a9e4",
+        "tests\\execution_r4\\test_cli_http_only.py": "436d651c27c0ab429156d0a756ec124067ff2dcd37e6b47969cd9e8d0ce1ae2d",
+        "tests\\execution_r4\\test_combined_consumption.py": "7915ab27ede4a0c6bdcb84a0af70fb2722572b0fcc4e8843ef54ac655b6a9635",
+        "tests\\execution_r4\\test_core_inventory.py": "3ae53193dda8265363f1ee82bec268d10fe4c8a543c49e04e8451a8637492cc3",
+        "tests\\execution_r4\\test_core_native_actions.py": "7dd97aaa107260d78a6b43f45bcb4f914041c9af450dc0ab719ed6a2faefa5d7",
+        "tests\\execution_r4\\test_daemon_startup.py": "8dc04fa0142e045e009236e1a4b5fd2e95843ce5ca769058d3df2678e26f7487",
+        "tests\\execution_r4\\test_delivery_selection.py": "9e4e34f8d1efbbaab1cec719b7c0eebde2d35e58339c878e54531b2b615c311f",
+        "tests\\execution_r4\\test_dispatch_capacity.py": "bdea11f3f843f01e36dd254f04c82cf8a92114f72a2027a26331fe975d8e88b5",
+        "tests\\execution_r4\\test_dispatch_pump.py": "77acc7819c3e5a71532dd4e7ba70d39d08ad296a9830ab446018830021163f96",
+        "tests\\execution_r4\\test_embedded_dispatch.py": "21ab2ffdfd5378804f2bdb1da118ed03d52d713594a8dfd8525b83eccefffc60",
+        "tests\\execution_r4\\test_embedded_inventory.py": "bc01183f1cde29fdb50452f36f401fb6544c8340bcd7ca03e35ba79134ba90ad",
+        "tests\\execution_r4\\test_embedded_tools.py": "d01374718daf848a50be6a0b570e5f7c1f1f22a5f14d42ba7dcc8c0043c3d44b",
+        "tests\\execution_r4\\test_event_ingress.py": "c759ee680953d8bcfef25cdde89182ee33d64a3a925a9852588a4b9ff569be8e",
+        "tests\\execution_r4\\test_execution_results.py": "344f67ef64db2ae8967661a928d17ebb19395eab2a647d706743b6214e70c46b",
+        "tests\\execution_r4\\test_executor_diagnostics.py": "d5bf927f1720df2c88e11d417038184d37a7986308e7b05e057acdb63f7dcb01",
+        "tests\\execution_r4\\test_executor_onboarding_cli.py": "61cfc8a4c42e1eca26b6c4daaeaf5163c0cee8e498d393e894b8425d4e02a8f2",
+        "tests\\execution_r4\\test_executor_registration_cli.py": "33758230e61ee49b3f028d08d3f0b0fbe168342eddafeca167ffd1a5764570eb",
+        "tests\\execution_r4\\test_handoff_workspace.py": "817836d80fd403f692440442e1d91d5e26fb0aaeb597f029e81c60f168d01a6c",
+        "tests\\execution_r4\\test_harness_canonical.py": "8f9cb6bd9c634a915f5a3962be127df3e124c18bab82a0a72c844df5f148757d",
+        "tests\\execution_r4\\test_initial_turn_parent_loss.py": "d745b07c3544243b1beed8b3250c918b98f3cf62785fb33bd86c564ce4a2456e",
+        "tests\\execution_r4\\test_initial_turns.py": "cbf5f2cbf494b6f0a3097a0a3daf85dcf85b072739c175fa5e86c5d203136cf4",
+        "tests\\execution_r4\\test_inventory_handoff.py": "95a5a187b533a39abfe0237065bfb36ee6db829e02749632112583f36721edec",
+        "tests\\execution_r4\\test_local_discovery.py": "79b8c94934ae594f19f0a40ac14de76ad16ea547d626cb6370c7e7a16eca6870",
+        "tests\\execution_r4\\test_local_launch.py": "282f5decb2c01a005f3ff5b0c709aae6311c5e521ad37b7f62608b8d907f4fde",
+        "tests\\execution_r4\\test_local_realization.py": "66f063b12629de563178b17bd07239f42f605a78fa73e17006a8f23efe35b4ba",
+        "tests\\execution_r4\\test_mcp_session_capabilities.py": "342812d66ef2618add5308ff2786e7c45958ddc7e2324c694b8151fb890b8790",
+        "tests\\execution_r4\\test_message_workspace.py": "a147a38e81179cb9be45f310974bcf68d5696463e859dd28bf8e7349e30fe1e6",
+        "tests\\execution_r4\\test_migration_backup.py": "f5866db769183adad76b73837413efe15a9282117c7507a8bfc83dc3edd83c10",
+        "tests\\execution_r4\\test_migration_catalog.py": "e2452423cda6310fb09f98e3ea1ce1f578dfe794b389af8b6db5229b3e49c9fe",
+        "tests\\execution_r4\\test_migration_resume.py": "b939b0e2b6657521241eeb9f8566a3f9a915185ac4fc00828ebac233c32339c1",
+        "tests\\execution_r4\\test_native_actions.py": "747527d8c400e504ae39591e530f4abbc4e83055b9e61a901ab6404f1924cc9b",
+        "tests\\execution_r4\\test_native_decisions.py": "d7cd0917f83b2f5829f1071c83e2227871039b3b35b775f54b2e72426c82877b",
+        "tests\\execution_r4\\test_native_loader_cutover.py": "f6b51b0f7dfac126075a8e5be8ee7f181e8cfc23ec9241033d67b5170087fc9b",
+        "tests\\execution_r4\\test_native_request_ingress.py": "69fb00daa5dd800a39bb21e850addb2edde6234a150054096742d47b049fad73",
+        "tests\\execution_r4\\test_ns00.py": "71d3895c0e34efc1a69bdfe75dc15d39803ca7bd762d053d401f25724ee85bc5",
+        "tests\\execution_r4\\test_ns01.py": "b78842a86c601c21b20f483ccf1bcafaff59f6d251d54001fec60e5add58766a",
+        "tests\\execution_r4\\test_ns02.py": "38ff1a4450e47825620fee07289993df46ae6f2911c2e3669574dff16f150d31",
+        "tests\\execution_r4\\test_ns02_receipts.py": "d805840fc2f0a9ddb36144b2c462a75e252c134ab00641bc22173c0cc94404fd",
+        "tests\\execution_r4\\test_ns03.py": "33aeb0bb63e3ab1e8a0a74e04c624ade4b265c87402947821f3716e31c0aee70",
+        "tests\\execution_r4\\test_ns04.py": "88b03fc900844286d79bfd7c031d6820788a5686741696fde78207e46c7ee88c",
+        "tests\\execution_r4\\test_ns05.py": "53a8723484825a147afc106e3f0bf09b72060ffc2abb620dc92920da7ef17279",
+        "tests\\execution_r4\\test_ns06.py": "b7638a57023b9e52524c020ae0e725643dba50f716f383d0b33d12c9c624e0da",
+        "tests\\execution_r4\\test_ns07.py": "8b0602146dd28c13d5d38b06f1e3d30333e6163cce8e488517fb5b7a08716f62",
+        "tests\\execution_r4\\test_ns08.py": "bffb3af20a3d2c854e406d16f7093bb0aba6e5d51ba9e82d710ddc8e8f2daaf6",
+        "tests\\execution_r4\\test_ns09.py": "38b09bfaa19e70596152f438e1addcc327719a4fff3115ffe0468bb6e62de70c",
+        "tests\\execution_r4\\test_ns10.py": "e9ff041a54e69dc4e05deb906a40994dc796bc6de25dec8198819f71114ed84d",
+        "tests\\execution_r4\\test_ns14.py": "6b0b3ef12a47bc2351bfb14b873cfd40fc17251435ca14c64d48851bcd0edca5",
+        "tests\\execution_r4\\test_ns15.py": "267554271169ff6b191458eefb4d4d2aa3a3d8bbd2db6b04c0549046414794ab",
+        "tests\\execution_r4\\test_open_bootstrap.py": "845f31cabbbe02dbed37933ad82324743f2c5a44cdc20188b7bef29ef2a54d1c",
+        "tests\\execution_r4\\test_pi_native_hosts.py": "80255a09622e347d0268696d1dc32e1fe8058fc77e94151f4dfe9b10247fd763",
+        "tests\\execution_r4\\test_provider_vault.py": "0361b67c1f54d868d8301dcd3446112d5dcbb1d4ec0136c957d19542b826279f",
+        "tests\\execution_r4\\test_public_open_bootstrap.py": "597aed988a13c2690d3a6f8b65cd8b5daed8473fed5ce63238236882bf5c4548",
+        "tests\\execution_r4\\test_real_connector_providers.py": "1de49dfb5e56f38f73f8d8b9346203583479b0e0cffc1f78300a14dbc77a9fde",
+        "tests\\execution_r4\\test_real_embedded_mcp.py": "1dfb7cf59940a919439511904c6a8b467cbcfeccccc23e2c37d86f63c6f78417",
+        "tests\\execution_r4\\test_real_embedded_pi.py": "940777555d5d9f97fbd5b5607e8524f5783befb66bf12ac096a1ee735afe0c90",
+        "tests\\execution_r4\\test_reconciliation.py": "38dc19a2648c5de6de951dfb517aac033ec0133d57369bcf464fcefee83f7723",
+        "tests\\execution_r4\\test_remote_connection.py": "3c558e44ff1c29dfc8d1bfd5294bb64d2888ed0ee44e49f6d9cfc265e41c7011",
+        "tests\\execution_r4\\test_server_shutdown.py": "5484c12a04e06e82762cadac9c3cf198ba53b1282b8fdfeca7697ed68289df42",
+        "tests\\execution_r4\\test_server_signal_shutdown.py": "acc20c858086187d909c9745c8580061376febe5817cdb5c71ec08acfe8b855a",
+        "tests\\execution_r4\\test_session_capabilities.py": "49d3c933ccbc01d9ad3ab3d338cee9781ce77a3aa32b4884b3804c2d23e3b0e3",
+        "tests\\execution_r4\\test_session_reuse.py": "e8a185d62f0ae898841ad40f30a348e48da55b53031333fd4dbd8739a1099735",
+        "tests\\execution_r4\\test_session_reuse_migration.py": "5194d8c6ad25fc50b0a2ae56c3764199d92dd2c1291ee39514fcb498950228a1",
+        "tests\\execution_r4\\test_session_views.py": "0285434b75165bb5d8b3a9df81ab30f9a593b97a53d07eab79f5b2492fb509b1",
+        "tests\\execution_r4\\test_shutdown_admission.py": "b156339739b7322340fe1818010dcbd0b99b479ed8adc7fb9e5b214379ae6f06",
+        "tests\\execution_r4\\test_shutdown_storage_order.py": "3946e10be3309ce30b7ca90954ce32cf8b96c1a706b48b06888e54d21702804b",
+        "tests\\execution_r4\\test_vertical_inventory.py": "ac8881d612fe0368113331c467f91bbdc62420907eaecb3266c4952ef10e5ab8"
+      },
+      "disposition": "ABORTED_AFTER_CONFIRMED_SHUTDOWN_HANG",
+      "diagnosis": "vault-refusal-aborted.json"
+    }
+  }
+}

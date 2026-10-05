@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="83.537" timestamp="2026-10-01T01:17:29.961473-03:00" hostname="Alienware_m15"><testcase classname="test_real_connector_providers" name="test_real_provider_through_public_connector_cli[pi_rpc]" time="82.297"><failure message="AssertionError: TypeError&#10;assert TypeError(&quot;'NoneType' object is not callable&quot;) is None&#10; +  where TypeError(&quot;'NoneType' object is not callable&quot;) = &lt;okto_nexus_connector.services.r4_execution.R4ExecutionOwner object at 0x000001FE8E6E78C0&gt;.failure">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_real_connector_providers.py:266: in test_real_provider_through_public_connector_cli
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_real_connector_providers.py:198: in run
+    report["open_stage"] = (await receipt("open", ("SUBMITTED", "SUCCEEDED")))["executor_stage"]
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_real_connector_providers.py:192: in receipt
+    assert owner.failure is None, type(owner.failure).__name__
+E   AssertionError: TypeError
+E   assert TypeError("'NoneType' object is not callable") is None
+E    +  where TypeError("'NoneType' object is not callable") = &lt;okto_nexus_connector.services.r4_execution.R4ExecutionOwner object at 0x000001FE8E6E78C0&gt;.failure</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,49 @@
+{
+  "increment": "M06 granted lease preservation after WSS disconnection",
+  "status": "PARTIAL_INSTALLED_INTEGRATION",
+  "requirements": [
+    "NS08.05 transport loss ownership (partial)",
+    "03_DADOS_MIGRACAO_E_RECUPERACAO.md: remote shutdown and authorized deadlines"
+  ],
+  "reference_commits": {
+    "nexus": "b497e87185b59c90ae87ecffbcc35f74d45dfca5",
+    "connector": "264ec531b833e4b418a984eb62bcd3339a756b5a",
+    "core": "97892edba088ac85c9977b8bd8fde27f725ea2a3"
+  },
+  "nexus_commit_note": "Nexus reference is the parent of the commit containing this manifest.",
+  "artifacts": "evidence/lease-disconnect-artifacts.json",
+  "tests": {
+    "connector": {
+      "tests": 411,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 1,
+      "passed": 410
+    },
+    "nexus": {
+      "tests": 75,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 75
+    }
+  },
+  "unchanged_artifacts": "Nexus production and Core 0.2.35.dev0 wheels unchanged; all installed/source/wheel byte sets verified.",
+  "verification": [
+    "Real Core lease remains active after execution connection closure; native close is delayed until expiry.",
+    "Explicit stop proceeds with cleanup, including after cancellation of the cleanup observer.",
+    "Inspection failure and unknown lease state cannot authorize early shutdown.",
+    "All started inspections remain owned through another inspection failure; another executor is not inspected.",
+    "Real HTTP/WSS loss preserves a Server-issued five-second lease and then cleans up after the original monotonic deadline.",
+    "One native opening, one native turn, two canonical operations and no repeated outbox attempt in the new integration case."
+  ],
+  "limits": [
+    "No live session adoption or transfer to a replacement connection. Reconnection waits for retained cleanup.",
+    "Session without canonical close receipt can remain in reconciliation; durable resource-release evidence remains required.",
+    "Unknown observations keep cleanup pending until new evidence or explicit stop; real process-kill and provider/platform/independent-host qualification remain pending.",
+    "Technical native peer and readiness fixture. Core and Nexus production wheels unchanged.",
+    "One existing Connector skip and one existing Nexus dependency warning; user UI assets have no new acceptance.",
+    "No M00-M13 milestone or G0-G3 gate closed; full scope unchanged."
+  ],
+  "review_correction": "After the first installed campaign, review found that one failed inspection could return before peer inspections settled. The final build awaits all started inspections, adds a regression test, and reruns both installed suites. Only final artifact results are reported here."
+}

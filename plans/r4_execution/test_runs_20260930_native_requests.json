@@ -1,0 +1,99 @@
+{
+  "product_commits": {
+    "nexus": "49b2422",
+    "connector": "ab6bfaf",
+    "core": "6cf2ecc"
+  },
+  "core_version": "0.2.41.dev0",
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-approvals-core-yqwcdf8k\\dist\\nexus_connector_core-0.2.41.dev0-py3-none-any.whl",
+      "sha256": "d524686df61b85f4cc284d6bc16b0f2525a9a5e6974b7213676e2eb8017fe1a7"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-request-nexus-final-99tr2nd8\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "c8d8dc40b963f8d905841ac55a81549bd60ac4d0a399cf86be89fd5c47bfeee5"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-request-connector-nkopmb07\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "a35617a4a1f23fc8a3da6c98fd3f4d6c13c4041129c72240ad69ab8f15502864"
+    }
+  },
+  "runs": {
+    "native-request-ingress-source.xml": {
+      "tests": 35,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "native-request-installed-diagnostic.xml": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 1,
+      "skipped": 0
+    },
+    "native-request-installed-initial-nexus.xml": {
+      "tests": 55,
+      "failures": 0,
+      "errors": 55,
+      "skipped": 0
+    },
+    "native-request-installed-initial-isolated.xml": {
+      "tests": 55,
+      "failures": 0,
+      "errors": 55,
+      "skipped": 0
+    },
+    "native-request-installed-nexus.xml": {
+      "tests": 55,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "native-request-installed-isolated.xml": {
+      "tests": 55,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "native-request-installed-connector.xml": {
+      "tests": 45,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "evidence_sha256": {
+    "evidence\\native-request-artifacts.json": "a52bd09ae7c6979ecc7e189e2f203783c8f1b9850eca6632bbde3f59a94a07e6",
+    "evidence\\native-request-connector-build.log": "e45259b40f891b2dfc355f6da04f92f651f0a9497c2c6c1e55c7fb92de2db01f",
+    "evidence\\native-request-final-install-isolated.log": "92a8036ff17131cf1b48f9d3f111e3577aa9d4eb04c96af02a13954808638073",
+    "evidence\\native-request-final-install-normal.log": "464c173db4377efe62280a4f1eaab46e1a1c63caadc3a694da62a7631d93f929",
+    "evidence\\native-request-ingress-source.xml": "564218577a0c908167f259089625426f0736ccfbc9f7f8da0c521c1845ea6950",
+    "evidence\\native-request-initial-artifacts.json": "f858c7bcd6ce9a7ed1d93c606d5444e27730df6f7ea693fcc7ae2670fd6c05a5",
+    "evidence\\native-request-install-isolated.log": "8fc1ed668890ca301ae79204dc198c75ce2f109aed3b0c1d199843dcd9ed396e",
+    "evidence\\native-request-install-normal.log": "49d7c8ac98efc478128d08a03b891f4bd0fa7bf9fcd6f121e4066355aca26d69",
+    "evidence\\native-request-installed-connector.json": "86a0658e499a6b39993f4f8a89dafd2b08cca86aa91a915dcf1247b685c857ab",
+    "evidence\\native-request-installed-connector.log": "282acec9818786c6f6bf4edb43955e7e7b1384f85bc0e55682c9735264458ced",
+    "evidence\\native-request-installed-connector.xml": "11eb364ecbffbb716ba2d55ba9f3779d2e8fb7f8be804cf533e6df7272a091ee",
+    "evidence\\native-request-installed-diagnostic.xml": "237fe37cdbb917a2993d95bcfa942182a67ec1fc86e14b75841ad3d82c26d671",
+    "evidence\\native-request-installed-initial-isolated.json": "d259637006954da66fae7354ba9d1ddd541d3ec917056bbc0407a9c89568e066",
+    "evidence\\native-request-installed-initial-isolated.log": "a3ea430cc67233dcbab97e2034fc22cf148633aa37af085146c3df1823f3202f",
+    "evidence\\native-request-installed-initial-isolated.xml": "daf00231add68d6dc488bb9a3e4d74be45b07e7edf29e7a7bd9f83c3c64a7f08",
+    "evidence\\native-request-installed-initial-nexus.json": "56b4127e1184f580e3f5c171ec476ab1bbcf3de6d67a518adc22b956e2caafa6",
+    "evidence\\native-request-installed-initial-nexus.log": "b20e3eb4f7aec124be14123afdaf1f33b6afb134a8ff52942b4861faf673b884",
+    "evidence\\native-request-installed-initial-nexus.xml": "9c4d0c8bf22eeb2f8b61c0a8ecbf65bad4e0ea8017ae77de478229c3babae386",
+    "evidence\\native-request-installed-isolated.json": "fda84cbfa39f903a193fb29153bf5337b3848426d4fea9b9620e3869d1664d04",
+    "evidence\\native-request-installed-isolated.log": "c894954226b3b82a1f3c9fdbc00eb3a97de0cecb4a843513980df77e5129a5bc",
+    "evidence\\native-request-installed-isolated.xml": "33af921da65798e393932ed6711669b58a41078565e543fec5e25778a70ce63a",
+    "evidence\\native-request-installed-nexus.json": "ef5bf57ce89cf17099ae8b1d955d82b9a8828c5a375a1bc556cc394ac20ca0d1",
+    "evidence\\native-request-installed-nexus.log": "e8f7921356e1a8796ef70e36880090286856e7be8fb92f651160ed72b7ef52ed",
+    "evidence\\native-request-installed-nexus.xml": "d492847099ca551fc762c520b1702951229da0eb40e9d3e667bf84deae6ccad5",
+    "evidence\\native-request-nexus-build.log": "65bcc6acde68e23aca0b14808eca73b3f87368fb845cead053b168a49a40f2e3",
+    "evidence\\native-request-nexus-final-build.log": "7aa1c0602d8e67a872c5cb3aa7539856ef1feb47514bf531b601ed471cbc82f6",
+    "run_native_request_installed.py": "2237948270a65eeb0fc2f9cfe5ac814aa270fb73ddeebc7b5bea8415bc8d252b"
+  },
+  "initial_failure": "Nexus inventory version constant still required Core 0.2.40 after dependency adoption. Corrected to 0.2.41; rebuilt and reinstalled before final campaigns.",
+  "scope": "Technical transactional ingress, native classification and launch regression on installed packages. The two 55-case Nexus campaigns overlap. No real provider, operator decision or release gate acceptance.",
+  "ui_assets": "Preexisting UI changes were packaged for installed byte equality but are excluded from product/UI acceptance and commits.",
+  "milestone_complete": false
+}

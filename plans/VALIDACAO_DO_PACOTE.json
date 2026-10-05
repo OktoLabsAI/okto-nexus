@@ -1,0 +1,143 @@
+{
+  "generated_at_utc": "2026-09-29T15:19:27.040818+00:00",
+  "status": "PASS",
+  "scope": "document_consistency_and_synthetic_json_shapes_only",
+  "product_tests_executed": false,
+  "all_164_product_scenarios": "NOT_RUN",
+  "checks": [
+    {
+      "check": "contagens_e_estados_iniciais",
+      "status": "PASS",
+      "detail": {
+        "phases": 17,
+        "tasks": 85,
+        "product_scenarios_not_run": 164
+      }
+    },
+    {
+      "check": "dependencias",
+      "status": "PASS",
+      "detail": "DAG de fases e tarefas sem ciclos ou dependência inexistente."
+    },
+    {
+      "check": "referencias_internas",
+      "status": "PASS",
+      "detail": "Todas as referências tarefa/teste/crosswalk têm destino."
+    },
+    {
+      "check": "cobertura_original_R3",
+      "status": "PASS",
+      "detail": {
+        "original_tasks_mapped": 70,
+        "TN_preserved": 45,
+        "J_preserved": 34
+      }
+    },
+    {
+      "check": "integridade_referencias",
+      "status": "PASS",
+      "detail": "Referências anexadas preservadas byte a byte no pacote."
+    },
+    {
+      "check": "schemas_e_exemplos_de_forma",
+      "status": "PASS",
+      "detail": {
+        "definitions": 59,
+        "routes": 23,
+        "synthetic_shape_cases": [
+          {
+            "id": "DOC-01",
+            "expected_valid": true,
+            "observed_valid": true
+          },
+          {
+            "id": "DOC-02",
+            "expected_valid": true,
+            "observed_valid": true
+          },
+          {
+            "id": "DOC-03",
+            "expected_valid": true,
+            "observed_valid": true
+          },
+          {
+            "id": "DOC-04",
+            "expected_valid": true,
+            "observed_valid": true
+          },
+          {
+            "id": "DOC-05",
+            "expected_valid": true,
+            "observed_valid": true
+          },
+          {
+            "id": "DOC-06",
+            "expected_valid": true,
+            "observed_valid": true
+          },
+          {
+            "id": "DOC-07",
+            "expected_valid": false,
+            "observed_valid": false
+          },
+          {
+            "id": "DOC-08",
+            "expected_valid": false,
+            "observed_valid": false
+          },
+          {
+            "id": "DOC-09",
+            "expected_valid": false,
+            "observed_valid": false
+          },
+          {
+            "id": "DOC-10",
+            "expected_valid": false,
+            "observed_valid": false
+          },
+          {
+            "id": "DOC-11",
+            "expected_valid": false,
+            "observed_valid": false
+          },
+          {
+            "id": "DOC-12",
+            "expected_valid": false,
+            "observed_valid": false
+          },
+          {
+            "id": "DOC-13",
+            "expected_valid": false,
+            "observed_valid": false
+          },
+          {
+            "id": "DOC-14",
+            "expected_valid": false,
+            "observed_valid": false
+          },
+          {
+            "id": "DOC-15",
+            "expected_valid": false,
+            "observed_valid": false
+          },
+          {
+            "id": "DOC-16",
+            "expected_valid": false,
+            "observed_valid": false
+          }
+        ],
+        "not_product_tests": true
+      }
+    },
+    {
+      "check": "delta_contratual_explicito",
+      "status": "PASS",
+      "detail": "R4 é alvo separado, sem declarar o Core atual como produtor da revisão nova."
+    },
+    {
+      "check": "entregaveis",
+      "status": "PASS",
+      "detail": "Documentos, tarefas e versão integral encontrados."
+    }
+  ]
+}

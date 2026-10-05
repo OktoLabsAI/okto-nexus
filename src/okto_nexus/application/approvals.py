@@ -86,7 +86,7 @@ def approval_to_summary(approval: Approval) -> dict[str, Any]:
         "action": approval.action,
         "agent_id": approval.agent_id,
         "policy_id": approval.policy_id,
-        "status": approval.status,
+        "status": "archived" if approval.archived_at else approval.status,
         "created_at": approval.created_at,
         "decided_at": approval.decided_at,
         "decided_by": approval.decided_by,
@@ -94,6 +94,9 @@ def approval_to_summary(approval: Approval) -> dict[str, Any]:
     }
     if approval.trace_id is not None:
         item["trace_id"] = approval.trace_id
+    if approval.archived_at:
+        item.update(archived_at=approval.archived_at, archived_by=approval.archived_by,
+                    original_status=approval.status)
     if approval.justification is not None:
         item["justification"] = approval.justification
     return item
@@ -133,11 +136,16 @@ class ApprovalService:
         self._config = config
         self._emitter = event_emitter
         self._executors: dict[str, Executor] = {}
+        self._decision_listeners = {}
+        self._idempotent_decisions = set()
+        self._decision_validators = {}
+        self._decision_details = {}
+        self._transactional_decisions = {}
 
     # ------------------------------------------------------------------ #
     # Wiring
     # ------------------------------------------------------------------ #
-    def register_executor(self, action: str, executor: Executor) -> None:
+    def register_executor(self, action: str, executor: Executor, *, idempotent_decisions=False) -> None:
         """Register the re-execution callable for one action (wiring layer).
 
         The executor receives the persisted use-case kwargs and MUST run the
@@ -146,6 +154,34 @@ class ApprovalService:
         this module never imports it.
         """
         self._executors[str(action)] = executor
+        if idempotent_decisions:
+            self._idempotent_decisions.add(str(action))
+
+    def register_decision_listener(self, action, listener):
+        self._decision_listeners[action] = listener
+
+    def register_transactional_decision(self, action, handler):
+        """Register a database-only decision, committed with its audit event.
+
+        The handler authenticates decision_context and must not perform
+        external I/O. It receives replay=True for an already decided row.
+        Existing re-execution actions retain their separate transaction flow.
+        """
+        self._transactional_decisions[action] = handler
+
+    def register_decision_validator(self, action, validator, *, detail=None):
+        # Transactional validation/storage only: no external I/O allowed.
+        self._decision_validators[action] = validator
+        if detail:
+            self._decision_details[action] = detail
+
+    def _wake_decision_listener(self, action):
+        listener = self._decision_listeners.get(action)
+        if listener:
+            try:
+                listener()
+            except Exception:
+                pass  # Durable decision survives a lost post-commit hint.
 
     # ------------------------------------------------------------------ #
     # Interception (called INSIDE the write path's UoW - BR1)
@@ -160,6 +196,7 @@ class ApprovalService:
         policy_id: str,
         kwargs: Mapping[str, Any],
         trace_id: str | None = None,
+        approval_id: str | None = None,
     ) -> dict[str, Any]:
         """Persist the intercepted action + emit ``approval.requested``.
 
@@ -170,7 +207,7 @@ class ApprovalService:
         deliberately NOT persisted - the submitter's authenticity was verified
         at interception time and secrets never land in the table.
         """
-        approval_id = new_id("apr")
+        approval_id = approval_id or new_id("apr")
         now = self._clock.now_iso()
         caller = str(agent_id) if agent_id is not None else ""
         request_payload = json.dumps(
@@ -231,6 +268,8 @@ class ApprovalService:
         decision: Any,
         decided_by: str,
         justification: Any = None,
+        response: Any = None,
+        decision_context: Any = None,
     ) -> dict[str, Any]:
         """Decide one pending approval: approve re-executes, reject notifies.
 
@@ -268,6 +307,42 @@ class ApprovalService:
             row = self._approvals.get(uow, aid)
             if row is None:
                 raise self._not_found(aid)
+            if row.archived_at:
+                raise OktoNexusError(ErrorCode.CONFLICT, "This approval has been archived.", {"approval_id": aid})
+            transactional = self._transactional_decisions.get(row.action)
+            if transactional is not None:
+                result = transactional(
+                    uow, row, approved=approving, response=response,
+                    context=decision_context, decided_by=decider,
+                    replay=row.status != STATUS_PENDING,
+                )
+                if row.status != STATUS_PENDING:
+                    if (row.status != target_status or row.decided_by != decider or
+                            row.justification != just):
+                        raise OktoNexusError(ErrorCode.CONFLICT,
+                                              "The approval already has a different decision.", {})
+                    return {"approval_id": aid, "status": row.status,
+                            "decided_by": row.decided_by, "decided_at": row.decided_at,
+                            "reused": True, "executed_result": result}
+                if not self._approvals.mark_decided(
+                        uow, approval_id=aid, status=target_status,
+                        decided_by=decider, justification=just, decided_at=now):
+                    raise OktoNexusError(ErrorCode.CONFLICT,
+                                          "The approval changed during the decision.", {})
+                self._approvals.set_executed_result(
+                    uow, approval_id=aid,
+                    executed_result=json.dumps(result, ensure_ascii=False))
+                self._emit_decision(
+                    uow, row, event_type=EVENT_APPROVAL_GRANTED if approving else EVENT_APPROVAL_DENIED,
+                    decided_by=decider)
+                return {"approval_id": aid, "status": target_status,
+                        "decided_by": decider, "decided_at": now,
+                        "executed_result": result}
+            validator = self._decision_validators.get(row.action)
+            if validator:
+                validator(uow, row, approved=approving, response=response)
+            elif response is not None:
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "This approval action does not accept input data.", {})
             if approving and row.action not in self._executors:
                 # Fail BEFORE the flip: nothing written, the row stays
                 # pending and decidable once the wiring is complete.
@@ -286,6 +361,11 @@ class ApprovalService:
                 decided_at=now,
             )
             if not flipped:
+                if (row.action in self._idempotent_decisions and row.status == target_status and
+                        row.decided_by == decider and row.justification == just):
+                    return {"approval_id": aid, "status": row.status, "decided_by": row.decided_by,
+                            "decided_at": row.decided_at, "reused": True,
+                            "executed_result": json.loads(row.executed_result) if row.executed_result else None}
                 raise OktoNexusError(
                     ErrorCode.CONFLICT,
                     f"Approval {aid!r} was already decided "
@@ -309,6 +389,7 @@ class ApprovalService:
         kwargs = dict(payload.get("kwargs") or {})
 
         if not approving:
+            self._wake_decision_listener(row.action)
             notified = self._notify_rejection(
                 row, decider=decider, kwargs=kwargs, justification=just
             )
@@ -344,6 +425,7 @@ class ApprovalService:
             self._emit_decision(
                 uow, row, event_type=EVENT_APPROVAL_GRANTED, decided_by=decider
             )
+        self._wake_decision_listener(row.action)
         return {
             "approval_id": aid,
             "status": STATUS_APPROVED,
@@ -410,6 +492,7 @@ class ApprovalService:
                     ),
                     "target": {"strategy": "direct", "agent_id": row.agent_id},
                     "trace_id": row.trace_id,
+                    "_nonexecuting_notification": True,
                 }
             )
         except OktoNexusError:
@@ -419,17 +502,38 @@ class ApprovalService:
     # ------------------------------------------------------------------ #
     # Operator queue reads (FR8; work with the flag OFF - BR6)
     # ------------------------------------------------------------------ #
+    def archive(self, *, approval_id: str, archived_by: str) -> dict[str, Any]:
+        """Dismiss locally, including expired native requests, without runtime I/O.
+
+        The original state remains auditable. Archived requests cannot authorize
+        a later execution, and repeated archive requests do not change the audit.
+        """
+        with self._cf.unit_of_work() as uow:
+            row = self._approvals.get(uow, approval_id)
+            if row is None:
+                raise self._not_found(approval_id)
+            if not row.archived_at:
+                # An approved action can still be executing outside this UoW.
+                if row.status == STATUS_APPROVED and row.executed_result is None:
+                    raise OktoNexusError(ErrorCode.CONFLICT,
+                        "This approval is still executing. Wait for its result before archiving.", {})
+                self._approvals.archive(uow, approval_id=approval_id,
+                    archived_by=archived_by, archived_at=self._clock.now_iso())
+                self._emit_decision(uow, row, event_type="approval.archived", decided_by=archived_by)
+            return approval_to_summary(self._approvals.get(uow, approval_id))
+
     def list_approvals(
         self,
         *,
         workspace_id: str,
         status: str | None = STATUS_PENDING,
         limit: int = 100,
+        offset: int = 0,
     ) -> list[dict[str, Any]]:
         """Oldest-first queue items (summaries - BR5), workspace-scoped."""
         with self._cf.unit_of_work(write=False) as uow:
             rows = self._approvals.list(
-                uow, workspace_id=workspace_id, status=status, limit=limit
+                uow, workspace_id=workspace_id, status=status, limit=limit, offset=offset
             )
         return [approval_to_summary(row) for row in rows]
 
@@ -437,9 +541,13 @@ class ApprovalService:
         """Full detail incl. the intact request payload (operator-only)."""
         with self._cf.unit_of_work(write=False) as uow:
             row = self._approvals.get(uow, str(approval_id))
-        if row is None:
-            raise self._not_found(approval_id)
-        return approval_to_detail(row)
+            if row is None:
+                raise self._not_found(approval_id)
+            result = approval_to_detail(row)
+            detail = self._decision_details.get(row.action)
+            if detail:
+                result["decision_detail"] = detail(uow, row)
+        return result
 
     @staticmethod
     def _not_found(approval_id: Any) -> OktoNexusError:

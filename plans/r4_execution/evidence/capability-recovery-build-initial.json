@@ -1,0 +1,55 @@
+{
+  "status": "FAILED_PACKAGE_PREFLIGHT",
+  "product_tests_run": false,
+  "reason": "In-place setuptools build retained old HTTP assets from build/lib; byte verification found okto_nexus/adapters/inbound/http/static/assets/index-BkB7Z3c-.css absent in src. Both suite launchers stopped before pytest.",
+  "artifacts": {
+    "core": {
+      "version": "0.2.30.dev0",
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-core-wheel-85cnb6ls\\nexus_connector_core-0.2.30.dev0-py3-none-any.whl",
+      "sha256": "e060e033be05fdd4c9aff5c90902d191483d400b3f6778fa7bb5395b66f561e6"
+    },
+    "qualification": "Fresh capability metadata and protected material recovery under applied Server/Core leases; technical peer, not automatic host restart or provider qualification.",
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-recovery-nexus-1d54_gw6\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "304b932eafb848ba663c3d721cdf4d39df7bd107d657f54dd340fd3d1c24e9c0",
+      "command": [
+        "C:\\Python313\\python.exe",
+        "-m",
+        "pip",
+        "wheel",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+        "--no-deps",
+        "--no-build-isolation",
+        "--wheel-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-recovery-nexus-1d54_gw6"
+      ]
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-recovery-connector-r5lfju6w\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "dc99b34075985f84b85abebb408acf71534b8afa7cb2322419e8876f96da2b6a",
+      "command": [
+        "C:\\Python313\\python.exe",
+        "-m",
+        "pip",
+        "wheel",
+        "D:\\Projetos\\Techridy\\okto-nexus-connector",
+        "--no-deps",
+        "--no-build-isolation",
+        "--wheel-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-recovery-connector-r5lfju6w"
+      ]
+    },
+    "installed_python": "C:/Users/jpamb/AppData/Local/Temp/okto-r4-native-installed-zk_r383i/Scripts/python.exe",
+    "install_command": [
+      "C:/Users/jpamb/AppData/Local/Temp/okto-r4-native-installed-zk_r383i/Scripts/python.exe",
+      "-I",
+      "-m",
+      "pip",
+      "install",
+      "--no-deps",
+      "--force-reinstall",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-recovery-nexus-1d54_gw6\\okto_nexus-0.2.0-py3-none-any.whl",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-recovery-connector-r5lfju6w\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "provider": "codex_app_server",
+  "version": "0.159.0",
+  "binary_sha256": "0e2a4cd6ac1b329e64ec74745e38b71a3d4fa701102c86f49cf605d23a02c4df",
+  "before_state": "NOT_PROBED",
+  "after_state": "READY_FOR_RUNTIME",
+  "runtime_authorized": false,
+  "publication_pending": true,
+  "readiness_override": false,
+  "stale_selection_refused": true,
+  "actual_registered_server": false,
+  "actual_runtime_opened": false,
+  "independent_hosts": false
+}

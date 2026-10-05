@@ -1,0 +1,26 @@
+{
+  "status": "READINESS_GAP_CONFIRMED_NOT_PROMOTED",
+  "scope": "Source and installed development tuple inspection; no product acceptance",
+  "nexus_head": "fee1a4c2d8816486402a7e6f6f2000ea8bc274e6",
+  "core_head": "189c9cc9a2b899548184f2e91c1f5145dbfd638c",
+  "connector_head": "1f9b29c27e4316d6dce84860f4067908fdc0d2b7",
+  "facts": [
+    "Core frame_codec_r4.R4_BUNDLE_EXECUTABLE is false.",
+    "Core R4 manifest and generator declare development-partial; codec verifies that exact status.",
+    "Core R4 manifest lists 21 supported frame types and unsupported_actions is empty; this is schema inventory, not runtime conformance proof.",
+    "Core protocol.CONTRACT_REVISION remains r3 and is consumed by the historical frame codec and Connector legacy wss_client.",
+    "Nexus core_inventory.SERVER_R4_EXECUTION_READY is false; protocol_info also requires Core CONTRACT_REVISION equal to the R4 wire revision.",
+    "Connector R4 transport uses the separate R4_PREVIEW_REVISION and explicit R4 codec. Its legacy transport still uses CONTRACT_REVISION.",
+    "Nexus tests/execution_r4/test_ns00.py and Core tests/test_r4_development_bundle.py assert historical r3 and unpromoted development status. Their assertions must be reconciled with promotion while retaining negative cross-revision coverage."
+  ],
+  "required_work": [
+    "Resolve current consumer regression failures and review admission, lease, dispatcher and Connector conformance evidence.",
+    "Promote generated R4 manifest and executable capability coherently with a distinct R4 revision identity; do not silently reinterpret historical r3 frames by replacing a shared legacy revision constant.",
+    "Update Nexus negotiation to validate the executable R4 bundle explicitly and retain an accurate historical revision field.",
+    "Build a new shared Core artifact, update both consumer pins and hashes, then exercise public installed local and remote paths without monkeypatching readiness.",
+    "Keep provider and independent-host qualification separate from protocol executability."
+  ],
+  "installed_evidence": "installed-r4-readiness-audit.json",
+  "core_ci_evidence": "core-189c9cc-ci.json",
+  "gates_closed": []
+}

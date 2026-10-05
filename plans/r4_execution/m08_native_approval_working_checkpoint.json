@@ -1,0 +1,52 @@
+{
+  "state": "remote_native_decision_transport_verified_real_remote_onboarding_pending",
+  "core_version": "0.2.43.dev0",
+  "core_commit": "a061960",
+  "artifact": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-lease-core-hi9n9umw\\dist\\nexus_connector_core-0.2.43.dev0-py3-none-any.whl",
+    "sha256": "7403611bb37050700fc325b2002f74b5ac507a79af8badba0bea0cd1b775087b",
+    "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-lease-core-hi9n9umw"
+  },
+  "installed_tests": {
+    "tests": 65,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "pip_check": true,
+  "package_verification": true,
+  "consumers": {
+    "nexus": {
+      "commit": "0a0eee5",
+      "core_pin": "0.2.43.dev0"
+    },
+    "connector": {
+      "commit": "80f65e0",
+      "core_pin": "0.2.43.dev0"
+    }
+  },
+  "changes": [
+    "Native operational proposals are copied from the adapter correlation port before display redaction, bounded and frozen.",
+    "Uncorrelated native payloads cannot install pending approval authority.",
+    "Claude MCP calls can be classified for explicit decisions; appended MCP/model arguments retain the stdio permission channel.",
+    "Nexus commits immutable operational requests and redacted display with contiguous event ACKs; typed ID namespaces, duplicate/conflict checks, fixed expiry, terminal and stale generation handling.",
+    "Nexus and Connector adopt the same Core 0.2.41 wheel; installed regressions passed.",
+    "Canonical operator CAS, client intent replay and one transactional decision/outbox operation.",
+    "Bounded input producer with loss refusal and exact inline wire reconstruction.",
+    "Embedded capture and application under explicit HITL lease actions; actual Claude journey passed with three operator decisions.",
+    "Observed and corrected Codex MCP empty elicitation forms; explicit one-call input remains mandatory.",
+    "Actual installed Pi, Codex and Claude local handoff journeys passed on the same Nexus/Core wheels without Connector.",
+    "Core 0.2.43 and Connector capture from applied lease actions; four technical loopback decision cases pass with canonical admission, dispatch and receipt return.",
+    "Connector persists scoped discovery roots/Pi pair and exposes public configure/preview CLI; automatic daemon uses the public Core facade. Final installed verification passed 190 cases plus CLI subprocess checks.",
+    "Public launch consent and daemon-owned realization passed installed CLI/IPC/TCP verification; ticket rotation is serialized and observer cancellation retains ownership."
+  ],
+  "remaining": [
+    "Complete durable public binding prepare/apply and reusable runtime CLI mapping, then exercise real remote providers.",
+    "Complete explicit native observation, sensitive input, rejection, replay and recovery acceptance.",
+    "Investigate the initial isolated renewal timing failure if it recurs; do not claim the cause was fixed.",
+    "Complete UI/CLI decisions and races, migration and the remaining fixed-plan milestones."
+  ],
+  "milestone_complete": false,
+  "consumer_evidence": "test_runs_20260930_native_lease.json",
+  "onboarding_evidence": "test_runs_20261001_executor_onboarding.json"
+}

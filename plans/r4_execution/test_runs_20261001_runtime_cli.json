@@ -1,0 +1,90 @@
+{
+  "date": "2026-10-01",
+  "branch": "feature/v0.2.0",
+  "commits": {
+    "nexus": "3dec14b",
+    "connector": "17ea012",
+    "core": "a061960"
+  },
+  "nexus_package_source_commit": "a0c6160",
+  "core_version": "0.2.43.dev0",
+  "artifacts": {
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-runtime-cli-connector-jdiuvhw2\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "1635ad499c4615be10bd9727a63ee86b2ebe30094e6b80ee09c32839306dbfcf"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-runtime-admission-nexus-tmvzlmoh\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "e218c5569551e335023de98d2d0988241a601eb59a412c4e24086685c0ee9889"
+    }
+  },
+  "core_artifact": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-lease-core-hi9n9umw\\dist\\nexus_connector_core-0.2.43.dev0-py3-none-any.whl",
+    "sha256": "7403611bb37050700fc325b2002f74b5ac507a79af8badba0bea0cd1b775087b",
+    "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-lease-core-hi9n9umw"
+  },
+  "installed": {
+    "connector": {
+      "file": "evidence/runtime-cli-installed.xml",
+      "tests": 246,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "seconds": 51.283
+    },
+    "nexus": {
+      "file": "evidence/runtime-cli-tcp-installed.xml",
+      "tests": 33,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "seconds": 174.557
+    }
+  },
+  "source": {
+    "connector": {
+      "file": "evidence/runtime-cli-source.xml",
+      "tests": 22,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "seconds": 7.665
+    },
+    "tcp": {
+      "file": "evidence/runtime-cli-tcp-source.xml",
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "seconds": 17.894
+    }
+  },
+  "runner": "run_runtime_cli_installed.py",
+  "pip_check": "evidence/runtime-cli-install.log",
+  "changes": [
+    "Canonical operation reads now use current agent credentials and approved Server profile independently of physical launch evidence.",
+    "Workspace drift, local binding removal and revoked local binding state no longer prevent historical queries; new runtime mutations still require the approved mapping.",
+    "Credential changes during a query discard its response; preexisting credential rotation can be used on a subsequent explicit read.",
+    "Public parsed CLI start/submit/steer/interrupt/stop commands resolve and admit over real loopback HTTP and dispatch through automatic daemon WSS/Core ownership.",
+    "Every command is replayed with the same intent ID; final evidence asserts five operations, five receipts, one native opening and one dispatch attempt per operation.",
+    "CLI operation queries read all five final receipts from the actual Server."
+  ],
+  "failure_history": [
+    {
+      "file": "evidence/runtime-cli-tcp-premature-assertion.xml",
+      "finding": "The new five-operation assertion was initially inserted after only open/submit. It was moved after all five actions; the same product code then passed."
+    }
+  ],
+  "limitations": [
+    "Positive runtime integration uses a technical native peer and fixture-only Server readiness qualification. It is not evidence for actual Pi, Codex or Claude.",
+    "Registration, realization and initial operator approval are supplied by the established onboarding fixture. Public Connector prepare/apply then recovers that approved proposal before runtime CLI admission.",
+    "Existing onboarding TCP cases separately cover CLI configuration/realization and binding application; no single real-provider end-to-end onboarding campaign is claimed.",
+    "Nexus production bytes and its installed wheel are unchanged from a0c6160. The new Nexus commit adds tests only.",
+    "Core production bytes and wheel remain unchanged at a061960 / 0.2.43.",
+    "Actual remote provider journeys, automatic session reuse, R4 status/logs, retention/pruning and final multi-host/platform acceptance remain pending.",
+    "Source and installed suites overlap; their counts are not unique test totals.",
+    "Preexisting Nexus UI asset changes remain outside commits and UI acceptance.",
+    "No milestone or release gate closes; M00-M13 remains the fixed objective."
+  ],
+  "milestone_complete": false
+}

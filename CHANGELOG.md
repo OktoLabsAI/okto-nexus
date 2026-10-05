@@ -2,6 +2,123 @@
 
 All notable changes to Okto Nexus are documented in this file.
 
+## Unreleased
+
+### 0.2.0 development
+
+- Complete the PR #34 remediation implementation and approved local Codex/Claude
+  qualification, with additive schema064 and verified local0.2.0 installation.
+  The final report is `plans/pr34-remediation/P12_FINAL_AUDIT.md`; Pi native and
+  dedicated Claude attach remain explicitly unqualified (`NOT_RUN`). No merge
+  or package publication is implied by the local installation.
+
+- Surface58/schema064 integrates approved external Nexus sessions with attach
+  handoff claim, authenticated ACK and canonical complete/reject. Native attach
+  remains unconfirmed injection: no fabricated native ACK, result or managed-work
+  capability. Old writers are fenced; referenced session audit history is retained.
+- Schema063 adds optional nonexecuting context observation for explicitly capable
+  adapters while keeping one executor per inbox delivery. The four native adapters
+  do not advertise this additional capability; a fifth fixture adapter proves it.
+- Schema062 stops new executable admission when the owner cannot preserve captured
+  results, including independent stdio writers, while retaining recovery state.
+- Surface57 normalizes canonical conversational payloads and preserves legacy
+  text/content at the boundary with explicit conflict rejection.
+
+- Redact resolved backend credentials before native diagnostics, journal, result
+  and approval projection, including split streaming values; preserve native
+  correlation and typed pre-write retry proofs.
+
+- Surface56/schema061 selects approved equivalent endpoints only after proven
+  non-delivery, preserving logical identity, admission context and work authority.
+- Surface55/schema060 retries transient local lane refusals only before native
+  write, with durable deadlines, bounded backoff/jitter and unchanged delivery identity.
+- Surface54/schema059 preserves immutable delivery attempt observations across
+  owner changes, with bounded operator detail inspection and honest upgrade snapshots.
+- Allow audited operator release of a proven pre-write conversation rejection
+  to its original pull inbox, preserving attempt evidence and handoff authority.
+- Surface53/schema058 bounds unresolved inbox transport backlog transactionally
+  and prevents one agent's endpoints from occupying all normal dispatch workers.
+  Native result observation no longer stands in for a blocked call returning.
+- Surface52 exposes and enforces per-session capabilities qualified by trusted
+  protocol probes and restricted by approved profiles, including connection reuse.
+  Unknown contracts cannot inherit execution from advertised adapter capabilities.
+- Surface51 enforces registered adapter conversation/control restrictions at
+  admission and revalidation; unsupported transport leaves logical inbox delivery intact.
+- Add a tested repository procedure for combined offline SQLite/journal/artifact
+  backup and restore; strict snapshot validation never repairs incomplete tails.
+- Surface50/schema057 fences incompatible writers and mismatched message producers
+  at SQLite admission, including connections opened before runtime activation.
+- Surface49 connects compatible Codex sessions through one live production
+  connection while preserving per-session events, ownership and isolated profiles.
+- Native event capture no longer waits on SQLite projection; bounded journal
+  batches preserve durable output during streaming bursts and commit atomically.
+- Surface 48 requires server-owned control compatibility at admission and dispatch;
+  missing/unknown evidence cannot enable steering or interruption by declaration.
+  Pi now observes its executable version through a bounded owned probe.
+- Surface 47 requires exact integer cc-socks peerProtocol=1 at attach open and
+  before send, and persists its redacted observation without inventing an ACK.
+- Surface 46 observes Claude stream's approved executable version in a bounded,
+  owned probe before readiness. Exact qualified request contracts satisfy explicit
+  profile requirements; unknown versions never inherit compatibility by prefix.
+- Surface 45 enforces required native request contracts before readiness and maps
+  explicit rejection to Codex cancel-only choices without granting policy amendments.
+- Surface 44 and migration056 persist redacted native compatibility observations
+  separately from caller metadata; an observed version does not verify capabilities.
+- Surface 43 and additive migration055 provide explicit operator recovery of managed
+  handoffs, preserving attempt facts and fencing stale claim completion without replay.
+- Surface 42 and additive migration054 add audited operator operation recovery.
+  Cancel only before send-intent, explicitly release uncertain conversation
+  delivery to its original inbox, or abandon uncertain command tracking. Current
+  attempts are fenced; risk acknowledgement and idempotency are required. Native
+  uncertainty/ACK and late captured results remain honest, without automatic replay.
+
+- The operator Approvals dashboard accepts explicit native question/form answers
+  for supported Codex and Claude requests. Opening a request submits no defaults.
+  Permission decisions remain distinct from input and native delivery; expired
+  requests expose their state without an answer control.
+
+- Surface 41 adds scoped discovery through `harness_list(view="bindings")`
+  and REST `/harness/bindings`. Endpoints and bounded session history group under
+  the canonical agent; current grants and policy restrict visibility. Private
+  configuration is omitted; declared capabilities and stored readiness do not
+  claim native version verification or process liveness.
+
+- Surface 40 adds revision-fenced profile and endpoint editing/deactivation.
+  Changes atomically revoke affected grants and boot approvals; old runtimes
+  retain history but cannot borrow the new profile's authority. Migration 053
+  extends the existing access audit with redacted configuration change metadata.
+
+- Runtime administration surface 39: `harness_list` endpoint/profile views
+  reuse REST services, strict request validation and revision fences. Profile
+  discovery on REST/MCP redacts launch paths, environment and secret references.
+  Existing endpoint creation, notification updates, boot and reconciliation are
+  available without adding per-adapter tools. Full release gates remain pending.
+
+- Start the PR #34 remediation on `feature/v0.2.0`. Package metadata is
+  0.2.0; implementation and acceptance gates are tracked in
+  `plans/pr34-remediation/IMPLEMENTATION_STATUS.md`. This is not a release
+  readiness claim.
+
+### Added
+
+- Added native, bidirectional, non-polling harness sessions (ADR 0004):
+  Nexus can now spawn and hold live sessions with `pi`, `codex`, and
+  `claude_code` (`stream` substrate), plus send-only injection into an
+  already-running interactive Claude Code session via `cc-socks`
+  (`claude_code`/`attach`). New MCP tools `harness_list`, `harness_open`,
+  `harness_send`, `harness_steer`, `harness_interrupt`, `harness_close`,
+  `harness_get`, `harness_event_list`, mirrored at full parity on
+  `GET /api/v1/harness/kinds` and `/api/v1/harness/sessions/...`. A live
+  session's `turn_completed`/`error` events are also delivered as ordinary
+  messages through the existing per-recipient inbox (`notify_target`), and
+  the existing routing grammar (`direct`/`capability`/`role`/`tag`) can now
+  address a live session's turn input directly through `message_create`, as
+  a best-effort hand-off (see the operator guide for its real limits).
+  `harness_open`'s `backend` parameter lets a caller select the session's
+  model provider/model explicitly instead of silently inheriting the
+  operator's own ambient CLI config. New operator documentation:
+  [`docs/harness-integrations/operator-guide.md`](docs/harness-integrations/operator-guide.md).
+
 ## 0.1.10 - 2026-09-16
 
 ### Fixed

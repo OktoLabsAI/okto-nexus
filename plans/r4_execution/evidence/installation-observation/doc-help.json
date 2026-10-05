@@ -1,0 +1,47 @@
+[
+  {
+    "command": [
+      "identity",
+      "add",
+      "--help"
+    ],
+    "exit_code": 0,
+    "stdout": "usage: okto-nexus-connector identity add [-h] --server SERVER [--agent AGENT]\n                                         --alias ALIAS [--credential-stdin]\n                                         [--credential-env CREDENTIAL_ENV]\n\noptions:\n  -h, --help            show this help message and exit\n  --server SERVER\n  --agent AGENT\n  --alias ALIAS\n  --credential-stdin\n  --credential-env CREDENTIAL_ENV\n"
+  },
+  {
+    "command": [
+      "executor",
+      "register",
+      "--help"
+    ],
+    "exit_code": 0,
+    "stdout": "usage: okto-nexus-connector executor register [-h] --identity IDENTITY\n                                              --label LABEL\n                                              [--client-intent-id CLIENT_INTENT_ID]\n\noptions:\n  -h, --help            show this help message and exit\n  --identity IDENTITY   imported identity alias\n  --label LABEL         host label shown by the Server\n  --client-intent-id CLIENT_INTENT_ID\n                        explicit registration intent ID; otherwise persisted\n                        automatically\n"
+  },
+  {
+    "command": [
+      "executor",
+      "list",
+      "--help"
+    ],
+    "exit_code": 0,
+    "stdout": "usage: okto-nexus-connector executor list [-h]\n\noptions:\n  -h, --help  show this help message and exit\n"
+  },
+  {
+    "command": [
+      "executor",
+      "probe",
+      "--help"
+    ],
+    "exit_code": 0,
+    "stdout": "usage: okto-nexus-connector executor probe [-h] --server-id SERVER_ID\n                                           --harness HARNESS\n                                           --candidate-ref CANDIDATE_REF\n                                           --inventory-revision INVENTORY_REVISION\n\noptions:\n  -h, --help            show this help message and exit\n  --server-id SERVER_ID\n  --harness HARNESS\n  --candidate-ref CANDIDATE_REF\n  --inventory-revision INVENTORY_REVISION\n"
+  },
+  {
+    "command": [
+      "runtime",
+      "start",
+      "--help"
+    ],
+    "exit_code": 0,
+    "stdout": "usage: okto-nexus-connector runtime start [-h]\n                                          [--client-intent-id CLIENT_INTENT_ID]\n                                          [--project PROJECT]\n                                          [--harness HARNESS] [--new-session]\n                                          [--session-id SESSION_ID]\n                                          [--text TEXT]\n                                          alias\n\npositional arguments:\n  alias\n\noptions:\n  -h, --help            show this help message and exit\n  --client-intent-id CLIENT_INTENT_ID\n  --project PROJECT\n  --harness HARNESS\n  --new-session\n  --session-id SESSION_ID\n                        select an existing compatible R4 session\n  --text TEXT           initial turn text\n"
+  }
+]

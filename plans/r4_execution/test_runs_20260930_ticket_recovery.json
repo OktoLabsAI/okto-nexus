@@ -1,0 +1,47 @@
+{
+  "increment": "M06 durable binding ticket intent recovery",
+  "status": "PARTIAL_INSTALLED_INTEGRATION",
+  "requirements": [
+    "NS08.03 recovery (partial)",
+    "NS10.04 event recovery (partial)"
+  ],
+  "reference_commits": {
+    "nexus": "19b1d830ef1d89d6ea700d176b4afed22ae6dbca",
+    "connector": "2bdbd208c5606aad7001c22c6add8346fbae067e",
+    "core": "97892edba088ac85c9977b8bd8fde27f725ea2a3"
+  },
+  "nexus_commit_note": "Nexus reference is the parent of the commit containing this manifest.",
+  "artifacts": "evidence/ticket-recovery-artifacts.json",
+  "tests": {
+    "connector": {
+      "tests": 405,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 1,
+      "passed": 404
+    },
+    "nexus": {
+      "tests": 74,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 74
+    }
+  },
+  "unchanged_artifacts": "Nexus production and Core 0.2.35.dev0 wheels unchanged; all installed/source/wheel byte sets verified.",
+  "verification": [
+    "Persisted request before HTTP, replay of exact request after material loss, stable logical intent and new replacement request ID.",
+    "Typed recovery metadata accepted only for validated HTTP 409 on binding ticket issuance.",
+    "Current authority checks, compare-and-swap, storage integrity, write failure before HTTP and live-bound refusal.",
+    "Fresh daemon recreation with empty retained cache recovers unsent events and lost event ACK over real HTTP/WSS.",
+    "Server confirms original intent preserved and previous ticket revoked; one event, five operations and no additional native effect.",
+    "No Server expiry injection or manual event recovery call in the two new cases."
+  ],
+  "limits": [
+    "Orderly shutdown and fresh daemon objects in one test process; actual process kill and still-connected predecessor not qualified.",
+    "Legacy unknown ticket intents are not reconstructed; unrelated active ticket conflicts remain refused.",
+    "Active ownership adoption, full rotation, embedded publishing, projections, migration and final provider/platform/independent-host acceptance remain pending.",
+    "One existing Connector skip and one existing Nexus dependency warning; user UI assets included without new UI acceptance.",
+    "No M00-M13 milestone or G0-G3 gate closed; full scope unchanged."
+  ]
+}

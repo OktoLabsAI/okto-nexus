@@ -81,7 +81,7 @@ function relBucket(iso: string, nowMs: number): string {
   if (s < 60) return "Just now";
   if (s < 3600) return `${Math.floor(s / 60)}m ago`;
   if (s < 86400) return `${Math.floor(s / 3600)}h ago`;
-  return new Date(iso).toLocaleDateString(undefined, {
+  return new Date(iso).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
   });
@@ -191,7 +191,7 @@ function TimelineChart({ timeline }: { timeline: EventTimeline }) {
         <div className="flex items-start gap-4 flex-wrap mb-3">
           <div>
             <div className="text-2xl font-semibold text-surface-900 dark:text-white tabular-nums">
-              {timeline.total.toLocaleString()}
+              {timeline.total.toLocaleString("en-US")}
             </div>
             <div className="text-[11px] text-surface-500 dark:text-surface-400">events in range</div>
           </div>
@@ -248,10 +248,10 @@ function TimelineChart({ timeline }: { timeline: EventTimeline }) {
               <line x1={x(hovered)} y1={pad.top} x2={x(hovered)} y2={pad.top + plotHeight} stroke="#94a3b8" strokeDasharray="3 3" />
             )}
             <text x={pad.left} y={height - 8} className="fill-surface-400 dark:fill-surface-500 text-[10px]">
-              {new Date(timeline.since).toLocaleString()}
+              {new Date(timeline.since).toLocaleString("en-US")}
             </text>
             <text x={width - pad.right} y={height - 8} textAnchor="end" className="fill-surface-400 dark:fill-surface-500 text-[10px]">
-              {new Date(timeline.until).toLocaleString()}
+              {new Date(timeline.until).toLocaleString("en-US")}
             </text>
           </svg>
           {hoverBucket && hovered !== null && (
@@ -260,7 +260,7 @@ function TimelineChart({ timeline }: { timeline: EventTimeline }) {
               style={{ left: `${(x(hovered) / width) * 100}%`, top: 12, transform: hovered > timeline.buckets.length / 2 ? "translateX(-100%)" : undefined }}
             >
               <div className="font-medium text-surface-700 dark:text-surface-200 mb-1">
-                {new Date(hoverBucket.bucket_start).toLocaleString()}
+                {new Date(hoverBucket.bucket_start).toLocaleString("en-US")}
               </div>
               {totals.map(({ type }, index) => (
                 <div key={type} className="flex items-center justify-between gap-3 text-surface-500 dark:text-surface-400">

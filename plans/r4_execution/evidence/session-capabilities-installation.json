@@ -1,0 +1,40 @@
+[
+  {
+    "command": [
+      "uv",
+      "pip",
+      "freeze",
+      "--python",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-installed-8bpn7vjx\\Scripts\\python.exe"
+    ],
+    "exit_code": 0,
+    "output": "annotated-doc==0.0.5\nannotated-types==0.8.0\nanyio==4.15.1\nattrs==26.1.0\ncertifi==2026.7.22\ncffi==2.1.1\nclick==8.5.0\ncolorama==0.4.6\ncryptography==50.0.1\nfastapi==0.142.1\nh11==0.16.0\nhttpcore==1.0.9\nhttpx==0.28.1\nhttpx-sse==0.4.3\nidna==3.20\niniconfig==2.3.0\njsonschema==4.26.0\njsonschema-specifications==2025.9.1\nmcp==1.30.0\nnexus-connector-core==0.2.28.dev0\nokto-nexus @ file:///C:/Users/jpamb/AppData/Local/Temp/okto-r4-startup-nexus-wheel-qqgmgauh/okto_nexus-0.2.0-py3-none-any.whl\nokto-nexus-connector @ file:///C:/Users/jpamb/AppData/Local/Temp/okto-r4-startup-final-wheel-md6q8vdz/okto_nexus_connector-0.5.0.dev0-py3-none-any.whl\nopentelemetry-api==1.45.0\npackaging==26.3\npluggy==1.6.0\npycparser==3.0\npydantic==2.13.5\npydantic-core==2.46.5\npydantic-settings==2.15.0\npygments==2.21.0\npyjwt==2.15.1\npytest==9.1.1\npytest-asyncio==1.4.0\npython-dotenv==1.2.3\npython-multipart==0.0.32\npywin32==312\nreferencing==0.37.0\nrfc8785==0.1.4\nrpds-py==2026.6.3\nsse-starlette==3.5.0\nstarlette==1.7.0\ntyping-extensions==4.16.0\ntyping-inspection==0.4.4\nuvicorn==0.54.0\nwebsockets==17.1\nUsing Python 3.13.1 environment at: C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-installed-8bpn7vjx\n"
+  },
+  {
+    "command": [
+      "uv",
+      "venv",
+      "--python",
+      "C:\\Python313\\python.exe",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-installed-pgqzez1h"
+    ],
+    "exit_code": 0,
+    "output": "Using CPython 3.13.1 interpreter at: C:\\Python313\\python.exe\nCreating virtual environment at: C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-installed-pgqzez1h\nActivate with: C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-installed-pgqzez1h\\Scripts\\activate\n"
+  },
+  {
+    "command": [
+      "uv",
+      "pip",
+      "install",
+      "--python",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-installed-pgqzez1h\\Scripts\\python.exe",
+      "-r",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-installed-pgqzez1h.requirements.txt",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\wheels\\nexus_connector_core-0.2.28.dev0-py3-none-any.whl",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-connector-wheel-9sxettlk\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-nexus-wheel-7xi81rp6\\okto_nexus-0.2.0-py3-none-any.whl"
+    ],
+    "exit_code": 0,
+    "output": "Using Python 3.13.1 environment at: C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-installed-pgqzez1h\nResolved 45 packages in 354ms\nPrepared 3 packages in 907ms\nInstalled 45 packages in 2.30s\n + annotated-doc==0.0.5\n + annotated-types==0.8.0\n + anyio==4.15.1\n + attrs==26.1.0\n + certifi==2026.7.22\n + cffi==2.1.1\n + click==8.5.0\n + colorama==0.4.6\n + cryptography==50.0.1\n + fastapi==0.142.1\n + h11==0.16.0\n + httpcore==1.0.9\n + httpx==0.28.1\n + httpx-sse==0.4.3\n + idna==3.20\n + iniconfig==2.3.0\n + jsonschema==4.26.0\n + jsonschema-specifications==2025.9.1\n + mcp==1.30.0\n + nexus-connector-core==0.2.28.dev0 (from file:///D:/Projetos/Techridy/okto_labs_okto_nexus/vendor/wheels/nexus_connector_core-0.2.28.dev0-py3-none-any.whl)\n + okto-nexus==0.2.0 (from file:///C:/Users/jpamb/AppData/Local/Temp/okto-r4-capability-nexus-wheel-7xi81rp6/okto_nexus-0.2.0-py3-none-any.whl)\n + okto-nexus-connector==0.5.0.dev0 (from file:///C:/Users/jpamb/AppData/Local/Temp/okto-r4-capability-connector-wheel-9sxettlk/okto_nexus_connector-0.5.0.dev0-py3-none-any.whl)\n + opentelemetry-api==1.45.0\n + packaging==26.3\n + pluggy==1.6.0\n + pycparser==3.0\n + pydantic==2.13.5\n + pydantic-core==2.46.5\n + pydantic-settings==2.15.0\n + pygments==2.21.0\n + pyjwt==2.15.1\n + pytest==9.1.1\n + pytest-asyncio==1.4.0\n + python-dotenv==1.2.3\n + python-multipart==0.0.32\n + pywin32==312\n + referencing==0.37.0\n + rfc8785==0.1.4\n + rpds-py==2026.6.3\n + sse-starlette==3.5.0\n + starlette==1.7.0\n + typing-extensions==4.16.0\n + typing-inspection==0.4.4\n + uvicorn==0.54.0\n + websockets==17.1\n"
+  }
+]

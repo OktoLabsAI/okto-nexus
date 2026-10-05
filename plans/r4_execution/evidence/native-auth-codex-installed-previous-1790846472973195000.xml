@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="10.235" timestamp="2026-10-01T06:19:22.072376-03:00" hostname="Alienware_m15"><testcase classname="test_real_native_auth_failure" name="test_real_codex_missing_login_has_durable_authentication_error" time="9.720"><failure message="nexus_connector_core.native.adapter_types.NativeAdapterError: codex app-server rejected 'initialize': codex child exited before replying">..\okto-nexus-connector-core\tests\test_real_native_auth_failure.py:89: in test_real_codex_missing_login_has_durable_authentication_error
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+..\okto-nexus-connector-core\tests\test_real_native_auth_failure.py:76: in run
+    await runtime.open(OpenOperation("open", "session", "epoch", prepared), authority)
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\runtime.py:603: in open
+    return await self._kernel.execute(semantic, context, effect)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\kernel.py:87: in execute
+    native_id = await effect()
+                ^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\runtime.py:536: in effect
+    native = await asyncio.shield(open_task)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\native\runtime_bridge.py:801: in open
+    native_session = await asyncio.to_thread(_guarded_start)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\threads.py:25: in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\thread.py:59: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\native\runtime_bridge.py:799: in _guarded_start
+    return connector.start(**start_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\native\adapters\codex.py:721: in start
+    self._spawn_and_initialize()
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\native\adapters\codex.py:1039: in _spawn_and_initialize
+    initialize_result = transport.request(
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\native\adapters\codex.py:406: in request
+    raise NativeAdapterError(
+E   nexus_connector_core.native.adapter_types.NativeAdapterError: codex app-server rejected 'initialize': codex child exited before replying</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="6.790" timestamp="2026-10-02T03:41:24.447052-03:00" hostname="Alienware_m15"><testcase classname="tests.test_runtime_session_recovery" name="test_revoked_binding_during_constructor_does_not_start_peer" time="5.062"><failure message="AssertionError: {&quot;ok&quot;:false,&quot;error&quot;:{&quot;code&quot;:&quot;PERMISSION_DENIED&quot;,&quot;message&quot;:&quot;Runtime action is not authorized.&quot;}}&#10;assert 403 == 409&#10; +  where 403 = &lt;Response [403 Forbidden]&gt;.status_code">runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4770/test_revo...DFD0&gt;], 'nxs_068b1c3ef6d4e457d05c4ac0c5bdfb862f69ad65781b9f33', 'nxs_56cbd6cde2cefef1c5a40719754497a4c4c53b7521222d4a')
+
+&gt;   ???
+E   AssertionError: {"ok":false,"error":{"code":"PERMISSION_DENIED","message":"Runtime action is not authorized."}}
+E   assert 403 == 409
+E    +  where 403 = &lt;Response [403 Forbidden]&gt;.status_code
+
+/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_session_recovery.py:24: AssertionError</failure></testcase></testsuite></testsuites>

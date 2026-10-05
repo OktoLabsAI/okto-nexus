@@ -79,10 +79,9 @@ _P_PROFILE = "Response size profile - one of: default, summary, full (optional; 
 #: INVARIANT: the sensitive inbox verbs (pull/ack/extend) share the trust
 #: wording with message_create/handoff_* - one credential story bus-wide.
 _P_SESSION_TRUST = (
-    "Your session_id from session_open (optional in trust_mode=open; REQUIRED "
-    "together with session_secret in trust_mode=strict)."
+    "Session from session_open; pass its secret in strict mode or for managed external attach work. Otherwise optional."
 )
-_P_SESSION_SECRET = "session_secret from session_open for session_id (optional in open mode but VALIDATED if supplied; REQUIRED in strict mode)."
+_P_SESSION_SECRET = "Secret of that session; required in strict mode and managed external attach work, validated whenever supplied."
 
 
 def build_service(deps: Any) -> InboxService:
@@ -106,6 +105,7 @@ def build_service(deps: Any) -> InboxService:
         if getattr(repos, "events", None) is None:
             repos.events = SqliteEventRepo(deps.clock)
         deps.event_emitter = SqliteEventEmitter(repos.events)
+    from .handoff import build_service as build_handoff_service, _request_context
     return InboxService(
         connection_factory=deps.connection_factory,
         deliveries=repos.deliveries,
@@ -115,6 +115,8 @@ def build_service(deps: Any) -> InboxService:
         lease_ttl_seconds=deps.config.inbox_lease_ttl_seconds,
         event_emitter=deps.event_emitter,
         config=deps.config,
+        external_work_provider=lambda: build_handoff_service(deps).runtime_work,
+        request_context_provider=_request_context,
     )
 
 
@@ -178,7 +180,8 @@ def register(server: Any, deps: Any) -> None:
             session_id=session_id,
             session_secret=session_secret,
         )
-        return service.ack(agent_id=agent_id, message_ids=message_ids)
+        return service.ack(agent_id=agent_id, message_ids=message_ids,
+            session_id=session_id, session_secret=session_secret)
 
     @server.tool()
     @tool_envelope

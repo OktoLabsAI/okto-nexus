@@ -1,0 +1,16 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+    "-I",
+    "D:/Projetos/Techridy/okto-nexus-connector-core/tools/probe_managed_factory.py",
+    "codex_app_server",
+    "--codex",
+    "C:/Users/jpamb/AppData/Roaming/npm/node_modules/@openai/codex/node_modules/@openai/codex-win32-x64/vendor/x86_64-pc-windows-msvc/bin/codex.exe",
+    "--codex-home",
+    "C:/Users/jpamb/.codex"
+  ],
+  "exit_code": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tools\\probe_managed_factory.py\", line 156, in <module>\n    main()\n    ~~~~^^\n  File \"D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tools\\probe_managed_factory.py\", line 151, in main\n    report = asyncio.run(_run(args.adapter, paths))\n  File \"C:\\Python313\\Lib\\asyncio\\runners.py\", line 194, in run\n    return runner.run(main)\n           ~~~~~~~~~~^^^^^^\n  File \"C:\\Python313\\Lib\\asyncio\\runners.py\", line 118, in run\n    return self._loop.run_until_complete(task)\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^\n  File \"C:\\Python313\\Lib\\asyncio\\base_events.py\", line 720, in run_until_complete\n    return future.result()\n           ~~~~~~~~~~~~~^^\n  File \"D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tools\\probe_managed_factory.py\", line 93, in _run\n    opened = await runtime.open(\n             ^^^^^^^^^^^^^^^^^^^\n        OpenOperation(\"open\", \"session\", \"epoch\", prepared), context)\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\nexus_connector_core\\runtime.py\", line 603, in open\n    return await self._kernel.execute(semantic, context, effect)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\nexus_connector_core\\kernel.py\", line 82, in execute\n    native_id = await effect()\n                ^^^^^^^^^^^^^^\n  File \"C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\nexus_connector_core\\runtime.py\", line 536, in effect\n    native = await asyncio.shield(open_task)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\nexus_connector_core\\native\\runtime_bridge.py\", line 614, in open\n    raise CoreError(\"NATIVE_VERSION_UNQUALIFIED\", \"open\", retry_safe=True)\nnexus_connector_core.models.CoreError: NATIVE_VERSION_UNQUALIFIED\n",
+  "scope": "Installed Core production factory without qualification overrides."
+}

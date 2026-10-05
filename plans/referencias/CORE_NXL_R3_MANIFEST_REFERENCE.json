@@ -1,0 +1,17 @@
+{
+  "core_version": "0.1.0.dev0",
+  "files": {
+    "capability.schema.json": "sha256:0ed1b79fd420cbb5f40766f6f8df3c3a6b8375bfe1e15844f2f7a336d4ead59a",
+    "error.schema.json": "sha256:f8bdffbbfd14940e3f12b628a6599ce46e9a968ac65e1d514d9ff7b15a2edc5a",
+    "event.schema.json": "sha256:3766c37c04e70b78ea710404f239898ee2f30c382fb6bfb386a3b812df29b057",
+    "fixtures.json": "sha256:9b4b705a555f083b381e0c2e80a84d5325c7628b05e5ab32dcd2271aa5394bd2",
+    "frame.schema.json": "sha256:2e3759a42ebb095492b4401ec2eef48b0da0d0bc98d3e64a777a7c684cc1d653",
+    "hash-vectors.json": "sha256:53d1cc0fdd9fc70d34a5b970d928a9cb177599b8f5152943e18af4d22cfc18ec",
+    "http-response.schema.json": "sha256:407b806797dfbdba158be4738c2a26334367ffb9134834f0ed04a267c65a8164",
+    "intent.schema.json": "sha256:af7e1ed337ec617d4c4b97e4e66c3471f65be9dcd7d0c67125414d36e4fbe03d",
+    "inventory.schema.json": "sha256:4dfeb6ba9576cc61ca87ae00167b5370bad8df68f069f99e5c0ff14a7c6c1541"
+  },
+  "protocol_major": 1,
+  "revision": "nxl-1-agent-centric-http-only-2026-09-25-r3",
+  "status": "development-partial"
+}

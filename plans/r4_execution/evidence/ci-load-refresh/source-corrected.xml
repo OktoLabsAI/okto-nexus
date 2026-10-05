@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="5" time="134.906" timestamp="2026-10-02T04:42:47.394673-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_ns14" name="test_ns14_04[load]" time="81.895"><failure message="AssertionError: {&quot;error&quot;:{&quot;code&quot;:&quot;CONFLICT&quot;,&quot;stage&quot;:&quot;inventory.publish&quot;,&quot;message&quot;:&quot;Publish through the current reconciled control channel.&quot;,&quot;possible_effect&quot;:false,&quot;retry_safe&quot;:false,&quot;operation_id&quot;:null,&quot;action&quot;:&quot;&quot;}}">opening = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4792/test_ns14...46bec6eb6cb5ad1f706c09468965148', connection_id='conn_3a95e026d4d4b56d1f2ef44511348137', connection_generation=2), ...)
+decision_state = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4792/test_ns14...dc5b24b9371acc991c2fb58c1355b265b91d13e4cf2b35778a7', 'cas_token': '-cxkSJPCodvc8Hv5ChHOT8o9BVvJIwrs7SAkg2Obppk', ...})
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4792/test_ns14_04_load_0')
+record_property = &lt;function record_property.&lt;locals&gt;.append_property at 0x0000020DBEFBF100&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000020DBE315CD0&gt;
+
+    @pytest.mark.parametrize("opening", [{"max_executions": 100}], indirect=True, ids=["load"])
+    def test_ns14_04(opening, decision_state, tmp_path, record_property, monkeypatch):
+        from okto_nexus.adapters.inbound.http import runtime_v1
+        info = runtime_v1.protocol_info()
+        monkeypatch.setattr(runtime_v1, "protocol_info", lambda: {**info, "remote_execution_ready": True})
+        from ns14_load import run_load
+&gt;       run_load(opening, tmp_path, record_property)
+
+tests\execution_r4\test_ns14.py:316: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+state = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4792/test_ns14...46bec6eb6cb5ad1f706c09468965148', connection_id='conn_3a95e026d4d4b56d1f2ef44511348137', connection_generation=2), ...)
+root = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4792/test_ns14_04_load_0')
+record_property = &lt;function record_property.&lt;locals&gt;.append_property at 0x0000020DBEFBF100&gt;
+
+    def run_load(state, root, record_property):
+        deps, app, access, _, _, first, opened, _ = state
+        factory = deps.connection_factory
+        client = TestClient(app, base_url="https://127.0.0.1:8202")
+        auth = app.state.auth
+        now = deps.clock.now_iso()
+        count = 100_000
+        last_heartbeat = 0.0
+        def heartbeat():
+            nonlocal last_heartbeat
+            if time.monotonic() - last_heartbeat &gt;= 5:
+                app.state.test_opening_socket.send_text(encode_r4_frame(dict(
+                    protocol_major=1, contract_revision=R4_PREVIEW_REVISION, type="heartbeat",
+                    server_id=first.server_id, executor_id=first.executor_id,
+                    connection_id=first.connection_id,
+                    connection_generation=first.connection_generation)).decode())
+                last_heartbeat = time.monotonic()
+        heartbeat()
+        for offset in range(0, count, 500):
+            heartbeat()
+            with factory.unit_of_work() as uow:
+                uow.connection.executemany("INSERT INTO agents(agent_id,created_at,api_key_hash,is_active) VALUES(?,?,?,1)",
+                    ((f"load-{i}", now, hash_api_key("nxs_" + format(i, "048x"))) for i in range(offset, offset + 500)))
+            time.sleep(.001)
+        threads_before = threading.active_count()
+        samples = []
+        started = time.perf_counter()
+        tracemalloc.start()
+        try:
+            for offset in range(0, count, 500):
+                heartbeat()
+                with factory.unit_of_work() as uow:
+                    for i in range(offset, offset + 500):
+                        assert auth.resolve(uow, "nxs_" + format(i, "048x")).agent_id == f"load-{i}"
+                if (offset + 500) % 25_000 == 0:
+                    current, peak = tracemalloc.get_traced_memory()
+                    samples.append(dict(identities=offset + 500, current_bytes=current, peak_bytes=peak,
+                                        cache_entries=auth.cache_stats()["entries"]))
+                    assert auth.cache_stats()["entries"] == 4096
+        finally:
+            tracemalloc.stop()
+        identity_seconds = time.perf_counter() - started
+        assert samples[-1]["current_bytes"] &lt; samples[0]["current_bytes"] * 1.5 + 524288
+        assert threading.active_count() &lt;= threads_before + 4
+        with factory.unit_of_work(write=False) as uow:
+            plan = [r[3] for r in uow.connection.execute(
+                "EXPLAIN QUERY PLAN SELECT * FROM agents WHERE api_key_hash=? AND is_active=1",
+                (hash_api_key("nxs_" + format(0, "048x")),))]
+        assert any("SEARCH" in line and "INDEX" in line for line in plan)
+    
+        heartbeat()
+        # Identity churn can outlive the 120 s inventory freshness window. Observe
+        # the fixture binary again and publish through the authenticated API, as a
+        # live executor would; replaying or re-anchoring old evidence is not enough.
+        binary = root / "codex.exe"
+        candidate = InstallationCandidate("codex_app_server", str(binary), fingerprint(binary), "explicit", "selected")
+        with factory.unit_of_work(write=False) as uow:
+            current = uow.connection.execute(
+                "SELECT c.publication_sequence,c.inventory_revision,s.producer_instance_id "
+                "FROM execution_inventory_current c JOIN execution_inventory_snapshots s "
+                "USING(server_id,executor_id,publication_sequence) WHERE c.server_id=? AND c.executor_id=?",
+                (first.server_id, first.executor_id)).fetchone()
+        refreshed = build_executor_inventory_snapshot([candidate], server_id=first.server_id,
+            executor_id=first.executor_id, producer_instance_id=current["producer_instance_id"],
+            publication_sequence=current["publication_sequence"] + 1)
+        assert refreshed["inventory_revision"] == current["inventory_revision"]
+        publication_ticket = issue_execution_ticket(factory, server_id=first.server_id,
+            executor_id=first.executor_id, binding_id=None, agent_id="registrar").ticket
+        published = client.put(f"/v1/runtime/executors/{first.executor_id}/inventory",
+            headers={"Authorization": "Bearer " + publication_ticket}, json=refreshed)
+&gt;       assert published.status_code == 200, published.text
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: {"error":{"code":"CONFLICT","stage":"inventory.publish","message":"Publish through the current reconciled control channel.","possible_effect":false,"retry_safe":false,"operation_id":null,"action":""}}
+
+tests\execution_r4\ns14_load.py:137: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_pi_native_hosts" name="test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[False-embedded]" time="10.884" /><testcase classname="tests.execution_r4.test_pi_native_hosts" name="test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[False-connector]" time="18.650" /><testcase classname="tests.execution_r4.test_pi_native_hosts" name="test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[True-embedded]" time="6.378" /><testcase classname="tests.execution_r4.test_pi_native_hosts" name="test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[True-connector]" time="15.569" /></testsuite></testsuites>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="1.428" timestamp="2026-10-01T08:58:10.952782-03:00" hostname="Alienware_m15"><testcase classname="test_ns07" name="test_failed_composition_does_not_leave_a_pending_shutdown_resource" time="0.037"><failure message="AssertionError: assert not {('executor', 'failed'): &lt;Task finished name='Task-2' coro=&lt;EmbeddedRuntimeHost._compose() done, defined at D:\Projeto...okto_labs_okto_nexus\src\okto_nexus\bootstrap\runtime_host.py:136&gt; exception=OSError('Technical composition failure')&gt;}&#10; +  where {('executor', 'failed'): &lt;Task finished name='Task-2' coro=&lt;EmbeddedRuntimeHost._compose() done, defined at D:\Projeto...okto_labs_okto_nexus\src\okto_nexus\bootstrap\runtime_host.py:136&gt; exception=OSError('Technical composition failure')&gt;} = &lt;okto_nexus.bootstrap.runtime_host.EmbeddedRuntimeHost object at 0x0000020FB3ECEA50&gt;._runtime_tasks">tests\execution_r4\test_ns07.py:265: in test_failed_composition_does_not_leave_a_pending_shutdown_resource
+    asyncio.run(scenario())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests\execution_r4\test_ns07.py:261: in scenario
+    assert not host._runtime_tasks
+E   AssertionError: assert not {('executor', 'failed'): &lt;Task finished name='Task-2' coro=&lt;EmbeddedRuntimeHost._compose() done, defined at D:\Projeto...okto_labs_okto_nexus\src\okto_nexus\bootstrap\runtime_host.py:136&gt; exception=OSError('Technical composition failure')&gt;}
+E    +  where {('executor', 'failed'): &lt;Task finished name='Task-2' coro=&lt;EmbeddedRuntimeHost._compose() done, defined at D:\Projeto...okto_labs_okto_nexus\src\okto_nexus\bootstrap\runtime_host.py:136&gt; exception=OSError('Technical composition failure')&gt;} = &lt;okto_nexus.bootstrap.runtime_host.EmbeddedRuntimeHost object at 0x0000020FB3ECEA50&gt;._runtime_tasks</failure></testcase></testsuite></testsuites>

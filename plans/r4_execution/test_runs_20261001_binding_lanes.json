@@ -1,0 +1,114 @@
+{
+  "date": "2026-10-01",
+  "commits": {
+    "nexus": "60418656395056692a5a82f69af6fb070302746e",
+    "connector": "2c84b529fa6cbb462916619e627b25dbd08d6cd5",
+    "core": "9c778719c3892d9742bb358b0020e39ed43df08d"
+  },
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-opening-core-nzdtg0fa\\dist\\nexus_connector_core-0.2.44.dev0-py3-none-any.whl",
+      "sha256": "c6f8555adeadb68959daa8e2ad91ec755eab49183049112a3d719470321e8db0",
+      "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-opening-core-nzdtg0fa",
+      "source_commit": "9c778719c3892d9742bb358b0020e39ed43df08d"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-binding-replacement-nexus-2uhl00gd\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "49a90a614814fb18b07f3cd229f223ec9563bf287ed3e89b5261dab408072d85",
+      "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-binding-replacement-nexus-2uhl00gd"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-binding-lanes-hxg8f3ku\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "f0c24269d1141505e31bbc6a0bb6872af1dcfd22a72e80eb36d3e684a0754f25"
+    }
+  },
+  "tests": {
+    "connector_installed": 244,
+    "nexus_integration_installed": 4,
+    "continuity_installed": 2,
+    "source_intermediate": 112,
+    "baseline_installed": {
+      "passed": 4,
+      "failed": 1
+    }
+  },
+  "campaigns": {
+    "pi_rpc": {
+      "result": "passed",
+      "seconds": 446.79,
+      "report": "evidence/real-rebinding-pi_rpc.json",
+      "manifest": "evidence/real-rebinding-pi_rpc-installed.json",
+      "scope": "Two sequential native sessions through public Connector CLI, with an approved binding replacement between them."
+    },
+    "codex_app_server": {
+      "result": "passed",
+      "seconds": 316.91,
+      "report": "evidence/real-rebinding-codex_app_server.json",
+      "manifest": "evidence/real-rebinding-codex_app_server-installed.json",
+      "scope": "Two sequential native sessions through public Connector CLI, with an approved binding replacement between them."
+    },
+    "claude_stream": {
+      "result": "passed",
+      "seconds": 292.88,
+      "report": "evidence/real-rebinding-claude_stream.json",
+      "manifest": "evidence/real-rebinding-claude_stream-installed.json",
+      "scope": "Two sequential native sessions through public Connector CLI, with an approved binding replacement between them."
+    }
+  },
+  "limitations": [
+    "Single Windows host using loopback HTTP/WSS.",
+    "Server release readiness is overridden only in the test process; native Core qualification is unchanged.",
+    "Unrelated running-session continuity uses a test native adapter, not simultaneous real providers in one executor.",
+    "The first control-readiness and cleanup timeout is retained and is not explained by this fix.",
+    "All M00-M13 release gates remain subject to the fixed delivery plan."
+  ],
+  "evidence": {
+    "evidence/binding-lane-artifacts.json": "7218a1849139131991ddefaeae1e65b5ff5ed066b46fe56533b2047da80d82a3",
+    "evidence/binding-lane-baseline.log": "fc75b0a7b2f179aaccc040be38a7b631f0fbf3f6edeb97a37efa80848cb4e187",
+    "evidence/binding-lane-baseline.xml": "5f7c1dd21d4c9a9a769d14017944ec8868d57afe10570f9694b4ecbc7242f345",
+    "evidence/binding-lane-build.log": "a5d45d32982cf21cbdbfa556c885170d7431e2e12bae4604dc34cbca29ca210c",
+    "evidence/binding-lane-continuity-installed.json": "954748ec42f68b45e8fb3810ed6156485d033af7c2a0910ca7d0b3754b450f23",
+    "evidence/binding-lane-continuity-installed.log": "f6ead82ae1fb2c1c90e7eb78d2b9c7c1eb4ce92c05e3a7e9b7a6dbd033587426",
+    "evidence/binding-lane-continuity-installed.xml": "38cb83dc12c6a85262f03be8d98d8f4ffa9498bc2b4168e72a8c22e10e9e2111",
+    "evidence/binding-lane-final-connector-installed.json": "3f6c7019d9f30e2202c19ff81f9fbc9e56460f96c724906be668f5c56a013cf6",
+    "evidence/binding-lane-final-connector-installed.log": "928f4c7401bb71a29d4ed841a6cc24ebf9b616a90b5b86fede20f36e2ba6b6ba",
+    "evidence/binding-lane-final-connector-installed.xml": "0b170d0fc64d8eede5c05e8e343dece0ab6b83b5c7cce3badf2087d3141899c4",
+    "evidence/binding-lane-final-nexus-installed.json": "950b951e2693a14a94fb02b36a0628729a675e059e8941424450bd6915ab3a57",
+    "evidence/binding-lane-final-nexus-installed.log": "2c09e754410c1b397db563867d0fcb2cd0ebe34bca58f3a64d968c03c66535b6",
+    "evidence/binding-lane-final-nexus-installed.xml": "b72e4fb325780a96d9c828529d0988f3b2d476c7a458f1a7926020181abc333a",
+    "evidence/binding-lane-install.log": "5cc237a4c81bf1b72b3892d9bd12bd359c722828aae2f079b67586dafbeef368",
+    "evidence/binding-lane-pip-check.log": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+    "evidence/binding-lane-source.log": "d9879d61b697cfc98be8e6988821a92992a510b6eae0981c2d9c4b567d1c66d2",
+    "evidence/binding-lane-source.xml": "f281f66b654c85f4400b225eed88ad9fcd9916cbcb70bfb2323b13b3c068b5b2",
+    "evidence/real-rebinding-claude_stream-installed.json": "dee6b1d9ab82ea820256f720a8f1d1fbfdfc741696dd06c2a9c1e55a0d738f59",
+    "evidence/real-rebinding-claude_stream-installed.log": "11793f8ea6d1d14d8ac52089b9d66002781204bcf15b32f89875b9cfb889d3c1",
+    "evidence/real-rebinding-claude_stream-installed.xml": "95d343670679fe6c4f1f6c3ba3e9553b5a68c2b53a1cc6914b0d00210365ebab",
+    "evidence/real-rebinding-claude_stream-progress.json": "22ff7c402f4e86f1d23c97848f8a0a0ff40bb66e4d70e9c38ff93776732d9c6f",
+    "evidence/real-rebinding-claude_stream.json": "22ff7c402f4e86f1d23c97848f8a0a0ff40bb66e4d70e9c38ff93776732d9c6f",
+    "evidence/real-rebinding-codex_app_server-installed.json": "5426ae513c0c49c2d6623d82ae550d2f75b8c5fb379340e35a244150e2b75865",
+    "evidence/real-rebinding-codex_app_server-installed.log": "be30e2ac280f5c074ec5fc11f3dc3c32c6cc083deebba927243825b6192a76f1",
+    "evidence/real-rebinding-codex_app_server-installed.xml": "59b49eeb2072e1b5cb109267205ed0602059008904c92dc04a1ad531c5eb6de7",
+    "evidence/real-rebinding-codex_app_server-progress.json": "d5aa178dbea8bf3e054b4c1090a064d6c96e318b4c2f79fe7209762434e6ab28",
+    "evidence/real-rebinding-codex_app_server.json": "d5aa178dbea8bf3e054b4c1090a064d6c96e318b4c2f79fe7209762434e6ab28",
+    "evidence/real-rebinding-pi_rpc-installed-previous-1790842955651164800.json": "cbc214804b53f06d7303e291d909c74313a2591fb019fa4cae96f6bba34edcff",
+    "evidence/real-rebinding-pi_rpc-installed-previous-1790842955651555600.xml": "1af130e7703a1d445868433a6700944230ca65d540097014d06363fe2664fbd1",
+    "evidence/real-rebinding-pi_rpc-installed-previous-1790842955651965400.log": "26804e01443558cf21ae397fafbcd341421bfe628f21d6fc9804b0b95a80ec3a",
+    "evidence/real-rebinding-pi_rpc-installed-previous-1790843286727486900.json": "7b9412c0ee9258e0887e1aa3d7334da167bee344dbdea78b3feec00c85c7928b",
+    "evidence/real-rebinding-pi_rpc-installed-previous-1790843286728120100.xml": "fb8d3f9def76cc8155b2444d5d8116e0a73c14aa57d4d2a9ec620a1954a78d95",
+    "evidence/real-rebinding-pi_rpc-installed-previous-1790843286728918700.log": "32007a7a6806825b5ac02b93b7ae756ac7f94d47fe2a9b98be5c114a8a93d538",
+    "evidence/real-rebinding-pi_rpc-installed-previous-1790843955811756100.json": "04479ad819d18d34e7355cc6c82e0f3ee0fb88af6e0bc8e71f1960ca3a2907c8",
+    "evidence/real-rebinding-pi_rpc-installed-previous-1790843955812106900.xml": "88e872958982d84085b26a2aee345f9b9a9ffebcef1f99d4b1b36f831feb48e5",
+    "evidence/real-rebinding-pi_rpc-installed-previous-1790843955812484500.log": "d14ef024393c830953acf98f72950cba9139509f6821c8baf3151edd2e8a58ae",
+    "evidence/real-rebinding-pi_rpc-installed.json": "e5f91dbc7d380743d67e24d8277ff38f036f96633a2af96cd38c3be1b7d13923",
+    "evidence/real-rebinding-pi_rpc-installed.log": "3a99e976e6ff938cd06b2b74d96e4d8ef93c28ac51b4a798947647991c5d98a6",
+    "evidence/real-rebinding-pi_rpc-installed.xml": "b5e4f7d76343628848fc93aee271ac8cd2bc39d2cd8f5084c860a760580e6ff5",
+    "evidence/real-rebinding-pi_rpc-previous-1790842955650215300.json": "64283ede411c793e01f21b44455b92c4635a32038bfcc1e8a7bf3e871081b5f6",
+    "evidence/real-rebinding-pi_rpc-previous-1790843286725885000.json": "5388250d88123a000266849834a07741dbfaa7a7f89aedecb007bd5cbae8ae1b",
+    "evidence/real-rebinding-pi_rpc-previous-1790843955810912200.json": "e9e98db5ee0acaf56200442e4d364b95d3fdbf5cd26f8be963d3bced59f8ec4d",
+    "evidence/real-rebinding-pi_rpc-progress-previous-1790842955650744000.json": "64283ede411c793e01f21b44455b92c4635a32038bfcc1e8a7bf3e871081b5f6",
+    "evidence/real-rebinding-pi_rpc-progress-previous-1790843286726810600.json": "5388250d88123a000266849834a07741dbfaa7a7f89aedecb007bd5cbae8ae1b",
+    "evidence/real-rebinding-pi_rpc-progress-previous-1790843955811376500.json": "e9e98db5ee0acaf56200442e4d364b95d3fdbf5cd26f8be963d3bced59f8ec4d",
+    "evidence/real-rebinding-pi_rpc-progress.json": "56e4050b4397a2798590acf34c3338faa69c914c4cf25b170266163126917747",
+    "evidence/real-rebinding-pi_rpc.json": "56e4050b4397a2798590acf34c3338faa69c914c4cf25b170266163126917747"
+  }
+}

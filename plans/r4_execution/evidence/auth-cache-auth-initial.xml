@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="2" skipped="0" tests="100" time="310.074" timestamp="2026-10-01T11:58:41.206629-03:00" hostname="Alienware_m15"><testcase classname="test_auth_cache_bounds" name="test_lru_eviction_keeps_both_indexes_bounded_and_invalidation_working" file="test_auth_cache_bounds.py" line="29" time="0.001" /><testcase classname="test_auth_cache_bounds" name="test_lookup_started_before_invalidation_cannot_repopulate_cache[agent]" file="test_auth_cache_bounds.py" line="48" time="0.002" /><testcase classname="test_auth_cache_bounds" name="test_lookup_started_before_invalidation_cannot_repopulate_cache[all]" file="test_auth_cache_bounds.py" line="48" time="0.001" /><testcase classname="test_auth_cache_bounds" name="test_invalid_cache_limits_refused[options0]" file="test_auth_cache_bounds.py" line="76" time="0.001" /><testcase classname="test_auth_cache_bounds" name="test_invalid_cache_limits_refused[options1]" file="test_auth_cache_bounds.py" line="76" time="0.001" /><testcase classname="test_auth_cache_bounds" name="test_invalid_cache_limits_refused[options2]" file="test_auth_cache_bounds.py" line="76" time="0.001" /><testcase classname="test_auth_cache_bounds" name="test_invalid_cache_limits_refused[options3]" file="test_auth_cache_bounds.py" line="76" time="0.001" /><testcase classname="test_auth_cache_bounds" name="test_invalid_cache_limits_refused[options4]" file="test_auth_cache_bounds.py" line="76" time="0.001" /><testcase classname="test_auth_cache_bounds" name="test_invalid_cache_limits_refused[options5]" file="test_auth_cache_bounds.py" line="76" time="0.001" /><testcase classname="test_auth_cache_bounds" name="test_invalid_cache_limits_refused[options6]" file="test_auth_cache_bounds.py" line="76" time="0.001" /><testcase classname="test_auth_cache_bounds" name="test_zero_capacity_disables_positive_cache" file="test_auth_cache_bounds.py" line="87" time="0.001" /><testcase classname="test_auth_cache_bounds" name="test_100k_sqlite_identities_use_indexed_lookup_and_bounded_cache" file="test_auth_cache_bounds.py" line="94" time="24.892"><properties><property name="auth_cache_load" value="{&quot;identities&quot;: 100000, &quot;elapsed_seconds&quot;: 20.19322470005136, &quot;samples&quot;: [{&quot;identities&quot;: 25000, &quot;current_bytes&quot;: 3624039, &quot;peak_bytes&quot;: 3822193, &quot;entries&quot;: 4096, &quot;reverse_entries&quot;: 4096}, {&quot;identities&quot;: 50000, &quot;current_bytes&quot;: 3620007, &quot;peak_bytes&quot;: 3835857, &quot;entries&quot;: 4096, &quot;reverse_entries&quot;: 4096}, {&quot;identities&quot;: 75000, &quot;current_bytes&quot;: 3615783, &quot;peak_bytes&quot;: 3835857, &quot;entries&quot;: 4096, &quot;reverse_entries&quot;: 4096}, {&quot;identities&quot;: 100000, &quot;current_bytes&quot;: 3611687, &quot;peak_bytes&quot;: 3835857, &quot;entries&quot;: 4096, &quot;reverse_entries&quot;: 4096}], &quot;query_plan&quot;: [&quot;SEARCH agents USING INDEX idx_agents_api_key_hash (api_key_hash=?)&quot;], &quot;platform&quot;: &quot;Windows-11-10.0.26200-SP0&quot;, &quot;processor&quot;: &quot;Intel64 Family 6 Model 141 Stepping 1, GenuineIntel&quot;, &quot;logical_cpus&quot;: 16, &quot;topology&quot;: &quot;Actual SQLite adapter and migrated database; one transaction for measured lookups; no providers.&quot;}" /></properties></testcase><testcase classname="test_auth_service" name="test_service_satisfies_auth_provider_protocol" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_auth_service.py" line="111" time="0.001" /><testcase classname="test_auth_service" name="test_issue_key_returns_wellformed_plaintext_and_stores_only_hash" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_auth_service.py" line="115" time="0.001" /><testcase classname="test_auth_service" name="test_issue_key_for_unknown_agent_raises_not_found" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_auth_service.py" line="125" time="0.001" /><testcase classname="test_auth_service" name="test_resolve_malformed_returns_none_without_storage_lookup[None]" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_auth_service.py" line="131" time="0.001" /><testcase classname="test_auth_service" name="test_resolve_malformed_returns_none_without_storage_lookup[]" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_auth_service.py" line="131" time="0.001" /><testcase classname="test_auth_service" name="test_resolve_malformed_returns_none_without_storage_lookup[garbage]" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_auth_service.py" line="131" time="0.001" /><testcase classname="test_auth_service" name="test_resolve_malformed_returns_none_without_storage_lookup[nxs_short]" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_auth_service.py" line="131" time="0.001" /><testcase classname="test_auth_service" name="test_resolve_malformed_returns_none_without_storage_lookup[dash_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_auth_service.py" line="131" time="0.001" /><testcase classname="test_auth_service" name="test_resolve_unknown_and_revoked_are_uniform_none" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_auth_service.py" line="137" time="0.001" /><testcase classname="test_auth_service" name="test_resolve_caches_positive_hits_within_ttl" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_auth_service.py" line="146" time="0.001" /><testcase classname="test_auth_service" name="test_resolve_touches_last_seen_on_every_success" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_auth_service.py" line="157" time="0.001" /><testcase classname="test_auth_service" name="test_rotation_invalidates_previous_key_synchronously" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_auth_service.py" line="164" time="0.001" /><testcase classname="test_auth_service" name="test_revocation_invalidates_cache_synchronously" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_auth_service.py" line="174" time="0.001" /><testcase classname="test_auth_service" name="test_negative_results_are_not_cached" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_auth_service.py" line="185" time="0.001" /><testcase classname="test_auth_service" name="test_end_to_end_over_sqlite" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_auth_service.py" line="200" time="0.522" /><testcase classname="test_agent_keys" name="test_generate_api_key_format_and_uniqueness" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_agent_keys.py" line="27" time="0.002" /><testcase classname="test_agent_keys" name="test_hash_api_key_is_lowercase_hex_sha256" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_agent_keys.py" line="38" time="0.001" /><testcase classname="test_agent_keys" name="test_is_well_formed_api_key_rejects[]" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_agent_keys.py" line="45" time="0.001" /><testcase classname="test_agent_keys" name="test_is_well_formed_api_key_rejects[nxs_]" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_agent_keys.py" line="45" time="0.001" /><testcase classname="test_agent_keys" name="test_is_well_formed_api_key_rejects[nxs_short]" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_agent_keys.py" line="45" time="0.001" /><testcase classname="test_agent_keys" name="test_is_well_formed_api_key_rejects[dash_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_agent_keys.py" line="45" time="0.001" /><testcase classname="test_agent_keys" name="test_is_well_formed_api_key_rejects[[REDACTED_TEST_CREDENTIAL]]" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_agent_keys.py" line="45" time="0.001" /><testcase classname="test_agent_keys" name="test_is_well_formed_api_key_rejects[[REDACTED_TEST_CREDENTIAL]]" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_agent_keys.py" line="45" time="0.001" /><testcase classname="test_agent_keys" name="test_is_well_formed_api_key_rejects[[REDACTED_TEST_CREDENTIAL]]" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_agent_keys.py" line="45" time="0.001" /><testcase classname="test_agent_keys" name="test_is_well_formed_api_key_rejects[NXS_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_agent_keys.py" line="45" time="0.001" /><testcase classname="test_agent_keys" name="test_migration_009_columns_and_backfill_defaults" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_agent_keys.py" line="65" time="0.482" /><testcase classname="test_agent_keys" name="test_migration_009_unique_index_rejects_duplicate_hash" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_agent_keys.py" line="82" time="0.442" /><testcase classname="test_agent_keys" name="test_resolve_by_hash_requires_active_and_is_uniform" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_agent_keys.py" line="97" time="0.444" /><testcase classname="test_agent_keys" name="test_set_key_hash_replacement_invalidates_previous" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_agent_keys.py" line="124" time="0.474" /><testcase classname="test_agent_keys" name="test_set_methods_return_false_for_unknown_agent" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_agent_keys.py" line="138" time="0.442" /><testcase classname="test_agent_keys" name="test_list_without_key_is_additive_view" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_agent_keys.py" line="147" time="0.473" /><testcase classname="test_agent_connections" name="test_connection_key_opens_only_bound_identity_and_reuses" file="test_agent_connections.py" line="15" time="3.947" /><testcase classname="test_agent_connections" name="test_expiry_overrides_revocation_and_method_reenable" file="test_agent_connections.py" line="38" time="3.058" /><testcase classname="test_agent_connections" name="test_policy_admin_only_and_mcp_disabled" file="test_agent_connections.py" line="64" time="3.319" /><testcase classname="test_agent_connections" name="test_all_managed_adapters_and_profile_invalidation[endpoint-pi]" file="test_agent_connections.py" line="75" time="2.867" /><testcase classname="test_agent_connections" name="test_all_managed_adapters_and_profile_invalidation[endpoint-codex]" file="test_agent_connections.py" line="75" time="2.600" /><testcase classname="test_agent_connections" name="test_all_managed_adapters_and_profile_invalidation[endpoint-claude_code.stream]" file="test_agent_connections.py" line="75" time="3.655" /><testcase classname="test_agent_connections" name="test_mcp_bootstrap_parity_and_disable_blocks_operator_open" file="test_agent_connections.py" line="87" time="3.059" /><testcase classname="test_agent_connections" name="test_concurrent_redemption_one_process_and_global_unlimited" file="test_agent_connections.py" line="100" time="2.904" /><testcase classname="test_agent_connections" name="test_disabled_feature_and_attach_override" file="test_agent_connections.py" line="115" time="2.669" /><testcase classname="test_agent_connections" name="test_agent_bootstrap_retains_grant_expiry_and_revocation" file="test_agent_connections.py" line="131" time="2.590" /><testcase classname="test_agent_connections" name="test_disable_stops_new_dispatch_and_preserves_inbox" file="test_agent_connections.py" line="153" time="3.044" /><testcase classname="test_agent_connections" name="test_stale_policy_update_rejected_without_mutation" file="test_agent_connections.py" line="168" time="2.786" /><testcase classname="test_agent_connections" name="test_old_runtime_writer_cannot_ignore_connection_policy" file="test_agent_connections.py" line="179" time="1.804" /><testcase classname="test_agent_connections" name="test_global_ttl_shared_with_an_independent_stdio_composition" file="test_agent_connections.py" line="198" time="1.853" /><testcase classname="test_agent_connections" name="test_registered_extension_uses_the_same_connection_contract[additional]" file="test_agent_connections.py" line="214" time="2.745" /><testcase classname="test_agent_connections" name="test_upgrade_from_64_preserves_identity_and_is_idempotent" file="test_agent_connections.py" line="225" time="0.685"><failure message="assert [65, 66, 67, 68, 69, 70, ...] == [65, 66, 67, 68, 69, 70, ...]&#10;  &#10;  Left contains 8 more items, first extra item: 83&#10;  Use -v to get more diff">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_agent_connections.py:248: in test_upgrade_from_64_preserves_identity_and_is_idempotent
+    assert MigrationRunner(factory).apply() == list(range(65, 83))
+E   assert [65, 66, 67, 68, 69, 70, ...] == [65, 66, 67, 68, 69, 70, ...]
+E     
+E     Left contains 8 more items, first extra item: 83
+E     Use -v to get more diff</failure></testcase><testcase classname="test_agent_connections" name="test_disabling_mcp_fences_an_already_authenticated_http_client" file="test_agent_connections.py" line="254" time="2.893" /><testcase classname="test_agent_connections" name="test_enabling_feature_requires_owner_restart_with_a_prescriptive_error[False]" file="test_agent_connections.py" line="276" time="1.649" /><testcase classname="test_agent_connections" name="test_self_bootstrap_rechecks_permissions_at_the_native_start_boundary" file="test_agent_connections.py" line="293" time="3.035" /><testcase classname="test_agent_connections" name="test_global_expiry_does_not_coerce_fraction_or_boolean_to_unlimited" file="test_agent_connections.py" line="322" time="3.380" /><testcase classname="test_agent_self_connections" name="test_self_discovery_is_scoped_read_only_and_reports_authorized_open" file="test_agent_self_connections.py" line="36" time="3.896" /><testcase classname="test_agent_self_connections" name="test_self_open_rechecks_grants_and_rejects_foreign_endpoint" file="test_agent_self_connections.py" line="67" time="3.000" /><testcase classname="test_agent_self_connections" name="test_actual_stdio_self_discovery_and_connect_use_existing_serve_owner" file="test_agent_self_connections.py" line="84" time="2.936"><failure message="McpError('Connection closed') [single exception in ExceptionGroup]">+ Exception Group Traceback (most recent call last):
+  |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_agent_self_connections.py", line 108, in test_actual_stdio_self_discovery_and_connect_use_existing_serve_owner
+  |     asyncio.run(asyncio.wait_for(run(), timeout=45))
+  |     ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |   File "C:\Python313\Lib\asyncio\runners.py", line 194, in run
+  |     return runner.run(main)
+  |            ~~~~~~~~~~^^^^^^
+  |   File "C:\Python313\Lib\asyncio\runners.py", line 118, in run
+  |     return self._loop.run_until_complete(task)
+  |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  |   File "C:\Python313\Lib\asyncio\base_events.py", line 720, in run_until_complete
+  |     return future.result()
+  |            ~~~~~~~~~~~~~^^
+  |   File "C:\Python313\Lib\asyncio\tasks.py", line 507, in wait_for
+  |     return await fut
+  |            ^^^^^^^^^
+  |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_agent_self_connections.py", line 97, in run
+  |     async with stdio_client(params) as (reader, writer), ClientSession(reader, writer) as session:
+  |                ~~~~~~~~~~~~^^^^^^^^
+  |   File "C:\Python313\Lib\contextlib.py", line 235, in __aexit__
+  |     await self.gen.athrow(value)
+  |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\mcp\client\stdio\__init__.py", line 183, in stdio_client
+  |     anyio.create_task_group() as tg,
+  |     ~~~~~~~~~~~~~~~~~~~~~~~^^
+  |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\_backends\_asyncio.py", line 847, in __aexit__
+  |     raise BaseExceptionGroup(
+  |         "unhandled errors in a TaskGroup", self._exceptions
+  |     ) from None
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Exception Group Traceback (most recent call last):
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\mcp\client\stdio\__init__.py", line 189, in stdio_client
+    |     yield read_stream, write_stream
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_agent_self_connections.py", line 97, in run
+    |     async with stdio_client(params) as (reader, writer), ClientSession(reader, writer) as session:
+    |                                                          ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\mcp\shared\session.py", line 238, in __aexit__
+    |     return await self._task_group.__aexit__(exc_type, exc_val, exc_tb)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\_backends\_asyncio.py", line 847, in __aexit__
+    |     raise BaseExceptionGroup(
+    |         "unhandled errors in a TaskGroup", self._exceptions
+    |     ) from None
+    | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+    +-+---------------- 1 ----------------
+      | Traceback (most recent call last):
+      |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_agent_self_connections.py", line 98, in run
+      |     await session.initialize()
+      |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\mcp\client\session.py", line 183, in initialize
+      |     result = await self.send_request(
+      |              ^^^^^^^^^^^^^^^^^^^^^^^^
+      |     ...&lt;16 lines&gt;...
+      |     )
+      |     ^
+      |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\mcp\shared\session.py", line 306, in send_request
+      |     raise McpError(response_or_error.error)
+      | mcp.shared.exceptions.McpError: Connection closed
+      +------------------------------------</failure></testcase><testcase classname="test_agent_self_connections" name="test_self_connect_never_forwards_with_another_identity" file="test_agent_self_connections.py" line="111" time="3.207" /><testcase classname="test_agent_self_connections" name="test_self_open_revalidates_grant_after_reservation_before_native_start" file="test_agent_self_connections.py" line="125" time="3.111" /><testcase classname="test_agent_self_connections" name="test_registered_adapter_uses_self_discovery_and_connect[additional]" file="test_agent_self_connections.py" line="146" time="3.281" /><testcase classname="test_http_api" name="test_artifact_catalog_detail_and_content_are_operator_only" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="72" time="2.305" /><testcase classname="test_http_api" name="test_artifact_catalog_paginates_and_filters_producers_and_dates" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="127" time="2.154" /><testcase classname="test_http_api" name="test_loopback_opens_rest_but_never_mcp" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="235" time="2.283" /><testcase classname="test_http_api" name="test_non_loopback_client_requires_key_even_when_local_open" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="256" time="1.944" /><testcase classname="test_http_api" name="test_loopback_trust_refuses_cross_origin_and_dns_rebinding" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="265" time="2.489" /><testcase classname="test_http_api" name="test_destructive_surfaces_are_operator_only_off_loopback" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="318" time="2.128" /><testcase classname="test_http_api" name="test_public_paths_do_not_require_a_key" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="386" time="2.205" /><testcase classname="test_http_api" name="test_missing_unknown_and_revoked_keys_are_uniform_401" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="393" time="2.359" /><testcase classname="test_http_api" name="test_key_accepted_via_query_header_and_bearer" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="424" time="2.586" /><testcase classname="test_http_api" name="test_create_agent_exposes_plaintext_once_and_stores_hash_only" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="439" time="44.414"><error message="failed on setup with &quot;RuntimeError: The embedded inventory requires the current store owner.&quot;">/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_http_api.py:49: in serve_env
+    ???
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\testclient.py:517: in __enter__
+    portal.call(self.wait_startup)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\testclient.py:552: in wait_startup
+    await receive()
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\testclient.py:543: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\testclient.py:533: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\applications.py:1202: in __call__
+    await lifespan(
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\telemetry\_runtime.py:239: in lifespan
+    await app(scope, wrapped_receive, wrapped_send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\telemetry\_asgi.py:151: in __call__
+    await self.app(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\routing.py:676: in __call__
+    await self.middleware_stack(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py:2773: in app
+    await self.lifespan(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\routing.py:654: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py:247: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py:247: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py:247: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py:247: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py:247: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py:247: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py:247: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus\adapters\inbound\http\app.py:604: in lifespan
+    await embedded_inventory.start()
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus\bootstrap\embedded_inventory.py:59: in start
+    return await asyncio.shield(self._startup_task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus\bootstrap\embedded_inventory.py:62: in _start
+    self.generation = await asyncio.to_thread(self._claim)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\threads.py:25: in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\thread.py:59: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus\bootstrap\embedded_inventory.py:42: in _claim
+    raise RuntimeError("The embedded inventory requires the current store owner.")
+E   RuntimeError: The embedded inventory requires the current store owner.</error></testcase><testcase classname="test_http_api" name="test_regenerate_key_invalidates_previous_immediately" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="479" time="3.913" /><testcase classname="test_http_api" name="test_delete_agent_removes_and_404s_afterwards" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="495" time="2.737" /><testcase classname="test_http_api" name="test_delete_operator_is_rejected_and_identity_survives" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="511" time="3.396" /><testcase classname="test_http_api" name="test_delete_agent_with_sessions_and_deliveries_cascades" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="526" time="2.992" /><testcase classname="test_http_api" name="test_graph_reflects_presence_and_in_flight" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="600" time="2.480" /><testcase classname="test_http_api" name="test_admin_reset_wipes_every_table_but_keeps_agents" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="725" time="51.678" /><testcase classname="test_http_api" name="test_admin_reset_without_keeping_agents" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="750" time="51.575" /><testcase classname="test_http_api" name="test_events_endpoint_pages_by_cursor" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="777" time="1.802" /><testcase classname="test_http_api" name="test_events_filter_by_type_agent_and_types_endpoint" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="812" time="1.926" /><testcase classname="test_http_api" name="test_events_timeline_and_recipient_filter" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="857" time="1.810" /><testcase classname="test_http_api" name="test_handoffs_filter_by_range_and_agents" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="918" time="2.163" /><testcase classname="test_http_api" name="test_handoffs_include_terminal_agent_outcomes" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="965" time="1.747" /><testcase classname="test_http_api" name="test_meta_harness_sends_messages_and_handoffs_by_audience" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="1014" time="1.961" /><testcase classname="test_http_api" name="test_meta_harness_attachment_cap_is_the_domain_cap" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="1177" time="1.905" /><testcase classname="test_http_api" name="test_meta_harness_artifact_upload_validates_transport_and_workspace" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="1219" time="1.930" /><testcase classname="test_http_api" name="test_events_no_filters_is_backward_compatible" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="1275" time="2.107" /><testcase classname="test_http_api" name="test_sse_streams_new_events_and_resumes_after_cursor" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="1291" time="1.781" /><testcase classname="test_http_api" name="test_sse_open_stream_does_not_wedge_server_shutdown" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_http_api.py" line="1377" time="1.763" /><testcase classname="test_import_boundary" name="test_inner_layers_have_files" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_import_boundary.py" line="50" time="0.009" /><testcase classname="test_import_boundary" name="test_domain_and_application_do_not_import_infrastructure" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_import_boundary.py" line="56" time="0.386" /><testcase classname="test_import_boundary" name="test_replay_core_modules_are_in_scope_and_clean" file="C:\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_import_boundary.py" line="64" time="0.007" /></testsuite></testsuites>

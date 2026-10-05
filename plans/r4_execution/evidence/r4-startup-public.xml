@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="19.850" timestamp="2026-09-30T06:31:00.581752-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_daemon_startup" name="test_daemon_starts_registered_r4_control_without_legacy_fallback[False]" time="4.349" /><testcase classname="tests.execution_r4.test_daemon_startup" name="test_daemon_starts_registered_r4_control_without_legacy_fallback[True]" time="14.060"><failure message="TimeoutError">tests\execution_r4\test_daemon_startup.py:88: in run
+    await asyncio.sleep(0.02)
+C:\Python313\Lib\asyncio\tasks.py:718: in sleep
+    return await future
+           ^^^^^^^^^^^^
+E   asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+tests\execution_r4\test_daemon_startup.py:121: in test_daemon_starts_registered_r4_control_without_legacy_fallback
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests\execution_r4\test_daemon_startup.py:76: in run
+    async with asyncio.timeout(10):
+               ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\timeouts.py:116: in __aexit__
+    raise TimeoutError from exc_val
+E   TimeoutError</failure></testcase></testsuite></testsuites>

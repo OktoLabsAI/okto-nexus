@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="290.344" timestamp="2026-10-01T02:16:36.161125-03:00" hostname="Alienware_m15"><testcase classname="test_real_connector_providers" name="test_real_provider_through_public_connector_cli[pi_rpc]" time="288.897"><failure message="AssertionError: {'adapter': 'pi_rpc', 'server_release_gate_override': True, 'native_qualification_override': False, 'synthetic_native_factory': False, ...}&#10;assert 'CLAIMED' == 'COMPLETED'&#10;  &#10;  - COMPLETED&#10;  + CLAIMED">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_real_connector_providers.py:296: in test_real_provider_through_public_connector_cli
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_real_connector_providers.py:259: in run
+    assert report["handoff_status"] == "COMPLETED", report
+E   AssertionError: {'adapter': 'pi_rpc', 'server_release_gate_override': True, 'native_qualification_override': False, 'synthetic_native_factory': False, ...}
+E   assert 'CLAIMED' == 'COMPLETED'
+E     
+E     - COMPLETED
+E     + CLAIMED</failure></testcase></testsuite></testsuites>

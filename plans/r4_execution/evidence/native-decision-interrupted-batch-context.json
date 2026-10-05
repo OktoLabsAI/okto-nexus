@@ -1,0 +1,23 @@
+{
+  "cause_evidence": "native-decision-batch-power-events.json",
+  "observation": "Windows Kernel-Power 506/507 records modern standby for approximately 834 seconds during the concurrent campaign.",
+  "standby_seconds": 834.009,
+  "results": {
+    "nexus": {
+      "passed": 82,
+      "errors": 1
+    },
+    "isolated": {
+      "passed": 82,
+      "errors": 1
+    },
+    "claude_stream": {
+      "failed": 1
+    },
+    "codex_app_server": {
+      "failed": 1
+    }
+  },
+  "interpretation": "Tickets and lease ownership expired while the computer was suspended. Preserve failures and repeat awake; these attempts do not establish provider acceptance.",
+  "stale_report": "real-native-decision-claude_stream-stale-initial-success.json is a leftover from the initial successful wheel, not a successful journey in this interrupted batch. The runner now archives any previous journey report before invoking pytest."
+}

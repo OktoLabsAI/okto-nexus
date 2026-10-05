@@ -1,0 +1,1275 @@
+Building wheel...
+C:\Users\jpamb\AppData\Local\uv\cache\builds-v0\.tmpi7RYrb\Lib\site-packages\setuptools\config\_apply_pyprojecttoml.py:82: SetuptoolsDeprecationWarning: `project.license` as a TOML table is deprecated
+!!
+
+        ********************************************************************************
+        Please use a simple string containing a SPDX expression for `project.license`. You can also use `project.license-files`. (Both options available on setuptools>=77.0.0).
+
+        By 2027-Feb-18, you need to update your project and remove deprecated calls
+        or your builds will no longer be supported.
+
+        See https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#license for details.
+        ********************************************************************************
+
+!!
+  corresp(dist, value, root_dir)
+running egg_info
+creating src\okto_nexus.egg-info
+writing src\okto_nexus.egg-info\PKG-INFO
+writing dependency_links to src\okto_nexus.egg-info\dependency_links.txt
+writing entry points to src\okto_nexus.egg-info\entry_points.txt
+writing requirements to src\okto_nexus.egg-info\requires.txt
+writing top-level names to src\okto_nexus.egg-info\top_level.txt
+writing manifest file 'src\okto_nexus.egg-info\SOURCES.txt'
+reading manifest file 'src\okto_nexus.egg-info\SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file 'src\okto_nexus.egg-info\SOURCES.txt'
+C:\Users\jpamb\AppData\Local\uv\cache\builds-v0\.tmpi7RYrb\Lib\site-packages\setuptools\config\_apply_pyprojecttoml.py:82: SetuptoolsDeprecationWarning: `project.license` as a TOML table is deprecated
+!!
+
+        ********************************************************************************
+        Please use a simple string containing a SPDX expression for `project.license`. You can also use `project.license-files`. (Both options available on setuptools>=77.0.0).
+
+        By 2027-Feb-18, you need to update your project and remove deprecated calls
+        or your builds will no longer be supported.
+
+        See https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#license for details.
+        ********************************************************************************
+
+!!
+  corresp(dist, value, root_dir)
+running bdist_wheel
+running build
+running build_py
+creating build\lib\okto_nexus
+copying src\okto_nexus\config.py -> build\lib\okto_nexus
+copying src\okto_nexus\envelope.py -> build\lib\okto_nexus
+copying src\okto_nexus\errors.py -> build\lib\okto_nexus
+copying src\okto_nexus\__init__.py -> build\lib\okto_nexus
+creating build\lib\okto_nexus\adapters
+copying src\okto_nexus\adapters\__init__.py -> build\lib\okto_nexus\adapters
+creating build\lib\okto_nexus\application
+copying src\okto_nexus\application\adapter_registry.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\agent_connections.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\approvals.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\artifacts.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\auth.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\capabilities.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\comm_preset_catalog.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\connection_policy.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\endpoints.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\events.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_admission.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_binding_approvals.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_binding_migration.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_binding_proposals.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_binding_replacement.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_boot_authority.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_capabilities.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_capacity.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_connection_discovery.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_connection_keys.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_dispatch.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_dispatch_pump.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_domain_delivery.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_events.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_initial_turns.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_intents.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_leases.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_local_launch.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_local_realizations.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_native_actions.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_native_decisions.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_native_requests.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_realizations.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_reconciliation.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_results.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_semantics.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_session_reuse.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_session_views.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_tools.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\execution_tool_claims.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\executor_inventory.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\executor_inventory_views.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\governance.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\guardrails.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\guardrail_admin.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\handoff.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\harness_supervisor.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\health.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\identity.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\inbox.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\memory.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\messages.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\observability.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\permissions.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\policy_catalog.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\poll_tokens.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\ports.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\replay.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\retention.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\runtime_access.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\runtime_admission_fence.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\runtime_authorization.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\runtime_boot.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\runtime_bootstrap.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\runtime_causality.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\runtime_command_dispatcher.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\runtime_control.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\runtime_delivery.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\runtime_discovery.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\runtime_dispatcher.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\runtime_event_ingress.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\runtime_external_work.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\runtime_lifecycle.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\runtime_maintenance.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\runtime_native_approvals.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\runtime_observations.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\runtime_open.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\runtime_operation_maintenance.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\runtime_requirements.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\runtime_results.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\runtime_shutdown.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\runtime_work.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\search.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\settings.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\shared_md.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\tags.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\workspace_analytics.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\workspace_overview.py -> build\lib\okto_nexus\application
+copying src\okto_nexus\application\__init__.py -> build\lib\okto_nexus\application
+creating build\lib\okto_nexus\bootstrap
+copying src\okto_nexus\bootstrap\database_backup.py -> build\lib\okto_nexus\bootstrap
+copying src\okto_nexus\bootstrap\dependencies.py -> build\lib\okto_nexus\bootstrap
+copying src\okto_nexus\bootstrap\embedded_dispatch.py -> build\lib\okto_nexus\bootstrap
+copying src\okto_nexus\bootstrap\embedded_events.py -> build\lib\okto_nexus\bootstrap
+copying src\okto_nexus\bootstrap\embedded_inventory.py -> build\lib\okto_nexus\bootstrap
+copying src\okto_nexus\bootstrap\embedded_reconciliation.py -> build\lib\okto_nexus\bootstrap
+copying src\okto_nexus\bootstrap\embedded_tools.py -> build\lib\okto_nexus\bootstrap
+copying src\okto_nexus\bootstrap\execution_authority.py -> build\lib\okto_nexus\bootstrap
+copying src\okto_nexus\bootstrap\execution_compat.py -> build\lib\okto_nexus\bootstrap
+copying src\okto_nexus\bootstrap\execution_migration.py -> build\lib\okto_nexus\bootstrap
+copying src\okto_nexus\bootstrap\local_discovery.py -> build\lib\okto_nexus\bootstrap
+copying src\okto_nexus\bootstrap\local_mcp_home.py -> build\lib\okto_nexus\bootstrap
+copying src\okto_nexus\bootstrap\runtime_host.py -> build\lib\okto_nexus\bootstrap
+copying src\okto_nexus\bootstrap\server_shutdown.py -> build\lib\okto_nexus\bootstrap
+copying src\okto_nexus\bootstrap\__init__.py -> build\lib\okto_nexus\bootstrap
+creating build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\approvals.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\artifacts.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\base.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\comm_preset.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\delivery.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\endpoints.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\events.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\execution_diagnostics.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\execution_principal.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\governance.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\guardrails.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\handoff.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\harness.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\health.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\ids.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\inbox.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\keys.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\memory.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\messages.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\models.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\native_inputs.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\permissions.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\policy.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\poll_tokens.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\replay.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\routing.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\runtime_commands.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\runtime_context.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\tag_selector.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\targets.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\trace.py -> build\lib\okto_nexus\domain
+copying src\okto_nexus\domain\__init__.py -> build\lib\okto_nexus\domain
+creating build\lib\okto_nexus\testing
+copying src\okto_nexus\testing\harness.py -> build\lib\okto_nexus\testing
+copying src\okto_nexus\testing\replay.py -> build\lib\okto_nexus\testing
+copying src\okto_nexus\testing\__init__.py -> build\lib\okto_nexus\testing
+creating build\lib\okto_nexus\adapters\inbound
+copying src\okto_nexus\adapters\inbound\runtime_admin.py -> build\lib\okto_nexus\adapters\inbound
+copying src\okto_nexus\adapters\inbound\__init__.py -> build\lib\okto_nexus\adapters\inbound
+creating build\lib\okto_nexus\adapters\outbound
+copying src\okto_nexus\adapters\outbound\clock.py -> build\lib\okto_nexus\adapters\outbound
+copying src\okto_nexus\adapters\outbound\inbox_notifier.py -> build\lib\okto_nexus\adapters\outbound
+copying src\okto_nexus\adapters\outbound\provider_vault.py -> build\lib\okto_nexus\adapters\outbound
+copying src\okto_nexus\adapters\outbound\runtime_owner_client.py -> build\lib\okto_nexus\adapters\outbound
+copying src\okto_nexus\adapters\outbound\runtime_wake.py -> build\lib\okto_nexus\adapters\outbound
+copying src\okto_nexus\adapters\outbound\waiter.py -> build\lib\okto_nexus\adapters\outbound
+copying src\okto_nexus\adapters\outbound\__init__.py -> build\lib\okto_nexus\adapters\outbound
+creating build\lib\okto_nexus\adapters\inbound\cli
+copying src\okto_nexus\adapters\inbound\cli\admin.py -> build\lib\okto_nexus\adapters\inbound\cli
+copying src\okto_nexus\adapters\inbound\cli\harness_orphan_watchdog.py -> build\lib\okto_nexus\adapters\inbound\cli
+copying src\okto_nexus\adapters\inbound\cli\main.py -> build\lib\okto_nexus\adapters\inbound\cli
+copying src\okto_nexus\adapters\inbound\cli\mcp_config_migration.py -> build\lib\okto_nexus\adapters\inbound\cli
+copying src\okto_nexus\adapters\inbound\cli\provider_credentials.py -> build\lib\okto_nexus\adapters\inbound\cli
+copying src\okto_nexus\adapters\inbound\cli\runtime_server.py -> build\lib\okto_nexus\adapters\inbound\cli
+copying src\okto_nexus\adapters\inbound\cli\serve.py -> build\lib\okto_nexus\adapters\inbound\cli
+copying src\okto_nexus\adapters\inbound\cli\server_shutdown.py -> build\lib\okto_nexus\adapters\inbound\cli
+copying src\okto_nexus\adapters\inbound\cli\tail.py -> build\lib\okto_nexus\adapters\inbound\cli
+copying src\okto_nexus\adapters\inbound\cli\__init__.py -> build\lib\okto_nexus\adapters\inbound\cli
+creating build\lib\okto_nexus\adapters\inbound\http
+copying src\okto_nexus\adapters\inbound\http\app.py -> build\lib\okto_nexus\adapters\inbound\http
+copying src\okto_nexus\adapters\inbound\http\connections.py -> build\lib\okto_nexus\adapters\inbound\http
+copying src\okto_nexus\adapters\inbound\http\connections_v1.py -> build\lib\okto_nexus\adapters\inbound\http
+copying src\okto_nexus\adapters\inbound\http\executor_link.py -> build\lib\okto_nexus\adapters\inbound\http
+copying src\okto_nexus\adapters\inbound\http\identity_ctx.py -> build\lib\okto_nexus\adapters\inbound\http
+copying src\okto_nexus\adapters\inbound\http\lock.py -> build\lib\okto_nexus\adapters\inbound\http
+copying src\okto_nexus\adapters\inbound\http\native_actions_v1.py -> build\lib\okto_nexus\adapters\inbound\http
+copying src\okto_nexus\adapters\inbound\http\routes.py -> build\lib\okto_nexus\adapters\inbound\http
+copying src\okto_nexus\adapters\inbound\http\runtime_v1.py -> build\lib\okto_nexus\adapters\inbound\http
+copying src\okto_nexus\adapters\inbound\http\stream.py -> build\lib\okto_nexus\adapters\inbound\http
+copying src\okto_nexus\adapters\inbound\http\__init__.py -> build\lib\okto_nexus\adapters\inbound\http
+creating build\lib\okto_nexus\adapters\inbound\mcp
+copying src\okto_nexus\adapters\inbound\mcp\connection_gate.py -> build\lib\okto_nexus\adapters\inbound\mcp
+copying src\okto_nexus\adapters\inbound\mcp\projection.py -> build\lib\okto_nexus\adapters\inbound\mcp
+copying src\okto_nexus\adapters\inbound\mcp\registration.py -> build\lib\okto_nexus\adapters\inbound\mcp
+copying src\okto_nexus\adapters\inbound\mcp\resources.py -> build\lib\okto_nexus\adapters\inbound\mcp
+copying src\okto_nexus\adapters\inbound\mcp\resources_docs.py -> build\lib\okto_nexus\adapters\inbound\mcp
+copying src\okto_nexus\adapters\inbound\mcp\server.py -> build\lib\okto_nexus\adapters\inbound\mcp
+copying src\okto_nexus\adapters\inbound\mcp\surface_metrics.py -> build\lib\okto_nexus\adapters\inbound\mcp
+copying src\okto_nexus\adapters\inbound\mcp\__init__.py -> build\lib\okto_nexus\adapters\inbound\mcp
+creating build\lib\okto_nexus\adapters\inbound\mcp\tools
+copying src\okto_nexus\adapters\inbound\mcp\tools\artifacts.py -> build\lib\okto_nexus\adapters\inbound\mcp\tools
+copying src\okto_nexus\adapters\inbound\mcp\tools\events.py -> build\lib\okto_nexus\adapters\inbound\mcp\tools
+copying src\okto_nexus\adapters\inbound\mcp\tools\guardrails.py -> build\lib\okto_nexus\adapters\inbound\mcp\tools
+copying src\okto_nexus\adapters\inbound\mcp\tools\handoff.py -> build\lib\okto_nexus\adapters\inbound\mcp\tools
+copying src\okto_nexus\adapters\inbound\mcp\tools\harness.py -> build\lib\okto_nexus\adapters\inbound\mcp\tools
+copying src\okto_nexus\adapters\inbound\mcp\tools\health.py -> build\lib\okto_nexus\adapters\inbound\mcp\tools
+copying src\okto_nexus\adapters\inbound\mcp\tools\identity.py -> build\lib\okto_nexus\adapters\inbound\mcp\tools
+copying src\okto_nexus\adapters\inbound\mcp\tools\inbox.py -> build\lib\okto_nexus\adapters\inbound\mcp\tools
+copying src\okto_nexus\adapters\inbound\mcp\tools\memory.py -> build\lib\okto_nexus\adapters\inbound\mcp\tools
+copying src\okto_nexus\adapters\inbound\mcp\tools\messages.py -> build\lib\okto_nexus\adapters\inbound\mcp\tools
+copying src\okto_nexus\adapters\inbound\mcp\tools\poll_tokens.py -> build\lib\okto_nexus\adapters\inbound\mcp\tools
+copying src\okto_nexus\adapters\inbound\mcp\tools\shared_md.py -> build\lib\okto_nexus\adapters\inbound\mcp\tools
+copying src\okto_nexus\adapters\inbound\mcp\tools\tags.py -> build\lib\okto_nexus\adapters\inbound\mcp\tools
+copying src\okto_nexus\adapters\inbound\mcp\tools\_guardrails.py -> build\lib\okto_nexus\adapters\inbound\mcp\tools
+copying src\okto_nexus\adapters\inbound\mcp\tools\__init__.py -> build\lib\okto_nexus\adapters\inbound\mcp\tools
+creating build\lib\okto_nexus\adapters\outbound\embedding
+copying src\okto_nexus\adapters\outbound\embedding\__init__.py -> build\lib\okto_nexus\adapters\outbound\embedding
+creating build\lib\okto_nexus\adapters\outbound\execution
+copying src\okto_nexus\adapters\outbound\execution\core_inventory.py -> build\lib\okto_nexus\adapters\outbound\execution
+copying src\okto_nexus\adapters\outbound\execution\core_native_actions.py -> build\lib\okto_nexus\adapters\outbound\execution
+copying src\okto_nexus\adapters\outbound\execution\embedded.py -> build\lib\okto_nexus\adapters\outbound\execution
+copying src\okto_nexus\adapters\outbound\execution\__init__.py -> build\lib\okto_nexus\adapters\outbound\execution
+creating build\lib\okto_nexus\adapters\outbound\file
+copying src\okto_nexus\adapters\outbound\file\artifacts.py -> build\lib\okto_nexus\adapters\outbound\file
+copying src\okto_nexus\adapters\outbound\file\store.py -> build\lib\okto_nexus\adapters\outbound\file
+copying src\okto_nexus\adapters\outbound\file\__init__.py -> build\lib\okto_nexus\adapters\outbound\file
+creating build\lib\okto_nexus\adapters\outbound\harness
+copying src\okto_nexus\adapters\outbound\harness\claude_code_attach.py -> build\lib\okto_nexus\adapters\outbound\harness
+copying src\okto_nexus\adapters\outbound\harness\claude_code_stream.py -> build\lib\okto_nexus\adapters\outbound\harness
+copying src\okto_nexus\adapters\outbound\harness\codex.py -> build\lib\okto_nexus\adapters\outbound\harness
+copying src\okto_nexus\adapters\outbound\harness\compatibility.py -> build\lib\okto_nexus\adapters\outbound\harness
+copying src\okto_nexus\adapters\outbound\harness\envelope.py -> build\lib\okto_nexus\adapters\outbound\harness
+copying src\okto_nexus\adapters\outbound\harness\environment.py -> build\lib\okto_nexus\adapters\outbound\harness
+copying src\okto_nexus\adapters\outbound\harness\event_buffers.py -> build\lib\okto_nexus\adapters\outbound\harness
+copying src\okto_nexus\adapters\outbound\harness\event_journal.py -> build\lib\okto_nexus\adapters\outbound\harness
+copying src\okto_nexus\adapters\outbound\harness\framing.py -> build\lib\okto_nexus\adapters\outbound\harness
+copying src\okto_nexus\adapters\outbound\harness\linux_process.py -> build\lib\okto_nexus\adapters\outbound\harness
+copying src\okto_nexus\adapters\outbound\harness\linux_process_guardian.py -> build\lib\okto_nexus\adapters\outbound\harness
+copying src\okto_nexus\adapters\outbound\harness\owned_process.py -> build\lib\okto_nexus\adapters\outbound\harness
+copying src\okto_nexus\adapters\outbound\harness\pi.py -> build\lib\okto_nexus\adapters\outbound\harness
+copying src\okto_nexus\adapters\outbound\harness\qualified.py -> build\lib\okto_nexus\adapters\outbound\harness
+copying src\okto_nexus\adapters\outbound\harness\secret_redaction.py -> build\lib\okto_nexus\adapters\outbound\harness
+copying src\okto_nexus\adapters\outbound\harness\subscribers.py -> build\lib\okto_nexus\adapters\outbound\harness
+copying src\okto_nexus\adapters\outbound\harness\windows_process.py -> build\lib\okto_nexus\adapters\outbound\harness
+copying src\okto_nexus\adapters\outbound\harness\__init__.py -> build\lib\okto_nexus\adapters\outbound\harness
+creating build\lib\okto_nexus\adapters\outbound\sharedmd
+copying src\okto_nexus\adapters\outbound\sharedmd\renderer.py -> build\lib\okto_nexus\adapters\outbound\sharedmd
+copying src\okto_nexus\adapters\outbound\sharedmd\__init__.py -> build\lib\okto_nexus\adapters\outbound\sharedmd
+creating build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\approvals_repo.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\artifacts_repo.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\capability_catalog_repo.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\comm_preset_repo.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\connection.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\embeddings_repo.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\endpoints_repo.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\events_repo.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\execution_agent_revisions.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\execution_dispatch_ownership.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\execution_identity.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\execution_leases.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\execution_legacy_migration.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\execution_migration_resume.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\execution_native_actions.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\execution_receipts.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\execution_tickets.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\execution_workspace.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\governance_repo.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\guardrails_repo.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\handoff_repo.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\harness_repo.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\identity_repo.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\memory_repo.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\messages_repo.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\migrations.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\migration_backup.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\observability_repo.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\permissions_repo.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\policy_repo.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\poll_tokens_repo.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\runtime_commands_repo.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\runtime_grants_repo.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\runtime_journal_repo.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\runtime_observations_repo.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\runtime_outbox_repo.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\runtime_requests_repo.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\tag_catalog_repo.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+copying src\okto_nexus\adapters\outbound\sqlite\__init__.py -> build\lib\okto_nexus\adapters\outbound\sqlite
+creating build\lib\okto_nexus\adapters\outbound\telemetry
+copying src\okto_nexus\adapters\outbound\telemetry\event_emitter.py -> build\lib\okto_nexus\adapters\outbound\telemetry
+copying src\okto_nexus\adapters\outbound\telemetry\http_sender.py -> build\lib\okto_nexus\adapters\outbound\telemetry
+copying src\okto_nexus\adapters\outbound\telemetry\local_store.py -> build\lib\okto_nexus\adapters\outbound\telemetry
+copying src\okto_nexus\adapters\outbound\telemetry\__init__.py -> build\lib\okto_nexus\adapters\outbound\telemetry
+creating build\lib\okto_nexus\adapters\outbound\tokenizer
+copying src\okto_nexus\adapters\outbound\tokenizer\__init__.py -> build\lib\okto_nexus\adapters\outbound\tokenizer
+creating build\lib\okto_nexus\application\telemetry
+copying src\okto_nexus\application\telemetry\ports.py -> build\lib\okto_nexus\application\telemetry
+copying src\okto_nexus\application\telemetry\schema.py -> build\lib\okto_nexus\application\telemetry
+copying src\okto_nexus\application\telemetry\service.py -> build\lib\okto_nexus\application\telemetry
+copying src\okto_nexus\application\telemetry\__init__.py -> build\lib\okto_nexus\application\telemetry
+creating build\lib\okto_nexus\domain\execution
+copying src\okto_nexus\domain\execution\keys.py -> build\lib\okto_nexus\domain\execution
+copying src\okto_nexus\domain\execution\__init__.py -> build\lib\okto_nexus\domain\execution
+running egg_info
+writing src\okto_nexus.egg-info\PKG-INFO
+writing dependency_links to src\okto_nexus.egg-info\dependency_links.txt
+writing entry points to src\okto_nexus.egg-info\entry_points.txt
+writing requirements to src\okto_nexus.egg-info\requires.txt
+writing top-level names to src\okto_nexus.egg-info\top_level.txt
+reading manifest file 'src\okto_nexus.egg-info\SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file 'src\okto_nexus.egg-info\SOURCES.txt'
+creating build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\001_core.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\002_session_close.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\003_handoff_payload.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\004_agent_last_seen.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\005_message_deliveries.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\006_inbox_delivery_hardening.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\007_session_secret.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\008_handoff_result.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\009_agent_keys.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\010_settings.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\011_permissions.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\012_message_embeddings.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\013_agent_tags.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\014_capability_names.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\015_trace_id.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\016_governance.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\017_approvals.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\018_handoff_verification.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\019_handoff_dependencies.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\020_memories.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\021_health_indexes.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\022_policies.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\023_communication_presets.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\024_agent_color.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\025_guardrails_and_agent_groups.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\026_ephemeral_poll_tokens.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\027_guardrail_capability_scope.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\028_external_artifact_storage.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\029_harness_sessions_and_events.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\030_agent_runtime_endpoints.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\031_runtime_execution_grants.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\032_runtime_delivery_outbox.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\033_runtime_event_journal.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\034_runtime_event_origin.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\035_runtime_attempt_correlation.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\036_runtime_result_output.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\037_runtime_recovery_boundary.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\038_runtime_start_reservations.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\039_runtime_boot_and_reconciliation.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\040_runtime_command_intents.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\041_runtime_result_publication.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\042_runtime_result_artifacts.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\043_runtime_result_maintenance.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\044_handoff_claim_epoch.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\045_runtime_handoff_bindings.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\046_handoff_authorization_receipts.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\047_runtime_work_outcomes.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\048_runtime_native_approvals.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\049_runtime_native_input_responses.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\050_runtime_causality.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\051_runtime_result_relay.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\052_runtime_relay_decisions.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\053_runtime_configuration_audit.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\054_runtime_operation_reconciliation.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\055_runtime_handoff_recovery.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\056_runtime_compatibility_observations.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\057_runtime_writer_contract.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\058_runtime_delivery_capacity.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\059_runtime_delivery_attempt_history.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\060_runtime_safe_retry_deadlines.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\061_runtime_fallback_binding.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\062_runtime_capture_admission.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\063_runtime_context_observations.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\064_runtime_external_work.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\065_agent_connections.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\066_execution_r4_expand.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\067_execution_agent_revisions.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\068_execution_receipt_provenance.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\069_execution_ticket_requests.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\070_execution_realization_requests.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\071_execution_binding_proposal_payload.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\072_execution_binding_apply_requests.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\073_execution_intent_source_guard.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\074_execution_dispatch_reservations.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\075_execution_control_lanes.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\076_execution_lease_application.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\077_execution_binding_operator_proof.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\078_execution_open_bootstrap.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\079_execution_dispatch_owner.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\080_execution_session_capability_requests.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\081_execution_tool_claims.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\082_execution_native_actions.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\083_execution_local_realizations.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\084_execution_local_publications.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\085_execution_local_streams.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\086_execution_local_tool_credentials.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\087_execution_native_requests.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\088_execution_native_decision_cas.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\089_execution_session_reuse.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\090_execution_initial_turns.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\091_execution_admission_capacity.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\092_execution_connection_key.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\093_execution_boot_authority.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\094_execution_domain_deliveries.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\095_execution_results.sql -> build\lib\okto_nexus\migrations
+copying src\okto_nexus\migrations\096_canonical_result_publication.sql -> build\lib\okto_nexus\migrations
+creating build\lib\okto_nexus\adapters\inbound\http\static
+copying src\okto_nexus\adapters\inbound\http\static\index.html -> build\lib\okto_nexus\adapters\inbound\http\static
+creating build\lib\okto_nexus\adapters\inbound\http\static\assets
+copying src\okto_nexus\adapters\inbound\http\static\assets\index-9KQzd25g.js -> build\lib\okto_nexus\adapters\inbound\http\static\assets
+copying src\okto_nexus\adapters\inbound\http\static\assets\index-BBPbiFRo.js -> build\lib\okto_nexus\adapters\inbound\http\static\assets
+copying src\okto_nexus\adapters\inbound\http\static\assets\index-CXDVfp6I.css -> build\lib\okto_nexus\adapters\inbound\http\static\assets
+copying src\okto_nexus\adapters\inbound\http\static\assets\index-DlAmqHcP.css -> build\lib\okto_nexus\adapters\inbound\http\static\assets
+copying src\okto_nexus\adapters\inbound\http\static\assets\index-DTt0-V6O.js -> build\lib\okto_nexus\adapters\inbound\http\static\assets
+creating build\lib\okto_nexus\adapters\inbound\http\static\logos
+copying src\okto_nexus\adapters\inbound\http\static\logos\nexus-icon.svg -> build\lib\okto_nexus\adapters\inbound\http\static\logos
+copying src\okto_nexus\adapters\inbound\http\static\logos\nexus-wordmark-dark.svg -> build\lib\okto_nexus\adapters\inbound\http\static\logos
+copying src\okto_nexus\adapters\inbound\http\static\logos\nexus-wordmark-light.svg -> build\lib\okto_nexus\adapters\inbound\http\static\logos
+copying src\okto_nexus\adapters\inbound\http\static\logos\oktolabs-icon.svg -> build\lib\okto_nexus\adapters\inbound\http\static\logos
+copying src\okto_nexus\adapters\inbound\http\LICENSE.txt -> build\lib\okto_nexus\adapters\inbound\http
+copying src\okto_nexus\adapters\inbound\cli\banner.txt -> build\lib\okto_nexus\adapters\inbound\cli
+creating build\lib\okto_nexus\adapters\outbound\tokenizer\_encodings
+copying src\okto_nexus\adapters\outbound\tokenizer\_encodings\fb374d419588a4632f3f557e76b4b70aebbca790 -> build\lib\okto_nexus\adapters\outbound\tokenizer\_encodings
+installing to build\bdist.win-amd64\wheel
+running install
+running install_lib
+creating build\bdist.win-amd64\wheel
+creating build\bdist.win-amd64\wheel\okto_nexus
+creating build\bdist.win-amd64\wheel\okto_nexus\adapters
+creating build\bdist.win-amd64\wheel\okto_nexus\adapters\inbound
+creating build\bdist.win-amd64\wheel\okto_nexus\adapters\inbound\cli
+copying build\lib\okto_nexus\adapters\inbound\cli\admin.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\cli
+copying build\lib\okto_nexus\adapters\inbound\cli\banner.txt -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\cli
+copying build\lib\okto_nexus\adapters\inbound\cli\harness_orphan_watchdog.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\cli
+copying build\lib\okto_nexus\adapters\inbound\cli\main.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\cli
+copying build\lib\okto_nexus\adapters\inbound\cli\mcp_config_migration.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\cli
+copying build\lib\okto_nexus\adapters\inbound\cli\provider_credentials.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\cli
+copying build\lib\okto_nexus\adapters\inbound\cli\runtime_server.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\cli
+copying build\lib\okto_nexus\adapters\inbound\cli\serve.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\cli
+copying build\lib\okto_nexus\adapters\inbound\cli\server_shutdown.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\cli
+copying build\lib\okto_nexus\adapters\inbound\cli\tail.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\cli
+copying build\lib\okto_nexus\adapters\inbound\cli\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\cli
+creating build\bdist.win-amd64\wheel\okto_nexus\adapters\inbound\http
+copying build\lib\okto_nexus\adapters\inbound\http\app.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\http
+copying build\lib\okto_nexus\adapters\inbound\http\connections.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\http
+copying build\lib\okto_nexus\adapters\inbound\http\connections_v1.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\http
+copying build\lib\okto_nexus\adapters\inbound\http\executor_link.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\http
+copying build\lib\okto_nexus\adapters\inbound\http\identity_ctx.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\http
+copying build\lib\okto_nexus\adapters\inbound\http\LICENSE.txt -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\http
+copying build\lib\okto_nexus\adapters\inbound\http\lock.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\http
+copying build\lib\okto_nexus\adapters\inbound\http\native_actions_v1.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\http
+copying build\lib\okto_nexus\adapters\inbound\http\routes.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\http
+copying build\lib\okto_nexus\adapters\inbound\http\runtime_v1.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\http
+creating build\bdist.win-amd64\wheel\okto_nexus\adapters\inbound\http\static
+creating build\bdist.win-amd64\wheel\okto_nexus\adapters\inbound\http\static\assets
+copying build\lib\okto_nexus\adapters\inbound\http\static\assets\index-9KQzd25g.js -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\http\static\assets
+copying build\lib\okto_nexus\adapters\inbound\http\static\assets\index-BBPbiFRo.js -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\http\static\assets
+copying build\lib\okto_nexus\adapters\inbound\http\static\assets\index-CXDVfp6I.css -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\http\static\assets
+copying build\lib\okto_nexus\adapters\inbound\http\static\assets\index-DlAmqHcP.css -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\http\static\assets
+copying build\lib\okto_nexus\adapters\inbound\http\static\assets\index-DTt0-V6O.js -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\http\static\assets
+copying build\lib\okto_nexus\adapters\inbound\http\static\index.html -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\http\static
+creating build\bdist.win-amd64\wheel\okto_nexus\adapters\inbound\http\static\logos
+copying build\lib\okto_nexus\adapters\inbound\http\static\logos\nexus-icon.svg -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\http\static\logos
+copying build\lib\okto_nexus\adapters\inbound\http\static\logos\nexus-wordmark-dark.svg -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\http\static\logos
+copying build\lib\okto_nexus\adapters\inbound\http\static\logos\nexus-wordmark-light.svg -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\http\static\logos
+copying build\lib\okto_nexus\adapters\inbound\http\static\logos\oktolabs-icon.svg -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\http\static\logos
+copying build\lib\okto_nexus\adapters\inbound\http\stream.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\http
+copying build\lib\okto_nexus\adapters\inbound\http\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\http
+creating build\bdist.win-amd64\wheel\okto_nexus\adapters\inbound\mcp
+copying build\lib\okto_nexus\adapters\inbound\mcp\connection_gate.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\mcp
+copying build\lib\okto_nexus\adapters\inbound\mcp\projection.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\mcp
+copying build\lib\okto_nexus\adapters\inbound\mcp\registration.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\mcp
+copying build\lib\okto_nexus\adapters\inbound\mcp\resources.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\mcp
+copying build\lib\okto_nexus\adapters\inbound\mcp\resources_docs.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\mcp
+copying build\lib\okto_nexus\adapters\inbound\mcp\server.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\mcp
+copying build\lib\okto_nexus\adapters\inbound\mcp\surface_metrics.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\mcp
+creating build\bdist.win-amd64\wheel\okto_nexus\adapters\inbound\mcp\tools
+copying build\lib\okto_nexus\adapters\inbound\mcp\tools\artifacts.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\mcp\tools
+copying build\lib\okto_nexus\adapters\inbound\mcp\tools\events.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\mcp\tools
+copying build\lib\okto_nexus\adapters\inbound\mcp\tools\guardrails.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\mcp\tools
+copying build\lib\okto_nexus\adapters\inbound\mcp\tools\handoff.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\mcp\tools
+copying build\lib\okto_nexus\adapters\inbound\mcp\tools\harness.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\mcp\tools
+copying build\lib\okto_nexus\adapters\inbound\mcp\tools\health.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\mcp\tools
+copying build\lib\okto_nexus\adapters\inbound\mcp\tools\identity.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\mcp\tools
+copying build\lib\okto_nexus\adapters\inbound\mcp\tools\inbox.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\mcp\tools
+copying build\lib\okto_nexus\adapters\inbound\mcp\tools\memory.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\mcp\tools
+copying build\lib\okto_nexus\adapters\inbound\mcp\tools\messages.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\mcp\tools
+copying build\lib\okto_nexus\adapters\inbound\mcp\tools\poll_tokens.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\mcp\tools
+copying build\lib\okto_nexus\adapters\inbound\mcp\tools\shared_md.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\mcp\tools
+copying build\lib\okto_nexus\adapters\inbound\mcp\tools\tags.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\mcp\tools
+copying build\lib\okto_nexus\adapters\inbound\mcp\tools\_guardrails.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\mcp\tools
+copying build\lib\okto_nexus\adapters\inbound\mcp\tools\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\mcp\tools
+copying build\lib\okto_nexus\adapters\inbound\mcp\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound\mcp
+copying build\lib\okto_nexus\adapters\inbound\runtime_admin.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound
+copying build\lib\okto_nexus\adapters\inbound\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\inbound
+creating build\bdist.win-amd64\wheel\okto_nexus\adapters\outbound
+copying build\lib\okto_nexus\adapters\outbound\clock.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound
+creating build\bdist.win-amd64\wheel\okto_nexus\adapters\outbound\embedding
+copying build\lib\okto_nexus\adapters\outbound\embedding\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\embedding
+creating build\bdist.win-amd64\wheel\okto_nexus\adapters\outbound\execution
+copying build\lib\okto_nexus\adapters\outbound\execution\core_inventory.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\execution
+copying build\lib\okto_nexus\adapters\outbound\execution\core_native_actions.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\execution
+copying build\lib\okto_nexus\adapters\outbound\execution\embedded.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\execution
+copying build\lib\okto_nexus\adapters\outbound\execution\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\execution
+creating build\bdist.win-amd64\wheel\okto_nexus\adapters\outbound\file
+copying build\lib\okto_nexus\adapters\outbound\file\artifacts.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\file
+copying build\lib\okto_nexus\adapters\outbound\file\store.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\file
+copying build\lib\okto_nexus\adapters\outbound\file\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\file
+creating build\bdist.win-amd64\wheel\okto_nexus\adapters\outbound\harness
+copying build\lib\okto_nexus\adapters\outbound\harness\claude_code_attach.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\harness
+copying build\lib\okto_nexus\adapters\outbound\harness\claude_code_stream.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\harness
+copying build\lib\okto_nexus\adapters\outbound\harness\codex.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\harness
+copying build\lib\okto_nexus\adapters\outbound\harness\compatibility.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\harness
+copying build\lib\okto_nexus\adapters\outbound\harness\envelope.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\harness
+copying build\lib\okto_nexus\adapters\outbound\harness\environment.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\harness
+copying build\lib\okto_nexus\adapters\outbound\harness\event_buffers.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\harness
+copying build\lib\okto_nexus\adapters\outbound\harness\event_journal.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\harness
+copying build\lib\okto_nexus\adapters\outbound\harness\framing.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\harness
+copying build\lib\okto_nexus\adapters\outbound\harness\linux_process.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\harness
+copying build\lib\okto_nexus\adapters\outbound\harness\linux_process_guardian.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\harness
+copying build\lib\okto_nexus\adapters\outbound\harness\owned_process.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\harness
+copying build\lib\okto_nexus\adapters\outbound\harness\pi.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\harness
+copying build\lib\okto_nexus\adapters\outbound\harness\qualified.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\harness
+copying build\lib\okto_nexus\adapters\outbound\harness\secret_redaction.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\harness
+copying build\lib\okto_nexus\adapters\outbound\harness\subscribers.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\harness
+copying build\lib\okto_nexus\adapters\outbound\harness\windows_process.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\harness
+copying build\lib\okto_nexus\adapters\outbound\harness\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\harness
+copying build\lib\okto_nexus\adapters\outbound\inbox_notifier.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound
+copying build\lib\okto_nexus\adapters\outbound\provider_vault.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound
+copying build\lib\okto_nexus\adapters\outbound\runtime_owner_client.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound
+copying build\lib\okto_nexus\adapters\outbound\runtime_wake.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound
+creating build\bdist.win-amd64\wheel\okto_nexus\adapters\outbound\sharedmd
+copying build\lib\okto_nexus\adapters\outbound\sharedmd\renderer.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sharedmd
+copying build\lib\okto_nexus\adapters\outbound\sharedmd\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sharedmd
+creating build\bdist.win-amd64\wheel\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\approvals_repo.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\artifacts_repo.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\capability_catalog_repo.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\comm_preset_repo.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\connection.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\embeddings_repo.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\endpoints_repo.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\events_repo.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\execution_agent_revisions.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\execution_dispatch_ownership.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\execution_identity.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\execution_leases.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\execution_legacy_migration.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\execution_migration_resume.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\execution_native_actions.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\execution_receipts.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\execution_tickets.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\execution_workspace.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\governance_repo.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\guardrails_repo.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\handoff_repo.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\harness_repo.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\identity_repo.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\memory_repo.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\messages_repo.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\migrations.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\migration_backup.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\observability_repo.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\permissions_repo.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\policy_repo.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\poll_tokens_repo.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\runtime_commands_repo.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\runtime_grants_repo.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\runtime_journal_repo.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\runtime_observations_repo.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\runtime_outbox_repo.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\runtime_requests_repo.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\tag_catalog_repo.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+copying build\lib\okto_nexus\adapters\outbound\sqlite\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\sqlite
+creating build\bdist.win-amd64\wheel\okto_nexus\adapters\outbound\telemetry
+copying build\lib\okto_nexus\adapters\outbound\telemetry\event_emitter.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\telemetry
+copying build\lib\okto_nexus\adapters\outbound\telemetry\http_sender.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\telemetry
+copying build\lib\okto_nexus\adapters\outbound\telemetry\local_store.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\telemetry
+copying build\lib\okto_nexus\adapters\outbound\telemetry\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\telemetry
+creating build\bdist.win-amd64\wheel\okto_nexus\adapters\outbound\tokenizer
+creating build\bdist.win-amd64\wheel\okto_nexus\adapters\outbound\tokenizer\_encodings
+copying build\lib\okto_nexus\adapters\outbound\tokenizer\_encodings\fb374d419588a4632f3f557e76b4b70aebbca790 -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\tokenizer\_encodings
+copying build\lib\okto_nexus\adapters\outbound\tokenizer\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound\tokenizer
+copying build\lib\okto_nexus\adapters\outbound\waiter.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound
+copying build\lib\okto_nexus\adapters\outbound\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters\outbound
+copying build\lib\okto_nexus\adapters\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus\adapters
+creating build\bdist.win-amd64\wheel\okto_nexus\application
+copying build\lib\okto_nexus\application\adapter_registry.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\agent_connections.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\approvals.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\artifacts.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\auth.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\capabilities.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\comm_preset_catalog.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\connection_policy.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\endpoints.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\events.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_admission.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_binding_approvals.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_binding_migration.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_binding_proposals.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_binding_replacement.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_boot_authority.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_capabilities.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_capacity.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_connection_discovery.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_connection_keys.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_dispatch.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_dispatch_pump.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_domain_delivery.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_events.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_initial_turns.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_intents.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_leases.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_local_launch.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_local_realizations.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_native_actions.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_native_decisions.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_native_requests.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_realizations.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_reconciliation.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_results.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_semantics.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_session_reuse.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_session_views.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_tools.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\execution_tool_claims.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\executor_inventory.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\executor_inventory_views.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\governance.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\guardrails.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\guardrail_admin.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\handoff.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\harness_supervisor.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\health.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\identity.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\inbox.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\memory.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\messages.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\observability.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\permissions.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\policy_catalog.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\poll_tokens.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\ports.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\replay.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\retention.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\runtime_access.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\runtime_admission_fence.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\runtime_authorization.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\runtime_boot.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\runtime_bootstrap.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\runtime_causality.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\runtime_command_dispatcher.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\runtime_control.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\runtime_delivery.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\runtime_discovery.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\runtime_dispatcher.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\runtime_event_ingress.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\runtime_external_work.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\runtime_lifecycle.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\runtime_maintenance.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\runtime_native_approvals.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\runtime_observations.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\runtime_open.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\runtime_operation_maintenance.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\runtime_requirements.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\runtime_results.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\runtime_shutdown.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\runtime_work.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\search.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\settings.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\shared_md.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\tags.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+creating build\bdist.win-amd64\wheel\okto_nexus\application\telemetry
+copying build\lib\okto_nexus\application\telemetry\ports.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application\telemetry
+copying build\lib\okto_nexus\application\telemetry\schema.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application\telemetry
+copying build\lib\okto_nexus\application\telemetry\service.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application\telemetry
+copying build\lib\okto_nexus\application\telemetry\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application\telemetry
+copying build\lib\okto_nexus\application\workspace_analytics.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\workspace_overview.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+copying build\lib\okto_nexus\application\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus\application
+creating build\bdist.win-amd64\wheel\okto_nexus\bootstrap
+copying build\lib\okto_nexus\bootstrap\database_backup.py -> build\bdist.win-amd64\wheel\.\okto_nexus\bootstrap
+copying build\lib\okto_nexus\bootstrap\dependencies.py -> build\bdist.win-amd64\wheel\.\okto_nexus\bootstrap
+copying build\lib\okto_nexus\bootstrap\embedded_dispatch.py -> build\bdist.win-amd64\wheel\.\okto_nexus\bootstrap
+copying build\lib\okto_nexus\bootstrap\embedded_events.py -> build\bdist.win-amd64\wheel\.\okto_nexus\bootstrap
+copying build\lib\okto_nexus\bootstrap\embedded_inventory.py -> build\bdist.win-amd64\wheel\.\okto_nexus\bootstrap
+copying build\lib\okto_nexus\bootstrap\embedded_reconciliation.py -> build\bdist.win-amd64\wheel\.\okto_nexus\bootstrap
+copying build\lib\okto_nexus\bootstrap\embedded_tools.py -> build\bdist.win-amd64\wheel\.\okto_nexus\bootstrap
+copying build\lib\okto_nexus\bootstrap\execution_authority.py -> build\bdist.win-amd64\wheel\.\okto_nexus\bootstrap
+copying build\lib\okto_nexus\bootstrap\execution_compat.py -> build\bdist.win-amd64\wheel\.\okto_nexus\bootstrap
+copying build\lib\okto_nexus\bootstrap\execution_migration.py -> build\bdist.win-amd64\wheel\.\okto_nexus\bootstrap
+copying build\lib\okto_nexus\bootstrap\local_discovery.py -> build\bdist.win-amd64\wheel\.\okto_nexus\bootstrap
+copying build\lib\okto_nexus\bootstrap\local_mcp_home.py -> build\bdist.win-amd64\wheel\.\okto_nexus\bootstrap
+copying build\lib\okto_nexus\bootstrap\runtime_host.py -> build\bdist.win-amd64\wheel\.\okto_nexus\bootstrap
+copying build\lib\okto_nexus\bootstrap\server_shutdown.py -> build\bdist.win-amd64\wheel\.\okto_nexus\bootstrap
+copying build\lib\okto_nexus\bootstrap\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus\bootstrap
+copying build\lib\okto_nexus\config.py -> build\bdist.win-amd64\wheel\.\okto_nexus
+creating build\bdist.win-amd64\wheel\okto_nexus\domain
+copying build\lib\okto_nexus\domain\approvals.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\artifacts.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\base.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\comm_preset.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\delivery.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\endpoints.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\events.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+creating build\bdist.win-amd64\wheel\okto_nexus\domain\execution
+copying build\lib\okto_nexus\domain\execution\keys.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain\execution
+copying build\lib\okto_nexus\domain\execution\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain\execution
+copying build\lib\okto_nexus\domain\execution_diagnostics.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\execution_principal.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\governance.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\guardrails.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\handoff.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\harness.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\health.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\ids.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\inbox.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\keys.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\memory.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\messages.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\models.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\native_inputs.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\permissions.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\policy.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\poll_tokens.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\replay.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\routing.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\runtime_commands.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\runtime_context.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\tag_selector.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\targets.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\trace.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\domain\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus\domain
+copying build\lib\okto_nexus\envelope.py -> build\bdist.win-amd64\wheel\.\okto_nexus
+copying build\lib\okto_nexus\errors.py -> build\bdist.win-amd64\wheel\.\okto_nexus
+creating build\bdist.win-amd64\wheel\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\001_core.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\002_session_close.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\003_handoff_payload.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\004_agent_last_seen.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\005_message_deliveries.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\006_inbox_delivery_hardening.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\007_session_secret.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\008_handoff_result.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\009_agent_keys.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\010_settings.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\011_permissions.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\012_message_embeddings.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\013_agent_tags.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\014_capability_names.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\015_trace_id.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\016_governance.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\017_approvals.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\018_handoff_verification.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\019_handoff_dependencies.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\020_memories.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\021_health_indexes.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\022_policies.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\023_communication_presets.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\024_agent_color.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\025_guardrails_and_agent_groups.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\026_ephemeral_poll_tokens.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\027_guardrail_capability_scope.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\028_external_artifact_storage.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\029_harness_sessions_and_events.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\030_agent_runtime_endpoints.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\031_runtime_execution_grants.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\032_runtime_delivery_outbox.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\033_runtime_event_journal.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\034_runtime_event_origin.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\035_runtime_attempt_correlation.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\036_runtime_result_output.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\037_runtime_recovery_boundary.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\038_runtime_start_reservations.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\039_runtime_boot_and_reconciliation.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\040_runtime_command_intents.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\041_runtime_result_publication.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\042_runtime_result_artifacts.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\043_runtime_result_maintenance.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\044_handoff_claim_epoch.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\045_runtime_handoff_bindings.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\046_handoff_authorization_receipts.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\047_runtime_work_outcomes.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\048_runtime_native_approvals.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\049_runtime_native_input_responses.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\050_runtime_causality.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\051_runtime_result_relay.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\052_runtime_relay_decisions.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\053_runtime_configuration_audit.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\054_runtime_operation_reconciliation.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\055_runtime_handoff_recovery.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\056_runtime_compatibility_observations.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\057_runtime_writer_contract.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\058_runtime_delivery_capacity.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\059_runtime_delivery_attempt_history.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\060_runtime_safe_retry_deadlines.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\061_runtime_fallback_binding.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\062_runtime_capture_admission.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\063_runtime_context_observations.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\064_runtime_external_work.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\065_agent_connections.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\066_execution_r4_expand.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\067_execution_agent_revisions.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\068_execution_receipt_provenance.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\069_execution_ticket_requests.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\070_execution_realization_requests.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\071_execution_binding_proposal_payload.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\072_execution_binding_apply_requests.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\073_execution_intent_source_guard.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\074_execution_dispatch_reservations.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\075_execution_control_lanes.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\076_execution_lease_application.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\077_execution_binding_operator_proof.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\078_execution_open_bootstrap.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\079_execution_dispatch_owner.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\080_execution_session_capability_requests.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\081_execution_tool_claims.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\082_execution_native_actions.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\083_execution_local_realizations.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\084_execution_local_publications.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\085_execution_local_streams.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\086_execution_local_tool_credentials.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\087_execution_native_requests.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\088_execution_native_decision_cas.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\089_execution_session_reuse.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\090_execution_initial_turns.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\091_execution_admission_capacity.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\092_execution_connection_key.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\093_execution_boot_authority.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\094_execution_domain_deliveries.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\095_execution_results.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+copying build\lib\okto_nexus\migrations\096_canonical_result_publication.sql -> build\bdist.win-amd64\wheel\.\okto_nexus\migrations
+creating build\bdist.win-amd64\wheel\okto_nexus\testing
+copying build\lib\okto_nexus\testing\harness.py -> build\bdist.win-amd64\wheel\.\okto_nexus\testing
+copying build\lib\okto_nexus\testing\replay.py -> build\bdist.win-amd64\wheel\.\okto_nexus\testing
+copying build\lib\okto_nexus\testing\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus\testing
+copying build\lib\okto_nexus\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus
+running install_egg_info
+Copying src\okto_nexus.egg-info to build\bdist.win-amd64\wheel\.\okto_nexus-0.2.0-py3.13.egg-info
+running install_scripts
+creating build\bdist.win-amd64\wheel\okto_nexus-0.2.0.dist-info\WHEEL
+creating 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-result-publication-ltnvryh0\\dist\\.tmp-a4_tae5v\\okto_nexus-0.2.0-py3-none-any.whl' and adding 'build\\bdist.win-amd64\\wheel' to it
+adding 'okto_nexus/__init__.py'
+adding 'okto_nexus/config.py'
+adding 'okto_nexus/envelope.py'
+adding 'okto_nexus/errors.py'
+adding 'okto_nexus/adapters/__init__.py'
+adding 'okto_nexus/adapters/inbound/__init__.py'
+adding 'okto_nexus/adapters/inbound/runtime_admin.py'
+adding 'okto_nexus/adapters/inbound/cli/__init__.py'
+adding 'okto_nexus/adapters/inbound/cli/admin.py'
+adding 'okto_nexus/adapters/inbound/cli/banner.txt'
+adding 'okto_nexus/adapters/inbound/cli/harness_orphan_watchdog.py'
+adding 'okto_nexus/adapters/inbound/cli/main.py'
+adding 'okto_nexus/adapters/inbound/cli/mcp_config_migration.py'
+adding 'okto_nexus/adapters/inbound/cli/provider_credentials.py'
+adding 'okto_nexus/adapters/inbound/cli/runtime_server.py'
+adding 'okto_nexus/adapters/inbound/cli/serve.py'
+adding 'okto_nexus/adapters/inbound/cli/server_shutdown.py'
+adding 'okto_nexus/adapters/inbound/cli/tail.py'
+adding 'okto_nexus/adapters/inbound/http/LICENSE.txt'
+adding 'okto_nexus/adapters/inbound/http/__init__.py'
+adding 'okto_nexus/adapters/inbound/http/app.py'
+adding 'okto_nexus/adapters/inbound/http/connections.py'
+adding 'okto_nexus/adapters/inbound/http/connections_v1.py'
+adding 'okto_nexus/adapters/inbound/http/executor_link.py'
+adding 'okto_nexus/adapters/inbound/http/identity_ctx.py'
+adding 'okto_nexus/adapters/inbound/http/lock.py'
+adding 'okto_nexus/adapters/inbound/http/native_actions_v1.py'
+adding 'okto_nexus/adapters/inbound/http/routes.py'
+adding 'okto_nexus/adapters/inbound/http/runtime_v1.py'
+adding 'okto_nexus/adapters/inbound/http/stream.py'
+adding 'okto_nexus/adapters/inbound/http/static/index.html'
+adding 'okto_nexus/adapters/inbound/http/static/assets/index-9KQzd25g.js'
+adding 'okto_nexus/adapters/inbound/http/static/assets/index-BBPbiFRo.js'
+adding 'okto_nexus/adapters/inbound/http/static/assets/index-CXDVfp6I.css'
+adding 'okto_nexus/adapters/inbound/http/static/assets/index-DTt0-V6O.js'
+adding 'okto_nexus/adapters/inbound/http/static/assets/index-DlAmqHcP.css'
+adding 'okto_nexus/adapters/inbound/http/static/logos/nexus-icon.svg'
+adding 'okto_nexus/adapters/inbound/http/static/logos/nexus-wordmark-dark.svg'
+adding 'okto_nexus/adapters/inbound/http/static/logos/nexus-wordmark-light.svg'
+adding 'okto_nexus/adapters/inbound/http/static/logos/oktolabs-icon.svg'
+adding 'okto_nexus/adapters/inbound/mcp/__init__.py'
+adding 'okto_nexus/adapters/inbound/mcp/connection_gate.py'
+adding 'okto_nexus/adapters/inbound/mcp/projection.py'
+adding 'okto_nexus/adapters/inbound/mcp/registration.py'
+adding 'okto_nexus/adapters/inbound/mcp/resources.py'
+adding 'okto_nexus/adapters/inbound/mcp/resources_docs.py'
+adding 'okto_nexus/adapters/inbound/mcp/server.py'
+adding 'okto_nexus/adapters/inbound/mcp/surface_metrics.py'
+adding 'okto_nexus/adapters/inbound/mcp/tools/__init__.py'
+adding 'okto_nexus/adapters/inbound/mcp/tools/_guardrails.py'
+adding 'okto_nexus/adapters/inbound/mcp/tools/artifacts.py'
+adding 'okto_nexus/adapters/inbound/mcp/tools/events.py'
+adding 'okto_nexus/adapters/inbound/mcp/tools/guardrails.py'
+adding 'okto_nexus/adapters/inbound/mcp/tools/handoff.py'
+adding 'okto_nexus/adapters/inbound/mcp/tools/harness.py'
+adding 'okto_nexus/adapters/inbound/mcp/tools/health.py'
+adding 'okto_nexus/adapters/inbound/mcp/tools/identity.py'
+adding 'okto_nexus/adapters/inbound/mcp/tools/inbox.py'
+adding 'okto_nexus/adapters/inbound/mcp/tools/memory.py'
+adding 'okto_nexus/adapters/inbound/mcp/tools/messages.py'
+adding 'okto_nexus/adapters/inbound/mcp/tools/poll_tokens.py'
+adding 'okto_nexus/adapters/inbound/mcp/tools/shared_md.py'
+adding 'okto_nexus/adapters/inbound/mcp/tools/tags.py'
+adding 'okto_nexus/adapters/outbound/__init__.py'
+adding 'okto_nexus/adapters/outbound/clock.py'
+adding 'okto_nexus/adapters/outbound/inbox_notifier.py'
+adding 'okto_nexus/adapters/outbound/provider_vault.py'
+adding 'okto_nexus/adapters/outbound/runtime_owner_client.py'
+adding 'okto_nexus/adapters/outbound/runtime_wake.py'
+adding 'okto_nexus/adapters/outbound/waiter.py'
+adding 'okto_nexus/adapters/outbound/embedding/__init__.py'
+adding 'okto_nexus/adapters/outbound/execution/__init__.py'
+adding 'okto_nexus/adapters/outbound/execution/core_inventory.py'
+adding 'okto_nexus/adapters/outbound/execution/core_native_actions.py'
+adding 'okto_nexus/adapters/outbound/execution/embedded.py'
+adding 'okto_nexus/adapters/outbound/file/__init__.py'
+adding 'okto_nexus/adapters/outbound/file/artifacts.py'
+adding 'okto_nexus/adapters/outbound/file/store.py'
+adding 'okto_nexus/adapters/outbound/harness/__init__.py'
+adding 'okto_nexus/adapters/outbound/harness/claude_code_attach.py'
+adding 'okto_nexus/adapters/outbound/harness/claude_code_stream.py'
+adding 'okto_nexus/adapters/outbound/harness/codex.py'
+adding 'okto_nexus/adapters/outbound/harness/compatibility.py'
+adding 'okto_nexus/adapters/outbound/harness/envelope.py'
+adding 'okto_nexus/adapters/outbound/harness/environment.py'
+adding 'okto_nexus/adapters/outbound/harness/event_buffers.py'
+adding 'okto_nexus/adapters/outbound/harness/event_journal.py'
+adding 'okto_nexus/adapters/outbound/harness/framing.py'
+adding 'okto_nexus/adapters/outbound/harness/linux_process.py'
+adding 'okto_nexus/adapters/outbound/harness/linux_process_guardian.py'
+adding 'okto_nexus/adapters/outbound/harness/owned_process.py'
+adding 'okto_nexus/adapters/outbound/harness/pi.py'
+adding 'okto_nexus/adapters/outbound/harness/qualified.py'
+adding 'okto_nexus/adapters/outbound/harness/secret_redaction.py'
+adding 'okto_nexus/adapters/outbound/harness/subscribers.py'
+adding 'okto_nexus/adapters/outbound/harness/windows_process.py'
+adding 'okto_nexus/adapters/outbound/sharedmd/__init__.py'
+adding 'okto_nexus/adapters/outbound/sharedmd/renderer.py'
+adding 'okto_nexus/adapters/outbound/sqlite/__init__.py'
+adding 'okto_nexus/adapters/outbound/sqlite/approvals_repo.py'
+adding 'okto_nexus/adapters/outbound/sqlite/artifacts_repo.py'
+adding 'okto_nexus/adapters/outbound/sqlite/capability_catalog_repo.py'
+adding 'okto_nexus/adapters/outbound/sqlite/comm_preset_repo.py'
+adding 'okto_nexus/adapters/outbound/sqlite/connection.py'
+adding 'okto_nexus/adapters/outbound/sqlite/embeddings_repo.py'
+adding 'okto_nexus/adapters/outbound/sqlite/endpoints_repo.py'
+adding 'okto_nexus/adapters/outbound/sqlite/events_repo.py'
+adding 'okto_nexus/adapters/outbound/sqlite/execution_agent_revisions.py'
+adding 'okto_nexus/adapters/outbound/sqlite/execution_dispatch_ownership.py'
+adding 'okto_nexus/adapters/outbound/sqlite/execution_identity.py'
+adding 'okto_nexus/adapters/outbound/sqlite/execution_leases.py'
+adding 'okto_nexus/adapters/outbound/sqlite/execution_legacy_migration.py'
+adding 'okto_nexus/adapters/outbound/sqlite/execution_migration_resume.py'
+adding 'okto_nexus/adapters/outbound/sqlite/execution_native_actions.py'
+adding 'okto_nexus/adapters/outbound/sqlite/execution_receipts.py'
+adding 'okto_nexus/adapters/outbound/sqlite/execution_tickets.py'
+adding 'okto_nexus/adapters/outbound/sqlite/execution_workspace.py'
+adding 'okto_nexus/adapters/outbound/sqlite/governance_repo.py'
+adding 'okto_nexus/adapters/outbound/sqlite/guardrails_repo.py'
+adding 'okto_nexus/adapters/outbound/sqlite/handoff_repo.py'
+adding 'okto_nexus/adapters/outbound/sqlite/harness_repo.py'
+adding 'okto_nexus/adapters/outbound/sqlite/identity_repo.py'
+adding 'okto_nexus/adapters/outbound/sqlite/memory_repo.py'
+adding 'okto_nexus/adapters/outbound/sqlite/messages_repo.py'
+adding 'okto_nexus/adapters/outbound/sqlite/migration_backup.py'
+adding 'okto_nexus/adapters/outbound/sqlite/migrations.py'
+adding 'okto_nexus/adapters/outbound/sqlite/observability_repo.py'
+adding 'okto_nexus/adapters/outbound/sqlite/permissions_repo.py'
+adding 'okto_nexus/adapters/outbound/sqlite/policy_repo.py'
+adding 'okto_nexus/adapters/outbound/sqlite/poll_tokens_repo.py'
+adding 'okto_nexus/adapters/outbound/sqlite/runtime_commands_repo.py'
+adding 'okto_nexus/adapters/outbound/sqlite/runtime_grants_repo.py'
+adding 'okto_nexus/adapters/outbound/sqlite/runtime_journal_repo.py'
+adding 'okto_nexus/adapters/outbound/sqlite/runtime_observations_repo.py'
+adding 'okto_nexus/adapters/outbound/sqlite/runtime_outbox_repo.py'
+adding 'okto_nexus/adapters/outbound/sqlite/runtime_requests_repo.py'
+adding 'okto_nexus/adapters/outbound/sqlite/tag_catalog_repo.py'
+adding 'okto_nexus/adapters/outbound/telemetry/__init__.py'
+adding 'okto_nexus/adapters/outbound/telemetry/event_emitter.py'
+adding 'okto_nexus/adapters/outbound/telemetry/http_sender.py'
+adding 'okto_nexus/adapters/outbound/telemetry/local_store.py'
+adding 'okto_nexus/adapters/outbound/tokenizer/__init__.py'
+adding 'okto_nexus/adapters/outbound/tokenizer/_encodings/fb374d419588a4632f3f557e76b4b70aebbca790'
+adding 'okto_nexus/application/__init__.py'
+adding 'okto_nexus/application/adapter_registry.py'
+adding 'okto_nexus/application/agent_connections.py'
+adding 'okto_nexus/application/approvals.py'
+adding 'okto_nexus/application/artifacts.py'
+adding 'okto_nexus/application/auth.py'
+adding 'okto_nexus/application/capabilities.py'
+adding 'okto_nexus/application/comm_preset_catalog.py'
+adding 'okto_nexus/application/connection_policy.py'
+adding 'okto_nexus/application/endpoints.py'
+adding 'okto_nexus/application/events.py'
+adding 'okto_nexus/application/execution_admission.py'
+adding 'okto_nexus/application/execution_binding_approvals.py'
+adding 'okto_nexus/application/execution_binding_migration.py'
+adding 'okto_nexus/application/execution_binding_proposals.py'
+adding 'okto_nexus/application/execution_binding_replacement.py'
+adding 'okto_nexus/application/execution_boot_authority.py'
+adding 'okto_nexus/application/execution_capabilities.py'
+adding 'okto_nexus/application/execution_capacity.py'
+adding 'okto_nexus/application/execution_connection_discovery.py'
+adding 'okto_nexus/application/execution_connection_keys.py'
+adding 'okto_nexus/application/execution_dispatch.py'
+adding 'okto_nexus/application/execution_dispatch_pump.py'
+adding 'okto_nexus/application/execution_domain_delivery.py'
+adding 'okto_nexus/application/execution_events.py'
+adding 'okto_nexus/application/execution_initial_turns.py'
+adding 'okto_nexus/application/execution_intents.py'
+adding 'okto_nexus/application/execution_leases.py'
+adding 'okto_nexus/application/execution_local_launch.py'
+adding 'okto_nexus/application/execution_local_realizations.py'
+adding 'okto_nexus/application/execution_native_actions.py'
+adding 'okto_nexus/application/execution_native_decisions.py'
+adding 'okto_nexus/application/execution_native_requests.py'
+adding 'okto_nexus/application/execution_realizations.py'
+adding 'okto_nexus/application/execution_reconciliation.py'
+adding 'okto_nexus/application/execution_results.py'
+adding 'okto_nexus/application/execution_semantics.py'
+adding 'okto_nexus/application/execution_session_reuse.py'
+adding 'okto_nexus/application/execution_session_views.py'
+adding 'okto_nexus/application/execution_tool_claims.py'
+adding 'okto_nexus/application/execution_tools.py'
+adding 'okto_nexus/application/executor_inventory.py'
+adding 'okto_nexus/application/executor_inventory_views.py'
+adding 'okto_nexus/application/governance.py'
+adding 'okto_nexus/application/guardrail_admin.py'
+adding 'okto_nexus/application/guardrails.py'
+adding 'okto_nexus/application/handoff.py'
+adding 'okto_nexus/application/harness_supervisor.py'
+adding 'okto_nexus/application/health.py'
+adding 'okto_nexus/application/identity.py'
+adding 'okto_nexus/application/inbox.py'
+adding 'okto_nexus/application/memory.py'
+adding 'okto_nexus/application/messages.py'
+adding 'okto_nexus/application/observability.py'
+adding 'okto_nexus/application/permissions.py'
+adding 'okto_nexus/application/policy_catalog.py'
+adding 'okto_nexus/application/poll_tokens.py'
+adding 'okto_nexus/application/ports.py'
+adding 'okto_nexus/application/replay.py'
+adding 'okto_nexus/application/retention.py'
+adding 'okto_nexus/application/runtime_access.py'
+adding 'okto_nexus/application/runtime_admission_fence.py'
+adding 'okto_nexus/application/runtime_authorization.py'
+adding 'okto_nexus/application/runtime_boot.py'
+adding 'okto_nexus/application/runtime_bootstrap.py'
+adding 'okto_nexus/application/runtime_causality.py'
+adding 'okto_nexus/application/runtime_command_dispatcher.py'
+adding 'okto_nexus/application/runtime_control.py'
+adding 'okto_nexus/application/runtime_delivery.py'
+adding 'okto_nexus/application/runtime_discovery.py'
+adding 'okto_nexus/application/runtime_dispatcher.py'
+adding 'okto_nexus/application/runtime_event_ingress.py'
+adding 'okto_nexus/application/runtime_external_work.py'
+adding 'okto_nexus/application/runtime_lifecycle.py'
+adding 'okto_nexus/application/runtime_maintenance.py'
+adding 'okto_nexus/application/runtime_native_approvals.py'
+adding 'okto_nexus/application/runtime_observations.py'
+adding 'okto_nexus/application/runtime_open.py'
+adding 'okto_nexus/application/runtime_operation_maintenance.py'
+adding 'okto_nexus/application/runtime_requirements.py'
+adding 'okto_nexus/application/runtime_results.py'
+adding 'okto_nexus/application/runtime_shutdown.py'
+adding 'okto_nexus/application/runtime_work.py'
+adding 'okto_nexus/application/search.py'
+adding 'okto_nexus/application/settings.py'
+adding 'okto_nexus/application/shared_md.py'
+adding 'okto_nexus/application/tags.py'
+adding 'okto_nexus/application/workspace_analytics.py'
+adding 'okto_nexus/application/workspace_overview.py'
+adding 'okto_nexus/application/telemetry/__init__.py'
+adding 'okto_nexus/application/telemetry/ports.py'
+adding 'okto_nexus/application/telemetry/schema.py'
+adding 'okto_nexus/application/telemetry/service.py'
+adding 'okto_nexus/bootstrap/__init__.py'
+adding 'okto_nexus/bootstrap/database_backup.py'
+adding 'okto_nexus/bootstrap/dependencies.py'
+adding 'okto_nexus/bootstrap/embedded_dispatch.py'
+adding 'okto_nexus/bootstrap/embedded_events.py'
+adding 'okto_nexus/bootstrap/embedded_inventory.py'
+adding 'okto_nexus/bootstrap/embedded_reconciliation.py'
+adding 'okto_nexus/bootstrap/embedded_tools.py'
+adding 'okto_nexus/bootstrap/execution_authority.py'
+adding 'okto_nexus/bootstrap/execution_compat.py'
+adding 'okto_nexus/bootstrap/execution_migration.py'
+adding 'okto_nexus/bootstrap/local_discovery.py'
+adding 'okto_nexus/bootstrap/local_mcp_home.py'
+adding 'okto_nexus/bootstrap/runtime_host.py'
+adding 'okto_nexus/bootstrap/server_shutdown.py'
+adding 'okto_nexus/domain/__init__.py'
+adding 'okto_nexus/domain/approvals.py'
+adding 'okto_nexus/domain/artifacts.py'
+adding 'okto_nexus/domain/base.py'
+adding 'okto_nexus/domain/comm_preset.py'
+adding 'okto_nexus/domain/delivery.py'
+adding 'okto_nexus/domain/endpoints.py'
+adding 'okto_nexus/domain/events.py'
+adding 'okto_nexus/domain/execution_diagnostics.py'
+adding 'okto_nexus/domain/execution_principal.py'
+adding 'okto_nexus/domain/governance.py'
+adding 'okto_nexus/domain/guardrails.py'
+adding 'okto_nexus/domain/handoff.py'
+adding 'okto_nexus/domain/harness.py'
+adding 'okto_nexus/domain/health.py'
+adding 'okto_nexus/domain/ids.py'
+adding 'okto_nexus/domain/inbox.py'
+adding 'okto_nexus/domain/keys.py'
+adding 'okto_nexus/domain/memory.py'
+adding 'okto_nexus/domain/messages.py'
+adding 'okto_nexus/domain/models.py'
+adding 'okto_nexus/domain/native_inputs.py'
+adding 'okto_nexus/domain/permissions.py'
+adding 'okto_nexus/domain/policy.py'
+adding 'okto_nexus/domain/poll_tokens.py'
+adding 'okto_nexus/domain/replay.py'
+adding 'okto_nexus/domain/routing.py'
+adding 'okto_nexus/domain/runtime_commands.py'
+adding 'okto_nexus/domain/runtime_context.py'
+adding 'okto_nexus/domain/tag_selector.py'
+adding 'okto_nexus/domain/targets.py'
+adding 'okto_nexus/domain/trace.py'
+adding 'okto_nexus/domain/execution/__init__.py'
+adding 'okto_nexus/domain/execution/keys.py'
+adding 'okto_nexus/migrations/001_core.sql'
+adding 'okto_nexus/migrations/002_session_close.sql'
+adding 'okto_nexus/migrations/003_handoff_payload.sql'
+adding 'okto_nexus/migrations/004_agent_last_seen.sql'
+adding 'okto_nexus/migrations/005_message_deliveries.sql'
+adding 'okto_nexus/migrations/006_inbox_delivery_hardening.sql'
+adding 'okto_nexus/migrations/007_session_secret.sql'
+adding 'okto_nexus/migrations/008_handoff_result.sql'
+adding 'okto_nexus/migrations/009_agent_keys.sql'
+adding 'okto_nexus/migrations/010_settings.sql'
+adding 'okto_nexus/migrations/011_permissions.sql'
+adding 'okto_nexus/migrations/012_message_embeddings.sql'
+adding 'okto_nexus/migrations/013_agent_tags.sql'
+adding 'okto_nexus/migrations/014_capability_names.sql'
+adding 'okto_nexus/migrations/015_trace_id.sql'
+adding 'okto_nexus/migrations/016_governance.sql'
+adding 'okto_nexus/migrations/017_approvals.sql'
+adding 'okto_nexus/migrations/018_handoff_verification.sql'
+adding 'okto_nexus/migrations/019_handoff_dependencies.sql'
+adding 'okto_nexus/migrations/020_memories.sql'
+adding 'okto_nexus/migrations/021_health_indexes.sql'
+adding 'okto_nexus/migrations/022_policies.sql'
+adding 'okto_nexus/migrations/023_communication_presets.sql'
+adding 'okto_nexus/migrations/024_agent_color.sql'
+adding 'okto_nexus/migrations/025_guardrails_and_agent_groups.sql'
+adding 'okto_nexus/migrations/026_ephemeral_poll_tokens.sql'
+adding 'okto_nexus/migrations/027_guardrail_capability_scope.sql'
+adding 'okto_nexus/migrations/028_external_artifact_storage.sql'
+adding 'okto_nexus/migrations/029_harness_sessions_and_events.sql'
+adding 'okto_nexus/migrations/030_agent_runtime_endpoints.sql'
+adding 'okto_nexus/migrations/031_runtime_execution_grants.sql'
+adding 'okto_nexus/migrations/032_runtime_delivery_outbox.sql'
+adding 'okto_nexus/migrations/033_runtime_event_journal.sql'
+adding 'okto_nexus/migrations/034_runtime_event_origin.sql'
+adding 'okto_nexus/migrations/035_runtime_attempt_correlation.sql'
+adding 'okto_nexus/migrations/036_runtime_result_output.sql'
+adding 'okto_nexus/migrations/037_runtime_recovery_boundary.sql'
+adding 'okto_nexus/migrations/038_runtime_start_reservations.sql'
+adding 'okto_nexus/migrations/039_runtime_boot_and_reconciliation.sql'
+adding 'okto_nexus/migrations/040_runtime_command_intents.sql'
+adding 'okto_nexus/migrations/041_runtime_result_publication.sql'
+adding 'okto_nexus/migrations/042_runtime_result_artifacts.sql'
+adding 'okto_nexus/migrations/043_runtime_result_maintenance.sql'
+adding 'okto_nexus/migrations/044_handoff_claim_epoch.sql'
+adding 'okto_nexus/migrations/045_runtime_handoff_bindings.sql'
+adding 'okto_nexus/migrations/046_handoff_authorization_receipts.sql'
+adding 'okto_nexus/migrations/047_runtime_work_outcomes.sql'
+adding 'okto_nexus/migrations/048_runtime_native_approvals.sql'
+adding 'okto_nexus/migrations/049_runtime_native_input_responses.sql'
+adding 'okto_nexus/migrations/050_runtime_causality.sql'
+adding 'okto_nexus/migrations/051_runtime_result_relay.sql'
+adding 'okto_nexus/migrations/052_runtime_relay_decisions.sql'
+adding 'okto_nexus/migrations/053_runtime_configuration_audit.sql'
+adding 'okto_nexus/migrations/054_runtime_operation_reconciliation.sql'
+adding 'okto_nexus/migrations/055_runtime_handoff_recovery.sql'
+adding 'okto_nexus/migrations/056_runtime_compatibility_observations.sql'
+adding 'okto_nexus/migrations/057_runtime_writer_contract.sql'
+adding 'okto_nexus/migrations/058_runtime_delivery_capacity.sql'
+adding 'okto_nexus/migrations/059_runtime_delivery_attempt_history.sql'
+adding 'okto_nexus/migrations/060_runtime_safe_retry_deadlines.sql'
+adding 'okto_nexus/migrations/061_runtime_fallback_binding.sql'
+adding 'okto_nexus/migrations/062_runtime_capture_admission.sql'
+adding 'okto_nexus/migrations/063_runtime_context_observations.sql'
+adding 'okto_nexus/migrations/064_runtime_external_work.sql'
+adding 'okto_nexus/migrations/065_agent_connections.sql'
+adding 'okto_nexus/migrations/066_execution_r4_expand.sql'
+adding 'okto_nexus/migrations/067_execution_agent_revisions.sql'
+adding 'okto_nexus/migrations/068_execution_receipt_provenance.sql'
+adding 'okto_nexus/migrations/069_execution_ticket_requests.sql'
+adding 'okto_nexus/migrations/070_execution_realization_requests.sql'
+adding 'okto_nexus/migrations/071_execution_binding_proposal_payload.sql'
+adding 'okto_nexus/migrations/072_execution_binding_apply_requests.sql'
+adding 'okto_nexus/migrations/073_execution_intent_source_guard.sql'
+adding 'okto_nexus/migrations/074_execution_dispatch_reservations.sql'
+adding 'okto_nexus/migrations/075_execution_control_lanes.sql'
+adding 'okto_nexus/migrations/076_execution_lease_application.sql'
+adding 'okto_nexus/migrations/077_execution_binding_operator_proof.sql'
+adding 'okto_nexus/migrations/078_execution_open_bootstrap.sql'
+adding 'okto_nexus/migrations/079_execution_dispatch_owner.sql'
+adding 'okto_nexus/migrations/080_execution_session_capability_requests.sql'
+adding 'okto_nexus/migrations/081_execution_tool_claims.sql'
+adding 'okto_nexus/migrations/082_execution_native_actions.sql'
+adding 'okto_nexus/migrations/083_execution_local_realizations.sql'
+adding 'okto_nexus/migrations/084_execution_local_publications.sql'
+adding 'okto_nexus/migrations/085_execution_local_streams.sql'
+adding 'okto_nexus/migrations/086_execution_local_tool_credentials.sql'
+adding 'okto_nexus/migrations/087_execution_native_requests.sql'
+adding 'okto_nexus/migrations/088_execution_native_decision_cas.sql'
+adding 'okto_nexus/migrations/089_execution_session_reuse.sql'
+adding 'okto_nexus/migrations/090_execution_initial_turns.sql'
+adding 'okto_nexus/migrations/091_execution_admission_capacity.sql'
+adding 'okto_nexus/migrations/092_execution_connection_key.sql'
+adding 'okto_nexus/migrations/093_execution_boot_authority.sql'
+adding 'okto_nexus/migrations/094_execution_domain_deliveries.sql'
+adding 'okto_nexus/migrations/095_execution_results.sql'
+adding 'okto_nexus/migrations/096_canonical_result_publication.sql'
+adding 'okto_nexus/testing/__init__.py'
+adding 'okto_nexus/testing/harness.py'
+adding 'okto_nexus/testing/replay.py'
+adding 'okto_nexus-0.2.0.dist-info/licenses/LICENSE'
+adding 'okto_nexus-0.2.0.dist-info/METADATA'
+adding 'okto_nexus-0.2.0.dist-info/WHEEL'
+adding 'okto_nexus-0.2.0.dist-info/entry_points.txt'
+adding 'okto_nexus-0.2.0.dist-info/top_level.txt'
+adding 'okto_nexus-0.2.0.dist-info/RECORD'
+removing build\bdist.win-amd64\wheel
+Successfully built C:\Users\jpamb\AppData\Local\Temp\okto-r4-result-publication-ltnvryh0\dist\okto_nexus-0.2.0-py3-none-any.whl

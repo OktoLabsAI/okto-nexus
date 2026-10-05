@@ -1,0 +1,135 @@
+{
+  "recorded_at": "2026-09-30T07:43:13.000302+00:00",
+  "scope": "Partial M04/M06 owned Server WSS dispatch integration; no product gate",
+  "parent_and_dependency_commits": {
+    "nexus": "550d9894ffa4fa6e8baeb16f3b82b1502a2ba26d",
+    "connector": "40a8cb07c183e000813afc63138270d77647a3a0",
+    "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
+  },
+  "source_sha256": {
+    "src/okto_nexus/application/execution_dispatch.py": "5df1b29778ac990b2ec7159e099896bf7eb521a9f6626122a233c298f0c22a51",
+    "src/okto_nexus/application/execution_dispatch_pump.py": "8df22fa5f6c83194fdd9f1ca7a1860953fef475ca7a7cdc372dff460a1ba1abb",
+    "src/okto_nexus/adapters/inbound/http/executor_link.py": "e29d87455aa81267c8f6592e1f4092e046683d18ea6de21b956cea6510c4c0f5",
+    "src/okto_nexus/adapters/outbound/sqlite/execution_dispatch_ownership.py": "a1903c6227c3be75ddd1f23e6caf96678977c5e8585c9ffd4712d0ad293b56d9",
+    "src/okto_nexus/adapters/outbound/sqlite/execution_receipts.py": "975f7d7fd48d624bc538a65ced7c8e2b18877149d4c36a0b9f659f4af2efb303",
+    "src/okto_nexus/migrations/079_execution_dispatch_owner.sql": "881006246e7dbd5efeb9fce848b17c73968c69b6e7ad69e40b7ddecbb8101242",
+    "tests/execution_r4/test_ns02.py": "8c1def181bcd9f11e21392f56bda4c4aa5349e8182ad916beabf38fe918d2e9a",
+    "tests/execution_r4/test_ns02_receipts.py": "d805840fc2f0a9ddb36144b2c462a75e252c134ab00641bc22173c0cc94404fd",
+    "tests/execution_r4/test_ns09.py": "1d0dcddc8e65fa321be4954e13c8d25704b563a6d3934552cff45dd83b49ebab",
+    "tests/execution_r4/test_dispatch_pump.py": "77acc7819c3e5a71532dd4e7ba70d39d08ad296a9830ab446018830021163f96",
+    "tests/execution_r4/test_public_open_bootstrap.py": "6359c4dc33a5138a6caaa1ed7e372061a6cef1607dd655787a16a9e65c9f534f"
+  },
+  "runs": [
+    {
+      "file": "plans/r4_execution/evidence/dispatch-pump-installed.xml",
+      "sha256": "ba9fce4a09bd12344529fc293897ce588003d77100ebe6f1f492c4640f85f130",
+      "tests": 70,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "file": "plans/r4_execution/evidence/dispatch-pump-lifecycle.xml",
+      "sha256": "9fb24751bf986a5c32d25bd7c4eaaa93d9dadc26ee77817e1acc5e070b631789",
+      "tests": 6,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "file": "plans/r4_execution/evidence/dispatch-pump-migrations.xml",
+      "sha256": "b1a183cabd0bba4dd666e8aeb661cc02ba1397638229449ca9bcb70d8826b99e",
+      "tests": 7,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "file": "plans/r4_execution/evidence/dispatch-pump-ownership-final.xml",
+      "sha256": "16ac7efebf4e7eab9d42137458b8236a28f93f335602dbe4d2fd1acbff11ccd6",
+      "tests": 4,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "file": "plans/r4_execution/evidence/dispatch-pump-ownership.xml",
+      "sha256": "91384f46880a33aaddd4106bf776e1391048c9ce49d4a240e679fed2ef065f6b",
+      "tests": 4,
+      "errors": 0,
+      "failures": 3,
+      "skipped": 0
+    },
+    {
+      "file": "plans/r4_execution/evidence/dispatch-pump-public-five-actions.xml",
+      "sha256": "bad64f074ae89bb22c18737dad15b4db881ae75a04efb96614936c5f4cc0e9be",
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "file": "plans/r4_execution/evidence/dispatch-pump-public.xml",
+      "sha256": "f80f5d4c9b58a9a82a520b8881cfcdc8864109d3500f1a464b6a20a4775faa44",
+      "tests": 5,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "file": "plans/r4_execution/evidence/dispatch-pump-receipts-final.xml",
+      "sha256": "dd0330f8836ce1852906682fd13ba194d7a91fc0169a0113d00291bdba38a523",
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "file": "plans/r4_execution/evidence/dispatch-pump-source-final.xml",
+      "sha256": "7b961e7d3f46e52b626f399a47918822ab902f1ffe96bd72bce5c40c6d5b8568",
+      "tests": 102,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "file": "plans/r4_execution/evidence/dispatch-pump-source.xml",
+      "sha256": "519f1aa7981b4666d477d3a56084214b8fda4d6e2ecf1fed6ac5a4ac4d274171",
+      "tests": 102,
+      "errors": 0,
+      "failures": 1,
+      "skipped": 0
+    }
+  ],
+  "source_commands": [
+    "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/execution_r4 -q --tb=short --junitxml=plans/r4_execution/evidence/dispatch-pump-source-final.xml",
+    "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/test_migrations.py -q --tb=short --junitxml=plans/r4_execution/evidence/dispatch-pump-migrations.xml"
+  ],
+  "installed_command": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/okto-dispatch-pump-installed-6_g6gb59/Scripts/python.exe -I -X utf8 -c '\nimport hashlib,json,zipfile,platform,sys,os\nfrom pathlib import Path\nimport pytest,okto_nexus,okto_nexus_connector,nexus_connector_core\nroot=Path(\"D:/Projetos/Techridy/okto_labs_okto_nexus\")\nconnector=root.parent/\"okto-nexus-connector\"\nreport={}\nassert not os.environ.get(\"OKTO_CONNECTOR_SRC\")\nfor module,wheel,source in [\n(okto_nexus,Path(\"C:/Users/jpamb/AppData/Local/Temp/okto-dispatch-pump-wheel-fwgjf64l/okto_nexus-0.2.0-py3-none-any.whl\"),root/\"src\"),\n(okto_nexus_connector,Path(\"C:/Users/jpamb/AppData/Local/Temp/okto-r4-delegated-binding-clean/okto_nexus_connector-0.5.0.dev0-py3-none-any.whl\"),connector/\"src\"),\n(nexus_connector_core,root/\"vendor/wheels/nexus_connector_core-0.2.28.dev0-py3-none-any.whl\",None)]:\n    package=Path(module.__file__).resolve().parent\n    assert \"site-packages\" in package.parts\n    files={}\n    with zipfile.ZipFile(wheel) as archive:\n        for name in archive.namelist():\n            if not name.startswith(module.__name__+\"/\") or name.endswith(\"/\"): continue\n            expected=archive.read(name)\n            assert (package/name.split(\"/\",1)[1]).read_bytes()==expected,name\n            if source is not None: assert (source/name).read_bytes()==expected,name\n            files[name]=hashlib.sha256(expected).hexdigest()\n    report[module.__name__]={\"installed_path\":str(package),\"wheel\":str(wheel),\"wheel_sha256\":hashlib.sha256(wheel.read_bytes()).hexdigest(),\"files_sha256\":files}\nreport.update({\"python\":sys.version,\"platform\":platform.platform(),\"isolated\":bool(sys.flags.isolated),\n\"scope\":\"Installed opening bootstrap, public binding/grant/admission, WSS lease, Core synthetic native peer, negative authority and migration cases; no product gate\",\n\"frontend\":\"Pre-existing workspace assets packaged unchanged; no UI qualification\"})\n(root/\"plans/r4_execution/evidence/dispatch-pump-installed-modules.json\").write_text(json.dumps(report,indent=2)+\"\\n\",encoding=\"utf-8\")\nfiles=[\"test_dispatch_pump.py\",\"test_ns02_receipts.py\",\"test_ns08.py\",\"test_ns10.py\",\"test_canonical_controls.py\",\"test_public_open_bootstrap.py\",\"test_open_bootstrap.py\",\"test_ns09.py\",\"test_ns06.py\",\"test_ns02.py\",\"test_binding_operator.py\",\"test_ns01.py::test_basic_bootstrap_does_not_import_optional_core\"]\nargs=[\"-c\",\"pytest.ini\",\"--rootdir=\"+str(root/\"tests\"),\"--confcutdir=\"+str(root/\"tests\"),\"-o\",\"asyncio_mode=auto\"]\nargs += [str(root/\"tests/execution_r4\"/name) for name in files]\nargs += [\"-q\",\"--tb=short\",\"--junitxml=\"+str(root/\"plans/r4_execution/evidence/dispatch-pump-installed.xml\")]\nraise SystemExit(pytest.main(args))\n'",
+  "installed_cwd": "C:/Users/jpamb/AppData/Local/Temp/okto-r4-canonical-installed",
+  "nexus_build": {
+    "stage": "C:/Users/jpamb/AppData/Local/Temp/okto-dispatch-pump-build-msmhqqfz",
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-dispatch-pump-wheel-fwgjf64l\\okto_nexus-0.2.0-py3-none-any.whl",
+    "sha256": "405d2d37ff94616069c50ee8fff6d86a36c872b33c159aa63a30bb1f337cf64e",
+    "build_install_manifest": "plans/r4_execution/evidence/dispatch-pump-build-install.json",
+    "build_install_manifest_sha256": "343d8aa4ab6e44a331132e4c28316d09a75d723b3b1828ab1d1b34c82290887e"
+  },
+  "fresh_environment": "C:/Users/jpamb/AppData/Local/Temp/okto-dispatch-pump-installed-6_g6gb59",
+  "installed_modules_manifest_sha256": "cb067f6ddbe0e5e258448513581ecd2e7e3bae74c68a7f9f885fbbaf0a96edbc",
+  "core_wheel_sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c",
+  "failure_analysis": [
+    "Three ownership tests initially required an unavailable asyncio plugin; converted to the existing asyncio.run pattern, then all four passed.",
+    "First full R4 run: 101 passed, one failed due to a stale possible_effect=False assertion for SENDING without receipt. Corrected to possible_effect=True/retry_safe=False; targeted rerun and all 102 source cases passed."
+  ],
+  "limitations": [
+    "Public integration uses the actual Server WSS pump and HTTP onboarding/admission, but readiness qualification, native peer, and physical root mapping remain test controlled.",
+    "Connector lease helper is exercised; production daemon, reader multiplexer, StateStore, physical realization resolver, and embedded owner composition remain pending.",
+    "Nonempty reconciliation remains RECOVERING and never blindly resends; full reconciliation and WSS receipt ingress remain pending.",
+    "Only five runtime actions are integrated by this journey; approval/input require canonical governance composition.",
+    "Production resource limits, watchdog, total shutdown budget and storage hang supervision remain unqualified.",
+    "Legacy ownerless reservations are not automatically released.",
+    "Campaigns overlap; do not sum counts as unique acceptance coverage.",
+    "Pre-existing frontend assets are packaged unchanged without UI qualification.",
+    "No native provider, Linux, independent-host or final release gate qualification is claimed."
+  ]
+}

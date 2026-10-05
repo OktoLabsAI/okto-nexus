@@ -68,7 +68,7 @@ from typing import Any, Callable, TextIO
 from okto_nexus.application.events import EventService
 from okto_nexus.errors import ErrorCode, OktoNexusError
 
-from ..mcp.server import bootstrap
+from okto_nexus.bootstrap.dependencies import bootstrap
 from ..mcp.tools.events import build_service
 
 #: ``--from`` sentinel: follow only events appended AFTER the stream's current end.

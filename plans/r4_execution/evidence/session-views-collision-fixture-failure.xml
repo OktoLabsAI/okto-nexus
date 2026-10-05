@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="5.532" timestamp="2026-10-01T03:37:55.571239-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_session_views" name="test_session_id_collision_requires_executor_selection" time="3.925"><failure message="sqlite3.IntegrityError: UNIQUE constraint failed: execution_workspace_bindings.server_id, execution_workspace_bindings.workspace_binding_id">tests\execution_r4\test_session_views.py:92: in test_session_id_collision_requires_executor_selection
+    copy("execution_workspace_bindings", "executor_id=?", (opened["scope"]["executor_id"],), executor_id=other)
+tests\execution_r4\test_session_views.py:89: in copy
+    conn.execute("INSERT INTO " + table + "(" + ",".join(row) + ") VALUES (" +
+E   sqlite3.IntegrityError: UNIQUE constraint failed: execution_workspace_bindings.server_id, execution_workspace_bindings.workspace_binding_id</failure></testcase></testsuite></testsuites>

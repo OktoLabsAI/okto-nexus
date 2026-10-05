@@ -1,0 +1,613 @@
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - setuptools>=68
+  - wheel
+* Getting build dependencies for wheel...
+running egg_info
+creating src\nexus_connector_core.egg-info
+writing src\nexus_connector_core.egg-info\PKG-INFO
+writing dependency_links to src\nexus_connector_core.egg-info\dependency_links.txt
+writing requirements to src\nexus_connector_core.egg-info\requires.txt
+writing top-level names to src\nexus_connector_core.egg-info\top_level.txt
+writing manifest file 'src\nexus_connector_core.egg-info\SOURCES.txt'
+reading manifest file 'src\nexus_connector_core.egg-info\SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+warning: no files found matching '*.md' under directory 'docs'
+adding license file 'LICENSE'
+writing manifest file 'src\nexus_connector_core.egg-info\SOURCES.txt'
+* Building wheel...
+running bdist_wheel
+running build
+running build_py
+creating build\lib\nexus_connector_core
+copying src\nexus_connector_core\approval_reducer_r4.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\availability.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\build_identity.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\catalog.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\clock.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\close_operation.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\close_runtime.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\composition.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\config_document.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\config_persistence.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\conformance.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\control_reducer_r4.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\decision_bridge_r4.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\discovery.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\environment.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\event_reducer.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\event_reducer_r4.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\executor_inventory.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\frame_codec.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\frame_codec_r4.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\harness_config.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\identifiers.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\installation.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\inventory_reducer.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\journal.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\kernel.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\lease_reducer.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\lease_reducer_r4.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\lease_runtime_r4.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\models.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\native_action_bridge.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\native_action_socket.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\offloop.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\pi_extension_resource.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\ports.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\profiles.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\protocol.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\receipt_binding_r4.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\receipt_bridge_r4.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\receipt_reducer.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\receipt_reducer_r4.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\resource_release_r4.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\runtime.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\slot_ledger.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\targeting.py -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\__init__.py -> build\lib\nexus_connector_core
+creating build\lib\nexus_connector_core\contracts
+copying src\nexus_connector_core\contracts\__init__.py -> build\lib\nexus_connector_core\contracts
+creating build\lib\nexus_connector_core\native
+copying src\nexus_connector_core\native\adapter_types.py -> build\lib\nexus_connector_core\native
+copying src\nexus_connector_core\native\event_buffers.py -> build\lib\nexus_connector_core\native
+copying src\nexus_connector_core\native\event_ingest.py -> build\lib\nexus_connector_core\native
+copying src\nexus_connector_core\native\framing.py -> build\lib\nexus_connector_core\native
+copying src\nexus_connector_core\native\jsonl.py -> build\lib\nexus_connector_core\native
+copying src\nexus_connector_core\native\legacy_environment.py -> build\lib\nexus_connector_core\native
+copying src\nexus_connector_core\native\native_inputs.py -> build\lib\nexus_connector_core\native
+copying src\nexus_connector_core\native\redaction.py -> build\lib\nexus_connector_core\native
+copying src\nexus_connector_core\native\registry.py -> build\lib\nexus_connector_core\native
+copying src\nexus_connector_core\native\runtime_bridge.py -> build\lib\nexus_connector_core\native
+copying src\nexus_connector_core\native\__init__.py -> build\lib\nexus_connector_core\native
+creating build\lib\nexus_connector_core\testing
+copying src\nexus_connector_core\testing\journal_conformance.py -> build\lib\nexus_connector_core\testing
+copying src\nexus_connector_core\testing\slot_ledger_conformance.py -> build\lib\nexus_connector_core\testing
+copying src\nexus_connector_core\testing\__init__.py -> build\lib\nexus_connector_core\testing
+creating build\lib\nexus_connector_core\contracts\nxl
+copying src\nexus_connector_core\contracts\nxl\__init__.py -> build\lib\nexus_connector_core\contracts\nxl
+creating build\lib\nexus_connector_core\contracts\nxl\r4
+copying src\nexus_connector_core\contracts\nxl\r4\__init__.py -> build\lib\nexus_connector_core\contracts\nxl\r4
+creating build\lib\nexus_connector_core\contracts\nxl\v1
+copying src\nexus_connector_core\contracts\nxl\v1\__init__.py -> build\lib\nexus_connector_core\contracts\nxl\v1
+creating build\lib\nexus_connector_core\native\adapters
+copying src\nexus_connector_core\native\adapters\claude_code_attach.py -> build\lib\nexus_connector_core\native\adapters
+copying src\nexus_connector_core\native\adapters\claude_code_stream.py -> build\lib\nexus_connector_core\native\adapters
+copying src\nexus_connector_core\native\adapters\codex.py -> build\lib\nexus_connector_core\native\adapters
+copying src\nexus_connector_core\native\adapters\compatibility.py -> build\lib\nexus_connector_core\native\adapters
+copying src\nexus_connector_core\native\adapters\pi.py -> build\lib\nexus_connector_core\native\adapters
+copying src\nexus_connector_core\native\adapters\__init__.py -> build\lib\nexus_connector_core\native\adapters
+creating build\lib\nexus_connector_core\native\process
+copying src\nexus_connector_core\native\process\birth.py -> build\lib\nexus_connector_core\native\process
+copying src\nexus_connector_core\native\process\linux_process.py -> build\lib\nexus_connector_core\native\process
+copying src\nexus_connector_core\native\process\linux_process_guardian.py -> build\lib\nexus_connector_core\native\process
+copying src\nexus_connector_core\native\process\preflight.py -> build\lib\nexus_connector_core\native\process
+copying src\nexus_connector_core\native\process\windows_process.py -> build\lib\nexus_connector_core\native\process
+copying src\nexus_connector_core\native\process\__init__.py -> build\lib\nexus_connector_core\native\process
+running egg_info
+writing src\nexus_connector_core.egg-info\PKG-INFO
+writing dependency_links to src\nexus_connector_core.egg-info\dependency_links.txt
+writing requirements to src\nexus_connector_core.egg-info\requires.txt
+writing top-level names to src\nexus_connector_core.egg-info\top_level.txt
+reading manifest file 'src\nexus_connector_core.egg-info\SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+warning: no files found matching '*.md' under directory 'docs'
+adding license file 'LICENSE'
+writing manifest file 'src\nexus_connector_core.egg-info\SOURCES.txt'
+copying src\nexus_connector_core\py.typed -> build\lib\nexus_connector_core
+copying src\nexus_connector_core\contracts\nxl\v1\capability.schema.json -> build\lib\nexus_connector_core\contracts\nxl\v1
+copying src\nexus_connector_core\contracts\nxl\v1\error.schema.json -> build\lib\nexus_connector_core\contracts\nxl\v1
+copying src\nexus_connector_core\contracts\nxl\v1\event.schema.json -> build\lib\nexus_connector_core\contracts\nxl\v1
+copying src\nexus_connector_core\contracts\nxl\v1\fixtures.json -> build\lib\nexus_connector_core\contracts\nxl\v1
+copying src\nexus_connector_core\contracts\nxl\v1\frame.schema.json -> build\lib\nexus_connector_core\contracts\nxl\v1
+copying src\nexus_connector_core\contracts\nxl\v1\hash-vectors.json -> build\lib\nexus_connector_core\contracts\nxl\v1
+copying src\nexus_connector_core\contracts\nxl\v1\http-response.schema.json -> build\lib\nexus_connector_core\contracts\nxl\v1
+copying src\nexus_connector_core\contracts\nxl\v1\intent.schema.json -> build\lib\nexus_connector_core\contracts\nxl\v1
+copying src\nexus_connector_core\contracts\nxl\v1\inventory.schema.json -> build\lib\nexus_connector_core\contracts\nxl\v1
+copying src\nexus_connector_core\contracts\nxl\v1\manifest.json -> build\lib\nexus_connector_core\contracts\nxl\v1
+copying src\nexus_connector_core\contracts\nxl\r4\frame.schema.json -> build\lib\nexus_connector_core\contracts\nxl\r4
+copying src\nexus_connector_core\contracts\nxl\r4\inventory.schema.json -> build\lib\nexus_connector_core\contracts\nxl\r4
+copying src\nexus_connector_core\contracts\nxl\r4\manifest.json -> build\lib\nexus_connector_core\contracts\nxl\r4
+copying src\nexus_connector_core\native\codex_app_server_0_157_0.schemas.json -> build\lib\nexus_connector_core\native
+creating build\lib\nexus_connector_core\pi_extension
+copying src\nexus_connector_core\pi_extension\index.js -> build\lib\nexus_connector_core\pi_extension
+copying src\nexus_connector_core\pi_extension\package.json -> build\lib\nexus_connector_core\pi_extension
+installing to build\bdist.win-amd64\wheel
+running install
+running install_lib
+creating build\bdist.win-amd64\wheel
+creating build\bdist.win-amd64\wheel\nexus_connector_core
+copying build\lib\nexus_connector_core\approval_reducer_r4.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\availability.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\build_identity.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\catalog.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\clock.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\close_operation.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\close_runtime.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\composition.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\config_document.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\config_persistence.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\conformance.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+creating build\bdist.win-amd64\wheel\nexus_connector_core\contracts
+creating build\bdist.win-amd64\wheel\nexus_connector_core\contracts\nxl
+creating build\bdist.win-amd64\wheel\nexus_connector_core\contracts\nxl\r4
+copying build\lib\nexus_connector_core\contracts\nxl\r4\frame.schema.json -> build\bdist.win-amd64\wheel\.\nexus_connector_core\contracts\nxl\r4
+copying build\lib\nexus_connector_core\contracts\nxl\r4\inventory.schema.json -> build\bdist.win-amd64\wheel\.\nexus_connector_core\contracts\nxl\r4
+copying build\lib\nexus_connector_core\contracts\nxl\r4\manifest.json -> build\bdist.win-amd64\wheel\.\nexus_connector_core\contracts\nxl\r4
+copying build\lib\nexus_connector_core\contracts\nxl\r4\__init__.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\contracts\nxl\r4
+creating build\bdist.win-amd64\wheel\nexus_connector_core\contracts\nxl\v1
+copying build\lib\nexus_connector_core\contracts\nxl\v1\capability.schema.json -> build\bdist.win-amd64\wheel\.\nexus_connector_core\contracts\nxl\v1
+copying build\lib\nexus_connector_core\contracts\nxl\v1\error.schema.json -> build\bdist.win-amd64\wheel\.\nexus_connector_core\contracts\nxl\v1
+copying build\lib\nexus_connector_core\contracts\nxl\v1\event.schema.json -> build\bdist.win-amd64\wheel\.\nexus_connector_core\contracts\nxl\v1
+copying build\lib\nexus_connector_core\contracts\nxl\v1\fixtures.json -> build\bdist.win-amd64\wheel\.\nexus_connector_core\contracts\nxl\v1
+copying build\lib\nexus_connector_core\contracts\nxl\v1\frame.schema.json -> build\bdist.win-amd64\wheel\.\nexus_connector_core\contracts\nxl\v1
+copying build\lib\nexus_connector_core\contracts\nxl\v1\hash-vectors.json -> build\bdist.win-amd64\wheel\.\nexus_connector_core\contracts\nxl\v1
+copying build\lib\nexus_connector_core\contracts\nxl\v1\http-response.schema.json -> build\bdist.win-amd64\wheel\.\nexus_connector_core\contracts\nxl\v1
+copying build\lib\nexus_connector_core\contracts\nxl\v1\intent.schema.json -> build\bdist.win-amd64\wheel\.\nexus_connector_core\contracts\nxl\v1
+copying build\lib\nexus_connector_core\contracts\nxl\v1\inventory.schema.json -> build\bdist.win-amd64\wheel\.\nexus_connector_core\contracts\nxl\v1
+copying build\lib\nexus_connector_core\contracts\nxl\v1\manifest.json -> build\bdist.win-amd64\wheel\.\nexus_connector_core\contracts\nxl\v1
+copying build\lib\nexus_connector_core\contracts\nxl\v1\__init__.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\contracts\nxl\v1
+copying build\lib\nexus_connector_core\contracts\nxl\__init__.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\contracts\nxl
+copying build\lib\nexus_connector_core\contracts\__init__.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\contracts
+copying build\lib\nexus_connector_core\control_reducer_r4.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\decision_bridge_r4.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\discovery.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\environment.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\event_reducer.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\event_reducer_r4.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\executor_inventory.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\frame_codec.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\frame_codec_r4.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\harness_config.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\identifiers.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\installation.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\inventory_reducer.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\journal.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\kernel.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\lease_reducer.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\lease_reducer_r4.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\lease_runtime_r4.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\models.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+creating build\bdist.win-amd64\wheel\nexus_connector_core\native
+creating build\bdist.win-amd64\wheel\nexus_connector_core\native\adapters
+copying build\lib\nexus_connector_core\native\adapters\claude_code_attach.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\native\adapters
+copying build\lib\nexus_connector_core\native\adapters\claude_code_stream.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\native\adapters
+copying build\lib\nexus_connector_core\native\adapters\codex.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\native\adapters
+copying build\lib\nexus_connector_core\native\adapters\compatibility.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\native\adapters
+copying build\lib\nexus_connector_core\native\adapters\pi.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\native\adapters
+copying build\lib\nexus_connector_core\native\adapters\__init__.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\native\adapters
+copying build\lib\nexus_connector_core\native\adapter_types.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\native
+copying build\lib\nexus_connector_core\native\codex_app_server_0_157_0.schemas.json -> build\bdist.win-amd64\wheel\.\nexus_connector_core\native
+copying build\lib\nexus_connector_core\native\event_buffers.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\native
+copying build\lib\nexus_connector_core\native\event_ingest.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\native
+copying build\lib\nexus_connector_core\native\framing.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\native
+copying build\lib\nexus_connector_core\native\jsonl.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\native
+copying build\lib\nexus_connector_core\native\legacy_environment.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\native
+copying build\lib\nexus_connector_core\native\native_inputs.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\native
+creating build\bdist.win-amd64\wheel\nexus_connector_core\native\process
+copying build\lib\nexus_connector_core\native\process\birth.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\native\process
+copying build\lib\nexus_connector_core\native\process\linux_process.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\native\process
+copying build\lib\nexus_connector_core\native\process\linux_process_guardian.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\native\process
+copying build\lib\nexus_connector_core\native\process\preflight.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\native\process
+copying build\lib\nexus_connector_core\native\process\windows_process.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\native\process
+copying build\lib\nexus_connector_core\native\process\__init__.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\native\process
+copying build\lib\nexus_connector_core\native\redaction.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\native
+copying build\lib\nexus_connector_core\native\registry.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\native
+copying build\lib\nexus_connector_core\native\runtime_bridge.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\native
+copying build\lib\nexus_connector_core\native\__init__.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\native
+copying build\lib\nexus_connector_core\native_action_bridge.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\native_action_socket.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\offloop.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+creating build\bdist.win-amd64\wheel\nexus_connector_core\pi_extension
+copying build\lib\nexus_connector_core\pi_extension\index.js -> build\bdist.win-amd64\wheel\.\nexus_connector_core\pi_extension
+copying build\lib\nexus_connector_core\pi_extension\package.json -> build\bdist.win-amd64\wheel\.\nexus_connector_core\pi_extension
+copying build\lib\nexus_connector_core\pi_extension_resource.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\ports.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\profiles.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\protocol.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\py.typed -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\receipt_binding_r4.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\receipt_bridge_r4.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\receipt_reducer.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\receipt_reducer_r4.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\resource_release_r4.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\runtime.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\slot_ledger.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+copying build\lib\nexus_connector_core\targeting.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+creating build\bdist.win-amd64\wheel\nexus_connector_core\testing
+copying build\lib\nexus_connector_core\testing\journal_conformance.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\testing
+copying build\lib\nexus_connector_core\testing\slot_ledger_conformance.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\testing
+copying build\lib\nexus_connector_core\testing\__init__.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core\testing
+copying build\lib\nexus_connector_core\__init__.py -> build\bdist.win-amd64\wheel\.\nexus_connector_core
+running install_egg_info
+Copying src\nexus_connector_core.egg-info to build\bdist.win-amd64\wheel\.\nexus_connector_core-0.2.39.dev0-py3.13.egg-info
+running install_scripts
+creating build\bdist.win-amd64\wheel\nexus_connector_core-0.2.39.dev0.dist-info\WHEEL
+creating 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-process-http-core-m0ysaqes\\dist\\.tmp-i6zxqdbj\\nexus_connector_core-0.2.39.dev0-py3-none-any.whl' and adding 'build\\bdist.win-amd64\\wheel' to it
+adding 'nexus_connector_core/__init__.py'
+adding 'nexus_connector_core/approval_reducer_r4.py'
+adding 'nexus_connector_core/availability.py'
+adding 'nexus_connector_core/build_identity.py'
+adding 'nexus_connector_core/catalog.py'
+adding 'nexus_connector_core/clock.py'
+adding 'nexus_connector_core/close_operation.py'
+adding 'nexus_connector_core/close_runtime.py'
+adding 'nexus_connector_core/composition.py'
+adding 'nexus_connector_core/config_document.py'
+adding 'nexus_connector_core/config_persistence.py'
+adding 'nexus_connector_core/conformance.py'
+adding 'nexus_connector_core/control_reducer_r4.py'
+adding 'nexus_connector_core/decision_bridge_r4.py'
+adding 'nexus_connector_core/discovery.py'
+adding 'nexus_connector_core/environment.py'
+adding 'nexus_connector_core/event_reducer.py'
+adding 'nexus_connector_core/event_reducer_r4.py'
+adding 'nexus_connector_core/executor_inventory.py'
+adding 'nexus_connector_core/frame_codec.py'
+adding 'nexus_connector_core/frame_codec_r4.py'
+adding 'nexus_connector_core/harness_config.py'
+adding 'nexus_connector_core/identifiers.py'
+adding 'nexus_connector_core/installation.py'
+adding 'nexus_connector_core/inventory_reducer.py'
+adding 'nexus_connector_core/journal.py'
+adding 'nexus_connector_core/kernel.py'
+adding 'nexus_connector_core/lease_reducer.py'
+adding 'nexus_connector_core/lease_reducer_r4.py'
+adding 'nexus_connector_core/lease_runtime_r4.py'
+adding 'nexus_connector_core/models.py'
+adding 'nexus_connector_core/native_action_bridge.py'
+adding 'nexus_connector_core/native_action_socket.py'
+adding 'nexus_connector_core/offloop.py'
+adding 'nexus_connector_core/pi_extension_resource.py'
+adding 'nexus_connector_core/ports.py'
+adding 'nexus_connector_core/profiles.py'
+adding 'nexus_connector_core/protocol.py'
+adding 'nexus_connector_core/py.typed'
+adding 'nexus_connector_core/receipt_binding_r4.py'
+adding 'nexus_connector_core/receipt_bridge_r4.py'
+adding 'nexus_connector_core/receipt_reducer.py'
+adding 'nexus_connector_core/receipt_reducer_r4.py'
+adding 'nexus_connector_core/resource_release_r4.py'
+adding 'nexus_connector_core/runtime.py'
+adding 'nexus_connector_core/slot_ledger.py'
+adding 'nexus_connector_core/targeting.py'
+adding 'nexus_connector_core/contracts/__init__.py'
+adding 'nexus_connector_core/contracts/nxl/__init__.py'
+adding 'nexus_connector_core/contracts/nxl/r4/__init__.py'
+adding 'nexus_connector_core/contracts/nxl/r4/frame.schema.json'
+adding 'nexus_connector_core/contracts/nxl/r4/inventory.schema.json'
+adding 'nexus_connector_core/contracts/nxl/r4/manifest.json'
+adding 'nexus_connector_core/contracts/nxl/v1/__init__.py'
+adding 'nexus_connector_core/contracts/nxl/v1/capability.schema.json'
+adding 'nexus_connector_core/contracts/nxl/v1/error.schema.json'
+adding 'nexus_connector_core/contracts/nxl/v1/event.schema.json'
+adding 'nexus_connector_core/contracts/nxl/v1/fixtures.json'
+adding 'nexus_connector_core/contracts/nxl/v1/frame.schema.json'
+adding 'nexus_connector_core/contracts/nxl/v1/hash-vectors.json'
+adding 'nexus_connector_core/contracts/nxl/v1/http-response.schema.json'
+adding 'nexus_connector_core/contracts/nxl/v1/intent.schema.json'
+adding 'nexus_connector_core/contracts/nxl/v1/inventory.schema.json'
+adding 'nexus_connector_core/contracts/nxl/v1/manifest.json'
+adding 'nexus_connector_core/native/__init__.py'
+adding 'nexus_connector_core/native/adapter_types.py'
+adding 'nexus_connector_core/native/codex_app_server_0_157_0.schemas.json'
+adding 'nexus_connector_core/native/event_buffers.py'
+adding 'nexus_connector_core/native/event_ingest.py'
+adding 'nexus_connector_core/native/framing.py'
+adding 'nexus_connector_core/native/jsonl.py'
+adding 'nexus_connector_core/native/legacy_environment.py'
+adding 'nexus_connector_core/native/native_inputs.py'
+adding 'nexus_connector_core/native/redaction.py'
+adding 'nexus_connector_core/native/registry.py'
+adding 'nexus_connector_core/native/runtime_bridge.py'
+adding 'nexus_connector_core/native/adapters/__init__.py'
+adding 'nexus_connector_core/native/adapters/claude_code_attach.py'
+adding 'nexus_connector_core/native/adapters/claude_code_stream.py'
+adding 'nexus_connector_core/native/adapters/codex.py'
+adding 'nexus_connector_core/native/adapters/compatibility.py'
+adding 'nexus_connector_core/native/adapters/pi.py'
+adding 'nexus_connector_core/native/process/__init__.py'
+adding 'nexus_connector_core/native/process/birth.py'
+adding 'nexus_connector_core/native/process/linux_process.py'
+adding 'nexus_connector_core/native/process/linux_process_guardian.py'
+adding 'nexus_connector_core/native/process/preflight.py'
+adding 'nexus_connector_core/native/process/windows_process.py'
+adding 'nexus_connector_core/pi_extension/index.js'
+adding 'nexus_connector_core/pi_extension/package.json'
+adding 'nexus_connector_core/testing/__init__.py'
+adding 'nexus_connector_core/testing/journal_conformance.py'
+adding 'nexus_connector_core/testing/slot_ledger_conformance.py'
+adding 'nexus_connector_core-0.2.39.dev0.dist-info/licenses/LICENSE'
+adding 'nexus_connector_core-0.2.39.dev0.dist-info/METADATA'
+adding 'nexus_connector_core-0.2.39.dev0.dist-info/WHEEL'
+adding 'nexus_connector_core-0.2.39.dev0.dist-info/top_level.txt'
+adding 'nexus_connector_core-0.2.39.dev0.dist-info/RECORD'
+removing build\bdist.win-amd64\wheel
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - setuptools>=68
+  - wheel
+* Getting build dependencies for sdist...
+running egg_info
+writing src\nexus_connector_core.egg-info\PKG-INFO
+writing dependency_links to src\nexus_connector_core.egg-info\dependency_links.txt
+writing requirements to src\nexus_connector_core.egg-info\requires.txt
+writing top-level names to src\nexus_connector_core.egg-info\top_level.txt
+reading manifest file 'src\nexus_connector_core.egg-info\SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+warning: no files found matching '*.md' under directory 'docs'
+adding license file 'LICENSE'
+writing manifest file 'src\nexus_connector_core.egg-info\SOURCES.txt'
+* Building sdist...
+running sdist
+running egg_info
+writing src\nexus_connector_core.egg-info\PKG-INFO
+writing dependency_links to src\nexus_connector_core.egg-info\dependency_links.txt
+writing requirements to src\nexus_connector_core.egg-info\requires.txt
+writing top-level names to src\nexus_connector_core.egg-info\top_level.txt
+reading manifest file 'src\nexus_connector_core.egg-info\SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+warning: no files found matching '*.md' under directory 'docs'
+adding license file 'LICENSE'
+writing manifest file 'src\nexus_connector_core.egg-info\SOURCES.txt'
+running check
+creating nexus_connector_core-0.2.39.dev0
+creating nexus_connector_core-0.2.39.dev0\contracts
+creating nexus_connector_core-0.2.39.dev0\contracts\specification
+creating nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+creating nexus_connector_core-0.2.39.dev0\src\nexus_connector_core.egg-info
+creating nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\contracts
+creating nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\contracts\nxl
+creating nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\contracts\nxl\r4
+creating nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\contracts\nxl\v1
+creating nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native
+creating nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native\adapters
+creating nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native\process
+creating nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\pi_extension
+creating nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\testing
+creating nexus_connector_core-0.2.39.dev0\tests
+creating nexus_connector_core-0.2.39.dev0\tests\fixtures
+creating nexus_connector_core-0.2.39.dev0\tools
+copying files to nexus_connector_core-0.2.39.dev0...
+copying LICENSE -> nexus_connector_core-0.2.39.dev0
+copying MANIFEST.in -> nexus_connector_core-0.2.39.dev0
+copying README.md -> nexus_connector_core-0.2.39.dev0
+copying pyproject.toml -> nexus_connector_core-0.2.39.dev0
+copying contracts\generate.py -> nexus_connector_core-0.2.39.dev0\contracts
+copying contracts\generate_r4.py -> nexus_connector_core-0.2.39.dev0\contracts
+copying contracts\specification\executor-inventory-baseline.json -> nexus_connector_core-0.2.39.dev0\contracts\specification
+copying contracts\specification\nxl-r4-delta.json -> nexus_connector_core-0.2.39.dev0\contracts\specification
+copying src\nexus_connector_core\__init__.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\approval_reducer_r4.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\availability.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\build_identity.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\catalog.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\clock.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\close_operation.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\close_runtime.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\composition.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\config_document.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\config_persistence.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\conformance.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\control_reducer_r4.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\decision_bridge_r4.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\discovery.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\environment.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\event_reducer.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\event_reducer_r4.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\executor_inventory.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\frame_codec.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\frame_codec_r4.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\harness_config.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\identifiers.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\installation.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\inventory_reducer.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\journal.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\kernel.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\lease_reducer.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\lease_reducer_r4.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\lease_runtime_r4.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\models.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\native_action_bridge.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\native_action_socket.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\offloop.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\pi_extension_resource.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\ports.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\profiles.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\protocol.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\py.typed -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\receipt_binding_r4.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\receipt_bridge_r4.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\receipt_reducer.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\receipt_reducer_r4.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\resource_release_r4.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\runtime.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\slot_ledger.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core\targeting.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core
+copying src\nexus_connector_core.egg-info\PKG-INFO -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core.egg-info
+copying src\nexus_connector_core.egg-info\SOURCES.txt -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core.egg-info
+copying src\nexus_connector_core.egg-info\dependency_links.txt -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core.egg-info
+copying src\nexus_connector_core.egg-info\requires.txt -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core.egg-info
+copying src\nexus_connector_core.egg-info\top_level.txt -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core.egg-info
+copying src\nexus_connector_core\contracts\__init__.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\contracts
+copying src\nexus_connector_core\contracts\nxl\__init__.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\contracts\nxl
+copying src\nexus_connector_core\contracts\nxl\r4\__init__.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\contracts\nxl\r4
+copying src\nexus_connector_core\contracts\nxl\r4\frame.schema.json -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\contracts\nxl\r4
+copying src\nexus_connector_core\contracts\nxl\r4\inventory.schema.json -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\contracts\nxl\r4
+copying src\nexus_connector_core\contracts\nxl\r4\manifest.json -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\contracts\nxl\r4
+copying src\nexus_connector_core\contracts\nxl\v1\__init__.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\contracts\nxl\v1
+copying src\nexus_connector_core\contracts\nxl\v1\capability.schema.json -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\contracts\nxl\v1
+copying src\nexus_connector_core\contracts\nxl\v1\error.schema.json -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\contracts\nxl\v1
+copying src\nexus_connector_core\contracts\nxl\v1\event.schema.json -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\contracts\nxl\v1
+copying src\nexus_connector_core\contracts\nxl\v1\fixtures.json -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\contracts\nxl\v1
+copying src\nexus_connector_core\contracts\nxl\v1\frame.schema.json -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\contracts\nxl\v1
+copying src\nexus_connector_core\contracts\nxl\v1\hash-vectors.json -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\contracts\nxl\v1
+copying src\nexus_connector_core\contracts\nxl\v1\http-response.schema.json -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\contracts\nxl\v1
+copying src\nexus_connector_core\contracts\nxl\v1\intent.schema.json -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\contracts\nxl\v1
+copying src\nexus_connector_core\contracts\nxl\v1\inventory.schema.json -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\contracts\nxl\v1
+copying src\nexus_connector_core\contracts\nxl\v1\manifest.json -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\contracts\nxl\v1
+copying src\nexus_connector_core\native\__init__.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native
+copying src\nexus_connector_core\native\adapter_types.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native
+copying src\nexus_connector_core\native\codex_app_server_0_157_0.schemas.json -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native
+copying src\nexus_connector_core\native\event_buffers.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native
+copying src\nexus_connector_core\native\event_ingest.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native
+copying src\nexus_connector_core\native\framing.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native
+copying src\nexus_connector_core\native\jsonl.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native
+copying src\nexus_connector_core\native\legacy_environment.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native
+copying src\nexus_connector_core\native\native_inputs.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native
+copying src\nexus_connector_core\native\redaction.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native
+copying src\nexus_connector_core\native\registry.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native
+copying src\nexus_connector_core\native\runtime_bridge.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native
+copying src\nexus_connector_core\native\adapters\__init__.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native\adapters
+copying src\nexus_connector_core\native\adapters\claude_code_attach.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native\adapters
+copying src\nexus_connector_core\native\adapters\claude_code_stream.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native\adapters
+copying src\nexus_connector_core\native\adapters\codex.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native\adapters
+copying src\nexus_connector_core\native\adapters\compatibility.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native\adapters
+copying src\nexus_connector_core\native\adapters\pi.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native\adapters
+copying src\nexus_connector_core\native\process\__init__.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native\process
+copying src\nexus_connector_core\native\process\birth.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native\process
+copying src\nexus_connector_core\native\process\linux_process.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native\process
+copying src\nexus_connector_core\native\process\linux_process_guardian.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native\process
+copying src\nexus_connector_core\native\process\preflight.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native\process
+copying src\nexus_connector_core\native\process\windows_process.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\native\process
+copying src\nexus_connector_core\pi_extension\index.js -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\pi_extension
+copying src\nexus_connector_core\pi_extension\package.json -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\pi_extension
+copying src\nexus_connector_core\testing\__init__.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\testing
+copying src\nexus_connector_core\testing\journal_conformance.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\testing
+copying src\nexus_connector_core\testing\slot_ledger_conformance.py -> nexus_connector_core-0.2.39.dev0\src\nexus_connector_core\testing
+copying tests\test_attach_extracted.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_bundle.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_c1_bridge_stubs.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_claude_extracted.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_close_policy.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_codex_0159_qualification.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_codex_extracted.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_codex_handshake.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_codex_resume.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_codex_toml_config.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_config_document.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_config_persistence.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_consumer_conformance.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_control_targeting.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_discovery_probe.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_environment.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_event_ingest.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_event_reducer.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_events.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_executor_inventory.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_frame_codec.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_harness_config.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_installation_slot_ledger.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_inventory_reducer.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_journal_compaction.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_journal_conformance.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_journal_crash.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_journal_disk_full.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_journal_limits.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_journal_multiprocess_fairness.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_journal_storage.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_journal_wal_bound.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_kernel.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_kernel_crash.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_lease_reducer.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_native_action_bridge.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_native_action_ownership.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_native_close_outcome.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_native_event_fairness.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_native_inline_limit.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_native_jsonl.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_native_parity.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_native_prewrite_adapters.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_native_redaction.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_native_registry.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_native_runtime_bridge.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_offline_artifacts.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_offloop_executor.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_owned_kernel_crash.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_owned_process.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_owned_slot_reservations.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_owned_slot_state.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_passive_discovery.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_pc02_containment.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_pc03_effect_guard.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_pc04_stream_loss.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_pc05_identifiers.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_pc06_composition.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_pc07_release.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_pc08_model.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_pc09_build_identity.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_pc10_pc11_discovery_preflight.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_pc14_migration.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_pi_extension_resource.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_pi_extracted.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_process_birth.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_process_birth_crash.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_process_http_configuration.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_profile_journal_admission.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_profiles.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_protocol.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_public_docs.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_r4_approval_reducer.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_r4_control_reducer.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_r4_decision_bridge.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_r4_development_bundle.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_r4_event_reducer.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_r4_lease_reducer.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_r4_native_actions.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_r4_pending_containment.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_r4_receipt_binding.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_r4_receipt_bridge.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_r4_receipt_reducer.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_r4_resource_release.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_r4_runtime_leases.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_r4_terminal_close.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_receipt_reducer.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_reconcile_validation.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_release_gate.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_release_workflow.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_runtime.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_session_claims.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_session_lease_state.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_tree_census.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\test_wheel_import_audit.py -> nexus_connector_core-0.2.39.dev0\tests
+copying tests\fixtures\claude_stream_peer.py -> nexus_connector_core-0.2.39.dev0\tests\fixtures
+copying tests\fixtures\codex_app_server_peer.py -> nexus_connector_core-0.2.39.dev0\tests\fixtures
+copying tests\fixtures\executor-inventory-v1.json -> nexus_connector_core-0.2.39.dev0\tests\fixtures
+copying tests\fixtures\journal_crash_peer.py -> nexus_connector_core-0.2.39.dev0\tests\fixtures
+copying tests\fixtures\journal_fairness_peer.py -> nexus_connector_core-0.2.39.dev0\tests\fixtures
+copying tests\fixtures\kernel_crash_peer.py -> nexus_connector_core-0.2.39.dev0\tests\fixtures
+copying tests\fixtures\owned_kernel_crash_peer.py -> nexus_connector_core-0.2.39.dev0\tests\fixtures
+copying tests\fixtures\owned_native_peer.py -> nexus_connector_core-0.2.39.dev0\tests\fixtures
+copying tests\fixtures\owned_slot_peer.py -> nexus_connector_core-0.2.39.dev0\tests\fixtures
+copying tests\fixtures\pi_rpc_ids_peer.py -> nexus_connector_core-0.2.39.dev0\tests\fixtures
+copying tests\fixtures\pi_rpc_peer.py -> nexus_connector_core-0.2.39.dev0\tests\fixtures
+copying tests\fixtures\session_claim_peer.py -> nexus_connector_core-0.2.39.dev0\tests\fixtures
+copying tools\build_artifacts.py -> nexus_connector_core-0.2.39.dev0\tools
+copying tools\consumer_smoke.py -> nexus_connector_core-0.2.39.dev0\tools
+copying tools\profile_journal_admission.py -> nexus_connector_core-0.2.39.dev0\tools
+copying tools\validate_release.py -> nexus_connector_core-0.2.39.dev0\tools
+copying tools\verify_offline_artifacts.py -> nexus_connector_core-0.2.39.dev0\tools
+Writing nexus_connector_core-0.2.39.dev0\setup.cfg
+Creating tar archive
+removing 'nexus_connector_core-0.2.39.dev0' (and everything under it)
+Successfully built nexus_connector_core-0.2.39.dev0-py3-none-any.whl and nexus_connector_core-0.2.39.dev0.tar.gz

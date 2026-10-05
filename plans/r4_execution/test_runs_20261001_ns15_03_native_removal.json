@@ -1,0 +1,98 @@
+{
+  "date": "2026-10-01",
+  "base_commit": "3735d2d",
+  "status": "PARTIAL_NS15_03_NATIVE_IMPLEMENTATION_REMOVAL",
+  "installed_unique_passed": 449,
+  "architecture_passed": 3,
+  "skipped": 81,
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-core-3msf4qiz\\dist\\nexus_connector_core-0.2.51.dev0-py3-none-any.whl",
+      "sha256": "4c4c0c58d25b93f4f08ba8515d8476ffc29d1f0a27cc577c9fccb610716d1d1c"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-connector-pmt6y5x7\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "baf837251f654ab6385f5fba4e22d1a1b69da1839e8f47752795d1518dd29fe7"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-removal-t4c3yzto\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "565fa7873c4d04d6223c4c6160e438d32a994aaa16236c3400ba5b45207f5e9a"
+    }
+  },
+  "results": {
+    "r4": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "48",
+      "time": "140.426",
+      "timestamp": "2026-10-01T20:11:21.713091-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "legacy": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "2",
+      "tests": "40",
+      "time": "118.348",
+      "timestamp": "2026-10-01T20:13:44.179127-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "architecture": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "3",
+      "time": "0.537",
+      "timestamp": "2026-10-01T20:15:44.703417-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "lifecycle": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "3",
+      "tests": "17",
+      "time": "92.962",
+      "timestamp": "2026-10-01T20:28:24.021437-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "fixtures": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "1",
+      "skipped": "76",
+      "tests": "425",
+      "time": "950.742",
+      "timestamp": "2026-10-01T20:15:25.625324-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "rollout": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "3",
+      "time": "14.621",
+      "timestamp": "2026-10-01T20:31:51.556671-03:00",
+      "hostname": "Alienware_m15"
+    }
+  },
+  "verification": "Installed packages match wheel bytes and Nexus nonstatic checkout. Clean-process import and wheel checks exclude the four retired modules and all test-only fixtures.",
+  "scope": "The four duplicate native connector implementations are absent from the Server source/package and installed wheel. Historical domain regression tests explicitly inject test-only fixtures; production execution remains in Core.",
+  "resolved_failures": [
+    [
+      "test_runtime_rollout",
+      "test_activation_does_not_replay_old_unread_and_legacy_notifications_do_not_duplicate_transport[False]"
+    ]
+  ],
+  "count_method": "Unique XML classname/name pairs across successful cases; the fixtures campaign retains its initial rollout failure, covered by the passing rollout correction campaign. Duplicate passes are counted once.",
+  "limitations": [
+    "Shared native process/framing helper separation, canonical-attempt policy, normative TR4-15-03, NS15.04 configuration/restore and final provider/platform/release gates remain pending.",
+    "Historical fixture passes do not qualify Core adapters or real providers. The 81 skips comprise 72 platform cases and 9 opt-in live-provider cases; none are counted as passes. Existing unrelated static assets are excluded from the campaign build.",
+    "Existing relay restart subprocesses load checkout source verified byte-identical to the wheel; the corrected serve launcher resolves the package under test."
+  ]
+}

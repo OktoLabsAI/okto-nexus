@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="0.612" timestamp="2026-10-01T07:35:14.833253-03:00" hostname="Alienware_m15"><testcase classname="tests.test_preexpired_lease_watcher" name="test_watcher_completes_when_lease_was_already_fenced[False]" time="0.059" /><testcase classname="tests.test_preexpired_lease_watcher" name="test_watcher_completes_when_lease_was_already_fenced[True]" time="0.055"><failure message="UnboundLocalError: cannot access local variable 'expired_event_pending' where it is not associated with a value">..\okto-nexus-connector-core\tests\test_preexpired_lease_watcher.py:37: in test_watcher_completes_when_lease_was_already_fenced
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+..\okto-nexus-connector-core\src\nexus_connector_core\runtime.py:1523: in _evict
+    await asyncio.wait_for(asyncio.shield(task),
+C:\Python313\Lib\asyncio\tasks.py:507: in wait_for
+    return await fut
+           ^^^^^^^^^
+..\okto-nexus-connector-core\src\nexus_connector_core\runtime.py:2371: in _watch_lease
+    if expired_event_pending:
+       ^^^^^^^^^^^^^^^^^^^^^
+E   UnboundLocalError: cannot access local variable 'expired_event_pending' where it is not associated with a value</failure></testcase></testsuite></testsuites>

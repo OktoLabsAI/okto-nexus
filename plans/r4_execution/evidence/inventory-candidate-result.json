@@ -1,0 +1,18 @@
+{
+  "status": "PASS_ISOLATED_CANDIDATE_NOT_APPLIED",
+  "original_defects_reproduced": [
+    "current Core wheel omitted",
+    "rename source counted as dirty status"
+  ],
+  "checks": [
+    "repeatable snapshot",
+    "unchanged HEAD",
+    "unchanged dirty status",
+    "all file bytes preserved",
+    "current Core wheel hashed",
+    "Connector and Nexus artifacts hashed",
+    "nested untracked file hashed"
+  ],
+  "candidate_sha256": "d233e47dd30e83de803e311ffaaf63e2cd78da874dc6aa8fe0b165ed8ea81b29",
+  "product_acceptance": false
+}

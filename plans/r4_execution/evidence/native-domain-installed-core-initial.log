@@ -1,0 +1,16 @@
+..............................F......................................... [ 66%]
+.....................................                                    [100%]
+================================== FAILURES ===================================
+________ test_revocation_fences_copied_factory_after_environment_wait _________
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-3928/test_revocation_fences_copied_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001C9336650F0>
+
+    def test_revocation_fences_copied_factory_after_environment_wait(tmp_path, monkeypatch):
+>       from tests.regression.test_c4_audit import _pending_open_runtime, _LabAdapter
+E       ModuleNotFoundError: No module named 'tests'
+
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_r4_runtime_leases.py:417: ModuleNotFoundError
+=========================== short test summary info ===========================
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_r4_runtime_leases.py::test_revocation_fences_copied_factory_after_environment_wait
+1 failed, 108 passed in 7.52s

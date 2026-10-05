@@ -1,0 +1,163 @@
+{
+  "package": "PLANO_UNIFICADO_NEXUS_SERVER_R4",
+  "revision": "nexus-server-unified-r4-2026-09-29",
+  "purpose": "implementation_plan_only",
+  "source_code_modified": false,
+  "product_tests_executed": false,
+  "phase_count": 17,
+  "task_count": 85,
+  "product_scenario_count": 164,
+  "original_task_mapping_count": 70,
+  "original_TN_count": 45,
+  "original_J_count": 34,
+  "planned_http_routes": 24,
+  "synthetic_schema_shape_fixtures": 16,
+  "file_hashes_exclude_manifest_itself": true,
+  "files": [
+    {
+      "path": "00_ENTREGAR_AO_AGENTE.md",
+      "bytes": 4281,
+      "sha256": "587d2aaa634f2de49ceb9ed63adc97cd4cb3c48b5c0eaeb49c1726882c5a0e24"
+    },
+    {
+      "path": "01_ARQUITETURA_E_PLANO_MESTRE.md",
+      "bytes": 27445,
+      "sha256": "23c4f92b221f96ad3d943b14b5a3e2d4d4575798afdcd1ead7630de2c15efea3"
+    },
+    {
+      "path": "02_CONTRATOS_HTTP_NXL_E_ESTADOS.md",
+      "bytes": 40677,
+      "sha256": "cddf8bdcd89866d7b3bac5b46aed9e1ab9cc69cb4fe9271131008aa5e09dc6e7"
+    },
+    {
+      "path": "03_DADOS_MIGRACAO_E_RECUPERACAO.md",
+      "bytes": 24081,
+      "sha256": "efffbaa72a98c84e701bd5f2488a25dd2cf90c9213832c00c8a807ee73a694cd"
+    },
+    {
+      "path": "04_BACKLOG_EXECUCAO.md",
+      "bytes": 95363,
+      "sha256": "b4f1f399b7ef57d5692877dfd3a3fa04124cfc349f2eee8b6add5dd2e5d8fc4c"
+    },
+    {
+      "path": "05_TESTES_E_ACEITE.md",
+      "bytes": 72340,
+      "sha256": "f9fad25cfc237e30012a44a455d608fa54448a8fce827de84b49ce8e032b02bb"
+    },
+    {
+      "path": "06_HANDOFF_CORE_CONNECTOR.md",
+      "bytes": 11412,
+      "sha256": "5a3c366df2a95b04a3b6345652e24999774cb6ec80fa002ca5b03aa2fb42a2c0"
+    },
+    {
+      "path": "07_RASTREABILIDADE_R3.md",
+      "bytes": 15030,
+      "sha256": "4123bf54c08aa29d08dbfcd1a22e76de69e52ada6628c0e3a90768ec0b707089"
+    },
+    {
+      "path": "08_FONTES_BASELINE_E_DECISOES.md",
+      "bytes": 13764,
+      "sha256": "c4de20e07e23e5a535fc696a2d5920f655ed18d3180996aeed61808850ed96c0"
+    },
+    {
+      "path": "BACKLOG_R4.json",
+      "bytes": 128914,
+      "sha256": "5b02655da1ce96bc0778c1805acf60ea903fafa96e950347d2a81c91e00890b3"
+    },
+    {
+      "path": "MATRIZ_TESTES_R4.json",
+      "bytes": 94923,
+      "sha256": "25d32e244ee1f938e12793c513c788f5865ca62d953f2e13a859b7f916ed0e02"
+    },
+    {
+      "path": "PLANO_COMPLETO_NEXUS_SERVER_R4.md",
+      "bytes": 306222,
+      "sha256": "fc6f022d33d6fd8453de37fd6e498804cee3477c60621b68947e659f8f094c26"
+    },
+    {
+      "path": "RASTREABILIDADE_R3.json",
+      "bytes": 24234,
+      "sha256": "72d4a330c733e6f1a2e2f442e544b493351648fda0594d409b54bbf3f72bd524"
+    },
+    {
+      "path": "contratos/README.md",
+      "bytes": 1421,
+      "sha256": "0df34f03ea3ba99fda782e79b2f6e94cc74017c3c08c3263824e8a962120a45a"
+    },
+    {
+      "path": "contratos/fixtures-planejamento.json",
+      "bytes": 25968,
+      "sha256": "725ef89fbd4f9cf4158e9ea5a5e406b2eabc3f52a1a5f0fe8ade9bb1fcc0f6f8"
+    },
+    {
+      "path": "contratos/http-routes.json",
+      "bytes": 9882,
+      "sha256": "ec0895e1492e07f972d1bf70731d8eff8dfd594fab8deb6f3ca5bfc7afb609c5"
+    },
+    {
+      "path": "contratos/http-target.schema.json",
+      "bytes": 90972,
+      "sha256": "48d242f9a87d5a1dc4a547f1685606a35918f0ab0d66626f05ce8381c37c2d7d"
+    },
+    {
+      "path": "contratos/nxl-r4-delta.json",
+      "bytes": 4991,
+      "sha256": "5cdfa96fb25a05910483a4adc8a63cef348578150378ee8593900028769e79e5"
+    },
+    {
+      "path": "evidencias/BASELINE.json",
+      "bytes": 1385,
+      "sha256": "6866e540f6d6b0a6bb27a2268485e0d48bb8cfce4f0b007386dd4c540795a127"
+    },
+    {
+      "path": "evidencias/REFERENCIAS_HASHES.json",
+      "bytes": 683,
+      "sha256": "829c11400af965c88f88565cc3a781389a507eac4d6a07e917bbaab2c1be652b"
+    },
+    {
+      "path": "evidencias/VALIDACAO_DO_PACOTE.json",
+      "bytes": 3643,
+      "sha256": "f5f9ccf3cb5dcc25c69bde0bbfdb5146030ede9499a868c7e61c69a4b26a4d02"
+    },
+    {
+      "path": "referencias/01_PLANO_NEXUS_SERVER_R3_ORIGINAL.md",
+      "bytes": 104939,
+      "sha256": "296fbd78785d8fc491699a23af6f53aad156941a5f0babcaf3752ec1aa925235"
+    },
+    {
+      "path": "referencias/ALTERACOES_R3_MCP_HTTP_ORIGINAL.md",
+      "bytes": 3605,
+      "sha256": "89e55d1f134bef71c69094dd33fea83b259b0500fbb0d7202803c14e54a111e7"
+    },
+    {
+      "path": "referencias/CORE_NXL_R3_MANIFEST_REFERENCE.json",
+      "bytes": 1085,
+      "sha256": "a4fd84304de7ba12041721c07f4edce29d3f39d17d8bd24f375de24b0a728630"
+    },
+    {
+      "path": "referencias/HANDOFF_CONNECTOR_CN5.md",
+      "bytes": 2698,
+      "sha256": "7a02fccdaa40fdf255b30fc8845c5a483df64720d07d3d5c9583174181b8f5fb"
+    },
+    {
+      "path": "validar_pacote.py",
+      "bytes": 8184,
+      "sha256": "f182821972ef2988bc69a3abd04f065567f348b66e90e04d0854f76ea965b228"
+    }
+  ],
+  "contract_clarifications": [
+    {
+      "date": "2026-09-30",
+      "scope": "Capability replay error metadata and stable-token validity after applied lease; no executable NXL readiness change.",
+      "document": "02_CONTRATOS_HTTP_NXL_E_ESTADOS.md",
+      "schema": "contratos/http-target.schema.json"
+    }
+  ],
+  "implementation_contract_additions": [
+    {
+      "date": "2026-09-30",
+      "route": "GET /v1/runtime/sessions/{id}/capability",
+      "reason": "Implement metadata-only authority recovery specified in section 2.4; retain the original 23 routes."
+    }
+  ]
+}

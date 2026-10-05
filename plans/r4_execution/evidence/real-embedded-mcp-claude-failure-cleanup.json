@@ -1,0 +1,6 @@
+{
+  "stopped_test_pid": 76976,
+  "remaining_direct_children": 0,
+  "protected_credentials_removed": 1,
+  "reason": "Failed campaign retained a native MCP HTTP connection during unbounded test-server drain; confirmed test process stop before vault removal."
+}

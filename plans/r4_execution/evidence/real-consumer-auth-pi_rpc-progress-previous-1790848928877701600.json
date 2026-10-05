@@ -1,0 +1,44 @@
+{
+  "adapter": "pi_rpc",
+  "missing_login": true,
+  "server_release_gate_override": true,
+  "native_qualification_override": false,
+  "synthetic_native_factory": false,
+  "public_connector_cli": true,
+  "cli_subprocess": true,
+  "protected_os_vault": true,
+  "topology": "Single Windows host; actual loopback HTTP/WSS; separate Server and daemon processes.",
+  "phase": "finished",
+  "vault_backend": "keyring:Windows WinVaultKeyring",
+  "failure_type": "TimeoutError",
+  "failure_phase": "waiting_for_control_readiness",
+  "failure_frames": [
+    {
+      "file": "test_real_connector_providers.py",
+      "function": "run",
+      "line": 173
+    },
+    {
+      "file": "timeouts.py",
+      "function": "__aexit__",
+      "line": 116
+    }
+  ],
+  "control_failures": [
+    {
+      "state": "PUBLISHING_INVENTORY",
+      "executor_id": "exe_5f1d60832d595e92a08622962c7e1a48",
+      "control_ready": false,
+      "execution_ready": false,
+      "error_code": null,
+      "recovery_required": false,
+      "cleanup_pending": false,
+      "publication_sequence": 0,
+      "inventory_revision": null,
+      "connection_generation": 2,
+      "attempts": 1
+    }
+  ],
+  "campaign_credentials_removed": true,
+  "server_exit_code": 0
+}

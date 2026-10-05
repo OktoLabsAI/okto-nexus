@@ -1,0 +1,102 @@
+{
+  "date": "2026-10-01",
+  "status": "ADMINISTRATIVE_SHUTDOWN_INCREMENT_PASSED_NS14_03_PARTIAL",
+  "commits": {
+    "nexus": "f1db5021839b2636cc53f14ffb56ecabe2897141",
+    "core": "c2aed115ea8add6dacf82bb892ff1415dcca652c",
+    "connector": "dca08630cd5f5a8150a01249845f9e55ee41ca70"
+  },
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-parallel-identity-core-dx3j4u5a\\dist\\nexus_connector_core-0.2.49.dev0-py3-none-any.whl",
+      "sha256": "b2787c4670c276b5310f7631552fdc53759d99a020f30cd7152154697e125963"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-parallel-identity-connector-1lc4uz_w\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "930e66148b1132a434859b4747524682c821324cc8d53dfd7ae9ce9eabf74f03"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-server-shutdown-nexus-rcwh0ube\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "7aaa062faf59cc954a5c6930b8cab51ecf269a7309c5746ae131d35fc160afba"
+    }
+  },
+  "results": {
+    "server-shutdown-cli-initial-failed.xml": {
+      "tests": "3",
+      "failures": "2",
+      "errors": "0",
+      "skipped": "0",
+      "time": "21.686"
+    },
+    "server-shutdown-cli-source.xml": {
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "13.504"
+    },
+    "server-shutdown-legacy_admission-installed.xml": {
+      "tests": "26",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "80.831"
+    },
+    "server-shutdown-nexus-installed.xml": {
+      "tests": "55",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "179.985"
+    },
+    "server-shutdown-source.xml": {
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "5.337"
+    }
+  },
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "topology": "Installed Nexus/Core/Connector outside clones. Synthetic native backend; real loopback Uvicorn transport on fixture-owned ASGI lifetime and separate administrative CLI child."
+  },
+  "checks": {
+    "pip_check": "passed",
+    "package_bytes": "source/wheel/installed bytes verified for all three packages",
+    "credential_pattern_scan": "no matches",
+    "plan_validation": "PASS_DOCUMENT_COVERAGE_ONLY: 14 milestones, 85 tasks, 164 original scenarios, 24 original routes"
+  },
+  "overlap": "The three final source cases overlap the 81 installed cases. Earlier one-case source run also overlaps; initial failed run is not acceptance.",
+  "defects_fixed": [
+    "CLI used x-api-key but R4 authentication requires Authorization Bearer.",
+    "Legacy recovery error code remained after dispatcher completion."
+  ],
+  "interrupted_setup": "An earlier source invocation used the wrong fixture header key and was interrupted during cleanup. No completed XML was produced; it is not counted.",
+  "limitations": [
+    "SIGINT/SIGTERM and standalone serve-process retention remain unqualified.",
+    "Process-versus-durable-release reports remain conservative unknown.",
+    "Full two-runtime late-open/stuck-close/release, authorization-store outage and platform matrix remain pending.",
+    "Core and Connector unchanged; actual Pi/Codex/Claude evidence retains its original artifact scope.",
+    "Preexisting modified UI assets are included in the wheel but are not accepted by this campaign.",
+    "NS14.03 partial; all release gates open."
+  ],
+  "raw_evidence_whitespace_exception": {
+    "evidence/server-shutdown-cli-initial-failed.xml": [
+      7,
+      19
+    ]
+  },
+  "evidence": {
+    "evidence/server-shutdown-artifacts.json": "eaec2295fb2f6e5c4941d15393b12455a5ed3b92df37457492a7d953ea6807a9",
+    "evidence/server-shutdown-cli-initial-failed.xml": "8449597946564ff8af7b5627f5124f0ef185b7df0547837a2e594e2c04e43381",
+    "evidence/server-shutdown-cli-source.xml": "e6a5d0ea9db70eba06c7489a3656eef6b42570733ef2a6519045616efd339850",
+    "evidence/server-shutdown-legacy_admission-installed.json": "1fdb6f0d37536e49a6ddb50cb9c653755da765e2e8b716e028c94e5951eb3c7e",
+    "evidence/server-shutdown-legacy_admission-installed.log": "c18ed9e5de6e3f077a259f7a2419a778e55124a84b3445a3c922fb5f2e5258e8",
+    "evidence/server-shutdown-legacy_admission-installed.xml": "f845d7f14ab25775b0571c6969b985176452a248e145c74e12b2ed4f7f3c8300",
+    "evidence/server-shutdown-nexus-installed.json": "9a5a1b731bd7a82c0391fb4ed1ced68d71f88f3afdf2f517f2008532d5b2beb7",
+    "evidence/server-shutdown-nexus-installed.log": "e896ad1382663a3f7b2ac4cc7be899e9ad06b98b9e07e70bd2aa57f133eaa5fa",
+    "evidence/server-shutdown-nexus-installed.xml": "e39e72bbf2154ba11e0a86f2db541a7735132edebe14ef0ca824118be293b803",
+    "evidence/server-shutdown-source.xml": "165d02718c5a13f32c94a30b22a0ba9f59bf0eae00e57254b53407e7e7c289cc"
+  }
+}

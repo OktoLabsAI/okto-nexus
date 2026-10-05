@@ -1,0 +1,23 @@
+.......................................................................F [100%]
+================================== FAILURES ===================================
+_________ test_real_pi_missing_login_has_durable_authentication_error _________
+..\okto-nexus-connector-core\tests\test_real_native_auth_failure.py:130: in test_real_pi_missing_login_has_durable_authentication_error
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+..\okto-nexus-connector-core\tests\test_real_native_auth_failure.py:109: in run
+    observed = candidate_pi_node_cli(binary, script, explicit=True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-nexus-connector-core\src\nexus_connector_core\discovery.py:95: in candidate_pi_node_cli
+    raise CoreError("NATIVE_VERSION_UNQUALIFIED", "discovery")
+E   nexus_connector_core.models.CoreError: NATIVE_VERSION_UNQUALIFIED
+=========================== short test summary info ===========================
+FAILED ..\okto-nexus-connector-core\tests\test_real_native_auth_failure.py::test_real_pi_missing_login_has_durable_authentication_error
+1 failed, 71 passed in 63.49s (0:01:03)

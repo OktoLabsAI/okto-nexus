@@ -1,0 +1,14 @@
+vite v6.4.3 building for production...
+transforming...
+✓ 2086 modules transformed.
+rendering chunks...
+computing gzip size...
+C:/Users/jpamb/AppData/Local/Temp/okto-r4-ns15-05-by411exj/source/src/okto_nexus/adapters/inbound/http/static/index.html                     0.47 kB │ gzip:   0.30 kB
+C:/Users/jpamb/AppData/Local/Temp/okto-r4-ns15-05-by411exj/source/src/okto_nexus/adapters/inbound/http/static/assets/index-CXDVfp6I.css     73.08 kB │ gzip:  12.53 kB
+C:/Users/jpamb/AppData/Local/Temp/okto-r4-ns15-05-by411exj/source/src/okto_nexus/adapters/inbound/http/static/assets/index-DcMFZwDl.js   1,015.46 kB │ gzip: 268.22 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 7.08s

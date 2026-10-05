@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-01",
+  "nexus_commit": "73981305b3af5553515a39e1679fa82eeab385e6",
+  "connector_commit": "358fd4d4441eefd768d95757cf356cc7c5b21cfb",
+  "core_commit": "9c778719c3892d9742bb358b0020e39ed43df08d",
+  "artifacts": "evidence/binding-alias-artifacts.json",
+  "passed": {
+    "installed": 24,
+    "source": 19
+  },
+  "overlap": "Source and installed suites overlap; these are not additive coverage.",
+  "baseline": {
+    "nexus_commit": "5d14e58c036a61474bc017694da97ef45b8ebde4",
+    "artifacts": "evidence/initial-turn-artifacts.json",
+    "failed": 2,
+    "passed": 1,
+    "reason": "Unscoped existing-endpoint checks rejected another executor and a distinct alias in the same executor."
+  },
+  "verified": [
+    "Alias conflicts are checked in both prepare and apply using canonical agent/executor/workspace scope.",
+    "Same alias in another executor and distinct alias in the same executor can create independent bindings.",
+    "Same alias in the same executor/workspace remains refused.",
+    "Unscoped legacy endpoints of the same adapter still require explicit review.",
+    "Existing endpoint data, agent identity and credential fields remain unchanged; authentication legitimately updates last_seen_at.",
+    "Installed onboarding, normative NS05 cases and actual HTTP/WSS Connector initial-turn/control journey pass."
+  ],
+  "fixture_corrections": [
+    "Exclude last_seen_at from identity preservation assertion.",
+    "Publish both realizations before applying the first binding; applying changes authority and invalidates the earlier publication ticket. No ticket validation was relaxed."
+  ],
+  "limitations": [
+    "No rebind/replacement workflow is introduced; same-scope alias replacement still requires the planned explicit diff/revision workflow.",
+    "Tests establish binding and identity preservation, not live-session continuity across global authorization/configuration revisions.",
+    "Native integration uses a synthetic peer and readiness fixtures; no new real-provider or release acceptance.",
+    "Existing uncommitted static assets were packaged unchanged but not accepted or committed.",
+    "M03/M04 and all release gates remain open."
+  ],
+  "evidence": {
+    "evidence/binding-alias-artifacts.json": "57f3643fc5a61e5913c4f8f0639b2955e17af4aefa9aac3ac808a6c7f241508b",
+    "evidence/binding-alias-baseline.xml": "90ecd47614d27c5cd0f4b8039d8856c86729774c554bf926db630a098f22c38f",
+    "evidence/binding-alias-build.log": "6bb6beeaa0ad26f3d093625f8e4c31d1308702f7f9dd659a291fac13de60a850",
+    "evidence/binding-alias-install.log": "f2299dced6686e9b3813d99da760499d0a18320c58c80d699d72c24284b7269c",
+    "evidence/binding-alias-nexus-installed.json": "06a92e8e3f70b9c32bbc58236529f4be832fdb7134d793349cef0a70394dea9d",
+    "evidence/binding-alias-nexus-installed.log": "212555fbe78699ce12e50a44de21c9e74c868b131c50d1e877235b341a97fa20",
+    "evidence/binding-alias-nexus-installed.xml": "19659e346c703705d3d6c6ed6efd47453a17a0dbe83a7a3510d076db1a1534dd",
+    "evidence/binding-alias-source-fixed.xml": "1f12c86b6ce7d37332c79586ad073d0c843a131c583c01b82e5e72531d06f5d0",
+    "evidence/binding-alias-source.xml": "47937ce63a01b2c24c6ff56cdbbe9c31bc9d39c91193894691a804f0b190a1c2"
+  }
+}

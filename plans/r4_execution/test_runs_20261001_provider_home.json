@@ -1,0 +1,156 @@
+{
+  "date": "2026-10-01",
+  "commits": {
+    "nexus": "5d90a856e409edd3dacc35e4be7c77e1e391357f",
+    "connector": "10a123abfa144c569dc42170acbca6e9bf3ae256",
+    "core": "016821fa10736633c2081c6f60ba627310e37855"
+  },
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-provider-home-core-d5_bt65f\\dist\\nexus_connector_core-0.2.47.dev0-py3-none-any.whl",
+      "sha256": "5fa9eb1f583daf4fe3c84aa40bf782267243303c0d2b5a562288aa9de35a8a2b"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-provider-home-connector-wuzgkcs2\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "55c797f8bd5217394fa26ff72c89f7384703555e784dfbdf4e3cce5bfbd8c8a5"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-provider-home-nexus-_1776a_u\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "c6759315f5cc56a3afa01ef9e1cd01b3786793fefec775b22dbe70a44822fe38"
+    }
+  },
+  "results": {
+    "core_installed": {
+      "tests": "89",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "381.512"
+    },
+    "connector_installed": {
+      "tests": "122",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "39.507"
+    },
+    "nexus_installed": {
+      "tests": "21",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "66.621"
+    },
+    "public_missing_login_pi_rpc": {
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "161.150"
+    },
+    "public_missing_login_codex_app_server": {
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "159.151"
+    },
+    "public_missing_login_claude_stream": {
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "164.468"
+    },
+    "public_authenticated_codex_rebinding": {
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "345.183"
+    }
+  },
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "topology": "One Windows host; installed wheels verified against sources; actual loopback HTTP/WSS; native qualified CLI builds; OS keyring; test-only Server release readiness."
+  },
+  "behavior": [
+    "Codex CODEX_HOME is derived from the explicitly approved provider home, overriding ambient default account lookup.",
+    "Only its state directory is created if missing; existing configuration and credentials are not rewritten. Invalid state path returns a sanitized Core error.",
+    "Public missing-login cases verify scoped US English guidance, conservative retry facts, matching HTTP/CLI error, one admitted turn on intent replay, explicit close and successful cleanup."
+  ],
+  "retained_failures": [
+    "Core 0.2.46 public Codex empty-home campaign timed out waiting for FAILED. Read-only SQLite inspection during the run found the turn SUCCEEDED; the approved HOME/USERPROFILE did not isolate its authentication. Temporary databases were later removed by pytest retention; the failed log, report and artifact metadata are retained.",
+    "Initial source regression expected an entirely empty provider home. Updated it to require only an empty .codex directory and preserve the assertion that no configuration or credential material is written. All 17 directed cases then passed.",
+    "Core 0.2.47 Pi public campaign running concurrently with other native campaigns hit control-readiness and shutdown deadlines (320.63 seconds total). The unchanged artifacts and deadlines passed in an isolated repeat (161.18 seconds). This does not establish the cause or close the concurrency/shutdown defect."
+  ],
+  "limitations": [
+    "The Core and consumer regression suites are directed, not full repository acceptance.",
+    "Public missing-login journeys cover Connector CLI and Nexus HTTP on loopback; embedded-only Nexus, browser recovery, Linux and independent hosts remain pending.",
+    "Positive Core 0.2.47 public native campaign here covers Codex handoff, approved replacement and second turn. Prior positive Pi/Claude campaigns retain their own older artifact provenance.",
+    "Nexus wheel contains preexisting modified static assets, excluded from these product commits and not accepted as UI/language evidence.",
+    "NS05.05 remains partial. No release gate closed."
+  ],
+  "reference": "https://raw.githubusercontent.com/openai/codex/main/codex-rs/utils/home-dir/src/lib.rs",
+  "evidence": {
+    "evidence/provider-home-artifacts.json": "0aa1bb5711eac3174698659bc1efdfd29ed35dc881358400f28693631c6678d7",
+    "evidence/provider-home-connector-build.log": "a3b86c7bd8460048a2c693e61d6c2047fa9df97e4f604ea7dea515d2abd18761",
+    "evidence/provider-home-connector-installed.json": "0d36f5a982acb88356a833d3ade111d906411edec455059ef8789269069ae12c",
+    "evidence/provider-home-connector-installed.log": "a730a623201c290565410264d28f4946e258b7f849ad87735526c6cc9c7ef078",
+    "evidence/provider-home-connector-installed.xml": "4bb81514eef69ea1ff2aa6758057f494171b63aec9ee710cd392eebb2092922d",
+    "evidence/provider-home-core-build.log": "56f8919c42009bb1f9bf8b499caba83cd41af0119107771dcdb8758adcfb508b",
+    "evidence/provider-home-core-installed.json": "db7f7ee22e97c2e3e627ed1c900e04a1ef9b86e00e125130ff230bc4e5101def",
+    "evidence/provider-home-core-installed.log": "8cbfa08e82f59ab1df1b3f9445f507390ab0103490efbe61fcfbdcedbc81e53f",
+    "evidence/provider-home-core-installed.xml": "68cf8106f2170861f20bea6245874e16c1bdce57c3ec4e9c24c5551473eddf27",
+    "evidence/provider-home-install.log": "249bac6fff270c7bff44a16057fa6d5573b7f03b1ca6b16c7b16b4808cc8fa91",
+    "evidence/provider-home-nexus-build.log": "f0b7661c0b7034b499887f5bdf8c01e9c7a4d8eeac16446f6ff2305925ec82de",
+    "evidence/provider-home-nexus-installed.json": "11c04ddb802e14af01451186859fbe9dec3e4983f47f0a1f07919de5bd366fe0",
+    "evidence/provider-home-nexus-installed.log": "48ceedd06c91e28ec9945dde10c5f56e82246c0817a5fa8cc3b3e4d221b5594d",
+    "evidence/provider-home-nexus-installed.xml": "422d1546fcb6654d4e88a37ea656e65d414398fe3f3e73984da27422c1e11f1b",
+    "evidence/provider-home-pip-check.log": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+    "evidence/provider-home-positive-codex_app_server-installed.json": "0ea3401913fc4f3033bad7b8688f7eb5c20f6d9bc0be16b111e3ab179a299fe5",
+    "evidence/provider-home-positive-codex_app_server-installed.log": "f9dd41126086d281266e821aafbe2b91ec6176fe0121373c6ad073e6835b89c8",
+    "evidence/provider-home-positive-codex_app_server-installed.xml": "97aeae023f23ea537abc1c07a92714be7206d0d4990e391a612ba56485952a6a",
+    "evidence/provider-home-positive-codex_app_server-progress.json": "4c033d31046e9df24187f3b02672fcc506efd13a1d9ec89a7352dce1f5bdf75b",
+    "evidence/provider-home-positive-codex_app_server.json": "4c033d31046e9df24187f3b02672fcc506efd13a1d9ec89a7352dce1f5bdf75b",
+    "evidence/provider-home-source-initial.log": "6270cfb2b0ba9543f08d0cb382e1d0ffc96dd69aa52227bbde9a418140552863",
+    "evidence/provider-home-source-initial.xml": "a85b620e9d36c4c19c1fcafe194e63d7e86139d3dceac0eff5e14995a9b090d8",
+    "evidence/provider-home-source.log": "aba6abb42268ba2333a28fc1c9580efd1109ab35c6020ebf2bc7e744aabfeb51",
+    "evidence/provider-home-source.xml": "0a35e77fb110744368ef6fbeec2031c55aa3323c3f553631936a1b12532a37c3",
+    "evidence/real-consumer-auth-claude_stream-installed-previous-1790848438149212800.json": "643ce959d15195e2b2f1d4dd063f2e604f2e57b7683a81469f87a4d8d20d8c52",
+    "evidence/real-consumer-auth-claude_stream-installed-previous-1790848438150431300.xml": "3b8afc5b0aa50b9a6b4c7f6a14014cb3012c0969037ea3f13393a11de296a2e5",
+    "evidence/real-consumer-auth-claude_stream-installed-previous-1790848438151808700.log": "29fe97c29b0424c64ce4be33215a45ecafb86f2ac711b960da1480dfc77766e4",
+    "evidence/real-consumer-auth-claude_stream-installed.json": "60c095fa43523f9fd0bad00e43daee2908ffaa0b466c4e32653595cc57c94d34",
+    "evidence/real-consumer-auth-claude_stream-installed.log": "9d37d1d964a1651d19819c94d0640270f2b440fb67492fdd475841279e7ba4eb",
+    "evidence/real-consumer-auth-claude_stream-installed.xml": "d03c5aa1fbf1eb42bf600a2d8d643daf31bd26f712bc59ac5b8975e45b93be5c",
+    "evidence/real-consumer-auth-claude_stream-previous-1790848438146039200.json": "8a8e3dd9b1ec15efaad332f3db8929472f9e65588d8a6f1c44c9f1ffc9c7f397",
+    "evidence/real-consumer-auth-claude_stream-progress-previous-1790848438147588400.json": "8a8e3dd9b1ec15efaad332f3db8929472f9e65588d8a6f1c44c9f1ffc9c7f397",
+    "evidence/real-consumer-auth-claude_stream-progress.json": "68d1096f623a70669bf1f3e11f010e2cf6120389d7d5bc69a01f115215275a7c",
+    "evidence/real-consumer-auth-claude_stream.json": "68d1096f623a70669bf1f3e11f010e2cf6120389d7d5bc69a01f115215275a7c",
+    "evidence/real-consumer-auth-codex_app_server-installed-previous-1790848416830675600.json": "7b6cac485707210801f862b19c85d57d23a3636c9b86393f15f53a85741723d1",
+    "evidence/real-consumer-auth-codex_app_server-installed-previous-1790848416831377900.xml": "b024d0f79acd483c9fc00cdeca9ab0bb6accd996eeda5ede838286b75e9615f9",
+    "evidence/real-consumer-auth-codex_app_server-installed-previous-1790848416832027000.log": "a969fe30c10ee68b4c4d050777a3e4a032875c2defb40d17da95c783f74214b3",
+    "evidence/real-consumer-auth-codex_app_server-installed.json": "bbdc60c1ba895454c68a768a27cd155b693480cd64cf2546ff7cbdbbbfdca3e2",
+    "evidence/real-consumer-auth-codex_app_server-installed.log": "f7a50b76552f973c5d900ba98b51d1eb166c5abe6c82634c0731b9ec815d70b6",
+    "evidence/real-consumer-auth-codex_app_server-installed.xml": "91ee3077a9a127ca7f5a04a7952bb0131feb6a321b18f565911e4fbdad5bfc93",
+    "evidence/real-consumer-auth-codex_app_server-previous-1790848416829160300.json": "9aa8f4834907a9ab300ad5a467fb790351b651509722ec94d25797e985f41197",
+    "evidence/real-consumer-auth-codex_app_server-progress-previous-1790848416829883500.json": "9aa8f4834907a9ab300ad5a467fb790351b651509722ec94d25797e985f41197",
+    "evidence/real-consumer-auth-codex_app_server-progress.json": "ffb81a36017bf0e3c1b647b54c3b0ffe9aa56e910a803c2a77a85bf19cae9df1",
+    "evidence/real-consumer-auth-codex_app_server.json": "ffb81a36017bf0e3c1b647b54c3b0ffe9aa56e910a803c2a77a85bf19cae9df1",
+    "evidence/real-consumer-auth-pi_rpc-installed-previous-1790848438149552500.json": "05b1474a44b4f42249fd14449505f873571c00e42c9ba3caf9849d1bf7ed47ce",
+    "evidence/real-consumer-auth-pi_rpc-installed-previous-1790848438150744200.xml": "826425945e1d67813f92146bf791b7e9d15b897288527a63de5c4d1d4fb47121",
+    "evidence/real-consumer-auth-pi_rpc-installed-previous-1790848438152140900.log": "c77c172e1e47c4a32f64d871c4e0de554f90fa2212fd432330380ae1eb802f2b",
+    "evidence/real-consumer-auth-pi_rpc-installed-previous-1790848928878356500.json": "a0d51313e6961e7ab569c8a9459ea1caa89ff582e8dbce4aa6794986f01e6db0",
+    "evidence/real-consumer-auth-pi_rpc-installed-previous-1790848928878960500.xml": "1e64f4564fc1174a0410415c4b6abda2e60dfd2345cee02220693a4a01f0beaf",
+    "evidence/real-consumer-auth-pi_rpc-installed-previous-1790848928879540700.log": "2ec846e0898820b9ac575e3be5761cb5a69a313e3082a6bf54719ae83995e68e",
+    "evidence/real-consumer-auth-pi_rpc-installed.json": "b1697a42032766f1c4f834ccb1732fe29f2d4e7133ff125b2c07a3759b42d63d",
+    "evidence/real-consumer-auth-pi_rpc-installed.log": "5fe8e96f26781b152eb0b3c2a7ade862b9e8b4da2980d8556a0fe655d88176d7",
+    "evidence/real-consumer-auth-pi_rpc-installed.xml": "f0cb7a68c1e40680c85740ae94b7fabaa01f38ea0739f8a0e3f855da55650049",
+    "evidence/real-consumer-auth-pi_rpc-previous-1790848438146423800.json": "a13bb569314143afdd822f94b723845e53f59d6393d659a1e280dfa3f3a60976",
+    "evidence/real-consumer-auth-pi_rpc-previous-1790848928877154600.json": "7e57da2ae9c3dbe082cb7e1edb431f5e9e23299a6c53569f7b4f4e66f390f83d",
+    "evidence/real-consumer-auth-pi_rpc-progress-previous-1790848438147880900.json": "a13bb569314143afdd822f94b723845e53f59d6393d659a1e280dfa3f3a60976",
+    "evidence/real-consumer-auth-pi_rpc-progress-previous-1790848928877701600.json": "7e57da2ae9c3dbe082cb7e1edb431f5e9e23299a6c53569f7b4f4e66f390f83d",
+    "evidence/real-consumer-auth-pi_rpc-progress.json": "6474e49571f7cf3241d589d4b45ff29d543cef3984621768773352912bdbcb83",
+    "evidence/real-consumer-auth-pi_rpc.json": "6474e49571f7cf3241d589d4b45ff29d543cef3984621768773352912bdbcb83"
+  }
+}

@@ -1,0 +1,589 @@
+{
+  "conclusion": "success",
+  "headSha": "4724cc6dff95ce73cae1318e835c45f64751b6b2",
+  "jobs": [
+    {
+      "completedAt": "2026-10-02T03:28:47Z",
+      "conclusion": "success",
+      "databaseId": 110688182340,
+      "name": "test (ubuntu-latest, 3.13)",
+      "startedAt": "2026-10-02T03:25:05Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-02T03:25:07Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-02T03:25:06Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:25:08Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "number": 2,
+          "startedAt": "2026-10-02T03:25:07Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:25:08Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "number": 3,
+          "startedAt": "2026-10-02T03:25:08Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:25:15Z",
+          "conclusion": "success",
+          "name": "Install Connector and its exact vendored Core dependency",
+          "number": 4,
+          "startedAt": "2026-10-02T03:25:08Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:25:16Z",
+          "conclusion": "success",
+          "name": "Lint boundaries (structural no-MCP audit)",
+          "number": 5,
+          "startedAt": "2026-10-02T03:25:15Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:28:45Z",
+          "conclusion": "success",
+          "name": "Full suite",
+          "number": 6,
+          "startedAt": "2026-10-02T03:25:16Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:28:45Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "number": 11,
+          "startedAt": "2026-10-02T03:28:45Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:28:45Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "number": 12,
+          "startedAt": "2026-10-02T03:28:45Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:28:45Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 13,
+          "startedAt": "2026-10-02T03:28:45Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/OktoLabsAI/okto-nexus-connector/actions/runs/36958974449/job/110688182340"
+    },
+    {
+      "completedAt": "2026-10-02T03:34:40Z",
+      "conclusion": "success",
+      "databaseId": 110688182511,
+      "name": "test (windows-latest, 3.13)",
+      "startedAt": "2026-10-02T03:28:48Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-02T03:28:49Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-02T03:28:49Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:28:56Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "number": 2,
+          "startedAt": "2026-10-02T03:28:49Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:28:56Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "number": 3,
+          "startedAt": "2026-10-02T03:28:56Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:29:19Z",
+          "conclusion": "success",
+          "name": "Install Connector and its exact vendored Core dependency",
+          "number": 4,
+          "startedAt": "2026-10-02T03:28:56Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:29:21Z",
+          "conclusion": "success",
+          "name": "Lint boundaries (structural no-MCP audit)",
+          "number": 5,
+          "startedAt": "2026-10-02T03:29:19Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:34:37Z",
+          "conclusion": "success",
+          "name": "Full suite",
+          "number": 6,
+          "startedAt": "2026-10-02T03:29:21Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:34:37Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "number": 11,
+          "startedAt": "2026-10-02T03:34:37Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:34:39Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "number": 12,
+          "startedAt": "2026-10-02T03:34:37Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:34:39Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 13,
+          "startedAt": "2026-10-02T03:34:39Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/OktoLabsAI/okto-nexus-connector/actions/runs/36958974449/job/110688182511"
+    },
+    {
+      "completedAt": "2026-10-02T03:48:21Z",
+      "conclusion": "success",
+      "databaseId": 110688182548,
+      "name": "test (ubuntu-latest, 3.12)",
+      "startedAt": "2026-10-02T03:45:11Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-02T03:45:13Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-02T03:45:12Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:14Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "number": 2,
+          "startedAt": "2026-10-02T03:45:13Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:15Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "number": 3,
+          "startedAt": "2026-10-02T03:45:14Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:22Z",
+          "conclusion": "success",
+          "name": "Install Connector and its exact vendored Core dependency",
+          "number": 4,
+          "startedAt": "2026-10-02T03:45:15Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:24Z",
+          "conclusion": "success",
+          "name": "Lint boundaries (structural no-MCP audit)",
+          "number": 5,
+          "startedAt": "2026-10-02T03:45:22Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:48:19Z",
+          "conclusion": "success",
+          "name": "Full suite",
+          "number": 6,
+          "startedAt": "2026-10-02T03:45:24Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:48:19Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "number": 11,
+          "startedAt": "2026-10-02T03:48:19Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:48:19Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "number": 12,
+          "startedAt": "2026-10-02T03:48:19Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:48:19Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 13,
+          "startedAt": "2026-10-02T03:48:19Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/OktoLabsAI/okto-nexus-connector/actions/runs/36958974449/job/110688182548"
+    },
+    {
+      "completedAt": "2026-10-02T03:50:14Z",
+      "conclusion": "success",
+      "databaseId": 110688182559,
+      "name": "test (windows-latest, 3.11)",
+      "startedAt": "2026-10-02T03:45:23Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-02T03:45:25Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-02T03:45:24Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:33Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "number": 2,
+          "startedAt": "2026-10-02T03:45:25Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:34Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "number": 3,
+          "startedAt": "2026-10-02T03:45:33Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:57Z",
+          "conclusion": "success",
+          "name": "Install Connector and its exact vendored Core dependency",
+          "number": 4,
+          "startedAt": "2026-10-02T03:45:34Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:46:00Z",
+          "conclusion": "success",
+          "name": "Lint boundaries (structural no-MCP audit)",
+          "number": 5,
+          "startedAt": "2026-10-02T03:45:57Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:50:09Z",
+          "conclusion": "success",
+          "name": "Full suite",
+          "number": 6,
+          "startedAt": "2026-10-02T03:46:00Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:50:09Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "number": 11,
+          "startedAt": "2026-10-02T03:50:09Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:50:12Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "number": 12,
+          "startedAt": "2026-10-02T03:50:09Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:50:12Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 13,
+          "startedAt": "2026-10-02T03:50:12Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/OktoLabsAI/okto-nexus-connector/actions/runs/36958974449/job/110688182559"
+    },
+    {
+      "completedAt": "2026-10-02T03:37:14Z",
+      "conclusion": "success",
+      "databaseId": 110688182578,
+      "name": "test (ubuntu-latest, 3.11)",
+      "startedAt": "2026-10-02T03:34:42Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-02T03:34:44Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-02T03:34:42Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:34:45Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "number": 2,
+          "startedAt": "2026-10-02T03:34:44Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:34:45Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "number": 3,
+          "startedAt": "2026-10-02T03:34:45Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:34:51Z",
+          "conclusion": "success",
+          "name": "Install Connector and its exact vendored Core dependency",
+          "number": 4,
+          "startedAt": "2026-10-02T03:34:45Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:34:52Z",
+          "conclusion": "success",
+          "name": "Lint boundaries (structural no-MCP audit)",
+          "number": 5,
+          "startedAt": "2026-10-02T03:34:51Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:37:13Z",
+          "conclusion": "success",
+          "name": "Full suite",
+          "number": 6,
+          "startedAt": "2026-10-02T03:34:52Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:37:13Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "number": 11,
+          "startedAt": "2026-10-02T03:37:13Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:37:13Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "number": 12,
+          "startedAt": "2026-10-02T03:37:13Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:37:13Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 13,
+          "startedAt": "2026-10-02T03:37:13Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/OktoLabsAI/okto-nexus-connector/actions/runs/36958974449/job/110688182578"
+    },
+    {
+      "completedAt": "2026-10-02T03:51:33Z",
+      "conclusion": "success",
+      "databaseId": 110688182622,
+      "name": "test (windows-latest, 3.12)",
+      "startedAt": "2026-10-02T03:45:22Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-02T03:45:24Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-02T03:45:23Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:34Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "number": 2,
+          "startedAt": "2026-10-02T03:45:24Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:35Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "number": 3,
+          "startedAt": "2026-10-02T03:45:34Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:46:09Z",
+          "conclusion": "success",
+          "name": "Install Connector and its exact vendored Core dependency",
+          "number": 4,
+          "startedAt": "2026-10-02T03:45:35Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:46:12Z",
+          "conclusion": "success",
+          "name": "Lint boundaries (structural no-MCP audit)",
+          "number": 5,
+          "startedAt": "2026-10-02T03:46:09Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:51:29Z",
+          "conclusion": "success",
+          "name": "Full suite",
+          "number": 6,
+          "startedAt": "2026-10-02T03:46:12Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:51:29Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "number": 11,
+          "startedAt": "2026-10-02T03:51:29Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:51:32Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "number": 12,
+          "startedAt": "2026-10-02T03:51:29Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:51:32Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 13,
+          "startedAt": "2026-10-02T03:51:32Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/OktoLabsAI/okto-nexus-connector/actions/runs/36958974449/job/110688182622"
+    },
+    {
+      "completedAt": "2026-10-02T03:51:51Z",
+      "conclusion": "success",
+      "databaseId": 110697496477,
+      "name": "build",
+      "startedAt": "2026-10-02T03:51:36Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-02T03:51:38Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-02T03:51:37Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:51:39Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "number": 2,
+          "startedAt": "2026-10-02T03:51:38Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:51:40Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "number": 3,
+          "startedAt": "2026-10-02T03:51:39Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:51:41Z",
+          "conclusion": "success",
+          "name": "Run python -m pip install build",
+          "number": 4,
+          "startedAt": "2026-10-02T03:51:40Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:51:46Z",
+          "conclusion": "success",
+          "name": "Run python tools/build_artifacts.py",
+          "number": 5,
+          "startedAt": "2026-10-02T03:51:41Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:51:48Z",
+          "conclusion": "success",
+          "name": "Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a",
+          "number": 6,
+          "startedAt": "2026-10-02T03:51:46Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:51:48Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "number": 11,
+          "startedAt": "2026-10-02T03:51:48Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:51:48Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "number": 12,
+          "startedAt": "2026-10-02T03:51:48Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:51:48Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 13,
+          "startedAt": "2026-10-02T03:51:48Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/OktoLabsAI/okto-nexus-connector/actions/runs/36958974449/job/110697496477"
+    }
+  ],
+  "status": "completed",
+  "url": "https://github.com/OktoLabsAI/okto-nexus-connector/actions/runs/36958974449"
+}

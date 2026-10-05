@@ -1,0 +1,21 @@
+Processing c:\users\jpamb\appdata\local\temp\okto-r4-native-elicitation-core-exybqmms\dist\nexus_connector_core-0.2.42.dev0-py3-none-any.whl
+Processing c:\users\jpamb\appdata\local\temp\okto-r4-native-elicitation-connector-d8ma_83o\dist\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl
+Processing c:\users\jpamb\appdata\local\temp\okto-r4-native-elicitation-nexus-4j295_a1\dist\okto_nexus-0.2.0-py3-none-any.whl
+Installing collected packages: okto-nexus-connector, okto-nexus, nexus-connector-core
+  Attempting uninstall: okto-nexus-connector
+    Found existing installation: okto-nexus-connector 0.5.0.dev0
+    Uninstalling okto-nexus-connector-0.5.0.dev0:
+      Successfully uninstalled okto-nexus-connector-0.5.0.dev0
+  Attempting uninstall: okto-nexus
+    Found existing installation: okto-nexus 0.2.0
+    Uninstalling okto-nexus-0.2.0:
+      Successfully uninstalled okto-nexus-0.2.0
+  Attempting uninstall: nexus-connector-core
+    Found existing installation: nexus-connector-core 0.2.41.dev0
+    Uninstalling nexus-connector-core-0.2.41.dev0:
+      Successfully uninstalled nexus-connector-core-0.2.41.dev0
+Successfully installed nexus-connector-core-0.2.42.dev0 okto-nexus-0.2.0 okto-nexus-connector-0.5.0.dev0
+
+[notice] A new release of pip is available: 24.3.1 -> 26.2.1
+[notice] To update, run: C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Scripts\python.exe -m pip install --upgrade pip
+No broken requirements found.

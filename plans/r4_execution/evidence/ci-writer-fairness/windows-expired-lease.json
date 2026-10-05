@@ -1,0 +1,177 @@
+{
+  "leases": [
+    {
+      "lease_serial": 1,
+      "issued_at": "2026-10-02T08:49:20.520907+00:00",
+      "valid_until_server": "2026-10-02T08:51:20.520907+00:00"
+    }
+  ],
+  "outbox_errors": [
+    {
+      "dispatch_state": "RECONCILING",
+      "last_error": "{\"code\":\"DISPATCH_CONNECTION_LOST\",\"stage\":\"dispatch\",\"message\":\"The dispatch connection closed before a durable receipt.\",\"possible_effect\":true,\"retry_safe\":false,\"operation_id\":\"op_aec276ff9f2a3b8bf701315c9dfa3656\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_0d609181bb76797f76b0b9692469b964\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_1fc2ffa15e8d972bf4183f975b49a8f0\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_244c05a30ef61b19a7349e4dfdc1c56a\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_2ac36012dade822aba534ba63cb128b8\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_372cb630b5edb9522504c3486d80645d\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_38db6f3d1a1b99bf92d84ff97ec43a45\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_5e7c7cf3c2a8767cf7c31c8834218b66\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_654175aa212b9e24a10bac88eb628cdb\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_65e262fdba98be9617974f605b854bbf\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_6a3643912221cd0beb4471c90333b906\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_6de104a576ff5324e541696a9f86d58c\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_73fc40ebeae358024aa4973ea0a1c682\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_73ff50882ec3929900122df344c8c75c\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_75db969226c4390e7fdcc49ded7729fb\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_787c2070cf724efa832eded9c646cb3d\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_819fa30f5c7829143958c2a28b000172\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_8246305988454b7bcd2c383c439c5794\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_83a3b2d5ae659f93202a0db3b1888a84\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_8c7ac07ba7d8d6b0635a8529bb28c48b\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_904840b1bd44885034592f43d338a4fa\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_93809a014d70fa703115d100664b656d\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_9777cdf06887ab9e27511cb13b9c218b\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_a1786b17e6e36a52771a2de64a75f99c\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_ab0e31335775e7e8b1bf1c5d4267419f\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_b92893eeb9ddeb491397ff87b37313a0\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_cc79ffb1a34198a95446ca6cb2cb9f30\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_ceca0d4ddf47ad9c4a8c4f1b9fbbe949\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_d215b81f85a1a8466e3438fad9165040\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_de96fee6186c57694c8ab8bf66172c18\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_f291d59e26dc900c0d5f8f1ee46dfcca\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "last_error": "{\"code\":\"CONFLICT\",\"stage\":\"dispatch\",\"message\":\"An applied dispatch lease is required.\",\"possible_effect\":false,\"retry_safe\":false,\"operation_id\":\"op_f4b61a9bc39008f2b6d33d3c80c56fb4\",\"action\":\"Query this operation and reconcile its executor before requesting new work.\"}",
+      "count": 1
+    },
+    {
+      "dispatch_state": "SENDING",
+      "last_error": null,
+      "count": 1
+    }
+  ],
+  "latest_operation": "2026-10-02T08:51:20.696349+00:00"
+}

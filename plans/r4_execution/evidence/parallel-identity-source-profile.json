@@ -1,0 +1,380 @@
+{
+  "elapsed_seconds": 12.50884139991831,
+  "top_functions": [
+    {
+      "file": "discovery.py",
+      "line": 377,
+      "function": "discover_installations",
+      "calls": 1,
+      "self_seconds": 1.72e-05,
+      "cumulative_seconds": 12.508637
+    },
+    {
+      "file": "discovery.py",
+      "line": 343,
+      "function": "_discover_installations",
+      "calls": 1,
+      "self_seconds": 5.9800000000000003e-05,
+      "cumulative_seconds": 12.508563200000001
+    },
+    {
+      "file": "discovery.py",
+      "line": 224,
+      "function": "discover_pi_releases",
+      "calls": 1,
+      "self_seconds": 3.5900000000000005e-05,
+      "cumulative_seconds": 12.4364939
+    },
+    {
+      "file": "discovery.py",
+      "line": 83,
+      "function": "candidate_pi_node_cli",
+      "calls": 1,
+      "self_seconds": 0.0026945000000000003,
+      "cumulative_seconds": 12.4360323
+    },
+    {
+      "file": "build_identity.py",
+      "line": 303,
+      "function": "_entry_size",
+      "calls": 14097,
+      "self_seconds": 0.084959,
+      "cumulative_seconds": 12.104430800000001
+    },
+    {
+      "file": "build_identity.py",
+      "line": 179,
+      "function": "pi_build_identity",
+      "calls": 1,
+      "self_seconds": 0.00032910000000000003,
+      "cumulative_seconds": 11.350569400000001
+    },
+    {
+      "file": "_local.py",
+      "line": 510,
+      "function": "stat",
+      "calls": 15940,
+      "self_seconds": 0.10771670000000001,
+      "cumulative_seconds": 9.8239607
+    },
+    {
+      "file": "_base.py",
+      "line": 646,
+      "function": "__exit__",
+      "calls": 1,
+      "self_seconds": 2.64e-05,
+      "cumulative_seconds": 8.6346364
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'get' of '_queue.SimpleQueue' objects>",
+      "calls": 14097,
+      "self_seconds": 0.3265967,
+      "cumulative_seconds": 8.5620271
+    },
+    {
+      "file": "thread.py",
+      "line": 220,
+      "function": "shutdown",
+      "calls": 1,
+      "self_seconds": 2.8100000000000002e-05,
+      "cumulative_seconds": 8.4996153
+    },
+    {
+      "file": "threading.py",
+      "line": 1056,
+      "function": "join",
+      "calls": 4,
+      "self_seconds": 3.82e-05,
+      "cumulative_seconds": 8.4995619
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'join' of '_thread._ThreadHandle' objects>",
+      "calls": 4,
+      "self_seconds": 0.0001121,
+      "cumulative_seconds": 8.4994429
+    },
+    {
+      "file": "threading.py",
+      "line": 998,
+      "function": "_bootstrap",
+      "calls": 4,
+      "self_seconds": 0.0031142,
+      "cumulative_seconds": 8.4992559
+    },
+    {
+      "file": "threading.py",
+      "line": 1025,
+      "function": "_bootstrap_inner",
+      "calls": 4,
+      "self_seconds": 5.910000000000001e-05,
+      "cumulative_seconds": 8.4992519
+    },
+    {
+      "file": "threading.py",
+      "line": 981,
+      "function": "run",
+      "calls": 4,
+      "self_seconds": 0.000662,
+      "cumulative_seconds": 8.499229
+    },
+    {
+      "file": "thread.py",
+      "line": 70,
+      "function": "_worker",
+      "calls": 4,
+      "self_seconds": 4.72e-05,
+      "cumulative_seconds": 8.4986022
+    },
+    {
+      "file": "build_identity.py",
+      "line": 217,
+      "function": "_add_tree",
+      "calls": 119,
+      "self_seconds": 0.009669,
+      "cumulative_seconds": 8.1032883
+    },
+    {
+      "file": "thread.py",
+      "line": 54,
+      "function": "run",
+      "calls": 14097,
+      "self_seconds": 0.1268871,
+      "cumulative_seconds": 5.4312427
+    },
+    {
+      "file": "build_identity.py",
+      "line": 220,
+      "function": "append_first",
+      "calls": 14097,
+      "self_seconds": 0.0843871,
+      "cumulative_seconds": 4.8654488
+    },
+    {
+      "file": "_base.py",
+      "line": 428,
+      "function": "result",
+      "calls": 14097,
+      "self_seconds": 0.08133860000000001,
+      "cumulative_seconds": 4.145836500000001
+    },
+    {
+      "file": "threading.py",
+      "line": 327,
+      "function": "wait",
+      "calls": 5395,
+      "self_seconds": 0.0676897,
+      "cumulative_seconds": 2.9949036
+    },
+    {
+      "file": "protocol.py",
+      "line": 73,
+      "function": "canonical_json",
+      "calls": 3,
+      "self_seconds": 1.7e-05,
+      "cumulative_seconds": 2.3683092
+    },
+    {
+      "file": "build_identity.py",
+      "line": 103,
+      "function": "_iter_tree_files",
+      "calls": 119,
+      "self_seconds": 0.00046970000000000003,
+      "cumulative_seconds": 2.1031062
+    },
+    {
+      "file": "build_identity.py",
+      "line": 114,
+      "function": "walk",
+      "calls": 1384,
+      "self_seconds": 0.17219420000000002,
+      "cumulative_seconds": 2.1026365
+    },
+    {
+      "file": "protocol.py",
+      "line": 43,
+      "function": "_validate",
+      "calls": 56437,
+      "self_seconds": 0.1733307,
+      "cumulative_seconds": 1.8875233
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method builtins.any>",
+      "calls": 70545,
+      "self_seconds": 0.5008063,
+      "cumulative_seconds": 1.6609752000000002
+    },
+    {
+      "file": "_local.py",
+      "line": 365,
+      "function": "relative_to",
+      "calls": 14097,
+      "self_seconds": 0.13770280000000001,
+      "cumulative_seconds": 1.6556744
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method nt.lstat>",
+      "calls": 15362,
+      "self_seconds": 1.1141585,
+      "cumulative_seconds": 1.6340922
+    },
+    {
+      "file": "_local.py",
+      "line": 529,
+      "function": "open",
+      "calls": 14580,
+      "self_seconds": 0.0928993,
+      "cumulative_seconds": 1.5134880000000002
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'update' of '_hashlib.HASH' objects>",
+      "calls": 14468,
+      "self_seconds": 1.3962013,
+      "cumulative_seconds": 1.3596700000000002
+    },
+    {
+      "file": "<frozen _collections_abc>",
+      "line": 1037,
+      "function": "__contains__",
+      "calls": 14102,
+      "self_seconds": 0.0948138,
+      "cumulative_seconds": 1.1209927000000002
+    },
+    {
+      "file": "protocol.py",
+      "line": 47,
+      "function": "<genexpr>",
+      "calls": 1983361,
+      "self_seconds": 0.7456896000000001,
+      "cumulative_seconds": 1.0352868000000002
+    },
+    {
+      "file": "<frozen _collections_abc>",
+      "line": 1027,
+      "function": "__iter__",
+      "calls": 62593,
+      "self_seconds": 0.055906300000000006,
+      "cumulative_seconds": 0.8077223
+    },
+    {
+      "file": "_local.py",
+      "line": 44,
+      "function": "__getitem__",
+      "calls": 48495,
+      "self_seconds": 0.11145360000000001,
+      "cumulative_seconds": 0.751826
+    },
+    {
+      "file": "discovery.py",
+      "line": 60,
+      "function": "fingerprint",
+      "calls": 3,
+      "self_seconds": 0.0168831,
+      "cumulative_seconds": 0.7434740000000001
+    },
+    {
+      "file": "discovery.py",
+      "line": 142,
+      "function": "candidate",
+      "calls": 2,
+      "self_seconds": 0.0001383,
+      "cumulative_seconds": 0.7290383
+    },
+    {
+      "file": "_local.py",
+      "line": 245,
+      "function": "_from_parsed_parts",
+      "calls": 64112,
+      "self_seconds": 0.0806626,
+      "cumulative_seconds": 0.6998881
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'run' of '_contextvars.Context' objects>",
+      "calls": 14097,
+      "self_seconds": 0.09240540000000001,
+      "cumulative_seconds": 0.6959207000000001
+    },
+    {
+      "file": "build_identity.py",
+      "line": 52,
+      "function": "_file_digest",
+      "calls": 2,
+      "self_seconds": 0.0139903,
+      "cumulative_seconds": 0.6748369000000001
+    },
+    {
+      "file": "_local.py",
+      "line": 166,
+      "function": "__fspath__",
+      "calls": 47889,
+      "self_seconds": 0.0504387,
+      "cumulative_seconds": 0.6231529
+    },
+    {
+      "file": "_abc.py",
+      "line": 130,
+      "function": "with_segments",
+      "calls": 82782,
+      "self_seconds": 0.1368225,
+      "cumulative_seconds": 0.609514
+    },
+    {
+      "file": "_local.py",
+      "line": 227,
+      "function": "__str__",
+      "calls": 126278,
+      "self_seconds": 0.09746600000000001,
+      "cumulative_seconds": 0.5959822
+    },
+    {
+      "file": "build_identity.py",
+      "line": 62,
+      "function": "_file_digest_counted",
+      "calls": 14097,
+      "self_seconds": 0.14497400000000002,
+      "cumulative_seconds": 0.5920968000000001
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'read' of '_io.BufferedReader' objects>",
+      "calls": 28573,
+      "self_seconds": 0.8233026000000001,
+      "cumulative_seconds": 0.5489106
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method nt.stat>",
+      "calls": 15945,
+      "self_seconds": 0.43819060000000004,
+      "cumulative_seconds": 0.5055947000000001
+    }
+  ],
+  "command_scope": "Modified Core source, same approved Pi/Node roots as the public campaign, passive reads only.",
+  "source": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src",
+  "profiler_limit": "Caller thread only; worker digest bodies are not profiled.",
+  "source_sha256": "ace9bd1d142fd0dfa74d9042bb16d244a08ab8cefdbdc6debc6c35aa6fa86e22",
+  "candidates": [
+    {
+      "adapter_id": "pi_rpc",
+      "version": "0.87.1",
+      "build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+      "architecture": "x86_64"
+    }
+  ],
+  "observed_metadata_version": "0.2.30.dev0",
+  "source_version_at_measurement": "0.2.48.dev0 plus uncommitted parallel identity reads",
+  "metadata_note": "Source path contained stale egg-info; the imported implementation is identified by source_sha256."
+}

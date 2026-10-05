@@ -1,0 +1,14 @@
+{
+  "command": [
+    "C:/Users/jpamb/AppData/Local/Temp/okto-r4-embedded-inventory-2z7k3itc/isolated/Scripts/python.exe",
+    "-m",
+    "pip",
+    "install",
+    "--force-reinstall",
+    "--no-deps",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-opening-nexus-88ig80nf\\inventory-dist\\okto_nexus-0.2.0-py3-none-any.whl",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-opening-core-nzdtg0fa\\dist\\nexus_connector_core-0.2.44.dev0-py3-none-any.whl"
+  ],
+  "exit_code": 0,
+  "pip_check": "No broken requirements found.\n"
+}

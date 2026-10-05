@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "okto-nexus"
-version = "0.1.10"
+version = "0.2.0"
 description = "Okto Nexus - Local Agent Coordination Bus (MCP server + dashboard)"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -47,7 +47,7 @@ Issues = "https://github.com/OktoLabsAI/okto-nexus/issues"
 # DEFAULT serve build (`okto-nexus serve`): HTTP transport + dashboard + the
 # semantic-search model, so `uv tool install ".[serve]"` ships embeddings by
 # design. The capability is INSTALLED but still gated by embedding_mode (off by
-# default) - shipping the model does NOT auto-enable search. The stdio server
+# default) - shipping the model does NOT auto-enable search. The base library
 # stays dependency-light; `serve` fails closed with an install hint when the
 # transport extra is missing. For a lighter build without torch, use the
 # `serve-lite` extra below.
@@ -58,13 +58,17 @@ Issues = "https://github.com/OktoLabsAI/okto-nexus/issues"
 # (empirical bisect via Okto Pulse). Nexus has no empty-path routes today, so
 # this is defense-in-depth against a future landmine.
 serve = [
+    "pywin32; sys_platform == 'win32'",
+    "keyring; sys_platform != 'win32'",
     "fastapi>=0.110,!=0.137.0",
     "uvicorn>=0.29",
+    "wsproto>=1.2",
+    "okto-nexus-connector-core==0.0.1",
     "sentence-transformers>=2.5",
     # Token counting for the workspace-analytics view (message "size" = TOKENS,
     # not bytes). o200k_base (GPT-4o family) is available since 0.7.0; loaded
     # fully offline from a vendored BPE blob. Lives ONLY here (serve), never in
-    # the stdio core - the tokenizer adapter imports it lazily.
+    # the base library - the tokenizer adapter imports it lazily.
     "tiktoken>=0.7,<1",
 ]
 # Slim serve build WITHOUT the embedding model (no torch): HTTP transport +
@@ -73,12 +77,16 @@ serve = [
 # is absent; `off` keeps it disabled. Use on hosts that won't run real semantic
 # search. Install with `uv tool install ".[serve-lite]"`.
 serve-lite = [
+    "pywin32; sys_platform == 'win32'",
+    "keyring; sys_platform != 'win32'",
     "fastapi>=0.110,!=0.137.0",
     "uvicorn>=0.29",
+    "wsproto>=1.2",
+    "okto-nexus-connector-core==0.0.1",
 ]
 # The semantic-search model on its own (Frente 3). `serve` already bundles it;
 # this extra stays for composing onto the slim build (`.[serve-lite,embeddings]`)
-# or a bare stdio host. Cosine is pure-Python (no numpy), so only the model
+# or an embedding-only host. Cosine is pure-Python (no numpy), so only the model
 # lives behind this extra. Heavy: pulls sentence-transformers + torch.
 embeddings = [
     "sentence-transformers>=2.5",
@@ -87,11 +95,12 @@ dev = [
     "pytest>=8",
     "fastapi>=0.110,!=0.137.0",
     "uvicorn>=0.29",
+    "wsproto>=1.2",
     "httpx>=0.27",
 ]
 
 [project.scripts]
-okto-nexus = "okto_nexus.adapters.inbound.mcp.server:main"
+okto-nexus = "okto_nexus.adapters.inbound.cli.main:main"
 
 [tool.setuptools]
 package-dir = { "" = "src" }

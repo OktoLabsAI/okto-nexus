@@ -1,0 +1,33 @@
+{
+  "increment": "M07 durable event ingress over the authenticated R4 WSS lane",
+  "requirements": [
+    "NS10.01 (partial)",
+    "NS08.04 event frame scope (partial)"
+  ],
+  "status": "PARTIAL_INSTALLED_INTEGRATION",
+  "reference_commits": {
+    "nexus": "1318e48200d01839e22ee4f832037f990fb8d1aa",
+    "connector": "f23270c48770c00ec740baaad0ec545ea50b39a2",
+    "core": "97892edba088ac85c9977b8bd8fde27f725ea2a3"
+  },
+  "nexus_commit_note": "Nexus reference is the parent of the commit containing this manifest.",
+  "artifacts": "evidence/event-ingress-artifacts.json",
+  "tests": {
+    "nexus": {
+      "tests": 65,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 65
+    }
+  },
+  "unchanged_dependencies": "Connector/Core unchanged; previous installed results retained in test_runs_20260930_reconciliation.json. All three installed packages and source bytes verified before this run.",
+  "scope": "Focused installed event ingress, public opening/bootstrap, five-action remote WSS, reconciliation and NS09 control regression.",
+  "limits": [
+    "Technical native peer and fixture readiness; no new provider or independent-host acceptance.",
+    "Automatic Connector/embedded publishing, Core ACK application, restart/reconnect publisher ownership, public projections and nonzero-stream reconciliation remain pending.",
+    "Normative TR4-10-01 disconnect-before/after-commit campaign and full canonical projections are not fully qualified. NS10.01 remains incomplete.",
+    "One existing FastAPI/Starlette dependency warning; no skips. User UI assets retained without new UI acceptance.",
+    "No milestone or gate closed; the full M00-M13/G0-G3 plan remains active."
+  ]
+}

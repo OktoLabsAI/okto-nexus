@@ -1,0 +1,32 @@
+{
+  "event_errors": [
+    {
+      "category": "error",
+      "executor_id": "exe_1bc777f552bb5127967e80646c90319f",
+      "native_type": "core.event_pump_failed",
+      "payload": {
+        "code": "EVENT_STREAM_UNAVAILABLE"
+      },
+      "sequence": 441,
+      "server_id": "srv_cbb35605ebadf3c785dd49949c6a8c77",
+      "session_id": "ses_07dc525856dfb0d36337bb074d5d3054",
+      "stream_epoch": "stream_0c2a357a4e29c544e2951d467e987b8d"
+    }
+  ],
+  "native_actions": [
+    [
+      "context",
+      "2026-10-01T05:05:44.584011Z"
+    ],
+    [
+      "claim",
+      "2026-10-01T05:06:03.990255Z"
+    ]
+  ],
+  "handoffs": [
+    [
+      "CLAIMED"
+    ]
+  ],
+  "finding": "Pi opened and renewed its lease, then lost event observation during native work. CLI clients shared the daemon event loop; thread-isolated CLI is the next diagnostic, not an established root cause."
+}

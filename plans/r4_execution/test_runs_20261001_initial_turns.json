@@ -1,0 +1,75 @@
+{
+  "date": "2026-10-01",
+  "nexus_commit": "5d14e58c036a61474bc017694da97ef45b8ebde4",
+  "connector_commit": "358fd4d4441eefd768d95757cf356cc7c5b21cfb",
+  "core_commit": "9c778719c3892d9742bb358b0020e39ed43df08d",
+  "artifacts": "evidence/initial-turn-artifacts.json",
+  "final_installed": {
+    "connector_passed": 77,
+    "nexus_passed": 35,
+    "skipped": 0,
+    "dependency_check": "PASS"
+  },
+  "earlier_installed": {
+    "connector_passed": 77,
+    "nexus_passed": 87,
+    "nexus_failed": 1,
+    "note": "Pre-parent-guard artifacts; not promoted to final acceptance. Counts overlap subsequent tests."
+  },
+  "verified": [
+    "Start text resolves to a separate durable child turn; no effect or outbox during resolution.",
+    "Opening admission creates the correlated child atomically; repeated resolution/admission preserves IDs.",
+    "No child dispatch before READY and ACTIVE lease; current successful/submitted opening receipt is required.",
+    "Changed parent outcomes and authority revocation refuse the delayed child before native effect.",
+    "UTF-8 encoded payload limit and conflicting request text are refused.",
+    "Reuse with text sends a child turn without another native opening.",
+    "Public parsed CLI over actual HTTP/WSS executes the child, retains operation correlation, continues controls and closes; three budget units are consumed for two sends and one steer.",
+    "Migration 088 through 090 preserves prior rows and is idempotent.",
+    "Installed source/wheel bytes and all three wheel hashes verified from an external cwd with isolated Python."
+  ],
+  "retained_failures": [
+    "The repository venv has an older Core and could not collect the first source test; subsequent campaigns used the isolated Core44 environment.",
+    "Initial fixtures omitted local_setup and attempted to restart a single-use dispatch pump; corrected without changing production lifecycle.",
+    "The revocation test initially revoked before reservation, causing correct no-reservation behavior; moved revocation between reserve and send to test the intended boundary.",
+    "Six injected stale-readiness cases exposed missing parent-receipt guards; both reservation release and pre-send now reject those outcomes.",
+    "The added HTTP/WSS wrapper omitted the connector-configured fixture parameter; corrected.",
+    "The extra child consumed the existing two-unit test grant before steer. The new scenario explicitly provisions three units and checks exact consumption; product budgets are unchanged."
+  ],
+  "limitations": [
+    "Native peers and readiness qualification are synthetic. Prior real Pi/Codex/Claude campaigns are not refreshed by this increment.",
+    "Existing UI assets in the worktree are packaged unchanged but neither committed nor accepted by these tests.",
+    "NS05.04 initial-child criterion is implemented; full alias/workspace/policy acceptance and M03/M04 closure require the remaining plan evidence.",
+    "Process/ownership observations, logs, retention, UI, final provider/platform campaigns and G0-G3 remain open."
+  ],
+  "evidence": {
+    "evidence/initial-turn-artifacts.json": "8d39c9b0e433bf81b11b3848af0049650a15196119dc72d55ceab5d3fe83a1ab",
+    "evidence/initial-turn-before-parent-fix-artifacts.json": "a60a11f5e89f612558e997bd1797c40636142b0bc8fd02e00265a27b93ae32f7",
+    "evidence/initial-turn-before-parent-fix-connector-build.log": "52d4b81d9e5a008a6ee9a4c20f8a7014d41683beed2a6d4389a7970494a65273",
+    "evidence/initial-turn-before-parent-fix-connector-installed.json": "0d239637f4f3179857c8108d51f45939e0710bb3cf1672c49f3df2aafda92ced",
+    "evidence/initial-turn-before-parent-fix-connector-installed.log": "1b0eba5b0e75de720ff0ddd7690a477f3863c811a652cc4906e78ace6f51728b",
+    "evidence/initial-turn-before-parent-fix-connector-installed.xml": "5135235334fa8fa5ce79d9ecf34964bc5a91c2dd1dad4694dbe41f02d15b96b8",
+    "evidence/initial-turn-before-parent-fix-install.log": "b93c8d74f82860183f155c3fe91bcf7eee6e1572061c06a5a669f4d8b79d3cf3",
+    "evidence/initial-turn-before-parent-fix-nexus-build.log": "8cfef7fedb7311ea64d00ab92663fdbb977e72b980754c939907edd98f7ea3b9",
+    "evidence/initial-turn-before-parent-fix-nexus-installed.json": "de586ecdcb9649087f30e470d553b2abe2d5d58810c7bb25df11016720a9ae58",
+    "evidence/initial-turn-before-parent-fix-nexus-installed.log": "ee40a01539fba860ef2c1e966521e2197c0450355bc26672c1ff3ea1568c62bf",
+    "evidence/initial-turn-before-parent-fix-nexus-installed.xml": "da75fc9caec916dae76b46f6302076d0ab84a8f4c8890edb59a89fef2ecc1fc8",
+    "evidence/initial-turn-connector-build.log": "e7216cafa3422869b175aced729c452bc7e6327f7577dafe7ea8d32101ea5f41",
+    "evidence/initial-turn-connector-installed.json": "e587f04146672a5ba7dcc54b06fa24c606c87fcd1b295ee0ab25692a1b8507c6",
+    "evidence/initial-turn-connector-installed.log": "25dab2d8718addf9bc931f6b91aebf59425330635b41132bf83ff551e0f4c6e5",
+    "evidence/initial-turn-connector-installed.xml": "316d0b11c29d9c4babfc976b7efd1892d82a04e3cf39cb8f64d3b9f475af890b",
+    "evidence/initial-turn-install.log": "ed12f92f7982e04f46439be99227e388bf55f322bfb402f3c5bf0030a5fda24a",
+    "evidence/initial-turn-nexus-build.log": "91da0015169bdd7b30014fc8f6ef4e826a8f2c2fd9d3b9ef93b78e5aaa1ac62b",
+    "evidence/initial-turn-nexus-installed.json": "3dd382f484de37f3b5ac7f78248b3402a0322d17eada0d741f7f6db6f5ee76f1",
+    "evidence/initial-turn-nexus-installed.log": "14c9fae7d9345ad4beb426312d73ed8f984b8a2c034048d89913b27a1b7d7607",
+    "evidence/initial-turn-nexus-installed.xml": "d8aabafa32bdcfdfe48b4ebec1c553ea0b53c12436348a746f0038128d90a142",
+    "evidence/initial-turn-parent-fix-source.xml": "cdf62f0fbb5c69923943be7b27ae19d83b86001e9f14df283869bff78f3d5820",
+    "evidence/initial-turn-parent-loss-before-fix.xml": "a8f9994e62ce751255076391c06b49215906b66463ea449680828ce5657f32a8",
+    "evidence/initial-turn-source-authority.xml": "298f29be257b6a7a36fb17aae9fba78b254592653961fb6522eef200efe0c5f9",
+    "evidence/initial-turn-source-core44.xml": "7ddbb6f0afe85f97a0b172fb771dd20a3bc66554309cceaded263d8a7db87ba7",
+    "evidence/initial-turn-source-fixed.xml": "3992098672f8325cc9a760c8cf6d1aaea05505bce662da0a401f3e4a161920eb",
+    "evidence/initial-turn-source-lock.xml": "1303b00af889f2c168cfc518f0f28485cc0eeb4940403e48b6b520566bc596ab",
+    "evidence/initial-turn-source-regression-fixed.xml": "12a29f8c84cf844dcb7dcb0b4d8083e831994ce4eb4219b1dad4dcfb619b3ca8",
+    "evidence/initial-turn-source-regression.xml": "4cf738b8a4eb1510b71af89bd41ac67933ccd6c00195a2a87c528eeaf02e1ef9",
+    "evidence/initial-turn-source.xml": "2de7af838a267bb96553501983d2b09e748fd5b60e040b02a4d8a56c64ae4ace"
+  }
+}

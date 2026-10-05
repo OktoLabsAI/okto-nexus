@@ -1,0 +1,2465 @@
+{
+  "all_product_tests_not_run": true,
+  "scenarios": [
+    {
+      "id": "TR4-00-01",
+      "source": "R4",
+      "task_ids": [
+        "NS00.01"
+      ],
+      "title": "Registrar branch, HEAD, fonte e capacidade realmente instalada",
+      "layer": "unit_contract",
+      "setup": "Clone de laboratório na branch e diretório com alteração não commitada.",
+      "action": "Gerar baseline e executar novamente sem editar código.",
+      "expected": "Mesmo HEAD e alteração local preservados; manifest distingue fonte, wheel e qualificação; nenhuma alteração destrutiva.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-00-02",
+      "source": "R4",
+      "task_ids": [
+        "NS00.02"
+      ],
+      "title": "Encerrar planos concorrentes sem perder requisito",
+      "layer": "unit_contract",
+      "setup": "Planos R3, CN1–CN5 e arquivos de planejamento presentes.",
+      "action": "Validar crosswalk e procurar tarefas sem sucessor.",
+      "expected": "70 tarefas originais e 79 cenários TN/J possuem destino; nenhuma tarefa está DONE só por estar descrita.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-00-03",
+      "source": "R4",
+      "task_ids": [
+        "NS00.03"
+      ],
+      "title": "Fixar responsabilidades e interfaces R4 entre repositórios",
+      "layer": "unit_contract",
+      "setup": "Peer de contrato sem provider; payloads válidos e respostas com envelope legado.",
+      "action": "Exercitar fixtures de protocolo e comparar representação.",
+      "expected": "Objetos /v1 diretos são aceitos; ok/data legado não é confundido; divergências produzem VERSION_INCOMPATIBLE antes de efeito.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-00-04",
+      "source": "R4",
+      "task_ids": [
+        "NS00.04"
+      ],
+      "title": "Solicitar bundle Core R4 e preservar histórico r3",
+      "layer": "unit_contract",
+      "setup": "Bundle r3 fixado e fixtures-alvo R4.",
+      "action": "Validar rejeição cruzada e leitura histórica explícita.",
+      "expected": "R3 não executa efeitos R4; receipts históricos continuam interpretáveis; gate remoto permanece BLOCKED_EXTERNAL até artefato compartilhado.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-00-05",
+      "source": "R4",
+      "task_ids": [
+        "NS00.05"
+      ],
+      "title": "Construir harness de testes e limites de evidência",
+      "layer": "unit_contract",
+      "setup": "Ambiente sem credenciais de providers.",
+      "action": "Rodar um controle de fixture e validar o manifesto de evidência.",
+      "expected": "Campanha pode passar em contrato sem marcar provider/multihost como PASS; segredos de laboratório identificados e isolados.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-01-01",
+      "source": "R4",
+      "task_ids": [
+        "NS01.01"
+      ],
+      "title": "Extrair Deps e composição antes de remover transporte",
+      "layer": "unit_contract",
+      "setup": "Server atual com /mcp e REST saudável em fixture.",
+      "action": "Importar nova composição e comparar catálogo HTTP antes/depois.",
+      "expected": "HTTP mantém tools/resources e identidade; import não abre listener ou subprocesso; não há dependência do Connector.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-01-02",
+      "source": "R4",
+      "task_ids": [
+        "NS01.02"
+      ],
+      "title": "Remover o ramo MCP stdio sem shim",
+      "layer": "unit_contract",
+      "setup": "Configuração legada selecionada e captura de stdin/stdout/processos.",
+      "action": "Invocar comandos antigos e novas opções HTTP.",
+      "expected": "Nenhuma sessão MCP stdio nasce; serve continua HTTP; nenhum adaptador nativo é removido por usar stdin/stdout.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-01-03",
+      "source": "R4",
+      "task_ids": [
+        "NS01.03"
+      ],
+      "title": "Definir CLI principal e extras de instalação",
+      "layer": "packaging",
+      "setup": "Wheel em ambiente limpo sem clone irmão.",
+      "action": "Executar help, serve-lite e import dos adaptadores.",
+      "expected": "CLI não inicia stdio sem argumentos; extras contêm o Core necessário e não exigem a aplicação Connector.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-01-04",
+      "source": "R4",
+      "task_ids": [
+        "NS01.04"
+      ],
+      "title": "Montar routers /v1 com autenticação específica",
+      "layer": "unit_contract",
+      "setup": "Requests HTTP e upgrade local/remoto com chaves/tickets inválidos.",
+      "action": "Consultar protocolo público, /me e fazer upgrades positivos/negativos.",
+      "expected": "Só protocolo público expõe dados não privados; endpoints escopados rejeitam credenciais de audiência errada antes do handler.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-01-05",
+      "source": "R4",
+      "task_ids": [
+        "NS01.05"
+      ],
+      "title": "Migrar configuração MCP apenas selecionada",
+      "layer": "unit_contract",
+      "setup": "Arquivo com duas entradas de terceiros e uma Nexus selecionada.",
+      "action": "Aplicar migração, repetir e simular edição concorrente.",
+      "expected": "Somente entrada selecionada muda; key/id intactos; concorrência recusa sem sobrescrever terceiros; stdio não retorna como rollback.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-02-01",
+      "source": "R4",
+      "task_ids": [
+        "NS02.01"
+      ],
+      "title": "Definir chaves de escopo imutáveis",
+      "layer": "unit_contract",
+      "setup": "Dois Servers/executores com mesmos binding/session/request IDs.",
+      "action": "Inserir, consultar e remover um namespace.",
+      "expected": "Nenhuma colisão ou remoção cruzada; UI pede escopo quando alias curto é ambíguo.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-02-02",
+      "source": "R4",
+      "task_ids": [
+        "NS02.02"
+      ],
+      "title": "Criar extensões aditivas e índices",
+      "layer": "migration",
+      "setup": "Banco vazio e cópia legada consistente.",
+      "action": "Migrar, repetir e conferir constraints/índices.",
+      "expected": "Migrações idempotentes; dados legados e negações preservados; consulta indexada encontra escopo exato.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-02-03",
+      "source": "R4",
+      "task_ids": [
+        "NS02.03"
+      ],
+      "title": "Persistir identidade técnica local e remota",
+      "layer": "unit_contract",
+      "setup": "Duas inicializações locais e dois pedidos idempotentes de registro remoto.",
+      "action": "Reabrir a base e repetir registro com mesma intenção.",
+      "expected": "IDs estáveis, nenhum Agent novo e nenhum takeover automático por clone de diretório.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-02-04",
+      "source": "R4",
+      "task_ids": [
+        "NS02.04"
+      ],
+      "title": "Separar workspace lógico da realização física",
+      "layer": "unit_contract",
+      "setup": "Server Linux, fixture de realização Windows e duas pastas do mesmo repo.",
+      "action": "Preparar vínculos lógicos e tentar falsa equivalência.",
+      "expected": "Nenhuma resolução de filesystem remoto em A; associação depende de permissão e aprovação explícita; histórico não é re-hasheado.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-02-05",
+      "source": "R4",
+      "task_ids": [
+        "NS02.05"
+      ],
+      "title": "Implementar writers transacionais e readers de histórico",
+      "layer": "unit_contract",
+      "setup": "Instrumentação da connection factory e peer que bloqueia I/O.",
+      "action": "Admitir operação e bloquear o dispatcher externo.",
+      "expected": "Commit termina antes do I/O; consultas continuam responsivas e reproduzem os registros por IDs exatos.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-03-01",
+      "source": "R4",
+      "task_ids": [
+        "NS03.01"
+      ],
+      "title": "Implementar /me pela autoridade já existente",
+      "layer": "contract_scale",
+      "setup": "100 mil registros sintéticos com índice por key hash.",
+      "action": "Autenticar uma key e enviar hint de outro agente.",
+      "expected": "Lookup escopado/indexado; spoof recusado; nenhum cadastro ou rotação ocorre.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-03-02",
+      "source": "R4",
+      "task_ids": [
+        "NS03.02"
+      ],
+      "title": "Implementar proposta/aplicação com política herdada",
+      "layer": "unit_contract",
+      "setup": "Agente com negação explícita e operador de fixture.",
+      "action": "Tentar self-escalation e depois aprovação autorizada.",
+      "expected": "Agente não autoaprova; operador aplica uma revisão; repetição retorna a mesma proposta aplicada sem gerar outra identidade.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-03-03",
+      "source": "R4",
+      "task_ids": [
+        "NS03.03"
+      ],
+      "title": "Emitir tickets escopados e revogáveis",
+      "layer": "unit_contract",
+      "setup": "Dois bindings/agentes, dois executores e relógio controlado.",
+      "action": "Reusar ticket em outro alvo, expirar e rotacionar key.",
+      "expected": "Alvo/audiência/epoch incorretos recusados; outro agente permanece operacional; novo ticket não revive key revogada.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-03-04",
+      "source": "R4",
+      "task_ids": [
+        "NS03.04"
+      ],
+      "title": "Implementar capability MCP de sessão com audiência própria",
+      "layer": "unit_contract",
+      "setup": "Harness HTTP de laboratório com token de sessão e ticket NXL.",
+      "action": "Chamar tool permitida, proibida e depois revogar sessão.",
+      "expected": "Só ações permitidas têm efeito; ticket errado falha; revogação bloqueia MCP sem depender de proxy Connector.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-03-05",
+      "source": "R4",
+      "task_ids": [
+        "NS03.05"
+      ],
+      "title": "Gerar comando protegido e não recuperar hash como segredo",
+      "layer": "unit_contract",
+      "setup": "Agente hash-only e captura de issue_key/argv.",
+      "action": "Gerar comando em Bash e PowerShell e usar key existente.",
+      "expected": "Comando sem segredo de longa duração; nenhuma chamada de emissão; MCP anterior continua autenticando o mesmo agente.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-04-01",
+      "source": "R4",
+      "task_ids": [
+        "NS04.01"
+      ],
+      "title": "Consumir catálogo sem compor runtime falso",
+      "layer": "unit_contract",
+      "setup": "Ambiente sem harnesses e Core instalado.",
+      "action": "Consultar catálogo antes de iniciar journal/runtime.",
+      "expected": "Catálogo vem do Core sem spawn/porta/credencial; attach continua registrado não qualificado.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-04-02",
+      "source": "R4",
+      "task_ids": [
+        "NS04.02"
+      ],
+      "title": "Preservar candidatos e avaliar no host correto",
+      "layer": "unit_contract",
+      "setup": "Par Node/CLI de laboratório e duas versões da mesma família.",
+      "action": "Discovery → avaliação → serialização.",
+      "expected": "Refs/build/version/architecture preservados; avaliação remota utiliza host remoto; nenhum provider é iniciado para listar.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-04-03",
+      "source": "R4",
+      "task_ids": [
+        "NS04.03"
+      ],
+      "title": "Gerar e ingressar revisão completa do inventário",
+      "layer": "unit_contract",
+      "setup": "Mesmos paths/versão com bytes alterados e inventário reordenado.",
+      "action": "Publicar snapshots repetidos, adulterados e antigos.",
+      "expected": "Bytes/qualificação alterados mudam revisão; reorder/timestamp isolado não muda; stale/adulterado recusados antes de binding.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-04-04",
+      "source": "R4",
+      "task_ids": [
+        "NS04.04"
+      ],
+      "title": "Expor opções com estados técnicos e canônicos separados",
+      "layer": "unit_contract",
+      "setup": "Executor offline, candidato unqualified e agente sem autorização.",
+      "action": "Consultar opções e comparar estados.",
+      "expected": "UI recebe razões verdadeiras; nenhuma combinação bloqueante habilita start; dados de outro executor não são apresentados ao principal errado.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-04-05",
+      "source": "R4",
+      "task_ids": [
+        "NS04.05"
+      ],
+      "title": "Resolver instalação da revisão exibida",
+      "layer": "unit_contract",
+      "setup": "Duas cópias byte-idênticas A/B e revisão inicial.",
+      "action": "Selecionar B, reordenar e depois alterar B antes do apply.",
+      "expected": "B continua B após reorder; drift/stale recusa antes de efeito; ref legada ambígua exige reseleção.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-05-01",
+      "source": "R4",
+      "task_ids": [
+        "NS05.01"
+      ],
+      "title": "Registrar realização no executor proprietário",
+      "layer": "unit_contract",
+      "setup": "Realização Windows remota e Server sem esse path.",
+      "action": "Registrar e tentar usar ref em outro executor/agente.",
+      "expected": "Somente escopo correto resolve; Server não testa filesystem remoto; nenhum spawn ao preparar.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-05-02",
+      "source": "R4",
+      "task_ids": [
+        "NS05.02"
+      ],
+      "title": "Compor proposta agregada de vínculo",
+      "layer": "unit_contract",
+      "setup": "Primeiro uso local/remoto com opções inequívocas.",
+      "action": "Preparar proposta pela mesma API usada pela UI.",
+      "expected": "Uma confirmação mostra agente, host, instalação, projeto e escopo; backend já resolveu detalhes técnicos.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-05-03",
+      "source": "R4",
+      "task_ids": [
+        "NS05.03"
+      ],
+      "title": "Aplicar proposta com CAS e recibo recuperável",
+      "layer": "unit_contract",
+      "setup": "Falha de resposta depois de commit e alteração concorrente de perfil.",
+      "action": "Repetir client_intent_id e depois tentar proposta obsoleta.",
+      "expected": "Sem duplicação; resposta recupera mesmo binding; mudança de escopo exige nova aprovação.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-05-04",
+      "source": "R4",
+      "task_ids": [
+        "NS05.04"
+      ],
+      "title": "Implementar reuso e novo processo explícito",
+      "layer": "unit_contract",
+      "setup": "Duas sessões/candidatos e uma operação de open incerta.",
+      "action": "Pedir start repetido, novo explícito e caso ambíguo.",
+      "expected": "Reuso não cria processo; new_session autorizado é distinto; unknown/ambiguidade não escolhe substituto.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-05-05",
+      "source": "R4",
+      "task_ids": [
+        "NS05.05"
+      ],
+      "title": "Tratar drift e login de provider como estados explícitos",
+      "layer": "unit_contract",
+      "setup": "Atualização de binário, root movido e provider sem login.",
+      "action": "Iniciar pela API e rebind após consentimento.",
+      "expected": "Recusas anteriores ao efeito têm diagnóstico; rebind efetivo preserva agente/key e não desliga outra sessão.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-06-01",
+      "source": "R4",
+      "task_ids": [
+        "NS06.01"
+      ],
+      "title": "Implementar resolve sem executar",
+      "layer": "unit_contract",
+      "setup": "Peer contador de chamadas nativas e resposta perdida de resolve.",
+      "action": "Resolver duas vezes mesma intenção e consultar por client_intent_id.",
+      "expected": "Zero efeitos; mesmos IDs; body diferente conflita; consulta recupera resposta perdida.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-06-02",
+      "source": "R4",
+      "task_ids": [
+        "NS06.02"
+      ],
+      "title": "Admitir operação e outbox atomicamente",
+      "layer": "unit_contract",
+      "setup": "Injeções antes/depois de commit.",
+      "action": "Admitir, perder resposta e repetir chave.",
+      "expected": "Uma operação/outbox lógica e um claim; falha pré-commit não anuncia sucesso; pós-commit é consultável.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-06-03",
+      "source": "R4",
+      "task_ids": [
+        "NS06.03"
+      ],
+      "title": "Implementar dispatcher com reserva e revalidação",
+      "layer": "unit_contract",
+      "setup": "Fila pequena saturada e rotação durante espera.",
+      "action": "Enfileirar submits e um controle, alterar grant antes do despacho.",
+      "expected": "Controle progride; operação obsoleta produz zero efeito; quota volta exatamente a zero ao concluir.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-06-04",
+      "source": "R4",
+      "task_ids": [
+        "NS06.04"
+      ],
+      "title": "Separar dispatch, receipt e consulta",
+      "layer": "unit_contract",
+      "setup": "Peer registra uma execução e perde ACK do receipt.",
+      "action": "Reenviar receipt idêntico e consultar operação.",
+      "expected": "Receipt idempotente não cria trabalho; um efeito máximo por intenção demonstrada; unknown não é retry seguro por timeout.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-06-05",
+      "source": "R4",
+      "task_ids": [
+        "NS06.05"
+      ],
+      "title": "Preservar consumo exclusivo e causalidade do domínio",
+      "layer": "domain_integration",
+      "setup": "Mesma delivery disputada por MCP e dois runtimes.",
+      "action": "Concorrer claim e encerrar um turno sem handoff_complete.",
+      "expected": "Um executor lógico; observers não executam; handoff permanece pendente até caso de uso governado.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-07-01",
+      "source": "R4",
+      "task_ids": [
+        "NS07.01"
+      ],
+      "title": "Compor stores e runtime por ownership explícito",
+      "layer": "unit_contract",
+      "setup": "Dois starts concorrentes e cancelamento de um waiter.",
+      "action": "Compor instâncias e contar stores/workers/reservas.",
+      "expected": "Uma inicialização possuída por store; nenhum worker órfão; quota física agregada respeitada.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-07-02",
+      "source": "R4",
+      "task_ids": [
+        "NS07.02"
+      ],
+      "title": "Adaptar prepare/open/control preservando IDs",
+      "layer": "core_integration",
+      "setup": "Core real + peer nativo e contextos válidos/invalidos.",
+      "action": "Executar open/submit/steer/interrupt/close pelo Server.",
+      "expected": "IDs conservados e erros tipados; operação legítima funciona; scope/generation errados não alcançam peer.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-07-03",
+      "source": "R4",
+      "task_ids": [
+        "NS07.03"
+      ],
+      "title": "Gerar ambiente e cliente MCP por abertura",
+      "layer": "unit_contract",
+      "setup": "Duas sessões e dois Servers com IDs longos semelhantes.",
+      "action": "Preparar lançamento e inspecionar env/arquivos reais de laboratório.",
+      "expected": "Configurações distintas, URL correta, tokens por sessão; marker estrangeiro impede sobrescrita; nenhum MCP proxy.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-07-04",
+      "source": "R4",
+      "task_ids": [
+        "NS07.04"
+      ],
+      "title": "Compor aprovação e bridge Pi por portas públicas",
+      "layer": "unit_contract",
+      "setup": "Core real e bridges de laboratório sem provider.",
+      "action": "Invocar pedido nativo, ação Pi limitada e tentativa fora de escopo.",
+      "expected": "Ação canônica passa pelo guard; fora de escopo recusa; capability não implementada é explicitamente indisponível.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-07-05",
+      "source": "R4",
+      "task_ids": [
+        "NS07.05"
+      ],
+      "title": "Ligar eventos e encerramento ao host persistente",
+      "layer": "core_fault_injection",
+      "setup": "Open tardio, close bloqueado e release pendente.",
+      "action": "Cancelar waiter, iniciar shutdown e restaurar backend.",
+      "expected": "Mesma abertura/handle permanece alcançável; controles independentes; consultas relatam físico e durável separadamente.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-08-01",
+      "source": "R4",
+      "task_ids": [
+        "NS08.01"
+      ],
+      "title": "Autenticar upgrade e negociar versão antes de efeitos",
+      "layer": "transport_contract",
+      "setup": "Peers válidos e ticket cruzado, expirado ou versão antiga.",
+      "action": "Tentar upgrades e enviar operation antes do welcome.",
+      "expected": "Somente namespace/protocolo correto progride; zero efeito em negociação inválida; secrets ausentes do log.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-08-02",
+      "source": "R4",
+      "task_ids": [
+        "NS08.02"
+      ],
+      "title": "Confirmar attach explicitamente e isolar agentes",
+      "layer": "unit_contract",
+      "setup": "Dois agentes e attach antigo bloqueado durante rotação.",
+      "action": "Admitir A/B, rotacionar A e liberar resposta velha.",
+      "expected": "B permanece válido; A só abre sob ACK novo; ticket A não concede B; ausência de ACK mantém PENDING.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-08-03",
+      "source": "R4",
+      "task_ids": [
+        "NS08.03"
+      ],
+      "title": "Implementar reconciliação e readiness por sessão",
+      "layer": "unit_contract",
+      "setup": "Journal indisponível e depois recuperado.",
+      "action": "Concluir handshake, simular falha e restaurar.",
+      "expected": "Operação nova fica bloqueada até recuperação; controles/história permitidos conforme escopo; nenhuma falsificação de liveness.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-08-04",
+      "source": "R4",
+      "task_ids": [
+        "NS08.04"
+      ],
+      "title": "Validar escopo de todos os frames",
+      "layer": "unit_contract",
+      "setup": "Canal B pede receipt/approval/session de A com IDs iguais.",
+      "action": "Percorrer receiver→handler→repo/Core de laboratório.",
+      "expected": "Zero dados/efeitos estrangeiros; caso legítimo passa; consultas durante handshake não ganham scope adicional.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-08-05",
+      "source": "R4",
+      "task_ids": [
+        "NS08.05"
+      ],
+      "title": "Controlar filas, watchdog e cancelamento do link",
+      "layer": "transport_fault_injection",
+      "setup": "Flood, peer silencioso e queda durante execução.",
+      "action": "Saturar e mandar interrupt/revoke/ACK; reconectar.",
+      "expected": "Memória/pendências limitadas; controles progridem; receipt é recuperado por ID sem duplicar trabalho.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-09-01",
+      "source": "R4",
+      "task_ids": [
+        "NS09.01"
+      ],
+      "title": "Despachar remote open por realização aprovada",
+      "layer": "cross_repo_contract",
+      "setup": "Server sem binários e Connector peer com Core/realização local.",
+      "action": "Abrir remotamente sem CLI ter criado sessão antes.",
+      "expected": "Um open com mesmo ID em Core; Server não acessa filesystem B; modo não suportado recusa antes de spawn.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-09-02",
+      "source": "R4",
+      "task_ids": [
+        "NS09.02"
+      ],
+      "title": "Instalar lease inicial e renovar com correlação",
+      "layer": "unit_contract",
+      "setup": "Relógios independentes, RTT alto e resposta duplicada.",
+      "action": "Solicitar initial/renew/reconnect e atrasar resposta.",
+      "expected": "Replay não estende deadline; resposta tardia não permite efeito; gerações/revisões correspondem ao grant legítimo.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-09-03",
+      "source": "R4",
+      "task_ids": [
+        "NS09.03"
+      ],
+      "title": "Completar matriz de verbos e targeting",
+      "layer": "unit_contract",
+      "setup": "Adapters de contrato com targeting distinto.",
+      "action": "Exercitar cada verbo anunciado e verbos não suportados.",
+      "expected": "Somente capacidades reais passam; expected_turn preservado; operação desconhecida gera erro tipado antes do efeito.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-09-04",
+      "source": "R4",
+      "task_ids": [
+        "NS09.04"
+      ],
+      "title": "Revogar sem troca silenciosa de ownership",
+      "layer": "unit_contract",
+      "setup": "Dois canais/executores concorrentes e um turno desconhecido.",
+      "action": "Avançar generation, revogar A e tentar execução antiga em B.",
+      "expected": "Contexto obsoleto recusado; nenhum processo substituto; histórico continua consultável no scope autorizado.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-09-05",
+      "source": "R4",
+      "task_ids": [
+        "NS09.05"
+      ],
+      "title": "Qualificar desconexão de controle e ferramentas separadamente",
+      "layer": "cross_repo_integration",
+      "setup": "Dois canais controlados e uma conversa tools-only.",
+      "action": "Derrubar canais individualmente e expirar capability.",
+      "expected": "Sem bypass/replay de tool mutável; tools-only legítimo permanece independente; runtime gerenciado respeita sua autorização.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-10-01",
+      "source": "R4",
+      "task_ids": [
+        "NS10.01"
+      ],
+      "title": "Ingressar evento com deduplicação e watermark contíguo",
+      "layer": "unit_contract",
+      "setup": "Seq1/seq3, duplicata1 e duplicata com hash diferente.",
+      "action": "Ingressar lote e perder conexão antes/depois de commit.",
+      "expected": "Watermark só chega a1 até seq2; duplicata legítima não duplica projeção; conflito de hash é explícito.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-10-02",
+      "source": "R4",
+      "task_ids": [
+        "NS10.02"
+      ],
+      "title": "Separar leitura finita de follower contínuo",
+      "layer": "core_integration",
+      "setup": "Um evento real persistido e nenhum posterior.",
+      "action": "Pedir página e publicar sem produzir outro evento.",
+      "expected": "Página termina; seq1 é enviada prontamente; próximo snapshot vazio não prende o request.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-10-03",
+      "source": "R4",
+      "task_ids": [
+        "NS10.03"
+      ],
+      "title": "Usar target correto e aplicar ACK local uma vez",
+      "layer": "unit_contract",
+      "setup": "ACK1 conhecido, lote2 sem ACK2 e replay1.",
+      "action": "Aguardar dois alvos e injetar falha em Core acknowledge.",
+      "expected": "Replay1 conclui; batch2 aguarda; obrigação de aplicar ACK converge sem novo send_turn.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-10-04",
+      "source": "R4",
+      "task_ids": [
+        "NS10.04"
+      ],
+      "title": "Recuperar publicador sem evento novo",
+      "layer": "unit_contract",
+      "setup": "Primeira leitura falha e journal contém seq1.",
+      "action": "Restaurar storage e sinalizar reconnect sem publish novo.",
+      "expected": "Task é retomada uma vez, seq1 publicada/confirmada, payloads offline não crescem ilimitadamente em RAM.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-10-05",
+      "source": "R4",
+      "task_ids": [
+        "NS10.05"
+      ],
+      "title": "Preservar projeções canônicas e retenção",
+      "layer": "domain_integration",
+      "setup": "Eventos fora de ordem, terminal cedo e UI offline.",
+      "action": "Ingressar e reconstruir projeções duas vezes.",
+      "expected": "Estado idempotente e auditável; ACK não depende UI; handoff/causalidade continuam íntegros.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-11-01",
+      "source": "R4",
+      "task_ids": [
+        "NS11.01"
+      ],
+      "title": "Persistir proposta operacional separada de exibição",
+      "layer": "core_integration",
+      "setup": "Pedido real observado no journal Core e pipeline de ingresso/UI.",
+      "action": "Receber, redigir para tela e recuperar pedido operacional.",
+      "expected": "Hash/JSON operacional byte-semanticamente preservados; UI não vaza secrets; dois namespaces não se sobrescrevem.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-11-02",
+      "source": "R4",
+      "task_ids": [
+        "NS11.02"
+      ],
+      "title": "Autorizar operador e aplicar CAS antes do efeito",
+      "layer": "unit_contract",
+      "setup": "Operador válido, agente solicitante e duas decisões concorrentes.",
+      "action": "Tentar approve sem autoridade e CAS concorrente approve/deny.",
+      "expected": "Sem autoridade zero operação nativa; uma decisão canônica vence; perdedora recebe conflito consultável.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-11-03",
+      "source": "R4",
+      "task_ids": [
+        "NS11.03"
+      ],
+      "title": "Despachar aplicação única e traduzir pelo contrato",
+      "layer": "cross_repo_contract",
+      "setup": "Server→Connector→Core reais nas fronteiras de laboratório.",
+      "action": "Decidir pedido e repetir resposta HTTP/notificação.",
+      "expected": "Uma aplicação por operation_id; request/turn/scope corretos; accept/decline legítimos passam e pedido velho não afeta turno novo.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-11-04",
+      "source": "R4",
+      "task_ids": [
+        "NS11.04"
+      ],
+      "title": "Conservar producers, recibos e incerteza de decisão",
+      "layer": "unit_contract",
+      "setup": "POST recebido bloqueado, cancelamento IPC e write nativo incerto.",
+      "action": "Cancelar waiter, consultar e restaurar backend.",
+      "expected": "Producer permanece ou resultado é classificado; mesma decisão converge; nenhuma execução duplicada ou estado pending fictício.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-11-05",
+      "source": "R4",
+      "task_ids": [
+        "NS11.05"
+      ],
+      "title": "Tratar input sensível e administrativo explicitamente",
+      "layer": "unit_contract",
+      "setup": "Pedido input, administrative e native session inexistente.",
+      "action": "Decidir, expirar e simular crash antes da aplicação.",
+      "expected": "Limite de recuperação declarado; nenhuma resposta inventada ou desvio de namespace; consultar decisão não revela conteúdo sensível.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-12-01",
+      "source": "R4",
+      "task_ids": [
+        "NS12.01"
+      ],
+      "title": "Unificar acesso MCP e native-actions no domínio",
+      "layer": "domain_integration",
+      "setup": "Uma delivery concorrida por MCP, local e Pi remoto.",
+      "action": "Solicitar claim/complete via caminhos distintos.",
+      "expected": "Um claimant lógico; repeat é idempotente; policy/delivery budget preservados.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-12-02",
+      "source": "R4",
+      "task_ids": [
+        "NS12.02"
+      ],
+      "title": "Aplicar autorização da sessão ao MCP HTTP",
+      "layer": "unit_contract",
+      "setup": "Capability limitada e key tools-only do mesmo agente.",
+      "action": "Testar tool permitida, negada, root outro e revoke.",
+      "expected": "Mesmo agente, scopes diferentes; managed não contorna lease; tools-only não depende do WSS.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-12-03",
+      "source": "R4",
+      "task_ids": [
+        "NS12.03"
+      ],
+      "title": "Preservar causalidade e resultado governado",
+      "layer": "unit_contract",
+      "setup": "Turno final sem complete e cadeia de replies próxima do limite.",
+      "action": "Reconectar e completar explicitamente.",
+      "expected": "Sem complete automático nem aumento do orçamento causal; destinatário e evidência preservados.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-12-04",
+      "source": "R4",
+      "task_ids": [
+        "NS12.04"
+      ],
+      "title": "Publicar capacidades apenas demonstradas",
+      "layer": "unit_contract",
+      "setup": "Runtime conversacional sem tool path e outro com ponte válida.",
+      "action": "Consultar opções/capacidades e despachar trabalho governado.",
+      "expected": "Primeiro não recebe execute_work; segundo segue grant/claim; nenhum false READY por metadado estático.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-12-05",
+      "source": "R4",
+      "task_ids": [
+        "NS12.05"
+      ],
+      "title": "Manter superfície MCP compacta",
+      "layer": "unit_contract",
+      "setup": "Catálogo com poucos e muitos executores, mesma toolset.",
+      "action": "Comparar nomes/schema e executar preflight HTTP.",
+      "expected": "Número de ferramentas não cresce por host; orientação compatível com identidade/workspace e sem stdio.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-13-01",
+      "source": "R4",
+      "task_ids": [
+        "NS13.01"
+      ],
+      "title": "Implementar seleção executor→instalação→workspace",
+      "layer": "ui_integration",
+      "setup": "Duas cópias idênticas e Server Linux com executor Windows.",
+      "action": "Selecionar B e alterar snapshot no peer API.",
+      "expected": "UI mantém alvo correto quando válido e recusa stale; fatos remotos não são reavaliados pelo OS do Server.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-13-02",
+      "source": "R4",
+      "task_ids": [
+        "NS13.02"
+      ],
+      "title": "Substituir configuração técnica por consentimento agregado",
+      "layer": "ui_integration",
+      "setup": "Primeiro uso e uso recorrente local/remoto.",
+      "action": "Concluir wizard duas vezes com mesmo binding.",
+      "expected": "Segundo uso reutiliza sem chave/JSON manual; local não exige Connector; remoto não pede provider secret ao Server.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-13-03",
+      "source": "R4",
+      "task_ids": [
+        "NS13.03"
+      ],
+      "title": "Implementar acompanhamento por IDs e estados honestos",
+      "layer": "ui_integration",
+      "setup": "Resposta perdida após admissão e evento terminal posterior.",
+      "action": "Operar UI e reconectar SSE.",
+      "expected": "Mesmo ID reaparece e estado converge sem segundo start; UI offline não altera ACK durável.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-13-04",
+      "source": "R4",
+      "task_ids": [
+        "NS13.04"
+      ],
+      "title": "Concluir CLI humana/headless e logs observadores",
+      "layer": "cli_integration",
+      "setup": "Ambiguidade de aliases e prompt desabilitado.",
+      "action": "Executar start/status/logs/stop com timeouts.",
+      "expected": "Erros estáveis e ação corretiva; identidade correta; follower termina sem matar runtime.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-13-05",
+      "source": "R4",
+      "task_ids": [
+        "NS13.05"
+      ],
+      "title": "Expor diagnóstico e aprovações sem vazar dados",
+      "layer": "ui_security",
+      "setup": "Usuário de teste autorizado e agente com leitura restrita.",
+      "action": "Consultar views/log/export e responder pedido por UI.",
+      "expected": "Scopes/reasons úteis sem secrets; canal de apresentação não torna agente seu próprio aprovador.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-14-01",
+      "source": "R4",
+      "task_ids": [
+        "NS14.01"
+      ],
+      "title": "Recuperar histórico antes de admitir após restart",
+      "layer": "restart_integration",
+      "setup": "Receipt real em disco, processo aplicativo novo e binário removido.",
+      "action": "Reiniciar host e consultar client intent/operation/session.",
+      "expected": "Histórico responde; ownership desconhecido permanece; nenhum novo spawn para recuperar dados.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-14-02",
+      "source": "R4",
+      "task_ids": [
+        "NS14.02"
+      ],
+      "title": "Invalidar autoridade em todas as superfícies",
+      "layer": "unit_contract",
+      "setup": "CAS perdido para geração mais nova e ACK perdido após revoke.",
+      "action": "Consultar, tentar submit antigo e recuperar storage.",
+      "expected": "Contexto antigo zero efeito; rollback comprovado recupera disponibilidade; verdadeiramente unknown continua restrito.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-14-03",
+      "source": "R4",
+      "task_ids": [
+        "NS14.03"
+      ],
+      "title": "Implementar shutdown DRAINING_PENDING com orçamento único",
+      "layer": "core_fault_injection",
+      "setup": "Dois runtimes, open tardio, close travado e release pendente.",
+      "action": "Parar Server e depois restaurar backend.",
+      "expected": "Prazo público limitado; ambos relatados; força não espera storage; segunda recuperação alcança mesmos owners sem duplicação.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-14-04",
+      "source": "R4",
+      "task_ids": [
+        "NS14.04"
+      ],
+      "title": "Aplicar quotas e cache limitados com medições",
+      "layer": "load",
+      "setup": "Base sintética e flood de um executor com outro legítimo.",
+      "action": "Medir lookup/memória/filas e enviar controle sob carga.",
+      "expected": "Sem full enumeration por onboarding; memória bounded; controles e outro agente progridem; resultados e hardware registrados.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-14-05",
+      "source": "R4",
+      "task_ids": [
+        "NS14.05"
+      ],
+      "title": "Testar falhas de processo e limites de plataforma",
+      "layer": "os_backend",
+      "setup": "Backend real disponível ou bloqueio documentado.",
+      "action": "Matar supervisor de laboratório e observar árvore própria.",
+      "expected": "Apenas ownership comprovado é controlado; backend ausente é BLOCKED/NOT_RUN, não PASS universal.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-15-01",
+      "source": "R4",
+      "task_ids": [
+        "NS15.01"
+      ],
+      "title": "Executar M0–M3 com preservação e retomada",
+      "layer": "migration",
+      "setup": "Snapshot legado com endpoints negados, jobs históricos e keys.",
+      "action": "Interromper backfill e retomar duas vezes.",
+      "expected": "Mesmos IDs/negações/conteagens; batches convergem; nenhuma migração abre processo.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-15-02",
+      "source": "R4",
+      "task_ids": [
+        "NS15.02"
+      ],
+      "title": "Drenar owner antigo antes de trocar execução",
+      "layer": "migration_runtime",
+      "setup": "Sessão antiga ativa e outra com resultado incerto.",
+      "action": "Executar cutover controlado e tentar abrir substituto.",
+      "expected": "Ativa encerra pelo mecanismo correto; unknown não duplica; rollback não reativa stdio.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-15-03",
+      "source": "R4",
+      "task_ids": [
+        "NS15.03"
+      ],
+      "title": "Remover loaders/codecs duplicados depois de paridade",
+      "layer": "unit_contract",
+      "setup": "Busca estática de imports/Popen e testes de comportamento local.",
+      "action": "Executar verificação de fronteiras e paridade delimitada.",
+      "expected": "Runtime físico só existe no Core; domínio e HTTP MCP preservados; nenhum import da aplicação Connector.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-15-04",
+      "source": "R4",
+      "task_ids": [
+        "NS15.04"
+      ],
+      "title": "Migrar configuração e documentar rollback seguro",
+      "layer": "migration",
+      "setup": "Falha de apply e tree com marker de outro binding.",
+      "action": "Aplicar/repetir/migrar configuração e ensaiar restore.",
+      "expected": "Config alheia intacta; rollback recusado quando inseguro; histórico e operações unknown preservados.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-15-05",
+      "source": "R4",
+      "task_ids": [
+        "NS15.05"
+      ],
+      "title": "Atualizar documentação e instruções operacionais",
+      "layer": "unit_contract",
+      "setup": "README/help/resources/dashboard atualizados.",
+      "action": "Comparar docs com APIs e matriz de capacidade.",
+      "expected": "Nenhum comando fictício apresentado como existente; docs não contradizem gate/qualificação e negações.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-16-01",
+      "source": "R4",
+      "task_ids": [
+        "NS16.01"
+      ],
+      "title": "Construir artefatos imutáveis e contratos instalados",
+      "layer": "packaging",
+      "setup": "Ambiente isolado sem fonte no sys.path.",
+      "action": "Instalar e executar smoke público.",
+      "expected": "Hashes/versões registrados; serve-lite funcional sem torch novo; nenhum schema é obtido remotamente em execução.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-16-02",
+      "source": "R4",
+      "task_ids": [
+        "NS16.02"
+      ],
+      "title": "Executar conjunto completo de regressões sem inflar números",
+      "layer": "regression_suite",
+      "setup": "Ambiente atual e fixtures de fault injection.",
+      "action": "Rodar duas vezes casos de corrida e uma suíte completa.",
+      "expected": "Resultados por camada/node/versão; nenhum PASS sem execução; falha externa distinguida de defeito funcional.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-16-03",
+      "source": "R4",
+      "task_ids": [
+        "NS16.03"
+      ],
+      "title": "Qualificar ciclo local sem Connector instalado",
+      "layer": "provider_local",
+      "setup": "Um SO/provider autorizado e pacote Nexus/Core apenas.",
+      "action": "Executar caminho local ponta a ponta.",
+      "expected": "Mesmo adapter Core; nenhum Connector/WSS local obrigatório; governança e shutdown demonstrados.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-16-04",
+      "source": "R4",
+      "task_ids": [
+        "NS16.04"
+      ],
+      "title": "Qualificar ciclo remoto heterogêneo",
+      "layer": "multi_host",
+      "setup": "Topologia A/B/C autorizada com ao menos um Windows/Unix pertinente.",
+      "action": "Executar J01–J34 e TR4 correspondentes com artefatos exatos.",
+      "expected": "Nenhum filesystem remoto resolvido em A, nenhuma execução duplicada, mesmos IDs; limitações de provider/SO explícitas.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TR4-16-05",
+      "source": "R4",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Emitir decisão por escopo e handoff final",
+      "layer": "release_review",
+      "setup": "Todas as evidências anteriores e casos NOT_RUN remanescentes.",
+      "action": "Revisar cada gate e requisito original preservado.",
+      "expected": "Decisão proporcional, sem ambiguidades; outro agente consegue instalar artefato e repetir campanha sem inferir campos/rotas.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-01",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS00.05"
+      ],
+      "title": "Baseline",
+      "layer": "legacy_acceptance",
+      "setup": "Executar build/testes existentes no HEAD efetivo e comparar com referência.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Falhas anteriores separadas; novos testes de regressão rastreados.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-02",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS00.05"
+      ],
+      "title": "Crosswalk",
+      "layer": "legacy_acceptance",
+      "setup": "Comparar dois planos antigos, PR34 e remote-executors com G01–G20.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Todo requisito preservado/substituído/descartado tem justificativa; sem dois backlogs concorrentes.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-03",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS02.05"
+      ],
+      "title": "Migração nova/legada",
+      "layer": "legacy_acceptance",
+      "setup": "Aplicar migrações em DB vazio e snapshot legado, repetir e interromper backfill.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Retomada idempotente; agent/workspace IDs e histórico preservados.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-04",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS02.05"
+      ],
+      "title": "Contrato único",
+      "layer": "legacy_acceptance",
+      "setup": "Alterar hash/schema de consumidor e tentar major incompatível.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "CI/negociação detecta divergência antes de efeitos.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-05",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS02.05"
+      ],
+      "title": "Boundary",
+      "layer": "legacy_acceptance",
+      "setup": "Importar Server sem Connector/provider local; inspecionar árvore de imports.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Server funciona; física nativa só no Core e sem ciclos de dependência.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-06",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS03.05"
+      ],
+      "title": "Identidade chave",
+      "layer": "legacy_acceptance",
+      "setup": "Autenticar A e enviar hint/payload com agent_id B.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Negação antes de bind/spawn; nenhum Agent criado ou identidade alterada.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-07",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS03.05"
+      ],
+      "title": "Importação sem rotação",
+      "layer": "legacy_acceptance",
+      "setup": "Configurar Connector com chave já usada por MCP; chamar MCP novamente.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Mesma identidade e chave continuam válidas; issue_key não é acionado.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-08",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS03.05"
+      ],
+      "title": "Revogação e dois canais",
+      "layer": "legacy_acceptance",
+      "setup": "Rotacionar/revogar key e capability MCP HTTP com WSS/HTTP ativos ou particionados separadamente.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Invalidação/expiry bloqueiam efeitos da sessão em qualquer caminho; tickets NXL não ampliam escopo MCP.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-09",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS03.05"
+      ],
+      "title": "Self permission",
+      "layer": "legacy_acceptance",
+      "setup": "Agente autenticado tenta bind/grant de outro ou habilitar método negado.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Políticas existentes preservadas; nenhum autoapprove de escalada.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-10",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS07.05"
+      ],
+      "title": "Local nativo",
+      "layer": "legacy_acceptance",
+      "setup": "Instalar Nexus + Core, sem aplicação Connector, e abrir Codex qualificado local.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Serve hospeda executor e controla runtime sem WSS/pareamento local.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-11",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS07.05"
+      ],
+      "title": "Owner local",
+      "layer": "legacy_acceptance",
+      "setup": "Duas CLIs e cliente MCP HTTP pedem abertura com mesma chave idempotente; fechar clientes.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Owner único e execução idempotente; runtimes independentes continuam, sem processo MCP stdio.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-12",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS07.05"
+      ],
+      "title": "Shutdown Server",
+      "layer": "legacy_acceptance",
+      "setup": "Encerrar serve com runtime próprio e alvo externo anexado.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Core drena/encerra árvore própria e desanexa externo; relatório por sessão.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-13",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS05.05"
+      ],
+      "title": "Path remoto",
+      "layer": "legacy_acceptance",
+      "setup": "Server Linux recebe vínculo de diretório Windows validado pelo Connector.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Nenhum realpath/isdir local sobre path remoto; identidade lógica correta.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-14",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS05.05"
+      ],
+      "title": "Workspace equivalência",
+      "layer": "legacy_acceptance",
+      "setup": "Mesmo Git/path em hosts diferentes e manifesto falsificado.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Não mescla/autoriza automaticamente; binding explícito e escopado.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-15",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS05.05"
+      ],
+      "title": "Setup sem argv",
+      "layer": "legacy_acceptance",
+      "setup": "Selecionar binários Codex/Pi com espaços via UI normal.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Core adiciona argumentos obrigatórios; usuário não edita JSON.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-16",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS05.05"
+      ],
+      "title": "Reuso e drift",
+      "layer": "legacy_acceptance",
+      "setup": "Repetir start aprovado, depois trocar root/binário/permissão.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Primeiro reutiliza; mudança relevante exige reprepare/approval, não expansão silenciosa.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-17",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS08.05"
+      ],
+      "title": "Canal WSS",
+      "layer": "legacy_acceptance",
+      "setup": "Negociar TLS/protocolo com peer e depois Connector real.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Saída remota bidirecional, sem callback/porta entrante no host.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-18",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS08.05"
+      ],
+      "title": "Lanes",
+      "layer": "legacy_acceptance",
+      "setup": "Autenticar lane A; tentar operações B; anexar B com própria prova.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "B só disponível após ticket válido; revoke A não empresta sua autoridade a B.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-19",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS08.05"
+      ],
+      "title": "Instâncias concorrentes",
+      "layer": "legacy_acceptance",
+      "setup": "Abrir canais conflitantes da mesma instalação e reenviar geração antiga.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "CAS/fencing impede dois owners ativos ou takeover silencioso.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-20",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS08.05"
+      ],
+      "title": "Controle sob carga",
+      "layer": "legacy_acceptance",
+      "setup": "Inundar texto enquanto chega interrupt/revoke.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Limites/priority preservam controle; métricas de fila em bytes disponíveis.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-21",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS10.05"
+      ],
+      "title": "Idempotência",
+      "layer": "legacy_acceptance",
+      "setup": "Repetir operation_id/hash e depois alterar payload.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Primeiro devolve recibo sem efeito novo; segundo OPERATION_CONFLICT.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-22",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS10.05"
+      ],
+      "title": "ACK durável",
+      "layer": "legacy_acceptance",
+      "setup": "Cair antes/depois do commit de evento e antes do ACK.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Replay deduplicado; watermark só confirma persistido.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-23",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS10.05"
+      ],
+      "title": "Unknown",
+      "layer": "legacy_acceptance",
+      "setup": "Perder confirmação depois de write possível no harness.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "OUTCOME_UNKNOWN consultável; nenhum novo turno/host automático.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-24",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS10.05"
+      ],
+      "title": "Consumo exclusivo",
+      "layer": "legacy_acceptance",
+      "setup": "MCP pull, runtime local e remoto competem pela mesma entrega.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Um consumidor de execução; outbox não cria outra tarefa.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-25",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS10.05"
+      ],
+      "title": "Eventos fora de ordem",
+      "layer": "legacy_acceptance",
+      "setup": "Terminal chega antes de ACK, duplicatas/gaps/geração antiga.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Reducer conserva fatos; gaps explícitos; histórico não autoriza novo efeito.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-26",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS12.05"
+      ],
+      "title": "Ferramentas canônicas",
+      "layer": "legacy_acceptance",
+      "setup": "Executar via MCP HTTP direto local/remoto e bridge nativa não MCP com o mesmo agente.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Mesmos casos de uso/grants/claims e auth; nenhum proxy/fachada MCP no caminho.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-27",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS12.05"
+      ],
+      "title": "Handoff",
+      "layer": "legacy_acceptance",
+      "setup": "Finalizar turno sem complete governado e depois emitir complete válido.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Primeiro não completa handoff; segundo preserva evidência/correlação/budget.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-28",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS12.05"
+      ],
+      "title": "HITL",
+      "layer": "legacy_acceptance",
+      "setup": "Duas interfaces decidem, chega decisão tardia e agente tenta se autoaprovar.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "CAS único, turno/request corretos e autoridade existente exigida.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-29",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS01.05"
+      ],
+      "title": "MCP HTTP e remoção stdio",
+      "layer": "legacy_acceptance",
+      "setup": "Upgrade com MCP HTTP e antiga entrada Nexus stdio selecionada; invocar entrypoint removido.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "HTTP preservado; migração orientada sem key nova; stdio ausente/erro prescritivo sem transporte ou shim; outras entradas intactas.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-30",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS01.05"
+      ],
+      "title": "Superfície compacta",
+      "layer": "legacy_acceptance",
+      "setup": "Comparar catálogo/schema/tokens com baseline e adicionar muitos hosts.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Catálogo não replica tools por conexão; diferença justificada/medida.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-31",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS01.05"
+      ],
+      "title": "CLI consistente",
+      "layer": "legacy_acceptance",
+      "setup": "Start/status/interrupt/stop/logs com JSON e timeout.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Mesmo domínio/recibo da API; timeout de espera não reenfileira efeito.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-32",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS13.05"
+      ],
+      "title": "UI primeiro/segundo uso",
+      "layer": "legacy_acceptance",
+      "setup": "Completar fluxo local e remoto duas vezes.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Sem endpoint/profile/JSON/token manual recorrente; escopo compreensível.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-33",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS13.05"
+      ],
+      "title": "Modo explícito",
+      "layer": "legacy_acceptance",
+      "setup": "Escolher tools-only, managed e attach.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "UI informa sessão criada/reutilizada/anexada; não promete adotar conversa atual.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-34",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS13.05"
+      ],
+      "title": "Estados honestos",
+      "layer": "legacy_acceptance",
+      "setup": "Daemon online, provider ausente, approval pendente e resultado unknown.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Cada condição aparece distintamente; nenhuma marcada como runtime pronto.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-35",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS14.05"
+      ],
+      "title": "Input hostil",
+      "layer": "legacy_acceptance",
+      "setup": "Enviar paths/plugins/argv/env e identidade forjados pelo wire.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Validação/autoridade impede execução/configuração fora do binding.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-36",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS14.05"
+      ],
+      "title": "Partição/lease",
+      "layer": "legacy_acceptance",
+      "setup": "Desconectar runtime durante revoke; alterar relógio; restaurar canal.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Sem novas autorizações offline; limite de lease respeitado e reconciliação anterior à admissão.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-37",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS14.05"
+      ],
+      "title": "Secrets",
+      "layer": "legacy_acceptance",
+      "setup": "Inspecionar logs/UI/exports/headers de erro/métricas.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Sem chave/ticket/provider secret; cardinalidade de labels limitada.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-38",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS15.05"
+      ],
+      "title": "100 mil identidades",
+      "layer": "legacy_acceptance",
+      "setup": "Sem provider, popular 100 mil agentes e conectar um por chave.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Lookup indexado e retorno escopado; nenhuma enumeração global ou thread por agente.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-39",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS15.05"
+      ],
+      "title": "Cache bounded",
+      "layer": "legacy_acceptance",
+      "setup": "Exercer muitas chaves e revogar em cache; simular churn.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Memória limitada e invalidação síncrona; epoch não permanece autorizado.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-40",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS15.05"
+      ],
+      "title": "Rollback dados",
+      "layer": "legacy_acceptance",
+      "setup": "Restaurar snapshot/versão suportada após backfill e execução controlada.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Dados e políticas preservados; rollback inseguro recusado/explicado.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-41",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Build limpo",
+      "layer": "legacy_acceptance",
+      "setup": "Instalar wheel Nexus serve/serve-lite e Core fixado sem clones irmãos.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Assets/dependências corretos e modo local disponível.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-42",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Server sem harnesses",
+      "layer": "legacy_acceptance",
+      "setup": "Subir A sem binários, provider keys ou diretórios de B/C.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "API/recepção remota funcionam; não solicita instalação local de provider.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-43",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Multihost",
+      "layer": "legacy_acceptance",
+      "setup": "Executar campanha J com A/B/C e mesmo Core wheel.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Controles/eventos/HITL e identidade independem do host central.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-44",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Fault conjunto",
+      "layer": "legacy_acceptance",
+      "setup": "Executar partições, crash e ACK perdido nos três artefatos reais.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Resultados correspondem a efeitos possíveis e sem execução duplicada.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "TN-45",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Release gate",
+      "layer": "legacy_acceptance",
+      "setup": "Revisar evidências com SHAs/versões e casos ainda NOT_RUN.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Somente capacidades demonstradas qualificadas; bloqueios externos explícitos.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J01",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Identidade canônica",
+      "layer": "joint_multi_host",
+      "setup": "Criar agente previamente no Nexus e configurar MCP com sua key; importar a mesma no Connector.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Nenhum segundo Agent/user; MCP continua válido, mesmo agent_id em mensagens e sessões.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J02",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Não rotacionar para conectar",
+      "layer": "joint_multi_host",
+      "setup": "Usar Server que guarda somente hash; gerar comando para identidade existente.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Comando pede/importa key existente de forma protegida; não chama issue_key silenciosamente.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J03",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Autenticação errada",
+      "layer": "joint_multi_host",
+      "setup": "Key A com hint B; depois ticket A tenta abrir lane de B.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Negação antes de configuração/spawn; nenhuma atribuição por payload.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J04",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Nexus local puro",
+      "layer": "joint_multi_host",
+      "setup": "Instalar Nexus/Core, sem app Connector, e abrir/gerir cada runtime gerenciado qualificado.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Core embutido em serve, sem daemon Connector, pareamento ou WSS local obrigatório.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J05",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Servidor realmente remoto",
+      "layer": "joint_multi_host",
+      "setup": "A sem executáveis/providers/projetos; B/C com Connector/Core e harnesses.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Operações e streams funcionam; Server não faz realpath/spawn de B/C.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J06",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Rede outbound",
+      "layer": "joint_multi_host",
+      "setup": "Firewall de B/C nega conexões entrantes e permite WSS/HTTPS ao Server; testar também o processo/sandbox do harness.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Controle via Connector e MCP HTTP direto via harness funcionam com tráfego de saída; nenhuma porta MCP local exigida.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J07",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Paths heterogêneos",
+      "layer": "joint_multi_host",
+      "setup": "A Linux, B Windows e C Unix; roots diferentes do mesmo e de outros repositórios.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Vínculos lógicos autorizados, validação física local e nenhuma fusão por path/Git.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J08",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "100 mil agentes",
+      "layer": "joint_multi_host",
+      "setup": "Sem providers, popular 100 mil identidades no Server e importar uma key em B.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Queries indexadas e escopadas; não listar tudo nem criar recursos por agente offline.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J09",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Um daemon, várias identidades",
+      "layer": "joint_multi_host",
+      "setup": "B importa agentes A1/A2 que usam o mesmo binário Codex e um agente Pi.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Sessões/credentials/lanes isoladas, sem daemon por agente ou prompt broadcast indevido.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J10",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Dois Servers",
+      "layer": "joint_multi_host",
+      "setup": "B conecta dois Servers distintos e remove/revoga binding em apenas um.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Namespaces, processos, cofre e tickets do outro preservados.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J11",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "First-use/second-use",
+      "layer": "joint_multi_host",
+      "setup": "Configurar por comando da tela e executar runtime start repetidamente.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Setup agregado uma vez; depois sem JSON/argv/endpoint/profile/grant/chave manual recorrente.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J12",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Daemon automático",
+      "layer": "joint_multi_host",
+      "setup": "Connect e runtime start concorrentes com daemon parado.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Uma instância; daemon ready não abre todos os harnesses descobertos.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J13",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Terminal independente",
+      "layer": "joint_multi_host",
+      "setup": "Fechar CLI de start, TUI/log follower e encerrar cliente MCP HTTP tools-only independente.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Daemon e runtimes independentes continuam; fechar cliente HTTP não encerra supervisor nem outra sessão.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J14",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Turno versus processo",
+      "layer": "joint_multi_host",
+      "setup": "Enviar trabalho, interrupt, novo turno e runtime stop.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Cancelamento preserva runtime quando suportado; stop encerra recursos próprios, não identidade/histórico.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J15",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Shutdown/crash",
+      "layer": "joint_multi_host",
+      "setup": "Stop daemon/serve; depois SIGKILL do supervisor em cenário controlado.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Drain/containment e relatório real; sem kill alheio ou trabalho indefinido não declarado.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J16",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "MCP HTTP tools-only direto",
+      "layer": "joint_multi_host",
+      "setup": "Usar conversa não gerenciada com MCP HTTP antes/depois de instalar e desligar Connector; também testar sem Connector instalado.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Harness chama somente o Server; identidade preservada, nenhum proxy/subprocesso MCP e nenhuma adoção de conversa pelo runtime.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J17",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Work bridge nativa não MCP",
+      "layer": "joint_multi_host",
+      "setup": "Pi sem MCP HTTP recebe tarefa e chama contexto/claim/complete via extensão qualificada.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Mesmo domínio canônico; nenhum servidor/proxy/envelope MCP no Core/Connector; texto livre não completa handoff.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J18",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Consumo exclusivo",
+      "layer": "joint_multi_host",
+      "setup": "Uma entrega com MCP pull e dois runtimes disponíveis ao mesmo agente.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Um consumidor lógico; sem duplo turno/grant/resposta por multiplicidade de conexão.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J19",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "HITL concorrente",
+      "layer": "joint_multi_host",
+      "setup": "Provider pede aprovação; CLI/UI respondem, agente tenta autoaprovar e decisão chega tarde.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Autoridade existente, CAS, geração/turno corretos; timeout/deny não aprovam.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J20",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Recebido não é concluído",
+      "layer": "joint_multi_host",
+      "setup": "Observar ACK WSS, aceitação nativa, fim de turno e handoff em cada adapter.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Estados separados, nenhum marco antecipa outro sem evidência.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J21",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Resposta perdida",
+      "layer": "joint_multi_host",
+      "setup": "Perder ACK após submit nativo possível, reconectar e repetir consulta/ID.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Sem replay automático; recibo/unknown/reconciliação pelo mesmo intent.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J22",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Partição e revogação",
+      "layer": "joint_multi_host",
+      "setup": "Revogar key com WSS online e depois testar partição prolongada/relógio alterado.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Online invalida derivados; offline limita por lease, sem prometer revogação instantânea.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J23",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Gerações e takeover",
+      "layer": "joint_multi_host",
+      "setup": "Canal antigo e novo/daemon clonado disputam mesma sessão.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Um owner, fencing/reconciliação; sem failover silencioso ou processo duplicado.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J24",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Eventos/retention",
+      "layer": "joint_multi_host",
+      "setup": "Interromper ACK, enviar duplicatas/out-of-order e ultrapassar retenção.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Ingressão durável idempotente e watermark contíguo; gap explícito, terminais não ocultos.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J25",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Saturação",
+      "layer": "joint_multi_host",
+      "setup": "Flood texto, disco cheio e consumidor lento enquanto chega interrupt.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Memória/journal/queues finitos, faixa crítica preservada e novas admissões bloqueadas quando necessário.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J26",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Drift/config segura",
+      "layer": "joint_multi_host",
+      "setup": "Trocar binary/root/symlink/home/hook e editar MCP existente durante setup.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Reprepare/approval/CAS; sem execução ampliada, JSON destruído ou secrets centrais.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J27",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Quatro adapters",
+      "layer": "joint_multi_host",
+      "setup": "Qualificar Codex/Pi/Claude managed e attach existente por versão/SO delimitados.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Mesma implementação Core local/remota e capabilities comprovadas, sem sucesso simulado.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J28",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Upgrade/rollback",
+      "layer": "joint_multi_host",
+      "setup": "Migrar Nexus legado, atualizar Connector/Core com journal pendente e instalar wheels limpos.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Histórico/IDs/negações preservados, drain/reconcile e dependências acíclicas.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J29",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Segredos/ameaças",
+      "layer": "joint_multi_host",
+      "setup": "Inspecionar argv/log/config/export/metric; tentar handle/agent/server spoof e shell injection.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Sem chave canônica/admin de terceiros/provider secrets vazados ou efeito fora do escopo.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J30",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Release coordenado",
+      "layer": "joint_multi_host",
+      "setup": "Conferir resultados/SHAs/wheel hashes e gates provider/SO/multi-host em três relatórios.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Mesma evidência, bloqueios explícitos e nenhuma alegação de produto completo baseada só em fakes.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J31",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Remoção MCP stdio",
+      "layer": "joint_multi_host",
+      "setup": "Instalação limpa e upgrade do Nexus v0.2.0 com configuração MCP stdio; inspecionar entrypoints, módulos, exemplos e migração selecionada.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "MCP stdio ausente, sem shim/fallback; MCP HTTP direto mantém agente/key/histórico e outras entradas não são alteradas.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J32",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "MCP HTTP local nativo",
+      "layer": "joint_multi_host",
+      "setup": "Somente Nexus/Core no host; abrir runtime gerenciado com MCP HTTP para o próprio Server.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Sem Connector ou fachada; cliente chama endpoint HTTP de serve com capability válida e o Core só configura o cliente.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J33",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Fronteira protocolo/transporte",
+      "layer": "joint_multi_host",
+      "setup": "Exercitar stdio nativo dos adapters e inspecionar artefatos/portas de Connector/Core; testar harness com MCP apenas stdio.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Protocolos nativos funcionam; nenhum serviço/extra/CLI MCP/proxy; cliente incompatível recebe diagnóstico sem fallback stdio.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    },
+    {
+      "id": "J34",
+      "source": "R3_PRESERVADO",
+      "task_ids": [
+        "NS16.05"
+      ],
+      "title": "Dois canais e autorização",
+      "layer": "joint_multi_host",
+      "setup": "Em runtime remoto com MCP HTTP direto, derrubar apenas WSS e depois apenas HTTP; expirar/revogar capability e manter outra conversa tools-only independente.",
+      "action": "Executar o cenário original abaixo contra o código R4, preservando sua condição causal e qualificação.",
+      "expected": "Sessão gerenciada respeita lease/grants/revogação sem bypass, replay ou túnel; canal HTTP tools-only legítimo mantém política própria sem exigir daemon.",
+      "status": "NOT_RUN",
+      "blocked_reason": null,
+      "evidence": null
+    }
+  ]
+}

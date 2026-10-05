@@ -1,0 +1,87 @@
+{
+  "date": "2026-10-01",
+  "status": "NS15_01_POST_ADOPTION_RESUME_PASSED_TASK_PARTIAL",
+  "base_commit": "760e4074f15b8b9689f31ee841c4b488d034e07c",
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-core-3msf4qiz\\dist\\nexus_connector_core-0.2.51.dev0-py3-none-any.whl",
+      "sha256": "4c4c0c58d25b93f4f08ba8515d8476ffc29d1f0a27cc577c9fccb610716d1d1c"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-connector-pmt6y5x7\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "baf837251f654ab6385f5fba4e22d1a1b69da1839e8f47752795d1518dd29fe7"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-migration-resume-bkj6ies1\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "567c9f2baf8c24faee9b439b39358fbb7c123274b59669a6091bdfdf6a728d7a"
+    }
+  },
+  "installed_passed": 62,
+  "architecture_passed": 3,
+  "results": {
+    "migration-resume-core51.xml": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "1",
+      "skipped": "0",
+      "tests": "6",
+      "time": "17.716",
+      "timestamp": "2026-10-01T14:24:26.910614-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "migration-resume-directed.xml": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "8",
+      "time": "20.382",
+      "timestamp": "2026-10-01T14:26:49.066232-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "migration-resume-installed.xml": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "62",
+      "time": "143.596",
+      "timestamp": "2026-10-01T14:29:12.579505-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "migration-resume-source.xml": {
+      "name": "pytest",
+      "errors": "5",
+      "failures": "1",
+      "skipped": "0",
+      "tests": "6",
+      "time": "15.959",
+      "timestamp": "2026-10-01T14:23:28.401561-03:00",
+      "hostname": "Alienware_m15"
+    }
+  },
+  "checks": {
+    "installed_packages": "All three wheels compared byte-for-byte to installed packages; Nexus non-static source compared to wheel",
+    "plan_validation": "PASS_DOCUMENT_COVERAGE_ONLY",
+    "diff_check": "Runtime/test code passed; six trailing-space diagnostics in preserved initial failure XML only (raw evidence retained)."
+  },
+  "limitations": [
+    "Synthetic discovery candidate; no provider qualification",
+    "Complete historical-job/M0-M3 acceptance and M4 cutover/rollback remain open",
+    "All release gates remain open"
+  ],
+  "overlap": "Eight directed source cases are included in the installed campaign; not added to its count.",
+  "evidence": {
+    "plans/r4_execution/evidence/migration-resume-artifacts.json": "7934275ba9a1c242c1cc09c46be5d64993e36fba8e7c732c5c7f98ad87630430",
+    "plans/r4_execution/evidence/migration-resume-build-context.json": "a6bc5422f0e80dd0f21968d6f516489d651e024d9f411f56b5fad4c89140dd2c",
+    "plans/r4_execution/evidence/migration-resume-core51.xml": "3ae90c51851cd0dc0018f59d6e76523d0322d6cb24fe6e301a69a11a9ca47ff3",
+    "plans/r4_execution/evidence/migration-resume-directed.xml": "29411f64988d85263531f26a4cd020dc9d76d7d914176276af6b45c0d91b73b6",
+    "plans/r4_execution/evidence/migration-resume-installed.json": "97884c0553fb4e9116a8bced1701c872fc6fe5928cc74519ab27f1a6ce11007e",
+    "plans/r4_execution/evidence/migration-resume-installed.log": "2dbdb3e4b13ffb0afd32cebc502187b5b55a5f878ceb441810b63b18bf3bba12",
+    "plans/r4_execution/evidence/migration-resume-installed.xml": "b749ac6202ca6747690a7e07abb65528cf1984f8112fb8812ecfa7a60ad28988",
+    "plans/r4_execution/evidence/migration-resume-source.xml": "9d55caa0235c0fcc1ef8fd5fd74647891d3c1d2e949e61a9c106f7f4d4b1f822",
+    "plans/r4_execution/M12_MIGRATION_RESUME.md": "1fc3adbe86c8553f2f2869730f5f295eb9c46f921389c8549ddd0b9e69742809",
+    "plans/r4_execution/run_migration_resume_installed.py": "09ca76fbeca58e78d024ece22786b5279b81c38cae58ad188ae6c626335a49c5"
+  },
+  "implementation_commit": "b6b955e89c78f406475c55414a7463a267991671"
+}

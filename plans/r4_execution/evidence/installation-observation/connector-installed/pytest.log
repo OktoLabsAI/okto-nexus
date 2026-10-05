@@ -1,0 +1,49 @@
+........................................................................ [ 10%]
+.................EE..................................................... [ 20%]
+....s................................................................... [ 30%]
+........................................................................ [ 41%]
+.........................................s.............................. [ 51%]
+........................................................................ [ 61%]
+........................................................................ [ 72%]
+........................................................................ [ 82%]
+........................................................................ [ 92%]
+.................................................                        [100%]
+=================================== ERRORS ====================================
+__________________ ERROR at setup of test_clean_venv_install __________________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=<pluggy._tracing.TagTracerSub object at 0x0000022496BACB00>, _basetemp=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4746'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def built_wheel(tmp_path_factory) -> Path:
+        out = tmp_path_factory.mktemp("build")
+        result = subprocess.run(
+            [sys.executable, "-m", "build", "--wheel", "--outdir", str(out)],
+            cwd=PROJECT, capture_output=True, timeout=600)
+>       assert result.returncode == 0, result.stderr.decode()
+E       AssertionError: C:\Users\jpamb\AppData\Local\Temp\nexus-openapi-053-env\Scripts\python.exe: No module named build.__main__; 'build' is a package and cannot be directly executed
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-openapi-053-env\\Scripts\\python.exe', '-m', 'bu...53-env\\Scripts\\python.exe: No module named build.__main__; 'build' is a package and cannot be directly executed\r\n").returncode
+
+tests\e2e\test_packaging.py:41: AssertionError
+_______________ ERROR at setup of test_wheel_metadata_pins_core _______________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=<pluggy._tracing.TagTracerSub object at 0x0000022496BACB00>, _basetemp=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4746'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def built_wheel(tmp_path_factory) -> Path:
+        out = tmp_path_factory.mktemp("build")
+        result = subprocess.run(
+            [sys.executable, "-m", "build", "--wheel", "--outdir", str(out)],
+            cwd=PROJECT, capture_output=True, timeout=600)
+>       assert result.returncode == 0, result.stderr.decode()
+E       AssertionError: C:\Users\jpamb\AppData\Local\Temp\nexus-openapi-053-env\Scripts\python.exe: No module named build.__main__; 'build' is a package and cannot be directly executed
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-openapi-053-env\\Scripts\\python.exe', '-m', 'bu...53-env\\Scripts\\python.exe: No module named build.__main__; 'build' is a package and cannot be directly executed\r\n").returncode
+
+tests\e2e\test_packaging.py:41: AssertionError
+=========================== short test summary info ===========================
+ERROR tests/e2e/test_packaging.py::test_clean_venv_install - AssertionError: C:\Users\jpamb\AppData\Local\Temp\nexus-openapi-053-env\Scripts\python.exe: No module named build.__main__; 'build' is a package and cannot be directly executed
+ERROR tests/e2e/test_packaging.py::test_wheel_metadata_pins_core - AssertionError: C:\Users\jpamb\AppData\Local\Temp\nexus-openapi-053-env\Scripts\python.exe: No module named build.__main__; 'build' is a package and cannot be directly executed
+693 passed, 2 skipped, 2 errors in 323.02s (0:05:23)

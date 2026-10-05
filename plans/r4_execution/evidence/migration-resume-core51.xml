@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="6" time="17.716" timestamp="2026-10-01T14:24:26.910614-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_migration_resume" name="test_migration_resumes_after_adoption_and_rejects_later_drift" time="2.751"><failure message="ValueError: A preserved migration source row changed or disappeared.">tests\execution_r4\test_migration_resume.py:26: in test_migration_resumes_after_adoption_and_rejects_later_drift
+    report=migrate_execution_catalog(deps.config.db_path,tmp_path/"migration-backup",batch_size=1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\bootstrap\execution_migration.py:21: in migrate_execution_catalog
+    require_preserved_baseline(uow.connection, baseline)
+src\okto_nexus\adapters\outbound\sqlite\execution_legacy_migration.py:52: in require_preserved_baseline
+    return require_adopted_baseline(conn, manifest)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\outbound\sqlite\execution_migration_resume.py:56: in require_adopted_baseline
+    raise ValueError("A preserved migration source row changed or disappeared.")
+E   ValueError: A preserved migration source row changed or disappeared.</failure></testcase><testcase classname="tests.execution_r4.test_binding_migration" name="test_reviewed_adoption_preserves_endpoint_and_disabled_policy" time="2.434" /><testcase classname="tests.execution_r4.test_binding_migration" name="test_adoption_revalidates_source_and_legacy_session_after_review[endpoint]" time="2.153" /><testcase classname="tests.execution_r4.test_binding_migration" name="test_adoption_revalidates_source_and_legacy_session_after_review[mapping]" time="3.045" /><testcase classname="tests.execution_r4.test_binding_migration" name="test_adoption_revalidates_source_and_legacy_session_after_review[session]" time="2.833" /><testcase classname="tests.execution_r4.test_binding_migration" name="test_agent_cannot_adopt_legacy_endpoint" time="2.417" /></testsuite></testsuites>

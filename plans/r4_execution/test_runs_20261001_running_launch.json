@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-01",
+  "scope": "Running native tool authority and real remote-provider journeys on one Windows host.",
+  "commits": {
+    "core": "9c778719c3892d9742bb358b0020e39ed43df08d",
+    "connector": "e2012a3",
+    "nexus_product": "68c6e0b",
+    "nexus_test": "dfb2b1a"
+  },
+  "artifacts": "evidence/running-launch-artifacts.json",
+  "installed_connector_regressions": {
+    "passed": 263,
+    "xml": "evidence/running-launch-regression-installed.xml"
+  },
+  "installed_nexus_regressions": {
+    "passed": 33,
+    "xml": "evidence/running-launch-regression-tcp-installed.xml"
+  },
+  "directed_source_tests": {
+    "passed": 60,
+    "xml": "evidence/running-launch-source.xml"
+  },
+  "real_providers": {
+    "pi_rpc": {
+      "passed": true,
+      "seconds": 242.956,
+      "report": "evidence/running-launch-pi_rpc.json",
+      "installed_provenance": "evidence/running-launch-pi_rpc-installed.json"
+    },
+    "codex_app_server": {
+      "passed": true,
+      "seconds": 168.992,
+      "report": "evidence/running-launch-codex_app_server.json",
+      "installed_provenance": "evidence/running-launch-codex_app_server-installed.json"
+    },
+    "claude_stream": {
+      "passed": true,
+      "seconds": 165.371,
+      "report": "evidence/running-launch-claude_stream.json",
+      "installed_provenance": "evidence/running-launch-claude_stream-installed.json"
+    }
+  },
+  "retained_failures": [
+    "evidence/running-launch-source-assertion-failure.xml",
+    "evidence/pi-stream-diagnostic-pi_rpc-installed-previous-1790833861529300500.json",
+    "evidence/pi-stream-diagnostic-pi_rpc-installed-previous-1790833861529598500.xml",
+    "evidence/pi-stream-diagnostic-pi_rpc-installed-previous-1790833861529889800.log",
+    "evidence/pi-stream-diagnostic-pi_rpc-installed.json",
+    "evidence/pi-stream-diagnostic-pi_rpc-installed.log",
+    "evidence/pi-stream-diagnostic-pi_rpc-installed.xml",
+    "evidence/pi-stream-diagnostic-pi_rpc-previous-1790833861528572500.json",
+    "evidence/pi-stream-diagnostic-pi_rpc-progress-previous-1790833861528963900.json",
+    "evidence/pi-stream-diagnostic-pi_rpc-progress.json",
+    "evidence/pi-stream-diagnostic-pi_rpc.json",
+    "evidence/pi-stream-diagnostic-preflight.json",
+    "evidence/pi-stream-diagnostic-startup.log"
+  ],
+  "limits": [
+    "Server release readiness is overridden in the test only; provider qualification and native factories are unchanged.",
+    "One Windows host with separate Server/daemon processes and real CLI subprocesses; not independent-host or Linux acceptance.",
+    "No HTTP response hooks or stream instrumentation in accepted provider runs. A read-only py-spy stack snapshot was taken during Pi opening.",
+    "Prior event observation loss is not assigned a concrete exception or claimed universally fixed.",
+    "Nexus wheel contains preexisting UI assets; this is not UI or US English acceptance.",
+    "Direct embedded revalidation with Core44 follows separately. Milestones and G0-G3 remain open."
+  ]
+}

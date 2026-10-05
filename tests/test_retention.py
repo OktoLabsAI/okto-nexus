@@ -665,17 +665,16 @@ def test_maybe_auto_prune_is_bounded_not_a_full_drain(tmp_path):
     assert count_rows(factory, "events") == 0
 
 
-def test_main_runs_auto_prune_before_serving(tmp_path, monkeypatch):
+def test_legacy_stdio_flags_do_not_bootstrap_or_prune(tmp_path, monkeypatch):
     factory, home, proj, ws, now = _bootstrap_store(tmp_path)
     seed_event(factory, ws, created_at=days_ago(40, now), type="old")
 
-    class _StubServer:
-        def run(self) -> None:  # the real stdio loop would block forever
-            return None
+    def unexpected_bootstrap(*args, **kwargs):
+        raise AssertionError("legacy flags must not start MCP stdio")
 
-    monkeypatch.setattr(server_module, "create_server", lambda deps: _StubServer())
+    monkeypatch.setattr(server_module, "bootstrap", unexpected_bootstrap)
 
     code = server_module.main(["--home", home, "--auto-prune-on-start", "true"])
 
-    assert code == 0
-    assert count_rows(factory, "events") == 0  # pruned during startup
+    assert code == 2
+    assert count_rows(factory, "events") == 1

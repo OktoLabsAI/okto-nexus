@@ -1,0 +1,50 @@
+{
+  "increment": "M07 pending event recovery during warm daemon reconnect",
+  "status": "PARTIAL_INSTALLED_INTEGRATION",
+  "requirements": [
+    "NS10.04 (partial)",
+    "NS08.03 closed-session recovery (partial)"
+  ],
+  "reference_commits": {
+    "nexus": "518f0c9b3a87f5b5d812981619371e03029805e7",
+    "connector": "2a3c7fa9e722406c637a87f5a905501b51be5f1c",
+    "core": "97892edba088ac85c9977b8bd8fde27f725ea2a3"
+  },
+  "nexus_commit_note": "Nexus reference is the parent of the commit containing this manifest.",
+  "artifacts": "evidence/event-recovery-artifacts.json",
+  "tests": {
+    "connector": {
+      "tests": 381,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 1,
+      "passed": 380
+    },
+    "nexus": {
+      "tests": 72,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 72
+    }
+  },
+  "unchanged_artifacts": "Nexus production and Core 0.2.35.dev0 wheels unchanged; all three installed/source/wheel byte sets verified. Nexus changes are tests and documentation.",
+  "verification": [
+    "Automatic daemon reconnect recovers a journaled event not delivered to the Server.",
+    "Automatic daemon reconnect recovers an event committed by the Server whose ACK was lost before Connector progress.",
+    "Both real HTTP/WSS cases retain one event row, five operations, one native opening and three native turn/control calls.",
+    "No credential expiry injection or direct manual recovery call in these two scenarios.",
+    "Current approved binding/identity guards, finite namespace paging, local ACK retry without new ticket, and lane transfer before dispatch."
+  ],
+  "fixture_corrections": [
+    "Updated the connection test double for the attachment-query port.",
+    "Initialized the focused Core host fixture directory before opening its journal."
+  ],
+  "limits": [
+    "Warm reconnect only. Cold daemon restart with unavailable material for an unexpired ticket remains subject to Server replacement rules and is not yet qualified.",
+    "Active ownership adoption, full authority rotation, embedded publication and public projections remain pending.",
+    "Technical native peer and readiness fixture; provider/platform/independent-host, pressure, migration and final acceptance remain pending.",
+    "One existing Connector skip and one existing Nexus dependency warning. User UI assets included without new UI acceptance.",
+    "No M00-M13 milestone or G0-G3 gate closed; full scope unchanged."
+  ]
+}

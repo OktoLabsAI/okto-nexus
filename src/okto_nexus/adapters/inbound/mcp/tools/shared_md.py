@@ -49,8 +49,8 @@ _P_LIMIT_EVENTS = (
     f"(optional; default: {DEFAULT_LIMIT_EVENTS}, clamped to the configured maximum)."
 )
 _P_AGENT = (
-    "Your agent_id for permission evaluation in open stdio mode (optional; "
-    "authenticated HTTP MCP uses the API-key identity)."
+    "Optional agent_id assertion for permission evaluation; "
+    "authenticated HTTP MCP uses the API-key identity."
 )
 
 

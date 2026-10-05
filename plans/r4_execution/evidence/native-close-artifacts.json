@@ -1,0 +1,48 @@
+{
+  "qualification": "Confirmed native close classification; R4 real provider probes use local grants.",
+  "core": {
+    "wheel": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\artifacts\\nexus_connector_core-0.2.32.dev0-py3-none-any.whl",
+    "sha256": "a32d49400c0e22ccedd1fbe7f26b8f74ff0b3bb2d55f21eac469dd0ae8a8784f",
+    "command": [
+      "C:/Python313/python.exe",
+      "-m",
+      "pip",
+      "wheel",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\native-close-core-dpqsfrl_",
+      "--no-deps",
+      "--no-build-isolation",
+      "--wheel-dir",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\native-close-core-dpqsfrl_\\dist"
+    ]
+  },
+  "connector": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\native-close-connector-dp8lfjh5\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+    "sha256": "e5d3f9d0dfbcfc22a8052ee4603f7b3936c8df7c2a4bdf4d146b4f122f898f63",
+    "command": [
+      "C:/Python313/python.exe",
+      "-m",
+      "pip",
+      "wheel",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\native-close-connector-dp8lfjh5",
+      "--no-deps",
+      "--no-build-isolation",
+      "--wheel-dir",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\native-close-connector-dp8lfjh5\\dist"
+    ]
+  },
+  "nexus": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\native-close-nexus-v594khfy\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+    "sha256": "2186eb46d0d3bfaa9cec2a304d7ff3065076cc97e859ef80d8211a9dd7eda131",
+    "command": [
+      "C:/Python313/python.exe",
+      "-m",
+      "pip",
+      "wheel",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\native-close-nexus-v594khfy",
+      "--no-deps",
+      "--no-build-isolation",
+      "--wheel-dir",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\native-close-nexus-v594khfy\\dist"
+    ]
+  }
+}

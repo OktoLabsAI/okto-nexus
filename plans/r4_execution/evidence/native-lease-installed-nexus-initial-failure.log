@@ -1,0 +1,739 @@
+........................................................................ [ 71%]
+.........................FFF
+================================== FAILURES ===================================
+_ test_canonical_native_decision_roundtrip_through_automatic_connector[approval-approve-connector-configured] _
+
+onboarding = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4235/test_cano...ent_id_hint': 'subject', 'executor_id': 'exe_51f1a1d087da2c2a5e6962cdabf7bd02', 'adapter_id': 'codex_app_server', ...})
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4235/test_canonical_native_decision0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001AE95B2E510>
+kind = 'approval', choice = 'approve'
+
+    @pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
+    @pytest.mark.parametrize('kind,choice', [('approval','approve'),('approval','deny'),('input','approve'),('input','deny')])
+    def test_canonical_native_decision_roundtrip_through_automatic_connector(onboarding, tmp_path, monkeypatch, kind, choice):
+>       test_owned_connector_reader_dispatches_five_actions_over_real_websocket(
+            onboarding,tmp_path,monkeypatch,True,None,False,0,None,native_decision=(kind,choice))
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:566: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:560: in test_owned_connector_reader_dispatches_five_actions_over_real_websocket
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def run():
+        sock = socket.socket()
+        sock.bind(('127.0.0.1', 0))
+        sock.listen()
+        port = sock.getsockname()[1]
+        server = uvicorn.Server(uvicorn.Config(client.app, lifespan='off', log_level='error'))
+        serving = asyncio.create_task(server.serve(sockets=[sock]))
+        daemon_root = state_dir(tmp_path / 'connector-runtime')
+        state = store.load()
+        state.preferences['vault.fallback_file.approved'] = True
+        StateStore(state_file(daemon_root)).save(state)
+        monkeypatch.setenv('OKTO_NEXUS_CONNECTOR_VAULT', 'file')
+        daemon = DaemonApp(daemon_root)
+        if automatic or publication_failure:
+            key = headers['subject']['Authorization'].removeprefix('Bearer ')
+            handle = daemon.vault.store('subject', key)
+            daemon.vault.store('provider-demo', 'provider-test-secret')
+            base_url = f'http://127.0.0.1:{port}'
+            def registered_state(state):
+                state.connector_id = 'connector'
+                state.servers[server_id] = ServerProfileRecord(server_id, base_url, base_url, 'now')
+                state.identities.append(IdentityRecord('subject', server_id, 'subject', handle,
+                                                       revisions.credential_epoch, 'now'))
+                state.execution_executors.append(ExecutionExecutorRecord(server_id, 'connector', 'subject',
+                    'register', 'Remote host', executor_id=executor_id, state='REGISTERED',
+                    inventory_publication_sequence=1))
+            daemon.store.update(registered_state)
+        binary = tmp_path / 'remote-only' / 'codex.exe'
+        candidate = InstallationCandidate('codex_app_server', str(binary), fingerprint(binary), 'explicit', 'selected')
+        class CountedFactory(_NativeFactory):
+            opens = 0
+            async def open(self, prepared, session_id, context, *, stream_epoch):
+                assert prepared.cwd == str(tmp_path / 'remote-workspace')
+                assert context.r4_authority is not None
+                self.opens += 1
+                self.context = context
+                self.stream_epoch = stream_epoch
+                return await super().open(prepared, session_id, context, stream_epoch=stream_epoch)
+        native = CountedFactory()
+        native_decisions = []
+        async def reply_native_approval(request, decision, response):
+            native_decisions.append((request, decision, response))
+        native.native.reply_native_approval = reply_native_approval
+        async def environment(_):
+            return {}
+        async def candidates(_):
+            return [candidate]
+        async def launch(_):
+            return R4LaunchSetup(environment)
+        owner = execution = None
+        recovery_host = None
+        dispatched = {}
+        operations = []
+        async def report(request):
+            assert request['operation_ids'] == request['session_ids'] == []
+            return {k: request[k] for k in ('protocol_major', 'contract_revision', 'server_id', 'executor_id',
+                'connection_id', 'connection_generation', 'reconcile_id', 'cursor')} | dict(
+                    type='reconcile.report', next_cursor=None, complete=True, receipts=[], claims=[],
+                    stream_watermarks=[], ownership_facts=[])
+        async def admit(intent, **options):
+            resolved = client.post('/v1/runtime/intents:resolve', headers=headers['subject'], json={
+                'client_intent_id': 'mux-' + intent, 'intent': intent, 'binding_id': binding['binding_id'],
+                'workspace_binding_id': binding['workspace_binding_id'], **options})
+            assert resolved.status_code == 200, resolved.text
+            resolution = resolved.json()
+            assert resolution['can_submit'], resolution['blockers']
+            admitted = client.post('/v1/runtime/operations', headers=headers['subject'], json={
+                k: resolution[k] for k in ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')})
+            assert admitted.status_code == 202, admitted.text
+            operations.append(resolution['operation_id'])
+            if publication_failure and intent == 'runtime.close':
+                async with asyncio.timeout(8):
+                    while execution.failure is None or execution.pending_count:
+                        await asyncio.sleep(.01)
+                assert isinstance(execution.failure, OSError)
+                return resolution
+            async with asyncio.timeout(8):
+                while True:
+                    if execution.failure is not None:
+                        raise execution.failure
+                    observed = client.get('/v1/runtime/operations/' + resolution['operation_id'],
+                                          headers=headers['subject'])
+                    assert observed.status_code == 200, observed.text
+                    if observed.json()['receipt_revision'] > 0:
+                        receipt = observed.json()
+                        assert receipt['operation_id'] == resolution['operation_id']
+                        assert receipt['intent_hash'] == resolution['intent_hash']
+                        assert receipt['error'] is None, receipt
+                        assert receipt['executor_stage'] is not None
+                        if intent == 'runtime.close':
+                            assert receipt['executor_stage'] == 'SUCCEEDED'
+                        break
+                    await asyncio.sleep(0.01)
+            return resolution
+        try:
+            async with asyncio.timeout(5):
+                while not server.started:
+                    if serving.done():
+                        await serving
+                    await asyncio.sleep(0.01)
+            from contextlib import AsyncExitStack
+            async with AsyncExitStack() as stack:
+                if automatic:
+                    from functools import partial
+                    from okto_nexus_connector.daemon import r4_control, r4_execution
+                    async def discover():
+                        return [candidate]
+                    monkeypatch.setattr(r4_control, 'R4DaemonControl',
+                        partial(r4_control.R4DaemonControl, discover=discover))
+                    monkeypatch.setattr(r4_execution, 'R4DaemonExecution',
+                        partial(r4_execution.R4DaemonExecution, native_factory=native))
+                    daemon._start_transports()
+                    control = daemon.r4_controls[server_id]
+                    async with asyncio.timeout(10):
+                        while not control.status()['execution_ready']:
+                            if control.error_code:
+                                raise AssertionError(control.status())
+                            await asyncio.sleep(.01)
+                    owner = control.connection
+                    execution = control.execution.owner
+                else:
+                    owner = await asyncio.wait_for(connect_r4_connection(
+                        f'ws://127.0.0.1:{port}/v1/runtime/executors/{executor_id}/link',
+                        registered.json()['bootstrap_ticket']['ticket'], server_id=server_id, executor_id=executor_id,
+                        management_revision=info['management_revision'], snapshot_format=info['executor_snapshot_format'],
+                        boot_id='connector-process-boot', report_reconciliation=report), 5)
+                    await owner.attach_binding(binding_id=binding['binding_id'], agent_id='subject', ticket=ticket,
+                        credential_epoch=revisions.credential_epoch, authorization_revision=revisions.authorization,
+                        configuration_revision=revisions.configuration)
+                    raw = await stack.enter_async_context(httpx.AsyncClient(transport=httpx.ASGITransport(app=client.app)))
+                    http = await stack.enter_async_context(NexusHTTPClient('https://127.0.0.1:8202', client=raw))
+                    async def publish(frame):
+                        if publication_failure == 'before_commit' and frame['operation_id'] == operations[-1] and frame['stage'] == 'SUCCEEDED':
+                            raise OSError('The receipt request was not delivered.')
+                        await http.publish_operation_receipt(ticket, frame=frame)
+                        if publication_failure == 'lost_ack' and frame['stage'] == 'SUCCEEDED':
+                            raise OSError('The receipt acknowledgment was lost.')
+                    execution = daemon.own_r4_connection(owner, candidate_provider=candidates,
+                        launch_provider=launch, publish_receipt=publish, native_factory=native)
+                    with pytest.raises(ConnectorError) as duplicate:
+                        daemon.own_r4_connection(owner, candidate_provider=candidates,
+                            launch_provider=launch, publish_receipt=publish, native_factory=native)
+                    assert duplicate.value.code == 'OPERATION_CONFLICT'
+                execute = execution._execute
+                async def capture(item):
+                    dispatched[item.frame['action']] = item.frame
+                    return await execute(item)
+                execution._execute = capture
+                if publication_failure == 'core_commit':
+                    original_record = execution.publications.record
+                    def interrupted_record(frame):
+                        if frame['stage'] == 'SUCCEEDED':
+                            raise OSError('The receipt projection write was interrupted.')
+                        original_record(frame)
+                    monkeypatch.setattr(execution.publications, 'record', interrupted_record)
+                opened = await admit('runtime.start', new_session=True)
+                session_id = opened['scope']['session_id']
+                turned = await admit('turn.submit', session_id=session_id, text='Hello')
+                if native_decision is not None:
+                    from nexus_connector_core import RuntimeEvent
+                    kind, choice = native_decision
+                    request = dict(schema_version=1, request_id=7, request_hash='a'*64,
+                        method='item/tool/requestUserInput' if kind == 'input' else 'item/commandExecution/requestApproval',
+                        params={'threadId':'native-thread','turnId':'turn-from-native','itemId':'item'})
+                    if kind == 'input':
+                        request['params'].update(isBlocking=True,questions=[
+                            {'id':'question','header':'Response','question':'Provide input.','isOther':True}])
+                    await native.native.queue.put(RuntimeEvent(server_id, executor_id, session_id,
+                        native.stream_epoch, 0, 'input_request' if kind == 'input' else 'approval_request',
+                        request['method'], {'native_approval':request, 'native_approval_display':dict(request)},
+                        turned['operation_id']))
+                    async with asyncio.timeout(8):
+                        while True:
+                            queued = client.get('/api/v1/approvals', headers=headers['operator'],
+                                params={'workspace':binding['workspace_id'],'status':'pending'})
+                            assert queued.status_code == 200, queued.text
+                            rows = [row for row in queued.json()['data']['items'] if row['action']=='execution.native.respond']
+                            if rows: break
+                            assert execution.failure is None, repr(execution.failure)
+                            await asyncio.sleep(.01)
+                    assert len(rows) == 1
+                    detail = client.get('/api/v1/approvals/'+rows[0]['approval_id'],headers=headers['operator'])
+                    proposal = detail.json()['data']['request_payload']['kwargs']
+                    body = {k:proposal[k] for k in ('approval_key','expected_revision','request_hash','cas_token')}
+                    body.update(client_intent_id='remote-native-decision',decision=choice)
+                    response = {'answers':{'question':{'answers':['remote-private-input-marker']}}} if kind=='input' and choice=='approve' else None
+                    if response is not None: body['response']=response
+                    assert client.post('/v1/runtime/approval-decisions',headers=headers['subject'],json=body).status_code == 403
+                    confirmed = client.post('/v1/runtime/approval-decisions',headers=headers['operator'],json=body)
+                    assert confirmed.status_code == 202, confirmed.text
+                    decision = confirmed.json()
+                    repeated = client.post('/v1/runtime/approval-decisions',headers=headers['operator'],json=body)
+                    assert repeated.status_code == 200, repeated.text
+                    assert repeated.json()['native_operation_id'] == decision['native_operation_id']
+                    operations.append(decision['native_operation_id'])
+                    async with asyncio.timeout(8):
+                        while True:
+                            result = client.get('/v1/runtime/approval-decisions/'+decision['decision_id'],headers=headers['operator'])
+                            assert result.status_code == 200, result.text
+                            view = result.json()
+                            if view['native_stage']=='SUBMITTED': break
+                            assert view['native_stage']=='DISPATCH_PENDING', view
+                            assert execution.failure is None, repr(execution.failure)
+                            await asyncio.sleep(.01)
+                    assert view['canonical_state'] == ('CONFIRMED' if choice=='approve' else 'DENIED')
+                    assert len(native_decisions) == 1
+>                   assert native_decisions[0] == (request,'accept' if choice=='approve' else 'decline',response)
+E                   AssertionError: assert ({'method': '...accept', None) == ({'schema_ver...accept', None)
+E                     
+E                     At index 0 diff: {'method': 'item/commandExecution/requestApproval', 'params': {'itemId': 'item', 'threadId': 'native-thread', 'turnId': 'turn-from-native'}, 'request_hash': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'request_id': 7} != {'schema_version': 1, 'request_id': 7, 'request_hash': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'method': 'item/commandExecution/requestApproval', 'params': {'threadId': 'native-thread', 'turnId': 'turn-from-native', 'itemId': 'item'}}
+E                     Use -v to get more diff
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:288: AssertionError
+_ test_canonical_native_decision_roundtrip_through_automatic_connector[approval-deny-connector-configured] _
+
+onboarding = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4235/test_cano...ent_id_hint': 'subject', 'executor_id': 'exe_cc88bd8c6473a3d67fa67e4ed239a390', 'adapter_id': 'codex_app_server', ...})
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4235/test_canonical_native_decision1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001AE973E7000>
+kind = 'approval', choice = 'deny'
+
+    @pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
+    @pytest.mark.parametrize('kind,choice', [('approval','approve'),('approval','deny'),('input','approve'),('input','deny')])
+    def test_canonical_native_decision_roundtrip_through_automatic_connector(onboarding, tmp_path, monkeypatch, kind, choice):
+>       test_owned_connector_reader_dispatches_five_actions_over_real_websocket(
+            onboarding,tmp_path,monkeypatch,True,None,False,0,None,native_decision=(kind,choice))
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:566: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:560: in test_owned_connector_reader_dispatches_five_actions_over_real_websocket
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def run():
+        sock = socket.socket()
+        sock.bind(('127.0.0.1', 0))
+        sock.listen()
+        port = sock.getsockname()[1]
+        server = uvicorn.Server(uvicorn.Config(client.app, lifespan='off', log_level='error'))
+        serving = asyncio.create_task(server.serve(sockets=[sock]))
+        daemon_root = state_dir(tmp_path / 'connector-runtime')
+        state = store.load()
+        state.preferences['vault.fallback_file.approved'] = True
+        StateStore(state_file(daemon_root)).save(state)
+        monkeypatch.setenv('OKTO_NEXUS_CONNECTOR_VAULT', 'file')
+        daemon = DaemonApp(daemon_root)
+        if automatic or publication_failure:
+            key = headers['subject']['Authorization'].removeprefix('Bearer ')
+            handle = daemon.vault.store('subject', key)
+            daemon.vault.store('provider-demo', 'provider-test-secret')
+            base_url = f'http://127.0.0.1:{port}'
+            def registered_state(state):
+                state.connector_id = 'connector'
+                state.servers[server_id] = ServerProfileRecord(server_id, base_url, base_url, 'now')
+                state.identities.append(IdentityRecord('subject', server_id, 'subject', handle,
+                                                       revisions.credential_epoch, 'now'))
+                state.execution_executors.append(ExecutionExecutorRecord(server_id, 'connector', 'subject',
+                    'register', 'Remote host', executor_id=executor_id, state='REGISTERED',
+                    inventory_publication_sequence=1))
+            daemon.store.update(registered_state)
+        binary = tmp_path / 'remote-only' / 'codex.exe'
+        candidate = InstallationCandidate('codex_app_server', str(binary), fingerprint(binary), 'explicit', 'selected')
+        class CountedFactory(_NativeFactory):
+            opens = 0
+            async def open(self, prepared, session_id, context, *, stream_epoch):
+                assert prepared.cwd == str(tmp_path / 'remote-workspace')
+                assert context.r4_authority is not None
+                self.opens += 1
+                self.context = context
+                self.stream_epoch = stream_epoch
+                return await super().open(prepared, session_id, context, stream_epoch=stream_epoch)
+        native = CountedFactory()
+        native_decisions = []
+        async def reply_native_approval(request, decision, response):
+            native_decisions.append((request, decision, response))
+        native.native.reply_native_approval = reply_native_approval
+        async def environment(_):
+            return {}
+        async def candidates(_):
+            return [candidate]
+        async def launch(_):
+            return R4LaunchSetup(environment)
+        owner = execution = None
+        recovery_host = None
+        dispatched = {}
+        operations = []
+        async def report(request):
+            assert request['operation_ids'] == request['session_ids'] == []
+            return {k: request[k] for k in ('protocol_major', 'contract_revision', 'server_id', 'executor_id',
+                'connection_id', 'connection_generation', 'reconcile_id', 'cursor')} | dict(
+                    type='reconcile.report', next_cursor=None, complete=True, receipts=[], claims=[],
+                    stream_watermarks=[], ownership_facts=[])
+        async def admit(intent, **options):
+            resolved = client.post('/v1/runtime/intents:resolve', headers=headers['subject'], json={
+                'client_intent_id': 'mux-' + intent, 'intent': intent, 'binding_id': binding['binding_id'],
+                'workspace_binding_id': binding['workspace_binding_id'], **options})
+            assert resolved.status_code == 200, resolved.text
+            resolution = resolved.json()
+            assert resolution['can_submit'], resolution['blockers']
+            admitted = client.post('/v1/runtime/operations', headers=headers['subject'], json={
+                k: resolution[k] for k in ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')})
+            assert admitted.status_code == 202, admitted.text
+            operations.append(resolution['operation_id'])
+            if publication_failure and intent == 'runtime.close':
+                async with asyncio.timeout(8):
+                    while execution.failure is None or execution.pending_count:
+                        await asyncio.sleep(.01)
+                assert isinstance(execution.failure, OSError)
+                return resolution
+            async with asyncio.timeout(8):
+                while True:
+                    if execution.failure is not None:
+                        raise execution.failure
+                    observed = client.get('/v1/runtime/operations/' + resolution['operation_id'],
+                                          headers=headers['subject'])
+                    assert observed.status_code == 200, observed.text
+                    if observed.json()['receipt_revision'] > 0:
+                        receipt = observed.json()
+                        assert receipt['operation_id'] == resolution['operation_id']
+                        assert receipt['intent_hash'] == resolution['intent_hash']
+                        assert receipt['error'] is None, receipt
+                        assert receipt['executor_stage'] is not None
+                        if intent == 'runtime.close':
+                            assert receipt['executor_stage'] == 'SUCCEEDED'
+                        break
+                    await asyncio.sleep(0.01)
+            return resolution
+        try:
+            async with asyncio.timeout(5):
+                while not server.started:
+                    if serving.done():
+                        await serving
+                    await asyncio.sleep(0.01)
+            from contextlib import AsyncExitStack
+            async with AsyncExitStack() as stack:
+                if automatic:
+                    from functools import partial
+                    from okto_nexus_connector.daemon import r4_control, r4_execution
+                    async def discover():
+                        return [candidate]
+                    monkeypatch.setattr(r4_control, 'R4DaemonControl',
+                        partial(r4_control.R4DaemonControl, discover=discover))
+                    monkeypatch.setattr(r4_execution, 'R4DaemonExecution',
+                        partial(r4_execution.R4DaemonExecution, native_factory=native))
+                    daemon._start_transports()
+                    control = daemon.r4_controls[server_id]
+                    async with asyncio.timeout(10):
+                        while not control.status()['execution_ready']:
+                            if control.error_code:
+                                raise AssertionError(control.status())
+                            await asyncio.sleep(.01)
+                    owner = control.connection
+                    execution = control.execution.owner
+                else:
+                    owner = await asyncio.wait_for(connect_r4_connection(
+                        f'ws://127.0.0.1:{port}/v1/runtime/executors/{executor_id}/link',
+                        registered.json()['bootstrap_ticket']['ticket'], server_id=server_id, executor_id=executor_id,
+                        management_revision=info['management_revision'], snapshot_format=info['executor_snapshot_format'],
+                        boot_id='connector-process-boot', report_reconciliation=report), 5)
+                    await owner.attach_binding(binding_id=binding['binding_id'], agent_id='subject', ticket=ticket,
+                        credential_epoch=revisions.credential_epoch, authorization_revision=revisions.authorization,
+                        configuration_revision=revisions.configuration)
+                    raw = await stack.enter_async_context(httpx.AsyncClient(transport=httpx.ASGITransport(app=client.app)))
+                    http = await stack.enter_async_context(NexusHTTPClient('https://127.0.0.1:8202', client=raw))
+                    async def publish(frame):
+                        if publication_failure == 'before_commit' and frame['operation_id'] == operations[-1] and frame['stage'] == 'SUCCEEDED':
+                            raise OSError('The receipt request was not delivered.')
+                        await http.publish_operation_receipt(ticket, frame=frame)
+                        if publication_failure == 'lost_ack' and frame['stage'] == 'SUCCEEDED':
+                            raise OSError('The receipt acknowledgment was lost.')
+                    execution = daemon.own_r4_connection(owner, candidate_provider=candidates,
+                        launch_provider=launch, publish_receipt=publish, native_factory=native)
+                    with pytest.raises(ConnectorError) as duplicate:
+                        daemon.own_r4_connection(owner, candidate_provider=candidates,
+                            launch_provider=launch, publish_receipt=publish, native_factory=native)
+                    assert duplicate.value.code == 'OPERATION_CONFLICT'
+                execute = execution._execute
+                async def capture(item):
+                    dispatched[item.frame['action']] = item.frame
+                    return await execute(item)
+                execution._execute = capture
+                if publication_failure == 'core_commit':
+                    original_record = execution.publications.record
+                    def interrupted_record(frame):
+                        if frame['stage'] == 'SUCCEEDED':
+                            raise OSError('The receipt projection write was interrupted.')
+                        original_record(frame)
+                    monkeypatch.setattr(execution.publications, 'record', interrupted_record)
+                opened = await admit('runtime.start', new_session=True)
+                session_id = opened['scope']['session_id']
+                turned = await admit('turn.submit', session_id=session_id, text='Hello')
+                if native_decision is not None:
+                    from nexus_connector_core import RuntimeEvent
+                    kind, choice = native_decision
+                    request = dict(schema_version=1, request_id=7, request_hash='a'*64,
+                        method='item/tool/requestUserInput' if kind == 'input' else 'item/commandExecution/requestApproval',
+                        params={'threadId':'native-thread','turnId':'turn-from-native','itemId':'item'})
+                    if kind == 'input':
+                        request['params'].update(isBlocking=True,questions=[
+                            {'id':'question','header':'Response','question':'Provide input.','isOther':True}])
+                    await native.native.queue.put(RuntimeEvent(server_id, executor_id, session_id,
+                        native.stream_epoch, 0, 'input_request' if kind == 'input' else 'approval_request',
+                        request['method'], {'native_approval':request, 'native_approval_display':dict(request)},
+                        turned['operation_id']))
+                    async with asyncio.timeout(8):
+                        while True:
+                            queued = client.get('/api/v1/approvals', headers=headers['operator'],
+                                params={'workspace':binding['workspace_id'],'status':'pending'})
+                            assert queued.status_code == 200, queued.text
+                            rows = [row for row in queued.json()['data']['items'] if row['action']=='execution.native.respond']
+                            if rows: break
+                            assert execution.failure is None, repr(execution.failure)
+                            await asyncio.sleep(.01)
+                    assert len(rows) == 1
+                    detail = client.get('/api/v1/approvals/'+rows[0]['approval_id'],headers=headers['operator'])
+                    proposal = detail.json()['data']['request_payload']['kwargs']
+                    body = {k:proposal[k] for k in ('approval_key','expected_revision','request_hash','cas_token')}
+                    body.update(client_intent_id='remote-native-decision',decision=choice)
+                    response = {'answers':{'question':{'answers':['remote-private-input-marker']}}} if kind=='input' and choice=='approve' else None
+                    if response is not None: body['response']=response
+                    assert client.post('/v1/runtime/approval-decisions',headers=headers['subject'],json=body).status_code == 403
+                    confirmed = client.post('/v1/runtime/approval-decisions',headers=headers['operator'],json=body)
+                    assert confirmed.status_code == 202, confirmed.text
+                    decision = confirmed.json()
+                    repeated = client.post('/v1/runtime/approval-decisions',headers=headers['operator'],json=body)
+                    assert repeated.status_code == 200, repeated.text
+                    assert repeated.json()['native_operation_id'] == decision['native_operation_id']
+                    operations.append(decision['native_operation_id'])
+                    async with asyncio.timeout(8):
+                        while True:
+                            result = client.get('/v1/runtime/approval-decisions/'+decision['decision_id'],headers=headers['operator'])
+                            assert result.status_code == 200, result.text
+                            view = result.json()
+                            if view['native_stage']=='SUBMITTED': break
+                            assert view['native_stage']=='DISPATCH_PENDING', view
+                            assert execution.failure is None, repr(execution.failure)
+                            await asyncio.sleep(.01)
+                    assert view['canonical_state'] == ('CONFIRMED' if choice=='approve' else 'DENIED')
+                    assert len(native_decisions) == 1
+>                   assert native_decisions[0] == (request,'accept' if choice=='approve' else 'decline',response)
+E                   AssertionError: assert ({'method': '...ecline', None) == ({'schema_ver...ecline', None)
+E                     
+E                     At index 0 diff: {'method': 'item/commandExecution/requestApproval', 'params': {'itemId': 'item', 'threadId': 'native-thread', 'turnId': 'turn-from-native'}, 'request_hash': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'request_id': 7} != {'schema_version': 1, 'request_id': 7, 'request_hash': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'method': 'item/commandExecution/requestApproval', 'params': {'threadId': 'native-thread', 'turnId': 'turn-from-native', 'itemId': 'item'}}
+E                     Use -v to get more diff
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:288: AssertionError
+_ test_canonical_native_decision_roundtrip_through_automatic_connector[input-approve-connector-configured] _
+
+onboarding = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4235/test_cano...ent_id_hint': 'subject', 'executor_id': 'exe_50ee4dd9134dd30cececcd5f6d11fdb2', 'adapter_id': 'codex_app_server', ...})
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4235/test_canonical_native_decision2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001AE96EC1390>
+kind = 'input', choice = 'approve'
+
+    @pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
+    @pytest.mark.parametrize('kind,choice', [('approval','approve'),('approval','deny'),('input','approve'),('input','deny')])
+    def test_canonical_native_decision_roundtrip_through_automatic_connector(onboarding, tmp_path, monkeypatch, kind, choice):
+>       test_owned_connector_reader_dispatches_five_actions_over_real_websocket(
+            onboarding,tmp_path,monkeypatch,True,None,False,0,None,native_decision=(kind,choice))
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:566: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:560: in test_owned_connector_reader_dispatches_five_actions_over_real_websocket
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def run():
+        sock = socket.socket()
+        sock.bind(('127.0.0.1', 0))
+        sock.listen()
+        port = sock.getsockname()[1]
+        server = uvicorn.Server(uvicorn.Config(client.app, lifespan='off', log_level='error'))
+        serving = asyncio.create_task(server.serve(sockets=[sock]))
+        daemon_root = state_dir(tmp_path / 'connector-runtime')
+        state = store.load()
+        state.preferences['vault.fallback_file.approved'] = True
+        StateStore(state_file(daemon_root)).save(state)
+        monkeypatch.setenv('OKTO_NEXUS_CONNECTOR_VAULT', 'file')
+        daemon = DaemonApp(daemon_root)
+        if automatic or publication_failure:
+            key = headers['subject']['Authorization'].removeprefix('Bearer ')
+            handle = daemon.vault.store('subject', key)
+            daemon.vault.store('provider-demo', 'provider-test-secret')
+            base_url = f'http://127.0.0.1:{port}'
+            def registered_state(state):
+                state.connector_id = 'connector'
+                state.servers[server_id] = ServerProfileRecord(server_id, base_url, base_url, 'now')
+                state.identities.append(IdentityRecord('subject', server_id, 'subject', handle,
+                                                       revisions.credential_epoch, 'now'))
+                state.execution_executors.append(ExecutionExecutorRecord(server_id, 'connector', 'subject',
+                    'register', 'Remote host', executor_id=executor_id, state='REGISTERED',
+                    inventory_publication_sequence=1))
+            daemon.store.update(registered_state)
+        binary = tmp_path / 'remote-only' / 'codex.exe'
+        candidate = InstallationCandidate('codex_app_server', str(binary), fingerprint(binary), 'explicit', 'selected')
+        class CountedFactory(_NativeFactory):
+            opens = 0
+            async def open(self, prepared, session_id, context, *, stream_epoch):
+                assert prepared.cwd == str(tmp_path / 'remote-workspace')
+                assert context.r4_authority is not None
+                self.opens += 1
+                self.context = context
+                self.stream_epoch = stream_epoch
+                return await super().open(prepared, session_id, context, stream_epoch=stream_epoch)
+        native = CountedFactory()
+        native_decisions = []
+        async def reply_native_approval(request, decision, response):
+            native_decisions.append((request, decision, response))
+        native.native.reply_native_approval = reply_native_approval
+        async def environment(_):
+            return {}
+        async def candidates(_):
+            return [candidate]
+        async def launch(_):
+            return R4LaunchSetup(environment)
+        owner = execution = None
+        recovery_host = None
+        dispatched = {}
+        operations = []
+        async def report(request):
+            assert request['operation_ids'] == request['session_ids'] == []
+            return {k: request[k] for k in ('protocol_major', 'contract_revision', 'server_id', 'executor_id',
+                'connection_id', 'connection_generation', 'reconcile_id', 'cursor')} | dict(
+                    type='reconcile.report', next_cursor=None, complete=True, receipts=[], claims=[],
+                    stream_watermarks=[], ownership_facts=[])
+        async def admit(intent, **options):
+            resolved = client.post('/v1/runtime/intents:resolve', headers=headers['subject'], json={
+                'client_intent_id': 'mux-' + intent, 'intent': intent, 'binding_id': binding['binding_id'],
+                'workspace_binding_id': binding['workspace_binding_id'], **options})
+            assert resolved.status_code == 200, resolved.text
+            resolution = resolved.json()
+            assert resolution['can_submit'], resolution['blockers']
+            admitted = client.post('/v1/runtime/operations', headers=headers['subject'], json={
+                k: resolution[k] for k in ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')})
+            assert admitted.status_code == 202, admitted.text
+            operations.append(resolution['operation_id'])
+            if publication_failure and intent == 'runtime.close':
+                async with asyncio.timeout(8):
+                    while execution.failure is None or execution.pending_count:
+                        await asyncio.sleep(.01)
+                assert isinstance(execution.failure, OSError)
+                return resolution
+            async with asyncio.timeout(8):
+                while True:
+                    if execution.failure is not None:
+                        raise execution.failure
+                    observed = client.get('/v1/runtime/operations/' + resolution['operation_id'],
+                                          headers=headers['subject'])
+                    assert observed.status_code == 200, observed.text
+                    if observed.json()['receipt_revision'] > 0:
+                        receipt = observed.json()
+                        assert receipt['operation_id'] == resolution['operation_id']
+                        assert receipt['intent_hash'] == resolution['intent_hash']
+                        assert receipt['error'] is None, receipt
+                        assert receipt['executor_stage'] is not None
+                        if intent == 'runtime.close':
+                            assert receipt['executor_stage'] == 'SUCCEEDED'
+                        break
+                    await asyncio.sleep(0.01)
+            return resolution
+        try:
+            async with asyncio.timeout(5):
+                while not server.started:
+                    if serving.done():
+                        await serving
+                    await asyncio.sleep(0.01)
+            from contextlib import AsyncExitStack
+            async with AsyncExitStack() as stack:
+                if automatic:
+                    from functools import partial
+                    from okto_nexus_connector.daemon import r4_control, r4_execution
+                    async def discover():
+                        return [candidate]
+                    monkeypatch.setattr(r4_control, 'R4DaemonControl',
+                        partial(r4_control.R4DaemonControl, discover=discover))
+                    monkeypatch.setattr(r4_execution, 'R4DaemonExecution',
+                        partial(r4_execution.R4DaemonExecution, native_factory=native))
+                    daemon._start_transports()
+                    control = daemon.r4_controls[server_id]
+                    async with asyncio.timeout(10):
+                        while not control.status()['execution_ready']:
+                            if control.error_code:
+                                raise AssertionError(control.status())
+                            await asyncio.sleep(.01)
+                    owner = control.connection
+                    execution = control.execution.owner
+                else:
+                    owner = await asyncio.wait_for(connect_r4_connection(
+                        f'ws://127.0.0.1:{port}/v1/runtime/executors/{executor_id}/link',
+                        registered.json()['bootstrap_ticket']['ticket'], server_id=server_id, executor_id=executor_id,
+                        management_revision=info['management_revision'], snapshot_format=info['executor_snapshot_format'],
+                        boot_id='connector-process-boot', report_reconciliation=report), 5)
+                    await owner.attach_binding(binding_id=binding['binding_id'], agent_id='subject', ticket=ticket,
+                        credential_epoch=revisions.credential_epoch, authorization_revision=revisions.authorization,
+                        configuration_revision=revisions.configuration)
+                    raw = await stack.enter_async_context(httpx.AsyncClient(transport=httpx.ASGITransport(app=client.app)))
+                    http = await stack.enter_async_context(NexusHTTPClient('https://127.0.0.1:8202', client=raw))
+                    async def publish(frame):
+                        if publication_failure == 'before_commit' and frame['operation_id'] == operations[-1] and frame['stage'] == 'SUCCEEDED':
+                            raise OSError('The receipt request was not delivered.')
+                        await http.publish_operation_receipt(ticket, frame=frame)
+                        if publication_failure == 'lost_ack' and frame['stage'] == 'SUCCEEDED':
+                            raise OSError('The receipt acknowledgment was lost.')
+                    execution = daemon.own_r4_connection(owner, candidate_provider=candidates,
+                        launch_provider=launch, publish_receipt=publish, native_factory=native)
+                    with pytest.raises(ConnectorError) as duplicate:
+                        daemon.own_r4_connection(owner, candidate_provider=candidates,
+                            launch_provider=launch, publish_receipt=publish, native_factory=native)
+                    assert duplicate.value.code == 'OPERATION_CONFLICT'
+                execute = execution._execute
+                async def capture(item):
+                    dispatched[item.frame['action']] = item.frame
+                    return await execute(item)
+                execution._execute = capture
+                if publication_failure == 'core_commit':
+                    original_record = execution.publications.record
+                    def interrupted_record(frame):
+                        if frame['stage'] == 'SUCCEEDED':
+                            raise OSError('The receipt projection write was interrupted.')
+                        original_record(frame)
+                    monkeypatch.setattr(execution.publications, 'record', interrupted_record)
+                opened = await admit('runtime.start', new_session=True)
+                session_id = opened['scope']['session_id']
+                turned = await admit('turn.submit', session_id=session_id, text='Hello')
+                if native_decision is not None:
+                    from nexus_connector_core import RuntimeEvent
+                    kind, choice = native_decision
+                    request = dict(schema_version=1, request_id=7, request_hash='a'*64,
+                        method='item/tool/requestUserInput' if kind == 'input' else 'item/commandExecution/requestApproval',
+                        params={'threadId':'native-thread','turnId':'turn-from-native','itemId':'item'})
+                    if kind == 'input':
+                        request['params'].update(isBlocking=True,questions=[
+                            {'id':'question','header':'Response','question':'Provide input.','isOther':True}])
+                    await native.native.queue.put(RuntimeEvent(server_id, executor_id, session_id,
+                        native.stream_epoch, 0, 'input_request' if kind == 'input' else 'approval_request',
+                        request['method'], {'native_approval':request, 'native_approval_display':dict(request)},
+                        turned['operation_id']))
+                    async with asyncio.timeout(8):
+                        while True:
+                            queued = client.get('/api/v1/approvals', headers=headers['operator'],
+                                params={'workspace':binding['workspace_id'],'status':'pending'})
+                            assert queued.status_code == 200, queued.text
+                            rows = [row for row in queued.json()['data']['items'] if row['action']=='execution.native.respond']
+                            if rows: break
+                            assert execution.failure is None, repr(execution.failure)
+                            await asyncio.sleep(.01)
+                    assert len(rows) == 1
+                    detail = client.get('/api/v1/approvals/'+rows[0]['approval_id'],headers=headers['operator'])
+                    proposal = detail.json()['data']['request_payload']['kwargs']
+                    body = {k:proposal[k] for k in ('approval_key','expected_revision','request_hash','cas_token')}
+                    body.update(client_intent_id='remote-native-decision',decision=choice)
+                    response = {'answers':{'question':{'answers':['remote-private-input-marker']}}} if kind=='input' and choice=='approve' else None
+                    if response is not None: body['response']=response
+                    assert client.post('/v1/runtime/approval-decisions',headers=headers['subject'],json=body).status_code == 403
+                    confirmed = client.post('/v1/runtime/approval-decisions',headers=headers['operator'],json=body)
+                    assert confirmed.status_code == 202, confirmed.text
+                    decision = confirmed.json()
+                    repeated = client.post('/v1/runtime/approval-decisions',headers=headers['operator'],json=body)
+                    assert repeated.status_code == 200, repeated.text
+                    assert repeated.json()['native_operation_id'] == decision['native_operation_id']
+                    operations.append(decision['native_operation_id'])
+                    async with asyncio.timeout(8):
+                        while True:
+                            result = client.get('/v1/runtime/approval-decisions/'+decision['decision_id'],headers=headers['operator'])
+                            assert result.status_code == 200, result.text
+                            view = result.json()
+                            if view['native_stage']=='SUBMITTED': break
+                            assert view['native_stage']=='DISPATCH_PENDING', view
+                            assert execution.failure is None, repr(execution.failure)
+                            await asyncio.sleep(.01)
+                    assert view['canonical_state'] == ('CONFIRMED' if choice=='approve' else 'DENIED')
+                    assert len(native_decisions) == 1
+>                   assert native_decisions[0] == (request,'accept' if choice=='approve' else 'decline',response)
+E                   AssertionError: assert ({'method': '...t-marker']}}}) == ({'schema_ver...t-marker']}}})
+E                     
+E                     At index 0 diff: {'method': 'item/tool/requestUserInput', 'params': {'isBlocking': True, 'itemId': 'item', 'questions': [{'header': 'Response', 'id': 'question', 'isOther': True, 'question': 'Provide input.'}], 'threadId': 'native-thread', 'turnId': 'turn-from-native'}, 'request_hash': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'request_id': 7} != {'schema_version': 1, 'request_id': 7, 'request_hash': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'method': 'item/tool/requestUserInput', 'params': {'threadId': 'native-thread'...
+E                     
+E                     ...Full output truncated (2 lines hidden), use '-vv' to show
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:288: AssertionError
+============================== warnings summary ===============================
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py::test_canonical_native_decision_roundtrip_through_automatic_connector[approval-approve-connector-configured]
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py::test_canonical_native_decision_roundtrip_through_automatic_connector[approval-deny-connector-configured]
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py::test_canonical_native_decision_roundtrip_through_automatic_connector[input-approve-connector-configured]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 3 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+3 failed, 97 passed, 1 warning in 466.59s (0:07:46)

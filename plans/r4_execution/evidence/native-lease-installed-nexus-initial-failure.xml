@@ -1,0 +1,716 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="100" time="466.500" timestamp="2026-09-30T23:06:43.338276-03:00" hostname="Alienware_m15"><testcase classname="test_native_decisions" name="test_public_cas_records_exactly_one_application_and_replay[approve-accept-CONFIRMED]" time="5.333" /><testcase classname="test_native_decisions" name="test_public_cas_records_exactly_one_application_and_replay[deny-decline-DENIED]" time="3.911" /><testcase classname="test_native_decisions" name="test_invalid_or_stale_decision_cannot_create_an_operation[subject]" time="3.260" /><testcase classname="test_native_decisions" name="test_invalid_or_stale_decision_cannot_create_an_operation[other]" time="2.525" /><testcase classname="test_native_decisions" name="test_invalid_or_stale_decision_cannot_create_an_operation[hash]" time="3.144" /><testcase classname="test_native_decisions" name="test_invalid_or_stale_decision_cannot_create_an_operation[revision]" time="3.143" /><testcase classname="test_native_decisions" name="test_invalid_or_stale_decision_cannot_create_an_operation[cas]" time="3.316" /><testcase classname="test_native_decisions" name="test_invalid_or_stale_decision_cannot_create_an_operation[scope]" time="3.528" /><testcase classname="test_native_decisions" name="test_invalid_or_stale_decision_cannot_create_an_operation[generation]" time="3.249" /><testcase classname="test_native_decisions" name="test_invalid_or_stale_decision_cannot_create_an_operation[expired]" time="2.521" /><testcase classname="test_native_decisions" name="test_invalid_or_stale_decision_cannot_create_an_operation[terminal]" time="3.253" /><testcase classname="test_native_decisions" name="test_invalid_or_stale_decision_cannot_create_an_operation[grant]" time="2.620" /><testcase classname="test_native_decisions" name="test_invalid_or_stale_decision_cannot_create_an_operation[profile]" time="2.765" /><testcase classname="test_native_decisions" name="test_two_interfaces_race_for_one_canonical_decision" time="2.550" /><testcase classname="test_native_decisions" name="test_outbox_failure_rolls_back_canonical_approval_and_decision" time="2.596" /><testcase classname="test_native_decisions" name="test_sensitive_input_is_retained_in_memory_and_explicitly_resupplied_after_loss[input]" time="2.734" /><testcase classname="test_native_decisions" name="test_dispatch_revalidates_operator_decision_and_uses_control_lane[None]" time="3.272" /><testcase classname="test_native_decisions" name="test_dispatch_revalidates_operator_decision_and_uses_control_lane[operator]" time="3.533" /><testcase classname="test_native_decisions" name="test_dispatch_revalidates_operator_decision_and_uses_control_lane[decision]" time="3.491" /><testcase classname="test_native_decisions" name="test_dispatch_revalidates_operator_decision_and_uses_control_lane[payload]" time="3.497" /><testcase classname="test_native_decisions" name="test_dispatch_revalidates_operator_decision_and_uses_control_lane[grant]" time="3.347" /><testcase classname="test_native_decisions" name="test_input_dispatch_reconstructs_exact_wire_without_persisting_response[input]" time="3.451" /><testcase classname="test_native_decisions" name="test_lost_input_is_reported_without_inventing_a_native_receipt[input]" time="3.175" /><testcase classname="test_native_request_ingress" name="test_intact_proposal_redacted_display_and_replay_after_reopen" time="2.579" /><testcase classname="test_native_request_ingress" name="test_gap_does_not_publish_request_or_refresh_its_expiry" time="2.543" /><testcase classname="test_native_request_ingress" name="test_reused_native_id_with_different_content_rolls_back_entire_ack[params]" time="2.559" /><testcase classname="test_native_request_ingress" name="test_reused_native_id_with_different_content_rolls_back_entire_ack[hash]" time="2.306" /><testcase classname="test_native_request_ingress" name="test_reused_native_id_with_different_content_rolls_back_entire_ack[turn]" time="2.377" /><testcase classname="test_native_request_ingress" name="test_reused_native_id_with_different_content_rolls_back_entire_ack[category]" time="3.000" /><testcase classname="test_native_request_ingress" name="test_reused_native_id_with_different_content_rolls_back_entire_ack[operation]" time="3.146" /><testcase classname="test_native_request_ingress" name="test_invalid_request_never_commits_event_or_request[no_operation]" time="2.723" /><testcase classname="test_native_request_ingress" name="test_invalid_request_never_commits_event_or_request[not_turn]" time="2.538" /><testcase classname="test_native_request_ingress" name="test_invalid_request_never_commits_event_or_request[scope]" time="3.410" /><testcase classname="test_native_request_ingress" name="test_invalid_request_never_commits_event_or_request[future_generation]" time="3.426" /><testcase classname="test_native_request_ingress" name="test_invalid_request_never_commits_event_or_request[bool_id]" time="2.858" /><testcase classname="test_native_request_ingress" name="test_invalid_request_never_commits_event_or_request[bad_hash]" time="2.550" /><testcase classname="test_native_request_ingress" name="test_invalid_request_never_commits_event_or_request[no_display]" time="2.530" /><testcase classname="test_native_request_ingress" name="test_invalid_request_never_commits_event_or_request[administrative]" time="3.182" /><testcase classname="test_native_request_ingress" name="test_typed_ids_are_distinct" time="2.507" /><testcase classname="test_native_request_ingress" name="test_terminal_turn_cannot_leave_or_reopen_a_pending_request[False]" time="3.811" /><testcase classname="test_native_request_ingress" name="test_terminal_turn_cannot_leave_or_reopen_a_pending_request[True]" time="2.637" /><testcase classname="test_native_request_ingress" name="test_storage_failure_cannot_acknowledge_a_missing_request" time="2.729" /><testcase classname="test_native_request_ingress" name="test_core_classifies_native_approval_and_input[item/tool/requestUserInput-params0-None-input_request-native_input]" time="3.329" /><testcase classname="test_native_request_ingress" name="test_core_classifies_native_approval_and_input[control_request:can_use_tool-params1-3-approval_request-native_approval]" time="3.539" /><testcase classname="test_native_request_ingress" name="test_core_classifies_native_approval_and_input[control_request:can_use_tool-params2-3-input_request-native_input]" time="2.993" /><testcase classname="test_native_request_ingress" name="test_same_native_id_in_two_stream_namespaces_is_distinct" time="3.503" /><testcase classname="test_native_request_ingress" name="test_old_generation_is_retained_without_actionable_authority" time="3.405" /><testcase classname="test_embedded_tools" name="test_automatic_mcp_configuration_claims_work_and_cleans_secret" time="6.856" /><testcase classname="test_embedded_tools" name="test_vault_failure_prevents_native_tool_launch" time="3.784" /><testcase classname="test_embedded_tools" name="test_cancelled_tool_waiter_keeps_issuance_owned" time="3.626" /><testcase classname="test_embedded_tools" name="test_automatic_pi_bridge_survives_initial_deadline_with_applied_renewal[pi_rpc]" time="9.091" /><testcase classname="test_embedded_tools" name="test_approved_provider_home_uses_process_mcp_without_copying_login[codex_app_server]" time="5.875" /><testcase classname="test_embedded_tools" name="test_approved_provider_home_uses_process_mcp_without_copying_login[claude_stream]" time="5.410" /><testcase classname="test_dispatch_pump" name="test_dispatch_revalidates_after_writer_wait_and_exposes_terminal_rejection" time="2.445" /><testcase classname="test_dispatch_pump" name="test_dispatch_send_loss_is_unknown_and_never_requeued" time="2.543" /><testcase classname="test_dispatch_pump" name="test_cancelled_stop_waiter_keeps_database_producer_owned" time="2.530" /><testcase classname="test_dispatch_pump" name="test_old_connection_cannot_send_after_owned_reservation_recovery" time="2.421" /><testcase classname="test_open_bootstrap" name="test_open_bootstrap_revalidates_authority_after_reservation[grant_revoked]" time="2.369" /><testcase classname="test_open_bootstrap" name="test_open_bootstrap_revalidates_authority_after_reservation[open_not_granted]" time="2.625" /><testcase classname="test_open_bootstrap" name="test_open_bootstrap_revalidates_authority_after_reservation[ticket_revoked]" time="2.454" /><testcase classname="test_open_bootstrap" name="test_open_bootstrap_revalidates_authority_after_reservation[inventory_stale]" time="2.358" /><testcase classname="test_open_bootstrap" name="test_open_bootstrap_revalidates_authority_after_reservation[profile_disabled]" time="2.951" /><testcase classname="test_open_bootstrap" name="test_open_bootstrap_revalidates_authority_after_reservation[subject_policy]" time="2.722" /><testcase classname="test_open_bootstrap" name="test_open_bootstrap_revalidates_authority_after_reservation[connection_changed]" time="2.768" /><testcase classname="test_open_bootstrap" name="test_open_bootstrap_revalidates_authority_after_reservation[lease_state_changed]" time="2.453" /><testcase classname="test_open_bootstrap" name="test_open_bootstrap_pins_grant_and_applied_ack_commits_atomically" time="2.531" /><testcase classname="test_open_bootstrap" name="test_open_bootstrap_cannot_move_initial_lease_to_another_connection" time="2.668" /><testcase classname="test_binding_operator" name="test_operator_binding_creates_profile_endpoint_and_scoped_grant" time="2.982" /><testcase classname="test_binding_operator" name="test_operator_binding_revalidates_before_apply[subject_policy]" time="2.347" /><testcase classname="test_binding_operator" name="test_operator_binding_revalidates_before_apply[operator_key]" time="2.403" /><testcase classname="test_binding_operator" name="test_operator_binding_revalidates_before_apply[configuration]" time="2.342" /><testcase classname="test_binding_operator" name="test_operator_binding_revalidates_before_apply[expiry]" time="2.467" /><testcase classname="test_binding_operator" name="test_operator_binding_revalidates_before_apply[method]" time="2.448" /><testcase classname="test_binding_operator" name="test_operator_binding_rolls_back_profile_with_binding" time="2.696" /><testcase classname="test_binding_operator" name="test_binding_does_not_turn_self_confirmation_into_execution_authority" time="2.713" /><testcase classname="test_binding_operator" name="test_binding_delegated_proof_uses_atomic_operator_decision" time="3.130" /><testcase classname="test_binding_operator" name="test_binding_delegated_proof_cannot_authorize_changed_scope[operator_key]" time="2.675" /><testcase classname="test_binding_operator" name="test_binding_delegated_proof_cannot_authorize_changed_scope[subject_policy]" time="2.473" /><testcase classname="test_binding_operator" name="test_binding_delegated_proof_cannot_authorize_changed_scope[expiry]" time="2.602" /><testcase classname="test_binding_operator" name="test_binding_delegated_proof_cannot_authorize_changed_scope[wrong_proposal]" time="2.935" /><testcase classname="test_binding_operator" name="test_binding_rejected_proposal_cannot_be_applied" time="2.679" /><testcase classname="test_binding_operator" name="test_binding_proof_and_decision_roll_back_together" time="3.271" /><testcase classname="test_binding_operator" name="test_binding_stale_proposal_cannot_receive_operator_proof" time="3.597" /><testcase classname="test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[False-None-False-0-None-connector-configured]" time="10.367" /><testcase classname="test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[True-None-False-0-None-connector-configured]" time="12.774" /><testcase classname="test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[False-before_commit-False-0-None-connector-configured]" time="8.736" /><testcase classname="test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[False-lost_ack-False-0-None-connector-configured]" time="7.284" /><testcase classname="test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[False-core_commit-False-0-None-connector-configured]" time="8.584" /><testcase classname="test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[False-None-True-0-None-connector-configured]" time="8.535" /><testcase classname="test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[False-core_commit-True-0-None-connector-configured]" time="8.372" /><testcase classname="test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[False-None-True-260-None-connector-configured]" time="37.631" /><testcase classname="test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[True-None-False-0-unsent-connector-configured]" time="12.491" /><testcase classname="test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[True-None-False-0-ack_lost-connector-configured]" time="12.446" /><testcase classname="test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[True-None-False-0-cold_unsent-connector-configured]" time="10.589" /><testcase classname="test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[True-None-False-0-cold_ack_lost-connector-configured]" time="13.055" /><testcase classname="test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[True-None-False-0-active_disconnect-connector-configured]" time="12.411" /><testcase classname="test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[True-None-False-0-lease_renewal-connector-configured]" time="13.187" /><testcase classname="test_remote_connection" name="test_canonical_native_decision_roundtrip_through_automatic_connector[approval-approve-connector-configured]" time="8.828"><failure message="AssertionError: assert ({'method': '...accept', None) == ({'schema_ver...accept', None)&#10;  &#10;  At index 0 diff: {'method': 'item/commandExecution/requestApproval', 'params': {'itemId': 'item', 'threadId': 'native-thread', 'turnId': 'turn-from-native'}, 'request_hash': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'request_id': 7} != {'schema_version': 1, 'request_id': 7, 'request_hash': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'method': 'item/commandExecution/requestApproval', 'params': {'threadId': 'native-thread', 'turnId': 'turn-from-native', 'itemId': 'item'}}&#10;  Use -v to get more diff">onboarding = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4235/test_cano...ent_id_hint': 'subject', 'executor_id': 'exe_51f1a1d087da2c2a5e6962cdabf7bd02', 'adapter_id': 'codex_app_server', ...})
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4235/test_canonical_native_decision0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001AE95B2E510&gt;
+kind = 'approval', choice = 'approve'
+
+    @pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
+    @pytest.mark.parametrize('kind,choice', [('approval','approve'),('approval','deny'),('input','approve'),('input','deny')])
+    def test_canonical_native_decision_roundtrip_through_automatic_connector(onboarding, tmp_path, monkeypatch, kind, choice):
+&gt;       test_owned_connector_reader_dispatches_five_actions_over_real_websocket(
+            onboarding,tmp_path,monkeypatch,True,None,False,0,None,native_decision=(kind,choice))
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:566: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:560: in test_owned_connector_reader_dispatches_five_actions_over_real_websocket
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def run():
+        sock = socket.socket()
+        sock.bind(('127.0.0.1', 0))
+        sock.listen()
+        port = sock.getsockname()[1]
+        server = uvicorn.Server(uvicorn.Config(client.app, lifespan='off', log_level='error'))
+        serving = asyncio.create_task(server.serve(sockets=[sock]))
+        daemon_root = state_dir(tmp_path / 'connector-runtime')
+        state = store.load()
+        state.preferences['vault.fallback_file.approved'] = True
+        StateStore(state_file(daemon_root)).save(state)
+        monkeypatch.setenv('OKTO_NEXUS_CONNECTOR_VAULT', 'file')
+        daemon = DaemonApp(daemon_root)
+        if automatic or publication_failure:
+            key = headers['subject']['Authorization'].removeprefix('Bearer ')
+            handle = daemon.vault.store('subject', key)
+            daemon.vault.store('provider-demo', 'provider-test-secret')
+            base_url = f'http://127.0.0.1:{port}'
+            def registered_state(state):
+                state.connector_id = 'connector'
+                state.servers[server_id] = ServerProfileRecord(server_id, base_url, base_url, 'now')
+                state.identities.append(IdentityRecord('subject', server_id, 'subject', handle,
+                                                       revisions.credential_epoch, 'now'))
+                state.execution_executors.append(ExecutionExecutorRecord(server_id, 'connector', 'subject',
+                    'register', 'Remote host', executor_id=executor_id, state='REGISTERED',
+                    inventory_publication_sequence=1))
+            daemon.store.update(registered_state)
+        binary = tmp_path / 'remote-only' / 'codex.exe'
+        candidate = InstallationCandidate('codex_app_server', str(binary), fingerprint(binary), 'explicit', 'selected')
+        class CountedFactory(_NativeFactory):
+            opens = 0
+            async def open(self, prepared, session_id, context, *, stream_epoch):
+                assert prepared.cwd == str(tmp_path / 'remote-workspace')
+                assert context.r4_authority is not None
+                self.opens += 1
+                self.context = context
+                self.stream_epoch = stream_epoch
+                return await super().open(prepared, session_id, context, stream_epoch=stream_epoch)
+        native = CountedFactory()
+        native_decisions = []
+        async def reply_native_approval(request, decision, response):
+            native_decisions.append((request, decision, response))
+        native.native.reply_native_approval = reply_native_approval
+        async def environment(_):
+            return {}
+        async def candidates(_):
+            return [candidate]
+        async def launch(_):
+            return R4LaunchSetup(environment)
+        owner = execution = None
+        recovery_host = None
+        dispatched = {}
+        operations = []
+        async def report(request):
+            assert request['operation_ids'] == request['session_ids'] == []
+            return {k: request[k] for k in ('protocol_major', 'contract_revision', 'server_id', 'executor_id',
+                'connection_id', 'connection_generation', 'reconcile_id', 'cursor')} | dict(
+                    type='reconcile.report', next_cursor=None, complete=True, receipts=[], claims=[],
+                    stream_watermarks=[], ownership_facts=[])
+        async def admit(intent, **options):
+            resolved = client.post('/v1/runtime/intents:resolve', headers=headers['subject'], json={
+                'client_intent_id': 'mux-' + intent, 'intent': intent, 'binding_id': binding['binding_id'],
+                'workspace_binding_id': binding['workspace_binding_id'], **options})
+            assert resolved.status_code == 200, resolved.text
+            resolution = resolved.json()
+            assert resolution['can_submit'], resolution['blockers']
+            admitted = client.post('/v1/runtime/operations', headers=headers['subject'], json={
+                k: resolution[k] for k in ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')})
+            assert admitted.status_code == 202, admitted.text
+            operations.append(resolution['operation_id'])
+            if publication_failure and intent == 'runtime.close':
+                async with asyncio.timeout(8):
+                    while execution.failure is None or execution.pending_count:
+                        await asyncio.sleep(.01)
+                assert isinstance(execution.failure, OSError)
+                return resolution
+            async with asyncio.timeout(8):
+                while True:
+                    if execution.failure is not None:
+                        raise execution.failure
+                    observed = client.get('/v1/runtime/operations/' + resolution['operation_id'],
+                                          headers=headers['subject'])
+                    assert observed.status_code == 200, observed.text
+                    if observed.json()['receipt_revision'] &gt; 0:
+                        receipt = observed.json()
+                        assert receipt['operation_id'] == resolution['operation_id']
+                        assert receipt['intent_hash'] == resolution['intent_hash']
+                        assert receipt['error'] is None, receipt
+                        assert receipt['executor_stage'] is not None
+                        if intent == 'runtime.close':
+                            assert receipt['executor_stage'] == 'SUCCEEDED'
+                        break
+                    await asyncio.sleep(0.01)
+            return resolution
+        try:
+            async with asyncio.timeout(5):
+                while not server.started:
+                    if serving.done():
+                        await serving
+                    await asyncio.sleep(0.01)
+            from contextlib import AsyncExitStack
+            async with AsyncExitStack() as stack:
+                if automatic:
+                    from functools import partial
+                    from okto_nexus_connector.daemon import r4_control, r4_execution
+                    async def discover():
+                        return [candidate]
+                    monkeypatch.setattr(r4_control, 'R4DaemonControl',
+                        partial(r4_control.R4DaemonControl, discover=discover))
+                    monkeypatch.setattr(r4_execution, 'R4DaemonExecution',
+                        partial(r4_execution.R4DaemonExecution, native_factory=native))
+                    daemon._start_transports()
+                    control = daemon.r4_controls[server_id]
+                    async with asyncio.timeout(10):
+                        while not control.status()['execution_ready']:
+                            if control.error_code:
+                                raise AssertionError(control.status())
+                            await asyncio.sleep(.01)
+                    owner = control.connection
+                    execution = control.execution.owner
+                else:
+                    owner = await asyncio.wait_for(connect_r4_connection(
+                        f'ws://127.0.0.1:{port}/v1/runtime/executors/{executor_id}/link',
+                        registered.json()['bootstrap_ticket']['ticket'], server_id=server_id, executor_id=executor_id,
+                        management_revision=info['management_revision'], snapshot_format=info['executor_snapshot_format'],
+                        boot_id='connector-process-boot', report_reconciliation=report), 5)
+                    await owner.attach_binding(binding_id=binding['binding_id'], agent_id='subject', ticket=ticket,
+                        credential_epoch=revisions.credential_epoch, authorization_revision=revisions.authorization,
+                        configuration_revision=revisions.configuration)
+                    raw = await stack.enter_async_context(httpx.AsyncClient(transport=httpx.ASGITransport(app=client.app)))
+                    http = await stack.enter_async_context(NexusHTTPClient('https://127.0.0.1:8202', client=raw))
+                    async def publish(frame):
+                        if publication_failure == 'before_commit' and frame['operation_id'] == operations[-1] and frame['stage'] == 'SUCCEEDED':
+                            raise OSError('The receipt request was not delivered.')
+                        await http.publish_operation_receipt(ticket, frame=frame)
+                        if publication_failure == 'lost_ack' and frame['stage'] == 'SUCCEEDED':
+                            raise OSError('The receipt acknowledgment was lost.')
+                    execution = daemon.own_r4_connection(owner, candidate_provider=candidates,
+                        launch_provider=launch, publish_receipt=publish, native_factory=native)
+                    with pytest.raises(ConnectorError) as duplicate:
+                        daemon.own_r4_connection(owner, candidate_provider=candidates,
+                            launch_provider=launch, publish_receipt=publish, native_factory=native)
+                    assert duplicate.value.code == 'OPERATION_CONFLICT'
+                execute = execution._execute
+                async def capture(item):
+                    dispatched[item.frame['action']] = item.frame
+                    return await execute(item)
+                execution._execute = capture
+                if publication_failure == 'core_commit':
+                    original_record = execution.publications.record
+                    def interrupted_record(frame):
+                        if frame['stage'] == 'SUCCEEDED':
+                            raise OSError('The receipt projection write was interrupted.')
+                        original_record(frame)
+                    monkeypatch.setattr(execution.publications, 'record', interrupted_record)
+                opened = await admit('runtime.start', new_session=True)
+                session_id = opened['scope']['session_id']
+                turned = await admit('turn.submit', session_id=session_id, text='Hello')
+                if native_decision is not None:
+                    from nexus_connector_core import RuntimeEvent
+                    kind, choice = native_decision
+                    request = dict(schema_version=1, request_id=7, request_hash='a'*64,
+                        method='item/tool/requestUserInput' if kind == 'input' else 'item/commandExecution/requestApproval',
+                        params={'threadId':'native-thread','turnId':'turn-from-native','itemId':'item'})
+                    if kind == 'input':
+                        request['params'].update(isBlocking=True,questions=[
+                            {'id':'question','header':'Response','question':'Provide input.','isOther':True}])
+                    await native.native.queue.put(RuntimeEvent(server_id, executor_id, session_id,
+                        native.stream_epoch, 0, 'input_request' if kind == 'input' else 'approval_request',
+                        request['method'], {'native_approval':request, 'native_approval_display':dict(request)},
+                        turned['operation_id']))
+                    async with asyncio.timeout(8):
+                        while True:
+                            queued = client.get('/api/v1/approvals', headers=headers['operator'],
+                                params={'workspace':binding['workspace_id'],'status':'pending'})
+                            assert queued.status_code == 200, queued.text
+                            rows = [row for row in queued.json()['data']['items'] if row['action']=='execution.native.respond']
+                            if rows: break
+                            assert execution.failure is None, repr(execution.failure)
+                            await asyncio.sleep(.01)
+                    assert len(rows) == 1
+                    detail = client.get('/api/v1/approvals/'+rows[0]['approval_id'],headers=headers['operator'])
+                    proposal = detail.json()['data']['request_payload']['kwargs']
+                    body = {k:proposal[k] for k in ('approval_key','expected_revision','request_hash','cas_token')}
+                    body.update(client_intent_id='remote-native-decision',decision=choice)
+                    response = {'answers':{'question':{'answers':['remote-private-input-marker']}}} if kind=='input' and choice=='approve' else None
+                    if response is not None: body['response']=response
+                    assert client.post('/v1/runtime/approval-decisions',headers=headers['subject'],json=body).status_code == 403
+                    confirmed = client.post('/v1/runtime/approval-decisions',headers=headers['operator'],json=body)
+                    assert confirmed.status_code == 202, confirmed.text
+                    decision = confirmed.json()
+                    repeated = client.post('/v1/runtime/approval-decisions',headers=headers['operator'],json=body)
+                    assert repeated.status_code == 200, repeated.text
+                    assert repeated.json()['native_operation_id'] == decision['native_operation_id']
+                    operations.append(decision['native_operation_id'])
+                    async with asyncio.timeout(8):
+                        while True:
+                            result = client.get('/v1/runtime/approval-decisions/'+decision['decision_id'],headers=headers['operator'])
+                            assert result.status_code == 200, result.text
+                            view = result.json()
+                            if view['native_stage']=='SUBMITTED': break
+                            assert view['native_stage']=='DISPATCH_PENDING', view
+                            assert execution.failure is None, repr(execution.failure)
+                            await asyncio.sleep(.01)
+                    assert view['canonical_state'] == ('CONFIRMED' if choice=='approve' else 'DENIED')
+                    assert len(native_decisions) == 1
+&gt;                   assert native_decisions[0] == (request,'accept' if choice=='approve' else 'decline',response)
+E                   AssertionError: assert ({'method': '...accept', None) == ({'schema_ver...accept', None)
+E                     
+E                     At index 0 diff: {'method': 'item/commandExecution/requestApproval', 'params': {'itemId': 'item', 'threadId': 'native-thread', 'turnId': 'turn-from-native'}, 'request_hash': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'request_id': 7} != {'schema_version': 1, 'request_id': 7, 'request_hash': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'method': 'item/commandExecution/requestApproval', 'params': {'threadId': 'native-thread', 'turnId': 'turn-from-native', 'itemId': 'item'}}
+E                     Use -v to get more diff
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:288: AssertionError</failure></testcase><testcase classname="test_remote_connection" name="test_canonical_native_decision_roundtrip_through_automatic_connector[approval-deny-connector-configured]" time="10.054"><failure message="AssertionError: assert ({'method': '...ecline', None) == ({'schema_ver...ecline', None)&#10;  &#10;  At index 0 diff: {'method': 'item/commandExecution/requestApproval', 'params': {'itemId': 'item', 'threadId': 'native-thread', 'turnId': 'turn-from-native'}, 'request_hash': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'request_id': 7} != {'schema_version': 1, 'request_id': 7, 'request_hash': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'method': 'item/commandExecution/requestApproval', 'params': {'threadId': 'native-thread', 'turnId': 'turn-from-native', 'itemId': 'item'}}&#10;  Use -v to get more diff">onboarding = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4235/test_cano...ent_id_hint': 'subject', 'executor_id': 'exe_cc88bd8c6473a3d67fa67e4ed239a390', 'adapter_id': 'codex_app_server', ...})
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4235/test_canonical_native_decision1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001AE973E7000&gt;
+kind = 'approval', choice = 'deny'
+
+    @pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
+    @pytest.mark.parametrize('kind,choice', [('approval','approve'),('approval','deny'),('input','approve'),('input','deny')])
+    def test_canonical_native_decision_roundtrip_through_automatic_connector(onboarding, tmp_path, monkeypatch, kind, choice):
+&gt;       test_owned_connector_reader_dispatches_five_actions_over_real_websocket(
+            onboarding,tmp_path,monkeypatch,True,None,False,0,None,native_decision=(kind,choice))
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:566: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:560: in test_owned_connector_reader_dispatches_five_actions_over_real_websocket
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def run():
+        sock = socket.socket()
+        sock.bind(('127.0.0.1', 0))
+        sock.listen()
+        port = sock.getsockname()[1]
+        server = uvicorn.Server(uvicorn.Config(client.app, lifespan='off', log_level='error'))
+        serving = asyncio.create_task(server.serve(sockets=[sock]))
+        daemon_root = state_dir(tmp_path / 'connector-runtime')
+        state = store.load()
+        state.preferences['vault.fallback_file.approved'] = True
+        StateStore(state_file(daemon_root)).save(state)
+        monkeypatch.setenv('OKTO_NEXUS_CONNECTOR_VAULT', 'file')
+        daemon = DaemonApp(daemon_root)
+        if automatic or publication_failure:
+            key = headers['subject']['Authorization'].removeprefix('Bearer ')
+            handle = daemon.vault.store('subject', key)
+            daemon.vault.store('provider-demo', 'provider-test-secret')
+            base_url = f'http://127.0.0.1:{port}'
+            def registered_state(state):
+                state.connector_id = 'connector'
+                state.servers[server_id] = ServerProfileRecord(server_id, base_url, base_url, 'now')
+                state.identities.append(IdentityRecord('subject', server_id, 'subject', handle,
+                                                       revisions.credential_epoch, 'now'))
+                state.execution_executors.append(ExecutionExecutorRecord(server_id, 'connector', 'subject',
+                    'register', 'Remote host', executor_id=executor_id, state='REGISTERED',
+                    inventory_publication_sequence=1))
+            daemon.store.update(registered_state)
+        binary = tmp_path / 'remote-only' / 'codex.exe'
+        candidate = InstallationCandidate('codex_app_server', str(binary), fingerprint(binary), 'explicit', 'selected')
+        class CountedFactory(_NativeFactory):
+            opens = 0
+            async def open(self, prepared, session_id, context, *, stream_epoch):
+                assert prepared.cwd == str(tmp_path / 'remote-workspace')
+                assert context.r4_authority is not None
+                self.opens += 1
+                self.context = context
+                self.stream_epoch = stream_epoch
+                return await super().open(prepared, session_id, context, stream_epoch=stream_epoch)
+        native = CountedFactory()
+        native_decisions = []
+        async def reply_native_approval(request, decision, response):
+            native_decisions.append((request, decision, response))
+        native.native.reply_native_approval = reply_native_approval
+        async def environment(_):
+            return {}
+        async def candidates(_):
+            return [candidate]
+        async def launch(_):
+            return R4LaunchSetup(environment)
+        owner = execution = None
+        recovery_host = None
+        dispatched = {}
+        operations = []
+        async def report(request):
+            assert request['operation_ids'] == request['session_ids'] == []
+            return {k: request[k] for k in ('protocol_major', 'contract_revision', 'server_id', 'executor_id',
+                'connection_id', 'connection_generation', 'reconcile_id', 'cursor')} | dict(
+                    type='reconcile.report', next_cursor=None, complete=True, receipts=[], claims=[],
+                    stream_watermarks=[], ownership_facts=[])
+        async def admit(intent, **options):
+            resolved = client.post('/v1/runtime/intents:resolve', headers=headers['subject'], json={
+                'client_intent_id': 'mux-' + intent, 'intent': intent, 'binding_id': binding['binding_id'],
+                'workspace_binding_id': binding['workspace_binding_id'], **options})
+            assert resolved.status_code == 200, resolved.text
+            resolution = resolved.json()
+            assert resolution['can_submit'], resolution['blockers']
+            admitted = client.post('/v1/runtime/operations', headers=headers['subject'], json={
+                k: resolution[k] for k in ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')})
+            assert admitted.status_code == 202, admitted.text
+            operations.append(resolution['operation_id'])
+            if publication_failure and intent == 'runtime.close':
+                async with asyncio.timeout(8):
+                    while execution.failure is None or execution.pending_count:
+                        await asyncio.sleep(.01)
+                assert isinstance(execution.failure, OSError)
+                return resolution
+            async with asyncio.timeout(8):
+                while True:
+                    if execution.failure is not None:
+                        raise execution.failure
+                    observed = client.get('/v1/runtime/operations/' + resolution['operation_id'],
+                                          headers=headers['subject'])
+                    assert observed.status_code == 200, observed.text
+                    if observed.json()['receipt_revision'] &gt; 0:
+                        receipt = observed.json()
+                        assert receipt['operation_id'] == resolution['operation_id']
+                        assert receipt['intent_hash'] == resolution['intent_hash']
+                        assert receipt['error'] is None, receipt
+                        assert receipt['executor_stage'] is not None
+                        if intent == 'runtime.close':
+                            assert receipt['executor_stage'] == 'SUCCEEDED'
+                        break
+                    await asyncio.sleep(0.01)
+            return resolution
+        try:
+            async with asyncio.timeout(5):
+                while not server.started:
+                    if serving.done():
+                        await serving
+                    await asyncio.sleep(0.01)
+            from contextlib import AsyncExitStack
+            async with AsyncExitStack() as stack:
+                if automatic:
+                    from functools import partial
+                    from okto_nexus_connector.daemon import r4_control, r4_execution
+                    async def discover():
+                        return [candidate]
+                    monkeypatch.setattr(r4_control, 'R4DaemonControl',
+                        partial(r4_control.R4DaemonControl, discover=discover))
+                    monkeypatch.setattr(r4_execution, 'R4DaemonExecution',
+                        partial(r4_execution.R4DaemonExecution, native_factory=native))
+                    daemon._start_transports()
+                    control = daemon.r4_controls[server_id]
+                    async with asyncio.timeout(10):
+                        while not control.status()['execution_ready']:
+                            if control.error_code:
+                                raise AssertionError(control.status())
+                            await asyncio.sleep(.01)
+                    owner = control.connection
+                    execution = control.execution.owner
+                else:
+                    owner = await asyncio.wait_for(connect_r4_connection(
+                        f'ws://127.0.0.1:{port}/v1/runtime/executors/{executor_id}/link',
+                        registered.json()['bootstrap_ticket']['ticket'], server_id=server_id, executor_id=executor_id,
+                        management_revision=info['management_revision'], snapshot_format=info['executor_snapshot_format'],
+                        boot_id='connector-process-boot', report_reconciliation=report), 5)
+                    await owner.attach_binding(binding_id=binding['binding_id'], agent_id='subject', ticket=ticket,
+                        credential_epoch=revisions.credential_epoch, authorization_revision=revisions.authorization,
+                        configuration_revision=revisions.configuration)
+                    raw = await stack.enter_async_context(httpx.AsyncClient(transport=httpx.ASGITransport(app=client.app)))
+                    http = await stack.enter_async_context(NexusHTTPClient('https://127.0.0.1:8202', client=raw))
+                    async def publish(frame):
+                        if publication_failure == 'before_commit' and frame['operation_id'] == operations[-1] and frame['stage'] == 'SUCCEEDED':
+                            raise OSError('The receipt request was not delivered.')
+                        await http.publish_operation_receipt(ticket, frame=frame)
+                        if publication_failure == 'lost_ack' and frame['stage'] == 'SUCCEEDED':
+                            raise OSError('The receipt acknowledgment was lost.')
+                    execution = daemon.own_r4_connection(owner, candidate_provider=candidates,
+                        launch_provider=launch, publish_receipt=publish, native_factory=native)
+                    with pytest.raises(ConnectorError) as duplicate:
+                        daemon.own_r4_connection(owner, candidate_provider=candidates,
+                            launch_provider=launch, publish_receipt=publish, native_factory=native)
+                    assert duplicate.value.code == 'OPERATION_CONFLICT'
+                execute = execution._execute
+                async def capture(item):
+                    dispatched[item.frame['action']] = item.frame
+                    return await execute(item)
+                execution._execute = capture
+                if publication_failure == 'core_commit':
+                    original_record = execution.publications.record
+                    def interrupted_record(frame):
+                        if frame['stage'] == 'SUCCEEDED':
+                            raise OSError('The receipt projection write was interrupted.')
+                        original_record(frame)
+                    monkeypatch.setattr(execution.publications, 'record', interrupted_record)
+                opened = await admit('runtime.start', new_session=True)
+                session_id = opened['scope']['session_id']
+                turned = await admit('turn.submit', session_id=session_id, text='Hello')
+                if native_decision is not None:
+                    from nexus_connector_core import RuntimeEvent
+                    kind, choice = native_decision
+                    request = dict(schema_version=1, request_id=7, request_hash='a'*64,
+                        method='item/tool/requestUserInput' if kind == 'input' else 'item/commandExecution/requestApproval',
+                        params={'threadId':'native-thread','turnId':'turn-from-native','itemId':'item'})
+                    if kind == 'input':
+                        request['params'].update(isBlocking=True,questions=[
+                            {'id':'question','header':'Response','question':'Provide input.','isOther':True}])
+                    await native.native.queue.put(RuntimeEvent(server_id, executor_id, session_id,
+                        native.stream_epoch, 0, 'input_request' if kind == 'input' else 'approval_request',
+                        request['method'], {'native_approval':request, 'native_approval_display':dict(request)},
+                        turned['operation_id']))
+                    async with asyncio.timeout(8):
+                        while True:
+                            queued = client.get('/api/v1/approvals', headers=headers['operator'],
+                                params={'workspace':binding['workspace_id'],'status':'pending'})
+                            assert queued.status_code == 200, queued.text
+                            rows = [row for row in queued.json()['data']['items'] if row['action']=='execution.native.respond']
+                            if rows: break
+                            assert execution.failure is None, repr(execution.failure)
+                            await asyncio.sleep(.01)
+                    assert len(rows) == 1
+                    detail = client.get('/api/v1/approvals/'+rows[0]['approval_id'],headers=headers['operator'])
+                    proposal = detail.json()['data']['request_payload']['kwargs']
+                    body = {k:proposal[k] for k in ('approval_key','expected_revision','request_hash','cas_token')}
+                    body.update(client_intent_id='remote-native-decision',decision=choice)
+                    response = {'answers':{'question':{'answers':['remote-private-input-marker']}}} if kind=='input' and choice=='approve' else None
+                    if response is not None: body['response']=response
+                    assert client.post('/v1/runtime/approval-decisions',headers=headers['subject'],json=body).status_code == 403
+                    confirmed = client.post('/v1/runtime/approval-decisions',headers=headers['operator'],json=body)
+                    assert confirmed.status_code == 202, confirmed.text
+                    decision = confirmed.json()
+                    repeated = client.post('/v1/runtime/approval-decisions',headers=headers['operator'],json=body)
+                    assert repeated.status_code == 200, repeated.text
+                    assert repeated.json()['native_operation_id'] == decision['native_operation_id']
+                    operations.append(decision['native_operation_id'])
+                    async with asyncio.timeout(8):
+                        while True:
+                            result = client.get('/v1/runtime/approval-decisions/'+decision['decision_id'],headers=headers['operator'])
+                            assert result.status_code == 200, result.text
+                            view = result.json()
+                            if view['native_stage']=='SUBMITTED': break
+                            assert view['native_stage']=='DISPATCH_PENDING', view
+                            assert execution.failure is None, repr(execution.failure)
+                            await asyncio.sleep(.01)
+                    assert view['canonical_state'] == ('CONFIRMED' if choice=='approve' else 'DENIED')
+                    assert len(native_decisions) == 1
+&gt;                   assert native_decisions[0] == (request,'accept' if choice=='approve' else 'decline',response)
+E                   AssertionError: assert ({'method': '...ecline', None) == ({'schema_ver...ecline', None)
+E                     
+E                     At index 0 diff: {'method': 'item/commandExecution/requestApproval', 'params': {'itemId': 'item', 'threadId': 'native-thread', 'turnId': 'turn-from-native'}, 'request_hash': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'request_id': 7} != {'schema_version': 1, 'request_id': 7, 'request_hash': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'method': 'item/commandExecution/requestApproval', 'params': {'threadId': 'native-thread', 'turnId': 'turn-from-native', 'itemId': 'item'}}
+E                     Use -v to get more diff
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:288: AssertionError</failure></testcase><testcase classname="test_remote_connection" name="test_canonical_native_decision_roundtrip_through_automatic_connector[input-approve-connector-configured]" time="9.268"><failure message="AssertionError: assert ({'method': '...t-marker']}}}) == ({'schema_ver...t-marker']}}})&#10;  &#10;  At index 0 diff: {'method': 'item/tool/requestUserInput', 'params': {'isBlocking': True, 'itemId': 'item', 'questions': [{'header': 'Response', 'id': 'question', 'isOther': True, 'question': 'Provide input.'}], 'threadId': 'native-thread', 'turnId': 'turn-from-native'}, 'request_hash': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'request_id': 7} != {'schema_version': 1, 'request_id': 7, 'request_hash': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'method': 'item/tool/requestUserInput', 'params': {'threadId': 'native-thread'...&#10;  &#10;  ...Full output truncated (2 lines hidden), use '-vv' to show">onboarding = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4235/test_cano...ent_id_hint': 'subject', 'executor_id': 'exe_50ee4dd9134dd30cececcd5f6d11fdb2', 'adapter_id': 'codex_app_server', ...})
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4235/test_canonical_native_decision2')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001AE96EC1390&gt;
+kind = 'input', choice = 'approve'
+
+    @pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
+    @pytest.mark.parametrize('kind,choice', [('approval','approve'),('approval','deny'),('input','approve'),('input','deny')])
+    def test_canonical_native_decision_roundtrip_through_automatic_connector(onboarding, tmp_path, monkeypatch, kind, choice):
+&gt;       test_owned_connector_reader_dispatches_five_actions_over_real_websocket(
+            onboarding,tmp_path,monkeypatch,True,None,False,0,None,native_decision=(kind,choice))
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:566: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:560: in test_owned_connector_reader_dispatches_five_actions_over_real_websocket
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def run():
+        sock = socket.socket()
+        sock.bind(('127.0.0.1', 0))
+        sock.listen()
+        port = sock.getsockname()[1]
+        server = uvicorn.Server(uvicorn.Config(client.app, lifespan='off', log_level='error'))
+        serving = asyncio.create_task(server.serve(sockets=[sock]))
+        daemon_root = state_dir(tmp_path / 'connector-runtime')
+        state = store.load()
+        state.preferences['vault.fallback_file.approved'] = True
+        StateStore(state_file(daemon_root)).save(state)
+        monkeypatch.setenv('OKTO_NEXUS_CONNECTOR_VAULT', 'file')
+        daemon = DaemonApp(daemon_root)
+        if automatic or publication_failure:
+            key = headers['subject']['Authorization'].removeprefix('Bearer ')
+            handle = daemon.vault.store('subject', key)
+            daemon.vault.store('provider-demo', 'provider-test-secret')
+            base_url = f'http://127.0.0.1:{port}'
+            def registered_state(state):
+                state.connector_id = 'connector'
+                state.servers[server_id] = ServerProfileRecord(server_id, base_url, base_url, 'now')
+                state.identities.append(IdentityRecord('subject', server_id, 'subject', handle,
+                                                       revisions.credential_epoch, 'now'))
+                state.execution_executors.append(ExecutionExecutorRecord(server_id, 'connector', 'subject',
+                    'register', 'Remote host', executor_id=executor_id, state='REGISTERED',
+                    inventory_publication_sequence=1))
+            daemon.store.update(registered_state)
+        binary = tmp_path / 'remote-only' / 'codex.exe'
+        candidate = InstallationCandidate('codex_app_server', str(binary), fingerprint(binary), 'explicit', 'selected')
+        class CountedFactory(_NativeFactory):
+            opens = 0
+            async def open(self, prepared, session_id, context, *, stream_epoch):
+                assert prepared.cwd == str(tmp_path / 'remote-workspace')
+                assert context.r4_authority is not None
+                self.opens += 1
+                self.context = context
+                self.stream_epoch = stream_epoch
+                return await super().open(prepared, session_id, context, stream_epoch=stream_epoch)
+        native = CountedFactory()
+        native_decisions = []
+        async def reply_native_approval(request, decision, response):
+            native_decisions.append((request, decision, response))
+        native.native.reply_native_approval = reply_native_approval
+        async def environment(_):
+            return {}
+        async def candidates(_):
+            return [candidate]
+        async def launch(_):
+            return R4LaunchSetup(environment)
+        owner = execution = None
+        recovery_host = None
+        dispatched = {}
+        operations = []
+        async def report(request):
+            assert request['operation_ids'] == request['session_ids'] == []
+            return {k: request[k] for k in ('protocol_major', 'contract_revision', 'server_id', 'executor_id',
+                'connection_id', 'connection_generation', 'reconcile_id', 'cursor')} | dict(
+                    type='reconcile.report', next_cursor=None, complete=True, receipts=[], claims=[],
+                    stream_watermarks=[], ownership_facts=[])
+        async def admit(intent, **options):
+            resolved = client.post('/v1/runtime/intents:resolve', headers=headers['subject'], json={
+                'client_intent_id': 'mux-' + intent, 'intent': intent, 'binding_id': binding['binding_id'],
+                'workspace_binding_id': binding['workspace_binding_id'], **options})
+            assert resolved.status_code == 200, resolved.text
+            resolution = resolved.json()
+            assert resolution['can_submit'], resolution['blockers']
+            admitted = client.post('/v1/runtime/operations', headers=headers['subject'], json={
+                k: resolution[k] for k in ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')})
+            assert admitted.status_code == 202, admitted.text
+            operations.append(resolution['operation_id'])
+            if publication_failure and intent == 'runtime.close':
+                async with asyncio.timeout(8):
+                    while execution.failure is None or execution.pending_count:
+                        await asyncio.sleep(.01)
+                assert isinstance(execution.failure, OSError)
+                return resolution
+            async with asyncio.timeout(8):
+                while True:
+                    if execution.failure is not None:
+                        raise execution.failure
+                    observed = client.get('/v1/runtime/operations/' + resolution['operation_id'],
+                                          headers=headers['subject'])
+                    assert observed.status_code == 200, observed.text
+                    if observed.json()['receipt_revision'] &gt; 0:
+                        receipt = observed.json()
+                        assert receipt['operation_id'] == resolution['operation_id']
+                        assert receipt['intent_hash'] == resolution['intent_hash']
+                        assert receipt['error'] is None, receipt
+                        assert receipt['executor_stage'] is not None
+                        if intent == 'runtime.close':
+                            assert receipt['executor_stage'] == 'SUCCEEDED'
+                        break
+                    await asyncio.sleep(0.01)
+            return resolution
+        try:
+            async with asyncio.timeout(5):
+                while not server.started:
+                    if serving.done():
+                        await serving
+                    await asyncio.sleep(0.01)
+            from contextlib import AsyncExitStack
+            async with AsyncExitStack() as stack:
+                if automatic:
+                    from functools import partial
+                    from okto_nexus_connector.daemon import r4_control, r4_execution
+                    async def discover():
+                        return [candidate]
+                    monkeypatch.setattr(r4_control, 'R4DaemonControl',
+                        partial(r4_control.R4DaemonControl, discover=discover))
+                    monkeypatch.setattr(r4_execution, 'R4DaemonExecution',
+                        partial(r4_execution.R4DaemonExecution, native_factory=native))
+                    daemon._start_transports()
+                    control = daemon.r4_controls[server_id]
+                    async with asyncio.timeout(10):
+                        while not control.status()['execution_ready']:
+                            if control.error_code:
+                                raise AssertionError(control.status())
+                            await asyncio.sleep(.01)
+                    owner = control.connection
+                    execution = control.execution.owner
+                else:
+                    owner = await asyncio.wait_for(connect_r4_connection(
+                        f'ws://127.0.0.1:{port}/v1/runtime/executors/{executor_id}/link',
+                        registered.json()['bootstrap_ticket']['ticket'], server_id=server_id, executor_id=executor_id,
+                        management_revision=info['management_revision'], snapshot_format=info['executor_snapshot_format'],
+                        boot_id='connector-process-boot', report_reconciliation=report), 5)
+                    await owner.attach_binding(binding_id=binding['binding_id'], agent_id='subject', ticket=ticket,
+                        credential_epoch=revisions.credential_epoch, authorization_revision=revisions.authorization,
+                        configuration_revision=revisions.configuration)
+                    raw = await stack.enter_async_context(httpx.AsyncClient(transport=httpx.ASGITransport(app=client.app)))
+                    http = await stack.enter_async_context(NexusHTTPClient('https://127.0.0.1:8202', client=raw))
+                    async def publish(frame):
+                        if publication_failure == 'before_commit' and frame['operation_id'] == operations[-1] and frame['stage'] == 'SUCCEEDED':
+                            raise OSError('The receipt request was not delivered.')
+                        await http.publish_operation_receipt(ticket, frame=frame)
+                        if publication_failure == 'lost_ack' and frame['stage'] == 'SUCCEEDED':
+                            raise OSError('The receipt acknowledgment was lost.')
+                    execution = daemon.own_r4_connection(owner, candidate_provider=candidates,
+                        launch_provider=launch, publish_receipt=publish, native_factory=native)
+                    with pytest.raises(ConnectorError) as duplicate:
+                        daemon.own_r4_connection(owner, candidate_provider=candidates,
+                            launch_provider=launch, publish_receipt=publish, native_factory=native)
+                    assert duplicate.value.code == 'OPERATION_CONFLICT'
+                execute = execution._execute
+                async def capture(item):
+                    dispatched[item.frame['action']] = item.frame
+                    return await execute(item)
+                execution._execute = capture
+                if publication_failure == 'core_commit':
+                    original_record = execution.publications.record
+                    def interrupted_record(frame):
+                        if frame['stage'] == 'SUCCEEDED':
+                            raise OSError('The receipt projection write was interrupted.')
+                        original_record(frame)
+                    monkeypatch.setattr(execution.publications, 'record', interrupted_record)
+                opened = await admit('runtime.start', new_session=True)
+                session_id = opened['scope']['session_id']
+                turned = await admit('turn.submit', session_id=session_id, text='Hello')
+                if native_decision is not None:
+                    from nexus_connector_core import RuntimeEvent
+                    kind, choice = native_decision
+                    request = dict(schema_version=1, request_id=7, request_hash='a'*64,
+                        method='item/tool/requestUserInput' if kind == 'input' else 'item/commandExecution/requestApproval',
+                        params={'threadId':'native-thread','turnId':'turn-from-native','itemId':'item'})
+                    if kind == 'input':
+                        request['params'].update(isBlocking=True,questions=[
+                            {'id':'question','header':'Response','question':'Provide input.','isOther':True}])
+                    await native.native.queue.put(RuntimeEvent(server_id, executor_id, session_id,
+                        native.stream_epoch, 0, 'input_request' if kind == 'input' else 'approval_request',
+                        request['method'], {'native_approval':request, 'native_approval_display':dict(request)},
+                        turned['operation_id']))
+                    async with asyncio.timeout(8):
+                        while True:
+                            queued = client.get('/api/v1/approvals', headers=headers['operator'],
+                                params={'workspace':binding['workspace_id'],'status':'pending'})
+                            assert queued.status_code == 200, queued.text
+                            rows = [row for row in queued.json()['data']['items'] if row['action']=='execution.native.respond']
+                            if rows: break
+                            assert execution.failure is None, repr(execution.failure)
+                            await asyncio.sleep(.01)
+                    assert len(rows) == 1
+                    detail = client.get('/api/v1/approvals/'+rows[0]['approval_id'],headers=headers['operator'])
+                    proposal = detail.json()['data']['request_payload']['kwargs']
+                    body = {k:proposal[k] for k in ('approval_key','expected_revision','request_hash','cas_token')}
+                    body.update(client_intent_id='remote-native-decision',decision=choice)
+                    response = {'answers':{'question':{'answers':['remote-private-input-marker']}}} if kind=='input' and choice=='approve' else None
+                    if response is not None: body['response']=response
+                    assert client.post('/v1/runtime/approval-decisions',headers=headers['subject'],json=body).status_code == 403
+                    confirmed = client.post('/v1/runtime/approval-decisions',headers=headers['operator'],json=body)
+                    assert confirmed.status_code == 202, confirmed.text
+                    decision = confirmed.json()
+                    repeated = client.post('/v1/runtime/approval-decisions',headers=headers['operator'],json=body)
+                    assert repeated.status_code == 200, repeated.text
+                    assert repeated.json()['native_operation_id'] == decision['native_operation_id']
+                    operations.append(decision['native_operation_id'])
+                    async with asyncio.timeout(8):
+                        while True:
+                            result = client.get('/v1/runtime/approval-decisions/'+decision['decision_id'],headers=headers['operator'])
+                            assert result.status_code == 200, result.text
+                            view = result.json()
+                            if view['native_stage']=='SUBMITTED': break
+                            assert view['native_stage']=='DISPATCH_PENDING', view
+                            assert execution.failure is None, repr(execution.failure)
+                            await asyncio.sleep(.01)
+                    assert view['canonical_state'] == ('CONFIRMED' if choice=='approve' else 'DENIED')
+                    assert len(native_decisions) == 1
+&gt;                   assert native_decisions[0] == (request,'accept' if choice=='approve' else 'decline',response)
+E                   AssertionError: assert ({'method': '...t-marker']}}}) == ({'schema_ver...t-marker']}}})
+E                     
+E                     At index 0 diff: {'method': 'item/tool/requestUserInput', 'params': {'isBlocking': True, 'itemId': 'item', 'questions': [{'header': 'Response', 'id': 'question', 'isOther': True, 'question': 'Provide input.'}], 'threadId': 'native-thread', 'turnId': 'turn-from-native'}, 'request_hash': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'request_id': 7} != {'schema_version': 1, 'request_id': 7, 'request_hash': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'method': 'item/tool/requestUserInput', 'params': {'threadId': 'native-thread'...
+E                     
+E                     ...Full output truncated (2 lines hidden), use '-vv' to show
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:288: AssertionError</failure></testcase></testsuite></testsuites>

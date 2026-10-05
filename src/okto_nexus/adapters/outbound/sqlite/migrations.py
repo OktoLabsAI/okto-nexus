@@ -71,8 +71,8 @@ def _default_migrations_dir() -> Path:
 def _split_statements(script: str) -> list[str]:
     """Split a migration script into individual statements.
 
-    Line-based: blank lines and full-line ``--`` comments are dropped; a
-    statement boundary is a line whose stripped content ends with ``;``.
+    Blank lines and full-line comments are dropped. SQLite's parser recognizes
+    complete statements, including a trigger body containing inner semicolons.
     """
     statements: list[str] = []
     buffer: list[str] = []
@@ -81,7 +81,7 @@ def _split_statements(script: str) -> list[str]:
         if not stripped or stripped.startswith("--"):
             continue
         buffer.append(line)
-        if stripped.endswith(";"):
+        if sqlite3.complete_statement("\n".join(buffer)):
             statements.append("\n".join(buffer).strip())
             buffer = []
     if buffer:
@@ -238,8 +238,14 @@ class MigrationRunner:
         previously committed migrations remain durable.
         """
         script = path.read_text(encoding="utf-8")
-        self._begin_immediate(conn)
+        rebuild = script.startswith("-- foreign-key-rebuild\n")
+        if rebuild:
+            # SQLite's documented table-rebuild sequence requires this on the
+            # migration connection before BEGIN. Other connections retain FK
+            # enforcement; the writer lock and final check protect the commit.
+            conn.execute("PRAGMA foreign_keys=OFF")
         try:
+            self._begin_immediate(conn)
             row = conn.execute(
                 "SELECT 1 FROM schema_migrations WHERE version = ?", (version,)
             ).fetchone()
@@ -248,6 +254,8 @@ class MigrationRunner:
                 return False
             for statement in _split_statements(script):
                 conn.execute(statement)
+            if rebuild and conn.execute("PRAGMA foreign_key_check").fetchone() is not None:
+                raise ValueError("Rebuilt schema contains an invalid foreign key.")
             conn.execute(
                 "INSERT INTO schema_migrations (version, applied_at) VALUES (?, ?)",
                 (version, utc_now_iso()),
@@ -268,6 +276,9 @@ class MigrationRunner:
                     "migrations_dir": str(self._migrations_dir),
                 },
             ) from exc
+        finally:
+            if rebuild:
+                conn.execute("PRAGMA foreign_keys=ON")
 
 
 def _rollback_quietly(conn: sqlite3.Connection) -> None:

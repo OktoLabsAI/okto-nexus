@@ -235,6 +235,7 @@ class Handoff:
     updated_at: str | None = None
     payload: str | None = None
     trace_id: str | None = None
+    claim_epoch: int = 0
 
 
 @dataclass(slots=True)
@@ -268,6 +269,9 @@ class Artifact:
     storage_kind: str | None = None
     filename: str | None = None
     media_type: str | None = None
+    # Additive private audience; None preserves legacy visibility. An empty
+    # list denies every non-operator reader and must not become public.
+    reader_agent_ids: list[str] | None = None
 
 
 @dataclass(slots=True)

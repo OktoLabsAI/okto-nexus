@@ -56,8 +56,23 @@ from ..mcp.projection import (
 )
 from ..mcp.tools.artifacts import build_service as _build_artifact_service
 from ..mcp.tools.handoff import build_service as _build_handoff_service
+from ..mcp.tools.harness import authorize_request as _harness_authorize
+from ..mcp.tools.harness import authorized_send as _harness_send
+from ..mcp.tools.harness import authorized_close as _harness_close
+from ..mcp.tools.harness import build_access_service as _harness_access
+from ..mcp.tools.harness import build_endpoint_service as _harness_endpoints
+from ..mcp.tools.harness import open_runtime as _harness_open
+from ..mcp.tools.harness import (
+    build_connector_factories as _build_harness_connector_factories,
+)
+from ..mcp.tools.harness import build_service as _build_harness_supervisor
+from ..mcp.tools.harness import capabilities_catalog as _harness_capabilities_catalog
+from ..mcp.tools.harness import normalize_payload as _harness_normalize_payload
+from ..mcp.tools.harness import read_session as _harness_read_session
 from ..mcp.tools.messages import build_service as _build_message_service
 from ..mcp.tools.poll_tokens import build_service as _build_poll_token_service
+from ..runtime_admin import (RuntimeProfileBody, RuntimeEndpointBody, RuntimeBootBody,
+    RuntimeEndpointUpdateBody, RuntimeReconcileBody, RuntimeProfileUpdateBody)
 from .identity_ctx import get_authenticated_agent
 
 
@@ -293,6 +308,7 @@ class CapabilityBody(BaseModel):
 class DecisionBody(BaseModel):
     decision: str = Field(min_length=1)
     justification: str | None = None
+    response: dict[str, Any] | None = None
 
 
 class SteeringBody(BaseModel):
@@ -328,6 +344,63 @@ class VerifyHandoffBody(BaseModel):
     # to 422 through _map_error.
     verdict: str = Field(min_length=1)
     feedback: str | None = None
+    claim_epoch: int | None = Field(default=None, strict=True, ge=1)
+
+
+class ClaimHandoffBody(BaseModel):
+    agent_id: str | None = None
+    session_id: str | None = None
+    session_secret: str | None = None
+    runtime_endpoint_id: str | None = None
+    execution_grant_id: str | None = None
+    idempotency_key: str | None = None
+    claim_epoch: int | None = Field(default=None, strict=True, ge=1)
+    completion_mode: str = "authenticated_nexus_call"
+
+
+class HarnessSessionOpenBody(BaseModel):
+    """Body for ``POST /harness/sessions`` (ADR 0004 Phase 3.5).
+
+    Named ``HarnessSession*`` (not ``Harness*``) to stay visually distinct
+    from the PRE-EXISTING, unrelated ``MetaHarnessSendBody`` above (the
+    dashboard's own "meta-harness" operator-send feature, nothing to do with
+    the pi/codex/claude_code connector sessions this body opens).
+    """
+
+    agent_id: str = Field(min_length=1, max_length=128)
+    kind: str = Field(min_length=1)
+    project_root: str = Field(min_length=1)
+    endpoint_id: str | None = None
+    idempotency_key: str | None = Field(default=None, min_length=1, max_length=128)
+    substrate: str | None = None
+    target_pid: int | None = None
+    # H-1 fix (EV-SYS-002): explicit per-session backend override, mirrors
+    # the MCP ``backend`` param exactly (_P_BACKEND in tools/harness.py owns
+    # the field-by-kind rules; both surfaces validate through the SAME
+    # ``build_connector``, so this body never drifts from the tool schema).
+    backend: dict[str, Any] | None = None
+    role: str | None = None
+    metadata: dict[str, Any] | None = None
+    notify_target: dict[str, Any] | None = None
+
+
+class HarnessSessionCommandBody(BaseModel):
+    """Version 3 durable runtime command; identity is always authenticated."""
+
+    model_config = {"extra": "forbid"}
+    payload: Any = None
+    idempotency_key: str | None = None
+    expected_operation_id: str | None = None
+    expected_turn_id: str | None = None
+    expected_owner_epoch: int | None = None
+
+
+class RuntimeGrantBody(BaseModel):
+    actor_agent_id: str
+    endpoint_id: str
+    actions: list[str]
+    expires_at: str | None
+    max_executions: int | None = 1
 
 
 def _tag_service(deps) -> TagCatalogService:
@@ -498,6 +571,11 @@ def _approval_service(deps):
     return service
 
 
+def _binding_decision_context():
+    from ..mcp.tools.harness import request_context
+    return request_context()
+
+
 def _require_operator() -> None:
     """Operator-only gate for the HITL surfaces (FR8/BR4).
 
@@ -626,9 +704,25 @@ def build_router() -> APIRouter:
     @router.get("/metrics/local/summary")
     async def metrics_local_summary(request: Request) -> JSONResponse:
         telemetry = getattr(request.app.state.deps, "telemetry", None)
-        if telemetry is None:
-            return _ok({"mode": "unavailable", "event_count": 0, "pending_count": 0})
-        return _ok(await anyio.to_thread.run_sync(telemetry.summary))
+        data = ({"mode": "unavailable", "event_count": 0, "pending_count": 0}
+                if telemetry is None else await anyio.to_thread.run_sync(telemetry.summary))
+        try:
+            _require_operator()
+        except OktoNexusError:
+            return _ok(data)
+        from ....application.execution_capacity import execution_capacity_snapshot
+        try:
+            data["runtime_capacity"] = await anyio.to_thread.run_sync(
+                execution_capacity_snapshot, request.app.state.deps.connection_factory)
+        except Exception:
+            # Storage failure is unknown, never a fabricated zero backlog.
+            data["runtime_capacity"] = {"status": "unavailable"}
+        auth = request.app.state.auth
+        data["authentication_cache"] = (auth.cache_stats() if hasattr(auth, "cache_stats")
+                                        else {"status": "unavailable"})
+        response = _ok(data)
+        response.headers["Cache-Control"] = "no-store"
+        return response
 
     @router.get("/metrics/publish-health")
     async def metrics_publish_health(request: Request) -> JSONResponse:
@@ -818,6 +912,394 @@ def build_router() -> APIRouter:
         except OktoNexusError as exc:
             return _map_error(exc)
         return _ok({"items": rows})
+
+    # ------------------------------------------------------------------ #
+    # Harness connectors (ADR 0004, Phase 3.5) - REST mirror of the MCP
+    # harness_* tools (tools/harness.py). Every handler reuses that module's
+    # OWN composition-root/serialisation functions (never re-implements
+    # them), so the two surfaces can never drift on shape or validation.
+    # Mutating verbs are operator-only (spawning/controlling a local child
+    # process is exactly the class of action ``POST /agents`` and
+    # ``POST /sessions/{id}/close`` already gate this way); reads are open,
+    # matching the rest of this dashboard surface (``GET /agents`` etc.).
+    # ------------------------------------------------------------------ #
+    @router.post("/harness/grants")
+    async def runtime_grant_create(request: Request, body: RuntimeGrantBody) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_access(deps).issue(context, **body.model_dump())))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.delete("/harness/grants/{grant_id}")
+    async def runtime_grant_revoke(request: Request, grant_id: str) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_access(deps).revoke(context, grant_id=grant_id)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.post("/harness/outbox")
+    async def runtime_operation_maintenance(request: Request, body: dict[str, Any]) -> JSONResponse:
+        from ..mcp.tools.harness import maintain_operations
+        try:
+            return _ok(await anyio.to_thread.run_sync(lambda: maintain_operations(request.app.state.deps, body)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.get("/harness/outbox")
+    async def runtime_operation_inspection(request: Request, operation_id: str | None = None,
+                                           after_operation_id: str | None = None, limit: int = 50) -> JSONResponse:
+        from ..mcp.tools.harness import maintain_operations
+        try:
+            return _ok(await anyio.to_thread.run_sync(lambda: maintain_operations(request.app.state.deps,
+                {"operation_id": operation_id, "after_operation_id": after_operation_id, "limit": limit})))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.get("/harness/bindings")
+    async def runtime_bindings(request: Request, agent_id: str | None = None,
+                               after_endpoint_id: str | None = None, limit: int = 50) -> JSONResponse:
+        from ..mcp.tools.harness import discover_bindings
+        try:
+            return _ok(await anyio.to_thread.run_sync(lambda: discover_bindings(request.app.state.deps,
+                {"agent_id": agent_id, "after_endpoint_id": after_endpoint_id, "limit": limit})))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.get("/harness/profiles")
+    async def runtime_profiles(request: Request) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            items = await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).profiles(context))
+            return _ok({"items": items})
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.post("/harness/profiles")
+    async def runtime_profile_create(request: Request, body: RuntimeProfileBody) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            result = await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).create_profile(
+                context, **body.model_dump()))
+            return _ok(result)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.patch("/harness/profiles/{profile_id}")
+    async def runtime_profile_update(request: Request, profile_id: str, body: RuntimeProfileUpdateBody) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).update_profile(
+                context, profile_id=profile_id, **body.model_dump(exclude_unset=True))))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.post("/harness/endpoints")
+    async def runtime_endpoint_create(request: Request, body: RuntimeEndpointBody) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            result = await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).create_endpoint(
+                context, **body.model_dump()))
+            return _ok(result)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.get("/harness/endpoints")
+    async def runtime_endpoints(request: Request, agent_id: str | None = None) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            result = await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).list(context, agent_id=agent_id))
+            return _ok({"items": result})
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.put("/harness/endpoints/{endpoint_id}/boot")
+    async def runtime_boot_configure(request: Request, endpoint_id: str, body: RuntimeBootBody) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).configure_boot(
+                context, endpoint_id=endpoint_id, **body.model_dump())))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.post("/harness/endpoints/{endpoint_id}/reconcile")
+    async def runtime_endpoint_reconcile(request: Request, endpoint_id: str, body: RuntimeReconcileBody) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).reconcile(
+                context, endpoint_id=endpoint_id, **body.model_dump())))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.post("/harness/journal")
+    async def runtime_journal(request: Request, body: dict) -> JSONResponse:
+        from okto_nexus.adapters.inbound.mcp.tools.harness import maintain_journal
+        try:
+            _harness_authorize(request.app.state.deps)
+            if set(body) - {"compact"} or type(body.get("compact", False)) is not bool:
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Expected optional compact boolean.", {})
+            return _ok(await anyio.to_thread.run_sync(lambda: maintain_journal(
+                request.app.state.deps, compact=body.get("compact", False))))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.get("/harness/endpoints/{endpoint_id}/connection-summary")
+    async def runtime_connection_summary(request: Request, endpoint_id: str) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).connection_summary(context, endpoint_id=endpoint_id)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.get("/harness/endpoints/{endpoint_id}/harness-settings")
+    async def runtime_harness_settings(request: Request, endpoint_id: str) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).harness_settings(context, endpoint_id=endpoint_id)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.put("/harness/endpoints/{endpoint_id}/harness-settings")
+    async def runtime_harness_settings_update(request: Request, endpoint_id: str, body: dict) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).harness_settings(context, endpoint_id=endpoint_id, changes=body)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.get("/harness/endpoints/{endpoint_id}/tool-permission")
+    async def runtime_tool_permission(request: Request, endpoint_id: str) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).tool_permission(context, endpoint_id=endpoint_id)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.put("/harness/endpoints/{endpoint_id}/tool-permission")
+    async def runtime_tool_permission_update(request: Request, endpoint_id: str, body: dict) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).tool_permission(context, endpoint_id=endpoint_id, changes=body)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.get("/harness/endpoints/{endpoint_id}/conversation-policy")
+    async def runtime_conversation_policy(request: Request, endpoint_id: str) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).conversation_policy(
+                context, endpoint_id=endpoint_id)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.put("/harness/endpoints/{endpoint_id}/conversation-policy")
+    async def runtime_conversation_policy_update(request: Request, endpoint_id: str, body: dict) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).conversation_policy(
+                context, endpoint_id=endpoint_id, changes=body)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.patch("/harness/endpoints/{endpoint_id}")
+    async def runtime_endpoint_update(request: Request, endpoint_id: str, body: RuntimeEndpointUpdateBody) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).update_endpoint(
+                context, endpoint_id=endpoint_id, **body.model_dump(exclude_unset=True))))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.post("/harness/artifacts")
+    async def runtime_artifacts(request: Request, body: dict) -> JSONResponse:
+        from okto_nexus.adapters.inbound.mcp.tools.harness import maintain_artifacts
+        try:
+            return _ok(await anyio.to_thread.run_sync(lambda: maintain_artifacts(request.app.state.deps, body)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.get("/harness/execution-log")
+    async def execution_log(request: Request, workspace_id: str | None = None,
+                            severity: str | None = None, agent_id: str | None = None,
+                            adapter_id: str | None = None, since: str | None = None,
+                            until: str | None = None, offset: int = 0, limit: int = 100) -> JSONResponse:
+        from ....application.execution_log import read_execution_log
+        try:
+            _require_operator()
+            result = await anyio.to_thread.run_sync(lambda: read_execution_log(
+                request.app.state.deps.connection_factory, workspace_id=workspace_id,
+                severity=severity, agent_id=agent_id, adapter_id=adapter_id,
+                since=since, until=until, offset=offset, limit=limit))
+            response = _ok(result)
+            response.headers["Cache-Control"] = "no-store"
+            return response
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.get("/harness/diagnostics")
+    async def runtime_diagnostics(request: Request) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).diagnostics(context)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.get("/harness/kinds")
+    async def harness_kinds(request: Request) -> JSONResponse:
+        try:
+            _harness_authorize(request.app.state.deps)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok({"harnesses": _harness_capabilities_catalog(_build_harness_connector_factories(request.app.state.deps))})
+
+    @router.post("/harness/sessions")
+    async def harness_open(
+        request: Request, body: HarnessSessionOpenBody
+    ) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            _harness_authorize(deps, action="access")
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        try:
+            result = await anyio.to_thread.run_sync(lambda: _harness_open(deps, **body.model_dump()))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(result)
+
+    @router.post("/harness/sessions/{session_id}/send")
+    async def harness_send(
+        request: Request, session_id: str, body: HarnessSessionCommandBody
+    ) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            _harness_authorize(deps, action="send", session_id=session_id, check_budget=False)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        supervisor = _build_harness_supervisor(deps)
+        try:
+            payload = _harness_normalize_payload(body.payload, required=True)
+            result = await anyio.to_thread.run_sync(
+                lambda: _harness_send(deps, supervisor, session_id, "send_turn", payload, **body.model_dump(exclude={"payload"}))
+            )
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(result)
+
+    @router.post("/harness/sessions/{session_id}/steer")
+    async def harness_steer(
+        request: Request, session_id: str, body: HarnessSessionCommandBody
+    ) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            _harness_authorize(deps, action="steer", session_id=session_id, check_budget=False)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        supervisor = _build_harness_supervisor(deps)
+        try:
+            payload = _harness_normalize_payload(body.payload, required=True)
+            result = await anyio.to_thread.run_sync(
+                lambda: _harness_send(deps, supervisor, session_id, "steer", payload, **body.model_dump(exclude={"payload"}))
+            )
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(result)
+
+    @router.post("/harness/sessions/{session_id}/interrupt")
+    async def harness_interrupt(
+        request: Request, session_id: str, body: HarnessSessionCommandBody
+    ) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            _harness_authorize(deps, action="interrupt", session_id=session_id, check_budget=False)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        supervisor = _build_harness_supervisor(deps)
+        try:
+            payload = _harness_normalize_payload(body.payload, required=False)
+            result = await anyio.to_thread.run_sync(
+                lambda: _harness_send(deps, supervisor, session_id, "interrupt", payload, **body.model_dump(exclude={"payload"}))
+            )
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(result)
+
+    @router.post("/harness/sessions/{session_id}/close")
+    async def harness_close(request: Request, session_id: str, body: HarnessSessionCommandBody | None = None) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            _harness_authorize(deps, action="close", session_id=session_id)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        supervisor = _build_harness_supervisor(deps)
+        try:
+            session = await anyio.to_thread.run_sync(
+                lambda: _harness_close(deps, supervisor, session_id, **(body.model_dump(exclude={"payload"}) if body else {}))
+            )
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(session)
+
+    @router.get("/harness/sessions/{session_id}")
+    async def harness_get(request: Request, session_id: str) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            _harness_authorize(deps, action="read", session_id=session_id)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        supervisor = _build_harness_supervisor(deps)
+        try:
+            result = await anyio.to_thread.run_sync(
+                lambda: _harness_read_session(deps, supervisor, session_id)
+            )
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(result)
+
+    @router.get("/harness/operations/{operation_id}")
+    async def runtime_operation_get(request: Request, operation_id: str) -> JSONResponse:
+        from ..mcp.tools.harness import read_operation
+        try:
+            return _ok(await anyio.to_thread.run_sync(lambda: read_operation(request.app.state.deps, operation_id)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.get("/harness/sessions/{session_id}/events")
+    async def harness_event_list(
+        request: Request,
+        session_id: str,
+        after_sequence: int = 0,
+        limit: int = 200,
+        executor_id: str | None = None,
+        stream_epoch: str | None = None,
+    ) -> JSONResponse:
+        from ..mcp.tools.harness import read_events
+        try:
+            result = await anyio.to_thread.run_sync(lambda: read_events(request.app.state.deps,
+                session_id, after_sequence=after_sequence, limit=limit,
+                executor_id=executor_id, stream_epoch=stream_epoch))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(result)
 
     @router.get("/events/cursor")
     async def poll_events_cursor(
@@ -2748,7 +3230,7 @@ def build_router() -> APIRouter:
     # ------------------------------------------------------------------ #
     @router.get("/approvals")
     async def list_approvals(
-        request: Request, workspace: str, status: str = "", limit: int = 100
+        request: Request, workspace: str, status: str = "", limit: int = 100, offset: int = 0
     ) -> JSONResponse:
         deps = request.app.state.deps
         try:
@@ -2760,7 +3242,7 @@ def build_router() -> APIRouter:
 
         def _list():
             return service.list_approvals(
-                workspace_id=workspace, status=status_filter, limit=limit
+                workspace_id=workspace, status=status_filter, limit=limit, offset=offset
             )
 
         try:
@@ -2787,6 +3269,19 @@ def build_router() -> APIRouter:
             return _map_error(exc)
         return _ok(detail)
 
+    @router.post("/approvals/{approval_id}/archive")
+    async def archive_approval(request: Request, approval_id: str) -> JSONResponse:
+        try:
+            _require_operator()
+            service = _approval_service(request.app.state.deps)
+            agent = get_authenticated_agent()
+            actor = agent.agent_id if agent is not None else OPERATOR_AGENT_ID
+            result = await anyio.to_thread.run_sync(
+                lambda: service.archive(approval_id=approval_id, archived_by=actor))
+            return _ok(result)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
     @router.post("/approvals/{approval_id}/decision")
     async def decide_approval(
         request: Request, approval_id: str, body: DecisionBody
@@ -2806,6 +3301,8 @@ def build_router() -> APIRouter:
                 decision=body.decision,
                 decided_by=decided_by,
                 justification=body.justification,
+                response=body.response,
+                decision_context=_binding_decision_context(),
             )
 
         try:
@@ -2824,12 +3321,9 @@ def build_router() -> APIRouter:
         service = _build_message_service(deps)
 
         def _send():
-            # The dashboard addresses workspaces by id; the use case takes a
-            # path - resolve through the registered root (same derivation:
-            # workspace_id = sha256(realpath)).
             with deps.connection_factory.unit_of_work(write=False) as uow:
                 ws = deps.repos.workspaces.get(uow, body.workspace)
-            if ws is None or not ws.root_realpath:
+            if ws is None:
                 raise OktoNexusError(
                     ErrorCode.NOT_FOUND,
                     f"workspace '{body.workspace}' is not registered.",
@@ -2839,7 +3333,7 @@ def build_router() -> APIRouter:
             # deny/quota and even HITL interception all apply to the
             # operator's own sends - steering has no delivery privilege.
             return service.create_message(
-                project_root=ws.root_realpath,
+                workspace_id=ws.workspace_id,
                 from_agent_id=OPERATOR_AGENT_ID,
                 subject=body.subject or "Operator steering",
                 body=body.body,
@@ -2879,7 +3373,7 @@ def build_router() -> APIRouter:
 
             with deps.connection_factory.unit_of_work(write=False) as uow:
                 ws = deps.repos.workspaces.get(uow, body.workspace)
-            if ws is None or not ws.root_realpath:
+            if ws is None:
                 raise OktoNexusError(
                     ErrorCode.NOT_FOUND,
                     f"workspace '{body.workspace}' is not registered.",
@@ -2905,7 +3399,7 @@ def build_router() -> APIRouter:
             )
             if body.kind == "message":
                 result = _build_message_service(deps).create_message(
-                    project_root=ws.root_realpath,
+                    workspace_id=ws.workspace_id,
                     from_agent_id=OPERATOR_AGENT_ID,
                     subject=body.subject or "Meta-harness message",
                     body=body.body,
@@ -2914,7 +3408,7 @@ def build_router() -> APIRouter:
                 )
             else:
                 result = _build_handoff_service(deps).handoff_create(
-                    project_root=ws.root_realpath,
+                    workspace_id=ws.workspace_id,
                     from_agent_id=OPERATOR_AGENT_ID,
                     target=target,
                     visibility=(
@@ -2994,6 +3488,30 @@ def build_router() -> APIRouter:
             return _map_error(exc)
         return _ok({"handoff_id": handoff.handoff_id, "status": handoff.status})
 
+    @router.post("/workspaces/{workspace_id}/handoffs/{handoff_id}/claim")
+    async def claim_handoff(request: Request, workspace_id: str, handoff_id: str, body: ClaimHandoffBody) -> JSONResponse:
+        deps = request.app.state.deps
+        actor = get_authenticated_agent()
+        caller = actor.agent_id if actor is not None else OPERATOR_AGENT_ID
+        represented = body.agent_id or caller
+        if represented != caller and body.runtime_endpoint_id is None:
+            return _map_error(OktoNexusError(ErrorCode.PERMISSION_DENIED, "Handoff actor is not authorized.", {}))
+        service = _build_handoff_service(deps)
+
+        def _claim():
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                ws = deps.repos.workspaces.get(uow, workspace_id)
+            if ws is None:
+                raise OktoNexusError(ErrorCode.NOT_FOUND, "Workspace is not registered.", {})
+            return service.handoff_claim(workspace_id=ws.workspace_id, handoff_id=handoff_id, agent_id=represented,
+                session_id=body.session_id, session_secret=body.session_secret,
+                runtime_endpoint_id=body.runtime_endpoint_id, execution_grant_id=body.execution_grant_id,
+                idempotency_key=body.idempotency_key, claim_epoch=body.claim_epoch, completion_mode=body.completion_mode)
+        try:
+            return _ok(await anyio.to_thread.run_sync(_claim))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
     @router.post("/workspaces/{workspace_id}/handoffs/{handoff_id}/verify")
     async def verify_handoff(
         request: Request, workspace_id: str, handoff_id: str, body: VerifyHandoffBody
@@ -3013,23 +3531,21 @@ def build_router() -> APIRouter:
         service = _build_handoff_service(deps)
 
         def _verify():
-            # The dashboard addresses workspaces by id; the use case takes a
-            # path - resolve through the registered root (same derivation:
-            # workspace_id = sha256(realpath), the steering precedent).
             with deps.connection_factory.unit_of_work(write=False) as uow:
                 ws = deps.repos.workspaces.get(uow, workspace_id)
-            if ws is None or not ws.root_realpath:
+            if ws is None:
                 raise OktoNexusError(
                     ErrorCode.NOT_FOUND,
                     f"workspace '{workspace_id}' is not registered.",
                     {"workspace": workspace_id},
                 )
             return service.handoff_verify(
-                project_root=ws.root_realpath,
+                workspace_id=ws.workspace_id,
                 handoff_id=handoff_id,
                 agent_id=caller,
                 verdict=body.verdict,
                 feedback=body.feedback,
+                claim_epoch=body.claim_epoch,
             )
 
         try:

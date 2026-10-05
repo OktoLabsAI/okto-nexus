@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="0.833" timestamp="2026-09-30T20:33:42.718297-03:00" hostname="Alienware_m15"><testcase classname="" name="test_passive_discovery" time="0.000"><error message="collection failure">ImportError while importing test module 'D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_passive_discovery.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+C:\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_passive_discovery.py:5: in &lt;module&gt;
+    from tests.regression.test_c11_audit import _LAB_BINARY, _binary_name
+E   ModuleNotFoundError: No module named 'tests'</error></testcase></testsuite></testsuites>

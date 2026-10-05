@@ -1,0 +1,81 @@
+{
+  "date": "2026-10-01",
+  "branch": "feature/v0.2.0",
+  "commits": {
+    "nexus": "a0c6160",
+    "connector": "ef124e6",
+    "core": "a061960"
+  },
+  "core_version": "0.2.43.dev0",
+  "artifacts": {
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-runtime-admission-connector-8axpji_k\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "4b7cfa8741da018ae54f36069422df85139af575580cc4a6a4d5a7d1d1ab4fd0"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-runtime-admission-nexus-tmvzlmoh\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "e218c5569551e335023de98d2d0988241a601eb59a412c4e24086685c0ee9889"
+    }
+  },
+  "core_artifact": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-lease-core-hi9n9umw\\dist\\nexus_connector_core-0.2.43.dev0-py3-none-any.whl",
+    "sha256": "7403611bb37050700fc325b2002f74b5ac507a79af8badba0bea0cd1b775087b",
+    "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-lease-core-hi9n9umw"
+  },
+  "installed": {
+    "connector": {
+      "file": "evidence/runtime-admission-installed.xml",
+      "tests": 241,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "seconds": 56.77
+    },
+    "nexus": {
+      "file": "evidence/runtime-admission-tcp-installed.xml",
+      "tests": 32,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "seconds": 97.749
+    }
+  },
+  "source": {
+    "file": "evidence/runtime-admission-source.xml",
+    "tests": 24,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "seconds": 6.597
+  },
+  "runner": "run_runtime_admission_installed.py",
+  "cli": "evidence/runtime-admission-cli.json",
+  "pip_check": "evidence/runtime-admission-install.log",
+  "changes": [
+    "Schema 11 retains runtime request digests before resolution, exact canonical resolutions before admission, and scoped operation observations.",
+    "CLI start, submit, steer, interrupt and stop route acknowledged R4 aliases to Server resolution/admission without invoking the legacy local runtime owner.",
+    "Explicit stable client intent IDs survive lost resolution/admission responses and process restart; changed content or authority is refused.",
+    "Operation queries validate scope/hash and cannot regress a newer receipt revision; lost admission can be recovered by read without resubmission.",
+    "Blocked resolutions are returned without admission or inferred execution readiness.",
+    "Nexus intent/admission/operation routes map domain errors to structured revision-bearing HTTP responses."
+  ],
+  "failure_history": [
+    {
+      "file": "evidence/runtime-admission-source-import-error.xml",
+      "finding": "The first source invocation imported the previous installed Connector. The explicit source-path invocation and subsequent wheel-isolated campaign passed."
+    }
+  ],
+  "limitations": [
+    "Positive admission and loss/recovery cases use a technical HTTP peer; real TCP currently proves public onboarding, operator binding approval, blocked resolution, identical replay and operation absence.",
+    "The TCP campaign seeds identity/vault and uses a harmless copied executable. It starts no provider, creates no runtime/outbox operation, and overrides no qualification gate.",
+    "Start currently requires an explicit new session and separate turn submission; automatic session reuse and initial text remain pending in the Server resolver.",
+    "R4 runtime status/logs, intent archival/pruning, queries after physical mapping drift, and complete binding replacement/removal remain pending.",
+    "Retained runtime intents are bounded to 32; resolution persistence refuses state above 3 MiB. Full retention lifecycle acceptance remains open.",
+    "Actual remote Pi/Codex/Claude journeys and independent-host/Linux acceptance remain pending.",
+    "Source and installed suites overlap; counts must not be added as unique coverage.",
+    "Preexisting Nexus UI assets are included in the wheel but excluded from commits and UI acceptance.",
+    "Core remains unchanged; prior real local provider evidence belongs to Core 0.2.42.",
+    "No milestone or G0-G3 gate closes. The fixed M00-M13 objective remains unchanged."
+  ],
+  "milestone_complete": false
+}

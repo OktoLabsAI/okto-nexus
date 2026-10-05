@@ -1,0 +1,174 @@
+{
+  "scope": "NS15.05 supporting docs audit; NOT full scenario acceptance",
+  "package_path": "C:\\Users\\jpamb\\.codex\\tmp\\nexus-http-ci-env\\Lib\\site-packages\\okto_nexus",
+  "guide_sha256": "5a982c7b9471023addc0d02273273ca473d8398d9f265798ab7767a392daa3f9",
+  "commands": [
+    {
+      "argv": [
+        "C:\\Users\\jpamb\\.codex\\tmp\\nexus-http-ci-env\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "serve",
+        "--help"
+      ],
+      "returncode": 0,
+      "help_sha256": "aec641b19988f6f5f95f57b83fff77bd57b595a154712acefcadea413ab61f78"
+    },
+    {
+      "argv": [
+        "C:\\Users\\jpamb\\.codex\\tmp\\nexus-http-ci-env\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "admin",
+        "--help"
+      ],
+      "returncode": 0,
+      "help_sha256": "25b31306a50115c683493f9790fd46eca958d974783da973c7a97aaa34b69238"
+    },
+    {
+      "argv": [
+        "C:\\Users\\jpamb\\.codex\\tmp\\nexus-http-ci-env\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "admin",
+        "migrate-mcp-entry",
+        "--help"
+      ],
+      "returncode": 0,
+      "help_sha256": "9e26b830d5dcc00464f7443ac1668012c1d8573be4dc3d7a0a1e89d3e8e73eb5"
+    },
+    {
+      "argv": [
+        "C:\\Users\\jpamb\\.codex\\tmp\\nexus-http-ci-env\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "admin",
+        "shutdown",
+        "--help"
+      ],
+      "returncode": 0,
+      "help_sha256": "a50789cc34924ce8ae16fc473ac90b99ab27cd98038862c622d60d3f44fe9752"
+    },
+    {
+      "argv": [
+        "C:\\Users\\jpamb\\.codex\\tmp\\nexus-http-ci-env\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "admin",
+        "shutdown-status",
+        "--help"
+      ],
+      "returncode": 0,
+      "help_sha256": "6955bf3690e6d90fcfc278eba9b26adac0bc619f8c7039b1356104253b59cb2d"
+    },
+    {
+      "argv": [
+        "C:\\Users\\jpamb\\.codex\\tmp\\nexus-http-ci-env\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "admin",
+        "backup",
+        "--help"
+      ],
+      "returncode": 0,
+      "help_sha256": "1f540c8316464ae7af617d53504e317b66de65737af109315a9cce36223e8908"
+    },
+    {
+      "argv": [
+        "C:\\Users\\jpamb\\.codex\\tmp\\nexus-http-ci-env\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "admin",
+        "migrate-execution",
+        "--help"
+      ],
+      "returncode": 0,
+      "help_sha256": "121189854fc96bef879a66ac28fe596441a4f9e1211c8e36470982ee6042b5ed"
+    }
+  ],
+  "routes": [
+    [
+      "GET",
+      "/v1/agents/{agent_id}/executors"
+    ],
+    [
+      "GET",
+      "/v1/agents/{agent_id}/runtime-options"
+    ],
+    [
+      "GET",
+      "/v1/connections/bindings/{binding_id}"
+    ],
+    [
+      "GET",
+      "/v1/connections/me"
+    ],
+    [
+      "GET",
+      "/v1/connections/protocol"
+    ],
+    [
+      "GET",
+      "/v1/runtime/executors/{executor_id}/inventory"
+    ],
+    [
+      "GET",
+      "/v1/runtime/operations/{operation_id}"
+    ],
+    [
+      "GET",
+      "/v1/runtime/sessions/{session_id}"
+    ],
+    [
+      "GET",
+      "/v1/runtime/sessions/{session_id}/events"
+    ],
+    [
+      "POST",
+      "/v1/connections/bindings:apply"
+    ],
+    [
+      "POST",
+      "/v1/connections/bindings:prepare"
+    ],
+    [
+      "POST",
+      "/v1/connections/executors:register"
+    ],
+    [
+      "POST",
+      "/v1/runtime/executors/{executor_id}/inventory:refresh"
+    ],
+    [
+      "POST",
+      "/v1/runtime/executors/{executor_id}/realizations"
+    ],
+    [
+      "POST",
+      "/v1/runtime/intents:resolve"
+    ],
+    [
+      "POST",
+      "/v1/runtime/operations"
+    ]
+  ],
+  "route_source_sha256": {
+    "connections_v1.py": "98d713548b115d8eb8bdc6ffeed1c87dc3165da645a92c225dce7f2232aa1367",
+    "runtime_v1.py": "efca0168ebf7a1b74bed0cb54d0d131a8ceeb2d5eac8925f4f5391e298665c3f"
+  },
+  "links_checked": 5,
+  "status": "PASSED",
+  "not_verified_by_this_audit": [
+    "interactive browser journeys",
+    "TN-38/39/40 scenario execution on final artifacts",
+    "final artifact and release acceptance"
+  ],
+  "scenario_status_source": "plans/r4_execution/acceptance_inventory.json"
+}

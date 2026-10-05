@@ -1,0 +1,70 @@
+{
+  "date": "2026-10-01",
+  "base_commit": "6034a35",
+  "status": "VERIFIED_TR4_15_03_UNIT_CONTRACT",
+  "installed_unique_passed": 98,
+  "architecture_passed": 3,
+  "skipped": 11,
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-core-3msf4qiz\\dist\\nexus_connector_core-0.2.51.dev0-py3-none-any.whl",
+      "sha256": "4c4c0c58d25b93f4f08ba8515d8476ffc29d1f0a27cc577c9fccb610716d1d1c"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-connector-pmt6y5x7\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "baf837251f654ab6385f5fba4e22d1a1b69da1839e8f47752795d1518dd29fe7"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-helper-removal-sgzb7tpo\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "fb801595130dc78aa8139ea12f5ed71e8a24532a3fd6b5a6d42f907a4ec2c3f4"
+    }
+  },
+  "results": {
+    "r4": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "7",
+      "time": "39.964",
+      "timestamp": "2026-10-01T20:39:49.276626-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "fixtures": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "8",
+      "tests": "85",
+      "time": "124.599",
+      "timestamp": "2026-10-01T20:40:30.902025-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "lifecycle": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "3",
+      "tests": "17",
+      "time": "86.714",
+      "timestamp": "2026-10-01T20:42:36.984019-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "architecture": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "3",
+      "time": "0.517",
+      "timestamp": "2026-10-01T20:44:05.071750-03:00",
+      "hostname": "Alienware_m15"
+    }
+  },
+  "scope": "TR4-15-03 passed in both REST and MCP cases. Retired process ownership, framing, event buffers and version probes are absent from the Server package; only inert legacy metadata and redaction error identities remain. Core owns physical native runtime.",
+  "verification": "All three installed package byte sets match their wheel hashes; Nexus nonstatic source matches checkout. Both normative cases inspect the installed package and call Core through public REST/MCP.",
+  "limitations": [
+    "Task dependency acceptance, NS15.04 configuration/restore and final provider/platform/release gates remain open.",
+    "Synthetic native peers/readiness; platform skips do not qualify Linux or providers. Historical relay/owner subprocesses use checkout source verified against the wheel."
+  ]
+}

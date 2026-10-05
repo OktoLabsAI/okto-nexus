@@ -1,0 +1,120 @@
+{
+  "adapter": "pi_rpc",
+  "server_release_gate_override": true,
+  "native_qualification_override": false,
+  "synthetic_native_factory": false,
+  "public_connector_cli": true,
+  "cli_subprocess": true,
+  "protected_os_vault": true,
+  "topology": "Single Windows host; actual loopback HTTP/WSS; Server and daemon owners.",
+  "phase": "finished",
+  "vault_backend": "keyring:Windows WinVaultKeyring",
+  "candidate_ref": "nexus-install-v1:b64f7d489758234ac44fa9004bec00163e29efe01b8772ace8836ffc6001b3d5",
+  "open_stage": "SUBMITTED",
+  "scope": {
+    "agent_id": "subject",
+    "authorization_revision": 2,
+    "binding_id": "bind_4ba0f133cfec8c1ef7cbfa70d8d35b9f",
+    "binding_revision": 1,
+    "configuration_revision": 2,
+    "credential_epoch": 1,
+    "executor_id": "exe_7ecf6e8dc2966dfeb0e49556e3fb1846",
+    "server_id": "srv_c93e0f2a31c02b875eadedf03420e594",
+    "session_id": "ses_134ca06fc9fbe28353628769525e8a61",
+    "session_owner_generation": 1,
+    "workspace_binding_id": "wxb_a9af44ed6b4b9b2b29b5b5708f37c91b",
+    "workspace_id": "wsr_6433c0db82f14c33e1bf10b62356433c"
+  },
+  "lease_serial_before_turn": 2,
+  "native_http_observations": [
+    {
+      "status": 200,
+      "revision_matches": true,
+      "content_encoding": "identity",
+      "bytes": 459,
+      "keys": [
+        "action",
+        "action_id",
+        "result",
+        "state"
+      ],
+      "action_matches": true,
+      "action_id_matches": true,
+      "state": "OPEN",
+      "result_status": "OPEN",
+      "result_keys": [
+        "claim_epoch",
+        "claimed_by",
+        "created_at",
+        "from_agent_id",
+        "handoff_id",
+        "lease_expires_at",
+        "rejected_reason",
+        "result",
+        "status",
+        "target",
+        "updated_at",
+        "visibility",
+        "workspace_id"
+      ],
+      "handoff_matches": true
+    },
+    {
+      "status": 200,
+      "revision_matches": true,
+      "content_encoding": "identity",
+      "bytes": 320,
+      "keys": [
+        "action",
+        "action_id",
+        "result",
+        "state"
+      ],
+      "action_matches": true,
+      "action_id_matches": true,
+      "state": "CLAIMED",
+      "result_status": "CLAIMED",
+      "result_keys": [
+        "claim_epoch",
+        "claimed_by",
+        "handoff_id",
+        "lease_expires_at",
+        "payload",
+        "status",
+        "workspace_id"
+      ],
+      "handoff_matches": true
+    },
+    {
+      "status": 200,
+      "revision_matches": true,
+      "content_encoding": "identity",
+      "bytes": 137,
+      "keys": [
+        "action",
+        "action_id",
+        "result",
+        "state"
+      ],
+      "action_matches": true,
+      "action_id_matches": true,
+      "state": "COMPLETED",
+      "result_status": "COMPLETED",
+      "result_keys": [
+        "handoff_id",
+        "status"
+      ],
+      "handoff_matches": true
+    }
+  ],
+  "turn_stage": "SUCCEEDED",
+  "explicit_operator_decisions": 0,
+  "handoff_status": "COMPLETED",
+  "native_action_count": 3,
+  "tool_claim_count": 1,
+  "wss_ticket_count": 4,
+  "close_stage": "SUCCEEDED",
+  "completed": true,
+  "daemon_exit_code": 0,
+  "campaign_credentials_removed": true
+}

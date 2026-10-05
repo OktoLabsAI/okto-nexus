@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="8.676" timestamp="2026-09-30T23:49:38.641907-03:00" hostname="Alienware_m15"><testcase classname="test_executor_onboarding_cli" name="test_connector_public_commands_publish_realization_over_tcp" time="6.871"><failure message="okto_nexus_connector.errors.ConnectorError: CONFLICT (inventory.publish): A different producer requires channel reconciliation and a newer sequence.">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4246/test_connector_public_commands0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001CB649F75C0&gt;
+
+    def test_connector_public_commands_publish_realization_over_tcp(tmp_path, monkeypatch):
+        from okto_nexus_connector.cli.main import build_parser
+        from okto_nexus_connector.cli.output import Output
+        from okto_nexus_connector.cli.commands.executor import run_executor
+        from okto_nexus_connector.cli.commands.discover import run_discover
+        from okto_nexus_connector.cli.commands import executor as executor_cli
+        from okto_nexus_connector.platform import paths
+        from okto_nexus_connector.storage.state_store import ConnectorState, StateStore, IdentityRecord, ServerProfileRecord
+    
+        deps = bootstrap({}, ["--home", str(tmp_path / "nexus"), "--feature-harness-integrations", "true"])
+        app = build_app(deps)
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute("INSERT OR IGNORE INTO agents(agent_id,created_at) VALUES (?,?)",
+                                   ("subject", deps.clock.now_iso()))
+            key = app.state.auth.issue_key(uow, agent_id="subject")
+            server_id = uow.connection.execute("SELECT server_id FROM execution_installation").fetchone()[0]
+        binary_root = tmp_path / "binaries"
+        binary_root.mkdir()
+        binary = binary_root / ("codex.exe" if os.name == "nt" else "codex")
+        shutil.copy2(sys.executable, binary)
+        monkeypatch.setenv("PATH", str(binary_root))
+        project = tmp_path / "project"
+        project.mkdir()
+        root = tmp_path / "connector"
+        store = StateStore(paths.state_file(root))
+        parser, output = build_parser(), Output(json_mode=True, stream=io.StringIO())
+        class Vault:
+            def resolve(self, handle):
+                assert handle == "vault:identity"
+                return key
+        monkeypatch.setattr(executor_cli, "_vault", lambda *args: Vault())
+    
+        async def run():
+            sock = socket.socket()
+            sock.bind(("127.0.0.1", 0))
+            base = "http://127.0.0.1:" + str(sock.getsockname()[1])
+            state = ConnectorState(connector_id="onboarding-connector")
+            state.servers[server_id] = ServerProfileRecord(server_id, base, base, "now")
+            state.identities.append(IdentityRecord("subject", server_id, "subject", "vault:identity", 1, "now"))
+            store.save(state)
+            server = uvicorn.Server(uvicorn.Config(app, log_level="error", lifespan="on"))
+            serving = asyncio.create_task(server.serve(sockets=[sock]))
+            try:
+                async with asyncio.timeout(15):
+                    while not server.started:
+                        assert not serving.done()
+                        await asyncio.sleep(.01)
+                async def execute(words):
+                    return await run_executor(parser.parse_args(["executor", *words]), output, root)
+                registered = await execute(["register", "--identity", "subject", "--label", "Test executor",
+                                            "--client-intent-id", "register"])
+                await execute(["configure-discovery", "--server-id", server_id, "--harness-root", str(binary_root)])
+                inventory = await run_discover(parser.parse_args(["discover", "--server-id", server_id]), output, root)
+                row = next(r for r in inventory["availability"]["rows"]
+                           if r["adapter_id"] == "codex_app_server" and r["candidate_ref"])
+                configuration = await execute(["configure-launch", "--identity", "subject",
+                    "--harness", "codex_app_server", "--local-consent-id", "explicit-test-consent",
+                    "--profile-revision", "1"])
+                words = ["realize", "--identity", "subject", "--client-intent-id", "realize",
+                    "--harness", "codex_app_server", "--candidate-ref", row["candidate_ref"],
+                    "--inventory-revision", inventory["availability"]["executor_revision"],
+                    "--configuration-digest", configuration["configuration_digest"],
+                    "--project", str(project), "--label", "Test project"]
+                result = await execute(words)
+                assert await execute(words) == result
+                local = store.load()
+                assert len(local.realizations) == 1 and local.realizations[0].status == "PENDING_APPROVAL"
+                assert local.realizations[0].executor_id == registered["executor_id"]
+                assert not local.execution_bindings
+                assert key not in store.path.read_text() and "nxt4_" not in store.path.read_text()
+                assert str(project) not in str(result) and str(binary) not in str(result)
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    assert uow.connection.execute("SELECT COUNT(*) FROM execution_realizations").fetchone()[0] == 1
+                    assert uow.connection.execute("SELECT COUNT(*) FROM execution_bindings").fetchone()[0] == 0
+                    assert uow.connection.execute("SELECT COUNT(*) FROM execution_sessions").fetchone()[0] == 0
+                    assert uow.connection.execute("SELECT COUNT(*) FROM execution_dispatch_outbox").fetchone()[0] == 0
+            finally:
+                server.should_exit = True
+                await asyncio.wait_for(serving, 15)
+                sock.close()
+&gt;       asyncio.run(run())
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_executor_onboarding_cli.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_executor_onboarding_cli.py:80: in run
+    assert await execute(words) == result
+           ^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_executor_onboarding_cli.py:64: in execute
+    return await run_executor(parser.parse_args(["executor", *words]), output, root)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector\src\okto_nexus_connector\cli\commands\executor.py:31: in run_executor
+    result = await service.realize(identity_alias=args.identity, client_intent_id=args.client_intent_id,
+D:\Projetos\Techridy\okto-nexus-connector\src\okto_nexus_connector\services\executor_onboarding.py:135: in realize
+    await http.publish_inventory(bootstrap.ticket, executor_id=record.executor_id, snapshot=snapshot)
+D:\Projetos\Techridy\okto-nexus-connector\src\okto_nexus_connector\transport\https_client.py:502: in publish_inventory
+    payload = await self._request(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus_connector.transport.https_client.NexusHTTPClient object at 0x000001CB657AF230&gt;
+method = 'PUT'
+path = '/v1/runtime/executors/exe_ffdf3df4f5b38db05e21e0d75cfe2e9e/inventory'
+key = 'nxt4_REDACTED_TEST_TICKET'
+json_body = {'snapshot_format_version': 2, 'server_id': 'srv_6673f9fdd6ade21a441b6ee60ab60920', 'executor_id': 'exe_ffdf3df4f5b38db05e21e0d75cfe2e9e', 'producer_instance_id': 'cli_84bd7b3cf98519731863a6327cc86eb5', ...}
+expect = (200,), require_revision = True, binding_ticket_errors = False
+
+    async def _request(self, method: str, path: str, *, key: str | None,
+                        json_body: dict[str, object] | None = None,
+                        expect: int | tuple[int, ...] = 200,
+                        require_revision: bool = False,
+                        binding_ticket_errors: bool = False) -&gt; dict[str, object]:
+        assert self._client is not None, "use 'async with NexusHTTPClient'"
+        headers: dict[str, str] = {}
+        if key is not None:
+            headers["Authorization"] = f"Bearer {key}"
+        mutating = method.upper() in ("POST", "PUT", "PATCH", "DELETE")
+        try:
+            response = await self._client.request(
+                method, f"{self.base_url}{path}", headers=headers,
+                json=json_body)
+        except httpx.HTTPError as exc:
+            # CN1/A07 (test_11): once the request has been handed to the
+            # transport, a LOST REPLY never proves absence of effect.
+            # Read/timeout/remote errors after a mutating send are
+            # possible-effect and NOT retry-safe; only a failure provably
+            # BEFORE delivery (connect-phase) keeps the safe-retry policy.
+            connect_phase = isinstance(
+                exc, (httpx.ConnectError, httpx.ConnectTimeout))
+            if mutating and not connect_phase:
+                raise ConnectorError(
+                    "OUTCOME_UNKNOWN", "http",
+                    redact_text(f"reply unavailable after {method} was "
+                                f"sent: {exc}"),
+                    possible_effect=True,
+                    retry_safe=False,
+                    action="The Server may have received the request. "
+                           "Query the operation by its id; do not re-send "
+                           "a new intent for the same work.") from None
+            raise ConnectorError(
+                "EXECUTOR_OFFLINE", "http",
+                redact_text(f"transport failure: {exc}"),
+                retry_safe=True,
+                action="Check the Server address/network and retry; the "
+                       "request was not delivered.") from None
+        if response.has_redirect_location:
+            from urllib.parse import urljoin
+            target = origin_of(urljoin(str(response.url),
+                                       response.headers["location"]))
+            if target != self.origin:
+                raise ConnectorError(
+                    "PROFILE_DRIFT", "http",
+                    "credential redirect to another origin refused",
+                    action="Verify the approved Server origin; "
+                           "cross-origin redirects are refused.")
+        if (require_revision and response.headers.get(
+                "X-Nexus-Connections-Revision") != MANAGEMENT_REVISION):
+            raise ConnectorError("VERSION_INCOMPATIBLE", "http",
+                                 "Server management revision is incompatible")
+        if isinstance(expect, int):
+            expect = (expect,)
+        if response.status_code not in expect:
+            if binding_ticket_errors and response.status_code == 409:
+                raise _ticket_error_from(response)
+&gt;           raise _error_from(response)
+E           okto_nexus_connector.errors.ConnectorError: CONFLICT (inventory.publish): A different producer requires channel reconciliation and a newer sequence.
+
+D:\Projetos\Techridy\okto-nexus-connector\src\okto_nexus_connector\transport\https_client.py:387: ConnectorError</failure></testcase></testsuite></testsuites>

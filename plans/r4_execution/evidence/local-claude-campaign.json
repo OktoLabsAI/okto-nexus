@@ -1,0 +1,12 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+    "-I",
+    "D:/Projetos/Techridy/okto-nexus-connector-core/tools/probe_claude_turn.py",
+    "C:/Users/jpamb/.local/bin/claude.exe"
+  ],
+  "exit_code": 0,
+  "stdout": "{\"close_seconds\": 0.78, \"compatibility_version\": \"2.1.282\", \"interrupt_result_observed\": true, \"interrupt_sent_while_generating\": true, \"process_stop_observed\": true, \"started\": true, \"turn1\": {\"event_counts\": {\"assistant\": 1, \"rate_limit_event\": 1, \"result\": 1, \"stream_event\": 6, \"system\": 4}, \"ordered\": [\"system:init\", \"system:status\", \"system:commands_changed\", \"system:commands_changed\", \"rate_limit_event\", \"result:success\"], \"result_subtypes\": [\"success\"]}, \"turn1_deltas_observed\": true, \"turn1_result_observed\": true, \"turn2\": {\"event_counts\": {\"assistant\": 2, \"rate_limit_event\": 2, \"result\": 2, \"stream_event\": 12, \"system\": 7}, \"ordered\": [\"system:init\", \"system:status\", \"system:commands_changed\", \"system:commands_changed\", \"rate_limit_event\", \"result:success\", \"system:init\", \"system:status\", \"system:commands_changed\", \"rate_limit_event\", \"result:success\"], \"result_subtypes\": [\"success\", \"success\"]}, \"turn2_result_observed\": true, \"turn3\": {\"event_counts\": {\"assistant\": 3, \"control_response\": 1, \"rate_limit_event\": 2, \"result\": 3, \"stream_event\": 15, \"system\": 9, \"user_echo\": 1}, \"ordered\": [\"system:init\", \"system:status\", \"system:commands_changed\", \"system:commands_changed\", \"rate_limit_event\", \"result:success\", \"system:init\", \"system:status\", \"system:commands_changed\", \"rate_limit_event\", \"result:success\", \"system:init\", \"system:status\", \"control_response:success\", \"user_echo\", \"result:error_during_execution\"], \"result_subtypes\": [\"error_during_execution\"]}}\n",
+  "stderr": "",
+  "scope": "Real native adapter campaign using installed Core; not Nexus/Connector end-to-end acceptance."
+}

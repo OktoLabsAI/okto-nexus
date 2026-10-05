@@ -1,0 +1,88 @@
+{
+  "date": "2026-10-01",
+  "status": "NS15_01_M2_CATALOG_BACKFILL_PASSED_TASK_PARTIAL",
+  "commits": {
+    "core": "18e172781b018ae09960fafc1bf7e2c4b1e8410f",
+    "connector": "211be74009a7f3c4f48eb25961f9860a91825df9",
+    "nexus": "d2362e0ff2033ac13b561a4b0e4df6a14999e830"
+  },
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-core-3msf4qiz\\dist\\nexus_connector_core-0.2.51.dev0-py3-none-any.whl",
+      "sha256": "4c4c0c58d25b93f4f08ba8515d8476ffc29d1f0a27cc577c9fccb610716d1d1c"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-connector-pmt6y5x7\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "baf837251f654ab6385f5fba4e22d1a1b69da1839e8f47752795d1518dd29fe7"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-migration-catalog-nexus-higs6856\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "d80a7b9349cba6b0117cb6842917df2c2597b29966889b30e5b6bcafce515856"
+    }
+  },
+  "installed_passed": {
+    "migration_backup": 8,
+    "admin_architecture": 40,
+    "total": 48
+  },
+  "results": {
+    "migration-catalog-first-source.xml": {
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "1.733"
+    },
+    "migration-catalog-legacy-installed.xml": {
+      "tests": "40",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "14.652"
+    },
+    "migration-catalog-r4-installed.xml": {
+      "tests": "8",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "4.133"
+    },
+    "migration-catalog-source.xml": {
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "2.444"
+    }
+  },
+  "checks": {
+    "package_bytes": "All three source/wheel/installed package trees compared",
+    "credential_pattern_scan": "No matches"
+  },
+  "proof": [
+    "Public bounded catalog batches verify backup and preserve source data.",
+    "Closed translation classifies unknown/MCP/unobserved adapters without execution.",
+    "Interrupted transaction rolls back; committed batches resume and repeat without duplicate maps."
+  ],
+  "limitations": [
+    "Catalog annotation only; M3 operational binding/policy transition remains open.",
+    "Normative TR4-15-01 is not yet qualified.",
+    "Provider, cutover, rollback and release gates remain open."
+  ],
+  "overlap": "Earlier source cases overlap final installed campaign; not added.",
+  "evidence": {
+    "plans/r4_execution/evidence/migration-catalog-artifacts.json": "f3cd548e0512c7872682655dec03250e740c81012bff2530f454d83ab9e0ee08",
+    "plans/r4_execution/evidence/migration-catalog-build.log": "ff09206444f6b8563eb504a04fdc5a58ee9a01070f651c723478f4360c172368",
+    "plans/r4_execution/evidence/migration-catalog-first-source.xml": "75440d5e12e2b9be3299b1e73edf8482ef170df5321df74397f4983b99fa5765",
+    "plans/r4_execution/evidence/migration-catalog-install.log": "ffa1cc6ff5c9d688cc4bf25534a4b021b89c2bda32f63275e5ed9fedbcb627a3",
+    "plans/r4_execution/evidence/migration-catalog-legacy-installed.json": "e29f3049207a21542fda7c558bb33ee8f1c9e4f0390c5a83025e86b8d83fc131",
+    "plans/r4_execution/evidence/migration-catalog-legacy-installed.log": "763a6bcec61d6a0d5b74e319b48a092943121b9bc348ba45b9d5a65ba52ea4da",
+    "plans/r4_execution/evidence/migration-catalog-legacy-installed.xml": "895cf5bfd9b60c1d1c00fe144de3b170b72a26a0b56dbf2d34861f20600c4787",
+    "plans/r4_execution/evidence/migration-catalog-r4-installed.json": "b4f49a828344a791892dfca095e260ad9f1e2eb5d73e4869e3e45e2efd611b96",
+    "plans/r4_execution/evidence/migration-catalog-r4-installed.log": "93258c3439532250b84c6a3daf3a2fb800fd11317bf2dc08ff5d0f16ec3741bc",
+    "plans/r4_execution/evidence/migration-catalog-r4-installed.xml": "40ab9c6b0087919111b3d96acd66170e2b6f59f15753c7ee218c8748cab4698d",
+    "plans/r4_execution/evidence/migration-catalog-source.xml": "10b0251392758cf0d6278fc8947bd0c46266b46d63ce1b4a39206e0d15affcab",
+    "plans/r4_execution/run_migration_catalog_installed.py": "46b5d8f1febaee4a8a66126a30172841fdff0d0397a4d34a0e14dbeb218ff544",
+    "plans/r4_execution/M12_MIGRATION_CATALOG.md": "9f56147da8782dc0397aed643b15bc5de67fd69a028f7c2041a97494c53f8b98"
+  }
+}

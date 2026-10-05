@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="29.529" timestamp="2026-10-02T05:06:13.621520-03:00" hostname="Alienware_m15"><testcase classname="tests.test_runtime_capture_projection_isolation" name="test_native_burst_is_journaled_while_projection_is_blocked[normal]" time="13.995"><failure message="AssertionError: {'operation_id': 'cmd_12240a7e78ca483490986113a1f0e6ba', 'session_id': 'hsess_fb892b526e7c49179b056a30e460e992', 'verb': 'send_turn', 'state': 'ACCEPTED', ...}&#10;assert False&#10; +  where False = &lt;function test_native_burst_is_journaled_while_projection_is_blocked.&lt;locals&gt;.&lt;lambda&gt; at 0x0000020E054768E0&gt;({'operation_id': 'cmd_12240a7e78ca483490986113a1f0e6ba', 'session_id': 'hsess_fb892b526e7c49179b056a30e460e992', 'verb': 'send_turn', 'state': 'ACCEPTED', ...})">runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4799/test_nati...t', [], 'nxs_80c25daae62db26ce08b72105760c3e08231b249a9a0f62b', 'nxs_bf2aebcb0a6d12a5f64688d0738689998f7682eb948fb083')
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4799/test_native_burst_is_journaled0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000020E05C67820&gt;
+capture_delay = 0
+
+    @pytest.mark.parametrize("capture_delay", [0, .04], ids=["normal", "slow-storage"])
+    def test_native_burst_is_journaled_while_projection_is_blocked(runtime, tmp_path, monkeypatch, capture_delay):
+        deps, client, root, _, operator, _ = runtime
+        gate = tmp_path / "emit-burst"
+        source = _FAKE_SERVER_SOURCE.replace('if "TRIGGER_HOLD" in text:\n        return',
+            'if "TRIGGER_HOLD" in text:\n'
+            '        deadline = time.monotonic() + 10\n'
+            f'        while not os.path.exists({str(gate)!r}) and time.monotonic() &lt; deadline: time.sleep(.01)\n'
+            '        for index in range(256):\n'
+            '            write_msg({"method": "item/agentMessage/delta", "params": {"threadId": thread_id, "turnId": turn_id, "delta": "x"}})\n'
+            '            time.sleep(.002)\n'
+            '        text = "BURST_COMPLETE"')
+        peers = []
+        def factory(**options):
+            peer = CodexAppServerConnector(command=[sys.executable, "-u", "-c", source], cwd=root,
+                env=options["backend"]["env"])
+            peers.append(peer)
+            return peer
+        deps.harness_connector_factories["codex"] = factory
+        opened = client.post("/api/v1/harness/sessions", headers={"x-api-key": operator}, json={
+            "agent_id": "worker", "kind": "codex", "endpoint_id": "endpoint-codex", "project_root": root})
+        assert opened.status_code == 200, opened.text
+        sid = opened.json()["data"]["session_id"]
+        sent = tool(client, operator, "harness_send", {"session_id": sid, "payload": {"text": "TRIGGER_HOLD"}})
+        assert sent["ok"], sent
+        op = sent["data"]["operation_id"]
+        wait_operation(runtime, op, lambda row: row["external_acceptance"] == "harness_accepted")
+        ingress = deps.harness_supervisor.event_ingress
+        append = ingress.journal.append
+        def delayed_append(*args, **kwargs):
+            if capture_delay:
+                time.sleep(capture_delay)
+            return append(*args, **kwargs)
+        monkeypatch.setattr(ingress.journal, "append", delayed_append)
+        assert ingress._project_lock.acquire(timeout=3)
+        try:
+            before = ingress.journal.watermark
+            gate.write_text("ready")
+            deadline = time.monotonic() + 8
+            while ingress.journal.watermark &lt; before + 260 and time.monotonic() &lt; deadline:
+                time.sleep(.01)
+            assert ingress.journal.watermark &gt;= before + 260, "SQLite projection blocked native durable capture"
+            assert peers[0]._transport._proc.poll() is None, "Normal burst overflowed the native queue"
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                assert not uow.connection.execute("SELECT 1 FROM runtime_results WHERE command_operation_id=?", (op,)).fetchone()
+        finally:
+            ingress._project_lock.release()
+&gt;       result = wait_operation(runtime, op, lambda row: row["result_durable"])
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_runtime_capture_projection_isolation.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_runtime_commands.py:57: in wait_operation
+    return wait_command(client, operator, operation_id, predicate)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = &lt;httpx.Client object at 0x0000020E05468D70&gt;
+operator = 'nxs_80c25daae62db26ce08b72105760c3e08231b249a9a0f62b'
+operation_id = 'cmd_12240a7e78ca483490986113a1f0e6ba'
+predicate = &lt;function test_native_burst_is_journaled_while_projection_is_blocked.&lt;locals&gt;.&lt;lambda&gt; at 0x0000020E054768E0&gt;
+
+    def wait_command(client, operator, operation_id, predicate):
+        deadline = time.monotonic() + 5
+        while time.monotonic() &lt; deadline:
+            response = client.get(f"/api/v1/harness/operations/{operation_id}", headers={"x-api-key": operator})
+            assert response.status_code == 200, response.text
+            data = response.json()["data"]
+            if predicate(data):
+                return data
+            time.sleep(.01)
+&gt;       assert predicate(data), data
+E       AssertionError: {'operation_id': 'cmd_12240a7e78ca483490986113a1f0e6ba', 'session_id': 'hsess_fb892b526e7c49179b056a30e460e992', 'verb': 'send_turn', 'state': 'ACCEPTED', ...}
+E       assert False
+E        +  where False = &lt;function test_native_burst_is_journaled_while_projection_is_blocked.&lt;locals&gt;.&lt;lambda&gt; at 0x0000020E054768E0&gt;({'operation_id': 'cmd_12240a7e78ca483490986113a1f0e6ba', 'session_id': 'hsess_fb892b526e7c49179b056a30e460e992', 'verb': 'send_turn', 'state': 'ACCEPTED', ...})
+
+tests\test_runtime_commands.py:69: AssertionError</failure></testcase><testcase classname="tests.test_runtime_capture_projection_isolation" name="test_native_burst_is_journaled_while_projection_is_blocked[slow-storage]" time="13.445"><failure message="AssertionError: SQLite projection blocked native durable capture&#10;assert 139 &gt;= (1 + 260)&#10; +  where 139 = &lt;okto_nexus.adapters.outbound.harness.event_journal.FileRuntimeEventJournal object at 0x0000020E06D2D950&gt;.watermark&#10; +    where &lt;okto_nexus.adapters.outbound.harness.event_journal.FileRuntimeEventJournal object at 0x0000020E06D2D950&gt; = &lt;okto_nexus.application.runtime_event_ingress.RuntimeEventIngress object at 0x0000020E06D2DBD0&gt;.journal">runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4799/test_nati...t', [], 'nxs_593ae25cd0b7c28638ab172b0220acbb7e2e6a4dd666ffae', 'nxs_3b3c6162d1b0c5a6406224a6c8e7897780aae07c46ed4494')
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4799/test_native_burst_is_journaled1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000020E05663230&gt;
+capture_delay = 0.04
+
+    @pytest.mark.parametrize("capture_delay", [0, .04], ids=["normal", "slow-storage"])
+    def test_native_burst_is_journaled_while_projection_is_blocked(runtime, tmp_path, monkeypatch, capture_delay):
+        deps, client, root, _, operator, _ = runtime
+        gate = tmp_path / "emit-burst"
+        source = _FAKE_SERVER_SOURCE.replace('if "TRIGGER_HOLD" in text:\n        return',
+            'if "TRIGGER_HOLD" in text:\n'
+            '        deadline = time.monotonic() + 10\n'
+            f'        while not os.path.exists({str(gate)!r}) and time.monotonic() &lt; deadline: time.sleep(.01)\n'
+            '        for index in range(256):\n'
+            '            write_msg({"method": "item/agentMessage/delta", "params": {"threadId": thread_id, "turnId": turn_id, "delta": "x"}})\n'
+            '            time.sleep(.002)\n'
+            '        text = "BURST_COMPLETE"')
+        peers = []
+        def factory(**options):
+            peer = CodexAppServerConnector(command=[sys.executable, "-u", "-c", source], cwd=root,
+                env=options["backend"]["env"])
+            peers.append(peer)
+            return peer
+        deps.harness_connector_factories["codex"] = factory
+        opened = client.post("/api/v1/harness/sessions", headers={"x-api-key": operator}, json={
+            "agent_id": "worker", "kind": "codex", "endpoint_id": "endpoint-codex", "project_root": root})
+        assert opened.status_code == 200, opened.text
+        sid = opened.json()["data"]["session_id"]
+        sent = tool(client, operator, "harness_send", {"session_id": sid, "payload": {"text": "TRIGGER_HOLD"}})
+        assert sent["ok"], sent
+        op = sent["data"]["operation_id"]
+        wait_operation(runtime, op, lambda row: row["external_acceptance"] == "harness_accepted")
+        ingress = deps.harness_supervisor.event_ingress
+        append = ingress.journal.append
+        def delayed_append(*args, **kwargs):
+            if capture_delay:
+                time.sleep(capture_delay)
+            return append(*args, **kwargs)
+        monkeypatch.setattr(ingress.journal, "append", delayed_append)
+        assert ingress._project_lock.acquire(timeout=3)
+        try:
+            before = ingress.journal.watermark
+            gate.write_text("ready")
+            deadline = time.monotonic() + 8
+            while ingress.journal.watermark &lt; before + 260 and time.monotonic() &lt; deadline:
+                time.sleep(.01)
+&gt;           assert ingress.journal.watermark &gt;= before + 260, "SQLite projection blocked native durable capture"
+E           AssertionError: SQLite projection blocked native durable capture
+E           assert 139 &gt;= (1 + 260)
+E            +  where 139 = &lt;okto_nexus.adapters.outbound.harness.event_journal.FileRuntimeEventJournal object at 0x0000020E06D2D950&gt;.watermark
+E            +    where &lt;okto_nexus.adapters.outbound.harness.event_journal.FileRuntimeEventJournal object at 0x0000020E06D2D950&gt; = &lt;okto_nexus.application.runtime_event_ingress.RuntimeEventIngress object at 0x0000020E06D2DBD0&gt;.journal
+
+tests\test_runtime_capture_projection_isolation.py:56: AssertionError</failure></testcase></testsuite></testsuites>

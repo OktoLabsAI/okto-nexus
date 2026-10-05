@@ -1,0 +1,23 @@
+Processing c:\users\jpamb\appdata\local\temp\okto-r4-launch-observation-core-c9trj5it\dist\nexus_connector_core-0.2.40.dev0-py3-none-any.whl
+Collecting rfc8785==0.1.4 (from nexus-connector-core==0.2.40.dev0)
+  Using cached rfc8785-0.1.4-py3-none-any.whl.metadata (3.4 kB)
+Collecting jsonschema==4.26.0 (from nexus-connector-core==0.2.40.dev0)
+  Using cached jsonschema-4.26.0-py3-none-any.whl.metadata (7.6 kB)
+Collecting attrs>=22.2.0 (from jsonschema==4.26.0->nexus-connector-core==0.2.40.dev0)
+  Using cached attrs-26.1.0-py3-none-any.whl.metadata (8.8 kB)
+Collecting jsonschema-specifications>=2023.03.6 (from jsonschema==4.26.0->nexus-connector-core==0.2.40.dev0)
+  Using cached jsonschema_specifications-2025.9.1-py3-none-any.whl.metadata (2.9 kB)
+Collecting referencing>=0.28.4 (from jsonschema==4.26.0->nexus-connector-core==0.2.40.dev0)
+  Using cached referencing-0.37.0-py3-none-any.whl.metadata (2.8 kB)
+Collecting rpds-py>=0.25.0 (from jsonschema==4.26.0->nexus-connector-core==0.2.40.dev0)
+  Using cached rpds_py-2026.6.3-cp313-cp313-win_amd64.whl.metadata (4.2 kB)
+Using cached jsonschema-4.26.0-py3-none-any.whl (90 kB)
+Using cached rfc8785-0.1.4-py3-none-any.whl (9.2 kB)
+Using cached attrs-26.1.0-py3-none-any.whl (67 kB)
+Using cached jsonschema_specifications-2025.9.1-py3-none-any.whl (18 kB)
+Using cached referencing-0.37.0-py3-none-any.whl (26 kB)
+Using cached rpds_py-2026.6.3-cp313-cp313-win_amd64.whl (219 kB)
+Installing collected packages: rpds-py, rfc8785, attrs, referencing, jsonschema-specifications, jsonschema, nexus-connector-core
+Successfully installed attrs-26.1.0 jsonschema-4.26.0 jsonschema-specifications-2025.9.1 nexus-connector-core-0.2.40.dev0 referencing-0.37.0 rfc8785-0.1.4 rpds-py-2026.6.3
+clean wheel import and contract resources OK
+embedded and remote clean-wheel consumer smokes OK

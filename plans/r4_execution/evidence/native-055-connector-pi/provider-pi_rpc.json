@@ -1,0 +1,62 @@
+{
+  "adapter": "pi_rpc",
+  "missing_login": false,
+  "server_release_gate_override": false,
+  "native_qualification_override": false,
+  "synthetic_native_factory": false,
+  "public_connector_cli": true,
+  "cli_subprocess": true,
+  "protected_os_vault": true,
+  "topology": "Single Windows host; actual loopback HTTP/WSS; separate Server and daemon processes.",
+  "phase": "finished",
+  "vault_backend": "keyring:Windows WinVaultKeyring",
+  "candidate_ref": "nexus-install-v1:b64f7d489758234ac44fa9004bec00163e29efe01b8772ace8836ffc6001b3d5",
+  "open_stage": "SUBMITTED",
+  "scope": {
+    "agent_id": "subject",
+    "authorization_revision": 2,
+    "binding_id": "bind_3bdf56eb6b995f77479b6c61a14d234a",
+    "binding_revision": 1,
+    "configuration_revision": 2,
+    "credential_epoch": 1,
+    "executor_id": "exe_b6404220e7849413141167c0389e1e67",
+    "server_id": "srv_024a86e65fe347f609b42e337594eb14",
+    "session_id": "ses_f58730632cd882b9625d4b77da9f6636",
+    "session_owner_generation": 1,
+    "workspace_binding_id": "wxb_43c9f5ee7fc5b2cb5ca22aa34ae0b0bc",
+    "workspace_id": "wsr_f4d055f3a29451085150d28358e389ec"
+  },
+  "lease_serial_before_turn": 2,
+  "failure_type": "AssertionError",
+  "failure_phase": "runtime.returned",
+  "failure_frames": [
+    {
+      "file": "test_real_connector_providers.py",
+      "function": "run",
+      "line": 354
+    },
+    {
+      "file": "test_real_connector_providers.py",
+      "function": "receipt",
+      "line": 276
+    }
+  ],
+  "control_failures": [
+    {
+      "state": "CONTROL_READY",
+      "executor_id": "exe_b6404220e7849413141167c0389e1e67",
+      "control_ready": true,
+      "execution_ready": true,
+      "error_code": null,
+      "recovery_required": false,
+      "cleanup_pending": false,
+      "publication_sequence": 4,
+      "inventory_revision": "sha256:81b6d47b792ea78dff3ee3164e643f82c0d998758b880ac46c4924d8d10434a9",
+      "connection_generation": 3,
+      "attempts": 2
+    }
+  ],
+  "daemon_exit_code": 0,
+  "campaign_credentials_removed": true,
+  "server_exit_code": 0
+}

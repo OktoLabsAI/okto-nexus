@@ -1,0 +1,23 @@
+{
+  "scope": "Installed Core 0.2.52 consumer validation, not final freeze",
+  "nexus_wheel_sha256": "9f2e9db64cd6526112e04e990c7042aae156b9d119f35ff8083ac6c3da7b3f97",
+  "nexus_sdist_sha256": "3ac3bf73ac0065992aff22b8bf8b9b4d9a79e9268e9809207a8114d8a1bc8b4b",
+  "passed": 27,
+  "tests": [
+    "tests/execution_r4/test_embedded_dispatch.py",
+    "tests/execution_r4/test_public_open_bootstrap.py",
+    "tests/test_import_boundary.py"
+  ],
+  "reports": {
+    "m13-core052-installed.json": "53ca749276d6c6739293575db3a656e90ea09ecf8752fed45beffe9e098f6d48",
+    "m13-core052-local.log": "2d39b6ff23cf74b0831e7996d5996cbf77faa6e3f418ece9c7d1d8852032c1ea",
+    "m13-core052-tests.xml": "10f7d52e7b7d92b2b55d7dd9a21f2ab2445fc6d8d0afab0fe8e5b3fbe7b67b70",
+    "m13-core052-build.json": "072b9346428dec8f2106ba3d741a7df5e94745807a973371c0fd9280c5ec244f"
+  },
+  "failed_preparation": "Initial wheel retained core_inventory version 0.2.51; clean boot refused installed 0.2.52. Corrected source pin and rebuilt wheel/sdist before successful install and testing.",
+  "limits": [
+    "Synthetic dispatch and public bootstrap are not real provider qualification",
+    "Prior R4 all_r4 campaign uses 0.2.51 and some source subprocesses; cannot qualify final tuple",
+    "Final platform, UI, provider and independent-host campaigns remain open"
+  ]
+}

@@ -7,7 +7,7 @@
 // table is oldest-first and the detail panel is the ONE surface showing the
 // full request_payload (BR5: the queue itself carries routing metadata only).
 
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import {
   ChevronDown,
   ChevronRight,
@@ -17,6 +17,8 @@ import {
 import { api, type ApprovalDetail, type ApprovalRow } from "../api";
 import { PageContainer } from "../components/PageContainer";
 import { useWorkspaceName } from "../components/WorkspaceNames";
+import { NativeApprovalInput } from "../components/NativeApprovalInput";
+import { CanonicalNativeDecision } from "../components/CanonicalNativeDecision";
 
 const inputCls =
   "rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-accent-500/40";
@@ -34,6 +36,7 @@ function ago(iso: string | null): string {
 
 // Compact "who does it address" line from the BR5 metadata (never content).
 function describeTarget(meta: ApprovalRow["payload_meta"]): string {
+  if (["runtime_native_approval", "execution.native.respond"].includes(meta.kind)) return "Runtime request";
   const target = meta.target as
     | {
         strategy?: string;
@@ -64,7 +67,11 @@ function actionChip(action: string): string {
     : "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300";
 }
 
-function DetailPanel({ detail }: { detail: ApprovalDetail | null }) {
+function DetailPanel({ detail, busy = false, onApprove, onChanged = () => {} }: {
+  detail: ApprovalDetail | null; busy?: boolean;
+  onApprove?: (response?: Record<string, unknown>) => void;
+  onChanged?: () => void;
+}) {
   const workspaceName = useWorkspaceName(detail?.workspace_id);
   if (detail === null) {
     return (
@@ -91,9 +98,14 @@ function DetailPanel({ detail }: { detail: ApprovalDetail | null }) {
           </span>
         )}
       </div>
+      {detail.status === "archived" && <p role="status">Archived by {detail.archived_by}. Previous status: {detail.original_status}. Archiving does not send a decision to the runtime.</p>}
+      {detail.status !== "archived" && detail.action === "runtime_native_approval" && <NativeApprovalInput key={detail.approval_id}
+        detail={detail} busy={busy} onApprove={onApprove ?? (() => {})} />}
+      {detail.status !== "archived" && detail.action === "execution.native.respond" && <CanonicalNativeDecision key={detail.approval_id}
+        detail={detail} onChanged={onChanged} />}
       <div>
         <div className="text-[11px] uppercase tracking-wide text-surface-400 dark:text-surface-500 mb-1">
-          Request payload (executed verbatim on approve)
+          {["runtime_native_approval", "execution.native.respond"].includes(detail.action) ? "Runtime request details" : "Request payload (executed verbatim on approve)"}
         </div>
         <pre className="font-mono text-[11px] whitespace-pre-wrap break-all max-h-64 overflow-y-auto bg-white dark:bg-surface-950 rounded-lg border border-surface-200 dark:border-surface-800 p-2">
           {JSON.stringify(detail.request_payload, null, 2)}
@@ -124,8 +136,28 @@ export function ApprovalsView({
   // Lets App refresh the sidebar badge right after a decision.
   onChanged: () => void;
 }) {
-  const [pending, setPending] = useState<ApprovalRow[]>([]);
-  const [decided, setDecided] = useState<ApprovalRow[]>([]);
+  const [rows, setRows] = useState<ApprovalRow[]>([]);
+  const [status, setStatus] = useState("all");
+  const [agent, setAgent] = useState("");
+  const [action, setAction] = useState("");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [loading, setLoading] = useState(false);
+  const loadRequest = useRef(0);
+  const invalidDates = !!(fromDate && toDate && fromDate > toDate);
+  const filtered = rows.filter(row => {
+    const created = new Date(row.created_at);
+    const start = fromDate ? new Date(`${fromDate}T00:00:00`) : null;
+    const end = toDate ? new Date(`${toDate}T00:00:00`) : null;
+    if (end) end.setDate(end.getDate() + 1);
+    return !invalidDates && (!agent || row.agent_id === agent) && (!action || row.action === action)
+      && (!start || created >= start) && (!end || created < end);
+  });
+  const visible = filtered.filter(row => status === "all" || row.status === status);
+  const pending = visible.filter(row => row.status === "pending")
+    .sort((a, b) => a.created_at.localeCompare(b.created_at));
+  const decided = visible.filter(row => row.status !== "pending")
+    .sort((a, b) => (b.decided_at ?? b.created_at).localeCompare(a.decided_at ?? a.created_at));
   // null = still probing /settings; the banner renders only on a firm false
   // (the PoliciesView enforcement-banner pattern).
   const [interceptionOn, setInterceptionOn] = useState<boolean | null>(null);
@@ -136,8 +168,19 @@ export function ApprovalsView({
   const [busy, setBusy] = useState<string | null>(null);
   const [detailOpen, setDetailOpen] = useState<string | null>(null);
   const [detail, setDetail] = useState<ApprovalDetail | null>(null);
+  const detailRequest = useRef(0);
+  useEffect(() => {
+    detailRequest.current += 1;
+    setDetailOpen(null);
+    setDetail(null);
+    setRows([]);
+    setAgent("");
+    setAction("");
+  }, [workspace]);
 
   const reload = useCallback(async () => {
+    const generation = ++loadRequest.current;
+    setLoading(true);
     try {
       // GET /approvals is workspace-scoped; the "all" scope fans out over
       // every known workspace and merges client-side.
@@ -146,25 +189,23 @@ export function ApprovalsView({
           ? (await api.workspaces()).workspaces.map((w) => w.workspace_id)
           : [workspace];
       const pages = await Promise.all(
-        ids.map((id) => api.approvals(id, "all")),
+        ids.map(async (id) => {
+          const items: ApprovalRow[] = [];
+          for (let offset = 0; ; offset += 100) {
+            const page = await api.approvals(id, "all", offset);
+            items.push(...page.items);
+            if (page.items.length < 100 || generation !== loadRequest.current) break;
+          }
+          return items;
+        }),
       );
-      const rows = pages.flatMap((page) => page.items);
-      setPending(
-        rows
-          .filter((row) => row.status === "pending")
-          .sort((a, b) => a.created_at.localeCompare(b.created_at)),
-      );
-      setDecided(
-        rows
-          .filter((row) => row.status !== "pending")
-          .sort((a, b) =>
-            (b.decided_at ?? "").localeCompare(a.decided_at ?? ""),
-          )
-          .slice(0, 20),
-      );
+      if (generation !== loadRequest.current) return;
+      setRows([...new Map(pages.flat().map(row => [row.approval_id, row])).values()]);
       setLoadError(null);
     } catch (exc) {
-      setLoadError((exc as Error).message);
+      if (generation === loadRequest.current) setLoadError((exc as Error).message);
+    } finally {
+      if (generation === loadRequest.current) setLoading(false);
     }
     api
       .settings()
@@ -179,30 +220,39 @@ export function ApprovalsView({
     reload();
   }, [reload, refreshTick]);
 
-  const openDetail = async (approvalId: string) => {
-    if (detailOpen === approvalId) {
-      setDetailOpen(null);
-      setDetail(null);
-      return;
-    }
-    setDetailOpen(approvalId);
+  const openDetail = (approvalId: string) => {
+    detailRequest.current += 1;
+    setDetailOpen(current => current === approvalId ? null : approvalId);
     setDetail(null);
-    try {
-      setDetail(await api.approvalDetail(approvalId));
-    } catch (exc) {
-      setActionError((exc as Error).message);
-      setDetailOpen(null);
-    }
   };
+
+  useEffect(() => {
+    if (!detailOpen) return;
+    const generation = ++detailRequest.current;
+    let active = true;
+    api.approvalDetail(detailOpen).then(loaded => {
+      if (active && generation === detailRequest.current) setDetail(loaded);
+    }).catch(exc => {
+      if (active && generation === detailRequest.current) {
+        setActionError((exc as Error).message);
+        setDetail(null);
+      }
+    });
+    return () => { active = false; };
+  }, [detailOpen, refreshTick]);
 
   const decide = async (
     approvalId: string,
     decision: "approve" | "reject",
     just?: string,
+    response?: Record<string, unknown>,
   ) => {
     setBusy(approvalId);
     try {
-      await api.decideApproval(approvalId, decision, just?.trim() || undefined);
+      await api.decideApproval(approvalId, decision, just?.trim() || undefined, response);
+      detailRequest.current += 1;
+      setDetailOpen(null);
+      setDetail(null);
       setRejecting(null);
       setJustification("");
       setActionError(null);
@@ -216,6 +266,25 @@ export function ApprovalsView({
       onChanged();
     }
   };
+
+  const archive = async (approvalId: string) => {
+    setBusy(approvalId);
+    try {
+      await api.archiveApproval(approvalId);
+      detailRequest.current += 1;
+      setDetailOpen(null); setDetail(null); setRejecting(null); setActionError(null);
+    } catch (exc) {
+      setActionError((exc as Error).message);
+    } finally {
+      setBusy(null); await reload(); onChanged();
+    }
+  };
+
+  const archiveButton = (row: ApprovalRow) => row.status !== "archived" && (
+    <button className="btn btn-secondary ml-2" disabled={busy !== null}
+      title="Remove from the pending queue and badge. Keep the history without approving or sending a runtime decision."
+      data-testid={`archive-${row.approval_id}`} onClick={() => void archive(row.approval_id)}>Archive</button>
+  );
 
   const chevron = (row: ApprovalRow) => (
     <button
@@ -240,11 +309,10 @@ export function ApprovalsView({
           Approvals
         </h1>
         <p className="text-xs text-surface-500 dark:text-surface-400 mt-1">
-          Actions intercepted by{" "}
+          Runtime requests and actions intercepted by{" "}
           <code className="font-mono">require_approval</code> policies wait
-          here until you decide. Approving executes the action exactly as
-          requested, with the same effects as the normal flow; rejecting
-          notifies the requester with your justification.
+          here until you decide. Review native questions to provide an explicit
+          answer. A recorded decision does not prove delivery to the runtime.
         </p>
       </div>
 
@@ -274,8 +342,50 @@ export function ApprovalsView({
         </p>
       )}
 
+      <div className="panel p-3 mb-4 space-y-3">
+        <div role="tablist" aria-label="Approval status" className="flex flex-wrap gap-2">
+          {(["all", "pending", "approved", "rejected", "archived"] as const).map(value => (
+            <button key={value} role="tab" aria-selected={status === value}
+              className={`rounded-lg px-3 py-2 text-xs font-medium ${status === value
+                ? "bg-accent-600 text-white" : "bg-surface-100 dark:bg-surface-800 text-surface-600 dark:text-surface-300"}`}
+              onClick={() => { setStatus(value); setDetailOpen(null); setRejecting(null); }}>
+              {value === "all" ? "All" : value[0].toUpperCase() + value.slice(1)}
+              {" "}
+              <span className="ml-2 opacity-75">{filtered.filter(row => value === "all" || row.status === value).length}</span>
+            </button>
+          ))}
+        </div>
+        <div className="flex flex-wrap items-end gap-3 text-xs">
+          <label className="flex flex-col gap-1">Created from
+            <input type="date" className={inputCls} value={fromDate} max={toDate || undefined}
+              onChange={event => setFromDate(event.target.value)} />
+          </label>
+          <label className="flex flex-col gap-1">Created through
+            <input type="date" className={inputCls} value={toDate} min={fromDate || undefined}
+              onChange={event => setToDate(event.target.value)} />
+          </label>
+          <label className="flex flex-col gap-1">Action
+            <select aria-label="Action" className={inputCls} value={action} onChange={event => setAction(event.target.value)}>
+              <option value="">All actions</option>
+              {[...new Set(rows.map(row => row.action))].sort().map(value => <option key={value}>{value}</option>)}
+            </select>
+          </label>
+          <label className="flex flex-col gap-1">Agent
+            <select aria-label="Agent" className={inputCls} value={agent} onChange={event => setAgent(event.target.value)}>
+              <option value="">All agents</option>
+              {[...new Set(rows.map(row => row.agent_id))].sort().map(value => <option key={value}>{value}</option>)}
+            </select>
+          </label>
+          <button className="btn btn-secondary" onClick={() => {setAgent(""); setAction(""); setFromDate(""); setToDate("");}}>Clear filters</button>
+          <button className="btn btn-secondary" onClick={reload} disabled={loading} aria-label="Refresh approvals"><RefreshCw size={12} /></button>
+        </div>
+        <p className="text-xs text-surface-500" role="status">{loading ? "Loading approvals…" : `${visible.length} approval(s)`} · Dates use local time.</p>
+        {invalidDates && <p role="alert" className="text-xs text-red-500">The start date must be on or before the end date.</p>}
+      </div>
+      {!loading && !visible.length && <p className="text-sm text-surface-500 py-4">No approvals match these filters.</p>}
+
       {/* Pending queue (oldest first) */}
-      <section className="panel p-4" data-testid="pending-approvals">
+      {(status === "all" || status === "pending") && <section className="panel p-4" data-testid="pending-approvals">
         <div className="flex items-center gap-2 mb-3">
           <h2 className="text-sm font-semibold text-surface-900 dark:text-surface-100">
             Pending
@@ -347,7 +457,9 @@ export function ApprovalsView({
                         {row.policy_id.slice(0, 12)}…
                       </td>
                       <td className="py-2 pr-0 text-right whitespace-nowrap">
-                        {rejecting === row.approval_id ? (
+                        {row.action === "execution.native.respond" ? <button className="btn btn-secondary"
+                          onClick={() => detailOpen !== row.approval_id && openDetail(row.approval_id)}
+                          data-testid={`approve-${row.approval_id}`}>Review request</button> : rejecting === row.approval_id ? (
                           <span className="inline-flex items-center gap-1">
                             <input
                               autoFocus
@@ -386,10 +498,12 @@ export function ApprovalsView({
                             <button
                               className="text-[11px] px-2 py-1 rounded-lg bg-emerald-600 text-white font-medium mr-1 disabled:opacity-50"
                               disabled={busy === row.approval_id}
-                              onClick={() => decide(row.approval_id, "approve")}
+                              onClick={() => row.action === "runtime_native_approval"
+                                ? (detailOpen !== row.approval_id && openDetail(row.approval_id))
+                                : decide(row.approval_id, "approve")}
                               data-testid={`approve-${row.approval_id}`}
                             >
-                              Approve
+                              {row.action === "runtime_native_approval" ? "Review request" : "Approve"}
                             </button>
                             <button
                               className="text-[11px] px-2 py-1 rounded-lg border border-red-300 dark:border-red-500/40 text-red-600 dark:text-red-400 disabled:opacity-50"
@@ -404,12 +518,16 @@ export function ApprovalsView({
                             </button>
                           </>
                         )}
+                        {archiveButton(row)}
                       </td>
                     </tr>
                     {detailOpen === row.approval_id && (
                       <tr>
                         <td colSpan={7} className="py-2">
-                          <DetailPanel detail={detail} />
+                          <DetailPanel detail={detail?.approval_id === row.approval_id ? detail : null}
+                            busy={busy === row.approval_id}
+                            onChanged={() => { void reload(); onChanged(); }}
+                            onApprove={response => decide(row.approval_id, "approve", undefined, response)} />
                         </td>
                       </tr>
                     )}
@@ -419,13 +537,13 @@ export function ApprovalsView({
             </table>
           </div>
         )}
-      </section>
+      </section>}
 
       {/* Recent decisions — self-gated by the data (the DenialsPanel pattern) */}
       {decided.length > 0 && (
         <section className="mt-5 panel p-4" data-testid="recent-decisions">
           <h2 className="text-sm font-semibold text-surface-900 dark:text-surface-100 mb-3">
-            Recent decisions
+            History
           </h2>
           <div className="overflow-x-auto">
             <table className="w-full text-xs">
@@ -438,7 +556,7 @@ export function ApprovalsView({
                     >
                       <td className="py-1.5 pr-1 w-6">{chevron(row)}</td>
                       <td className="py-1.5 pr-3 whitespace-nowrap text-surface-500 dark:text-surface-400">
-                        {ago(row.decided_at)} ago
+                        {ago(row.archived_at ?? row.decided_at)} ago
                       </td>
                       <td className="py-1.5 pr-3 font-mono">{row.agent_id}</td>
                       <td className="py-1.5 pr-3 font-mono text-[11px]">
@@ -456,16 +574,18 @@ export function ApprovalsView({
                         </span>
                       </td>
                       <td className="py-1.5 pr-0 text-surface-400 dark:text-surface-500">
-                        by <span className="font-mono">{row.decided_by ?? "—"}</span>
+                        by <span className="font-mono">{row.archived_by ?? row.decided_by ?? "—"}</span>
                         {row.status === "rejected" && row.justification && (
                           <span> · “{row.justification}”</span>
                         )}
+                        {archiveButton(row)}
                       </td>
                     </tr>
                     {detailOpen === row.approval_id && (
                       <tr>
                         <td colSpan={6} className="py-2">
-                          <DetailPanel detail={detail} />
+                          <DetailPanel detail={detail?.approval_id === row.approval_id ? detail : null}
+                            onChanged={() => { void reload(); onChanged(); }} />
                         </td>
                       </tr>
                     )}

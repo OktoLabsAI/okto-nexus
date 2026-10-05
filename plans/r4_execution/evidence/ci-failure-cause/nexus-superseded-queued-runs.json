@@ -1,0 +1,128 @@
+[
+  {
+    "run": {
+      "databaseId": 36976141205,
+      "headSha": "d172c7d9a33bb739e18882701cd385071f99def2",
+      "status": "queued",
+      "workflowName": "Nexus installed regression"
+    },
+    "observed": {
+      "conclusion": "",
+      "headSha": "d172c7d9a33bb739e18882701cd385071f99def2",
+      "status": "queued"
+    },
+    "superseded_by": "43aa8def78377389d200592e5f969833d94d5b04",
+    "reason": "Queued ancestor superseded by cumulative CI fixes; not canceled for elapsed time",
+    "cancel_exit_code": 0,
+    "cancel_output": "\u2713 Request to cancel workflow 36976141205 submitted.\n",
+    "after": {
+      "conclusion": "cancelled",
+      "status": "completed"
+    }
+  },
+  {
+    "run": {
+      "databaseId": 36975322681,
+      "headSha": "a462b309e171d91967d3259e838c9a7a57e1a28c",
+      "status": "queued",
+      "workflowName": "Nexus installed regression"
+    },
+    "observed": {
+      "conclusion": "",
+      "headSha": "a462b309e171d91967d3259e838c9a7a57e1a28c",
+      "status": "queued"
+    },
+    "superseded_by": "43aa8def78377389d200592e5f969833d94d5b04",
+    "reason": "Queued ancestor superseded by cumulative CI fixes; not canceled for elapsed time",
+    "cancel_exit_code": 0,
+    "cancel_output": "\u2713 Request to cancel workflow 36975322681 submitted.\n",
+    "after": {
+      "conclusion": "cancelled",
+      "status": "completed"
+    }
+  },
+  {
+    "run": {
+      "databaseId": 36974584781,
+      "headSha": "f94e77c86a7a16eca5133d6fd6e7d4a9b11272b8",
+      "status": "queued",
+      "workflowName": "Nexus installed regression"
+    },
+    "observed": {
+      "conclusion": "",
+      "headSha": "f94e77c86a7a16eca5133d6fd6e7d4a9b11272b8",
+      "status": "queued"
+    },
+    "superseded_by": "43aa8def78377389d200592e5f969833d94d5b04",
+    "reason": "Queued ancestor superseded by cumulative CI fixes; not canceled for elapsed time",
+    "cancel_exit_code": 0,
+    "cancel_output": "\u2713 Request to cancel workflow 36974584781 submitted.\n",
+    "after": {
+      "conclusion": "cancelled",
+      "status": "completed"
+    }
+  },
+  {
+    "run": {
+      "databaseId": 36973245450,
+      "headSha": "b3fa455630f1e9b3f22b894b2455efc64733bc09",
+      "status": "queued",
+      "workflowName": "Nexus installed regression"
+    },
+    "observed": {
+      "conclusion": "",
+      "headSha": "b3fa455630f1e9b3f22b894b2455efc64733bc09",
+      "status": "queued"
+    },
+    "superseded_by": "43aa8def78377389d200592e5f969833d94d5b04",
+    "reason": "Queued ancestor superseded by cumulative CI fixes; not canceled for elapsed time",
+    "cancel_exit_code": 0,
+    "cancel_output": "\u2713 Request to cancel workflow 36973245450 submitted.\n",
+    "after": {
+      "conclusion": "cancelled",
+      "status": "completed"
+    }
+  },
+  {
+    "run": {
+      "databaseId": 36971852244,
+      "headSha": "302ca5d0ef6daa9185297db01b473efc3173aeb9",
+      "status": "queued",
+      "workflowName": "Nexus installed regression"
+    },
+    "observed": {
+      "conclusion": "",
+      "headSha": "302ca5d0ef6daa9185297db01b473efc3173aeb9",
+      "status": "queued"
+    },
+    "superseded_by": "43aa8def78377389d200592e5f969833d94d5b04",
+    "reason": "Queued ancestor superseded by cumulative CI fixes; not canceled for elapsed time",
+    "cancel_exit_code": 0,
+    "cancel_output": "\u2713 Request to cancel workflow 36971852244 submitted.\n",
+    "after": {
+      "conclusion": "cancelled",
+      "status": "completed"
+    }
+  },
+  {
+    "run": {
+      "databaseId": 36971848805,
+      "headSha": "302ca5d0ef6daa9185297db01b473efc3173aeb9",
+      "status": "queued",
+      "workflowName": "Nexus installed regression"
+    },
+    "observed": {
+      "conclusion": "",
+      "headSha": "302ca5d0ef6daa9185297db01b473efc3173aeb9",
+      "status": "queued"
+    },
+    "superseded_by": "43aa8def78377389d200592e5f969833d94d5b04",
+    "reason": "Queued ancestor superseded by cumulative CI fixes; not canceled for elapsed time",
+    "cancel_exit_code": 0,
+    "cancel_output": "\u2713 Request to cancel workflow 36971848805 submitted.\n",
+    "after": {
+      "status": "completed",
+      "conclusion": "cancelled"
+    }
+  }
+]

@@ -71,6 +71,8 @@ import { PoliciesView } from "./views/PoliciesView";
 import { GuardrailsView } from "./views/GuardrailsView";
 import { CommunicationView } from "./views/CommunicationView";
 import { ApprovalsView } from "./views/ApprovalsView";
+import { RuntimesView } from "./views/RuntimesView";
+import { ExecutionLogView } from "./views/ExecutionLogView";
 import { SettingsView } from "./views/SettingsView";
 import {
   WorkspaceNamesProvider,
@@ -103,6 +105,8 @@ const VIEWS = [
   // Always listed too (spec 2948b2a2 BR6: pending items stay decidable with
   // feature_hitl OFF); only the BADGE is gated — by the data, never the flag.
   { name: "Approvals", icon: CheckSquare },
+  { name: "Runtimes", icon: Bot },
+  { name: "Execution log", icon: Activity },
   { name: "Settings", icon: Settings },
 ] as const;
 type View = (typeof VIEWS)[number]["name"];
@@ -390,10 +394,14 @@ function Dashboard({
   // derived from /sessions): every KNOWN workspace shows up, including ones
   // with no live session yet (TR8).
   useEffect(() => {
-    api
-      .workspaces()
-      .then(({ workspaces }) => setWorkspaces(workspaces))
-      .catch(() => undefined);
+    let active = true;
+    const reload = () => {
+      api.workspaces().then(({workspaces}) => {if (active) setWorkspaces(workspaces);})
+        .catch(() => undefined);
+    };
+    reload();
+    window.addEventListener("nexus-workspaces-changed", reload);
+    return () => {active = false; window.removeEventListener("nexus-workspaces-changed", reload);};
   }, [refreshTick]);
 
   // Default scope = the serve's --project-root workspace (AC1) - applied
@@ -686,6 +694,8 @@ function Dashboard({
             <AgentsView onChanged={loadGraph} workspace={workspace} />
           )}
           {view === "Registry" && <RegistryView />}
+          {view === "Runtimes" && <RuntimesView onApprovals={() => setView("Approvals")} />}
+          {view === "Execution log" && <ExecutionLogView workspace={workspace} />}
           {view === "Policies" && <PoliciesView workspace={workspace} />}
           {view === "Guardrails" && <GuardrailsView workspace={workspace} />}
           {view === "Communication" && <CommunicationView />}

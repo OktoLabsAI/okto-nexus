@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-01",
+  "base_commit": "d3e136f",
+  "status": "PARTIAL_NS06_05_CONSUMPTION_VERIFIED",
+  "installed_unique_passed": 7,
+  "architecture_passed": 3,
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-core-3msf4qiz\\dist\\nexus_connector_core-0.2.51.dev0-py3-none-any.whl",
+      "sha256": "4c4c0c58d25b93f4f08ba8515d8476ffc29d1f0a27cc577c9fccb610716d1d1c"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-connector-pmt6y5x7\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "baf837251f654ab6385f5fba4e22d1a1b69da1839e8f47752795d1518dd29fe7"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-event-views-iflakvk1\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "a2f500f535430721f54998b9cac1b60cfaea278cdd4474574d5ba5da1290f655"
+    }
+  },
+  "results": {
+    "r4": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "7",
+      "time": "30.087",
+      "timestamp": "2026-10-01T19:24:15.015432-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "architecture": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "3",
+      "time": "0.461",
+      "timestamp": "2026-10-01T19:24:46.437419-03:00",
+      "hostname": "Alienware_m15"
+    }
+  },
+  "verification": "Existing installed wheel bytes match checkout; isolated Python outside checkout. No product code change.",
+  "scope": "MCP pull exclusion for embedded and automatic remote domain delivery; sequential and concurrent pull/managed handoff claims preserve one winner and grant budget.",
+  "limitations": [
+    "Combined local/remote endpoint competition on one delivery, final normative TR4-06-05 acceptance and release gates remain open.",
+    "Remote policy/revision setup and native peers are fixture-local; no public reconfiguration or provider qualification."
+  ]
+}

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="24" time="200.098" timestamp="2026-10-02T10:41:40.717254-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_operator_runtime" name="test_operator_complete_cycle_preserves_actor_and_subject" time="6.424" /><testcase classname="tests.execution_r4.test_operator_runtime" name="test_nonoperator_cannot_represent_another_agent" time="2.048" /><testcase classname="tests.execution_r4.test_operator_runtime" name="test_operator_authority_change_after_resolve_refuses_admission" time="1.931" /><testcase classname="tests.execution_r4.test_operator_runtime" name="test_operator_reuses_subject_opening_and_reads_its_receipt" time="2.697" /><testcase classname="tests.execution_r4.test_operator_runtime" name="test_operator_start_prompt_retains_provenance_for_both_operations" time="3.290" /><testcase classname="tests.execution_r4.test_operator_runtime" name="test_operator_change_or_subject_grant_revocation_refuses_dispatch[UPDATE agents SET permissions='{}' WHERE agent_id='operator']" time="1.983" /><testcase classname="tests.execution_r4.test_operator_runtime" name="test_operator_change_or_subject_grant_revocation_refuses_dispatch[UPDATE runtime_execution_grants SET revoked_at='2026-01-01T00:00:00Z']" time="1.989" /><testcase classname="tests.execution_r4.test_operator_runtime" name="test_operator_change_invalidates_lease_and_capability_authority" time="2.820" /><testcase classname="tests.execution_r4.test_operator_runtime" name="test_actor_namespace_and_schema_are_preserved" time="1.857" /><testcase classname="tests.execution_r4.test_operator_runtime" name="test_operator_start_projection_requires_subject_grant" time="1.653"><failure message="assert False">connected_local = ((Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4883/test_ope...agent_id': 'subject', ...}, &lt;test_embedded_dispatch.connect_local.&lt;locals&gt;.NativeFactory object at 0x000001699469F4D0&gt;)
+
+    def test_operator_start_projection_requires_subject_grant(connected_local):
+        setup, binding, native = connected_local
+        from urllib.parse import urlencode
+        url = '/v1/agents/subject/runtime-options?' + urlencode({
+            'executor_id': binding['executor_id'], 'workspace_id': binding['workspace_id']})
+        def choice():
+            response = setup[2].get(url, headers=setup[3]['operator'])
+            assert response.status_code == 200, response.text
+            return next(item for item in response.json()['options'] if item['candidate_ref'] == binding['candidate_ref'])
+&gt;       assert choice()['can_start']
+E       assert False
+
+tests\execution_r4\test_operator_runtime.py:184: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_runtime_options" name="test_workspace_binding_and_grant_each_gate_a_different_action" time="12.855"><failure message="assert not True">options_host = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4883/test_work...ent_id_hint': 'subject', 'executor_id': 'exe_24e51139061908a30dcc1e70c234a624', 'adapter_id': 'codex_app_server', ...})
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000169967D0670&gt;
+
+    def test_workspace_binding_and_grant_each_gate_a_different_action(options_host, monkeypatch):
+        _, first = option(options_host, workspace=False)
+        assert first['technical_state'] == 'READY_FOR_RUNTIME'
+        assert first['can_prepare'] and not first['can_bind'] and not first['can_start']
+        assert 'WORKSPACE_REQUIRED' in first['policy_reasons']
+        _, pending = option(options_host, actor='operator')
+        assert pending['can_bind'] and not pending['can_start']
+        assert pending['preparation']['realization_ref'] == options_host[3]['realization_ref']
+        assert set(pending['preparation']) == {'realization_ref', 'realization_revision', 'workspace_binding_id'}
+        assert pending['binding'] is None
+        _, subject = option(options_host)
+        assert not subject['can_bind'] and 'OPERATOR_APPROVAL_REQUIRED' in subject['policy_reasons']
+        assert subject['preparation'] is None
+        binding = bind(options_host)
+        _, unauthorized = option(options_host)
+        assert not unauthorized['can_start'] and 'AUTHORIZATION_REQUIRED' in unauthorized['policy_reasons']
+        assert unauthorized['binding']['binding_id'] == binding['binding_id']
+        assert unauthorized['binding']['state'] == 'APPROVED'
+        assert unauthorized['preparation'] is None
+        grant(options_host, binding)
+        # A Server read must use the published executor assessment, not probe or
+        # reassess a provider under the Server's own platform/containment state.
+        monkeypatch.setattr(availability, 'evaluate_runtime_availability', lambda *a, **k: pytest.fail('Server reassessed provider'))
+        monkeypatch.setattr(availability, 'containment_preflight', lambda **k: pytest.fail('Server checked native containment'))
+        _, authorized = option(options_host)
+        assert authorized['can_start'], authorized
+        _, operator = option(options_host, actor='operator')
+&gt;       assert not operator['can_start']
+E       assert not True
+
+tests\execution_r4\test_runtime_options.py:96: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_runtime_options" name="test_unqualified_inventory_can_be_prepared_but_never_started[unqualified]" time="12.007" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_current_policy_or_evidence_changes_disable_start[offline-EXECUTOR_OFFLINE]" time="10.905" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_current_policy_or_evidence_changes_disable_start[stale-INVENTORY_STALE]" time="12.170" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_current_policy_or_evidence_changes_disable_start[feature-FEATURE_DISABLED]" time="11.736" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_current_policy_or_evidence_changes_disable_start[method-METHOD_DISABLED]" time="12.012" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_current_policy_or_evidence_changes_disable_start[endpoint-BINDING_DISABLED]" time="13.111" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_current_policy_or_evidence_changes_disable_start[profile-BINDING_DISABLED]" time="11.804" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_current_policy_or_evidence_changes_disable_start[grant-AUTHORIZATION_REQUIRED]" time="11.356" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_current_policy_or_evidence_changes_disable_start[workspace-BINDING_REQUIRED]" time="12.100" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_options_reject_ambiguous_or_invalid_query[executor_id=one&amp;executor_id=two]" time="10.937" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_options_reject_ambiguous_or_invalid_query[executor_id=one&amp;workspace_id=x&amp;workspace_id=y]" time="11.044" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_options_reject_ambiguous_or_invalid_query[executor_id=one&amp;workspace_id=]" time="15.283" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_options_reject_ambiguous_or_invalid_query[executor_id=one&amp;unexpected=true]" time="14.783" /></testsuite></testsuites>

@@ -1,0 +1,31 @@
+{
+  "adapter": "pi_rpc",
+  "server_release_gate_override": true,
+  "native_qualification_override": false,
+  "synthetic_native_factory": false,
+  "public_connector_cli": true,
+  "protected_os_vault": true,
+  "topology": "Single Windows host; actual loopback HTTP/WSS; Server and daemon owners.",
+  "phase": "finished",
+  "vault_backend": "keyring:Windows WinVaultKeyring",
+  "candidate_ref": "nexus-install-v1:b64f7d489758234ac44fa9004bec00163e29efe01b8772ace8836ffc6001b3d5",
+  "open_stage": "SUBMITTED",
+  "scope": {
+    "agent_id": "subject",
+    "authorization_revision": 2,
+    "binding_id": "bind_07962635a362775b3b014e2d08d735e2",
+    "binding_revision": 1,
+    "configuration_revision": 2,
+    "credential_epoch": 1,
+    "executor_id": "exe_1bc777f552bb5127967e80646c90319f",
+    "server_id": "srv_cbb35605ebadf3c785dd49949c6a8c77",
+    "session_id": "ses_07dc525856dfb0d36337bb074d5d3054",
+    "session_owner_generation": 1,
+    "workspace_binding_id": "wxb_c3877a975ff194b69aa91721bddb5204",
+    "workspace_id": "wsr_c76063458cf5f6f9b5f87fcf16845b9d"
+  },
+  "lease_serial_before_turn": 2,
+  "failure_type": "TimeoutError",
+  "daemon_exit_code": 0,
+  "campaign_credentials_removed": true
+}

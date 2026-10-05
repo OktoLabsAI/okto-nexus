@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="27" time="34.595" timestamp="2026-09-30T05:00:06.422539-03:00" hostname="Alienware_m15"><testcase classname="" name="test_reader_correlates_reordered_leases_with_interleaved_operation" time="0.237" /><testcase classname="" name="test_cancelled_lease_waiter_preserves_installation_and_ack" time="0.035" /><testcase classname="" name="test_cancelled_close_waiter_does_not_abandon_install_producer" time="0.032" /><testcase classname="" name="test_control_capacity_is_independent_and_taken_reservation_survives_close[items]" time="0.016" /><testcase classname="" name="test_control_capacity_is_independent_and_taken_reservation_survives_close[bytes]" time="0.017" /><testcase classname="" name="test_late_attach_cannot_restore_old_lane_or_queued_authority" time="0.016" /><testcase classname="" name="test_invalid_or_absent_lease_reply_fences_connection[foreign]" time="0.022" /><testcase classname="" name="test_invalid_or_absent_lease_reply_fences_connection[timeout]" time="0.078" /><testcase classname="" name="test_r4_control_retries_journal_failure_without_false_report" time="0.018" /><testcase classname="" name="test_r4_control_rejects_cross_scoped_welcome" time="0.004" /><testcase classname="" name="test_r4_control_refuses_empty_report_for_pending_operation" time="0.013" /><testcase classname="" name="test_r4_control_applies_core_authority_before_ack_and_rejects_bad_reply" time="0.052" /><testcase classname="execution_r4.test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket" time="3.248"><failure message="okto_nexus.errors.OktoNexusError: CONFLICT: The receipt has no matching authorized dispatch.">+ Exception Group Traceback (most recent call last):
+  |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\_utils.py", line 107, in create_collapsing_task_group
+  |     async with anyio.create_task_group() as tg:
+  |                ~~~~~~~~~~~~~~~~~~~~~~~^^
+  |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\anyio\_backends\_asyncio.py", line 847, in __aexit__
+  |     raise BaseExceptionGroup(
+  |         "unhandled errors in a TaskGroup", self._exceptions
+  |     ) from None
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\_pytest\runner.py", line 361, in from_call
+    |     result: TResult | None = func()
+    |                              ~~~~^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\_pytest\runner.py", line 250, in &lt;lambda&gt;
+    |     lambda: runtest_hook(item=item, **kwds),
+    |             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+    |     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+    |            ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+    |     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+    |            ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\pluggy\_callers.py", line 167, in _multicall
+    |     raise exception
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\pluggy\_callers.py", line 139, in _multicall
+    |     teardown.throw(exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\_pytest\logging.py", line 865, in pytest_runtest_call
+    |     yield
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\pluggy\_callers.py", line 139, in _multicall
+    |     teardown.throw(exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\_pytest\capture.py", line 900, in pytest_runtest_call
+    |     return (yield)
+    |             ^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\pluggy\_callers.py", line 139, in _multicall
+    |     teardown.throw(exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\_pytest\skipping.py", line 268, in pytest_runtest_call
+    |     return (yield)
+    |             ^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+    |     res = hook_impl.function(*args)
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\_pytest\runner.py", line 184, in pytest_runtest_call
+    |     item.runtest()
+    |     ~~~~~~~~~~~~^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\_pytest\python.py", line 1707, in runtest
+    |     self.ihook.pytest_pyfunc_call(pyfuncitem=self)
+    |     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+    |     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+    |            ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+    |     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+    |            ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\pluggy\_callers.py", line 167, in _multicall
+    |     raise exception
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\pluggy\_callers.py", line 139, in _multicall
+    |     teardown.throw(exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\pluggy\_callers.py", line 53, in run_old_style_hookwrapper
+    |     return result.get_result()
+    |            ~~~~~~~~~~~~~~~~~^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\pluggy\_result.py", line 103, in get_result
+    |     raise exc.with_traceback(tb)
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\pluggy\_callers.py", line 38, in run_old_style_hookwrapper
+    |     res = yield
+    |           ^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+    |     res = hook_impl.function(*args)
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\_pytest\python.py", line 167, in pytest_pyfunc_call
+    |     result = testfunction(**testargs)
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py", line 160, in test_owned_connector_reader_dispatches_five_actions_over_real_websocket
+    |     asyncio.run(run())
+    |     ~~~~~~~~~~~^^^^^^^
+    |   File "C:\Python313\Lib\asyncio\runners.py", line 194, in run
+    |     return runner.run(main)
+    |            ~~~~~~~~~~^^^^^^
+    |   File "C:\Python313\Lib\asyncio\runners.py", line 118, in run
+    |     return self._loop.run_until_complete(task)
+    |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+    |   File "C:\Python313\Lib\asyncio\base_events.py", line 720, in run_until_complete
+    |     return future.result()
+    |            ~~~~~~~~~~~~~^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py", line 121, in run
+    |     await http.publish_core_open_receipt(ticket, submit_frame=frame, core_receipt=opened,
+    |         context=ctx, prepared=prepared, stream_epoch='mux-epoch', receipt_revision=1)
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\okto_nexus_connector\transport\https_client.py", line 779, in publish_core_open_receipt
+    |     return await self.publish_operation_receipt(ticket, frame=frame)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\okto_nexus_connector\transport\https_client.py", line 742, in publish_operation_receipt
+    |     payload = await self._request(
+    |               ^^^^^^^^^^^^^^^^^^^^
+    |     ...&lt;2 lines&gt;...
+    |     )
+    |     ^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\okto_nexus_connector\transport\https_client.py", line 303, in _request
+    |     response = await self._client.request(
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |         method, f"{self.base_url}{path}", headers=headers,
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |         json=json_body)
+    |         ^^^^^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\httpx\_client.py", line 1540, in request
+    |     return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\httpx\_client.py", line 1629, in send
+    |     response = await self._send_handling_auth(
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ...&lt;4 lines&gt;...
+    |     )
+    |     ^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\httpx\_client.py", line 1657, in _send_handling_auth
+    |     response = await self._send_handling_redirects(
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ...&lt;3 lines&gt;...
+    |     )
+    |     ^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\httpx\_client.py", line 1694, in _send_handling_redirects
+    |     response = await self._send_single_request(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\httpx\_client.py", line 1730, in _send_single_request
+    |     response = await transport.handle_async_request(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\httpx\_transports\asgi.py", line 170, in handle_async_request
+    |     await self.app(scope, receive, send)
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\fastapi\applications.py", line 1215, in __call__
+    |     await super().__call__(scope, receive, send)
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\applications.py", line 96, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\middleware\errors.py", line 186, in __call__
+    |     raise exc
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    |     await self.app(scope, receive, _send)
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\fastapi\telemetry\_asgi.py", line 151, in __call__
+    |     await self.app(scope, receive, send)
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\middleware\base.py", line 197, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\okto_nexus\adapters\inbound\http\app.py", line 312, in dispatch
+    |     response = await call_next(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\middleware\base.py", line 173, in call_next
+    |     raise app_exc from app_exc.__cause__ or app_exc.__context__
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\middleware\base.py", line 149, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\middleware\base.py", line 197, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\okto_nexus\adapters\inbound\http\app.py", line 222, in dispatch
+    |     return await call_next(request)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\middleware\base.py", line 173, in call_next
+    |     raise app_exc from app_exc.__cause__ or app_exc.__context__
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\middleware\base.py", line 149, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\middleware\base.py", line 197, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\okto_nexus\adapters\inbound\http\app.py", line 327, in dispatch
+    |     return await call_next(request)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\middleware\base.py", line 173, in call_next
+    |     raise app_exc from app_exc.__cause__ or app_exc.__context__
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\middleware\base.py", line 149, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    |     raise exc
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    |     await self.app(scope, receive, send)
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\routing.py", line 676, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\fastapi\routing.py", line 2786, in app
+    |     await route.handle(scope, receive, send)
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\fastapi\routing.py", line 1817, in handle
+    |     await self.original_router.handle(scope, receive, send)
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\fastapi\routing.py", line 2869, in handle
+    |     await included_router._handle_selected(scope, receive, send)
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\fastapi\routing.py", line 1843, in _handle_selected
+    |     await original_route.handle(scope, receive, send)
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\fastapi\routing.py", line 1308, in handle
+    |     await effective_context.app(scope, receive, send)
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\fastapi\routing.py", line 165, in app
+    |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    |     raise exc
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\fastapi\routing.py", line 151, in app
+    |     response = await f(request)
+    |                ^^^^^^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\fastapi\routing.py", line 727, in app
+    |     raw_response = await run_endpoint_function(
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ...&lt;3 lines&gt;...
+    |     )
+    |     ^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\fastapi\routing.py", line 360, in run_endpoint_function
+    |     return await dependant.call(**values)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\okto_nexus\adapters\inbound\http\runtime_v1.py", line 286, in publish_operation_receipt
+    |     accepted = await anyio.to_thread.run_sync(_publish)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    |     return await get_async_backend().run_sync_in_worker_thread(
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |         func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     )
+    |     ^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\anyio\_backends\_asyncio.py", line 2706, in run_sync_in_worker_thread
+    |     return await future
+    |            ^^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\anyio\_backends\_asyncio.py", line 1100, in run
+    |     result = context.run(func, *args)
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\okto_nexus\adapters\inbound\http\runtime_v1.py", line 283, in _publish
+    |     return append_execution_receipt(
+    |         factory, principal=principal, frame=frame)
+    |   File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\okto_nexus\adapters\outbound\sqlite\execution_receipts.py", line 216, in append_execution_receipt
+    |     raise OktoNexusError(ErrorCode.CONFLICT,
+    |                          "The receipt has no matching authorized dispatch.", {})
+    | okto_nexus.errors.OktoNexusError: CONFLICT: The receipt has no matching authorized dispatch.
+    +------------------------------------
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py", line 160, in test_owned_connector_reader_dispatches_five_actions_over_real_websocket
+    asyncio.run(run())
+    ~~~~~~~~~~~^^^^^^^
+  File "C:\Python313\Lib\asyncio\runners.py", line 194, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Python313\Lib\asyncio\base_events.py", line 720, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py", line 121, in run
+    await http.publish_core_open_receipt(ticket, submit_frame=frame, core_receipt=opened,
+        context=ctx, prepared=prepared, stream_epoch='mux-epoch', receipt_revision=1)
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\okto_nexus_connector\transport\https_client.py", line 779, in publish_core_open_receipt
+    return await self.publish_operation_receipt(ticket, frame=frame)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\okto_nexus_connector\transport\https_client.py", line 742, in publish_operation_receipt
+    payload = await self._request(
+              ^^^^^^^^^^^^^^^^^^^^
+    ...&lt;2 lines&gt;...
+    )
+    ^
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\okto_nexus_connector\transport\https_client.py", line 303, in _request
+    response = await self._client.request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        method, f"{self.base_url}{path}", headers=headers,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        json=json_body)
+        ^^^^^^^^^^^^^^^
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\httpx\_client.py", line 1540, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\httpx\_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...&lt;4 lines&gt;...
+    )
+    ^
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\httpx\_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...&lt;3 lines&gt;...
+    )
+    ^
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\httpx\_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\httpx\_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\httpx\_transports\asgi.py", line 170, in handle_async_request
+    await self.app(scope, receive, send)
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\fastapi\applications.py", line 1215, in __call__
+    await super().__call__(scope, receive, send)
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\applications.py", line 96, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\middleware\errors.py", line 186, in __call__
+    raise exc
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\fastapi\telemetry\_asgi.py", line 151, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\middleware\base.py", line 197, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\okto_nexus\adapters\inbound\http\app.py", line 312, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\middleware\base.py", line 173, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\middleware\base.py", line 149, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\middleware\base.py", line 197, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\okto_nexus\adapters\inbound\http\app.py", line 222, in dispatch
+    return await call_next(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\middleware\base.py", line 173, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\middleware\base.py", line 149, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\middleware\base.py", line 197, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\okto_nexus\adapters\inbound\http\app.py", line 327, in dispatch
+    return await call_next(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\middleware\base.py", line 173, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\middleware\base.py", line 149, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\routing.py", line 676, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\fastapi\routing.py", line 2786, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\fastapi\routing.py", line 1817, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\fastapi\routing.py", line 2869, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\fastapi\routing.py", line 1843, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\fastapi\routing.py", line 1308, in handle
+    await effective_context.app(scope, receive, send)
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\fastapi\routing.py", line 165, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\fastapi\routing.py", line 151, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\fastapi\routing.py", line 727, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...&lt;3 lines&gt;...
+    )
+    ^
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\fastapi\routing.py", line 360, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\okto_nexus\adapters\inbound\http\runtime_v1.py", line 286, in publish_operation_receipt
+    accepted = await anyio.to_thread.run_sync(_publish)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\anyio\_backends\_asyncio.py", line 2706, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\anyio\_backends\_asyncio.py", line 1100, in run
+    result = context.run(func, *args)
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\okto_nexus\adapters\inbound\http\runtime_v1.py", line 283, in _publish
+    return append_execution_receipt(
+        factory, principal=principal, frame=frame)
+  File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-connection-installed-msk801qw\Lib\site-packages\okto_nexus\adapters\outbound\sqlite\execution_receipts.py", line 216, in append_execution_receipt
+    raise OktoNexusError(ErrorCode.CONFLICT,
+                         "The receipt has no matching authorized dispatch.", {})
+okto_nexus.errors.OktoNexusError: CONFLICT: The receipt has no matching authorized dispatch.
+
+The above exception was the direct cause of the following exception:
+E   okto_nexus.errors.OktoNexusError: CONFLICT: The receipt has no matching authorized dispatch.</failure></testcase><testcase classname="execution_r4.test_public_open_bootstrap" name="test_public_binding_grant_admission_bootstrap_core_and_receipts[False]" time="3.624" /><testcase classname="execution_r4.test_public_open_bootstrap" name="test_public_binding_grant_admission_bootstrap_core_and_receipts[True]" time="2.867" /><testcase classname="execution_r4.test_ns09" name="test_ns09_02_server_grant_core_application_and_replay" time="2.625" /><testcase classname="execution_r4.test_ns09" name="test_ns09_02_transaction_rollback_scope_and_late_ack" time="1.844" /><testcase classname="execution_r4.test_ns09" name="test_server_lease_serial_race_and_superseded_socket_cannot_ack" time="1.882" /><testcase classname="execution_r4.test_ns09" name="test_canonical_authority_changes_refuse_initial_lease[permission]" time="1.787" /><testcase classname="execution_r4.test_ns09" name="test_canonical_authority_changes_refuse_initial_lease[method]" time="1.932" /><testcase classname="execution_r4.test_ns09" name="test_canonical_authority_changes_refuse_initial_lease[credential]" time="1.820" /><testcase classname="execution_r4.test_ns09" name="test_canonical_authority_changes_refuse_initial_lease[grant]" time="2.024" /><testcase classname="execution_r4.test_ns09" name="test_canonical_authority_changes_refuse_initial_lease[ticket]" time="1.842" /><testcase classname="execution_r4.test_ns09" name="test_canonical_authority_changes_refuse_initial_lease[scope]" time="1.790" /><testcase classname="execution_r4.test_ns09" name="test_revoked_lease_projection_survives_lane_and_owner_fencing[True]" time="1.917" /><testcase classname="execution_r4.test_ns09" name="test_revoked_lease_projection_survives_lane_and_owner_fencing[False]" time="1.928" /><testcase classname="execution_r4.test_ns09" name="test_unapplied_lease_requires_reconciliation_before_reconnect" time="1.929" /></testsuite></testsuites>

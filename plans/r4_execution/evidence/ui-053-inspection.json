@@ -1,0 +1,19 @@
+{
+  "status": "INCOMPLETE_WITH_CONFIRMED_GAPS",
+  "date": "2026-10-02",
+  "nexus_wheel_sha256": "f14427d85b9ede4901d6675ed030488c2007b9a3be3cdeebe295ac7e6544a4cf",
+  "environment": "Windows, installed Nexus serve-lite, isolated temporary home/workspace, loopback port 8286, harness integrations and HITL enabled",
+  "observation_method": "Chrome via CUA accessibility tree; actual packaged dashboard",
+  "journey": ["Open dashboard", "Close onboarding", "Open Runtimes", "Open Agents", "Open operator Connections"],
+  "observations": [
+    {"surface": "Runtimes", "observed": "Empty agent connections and transport operations render successfully."},
+    {"surface": "Agent Connections", "observed": "Panel still offers legacy endpoint/profile setup and legacy connection-key command generation; no executor/install/workspace R4 selection is exposed here."},
+    {"surface": "Agent Connections", "observed": "Method list duplicates provider entries: friendly legacy labels plus raw codex_app_server, pi_rpc, claude_stream and claude_attach IDs."},
+    {"surface": "Agent Connections", "observed": "Text states managed runtimes run on the Nexus server and the command does not bridge a harness on another machine. This legacy flow does not provide the required R4 remote journey."},
+    {"surface": "Graph help", "observed": "Application-authored text still includes 'handoff aberto' and 'aguarda claim', contradicting complete US English acceptance."}
+  ],
+  "source_confirmation": ["frontend/src/components/AgentConnectionsPanel.tsx", "frontend/src/api.ts"],
+  "requirements_not_met": ["M10", "NS13 UI journey", "TLANG-02", "M13 packaged UI acceptance"],
+  "next_work": "Implement and test the canonical R4 UI flow against existing admission/binding APIs, replace legacy controls after demonstrated parity, rebuild and attest packaged assets, then execute actual browser lifecycle and failure journeys.",
+  "limits": "Read-only inspection only. No runtime was opened, no key or grant was issued, no provider/UI lifecycle or independent-host acceptance is claimed. No gate is closed."
+}

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="1.296" timestamp="2026-10-02T03:40:13.382666-03:00" hostname="Alienware_m15"><testcase classname="tests.test_presence_trust" name="test_strict_inbox_pull_ack_extend_require_credentials" time="0.729"><failure message="AssertionError: {'ok': False, 'error': {'code': 'INTERNAL_ERROR', 'message': 'An unexpected internal error occurred.', 'details': {'exception': 'AttributeError'}}}&#10;assert (False is True)">migrated_factory = &lt;okto_nexus.adapters.outbound.sqlite.connection.ConnectionFactory object at 0x0000019978C4D2B0&gt;
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4768/test_strict_inbox_pull_ack_ext0')
+fake_clock = &lt;conftest.FakeClock object at 0x0000019978C4D400&gt;
+
+    def test_strict_inbox_pull_ack_extend_require_credentials(
+        migrated_factory, tmp_path, fake_clock
+    ):
+        config = _strict_config(tmp_path)
+        identity = make_identity(migrated_factory, config, fake_clock)
+        proj = mkproj(tmp_path)
+        ws = seed(identity, proj, "sender", "validator")
+        sender = identity.session_open(agent_id="sender", workspace_id=ws)
+        validator = identity.session_open(agent_id="validator", workspace_id=ws)
+    
+        msg_svc = make_messages(migrated_factory, config, fake_clock)
+        msg = msg_svc.create_message(
+            project_root=proj,
+            from_agent_id="sender",
+            subject="please validate",
+            body="gate",
+            target={"strategy": "direct", "agent_id": "validator"},
+            from_session_id=sender["session_id"],
+            session_secret=sender["session_secret"],
+        )
+    
+        server = FakeServer()
+        register_inbox(server, _tool_deps(migrated_factory, config, fake_clock))
+    
+        # An unauthenticated actor cannot suppress the validator's unread (the M10
+        # attack): pull/ack/extend all refuse without credentials.
+        for tool, kwargs in (
+            ("inbox_pull", {}),
+            ("inbox_ack", {"message_ids": [msg["message_id"]]}),
+            ("inbox_extend", {"message_ids": [msg["message_id"]], "extend_seconds": 60}),
+        ):
+            res = server.tools[tool](agent_id="validator", **kwargs)
+            assert res["ok"] is False, tool
+            assert res["error"]["code"] == "VALIDATION_ERROR", tool
+            assert "session_open" in res["error"]["message"], tool
+        # The unread is intact - nothing was leased or acknowledged.
+        assert server.tools["inbox_count"](agent_id="validator")["data"]["unread"] == 1
+    
+        # The validator itself, with its own credentials, completes the flow.
+        creds = dict(
+            session_id=validator["session_id"],
+            session_secret=validator["session_secret"],
+        )
+        pulled = server.tools["inbox_pull"](agent_id="validator", **creds)
+        assert pulled["ok"] is True
+        assert [m["body"] for m in pulled["data"]["messages"]] == ["gate"]
+        extended = server.tools["inbox_extend"](
+            agent_id="validator",
+            message_ids=[msg["message_id"]],
+            extend_seconds=120,
+            **creds,
+        )
+        assert extended["ok"] is True
+        acked = server.tools["inbox_ack"](
+            agent_id="validator", message_ids=[msg["message_id"]], **creds
+        )
+&gt;       assert acked["ok"] is True and acked["data"]["acknowledged"] == 1, acked
+E       AssertionError: {'ok': False, 'error': {'code': 'INTERNAL_ERROR', 'message': 'An unexpected internal error occurred.', 'details': {'exception': 'AttributeError'}}}
+E       assert (False is True)
+
+tests\test_presence_trust.py:779: AssertionError</failure></testcase></testsuite></testsuites>

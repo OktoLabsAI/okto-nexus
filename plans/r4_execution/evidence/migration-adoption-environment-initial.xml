@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="5" failures="0" skipped="0" tests="5" time="3.280" timestamp="2026-10-01T13:55:06.105160-03:00" hostname="Alienware_m15"><testcase classname="test_binding_migration" name="test_reviewed_adoption_preserves_endpoint_and_disabled_policy" time="0.346"><error message="failed on setup with &quot;ImportError: cannot import name 'decode_r4_frame' from 'nexus_connector_core' (C:\Users\jpamb\AppData\Roaming\Python\Python313\site-packages\nexus_connector_core\__init__.py)&quot;">tests\execution_r4\test_binding_migration.py:36: in adopted_setup
+    yield from local.local_setup.__wrapped__(tmp_path,monkeypatch,request)
+tests\execution_r4\test_local_realization.py:29: in local_setup
+    deps, app = app_for(tmp_path / "home")
+tests\execution_r4\test_binding_migration.py:15: in seeded
+    deps, app = original(home)
+tests\execution_r4\test_embedded_inventory.py:18: in app_for
+    deps = bootstrap({}, ["--home", str(home), "--feature-harness-integrations", "true"])
+src\okto_nexus\bootstrap\dependencies.py:251: in bootstrap
+    from ..application.execution_native_decisions import ExecutionNativeDecisions
+src\okto_nexus\application\execution_native_decisions.py:9: in &lt;module&gt;
+    from nexus_connector_core import CoreError, decode_r4_frame, reduce_r4_approval_request, r4_operational_request_hash
+E   ImportError: cannot import name 'decode_r4_frame' from 'nexus_connector_core' (C:\Users\jpamb\AppData\Roaming\Python\Python313\site-packages\nexus_connector_core\__init__.py)</error></testcase><testcase classname="test_binding_migration" name="test_adoption_revalidates_source_and_legacy_session_after_review[endpoint]" time="0.362"><error message="failed on setup with &quot;ImportError: cannot import name 'decode_r4_frame' from 'nexus_connector_core' (C:\Users\jpamb\AppData\Roaming\Python\Python313\site-packages\nexus_connector_core\__init__.py)&quot;">tests\execution_r4\test_binding_migration.py:36: in adopted_setup
+    yield from local.local_setup.__wrapped__(tmp_path,monkeypatch,request)
+tests\execution_r4\test_local_realization.py:29: in local_setup
+    deps, app = app_for(tmp_path / "home")
+tests\execution_r4\test_binding_migration.py:15: in seeded
+    deps, app = original(home)
+tests\execution_r4\test_embedded_inventory.py:18: in app_for
+    deps = bootstrap({}, ["--home", str(home), "--feature-harness-integrations", "true"])
+src\okto_nexus\bootstrap\dependencies.py:251: in bootstrap
+    from ..application.execution_native_decisions import ExecutionNativeDecisions
+src\okto_nexus\application\execution_native_decisions.py:9: in &lt;module&gt;
+    from nexus_connector_core import CoreError, decode_r4_frame, reduce_r4_approval_request, r4_operational_request_hash
+E   ImportError: cannot import name 'decode_r4_frame' from 'nexus_connector_core' (C:\Users\jpamb\AppData\Roaming\Python\Python313\site-packages\nexus_connector_core\__init__.py)</error></testcase><testcase classname="test_binding_migration" name="test_adoption_revalidates_source_and_legacy_session_after_review[mapping]" time="0.348"><error message="failed on setup with &quot;ImportError: cannot import name 'decode_r4_frame' from 'nexus_connector_core' (C:\Users\jpamb\AppData\Roaming\Python\Python313\site-packages\nexus_connector_core\__init__.py)&quot;">tests\execution_r4\test_binding_migration.py:36: in adopted_setup
+    yield from local.local_setup.__wrapped__(tmp_path,monkeypatch,request)
+tests\execution_r4\test_local_realization.py:29: in local_setup
+    deps, app = app_for(tmp_path / "home")
+tests\execution_r4\test_binding_migration.py:15: in seeded
+    deps, app = original(home)
+tests\execution_r4\test_embedded_inventory.py:18: in app_for
+    deps = bootstrap({}, ["--home", str(home), "--feature-harness-integrations", "true"])
+src\okto_nexus\bootstrap\dependencies.py:251: in bootstrap
+    from ..application.execution_native_decisions import ExecutionNativeDecisions
+src\okto_nexus\application\execution_native_decisions.py:9: in &lt;module&gt;
+    from nexus_connector_core import CoreError, decode_r4_frame, reduce_r4_approval_request, r4_operational_request_hash
+E   ImportError: cannot import name 'decode_r4_frame' from 'nexus_connector_core' (C:\Users\jpamb\AppData\Roaming\Python\Python313\site-packages\nexus_connector_core\__init__.py)</error></testcase><testcase classname="test_binding_migration" name="test_adoption_revalidates_source_and_legacy_session_after_review[session]" time="0.371"><error message="failed on setup with &quot;ImportError: cannot import name 'decode_r4_frame' from 'nexus_connector_core' (C:\Users\jpamb\AppData\Roaming\Python\Python313\site-packages\nexus_connector_core\__init__.py)&quot;">tests\execution_r4\test_binding_migration.py:36: in adopted_setup
+    yield from local.local_setup.__wrapped__(tmp_path,monkeypatch,request)
+tests\execution_r4\test_local_realization.py:29: in local_setup
+    deps, app = app_for(tmp_path / "home")
+tests\execution_r4\test_binding_migration.py:15: in seeded
+    deps, app = original(home)
+tests\execution_r4\test_embedded_inventory.py:18: in app_for
+    deps = bootstrap({}, ["--home", str(home), "--feature-harness-integrations", "true"])
+src\okto_nexus\bootstrap\dependencies.py:251: in bootstrap
+    from ..application.execution_native_decisions import ExecutionNativeDecisions
+src\okto_nexus\application\execution_native_decisions.py:9: in &lt;module&gt;
+    from nexus_connector_core import CoreError, decode_r4_frame, reduce_r4_approval_request, r4_operational_request_hash
+E   ImportError: cannot import name 'decode_r4_frame' from 'nexus_connector_core' (C:\Users\jpamb\AppData\Roaming\Python\Python313\site-packages\nexus_connector_core\__init__.py)</error></testcase><testcase classname="test_binding_migration" name="test_agent_cannot_adopt_legacy_endpoint" time="0.338"><error message="failed on setup with &quot;ImportError: cannot import name 'decode_r4_frame' from 'nexus_connector_core' (C:\Users\jpamb\AppData\Roaming\Python\Python313\site-packages\nexus_connector_core\__init__.py)&quot;">tests\execution_r4\test_binding_migration.py:36: in adopted_setup
+    yield from local.local_setup.__wrapped__(tmp_path,monkeypatch,request)
+tests\execution_r4\test_local_realization.py:29: in local_setup
+    deps, app = app_for(tmp_path / "home")
+tests\execution_r4\test_binding_migration.py:15: in seeded
+    deps, app = original(home)
+tests\execution_r4\test_embedded_inventory.py:18: in app_for
+    deps = bootstrap({}, ["--home", str(home), "--feature-harness-integrations", "true"])
+src\okto_nexus\bootstrap\dependencies.py:251: in bootstrap
+    from ..application.execution_native_decisions import ExecutionNativeDecisions
+src\okto_nexus\application\execution_native_decisions.py:9: in &lt;module&gt;
+    from nexus_connector_core import CoreError, decode_r4_frame, reduce_r4_approval_request, r4_operational_request_hash
+E   ImportError: cannot import name 'decode_r4_frame' from 'nexus_connector_core' (C:\Users\jpamb\AppData\Roaming\Python\Python313\site-packages\nexus_connector_core\__init__.py)</error></testcase></testsuite></testsuites>

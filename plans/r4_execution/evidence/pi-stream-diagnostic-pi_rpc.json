@@ -1,0 +1,72 @@
+{
+  "adapter": "pi_rpc",
+  "server_release_gate_override": true,
+  "native_qualification_override": false,
+  "synthetic_native_factory": false,
+  "public_connector_cli": true,
+  "cli_subprocess": true,
+  "protected_os_vault": true,
+  "topology": "Single Windows host; actual loopback HTTP/WSS; Server and daemon owners.",
+  "stream_diagnostic": true,
+  "phase": "finished",
+  "vault_backend": "keyring:Windows WinVaultKeyring",
+  "candidate_ref": "nexus-install-v1:b64f7d489758234ac44fa9004bec00163e29efe01b8772ace8836ffc6001b3d5",
+  "selection_check_seconds": [
+    7.835556100006215,
+    7.942345799994655,
+    7.972236400004476,
+    9.377769500017166,
+    9.341736699920148,
+    13.375716999988072,
+    11.989888600073755,
+    12.780396100017242,
+    13.064321799902245,
+    12.84756829997059,
+    12.891060399939306,
+    11.873893199954182,
+    10.618397600017488
+  ],
+  "open_stage": "SUBMITTED",
+  "scope": {
+    "agent_id": "subject",
+    "authorization_revision": 2,
+    "binding_id": "bind_773bada06cfa9e86b9b6795dcacb4869",
+    "binding_revision": 1,
+    "configuration_revision": 2,
+    "credential_epoch": 1,
+    "executor_id": "exe_c6e8516bf0ebf8f1d9772ccc4ca0caf9",
+    "server_id": "srv_681c9e91fa42c983220fbe17e34d34cc",
+    "session_id": "ses_84fe7bd9f9fc5c40b9aea8a2e2d278be",
+    "session_owner_generation": 1,
+    "workspace_binding_id": "wxb_c041b40fa68c73f77efe98bf6b984dc7",
+    "workspace_id": "wsr_d2058031730b6f78c03bbdaf3105e420"
+  },
+  "lease_serial_before_turn": 2,
+  "native_bridge_calls": [
+    {
+      "seconds": 25.577190199983306,
+      "outcome": "returned"
+    },
+    {
+      "seconds": 25.979811499943025,
+      "outcome": "returned"
+    },
+    {
+      "seconds": 25.797537600039504,
+      "outcome": "CoreError:STALE_GENERATION"
+    },
+    {
+      "seconds": 22.562996099935845,
+      "outcome": "CoreError:RUNTIME_DRAINING"
+    }
+  ],
+  "turn_stage": "SUCCEEDED",
+  "explicit_operator_decisions": 0,
+  "handoff_status": "CLAIMED",
+  "native_action_count": 2,
+  "tool_claim_count": 1,
+  "wss_ticket_count": 4,
+  "failure_type": "AssertionError",
+  "daemon_exit_code": 0,
+  "campaign_credentials_removed": true
+}

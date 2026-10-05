@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-01",
+  "scope": "Real installed providers directly through the Nexus embedded owner, with the Connector application absent.",
+  "artifacts": "evidence/running-launch-artifacts.json",
+  "core_commit": "9c778719c3892d9742bb358b0020e39ed43df08d",
+  "nexus_product_commit": "68c6e0b",
+  "remote_evidence": "test_runs_20261001_running_launch.json",
+  "installation": "evidence/core44-embedded-installation.json",
+  "providers": {
+    "pi_rpc": {
+      "passed": true,
+      "seconds": 103.584,
+      "connector_absent": true,
+      "wss_tickets": 0,
+      "report": "evidence/core44-embedded-pi_rpc.json",
+      "installed_provenance": "evidence/core44-embedded-installed-pi_rpc.json"
+    },
+    "codex_app_server": {
+      "passed": true,
+      "seconds": 108.836,
+      "connector_absent": true,
+      "wss_tickets": 0,
+      "report": "evidence/core44-embedded-codex_app_server.json",
+      "installed_provenance": "evidence/core44-embedded-installed-codex_app_server.json"
+    },
+    "claude_stream": {
+      "passed": true,
+      "seconds": 89.927,
+      "connector_absent": true,
+      "wss_tickets": 0,
+      "report": "evidence/core44-embedded-claude_stream.json",
+      "installed_provenance": "evidence/core44-embedded-installed-claude_stream.json"
+    }
+  },
+  "runner_sha256": "c0182e17ad36b4cad87c0d602a7a75c31737d2168341bc6794e2fc9f5b0f604b",
+  "limits": [
+    "Single Windows host. Linux and independent-host acceptance remain pending.",
+    "Server release gate enabled only inside each test; native qualifications and factories unchanged.",
+    "MCP journeys use real loopback HTTP; the Pi application route uses TestClient and its real native socket.",
+    "No UI/browser, full US English, migration, fault-matrix or release-gate acceptance is claimed.",
+    "No milestone or release gate closes. Remaining fixed-plan work continues with session reuse, runtime observation and retention."
+  ]
+}

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="9.206" timestamp="2026-10-02T11:01:47.984987-03:00" hostname="Alienwarem15"><testcase classname="test_operator_remote" name="test_operator_remote_opening_keeps_subject_lane_and_grant" time="8.064"><failure message="starlette.websockets.WebSocketDisconnect">tmp_path = PosixPath('/tmp/pytest-of-jpbraga/pytest-43/test_operator_remote_opening_k0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7fb2644163f0&gt;
+
+    def test_operator_remote_opening_keeps_subject_lane_and_grant(tmp_path, monkeypatch):
+        deps, app, access, _, canonical, _, info, revisions, link, lane, server, executor = setup_authority(tmp_path, monkeypatch)
+        headers = {'Authorization': 'Bearer ' + app.state.test_agent_keys['operator']}
+        with TestClient(app, base_url='https://127.0.0.1:8202') as client:
+&gt;           with client.websocket_connect(f'/v1/runtime/executors/{executor}/link',
+                    headers={'Authorization': 'Bearer ' + link}, subprotocols=['nxl.v1']) as ws:
+
+test_operator_remote.py:12: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../nexus-load-diagnosis-2162908-py312/lib/python3.12/site-packages/starlette/testclient.py:123: in __enter__
+    self._raise_on_close(message)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;starlette.testclient.WebSocketTestSession object at 0x7fb2636c7500&gt;
+message = {'type': 'websocket.close', 'code': 4406, 'reason': ''}
+
+    def _raise_on_close(self, message: Message) -&gt; None:
+        if message["type"] == "websocket.close":
+&gt;           raise WebSocketDisconnect(code=message.get("code", 1000), reason=message.get("reason", ""))
+E           starlette.websockets.WebSocketDisconnect
+
+../nexus-load-diagnosis-2162908-py312/lib/python3.12/site-packages/starlette/testclient.py:150: WebSocketDisconnect</failure></testcase></testsuite></testsuites>

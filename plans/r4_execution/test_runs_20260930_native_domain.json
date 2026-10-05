@@ -1,0 +1,210 @@
+{
+  "captured_at": "2026-09-30T12:34:39.607343+00:00",
+  "status": "PARTIAL_INTEGRATION_VERIFIED",
+  "branch": "feature/v0.2.0",
+  "published_dependency_heads_and_nexus_parent": {
+    "nexus": "ddc7b0a470fb47a0f68f3e76588bad0e69d77448",
+    "connector": "1b16110c2da98edc3d9fed50cbbb8c3799a022bf",
+    "core": "cfcf121a69bb324ae34d06a267a37d130246d847"
+  },
+  "nexus_increment": "The commit containing this manifest and M09_CORE_NATIVE_BRIDGE.md.",
+  "shared_core": {
+    "version": "0.2.29.dev0",
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-core-wheel-oaqfuyo2\\nexus_connector_core-0.2.29.dev0-py3-none-any.whl",
+    "sha256": "a465c1ec1aaba9814872b21984a436bbf4cac5f28c2b4bed776f1a7042426cba"
+  },
+  "artifacts": "evidence/native-domain-artifacts.json",
+  "artifacts_before_state_fix": "evidence/native-domain-artifacts-before-state-fix.json",
+  "campaigns": [
+    {
+      "file": "plans\\r4_execution\\evidence\\native-domain-integration-initial.xml",
+      "sha256": "0bfb5950e3713113d323eb13a0d11a51d022f52ae25ee63fc7981d254ecb11a1",
+      "phase": "Development sources of all three repositories; 6 integrated cases.",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 6
+    },
+    {
+      "file": "plans\\r4_execution\\evidence\\native-domain-installed-core-initial.xml",
+      "sha256": "812671aa33b752cd015e246ba31eb1f127c9bd53eeb6d8809c80275dff744962",
+      "phase": "Installed before runner fix; legacy test namespace was missing.",
+      "tests": 109,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 108
+    },
+    {
+      "file": "plans\\r4_execution\\evidence\\native-domain-installed-core.xml",
+      "sha256": "22a809bad78126dc331543cf837d87ab69b1c7c49f8ad23973afeb05811c47c0",
+      "phase": "Final Core wheel: current authority, pending renewal, revocation and runtime regression.",
+      "tests": 109,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 109
+    },
+    {
+      "file": "plans\\r4_execution\\evidence\\native-domain-installed-connector.xml",
+      "sha256": "f2fd5621e69af5a7ab4145e235e216ead7d8e757fcbbc05e4d15821a53177562",
+      "phase": "Installed before state-store locking correction.",
+      "tests": 107,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 107
+    },
+    {
+      "file": "plans\\r4_execution\\evidence\\native-domain-installed-nexus.xml",
+      "sha256": "547b3c79ff810a7cf71c96424d31f4114d42616d6293ec3824b6c5a632281eb0",
+      "phase": "Broad R4 run before state-store correction: 193 passes and Windows state read PermissionError.",
+      "tests": 194,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 193
+    },
+    {
+      "file": "plans\\r4_execution\\evidence\\native-domain-startup-isolated.xml",
+      "sha256": "bca641230f2e403f14a93522a12e08adc67beacfedc5e698ded8bb2e443978cb",
+      "phase": "Isolated rerun before correction; passing did not dismiss the recorded concurrency failure.",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 2
+    },
+    {
+      "file": "plans\\r4_execution\\evidence\\native-domain-no-connector.xml",
+      "sha256": "b0a64307e6115e37aa50ad8fd37bea7081fbd12b6f07740442526c4f389cf99b",
+      "phase": "Embedded native cycle with all Connector imports refused; 3 remote cases deselected.",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 3
+    },
+    {
+      "file": "D:\\Projetos\\Techridy\\okto-nexus-connector\\plans\\implementation\\evidence\\native-domain-state-red.xml",
+      "sha256": "a32631a565564531a0b6e9694d0f10dd42a88b284b4be4bb5b46184d8fe6e518",
+      "phase": "Controlled reproduction of reader bypassing concurrent writer lock.",
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 0
+    },
+    {
+      "file": "D:\\Projetos\\Techridy\\okto-nexus-connector\\plans\\implementation\\evidence\\native-domain-state-final.xml",
+      "sha256": "5ccbe4109e2cd912ca508a4eb0a94bc7e594f59536626e8c80559e7c9914816a",
+      "phase": "Source state-store correction.",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 7
+    },
+    {
+      "file": "plans\\r4_execution\\evidence\\native-domain-installed-connector-final.xml",
+      "sha256": "0a6efab4198dcf58a4c332249e068cf4b54c230c2bdfa1c6458e3eb9c6f57658",
+      "phase": "Final Connector wheel, unit/contract and native transport regression.",
+      "tests": 263,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1,
+      "passed": 262
+    },
+    {
+      "file": "plans\\r4_execution\\evidence\\native-domain-installed-nexus-final.xml",
+      "sha256": "1b46bd3cb3b4de4a353c11f50482149f9ef98d7eb002e53337ab4fa2e84b625d",
+      "phase": "Final tuple: 6 native backend cases, 2 daemon startup cases, remote connection and CLI registration.",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 10
+    }
+  ],
+  "commands": [
+    "evidence/native-domain-installed-core.json",
+    "evidence/native-domain-installed-connector.json",
+    "evidence/native-domain-installed-nexus.json",
+    "evidence/native-domain-installed-connector-final.json",
+    "evidence/native-domain-installed-nexus-final.json"
+  ],
+  "embedded_without_connector_command": [
+    "rtk",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+    "-I",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\evidence\\native-domain-no-connector-probe.py"
+  ],
+  "source_sha256": {
+    "nexus": {
+      "src/okto_nexus/adapters/outbound/execution/core_native_actions.py": "fafcd4c5157a4cc75c3da9c8e9c4516969ec9d83b833fe86a8b4820b3f0d727b",
+      "src/okto_nexus/bootstrap/execution_authority.py": "292f8bf6ab351e50713f8cb4604b95bf3574bbc71495aa188624ffe86980e9c0",
+      "src/okto_nexus/adapters/inbound/http/native_actions_v1.py": "e480e3a3ee3ff96c019e371dad3956a609b9425d19f090a1acf1e9b89f38ad59",
+      "src/okto_nexus/adapters/outbound/execution/core_inventory.py": "7d90143a7a16fda5df617ef5704b72a56917ae458998b2c0010eb9e2be1d6e6d",
+      "tests/execution_r4/test_core_native_actions.py": "612982df4f38ad9c06b9daad52dd28aee13d6efb89da34623f315bf494f8d401",
+      "pyproject.toml": "c41a95f90f1014d59b041771d06d37dd8de3b30456b09a46efd1493b4c3d5163",
+      "uv.lock": "fb46dfb0cb7a381833552fac2ce393ecedb1eb1606a2c0b6c1d9ed634df8ecd6"
+    },
+    "connector": {
+      "src/okto_nexus_connector/transport/native_actions.py": "3a67ce3ba5f85a82d2faa568e86bca9c66f9a26abd0c679280bc523a4fdb7275",
+      "src/okto_nexus_connector/transport/https_client.py": "3eada268b708627e4551165fc856b4e3a7744d93908f24782a956b1259ff2752",
+      "src/okto_nexus_connector/storage/state_store.py": "d5d1384c77b1b801b09a4ad8fa69b5b4550d4519797d7c0734ee2d03be728974",
+      "tests/test_r4_native_actions.py": "878db1532d399b3618139172020109a0830a750623e5ec351607f37d3e36adc8",
+      "tests/unit/test_state_store.py": "d321055c74723fcbd9fb351f74469794f5063e9a71083cb26818dfdad15a6b11",
+      "pyproject.toml": "b7f7ae4041689473c39b790d101d690adfedc6b786a64dc119f795268faa3757"
+    },
+    "core": {
+      "src/nexus_connector_core/native_action_bridge.py": "061c8833a7345b2eca147b79f77a04c34691602fd844ff122996e08a07235eba",
+      "src/nexus_connector_core/lease_runtime_r4.py": "38594ee81c78c30dc1cd4cdb531fad26f9546360e72e46134dafbc6ca785d746",
+      "src/nexus_connector_core/ports.py": "0c46401bbba15f826b5ecfbefccafc8fdafe594a978371414c2ba15655b44b45",
+      "tests/test_r4_native_actions.py": "7a20b4037519ac8242e345214ac97258ac3e11595c92930c26273193bc3c0fa9",
+      "pyproject.toml": "bcc0eb1d5e1299b1c0fbde70275afb478d258549c0b54b55e4415c017b2072f9"
+    }
+  },
+  "verified_installed_files": {
+    "nexus": 333,
+    "connector": 58,
+    "core": 91
+  },
+  "fixes": [
+    "Separate native domain capability ceiling from R4 runtime lease verbs.",
+    "Revalidate current full installed scope before and after native backend invocation.",
+    "Share canonical handoff service between HTTP and embedded backends.",
+    "Preserve original action ID across response loss and replay.",
+    "Serialize StateStore readers and writers on Windows; preserve bounded state validation."
+  ],
+  "attempt_notes": [
+    "Initial Core source campaign: 34 passed, 1 failed because test used a zero close observation deadline; final source 109 passed.",
+    "An invocation referenced nonexistent tests/test_native_action_socket.py and ran no tests; corrected file selection is recorded.",
+    "An offline lock command without --find-links failed; uv lock --offline --find-links vendor/wheels succeeded.",
+    "The initial installed Core runner lacked the root for a legacy tests.regression import; final runner adds only repository root, with product imports still from site-packages.",
+    "The full R4 run exposed a real Windows concurrent read/replace failure. A passing isolated rerun was followed by a controlled red test, a product correction, a rebuilt Connector wheel and final affected campaigns.",
+    "Core source commit and wheel were published separately because the new artifact required explicit forced staging under the repository ignore rule."
+  ],
+  "skips": [
+    {
+      "test": "unit.test_core02_integration::test_shim_resolution_never_runs_outside_windows",
+      "reason": "covered above",
+      "campaign": "Final Connector unit/contract run on Windows."
+    }
+  ],
+  "limitations": [
+    "The 193-pass broad R4 campaign predates the Connector state-store fix; only affected integrations were repeated on the final tuple.",
+    "The six native integration cases use a technical harness peer and synthetic Server READY/qualification preconditions.",
+    "Automatic approved host configuration, Pi socket lifecycle and capability renewal remain pending.",
+    "The Nexus wheel includes three preexisting modified UI assets excluded from this commit; this is not clean release/UI acceptance.",
+    "No Linux, real-provider or independent-host A/B/C campaign was executed by this increment.",
+    "All remaining M00-M13 criteria and G0-G3 gates remain open."
+  ],
+  "readiness": {
+    "R4_BUNDLE_EXECUTABLE": false,
+    "SERVER_R4_EXECUTION_READY": false,
+    "gates_closed": []
+  }
+}

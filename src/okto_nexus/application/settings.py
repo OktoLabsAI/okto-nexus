@@ -45,6 +45,7 @@ class SettingSpec:
 #: stay CLI/env-only on purpose: repointing storage mid-flight cannot be
 #: applied safely to a running process.
 SETTING_SPECS: tuple[SettingSpec, ...] = (
+    SettingSpec("connection_key_ttl_seconds", "int", "New connection key lifetime in seconds; 86400 = 24 hours, 0 = unlimited. Agents may override this default. Existing keys keep their issued expiry.", minimum=0, maximum=315360000),
     SettingSpec(
         "session_stale_ttl_seconds",
         "int",
@@ -304,6 +305,16 @@ SETTING_SPECS: tuple[SettingSpec, ...] = (
         group="features",
     ),
     SettingSpec(
+        "feature_harness_integrations", "bool",
+        "Runtime connections, enabled by default. Admission is checked on every request; MCP publication requires restart.",
+        group="features", requires_restart=True,
+    ),
+    SettingSpec(
+        "feature_harness_attach", "bool",
+        "Private Claude attach protocol, enabled by default. Requires harness integrations and an approved endpoint.",
+        group="features",
+    ),
+    SettingSpec(
         "feature_replay",
         "bool",
         "Opt-in: replay/eval export of coordination history (NDJSON + "
@@ -317,6 +328,11 @@ _SPEC_BY_KEY: dict[str, SettingSpec] = {spec.key: spec for spec in SETTING_SPECS
 
 def _coerce(spec: SettingSpec, raw: Any) -> Any:
     """Validate ``raw`` against the spec; raise CONFIG_ERROR otherwise."""
+    if spec.key == "connection_key_ttl_seconds" and type(raw) is not int:
+        # Unlike an ordinary numeric tuning knob, truncating 0.5 or coercing
+        # false to zero would silently grant an unlimited credential lifetime.
+        raise OktoNexusError(ErrorCode.CONFIG_ERROR,
+            "Connection key lifetime must be integer seconds; use 0 explicitly for unlimited.", {})
     if spec.type == "bool":
         if isinstance(raw, bool):
             return raw
@@ -467,6 +483,8 @@ class SettingsService:
                 (key, json.dumps(value), now),
             )
             setattr(self._config, key, value)
+            if key == "feature_harness_integrations":
+                self._sync_runtime_writer_mode(uow, value)
         return validated
 
     def reset(self, uow: UnitOfWork, keys: list[str] | None = None) -> list[str]:
@@ -482,8 +500,20 @@ class SettingsService:
             uow.connection.execute("DELETE FROM settings WHERE key = ?", (key,))
             if key not in self._pinned:
                 setattr(self._config, key, getattr(defaults, key))
+                if key == "feature_harness_integrations":
+                    self._sync_runtime_writer_mode(uow, defaults.feature_harness_integrations)
             cleared.append(key)
         return cleared
+
+    def _sync_runtime_writer_mode(self, uow, enabled):
+        # Only the current owner can change the live admission mode. A cached
+        # client configuration cannot silently downgrade the store contract.
+        uow.connection.execute("UPDATE runtime_writer_contract SET admission_enabled=? "
+            "WHERE singleton=1 AND owner_id=nexus_runtime_owner_id() "
+            "AND owner_epoch=nexus_runtime_owner_epoch() AND EXISTS("
+            "SELECT 1 FROM runtime_dispatcher_owner o WHERE o.owner_id=runtime_writer_contract.owner_id "
+            "AND o.epoch=runtime_writer_contract.owner_epoch AND o.lease_expires_at>?)",
+            (int(enabled), self._clock.now_iso()))
 
 
 def detect_pinned_fields(resolved: NexusConfig) -> frozenset[str]:

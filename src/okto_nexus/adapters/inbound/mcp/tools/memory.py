@@ -60,8 +60,8 @@ _P_ROOT = (
 )
 _P_AGENT = "Your agent_id (the author). REQUIRED - every memory has an author; must be registered (agent_register)."
 _P_ACCESS_AGENT = (
-    "Your agent_id for memory permission evaluation in open stdio mode "
-    "(optional; authenticated HTTP MCP uses the API-key identity)."
+    "Optional agent_id assertion for memory permission evaluation; "
+    "authenticated HTTP MCP uses the API-key identity."
 )
 _P_TITLE = "Short human-readable title (1..200 chars). REQUIRED."
 _P_CONTENT = "The memory content (1..16384 UTF-8 BYTES). REQUIRED. Larger payloads: store an artifact (artifact_put) and keep content a short pointer."

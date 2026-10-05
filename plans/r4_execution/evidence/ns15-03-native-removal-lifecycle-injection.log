@@ -1,0 +1,36 @@
+......FsssFFF....                                                        [100%]
+================================== FAILURES ===================================
+__ test_active_turn_and_unprojected_journal_drain_before_serve_exits[clean] ___
+/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_signal_drain.py:84: in test_active_turn_and_unprojected_journal_drain_before_serve_exits
+    ???
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\runtime_serve_shutdown_fixture.py:122: in open
+    assert response.status_code == 200, response.text
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {"ok":false,"error":{"code":"CONFLICT","message":"Legacy native execution has moved to Core. Prepare and approve a canonical runtime binding before opening this endpoint.","details":{"migration_required":true}}}
+__________ test_clean_shutdown_after_explicit_close_leaves_no_orphan __________
+/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_serve_harness_shutdown_reap.py:32: in test_clean_shutdown_after_explicit_close_leaves_no_orphan
+    ???
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\runtime_serve_shutdown_fixture.py:122: in open
+    assert response.status_code == 200, response.text
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {"ok":false,"error":{"code":"CONFLICT","message":"Legacy native execution has moved to Core. Prepare and approve a canonical runtime binding before opening this endpoint.","details":{"migration_required":true}}}
+______ test_clean_shutdown_with_live_session_reaps_child_and_grandchild _______
+/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_serve_harness_shutdown_reap.py:45: in test_clean_shutdown_with_live_session_reaps_child_and_grandchild
+    ???
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\runtime_serve_shutdown_fixture.py:122: in open
+    assert response.status_code == 200, response.text
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {"ok":false,"error":{"code":"CONFLICT","message":"Legacy native execution has moved to Core. Prepare and approve a canonical runtime binding before opening this endpoint.","details":{"migration_required":true}}}
+________ test_sigkill_with_live_session_reaps_owned_tree_and_guardian _________
+/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_serve_harness_sigkill_reap.py:10: in test_sigkill_with_live_session_reaps_owned_tree_and_guardian
+    ???
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\runtime_serve_shutdown_fixture.py:122: in open
+    assert response.status_code == 200, response.text
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {"ok":false,"error":{"code":"CONFLICT","message":"Legacy native execution has moved to Core. Prepare and approve a canonical runtime binding before opening this endpoint.","details":{"migration_required":true}}}
+=========================== short test summary info ===========================
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_runtime_signal_drain.py::test_active_turn_and_unprojected_journal_drain_before_serve_exits[clean]
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_serve_harness_shutdown_reap.py::test_clean_shutdown_after_explicit_close_leaves_no_orphan
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_serve_harness_shutdown_reap.py::test_clean_shutdown_with_live_session_reaps_child_and_grandchild
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_serve_harness_sigkill_reap.py::test_sigkill_with_live_session_reaps_owned_tree_and_guardian
+4 failed, 10 passed, 3 skipped in 89.33s (0:01:29)

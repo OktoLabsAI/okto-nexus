@@ -158,7 +158,7 @@ function shortId(value: string): string {
 function formatTimestamp(value: string): string {
   const millis = Date.parse(value);
   if (!Number.isFinite(millis)) return value;
-  return new Intl.DateTimeFormat(undefined, {
+  return new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "2-digit",
     hour: "2-digit",
@@ -354,7 +354,7 @@ function StructuredValue({
 }): ReactNode {
   if (value === null || value === undefined) return <span className="text-surface-400">—</span>;
   if (typeof value === "boolean") return value ? "Yes" : "No";
-  if (typeof value === "number") return value.toLocaleString();
+  if (typeof value === "number") return value.toLocaleString("en-US");
   if (typeof value === "string") return <span className="whitespace-pre-wrap break-words">{value}</span>;
   if (Array.isArray(value)) {
     if (value.length === 0) return <span className="text-surface-400">None</span>;

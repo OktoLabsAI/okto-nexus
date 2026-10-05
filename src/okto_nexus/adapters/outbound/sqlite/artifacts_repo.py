@@ -56,7 +56,7 @@ class SqliteArtifactRepo:
     _COLUMNS = (
         "artifact_id, workspace_id, artifact_type, name, path, content, "
         "size_bytes, content_type, created_by, created_at, audience, "
-        "storage_path, storage_kind, filename, media_type"
+        "storage_path, storage_kind, filename, media_type, reader_agent_ids"
     )
 
     def __init__(self, clock: Optional[Clock] = None) -> None:
@@ -86,6 +86,7 @@ class SqliteArtifactRepo:
         storage_kind: str | None = None,
         filename: str | None = None,
         media_type: str | None = None,
+        reader_agent_ids: list[str] | None = None,
     ) -> Artifact:
         now = created_at or self._now()
         try:
@@ -94,8 +95,8 @@ class SqliteArtifactRepo:
                 INSERT INTO artifacts
                     (artifact_id, workspace_id, artifact_type, name, path,
                      content, size_bytes, content_type, created_by, created_at,
-                     audience, storage_path, storage_kind, filename, media_type)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                     audience, storage_path, storage_kind, filename, media_type, reader_agent_ids)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     artifact_id,
@@ -113,6 +114,7 @@ class SqliteArtifactRepo:
                     storage_kind,
                     filename,
                     media_type,
+                    _dumps(reader_agent_ids),
                 ),
             )
         except sqlite3.Error as exc:
@@ -299,4 +301,5 @@ class SqliteArtifactRepo:
             storage_kind=row["storage_kind"],
             filename=row["filename"],
             media_type=row["media_type"],
+            reader_agent_ids=None if row["reader_agent_ids"] is None else (_loads(row["reader_agent_ids"]) or []),
         )

@@ -1,0 +1,16 @@
+{
+  "adapter": "pi_rpc",
+  "server_release_gate_override": false,
+  "native_qualification_override": false,
+  "protected_os_vault": true,
+  "synthetic_native_factory": false,
+  "version": "0.87.1",
+  "open_stage": "SUBMITTED",
+  "lease_serial_before_turn": 2,
+  "turn_stage": "SUCCEEDED",
+  "handoff_status": "COMPLETED",
+  "native_action_count": 3,
+  "wss_ticket_count": 0,
+  "close_stage": "SUCCEEDED",
+  "secret_removed": true
+}

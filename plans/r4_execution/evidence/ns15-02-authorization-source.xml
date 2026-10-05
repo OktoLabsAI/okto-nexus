@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="25" time="103.018" timestamp="2026-10-01T14:57:27.330203-03:00" hostname="Alienware_m15"><testcase classname="tests.test_runtime_grants" name="test_p04_grant_allows_same_scoped_action_in_rest_and_mcp" time="6.814" /><testcase classname="tests.test_runtime_grants" name="test_p04_grant_open_requires_explicit_scoped_binding" time="3.395" /><testcase classname="tests.test_runtime_grants" name="test_p04_authority_is_revalidated_before_send[revoke]" time="3.270" /><testcase classname="tests.test_runtime_grants" name="test_p04_authority_is_revalidated_before_send[expire]" time="3.446" /><testcase classname="tests.test_runtime_grants" name="test_p04_authority_is_revalidated_before_send[permissions]" time="3.322" /><testcase classname="tests.test_runtime_grants" name="test_p04_authority_is_revalidated_before_send[scope]" time="3.393" /><testcase classname="tests.test_runtime_grants" name="test_p04_authority_is_revalidated_before_send[credential]" time="3.615" /><testcase classname="tests.test_runtime_grants" name="test_p04_authority_is_revalidated_before_send[profile]" time="3.352" /><testcase classname="tests.test_runtime_grants" name="test_p04_internal_missing_authentication_cannot_impersonate_operator" time="3.500" /><testcase classname="tests.test_runtime_grants" name="test_p04_native_options_and_payload_identity_are_rejected" time="4.087" /><testcase classname="tests.test_runtime_grants" name="test_p04_authenticated_stdio_reuses_grant_policy_and_durable_resource" time="4.396"><failure message="McpError('Connection closed') [single exception in ExceptionGroup]">+ Exception Group Traceback (most recent call last):
+  |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_grants.py", line 125, in test_p04_authenticated_stdio_reuses_grant_policy_and_durable_resource
+  |   File "C:\Python313\Lib\asyncio\runners.py", line 194, in run
+  |     return runner.run(main)
+  |            ~~~~~~~~~~^^^^^^
+  |   File "C:\Python313\Lib\asyncio\runners.py", line 118, in run
+  |     return self._loop.run_until_complete(task)
+  |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  |   File "C:\Python313\Lib\asyncio\base_events.py", line 720, in run_until_complete
+  |     return future.result()
+  |            ~~~~~~~~~~~~~^^
+  |   File "C:\Python313\Lib\asyncio\tasks.py", line 507, in wait_for
+  |     return await fut
+  |            ^^^^^^^^^
+  |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_grants.py", line 115, in query
+  |   File "C:\Python313\Lib\contextlib.py", line 235, in __aexit__
+  |     await self.gen.athrow(value)
+  |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 183, in stdio_client
+  |     anyio.create_task_group() as tg,
+  |     ~~~~~~~~~~~~~~~~~~~~~~~^^
+  |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 811, in __aexit__
+  |     raise BaseExceptionGroup(
+  |         "unhandled errors in a TaskGroup", self._exceptions
+  |     ) from None
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Exception Group Traceback (most recent call last):
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 189, in stdio_client
+    |     yield read_stream, write_stream
+    |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_grants.py", line 116, in query
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\mcp\shared\session.py", line 238, in __aexit__
+    |     return await self._task_group.__aexit__(exc_type, exc_val, exc_tb)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 811, in __aexit__
+    |     raise BaseExceptionGroup(
+    |         "unhandled errors in a TaskGroup", self._exceptions
+    |     ) from None
+    | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+    +-+---------------- 1 ----------------
+      | Traceback (most recent call last):
+      |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_grants.py", line 117, in query
+      |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\mcp\client\session.py", line 183, in initialize
+      |     result = await self.send_request(
+      |              ^^^^^^^^^^^^^^^^^^^^^^^^
+      |     ...&lt;16 lines&gt;...
+      |     )
+      |     ^
+      |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\mcp\shared\session.py", line 306, in send_request
+      |     raise McpError(response_or_error.error)
+      | mcp.shared.exceptions.McpError: Connection closed
+      +------------------------------------</failure></testcase><testcase classname="tests.test_runtime_grants" name="test_p04_concurrent_grant_budget_has_one_admitted_send" time="4.179" /><testcase classname="tests.test_runtime_grants" name="test_p04_wrong_endpoint_is_opaque_and_internal_control_is_authorized" time="3.715" /><testcase classname="tests.test_runtime_grants" name="test_p04_operator_cannot_send_using_a_replaced_profile" time="3.561" /><testcase classname="tests.test_runtime_monitor_authorization" name="test_valid_ept_can_monitor_but_cannot_reach_runtime_rest_or_mcp" time="3.369" /><testcase classname="tests.test_runtime_monitor_authorization" name="test_read_only_runtime_grant_has_identical_control_denials_and_audit" time="4.579" /><testcase classname="tests.test_runtime_monitor_authorization" name="test_anonymous_real_stdio_cannot_open_or_control_existing_runtime" time="4.135"><failure message="McpError('Connection closed') [single exception in ExceptionGroup]">+ Exception Group Traceback (most recent call last):
+  |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_monitor_authorization.py", line 102, in test_anonymous_real_stdio_cannot_open_or_control_existing_runtime
+  |   File "C:\Python313\Lib\asyncio\runners.py", line 194, in run
+  |     return runner.run(main)
+  |            ~~~~~~~~~~^^^^^^
+  |   File "C:\Python313\Lib\asyncio\runners.py", line 118, in run
+  |     return self._loop.run_until_complete(task)
+  |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  |   File "C:\Python313\Lib\asyncio\base_events.py", line 720, in run_until_complete
+  |     return future.result()
+  |            ~~~~~~~~~~~~~^^
+  |   File "C:\Python313\Lib\asyncio\tasks.py", line 507, in wait_for
+  |     return await fut
+  |            ^^^^^^^^^
+  |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_monitor_authorization.py", line 90, in query
+  |   File "C:\Python313\Lib\contextlib.py", line 235, in __aexit__
+  |     await self.gen.athrow(value)
+  |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 183, in stdio_client
+  |     anyio.create_task_group() as tg,
+  |     ~~~~~~~~~~~~~~~~~~~~~~~^^
+  |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 811, in __aexit__
+  |     raise BaseExceptionGroup(
+  |         "unhandled errors in a TaskGroup", self._exceptions
+  |     ) from None
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Exception Group Traceback (most recent call last):
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 189, in stdio_client
+    |     yield read_stream, write_stream
+    |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_monitor_authorization.py", line 91, in query
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\mcp\shared\session.py", line 238, in __aexit__
+    |     return await self._task_group.__aexit__(exc_type, exc_val, exc_tb)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 811, in __aexit__
+    |     raise BaseExceptionGroup(
+    |         "unhandled errors in a TaskGroup", self._exceptions
+    |     ) from None
+    | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+    +-+---------------- 1 ----------------
+      | Traceback (most recent call last):
+      |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_monitor_authorization.py", line 92, in query
+      |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\mcp\client\session.py", line 183, in initialize
+      |     result = await self.send_request(
+      |              ^^^^^^^^^^^^^^^^^^^^^^^^
+      |     ...&lt;16 lines&gt;...
+      |     )
+      |     ^
+      |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\mcp\shared\session.py", line 306, in send_request
+      |     raise McpError(response_or_error.error)
+      | mcp.shared.exceptions.McpError: Connection closed
+      +------------------------------------</failure></testcase><testcase classname="tests.test_runtime_operation_authorization" name="test_foreign_actor_cannot_reuse_command_key_or_inspect_persisted_result" time="6.066" /><testcase classname="tests.test_runtime_operation_authorization" name="test_revoked_actor_cannot_recover_cached_control_reply[send]" time="4.246" /><testcase classname="tests.test_runtime_operation_authorization" name="test_revoked_actor_cannot_recover_cached_control_reply[steer]" time="4.664" /><testcase classname="tests.test_runtime_operation_authorization" name="test_revoked_actor_cannot_recover_cached_control_reply[interrupt]" time="4.781" /><testcase classname="tests.test_runtime_operation_authorization" name="test_revoked_actor_cannot_recover_cached_control_reply[close]" time="4.267" /><testcase classname="tests.test_runtime_operation_authorization" name="test_shutdown_fence_rejects_turns_but_allows_authorized_close[rest]" time="4.185" /><testcase classname="tests.test_runtime_operation_authorization" name="test_shutdown_fence_rejects_turns_but_allows_authorized_close[mcp]" time="4.121" /><testcase classname="tests.test_runtime_disabled_acceptance" name="test_disabled_stdio_http_and_rest_do_not_start_implicit_runtime[False]" time="2.649"><failure message="McpError('Connection closed') [single exception in ExceptionGroup]">+ Exception Group Traceback (most recent call last):
+  |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_disabled_acceptance.py", line 39, in test_disabled_stdio_http_and_rest_do_not_start_implicit_runtime
+  |   File "C:\Python313\Lib\asyncio\runners.py", line 194, in run
+  |     return runner.run(main)
+  |            ~~~~~~~~~~^^^^^^
+  |   File "C:\Python313\Lib\asyncio\runners.py", line 118, in run
+  |     return self._loop.run_until_complete(task)
+  |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  |   File "C:\Python313\Lib\asyncio\base_events.py", line 720, in run_until_complete
+  |     return future.result()
+  |            ~~~~~~~~~~~~~^^
+  |   File "C:\Python313\Lib\asyncio\tasks.py", line 507, in wait_for
+  |     return await fut
+  |            ^^^^^^^^^
+  |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_disabled_acceptance.py", line 26, in query_stdio
+  |   File "C:\Python313\Lib\contextlib.py", line 235, in __aexit__
+  |     await self.gen.athrow(value)
+  |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 183, in stdio_client
+  |     anyio.create_task_group() as tg,
+  |     ~~~~~~~~~~~~~~~~~~~~~~~^^
+  |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 811, in __aexit__
+  |     raise BaseExceptionGroup(
+  |         "unhandled errors in a TaskGroup", self._exceptions
+  |     ) from None
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Exception Group Traceback (most recent call last):
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 189, in stdio_client
+    |     yield read_stream, write_stream
+    |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_disabled_acceptance.py", line 27, in query_stdio
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\mcp\shared\session.py", line 238, in __aexit__
+    |     return await self._task_group.__aexit__(exc_type, exc_val, exc_tb)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 811, in __aexit__
+    |     raise BaseExceptionGroup(
+    |         "unhandled errors in a TaskGroup", self._exceptions
+    |     ) from None
+    | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+    +-+---------------- 1 ----------------
+      | Traceback (most recent call last):
+      |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_disabled_acceptance.py", line 28, in query_stdio
+      |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\mcp\client\session.py", line 183, in initialize
+      |     result = await self.send_request(
+      |              ^^^^^^^^^^^^^^^^^^^^^^^^
+      |     ...&lt;16 lines&gt;...
+      |     )
+      |     ^
+      |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\mcp\shared\session.py", line 306, in send_request
+      |     raise McpError(response_or_error.error)
+      | mcp.shared.exceptions.McpError: Connection closed
+      +------------------------------------</failure></testcase></testsuite></testsuites>

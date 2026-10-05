@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-01",
+  "commits": {
+    "nexus": "12e2c412688e2689434126134623d384932ab85e",
+    "connector": "e67eb8770ffa168275290147f6df034e5decd6e6",
+    "core": "3823ae39e41da992526f25d5c875d0518857df50"
+  },
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-failure-core-zui7tpmj\\dist\\nexus_connector_core-0.2.45.dev0-py3-none-any.whl",
+      "sha256": "ee30e2c9486965b842f7c80550740d6d23a55f569abd8f8326306cbb8d2009f7"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-failure-nexus-final-9zt1zmfe\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "c3399d0750f2f6ac1e67531dc28f61280b57d023c99a78a5a6ab318db7eb8e1c"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-failure-connector-v4y9oame\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "903d34d6095ecd5e93ad246ece633ed1c89c1ef297202201dd92e59ab91a952c"
+    }
+  },
+  "results": {
+    "core_installed_regression": 58,
+    "core_installed_real_claude": 1,
+    "connector_installed": 122,
+    "nexus_installed": 21
+  },
+  "retained_failures": [
+    "Initial test fixture transposed Operation action/session arguments.",
+    "Four baseline cases reproduced missing terminal receipt codes and an unclassified Claude terminal error.",
+    "First corrected source run passed 53 other cases; four new cases reached the final assertion, which mistakenly tested a bound method instead of calling it.",
+    "Initial installed real-case fixture requested a lease longer than the permitted window. Corrected to 60 seconds; the same installed Core then passed.",
+    "The first Nexus adoption retained the old inventory version constant. It was updated and a new Nexus wheel passed all 21 affected cases."
+  ],
+  "limitations": [
+    "Real missing-login evidence covers Claude on Windows with a temporary provider home, using the normal Core factory and unchanged build qualification.",
+    "Codex unauthorized classification is tested against structured schema-shaped native events; a real missing-login campaign is still required.",
+    "Pi missing-login classification remains pending.",
+    "This does not prove the real missing-login journey through Nexus UI/API and Connector CLI, or final Windows/Linux and separate-host acceptance.",
+    "No release gate is closed."
+  ],
+  "evidence": {
+    "evidence/native-auth-claude-probe.json": "50a62b14ea72ca4bc5d80c2a03c3b90cef996b1e131c59fc1eeb854a64d401b9",
+    "evidence/native-failure-artifacts.json": "0f489c6bc50945074eea5ae16565910b27d95f8cc298fb11bf26eef7a75013cd",
+    "evidence/native-failure-baseline.log": "796c0c307668d5dec31ca0221bfba54eb8299a8104b139bc6070a1d7f6f591c6",
+    "evidence/native-failure-baseline.xml": "f79f848b1608bb41340496d3a961c065f60680e70dd7ba7afdf4f94f72cc9ada",
+    "evidence/native-failure-connector-build.log": "f23541d45500b2e0976ec6a934fa7c5866412efd5cf1e5399a3009430552ca5e",
+    "evidence/native-failure-connector-installed.json": "c23ae004135cba19149b55c2777fd1e0129841609ac8685af68b2c117ad102ef",
+    "evidence/native-failure-connector-installed.log": "d662177aafc10928007a5f873c412f0c74a7c3f76a5a010eddc425931034e40e",
+    "evidence/native-failure-connector-installed.xml": "632a5991f80ec17c2115cbdeb5c2e6ed0d8958ca89b2b8c7c44361e275bd2fad",
+    "evidence/native-failure-core-artifact.json": "a39528ba80683a593b1fb69fb4dcf01ac34b7e36aa7c63092057ca33de5b0c03",
+    "evidence/native-failure-core-build.log": "6652d4e7193d9e94814de38bdfc69da5d49815ae790d377df247c97775e3376c",
+    "evidence/native-failure-core-installed.json": "4ea58b3eb0f4ae35cebbd6603cd0bb60082daa5769500d040f99f9bcbb8a7a99",
+    "evidence/native-failure-core-installed.log": "6003ef2b02bdfca3453a0ed0fa0ffe97a58cd9e06312ecf3d90abc8aec701b58",
+    "evidence/native-failure-core-installed.xml": "3ddb37ecfb734271533b84f77017f2ab66c7e129be04ffd2718c640b8c90f7f2",
+    "evidence/native-failure-final-source.log": "27e8028389606ffbea0c9b2378e1d8f62881a8b8763126230a57ad77d62468b1",
+    "evidence/native-failure-final-source.xml": "6fed5908c7488f72d5970b94f368cced317e30a4d48fdb7bf3248ccc84a8bf2a",
+    "evidence/native-failure-first-artifacts.json": "89e7a0d7ce7a6f895e889d439907227352b70359ae89dc1a19a0cc495d1c4d09",
+    "evidence/native-failure-first-core-installed.json": "d6577228e92898e0c96d63d74d5dd1842c1926ddfedfd43855ca026b177efa79",
+    "evidence/native-failure-first-core-installed.log": "8790543fc5303ea37ef374cb805820a13dc593d73c66148bf9bd7ede068dcc93",
+    "evidence/native-failure-first-core-installed.xml": "0c8e01f160bf170473bf49143a378b52ecdc4f31b60f32e055932d2b2c00d7d8",
+    "evidence/native-failure-first-nexus-installed.json": "7e0d6c1ca419f31d6038cf4128931313bb7d53903e6e4de389ebb3b187cdbaac",
+    "evidence/native-failure-first-nexus-installed.log": "344194a496b33339637a1107d725e8bf3868ad1c38567aa893c255b5cc52d1f5",
+    "evidence/native-failure-first-nexus-installed.xml": "dd3426cd2c699b6e8228fb9c5034eb6958473e0486e019ea91b31eac5674ccb8",
+    "evidence/native-failure-fixture-error.log": "67d65283a5584e7df9464b05c377bffa62730882a0f2bcbd7b8d714a5124a42f",
+    "evidence/native-failure-fixture-error.xml": "33ca967076886a6e9cebc8114d2eb254eaa435a63064580c986df1c249cb9abd",
+    "evidence/native-failure-install.log": "e1ec641133f8ebc6705000fdcb9ccfa8c51e6770b56393f881bb24df86483d00",
+    "evidence/native-failure-nexus-build.log": "b8a1fb7e6b44c429a8460a77b40e2547d4983aae2b5d9af08ef46b3111aef767",
+    "evidence/native-failure-nexus-final-build.log": "7c6c493b07ecd83de4f9d1dbde659b720acfe674dab2b704cf83e1a1b2db45b7",
+    "evidence/native-failure-nexus-final-install.log": "cef5a8bd7837e551b72712c2e95a4e7b5ec2c2a2e7f99ef712fe8b57032bbd71",
+    "evidence/native-failure-nexus-installed.json": "0c61cd020464d80f6b77a9b24c9f73ee57635ea59008f7959d158d33887c5d78",
+    "evidence/native-failure-nexus-installed.log": "745db0b1e6ff3562d5c13c36001b01c5848914b78dc36e37ebe12514c3d152cf",
+    "evidence/native-failure-nexus-installed.xml": "9f512026d530119fed138198e38ffe62dca478b64c35773c2df980f6904c2d3a",
+    "evidence/native-failure-pip-check.log": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+    "evidence/native-failure-source.log": "ad570d361632984c4ae7c2ece41be43293db1dd011c9c0ffdaad24c9fe06cae6",
+    "evidence/native-failure-source.xml": "0aae21ec4b3cdcd7d16a6d943c69da989603f96a8c1c8823097302056c359f71"
+  }
+}

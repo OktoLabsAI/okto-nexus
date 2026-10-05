@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-01",
+  "scenario": "TR4-14-03",
+  "task": "NS14.03",
+  "status": "PASSED_CORE_FAULT_INJECTION_TASK_DEPENDENCY_OPEN",
+  "nodeid": "tests/execution_r4/test_ns14.py::test_ns14_03",
+  "commits": {
+    "core": "29197d29af27cf101a1d5bccf7ca3340a931ec27",
+    "connector": "6fc8654c5dc209d488990f837dde8e2bed59b8eb",
+    "nexus": "4b63b55917f3dfa6c704919412584e62352555f3"
+  },
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-shutdown-facts-final-core-bvyk__vf\\dist\\nexus_connector_core-0.2.50.dev0-py3-none-any.whl",
+      "sha256": "797e28d34ba43800e5ad800b0fb344ce53a4160389ac817b4687505187c25215"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-shutdown-facts-connector-k33g57m7\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "3cab81b8e5e3b3ff76f08d3e2768da39f7133649086c160ee09b86c36ad6699c"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-shutdown-facts-nexus-wh_b_9xe\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "dcd080587d7c5d6a977518ea49c024077711446a8927ebcb2b17425e529e9602"
+    }
+  },
+  "results": {
+    "ns14-03-combined-initial-installed.xml": {
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "5.302"
+    },
+    "ns14-03-combined-normative-installed.xml": {
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "5.767"
+    }
+  },
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "layer": "core_fault_injection",
+    "topology": "Installed packages outside clones; actual Nexus/Core owners and public ASGI HTTP with controlled native/storage ports."
+  },
+  "checks": {
+    "package_bytes": "source/wheel/installation verified for all three packages",
+    "credential_pattern_scan": "no matches"
+  },
+  "overlap": "Initial and strengthened runs exercise the same normative scenario; count one scenario.",
+  "limitations": [
+    "NS14.02 dependency has no verified normative entry in the current inventory.",
+    "This test does not grant actual-provider, external-signal, cross-platform or force-exit acceptance.",
+    "Preexisting UI assets remain outside acceptance; all release gates open."
+  ],
+  "evidence": {
+    "evidence/ns14-03-combined-initial-installed.xml": "61e3344f5f0997bcd17051efb538e5bdae6c60e678e6f2f6dbcf21e28bd3d23d",
+    "evidence/ns14-03-combined-normative-installed.json": "1b8b2e697005d5cd2e02a822f1444daec844a997690bf51a4d35751d9c8c949c",
+    "evidence/ns14-03-combined-normative-installed.log": "254902b6c332b74a98952b40a723ba1e0091be752057193c8e43c5f13ef3c32a",
+    "evidence/ns14-03-combined-normative-installed.xml": "22745db4512a02cb27241c0ed17edb17b7c652376f6efd54f2803f20cfa050ab"
+  }
+}

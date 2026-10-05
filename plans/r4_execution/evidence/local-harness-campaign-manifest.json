@@ -1,0 +1,30 @@
+{
+  "date": "2026-09-30",
+  "platform": "win32/x86_64",
+  "python": "3.13.1",
+  "core_commit": "770659b7f3404798fe6c59146c7ab9d12b84bbe4",
+  "core_wheel_sha256": "e060e033be05fdd4c9aff5c90902d191483d400b3f6778fa7bb5395b66f561e6",
+  "probe_scripts": {
+    "probe_pi_controls.py": "d18c6f2ee56e9a77f5b3768bfc9554c1e0b91e9c663d8fc74a0993078e1048ed",
+    "probe_codex_turn.py": "704f21ac0adcaf4725fa37dda24cc99a1c83e41b5a2989b18e14436283615c53",
+    "probe_claude_turn.py": "fe7c10e347c59643904ffddcfe27413648423efff6818470d2a4d8df2aa89470",
+    "probe_managed_factory.py": "a1ec8666dea5f68a902443165a2af68341e54614254ea4f429b5808f7205c489"
+  },
+  "scope": "Real local adapter protocols and installed Core production factory. No qualification overrides. The production factory probe uses the legacy public context; this is not R4 end-to-end acceptance.",
+  "evidence": [
+    "local-harness-discovery.json",
+    "local-pi-campaign.json",
+    "local-codex-campaign.json",
+    "local-claude-campaign.json",
+    "local-managed-codex_app_server.json",
+    "local-managed-claude_stream.json",
+    "local-managed-pi_rpc.json"
+  ],
+  "limitations": [
+    "Codex 0.159.0 wire campaign succeeds but current production gate refuses NATIVE_VERSION_UNQUALIFIED.",
+    "Claude factory turn succeeds; close initially reports OUTCOME_UNKNOWN and subsequent shutdown reports already_closed.",
+    "Existing provider homes may load user configuration and registered MCP servers. These probes do not establish isolated approved MCP configuration.",
+    "No Linux, multi-host, R4 end-to-end or release acceptance is claimed.",
+    "Pi probe flags abort_settle_before_ack and steer_follow_up_started_after_settle have insufficient timing/reset instrumentation; they are not acceptance evidence."
+  ]
+}

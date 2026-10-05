@@ -157,6 +157,7 @@ class NexusConfig:
     max_inline_bytes: int = DEFAULT_MAX_INLINE_BYTES
     inbox_lease_ttl_seconds: int = DEFAULT_INBOX_LEASE_TTL_SECONDS
     session_stale_ttl_seconds: int = DEFAULT_SESSION_STALE_TTL_SECONDS
+    connection_key_ttl_seconds: int = 86400
     presence_ttl_seconds: int = DEFAULT_PRESENCE_TTL_SECONDS
     session_reap_seconds: int = DEFAULT_SESSION_REAP_SECONDS
     max_shared_md_events: int = DEFAULT_MAX_SHARED_MD_EVENTS
@@ -191,7 +192,7 @@ class NexusConfig:
     # surface) - the dashboard gating is controlled ONLY by this knob.
     expose_workspace_path: bool = False
     # ----------------------------------------------------------------- #
-    # Meta-harness feature flags (R-I0). All opt-in (default OFF). Most flags
+    # Meta-harness feature flags (R-I0). Native connections default ON. Most flags
     # gate behaviour inside consuming use-cases; feature_memory is the explicit
     # experimental exception that also controls MCP tool registration at
     # bootstrap.
@@ -201,10 +202,28 @@ class NexusConfig:
     feature_verification: bool = False
     feature_dag: bool = False
     feature_memory: bool = False
+    feature_harness_integrations: bool = True
+    feature_harness_attach: bool = True
+    # Startup-only indexed recovery of lost runtime commit notifications.
+    # This is internal store polling, never native peer status polling.
+    runtime_recovery_interval_seconds: int = 30
+    max_relay_depth: int = 4
+    max_generated_messages_per_root: int = 32
+    max_executions_per_root: int = 16
+    root_deadline_seconds: int = 1800
+    max_new_roots_per_agent_per_minute: int = 32
+    max_new_roots_per_workspace_per_minute: int = 128
     feature_health: bool = False
     feature_replay: bool = False
 
     def __post_init__(self) -> None:
+        for name, low, high in (("runtime_recovery_interval_seconds", 1, 86400),
+                ("max_relay_depth", 0, 64), ("max_generated_messages_per_root", 1, 4096),
+                ("max_executions_per_root", 1, 1024), ("root_deadline_seconds", 1, 86400),
+                ("max_new_roots_per_agent_per_minute", 1, 4096), ("max_new_roots_per_workspace_per_minute", 1, 16384)):
+            value = getattr(self, name)
+            if type(value) is not int or not low <= value <= high:
+                raise OktoNexusError(ErrorCode.CONFIG_ERROR, f"{name} must be within {low}..{high}.", {})
         self.home_dir = Path(self.home_dir).expanduser()
         if self.db_path is None:
             self.db_path = self.home_dir / "nexus.db"
@@ -224,6 +243,16 @@ _PATH_FIELDS: dict[str, tuple[str, str]] = {
 }
 
 _INT_FIELDS: dict[str, tuple[str, str, int, int]] = {
+    "runtime_recovery_interval_seconds": (
+        "OKTO_NEXUS_RUNTIME_RECOVERY_INTERVAL_SECONDS",
+        "--runtime-recovery-interval-seconds", 30, 1,
+    ),
+    "max_relay_depth": ("OKTO_NEXUS_MAX_RELAY_DEPTH", "--max-relay-depth", 4, 0),
+    "max_generated_messages_per_root": ("OKTO_NEXUS_MAX_GENERATED_MESSAGES_PER_ROOT", "--max-generated-messages-per-root", 32, 1),
+    "max_executions_per_root": ("OKTO_NEXUS_MAX_EXECUTIONS_PER_ROOT", "--max-executions-per-root", 16, 1),
+    "root_deadline_seconds": ("OKTO_NEXUS_ROOT_DEADLINE_SECONDS", "--root-deadline-seconds", 1800, 1),
+    "max_new_roots_per_agent_per_minute": ("OKTO_NEXUS_MAX_NEW_ROOTS_PER_AGENT_PER_MINUTE", "--max-new-roots-per-agent-per-minute", 32, 1),
+    "max_new_roots_per_workspace_per_minute": ("OKTO_NEXUS_MAX_NEW_ROOTS_PER_WORKSPACE_PER_MINUTE", "--max-new-roots-per-workspace-per-minute", 128, 1),
     # field: (env var, CLI flag, default, minimum allowed)
     "busy_timeout_ms": ("OKTO_NEXUS_BUSY_TIMEOUT_MS", "--busy-timeout-ms", 5000, 0),
     "poll_interval_ms": ("OKTO_NEXUS_POLL_INTERVAL_MS", "--poll-interval-ms", 200, 1),
@@ -262,6 +291,7 @@ _INT_FIELDS: dict[str, tuple[str, str, int, int]] = {
         DEFAULT_SESSION_STALE_TTL_SECONDS,
         1,
     ),
+    "connection_key_ttl_seconds": ("OKTO_NEXUS_CONNECTION_KEY_TTL_SECONDS", "--connection-key-ttl-seconds", 86400, 0),
     "presence_ttl_seconds": (
         "OKTO_NEXUS_PRESENCE_TTL_SECONDS",
         "--presence-ttl-seconds",
@@ -394,7 +424,7 @@ _BOOL_FIELDS: dict[str, tuple[str, str, bool]] = {
         "--expose-workspace-path",
         False,
     ),
-    # Meta-harness feature flags (R-I0): all default False (opt-in).
+    # Meta-harness feature flags (R-I0); keep defaults aligned with NexusConfig.
     "feature_trace": (
         "OKTO_NEXUS_FEATURE_TRACE",
         "--feature-trace",
@@ -419,6 +449,16 @@ _BOOL_FIELDS: dict[str, tuple[str, str, bool]] = {
         "OKTO_NEXUS_FEATURE_MEMORY",
         "--feature-memory",
         False,
+    ),
+    "feature_harness_integrations": (
+        "OKTO_NEXUS_FEATURE_HARNESS_INTEGRATIONS",
+        "--feature-harness-integrations",
+        True,
+    ),
+    "feature_harness_attach": (
+        "OKTO_NEXUS_FEATURE_HARNESS_ATTACH",
+        "--feature-harness-attach",
+        True,
     ),
     "feature_health": (
         "OKTO_NEXUS_FEATURE_HEALTH",

@@ -12,6 +12,8 @@ interface ConfirmState {
 
 export function useConfirm() {
   const [state, setState] = useState<ConfirmState | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
 
   const dialog = state ? (
     <div className="modal-overlay">
@@ -28,24 +30,31 @@ export function useConfirm() {
         </div>
         <div className="px-5 py-4 text-xs text-surface-600 dark:text-surface-400">
           {state.body}
+          {error && <p role="alert" className="mt-3 text-red-600 dark:text-red-400">{error}</p>}
         </div>
         <div className="px-5 py-3 border-t border-surface-200/60 dark:border-surface-700/50 flex justify-end gap-2">
-          <button className="btn btn-secondary" onClick={() => setState(null)}>
+          <button className="btn btn-secondary" disabled={busy} onClick={() => setState(null)}>
             Cancel
           </button>
           <button
             className="btn btn-danger"
+            disabled={busy}
             onClick={async () => {
-              await state.onConfirm();
-              setState(null);
+              setBusy(true); setError("");
+              try {
+                await state.onConfirm();
+                setState(null);
+              } catch (failure) {
+                setError(failure instanceof Error ? failure.message : String(failure));
+              } finally { setBusy(false); }
             }}
           >
-            Confirm
+            {busy ? "Working…" : "Confirm"}
           </button>
         </div>
       </div>
     </div>
   ) : null;
 
-  return { confirm: setState, dialog };
+  return { confirm: (next: ConfirmState | null) => {setError(""); setState(next);}, dialog };
 }

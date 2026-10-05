@@ -1,0 +1,4321 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nexus.oktolabs.ai/plans/server-r4/http-target.schema.json",
+  "$comment": "PLANEJAMENTO. Não instalar como SDK publicado. Estado real: Core0.2.10 NXLr3; DTOs novos exigem geração/validação coordenada. Validar byte-size, relação entre campos, auth e JCS no código de produto.",
+  "title": "Contrato de planejamento para Nexus Server R4",
+  "$defs": {
+    "Id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "Hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "InstallationRef": {
+      "type": "string",
+      "pattern": "^nexus-install-v1:[0-9a-f]{64}$"
+    },
+    "ExecutionScope": {
+      "type": "object",
+      "properties": {
+        "server_id": {
+          "$ref": "#/$defs/Id"
+        },
+        "executor_id": {
+          "$ref": "#/$defs/Id"
+        },
+        "binding_id": {
+          "$ref": "#/$defs/Id"
+        },
+        "agent_id": {
+          "$ref": "#/$defs/Id"
+        },
+        "workspace_id": {
+          "$ref": "#/$defs/Id"
+        },
+        "workspace_binding_id": {
+          "$ref": "#/$defs/Id"
+        },
+        "session_id": {
+          "$ref": "#/$defs/Id"
+        },
+        "session_owner_generation": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "authorization_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "configuration_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "binding_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "credential_epoch": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "server_id",
+        "executor_id",
+        "binding_id",
+        "agent_id",
+        "workspace_id",
+        "workspace_binding_id",
+        "session_id",
+        "session_owner_generation",
+        "authorization_revision",
+        "configuration_revision",
+        "binding_revision",
+        "credential_epoch"
+      ],
+      "additionalProperties": false
+    },
+    "ErrorBody": {
+      "type": "object",
+      "properties": {
+        "capability_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "recovery_allowed": {
+          "type": "boolean"
+        },
+        "code": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "stage": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 4096
+        },
+        "possible_effect": {
+          "type": "boolean"
+        },
+        "retry_safe": {
+          "type": "boolean"
+        },
+        "operation_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "action": {
+          "type": "string",
+          "maxLength": 4096
+        }
+      },
+      "required": [
+        "code",
+        "stage",
+        "message",
+        "possible_effect",
+        "retry_safe",
+        "operation_id",
+        "action"
+      ],
+      "additionalProperties": false
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "$ref": "#/$defs/ErrorBody"
+        }
+      },
+      "required": [
+        "error"
+      ],
+      "additionalProperties": false
+    },
+    "ProtocolInfo": {
+      "type": "object",
+      "properties": {
+        "management_revision": {
+          "const": "nexus-connections-2026-09-29-r4"
+        },
+        "protocol_major": {
+          "const": 1
+        },
+        "nxl_accepted": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "nxl_historical_revision": {
+          "type": "string"
+        },
+        "core_version": {
+          "type": "string"
+        },
+        "catalog_format": {
+          "const": 2
+        },
+        "availability_format": {
+          "const": 2
+        },
+        "executor_snapshot_format": {
+          "const": 2
+        },
+        "limits": {
+          "type": "object",
+          "properties": {
+            "inventory_candidates": {
+              "const": 128
+            },
+            "snapshot_age_ms": {
+              "const": 300000
+            }
+          },
+          "required": [
+            "inventory_candidates",
+            "snapshot_age_ms"
+          ],
+          "additionalProperties": false
+        },
+        "remote_execution_ready": {
+          "type": "boolean"
+        },
+        "inventory_refresh_supported": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "management_revision",
+        "protocol_major",
+        "nxl_accepted",
+        "nxl_historical_revision",
+        "core_version",
+        "catalog_format",
+        "availability_format",
+        "executor_snapshot_format",
+        "limits",
+        "remote_execution_ready"
+      ],
+      "additionalProperties": false
+    },
+    "MeInfo": {
+      "type": "object",
+      "properties": {
+        "server_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "agent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "display_name": {
+          "type": "string",
+          "maxLength": 4096
+        },
+        "permissions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "maxItems": 256
+        },
+        "revisions": {
+          "type": "object",
+          "properties": {
+            "authorization": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "configuration": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "credential_epoch": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "authorization",
+            "configuration",
+            "credential_epoch"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "server_id",
+        "agent_id",
+        "display_name",
+        "permissions",
+        "revisions"
+      ],
+      "additionalProperties": false
+    },
+    "RegisterExecutorRequest": {
+      "type": "object",
+      "properties": {
+        "client_intent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "connector_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "control_capabilities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "maxItems": 64
+        }
+      },
+      "required": [
+        "client_intent_id",
+        "connector_id",
+        "label",
+        "control_capabilities"
+      ],
+      "additionalProperties": false
+    },
+    "TicketIssue": {
+      "type": "object",
+      "properties": {
+        "ticket_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "ticket": {
+          "type": "string",
+          "minLength": 32,
+          "maxLength": 4096
+        },
+        "executor_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "binding_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "agent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "expires_in": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 600
+        },
+        "credential_epoch": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "authorization_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "audience": {
+          "const": "nexus-executor-control"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "link:connect",
+              "lane:attach",
+              "inventory:publish",
+              "realization:publish",
+              "receipt:publish",
+              "history:read",
+              "lease:request"
+            ]
+          },
+          "maxItems": 16
+        }
+      },
+      "required": [
+        "ticket_id",
+        "ticket",
+        "executor_id",
+        "binding_id",
+        "agent_id",
+        "expires_in",
+        "credential_epoch",
+        "authorization_revision",
+        "audience",
+        "scopes"
+      ],
+      "additionalProperties": false
+    },
+    "RegisterExecutorResponse": {
+      "type": "object",
+      "properties": {
+        "server_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "executor_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "connector_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "REGISTERED",
+            "AWAITING_INVENTORY"
+          ]
+        },
+        "bootstrap_ticket": {
+          "$ref": "#/$defs/TicketIssue"
+        }
+      },
+      "required": [
+        "server_id",
+        "executor_id",
+        "connector_id",
+        "state",
+        "bootstrap_ticket"
+      ],
+      "additionalProperties": false
+    },
+    "RuntimeDescriptor": {
+      "type": "object",
+      "properties": {
+        "adapter_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "display_name": {
+          "type": "string",
+          "maxLength": 4096
+        },
+        "harness_family": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "native_kind": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "connection_mode": {
+          "type": "string",
+          "enum": [
+            "managed",
+            "attach"
+          ]
+        },
+        "implementation_platforms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "maxItems": 16
+        },
+        "support_status": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "discoverable": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "adapter_id",
+        "display_name",
+        "harness_family",
+        "native_kind",
+        "connection_mode",
+        "implementation_platforms",
+        "support_status",
+        "discoverable"
+      ],
+      "additionalProperties": false
+    },
+    "RuntimeCatalog": {
+      "type": "object",
+      "properties": {
+        "core_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "format_version": {
+          "const": 1
+        },
+        "runtimes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RuntimeDescriptor"
+          },
+          "maxItems": 128
+        }
+      },
+      "required": [
+        "core_version",
+        "format_version",
+        "runtimes"
+      ],
+      "additionalProperties": false
+    },
+    "CandidateAvailability": {
+      "type": "object",
+      "properties": {
+        "adapter_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "candidate_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^nexus-install-v1:[0-9a-f]{64}$"
+            },
+            {
+              "const": ""
+            }
+          ]
+        },
+        "display_name": {
+          "type": "string",
+          "maxLength": 4096
+        },
+        "connection_mode": {
+          "type": "string",
+          "enum": [
+            "managed",
+            "attach"
+          ]
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "NOT_INSTALLED",
+            "UNSUPPORTED_PLATFORM",
+            "NOT_PROBED",
+            "UNQUALIFIED_BUILD",
+            "CONTAINMENT_UNAVAILABLE",
+            "PREPARATION_REQUIRED",
+            "READY_FOR_RUNTIME"
+          ]
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "maxItems": 64
+        },
+        "version": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "architecture": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "build_identity": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "trust": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "source": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "qualification": {
+          "type": "string",
+          "enum": [
+            "qualified",
+            "unqualified",
+            "not_probed"
+          ]
+        },
+        "containment": {
+          "type": "string",
+          "enum": [
+            "available",
+            "unavailable",
+            "unverified"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 4096
+        }
+      },
+      "required": [
+        "adapter_id",
+        "candidate_ref",
+        "display_name",
+        "connection_mode",
+        "state",
+        "reasons",
+        "version",
+        "architecture",
+        "build_identity",
+        "trust",
+        "source",
+        "qualification",
+        "containment",
+        "label"
+      ],
+      "additionalProperties": false
+    },
+    "AvailabilityReport": {
+      "type": "object",
+      "properties": {
+        "core_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "format_version": {
+          "const": 2
+        },
+        "platform": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "availability": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CandidateAvailability"
+          },
+          "maxItems": 256
+        }
+      },
+      "required": [
+        "core_version",
+        "format_version",
+        "platform",
+        "availability"
+      ],
+      "additionalProperties": false
+    },
+    "ObservedCapabilities": {
+      "type": "object",
+      "properties": {
+        "evidence_revision": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "conversation": {
+          "type": "boolean"
+        },
+        "managed_work": {
+          "type": "boolean"
+        },
+        "tool_path": {
+          "type": "string",
+          "enum": [
+            "direct_mcp_http",
+            "structured_native",
+            "none"
+          ]
+        },
+        "interrupt": {
+          "type": "boolean"
+        },
+        "steer_timing": {
+          "type": "string",
+          "enum": [
+            "IMMEDIATE",
+            "NEXT_TURN_BOUNDARY",
+            "UNSUPPORTED"
+          ]
+        },
+        "approvals": {
+          "type": "boolean"
+        },
+        "input": {
+          "type": "boolean"
+        },
+        "targeting": {
+          "type": "object",
+          "properties": {
+            "steer": {
+              "type": "string",
+              "enum": [
+                "native_turn_id",
+                "current_run",
+                "unsupported"
+              ]
+            },
+            "interrupt": {
+              "type": "string",
+              "enum": [
+                "native_turn_id",
+                "current_run",
+                "unsupported"
+              ]
+            }
+          },
+          "required": [
+            "steer",
+            "interrupt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "evidence_revision",
+        "conversation",
+        "managed_work",
+        "tool_path",
+        "interrupt",
+        "steer_timing",
+        "approvals",
+        "input",
+        "targeting"
+      ],
+      "additionalProperties": false
+    },
+    "CandidateEvidence": {
+      "type": "object",
+      "properties": {
+        "adapter_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "candidate_ref": {
+          "type": "string",
+          "pattern": "^nexus-install-v1:[0-9a-f]{64}$"
+        },
+        "content_fingerprint": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "build_identity": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "version": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "architecture": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "trust": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "support_status": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "platform": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "NOT_INSTALLED",
+            "UNSUPPORTED_PLATFORM",
+            "NOT_PROBED",
+            "UNQUALIFIED_BUILD",
+            "CONTAINMENT_UNAVAILABLE",
+            "PREPARATION_REQUIRED",
+            "READY_FOR_RUNTIME"
+          ]
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "maxItems": 64
+        },
+        "capability_report": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ObservedCapabilities"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "adapter_id",
+        "candidate_ref",
+        "content_fingerprint",
+        "build_identity",
+        "version",
+        "architecture",
+        "trust",
+        "source",
+        "support_status",
+        "platform",
+        "state",
+        "reasons",
+        "capability_report"
+      ],
+      "additionalProperties": false
+    },
+    "ExecutorInventorySnapshot": {
+      "type": "object",
+      "properties": {
+        "snapshot_format_version": {
+          "const": 1
+        },
+        "server_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "executor_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "producer_instance_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "publication_sequence": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "inventory_revision": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "core_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "catalog": {
+          "$ref": "#/$defs/RuntimeCatalog"
+        },
+        "availability": {
+          "$ref": "#/$defs/AvailabilityReport"
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CandidateEvidence"
+          },
+          "maxItems": 128
+        },
+        "observation_age_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 300000
+        }
+      },
+      "required": [
+        "snapshot_format_version",
+        "server_id",
+        "executor_id",
+        "producer_instance_id",
+        "publication_sequence",
+        "inventory_revision",
+        "core_version",
+        "catalog",
+        "availability",
+        "evidence",
+        "observation_age_ms"
+      ],
+      "additionalProperties": false
+    },
+    "InventoryAccepted": {
+      "type": "object",
+      "properties": {
+        "server_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "executor_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "publication_sequence": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "inventory_revision": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "fresh_for_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 120000
+        },
+        "accepted": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "server_id",
+        "executor_id",
+        "publication_sequence",
+        "inventory_revision",
+        "fresh_for_ms",
+        "accepted"
+      ],
+      "additionalProperties": false
+    },
+    "InventoryView": {
+      "type": "object",
+      "properties": {
+        "snapshot": {
+          "$ref": "#/$defs/ExecutorInventorySnapshot"
+        },
+        "freshness": {
+          "type": "string",
+          "enum": [
+            "FRESH",
+            "STALE",
+            "OFFLINE",
+            "UNKNOWN"
+          ]
+        },
+        "eligible_for_new_start": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "snapshot",
+        "freshness",
+        "eligible_for_new_start"
+      ],
+      "additionalProperties": false
+    },
+    "RefreshRequest": {
+      "type": "object",
+      "properties": {
+        "client_intent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        }
+      },
+      "required": [
+        "client_intent_id"
+      ],
+      "additionalProperties": false
+    },
+    "RefreshView": {
+      "type": "object",
+      "properties": {
+        "client_intent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "refresh_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "executor_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "PENDING",
+            "REQUESTED",
+            "UPDATED",
+            "OFFLINE"
+          ]
+        }
+      },
+      "required": [
+        "client_intent_id",
+        "refresh_id",
+        "executor_id",
+        "state"
+      ],
+      "additionalProperties": false
+    },
+    "RealizationPublishRequest": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/RemoteRealizationPublishRequest"
+        },
+        {
+          "$ref": "#/$defs/LocalRealizationPrepareRequest"
+        }
+      ]
+    },
+    "RealizationView": {
+      "type": "object",
+      "properties": {
+        "server_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "executor_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "realization_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "local_realization_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "realization_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "agent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "workspace_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "workspace_binding_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "inventory_revision": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "configuration_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "server_id",
+        "executor_id",
+        "realization_ref",
+        "local_realization_ref",
+        "realization_revision",
+        "agent_id",
+        "workspace_id",
+        "workspace_binding_id",
+        "inventory_revision",
+        "configuration_digest"
+      ],
+      "additionalProperties": false
+    },
+    "BindingPrepareRequest": {
+      "type": "object",
+      "properties": {
+        "client_intent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "agent_id_hint": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "replace_binding_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "executor_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "adapter_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "candidate_ref": {
+          "type": "string",
+          "pattern": "^nexus-install-v1:[0-9a-f]{64}$"
+        },
+        "inventory_revision": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "realization_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "workspace_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "adopt_endpoint_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 160
+        }
+      },
+      "required": [
+        "client_intent_id",
+        "executor_id",
+        "adapter_id",
+        "candidate_ref",
+        "inventory_revision",
+        "realization_ref",
+        "workspace_id",
+        "alias"
+      ],
+      "additionalProperties": false
+    },
+    "ConfigurationDiff": {
+      "type": "object",
+      "properties": {
+        "fields_changed": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "maxItems": 64
+        },
+        "approved_diff_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "requires_operator": {
+          "type": "boolean"
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 4096
+        }
+      },
+      "required": [
+        "fields_changed",
+        "approved_diff_hash",
+        "requires_operator",
+        "summary"
+      ],
+      "additionalProperties": false
+    },
+    "BindingProposal": {
+      "type": "object",
+      "properties": {
+        "proposal_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "proposal_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "server_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "executor_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "agent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "binding_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "endpoint_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "profile_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "workspace_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "workspace_binding_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "adapter_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "candidate_ref": {
+          "type": "string",
+          "pattern": "^nexus-install-v1:[0-9a-f]{64}$"
+        },
+        "inventory_revision": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "realization_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "realization_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "authorization_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "configuration_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "required_approvals": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "maxItems": 32
+        },
+        "diff": {
+          "$ref": "#/$defs/ConfigurationDiff"
+        },
+        "can_apply": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "proposal_id",
+        "proposal_revision",
+        "expires_at",
+        "server_id",
+        "executor_id",
+        "agent_id",
+        "binding_id",
+        "endpoint_id",
+        "profile_id",
+        "workspace_id",
+        "workspace_binding_id",
+        "adapter_id",
+        "candidate_ref",
+        "inventory_revision",
+        "realization_ref",
+        "realization_revision",
+        "authorization_revision",
+        "configuration_revision",
+        "required_approvals",
+        "diff",
+        "can_apply"
+      ],
+      "additionalProperties": false
+    },
+    "BindingApplyRequest": {
+      "type": "object",
+      "properties": {
+        "client_intent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "proposal_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "proposal_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "approved_diff_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "operator_proof_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "client_intent_id",
+        "proposal_id",
+        "proposal_revision",
+        "approved_diff_hash"
+      ],
+      "additionalProperties": false
+    },
+    "BindingView": {
+      "type": "object",
+      "properties": {
+        "binding_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "server_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "executor_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "agent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "endpoint_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "workspace_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "workspace_binding_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "adapter_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "candidate_ref": {
+          "type": "string",
+          "pattern": "^nexus-install-v1:[0-9a-f]{64}$"
+        },
+        "inventory_revision": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "realization_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "realization_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "binding_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "authorization_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "configuration_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "PENDING_REVIEW",
+            "APPROVED",
+            "DISABLED",
+            "STALE",
+            "REVOKED"
+          ]
+        }
+      },
+      "required": [
+        "binding_id",
+        "server_id",
+        "executor_id",
+        "agent_id",
+        "endpoint_id",
+        "workspace_id",
+        "workspace_binding_id",
+        "adapter_id",
+        "candidate_ref",
+        "inventory_revision",
+        "realization_ref",
+        "realization_revision",
+        "binding_revision",
+        "authorization_revision",
+        "configuration_revision",
+        "state"
+      ],
+      "additionalProperties": false
+    },
+    "TicketRequest": {
+      "type": "object",
+      "properties": {
+        "client_intent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "credential_request_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "audience": {
+          "const": "nexus-executor-control"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "maxItems": 16
+        },
+        "replaces_ticket_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "client_intent_id",
+        "credential_request_id",
+        "audience",
+        "scopes"
+      ],
+      "additionalProperties": false
+    },
+    "RuntimeOption": {
+      "type": "object",
+      "properties": {
+        "adapter_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "candidate_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^nexus-install-v1:[0-9a-f]{64}$"
+            },
+            {
+              "const": ""
+            }
+          ]
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 4096
+        },
+        "technical_state": {
+          "type": "string",
+          "enum": [
+            "NOT_INSTALLED",
+            "UNSUPPORTED_PLATFORM",
+            "NOT_PROBED",
+            "UNQUALIFIED_BUILD",
+            "CONTAINMENT_UNAVAILABLE",
+            "PREPARATION_REQUIRED",
+            "READY_FOR_RUNTIME"
+          ]
+        },
+        "technical_reasons": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "maxItems": 64
+        },
+        "can_prepare": {
+          "type": "boolean"
+        },
+        "can_configure": {
+          "type": "boolean"
+        },
+        "provider_home_suggestion": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 4096
+        },
+        "can_bind": {
+          "type": "boolean"
+        },
+        "can_start": {
+          "type": "boolean"
+        },
+        "preparation": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "realization_ref": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160
+                },
+                "realization_revision": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "workspace_binding_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160
+                }
+              },
+              "required": [
+                "realization_ref",
+                "realization_revision",
+                "workspace_binding_id"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "binding": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/BindingView"
+            }
+          ]
+        },
+        "policy_reasons": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "maxItems": 64
+        },
+        "harness_configuration": {
+          "type": "object",
+          "required": [
+            "schema_version",
+            "schema_revision",
+            "adapter_id",
+            "parameters",
+            "models",
+            "human_input"
+          ],
+          "properties": {
+            "schema_version": {
+              "const": 1
+            },
+            "schema_revision": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            "adapter_id": {
+              "type": "string"
+            },
+            "parameters": {
+              "type": "array"
+            },
+            "models": {
+              "type": "array"
+            },
+            "human_input": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "required": [
+        "adapter_id",
+        "candidate_ref",
+        "label",
+        "technical_state",
+        "technical_reasons",
+        "can_prepare",
+        "can_bind",
+        "can_start",
+        "policy_reasons"
+      ],
+      "additionalProperties": false
+    },
+    "RuntimeOptions": {
+      "type": "object",
+      "properties": {
+        "agent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "executor_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "inventory_revision": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "catalog": {
+          "$ref": "#/$defs/RuntimeCatalog"
+        },
+        "availability": {
+          "$ref": "#/$defs/AvailabilityReport"
+        },
+        "freshness": {
+          "type": "string",
+          "enum": [
+            "FRESH",
+            "STALE",
+            "OFFLINE",
+            "UNKNOWN"
+          ]
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RuntimeOption"
+          },
+          "maxItems": 256
+        }
+      },
+      "required": [
+        "agent_id",
+        "executor_id",
+        "inventory_revision",
+        "catalog",
+        "availability",
+        "freshness",
+        "options"
+      ],
+      "additionalProperties": false
+    },
+    "Target": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "native_turn_id",
+            "current_run",
+            "none"
+          ]
+        },
+        "expected_turn_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "expected_turn_id"
+      ],
+      "additionalProperties": false
+    },
+    "OpenPayload": {
+      "type": "object",
+      "properties": {
+        "adapter_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "candidate_ref": {
+          "type": "string",
+          "pattern": "^nexus-install-v1:[0-9a-f]{64}$"
+        },
+        "inventory_revision": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "realization_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "realization_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "profile_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "mode": {
+          "const": "managed"
+        },
+        "model": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "adapter_id",
+        "candidate_ref",
+        "inventory_revision",
+        "realization_ref",
+        "realization_revision",
+        "profile_revision",
+        "mode"
+      ],
+      "additionalProperties": false
+    },
+    "ArtifactRef": {
+      "type": "object",
+      "properties": {
+        "artifact_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "media_type": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        }
+      },
+      "required": [
+        "artifact_id",
+        "content_hash",
+        "media_type"
+      ],
+      "additionalProperties": false
+    },
+    "SubmitPayload": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "maxLength": 65536
+        },
+        "delivery_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "artifact_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ArtifactRef"
+          },
+          "maxItems": 32
+        }
+      },
+      "required": [
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "SteerPayload": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "maxLength": 65536
+        }
+      },
+      "required": [
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "InterruptPayload": {
+      "type": "object",
+      "properties": {
+        "reason": {
+          "type": "string",
+          "maxLength": 1024
+        }
+      },
+      "required": [
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "ClosePayload": {
+      "type": "object",
+      "properties": {
+        "reason": {
+          "type": "string",
+          "maxLength": 1024
+        },
+        "drain_seconds": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 30
+        },
+        "interrupt_seconds": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 15
+        }
+      },
+      "required": [
+        "reason",
+        "drain_seconds",
+        "interrupt_seconds"
+      ],
+      "additionalProperties": false
+    },
+    "NativeProposal": {
+      "type": "object",
+      "maxProperties": 32,
+      "required": [
+        "request_hash"
+      ],
+      "properties": {
+        "request_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": true,
+      "description": "Estrutura operacional original validada pelo schema do Core/adapter. Impor também 16 KiB e profundidade64; não renomear campos nativos aqui."
+    },
+    "ApprovalPayload": {
+      "type": "object",
+      "properties": {
+        "canonical_request_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "decision_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "decision_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "accept",
+            "decline",
+            "cancel"
+          ]
+        },
+        "request": {
+          "$ref": "#/$defs/NativeProposal"
+        },
+        "response_digest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "canonical_request_id",
+        "decision_id",
+        "decision_revision",
+        "decision",
+        "request",
+        "response_digest"
+      ],
+      "additionalProperties": false
+    },
+    "InputPayload": {
+      "type": "object",
+      "properties": {
+        "canonical_request_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "decision_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "decision_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "accept",
+            "decline",
+            "cancel"
+          ]
+        },
+        "request": {
+          "$ref": "#/$defs/NativeProposal"
+        },
+        "response_digest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "response": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "response_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "canonical_request_id",
+        "decision_id",
+        "decision_revision",
+        "decision",
+        "request",
+        "response_digest"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "decision": {
+                "const": "accept"
+              }
+            },
+            "required": [
+              "decision"
+            ]
+          },
+          "then": {
+            "oneOf": [
+              {
+                "required": [
+                  "response"
+                ],
+                "properties": {
+                  "response": {
+                    "type": "object"
+                  },
+                  "response_ref": {
+                    "type": "null"
+                  }
+                }
+              },
+              {
+                "required": [
+                  "response_ref"
+                ],
+                "properties": {
+                  "response_ref": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160
+                  },
+                  "response": {
+                    "type": "null"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "SemanticIntent": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "server_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "executor_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "binding_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "agent_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "workspace_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "workspace_binding_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "session_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "configuration_revision": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "action": {
+              "const": "runtime.open"
+            },
+            "target": {
+              "$ref": "#/$defs/Target"
+            },
+            "payload": {
+              "$ref": "#/$defs/OpenPayload"
+            }
+          },
+          "required": [
+            "server_id",
+            "executor_id",
+            "binding_id",
+            "agent_id",
+            "workspace_id",
+            "workspace_binding_id",
+            "session_id",
+            "configuration_revision",
+            "action",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "server_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "executor_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "binding_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "agent_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "workspace_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "workspace_binding_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "session_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "configuration_revision": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "action": {
+              "const": "turn.submit"
+            },
+            "target": {
+              "$ref": "#/$defs/Target"
+            },
+            "payload": {
+              "$ref": "#/$defs/SubmitPayload"
+            }
+          },
+          "required": [
+            "server_id",
+            "executor_id",
+            "binding_id",
+            "agent_id",
+            "workspace_id",
+            "workspace_binding_id",
+            "session_id",
+            "configuration_revision",
+            "action",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "server_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "executor_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "binding_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "agent_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "workspace_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "workspace_binding_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "session_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "configuration_revision": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "action": {
+              "const": "turn.steer"
+            },
+            "target": {
+              "$ref": "#/$defs/Target"
+            },
+            "payload": {
+              "$ref": "#/$defs/SteerPayload"
+            }
+          },
+          "required": [
+            "server_id",
+            "executor_id",
+            "binding_id",
+            "agent_id",
+            "workspace_id",
+            "workspace_binding_id",
+            "session_id",
+            "configuration_revision",
+            "action",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "server_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "executor_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "binding_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "agent_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "workspace_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "workspace_binding_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "session_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "configuration_revision": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "action": {
+              "const": "turn.interrupt"
+            },
+            "target": {
+              "$ref": "#/$defs/Target"
+            },
+            "payload": {
+              "$ref": "#/$defs/InterruptPayload"
+            }
+          },
+          "required": [
+            "server_id",
+            "executor_id",
+            "binding_id",
+            "agent_id",
+            "workspace_id",
+            "workspace_binding_id",
+            "session_id",
+            "configuration_revision",
+            "action",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "server_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "executor_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "binding_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "agent_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "workspace_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "workspace_binding_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "session_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "configuration_revision": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "action": {
+              "const": "runtime.close"
+            },
+            "target": {
+              "$ref": "#/$defs/Target"
+            },
+            "payload": {
+              "$ref": "#/$defs/ClosePayload"
+            }
+          },
+          "required": [
+            "server_id",
+            "executor_id",
+            "binding_id",
+            "agent_id",
+            "workspace_id",
+            "workspace_binding_id",
+            "session_id",
+            "configuration_revision",
+            "action",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "server_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "executor_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "binding_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "agent_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "workspace_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "workspace_binding_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "session_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "configuration_revision": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "action": {
+              "const": "approval.decide"
+            },
+            "target": {
+              "$ref": "#/$defs/Target"
+            },
+            "payload": {
+              "$ref": "#/$defs/ApprovalPayload"
+            }
+          },
+          "required": [
+            "server_id",
+            "executor_id",
+            "binding_id",
+            "agent_id",
+            "workspace_id",
+            "workspace_binding_id",
+            "session_id",
+            "configuration_revision",
+            "action",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "server_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "executor_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "binding_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "agent_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "workspace_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "workspace_binding_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "session_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "configuration_revision": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "action": {
+              "const": "input.provide"
+            },
+            "target": {
+              "$ref": "#/$defs/Target"
+            },
+            "payload": {
+              "$ref": "#/$defs/InputPayload"
+            }
+          },
+          "required": [
+            "server_id",
+            "executor_id",
+            "binding_id",
+            "agent_id",
+            "workspace_id",
+            "workspace_binding_id",
+            "session_id",
+            "configuration_revision",
+            "action",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "ResolveIntentRequest": {
+      "type": "object",
+      "properties": {
+        "agent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "client_intent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "intent": {
+          "type": "string",
+          "enum": [
+            "runtime.start",
+            "turn.submit",
+            "turn.steer",
+            "turn.interrupt",
+            "runtime.close"
+          ]
+        },
+        "binding_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "workspace_binding_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "session_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "new_session": {
+          "type": "boolean"
+        },
+        "text": {
+          "type": "string",
+          "maxLength": 65536
+        },
+        "target": {
+          "$ref": "#/$defs/Target"
+        }
+      },
+      "required": [
+        "client_intent_id",
+        "intent",
+        "binding_id",
+        "workspace_binding_id"
+      ],
+      "additionalProperties": false
+    },
+    "IntentResolution": {
+      "type": "object",
+      "properties": {
+        "client_intent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "intent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "operation_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "session_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "reuse": {
+          "type": "boolean"
+        },
+        "scope": {
+          "$ref": "#/$defs/ExecutionScope"
+        },
+        "semantic_intent": {
+          "$ref": "#/$defs/SemanticIntent"
+        },
+        "intent_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "resolution_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "can_submit": {
+          "type": "boolean"
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "maxItems": 32
+        },
+        "dispatch_owner": {
+          "const": "server"
+        }
+      },
+      "required": [
+        "client_intent_id",
+        "intent_id",
+        "operation_id",
+        "session_id",
+        "reuse",
+        "scope",
+        "semantic_intent",
+        "intent_hash",
+        "resolution_revision",
+        "expires_at",
+        "can_submit",
+        "blockers",
+        "dispatch_owner"
+      ],
+      "additionalProperties": false
+    },
+    "OperationSubmitRequest": {
+      "type": "object",
+      "properties": {
+        "client_intent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "operation_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "resolution_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "intent_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "client_intent_id",
+        "operation_id",
+        "resolution_revision",
+        "intent_hash"
+      ],
+      "additionalProperties": false
+    },
+    "OperationView": {
+      "type": "object",
+      "properties": {
+        "operation_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "client_intent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "scope": {
+          "$ref": "#/$defs/ExecutionScope"
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "runtime.open",
+            "turn.submit",
+            "turn.steer",
+            "turn.interrupt",
+            "runtime.close",
+            "approval.decide",
+            "input.provide"
+          ]
+        },
+        "intent_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "admission_state": {
+          "type": "string",
+          "enum": [
+            "RESOLVED",
+            "ACCEPTED",
+            "DISPATCH_PENDING",
+            "DISPATCHED",
+            "RECONCILING",
+            "RESOLVED_TERMINAL"
+          ]
+        },
+        "executor_stage": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "RECEIVED_DURABLE",
+                "PREPARED",
+                "SUBMISSION_STARTED",
+                "SUBMITTED",
+                "ACCEPTED",
+                "RUNNING",
+                "WAITING_INPUT",
+                "SUCCEEDED",
+                "FAILED",
+                "CANCELLED",
+                "OUTCOME_UNKNOWN"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "possible_effect": {
+          "type": "boolean"
+        },
+        "retry_safe": {
+          "type": "boolean"
+        },
+        "receipt_revision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "last_observed_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ErrorBody"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "follow_up_operation_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "maxItems": 16
+        },
+        "result": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "session_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160
+                },
+                "stream_epoch": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160
+                },
+                "terminal_sequence": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "output_text": {
+                  "type": "string",
+                  "maxLength": 1048576
+                },
+                "output_truncated": {
+                  "type": "integer",
+                  "enum": [
+                    0,
+                    1
+                  ]
+                },
+                "output_event_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "delivery_outcome": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "captured_at": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "session_id",
+                "stream_epoch",
+                "terminal_sequence",
+                "output_text",
+                "output_truncated",
+                "output_event_count",
+                "delivery_outcome",
+                "captured_at"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "operation_id",
+        "client_intent_id",
+        "scope",
+        "action",
+        "intent_hash",
+        "admission_state",
+        "executor_stage",
+        "possible_effect",
+        "retry_safe",
+        "receipt_revision",
+        "last_observed_at",
+        "error",
+        "follow_up_operation_ids"
+      ],
+      "additionalProperties": false
+    },
+    "ReceiptEvidence": {
+      "type": "object",
+      "properties": {
+        "operation_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "intent_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "session_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "stage": {
+          "type": "string",
+          "enum": [
+            "RECEIVED_DURABLE",
+            "PREPARED",
+            "SUBMISSION_STARTED",
+            "SUBMITTED",
+            "ACCEPTED",
+            "RUNNING",
+            "WAITING_INPUT",
+            "SUCCEEDED",
+            "FAILED",
+            "CANCELLED",
+            "OUTCOME_UNKNOWN"
+          ]
+        },
+        "possible_effect": {
+          "type": "boolean"
+        },
+        "retry_safe": {
+          "type": "boolean"
+        },
+        "native_reference": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "detail": {
+          "type": "object",
+          "maxProperties": 32
+        }
+      },
+      "required": [
+        "operation_id",
+        "intent_hash",
+        "session_id",
+        "stage",
+        "possible_effect",
+        "retry_safe"
+      ],
+      "additionalProperties": false
+    },
+    "ReceiptPublishRequest": {
+      "type": "object",
+      "properties": {
+        "scope": {
+          "$ref": "#/$defs/ExecutionScope"
+        },
+        "connection_generation": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "source_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "receipt": {
+          "$ref": "#/$defs/ReceiptEvidence"
+        }
+      },
+      "required": [
+        "scope",
+        "connection_generation",
+        "source_revision",
+        "receipt"
+      ],
+      "additionalProperties": false
+    },
+    "ReceiptAccepted": {
+      "type": "object",
+      "properties": {
+        "operation_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "source_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "receipt_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "accepted": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "operation_id",
+        "source_revision",
+        "receipt_revision",
+        "accepted"
+      ],
+      "additionalProperties": false
+    },
+    "SessionListView": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sessions",
+        "has_more",
+        "next_after_session_id"
+      ],
+      "properties": {
+        "sessions": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "$ref": "#/$defs/SessionView"
+          }
+        },
+        "has_more": {
+          "type": "boolean"
+        },
+        "next_after_session_id": {
+          "type": "string",
+          "maxLength": 160
+        }
+      }
+    },
+    "SessionView": {
+      "type": "object",
+      "properties": {
+        "scope": {
+          "$ref": "#/$defs/ExecutionScope"
+        },
+        "connection_generation": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "lifecycle_state": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "process_state": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "ownership": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "lease_state": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "durable_release_pending": {
+          "type": "boolean"
+        },
+        "control_available": {
+          "type": "boolean"
+        },
+        "last_observed_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "scope",
+        "connection_generation",
+        "lifecycle_state",
+        "process_state",
+        "ownership",
+        "lease_state",
+        "durable_release_pending",
+        "control_available",
+        "last_observed_at"
+      ],
+      "additionalProperties": false
+    },
+    "CapabilityRequest": {
+      "type": "object",
+      "properties": {
+        "capability_request_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "binding_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "audience": {
+          "type": "string",
+          "enum": [
+            "nexus-mcp-session",
+            "nexus-native-session"
+          ]
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "maxItems": 128
+        },
+        "replaces_capability_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "capability_request_id",
+        "binding_id",
+        "audience",
+        "actions"
+      ],
+      "additionalProperties": false
+    },
+    "CapabilityIssue": {
+      "type": "object",
+      "properties": {
+        "capability_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "capability_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "capability": {
+          "type": "string",
+          "minLength": 32,
+          "maxLength": 4096
+        },
+        "scope": {
+          "$ref": "#/$defs/ExecutionScope"
+        },
+        "audience": {
+          "type": "string",
+          "enum": [
+            "nexus-mcp-session",
+            "nexus-native-session"
+          ]
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "maxItems": 128
+        },
+        "expires_in": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 120
+        },
+        "mcp_url": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uri",
+              "maxLength": 2048
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "capability_id",
+        "capability_ref",
+        "capability",
+        "scope",
+        "audience",
+        "actions",
+        "expires_in",
+        "mcp_url"
+      ],
+      "additionalProperties": false
+    },
+    "ApprovalKey": {
+      "type": "object",
+      "properties": {
+        "server_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "executor_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "binding_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "agent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "workspace_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "session_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "session_owner_generation": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "canonical_request_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "native_approval",
+            "native_input",
+            "administrative"
+          ]
+        }
+      },
+      "required": [
+        "server_id",
+        "executor_id",
+        "binding_id",
+        "agent_id",
+        "workspace_id",
+        "session_id",
+        "session_owner_generation",
+        "canonical_request_id",
+        "kind"
+      ],
+      "additionalProperties": false
+    },
+    "ApprovalDecisionRequest": {
+      "type": "object",
+      "properties": {
+        "client_intent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "approval_key": {
+          "$ref": "#/$defs/ApprovalKey"
+        },
+        "expected_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "request_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "approve",
+            "deny"
+          ]
+        },
+        "cas_token": {
+          "type": "string",
+          "minLength": 16,
+          "maxLength": 4096
+        },
+        "operator_proof_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "response": {
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "client_intent_id",
+        "approval_key",
+        "expected_revision",
+        "request_hash",
+        "decision",
+        "cas_token"
+      ],
+      "additionalProperties": false
+    },
+    "DecisionView": {
+      "type": "object",
+      "properties": {
+        "decision_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "client_intent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "approval_key": {
+          "$ref": "#/$defs/ApprovalKey"
+        },
+        "request_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "request_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "proposal_decision": {
+          "type": "string",
+          "enum": [
+            "approve",
+            "deny"
+          ]
+        },
+        "native_decision": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "accept",
+                "decline",
+                "cancel"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "actor_agent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "subject_agent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "canonical_state": {
+          "type": "string",
+          "enum": [
+            "PENDING",
+            "CONFIRMED",
+            "DENIED",
+            "EXPIRED",
+            "CANCELLED"
+          ]
+        },
+        "native_operation_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "native_stage": {
+          "type": "string",
+          "enum": [
+            "NOT_DISPATCHED",
+            "DISPATCH_PENDING",
+            "SUBMITTED",
+            "APPLIED_OBSERVED",
+            "REFUSED_BEFORE_EFFECT",
+            "OUTCOME_UNKNOWN"
+          ]
+        },
+        "possible_effect": {
+          "type": "boolean"
+        },
+        "retry_safe": {
+          "type": "boolean"
+        },
+        "response_digest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "decision_id",
+        "client_intent_id",
+        "approval_key",
+        "request_hash",
+        "request_revision",
+        "proposal_decision",
+        "native_decision",
+        "actor_agent_id",
+        "subject_agent_id",
+        "canonical_state",
+        "native_operation_id",
+        "native_stage",
+        "possible_effect",
+        "retry_safe",
+        "response_digest",
+        "expires_at"
+      ],
+      "additionalProperties": false
+    },
+    "NativeActionRequest": {
+      "type": "object",
+      "properties": {
+        "action_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "scope": {
+          "$ref": "#/$defs/ExecutionScope"
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "context",
+            "claim",
+            "complete",
+            "input_list",
+            "input_respond",
+            "message_create"
+          ]
+        },
+        "payload": {
+          "type": "object",
+          "maxProperties": 32
+        }
+      },
+      "required": [
+        "action_id",
+        "scope",
+        "action",
+        "payload"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "context"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "handoff_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160
+                  }
+                },
+                "required": [
+                  "handoff_id"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "claim"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "handoff_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160
+                  },
+                  "idempotency_key": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "claim_epoch": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                },
+                "required": [
+                  "handoff_id",
+                  "idempotency_key"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "complete"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "handoff_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160
+                  },
+                  "claim_epoch": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "result": {}
+                },
+                "required": [
+                  "handoff_id",
+                  "claim_epoch",
+                  "result"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "input_list"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "object",
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "input_respond"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "request": {
+                    "type": "object",
+                    "properties": {
+                      "approval_key": {
+                        "$ref": "#/$defs/ApprovalKey"
+                      },
+                      "expected_revision": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "request_hash": {
+                        "type": "string",
+                        "pattern": "^sha256:[0-9a-f]{64}$"
+                      },
+                      "decision": {
+                        "type": "string",
+                        "enum": [
+                          "approve",
+                          "deny"
+                        ]
+                      },
+                      "cas_token": {
+                        "type": "string",
+                        "minLength": 16,
+                        "maxLength": 4096
+                      },
+                      "operator_proof_ref": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 160
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "response": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "approval_key",
+                      "expected_revision",
+                      "request_hash",
+                      "decision",
+                      "cas_token"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "request"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "message_create"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "object",
+                    "properties": {
+                      "subject": {
+                        "type": "string"
+                      },
+                      "body": {
+                        "type": "string"
+                      },
+                      "target": {
+                        "type": "object"
+                      },
+                      "channel_id": {
+                        "type": "string"
+                      },
+                      "parent_message_id": {
+                        "type": "string"
+                      },
+                      "artifacts": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "required": [
+                      "subject",
+                      "body",
+                      "target"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "message"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        }
+      ]
+    },
+    "NativeActionResult": {
+      "type": "object",
+      "properties": {
+        "action_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "context",
+            "claim",
+            "complete",
+            "input_list",
+            "input_respond",
+            "message_create"
+          ]
+        },
+        "state": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "result": {
+          "type": "object",
+          "maxProperties": 64
+        }
+      },
+      "required": [
+        "action_id",
+        "action",
+        "state",
+        "result"
+      ],
+      "additionalProperties": false
+    },
+    "IntentQueryResponse": {
+      "type": "object",
+      "properties": {
+        "resolution": {
+          "$ref": "#/$defs/IntentResolution"
+        },
+        "operation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/OperationView"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "resolution",
+        "operation"
+      ],
+      "additionalProperties": false
+    },
+    "CapabilityMetadata": {
+      "type": "object",
+      "properties": {
+        "capability_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "capability_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "scope": {
+          "$ref": "#/$defs/ExecutionScope"
+        },
+        "audience": {
+          "type": "string",
+          "enum": [
+            "nexus-mcp-session",
+            "nexus-native-session"
+          ]
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "maxItems": 128
+        },
+        "expires_in": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 120
+        },
+        "mcp_url": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uri",
+              "maxLength": 2048
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "request_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "lease_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "lease_serial": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "capability_id",
+        "capability_ref",
+        "scope",
+        "audience",
+        "actions",
+        "expires_in",
+        "mcp_url",
+        "request_id",
+        "lease_id",
+        "lease_serial"
+      ],
+      "additionalProperties": false
+    },
+    "CapabilityMetadataQuery": {
+      "type": "object",
+      "properties": {
+        "binding_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "capability_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "request_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        }
+      },
+      "required": [
+        "binding_id",
+        "capability_id",
+        "request_id"
+      ],
+      "additionalProperties": false
+    },
+    "RemoteRealizationPublishRequest": {
+      "type": "object",
+      "properties": {
+        "client_intent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "agent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "local_realization_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "realization_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "workspace_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "workspace_label": {
+          "type": "string",
+          "maxLength": 4096
+        },
+        "adapter_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "candidate_ref": {
+          "type": "string",
+          "pattern": "^nexus-install-v1:[0-9a-f]{64}$"
+        },
+        "inventory_revision": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "local_root_proof_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "configuration_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "local_consent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        }
+      },
+      "required": [
+        "client_intent_id",
+        "agent_id",
+        "local_realization_ref",
+        "realization_revision",
+        "workspace_id",
+        "workspace_label",
+        "adapter_id",
+        "candidate_ref",
+        "inventory_revision",
+        "local_root_proof_digest",
+        "configuration_digest",
+        "local_consent_id"
+      ],
+      "additionalProperties": false
+    },
+    "LocalRealizationPrepareRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "client_intent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "agent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "workspace_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "workspace_label": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "adapter_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "candidate_ref": {
+          "type": "string",
+          "pattern": "^nexus-install-v1:[0-9a-f]{64}$"
+        },
+        "inventory_revision": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "local_consent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "workspace_root": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "approved": {
+          "const": true
+        },
+        "provider_home": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "secret_bindings": {
+          "type": "object",
+          "maxProperties": 64,
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        }
+      },
+      "required": [
+        "client_intent_id",
+        "agent_id",
+        "workspace_id",
+        "workspace_label",
+        "adapter_id",
+        "candidate_ref",
+        "inventory_revision",
+        "local_consent_id",
+        "workspace_root",
+        "approved"
+      ]
+    },
+    "InventoryRefreshClaimRequest": {
+      "type": "object",
+      "properties": {
+        "producer_instance_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        }
+      },
+      "required": [
+        "producer_instance_id"
+      ],
+      "additionalProperties": false
+    },
+    "InventoryRefreshClaimView": {
+      "type": "object",
+      "properties": {
+        "server_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "executor_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "producer_instance_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "delivery_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "server_id",
+        "executor_id",
+        "producer_instance_id",
+        "delivery_id"
+      ],
+      "additionalProperties": false
+    },
+    "LocalInstallationCheckRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "agent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "adapter_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "candidate_ref": {
+          "type": "string",
+          "pattern": "^nexus-install-v1:[0-9a-f]{64}$"
+        },
+        "inventory_revision": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "approved": {
+          "const": true
+        }
+      },
+      "required": [
+        "agent_id",
+        "adapter_id",
+        "candidate_ref",
+        "inventory_revision",
+        "approved"
+      ]
+    },
+    "LocalInstallationCheckView": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "executor_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "candidate_ref": {
+          "type": "string",
+          "pattern": "^nexus-install-v1:[0-9a-f]{64}$"
+        },
+        "version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "runtime_authorized": {
+          "const": false
+        },
+        "publication_pending": {
+          "const": false
+        }
+      },
+      "required": [
+        "executor_id",
+        "candidate_ref",
+        "version",
+        "runtime_authorized",
+        "publication_pending"
+      ]
+    }
+  }
+}

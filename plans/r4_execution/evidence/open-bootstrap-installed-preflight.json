@@ -1,0 +1,8 @@
+{
+  "status": "ENVIRONMENT_PREPARATION_FAILED",
+  "product_tests_collected": false,
+  "python": "C:/Users/jpamb/AppData/Local/Temp/okto-r4-pending-installed-py313/Scripts/python.exe",
+  "error": "ImportError: cannot import name 'Draft202012Validator' from 'jsonschema' (unknown location)",
+  "observation": "42 of 46 entries in jsonschema RECORD were missing, including module and METADATA. The Nexus wheel contains only okto_nexus and its dist-info. Root cause of environment damage is not established.",
+  "resolution": "Create a new isolated environment; install all package dependencies with copy mode and rerun the campaign."
+}
