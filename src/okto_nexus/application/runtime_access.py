@@ -29,7 +29,7 @@ class RuntimeAccessService:
 
     @staticmethod
     def _operator(context, actor):
-        local = context.trusted_local_operator and context.authentication_source == "http_loopback"
+        local = context.trusted_local_operator and context.authentication_source in ("http_loopback", "operator_session")
         keyed = (context.authentication_source == "agent_key" and actor and actor.is_active
                  and actor.agent_id == "operator" and context.credential_binding
                  and context.credential_binding == actor.api_key_hash)

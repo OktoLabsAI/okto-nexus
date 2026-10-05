@@ -859,9 +859,12 @@ okto-nexus admin issue-keys --project-root .
 okto-nexus --help           # command reference; MCP uses HTTP /mcp`}</Code>
         <H>Binding beyond loopback</H>
         <P>
-          With `--host` outside 127.0.0.1, the dashboard and REST start
-          requiring an API key (fail-closed on the network). The /mcp
-          endpoint requires a key always, on any bind.
+          With --host 0.0.0.0, direct localhost access remains open. For the
+          remote dashboard, configure a username and password locally in
+          Settings → Operator access. Sessions last eight hours; Sign out
+          ends the session, and changing the password signs out all sessions.
+          MCP and Connector continue to use agent API keys. Use HTTPS to
+          encrypt remote sign-in and session traffic.
         </P>
       </>
     ),

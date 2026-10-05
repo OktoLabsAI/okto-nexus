@@ -77,7 +77,7 @@ def authenticated_message_context(uow, context, agents, *, capabilities=None, wo
                                    capabilities=capabilities, workspace_id=workspace_id):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Runtime message authority is no longer valid.', {})
         return context
-    if context.authentication_source == "http_loopback":
+    if context.authentication_source in ("http_loopback", "operator_session"):
         if not context.trusted_local_operator or context.actor_agent_id not in (None, "operator"):
             return None
         actor = agents.get(uow, "operator")

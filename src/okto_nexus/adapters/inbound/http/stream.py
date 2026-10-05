@@ -84,6 +84,11 @@ def build_router() -> APIRouter:
             while True:
                 if server is not None and server.should_exit:
                     break
+                if getattr(request.state, 'operator_session', False):
+                    from .operator_auth import COOKIE
+                    if not await anyio.to_thread.run_sync(
+                            request.app.state.operator_auth.resolve, request.cookies.get(COOKIE)):
+                        break
                 rows = await anyio.to_thread.run_sync(_fetch, cursor)
                 if rows:
                     for row in rows:

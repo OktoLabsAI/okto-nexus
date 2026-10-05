@@ -4,7 +4,7 @@
 // extraction slot). Consumers register a handler; the hook reports liveness.
 
 import { useEffect, useRef, useState } from "react";
-import { getApiKey, type NexusEvent } from "./api";
+import { type NexusEvent } from "./api";
 
 export type SSEStatus = "connecting" | "live" | "reconnecting" | "off";
 
@@ -17,7 +17,6 @@ export function useSSE(onEvent: (event: NexusEvent) => void): SSEStatus {
   useEffect(() => {
     // No key is fine on a loopback-bound serve (same-machine trust); the
     // credential rides along only when the operator actually has one.
-    const key = getApiKey();
     let source: EventSource | null = null;
     let retryTimer: number | undefined;
     let disposed = false;
@@ -26,7 +25,6 @@ export function useSSE(onEvent: (event: NexusEvent) => void): SSEStatus {
       if (disposed) return;
       setStatus((s) => (s === "live" ? "reconnecting" : "connecting"));
       const params = new URLSearchParams();
-      if (key) params.set("api_key", key);
       if (lastIdRef.current > 0) {
         params.set("last_event_id", String(lastIdRef.current));
       }

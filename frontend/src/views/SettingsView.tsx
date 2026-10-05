@@ -21,6 +21,7 @@ import {
 import { api, type NexusInfo, type SettingItem } from "../api";
 import { useConfirm } from "../components/Confirm";
 import { useTheme } from "../hooks/useTheme";
+import { OperatorAccess } from "../components/OperatorAccess";
 import { RuntimePolicy } from "../components/RuntimePolicy";
 
 function labelOf(key: string): string {
@@ -214,6 +215,7 @@ export function SettingsView({
     <div className="h-full overflow-y-auto p-6">
       {dialog}
       <div className="max-w-2xl mx-auto space-y-4">
+        <OperatorAccess />
         {/* Appearance */}
         <section className="panel p-5 space-y-3">
           <h2 className="font-display font-semibold text-sm">Appearance</h2>

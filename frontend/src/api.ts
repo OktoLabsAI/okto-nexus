@@ -1,7 +1,6 @@
 // API client for the Nexus serve surfaces. Single source of truth for the
-// envelope ({ok, data | error}) and for credential handling: the operator
-// key lives in sessionStorage only (cleared when the tab closes) and is sent
-// via x-api-key. Issued AGENT keys are never stored anywhere (br_ae340cae).
+// envelope ({ok, data | error}). Human sessions use HttpOnly cookies;
+// issued AGENT keys are never stored by the dashboard.
 
 export interface Envelope<T> {
   ok: boolean;
@@ -635,6 +634,7 @@ export interface PresetsPayload {
 }
 
 export interface AgentRow {
+  connection?: { location: 'local' | 'remote'; status: string; hosts: {executor_id: string; label: string; status: string; last_seen_at: string | null}[] };
   agent_id: string;
   role: string | null;
   capabilities: Record<string, unknown>;
@@ -964,18 +964,8 @@ export interface WorkspaceHealth {
   };
 }
 
-const KEY_STORAGE = "okto_nexus_operator_key";
-
-export function getApiKey(): string | null {
-  return sessionStorage.getItem(KEY_STORAGE);
-}
-
-export function setApiKey(key: string): void {
-  sessionStorage.setItem(KEY_STORAGE, key);
-}
-
-export function clearApiKey(): void {
-  sessionStorage.removeItem(KEY_STORAGE);
+export interface OperatorStatus {
+  configured: boolean; local: boolean; authenticated: boolean; username: string | null;
 }
 
 export class ApiError extends Error {
@@ -993,13 +983,15 @@ async function call<T>(
   path: string,
   init: RequestInit = {},
 ): Promise<T> {
-  const key = getApiKey();
   const headers = new Headers(init.headers);
-  if (key) headers.set("x-api-key", key);
+  headers.set("x-nexus-ui", "1");
   if (init.body) headers.set("content-type", "application/json");
   const response = await fetch(path, { ...init, headers });
   // Never assume JSON: a crashed handler or a proxy can answer plain text,
   // and "Unexpected token ..." hides the actual error from the operator.
+  if (response.status === 401 && !path.startsWith("/api/v1/operator-auth/")) {
+    window.dispatchEvent(new Event("nexus-auth-expired"));
+  }
   const raw = await response.text();
   let body: Envelope<T> | null = null;
   try {
@@ -1037,9 +1029,8 @@ export interface NexusInfo {
 // key is needed. Streams to a Blob and saves via an object URL so the browser's
 // Save dialog fires with the Content-Disposition filename.
 async function downloadExport(path: string, filename: string): Promise<void> {
-  const key = getApiKey();
   const headers = new Headers();
-  if (key) headers.set("x-api-key", key);
+  headers.set("x-nexus-ui", "1");
   const response = await fetch(path, { headers });
   if (!response.ok) {
     const raw = await response.text();
@@ -1063,9 +1054,8 @@ async function downloadExport(path: string, filename: string): Promise<void> {
 }
 
 async function fetchBlob(path: string): Promise<Blob> {
-  const key = getApiKey();
   const headers = new Headers();
-  if (key) headers.set("x-api-key", key);
+  headers.set("x-nexus-ui", "1");
   const response = await fetch(path, { headers });
   if (!response.ok) {
     const raw = await response.text();
@@ -1081,9 +1071,8 @@ async function fetchBlob(path: string): Promise<Blob> {
 }
 
 async function uploadArtifact(workspace: string, file: File): Promise<ArtifactItem> {
-  const key = getApiKey();
   const headers = new Headers();
-  if (key) headers.set("x-api-key", key);
+  headers.set("x-nexus-ui", "1");
   headers.set("content-type", file.type || "application/octet-stream");
   const params = new URLSearchParams({ workspace, filename: file.name });
   const response = await fetch(`/api/v1/meta-harness/artifacts?${params}`, {
@@ -1113,7 +1102,7 @@ async function uploadArtifact(workspace: string, file: File): Promise<ArtifactIt
 }
 
 export interface AgentExecutionPolicy {
-  agent_id: string; revision: number; execution_location: 'local' | 'remote' | 'all';
+  agent_id: string; revision: number; execution_location: 'local' | 'remote';
   local_adapter_id: string | null; local_integrations: Array<{adapter_id: string; label: string}>;
 }
 
@@ -1127,6 +1116,13 @@ export type RuntimePolicy = {
 };
 
 export const api = {
+  operatorStatus: () => call<OperatorStatus>("/api/v1/operator-auth/status"),
+  operatorLogin: (username: string, password: string) => call("/api/v1/operator-auth/login", {
+    method: "POST", body: JSON.stringify({username, password}),
+  }),
+  operatorLogout: () => call("/api/v1/operator-auth/logout", {method: "POST"}),
+  operatorAccount: (username: string, password: string, current_password: string) =>
+    call("/api/v1/operator-auth/account", {method: "POST", body: JSON.stringify({username, password, current_password})}),
   agentRuntimeSessions: (agentId: string, workspace: string) => call<{
     items: (import('./runtimeApi').RuntimeSession & {host: string; harness: string})[]; has_more: boolean;
   }>(`/api/v1/agents/${encodeURIComponent(agentId)}/runtime-sessions${workspace === 'all' ? '' : `?workspace=${encodeURIComponent(workspace)}`}`),
@@ -1149,7 +1145,7 @@ export const api = {
   authorizeRuntimeExecution: (body: {actor_agent_id: string; endpoint_id: string; actions: string[]; max_executions: number | null; expires_at: string | null}) =>
     call<{grant_id: string}>("/api/v1/harness/grants", {method: "POST", body: JSON.stringify(body)}),
   agentExecutionPolicy: (id: string) => call<AgentExecutionPolicy>(`/api/v1/agents/${encodeURIComponent(id)}/execution-policy`),
-  saveAgentExecutionPolicy: (id: string, body: {expected_revision: number; execution_location: 'local' | 'remote' | 'all'; local_adapter_id: string | null}) => call<AgentExecutionPolicy>(`/api/v1/agents/${encodeURIComponent(id)}/execution-policy`, {method: 'PUT', body: JSON.stringify(body)}),
+  saveAgentExecutionPolicy: (id: string, body: {expected_revision: number; execution_location: 'local' | 'remote'; local_adapter_id: string | null}) => call<AgentExecutionPolicy>(`/api/v1/agents/${encodeURIComponent(id)}/execution-policy`, {method: 'PUT', body: JSON.stringify(body)}),
   runtimeBindings: (after?: string) => call<{
     agents: RuntimeBindingAgent[]; has_more: boolean; next_endpoint_id: string | null;
   }>(`/api/v1/harness/bindings?limit=50${after ? `&after_endpoint_id=${encodeURIComponent(after)}` : ""}`),

@@ -10,6 +10,27 @@ pytestmark = pytest.mark.skipif(os.environ.get('OKTO_NEXUS_UI_CAMPAIGN') != '1',
                                reason='Isolated browser campaign not enabled')
 
 
+def test_remote_command_uses_http_address_and_explains_required_key(local_setup, local_browser):
+    from playwright.sync_api import expect
+    page, _ = local_browser
+    page.get_by_role('button', name='Agents', exact=True).click()
+    page.get_by_test_id('connections-subject').click()
+    panel = page.get_by_test_id('agent-connections-subject')
+    panel.get_by_label('Execution access', exact=True).select_option('remote')
+    remote = panel.get_by_role('region', name='Remote Connector setup')
+    address = remote.get_by_label('Remote Nexus address')
+    for server in ('http://192.168.0.146:8202', 'https://nexus.lan:8202'):
+        address.fill(server)
+        expect(remote.get_by_test_id('connector-command')).to_have_text(
+            f"okto-nexus-connector connect --server='{server}' --agent='subject'")
+        expect(remote.get_by_role('button', name='Copy Connector command')).to_be_enabled()
+    expect(remote).to_contain_text('The key is required; the agent name alone does not authorize a connection.')
+    for invalid in ('', 'http://127.0.0.1:8202', 'ftp://nexus.lan:8202', 'http://user:secret@nexus.lan:8202'):
+        address.fill(invalid)
+        expect(remote.get_by_test_id('connector-command')).to_have_count(0)
+        expect(remote.get_by_role('button', name='Copy Connector command')).to_be_disabled()
+
+
 def test_agent_connections_has_original_mcp_policy_and_local_configuration(local_setup, local_browser, tmp_path):
     from playwright.sync_api import expect
     deps, app, client, headers, *_ = local_setup
@@ -52,8 +73,8 @@ def test_agent_connections_has_original_mcp_policy_and_local_configuration(local
         assert 'workspace_id' not in policy
         assert uow.connection.execute('SELECT COUNT(*) FROM agent_connection_keys').fetchone()[0] == 0
     assert not any('/connection-keys' in path for _, path, _ in trace['requests'])
-    panel.get_by_label('Execution access', exact=True).select_option('all')
-    expect(panel.get_by_role('region', name='Remote Connector setup')).to_be_visible()
+    expect(panel.get_by_label('Execution access', exact=True).get_by_role('option', name='All', exact=True)).to_have_count(0)
+    expect(panel.get_by_role('region', name='Remote Connector setup')).to_have_count(0)
     expect(panel.get_by_role('group', name='Local runtime', exact=True)).to_be_visible()
     target = Path(os.environ.get('OKTO_NEXUS_UI_SCREENSHOT_DIR', str(tmp_path)))
     target.mkdir(parents=True, exist_ok=True)

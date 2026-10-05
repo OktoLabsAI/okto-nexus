@@ -1770,7 +1770,10 @@ def build_router() -> APIRouter:
         deps = request.app.state.deps
 
         def _list(uow):
-            return [_public_agent(agent) for agent in deps.repos.agents.list(uow)]
+            from ....application.agent_connection_status import agent_connection_statuses
+            statuses = agent_connection_statuses(uow, deps.clock.now_iso())
+            return [_public_agent(agent) | {'connection': statuses.get(agent.agent_id)}
+                    for agent in deps.repos.agents.list(uow)]
 
         return _ok({"items": await _read(request, _list)})
 

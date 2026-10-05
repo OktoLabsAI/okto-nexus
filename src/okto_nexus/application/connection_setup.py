@@ -60,21 +60,24 @@ def load_setup(deps, context, agent_id, binding_id=None):
         result = {'baseline': baseline(uow, agent_id, binding_id),
                   'runtime_default': runtime_policy.defaults(uow.connection)['runtime_enabled']}
         result['connections'] = [dict(row) for row in uow.connection.execute(
-            'SELECT b.binding_id,b.candidate_ref,b.executor_id,e.workspace_id,e.adapter_id '
+            "SELECT b.binding_id,b.candidate_ref,b.executor_id,e.workspace_id,e.adapter_id,"
+            "CASE WHEN x.kind='remote' THEN 'remote' ELSE 'local' END execution_location "
             'FROM execution_bindings b JOIN agent_endpoints e ON e.endpoint_id=b.endpoint_id '
-            'JOIN execution_local_realizations l ON l.server_id=b.server_id AND l.executor_id=b.executor_id '
-            'AND l.realization_ref=b.realization_ref WHERE e.agent_id=? ORDER BY e.workspace_id,e.adapter_id', (agent_id,))]
+            'JOIN execution_executors x ON x.server_id=b.server_id AND x.executor_id=b.executor_id '
+            "WHERE e.agent_id=? AND e.enabled=1 AND e.activation_state='approved' "
+            'ORDER BY e.workspace_id,e.adapter_id', (agent_id,))]
         if binding_id:
             row = uow.connection.execute('SELECT e.public_config,e.response_policy,l.local_record_json FROM execution_bindings b '
                 'JOIN agent_endpoints e ON e.endpoint_id=b.endpoint_id '
-                'JOIN execution_local_realizations l ON l.server_id=b.server_id AND l.executor_id=b.executor_id '
+                'LEFT JOIN execution_local_realizations l ON l.server_id=b.server_id AND l.executor_id=b.executor_id '
                 'AND l.realization_ref=b.realization_ref WHERE b.binding_id=? AND e.agent_id=?',
                 (binding_id, agent_id)).fetchone()
             if row:
-                record = json.loads(row['local_record_json'])
-                result['folders'] = dict(workspace_root=record['root']['path'],
-                    provider_home=record['provider_home']['path'] if record['provider_home'] else None,
-                    secret_bindings=record['configuration']['secret_bindings'])
+                if row['local_record_json']:
+                    record = json.loads(row['local_record_json'])
+                    result['folders'] = dict(workspace_root=record['root']['path'],
+                        provider_home=record['provider_home']['path'] if record['provider_home'] else None,
+                        secret_bindings=record['configuration']['secret_bindings'])
                 result['public_config'] = json.loads(row['public_config'])
                 result['automatic_reply'] = True
                 grant = uow.connection.execute('SELECT g.* FROM runtime_execution_grants g '

@@ -83,6 +83,27 @@ def test_setup_transport_requires_operator(local_setup):
     assert client.get('/v1/connections/setup/subject',headers=headers['operator']).status_code == 200
 
 
+@pytest.mark.parametrize('existing_local', [False, True])
+def test_remote_policy_can_finish_before_connector_registration(local_setup, existing_local):
+    context, request = request_for(local_setup)
+    if existing_local:
+        finish(local_setup, context, request, verified={
+            'root': directory_identity(request['configuration']['workspace_root']), 'home': None})
+    before = count(local_setup, 'execution_bindings')
+    request.update(client_intent_id='switch-to-remote', executor_id='', candidate_ref='', inventory_revision='',
+                   workspace_id=None, binding_id=None,
+                   baseline=load_setup(local_setup[0], context, 'subject')['baseline'])
+    request['configuration']['execution_location'] = 'remote'
+    response = local_setup[2].post('/v1/connections/setup:finish', headers=local_setup[3]['operator'], json=request)
+    assert response.status_code == 200, response.text
+    assert response.json() == {'saved': True, 'agent_id': 'subject'}
+    assert count(local_setup, 'execution_bindings') == before
+    policy = local_setup[2].get('/api/v1/agents/subject/execution-policy', headers=local_setup[3]['operator'])
+    assert policy.json()['data']['execution_location'] == 'remote'
+    retry = local_setup[2].post('/v1/connections/setup:finish', headers=local_setup[3]['operator'], json=request)
+    assert retry.status_code == 200 and retry.json() == response.json()
+
+
 @pytest.mark.parametrize('enabled',[True,False])
 def test_finish_preserves_inherited_runtime_policy(local_setup,enabled):
     context,request=request_for(local_setup)
@@ -102,13 +123,21 @@ def test_remote_finish_updates_approved_binding_atomically(local_setup):
     with local_setup[0].connection_factory.unit_of_work() as uow:
         uow.connection.execute("UPDATE execution_executors SET kind='remote',connector_id='connector-test',registered_by_agent_id='subject'")
     request.update(client_intent_id='remote-finish',binding_id=created['binding']['binding_id'])
-    request['baseline']=load_setup(local_setup[0],context,'subject',request['binding_id'])['baseline']
+    with local_setup[0].connection_factory.unit_of_work() as uow:
+        uow.connection.execute('DELETE FROM execution_local_realizations')
+        uow.connection.execute('DELETE FROM runtime_execution_grants')
+    remote_view=load_setup(local_setup[0],context,'subject',request['binding_id'])
+    assert remote_view['connections'][0]['execution_location']=='remote'
+    assert 'folders' not in remote_view
+    request['baseline']=remote_view['baseline']
     request['configuration'].update(execution_location='remote',tool_access='ask')
     result=finish(local_setup,context,request,verified=None)
     assert result['saved']
     assert count(local_setup,'execution_bindings')==1
     view=load_setup(local_setup[0],context,'subject',request['binding_id'])
     assert view['public_config']['nexus_tool_permission']=='ask'
+    assert count(local_setup,'runtime_execution_grants')==1
+    assert view['authorization']=={'minutes':60,'actions':20}
 
 
 def test_remote_finish_rejects_embedded_binding_without_partial_writes(local_setup):

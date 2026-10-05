@@ -48,9 +48,6 @@ import {
 } from "./components/onboarding/onboardingStorage";
 import {
   api,
-  clearApiKey,
-  getApiKey,
-  setApiKey,
   type GraphSnapshot,
   type NexusInfo,
   type NexusEvent,
@@ -112,31 +109,25 @@ const VIEWS = [
 type View = (typeof VIEWS)[number]["name"];
 
 export default function App() {
-  // Same-machine trust probe: when the serve is loopback-bound, the REST
-  // surface answers without a key and the gate is skipped entirely - the
-  // key ceremony belongs to AGENTS (/mcp), not to the local operator.
-  const [mode, setMode] = useState<"checking" | "open" | "locked" | "unlocked">(
-    "checking",
-  );
-
-  useEffect(() => {
-    api
-      .agents()
-      .then(() => setMode(getApiKey() ? "unlocked" : "open"))
-      .catch(() => setMode(getApiKey() ? "unlocked" : "locked"));
+  const [status, setStatus] = useState<import("./api").OperatorStatus | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const refreshAuth = useCallback(() => {
+    return api.operatorStatus().then(value => { setStatus(value); setError(null); })
+      .catch(exc => setError((exc as Error).message));
   }, []);
-
-  if (mode === "checking") return null;
-  if (mode === "locked") return <KeyGate onUnlock={() => setMode("unlocked")} />;
-  return (
-    <Dashboard
-      localOpen={mode === "open"}
-      onLock={() => {
-        clearApiKey();
-        setMode("locked");
-      }}
-    />
-  );
+  useEffect(() => {
+    sessionStorage.removeItem("okto_nexus_operator_key");
+    void refreshAuth();
+    const expired = () => { void refreshAuth(); };
+    window.addEventListener("nexus-auth-expired", expired);
+    return () => window.removeEventListener("nexus-auth-expired", expired);
+  }, [refreshAuth]);
+  if (error) return <div role="alert" className="p-6">{error}<button className="btn btn-secondary ml-3" onClick={() => void refreshAuth()}>Retry</button></div>;
+  if (!status) return <div className="p-6">Connecting…</div>;
+  if (!status.authenticated) return <OperatorGate configured={status.configured} onUnlock={() => void refreshAuth()} />;
+  return <Dashboard localOpen={status.local} onLock={() => {
+    void api.operatorLogout().then(refreshAuth).catch(exc => setError((exc as Error).message));
+  }} />;
 }
 
 // Pulse header pattern: both wordmark variants in the DOM, the theme picks
@@ -160,49 +151,28 @@ function BrandMark({ className = "h-7 w-auto" }: { className?: string }) {
   );
 }
 
-function KeyGate({ onUnlock }: { onUnlock: () => void }) {
-  const [key, setKey] = useState("");
+function OperatorGate({configured, onUnlock}: {configured: boolean; onUnlock: () => void}) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-
-  const submit = async () => {
-    setApiKey(key.trim());
-    try {
-      await api.agents();
-      onUnlock();
-    } catch (exc) {
-      clearApiKey();
-      setError("Key rejected: " + (exc as Error).message);
-    }
-  };
-
-  return (
-    <div className="h-screen grid place-items-center">
-      <div className="panel p-6 w-[420px] space-y-4 animate-slide-up">
-        <div>
-          <BrandMark className="h-9 w-auto mb-2" />
-          <p className="text-xs text-surface-500 dark:text-surface-400 mt-1">
-            Enter an agent API key. It is kept in this tab only and never
-            persisted on the server.
-          </p>
-        </div>
-        <input
-          autoFocus
-          type="password"
-          value={key}
-          onChange={(e) => setKey(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && submit()}
-          placeholder="nxs_…"
-          className="w-full rounded-lg border border-surface-200 dark:border-surface-700
-            bg-white dark:bg-surface-800 px-3 py-2 text-sm font-mono
-            focus:outline-none focus:ring-2 focus:ring-accent-500/40 focus:border-accent-500"
-        />
-        {error && <p className="text-xs text-red-500">{error}</p>}
-        <button className="btn btn-primary w-full justify-center" onClick={submit}>
-          Sign in
-        </button>
-      </div>
-    </div>
-  );
+  const [busy, setBusy] = useState(false);
+  return <div className="h-screen grid place-items-center">
+    <form className="panel p-6 w-full max-w-[420px] space-y-4" onSubmit={async event => {
+      event.preventDefault(); setBusy(true); setError(null);
+      try { await api.operatorLogin(username.trim(), password); setPassword(""); onUnlock(); }
+      catch (exc) { setError((exc as Error).message); }
+      finally { setBusy(false); }
+    }}>
+      <BrandMark className="h-9 w-auto mb-2" />
+      <h1 className="font-semibold">Operator sign-in</h1>
+      {configured ? <>
+        <label className="block text-sm">Username<input autoFocus autoComplete="username" required value={username} onChange={e => setUsername(e.target.value)} className="w-full border rounded-lg p-2 mt-1 bg-transparent" /></label>
+        <label className="block text-sm">Password<input type="password" autoComplete="current-password" required value={password} onChange={e => setPassword(e.target.value)} className="w-full border rounded-lg p-2 mt-1 bg-transparent" /></label>
+        {error && <p role="alert" className="text-sm text-red-500">{error}</p>}
+        <button className="btn btn-primary w-full justify-center" disabled={busy}>{busy ? "Signing in…" : "Sign in"}</button>
+      </> : <p className="text-sm text-surface-500">Remote operator access is not configured. On the Nexus server, open the dashboard at localhost and go to Settings → Operator access.</p>}
+    </form>
+  </div>;
 }
 
 function Dashboard({
@@ -482,7 +452,7 @@ function Dashboard({
             <button
               className="btn btn-secondary !px-2"
               onClick={onLock}
-              title="Forget this tab's key"
+              title="Sign out" aria-label="Sign out"
             >
               <Lock size={14} />
             </button>

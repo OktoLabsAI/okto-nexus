@@ -29,6 +29,8 @@ def onboarding(tmp_path, request):
                 (agent, deps.clock.now_iso()))
             key = app.state.auth.issue_key(uow, agent_id=agent)
             headers[agent] = {"Authorization": "Bearer " + key}
+            uow.connection.execute('INSERT INTO agent_execution_policies VALUES(?,?,?,?)',
+                                   (agent, 'remote', None, 1))
     with TestClient(app, raise_server_exceptions=False) as client:
         response = client.post("/v1/connections/executors:register", json={
             "client_intent_id": "register", "connector_id": "connector",

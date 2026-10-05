@@ -9,11 +9,11 @@ def require_operator_request(uow, *, actor, subject, access, context, require_fe
     if actor == subject:
         return None
     if (access is None or context is None or context.actor_agent_id != actor
-            or context.authentication_source not in ('agent_key', 'http_loopback')
+            or context.authentication_source not in ('agent_key', 'http_loopback', 'operator_session')
             or not access.authenticate(context, uow=uow, require_feature=require_feature)):
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
                             'Representing another agent requires an authenticated operator.', {})
-    if context.authentication_source == 'http_loopback':
+    if context.authentication_source in ('http_loopback', 'operator_session'):
         if actor != 'operator' or not context.trusted_local_operator:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The local operator is unavailable.', {})
         return local_operator_binding(uow)

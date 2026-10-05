@@ -1,4 +1,4 @@
-import { ApiError, getApiKey, type ApprovalDetail } from "./api";
+import { ApiError, type ApprovalDetail } from "./api";
 import type { SetupRequest, SetupTest, SetupBaseline } from './connectionConfiguration';
 
 export interface ExecutorChoice {
@@ -138,10 +138,9 @@ export interface NativeDecisionView {
 // R4 uses Bearer authentication and direct JSON, unlike the legacy /api envelope.
 async function read<T>(path: string, signal: AbortSignal | undefined, body?: unknown): Promise<T> {
   const headers = new Headers();
-  const key = getApiKey();
-  if (key) headers.set("Authorization", `Bearer ${key}`);
+  headers.set("x-nexus-ui", "1");
   if (body !== undefined) headers.set("Content-Type", "application/json");
-  const url = key ? path : path.replace(/^\/v1\//, "/api/v1/runtime-management/");
+  const url = path.replace(/^\/v1\//, "/api/v1/runtime-management/");
   const response = await fetch(url, { headers, signal, cache: "no-store",
     method: body === undefined ? "GET" : "POST", body: body === undefined ? undefined : JSON.stringify(body) });
   const raw = await response.text();
@@ -184,7 +183,7 @@ export function bindingRequestExists(key: string): boolean {
 
 export const runtimeApi = {
   setup: (agent: string, binding?: string, signal?: AbortSignal) => read<{baseline: SetupBaseline;
-    connections: Pick<BindingView,'binding_id' | 'candidate_ref' | 'executor_id' | 'workspace_id' | 'adapter_id'>[];
+    connections: (Pick<BindingView,'binding_id' | 'candidate_ref' | 'executor_id' | 'workspace_id' | 'adapter_id'> & {execution_location: 'local' | 'remote'})[];
     authorization?: {minutes: number | null; actions: number | null};
     folders?: {workspace_root: string; provider_home: string | null; secret_bindings: Record<string,string>};
     public_config?: {alias?: string; harness_settings?: Record<string,string>; nexus_tool_permission?: 'ask' | 'always_allow'};

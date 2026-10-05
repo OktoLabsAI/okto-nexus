@@ -178,6 +178,19 @@ export function AgentsView({
     reload();
   }, []);
 
+  useEffect(() => {
+    let active = true;
+    let pending = false;
+    const timer = window.setInterval(async () => {
+      if (pending || document.hidden) return;
+      pending = true;
+      try { const value = await api.agents(); if (active) setAgents(value.items); }
+      catch { /* Keep the last observation; the next poll retries. */ }
+      finally { pending = false; }
+    }, 10000);
+    return () => { active = false; window.clearInterval(timer); };
+  }, []);
+
   const presetName = useMemo(() => {
     const map = new Map<string, string>();
     for (const p of presets?.items ?? []) map.set(p.preset_id, p.name);
@@ -659,6 +672,11 @@ export function AgentsView({
                       last seen {agent.last_seen_at ?? "never"}
                     </div>
                     <div className="flex items-center gap-1 flex-wrap">
+                      {agent.connection && <span data-testid={`connection-status-${agent.agent_id}`}
+                        className={`chip ${agent.connection.status === 'Connected' ? 'bg-emerald-100 text-emerald-700' : agent.connection.status === 'Reconnecting' ? 'bg-amber-100 text-amber-700' : 'bg-surface-100 text-surface-600 dark:bg-surface-700 dark:text-surface-300'}`}
+                        title={agent.connection.hosts.map(host => `${host.label}: ${host.status} · Last contact: ${host.last_seen_at || 'never'}`).join('\n') || 'Configured execution host'}>
+                        {agent.connection.status === 'MCP only' ? 'MCP only' : agent.connection.location === 'remote' ? `Remote · ${agent.connection.status}` : 'Local'}
+                      </span>}
                       <span className={`chip ${chipCls}`} title="Effective permissions">
                         {chipLabel}
                       </span>

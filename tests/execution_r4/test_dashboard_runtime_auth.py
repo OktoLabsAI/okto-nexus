@@ -3,6 +3,26 @@ import pytest
 from test_local_realization import local_setup
 
 
+def test_human_session_can_manage_runtime_without_agent_credentials(local_setup):
+    deps, app, client, _, body, *_ = local_setup
+    app.state.local_open = False
+    auth = app.state.operator_auth
+    auth.configure('human', 'test-password-123', local=True)
+    from okto_nexus.adapters.inbound.http.operator_auth import COOKIE
+    client.cookies.set(COOKIE, auth.login('human', 'test-password-123'))
+    headers = {'x-nexus-ui': '1'}
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE agents SET api_key_hash=NULL WHERE agent_id='operator'")
+    prefix = '/api/v1/runtime-management'
+    response = client.get(prefix + '/agents/subject/executors')
+    assert response.status_code == 200, response.text
+    executor = next(item['executor_id'] for item in response.json()['items'] if item['kind'] == 'embedded')
+    response = client.post(prefix + f'/runtime/executors/{executor}/realizations', json=body, headers=headers)
+    assert response.status_code == 201, response.text
+    assert client.get('/v1/agents/subject/executors').status_code == 401
+    assert client.post('/mcp', json={}).status_code == 401
+
+
 def test_keyless_loopback_can_configure_local_but_not_use_agent_transport(local_setup):
     deps, app, client, _, body, *_ = local_setup
     app.state.local_open = True

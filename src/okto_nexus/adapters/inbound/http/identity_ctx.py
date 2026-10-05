@@ -16,6 +16,8 @@ from ....domain.models import Agent
 #: or before authentication).
 current_agent: ContextVar[Agent | None] = ContextVar("okto_nexus_current_agent", default=None)
 trusted_local_operator: ContextVar[bool] = ContextVar("okto_nexus_local_operator", default=False)
+# Human identity is independent of the synthetic operator agent used by runtime management.
+current_operator: ContextVar[str | None] = ContextVar("okto_nexus_operator", default=None)
 
 
 def get_authenticated_agent() -> Agent | None:
@@ -30,6 +32,7 @@ def runtime_request_context():
     local = trusted_local_operator.get()
     return RuntimeRequestContext(
         actor.agent_id if actor else None,
+        "operator_session" if current_operator.get() is not None else
         "http_loopback" if local else "agent_key" if actor else "unauthenticated",
         trusted_local_operator=local,
         credential_binding=actor.api_key_hash if actor and not local else None,

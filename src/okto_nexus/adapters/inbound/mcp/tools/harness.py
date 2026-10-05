@@ -77,14 +77,8 @@ def build_access_service(deps):
 
 def request_context():
     """Resolve only middleware identity; payload identifiers are never principals."""
-    actor = get_authenticated_agent()
-    local = trusted_local_operator.get()
-    return RuntimeRequestContext(
-        actor.agent_id if actor else None,
-        "http_loopback" if local else "agent_key" if actor else "unauthenticated",
-        trusted_local_operator=local,
-        credential_binding=actor.api_key_hash if actor else None,
-    )
+    from okto_nexus.adapters.inbound.http.identity_ctx import runtime_request_context
+    return runtime_request_context()
 
 
 def authorize_request(deps, *, substrate=None, action="admin", session_id=None, endpoint_id=None,

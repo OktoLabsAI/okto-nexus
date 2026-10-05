@@ -66,7 +66,9 @@ from .lock import HEARTBEAT_INTERVAL_SECONDS, ServeLock
 #: data; every byte of data still rides the key-gated /api/v1 surface.
 PUBLIC_PATHS = frozenset(
     {"/", "/healthz", "/api/v1/info", "/api/v1/license",
-     "/v1/connections/protocol", "/v1/reach", "/favicon.ico"}
+     "/v1/connections/protocol", "/v1/reach", "/favicon.ico",
+     "/api/v1/operator-auth/status", "/api/v1/operator-auth/login",
+     "/api/v1/operator-auth/logout", "/api/v1/operator-auth/account"}
 )
 PUBLIC_PREFIXES = ("/assets/", "/logos/")
 
@@ -293,25 +295,35 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
                 "the monitor data-plane endpoints.",
             )
 
+        from .operator_auth import COOKIE, same_origin_request
+        human = None
+        if path.startswith('/api/v1/') and not supplied:
+            human = await anyio.to_thread.run_sync(
+                request.app.state.operator_auth.resolve, request.cookies.get(COOKIE))
+            if human and not same_origin_request(request):
+                return err(403, 'CROSS_ORIGIN_BLOCKED', 'Use the Nexus dashboard for operator requests.')
         if (
             not is_mcp
             and not is_v1
             and not extract_api_key(request)
-            and getattr(request.app.state, "local_open", False)
+            and (human or (getattr(request.app.state, "local_open", False)
             and request.client is not None
             and request.client.host in _LOOPBACK_CLIENTS
+            and not any(h in request.headers for h in ('forwarded', 'x-forwarded-for', 'x-forwarded-host'))))
         ):
             # Same-machine trust, but never for a cross-origin / DNS-rebound
             # BROWSER request that merely rides the loopback socket (CSRF).
-            if not _loopback_trust_ok(request):
+            if not human and not _loopback_trust_ok(request):
                 return err(
                     403,
                     "CROSS_ORIGIN_BLOCKED",
                     "Refused a cross-origin or rebound-host request on the "
                     "loopback trust path; authenticate with an api_key.",
                 )
-            from .identity_ctx import trusted_local_operator
+            from .identity_ctx import trusted_local_operator, current_operator
             local_token = trusted_local_operator.set(True)
+            human_token = current_operator.set(human)
+            request.state.operator_session = bool(human)
             dashboard_token = None
             try:
                 if path.startswith('/api/v1/runtime-management/'):
@@ -325,11 +337,16 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
                     if actor is None or not actor.is_active:
                         return v1_err(403, 'PERMISSION_DENIED', 'The local operator is unavailable.')
                     dashboard_token = current_agent.set(actor)
-                return await call_next(request)
+                response = await call_next(request)
+                if request.method not in ('GET', 'HEAD', 'OPTIONS'):
+                    await anyio.to_thread.run_sync(request.app.state.operator_auth.audit,
+                        human or 'local', request.method, path, response.status_code)
+                return response
             finally:
                 if dashboard_token is not None:
                     current_agent.reset(dashboard_token)
                 trusted_local_operator.reset(local_token)
+                current_operator.reset(human_token)
 
         if bearer_is_allowed_poll:
             return await call_next(request)
@@ -699,6 +716,9 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     # becomes the documented envelope.
     @app.exception_handler(RequestValidationError)
     async def validation_exception_handler(request, exc: RequestValidationError):
+        if request.url.path.startswith('/api/v1/operator-auth/'):
+            return err(422, 'VALIDATION_ERROR',
+                       'Enter a username (1–80 characters) and a password. New passwords require 12–1024 characters.')
         if re.fullmatch(r"/v1/runtime/sessions/[^/]+/capability/?", request.url.path):
             response = v1_err(422, "VALIDATION_ERROR",
                               "The capability request does not match the R4 contract.",
@@ -738,6 +758,9 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     app.state.deps = deps
     app.state.inventory_fresh_publications = deps.execution_fresh_publications
     app.state.auth = auth
+    from .operator_auth import OperatorAuth, router as operator_auth_router
+    app.state.operator_auth = OperatorAuth(deps.config.home_dir)
+    app.include_router(operator_auth_router())
     app.state.observability = observability
     app.state.search = search_service
     app.state.settings_service = settings_service
@@ -746,8 +769,8 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     app.state.workspace_health = workspace_health
     app.state.sse_poll_seconds = 1.0  # TR7 fallback cadence (tests shrink it)
     app.state.sse_ping_seconds = 15.0
-    # Same-machine trust for REST/dashboard; the serve CLI sets this to
-    # False when bound beyond loopback (--host on the LAN -> key required).
+    # Direct loopback peers retain keyless UI access even on a LAN bind.
+    # Agent transports never inherit this trust or human session cookies.
     app.state.local_open = True
 
     app.add_middleware(TelemetryMiddleware)
