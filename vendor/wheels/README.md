@@ -1,3 +1,7 @@
+Current PyPI release candidate: `okto_nexus_connector_core-0.0.1-py3-none-any.whl`
+SHA-256: 1547d389913f6de6b9060f03b9492b38be660d876ab1d6a5298442720cf28421.
+Python imports remain `nexus_connector_core`.
+
 ## Current development artifact: 0.2.53.dev0
 
 nexus_connector_core-0.2.53.dev0-py3-none-any.whl

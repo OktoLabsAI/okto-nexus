@@ -96,19 +96,19 @@ def test_ns01_02(tmp_path, capsys):
 def test_ns01_03(capsys):
     """Packaged serve-lite pins a local, byte-verified Core wheel."""
     project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
-    version = importlib.metadata.version("nexus-connector-core")
-    required_core = f"nexus-connector-core=={version}"
+    version = importlib.metadata.version("okto-nexus-connector-core")
+    required_core = f"okto-nexus-connector-core=={version}"
     assert project["project"]["scripts"]["okto-nexus"].endswith("cli.main:main")
     for extra in ("serve", "serve-lite"):
         requirements = project["project"]["optional-dependencies"][extra]
         assert required_core in requirements
-        assert not any(item.startswith("okto-nexus-connector") for item in requirements)
+        assert not any(item.split("==")[0] == "okto-nexus-connector" for item in requirements)
     assert "mcp>=1.0,<2" in project["project"]["dependencies"]
     manifest = json.loads((ROOT / "vendor/ci/manifest.json").read_text(encoding="utf-8"))
     artifact, = (item for item in manifest["artifacts"]
-                 if Path(item["path"]).name.startswith("nexus_connector_core-"))
+                 if Path(item["path"]).name.startswith("okto_nexus_connector_core-"))
     wheel = ROOT / artifact["path"]
-    assert wheel.name == f"nexus_connector_core-{version}-py3-none-any.whl"
+    assert wheel.name == f"okto_nexus_connector_core-{version}-py3-none-any.whl"
     assert hashlib.sha256(wheel.read_bytes()).hexdigest() == artifact["sha256"]
     installed_requirements = importlib.metadata.requires("okto-nexus") or []
     for extra in ("serve", "serve-lite"):
