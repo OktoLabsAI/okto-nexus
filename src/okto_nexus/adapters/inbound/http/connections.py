@@ -57,6 +57,11 @@ def build_router():
         from ....application.runtime_policy import read_policy
         return await execute(lambda: read_policy(request.app.state.deps, request_context(), agent_id))
 
+    @router.get('/agents/{agent_id}/runtime-sessions')
+    async def agent_runtime_sessions(request: Request, agent_id: str, workspace: str | None = None):
+        from ....application.execution_session_views import agent_session_summary
+        return await execute(lambda: agent_session_summary(request.app.state.deps, request_context(), agent_id, workspace))
+
     @router.put('/agents/{agent_id}/runtime-policy')
     async def update_agent_runtime_policy(request: Request, agent_id: str, body: dict):
         from ....application.runtime_policy import save_policy

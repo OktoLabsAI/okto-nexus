@@ -259,6 +259,16 @@ class EndpointService:
                 raise OktoNexusError(ErrorCode.CONFLICT, "Endpoint revision changed.", {})
             if endpoint["protocol"] != "nxl-r4":
                 raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Legacy connection configuration was removed.", {})
+            # Retiring a canonical connection must not look it up in the legacy
+            # adapter registry. This does not claim its native process exited.
+            if changes == {"enabled": False} and type(changes["enabled"]) is bool:
+                now = self.clock.now_iso()
+                uow.connection.execute('UPDATE agent_endpoints SET enabled=0,revision=revision+1,updated_at=? '
+                    'WHERE endpoint_id=? AND revision=?', (now, endpoint_id, expected_revision))
+                self.repo.invalidate_configuration(uow, endpoint_ids=[endpoint_id], now=now)
+                self.repo.audit_configuration(uow, context=context, kind='endpoint', resource_id=endpoint_id,
+                    old_revision=expected_revision, new_revision=expected_revision+1, fields=changes, now=now)
+                return {**endpoint, 'enabled': False, 'revision': expected_revision+1}
             updated = endpoint | changes
             if updated['response_policy'] != 'conversation' or updated['consumption'] != 'exclusive':
                 raise OktoNexusError(ErrorCode.VALIDATION_ERROR,

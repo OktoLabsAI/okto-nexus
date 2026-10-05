@@ -1127,6 +1127,9 @@ export type RuntimePolicy = {
 };
 
 export const api = {
+  agentRuntimeSessions: (agentId: string, workspace: string) => call<{
+    items: (import('./runtimeApi').RuntimeSession & {host: string; harness: string})[]; has_more: boolean;
+  }>(`/api/v1/agents/${encodeURIComponent(agentId)}/runtime-sessions${workspace === 'all' ? '' : `?workspace=${encodeURIComponent(workspace)}`}`),
   runtimeConnectionSummary: (endpoint: string) => call<{endpoint_id: string; agent_id: string; workspace_id: string; connection_name: string}>(
     `/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/connection-summary`),
   runtimeHarnessSettings: (endpoint: string) => call<{revision: number; settings: Record<string, string>}>(

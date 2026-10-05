@@ -1,6 +1,5 @@
 // The agent-mesh graph (spec S2 / FR2-FR3): Sigma.js v3 over graphology
-// with a deterministic layout (seeded initial positions per agent_id +
-// fixed forceatlas2 iterations - stable across reloads, AC2).
+// with deterministic rows and enough space for fixed-size agent cards.
 //
 // Visual grammar (owner-reviewed, 2026-06-10; central hub node tried and
 // REJECTED by the owner - idle agents sit on a calm deterministic orbit
@@ -15,7 +14,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Graph from "graphology";
-import forceAtlas2 from "graphology-layout-forceatlas2";
+import { RuntimeSessionSummary } from "../graph/RuntimeSessionSummary";
+import { cardLayout } from "../graph/cardLayout";
 import Sigma from "sigma";
 import { NodeSquareProgram } from "@sigma/node-square";
 import { DashedEdgeArrowProgram } from "../graph/DashedEdgeProgram";
@@ -156,6 +156,7 @@ export function GraphView({
   viewModeRef.current = viewMode;
   const rendererRef = useRef<Sigma | null>(null);
   const syncAgentOverlaysRef = useRef<() => void>(() => undefined);
+  const spaceCardsRef = useRef<() => void>(() => undefined);
   // agent_id -> the visible card or the simple node's transparent hit target.
   // The Sigma frame loop glues either representation to the same graph point.
   const agentOverlayRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
@@ -268,47 +269,16 @@ export function GraphView({
       });
     }
 
-    if (g.order > 1) {
-      forceAtlas2.assign(g, {
-        iterations: 260,
-        settings: {
-          ...forceAtlas2.inferSettings(g),
-          slowDown: 5,
-          // Roomier spread: full entity CARDS (not dots) need space, so raise
-          // repulsion and ease gravity to reduce card overlap at fit-zoom
-          // (owner decision: always-box + wider layout, no zoom-collapse).
-          scalingRatio: 60,
-          gravity: 0.8,
-        },
-      });
-    }
-
-    // Idle agents (no traffic at all) sit on a deterministic orbit around
-    // the mesh's centroid: organised, with no extra nodes or tether edges.
     const agents = g.filterNodes((_, a) => a.kind === "agent");
-    if (agents.length > 0) {
-      let cx = 0;
-      let cy = 0;
-      for (const id of agents) {
-        cx += g.getNodeAttribute(id, "x") as number;
-        cy += g.getNodeAttribute(id, "y") as number;
-      }
-      cx /= agents.length;
-      cy /= agents.length;
-
-      let maxR = 1;
-      for (const id of agents) {
-        const dx = (g.getNodeAttribute(id, "x") as number) - cx;
-        const dy = (g.getNodeAttribute(id, "y") as number) - cy;
-        maxR = Math.max(maxR, Math.hypot(dx, dy));
-      }
-      const orbit = maxR * 1.6;
-      for (const id of agents) {
-        if (g.degree(id) > 0) continue;
-        const angle = ((hashOf(id) % 3600) / 3600) * Math.PI * 2;
-        g.setNodeAttribute(id, "x", cx + Math.cos(angle) * orbit);
-        g.setNodeAttribute(id, "y", cy + Math.sin(angle) * orbit);
-      }
+    // Cards have a fixed pixel footprint. Regular rows preserve readable gaps;
+    // communication remains represented by directed edges, not proximity.
+    const container = containerRef.current;
+    const positions = cardLayout(agents, container ? container.clientWidth / Math.max(1, container.clientHeight) : 1.5);
+    positions.forEach((point, id) => g.mergeNodeAttributes(id, point));
+    for (const handoff of graph.edges.handoffs) {
+      const pool = `pool:${handoff.handoff_id}`;
+      const anchor = handoff.from_agent_id && positions.get(handoff.from_agent_id);
+      if (anchor && g.hasNode(pool)) g.mergeNodeAttributes(pool, {x: anchor.x + 0.6, y: anchor.y - 0.4});
     }
     return g;
   }, [graph, theme]);
@@ -321,8 +291,12 @@ export function GraphView({
       labelColor: { attribute: "labelColor", color: dark ? "#e2e8f0" : "#1e293b" },
       labelSize: 15,
       labelWeight: "600",
+      labelGridCellSize: 180,
+      labelDensity: 0.5,
       labelRenderedSizeThreshold: 0, // every node keeps its name visible
-      renderEdgeLabels: true,
+      // Counts and full messages are shown in the selected edge's panel.
+      // Overlaid labels obscure both directions on reciprocal connections.
+      renderEdgeLabels: false,
       edgeLabelSize: 13,
       edgeLabelColor: { color: "#0ea5e9" },
       edgeLabelWeight: "700",
@@ -336,7 +310,7 @@ export function GraphView({
         if (viewModeRef.current === "simple") {
           return {
             ...data,
-            label: String(data.agentLabel ?? ""),
+            label: "", // Bounded HTML labels stay clear of neighboring nodes.
             size: Number(data.simpleSize ?? AGENT_NODE_RADIUS_PX),
             color: String(data.identityColor ?? data.color),
             labelColor: dark ? "#e2e8f0" : "#1e293b",
@@ -351,6 +325,28 @@ export function GraphView({
       },
     });
     rendererRef.current = renderer;
+    let disposed = false;
+    const spaceCards = () => {
+      if (disposed || viewModeRef.current !== 'detailed') return;
+      const ids = model.filterNodes((_, data) => data.kind === 'agent');
+      let factor = 1;
+      for (let i = 0; i < ids.length; i++) {
+        const a = renderer.graphToViewport(model.getNodeAttributes(ids[i]) as {x: number; y: number});
+        for (let j = i + 1; j < ids.length; j++) {
+          const b = renderer.graphToViewport(model.getNodeAttributes(ids[j]) as {x: number; y: number});
+          factor = Math.min(factor, Math.max(Math.abs(a.x-b.x)/284, Math.abs(a.y-b.y)/240));
+        }
+      }
+      if (factor > 0 && factor < 0.99) renderer.getCamera().setState({ratio: renderer.getCamera().getState().ratio * factor});
+    };
+    const resizeObserver = new ResizeObserver(() => requestAnimationFrame(() => {
+      if (disposed) return;
+      renderer.resize();
+      renderer.refresh();
+      spaceCards();
+    }));
+    spaceCardsRef.current = spaceCards;
+    resizeObserver.observe(containerRef.current);
     renderer.on("clickNode", ({ node }) => {
       if (node.startsWith("pool:")) {
         const handoff = graph?.edges.handoffs.find(
@@ -407,6 +403,17 @@ export function GraphView({
           const badgeOffset = radius * Math.SQRT1_2;
           el.style.width = `${hitDiameter}px`;
           el.style.height = `${hitDiameter}px`;
+          const label = el.querySelector<HTMLElement>('[data-agent-label]');
+          if (label) {
+            let width = 140;
+            model.forEachNode((other, point) => {
+              if (other === id || point.kind !== 'agent') return;
+              const neighbor = renderer.graphToViewport(point as {x: number; y: number});
+              if (Math.abs(neighbor.y-vp.y) < 20) width = Math.min(width, Math.abs(neighbor.x-vp.x)-12);
+            });
+            label.style.width = `${Math.max(0, width)}px`;
+            label.style.top = `calc(50% + ${radius + 5}px)`;
+          }
           const outline = simpleOutlineRefs.current.get(id);
           if (outline) {
             outline.style.width = `${visualDiameter}px`;
@@ -443,8 +450,11 @@ export function GraphView({
     }, 30_000);
     return () => {
       window.clearInterval(decayTimer);
+      disposed = true;
+      resizeObserver.disconnect();
       if (rendererRef.current === renderer) rendererRef.current = null;
       syncAgentOverlaysRef.current = () => undefined;
+      spaceCardsRef.current = () => undefined;
       renderer.kill();
     };
   }, [model, graph, theme]);
@@ -456,15 +466,19 @@ export function GraphView({
       // Browser policy can disable storage; the current visit still toggles.
     }
     // nodeReducer reads viewModeRef, so refresh changes only presentation: the
-    // Graphology model, ForceAtlas layout, camera and selection remain intact.
+    // Graphology model, layout, camera and selection remain intact.
     rendererRef.current?.refresh();
     syncAgentOverlaysRef.current();
+    requestAnimationFrame(() => spaceCardsRef.current());
   }, [viewMode]);
 
   return (
     <div className="h-full flex">
       <div className="flex-1 min-w-0 flex flex-col bg-surface-50 dark:bg-surface-950 transition-colors">
-        <GraphModeToolbar mode={viewMode} onChange={setViewMode} />
+        <GraphModeToolbar mode={viewMode} onChange={setViewMode} onFit={() => {
+          viewModeRef.current = 'simple'; setViewMode('simple');
+          rendererRef.current?.getCamera().setState({x: 0.5, y: 0.5, ratio: 1, angle: 0});
+        }} />
         <div className="flex-1 min-h-0 relative" data-testid="graph-canvas">
           <div ref={containerRef} className="absolute inset-0" />
         {/* Entity-card overlay: one card per agent, glued to its node by the
@@ -630,6 +644,11 @@ export function GraphView({
                     dark:focus-visible:ring-offset-surface-950"
                 >
                   <span
+                    data-agent-label
+                    aria-hidden="true"
+                    className="absolute left-1/2 -translate-x-1/2 truncate text-center text-xs font-semibold text-surface-700 dark:text-surface-200"
+                  >{node.agent_id}</span>
+                  <span
                     data-node-outline
                     ref={(el) => {
                       if (el) simpleOutlineRefs.current.set(node.agent_id, el);
@@ -696,9 +715,11 @@ export function GraphView({
 function GraphModeToolbar({
   mode,
   onChange,
+  onFit,
 }: {
   mode: GraphViewMode;
   onChange: (mode: GraphViewMode) => void;
+  onFit: () => void;
 }) {
   const buttonClass = (active: boolean) =>
     `inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-colors
@@ -720,6 +741,8 @@ function GraphModeToolbar({
       >
         Agent representation
       </span>
+      <span className="ml-auto text-xs text-surface-400">Drag to pan · Scroll to zoom</span>
+      <button className="btn btn-secondary !py-1" onClick={onFit} title="Show all agents in Simple view">Fit overview</button>
       <div
         role="group"
         aria-labelledby="graph-representation-label"
@@ -1346,12 +1369,12 @@ function SidePanel({
               Sessions
             </div>
             {sessions.length === 0 && (
-              <div className="text-surface-400">no sessions</div>
+              <div className="text-surface-400">No MCP sessions.</div>
             )}
             {sessions.map((s) => (
               <div key={s.session_id} className="flex items-center gap-2">
                 <span className="font-mono text-surface-600 dark:text-surface-300">
-                  {s.session_id.slice(0, 10)}…
+                  MCP · {s.session_id.slice(0, 10)}…
                 </span>
                 <span className="text-surface-400">{s.status}</span>
                 {s.status === "active" && (
@@ -1378,6 +1401,7 @@ function SidePanel({
                 )}
               </div>
             ))}
+            <RuntimeSessionSummary agentId={agentId} workspace={workspace} refreshKey={refreshKey} />
           </div>
           <div className="border-t border-surface-200 dark:border-surface-700 pt-2 flex-1 min-h-0 flex flex-col gap-1">
             <div className="text-surface-600 dark:text-surface-300 font-medium shrink-0">

@@ -144,6 +144,14 @@ def issue_execution_ticket(factory: ConnectionFactory, *, server_id: str,
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
                                   "The agent has no active canonical key.", {})
         if credential_request_id is not None:
+            # An invalidated derivative cannot reserve the binding until its
+            # old expiration. Admission/lease checks already reject this
+            # authority; retire it before evaluating replacement obligations.
+            conn.execute('UPDATE execution_link_tickets SET revoked_at=? WHERE server_id=? '
+                'AND executor_id=? AND binding_id=? AND agent_id=? AND revoked_at IS NULL '
+                'AND (credential_epoch<>? OR authorization_revision<>?)',
+                (instant.isoformat(), server_id, executor_id, binding_id, agent_id,
+                 revisions.credential_epoch, revisions.authorization))
             prior = conn.execute(
                 "SELECT ticket_id,client_intent_id,scopes_json,"
                 "requested_duration_seconds,replaces_ticket_id FROM "

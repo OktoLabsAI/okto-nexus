@@ -11,6 +11,47 @@ from test_embedded_dispatch import (
 from test_local_realization import local_setup
 
 
+def test_retire_canonical_endpoint_does_not_use_legacy_adapter(connected_local):
+    setup, binding, native = connected_local
+    deps, app, client, headers, *_ = setup
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        revision = uow.connection.execute('SELECT revision FROM agent_endpoints WHERE endpoint_id=?',
+            (binding['endpoint_id'],)).fetchone()[0]
+    response = client.patch('/api/v1/harness/endpoints/' + binding['endpoint_id'],
+        headers={'x-api-key': headers['operator']['Authorization'].removeprefix('Bearer ')},
+        json={'expected_revision': revision, 'enabled': False})
+    assert response.status_code == 200, response.text
+    assert response.json()['data']['enabled'] is False
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        row = uow.connection.execute('SELECT enabled,revision FROM agent_endpoints WHERE endpoint_id=?',
+            (binding['endpoint_id'],)).fetchone()
+        assert tuple(row) == (0, revision + 1)
+    assert native.opens == 0
+
+
+def test_agent_summary_includes_runtime_history_and_filters_workspace(connected_local):
+    setup, binding, native = connected_local
+    deps, app, client, headers, *_ = setup
+    opened = admit(setup, binding, 'summary-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    auth = {'x-api-key': headers['operator']['Authorization'].removeprefix('Bearer ')}
+    path = '/api/v1/agents/subject/runtime-sessions'
+    response = client.get(path, headers=auth)
+    assert response.status_code == 200, response.text
+    summary = response.json()['data']
+    assert len(summary['items']) == 1 and not summary['has_more']
+    row = summary['items'][0]
+    assert row['scope']['session_id'] == opened['session_id']
+    assert row['harness'] == binding['adapter_id'] and row['control_available']
+    from okto_nexus.application.execution_session_views import agent_session_summary
+    from okto_nexus.domain.runtime_context import RuntimeRequestContext
+    loopback = RuntimeRequestContext(None, 'http_loopback', trusted_local_operator=True)
+    assert agent_session_summary(deps, loopback, 'subject')['items'][0]['scope'] == row['scope']
+    assert client.get(path, headers=auth, params={'workspace': 'other'}).json()['data']['items'] == []
+    wait_receipt(setup, admit(setup, binding, 'summary-close', 'runtime.close', session_id=opened['session_id']), stages=('SUCCEEDED',))
+    assert client.get(path, headers=auth).json()['data']['items'][0]['lifecycle_state'] == 'CLOSED'
+
+
 def test_session_list_pages_closed_history_and_enforces_scope(connected_local):
     setup, binding, native = connected_local
     deps, app, client, headers, *_ = setup

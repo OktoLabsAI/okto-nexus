@@ -6,6 +6,34 @@ import json
 from ..errors import ErrorCode, OktoNexusError
 
 
+def agent_session_summary(deps, context, agent_id, workspace=None):
+    """Read local and Connector history without depending on local realizations."""
+    from ..bootstrap.execution_authority import build_execution_access
+    access = build_execution_access(deps)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        operator = access.authenticate(context, uow=uow, require_feature=False)
+        if not operator and context.actor_agent_id != agent_id:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Session history is outside this identity.', {})
+        if access.agents.get(uow, agent_id) is None:
+            raise OktoNexusError(ErrorCode.NOT_FOUND, 'Agent does not exist.', {})
+        if operator and not context.actor_agent_id:
+            from dataclasses import replace
+            context = replace(context, actor_agent_id='operator')
+        rows = uow.connection.execute(
+            'SELECT s.server_id,s.executor_id,s.session_id,e.label,e.kind,ep.adapter_id '
+            'FROM execution_sessions s JOIN execution_bindings b USING(server_id,executor_id,binding_id) '
+            'JOIN execution_executors e USING(server_id,executor_id) '
+            'JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id '
+            'WHERE ep.agent_id=? AND (? IS NULL OR ep.workspace_id=?) '
+            "ORDER BY (s.lifecycle_state NOT IN ('CLOSED','FAILED')) DESC,s.rowid DESC LIMIT 101",
+            (agent_id, workspace, workspace)).fetchall()
+        items = [read_execution_session(deps.connection_factory, server_id=r['server_id'],
+            executor_id=r['executor_id'], session_id=r['session_id'], context=context, access=access, _uow=uow)
+            | dict(host=r['label'] or ('Nexus server' if r['kind']=='embedded' else r['executor_id']), harness=r['adapter_id'])
+            for r in rows[:100]]
+        return dict(items=items, has_more=len(rows)>100)
+
+
 def list_execution_sessions(factory, *, server_id, context, access, executor_id,
                             binding_id, agent_id, after_session_id="", limit=25):
     for value in (executor_id, binding_id, agent_id):
