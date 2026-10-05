@@ -165,13 +165,18 @@ _BANNER_PATH = Path(__file__).parent / "banner.txt"
 
 
 def _banner_version() -> str:
-    """The installed package version for the banner line (Pulse grammar)."""
+    """The installed Nexus and Core versions for the banner line."""
     import importlib.metadata
 
     try:
-        return importlib.metadata.version("okto-nexus")
+        nexus_version = importlib.metadata.version("okto-nexus")
     except importlib.metadata.PackageNotFoundError:
-        return "dev"
+        nexus_version = "dev"
+    try:
+        core_version = importlib.metadata.version("okto-nexus-connector-core")
+    except importlib.metadata.PackageNotFoundError:
+        core_version = "not installed"
+    return f"{nexus_version} ({core_version})"
 
 
 def _print_banner() -> None:
