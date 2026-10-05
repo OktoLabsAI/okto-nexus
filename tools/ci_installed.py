@@ -113,6 +113,8 @@ print(json.dumps({"local_boot_without_connector": True, "torch_installed": False
     # no pytest pythonpath setting may replace the installed application.
     with tempfile.TemporaryDirectory(prefix='nexus-ci-installed-') as temp:
         verification = '''import hashlib, importlib, importlib.metadata, json, pathlib, sys, zipfile
+from packaging.requirements import Requirement
+from packaging.utils import canonicalize_name
 results = {}
 for artifact, module in ARTIFACTS:
     package = pathlib.Path(importlib.import_module(module).__file__).resolve().parent
@@ -123,7 +125,9 @@ for artifact, module in ARTIFACTS:
                 assert (package / name.split("/", 1)[1]).read_bytes() == archive.read(name), name
     results[module] = {"path": str(package), "wheel_sha256": hashlib.sha256(pathlib.Path(artifact).read_bytes()).hexdigest()}
 requirements = importlib.metadata.requires("okto-nexus") or []
-assert not any(r.lower().startswith("okto-nexus-connector") for r in requirements)
+# Core shares the CLI package's prefix, but is an allowed runtime dependency.
+assert not any(canonicalize_name(Requirement(r).name) == "okto-nexus-connector"
+               for r in requirements)
 from okto_nexus.adapters.inbound.cli.main import main
 assert main(["--help"]) == 0
 pathlib.Path(REPORT).write_text(json.dumps(results, indent=2) + "\\n", encoding="utf-8")
