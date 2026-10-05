@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="19.334" timestamp="2026-10-02T13:04:11.359413-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_runtime_operations_dashboard" name="test_browser_retains_uncertain_effect_without_replacement_or_replay" time="18.105"><failure message="AssertionError: Locator expected to be enabled&#10;Actual value: disabled &#10;Call log:&#10;  - Expect &quot;to_be_enabled&quot; get_by_test_id(&quot;runtime-selection&quot;).get_by_test_id(&quot;runtime-candidate-nexus-install-v1:2926e50d427126fb8716b0f8811e54b89108a2bdd3bd1a28e299dbfc77689f99&quot;).get_by_role(&quot;radio&quot;) with timeout 5000ms&#10;  - waiting for get_by_test_id(&quot;runtime-selection&quot;).get_by_test_id(&quot;runtime-candidate-nexus-install-v1:2926e50d427126fb8716b0f8811e54b89108a2bdd3bd1a28e299dbfc77689f99&quot;).get_by_role(&quot;radio&quot;)&#10;    12 × locator resolved to &lt;input type=&quot;radio&quot; name=&quot;runtime-installation-subject&quot;/&gt;&#10;       - unexpected value &quot;disabled&quot;&#10;&#10;Aria snapshot:&#10;- radio &quot;codex.exe · 77689f99 · READY_FOR_RUNTIME EXECUTOR_OFFLINE · WORKSPACE_REQUIRED&quot; [disabled]">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_runtime_operations_dashboard.py:99: in test_browser_retains_uncertain_effect_without_replacement_or_replay
+    panel = panel_for(page, setup, binding)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_runtime_operations_dashboard.py:59: in panel_for
+    panel = select_local(page, setup)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_embedded_preparation_dashboard.py:91: in select_local
+    expect(candidate).to_be_enabled()
+E   AssertionError: Locator expected to be enabled
+E   Actual value: disabled 
+E   Call log:
+E     - Expect "to_be_enabled" get_by_test_id("runtime-selection").get_by_test_id("runtime-candidate-nexus-install-v1:2926e50d427126fb8716b0f8811e54b89108a2bdd3bd1a28e299dbfc77689f99").get_by_role("radio") with timeout 5000ms
+E     - waiting for get_by_test_id("runtime-selection").get_by_test_id("runtime-candidate-nexus-install-v1:2926e50d427126fb8716b0f8811e54b89108a2bdd3bd1a28e299dbfc77689f99").get_by_role("radio")
+E       12 × locator resolved to &lt;input type="radio" name="runtime-installation-subject"/&gt;
+E          - unexpected value "disabled"
+E   
+E   Aria snapshot:
+E   - radio "codex.exe · 77689f99 · READY_FOR_RUNTIME EXECUTOR_OFFLINE · WORKSPACE_REQUIRED" [disabled]</failure></testcase></testsuite></testsuites>

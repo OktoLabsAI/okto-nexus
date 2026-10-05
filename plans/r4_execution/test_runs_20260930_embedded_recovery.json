@@ -1,0 +1,55 @@
+{
+  "date": "2026-09-30",
+  "scope": "Partial M05 cold receipt recovery; no milestone or gate closure.",
+  "artifacts": {
+    "core": {
+      "wheel": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\artifacts\\nexus_connector_core-0.2.38.dev0-py3-none-any.whl",
+      "sha256": "f9bc5c3002593845416187b91802dfe914fd89b04036fd699be48e81dfff321b"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-lease-renewal-final-connector-g0xipv52\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "e540cd1ee34e1208399d0261d905d73068861ccec7f92065ec099d541c001683"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-embedded-recovery-6y0lqpch\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "c2dd72a8866b87fa92f2d84d4f5c62a51114040fe237696ba75cd2cbb0f00f72"
+    },
+    "isolated_python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-embedded-inventory-2z7k3itc\\isolated\\Scripts\\python.exe"
+  },
+  "runs": {
+    "nexus": {
+      "passed": 89,
+      "seconds": 205.813,
+      "overlapping_subset": false,
+      "result": "evidence/embedded-recovery-installed-nexus.xml"
+    },
+    "isolated": {
+      "passed": 50,
+      "seconds": 124.76,
+      "overlapping_subset": true,
+      "result": "evidence/embedded-recovery-installed-isolated.xml"
+    }
+  },
+  "source_regression": {
+    "passed": 14,
+    "scope": "Before the additional cancellation test; superseded by installed results."
+  },
+  "limitations": [
+    "Technical native factory and qualification fixtures.",
+    "Retained resources and event streams still require reconciliation; retained stores remain RECOVERING.",
+    "No full real-provider journey acceptance.",
+    "Preexisting UI edits included in wheel, excluded from commit and UI acceptance.",
+    "Existing Starlette/httpx deprecation warning."
+  ],
+  "evidence_sha256": {
+    "embedded-recovery-artifacts.json": "1371df7b5ea7ed1df219d1a6a826547add7586144d04f7a3f03a74582457627d",
+    "embedded-recovery-installed-isolated.json": "e92e3b6ee40b621b1e417f2b91209b28e2d1a1c398dfb96f5a6a27b3f3188d92",
+    "embedded-recovery-installed-isolated.log": "3b2964da8c388e77b86300e6604d5744278641a594d276a186e327af10ee6ab5",
+    "embedded-recovery-installed-isolated.xml": "a5d28ec9fe84be29bd9b94163f4d7f917da6eb19e2cbd279e9f9fa7c935a1bfa",
+    "embedded-recovery-installed-nexus.json": "4067ed0dbcffe485c417500b6200eed5d0b9eb1c147f60c18e368ed16297de82",
+    "embedded-recovery-installed-nexus.log": "ca603bb56e27b68a70b6e0e620146a5ec73268e2541d1c2ecaff0315f7f69390",
+    "embedded-recovery-installed-nexus.xml": "ca6de25d96442fd897507e99466420726073e5d47055fc8ab086be6688fd5d2c",
+    "embedded-recovery-isolated-installation.json": "156edd7d8655bc85ed3902f7f8a0e145f792b2e053d460c396547ae1ff9fc2cd",
+    "embedded-recovery-source.xml": "72b3e40ad6f5e04195671fc23e1f661cf9ac1deb2d5d0970ed1877be4eb9c232"
+  }
+}

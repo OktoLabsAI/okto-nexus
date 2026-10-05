@@ -1,0 +1,41 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+    "-I",
+    "-c",
+    "import sys,pytest; sys.path.insert(0,'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector'); raise SystemExit(pytest.main(['-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\okto-r4-canonical-installed\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4', '-o', 'asyncio_mode=auto', '-o', 'asyncio_default_fixture_loop_scope=function', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4\\\\test_executor_onboarding_cli.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4\\\\test_remote_connection.py::test_public_runtime_cli_start_prompt_runs_as_child', '-q', '--tb=short', '--junitxml=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\plans\\\\r4_execution\\\\evidence\\\\binding-replacement-final-nexus-installed.xml']))"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed",
+  "verified_packages": {
+    "nexus": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus",
+      "artifact": {
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-binding-replacement-nexus-2uhl00gd\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+        "sha256": "49a90a614814fb18b07f3cd229f223ec9563bf287ed3e89b5261dab408072d85",
+        "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-binding-replacement-nexus-2uhl00gd"
+      }
+    },
+    "connector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus_connector",
+      "artifact": {
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-binding-replacement-final-connector-kh2u0t1a\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+        "sha256": "426e2a0e00b644eb552a12fd797d912d02951b26d586b27f551a179fed1ac543",
+        "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-binding-replacement-final-connector-kh2u0t1a"
+      }
+    },
+    "core": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\nexus_connector_core",
+      "artifact": {
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-opening-core-nzdtg0fa\\dist\\nexus_connector_core-0.2.44.dev0-py3-none-any.whl",
+        "sha256": "c6f8555adeadb68959daa8e2ad91ec755eab49183049112a3d719470321e8db0",
+        "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-opening-core-nzdtg0fa",
+        "source_commit": "9c778719c3892d9742bb358b0020e39ed43df08d"
+      }
+    }
+  },
+  "exit_code": 0,
+  "test_hashes": {
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_executor_onboarding_cli.py": "61cfc8a4c42e1eca26b6c4daaeaf5163c0cee8e498d393e894b8425d4e02a8f2",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_remote_connection.py::test_public_runtime_cli_start_prompt_runs_as_child": "50accc45fae485ed9a6b60ff714467f860bd2a1199f2ceb49036f907f0aa0061"
+  }
+}

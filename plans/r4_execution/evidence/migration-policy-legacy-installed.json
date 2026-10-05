@@ -1,0 +1,39 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+    "-I",
+    "-c",
+    "import sys,pytest; sys.path.insert(0,'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector'); raise SystemExit(pytest.main(['-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\okto-r4-canonical-installed\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests', '-o', 'junit_family=legacy', '-o', 'asyncio_mode=auto', '-o', 'asyncio_default_fixture_loop_scope=function', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_issue_keys.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_retention.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_replay_cli.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_import_boundary.py', '-q', '--tb=short', '--junitxml=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\plans\\\\r4_execution\\\\evidence\\\\migration-policy-legacy-installed.xml']))"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed",
+  "verified_packages": {
+    "nexus": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus",
+      "artifact": {
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-migration-policy-nexus-xbaw3o3n\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+        "sha256": "6c432aed0caf20661d64266b9c931f86d2e68c96adcbaa00030cab30197d5fdc"
+      }
+    },
+    "connector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus_connector",
+      "artifact": {
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-connector-pmt6y5x7\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+        "sha256": "baf837251f654ab6385f5fba4e22d1a1b69da1839e8f47752795d1518dd29fe7"
+      }
+    },
+    "core": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\nexus_connector_core",
+      "artifact": {
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-core-3msf4qiz\\dist\\nexus_connector_core-0.2.51.dev0-py3-none-any.whl",
+        "sha256": "4c4c0c58d25b93f4f08ba8515d8476ffc29d1f0a27cc577c9fccb610716d1d1c"
+      }
+    }
+  },
+  "exit_code": 0,
+  "test_hashes": {
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\test_issue_keys.py": "e627d2d0e18667a7eddd25d0e99cbf4a9abfbbc3da920dd5b63a4429c13d7040",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\test_retention.py": "9885f027dfb824635c37b53bdbc1d3c8b491bb0c9fd374aa813d425e35b9ac3a",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\test_replay_cli.py": "27ddfa7e57a0df2b8219b4447182d0bc1f7239ff3f7d781750d9180cb35a068b",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\test_import_boundary.py": "39e739ea7246c0defd1edbf37ff5a2f1f52c448ce5bd15aeb6be75e1e7e8f1c3"
+  }
+}

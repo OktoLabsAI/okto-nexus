@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="20" time="16.051" timestamp="2026-10-01T01:31:49.498720-03:00" hostname="Alienware_m15"><testcase classname="tests.unit.test_r4_publications" name="test_pending_restart_scope_capacity_and_exact_ack" time="0.388" /><testcase classname="tests.unit.test_r4_publications" name="test_payload_is_not_persisted_and_receipt_corruption_fails_closed" time="0.072" /><testcase classname="tests.unit.test_r4_publications" name="test_confirmed_history_advances_and_old_ack_cannot_erase_new_fact" time="0.186" /><testcase classname="tests.unit.test_r4_publications" name="test_corrupted_confirmed_metadata_is_not_a_release_proof" time="0.080" /><testcase classname="tests.unit.test_r4_publications" name="test_publication_failure_leaves_exact_durable_receipt" time="0.345" /><testcase classname="tests.unit.test_r4_publications" name="test_failed_reservation_never_reaches_native_open" time="0.085" /><testcase classname="tests.unit.test_r4_publications" name="test_failed_binding_commit_never_reaches_native_open" time="0.311" /><testcase classname="tests.unit.test_r4_publications" name="test_schema_one_pending_receipt_migrates_without_inventing_hash_binding" time="0.093" /><testcase classname="tests.unit.test_r4_publications" name="test_recover_after_core_commit_before_wire_projection[True]" time="0.216"><failure message="AssertionError: assert (not [] and 0 == 1)&#10; +  where [] = ready('srv', 'exe')&#10; +    where ready = &lt;okto_nexus_connector.storage.r4_publications.R4PublicationStore object at 0x000001FCFAF2BE70&gt;.ready&#10; +  and   0 = len([])&#10; +    where [] = unprojected('srv', 'exe')&#10; +      where unprojected = &lt;okto_nexus_connector.storage.r4_publications.R4PublicationStore object at 0x000001FCFAF2BE70&gt;.unprojected">tests\unit\test_r4_publications.py:167: in test_recover_after_core_commit_before_wire_projection
+    assert not journal.ready('srv', 'exe') and len(journal.unprojected('srv', 'exe')) == 1
+E   AssertionError: assert (not [] and 0 == 1)
+E    +  where [] = ready('srv', 'exe')
+E    +    where ready = &lt;okto_nexus_connector.storage.r4_publications.R4PublicationStore object at 0x000001FCFAF2BE70&gt;.ready
+E    +  and   0 = len([])
+E    +    where [] = unprojected('srv', 'exe')
+E    +      where unprojected = &lt;okto_nexus_connector.storage.r4_publications.R4PublicationStore object at 0x000001FCFAF2BE70&gt;.unprojected</failure></testcase><testcase classname="tests.unit.test_r4_publications" name="test_binding_without_core_admission_stays_pending[True]" time="0.201"><failure message="AssertionError: assert 0 == 1&#10; +  where 0 = len([])&#10; +    where [] = unprojected('srv', 'exe')&#10; +      where unprojected = &lt;okto_nexus_connector.storage.r4_publications.R4PublicationStore object at 0x000001FCFAFE8E90&gt;.unprojected">tests\unit\test_r4_publications.py:191: in test_binding_without_core_admission_stays_pending
+    assert len(journal.unprojected('srv', 'exe')) == 1
+E   AssertionError: assert 0 == 1
+E    +  where 0 = len([])
+E    +    where [] = unprojected('srv', 'exe')
+E    +      where unprojected = &lt;okto_nexus_connector.storage.r4_publications.R4PublicationStore object at 0x000001FCFAFE8E90&gt;.unprojected</failure></testcase><testcase classname="tests.unit.test_r4_publications" name="test_failed_receipt_write_retains_reservation_and_never_publishes" time="0.306" /><testcase classname="tests.unit.test_r4_publications" name="test_cancelled_shutdown_observer_retains_publication_commit" time="0.309" /><testcase classname="tests.unit.test_r4_publications" name="test_startup_recovers_before_connect_and_pending_reservation_blocks_empty" time="0.268" /><testcase classname="tests.unit.test_r4_publications" name="test_recovery_republishes_same_fact_and_reuses_authority_for_attach[True]" time="0.204" /><testcase classname="tests.unit.test_r4_publications" name="test_recovery_failure_preserves_obligation_and_never_opens[lost_ack-True]" time="0.185" /><testcase classname="tests.unit.test_r4_publications" name="test_recovery_failure_preserves_obligation_and_never_opens[revocation-True]" time="0.186" /><testcase classname="tests.unit.test_r4_publications" name="test_recovery_failure_preserves_obligation_and_never_opens[corrupt_ticket-True]" time="0.166" /><testcase classname="tests.unit.test_r4_publications" name="test_recovery_pages_more_than_256_receipts_without_reissuing_ticket[True]" time="9.868" /><testcase classname="tests.unit.test_r4_publications" name="test_live_owner_publishes_late_core_terminal_fact_once" time="1.342" /><testcase classname="tests.unit.test_r4_publications" name="test_recovery_advances_acknowledged_fact_without_native_replay[before_projection-True]" time="0.130"><failure message="sqlite3.OperationalError: unable to open database file">tests\unit\test_r4_publications.py:385: in test_recovery_advances_acknowledged_fact_without_native_replay
+    await observed(published, owner.owner)
+tests\unit\test_r4_execution.py:146: in observed
+    raise owner.failure
+src\okto_nexus_connector\services\r4_execution.py:169: in _observe_receipts
+    journal = await self.host.ensure_journal()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus_connector\services\core_host.py:155: in ensure_journal
+    self._journal = await open_journal(self._journal_path)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\journal.py:159: in open_journal
+    return await asyncio.to_thread(SQLiteJournal, path, limits=limits)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\threads.py:25: in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\thread.py:59: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\journal.py:171: in __init__
+    self._executor.start(self._open_database)
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\offloop.py:110: in start
+    raise self._setup_error
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\offloop.py:114: in _run
+    self._resource = setup()
+                     ^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\journal.py:175: in _open_database
+    db = sqlite3.connect(self.path, isolation_level=None, timeout=5)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   sqlite3.OperationalError: unable to open database file</failure></testcase></testsuite></testsuites>

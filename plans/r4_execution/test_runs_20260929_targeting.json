@@ -1,0 +1,408 @@
+{
+  "scope": "Development increment; run counts overlap and do not qualify final product requirements",
+  "python": "3.13.1",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "core_version": "0.2.24.dev0",
+  "wheel_sha256": "49254567dc23a15e4868e1ff3e489d24893ba264dff381d173337be74143cc3b",
+  "manifest_sha256": "a316cfb1575c9d926c10dcf5ee3192979651aa7db0efb145fab7635094816f03",
+  "provider": "NOT_RUN",
+  "multi_host": "NOT_RUN",
+  "product_gates_closed": [],
+  "runs": [
+    {
+      "run": "Core source full",
+      "status": "PASS_WITH_SKIPS",
+      "counts": {
+        "tests": 949,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 74,
+        "passed": 875
+      },
+      "seconds": 276.775,
+      "junit_sha256": "801734275456f7df95b6809e86b286125bceca8ebd24f6f2fe75d54258a3f05b",
+      "skips": [
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_discover_filters_to_interactive_and_skips_malformed",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_discover_missing_directory_returns_empty",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_probe_missing_registry_is_negative_not_raising",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_probe_non_interactive_session_is_negative",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_probe_protocol_mismatch_is_loud_and_negative",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_probe_succeeds_against_live_fake_socket",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_start_raises_not_found_when_registry_missing",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_start_raises_validation_error_for_headless_session",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_start_raises_config_error_on_multiple_key_files",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_start_falls_back_to_computed_socket_path_when_registry_omits_field",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_start_binds_to_observed_peer_identity",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_send_delivers_auth_then_user_ndjson_lines",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_send_rejects_non_send_turn_verbs",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_send_before_start_raises_not_found",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_send_rejects_oversized_content",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_send_neutralises_banner_spoofing_attempt",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_send_fails_loudly_and_records_error_event_when_peer_unreachable",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_send_trips_pid_reuse_guard_on_proc_start_mismatch",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_events_is_empty_and_finite_for_a_fresh_connector",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_capabilities_match_adr_0004_d7b",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_probe_never_raises_on_embedded_null_byte_in_socket_path",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_start_raises_oktonexuserror_not_valueerror_on_embedded_null_byte",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_probe_never_raises_on_a_genuinely_unexpected_internal_error",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_probe_and_start_agree_when_both_protocol_mismatch_and_missing_key_apply",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_probe_and_start_agree_when_key_file_exists_but_is_unparseable",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_probe_reports_not_a_socket",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_start_raises_config_error_when_resolved_path_is_not_a_socket",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_computed_socket_path_xdg_runtime_dir_unset_matches_ev_cc_001",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_computed_socket_path_falls_back_past_103_byte_sun_path_limit",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_pid_reuse_guard_raises_when_key_file_goes_missing",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_pid_reuse_guard_detects_new_hash_key_file_after_recycle",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_send_against_a_peer_that_accepts_then_closes_is_documented_not_detected",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_send_against_a_peer_that_reads_auth_then_rejects",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_send_against_a_peer_that_closes_mid_message",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_registry_fixture_matches_ev_cc_001_schema_exactly",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_send_docstring_states_the_ack_less_limitation_plainly",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_events_can_be_called_twice_without_hanging",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_probe_rejects_socket_owned_by_a_different_uid",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_start_rejects_socket_owned_by_a_different_uid",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_res_a3_and_b3_every_blocking_wait_in_the_module_carries_a_timeout",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_res_a4_a_failed_start_still_leaves_events_terminable",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_res_a4_a_failed_start_after_partial_probe_success_still_leaves_events_terminable",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_send_rejects_socket_that_changed_owner_uid_since_start",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_res_a2_concurrent_events_consumers_each_get_the_full_stream",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_probe_missing_key_file_reason_is_distinct_from_missing_registry",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_probe_registry_missing_kind_field_is_protocol_drift_not_headless",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_probe_permission_denied_registry_is_a_distinct_permission_category",
+          "reason": "requires non-root POSIX"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_probe_permission_denied_key_file_is_a_distinct_permission_category",
+          "reason": "requires non-root POSIX"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_probe_success_reports_peer_protocol_verified_true_on_exact_match",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_probe_success_reports_peer_protocol_unverified_when_field_absent",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_probe_success_records_peer_features_without_enforcing_them",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_probe_result_docstring_states_ok_is_not_proof_of_delivery",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_probe_success_detail_does_not_claim_delivery",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_key_file_ambiguous_reason_is_specific",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_key_file_missing_token_field_reason_is_specific",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_every_ok_false_probe_reason_maps_to_a_known_category",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_attach_legacy::test_every_oktonexuserror_raised_by_this_module_sets_reason_and_category",
+          "reason": "NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics"
+        },
+        {
+          "nodeid": "tests.legacy.test_claude_legacy::test_real_claude_interrupt_with_a_second_turn_already_queued_behind",
+          "reason": "requires an explicitly configured isolated Claude campaign (OKTO_NEXUS_CLAUDE_LIVE=1)"
+        },
+        {
+          "nodeid": "tests.legacy.test_claude_legacy::test_real_claude_single_trivial_turn",
+          "reason": "requires an explicitly configured isolated Claude campaign (OKTO_NEXUS_CLAUDE_LIVE=1)"
+        },
+        {
+          "nodeid": "tests.legacy.test_claude_legacy::test_real_claude_two_turns_share_session_and_process_survives",
+          "reason": "requires an explicitly configured isolated Claude campaign (OKTO_NEXUS_CLAUDE_LIVE=1)"
+        },
+        {
+          "nodeid": "tests.legacy.test_claude_legacy::test_real_claude_steer_interrupts_in_flight_turn_and_runs_new_one_immediately",
+          "reason": "requires an explicitly configured isolated Claude campaign (OKTO_NEXUS_CLAUDE_LIVE=1)"
+        },
+        {
+          "nodeid": "tests.legacy.test_claude_legacy::test_real_claude_interrupt_after_generation_start_survives_and_reprompts_immediately",
+          "reason": "requires an explicitly configured isolated Claude campaign (OKTO_NEXUS_CLAUDE_LIVE=1)"
+        },
+        {
+          "nodeid": "tests.legacy.test_claude_legacy::test_real_claude_end_verb_drains_and_exits_cleanly",
+          "reason": "requires an explicitly configured isolated Claude campaign (OKTO_NEXUS_CLAUDE_LIVE=1)"
+        },
+        {
+          "nodeid": "tests.legacy.test_claude_legacy::test_real_claude_interrupt_targets_head_turn_with_two_outstanding",
+          "reason": "requires an explicitly configured isolated Claude campaign (OKTO_NEXUS_CLAUDE_LIVE=1)"
+        },
+        {
+          "nodeid": "tests.legacy.test_codex_legacy::test_live_against_real_codex_lan_box",
+          "reason": "opt-in live test: needs the real `codex` binary AND OKTO_NEXUS_CODEX_LIVE=1"
+        },
+        {
+          "nodeid": "tests.legacy.test_pi_legacy::test_live_against_real_pi_zai",
+          "reason": "opt-in live test: needs the real `pi` binary AND OKTO_NEXUS_PI_LIVE=1"
+        },
+        {
+          "nodeid": "tests.test_attach_extracted::test_discovery_and_probe_reject_registry_pid_mismatch",
+          "reason": "Claude attach uses POSIX checks"
+        },
+        {
+          "nodeid": "tests.test_attach_extracted::test_pid_reuse_guard_fails_closed_when_key_directory_cannot_be_listed",
+          "reason": "Claude attach uses POSIX checks"
+        },
+        {
+          "nodeid": "tests.test_attach_extracted::test_pid_reuse_guard_does_not_ignore_unreadable_current_key",
+          "reason": "Claude attach uses POSIX checks"
+        },
+        {
+          "nodeid": "tests.test_attach_extracted::test_pid_reuse_guard_rejects_disappearing_proc_start",
+          "reason": "Claude attach uses POSIX checks"
+        },
+        {
+          "nodeid": "tests.test_native_prewrite_adapters::test_claude_attach_refuses_unstarted_session_before_socket_write",
+          "reason": "Claude attach uses a POSIX socket"
+        },
+        {
+          "nodeid": "tests.test_owned_process::test_explicit_guardian_force_reaps_escaped_grandchild",
+          "reason": "Linux pidfd guardian contract"
+        },
+        {
+          "nodeid": "tests.test_owned_process::test_linux_abrupt_owner_exit_reaps_native_tree",
+          "reason": "Linux pidfd guardian contract"
+        },
+        {
+          "nodeid": "tests.test_tree_census::test_linux_group_census_counts_descendants_without_kernel_limit",
+          "reason": "process-group census is Linux-only"
+        }
+      ]
+    },
+    {
+      "run": "Core installed directed",
+      "status": "PASS",
+      "counts": {
+        "tests": 131,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 131
+      },
+      "seconds": 24.252,
+      "junit_sha256": "32cd0f23585edb6dcfdb6f57208cf3bec88c471e6ad9babc3d0866d6a5252559",
+      "skips": []
+    },
+    {
+      "run": "Connector installed Core full",
+      "status": "PASS_WITH_SKIPS",
+      "counts": {
+        "tests": 240,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 2,
+        "passed": 238
+      },
+      "seconds": 258.549,
+      "junit_sha256": "2e3ceee7fcea73ce3c315050b30c53635ce0463eb23e2265caa55c3fbe863c72",
+      "skips": [
+        {
+          "nodeid": "tests.regressoes.test_connector_audit::test_27_start_session_capability_is_referenced_in_effective_environment",
+          "reason": "lab peer lacks full contract surface: BINDING_NOT_AUTHORIZED"
+        },
+        {
+          "nodeid": "tests.unit.test_core02_integration::test_shim_resolution_never_runs_outside_windows",
+          "reason": "covered above"
+        }
+      ]
+    },
+    {
+      "run": "Nexus R4",
+      "status": "PASS_WITH_SKIPS",
+      "counts": {
+        "tests": 42,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 1,
+        "passed": 41
+      },
+      "seconds": 56.903,
+      "junit_sha256": "3a20a0ef3123e627d8735821a6e668cd4e299d5339f604d597af07d934c9251e",
+      "skips": [
+        {
+          "nodeid": "tests.execution_r4.test_vertical_inventory::test_connector_publishes_core_snapshot_to_nexus",
+          "reason": "Set OKTO_CONNECTOR_SRC for the cross-repo contract run"
+        }
+      ]
+    },
+    {
+      "run": "Nexus installed Connector vertical",
+      "status": "PASS",
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 1
+      },
+      "seconds": 3.682,
+      "junit_sha256": "2dba8f14e9754768c98de68cec832f88dd33ed5e9c50f54da834c0c490a2f9bb",
+      "skips": []
+    },
+    {
+      "run": "Nexus final inventory ingress admission vertical",
+      "status": "PASS",
+      "counts": {
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 7
+      },
+      "seconds": 8.42,
+      "junit_sha256": "099864a346882ca8f644f857932c129bc18fb10c672f44f51488b4fdd183320c",
+      "skips": []
+    }
+  ]
+}

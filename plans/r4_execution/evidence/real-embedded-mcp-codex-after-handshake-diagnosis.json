@@ -1,0 +1,48 @@
+{
+  "native_version": "0.159.0",
+  "mcp_status": [
+    {
+      "status": "starting",
+      "error": null,
+      "failureReason": null
+    },
+    {
+      "status": "ready",
+      "error": null,
+      "failureReason": null
+    },
+    {
+      "status": "ready",
+      "error": null,
+      "failureReason": null
+    }
+  ],
+  "tool_calls": [
+    {
+      "appContext": null,
+      "arguments": {
+        "agent_id": "subject",
+        "handoff_id": "work",
+        "project_root": "wsr_39cd96ca9982dc7b0a2e1d9bde412176"
+      },
+      "durationMs": 0,
+      "error": {
+        "message": "user rejected MCP tool call"
+      },
+      "id": "exec-92f283dd-2d3c-4a22-adf7-026258f7de42",
+      "mcpAppUi": null,
+      "pluginId": null,
+      "readOnlyHint": null,
+      "result": null,
+      "server": "nexus_c05a9352a30ee521",
+      "status": "failed",
+      "tool": "handoff_get",
+      "type": "mcpToolCall"
+    }
+  ],
+  "final": [
+    "I\u2019ll retrieve, claim, and complete the handoff using the specified MCP server.",
+    "The handoff_get call was rejected, so I couldn\u2019t claim or complete the handoff.\n\nOK"
+  ],
+  "handoff_status": "OPEN"
+}

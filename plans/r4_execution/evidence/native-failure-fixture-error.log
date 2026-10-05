@@ -1,0 +1,76 @@
+FFFF                                                                     [100%]
+================================== FAILURES ===================================
+_ test_terminal_failure_is_durable_and_scoped[claude_auth-PROVIDER_AUTH_REQUIRED] _
+..\okto-nexus-connector-core\tests\test_native_failure_receipts.py:70: in test_terminal_failure_is_durable_and_scoped
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+..\okto-nexus-connector-core\tests\test_native_failure_receipts.py:54: in run
+    await OperationKernel(journal).execute(Operation("turn", "turn.submit", "session", {"text": "hello"}), context(), effect)
+..\okto-nexus-connector-core\src\nexus_connector_core\kernel.py:47: in execute
+    raise CoreError("BINDING_NOT_AUTHORIZED", "admission", retry_safe=True,
+E   nexus_connector_core.models.CoreError: BINDING_NOT_AUTHORIZED
+_ test_terminal_failure_is_durable_and_scoped[claude_error-NATIVE_OPERATION_FAILED] _
+..\okto-nexus-connector-core\tests\test_native_failure_receipts.py:70: in test_terminal_failure_is_durable_and_scoped
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+..\okto-nexus-connector-core\tests\test_native_failure_receipts.py:54: in run
+    await OperationKernel(journal).execute(Operation("turn", "turn.submit", "session", {"text": "hello"}), context(), effect)
+..\okto-nexus-connector-core\src\nexus_connector_core\kernel.py:47: in execute
+    raise CoreError("BINDING_NOT_AUTHORIZED", "admission", retry_safe=True,
+E   nexus_connector_core.models.CoreError: BINDING_NOT_AUTHORIZED
+_ test_terminal_failure_is_durable_and_scoped[claude_text-NATIVE_OPERATION_FAILED] _
+..\okto-nexus-connector-core\tests\test_native_failure_receipts.py:70: in test_terminal_failure_is_durable_and_scoped
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+..\okto-nexus-connector-core\tests\test_native_failure_receipts.py:54: in run
+    await OperationKernel(journal).execute(Operation("turn", "turn.submit", "session", {"text": "hello"}), context(), effect)
+..\okto-nexus-connector-core\src\nexus_connector_core\kernel.py:47: in execute
+    raise CoreError("BINDING_NOT_AUTHORIZED", "admission", retry_safe=True,
+E   nexus_connector_core.models.CoreError: BINDING_NOT_AUTHORIZED
+_ test_terminal_failure_is_durable_and_scoped[codex_auth-PROVIDER_AUTH_REQUIRED] _
+..\okto-nexus-connector-core\tests\test_native_failure_receipts.py:70: in test_terminal_failure_is_durable_and_scoped
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+..\okto-nexus-connector-core\tests\test_native_failure_receipts.py:54: in run
+    await OperationKernel(journal).execute(Operation("turn", "turn.submit", "session", {"text": "hello"}), context(), effect)
+..\okto-nexus-connector-core\src\nexus_connector_core\kernel.py:47: in execute
+    raise CoreError("BINDING_NOT_AUTHORIZED", "admission", retry_safe=True,
+E   nexus_connector_core.models.CoreError: BINDING_NOT_AUTHORIZED
+=========================== short test summary info ===========================
+FAILED ..\okto-nexus-connector-core\tests\test_native_failure_receipts.py::test_terminal_failure_is_durable_and_scoped[claude_auth-PROVIDER_AUTH_REQUIRED]
+FAILED ..\okto-nexus-connector-core\tests\test_native_failure_receipts.py::test_terminal_failure_is_durable_and_scoped[claude_error-NATIVE_OPERATION_FAILED]
+FAILED ..\okto-nexus-connector-core\tests\test_native_failure_receipts.py::test_terminal_failure_is_durable_and_scoped[claude_text-NATIVE_OPERATION_FAILED]
+FAILED ..\okto-nexus-connector-core\tests\test_native_failure_receipts.py::test_terminal_failure_is_durable_and_scoped[codex_auth-PROVIDER_AUTH_REQUIRED]
+4 failed in 0.77s

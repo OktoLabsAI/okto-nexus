@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="1.417" timestamp="2026-10-01T02:00:47.808252-03:00" hostname="Alienware_m15"><testcase classname="test_real_connector_providers" name="test_real_provider_through_public_connector_cli[pi_rpc]" time="0.150"><failure message="RuntimeError: Core 0.2.43.dev0 is required for R4 inventory; installed 0.2.44.dev0">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_real_connector_providers.py:48: in test_real_provider_through_public_connector_cli
+    info = executor_link.protocol_info()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus\adapters\outbound\execution\core_inventory.py:36: in protocol_info
+    core = _core()
+           ^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus\adapters\outbound\execution\core_inventory.py:27: in _core
+    raise RuntimeError(
+E   RuntimeError: Core 0.2.43.dev0 is required for R4 inventory; installed 0.2.44.dev0</failure></testcase></testsuite></testsuites>

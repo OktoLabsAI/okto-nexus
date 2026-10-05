@@ -1,0 +1,32 @@
+{
+  "module": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-nexus-r4-053-env\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\app.py",
+  "diagnostic_only": true,
+  "before": {
+    "type": "PydanticUserError",
+    "message": "`TypeAdapter[typing.Annotated[ForwardRef('FileResponse'), FieldInfo(annotation=NoneType, required=True)]]` is not fully defined; you should define `typing.Annotated[ForwardRef('FileResponse'), FieldInfo(annotation=NoneType, required=True)]` and all referenced types, then call `.rebuild()` on the instance.\n\nFor further information visit https://errors.pydantic.dev/2.13/u/class-not-fully-defined"
+  },
+  "after": {
+    "schema_paths": 125,
+    "openapi": "3.1.0",
+    "http_status": 200
+  },
+  "route_audit": {
+    "document": "plans/02_CONTRATOS_HTTP_NXL_E_ESTADOS.md",
+    "required_count": 24,
+    "absent_from_openapi": [
+      {
+        "method": "POST",
+        "path": "/v1/runtime/executors/{id}/inventory:refresh"
+      },
+      {
+        "method": "GET",
+        "path": "/v1/connections/bindings/{id}"
+      },
+      {
+        "method": "GET",
+        "path": "/v1/runtime/executors/{id}/link"
+      }
+    ],
+    "limit": "Schema absence requires source/runtime confirmation; a route may deliberately be excluded from OpenAPI."
+  }
+}

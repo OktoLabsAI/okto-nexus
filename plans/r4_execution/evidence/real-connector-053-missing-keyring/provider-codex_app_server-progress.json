@@ -1,0 +1,27 @@
+{
+  "adapter": "codex_app_server",
+  "missing_login": false,
+  "server_release_gate_override": false,
+  "native_qualification_override": false,
+  "synthetic_native_factory": false,
+  "public_connector_cli": true,
+  "cli_subprocess": true,
+  "protected_os_vault": false,
+  "topology": "Single Windows host; actual loopback HTTP/WSS; separate Server and daemon processes.",
+  "phase": "finished",
+  "failure_type": "AssertionError",
+  "failure_phase": "identity.add",
+  "failure_frames": [
+    {
+      "file": "test_real_connector_providers.py",
+      "function": "run",
+      "line": 156
+    },
+    {
+      "file": "test_real_connector_providers.py",
+      "function": "cli",
+      "line": 136
+    }
+  ],
+  "server_exit_code": 0
+}

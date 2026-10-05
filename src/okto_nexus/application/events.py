@@ -46,7 +46,7 @@ from ..domain.events import (
     normalize_filters,
     validate_stream,
 )
-from ..domain.ids import resolve_workspace_id
+from .execution_tools import resolve_tool_workspace as resolve_workspace_id
 from ..domain.models import Event
 from ..domain.routing import RoutingAgent, can_agent_see_event
 from ..domain.tag_selector import reachable

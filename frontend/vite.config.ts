@@ -13,6 +13,7 @@ export default defineConfig({
     port: 5202,
     proxy: {
       "/api": "http://127.0.0.1:8202",
+      "/v1": "http://127.0.0.1:8202",
       "/mcp": "http://127.0.0.1:8202",
     },
   },

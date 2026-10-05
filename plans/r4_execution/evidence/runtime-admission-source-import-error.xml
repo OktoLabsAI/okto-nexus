@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="1.045" timestamp="2026-10-01T00:42:28.243643-03:00" hostname="Alienware_m15"><testcase classname="" name="tests.unit.test_runtime_admission" time="0.000"><error message="collection failure">ImportError while importing test module 'D:\Projetos\Techridy\okto-nexus-connector\tests\unit\test_runtime_admission.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+C:\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_runtime_admission.py:7: in &lt;module&gt;
+    from okto_nexus_connector.services.runtime_admission import RuntimeAdmission
+E   ModuleNotFoundError: No module named 'okto_nexus_connector.services.runtime_admission'</error></testcase></testsuite></testsuites>

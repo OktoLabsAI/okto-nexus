@@ -1,0 +1,32 @@
+{
+  "adapter": "pi_rpc",
+  "server_release_gate_override": true,
+  "native_qualification_override": false,
+  "synthetic_native_factory": false,
+  "public_connector_cli": true,
+  "cli_subprocess": true,
+  "protected_os_vault": true,
+  "topology": "Single Windows host; actual loopback HTTP/WSS; Server and daemon owners.",
+  "phase": "finished",
+  "vault_backend": "keyring:Windows WinVaultKeyring",
+  "candidate_ref": "nexus-install-v1:b64f7d489758234ac44fa9004bec00163e29efe01b8772ace8836ffc6001b3d5",
+  "open_stage": "SUBMITTED",
+  "scope": {
+    "agent_id": "subject",
+    "authorization_revision": 2,
+    "binding_id": "bind_0c2294e16fedccf875217562728a3b55",
+    "binding_revision": 1,
+    "configuration_revision": 2,
+    "credential_epoch": 1,
+    "executor_id": "exe_2267002fc39933a04a20a769e26c4c33",
+    "server_id": "srv_40943fc12675f10f02bb125c22879790",
+    "session_id": "ses_5de61c4ed08701e829c7dcf26b0b264a",
+    "session_owner_generation": 1,
+    "workspace_binding_id": "wxb_60d833a87eb7bd531b627bf0b55d06df",
+    "workspace_id": "wsr_612f719c38a208506325642222923773"
+  },
+  "lease_serial_before_turn": 2,
+  "failure_type": "AssertionError",
+  "daemon_exit_code": 0,
+  "campaign_credentials_removed": true
+}

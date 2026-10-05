@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="2" failures="3" skipped="0" tests="6" time="62.643" timestamp="2026-10-01T10:16:22.133377-03:00" hostname="Alienware_m15"><testcase classname="test_ns14" name="test_ns14_02[newer_generation]" time="4.249" /><testcase classname="test_ns14" name="test_ns14_02[rollback]" time="2.055"><failure message="Failed: DID NOT RAISE CoreError">tests\execution_r4\test_ns14.py:101: in test_ns14_02
+    client.portal.call(scenario)
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\execution_r4\test_ns14.py:60: in scenario
+    with pytest.raises(CoreError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE CoreError</failure></testcase><testcase classname="test_ns14" name="test_ns14_02[rollback]" time="0.000"><error message="failed on teardown with &quot;RuntimeError: This portal is not running&quot;">tests\execution_r4\test_local_realization.py:35: in local_setup
+    with TestClient(app, raise_server_exceptions=False) as client:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\testclient.py:528: in __exit__
+    self.exit_stack.close()
+C:\Python313\Lib\contextlib.py:627: in close
+    self.__exit__(None, None, None)
+C:\Python313\Lib\contextlib.py:619: in __exit__
+    raise exc
+C:\Python313\Lib\contextlib.py:604: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:482: in _exit_wrapper
+    callback(*args, **kwds)
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\testclient.py:521: in wait_shutdown
+    portal.call(self.wait_shutdown)
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:382: in start_task_soon
+    self._check_running()
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:216: in _check_running
+    raise RuntimeError("This portal is not running")
+E   RuntimeError: This portal is not running</error></testcase><testcase classname="test_ns14" name="test_ns14_02[unknown]" time="1.947"><failure message="Failed: DID NOT RAISE CoreError">tests\execution_r4\test_ns14.py:101: in test_ns14_02
+    client.portal.call(scenario)
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\execution_r4\test_ns14.py:60: in scenario
+    with pytest.raises(CoreError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE CoreError</failure></testcase><testcase classname="test_ns14" name="test_ns14_02[unknown]" time="49.978"><error message="failed on teardown with &quot;RuntimeError: This portal is not running&quot;">tests\execution_r4\test_local_realization.py:35: in local_setup
+    with TestClient(app, raise_server_exceptions=False) as client:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\testclient.py:528: in __exit__
+    self.exit_stack.close()
+C:\Python313\Lib\contextlib.py:627: in close
+    self.__exit__(None, None, None)
+C:\Python313\Lib\contextlib.py:619: in __exit__
+    raise exc
+C:\Python313\Lib\contextlib.py:604: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:482: in _exit_wrapper
+    callback(*args, **kwds)
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\testclient.py:521: in wait_shutdown
+    portal.call(self.wait_shutdown)
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:382: in start_task_soon
+    self._check_running()
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:216: in _check_running
+    raise RuntimeError("This portal is not running")
+E   RuntimeError: This portal is not running</error></testcase><testcase classname="test_ns14" name="test_ns14_02[revoke_ack_lost]" time="2.878"><failure message="nexus_connector_core.models.CoreError: STALE_GENERATION">tests\execution_r4\test_ns14.py:101: in test_ns14_02
+    client.portal.call(scenario)
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\execution_r4\test_ns14.py:84: in scenario
+    applied = await executor.revoke_r4(authorization_revision=base.authorization_revision + 1)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus\adapters\outbound\execution\embedded.py:96: in revoke_r4
+    application = await runtime.revoke_r4_lease(
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\lease_runtime_r4.py:411: in revoke_r4_lease
+    return await asyncio.shield(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\lease_runtime_r4.py:439: in _revoke_r4_installed
+    raise CoreError("STALE_GENERATION", "r4_revoke")
+E   nexus_connector_core.models.CoreError: STALE_GENERATION</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,50 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+    "-I",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed\\pytest.ini",
+    "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4",
+    "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_real_connector_providers.py",
+    "-k",
+    "codex_app_server",
+    "-q",
+    "--tb=short",
+    "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\evidence\\real-connector-codex_app_server-installed.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed",
+  "started_at": 1790828534.4362411,
+  "finished_at": 1790828904.6426456,
+  "verified_packages": {
+    "nexus": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus",
+      "files": 354,
+      "artifact": {
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-runtime-admission-nexus-tmvzlmoh\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+        "sha256": "e218c5569551e335023de98d2d0988241a601eb59a412c4e24086685c0ee9889"
+      }
+    },
+    "connector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus_connector",
+      "files": 75,
+      "artifact": {
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-real-connector-discovery-ifarb2ic\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+        "sha256": "984e365fea8f42967a1a940033484f51c13163c072f33a8859ab275501ceccb5"
+      }
+    },
+    "core": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\nexus_connector_core",
+      "files": 93,
+      "artifact": {
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-lease-core-hi9n9umw\\dist\\nexus_connector_core-0.2.43.dev0-py3-none-any.whl",
+        "sha256": "7403611bb37050700fc325b2002f74b5ac507a79af8badba0bea0cd1b775087b",
+        "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-lease-core-hi9n9umw"
+      }
+    }
+  },
+  "exit_code": 1,
+  "scope": "Actual public Connector onboarding, daemon and real provider over loopback HTTP/WSS. Server release gates test-only; native qualification unchanged."
+}

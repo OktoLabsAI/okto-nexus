@@ -64,9 +64,16 @@ from okto_nexus.adapters.outbound.sqlite.messages_repo import (
     SqliteMessageDeliveryRepo,
     SqliteMessageRepo,
 )
+from okto_nexus.adapters.outbound.inbox_notifier import InMemoryInboxDeliveryNotifier
 from okto_nexus.application.approvals import ApprovalService
 from okto_nexus.application.governance import GovernanceService
 from okto_nexus.application.messages import MessageService
+from okto_nexus.application.runtime_delivery import RuntimeDeliveryPlanner
+from okto_nexus.adapters.outbound.sqlite.runtime_observations_repo import SqliteRuntimeObservationRepo
+from okto_nexus.application.runtime_results import RuntimeResultService
+from okto_nexus.adapters.outbound.sqlite.endpoints_repo import SqliteEndpointRepo
+from okto_nexus.adapters.outbound.sqlite.runtime_outbox_repo import SqliteRuntimeOutboxRepo
+from okto_nexus.adapters.outbound.runtime_wake import signal_runtime_owner
 from okto_nexus.domain.governance import ACTION_BROADCAST, ACTION_MESSAGE_CREATE
 from okto_nexus.envelope import err, require_json_object_param, tool_envelope
 from okto_nexus.errors import ErrorCode
@@ -118,15 +125,47 @@ _P_TRACE = (
 )
 
 
-def build_service(deps: Any) -> MessageService:
+def runtime_message_context():
+    from ...http.identity_ctx import runtime_request_context
+    return runtime_request_context()
+
+
+def wake_runtime(deps):
+    dispatcher = getattr(deps, "runtime_dispatcher", None)
+    if dispatcher:
+        dispatcher.wake()
+    else:
+        signal_runtime_owner(deps.config.home_dir)
+
+
+def validate_runtime_work(deps, uow, *, operation):
+    from .handoff import build_service as build_handoff_service
+    return build_handoff_service(deps).runtime_work.revalidate(uow, operation=operation)
+
+
+def build_service(deps: Any, *, register_approval_executor=True) -> MessageService:
     """Wire the SQLite repos/emitter into ``deps`` and build the service.
 
     Idempotent: any repo / emitter already present is reused so this slice and
     its peers share a single concrete instance and a single event append path.
     The agents/sessions/deliveries repos back recipient resolution and the inbox
     fan-out performed by ``message_create`` (ADR 0001).
+
+    Also wires (idempotently, cached on ``deps``) the ONE process-wide
+    ``InboxDeliveryNotifier`` (ADR 0004 follow-up, SYS-03/UAT-05): every
+    ``MessageService`` built by this function - this slice registers its
+    own tools with one, and ``tools/harness.py::build_service`` reuses THIS
+    function to build the notable-event-delivery instance it wires into
+    ``HarnessSupervisor`` - shares the SAME notifier object, which is what
+    lets a live harness session's ``open()``-time subscription actually see
+    every ``create_message`` fan-out, regardless of which composition path
+    built the ``MessageService`` that ran it.
     """
+    from .artifacts import build_service as build_artifact_service
     repos = deps.repos
+
+    if getattr(deps, "inbox_delivery_notifier", None) is None:
+        deps.inbox_delivery_notifier = InMemoryInboxDeliveryNotifier()
 
     if getattr(repos, "channels", None) is None:
         repos.channels = SqliteChannelRepo(deps.clock)
@@ -196,6 +235,10 @@ def build_service(deps: Any) -> MessageService:
     embedding_provider = embedding.provider if embedding is not None else None
     guardrails = build_guardrail_service(deps)
 
+    from .harness import build_connector_factories
+    from okto_nexus.bootstrap.execution_compat import admit_delivery
+    from okto_nexus.bootstrap.execution_authority import build_message_capabilities
+    capabilities = build_message_capabilities(deps)
     service = MessageService(
         connection_factory=deps.connection_factory,
         channels=repos.channels,
@@ -214,6 +257,18 @@ def build_service(deps: Any) -> MessageService:
         governance=governance,
         approvals=approvals,
         guardrails=guardrails,
+        inbox_notifier=deps.inbox_delivery_notifier,
+        runtime_planner=RuntimeDeliveryPlanner(endpoints=SqliteEndpointRepo(), outbox=SqliteRuntimeOutboxRepo(), agents=repos.agents,
+            capabilities=capabilities,
+            registry=build_connector_factories(deps), config=deps.config, observations=SqliteRuntimeObservationRepo(clock=deps.clock),
+            canonical_admit=lambda uow, operation_id: admit_delivery(deps, uow, operation_id)),
+        runtime_context_provider=runtime_message_context,
+        runtime_results=RuntimeResultService(connection_factory=deps.connection_factory,
+            capabilities=capabilities,
+            agents=repos.agents, endpoints=SqliteEndpointRepo(), config=deps.config,
+            artifacts=build_artifact_service(deps), owner_provider=lambda: getattr(deps, "runtime_dispatcher", None),
+            work_validator=lambda uow, **kwargs: validate_runtime_work(deps, uow, **kwargs)),
+        runtime_wake=lambda: wake_runtime(deps),
     )
 
     # Approved re-execution (BR2): one executor per intercepted action key.
@@ -222,8 +277,9 @@ def build_service(deps: Any) -> MessageService:
     def _execute_message(kwargs: dict[str, Any]) -> dict[str, Any]:
         return service.create_message(**kwargs, _approved_execution=True)
 
-    approvals.register_executor(ACTION_MESSAGE_CREATE, _execute_message)
-    approvals.register_executor(ACTION_BROADCAST, _execute_message)
+    if register_approval_executor:
+        approvals.register_executor(ACTION_MESSAGE_CREATE, _execute_message)
+        approvals.register_executor(ACTION_BROADCAST, _execute_message)
 
     return service
 
@@ -235,10 +291,11 @@ def register(server: Any, deps: Any) -> None:
     @server.tool()
     @tool_envelope
     def message_create(
-        project_root: Annotated[str, Field(description=_P_ROOT)],
         from_agent_id: Annotated[str, Field(description=_P_FROM_AGENT)],
         subject: Annotated[str, Field(description=_P_SUBJECT)],
         body: Annotated[str, Field(description=_P_BODY)],
+        project_root: Annotated[str | None, Field(description="Absolute local project path. Supply exactly one of project_root or existing workspace_id.")] = None,
+        workspace_id: Annotated[str | None, Field(description="Existing logical workspace ID. Select this or project_root, never both.")] = None,
         channel_id: Annotated[str | None, Field(description=_P_CHANNEL)] = None,
         from_session_id: Annotated[
             str | None, Field(description=_P_FROM_SESSION)
@@ -255,6 +312,7 @@ def register(server: Any, deps: Any) -> None:
         require_json_object_param("target", target)
         return service.create_message(
             project_root=project_root,
+            workspace_id=workspace_id,
             from_agent_id=from_agent_id,
             subject=subject,
             body=body,

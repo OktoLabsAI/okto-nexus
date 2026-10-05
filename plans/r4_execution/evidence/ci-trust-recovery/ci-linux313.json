@@ -1,0 +1,187 @@
+{
+  "run": 36966572607,
+  "job": 110711519231,
+  "head": "0e9274b8b32a8072f75083399e4a5bbc387bcc42",
+  "job_status": "completed",
+  "job_conclusion": "failure",
+  "matrix_status_at_inspection": "in_progress",
+  "url": "https://github.com/OktoLabsAI/okto-nexus/actions/runs/36966572607/job/110711519231",
+  "counts": {
+    "failed": 42,
+    "passed": 3462,
+    "skipped": 55,
+    "errors": 0
+  },
+  "seconds": 4456.17,
+  "log_sha256": "34f5cfa8f2506f67f27c66b1c4911fbe5854b57864f8b40720997d54ef379ab6",
+  "historical_failed_nodes": [
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/execution_r4/test_native_loader_cutover.py::test_clean_server_composition_does_not_import_legacy_native_loaders"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/execution_r4/test_ns00.py::test_ns00_01"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/execution_r4/test_ns15.py::test_ns15_03[rest]"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/execution_r4/test_ns15.py::test_ns15_03[mcp]"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_comm_presets.py::test_no_comm_preset_mcp_tool_and_surface_revision_is_33"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_feature_flags.py::test_nexus_info_features_identical_on_stdio_and_http"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_frente1_compaction.py::test_s2_every_tool_description_is_compact_single_line"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_frente1_compaction.py::test_s2_every_tool_parameter_has_a_description"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_frente1_harness.py::test_s7_ta_direct_message_targetable_from_inline_surface"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_frente1_measurement.py::test_s4_cuttable_surface_meets_40pct_reduction_gate"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_handoff_dependencies.py::test_ts11_surface_revision_feature_flag_and_budgets"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_health.py::test_ts8_surface_revision_ledger_and_budgets"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_memory.py::test_ts11_surface_revision_ledger_budgets_and_tool_set"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_presence_trust.py::test_strict_handoff_claim_complete_reject_require_credentials"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_presence_trust.py::test_open_mode_handoff_claim_validates_supplied_secret"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_presence_trust.py::test_strict_inbox_pull_ack_extend_require_credentials"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_replay_marker.py::test_ts11_replay_marker_is_registered"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_replay_marker.py::test_ts13_surface_revision_unchanged"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_replay_marker.py::test_ts13_nexus_info_features_reflect_flag_off"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_runtime_attempt_history.py::test_upgrade_records_only_known_current_snapshot_and_is_repeatable[False]"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_runtime_attempt_history.py::test_upgrade_records_only_known_current_snapshot_and_is_repeatable[True]"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[stdio-quota]"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[stdio-fsync]"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_runtime_handoff_recovery.py::test_authenticated_stdio_work_recovery_uses_active_serve_owner"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_runtime_operation_reconciliation.py::test_retired_stdio_refuses_recovery_and_http_uses_active_owner"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_runtime_outbox.py::test_p06_stdio_producer_wakes_serve_without_owning_runtime"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_runtime_outbox.py::test_p06_stdio_open_runs_only_in_the_existing_serve_owner"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_runtime_production_multiplex.py::test_production_connection_reuse_never_crosses_effective_context[agent-production]"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_runtime_production_multiplex.py::test_production_connection_reuse_never_crosses_effective_context[workspace-production]"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_runtime_production_multiplex.py::test_production_connection_reuse_never_crosses_effective_context[profile-production]"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_runtime_production_multiplex.py::test_production_connection_reuse_never_crosses_effective_context[revision-production]"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_runtime_production_multiplex.py::test_production_connection_reuse_never_crosses_effective_context[secret-production]"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_runtime_production_multiplex.py::test_production_connection_reuse_never_crosses_effective_context[hitl-production]"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_runtime_production_multiplex.py::test_concurrent_production_opens_share_a_live_connection[production]"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_runtime_production_multiplex.py::test_production_factory_reuses_compatible_connection_and_preserves_sibling[production]"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_runtime_session_recovery.py::test_revoked_binding_during_constructor_does_not_start_peer"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_runtime_worker_capacity.py::test_observed_native_result_does_not_free_a_still_blocked_agent_worker[production]"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_runtime_writer_contract.py::test_feature_off_stdio_cannot_commit_unreserved_delivery_to_active_store"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_runtime_writer_contract.py::test_operator_disable_changes_writer_mode_atomically_and_retains_fences[stored_runtime]"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_runtime_writer_contract.py::test_compatible_stdio_still_enqueues_the_canonical_delivery"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_tool_schemas.py::test_every_tool_parameter_has_a_description"
+    },
+    {
+      "outcome": "FAILED",
+      "nodeid": "tests/test_verification.py::test_ts11_surface_revision_and_verify_description_budget"
+    }
+  ]
+}

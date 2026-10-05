@@ -1,0 +1,35 @@
+{
+  "increment": "M07 retained late close publication",
+  "status": "PARTIAL_INSTALLED_INTEGRATION",
+  "artifacts": "evidence/late-close-artifacts.json",
+  "tests": {
+    "core": {
+      "tests": 78,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 78
+    },
+    "connector": {
+      "tests": 338,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 1,
+      "passed": 337
+    },
+    "nexus": {
+      "tests": 81,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 81
+    }
+  },
+  "limitations": [
+    "In-process observation and publication only; disconnected publication, durable publication obligations, reconciliation and restart recovery remain pending.",
+    "Technical native peer and fixture readiness in integration; no new real provider qualification.",
+    "No full milestone or release gate closed."
+  ],
+  "core_commit": "843e8547ca721b505b939292d004e3ca63cc8f25",
+  "connector_commit": "7571bbb24bcc815013c747f4b7934db9f27f68f4"
+}

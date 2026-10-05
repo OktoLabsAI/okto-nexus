@@ -1,0 +1,32 @@
+{
+  "command": [
+    "C:/Users/jpamb/AppData/Local/Temp/okto-r4-native-installed-zk_r383i/Scripts/python.exe",
+    "-I",
+    "-m",
+    "pytest",
+    "-c",
+    "C:/Users/jpamb/AppData/Local/Temp/okto-r4-canonical-installed/pytest.ini",
+    "--rootdir=D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests",
+    "--confcutdir=D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_real_native_auth_failure.py::test_real_codex_missing_login_has_durable_authentication_error",
+    "-q",
+    "--tb=short",
+    "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\evidence\\native-auth-codex-installed.xml"
+  ],
+  "exit_code": 1,
+  "test_sha256": "d9058c306da26065c0fc983ffc585a16ac26ab026f87e22b06456966faf4bb38",
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-failure-core-zui7tpmj\\dist\\nexus_connector_core-0.2.45.dev0-py3-none-any.whl",
+      "sha256": "ee30e2c9486965b842f7c80550740d6d23a55f569abd8f8326306cbb8d2009f7"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-failure-nexus-final-9zt1zmfe\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "c3399d0750f2f6ac1e67531dc28f61280b57d023c99a78a5a6ab318db7eb8e1c"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-failure-connector-v4y9oame\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "903d34d6095ecd5e93ad246ece633ed1c89c1ef297202201dd92e59ab91a952c"
+    }
+  }
+}

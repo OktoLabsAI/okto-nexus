@@ -1,0 +1,45 @@
+{
+  "increment": "M05/P5.1 approved configuration at the embedded Core launch boundary",
+  "status": "PARTIAL_INSTALLED_INTEGRATION",
+  "core_commit": "fb4c8df70a66b9d9df7729fee5cbff453b591d31",
+  "connector_commit": "cba635a714f0f0c998badf4f075713a22b862d7d",
+  "nexus_commit": "The commit containing this manifest.",
+  "artifacts": "evidence/local-launch-artifacts.json",
+  "tests": {
+    "nexus": {
+      "tests": 78,
+      "passed": 78,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 282.513
+    },
+    "isolated": {
+      "tests": 36,
+      "passed": 36,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 74.141
+    }
+  },
+  "isolated_cases_are_subset": true,
+  "installation": "Nexus wheel updated in existing installed environments. No Connector module or distribution in isolated environment; pip check passed.",
+  "initial_failure": "Test collection used an incorrect authority-builder import; corrected before installed runs.",
+  "limitations": [
+    "Technical native factory, readiness override and manually invoked reserve/begin. No automatic embedded dispatcher or real-provider journey.",
+    "Vault backend, session tools, receipts/events, renewal/reconciliation and full M05/G1 remain open.",
+    "Preexisting user UI assets included in wheel but excluded from commit and UI acceptance.",
+    "Core and Connector artifacts unchanged. Existing dependency deprecation warning."
+  ],
+  "evidence_hashes": {
+    "local-launch-artifacts.json": "0b812468a0cf89c48afddbdaac3635b460be9ca1fb83a256a87b1fb7b37feed5",
+    "local-launch-installed-isolated.json": "217be74dcc330681426a92fe1221dbec53e9f02f5de8ffa6880cd01f0bf72de2",
+    "local-launch-installed-isolated.log": "485996db2b214dde86389e64d218e572968024a3d2a0c2c0067b45ff1255df40",
+    "local-launch-installed-isolated.xml": "900aad09b084c3f7fabee89c63d19cc7adcf2b9f8a2207d08d2cdc4d356e2cd6",
+    "local-launch-installed-nexus.json": "3c97f19a4a41c0955dd1540ff8354c72b74a3ce5040966edb6b6ffb9e043472a",
+    "local-launch-installed-nexus.log": "4a40720050817a368f007a8c57c32ef64b51051f2da3ca1ef375a80c840229f5",
+    "local-launch-installed-nexus.xml": "37d47c849a9e5792e2e2ae1304fdfc5c0dcbe60d6825ba3b3f10945ae5c82e28",
+    "local-launch-isolated-installation.json": "511fc17a1e0e85efafabb9e34435d90ebba6235f386ba485e6b7ec990c83c0dc"
+  }
+}

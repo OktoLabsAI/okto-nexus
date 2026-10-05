@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="862.831" timestamp="2026-09-30T21:58:43.156016-03:00" hostname="Alienware_m15"><testcase classname="test_real_embedded_mcp" name="test_real_provider_uses_automatic_local_dispatch_and_http_work[claude_stream]" time="860.581"><failure message="httpx.ReadTimeout: timed out">@contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        global HTTPCORE_EXC_MAP
+        if len(HTTPCORE_EXC_MAP) == 0:
+            HTTPCORE_EXC_MAP = _load_httpcore_exceptions()
+        try:
+&gt;           yield
+
+..\okto-r4-embedded-inventory-2z7k3itc\isolated\Lib\site-packages\httpx\_transports\default.py:101: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\okto-r4-embedded-inventory-2z7k3itc\isolated\Lib\site-packages\httpx\_transports\default.py:250: in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-embedded-inventory-2z7k3itc\isolated\Lib\site-packages\httpcore\_sync\connection_pool.py:256: in handle_request
+    raise exc from None
+..\okto-r4-embedded-inventory-2z7k3itc\isolated\Lib\site-packages\httpcore\_sync\connection_pool.py:236: in handle_request
+    response = connection.handle_request(
+..\okto-r4-embedded-inventory-2z7k3itc\isolated\Lib\site-packages\httpcore\_sync\connection.py:103: in handle_request
+    return self._connection.handle_request(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-embedded-inventory-2z7k3itc\isolated\Lib\site-packages\httpcore\_sync\http11.py:136: in handle_request
+    raise exc
+..\okto-r4-embedded-inventory-2z7k3itc\isolated\Lib\site-packages\httpcore\_sync\http11.py:106: in handle_request
+    ) = self._receive_response_headers(**kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-embedded-inventory-2z7k3itc\isolated\Lib\site-packages\httpcore\_sync\http11.py:177: in _receive_response_headers
+    event = self._receive_event(timeout=timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-embedded-inventory-2z7k3itc\isolated\Lib\site-packages\httpcore\_sync\http11.py:217: in _receive_event
+    data = self._network_stream.read(
+..\okto-r4-embedded-inventory-2z7k3itc\isolated\Lib\site-packages\httpcore\_backends\sync.py:126: in read
+    with map_exceptions(exc_map):
+         ^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:162: in __exit__
+    self.gen.throw(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+map = {&lt;class 'TimeoutError'&gt;: &lt;class 'httpcore.ReadTimeout'&gt;, &lt;class 'OSError'&gt;: &lt;class 'httpcore.ReadError'&gt;}
+
+    @contextlib.contextmanager
+    def map_exceptions(map: ExceptionMapping) -&gt; typing.Iterator[None]:
+        try:
+            yield
+        except Exception as exc:  # noqa: PIE786
+            for from_exc, to_exc in map.items():
+                if isinstance(exc, from_exc):
+&gt;                   raise to_exc(exc) from exc
+E                   httpcore.ReadTimeout: timed out
+
+..\okto-r4-embedded-inventory-2z7k3itc\isolated\Lib\site-packages\httpcore\_exceptions.py:14: ReadTimeout
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4213/test_real_provider_uses_automa0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002C58A52A2C0&gt;
+adapter = 'claude_stream'
+
+    @pytest.mark.skipif(os.environ.get("OKTO_NEXUS_REAL_MCP") != "1", reason="Real provider campaign is opt-in.")
+    @pytest.mark.parametrize("adapter",["codex_app_server","claude_stream"])
+    def test_real_provider_uses_automatic_local_dispatch_and_http_work(tmp_path,monkeypatch,adapter):
+        codex=Path.home()/"AppData/Roaming/npm/node_modules/@openai/codex/node_modules/@openai/codex-win32-x64/vendor/x86_64-pc-windows-msvc/bin/codex.exe"
+        claude=Path.home()/".local/bin/claude.exe"
+        binary=codex if adapter=="codex_app_server" else claude
+        assert binary.is_file(),"The selected real provider executable must be installed."
+        monkeypatch.setenv("PATH",str(binary.parent)+os.pathsep+os.environ.get("PATH",""))
+        discovery,rest=split_discovery_args(["--harness-root",str(binary.parent)])
+        assert not rest
+        info = runtime_v1.protocol_info()
+        monkeypatch.setattr(runtime_v1,'protocol_info',lambda:{**info,'remote_execution_ready':True})
+        monkeypatch.setattr(embedded_dispatch,'protocol_info',lambda:{**info,'remote_execution_ready':True})
+        deps=bootstrap({},['--home',str(tmp_path/'nexus'),'--feature-harness-integrations','true',
+                           '--feature-hitl','true'])
+        deps.local_discovery=discovery
+        listener=socket.socket()
+        listener.bind(('127.0.0.1',0))
+        origin='http://127.0.0.1:'+str(listener.getsockname()[1])
+        app=build_app(deps,runtime_owner_api_url=origin)
+        headers={}
+        with deps.connection_factory.unit_of_work() as uow:
+            for actor in ('operator','subject'):
+                uow.connection.execute('INSERT OR IGNORE INTO agents(agent_id,created_at) VALUES (?,?)',(actor,deps.clock.now_iso()))
+                headers[actor]={'Authorization':'Bearer '+app.state.auth.issue_key(uow,agent_id=actor)}
+        workspace=tmp_path/'workspace'
+        workspace.mkdir()
+        report={'adapter':adapter,'server_release_gate_override':True,'native_qualification_override':False,
+                'protected_os_vault':True,'synthetic_native_factory':False}
+        with live_server(app,listener,origin) as client:
+            owner=app.state.embedded_dispatch_owner
+            inventory_owner=app.state.embedded_inventory_owner
+            until=time.monotonic()+300
+            while True:
+                inventory_view=client.get(f'/v1/runtime/executors/{inventory_owner.key.executor_id}/inventory',
+                                         headers=headers['operator']).json()
+                if inventory_view.get('freshness')=='FRESH':
+                    inventory=inventory_view['snapshot']
+                    break
+                assert inventory_owner.failure is None,repr(inventory_owner.failure)
+                assert time.monotonic()&lt;until,inventory_view.get('freshness')
+                time.sleep(.25)
+            selected=next(row for row in inventory['evidence'] if row['adapter_id']==adapter)
+            candidate=next(c for c in inventory_owner.candidates if c.adapter_id==adapter)
+            report['passive_inventory_version']=candidate.version
+            report['candidate_fingerprint']=candidate.fingerprint
+            report['candidate_build_identity']=candidate.build_identity
+            response=client.post(f'/v1/runtime/executors/{inventory_owner.key.executor_id}/realizations',
+                headers=headers['operator'],json=dict(client_intent_id='real-mcp-setup',agent_id='subject',
+                    workspace_root=str(workspace),workspace_id=None,workspace_label='Real MCP campaign',
+                    adapter_id=adapter,candidate_ref=selected['candidate_ref'],inventory_revision=inventory['inventory_revision'],
+                    local_consent_id='authorized-local-provider-campaign',approved=True,provider_home=str(Path.home()),secret_bindings={}))
+            assert response.status_code==201,response.text
+            view=response.json()
+            _,apply=prepare_operator(client,headers,dict(client_intent_id='real-mcp-binding',agent_id_hint='subject',
+                executor_id=view['executor_id'],adapter_id=adapter,candidate_ref=selected['candidate_ref'],
+                inventory_revision=inventory['inventory_revision'],realization_ref=view['realization_ref'],
+                workspace_id=view['workspace_id'],alias='real-local-mcp'))
+            response=client.post('/v1/connections/bindings:apply',json=apply,headers=headers['operator'])
+            assert response.status_code==200,response.text
+            binding=response.json()
+            response=client.post('/api/v1/harness/grants',headers=headers['operator'],json={
+                'actor_agent_id':'subject','endpoint_id':binding['endpoint_id'],
+                'actions':['open','send','steer','interrupt','close'],'max_executions':3,
+                'expires_at':iso_plus(deps.clock.now_iso(),600)})
+            assert response.status_code==200,response.text
+            setup=(deps,app,client,headers,{},candidate,workspace)
+            approval_scope = None
+            approved_requests = set()
+            def decide_requested_tools():
+                if approval_scope is None:
+                    return
+                queued = client.get('/api/v1/approvals', headers=headers['operator'],
+                    params={'workspace': approval_scope['workspace_id'], 'status': 'pending'})
+                assert queued.status_code == 200, queued.text
+                for item in queued.json()['data']['items']:
+                    if item['action'] != 'execution.native.respond' or item['approval_id'] in approved_requests:
+                        continue
+                    detail = client.get('/api/v1/approvals/'+item['approval_id'], headers=headers['operator'])
+                    assert detail.status_code == 200, detail.text
+                    proposal = detail.json()['data']['request_payload']['kwargs']
+                    key = proposal['approval_key']
+                    assert all(key[name] == approval_scope[name] for name in (
+                        'server_id','executor_id','binding_id','agent_id','workspace_id','session_id','session_owner_generation'))
+                    # This authorized campaign approves only its three governed
+                    # MCP tools. Unexpected native input remains an observed failure.
+                    assert key['kind'] == 'native_approval', proposal['display']
+                    params = proposal['display']['params']
+                    assert params.get('tool_name') in {
+                        'mcp__'+entry+'__'+name for name in ('handoff_get','handoff_claim','handoff_complete')}, proposal['display']
+                    arguments = params['input']
+                    assert arguments['project_root'] == approval_scope['workspace_id']
+                    assert arguments['agent_id'] == 'subject' and arguments['handoff_id'] == 'work'
+                    body = {name: proposal[name] for name in ('approval_key','expected_revision','request_hash','cas_token')}
+                    body.update(client_intent_id='real-'+item['approval_id'], decision='approve')
+                    decided = client.post('/v1/runtime/approval-decisions', headers=headers['operator'], json=body)
+                    assert decided.status_code == 202, decided.text
+                    replay = client.post('/v1/runtime/approval-decisions', headers=headers['operator'], json=body)
+                    assert replay.status_code == 200, replay.text
+                    assert replay.json()['native_operation_id'] == decided.json()['native_operation_id']
+                    approved_requests.add(item['approval_id'])
+            def receipt(operation, stages):
+                until=time.monotonic()+180
+                while True:
+                    decide_requested_tools()
+                    result=client.get('/v1/runtime/operations/'+operation['operation_id'],headers=headers['subject']).json()
+                    if result.get('executor_stage') in stages:
+                        return result
+                    assert result.get('executor_stage') not in ('FAILED','REJECTED','OUTCOME_UNKNOWN'),result
+                    assert owner.failure is None,repr(owner.failure)
+                    assert time.monotonic()&lt;until,{'operation':operation['operation_id'],'stage':result.get('executor_stage')}
+                    time.sleep(.1)
+&gt;           opened=admit(setup,binding,'real-mcp-open','runtime.start',new_session=True)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_real_embedded_mcp.py:169: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_embedded_dispatch.py:76: in admit
+    response=client.post("/v1/runtime/operations",headers=headers["subject"],json=request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-embedded-inventory-2z7k3itc\isolated\Lib\site-packages\httpx\_client.py:1144: in post
+    return self.request(
+..\okto-r4-embedded-inventory-2z7k3itc\isolated\Lib\site-packages\httpx\_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-embedded-inventory-2z7k3itc\isolated\Lib\site-packages\httpx\_client.py:914: in send
+    response = self._send_handling_auth(
+..\okto-r4-embedded-inventory-2z7k3itc\isolated\Lib\site-packages\httpx\_client.py:942: in _send_handling_auth
+    response = self._send_handling_redirects(
+..\okto-r4-embedded-inventory-2z7k3itc\isolated\Lib\site-packages\httpx\_client.py:979: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-embedded-inventory-2z7k3itc\isolated\Lib\site-packages\httpx\_client.py:1014: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-embedded-inventory-2z7k3itc\isolated\Lib\site-packages\httpx\_transports\default.py:249: in handle_request
+    with map_httpcore_exceptions():
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:162: in __exit__
+    self.gen.throw(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    @contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        global HTTPCORE_EXC_MAP
+        if len(HTTPCORE_EXC_MAP) == 0:
+            HTTPCORE_EXC_MAP = _load_httpcore_exceptions()
+        try:
+            yield
+        except Exception as exc:
+            mapped_exc = None
+    
+            for from_exc, to_exc in HTTPCORE_EXC_MAP.items():
+                if not isinstance(exc, from_exc):
+                    continue
+                # We want to map to the most specific exception we can find.
+                # Eg if `exc` is an `httpcore.ReadTimeout`, we want to map to
+                # `httpx.ReadTimeout`, not just `httpx.TimeoutException`.
+                if mapped_exc is None or issubclass(to_exc, mapped_exc):
+                    mapped_exc = to_exc
+    
+            if mapped_exc is None:  # pragma: no cover
+                raise
+    
+            message = str(exc)
+&gt;           raise mapped_exc(message) from exc
+E           httpx.ReadTimeout: timed out
+
+..\okto-r4-embedded-inventory-2z7k3itc\isolated\Lib\site-packages\httpx\_transports\default.py:118: ReadTimeout</failure></testcase></testsuite></testsuites>

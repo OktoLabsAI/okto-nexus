@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="7.760" timestamp="2026-10-01T04:25:02.289966-03:00" hostname="Alienware_m15"><testcase classname="test_initial_turns" name="test_start_prompt_waits_for_ready_and_replays_without_duplicate" time="2.742"><failure message="RuntimeError: The dispatch owner has already started.">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_initial_turns.py:27: in test_start_prompt_waits_for_ready_and_replays_without_duplicate
+    setup[2].portal.call(pump.start)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:261: in _call_func
+    retval_or_awaitable = func(*args, **kwargs)
+                          ^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\application\execution_dispatch_pump.py:41: in start
+    raise RuntimeError('The dispatch owner has already started.')
+E   RuntimeError: The dispatch owner has already started.</failure></testcase><testcase classname="test_initial_turns" name="test_reused_start_prompt_creates_only_a_child_turn" time="3.757" /></testsuite></testsuites>

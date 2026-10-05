@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="10" time="55.095" timestamp="2026-10-02T06:43:41.796279-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_inventory_refresh_dashboard" name="test_refresh_survives_lost_reply_host_switch_and_reload" time="12.857"><failure message="playwright._impl._errors.Error: Locator.evaluate: Error: strict mode violation: get_by_alt_text(&quot;Okto Nexus&quot;) resolved to 2 elements:&#10;    1) &lt;img alt=&quot;Okto Nexus&quot; draggable=&quot;false&quot; class=&quot;h-7 w-auto dark:hidden&quot; src=&quot;/logos/nexus-wordmark-light.svg&quot;/&gt; aka get_by_role(&quot;img&quot;, name=&quot;Okto Nexus&quot;)&#10;    2) &lt;img alt=&quot;Okto Nexus&quot; draggable=&quot;false&quot; src=&quot;/logos/nexus-wordmark-dark.svg&quot; class=&quot;h-7 w-auto hidden dark:block&quot;/&gt; aka get_by_alt_text(&quot;Okto Nexus&quot;).nth(1)&#10;&#10;Call log:&#10;  - waiting for get_by_alt_text(&quot;Okto Nexus&quot;)">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_inventory_refresh_dashboard.py:98: in test_refresh_survives_lost_reply_host_switch_and_reload
+    assert page.get_by_alt_text('Okto Nexus').evaluate('(image) =&gt; image.complete &amp;&amp; image.naturalWidth &gt; 0')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\.codex\tmp\nexus-http-ci-env\Lib\site-packages\playwright\sync_api\_generated.py:18248: in evaluate
+    self._sync(
+..\..\..\..\.codex\tmp\nexus-http-ci-env\Lib\site-packages\playwright\_impl\_locator.py:195: in evaluate
+    return await self._with_element(
+..\..\..\..\.codex\tmp\nexus-http-ci-env\Lib\site-packages\playwright\_impl\_locator.py:114: in _with_element
+    handle = await self.element_handle(timeout=timeout)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\.codex\tmp\nexus-http-ci-env\Lib\site-packages\playwright\_impl\_locator.py:325: in element_handle
+    handle = await self._frame.wait_for_selector(
+..\..\..\..\.codex\tmp\nexus-http-ci-env\Lib\site-packages\playwright\_impl\_frame.py:395: in wait_for_selector
+    await self._channel.send(
+..\..\..\..\.codex\tmp\nexus-http-ci-env\Lib\site-packages\playwright\_impl\_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+..\..\..\..\.codex\tmp\nexus-http-ci-env\Lib\site-packages\playwright\_impl\_connection.py:632: in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E   playwright._impl._errors.Error: Locator.evaluate: Error: strict mode violation: get_by_alt_text("Okto Nexus") resolved to 2 elements:
+E       1) &lt;img alt="Okto Nexus" draggable="false" class="h-7 w-auto dark:hidden" src="/logos/nexus-wordmark-light.svg"/&gt; aka get_by_role("img", name="Okto Nexus")
+E       2) &lt;img alt="Okto Nexus" draggable="false" src="/logos/nexus-wordmark-dark.svg" class="h-7 w-auto hidden dark:block"/&gt; aka get_by_alt_text("Okto Nexus").nth(1)
+E   
+E   Call log:
+E     - waiting for get_by_alt_text("Okto Nexus")</failure></testcase><testcase classname="tests.execution_r4.test_runtime_selection_dashboard" name="test_selection_uses_refs_and_invalidates_on_revocation[duplicate-installations]" time="5.997" /><testcase classname="tests.execution_r4.test_binding_consent_dashboard" name="test_consent_applies_once_and_second_visit_reuses_binding[False]" time="7.067" /><testcase classname="tests.execution_r4.test_binding_consent_dashboard" name="test_consent_applies_once_and_second_visit_reuses_binding[True]" time="7.017" /><testcase classname="tests.execution_r4.test_binding_consent_dashboard" name="test_stale_inventory_after_review_refuses_approval" time="6.161" /><testcase classname="tests.execution_r4.test_binding_consent_dashboard" name="test_storage_failure_prevents_sending_unrecorded_intent" time="6.139" /><testcase classname="tests.execution_r4.test_inventory_refresh_http" name="test_http_refresh_scope_and_capacity" time="3.038" /><testcase classname="tests.execution_r4.test_inventory_refresh_http" name="test_http_claim_publication_and_transactional_revocation[False]" time="2.013" /><testcase classname="tests.execution_r4.test_inventory_refresh_http" name="test_http_claim_publication_and_transactional_revocation[True]" time="1.871" /><testcase classname="tests.execution_r4.test_packaged_openapi" name="test_dashboard_and_openapi_are_served_together" time="0.865" /></testsuite></testsuites>

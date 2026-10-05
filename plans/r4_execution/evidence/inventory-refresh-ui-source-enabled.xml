@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="22.454" timestamp="2026-10-02T06:40:50.449835-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_inventory_refresh_dashboard" name="test_refresh_survives_lost_reply_host_switch_and_reload" time="21.285"><failure message="AssertionError: Locator expected to be visible&#10;Actual value: None&#10;Error: element(s) not found &#10;Call log:&#10;  - Expect &quot;to_be_visible&quot; get_by_test_id(&quot;runtime-selection&quot;).get_by_test_id(&quot;inventory-refresh&quot;).get_by_text(&quot;The host published a new inventory. Review the current choices.&quot;) with timeout 5000ms&#10;  - waiting for get_by_test_id(&quot;runtime-selection&quot;).get_by_test_id(&quot;inventory-refresh&quot;).get_by_text(&quot;The host published a new inventory. Review the current choices.&quot;)&#10;&#10;Aria snapshot:&#10;- banner:&#10;  - button &quot;Collapse menu&quot;&#10;  - img &quot;Okto Nexus&quot;&#10;  - text: / Agents&#10;  - combobox &quot;Workspace scope&quot;:&#10;    - option &quot;All workspaces&quot; [selected]&#10;    - option &quot;Project&quot;&#10;  - text: ● Reconnecting&#10;  - button &quot;Refresh Agents&quot;&#10;  - button &quot;Forget this tab's key&quot;&#10;  - button&#10;- complementary:&#10;  - navigation:&#10;    - heading &quot;Observability&quot; [level=3]&#10;    - list:&#10;      - listitem:&#10;        - button &quot;Graph&quot;&#10;      - listitem:&#10;        - button &quot;Messages&quot;&#10;      - listitem:&#10;        - button &quot;Handoffs&quot;&#10;      - listitem:&#10;        - button &quot;Meta-harness&quot;&#10;      - listitem:&#10;        - button &quot;Events&quot;&#10;      - listitem:&#10;        - button &quot;Artifacts&quot;&#10;      - listitem:&#10;        - button &quot;Workspaces&quot;&#10;      - listitem:&#10;        - button &quot;Agents&quot;&#10;      - listitem:&#10;        - button &quot;Registry&quot;&#10;      - listitem:&#10;        - button &quot;Policies&quot;&#10;      - listitem:&#10;        - button &quot;Guardrails&quot;&#10;      - listitem:&#10;        - button &quot;Communication&quot;&#10;      - listitem:&#10;        - button &quot;Approvals&quot;&#10;      - listitem:&#10;        - button &quot;Runtimes&quot;&#10;- main:&#10;  - button &quot;Agents&quot;&#10;  - button &quot;Permission presets&quot;&#10;  - button &quot;New agent&quot;&#10;  - text: operator operator · key issued last seen 2026-10-02T09:41:05.473117Z Full access active&#10;  - button &quot;Edit identity (role / capabilities / metadata)&quot;&#10;  - button &quot;Permissions&quot;&#10;  - button &quot;Tags &amp; outbound audience&quot;&#10;  - button &quot;Communication style (how the agent should communicate)&quot;&#10;  - button &quot;Connections&quot;&#10;  - button &quot;Regenerate key&quot;&#10;  - button &quot;Deactivate&quot;&#10;  - text: subject — · key issued last seen 2026-10-02T09:41:00.442065Z Full access active&#10;  - button &quot;Edit identity (role / capabilities / metadata)&quot;&#10;  - button &quot;Permissions&quot;&#10;  - button &quot;Tags &amp; outbound audience&quot;&#10;  - button &quot;Communication style (how the agent should communicate)&quot;&#10;  - button &quot;Connections&quot;&#10;  - button &quot;Steer (direct message as operator)&quot;&#10;  - button &quot;Regenerate key&quot;&#10;  - button &quot;Deactivate&quot;&#10;  - button &quot;Delete agent&quot;&#10;  - heading &quot;Connection methods · subject&quot; [level=3]&#10;  - button &quot;Close&quot;&#10;  - region &quot;Runtime selection&quot;:&#10;    - heading &quot;Execution host and installation&quot; [level=4]&#10;    - paragraph: Choose where this agent runs. Installation discovery and workspace selection do not approve or start a runtime.&#10;    - text: Execution host&#10;    - combobox &quot;Execution host&quot;:&#10;      - option &quot;Select a host&quot;&#10;      - option &quot;exe_a434766c7af69d2553d52920227834ae · embedded · CONTROL_READY&quot; [selected]&#10;      - option &quot;Remote host · remote · DISCONNECTED&quot;&#10;    - text: Workspace&#10;    - combobox &quot;Runtime workspace&quot;:&#10;      - option &quot;Select a workspace&quot; [selected]&#10;      - option &quot;Project&quot;&#10;    - button &quot;Reload published inventory&quot;&#10;    - button &quot;Request host inventory refresh&quot; [disabled]&#10;    - paragraph: Ask the host to discover installations again. This does not run a version probe or start a runtime.&#10;    - status: Inventory refresh queued. Waiting for the host.&#10;    - paragraph: &quot;Inventory: FRESH&quot;&#10;    - group &quot;Provider installation&quot;:&#10;      - text: Provider installation&#10;      - radio &quot;Codex (app-server) · NOT_INSTALLED no_installed_candidate · INSTALLATION_REQUIRED · WORKSPACE_REQUIRED · TECHNICAL_NOT_READY&quot; [disabled]&#10;      - text: Codex (app-server) · NOT_INSTALLED no_installed_candidate · INSTALLATION_REQUIRED · WORKSPACE_REQUIRED · TECHNICAL_NOT_READY&#10;      - radio &quot;Pi (Node RPC) · NOT_INSTALLED no_installed_candidate · INSTALLATION_REQUIRED · WORKSPACE_REQUIRED · TECHNICAL_NOT_READY&quot; [disabled]&#10;      - text: Pi (Node RPC) · NOT_INSTALLED no_installed_candidate · INSTALLATION_REQUIRED · WORKSPACE_REQUIRED · TECHNICAL_NOT_READY&#10;      - radio &quot;Claude Code (stream) · NOT_INSTALLED no_installed_candidate · INSTALLATION_REQUIRED · WORKSPACE_REQUIRED · TECHNICAL_NOT_READY&quot; [disabled]&#10;      - text: Claude Code (stream) · NOT_INSTALLED no_installed_candidate · INSTALLATION_REQUIRED · WORKSPACE_REQUIRED · TECHNICAL_NOT_READY&#10;  - group: Legacy connection policy and records&#10;  - text: other — · key issued last seen never Full access active&#10;  - button &quot;Edit identity (role / capabilities / metadata)&quot;&#10;  - button &quot;Permissions&quot;&#10;  - button &quot;Tags &amp; outbound audience&quot;&#10;  - button &quot;Communication style (how the agent should communicate)&quot;&#10;  - button &quot;Connections&quot;&#10;  - button &quot;Steer (direct message as operator)&quot;&#10;  - button &quot;Regenerate key&quot;&#10;  - button &quot;Deactivate&quot;&#10;  - button &quot;Delete agent&quot;">onboarding = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4831/test_refr...ent_id_hint': 'subject', 'executor_id': 'exe_acf26a33fe9de4930687a87d65c24d87', 'adapter_id': 'codex_app_server', ...})
+assets = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4831/r4-selection-assets0')
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4831/test_refresh_survives_lost_rep0')
+
+    def test_refresh_survives_lost_reply_host_switch_and_reload(onboarding, assets, tmp_path):
+        from playwright.sync_api import sync_playwright, expect
+        deps, client, headers, scope = onboarding
+        remote = scope['executor_id']
+        local = client.app.state.embedded_inventory_owner
+        seen = []
+        lose_reply = True
+        with sync_playwright() as driver:
+            browser = driver.chromium.launch(channel='msedge', headless=True)
+            context = browser.new_context(viewport={'width': 1440, 'height': 1100})
+            context.add_init_script('sessionStorage.setItem("okto_nexus_operator_key", ' + json.dumps(headers['operator']['Authorization'][7:]) + ');')
+            context.add_init_script('localStorage.setItem("okto-nexus:metrics-opt-in-prompt-dismissed:1.0.0", "fixture");')
+            def routed(route):
+                nonlocal lose_reply
+                request = route.request
+                url = urlsplit(request.url)
+                if url.netloc != 'nexus.test':
+                    route.abort()
+                elif url.path == '/':
+                    route.fulfill(path=str(assets / 'index.html'), content_type='text/html')
+                elif url.path.startswith('/assets/'):
+                    route.fulfill(path=str(assets / 'assets' / Path(url.path).name))
+                elif url.path == '/api/v1/stream':
+                    route.fulfill(status=200, body=': isolated refresh test\n\n', content_type='text/event-stream')
+                elif url.path.startswith(('/api/', '/v1/')):
+                    response = client.request(request.method, url.path + ('?' + url.query if url.query else ''),
+                        headers={k:v for k,v in request.headers.items() if k.lower() in ('authorization','x-api-key','content-type')},
+                        content=request.post_data)
+                    if url.path.endswith('/inventory:refresh'):
+                        seen.append((url.path, json.loads(request.post_data)['client_intent_id'], response.status_code))
+                        if lose_reply:
+                            lose_reply = False
+                            assert response.status_code == 202
+                            route.abort('failed')
+                            return
+                    route.fulfill(status=response.status_code, body=response.content,
+                                  content_type=response.headers.get('content-type','application/json'))
+                else:
+                    route.fulfill(status=404)
+            context.route('**/*', routed)
+            page = context.new_page()
+            page.set_default_timeout(15000)
+            def open_panel():
+                page.get_by_role('button', name='Agents', exact=True).click()
+                page.get_by_test_id('connections-subject').click()
+                return page.get_by_test_id('runtime-selection')
+            try:
+                page.goto('http://nexus.test/')
+                page.get_by_test_id('onboarding-close').click()
+                panel = open_panel()
+                host = panel.get_by_label('Execution host', exact=True)
+                expect(host).to_be_enabled()
+                host.select_option(remote)
+                refresh = panel.get_by_test_id('inventory-refresh')
+                refresh.get_by_role('button', name='Request host inventory refresh').click()
+                expect(refresh.get_by_role('alert')).to_contain_text('Retry to check the same request')
+                refresh.get_by_role('button', name='Retry inventory refresh').click()
+                expect(refresh.get_by_text('The host is offline. The refresh request will remain queued.')).to_be_visible()
+                assert len(seen) &gt;= 2 and seen[0][1] == seen[1][1]
+                remote_intent = seen[0][1]
+                expect(host).to_be_enabled()
+                host.select_option(local.key.executor_id)
+                refresh.get_by_role('button', name='Request host inventory refresh').click()
+                expect(refresh.get_by_text('Inventory refresh queued. Waiting for the host.')).to_be_visible()
+                client.portal.call(local.refresh)
+&gt;               expect(refresh.get_by_text('The host published a new inventory. Review the current choices.')).to_be_visible()
+E               AssertionError: Locator expected to be visible
+E               Actual value: None
+E               Error: element(s) not found 
+E               Call log:
+E                 - Expect "to_be_visible" get_by_test_id("runtime-selection").get_by_test_id("inventory-refresh").get_by_text("The host published a new inventory. Review the current choices.") with timeout 5000ms
+E                 - waiting for get_by_test_id("runtime-selection").get_by_test_id("inventory-refresh").get_by_text("The host published a new inventory. Review the current choices.")
+E               
+E               Aria snapshot:
+E               - banner:
+E                 - button "Collapse menu"
+E                 - img "Okto Nexus"
+E                 - text: / Agents
+E                 - combobox "Workspace scope":
+E                   - option "All workspaces" [selected]
+E                   - option "Project"
+E                 - text: ● Reconnecting
+E                 - button "Refresh Agents"
+E                 - button "Forget this tab's key"
+E                 - button
+E               - complementary:
+E                 - navigation:
+E                   - heading "Observability" [level=3]
+E                   - list:
+E                     - listitem:
+E                       - button "Graph"
+E                     - listitem:
+E                       - button "Messages"
+E                     - listitem:
+E                       - button "Handoffs"
+E                     - listitem:
+E                       - button "Meta-harness"
+E                     - listitem:
+E                       - button "Events"
+E                     - listitem:
+E                       - button "Artifacts"
+E                     - listitem:
+E                       - button "Workspaces"
+E                     - listitem:
+E                       - button "Agents"
+E                     - listitem:
+E                       - button "Registry"
+E                     - listitem:
+E                       - button "Policies"
+E                     - listitem:
+E                       - button "Guardrails"
+E                     - listitem:
+E                       - button "Communication"
+E                     - listitem:
+E                       - button "Approvals"
+E                     - listitem:
+E                       - button "Runtimes"
+E               - main:
+E                 - button "Agents"
+E                 - button "Permission presets"
+E                 - button "New agent"
+E                 - text: operator operator · key issued last seen 2026-10-02T09:41:05.473117Z Full access active
+E                 - button "Edit identity (role / capabilities / metadata)"
+E                 - button "Permissions"
+E                 - button "Tags &amp; outbound audience"
+E                 - button "Communication style (how the agent should communicate)"
+E                 - button "Connections"
+E                 - button "Regenerate key"
+E                 - button "Deactivate"
+E                 - text: subject — · key issued last seen 2026-10-02T09:41:00.442065Z Full access active
+E                 - button "Edit identity (role / capabilities / metadata)"
+E                 - button "Permissions"
+E                 - button "Tags &amp; outbound audience"
+E                 - button "Communication style (how the agent should communicate)"
+E                 - button "Connections"
+E                 - button "Steer (direct message as operator)"
+E                 - button "Regenerate key"
+E                 - button "Deactivate"
+E                 - button "Delete agent"
+E                 - heading "Connection methods · subject" [level=3]
+E                 - button "Close"
+E                 - region "Runtime selection":
+E                   - heading "Execution host and installation" [level=4]
+E                   - paragraph: Choose where this agent runs. Installation discovery and workspace selection do not approve or start a runtime.
+E                   - text: Execution host
+E                   - combobox "Execution host":
+E                     - option "Select a host"
+E                     - option "exe_a434766c7af69d2553d52920227834ae · embedded · CONTROL_READY" [selected]
+E                     - option "Remote host · remote · DISCONNECTED"
+E                   - text: Workspace
+E                   - combobox "Runtime workspace":
+E                     - option "Select a workspace" [selected]
+E                     - option "Project"
+E                   - button "Reload published inventory"
+E                   - button "Request host inventory refresh" [disabled]
+E                   - paragraph: Ask the host to discover installations again. This does not run a version probe or start a runtime.
+E                   - status: Inventory refresh queued. Waiting for the host.
+E                   - paragraph: "Inventory: FRESH"
+E                   - group "Provider installation":
+E                     - text: Provider installation
+E                     - radio "Codex (app-server) · NOT_INSTALLED no_installed_candidate · INSTALLATION_REQUIRED · WORKSPACE_REQUIRED · TECHNICAL_NOT_READY" [disabled]
+E                     - text: Codex (app-server) · NOT_INSTALLED no_installed_candidate · INSTALLATION_REQUIRED · WORKSPACE_REQUIRED · TECHNICAL_NOT_READY
+E                     - radio "Pi (Node RPC) · NOT_INSTALLED no_installed_candidate · INSTALLATION_REQUIRED · WORKSPACE_REQUIRED · TECHNICAL_NOT_READY" [disabled]
+E                     - text: Pi (Node RPC) · NOT_INSTALLED no_installed_candidate · INSTALLATION_REQUIRED · WORKSPACE_REQUIRED · TECHNICAL_NOT_READY
+E                     - radio "Claude Code (stream) · NOT_INSTALLED no_installed_candidate · INSTALLATION_REQUIRED · WORKSPACE_REQUIRED · TECHNICAL_NOT_READY" [disabled]
+E                     - text: Claude Code (stream) · NOT_INSTALLED no_installed_candidate · INSTALLATION_REQUIRED · WORKSPACE_REQUIRED · TECHNICAL_NOT_READY
+E                 - group: Legacy connection policy and records
+E                 - text: other — · key issued last seen never Full access active
+E                 - button "Edit identity (role / capabilities / metadata)"
+E                 - button "Permissions"
+E                 - button "Tags &amp; outbound audience"
+E                 - button "Communication style (how the agent should communicate)"
+E                 - button "Connections"
+E                 - button "Steer (direct message as operator)"
+E                 - button "Regenerate key"
+E                 - button "Deactivate"
+E                 - button "Delete agent"
+
+tests\execution_r4\test_inventory_refresh_dashboard.py:80: AssertionError</failure></testcase></testsuite></testsuites>

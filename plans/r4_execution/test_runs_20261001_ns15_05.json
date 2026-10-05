@@ -1,0 +1,70 @@
+{
+  "date": "2026-10-01",
+  "base_commit": "41f27ff",
+  "status": "VERIFIED_TR4_15_05_TN_38_TN_39",
+  "installed_unique_passed": 55,
+  "architecture_passed": 3,
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-core-3msf4qiz\\dist\\nexus_connector_core-0.2.51.dev0-py3-none-any.whl",
+      "sha256": "4c4c0c58d25b93f4f08ba8515d8476ffc29d1f0a27cc577c9fccb610716d1d1c"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-connector-pmt6y5x7\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "baf837251f654ab6385f5fba4e22d1a1b69da1839e8f47752795d1518dd29fe7"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-ns15-05-by411exj\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "a72e24455b65aef550ee29bd2b077bb6ded0cf6498e4dbecfb9da9b736fd124e"
+    }
+  },
+  "results": {
+    "r4": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "2",
+      "time": "7.795",
+      "timestamp": "2026-10-01T21:40:39.496970-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "legacy": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "53",
+      "time": "33.419",
+      "timestamp": "2026-10-01T21:42:17.646594-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "architecture": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "3",
+      "time": "0.494",
+      "timestamp": "2026-10-01T21:41:33.865078-03:00",
+      "hostname": "Alienware_m15"
+    }
+  },
+  "scope": "Documentation unit contract plus 100,000-identity indexed/scoped authentication and bounded cache/revocation acceptance.",
+  "source_hashes": {
+    "README.md": "5c719430e39807f875f36eded7565c280076713d90a8d7915294e0c796a3b57e",
+    "docs/harness-integrations/r4-operations.md": "e41935223fc1264764ddb4db4747e1494b969e11d9c4aec6ac091c2045478158",
+    "docs/harness-integrations/runtime-administration.md": "2770e5de1234570023cfbcf5b0813c946816f54053336445155b7daecb480fc9",
+    "tests/test_auth_cache_bounds.py": "3a77c34ddabfb26bd71fc1bcbb48d948f9efd229b8f636d7f8165bd3ba7c542c",
+    "tests/execution_r4/test_ns15.py": "642ff1ccf41a9a4efafe5f2959375bd2069de5462d3a40f94b74a1edebf86d29",
+    "plans/r4_execution/audit_ns15_05_docs.py": "0edf80fa227a0979a1250873175f78e813fdf71c9c5c564a47d2609d81a79397",
+    "frontend/src/components/HelpModal.tsx": "0bf6d082c0a6d4570a39c742fd86b436f33fe73105b3a34aab986176cf3f1cf0",
+    "frontend/src/views/AgentsView.tsx": "604239e26dd591fa0c81078b1eefc08459c3fd86bfbfd7f72434ca62b3213a90"
+  },
+  "limitations": [
+    "Windows/Python 3.13 only; no live provider or independent remote host.",
+    "TN-40, task dependencies and G0-G3 remain open.",
+    "Intermediate wheel predates final README count corrections; final release metadata needs M13 rebuild.",
+    "Dashboard compiled asset content verified; browser interaction not claimed."
+  ]
+}

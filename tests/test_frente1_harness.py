@@ -118,14 +118,18 @@ def test_s7_ta_direct_message_targetable_from_inline_surface(surface):
     assert "message_create" in tools, "message_create must be on the inline surface"
     create = tools["message_create"]
 
-    # The four required params an agent must fill are each documented inline.
-    for required in ("project_root", "from_agent_id", "subject", "body"):
+    # R4 permits a logical workspace without a Server-local path. Both selectors
+    # must remain documented; their exclusive choice is validated by the service.
+    for required in ("project_root", "workspace_id", "from_agent_id", "subject", "body"):
         _described(create, required)
     # And they are actually marked required in the published schema.
     schema_required = set((create.inputSchema or {}).get("required", []))
-    assert {"project_root", "from_agent_id", "subject", "body"} <= schema_required, (
-        "message_create must mark project_root/from_agent_id/subject/body required"
+    assert {"from_agent_id", "subject", "body"} <= schema_required, (
+        "message_create must mark from_agent_id/subject/body required"
     )
+    assert not {"project_root", "workspace_id"} & schema_required
+    assert "exactly one" in _described(create, "project_root").lower()
+    assert "project_root" in _described(create, "workspace_id")
 
     target_desc = _described(create, "target")
     assert '"strategy":"direct"' in target_desc, (

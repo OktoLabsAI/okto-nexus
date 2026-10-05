@@ -1,0 +1,59 @@
+{
+  "core": {
+    "version": "0.2.29.dev0",
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-core-wheel-oaqfuyo2\\nexus_connector_core-0.2.29.dev0-py3-none-any.whl",
+    "sha256": "a465c1ec1aaba9814872b21984a436bbf4cac5f28c2b4bed776f1a7042426cba"
+  },
+  "qualification": "development only; real providers and host composition pending",
+  "nexus": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-domain-nexus-wheel-c6s1_kds\\okto_nexus-0.2.0-py3-none-any.whl",
+    "sha256": "c3650009f1cf9fe558aacd961a01221735e462925a3d2b682c7281ebde61927e",
+    "command": [
+      "C:\\Python313\\python.exe",
+      "-m",
+      "pip",
+      "wheel",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-domain-nexus-stage-ac2e2sxq",
+      "--no-deps",
+      "--no-build-isolation",
+      "--wheel-dir",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-domain-nexus-wheel-c6s1_kds"
+    ]
+  },
+  "connector": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-domain-connector-final-wheel-8tle55i5\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+    "sha256": "60bf3d03e8888a243b7769f41e31986a8914a456d4275b98f0fc76d0ddcfa291",
+    "command": [
+      "C:\\Python313\\python.exe",
+      "-m",
+      "pip",
+      "wheel",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-domain-connector-final-stage-poc4gppr",
+      "--no-deps",
+      "--no-build-isolation",
+      "--wheel-dir",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-domain-connector-final-wheel-8tle55i5"
+    ]
+  },
+  "installed_python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+  "install_command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+    "-m",
+    "pip",
+    "install",
+    "--no-deps",
+    "--force-reinstall",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-core-wheel-oaqfuyo2\\nexus_connector_core-0.2.29.dev0-py3-none-any.whl",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-domain-nexus-wheel-c6s1_kds\\okto_nexus-0.2.0-py3-none-any.whl",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-domain-connector-wheel-01qwy60h\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl"
+  ],
+  "connector_reinstall_command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+    "-m",
+    "pip",
+    "install",
+    "--no-deps",
+    "--force-reinstall",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-domain-connector-final-wheel-8tle55i5\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl"
+  ]
+}

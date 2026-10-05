@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="6.944" timestamp="2026-10-01T14:49:37.447671-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_ns15" name="test_ns15_02" time="5.175"><failure message="AssertionError: assert ('ENDED' == 'ended'&#10;  &#10;  - ended&#10;  + ENDED)">tests\execution_r4\test_ns15.py:176: in test_ns15_02
+    assert stopped["status"] == "ended" and stopped["lifecycle_state"] == "stopped"
+E   AssertionError: assert ('ENDED' == 'ended'
+E     
+E     - ended
+E     + ENDED)</failure></testcase></testsuite></testsuites>

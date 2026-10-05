@@ -1,0 +1,173 @@
+{
+  "recorded_at": "2026-09-30T08:54:53.947224+00:00",
+  "scope": "Partial M04/M06 daemon-owned operation consumers and real loopback WSS integration; no product gate",
+  "parent_and_dependency_commits": {
+    "nexus": "7e6ea4f5e1d4d34fa4c8f0303ba87a41fbe47559",
+    "connector": "23a28467e2da141c5dff389e838792ebe820e229",
+    "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
+  },
+  "source_sha256": {
+    "tests/execution_r4/test_remote_connection.py": "f50b8640691a56d7199d61686e41a83562940b26c7ab878f37511ecce1ad2d5a"
+  },
+  "connector_evidence": {
+    "commit": "23a28467e2da141c5dff389e838792ebe820e229",
+    "file": "plans/implementation/evidence/r4-execution-report.json",
+    "sha256": "c5780d306aa095174f84c3196595f2d87e1488b5cc65273567cb00ffdc13b504"
+  },
+  "runs": [
+    {
+      "file": "plans/r4_execution/evidence/r4-execution-installed.xml",
+      "sha256": "8051b1e1ac75e2410e1f29ded058a828dede553f6a9c991798d2252d0daa74e5",
+      "tests": 63,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 63,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "63",
+          "time": "57.644",
+          "timestamp": "2026-09-30T05:49:55.568394-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ]
+    },
+    {
+      "file": "plans/r4_execution/evidence/r4-execution-public-verified.xml",
+      "sha256": "ec2346b065b7c0a4cd6a54fda2c6fe1fd684ac869d0a35b84a1645063fc8ae96",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 1,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "1",
+          "time": "6.447",
+          "timestamp": "2026-09-30T05:46:10.341732-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ]
+    },
+    {
+      "file": "plans/r4_execution/evidence/r4-execution-public.xml",
+      "sha256": "00ff8c93cf2899a35f090a5a0190913767a91e80f7de77de68c40e67eda37359",
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "1",
+          "skipped": "0",
+          "tests": "1",
+          "time": "7.956",
+          "timestamp": "2026-09-30T05:45:35.294966-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ]
+    },
+    {
+      "file": "plans/r4_execution/evidence/r4-execution-source.xml",
+      "sha256": "745262249aae3fe819e01ef4612032101bca117a5a16c233252a7042774cce95",
+      "tests": 103,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 103,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "103",
+          "time": "167.308",
+          "timestamp": "2026-09-30T05:49:47.735573-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ]
+    }
+  ],
+  "connector_runs": {
+    "regression_passes": 286,
+    "regression_skips": 2,
+    "directed_passes": 17,
+    "counts_overlap": true
+  },
+  "source_commands": [
+    "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/execution_r4/test_remote_connection.py -q --tb=short --junitxml=plans/r4_execution/evidence/r4-execution-public-verified.xml",
+    "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/execution_r4 -q --tb=line --junitxml=plans/r4_execution/evidence/r4-execution-source.xml"
+  ],
+  "installed_command": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/okto-r4-execution-installed-p43ay8hw/Scripts/python.exe -I -X utf8 -c '\nimport json,hashlib,zipfile,sys,platform,os\nfrom pathlib import Path\nimport pytest,okto_nexus,okto_nexus_connector,nexus_connector_core\nroot=Path(\"D:/Projetos/Techridy/okto_labs_okto_nexus\")\nconnector=root.parent/\"okto-nexus-connector\"\nwheel=json.loads(Path(\"C:/Users/jpamb/AppData/Local/Temp/r4-execution-final-wheel.json\").read_text())[\"wheel\"]\nmanifest={}\nfor module,artifact,source in [\n(okto_nexus,Path(\"C:/Users/jpamb/AppData/Local/Temp/okto-dispatch-pump-wheel-fwgjf64l/okto_nexus-0.2.0-py3-none-any.whl\"),root/\"src\"),\n(okto_nexus_connector,Path(wheel),connector/\"src\"),\n(nexus_connector_core,root/\"vendor/wheels/nexus_connector_core-0.2.28.dev0-py3-none-any.whl\",None)]:\n    package=Path(module.__file__).resolve().parent\n    assert \"site-packages\" in package.parts\n    files={}\n    with zipfile.ZipFile(artifact) as archive:\n        for name in archive.namelist():\n            if not name.startswith(module.__name__+\"/\") or name.endswith(\"/\"): continue\n            data=archive.read(name)\n            assert (package/name.split(\"/\",1)[1]).read_bytes()==data,name\n            if source is not None: assert (source/name).read_bytes()==data,name\n            files[name]=hashlib.sha256(data).hexdigest()\n    manifest[module.__name__]={\"path\":str(package),\"wheel\":str(artifact),\"wheel_sha256\":hashlib.sha256(artifact.read_bytes()).hexdigest(),\"files_sha256\":files}\nmanifest.update(python=sys.version,platform=platform.platform(),isolated=bool(sys.flags.isolated),\nscope=\"Daemon-owned operation consumers, seven-action Core translation and real loopback WSS integration; synthetic native peer, no startup or provider qualification\")\n(root/\"plans/r4_execution/evidence/r4-execution-installed-modules.json\").write_text(json.dumps(manifest,indent=2)+\"\\n\",encoding=\"utf-8\")\nargs=[\"-c\",\"pytest.ini\",\"--rootdir=\"+str(root/\"tests\"),\"--confcutdir=\"+str(root/\"tests\"),\"-o\",\"asyncio_mode=auto\",\nstr(connector/\"tests/unit/test_r4_execution.py\"),str(connector/\"tests/unit/test_execution_selection.py\"),str(connector/\"tests/unit/test_realization_service_r4.py\"),str(connector/\"tests/unit/test_state_store.py\"),str(connector/\"tests/contract/test_r4_connection.py\"),str(connector/\"tests/contract/test_wss_r4.py\"),\nstr(root/\"tests/execution_r4/test_remote_connection.py\"),str(root/\"tests/execution_r4/test_public_open_bootstrap.py\"),\nstr(root/\"tests/execution_r4/test_ns09.py\"),\"-q\",\"--tb=line\",\n\"--junitxml=\"+str(root/\"plans/r4_execution/evidence/r4-execution-installed.xml\")]\nraise SystemExit(pytest.main(args))\n'",
+  "installed_cwd": "C:/Users/jpamb/AppData/Local/Temp/okto-r4-canonical-installed",
+  "installed_modules_manifest_sha256": "212f43df659772566e5a42a4a11487983eb32bc49fcba249490d1f3c7624d70c",
+  "installation_log_sha256": "b36686667ce0d9bb5ae23b10b29229bcfc50ec7e6e686d1a517184fffe6d7cb6",
+  "artifacts": {
+    "initial": {
+      "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-execution-build-w1sy7kar",
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-execution-wheel-z1lanog9\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "05f291c1d99a3e1275140fee47024526a676b3f5c304c97a97a708b423894405",
+      "build_log": "plans/r4_execution/evidence/r4-execution-initial-build.log",
+      "build_log_sha256": "7327eaa2e1c9cce87cd9263cefa6f3110cd90759d89a5030ffdf63f18e046d51"
+    },
+    "final": {
+      "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-execution-final-build-ary9uwjb",
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-execution-final-wheel-5yazauq2\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "1ff0de4fa9dac562a834c91431ef4d2cc113f899cf921295e37acf6a539f42bf",
+      "installed_env": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-execution-installed-p43ay8hw",
+      "build_log": "plans/r4_execution/evidence/r4-execution-final-build.log",
+      "build_log_sha256": "617ae27da5d2afd06c8062c4c1417a6d096c4b2ebe20888adaef2759431d3797"
+    }
+  },
+  "artifact_manifest_sha256": "85cff6fcf208d270a3e0c1523e149287d9895e0e73337322cc9ee08811bb56f5",
+  "installed_artifacts": {
+    "okto_nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-dispatch-pump-wheel-fwgjf64l\\okto_nexus-0.2.0-py3-none-any.whl",
+      "wheel_sha256": "405d2d37ff94616069c50ee8fff6d86a36c872b33c159aa63a30bb1f337cf64e"
+    },
+    "okto_nexus_connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-execution-final-wheel-5yazauq2\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "wheel_sha256": "1ff0de4fa9dac562a834c91431ef4d2cc113f899cf921295e37acf6a539f42bf"
+    },
+    "nexus_connector_core": {
+      "wheel": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\wheels\\nexus_connector_core-0.2.28.dev0-py3-none-any.whl",
+      "wheel_sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c"
+    }
+  },
+  "environment": {
+    "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "isolated": true
+  },
+  "core_wheel_sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c",
+  "verification": [
+    "The public journey now admits and queries operations; daemon-owned consumers perform prepare/open/submit/control/close, project receipts and publish them.",
+    "One native opening uses the approved workspace; five persisted operations have one dispatch attempt each; the session closes and daemon shutdown succeeds.",
+    "Seventeen directed Connector cases cover connection ownership and consumers, including seven action translations using actual Core journals with a synthetic native peer.",
+    "The final installed campaign passes 63 cases; installed package files match wheels and Nexus/Connector production bytes. Nexus R4 source passes 103 cases.",
+    "Initial public failure came from closing the socket before stopping the consumers; corrected cleanup follows daemon ownership. Final source/installed campaigns include a duplicate-adoption negative assertion and final daemon capacity/readiness guards.",
+    "The standalone public rerun used the initial Connector wheel; final source and installed campaigns use the final artifact recorded here.",
+    "Raw failures, Connector fixture corrections and the completed-producer observation race are preserved in reports and XML."
+  ],
+  "limitations": [
+    "Connection negotiation is still supplied by the test; automatic daemon startup, persisted executor registry, credentials/ticket/lease renewal and reconnect are pending.",
+    "Production profile/environment/capability composition must supply host ports. The campaign uses empty environment and synthetic native qualification.",
+    "Seven-action translation is a Connector/Core contract proof; canonical native-request ingress and decision UI/CLI journeys remain incomplete.",
+    "Nonempty reconciliation, durable receipt/error/event publication recovery and embedded execution remain pending.",
+    "Class-local serialization, global shutdown deadline and live recovery ownership under unresolved outcomes still require M11.",
+    "Core and Nexus production bytes are unchanged. No provider, Linux, separate-process/host or final product gate is qualified. Counts overlap."
+  ],
+  "product_gates_closed": []
+}

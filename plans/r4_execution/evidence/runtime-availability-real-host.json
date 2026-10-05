@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "keyless_dashboard": true,
+  "freshness": "FRESH",
+  "platform": "win32",
+  "runtimes": [
+    {
+      "adapter_id": "codex_app_server",
+      "state": "NOT_PROBED",
+      "installed": true,
+      "can_configure": true
+    },
+    {
+      "adapter_id": "pi_rpc",
+      "state": "PREPARATION_REQUIRED",
+      "installed": true,
+      "can_configure": true
+    },
+    {
+      "adapter_id": "claude_stream",
+      "state": "NOT_PROBED",
+      "installed": true,
+      "can_configure": true
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus\adapters\outbound\sqlite\connection.py:59: in __enter__
+    self.connection.execute(statement)
+E   sqlite3.OperationalError: database is locked
+
+The above exception was the direct cause of the following exception:
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_open_bootstrap.py:26: in opening
+    with client.websocket_connect(f'wss://127.0.0.1:8202/v1/runtime/executors/{executor}/link',
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\testclient.py:131: in __exit__
+    return self.exit_stack.__exit__(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:619: in __exit__
+    raise exc
+C:\Python313\Lib\contextlib.py:604: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:482: in _exit_wrapper
+    callback(*args, **kwds)
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\testclient.py:143: in _run
+    await self.app(self.scope, receive_rx.receive, send_tx.send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\applications.py:1215: in __call__
+    await super().__call__(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\telemetry\_asgi.py:151: in __call__
+    await self.app(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\middleware\exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\routing.py:676: in __call__
+    await self.middleware_stack(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py:2786: in app
+    await route.handle(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py:1817: in handle
+    await self.original_router.handle(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py:2869: in handle
+    await included_router._handle_selected(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py:1845: in _handle_selected
+    await route.handle(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\routing.py:356: in handle
+    await self.app(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py:191: in app
+    await wrap_app_handling_exceptions(app, session)(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py:188: in app
+    await func(session)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py:829: in app
+    await dependant.call(**solved_result.values)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus\adapters\inbound\http\executor_link.py:539: in executor_link
+    await anyio.to_thread.run_sync(_release)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\_backends\_asyncio.py:2706: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\_backends\_asyncio.py:1100: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus\adapters\inbound\http\executor_link.py:517: in _release
+    with factory.unit_of_work() as uow:
+         ^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus\adapters\outbound\sqlite\connection.py:66: in __enter__
+    raise db_error_from_exception("starting a transaction", exc) from exc
+E   okto_nexus.errors.OktoNexusError: DB_ERROR: SQLite failure while starting a transaction: the database is briefly locked by another process. Retry the call; the lock clears as soon as the competing writer commits.

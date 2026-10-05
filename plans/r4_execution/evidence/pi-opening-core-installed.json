@@ -1,0 +1,15 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-approvals-core-yqwcdf8k\\test-env\\Scripts\\python.exe",
+    "-I",
+    "-c",
+    "import sys; from pathlib import Path; sys.path.insert(0, 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core'); import nexus_connector_core as core; assert Path(core.__file__).resolve().parent == Path('C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\okto-r4-native-approvals-core-yqwcdf8k\\\\test-env\\\\Lib\\\\site-packages\\\\nexus_connector_core'); import pytest; raise SystemExit(pytest.main(['-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\okto-r4-canonical-installed\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests\\\\test_pc09_build_identity.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests\\\\regression\\\\test_c4_audit.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests\\\\test_native_runtime_bridge.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests\\\\test_pc06_composition.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests\\\\test_r4_runtime_leases.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests\\\\test_r4_lease_reducer.py', '-q', '--junitxml=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\plans\\\\r4_execution\\\\evidence\\\\pi-opening-core-installed.xml']))"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed",
+  "core_version": "0.2.44.dev0",
+  "wheel_sha256": "c6f8555adeadb68959daa8e2ad91ec755eab49183049112a3d719470321e8db0",
+  "verified_files": 93,
+  "application_packages_absent": true,
+  "exit_code": 0,
+  "scope": "Technical native adapters; no product journey acceptance."
+}

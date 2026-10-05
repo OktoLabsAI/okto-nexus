@@ -39,6 +39,9 @@ Application layer: ports + domain + errors only; never imports ``sqlite3`` nor
 from __future__ import annotations
 
 from contextlib import contextmanager
+from dataclasses import asdict
+import hashlib
+import json
 from typing import Any, Iterator, Optional
 
 from ..domain.base import iso_plus, new_id
@@ -67,6 +70,7 @@ from ..domain.policy import (
     resolve_effective_sources,
 )
 from ..domain.policy import audience_reachable as policy_audience_reachable
+from ..domain.targets import target_strategy
 from ..errors import ErrorCode, OktoNexusError
 from .ports import (
     AgentPolicyBindingRepo,
@@ -100,10 +104,8 @@ def message_action_for(target: Any, channel_id: Any = None) -> str:
     ``mixed`` is already rejected upstream by the deliverability gate). A
     channel post without a target is a plain ``message_create``.
     """
-    if isinstance(target, dict):
-        strategy = target.get("strategy")
-        return ACTION_BROADCAST if strategy == "broadcast" else ACTION_MESSAGE_CREATE
-    if target is None and channel_id is None:
+    strategy = target_strategy(target)
+    if strategy == "broadcast" or strategy is None and channel_id is None:
         return ACTION_BROADCAST
     return ACTION_MESSAGE_CREATE
 
@@ -249,6 +251,12 @@ class GovernanceService:
             # TOTAL, byte-identical to the no-rule flow (D4/BR6).
             return verdict
         return None
+
+    def authorization_revision(self, uow: UnitOfWork, agent_id: str) -> str:
+        """Stable receipt for an already admitted action; no second quota charge."""
+        encoded = json.dumps([asdict(source) for source in self._effective_sources(uow, agent_id)],
+                             sort_keys=True, separators=(",", ":"))
+        return hashlib.sha256(encoded.encode()).hexdigest()
 
     def _effective_sources(
         self, uow: UnitOfWork, agent_id: str

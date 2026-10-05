@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="10.256" timestamp="2026-10-02T04:12:25.163291-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_provider_vault" name="test_missing_provider_error_survives_inflight_receipt_read_during_shutdown" time="8.998"><failure message="AssertionError: receipt reader must observe the closing host after the credential failure&#10;assert 1 &gt;= 2&#10; +  where 1 = len([TimeoutError()])">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_provider_vault.py:66: in test_missing_provider_error_survives_inflight_receipt_read_during_shutdown
+    assert len(failures) &gt;= 2, "receipt reader must observe the closing host after the credential failure"
+E   AssertionError: receipt reader must observe the closing host after the credential failure
+E   assert 1 &gt;= 2
+E    +  where 1 = len([TimeoutError()])</failure></testcase></testsuite></testsuites>

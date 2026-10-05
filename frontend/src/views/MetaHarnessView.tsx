@@ -1,3 +1,4 @@
+import { NativeQuestions } from "../components/NativeQuestions";
 import {
   ArrowDown,
   Bot,
@@ -301,7 +302,7 @@ function isAcknowledged(delivery: MessageRow["deliveries"][number]): boolean {
 function fullStamp(value: string | null | undefined): string {
   if (!value) return "—";
   const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? value : date.toLocaleString();
+  return Number.isNaN(date.getTime()) ? value : date.toLocaleString("en-US");
 }
 
 function receiptState(delivery: MessageRow["deliveries"][number]): string {
@@ -473,7 +474,7 @@ function shortWorkspace(id: string, workspaces: WorkspaceListItem[]): string {
 function stamp(value: string): string {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
-  return new Intl.DateTimeFormat(undefined, {
+  return new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "2-digit",
     hour: "2-digit",
@@ -642,6 +643,8 @@ function ChatTurn({
                 {entry.outcome === "completed" ? <CheckCircle2 size={11} /> : entry.outcome === "rejected" ? <CircleAlert size={11} /> : null}
                 {entry.status}
               </span>
+              {entry.deliveries?.some(d=>d.runtime_recovery==='waiting') && <span role="status">Waiting for runtime recovery</span>}
+              {entry.deliveries?.some(d=>d.runtime_recovery==='attention') && <span role="status">Runtime recovery needs attention. See Execution log.</span>}
               {showReceiptFlags && outgoing && entry.kind === "message" && Boolean(entry.deliveries?.length) && (
                 <ReceiptStatusFlag deliveries={entry.deliveries ?? []} onOpen={() => onOpenReceipt(entry)} />
               )}
@@ -1058,6 +1061,7 @@ export function MetaHarnessView({
           data-testid="meta-harness-timeline"
         >
           <div className="mx-auto flex min-h-full max-w-5xl flex-col px-4 py-6 sm:px-6">
+            <NativeQuestions workspace={workspace} agent={filterAgent} />
             {loading ? (
               <div className="grid flex-1 place-items-center text-sm text-surface-400">
                 <LoaderCircle className="animate-spin" size={22} />

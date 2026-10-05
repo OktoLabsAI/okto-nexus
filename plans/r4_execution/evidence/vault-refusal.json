@@ -1,0 +1,20 @@
+{
+  "scope": "Missing-provider credential pre-effect shutdown correction plus Connector issue 1 test artifact",
+  "nexus_wheel_sha256": "6bdfeeb41f8b433bf1377adb7821aff45f5dbbfa83769f82bb2dc8edc6176443",
+  "nexus_sdist_sha256": "babf287a21f0e394344d198536341e69a52eb4bc838fc0b6c59e045e77a77365",
+  "passed": 35,
+  "additional_repeats": 5,
+  "platform": "Windows Python 3.13",
+  "evidence": {
+    "vault-refusal-tests.xml": "e536ea0c08c72faf5123691b47eee004e68d263ca118be16cd48f5f82416d1cb",
+    "vault-refusal-installed.json": "dadc463ab519dc7eda62d41b740b9ddfab8fe29da186d01b30be1c8891bf0796",
+    "vault-refusal-build.json": "7f00adcf26aea99d532d91b039c136751dd17b9cdfe7978c5475cdfa157b5f58",
+    "vault-refusal-repeat.log": "57b26233a077926cee0f54c6b7fe93677e9690856296a25a4e3abc55f78413e4",
+    "connector-r4-timeouts-baseline.xml": "98d41ea5abf00791584b359f1b174ae5c612b9c267ab68f31a0024870fa6c380"
+  },
+  "limitations": [
+    "Not a final freeze or provider/host qualification",
+    "Initial intermittent RuntimeError remains a full-regression concern; five later isolated repetitions passed",
+    "52 Connector R4 tests passed locally but hosted timeout failures remain pending"
+  ]
+}

@@ -94,8 +94,8 @@ _P_INCLUDE_PATHS = (
     "agent_list / capability_list."
 )
 _P_WORKSPACE_LIST_AGENT = (
-    "Your agent_id for permission evaluation in open stdio mode (optional; "
-    "authenticated HTTP MCP uses the API-key identity)."
+    "Optional agent_id assertion for permission evaluation; "
+    "authenticated HTTP MCP uses the API-key identity."
 )
 
 
@@ -221,6 +221,11 @@ def register(server: Any, deps: Any) -> None:
         data = service.agent_whoami(
             actor_agent_id=caller.agent_id if caller is not None else None,
         )
+        from .....domain.execution_principal import current_execution_principal
+        principal = current_execution_principal.get()
+        if principal is not None:
+            data['authentication_source'] = 'session_capability'
+            data['session_scope'] = dict(principal.scope)
         # Policy blocks (spec 80624c1a, FR11/AC10): present ONLY when the caller
         # has bindings, so an actor with none stays byte-identical to the
         # pre-policy surface (BR2). effective_policies names WHICH policies apply

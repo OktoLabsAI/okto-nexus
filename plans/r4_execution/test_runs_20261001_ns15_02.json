@@ -1,0 +1,176 @@
+{
+  "date": "2026-10-01",
+  "status": "TR4_15_02_DRAIN_AND_SUPPORTED_RESTORE_PASSED",
+  "base_commit": "c06430a",
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-core-3msf4qiz\\dist\\nexus_connector_core-0.2.51.dev0-py3-none-any.whl",
+      "sha256": "4c4c0c58d25b93f4f08ba8515d8476ffc29d1f0a27cc577c9fccb610716d1d1c"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-connector-pmt6y5x7\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "baf837251f654ab6385f5fba4e22d1a1b69da1839e8f47752795d1518dd29fe7"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-ns15-02-4e3ka7um\\final-dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "1f6723075d9895626f563cb82b051e38cae05a22365bb5aa3a8ce3ccc93734f5"
+    }
+  },
+  "installed_unique_passed": 94,
+  "architecture_passed": 3,
+  "results": {
+    "ns15-02-authorization-installed.xml": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "1",
+      "skipped": "0",
+      "tests": "25",
+      "time": "85.415",
+      "timestamp": "2026-10-01T15:01:16.723574-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "ns15-02-authorization-source.xml": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "3",
+      "skipped": "0",
+      "tests": "25",
+      "time": "103.018",
+      "timestamp": "2026-10-01T14:57:27.330203-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "ns15-02-directed.xml": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "12",
+      "time": "34.145",
+      "timestamp": "2026-10-01T14:50:39.686886-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "ns15-02-disabled-installed.xml": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "1",
+      "time": "3.364",
+      "timestamp": "2026-10-01T15:03:06.964728-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "ns15-02-final-installed.xml": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "69",
+      "time": "175.745",
+      "timestamp": "2026-10-01T14:58:08.973125-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "ns15-02-initial.xml": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "1",
+      "skipped": "0",
+      "tests": "1",
+      "time": "6.926",
+      "timestamp": "2026-10-01T14:49:17.397450-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "ns15-02-installed.xml": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "69",
+      "time": "170.620",
+      "timestamp": "2026-10-01T14:52:13.745935-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "ns15-02-reproduced.xml": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "1",
+      "skipped": "0",
+      "tests": "1",
+      "time": "6.806",
+      "timestamp": "2026-10-01T14:50:01.426414-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "ns15-02-restore-source-fixed.xml": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "1",
+      "time": "7.492",
+      "timestamp": "2026-10-01T14:56:42.032777-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "ns15-02-restore-source.xml": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "1",
+      "skipped": "0",
+      "tests": "1",
+      "time": "6.950",
+      "timestamp": "2026-10-01T14:55:41.274674-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "ns15-02-source.xml": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "1",
+      "skipped": "0",
+      "tests": "1",
+      "time": "6.944",
+      "timestamp": "2026-10-01T14:49:37.447671-03:00",
+      "hostname": "Alienware_m15"
+    }
+  },
+  "evidence": {
+    "plans/r4_execution/evidence/ns15-02-artifacts.json": "ab082c700bdb10dc806ca21532a0c78e55c849c7faa4bcca3d2597bc70d13474",
+    "plans/r4_execution/evidence/ns15-02-authorization-installed.xml": "dece674291bc69eb1270ac0353a58bcf8a36d7019dfee1cb1058c018763da760",
+    "plans/r4_execution/evidence/ns15-02-authorization-source.xml": "4a45cf3dd7f05a7308efb1a1feb07cd0b434d26b174a84a814ca2a48a8102b1c",
+    "plans/r4_execution/evidence/ns15-02-build-context.json": "0d67b35ef59583f294bbd95f7aea1fb1117fe0838e2d4e691982b6017a1084a2",
+    "plans/r4_execution/evidence/ns15-02-build.log": "0e0f6817f957ee6d466a7ea87a6be0c33608c98da9ceb3fce16792331b9a8af2",
+    "plans/r4_execution/evidence/ns15-02-directed.xml": "f48b4e0684347ca9156896121b8fcb1026c0dc5faa81a6476956f430b6428e5b",
+    "plans/r4_execution/evidence/ns15-02-disabled-installed.xml": "fa5498ca845ee43a1419301c40a7423fe41bb3e87cb2385c1bdf208b628fa6f0",
+    "plans/r4_execution/evidence/ns15-02-final-artifacts.json": "91eebfa28ef4fd0849d3ef8c6c3d80674c12e76f5428b865f2187c6c5be91fcc",
+    "plans/r4_execution/evidence/ns15-02-final-build.log": "d1ada040263352dcccccb50ea4674d4c7d771b4cc09c1f617646a3173704a079",
+    "plans/r4_execution/evidence/ns15-02-final-installed.json": "3839beb28fb40e1acf57b53693237f9955e58d8fa70cd97632c85d637b0b8030",
+    "plans/r4_execution/evidence/ns15-02-final-installed.log": "145e1cf4325faf4f84b0105bd03237403871f7a352f8e950228455fd4b865f0d",
+    "plans/r4_execution/evidence/ns15-02-final-installed.xml": "8526dba62a6250c937ca987a690f9d8799fad3d7cafee547a75ebeeb308b5345",
+    "plans/r4_execution/evidence/ns15-02-initial.xml": "21d80be927f99f80a04d513c16e83136cccde29064e7103d6d3a6fdd1a85a617",
+    "plans/r4_execution/evidence/ns15-02-installed.json": "1e753d465e0a0bcf2d3a243326a7ba90339f803ea506d14fc7b8d3a9bd565a14",
+    "plans/r4_execution/evidence/ns15-02-installed.log": "0dd515219da356c56bf77c78b532aa06fe4662a35ed699a599e5dc197706675a",
+    "plans/r4_execution/evidence/ns15-02-installed.xml": "315be6fb81783f30e50260c60807969f23d451c69e4c052496659ef31bda3a1b",
+    "plans/r4_execution/evidence/ns15-02-reproduced.xml": "2ce50b1c64690af36a3d7322607ea674bbfa9191a01b093632425067a97c6d36",
+    "plans/r4_execution/evidence/ns15-02-restore-source-fixed.xml": "5865570cb9f7f236855b3f2053910ebad8d8f5945f390b0202eb8ffc30893b33",
+    "plans/r4_execution/evidence/ns15-02-restore-source.xml": "3cf025756209987c8ddd08522d8a6853066f54ca1487804319eee2cabec3c1f0",
+    "plans/r4_execution/evidence/ns15-02-source.xml": "a9e9760ade7f58a5f3c0f864b354f2caeb9f764b853e8cdbe2c1862ab7b218e7",
+    "plans/r4_execution/M12_NS15_02_DRAIN.md": "f9185f7633f946be2e5fa603f2475e0dfbd285f0344e29ebcbfc09dec0999ff8",
+    "plans/r4_execution/run_ns15_02_installed.py": "0277715ab8676c7ebbbc4cf412ff71c5a4b7507e1ddf8c60298f895fd44dd3e3",
+    "plans/r4_execution/run_ns15_02_final_installed.py": "327442343575371cd4ea3f86d3ad74887ef2c3c870df534d2deff9b71c58f30b",
+    "tests/execution_r4/test_ns15.py": "73577aad9d5bed05a4b9ff5d59495d0e7fbe30883ce69bf38914863894413534",
+    "tests/execution_r4/test_binding_migration.py": "6a71c5c401936f6180a9262eef26d6355bc17b9660ea7c1d80b70524a98d1883",
+    "tests/test_runtime_grants.py": "1a9fbff1cf657dc898461dc3ed2993ceca89e4fcf65291e7dec34b137707f09b",
+    "tests/test_runtime_monitor_authorization.py": "7158cb6bb14d100836e409de1c4f0b63fba28f6add81f99461228633381eac0e",
+    "tests/test_runtime_operation_authorization.py": "c8975ac6313258c496cd7bd230d6a6c437efea5c28d1ba8f4439dd0c8d1c0213",
+    "tests/test_runtime_disabled_acceptance.py": "915e2ed872d02bff73767144efd5ccf2bfbe7c0953a5f4325b108668227bab6e"
+  },
+  "qualification": "Windows/Python 3.13; migration_runtime; real TCP owner and technical peers; supported combined restore into a new home with current HTTP-only binary",
+  "limitations": [
+    "No arbitrary older binary downgrade qualified",
+    "NS15.03 native deduplication and full NS15.04 configuration/post-R4-effect recovery remain open",
+    "Task dependencies and release gates remain open"
+  ],
+  "counting": "Final wheel: 69 R4 passes plus 24 authorization passes and the corrected disabled test pass = 94 distinct cases. Earlier candidate/source runs overlap and are not added. Initial authorization failures required removed stdio; the remaining installed failure expected 404 for an existing empty event-list contract (200), corrected without product change.",
+  "checks": {
+    "plan": "PASS_DOCUMENT_COVERAGE_ONLY",
+    "packages": "Final runner compares three installed packages to artifact bytes and Nexus non-static source to wheel",
+    "diff_check": "One trailing-space diagnostic in preserved initial failure XML; source and tests clean."
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "date": "2026-10-01",
+  "status": "EMBEDDED_SHUTDOWN_INCREMENT_PASSED_SERVER_CONTRACT_PARTIAL",
+  "commits": {
+    "nexus": "4a7023b062459b73892f249c091a3f2ecd9c0125",
+    "core": "c2aed115ea8add6dacf82bb892ff1415dcca652c",
+    "connector": "dca08630cd5f5a8150a01249845f9e55ee41ca70"
+  },
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-parallel-identity-core-dx3j4u5a\\dist\\nexus_connector_core-0.2.49.dev0-py3-none-any.whl",
+      "sha256": "b2787c4670c276b5310f7631552fdc53759d99a020f30cd7152154697e125963"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-parallel-identity-connector-1lc4uz_w\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "930e66148b1132a434859b4747524682c821324cc8d53dfd7ae9ce9eabf74f03"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-shutdown-deadline-composition-0k1pi6do\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "04b59d6ccec149087fb9fb3b6e338aa5d10c63f1b08d5d3b7691fe27862f5e04"
+    }
+  },
+  "results": {
+    "precomposition-nexus-installed": {
+      "tests": "106",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "340.288"
+    },
+    "precomposition-legacy_shutdown-installed": {
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "16.264"
+    },
+    "nexus-installed": {
+      "tests": "14",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "33.759"
+    },
+    "legacy_shutdown-installed": {
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "11.137"
+    },
+    "source": {
+      "tests": "6",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "18.722"
+    },
+    "recovery-source": {
+      "tests": "2",
+      "failures": "1",
+      "errors": "0",
+      "skipped": "0",
+      "time": "8.478"
+    },
+    "recovery-fixed-source": {
+      "tests": "8",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "28.186"
+    },
+    "error-recovery-source": {
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "7.260"
+    },
+    "lifespan-source": {
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "4.536"
+    },
+    "composition-before": {
+      "tests": "1",
+      "failures": "1",
+      "errors": "0",
+      "skipped": "0",
+      "time": "1.428"
+    },
+    "composition-fixed": {
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "1.325"
+    }
+  },
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "topology": "Installed Nexus/Core/Connector wheels, Windows, technical handles and owned technical Pi child. Actual provider and independent-host qualification not repeated."
+  },
+  "checks": {
+    "pip_check": "passed",
+    "package_bytes": "source/wheel/installed package bytes compared before installed suites",
+    "credential_pattern_scan": "no matches"
+  },
+  "artifact_scope": "106 Nexus and four legacy cases passed before the failed-composition cleanup correction. The final wheel passed 14 directed shutdown/host cases and the four legacy cases. These suites overlap and must not be summed as unique final-wheel coverage.",
+  "retained_failures": [
+    "The first uncertain-result test failed: a second immediate pass did not wait for Core cleanup. A retained recovery loop fixed it.",
+    "A failed initialization remained in the host map after successful journal cleanup. A focused failing test reproduced it; cleanup confirmation now permits removing only those released entries.",
+    "The first built wheel was superseded before the broad installed regression; its build/install metadata is retained."
+  ],
+  "limitations": [
+    "The deadline/report applies to the embedded owner and is integrated with lifespan retention. It is not yet a Server-wide public command.",
+    "Uvicorn transport shutdown precedes ASGI cleanup; a reachable administrative recovery service and one budget across all owners remain pending.",
+    "Full ingress admission fencing, qualified process-vs-durable-release distinction, late-open/release failures and platform acceptance remain required.",
+    "Core/Connector wheels are unchanged; older real-provider evidence retains its original artifact scope.",
+    "Preexisting modified UI assets are included in the wheel bytes but not accepted by this campaign. All gates remain open."
+  ],
+  "evidence": {
+    "evidence/shutdown-deadline-artifacts.json": "54e3d92a46314928305378b4da85b71e56afec70bd63f11e3a0d4e4ab5fdc276",
+    "evidence/shutdown-deadline-composition-before.xml": "c9b6bbe4af1b189de84fe2d7dda6f8ffa5d3c03a72153ef68effa670bd81fd83",
+    "evidence/shutdown-deadline-composition-fixed.xml": "413d863860d00ca9a5828a1ea037199ecca83c22f489e91bdedad0b455d83cee",
+    "evidence/shutdown-deadline-error-recovery-source.xml": "b3c35f3b6700689a45a042b1bd181e140230e31e4790bcb7b7bcdec875d1bff8",
+    "evidence/shutdown-deadline-first-artifacts.json": "4543427405258d4cfe5bb81014463d17ae35beeaaa22e00abb1f4bd5893ef356",
+    "evidence/shutdown-deadline-first-install.log": "4579312c0a2d85651d65f6a8f149f36dd3f9ff55630523d881d88275687d5dde",
+    "evidence/shutdown-deadline-first-nexus-build.log": "6f4689b43394f7815235cf80709ce5d31e45fce7953f30167acd181d1965c599",
+    "evidence/shutdown-deadline-install.log": "e1f51a43d1efd1c71ad2893643cb1613873097a62b45208616188fc424c54ace",
+    "evidence/shutdown-deadline-legacy_shutdown-installed.json": "97e07864eec54d63ec587d8e5a5b2a59c3c6c750a3e3934e8819aa3221582881",
+    "evidence/shutdown-deadline-legacy_shutdown-installed.log": "490a47403d3e0c4b145baafb34c759345fa24dd210adcdb013e6a5d155203c1f",
+    "evidence/shutdown-deadline-legacy_shutdown-installed.xml": "7c028c8ff4dbf151964a852b1584471375cfe1e7badcbac190344cb0693b227a",
+    "evidence/shutdown-deadline-lifespan-source.xml": "4923a4b20b99c781d313206de88156c8f9b5eea34a3be2effffe1308cdcc4f19",
+    "evidence/shutdown-deadline-nexus-build.log": "7d59cd1d7d1a180a22b83bd4c0415ac5c1ddaedc083c15254dbbb3e01f596458",
+    "evidence/shutdown-deadline-nexus-installed.json": "655bb85769ae5a8e72ee9bdd271b1fe8eb80c6aedb7c16ff49c206a797603c9f",
+    "evidence/shutdown-deadline-nexus-installed.log": "e552a0f86ee391b641da5df0618b9456ecb829bf35394273f5e29b160725acf4",
+    "evidence/shutdown-deadline-nexus-installed.xml": "6da9c023accbee07ff6f295de4e2727114cecf6b2563cec70f8a2c2a21d76d27",
+    "evidence/shutdown-deadline-precomposition-artifacts.json": "d04c1b7ff51ed265ce9e9338a3494b0bab1e6a58be30b93e8625b55ec63e750f",
+    "evidence/shutdown-deadline-precomposition-install.log": "a82d979230312936006a538814abf0af796edcfeb1ec4c7f81c84b292561a9d4",
+    "evidence/shutdown-deadline-precomposition-legacy_shutdown-installed.json": "caeb79c5d425f00eb7012d9682d90929b14daaa56f6c95acc450c48a2dfcc756",
+    "evidence/shutdown-deadline-precomposition-legacy_shutdown-installed.log": "c40f76abf89484bb4c2e4ccb4a0682cfd40d539516ad74c12145b8db55864ef2",
+    "evidence/shutdown-deadline-precomposition-legacy_shutdown-installed.xml": "62cea0ca7b4d644b984d203bf5212506177587305f4521b75e0dfa0414561839",
+    "evidence/shutdown-deadline-precomposition-nexus-build.log": "4e1d0aa95946c414065adc795a6d949302d1b4a2f06b9cc48be485c7d9655175",
+    "evidence/shutdown-deadline-precomposition-nexus-installed.json": "a9430b22366e4802829ccbf21b7464b6fd14db82c546d5a7537d00a24f17ed32",
+    "evidence/shutdown-deadline-precomposition-nexus-installed.log": "a4936fbf6cd4c617a20baa459fac5f188b60175abc3c8c41a5d15bd1fddc3da2",
+    "evidence/shutdown-deadline-precomposition-nexus-installed.xml": "4c0c9922b2c0d80b1cc4d9ea2a55f85d9bc6f4d5d217e33e6c3cbfcbba2aac50",
+    "evidence/shutdown-deadline-recovery-fixed-source.xml": "ae3a1453bd1ac1b1c686dff382c96e4ed1b6117d559cefa0c6c2fb2f4fc86277",
+    "evidence/shutdown-deadline-recovery-source.xml": "44c8881775b6cf19a07020c2baf4424b990e7831fbac4845bd60ef449d5b27e8",
+    "evidence/shutdown-deadline-source.xml": "fb51e84aabea1dae1ca617fe9b19cafbc1904774c719270654a266b640d6474e"
+  },
+  "raw_evidence_whitespace_exception": "evidence/shutdown-deadline-recovery-source.xml line 17 preserves pytest traceback trailing whitespace. Product, tests, runner and documentation pass whitespace checks; failed-run evidence is unchanged."
+}

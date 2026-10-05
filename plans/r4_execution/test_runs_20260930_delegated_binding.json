@@ -1,0 +1,95 @@
+{
+  "recorded_at": "2026-09-30T06:41:08.288218+00:00",
+  "scope": "Partial M02/M03 operator proof integration and Connector consent DTO; all product gates remain open",
+  "nexus_parent_commit": "777de3748df75bcdde836b371333816287a861a0",
+  "connector_commit": "40a8cb07c183e000813afc63138270d77647a3a0",
+  "core_unchanged_commit": "9d244cfecc31c817661d560bbcee75cc9f8d5513",
+  "source_sha256": {
+    "src/okto_nexus/application/approvals.py": "3d0cc8e7198197e31c90440933cab55415cb457a2627295f3d85da12ea611e88",
+    "src/okto_nexus/application/execution_binding_approvals.py": "16ecd228fd2cf7bf9170e9566cea5a0422c1e805ae3e8296f1cae3efcdcd8d1e",
+    "src/okto_nexus/application/execution_binding_proposals.py": "0117df97fe013fa97916fa43b645ffa47fb991b883cfc04eed423149b9688440",
+    "src/okto_nexus/bootstrap/dependencies.py": "3c93805ab42041da61aba13eea2f6010aefe161fd552ac536d6fc275fc1f0ce5",
+    "src/okto_nexus/adapters/inbound/http/connections_v1.py": "9c3fb6185be76955c370dc994a29c49817cca890727794d352fbd573db079c43",
+    "src/okto_nexus/adapters/inbound/http/routes.py": "13562a588b2eeb9f746e4e5c3731a4112e2931ba615b9255a1b742f8da0469a6",
+    "src/okto_nexus/migrations/077_execution_binding_operator_proof.sql": "20e6d19eca9dffffe1d6bc368f8579449f62bf37fb020f47c46dac90bb9069d2",
+    "tests/execution_r4/test_binding_operator.py": "e037d67906f9d6329d6fab3f9d6175cc8492f70545652ad2f4cdf04995c68bac",
+    "tests/execution_r4/test_ns01.py": "76b4b6b02c9b4f64238c058e0cc3ead9fed96e97da4044ad835a47a1ec95aa1f",
+    "tests/execution_r4/test_ns02.py": "a01455725f9a5acfd243e448a68650d449cf89aadec6fd401df0ef9c2a3dec50",
+    "tests/execution_r4/test_ns05.py": "81e5d83b500e1304bbafce43d22adcc0ba325de21e17bee71b180d73f0ecd99d",
+    "tests/execution_r4/test_vertical_inventory.py": "ac8881d612fe0368113331c467f91bbdc62420907eaecb3266c4952ef10e5ab8"
+  },
+  "runs": [
+    {
+      "file": "plans/r4_execution/evidence/delegated-binding-targeted.xml",
+      "sha256": "eb97d4e534d62e89d54d7df846b96abc256298a33ea07d459dd6e2af0478c483",
+      "tests": 16,
+      "errors": 0,
+      "failures": 1,
+      "skipped": 0
+    },
+    {
+      "file": "plans/r4_execution/evidence/delegated-binding-source.xml",
+      "sha256": "5df495bbc31ff42d257f26543c28160519d032fafb0690b68b3eba80497754c5",
+      "tests": 85,
+      "errors": 0,
+      "failures": 1,
+      "skipped": 0
+    },
+    {
+      "file": "plans/r4_execution/evidence/delegated-binding-source-final.xml",
+      "sha256": "5f21bf8c4bed853c940186663f7f9297ef89a6f7fdcfba6013436b3e0a176467",
+      "tests": 86,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "file": "plans/r4_execution/evidence/delegated-binding-approval-regression.xml",
+      "sha256": "33a7ea3794f453bb66c5fd4b735f617e3621cd2de81a9b25c03bff001dc08939",
+      "tests": 48,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "file": "plans/r4_execution/evidence/delegated-binding-migrations.xml",
+      "sha256": "7c1599562c6116bc70ef4739036404a1553fd468da2f09ed42b37a87cbdee86a",
+      "tests": 7,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "file": "plans/r4_execution/evidence/delegated-binding-installed.xml",
+      "sha256": "8bbd5b2f6e9450e1c874597affe705964329cc8a7966b158fe183fdb3a00a9cc",
+      "tests": 27,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    }
+  ],
+  "source_commands": [
+    "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/execution_r4 -q --tb=short --junitxml=plans/r4_execution/evidence/delegated-binding-source-final.xml",
+    "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/test_hitl.py tests/test_runtime_native_approvals.py tests/test_runtime_claude_approvals.py -q --tb=short --junitxml=plans/r4_execution/evidence/delegated-binding-approval-regression.xml",
+    "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/test_migrations.py -q --tb=short --junitxml=plans/r4_execution/evidence/delegated-binding-migrations.xml"
+  ],
+  "installed_command": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/okto-r4-pending-installed-py313/Scripts/python.exe -I -X utf8 -c '\nimport hashlib,json,zipfile,platform,sys,os\nfrom pathlib import Path\nimport pytest,okto_nexus,okto_nexus_connector,nexus_connector_core\nroot=Path(\"D:/Projetos/Techridy/okto_labs_okto_nexus\")\nconnector=root.parent/\"okto-nexus-connector\"\ndist=Path(\"C:/Users/jpamb/AppData/Local/Temp/okto-r4-delegated-binding-clean\")\nreport={}\nassert not os.environ.get(\"OKTO_CONNECTOR_SRC\")\nfor module,wheel,source in [\n(okto_nexus,dist/\"okto_nexus-0.2.0-py3-none-any.whl\",root/\"src\"),\n(okto_nexus_connector,dist/\"okto_nexus_connector-0.5.0.dev0-py3-none-any.whl\",connector/\"src\"),\n(nexus_connector_core,root/\"vendor/wheels/nexus_connector_core-0.2.28.dev0-py3-none-any.whl\",None)]:\n    package=Path(module.__file__).resolve().parent\n    assert \"site-packages\" in package.parts\n    files={}\n    with zipfile.ZipFile(wheel) as archive:\n        for name in archive.namelist():\n            if not name.startswith(module.__name__+\"/\") or name.endswith(\"/\"): continue\n            expected=archive.read(name)\n            assert (package/name.split(\"/\",1)[1]).read_bytes()==expected,name\n            if source is not None:\n                assert (source/name).read_bytes()==expected,name\n            files[name]=hashlib.sha256(expected).hexdigest()\n    report[module.__name__]={\"installed_path\":str(package),\"wheel\":str(wheel),\"wheel_sha256\":hashlib.sha256(wheel.read_bytes()).hexdigest(),\"files_sha256\":files}\nreport.update({\"python\":sys.version,\"platform\":platform.platform(),\"isolated\":bool(sys.flags.isolated),\"scope\":\"Installed delegated operator binding HTTP integration with synthetic inventory; no provider or product gate\",\"frontend\":\"Pre-existing workspace assets packaged unchanged; no UI qualification\"})\n(root/\"plans/r4_execution/evidence/delegated-binding-installed-modules.json\").write_text(json.dumps(report,indent=2)+\"\\n\",encoding=\"utf-8\")\nargs=[\"-c\",\"pytest.ini\",\"--rootdir=\"+str(root/\"tests\"),\"--confcutdir=\"+str(root/\"tests\"),\"-o\",\"asyncio_mode=auto\",\nstr(root/\"tests/execution_r4/test_binding_operator.py\"),str(root/\"tests/execution_r4/test_ns05.py\"),\nstr(root/\"tests/execution_r4/test_ns01.py\")+\"::test_basic_bootstrap_does_not_import_optional_core\",\nstr(root/\"tests/execution_r4/test_vertical_inventory.py\"),\nstr(connector/\"tests/contract/test_r4_binding_consent.py\"),\"-q\",\"--tb=short\",\n\"--junitxml=\"+str(root/\"plans/r4_execution/evidence/delegated-binding-installed.xml\")]\nraise SystemExit(pytest.main(args))\n'",
+  "installed_cwd": "C:/Users/jpamb/AppData/Local/Temp/okto-r4-canonical-installed",
+  "installed_modules_manifest_sha256": "99b29bbe0be387489ae7e9a53c94a966cc8b171d13b2b419b50939f74df4a3d9",
+  "core_wheel_sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c",
+  "evidence_normalization": "Trailing whitespace removed; ephemeral test bearer credentials redacted from recorded failures. Outcomes unchanged.",
+  "failure_resolution": [
+    "Targeted campaign: 15 passed, one failure because injected repository storage failure maps to HTTP 503 DB_ERROR rather than raw HTTP 500. The corrected test checks DB_ERROR and complete rollback.",
+    "First R4 campaign: 84 passed, one failure because the vertical Connector journey omitted required operator approval. It now obtains the actual operator decision and transports operator_proof_ref.",
+    "Bootstrap review found an eager optional-Core import; moved imports into the R4 action and added an isolated no-Core bootstrap regression.",
+    "Connector full campaign: 246 passed, 2 skipped, one inherited PYTHONPATH packaging failure. Isolated packaging rerun passed both cases; see the Connector summary."
+  ],
+  "limitations": [
+    "Synthetic inventory/peers; provider, daemon, full outbox loop, browser and multi-host acceptance remain open",
+    "Self-bind reuse of existing approved configuration remains pending; this increment covers first-time operator-approved bindings",
+    "Operator proof is not a runtime grant; runtime grant issuance remains explicit",
+    "Installed tests use external interpreter/cwd and package files match exact wheels/source; contract fixtures remain in test directories",
+    "Pre-existing user frontend assets packaged unchanged; no frontend qualification",
+    "Campaigns overlap; counts must not be summed as unique acceptance coverage"
+  ]
+}

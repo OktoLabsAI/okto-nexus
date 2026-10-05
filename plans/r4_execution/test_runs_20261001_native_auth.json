@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-01",
+  "commits": {
+    "nexus": "581df448295cf120f8255d6371c72e2e4ade3c8b",
+    "connector": "96d11cfb1f38f2fa316875406176bc1608d08d5c",
+    "core": "3982f6b95c139b5a03f4af848eace99e34d0b91d"
+  },
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-auth-core-ddzglfw2\\dist\\nexus_connector_core-0.2.46.dev0-py3-none-any.whl",
+      "sha256": "302431373fc9a4d540b6865dee5aedcff50de7694d8d730963dbb503bd3dd1b8"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-auth-connector-_5phy_ng\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "ea577ece54684d68bb4918788fb0bfdb43cd42f71178d7b50813fccfe35d85e1"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-auth-nexus-aaxy1576\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "ac533d0b65c252ca303347d5afc6489de60a5948b2eddcf77eff6fc4c589e85c"
+    }
+  },
+  "results": {
+    "core": {
+      "tests": "72",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "99.801"
+    },
+    "connector": {
+      "tests": "122",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "40.207"
+    },
+    "nexus": {
+      "tests": "21",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "72.230"
+    }
+  },
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "topology": "One Windows host; installed wheels; external working directory; real native CLIs with fresh provider homes."
+  },
+  "retained_failures": [
+    "Core 0.2.45 real Codex first failed because the fixture did not create CODEX_HOME. The corrected fixture then reproduced missing HTTP 401 classification.",
+    "The initial source campaign passed 71 cases but failed Pi discovery because the fixture selected dist/cli.js. The qualified dist/bundle/cli.js entry then passed separately. All 72 cases passed together against installed Core 0.2.46.",
+    "The exploratory Pi protocol observation used the unbundled entry. Installed acceptance used the qualified bundled entry.",
+    "git diff --check reports a trailing blank line in the real authentication test; this is a formatting issue, not an execution failure."
+  ],
+  "limitations": [
+    "Actual missing-login cases use the normal qualified Core factory; public Nexus/Connector missing-login journeys remain pending.",
+    "Consumer compatibility cases include technical peers. Historical successful real-provider handoff and rebinding runs belong to their recorded older wheels.",
+    "Nexus wheel includes preexisting modified static assets; this campaign does not accept UI or language coverage.",
+    "Windows only; Linux and independent hosts remain pending. No milestone or release gate closed."
+  ],
+  "evidence": {
+    "evidence/native-auth-artifacts.json": "3217429c29564e1824e4008715d17dcbef014bd693e0c09b942f762c2642b2f2",
+    "evidence/native-auth-claude-probe.json": "50a62b14ea72ca4bc5d80c2a03c3b90cef996b1e131c59fc1eeb854a64d401b9",
+    "evidence/native-auth-codex-installed-previous-1790846472972518100.json": "a04a9635caacf27e54a34a116a28beeffd1383dd700d75085bb163ed19c3200f",
+    "evidence/native-auth-codex-installed-previous-1790846472973195000.xml": "083711396f6cd130975c0f9004127fa57194b9ce36df6631d3f55e169083a4dd",
+    "evidence/native-auth-codex-installed-previous-1790846472973677100.log": "7c9b7755f27a18786c56d6a230d0fbe568597bbe979e5083b94003dd1da799b2",
+    "evidence/native-auth-codex-installed.json": "816d368c7aebabe4bf1c633550e53f071fcf4a8f20d1ba0be49c7f4ba86d524e",
+    "evidence/native-auth-codex-installed.log": "30427154a397395e2496b034456e48eb713f354b595996dac6a9de8895c9796c",
+    "evidence/native-auth-codex-installed.xml": "fcf978b2c54b329bc353c011ed62700478ece38bf34706a36978af87931bc4f7",
+    "evidence/native-auth-codex-observation.json": "5980033fa79d27f7c4ab279748281c60acc6a189d296dd42e4d0d23ae0fc9354",
+    "evidence/native-auth-connector-build.log": "b008a9654219b1d8b9b366f5ef47ba02c9d1f9c8d63515118f0666265ac45cb5",
+    "evidence/native-auth-connector-installed.json": "bce51010d59a9a189deb5fc91f7cef734090b1826d7d1bfcc553793da50034c1",
+    "evidence/native-auth-connector-installed.log": "7cbad07f233a73e56295a34ef502a9f756be176e6f516b654e619530142febd0",
+    "evidence/native-auth-connector-installed.xml": "3723dd5162ddf38751dba544a1f35c9536e3da942ad1b19069e3e53f89c8ea72",
+    "evidence/native-auth-core-build.log": "514f95b3a3ee20b447a48b8eeb3b016fa3289c677775bc5d483ed79b6fc47f69",
+    "evidence/native-auth-core-installed.json": "908f1c807781527a4c0c8d81053ef27c4ec916f0cd2a4527e936c757ed61aae2",
+    "evidence/native-auth-core-installed.log": "2341de02fc7b8b1294e43ca744f104f01b8a2e75d3022e56cdc3aed9eb9cb9dd",
+    "evidence/native-auth-core-installed.xml": "fd2b1c7db01d18362bb75a78b3b664c66b0a48cae80a476028bc7f51d26acbc6",
+    "evidence/native-auth-install.log": "4d855ac4c4fd33e594c3d3f362672f42bafe02dbff21f13acc9fe635203a855f",
+    "evidence/native-auth-nexus-build.log": "b0101b1c2ff30bb613c9e61015cab86c451227d1ef8c435ecc6d8d8c591ff939",
+    "evidence/native-auth-nexus-installed.json": "e0078e8da606178309f45f840116780e1d97648f953e7608c23a561041b16c84",
+    "evidence/native-auth-nexus-installed.log": "f58347f498d67c97a908f0800ea0c818e25b9b8ee25f14a0942a103969fbadd1",
+    "evidence/native-auth-nexus-installed.xml": "17e739af6152f519bc9695888b2347a76b81aad7e2d4ec04e9cf3eb31bd2f971",
+    "evidence/native-auth-pi-observation.json": "efb6b2da135a7e93042324e84818681696bdb1c7c00fd0fca922366f18380f1e",
+    "evidence/native-auth-pi-source.log": "4df6912de18efef0b942734feb47071413944b7a9dd8a45dbf7a72c6df85ba6f",
+    "evidence/native-auth-pi-source.xml": "1f63e03596741d15a545982e8d21c7567118b31b5c71c1df40817bdb81272422",
+    "evidence/native-auth-pip-check.log": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+    "evidence/native-auth-source.log": "e12b5e7373fdcb60a0249318191da4065438ecb26a45b8665a2c780d32e62099",
+    "evidence/native-auth-source.xml": "07c5ab3cdaa7ce392b0ba96d645093d5eae182299b8f511c76dd7bb02991ef5e"
+  }
+}

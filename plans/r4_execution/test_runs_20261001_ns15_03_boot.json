@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-01",
+  "status": "PARTIAL_NS15_03_CANONICAL_BOOT_VERIFIED",
+  "base_commit": "4d059fa",
+  "installed_unique_passed": 138,
+  "architecture_passed": 3,
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-core-3msf4qiz\\dist\\nexus_connector_core-0.2.51.dev0-py3-none-any.whl",
+      "sha256": "4c4c0c58d25b93f4f08ba8515d8476ffc29d1f0a27cc577c9fccb610716d1d1c"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-connector-pmt6y5x7\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "baf837251f654ab6385f5fba4e22d1a1b69da1839e8f47752795d1518dd29fe7"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-boot-1f0xg541\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "a7461f2f3e698d4434bfc5d89dd42a18ff72cf0500736dc9356d35b4aa8df0fe"
+    }
+  },
+  "results": {
+    "r4": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "91",
+      "time": "259.964",
+      "timestamp": "2026-10-01T17:04:52.597582-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "legacy": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "47",
+      "time": "140.871",
+      "timestamp": "2026-10-01T17:09:14.539115-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "architecture": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "3",
+      "time": "0.447",
+      "timestamp": "2026-10-01T17:11:37.008438-03:00",
+      "hostname": "Alienware_m15"
+    }
+  },
+  "runner": "plans/r4_execution/run_ns15_03_boot.py",
+  "verification": "All installed package bytes matched their wheels; Nexus nonstatic sources matched. Tests ran with Python -I outside checkout.",
+  "limitations": [
+    "Synthetic native peers; readiness qualification is fixture-local.",
+    "Actual serve boot qualified for embedded execution; remote boot and real provider/OS acceptance remain pending.",
+    "Delivery, event projection and native loader removal remain pending.",
+    "Normative TR4-15-03 and release gates remain open."
+  ]
+}

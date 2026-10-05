@@ -1,0 +1,95 @@
+{
+  "reviewed_at": "2026-09-30T10:05:29.464568+00:00",
+  "scope": "Completion planning review only; no new product test campaign.",
+  "repositories": {
+    "nexus": {
+      "head": "fb2c2d155bccd5d24926a335a9fbcd81c9190412",
+      "branch": "feature/v0.2.0",
+      "local_tracking_ref": "fb2c2d155bccd5d24926a335a9fbcd81c9190412",
+      "dirty_entries_at_review": 607,
+      "dirty_status_counts": {
+        " D": 599,
+        " M": 7,
+        "??": 1
+      },
+      "core_wheel_sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c",
+      "core_wheel_paths": [
+        "vendor/wheels/nexus_connector_core-0.2.28.dev0-py3-none-any.whl"
+      ]
+    },
+    "connector": {
+      "head": "9e1a96a9e24e643861974b5ede6e987b941908e7",
+      "branch": "feature/v0.2.0",
+      "local_tracking_ref": "9e1a96a9e24e643861974b5ede6e987b941908e7",
+      "dirty_entries_at_review": 0,
+      "dirty_status_counts": {},
+      "core_wheel_sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c",
+      "core_wheel_paths": [
+        "vendor/wheels/nexus_connector_core-0.2.28.dev0-py3-none-any.whl"
+      ]
+    },
+    "core": {
+      "head": "9d244cfecc31c817661d560bbcee75cc9f8d5513",
+      "branch": "feature/v0.2.0",
+      "local_tracking_ref": "9d244cfecc31c817661d560bbcee75cc9f8d5513",
+      "dirty_entries_at_review": 1,
+      "dirty_status_counts": {
+        "??": 1
+      },
+      "core_wheel_sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c",
+      "core_wheel_paths": [
+        "artifacts/nexus_connector_core-0.2.28.dev0-py3-none-any.whl"
+      ]
+    }
+  },
+  "closed_product_gates": [],
+  "product_tests_executed": false,
+  "source_files_inspected": {
+    "nexus": {
+      "src/okto_nexus/adapters/outbound/execution/core_inventory.py": "5c481d6d30cbb49da1a7f78f294d2d65ef3f746e1d11c266b8f861ab324b303b"
+    },
+    "connector": {
+      "src/okto_nexus_connector/daemon/r4_control.py": "b63a9c75025b82c0833570e6bec86b46148d2f3f81215d001106c9dc34a52f7c",
+      "src/okto_nexus_connector/daemon/app.py": "66c1cbc353895323b5f86cd3674e5cf343733653b4da9e5dfa5bd65fd34bbfca",
+      "src/okto_nexus_connector/services/r4_execution.py": "e8cea6f7b3a5e7d61e87b76619180e9610050d5c43cfa5b660dc641aa4a057f3",
+      "src/okto_nexus_connector/services/core_host.py": "90cace252e47b81a0fbbe1eb1f6916fa25a54decc5bf5dec505c49564f27bd24"
+    },
+    "core": {
+      "src/nexus_connector_core/frame_codec_r4.py": "4f2d23cc24e505033f71a572021a28e3e1a105d5bc07a106c26855394a750205"
+    }
+  },
+  "observations": [
+    "Core R4_BUNDLE_EXECUTABLE and Nexus SERVER_R4_EXECUTION_READY remain false.",
+    "Connector automatic startup reports execution_ready=false and accepts only proven empty reconciliation.",
+    "Existing runtime host and execution owner still require approved launch composition and automatic adoption.",
+    "P1-P13 organize remaining work without resetting historical implementation evidence.",
+    "US English is mandatory for all application-authored text, including legacy surfaces."
+  ],
+  "prior_product_evidence": {
+    "path": "plans/r4_execution/test_runs_20260930_startup.json",
+    "sha256": "d7b9cf6f02b511f1b86c0ee5a01bd99c3ee96c72ef933be0b07971c6c97b2433",
+    "policy": "Historical results were inspected, not reexecuted or promoted to final acceptance."
+  },
+  "document_validation": {
+    "coverage": "plans/r4_execution/delivery_coverage.json",
+    "package": "plans/r4_execution/evidence/completion-planning-package-validation.json",
+    "scope": "Document consistency and synthetic planning shapes only.",
+    "results": [
+      {
+        "command": "rtk proxy python -X utf8 plans/r4_execution/validate_delivery_plan.py --write-report",
+        "exit_code": 0,
+        "result": "PASS_DOCUMENT_COVERAGE_ONLY"
+      },
+      {
+        "command": "rtk proxy .venv/Scripts/python.exe -X utf8 plans/validar_pacote.py --output plans/r4_execution/evidence/completion-planning-package-validation.json",
+        "exit_code": 0,
+        "result": "PASS",
+        "checks": 8
+      }
+    ],
+    "report_sha256": {
+      "plans/r4_execution/delivery_coverage.json": "8120c319d5de0480fa8be3a7b0052f7c8b8a16b9bc098852541725a0bd00cdf9",
+      "plans/r4_execution/evidence/completion-planning-package-validation.json": "d9fa06d0d8af6848d2e025de91e7da73f5752a25f473ce46a6c20e89f2c19c28"
+    }
+  }
+}

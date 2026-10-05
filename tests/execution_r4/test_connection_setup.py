@@ -1,0 +1,121 @@
+"""Finish is the sole configuration commit boundary."""
+import json
+import pytest
+from test_local_realization import local_setup
+from okto_nexus.application.connection_setup import finish_setup, load_setup
+from okto_nexus.application.execution_local_realizations import directory_identity
+from okto_nexus.domain.runtime_context import RuntimeRequestContext
+
+
+def request_for(setup):
+    deps,app,client,headers,body,candidate,root = setup
+    context = RuntimeRequestContext('operator','http_loopback',trusted_local_operator=True)
+    request = dict(client_intent_id='finish-one',agent_id='subject',executor_id=app.state.embedded_inventory_owner.key.executor_id,
+        candidate_ref=body['candidate_ref'],inventory_revision=body['inventory_revision'],workspace_id=None,binding_id=None,
+        baseline=load_setup(deps,context,'subject')['baseline'],configuration=dict(
+            format='okto-nexus-connection',version=1,adapter_id=body['adapter_id'],execution_location='local',
+            runtime_enabled=True,session_policy='per_sender',workspace_root=str(root),workspace_label='Draft workspace',
+            provider_home=None,secret_bindings={},alias='draft-test',harness_settings={},automatic_reply=True,
+            tool_access='always_allow',authorization=dict(minutes=60,actions=20)))
+    return context,request
+
+
+def finish(setup, context, request, **kwargs):
+    deps,app,*_ = setup
+    return finish_setup(deps,context,app.state.embedded_inventory_owner,
+        app.state.inventory_fresh_publications,request,**kwargs)
+
+
+def count(setup, table):
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        return uow.connection.execute('SELECT COUNT(*) FROM '+table).fetchone()[0]
+
+
+def test_finish_atomic_idempotent(local_setup):
+    context,request=request_for(local_setup)
+    request['configuration']['automatic_reply'] = False  # Legacy JSON cannot disable routing.
+    assert count(local_setup,'execution_bindings') == 0
+    result=finish(local_setup,context,request,verified={'root':directory_identity(request['configuration']['workspace_root']),'home':None})
+    assert result['saved']
+    assert count(local_setup,'execution_bindings') == 1
+    assert count(local_setup,'connection_setup_commits') == 1
+    assert finish(local_setup,context,request,verified=None) == result
+    assert count(local_setup,'execution_bindings') == 1
+    view=load_setup(local_setup[0],context,'subject',result['binding']['binding_id'])
+    assert view['folders']['workspace_root'] == request['configuration']['workspace_root']
+    assert view['public_config']['nexus_tool_permission'] == 'always_allow'
+    assert view['automatic_reply'] is True
+    endpoint = result['binding']['endpoint_id']
+    client,headers = local_setup[2:4]
+    policy = client.get(f'/api/v1/harness/endpoints/{endpoint}/conversation-policy',headers=headers['operator']).json()['data']
+    response = client.put(f'/api/v1/harness/endpoints/{endpoint}/conversation-policy',headers=headers['operator'],
+        json={'expected_revision':policy['revision'],'enabled':False})
+    assert response.status_code == 422
+    # Upgrade legacy connections without losing existing execution grants.
+    from pathlib import Path
+    import okto_nexus
+    with local_setup[0].connection_factory.unit_of_work() as uow:
+        conn=uow.connection
+        before=[tuple(r) for r in conn.execute('SELECT * FROM runtime_execution_grants')]
+        revision=conn.execute('SELECT revision FROM agent_endpoints WHERE endpoint_id=?',(endpoint,)).fetchone()[0]
+        conn.execute("UPDATE agent_endpoints SET response_policy='explicit' WHERE endpoint_id=?",(endpoint,))
+        sql=(Path(okto_nexus.__file__).parent/'migrations/106_runtime_automatic_delivery.sql').read_text()
+        conn.execute(sql)
+        assert conn.execute('SELECT response_policy,revision FROM agent_endpoints WHERE endpoint_id=?',(endpoint,)).fetchone()[:] == ('conversation',revision)
+        assert [tuple(r) for r in conn.execute('SELECT * FROM runtime_execution_grants')] == before
+
+
+@pytest.mark.parametrize('failure',['no_test','invalid_settings','stale_baseline'])
+def test_finish_rolls_back_every_configuration_change(local_setup,failure):
+    context,request=request_for(local_setup)
+    verified={'root':directory_identity(request['configuration']['workspace_root']),'home':None}
+    if failure == 'no_test': verified=None
+    if failure == 'invalid_settings': request['configuration']['harness_settings']={'effort':'impossible'}
+    if failure == 'stale_baseline': request['baseline']['execution_revision'] += 1
+    with pytest.raises(Exception): finish(local_setup,context,request,verified=verified)
+    for table in ('execution_bindings','execution_local_realizations','connection_setup_commits','agent_execution_policies','agent_runtime_overrides'):
+        assert count(local_setup,table) == 0
+
+
+def test_setup_transport_requires_operator(local_setup):
+    _,_,client,headers,*_=local_setup
+    assert client.get('/v1/connections/setup/subject',headers=headers['subject']).status_code == 403
+    assert client.get('/v1/connections/setup/subject',headers=headers['operator']).status_code == 200
+
+
+@pytest.mark.parametrize('enabled',[True,False])
+def test_finish_preserves_inherited_runtime_policy(local_setup,enabled):
+    context,request=request_for(local_setup)
+    with local_setup[0].connection_factory.unit_of_work() as uow:
+        uow.connection.execute('UPDATE runtime_policy_defaults SET runtime_enabled=?',(enabled,))
+    request['configuration']['runtime_enabled']=None
+    verified={'root':directory_identity(request['configuration']['workspace_root']),'home':None} if enabled else None
+    assert finish(local_setup,context,request,verified=verified)['saved']
+    assert count(local_setup,'execution_bindings') == int(enabled)
+    with local_setup[0].connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT runtime_enabled FROM agent_runtime_overrides WHERE agent_id=?',('subject',)).fetchone()[0] is None
+
+
+def test_remote_finish_updates_approved_binding_atomically(local_setup):
+    context,request=request_for(local_setup)
+    created=finish(local_setup,context,request,verified={'root':directory_identity(request['configuration']['workspace_root']),'home':None})
+    with local_setup[0].connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE execution_executors SET kind='remote',connector_id='connector-test',registered_by_agent_id='subject'")
+    request.update(client_intent_id='remote-finish',binding_id=created['binding']['binding_id'])
+    request['baseline']=load_setup(local_setup[0],context,'subject',request['binding_id'])['baseline']
+    request['configuration'].update(execution_location='remote',tool_access='ask')
+    result=finish(local_setup,context,request,verified=None)
+    assert result['saved']
+    assert count(local_setup,'execution_bindings')==1
+    view=load_setup(local_setup[0],context,'subject',request['binding_id'])
+    assert view['public_config']['nexus_tool_permission']=='ask'
+
+
+def test_remote_finish_rejects_embedded_binding_without_partial_writes(local_setup):
+    context,request=request_for(local_setup)
+    created=finish(local_setup,context,request,verified={'root':directory_identity(request['configuration']['workspace_root']),'home':None})
+    request.update(client_intent_id='remote-wrong',binding_id=created['binding']['binding_id'])
+    request['baseline']=load_setup(local_setup[0],context,'subject',request['binding_id'])['baseline']
+    request['configuration'].update(execution_location='remote')
+    with pytest.raises(Exception,match='approved remote'):finish(local_setup,context,request,verified=None)
+    assert load_setup(local_setup[0],context,'subject',request['binding_id'])['baseline']==request['baseline']

@@ -1,0 +1,239 @@
+"""Authenticated runtime delegation. Grants restrict canonical policy."""
+from contextlib import nullcontext
+from dataclasses import replace
+from datetime import datetime, timezone
+from ..domain.base import iso_to_epoch, iso_plus, new_id
+from ..domain.permissions import PermissionSet
+from ..domain.tag_selector import reachable
+from ..errors import ErrorCode, OktoNexusError
+from .connection_policy import method_enabled, valid_connection_key
+from .runtime_requirements import validate_native_requirements
+
+ACTIONS = frozenset({"open", "send", "steer", "interrupt", "close", "read", "events", "discover", "execute_work"})
+
+
+def denied():
+    return OktoNexusError(ErrorCode.PERMISSION_DENIED, "Runtime action is not authorized.", {})
+
+
+class RuntimeAccessService:
+    def __init__(self, *, connection_factory, agents, endpoints, grants, config, clock, registry=None, admission_fence=None):
+        self.cf, self.agents, self.endpoints, self.grants = connection_factory, agents, endpoints, grants
+        self.config, self.clock = config, clock
+        self.registry = registry
+        self.admission_fence = admission_fence
+
+    def require_admission(self, action, *, returning_external_work=False):
+        if self.admission_fence is not None:
+            self.admission_fence.require(action, returning_external_work=returning_external_work)
+
+    @staticmethod
+    def _operator(context, actor):
+        local = context.trusted_local_operator and context.authentication_source == "http_loopback"
+        keyed = (context.authentication_source == "agent_key" and actor and actor.is_active
+                 and actor.agent_id == "operator" and context.credential_binding
+                 and context.credential_binding == actor.api_key_hash)
+        return bool(local or keyed)
+
+    def authenticate(self, context, *, uow, require_feature=True):
+        """Authenticate a discovery caller without granting resource authority."""
+        actor = self.agents.get(uow, context.actor_agent_id) if context.actor_agent_id else None
+        operator = self._operator(context, actor)
+        if (require_feature and not self.config.feature_harness_integrations) or not (operator or (
+                actor and actor.is_active and context.authentication_source == "agent_key"
+                and context.credential_binding and context.credential_binding == actor.api_key_hash)):
+            raise denied()
+        return operator
+
+    def authorize_maintenance(self, context, *, uow=None):
+        """Operator recovery remains available while new admission is disabled."""
+        with (nullcontext(uow) if uow is not None else self.cf.unit_of_work()) as uow:
+            if not self.authenticate(context, uow=uow, require_feature=False):
+                raise denied()
+            self.grants.audit(uow, context=context, action="operation_maintenance", endpoint_id=None,
+                session_id=None, grant=None, allowed=True, now=self.clock.now_iso())
+
+    def authorize(self, context, *, action="admin", endpoint_id=None, session_id=None,
+                  represented_agent_id=None, workspace_id=None, substrate=None, consume=False, uow=None, check_budget=True,
+                  audit=True, _returning_external_work=False):
+        self.require_admission(action, returning_external_work=_returning_external_work)
+        now, allowed, selected = self.clock.now_iso(), False, None
+        with (nullcontext(uow) if uow is not None else self.cf.unit_of_work()) as uow:
+            actor = self.agents.get(uow, context.actor_agent_id) if context.actor_agent_id else None
+            if session_id:
+                endpoint_id = self.grants.runtime_endpoint(uow, session_id)
+            endpoint = self.endpoints.get(uow, endpoint_id) if endpoint_id else None
+            if endpoint and endpoint['protocol'] != 'nxl-r4' and action not in {'read', 'events'}:
+                raise denied()
+            adapter_available = True
+            if endpoint and endpoint["protocol"] == "nxl-r4":
+                from nexus_connector_core import get_runtime_catalog
+                descriptor = next((item for item in get_runtime_catalog().runtimes
+                                   if item.adapter_id == endpoint["adapter_id"]), None)
+                adapter_available = descriptor is not None
+                substrate = descriptor.connection_mode if descriptor else None
+            elif endpoint and self.registry:
+                try:
+                    substrate = self.registry.get(endpoint["adapter_id"]).substrate
+                except OktoNexusError:
+                    adapter_available = False
+            # Historical inspection must survive disabled execution or removed
+            # providers during cutover/restore. Authentication, grants and audit
+            # below still apply; this does not authorize a native effect.
+            enabled = action in {"read", "events"} or (
+                adapter_available and self.config.feature_harness_integrations and (
+                    substrate != "attach" or self.config.feature_harness_attach))
+            if endpoint and action in {"open", "send", "steer", "execute_work"}:
+                if endpoint['protocol'] != 'nxl-r4':
+                    raise denied()
+                from .agent_execution_policy import require_execution_location
+                binding = uow.connection.execute('SELECT b.executor_id FROM execution_bindings b '
+                    'JOIN execution_installation i ON i.server_id=b.server_id AND i.singleton=1 '
+                    'WHERE b.endpoint_id=? LIMIT 2', (endpoint_id,)).fetchall()
+                if len(binding) != 1:
+                    raise denied()
+                require_execution_location(uow, agent_id=endpoint['agent_id'], executor_id=binding[0]['executor_id'], adapter_id=endpoint['adapter_id'])
+                # Deactivation revokes execution for the represented identity,
+                # including operator/boot paths and cached idempotent requests.
+                # Read, interrupt and close remain available for recovery.
+                represented = self.agents.get(uow, endpoint["agent_id"])
+                enabled = enabled and represented is not None and represented.is_active
+                enabled = enabled and method_enabled(uow, endpoint["agent_id"], endpoint["adapter_id"])
+                enabled = enabled and endpoint["enabled"] and endpoint["activation_state"] == "approved"
+                # A proved response through Nexus does not need a live native
+                # connection. All credential/grant/policy/revision gates stay
+                # active; this internal option never authorizes new dispatch.
+                enabled = enabled and (endpoint["health"] != "quarantined" or
+                    (_returning_external_work and action == "execute_work" and substrate == "attach" and not consume))
+                if endpoint["profile_id"]:
+                    profile = self.endpoints.profile(uow, endpoint["profile_id"])
+                    enabled = enabled and profile is not None and profile["enabled"]
+                    if enabled and self.registry and endpoint["protocol"] != "nxl-r4":
+                        try:
+                            validate_native_requirements(profile["config"], self.registry.get(endpoint["adapter_id"]),
+                                                         hitl_enabled=self.config.feature_hitl)
+                        except OktoNexusError:
+                            enabled = False
+                    if enabled and session_id:
+                        enabled = self.endpoints.session_profile_revision(uow, session_id) == profile["revision"]
+            if enabled and context.authentication_source == "connection_key":
+                key = valid_connection_key(uow, context.credential_binding, now, endpoint_id, agents=self.agents)
+                allowed = bool(key and key["agent_id"] == context.actor_agent_id and action in {"access", "open"}
+                    and (not represented_agent_id or represented_agent_id == key["agent_id"]))
+                if allowed and key["source_grant_id"]:
+                    try:
+                        self.authorize(replace(context, authentication_source="agent_key",
+                            credential_binding=actor.api_key_hash if actor else None,
+                            execution_grant_id=key["source_grant_id"]), action="open",
+                            endpoint_id=key["endpoint_id"], represented_agent_id=key["agent_id"], uow=uow, audit=False)
+                    except OktoNexusError:
+                        allowed = False
+            elif enabled and endpoint and context.authentication_source == "runtime_boot":
+                allowed = self.endpoints.boot_authorized(uow, context=context, endpoint=endpoint, action=action, now=now)
+            elif enabled and self._operator(context, actor) and not context.execution_grant_id:
+                allowed = True
+            elif (enabled and actor and actor.is_active and context.authentication_source == "agent_key"
+                  and context.credential_binding and context.credential_binding == actor.api_key_hash):
+                for grant in self.grants.candidates(uow, actor_id=actor.agent_id, endpoint_id=endpoint_id):
+                    if context.execution_grant_id and context.execution_grant_id != grant["grant_id"]:
+                        continue
+                    if endpoint_id and endpoint_id != grant["endpoint_id"]:
+                        continue
+                    if grant["credential_binding"] != actor.api_key_hash or (not grant['no_expiry'] and grant["expires_at"] <= now):
+                        continue
+                    if action != "access" and action not in grant["actions"]:
+                        continue
+                    if action != "access" and (not endpoint or not endpoint["enabled"] or
+                            endpoint["activation_state"] != "approved" or grant["endpoint_id"] != endpoint_id):
+                        continue
+                    represented = self.agents.get(uow, grant["represented_agent_id"])
+                    if not represented or not represented.is_active or not reachable(actor, represented):
+                        continue
+                    if represented_agent_id and represented_agent_id != grant["represented_agent_id"]:
+                        continue
+                    if workspace_id and workspace_id != grant["workspace_id"]:
+                        continue
+                    if endpoint and (endpoint["agent_id"] != grant["represented_agent_id"] or
+                                     endpoint["workspace_id"] != grant["workspace_id"]):
+                        continue
+                    if endpoint and endpoint["profile_id"]:
+                        profile = self.endpoints.profile(uow, endpoint["profile_id"])
+                        if not profile or not profile["enabled"] or profile["revision"] != grant["profile_revision"]:
+                            continue
+                    permission = (("handoffs", "work") if action == "execute_work" else
+                                  ("events", "read") if action in {"read", "events", "discover"} else ("messages", "send_direct"))
+                    if not PermissionSet(actor.permissions).allows(*permission):
+                        continue
+                    if (check_budget or consume) and action in {"send", "steer", "execute_work"} and not grant['unlimited_actions'] and grant["used_executions"] >= grant["max_executions"]:
+                        continue
+                    allowed, selected = True, grant
+                    if consume and action in {"send", "steer", "execute_work"}:
+                        self.grants.consume(uow, grant_id=grant["grant_id"])
+                    break
+            if audit:
+                self.grants.audit(uow, context=context, action=action, endpoint_id=endpoint_id,
+                                  session_id=session_id, grant=selected, allowed=allowed, now=now)
+        if not allowed:
+            raise denied()
+        return selected
+
+    def issue(self, context, *, actor_agent_id, endpoint_id, actions, expires_at, max_executions=1):
+        self.authorize(context)
+        if not isinstance(actions, list) or not actions or any(not isinstance(a, str) or a not in ACTIONS for a in actions):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Grant actions must be supported runtime actions.", {})
+        now = self.clock.now_iso()
+        try:
+            # API/browser timestamps may have millisecond precision. Normalize
+            # external input before persisting the fixed-width lease format.
+            if expires_at is not None:
+                expires_at = datetime.fromtimestamp(iso_to_epoch(expires_at), timezone.utc).isoformat(
+                    timespec="microseconds").replace("+00:00", "Z")
+                remaining = iso_to_epoch(expires_at) - iso_to_epoch(now)
+        except (ValueError, TypeError, OverflowError):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Grant expiry must be a valid timestamp.", {}) from None
+        if ((expires_at is not None and not 0 < remaining <= 86400) or
+                (max_executions is not None and (type(max_executions) is not int or not 1 <= max_executions <= 1000))):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Grant expiry must be within 24 hours and budget within 1..1000.", {})
+        with self.cf.unit_of_work() as uow:
+            actor = self.agents.get(uow, actor_agent_id)
+            endpoint = self.endpoints.get(uow, endpoint_id)
+            if not actor or not actor.is_active or not actor.api_key_hash or not endpoint or not endpoint["enabled"]:
+                raise denied()
+            if endpoint["protocol"] != "nxl-r4":
+                raise denied()
+            if expires_at is None or max_executions is None:
+                local = uow.connection.execute(
+                    "SELECT e.kind FROM execution_bindings b JOIN execution_installation i "
+                    "ON i.server_id=b.server_id AND i.singleton=1 JOIN execution_executors e "
+                    "ON e.server_id=b.server_id AND e.executor_id=b.executor_id "
+                    "WHERE b.endpoint_id=? LIMIT 2", (endpoint_id,)).fetchall()
+                if len(local) != 1 or local[0]['kind'] != 'embedded':
+                    raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                        "Unbounded permissions are supported only for local execution.", {})
+            if set(actions) & {"open", "send", "steer", "execute_work"}:
+                binding = uow.connection.execute(
+                    "SELECT b.executor_id FROM execution_bindings b JOIN execution_installation i "
+                    "ON i.server_id=b.server_id AND i.singleton=1 WHERE b.endpoint_id=? LIMIT 2",
+                    (endpoint_id,)).fetchall()
+                if len(binding) != 1:
+                    raise denied()
+                from .agent_execution_policy import require_execution_location
+                require_execution_location(uow, agent_id=endpoint["agent_id"],
+                    executor_id=binding[0]["executor_id"], adapter_id=endpoint["adapter_id"])
+            represented = self.agents.get(uow, endpoint["agent_id"])
+            if not represented or not represented.is_active:
+                raise denied()
+            profile = self.endpoints.profile(uow, endpoint["profile_id"]) if endpoint["profile_id"] else None
+            grant = dict(grant_id=new_id("grant"), issuer_agent_id=context.actor_agent_id or "operator",
+                         actor_agent_id=actor_agent_id, credential_binding=actor.api_key_hash,
+                         represented_agent_id=endpoint["agent_id"], endpoint_id=endpoint_id,
+                         workspace_id=endpoint["workspace_id"], profile_revision=profile["revision"] if profile else None,
+                         actions=actions, expires_at=expires_at, max_executions=max_executions, created_at=now)
+            self.grants.insert(uow, grant=grant)
+        return {k: v for k, v in grant.items() if k != "credential_binding"}
+
+    def revoke(self, context, *, grant_id):
+        self.authorize(context)
+        with self.cf.unit_of_work() as uow:
+            self.grants.revoke(uow, grant_id=grant_id, now=self.clock.now_iso())
+        return {"revoked": True}

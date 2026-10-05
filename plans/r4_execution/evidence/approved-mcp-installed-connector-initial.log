@@ -1,0 +1,29 @@
+...........................................................F............ [ 22%]
+..........s............................................................. [ 44%]
+........................................................................ [ 67%]
+........................................................................ [ 89%]
+..................................                                       [100%]
+================================== FAILURES ===================================
+_____________________ test_no_mcp_imports_or_entrypoints ______________________
+
+    def test_no_mcp_imports_or_entrypoints():
+        """No MCP SDK dependency, no mcp entrypoints, no envelope handling."""
+        for path in _python_files():
+            source = path.read_text(encoding="utf-8")
+>           assert "import mcp" not in source, path
+E           AssertionError: WindowsPath('C:/Users/jpamb/AppData/Local/Temp/okto-r4-native-installed-zk_r383i/Lib/site-packages/okto_nexus_connector/services/launch_configuration.py')
+E           assert 'import mcp' not in '"""Resolve ...e_factory)\n'
+E             
+E             'import mcp' is contained here:
+E               cp_launch import mcp_template, session_mcp_home
+E             ?           ++++++++++
+E                           if record.provider_home is not None and not record.secret_bindings:
+E                               raise ConnectorError('PROVIDER_AUTH_REQUIRED', 'launch_configuration',
+E                                                    'Import provider credentials before using an isolated MCP session home.')...
+E             
+E             ...Full output truncated (37 lines hidden), use '-vv' to show
+
+D:\Projetos\Techridy\okto-nexus-connector\tests\unit\test_boundaries.py:29: AssertionError
+=========================== short test summary info ===========================
+FAILED D:\Projetos\Techridy\okto-nexus-connector\tests\unit\test_boundaries.py::test_no_mcp_imports_or_entrypoints
+1 failed, 320 passed, 1 skipped in 39.91s

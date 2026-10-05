@@ -1,0 +1,91 @@
+{
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-helper-removal-sgzb7tpo",
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-core-3msf4qiz\\dist\\nexus_connector_core-0.2.51.dev0-py3-none-any.whl",
+      "sha256": "4c4c0c58d25b93f4f08ba8515d8476ffc29d1f0a27cc577c9fccb610716d1d1c"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-connector-pmt6y5x7\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "baf837251f654ab6385f5fba4e22d1a1b69da1839e8f47752795d1518dd29fe7"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-helper-removal-sgzb7tpo\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "fb801595130dc78aa8139ea12f5ed71e8a24532a3fd6b5a6d42f907a4ec2c3f4"
+    }
+  },
+  "results": {
+    "r4": {
+      "command": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-migration-resume-bkj6ies1\\venv313\\Scripts\\python.exe",
+        "-I",
+        "-c",
+        "import pytest; raise SystemExit(pytest.main(['-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\okto-r4-helper-removal-sgzb7tpo\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4', '-o', 'asyncio_mode=auto', '-o', 'asyncio_default_fixture_loop_scope=function', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4\\\\test_ns15.py::test_ns15_03', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4\\\\test_native_loader_cutover.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4\\\\test_canonical_fallback.py', '-q', '--tb=short', '--junitxml=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\plans\\\\r4_execution\\\\evidence\\\\ns15-03-helper-removal-r4.xml']))"
+      ],
+      "exit_code": 0,
+      "test_hashes": {
+        "tests\\execution_r4\\test_ns15.py::test_ns15_03": "2dc71c3476ce4de5912d2ade286518921387981a5d9e42524124ccd7bbf9ef4d",
+        "tests\\execution_r4\\test_native_loader_cutover.py": "f6b51b0f7dfac126075a8e5be8ee7f181e8cfc23ec9241033d67b5170087fc9b",
+        "tests\\execution_r4\\test_canonical_fallback.py": "ad15a79b60ccefff27dc8c6a379a40ed5408e16c0c9e0c8216277dfd7cafb98e"
+      }
+    },
+    "fixtures": {
+      "command": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-migration-resume-bkj6ies1\\venv313\\Scripts\\python.exe",
+        "-I",
+        "-c",
+        "import pytest; raise SystemExit(pytest.main(['-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\okto-r4-helper-removal-sgzb7tpo\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests', '-o', 'asyncio_mode=auto', '-o', 'asyncio_default_fixture_loop_scope=function', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_linux_process_ownership.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_runtime_process_ownership.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_runtime_birth_identity.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_runtime_event_buffers.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_runtime_protocol_limits.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_runtime_fragmented_pipes.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_runtime_claude_compatibility.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_runtime_protocol_compatibility.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_runtime_secret_redaction.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_runtime_compatibility_observations.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_runtime_attach_platform.py', '-q', '--tb=short', '--junitxml=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\plans\\\\r4_execution\\\\evidence\\\\ns15-03-helper-removal-fixtures.xml']))"
+      ],
+      "exit_code": 0,
+      "test_hashes": {
+        "tests\\test_linux_process_ownership.py": "86227b0378877cba4da98b621715923442cbf7eacca530fe7d648f6e0c660be4",
+        "tests\\test_runtime_process_ownership.py": "50549225073dab5770ce5c8f753e96cca832611b6584e695c0b4c8d47cb6246f",
+        "tests\\test_runtime_birth_identity.py": "e1b23043271274341819e45cb710cd7c4d819809b79398472fa63d3c8b2a3597",
+        "tests\\test_runtime_event_buffers.py": "3f056c285bea33e559ff09a253770f04c9a918701deda27282bc33915d2a4933",
+        "tests\\test_runtime_protocol_limits.py": "5bb4c9c72b3eead0359e7d354fce9f9dadb2d876a65d0989afc6490ad1ce4637",
+        "tests\\test_runtime_fragmented_pipes.py": "54c4965eca1f3af25f04204e1a9423270c4859d95f6a8aea589f493b67e1ecad",
+        "tests\\test_runtime_claude_compatibility.py": "53ad716601d9e4f3b5781c1cbfa4744b081c2e783c2dcf0114e2f70e04d81ab2",
+        "tests\\test_runtime_protocol_compatibility.py": "83c8d323c3e059118ced1e75f512877f3e2f350d9f831c0d47e493c49ef4b557",
+        "tests\\test_runtime_secret_redaction.py": "5908bd686e7ff939495b46a24dd7c1747e043efb882164b5c8203e60b6d976bd",
+        "tests\\test_runtime_compatibility_observations.py": "83f3f39b8fe64d37c5f229c4bc528b56bf99f59aff1301b43592b6c6e80c3aca",
+        "tests\\test_runtime_attach_platform.py": "54344d236632fcca938c30aa5d9bf67a80c4f942c5ecc97bf9ee50da3851cfec"
+      }
+    },
+    "lifecycle": {
+      "command": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-migration-resume-bkj6ies1\\venv313\\Scripts\\python.exe",
+        "-I",
+        "-c",
+        "import pytest; raise SystemExit(pytest.main(['-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\okto-r4-helper-removal-sgzb7tpo\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests', '-o', 'asyncio_mode=auto', '-o', 'asyncio_default_fixture_loop_scope=function', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_runtime_owner_contention.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_runtime_relay_process_restart.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_runtime_signal_drain.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_serve_harness_shutdown_reap.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_serve_harness_sigkill_reap.py', '-q', '--tb=short', '--junitxml=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\plans\\\\r4_execution\\\\evidence\\\\ns15-03-helper-removal-lifecycle.xml']))"
+      ],
+      "exit_code": 0,
+      "test_hashes": {
+        "tests\\test_runtime_owner_contention.py": "2a6cc00bba15ee1c071ac3982021ae87b21f935621e191833bf4bfc55ae6b317",
+        "tests\\test_runtime_relay_process_restart.py": "2590340e7d458bf393cb40988347ee2ef0085d12888d934585feb323c062dd29",
+        "tests\\test_runtime_signal_drain.py": "4f2d9edd3212bea80ba716065248c249045ae8085cac0afc73bbb39c9a67233b",
+        "tests\\test_serve_harness_shutdown_reap.py": "10e82faaba08fe9933bae93fbfce5e14bcbd75f8459b8adef67e7a8c5fc95914",
+        "tests\\test_serve_harness_sigkill_reap.py": "b3d1c6cd1a92b4de345b81331687e69f1972f66c2ce482bb473326de38b2dccd"
+      }
+    },
+    "architecture": {
+      "command": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-migration-resume-bkj6ies1\\venv313\\Scripts\\python.exe",
+        "-I",
+        "-c",
+        "import pytest; raise SystemExit(pytest.main(['-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\okto-r4-helper-removal-sgzb7tpo\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4', '-o', 'asyncio_mode=auto', '-o', 'asyncio_default_fixture_loop_scope=function', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_import_boundary.py', '-q', '--tb=short', '--junitxml=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\plans\\\\r4_execution\\\\evidence\\\\ns15-03-helper-removal-architecture.xml']))"
+      ],
+      "exit_code": 0,
+      "test_hashes": {
+        "tests\\test_import_boundary.py": "39e739ea7246c0defd1edbf37ff5a2f1f52c448ce5bd15aeb6be75e1e7e8f1c3"
+      }
+    }
+  }
+}

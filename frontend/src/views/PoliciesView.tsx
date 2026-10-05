@@ -148,7 +148,7 @@ function DenialsPanel({ workspace }: { workspace: string }) {
                   className="border-t border-surface-100 dark:border-surface-800"
                 >
                   <td className="py-1.5 pr-3 whitespace-nowrap text-surface-500 dark:text-surface-400">
-                    {new Date(event.created_at).toLocaleString()}
+                    {new Date(event.created_at).toLocaleString("en-US")}
                   </td>
                   <td className="py-1.5 pr-3 font-mono">
                     {payload.agent_id ?? event.actor_agent_id ?? "—"}
@@ -471,7 +471,7 @@ function PolicyDetail({
               </div>
               <p className="text-[11px] text-surface-400 dark:text-surface-500 mt-3 font-mono">
                 {policyId} · created{" "}
-                {new Date(record.created_at).toLocaleString()}
+                {new Date(record.created_at).toLocaleString("en-US")}
               </p>
               <div className="flex items-center gap-2 mt-3">
                 <button
@@ -547,7 +547,7 @@ function PolicyDetail({
                             @v{version.version}
                           </td>
                           <td className="py-2 pr-3 whitespace-nowrap text-surface-500 dark:text-surface-400">
-                            {new Date(version.published_at).toLocaleString()}
+                            {new Date(version.published_at).toLocaleString("en-US")}
                           </td>
                           <td className="py-2 pr-3 font-mono">
                             {audienceSummary(version.audience)}

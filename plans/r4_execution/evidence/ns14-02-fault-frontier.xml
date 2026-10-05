@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="4.419" timestamp="2026-10-01T10:17:58.018775-03:00" hostname="Alienware_m15"><testcase classname="test_ns14" name="test_ns14_02[rollback]" time="3.317"><failure message="AssertionError: ('LEASE_INVALID', 'admission')&#10;assert 'admission' in {'lease_cas', 'test_lease_confirmation'}&#10; +  where 'admission' = CoreError('LEASE_INVALID').stage&#10; +    where CoreError('LEASE_INVALID') = &lt;ExceptionInfo CoreError('LEASE_INVALID') tblen=3&gt;.value">tests\execution_r4\test_ns14.py:102: in test_ns14_02
+    client.portal.call(scenario)
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\execution_r4\test_ns14.py:59: in scenario
+    assert failure.value.stage in {"test_lease_confirmation", "lease_cas"}, (failure.value.code, failure.value.stage)
+E   AssertionError: ('LEASE_INVALID', 'admission')
+E   assert 'admission' in {'lease_cas', 'test_lease_confirmation'}
+E    +  where 'admission' = CoreError('LEASE_INVALID').stage
+E    +    where CoreError('LEASE_INVALID') = &lt;ExceptionInfo CoreError('LEASE_INVALID') tblen=3&gt;.value</failure></testcase></testsuite></testsuites>

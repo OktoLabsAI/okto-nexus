@@ -1,0 +1,23 @@
+{
+  "status": "PASSED_BOOTSTRAP_ONLY",
+  "python": "3.13.1",
+  "environment": "C:/Users/jpamb/AppData/Local/Temp/okto-m13-ci-clean-20261002",
+  "nexus_artifact": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-ns15-05-by411exj\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+    "sha256": "a72e24455b65aef550ee29bd2b077bb6ded0cf6498e4dbecfb9da9b736fd124e"
+  },
+  "local_before_test_dependency": {
+    "connector_installed": false,
+    "torch_installed": false,
+    "protocol_http": 200,
+    "dashboard_http": 200,
+    "unauthenticated_identity_http": 401
+  },
+  "import_boundary_passed": 3,
+  "log_sha256": "46d797bf4915b68245eec90dcff28ce27e9b6b52e6984dce10e8045ac3791b04",
+  "limits": [
+    "No native provider task or controls executed",
+    "Development NS15.05 artifact, not final M13 tuple",
+    "After this check Connector test dependency was installed"
+  ]
+}

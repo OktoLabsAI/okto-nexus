@@ -1,0 +1,36 @@
+{
+  "increment": "M07 durable Connector receipt publication",
+  "status": "PARTIAL_INSTALLED_INTEGRATION",
+  "artifacts": "evidence/publication-artifacts.json",
+  "source_attempts": "evidence/publication-source-attempts.json",
+  "tests": {
+    "connector": {
+      "tests": 350,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 1,
+      "passed": 349
+    },
+    "nexus": {
+      "tests": 83,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 83
+    }
+  },
+  "reference_commits": {
+    "nexus": "48049f3164e7e318c85dfaf028fbd9680d8a96dd",
+    "connector": "5c5414ff176cf88bc938f311fbc91f3c84837f2d",
+    "core": "843e8547ca721b505b939292d004e3ca63cc8f25"
+  },
+  "nexus_commit_note": "Nexus reference is the parent of the commit containing this manifest.",
+  "core_changed": false,
+  "limitations": [
+    "Recovery covers ready projected receipts; a reservation without a projected receipt remains unresolved and fences empty reconciliation.",
+    "Nonempty claims/session adoption, events, Core-to-wire recovery mapping, bound-ticket rotation and embedded recovery remain pending.",
+    "Integration uses a technical native peer, fixture readiness, and injected expiry of the old bound ticket; no new real provider or process-crash qualification.",
+    "One existing Connector skip (covered above); one existing Nexus dependency deprecation warning.",
+    "No milestone or release gate closed."
+  ]
+}

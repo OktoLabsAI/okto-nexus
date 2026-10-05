@@ -1,0 +1,49 @@
+{
+  "increment": "M02/P6.1 approved direct HTTP MCP configuration",
+  "status": "PARTIAL_INSTALLED_INTEGRATION",
+  "connector_commit": "45c37e60e9546205b042544a706c27c160eb94dc",
+  "core_commit": "770659b7f3404798fe6c59146c7ab9d12b84bbe4",
+  "changes": [
+    "Approved adapter selects native Pi or direct HTTP MCP configuration.",
+    "Codex/Claude session homes contain only reference-based configuration and ownership marker.",
+    "Provider credentials and session capabilities are resolved only into the process environment.",
+    "Scope, origin, expiry, owner, directory identity and config content are checked.",
+    "Default capability includes protocol ceilings and eight canonical tool permissions."
+  ],
+  "tests": {
+    "source_directed_connector": {
+      "passed": 38
+    },
+    "source_nexus_mcp": {
+      "passed": 1,
+      "warnings": 1
+    },
+    "installed_connector": {
+      "passed": 328,
+      "skipped": 1
+    },
+    "installed_nexus": {
+      "passed": 78,
+      "warnings": 1
+    }
+  },
+  "artifacts": "plans/r4_execution/evidence/approved-mcp-artifacts.json",
+  "evidence": [
+    "plans/r4_execution/evidence/approved-mcp-installed-connector.json",
+    "plans/r4_execution/evidence/approved-mcp-installed-nexus.json"
+  ],
+  "initial_installed_connector": {
+    "passed": 320,
+    "failed": 1,
+    "skipped": 1,
+    "cause": "Substring import guard falsely identified a local mcp_template import as the MCP SDK.",
+    "correction": "AST module import checks, including alias/combined import cases; original MCP dependency and implementation prohibitions preserved.",
+    "evidence": "plans/r4_execution/evidence/approved-mcp-installed-connector-initial.json"
+  },
+  "limitations": [
+    "Technical native peer and fixture selection/READY; real provider qualification remains pending.",
+    "MCP home-only native login requires importing protected credential references; complete onboarding/migration is pending.",
+    "Automatic daemon startup adoption, renewal, nonempty reconciliation and remaining M00-M13 acceptance remain pending.",
+    "No milestone or product gate closed."
+  ]
+}

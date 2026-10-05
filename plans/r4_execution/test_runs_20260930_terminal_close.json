@@ -1,0 +1,83 @@
+{
+  "increment": "M07 durable and published terminal R4 close",
+  "status": "PARTIAL_INSTALLED_INTEGRATION",
+  "artifacts": "evidence/terminal-close-artifacts.json",
+  "tests": {
+    "core": {
+      "tests": 76,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 76
+    },
+    "connector": {
+      "tests": 337,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 1,
+      "passed": 336
+    },
+    "nexus": {
+      "tests": 81,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 81
+    }
+  },
+  "limitations": [
+    "Constructed R4 grants in real provider probes; technical provider and protocol readiness fixtures in Server integration.",
+    "Delayed/disconnected publication, nonempty reconciliation, restart/crash and disk-error recovery remain pending.",
+    "No full milestone or release gate closed."
+  ],
+  "initial_source_test_error": "Two Nexus cases failed due to an undefined variable in the new assertion; changed action to the existing intent parameter. Both then passed.",
+  "core_commit": "555207767e0ef22721c9b3e63e33c498a3c718a7",
+  "connector_commit": "1a23d9b3f3516e61a44a1ca43ec95b7b1558f7e1",
+  "real_providers": {
+    "codex_app_server": {
+      "authority_mode": "r4",
+      "close_receipt_error": null,
+      "close_receipt_stage": "SUCCEEDED",
+      "close_stage": "SUCCEEDED",
+      "lease_application_stage": "INSTALLED",
+      "open_stage": "SUBMITTED",
+      "prepared_architecture": "x86_64",
+      "prepared_version": "0.159.0",
+      "shutdown_outcome": "already_closed",
+      "submit_stage": "SUBMITTED",
+      "terminal_operation_id": "turn",
+      "terminal_outcome": "success",
+      "turn_receipt_stage": "SUCCEEDED"
+    },
+    "claude_stream": {
+      "authority_mode": "r4",
+      "close_receipt_error": null,
+      "close_receipt_stage": "SUCCEEDED",
+      "close_stage": "SUCCEEDED",
+      "lease_application_stage": "INSTALLED",
+      "open_stage": "SUBMITTED",
+      "prepared_architecture": "x86_64",
+      "prepared_version": "2.1.282",
+      "shutdown_outcome": "already_closed",
+      "submit_stage": "SUBMITTED",
+      "terminal_operation_id": "turn",
+      "terminal_outcome": "success",
+      "turn_receipt_stage": "SUCCEEDED"
+    },
+    "pi_rpc": {
+      "authority_mode": "r4",
+      "close_receipt_error": null,
+      "close_receipt_stage": "SUCCEEDED",
+      "close_stage": "SUCCEEDED",
+      "lease_application_stage": "INSTALLED",
+      "open_stage": "SUBMITTED",
+      "prepared_architecture": "x86_64",
+      "prepared_version": "0.87.1",
+      "shutdown_outcome": "already_closed",
+      "submit_stage": "SUBMITTED",
+      "terminal_operation_id": "turn",
+      "terminal_outcome": "success",
+      "turn_receipt_stage": "SUCCEEDED"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="6.164" timestamp="2026-10-01T14:41:03.204844-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_binding_migration" name="test_canonical_adapter_cannot_bypass_legacy_cutover[protocol_ready]" time="2.466"><failure message="KeyError: 'blockers'">tests\execution_r4\test_binding_migration.py:119: in test_canonical_adapter_cannot_bypass_legacy_cutover
+    assert "existing_endpoint_requires_review" in proposal["blockers"]
+                                                  ^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'blockers'</failure></testcase><testcase classname="tests.execution_r4.test_binding_migration" name="test_canonical_adapter_cannot_bypass_legacy_cutover[outcome_unknown]" time="2.313"><failure message="KeyError: 'blockers'">tests\execution_r4\test_binding_migration.py:119: in test_canonical_adapter_cannot_bypass_legacy_cutover
+    assert "existing_endpoint_requires_review" in proposal["blockers"]
+                                                  ^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'blockers'</failure></testcase></testsuite></testsuites>

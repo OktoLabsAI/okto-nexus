@@ -1,0 +1,163 @@
+{
+  "date": "2026-10-01",
+  "branch": "feature/v0.2.0",
+  "commits": {
+    "nexus": "68c6e0b",
+    "connector": "2390f84",
+    "core": "9c77871"
+  },
+  "core_version": "0.2.44.dev0",
+  "artifacts": {
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-opening-nexus-88ig80nf\\inventory-dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "fd85b88a1fe7412bbc66b56106b36d105266c69c24a5c7f31a74440a5f0abe92",
+      "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-opening-nexus-88ig80nf"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-opening-connector-i98ojiu_\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "29ec0b19243aa427677a716078cfeb0ff9227ff641e4bbf41876891498ccded8",
+      "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-opening-connector-i98ojiu_"
+    }
+  },
+  "core_artifact": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-opening-core-nzdtg0fa\\dist\\nexus_connector_core-0.2.44.dev0-py3-none-any.whl",
+    "sha256": "c6f8555adeadb68959daa8e2ad91ec755eab49183049112a3d719470321e8db0",
+    "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-opening-core-nzdtg0fa"
+  },
+  "installed": {
+    "core": {
+      "file": "evidence/pi-opening-core-installed.xml",
+      "tests": 92,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "seconds": 43.596
+    },
+    "connector": {
+      "file": "evidence/pi-opening-regression-installed.xml",
+      "tests": 252,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "seconds": 70.303
+    },
+    "nexus": {
+      "file": "evidence/pi-opening-regression-tcp-installed.xml",
+      "tests": 33,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "seconds": 134.871
+    }
+  },
+  "real_providers": {
+    "pi_rpc": {
+      "tests": {
+        "file": "evidence/pi-opening-pi_rpc-installed.xml",
+        "tests": 1,
+        "errors": 0,
+        "failures": 1,
+        "skipped": 0,
+        "seconds": 314.926
+      },
+      "report": "evidence/pi-opening-pi_rpc.json",
+      "completed": false,
+      "cli_subprocess": true,
+      "credentials_removed": true,
+      "daemon_exit_code": 0
+    },
+    "codex_app_server": {
+      "tests": {
+        "file": "evidence/pi-opening-codex_app_server-installed.xml",
+        "tests": 1,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "seconds": 177.649
+      },
+      "report": "evidence/pi-opening-codex_app_server.json",
+      "completed": true,
+      "cli_subprocess": true,
+      "credentials_removed": true,
+      "daemon_exit_code": 0
+    },
+    "claude_stream": {
+      "tests": {
+        "file": "evidence/pi-opening-claude_stream-installed.xml",
+        "tests": 1,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "seconds": 159.51
+      },
+      "report": "evidence/pi-opening-claude_stream.json",
+      "completed": true,
+      "cli_subprocess": true,
+      "credentials_removed": true,
+      "daemon_exit_code": 0
+    }
+  },
+  "test_sha256": "3b5945315230715c5a90d89bc08c03ed46974a3f347cb665b0e9b4751b758ed5",
+  "packaging": {
+    "lock_check": "evidence/pi-opening-lock-check.log",
+    "frozen_sync": "evidence/pi-opening-frozen-sync.json",
+    "isolated_import": "evidence/pi-opening-frozen-import.json"
+  },
+  "changes": [
+    "Core counted file reads allocate no more than the remaining expected bytes plus one growth-detection byte, capped at the existing chunk limit. Every file and EOF is still read.",
+    "Installed tests cover unchanged digests, empty and multichunk files, growth, truncation, dependency coverage, composition, native bridges and lease behavior.",
+    "Nexus and Connector pin the same Core 0.2.44 wheel. Nexus inventory version, checked-in wheel and frozen lock agree.",
+    "The real provider journey now invokes the public Connector CLI in separate Python processes and fails immediately on a durable Core event-observation incident."
+  ],
+  "measurements": {
+    "baseline": "evidence/pi-opening-hash-baseline.json",
+    "bounded_diagnostic": "evidence/pi-opening-hash-bounded-diagnostic.json",
+    "identical_pi_build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+    "caveat": "Baseline used cProfile (17.706 s); the bounded-read diagnostic did not (5.084 s). These are diagnostic timings, not a controlled benchmark or end-to-end latency guarantee."
+  },
+  "failure_history": [
+    {
+      "file": "evidence/pi-opening-pi_rpc-installed-previous-1790830923255129200.json",
+      "exit_code": 1,
+      "seconds": 2.6741912364959717
+    },
+    {
+      "file": "evidence/pi-opening-pi_rpc-installed-previous-1790831428179435500.json",
+      "exit_code": 1,
+      "seconds": 478.94041204452515
+    },
+    {
+      "file": "evidence/pi-opening-pi_rpc-installed-previous-1790831795360220100.json",
+      "exit_code": 1,
+      "seconds": 256.77590441703796
+    },
+    {
+      "file": "evidence/pi-opening-pi_rpc-installed-previous-1790832243956839700.json",
+      "exit_code": 1,
+      "seconds": 291.8385200500488
+    },
+    {
+      "file": "evidence/pi-opening-pi_rpc-installed-previous-1790832625688795100.json",
+      "exit_code": 0,
+      "seconds": 304.5387899875641
+    }
+  ],
+  "findings": [
+    "The first consumer run refused Core 0.2.44 because Nexus inventory still pinned 0.2.43. The inventory pin was corrected and the final Nexus wheel rebuilt; the failed report and previous artifact remain.",
+    "Pi subsequently opened and renewed its lease, but a same-loop CLI run lost native event observation. Thread-isolated CLI completed a turn with an OPEN handoff; CLI subprocesses completed a turn with a CLAIMED handoff. These remain failures.",
+    "A diagnostic response hook observed valid HTTP 200 native action responses and produced one complete Pi journey. It read response bodies before the production validator; this instrumented pass is excluded from acceptance.",
+    "The final Pi repetition removed that hook and failed on core.event_pump_failed. It ran concurrently with the independent installed regression suite. The daemon exited normally and campaign credentials were removed.",
+    "Codex and Claude passed on final wheels with actual CLI subprocesses, lease renewal, three explicit operator decisions each, completed handoffs, successful turn and close receipts, normal shutdown and credential cleanup.",
+    "The frozen offline Nexus install succeeded in an isolated CPython 3.14.3 environment; imports resolve Core 0.2.44 from site-packages with Connector absent. This is packaging evidence, not a real embedded provider journey."
+  ],
+  "limitations": [
+    "Pi remains unaccepted. Root causes of event loss and native action uncertainty are not yet established; a successful instrumented run does not resolve intermittent failures.",
+    "Server release readiness is overridden only by the test; native provider qualification is unchanged.",
+    "This campaign uses one Windows host and loopback HTTP/WSS, not independent hosts, Linux, deployed TLS or UI.",
+    "Core 0.2.44 introduces no native action timeout, buffer limit, authorization or qualification relaxation.",
+    "Nexus UI assets were preexisting changes carried by its built wheel; they remain outside commits and UI acceptance.",
+    "Counts overlap across source, installed and historical campaigns. G0-G3 and M00-M13 remain open."
+  ],
+  "next_step": "Capture the concrete exception behind Pi core.event_pump_failed, reproduce it with bounded native event ingestion tests, and correct the cause. Also measure metadata validation relative to the native ingress observation budget; preserve same-action recovery and authority checks.",
+  "milestone_complete": false
+}

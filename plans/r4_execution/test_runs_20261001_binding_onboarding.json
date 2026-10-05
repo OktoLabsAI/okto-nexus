@@ -1,0 +1,92 @@
+{
+  "date": "2026-10-01",
+  "branch": "feature/v0.2.0",
+  "commits": {
+    "nexus": "5d21a93",
+    "connector": "2a52255",
+    "core": "a061960"
+  },
+  "core_version": "0.2.43.dev0",
+  "artifacts": {
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-binding-onboarding-connector-awjaoimh\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "c7b03eb4e9e533259362ab85aeca62c50896b8a12be89584615e5ce6cbf82ac4"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-binding-onboarding-nexus-x5_tzue4\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "af520a6c3f581129ad16bb4e2c9a8713d6bb6f8832a8e942bb6b6838d3bd580e"
+    }
+  },
+  "core_artifact": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-lease-core-hi9n9umw\\dist\\nexus_connector_core-0.2.43.dev0-py3-none-any.whl",
+    "sha256": "7403611bb37050700fc325b2002f74b5ac507a79af8badba0bea0cd1b775087b",
+    "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-lease-core-hi9n9umw"
+  },
+  "installed": {
+    "connector": {
+      "file": "evidence/binding-onboarding-installed.xml",
+      "tests": 224,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "seconds": 53.356
+    },
+    "nexus": {
+      "file": "evidence/binding-onboarding-tcp-installed.xml",
+      "tests": 32,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "seconds": 90.51
+    }
+  },
+  "source": {
+    "connector": {
+      "file": "evidence/binding-onboarding-source.xml",
+      "tests": 56,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "seconds": 6.378
+    },
+    "tcp": {
+      "file": "evidence/binding-onboarding-tcp-source.xml",
+      "tests": 2,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "seconds": 15.248
+    }
+  },
+  "runner": "run_binding_onboarding_installed.py",
+  "cli": "evidence/binding-onboarding-cli.json",
+  "pip_check": "evidence/binding-onboarding-pip-check.log",
+  "changes": [
+    "Schema 10 persists prepare/apply intent IDs and exact reviewed proposal content before network mutation.",
+    "Public bind prepare/apply validates identity, physical workspace and launch consent, explicit proof and proposal hash.",
+    "Lost responses reuse the same durable intent; changed content and changed authority are refused.",
+    "Binding acknowledgment and the local realization status commit atomically; failure leaves one recoverable application.",
+    "Public bind show/list reads canonical intent and acknowledged binding state, including installed subprocess verification.",
+    "Nexus maps binding domain refusals to structured revision-bearing HTTP errors."
+  ],
+  "failure_history": [
+    {
+      "file": "evidence/binding-onboarding-source-json-shape-failure.xml",
+      "finding": "Canonical JSON refused dataclass tuple values. Hashing now normalizes the same JSON shape persisted by StateStore."
+    },
+    {
+      "file": "evidence/binding-onboarding-tcp-domain-error.xml",
+      "finding": "Uncaught permission refusal produced HTTP 500 and a protocol mismatch. Binding routes now return structured domain errors."
+    }
+  ],
+  "limitations": [
+    "Actual loopback HTTP, authenticated daemon IPC and operator approval are exercised with seeded identity, a technical vault and harmless copied discovery executable.",
+    "No provider starts and no runtime or outbox operation is created by binding onboarding. Real remote Pi/Codex/Claude acceptance remains pending.",
+    "Canonical runtime CLI admission and reusable alias mapping are next; full binding replacement/removal remains pending under M03/M10.",
+    "Source and installed suites overlap and must not be summed as unique coverage.",
+    "Preexisting Nexus UI assets are present in the wheel but excluded from these commits and UI acceptance.",
+    "Core is unchanged; earlier real local provider evidence remains tied to Core 0.2.42.",
+    "M00-M13 and G0-G3 completion criteria are unchanged; no milestone or gate is closed."
+  ],
+  "milestone_complete": false
+}

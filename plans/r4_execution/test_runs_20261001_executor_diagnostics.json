@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-01",
+  "commits": {
+    "nexus": "61847394f7b33153ecdd61c305a12ad062ff7838",
+    "connector": "2c84b529fa6cbb462916619e627b25dbd08d6cd5",
+    "core": "9c778719c3892d9742bb358b0020e39ed43df08d"
+  },
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-opening-core-nzdtg0fa\\dist\\nexus_connector_core-0.2.44.dev0-py3-none-any.whl",
+      "sha256": "c6f8555adeadb68959daa8e2ad91ec755eab49183049112a3d719470321e8db0",
+      "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-opening-core-nzdtg0fa",
+      "source_commit": "9c778719c3892d9742bb358b0020e39ed43df08d"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-executor-diagnostics-smyq6rke\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "848ce36713ef9ee696940045ab0c42ad8de76e27c32cc4d5eda92ac603d6882f"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-binding-lanes-hxg8f3ku\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "f0c24269d1141505e31bbc6a0bb6872af1dcfd22a72e80eb36d3e684a0754f25"
+    }
+  },
+  "results": {
+    "source": 15,
+    "nexus_installed": 21,
+    "connector_installed": 60
+  },
+  "scope": "Scoped US English corrective guidance from existing verified receipt codes, exposed through the public operation API.",
+  "limitations": [
+    "Receipt codes are injected through authenticated receipt ingress in diagnostic cases; this does not prove native missing-login detection.",
+    "Real Pi/Codex/Claude rebind evidence belongs to the preceding Nexus wheel and is not relabeled as a run of this new wheel.",
+    "No Core or Connector product changes; no migration; no release gate closed."
+  ],
+  "evidence": {
+    "evidence/executor-diagnostics-artifacts.json": "22d936259b50e4c7eda57d10b6d09231ccaec776d11b9f6a3d1e5bfd27f850ad",
+    "evidence/executor-diagnostics-build.log": "ac74ffd9d8f12a82af4260ca8ba8cae30cce7096d7dd0c3192dc7c4dbb7cf922",
+    "evidence/executor-diagnostics-connector-installed.json": "2b77e69a69f1551d0f0700370c2c26aa68eb01f4547e5a493f268ddd6244669d",
+    "evidence/executor-diagnostics-connector-installed.log": "a42de387d365339c58f7add9813e1baac34baa073f57b2b0ebe2cc1a1bce0027",
+    "evidence/executor-diagnostics-connector-installed.xml": "448cfa7632d08fbfe182f27ee9ab7d461f6b1ce593c496f801eeebf698056ef9",
+    "evidence/executor-diagnostics-install.log": "b72df150e828fc97a4e45aca416fafb5942ff3f73ca7aabac0b43ff48c730a59",
+    "evidence/executor-diagnostics-nexus-installed.json": "155664a30f7a70b55e5dd8482772cee5f593619d4f1e47680e55e7a9ba7e7548",
+    "evidence/executor-diagnostics-nexus-installed.log": "d7d5f0ee2d1dd44e43f2824d64956bb7f4965331dc7d6d5e4b3567eb00ba96b7",
+    "evidence/executor-diagnostics-nexus-installed.xml": "4833dd7430db17e85f1f9ff51ba66f4a0b1cf7104411c7af9b10ca490bc49c88",
+    "evidence/executor-diagnostics-pip-check.log": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+    "evidence/executor-diagnostics-source.log": "57b86f306cd4eb9dfdc799047b85b32871bb5d42d8fa40abf45561a4c1d3957c",
+    "evidence/executor-diagnostics-source.xml": "89463783226de8a268ddfc61cc1ff804952c2dc054564f53e339ebc5a1e9091e"
+  }
+}

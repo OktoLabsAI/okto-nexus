@@ -119,7 +119,10 @@ def _mcp_json_snippet(host: str, port: int, api_key: str) -> str:
     return json.dumps(
         {
             "mcpServers": {
-                "okto-nexus": {"url": f"http://{host}:{port}/mcp?api_key={api_key}"}
+                "okto-nexus": {
+                    "url": f"http://{host}:{port}/mcp",
+                    "headers": {"Authorization": f"Bearer {api_key}"},
+                }
             }
         },
         indent=2,
@@ -143,6 +146,10 @@ Options:
   --project-root P    Workspace the dashboard opens scoped to (default: .)
   --home P            Data directory (default ~/.okto_nexus)
   --db-path P         SQLite file (default {home}/nexus.db)
+  --harness-root P    Approve an absolute installation root for passive
+                      Core discovery (repeat for each trusted directory)
+  --pi-install-root P  Pi installation directory containing releases/
+  --pi-node P        Absolute Node executable; required with --pi-install-root
   --trust-mode M      open | strict
   --log-level L       Console verbosity: critical|error|warning|info|debug|
                       trace (default warning; env OKTO_NEXUS_LOG_LEVEL). Only
@@ -277,6 +284,86 @@ def _watch_ready(
     )
 
 
+def _reap_live_harness_sessions(deps: "object") -> int:
+    """Fallback session close after ASGI shutdown.
+
+    Native creation already establishes Windows Job or Linux guardian ownership.
+    This loop handles observable close; owner SIGKILL cleanup belongs to those
+    birth-owned resources, not a cached PID scanner. Attach is never terminated.
+    A global shutdown budget remains a separate lifecycle gate.
+    """
+    supervisor = getattr(deps, "harness_supervisor", None)
+    if supervisor is None:
+        return 0
+    sessions = supervisor.list_live()
+    for session in sessions:
+        try:
+            supervisor.close(session.session_id)
+        except Exception as exc:  # noqa: BLE001 - best-effort: shutdown must never hang or fail here
+            print(
+                f"[okto-nexus] failed to reap harness session "
+                f"{session.session_id!r} on shutdown "
+                f"({type(exc).__name__}: {exc})",
+                file=sys.stderr,
+            )
+    return len(sessions)
+
+
+#: Env var overriding the harness-orphan-watchdog's poll interval (seconds).
+#: Undocumented in ``SERVE_USAGE`` deliberately - this is a test/ops knob
+#: for the watchdog's own detection-latency-vs-overhead trade-off (see
+#: ``harness_orphan_watchdog.DEFAULT_POLL_INTERVAL_S``), not a supported
+#: end-user setting.
+_WATCHDOG_POLL_INTERVAL_ENV = "OKTO_NEXUS_HARNESS_WATCHDOG_POLL_INTERVAL_S"
+
+_WATCHDOG_MODULE = "okto_nexus.adapters.inbound.cli.harness_orphan_watchdog"
+
+
+def _spawn_harness_orphan_watchdog(env: Mapping[str, str]) -> object | None:
+    """Compatibility hook: birth-owned adapters no longer launch a PID scanner.
+
+    Windows Job objects and Linux per-connection subreapers own native children
+    from creation. Attach never owns the external operator process.
+    """
+    return None
+
+
+def _stop_harness_orphan_watchdog(watchdog: "object | None") -> None:
+    """Explicitly stop the watchdog on every path THIS process can still run
+    code on (clean exit, SIGINT, SIGTERM - the same three ``_reap_live_
+    harness_sessions`` above already covers). Only the SIGKILL path this
+    watchdog exists for skips this call entirely (by definition - see the
+    module top), in which case the watchdog's own bounded self-reap loop
+    (``run_watchdog`` in ``harness_orphan_watchdog.py``) is what notices
+    and stops it instead. Best-effort and never raises: a watchdog that
+    fails to stop promptly here is, at worst, a few seconds of an idle
+    polling loop that self-terminates on its own the moment it next
+    observes ``os.getppid() != this process's pid`` - not a hang, and
+    never allowed to become one.
+    """
+    if watchdog is None:
+        return
+    import signal
+    import subprocess
+
+    if watchdog.poll() is not None:
+        return
+    try:
+        watchdog.send_signal(signal.SIGTERM)
+    except OSError:
+        return
+    try:
+        watchdog.wait(timeout=2.0)
+        return
+    except subprocess.TimeoutExpired:
+        pass
+    try:
+        watchdog.kill()
+        watchdog.wait(timeout=2.0)
+    except (OSError, subprocess.TimeoutExpired):
+        pass
+
+
 def _warm_embeddings(deps: "object", done_event: "object") -> None:
     """Eagerly load the local embedding model at startup (mirrors the Pulse KG
     warm-up) so the model is hot BEFORE the first message/search and the
@@ -346,7 +433,7 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
 
     import threading
 
-    from ..mcp.server import bootstrap, maybe_auto_prune
+    from okto_nexus.bootstrap.dependencies import bootstrap, maybe_auto_prune
     from ....application.auth import AgentKeyAuthService
     from ....domain.ids import resolve_workspace_id
     from ..http.app import build_app, ensure_operator_key
@@ -357,7 +444,10 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
             list(args), env
         )
         _configure_logging(log_level)
+        from ....bootstrap.local_discovery import split_discovery_args
+        discovery, rest = split_discovery_args(rest)
         deps = bootstrap(env, rest)
+        deps.local_discovery = discovery
     except OktoNexusError as exc:
         print(
             f"[okto-nexus] serve bootstrap failed: {exc.code}: {exc.message}",
@@ -401,7 +491,8 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
         except OktoNexusError:
             default_workspace = None  # dashboard falls back to "all workspaces"
 
-        app = build_app(deps, lock=lock)
+        owner_host = "[::1]" if ":" in host else "127.0.0.1"
+        app = build_app(deps, lock=lock, runtime_owner_api_url=f"http://{owner_host}:{port}")
         app.state.default_workspace_id = default_workspace
         app.state.project_root = project_root
         # Same-machine trust: dashboard/REST open without a key ONLY when
@@ -414,7 +505,8 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
                 file=sys.stderr,
             )
 
-        server = uvicorn.Server(
+        from .runtime_server import RuntimeServer
+        server = RuntimeServer(
             uvicorn.Config(
                 app,
                 host=host,
@@ -424,7 +516,7 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
             )
         )
         # The SSE feed reads this to end its otherwise-infinite generator the
-        # moment CTRL+C flips should_exit, so an open dashboard never holds the
+        # moment coordinated shutdown flips should_exit, so a dashboard never holds the
         # graceful-shutdown wait open (the "stuck finalizing" report).
         app.state.server = server
         # Warm the embedding model in the background (mirrors Pulse) so it is
@@ -441,14 +533,39 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
             args=(server, host, port, embeddings_done),
             daemon=True,
         ).start()
+        # Adapters establish ownership at native process birth. The compatibility
+        # hook returns None; never launch the historical cached-PID scanner.
+        watchdog = (_spawn_harness_orphan_watchdog(env)
+                    if deps.config.feature_harness_integrations else None)
         try:
-            server.run()
-        except KeyboardInterrupt:
-            # uvicorn already completed its graceful shutdown and re-raised
-            # the captured CTRL+C (its signal-forwarding contract). The work
-            # is DONE at this point - swallowing it turns a scary multi-page
-            # traceback into the calm goodbye the operator expects.
-            print("[okto-nexus] Shutdown complete.", file=sys.stderr)
+            try:
+                server.run()
+            except KeyboardInterrupt:
+                # uvicorn already completed its graceful shutdown and
+                # re-raised the captured CTRL+C (its signal-forwarding
+                # contract). The work is DONE at this point - swallowing it
+                # turns a scary multi-page traceback into the calm goodbye
+                # the operator expects.
+                print("[okto-nexus] Shutdown complete.", file=sys.stderr)
+        finally:
+            # EV-OPS-001: reap any harness session still live at this point
+            # (server exiting - clean, SIGINT, or SIGTERM - while a session
+            # was never explicitly closed) BEFORE the lock is released, so a
+            # takeover by the next `serve` never races a still-tearing-down
+            # child. See `_reap_live_harness_sessions`'s docstring for what
+            # this does and does NOT cover (SIGKILL is NOT covered).
+            reaped = _reap_live_harness_sessions(deps)
+            if reaped:
+                print(
+                    f"[okto-nexus] reaped {reaped} live harness session(s) "
+                    "on shutdown.",
+                    file=sys.stderr,
+                )
+            # This process is about to exit normally - the watchdog's own
+            # job (react to THIS process disappearing) is therefore already
+            # moot; stop it explicitly rather than leaving it to notice on
+            # its own next poll. See `_stop_harness_orphan_watchdog`.
+            _stop_harness_orphan_watchdog(watchdog)
         return 0
     finally:
         lock.release()

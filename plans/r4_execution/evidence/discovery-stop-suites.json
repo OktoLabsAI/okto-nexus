@@ -1,0 +1,28 @@
+{
+  "core": {
+    "root": "D:\\Projetos\\Techridy\\okto-nexus-connector-core",
+    "tests": [
+      "test_discovery_cancellation.py",
+      "test_pc09_build_identity.py",
+      "test_passive_discovery.py",
+      "test_discovery_probe.py",
+      "test_pc10_pc11_discovery_preflight.py",
+      "regression/test_c2_regressions.py",
+      "regression/test_c3_regressions.py",
+      "regression/test_c4_audit.py",
+      "regression/test_c4_complementary.py",
+      "regression/test_c5_audit.py",
+      "test_preexpired_lease_watcher.py",
+      "test_pc02_containment.py",
+      "test_r4_runtime_leases.py",
+      "test_r4_pending_containment.py"
+    ]
+  },
+  "connector": {
+    "root": "D:\\Projetos\\Techridy\\okto-nexus-connector",
+    "tests": [
+      "unit/test_discovery_configuration.py",
+      "unit/test_r4_daemon_control.py"
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="7.982" timestamp="2026-10-02T00:23:15.653517-03:00" hostname="Alienware_m15"><testcase classname="test_real_connector_providers" name="test_real_provider_through_public_connector_cli[codex_app_server]" time="6.509"><failure message="AssertionError: (1, '{\r&#10;   &quot;error&quot;: {\r&#10;    &quot;action&quot;: &quot;Re-run interactively and approve, or install an OS keyring backend.&quot;,\r&#10;    &quot;code...peration_id&quot;: null,\r&#10;    &quot;possible_effect&quot;: false,\r&#10;    &quot;retry_safe&quot;: false,\r&#10;    &quot;stage&quot;: &quot;vault&quot;\r&#10;   }\r&#10;  }\r&#10;  ', '')&#10;assert 1 == 0&#10; +  where 1 = &lt;Process 62504&gt;.returncode">test_real_connector_providers.py:484: in test_real_provider_through_public_connector_cli
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+test_real_connector_providers.py:156: in run
+    imported = await cli("identity", "add", "--server", origin, "--alias", "subject",
+test_real_connector_providers.py:136: in cli
+    assert process.returncode == 0, (process.returncode, stdout.decode(), stderr.decode())
+E   AssertionError: (1, '{\r
+E      "error": {\r
+E       "action": "Re-run interactively and approve, or install an OS keyring backend.",\r
+E       "code...peration_id": null,\r
+E       "possible_effect": false,\r
+E       "retry_safe": false,\r
+E       "stage": "vault"\r
+E      }\r
+E     }\r
+E     ', '')
+E   assert 1 == 0
+E    +  where 1 = &lt;Process 62504&gt;.returncode</failure></testcase></testsuite></testsuites>

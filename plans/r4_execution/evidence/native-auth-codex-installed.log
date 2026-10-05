@@ -1,0 +1,23 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+_______ test_real_codex_missing_login_has_durable_authentication_error ________
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_real_native_auth_failure.py:90: in test_real_codex_missing_login_has_durable_authentication_error
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_real_native_auth_failure.py:85: in run
+    assert receipt.error_code == "PROVIDER_AUTH_REQUIRED"
+E   AssertionError: assert 'NATIVE_OPERATION_FAILED' == 'PROVIDER_AUTH_REQUIRED'
+E     
+E     - PROVIDER_AUTH_REQUIRED
+E     + NATIVE_OPERATION_FAILED
+=========================== short test summary info ===========================
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_real_native_auth_failure.py::test_real_codex_missing_login_has_durable_authentication_error
+1 failed in 28.72s

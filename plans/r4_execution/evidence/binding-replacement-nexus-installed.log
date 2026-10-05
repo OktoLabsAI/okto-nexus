@@ -1,0 +1,43 @@
+.................................F.                                      [100%]
+================================== FAILURES ===================================
+____ test_connector_public_replacement_commands_preserve_binding_identity _____
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_executor_onboarding_cli.py:210: in test_connector_public_replacement_commands_preserve_binding_identity
+    test_connector_public_commands_publish_realization_over_tcp(tmp_path, monkeypatch, True, replacement_flow=True)
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_executor_onboarding_cli.py:206: in test_connector_public_commands_publish_realization_over_tcp
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_executor_onboarding_cli.py:149: in run
+    replacement = await execute(replacement_words)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_executor_onboarding_cli.py:74: in execute
+    return await run_executor(parser.parse_args(["executor", *words]), output, root)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus_connector\cli\commands\executor.py:42: in run_executor
+    result = await asyncio.to_thread(publish)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\threads.py:25: in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\thread.py:59: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus_connector\cli\commands\executor.py:40: in publish
+    raise ConnectorError.from_json(response.get("error", {}))
+E   okto_nexus_connector.errors.ConnectorError: PERMISSION_DENIED (realization.publish): The execution ticket has stale authority.
+============================== warnings summary ===============================
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_executor_onboarding_cli.py::test_connector_public_replacement_commands_preserve_binding_identity
+1 failed, 34 passed, 1 warning in 132.90s (0:02:12)

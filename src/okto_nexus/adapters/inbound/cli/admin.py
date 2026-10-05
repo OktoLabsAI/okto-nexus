@@ -54,7 +54,7 @@ from okto_nexus.application.retention import RetentionService
 from okto_nexus.domain.ids import resolve_workspace_id
 from okto_nexus.errors import OktoNexusError
 
-from ..mcp.server import bootstrap
+from okto_nexus.bootstrap.dependencies import bootstrap
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -64,6 +64,22 @@ def _build_parser() -> argparse.ArgumentParser:
         description="Operator maintenance commands for the shared store.",
     )
     sub = parser.add_subparsers(dest="command", required=True)
+
+    migration = sub.add_parser("migrate-execution", help="Backfill one legacy catalog batch without activating execution.")
+    migration.add_argument("--db-path", required=True)
+    migration.add_argument("--backup", required=True, help="Verified pre-migration backup directory.")
+    migration.add_argument("--batch-size", type=int, default=100)
+
+    backup = sub.add_parser("backup", help="Create a consistent database backup before migration.")
+    backup.add_argument("--db-path", required=True, help="Existing source SQLite database.")
+    backup.add_argument("--output", required=True, help="New backup directory; must not already exist.")
+
+    for name in ("shutdown", "shutdown-status"):
+        shutdown = sub.add_parser(name, help="Request or inspect Server shutdown.")
+        shutdown.add_argument("--url", required=True, help="Running Server base URL.")
+        if name == "shutdown":
+            shutdown.add_argument("--timeout-seconds", type=float, default=50.0,
+                                  help="First shutdown deadline, in seconds (0 to 300).")
 
     prune = sub.add_parser(
         "prune",
@@ -217,6 +233,21 @@ def _build_parser() -> argparse.ArgumentParser:
             "Write NDJSON to this file (UTF-8, LF newlines). Omit to stream to stdout."
         ),
     )
+
+    migrate = sub.add_parser(
+        "migrate-mcp-entry",
+        help="Plan or apply migration of one selected Nexus stdio MCP entry to HTTP.",
+    )
+    migrate.add_argument("--config", required=True, metavar="PATH",
+                         help="Explicit MCP JSON config path; no home scan.")
+    migrate.add_argument("--entry", required=True,
+                         help="Exact mcpServers entry name to migrate.")
+    migrate.add_argument("--url", required=True,
+                         help="Direct HTTP(S) URL ending in /mcp, without a key.")
+    migrate.add_argument("--apply", action="store_true",
+                         help="Apply the reviewed plan with a backup and CAS.")
+    migrate.add_argument("--expected-sha256",
+                         help="Full SHA-256 printed by the reviewed plan; required with --apply.")
     return parser
 
 
@@ -332,6 +363,66 @@ def run_admin(
     ns, extra = parser.parse_known_args(list(argv))
     environ = env if env is not None else os.environ
     sink = out if out is not None else sys.stdout
+    if ns.command == "migrate-execution":
+        from ....bootstrap.execution_migration import migrate_execution_catalog
+        if extra:
+            parser.error("Unknown migrate-execution option.")
+        try:
+            report = migrate_execution_catalog(ns.db_path, ns.backup, batch_size=ns.batch_size)
+        except (OSError, ValueError, KeyError, OktoNexusError):
+            print("[okto-nexus admin] MIGRATION_FAILED: Verify the backup and unchanged source data before retrying.",
+                  file=sys.stderr)
+            return 1
+        sink.write(json.dumps(report, ensure_ascii=True) + "\n")
+        sink.flush()
+        return 0
+    if ns.command == "backup":
+        from ....bootstrap.database_backup import backup_database
+        if extra:
+            parser.error("Unknown backup option.")
+        try:
+            report = backup_database(ns.db_path, ns.output)
+        except (OSError, ValueError, TimeoutError):
+            print("[okto-nexus admin] BACKUP_FAILED: The database backup could not be completed.",
+                  file=sys.stderr)
+            return 1
+        sink.write(json.dumps(report, ensure_ascii=True) + "\n")
+        sink.flush()
+        return 0
+    if ns.command in {"shutdown", "shutdown-status"}:
+        from .server_shutdown import run_shutdown
+        if extra:
+            parser.error("Unknown shutdown option.")
+        return run_shutdown(ns, environ, sink)
+    if ns.command == "migrate-mcp-entry":
+        from pathlib import Path
+        from .mcp_config_migration import (
+            MigrationConflict, apply_entry_migration, plan_entry_migration,
+        )
+        try:
+            if extra:
+                raise MigrationConflict("Unknown migrate-mcp-entry option.")
+            plan = plan_entry_migration(
+                Path(ns.config), entry_name=ns.entry, url=ns.url,
+                existing_api_key=environ.get("OKTO_NEXUS_MCP_KEY", ""),
+            )
+            if ns.apply:
+                if not ns.expected_sha256 or ns.expected_sha256 != plan.expected_sha256:
+                    raise MigrationConflict("--apply requires the SHA-256 of the reviewed plan.")
+                backup = apply_entry_migration(plan)
+                sink.write(json.dumps({"applied": not plan.already_applied,
+                                       "already_current": plan.already_applied,
+                                       "entry": ns.entry,
+                                       "backup": str(backup) if backup else None},
+                                      ensure_ascii=True) + "\n")
+            else:
+                sink.write(json.dumps(plan.redacted_summary(), indent=2,
+                                      ensure_ascii=True) + "\n")
+            sink.flush()
+            return 0
+        except (MigrationConflict, OSError) as exc:
+            print(f"[okto-nexus admin] CONFIG_ERROR: {exc}", file=sys.stderr)
+            return 1
     try:
         deps = (deps_factory or bootstrap)(environ, extra)
         # Anchor to a real workspace, fail-closed (WORKSPACE_UNRESOLVED on a

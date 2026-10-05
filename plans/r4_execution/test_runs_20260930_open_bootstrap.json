@@ -1,0 +1,99 @@
+{
+  "recorded_at": "2026-09-30T07:16:41.438430+00:00",
+  "scope": "Partial M04/M06 bootstrap integration; product gates remain open",
+  "parent_and_dependency_commits": {
+    "nexus": "9aa567dc3ceb755a5e8ea6ff6a8944aaf58df3ae",
+    "connector": "40a8cb07c183e000813afc63138270d77647a3a0",
+    "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
+  },
+  "source_sha256": {
+    "src/okto_nexus/application/execution_dispatch.py": "e08cace8b079585857106bd9d5e05ce9f45ae4dcaf8b4ebbebe8bf54f8ec23e6",
+    "src/okto_nexus/application/execution_leases.py": "3a16b7c1b3c1702798bd74e4c6bd8e67338354df82b7e3a30ca37fdda1c13a19",
+    "src/okto_nexus/adapters/outbound/sqlite/execution_leases.py": "188a3feaff576bb7958bcee23993ca4c40413f6d7cd2d38479d3c662adc6cbba",
+    "src/okto_nexus/migrations/078_execution_open_bootstrap.sql": "7693d3400582943585698fc5b9ae865d04f2382178d06548fb63fdd715f76fa3",
+    "tests/execution_r4/test_binding_operator.py": "a7ceb2259161438e200d1aefa8b4ea8d776a891aa41494b12f5f7d950fe4e136",
+    "tests/execution_r4/test_ns02.py": "f49fa2a4a032c97615f8cc16a8bc692163b3ba9ff82e5514dd8c15e285f3deff",
+    "tests/execution_r4/test_ns09.py": "86c8e657ef7adf0296801d93fbf23369df92468f1edda99dedf4ac7f301d3d8b",
+    "tests/execution_r4/test_open_bootstrap.py": "6d29e7b70380f187413365b60628bfd9cd9058b9edf284a51c45b1ddbb9ed622",
+    "tests/execution_r4/test_public_open_bootstrap.py": "6a8db420a383e41e734730cc63d661c4539cfb101d8dce66b6092bdf1f3e2fd1"
+  },
+  "runs": [
+    {
+      "file": "plans/r4_execution/evidence/open-bootstrap-authority.xml",
+      "sha256": "d353f4d6cf1db0df5242dd717010899eadfe954e514118c0b4f153d1f42e1cb7",
+      "tests": 10,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "file": "plans/r4_execution/evidence/open-bootstrap-installed.xml",
+      "sha256": "82ab03fb7eb2109de0eabab974f48d4b6f689c6dd1668e3994820e26a9065771",
+      "tests": 46,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "file": "plans/r4_execution/evidence/open-bootstrap-migrations.xml",
+      "sha256": "d432d92c2ccdfda12dfb2bec18a93699cce26c57f72c28851600249fb0f988b5",
+      "tests": 7,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "file": "plans/r4_execution/evidence/open-bootstrap-public.xml",
+      "sha256": "1ed85ae59dbefb03aa8b541bcdad425bc909b638ac9826c50840514aa484ba2a",
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "file": "plans/r4_execution/evidence/open-bootstrap-source.xml",
+      "sha256": "d329e1a9a1418ef7803587b293cd69a5a3d6e50a34abd35ae6212ab97665265c",
+      "tests": 97,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "file": "plans/r4_execution/evidence/open-bootstrap-targeted.xml",
+      "sha256": "88c808626f98b9cec97913c4f89beda27f1c0b57f765f30c3679012d9046f0de",
+      "tests": 7,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    }
+  ],
+  "source_commands": [
+    "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/execution_r4 -q --tb=short --junitxml=plans/r4_execution/evidence/open-bootstrap-source.xml",
+    "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/test_migrations.py -q --tb=short --junitxml=plans/r4_execution/evidence/open-bootstrap-migrations.xml"
+  ],
+  "installed_command": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/okto-open-bootstrap-installed-1_6k1yam/Scripts/python.exe -I -X utf8 -c '\nimport hashlib,json,zipfile,platform,sys,os\nfrom pathlib import Path\nimport pytest,okto_nexus,okto_nexus_connector,nexus_connector_core\nroot=Path(\"D:/Projetos/Techridy/okto_labs_okto_nexus\")\nconnector=root.parent/\"okto-nexus-connector\"\nreport={}\nassert not os.environ.get(\"OKTO_CONNECTOR_SRC\")\nfor module,wheel,source in [\n(okto_nexus,Path(\"C:/Users/jpamb/AppData/Local/Temp/okto-open-bootstrap-wheel-j2k09ihe/okto_nexus-0.2.0-py3-none-any.whl\"),root/\"src\"),\n(okto_nexus_connector,Path(\"C:/Users/jpamb/AppData/Local/Temp/okto-r4-delegated-binding-clean/okto_nexus_connector-0.5.0.dev0-py3-none-any.whl\"),connector/\"src\"),\n(nexus_connector_core,root/\"vendor/wheels/nexus_connector_core-0.2.28.dev0-py3-none-any.whl\",None)]:\n    package=Path(module.__file__).resolve().parent\n    assert \"site-packages\" in package.parts\n    files={}\n    with zipfile.ZipFile(wheel) as archive:\n        for name in archive.namelist():\n            if not name.startswith(module.__name__+\"/\") or name.endswith(\"/\"): continue\n            expected=archive.read(name)\n            assert (package/name.split(\"/\",1)[1]).read_bytes()==expected,name\n            if source is not None: assert (source/name).read_bytes()==expected,name\n            files[name]=hashlib.sha256(expected).hexdigest()\n    report[module.__name__]={\"installed_path\":str(package),\"wheel\":str(wheel),\"wheel_sha256\":hashlib.sha256(wheel.read_bytes()).hexdigest(),\"files_sha256\":files}\nreport.update({\"python\":sys.version,\"platform\":platform.platform(),\"isolated\":bool(sys.flags.isolated),\n\"scope\":\"Installed opening bootstrap, public binding/grant/admission, WSS lease, Core synthetic native peer, negative authority and migration cases; no product gate\",\n\"frontend\":\"Pre-existing workspace assets packaged unchanged; no UI qualification\"})\n(root/\"plans/r4_execution/evidence/open-bootstrap-installed-modules.json\").write_text(json.dumps(report,indent=2)+\"\\n\",encoding=\"utf-8\")\nfiles=[\"test_public_open_bootstrap.py\",\"test_open_bootstrap.py\",\"test_ns09.py\",\"test_ns06.py\",\"test_ns02.py\",\"test_binding_operator.py\",\"test_ns01.py::test_basic_bootstrap_does_not_import_optional_core\"]\nargs=[\"-c\",\"pytest.ini\",\"--rootdir=\"+str(root/\"tests\"),\"--confcutdir=\"+str(root/\"tests\"),\"-o\",\"asyncio_mode=auto\"]\nargs += [str(root/\"tests/execution_r4\"/name) for name in files]\nargs += [\"-q\",\"--tb=short\",\"--junitxml=\"+str(root/\"plans/r4_execution/evidence/open-bootstrap-installed.xml\")]\nraise SystemExit(pytest.main(args))\n'",
+  "installed_cwd": "C:/Users/jpamb/AppData/Local/Temp/okto-r4-canonical-installed",
+  "fresh_environment": {
+    "environment": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-open-bootstrap-installed-1_6k1yam",
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-open-bootstrap-installed-1_6k1yam\\Scripts\\python.exe",
+    "installation_log": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-open-bootstrap-installed-1_6k1yam\\installation.json"
+  },
+  "environment_command": "rtk proxy python -X utf8 -c 'from pathlib import Path\nimport subprocess,tempfile,json,sys\nenv=Path(tempfile.mkdtemp(prefix=''okto-open-bootstrap-installed-''))\nlogs=Path(''plans/r4_execution/evidence'')\n(logs/''open-bootstrap-installed-preflight.json'').write_text(json.dumps({\n ''status'':''ENVIRONMENT_PREPARATION_FAILED'',''product_tests_collected'':False,\n ''python'':''C:/Users/jpamb/AppData/Local/Temp/okto-r4-pending-installed-py313/Scripts/python.exe'',\n ''error'':\"ImportError: cannot import name ''Draft202012Validator'' from ''jsonschema'' (unknown location)\",\n ''observation'':''42 of 46 entries in jsonschema RECORD were missing, including module and METADATA. The Nexus wheel contains only okto_nexus and its dist-info. Root cause of environment damage is not established.'',\n ''resolution'':''Create a new isolated environment; install all package dependencies with copy mode and rerun the campaign.''\n},indent=2)+''\\n'',encoding=''utf-8'')\ncommands=[\n [''uv'',''venv'',''--python'',''C:/Python313/python.exe'',str(env)],\n [''uv'',''pip'',''install'',''--python'',str(env/''Scripts/python.exe''),''--link-mode'',''copy'',\n ''--find-links'',str(Path(''vendor/wheels'').resolve()),\n ''C:/Users/jpamb/AppData/Local/Temp/okto-open-bootstrap-wheel-j2k09ihe/okto_nexus-0.2.0-py3-none-any.whl[serve-lite,dev]'',\n ''C:/Users/jpamb/AppData/Local/Temp/okto-r4-delegated-binding-clean/okto_nexus_connector-0.5.0.dev0-py3-none-any.whl'',\n ''pytest-asyncio'',''jsonschema'']]\nrecords=[]\nfor command in commands:\n r=subprocess.run(command,text=True,capture_output=True,encoding=''utf-8'')\n records.append({''command'':command,''exit_code'':r.returncode,''stdout'':r.stdout,''stderr'':r.stderr})\n (env/''installation.json'').write_text(json.dumps(records,indent=2)+''\\n'',encoding=''utf-8'')\n if r.returncode: print(r.stderr); raise SystemExit(r.returncode)\nprint(json.dumps({''environment'':str(env),''python'':str(env/''Scripts/python.exe''),''installation_log'':str(env/''installation.json'')}))\n'",
+  "nexus_build": {
+    "stage": "C:/Users/jpamb/AppData/Local/Temp/okto-open-bootstrap-build-oe4sa_5f",
+    "dist": "C:/Users/jpamb/AppData/Local/Temp/okto-open-bootstrap-wheel-j2k09ihe",
+    "wheel": "C:/Users/jpamb/AppData/Local/Temp/okto-open-bootstrap-wheel-j2k09ihe/okto_nexus-0.2.0-py3-none-any.whl",
+    "sha256": "f05e870454ef4dce1ce791d80d32f28eaab9539db282b2580d744cc297386a7b"
+  },
+  "installed_modules_manifest_sha256": "a31f8f2eaa3425f50d400d1ca7d6f9e5c238f5ab821fd22c16a4592799773ffd",
+  "preflight_failure_sha256": "a5f1703b3fc6594efff9ee186788bd676a7073b19066a32bcb87bdf64ce2b253",
+  "core_wheel_sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c",
+  "limitations": [
+    "Public integration seeds identity only; dispatcher invocation, qualification gate, native peer and physical root mapping remain synthetic/test controlled.",
+    "No owning outbox loop, daemon composition, embedded public onboarding, native provider, browser or multi-host acceptance is claimed.",
+    "Opening bootstrap pins one canonical grant and connection before lease installation; a lost bootstrap requires reconciliation, never blind resend.",
+    "The first installed attempt failed before collection because jsonschema files were missing in the old temporary environment; root cause is unestablished. A fresh environment installed all dependencies and passed.",
+    "Source, targeted and installed campaigns overlap; do not sum them as unique acceptance coverage.",
+    "Pre-existing user frontend assets are packaged unchanged and have not been qualified."
+  ]
+}

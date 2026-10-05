@@ -1,0 +1,19 @@
+{
+  "adapter": "claude_stream",
+  "server_release_gate_override": false,
+  "native_qualification_override": false,
+  "protected_os_vault": true,
+  "synthetic_native_factory": false,
+  "passive_inventory_version": null,
+  "candidate_fingerprint": "sha256:fc0e3af017705624b9e1bce913f72761864ff994804514da1f5e41380fca4484",
+  "candidate_build_identity": "sha256:14369971cf394418edc2d29fe53d78b0e8dde500cc2db7746a743110ee394862",
+  "open_stage": "SUBMITTED",
+  "lease_serial_before_turn": 2,
+  "turn_stage": "SUCCEEDED",
+  "explicit_operator_decisions": 3,
+  "handoff_status": "COMPLETED",
+  "tool_claim_count": 1,
+  "wss_ticket_count": 0,
+  "close_stage": "SUCCEEDED",
+  "secret_removed": true
+}

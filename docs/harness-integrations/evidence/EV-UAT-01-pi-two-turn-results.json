@@ -1,0 +1,971 @@
+{
+  "pi": {
+    "label": "UAT-01 pi",
+    "open_status": 200,
+    "open_response": {
+      "ok": true,
+      "data": {
+        "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+        "kind": "pi",
+        "owning_agent_id": "uat_pi_agent",
+        "status": "RUNNING",
+        "capabilities": {
+          "send_only": false,
+          "steer_timing": "NEXT_TURN_BOUNDARY",
+          "interrupt_requires_settle_wait": true,
+          "multiplexes_sessions": false,
+          "observes_session_end": true
+        },
+        "started_at": "2026-09-20T18:18:30.145125Z",
+        "ended_at": null,
+        "metadata": {
+          "pi_session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0"
+        }
+      }
+    },
+    "open_latency_s": 0.914,
+    "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+    "turns": [
+      {
+        "turn": 1,
+        "prompt": "reply with the single word: ok",
+        "send_status": 200,
+        "send_response": {
+          "ok": true,
+          "data": {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "verb": "send_turn"
+          }
+        },
+        "send_to_completion_s": 5.378,
+        "poll_count": 49,
+        "event_kinds": [
+          "tool_activity",
+          "tool_activity",
+          "tool_activity",
+          "tool_activity",
+          "tool_activity",
+          "tool_activity",
+          "tool_activity",
+          "tool_activity",
+          "turn_started",
+          "tool_activity",
+          "tool_activity",
+          "tool_activity",
+          "output_delta",
+          "output_delta",
+          "output_delta",
+          "tool_activity",
+          "turn_completed",
+          "tool_activity",
+          "turn_completed"
+        ],
+        "events_raw": [
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "tool_activity",
+            "native_event": "extension_ui_request",
+            "occurred_at": "2026-09-20T18:18:30.109891Z",
+            "payload": {
+              "type": "extension_ui_request",
+              "id": "800660c7-fca2-41af-a7ca-6900a70c45e0",
+              "method": "setStatus",
+              "statusKey": "statusline"
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "tool_activity",
+            "native_event": "extension_ui_request",
+            "occurred_at": "2026-09-20T18:18:30.123876Z",
+            "payload": {
+              "type": "extension_ui_request",
+              "id": "0a335407-f2c6-4ea9-8fb3-81c0c2c59d07",
+              "method": "setStatus",
+              "statusKey": "goal"
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "tool_activity",
+            "native_event": "extension_ui_request",
+            "occurred_at": "2026-09-20T18:18:30.123989Z",
+            "payload": {
+              "type": "extension_ui_request",
+              "id": "6c3ef06d-c921-453d-aaf1-9ee8c8b6a557",
+              "method": "setStatus",
+              "statusKey": "mcp",
+              "statusText": "\u001b[38;2;138;190;183m\ud83d\udd0c MCP: 11 servers enabled (1 disabled)\u001b[39m"
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "tool_activity",
+            "native_event": "extension_ui_request",
+            "occurred_at": "2026-09-20T18:18:30.124080Z",
+            "payload": {
+              "type": "extension_ui_request",
+              "id": "0f97097e-13eb-4556-a2cc-385be0c3e42a",
+              "method": "notify",
+              "message": "\ud83e\udde0 Thinking Saver loaded \u2014 thinking offload + soft compact \u226580% (control panel: /ctx)",
+              "notifyType": "info"
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "tool_activity",
+            "native_event": "extension_ui_request",
+            "occurred_at": "2026-09-20T18:18:30.124131Z",
+            "payload": {
+              "type": "extension_ui_request",
+              "id": "5963f8e2-e247-4c5a-8841-8c0b8a2c3edc",
+              "method": "setStatus",
+              "statusKey": "delegate"
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "tool_activity",
+            "native_event": "extension_ui_request",
+            "occurred_at": "2026-09-20T18:18:30.132832Z",
+            "payload": {
+              "type": "extension_ui_request",
+              "id": "ddff4df6-614b-4ebb-8759-ddc7b90087fe",
+              "method": "setStatus",
+              "statusKey": "model-discovery-thinking-profile"
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "tool_activity",
+            "native_event": "extension_ui_request",
+            "occurred_at": "2026-09-20T18:18:30.144355Z",
+            "payload": {
+              "type": "extension_ui_request",
+              "id": "579f7b33-223c-4045-b9ad-523ebacd6006",
+              "method": "notify",
+              "message": "Slack: 24 tool(s) ready",
+              "notifyType": "info"
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "tool_activity",
+            "native_event": "agent_start",
+            "occurred_at": "2026-09-20T18:18:30.151430Z",
+            "payload": {
+              "type": "agent_start"
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "turn_started",
+            "native_event": "turn_start",
+            "occurred_at": "2026-09-20T18:18:30.151507Z",
+            "payload": {
+              "type": "turn_start"
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "tool_activity",
+            "native_event": "message_start",
+            "occurred_at": "2026-09-20T18:18:30.151689Z",
+            "payload": {
+              "type": "message_start",
+              "message": {
+                "role": "user",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "reply with the single word: ok"
+                  }
+                ],
+                "timestamp": 1789928310150
+              }
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "tool_activity",
+            "native_event": "message_end",
+            "occurred_at": "2026-09-20T18:18:30.151794Z",
+            "payload": {
+              "type": "message_end",
+              "message": {
+                "role": "user",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "reply with the single word: ok"
+                  }
+                ],
+                "timestamp": 1789928310150
+              }
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "tool_activity",
+            "native_event": "message_start",
+            "occurred_at": "2026-09-20T18:18:35.457266Z",
+            "payload": {
+              "type": "message_start",
+              "message": {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "ok"
+                  }
+                ],
+                "api": "openai-completions",
+                "provider": "zai",
+                "model": "glm-5.3",
+                "usage": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 0,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                },
+                "stopReason": "pending",
+                "timestamp": 1789928310158
+              }
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "output_delta",
+            "native_event": "message_update",
+            "occurred_at": "2026-09-20T18:18:35.457703Z",
+            "payload": {
+              "type": "message_update",
+              "usage": {
+                "input": 47,
+                "output": 3,
+                "cacheRead": 25728,
+                "cacheWrite": 0,
+                "reasoning": 0,
+                "totalTokens": 25778,
+                "cost": {
+                  "input": 6.58e-05,
+                  "output": 1.32e-05,
+                  "cacheRead": 0.00668928,
+                  "cacheWrite": 0,
+                  "total": 0.00676828
+                }
+              },
+              "assistantMessageEvent": {
+                "type": "text_start",
+                "contentIndex": 0
+              }
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "output_delta",
+            "native_event": "message_update",
+            "occurred_at": "2026-09-20T18:18:35.457967Z",
+            "payload": {
+              "type": "message_update",
+              "usage": {
+                "input": 47,
+                "output": 3,
+                "cacheRead": 25728,
+                "cacheWrite": 0,
+                "reasoning": 0,
+                "totalTokens": 25778,
+                "cost": {
+                  "input": 6.58e-05,
+                  "output": 1.32e-05,
+                  "cacheRead": 0.00668928,
+                  "cacheWrite": 0,
+                  "total": 0.00676828
+                }
+              },
+              "assistantMessageEvent": {
+                "type": "text_delta",
+                "contentIndex": 0,
+                "delta": "ok"
+              }
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "output_delta",
+            "native_event": "message_update",
+            "occurred_at": "2026-09-20T18:18:35.458352Z",
+            "payload": {
+              "type": "message_update",
+              "usage": {
+                "input": 47,
+                "output": 3,
+                "cacheRead": 25728,
+                "cacheWrite": 0,
+                "reasoning": 0,
+                "totalTokens": 25778,
+                "cost": {
+                  "input": 6.58e-05,
+                  "output": 1.32e-05,
+                  "cacheRead": 0.00668928,
+                  "cacheWrite": 0,
+                  "total": 0.00676828
+                }
+              },
+              "assistantMessageEvent": {
+                "type": "text_end",
+                "contentIndex": 0,
+                "content": "ok"
+              }
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "tool_activity",
+            "native_event": "message_end",
+            "occurred_at": "2026-09-20T18:18:35.459351Z",
+            "payload": {
+              "type": "message_end",
+              "message": {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "ok"
+                  }
+                ],
+                "api": "openai-completions",
+                "provider": "zai",
+                "model": "glm-5.3",
+                "usage": {
+                  "input": 47,
+                  "output": 3,
+                  "cacheRead": 25728,
+                  "cacheWrite": 0,
+                  "reasoning": 0,
+                  "totalTokens": 25778,
+                  "cost": {
+                    "input": 6.58e-05,
+                    "output": 1.32e-05,
+                    "cacheRead": 0.00668928,
+                    "cacheWrite": 0,
+                    "total": 0.00676828
+                  }
+                },
+                "stopReason": "stop",
+                "timestamp": 1789928310158,
+                "responseId": "20260921021831dfe3a891176c42d5",
+                "rawStopReason": "stop"
+              }
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "turn_completed",
+            "native_event": "turn_end",
+            "occurred_at": "2026-09-20T18:18:35.460359Z",
+            "payload": {
+              "type": "turn_end",
+              "message": {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "ok"
+                  }
+                ],
+                "api": "openai-completions",
+                "provider": "zai",
+                "model": "glm-5.3",
+                "usage": {
+                  "input": 47,
+                  "output": 3,
+                  "cacheRead": 25728,
+                  "cacheWrite": 0,
+                  "reasoning": 0,
+                  "totalTokens": 25778,
+                  "cost": {
+                    "input": 6.58e-05,
+                    "output": 1.32e-05,
+                    "cacheRead": 0.00668928,
+                    "cacheWrite": 0,
+                    "total": 0.00676828
+                  }
+                },
+                "stopReason": "stop",
+                "timestamp": 1789928310158,
+                "responseId": "20260921021831dfe3a891176c42d5",
+                "rawStopReason": "stop"
+              },
+              "toolResults": []
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "tool_activity",
+            "native_event": "agent_end",
+            "occurred_at": "2026-09-20T18:18:35.461029Z",
+            "payload": {
+              "type": "agent_end",
+              "messages": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "reply with the single word: ok"
+                    }
+                  ],
+                  "timestamp": 1789928310150
+                },
+                {
+                  "role": "assistant",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "ok"
+                    }
+                  ],
+                  "api": "openai-completions",
+                  "provider": "zai",
+                  "model": "glm-5.3",
+                  "usage": {
+                    "input": 47,
+                    "output": 3,
+                    "cacheRead": 25728,
+                    "cacheWrite": 0,
+                    "reasoning": 0,
+                    "totalTokens": 25778,
+                    "cost": {
+                      "input": 6.58e-05,
+                      "output": 1.32e-05,
+                      "cacheRead": 0.00668928,
+                      "cacheWrite": 0,
+                      "total": 0.00676828
+                    }
+                  },
+                  "stopReason": "stop",
+                  "timestamp": 1789928310158,
+                  "responseId": "20260921021831dfe3a891176c42d5",
+                  "rawStopReason": "stop"
+                }
+              ],
+              "willRetry": false
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "turn_completed",
+            "native_event": "agent_settled",
+            "occurred_at": "2026-09-20T18:18:35.461669Z",
+            "payload": {
+              "type": "agent_settled"
+            },
+            "thread_id": null,
+            "turn_id": null
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "prompt": "reply with the single word: two",
+        "send_status": 200,
+        "send_response": {
+          "ok": true,
+          "data": {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "verb": "send_turn"
+          }
+        },
+        "send_to_completion_s": 7.64,
+        "poll_count": 68,
+        "event_kinds": [
+          "tool_activity",
+          "turn_started",
+          "tool_activity",
+          "tool_activity",
+          "tool_activity",
+          "output_delta",
+          "output_delta",
+          "output_delta",
+          "tool_activity",
+          "turn_completed",
+          "tool_activity",
+          "turn_completed"
+        ],
+        "events_raw": [
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "tool_activity",
+            "native_event": "agent_start",
+            "occurred_at": "2026-09-20T18:18:35.529933Z",
+            "payload": {
+              "type": "agent_start"
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "turn_started",
+            "native_event": "turn_start",
+            "occurred_at": "2026-09-20T18:18:35.529997Z",
+            "payload": {
+              "type": "turn_start"
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "tool_activity",
+            "native_event": "message_start",
+            "occurred_at": "2026-09-20T18:18:35.530105Z",
+            "payload": {
+              "type": "message_start",
+              "message": {
+                "role": "user",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "reply with the single word: two"
+                  }
+                ],
+                "timestamp": 1789928315529
+              }
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "tool_activity",
+            "native_event": "message_end",
+            "occurred_at": "2026-09-20T18:18:35.530457Z",
+            "payload": {
+              "type": "message_end",
+              "message": {
+                "role": "user",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "reply with the single word: two"
+                  }
+                ],
+                "timestamp": 1789928315529
+              }
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "tool_activity",
+            "native_event": "message_start",
+            "occurred_at": "2026-09-20T18:18:43.051788Z",
+            "payload": {
+              "type": "message_start",
+              "message": {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "two"
+                  }
+                ],
+                "api": "openai-completions",
+                "provider": "zai",
+                "model": "glm-5.3",
+                "usage": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "totalTokens": 0,
+                  "cost": {
+                    "input": 0,
+                    "output": 0,
+                    "cacheRead": 0,
+                    "cacheWrite": 0,
+                    "total": 0
+                  }
+                },
+                "stopReason": "pending",
+                "timestamp": 1789928315531
+              }
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "output_delta",
+            "native_event": "message_update",
+            "occurred_at": "2026-09-20T18:18:43.051859Z",
+            "payload": {
+              "type": "message_update",
+              "usage": {
+                "input": 59,
+                "output": 3,
+                "cacheRead": 25728,
+                "cacheWrite": 0,
+                "reasoning": 0,
+                "totalTokens": 25790,
+                "cost": {
+                  "input": 8.26e-05,
+                  "output": 1.32e-05,
+                  "cacheRead": 0.00668928,
+                  "cacheWrite": 0,
+                  "total": 0.00678508
+                }
+              },
+              "assistantMessageEvent": {
+                "type": "text_start",
+                "contentIndex": 0
+              }
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "output_delta",
+            "native_event": "message_update",
+            "occurred_at": "2026-09-20T18:18:43.051878Z",
+            "payload": {
+              "type": "message_update",
+              "usage": {
+                "input": 59,
+                "output": 3,
+                "cacheRead": 25728,
+                "cacheWrite": 0,
+                "reasoning": 0,
+                "totalTokens": 25790,
+                "cost": {
+                  "input": 8.26e-05,
+                  "output": 1.32e-05,
+                  "cacheRead": 0.00668928,
+                  "cacheWrite": 0,
+                  "total": 0.00678508
+                }
+              },
+              "assistantMessageEvent": {
+                "type": "text_delta",
+                "contentIndex": 0,
+                "delta": "two"
+              }
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "output_delta",
+            "native_event": "message_update",
+            "occurred_at": "2026-09-20T18:18:43.051891Z",
+            "payload": {
+              "type": "message_update",
+              "usage": {
+                "input": 59,
+                "output": 3,
+                "cacheRead": 25728,
+                "cacheWrite": 0,
+                "reasoning": 0,
+                "totalTokens": 25790,
+                "cost": {
+                  "input": 8.26e-05,
+                  "output": 1.32e-05,
+                  "cacheRead": 0.00668928,
+                  "cacheWrite": 0,
+                  "total": 0.00678508
+                }
+              },
+              "assistantMessageEvent": {
+                "type": "text_end",
+                "contentIndex": 0,
+                "content": "two"
+              }
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "tool_activity",
+            "native_event": "message_end",
+            "occurred_at": "2026-09-20T18:18:43.053557Z",
+            "payload": {
+              "type": "message_end",
+              "message": {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "two"
+                  }
+                ],
+                "api": "openai-completions",
+                "provider": "zai",
+                "model": "glm-5.3",
+                "usage": {
+                  "input": 59,
+                  "output": 3,
+                  "cacheRead": 25728,
+                  "cacheWrite": 0,
+                  "reasoning": 0,
+                  "totalTokens": 25790,
+                  "cost": {
+                    "input": 8.26e-05,
+                    "output": 1.32e-05,
+                    "cacheRead": 0.00668928,
+                    "cacheWrite": 0,
+                    "total": 0.00678508
+                  }
+                },
+                "stopReason": "stop",
+                "timestamp": 1789928315531,
+                "responseId": "2026092102183753484177c3d5498b",
+                "rawStopReason": "stop"
+              }
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "turn_completed",
+            "native_event": "turn_end",
+            "occurred_at": "2026-09-20T18:18:43.053608Z",
+            "payload": {
+              "type": "turn_end",
+              "message": {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "two"
+                  }
+                ],
+                "api": "openai-completions",
+                "provider": "zai",
+                "model": "glm-5.3",
+                "usage": {
+                  "input": 59,
+                  "output": 3,
+                  "cacheRead": 25728,
+                  "cacheWrite": 0,
+                  "reasoning": 0,
+                  "totalTokens": 25790,
+                  "cost": {
+                    "input": 8.26e-05,
+                    "output": 1.32e-05,
+                    "cacheRead": 0.00668928,
+                    "cacheWrite": 0,
+                    "total": 0.00678508
+                  }
+                },
+                "stopReason": "stop",
+                "timestamp": 1789928315531,
+                "responseId": "2026092102183753484177c3d5498b",
+                "rawStopReason": "stop"
+              },
+              "toolResults": []
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "tool_activity",
+            "native_event": "agent_end",
+            "occurred_at": "2026-09-20T18:18:43.053628Z",
+            "payload": {
+              "type": "agent_end",
+              "messages": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "reply with the single word: two"
+                    }
+                  ],
+                  "timestamp": 1789928315529
+                },
+                {
+                  "role": "assistant",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "two"
+                    }
+                  ],
+                  "api": "openai-completions",
+                  "provider": "zai",
+                  "model": "glm-5.3",
+                  "usage": {
+                    "input": 59,
+                    "output": 3,
+                    "cacheRead": 25728,
+                    "cacheWrite": 0,
+                    "reasoning": 0,
+                    "totalTokens": 25790,
+                    "cost": {
+                      "input": 8.26e-05,
+                      "output": 1.32e-05,
+                      "cacheRead": 0.00668928,
+                      "cacheWrite": 0,
+                      "total": 0.00678508
+                    }
+                  },
+                  "stopReason": "stop",
+                  "timestamp": 1789928315531,
+                  "responseId": "2026092102183753484177c3d5498b",
+                  "rawStopReason": "stop"
+                }
+              ],
+              "willRetry": false
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+            "harness_kind": "pi",
+            "kind": "turn_completed",
+            "native_event": "agent_settled",
+            "occurred_at": "2026-09-20T18:18:43.053639Z",
+            "payload": {
+              "type": "agent_settled"
+            },
+            "thread_id": null,
+            "turn_id": null
+          }
+        ]
+      }
+    ],
+    "get_before_close": {
+      "status": 200,
+      "data": {
+        "ok": true,
+        "data": {
+          "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+          "kind": "pi",
+          "owning_agent_id": "uat_pi_agent",
+          "status": "RUNNING",
+          "capabilities": {
+            "send_only": false,
+            "steer_timing": "NEXT_TURN_BOUNDARY",
+            "interrupt_requires_settle_wait": true,
+            "multiplexes_sessions": false,
+            "observes_session_end": true
+          },
+          "started_at": "2026-09-20T18:18:30.145125Z",
+          "ended_at": null,
+          "metadata": {
+            "pi_session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0"
+          },
+          "live": true
+        }
+      }
+    },
+    "close": {
+      "status": 200,
+      "data": {
+        "ok": true,
+        "data": {
+          "session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0",
+          "kind": "pi",
+          "owning_agent_id": "uat_pi_agent",
+          "status": "ENDED",
+          "capabilities": {
+            "send_only": false,
+            "steer_timing": "NEXT_TURN_BOUNDARY",
+            "interrupt_requires_settle_wait": true,
+            "multiplexes_sessions": false,
+            "observes_session_end": true
+          },
+          "started_at": "2026-09-20T18:18:30.145125Z",
+          "ended_at": "2026-09-20T18:18:43.169368Z",
+          "metadata": {
+            "pi_session_id": "hsess_bf10a77289404a6c97ecaf157584dbf0"
+          }
+        }
+      }
+    }
+  }
+}

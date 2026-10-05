@@ -1,0 +1,12 @@
+...F                                                                     [100%]
+================================== FAILURES ===================================
+_____________ test_installed_cli_backs_up_complete_current_schema _____________
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_migration_backup.py:90: in test_installed_cli_backs_up_complete_current_schema
+    assert result.returncode == 0, result.stderr
+E   AssertionError: C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Scripts\python.exe: No module named okto_nexus.__main__; 'okto_nexus' is a package and cannot be directly executed
+E     
+E   assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe...Scripts\\python.exe: No module named okto_nexus.__main__; 'okto_nexus' is a package and cannot be directly executed\n").returncode
+=========================== short test summary info ===========================
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_migration_backup.py::test_installed_cli_backs_up_complete_current_schema
+1 failed, 3 passed in 0.91s

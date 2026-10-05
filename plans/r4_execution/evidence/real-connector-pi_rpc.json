@@ -1,0 +1,14 @@
+{
+  "adapter": "pi_rpc",
+  "server_release_gate_override": true,
+  "native_qualification_override": false,
+  "synthetic_native_factory": false,
+  "public_connector_cli": true,
+  "protected_os_vault": true,
+  "topology": "Single Windows host; actual loopback HTTP/WSS; Server and daemon owners.",
+  "phase": "finished",
+  "vault_backend": "keyring:Windows WinVaultKeyring",
+  "candidate_ref": "nexus-install-v1:b64f7d489758234ac44fa9004bec00163e29efe01b8772ace8836ffc6001b3d5",
+  "failure_type": "TimeoutError",
+  "campaign_credentials_removed": true
+}

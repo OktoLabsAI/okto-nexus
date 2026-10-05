@@ -1,0 +1,133 @@
+{
+  "date": "2026-09-30",
+  "branch": "feature/v0.2.0",
+  "commits": {
+    "nexus": "dfa48d5",
+    "connector": "ab6bfaf",
+    "core": "6cf2ecc"
+  },
+  "core_version": "0.2.41.dev0",
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-approvals-core-yqwcdf8k\\dist\\nexus_connector_core-0.2.41.dev0-py3-none-any.whl",
+      "sha256": "d524686df61b85f4cc284d6bc16b0f2525a9a5e6974b7213676e2eb8017fe1a7"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-decision-final-todkj56c\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "585388c19efb627a73028e702f254b2006db9184e95ae5e3a5e7e3e141590207"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-request-connector-nkopmb07\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "a35617a4a1f23fc8a3da6c98fd3f4d6c13c4041129c72240ad69ab8f15502864"
+    }
+  },
+  "installed": {
+    "nexus": {
+      "file": "evidence/native-decision-installed-nexus.xml",
+      "tests": 83,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "seconds": 196.285
+    },
+    "without_connector": {
+      "file": "evidence/native-decision-installed-isolated.xml",
+      "tests": 83,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "seconds": 190.274
+    }
+  },
+  "real": {
+    "claude": {
+      "file": "evidence/real-native-decision-installed-claude_stream.xml",
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "seconds": 87.845
+    },
+    "codex": {
+      "file": "evidence/real-native-decision-installed-codex_app_server.xml",
+      "tests": 1,
+      "errors": 0,
+      "failures": 1,
+      "skipped": 0,
+      "seconds": 95.804
+    }
+  },
+  "claude_journey": {
+    "adapter": "claude_stream",
+    "server_release_gate_override": true,
+    "native_qualification_override": false,
+    "protected_os_vault": true,
+    "synthetic_native_factory": false,
+    "passive_inventory_version": null,
+    "candidate_fingerprint": "sha256:fc0e3af017705624b9e1bce913f72761864ff994804514da1f5e41380fca4484",
+    "candidate_build_identity": "sha256:14369971cf394418edc2d29fe53d78b0e8dde500cc2db7746a743110ee394862",
+    "open_stage": "SUBMITTED",
+    "lease_serial_before_turn": 2,
+    "turn_stage": "SUCCEEDED",
+    "explicit_operator_decisions": 3,
+    "handoff_status": "COMPLETED",
+    "tool_claim_count": 1,
+    "wss_ticket_count": 0,
+    "close_stage": "SUCCEEDED",
+    "secret_removed": true
+  },
+  "codex_observation": "evidence/real-native-decision-codex-observed-refusal.json",
+  "pip_check_logs": [
+    "evidence/native-decision-final-install-normal.log",
+    "evidence/native-decision-final-install-isolated.log"
+  ],
+  "runners": [
+    "run_native_decision_installed.py",
+    "run_real_native_decision.py"
+  ],
+  "failure_history": {
+    "source_initial": "evidence/native-decision-source-initial.xml",
+    "source_initial_correction": "Add the eight required Core semantic scope fields before intent hashing.",
+    "initial_artifact": "evidence/native-decision-initial-artifacts.json",
+    "initial_installed": [
+      {
+        "file": "evidence/native-decision-installed-nexus-initial.xml",
+        "tests": 82,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "seconds": 224.388
+      },
+      {
+        "file": "evidence/native-decision-installed-isolated-initial.xml",
+        "tests": 82,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "seconds": 228.141
+      }
+    ],
+    "initial_real_claude": {
+      "file": "evidence/real-native-decision-installed-claude_stream-initial.xml",
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "seconds": 96.652
+    },
+    "runner_refusal": "evidence/real-native-decision-codex-runner-refusal.json",
+    "suspended_batch": "evidence/native-decision-interrupted-batch-context.json",
+    "final_codex": "The real MCP call was rejected without a captured canonical request; handoff stayed OPEN."
+  },
+  "limitations": [
+    "The two 83-case suites overlap; they are not 166 distinct cases.",
+    "Real journeys use the automatic local owner, installed wheels, actual native builds, TCP HTTP and protected OS vault with no Connector installed. Only the Server release gate is test-overridden; native qualification is not overridden.",
+    "Pi passed earlier on a prior increment, not rerun against this artifact.",
+    "Remote native capture, Codex permission translation, native input/rejection/recovery acceptance, UI/CLI, migrations and final provider/OS campaigns remain.",
+    "Expired in-memory input becomes unavailable; expired storage is purged on producer access or shutdown.",
+    "Native SUCCEEDED receipts are conservatively shown as SUBMITTED; APPLIED_OBSERVED still requires explicit provider observation.",
+    "Preexisting UI assets in the wheel are excluded from UI acceptance and this commit.",
+    "M08 and G0-G3 remain open."
+  ],
+  "milestone_complete": false
+}

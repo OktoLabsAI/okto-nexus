@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="0.481" timestamp="2026-10-01T13:27:21.659937-03:00" hostname="Alienware_m15"><testcase classname="test_migration_backup" name="test_backup_cli_preserves_committed_wal_snapshot_without_bootstrap" time="0.045"><failure message="AssertionError: assert {'denials': {...c82d1d2', ...} == {'denials': {...c82d1d2', ...}&#10;  &#10;  Omitting 6 identical items, use -vv to show&#10;  Differing items:&#10;  {'schema_version': 1} != {'schema_version': 5}&#10;  Use -v to get more diff">tests\execution_r4\test_migration_backup.py:43: in test_backup_cli_preserves_committed_wal_snapshot_without_bootstrap
+    assert manifest["inventory"] == before
+E   AssertionError: assert {'denials': {...c82d1d2', ...} == {'denials': {...c82d1d2', ...}
+E     
+E     Omitting 6 identical items, use -vv to show
+E     Differing items:
+E     {'schema_version': 1} != {'schema_version': 5}
+E     Use -v to get more diff</failure></testcase><testcase classname="test_migration_backup" name="test_backup_cli_refuses_missing_or_invalid_source[missing]" time="0.005" /><testcase classname="test_migration_backup" name="test_backup_cli_refuses_missing_or_invalid_source[invalid]" time="0.007" /></testsuite></testsuites>

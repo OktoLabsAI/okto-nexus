@@ -1,0 +1,22 @@
+{
+  "increment": "M06 automatic approved daemon lanes",
+  "status": "PARTIAL_INSTALLED_INTEGRATION",
+  "connector_commit": "13da0220e86ad3f87e9df627861c8d4115d6cd38",
+  "core_commit": "770659b7f3404798fe6c59146c7ab9d12b84bbe4",
+  "tests": {
+    "installed_connector": {
+      "passed": 336,
+      "skipped": 1
+    },
+    "installed_nexus": {
+      "passed": 81,
+      "warnings": 1
+    }
+  },
+  "artifacts": "evidence/automatic-lanes-artifacts.json",
+  "limitations": [
+    "Technical provider and protocol readiness fixtures in integration tests.",
+    "Ticket rotation, lease/capability renewal and nonempty reconciliation remain pending.",
+    "No milestone or product gate closed."
+  ]
+}

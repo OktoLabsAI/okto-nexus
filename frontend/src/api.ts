@@ -11,6 +11,40 @@ export interface Envelope<T> {
   error?: { code: string; message: string; details?: unknown };
 }
 
+export interface ExecutionLogEntry {
+  id: string; timestamp: string; severity: "info" | "warning" | "error";
+  source: string; agent_id: string | null; workspace_id: string | null;
+  adapter_id: string | null; endpoint_id: string | null; session_id: string | null;
+  operation_id: string | null; executor_id: string | null; action: string; code: string;
+  details: Record<string, string>;
+}
+
+export interface RuntimeBindingAgent {
+  agent_id: string;
+  skill_names: string[];
+  endpoints: Array<{
+    endpoint_id: string; adapter_id: string; workspace_id: string;
+    health: string; enabled: boolean; capability_verification: string;
+    sessions_has_more: boolean;
+    sessions: Array<{
+      session_id: string; lifecycle_state: string;
+      current_owner_ready_record: boolean; process_liveness: string;
+      effective_capabilities?: Record<string, boolean | string | null>;
+    }>;
+  }>;
+}
+
+export interface RuntimeOperationRow {
+  operation_id: string; source_kind: string; endpoint_id: string;
+  agent_id: string; workspace_id: string; runtime_session_id: string | null;
+  state: string; reason: string | null; ack_level: string;
+  attempt_id: string | null; owner_epoch: number | null;
+  runtime_lifecycle: string | null; terminal_event_id: string | null;
+  reconciliation_id: string | null;
+  handoff?: { handoff_id: string; claim_epoch: number } | null;
+  reconciliation: { action: string; reason: string; created_at: string } | null;
+}
+
 export interface GraphNode {
   agent_id: string;
   role: string | null;
@@ -127,6 +161,7 @@ export interface GraphHandoff {
   created_at: string;
   from_agent_id: string | null;
   claimed_by: string | null;
+  claim_epoch?: number;
   target: RoutingTarget | null;
   payload?: unknown;
   visibility?: string;
@@ -502,7 +537,7 @@ export interface CommPresetInUseDetails {
 // HITL approvals (spec 2948b2a2): operator-only queue behind the Approvals
 // screen. Queue reads and decisions work with feature_hitl OFF — the flag
 // gates only the interception of new actions.
-export type ApprovalStatus = "pending" | "approved" | "rejected";
+export type ApprovalStatus = "pending" | "approved" | "rejected" | "archived";
 
 export interface ApprovalRow {
   approval_id: string;
@@ -510,6 +545,9 @@ export interface ApprovalRow {
   agent_id: string;
   policy_id: string;
   status: ApprovalStatus;
+  archived_at?: string;
+  archived_by?: string;
+  original_status?: ApprovalStatus;
   created_at: string;
   decided_at: string | null;
   decided_by: string | null;
@@ -534,6 +572,14 @@ export interface ApprovalDetail extends ApprovalRow {
     kwargs?: Record<string, unknown>;
   } | null;
   executed_result?: unknown;
+  decision_detail?: {
+    operation_id: string;
+    state: string;
+    decision: string | null;
+    reason: string | null;
+    expires_at: string;
+    response: unknown;
+  } | null;
 }
 
 export interface ApprovalDecision {
@@ -621,6 +667,7 @@ export interface MessageRow {
   // Trajectory correlation (R-I1): non-null only when the feature stamped one.
   trace_id?: string | null;
   deliveries: {
+    runtime_recovery?: 'waiting' | 'attention';
     delivery_id: string;
     recipient_agent_id: string;
     status: string;
@@ -1065,7 +1112,53 @@ async function uploadArtifact(workspace: string, file: File): Promise<ArtifactIt
   return envelope.data as ArtifactItem;
 }
 
+export interface AgentExecutionPolicy {
+  agent_id: string; revision: number; execution_location: 'local' | 'remote' | 'all';
+  local_adapter_id: string | null; local_integrations: Array<{adapter_id: string; label: string}>;
+}
+
+export type RuntimePolicy = {
+  automatic_recovery?: boolean;
+  revision: number;
+  runtime_enabled: boolean | null;
+  session_policy: 'shared' | 'per_sender' | 'per_sender_session' | null;
+  defaults?: {revision: number; runtime_enabled: boolean; session_policy: 'shared' | 'per_sender' | 'per_sender_session'};
+  effective?: {runtime_enabled: boolean; session_policy: 'shared' | 'per_sender' | 'per_sender_session'};
+};
+
 export const api = {
+  agentRuntimeSessions: (agentId: string, workspace: string) => call<{
+    items: (import('./runtimeApi').RuntimeSession & {host: string; harness: string})[]; has_more: boolean;
+  }>(`/api/v1/agents/${encodeURIComponent(agentId)}/runtime-sessions${workspace === 'all' ? '' : `?workspace=${encodeURIComponent(workspace)}`}`),
+  runtimeConnectionSummary: (endpoint: string) => call<{endpoint_id: string; agent_id: string; workspace_id: string; connection_name: string}>(
+    `/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/connection-summary`),
+  runtimeHarnessSettings: (endpoint: string) => call<{revision: number; settings: Record<string, string>}>(
+    `/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/harness-settings`),
+  saveRuntimeHarnessSettings: (endpoint: string, body: {expected_revision: number; settings: Record<string, string>}) =>
+    call<{revision: number; settings: Record<string, string>}>(`/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/harness-settings`, {method: "PUT", body: JSON.stringify(body)}),
+  runtimeToolPermission: (endpoint: string) => call<{revision: number; mode: "ask" | "always_allow"}>(
+    `/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/tool-permission`),
+  saveRuntimeToolPermission: (endpoint: string, body: {expected_revision: number; mode: "ask" | "always_allow"}) =>
+    call<{revision: number; mode: "ask" | "always_allow"}>(`/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/tool-permission`, {method: "PUT", body: JSON.stringify(body)}),
+  runtimePolicy: (agentId?: string) => call<RuntimePolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/runtime-policy` : '/api/v1/runtime-policy'),
+  saveRuntimePolicy: (body: {expected_revision: number; runtime_enabled: boolean | null; session_policy: 'shared' | 'per_sender' | 'per_sender_session' | null; automatic_recovery?: boolean}, agentId?: string) => call<RuntimePolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/runtime-policy` : '/api/v1/runtime-policy', {method: 'PUT', body: JSON.stringify(body)}),
+  runtimeConversationPolicy: (endpoint: string) => call<{endpoint_id: string; agent_id: string; workspace_id: string; revision: number; enabled: boolean; session_policy: "shared" | "per_sender" | "per_sender_session"}>(
+    `/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/conversation-policy`),
+  saveRuntimeConversationPolicy: (endpoint: string, body: {expected_revision: number; enabled: boolean; session_policy?: "shared" | "per_sender" | "per_sender_session"}) => call<{revision: number; enabled: boolean; session_policy: "shared" | "per_sender" | "per_sender_session"}>(
+    `/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/conversation-policy`, {method: "PUT", body: JSON.stringify(body)}),
+  authorizeRuntimeExecution: (body: {actor_agent_id: string; endpoint_id: string; actions: string[]; max_executions: number | null; expires_at: string | null}) =>
+    call<{grant_id: string}>("/api/v1/harness/grants", {method: "POST", body: JSON.stringify(body)}),
+  agentExecutionPolicy: (id: string) => call<AgentExecutionPolicy>(`/api/v1/agents/${encodeURIComponent(id)}/execution-policy`),
+  saveAgentExecutionPolicy: (id: string, body: {expected_revision: number; execution_location: 'local' | 'remote' | 'all'; local_adapter_id: string | null}) => call<AgentExecutionPolicy>(`/api/v1/agents/${encodeURIComponent(id)}/execution-policy`, {method: 'PUT', body: JSON.stringify(body)}),
+  runtimeBindings: (after?: string) => call<{
+    agents: RuntimeBindingAgent[]; has_more: boolean; next_endpoint_id: string | null;
+  }>(`/api/v1/harness/bindings?limit=50${after ? `&after_endpoint_id=${encodeURIComponent(after)}` : ""}`),
+  executionLog: (params: URLSearchParams) => call<{
+    items: ExecutionLogEntry[]; has_more: boolean; next_offset: number;
+  }>(`/api/v1/harness/execution-log?${params}`),
+  runtimeOperations: (after?: string) => call<{
+    items: RuntimeOperationRow[]; has_more: boolean; next_operation_id: string | null;
+  }>(`/api/v1/harness/outbox?limit=50${after ? `&after_operation_id=${encodeURIComponent(after)}` : ""}`),
   graph: (workspace: string, windowHours = 24) =>
     call<GraphSnapshot>(
       `/api/v1/graph?workspace=${encodeURIComponent(workspace)}&window_hours=${windowHours}`,
@@ -1560,10 +1653,10 @@ export const api = {
     ),
   // HITL approvals (spec 2948b2a2): operator-only. status defaults to
   // "pending" server-side; pass "approved" / "rejected" / "all" to widen.
-  approvals: (workspace: string, status?: string) =>
+  approvals: (workspace: string, status?: string, offset = 0) =>
     call<{ items: ApprovalRow[] }>(
       `/api/v1/approvals?workspace=${encodeURIComponent(workspace)}${
-        status ? `&status=${encodeURIComponent(status)}` : ""
+        (status ? `&status=${encodeURIComponent(status)}` : "") + `&limit=100&offset=${offset}`
       }`,
     ),
   approvalDetail: (approvalId: string) =>
@@ -1572,17 +1665,20 @@ export const api = {
     ),
   // 409 CONFLICT when already decided (the first decision survives; its
   // details ride ApiError.details).
+  archiveApproval: (approvalId: string) => call<ApprovalRow>(
+    `/api/v1/approvals/${encodeURIComponent(approvalId)}/archive`, {method: "POST"}),
   decideApproval: (
     approvalId: string,
     decision: "approve" | "reject",
     justification?: string,
+    response?: Record<string, unknown>,
   ) =>
     call<ApprovalDecision>(
       `/api/v1/approvals/${encodeURIComponent(approvalId)}/decision`,
       {
         method: "POST",
         body: JSON.stringify(
-          justification ? { decision, justification } : { decision },
+          { decision, ...(justification ? { justification } : {}), ...(response !== undefined ? { response } : {}) },
         ),
       },
     ),
@@ -1643,12 +1739,13 @@ export const api = {
     workspace: string,
     verdict: "pass" | "fail",
     feedback?: string,
+    claimEpoch?: number,
   ) =>
     call<{ handoff_id: string; status: string; verified_by?: string }>(
       `/api/v1/workspaces/${encodeURIComponent(workspace)}/handoffs/${encodeURIComponent(handoffId)}/verify`,
       {
         method: "POST",
-        body: JSON.stringify(feedback ? { verdict, feedback } : { verdict }),
+        body: JSON.stringify({ verdict, ...(feedback ? { feedback } : {}), claim_epoch: claimEpoch }),
       },
     ),
   prune: (dryRun: boolean) =>

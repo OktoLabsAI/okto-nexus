@@ -32,14 +32,15 @@ def test_settings_catalogue_lists_every_spec_with_description(loopback_client):
         assert item["value"] == item["default"]
 
 
-def test_patch_persists_and_applies_to_live_config(loopback_client):
-    deps, client = loopback_client
-    response = client.patch(
-        "/api/v1/settings", json={"session_stale_ttl_seconds": 120}
-    )
-    assert response.status_code == 200
-    # Applied to the LIVE config object (presence derivation uses it now).
-    assert deps.config.session_stale_ttl_seconds == 120
+def test_patch_persists_and_applies_to_live_config(tmp_path):
+    deps = bootstrap({}, ["--home", str(tmp_path / "home")])
+    with TestClient(build_app(deps), client=("127.0.0.1", 50000)) as client:
+        response = client.patch(
+            "/api/v1/settings", json={"session_stale_ttl_seconds": 120}
+        )
+        assert response.status_code == 200
+        # Applied to the LIVE config object (presence derivation uses it now).
+        assert deps.config.session_stale_ttl_seconds == 120
     # Persisted: a fresh bootstrap over the same home picks it up.
     deps2 = bootstrap({}, ["--home", str(deps.config.home_dir)])
     app2 = build_app(deps2)
@@ -47,32 +48,33 @@ def test_patch_persists_and_applies_to_live_config(loopback_client):
         assert deps2.config.session_stale_ttl_seconds == 120
 
 
-def test_meta_harness_receipt_display_defaults_inline_and_persists(loopback_client):
-    deps, client = loopback_client
-    items = client.get("/api/v1/settings").json()["data"]["items"]
-    setting = next(
-        item for item in items if item["key"] == "meta_harness_receipt_display"
-    )
-    assert setting == {
-        "key": "meta_harness_receipt_display",
-        "type": "enum",
-        "group": "interface",
-        "description": setting["description"],
-        "value": "inline",
-        "default": "inline",
-        "min": None,
-        "max": None,
-        "choices": ["inline", "timeline"],
-        "source": "default",
-        "editable": True,
-        "requires_restart": False,
-    }
+def test_meta_harness_receipt_display_defaults_inline_and_persists(tmp_path):
+    deps = bootstrap({}, ["--home", str(tmp_path / "home")])
+    with TestClient(build_app(deps), client=("127.0.0.1", 50000)) as client:
+        items = client.get("/api/v1/settings").json()["data"]["items"]
+        setting = next(
+            item for item in items if item["key"] == "meta_harness_receipt_display"
+        )
+        assert setting == {
+            "key": "meta_harness_receipt_display",
+            "type": "enum",
+            "group": "interface",
+            "description": setting["description"],
+            "value": "inline",
+            "default": "inline",
+            "min": None,
+            "max": None,
+            "choices": ["inline", "timeline"],
+            "source": "default",
+            "editable": True,
+            "requires_restart": False,
+        }
 
-    response = client.patch(
-        "/api/v1/settings", json={"meta_harness_receipt_display": "timeline"}
-    )
-    assert response.status_code == 200
-    assert deps.config.meta_harness_receipt_display == "timeline"
+        response = client.patch(
+            "/api/v1/settings", json={"meta_harness_receipt_display": "timeline"}
+        )
+        assert response.status_code == 200
+        assert deps.config.meta_harness_receipt_display == "timeline"
 
     deps2 = bootstrap({}, ["--home", str(deps.config.home_dir)])
     app2 = build_app(deps2)

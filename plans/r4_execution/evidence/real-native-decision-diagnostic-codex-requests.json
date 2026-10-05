@@ -1,0 +1,53 @@
+{
+  "observer_only": true,
+  "handler_result_unchanged": true,
+  "requests": [
+    {
+      "method": "mcpServer/elicitation/request",
+      "request_id_type": "int",
+      "accepted_by_adapter": false,
+      "capture_enabled": true,
+      "params": {
+        "threadId": "01a0f517-b782-73c1-8e0d-58ae622b3b7c",
+        "turnId": "01a0f518-65ea-7f00-909f-b1e11e8d12ed",
+        "serverName": "nexus_56f0b4ccd306e26c",
+        "mode": "form",
+        "_meta": {
+          "codex_approval_kind": "mcp_tool_call",
+          "persist": [
+            "session",
+            "always"
+          ],
+          "tool_description": "Read a handoff by id: status, claimant, payload, result/rejected_reason + verification/dependency fields if set. The creator's path to the outcome. Full docs: okto-nexus://reference/tool-docs/handoff.",
+          "tool_params": {
+            "project_root": "wsr_395bec1c121b3c520ebf746e5bf16ef6",
+            "agent_id": "subject",
+            "handoff_id": "work"
+          },
+          "tool_params_display": [
+            {
+              "name": "agent_id",
+              "value": "subject",
+              "display_name": "agent_id"
+            },
+            {
+              "name": "handoff_id",
+              "value": "work",
+              "display_name": "handoff_id"
+            },
+            {
+              "name": "project_root",
+              "value": "wsr_395bec1c121b3c520ebf746e5bf16ef6",
+              "display_name": "project_root"
+            }
+          ]
+        },
+        "message": "Allow the nexus_56f0b4ccd306e26c MCP server to run tool \"handoff_get\"?",
+        "requestedSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    }
+  ]
+}

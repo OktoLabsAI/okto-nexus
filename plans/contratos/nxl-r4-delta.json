@@ -1,0 +1,159 @@
+{
+  "status": "SPECIFICATION_NOT_EXECUTABLE_CODEC",
+  "owner": "nexus-connector-core",
+  "baseline_package": "0.2.10.dev0",
+  "baseline_sha": "1560d314ed2b478515dcbbe533436d7d0b027b09",
+  "base_revision": "nxl-1-agent-centric-http-only-2026-09-25-r3",
+  "target_revision": "nxl-1-agent-centric-http-only-2026-09-29-r4",
+  "protocol_major": 1,
+  "management_revision": "nexus-connections-2026-09-29-r4",
+  "preserve_r3_bytes_and_history": true,
+  "new_effects_require_exact_revision": true,
+  "new_frames": {
+    "binding.attached": {
+      "sender": "server",
+      "required": [
+        "attach_request_id",
+        "connection_id",
+        "connection_generation",
+        "server_id",
+        "executor_id",
+        "binding_id",
+        "agent_id",
+        "credential_epoch",
+        "authorization_revision",
+        "configuration_revision",
+        "expires_in"
+      ],
+      "meaning": "ticket verificado e lane registrada; write no socket não basta"
+    },
+    "reconcile.accepted": {
+      "sender": "server",
+      "required": [
+        "reconcile_id",
+        "connection_id",
+        "connection_generation",
+        "server_id",
+        "executor_id",
+        "recovery_remaining",
+        "ready_lane_ids",
+        "session_lease_requirements"
+      ],
+      "meaning": "ingresso/reconciliação canônicos concluídos no escopo; readiness de lane/sessão separada"
+    },
+    "lease.applied": {
+      "sender": "executor",
+      "required": [
+        "request_id",
+        "lease_id",
+        "lease_serial",
+        "grant_id",
+        "scope",
+        "connection_id",
+        "connection_generation",
+        "application_stage"
+      ],
+      "meaning": "contexto inicial instalado ou renew Core concluído; não significa processo READY"
+    }
+  },
+  "operation_submit": {
+    "require_scope_fields": [
+      "server_id",
+      "executor_id",
+      "binding_id",
+      "agent_id",
+      "workspace_id",
+      "workspace_binding_id",
+      "session_id",
+      "session_owner_generation",
+      "authorization_revision",
+      "configuration_revision",
+      "binding_revision",
+      "credential_epoch"
+    ],
+    "require_additional": [
+      "grant_id",
+      "connection_id",
+      "connection_generation",
+      "operation_id",
+      "intent_hash",
+      "action",
+      "payload"
+    ],
+    "payload_definitions": {
+      "runtime.open": "OpenPayload",
+      "turn.submit": "SubmitPayload",
+      "turn.steer": "SteerPayload",
+      "turn.interrupt": "InterruptPayload",
+      "runtime.close": "ClosePayload",
+      "approval.decide": "ApprovalPayload",
+      "input.provide": "InputPayload"
+    },
+    "payload_unknown_fields": "reject",
+    "max_payload_utf8_bytes": 65536,
+    "targeting": "Core publica capability de alvo; expected_turn_id não pode ser exigido quando adapter qualificado não possui ID nativo",
+    "initial_open_exception": "lane ADMITTED pode receber OPEN_AUTHORIZED_PENDING_LEASE; somente resolve realização/pede lease; zero prepare/open/spawn antes de grant instalado"
+  },
+  "lease_request": {
+    "sender": "executor",
+    "new_fields": [
+      "request_id",
+      "grant_id",
+      "expected_lease_serial",
+      "scope",
+      "connection_id",
+      "connection_generation",
+      "purpose"
+    ],
+    "purpose": [
+      "initial",
+      "renew",
+      "reconnect"
+    ],
+    "clock_rule": "guardar t0 monotônico ANTES do envio e usá-lo uma vez"
+  },
+  "lease_granted": {
+    "sender": "server",
+    "new_fields": [
+      "request_id",
+      "lease_serial",
+      "grant_id",
+      "scope",
+      "allowed_actions",
+      "valid_for_ms"
+    ],
+    "clock_rule": "deadline local = t0 + valid_for_ms/1000; máximo120000; replay não reancora; resposta tardia é recusada"
+  },
+  "changed_frames": [
+    "hello",
+    "welcome",
+    "binding.attach",
+    "binding.detach",
+    "reconcile.request",
+    "reconcile.report",
+    "lease.renew",
+    "lease.granted",
+    "operation.submit",
+    "operation.receipt",
+    "operation.query",
+    "event.batch",
+    "event.ack",
+    "approval.request",
+    "approval.decision",
+    "error",
+    "goaway"
+  ],
+  "approval_decision_semantics": "notificação apenas; exatamente uma operation.submit approval.decide/input.provide aplica a decisão",
+  "event_ack_semantics": "scope/connection_id/generation atuais; seqcontígua apóscommit; identidadeeventopreservadaentreconexões",
+  "inventory_transport": "snapshot completo por HTTPSappversionado; nenhum campoextranoNXLr3",
+  "hash_policy": "Core é fonte única JCS/hash/vetores; r3intents não são recalculados com formatoR4; definir domínioR4 ao alterarsemântica",
+  "additional_product_invariants": [
+    "validar geração/revisão após fila",
+    "não inferir readiness de websocket aberto",
+    "não transportar timestamps monotônicos remotos",
+    "não conceder permissões por payload",
+    "não misturar ticket NXL e capability MCP",
+    "não ligar UI a array de adapters",
+    "negações preservadas no cutover"
+  ]
+}

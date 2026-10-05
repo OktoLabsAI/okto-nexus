@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="5.375" timestamp="2026-10-01T01:08:39.551882-03:00" hostname="Alienware_m15"><testcase classname="test_real_connector_providers" name="test_real_provider_through_public_connector_cli[pi_rpc]" time="3.750"><failure message="okto_nexus_connector.errors.ConnectorError: APPROVAL_REQUIRED (vault): restricted-file fallback was not approved -- Re-run interactively and approve, or install an OS keyring backend.">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_real_connector_providers.py:260: in test_real_provider_through_public_connector_cli
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_real_connector_providers.py:93: in run
+    imported = await cli("identity", "add", "--server", origin, "--alias", "subject",
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_real_connector_providers.py:81: in cli
+    return await caller(args, output, root)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus_connector\cli\commands\identity.py:70: in run_identity
+    raise ConnectorError(
+E   okto_nexus_connector.errors.ConnectorError: APPROVAL_REQUIRED (vault): restricted-file fallback was not approved -- Re-run interactively and approve, or install an OS keyring backend.</failure></testcase></testsuite></testsuites>

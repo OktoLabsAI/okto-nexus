@@ -33,7 +33,7 @@ function relTime(iso: string, nowMs: number): string {
   if (mins < 60) return `${mins}m ago`;
   const hours = Math.floor(mins / 60);
   if (hours < 24) return `${hours}h ago`;
-  return new Date(t).toLocaleDateString(undefined, {
+  return new Date(t).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
   });
@@ -371,7 +371,7 @@ export function MemoryView({
                     by <b>{selected.author_agent_id}</b>
                   </span>
                   <span>&middot;</span>
-                  <span>{new Date(selected.created_at).toLocaleString()}</span>
+                  <span>{new Date(selected.created_at).toLocaleString("en-US")}</span>
                   <span className="rounded bg-surface-100 dark:bg-surface-700 px-1.5 font-mono">
                     {selected.memory_id}
                   </span>

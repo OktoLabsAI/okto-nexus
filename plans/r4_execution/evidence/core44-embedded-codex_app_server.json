@@ -1,0 +1,19 @@
+{
+  "adapter": "codex_app_server",
+  "server_release_gate_override": true,
+  "native_qualification_override": false,
+  "protected_os_vault": true,
+  "synthetic_native_factory": false,
+  "passive_inventory_version": null,
+  "candidate_fingerprint": "sha256:0e2a4cd6ac1b329e64ec74745e38b71a3d4fa701102c86f49cf605d23a02c4df",
+  "candidate_build_identity": "sha256:ac0413e2cd18e80561c8e1e50511f7e05465630dc16bf60656e04d7fff2e994c",
+  "open_stage": "SUBMITTED",
+  "lease_serial_before_turn": 2,
+  "turn_stage": "SUCCEEDED",
+  "explicit_operator_decisions": 3,
+  "handoff_status": "COMPLETED",
+  "tool_claim_count": 1,
+  "wss_ticket_count": 0,
+  "close_stage": "SUCCEEDED",
+  "secret_removed": true
+}

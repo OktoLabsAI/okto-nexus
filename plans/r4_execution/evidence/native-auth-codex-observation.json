@@ -1,0 +1,14 @@
+{
+  "isolated_provider_home": true,
+  "events": [
+    {
+      "native_type": "turn/completed",
+      "status": "failed",
+      "error_info": {
+        "httpConnectionFailed": {
+          "httpStatusCode": 401
+        }
+      }
+    }
+  ]
+}

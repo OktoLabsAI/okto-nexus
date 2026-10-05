@@ -1,0 +1,13 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+    "-I",
+    "-c",
+    "import sys,pytest; sys.path.insert(0,'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector'); raise SystemExit(pytest.main(['-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\okto-r4-canonical-installed\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests', '-o', 'asyncio_mode=auto', '-o', 'asyncio_default_fixture_loop_scope=function', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests\\\\unit\\\\test_discovery_configuration.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests\\\\unit\\\\test_r4_daemon_control.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests\\\\unit\\\\test_state_store.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests\\\\unit\\\\test_executor_registration.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests\\\\unit\\\\test_launch_configuration.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests\\\\unit\\\\test_execution_selection.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests\\\\unit\\\\test_session_capability_owner.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests\\\\unit\\\\test_r4_daemon_execution.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests\\\\unit\\\\test_r4_execution.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests\\\\unit\\\\test_r4_lease_renewal.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests\\\\unit\\\\test_r4_publications.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests\\\\unit\\\\test_approved_native_launch.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests\\\\unit\\\\test_approved_mcp_launch.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests\\\\unit\\\\test_executor_onboarding.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests\\\\unit\\\\test_executor_inventory_r4.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector\\\\tests\\\\unit\\\\test_realization_service_r4.py', '-q', '--maxfail=3', '--tb=short', '--junitxml=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\plans\\\\r4_execution\\\\evidence\\\\executor-onboarding-installed.xml']))"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed",
+  "package_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus_connector",
+  "verified_files": 73,
+  "exit_code": 0,
+  "core_version": "0.2.43.dev0"
+}

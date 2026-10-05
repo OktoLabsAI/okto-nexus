@@ -1,0 +1,120 @@
+{
+  "increment": "M06 automatic runtime lease renewal",
+  "status": "PARTIAL_INSTALLED_INTEGRATION",
+  "core_commit": "fb4c8df70a66b9d9df7729fee5cbff453b591d31",
+  "connector_commit": "cba635a714f0f0c998badf4f075713a22b862d7d",
+  "nexus_commit": "The commit containing this manifest.",
+  "artifacts": "evidence/lease-renewal-artifacts.json",
+  "tests": {
+    "core": {
+      "tests": 154,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 154
+    },
+    "connector": {
+      "tests": 418,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1,
+      "passed": 417
+    },
+    "nexus": {
+      "tests": 144,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 144
+    }
+  },
+  "initial_tests": {
+    "core": {
+      "tests": 153,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 153
+    },
+    "connector": {
+      "tests": 418,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1,
+      "passed": 417
+    },
+    "nexus": {
+      "tests": 90,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 89
+    }
+  },
+  "initial_artifacts": "evidence/lease-renewal-initial-artifacts.json",
+  "initial_failure": "Core 0.2.37 classified stale containment as retry-safe but session and R4 contexts could still disagree during post-CAS event persistence. The final Core 0.2.38 atomically publishes both contexts before yielding. The initial failed Nexus log and XML are retained.",
+  "source_tests": {
+    "core_pending_containment_and_leases": 31,
+    "nexus_capabilities_before_two_additional_metadata_cases": 52
+  },
+  "real_providers": {
+    "pi_rpc": {
+      "authority_mode": "r4",
+      "close_receipt_error": null,
+      "close_receipt_stage": "SUCCEEDED",
+      "close_stage": "SUCCEEDED",
+      "lease_application_stage": "INSTALLED",
+      "lease_serial": 2,
+      "open_stage": "SUBMITTED",
+      "prepared_architecture": "x86_64",
+      "prepared_version": "0.87.1",
+      "renewal_stage": "RENEWED",
+      "shutdown_outcome": "already_closed",
+      "submit_stage": "SUBMITTED",
+      "terminal_operation_id": "turn",
+      "terminal_outcome": "success",
+      "turn_receipt_stage": "SUCCEEDED"
+    },
+    "codex_app_server": {
+      "authority_mode": "r4",
+      "close_receipt_error": null,
+      "close_receipt_stage": "SUCCEEDED",
+      "close_stage": "SUCCEEDED",
+      "lease_application_stage": "INSTALLED",
+      "lease_serial": 2,
+      "open_stage": "SUBMITTED",
+      "prepared_architecture": "x86_64",
+      "prepared_version": "0.159.0",
+      "renewal_stage": "RENEWED",
+      "shutdown_outcome": "already_closed",
+      "submit_stage": "SUBMITTED",
+      "terminal_operation_id": "turn",
+      "terminal_outcome": "success",
+      "turn_receipt_stage": "SUCCEEDED"
+    },
+    "claude_stream": {
+      "authority_mode": "r4",
+      "close_receipt_error": null,
+      "close_receipt_stage": "SUCCEEDED",
+      "close_stage": "SUCCEEDED",
+      "lease_application_stage": "INSTALLED",
+      "lease_serial": 2,
+      "open_stage": "SUBMITTED",
+      "prepared_architecture": "x86_64",
+      "prepared_version": "2.1.282",
+      "renewal_stage": "RENEWED",
+      "shutdown_outcome": "already_closed",
+      "submit_stage": "SUBMITTED",
+      "terminal_operation_id": "turn",
+      "terminal_outcome": "success",
+      "turn_receipt_stage": "SUCCEEDED"
+    }
+  },
+  "limitations": [
+    "Technical native peer and qualification fixture in real HTTP/WSS integration.",
+    "Real provider probes use locally constructed R4 grants, not full Server/Connector provider journeys.",
+    "User UI assets are included in the Nexus wheel without UI acceptance or committing unrelated edits.",
+    "One existing Connector skip and a dependency deprecation warning in Nexus.",
+    "Live-session adoption, complete ticket rotation, embedded journeys, crash/platform/independent-host qualification and other fixed plan criteria remain open. No milestone or release gate closed."
+  ]
+}

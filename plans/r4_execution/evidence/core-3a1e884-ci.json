@@ -1,0 +1,837 @@
+{
+  "conclusion": "success",
+  "headSha": "3a1e884b51be49a5928ec6d9a6c74b92bbaf0e18",
+  "jobs": [
+    {
+      "completedAt": "2026-10-02T03:50:33Z",
+      "conclusion": "success",
+      "databaseId": 110695776283,
+      "name": "ubuntu-24.04 / Python 3.13",
+      "startedAt": "2026-10-02T03:45:27Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-02T03:45:29Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-02T03:45:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:31Z",
+          "conclusion": "success",
+          "name": "Check out Core",
+          "number": 2,
+          "startedAt": "2026-10-02T03:45:29Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:31Z",
+          "conclusion": "success",
+          "name": "Set up Python",
+          "number": 3,
+          "startedAt": "2026-10-02T03:45:31Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:40Z",
+          "conclusion": "success",
+          "name": "Install test and build dependencies",
+          "number": 4,
+          "startedAt": "2026-10-02T03:45:31Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:41Z",
+          "conclusion": "success",
+          "name": "Verify generated contract bundle",
+          "number": 5,
+          "startedAt": "2026-10-02T03:45:40Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:41Z",
+          "conclusion": "success",
+          "name": "Verify generated R4 contract bundle",
+          "number": 6,
+          "startedAt": "2026-10-02T03:45:41Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:50:09Z",
+          "conclusion": "success",
+          "name": "Test Core and copied adapter regressions",
+          "number": 7,
+          "startedAt": "2026-10-02T03:45:41Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:50:13Z",
+          "conclusion": "success",
+          "name": "Build independent wheel and sdist",
+          "number": 8,
+          "startedAt": "2026-10-02T03:50:09Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:50:14Z",
+          "conclusion": "success",
+          "name": "Prepare dependency wheelhouse",
+          "number": 9,
+          "startedAt": "2026-10-02T03:50:13Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:50:24Z",
+          "conclusion": "success",
+          "name": "Verify offline wheel and sdist installation",
+          "number": 10,
+          "startedAt": "2026-10-02T03:50:14Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:50:30Z",
+          "conclusion": "success",
+          "name": "Verify clean-wheel imports and resources",
+          "number": 11,
+          "startedAt": "2026-10-02T03:50:24Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:50:30Z",
+          "conclusion": "success",
+          "name": "Post Set up Python",
+          "number": 21,
+          "startedAt": "2026-10-02T03:50:30Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:50:30Z",
+          "conclusion": "success",
+          "name": "Post Check out Core",
+          "number": 22,
+          "startedAt": "2026-10-02T03:50:30Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:50:30Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 23,
+          "startedAt": "2026-10-02T03:50:30Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/OktoLabsAI/okto-nexus-connector-core/actions/runs/36961433275/job/110695776283"
+    },
+    {
+      "completedAt": "2026-10-02T03:50:19Z",
+      "conclusion": "success",
+      "databaseId": 110695776480,
+      "name": "ubuntu-24.04 / Python 3.12",
+      "startedAt": "2026-10-02T03:45:18Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-02T03:45:20Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-02T03:45:19Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:21Z",
+          "conclusion": "success",
+          "name": "Check out Core",
+          "number": 2,
+          "startedAt": "2026-10-02T03:45:20Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:22Z",
+          "conclusion": "success",
+          "name": "Set up Python",
+          "number": 3,
+          "startedAt": "2026-10-02T03:45:21Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:27Z",
+          "conclusion": "success",
+          "name": "Install test and build dependencies",
+          "number": 4,
+          "startedAt": "2026-10-02T03:45:22Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:28Z",
+          "conclusion": "success",
+          "name": "Verify generated contract bundle",
+          "number": 5,
+          "startedAt": "2026-10-02T03:45:27Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:28Z",
+          "conclusion": "success",
+          "name": "Verify generated R4 contract bundle",
+          "number": 6,
+          "startedAt": "2026-10-02T03:45:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:49:56Z",
+          "conclusion": "success",
+          "name": "Test Core and copied adapter regressions",
+          "number": 7,
+          "startedAt": "2026-10-02T03:45:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:50:01Z",
+          "conclusion": "success",
+          "name": "Build independent wheel and sdist",
+          "number": 8,
+          "startedAt": "2026-10-02T03:49:56Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:50:02Z",
+          "conclusion": "success",
+          "name": "Prepare dependency wheelhouse",
+          "number": 9,
+          "startedAt": "2026-10-02T03:50:01Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:50:12Z",
+          "conclusion": "success",
+          "name": "Verify offline wheel and sdist installation",
+          "number": 10,
+          "startedAt": "2026-10-02T03:50:02Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:50:18Z",
+          "conclusion": "success",
+          "name": "Verify clean-wheel imports and resources",
+          "number": 11,
+          "startedAt": "2026-10-02T03:50:12Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:50:18Z",
+          "conclusion": "success",
+          "name": "Post Set up Python",
+          "number": 21,
+          "startedAt": "2026-10-02T03:50:18Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:50:18Z",
+          "conclusion": "success",
+          "name": "Post Check out Core",
+          "number": 22,
+          "startedAt": "2026-10-02T03:50:18Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:50:18Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 23,
+          "startedAt": "2026-10-02T03:50:18Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/OktoLabsAI/okto-nexus-connector-core/actions/runs/36961433275/job/110695776480"
+    },
+    {
+      "completedAt": "2026-10-02T03:53:13Z",
+      "conclusion": "success",
+      "databaseId": 110695776493,
+      "name": "windows-2022 / Python 3.12",
+      "startedAt": "2026-10-02T03:45:26Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-02T03:45:28Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-02T03:45:27Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:37Z",
+          "conclusion": "success",
+          "name": "Check out Core",
+          "number": 2,
+          "startedAt": "2026-10-02T03:45:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:37Z",
+          "conclusion": "success",
+          "name": "Set up Python",
+          "number": 3,
+          "startedAt": "2026-10-02T03:45:37Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:53Z",
+          "conclusion": "success",
+          "name": "Install test and build dependencies",
+          "number": 4,
+          "startedAt": "2026-10-02T03:45:37Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:55Z",
+          "conclusion": "success",
+          "name": "Verify generated contract bundle",
+          "number": 5,
+          "startedAt": "2026-10-02T03:45:53Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:56Z",
+          "conclusion": "success",
+          "name": "Verify generated R4 contract bundle",
+          "number": 6,
+          "startedAt": "2026-10-02T03:45:55Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:52:25Z",
+          "conclusion": "success",
+          "name": "Test Core and copied adapter regressions",
+          "number": 7,
+          "startedAt": "2026-10-02T03:45:56Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:52:34Z",
+          "conclusion": "success",
+          "name": "Build independent wheel and sdist",
+          "number": 8,
+          "startedAt": "2026-10-02T03:52:25Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:52:36Z",
+          "conclusion": "success",
+          "name": "Prepare dependency wheelhouse",
+          "number": 9,
+          "startedAt": "2026-10-02T03:52:34Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:52:59Z",
+          "conclusion": "success",
+          "name": "Verify offline wheel and sdist installation",
+          "number": 10,
+          "startedAt": "2026-10-02T03:52:36Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:53:09Z",
+          "conclusion": "success",
+          "name": "Verify clean-wheel imports and resources",
+          "number": 11,
+          "startedAt": "2026-10-02T03:52:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:53:09Z",
+          "conclusion": "success",
+          "name": "Post Set up Python",
+          "number": 21,
+          "startedAt": "2026-10-02T03:53:09Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:53:11Z",
+          "conclusion": "success",
+          "name": "Post Check out Core",
+          "number": 22,
+          "startedAt": "2026-10-02T03:53:09Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:53:11Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 23,
+          "startedAt": "2026-10-02T03:53:11Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/OktoLabsAI/okto-nexus-connector-core/actions/runs/36961433275/job/110695776493"
+    },
+    {
+      "completedAt": "2026-10-02T03:50:22Z",
+      "conclusion": "success",
+      "databaseId": 110695776506,
+      "name": "ubuntu-24.04 / Python 3.11",
+      "startedAt": "2026-10-02T03:45:20Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-02T03:45:22Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-02T03:45:21Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:24Z",
+          "conclusion": "success",
+          "name": "Check out Core",
+          "number": 2,
+          "startedAt": "2026-10-02T03:45:22Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:24Z",
+          "conclusion": "success",
+          "name": "Set up Python",
+          "number": 3,
+          "startedAt": "2026-10-02T03:45:24Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:32Z",
+          "conclusion": "success",
+          "name": "Install test and build dependencies",
+          "number": 4,
+          "startedAt": "2026-10-02T03:45:24Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:32Z",
+          "conclusion": "success",
+          "name": "Verify generated contract bundle",
+          "number": 5,
+          "startedAt": "2026-10-02T03:45:32Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:33Z",
+          "conclusion": "success",
+          "name": "Verify generated R4 contract bundle",
+          "number": 6,
+          "startedAt": "2026-10-02T03:45:32Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:49:55Z",
+          "conclusion": "success",
+          "name": "Test Core and copied adapter regressions",
+          "number": 7,
+          "startedAt": "2026-10-02T03:45:33Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:49:59Z",
+          "conclusion": "success",
+          "name": "Build independent wheel and sdist",
+          "number": 8,
+          "startedAt": "2026-10-02T03:49:55Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:49:59Z",
+          "conclusion": "success",
+          "name": "Prepare dependency wheelhouse",
+          "number": 9,
+          "startedAt": "2026-10-02T03:49:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:50:12Z",
+          "conclusion": "success",
+          "name": "Verify offline wheel and sdist installation",
+          "number": 10,
+          "startedAt": "2026-10-02T03:49:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:50:19Z",
+          "conclusion": "success",
+          "name": "Verify clean-wheel imports and resources",
+          "number": 11,
+          "startedAt": "2026-10-02T03:50:12Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:50:19Z",
+          "conclusion": "success",
+          "name": "Post Set up Python",
+          "number": 21,
+          "startedAt": "2026-10-02T03:50:19Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:50:20Z",
+          "conclusion": "success",
+          "name": "Post Check out Core",
+          "number": 22,
+          "startedAt": "2026-10-02T03:50:19Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:50:20Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 23,
+          "startedAt": "2026-10-02T03:50:20Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/OktoLabsAI/okto-nexus-connector-core/actions/runs/36961433275/job/110695776506"
+    },
+    {
+      "completedAt": "2026-10-02T03:53:31Z",
+      "conclusion": "success",
+      "databaseId": 110695776545,
+      "name": "windows-2022 / Python 3.11",
+      "startedAt": "2026-10-02T03:45:23Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-02T03:45:25Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-02T03:45:24Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:32Z",
+          "conclusion": "success",
+          "name": "Check out Core",
+          "number": 2,
+          "startedAt": "2026-10-02T03:45:25Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:32Z",
+          "conclusion": "success",
+          "name": "Set up Python",
+          "number": 3,
+          "startedAt": "2026-10-02T03:45:32Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:48Z",
+          "conclusion": "success",
+          "name": "Install test and build dependencies",
+          "number": 4,
+          "startedAt": "2026-10-02T03:45:32Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:49Z",
+          "conclusion": "success",
+          "name": "Verify generated contract bundle",
+          "number": 5,
+          "startedAt": "2026-10-02T03:45:48Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:50Z",
+          "conclusion": "success",
+          "name": "Verify generated R4 contract bundle",
+          "number": 6,
+          "startedAt": "2026-10-02T03:45:49Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:52:45Z",
+          "conclusion": "success",
+          "name": "Test Core and copied adapter regressions",
+          "number": 7,
+          "startedAt": "2026-10-02T03:45:50Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:52:53Z",
+          "conclusion": "success",
+          "name": "Build independent wheel and sdist",
+          "number": 8,
+          "startedAt": "2026-10-02T03:52:45Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:52:55Z",
+          "conclusion": "success",
+          "name": "Prepare dependency wheelhouse",
+          "number": 9,
+          "startedAt": "2026-10-02T03:52:53Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:53:17Z",
+          "conclusion": "success",
+          "name": "Verify offline wheel and sdist installation",
+          "number": 10,
+          "startedAt": "2026-10-02T03:52:55Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:53:28Z",
+          "conclusion": "success",
+          "name": "Verify clean-wheel imports and resources",
+          "number": 11,
+          "startedAt": "2026-10-02T03:53:17Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:53:28Z",
+          "conclusion": "success",
+          "name": "Post Set up Python",
+          "number": 21,
+          "startedAt": "2026-10-02T03:53:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:53:30Z",
+          "conclusion": "success",
+          "name": "Post Check out Core",
+          "number": 22,
+          "startedAt": "2026-10-02T03:53:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:53:30Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 23,
+          "startedAt": "2026-10-02T03:53:30Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/OktoLabsAI/okto-nexus-connector-core/actions/runs/36961433275/job/110695776545"
+    },
+    {
+      "completedAt": "2026-10-02T03:53:08Z",
+      "conclusion": "success",
+      "databaseId": 110695776601,
+      "name": "windows-2022 / Python 3.13",
+      "startedAt": "2026-10-02T03:45:28Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-02T03:45:30Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-02T03:45:29Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:39Z",
+          "conclusion": "success",
+          "name": "Check out Core",
+          "number": 2,
+          "startedAt": "2026-10-02T03:45:30Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:39Z",
+          "conclusion": "success",
+          "name": "Set up Python",
+          "number": 3,
+          "startedAt": "2026-10-02T03:45:39Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:57Z",
+          "conclusion": "success",
+          "name": "Install test and build dependencies",
+          "number": 4,
+          "startedAt": "2026-10-02T03:45:39Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:58Z",
+          "conclusion": "success",
+          "name": "Verify generated contract bundle",
+          "number": 5,
+          "startedAt": "2026-10-02T03:45:57Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:45:59Z",
+          "conclusion": "success",
+          "name": "Verify generated R4 contract bundle",
+          "number": 6,
+          "startedAt": "2026-10-02T03:45:58Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:52:26Z",
+          "conclusion": "success",
+          "name": "Test Core and copied adapter regressions",
+          "number": 7,
+          "startedAt": "2026-10-02T03:45:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:52:34Z",
+          "conclusion": "success",
+          "name": "Build independent wheel and sdist",
+          "number": 8,
+          "startedAt": "2026-10-02T03:52:26Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:52:37Z",
+          "conclusion": "success",
+          "name": "Prepare dependency wheelhouse",
+          "number": 9,
+          "startedAt": "2026-10-02T03:52:34Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:52:55Z",
+          "conclusion": "success",
+          "name": "Verify offline wheel and sdist installation",
+          "number": 10,
+          "startedAt": "2026-10-02T03:52:37Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:53:04Z",
+          "conclusion": "success",
+          "name": "Verify clean-wheel imports and resources",
+          "number": 11,
+          "startedAt": "2026-10-02T03:52:55Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:53:04Z",
+          "conclusion": "success",
+          "name": "Post Set up Python",
+          "number": 21,
+          "startedAt": "2026-10-02T03:53:04Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:53:06Z",
+          "conclusion": "success",
+          "name": "Post Check out Core",
+          "number": 22,
+          "startedAt": "2026-10-02T03:53:04Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:53:06Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 23,
+          "startedAt": "2026-10-02T03:53:06Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/OktoLabsAI/okto-nexus-connector-core/actions/runs/36961433275/job/110695776601"
+    },
+    {
+      "completedAt": "2026-10-02T03:54:09Z",
+      "conclusion": "success",
+      "databaseId": 110697931742,
+      "name": "Runtime dependency SBOM",
+      "startedAt": "2026-10-02T03:53:34Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-02T03:53:36Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-02T03:53:35Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:53:38Z",
+          "conclusion": "success",
+          "name": "Check out Core",
+          "number": 2,
+          "startedAt": "2026-10-02T03:53:36Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:53:38Z",
+          "conclusion": "success",
+          "name": "Set up Python",
+          "number": 3,
+          "startedAt": "2026-10-02T03:53:38Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:53:42Z",
+          "conclusion": "success",
+          "name": "Install build frontend",
+          "number": 4,
+          "startedAt": "2026-10-02T03:53:38Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:53:46Z",
+          "conclusion": "success",
+          "name": "Build independent wheel and sdist",
+          "number": 5,
+          "startedAt": "2026-10-02T03:53:42Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:54:03Z",
+          "conclusion": "success",
+          "name": "Inventory installed wheel and runtime dependencies",
+          "number": 6,
+          "startedAt": "2026-10-02T03:53:46Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:54:05Z",
+          "conclusion": "success",
+          "name": "Preserve development artifacts for review",
+          "number": 7,
+          "startedAt": "2026-10-02T03:54:03Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:54:05Z",
+          "conclusion": "success",
+          "name": "Post Set up Python",
+          "number": 13,
+          "startedAt": "2026-10-02T03:54:05Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:54:06Z",
+          "conclusion": "success",
+          "name": "Post Check out Core",
+          "number": 14,
+          "startedAt": "2026-10-02T03:54:05Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-02T03:54:06Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 15,
+          "startedAt": "2026-10-02T03:54:06Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/OktoLabsAI/okto-nexus-connector-core/actions/runs/36961433275/job/110697931742"
+    }
+  ],
+  "status": "completed",
+  "url": "https://github.com/OktoLabsAI/okto-nexus-connector-core/actions/runs/36961433275"
+}

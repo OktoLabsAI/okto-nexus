@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="16" time="43.493" timestamp="2026-10-02T01:47:49.736987-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_runtime_options" name="test_workspace_binding_and_grant_each_gate_a_different_action" time="3.398"><failure message="sqlite3.OperationalError: no such column: executions_used">options_host = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4741/test_work...ent_id_hint': 'subject', 'executor_id': 'exe_62589a0b090d152dbe373744c4041fb8', 'adapter_id': 'codex_app_server', ...})
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000200A50DA9E0&gt;
+
+    def test_workspace_binding_and_grant_each_gate_a_different_action(options_host, monkeypatch):
+        _, first = option(options_host, workspace=False)
+        assert first['technical_state'] == 'READY_FOR_RUNTIME'
+        assert first['can_prepare'] and not first['can_bind'] and not first['can_start']
+        assert 'WORKSPACE_REQUIRED' in first['policy_reasons']
+        _, pending = option(options_host, actor='operator')
+        assert pending['can_bind'] and not pending['can_start']
+        _, subject = option(options_host)
+        assert not subject['can_bind'] and 'OPERATOR_APPROVAL_REQUIRED' in subject['policy_reasons']
+        binding = bind(options_host)
+        _, unauthorized = option(options_host)
+        assert not unauthorized['can_start'] and 'AUTHORIZATION_REQUIRED' in unauthorized['policy_reasons']
+        grant(options_host, binding)
+        # A Server read must use the published executor assessment, not probe or
+        # reassess a provider under the Server's own platform/containment state.
+        monkeypatch.setattr(availability, 'evaluate_runtime_availability', lambda *a, **k: pytest.fail('Server reassessed provider'))
+        monkeypatch.setattr(availability, 'containment_preflight', lambda **k: pytest.fail('Server checked native containment'))
+        _, authorized = option(options_host)
+        assert authorized['can_start'], authorized
+        _, operator = option(options_host, actor='operator')
+        assert not operator['can_start']
+        assert 'SUBJECT_IDENTITY_REQUIRED' in operator['policy_reasons']
+        deps = options_host[0]
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            for table in ('execution_operations', 'execution_dispatch_outbox', 'execution_sessions'):
+                assert uow.connection.execute('SELECT COUNT(*) FROM ' + table).fetchone()[0] == 0
+&gt;           assert uow.connection.execute('SELECT executions_used FROM runtime_execution_grants').fetchone()[0] == 0
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           sqlite3.OperationalError: no such column: executions_used
+
+tests\execution_r4\test_runtime_options.py:86: OperationalError</failure></testcase><testcase classname="tests.execution_r4.test_runtime_options" name="test_current_policy_or_evidence_changes_disable_start[offline-EXECUTOR_OFFLINE]" time="3.070" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_current_policy_or_evidence_changes_disable_start[stale-INVENTORY_STALE]" time="2.319" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_current_policy_or_evidence_changes_disable_start[feature-FEATURE_DISABLED]" time="2.209" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_current_policy_or_evidence_changes_disable_start[method-METHOD_DISABLED]" time="2.845" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_current_policy_or_evidence_changes_disable_start[endpoint-BINDING_DISABLED]" time="3.043" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_current_policy_or_evidence_changes_disable_start[profile-BINDING_DISABLED]" time="2.316" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_current_policy_or_evidence_changes_disable_start[grant-AUTHORIZATION_REQUIRED]" time="2.146" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_current_policy_or_evidence_changes_disable_start[workspace-BINDING_REQUIRED]" time="3.043" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_options_reject_ambiguous_or_invalid_query[executor_id=one&amp;executor_id=two]" time="2.261" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_options_reject_ambiguous_or_invalid_query[executor_id=one&amp;workspace_id=x&amp;workspace_id=y]" time="2.411" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_options_reject_ambiguous_or_invalid_query[executor_id=one&amp;workspace_id=]" time="2.400" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_options_reject_ambiguous_or_invalid_query[executor_id=one&amp;unexpected=true]" time="2.703" /><testcase classname="tests.execution_r4.test_inventory_operator_views" name="test_operator_can_read_subject_options_without_changing_technical_facts" time="3.227" /><testcase classname="tests.execution_r4.test_inventory_operator_views" name="test_inventory_authorizes_binding_subject_separately_from_registrar" time="2.352" /><testcase classname="tests.execution_r4.test_inventory_operator_views" name="test_inventory_revalidates_operator_credential_inside_transaction" time="2.296" /></testsuite></testsuites>

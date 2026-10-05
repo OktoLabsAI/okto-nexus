@@ -1,0 +1,117 @@
+{
+  "before_tree": {
+    "61737": "python3 /private/tmp/claude-501/-Users-maheidem-Documents-dev-OktoLabsAI/d964d04a-26e1-4484-bc9c-51ccc97fd32b/scratchpad/sys_evidence/bin/codex app-server",
+    "61790": "python3 /private/tmp/claude-501/-Users-maheidem-Documents-dev-OktoLabsAI/d964d04a-26e1-4484-bc9c-51ccc97fd32b/scratchpad/sys_evidence/bin/claude -p --output-format stream-json --input-format stream-json --verbose --include-partial-messages",
+    "61738": "node /opt/homebrew/bin/codex app-server",
+    "61739": "/opt/homebrew/lib/node_modules/@openai/codex/node_modules/@openai/codex-darwin-arm64/vendor/aarch64-apple-darwin/bin/codex app-server",
+    "61942": "/Users/maheidem/.local/bin/claude -p --output-format stream-json --input-format stream-json --verbose --include-partial-messages",
+    "62024": "npm exec linkedin-mcp-server",
+    "62026": "npm exec @maheidem/nanobanana-mcp",
+    "62028": "node /Users/maheidem/Documents/dev/claude-code-management/plugin-development/maheidem-plugins/plugins/pi-delegate/scripts/pi-mcp-server.mjs",
+    "62044": "node /opt/homebrew/bin/reddit-mcp",
+    "62130": "npm exec @marcos-heidemann/waha-mcp-server",
+    "62166": "/usr/local/bin/portainer-mcp -server 192.168.31.154:9443 -token ptr_R4wEUwgp2eoH6AF5cVf7FNEhUJioqw091P+DvvWJsKc= -disable-version-check -tools /Users/maheidem/.config/portainer-mcp/tools.yaml",
+    "62168": "node /opt/homebrew/bin/codegraph serve --mcp",
+    "62165": "node /Users/maheidem/.npm/_npx/cfb3e7bc14683d46/node_modules/.bin/linkedin-mcp-server",
+    "62212": "node /Users/maheidem/.npm/_npx/5dee8ab85cb8f2ba/node_modules/.bin/nanobanana-mcp",
+    "62248": "node /opt/homebrew/bin/waha-mcp-server"
+  },
+  "after_close_tree": [
+    61790,
+    61942,
+    62024,
+    62026,
+    62028,
+    62044,
+    62130,
+    62166,
+    62168,
+    62165,
+    62212,
+    62248
+  ],
+  "close_results": {
+    "codex": {
+      "status": 200,
+      "response": {
+        "ok": true,
+        "data": {
+          "session_id": "hsess_d7c8c068a0624872a79717094feba6dd",
+          "kind": "codex",
+          "owning_agent_id": "sys_codex_agent",
+          "status": "ENDED",
+          "capabilities": {
+            "send_only": false,
+            "steer_timing": "IMMEDIATE",
+            "interrupt_requires_settle_wait": false,
+            "multiplexes_sessions": true,
+            "observes_session_end": true
+          },
+          "started_at": "2026-09-20T17:58:38.261810Z",
+          "ended_at": "2026-09-20T18:06:40.879739Z",
+          "metadata": {
+            "thread_id": "01a0bff8-55ab-7220-b7c7-153ae556094a"
+          }
+        }
+      }
+    },
+    "cc_stream": {
+      "status": 200,
+      "response": {
+        "ok": true,
+        "data": {
+          "session_id": "hsess_c7f18beb4af34fdd92e9044ef1ed56b0",
+          "kind": "claude_code",
+          "owning_agent_id": "sys_cc_stream_agent",
+          "status": "ENDED",
+          "capabilities": {
+            "send_only": false,
+            "steer_timing": "IMMEDIATE",
+            "interrupt_requires_settle_wait": false,
+            "multiplexes_sessions": false,
+            "observes_session_end": true
+          },
+          "started_at": "2026-09-20T17:58:38.267465Z",
+          "ended_at": "2026-09-20T18:06:40.882105Z",
+          "metadata": {}
+        }
+      }
+    },
+    "cc_attach": {
+      "status": 200,
+      "response": {
+        "ok": true,
+        "data": {
+          "session_id": "60906.a6ca59219c37fde7c0c907ce203016e3484d8b3d8456070542e43a1abd6a6d5d",
+          "kind": "claude_code",
+          "owning_agent_id": "sys_cc_attach_agent",
+          "status": "RUNNING",
+          "capabilities": {
+            "send_only": true,
+            "steer_timing": null,
+            "interrupt_requires_settle_wait": false,
+            "multiplexes_sessions": false,
+            "observes_session_end": false
+          },
+          "started_at": "2026-09-20T17:58:38.271385Z",
+          "ended_at": null,
+          "metadata": {
+            "pid": 60906,
+            "registry_session_id": "5e3f65cf-8743-4d6b-8777-024f3015f6ae",
+            "name": "sys-evidence-33",
+            "cwd": "/private/tmp/claude-501/-Users-maheidem-Documents-dev-OktoLabsAI/d964d04a-26e1-4484-bc9c-51ccc97fd32b/scratchpad/sys_evidence",
+            "tmux": "sys-harness-attach:@18.%18",
+            "version": "2.1.278",
+            "peer_protocol": 1,
+            "socket_path": "/tmp/cc-socks/60906.sock",
+            "socket_path_source": "registry",
+            "guard_proc_start_known": true
+          }
+        }
+      }
+    }
+  },
+  "serve_process_gone": true,
+  "orphans": [],
+  "broad_sweep_output": ""
+}

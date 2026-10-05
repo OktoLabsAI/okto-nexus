@@ -1,0 +1,18 @@
+.....s..s....................F...F.................                      [100%]
+================================== FAILURES ===================================
+__________ test_harness_open_claude_code_attach_requires_target_pid ___________
+/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_harness_routes.py:108: in test_harness_open_claude_code_attach_requires_target_pid
+    ???
+E   AssertionError: {"ok":true,"data":{"session_id":"hsess_a4f1cb460d2e4af6b6eb63a0635a0d23","kind":"claude_code","owning_agent_id":"worker","status":"RUNNING","capabilities":{"send_only":true,"steer_timing":null,"interrupt_requires_settle_wait":false,"multiplexes_sessions":false,"observes_session_end":false},"started_at":"2026-10-01T22:11:00.274266Z","ended_at":null,"metadata":{},"compatibility_report":{"control_contract_basis":"tested_protocol_contract","native_version":"2.1.281","transport_contract":"cc_socks_peer_1","peer_protocol":1,"compatible_controls":[],"effective_capability_contract":1,"effective_capabilities":{"conversation":true,"managed_work":false,"context_without_execution":false,"events":false,"observes_acceptance":false,"correlated_results":false,"native_deduplication":false,"native_replay":false,"multiplexing":false,"steer_timing":null,"interrupt":false,"interrupt_requires_settle":false,"observes_stop":false,"approvals":false},"effective_capability_basis":"trusted_adapter_probe_and_profile"},"endpoint_id":"endpoint-claude_code.attach","workspace_id":"ee288eb4315707b3aeec6f5954e99649a7c3e7067e8a0bbdd7a0479e0b6e59c6","presence_session_id":"ses_fd0405e824b447e6ba4578fe46bc02e6","lifecycle_state":"protocol_ready","connection_id":"conn_110e4c2032af45dd8721ec87ce3982ec","owner_epoch":1,"backend":{"profile_id":null,"inherit_ambient":false,"revision":null},"request_id":"open_e6dfc3408d294e758a0b9604625e9144","reused":false}}
+E   assert 200 == 403
+E    +  where 200 = <Response [200 OK]>.status_code
+_ test_harness_open_rejects_backend_for_claude_code_attach_substrate_over_rest _
+/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_harness_routes.py:171: in test_harness_open_rejects_backend_for_claude_code_attach_substrate_over_rest
+    ???
+E   AssertionError: {"ok":false,"error":{"code":"VALIDATION_ERROR","message":"Use an approved runtime profile, not per-call backend options."}}
+E   assert 422 == 403
+E    +  where 422 = <Response [422 Unprocessable Content]>.status_code
+=========================== short test summary info ===========================
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_harness_routes.py::test_harness_open_claude_code_attach_requires_target_pid
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_harness_routes.py::test_harness_open_rejects_backend_for_claude_code_attach_substrate_over_rest
+2 failed, 47 passed, 2 skipped in 131.45s (0:02:11)

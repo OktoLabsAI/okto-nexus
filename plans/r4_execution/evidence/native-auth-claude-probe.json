@@ -1,0 +1,100 @@
+{
+  "exit_code": 1,
+  "isolated_auth_home": true,
+  "events": [
+    {
+      "type": "system",
+      "subtype": "init",
+      "keys": [
+        "type",
+        "subtype",
+        "cwd",
+        "session_id",
+        "tools",
+        "mcp_servers",
+        "model",
+        "permissionMode",
+        "slash_commands",
+        "terminal_slash_commands",
+        "apiKeySource",
+        "claude_code_version",
+        "output_style",
+        "agents",
+        "skills",
+        "plugins",
+        "capabilities",
+        "analytics_disabled",
+        "product_feedback_disabled",
+        "uuid",
+        "memory_paths",
+        "messaging_socket_path",
+        "fast_mode_state",
+        "fast_mode_disabled_reason",
+        "per_turn_effort_active",
+        "view_mode",
+        "powershell_path"
+      ]
+    },
+    {
+      "type": "assistant",
+      "error": "authentication_failed",
+      "keys": [
+        "type",
+        "message",
+        "parent_tool_use_id",
+        "session_id",
+        "uuid",
+        "timestamp",
+        "error",
+        "is_api_error_message"
+      ],
+      "message_keys": [
+        "diagnostics",
+        "id",
+        "container",
+        "model",
+        "role",
+        "stop_details",
+        "stop_reason",
+        "stop_sequence",
+        "type",
+        "usage",
+        "content",
+        "context_management"
+      ],
+      "content_types": [
+        "text"
+      ]
+    },
+    {
+      "type": "result",
+      "subtype": "success",
+      "is_error": true,
+      "keys": [
+        "duration_api_ms",
+        "stop_reason",
+        "session_id",
+        "total_cost_usd",
+        "usage",
+        "modelUsage",
+        "permission_denials",
+        "terminal_reason",
+        "fast_mode_state",
+        "fast_mode_disabled_reason",
+        "subagent_stats",
+        "is_error",
+        "num_turns",
+        "subtype",
+        "api_error_status",
+        "result",
+        "type",
+        "duration_ms",
+        "uuid",
+        "queued_turn_count",
+        "result_index"
+      ]
+    }
+  ],
+  "stderr_bytes": 0,
+  "authenticated_response": false
+}

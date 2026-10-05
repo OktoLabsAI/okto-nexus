@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="7.441" timestamp="2026-10-01T10:29:06.437778-03:00" hostname="Alienware_m15"><testcase classname="test_ns14" name="test_ns14_01" time="6.213"><failure message="AssertionError: ERROR:    Traceback (most recent call last):&#10;    File &quot;C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\routing.py&quot;, line 654, in lifespan&#10;      async with self.lifespan_context(app) as maybe_state:&#10;                 ~~~~~~~~~~~~~~~~~~~~~^^^^^&#10;    File &quot;C:\Python313\Lib\contextlib.py&quot;, line 214, in __aenter__&#10;      return await anext(self.gen)&#10;             ^^^^^^^^^^^^^^^^^^^^^&#10;    File &quot;C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py&quot;, line 247, in merged_lifespan&#10;      async with original_context(app) as maybe_original_state:&#10;                 ~~~~~~~~~~~~~~~~^^^^^&#10;    File &quot;C:\Python313\Lib\contextlib.py&quot;, line 214, in __aenter__&#10;      return await anext(self.gen)&#10;             ^^^^^^^^^^^^^^^^^^^^^&#10;    File &quot;C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py&quot;, line 247, in merged_lifespan&#10;      async with original_context(app) as maybe_original_state:&#10;                 ~~~~~~~~~~~~~~~~^^^^^&#10;    File &quot;C:\Python313\Lib\contextlib.py&quot;, line 214, in __aenter__&#10;      return await anext(self.gen)&#10;             ^^^^^^^^^^^^^^^^^^^^^&#10;    File &quot;C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py&quot;, line 247, in merged_lifespan&#10;      async with original_context(app) as maybe_original_state:&#10;                 ~~~~~~~~~~~~~~~~^^^^^&#10;    File &quot;C:\Python313\Lib\contextlib.py&quot;, line 214, in __aenter__&#10;      return await anext(self.gen)&#10;             ^^^^^^^^^^^^^^^^^^^^^&#10;    File &quot;C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py&quot;, line 247, in merged_lifespan&#10;      async with original_context(app) as maybe_original_state:&#10;                 ~~~~~~~~~~~~~~~~^^^^^&#10;    File &quot;C:\Python313\Lib\contextlib.py&quot;, line 214, in __aenter__&#10;      return await anext(self.gen)&#10;             ^^^^^^^^^^^^^^^^^^^^^&#10;    File &quot;C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py&quot;, line 247, in merged_lifespan&#10;      async with original_context(app) as maybe_original_state:&#10;                 ~~~~~~~~~~~~~~~~^^^^^&#10;    File &quot;C:\Python313\Lib\contextlib.py&quot;, line 214, in __aenter__&#10;      return await anext(self.gen)&#10;             ^^^^^^^^^^^^^^^^^^^^^&#10;    File &quot;C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py&quot;, line 247, in merged_lifespan&#10;      async with original_context(app) as maybe_original_state:&#10;                 ~~~~~~~~~~~~~~~~^^^^^&#10;    File &quot;C:\Python313\Lib\contextlib.py&quot;, line 214, in __aenter__&#10;      return await anext(self.gen)&#10;             ^^^^^^^^^^^^^^^^^^^^^&#10;    File &quot;C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py&quot;, line 247, in merged_lifespan&#10;      async with original_context(app) as maybe_original_state:&#10;                 ~~~~~~~~~~~~~~~~^^^^^&#10;    File &quot;C:\Python313\Lib\contextlib.py&quot;, line 214, in __aenter__&#10;      return await anext(self.gen)&#10;             ^^^^^^^^^^^^^^^^^^^^^&#10;    File &quot;C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus\adapters\inbound\http\app.py&quot;, line 591, in lifespan&#10;      raise RuntimeError(&quot;Another runtime owner holds this store; serve startup refused.&quot;)&#10;  RuntimeError: Another runtime owner holds this store; serve startup refused.&#10;  &#10;  ERROR:    Application startup failed. Exiting.&#10;  &#10;assert 3 is None&#10; +  where 3 = poll()&#10; +    where poll = &lt;Popen: returncode: 3 args: ['C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r...&gt;.poll">tests\execution_r4\test_ns14.py:49: in test_ns14_01
+    assert process.poll() is None, log_path.read_text(encoding="utf-8")
+E   AssertionError: ERROR:    Traceback (most recent call last):
+E       File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\routing.py", line 654, in lifespan
+E         async with self.lifespan_context(app) as maybe_state:
+E                    ~~~~~~~~~~~~~~~~~~~~~^^^^^
+E       File "C:\Python313\Lib\contextlib.py", line 214, in __aenter__
+E         return await anext(self.gen)
+E                ^^^^^^^^^^^^^^^^^^^^^
+E       File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py", line 247, in merged_lifespan
+E         async with original_context(app) as maybe_original_state:
+E                    ~~~~~~~~~~~~~~~~^^^^^
+E       File "C:\Python313\Lib\contextlib.py", line 214, in __aenter__
+E         return await anext(self.gen)
+E                ^^^^^^^^^^^^^^^^^^^^^
+E       File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py", line 247, in merged_lifespan
+E         async with original_context(app) as maybe_original_state:
+E                    ~~~~~~~~~~~~~~~~^^^^^
+E       File "C:\Python313\Lib\contextlib.py", line 214, in __aenter__
+E         return await anext(self.gen)
+E                ^^^^^^^^^^^^^^^^^^^^^
+E       File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py", line 247, in merged_lifespan
+E         async with original_context(app) as maybe_original_state:
+E                    ~~~~~~~~~~~~~~~~^^^^^
+E       File "C:\Python313\Lib\contextlib.py", line 214, in __aenter__
+E         return await anext(self.gen)
+E                ^^^^^^^^^^^^^^^^^^^^^
+E       File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py", line 247, in merged_lifespan
+E         async with original_context(app) as maybe_original_state:
+E                    ~~~~~~~~~~~~~~~~^^^^^
+E       File "C:\Python313\Lib\contextlib.py", line 214, in __aenter__
+E         return await anext(self.gen)
+E                ^^^^^^^^^^^^^^^^^^^^^
+E       File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py", line 247, in merged_lifespan
+E         async with original_context(app) as maybe_original_state:
+E                    ~~~~~~~~~~~~~~~~^^^^^
+E       File "C:\Python313\Lib\contextlib.py", line 214, in __aenter__
+E         return await anext(self.gen)
+E                ^^^^^^^^^^^^^^^^^^^^^
+E       File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py", line 247, in merged_lifespan
+E         async with original_context(app) as maybe_original_state:
+E                    ~~~~~~~~~~~~~~~~^^^^^
+E       File "C:\Python313\Lib\contextlib.py", line 214, in __aenter__
+E         return await anext(self.gen)
+E                ^^^^^^^^^^^^^^^^^^^^^
+E       File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py", line 247, in merged_lifespan
+E         async with original_context(app) as maybe_original_state:
+E                    ~~~~~~~~~~~~~~~~^^^^^
+E       File "C:\Python313\Lib\contextlib.py", line 214, in __aenter__
+E         return await anext(self.gen)
+E                ^^^^^^^^^^^^^^^^^^^^^
+E       File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus\adapters\inbound\http\app.py", line 591, in lifespan
+E         raise RuntimeError("Another runtime owner holds this store; serve startup refused.")
+E     RuntimeError: Another runtime owner holds this store; serve startup refused.
+E     
+E     ERROR:    Application startup failed. Exiting.
+E     
+E   assert 3 is None
+E    +  where 3 = poll()
+E    +    where poll = &lt;Popen: returncode: 3 args: ['C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r...&gt;.poll</failure></testcase></testsuite></testsuites>

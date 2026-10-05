@@ -1,0 +1,44 @@
+{
+  "increment": "M02/P6.1 Pi native tools from approved configuration",
+  "status": "PARTIAL_INSTALLED_INTEGRATION",
+  "connector_commit": "f1714f4f392c3ed7d41b14be8151d5af6a4669d9",
+  "core_commit": "770659b7f3404798fe6c59146c7ab9d12b84bbe4",
+  "changes": [
+    "Default R4 owner accepts trusted native tool services through daemon adoption.",
+    "Durable issuance precedes approved configuration composition.",
+    "Pi capability scope matches the approved opening and is included in Core prepare.",
+    "Actual Pi technical child uses approved environment and canonical domain handlers."
+  ],
+  "tests": {
+    "source_directed_connector": {
+      "passed": 15
+    },
+    "source_nexus_pi_connector": {
+      "passed": 2,
+      "deselected": 2
+    },
+    "installed_connector": {
+      "passed": 310,
+      "skipped": 1
+    },
+    "installed_nexus": {
+      "passed": 77,
+      "warnings": 1
+    }
+  },
+  "artifacts": "plans/r4_execution/evidence/approved-native-artifacts.json",
+  "evidence": [
+    "plans/r4_execution/evidence/approved-native-installed-connector.json",
+    "plans/r4_execution/evidence/approved-native-installed-nexus.json"
+  ],
+  "development_failures": [
+    "Initial test fixture lacked an existing vault directory.",
+    "Explicit native socket launch exposed a missing capability prepare reference; corrected before installed verification."
+  ],
+  "limitations": [
+    "Technical Pi child uses a qualification fixture, not a real provider acceptance run.",
+    "Server selection/READY in the technical integration remain fixtures.",
+    "Automatic daemon boot adoption, MCP composition, renewal/reconciliation and remaining M00-M13 criteria are pending.",
+    "No milestone or product gate closed."
+  ]
+}

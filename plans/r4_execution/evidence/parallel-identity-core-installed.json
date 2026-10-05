@@ -1,0 +1,50 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+    "-I",
+    "-c",
+    "import sys,pytest; sys.path.insert(0,'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core'); raise SystemExit(pytest.main(['-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\okto-r4-canonical-installed\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests', '-o', 'asyncio_mode=auto', '-o', 'asyncio_default_fixture_loop_scope=function', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests\\\\test_parallel_identity_reads.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests\\\\test_discovery_cancellation.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests\\\\test_pc09_build_identity.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests\\\\test_passive_discovery.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests\\\\test_discovery_probe.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests\\\\test_pc10_pc11_discovery_preflight.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests\\\\regression\\\\test_c2_regressions.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests\\\\regression\\\\test_c3_regressions.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests\\\\regression\\\\test_c4_audit.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests\\\\regression\\\\test_c4_complementary.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests\\\\regression\\\\test_c5_audit.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests\\\\test_preexpired_lease_watcher.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests\\\\test_pc02_containment.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests\\\\test_r4_runtime_leases.py', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests\\\\test_r4_pending_containment.py', '-q', '--tb=short', '--junitxml=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\plans\\\\r4_execution\\\\evidence\\\\parallel-identity-core-installed.xml']))"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed",
+  "verified_packages": {
+    "nexus": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus",
+      "artifact": {
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-parallel-identity-nexus-wxk0ixx4\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+        "sha256": "c722152dfeefc0d36964b9664979062018697f0ca7363289fe05b0f79f2718fe"
+      }
+    },
+    "connector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus_connector",
+      "artifact": {
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-parallel-identity-connector-1lc4uz_w\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+        "sha256": "930e66148b1132a434859b4747524682c821324cc8d53dfd7ae9ce9eabf74f03"
+      }
+    },
+    "core": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\nexus_connector_core",
+      "artifact": {
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-parallel-identity-core-dx3j4u5a\\dist\\nexus_connector_core-0.2.49.dev0-py3-none-any.whl",
+        "sha256": "b2787c4670c276b5310f7631552fdc53759d99a020f30cd7152154697e125963"
+      }
+    }
+  },
+  "exit_code": 0,
+  "test_hashes": {
+    "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_parallel_identity_reads.py": "6b992c9e0c5bce67a9b22adee525f6bcd1a4a6db99ddae89dc71127e8a2b2cf8",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_discovery_cancellation.py": "d2eaeb0617838b7dfe76e55e46d8bed6308fb4ffecd3a511e10403efef33f383",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_pc09_build_identity.py": "95c3c94bfff85db5690505eff308c6052319403f4ea853953761621fe93d9a77",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_passive_discovery.py": "86f2eabe8997acb0bd6ebbfc1a06660679a7d29dc034f98a098d5fcaeed0e209",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_discovery_probe.py": "2881a726570a97a5e230d3a873a87c3bce1de53c9b45ea4aae6e09f51f4f3fe5",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_pc10_pc11_discovery_preflight.py": "31396bea0eacf9c91ca3957309a858541a01c3391505d84167c54c7521b15bb0",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\regression\\test_c2_regressions.py": "d0ed604db28e9068203f028029218f57854532393e1badf0c343e67933732a2f",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\regression\\test_c3_regressions.py": "15eff36d421fe4dec1c47d35ea4b2910a39633de1e6f5ab50f87aaceb08d4642",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\regression\\test_c4_audit.py": "8725e234ccfa69d6a145a74099bf845ae12ed2089159d7ff72bd79668ac35122",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\regression\\test_c4_complementary.py": "39592e2a17e797fc4fba5ef2354853784bde1c8ce93005d4f827afb9dc5306bf",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\regression\\test_c5_audit.py": "e6c15cf39db58795e4efca398f14d858d20e6d3045bd32023dce1ed2b728ca71",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_preexpired_lease_watcher.py": "a0803fdb3c8d4549194bbb18b4ea75291f219c68b397dc80f8ffc39ec4e64510",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_pc02_containment.py": "1b705d1386d599cd8fd7896fccc41390e8e13991bf3d1fb4e95c6556efd870f3",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_r4_runtime_leases.py": "5ad1edcce352aeb6f61aa51872229e3f0f9e9edf972898cb5239cfa8a46b14c8",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_r4_pending_containment.py": "4981c41eeaee3e64c0000e38f5d50081b002cdbadef8432850bb28afa548bc19"
+  }
+}

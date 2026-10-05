@@ -1,0 +1,78 @@
+{
+  "date": "2026-09-30",
+  "branch": "feature/v0.2.0",
+  "commits": {
+    "nexus_product": "301ed04",
+    "connector": "74e9b48",
+    "core": "a061960"
+  },
+  "core_version": "0.2.43.dev0",
+  "connector_artifact": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-discovery-configuration-n9kil2us\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+    "sha256": "7317e74a210d031a01e05c3cf94fd323228215f85502701ed14d1dd3e56db8bf",
+    "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-discovery-configuration-n9kil2us"
+  },
+  "core_artifact": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-lease-core-hi9n9umw\\dist\\nexus_connector_core-0.2.43.dev0-py3-none-any.whl",
+    "sha256": "7403611bb37050700fc325b2002f74b5ac507a79af8badba0bea0cd1b775087b",
+    "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-lease-core-hi9n9umw"
+  },
+  "installed": {
+    "file": "evidence/discovery-configuration-installed.xml",
+    "tests": 190,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "seconds": 50.274
+  },
+  "source": {
+    "file": "evidence/discovery-configuration-source.xml",
+    "tests": 115,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "seconds": 15.63
+  },
+  "focused_final": {
+    "file": "evidence/discovery-configuration-focused.xml",
+    "tests": 14,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "seconds": 1.38
+  },
+  "cli": "evidence/discovery-configuration-cli.json",
+  "runner": "run_discovery_configuration_installed.py",
+  "pip_check": "evidence/discovery-configuration-install.log",
+  "schema": {
+    "previous": 8,
+    "current": 9,
+    "behavior": "Existing executor records migrate with empty discovery choices; older clients refuse the newer schema."
+  },
+  "changes": [
+    "Per-Server registered executor persists explicitly named discovery roots and optional Pi release root/Node pair.",
+    "Public configure-discovery and scoped discover CLI commands persist, preview and clear the configuration.",
+    "Automatic daemon composes passive discovery through the public Core facade and preserves full candidates.",
+    "Physical path identity is checked before and after discovery; configuration changes invalidate the control snapshot.",
+    "Pi may use a named Node file outside the release root, without trusting the parent directory.",
+    "No runtime, workspace binding or lease authority is granted by discovery."
+  ],
+  "retained_attempts": [
+    {
+      "file": "evidence/discovery-configuration-source-import-failure.xml",
+      "finding": "Test helper import used the wrong namespace. Corrected to the existing tests.unit import convention."
+    },
+    {
+      "file": "evidence/discovery-configuration-initial-installed.xml",
+      "finding": "189 tests passed before the explicit external Node trust case was added; final rebuilt wheel passes 190."
+    }
+  ],
+  "limitations": [
+    "The CLI subprocess journey seeds an already registered executor locally; network registration and full public onboarding are not accepted by this evidence.",
+    "The real-file discovery tests use harmless copied interpreter files and a synthetic Pi package layout; no actual provider is launched.",
+    "Launch configuration, realization publication/acknowledgement and reusable binding CLI flows remain to integrate for real remote provider journeys.",
+    "Nexus product and Core code are unchanged. Prior real local provider results remain tied to Core 0.2.42.",
+    "Full M03/M10 and M08 acceptance and G0-G3 remain open."
+  ],
+  "milestone_complete": false
+}

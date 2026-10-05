@@ -1,0 +1,1033 @@
+{
+  "codex": {
+    "label": "UAT-02 codex",
+    "open_status": 200,
+    "open_response": {
+      "ok": true,
+      "data": {
+        "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+        "kind": "codex",
+        "owning_agent_id": "uat_codex_agent",
+        "status": "RUNNING",
+        "capabilities": {
+          "send_only": false,
+          "steer_timing": "IMMEDIATE",
+          "interrupt_requires_settle_wait": false,
+          "multiplexes_sessions": true,
+          "observes_session_end": true
+        },
+        "started_at": "2026-09-20T18:19:59.997166Z",
+        "ended_at": null,
+        "metadata": {
+          "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e"
+        }
+      }
+    },
+    "open_latency_s": 0.125,
+    "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+    "turns": [
+      {
+        "turn": 1,
+        "prompt": "reply with the single word: ok",
+        "send_status": 200,
+        "send_response": {
+          "ok": true,
+          "data": {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "verb": "send_turn"
+          }
+        },
+        "send_to_completion_s": 10.327,
+        "poll_count": 93,
+        "event_kinds": [
+          "tool_activity",
+          "tool_activity",
+          "tool_activity",
+          "turn_started",
+          "tool_activity",
+          "tool_activity",
+          "tool_activity",
+          "tool_activity",
+          "output_delta",
+          "output_delta",
+          "output_delta",
+          "output_delta",
+          "output_delta",
+          "tool_activity",
+          "tool_activity",
+          "output_delta",
+          "tool_activity",
+          "tool_activity",
+          "tool_activity",
+          "tool_activity",
+          "turn_completed"
+        ],
+        "events_raw": [
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "tool_activity",
+            "native_event": "thread/started",
+            "occurred_at": "2026-09-20T18:19:59.997320Z",
+            "payload": {
+              "thread": {
+                "id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+                "extra": null,
+                "sessionId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+                "forkedFromId": null,
+                "parentThreadId": null,
+                "preview": "",
+                "ephemeral": false,
+                "historyMode": "legacy",
+                "modelProvider": "lanqwen",
+                "createdAt": 1789928399,
+                "updatedAt": 1789928399,
+                "recencyAt": 1789928399,
+                "status": {
+                  "type": "idle"
+                },
+                "path": "/private/tmp/claude-501/-Users-maheidem-Documents-dev-OktoLabsAI/d964d04a-26e1-4484-bc9c-51ccc97fd32b/scratchpad/uat/codex_home/sessions/2026/09/20/rollout-2026-09-20T15-19-59-01a0c00b-e473-7ff0-b7ed-63c3c968da7e.jsonl",
+                "cwd": "/private/tmp/claude-501/-Users-maheidem-Documents-dev-OktoLabsAI/d964d04a-26e1-4484-bc9c-51ccc97fd32b/scratchpad/uat/project_root",
+                "cliVersion": "0.144.6",
+                "source": "vscode",
+                "threadSource": null,
+                "agentNickname": null,
+                "agentRole": null,
+                "gitInfo": null,
+                "name": null,
+                "turns": []
+              }
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "tool_activity",
+            "native_event": "warning",
+            "occurred_at": "2026-09-20T18:20:00.002453Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "message": "Model metadata for `qwen3.8-flash` not found. Defaulting to fallback metadata; this can degrade performance and cause issues."
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "tool_activity",
+            "native_event": "thread/status/changed",
+            "occurred_at": "2026-09-20T18:20:00.004077Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "status": {
+                "type": "active",
+                "activeFlags": []
+              }
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "turn_started",
+            "native_event": "turn/started",
+            "occurred_at": "2026-09-20T18:20:00.004127Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turn": {
+                "id": "01a0c00b-e481-78c0-884d-b60a61ececa9",
+                "items": [],
+                "itemsView": "notLoaded",
+                "status": "inProgress",
+                "error": null,
+                "startedAt": 1789928400,
+                "completedAt": null,
+                "durationMs": null
+              }
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00b-e481-78c0-884d-b60a61ececa9"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "tool_activity",
+            "native_event": "item/started",
+            "occurred_at": "2026-09-20T18:20:00.005362Z",
+            "payload": {
+              "item": {
+                "type": "userMessage",
+                "id": "01a0c00b-e485-7d61-8483-4ac4f0dc11ef",
+                "clientId": null,
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "reply with the single word: ok",
+                    "text_elements": []
+                  }
+                ]
+              },
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00b-e481-78c0-884d-b60a61ececa9",
+              "startedAtMs": 1789928400005
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00b-e481-78c0-884d-b60a61ececa9"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "tool_activity",
+            "native_event": "item/completed",
+            "occurred_at": "2026-09-20T18:20:00.005459Z",
+            "payload": {
+              "item": {
+                "type": "userMessage",
+                "id": "01a0c00b-e485-7d61-8483-4ac4f0dc11ef",
+                "clientId": null,
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "reply with the single word: ok",
+                    "text_elements": []
+                  }
+                ]
+              },
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00b-e481-78c0-884d-b60a61ececa9",
+              "completedAtMs": 1789928400005
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00b-e481-78c0-884d-b60a61ececa9"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "tool_activity",
+            "native_event": "item/started",
+            "occurred_at": "2026-09-20T18:20:09.273296Z",
+            "payload": {
+              "item": {
+                "type": "reasoning",
+                "id": "rs_305a2a30b4bb43e481b09012",
+                "summary": [],
+                "content": []
+              },
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00b-e481-78c0-884d-b60a61ececa9",
+              "startedAtMs": 1789928409272
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00b-e481-78c0-884d-b60a61ececa9"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "tool_activity",
+            "native_event": "item/reasoning/summaryPartAdded",
+            "occurred_at": "2026-09-20T18:20:09.279201Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00b-e481-78c0-884d-b60a61ececa9",
+              "itemId": "rs_305a2a30b4bb43e481b09012",
+              "summaryIndex": 0
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00b-e481-78c0-884d-b60a61ececa9"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "output_delta",
+            "native_event": "item/reasoning/summaryTextDelta",
+            "occurred_at": "2026-09-20T18:20:09.279426Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00b-e481-78c0-884d-b60a61ececa9",
+              "itemId": "rs_305a2a30b4bb43e481b09012",
+              "delta": "\nThe user has sent a",
+              "summaryIndex": 0
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00b-e481-78c0-884d-b60a61ececa9"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "output_delta",
+            "native_event": "item/reasoning/summaryTextDelta",
+            "occurred_at": "2026-09-20T18:20:09.492160Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00b-e481-78c0-884d-b60a61ececa9",
+              "itemId": "rs_305a2a30b4bb43e481b09012",
+              "delta": " system prompt with instructions and",
+              "summaryIndex": 0
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00b-e481-78c0-884d-b60a61ececa9"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "output_delta",
+            "native_event": "item/reasoning/summaryTextDelta",
+            "occurred_at": "2026-09-20T18:20:09.791014Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00b-e481-78c0-884d-b60a61ececa9",
+              "itemId": "rs_305a2a30b4bb43e481b09012",
+              "delta": " then said \"reply with the single",
+              "summaryIndex": 0
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00b-e481-78c0-884d-b60a61ececa9"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "output_delta",
+            "native_event": "item/reasoning/summaryTextDelta",
+            "occurred_at": "2026-09-20T18:20:10.031408Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00b-e481-78c0-884d-b60a61ececa9",
+              "itemId": "rs_305a2a30b4bb43e481b09012",
+              "delta": " word: ok\". I should simply reply",
+              "summaryIndex": 0
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00b-e481-78c0-884d-b60a61ececa9"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "output_delta",
+            "native_event": "item/reasoning/summaryTextDelta",
+            "occurred_at": "2026-09-20T18:20:10.277542Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00b-e481-78c0-884d-b60a61ececa9",
+              "itemId": "rs_305a2a30b4bb43e481b09012",
+              "delta": " \"ok\".\n",
+              "summaryIndex": 0
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00b-e481-78c0-884d-b60a61ececa9"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "tool_activity",
+            "native_event": "item/completed",
+            "occurred_at": "2026-09-20T18:20:10.278126Z",
+            "payload": {
+              "item": {
+                "type": "reasoning",
+                "id": "rs_305a2a30b4bb43e481b09012",
+                "summary": [
+                  "\nThe user has sent a system prompt with instructions and then said \"reply with the single word: ok\". I should simply reply \"ok\".\n"
+                ],
+                "content": []
+              },
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00b-e481-78c0-884d-b60a61ececa9",
+              "completedAtMs": 1789928410277
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00b-e481-78c0-884d-b60a61ececa9"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "tool_activity",
+            "native_event": "item/started",
+            "occurred_at": "2026-09-20T18:20:10.281671Z",
+            "payload": {
+              "item": {
+                "type": "agentMessage",
+                "id": "msg_124f320eb255457f9909722b",
+                "text": "",
+                "phase": null,
+                "memoryCitation": null
+              },
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00b-e481-78c0-884d-b60a61ececa9",
+              "startedAtMs": 1789928410281
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00b-e481-78c0-884d-b60a61ececa9"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "output_delta",
+            "native_event": "item/agentMessage/delta",
+            "occurred_at": "2026-09-20T18:20:10.281784Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00b-e481-78c0-884d-b60a61ececa9",
+              "itemId": "msg_124f320eb255457f9909722b",
+              "delta": "\n\nok"
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00b-e481-78c0-884d-b60a61ececa9"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "tool_activity",
+            "native_event": "item/completed",
+            "occurred_at": "2026-09-20T18:20:10.281940Z",
+            "payload": {
+              "item": {
+                "type": "agentMessage",
+                "id": "msg_124f320eb255457f9909722b",
+                "text": "ok",
+                "phase": null,
+                "memoryCitation": null
+              },
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00b-e481-78c0-884d-b60a61ececa9",
+              "completedAtMs": 1789928410281
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00b-e481-78c0-884d-b60a61ececa9"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "tool_activity",
+            "native_event": "thread/tokenUsage/updated",
+            "occurred_at": "2026-09-20T18:20:10.284649Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00b-e481-78c0-884d-b60a61ececa9",
+              "tokenUsage": {
+                "total": {
+                  "totalTokens": 8147,
+                  "inputTokens": 8115,
+                  "cachedInputTokens": 4096,
+                  "outputTokens": 32,
+                  "reasoningOutputTokens": 30
+                },
+                "last": {
+                  "totalTokens": 8147,
+                  "inputTokens": 8115,
+                  "cachedInputTokens": 4096,
+                  "outputTokens": 32,
+                  "reasoningOutputTokens": 30
+                },
+                "modelContextWindow": 258400
+              }
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00b-e481-78c0-884d-b60a61ececa9"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "tool_activity",
+            "native_event": "account/rateLimits/updated",
+            "occurred_at": "2026-09-20T18:20:10.284781Z",
+            "payload": {
+              "rateLimits": {
+                "limitId": "codex",
+                "limitName": null,
+                "primary": null,
+                "secondary": null,
+                "credits": null,
+                "individualLimit": null,
+                "planType": null,
+                "rateLimitReachedType": null
+              }
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "tool_activity",
+            "native_event": "thread/status/changed",
+            "occurred_at": "2026-09-20T18:20:10.285174Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "status": {
+                "type": "idle"
+              }
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "turn_completed",
+            "native_event": "turn/completed",
+            "occurred_at": "2026-09-20T18:20:10.285383Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turn": {
+                "id": "01a0c00b-e481-78c0-884d-b60a61ececa9",
+                "items": [],
+                "itemsView": "notLoaded",
+                "status": "completed",
+                "error": null,
+                "startedAt": 1789928400,
+                "completedAt": 1789928410,
+                "durationMs": 10282
+              }
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00b-e481-78c0-884d-b60a61ececa9"
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "prompt": "reply with the single word: two",
+        "send_status": 200,
+        "send_response": {
+          "ok": true,
+          "data": {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "verb": "send_turn"
+          }
+        },
+        "send_to_completion_s": 10.907,
+        "poll_count": 97,
+        "event_kinds": [
+          "tool_activity",
+          "tool_activity",
+          "turn_started",
+          "tool_activity",
+          "tool_activity",
+          "tool_activity",
+          "tool_activity",
+          "output_delta",
+          "output_delta",
+          "output_delta",
+          "output_delta",
+          "output_delta",
+          "output_delta",
+          "output_delta",
+          "output_delta",
+          "output_delta",
+          "tool_activity",
+          "tool_activity",
+          "output_delta",
+          "tool_activity",
+          "tool_activity",
+          "tool_activity",
+          "tool_activity",
+          "turn_completed"
+        ],
+        "events_raw": [
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "tool_activity",
+            "native_event": "warning",
+            "occurred_at": "2026-09-20T18:20:10.330625Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "message": "Model metadata for `qwen3.8-flash` not found. Defaulting to fallback metadata; this can degrade performance and cause issues."
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "tool_activity",
+            "native_event": "thread/status/changed",
+            "occurred_at": "2026-09-20T18:20:10.333021Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "status": {
+                "type": "active",
+                "activeFlags": []
+              }
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "turn_started",
+            "native_event": "turn/started",
+            "occurred_at": "2026-09-20T18:20:10.333191Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turn": {
+                "id": "01a0c00c-0cd8-76b3-863b-adce8e2f3824",
+                "items": [],
+                "itemsView": "notLoaded",
+                "status": "inProgress",
+                "error": null,
+                "startedAt": 1789928410,
+                "completedAt": null,
+                "durationMs": null
+              }
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00c-0cd8-76b3-863b-adce8e2f3824"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "tool_activity",
+            "native_event": "item/started",
+            "occurred_at": "2026-09-20T18:20:10.335187Z",
+            "payload": {
+              "item": {
+                "type": "userMessage",
+                "id": "01a0c00c-0cde-73c0-b288-c8d7ae8ade41",
+                "clientId": null,
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "reply with the single word: two",
+                    "text_elements": []
+                  }
+                ]
+              },
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00c-0cd8-76b3-863b-adce8e2f3824",
+              "startedAtMs": 1789928410334
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00c-0cd8-76b3-863b-adce8e2f3824"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "tool_activity",
+            "native_event": "item/completed",
+            "occurred_at": "2026-09-20T18:20:10.335394Z",
+            "payload": {
+              "item": {
+                "type": "userMessage",
+                "id": "01a0c00c-0cde-73c0-b288-c8d7ae8ade41",
+                "clientId": null,
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "reply with the single word: two",
+                    "text_elements": []
+                  }
+                ]
+              },
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00c-0cd8-76b3-863b-adce8e2f3824",
+              "completedAtMs": 1789928410334
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00c-0cd8-76b3-863b-adce8e2f3824"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "tool_activity",
+            "native_event": "item/started",
+            "occurred_at": "2026-09-20T18:20:18.887856Z",
+            "payload": {
+              "item": {
+                "type": "reasoning",
+                "id": "rs_ec4bd85c5c96424e81fac235",
+                "summary": [],
+                "content": []
+              },
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00c-0cd8-76b3-863b-adce8e2f3824",
+              "startedAtMs": 1789928418887
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00c-0cd8-76b3-863b-adce8e2f3824"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "tool_activity",
+            "native_event": "item/reasoning/summaryPartAdded",
+            "occurred_at": "2026-09-20T18:20:18.893785Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00c-0cd8-76b3-863b-adce8e2f3824",
+              "itemId": "rs_ec4bd85c5c96424e81fac235",
+              "summaryIndex": 0
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00c-0cd8-76b3-863b-adce8e2f3824"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "output_delta",
+            "native_event": "item/reasoning/summaryTextDelta",
+            "occurred_at": "2026-09-20T18:20:18.894017Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00c-0cd8-76b3-863b-adce8e2f3824",
+              "itemId": "rs_ec4bd85c5c96424e81fac235",
+              "delta": "\nThe user asks to reply",
+              "summaryIndex": 0
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00c-0cd8-76b3-863b-adce8e2f3824"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "output_delta",
+            "native_event": "item/reasoning/summaryTextDelta",
+            "occurred_at": "2026-09-20T18:20:19.112056Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00c-0cd8-76b3-863b-adce8e2f3824",
+              "itemId": "rs_ec4bd85c5c96424e81fac235",
+              "delta": " with the single word \"two\".",
+              "summaryIndex": 0
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00c-0cd8-76b3-863b-adce8e2f3824"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "output_delta",
+            "native_event": "item/reasoning/summaryTextDelta",
+            "occurred_at": "2026-09-20T18:20:19.456384Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00c-0cd8-76b3-863b-adce8e2f3824",
+              "itemId": "rs_ec4bd85c5c96424e81fac235",
+              "delta": " But there's a safety/system reminder",
+              "summaryIndex": 0
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00c-0cd8-76b3-863b-adce8e2f3824"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "output_delta",
+            "native_event": "item/reasoning/summaryTextDelta",
+            "occurred_at": "2026-09-20T18:20:19.756490Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00c-0cd8-76b3-863b-adce8e2f3824",
+              "itemId": "rs_ec4bd85c5c96424e81fac235",
+              "delta": " about sensitive data. Nothing sensitive",
+              "summaryIndex": 0
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00c-0cd8-76b3-863b-adce8e2f3824"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "output_delta",
+            "native_event": "item/reasoning/summaryTextDelta",
+            "occurred_at": "2026-09-20T18:20:19.997098Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00c-0cd8-76b3-863b-adce8e2f3824",
+              "itemId": "rs_ec4bd85c5c96424e81fac235",
+              "delta": " here. Just respond \"two",
+              "summaryIndex": 0
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00c-0cd8-76b3-863b-adce8e2f3824"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "output_delta",
+            "native_event": "item/reasoning/summaryTextDelta",
+            "occurred_at": "2026-09-20T18:20:20.213799Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00c-0cd8-76b3-863b-adce8e2f3824",
+              "itemId": "rs_ec4bd85c5c96424e81fac235",
+              "delta": "\".\n\nWait \u2014 this looks",
+              "summaryIndex": 0
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00c-0cd8-76b3-863b-adce8e2f3824"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "output_delta",
+            "native_event": "item/reasoning/summaryTextDelta",
+            "occurred_at": "2026-09-20T18:20:20.530368Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00c-0cd8-76b3-863b-adce8e2f3824",
+              "itemId": "rs_ec4bd85c5c96424e81fac235",
+              "delta": " like a prompt injection test context? The message",
+              "summaryIndex": 0
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00c-0cd8-76b3-863b-adce8e2f3824"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "output_delta",
+            "native_event": "item/reasoning/summaryTextDelta",
+            "occurred_at": "2026-09-20T18:20:20.853258Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00c-0cd8-76b3-863b-adce8e2f3824",
+              "itemId": "rs_ec4bd85c5c96424e81fac235",
+              "delta": " is simply \"reply with the single word:",
+              "summaryIndex": 0
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00c-0cd8-76b3-863b-adce8e2f3824"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "output_delta",
+            "native_event": "item/reasoning/summaryTextDelta",
+            "occurred_at": "2026-09-20T18:20:21.124182Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00c-0cd8-76b3-863b-adce8e2f3824",
+              "itemId": "rs_ec4bd85c5c96424e81fac235",
+              "delta": " two\". Just reply \"two\".\n",
+              "summaryIndex": 0
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00c-0cd8-76b3-863b-adce8e2f3824"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "tool_activity",
+            "native_event": "item/completed",
+            "occurred_at": "2026-09-20T18:20:21.124605Z",
+            "payload": {
+              "item": {
+                "type": "reasoning",
+                "id": "rs_ec4bd85c5c96424e81fac235",
+                "summary": [
+                  "\nThe user asks to reply with the single word \"two\". But there's a safety/system reminder about sensitive data. Nothing sensitive here. Just respond \"two\".\n\nWait \u2014 this looks like a prompt injection test context? The message is simply \"reply with the single word: two\". Just reply \"two\".\n"
+                ],
+                "content": []
+              },
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00c-0cd8-76b3-863b-adce8e2f3824",
+              "completedAtMs": 1789928421123
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00c-0cd8-76b3-863b-adce8e2f3824"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "tool_activity",
+            "native_event": "item/started",
+            "occurred_at": "2026-09-20T18:20:21.127667Z",
+            "payload": {
+              "item": {
+                "type": "agentMessage",
+                "id": "msg_610137d75a964fbb91ea2448",
+                "text": "",
+                "phase": null,
+                "memoryCitation": null
+              },
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00c-0cd8-76b3-863b-adce8e2f3824",
+              "startedAtMs": 1789928421127
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00c-0cd8-76b3-863b-adce8e2f3824"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "output_delta",
+            "native_event": "item/agentMessage/delta",
+            "occurred_at": "2026-09-20T18:20:21.127971Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00c-0cd8-76b3-863b-adce8e2f3824",
+              "itemId": "msg_610137d75a964fbb91ea2448",
+              "delta": "\n\ntwo"
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00c-0cd8-76b3-863b-adce8e2f3824"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "tool_activity",
+            "native_event": "item/completed",
+            "occurred_at": "2026-09-20T18:20:21.128051Z",
+            "payload": {
+              "item": {
+                "type": "agentMessage",
+                "id": "msg_610137d75a964fbb91ea2448",
+                "text": "two",
+                "phase": null,
+                "memoryCitation": null
+              },
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00c-0cd8-76b3-863b-adce8e2f3824",
+              "completedAtMs": 1789928421127
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00c-0cd8-76b3-863b-adce8e2f3824"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "tool_activity",
+            "native_event": "thread/tokenUsage/updated",
+            "occurred_at": "2026-09-20T18:20:21.131434Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turnId": "01a0c00c-0cd8-76b3-863b-adce8e2f3824",
+              "tokenUsage": {
+                "total": {
+                  "totalTokens": 16379,
+                  "inputTokens": 16281,
+                  "cachedInputTokens": 8192,
+                  "outputTokens": 98,
+                  "reasoningOutputTokens": 94
+                },
+                "last": {
+                  "totalTokens": 8232,
+                  "inputTokens": 8166,
+                  "cachedInputTokens": 4096,
+                  "outputTokens": 66,
+                  "reasoningOutputTokens": 64
+                },
+                "modelContextWindow": 258400
+              }
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00c-0cd8-76b3-863b-adce8e2f3824"
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "tool_activity",
+            "native_event": "account/rateLimits/updated",
+            "occurred_at": "2026-09-20T18:20:21.131668Z",
+            "payload": {
+              "rateLimits": {
+                "limitId": "codex",
+                "limitName": null,
+                "primary": null,
+                "secondary": null,
+                "credits": null,
+                "individualLimit": null,
+                "planType": null,
+                "rateLimitReachedType": null
+              }
+            },
+            "thread_id": null,
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "tool_activity",
+            "native_event": "thread/status/changed",
+            "occurred_at": "2026-09-20T18:20:21.132056Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "status": {
+                "type": "idle"
+              }
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": null
+          },
+          {
+            "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+            "harness_kind": "codex",
+            "kind": "turn_completed",
+            "native_event": "turn/completed",
+            "occurred_at": "2026-09-20T18:20:21.132288Z",
+            "payload": {
+              "threadId": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+              "turn": {
+                "id": "01a0c00c-0cd8-76b3-863b-adce8e2f3824",
+                "items": [],
+                "itemsView": "notLoaded",
+                "status": "completed",
+                "error": null,
+                "startedAt": 1789928410,
+                "completedAt": 1789928421,
+                "durationMs": 10801
+              }
+            },
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e",
+            "turn_id": "01a0c00c-0cd8-76b3-863b-adce8e2f3824"
+          }
+        ]
+      }
+    ],
+    "get_before_close": {
+      "status": 200,
+      "data": {
+        "ok": true,
+        "data": {
+          "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+          "kind": "codex",
+          "owning_agent_id": "uat_codex_agent",
+          "status": "RUNNING",
+          "capabilities": {
+            "send_only": false,
+            "steer_timing": "IMMEDIATE",
+            "interrupt_requires_settle_wait": false,
+            "multiplexes_sessions": true,
+            "observes_session_end": true
+          },
+          "started_at": "2026-09-20T18:19:59.997166Z",
+          "ended_at": null,
+          "metadata": {
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e"
+          },
+          "live": true
+        }
+      }
+    },
+    "close": {
+      "status": 200,
+      "data": {
+        "ok": true,
+        "data": {
+          "session_id": "hsess_f8c83041dc2a48868ee0a489c61b60ff",
+          "kind": "codex",
+          "owning_agent_id": "uat_codex_agent",
+          "status": "ENDED",
+          "capabilities": {
+            "send_only": false,
+            "steer_timing": "IMMEDIATE",
+            "interrupt_requires_settle_wait": false,
+            "multiplexes_sessions": true,
+            "observes_session_end": true
+          },
+          "started_at": "2026-09-20T18:19:59.997166Z",
+          "ended_at": "2026-09-20T18:20:21.241941Z",
+          "metadata": {
+            "thread_id": "01a0c00b-e473-7ff0-b7ed-63c3c968da7e"
+          }
+        }
+      }
+    }
+  }
+}

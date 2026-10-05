@@ -1,0 +1,39 @@
+{
+  "source_database": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pytest-of-jpamb\\pytest-4220\\test_real_provider_uses_automa0\\nexus\\nexus.db",
+  "native_request_count": 0,
+  "handoff_status": "OPEN",
+  "tool_claim_count": 0,
+  "events": [
+    {
+      "sequence": 56,
+      "native_type": "serverRequest/resolved",
+      "request_id": 0
+    },
+    {
+      "sequence": 58,
+      "native_type": "item/completed",
+      "item": {
+        "appContext": null,
+        "arguments": {
+          "agent_id": "subject",
+          "handoff_id": "work",
+          "project_root": "wsr_fd504563037e192dd2188fbba57e7f67"
+        },
+        "durationMs": 0,
+        "error": {
+          "message": "user rejected MCP tool call"
+        },
+        "id": "exec-80c7c7c9-eae2-49e5-a781-93cd7ad9651d",
+        "mcpAppUi": null,
+        "pluginId": null,
+        "readOnlyHint": null,
+        "result": null,
+        "server": "nexus_9274f4963cdf47bc",
+        "status": "failed",
+        "tool": "handoff_get",
+        "type": "mcpToolCall"
+      }
+    }
+  ],
+  "conclusion": "The native MCP call was rejected without a captured canonical native request. The actual server request method/shape needs observation; no permission mapping is inferred from the rejection."
+}

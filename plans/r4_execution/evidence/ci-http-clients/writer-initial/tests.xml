@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="7" time="24.850" timestamp="2026-10-02T03:55:27.253165-03:00" hostname="Alienware_m15"><testcase classname="tests.test_runtime_writer_contract" name="test_writer_migration_trigger_failure_rolls_back_and_upgrade_repeats" time="0.546" /><testcase classname="tests.test_runtime_writer_contract" name="test_future_writer_contract_cannot_be_downgraded_by_owner_start" time="0.549" /><testcase classname="tests.test_runtime_writer_contract" name="test_preexisting_legacy_connection_is_fenced_only_after_activation" time="0.717" /><testcase classname="tests.test_runtime_writer_contract" name="test_feature_off_writer_cannot_commit_unreserved_delivery_to_active_store" time="6.664"><failure message="AssertionError: Traceback (most recent call last):&#10;    File &quot;D:\Projetos\Techridy\okto_labs_okto_nexus\tests\runtime_writer_process.py&quot;, line 32, in &lt;module&gt;&#10;      print(json.dumps(create(json.load(sys.stdin))))&#10;                       ~~~~~~^^^^^^^^^^^^^^^^^^^^^^&#10;    File &quot;D:\Projetos\Techridy\okto_labs_okto_nexus\tests\runtime_writer_process.py&quot;, line 16, in create&#10;      assert deps.runtime_dispatcher is None&#10;             ^^^^^^^^^^^^^^^^^^^^^^^&#10;  AttributeError: 'Deps' object has no attribute 'runtime_dispatcher'&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['C:\\Users\\jpamb\\.codex\\tmp\\nexus-http-ci-env\\Scripts\\python.exe', '-I', 'D:\\Projetos\\T...s None\n           ^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: \'Deps\' object has no attribute \'runtime_dispatcher\'\n').returncode">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_runtime_writer_contract.py:110: in test_feature_off_writer_cannot_commit_unreserved_delivery_to_active_store
+    response = independent_writer_create(runtime, enabled=False)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_runtime_writer_contract.py:103: in independent_writer_create
+    assert response.returncode == 0, response.stderr
+E   AssertionError: Traceback (most recent call last):
+E       File "D:\Projetos\Techridy\okto_labs_okto_nexus\tests\runtime_writer_process.py", line 32, in &lt;module&gt;
+E         print(json.dumps(create(json.load(sys.stdin))))
+E                          ~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+E       File "D:\Projetos\Techridy\okto_labs_okto_nexus\tests\runtime_writer_process.py", line 16, in create
+E         assert deps.runtime_dispatcher is None
+E                ^^^^^^^^^^^^^^^^^^^^^^^
+E     AttributeError: 'Deps' object has no attribute 'runtime_dispatcher'
+E     
+E   assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['C:\\Users\\jpamb\\.codex\\tmp\\nexus-http-ci-env\\Scripts\\python.exe', '-I', 'D:\\Projetos\\T...s None\n           ^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: \'Deps\' object has no attribute \'runtime_dispatcher\'\n').returncode</failure></testcase><testcase classname="tests.test_runtime_writer_contract" name="test_operator_disable_changes_writer_mode_atomically_and_retains_fences[stored_runtime]" time="5.205"><failure message="AssertionError: Traceback (most recent call last):&#10;    File &quot;D:\Projetos\Techridy\okto_labs_okto_nexus\tests\runtime_writer_process.py&quot;, line 32, in &lt;module&gt;&#10;      print(json.dumps(create(json.load(sys.stdin))))&#10;                       ~~~~~~^^^^^^^^^^^^^^^^^^^^^^&#10;    File &quot;D:\Projetos\Techridy\okto_labs_okto_nexus\tests\runtime_writer_process.py&quot;, line 16, in create&#10;      assert deps.runtime_dispatcher is None&#10;             ^^^^^^^^^^^^^^^^^^^^^^^&#10;  AttributeError: 'Deps' object has no attribute 'runtime_dispatcher'&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['C:\\Users\\jpamb\\.codex\\tmp\\nexus-http-ci-env\\Scripts\\python.exe', '-I', 'D:\\Projetos\\T...s None\n           ^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: \'Deps\' object has no attribute \'runtime_dispatcher\'\n').returncode">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_runtime_writer_contract.py:131: in test_operator_disable_changes_writer_mode_atomically_and_retains_fences
+    stale = independent_writer_create(runtime, enabled=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_runtime_writer_contract.py:103: in independent_writer_create
+    assert response.returncode == 0, response.stderr
+E   AssertionError: Traceback (most recent call last):
+E       File "D:\Projetos\Techridy\okto_labs_okto_nexus\tests\runtime_writer_process.py", line 32, in &lt;module&gt;
+E         print(json.dumps(create(json.load(sys.stdin))))
+E                          ~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+E       File "D:\Projetos\Techridy\okto_labs_okto_nexus\tests\runtime_writer_process.py", line 16, in create
+E         assert deps.runtime_dispatcher is None
+E                ^^^^^^^^^^^^^^^^^^^^^^^
+E     AttributeError: 'Deps' object has no attribute 'runtime_dispatcher'
+E     
+E   assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['C:\\Users\\jpamb\\.codex\\tmp\\nexus-http-ci-env\\Scripts\\python.exe', '-I', 'D:\\Projetos\\T...s None\n           ^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: \'Deps\' object has no attribute \'runtime_dispatcher\'\n').returncode</failure></testcase><testcase classname="tests.test_runtime_writer_contract" name="test_compatible_writer_still_enqueues_the_canonical_delivery" time="5.321"><failure message="AssertionError: Traceback (most recent call last):&#10;    File &quot;D:\Projetos\Techridy\okto_labs_okto_nexus\tests\runtime_writer_process.py&quot;, line 32, in &lt;module&gt;&#10;      print(json.dumps(create(json.load(sys.stdin))))&#10;                       ~~~~~~^^^^^^^^^^^^^^^^^^^^^^&#10;    File &quot;D:\Projetos\Techridy\okto_labs_okto_nexus\tests\runtime_writer_process.py&quot;, line 16, in create&#10;      assert deps.runtime_dispatcher is None&#10;             ^^^^^^^^^^^^^^^^^^^^^^^&#10;  AttributeError: 'Deps' object has no attribute 'runtime_dispatcher'&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['C:\\Users\\jpamb\\.codex\\tmp\\nexus-http-ci-env\\Scripts\\python.exe', '-I', 'D:\\Projetos\\T...s None\n           ^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: \'Deps\' object has no attribute \'runtime_dispatcher\'\n').returncode">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_runtime_writer_contract.py:146: in test_compatible_writer_still_enqueues_the_canonical_delivery
+    response = independent_writer_create(runtime, enabled=True)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_runtime_writer_contract.py:103: in independent_writer_create
+    assert response.returncode == 0, response.stderr
+E   AssertionError: Traceback (most recent call last):
+E       File "D:\Projetos\Techridy\okto_labs_okto_nexus\tests\runtime_writer_process.py", line 32, in &lt;module&gt;
+E         print(json.dumps(create(json.load(sys.stdin))))
+E                          ~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+E       File "D:\Projetos\Techridy\okto_labs_okto_nexus\tests\runtime_writer_process.py", line 16, in create
+E         assert deps.runtime_dispatcher is None
+E                ^^^^^^^^^^^^^^^^^^^^^^^
+E     AttributeError: 'Deps' object has no attribute 'runtime_dispatcher'
+E     
+E   assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['C:\\Users\\jpamb\\.codex\\tmp\\nexus-http-ci-env\\Scripts\\python.exe', '-I', 'D:\\Projetos\\T...s None\n           ^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: \'Deps\' object has no attribute \'runtime_dispatcher\'\n').returncode</failure></testcase><testcase classname="tests.test_runtime_writer_contract" name="test_writer_contract_diagnostics_are_operator_only" time="4.168" /></testsuite></testsuites>

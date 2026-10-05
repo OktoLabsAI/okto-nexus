@@ -1,0 +1,103 @@
+{
+  "date": "2026-09-30",
+  "status": "DEVELOPMENT_PARTIAL",
+  "source_parent_commit": "cf3045351dc8d4531068b059555a2ad9bb8c490e",
+  "branch": "feature/v0.2.0",
+  "gates": {
+    "G0": "OPEN",
+    "G1": "OPEN",
+    "G2": "OPEN",
+    "G3": "OPEN"
+  },
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.1",
+  "core_version": "0.2.25.dev0",
+  "core_wheel_sha256": "e4918889b6c4ffc0b4cb0d172bf32f18ef9aeefbc35e0371cf94b373f34232e4",
+  "nexus_development_wheel_sha256": "7c23bc258a57fa28b4c69ae75a5e8e08b60bcdf3b4c1cd202a241e59c5cecf43",
+  "nexus_python_sql_files_compared": 302,
+  "source_sha256": {
+    "src/okto_nexus/adapters/inbound/http/executor_link.py": "a621c9a9aed79989cede671b2741d1242396934a2a49286a2be3bfc124985076",
+    "src/okto_nexus/adapters/outbound/sqlite/execution_leases.py": "4293a444c656def9247124a7b08872af5c49714020cc7bb58ce1656cd3e87c9b",
+    "src/okto_nexus/adapters/outbound/sqlite/execution_receipts.py": "8f18b1ca4831164a6f3b372cf565c584f3e04fb844aa39f846ced32fe8a92de4",
+    "src/okto_nexus/application/execution_admission.py": "3be6afc62684d6a0760bf1ec7e0a7bce7a67f31332b0e7ca08894abc13381cc6",
+    "src/okto_nexus/application/execution_dispatch.py": "33dd1910677cb3bd86c69ed1a6d5b73381e18d5dae81a294674e01a1bba139d0",
+    "src/okto_nexus/application/execution_intents.py": "564910073176fedad169e29f87e36dc3e95762d41b543c7f3a4adcf9f20636ab",
+    "src/okto_nexus/application/execution_leases.py": "8c844769e7d8687a6d31369a3f999b053f0aec5b18e9a2b62ceab1c9bbccf086",
+    "src/okto_nexus/bootstrap/execution_authority.py": "f3e396457c86fea4dd31c33da2e628db060d3423000f2cf194f8f7e1b54e43b9",
+    "src/okto_nexus/migrations/076_execution_lease_application.sql": "2e19d3ef400b956c073c65219d4c3ae91fd65bd38724987524929300f1e541da",
+    "tests/execution_r4/test_ns02.py": "9c5c628430294666ea37f19bcfe411efbec9b6ba9d9eee8fc146a2c64ed3bd15",
+    "tests/execution_r4/test_ns06.py": "face7386be4f7806cdc6c78040113a19b8dd1a3af7e426053fcc2d8807c55c96",
+    "tests/execution_r4/test_ns09.py": "d02e6d25991b600076a97710c9dc52ac8fa63f3bbf290c7ba39f43811dba18bf",
+    "tests/execution_r4/test_ns10.py": "e9ff041a54e69dc4e05deb906a40994dc796bc6de25dec8198819f71114ed84d"
+  },
+  "runs": [
+    {
+      "name": "source_r4_and_grants",
+      "arguments": [
+        "tests/execution_r4",
+        "tests/test_runtime_grants.py",
+        "-k",
+        "not authenticated_stdio",
+        "-q",
+        "--tb=short"
+      ],
+      "counts": {
+        "tests": 69,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "passed": 69
+      },
+      "seconds": 106.281,
+      "timestamp": "2026-09-30T01:03:34.575280-03:00",
+      "junit": "plans/r4_execution/evidence/nexus-r4-canonical-leases-final.xml",
+      "junit_sha256": "0f88263f237cf5abc7553ca79c08489bd28f1cd358769e60a34336300ad3f5c4",
+      "exit_code": 0
+    },
+    {
+      "name": "installed_ns09_ns10",
+      "arguments": [
+        "-I",
+        "-m",
+        "pytest",
+        "-c",
+        "pytest.ini",
+        "--confcutdir=D:/Projetos/Techridy/okto_labs_okto_nexus/tests/execution_r4",
+        "D:/Projetos/Techridy/okto_labs_okto_nexus/tests/execution_r4/test_ns09.py",
+        "D:/Projetos/Techridy/okto_labs_okto_nexus/tests/execution_r4/test_ns10.py",
+        "-q",
+        "--tb=short"
+      ],
+      "counts": {
+        "tests": 14,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "passed": 14
+      },
+      "seconds": 36.344,
+      "timestamp": "2026-09-30T01:05:48.451202-03:00",
+      "junit": "plans/r4_execution/evidence/nexus-canonical-leases-installed.xml",
+      "junit_sha256": "09ea9ba1e22ddea4f3789bec23f76baca0cdc7d8c994309140a42be36dbb8d00",
+      "exit_code": 0
+    }
+  ],
+  "source_run_counts": {
+    "r4": 56,
+    "canonical_grants": 13,
+    "deselected_legacy_stdio": 1
+  },
+  "limits": [
+    "Protocol readiness is patched in contract tests; product gate remains closed.",
+    "Binding/profile/inventory fixtures are seeded; operations use canonical admission.",
+    "Native provider peer is synthetic; no real daemon or independent-host qualification.",
+    "Installed run uses all three packages from site-packages with isolated Python and an external pytest configuration.",
+    "Development wheel includes existing local frontend assets; no frontend release qualification.",
+    "Online physical revocation, nonempty reconciliation, embedded and daemon composition remain incomplete."
+  ],
+  "warnings": [
+    "Starlette httpx deprecation",
+    "Legacy websockets deprecations in existing grants tests",
+    "Setuptools license metadata deprecation during wheel build"
+  ]
+}

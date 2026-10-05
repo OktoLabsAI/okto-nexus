@@ -1,0 +1,9 @@
+{
+  "adapter": "pi_rpc",
+  "server_release_gate_override": true,
+  "native_qualification_override": false,
+  "synthetic_native_factory": false,
+  "public_connector_cli": true,
+  "protected_os_vault": true,
+  "topology": "Single Windows host; actual loopback HTTP/WSS; Server and daemon owners."
+}

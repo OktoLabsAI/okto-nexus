@@ -1,0 +1,41 @@
+{
+  "reason": "Superseded commits retain confirmed missing-credential shutdown hang; replaced by corrected artifact campaign",
+  "runs": [
+    {
+      "conclusion": "",
+      "databaseId": 36949279228,
+      "headSha": "e4c596bb3a46ea428daae7c9c5e784e40e409fe9",
+      "status": "in_progress"
+    },
+    {
+      "conclusion": "",
+      "databaseId": 36949902277,
+      "headSha": "ec1b73705b1976bd672144566d70106e61a168b8",
+      "status": "in_progress"
+    },
+    {
+      "conclusion": "",
+      "databaseId": 36951078377,
+      "headSha": "62e61c67288f7ee32b63f715cf7fbc1a6634370f",
+      "status": "in_progress"
+    },
+    {
+      "conclusion": "",
+      "databaseId": 36951377462,
+      "headSha": "76914182c42c0994b08cb8bc16f9f7cfa01e2d3b",
+      "status": "queued"
+    },
+    {
+      "conclusion": "",
+      "databaseId": 36951788879,
+      "headSha": "e8fbf61087e54463325c680a44244a0ee330697e",
+      "status": "queued"
+    },
+    {
+      "conclusion": "",
+      "databaseId": 36952496656,
+      "headSha": "7462a9b7a59a4cf50a29a1a4080b3687d003911c",
+      "status": "queued"
+    }
+  ]
+}

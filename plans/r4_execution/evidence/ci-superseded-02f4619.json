@@ -1,0 +1,10 @@
+{
+  "superseded_run": 36961059133,
+  "superseded_head": "92380e102af4e5dfd5018ac056ffb0192d1db466",
+  "replacement_run": 36963623694,
+  "replacement_head": "02f46191ed0b13471c82376a6fa0afbf2bc95cf2",
+  "cancellation_requested": true,
+  "reason": "Replaced by actual packaged OpenAPI and executable-R4 regression fixes. Original full installed failures are preserved in r4-053-full. This was not a timeout-based restart.",
+  "confirmed_status": "completed",
+  "confirmed_conclusion": "cancelled"
+}

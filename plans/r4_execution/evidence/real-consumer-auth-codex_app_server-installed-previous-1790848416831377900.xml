@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="355.469" timestamp="2026-10-01T06:44:14.926339-03:00" hostname="Alienware_m15"><testcase classname="test_real_connector_providers" name="test_real_provider_through_public_connector_cli[codex_app_server]" time="353.890"><failure message="TimeoutError">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_real_connector_providers.py:261: in receipt
+    view = await cli("runtime", "operation", "--alias", "assistant", "--client-intent-id", intent_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_real_connector_providers.py:132: in cli
+    stdout, stderr = await asyncio.shield(capture)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_real_connector_providers.py:466: in test_real_provider_through_public_connector_cli
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_real_connector_providers.py:283: in run
+    failed = await receipt("missing-login", ("FAILED",))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_real_connector_providers.py:251: in receipt
+    async with asyncio.timeout(240):
+               ^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\timeouts.py:116: in __aexit__
+    raise TimeoutError from exc_val
+E   TimeoutError</failure></testcase></testsuite></testsuites>

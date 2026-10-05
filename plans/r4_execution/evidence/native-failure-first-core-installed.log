@@ -1,0 +1,24 @@
+.....F.....................................................              [100%]
+================================== FAILURES ===================================
+_______ test_real_claude_missing_login_has_durable_authentication_error _______
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_real_native_auth_failure.py:52: in test_real_claude_missing_login_has_durable_authentication_error
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_real_native_auth_failure.py:39: in run
+    await runtime.open(OpenOperation("open", "session", "epoch", prepared), authority)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\runtime.py:436: in open
+    self._validate_lease_window(context)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\runtime.py:2659: in _validate_lease_window
+    raise CoreError("LEASE_INVALID", "admission")
+E   nexus_connector_core.models.CoreError: LEASE_INVALID
+=========================== short test summary info ===========================
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_real_native_auth_failure.py::test_real_claude_missing_login_has_durable_authentication_error
+1 failed, 58 passed in 28.49s

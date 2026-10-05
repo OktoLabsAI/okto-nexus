@@ -1,0 +1,50 @@
+sssssssssssssssssssssssssssssssssssssssssssssssssssssssss............... [  6%]
+.............s..ssssss........................................s......... [ 13%]
+......................s................................................. [ 20%]
+........................................................................ [ 27%]
+.......s....sss......................................................... [ 34%]
+........................................................................ [ 41%]
+........................................................................ [ 48%]
+........................................................................ [ 55%]
+........................................................................ [ 62%]
+s..............................................................s.s...... [ 69%]
+........................................................................ [ 76%]
+........................................................................ [ 83%]
+........................................................................ [ 90%]
+........................................................................ [ 96%]
+..........s.....................                                         [100%]
+============================== warnings summary ===============================
+legacy/test_pi_legacy.py::test_res_b2_reader_exit_signals_shutdown_even_if_on_child_exit_itself_raises
+  C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\_pytest\threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread pi-stdout
+  
+  Traceback (most recent call last):
+    File "C:\Python313\Lib\threading.py", line 1041, in _bootstrap_inner
+      self.run()
+      ~~~~~~~~^^
+    File "C:\Python313\Lib\threading.py", line 992, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\native\adapters\pi.py", line 476, in _read_stdout
+      self._on_child_exit(returncode, self.stderr_tail())
+      ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "/mnt/d/projetos/Techridy/okto-nexus-connector-core/tests/legacy/test_pi_legacy.py", line 852, in exploding_on_child_exit
+  RuntimeError: boom - injected failure in the death-report path itself
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+regression/test_c2_regressions.py::test_r03_late_dispatch_checks_clock_not_only_watcher_flags
+  C:\Python313\Lib\asyncio\base_events.py:2034: RuntimeWarning: coroutine '_ClockLateNative.close' was never awaited
+    handle = None  # Needed to break cycles when an exception occurs.
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+test_pc03_effect_guard.py::test_rc_03_03_late_thread_does_not_write_under_expired_lease
+  C:\Python313\Lib\asyncio\base_events.py:2034: RuntimeWarning: coroutine '_SlowThreadNative.close' was never awaited
+    handle = None  # Needed to break cycles when an exception occurs.
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+966 passed, 74 skipped, 3 warnings in 276.51s (0:04:36)

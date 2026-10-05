@@ -1,0 +1,51 @@
+{
+  "increment": "M06/M07 confirmed close and retained history reconciliation",
+  "status": "PARTIAL_INSTALLED_INTEGRATION",
+  "artifacts": "evidence/reconciliation-artifacts.json",
+  "reference_commits": {
+    "core": "97892edba088ac85c9977b8bd8fde27f725ea2a3",
+    "connector": "f23270c48770c00ec740baaad0ec545ea50b39a2",
+    "nexus": "54c23be582c9cc1d45c2793d29d5567c7973ada3"
+  },
+  "nexus_commit_note": "Nexus reference is the parent of the commit containing this manifest.",
+  "tests": {
+    "connector": {
+      "tests": 357,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 1,
+      "passed": 356
+    },
+    "nexus": {
+      "tests": 114,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 114
+    }
+  },
+  "unchanged_core": {
+    "version": "0.2.35.dev0",
+    "previous_tests": "test_runs_20260930_receipt_binding.json",
+    "note": "Core source unchanged; prior 104 focused installed passes retained, not rerun. Wheel and installed bytes verified in this campaign."
+  },
+  "source_checks": {
+    "remote_http_wss": 8,
+    "server_reconciliation": 27,
+    "publication_and_daemon": 43,
+    "paged_claims": 1
+  },
+  "fixture_corrections": [
+    "Joined the old execution owner before its deliberate socket close.",
+    "Marked possible effects before recording synthetic historical SUBMITTED facts.",
+    "Focused Server preconditions are explicitly seeded; initial authenticated ingress correctly refused the fixture's absent dispatched lease."
+  ],
+  "limits": [
+    "264 summaries over two WSS pages; 260 are seeded historical facts, not provider turns.",
+    "257 public Core claims over three pages remain UNKNOWN without release evidence.",
+    "Active session adoption, nonzero events, authority rotation, embedded recovery, pressure, migration and complete product acceptance remain pending.",
+    "Old acknowledged rows deleted before schema 3 cannot be reconstructed; missing opening generation/epoch cannot prove release.",
+    "One existing Connector skip and one Nexus dependency deprecation warning. User UI assets included without new UI acceptance.",
+    "No M00-M13 milestone or G0-G3 gate closed; full delivery scope unchanged."
+  ]
+}

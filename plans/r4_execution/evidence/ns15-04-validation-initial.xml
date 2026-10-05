@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="10.133" timestamp="2026-10-01T21:14:10.074434-03:00" hostname="Alienware_m15"><testcase classname="execution_r4.test_ns15" name="test_ns15_04[configuration]" time="0.044" /><testcase classname="execution_r4.test_ns15" name="test_ns15_04[restore]" time="3.741"><failure message="ValueError: Snapshot changed during validation">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_ns15.py:28: in test_ns15_04
+    {"configuration": configuration_case, "restore": restore_case}[scenario](tmp_path, monkeypatch, request)
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\ns15_restore_cases.py:117: in restore_case
+    report = recovery.backup(home, snapshot, stopped=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tools\offline_runtime_backup.py:237: in backup
+    validate(destination)
+D:\Projetos\Techridy\okto_labs_okto_nexus\tools\offline_runtime_backup.py:192: in validate
+    raise ValueError("Snapshot changed during validation")
+E   ValueError: Snapshot changed during validation</failure></testcase><testcase classname="execution_r4.test_ns15" name="test_ns15_02" time="5.113" /></testsuite></testsuites>

@@ -157,6 +157,15 @@ class SqliteMessageRepo(_ClockBacked):
         "created_at"
     )
 
+    # Transport evidence and causal admission are durable fences, not ordinary
+    # message history. Keep the same predicate for dry-run and actual pruning.
+    _RETAIN_RUNTIME = (
+        "NOT EXISTS (SELECT 1 FROM delivery_outbox o WHERE o.message_id=messages.message_id) "
+        "AND NOT EXISTS (SELECT 1 FROM runtime_results r WHERE r.publication_message_id=messages.message_id) "
+        "AND NOT EXISTS (SELECT 1 FROM runtime_message_causality n WHERE n.message_id=messages.message_id) "
+        "AND NOT EXISTS (SELECT 1 FROM runtime_message_causality n WHERE n.parent_message_id=messages.message_id)"
+    )
+
     def create(
         self,
         uow: UnitOfWork,
@@ -243,12 +252,12 @@ class SqliteMessageRepo(_ClockBacked):
     def count_before(self, uow: UnitOfWork, *, cutoff: str) -> int:
         """Count messages with ``created_at < cutoff`` (the reaper dry-run view).
 
-        By PURE AGE, independent of delivery status - matches the predicate of
+        By age, excluding durable runtime references, independent of delivery status; matches
         :meth:`prune_before` exactly (spec D-EMB-6 / rule br_cff2f2db).
         """
         try:
             row = uow.connection.execute(
-                "SELECT COUNT(*) FROM messages WHERE created_at < ?", (cutoff,)
+                "SELECT COUNT(*) FROM messages WHERE created_at < ? AND " + self._RETAIN_RUNTIME, (cutoff,)
             ).fetchone()
         except sqlite3.Error as exc:
             raise _db_error("counting prunable messages", exc) from exc
@@ -257,7 +266,7 @@ class SqliteMessageRepo(_ClockBacked):
     def prune_before(self, uow: UnitOfWork, *, cutoff: str, limit: int) -> int:
         """Delete up to ``limit`` messages with ``created_at < cutoff``; return count.
 
-        The messages reaper (spec D-EMB-6): purges by PURE AGE regardless of
+        The messages reaper (spec D-EMB-6): purges by age except runtime fences, regardless of
         delivery lane, deliberately relaxing the "never delete an undelivered
         message" invariant. Inbound FKs are RESTRICT, so within this ONE batch
         transaction the order is:
@@ -277,8 +286,8 @@ class SqliteMessageRepo(_ClockBacked):
             ids = [
                 row["message_id"]
                 for row in uow.connection.execute(
-                    "SELECT message_id FROM messages WHERE created_at < ? "
-                    "ORDER BY created_at ASC, rowid ASC LIMIT ?",
+                    "SELECT message_id FROM messages WHERE created_at < ? AND " + self._RETAIN_RUNTIME +
+                    " ORDER BY created_at ASC, rowid ASC LIMIT ?",
                     (cutoff, int(limit)),
                 ).fetchall()
             ]
@@ -386,6 +395,11 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
         "delivered_at, lease_expires_at, read_at, created_at"
     )
 
+    _RETAIN_RUNTIME = (
+        "NOT EXISTS (SELECT 1 FROM delivery_outbox o WHERE o.delivery_id=message_deliveries.delivery_id) "
+        "AND NOT EXISTS (SELECT 1 FROM runtime_relay_decisions r WHERE r.delivery_id=message_deliveries.delivery_id)"
+    )
+
     # An in-flight row whose lease elapsed at :now - the read-time projection
     # shows/counts it as 'unread' (redeliverable). Parameters: (delivered, now).
     _EXPIRED = "(status = ? AND lease_expires_at IS NOT NULL AND lease_expires_at < ?)"
@@ -439,6 +453,7 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
             rows = uow.connection.execute(
                 f"""
                 UPDATE message_deliveries SET
+                    consumer_kind = 'pull',
                     status = CASE WHEN attempts < ? THEN ? ELSE ? END,
                     attempts = CASE WHEN attempts < ? THEN attempts + 1
                                     ELSE attempts END,
@@ -448,6 +463,7 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
                 WHERE delivery_id IN (
                     SELECT delivery_id FROM message_deliveries
                     WHERE recipient_agent_id = ?
+                      AND (consumer_kind IS NULL OR consumer_kind = 'pull')
                       AND (status = ? OR {self._EXPIRED})
                     ORDER BY created_at ASC, rowid ASC
                     LIMIT ?
@@ -496,6 +512,7 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
             rows = uow.connection.execute(
                 f"UPDATE message_deliveries SET status = ?, read_at = ? "
                 f"WHERE recipient_agent_id = ? AND status IN (?, ?) "
+                f"AND (consumer_kind IS NULL OR consumer_kind = 'pull') "
                 f"AND message_id IN ({placeholders}) RETURNING message_id",
                 (
                     DELIVERY_READ,
@@ -509,6 +526,31 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
         except sqlite3.Error as exc:
             raise _db_error("acknowledging inbox deliveries", exc) from exc
         return sorted({row["message_id"] for row in rows})
+
+    def release_runtime_reservation(self, uow, *, operation_id):
+        return uow.connection.execute("UPDATE message_deliveries SET consumer_kind=NULL,consumer_operation_id=NULL,"
+            "status='unread',lease_expires_at=NULL WHERE consumer_kind='push' AND consumer_operation_id=? "
+            "AND status IN ('unread','delivered')", (operation_id,)).rowcount == 1
+
+    def mark_external_work_ack(self, uow, *, operation_id, session_id, at):
+        """CAS after application authentication; no native terminal is fabricated."""
+        return uow.connection.execute("UPDATE message_deliveries SET status='read',read_at=? "
+            "WHERE status IN ('unread','delivered') AND consumer_kind='push' AND consumer_operation_id=? "
+            "AND delivery_id IN (SELECT o.delivery_id FROM delivery_outbox o JOIN runtime_handoff_bindings b "
+            "USING(operation_id) WHERE o.operation_id=? AND b.external_session_id=? "
+            "AND b.external_acked_at IS NULL AND o.reconciliation_id IS NULL "
+            "AND o.status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED','OUTCOME_UNKNOWN'))",
+            (at, operation_id, operation_id, session_id)).rowcount == 1
+
+    def mark_runtime_processed(self, uow, *, operation_id, terminal_event_id, at):
+        """Consume only the matching push reservation with durable terminal proof."""
+        rows = uow.connection.execute("UPDATE message_deliveries SET status='read',read_at=? "
+            "WHERE status IN ('unread','delivered') AND consumer_kind='push' AND consumer_operation_id=? "
+            "AND delivery_id IN (SELECT o.delivery_id FROM delivery_outbox o JOIN runtime_results r "
+            "ON r.operation_id=o.operation_id AND r.attempt_id=o.attempt_id AND r.event_id=o.terminal_event_id "
+            "WHERE o.operation_id=? AND o.status='ACCEPTED' AND o.reconciliation_id IS NULL AND o.terminal_event_id=?) "
+            "RETURNING recipient_agent_id,message_id", (at, operation_id, operation_id, terminal_event_id)).fetchall()
+        return [dict(row) for row in rows]
 
     def extend_leases(
         self,
@@ -682,7 +724,7 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
         try:
             row = uow.connection.execute(
                 "SELECT COUNT(*) FROM message_deliveries "
-                "WHERE status = ? AND COALESCE(read_at, created_at) < ?",
+                "WHERE status = ? AND COALESCE(read_at, created_at) < ? AND " + self._RETAIN_RUNTIME,
                 (DELIVERY_READ, cutoff),
             ).fetchone()
         except sqlite3.Error as exc:
@@ -703,10 +745,11 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
         """
         try:
             cur = uow.connection.execute(
-                """
+                f"""
                 DELETE FROM message_deliveries WHERE delivery_id IN (
                     SELECT delivery_id FROM message_deliveries
                     WHERE status = ? AND COALESCE(read_at, created_at) < ?
+                      AND {self._RETAIN_RUNTIME}
                     ORDER BY COALESCE(read_at, created_at) ASC, delivery_id ASC
                     LIMIT ?
                 )

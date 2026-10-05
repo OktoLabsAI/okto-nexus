@@ -272,6 +272,20 @@ class SessionTrustGuard:
         unit of work is therefore a WRITE (the verification read plus the
         presence stamp); a failed credential check rolls it back untouched.
         """
+        from ..domain.execution_principal import current_execution_principal
+        from .execution_tools import denied, ExecutionToolConnectionFactory
+        principal = current_execution_principal.get()
+        if principal is not None:
+            if not isinstance(self._cf, ExecutionToolConnectionFactory):
+                raise denied('Managed session authentication is not configured for this service.')
+            if (agent_id != principal.scope['agent_id'] or
+                    session_id not in (None, principal.scope['session_id']) or session_secret is not None):
+                raise denied()
+            # The managed factory checks the current lease/grant in this UOW.
+            # The capability never creates a separate legacy session secret.
+            with self._cf.unit_of_work(write=False):
+                pass
+            return
         if self._trust_mode != TRUST_MODE_STRICT and not _is_nonempty_str(
             session_secret
         ):

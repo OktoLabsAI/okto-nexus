@@ -1,0 +1,51 @@
+{
+  "core": {
+    "version": "0.2.30.dev0",
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-core-wheel-85cnb6ls\\nexus_connector_core-0.2.30.dev0-py3-none-any.whl",
+    "sha256": "e060e033be05fdd4c9aff5c90902d191483d400b3f6778fa7bb5395b66f561e6"
+  },
+  "qualification": "Approved Codex/Claude MCP configuration and canonical domain use; technical peers, no real provider qualification.",
+  "nexus": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-capability-recovery-nexus-wheel-cnfc2uk2\\okto_nexus-0.2.0-py3-none-any.whl",
+    "sha256": "0a7dc654c0e4515a46ee331a1a12ec5fd4937c9aeb67808f3dda002f12987e3d",
+    "command": [
+      "C:\\Python313\\python.exe",
+      "-m",
+      "pip",
+      "wheel",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-capability-recovery-nexus-stage-agbnkf9c",
+      "--no-deps",
+      "--no-build-isolation",
+      "--wheel-dir",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-capability-recovery-nexus-wheel-cnfc2uk2"
+    ],
+    "staging_source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-capability-recovery-nexus-stage-agbnkf9c"
+  },
+  "connector": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-approved-mcp-wheel-el5u_0so\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+    "sha256": "ea6cf7fd15552daaca51ca1062e67d1dddd7c32f3c82c7501ffa9308ad8da837",
+    "command": [
+      "C:\\Python313\\python.exe",
+      "-m",
+      "pip",
+      "wheel",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-approved-mcp-stage-5ygji8z1",
+      "--no-deps",
+      "--no-build-isolation",
+      "--wheel-dir",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-approved-mcp-wheel-el5u_0so"
+    ],
+    "staging_source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-approved-mcp-stage-5ygji8z1"
+  },
+  "installed_python": "C:/Users/jpamb/AppData/Local/Temp/okto-r4-native-installed-zk_r383i/Scripts/python.exe",
+  "install_command": [
+    "C:/Users/jpamb/AppData/Local/Temp/okto-r4-native-installed-zk_r383i/Scripts/python.exe",
+    "-I",
+    "-m",
+    "pip",
+    "install",
+    "--no-deps",
+    "--force-reinstall",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-approved-mcp-wheel-el5u_0so\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl"
+  ]
+}

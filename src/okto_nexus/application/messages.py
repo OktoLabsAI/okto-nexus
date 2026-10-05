@@ -84,6 +84,7 @@ from .ports import (
     ConnectionFactory,
     EmbeddingProvider,
     EventEmitter,
+    InboxDeliveryNotifier,
     MessageDeliveryRepo,
     MessageRepo,
     MessageVectorStore,
@@ -125,6 +126,11 @@ class MessageService:
         governance: GovernanceService | None = None,
         approvals: ApprovalService | None = None,
         guardrails: GuardrailService | None = None,
+        inbox_notifier: InboxDeliveryNotifier | None = None,
+        runtime_planner=None,
+        runtime_context_provider=None,
+        runtime_results=None,
+        runtime_wake=None,
     ) -> None:
         self._cf = connection_factory
         self._channels = channels
@@ -164,6 +170,17 @@ class MessageService:
         # Communication guardrails (spec 9ae50ecb): when wired, content checks
         # run before governance/HITL and before any message row/delivery/event.
         self._guardrails = guardrails
+        # Inbox delivery push (ADR 0004 follow-up, SYS-03/UAT-05): when
+        # wired, every recipient's delivery is ALSO announced through this
+        # in-process registry, best-effort, AFTER the write uow commits -
+        # see _maybe_notify_inbox_subscribers. None = no-op (this slice's
+        # standing optional-dependency convention, same as governance/
+        # approvals/guardrails above).
+        self._inbox_notifier = inbox_notifier
+        self._runtime_planner = runtime_planner
+        self._runtime_context_provider = runtime_context_provider
+        self._runtime_results = runtime_results
+        self._runtime_wake = runtime_wake
 
     @contextmanager
     def _send_uow(
@@ -226,8 +243,9 @@ class MessageService:
     def create_message(
         self,
         *,
-        project_root: Any,
+        project_root: Any = None,
         from_agent_id: Any,
+        workspace_id: Any = None,
         subject: Any = None,
         body: Any = None,
         channel_id: Any = None,
@@ -238,6 +256,11 @@ class MessageService:
         trace_id: Any = None,
         session_secret: Any = None,
         _approved_execution: bool = False,
+        _runtime_context=None,
+        _runtime_result_id=None,
+        _nonexecuting_notification=False,
+        _managed_message_binding=None,
+        _source_session_key=None,
     ) -> dict[str, Any]:
         """Persist a message and emit ``message.created`` atomically.
 
@@ -272,8 +295,32 @@ class MessageService:
         exactly the failure mode this flag surfaces (check it if you expected
         an existing workspace).
         """
-        workspace_id, root_realpath = self._resolve_workspace(project_root)
+        from ..domain.execution_principal import current_execution_principal
+        principal = current_execution_principal.get()
+        if _source_session_key is not None and not _approved_execution:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Session provenance is internal to approval replay.', {})
+        if principal is not None:
+            if (from_agent_id != principal.scope['agent_id'] or from_session_id is not None
+                    or session_secret is not None or _runtime_result_id or _managed_message_binding):
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Use the identity of the managed runtime session.', {})
+            if workspace_id is None and project_root == principal.scope['workspace_id']:
+                workspace_id, project_root = project_root, None
+            if workspace_id != principal.scope['workspace_id'] or project_root is not None:
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Use the workspace ID bound to the managed session.', {})
+        logical_workspace = workspace_id is not None
+        if logical_workspace:
+            if (project_root is not None or type(workspace_id) is not str
+                    or not 1 <= len(workspace_id) <= 160 or not workspace_id.isprintable()):
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                    "Select exactly one project_root or existing workspace_id.", {})
+            root_realpath = None
+        else:
+            workspace_id, root_realpath = self._resolve_workspace(project_root)
         now = self._clock.now_iso()
+        runtime_context = _runtime_context
+        if runtime_context is None and self._runtime_context_provider:
+            runtime_context = self._runtime_context_provider()
+        runtime_operations = []
 
         # Pure, write-free validation first (no row / event on rejection).
         require_message_fields(from_agent_id, subject, body)
@@ -302,13 +349,44 @@ class MessageService:
         channel = channel_id if _is_nonempty_str(channel_id) else None
         parent = parent_message_id if _is_nonempty_str(parent_message_id) else None
         message_id = new_message_id()
+        prepared_runtime_artifact = None
+        if _runtime_result_id:
+            if self._runtime_results is None:
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Runtime result publication is not configured.", {})
+            prepared_runtime_artifact = self._runtime_results.prepare(_runtime_result_id, approved=_approved_execution)
 
         with self._send_uow(workspace_id=workspace_id, agent_id=from_agent_id) as uow:
+            if logical_workspace and self._workspaces.get(uow, workspace_id) is None:
+                raise OktoNexusError(ErrorCode.NOT_FOUND, "The logical workspace was not found.", {})
+            from .runtime_actor_authority import managed_message_binding, valid_actor_binding
+            capabilities = getattr(self._runtime_planner, 'capabilities', None)
+            managed_binding = managed_message_binding(uow, capabilities=capabilities,
+                actor_id=from_agent_id, workspace_id=workspace_id)
+            if _managed_message_binding is not None:
+                if not _approved_execution or not valid_actor_binding(uow, self._agents.get(uow, from_agent_id),
+                        _managed_message_binding, capabilities=capabilities, workspace_id=workspace_id):
+                    raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The approved runtime sender is no longer authorized.', {})
+                managed_binding = _managed_message_binding
+            if managed_binding:
+                from ..domain.runtime_context import RuntimeRequestContext
+                runtime_context = RuntimeRequestContext(actor_agent_id=from_agent_id,
+                    authentication_source='session_capability', workspace_id=workspace_id,
+                    credential_binding=managed_binding)
+            if _runtime_result_id:
+                if self._runtime_results is None or from_session_id or session_secret:
+                    raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Invalid runtime result publication context.", {})
+                existing = self._runtime_results.authorize(uow, result_id=_runtime_result_id,
+                    approved=_approved_execution, supplied={"project_root": root_realpath,
+                        **({"workspace_id": workspace_id} if logical_workspace else {}),
+                        "from_agent_id": from_agent_id, "subject": subject, "body": body,
+                        "channel_id": channel, "parent_message_id": parent, "target": target_echo, "artifacts": artifact_refs})
+                if existing:
+                    return existing
             # Trust gate FIRST (M10): a failed credential check rolls the whole
             # uow back, so a forged sender never persists anything. Skipped on
             # approved re-execution (spec 2948b2a2): authenticity was verified
             # at interception time and the ephemeral session may be long gone.
-            if not _approved_execution:
+            if not _approved_execution and not _runtime_result_id and not managed_binding:
                 verify_session_credentials(
                     self._sessions,
                     uow,
@@ -325,6 +403,11 @@ class MessageService:
                 advance_session_presence(
                     self._sessions, uow, session_id=from_session_id, at=now
                 )
+
+            from .message_session_origin import capture
+            source_session_key = _source_session_key if _approved_execution and _source_session_key is not None else capture(
+                uow.connection, managed_binding=managed_binding, result_id=_runtime_result_id,
+                verified_session_id=from_session_id if _is_nonempty_str(session_secret) else None)
 
             # Permission gate (migration 011): which SEND capability this is.
             # A channel post is gated by send_channel alone (its broadcast-ish
@@ -386,6 +469,16 @@ class MessageService:
             recipients, warning, excluded_stale, filtered_by_audience = (
                 self._resolve_recipients(uow, workspace_id, from_agent_id, target, now)
             )
+            if (managed_binding or _runtime_result_id) and str(from_agent_id) in recipients:
+                raise OktoNexusError(
+                    ErrorCode.PERMISSION_DENIED,
+                    "Runtime agents cannot send messages to themselves.",
+                    {"reason": "SELF_MESSAGE_NOT_ALLOWED"},
+                )
+            if _runtime_result_id and requires_known_recipient(target) and recipients != [target_echo["agent_id"]]:
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Result recipient is outside the current authorized audience.", {})
+            notification_actor = (self._runtime_results.authorize_notification_audience(uow,
+                result_id=_runtime_result_id, recipients=recipients) if _runtime_result_id else None)
 
             # Quantitative permission gates over the RESOLVED fan-out.
             max_recipients = perms.limit("max_recipients")
@@ -427,6 +520,12 @@ class MessageService:
                     if isinstance(body, str)
                     else 0,
                 )
+                approval_actor = from_agent_id
+                if notification_actor:
+                    origin_verdict = self._governance.enforce(uow, agent_id=notification_actor,
+                        action=message_action_for(target_echo, channel), size_bytes=len(body.encode("utf-8")))
+                    if origin_verdict is not None:
+                        verdict, approval_actor = origin_verdict, notification_actor
                 if (
                     verdict is not None
                     and self._approvals is not None
@@ -438,14 +537,15 @@ class MessageService:
                     # (BR1) and the pending envelope early-returns - no
                     # message row, no deliveries, no message.created. Session
                     # credentials are deliberately NOT persisted.
-                    return self._approvals.intercept(
+                    response = self._approvals.intercept(
                         uow,
                         workspace_id=workspace_id,
-                        agent_id=from_agent_id,
+                        agent_id=approval_actor,
                         action=message_action_for(target_echo, channel),
                         policy_id=verdict.policy.policy_id,
                         kwargs={
                             "project_root": root_realpath,
+                            **({"workspace_id": workspace_id} if logical_workspace else {}),
                             "from_agent_id": from_agent_id,
                             "subject": subject,
                             "body": body,
@@ -454,9 +554,18 @@ class MessageService:
                             "artifacts": artifact_refs,
                             "parent_message_id": parent,
                             "trace_id": resolved_trace,
+                            **({"_runtime_result_id": _runtime_result_id} if _runtime_result_id else {}),
+                            **({'_managed_message_binding': managed_binding} if managed_binding else {}),
+                            **({'_source_session_key': source_session_key} if source_session_key else {}),
                         },
                         trace_id=resolved_trace,
                     )
+                    if _runtime_result_id:
+                        self._runtime_results.finish(uow, result_id=_runtime_result_id, response=response)
+                    return response
+            if _runtime_result_id:
+                self._runtime_results.commit_artifact(uow, result_id=_runtime_result_id,
+                    prepared=prepared_runtime_artifact, recipients=recipients)
             message = self._messages.create(
                 uow,
                 message_id=message_id,
@@ -475,11 +584,17 @@ class MessageService:
                 created_at=now,
             )
 
+            if source_session_key:
+                uow.connection.execute('INSERT INTO execution_message_origins VALUES(?,?)',
+                                       (message.message_id, source_session_key))
+            if self._runtime_planner and getattr(self._config, "feature_harness_integrations", False) and not _nonexecuting_notification:
+                self._runtime_planner.causality.record(uow, message=message, context=runtime_context,
+                    now=now, source_result_id=_runtime_result_id)
             self._agents.touch(uow, agent_id=from_agent_id, at=now)
 
             # Fan out into each recipient's GLOBAL inbox (one delivery per agent).
             for recipient_id in recipients:
-                self._deliveries.create(
+                delivery = self._deliveries.create(
                     uow,
                     delivery_id=new_delivery_id(),
                     message_id=message.message_id,
@@ -487,6 +602,19 @@ class MessageService:
                     status=DELIVERY_UNREAD,
                     created_at=now,
                 )
+                if self._runtime_planner and not (_runtime_result_id or _nonexecuting_notification) and getattr(self._config, "feature_harness_integrations", False):
+                    operation_id = self._runtime_planner.enqueue(uow, context=runtime_context,
+                        message=message, delivery=delivery, now=now,
+                        authorization_revision=self.runtime_policy_revision(uow, message.from_agent_id, recipient_id))
+                    if operation_id:
+                        runtime_operations.append(operation_id)
+                elif self._runtime_planner and _runtime_result_id and not _nonexecuting_notification:
+                    operation_id = self._runtime_results.enqueue_relay(uow, result_id=_runtime_result_id,
+                        planner=self._runtime_planner, message=message, delivery=delivery, now=now,
+                        authorization_revision=self.runtime_policy_revision(uow, message.from_agent_id, recipient_id,
+                            notification_actor=notification_actor), emitter=self._emitter)
+                    if operation_id:
+                        runtime_operations.append(operation_id)
 
             # Emit the single message.created event INSIDE this transaction; the
             # event_id is assigned by the Event Log slice within the same commit.
@@ -517,6 +645,8 @@ class MessageService:
             data["event_id"] = event_id
             data["recipients"] = recipients
             data["delivered_count"] = len(recipients)
+            if runtime_operations:
+                data["runtime_operations"] = runtime_operations
             if filtered_by_audience:
                 # Outbound audience scoping (F1): these agents matched the
                 # target but sit outside the sender's comm_scope - the drop is
@@ -532,14 +662,65 @@ class MessageService:
                 # The upsert materialised a BRAND-NEW workspace: surface it so a
                 # mistyped project_root never creates a phantom silently.
                 data["workspace_created"] = True
+            if _runtime_result_id:
+                self._runtime_results.finish(uow, result_id=_runtime_result_id, response=data)
+
+        if runtime_operations and self._runtime_wake:
+            # Notifications are hints. The intent already committed with inbox.
+            try:
+                self._runtime_wake()
+            except Exception:
+                pass
 
         # Best-effort semantic index of the NEW message, in its OWN unit of work
         # AFTER the send committed (TR3 / br_0bdedc28): a failure here never
         # aborts the send or the fan-out, and there is no backfill of history.
-        self._maybe_generate_embedding(
-            message_id=message_id, subject=subject, body=body, created_at=now
-        )
+        if not _runtime_result_id:
+            self._maybe_generate_embedding(
+                message_id=message_id, subject=subject, body=body, created_at=now
+            )
+        # Best-effort in-process push (ADR 0004 follow-up, SYS-03/UAT-05):
+        # AFTER the delivery rows already committed above, announce each one
+        # to anything subscribed to that recipient - most notably
+        # HarnessSupervisor, for a live session's owning_agent_id. See
+        # _maybe_notify_inbox_subscribers's own docstring for why this runs
+        # here (post-commit) and never inside the write uow.
+        self._maybe_notify_inbox_subscribers(recipients=recipients, data=data)
         return data
+
+    # ------------------------------------------------------------------ #
+    # Transport revalidation reuses canonical policy without a second quota.
+    # ------------------------------------------------------------------ #
+    def runtime_policy_revision(self, uow, sender_id, recipient_id, *, notification_actor=None):
+        if self._governance is None:
+            return "unbound"
+        revision = self._governance.authorization_revision(uow, sender_id) + ":" + self._governance.authorization_revision(uow, recipient_id)
+        return revision + ":" + self._governance.authorization_revision(uow, notification_actor) if notification_actor else revision
+
+    def revalidate_runtime_delivery(self, uow, operation):
+        message = self._messages.get(uow, workspace_id=operation["workspace_id"], message_id=operation["message_id"])
+        if not message:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Delivery source is unavailable.", {})
+        sender = self._agents.get(uow, message.from_agent_id)
+        recipient = self._agents.get(uow, operation["recipient_agent_id"])
+        if not sender or not sender.is_active or not recipient or not reachable(sender, recipient):
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Delivery audience changed.", {})
+        perms = permission_set_for(self._agents, uow, message.from_agent_id)
+        target = parse_target(message.target)
+        if message.channel_id:
+            perms.require("messages", "send_channel")
+            if requires_known_recipient(target):
+                perms.require("messages", "send_direct")
+        else:
+            perms.require("messages", "send_direct" if requires_known_recipient(target) else "send_broadcast")
+        notification_actor = (self._runtime_results.authorize_notification_audience(uow,
+            result_id=operation["source_result_id"], recipients=[recipient.agent_id]) if operation.get("source_result_id") else None)
+        if operation["authorization_revision"] != self.runtime_policy_revision(uow, message.from_agent_id, recipient.agent_id,
+                notification_actor=notification_actor):
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Delivery policy changed; new admission is required.", {})
+        if self._guardrails and self._guardrails.has_enabled_assignments(uow):
+            self._guardrails.enforce(uow, workspace_id=message.workspace_id, actor_agent_id=message.from_agent_id,
+                                    surface="message_create", fields={"subject": message.subject, "body": message.body})
 
     # ------------------------------------------------------------------ #
     # Semantic-search generation (Frente 3)
@@ -582,6 +763,40 @@ class MessageService:
                 )
         except Exception:  # noqa: BLE001 - best-effort: a failed embed never aborts the send
             return
+
+    def _maybe_notify_inbox_subscribers(
+        self, *, recipients: Any, data: Mapping[str, Any]
+    ) -> None:
+        """Announce this delivery to each recipient's inbox subscribers,
+        BEST-EFFORT, AFTER the write uow that created the delivery rows has
+        already committed (ADR 0004 follow-up: closes the SYS-03/UAT-05
+        target-grammar gap - a message addressed at a live harness session's
+        owning_agent_id via direct/capability/role/tag now reaches its
+        connector).
+
+        Runs post-commit, never inside ``_send_uow``, for the same reason
+        :class:`~okto_nexus.application.ports.HarnessConnector` documents
+        for its own ``start``: a subscriber's callback (the supervisor
+        forwarding into a connector) can itself block on a transport write,
+        and must never do so while this service holds the SQLite WAL
+        writer lock. It is also why this is hand-off, not consumption: the
+        delivery row each recipient got is already durable by the time this
+        runs, so a subscriber raising - or no notifier being wired at all -
+        never loses or mutates it; it stays exactly where ADR 0001 already
+        left it, claimable through the ordinary inbox_pull/ack path
+        regardless of what happens here.
+
+        No-op when no notifier is wired (this slice's standing optional-
+        dependency convention - see governance/approvals/guardrails above).
+        """
+        notifier = self._inbox_notifier
+        if notifier is None:
+            return
+        for recipient_id in recipients:
+            try:
+                notifier.publish(recipient_id, data)
+            except Exception:  # noqa: BLE001 - best-effort, mirrors _maybe_generate_embedding
+                continue
 
     # ------------------------------------------------------------------ #
     # channel_create / channel_list

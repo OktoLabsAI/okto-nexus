@@ -1,0 +1,155 @@
+{
+  "date": "2026-10-01",
+  "status": "PARTIAL_ACCEPTANCE_WITH_RETAINED_READINESS_FAILURE",
+  "commits": {
+    "nexus": "79c2d3fde7b6294a643561de3af6a04245b29004",
+    "connector": "d4cb0c281a484134c2ca6063d098fa8f2cd53e8b",
+    "core": "8d519e027e8643481b2a5a48f66207a7ec5e4214"
+  },
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-discovery-stop-core-7379eez5\\dist\\nexus_connector_core-0.2.48.dev0-py3-none-any.whl",
+      "sha256": "205b16320ce75c228d54598f05c8b6286ee2c202bf1ef87ff247da4b696d62a0"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-discovery-stop-connector-bp9a_jrq\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "686b85af6d11771f1d304321036b166a0cd0dfcd252ca6f9c88410d4b87c41f8"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-discovery-stop-nexus-final-ztevxut7\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "01f409ba6462ade4a492cc64c72acb268ae28089adf144b24ec1682967924aa3"
+    }
+  },
+  "results": {
+    "core_installed": {
+      "tests": "139",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "73.298"
+    },
+    "connector_installed": {
+      "tests": "165",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "43.186"
+    },
+    "nexus_installed": {
+      "tests": "89",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "260.734"
+    },
+    "durable_lease_rechecks": {
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "0.367"
+    },
+    "actual_pi_discovery_stop": {
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "13.045"
+    },
+    "actual_pi_normal_journey": {
+      "tests": "1",
+      "failures": "1",
+      "errors": "0",
+      "skipped": "0",
+      "time": "129.816"
+    }
+  },
+  "test_overlap": "The two durable journal rechecks strengthen two cases already included in the 139 Core cases; do not add them as unique coverage.",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "topology": "Single Windows host; installed wheels outside clones; actual loopback HTTP/WSS, OS keyring and Pi installation. Server release readiness is test-only."
+  },
+  "measurements": {
+    "actual_discovery_stop_seconds": 0.014425199944525957,
+    "passive_discovery_seconds": 66.17574610002339,
+    "qualified_candidates": [
+      {
+        "adapter_id": "pi_rpc",
+        "version": "0.87.1",
+        "build_identity": "sha256:caf8bfad84ea26a7c8eaee06e0cde3dd7e34ef05e00dbebc348dfb3f22de487b",
+        "architecture": "x86_64"
+      }
+    ],
+    "file_open_seconds": 55.8667978
+  },
+  "retained_failures": [
+    "First source collection imported the Connector tests package ahead of Core tests.regression. Fixed source-runner import roots.",
+    "Initial Core run passed 101 assertions but exposed an unhandled UnboundLocalError in the lease watcher and an asynchronous close method in a synchronous test adapter. The watcher defect was reproduced in a failing focused test, fixed and rechecked against durable journal events.",
+    "Initial Nexus expanded source run passed 65 cases and failed the new fixture's missing local_discovery attribute plus an obsolete assertion that an approved Codex home remains entirely empty. The fixture now adds the optional attribute; the assertion requires only an empty .codex directory with no configuration or credentials written.",
+    "The final normal Pi journey failed the existing 120-second control-readiness deadline in PUBLISHING_INVENTORY. Shutdown and credential cleanup succeeded. This run is FAIL, not provider acceptance."
+  ],
+  "limitations": [
+    "Cooperative stop applies between filesystem operations; it does not preempt an OS read that has not returned.",
+    "Started publications and native operations retain their owners. Full single-deadline DRAINING_PENDING and second-recovery acceptance remain pending.",
+    "Readiness still requires the complete inventory. The normal Pi startup performance defect remains open; no timeout was increased and no content/qualification check was removed.",
+    "Core/Connector component regressions preceded the final Nexus-only rebuild; those component wheels are unchanged. The 89 Nexus cases and actual Pi campaigns used the final artifact tuple.",
+    "The first Nexus wheel/results and all failed attempts remain separately identified. Earlier positive provider journeys belong to their recorded earlier wheels.",
+    "Existing modified static UI assets were not accepted by this campaign. Linux, independent hosts and UI acceptance remain pending. All release gates remain open."
+  ],
+  "evidence": {
+    "evidence/discovery-stop-artifacts.json": "517763535c722f587a30b2d2694626f93c8e08767df0198300456feb47b25b02",
+    "evidence/discovery-stop-connector-build.log": "8203019874dae144226f4d51ac6883bd75f1e6e13de783161b52c38c78a10f52",
+    "evidence/discovery-stop-connector-installed.json": "8d89af0c913c41edb69475c756259b68d2912c7ab1f2d431a5b1f732fbce15ae",
+    "evidence/discovery-stop-connector-installed.log": "9478ff9ef6245ee42f5e66804c147062aef4a01afc935f15a19f757fb9b19952",
+    "evidence/discovery-stop-connector-installed.xml": "8861701f24e392e9b0dcbef1990fe7433da3aa9eeec773405a3db707ea6349dd",
+    "evidence/discovery-stop-connector-source-first.log": "7b98f63a2bbd8a43888248b622e66eac2fcad1dae8bf24633fafda9d515d94c6",
+    "evidence/discovery-stop-connector-source-first.xml": "c738af33030ce4107d012102bc06dd243bb9b62ce14a6ed991030f4006987fce",
+    "evidence/discovery-stop-connector-source.log": "1ba297b7575dea3385e1d34d059fc8e7b26a64e64d46d799c4c675f0718fad87",
+    "evidence/discovery-stop-connector-source.xml": "658d42936d316b28c1bbbe6fb1fe60870632752df55075b3c3890eb4655c544b",
+    "evidence/discovery-stop-core-build.log": "1bbce75e3bd198dd79e49e278f02b0cf8db3f346202cb35b5655f691fdb82d8d",
+    "evidence/discovery-stop-core-installed.json": "1415e75b530c97edb51a312c20403f348438fc92158a23c127c8f01b19f2d15a",
+    "evidence/discovery-stop-core-installed.log": "97f63c642d821ff64f21b2fd9528da2b2a25ba816cbb38a22f6c6c81c9d6a04e",
+    "evidence/discovery-stop-core-installed.xml": "b1600e491807056c9608dd8fa8f281d39cda8ac569718cb9be16a6d77787152a",
+    "evidence/discovery-stop-core-source-first.log": "42318d04df001c8771419d88b7d60de70226268d53ad262ff26010d8260ffba3",
+    "evidence/discovery-stop-core-source-first.xml": "3a7815fe85e26d2b7b9ac7541580273e20bcba108e509b0c70d5f2f2aeef9f7d",
+    "evidence/discovery-stop-core-source-import-error.log": "c6802c0c500d21fab4c02dbe9f540d89608a7013985177efd9b99b91ace63b0e",
+    "evidence/discovery-stop-core-source-import-error.xml": "ba8a7d1fa2665439b0c60b8c26e68c1683fb59f47f40eecd376217a7b181842a",
+    "evidence/discovery-stop-core-source.log": "87d36b8994578022955346b2f978e28cc91be0f3f529475923f4eed9b32286e1",
+    "evidence/discovery-stop-core-source.xml": "47c8d123beaafc5b9701784ec9d43eaeb9bf1a276f7bd0677a8d5a510f6efdc2",
+    "evidence/discovery-stop-durable-lease-installed.json": "309b7c241a6ee645e7a33aa232b5fd741bac3b68bebb674de0c7359f4ba432cf",
+    "evidence/discovery-stop-durable-lease-installed.log": "efb96369fde5de27afdbcc38439a58eb4e212e151c33b197b7bc9aea8bbed024",
+    "evidence/discovery-stop-durable-lease-installed.xml": "34c7c70837d15bc26fa9d12260689b68df1f039e0916b6859d917366e629ffb3",
+    "evidence/discovery-stop-first-artifacts.json": "f09389eb20ff9cbffed08171a1371a3eae71654689982a929537485a33c051a3",
+    "evidence/discovery-stop-first-nexus-installed.json": "64a0bb0f68f10383dd732846fb6a1f9a595a149c4de1c2c6667fb93a635b32c8",
+    "evidence/discovery-stop-first-nexus-installed.log": "4af88acfc40bdce31c600f0019fac868043f5e2dfc97ab9dde71be88a280ef2e",
+    "evidence/discovery-stop-first-nexus-installed.xml": "acd7da4192a689fe7d15d57fdb98346cabe5a2ac88c81a09d7263dd0f00ee955",
+    "evidence/discovery-stop-install.log": "05100e567dd7e8469a58561b3a265ff11c75dfa8a3bfd5a8e94cf88917577b18",
+    "evidence/discovery-stop-lease-baseline.log": "28e53853223f7325e95fcd38b602a0eca208836e46a795d4df6337f15acd662a",
+    "evidence/discovery-stop-lease-baseline.xml": "17dad2ed3a2f92579f455f4982abf0ee1f702d86cde9fb6b1323839f7e0ac48d",
+    "evidence/discovery-stop-legacy-contract-check.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "evidence/discovery-stop-nexus-build.log": "db0b148762692477584619331b7d49e5a58b40ca8ec2abeda966ca981bf0a2ff",
+    "evidence/discovery-stop-nexus-final-build.log": "68e1b8737db7885e4eb276b6e21639aa26dbf5d46352d73a162dacb436fcc869",
+    "evidence/discovery-stop-nexus-final-install.log": "33781560578f1149a3171c408df2085be584f28d21c9d672ba072590cdb34a3e",
+    "evidence/discovery-stop-nexus-installed.json": "7339bbe969a35605515f2d54f14e5f808eb2d2a3673397878a6e9172a923beb2",
+    "evidence/discovery-stop-nexus-installed.log": "cbd4957182fdd89bf247d894ee1ab2d15218be935a57b0f42f5bbbe9bbc21f2b",
+    "evidence/discovery-stop-nexus-installed.xml": "baa67d41e64deaf5608d2caad1f9e3ccef3d8319a7b5c29aa9f7d04423b998d8",
+    "evidence/discovery-stop-nexus-source-first.log": "394e4d366213c048bcf60582b3e840ed10fb625086190a9fee60fecbc106e66d",
+    "evidence/discovery-stop-nexus-source-first.xml": "421c2ccb3076f69783609ac73a4092b8f84e49cb878525f43fcb95bfcbdb5f91",
+    "evidence/discovery-stop-nexus-source.log": "1870fd1898eaad4f887e9028595dbab2210e7ba6ece1675f57c0e8b5f05e3d1a",
+    "evidence/discovery-stop-nexus-source.xml": "8d3f5fbd57b1e12ae60deeaf3c520b6ed7c62137d0351b780e644881ccce6e1a",
+    "evidence/discovery-stop-passive-profile.json": "b3afa8813014e16716ee86fe936e6faef1c3c6157324ed0c1b0195b3b10c2b08",
+    "evidence/discovery-stop-pip-check.log": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+    "evidence/discovery-stop-positive-pi_rpc-installed.json": "f8a88083185438e77911fab45089879fdbd5dc27723fcd92b714b0886df3b3c3",
+    "evidence/discovery-stop-positive-pi_rpc-installed.log": "2c3839ae45a35e64bda1443e2dde336a90fa8ab760181619f72d8aecec44faa1",
+    "evidence/discovery-stop-positive-pi_rpc-installed.xml": "bd46b574b6133d1b5af9bcacdeea931ee9d8df6a7890fd5d90c388f6550b11b5",
+    "evidence/discovery-stop-positive-pi_rpc-progress.json": "6a125b601925f281cbe7b9b9f11eb315285c75531031a50149a3341240150f6b",
+    "evidence/discovery-stop-positive-pi_rpc.json": "6a125b601925f281cbe7b9b9f11eb315285c75531031a50149a3341240150f6b",
+    "evidence/discovery-stop-r4-contract-check.log": "828192bf117521085fbbb79d845fbd5f07ea332da299bedb3d71dadbcb6f7732",
+    "evidence/discovery-stop-suites.json": "aad03687592f12ea618fd29524519ff68bc8fdebd70acbb769fcccf19f518d73",
+    "evidence/real-discovery-stop-pi_rpc-installed.json": "ce2942e5d5623f4980800d67e98c37542823c3e068318f15ff3ecd4cdbf369d9",
+    "evidence/real-discovery-stop-pi_rpc-installed.log": "c6b723d505f7902a6e360620307f1e730919045dc835b6705a5f707dc372215e",
+    "evidence/real-discovery-stop-pi_rpc-installed.xml": "7062e9e889868f9488ec8b3d4e52ede853801742bf08c38d73b1e1b79ad554a4",
+    "evidence/real-discovery-stop-pi_rpc-progress.json": "e29983253ccde65b790d071b27971340c6fef2000a0836608dee8dffe389665d",
+    "evidence/real-discovery-stop-pi_rpc.json": "e29983253ccde65b790d071b27971340c6fef2000a0836608dee8dffe389665d"
+  }
+}

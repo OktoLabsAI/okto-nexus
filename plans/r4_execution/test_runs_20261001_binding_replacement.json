@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-01",
+  "nexus_commit": "2a37eda182c225bd6957a8efb7287fcd47a74319",
+  "connector_commit": "4cb5ccfd1853e865b00a6aac873ccf348406a8c2",
+  "core_commit": "9c778719c3892d9742bb358b0020e39ed43df08d",
+  "artifacts": "evidence/binding-replacement-artifacts.json",
+  "final_installed": {
+    "connector_passed": 196,
+    "nexus_tcp_journeys_passed": 4,
+    "skipped": 0
+  },
+  "earlier_installed": {
+    "connector_passed": 195,
+    "nexus_passed": 34,
+    "nexus_failed": 1,
+    "note": "Same Nexus/Core wheel bytes; Connector lacked the administrative-ticket refresh. Failed real replacement journey was corrected and rerun on the final pair."
+  },
+  "source": {
+    "initial_server_passed": 7,
+    "expanded_server_passed": 26,
+    "expanded_connector_passed": 104,
+    "ticket_owner_passed": 28,
+    "note": "Overlapping executions, not additive coverage."
+  },
+  "verified": [
+    "Optional replace_binding_id is validated by the public API and additive HTTP request schema.",
+    "Preparation exposes the old binding revision/realization and the replacement; exact diff and operator proof are required.",
+    "Apply rechecks scope, old revision and idle target, updates one binding and preserves endpoint/profile and global agent revision dimensions.",
+    "Active, opening, unknown and failed target claims refuse replacement at preparation and application; another seeded READY claim is preserved.",
+    "Connector persists the target snapshot before network calls, compares it before application, and acknowledges only the next scoped binding revision.",
+    "Lost acknowledgment recovers the same application; prior local intent becomes SUPERSEDED with its original result retained.",
+    "CLI show/list/runtime selection use the current alias after replacement; schema 11 migrates to schema 12 without implicit replacement authority.",
+    "Actual TCP CLI registration, realization, operator approval and replacement journey passes, including historical reads and new blocked runtime-intent resolution.",
+    "Daemon realization publication obtains a current administrative derivative when canonical authority differs from its ticket, without replacing the control connection or retrying native execution.",
+    "Existing HTTP/WSS CLI initial-turn/control journey passes on the final pair."
+  ],
+  "retained_failures": [
+    "One acknowledgment-failure mock lacked the new optional comparison argument; its signature was corrected.",
+    "The first installed real replacement journey exposed reuse of a stale administrative ticket after binding application. Current-authority comparison and idempotent registration refresh fixed it; Server rejection was retained."
+  ],
+  "limitations": [
+    "No real-provider native opening after replacement is demonstrated here.",
+    "Preservation of an unrelated session is verified on a seeded durable claim, not another running native process.",
+    "Drift/login diagnostics and full NS05.05 acceptance remain pending.",
+    "Historical real Pi/Codex/Claude campaigns are not promoted to these newer consumer wheels.",
+    "Preexisting UI assets were packaged unchanged but not committed or accepted.",
+    "M03/M04 and G0-G3 remain open."
+  ],
+  "evidence": {
+    "evidence/binding-replacement-artifacts.json": "e54620f2dbc9354f180d47f7a094b865d7c1b40bf3f5059a6169ccfb3f11399a",
+    "evidence/binding-replacement-before-ticket-fix-artifacts.json": "6c3af6b99e433dcf2401034b7c7fdbff9287374e5b1f02aac41ea21446ed0ad3",
+    "evidence/binding-replacement-before-ticket-fix-connector-build.log": "58016e6d2b9f5ef60f3661705e9117589fbc570e7c19943df86e92ece1ff1e20",
+    "evidence/binding-replacement-before-ticket-fix-connector-installed.json": "08f6ee1a10127548e75e6809f395b8f50df4a080d5e0e09f4d6be9474701f7d7",
+    "evidence/binding-replacement-before-ticket-fix-connector-installed.log": "d5c2448e050c81237d1245841baf2a0b33c481fb389889f65ea829b177adc9f1",
+    "evidence/binding-replacement-before-ticket-fix-connector-installed.xml": "e30899c9323a1b30aea29e93b27cee5fca405797eed9d94d4c88e6e7e91dff16",
+    "evidence/binding-replacement-before-ticket-fix-install.log": "568f93d01bdd865b525b5ab2148c7a600ef12007693a23f58f23382a51c69e9d",
+    "evidence/binding-replacement-before-ticket-fix-nexus-build.log": "1c4c3049ab581e5b3c6f24777528ca32a4ffd62c6542daadcebbeb681226992c",
+    "evidence/binding-replacement-before-ticket-fix-nexus-installed.json": "ee09a29f3c5adc0db6a4a406756be7576f8dff4055bdf8438ecbcfaa5512e9e1",
+    "evidence/binding-replacement-before-ticket-fix-nexus-installed.log": "f914850ad715cd7c9f6b7a621071aae4b208be785f122f25e53edb739e9786b8",
+    "evidence/binding-replacement-before-ticket-fix-nexus-installed.xml": "e3ab572f3516cd45a44833df19d08b176ff490499b35d409164ce690a5e12819",
+    "evidence/binding-replacement-connector-build.log": "49b2a4cff8c2f4f50a7b1d7083193b6970ab5662f48a6a9c9dc34cda7147b59c",
+    "evidence/binding-replacement-connector-installed.json": "08f6ee1a10127548e75e6809f395b8f50df4a080d5e0e09f4d6be9474701f7d7",
+    "evidence/binding-replacement-connector-installed.log": "d5c2448e050c81237d1245841baf2a0b33c481fb389889f65ea829b177adc9f1",
+    "evidence/binding-replacement-connector-installed.xml": "e30899c9323a1b30aea29e93b27cee5fca405797eed9d94d4c88e6e7e91dff16",
+    "evidence/binding-replacement-connector-source-expanded.xml": "e2b6d1099c27fa87d9cd41815f4cac82d4fafe703d335b7603d1db20343833d8",
+    "evidence/binding-replacement-connector-source.xml": "a6dec2fde158e9b5bcadaea98d1438751eb8b0c907ab8d7edca1e3bd4ecf84ec",
+    "evidence/binding-replacement-final-connector-installed.json": "a41a317bd536db8b90ae4d6c3e9bebfffa4694157fa1ae9e86e71806f0125f7f",
+    "evidence/binding-replacement-final-connector-installed.log": "4c7f1db907c07ac97b8a1763f7b240eac543f363a6057c0dae4010ac7cea7e68",
+    "evidence/binding-replacement-final-connector-installed.xml": "950232feae8d7f01b1cab2a9d6e68a2ef287766e8336caeedcc5480d8aa91ac7",
+    "evidence/binding-replacement-final-install.log": "1c020d6d6f5473d2e6a7443e152494ef9eaeaae3565c41b2dd876b3e047817b0",
+    "evidence/binding-replacement-final-nexus-installed.json": "a13dbedae66f3e3c8f22975d27f5aab8d8b174a32d131271fdaad27f5476e8da",
+    "evidence/binding-replacement-final-nexus-installed.log": "7b61232b8dbc095a32a01b5e9e083ca6c50332a739542adfe1dc1e93fa7fdf3c",
+    "evidence/binding-replacement-final-nexus-installed.xml": "27e61227a657f44475d61c97a2147536dcf6ea5356976387c32e33de40d9036d",
+    "evidence/binding-replacement-install.log": "568f93d01bdd865b525b5ab2148c7a600ef12007693a23f58f23382a51c69e9d",
+    "evidence/binding-replacement-nexus-build.log": "1c4c3049ab581e5b3c6f24777528ca32a4ffd62c6542daadcebbeb681226992c",
+    "evidence/binding-replacement-nexus-installed.json": "ee09a29f3c5adc0db6a4a406756be7576f8dff4055bdf8438ecbcfaa5512e9e1",
+    "evidence/binding-replacement-nexus-installed.log": "f914850ad715cd7c9f6b7a621071aae4b208be785f122f25e53edb739e9786b8",
+    "evidence/binding-replacement-nexus-installed.xml": "e3ab572f3516cd45a44833df19d08b176ff490499b35d409164ce690a5e12819",
+    "evidence/binding-replacement-nexus-source-expanded.xml": "e7f8999ceb3be0e9b804ada6641631c14aa7b19da5f347b373e996eeba9176a6",
+    "evidence/binding-replacement-source.xml": "28e9e6ba06ee9f2fc94100c2860314f99fbfe6fea37954025345847c37d425fe",
+    "evidence/binding-replacement-ticket-source.xml": "13927f5e2bede5352e23455944d720c39b3f05dcbd2e1503bcc5a256fc9fbcdc"
+  }
+}

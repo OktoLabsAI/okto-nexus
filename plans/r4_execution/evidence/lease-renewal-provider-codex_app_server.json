@@ -1,0 +1,36 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+    "-I",
+    "D:/Projetos/Techridy/okto-nexus-connector-core/tools/probe_managed_factory.py",
+    "codex_app_server",
+    "--codex",
+    "C:/Users/jpamb/AppData/Roaming/npm/node_modules/@openai/codex/node_modules/@openai/codex-win32-x64/vendor/x86_64-pc-windows-msvc/bin/codex.exe",
+    "--codex-home",
+    "C:/Users/jpamb/.codex",
+    "--renew-r4"
+  ],
+  "core_version": "0.2.38.dev0",
+  "core_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+  "exit_code": 0,
+  "accepted": true,
+  "report": {
+    "authority_mode": "r4",
+    "close_receipt_error": null,
+    "close_receipt_stage": "SUCCEEDED",
+    "close_stage": "SUCCEEDED",
+    "lease_application_stage": "INSTALLED",
+    "lease_serial": 2,
+    "open_stage": "SUBMITTED",
+    "prepared_architecture": "x86_64",
+    "prepared_version": "0.159.0",
+    "renewal_stage": "RENEWED",
+    "shutdown_outcome": "already_closed",
+    "submit_stage": "SUBMITTED",
+    "terminal_operation_id": "turn",
+    "terminal_outcome": "success",
+    "turn_receipt_stage": "SUCCEEDED"
+  },
+  "stderr_present": false,
+  "scope": "Real local provider through installed Core production factory; locally constructed R4 grants. No Server/Connector journey acceptance."
+}

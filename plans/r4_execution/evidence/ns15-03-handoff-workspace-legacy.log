@@ -1,0 +1,42 @@
+.......................................FF............................... [ 39%]
+.....................................................F.................. [ 79%]
+.....................................                                    [100%]
+================================== FAILURES ===================================
+______________________ test_register_tools_and_envelope _______________________
+/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_handoff.py:1500: in test_register_tools_and_envelope
+    ???
+..\okto-r4-migration-resume-bkj6ies1\venv313\Lib\site-packages\okto_nexus\adapters\inbound\mcp\tools\handoff.py:282: in register
+    service = build_service(deps)
+              ^^^^^^^^^^^^^^^^^^^
+..\okto-r4-migration-resume-bkj6ies1\venv313\Lib\site-packages\okto_nexus\adapters\inbound\mcp\tools\handoff.py:263: in build_service
+    service.runtime_work = RuntimeWorkService(access=build_access_service(deps), outbox=SqliteRuntimeOutboxRepo(),
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-migration-resume-bkj6ies1\venv313\Lib\site-packages\okto_nexus\adapters\inbound\mcp\tools\harness.py:86: in build_access_service
+    admission_fence=deps.runtime_admission_fence)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'types.SimpleNamespace' object has no attribute 'runtime_admission_fence'
+__________________ test_build_service_reuses_existing_repos ___________________
+/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_handoff.py:1582: in test_build_service_reuses_existing_repos
+    ???
+..\okto-r4-migration-resume-bkj6ies1\venv313\Lib\site-packages\okto_nexus\adapters\inbound\mcp\tools\handoff.py:263: in build_service
+    service.runtime_work = RuntimeWorkService(access=build_access_service(deps), outbox=SqliteRuntimeOutboxRepo(),
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-migration-resume-bkj6ies1\venv313\Lib\site-packages\okto_nexus\adapters\inbound\mcp\tools\harness.py:86: in build_access_service
+    admission_fence=deps.runtime_admission_fence)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'types.SimpleNamespace' object has no attribute 'runtime_admission_fence'
+_____________ test_ts11_surface_revision_feature_flag_and_budgets _____________
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_handoff_dependencies.py:1267: in test_ts11_surface_revision_feature_flag_and_budgets
+    assert info["surface_revision"] == SURFACE_REVISION == 59
+E   assert 61 == 59
+============================== warnings summary ===============================
+test_handoff_dependencies.py::test_ts9_hitl_kwargs_normalized_depends_on_without_credentials
+  C:\Users\jpamb\AppData\Local\Temp\okto-r4-migration-resume-bkj6ies1\venv313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_handoff.py::test_register_tools_and_envelope
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_handoff.py::test_build_service_reuses_existing_repos
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_handoff_dependencies.py::test_ts11_surface_revision_feature_flag_and_budgets
+3 failed, 178 passed, 1 warning in 287.54s (0:04:47)

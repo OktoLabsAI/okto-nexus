@@ -1,0 +1,109 @@
+{
+  "pi": {
+    "status": 200,
+    "data": {
+      "ok": true,
+      "data": {
+        "session_id": "hsess_066f968502bd44f48aa49f100878550c",
+        "kind": "pi",
+        "owning_agent_id": "sys_pi_agent",
+        "status": "RUNNING",
+        "capabilities": {
+          "send_only": false,
+          "steer_timing": "NEXT_TURN_BOUNDARY",
+          "interrupt_requires_settle_wait": true,
+          "multiplexes_sessions": false,
+          "observes_session_end": true
+        },
+        "started_at": "2026-09-20T17:58:37.816898Z",
+        "ended_at": null,
+        "metadata": {
+          "pi_session_id": "hsess_066f968502bd44f48aa49f100878550c"
+        }
+      }
+    },
+    "seconds": 1.027
+  },
+  "codex": {
+    "status": 200,
+    "data": {
+      "ok": true,
+      "data": {
+        "session_id": "hsess_d7c8c068a0624872a79717094feba6dd",
+        "kind": "codex",
+        "owning_agent_id": "sys_codex_agent",
+        "status": "RUNNING",
+        "capabilities": {
+          "send_only": false,
+          "steer_timing": "IMMEDIATE",
+          "interrupt_requires_settle_wait": false,
+          "multiplexes_sessions": true,
+          "observes_session_end": true
+        },
+        "started_at": "2026-09-20T17:58:38.261810Z",
+        "ended_at": null,
+        "metadata": {
+          "thread_id": "01a0bff8-55ab-7220-b7c7-153ae556094a"
+        }
+      }
+    },
+    "seconds": 0.444
+  },
+  "claude_code/stream": {
+    "status": 200,
+    "data": {
+      "ok": true,
+      "data": {
+        "session_id": "hsess_c7f18beb4af34fdd92e9044ef1ed56b0",
+        "kind": "claude_code",
+        "owning_agent_id": "sys_cc_stream_agent",
+        "status": "RUNNING",
+        "capabilities": {
+          "send_only": false,
+          "steer_timing": "IMMEDIATE",
+          "interrupt_requires_settle_wait": false,
+          "multiplexes_sessions": false,
+          "observes_session_end": true
+        },
+        "started_at": "2026-09-20T17:58:38.267465Z",
+        "ended_at": null,
+        "metadata": {}
+      }
+    },
+    "seconds": 0.005
+  },
+  "claude_code/attach": {
+    "status": 200,
+    "data": {
+      "ok": true,
+      "data": {
+        "session_id": "60906.a6ca59219c37fde7c0c907ce203016e3484d8b3d8456070542e43a1abd6a6d5d",
+        "kind": "claude_code",
+        "owning_agent_id": "sys_cc_attach_agent",
+        "status": "RUNNING",
+        "capabilities": {
+          "send_only": true,
+          "steer_timing": null,
+          "interrupt_requires_settle_wait": false,
+          "multiplexes_sessions": false,
+          "observes_session_end": false
+        },
+        "started_at": "2026-09-20T17:58:38.271385Z",
+        "ended_at": null,
+        "metadata": {
+          "pid": 60906,
+          "registry_session_id": "5e3f65cf-8743-4d6b-8777-024f3015f6ae",
+          "name": "sys-evidence-33",
+          "cwd": "/private/tmp/claude-501/-Users-maheidem-Documents-dev-OktoLabsAI/d964d04a-26e1-4484-bc9c-51ccc97fd32b/scratchpad/sys_evidence",
+          "tmux": "sys-harness-attach:@18.%18",
+          "version": "2.1.278",
+          "peer_protocol": 1,
+          "socket_path": "/tmp/cc-socks/60906.sock",
+          "socket_path_source": "registry",
+          "guard_proc_start_known": true
+        }
+      }
+    },
+    "seconds": 0.003
+  }
+}

@@ -1,0 +1,1131 @@
+{
+  "fake_target_pid": 87030,
+  "registry_path_checked": "/Users/maheidem/.claude/sessions/87030.json",
+  "registry_exists": false,
+  "attach_open_status": 404,
+  "attach_open_response": {
+    "ok": false,
+    "error": {
+      "code": "NOT_FOUND",
+      "message": "No Claude Code session registry at /Users/maheidem/.claude/sessions/87030.json. The session may have ended, the pid may be wrong, or this is not an interactive session (`claude -p` sessions have no registry entry)."
+    }
+  },
+  "attach_open_seconds": 0.013,
+  "stream_open_status": 200,
+  "stream_open_response": {
+    "ok": true,
+    "data": {
+      "session_id": "hsess_585d82659d5244b8adaf8acca3fa3214",
+      "kind": "claude_code",
+      "owning_agent_id": "uat06_stream_after_failure_agent",
+      "status": "RUNNING",
+      "capabilities": {
+        "send_only": false,
+        "steer_timing": "IMMEDIATE",
+        "interrupt_requires_settle_wait": false,
+        "multiplexes_sessions": false,
+        "observes_session_end": true
+      },
+      "started_at": "2026-09-20T18:23:37.532495Z",
+      "ended_at": null,
+      "metadata": {}
+    }
+  },
+  "stream_open_seconds": 0.006,
+  "stream_send_status": 200,
+  "stream_turn_completed": true,
+  "stream_events": [
+    {
+      "session_id": "hsess_585d82659d5244b8adaf8acca3fa3214",
+      "harness_kind": "claude_code",
+      "kind": "tool_activity",
+      "native_event": "system:hook_started",
+      "occurred_at": "2026-09-20T18:23:38.134766Z",
+      "payload": {
+        "type": "system",
+        "subtype": "hook_started",
+        "hook_id": "2d1a5787-9f27-46be-a9d2-a678a54a703f",
+        "hook_name": "SessionStart:startup",
+        "hook_event": "SessionStart",
+        "uuid": "de2d79f9-bc10-4f87-905a-052b459f8ea2",
+        "session_id": "fa1ff602-11c9-46c5-8acf-1fa22108b2cd"
+      },
+      "thread_id": null,
+      "turn_id": null
+    },
+    {
+      "session_id": "hsess_585d82659d5244b8adaf8acca3fa3214",
+      "harness_kind": "claude_code",
+      "kind": "tool_activity",
+      "native_event": "system:hook_started",
+      "occurred_at": "2026-09-20T18:23:38.134838Z",
+      "payload": {
+        "type": "system",
+        "subtype": "hook_started",
+        "hook_id": "162c3f00-2bcc-4032-aaa5-3b8961d1297f",
+        "hook_name": "SessionStart:startup",
+        "hook_event": "SessionStart",
+        "uuid": "47eea2a3-6eab-4053-8b55-7004a2066d2d",
+        "session_id": "fa1ff602-11c9-46c5-8acf-1fa22108b2cd"
+      },
+      "thread_id": null,
+      "turn_id": null
+    },
+    {
+      "session_id": "hsess_585d82659d5244b8adaf8acca3fa3214",
+      "harness_kind": "claude_code",
+      "kind": "tool_activity",
+      "native_event": "system:hook_response",
+      "occurred_at": "2026-09-20T18:23:38.134930Z",
+      "payload": {
+        "type": "system",
+        "subtype": "hook_response",
+        "hook_id": "162c3f00-2bcc-4032-aaa5-3b8961d1297f",
+        "hook_name": "SessionStart:startup",
+        "hook_event": "SessionStart",
+        "output": "",
+        "stdout": "",
+        "stderr": "",
+        "exit_code": 0,
+        "outcome": "success",
+        "uuid": "a1950c2d-1894-452d-98ae-235f16bcc88b",
+        "session_id": "fa1ff602-11c9-46c5-8acf-1fa22108b2cd"
+      },
+      "thread_id": null,
+      "turn_id": null
+    },
+    {
+      "session_id": "hsess_585d82659d5244b8adaf8acca3fa3214",
+      "harness_kind": "claude_code",
+      "kind": "tool_activity",
+      "native_event": "system:hook_response",
+      "occurred_at": "2026-09-20T18:23:38.135250Z",
+      "payload": {
+        "type": "system",
+        "subtype": "hook_response",
+        "hook_id": "2d1a5787-9f27-46be-a9d2-a678a54a703f",
+        "hook_name": "SessionStart:startup",
+        "hook_event": "SessionStart",
+        "output": "=== REMEMBER ===\nHistory in .remember/: now.md (buffer), today-*.md (daily), recent.md (7d), archive.md (old), archive-YYYY-MM-DD*.md and recent-YYYY-MM-DD*.md (rotated slices, older still; a second rotation the same day gets a -2 suffix), core-memories.md (key moments). Search on user request \u2014 the rotated slices are NOT injected below, grep them when a question reaches past what is.\n\n",
+        "stdout": "=== REMEMBER ===\nHistory in .remember/: now.md (buffer), today-*.md (daily), recent.md (7d), archive.md (old), archive-YYYY-MM-DD*.md and recent-YYYY-MM-DD*.md (rotated slices, older still; a second rotation the same day gets a -2 suffix), core-memories.md (key moments). Search on user request \u2014 the rotated slices are NOT injected below, grep them when a question reaches past what is.\n\n",
+        "stderr": "",
+        "exit_code": 0,
+        "outcome": "success",
+        "uuid": "eda37920-5e14-4321-adfa-b13e3708478d",
+        "session_id": "fa1ff602-11c9-46c5-8acf-1fa22108b2cd"
+      },
+      "thread_id": null,
+      "turn_id": null
+    },
+    {
+      "session_id": "hsess_585d82659d5244b8adaf8acca3fa3214",
+      "harness_kind": "claude_code",
+      "kind": "turn_started",
+      "native_event": "system:init",
+      "occurred_at": "2026-09-20T18:23:38.184816Z",
+      "payload": {
+        "type": "system",
+        "subtype": "init",
+        "cwd": "/private/tmp/claude-501/-Users-maheidem-Documents-dev-OktoLabsAI/d964d04a-26e1-4484-bc9c-51ccc97fd32b/scratchpad/uat/project_root",
+        "session_id": "fa1ff602-11c9-46c5-8acf-1fa22108b2cd",
+        "tools": [
+          "Task",
+          "Bash",
+          "CronCreate",
+          "CronDelete",
+          "CronList",
+          "DesignSync",
+          "Edit",
+          "EnterWorktree",
+          "ExitWorktree",
+          "ListAgents",
+          "ListMcpResourcesTool",
+          "LSP",
+          "Monitor",
+          "NotebookEdit",
+          "PushNotification",
+          "Read",
+          "ReadMcpResourceDirTool",
+          "ReadMcpResourceTool",
+          "RemoteTrigger",
+          "ReportFindings",
+          "ScheduleWakeup",
+          "SendMessage",
+          "Skill",
+          "TaskStop",
+          "ToolSearch",
+          "WebFetch",
+          "WebSearch",
+          "Workflow",
+          "Write",
+          "mcp__nextcloud__nc_share_create",
+          "mcp__nextcloud__nc_share_create_public_link",
+          "mcp__nextcloud__nc_share_delete",
+          "mcp__nextcloud__nc_share_get",
+          "mcp__nextcloud__nc_share_list",
+          "mcp__nextcloud__nc_share_update",
+          "mcp__nextcloud__nc_webdav_copy_resource",
+          "mcp__nextcloud__nc_webdav_create_directory",
+          "mcp__nextcloud__nc_webdav_delete_resource",
+          "mcp__nextcloud__nc_webdav_find_by_name",
+          "mcp__nextcloud__nc_webdav_find_by_type",
+          "mcp__nextcloud__nc_webdav_list_directory",
+          "mcp__nextcloud__nc_webdav_list_favorites",
+          "mcp__nextcloud__nc_webdav_move_resource",
+          "mcp__nextcloud__nc_webdav_read_file",
+          "mcp__nextcloud__nc_webdav_search_files",
+          "mcp__nextcloud__nc_webdav_write_file",
+          "mcp__plugin_controle-financeiro_finance__add_cc_bill",
+          "mcp__plugin_controle-financeiro_finance__add_expense",
+          "mcp__plugin_controle-financeiro_finance__add_income",
+          "mcp__plugin_controle-financeiro_finance__apply_cards",
+          "mcp__plugin_controle-financeiro_finance__audit_archive",
+          "mcp__plugin_controle-financeiro_finance__audit_duplicates",
+          "mcp__plugin_controle-financeiro_finance__category_report",
+          "mcp__plugin_controle-financeiro_finance__cc_bills",
+          "mcp__plugin_controle-financeiro_finance__cc_details",
+          "mcp__plugin_controle-financeiro_finance__create_month",
+          "mcp__plugin_controle-financeiro_finance__delete_month",
+          "mcp__plugin_controle-financeiro_finance__edit_month",
+          "mcp__plugin_controle-financeiro_finance__enel_solar_report",
+          "mcp__plugin_controle-financeiro_finance__fetch_bills",
+          "mcp__plugin_controle-financeiro_finance__import_pdf",
+          "mcp__plugin_controle-financeiro_finance__list_expenses",
+          "mcp__plugin_controle-financeiro_finance__list_months",
+          "mcp__plugin_controle-financeiro_finance__mark_cc_bills_paid",
+          "mcp__plugin_controle-financeiro_finance__mark_expenses_paid",
+          "mcp__plugin_controle-financeiro_finance__pj_calc",
+          "mcp__plugin_controle-financeiro_finance__prepare_month",
+          "mcp__plugin_controle-financeiro_finance__prepare_pdf",
+          "mcp__plugin_controle-financeiro_finance__search_expenses",
+          "mcp__plugin_controle-financeiro_finance__update_expense",
+          "mcp__plugin_controle-financeiro_finance__update_income",
+          "mcp__plugin_controle-financeiro_finance__view_month",
+          "mcp__plugin_controle-financeiro_finance__yearly_report",
+          "mcp__plugin_pi-delegate_pi-delegate__pi_conversation_end",
+          "mcp__plugin_pi-delegate_pi-delegate__pi_conversation_interrupt",
+          "mcp__plugin_pi-delegate_pi-delegate__pi_conversation_read",
+          "mcp__plugin_pi-delegate_pi-delegate__pi_conversation_send",
+          "mcp__plugin_pi-delegate_pi-delegate__pi_conversation_send_async",
+          "mcp__plugin_pi-delegate_pi-delegate__pi_conversation_status",
+          "mcp__plugin_pi-delegate_pi-delegate__pi_conversation_steer",
+          "mcp__plugin_pi-delegate_pi-delegate__pi_respond",
+          "mcp__plugin_pi-delegate_pi-delegate__pi_setup",
+          "mcp__plugin_pi-delegate_pi-delegate__pi_task",
+          "mcp__reddit__approve",
+          "mcp__reddit__ban_user",
+          "mcp__reddit__create_comment",
+          "mcp__reddit__create_post",
+          "mcp__reddit__delete_content",
+          "mcp__reddit__edit_text",
+          "mcp__reddit__get_comments",
+          "mcp__reddit__get_me",
+          "mcp__reddit__get_mod_log",
+          "mcp__reddit__get_mod_notes",
+          "mcp__reddit__get_modqueue",
+          "mcp__reddit__get_post",
+          "mcp__reddit__get_subreddit",
+          "mcp__reddit__get_subreddit_posts",
+          "mcp__reddit__get_subreddit_rules",
+          "mcp__reddit__get_trending",
+          "mcp__reddit__get_user",
+          "mcp__reddit__get_user_comments",
+          "mcp__reddit__get_user_posts",
+          "mcp__reddit__get_wiki_page",
+          "mcp__reddit__reddit_ping",
+          "mcp__reddit__remove",
+          "mcp__reddit__reply_message",
+          "mcp__reddit__search",
+          "mcp__reddit__send_message",
+          "mcp__reddit__vote"
+        ],
+        "mcp_servers": [
+          {
+            "name": "plugin:obscura-browser:obscura",
+            "status": "failed",
+            "source": "plugin"
+          },
+          {
+            "name": "plugin:pi-delegate:pi-delegate",
+            "status": "connected",
+            "source": "plugin"
+          },
+          {
+            "name": "plugin:controle-financeiro:finance",
+            "status": "connected",
+            "source": "plugin"
+          },
+          {
+            "name": "linkedin-complete",
+            "status": "pending",
+            "source": "user"
+          },
+          {
+            "name": "firecrawl-local",
+            "status": "failed",
+            "source": "user"
+          },
+          {
+            "name": "nano-banana",
+            "status": "pending",
+            "source": "user"
+          },
+          {
+            "name": "reddit",
+            "status": "connected",
+            "source": "user"
+          },
+          {
+            "name": "waha-whatsapp",
+            "status": "pending",
+            "source": "user"
+          },
+          {
+            "name": "portainer",
+            "status": "pending",
+            "source": "user"
+          },
+          {
+            "name": "codegraph",
+            "status": "pending",
+            "source": "user"
+          },
+          {
+            "name": "okto-pulse",
+            "status": "failed",
+            "source": "user"
+          },
+          {
+            "name": "nextcloud",
+            "status": "connected",
+            "source": "user"
+          },
+          {
+            "name": "marginalia",
+            "status": "failed",
+            "source": "user"
+          },
+          {
+            "name": "claude.ai Claude Docs",
+            "status": "pending",
+            "source": "claudeai"
+          },
+          {
+            "name": "claude.ai Whatsapp",
+            "status": "needs-auth",
+            "source": "claudeai"
+          },
+          {
+            "name": "claude.ai Reddit",
+            "status": "needs-auth",
+            "source": "claudeai"
+          },
+          {
+            "name": "claude.ai Microsoft 365",
+            "status": "needs-auth",
+            "source": "claudeai"
+          },
+          {
+            "name": "claude.ai Slack",
+            "status": "pending",
+            "source": "claudeai"
+          },
+          {
+            "name": "claude.ai Figma",
+            "status": "pending",
+            "source": "claudeai"
+          },
+          {
+            "name": "claude.ai Google Drive",
+            "status": "pending",
+            "source": "claudeai"
+          },
+          {
+            "name": "claude.ai Gmail",
+            "status": "pending",
+            "source": "claudeai"
+          },
+          {
+            "name": "claude.ai Google Calendar",
+            "status": "pending",
+            "source": "claudeai"
+          }
+        ],
+        "model": "claude-opus-5",
+        "permissionMode": "bypassPermissions",
+        "slash_commands": [
+          "deep-research",
+          "plugin-dev:create-plugin",
+          "remember:doctor",
+          "codex:adversarial-review",
+          "codex:cancel",
+          "codex:rescue",
+          "codex:result",
+          "codex:review",
+          "codex:setup",
+          "codex:status",
+          "slack:channel-digest",
+          "slack:draft-announcement",
+          "slack:find-discussions",
+          "slack:standup",
+          "slack:summarize-channel",
+          "handoff:handoff-resume",
+          "obscura-browser:start",
+          "pi-delegate:delegate",
+          "pi-delegate:setup",
+          "orchestrator-mode:mode",
+          "shepherd:shepherd-docs",
+          "shepherd:shepherd",
+          "controle-financeiro:enel-solar",
+          "controle-financeiro:import-fatura",
+          "controle-financeiro:import-historical",
+          "controle-financeiro:new-month-manual",
+          "controle-financeiro:new-month",
+          "controle-financeiro:pay-bills",
+          "controle-financeiro:review",
+          "interactive-cli:tmux-orchestrator",
+          "plugin-dev:agent-development",
+          "plugin-dev:command-development",
+          "plugin-dev:hook-development",
+          "plugin-dev:mcp-integration",
+          "plugin-dev:plugin-settings",
+          "plugin-dev:plugin-structure",
+          "plugin-dev:skill-development",
+          "frontend-design:frontend-design",
+          "remember:remember",
+          "slack:block-kit",
+          "slack:create-slack-app",
+          "slack:slack-api",
+          "slack:slack-cli",
+          "slack:slack-docs",
+          "slack:slack-messaging",
+          "slack:slack-search",
+          "slack:test-slack-app",
+          "handoff:agent-handoff",
+          "obscura-browser:driving-obscura",
+          "controle-financeiro:fatura-debug-guide",
+          "controle-financeiro:gmail-bill-patterns",
+          "controle-financeiro:historical-data-guide",
+          "design",
+          "design-sync",
+          "dataviz",
+          "update-config",
+          "verify",
+          "debug",
+          "code-review",
+          "simplify",
+          "batch",
+          "fewer-permission-prompts",
+          "doctor",
+          "loop",
+          "schedule",
+          "claude-api",
+          "workflow-authoring",
+          "run",
+          "run-skill-generator",
+          "advisor",
+          "agents",
+          "auto-mode-setup",
+          "autocompact",
+          "clear",
+          "color",
+          "compact",
+          "config",
+          "output-style",
+          "context",
+          "effort",
+          "fast",
+          "heapdump",
+          "init",
+          "mcp",
+          "import",
+          "model",
+          "__remote-workflow",
+          "workflow-launch-exec",
+          "reload-plugins",
+          "reload-skills",
+          "rename",
+          "ultrareview",
+          "security-review",
+          "usage-credits",
+          "extra-usage",
+          "usage",
+          "insights",
+          "recap",
+          "skill-doctor",
+          "goal",
+          "design-consent",
+          "design-revoke",
+          "list-agents",
+          "team-onboarding",
+          "anthropic-skills:built-in-browser",
+          "anthropic-skills:chrome-browser",
+          "anthropic-skills:computer-use",
+          "anthropic-skills:deep-research",
+          "anthropic-skills:docs",
+          "anthropic-skills:docx",
+          "anthropic-skills:import-memory",
+          "anthropic-skills:morning",
+          "anthropic-skills:pdf",
+          "anthropic-skills:pptx",
+          "anthropic-skills:skill-creator",
+          "anthropic-skills:xlsx",
+          "mcp__reddit__reddit_research",
+          "mcp__reddit__reddit_moderate",
+          "mcp__reddit__reddit_content_plan",
+          "mcp__reddit__reddit_user_analysis"
+        ],
+        "terminal_slash_commands": [
+          "doctor",
+          "color",
+          "reload-plugins"
+        ],
+        "apiKeySource": "none",
+        "claude_code_version": "2.1.278",
+        "output_style": "visual-guide",
+        "agents": [
+          "claude",
+          "code-simplifier:code-simplifier",
+          "codex:codex-rescue",
+          "controle-financeiro:bill-fetcher",
+          "controle-financeiro:fatura-importer",
+          "controle-financeiro:month-validator",
+          "Explore",
+          "general-purpose",
+          "Plan",
+          "plugin-dev:agent-creator",
+          "plugin-dev:plugin-validator",
+          "plugin-dev:skill-reviewer",
+          "statusline-setup"
+        ],
+        "skills": [
+          "deep-research",
+          "codex:adversarial-review",
+          "codex:cancel",
+          "codex:result",
+          "codex:review",
+          "codex:status",
+          "shepherd:shepherd-docs",
+          "shepherd:shepherd",
+          "interactive-cli:tmux-orchestrator",
+          "plugin-dev:agent-development",
+          "plugin-dev:command-development",
+          "plugin-dev:hook-development",
+          "plugin-dev:mcp-integration",
+          "plugin-dev:plugin-settings",
+          "plugin-dev:plugin-structure",
+          "plugin-dev:skill-development",
+          "frontend-design:frontend-design",
+          "remember:remember",
+          "slack:block-kit",
+          "slack:create-slack-app",
+          "slack:slack-api",
+          "slack:slack-cli",
+          "slack:slack-docs",
+          "slack:slack-messaging",
+          "slack:slack-search",
+          "slack:test-slack-app",
+          "handoff:agent-handoff",
+          "obscura-browser:driving-obscura",
+          "controle-financeiro:fatura-debug-guide",
+          "controle-financeiro:gmail-bill-patterns",
+          "controle-financeiro:historical-data-guide",
+          "design",
+          "design-sync",
+          "dataviz",
+          "update-config",
+          "verify",
+          "debug",
+          "code-review",
+          "simplify",
+          "batch",
+          "fewer-permission-prompts",
+          "doctor",
+          "loop",
+          "schedule",
+          "claude-api",
+          "workflow-authoring",
+          "run",
+          "run-skill-generator",
+          "anthropic-skills:built-in-browser",
+          "anthropic-skills:chrome-browser",
+          "anthropic-skills:computer-use",
+          "anthropic-skills:deep-research",
+          "anthropic-skills:docs",
+          "anthropic-skills:docx",
+          "anthropic-skills:import-memory",
+          "anthropic-skills:morning",
+          "anthropic-skills:pdf",
+          "anthropic-skills:pptx",
+          "anthropic-skills:skill-creator",
+          "anthropic-skills:xlsx"
+        ],
+        "plugins": [
+          {
+            "name": "interactive-cli",
+            "path": "/Users/maheidem/Documents/dev/claude-code-management/plugin-development/maheidem-plugins/plugins/interactive-cli",
+            "source": "interactive-cli@maheidem-plugins",
+            "version": "0.2.1"
+          },
+          {
+            "name": "plugin-dev",
+            "path": "/Users/maheidem/.claude/plugins/cache/claude-plugins-official/plugin-dev/c447c3207a42",
+            "source": "plugin-dev@claude-plugins-official"
+          },
+          {
+            "name": "frontend-design",
+            "path": "/Users/maheidem/.claude/plugins/cache/claude-code-plugins/frontend-design/1.1.0",
+            "source": "frontend-design@claude-code-plugins",
+            "version": "1.1.0"
+          },
+          {
+            "name": "clangd-lsp",
+            "path": "/Users/maheidem/.claude/plugins/cache/claude-plugins-official/clangd-lsp/1.0.0",
+            "source": "clangd-lsp@claude-plugins-official",
+            "version": "1.0.0"
+          },
+          {
+            "name": "code-simplifier",
+            "path": "/Users/maheidem/.claude/plugins/cache/claude-plugins-official/code-simplifier/1.0.0",
+            "source": "code-simplifier@claude-plugins-official",
+            "version": "1.0.0"
+          },
+          {
+            "name": "remember",
+            "path": "/Users/maheidem/.claude/plugins/cache/claude-plugins-official/remember/0.33.0",
+            "source": "remember@claude-plugins-official",
+            "version": "0.33.0"
+          },
+          {
+            "name": "pyright-lsp",
+            "path": "/Users/maheidem/.claude/plugins/cache/claude-plugins-official/pyright-lsp/1.0.0",
+            "source": "pyright-lsp@claude-plugins-official",
+            "version": "1.0.0"
+          },
+          {
+            "name": "codex",
+            "path": "/Users/maheidem/.claude/plugins/cache/openai-codex/codex/1.0.4",
+            "source": "codex@openai-codex",
+            "version": "1.0.4"
+          },
+          {
+            "name": "slack",
+            "path": "/Users/maheidem/.claude/plugins/cache/claude-plugins-official/slack/1.3.0",
+            "source": "slack@claude-plugins-official",
+            "version": "1.3.0"
+          },
+          {
+            "name": "handoff",
+            "path": "/Users/maheidem/Documents/dev/claude-code-management/plugin-development/maheidem-plugins/plugins/handoff",
+            "source": "handoff@maheidem-plugins",
+            "version": "0.1.0"
+          },
+          {
+            "name": "obscura-browser",
+            "path": "/Users/maheidem/Documents/dev/claude-code-management/plugin-development/maheidem-plugins/plugins/obscura-browser",
+            "source": "obscura-browser@maheidem-plugins",
+            "version": "0.1.0"
+          },
+          {
+            "name": "pi-delegate",
+            "path": "/Users/maheidem/Documents/dev/claude-code-management/plugin-development/maheidem-plugins/plugins/pi-delegate",
+            "source": "pi-delegate@maheidem-plugins",
+            "version": "0.10.0"
+          },
+          {
+            "name": "disciplined-agent",
+            "path": "/Users/maheidem/Documents/Symphony/PortifolioZero/symphony-plugins/plugins/disciplined-agent",
+            "source": "disciplined-agent@symphony-plugins",
+            "version": "0.3.0"
+          },
+          {
+            "name": "orchestrator-mode",
+            "path": "/Users/maheidem/Documents/dev/claude-code-management/plugin-development/maheidem-plugins/plugins/orchestrator-mode",
+            "source": "orchestrator-mode@maheidem-plugins",
+            "version": "0.9.2"
+          },
+          {
+            "name": "shepherd",
+            "path": "/Users/maheidem/Documents/dev/claude-code-management/plugin-development/maheidem-plugins/plugins/shepherd",
+            "source": "shepherd@maheidem-plugins",
+            "version": "0.2.0"
+          },
+          {
+            "name": "controle-financeiro",
+            "path": "/Users/maheidem/Documents/dev/maheidem-plugins-private/plugins/controle-financeiro",
+            "source": "controle-financeiro@maheidem-plugins-private",
+            "version": "2.3.0"
+          },
+          {
+            "name": "agents-md",
+            "path": "builtin",
+            "source": "agents-md@builtin"
+          }
+        ],
+        "capabilities": [
+          "interrupt_receipt_v1",
+          "interrupt_cancel_queued_v1",
+          "msg_lifecycle_v1"
+        ],
+        "analytics_disabled": false,
+        "product_feedback_disabled": false,
+        "uuid": "ba7e73da-7f1d-4037-9cae-94a5c2dc4eab",
+        "memory_paths": {
+          "auto": "/Users/maheidem/.claude/projects/-private-tmp-claude-501--Users-maheidem-Documents-dev-OktoLabsAI-d964d04a-26e1-4484-bc9c-51ccc97fd32b-scratchpad-uat-project-root/memory/"
+        },
+        "messaging_socket_path": "/tmp/cc-socks/87033.sock",
+        "fast_mode_state": "off",
+        "fast_mode_disabled_reason": "sdk_opt_in_required"
+      },
+      "thread_id": null,
+      "turn_id": null
+    },
+    {
+      "session_id": "hsess_585d82659d5244b8adaf8acca3fa3214",
+      "harness_kind": "claude_code",
+      "kind": "tool_activity",
+      "native_event": "system:informational",
+      "occurred_at": "2026-09-20T18:23:38.184853Z",
+      "payload": {
+        "type": "system",
+        "subtype": "informational",
+        "content": "UserPromptSubmit says: \ud83e\udded delegate-by-default active",
+        "level": "notice",
+        "uuid": "c39f1137-4bbe-4402-9945-c2860f059b8b",
+        "session_id": "fa1ff602-11c9-46c5-8acf-1fa22108b2cd"
+      },
+      "thread_id": null,
+      "turn_id": null
+    },
+    {
+      "session_id": "hsess_585d82659d5244b8adaf8acca3fa3214",
+      "harness_kind": "claude_code",
+      "kind": "tool_activity",
+      "native_event": "system:informational",
+      "occurred_at": "2026-09-20T18:23:38.184915Z",
+      "payload": {
+        "type": "system",
+        "subtype": "informational",
+        "content": "UserPromptSubmit says: \ud83d\udccf discipline + done-gate + ask-first + cite-sources",
+        "level": "notice",
+        "uuid": "b94d4182-1c5e-4347-b136-3004acd57646",
+        "session_id": "fa1ff602-11c9-46c5-8acf-1fa22108b2cd"
+      },
+      "thread_id": null,
+      "turn_id": null
+    },
+    {
+      "session_id": "hsess_585d82659d5244b8adaf8acca3fa3214",
+      "harness_kind": "claude_code",
+      "kind": "tool_activity",
+      "native_event": "system:informational",
+      "occurred_at": "2026-09-20T18:23:38.184972Z",
+      "payload": {
+        "type": "system",
+        "subtype": "informational",
+        "content": "UserPromptSubmit says: \ud83d\udd50 Sunday, 2026-09-20 15:23 -03",
+        "level": "notice",
+        "uuid": "a57ef308-2ea6-4eb2-9863-3ae1adddcddb",
+        "session_id": "fa1ff602-11c9-46c5-8acf-1fa22108b2cd"
+      },
+      "thread_id": null,
+      "turn_id": null
+    },
+    {
+      "session_id": "hsess_585d82659d5244b8adaf8acca3fa3214",
+      "harness_kind": "claude_code",
+      "kind": "tool_activity",
+      "native_event": "system:status",
+      "occurred_at": "2026-09-20T18:23:38.185026Z",
+      "payload": {
+        "type": "system",
+        "subtype": "status",
+        "status": "requesting",
+        "session_id": "fa1ff602-11c9-46c5-8acf-1fa22108b2cd",
+        "uuid": "f5af14e2-69a6-4913-a659-2bf37521f1bc"
+      },
+      "thread_id": null,
+      "turn_id": null
+    },
+    {
+      "session_id": "hsess_585d82659d5244b8adaf8acca3fa3214",
+      "harness_kind": "claude_code",
+      "kind": "tool_activity",
+      "native_event": "stream_event:message_start",
+      "occurred_at": "2026-09-20T18:23:39.448983Z",
+      "payload": {
+        "type": "stream_event",
+        "event": {
+          "type": "message_start",
+          "message": {
+            "model": "claude-opus-5",
+            "id": "msg_011CfFA9J5cCr8jvUJCYwXBF",
+            "type": "message",
+            "role": "assistant",
+            "content": [],
+            "container": null,
+            "stop_reason": null,
+            "stop_sequence": null,
+            "stop_details": null,
+            "usage": {
+              "input_tokens": 2,
+              "cache_creation_input_tokens": 22360,
+              "cache_read_input_tokens": 12727,
+              "cache_creation": {
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 22360
+              },
+              "output_tokens": 4,
+              "service_tier": "standard",
+              "inference_geo": "not_available"
+            },
+            "input_transformations": [],
+            "diagnostics": null,
+            "context_management": null
+          }
+        },
+        "session_id": "fa1ff602-11c9-46c5-8acf-1fa22108b2cd",
+        "parent_tool_use_id": null,
+        "uuid": "943f9e06-de44-4df7-a3a5-1e8d93248968",
+        "ttft_ms": 1253
+      },
+      "thread_id": null,
+      "turn_id": null
+    },
+    {
+      "session_id": "hsess_585d82659d5244b8adaf8acca3fa3214",
+      "harness_kind": "claude_code",
+      "kind": "tool_activity",
+      "native_event": "stream_event:content_block_start",
+      "occurred_at": "2026-09-20T18:23:39.449189Z",
+      "payload": {
+        "type": "stream_event",
+        "event": {
+          "type": "content_block_start",
+          "index": 0,
+          "content_block": {
+            "type": "text",
+            "text": ""
+          }
+        },
+        "session_id": "fa1ff602-11c9-46c5-8acf-1fa22108b2cd",
+        "parent_tool_use_id": null,
+        "uuid": "bacc80cd-8964-4785-819e-f227955f0944"
+      },
+      "thread_id": null,
+      "turn_id": null
+    },
+    {
+      "session_id": "hsess_585d82659d5244b8adaf8acca3fa3214",
+      "harness_kind": "claude_code",
+      "kind": "output_delta",
+      "native_event": "stream_event:content_block_delta",
+      "occurred_at": "2026-09-20T18:23:39.449455Z",
+      "payload": {
+        "text": "ok",
+        "index": 0
+      },
+      "thread_id": null,
+      "turn_id": null
+    },
+    {
+      "session_id": "hsess_585d82659d5244b8adaf8acca3fa3214",
+      "harness_kind": "claude_code",
+      "kind": "output_delta",
+      "native_event": "assistant",
+      "occurred_at": "2026-09-20T18:23:39.481755Z",
+      "payload": {
+        "final": true,
+        "text": "ok",
+        "raw": {
+          "type": "assistant",
+          "message": {
+            "model": "claude-opus-5",
+            "id": "msg_011CfFA9J5cCr8jvUJCYwXBF",
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "ok"
+              }
+            ],
+            "container": null,
+            "stop_reason": null,
+            "stop_sequence": null,
+            "stop_details": null,
+            "usage": {
+              "input_tokens": 2,
+              "cache_creation_input_tokens": 22360,
+              "cache_read_input_tokens": 12727,
+              "cache_creation": {
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 22360
+              },
+              "output_tokens": 4,
+              "service_tier": "standard",
+              "inference_geo": "not_available"
+            },
+            "input_transformations": [],
+            "diagnostics": null,
+            "context_management": null
+          },
+          "parent_tool_use_id": null,
+          "session_id": "fa1ff602-11c9-46c5-8acf-1fa22108b2cd",
+          "uuid": "f97088ff-6a4f-4402-a556-cd67dae92940",
+          "timestamp": "2026-09-20T18:23:39.450Z",
+          "request_id": "req_011CfFA9Hh36FQndqEr7cYof"
+        }
+      },
+      "thread_id": null,
+      "turn_id": null
+    },
+    {
+      "session_id": "hsess_585d82659d5244b8adaf8acca3fa3214",
+      "harness_kind": "claude_code",
+      "kind": "tool_activity",
+      "native_event": "stream_event:content_block_stop",
+      "occurred_at": "2026-09-20T18:23:39.481876Z",
+      "payload": {
+        "type": "stream_event",
+        "event": {
+          "type": "content_block_stop",
+          "index": 0
+        },
+        "session_id": "fa1ff602-11c9-46c5-8acf-1fa22108b2cd",
+        "parent_tool_use_id": null,
+        "uuid": "e1388ede-68c7-4ab9-bd66-fa4e6d1cb350"
+      },
+      "thread_id": null,
+      "turn_id": null
+    },
+    {
+      "session_id": "hsess_585d82659d5244b8adaf8acca3fa3214",
+      "harness_kind": "claude_code",
+      "kind": "tool_activity",
+      "native_event": "stream_event:message_delta",
+      "occurred_at": "2026-09-20T18:23:39.521555Z",
+      "payload": {
+        "type": "stream_event",
+        "event": {
+          "type": "message_delta",
+          "delta": {
+            "stop_reason": "end_turn",
+            "stop_sequence": null,
+            "stop_details": null,
+            "container": null
+          },
+          "usage": {
+            "input_tokens": 2,
+            "cache_creation_input_tokens": 22360,
+            "cache_read_input_tokens": 12727,
+            "output_tokens": 4,
+            "output_tokens_details": {
+              "thinking_tokens": 0
+            },
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 4,
+                "cache_read_input_tokens": 12727,
+                "cache_creation_input_tokens": 22360,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 22360
+                },
+                "type": "message"
+              }
+            ]
+          },
+          "context_management": {
+            "applied_edits": []
+          }
+        },
+        "session_id": "fa1ff602-11c9-46c5-8acf-1fa22108b2cd",
+        "parent_tool_use_id": null,
+        "uuid": "2b759363-71f4-4e21-b3aa-661703ca52a1"
+      },
+      "thread_id": null,
+      "turn_id": null
+    },
+    {
+      "session_id": "hsess_585d82659d5244b8adaf8acca3fa3214",
+      "harness_kind": "claude_code",
+      "kind": "tool_activity",
+      "native_event": "stream_event:message_stop",
+      "occurred_at": "2026-09-20T18:23:39.521668Z",
+      "payload": {
+        "type": "stream_event",
+        "event": {
+          "type": "message_stop"
+        },
+        "session_id": "fa1ff602-11c9-46c5-8acf-1fa22108b2cd",
+        "parent_tool_use_id": null,
+        "uuid": "c70edcce-6c2d-40e2-8001-c78b201ebf95"
+      },
+      "thread_id": null,
+      "turn_id": null
+    },
+    {
+      "session_id": "hsess_585d82659d5244b8adaf8acca3fa3214",
+      "harness_kind": "claude_code",
+      "kind": "tool_activity",
+      "native_event": "rate_limit_event",
+      "occurred_at": "2026-09-20T18:23:39.524865Z",
+      "payload": {
+        "type": "rate_limit_event",
+        "rate_limit_info": {
+          "status": "allowed",
+          "resetsAt": 1789940400,
+          "rateLimitType": "five_hour",
+          "overageStatus": "rejected",
+          "overageDisabledReason": "org_level_disabled",
+          "isUsingOverage": false,
+          "unifiedWindows": {
+            "five_hour": {
+              "utilization": 0.13,
+              "resetsAt": 1789940400
+            },
+            "seven_day": {
+              "utilization": 0.23,
+              "resetsAt": 1790463600
+            }
+          }
+        },
+        "uuid": "7e8dddd7-ba2c-407d-8599-acaae8a869de",
+        "session_id": "fa1ff602-11c9-46c5-8acf-1fa22108b2cd"
+      },
+      "thread_id": null,
+      "turn_id": null
+    },
+    {
+      "session_id": "hsess_585d82659d5244b8adaf8acca3fa3214",
+      "harness_kind": "claude_code",
+      "kind": "turn_completed",
+      "native_event": "result:success",
+      "occurred_at": "2026-09-20T18:23:39.609012Z",
+      "payload": {
+        "duration_api_ms": 1332,
+        "stop_reason": "end_turn",
+        "session_id": "fa1ff602-11c9-46c5-8acf-1fa22108b2cd",
+        "total_cost_usd": 0.23007350000000001,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 22360,
+          "cache_read_input_tokens": 12727,
+          "output_tokens": 4,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "server_tool_use": {
+            "web_search_requests": 0,
+            "web_fetch_requests": 0
+          },
+          "service_tier": "standard",
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 22360,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "inference_geo": "not_available",
+          "iterations": [
+            {
+              "input_tokens": 2,
+              "output_tokens": 4,
+              "cache_read_input_tokens": 12727,
+              "cache_creation_input_tokens": 22360,
+              "cache_creation": {
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 22360
+              },
+              "type": "message"
+            }
+          ],
+          "speed": "standard"
+        },
+        "modelUsage": {
+          "claude-opus-5": {
+            "inputTokens": 2,
+            "outputTokens": 4,
+            "cacheReadInputTokens": 12727,
+            "cacheCreationInputTokens": 22360,
+            "webSearchRequests": 0,
+            "costUSD": 0.23007350000000001,
+            "contextWindow": 1000000,
+            "maxOutputTokens": 64000,
+            "thinkingTokens": 0,
+            "canonicalModel": "claude-opus-5",
+            "provider": "firstParty",
+            "costBasis": "list"
+          }
+        },
+        "permission_denials": [],
+        "terminal_reason": "completed",
+        "fast_mode_state": "off",
+        "fast_mode_disabled_reason": "sdk_opt_in_required",
+        "subagent_stats": {
+          "spawned": 0,
+          "requested": {
+            "background": 0,
+            "foreground": 0,
+            "unset": 0
+          },
+          "started_in_background": 0,
+          "max_depth": 0,
+          "spawned_by_subagents": 0,
+          "completed": 0,
+          "failed": 0,
+          "killed": {
+            "parent": 0,
+            "user": 0,
+            "system": 0
+          },
+          "refused": {
+            "depth_limit": 0,
+            "concurrency_limit": 0,
+            "budget": 0
+          },
+          "by_type": {}
+        },
+        "is_error": false,
+        "num_turns": 1,
+        "subtype": "success",
+        "api_error_status": null,
+        "result": "ok",
+        "ttft_ms": 1304,
+        "type": "result",
+        "duration_ms": 1461,
+        "uuid": "e59ad982-3b4a-4ea1-b21d-2fdd3f644804",
+        "ttft_stream_ms": 1301,
+        "time_to_request_ms": 47,
+        "first_content_frame_ms": 1302,
+        "queued_turn_count": 0,
+        "result_index": 0,
+        "interrupted_by_connector": false
+      },
+      "thread_id": null,
+      "turn_id": null
+    }
+  ],
+  "stream_close": {
+    "status": 200,
+    "response": {
+      "ok": true,
+      "data": {
+        "session_id": "hsess_585d82659d5244b8adaf8acca3fa3214",
+        "kind": "claude_code",
+        "owning_agent_id": "uat06_stream_after_failure_agent",
+        "status": "ENDED",
+        "capabilities": {
+          "send_only": false,
+          "steer_timing": "IMMEDIATE",
+          "interrupt_requires_settle_wait": false,
+          "multiplexes_sessions": false,
+          "observes_session_end": true
+        },
+        "started_at": "2026-09-20T18:23:37.532495Z",
+        "ended_at": "2026-09-20T18:23:39.632977Z",
+        "metadata": {}
+      }
+    }
+  }
+}

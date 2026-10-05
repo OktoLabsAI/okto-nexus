@@ -282,7 +282,7 @@ function PresetDetail({
               </div>
               <p className="text-[11px] text-surface-400 dark:text-surface-500 mt-3 font-mono">
                 {presetId} · created{" "}
-                {new Date(record.created_at).toLocaleString()}
+                {new Date(record.created_at).toLocaleString("en-US")}
               </p>
               <div className="flex items-center gap-2 mt-3">
                 <button
@@ -357,7 +357,7 @@ function PresetDetail({
                             </span>
                           )}
                           <span className="text-[11px] text-surface-400 dark:text-surface-500 ml-auto whitespace-nowrap">
-                            {new Date(version.published_at).toLocaleString()}
+                            {new Date(version.published_at).toLocaleString("en-US")}
                           </span>
                         </div>
                         <CommContentChips content={version.content} />

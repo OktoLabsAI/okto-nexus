@@ -1,0 +1,61 @@
+{
+  "date": "2026-09-30",
+  "scope": "Partial M05/M09 automatic local tool credentials and MCP composition; no milestone or gate closure.",
+  "artifacts": {
+    "core": {
+      "wheel": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\artifacts\\nexus_connector_core-0.2.38.dev0-py3-none-any.whl",
+      "sha256": "f9bc5c3002593845416187b91802dfe914fd89b04036fd699be48e81dfff321b"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-lease-renewal-final-connector-g0xipv52\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "e540cd1ee34e1208399d0261d905d73068861ccec7f92065ec099d541c001683"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-embedded-tools-rykj21sp\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "634d377e317dc58447008a57fb66f6bf0db961c7805998023e05b8d05699941f"
+    },
+    "isolated_python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-embedded-inventory-2z7k3itc\\isolated\\Scripts\\python.exe"
+  },
+  "runs": {
+    "nexus": {
+      "passed": 133,
+      "seconds": 343.828,
+      "overlapping_subset": false,
+      "result": "evidence/embedded-tools-installed-nexus.xml"
+    },
+    "isolated": {
+      "passed": 70,
+      "seconds": 195.299,
+      "overlapping_subset": true,
+      "result": "evidence/embedded-tools-installed-isolated.xml"
+    }
+  },
+  "source": {
+    "passed": 66,
+    "scope": "Development regression before final cleanup/renewal assertions; superseded by installed verification."
+  },
+  "development_corrections": [
+    "Canonical JSON actions changed from tuple to list.",
+    "MCP test uses the canonical workspace ID."
+  ],
+  "os_vault_probe": "evidence/embedded-tools-os-vault.json",
+  "limitations": [
+    "Technical native/qualification/session-vault fixtures in automatic execution; separate actual Windows session-vault probe.",
+    "Full automatic Claude/Pi journeys, Pi bridge deadline renewal and live tool-configuration recovery remain open.",
+    "Lower-level embedders without an advertised origin retain the provider-only path.",
+    "Preexisting UI edits included in wheel, excluded from commit and UI acceptance.",
+    "Existing Starlette/httpx deprecation warning."
+  ],
+  "evidence_sha256": {
+    "embedded-tools-artifacts.json": "d15f9a98d7223d23cdbdcd11888de95bffe71a462fab37dd528c1a5cb05b33d8",
+    "embedded-tools-installed-isolated.json": "af882a6241e1f89a2764ff0a54d07e163a4cfe38b642e9fafd4a0ddfdf5d058b",
+    "embedded-tools-installed-isolated.log": "ccc2a45fa72dc2333f443cda5254bc3b538d6676c357b19547b5c0596ebd0f0d",
+    "embedded-tools-installed-isolated.xml": "944350cf6633cfd1ff7ad0f935f24e335564b1e73443bc89d0cc4665666b9e04",
+    "embedded-tools-installed-nexus.json": "907740fec6fa696b23d8eb36741098b7b4a5df9c29046ce6b8a70c284e23ec3a",
+    "embedded-tools-installed-nexus.log": "5593ab6cd55a01d2f8d27990ff213b86173324eade83e55725253c84544b971f",
+    "embedded-tools-installed-nexus.xml": "2c64515e5f6be77b93ac80307ac9e913523dfb0c1445c9bb09d7973080c5cd46",
+    "embedded-tools-isolated-installation.json": "156edd7d8655bc85ed3902f7f8a0e145f792b2e053d460c396547ae1ff9fc2cd",
+    "embedded-tools-os-vault.json": "92f2089a07d1e62bad1b552b9fd936b954495d1cc4998b513ae19303b59971a5",
+    "embedded-tools-source.xml": "d03d84a97f219f507d928b7f13ed5d57ecc71a0a8aa0719760503b44e298b87b"
+  }
+}

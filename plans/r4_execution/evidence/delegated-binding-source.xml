@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="85" time="113.110" timestamp="2026-09-30T03:26:17.621394-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_binding_operator" name="test_operator_binding_creates_profile_endpoint_and_scoped_grant" time="3.672" /><testcase classname="tests.execution_r4.test_binding_operator" name="test_operator_binding_revalidates_before_apply[subject_policy]" time="2.440" /><testcase classname="tests.execution_r4.test_binding_operator" name="test_operator_binding_revalidates_before_apply[operator_key]" time="2.101" /><testcase classname="tests.execution_r4.test_binding_operator" name="test_operator_binding_revalidates_before_apply[configuration]" time="2.238" /><testcase classname="tests.execution_r4.test_binding_operator" name="test_operator_binding_revalidates_before_apply[expiry]" time="2.140" /><testcase classname="tests.execution_r4.test_binding_operator" name="test_operator_binding_revalidates_before_apply[method]" time="2.508" /><testcase classname="tests.execution_r4.test_binding_operator" name="test_operator_binding_rolls_back_profile_with_binding" time="2.251" /><testcase classname="tests.execution_r4.test_binding_operator" name="test_binding_does_not_turn_self_confirmation_into_execution_authority" time="2.039" /><testcase classname="tests.execution_r4.test_binding_operator" name="test_binding_delegated_proof_uses_atomic_operator_decision" time="2.230" /><testcase classname="tests.execution_r4.test_binding_operator" name="test_binding_delegated_proof_cannot_authorize_changed_scope[operator_key]" time="2.286" /><testcase classname="tests.execution_r4.test_binding_operator" name="test_binding_delegated_proof_cannot_authorize_changed_scope[subject_policy]" time="1.958" /><testcase classname="tests.execution_r4.test_binding_operator" name="test_binding_delegated_proof_cannot_authorize_changed_scope[expiry]" time="2.077" /><testcase classname="tests.execution_r4.test_binding_operator" name="test_binding_delegated_proof_cannot_authorize_changed_scope[wrong_proposal]" time="1.825" /><testcase classname="tests.execution_r4.test_binding_operator" name="test_binding_rejected_proposal_cannot_be_applied" time="2.022" /><testcase classname="tests.execution_r4.test_binding_operator" name="test_binding_proof_and_decision_roll_back_together" time="2.234" /><testcase classname="tests.execution_r4.test_binding_operator" name="test_binding_stale_proposal_cannot_receive_operator_proof" time="2.609" /><testcase classname="tests.execution_r4.test_canonical_controls" name="test_targeting_uses_core_contract[codex_app_server-turn.steer-native_turn_id-t-True]" time="0.002" /><testcase classname="tests.execution_r4.test_canonical_controls" name="test_targeting_uses_core_contract[codex_app_server-turn.steer-current_run-None-False]" time="0.001" /><testcase classname="tests.execution_r4.test_canonical_controls" name="test_targeting_uses_core_contract[codex_app_server-turn.interrupt-current_run-None-True]" time="0.001" /><testcase classname="tests.execution_r4.test_canonical_controls" name="test_targeting_uses_core_contract[codex_app_server-turn.interrupt-none-None-False]" time="0.001" /><testcase classname="tests.execution_r4.test_canonical_controls" name="test_targeting_uses_core_contract[pi_rpc-turn.steer-current_run-None-True]" time="0.001" /><testcase classname="tests.execution_r4.test_canonical_controls" name="test_targeting_uses_core_contract[pi_rpc-turn.interrupt-native_turn_id-t-False]" time="0.001" /><testcase classname="tests.execution_r4.test_canonical_controls" name="test_targeting_uses_core_contract[claude_stream-turn.steer-current_run-None-False]" time="0.001" /><testcase classname="tests.execution_r4.test_canonical_controls" name="test_targeting_uses_core_contract[claude_stream-turn.interrupt-current_run-None-True]" time="0.001" /><testcase classname="tests.execution_r4.test_canonical_controls" name="test_targeting_uses_core_contract[claude_attach-turn.interrupt-current_run-None-False]" time="0.001" /><testcase classname="tests.execution_r4.test_canonical_controls" name="test_targeting_uses_core_contract[codex_app_server-turn.submit-current_run-None-False]" time="0.001" /><testcase classname="tests.execution_r4.test_canonical_controls" name="test_native_target_is_bound_to_the_wire_hash" time="0.001" /><testcase classname="tests.execution_r4.test_canonical_controls" name="test_public_controls_preserve_ids_authority_and_expired_containment[revoke]" time="3.384" /><testcase classname="tests.execution_r4.test_canonical_controls" name="test_public_controls_preserve_ids_authority_and_expired_containment[close]" time="3.352" /><testcase classname="tests.execution_r4.test_cli_http_only" name="test_no_arguments_shows_http_help" time="0.001" /><testcase classname="tests.execution_r4.test_cli_http_only" name="test_old_flags_and_explicit_stdio_fail_without_bootstrap" time="0.001" /><testcase classname="tests.execution_r4.test_core_inventory" name="test_local_catalog_and_empty_inventory_need_no_runtime" time="0.011" /><testcase classname="tests.execution_r4.test_core_inventory" name="test_local_discovery_calls_public_core_facade_without_runtime" time="0.006" /><testcase classname="tests.execution_r4.test_core_inventory" name="test_two_copies_keep_distinct_installation_refs" time="0.018" /><testcase classname="tests.execution_r4.test_core_inventory" name="test_protocol_is_direct_object_and_does_not_claim_remote_ready" time="1.861" /><testcase classname="tests.execution_r4.test_ns00" name="test_ns00_01" time="0.407" /><testcase classname="tests.execution_r4.test_ns00" name="test_ns00_02" time="0.043" /><testcase classname="tests.execution_r4.test_ns00" name="test_ns00_03" time="1.966" /><testcase classname="tests.execution_r4.test_ns00" name="test_ns00_04" time="0.164" /><testcase classname="tests.execution_r4.test_ns00" name="test_ns00_05" time="0.020" /><testcase classname="tests.execution_r4.test_ns01" name="test_ns01_01" time="1.252" /><testcase classname="tests.execution_r4.test_ns01" name="test_ns01_02" time="0.003" /><testcase classname="tests.execution_r4.test_ns01" name="test_ns01_03" time="0.023" /><testcase classname="tests.execution_r4.test_ns01" name="test_mcp_config_uses_bearer_header" time="0.001" /><testcase classname="tests.execution_r4.test_ns01" name="test_v1_auth_is_bearer_only_and_direct" time="1.813" /><testcase classname="tests.execution_r4.test_ns01" name="test_ns01_05" time="0.053" /><testcase classname="tests.execution_r4.test_ns02" name="test_ns02_01" time="0.001" /><testcase classname="tests.execution_r4.test_ns02" name="test_ns02_02" time="0.505" /><testcase classname="tests.execution_r4.test_ns02" name="test_ns02_03" time="0.418" /><testcase classname="tests.execution_r4.test_ns02" name="test_ns02_04" time="0.459" /><testcase classname="tests.execution_r4.test_ns02_receipts" name="test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance" time="2.240" /><testcase classname="tests.execution_r4.test_ns03" name="test_ns03_01" time="2.607" /><testcase classname="tests.execution_r4.test_ns03" name="test_ns03_03" time="0.874" /><testcase classname="tests.execution_r4.test_ns03" name="test_binding_ticket_follows_endpoint_agent_not_executor_registrar" time="1.903" /><testcase classname="tests.execution_r4.test_ns03" name="test_register_executor_is_scoped_and_returns_only_bootstrap_authority" time="1.973" /><testcase classname="tests.execution_r4.test_ns04" name="test_ns04_01" time="0.005" /><testcase classname="tests.execution_r4.test_ns04" name="test_ns04_05_local_selection_uses_exact_revision_and_installation" time="0.032" /><testcase classname="tests.execution_r4.test_ns04" name="test_ns04_03" time="0.545" /><testcase classname="tests.execution_r4.test_ns04" name="test_remote_inventory_http_requires_executor_ticket" time="2.231" /><testcase classname="tests.execution_r4.test_ns05" name="test_ns05_01" time="2.180" /><testcase classname="tests.execution_r4.test_ns05" name="test_ns05_02" time="2.006" /><testcase classname="tests.execution_r4.test_ns05" name="test_ns05_03" time="1.823" /><testcase classname="tests.execution_r4.test_ns06" name="test_ns06_01" time="2.097" /><testcase classname="tests.execution_r4.test_ns06" name="test_ns06_02_atomic_admission_and_replay_with_synthetic_qualification" time="0.878" /><testcase classname="tests.execution_r4.test_ns07" name="test_ns07_01" time="0.042" /><testcase classname="tests.execution_r4.test_ns07" name="test_passive_serve_does_not_open_core_stores" time="1.649" /><testcase classname="tests.execution_r4.test_ns07" name="test_ns07_02" time="0.052" /><testcase classname="tests.execution_r4.test_ns08" name="test_ns08_01" time="1.809" /><testcase classname="tests.execution_r4.test_ns08" name="test_ns08_02" time="2.036" /><testcase classname="tests.execution_r4.test_ns08" name="test_ns08_03" time="2.036" /><testcase classname="tests.execution_r4.test_ns09" name="test_ns09_02_server_grant_core_application_and_replay" time="2.693" /><testcase classname="tests.execution_r4.test_ns09" name="test_ns09_02_transaction_rollback_scope_and_late_ack" time="1.925" /><testcase classname="tests.execution_r4.test_ns09" name="test_server_lease_serial_race_and_superseded_socket_cannot_ack" time="2.044" /><testcase classname="tests.execution_r4.test_ns09" name="test_canonical_authority_changes_refuse_initial_lease[permission]" time="1.955" /><testcase classname="tests.execution_r4.test_ns09" name="test_canonical_authority_changes_refuse_initial_lease[method]" time="1.884" /><testcase classname="tests.execution_r4.test_ns09" name="test_canonical_authority_changes_refuse_initial_lease[credential]" time="2.064" /><testcase classname="tests.execution_r4.test_ns09" name="test_canonical_authority_changes_refuse_initial_lease[grant]" time="2.522" /><testcase classname="tests.execution_r4.test_ns09" name="test_canonical_authority_changes_refuse_initial_lease[ticket]" time="1.866" /><testcase classname="tests.execution_r4.test_ns09" name="test_canonical_authority_changes_refuse_initial_lease[scope]" time="1.903" /><testcase classname="tests.execution_r4.test_ns09" name="test_revoked_lease_projection_survives_lane_and_owner_fencing[True]" time="1.905" /><testcase classname="tests.execution_r4.test_ns09" name="test_revoked_lease_projection_survives_lane_and_owner_fencing[False]" time="1.840" /><testcase classname="tests.execution_r4.test_ns09" name="test_unapplied_lease_requires_reconciliation_before_reconnect" time="2.046" /><testcase classname="tests.execution_r4.test_ns10" name="test_open_receipt_requires_dispatch_and_commits_readiness_atomically[False]" time="1.795" /><testcase classname="tests.execution_r4.test_ns10" name="test_open_receipt_requires_dispatch_and_commits_readiness_atomically[True]" time="1.920" /><testcase classname="tests.execution_r4.test_vertical_inventory" name="test_connector_publishes_core_snapshot_to_nexus" time="0.893"><failure message="okto_nexus.errors.OktoNexusError: PERMISSION_DENIED: The binding requires an approved operator proof.">+ Exception Group Traceback (most recent call last):
+  |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\_utils.py", line 85, in create_collapsing_task_group
+  |     async with anyio.create_task_group() as tg:
+  |                ~~~~~~~~~~~~~~~~~~~~~~~^^
+  |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 811, in __aexit__
+  |     raise BaseExceptionGroup(
+  |         "unhandled errors in a TaskGroup", self._exceptions
+  |     ) from None
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\_pytest\runner.py", line 361, in from_call
+    |     result: TResult | None = func()
+    |                              ~~~~^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\_pytest\runner.py", line 250, in &lt;lambda&gt;
+    |     lambda: runtest_hook(item=item, **kwds),
+    |             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+    |     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+    |            ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+    |     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+    |            ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\pluggy\_callers.py", line 167, in _multicall
+    |     raise exception
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\pluggy\_callers.py", line 139, in _multicall
+    |     teardown.throw(exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\_pytest\logging.py", line 865, in pytest_runtest_call
+    |     yield
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\pluggy\_callers.py", line 139, in _multicall
+    |     teardown.throw(exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\_pytest\capture.py", line 900, in pytest_runtest_call
+    |     return (yield)
+    |             ^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\pluggy\_callers.py", line 139, in _multicall
+    |     teardown.throw(exception)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\_pytest\skipping.py", line 268, in pytest_runtest_call
+    |     return (yield)
+    |             ^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+    |     res = hook_impl.function(*args)
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\_pytest\runner.py", line 184, in pytest_runtest_call
+    |     item.runtest()
+    |     ~~~~~~~~~~~~^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\_pytest\python.py", line 1707, in runtest
+    |     self.ihook.pytest_pyfunc_call(pyfuncitem=self)
+    |     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+    |     return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+    |            ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+    |     return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+    |            ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\pluggy\_callers.py", line 167, in _multicall
+    |     raise exception
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+    |     res = hook_impl.function(*args)
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\_pytest\python.py", line 167, in pytest_pyfunc_call
+    |     result = testfunction(**testargs)
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_vertical_inventory.py", line 398, in test_connector_publishes_core_snapshot_to_nexus
+    |     registered, snapshot = asyncio.run(roundtrip())
+    |                            ~~~~~~~~~~~^^^^^^^^^^^^^
+    |   File "C:\Python313\Lib\asyncio\runners.py", line 194, in run
+    |     return runner.run(main)
+    |            ~~~~~~~~~~^^^^^^
+    |   File "C:\Python313\Lib\asyncio\runners.py", line 118, in run
+    |     return self._loop.run_until_complete(task)
+    |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+    |   File "C:\Python313\Lib\asyncio\base_events.py", line 720, in run_until_complete
+    |     return future.result()
+    |            ~~~~~~~~~~~~~^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_vertical_inventory.py", line 154, in roundtrip
+    |     binding = await http.apply_r4_binding(
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |         key, client_intent_id="binding-apply-one",
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |         proposal=proposal)
+    |         ^^^^^^^^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\okto_nexus_connector\transport\https_client.py", line 562, in apply_r4_binding
+    |     payload = await self._request(
+    |               ^^^^^^^^^^^^^^^^^^^^
+    |     ...&lt;2 lines&gt;...
+    |     )
+    |     ^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\okto_nexus_connector\transport\https_client.py", line 300, in _request
+    |     response = await self._client.request(
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |         method, f"{self.base_url}{path}", headers=headers,
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |         json=json_body)
+    |         ^^^^^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\httpx\_client.py", line 1540, in request
+    |     return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\httpx\_client.py", line 1629, in send
+    |     response = await self._send_handling_auth(
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ...&lt;4 lines&gt;...
+    |     )
+    |     ^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\httpx\_client.py", line 1657, in _send_handling_auth
+    |     response = await self._send_handling_redirects(
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ...&lt;3 lines&gt;...
+    |     )
+    |     ^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\httpx\_client.py", line 1694, in _send_handling_redirects
+    |     response = await self._send_single_request(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\httpx\_client.py", line 1730, in _send_single_request
+    |     response = await transport.handle_async_request(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\httpx\_transports\asgi.py", line 170, in handle_async_request
+    |     await self.app(scope, receive, send)
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\fastapi\applications.py", line 1162, in __call__
+    |     await super().__call__(scope, receive, send)
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\applications.py", line 90, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\middleware\errors.py", line 186, in __call__
+    |     raise exc
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    |     await self.app(scope, receive, _send)
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\adapters\inbound\http\app.py", line 312, in dispatch
+    |     response = await call_next(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    |     raise app_exc from app_exc.__cause__ or app_exc.__context__
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\adapters\inbound\http\app.py", line 303, in dispatch
+    |     return await call_next(request)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    |     raise app_exc from app_exc.__cause__ or app_exc.__context__
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\adapters\inbound\http\app.py", line 327, in dispatch
+    |     return await call_next(request)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    |     raise app_exc from app_exc.__cause__ or app_exc.__context__
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    |     raise exc
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    |     await self.app(scope, receive, send)
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\routing.py", line 680, in app
+    |     await route.handle(scope, receive, send)
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\fastapi\routing.py", line 1650, in handle
+    |     await self.original_router.handle(scope, receive, send)
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\fastapi\routing.py", line 2102, in handle
+    |     await included_router._handle_selected(scope, receive, send)
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\fastapi\routing.py", line 1670, in _handle_selected
+    |     await original_route.handle(scope, receive, send)
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\fastapi\routing.py", line 1218, in handle
+    |     await app(scope, receive, send)
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\fastapi\routing.py", line 143, in app
+    |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    |     raise exc
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\fastapi\routing.py", line 129, in app
+    |     response = await f(request)
+    |                ^^^^^^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\fastapi\routing.py", line 683, in app
+    |     raw_response = await run_endpoint_function(
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ...&lt;3 lines&gt;...
+    |     )
+    |     ^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\fastapi\routing.py", line 337, in run_endpoint_function
+    |     return await dependant.call(**values)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\adapters\inbound\http\connections_v1.py", line 231, in apply_binding
+    |     view = await anyio.to_thread.run_sync(_apply)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\anyio\to_thread.py", line 63, in run_sync
+    |     return await get_async_backend().run_sync_in_worker_thread(
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |         func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     )
+    |     ^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2592, in run_sync_in_worker_thread
+    |     return await future
+    |            ^^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1029, in run
+    |     result = context.run(func, *args)
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\adapters\inbound\http\connections_v1.py", line 221, in _apply
+    |     return apply_execution_binding(
+    |         factory, actor_agent_id=agent.agent_id,
+    |     ...&lt;5 lines&gt;...
+    |         access=build_execution_access(request.app.state.deps),
+    |     )
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\application\execution_binding_proposals.py", line 431, in apply_execution_binding
+    |     verify_binding_operator_proof(
+    |     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+    |         conn, proposal_row=row, expected=expected,
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |         proof_ref=request.get("operator_proof_ref"))
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\application\execution_binding_approvals.py", line 74, in verify_binding_operator_proof
+    |     if (not proof_ref or proof_ref != expected.get("operator_approval_id") or
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |             not proposal_row["operator_proof_json"]):
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    | okto_nexus.errors.OktoNexusError: PERMISSION_DENIED: The binding requires an approved operator proof.
+    +------------------------------------
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_vertical_inventory.py", line 398, in test_connector_publishes_core_snapshot_to_nexus
+    registered, snapshot = asyncio.run(roundtrip())
+                           ~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Python313\Lib\asyncio\runners.py", line 194, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Python313\Lib\asyncio\base_events.py", line 720, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_vertical_inventory.py", line 154, in roundtrip
+    binding = await http.apply_r4_binding(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        key, client_intent_id="binding-apply-one",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proposal=proposal)
+        ^^^^^^^^^^^^^^^^^^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\okto_nexus_connector\transport\https_client.py", line 562, in apply_r4_binding
+    payload = await self._request(
+              ^^^^^^^^^^^^^^^^^^^^
+    ...&lt;2 lines&gt;...
+    )
+    ^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\okto_nexus_connector\transport\https_client.py", line 300, in _request
+    response = await self._client.request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        method, f"{self.base_url}{path}", headers=headers,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        json=json_body)
+        ^^^^^^^^^^^^^^^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\httpx\_client.py", line 1540, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\httpx\_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...&lt;4 lines&gt;...
+    )
+    ^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\httpx\_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...&lt;3 lines&gt;...
+    )
+    ^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\httpx\_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\httpx\_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\httpx\_transports\asgi.py", line 170, in handle_async_request
+    await self.app(scope, receive, send)
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\fastapi\applications.py", line 1162, in __call__
+    await super().__call__(scope, receive, send)
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\middleware\errors.py", line 186, in __call__
+    raise exc
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\adapters\inbound\http\app.py", line 312, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\adapters\inbound\http\app.py", line 303, in dispatch
+    return await call_next(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\adapters\inbound\http\app.py", line 327, in dispatch
+    return await call_next(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\fastapi\routing.py", line 1650, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\fastapi\routing.py", line 2102, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\fastapi\routing.py", line 1670, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\fastapi\routing.py", line 1218, in handle
+    await app(scope, receive, send)
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\fastapi\routing.py", line 143, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\fastapi\routing.py", line 129, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\fastapi\routing.py", line 683, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...&lt;3 lines&gt;...
+    )
+    ^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\fastapi\routing.py", line 337, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\adapters\inbound\http\connections_v1.py", line 231, in apply_binding
+    view = await anyio.to_thread.run_sync(_apply)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\anyio\to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2592, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1029, in run
+    result = context.run(func, *args)
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\adapters\inbound\http\connections_v1.py", line 221, in _apply
+    return apply_execution_binding(
+        factory, actor_agent_id=agent.agent_id,
+    ...&lt;5 lines&gt;...
+        access=build_execution_access(request.app.state.deps),
+    )
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\application\execution_binding_proposals.py", line 431, in apply_execution_binding
+    verify_binding_operator_proof(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        conn, proposal_row=row, expected=expected,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proof_ref=request.get("operator_proof_ref"))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\application\execution_binding_approvals.py", line 74, in verify_binding_operator_proof
+    if (not proof_ref or proof_ref != expected.get("operator_approval_id") or
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            not proposal_row["operator_proof_json"]):
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+okto_nexus.errors.OktoNexusError: PERMISSION_DENIED: The binding requires an approved operator proof.
+
+The above exception was the direct cause of the following exception:
+tests\execution_r4\test_vertical_inventory.py:398: in test_connector_publishes_core_snapshot_to_nexus
+    registered, snapshot = asyncio.run(roundtrip())
+                           ^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests\execution_r4\test_vertical_inventory.py:154: in roundtrip
+    binding = await http.apply_r4_binding(
+.venv\Lib\site-packages\okto_nexus_connector\transport\https_client.py:562: in apply_r4_binding
+    payload = await self._request(
+.venv\Lib\site-packages\okto_nexus_connector\transport\https_client.py:300: in _request
+    response = await self._client.request(
+.venv\Lib\site-packages\httpx\_client.py:1540: in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:1629: in send
+    response = await self._send_handling_auth(
+.venv\Lib\site-packages\httpx\_client.py:1657: in _send_handling_auth
+    response = await self._send_handling_redirects(
+.venv\Lib\site-packages\httpx\_client.py:1694: in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:1730: in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_transports\asgi.py:170: in handle_async_request
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\applications.py:1162: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:186: in __call__
+    raise exc
+.venv\Lib\site-packages\starlette\middleware\errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+.venv\Lib\site-packages\starlette\middleware\base.py:193: in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:312: in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\middleware\base.py:168: in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+.venv\Lib\site-packages\starlette\middleware\base.py:144: in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+.venv\Lib\site-packages\starlette\middleware\base.py:193: in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:303: in dispatch
+    return await call_next(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\middleware\base.py:168: in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+.venv\Lib\site-packages\starlette\middleware\base.py:144: in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+.venv\Lib\site-packages\starlette\middleware\base.py:193: in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:327: in dispatch
+    return await call_next(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\middleware\base.py:168: in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+.venv\Lib\site-packages\starlette\middleware\base.py:144: in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:680: in app
+    await route.handle(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:1650: in handle
+    await self.original_router.handle(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:2102: in handle
+    await included_router._handle_selected(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:1670: in _handle_selected
+    await original_route.handle(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:1218: in handle
+    await app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:143: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\routing.py:129: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:683: in app
+    raw_response = await run_endpoint_function(
+.venv\Lib\site-packages\fastapi\routing.py:337: in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\connections_v1.py:231: in apply_binding
+    view = await anyio.to_thread.run_sync(_apply)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\to_thread.py:63: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:2592: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:1029: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\connections_v1.py:221: in _apply
+    return apply_execution_binding(
+src\okto_nexus\application\execution_binding_proposals.py:431: in apply_execution_binding
+    verify_binding_operator_proof(
+src\okto_nexus\application\execution_binding_approvals.py:74: in verify_binding_operator_proof
+    if (not proof_ref or proof_ref != expected.get("operator_approval_id") or
+E   okto_nexus.errors.OktoNexusError: PERMISSION_DENIED: The binding requires an approved operator proof.</failure></testcase></testsuite></testsuites>

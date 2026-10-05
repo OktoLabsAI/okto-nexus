@@ -1,0 +1,63 @@
+{
+  "adapter": "pi_rpc",
+  "server_release_gate_override": true,
+  "native_qualification_override": false,
+  "synthetic_native_factory": false,
+  "public_connector_cli": true,
+  "cli_subprocess": true,
+  "protected_os_vault": true,
+  "topology": "Single Windows host; actual loopback HTTP/WSS; separate Server and daemon processes.",
+  "phase": "finished",
+  "vault_backend": "keyring:Windows WinVaultKeyring",
+  "candidate_ref": "nexus-install-v1:b64f7d489758234ac44fa9004bec00163e29efe01b8772ace8836ffc6001b3d5",
+  "open_stage": "SUBMITTED",
+  "scope": {
+    "agent_id": "subject",
+    "authorization_revision": 2,
+    "binding_id": "bind_5164b6d38200ed046944b645586c32b4",
+    "binding_revision": 1,
+    "configuration_revision": 2,
+    "credential_epoch": 1,
+    "executor_id": "exe_13605449fa10caef187a63e4702dd5ab",
+    "server_id": "srv_cab87195a4231f730818674bf08ca122",
+    "session_id": "ses_230e29528bb3a6137946184dc2a81cd4",
+    "session_owner_generation": 1,
+    "workspace_binding_id": "wxb_d01741c4f5f6db7fb21eaef0904e22f7",
+    "workspace_id": "wsr_3ee0304d975eeac7da384501b690530b"
+  },
+  "lease_serial_before_turn": 2,
+  "turn_stage": "SUCCEEDED",
+  "explicit_operator_decisions": 0,
+  "handoff_status": "COMPLETED",
+  "native_action_count": 3,
+  "tool_claim_count": 1,
+  "wss_ticket_count": 4,
+  "close_stage": "SUCCEEDED",
+  "failure_type": "AssertionError",
+  "failure_phase": "runtime.returned",
+  "failure_frames": [
+    {
+      "file": "test_real_connector_providers.py",
+      "function": "run",
+      "line": 335
+    }
+  ],
+  "control_failures": [
+    {
+      "state": "CHECKING_PROTOCOL",
+      "executor_id": "exe_13605449fa10caef187a63e4702dd5ab",
+      "control_ready": false,
+      "execution_ready": false,
+      "error_code": "RECONCILIATION_REQUIRED",
+      "recovery_required": false,
+      "cleanup_pending": false,
+      "publication_sequence": 4,
+      "inventory_revision": "sha256:8a0d08021a435878197e13a8415052beeea5c689cab6e0f8e574e054c361610e",
+      "connection_generation": null,
+      "attempts": 3
+    }
+  ],
+  "daemon_exit_code": 0,
+  "campaign_credentials_removed": true,
+  "server_exit_code": 0
+}

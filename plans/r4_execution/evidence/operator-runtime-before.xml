@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="4.485" timestamp="2026-10-02T10:33:24.764895-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_operator_runtime" name="test_operator_complete_cycle_preserves_actor_and_subject" time="3.006"><failure message="AssertionError: {&quot;error&quot;:{&quot;code&quot;:&quot;VALIDATION_ERROR&quot;,&quot;stage&quot;:&quot;validation&quot;,&quot;message&quot;:&quot;The request does not match the R4 contract.&quot;,&quot;possible_effect&quot;:false,&quot;retry_safe&quot;:false,&quot;operation_id&quot;:null,&quot;action&quot;:&quot;&quot;}}&#10;assert 400 == 200&#10; +  where 400 = &lt;Response [400 Bad Request]&gt;.status_code">connected_local = ((Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4880/test_ope...agent_id': 'subject', ...}, &lt;test_embedded_dispatch.connect_local.&lt;locals&gt;.NativeFactory object at 0x00000211BF4CEBA0&gt;)
+
+    def test_operator_complete_cycle_preserves_actor_and_subject(connected_local):
+        setup, binding, native = connected_local
+        response = resolve(setup, binding, new_session=True)
+&gt;       assert response.status_code == 200, response.text
+E       AssertionError: {"error":{"code":"VALIDATION_ERROR","stage":"validation","message":"The request does not match the R4 contract.","possible_effect":false,"retry_safe":false,"operation_id":null,"action":""}}
+E       assert 400 == 200
+E        +  where 400 = &lt;Response [400 Bad Request]&gt;.status_code
+
+tests\execution_r4\test_operator_runtime.py:25: AssertionError</failure></testcase></testsuite></testsuites>

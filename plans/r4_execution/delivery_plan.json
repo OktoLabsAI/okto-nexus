@@ -1,0 +1,227 @@
+{
+  "format_version": 1,
+  "plan_id": "r4-full-delivery-2026-09-29",
+  "status": "IN_PROGRESS",
+  "purpose": "Coordinate completion and acceptance of Nexus, Connector, and Core without replacing the normative R4 requirements.",
+  "document": "plans/r4_execution/DELIVERY_PLAN.md",
+  "review_checkpoint": {
+    "date": "2026-10-02",
+    "scope": "Current implementation and bounded installed evidence; not final release acceptance.",
+    "branch": "feature/v0.2.0",
+    "historical_checkpoint": "plans/r4_execution/evidence/delivery-checkpoint-20260930.json",
+    "published_heads": {
+      "nexus": "593ebacdafc212b8417c9c981ed1fc9243f8db42",
+      "connector": "ad0933e0f71b71fc6d8d420db4c77c1d9c60836c",
+      "core": "19ed94d18f8e372cdf582de7e6a47c1dfed43779"
+    },
+    "heads_are_final_release_tuple": false,
+    "shared_core_version": "0.2.58.dev0",
+    "shared_core_wheel_sha256": "7f19885f28b16dbfce66b969ab42c79b9947246416c71147315006b6e618b1f6",
+    "latest_tested_wheels": {
+      "nexus": "5a3d4f357339c8162c80414060ca735b44af982dedf0b653485fbd5ba4b92647",
+      "connector": "93d78a75c5ad81bbdd96e648be136f0f6b2cfd0a53f350266a1c9f96fc449104",
+      "core": "7f19885f28b16dbfce66b969ab42c79b9947246416c71147315006b6e618b1f6"
+    },
+    "closed_product_gates": [],
+    "evidence": [
+      "plans/r4_execution/M10_AGENT_CONNECTIONS.md",
+      "plans/r4_execution/M10_OFFLINE_RECOVERY.md",
+      "plans/r4_execution/M10_SESSION_BROWSER.md",
+      "plans/r4_execution/M10_SESSION_HISTORY_UI.md",
+      "plans/r4_execution/M10_NATIVE_DECISIONS_UI.md",
+      "plans/r4_execution/M10_RUNTIME_OPERATIONS.md",
+      "plans/r4_execution/M04_OPERATOR_RUNTIME.md",
+      "plans/r4_execution/M10_LOCAL_INSTALLATION_CHECK.md",
+      "plans/r4_execution/M13_POSIX_DISCOVERY_056.md",
+      "plans/r4_execution/M13_PI_STREAM_DIAGNOSTIC.md",
+      "plans/r4_execution/M12_NS15_05_ACCEPTANCE.md",
+      "plans/r4_execution/M12_NS15_05_OPERATIONAL_RECONCILIATION.md"
+    ],
+    "latest_increment": "Core-backed local runtime buttons and configuration; keyless loopback dashboard authority; Remote/All Connector command copying; configured-agent deletion and visible conflicts. Installed globally.",
+    "verification_scope": "Broad installed campaign: 105 passes and three retained test failures. Corrected targeted campaign: 20 passes with unchanged inputs; all 376 backend Python/SQL files identical. Real local inventory found Codex, Pi and Claude. Global install preserved 72 distribution versions and verified 386 Nexus/96 Core files. No independent-host or native provider qualification.",
+    "clean_install_scope": "Final increment validated in an isolated installed environment. Coordinated final three-product clean-install acceptance remains required.",
+    "macos": {
+      "source_commit": "1975e88",
+      "plan_commit": "19ed94d18f8e372cdf582de7e6a47c1dfed43779",
+      "target": "Intel x86_64 / macOS 26.4.1 / Python 3.12.4",
+      "provenance": "User-operated native synthetic probes; source Git hash and issue report matched.",
+      "parent_tracking_escape_leaks": "24/24",
+      "coalition_escape_cleanup": "10/10 stopped",
+      "containment_qualified": false,
+      "next": "Queued after the user-approved Agents/Connections corrections. Implement bounded coalition census and escaped-tree stop proof, autonomous job lifecycle, capacity retention and production integration using observed GUI-domain primitives; diagnose user-domain bootstrap failure before claiming headless operation.",
+      "prototype_commit": "7a84ff98e9cd559dd24309f1275f9aa54693f6c3",
+      "prototype_validation": "Native Intel gui/501: all three fixed-fixture scenarios passed pipe handoff, descriptor hygiene, cleanup and label removal. user/501: all three bootstraps failed with error 5. Report script hash matches published 7a84ff9. No production containment or provider qualification.",
+      "launchd_report_commit": "f5d552e"
+    },
+    "remaining": [
+      "Complete remaining M10 archive access independent of installation selection, uncertain-session recovery, onboarding, US English/accessibility and actual remote/provider browser acceptance.",
+      "Resolve or delimit Pi stream-loss reproduction with sufficient provider evidence; complete required provider/platform/Python/fault matrix.",
+      "Implement native macOS containment and qualify each provider independently on the user-operated Intel Mac.",
+      "Freeze final immutable three-repository tuple, build packages and verify clean installations without checkout dependencies.",
+      "Complete independent-host integrated acceptance manually with user intervention; same-machine WSL/WSS tests do not satisfy it.",
+      "Reconcile final NS15.05 commands and support claims against completed functionality; rerun final regression and close G0-G3 only from matching evidence.",
+      "Hosted CI deferred by user instruction; final hosted qualification remains open."
+    ]
+  },
+  "sources": {
+    "backlog": "plans/BACKLOG_R4.json",
+    "tests": "plans/MATRIZ_TESTES_R4.json",
+    "handoff": "plans/06_HANDOFF_CORE_CONNECTOR.md",
+    "http_routes": "plans/contratos/http-routes.json",
+    "nxl_delta": "plans/contratos/nxl-r4-delta.json"
+  },
+  "baseline": {
+    "branch": "feature/v0.2.0",
+    "nexus": {"head": "2ce437d5189f0fdf08b1332e836249b2a838dbf3", "version": "0.2.0"},
+    "connector": {"head": "208a9c90e14e4995951c805ccc6585596160ca1c", "version": "0.5.0.dev0"},
+    "core": {"head": "79a315ff634bcfc8e5c4d4bab95ab46eff4579c8", "version": "0.2.22.dev0", "wheel_sha256": "a909fab422f506c9631ef1ed57cea4ec09d235bc44f9e92ab1f84b4e289e02db"},
+    "product_gates": {"G0": "OPEN", "G1": "OPEN", "G2": "OPEN", "G3": "OPEN"},
+    "prior_evidence_policy": "Historical partial results are context only. They do not qualify the final release artifacts."
+  },
+  "milestones": [
+    {"id": "M00", "title": "Audit and acceptance inventory", "owners": ["Nexus", "Connector", "Core"], "depends_on": [], "nexus_tasks": ["NS00.01", "NS00.02", "NS00.03"], "nexus_phases": [], "exit": "Every requirement, supported platform, provider build, test entry point, and environmental dependency has an owner and an evidence path."},
+    {"id": "M01", "title": "Shared executable Core contracts", "owners": ["Core", "Nexus", "Connector"], "depends_on": ["M00"], "nexus_tasks": ["NS00.04", "NS00.05"], "nexus_phases": [], "exit": "One immutable Core wheel passes R4 conformance and R3 history tests in both installed consumers; executable contract status is evidence based."},
+    {"id": "M02", "title": "Composition persistence and authority", "owners": ["Nexus", "Connector"], "depends_on": ["M01"], "nexus_tasks": [], "nexus_phases": ["NS01", "NS02", "NS03"], "exit": "HTTP-only MCP, additive migrations, canonical identity, scoped tickets, session capabilities, and operator authorization pass their positive and negative cases."},
+    {"id": "M03", "title": "Inventory consent and reusable bindings", "owners": ["Nexus", "Connector", "Core"], "depends_on": ["M02"], "nexus_tasks": [], "nexus_phases": ["NS04", "NS05"], "exit": "Local and remote onboarding creates an approved binding through public entry points and reuses it without repeating technical setup."},
+    {"id": "M04", "title": "Canonical operation dispatcher", "owners": ["Nexus", "Connector"], "depends_on": ["M03"], "nexus_tasks": [], "nexus_phases": ["NS06"], "exit": "All user intents use one durable admission and dispatch path; loss of a response, cancellation, or retry never creates a second native effect."},
+    {"id": "M05", "title": "Embedded execution through the product", "owners": ["Nexus", "Core"], "depends_on": ["M04"], "nexus_tasks": [], "nexus_phases": ["NS07"], "exit": "An installed Nexus and Core open, submit, control, observe, and close a local runtime using canonical admission with no Connector application installed."},
+    {"id": "M06", "title": "Remote daemon lanes leases and execution", "owners": ["Nexus", "Connector", "Core"], "depends_on": ["M04"], "nexus_tasks": [], "nexus_phases": ["NS08", "NS09"], "exit": "The real Connector daemon performs R4 negotiation, paginated reconciliation, correlated attach and lease installation, and remote open and controls from the Nexus dispatcher."},
+    {"id": "M07", "title": "Durable events receipts and replay", "owners": ["Nexus", "Connector", "Core"], "depends_on": ["M06"], "nexus_tasks": [], "nexus_phases": ["NS10"], "exit": "Events and receipts survive restart and reconnect with contiguous post-commit ACKs, bounded journals, explicit gaps, and publisher recovery without a new native event."},
+    {"id": "M08", "title": "Canonical decisions and native input", "owners": ["Nexus", "Connector", "Core"], "depends_on": ["M05", "M07"], "nexus_tasks": [], "nexus_phases": ["NS11"], "exit": "An authorized decision produces exactly one native application and a recoverable receipt while preserving full request identity, namespace, and sensitive input rules."},
+    {"id": "M09", "title": "Direct tools and governed work", "owners": ["Nexus", "Connector", "Core"], "depends_on": ["M08"], "nexus_tasks": [], "nexus_phases": ["NS12"], "exit": "Direct MCP HTTP and the qualified Pi native bridge reach the same authorized domain with exclusive consumption, causal results, and no Connector MCP proxy."},
+    {"id": "M10", "title": "Complete UI CLI and US English", "owners": ["Nexus", "Connector", "Core"], "depends_on": ["M08"], "nexus_tasks": [], "nexus_phases": ["NS13"], "exit": "Human and headless user journeys pass through the actual UI and CLI; all application-authored visible and returned text is US English."},
+    {"id": "M11", "title": "Recovery revocation shutdown and limits", "owners": ["Nexus", "Connector", "Core"], "depends_on": ["M08"], "nexus_tasks": [], "nexus_phases": ["NS14"], "exit": "Process crashes, partitions, rotation, disk pressure, and shutdown preserve ownership and uncertainty without unbounded queues or unauthorized effects."},
+    {"id": "M12", "title": "Migration cutover and removal of duplicate execution", "owners": ["Nexus", "Connector", "Core"], "depends_on": ["M09", "M10", "M11"], "nexus_tasks": [], "nexus_phases": ["NS15"], "exit": "Legacy data and active ownership migrate with restartable checkpoints and verified rollback; obsolete execution paths are removed after demonstrated parity."},
+    {"id": "M13", "title": "Final artifacts and complete acceptance", "owners": ["Nexus", "Connector", "Core"], "depends_on": ["M12"], "nexus_tasks": [], "nexus_phases": ["NS16"], "exit": "The immutable three-repository release tuple passes all applicable TR4, TN, J, language, platform, provider, and installed-product campaigns with no unresolved required test."}
+  ],
+  "external_deliverables": [
+    {"id": "CORE-R4-01", "owner": "Core", "close_at": "M01", "verify_again_at": ["M06", "M08", "M13"]},
+    {"id": "CORE-R4-02", "owner": "Core", "close_at": "M01", "verify_again_at": ["M03", "M05", "M06", "M13"]},
+    {"id": "CORE-R4-03", "owner": "Core", "close_at": "M01", "verify_again_at": ["M05", "M06", "M08", "M13"]},
+    {"id": "CORE-R4-04", "owner": "Core", "close_at": "M13", "verify_again_at": []},
+    {"id": "CON-R4-01", "owner": "Connector", "close_at": "M11", "verify_again_at": ["M13"]},
+    {"id": "CON-R4-02", "owner": "Connector", "close_at": "M06", "verify_again_at": ["M08", "M10", "M13"]},
+    {"id": "CON-R4-03", "owner": "Connector", "close_at": "M08", "verify_again_at": ["M09", "M10", "M13"]},
+    {"id": "CON-R4-04", "owner": "Connector", "close_at": "M06", "verify_again_at": ["M11", "M13"]},
+    {"id": "CON-R4-05", "owner": "Connector", "close_at": "M03", "verify_again_at": ["M06", "M10", "M13"]},
+    {"id": "CON-R4-06", "owner": "Connector", "close_at": "M07", "verify_again_at": ["M11", "M13"]},
+    {"id": "CON-R4-07", "owner": "Connector", "close_at": "M08", "verify_again_at": ["M11", "M13"]},
+    {"id": "CON-R4-08", "owner": "Connector", "close_at": "M11", "verify_again_at": ["M13"]}
+  ],
+  "additional_requirements": [
+    {"id": "LANG-US-01", "owner": "Nexus, Connector, Core", "close_at": "M10", "verify_again_at": ["M13"], "requirement": "All application-authored UI, accessibility, CLI, API, MCP, WebSocket, error, diagnostic, and return messages use US English, including legacy surfaces.", "tests": ["TLANG-01", "TLANG-02", "TLANG-03", "TLANG-04"]}
+  ],
+  "cn5_findings": {"Q01": "M08", "Q02": "M08", "Q03": "M06", "Q04": "M07"},
+  "http_route_closure": {
+    "POST /v1/runtime/executors/{id}/inventory:claim-refresh": "M03",
+    "POST /v1/runtime/executors/{id}/installations:check": "M03",
+    "GET /v1/runtime/sessions/{id}/capability": "M02",
+    "GET /v1/connections/protocol": "M02",
+    "GET /v1/connections/me": "M02",
+    "POST /v1/connections/executors:register": "M02",
+    "PUT /v1/runtime/executors/{id}/inventory": "M03",
+    "GET /v1/runtime/executors/{id}/inventory": "M03",
+    "POST /v1/runtime/executors/{id}/inventory:refresh": "M03",
+    "POST /v1/runtime/executors/{id}/realizations": "M03",
+    "POST /v1/connections/bindings:prepare": "M03",
+    "POST /v1/connections/bindings:apply": "M03",
+    "GET /v1/connections/bindings/{id}": "M03",
+    "POST /v1/connections/bindings/{id}/ticket": "M02",
+    "GET /v1/agents/{agent_id}/runtime-options": "M03",
+    "POST /v1/runtime/intents:resolve": "M04",
+    "GET /v1/runtime/intents/{client_intent_id}": "M04",
+    "POST /v1/runtime/operations": "M04",
+    "GET /v1/runtime/operations/{id}": "M04",
+    "POST /v1/runtime/operations/{id}/receipts": "M07",
+    "GET /v1/runtime/sessions/{id}": "M06",
+    "GET /v1/runtime/sessions": "M10",
+    "POST /v1/runtime/sessions/{id}/capability": "M02",
+    "POST /v1/runtime/approval-decisions": "M08",
+    "GET /v1/runtime/approval-decisions/{id}": "M08",
+    "POST /v1/runtime/native-actions": "M09",
+    "GET /v1/runtime/executors/{id}/link": "M06"
+  },
+  "operation_actions": {
+    "runtime.open": {"local": "M05", "remote": "M06", "final_acceptance": "M13"},
+    "turn.submit": {"local": "M05", "remote": "M06", "final_acceptance": "M13"},
+    "turn.steer": {"local": "M05", "remote": "M06", "final_acceptance": "M13"},
+    "turn.interrupt": {"local": "M05", "remote": "M06", "final_acceptance": "M13"},
+    "runtime.close": {"local": "M05", "remote": "M06", "final_acceptance": "M13"},
+    "approval.decide": {"local": "M08", "remote": "M08", "final_acceptance": "M13"},
+    "input.provide": {"local": "M08", "remote": "M08", "final_acceptance": "M13"}
+  },
+  "acceptance_policy": {
+    "source_task_dependencies_preserved": true,
+    "test_assignment": "Each original scenario is assigned to the latest closing milestone of its source task IDs and is reassessed on final artifacts in M13.",
+    "mandatory_test_statuses_at_release": ["PASS"],
+    "not_applicable_requires": "A normative capability or platform exclusion, its negative test, and an explicit recorded rationale; missing infrastructure is NOT_RUN, never NOT_APPLICABLE.",
+    "synthetic_evidence_qualifies_provider": false,
+    "gate_closure": {"G0": "M02", "G1": "M13", "G2": "M13", "G3": "M13"},
+    "commit_policy": "Commit coherent tested increments and push feature/v0.2.0 in each changed repository; milestone closure requires all acceptance evidence, independently of commit count."
+  },
+  "execution_batches": [
+    {"id": "P1", "title": "Baseline and acceptance evidence", "milestones": ["M00"], "owners": ["Nexus", "Connector", "Core"], "depends_on": [], "status": "PLANNED_REMAINING_WORK", "acceptance": "Each requirement has an owner, public caller, collectible test or explicit test work, environment and evidence; preserve failed attempts and known defects. Original task and milestone dependencies remain mandatory."},
+    {"id": "P2", "title": "Shared contract", "milestones": ["M01"], "owners": ["Core", "Nexus", "Connector"], "depends_on": ["P1"], "status": "PLANNED_REMAINING_WORK", "acceptance": "Installed conformance covers all seven actions, errors, targeting and lease authority, preserves historical R3, and uses the same hashed Core wheel in both consumers. Original task and milestone dependencies remain mandatory."},
+    {"id": "P3", "title": "Reusable onboarding", "milestones": ["M02", "M03"], "owners": ["Nexus", "Connector"], "depends_on": ["P2"], "status": "PLANNED_REMAINING_WORK", "acceptance": "Public first and repeated onboarding preserve identity, explicit runtime grants, consent, replay, denial and concurrent revision checks. Original task and milestone dependencies remain mandatory."},
+    {"id": "P4", "title": "Opening and outbox", "milestones": ["M04"], "owners": ["Nexus", "Connector"], "depends_on": ["P3"], "status": "PLANNED_REMAINING_WORK", "acceptance": "Canonical admission and outbox are atomic; lease installation precedes native preparation; lost responses preserve operation IDs and control remains available under saturation. Original task and milestone dependencies remain mandatory."},
+    {
+      "id": "P5",
+      "title": "Embedded cycle",
+      "milestones": [
+        "M05"
+      ],
+      "owners": [
+        "Nexus",
+        "Core"
+      ],
+      "depends_on": [
+        "P4"
+      ],
+      "status": "PLANNED_REMAINING_WORK",
+      "acceptance": "An installed Nexus without the Connector application executes the embedded lifecycle through public callers, with technical-peer and real-provider evidence classified separately. Original task and milestone dependencies remain mandatory.",
+      "steps": [
+        {
+          "id": "P5.1",
+          "title": "Canonical serve composition",
+          "depends_on": []
+        },
+        {
+          "id": "P5.2",
+          "title": "Protected launch environment and tools",
+          "depends_on": [
+            "P5.1"
+          ]
+        },
+        {
+          "id": "P5.3",
+          "title": "Lifecycle and observation",
+          "depends_on": [
+            "P5.2"
+          ]
+        },
+        {
+          "id": "P5.4",
+          "title": "Recovery and authority",
+          "depends_on": [
+            "P5.3"
+          ]
+        },
+        {
+          "id": "P5.5",
+          "title": "Installed local-only acceptance",
+          "depends_on": [
+            "P5.4"
+          ]
+        }
+      ]
+    },
+    {"id": "P6", "title": "Remote cycle", "milestones": ["M06"], "owners": ["Connector", "Nexus", "Core"], "depends_on": ["P4"], "status": "PLANNED_REMAINING_WORK", "acceptance": "Automatic persisted daemon composition, protected configuration, ticket rotation, lease renewal and nonempty paginated reconciliation pass in independent product processes. Original task and milestone dependencies remain mandatory.", "steps": [{"id": "P6.1", "title": "Approved configuration and protected launch environment", "depends_on": []}, {"id": "P6.2", "title": "Automatic lane attachment and execution ownership", "depends_on": ["P6.1"]}, {"id": "P6.3", "title": "Ticket lease and capability lifecycle", "depends_on": ["P6.2"]}, {"id": "P6.4", "title": "Nonempty paginated recovery and publication obligations", "depends_on": ["P6.2"]}, {"id": "P6.5", "title": "Installed integration through independent product processes", "depends_on": ["P6.3", "P6.4"]}]},
+    {"id": "P7", "title": "Durable observation", "milestones": ["M07"], "owners": ["Nexus", "Connector", "Core"], "depends_on": ["P6"], "status": "PLANNED_REMAINING_WORK", "acceptance": "Durable receipts and events recover after restart without a new native event; duplicates, gaps, lost acknowledgments and namespace collisions are covered. Original task and milestone dependencies remain mandatory."},
+    {"id": "P8", "title": "Decisions and input", "milestones": ["M08"], "owners": ["Nexus", "Connector", "Core"], "depends_on": ["P5", "P7"], "status": "PLANNED_REMAINING_WORK", "acceptance": "Canonical approval and input through public callers cause one authorized native application under concurrency, timeout, denial and restart. Original task and milestone dependencies remain mandatory."},
+    {"id": "P9", "title": "Tools and domain", "milestones": ["M09"], "owners": ["Nexus", "Connector", "Core"], "depends_on": ["P8"], "status": "PLANNED_REMAINING_WORK", "acceptance": "Native context/claim/complete and managed MCP share canonical claims and causal results; replay, cross-channel contention, revocation and independent tools-only operation are proven. Original task and milestone dependencies remain mandatory."},
+    {"id": "P10", "title": "User journeys and US English", "milestones": ["M10"], "owners": ["Nexus", "Connector", "Core"], "depends_on": ["P8"], "status": "PLANNED_REMAINING_WORK", "acceptance": "Complete browser and human/headless CLI journeys pass; TLANG-01 through TLANG-04 cover all application-authored US English text and packaged resources. Original task and milestone dependencies remain mandatory."},
+    {"id": "P11", "title": "Failures and limits", "milestones": ["M11"], "owners": ["Nexus", "Connector", "Core"], "depends_on": ["P8"], "status": "PLANNED_REMAINING_WORK", "acceptance": "Fault barriers, process death, partitions and storage pressure prove authority, ownership, containment and bounded memory, queues and shutdown; all CN5 findings are covered. Original task and milestone dependencies remain mandatory."},
+    {"id": "P12", "title": "Installation upgrades", "milestones": ["M12"], "owners": ["Nexus", "Connector", "Core"], "depends_on": ["P9", "P10", "P11"], "status": "PLANNED_REMAINING_WORK", "acceptance": "Representative legacy data and pending sessions survive interrupted and repeated migration, owner drain, cutover, joint database/journal restore and verified rollback. Original task and milestone dependencies remain mandatory."},
+    {"id": "P13", "title": "Complete delivery", "milestones": ["M13"], "owners": ["Nexus", "Connector", "Core"], "depends_on": ["P12"], "status": "PLANNED_REMAINING_WORK", "acceptance": "The frozen three-repository release tuple passes all mandatory scenarios, declared platforms and real-provider local/remote matrices, with G0-G3 closed and runbooks delivered. Original task and milestone dependencies remain mandatory."}
+  ]
+}

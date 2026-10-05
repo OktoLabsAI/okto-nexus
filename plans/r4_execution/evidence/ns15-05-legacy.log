@@ -1,0 +1,8 @@
+.....................................................                    [100%]
+============================== warnings summary ===============================
+test_auth_cache_bounds.py::test_100k_sqlite_identities_use_indexed_lookup_and_bounded_cache
+  test_auth_cache_bounds.py:95: PytestWarning: record_property is incompatible with junit_family 'xunit2' (use 'legacy' or 'xunit1')
+    def test_100k_sqlite_identities_use_indexed_lookup_and_bounded_cache(migrated_factory, record_property):
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+53 passed, 1 warning in 33.44s

@@ -1,0 +1,27 @@
+{
+  "scope": "Staged installed packaging checks, not final release acceptance",
+  "environment": "Windows Python 3.13, fresh okto-nexus-ci-staged-env",
+  "wheel_sha256": "9f2e9db64cd6526112e04e990c7042aae156b9d119f35ff8083ac6c3da7b3f97",
+  "passed": 10,
+  "tests": [
+    "tests/execution_r4/test_ns01.py",
+    "tests/test_import_boundary.py"
+  ],
+  "stages": [
+    "base bootstrap without Core/Connector/Torch",
+    "serve-lite HTTP bootstrap without Connector/Torch",
+    "Connector test dependency installed; all package bytes compared to wheels"
+  ],
+  "corrections": [
+    "NS01 packaging expectation now checks current manifest hash, installed Core and installed Nexus metadata",
+    "NS01 import subprocess no longer prepends checkout src",
+    "Absent Core discovery simulation returns None and still forbids actual imports"
+  ],
+  "reports": {
+    "m13-staged-base.log": "2a4ce8fe9d7d97ecb33078c71275c54d5945a7b42a92f539cb07b20249565de3",
+    "m13-staged-local.log": "33ec2469ff9337d39fde445cc809b9663c6e0a68635c986b14423f3f6ecb49e3",
+    "m13-staged-installed.json": "b6fc1ab8f3c7e180d1cff0e798f3fa1917ba8d454fbe2db9a0c451656545c20c",
+    "m13-staged-tests.xml": "4dce0796dffe44ed4d8da78f3059a44a96d82e50d8afe5934b7738ae94059360"
+  },
+  "limitation": "Earlier .51 R4 campaign is still live; this NS01 test revision was made during that campaign and has separate .52 evidence"
+}

@@ -1,0 +1,335 @@
+{
+  "management_revision": "nexus-connections-2026-09-29-r4",
+  "schema_file": "http-target.schema.json",
+  "status": "PLANNED",
+  "error_definition": "ErrorResponse",
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/v1/connections/protocol",
+      "principal": "public",
+      "request_definition": null,
+      "response_definition": "ProtocolInfo",
+      "success_codes": [
+        200
+      ],
+      "effect": "metadados públicos apenas",
+      "implementation_status": "IMPLEMENTED_DIRECTED_TESTS"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/connections/me",
+      "principal": "canonical_agent_key",
+      "request_definition": null,
+      "response_definition": "MeInfo",
+      "success_codes": [
+        200
+      ],
+      "effect": "lookup escopado",
+      "implementation_status": "SPECIFIED_NOT_IMPLEMENTED"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/connections/executors:register",
+      "principal": "canonical_agent_key",
+      "request_definition": "RegisterExecutorRequest",
+      "response_definition": "RegisterExecutorResponse",
+      "success_codes": [
+        200,
+        201
+      ],
+      "effect": "registro técnico autorizado; sem agente novo/spawn",
+      "implementation_status": "SPECIFIED_NOT_IMPLEMENTED"
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/runtime/executors/{id}/inventory",
+      "principal": "inventory_publish_ticket",
+      "request_definition": "ExecutorInventorySnapshot",
+      "response_definition": "InventoryAccepted",
+      "success_codes": [
+        200
+      ],
+      "effect": "snapshot durável; sem execução",
+      "implementation_status": "SPECIFIED_NOT_IMPLEMENTED"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/executors/{id}/inventory",
+      "principal": "subject_or_operator",
+      "request_definition": null,
+      "response_definition": "InventoryView",
+      "success_codes": [
+        200
+      ],
+      "effect": "consulta escopada",
+      "implementation_status": "SPECIFIED_NOT_IMPLEMENTED"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/executors/{id}/inventory:refresh",
+      "principal": "subject_or_operator",
+      "request_definition": "RefreshRequest",
+      "response_definition": "RefreshView",
+      "success_codes": [
+        202
+      ],
+      "effect": "pedido de inventário passivo",
+      "implementation_status": "IMPLEMENTED_DIRECTED_TESTS"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/executors/{id}/realizations",
+      "principal": "realization_publish_ticket_or_embedded_operator",
+      "request_definition": "RealizationPublishRequest",
+      "response_definition": "RealizationView",
+      "success_codes": [
+        200,
+        201
+      ],
+      "effect": "registro de prova; sem execução",
+      "implementation_status": "SPECIFIED_NOT_IMPLEMENTED"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/connections/bindings:prepare",
+      "principal": "subject_or_operator",
+      "request_definition": "BindingPrepareRequest",
+      "response_definition": "BindingProposal",
+      "success_codes": [
+        200
+      ],
+      "effect": "proposta sem habilitar/spawn",
+      "implementation_status": "SPECIFIED_NOT_IMPLEMENTED"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/connections/bindings:apply",
+      "principal": "subject_and_required_operator_proof",
+      "request_definition": "BindingApplyRequest",
+      "response_definition": "BindingView",
+      "success_codes": [
+        200
+      ],
+      "effect": "CAS de binding; sem spawn",
+      "implementation_status": "SPECIFIED_NOT_IMPLEMENTED"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/connections/bindings/{id}",
+      "principal": "subject_or_operator",
+      "request_definition": null,
+      "response_definition": "BindingView",
+      "success_codes": [
+        200
+      ],
+      "effect": "consulta escopada",
+      "implementation_status": "SPECIFIED_NOT_IMPLEMENTED"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/connections/bindings/{id}/ticket",
+      "principal": "same_agent_key",
+      "request_definition": "TicketRequest",
+      "response_definition": "TicketIssue",
+      "success_codes": [
+        200
+      ],
+      "effect": "segredo derivado escopado; no-store",
+      "implementation_status": "SPECIFIED_NOT_IMPLEMENTED"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/agents/{agent_id}/runtime-options",
+      "principal": "subject_or_operator",
+      "request_definition": null,
+      "response_definition": "RuntimeOptions",
+      "success_codes": [
+        200
+      ],
+      "effect": "executor_id obrigatório; projeção autorizada sem lista manual",
+      "implementation_status": "SPECIFIED_NOT_IMPLEMENTED"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/intents:resolve",
+      "principal": "subject_or_operator",
+      "request_definition": "ResolveIntentRequest",
+      "response_definition": "IntentResolution",
+      "success_codes": [
+        200
+      ],
+      "effect": "reserva de IDs/intenção; sem outbox de efeito",
+      "implementation_status": "SPECIFIED_NOT_IMPLEMENTED"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/intents/{client_intent_id}",
+      "principal": "same_actor_scope",
+      "request_definition": null,
+      "response_definition": "IntentQueryResponse",
+      "success_codes": [
+        200
+      ],
+      "effect": "consulta da intenção existente",
+      "implementation_status": "SPECIFIED_NOT_IMPLEMENTED"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/operations",
+      "principal": "subject_or_operator",
+      "request_definition": "OperationSubmitRequest",
+      "response_definition": "OperationView",
+      "success_codes": [
+        200,
+        202
+      ],
+      "effect": "única admissão de operação produtiva/controle solicitado",
+      "implementation_status": "SPECIFIED_NOT_IMPLEMENTED"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/{id}",
+      "principal": "subject_history_ticket_or_operator",
+      "request_definition": null,
+      "response_definition": "OperationView",
+      "success_codes": [
+        200
+      ],
+      "effect": "histórico independente de binário",
+      "implementation_status": "SPECIFIED_NOT_IMPLEMENTED"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/operations/{id}/receipts",
+      "principal": "receipt_publish_ticket",
+      "request_definition": "ReceiptPublishRequest",
+      "response_definition": "ReceiptAccepted",
+      "success_codes": [
+        200
+      ],
+      "effect": "ingresso de evidência; nunca nova execução",
+      "implementation_status": "SPECIFIED_NOT_IMPLEMENTED"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/sessions",
+      "principal": "subject_opening_actor_or_operator",
+      "request_definition": null,
+      "response_definition": "SessionListView",
+      "success_codes": [200],
+      "effect": "Read-only paginated session history scoped by executor, binding and subject.",
+      "implementation_status": "IMPLEMENTED_PENDING_FINAL_ACCEPTANCE"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/sessions/{id}",
+      "principal": "subject_or_operator",
+      "request_definition": null,
+      "response_definition": "SessionView",
+      "success_codes": [
+        200
+      ],
+      "effect": "estado composto; ausência de handle não prova morte",
+      "implementation_status": "SPECIFIED_NOT_IMPLEMENTED"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/sessions/{id}/capability",
+      "principal": "authorized_session_subject",
+      "request_definition": "CapabilityRequest",
+      "response_definition": "CapabilityIssue",
+      "success_codes": [
+        200
+      ],
+      "effect": "credencial de sessão limitada/no-store",
+      "implementation_status": "SPECIFIED_NOT_IMPLEMENTED"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/approval-decisions",
+      "principal": "operator_or_verified_operator_proof",
+      "request_definition": "ApprovalDecisionRequest",
+      "response_definition": "DecisionView",
+      "success_codes": [
+        200,
+        202
+      ],
+      "effect": "CAS+outbox da decisão; CLI não aplica em paralelo",
+      "implementation_status": "SPECIFIED_NOT_IMPLEMENTED"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/approval-decisions/{id}",
+      "principal": "authorized_actor_or_limited_subject",
+      "request_definition": null,
+      "response_definition": "DecisionView",
+      "success_codes": [
+        200
+      ],
+      "effect": "consulta; não retorna resposta sensível",
+      "implementation_status": "SPECIFIED_NOT_IMPLEMENTED"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/native-actions",
+      "principal": "native_session_capability",
+      "request_definition": "NativeActionRequest",
+      "response_definition": "NativeActionResult",
+      "success_codes": [
+        200,
+        202
+      ],
+      "effect": "caso de uso canônico da bridge nativa não MCP",
+      "implementation_status": "SPECIFIED_NOT_IMPLEMENTED"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/executors/{id}/link",
+      "principal": "link_connect_ticket",
+      "request_definition": null,
+      "response_definition": null,
+      "success_codes": [
+        101
+      ],
+      "effect": "upgrade autenticado próprio; NXLr4",
+      "implementation_status": "SPECIFIED_NOT_IMPLEMENTED"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/sessions/{id}/capability",
+      "principal": "authorized_session_subject_or_operator",
+      "request_definition": "CapabilityMetadataQuery",
+      "response_definition": "CapabilityMetadata",
+      "success_codes": [
+        200
+      ],
+      "effect": "Consulta correlacionada da autoridade ativa; sem material, emissão, renovação ou efeito nativo; no-store.",
+      "implementation_status": "IMPLEMENTED_PARTIAL_ACCEPTANCE"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/executors/{id}/inventory:claim-refresh",
+      "principal": "current_reconciled_inventory_publish_ticket",
+      "request_definition": "InventoryRefreshClaimRequest",
+      "response_definition": "InventoryRefreshClaimView",
+      "success_codes": [
+        200
+      ],
+      "effect": "claim passive observation request; no execution authority",
+      "implementation_status": "IMPLEMENTED_DIRECTED_TESTS"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/executors/{id}/installations:check",
+      "principal": "embedded_operator_with_explicit_candidate_consent",
+      "request_definition": "LocalInstallationCheckRequest",
+      "response_definition": "LocalInstallationCheckView",
+      "success_codes": [
+        200
+      ],
+      "effect": "contained local version probe; durable byte-bound observation; no runtime authorization",
+      "implementation_status": "IMPLEMENTED_DIRECTED_TESTS"
+    }
+  ]
+}

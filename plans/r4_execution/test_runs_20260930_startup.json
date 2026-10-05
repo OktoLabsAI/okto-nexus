@@ -1,0 +1,199 @@
+{
+  "recorded_at": "2026-09-30T09:55:28.670610+00:00",
+  "scope": "Partial M02/M06 automatic control startup, reboot and authenticated inventory-producer handoff; no automatic lane/runtime or provider acceptance",
+  "parent_and_dependency_commits": {
+    "nexus": "0e283ef5e988e18089981b9534d0c73c9a4dd100",
+    "connector": "9e1a96a9e24e643861974b5ede6e987b941908e7",
+    "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
+  },
+  "source_sha256": {
+    "src/okto_nexus/application/executor_inventory.py": "8f4d9caeadbe4120bf74a2f1d5dd0402e1a407727d03417f865e21781c2d5ee1",
+    "src/okto_nexus/adapters/inbound/http/executor_link.py": "3e25df5ba536c3913d37942c6d282f1f9b770de748a612cfa69e9bd77436385f",
+    "src/okto_nexus/adapters/inbound/http/runtime_v1.py": "7845d94af00f5a21c4591cf9f2be604a65c325d96b8a4150dbdc81912dc85e17",
+    "tests/execution_r4/test_daemon_startup.py": "8dc04fa0142e045e009236e1a4b5fd2e95843ce5ca769058d3df2678e26f7487",
+    "tests/execution_r4/test_inventory_handoff.py": "95a5a187b533a39abfe0237065bfb36ee6db829e02749632112583f36721edec"
+  },
+  "connector_evidence": {
+    "commit": "9e1a96a9e24e643861974b5ede6e987b941908e7",
+    "file": "plans/implementation/evidence/r4-startup-report.json",
+    "sha256": "00b60e745549b185f14e46a9d52a27d35674b96315bd8dc43dcc1f4a1123e23f"
+  },
+  "runs": [
+    {
+      "file": "plans/r4_execution/evidence/r4-startup-handoff-final.xml",
+      "sha256": "49663bb66b1030134cbf3d1fca11c6736175b037f8066949bd98abc61404ad9f",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 8
+    },
+    {
+      "file": "plans/r4_execution/evidence/r4-startup-handoff-rerun.xml",
+      "sha256": "39e10f043a91dc897b686bb143ee56f6ccc212707ffafdf10c7afbb1b2a56c17",
+      "tests": 8,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 7
+    },
+    {
+      "file": "plans/r4_execution/evidence/r4-startup-handoff.xml",
+      "sha256": "58437bd40d2b40937120cd39d343fbfadf124c9baf67ec93a0b25b29e358b658",
+      "tests": 8,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 6
+    },
+    {
+      "file": "plans/r4_execution/evidence/r4-startup-installed.xml",
+      "sha256": "54e17bf250b5dcc8e0bb0229bbc06b211dd1d68c99fd76a94d0307d5aa4c0f10",
+      "tests": 105,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 105
+    },
+    {
+      "file": "plans/r4_execution/evidence/r4-startup-public-rerun.xml",
+      "sha256": "04bbc4e13c373271870fb0cc81ae8750664f3ac49d205ac2d5b57c76b3764275",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 2
+    },
+    {
+      "file": "plans/r4_execution/evidence/r4-startup-public.xml",
+      "sha256": "1d33807de86fb1b34d9fc3075cde739bde0b96fe417976facddb57a20d392732",
+      "tests": 2,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 1
+    },
+    {
+      "file": "plans/r4_execution/evidence/r4-startup-source.xml",
+      "sha256": "faa6be7ededd691b8e5623cd166ef30ac8aa9484940b06c9a76bf01906d8f91b",
+      "tests": 107,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 107
+    },
+    {
+      "file": "plans/r4_execution/evidence/r4-startup-installed-final.xml",
+      "sha256": "495bc982c29f69219c919ae4b8356c4b99a958960268a0aca39962e3aa17c378",
+      "tests": 109,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 109
+    }
+  ],
+  "connector_runs": {
+    "regression_passes": 325,
+    "regression_skips": 2,
+    "directed_passes": 65,
+    "counts_overlap": true
+  },
+  "commands": {
+    "source": "rtk proxy .venv/Scripts/python.exe -X utf8 -c '\nimport sys\nfrom pathlib import Path\nsys.path.insert(0,str(Path(\"../okto-nexus-connector/src\").resolve()))\nimport okto_nexus_connector,pytest\nprint(\"Connector source:\",okto_nexus_connector.__file__)\nraise SystemExit(pytest.main([\"tests/execution_r4\",\"-q\",\"--tb=line\",\"--junitxml=plans/r4_execution/evidence/r4-startup-source.xml\"]))\n'",
+    "public": "rtk proxy .venv/Scripts/python.exe -X utf8 -c '\nimport sys\nfrom pathlib import Path\nsys.path.insert(0,str(Path(\"../okto-nexus-connector/src\").resolve()))\nimport okto_nexus_connector,pytest\nprint(\"Connector source:\",okto_nexus_connector.__file__)\nraise SystemExit(pytest.main([\"tests/execution_r4/test_daemon_startup.py\",\"-q\",\"--tb=short\",\"--junitxml=plans/r4_execution/evidence/r4-startup-public.xml\"]))\n'",
+    "installed": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/okto-r4-startup-installed-8bpn7vjx/Scripts/python.exe -I -X utf8 -c '\nimport json,hashlib,zipfile,sys,platform\nfrom pathlib import Path\nimport pytest,okto_nexus,okto_nexus_connector,nexus_connector_core\nroot=Path(\"D:/Projetos/Techridy/okto_labs_okto_nexus\")\nconnector=root.parent/\"okto-nexus-connector\"\nartifacts=json.loads(Path(\"C:/Users/jpamb/AppData/Local/Temp/r4-startup-wheels.json\").read_text())\nmanifest={}\nfor module,artifact,source in [\n(okto_nexus,Path(artifacts[\"nexus\"][\"wheel\"]),root/\"src\"),\n(okto_nexus_connector,Path(artifacts[\"connector\"][\"wheel\"]),connector/\"src\"),\n(nexus_connector_core,root/\"vendor/wheels/nexus_connector_core-0.2.28.dev0-py3-none-any.whl\",None)]:\n    package=Path(module.__file__).resolve().parent\n    assert \"site-packages\" in package.parts\n    files={}\n    with zipfile.ZipFile(artifact) as archive:\n        for name in archive.namelist():\n            if not name.startswith(module.__name__+\"/\") or name.endswith(\"/\"): continue\n            data=archive.read(name)\n            assert (package/name.split(\"/\",1)[1]).read_bytes()==data,name\n            if source is not None: assert (source/name).read_bytes()==data,name\n            files[name]=hashlib.sha256(data).hexdigest()\n    manifest[module.__name__]={\"path\":str(package),\"wheel\":str(artifact),\"wheel_sha256\":hashlib.sha256(artifact.read_bytes()).hexdigest(),\"files_sha256\":files}\nmanifest.update(python=sys.version,platform=platform.platform(),isolated=bool(sys.flags.isolated),\nscope=\"Automatic control startup and inventory handoff; real HTTP/WSS/IPC, synthetic readiness only, no automatic lane/runtime or provider acceptance\")\n(root/\"plans/r4_execution/evidence/r4-startup-installed-modules.json\").write_text(json.dumps(manifest,indent=2)+\"\\n\",encoding=\"utf-8\")\nargs=[\"-c\",\"pytest.ini\",\"--rootdir=\"+str(root/\"tests\"),\"--confcutdir=\"+str(root/\"tests\"),\"-o\",\"asyncio_mode=auto\"]\nargs.extend(str(connector/\"tests\"/p) for p in [\n\"unit/test_r4_daemon_control.py\",\"unit/test_executor_registration.py\",\"unit/test_execution_selection.py\",\"unit/test_state_store.py\",\"unit/test_r4_execution.py\",\n\"contract/test_r4_connection.py\",\"contract/test_wss_r4.py\"])\nargs.extend(str(root/\"tests/execution_r4\"/p) for p in [\n\"test_daemon_startup.py\",\"test_inventory_handoff.py\",\"test_ns04.py\",\"test_ns08.py\",\"test_ns09.py\",\"test_remote_connection.py\"])\nargs.extend([\"-q\",\"--tb=line\",\"--junitxml=\"+str(root/\"plans/r4_execution/evidence/r4-startup-installed.xml\")])\nraise SystemExit(pytest.main(args))\n'",
+    "build": "rtk proxy python -X utf8 -c '\nimport tempfile,shutil,subprocess,json,hashlib,sys\nfrom pathlib import Path\nroot=Path.cwd()\nresult={}\nfor name,repo in [(\"nexus\",root),(\"connector\",root.parent/\"okto-nexus-connector\")]:\n    stage=Path(tempfile.mkdtemp(prefix=\"okto-r4-startup-\"+name+\"-build-\"))\n    output=Path(tempfile.mkdtemp(prefix=\"okto-r4-startup-\"+name+\"-wheel-\"))\n    shutil.copytree(repo/\"src\",stage/\"src\",ignore=shutil.ignore_patterns(\"__pycache__\",\"*.egg-info\"))\n    for filename in [\"pyproject.toml\",\"README.md\",\"LICENSE\"]:\n        if (repo/filename).exists(): shutil.copy2(repo/filename,stage/filename)\n    command=[sys.executable,\"-m\",\"pip\",\"wheel\",\"--no-deps\",\"--no-build-isolation\",\"--wheel-dir\",str(output),str(stage)]\n    run=subprocess.run(command,text=True,capture_output=True)\n    (output/\"build.log\").write_text(run.stdout+\"\\n\"+run.stderr,encoding=\"utf-8\")\n    if run.returncode: print((run.stdout+\"\\n\"+run.stderr)[-6000:]); raise SystemExit(run.returncode)\n    wheel=next(output.glob(\"*.whl\"))\n    result[name]={\"stage\":str(stage),\"wheel\":str(wheel),\"sha256\":hashlib.sha256(wheel.read_bytes()).hexdigest(),\"build_log\":str(output/\"build.log\"),\"command\":command}\nmetadata=Path(tempfile.gettempdir())/\"r4-startup-wheels.json\"\nmetadata.write_text(json.dumps(result,indent=2)+\"\\n\",encoding=\"utf-8\")\nprint(json.dumps(result,indent=2))\n'",
+    "installed_final": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/okto-r4-startup-installed-8bpn7vjx/Scripts/python.exe -I -X utf8 -c '\nimport json,hashlib,zipfile,sys,platform\nfrom pathlib import Path\nimport pytest,okto_nexus,okto_nexus_connector,nexus_connector_core\nroot=Path(\"D:/Projetos/Techridy/okto_labs_okto_nexus\")\nconnector=root.parent/\"okto-nexus-connector\"\nartifacts=json.loads(Path(\"C:/Users/jpamb/AppData/Local/Temp/r4-startup-wheels.json\").read_text())\nmanifest={}\nfor module,artifact,source in [\n(okto_nexus,Path(artifacts[\"nexus\"][\"wheel\"]),root/\"src\"),\n(okto_nexus_connector,Path(artifacts[\"connector\"][\"wheel\"]),connector/\"src\"),\n(nexus_connector_core,root/\"vendor/wheels/nexus_connector_core-0.2.28.dev0-py3-none-any.whl\",None)]:\n    package=Path(module.__file__).resolve().parent\n    assert \"site-packages\" in package.parts\n    files={}\n    with zipfile.ZipFile(artifact) as archive:\n        for name in archive.namelist():\n            if not name.startswith(module.__name__+\"/\") or name.endswith(\"/\"): continue\n            data=archive.read(name)\n            assert (package/name.split(\"/\",1)[1]).read_bytes()==data,name\n            if source is not None: assert (source/name).read_bytes()==data,name\n            files[name]=hashlib.sha256(data).hexdigest()\n    manifest[module.__name__]={\"path\":str(package),\"wheel\":str(artifact),\"wheel_sha256\":hashlib.sha256(artifact.read_bytes()).hexdigest(),\"files_sha256\":files}\nmanifest.update(python=sys.version,platform=platform.platform(),isolated=bool(sys.flags.isolated),\nscope=\"Automatic control startup and inventory handoff; real HTTP/WSS/IPC, synthetic readiness only, no automatic lane/runtime or provider acceptance\")\n(root/\"plans/r4_execution/evidence/r4-startup-installed-modules.json\").write_text(json.dumps(manifest,indent=2)+\"\\n\",encoding=\"utf-8\")\nargs=[\"-c\",\"pytest.ini\",\"--rootdir=\"+str(root/\"tests\"),\"--confcutdir=\"+str(root/\"tests\"),\"-o\",\"asyncio_mode=auto\"]\nargs.extend(str(connector/\"tests\"/p) for p in [\n\"unit/test_r4_daemon_control.py\",\"unit/test_executor_registration.py\",\"unit/test_execution_selection.py\",\"unit/test_state_store.py\",\"unit/test_r4_execution.py\",\n\"contract/test_r4_connection.py\",\"contract/test_wss_r4.py\"])\nargs.extend(str(root/\"tests/execution_r4\"/p) for p in [\n\"test_daemon_startup.py\",\"test_inventory_handoff.py\",\"test_ns04.py\",\"test_ns08.py\",\"test_ns09.py\",\"test_remote_connection.py\"])\nargs.extend([\"-q\",\"--tb=line\",\"--junitxml=\"+str(root/\"plans/r4_execution/evidence/r4-startup-installed-final.xml\")])\nraise SystemExit(pytest.main(args))\n'"
+  },
+  "installed_cwd": "C:/Users/jpamb/AppData/Local/Temp/okto-r4-canonical-installed",
+  "evidence_sha256": {
+    "plans/r4_execution/evidence/r4-startup-artifacts.json": "3211a14cc85dfc470f3caa0498ab97befad6dfd576b9d150164b24ca4c2160a3",
+    "plans/r4_execution/evidence/r4-startup-before-stream-guard-artifacts.json": "bd803df6f49cd9e7bcc891587a171aeadf2d697553672bf2a203479cef2acb37",
+    "plans/r4_execution/evidence/r4-startup-before-stream-guard-installed-modules.json": "cbae1d31242008211df886b8c773431c47a58e88a2ccd5a072b9530ca0bc98a7",
+    "plans/r4_execution/evidence/r4-startup-evidence-export.json": "9c4547175f2ed8d6be9a8a5f526ee85e0417ea4c5676eb2b52457001cbe24b05",
+    "plans/r4_execution/evidence/r4-startup-installation.json": "7f7b84e7afdb4188fd7379747b4bb8996d5273315495085df56c368fa4628b10",
+    "plans/r4_execution/evidence/r4-startup-installed-modules.json": "3add07c9af8e5445ef8bca2703494b64bc805cbccfdbb7a4ce4e0dd718871c03"
+  },
+  "artifacts": {
+    "nexus": {
+      "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-nexus-build-5o6cg1v0",
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-nexus-wheel-qqgmgauh\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "b8041e69b2a7fc2d579645be5d5cab13de228550f064579eef89c0aba40dd830",
+      "build_log": "plans/r4_execution/evidence/r4-startup-nexus-build.log",
+      "command": [
+        "C:\\Python313\\python.exe",
+        "-m",
+        "pip",
+        "wheel",
+        "--no-deps",
+        "--no-build-isolation",
+        "--wheel-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-nexus-wheel-qqgmgauh",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-nexus-build-5o6cg1v0"
+      ],
+      "build_log_sha256": "012a62db9796cb450a6ed6883b263e9cd903b81fd8338fa8b6093afefab796bb"
+    },
+    "connector": {
+      "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-final-build-4l_9nrfy",
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-final-wheel-md6q8vdz\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "911c36d4b40256cd1f533654c77284c5ec7771b955515b71fb94e72541057ea4",
+      "build_log": "plans/r4_execution/evidence/r4-startup-connector-build.log",
+      "command": [
+        "C:\\Python313\\python.exe",
+        "-m",
+        "pip",
+        "wheel",
+        "--no-deps",
+        "--no-build-isolation",
+        "--wheel-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-final-wheel-md6q8vdz",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-final-build-4l_9nrfy"
+      ],
+      "build_log_sha256": "ac10505435deb0ce6cc4f72522512a25822723b97b327875d2313e062a7a329a"
+    },
+    "installed_env": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-installed-8bpn7vjx"
+  },
+  "core_wheel_sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c",
+  "environment": {
+    "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "isolated": true
+  },
+  "verification": [
+    "The real CLI persists registration before daemon startup; real HTTP/WSS and authenticated IPC exercise startup, status, shutdown and a second boot.",
+    "Qualified preview control becomes ready only after durable empty-namespace checks and accepted reconciliation; production-unqualified control stays unavailable.",
+    "The Connector persists sequence before publication and scopes its producer to the current reconciled connection.",
+    "Server publication revalidates ticket/actor/epoch/revision/expiry and channel inside the transaction. New producers require a newer sequence; old credentials and precommit revocation cannot advance current inventory.",
+    "Final Connector suites: 325 regression passes with two existing skips and 65 directed. Nexus R4 source: 107 passes; handoff: eight. Final isolated installed campaign: 109 passes. Groups overlap; initial 321/61/105 runs are retained.",
+    "Installed modules match exact wheel contents and current production files, checked again after test completion.",
+    "Final review added refusal for requested stream watermarks/cursors. The Connector was rebuilt and its directed/full regression and the coordinated installed campaign were repeated on final bytes."
+  ],
+  "historical_attempts": [
+    "The first startup test exposed the missing inventory producer handoff on reboot.",
+    "The handoff tests then exposed an error-envelope conversion bug and test setup issues involving bootstrap replacement and the TestClient WSS origin; corrected final directed and regression runs passed.",
+    "Connector directed fixture cleanup and observation-order errors were corrected; the retained before-wait-fix XML is superseded by the final 61-case run.",
+    "The Nexus test venv lacked setuptools for wheel building. Fresh staging with the existing global build interpreter succeeded.",
+    "Failure evidence exports redact generated laboratory tokens and trim trailing whitespace; original/export hashes are recorded."
+  ],
+  "limitations": [
+    "Automatic lane attachment, production profile/environment/capability composition and approved-revision refresh remain pending.",
+    "Nonempty reconciliation, live runtime lease renewal, native request ingress and durable receipt/event publication remain pending.",
+    "Core 0.2.28.dev0 is unchanged. No readiness promotion, provider/Linux/separate-process/independent-host acceptance or gate closure.",
+    "Schema 6 is additive and rejected by old binaries. Full backup/restore/rollback and global lifecycle/load qualification remain open.",
+    "The Nexus wheel retains preexisting user-modified UI assets from the workspace. Those assets and the 599 old-plan deletions are excluded from this commit. Installed R4 integration does not qualify a clean release build or the UI assets."
+  ],
+  "product_gates_closed": [],
+  "development_environment_refresh": "Nexus .venv now has the final Connector wheel installed; Core version/hash remains unchanged.",
+  "source_dirty_counts": {
+    "okto_labs_okto_nexus": {
+      " M": 11,
+      " D": 599,
+      "??": 22
+    },
+    "okto-nexus-connector": {},
+    "okto-nexus-connector-core": {
+      "??": 1
+    }
+  },
+  "whitespace_verification": "Source, tests and documentation pass git diff --check. Three raw pip build logs retain their original final blank line to preserve recorded artifact hashes and are excluded from the whitespace-only check."
+}

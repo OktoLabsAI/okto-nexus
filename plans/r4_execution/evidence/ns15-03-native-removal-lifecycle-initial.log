@@ -1,0 +1,48 @@
+......FsssFFF....                                                        [100%]
+================================== FAILURES ===================================
+__ test_active_turn_and_unprojected_journal_drain_before_serve_exits[clean] ___
+/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_signal_drain.py:78: in test_active_turn_and_unprojected_journal_drain_before_serve_exits
+    ???
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\runtime_serve_shutdown_fixture.py:95: in __init__
+    assert self.process.poll() is None, self.log_path.read_text(encoding="utf-8")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: Traceback (most recent call last):
+E     File "C:\Users\jpamb\AppData\Local\Temp\pytest-of-jpamb\pytest-4643\test_active_turn_and_unproject0\serve.py", line 4, in <module>
+E       from legacy_native_fixture.pi import PiRpcConnector
+E   ModuleNotFoundError: No module named 'legacy_native_fixture'
+__________ test_clean_shutdown_after_explicit_close_leaves_no_orphan __________
+/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_serve_harness_shutdown_reap.py:30: in test_clean_shutdown_after_explicit_close_leaves_no_orphan
+    ???
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\runtime_serve_shutdown_fixture.py:95: in __init__
+    assert self.process.poll() is None, self.log_path.read_text(encoding="utf-8")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: Traceback (most recent call last):
+E     File "C:\Users\jpamb\AppData\Local\Temp\pytest-of-jpamb\pytest-4643\test_clean_shutdown_after_expl0\serve.py", line 4, in <module>
+E       from legacy_native_fixture.pi import PiRpcConnector
+E   ModuleNotFoundError: No module named 'legacy_native_fixture'
+______ test_clean_shutdown_with_live_session_reaps_child_and_grandchild _______
+/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_serve_harness_shutdown_reap.py:43: in test_clean_shutdown_with_live_session_reaps_child_and_grandchild
+    ???
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\runtime_serve_shutdown_fixture.py:95: in __init__
+    assert self.process.poll() is None, self.log_path.read_text(encoding="utf-8")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: Traceback (most recent call last):
+E     File "C:\Users\jpamb\AppData\Local\Temp\pytest-of-jpamb\pytest-4643\test_clean_shutdown_with_live_0\serve.py", line 4, in <module>
+E       from legacy_native_fixture.pi import PiRpcConnector
+E   ModuleNotFoundError: No module named 'legacy_native_fixture'
+________ test_sigkill_with_live_session_reaps_owned_tree_and_guardian _________
+/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_serve_harness_sigkill_reap.py:8: in test_sigkill_with_live_session_reaps_owned_tree_and_guardian
+    ???
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\runtime_serve_shutdown_fixture.py:95: in __init__
+    assert self.process.poll() is None, self.log_path.read_text(encoding="utf-8")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: Traceback (most recent call last):
+E     File "C:\Users\jpamb\AppData\Local\Temp\pytest-of-jpamb\pytest-4643\test_sigkill_with_live_session0\serve.py", line 4, in <module>
+E       from legacy_native_fixture.pi import PiRpcConnector
+E   ModuleNotFoundError: No module named 'legacy_native_fixture'
+=========================== short test summary info ===========================
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_runtime_signal_drain.py::test_active_turn_and_unprojected_journal_drain_before_serve_exits[clean]
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_serve_harness_shutdown_reap.py::test_clean_shutdown_after_explicit_close_leaves_no_orphan
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_serve_harness_shutdown_reap.py::test_clean_shutdown_with_live_session_reaps_child_and_grandchild
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_serve_harness_sigkill_reap.py::test_sigkill_with_live_session_reaps_owned_tree_and_guardian
+4 failed, 10 passed, 3 skipped in 86.02s (0:01:26)

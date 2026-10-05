@@ -1,0 +1,220 @@
+{
+  "purpose": "Execution evidence; skips and unexecuted requirements are not passes",
+  "platform": "Windows 11 26200 AMD64",
+  "python": "3.13.1",
+  "provider": "NOT_RUN",
+  "multi_host": "NOT_RUN",
+  "runs": [
+    {
+      "repository": "Core",
+      "command": "python -m pytest tests -q",
+      "source": "Core source 0.2.23 before documentation repair",
+      "status": "FAIL",
+      "report_sha256": "16752012462bf053ea7f29359745ae8c2d09989f7330fc51f915e5de44313ac6",
+      "counts": {
+        "tests": 938,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 74
+      },
+      "duration_seconds": 277.561,
+      "failures": [
+        {
+          "nodeid": "tests.test_public_docs::test_api_guide_covers_every_top_level_export",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.test_public_docs::test_compatibility_and_migration_track_registry_and_revision",
+          "kind": "failure"
+        }
+      ]
+    },
+    {
+      "repository": "Nexus",
+      "command": "python -m pytest tests -q --maxfail=10",
+      "source": "f02b97f; installed Core 0.2.22",
+      "status": "FAIL",
+      "report_sha256": "6dbd4844f80433defc3556b58f5e4c4348d5fa5424d2e1c98841f2699311cc1f",
+      "counts": {
+        "tests": 912,
+        "failures": 10,
+        "errors": 0,
+        "skipped": 71
+      },
+      "duration_seconds": 518.159,
+      "failures": [
+        {
+          "nodeid": "tests.test_agent_connections::test_upgrade_from_64_preserves_identity_and_is_idempotent",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.test_agent_connections::test_disabling_mcp_fences_an_already_authenticated_stdio_connection",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.test_agent_self_connections::test_actual_stdio_self_discovery_and_connect_use_existing_serve_owner",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.test_comm_presets::test_no_comm_preset_mcp_tool_and_surface_revision_is_33",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.test_frente1_compaction::test_s2_every_tool_description_is_compact_single_line",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.test_frente1_compaction::test_s2_every_tool_parameter_has_a_description",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.test_frente1_measurement::test_s4_cuttable_surface_meets_40pct_reduction_gate",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.test_handoff_dependencies::test_ts11_surface_revision_feature_flag_and_budgets",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.test_harness_routes::test_harness_open_claude_code_attach_requires_target_pid",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.test_harness_routes::test_harness_open_rejects_backend_for_claude_code_attach_substrate_over_rest",
+          "kind": "failure"
+        }
+      ]
+    },
+    {
+      "repository": "Connector",
+      "command": "python -m pytest tests -q --maxfail=5",
+      "source": "208a9c9 plus exact Core 0.2.23 pin; before packaging repair",
+      "status": "FAIL",
+      "report_sha256": "cbea1ddf45e70709ecfd42b3a8b6323fb093b0dec18a5bfd5681c693a742e7bc",
+      "counts": {
+        "tests": 240,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 2
+      },
+      "duration_seconds": 246.228,
+      "failures": [
+        {
+          "nodeid": "tests.e2e.test_packaging::test_clean_venv_install",
+          "kind": "failure"
+        }
+      ]
+    },
+    {
+      "repository": "Nexus",
+      "command": "python -m pytest tests/execution_r4 -q",
+      "source": "transitional pin update; inventory guard still 0.2.22",
+      "status": "FAIL",
+      "report_sha256": "7e289c1df441bea57313d2458cd85b9fc906830efd02450fd3302eb98f8b08bd",
+      "counts": {
+        "tests": 42,
+        "failures": 20,
+        "errors": 0,
+        "skipped": 0
+      },
+      "duration_seconds": 45.31,
+      "failures": [
+        {
+          "nodeid": "tests.execution_r4.test_core_inventory::test_local_catalog_and_empty_inventory_need_no_runtime",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.execution_r4.test_core_inventory::test_local_discovery_calls_public_core_facade_without_runtime",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.execution_r4.test_core_inventory::test_two_copies_keep_distinct_installation_refs",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.execution_r4.test_core_inventory::test_protocol_is_direct_object_and_does_not_claim_remote_ready",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.execution_r4.test_ns00::test_ns00_03",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.execution_r4.test_ns01::test_ns01_03",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.execution_r4.test_ns01::test_v1_auth_is_bearer_only_and_direct",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.execution_r4.test_ns04::test_ns04_01",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.execution_r4.test_ns04::test_ns04_05_local_selection_uses_exact_revision_and_installation",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.execution_r4.test_ns04::test_ns04_03",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.execution_r4.test_ns04::test_remote_inventory_http_requires_executor_ticket",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.execution_r4.test_ns05::test_ns05_01",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.execution_r4.test_ns05::test_ns05_02",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.execution_r4.test_ns05::test_ns05_03",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.execution_r4.test_ns06::test_ns06_01",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.execution_r4.test_ns07::test_passive_serve_does_not_open_core_stores",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.execution_r4.test_ns08::test_ns08_01",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.execution_r4.test_ns08::test_ns08_02",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.execution_r4.test_ns08::test_ns08_03",
+          "kind": "failure"
+        },
+        {
+          "nodeid": "tests.execution_r4.test_vertical_inventory::test_connector_publishes_core_snapshot_to_nexus",
+          "kind": "failure"
+        }
+      ]
+    },
+    {
+      "repository": "Nexus",
+      "command": "python -m pytest tests/execution_r4 -q --tb=short",
+      "source": "complete Core 0.2.23 pin/guard update; vertical in-process with OKTO_CONNECTOR_SRC",
+      "status": "PASS",
+      "report_sha256": "fd603e012c317ed9913044fd2a0f97e0df7dfc7cdbf23101c55cb7da83e8883a",
+      "counts": {
+        "tests": 42,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "duration_seconds": 38.187,
+      "failures": []
+    }
+  ]
+}

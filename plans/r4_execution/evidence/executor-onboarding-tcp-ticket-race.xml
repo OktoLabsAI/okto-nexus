@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="8.887" timestamp="2026-09-30T23:57:46.891582-03:00" hostname="Alienware_m15"><testcase classname="test_executor_onboarding_cli" name="test_connector_public_commands_publish_realization_over_tcp" time="7.392"><failure message="okto_nexus_connector.errors.ConnectorError: VERSION_INCOMPATIBLE (http): Server management revision is incompatible">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_executor_onboarding_cli.py:112: in test_connector_public_commands_publish_realization_over_tcp
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_executor_onboarding_cli.py:92: in run
+    result = await execute(words)
+             ^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_executor_onboarding_cli.py:67: in execute
+    return await run_executor(parser.parse_args(["executor", *words]), output, root)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus_connector\cli\commands\executor.py:31: in run_executor
+    result = await service.realize(identity_alias=args.identity, client_intent_id=args.client_intent_id,
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus_connector\services\executor_onboarding.py:123: in realize
+    published = await http.publish_r4_realization(bootstrap.ticket,
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus_connector\transport\https_client.py:546: in publish_r4_realization
+    payload = await self._request(
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus_connector\transport\https_client.py:380: in _request
+    raise ConnectorError("VERSION_INCOMPATIBLE", "http",
+E   okto_nexus_connector.errors.ConnectorError: VERSION_INCOMPATIBLE (http): Server management revision is incompatible</failure></testcase></testsuite></testsuites>

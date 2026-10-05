@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="2" failures="0" skipped="0" tests="13" time="186.411" timestamp="2026-10-02T12:21:47.825354-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_native_decision_dashboard" name="test_native_ui_confirm_and_recover_without_persisting_answers[False-None]" time="15.640" /><testcase classname="tests.execution_r4.test_native_decision_dashboard" name="test_native_ui_confirm_and_recover_without_persisting_answers[False-input]" time="14.503" /><testcase classname="tests.execution_r4.test_native_decision_dashboard" name="test_native_ui_confirm_and_recover_without_persisting_answers[False-form]" time="10.776"><error message="failed on setup with &quot;nexus_connector_core.models.CoreError: VALIDATION_ERROR&quot;">..\..\..\..\.codex\tmp\nexus-http-ci-env\Lib\site-packages\pytest_asyncio\plugin.py:926: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_native_decisions.py:63: in decision_state
+    commit_execution_events(deps.connection_factory, channel=channel, frame=frame, approvals=deps.approvals)
+..\..\..\..\.codex\tmp\nexus-http-ci-env\Lib\site-packages\okto_nexus\application\execution_events.py:107: in commit_execution_events
+    project_native_request(conn,event=json.loads(saved["payload_json"]),
+..\..\..\..\.codex\tmp\nexus-http-ci-env\Lib\site-packages\okto_nexus\application\execution_native_requests.py:91: in project_native_request
+    reduce_r4_approval_request(None, frame)
+..\..\..\..\.codex\tmp\nexus-http-ci-env\Lib\site-packages\nexus_connector_core\approval_reducer_r4.py:57: in reduce_r4_approval_request
+    action = native_request_action(parsed["operational_request"])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\.codex\tmp\nexus-http-ci-env\Lib\site-packages\nexus_connector_core\decision_bridge_r4.py:89: in native_request_action
+    raise CoreError("VALIDATION_ERROR", "approval_decide")
+E   nexus_connector_core.models.CoreError: VALIDATION_ERROR</error></testcase><testcase classname="tests.execution_r4.test_native_decision_dashboard" name="test_native_ui_confirm_and_recover_without_persisting_answers[True-None]" time="14.987" /><testcase classname="tests.execution_r4.test_native_decision_dashboard" name="test_native_ui_confirm_and_recover_without_persisting_answers[True-input]" time="16.038" /><testcase classname="tests.execution_r4.test_native_decision_dashboard" name="test_native_ui_confirm_and_recover_without_persisting_answers[True-form]" time="12.895"><error message="failed on setup with &quot;nexus_connector_core.models.CoreError: VALIDATION_ERROR&quot;">..\..\..\..\.codex\tmp\nexus-http-ci-env\Lib\site-packages\pytest_asyncio\plugin.py:926: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_native_decisions.py:63: in decision_state
+    commit_execution_events(deps.connection_factory, channel=channel, frame=frame, approvals=deps.approvals)
+..\..\..\..\.codex\tmp\nexus-http-ci-env\Lib\site-packages\okto_nexus\application\execution_events.py:107: in commit_execution_events
+    project_native_request(conn,event=json.loads(saved["payload_json"]),
+..\..\..\..\.codex\tmp\nexus-http-ci-env\Lib\site-packages\okto_nexus\application\execution_native_requests.py:91: in project_native_request
+    reduce_r4_approval_request(None, frame)
+..\..\..\..\.codex\tmp\nexus-http-ci-env\Lib\site-packages\nexus_connector_core\approval_reducer_r4.py:57: in reduce_r4_approval_request
+    action = native_request_action(parsed["operational_request"])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\.codex\tmp\nexus-http-ci-env\Lib\site-packages\nexus_connector_core\decision_bridge_r4.py:89: in native_request_action
+    raise CoreError("VALIDATION_ERROR", "approval_decide")
+E   nexus_connector_core.models.CoreError: VALIDATION_ERROR</error></testcase><testcase classname="tests.execution_r4.test_native_decision_dashboard" name="test_native_ui_denial_is_canonical_and_cannot_use_legacy_decision" time="14.877" /><testcase classname="tests.execution_r4.test_native_decision_dashboard" name="test_native_ui_expiry_disables_form_while_open" time="17.042" /><testcase classname="tests.execution_r4.test_native_decision_dashboard" name="test_native_ui_storage_failure_prevents_decision" time="15.202" /><testcase classname="tests.execution_r4.test_native_decision_dashboard" name="test_native_ui_revoked_grant_refuses_confirmation" time="16.467" /><testcase classname="tests.execution_r4.test_runtime_operations_dashboard" name="test_browser_runtime_cycle_and_lost_reply_recovery[none]" time="23.218" /><testcase classname="tests.execution_r4.test_native_decisions" name="test_two_interfaces_race_for_one_canonical_decision" time="10.963" /><testcase classname="tests.execution_r4.test_ns15" name="test_ns15_05" time="1.919" /></testsuite></testsuites>

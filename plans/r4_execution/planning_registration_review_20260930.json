@@ -1,0 +1,27 @@
+{
+  "recorded_at": "2026-09-30T09:19:00.671129+00:00",
+  "scope": "Delivery planning and recorded registration evidence integrity only",
+  "status": "PASS",
+  "coverage": {
+    "milestones": 14,
+    "nexus_tasks": 85,
+    "original_scenarios": 164,
+    "external_deliverables": 12,
+    "cn5_findings": 4,
+    "http_and_websocket_routes": 23,
+    "operation_actions": 7,
+    "language_scenarios": 4
+  },
+  "evidence_files_checked": 404,
+  "evidence_manifest": "plans/r4_execution/test_runs_20260930_registration.json",
+  "product_tests_rerun": false,
+  "counts_overlap": true,
+  "product_gates_closed": [],
+  "document_sha256": {
+    "plans/r4_execution/DELIVERY_PLAN.md": "b56d74ef37240c88baf322766a4f9c883a8fbb8c200ac62f0db93150473d9bc9",
+    "plans/r4_execution/delivery_plan.json": "c0a7386826b8d62e054d4a7335caca4dfdcc88203fad4dc0ef7600970b7c874a",
+    "plans/r4_execution/acceptance_inventory.json": "92493ace909bb1c5d32672e435e0dc7d641140a45d6a2c4c994c2d3b271df42d",
+    "plans/r4_execution/delivery_coverage.json": "52df2f88f518a05455a34d0a295babd34c9bb0eb926a1112118ea04ed002b5e1",
+    "plans/r4_execution/planning_registration_package_validation_20260930.json": "eb7b7cff9ef6375a0f83c90517b8d018f1be1d7cb67d23b6ff5d698b9c25e996"
+  }
+}

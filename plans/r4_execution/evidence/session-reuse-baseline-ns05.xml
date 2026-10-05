@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="3.874" timestamp="2026-10-01T04:08:19.007583-03:00" hostname="Alienware_m15"><testcase classname="test_ns05" name="test_ns05_01" time="2.731"><failure message="assert 422 in (400, 403)&#10; +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_ns05.py:96: in test_ns05_01
+    assert wrong_agent.status_code in (400, 403)
+E   assert 422 in (400, 403)
+E    +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code</failure></testcase></testsuite></testsuites>

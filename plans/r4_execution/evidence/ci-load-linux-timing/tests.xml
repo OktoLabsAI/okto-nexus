@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="57.491" timestamp="2026-10-02T05:30:05.911982-03:00" hostname="Alienwarem15"><testcase classname="tests.execution_r4.test_ns14" name="test_ns14_04[load]" time="52.063"><properties><property name="identity_write_batches" value="{&quot;completed&quot;: 200, &quot;identities_per_batch&quot;: 500, &quot;max_acquire_seconds&quot;: 0.024714894010685384, &quot;max_held_seconds&quot;: 0.20132148198899813, &quot;total_acquire_seconds&quot;: 0.7641232059686445, &quot;total_held_seconds&quot;: 25.928702327015344}" /></properties><failure message="AssertionError">/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/execution_r4/test_ns14.py:316: in test_ns14_04
+    run_load(opening, tmp_path, record_property)
+/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/execution_r4/ns14_load.py:122: in run_load
+    assert threading.active_count() &lt;= threads_before + 4
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,10 @@
+{
+  "status": "PASS_ISOLATED_CANDIDATE_NOT_APPLIED",
+  "candidate_sha256": "3c5cb6911e0207345b5510d917df03d82c863a340973dbfaea8af3b6d5afedd6",
+  "baseline": "Installed focused campaign: 1 failed (NS02), 4 passed including canonical retention",
+  "diagnosis": "Stale expected migrations 66..82 and 24 tables; installed package contains 66..96 and 31 execution tables",
+  "change": "Read old migration inputs from installed package resources; update frozen expected migration/table inventory; retain replay, namespace isolation, foreign-key and disabled-endpoint assertions",
+  "result": "4 passed in 3.16 seconds",
+  "limitation": "Full campaign still live; candidate not copied into its input tree. Canonical retention failure not reproduced in focused run.",
+  "nexus_wheel_sha256": "6bdfeeb41f8b433bf1377adb7821aff45f5dbbfa83769f82bb2dc8edc6176443"
+}

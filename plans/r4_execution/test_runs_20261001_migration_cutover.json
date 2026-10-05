@@ -1,0 +1,95 @@
+{
+  "date": "2026-10-01",
+  "status": "LEGACY_CUTOVER_ADMISSION_FENCE_FIXED_NS15_02_PARTIAL",
+  "base_commit": "7f469f7",
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-core-3msf4qiz\\dist\\nexus_connector_core-0.2.51.dev0-py3-none-any.whl",
+      "sha256": "4c4c0c58d25b93f4f08ba8515d8476ffc29d1f0a27cc577c9fccb610716d1d1c"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-connector-pmt6y5x7\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "baf837251f654ab6385f5fba4e22d1a1b69da1839e8f47752795d1518dd29fe7"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-migration-cutover-b4bqqivy\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "8a61ab9a940c77011be6f0bd72239c3ef813b0b37b134328f116e0f277d76e36"
+    }
+  },
+  "installed_passed": 65,
+  "architecture_passed": 3,
+  "results": {
+    "migration-cutover-installed.xml": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "64",
+      "time": "135.851",
+      "timestamp": "2026-10-01T14:43:46.071611-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "migration-cutover-red.xml": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "2",
+      "skipped": "0",
+      "tests": "2",
+      "time": "6.164",
+      "timestamp": "2026-10-01T14:41:03.204844-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "migration-cutover-reproduced.xml": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "2",
+      "skipped": "0",
+      "tests": "2",
+      "time": "10.109",
+      "timestamp": "2026-10-01T14:41:29.440095-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "migration-cutover-source.xml": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "8",
+      "time": "22.326",
+      "timestamp": "2026-10-01T14:42:02.014073-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "ns15-01-cutover-installed.xml": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "1",
+      "time": "5.747",
+      "timestamp": "2026-10-01T14:44:16.601916-03:00",
+      "hostname": "Alienware_m15"
+    }
+  },
+  "evidence": {
+    "plans/r4_execution/evidence/migration-cutover-artifacts.json": "bc12cb694878be5497d076b5225c8de6a6c1eae748d07dae93c6a354465fa434",
+    "plans/r4_execution/evidence/migration-cutover-build-context.json": "0a0792fa8f7edea0c170e084b05aa70ecf60631be0ecf72b12b2f1800ba4d562",
+    "plans/r4_execution/evidence/migration-cutover-build.log": "215fe8e313db90b1239580411df79e35eb0b7de91767cc98a7403005761d5139",
+    "plans/r4_execution/evidence/migration-cutover-installed.json": "c6360caf97e40fdb55ffcf0cab92f0abd3a36616824da3700d21aff55d949f51",
+    "plans/r4_execution/evidence/migration-cutover-installed.log": "e9f67cdcab21d3ba550bab4a978e961a4d434a5108100d98df4a8d0cdd410489",
+    "plans/r4_execution/evidence/migration-cutover-installed.xml": "398cb08fc4748faa9fb68cd0bf4101f1263d92226974f226b2673290aa6dccb9",
+    "plans/r4_execution/evidence/migration-cutover-red.xml": "8402212d33b2dfc1eecf5a705480217c487caea8aa167661031bcfb008f25f00",
+    "plans/r4_execution/evidence/migration-cutover-reproduced.xml": "efb14411db0d73ca72783faeb0bdaa9bdd12dac4d5ae59fe037f3b5d1d8face4",
+    "plans/r4_execution/evidence/migration-cutover-source.xml": "7f3056f2d7368bc17d131e96a290f1ccb641b59f91d7f2e28bf0ac206a42261a",
+    "plans/r4_execution/evidence/ns15-01-cutover-installed.json": "a85f3fe171873ae613f2241eb87eb4e364786cfecddbe2faf140a2fa6eb4702a",
+    "plans/r4_execution/evidence/ns15-01-cutover-installed.log": "68ed8b7050652c6c4c81955ba6cb05744caa09a9ce1fcbc05d1415060966e179",
+    "plans/r4_execution/evidence/ns15-01-cutover-installed.xml": "56c8ad2f07244b981e4550fb348dc3da4d5117eb864b2a430498f25aca373db0",
+    "plans/r4_execution/M12_MIGRATION_CUTOVER_FENCE.md": "dbb752d8d91d819ec39d06befb63e1fc789f96129deadb49cd4c5cf66a924270",
+    "plans/r4_execution/run_migration_cutover_installed.py": "b4723e056bd3b119e20f999f2acd91ee4bf7d4940281b8c2a4dd91129a6aff06",
+    "plans/r4_execution/run_ns15_01_cutover_installed.py": "ced99a683c1079279198d4b2e8498135fa774eacc77d2874dd1bb4fb5585108a"
+  },
+  "limitations": [
+    "Full TR4-15-02 legacy owner drain and rollback proof remains open",
+    "Task dependencies and release gates remain open"
+  ],
+  "overlap": "Source cases overlap installed campaign and are not added."
+}

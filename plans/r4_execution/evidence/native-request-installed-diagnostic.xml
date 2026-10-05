@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="4.673" timestamp="2026-09-30T21:17:53.358172-03:00" hostname="Alienware_m15"><testcase classname="test_native_request_ingress" name="test_intact_proposal_redacted_display_and_replay_after_reopen" time="2.460"><error message="failed on setup with &quot;RuntimeError: Core 0.2.40.dev0 is required for R4 inventory; installed 0.2.41.dev0&quot;">fixturedef = &lt;FixtureDef argname='onboarding' scope='function' baseid='test_native_request_ingress.py'&gt;
+request = &lt;SubRequest 'onboarding' for &lt;Function test_intact_proposal_redacted_display_and_replay_after_reopen&gt;&gt;
+
+    @pytest.hookimpl(wrapper=True)
+    def pytest_fixture_setup(fixturedef: FixtureDef, request) -&gt; object | None:
+        if (
+            fixturedef.argname == "event_loop_policy"
+            and fixturedef.func.__module__ != __name__
+        ):
+            warnings.warn(
+                PytestDeprecationWarning(_EVENT_LOOP_POLICY_FIXTURE_DEPRECATION_WARNING),
+            )
+        asyncio_mode = _get_asyncio_mode(request.config)
+        if not _is_asyncio_fixture_function(fixturedef.func):
+            if asyncio_mode == Mode.STRICT:
+                # Ignore async fixtures without explicit asyncio mark in strict mode
+                # This applies to pytest_trio fixtures, for example
+&gt;               return (yield)
+                        ^^^^^
+
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\pytest_asyncio\plugin.py:924: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_binding_operator.py:32: in onboarding
+    with TestClient(app, raise_server_exceptions=False) as client:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\testclient.py:517: in __enter__
+    portal.call(self.wait_startup)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\testclient.py:552: in wait_startup
+    await receive()
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\testclient.py:543: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\testclient.py:533: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\applications.py:1202: in __call__
+    await lifespan(
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\telemetry\_runtime.py:239: in lifespan
+    await app(scope, wrapped_receive, wrapped_send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\telemetry\_asgi.py:151: in __call__
+    await self.app(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\routing.py:676: in __call__
+    await self.middleware_stack(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py:2773: in app
+    await self.lifespan(scope, receive, send)
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\starlette\routing.py:654: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py:247: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py:247: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py:247: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py:247: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py:247: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py:247: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\routing.py:247: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus\adapters\inbound\http\app.py:603: in lifespan
+    await embedded_inventory.start()
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus\bootstrap\embedded_inventory.py:57: in start
+    return await asyncio.shield(self._startup_task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus\bootstrap\embedded_inventory.py:61: in _start
+    await self.refresh()
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus\bootstrap\embedded_inventory.py:71: in refresh
+    return await asyncio.shield(self._refresh_task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus\bootstrap\embedded_inventory.py:75: in _refresh_owned
+    return await self._refresh()
+           ^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus\bootstrap\embedded_inventory.py:84: in _refresh
+    discovery = await asyncio.to_thread(discover_local_candidates,
+C:\Python313\Lib\asyncio\threads.py:25: in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\thread.py:59: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus\adapters\outbound\execution\core_inventory.py:83: in discover_local_candidates
+    return _core().discover_installations(
+           ^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def _core():
+        import nexus_connector_core as core
+    
+        if core.__version__ != CORE_INVENTORY_VERSION:
+&gt;           raise RuntimeError(
+                f"Core {CORE_INVENTORY_VERSION} is required for R4 inventory; "
+                f"installed {core.__version__}"
+            )
+E           RuntimeError: Core 0.2.40.dev0 is required for R4 inventory; installed 0.2.41.dev0
+
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus\adapters\outbound\execution\core_inventory.py:27: RuntimeError</error></testcase></testsuite></testsuites>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="78.958" timestamp="2026-10-02T04:41:00.514087-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_ns14" name="test_ns14_04[load]" time="77.633"><failure message="okto_nexus.errors.OktoNexusError: PERMISSION_DENIED: A binding is required for this ticket scope.">opening = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4791/test_ns14...66a960f73c257d221560c0e474b062c', connection_id='conn_99de52f9e9974a157d4dfc8f8c20d8eb', connection_generation=2), ...)
+decision_state = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4791/test_ns14...dc5b24b9371acc991c2fb58c1355b265b91d13e4cf2b35778a7', 'cas_token': 'cz1rOziZCExx3RgprEZuoUAN4k5fi2dorq3iC4aIC50', ...})
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4791/test_ns14_04_load_0')
+record_property = &lt;function record_property.&lt;locals&gt;.append_property at 0x000001A5DFD7A0C0&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001A5DF108510&gt;
+
+    @pytest.mark.parametrize("opening", [{"max_executions": 100}], indirect=True, ids=["load"])
+    def test_ns14_04(opening, decision_state, tmp_path, record_property, monkeypatch):
+        from okto_nexus.adapters.inbound.http import runtime_v1
+        info = runtime_v1.protocol_info()
+        monkeypatch.setattr(runtime_v1, "protocol_info", lambda: {**info, "remote_execution_ready": True})
+        from ns14_load import run_load
+&gt;       run_load(opening, tmp_path, record_property)
+
+tests\execution_r4\test_ns14.py:316: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\execution_r4\ns14_load.py:133: in run_load
+    publication_ticket = issue_execution_ticket(factory, server_id=first.server_id,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+factory = &lt;okto_nexus.adapters.outbound.sqlite.connection.ConnectionFactory object at 0x000001A5DEF6EE40&gt;
+server_id = 'srv_ba3c3d220ed792bee6aef8a9297fe8b7'
+executor_id = 'exe_766a960f73c257d221560c0e474b062c', agent_id = 'registrar'
+scopes = frozenset({'inventory:publish'}), binding_id = None, expires_in = 600
+now = None, client_intent_id = None, credential_request_id = None
+replaces_ticket_id = None
+
+    def issue_execution_ticket(factory: ConnectionFactory, *, server_id: str,
+                               executor_id: str, agent_id: str,
+                               scopes: frozenset[str] = BOOTSTRAP_SCOPES,
+                               binding_id: str | None = None,
+                               expires_in: int = 600,
+                               now: datetime | None = None,
+                               client_intent_id: str | None = None,
+                               credential_request_id: str | None = None,
+                               replaces_ticket_id: str | None = None,
+                               ) -&gt; IssuedExecutionTicket:
+        """Issue a random ticket after checking its canonical actor and target."""
+        if (not isinstance(expires_in, int) or isinstance(expires_in, bool) or
+                not 1 &lt;= expires_in &lt;= 600 or not scopes or
+                not scopes &lt;= _ALL_SCOPES):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                                  "Invalid ticket scope or duration.", {})
+        if binding_id is None and scopes != BOOTSTRAP_SCOPES:
+&gt;           raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                                  "A binding is required for this ticket scope.", {})
+E           okto_nexus.errors.OktoNexusError: PERMISSION_DENIED: A binding is required for this ticket scope.
+
+src\okto_nexus\adapters\outbound\sqlite\execution_tickets.py:93: OktoNexusError</failure></testcase></testsuite></testsuites>

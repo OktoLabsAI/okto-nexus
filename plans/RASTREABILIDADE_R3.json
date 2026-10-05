@@ -1,0 +1,624 @@
+{
+  "original_tasks": [
+    {
+      "id": "N00.1",
+      "original_requirement": "Registrar HEAD/branch/working tree, versões Python/MCP/schema, comandos de build e testes; preservar arquivos modificados e falhas preexistentes separadas.",
+      "target_task_ids": [
+        "NS00.01",
+        "NS16.02"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N00.2",
+      "original_requirement": "Ler os dois planos anteriores, PR34 e remote-executors; criar crosswalk G01–G20 e marcar cada requisito como preservado, substituído, já implementado ou a investigar.",
+      "target_task_ids": [
+        "NS00.02"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N00.3",
+      "original_requirement": "Inspecionar fluxo de chave, cache, middleware, operador reservado, grants e self-open; demonstrar que chave resolve agente e que emitir nova chave invalida a anterior.",
+      "target_task_ids": [
+        "NS03.01",
+        "NS03.05"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N00.4",
+      "original_requirement": "Reproduzir setup local e bugs de argv/path/plataforma no HEAD; criar regressões para os confirmados, sem tratar comentários/planos como evidência de execução.",
+      "target_task_ids": [
+        "NS00.05",
+        "NS07.02"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N00.5",
+      "original_requirement": "Inventariar realpath, spawn, ownership, delivery, approvals, boot e todo MCP stdio (entrypoints/config/módulos/docs/testes); medir baseline MCP HTTP e instalar backlog/status/evidência da revisão 3.",
+      "target_task_ids": [
+        "NS01.01",
+        "NS01.02"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N01.1",
+      "original_requirement": "Consumir bundle imutável K01 com manifest/hash; integrar tipos via API pública sem manter cópia autoral de NXL no Server.",
+      "target_task_ids": [
+        "NS00.03",
+        "NS00.04"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N01.2",
+      "original_requirement": "Modelar executor/binding/workspace binding, credential epoch, auth/config revision, operações e eventos; preservar IDs e serviços existentes onde possível.",
+      "target_task_ids": [
+        "NS02.01",
+        "NS02.02"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N01.3",
+      "original_requirement": "Criar migrações aditivas idempotentes e índices por key hash, agente/binding/executor/workspace e operation/event IDs; definir backfill retomável.",
+      "target_task_ids": [
+        "NS02.02",
+        "NS15.01"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N01.4",
+      "original_requirement": "Definir porta de execução embutida/remota, contexto autenticado e rotas do Anexo A no OpenAPI do produto; fechar validação de entrada/erro antes de efeitos.",
+      "target_task_ids": [
+        "NS06.01",
+        "NS08.01"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N01.5",
+      "original_requirement": "Construir reader/writer fixtures legado-novo, testes de boundary e de conflito; registrar política de rollback e incompatibilidade de schema sem downgrade destrutivo.",
+      "target_task_ids": [
+        "NS15.01",
+        "NS15.04"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N02.1",
+      "original_requirement": "Implementar /connections/me utilizando o resolvedor de chave existente; comparar agent hint e negar spoofing sem enumerar agentes.",
+      "target_task_ids": [
+        "NS03.01"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N02.2",
+      "original_requirement": "Implementar prepare/apply de binding próprio com CAS, políticas existentes e aprovação agregada; agente não pode habilitar método negado ou se autoaprovar escalada.",
+      "target_task_ids": [
+        "NS03.02",
+        "NS05.03"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N02.3",
+      "original_requirement": "Emitir tickets opacos curtos escopados em agente/executor/binding/epoch e capacidades de sessão; não adicionar login de usuário nem chave raiz obrigatória de Connector.",
+      "target_task_ids": [
+        "NS03.03",
+        "NS03.04"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N02.4",
+      "original_requirement": "Propagar rotação/revogação para tickets NXL, capabilities MCP HTTP diretas, caches, lanes, leases e bridges não MCP; validar cada audiência sem permitir bypass quando apenas um canal estiver conectado.",
+      "target_task_ids": [
+        "NS14.02",
+        "NS09.04"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N02.5",
+      "original_requirement": "Gerar contrato de comando de conexão da tela do agente; importar chave existente por entrada protegida e nunca emitir outra para contornar hash-only; testar comando em shells suportados.",
+      "target_task_ids": [
+        "NS03.05"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N03.1",
+      "original_requirement": "Integrar wheel incremental do Core ao serve e serve-lite; montagem de API/dashboard sem provider/binário local continua válida.",
+      "target_task_ids": [
+        "NS01.03",
+        "NS07.01"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N03.2",
+      "original_requirement": "Criar EmbeddedExecutor adaptando journal/event sink/secret resolver e contexto autorizado; não usar WSS/Connector app para executar localmente.",
+      "target_task_ids": [
+        "NS07.01",
+        "NS07.02"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N03.3",
+      "original_requirement": "Substituir construção nativa em RuntimeOpen/Control pelo despacho da porta; preservar recibos, reserva idempotente e claims existentes.",
+      "target_task_ids": [
+        "NS06.02",
+        "NS07.02"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N03.4",
+      "original_requirement": "Separar supervisor canônico de processo físico; manter wrappers de compatibilidade temporários e eliminar duplicação de adapters após comparação rastreada.",
+      "target_task_ids": [
+        "NS15.03"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N03.5",
+      "original_requirement": "Integrar startup/shutdown do Core ao owner de serve, contenção, readiness e cleanup; CLI/cliente MCP HTTP não são donos de runtime e nenhum processo MCP stdio inicia o Server.",
+      "target_task_ids": [
+        "NS07.05",
+        "NS14.03"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N04.1",
+      "original_requirement": "Usar discovery/prepare do Core no executor certo; Server central consulta inventário remoto e nunca qualifica peer pelo próprio os.name.",
+      "target_task_ids": [
+        "NS04.01",
+        "NS04.02"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N04.2",
+      "original_requirement": "Implementar criação/resolução de workspace lógico e vínculo físico local com validação no executor; manter aliases de IDs legados e compatibilidade de APIs.",
+      "target_task_ids": [
+        "NS02.04",
+        "NS05.01"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N04.3",
+      "original_requirement": "Criar fluxo resolve–diff de confiança–approve/apply–start com etapas reexecutáveis; gerar endpoint/perfil/argv sem pedir ao usuário sua estrutura interna.",
+      "target_task_ids": [
+        "NS05.02",
+        "NS05.03"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N04.4",
+      "original_requirement": "Reutilizar binding e sessão compatível, com ambiguidade explícita e intenção nova para --new-session; mudança de root/perfil/harness não amplia escopo silenciosamente.",
+      "target_task_ids": [
+        "NS05.04"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N04.5",
+      "original_requirement": "Corrigir fluxo do campo Executável para consumir templates de Core; segredos/provider home são refs locais e login ausente retorna ação no host adequado.",
+      "target_task_ids": [
+        "NS05.05",
+        "NS07.03"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N05.1",
+      "original_requirement": "Implementar upgrade WSS com TLS no deployment, ticket em header, subprotocolo nxl.v1, negociação de limites e erro antes de efeitos para versão incompatível.",
+      "target_task_ids": [
+        "NS08.01"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N05.2",
+      "original_requirement": "Registrar connector/executor como entidades técnicas; autenticar lane inicial e binding.attach adicional com prova de agente independente por ticket.",
+      "target_task_ids": [
+        "NS03.03",
+        "NS08.02"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N05.3",
+      "original_requirement": "Gerir geração/ownership de canal por CAS, reconnect, heartbeat, lease autenticado e conflito entre instâncias; não converter WSS ativo em runtime pronto.",
+      "target_task_ids": [
+        "NS08.03",
+        "NS09.02"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N05.4",
+      "original_requirement": "Implementar inventory snapshot/delta, filtros por binding e estado de controle; não aceitar atualização global de identidade/permissões vinda do executor.",
+      "target_task_ids": [
+        "NS04.03",
+        "NS04.04"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N05.5",
+      "original_requirement": "Adicionar prioridades, limites de bytes/frames, redaction e backpressure; validar proxy reverso e fechamento/deauth por agente sem conceder outra lane.",
+      "target_task_ids": [
+        "NS08.04",
+        "NS08.05"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N06.1",
+      "original_requirement": "Reservar operação/outbox com ID/hash antes do envio; mesma intenção retorna recibo, payload conflitante é negado; rede/spawn nunca dentro da transação.",
+      "target_task_ids": [
+        "NS06.01",
+        "NS06.02",
+        "NS06.04"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N06.2",
+      "original_requirement": "Ingressar eventos com identidade/sequence/hash e ACK pós-commit; projetar fatos idempotentemente e lidar com terminal antes de ACK intermediário.",
+      "target_task_ids": [
+        "NS10.01",
+        "NS10.03"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N06.3",
+      "original_requirement": "Reconciliar cursores, operações, sessões e ownership após reconnect/restart; conservar unknown e evitar repetição automática ou realocação para outro executor.",
+      "target_task_ids": [
+        "NS14.01",
+        "NS09.04"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N06.4",
+      "original_requirement": "Aplicar mecanismo de consumo exclusivo comum a MCP/local/remoto; preservar quotas, leases, causalidade e budgets ao reconectar.",
+      "target_task_ids": [
+        "NS06.05",
+        "NS12.01"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N06.5",
+      "original_requirement": "Testar queda em cada fronteira de commit/envio/aceitação/evento/ACK, evento atrasado e geração antiga; diferenciar evidência histórica de autoridade ativa.",
+      "target_task_ids": [
+        "NS10.05",
+        "NS16.02"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N07.1",
+      "original_requirement": "MCP HTTP do Server e bridges nativas não MCP chamam os mesmos casos de uso; Core não importa MessageService nem concede grants. Não criar fachada MCP local/remota.",
+      "target_task_ids": [
+        "NS12.01",
+        "NS12.02"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N07.2",
+      "original_requirement": "Emitir capability de sessão aceita diretamente pelo MCP HTTP com agente/workspace/binding/sessão/ações/validade; qualificar renovação e expiração sem proxy/hot-reload presumido, nem chave administrativa no harness.",
+      "target_task_ids": [
+        "NS03.04",
+        "NS09.05"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N07.3",
+      "original_requirement": "Distinguir fim de turno de handoff complete; preservar claim, reply target, contexto, evidência, root/parent/correlation e orçamento de relay.",
+      "target_task_ids": [
+        "NS12.03"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N07.4",
+      "original_requirement": "Normalizar pedidos HITL com sessão/turno/request/geração/expiry; aplicar decisão uma vez por CAS e validar autoridade existente de aprovador.",
+      "target_task_ids": [
+        "NS11.01",
+        "NS11.02",
+        "NS11.03",
+        "NS11.04",
+        "NS11.05"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N07.5",
+      "original_requirement": "Classificar execute_work somente após caminho de ferramentas comprovado; MCP HTTP direto é padrão para cliente compatível. Pi sem esse cliente usa extensão nativa não MCP qualificada, nunca servidor/proxy MCP.",
+      "target_task_ids": [
+        "NS07.04",
+        "NS12.04"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N08.1",
+      "original_requirement": "Expor operações por intenção nas superfícies existentes, compartilhando validação/autorização; evitar tool por host/adapter/CRUD interno.",
+      "target_task_ids": [
+        "NS12.05",
+        "NS06.01"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N08.2",
+      "original_requirement": "Implementar namespace CLI runtime com discover/start/status/interrupt/stop/logs/doctor e recibos JSON; não sobrecarregar start como daemon e harness.",
+      "target_task_ids": [
+        "NS13.04"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N08.3",
+      "original_requirement": "Remover MCP stdio, entrypoints e shims legados do Nexus; migrar configuração selecionada para MCP HTTP direto sem rotação de key/novo agente. Preservar outras entradas e SDK major; roots/hints não autorizam filesystem/identidade.",
+      "target_task_ids": [
+        "NS01.02",
+        "NS01.05"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N08.4",
+      "original_requirement": "Gerar configuração do cliente MCP HTTP para a URL do Server e capability limitada de sessão, inclusive local nativo. Não exigir Connector ou publicar fachada/backend MCP adicional; validar alcance a partir do harness/sandbox.",
+      "target_task_ids": [
+        "NS07.03",
+        "NS12.02"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N08.5",
+      "original_requirement": "Medir catálogo/tokens antes/depois e corrigir crescimento desnecessário; erros de auth/projeto/unknown são prescritivos sem rotinas manuais de grants.",
+      "target_task_ids": [
+        "NS12.05"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N09.1",
+      "original_requirement": "Criar visão por agente com local/remoto/tools-only/managed/attach e host/projeto/status; não adicionar painel de conta de usuário Nexus.",
+      "target_task_ids": [
+        "NS13.01",
+        "NS13.02"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N09.2",
+      "original_requirement": "Implementar gerar comando protegido para Connector e fluxo local nativo; renderizar política/aprovação agregada em linguagem de intenção.",
+      "target_task_ids": [
+        "NS03.05",
+        "NS13.02"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N09.3",
+      "original_requirement": "Retirar JSON, nomes/IDs de endpoint/perfil, argumentos e token de uma hora do caminho normal; avançado apenas para diagnóstico e opções justificadas.",
+      "target_task_ids": [
+        "NS13.02"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N09.4",
+      "original_requirement": "Implementar start/reuse/interrupt/stop/inspeção/logs com recibos e estado de operação; timeout não dispara nova sessão automaticamente.",
+      "target_task_ids": [
+        "NS13.03",
+        "NS13.04"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N09.5",
+      "original_requirement": "Mostrar desconhecido/offline/auth_required/drift/approval por camada e capabilities reais; testar UI em locale/shell/path com espaços e preservação de config MCP.",
+      "target_task_ids": [
+        "NS13.05"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N10.1",
+      "original_requirement": "Executar testes de spoof de agente/Server/executor, replay de ticket, lane não autenticada, mutation de escopo e tentativa de plugin/shell remoto.",
+      "target_task_ids": [
+        "NS08.04",
+        "NS09.04"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N10.2",
+      "original_requirement": "Validar invalidation de chave em trânsito e revogação durante turno/approval; impedir renovação após revogação e mostrar limite real de partição/lease.",
+      "target_task_ids": [
+        "NS14.02",
+        "NS09.05"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N10.3",
+      "original_requirement": "Exercitar frame/journal flood, slow consumer, disco cheio e controle urgente; recursos finitos e isolamento por binding/Server são obrigatórios.",
+      "target_task_ids": [
+        "NS08.05",
+        "NS14.04"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N10.4",
+      "original_requirement": "Validar restart do owner, morte do executor local e reconnect remoto com operações desconhecidas; não converter heartbeat em prova de processo vivo/morto.",
+      "target_task_ids": [
+        "NS14.01",
+        "NS14.03",
+        "NS14.05"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N10.5",
+      "original_requirement": "Auditar logs/metrics/export/UI para secrets e roots indevidos; separar dados históricos de geração antiga de nova autoridade e registrar findings resolvidos.",
+      "target_task_ids": [
+        "NS13.05",
+        "NS16.02"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N11.1",
+      "original_requirement": "Executar cenário sintético de 100 mil agentes sem providers: onboarding por key index, paginação, sem full enumeration ou estruturas por identidade offline.",
+      "target_task_ids": [
+        "NS03.01",
+        "NS14.04"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N11.2",
+      "original_requirement": "Limitar cache positivo por tamanho/TTL com invalidação síncrona; medir touch/queries no hot path e evitar escrita por delta de streaming.",
+      "target_task_ids": [
+        "NS14.04"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N11.3",
+      "original_requirement": "Migrar instalação legada, permissões e endpoints para executor local; comparar dados/IDs/inbox/handoff antes/depois e retomar backfill interrompido.",
+      "target_task_ids": [
+        "NS15.01",
+        "NS15.02"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N11.4",
+      "original_requirement": "Remover código nativo duplicado após paridade, referências ao Core hospedado no Connector e onboarding user-centric; marcar planos antigos superseded preservando evidência.",
+      "target_task_ids": [
+        "NS15.03",
+        "NS00.02"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N11.5",
+      "original_requirement": "Entregar runbooks de backup/restore/rollback e upgrade com drain; não indicar downgrade de schema irreversível como seguro.",
+      "target_task_ids": [
+        "NS15.04",
+        "NS15.05"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N12.1",
+      "original_requirement": "Gerar wheel/sdist de Nexus com dependência Core versionada e assets corretos; instalação limpa sem clone do Connector.",
+      "target_task_ids": [
+        "NS16.01"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N12.2",
+      "original_requirement": "Rodar suíte unitária/contrato/migração e gate local com Core real; registrar versões dos harnesses e capacidades testadas por SO.",
+      "target_task_ids": [
+        "NS16.02",
+        "NS16.03"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N12.3",
+      "original_requirement": "Validar Server central sem binários/providers/dirs, preparando artefato para campanha remota; falhas locais do provider não impedem serving de modo remoto.",
+      "target_task_ids": [
+        "NS04.01",
+        "NS16.04"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N12.4",
+      "original_requirement": "Publicar documentação de API/CLI/UX e matriz de compatibilidade, sem comandos fictícios marcados como já existentes antes da implementação.",
+      "target_task_ids": [
+        "NS15.05",
+        "NS13.04"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N12.5",
+      "original_requirement": "Entregar build imutável de integração, SHA e hash para C11/N13; preparar release/rollback sem publicar automaticamente.",
+      "target_task_ids": [
+        "NS16.01",
+        "NS16.05"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N13.1",
+      "original_requirement": "Montar Nexus A sem runtimes e hosts B/C com Connector/Core, ao menos uma combinação heterogênea; incluir cenário Nexus local separado.",
+      "target_task_ids": [
+        "NS16.04"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N13.2",
+      "original_requirement": "Executar J01–J34 com SHAs e wheels reais; fakes não contam nos casos explicitamente multi-host/provider/SO.",
+      "target_task_ids": [
+        "NS16.04"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N13.3",
+      "original_requirement": "Validar first-use/second-use, chave MCP reutilizada, mesma identidade, múltiplos bindings e ausência de usuário Nexus em todas as superfícies.",
+      "target_task_ids": [
+        "NS13.02",
+        "NS16.04"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N13.4",
+      "original_requirement": "Injetar partições/restart/revogação/ACK perdido e provar não duplicação, cleanup e governança; registrar limitações por capacidade real.",
+      "target_task_ids": [
+        "NS14.05",
+        "NS16.04"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    },
+    {
+      "id": "N13.5",
+      "original_requirement": "Consolidar matriz conjunta idêntica à do Connector/Core, blockers e release checklist; concluir somente gates demonstrados sem merge/publicação implícitos.",
+      "target_task_ids": [
+        "NS16.05"
+      ],
+      "disposition": "PRESERVADO_E_ATUALIZADO_R4"
+    }
+  ],
+  "original_test_count": 79
+}

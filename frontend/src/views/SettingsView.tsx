@@ -21,6 +21,7 @@ import {
 import { api, type NexusInfo, type SettingItem } from "../api";
 import { useConfirm } from "../components/Confirm";
 import { useTheme } from "../hooks/useTheme";
+import { RuntimePolicy } from "../components/RuntimePolicy";
 
 function labelOf(key: string): string {
   return key
@@ -284,6 +285,7 @@ export function SettingsView({
         </section>
 
         {/* Runtime parameters */}
+        <RuntimePolicy />
         <section className="panel p-5 space-y-4" data-testid="runtime-settings">
           <div className="flex items-center justify-between">
             <h2 className="font-display font-semibold text-sm flex items-center gap-2">

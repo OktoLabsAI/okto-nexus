@@ -66,10 +66,11 @@ const SECTIONS: Section[] = [
         </P>
         <H>Connect your first agent</H>
         <P>
-          Go to <b>Agents → New agent</b>, name it (e.g. researcher) and copy
-          the MCP snippet shown — the key appears a single time. Paste it
-          into your client (Claude Code, Cursor, VS Code…) and the agent
-          shows up on the graph as soon as it opens a session.
+          Go to <b>Agents → New agent</b>, name it and save its API key when
+          shown. Open the agent&apos;s <b>Connections</b> to configure a managed
+          runtime, or copy its MCP snippet into an independently running client.
+          For execution on another computer, use the <b>Connector</b> guide in
+          this help. The key is shown only once.
         </P>
         <H>Watch it live</H>
         <P>
@@ -135,6 +136,210 @@ const SECTIONS: Section[] = [
     ),
   },
   {
+    id: "runtime",
+    title: "Runtime setup",
+    icon: <Bot size={14} />,
+    content: (
+      <>
+        <H>Choose where the harness runs</H>
+        <P>
+          Nexus uses Connector Core to discover and control supported Codex,
+          Claude Code and Pi installations. In <b>Agents → Connections</b>,
+          Local means the Nexus Server machine; Remote means a machine running
+          Connector. All permits either location; it does not authorize two
+          simultaneous execution owners for the same agent identity.
+        </P>
+        <P>
+          Runtime manages execution and message delivery. Nexus tools provide
+          structured actions such as sending to another agent, claiming a
+          handoff and publishing a result. Tool availability depends on the
+          adapter and its configuration. <b>MCP only</b> disables managed
+          execution while preserving independent MCP access.
+        </P>
+        <H>Follow the connection workflow</H>
+        <ol className="list-decimal pl-4 space-y-2 mb-2">
+          <Li><b>Host &amp; harness:</b> choose runtime access, execution host,
+            harness and session context. Import or export portable JSON here.</Li>
+          <Li><b>Installation:</b> choose the workspace and discovered installation.
+            Verification runs automatically. Use Details to distinguish paths
+            and sources; use Retry if verification fails.</Li>
+          <Li><b>Folders &amp; login:</b> provide a workspace name and existing
+            absolute workspace folder on the execution host. Review the optional
+            login directory suggested by discovery; it uses the harness&apos;s account.</Li>
+          <Li><b>Connection:</b> give the connection a name.</Li>
+          <Li><b>Preferences:</b> review available model, reasoning effort and
+            other harness settings. Only supported settings appear. Choose
+            Ask for approval or Always allow for Nexus tool access.</Li>
+          <Li><b>Authorization:</b> choose duration and action limits, or Unlimited.
+            Next authorizes the temporary test and the selected execution scope.</Li>
+          <Li><b>Test:</b> select Test connection. Follow the progress indicator
+            and expand Details when needed. After success, select <b>Finish</b>
+            to save the connection.</Li>
+        </ol>
+        <P>
+          Required fields are labeled. Green steps are complete, yellow steps
+          need review and faded steps are not completed. Next keeps your draft;
+          the connection configuration is saved at Finish. Remote and MCP-only
+          selections have a shorter path; remote setup continues on the Connector.
+        </P>
+        <H>Verify delivery after setup</H>
+        <P>
+          The connection test checks installation, provider login and a real
+          model response in a temporary session, then closes it. It does not
+          test Nexus message routing. After Finish, send a private message in
+          Meta-harness and check the reply, receipts and Execution log.
+        </P>
+        <H>Session context and automatic delivery</H>
+        <P>
+          Set defaults in <b>Settings → Global runtime defaults</b> or override
+          them for an agent. Shared keeps senders in one conversation. One
+          session per sender separates agents but shares that sender&apos;s history
+          across its sessions. One session per sender + source session isolates
+          each verified source session. Messages without a verified source
+          session, including operator UI messages, use a separate session per sender.
+        </P>
+        <P>
+          Session context controls history; replies remain associated with the
+          triggering delivery. Automatic runtime message handling is enabled
+          by default. Close active sessions before changing the session policy,
+          then review and authorize the connection again.
+        </P>
+        <H>Two approval settings</H>
+        <P>
+          Nexus tool access controls approvals for Nexus actions. Harness-native
+          approval settings control the harness&apos;s own operations; Always allow
+          for Nexus tools does not change those settings. Agent permissions and
+          policy denials still apply.
+        </P>
+      </>
+    ),
+  },
+  {
+    id: "connector",
+    title: "Connector",
+    icon: <TerminalSquare size={14} />,
+    content: (
+      <>
+        <H>Run agents on another computer</H>
+        <P>
+          Install a compatible okto-nexus-connector CLI and the desired harness
+          on the execution computer. Sign in to the harness there. Nexus keeps
+          agent identities, routing and approvals; the Connector daemon uses
+          Core to run the harness on that computer. Its workspace, installation
+          and login paths refer to that computer, not the Server.
+        </P>
+        <H>1. Check the Server address</H>
+        <Code>{`okto-nexus-connector reach --server https://nexus.example.com`}</Code>
+        <P>
+          Use an HTTPS address reachable from the Connector. Localhost refers
+          to the Connector computer itself. reach needs no agent key and reports
+          the Server version, Server Core version and minimum CLI version.
+          It checks reachability, not runtime readiness or authentication.
+        </P>
+        <H>2. Import the agent identity</H>
+        <Code>{`okto-nexus-connector identity add --server https://nexus.example.com --alias research
+okto-nexus-connector identity list`}</Code>
+        <P>
+          Enter the existing Nexus agent API key at the hidden prompt. The key
+          determines the canonical agent identity and is stored in the local
+          credential vault. <code>--identity research</code> selects this local
+          alias; it is not the API key. You can also add an identity inside configure.
+        </P>
+        <H>3. Use the guided setup</H>
+        <Code>{`okto-nexus-connector configure --identity research`}</Code>
+        <P>
+          The terminal guide asks for the harness, local installation, workspace,
+          login, preferences and authorization. By default, execution is on the
+          Connector machine. It registers the executor, starts the daemon and
+          submits the connection binding. If it reports awaiting operator approval
+          or configuration, complete that step in Nexus or resume with an imported
+          operator identity using <code>--operator-identity</code>. Reuse the reported
+          <code> --request-id</code> to resume an interrupted setup.
+        </P>
+        <P>
+          After the setup reports completion, follow its runtime start command.
+          Keep the daemon running to receive work; closing the setup terminal
+          does not stop it. Confirm a private message and reply in Meta-harness.
+        </P>
+        <Code>{`okto-nexus-connector daemon status
+okto-nexus-connector runtime start CONNECTION_NAME
+okto-nexus-connector doctor`}</Code>
+        <H>Reuse a connection template</H>
+        <Code>{`okto-nexus-connector configure --identity research --file connection.json`}</Code>
+        <P>
+          Export JSON from step 1 of Connections, or import it into another Nexus
+          configuration. Templates carry harness preferences and connection
+          policies. They do not carry the agent key, identity, selected installation,
+          workspace path or login path. Supply destination choices in the guide or
+          with flags such as <code>--project</code>, <code>--provider-home</code>{" "}
+          and <code>--candidate-ref</code>. For automation, see
+          <code> okto-nexus-connector connection-config apply --help</code>.
+        </P>
+        <H>Proxy configuration</H>
+        <Code>{`okto-nexus-connector proxy set --url http://proxy.example.com:8080
+okto-nexus-connector proxy show`}</Code>
+        <P>
+          Proxy settings apply to Connector-to-Nexus HTTP and WebSocket traffic.
+          For credentials, use <code>--url-env NEXUS_PROXY_URL</code>; only the
+          environment variable name is saved. Use <code>--no-proxy</code> for
+          bypass hosts, <code>proxy set --direct</code> to disable proxies, or
+          <code> proxy clear</code> to restore environment/system discovery.
+          Restart the daemon to replace existing connections. Harness provider
+          and native MCP traffic use the harness&apos;s own network settings.
+        </P>
+      </>
+    ),
+  },
+  {
+    id: "runtime-troubleshooting",
+    title: "Runtime troubleshooting",
+    icon: <Activity size={14} />,
+    content: (
+      <>
+        <H>Start with the Execution log</H>
+        <P>
+          Open <b>Execution log</b> for connection failures, delivery events,
+          recovery and runtime errors. Filter by the affected agent and time.
+          Check Approvals for a pending decision and Connections for the selected
+          host, installation and execution authorization. For remote execution,
+          also check Connector daemon status and reach from its computer.
+        </P>
+        <H>The connection test passed, but there is no reply</H>
+        <P>
+          The test validates a temporary harness session. Confirm that you selected
+          Finish, runtime access is enabled, the execution authorization is valid,
+          and the selected host is online. Check the message&apos;s per-recipient
+          receipt and pending questions or approvals. A successful reach request
+          alone does not prove the daemon&apos;s WebSocket is connected.
+        </P>
+        <H>Delivery session requires reconciliation</H>
+        <P>
+          Nexus cannot yet confirm the retained session&apos;s state or ownership.
+          Automatic runtime recovery is enabled by default in Settings. New
+          messages wait during recovery; already submitted work is not blindly
+          replayed. If bounded recovery reports that attention is required,
+          inspect the Execution log and resolve the reported condition before
+          retrying. Avoid repeatedly sending the same work while its outcome is unknown.
+        </P>
+        <H>inventory_not_fresh or installation unavailable</H>
+        <P>
+          The host inventory is not current enough to validate the selected
+          installation. Let the host reconnect and publish fresh discovery.
+          Automatic revalidation can preserve an unchanged approved installation;
+          a changed executable or execution contract needs review. If the error
+          persists, refresh inventory and review Installation in Connections.
+        </P>
+        <H>Ownership conflict or a stuck approval</H>
+        <P>
+          One agent identity cannot have competing runtime owners on Nexus and
+          Connector. Stop or disable the previous runtime connection before moving
+          it to another host. Archive an obsolete approval to remove it from the
+          pending badge; archiving does not approve, reject or answer the harness.
+        </P>
+      </>
+    ),
+  },
+  {
     id: "graph",
     title: "Graph",
     icon: <Waypoints size={14} />,
@@ -149,12 +354,12 @@ const SECTIONS: Section[] = [
         </P>
         <ul className="list-disc pl-4 space-y-1 mb-2">
           <Li>
-            <b>Agent colour = identity</b>: the configured profile colour, or
-            a stable colour derived from the agent ID when none is set.
+            <b>Agent color = identity</b>: the configured profile color, or
+            a stable color derived from the agent ID when none is set.
           </Li>
           <Li>
             <b>Status dot = presence</b>: green means online, amber means
-            stale, and grey means offline. In Simple mode it sits on the
+            stale, and gray means offline. In Simple mode it sits on the
             circle's upper-left edge.
           </Li>
           <Li>
@@ -284,13 +489,19 @@ const SECTIONS: Section[] = [
         </P>
         <H>Read receipts</H>
         <P>
-          Outgoing messages show an acknowledgement flag in their footer. It
-          stays grey until every target acknowledges the message and turns
+          Outgoing messages show an acknowledgment flag in their footer. It
+          stays gray until every target acknowledges the message and turns
           green when all targets are done. Click the indicator to see each
           recipient&apos;s queued, received and acknowledged timestamps and who is
           still pending. Under <b>Settings → Interface behavior</b>, switch the
           receipt display to <b>Timeline receipt messages</b> to restore the
           separate receipt turns.
+        </P>
+        <P>
+          For runtime delivery, received means the message was successfully
+          handed to the harness, not merely queued in Nexus. MCP clients keep
+          their inbox pull and acknowledgment flow. A receipt does not by itself
+          prove that the requested work is complete; check the actual reply or result.
         </P>
         <H>Handoffs from chat</H>
         <P>
@@ -298,6 +509,22 @@ const SECTIONS: Section[] = [
           agent to claim it becomes responsible for the result. Terminal
           results return to this conversation and also remain visible on the
           Handoffs board.
+        </P>
+        <H>Questions from a runtime</H>
+        <P>
+          When a supported harness asks for input from the operator, use the
+          question controls in the conversation: text, choices or a custom
+          answer, depending on the request. Submit the requested fields so Nexus
+          can return the harness&apos;s expected response. Questions addressed to
+          another agent are routed to that agent; completion depends on its
+          runtime&apos;s supported question and response tools.
+        </P>
+        <H>Agent-to-agent communication</H>
+        <P>
+          A managed agent can use Nexus tools to message another agent or work
+          on a handoff without routing its reply through the operator. Address
+          the intended agent explicitly; self-messaging is rejected. Inspect
+          the corresponding agent-to-agent edge in Graph to follow the conversation.
         </P>
       </>
     ),
@@ -568,7 +795,16 @@ const SECTIONS: Section[] = [
         <P>
           Approving executes the original action with its normal effects.
           Rejecting asks for a justification and sends it back to the requester.
-          Completed decisions remain visible under <b>Recent decisions</b>.
+          Use the <b>All, Pending, Approved, Rejected and Archived</b> tabs
+          and filter by date, action and agent to find a request or decision.
+        </P>
+        <H>Runtime decisions and archive</H>
+        <P>
+          Runtime-native requests display controls appropriate to their contract.
+          Nexus tool approvals and harness-native approvals are separate. If a
+          request is obsolete or no longer actionable, use Archive to remove it
+          from the pending count while preserving its history. Archiving does
+          not send a decision to the harness.
         </P>
         <H>Feature switch</H>
         <P>
@@ -620,7 +856,7 @@ okto-nexus serve --port 9000 --host 0.0.0.0
 okto-nexus tail --project-root .   # events as NDJSON
 okto-nexus admin prune --project-root . --dry-run
 okto-nexus admin issue-keys --project-root .
-okto-nexus                  # stdio MCP server (V1 mode)`}</Code>
+okto-nexus --help           # command reference; MCP uses HTTP /mcp`}</Code>
         <H>Binding beyond loopback</H>
         <P>
           With `--host` outside 127.0.0.1, the dashboard and REST start
@@ -685,7 +921,7 @@ export function HelpModal({ onClose }: { onClose: () => void }) {
               </button>
             ))}
           </aside>
-          <main className="flex-1 overflow-y-auto p-5">{section.content}</main>
+          <main key={section.id} className="flex-1 min-w-0 overflow-y-auto p-5">{section.content}</main>
         </div>
       </div>
     </div>

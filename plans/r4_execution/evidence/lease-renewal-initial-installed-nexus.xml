@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="90" time="321.135" timestamp="2026-09-30T16:12:40.010963-03:00" hostname="Alienware_m15"><testcase classname="execution_r4.test_event_ingress" name="test_gap_replay_and_conflict" time="2.904" /><testcase classname="execution_r4.test_event_ingress" name="test_invalid_events_leave_storage_unchanged[wrong_channel]" time="2.082" /><testcase classname="execution_r4.test_event_ingress" name="test_invalid_events_leave_storage_unchanged[wrong_event_scope]" time="1.944" /><testcase classname="execution_r4.test_event_ingress" name="test_invalid_events_leave_storage_unchanged[wrong_session]" time="2.116" /><testcase classname="execution_r4.test_event_ingress" name="test_invalid_events_leave_storage_unchanged[wrong_binding]" time="2.232" /><testcase classname="execution_r4.test_event_ingress" name="test_invalid_events_leave_storage_unchanged[wrong_agent]" time="2.179" /><testcase classname="execution_r4.test_event_ingress" name="test_invalid_events_leave_storage_unchanged[unknown_operation]" time="2.086" /><testcase classname="execution_r4.test_event_ingress" name="test_invalid_events_leave_storage_unchanged[epoch_changed]" time="1.983" /><testcase classname="execution_r4.test_event_ingress" name="test_invalid_events_leave_storage_unchanged[expired_lane]" time="2.398" /><testcase classname="execution_r4.test_event_ingress" name="test_invalid_events_leave_storage_unchanged[revoked_ticket]" time="2.213" /><testcase classname="execution_r4.test_event_ingress" name="test_invalid_events_leave_storage_unchanged[old_generation]" time="1.984" /><testcase classname="execution_r4.test_event_ingress" name="test_invalid_events_leave_storage_unchanged[changed_revision]" time="1.877" /><testcase classname="execution_r4.test_event_ingress" name="test_invalid_events_leave_storage_unchanged[oversized]" time="1.994" /><testcase classname="execution_r4.test_event_ingress" name="test_invalid_events_leave_storage_unchanged[far_gap]" time="1.846" /><testcase classname="execution_r4.test_event_ingress" name="test_storage_failure_never_returns_ack" time="2.128" /><testcase classname="execution_r4.test_event_ingress" name="test_old_duplicate_survives_reopening_beyond_reducer_window" time="2.196" /><testcase classname="execution_r4.test_public_open_bootstrap" name="test_public_binding_grant_admission_bootstrap_core_and_receipts[False]" time="3.998" /><testcase classname="execution_r4.test_public_open_bootstrap" name="test_public_binding_grant_admission_bootstrap_core_and_receipts[True]" time="2.701" /><testcase classname="execution_r4.test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[False-None-False-0-None-connector-configured]" time="6.994" /><testcase classname="execution_r4.test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[True-None-False-0-None-connector-configured]" time="9.303" /><testcase classname="execution_r4.test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[False-before_commit-False-0-None-connector-configured]" time="5.135" /><testcase classname="execution_r4.test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[False-lost_ack-False-0-None-connector-configured]" time="5.891" /><testcase classname="execution_r4.test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[False-core_commit-False-0-None-connector-configured]" time="5.828" /><testcase classname="execution_r4.test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[False-None-True-0-None-connector-configured]" time="5.886" /><testcase classname="execution_r4.test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[False-core_commit-True-0-None-connector-configured]" time="5.811" /><testcase classname="execution_r4.test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[False-None-True-260-None-connector-configured]" time="30.799" /><testcase classname="execution_r4.test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[True-None-False-0-unsent-connector-configured]" time="12.373" /><testcase classname="execution_r4.test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[True-None-False-0-ack_lost-connector-configured]" time="15.602" /><testcase classname="execution_r4.test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[True-None-False-0-cold_unsent-connector-configured]" time="16.051" /><testcase classname="execution_r4.test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[True-None-False-0-cold_ack_lost-connector-configured]" time="13.806" /><testcase classname="execution_r4.test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[True-None-False-0-active_disconnect-connector-configured]" time="13.675" /><testcase classname="execution_r4.test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[True-None-False-0-lease_renewal-connector-configured]" time="12.802"><failure message="nexus_connector_core.models.CoreError: STALE_GENERATION">self = &lt;okto_nexus_connector.services.r4_execution.R4ExecutionOwner object at 0x0000020A7028D050&gt;
+item = ReceivedOperation(token='96d2c622f64dfc40712f1e75eab3a9d2', encoded=b'{"action":"turn.interrupt","agent_id":"subject",...d":"wsr_15396a87b2859069b04efb3fe48eea64"}\n', control=True, lane_attempt_id='attach_5e7072feb75788d47643cef2129f3e3d')
+
+    async def _execute(self, item):
+        frame = self.connection.require_current(item)
+        key = ExecutionRuntimeKey(frame["server_id"], frame["executor_id"], frame["binding_id"], frame["session_id"])
+        session = self._sessions.get(key)
+        containment = frame["action"] in ("turn.interrupt", "runtime.close") or (
+            frame["action"] in ("approval.decide", "input.provide") and
+            frame["payload"].get("decision") in ("decline", "cancel") and
+            all(frame["payload"].get(k) is None for k in ("response", "response_ref", "response_digest")))
+        if session is not None and not containment:
+            async with session.gate.operation():
+                return await self._execute_owned(item)
+        if session is not None and frame["action"] == "runtime.close":
+            session.stopped.set()
+        try:
+&gt;           return await self._execute_owned(item)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus_connector\services\r4_execution.py:277:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus_connector\services\r4_execution.py:357: in _execute_owned
+    receipt = await runtime.control(ControlOperation(frame['operation_id'], frame['session_id'],
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\runtime.py:656: in control
+    return await self._send(semantic, context, "interrupt", {})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\runtime.py:854: in _send
+    binding = self._session(semantic.session_id, context,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;nexus_connector_core.runtime.LocalRuntimeCore object at 0x0000020A702BCE10&gt;
+session_id = 'ses_5393d86d29e19421a6626de951bbc13a'
+context = ExecutionContext(server_id='srv_a0f4c3455f6b6bf26d8b96c5fb8d7c8d', executor_id='exe_43ea14d5a663d47cfe440febc7717d75',...=2, connection_id='conn_55a325914ec2fbd89cbef7df8199ce26', boot_id='2c33d690d818c31350118c10546433618d8b6ef0804cd83f'))
+require_live_lease = False, allow_newer_revision = False
+containment_reply = False
+
+    def _session(self, session_id: str, context: ExecutionContext, *,
+                 require_live_lease: bool = False,
+                 allow_newer_revision: bool = False,
+                 containment_reply: bool = False) -&gt; _Session:
+        binding = self._sessions.get(SessionKey(context.server_id,
+                                                context.executor_id, session_id))
+        if binding is None:
+            raise CoreError("SESSION_UNKNOWN", "admission")
+        original = binding.context
+        if context.r4_authority != original.r4_authority:
+&gt;           raise CoreError("STALE_GENERATION", "r4_context", retry_safe=True)
+E           nexus_connector_core.models.CoreError: STALE_GENERATION
+
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\runtime.py:2695: CoreError
+
+During handling of the above exception, another exception occurred:
+
+onboarding = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4090/test_owne...ent_id_hint': 'subject', 'executor_id': 'exe_43ea14d5a663d47cfe440febc7717d75', 'adapter_id': 'codex_app_server', ...})
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4090/test_owned_connector_reader_di13')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000020A6E965DE0&gt;
+automatic = True, publication_failure = None, reconcile_closed = False
+history_count = 0, event_recovery = 'lease_renewal'
+
+    @pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
+    @pytest.mark.parametrize('automatic,publication_failure,reconcile_closed,history_count,event_recovery', [
+        (False, None, False, 0, None), (True, None, False, 0, None), (False, 'before_commit', False, 0, None),
+        (False, 'lost_ack', False, 0, None), (False, 'core_commit', False, 0, None),
+        (False, None, True, 0, None), (False, 'core_commit', True, 0, None), (False, None, True, 260, None),
+        (True, None, False, 0, 'unsent'), (True, None, False, 0, 'ack_lost'),
+        (True, None, False, 0, 'cold_unsent'), (True, None, False, 0, 'cold_ack_lost'),
+        (True, None, False, 0, 'active_disconnect'), (True, None, False, 0, 'lease_renewal')])
+    def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery):
+        from okto_nexus_connector.transport.https_client import NexusHTTPClient, R4BindingView
+        from okto_nexus_connector.transport.wss_r4 import connect_r4_connection
+        from okto_nexus_connector.services.execution_selection import acknowledge_execution_binding
+        from okto_nexus_connector.daemon.app import DaemonApp
+        from okto_nexus_connector.errors import ConnectorError
+        from okto_nexus_connector.services.r4_execution import R4LaunchSetup
+        from okto_nexus_connector.platform.paths import state_dir, state_file
+        from okto_nexus_connector.storage.state_store import StateStore, IdentityRecord, ServerProfileRecord, ExecutionExecutorRecord
+
+        deps, client, headers, prepare = onboarding
+        _, apply, approval_id = prepare_delegated(client, headers, prepare)
+        assert decide_binding(client, headers, approval_id).status_code == 200
+        response = client.post('/v1/connections/bindings:apply', json=apply, headers=headers['subject'])
+        assert response.status_code == 200, response.text
+        binding = response.json()
+        store = StateStore(tmp_path / 'connector-state.json')
+        acknowledge_execution_binding(store, binding=R4BindingView(**binding))
+        server_id, executor_id = binding['server_id'], binding['executor_id']
+        granted = client.post('/api/v1/harness/grants', headers=headers['operator'], json={
+            'actor_agent_id': 'subject', 'endpoint_id': binding['endpoint_id'],
+            'actions': ['open', 'send', 'steer', 'interrupt', 'close'], 'max_executions': 2,
+            'expires_at': iso_plus(deps.clock.now_iso(), 600)})
+        assert granted.status_code == 200, granted.text
+        registered = client.post('/v1/connections/executors:register', headers=headers['subject'], json={
+            'client_intent_id': 'register', 'connector_id': 'connector', 'label': 'Remote host', 'control_capabilities': []})
+        assert registered.status_code == 200, registered.text
+        if not automatic:
+            ticketed = client.post(f"/v1/connections/bindings/{binding['binding_id']}/ticket",
+                headers=headers['subject'], json={'client_intent_id': 'mux-lane', 'credential_request_id': 'mux-key',
+                    'audience': 'nexus-executor-control', 'scopes': ['lane:attach', 'lease:request', 'receipt:publish']})
+            assert ticketed.status_code == 200, ticketed.text
+            ticket = ticketed.json()['ticket']
+        _, revisions, _ = current_agent_revisions(deps.connection_factory, agent_id='subject')
+        info = executor_link.protocol_info()
+        qualified = {**info, 'remote_execution_ready': True, 'nxl_accepted': [R4_PREVIEW_REVISION]}
+        monkeypatch.setattr(executor_link, 'protocol_info', lambda: qualified)
+        monkeypatch.setattr(runtime_v1, 'protocol_info', lambda: qualified)
+        from okto_nexus.adapters.inbound.http import connections_v1
+        monkeypatch.setattr(connections_v1, 'protocol_info', lambda: qualified)
+
+        if event_recovery in ('active_disconnect', 'lease_renewal'):
+            from functools import partial
+            monkeypatch.setattr(executor_link, 'ExecutionLeaseService',
+                partial(executor_link.ExecutionLeaseService, max_duration_ms=5000))
+
+        async def run():
+            sock = socket.socket()
+            sock.bind(('127.0.0.1', 0))
+            sock.listen()
+            port = sock.getsockname()[1]
+            server = uvicorn.Server(uvicorn.Config(client.app, lifespan='off', log_level='error'))
+            serving = asyncio.create_task(server.serve(sockets=[sock]))
+            daemon_root = state_dir(tmp_path / 'connector-runtime')
+            state = store.load()
+            state.preferences['vault.fallback_file.approved'] = True
+            StateStore(state_file(daemon_root)).save(state)
+            monkeypatch.setenv('OKTO_NEXUS_CONNECTOR_VAULT', 'file')
+            daemon = DaemonApp(daemon_root)
+            if automatic or publication_failure:
+                key = headers['subject']['Authorization'].removeprefix('Bearer ')
+                handle = daemon.vault.store('subject', key)
+                daemon.vault.store('provider-demo', 'provider-test-secret')
+                base_url = f'http://127.0.0.1:{port}'
+                def registered_state(state):
+                    state.connector_id = 'connector'
+                    state.servers[server_id] = ServerProfileRecord(server_id, base_url, base_url, 'now')
+                    state.identities.append(IdentityRecord('subject', server_id, 'subject', handle,
+                                                           revisions.credential_epoch, 'now'))
+                    state.execution_executors.append(ExecutionExecutorRecord(server_id, 'connector', 'subject',
+                        'register', 'Remote host', executor_id=executor_id, state='REGISTERED',
+                        inventory_publication_sequence=1))
+                daemon.store.update(registered_state)
+            binary = tmp_path / 'remote-only' / 'codex.exe'
+            candidate = InstallationCandidate('codex_app_server', str(binary), fingerprint(binary), 'explicit', 'selected')
+            class CountedFactory(_NativeFactory):
+                opens = 0
+                async def open(self, prepared, session_id, context, *, stream_epoch):
+                    assert prepared.cwd == str(tmp_path / 'remote-workspace')
+                    assert context.r4_authority is not None
+                    self.opens += 1
+                    self.context = context
+                    self.stream_epoch = stream_epoch
+                    return await super().open(prepared, session_id, context, stream_epoch=stream_epoch)
+            native = CountedFactory()
+            async def environment(_):
+                return {}
+            async def candidates(_):
+                return [candidate]
+            async def launch(_):
+                return R4LaunchSetup(environment)
+            owner = execution = None
+            recovery_host = None
+            dispatched = {}
+            operations = []
+            async def report(request):
+                assert request['operation_ids'] == request['session_ids'] == []
+                return {k: request[k] for k in ('protocol_major', 'contract_revision', 'server_id', 'executor_id',
+                    'connection_id', 'connection_generation', 'reconcile_id', 'cursor')} | dict(
+                        type='reconcile.report', next_cursor=None, complete=True, receipts=[], claims=[],
+                        stream_watermarks=[], ownership_facts=[])
+            async def admit(intent, **options):
+                resolved = client.post('/v1/runtime/intents:resolve', headers=headers['subject'], json={
+                    'client_intent_id': 'mux-' + intent, 'intent': intent, 'binding_id': binding['binding_id'],
+                    'workspace_binding_id': binding['workspace_binding_id'], **options})
+                assert resolved.status_code == 200, resolved.text
+                resolution = resolved.json()
+                assert resolution['can_submit'], resolution['blockers']
+                admitted = client.post('/v1/runtime/operations', headers=headers['subject'], json={
+                    k: resolution[k] for k in ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')})
+                assert admitted.status_code == 202, admitted.text
+                operations.append(resolution['operation_id'])
+                if publication_failure and intent == 'runtime.close':
+                    async with asyncio.timeout(8):
+                        while execution.failure is None or execution.pending_count:
+                            await asyncio.sleep(.01)
+                    assert isinstance(execution.failure, OSError)
+                    return resolution
+                async with asyncio.timeout(8):
+                    while True:
+                        if execution.failure is not None:
+                            raise execution.failure
+                        observed = client.get('/v1/runtime/operations/' + resolution['operation_id'],
+                                              headers=headers['subject'])
+                        assert observed.status_code == 200, observed.text
+                        if observed.json()['receipt_revision'] &gt; 0:
+                            receipt = observed.json()
+                            assert receipt['operation_id'] == resolution['operation_id']
+                            assert receipt['intent_hash'] == resolution['intent_hash']
+                            assert receipt['error'] is None, receipt
+                            assert receipt['executor_stage'] is not None
+                            if intent == 'runtime.close':
+                                assert receipt['executor_stage'] == 'SUCCEEDED'
+                            break
+                        await asyncio.sleep(0.01)
+                return resolution
+            try:
+                async with asyncio.timeout(5):
+                    while not server.started:
+                        if serving.done():
+                            await serving
+                        await asyncio.sleep(0.01)
+                from contextlib import AsyncExitStack
+                async with AsyncExitStack() as stack:
+                    if automatic:
+                        from functools import partial
+                        from okto_nexus_connector.daemon import r4_control, r4_execution
+                        async def discover():
+                            return [candidate]
+                        monkeypatch.setattr(r4_control, 'R4DaemonControl',
+                            partial(r4_control.R4DaemonControl, discover=discover))
+                        monkeypatch.setattr(r4_execution, 'R4DaemonExecution',
+                            partial(r4_execution.R4DaemonExecution, native_factory=native))
+                        daemon._start_transports()
+                        control = daemon.r4_controls[server_id]
+                        async with asyncio.timeout(10):
+                            while not control.status()['execution_ready']:
+                                if control.error_code:
+                                    raise AssertionError(control.status())
+                                await asyncio.sleep(.01)
+                        owner = control.connection
+                        execution = control.execution.owner
+                    else:
+                        owner = await asyncio.wait_for(connect_r4_connection(
+                            f'ws://127.0.0.1:{port}/v1/runtime/executors/{executor_id}/link',
+                            registered.json()['bootstrap_ticket']['ticket'], server_id=server_id, executor_id=executor_id,
+                            management_revision=info['management_revision'], snapshot_format=info['executor_snapshot_format'],
+                            boot_id='connector-process-boot', report_reconciliation=report), 5)
+                        await owner.attach_binding(binding_id=binding['binding_id'], agent_id='subject', ticket=ticket,
+                            credential_epoch=revisions.credential_epoch, authorization_revision=revisions.authorization,
+                            configuration_revision=revisions.configuration)
+                        raw = await stack.enter_async_context(httpx.AsyncClient(transport=httpx.ASGITransport(app=client.app)))
+                        http = await stack.enter_async_context(NexusHTTPClient('https://127.0.0.1:8202', client=raw))
+                        async def publish(frame):
+                            if publication_failure == 'before_commit' and frame['operation_id'] == operations[-1] and frame['stage'] == 'SUCCEEDED':
+                                raise OSError('The receipt request was not delivered.')
+                            await http.publish_operation_receipt(ticket, frame=frame)
+                            if publication_failure == 'lost_ack' and frame['stage'] == 'SUCCEEDED':
+                                raise OSError('The receipt acknowledgment was lost.')
+                        execution = daemon.own_r4_connection(owner, candidate_provider=candidates,
+                            launch_provider=launch, publish_receipt=publish, native_factory=native)
+                        with pytest.raises(ConnectorError) as duplicate:
+                            daemon.own_r4_connection(owner, candidate_provider=candidates,
+                                launch_provider=launch, publish_receipt=publish, native_factory=native)
+                        assert duplicate.value.code == 'OPERATION_CONFLICT'
+                    execute = execution._execute
+                    async def capture(item):
+                        dispatched[item.frame['action']] = item.frame
+                        return await execute(item)
+                    execution._execute = capture
+                    if publication_failure == 'core_commit':
+                        original_record = execution.publications.record
+                        def interrupted_record(frame):
+                            if frame['stage'] == 'SUCCEEDED':
+                                raise OSError('The receipt projection write was interrupted.')
+                            original_record(frame)
+                        monkeypatch.setattr(execution.publications, 'record', interrupted_record)
+                    opened = await admit('runtime.start', new_session=True)
+                    session_id = opened['scope']['session_id']
+                    turned = await admit('turn.submit', session_id=session_id, text='Hello')
+                    if event_recovery == 'active_disconnect':
+                        import time
+                        await owner.close()
+                        runtime = next(iter(execution._sessions.values())).runtime
+                        installed_deadline = runtime.r4_operation_context(dispatched['turn.submit'],
+                            connection_id=owner.state.connection_id,
+                            connection_generation=owner.state.connection_generation).lease_deadline_monotonic
+                        async with asyncio.timeout(3):
+                            while not control.cleanup_pending:
+                                await asyncio.sleep(.01)
+                        assert time.monotonic() &lt; installed_deadline
+                        assert not native.native.stopped and daemon.host._journal is not None
+                        assert not control.status()['execution_ready']
+                        async with asyncio.timeout(8):
+                            while not native.native.stopped:
+                                await asyncio.sleep(.01)
+                        assert time.monotonic() &gt;= installed_deadline
+                        generation = owner.state.connection_generation
+                        async with asyncio.timeout(15):
+                            while not (control.status()['execution_ready'] and control.connection.state.connection_generation &gt; generation):
+                                await asyncio.sleep(.01)
+                        assert native.opens == 1
+                        assert [kind for kind, _ in native.native.sent] == ['send_turn']
+                        with deps.connection_factory.unit_of_work(write=False) as uow:
+                            assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 2
+                            assert uow.connection.execute('SELECT COUNT(*) FROM execution_dispatch_outbox WHERE attempt_no&lt;&gt;1').fetchone()[0] == 0
+                            assert tuple(uow.connection.execute('SELECT lifecycle_state,lease_state FROM execution_sessions').fetchone()) == ('CLOSED','CLOSED')
+                            assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='runtime.close'").fetchone()[0] == 0
+                            assert uow.connection.execute('SELECT COUNT(*) FROM execution_receipts').fetchone()[0] == 2
+                        return
+                    if event_recovery == 'lease_renewal':
+                        import time
+                        initial_deadline = native.context.lease_deadline_monotonic
+                        async with asyncio.timeout(10):
+                            while time.monotonic() &lt;= initial_deadline + .05:
+                                assert not native.native.stopped and control.status()['execution_ready']
+                                await asyncio.sleep(.02)
+                        runtime = next(iter(execution._sessions.values())).runtime
+                        current = runtime.r4_operation_context(dispatched['turn.submit'],
+                            connection_id=owner.state.connection_id,
+                            connection_generation=owner.state.connection_generation)
+                        assert current.r4_authority.lease_serial &gt;= 2
+                        assert current.lease_deadline_monotonic &gt; initial_deadline
+                        assert native.opens == 1 and not native.native.stopped
+                        with deps.connection_factory.unit_of_work(write=False) as uow:
+                            row = uow.connection.execute(
+                                'SELECT lease_serial,status FROM execution_leases ORDER BY lease_serial DESC LIMIT 1').fetchone()
+                            assert row['lease_serial'] &gt;= 2 and row['status'] == 'ACTIVE'
+                    if (automatic and event_recovery != 'lease_renewal') or (reconcile_closed and not publication_failure and not history_count):
+                        from nexus_connector_core import RuntimeEvent
+                        journal = await daemon.host.ensure_history_journal()
+                        original_ack = journal.acknowledge_events
+                        ack_attempts = []
+                        async def interrupted_ack(cursor, through):
+                            ack_attempts.append(through)
+                            if len(ack_attempts) == 1:
+                                raise OSError('Injected Core ACK write failure after Server commit.')
+                            return await original_ack(cursor, through)
+                        if event_recovery:
+                            publish_events = owner.publish_events
+                            async def interrupted_events(**values):
+                                if event_recovery.endswith('ack_lost'):
+                                    await publish_events(**values)
+                                raise OSError('Injected event delivery interruption.')
+                            monkeypatch.setattr(owner,'publish_events',interrupted_events)
+                        else:
+                            monkeypatch.setattr(journal, 'acknowledge_events', interrupted_ack)
+                        await native.native.queue.put(RuntimeEvent(server_id,executor_id,session_id,native.stream_epoch,
+                            0,'text_delta','synthetic.delta',{'text':'Automatic event publication.'},turned['operation_id']))
+                        stream = dict(server_id=server_id,executor_id=executor_id,binding_id=binding['binding_id'],
+                                      agent_id='subject',session_id=session_id,stream_epoch=native.stream_epoch)
+                        if event_recovery:
+                            from nexus_connector_core import EventCursor
+                            async with asyncio.timeout(5):
+                                while await journal.contiguous_watermark(EventCursor(server_id,executor_id,session_id,native.stream_epoch)) &lt; 1:
+                                    await asyncio.sleep(.01)
+                                while not execution.events.errors:
+                                    await asyncio.sleep(.01)
+                            progress = await asyncio.to_thread(execution.events.store.read,stream)
+                            assert progress['remote_acked'] == progress['core_applied'] == 0
+                        else:
+                            async with asyncio.timeout(5):
+                                while True:
+                                    try:
+                                        progress = await asyncio.to_thread(execution.events.store.read,stream)
+                                    except ConnectorError:
+                                        progress = {'core_applied':0}
+                                    if progress['core_applied'] == 1:
+                                        break
+                                    await asyncio.sleep(.01)
+                            assert progress['remote_acked'] == 1 and ack_attempts == [1,1]
+                            assert not execution.events.errors
+                            with deps.connection_factory.unit_of_work(write=False) as uow:
+                                assert uow.connection.execute('SELECT COUNT(*) FROM execution_event_ingress').fetchone()[0] == 1
+                                assert tuple(uow.connection.execute('SELECT committed_contiguous,projected_through FROM execution_event_watermarks').fetchone()) == (1,0)
+                    await admit('turn.steer', session_id=session_id, text='Continue carefully.',
+                        target={'kind': 'native_turn_id', 'expected_turn_id': 'turn-from-native'})
+                    await admit('turn.interrupt', session_id=session_id,
+                        target={'kind': 'current_run', 'expected_turn_id': None})
+                    await admit('runtime.close', session_id=session_id)
+                    async with asyncio.timeout(5):
+                        while execution.pending_count:
+                            await asyncio.sleep(0)
+                    if event_recovery and event_recovery != 'lease_renewal':
+                        generation = owner.state.connection_generation
+                        old_ticket = control.execution.lanes[binding['binding_id']].ticket.ticket_id
+                        if event_recovery.startswith('cold_'):
+                            assert await daemon._shutdown() == 0
+                            daemon = DaemonApp(daemon_root)
+                            daemon._start_transports()
+                            control = daemon.r4_controls[server_id]
+                            assert not control._retained_lanes
+                        else:
+                            await owner.close()
+                        async with asyncio.timeout(15):
+                            while not (control.status()['execution_ready'] and control.connection.state.connection_generation &gt; generation):
+                                await asyncio.sleep(.01)
+                        owner = control.connection
+                        execution = control.execution.owner
+                        progress = await asyncio.to_thread(execution.events.store.read,stream)
+                        assert progress['remote_acked'] == progress['core_applied'] == 1
+                        assert control._retained_lanes and owner.is_attached(binding_id=binding['binding_id'],agent_id='subject',
+                            credential_epoch=revisions.credential_epoch,authorization_revision=binding['authorization_revision'],
+                            configuration_revision=binding['configuration_revision'])
+                        with deps.connection_factory.unit_of_work(write=False) as uow:
+                            assert uow.connection.execute('SELECT COUNT(*) FROM execution_event_ingress').fetchone()[0] == 1
+                            assert uow.connection.execute('SELECT committed_contiguous FROM execution_event_watermarks').fetchone()[0] == 1
+                            if event_recovery.startswith('cold_'):
+                                rows = uow.connection.execute(
+                                    'SELECT ticket_id,client_intent_id,replaces_ticket_id,revoked_at FROM execution_link_tickets WHERE binding_id=?',
+                                    (binding['binding_id'],)).fetchall()
+                                assert len(rows) == 2
+                                old = next(row for row in rows if row['ticket_id'] == old_ticket)
+                                new = next(row for row in rows if row['ticket_id'] != old_ticket)
+                                assert old['revoked_at'] is not None and new['revoked_at'] is None
+                                assert new['replaces_ticket_id'] == old_ticket
+                                assert new['client_intent_id'] == old['client_intent_id']
+                    if publication_failure:
+                        from okto_nexus_connector.storage.r4_publications import R4PublicationStore
+                        from okto_nexus_connector.services.r4_publications import recover_publications
+                        pending = R4PublicationStore.for_state(daemon.store)
+                        saved = pending.ready(server_id, executor_id)
+                        if publication_failure == 'core_commit':
+                            assert not saved
+                            bound = pending.unprojected(server_id, executor_id)
+                            assert len(bound) == 1 and bound[0]['source']['connection_id'] == owner.state.connection_id
+                        else:
+                            assert len(saved) == 1 and saved[0]['stage'] == 'SUCCEEDED'
+                            assert saved[0]['connection_id'] == owner.state.connection_id
+                        # Simulate the previous credential's expiry. Recovery cannot
+                        # replace a still-bound live ticket and must not bypass it.
+                        with deps.connection_factory.unit_of_work() as uow:
+                            uow.connection.execute("UPDATE execution_link_tickets SET expires_at='2000-01-01T00:00:00+00:00' "
+                                "WHERE binding_id=?", (binding['binding_id'],))
+                        async def current():
+                            pass
+                        async with NexusHTTPClient(base_url) as recovery_http:
+                            recovered = await recover_publications(daemon.store, daemon.vault, recovery_http,
+                                server_id=server_id, executor_id=executor_id, require_current=current,
+                                journal=await daemon.host.ensure_history_journal())
+                        assert list(recovered) == [binding['binding_id']]
+                        assert not pending.pending(server_id, executor_id)
+                        final = client.get('/v1/runtime/operations/' + operations[-1], headers=headers['subject']).json()
+                        assert final['executor_stage'] == 'SUCCEEDED' and final['receipt_revision'] == 1
+                    if reconcile_closed:
+                        from okto_nexus_connector.services.r4_reconciliation import R4ReconciliationReporter
+                        from okto_nexus_connector.services.core_host import CoreRuntimeHost
+                        generation = owner.state.connection_generation
+                        await execution.stop()
+                        await owner.close()
+                        async with asyncio.timeout(5):
+                            while True:
+                                with deps.connection_factory.unit_of_work(write=False) as uow:
+                                    state = uow.connection.execute('SELECT control_state FROM execution_executors WHERE executor_id=?',
+                                        (executor_id,)).fetchone()[0]
+                                if state == 'DISCONNECTED':
+                                    break
+                                await asyncio.sleep(.01)
+                        if history_count:
+                            # Synthetic historical facts exercise pagination. The
+                            # five actual native commands above are not repeated.
+                            import hashlib
+                            from nexus_connector_core import (OperationKey, OperationReceipt, prepare_r4_receipt_binding,
+                                project_r4_bound_receipt, r4_submit_intent_hash)
+                            from nexus_connector_core.protocol import canonical_json
+                            from okto_nexus_connector.storage.r4_publications import R4PublicationStore
+                            journal = await daemon.host.ensure_history_journal()
+                            publications = R4PublicationStore.for_state(daemon.store)
+                            template = dispatched['turn.submit']
+                            with deps.connection_factory.unit_of_work(write=False) as uow:
+                                tables = {table: dict(uow.connection.execute('SELECT * FROM ' + table + ' WHERE operation_id=?',
+                                    (template['operation_id'],)).fetchone()) for table in
+                                    ('execution_operations','execution_dispatch_outbox','execution_receipts')}
+                            prepared_history = []
+                            for index in range(history_count):
+                                frame = dict(template, operation_id=f'history-{index:04}-' + 'x' * 140)
+                                frame['intent_hash'] = r4_submit_intent_hash(frame)
+                                association = prepare_r4_receipt_binding(frame, native.context)
+                                key = OperationKey(server_id, executor_id, frame['operation_id'])
+                                await journal.admit(key, association['core_intent_hash'], session_id)
+                                await journal.mark_possible_effect(key)
+                                fact = await journal.record_receipt(key, OperationReceipt(key.operation_id,
+                                    association['core_intent_hash'], 'SUBMITTED', True, False, session_id,
+                                    native_id=native.native.native_id))
+                                projected = project_r4_bound_receipt(association, fact, key=key, receipt_revision=1)
+                                await asyncio.to_thread(publications.reserve, frame)
+                                await asyncio.to_thread(publications.bind, association)
+                                await asyncio.to_thread(publications.record, projected)
+                                await asyncio.to_thread(publications.acknowledge, projected)
+                                prepared_history.append((frame, projected))
+                            with deps.connection_factory.unit_of_work() as uow:
+                                for frame, projected in prepared_history:
+                                    for table, source in tables.items():
+                                        values = dict(source, operation_id=frame['operation_id'])
+                                        if 'intent_hash' in values:
+                                            values['intent_hash'] = frame['intent_hash']
+                                        if table == 'execution_receipts':
+                                            raw = canonical_json(projected)
+                                            values.update(canonical_frame=raw.decode(),
+                                                          frame_digest='sha256:' + hashlib.sha256(raw).hexdigest())
+                                        if table == 'execution_dispatch_outbox':
+                                            values['attempt_token'] = frame['operation_id']
+                                        uow.connection.execute('INSERT INTO ' + table + '(' + ','.join(values) + ') VALUES (' +
+                                            ','.join('?' for _ in values) + ')', tuple(values.values()))
+                        recovery_host = CoreRuntimeHost(daemon.host.root, daemon.vault)
+                        reporter = R4ReconciliationReporter(daemon.store, recovery_host, server_id, executor_id)
+                        reports = []
+                        async def reconciled(request):
+                            report = await reporter.report(request)
+                            reports.append(report)
+                            return report
+                        owner = await asyncio.wait_for(connect_r4_connection(
+                            f'ws://127.0.0.1:{port}/v1/runtime/executors/{executor_id}/link',
+                            registered.json()['bootstrap_ticket']['ticket'], server_id=server_id, executor_id=executor_id,
+                            management_revision=info['management_revision'], snapshot_format=info['executor_snapshot_format'],
+                            boot_id='recovery-boot', report_reconciliation=reconciled), 10)
+                        assert owner.state.control_ready and owner.state.connection_generation &gt; generation
+                        assert reports and reports[0]['receipts'] and reports[0]['claims'][0]['state'] == 'RELEASED'
+                        assert not reporter.blocked
+                        if history_count:
+                            from nexus_connector_core import encode_r4_frame
+                            assert len(reports) == 2 and len(reports[0]['receipts']) == 256
+                            assert sum(len(report['receipts']) for report in reports) == history_count + 4
+                            assert len(encode_r4_frame(reports[0])) &gt; 64 * 1024
+                assert owner.online is (not bool(publication_failure) or reconcile_closed)
+                assert owner.usage == {False: (0, 0), True: (0, 0)}
+                assert native.native.stopped
+                assert native.opens == 1
+                assert [kind for kind, _ in native.native.sent] == ['send_turn', 'steer', 'interrupt']
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 5 + history_count
+                    assert uow.connection.execute('SELECT COUNT(*) FROM execution_receipts').fetchone()[0] == 5 + history_count
+                    assert uow.connection.execute('SELECT COUNT(*) FROM execution_dispatch_outbox WHERE attempt_no&lt;&gt;1').fetchone()[0] == 0
+                    expected_session = ('READY', 'SUPERSEDED') if publication_failure in ('before_commit', 'core_commit') and not reconcile_closed else ('CLOSED', 'CLOSED')
+                    # Receipt ingress preserves history after disconnect. Adoption
+                    # of that fact into session readiness remains reconciliation.
+                    assert tuple(uow.connection.execute('SELECT lifecycle_state,lease_state FROM execution_sessions').fetchone()) == expected_session
+            finally:
+                try:
+                    if recovery_host is not None:
+                        await recovery_host.shutdown_all()
+                    result = await daemon._shutdown()
+                    if owner is not None:
+                        await owner.close()
+                    assert result == (1 if publication_failure else 0)
+                finally:
+                    server.should_exit = True
+                    await asyncio.wait_for(serving, 5)
+                    sock.close()
+&gt;       asyncio.run(run())
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:503:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:331: in run
+    await admit('turn.interrupt', session_id=session_id,
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:155: in admit
+    raise execution.failure
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus_connector\services\r4_execution.py:194: in _produce
+    receipt = await self._execute(item)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:222: in capture
+    return await execute(item)
+           ^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus_connector\services\r4_execution.py:284: in _execute
+    return await self._execute_owned(item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\okto_nexus_connector\services\r4_execution.py:357: in _execute_owned
+    receipt = await runtime.control(ControlOperation(frame['operation_id'], frame['session_id'],
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\runtime.py:656: in control
+    return await self._send(semantic, context, "interrupt", {})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\runtime.py:854: in _send
+    binding = self._session(semantic.session_id, context,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;nexus_connector_core.runtime.LocalRuntimeCore object at 0x0000020A702BCE10&gt;
+session_id = 'ses_5393d86d29e19421a6626de951bbc13a'
+context = ExecutionContext(server_id='srv_a0f4c3455f6b6bf26d8b96c5fb8d7c8d', executor_id='exe_43ea14d5a663d47cfe440febc7717d75',...=2, connection_id='conn_55a325914ec2fbd89cbef7df8199ce26', boot_id='2c33d690d818c31350118c10546433618d8b6ef0804cd83f'))
+require_live_lease = False, allow_newer_revision = False
+containment_reply = False
+
+    def _session(self, session_id: str, context: ExecutionContext, *,
+                 require_live_lease: bool = False,
+                 allow_newer_revision: bool = False,
+                 containment_reply: bool = False) -&gt; _Session:
+        binding = self._sessions.get(SessionKey(context.server_id,
+                                                context.executor_id, session_id))
+        if binding is None:
+            raise CoreError("SESSION_UNKNOWN", "admission")
+        original = binding.context
+        if context.r4_authority != original.r4_authority:
+&gt;           raise CoreError("STALE_GENERATION", "r4_context", retry_safe=True)
+E           nexus_connector_core.models.CoreError: STALE_GENERATION
+
+..\okto-r4-native-installed-zk_r383i\Lib\site-packages\nexus_connector_core\runtime.py:2695: CoreError</failure></testcase><testcase classname="execution_r4.test_reconciliation" name="test_confirmed_close_makes_current_owner_ready" time="2.386" /><testcase classname="execution_r4.test_reconciliation" name="test_incomplete_or_invalid_evidence_never_makes_owner_ready[hash]" time="2.654" /><testcase classname="execution_r4.test_reconciliation" name="test_incomplete_or_invalid_evidence_never_makes_owner_ready[revision]" time="2.367" /><testcase classname="execution_r4.test_reconciliation" name="test_incomplete_or_invalid_evidence_never_makes_owner_ready[stage]" time="2.072" /><testcase classname="execution_r4.test_reconciliation" name="test_incomplete_or_invalid_evidence_never_makes_owner_ready[missing_receipt]" time="2.194" /><testcase classname="execution_r4.test_reconciliation" name="test_incomplete_or_invalid_evidence_never_makes_owner_ready[corrupt_frame]" time="2.546" /><testcase classname="execution_r4.test_reconciliation" name="test_incomplete_or_invalid_evidence_never_makes_owner_ready[corrupt_digest]" time="2.431" /><testcase classname="execution_r4.test_reconciliation" name="test_incomplete_or_invalid_evidence_never_makes_owner_ready[unknown_claim]" time="2.395" /><testcase classname="execution_r4.test_reconciliation" name="test_incomplete_or_invalid_evidence_never_makes_owner_ready[unknown_process]" time="2.406" /><testcase classname="execution_r4.test_reconciliation" name="test_incomplete_or_invalid_evidence_never_makes_owner_ready[wrong_owner]" time="2.736" /><testcase classname="execution_r4.test_reconciliation" name="test_incomplete_or_invalid_evidence_never_makes_owner_ready[missing_proof]" time="2.318" /><testcase classname="execution_r4.test_reconciliation" name="test_incomplete_or_invalid_evidence_never_makes_owner_ready[missing_watermark]" time="2.213" /><testcase classname="execution_r4.test_reconciliation" name="test_incomplete_or_invalid_evidence_never_makes_owner_ready[nonzero_watermark]" time="2.490" /><testcase classname="execution_r4.test_reconciliation" name="test_incomplete_or_invalid_evidence_never_makes_owner_ready[missing_close]" time="2.130" /><testcase classname="execution_r4.test_reconciliation" name="test_incomplete_or_invalid_evidence_never_makes_owner_ready[receipt_after_snapshot]" time="2.140" /><testcase classname="execution_r4.test_reconciliation" name="test_stale_or_malformed_report_is_rejected[connection_generation]" time="2.155" /><testcase classname="execution_r4.test_reconciliation" name="test_stale_or_malformed_report_is_rejected[connection_id]" time="2.196" /><testcase classname="execution_r4.test_reconciliation" name="test_stale_or_malformed_report_is_rejected[server_id]" time="2.361" /><testcase classname="execution_r4.test_reconciliation" name="test_stale_or_malformed_report_is_rejected[executor_id]" time="1.981" /><testcase classname="execution_r4.test_reconciliation" name="test_stale_or_malformed_report_is_rejected[reconcile_id]" time="2.128" /><testcase classname="execution_r4.test_reconciliation" name="test_stale_or_malformed_report_is_rejected[cursor]" time="2.090" /><testcase classname="execution_r4.test_reconciliation" name="test_stale_or_malformed_report_is_rejected[owner_changed]" time="2.156" /><testcase classname="execution_r4.test_reconciliation" name="test_stale_or_malformed_report_is_rejected[duplicate_receipt]" time="2.284" /><testcase classname="execution_r4.test_reconciliation" name="test_stale_or_malformed_report_is_rejected[duplicate_claim]" time="2.155" /><testcase classname="execution_r4.test_reconciliation" name="test_stale_or_malformed_report_is_rejected[duplicate_stream]" time="2.410" /><testcase classname="execution_r4.test_reconciliation" name="test_stale_or_malformed_report_is_rejected[unmatched_fact]" time="2.157" /><testcase classname="execution_r4.test_reconciliation" name="test_stale_or_malformed_report_is_rejected[nonadvancing_cursor]" time="1.897" /><testcase classname="execution_r4.test_reconciliation" name="test_stream_readiness_requires_matching_durable_contiguous_prefix[1-epoch-none-True]" time="2.011" /><testcase classname="execution_r4.test_reconciliation" name="test_stream_readiness_requires_matching_durable_contiguous_prefix[0-epoch-none-False]" time="2.351" /><testcase classname="execution_r4.test_reconciliation" name="test_stream_readiness_requires_matching_durable_contiguous_prefix[2-epoch-none-False]" time="2.229" /><testcase classname="execution_r4.test_reconciliation" name="test_stream_readiness_requires_matching_durable_contiguous_prefix[1-other-none-False]" time="2.194" /><testcase classname="execution_r4.test_reconciliation" name="test_stream_readiness_requires_matching_durable_contiguous_prefix[1-epoch-pending-False]" time="2.361" /><testcase classname="execution_r4.test_reconciliation" name="test_durable_release_correlates_original_open_without_synthetic_close[None]" time="2.502" /><testcase classname="execution_r4.test_reconciliation" name="test_durable_release_correlates_original_open_without_synthetic_close[digest]" time="2.155" /><testcase classname="execution_r4.test_reconciliation" name="test_durable_release_correlates_original_open_without_synthetic_close[opening_hash]" time="2.369" /><testcase classname="execution_r4.test_reconciliation" name="test_durable_release_correlates_original_open_without_synthetic_close[opening_session]" time="1.984" /><testcase classname="execution_r4.test_reconciliation" name="test_durable_release_correlates_original_open_without_synthetic_close[opening_stage]" time="1.837" /><testcase classname="execution_r4.test_reconciliation" name="test_durable_release_correlates_original_open_without_synthetic_close[opening_generation]" time="1.942" /><testcase classname="execution_r4.test_ns09" name="test_ns09_02_server_grant_core_application_and_replay" time="2.727" /><testcase classname="execution_r4.test_ns09" name="test_ns09_02_transaction_rollback_scope_and_late_ack" time="1.890" /><testcase classname="execution_r4.test_ns09" name="test_server_lease_serial_race_and_superseded_socket_cannot_ack" time="2.130" /><testcase classname="execution_r4.test_ns09" name="test_canonical_authority_changes_refuse_initial_lease[permission]" time="2.248" /><testcase classname="execution_r4.test_ns09" name="test_canonical_authority_changes_refuse_initial_lease[method]" time="2.423" /><testcase classname="execution_r4.test_ns09" name="test_canonical_authority_changes_refuse_initial_lease[credential]" time="2.210" /><testcase classname="execution_r4.test_ns09" name="test_canonical_authority_changes_refuse_initial_lease[grant]" time="2.049" /><testcase classname="execution_r4.test_ns09" name="test_canonical_authority_changes_refuse_initial_lease[ticket]" time="1.888" /><testcase classname="execution_r4.test_ns09" name="test_canonical_authority_changes_refuse_initial_lease[scope]" time="1.844" /><testcase classname="execution_r4.test_ns09" name="test_revoked_lease_projection_survives_lane_and_owner_fencing[True]" time="1.896" /><testcase classname="execution_r4.test_ns09" name="test_revoked_lease_projection_survives_lane_and_owner_fencing[False]" time="2.175" /><testcase classname="execution_r4.test_ns09" name="test_unapplied_lease_requires_reconciliation_before_reconnect" time="2.212" /><testcase classname="execution_r4.test_ns09" name="test_compatible_renewal_preserves_applied_authority_until_ack" time="2.401" /><testcase classname="execution_r4.test_ns01" name="test_basic_bootstrap_does_not_import_optional_core" time="0.870" /><testcase classname="execution_r4.test_ns01" name="test_ns01_01" time="1.266" /><testcase classname="execution_r4.test_ns01" name="test_ns01_02" time="0.004" /><testcase classname="execution_r4.test_ns01" name="test_ns01_03" time="0.019" /><testcase classname="execution_r4.test_ns01" name="test_mcp_config_uses_bearer_header" time="0.001" /><testcase classname="execution_r4.test_ns01" name="test_v1_auth_is_bearer_only_and_direct" time="2.018" /><testcase classname="execution_r4.test_ns01" name="test_ns01_05" time="0.066" /></testsuite></testsuites>

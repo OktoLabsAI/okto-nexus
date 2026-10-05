@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import asyncio
 import contextlib
+import re
 import time
 from pathlib import Path
 from typing import Any
@@ -26,7 +27,9 @@ from urllib.parse import urlsplit
 
 import anyio.to_thread
 from fastapi import FastAPI, Request, Response
-from fastapi.responses import JSONResponse
+from fastapi.exception_handlers import request_validation_exception_handler
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import FileResponse, JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from ....application.auth import AgentKeyAuthService
@@ -39,14 +42,16 @@ from ....application.workspace_analytics import WorkspaceAnalyticsService
 from ....application.workspace_overview import WorkspaceListService
 from ....domain.approvals import OPERATOR_AGENT_ID
 from ....domain.poll_tokens import POLL_TOKEN_PREFIX, is_well_formed_poll_token
-from ....errors import OktoNexusError
+from ....errors import ErrorCode, OktoNexusError
 from ...outbound.embedding import resolve_embedding_provider
+from ...outbound.execution.core_inventory import MANAGEMENT_REVISION
 from ...outbound.sqlite.embeddings_repo import SqliteMessageVectorStore
 from ...outbound.sqlite.observability_repo import SqliteObservabilityQueries
 from ...outbound.tokenizer import resolve_tokenizer
-from ..mcp.server import (
+from okto_nexus.bootstrap.dependencies import Deps
+from okto_nexus.bootstrap.runtime_host import EmbeddedRuntimeHost
+from ..mcp.registration import (
     SERVER_INSTRUCTIONS,
-    Deps,
     _load_fastmcp,
     register_meta_tools,
     register_resources,
@@ -60,7 +65,8 @@ from .lock import HEARTBEAT_INTERVAL_SECONDS, ServeLock
 #: The SPA shell and its bundles are public by design - they contain no
 #: data; every byte of data still rides the key-gated /api/v1 surface.
 PUBLIC_PATHS = frozenset(
-    {"/", "/healthz", "/api/v1/info", "/api/v1/license", "/favicon.ico"}
+    {"/", "/healthz", "/api/v1/info", "/api/v1/license",
+     "/v1/connections/protocol", "/v1/reach", "/favicon.ico"}
 )
 PUBLIC_PREFIXES = ("/assets/", "/logos/")
 
@@ -84,6 +90,17 @@ def ok(data: Any) -> JSONResponse:
 def err(status: int, code: str, message: str) -> JSONResponse:
     return JSONResponse(
         {"ok": False, "error": {"code": code, "message": message}}, status_code=status
+    )
+
+
+def v1_err(status: int, code: str, message: str, *,
+           stage: str = "authentication") -> JSONResponse:
+    """R4 direct error representation; no legacy ok/data envelope."""
+    return JSONResponse(
+        {"error": {"code": code, "stage": stage, "message": message,
+                   "possible_effect": False, "retry_safe": False,
+                   "operation_id": None, "action": ""}},
+        status_code=status,
     )
 
 
@@ -177,6 +194,10 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(self, request: Request, call_next) -> Response:
         path = request.url.path.rstrip("/") or "/"
+        is_v1 = path == "/v1" or path.startswith("/v1/")
+        if is_v1 and (request.query_params.get("api_key") or
+                      request.headers.get("x-api-key")):
+            return v1_err(401, "AUTH_FAILED", "Use only the Authorization bearer header on /v1.")
         if (
             path in PUBLIC_PATHS
             or request.url.path.startswith(PUBLIC_PREFIXES)
@@ -184,8 +205,77 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
         ):
             return await call_next(request)
 
-        is_mcp = request.url.path.startswith("/mcp")
+        if request.method == "POST" and path == "/v1/runtime/native-actions":
+            # This route authenticates only its own session audience, including
+            # on loopback. It never inherits canonical-key/operator authority.
+            return await call_next(request)
+        if ((request.method == "PUT" and re.fullmatch(
+                 r"/v1/runtime/executors/[^/]{1,160}/inventory", path)) or
+                 (request.method == "POST" and re.fullmatch(
+                  r"/v1/runtime/executors/[^/]{1,160}/inventory:claim-refresh", path)) or
+                 (request.method == "POST" and re.fullmatch(
+                  r"/v1/runtime/operations/[^/]{1,160}/receipts", path)) or
+                  (request.method == "POST" and re.fullmatch(
+                  r"/v1/runtime/executors/[^/]{1,160}/realizations", path)
+                  and (extract_bearer(request) or "").startswith("nxt4_"))):
+            # This route has its own ticket audience and scope check. A
+            # canonical agent key does not substitute for that ticket.
+            return await call_next(request)
+        if (request.method == "GET" and re.fullmatch(
+                r"/v1/runtime/operations/[^/]{1,160}", path) and
+                (extract_bearer(request) or "").startswith("nxt4_") and
+                not request.query_params.get("api_key") and
+                not request.headers.get("x-api-key")):
+            # A history ticket is accepted only by this operation reader.
+            # Every scope and canonical ownership check stays in the route.
+            return await call_next(request)
+        is_mcp = path == "/mcp" or path.startswith("/mcp/")
         bearer = extract_bearer(request)
+        supplied = extract_api_key(request)
+        if (bearer or '').startswith('nxc4_') or (supplied or '').startswith('nxc4_'):
+            if (not is_mcp or not bearer or supplied != bearer or
+                    request.query_params.get('api_key') or request.headers.get('x-api-key')):
+                return (v1_err if is_v1 else err)(401, 'AUTH_FAILED',
+                    'Use the session capability bearer only on its supported audience endpoint.')
+            from dataclasses import replace
+            from ....application.execution_capabilities import ExecutionCapabilityService
+            from ....bootstrap.execution_authority import build_execution_access
+            from ....domain.execution_principal import current_execution_principal
+            deps = request.app.state.deps
+            service = ExecutionCapabilityService(factory=deps.connection_factory,
+                                                 access=build_execution_access(deps))
+            opening_handshake = False
+            if request.method == 'POST':
+                try:
+                    rpc = await request.json()
+                    opening_handshake = (type(rpc) is dict and rpc.get('jsonrpc') == '2.0' and
+                        rpc.get('method') in ('initialize', 'notifications/initialized', 'tools/list', 'ping'))
+                except (ValueError, UnicodeError):
+                    pass
+
+            def resolve_capability():
+                principal = service.authenticate_transport(token=bearer, audience='nexus-mcp-session',
+                                                           opening_handshake=opening_handshake)
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    agent = deps.repos.agents.get(uow, principal.scope['agent_id'])
+                if agent is None:
+                    raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                                         'The session identity is unavailable.', {})
+                # Never let a legacy context builder turn this derived identity
+                # into canonical-key authority using a database key hash.
+                return principal, replace(agent, api_key_hash=None)
+
+            try:
+                principal, agent = await anyio.to_thread.run_sync(resolve_capability)
+            except OktoNexusError:
+                return err(401, 'AUTH_FAILED', 'The session capability is invalid or inactive.')
+            principal_token = current_execution_principal.set(principal)
+            agent_token = current_agent.set(agent)
+            try:
+                return await call_next(request)
+            finally:
+                current_agent.reset(agent_token)
+                current_execution_principal.reset(principal_token)
         bearer_is_poll_token = bool(bearer and bearer.startswith(POLL_TOKEN_PREFIX))
         bearer_is_allowed_poll = (
             request.method == "GET"
@@ -205,6 +295,8 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
 
         if (
             not is_mcp
+            and not is_v1
+            and not extract_api_key(request)
             and getattr(request.app.state, "local_open", False)
             and request.client is not None
             and request.client.host in _LOOPBACK_CLIENTS
@@ -218,14 +310,33 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
                     "Refused a cross-origin or rebound-host request on the "
                     "loopback trust path; authenticate with an api_key.",
                 )
-            return await call_next(request)
+            from .identity_ctx import trusted_local_operator
+            local_token = trusted_local_operator.set(True)
+            dashboard_token = None
+            try:
+                if path.startswith('/api/v1/runtime-management/'):
+                    # Dashboard management uses the existing loopback operator
+                    # authority. Public /v1 and MCP still require their bearers.
+                    deps = request.app.state.deps
+                    def local_actor():
+                        with deps.connection_factory.unit_of_work(write=False) as uow:
+                            return deps.repos.agents.get(uow, 'operator')
+                    actor = await anyio.to_thread.run_sync(local_actor)
+                    if actor is None or not actor.is_active:
+                        return v1_err(403, 'PERMISSION_DENIED', 'The local operator is unavailable.')
+                    dashboard_token = current_agent.set(actor)
+                return await call_next(request)
+            finally:
+                if dashboard_token is not None:
+                    current_agent.reset(dashboard_token)
+                trusted_local_operator.reset(local_token)
 
         if bearer_is_allowed_poll:
             return await call_next(request)
 
         auth: AgentKeyAuthService = request.app.state.auth
         deps: Deps = request.app.state.deps
-        api_key = extract_api_key(request)
+        api_key = extract_bearer(request) if is_v1 else extract_api_key(request)
 
         def _resolve():
             with deps.connection_factory.unit_of_work() as uow:
@@ -234,17 +345,34 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
         try:
             agent = await anyio.to_thread.run_sync(_resolve)
         except OktoNexusError as exc:
+            if is_v1:
+                return v1_err(503, exc.code, exc.message)
             return err(503, exc.code, exc.message)
         if agent is None:
-            return err(
-                401, "AUTH_FAILED", "Authentication failed: unknown or inactive api_key"
-            )
+            if is_v1:
+                return v1_err(401, "AUTH_FAILED", "Authentication failed: unknown or inactive bearer.")
+            return err(401, "AUTH_FAILED", "Authentication failed: unknown or inactive api_key")
 
+        if is_mcp:
+            from ....application.connection_policy import method_enabled
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                if not method_enabled(uow, agent.agent_id, "mcp"):
+                    return err(403, "PERMISSION_DENIED", "MCP is disabled for this agent.")
         token = current_agent.set(agent)
         try:
             return await call_next(request)
         finally:
             current_agent.reset(token)
+
+
+class V1RevisionMiddleware(BaseHTTPMiddleware):
+    """Advertise the exact management contract on every /v1 response."""
+
+    async def dispatch(self, request: Request, call_next) -> Response:
+        response = await call_next(request)
+        if request.url.path == "/v1" or request.url.path.startswith("/v1/"):
+            response.headers["X-Nexus-Connections-Revision"] = MANAGEMENT_REVISION
+        return response
 
 
 class TelemetryMiddleware(BaseHTTPMiddleware):
@@ -338,8 +466,9 @@ def ensure_operator_key(
         return OPERATOR_AGENT_ID, plaintext
 
 
-def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
+def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_url: str | None = None) -> FastAPI:
     """Assemble the serve application (REST + SSE + MCP mount + static)."""
+    deps.runtime_owner_api_url = runtime_owner_api_url
     auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
     observability = ObservabilityService(
         SqliteObservabilityQueries(), deps.clock, deps.config
@@ -433,6 +562,10 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
         # mounting pattern). The lock heartbeat keeps takeover honest (D4).
         heartbeat_task: asyncio.Task | None = None
         metrics_task: asyncio.Task | None = None
+        embedded_core_host: EmbeddedRuntimeHost | None = None
+        embedded_inventory = None
+        embedded_dispatch = None
+        shutdown_coordinator = None
         if lock is not None:
 
             async def _beat() -> None:
@@ -458,9 +591,82 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
 
             metrics_task = asyncio.create_task(_publish_metrics())
         try:
+            from ...outbound.sqlite.runtime_outbox_repo import SqliteRuntimeOutboxRepo
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                runtime_history = SqliteRuntimeOutboxRepo().has_history(uow)
+            if deps.config.feature_harness_integrations or runtime_history:
+                from ..mcp.tools.harness import build_dispatcher, run_runtime_boot
+                acquired = await anyio.to_thread.run_sync(build_dispatcher(deps).start)
+                if not acquired:
+                    raise RuntimeError("Another runtime owner holds this store; serve startup refused.")
+            # Composition is owned by serve's lifespan. No Core stores or
+            # native workers are opened until an approved local selection is
+            # passed to acquire().
+            embedded_core_host = EmbeddedRuntimeHost(
+                deps.config.home_dir.resolve() / "core-runtime")
+            app.state.embedded_core_host = embedded_core_host
+            if deps.config.feature_harness_integrations:
+                from ....bootstrap.embedded_inventory import EmbeddedInventoryOwner
+                embedded_inventory = EmbeddedInventoryOwner(deps, app.state.inventory_fresh_publications)
+                app.state.embedded_inventory_owner = embedded_inventory
+                await embedded_inventory.start()
+                from ....application.execution_local_launch import ApprovedLocalLaunch
+                embedded_core_host.local_launch_factory = lambda scope: ApprovedLocalLaunch(embedded_inventory, scope)
+                from ....bootstrap.embedded_dispatch import EmbeddedDispatchOwner
+                embedded_dispatch = EmbeddedDispatchOwner(embedded_inventory, embedded_core_host)
+                app.state.embedded_dispatch_owner = embedded_dispatch
+                await embedded_dispatch.start()
+                await anyio.to_thread.run_sync(run_runtime_boot, deps)
+            from ....bootstrap.server_shutdown import ServerShutdownCoordinator
+            def server_drained():
+                server = getattr(app.state, "server", None)
+                if server is not None:
+                    server.should_exit = True
+            from ....application.connection_test import ConnectionTests
+            app.state.connection_tests = ConnectionTests(deps)
+            shutdown_coordinator = ServerShutdownCoordinator(deps,
+                embedded=embedded_dispatch, inventory=embedded_inventory,
+                host=embedded_core_host, on_drained=server_drained,
+                connection_tests=app.state.connection_tests,
+                on_embedded_report=lambda report: setattr(app.state, "embedded_shutdown_report", report))
+            app.state.runtime_shutdown = shutdown_coordinator
             async with mcp_server.session_manager.run():
                 yield
         finally:
+            deps.runtime_admission_fence.close()
+            if getattr(app.state, 'connection_tests', None) is not None:
+                await app.state.connection_tests.shutdown()
+            if shutdown_coordinator is not None:
+                await shutdown_coordinator.request()
+                await shutdown_coordinator.wait()
+            embedded_shutdown_error: Exception | None = None
+            if embedded_dispatch is not None:
+                try:
+                    report = await embedded_dispatch.request_shutdown()
+                    app.state.embedded_shutdown_report = report
+                    # A bounded pending answer cannot authorize disposal of
+                    # this loop, the stores or the serve lock.
+                    await embedded_dispatch.wait_shutdown()
+                    app.state.embedded_shutdown_report = embedded_dispatch.shutdown_status()
+                except Exception as exc:
+                    embedded_shutdown_error = exc
+            if embedded_inventory is not None:
+                try:
+                    await embedded_inventory.close()
+                except Exception as exc:
+                    embedded_shutdown_error = exc
+            if embedded_core_host is not None:
+                try:
+                    deps.embedded_core_shutdown_status = await embedded_core_host.shutdown()
+                except Exception as exc:
+                    embedded_shutdown_error = exc
+            dispatcher = getattr(deps, "runtime_dispatcher", None)
+            supervisor = getattr(deps, "harness_supervisor", None)
+            if (dispatcher and dispatcher.epoch is not None and supervisor
+                    and not dispatcher._shutdown_finished.is_set()):
+                from ....application.runtime_shutdown import shutdown_runtime
+                deps.runtime_shutdown_status = await anyio.to_thread.run_sync(
+                    shutdown_runtime, dispatcher, supervisor)
             if telemetry is not None:
                 telemetry.record_event(
                     EVENT_LIFECYCLE, {"action": "serve_stop", "status": "ok"}
@@ -475,6 +681,10 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
                     await heartbeat_task
             if lock is not None:
                 lock.release()
+            if deps.native_decisions is not None:
+                deps.native_decisions.inputs.close()
+            if embedded_shutdown_error is not None:
+                raise embedded_shutdown_error
 
     app = FastAPI(
         title="Okto Nexus",
@@ -487,8 +697,33 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
     # Safety net: NO unhandled exception may leave the API as a plain-text
     # 500 ("Internal Server Error" breaks every JSON client). Everything
     # becomes the documented envelope.
+    @app.exception_handler(RequestValidationError)
+    async def validation_exception_handler(request, exc: RequestValidationError):
+        if re.fullmatch(r"/v1/runtime/sessions/[^/]+/capability/?", request.url.path):
+            response = v1_err(422, "VALIDATION_ERROR",
+                              "The capability request does not match the R4 contract.",
+                              stage="validation")
+            response.headers['Cache-Control'] = 'no-store'
+            return response
+        if request.url.path == "/v1" or request.url.path.startswith("/v1/"):
+            return v1_err(400, "VALIDATION_ERROR",
+                          "The request does not match the R4 contract.",
+                          stage="validation")
+        return await request_validation_exception_handler(request, exc)
+
     @app.exception_handler(Exception)
     async def unhandled_exception_handler(request, exc: Exception):
+        if request.url.path == "/v1" or request.url.path.startswith("/v1/"):
+            if isinstance(exc, OktoNexusError):
+                status = {"VALIDATION_ERROR": 400, "CONFLICT": 409,
+                          "PERMISSION_DENIED": 403, "NOT_FOUND": 404}.get(
+                              exc.code, 500)
+                return v1_err(status, exc.code if status < 500 else "INTERNAL",
+                              exc.message if status < 500 else
+                              "An internal server error occurred.",
+                              stage="admission" if status < 500 else "internal")
+            return v1_err(500, "INTERNAL", "An internal server error occurred.",
+                          stage="internal")
         return JSONResponse(
             {
                 "ok": False,
@@ -501,6 +736,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
         )
 
     app.state.deps = deps
+    app.state.inventory_fresh_publications = deps.execution_fresh_publications
     app.state.auth = auth
     app.state.observability = observability
     app.state.search = search_service
@@ -516,6 +752,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
 
     app.add_middleware(TelemetryMiddleware)
     app.add_middleware(ApiKeyAuthMiddleware)
+    app.add_middleware(V1RevisionMiddleware)
 
     @app.get("/healthz")
     async def healthz() -> JSONResponse:  # public liveness probe
@@ -529,7 +766,6 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
     index_html = static_dir / "index.html"
 
     if index_html.is_file():
-        from fastapi.responses import FileResponse
         from fastapi.staticfiles import StaticFiles
 
         assets_dir = static_dir / "assets"
@@ -559,6 +795,20 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
                 }
             )
 
+    from .connections import build_router as connection_router
+    from .connections_v1 import build_router as connection_v1_router
+    from .runtime_v1 import build_router as runtime_v1_router
+    from .executor_link import build_router as executor_link_router
+    app.include_router(connection_router(), prefix="/api/v1")
+    app.include_router(connection_v1_router(), prefix="/v1")
+    app.include_router(runtime_v1_router(), prefix="/v1")
+    # Only UI management routes are shared. Connector registration, tickets,
+    # capability issuance and executor publication are not dashboard surfaces.
+    from .dashboard_runtime import build_router as dashboard_runtime_router
+    app.include_router(dashboard_runtime_router(), prefix="/api/v1/runtime-management")
+    from .native_actions_v1 import build_router as native_actions_router
+    app.include_router(native_actions_router(), prefix="/v1")
+    app.include_router(executor_link_router(), prefix="/v1")
     app.include_router(routes.build_router(), prefix="/api/v1")
     app.include_router(stream.build_router(), prefix="/api/v1")
     app.mount("/mcp", mcp_app)

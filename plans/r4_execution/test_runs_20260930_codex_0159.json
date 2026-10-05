@@ -1,0 +1,89 @@
+{
+  "increment": "Core 0.2.31 exact Codex 0.159.0 Windows qualification and real R4 native probes",
+  "status": "PARTIAL_INTEGRATION",
+  "core_commit": "bf41c67228f0886914cac334261f1258718cdf42",
+  "connector_commit": "a5a3424cd1b3dcfaf8729b5738cfef4accfd8ae6",
+  "artifacts": "evidence/codex-0159-artifacts.json",
+  "tests": {
+    "core_installed": {
+      "passed": 951,
+      "skipped": 74,
+      "warnings": 3
+    },
+    "connector_installed": {
+      "passed": 336,
+      "skipped": 1
+    },
+    "nexus_installed": {
+      "passed": 81,
+      "warnings": 1
+    }
+  },
+  "real_providers": {
+    "codex": {
+      "exit_code": 0,
+      "result": {
+        "authority_mode": "r4",
+        "close_stage": "OUTCOME_UNKNOWN",
+        "lease_application_stage": "INSTALLED",
+        "open_stage": "SUBMITTED",
+        "prepared_architecture": "x86_64",
+        "prepared_version": "0.159.0",
+        "shutdown_outcome": "already_closed",
+        "submit_stage": "SUBMITTED",
+        "terminal_operation_id": "turn",
+        "terminal_outcome": "success",
+        "turn_receipt_stage": "SUCCEEDED"
+      },
+      "evidence": "..\\okto-nexus-connector-core\\plans\\implementation\\evidence\\codex-0159-r4-managed.json"
+    },
+    "pi": {
+      "exit_code": 0,
+      "result": {
+        "authority_mode": "r4",
+        "close_stage": "SUBMITTED",
+        "lease_application_stage": "INSTALLED",
+        "open_stage": "SUBMITTED",
+        "prepared_architecture": "x86_64",
+        "prepared_version": "0.87.1",
+        "shutdown_outcome": "already_closed",
+        "submit_stage": "SUBMITTED",
+        "terminal_operation_id": "turn",
+        "terminal_outcome": "success",
+        "turn_receipt_stage": "SUCCEEDED"
+      },
+      "evidence": "..\\okto-nexus-connector-core\\plans\\implementation\\evidence\\pi_rpc-r4-managed-20260930.json"
+    },
+    "claude": {
+      "exit_code": 0,
+      "result": {
+        "authority_mode": "r4",
+        "close_stage": "OUTCOME_UNKNOWN",
+        "lease_application_stage": "INSTALLED",
+        "open_stage": "SUBMITTED",
+        "prepared_architecture": "x86_64",
+        "prepared_version": "2.1.282",
+        "shutdown_outcome": "already_closed",
+        "submit_stage": "SUBMITTED",
+        "terminal_operation_id": "turn",
+        "terminal_outcome": "success",
+        "turn_receipt_stage": "SUCCEEDED"
+      },
+      "evidence": "..\\okto-nexus-connector-core\\plans\\implementation\\evidence\\claude_stream-r4-managed-20260930.json"
+    }
+  },
+  "limitations": [
+    "Core-native R4 probes use locally constructed lease grants, not Server journeys.",
+    "Codex and Claude close classification remains OUTCOME_UNKNOWN; subsequent shutdown reports already_closed.",
+    "Codex active shutdown reports unknown within 4.17 seconds; not confirmed process-stop acceptance.",
+    "Native provider homes retain user settings; approved MCP credential migration remains pending.",
+    "M00-M13 and G0-G3 remain incomplete."
+  ],
+  "initial_nexus_failure": {
+    "failed": 19,
+    "passed": 7,
+    "errors": 55,
+    "cause": "Core inventory version pin still referenced 0.2.30; fixed and rebuilt before final rerun.",
+    "evidence": "evidence/codex-0159-installed-nexus-initial.xml"
+  }
+}

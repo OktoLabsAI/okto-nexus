@@ -46,8 +46,8 @@ from ...http.identity_ctx import get_authenticated_agent
 _P_ROOT = "Absolute path to the project (defines the workspace scope)."
 _P_WINDOW = "Report window - one of: 1h, 24h, 7d (default: 24h)."
 _P_AGENT = (
-    "Your agent_id for permission evaluation in open stdio mode (optional; "
-    "authenticated HTTP MCP uses the API-key identity)."
+    "Optional agent_id assertion for permission evaluation; "
+    "authenticated HTTP MCP uses the API-key identity."
 )
 
 

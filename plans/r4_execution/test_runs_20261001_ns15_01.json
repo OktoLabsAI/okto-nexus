@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-01",
+  "status": "TR4_15_01_PASSED_MIGRATION_LAYER_TASK_DEPENDENCIES_OPEN",
+  "product_commit": "b6b955e",
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-core-3msf4qiz\\dist\\nexus_connector_core-0.2.51.dev0-py3-none-any.whl",
+      "sha256": "4c4c0c58d25b93f4f08ba8515d8476ffc29d1f0a27cc577c9fccb610716d1d1c"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-connector-pmt6y5x7\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "baf837251f654ab6385f5fba4e22d1a1b69da1839e8f47752795d1518dd29fe7"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-migration-resume-bkj6ies1\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "567c9f2baf8c24faee9b439b39358fbb7c123274b59669a6091bdfdf6a728d7a"
+    }
+  },
+  "installed_passed": 1,
+  "results": {
+    "ns15-01-initial.xml": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "1",
+      "skipped": "0",
+      "tests": "1",
+      "time": "3.107",
+      "timestamp": "2026-10-01T14:37:36.058273-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "ns15-01-installed.xml": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "1",
+      "time": "3.885",
+      "timestamp": "2026-10-01T14:38:32.226238-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "ns15-01-source.xml": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "1",
+      "time": "4.656",
+      "timestamp": "2026-10-01T14:37:51.472458-03:00",
+      "hostname": "Alienware_m15"
+    }
+  },
+  "evidence": {
+    "plans/r4_execution/evidence/ns15-01-initial.xml": "8abe853ba4e58f4a322778b289c71716ec1f186501deccc5fada662743e2c9df",
+    "plans/r4_execution/evidence/ns15-01-installed.json": "a1381e347ef2b81a5bc518ebc0862e0cf14aa35d0b4568a7c7fdf5d761020d33",
+    "plans/r4_execution/evidence/ns15-01-installed.log": "5c662cc2d77d702d230f73f7213c4ae52057870c4e9d424fd6d61b4847449633",
+    "plans/r4_execution/evidence/ns15-01-installed.xml": "d964093f2fbede7958c3aea602e4e147cbdda3d5521c469433cd38d729ce1ec6",
+    "plans/r4_execution/evidence/ns15-01-source.xml": "0f48ef55200b41f95e3a519996e89e8cf75c288a0b9f7fec17f6375dc4651468",
+    "plans/r4_execution/M12_NS15_01_ACCEPTANCE.md": "9044ca763e17ad998990496d2cdda9b465e53a0ea97feaaecf3eb93a3d39d77e",
+    "plans/r4_execution/run_ns15_01_installed.py": "bf15b0f9ecc65c6845a9c8007acc7731b4b30010c3504c0c018f45f661483269",
+    "tests/execution_r4/test_ns15.py": "d1d86155d89e282be12d41911a496ab687dfd9d404549dd18226b262c573040f"
+  },
+  "limitations": [
+    "Source and installed cases overlap",
+    "Synthetic discovery candidate; no provider qualification",
+    "Task dependencies, M4-M6 and release gates remain open"
+  ]
+}

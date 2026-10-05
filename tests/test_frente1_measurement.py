@@ -61,7 +61,10 @@ def test_s4_cuttable_surface_meets_40pct_reduction_gate(tmp_path):
 
     # Gate 1: >=40% reduction vs the FROZEN baseline (BR8), measured with the
     # same char-count proxy that captured the baseline.
-    reduction = cuttable_reduction_pct(cuttable)
+    names = {tool.name for tool in asyncio.run(server.list_tools())}
+    reduction = cuttable_reduction_pct(cuttable,
+        include_experimental="memory_put" in names,
+        include_harness="harness_open" in names)
     assert reduction >= 0.40, (
         f"cuttable resident surface must shrink >=40% vs baseline "
         f"{BASELINE['cuttable']} chars; measured {cuttable} chars "

@@ -1,0 +1,13 @@
+{
+  "wheel_sha256": "508eaf654ec34e8fa8ff513d3c78c46d86cfc0555475cd91a721c9458b511bea",
+  "tested_wheel_sha256": "470eeac3b0c06118417df728dd22221f00a0bd638e2b947e9ab533dc17e44b85",
+  "verified_files": 76,
+  "changed_package_files_since_test": [],
+  "changed_package_files_since_full_suite": [
+    "okto_nexus_connector/cli/commands/doctor.py"
+  ],
+  "changed_wheel_members_since_test": [
+    "okto_nexus_connector-0.5.0.dev0.dist-info/METADATA",
+    "okto_nexus_connector-0.5.0.dev0.dist-info/RECORD"
+  ]
+}

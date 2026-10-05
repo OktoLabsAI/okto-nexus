@@ -1,3 +1,4 @@
+import { AgentConnectionsPanel } from "../components/AgentConnectionsPanel";
 // Agents & API keys (spec S2 / FR5): the AgentsModal mirror. The freshly
 // issued key renders ONCE in component state - it is never written to any
 // storage, so closing the panel or reloading makes it unrecoverable
@@ -8,6 +9,7 @@
 
 import { Fragment, useEffect, useMemo, useState } from "react";
 import {
+  Cable,
   Check,
   Copy,
   Eye,
@@ -119,6 +121,7 @@ export function AgentsView({
   const [tagsOpen, setTagsOpen] = useState<string | null>(null);
   // Communication binding editor (spec 6f961722) — the 4th per-agent axis
   // (inline style XOR a reference to a reusable Communication preset).
+  const [connectionsOpen, setConnectionsOpen] = useState<string | null>(null);
   const [commOpen, setCommOpen] = useState<string | null>(null);
   const [catalog, setCatalog] = useState<TagKeyRow[]>([]);
   // Capability catalog (migration 014) — the picker's only vocabulary.
@@ -627,6 +630,7 @@ export function AgentsView({
               const showPerms = permsOpen === agent.agent_id && !!presets;
               const showEdit = editOpen === agent.agent_id;
               const showTags = tagsOpen === agent.agent_id;
+              const showConnections = connectionsOpen === agent.agent_id;
               const showComm = commOpen === agent.agent_id;
               return (
                 <Fragment key={agent.agent_id}>
@@ -712,6 +716,11 @@ export function AgentsView({
                         }
                       >
                         <MessageSquare size={14} />
+                      </button>
+                      <button className={`${ICON_BTN} inline-flex items-center gap-1 ${showConnections ? ICON_BTN_ACTIVE : ""}`}
+                        title="Connections" aria-label={`Connections for ${agent.agent_id}`} data-testid={`connections-${agent.agent_id}`}
+                        onClick={() => setConnectionsOpen(open => open === agent.agent_id ? null : agent.agent_id)}>
+                        <Cable size={14} />
                       </button>
                       {/* Steering to yourself is a no-op — hide it for the
                           reserved operator identity. */}
@@ -799,11 +808,12 @@ export function AgentsView({
 
                   {/* Full-width breakout row beneath the card (preserves the
                       loved click-to-expand; spans every column). */}
-                  {(showKey || showEdit || showPerms || showTags || showComm) && (
+                  {(showKey || showEdit || showPerms || showTags || showComm || showConnections) && (
                     <div
                       className="col-span-full space-y-3"
                       data-testid={`agent-expand-${agent.agent_id}`}
                     >
+                      {showConnections && <AgentConnectionsPanel agentId={agent.agent_id} onClose={() => setConnectionsOpen(null)} />}
                       {showKey && (
                         <div
                           className="space-y-2 rounded-xl border border-accent-300 dark:border-accent-700/50 p-3 animate-slide-up"
@@ -1030,8 +1040,8 @@ export function AgentsView({
                             }
                           />
                           <p className="text-[10px] text-surface-400 dark:text-surface-500">
-                            Changes apply immediately to every transport (MCP HTTP and
-                            stdio). “Full access” agents have no stored flags.
+                            Changes apply immediately to MCP HTTP and REST.
+                            “Full access” agents have no stored flags.
                           </p>
                         </div>
                       )}

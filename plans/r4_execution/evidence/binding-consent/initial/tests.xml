@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="11" skipped="0" tests="24" time="87.684" timestamp="2026-10-02T03:16:39.206437-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_runtime_options" name="test_workspace_binding_and_grant_each_gate_a_different_action" time="4.442"><failure message="jsonschema.exceptions.ValidationError: 1 was expected&#10;&#10;Failed validating 'const' in schema['properties']['catalog']['properties']['format_version']:&#10;    {'const': 1}&#10;&#10;On instance['catalog']['format_version']:&#10;    2">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_runtime_options.py:66: in test_workspace_binding_and_grant_each_gate_a_different_action
+    _, first = option(options_host, workspace=False)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_runtime_options.py:42: in option
+    Draft202012Validator({'$defs': contract['$defs'], **contract['$defs']['RuntimeOptions']}).validate(result)
+..\nexus-openapi-053-env\Lib\site-packages\jsonschema\validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 1 was expected
+E   
+E   Failed validating 'const' in schema['properties']['catalog']['properties']['format_version']:
+E       {'const': 1}
+E   
+E   On instance['catalog']['format_version']:
+E       2</failure></testcase><testcase classname="tests.execution_r4.test_runtime_options" name="test_unqualified_inventory_can_be_prepared_but_never_started[unqualified]" time="3.184"><failure message="jsonschema.exceptions.ValidationError: 1 was expected&#10;&#10;Failed validating 'const' in schema['properties']['catalog']['properties']['format_version']:&#10;    {'const': 1}&#10;&#10;On instance['catalog']['format_version']:&#10;    2">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_runtime_options.py:105: in test_unqualified_inventory_can_be_prepared_but_never_started
+    result, row = option(options_host)
+                  ^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_runtime_options.py:42: in option
+    Draft202012Validator({'$defs': contract['$defs'], **contract['$defs']['RuntimeOptions']}).validate(result)
+..\nexus-openapi-053-env\Lib\site-packages\jsonschema\validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 1 was expected
+E   
+E   Failed validating 'const' in schema['properties']['catalog']['properties']['format_version']:
+E       {'const': 1}
+E   
+E   On instance['catalog']['format_version']:
+E       2</failure></testcase><testcase classname="tests.execution_r4.test_runtime_options" name="test_current_policy_or_evidence_changes_disable_start[offline-EXECUTOR_OFFLINE]" time="3.127"><failure message="jsonschema.exceptions.ValidationError: 1 was expected&#10;&#10;Failed validating 'const' in schema['properties']['catalog']['properties']['format_version']:&#10;    {'const': 1}&#10;&#10;On instance['catalog']['format_version']:&#10;    2">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_runtime_options.py:124: in test_current_policy_or_evidence_changes_disable_start
+    before, row = option(options_host)
+                  ^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_runtime_options.py:42: in option
+    Draft202012Validator({'$defs': contract['$defs'], **contract['$defs']['RuntimeOptions']}).validate(result)
+..\nexus-openapi-053-env\Lib\site-packages\jsonschema\validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 1 was expected
+E   
+E   Failed validating 'const' in schema['properties']['catalog']['properties']['format_version']:
+E       {'const': 1}
+E   
+E   On instance['catalog']['format_version']:
+E       2</failure></testcase><testcase classname="tests.execution_r4.test_runtime_options" name="test_current_policy_or_evidence_changes_disable_start[stale-INVENTORY_STALE]" time="3.161"><failure message="jsonschema.exceptions.ValidationError: 1 was expected&#10;&#10;Failed validating 'const' in schema['properties']['catalog']['properties']['format_version']:&#10;    {'const': 1}&#10;&#10;On instance['catalog']['format_version']:&#10;    2">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_runtime_options.py:124: in test_current_policy_or_evidence_changes_disable_start
+    before, row = option(options_host)
+                  ^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_runtime_options.py:42: in option
+    Draft202012Validator({'$defs': contract['$defs'], **contract['$defs']['RuntimeOptions']}).validate(result)
+..\nexus-openapi-053-env\Lib\site-packages\jsonschema\validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 1 was expected
+E   
+E   Failed validating 'const' in schema['properties']['catalog']['properties']['format_version']:
+E       {'const': 1}
+E   
+E   On instance['catalog']['format_version']:
+E       2</failure></testcase><testcase classname="tests.execution_r4.test_runtime_options" name="test_current_policy_or_evidence_changes_disable_start[feature-FEATURE_DISABLED]" time="3.086"><failure message="jsonschema.exceptions.ValidationError: 1 was expected&#10;&#10;Failed validating 'const' in schema['properties']['catalog']['properties']['format_version']:&#10;    {'const': 1}&#10;&#10;On instance['catalog']['format_version']:&#10;    2">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_runtime_options.py:124: in test_current_policy_or_evidence_changes_disable_start
+    before, row = option(options_host)
+                  ^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_runtime_options.py:42: in option
+    Draft202012Validator({'$defs': contract['$defs'], **contract['$defs']['RuntimeOptions']}).validate(result)
+..\nexus-openapi-053-env\Lib\site-packages\jsonschema\validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 1 was expected
+E   
+E   Failed validating 'const' in schema['properties']['catalog']['properties']['format_version']:
+E       {'const': 1}
+E   
+E   On instance['catalog']['format_version']:
+E       2</failure></testcase><testcase classname="tests.execution_r4.test_runtime_options" name="test_current_policy_or_evidence_changes_disable_start[method-METHOD_DISABLED]" time="3.236"><failure message="jsonschema.exceptions.ValidationError: 1 was expected&#10;&#10;Failed validating 'const' in schema['properties']['catalog']['properties']['format_version']:&#10;    {'const': 1}&#10;&#10;On instance['catalog']['format_version']:&#10;    2">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_runtime_options.py:124: in test_current_policy_or_evidence_changes_disable_start
+    before, row = option(options_host)
+                  ^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_runtime_options.py:42: in option
+    Draft202012Validator({'$defs': contract['$defs'], **contract['$defs']['RuntimeOptions']}).validate(result)
+..\nexus-openapi-053-env\Lib\site-packages\jsonschema\validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 1 was expected
+E   
+E   Failed validating 'const' in schema['properties']['catalog']['properties']['format_version']:
+E       {'const': 1}
+E   
+E   On instance['catalog']['format_version']:
+E       2</failure></testcase><testcase classname="tests.execution_r4.test_runtime_options" name="test_current_policy_or_evidence_changes_disable_start[endpoint-BINDING_DISABLED]" time="3.141"><failure message="jsonschema.exceptions.ValidationError: 1 was expected&#10;&#10;Failed validating 'const' in schema['properties']['catalog']['properties']['format_version']:&#10;    {'const': 1}&#10;&#10;On instance['catalog']['format_version']:&#10;    2">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_runtime_options.py:124: in test_current_policy_or_evidence_changes_disable_start
+    before, row = option(options_host)
+                  ^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_runtime_options.py:42: in option
+    Draft202012Validator({'$defs': contract['$defs'], **contract['$defs']['RuntimeOptions']}).validate(result)
+..\nexus-openapi-053-env\Lib\site-packages\jsonschema\validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 1 was expected
+E   
+E   Failed validating 'const' in schema['properties']['catalog']['properties']['format_version']:
+E       {'const': 1}
+E   
+E   On instance['catalog']['format_version']:
+E       2</failure></testcase><testcase classname="tests.execution_r4.test_runtime_options" name="test_current_policy_or_evidence_changes_disable_start[profile-BINDING_DISABLED]" time="3.087"><failure message="jsonschema.exceptions.ValidationError: 1 was expected&#10;&#10;Failed validating 'const' in schema['properties']['catalog']['properties']['format_version']:&#10;    {'const': 1}&#10;&#10;On instance['catalog']['format_version']:&#10;    2">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_runtime_options.py:124: in test_current_policy_or_evidence_changes_disable_start
+    before, row = option(options_host)
+                  ^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_runtime_options.py:42: in option
+    Draft202012Validator({'$defs': contract['$defs'], **contract['$defs']['RuntimeOptions']}).validate(result)
+..\nexus-openapi-053-env\Lib\site-packages\jsonschema\validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 1 was expected
+E   
+E   Failed validating 'const' in schema['properties']['catalog']['properties']['format_version']:
+E       {'const': 1}
+E   
+E   On instance['catalog']['format_version']:
+E       2</failure></testcase><testcase classname="tests.execution_r4.test_runtime_options" name="test_current_policy_or_evidence_changes_disable_start[grant-AUTHORIZATION_REQUIRED]" time="3.039"><failure message="jsonschema.exceptions.ValidationError: 1 was expected&#10;&#10;Failed validating 'const' in schema['properties']['catalog']['properties']['format_version']:&#10;    {'const': 1}&#10;&#10;On instance['catalog']['format_version']:&#10;    2">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_runtime_options.py:124: in test_current_policy_or_evidence_changes_disable_start
+    before, row = option(options_host)
+                  ^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_runtime_options.py:42: in option
+    Draft202012Validator({'$defs': contract['$defs'], **contract['$defs']['RuntimeOptions']}).validate(result)
+..\nexus-openapi-053-env\Lib\site-packages\jsonschema\validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 1 was expected
+E   
+E   Failed validating 'const' in schema['properties']['catalog']['properties']['format_version']:
+E       {'const': 1}
+E   
+E   On instance['catalog']['format_version']:
+E       2</failure></testcase><testcase classname="tests.execution_r4.test_runtime_options" name="test_current_policy_or_evidence_changes_disable_start[workspace-BINDING_REQUIRED]" time="3.084"><failure message="jsonschema.exceptions.ValidationError: 1 was expected&#10;&#10;Failed validating 'const' in schema['properties']['catalog']['properties']['format_version']:&#10;    {'const': 1}&#10;&#10;On instance['catalog']['format_version']:&#10;    2">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_runtime_options.py:124: in test_current_policy_or_evidence_changes_disable_start
+    before, row = option(options_host)
+                  ^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_runtime_options.py:42: in option
+    Draft202012Validator({'$defs': contract['$defs'], **contract['$defs']['RuntimeOptions']}).validate(result)
+..\nexus-openapi-053-env\Lib\site-packages\jsonschema\validators.py:450: in validate
+    raise error
+E   jsonschema.exceptions.ValidationError: 1 was expected
+E   
+E   Failed validating 'const' in schema['properties']['catalog']['properties']['format_version']:
+E       {'const': 1}
+E   
+E   On instance['catalog']['format_version']:
+E       2</failure></testcase><testcase classname="tests.execution_r4.test_runtime_options" name="test_options_reject_ambiguous_or_invalid_query[executor_id=one&amp;executor_id=two]" time="2.446" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_options_reject_ambiguous_or_invalid_query[executor_id=one&amp;workspace_id=x&amp;workspace_id=y]" time="2.633" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_options_reject_ambiguous_or_invalid_query[executor_id=one&amp;workspace_id=]" time="2.334" /><testcase classname="tests.execution_r4.test_runtime_options" name="test_options_reject_ambiguous_or_invalid_query[executor_id=one&amp;unexpected=true]" time="2.411" /><testcase classname="tests.execution_r4.test_binding_consent_dashboard" name="test_consent_applies_once_and_second_visit_reuses_binding[False]" time="7.521" /><testcase classname="tests.execution_r4.test_binding_consent_dashboard" name="test_consent_applies_once_and_second_visit_reuses_binding[True]" time="8.600" /><testcase classname="tests.execution_r4.test_binding_consent_dashboard" name="test_stale_inventory_after_review_refuses_approval" time="7.408" /><testcase classname="tests.execution_r4.test_binding_consent_dashboard" name="test_storage_failure_prevents_sending_unrecorded_intent" time="6.047"><failure message="playwright._impl._errors.Error: Page.evaluate: Error: Storage unavailable&#10;    at Storage.setItem (eval at evaluate (:311:30), &lt;anonymous&gt;:1:48)&#10;    at UtilityScript.evaluate (&lt;anonymous&gt;:318:18)&#10;    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_binding_consent_dashboard.py:152: in test_storage_failure_prevents_sending_unrecorded_intent
+    page.evaluate('Storage.prototype.setItem = function() { throw new Error("Storage unavailable"); }')
+..\nexus-openapi-053-env\Lib\site-packages\playwright\sync_api\_generated.py:9413: in evaluate
+    self._sync(
+..\nexus-openapi-053-env\Lib\site-packages\playwright\_impl\_page.py:474: in evaluate
+    return await self._main_frame.evaluate(expression, arg)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\nexus-openapi-053-env\Lib\site-packages\playwright\_impl\_frame.py:346: in evaluate
+    await self._channel.send(
+..\nexus-openapi-053-env\Lib\site-packages\playwright\_impl\_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+..\nexus-openapi-053-env\Lib\site-packages\playwright\_impl\_connection.py:632: in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E   playwright._impl._errors.Error: Page.evaluate: Error: Storage unavailable
+E       at Storage.setItem (eval at evaluate (:311:30), &lt;anonymous&gt;:1:48)
+E       at UtilityScript.evaluate (&lt;anonymous&gt;:318:18)
+E       at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</failure></testcase><testcase classname="tests.execution_r4.test_runtime_selection_dashboard" name="test_selection_uses_refs_and_invalidates_on_revocation[duplicate-installations]" time="7.523" /><testcase classname="tests.execution_r4.test_ns04" name="test_ns04_01" time="0.004" /><testcase classname="tests.execution_r4.test_ns04" name="test_ns04_05_local_selection_uses_exact_revision_and_installation" time="0.043" /><testcase classname="tests.execution_r4.test_ns04" name="test_ns04_03" time="0.732" /><testcase classname="tests.execution_r4.test_ns04" name="test_remote_inventory_http_requires_executor_ticket" time="2.359" /><testcase classname="tests.execution_r4.test_packaged_openapi" name="test_dashboard_and_openapi_are_served_together" time="1.456" /></testsuite></testsuites>
