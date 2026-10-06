@@ -45,6 +45,20 @@ class SettingSpec:
 #: stay CLI/env-only on purpose: repointing storage mid-flight cannot be
 #: applied safely to a running process.
 SETTING_SPECS: tuple[SettingSpec, ...] = (
+    SettingSpec(
+        "remote_machine_policy", "enum",
+        "When another registered Connector machine requests the same agent: require approval (default), "
+        "deny, or accept and revoke the previous machine. Automatic replacement preserves approved "
+        "harness settings and the remaining execution budget and expiry; the first machine always needs approval.",
+        choices=("manual", "deny", "auto_replace"),
+    ),
+    SettingSpec(
+        "transport_security", "enum",
+        "Allow HTTP/HTTPS and WS/WSS (default), or require HTTPS/WSS. "
+        "Configure TLS before selecting HTTPS only. Applies to new requests and connections; "
+        "restart to close existing streams. TLS can terminate at a trusted reverse proxy.",
+        choices=("http_https", "https_only"),
+    ),
     SettingSpec("connection_key_ttl_seconds", "int", "New connection key lifetime in seconds; 86400 = 24 hours, 0 = unlimited. Agents may override this default. Existing keys keep their issued expiry.", minimum=0, maximum=315360000),
     SettingSpec(
         "session_stale_ttl_seconds",

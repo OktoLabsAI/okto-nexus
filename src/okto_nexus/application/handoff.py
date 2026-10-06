@@ -646,6 +646,8 @@ class HandoffService:
                     trace_id=handoff.trace_id,
                 ):
                     extras["notified"] = [named]
+            elif getattr(self._config, 'feature_harness_integrations', False):
+                self._notify_runtime_pool(uow, handoff=handoff, now=now, blocked=born_blocked)
         response = {
             "handoff_id": handoff.handoff_id,
             "workspace_id": handoff.workspace_id,
@@ -2167,7 +2169,7 @@ class HandoffService:
             trace_id=trace_id,
             created_at=now,
         )
-        self._deliveries.create(
+        delivery = self._deliveries.create(
             uow,
             delivery_id=new_delivery_id(),
             message_id=message.message_id,
@@ -2175,7 +2177,22 @@ class HandoffService:
             status=DELIVERY_UNREAD,
             created_at=now,
         )
+        if getattr(self._config, 'feature_harness_integrations', False):
+            from .runtime_handoff_notifications import queue
+            queue(uow, message=message, delivery=delivery, agents=self._agents,
+                  handoffs=self._handoffs, now=now, governance=self._governance)
         return True
+
+    def _notify_runtime_pool(self, uow, *, handoff, now, blocked=False, event_type='handoff.created'):
+        from .runtime_handoff_notifications import eligible, has_runtime
+        for recipient in self._agents.list(uow) if self._agents else ():
+            if (has_runtime(uow, recipient.agent_id, handoff.workspace_id)
+                    and eligible(uow, agents=self._agents, handoff=handoff, recipient_id=recipient.agent_id, now=now, governance=self._governance)):
+                self._notify_inbox(uow, workspace_id=handoff.workspace_id, recipient_agent_id=recipient.agent_id,
+                    from_agent_id=handoff.from_agent_id, subject=f'handoff {handoff.handoff_id} available' + (' (blocked)' if blocked else ''),
+                    body=dict(kind=event_type, handoff_id=handoff.handoff_id, from_agent_id=handoff.from_agent_id,
+                              blocked=blocked, next_step='handoff_claim with this handoff_id when dependencies are satisfied; the first eligible claimant wins'),
+                    now=now, trace_id=handoff.trace_id)
 
     def _notify_creator_outcome(
         self,
@@ -2620,6 +2637,8 @@ class HandoffService:
                     now=now,
                     trace_id=getattr(dependent, "trace_id", None),
                 )
+            elif getattr(self._config, 'feature_harness_integrations', False):
+                self._notify_runtime_pool(uow, handoff=dependent, now=now, event_type=EVENT_UNBLOCKED)
 
     def _fail_dependents(
         self, uow: UnitOfWork, *, failed: Any, actor_agent_id: str, now: str

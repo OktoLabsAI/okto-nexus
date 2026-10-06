@@ -12,6 +12,15 @@ from okto_nexus.adapters.inbound.mcp.server import bootstrap  # noqa: E402
 from okto_nexus.application.settings import SETTING_SPECS  # noqa: E402
 
 
+@pytest.fixture(autouse=True)
+def isolated_inventory(monkeypatch):
+    # Settings tests must not probe installed personal harnesses at app startup.
+    from types import SimpleNamespace
+    from okto_nexus.bootstrap import embedded_inventory
+    monkeypatch.setattr(embedded_inventory, "discover_local_candidates",
+                        lambda **_: SimpleNamespace(candidates=()))
+
+
 @pytest.fixture
 def loopback_client(tmp_path):
     deps = bootstrap({}, ["--home", str(tmp_path / "home")])
@@ -46,6 +55,22 @@ def test_patch_persists_and_applies_to_live_config(tmp_path):
     app2 = build_app(deps2)
     with TestClient(app2, client=("127.0.0.1", 50001)):
         assert deps2.config.session_stale_ttl_seconds == 120
+
+
+def test_transport_policy_applies_globally_and_persists(tmp_path):
+    deps = bootstrap({}, ["--home", str(tmp_path / "home")])
+    with TestClient(build_app(deps), client=("127.0.0.1", 50000)) as client:
+        assert deps.config.transport_security == "http_https"
+        assert client.patch("/api/v1/settings", json={"transport_security": "invalid"}).status_code == 422
+        assert client.patch("/api/v1/settings", json={"transport_security": "https_only"}).status_code == 200
+        assert client.get("/healthz").status_code == 403
+        assert client.get("https://testserver/healthz").status_code == 200
+    deps2 = bootstrap({}, ["--home", str(deps.config.home_dir)])
+    with TestClient(build_app(deps2), client=("127.0.0.1", 50001)) as client:
+        assert deps2.config.transport_security == "https_only"
+        assert client.get("/healthz").status_code == 403
+        assert client.patch("https://testserver/api/v1/settings", json={"transport_security": "http_https"}).status_code == 200
+        assert client.get("/healthz").status_code == 200
 
 
 def test_meta_harness_receipt_display_defaults_inline_and_persists(tmp_path):
@@ -133,3 +158,13 @@ def test_settings_reset_restores_defaults(loopback_client):
     assert deps.config.presence_ttl_seconds == 1800  # default restored
     items = client.get("/api/v1/settings").json()["data"]["items"]
     assert all(item["source"] == "default" for item in items)
+
+
+def test_remote_machine_policy_defaults_to_manual_and_is_editable(loopback_client):
+    deps, client = loopback_client
+    assert deps.config.remote_machine_policy == 'manual'
+    for value in ('deny', 'auto_replace', 'manual'):
+        response = client.patch('/api/v1/settings', json={'remote_machine_policy':value})
+        assert response.status_code == 200, response.text
+        assert deps.config.remote_machine_policy == value
+    assert client.patch('/api/v1/settings', json={'remote_machine_policy':'allow_all'}).status_code == 422

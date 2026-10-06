@@ -819,7 +819,8 @@ def build_router() -> APIRouter:
         from nexus_connector_core import CoreError
         result = body.model_dump()
         try:
-            result['configuration'] = parse_connection_configuration(result['configuration'])
+            from ....application.connection_authorization import normalize_authorization
+            result['configuration'] = normalize_authorization(parse_connection_configuration(normalize_authorization(result['configuration'])))
         except (CoreError, ValueError, TypeError):
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Invalid connection configuration file.', {}) from None
         return result

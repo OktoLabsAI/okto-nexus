@@ -1770,7 +1770,10 @@ def build_router() -> APIRouter:
         deps = request.app.state.deps
 
         def _list(uow):
-            return [_public_agent(agent) for agent in deps.repos.agents.list(uow)]
+            from ....application.agent_connection_status import agent_connection_statuses
+            statuses = agent_connection_statuses(uow, deps.clock.now_iso())
+            return [_public_agent(agent) | {'connection': statuses.get(agent.agent_id)}
+                    for agent in deps.repos.agents.list(uow)]
 
         return _ok({"items": await _read(request, _list)})
 
@@ -3346,6 +3349,19 @@ def build_router() -> APIRouter:
             return _map_error(exc)
         return _ok(result)
 
+    @router.get("/meta-harness/agents/{agent_id}/workspaces")
+    async def meta_harness_workspaces(request: Request, agent_id: str) -> JSONResponse:
+        from ....application.meta_harness_workspaces import recipient_workspaces
+        deps = request.app.state.deps
+        try:
+            _require_operator()
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                result = recipient_workspaces(uow, agent_id,
+                    runtime_available=deps.config.feature_harness_integrations)
+            return _ok(result)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
     @router.post("/meta-harness/send")
     async def meta_harness_send(
         request: Request, body: MetaHarnessSendBody
@@ -3373,6 +3389,10 @@ def build_router() -> APIRouter:
 
             with deps.connection_factory.unit_of_work(write=False) as uow:
                 ws = deps.repos.workspaces.get(uow, body.workspace)
+                if body.audience == "private":
+                    from ....application.meta_harness_workspaces import validate_recipient_workspace
+                    validate_recipient_workspace(uow, body.to_agent_id, body.workspace,
+                        runtime_available=deps.config.feature_harness_integrations)
             if ws is None:
                 raise OktoNexusError(
                     ErrorCode.NOT_FOUND,

@@ -29,7 +29,7 @@ class RuntimeAccessService:
 
     @staticmethod
     def _operator(context, actor):
-        local = context.trusted_local_operator and context.authentication_source == "http_loopback"
+        local = context.trusted_local_operator and context.authentication_source in ("http_loopback", "operator_session")
         keyed = (context.authentication_source == "agent_key" and actor and actor.is_active
                  and actor.agent_id == "operator" and context.credential_binding
                  and context.credential_binding == actor.api_key_hash)
@@ -207,9 +207,9 @@ class RuntimeAccessService:
                     "ON i.server_id=b.server_id AND i.singleton=1 JOIN execution_executors e "
                     "ON e.server_id=b.server_id AND e.executor_id=b.executor_id "
                     "WHERE b.endpoint_id=? LIMIT 2", (endpoint_id,)).fetchall()
-                if len(local) != 1 or local[0]['kind'] != 'embedded':
+                if len(local) != 1 or local[0]['kind'] not in ('embedded', 'remote'):
                     raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
-                        "Unbounded permissions are supported only for local execution.", {})
+                        "Unbounded permissions require a uniquely bound execution host.", {})
             if set(actions) & {"open", "send", "steer", "execute_work"}:
                 binding = uow.connection.execute(
                     "SELECT b.executor_id FROM execution_bindings b JOIN execution_installation i "
@@ -236,4 +236,6 @@ class RuntimeAccessService:
         self.authorize(context)
         with self.cf.unit_of_work() as uow:
             self.grants.revoke(uow, grant_id=grant_id, now=self.clock.now_iso())
+            from .execution_revocation import invalidate_sessions
+            invalidate_sessions(uow.connection, grant_id=grant_id, now=self.clock.now_iso())
         return {"revoked": True}

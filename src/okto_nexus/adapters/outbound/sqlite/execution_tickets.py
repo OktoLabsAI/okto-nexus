@@ -214,6 +214,13 @@ def issue_execution_ticket(factory: ConnectionFactory, *, server_id: str,
                     (instant.isoformat(), replaces_ticket_id),
                 )
         if binding_id is None:
+            # A fresh bootstrap explicitly abandons a disconnected transport's
+            # short resume window. Its runtime cleanup remains Connector-owned.
+            if conn.execute('SELECT 1 FROM execution_executors WHERE server_id=? AND executor_id=? '
+                    'AND owner_instance_id IS NULL', (server_id, executor_id)).fetchone():
+                conn.execute('DELETE FROM execution_connection_resumes WHERE server_id=? AND executor_id=?', (server_id, executor_id))
+                conn.execute('UPDATE execution_link_tickets SET bound_connection_id=NULL WHERE server_id=? AND executor_id=?',
+                    (server_id, executor_id))
             # A lost registration response may be retried with the same
             # intent. The successor replaces the old bootstrap credential;
             # no second long-lived route to this executor is accumulated.

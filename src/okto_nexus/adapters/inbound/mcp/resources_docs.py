@@ -634,7 +634,7 @@ with endpoint_id and idempotency_key, authenticated using the agent's own API ke
 Connect using the original agent API key over MCP HTTP. Scoped connection-key
 issuance and the legacy opening route are removed. Historical credentials can
 still be listed/revoked, but cannot authenticate a connection.
-Configure the entire local integration in Agents > Connections: Local/Remote/All
+Configure the entire local integration in Agents > Connections: Local or Remote
 execution access, local runtime integration, installation check, environment,
 workspace mapping, connection approval and bounded execution permission.
 Remote identity and runtime integration are configured by the Connector using

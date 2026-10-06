@@ -701,6 +701,13 @@ class MessageService:
         message = self._messages.get(uow, workspace_id=operation["workspace_id"], message_id=operation["message_id"])
         if not message:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Delivery source is unavailable.", {})
+        if uow.connection.execute('SELECT 1 FROM runtime_handoff_notifications WHERE message_id=?', (message.message_id,)).fetchone():
+            from .runtime_handoff_notifications import PREFIX, validate
+            if operation['credential_binding'] != PREFIX + message.message_id:
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Handoff notification provenance does not match its message.', {})
+            validate(uow, message=message, recipient_id=operation['recipient_agent_id'], agents=self._agents,
+                     now=self._clock.now_iso(), governance=self._governance)
+            return
         sender = self._agents.get(uow, message.from_agent_id)
         recipient = self._agents.get(uow, operation["recipient_agent_id"])
         if not sender or not sender.is_active or not recipient or not reachable(sender, recipient):

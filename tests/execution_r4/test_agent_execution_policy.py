@@ -13,6 +13,16 @@ def save(setup, location, adapter=None, revision=0):
         expected_revision=revision, execution_location=location, local_adapter_id=adapter))
 
 
+def test_all_is_rejected_and_new_agents_default_to_local(local_setup):
+    result = local_setup[2].get('/api/v1/agents/subject/execution-policy', headers=local_setup[3]['operator'])
+    assert result.json()['data']['execution_location'] == 'local'
+    assert save(local_setup, 'all', 'codex_app_server').status_code == 422
+    with local_setup[0].connection_factory.unit_of_work() as uow:
+        with pytest.raises(sqlite3.IntegrityError):
+            uow.connection.execute('INSERT INTO agent_execution_policies VALUES(?,?,?,?)',
+                                   ('subject', 'all', 'codex_app_server', 1))
+
+
 def test_local_restriction_rechecks_admission_and_preserves_close(connected_local):
     setup, binding, native = connected_local
     opened = admit(setup, binding, 'policy-open', 'runtime.start', new_session=True)
@@ -33,20 +43,20 @@ def test_local_restriction_rechecks_admission_and_preserves_close(connected_loca
     choice = next(row for row in response.json()['options'] if row['binding'])
     assert not choice['can_start'] and not choice['can_prepare'] and not choice['can_bind']
     assert 'EXECUTION_LOCATION_RESTRICTED' in choice['policy_reasons']
-    assert save(setup, 'all', revision=0).status_code == 409
+    assert save(setup, 'local', 'codex_app_server', revision=0).status_code == 409
     assert client.put('/api/v1/agents/subject/execution-policy', headers=headers['subject'], json=dict(
-        expected_revision=1, execution_location='all')).status_code == 403
+        expected_revision=1, execution_location='remote')).status_code == 403
     wait_receipt(setup, admit(setup,binding,'policy-close','runtime.close',session_id=opened['session_id']), stages=('SUCCEEDED',))
     assert native.opens == 1 and native.native.sent == []
 
 
-@pytest.mark.parametrize('location,allowed', [('local',False),('remote',True),('all',True)])
+@pytest.mark.parametrize('location,allowed', [('local',False),('remote',True)])
 def test_remote_location_policy_is_enforced_in_runtime_resolution(options_host, location, allowed):
     deps, client, headers, scope = options_host
     binding = bind(options_host)
     grant(options_host,binding)
     response = client.put('/api/v1/agents/subject/execution-policy', headers=headers['operator'], json=dict(
-        expected_revision=0, execution_location=location, local_adapter_id='pi_rpc'))
+        expected_revision=1, execution_location=location, local_adapter_id='pi_rpc'))
     assert response.status_code == 200, response.text
     _, row = option(options_host)
     assert row['can_start'] is allowed

@@ -16,7 +16,7 @@ def database(tmp_path):
         conn.executescript('''
             CREATE TABLE agent_endpoints(endpoint_id TEXT PRIMARY KEY, agent_id TEXT);
             CREATE TABLE execution_bindings(server_id TEXT,executor_id TEXT,binding_id TEXT,endpoint_id TEXT);
-            CREATE TABLE execution_sessions(server_id TEXT,executor_id TEXT,binding_id TEXT,lifecycle_state TEXT);
+            CREATE TABLE execution_sessions(server_id TEXT,executor_id TEXT,binding_id TEXT,lifecycle_state TEXT,lease_state TEXT);
             INSERT INTO agent_endpoints VALUES ('ep','agent');
             INSERT INTO execution_bindings VALUES ('server','local','local-binding','ep');
             INSERT INTO execution_bindings VALUES ('server','remote','remote-binding','ep');
@@ -28,8 +28,8 @@ def database(tmp_path):
 def test_owner_is_retained_until_terminal(database, state):
     with sqlite3.connect(database) as conn:
         conn.row_factory = sqlite3.Row
-        conn.execute('INSERT INTO execution_sessions VALUES (?,?,?,?)',
-                     ('server', 'local', 'local-binding', state))
+        conn.execute('INSERT INTO execution_sessions VALUES (?,?,?,?,?)',
+                     ('server', 'local', 'local-binding', state, 'ACTIVE'))
         require_identity_host(conn, server_id='server', agent_id='agent', executor_id='local')
         require_identity_host(conn, server_id='server', agent_id='another', executor_id='remote')
         if state in ('CLOSED', 'FAILED'):
@@ -49,8 +49,8 @@ def test_simultaneous_hosts_cannot_both_claim_identity(database):
             conn.execute('BEGIN IMMEDIATE')
             try:
                 require_identity_host(conn, server_id='server', agent_id='agent', executor_id=host)
-                conn.execute('INSERT INTO execution_sessions VALUES (?,?,?,?)',
-                             ('server', host, host+'-binding', 'OPEN_PENDING'))
+                conn.execute('INSERT INTO execution_sessions VALUES (?,?,?,?,?)',
+                             ('server', host, host+'-binding', 'OPEN_PENDING', 'ACTIVE'))
                 conn.commit()
                 return 'accepted'
             except OktoNexusError:
@@ -60,3 +60,11 @@ def test_simultaneous_hosts_cannot_both_claim_identity(database):
         assert sorted(pool.map(claim, ['local', 'remote'])) == ['accepted', 'rejected']
     with sqlite3.connect(database) as conn:
         assert conn.execute('SELECT count(*) FROM execution_sessions').fetchone()[0] == 1
+
+
+def test_revoked_session_no_longer_owns_routing_identity(database):
+    with sqlite3.connect(database) as conn:
+        conn.row_factory = sqlite3.Row
+        conn.execute("INSERT INTO execution_sessions VALUES ('server','local','local-binding','READY','REVOKED')")
+        require_identity_host(conn, server_id='server', agent_id='agent', executor_id='remote')
+        assert conn.execute('SELECT lifecycle_state FROM execution_sessions').fetchone()[0] == 'READY'

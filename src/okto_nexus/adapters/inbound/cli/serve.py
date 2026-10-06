@@ -6,7 +6,7 @@ Fail-closed bootstrap order (FR1):
    flags go through the standard fail-closed ``load_config`` parser
 2. ``bootstrap`` (config -> home dir -> connections -> migrations -> repos)
 3. single-server lock (decision D4) - BEFORE anything else can mutate state
-4. cold-start key bootstrap: print the operator key + .mcp.json snippet ONCE
+4. remote dashboard uses a separately configured human operator account
 5. uvicorn serves /mcp + /api/v1 + the dashboard root
 
 The HTTP extra is optional: a missing FastAPI/uvicorn aborts with an install
@@ -439,9 +439,8 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
     import threading
 
     from okto_nexus.bootstrap.dependencies import bootstrap, maybe_auto_prune
-    from ....application.auth import AgentKeyAuthService
     from ....domain.ids import resolve_workspace_id
-    from ..http.app import build_app, ensure_operator_key
+    from ..http.app import build_app
     from ..http.lock import ServeLock
 
     try:
@@ -472,41 +471,24 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
 
         local_open = host in ("127.0.0.1", "localhost", "::1")
 
-        # Anti-lockout bootstrap, ONLY for non-loopback binds: there the
-        # dashboard requires a key, and a keyless store would lock the
-        # operator out entirely. On loopback (the default) no key is ever
-        # needed locally, so nothing is issued and nothing is printed.
-        if not local_open:
-            auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
-            issued = ensure_operator_key(deps, auth)
-            if issued is not None:
-                agent_id, plaintext = issued
-                print(
-                    f"\n[okto-nexus] Bind beyond loopback with NO issued keys: "
-                    f"created agent '{agent_id}' so you can reach the remote "
-                    f"dashboard. The key is shown ONCE - store it now:\n\n"
-                    f"  {plaintext}\n\n"
-                    f"MCP client snippet:\n"
-                    f"{_mcp_json_snippet(host, port, plaintext)}\n",
-                    file=sys.stderr,
-                )
-
         try:
             default_workspace = resolve_workspace_id(project_root)
         except OktoNexusError:
             default_workspace = None  # dashboard falls back to "all workspaces"
 
         owner_host = "[::1]" if ":" in host else "127.0.0.1"
-        app = build_app(deps, lock=lock, runtime_owner_api_url=f"http://{owner_host}:{port}")
+        app = build_app(deps, lock=lock, runtime_owner_api_url=f"http://{owner_host}:{port}", bind_host=host, bind_port=port)
         app.state.default_workspace_id = default_workspace
         app.state.project_root = project_root
-        # Same-machine trust: dashboard/REST open without a key ONLY when
-        # bound to loopback; any wider bind re-enables the key gate.
-        app.state.local_open = local_open
+        # Trust actual loopback peers regardless of the listening address.
+        # Remote humans use operator sessions; agent transports keep their keys.
+        app.state.local_open = True
         if not local_open:
             print(
                 f"[okto-nexus] host {host!r} is not loopback: the dashboard "
-                "and REST will REQUIRE an agent API key.",
+                "requires operator sign-in for remote dashboard access. "
+                "Configure it locally in Settings > Operator access. "
+                "MCP and Connector continue to use agent API keys.",
                 file=sys.stderr,
             )
 
@@ -516,6 +498,7 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
                 app,
                 host=host,
                 port=port,
+                proxy_headers=False,
                 log_level=log_level,
                 timeout_graceful_shutdown=GRACEFUL_SHUTDOWN_SECONDS,
             )

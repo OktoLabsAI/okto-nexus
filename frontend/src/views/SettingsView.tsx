@@ -21,6 +21,7 @@ import {
 import { api, type NexusInfo, type SettingItem } from "../api";
 import { useConfirm } from "../components/Confirm";
 import { useTheme } from "../hooks/useTheme";
+import { OperatorAccess } from "../components/OperatorAccess";
 import { RuntimePolicy } from "../components/RuntimePolicy";
 
 function labelOf(key: string): string {
@@ -31,6 +32,14 @@ function labelOf(key: string): string {
 }
 
 function choiceLabel(item: SettingItem, choice: string): string {
+  if (item.key === "remote_machine_policy") {
+    return ({ manual: "Require approval (default)", deny: "Deny another machine", auto_replace: "Accept and revoke previous machine" } as Record<string, string>)[choice] ?? choice;
+  }
+  if (item.key === "transport_security") {
+    return choice === "http_https"
+      ? "HTTP + HTTPS / WS + WSS (default)"
+      : "HTTPS / WSS only";
+  }
   if (item.key === "meta_harness_receipt_display") {
     return choice === "inline"
       ? "Status flags (default)"
@@ -214,6 +223,7 @@ export function SettingsView({
     <div className="h-full overflow-y-auto p-6">
       {dialog}
       <div className="max-w-2xl mx-auto space-y-4">
+        <OperatorAccess />
         {/* Appearance */}
         <section className="panel p-5 space-y-3">
           <h2 className="font-display font-semibold text-sm">Appearance</h2>

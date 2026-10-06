@@ -29,7 +29,10 @@ def onboarding(tmp_path, request):
                 (agent, deps.clock.now_iso()))
             key = app.state.auth.issue_key(uow, agent_id=agent)
             headers[agent] = {"Authorization": "Bearer " + key}
-    with TestClient(app, raise_server_exceptions=False) as client:
+            uow.connection.execute('INSERT INTO agent_execution_policies VALUES(?,?,?,?)',
+                                   (agent, 'remote', None, 1))
+    with TestClient(app, raise_server_exceptions=False,
+                    client=('127.0.0.1' if getattr(request, 'param', None) == 'human-operator' else 'testclient', 50000)) as client:
         response = client.post("/v1/connections/executors:register", json={
             "client_intent_id": "register", "connector_id": "connector",
             "label": "Remote host", "control_capabilities": [],
@@ -268,6 +271,91 @@ def prepare_delegated(client, headers, prepare):
 def decide_binding(client, headers, approval_id, decision="approve"):
     return client.post(f"/api/v1/approvals/{approval_id}/decision",
                        json={"decision": decision}, headers=headers["operator"])
+
+
+def connection_preferences(prepare):
+    return dict(format='okto-nexus-connection', version=2,
+        adapter_id=prepare['adapter_id'], alias=prepare['alias'], runtime_enabled=True,
+        session_policy='per_sender', harness_settings={}, automatic_reply=True,
+        tool_access='ask', authorization=dict(minutes=60, actions=20))
+
+
+@pytest.mark.parametrize('onboarding', [None, 'human-operator'], indirect=True)
+@pytest.mark.parametrize('unlimited', [False, True])
+def test_single_approval_applies_configuration_and_scoped_grant_atomically(onboarding, unlimited):
+    deps, client, headers, prepare = onboarding
+    prepare['connection_configuration'] = connection_preferences(prepare)
+    if unlimited:
+        prepare['connection_configuration']['authorization'] = dict(minutes=0, actions=0,
+            no_expiry=True, unlimited_actions=True)
+    proposal, apply, approval_id = prepare_delegated(client, headers, prepare)
+    waiting = client.post('/v1/connections/bindings:apply', json=apply, headers=headers['subject'])
+    assert waiting.status_code == 403
+    assert waiting.json()['error']['code'] == 'APPROVAL_REQUIRED'
+    assert_no_binding(deps)
+    if not unlimited:
+        assert '60 minutes, 20 actions' in proposal['diff']['summary']
+    decision_headers = {} if client._transport.client[0] == '127.0.0.1' else headers['operator']
+    assert client.post(f'/api/v1/approvals/{approval_id}/decision',
+        json={'decision':'approve'}, headers=decision_headers).status_code == 200
+    applied = client.post('/v1/connections/bindings:apply', json=apply, headers=headers['subject'])
+    assert applied.status_code == 200, applied.text
+    replay = client.post('/v1/connections/bindings:apply', json=apply, headers=headers['subject'])
+    assert replay.json() == applied.json()
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        grant = uow.connection.execute('SELECT * FROM runtime_execution_grants').fetchall()
+        assert len(grant) == 1
+        if not unlimited:
+            assert grant[0]['max_executions'] == 20
+        assert bool(grant[0]['no_expiry']) == unlimited
+        assert bool(grant[0]['unlimited_actions']) == unlimited
+        assert grant[0]['endpoint_id'] == applied.json()['endpoint_id']
+        policy = uow.connection.execute("SELECT * FROM agent_runtime_overrides WHERE agent_id='subject'").fetchone()
+        assert policy['runtime_enabled'] == 1 and policy['session_policy'] == 'per_sender'
+
+
+def test_single_approval_rejection_is_terminal_and_creates_no_grant(onboarding):
+    deps, client, headers, prepare = onboarding
+    prepare['connection_configuration'] = connection_preferences(prepare)
+    _, apply, approval_id = prepare_delegated(client, headers, prepare)
+    assert decide_binding(client, headers, approval_id, 'reject').status_code == 200
+    rejected = client.post('/v1/connections/bindings:apply', json=apply, headers=headers['subject'])
+    assert rejected.status_code == 403
+    assert rejected.json()['error']['code'] == 'PERMISSION_DENIED'
+    assert_no_binding(deps)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT COUNT(*) FROM runtime_execution_grants').fetchone()[0] == 0
+
+
+def test_single_approval_configuration_failure_rolls_back_binding_and_grant(onboarding):
+    deps, client, headers, prepare = onboarding
+    prepare['connection_configuration'] = connection_preferences(prepare)
+    _, apply, approval_id = prepare_delegated(client, headers, prepare)
+    assert decide_binding(client, headers, approval_id).status_code == 200
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("CREATE TRIGGER fail_grant BEFORE INSERT ON runtime_execution_grants "
+                               "BEGIN SELECT RAISE(ABORT,'Injected grant failure'); END")
+    failed = client.post('/v1/connections/bindings:apply', json=apply, headers=headers['subject'])
+    assert failed.status_code == 500
+    assert_no_binding(deps)
+    with deps.connection_factory.unit_of_work() as uow:
+        assert uow.connection.execute("SELECT COUNT(*) FROM agent_runtime_overrides WHERE agent_id='subject'").fetchone()[0] == 0
+        uow.connection.execute('DROP TRIGGER fail_grant')
+    assert client.post('/v1/connections/bindings:apply', json=apply, headers=headers['subject']).status_code == 200
+
+
+def test_single_approval_request_cannot_be_changed_after_review(onboarding):
+    deps, client, headers, prepare = onboarding
+    prepare['connection_configuration'] = connection_preferences(prepare)
+    _, apply, approval_id = prepare_delegated(client, headers, prepare)
+    prepare['connection_configuration']['authorization']['actions'] = 1000
+    assert client.post('/v1/connections/bindings:prepare', json=prepare, headers=headers['subject']).status_code == 409
+    assert_no_binding(deps)
+    assert decide_binding(client, headers, approval_id).status_code == 200
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE execution_proposals SET expires_at='2000-01-01T00:00:00Z'")
+    assert client.post('/v1/connections/bindings:apply', json=apply, headers=headers['subject']).status_code == 409
+    assert_no_binding(deps)
 
 
 def test_binding_delegated_proof_uses_atomic_operator_decision(onboarding):

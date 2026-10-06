@@ -211,12 +211,12 @@ def submit_execution_operation(
             session_id = scope["session_id"]
             if boot_authority is not None and conn.execute(
                     "SELECT 1 FROM execution_sessions WHERE server_id=? AND executor_id=? AND binding_id=? "
-                    "AND lifecycle_state NOT IN ('CLOSED','FAILED') LIMIT 1",
+                    "AND lifecycle_state NOT IN ('CLOSED','FAILED') AND lease_state<>'REVOKED' LIMIT 1",
                     (server_id, executor_id, scope["binding_id"])).fetchone():
                 raise OktoNexusError(ErrorCode.CONFLICT, "An existing session requires reconciliation before boot.", {})
             if action == "runtime.open" and intent["session_selection"] == "automatic":
                 existing = conn.execute("SELECT 1 FROM execution_sessions WHERE server_id=? AND executor_id=? "
-                    "AND binding_id=? AND lifecycle_state NOT IN ('CLOSED','FAILED') LIMIT 1",
+                    "AND binding_id=? AND lifecycle_state NOT IN ('CLOSED','FAILED') AND lease_state<>'REVOKED' LIMIT 1",
                     (server_id, executor_id, scope["binding_id"])).fetchone()
                 if existing:
                     raise OktoNexusError(ErrorCode.CONFLICT, "Another session claim requires explicit selection.", {})
