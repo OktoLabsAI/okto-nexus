@@ -94,6 +94,8 @@ def test_remote_policy_can_finish_before_connector_registration(local_setup, exi
                    workspace_id=None, binding_id=None,
                    baseline=load_setup(local_setup[0], context, 'subject')['baseline'])
     request['configuration']['execution_location'] = 'remote'
+    request['configuration']['authorization'] = dict(minutes=0, actions=0,
+        no_expiry=True, unlimited_actions=True)
     response = local_setup[2].post('/v1/connections/setup:finish', headers=local_setup[3]['operator'], json=request)
     assert response.status_code == 200, response.text
     assert response.json() == {'saved': True, 'agent_id': 'subject'}

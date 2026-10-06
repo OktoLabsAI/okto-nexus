@@ -63,6 +63,9 @@ def setup_authority(tmp_path, monkeypatch, *, lease_authority=True,
             uow.connection.execute('INSERT OR IGNORE INTO agents(agent_id,created_at) VALUES (?,?)', (agent, now))
             app.state.test_agent_keys[agent] = app.state.auth.issue_key(uow, agent_id=agent)
         uow.connection.execute("INSERT INTO workspaces(workspace_id,created_at) VALUES ('ws',?)", (now,))
+        # This fixture exercises a remote executor; new identities default to local.
+        uow.connection.execute(
+            "INSERT INTO agent_execution_policies(agent_id,execution_location) VALUES ('subject','remote')")
         uow.connection.execute(
             "INSERT INTO runtime_profiles(profile_id,adapter_id,config,enabled,revision,created_at,updated_at) "
             "VALUES ('profile',?,'{}',1,1,?,?)", (adapter_id, now, now))
@@ -120,11 +123,11 @@ def setup_authority(tmp_path, monkeypatch, *, lease_authority=True,
     return deps, app, access, operator, canonical, candidate, info, revisions, link_ticket, lane_ticket, server_id, executor_id
 
 
-def negotiate(ws, info, revisions, lane_ticket, server_id, executor_id, *, binding_id="binding", agent_id="subject"):
+def negotiate(ws, info, revisions, lane_ticket, server_id, executor_id, *, binding_id="binding", agent_id="subject", control_capabilities=()):
     base = dict(protocol_major=1, contract_revision=R4_PREVIEW_REVISION, server_id=server_id, executor_id=executor_id)
     ws.send_text(encode_r4_frame(dict(**base, type='hello', link_attempt_id='attempt',
         core_version=info['core_version'], management_revision=info['management_revision'],
-        supported_nxl=[R4_PREVIEW_REVISION], snapshot_formats=[info['executor_snapshot_format']], control_capabilities=[])).decode())
+        supported_nxl=[R4_PREVIEW_REVISION], snapshot_formats=[info['executor_snapshot_format']], control_capabilities=list(control_capabilities))).decode())
     welcome = ws.receive_json()
     assert welcome['type'] == 'welcome'
     connection = dict(connection_id=welcome['connection_id'], connection_generation=welcome['connection_generation'])

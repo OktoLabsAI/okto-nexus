@@ -281,15 +281,20 @@ def connection_preferences(prepare):
 
 
 @pytest.mark.parametrize('onboarding', [None, 'human-operator'], indirect=True)
-def test_single_approval_applies_configuration_and_scoped_grant_atomically(onboarding):
+@pytest.mark.parametrize('unlimited', [False, True])
+def test_single_approval_applies_configuration_and_scoped_grant_atomically(onboarding, unlimited):
     deps, client, headers, prepare = onboarding
     prepare['connection_configuration'] = connection_preferences(prepare)
+    if unlimited:
+        prepare['connection_configuration']['authorization'] = dict(minutes=0, actions=0,
+            no_expiry=True, unlimited_actions=True)
     proposal, apply, approval_id = prepare_delegated(client, headers, prepare)
     waiting = client.post('/v1/connections/bindings:apply', json=apply, headers=headers['subject'])
     assert waiting.status_code == 403
     assert waiting.json()['error']['code'] == 'APPROVAL_REQUIRED'
     assert_no_binding(deps)
-    assert '60 minutes, 20 actions' in proposal['diff']['summary']
+    if not unlimited:
+        assert '60 minutes, 20 actions' in proposal['diff']['summary']
     decision_headers = {} if client._transport.client[0] == '127.0.0.1' else headers['operator']
     assert client.post(f'/api/v1/approvals/{approval_id}/decision',
         json={'decision':'approve'}, headers=decision_headers).status_code == 200
@@ -300,8 +305,10 @@ def test_single_approval_applies_configuration_and_scoped_grant_atomically(onboa
     with deps.connection_factory.unit_of_work(write=False) as uow:
         grant = uow.connection.execute('SELECT * FROM runtime_execution_grants').fetchall()
         assert len(grant) == 1
-        assert grant[0]['max_executions'] == 20
-        assert not grant[0]['no_expiry'] and not grant[0]['unlimited_actions']
+        if not unlimited:
+            assert grant[0]['max_executions'] == 20
+        assert bool(grant[0]['no_expiry']) == unlimited
+        assert bool(grant[0]['unlimited_actions']) == unlimited
         assert grant[0]['endpoint_id'] == applied.json()['endpoint_id']
         policy = uow.connection.execute("SELECT * FROM agent_runtime_overrides WHERE agent_id='subject'").fetchone()
         assert policy['runtime_enabled'] == 1 and policy['session_policy'] == 'per_sender'

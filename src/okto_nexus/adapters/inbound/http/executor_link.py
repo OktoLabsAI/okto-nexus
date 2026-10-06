@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import asyncio
-from datetime import datetime, timezone
+import logging
+from datetime import datetime, timedelta, timezone
 import secrets
 import sqlite3
 from urllib.parse import urlsplit
@@ -98,6 +99,9 @@ def build_router() -> APIRouter:
         connection_id: str | None = None
         generation: int | None = None
         pump = None
+        resumable_disconnect = False
+        resume_supported = False
+        bootstrap_ticket_id = None
         send_lock = asyncio.Lock()
 
         async def _send_text(raw):
@@ -109,8 +113,13 @@ def build_router() -> APIRouter:
             await asyncio.wait_for(ws.send_text(encode_r4_frame(frame).decode("utf-8")), timeout=5)
 
         async def _close_dispatch_link():
+            error = pump.error if pump is not None else None
+            authorization_changed = isinstance(error, OktoNexusError) and error.code == 'PERMISSION_DENIED'
+            logging.getLogger(__name__).warning('Control dispatch stopped: executor=%s code=%s',
+                executor_id, getattr(error, 'code', type(error).__name__))
             async with send_lock:
-                await asyncio.wait_for(ws.close(code=1011), timeout=5)
+                await asyncio.wait_for(ws.close(code=4403 if authorization_changed else 1011,
+                    reason='authorization changed' if authorization_changed else 'dispatch failure'), timeout=5)
 
         leases = ExecutionLeaseService(
             factory=factory, access=build_execution_access(ws.app.state.deps),
@@ -181,6 +190,17 @@ def build_router() -> APIRouter:
                         frame["credential_epoch"] or
                         ticket_row["authorization_revision"] !=
                         frame["authorization_revision"]):
+                    # Fixed reason labels only; never log tickets or key material.
+                    reasons = []
+                    if owner is None: reasons.append('connection_owner')
+                    if binding is None or binding['agent_id'] != verified.agent_id: reasons.append('binding_identity')
+                    if ticket_row is None: reasons.append('ticket_missing')
+                    elif ticket_row['revoked_at'] is not None: reasons.append('ticket_revoked')
+                    if remaining < 1: reasons.append('ticket_expired')
+                    if ticket_row is not None and ticket_row['bound_connection_id'] not in (None, connection_id): reasons.append('ticket_connection')
+                    if current is None or tuple(current) != (frame['credential_epoch'], frame['authorization_revision'], frame['configuration_revision']): reasons.append('revisions')
+                    logging.getLogger(__name__).warning('Binding attach denied: executor=%s binding=%s generation=%s reasons=%s',
+                        executor_id, frame['binding_id'], generation, ','.join(reasons) or 'ticket_revisions')
                     raise ValueError("attach authority unavailable")
                 prior = conn.execute(
                     "SELECT connection_id,connection_generation,"
@@ -249,9 +269,11 @@ def build_router() -> APIRouter:
             connection_id = "conn_" + secrets.token_hex(16)
 
             def _claim():
+                nonlocal bootstrap_ticket_id
                 verified = verify_execution_ticket(
                     factory, ticket=ticket, server_id=server_id, executor_id=executor_id,
                     binding_id=None, scope="link:connect")
+                bootstrap_ticket_id = verified.ticket_id
                 with factory.unit_of_work() as uow:
                     row = uow.connection.execute(
                         "SELECT generation,revoked_at,owner_instance_id "
@@ -261,6 +283,21 @@ def build_router() -> APIRouter:
                     ).fetchone()
                     if row is None or row["revoked_at"] is not None:
                         raise ValueError("executor unavailable")
+                    if 'resume_connection_id' in hello:
+                        resume = uow.connection.execute('SELECT * FROM execution_connection_resumes WHERE server_id=? AND executor_id=?',
+                            (server_id, executor_id)).fetchone()
+                        if (not resume or row['owner_instance_id'] is not None
+                                or resume['connection_id'] != hello['resume_connection_id']
+                                or resume['connection_generation'] != hello.get('resume_connection_generation')
+                                or row['generation'] != resume['connection_generation']
+                                or resume['ticket_id'] != verified.ticket_id
+                                or datetime.fromisoformat(resume['expires_at']) <= datetime.now(timezone.utc)):
+                            raise ValueError('connection resume unavailable')
+                        uow.connection.execute("UPDATE execution_executors SET owner_instance_id=?,control_state='CONTROL_READY' "
+                            'WHERE server_id=? AND executor_id=?', (connection_id, server_id, executor_id))
+                        uow.connection.execute('DELETE FROM execution_connection_resumes WHERE server_id=? AND executor_id=?', (server_id, executor_id))
+                        return row['generation']
+                    uow.connection.execute('DELETE FROM execution_connection_resumes WHERE server_id=? AND executor_id=?', (server_id, executor_id))
                     next_generation = row["generation"] + 1
                     changed = uow.connection.execute(
                         "UPDATE execution_executors SET generation=?,"
@@ -303,6 +340,12 @@ def build_router() -> APIRouter:
                         raise ValueError("bootstrap authority changed")
                     return next_generation
 
+            resume_supported = 'connection_resume_v1' in hello['control_capabilities']
+            if 'resume_connection_id' in hello:
+                if not resume_supported or 'resume_connection_generation' not in hello:
+                    await ws.close(code=4406)
+                    return
+                connection_id = hello['resume_connection_id']
             try:
                 generation = await anyio.to_thread.run_sync(_claim)
             except (ValueError, OktoNexusError):
@@ -317,8 +360,12 @@ def build_router() -> APIRouter:
                 "management_revision": info["management_revision"],
                 "accepted_nxl": R4_PREVIEW_REVISION,
                 "snapshot_format": info["executor_snapshot_format"],
-                "control_capabilities": [],
+                "control_capabilities": [cap for cap in ('connection_renewal_v1', 'heartbeat_ack_v1', 'connection_resume_v1')
+                                         if cap in hello['control_capabilities']],
             }
+            resumed = 'resume_connection_id' in hello
+            if resume_supported:
+                welcome['resumed'] = resumed
             await _send_text(encode_r4_frame(welcome).decode("utf-8"))
 
             from ....application.execution_reconciliation import ExecutionReconciliation
@@ -335,15 +382,48 @@ def build_router() -> APIRouter:
                     return
                 await _send_text(encode_r4_frame(pending_reconcile).decode("utf-8"))
 
-            await anyio.to_thread.run_sync(lambda: recover_fenced_reservations(
-                factory, channel=ExecutionChannel(server_id, executor_id, connection_id, generation)))
-            await _request_reconcile()
+            if resumed:
+                # Same authenticated socket owner and still-current proofs. No
+                # new session generation, native replay, or fabricated lease.
+                pump = ExecutionDispatchPump(factory=factory,
+                    channel=ExecutionChannel(server_id, executor_id, connection_id, generation),
+                    access=leases.access, fresh_publications=ws.app.state.inventory_fresh_publications,
+                    send=_send_operation, send_lock=send_lock, verify_link=_verify,
+                    close_link=_close_dispatch_link,
+                    resolve_native_input=ws.app.state.deps.native_decisions.inputs.resolve)
+                pump.start()
+            else:
+                await anyio.to_thread.run_sync(lambda: recover_fenced_reservations(
+                    factory, channel=ExecutionChannel(server_id, executor_id, connection_id, generation)))
+                await _request_reconcile()
+            renewal_replies = {}
             while True:
                 raw = await asyncio.wait_for(ws.receive_text(), timeout=30)
                 if len(raw.encode("utf-8")) > MAX_FRAME_BYTES:
                     await ws.close(code=4409)
                     break
                 frame = decode_r4_frame(raw.encode("utf-8"))
+                if frame['type'] == 'connection.renew':
+                    if ('connection_renewal_v1' not in welcome['control_capabilities'] or
+                            any(frame[k] != welcome[k] for k in
+                                ('server_id', 'executor_id', 'connection_id', 'connection_generation'))):
+                        await ws.close(code=4406)
+                        break
+                    reply = renewal_replies.get(frame['request_id'])
+                    if reply is None:
+                        from ....application.execution_continuity import renew_connection
+                        try:
+                            renewed = await anyio.to_thread.run_sync(lambda: renew_connection(factory,
+                                channel=ExecutionChannel(server_id, executor_id, connection_id, generation), ticket=ticket))
+                        except OktoNexusError:
+                            await ws.close(code=4403, reason='authorization changed')
+                            break
+                        reply = dict(frame, type='connection.renewed', **renewed)
+                        if len(renewal_replies) >= 256:
+                            renewal_replies.pop(next(iter(renewal_replies)))
+                        renewal_replies[frame['request_id']] = reply
+                    await _send_text(encode_r4_frame(reply).decode('utf-8'))
+                    continue
                 if frame["type"] in {"lease.renew", "lease.applied"}:
                     def _lease_transition():
                         _verify()  # Recheck the authenticated link credential.
@@ -425,7 +505,15 @@ def build_router() -> APIRouter:
                     try:
                         expires_in = await anyio.to_thread.run_sync(
                             _admit_attach, frame)
-                    except (OktoNexusError, ValueError):
+                    except (OktoNexusError, ValueError) as error:
+                        logging.getLogger(__name__).warning(
+                            'Binding attach rejected: executor=%s binding=%s generation=%s code=%s reason=%s',
+                            executor_id, frame['binding_id'], generation,
+                            getattr(error, 'code', 'ATTACH_DENIED'),
+                            str(error) if isinstance(error, ValueError) and str(error) in {
+                                'attach scope changed', 'attach authority changed',
+                                'attach configuration changed', 'attach authority unavailable',
+                                'attach attempt changed'} else 'ticket_authority')
                         await _send_text(encode_r4_frame({
                             "protocol_major": 1,
                             "contract_revision": R4_PREVIEW_REVISION,
@@ -488,6 +576,8 @@ def build_router() -> APIRouter:
                 if touched != 1:
                     await ws.close(code=4403)
                     break
+                if 'heartbeat_ack_v1' in welcome['control_capabilities']:
+                    await _send_text(encode_r4_frame(frame).decode('utf-8'))
                 if pending_reconcile is None:
                     with factory.unit_of_work(write=False) as uow:
                         state = uow.connection.execute(
@@ -499,8 +589,10 @@ def build_router() -> APIRouter:
                         ).fetchone()
                     if state is not None and state["control_state"] == "RECOVERING":
                         await _request_reconcile()
-        except (WebSocketDisconnect, asyncio.TimeoutError):
-            pass
+        except WebSocketDisconnect as error:
+            resumable_disconnect = resume_supported and error.code in (1000, 1001, 1006)
+        except asyncio.TimeoutError:
+            resumable_disconnect = resume_supported
         except (CoreError, UnicodeError, ValueError, RecursionError):
             await ws.close(code=4406)
         finally:
@@ -512,14 +604,19 @@ def build_router() -> APIRouter:
             if connection_id is not None and generation is not None:
                 def _release():
                     with factory.unit_of_work() as uow:
-                        uow.connection.execute(
+                        released = uow.connection.execute(
                             "UPDATE execution_executors SET control_state='DISCONNECTED',"
                             "owner_instance_id=NULL WHERE server_id=? "
                             "AND executor_id=? AND owner_instance_id=? "
                             "AND generation=?",
                             (server_id, executor_id, connection_id,
                             generation),
-                        )
+                        ).rowcount
+                        if resumable_disconnect and released == 1:
+                            uow.connection.execute('INSERT OR REPLACE INTO execution_connection_resumes VALUES (?,?,?,?,?,?)',
+                                (server_id, executor_id, connection_id, generation, bootstrap_ticket_id,
+                                 (datetime.now(timezone.utc) + timedelta(seconds=30)).isoformat()))
+                            return
                         uow.connection.execute(
                             "UPDATE execution_control_lanes SET state='DISCONNECTED' "
                             "WHERE server_id=? AND executor_id=? AND "

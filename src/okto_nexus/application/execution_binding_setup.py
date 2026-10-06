@@ -15,15 +15,13 @@ def validate_requested_configuration(request):
         # The remote machine's paths and credentials never enter this contract.
         if not isinstance(value, dict) or value.get('version') != 2:
             raise ValueError()
-        portable = parse_portable_connection_configuration(value)
+        from .connection_authorization import normalize_authorization
+        portable = parse_portable_connection_configuration(normalize_authorization(value))
         if portable['adapter_id'] != request['adapter_id'] or portable['alias'] != request['alias']:
             raise ValueError()
         if portable['runtime_enabled'] is not True:
             raise ValueError()
-        if any(value is None for value in portable['authorization'].values()):
-            raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
-                'Remote execution requires a finite authorization duration and action limit.', {})
-        return materialize_connection_configuration(portable, execution_location='remote')
+        return normalize_authorization(materialize_connection_configuration(portable, execution_location='remote'))
     except (CoreError, ValueError, TypeError):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                              'Invalid remote connection configuration.', {}) from None

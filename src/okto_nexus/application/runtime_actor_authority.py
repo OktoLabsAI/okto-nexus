@@ -45,6 +45,9 @@ def local_operator_binding(uow):
 def valid_actor_binding(uow, actor, binding, *, capabilities=None, workspace_id=None):
     if not actor or not actor.is_active or not binding:
         return False
+    from .runtime_handoff_notifications import PREFIX, valid_binding
+    if binding.startswith(PREFIX):
+        return valid_binding(uow, actor, binding, workspace_id)
     if binding.startswith(LOCAL_OPERATOR_PREFIX):
         return actor.agent_id == "operator" and binding == local_operator_binding(uow)
     if binding.startswith(MANAGED_MESSAGE_PREFIX):
@@ -71,6 +74,13 @@ def valid_actor_binding(uow, actor, binding, *, capabilities=None, workspace_id=
 def authenticated_message_context(uow, context, agents, *, capabilities=None, workspace_id=None):
     if context is None:
         return None
+    if context.authentication_source == 'handoff_notification':
+        from .runtime_handoff_notifications import PREFIX
+        actor = agents.get(uow, context.actor_agent_id)
+        if (not context.credential_binding or not context.credential_binding.startswith(PREFIX)
+                or not valid_actor_binding(uow, actor, context.credential_binding, workspace_id=workspace_id)):
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Handoff notification provenance is unavailable.', {})
+        return context
     if context.authentication_source == 'session_capability':
         actor = agents.get(uow, context.actor_agent_id)
         if not valid_actor_binding(uow, actor, context.credential_binding,
