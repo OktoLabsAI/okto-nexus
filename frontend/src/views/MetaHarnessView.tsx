@@ -40,6 +40,8 @@ import {
 } from "../api";
 import { AgentSelect } from "../components/AgentSelect";
 import { Markdown } from "../components/Markdown";
+import { parseStructuredMessage, StructuredMessage, type StructuredMessagePayload } from "../components/StructuredMessage";
+import { handoffLabel } from "../handoffLabel";
 import { PageContainer } from "../components/PageContainer";
 import { workspaceDisplayName } from "../components/WorkspaceNames";
 import { agentColor } from "../graph/agentColor";
@@ -61,6 +63,7 @@ type TimelineEntry = {
   recipients: string[];
   subject: string | null;
   content: string;
+  structured?: StructuredMessagePayload;
   artifacts: string[];
   deliveries?: MessageRow["deliveries"];
   status?: string;
@@ -256,8 +259,17 @@ function buildTimeline(
       audience: audienceOf(handoff),
       agentId: OPERATOR,
       recipients,
-      subject: request.subject,
+      subject: handoffLabel(handoff),
       content: request.body,
+      structured: {
+        kind: "handoff.created",
+        handoff_id: handoff.handoff_id,
+        title: handoffLabel(handoff),
+        from_agent_id: handoff.from_agent_id,
+        claimed_by: handoff.claimed_by,
+        status: handoff.status,
+        request: request.body,
+      },
       artifacts: request.artifacts,
       status: handoff.status,
     });
@@ -277,7 +289,17 @@ function buildTimeline(
         audience: audienceOf(handoff),
         agentId: handoff.claimed_by || directTarget || "agent",
         recipients: [OPERATOR],
-        subject: rejected ? "Handoff rejected" : "Handoff completed",
+        subject: handoffLabel(handoff),
+        structured: {
+          kind: rejected ? "handoff.rejected" : "handoff.completed",
+          handoff_id: handoff.handoff_id,
+          title: handoffLabel(handoff),
+          by_agent_id: handoff.claimed_by || directTarget,
+          status: handoff.status,
+          ...(rejected
+            ? { reason: handoff.rejected_reason || "(no reason provided)" }
+            : { result: outcomeText(handoff.result || "") }),
+        },
         content: rejected
           ? handoff.rejected_reason || "(no reason provided)"
           : outcomeText(handoff.result || ""),
@@ -545,6 +567,7 @@ function ChatTurn({
   onOpenReceipt: (entry: TimelineEntry) => void;
 }) {
   const outgoing = entry.direction === "outgoing";
+  const structured = entry.structured ?? parseStructuredMessage(entry.content);
   const identity = outgoing ? OPERATOR : entry.agentId;
   const profile = agents.find((agent) => agent.agent_id === identity);
   const color = outgoing ? "#0284c7" : agentColor(identity, profile?.color);
@@ -594,12 +617,16 @@ function ChatTurn({
                   : "rounded-bl-md border border-surface-200 bg-white text-surface-800 dark:border-surface-700 dark:bg-surface-800 dark:text-surface-100"
           }`}
         >
-          {entry.subject && (
+          {!structured && entry.subject && (
             <div className={`mb-1.5 text-xs font-semibold ${outgoing ? "text-white/80" : "text-surface-500 dark:text-surface-400"}`}>
               {entry.subject}
             </div>
           )}
-          <Markdown text={formatChatContent(entry.content)} />
+          {structured ? (
+            <StructuredMessage payload={structured} subject={entry.subject} />
+          ) : (
+            <Markdown text={formatChatContent(entry.content)} />
+          )}
           {entry.artifacts.length > 0 && (
             <div
               className="mt-3 flex flex-wrap gap-2"
