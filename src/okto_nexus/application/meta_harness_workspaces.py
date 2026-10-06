@@ -24,7 +24,10 @@ def recipient_workspaces(uow, agent_id, *, runtime_available=True):
         ids = {r['workspace_id'] for r in rows if method_enabled(uow, agent_id, r['adapter_id'])}
     else:
         ids = {r[0] for r in conn.execute('SELECT DISTINCT workspace_id FROM sessions WHERE agent_id=? AND closed_at IS NULL', (agent_id,))}
-    items = [dict(r) for r in conn.execute('SELECT workspace_id,display_name FROM workspaces ORDER BY display_name,workspace_id') if r['workspace_id'] in ids]
+    # MCP identities can receive inbox messages before opening a session.
+    # Without an active namespace, let the operator select an existing one;
+    # normal message permissions and workspace policies still apply on send.
+    items = [dict(r) for r in conn.execute('SELECT workspace_id,display_name FROM workspaces ORDER BY display_name,workspace_id') if (not runtime and not ids) or r['workspace_id'] in ids]
     return dict(agent_id=agent_id, runtime=runtime, items=items)
 
 

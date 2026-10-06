@@ -1,3 +1,4 @@
+import { handoffLabel } from "../handoffLabel";
 // The agent-mesh graph (spec S2 / FR2-FR3): Sigma.js v3 over graphology
 // with deterministic rows and enough space for fixed-size agent cards.
 //
@@ -1283,8 +1284,8 @@ function SidePanel({
             >
               {selection.handoff.status}
             </span>
-            <span className="font-mono text-surface-400">
-              {selection.handoff.handoff_id}
+            <span title={selection.handoff.handoff_id} className="break-words text-surface-400">
+              {handoffLabel(selection.handoff)}
             </span>
           </div>
           <div className="text-surface-500 dark:text-surface-400">
@@ -1313,7 +1314,7 @@ function SidePanel({
                   title: "Cancel handoff?",
                   body: (
                     <span>
-                      O handoff <code>{selection.handoff.handoff_id}</code> will be
+                      Handoff <code>{handoffLabel(selection.handoff)}</code> will be
                       moved to CANCELLED and leaves the claim pool.
                     </span>
                   ),

@@ -25,6 +25,7 @@ import {
 } from "../components/TargetDescriptor";
 import { useWorkspaceName } from "../components/WorkspaceNames";
 import { AgentSelect } from "../components/AgentSelect";
+import { handoffLabel } from "../handoffLabel";
 
 const CARDS_PER_PAGE = 3;
 const inputCls =
@@ -128,8 +129,8 @@ function HandoffDetailModal({
                 </span>
               )}
             </div>
-            <h3 className="mt-2 font-display font-semibold text-sm text-surface-900 dark:text-surface-100 font-mono truncate">
-              {handoff.handoff_id}
+            <h3 title={handoff.handoff_id} className="mt-2 font-display font-semibold text-sm text-surface-900 dark:text-surface-100 break-words">
+              {handoffLabel(handoff)}
             </h3>
           </div>
           <button
@@ -512,8 +513,8 @@ export function HandoffsView({
                           </span>
                         )}
                       </div>
-                      <div className="text-sm font-medium text-surface-800 dark:text-surface-200 font-mono truncate">
-                        {h.handoff_id}
+                      <div title={`${handoffLabel(h)} (${h.handoff_id})`} className="text-sm font-medium text-surface-800 dark:text-surface-200 truncate">
+                        {handoffLabel(h)}
                       </div>
                       <div className="mt-1 text-xs text-surface-500 dark:text-surface-400 space-y-0.5">
                         <div className="flex items-center gap-1">
@@ -677,7 +678,7 @@ export function HandoffsView({
                                     title: "Pass verification?",
                                     body: (
                                       <span>
-                                        Handoff <code>{h.handoff_id}</code> will be
+                                        Handoff <code>{handoffLabel(h)}</code> will be
                                         marked COMPLETED, verified by the operator.
                                       </span>
                                     ),
@@ -715,7 +716,7 @@ export function HandoffsView({
                               title: "Cancel handoff?",
                               body: (
                                 <span>
-                                  Handoff <code>{h.handoff_id}</code> will be
+                                  Handoff <code>{handoffLabel(h)}</code> will be
                                   moved to CANCELLED and leaves the pool.
                                 </span>
                               ),
