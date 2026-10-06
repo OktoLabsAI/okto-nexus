@@ -38,7 +38,7 @@ def select_delivery_session(uow, endpoint_id, *, sender_agent_id=None, source_se
         "SELECT s.session_id,s.lifecycle_state,s.lease_state FROM execution_sessions s "
         "LEFT JOIN execution_sender_sessions a USING(server_id,executor_id,session_id) "
         "WHERE s.server_id=? AND s.executor_id=? AND s.binding_id=? "
-        "AND s.lifecycle_state NOT IN ('CLOSED','FAILED') AND "
+        "AND s.lifecycle_state NOT IN ('CLOSED','FAILED') AND s.lease_state<>'REVOKED' AND "
         + ("a.sender_agent_id=? AND a.isolation_policy=? AND a.source_session_key=?" if per_sender else "a.session_id IS NULL") + " LIMIT 2",
         (binding["server_id"], binding["executor_id"], binding["binding_id"])
         + ((sender_agent_id, binding['session_policy'],

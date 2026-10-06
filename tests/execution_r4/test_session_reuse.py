@@ -150,7 +150,14 @@ def test_reuse_revalidates_authority_at_both_boundaries(reuse_connected, sql, bo
     else:
         response = setup[2].post("/v1/runtime/operations", headers=setup[3]["subject"],
             json={name: selected[name] for name in ("client_intent_id", "operation_id", "resolution_revision", "intent_hash")})
-    assert response.status_code in (403, 409), response.text
+    if boundary == 'resolve' and 'revoked_at' in sql and response.status_code == 200:
+        # Revoked sessions are no longer automatic reuse candidates. A new
+        # intent may be prepared, but cannot reuse the revoked opening.
+        assert response.json()['reuse'] is False
+        assert response.json()['session_id'] != first['session_id']
+        assert native.opens == 1
+    else:
+        assert response.status_code in (403, 409), response.text
     assert native.opens == 1
     with setup[0].connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations").fetchone()[0] == 1

@@ -18,6 +18,12 @@ def agent_connection_statuses(uow, now_iso):
         SELECT a.agent_id, COALESCE(p.execution_location,'local') location,
                COALESCE(o.runtime_enabled,d.runtime_enabled) runtime_enabled,
                e.executor_id,e.label,e.control_state,e.last_seen_at,
+               (EXISTS(SELECT 1 FROM execution_bindings b JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id
+                   WHERE b.server_id=e.server_id AND b.executor_id=e.executor_id AND ep.agent_id=a.agent_id
+                     AND ep.activation_state='revoked') AND NOT EXISTS(
+                   SELECT 1 FROM execution_bindings b JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id
+                   WHERE b.server_id=e.server_id AND b.executor_id=e.executor_id AND ep.agent_id=a.agent_id
+                     AND ep.enabled=1 AND ep.activation_state='approved')) revoked,
                EXISTS(SELECT 1 FROM execution_control_lanes l
                    JOIN execution_bindings b USING(server_id,executor_id,binding_id)
                    JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id
@@ -36,6 +42,17 @@ def agent_connection_statuses(uow, now_iso):
                 AND ep.enabled=1 AND ep.activation_state='approved'))
         ORDER BY a.agent_id,e.executor_id
     ''', (now_iso,)).fetchall()
+    setups = {}
+    for proposal in uow.connection.execute('''
+        SELECT p.subject_agent_id,p.executor_id,p.expires_at,a.status
+        FROM execution_proposals p
+        JOIN approvals a ON a.approval_id=json_extract(p.expected_revisions_json,'$.operator_approval_id')
+        WHERE p.status='PREPARED' ORDER BY p.created_at
+    '''):
+        expired = datetime.fromisoformat(proposal['expires_at'].replace('Z', '+00:00')) <= now
+        setups[(proposal['subject_agent_id'], proposal['executor_id'])] = (
+            'Needs attention' if expired or proposal['status'] not in ('pending', 'approved') else
+            'Awaiting approval' if proposal['status'] == 'pending' else 'Completing setup')
     result = {}
     for row in rows:
         item = result.setdefault(row['agent_id'], dict(
@@ -47,8 +64,13 @@ def agent_connection_statuses(uow, now_iso):
         fresh = _fresh(row['last_seen_at'], now)
         state = ('Connected' if fresh and row['control_state']=='CONTROL_READY' and row['admitted']
                  else 'Reconnecting' if fresh and row['control_state'] in ('RECOVERING','CONTROL_READY') else 'Offline')
+        if row['revoked']:
+            state = 'Revoked'
+        if state != 'Connected' and (row['agent_id'], row['executor_id']) in setups:
+            state = setups[(row['agent_id'], row['executor_id'])]
         item['hosts'].append(dict(executor_id=row['executor_id'], label=row['label'] or row['executor_id'],
                                  status=state,last_seen_at=row['last_seen_at']))
-        if item['status'] != 'MCP only' and ['Offline','Reconnecting','Connected'].index(state) > ['Offline','Reconnecting','Connected'].index(item['status']):
+        rank = ['Offline', 'Revoked', 'Needs attention', 'Reconnecting', 'Awaiting approval', 'Completing setup', 'Connected']
+        if item['status'] != 'MCP only' and rank.index(state) > rank.index(item['status']):
             item['status'] = state
     return result

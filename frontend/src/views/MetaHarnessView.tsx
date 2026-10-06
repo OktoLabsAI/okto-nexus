@@ -676,6 +676,8 @@ export function MetaHarnessView({
   const [filterAgent, setFilterAgent] = useState("");
   const [targetAgentId, setTargetAgentId] = useState("");
   const [sendWorkspace, setSendWorkspace] = useState("");
+  const [recipientNamespaces, setRecipientNamespaces] = useState<{agent: string; ids: string[]} | null>(null);
+  const [namespaceError, setNamespaceError] = useState<string | null>(null);
   const [kind, setKind] = useState<MetaHarnessKind>("message");
   const [audience, setAudience] = useState<MetaHarnessAudience>("private");
   const [subject, setSubject] = useState("");
@@ -744,6 +746,7 @@ export function MetaHarnessView({
   }, []);
 
   useEffect(() => {
+    if (audience === "private") return;
     if (workspace !== "all") {
       setSendWorkspace(workspace);
       return;
@@ -753,7 +756,42 @@ export function MetaHarnessView({
         ? current
         : workspaces[0]?.workspace_id || "",
     );
-  }, [workspace, workspaces]);
+  }, [workspace, workspaces, audience]);
+
+  useEffect(() => {
+    if (audience !== "private" || !targetAgentId) return;
+    let active = true;
+    let refresh: ReturnType<typeof setTimeout>;
+    let controller: AbortController;
+    setRecipientNamespaces(null);
+    setNamespaceError(null);
+    const loadNamespaces = async () => {
+      controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 15000);
+      try {
+        const { items } = await api.metaHarnessWorkspaces(targetAgentId, controller.signal);
+        if (!active) return;
+        const ids = items.map((item) => item.workspace_id);
+        setRecipientNamespaces({agent: targetAgentId, ids});
+        setNamespaceError(null);
+        setSendWorkspace((current) => ids.includes(current) ? current : ids.includes(workspace) ? workspace : ids[0] || "");
+      } catch (exc) {
+        if (active) setNamespaceError(controller.signal.aborted
+          ? "Namespace request timed out. Retrying automatically…" : (exc as Error).message);
+      } finally {
+        clearTimeout(timeout);
+        if (active) refresh = setTimeout(loadNamespaces, 10000);
+      }
+    };
+    void loadNamespaces();
+    return () => { active = false; clearTimeout(refresh); controller?.abort(); };
+  }, [targetAgentId, audience, workspace]);
+
+  const namespacesReady = audience !== "private" || recipientNamespaces?.agent === targetAgentId;
+  const sendWorkspaces = audience === "private"
+    ? workspaces.filter((item) => namespacesReady && recipientNamespaces?.ids.includes(item.workspace_id))
+    : workspaces;
+  const validSendWorkspace = namespacesReady && sendWorkspaces.some((item) => item.workspace_id === sendWorkspace);
 
   const loadFeed = useCallback(async () => {
     const scopeChanged = feedScopeRef.current !== workspace;
@@ -972,7 +1010,7 @@ export function MetaHarnessView({
   const submit = async (event?: FormEvent) => {
     event?.preventDefault();
     const content = body.trim();
-    if ((!content && !attachments.length) || !sendWorkspace || sending) return;
+    if ((!content && !attachments.length) || !validSendWorkspace || sending) return;
     if (audience === "private" && !targetAgentId) {
       setError("Choose an agent for a private turn.");
       return;
@@ -1027,7 +1065,7 @@ export function MetaHarnessView({
   const cannotSend =
     sending ||
     (!body.trim() && !attachments.length) ||
-    !sendWorkspace ||
+    !validSendWorkspace ||
     (audience === "private" && !targetAgentId);
 
   return (
@@ -1251,17 +1289,19 @@ export function MetaHarnessView({
                     menuPlacement="top"
                   />
                 )}
-                {workspace === "all" && (
+                {(workspace === "all" || audience === "private") && (
                   <select
                     value={sendWorkspace}
                     onChange={(event) => setSendWorkspace(event.target.value)}
-                    aria-label="Send workspace"
+                    aria-label="Send namespace"
+                    disabled={!namespacesReady || sendWorkspaces.length === 0}
+                    title="Namespaces available for the selected agent"
                     className="rounded-lg border border-surface-200 bg-white px-2 py-1.5 text-xs outline-none focus:ring-2 focus:ring-accent-500/40 dark:border-surface-700 dark:bg-surface-800"
                   >
-                    {workspaces.length === 0 && <option value="">No workspace available</option>}
-                    {workspaces.map((item) => (
+                    {sendWorkspaces.length === 0 && <option value="">{namespaceError ? "Could not load namespaces" : !namespacesReady ? "Loading namespaces…" : "No namespace available"}</option>}
+                    {sendWorkspaces.map((item) => (
                       <option key={item.workspace_id} value={item.workspace_id}>
-                        {shortWorkspace(item.workspace_id, workspaces)}
+                        {shortWorkspace(item.workspace_id, workspaces)} · {item.workspace_id.slice(-8)}
                       </option>
                     ))}
                   </select>

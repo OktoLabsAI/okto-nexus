@@ -439,7 +439,7 @@ def _route_template(request: Request) -> str:
     return request.url.path
 
 
-def create_http_mcp_server(deps: Deps) -> Any:
+def create_http_mcp_server(deps: Deps, *, host: str = "127.0.0.1", port: int | None = None) -> Any:
     """A FastMCP instance serving the SAME tool AND resource surface over
     streamable-http.
 
@@ -452,11 +452,13 @@ def create_http_mcp_server(deps: Deps) -> Any:
     tool-docs/*) that must therefore resolve on a ``resources/read``.
     """
     FastMCP = _load_fastmcp()  # lazy: SDK only needed at serve time
+    from .mcp_security import mcp_transport_security
     server = FastMCP(
         "okto-nexus",
         instructions=SERVER_INSTRUCTIONS,
         streamable_http_path="/",
         stateless_http=True,
+        transport_security=mcp_transport_security(host, port),
     )
     register_tools(server, deps)
     register_meta_tools(server, deps)
@@ -483,7 +485,7 @@ def ensure_operator_key(
         return OPERATOR_AGENT_ID, plaintext
 
 
-def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_url: str | None = None) -> FastAPI:
+def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_url: str | None = None, bind_host: str = "127.0.0.1", bind_port: int | None = None) -> FastAPI:
     """Assemble the serve application (REST + SSE + MCP mount + static)."""
     deps.runtime_owner_api_url = runtime_owner_api_url
     auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
@@ -550,11 +552,14 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
         config=deps.config,
     )
 
-    mcp_server = create_http_mcp_server(deps)
+    mcp_server = create_http_mcp_server(deps, host=bind_host, port=bind_port)
     mcp_app = mcp_server.streamable_http_app()
 
     @contextlib.asynccontextmanager
     async def lifespan(app: FastAPI):
+        from ....application.execution_revocation import repair_revoked_sessions
+        with deps.connection_factory.unit_of_work() as uow:
+            repair_revoked_sessions(uow.connection, now=deps.clock.now_iso())
         # Quiet a benign Windows ProactorEventLoop teardown race: when a client
         # RSTs a connection, asyncio's _call_connection_lost calls sock.shutdown
         # on the already-reset socket and the resulting ConnectionResetError
@@ -776,6 +781,8 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     app.add_middleware(TelemetryMiddleware)
     app.add_middleware(ApiKeyAuthMiddleware)
     app.add_middleware(V1RevisionMiddleware)
+    from .transport_security import TransportSecurityMiddleware
+    app.add_middleware(TransportSecurityMiddleware, config=deps.config)
 
     @app.get("/healthz")
     async def healthz() -> JSONResponse:  # public liveness probe

@@ -32,6 +32,14 @@ function labelOf(key: string): string {
 }
 
 function choiceLabel(item: SettingItem, choice: string): string {
+  if (item.key === "remote_machine_policy") {
+    return ({ manual: "Require approval (default)", deny: "Deny another machine", auto_replace: "Accept and revoke previous machine" } as Record<string, string>)[choice] ?? choice;
+  }
+  if (item.key === "transport_security") {
+    return choice === "http_https"
+      ? "HTTP + HTTPS / WS + WSS (default)"
+      : "HTTPS / WSS only";
+  }
   if (item.key === "meta_harness_receipt_display") {
     return choice === "inline"
       ? "Status flags (default)"

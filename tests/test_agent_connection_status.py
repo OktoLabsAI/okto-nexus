@@ -15,6 +15,9 @@ def status_db():
     CREATE TABLE agent_execution_policies(agent_id TEXT,execution_location TEXT);
     CREATE TABLE agent_runtime_overrides(agent_id TEXT,runtime_enabled INTEGER);
     CREATE TABLE runtime_policy_defaults(runtime_enabled INTEGER);
+    CREATE TABLE execution_proposals(subject_agent_id TEXT,executor_id TEXT,expires_at TEXT,
+      expected_revisions_json TEXT,status TEXT,created_at TEXT);
+    CREATE TABLE approvals(approval_id TEXT,status TEXT);
     CREATE TABLE execution_executors(server_id TEXT,executor_id TEXT,registered_by_agent_id TEXT,
       kind TEXT,revoked_at TEXT,label TEXT,control_state TEXT,last_seen_at TEXT,generation INTEGER,owner_instance_id TEXT);
     CREATE TABLE execution_bindings(server_id TEXT,executor_id TEXT,binding_id TEXT,endpoint_id TEXT);
@@ -44,6 +47,7 @@ def status_db():
     ("UPDATE execution_control_lanes SET connection_generation=2", 'Reconnecting'),
     ("UPDATE execution_control_lanes SET expires_at='2026-10-05T11:59:00Z'", 'Reconnecting'),
     ("UPDATE agent_endpoints SET enabled=0", 'Reconnecting'),
+    ("UPDATE agent_endpoints SET enabled=0,activation_state='revoked'", 'Revoked'),
     ("UPDATE execution_executors SET revoked_at='2026-10-05T12:00:00Z'", 'Offline'),
     ("INSERT INTO agent_runtime_overrides VALUES('subject',0)", 'MCP only'),
 ])
@@ -61,3 +65,17 @@ def test_host_details_and_local_selection(status_db):
     assert result['hosts'][0]['last_seen_at'] == '2026-10-05T12:00:00Z'
     status_db.connection.execute("UPDATE agent_execution_policies SET execution_location='local'")
     assert agent_connection_statuses(status_db, '2026-10-05T12:00:10Z')['subject'] == dict(location='local',status='Local',hosts=[])
+
+
+@pytest.mark.parametrize('decision,expiry,expected', [
+    ('pending', '2026-10-05T13:00:00Z', 'Awaiting approval'),
+    ('approved', '2026-10-05T13:00:00Z', 'Completing setup'),
+    ('rejected', '2026-10-05T13:00:00Z', 'Needs attention'),
+    ('pending', '2026-10-05T11:00:00Z', 'Needs attention'),
+])
+def test_onboarding_is_not_reported_as_network_reconnection(status_db, decision, expiry, expected):
+    status_db.connection.execute('DELETE FROM execution_control_lanes')
+    status_db.connection.execute('INSERT INTO approvals VALUES(?,?)', ('approval', decision))
+    status_db.connection.execute('INSERT INTO execution_proposals VALUES(?,?,?,?,?,?)',
+        ('subject', 'host', expiry, '{"operator_approval_id":"approval"}', 'PREPARED', '2026-10-05T12:00:00Z'))
+    assert agent_connection_statuses(status_db, '2026-10-05T12:00:10Z')['subject']['status'] == expected

@@ -101,8 +101,11 @@ def finish_setup(deps, context, owner, fresh, request, *, verified):
         scoped = ExecutionToolDependencies(deps, SetupTransaction(deps.connection_factory, uow))
         access = build_execution_access(scoped)
         access.authorize_maintenance(context, uow=uow)
+        # Human dashboard operators have no agent identity. Use the same
+        # operator audit identity as execution grants, only after authorization.
+        commit_actor = context.actor_agent_id or 'operator'
         prior = uow.connection.execute('SELECT * FROM connection_setup_commits WHERE actor_agent_id=? '
-            'AND client_intent_id=?', (context.actor_agent_id, request['client_intent_id'])).fetchone()
+            'AND client_intent_id=?', (commit_actor, request['client_intent_id'])).fetchone()
         if prior:
             if prior['request_hash'] != digest:
                 raise conflict('This Finish request has different content.')
@@ -172,5 +175,5 @@ def finish_setup(deps, context, owner, fresh, request, *, verified):
                 actions=['open','send','steer','interrupt','close'], expires_at=expiry, max_executions=limits['actions'])
             result['binding'] = binding
         uow.connection.execute('INSERT INTO connection_setup_commits VALUES(?,?,?,?,?)',
-            (context.actor_agent_id, request['client_intent_id'], digest, json.dumps(result), deps.clock.now_iso()))
+            (commit_actor, request['client_intent_id'], digest, json.dumps(result), deps.clock.now_iso()))
         return result

@@ -236,4 +236,6 @@ class RuntimeAccessService:
         self.authorize(context)
         with self.cf.unit_of_work() as uow:
             self.grants.revoke(uow, grant_id=grant_id, now=self.clock.now_iso())
+            from .execution_revocation import invalidate_sessions
+            invalidate_sessions(uow.connection, grant_id=grant_id, now=self.clock.now_iso())
         return {"revoked": True}

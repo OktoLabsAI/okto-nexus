@@ -477,7 +477,7 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
             default_workspace = None  # dashboard falls back to "all workspaces"
 
         owner_host = "[::1]" if ":" in host else "127.0.0.1"
-        app = build_app(deps, lock=lock, runtime_owner_api_url=f"http://{owner_host}:{port}")
+        app = build_app(deps, lock=lock, runtime_owner_api_url=f"http://{owner_host}:{port}", bind_host=host, bind_port=port)
         app.state.default_workspace_id = default_workspace
         app.state.project_root = project_root
         # Trust actual loopback peers regardless of the listening address.

@@ -169,6 +169,8 @@ class NexusConfig:
     metrics_retention_days: int = DEFAULT_METRICS_RETENTION_DAYS
     metrics_publish_interval_seconds: int = DEFAULT_METRICS_PUBLISH_INTERVAL_SECONDS
     trust_mode: str = TRUST_MODE_OPEN
+    transport_security: str = "http_https"
+    remote_machine_policy: str = "manual"
     retention_events_keep_days: int = DEFAULT_RETENTION_EVENTS_KEEP_DAYS
     retention_read_deliveries_keep_days: int = (
         DEFAULT_RETENTION_READ_DELIVERIES_KEEP_DAYS
@@ -368,6 +370,14 @@ _INT_FIELDS: dict[str, tuple[str, str, int, int]] = {
 # field: (env var, CLI flag, default, allowed values) - closed-vocabulary
 # string knobs, parsed FAIL-CLOSED like the integer fields above.
 _ENUM_FIELDS: dict[str, tuple[str, str, str, tuple[str, ...]]] = {
+    "remote_machine_policy": (
+        "OKTO_NEXUS_REMOTE_MACHINE_POLICY", "--remote-machine-policy",
+        "manual", ("manual", "deny", "auto_replace"),
+    ),
+    "transport_security": (
+        "OKTO_NEXUS_TRANSPORT_SECURITY", "--transport-security",
+        "http_https", ("http_https", "https_only"),
+    ),
     "metrics_mode": (
         "OKTO_NEXUS_METRICS_MODE",
         "--metrics-mode",

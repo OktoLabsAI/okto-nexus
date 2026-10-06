@@ -1146,6 +1146,8 @@ export const api = {
     call<{grant_id: string}>("/api/v1/harness/grants", {method: "POST", body: JSON.stringify(body)}),
   agentExecutionPolicy: (id: string) => call<AgentExecutionPolicy>(`/api/v1/agents/${encodeURIComponent(id)}/execution-policy`),
   saveAgentExecutionPolicy: (id: string, body: {expected_revision: number; execution_location: 'local' | 'remote'; local_adapter_id: string | null}) => call<AgentExecutionPolicy>(`/api/v1/agents/${encodeURIComponent(id)}/execution-policy`, {method: 'PUT', body: JSON.stringify(body)}),
+  metaHarnessWorkspaces: (agent: string, signal?: AbortSignal) => call<{agent_id: string; runtime: boolean; items: Array<{workspace_id: string; display_name: string | null}>}>(
+    `/api/v1/meta-harness/agents/${encodeURIComponent(agent)}/workspaces`, { signal }),
   runtimeBindings: (after?: string) => call<{
     agents: RuntimeBindingAgent[]; has_more: boolean; next_endpoint_id: string | null;
   }>(`/api/v1/harness/bindings?limit=50${after ? `&after_endpoint_id=${encodeURIComponent(after)}` : ""}`),

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import asyncio
 from datetime import datetime, timezone
-import ipaddress
 import secrets
 import sqlite3
 from urllib.parse import urlsplit
@@ -37,21 +36,9 @@ SUBPROTOCOL = "nxl.v1"
 MAX_FRAME_BYTES = 1024 * 1024
 
 
-def _loopback(host: str | None) -> bool:
-    if not host:
-        return False
-    try:
-        return ipaddress.ip_address(host).is_loopback
-    except ValueError:
-        return host.lower() == "localhost"
-
-
 def _safe_transport(ws: WebSocket) -> bool:
-    # A reverse proxy must provide a trusted WSS ASGI scheme. Forwarded
-    # headers supplied by a client do not turn an insecure socket into TLS.
-    if ws.url.scheme != "wss" and not (
-            ws.url.scheme == "ws" and _loopback(ws.url.hostname) and
-            _loopback(ws.client.host if ws.client else None)):
+    from .transport_security import transport_allowed
+    if not transport_allowed(ws.app.state.deps.config, ws.url.scheme):
         return False
     origin = ws.headers.get("origin")
     if origin is None:
