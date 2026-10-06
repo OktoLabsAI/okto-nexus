@@ -31,6 +31,7 @@ classifiers = [
     "Topic :: System :: Distributed Computing",
 ]
 dependencies = [
+    "okto-nexus-connector-core==0.0.1",
     # Nexus uses the MCP Python SDK v1 FastMCP API.  Keep v2 as an explicit
     # migration instead of accepting a breaking major during installation.
     "mcp>=1.0,<2",
@@ -63,7 +64,6 @@ serve = [
     "fastapi>=0.110,!=0.137.0",
     "uvicorn>=0.29",
     "wsproto>=1.2",
-    "okto-nexus-connector-core==0.0.1",
     "sentence-transformers>=2.5",
     # Token counting for the workspace-analytics view (message "size" = TOKENS,
     # not bytes). o200k_base (GPT-4o family) is available since 0.7.0; loaded
@@ -82,7 +82,6 @@ serve-lite = [
     "fastapi>=0.110,!=0.137.0",
     "uvicorn>=0.29",
     "wsproto>=1.2",
-    "okto-nexus-connector-core==0.0.1",
 ]
 # The semantic-search model on its own (Frente 3). `serve` already bundles it;
 # this extra stays for composing onto the slim build (`.[serve-lite,embeddings]`)
