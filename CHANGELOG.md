@@ -16,6 +16,8 @@ All notable changes to Okto Nexus are documented in this file.
 - Recover fenced Windows runtime containers automatically, continue reconciliation
   after the initial retry budget, and provide audited last-resort recovery in Agents.
 - Require Connector Core 0.0.2.
+- Drain retained local events for inactive and archived agents during recovery,
+  without restoring access or creating actionable native approval requests.
 
 ### 0.2.0 development
 

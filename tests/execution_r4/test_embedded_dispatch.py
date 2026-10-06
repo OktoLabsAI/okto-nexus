@@ -540,7 +540,8 @@ def test_local_event_owner_change_prevents_commit(connected_local):
         assert uow.connection.execute("SELECT COUNT(*) FROM execution_event_ingress").fetchone()[0]==0
 
 
-def test_restart_publishes_uncommitted_native_events(tmp_path,monkeypatch):
+@pytest.mark.parametrize('agent_state', ['active', 'inactive', 'archived'])
+def test_restart_publishes_uncommitted_native_events(tmp_path,monkeypatch,agent_state):
     from nexus_connector_core import RuntimeEvent
     from okto_nexus.bootstrap import embedded_events
     with contextmanager(local_setup.__wrapped__)(tmp_path,monkeypatch,None) as setup:
@@ -562,6 +563,12 @@ def test_restart_publishes_uncommitted_native_events(tmp_path,monkeypatch):
                 assert time.monotonic()<until
                 time.sleep(.02)
             assert isinstance(owner.failure,OSError)
+        if agent_state == 'archived':
+            response = client.delete('/api/v1/agents/subject', headers=headers['operator'])
+            assert response.status_code == 200, response.text
+        elif agent_state == 'inactive':
+            response = client.patch('/api/v1/agents/subject', headers=headers['operator'], json={'is_active': False})
+            assert response.status_code == 200, response.text
     Path(candidate.executable).unlink()
     for _ in range(2):
         deps,app=app_for(tmp_path/"home")
@@ -573,6 +580,7 @@ def test_restart_publishes_uncommitted_native_events(tmp_path,monkeypatch):
                 rows=uow.connection.execute("SELECT payload_json FROM execution_event_ingress").fetchall()
                 assert len(rows)==1 and json.loads(rows[0][0])["payload"]=={"text":"Retained"}
                 assert uow.connection.execute("SELECT committed_contiguous,gap_state FROM execution_event_watermarks").fetchone()[:]==(1,"none")
+                assert bool(uow.connection.execute("SELECT is_active FROM agents WHERE agent_id='subject'").fetchone()[0]) == (agent_state == 'active')
     assert native.opens==1
 
 
