@@ -24,6 +24,11 @@ interface Presentation {
 }
 
 const PRESENTATIONS: Record<string, Presentation> = {
+  "handoff.created": {
+    label: "Handoff created",
+    tone: "info",
+    icon: ArrowRight,
+  },
   "message.read_receipt": {
     label: "Read receipt",
     tone: "receipt",
@@ -282,6 +287,8 @@ function ReadReceiptDetails({ payload }: { payload: StructuredMessagePayload }) 
 
 function HandoffDetails({ payload }: { payload: StructuredMessagePayload }) {
   const handoffId = stringValue(payload.handoff_id);
+  const title = stringValue(payload.title) ?? stringValue(payload.subject);
+  const request = stringValue(payload.request);
   const fromAgent = stringValue(payload.from_agent_id);
   const actor = stringValue(payload.by_agent_id);
   const claimant = stringValue(payload.claimed_by);
@@ -299,7 +306,7 @@ function HandoffDetails({ payload }: { payload: StructuredMessagePayload }) {
       <div className="grid grid-cols-2 gap-2">
         {handoffId && (
           <Detail label="Handoff">
-            <IdValue value={handoffId} />
+            {title ? <span title={handoffId}>{title}</span> : <IdValue value={handoffId} />}
           </Detail>
         )}
         {fromAgent && (
@@ -337,6 +344,7 @@ function HandoffDetails({ payload }: { payload: StructuredMessagePayload }) {
           </Detail>
         )}
       </div>
+      {request && <LongText label="Request" value={request} />}
       {feedback && <LongText label="Feedback" value={feedback} />}
       {result && <LongText label="Result" value={result} />}
       {reason && <LongText label="Reason" value={reason} />}

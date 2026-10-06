@@ -62,3 +62,12 @@ def test_revocation_after_selection_is_rejected(uow):
     uow.connection.execute("UPDATE execution_executors SET revoked_at='now' WHERE executor_id='new'")
     with pytest.raises(OktoNexusError):
         service.validate_recipient_workspace(uow, 'claude', 'new')
+
+
+@pytest.mark.parametrize('agent_id', ['new-mcp-agent', 'mcp'])
+def test_mcp_without_open_sessions_can_receive_in_existing_workspace(uow, agent_id):
+    uow.connection.execute("UPDATE sessions SET closed_at='2026-01-01'")
+    result = service.recipient_workspaces(uow, agent_id)
+    assert result['runtime'] is False
+    assert {item['workspace_id'] for item in result['items']} == {'local', 'new', 'old'}
+    service.validate_recipient_workspace(uow, agent_id, 'local')
