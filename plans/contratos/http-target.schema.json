@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://nexus.oktolabs.ai/plans/server-r4/http-target.schema.json",
-  "$comment": "PLANEJAMENTO. Não instalar como SDK publicado. Estado real: Core0.2.10 NXLr3; DTOs novos exigem geração/validação coordenada. Validar byte-size, relação entre campos, auth e JCS no código de produto.",
+  "$comment": "PLANEJAMENTO. N\u00c3\u00a3o instalar como SDK publicado. Estado real: Core0.2.10 NXLr3; DTOs novos exigem gera\u00c3\u00a7\u00c3\u00a3o/valida\u00c3\u00a7\u00c3\u00a3o coordenada. Validar byte-size, rela\u00c3\u00a7\u00c3\u00a3o entre campos, auth e JCS no c\u00c3\u00b3digo de produto.",
   "title": "Contrato de planejamento para Nexus Server R4",
   "$defs": {
     "Id": {
@@ -1206,6 +1206,13 @@
           ],
           "minLength": 1,
           "maxLength": 160
+        },
+        "connection_configuration": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "Portable version 2 connection preferences and finite execution limits included in the immutable approval diff. Validated by Core; no identity, credentials or destination paths."
         }
       },
       "required": [
@@ -1988,7 +1995,7 @@
         }
       },
       "additionalProperties": true,
-      "description": "Estrutura operacional original validada pelo schema do Core/adapter. Impor também 16 KiB e profundidade64; não renomear campos nativos aqui."
+      "description": "Estrutura operacional original validada pelo schema do Core/adapter. Impor tamb\u00c3\u00a9m 16 KiB e profundidade64; n\u00c3\u00a3o renomear campos nativos aqui."
     },
     "ApprovalPayload": {
       "type": "object",

@@ -127,7 +127,7 @@ def prepare_execution_binding(
         "client_intent_id", "executor_id", "adapter_id", "candidate_ref",
         "inventory_revision", "realization_ref", "workspace_id", "alias",
     }
-    allowed = required | {"agent_id_hint", "replace_binding_id", "adopt_endpoint_id"}
+    allowed = required | {"agent_id_hint", "replace_binding_id", "adopt_endpoint_id", "connection_configuration"}
     if (not isinstance(request, Mapping) or not required <= set(request) or
             not set(request) <= allowed):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
@@ -139,6 +139,10 @@ def prepare_execution_binding(
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                                   "Invalid binding preparation field.",
                                   {"field": name})
+    configuration = None
+    if request.get("connection_configuration") is not None:
+        from .execution_binding_setup import validate_requested_configuration
+        configuration = validate_requested_configuration(request)
     if request.get("replace_binding_id") is not None and (
             type(request["replace_binding_id"]) is not str or not 1 <= len(request["replace_binding_id"]) <= 160):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid replacement binding ID.", {})
@@ -262,13 +266,25 @@ def prepare_execution_binding(
             legacy = [item for item in legacy if item["endpoint_id"] != adoption["endpoint_id"]]
         blockers = (["existing_endpoint_requires_review"] if legacy else [])
 
+        from .remote_machine_policy import other_machines, automatic_source
+        machine_policy = getattr(access.config, 'remote_machine_policy', 'manual') if access else 'manual'
+        previous_machines = other_machines(conn, server_id=server_id, agent_id=subject_agent_id,
+            executor_id=request['executor_id']) if executor['kind'] == 'remote' else []
+        automatic_machine = None
+        if previous_machines and machine_policy == 'deny':
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                'Another machine is already authorized for this agent. The remote machine policy denies replacement.', {})
+        if previous_machines and machine_policy == 'auto_replace' and not operator:
+            automatic_machine = automatic_source(conn, previous_machines, agent_id=subject_agent_id,
+                adapter_id=request['adapter_id'], configuration=configuration)
+
         request_operator_proof = bool(
-            not operator and access is not None and
+            not operator and not automatic_machine and access is not None and
             access.config.feature_harness_integrations)
         if request_operator_proof and approvals is None:
             raise OktoNexusError(ErrorCode.INTERNAL_ERROR,
                                   "Binding approval is not available.", {})
-        enable_requested = operator or request_operator_proof
+        enable_requested = operator or request_operator_proof or bool(automatic_machine)
         if replacement is not None and not enable_requested:
             blockers.append("replacement_requires_operator")
         if enable_requested:
@@ -314,6 +330,13 @@ def prepare_execution_binding(
         }
         if replacement is not None:
             expected["replacement"] = replacement
+        if configuration is not None:
+            expected["connection_configuration"] = configuration
+        if previous_machines:
+            expected['previous_machines'] = previous_machines
+            expected['remote_machine_policy'] = machine_policy
+        if automatic_machine:
+            expected['automatic_machine_replacement'] = automatic_machine
         if adoption is not None:
             expected["migration_adoption"] = adoption
         diff_semantic = {
@@ -338,6 +361,10 @@ def prepare_execution_binding(
         summary = (f"Connect {agent_name} to {request['adapter_id']} "
                    f"installation {request['candidate_ref']} on {host_name} "
                    f"for {project_name} as {request['alias']}.")
+        summary += f" Machine ID: {request['executor_id']}."
+        if previous_machines:
+            summary += ' Revoke previous machine authorization: ' + ', '.join(
+                f"{item['label']} ({item['executor_id']})" for item in previous_machines) + '.'
         if replacement is not None:
             summary = (f"Replace binding {binding_id} revision {replacement['binding_revision']} "
                        f"from realization {replacement['realization_ref']} to {request['realization_ref']}. "
@@ -349,7 +376,18 @@ def prepare_execution_binding(
         if enable_requested and replacement is None and adoption is None:
             summary += (" Enable the approved endpoint and its managed profile."
                         if profile_id else " Enable the approved attach endpoint.")
-            summary += " Execution still requires a separate scoped grant."
+            if configuration is None:
+                summary += " Execution still requires a separate scoped grant."
+        if automatic_machine:
+            summary += ' Automatic replacement preserves the previous harness permissions, remaining action budget and expiry.'
+        elif configuration is not None:
+            limits = configuration['authorization']
+            summary += (f" Apply remote runtime configuration and authorize execution: "
+                        f"{limits['minutes'] if limits['minutes'] is not None else 'unlimited'} minutes, "
+                        f"{limits['actions'] if limits['actions'] is not None else 'unlimited'} actions. "
+                        f"Nexus tool access: {configuration['tool_access']}; "
+                        f"session policy: {configuration['session_policy'] or 'inherit'}. "
+                        f"Harness settings: {json.dumps(configuration['harness_settings'], sort_keys=True)}.")
         proposal = {
             "proposal_id": proposal_id, "proposal_revision": 1,
             "expires_at": expires_at, "server_id": server_id,
@@ -377,6 +415,8 @@ def prepare_execution_binding(
             },
             "can_apply": not blockers,
         }
+        if configuration is not None:
+            proposal['diff']['fields_changed'] += ['runtime_policy', 'harness_settings', 'tool_access', 'execution_grant']
         conn.execute(
             "INSERT INTO execution_proposals(proposal_id,server_id,"
             "client_intent_id,actor_agent_id,subject_agent_id,executor_id,"
@@ -406,7 +446,7 @@ def prepare_execution_binding(
 def apply_execution_binding(
     factory: ConnectionFactory, *, actor_agent_id: str,
     request: Mapping[str, Any], fresh_publications: Mapping,
-    context=None, access=None,
+    context=None, access=None, setup_deps=None,
 ) -> dict[str, Any]:
     """CAS a reviewed proposal into one canonical binding, without effect."""
     required = {"client_intent_id", "proposal_id", "proposal_revision",
@@ -477,13 +517,16 @@ def apply_execution_binding(
                 row["diff_hash"] != request["approved_diff_hash"] or
                 not proposal["can_apply"] or
                 (proposal["diff"]["requires_operator"] and not operator and
-                 not expected.get("operator_approval_id")) or
+                 not expected.get("operator_approval_id") and not expected.get('automatic_machine_replacement')) or
                 (request.get("operator_proof_ref") is not None and
                  not expected.get("operator_approval_id")) or
                 datetime.fromisoformat(row["expires_at"].replace(
                     "Z", "+00:00")) <= datetime.now(timezone.utc)):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The binding proposal cannot be applied.", {})
+        if expected.get('previous_machines') and (
+                access is None or access.config.remote_machine_policy != expected['remote_machine_policy']):
+            raise OktoNexusError(ErrorCode.CONFLICT, 'Remote machine policy changed after preparation.', {})
         operator_approved = expected.get("operator_approved", False)
         if operator_approved and (not operator or
                 _agent_guard(conn, actor_agent_id) != expected["operator_guard_digest"]):
@@ -501,6 +544,8 @@ def apply_execution_binding(
                 proof_ref=request.get("operator_proof_ref"))
             # Delegated proof approves this immutable diff, never an actor
             # change or a runtime grant. Apply still belongs to the agent.
+            operator_approved = True
+        if expected.get('automatic_machine_replacement'):
             operator_approved = True
         if operator_approved:
             if access is None or not access.config.feature_harness_integrations:
@@ -648,6 +693,12 @@ def apply_execution_binding(
         if adoption is not None:
             from .execution_binding_migration import record_adoption
             record_adoption(conn, proposal=proposal)
+        from .remote_machine_policy import apply_machine_replacement
+        apply_machine_replacement(uow, expected=expected, proposal=proposal, access=access, context=context)
+        if expected.get('connection_configuration') is not None and not expected.get('automatic_machine_replacement'):
+            from .execution_binding_setup import finish_approved_configuration
+            finish_approved_configuration(setup_deps, uow, row=row, expected=expected,
+                                          proposal=proposal, context=context, operator=operator)
         view = {
             "binding_id": proposal["binding_id"], "server_id": server_id,
             "executor_id": proposal["executor_id"],

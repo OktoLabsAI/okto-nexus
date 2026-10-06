@@ -62,6 +62,9 @@ class ExecutionBindingApprovals:
                  "approved_diff_hash": row["diff_hash"],
                  "operator_agent_id": decided_by,
                  "operator_guard_digest": _agent_guard(conn, decided_by)}
+        if expected.get('connection_configuration') is not None:
+            from dataclasses import asdict
+            proof['decision_context'] = asdict(context)
         conn.execute("UPDATE execution_proposals SET operator_proof_json=? WHERE proposal_id=?",
                      (canonical_json(proof).decode("utf-8"), row["proposal_id"]))
         return result
@@ -70,6 +73,11 @@ class ExecutionBindingApprovals:
 def verify_binding_operator_proof(conn, *, proposal_row, expected, proof_ref):
     """Compare a stored proof with its committed decision and current operator."""
     from .execution_binding_proposals import _agent_guard
+
+    if expected.get('connection_configuration') is not None and proof_ref == expected.get('operator_approval_id'):
+        decision = conn.execute('SELECT status FROM approvals WHERE approval_id=?', (proof_ref,)).fetchone()
+        if decision and decision['status'] == 'pending':
+            raise OktoNexusError('APPROVAL_REQUIRED', 'Waiting for approval in Nexus.', {})
 
     if (not proof_ref or proof_ref != expected.get("operator_approval_id") or
             not proposal_row["operator_proof_json"]):

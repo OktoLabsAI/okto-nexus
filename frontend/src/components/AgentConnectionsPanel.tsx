@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { CheckCircle2, Loader2 } from 'lucide-react';
 import { api, type WorkspaceListItem } from '../api';
 import { runtimeApi, localInstallationAvailable, type RuntimeOptions } from '../runtimeApi';
-import { emptyConnection, parseConnectionConfiguration, exportConnectionConfiguration, type ConnectionConfiguration, type SetupBaseline, type SetupRequest, type SetupTest } from '../connectionConfiguration';
+import { emptyConnection, parseConnectionConfiguration, exportConnectionConfiguration, policyOnlySetup, type ConnectionConfiguration, type SetupBaseline, type SetupRequest, type SetupTest } from '../connectionConfiguration';
 import { ConnectionWorkflow, connectionSteps } from './ConnectionWorkflow';
 import { ConfigurationHelp } from './ConfigurationHelp';
 import { HarnessPreferenceFields } from './HarnessPreferenceFields';
@@ -50,7 +50,7 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
     void Promise.all([api.agentExecutionPolicy(agentId),api.runtimePolicy(agentId),api.workspaces(),
       runtimeApi.executors(agentId,controller.signal),runtimeApi.setup(agentId,undefined,controller.signal)])
       .then(async ([policy,runtime,projects,hosts,initial]) => {
-        const matches = initial.connections.filter(c => c.adapter_id === policy.local_adapter_id);
+        const matches = initial.connections.filter(c => c.execution_location === policy.execution_location && c.adapter_id === policy.local_adapter_id);
         const saved = matches.length === 1 ? matches[0] : null;
         const setup = saved ? await runtimeApi.setup(agentId,saved.binding_id,controller.signal) : initial;
         if (controller.signal.aborted) return;
@@ -111,6 +111,10 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
     } catch(e) {setError(String(e));} finally {if (live.current) setBusy(false);}
   };
   const portableOnly = !runtimeEnabled || draft.execution_location === 'remote';
+  const workflowSteps = !runtimeEnabled ? ['Runtime connection'] : draft.execution_location === 'remote' ? ['Host & Connector'] : connectionSteps;
+  useEffect(() => {
+    if (portableOnly) {setStep(0);setVisited(0);}
+  }, [portableOnly]);
   useEffect(() => {
     if (step !== 1 || busy || !options || installationBusy) return;
     const choices = options.options.filter(row => row.adapter_id === draft.adapter_id && localInstallationAvailable(row));
@@ -150,16 +154,18 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
   const buildRequest = (): SetupRequest => {
     if (!baseline) throw new Error('Configuration is still loading.');
     const intent = `setup_${Array.from(crypto.getRandomValues(new Uint8Array(16)), byte => byte.toString(16).padStart(2,'0')).join('')}`;
-    return {client_intent_id:intent,agent_id:agentId,executor_id:executor,candidate_ref:candidateRef,
+    const value = {client_intent_id:intent,agent_id:agentId,executor_id:executor,candidate_ref:candidateRef,
       inventory_revision:options?.inventory_revision || '',workspace_id:workspace || null,binding_id:bindingId,
       baseline,configuration:draft};
+    const remoteBinding = connections.find(c => c.binding_id === bindingId && c.execution_location === 'remote');
+    return portableOnly && !(runtimeEnabled && draft.execution_location === 'remote' && remoteBinding) ? policyOnlySetup(value) : value;
   };
   const finish = async () => {
     setBusy(true);setError('');
     try {const value = request || buildRequest();setRequest(value);await runtimeApi.finishSetup(value);onClose();}
     catch(e) {setError(String(e));} finally {if(live.current)setBusy(false);}
   };
-  const summaries = [runtimeEnabled ? `${draft.execution_location} · ${draft.adapter_id || 'Choose a harness'}` : 'MCP only',
+  const summaries = [!runtimeEnabled ? 'MCP only' : draft.execution_location === 'remote' ? 'Remote · Configure on the Connector computer' : `Local · ${draft.adapter_id || 'Choose a harness'}`,
     selected?.label || 'Choose an installation',draft.workspace_label || 'Choose folders',draft.alias || 'Name the connection',
     Object.values(draft.harness_settings).join(' · ') || 'Harness defaults',
     `${draft.authorization.minutes ?? 'Unlimited'} minutes · ${draft.authorization.actions ?? 'Unlimited'} actions`,test?.stage || 'Not tested'];
@@ -192,12 +198,12 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
         imported.current=true;patch(config);setCandidateRef('');setBindingId(null);setWorkspace('');setVisited(0);setNotice('Configuration imported. Review the host, installation and folders.');
       }catch(e){setError(String(e));}
     }} />
-    <ConnectionWorkflow step={step} summaries={summaries} statuses={statuses} available={visited} locked={busy || installationBusy || !!testing}
+    <ConnectionWorkflow steps={workflowSteps} step={step} summaries={summaries} statuses={statuses} available={visited} locked={busy || installationBusy || !!testing}
       onStep={value => {if (value <= visited && !busy && !testing) go(value);}} />
-    <h4 className="font-semibold">Step {step+1} of {connectionSteps.length} · {connectionSteps[step]}</h4>
+    <h4 className="font-semibold">Step {step+1} of {workflowSteps.length} · {workflowSteps[step]}</h4>
     <fieldset disabled={busy || installationBusy || !!testing} className="space-y-4">
     {step === 0 && <>
-      {connections.length > 1 && <label className="block">Existing connection <span className="text-surface-500">Optional</span><select aria-label="Existing connection" className={input} value={bindingId || ''} onChange={async e => {
+      {runtimeEnabled && connections.some(c => c.execution_location === draft.execution_location) && <label className="block">Existing connection <span className="text-surface-500">Select to authorize and configure this connection</span><select aria-label="Existing connection" className={input} value={bindingId || ''} onChange={async e => {
         const saved=connections.find(c => c.binding_id===e.target.value);if(!saved)return;
         setBusy(true);setError('');
         try {const setup=await runtimeApi.setup(agentId,saved.binding_id);setBaseline(setup.baseline);setBindingId(saved.binding_id);
@@ -207,7 +213,7 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
             automatic_reply:true,authorization:setup.authorization || emptyConnection().authorization,
             workspace_label:workspaces.find(w => w.workspace_id===saved.workspace_id)?.display_name || ''});
         }catch(e){setError(String(e));}finally{setBusy(false);}
-      }}><option value="">Select a connection to edit or export</option>{connections.map(c => <option key={c.binding_id} value={c.binding_id}>{c.adapter_id} · {workspaces.find(w => w.workspace_id===c.workspace_id)?.display_name || c.workspace_id}</option>)}</select></label>}
+      }}><option value="">Select a connection to edit or export</option>{connections.filter(c => c.execution_location === draft.execution_location).map(c => <option key={c.binding_id} value={c.binding_id}>{c.adapter_id} · {workspaces.find(w => w.workspace_id===c.workspace_id)?.display_name || c.workspace_id}</option>)}</select></label>}
       <label className="block">Runtime connection <ConfigurationHelp label="Runtime connection">Use the global setting or override it for this agent. This change is applied when you finish.</ConfigurationHelp>
         <select className={input} aria-label="Runtime connection" value={draft.runtime_enabled === null ? 'inherit' : String(draft.runtime_enabled)} onChange={e => patch({runtime_enabled:e.target.value === 'inherit' ? null : e.target.value === 'true'})}>
           <option value="inherit">Use global setting ({runtimeDefault ? 'Enabled' : 'MCP only'})</option><option value="true">Enabled</option><option value="false">MCP only</option>
@@ -215,7 +221,7 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
       </label>
       {runtimeEnabled && <>
         <label className="block">Execution host <span className="text-surface-500">Required</span><select aria-label="Execution access" className={input} value={draft.execution_location} onChange={e => patch({execution_location:e.target.value as ConnectionConfiguration['execution_location']})}>
-          <option value="local">Local</option><option value="remote">Remote</option><option value="all">All</option></select></label>
+          <option value="local">Local</option><option value="remote">Remote</option></select></label>
         {draft.execution_location !== 'remote' && <div role="group" aria-label="Local runtime" className="flex gap-2 flex-wrap">
           {options?.catalog.runtimes.filter(r => r.support_status === 'managed_supported').map(r => <button key={r.adapter_id} className={`btn ${draft.adapter_id === r.adapter_id ? 'btn-primary':'btn-secondary'}`}
             aria-pressed={draft.adapter_id === r.adapter_id} data-testid={`local-runtime-${r.adapter_id}`}
@@ -258,7 +264,7 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
       {selected?.harness_configuration && <HarnessPreferenceFields schema={selected.harness_configuration} values={draft.harness_settings} onChange={harness_settings => patch({harness_settings})} />}
       <label className="block">Nexus tool access <span className="text-surface-500">Required</span><ConfigurationHelp label="Nexus tool access">Always allow skips approval requests for Nexus tools. Native harness approval settings remain separate.</ConfigurationHelp><select aria-label="Nexus tool access" className={input} value={draft.tool_access} onChange={e => patch({tool_access:e.target.value as 'ask' | 'always_allow'})}><option value="ask">Ask for approval</option><option value="always_allow">Always allow</option></select></label>
     </>}
-    {step === 5 && <>
+    {(step === 5 || (step === 0 && runtimeEnabled && draft.execution_location === 'remote' && connections.some(c => c.binding_id === bindingId && c.execution_location === 'remote'))) && <>
       <p>Next authorizes the connection test and the execution limits below. The connection is saved only after Finish.</p>
       {(['minutes','actions'] as const).map(key => <div key={key} className="space-y-2"><label className="block">{key==='minutes'?'Authorization duration (minutes)':'Action limit'} <span className="text-surface-500">Required</span>
         <ConfigurationHelp label={key==='minutes'?'Authorization duration':'Action limit'}>{key==='minutes'?'Duration starts at Finish. The temporary test has a separate four-minute limit.':'Maximum runtime actions after Finish. Select Unlimited for no action limit.'}</ConfigurationHelp>

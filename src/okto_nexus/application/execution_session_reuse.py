@@ -19,7 +19,7 @@ def reusable_opening(uow, *, factory, access, context, server_id, executor_id,
         "FROM execution_sessions s JOIN execution_operations o ON o.server_id=s.server_id "
         "AND o.executor_id=s.executor_id AND o.operation_id=s.open_operation_id "
         "WHERE s.server_id=? AND s.executor_id=? AND s.binding_id=? "
-        "AND s.lifecycle_state NOT IN ('CLOSED','FAILED') "
+        "AND s.lifecycle_state NOT IN ('CLOSED','FAILED') AND s.lease_state<>'REVOKED' "
         "AND (? IS NULL OR s.session_id=?) LIMIT 2",
         (server_id, executor_id, binding_id, session_id, session_id)).fetchall()
     if not rows:

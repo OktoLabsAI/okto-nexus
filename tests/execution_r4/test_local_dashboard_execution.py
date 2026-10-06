@@ -88,22 +88,22 @@ def test_local_subject_grant_revocation_refuses_native_dispatch(connected_local)
     assert native.opens == 0
 
 
-def test_meta_harness_policy_opt_in_reaches_core_and_publishes_reply(connected_local):
+def test_meta_harness_namespace_reaches_core_and_publishes_reply(connected_local):
     setup, binding, native = connected_local
     deps, _, client, headers, *_ = setup
     keyless(setup)
     path = f"/api/v1/harness/endpoints/{binding['endpoint_id']}/conversation-policy"
     policy = client.get(path).json()['data']
-    assert not policy['enabled']
-    body = {'expected_revision': policy['revision'], 'enabled': True}
-    assert client.put(path, json=body, headers=headers['subject']).status_code == 403
-    configured = client.put(path, json=body)
-    assert configured.status_code == 200, configured.text
-    assert client.put(path, json=body).status_code == 409
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute('SELECT revoked_at FROM runtime_execution_grants').fetchone()[0]
-        row = uow.connection.execute('SELECT public_config FROM agent_endpoints').fetchone()[0]
-        assert 'automatic-local' in row
+    assert policy['enabled']
+    namespaces = client.get('/api/v1/meta-harness/agents/subject/workspaces')
+    assert namespaces.status_code == 200, namespaces.text
+    assert [item['workspace_id'] for item in namespaces.json()['data']['items']] == [policy['workspace_id']]
+    refused = client.post('/api/v1/meta-harness/send', json={
+        'workspace': 'another-namespace', 'kind': 'message', 'audience': 'private',
+        'to_agent_id': 'subject', 'body': 'Do not execute'})
+    assert refused.status_code == 409, refused.text
+    assert refused.json()['error']['details']['reason'] == 'AGENT_WORKSPACE_MISMATCH'
+    assert native.opens == 0
     grant = client.post('/api/v1/harness/grants', json={
         'actor_agent_id': 'subject', 'endpoint_id': binding['endpoint_id'],
         'actions': ['open','send','interrupt','close'], 'max_executions': 10,

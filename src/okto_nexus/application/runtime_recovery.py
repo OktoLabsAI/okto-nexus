@@ -10,10 +10,11 @@ def drain_pending(deps):
     service=build_service(deps)
     with deps.connection_factory.unit_of_work() as uow:
         conn=uow.connection
-        if not defaults(conn)['automatic_recovery']: return
+        automatic_recovery = defaults(conn)['automatic_recovery']
         rows=conn.execute("SELECT p.*,d.message_id,d.recipient_agent_id,d.status delivery_status,d.consumer_kind,m.workspace_id "
             "FROM runtime_pending_deliveries p JOIN message_deliveries d USING(delivery_id) JOIN messages m USING(message_id) "
-            "WHERE p.status='waiting' ORDER BY p.attempts,p.created_at,p.delivery_id LIMIT 32").fetchall()
+            "WHERE p.status='waiting' AND (? OR EXISTS(SELECT 1 FROM runtime_handoff_notifications n WHERE n.message_id=m.message_id)) "
+            "ORDER BY p.attempts,p.created_at,p.delivery_id LIMIT 32", (automatic_recovery,)).fetchall()
         for row in rows:
             if row['delivery_status']!='unread' or row['consumer_kind'] is not None or conn.execute('SELECT 1 FROM delivery_outbox WHERE delivery_id=?',(row['delivery_id'],)).fetchone():
                 conn.execute("UPDATE runtime_pending_deliveries SET status='resolved',reason='Already claimed or processed' WHERE delivery_id=?",(row['delivery_id'],))
@@ -22,6 +23,11 @@ def drain_pending(deps):
             try:
                 message=deps.repos.messages.get(uow,workspace_id=row['workspace_id'],message_id=row['message_id'])
                 context=RuntimeRequestContext(**json.loads(row['context_json']))
+                if context.authentication_source == 'handoff_notification':
+                    from .runtime_handoff_notifications import validate
+                    validate(uow, message=message, recipient_id=row['recipient_agent_id'], agents=deps.repos.agents,
+                             now=deps.clock.now_iso(), governance=service._governance)
+                    service._runtime_planner.causality.record(uow, message=message, context=context, now=deps.clock.now_iso())
                 op=service._runtime_planner.enqueue(uow,context=context,message=message,
                     delivery=SimpleNamespace(delivery_id=row['delivery_id'],recipient_agent_id=row['recipient_agent_id']),
                     now=deps.clock.now_iso(),authorization_revision=row['authorization_revision'],
@@ -41,8 +47,12 @@ def drain_pending(deps):
             except Exception as error:
                 conn.execute('ROLLBACK TO pending_message')
                 conn.execute('RELEASE pending_message')
-                conn.execute("UPDATE runtime_pending_deliveries SET status='attention',reason=? WHERE delivery_id=?",
-                    (getattr(error,'code','RECOVERY_ADMISSION_FAILED'),row['delivery_id']))
+                notification = conn.execute('SELECT 1 FROM runtime_handoff_notifications WHERE message_id=?', (row['message_id'],)).fetchone()
+                transient = notification and getattr(error, 'code', None) == 'CONFLICT' and (
+                    getattr(error, 'message', '') == 'Delivery session requires reconciliation.' or
+                    bool(set(getattr(error, 'details', {}).get('blockers', ())) & {'inventory_not_fresh', 'executor_offline'}))
+                conn.execute("UPDATE runtime_pending_deliveries SET status=?,attempts=attempts+1,reason=? WHERE delivery_id=?",
+                    ('waiting' if transient else 'attention', getattr(error,'code','RECOVERY_ADMISSION_FAILED'),row['delivery_id']))
 
 
 def mark_recovery_attention(owner):

@@ -1,6 +1,6 @@
 export interface ConnectionConfiguration {
   format: 'okto-nexus-connection'; version: 1;
-  adapter_id: string; execution_location: 'local' | 'remote' | 'all';
+  adapter_id: string; execution_location: 'local' | 'remote';
   runtime_enabled: boolean | null; session_policy: 'shared' | 'per_sender' | 'per_sender_session' | null;
   workspace_root: string; workspace_label: string; provider_home: string | null;
   secret_bindings: Record<string,string>; alias: string; harness_settings: Record<string,string>;
@@ -22,7 +22,7 @@ export function parseConnectionConfiguration(text: string): ConnectionConfigurat
   }
   const base = emptyConnection();
   if (!value || Array.isArray(value) || Object.keys(value).sort().join() !== Object.keys(base).sort().join() ||
-      value.format !== base.format || value.version !== 1 || !['local','remote','all'].includes(value.execution_location) ||
+      value.format !== base.format || value.version !== 1 || !['local','remote'].includes(value.execution_location) ||
       (value.runtime_enabled !== null && typeof value.runtime_enabled !== 'boolean') || typeof value.automatic_reply !== 'boolean' ||
       !['shared','per_sender','per_sender_session',null].includes(value.session_policy) || !['ask','always_allow'].includes(value.tool_access))
     throw new Error('Use a complete Okto Nexus connection configuration (version 1).');
@@ -52,3 +52,9 @@ export interface SetupRequest {
   baseline: SetupBaseline; configuration: ConnectionConfiguration;
 }
 export interface SetupTest {test_id: string; status: 'running' | 'succeeded' | 'failed'; stage: string; details: string[]}
+
+// Remote onboarding and MCP-only changes save policy, not a local installation.
+export function policyOnlySetup(request: SetupRequest): SetupRequest {
+  return {...request, executor_id:'', candidate_ref:'', inventory_revision:'', workspace_id:null, binding_id:null,
+    baseline:{...request.baseline,binding_revision:null,endpoint_revision:null}};
+}

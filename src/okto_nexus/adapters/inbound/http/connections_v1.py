@@ -58,6 +58,7 @@ class BindingPrepareRequest(BaseModel):
     agent_id_hint: _Id | None = None
     replace_binding_id: _Id | None = None
     adopt_endpoint_id: _Id | None = None
+    connection_configuration: dict | None = None
     executor_id: _Id
     adapter_id: _Id
     candidate_ref: Annotated[str, Field(
@@ -97,7 +98,7 @@ def build_router() -> APIRouter:
     def binding_error(error, stage):
         status = {ErrorCode.NOT_FOUND: 404, ErrorCode.PERMISSION_DENIED: 403,
                   ErrorCode.CONFLICT: 409, ErrorCode.VALIDATION_ERROR: 422,
-                  'RECONCILIATION_REQUIRED': 409}.get(error.code, 500)
+                  'RECONCILIATION_REQUIRED': 409, 'APPROVAL_REQUIRED': 403}.get(error.code, 500)
         result = v1_err(status, error.code, error.message, stage=stage)
         result.headers["Cache-Control"] = "no-store"
         return result
@@ -235,6 +236,7 @@ def build_router() -> APIRouter:
         def _apply():
             return apply_execution_binding(
                 factory, actor_agent_id=agent.agent_id,
+                setup_deps=request.app.state.deps,
                 request=body.model_dump(exclude_none=True),
                 fresh_publications=request.app.state.inventory_fresh_publications,
                 context=runtime_request_context(),
@@ -246,6 +248,20 @@ def build_router() -> APIRouter:
         except OktoNexusError as error:
             return binding_error(error, "binding.apply")
         return JSONResponse(view, headers={"Cache-Control": "no-store"})
+
+    @router.get('/connections/status')
+    async def connections_status(request: Request) -> JSONResponse:
+        if get_authenticated_agent() is None:
+            return v1_err(401, 'AUTH_FAILED', 'Authentication is required.')
+        from ....application.connection_status import connection_status
+        deps = request.app.state.deps
+        context = runtime_request_context()
+        try:
+            value = await anyio.to_thread.run_sync(lambda: connection_status(deps.connection_factory,
+                context=context, access=build_execution_access(deps)))
+        except OktoNexusError as error:
+            return binding_error(error, 'connection.status')
+        return JSONResponse(value, headers={'Cache-Control':'no-store'})
 
     @router.get("/connections/bindings/{binding_id}")
     async def binding_view(binding_id: str, request: Request) -> JSONResponse:

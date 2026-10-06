@@ -300,21 +300,29 @@ Important boundaries:
 
 ## HTTP surfaces and authentication
 
-| Surface | Loopback bind | Non-loopback bind |
+| Surface | Direct loopback client | Remote client |
 |---|---|---|
 | SPA shell/assets, `/healthz`, info, license | Public | Public |
-| REST data/control plane | Keyless operator trust | Active `nxs_` key required |
+| Dashboard REST data/control plane | Keyless operator trust | Human operator session |
 | MCP `/mcp` | Active `nxs_` key required | Active `nxs_` key required |
 | EPT monitor endpoints | Scoped `nxsept_` accepted | Scoped `nxsept_` accepted |
 
 MCP-over-HTTP connections always represent an agent. The dashboard/REST loopback trust path represents
 the local operator. Browser-origin checks protect mutating operator routes, and
-binding beyond loopback removes keyless REST trust.
+binding to `0.0.0.0` preserves direct loopback access. Forwarded requests never
+inherit loopback trust. Agent REST/MCP credentials remain separate from UI sessions.
 
-On a non-loopback bind, use the reserved `operator` identity's key for the
-dashboard/control plane. Participant keys authenticate requests but
-operator-only routes return `PERMISSION_DENIED`. When a store has no keys at
-all, startup creates the operator key and prints its plaintext once.
+For remote UI access, open the dashboard locally at `http://127.0.0.1:8202`,
+then set a username and password under **Settings → Operator access**. Remote
+browsers use **Operator sign-in**, not an agent API key. Passwords require at
+least 12 characters and are salted and hashed. Sessions expire after eight
+hours and use HttpOnly, SameSite cookies (Secure over HTTPS). Sign out revokes
+the session; changing the password revokes all sessions. Local access can reset
+a forgotten password; remote changes require the current password.
+The separate `operator-auth.db` in the Nexus home stores credential hashes,
+session hashes, and bounded human-action audit records, without agent keys.
+Startup no longer issues an agent key for dashboard login. HTTPS protects
+credentials and session traffic when using the dashboard across a network.
 
 Permanent agent keys can authenticate REST and MCP, but helper monitors should
 receive only a short-lived ephemeral poll token (`nxsept_...`). EPTs are bound
@@ -768,6 +776,16 @@ embeddings. Handoffs and other non-message live rows are not age-pruned.
 | `OKTO_NEXUS_METRICS_MODE` | `--metrics-mode` | `disabled` | `disabled`, `local_only`, `anonymous_beacon` |
 | `OKTO_NEXUS_METRICS_DIR` | `--metrics-dir` | `{home}/metrics` | Local telemetry JSONL/state |
 | `OKTO_NEXUS_METRICS_BEACON_URL` | `--metrics-beacon-url` | `https://nexus-metrics.oktolabs.ai` | Used only in beacon mode |
+| `OKTO_NEXUS_TRANSPORT_SECURITY` | `--transport-security` | `http_https` | `http_https`: HTTP/HTTPS and WS/WSS; `https_only`: HTTPS/WSS only |
+
+**Settings → Transport security** controls the same global policy for the UI,
+HTTP APIs, MCP, and runtime WebSocket links. HTTP and WS are allowed over LAN
+by default; credentials and binding approvals are still required. `https_only`
+rejects plaintext requests, including loopback, with `TLS_REQUIRED` (HTTP 403).
+Configure TLS at the ASGI server before enabling this mode. This setting does
+not install certificates or enable TLS on the listener. It takes effect for new
+requests and connections; restart to close existing streams. Only the trusted
+ASGI scheme is used: raw client forwarding headers cannot bypass this policy.
 | `OKTO_NEXUS_METRICS_RETENTION_DAYS` | `--metrics-retention-days` | 30 | Minimum 0 |
 | `OKTO_NEXUS_METRICS_PUBLISH_INTERVAL_SECONDS` | `--metrics-publish-interval-seconds` | 3600 | Minimum 60 |
 
@@ -1332,6 +1350,27 @@ missing historical evidence require review. Legacy embedded connections can use
 their retained, digest-verified local installation record as the baseline.
 Version observations survive a Core upgrade only for the exact same host source
 and platform; current Core still evaluates runtime support and containment.
+
+## Remote machine approval and connection status
+
+Remote approvals are scoped to the agent and its registered Connector machine
+identity (`connector_id` / `executor_id`), not its hostname or IP address.
+**Settings → Remote machine policy** defaults to **Require approval** when
+another machine requests the same agent. The operator can select **Deny another
+machine** or **Accept and revoke previous machine** instead. The first machine
+always requires approval. A reviewed replacement revokes the previous machine's
+endpoints, grants, binding tickets and session capabilities atomically.
+
+Automatic replacement retains the approved harness preferences and the original
+grant expiry and consumed action count. It cannot widen tool access or renew an
+exhausted authorization. Ambiguous prior connections require manual review.
+
+Connector onboarding is asynchronous: after submitting the request, the CLI
+returns and its daemon completes the connection after approval, including after
+a daemon restart. No operator key is needed on the remote computer. Use
+`okto-nexus-connector status` (or `--json status`) for each configured connection's
+current state. The authenticated `GET /v1/connections/status` endpoint reports
+only connections belonging to the calling agent, without credentials or paths.
 
 ## License
 
