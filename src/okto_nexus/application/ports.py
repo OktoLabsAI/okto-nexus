@@ -288,10 +288,10 @@ class AgentRepo(Protocol):
         ...
 
     def delete(self, uow: UnitOfWork, *, agent_id: str) -> bool:
-        """Remove the agent row entirely. Returns ``True`` if it existed.
+        """Remove the agent, retaining a revoked tombstone when history requires it.
 
-        Management-surface only (FR4): deactivation (``set_active``) is the
-        normal revocation path; deletion is the irreversible cleanup.
+        Returns ``True`` if a visible identity existed. Deactivation
+        (``set_active``) remains the reversible revocation path.
         """
         ...
 

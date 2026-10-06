@@ -1,5 +1,6 @@
 """Finish is the sole configuration commit boundary."""
 import json
+from copy import deepcopy
 import pytest
 from test_local_realization import local_setup
 from okto_nexus.application.connection_setup import finish_setup, load_setup
@@ -39,6 +40,24 @@ def test_finish_atomic_idempotent(local_setup):
     assert result['saved']
     assert count(local_setup,'execution_bindings') == 1
     assert count(local_setup,'connection_setup_commits') == 1
+    workspace_id = result['binding']['workspace_id']
+    client, headers = local_setup[2:4]
+    listed = client.get('/api/v1/workspaces', headers=headers['operator'])
+    assert listed.status_code == 200
+    assert workspace_id in {item['workspace_id'] for item in listed.json()['data']['workspaces']}
+    recipient = client.get('/api/v1/meta-harness/agents/subject/workspaces', headers=headers['operator'])
+    assert recipient.status_code == 200
+    assert workspace_id in {item['workspace_id'] for item in recipient.json()['data']['items']}
+    paths = client.get(f'/v1/workspaces/{workspace_id}/paths',
+        params={'executor_id': request['executor_id']}, headers=headers['operator'])
+    assert paths.status_code == 200
+    assert paths.json()['items'] == [{'path': str(local_setup[6].resolve())}]
+    dashboard_paths = client.get(f'/api/v1/runtime-management/workspaces/{workspace_id}/paths',
+        params={'executor_id': request['executor_id']}, headers=headers['operator'])
+    assert dashboard_paths.status_code == 200
+    assert dashboard_paths.json()['items'] == paths.json()['items']
+    assert client.get(f'/v1/workspaces/{workspace_id}/paths',
+        params={'executor_id': request['executor_id']}, headers=headers['subject']).status_code == 403
     assert finish(local_setup,context,request,verified=None) == result
     assert count(local_setup,'execution_bindings') == 1
     view=load_setup(local_setup[0],context,'subject',result['binding']['binding_id'])
@@ -63,6 +82,31 @@ def test_finish_atomic_idempotent(local_setup):
         conn.execute(sql)
         assert conn.execute('SELECT response_policy,revision FROM agent_endpoints WHERE endpoint_id=?',(endpoint,)).fetchone()[:] == ('conversation',revision)
         assert [tuple(r) for r in conn.execute('SELECT * FROM runtime_execution_grants')] == before
+
+
+def test_workspace_paths_aggregate_across_agents_on_the_same_host(local_setup):
+    context, first = request_for(local_setup)
+    initial = finish(local_setup, context, first, verified={
+        'root': directory_identity(first['configuration']['workspace_root']), 'home': None})
+    workspace_id = initial['binding']['workspace_id']
+    second_root = local_setup[6].parent / 'another-location'
+    second_root.mkdir()
+    with local_setup[0].connection_factory.unit_of_work() as uow:
+        local_setup[0].repos.agents.upsert(uow, agent_id='second-agent')
+        local_setup[1].state.auth.issue_key(uow, agent_id='second-agent')
+    second = deepcopy(first)
+    second.update(client_intent_id='finish-second', agent_id='second-agent', workspace_id=workspace_id,
+                  baseline=load_setup(local_setup[0], context, 'second-agent')['baseline'])
+    second['configuration'].update(workspace_root=str(second_root), alias='second-agent-connection')
+    finish(local_setup, context, second, verified={
+        'root': directory_identity(str(second_root)), 'home': None})
+
+    client, headers = local_setup[2:4]
+    response = client.get(f'/v1/workspaces/{workspace_id}/paths',
+        params={'executor_id': first['executor_id']}, headers=headers['operator'])
+    assert response.status_code == 200
+    assert {item['path'] for item in response.json()['items']} == {
+        str(local_setup[6].resolve()), str(second_root.resolve())}
 
 
 @pytest.mark.parametrize('failure',['no_test','invalid_settings','stale_baseline'])

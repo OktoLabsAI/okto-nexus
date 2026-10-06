@@ -110,9 +110,10 @@ const SECTIONS: Section[] = [
             (reversible).
           </Li>
           <Li>
-            <b>Delete</b>: removes a regular agent identity for good. The
-            reserved <code>operator</code> identity powers dashboard messaging
-            and Meta-harness, so neither the UI nor the API allows deleting it.
+            <b>Delete</b>: removes a regular agent from active use and revokes
+            its key. Runtime history remains available when it references the
+            agent. The reserved <code>operator</code> identity powers dashboard
+            messaging and Meta-harness, so it cannot be deleted.
           </Li>
         </ul>
         <H>Permissions & presets</H>

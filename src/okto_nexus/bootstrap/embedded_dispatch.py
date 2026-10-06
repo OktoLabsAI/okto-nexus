@@ -58,6 +58,7 @@ class EmbeddedDispatchOwner:
         self.state_failure = None
         self.recovery_failure = None
         self._recovery_task = None
+        self._recovery_lock = asyncio.Lock()
         from .embedded_events import EmbeddedEventPublisher
         self.events = EmbeddedEventPublisher(self)
         from .embedded_tools import EmbeddedToolsOwner
@@ -126,8 +127,6 @@ class EmbeddedDispatchOwner:
         from ..application.runtime_recovery import drain_pending, mark_recovery_attention
         reported = False
         async def attempt():
-            nonlocal reported
-            reported = False
             await self._start_attempt()
             return self.pump is not None
         async def exhausted():
@@ -135,15 +134,41 @@ class EmbeddedDispatchOwner:
             await asyncio.to_thread(mark_recovery_attention, self)
             if not reported:
                 reported = True
-                await asyncio.to_thread(self._recovery_event,'RECOVERY_ATTENTION_REQUIRED','Automatic recovery attempts exhausted. Inspect retained runtime state; no work was replayed.')
+                await asyncio.to_thread(self._recovery_event,'RECOVERY_ATTENTION_REQUIRED','Initial recovery attempts did not resolve retained state. Automatic checks continue; operator recovery is available. No work was replayed.')
         await RuntimeAutomation().recover(attempt=attempt, stop=self._stopping,
             enabled=lambda: asyncio.to_thread(self._recovery_enabled),
-            pending=lambda: asyncio.to_thread(drain_pending, self.deps), exhausted=exhausted)
+            pending=lambda: asyncio.to_thread(drain_pending, self.deps), exhausted=exhausted, continuous=True)
 
-    async def _start_attempt(self):
+    async def _start_attempt(self, *, manual=False):
+        async with self._recovery_lock:
+            if self.pump is not None or self._stopping.is_set():
+                return
+            await self._start_attempt_locked(manual=manual)
+
+    async def retry_recovery(self):
+        await asyncio.to_thread(self.verify)
+        await self._start_attempt(manual=True)
+        return {'state': 'READY' if self.pump is not None else 'RECOVERING',
+                'error_code': getattr(self.recovery_failure, 'code', None),
+                'message': ('Runtime restored. Previous work was not replayed.' if self.pump is not None else
+                    'Recovery could not prove that all previous runtime processes stopped. Retained history was preserved.')}
+
+    async def recovery_plan(self):
+        from .embedded_reconciliation import EmbeddedReconciliation
+        async with self._recovery_lock:
+            return await EmbeddedReconciliation(self).recovery_plan()
+
+    async def confirm_recovery(self, plan, actor):
+        from .embedded_reconciliation import EmbeddedReconciliation
+        async with self._recovery_lock:
+            await EmbeddedReconciliation(self).confirm_stopped(plan, actor)
+            await self._start_attempt_locked(manual=True)
+        return await self.retry_recovery()
+
+    async def _start_attempt_locked(self, *, manual=False):
         if not protocol_info()["remote_execution_ready"]:
             return
-        if not await asyncio.to_thread(self._recovery_enabled):
+        if not manual and not await asyncio.to_thread(self._recovery_enabled):
             if not await asyncio.to_thread(self._activate): return
         self.recovery_failure=None
         try:

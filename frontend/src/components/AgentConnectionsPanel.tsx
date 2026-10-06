@@ -25,6 +25,8 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
   const [options,setOptions] = useState<RuntimeOptions | null>(null);
   const [workspaces,setWorkspaces] = useState<WorkspaceListItem[]>([]);
   const [workspace,setWorkspace] = useState('');
+  const [workspacePaths,setWorkspacePaths] = useState<{path: string}[]>([]);
+  const [workspacePathsLoading,setWorkspacePathsLoading] = useState(false);
   const [candidateRef,setCandidateRef] = useState('');
   const [baseline,setBaseline] = useState<SetupBaseline | null>(null);
   const [bindingId,setBindingId] = useState<string | null>(null);
@@ -80,6 +82,24 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
       .finally(() => {if (!controller.signal.aborted) setBusy(false);});
     return () => controller.abort();
   },[agentId,executor,workspace,reload]);
+  useEffect(() => {
+    setWorkspacePaths([]);
+    setWorkspacePathsLoading(false);
+    if (!workspace || !executor || draft.execution_location !== 'local') return;
+    const controller = new AbortController();
+    setWorkspacePathsLoading(true);
+    runtimeApi.workspacePaths(workspace, executor, controller.signal)
+      .then(({items}) => {
+        if (controller.signal.aborted) return;
+        setWorkspacePaths(items);
+        if (items.length === 1) {
+          setDraft(current => current.workspace_root ? current : {...current, workspace_root: items[0].path});
+        }
+      })
+      .catch(() => { /* The folder can still be entered manually. */ })
+      .finally(() => { if (!controller.signal.aborted) setWorkspacePathsLoading(false); });
+    return () => controller.abort();
+  }, [workspace, executor, draft.execution_location]);
   useEffect(() => {
     if (!testing || !test) return;
     const controller = new AbortController();
@@ -162,7 +182,13 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
   };
   const finish = async () => {
     setBusy(true);setError('');
-    try {const value = request || buildRequest();setRequest(value);await runtimeApi.finishSetup(value);onClose();}
+    try {
+      const value = request || buildRequest();
+      setRequest(value);
+      await runtimeApi.finishSetup(value);
+      window.dispatchEvent(new Event('nexus-workspaces-changed'));
+      onClose();
+    }
     catch(e) {setError(String(e));} finally {if(live.current)setBusy(false);}
   };
   const summaries = [!runtimeEnabled ? 'MCP only' : draft.execution_location === 'remote' ? 'Remote · Configure on the Connector computer' : `Local · ${draft.adapter_id || 'Choose a harness'}`,
@@ -234,7 +260,7 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
       </>}
     </>}
     {step === 1 && <fieldset disabled={installationBusy || busy} className="space-y-3">
-      <label>Workspace <span className="text-surface-500">Required</span><select aria-label="Runtime workspace" className={input} value={workspace} onChange={e => {setWorkspace(e.target.value);setCandidateRef('');setBindingId(null);setVisited(1);patch({workspace_label:workspaces.find(w => w.workspace_id === e.target.value)?.display_name || ''});}}>
+      <label>Workspace <span className="text-surface-500">Required</span><select aria-label="Runtime workspace" className={input} value={workspace} onChange={e => {setWorkspace(e.target.value);setCandidateRef('');setBindingId(null);setVisited(1);patch({workspace_label:workspaces.find(w => w.workspace_id === e.target.value)?.display_name || '',workspace_root:''});}}>
         <option value="">Register a new workspace</option>{workspaces.map(w => <option key={w.workspace_id} value={w.workspace_id}>{w.display_name || w.workspace_id}</option>)}</select></label>
       <div role="group" aria-label="Local installation" className="space-y-2">{options?.options.filter(row => row.adapter_id === draft.adapter_id && row.candidate_ref).map(row => {
         const info=options.availability.availability?.find(i => i.candidate_ref === row.candidate_ref);
@@ -253,7 +279,16 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
     </fieldset>}
     {step === 2 && <>
       <label className="block">Workspace name <span className="text-surface-500">Required</span><input aria-label="Workspace name" className={input} value={draft.workspace_label} onChange={e => patch({workspace_label:e.target.value})} /></label>
-      <label className="block">Workspace folder <span className="text-surface-500">Required</span><ConfigurationHelp label="Workspace folder">Existing absolute folder on the execution host. The harness operates in this directory.</ConfigurationHelp><input aria-label="Workspace folder" className={input} value={draft.workspace_root} onChange={e => patch({workspace_root:e.target.value})} /></label>
+      {workspace && draft.execution_location === 'local' && workspacePaths.length > 0 && <label className="block">Previously used folders on this execution host
+        <select aria-label="Saved workspace folder" className={input}
+          value={workspacePaths.some(item => item.path === draft.workspace_root) ? draft.workspace_root : ''}
+          onChange={e => patch({workspace_root:e.target.value})}>
+          <option value="">Enter a new folder</option>
+          {workspacePaths.map(item => <option key={item.path} value={item.path}>{item.path}</option>)}
+        </select>
+      </label>}
+      {workspace && workspacePathsLoading && <p className="text-xs text-surface-500">Loading saved workspace folders…</p>}
+      <label className="block">Workspace folder <span className="text-surface-500">Required</span><ConfigurationHelp label="Workspace folder">Existing absolute folder on the execution host. Folders previously used for this workspace on the same host are suggested above. The harness operates in the selected directory.</ConfigurationHelp><input aria-label="Workspace folder" className={input} value={draft.workspace_root} onChange={e => patch({workspace_root:e.target.value})} /></label>
       <label className="block">Login directory <span className="text-surface-500">Optional</span><ConfigurationHelp label="Login directory">The account directory suggested by Core discovery. Continuing authorizes the harness to use this login for the test and this connection.</ConfigurationHelp><input aria-label="Login directory" className={input} value={draft.provider_home || ''} onChange={e => patch({provider_home:e.target.value || null})} /></label>
     </>}
     {step === 3 && <>

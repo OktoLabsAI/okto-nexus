@@ -169,6 +169,13 @@ class ObservabilityService:
                     "open_handoffs": int(open_handoffs.get(row["agent_id"], 0)),
                 }
             )
+        visible_agents = {node["agent_id"] for node in nodes}
+        message_edges = self._q.message_edges(
+            uow, workspace_id=workspace_id, since_iso=since_iso
+        )
+        handoff_edges = self._q.handoff_rows(
+            uow, workspace_id=workspace_id, statuses=("OPEN", "CLAIMED")
+        )
 
         return {
             "workspace_id": workspace_id,
@@ -177,14 +184,15 @@ class ObservabilityService:
             "nodes": nodes,
             "channels": self._q.channel_rows(uow, workspace_id=workspace_id),
             "edges": {
-                "messages": self._q.message_edges(
-                    uow, workspace_id=workspace_id, since_iso=since_iso
-                ),
-                "handoffs": self._q.handoff_rows(
-                    uow,
-                    workspace_id=workspace_id,
-                    statuses=("OPEN", "CLAIMED"),
-                ),
+                "messages": [
+                    edge for edge in message_edges
+                    if edge["from"] in visible_agents and edge["to"] in visible_agents
+                ],
+                "handoffs": [
+                    edge for edge in handoff_edges
+                    if edge["from_agent_id"] in visible_agents
+                    and (edge["claimed_by"] is None or edge["claimed_by"] in visible_agents)
+                ],
             },
         }
 

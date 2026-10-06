@@ -34,6 +34,7 @@ export function EmbeddedPreparation({agentId, executorId, hostLabel, workspaceId
   });
   const [pending, setPending] = useState<LocalPreparationRequest | null>(saved.request);
   const [root, setRoot] = useState(saved.request?.workspace_root || "");
+  const [workspacePaths, setWorkspacePaths] = useState<{path: string}[]>([]);
   const [home, setHome] = useState(saved.request ? saved.request.provider_home || "" : choice.provider_home_suggestion || "");
   const [label, setLabel] = useState(saved.request?.workspace_label || workspaceLabel);
   const [references, setReferences] = useState(saved.request
@@ -49,6 +50,18 @@ export function EmbeddedPreparation({agentId, executorId, hostLabel, workspaceId
   const settings = runtimeSettings[choice.adapter_id];
   const mounted = useRef(true);
   useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
+  useEffect(() => {
+    if (!workspaceId) return;
+    const controller = new AbortController();
+    runtimeApi.workspacePaths(workspaceId, executorId, controller.signal)
+      .then(({items}) => {
+        if (controller.signal.aborted) return;
+        setWorkspacePaths(items);
+        if (items.length === 1 && !saved.request) setRoot(current => current || items[0].path);
+      })
+      .catch(() => { /* Manual entry remains available. */ });
+    return () => controller.abort();
+  }, [workspaceId, executorId, saved.request]);
 
   const submit = async () => {
     setBusy(true); setError("");
@@ -105,6 +118,14 @@ export function EmbeddedPreparation({agentId, executorId, hostLabel, workspaceId
     <p className="text-xs text-surface-500">Host: {hostLabel}</p>
 
     <fieldset disabled={busy || pending !== null || !!saved.error} className="space-y-2">
+      {workspaceId && workspacePaths.length > 0 && <label className="block">Previously used folders on this execution host
+        <select aria-label="Saved workspace directory" className={inputClass}
+          value={workspacePaths.some(item => item.path === root) ? root : ''}
+          onChange={event => setRoot(event.target.value)}>
+          <option value="">Enter a new folder</option>
+          {workspacePaths.map(item => <option key={item.path} value={item.path}>{item.path}</option>)}
+        </select>
+      </label>}
       <label className="block">Workspace directory <span className="text-xs text-surface-500">Required</span><ConfigurationHelp label="Workspace directory">Existing absolute directory this harness may use for the selected workspace.</ConfigurationHelp><input required aria-label="Workspace directory" className={inputClass} value={root} maxLength={4096} onChange={event => setRoot(event.target.value)} /></label>
       {!workspaceId && <label className="block">New workspace name <span className="text-xs text-surface-500">Required</span><input required aria-label="New workspace name" className={inputClass} value={label} maxLength={160} onChange={event => setLabel(event.target.value)} /></label>}
       {workspaceId && <p>Workspace: {workspaceLabel || workspaceId}</p>}

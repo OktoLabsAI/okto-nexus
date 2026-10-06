@@ -175,6 +175,12 @@ class CapabilityRequest(BaseModel):
     replaces_capability_id: _Id | None = None
 
 
+class RecoveryConfirmation(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    plan: dict
+    confirmation: Literal['PREVIOUS_RUNTIME_PROCESSES_STOPPED']
+
+
 def build_router() -> APIRouter:
     router = APIRouter()
 
@@ -197,6 +203,49 @@ def build_router() -> APIRouter:
         except OktoNexusError as error:
             return v1_err(403, error.code, error.message)
         return None
+
+    @router.get("/runtime/recovery/plan")
+    async def runtime_recovery_plan(request: Request):
+        denied = await shutdown_authority(request, mutate=True)
+        if denied is not None:
+            return denied
+        owner = getattr(request.app.state, 'embedded_dispatch_owner', None)
+        if owner is None:
+            return v1_err(503, 'RECONCILIATION_REQUIRED', 'The local runtime owner is unavailable.')
+        try:
+            return JSONResponse(await owner.recovery_plan(), headers={'Cache-Control': 'no-store'})
+        except Exception as error:
+            return v1_err(409, getattr(error, 'code', 'RECONCILIATION_REQUIRED'),
+                'A safe recovery plan could not be prepared. Retained history was preserved.')
+
+    @router.post("/runtime/recovery/confirm-stopped")
+    async def confirm_runtime_stopped(body: RecoveryConfirmation, request: Request):
+        denied = await shutdown_authority(request, mutate=True)
+        if denied is not None:
+            return denied
+        owner = getattr(request.app.state, 'embedded_dispatch_owner', None)
+        if owner is None:
+            return v1_err(503, 'RECONCILIATION_REQUIRED', 'The local runtime owner is unavailable.')
+        try:
+            view = await owner.confirm_recovery(body.plan, get_authenticated_agent().agent_id)
+        except Exception as error:
+            return v1_err(409, getattr(error, 'code', 'RECONCILIATION_REQUIRED'),
+                'Recovery state changed or remains unresolved. Review a new plan before continuing.')
+        return JSONResponse(view, headers={'Cache-Control': 'no-store'})
+
+    @router.post("/runtime/recovery/retry")
+    async def retry_runtime_recovery(request: Request):
+        denied = await shutdown_authority(request, mutate=True)
+        if denied is not None:
+            return denied
+        owner = getattr(request.app.state, 'embedded_dispatch_owner', None)
+        if owner is None:
+            return v1_err(503, 'RECONCILIATION_REQUIRED', 'The local runtime owner is unavailable.')
+        try:
+            view = await owner.retry_recovery()
+        except OktoNexusError as error:
+            return v1_err(409, error.code, error.message)
+        return JSONResponse(view, headers={'Cache-Control': 'no-store'})
 
     @router.post("/runtime/shutdown")
     async def request_shutdown(body: ShutdownRequest, request: Request):
@@ -813,6 +862,17 @@ def build_router() -> APIRouter:
             return JSONResponse(result, headers={'Cache-Control':'no-store'})
         except OktoNexusError as error:
             return runtime_error(error, 'connection.setup')
+
+    @router.get('/workspaces/{workspace_id}/paths')
+    async def workspace_paths_read(workspace_id: str, executor_id: str, request: Request):
+        from ....application.workspace_paths import list_workspace_paths
+        try:
+            result = await anyio.to_thread.run_sync(lambda: list_workspace_paths(
+                request.app.state.deps, runtime_request_context(),
+                workspace_id=workspace_id, executor_id=executor_id))
+            return JSONResponse(result, headers={'Cache-Control': 'no-store'})
+        except OktoNexusError as error:
+            return runtime_error(error, 'workspace.paths')
 
     def setup_request(body):
         from nexus_connector_core.connection_configuration import parse_connection_configuration

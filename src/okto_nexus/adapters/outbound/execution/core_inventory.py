@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 R4_NXL_REVISION = "nxl-1-agent-centric-http-only-2026-09-29-r4"
 MANAGEMENT_REVISION = "nexus-connections-2026-09-29-r4"
-CORE_INVENTORY_VERSION = "0.0.1"
+CORE_INVENTORY_VERSION = "0.0.2"
 # Promoted only after admission, lease, dispatcher and Connector conformance.
 SERVER_R4_EXECUTION_READY = True
 

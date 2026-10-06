@@ -219,9 +219,29 @@ function buildTimeline(
   receiptDisplay: ReceiptDisplay,
 ): TimelineEntry[] {
   const rows: TimelineEntry[] = [];
+  const handoffsById = new Map(handoffs.map((handoff) => [handoff.handoff_id, handoff]));
+  const seenLifecycleMessages = new Set<string>();
 
   for (const message of messages) {
     if (receiptDisplay === "inline" && isReadReceiptMessage(message)) continue;
+    const parsed = parseStructuredMessage(message.body ?? message.preview);
+    const handoffId = typeof parsed?.handoff_id === "string" ? parsed.handoff_id : null;
+    const handoff = handoffId ? handoffsById.get(handoffId) : undefined;
+    const handoffKind = parsed?.kind;
+    if (handoffId && handoffKind && ["handoff.created", "handoff.directed", "handoff.completed", "handoff.rejected"].includes(handoffKind)) {
+      const representedByHandoff = handoff && (
+        handoffKind === "handoff.created" || handoffKind === "handoff.directed" ||
+        handoffKind === "handoff.completed" && handoff.result != null ||
+        handoffKind === "handoff.rejected" && handoff.rejected_reason != null
+      );
+      if (representedByHandoff) continue;
+      const lifecycleKey = `${handoffId}:${handoffKind}`;
+      if (seenLifecycleMessages.has(lifecycleKey)) continue;
+      seenLifecycleMessages.add(lifecycleKey);
+    }
+    const handoffTitle = handoff ? handoffLabel(handoff) :
+      (typeof parsed?.title === "string" && parsed.title.trim()) ||
+      (typeof parsed?.subject === "string" && parsed.subject.trim()) || handoffId;
     const outgoing = message.from_agent_id === OPERATOR;
     const recipients = message.deliveries.map((delivery) => delivery.recipient_agent_id);
     const directTarget = targetAgent(message);
@@ -234,8 +254,9 @@ function buildTimeline(
       audience: audienceOf(message),
       agentId: outgoing ? OPERATOR : message.from_agent_id,
       recipients: recipients.length ? recipients : directTarget ? [directTarget] : [],
-      subject: message.subject,
+      subject: handoffId ? handoffTitle : message.subject,
       content: message.body ?? message.preview,
+      structured: handoffId && parsed ? { ...parsed, title: handoffTitle } : undefined,
       artifacts: artifactIds(message.artifacts),
       deliveries: outgoing ? message.deliveries : undefined,
       status: outgoing
@@ -581,7 +602,7 @@ function ChatTurn({
 
   return (
     <article
-      className={`flex gap-3 ${outgoing ? "justify-end" : "justify-start"}`}
+      className={`flex min-w-0 gap-3 ${outgoing ? "justify-end" : "justify-start"}`}
       data-testid={`meta-harness-turn-${entry.id.replaceAll(":", "-")}`}
     >
       {!outgoing && (
@@ -607,7 +628,7 @@ function ChatTurn({
           <span>· {stamp(entry.timestamp)}</span>
         </div>
         <div
-          className={`rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${
+          className={`min-w-0 max-w-full rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm [overflow-wrap:anywhere] ${
             outgoing
               ? "rounded-br-md bg-accent-600 text-white"
               : entry.outcome === "rejected"
@@ -1122,10 +1143,10 @@ export function MetaHarnessView({
 
         <div
           ref={timelineRef}
-          className="min-h-0 flex-1 overflow-y-auto"
+          className="min-h-0 min-w-0 flex-1 overflow-x-hidden overflow-y-auto"
           data-testid="meta-harness-timeline"
         >
-          <div className="mx-auto flex min-h-full max-w-5xl flex-col px-4 py-6 sm:px-6">
+          <div className="mx-auto flex min-h-full min-w-0 max-w-5xl flex-col px-4 py-6 sm:px-6">
             <NativeQuestions workspace={workspace} agent={filterAgent} />
             {loading ? (
               <div className="grid flex-1 place-items-center text-sm text-surface-400">

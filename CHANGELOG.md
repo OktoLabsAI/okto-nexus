@@ -4,6 +4,17 @@ All notable changes to Okto Nexus are documented in this file.
 
 ## Unreleased
 
+### 0.2.1
+
+- Deliver broadcast and handoff fanout through eligible runtime connections.
+- Deduplicate broadcast timeline entries, prefer handoff titles, and constrain message widths.
+- Archive agents with runtime history while revoking access and preserving records.
+- Refresh workspace choices and reuse normalized workspace paths in agent setup.
+- Keep local installation checks available while runtime reconciliation is pending.
+- Recover fenced Windows runtime containers automatically, continue reconciliation
+  after the initial retry budget, and provide audited last-resort recovery in Agents.
+- Require Connector Core 0.0.2.
+
 ### 0.2.0 development
 
 - Complete the PR #34 remediation implementation and approved local Codex/Claude

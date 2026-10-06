@@ -141,10 +141,6 @@ class EmbeddedInventoryOwner:
                     now=self.deps.clock.now_iso()):
                 raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
                     "The embedded inventory owner is no longer current.", {})
-            # Initial reconciliation publishes the baseline before the runtime
-            # owner marks this executor CONTROL_READY.
-            if row['control_state'] == 'RECOVERING':
-                return None
             return claim_inventory_refresh(uow, server_id=self.key.server_id,
                 executor_id=self.key.executor_id, producer_instance_id=self.dispatcher.owner_id,
                 connection_generation=self.generation)

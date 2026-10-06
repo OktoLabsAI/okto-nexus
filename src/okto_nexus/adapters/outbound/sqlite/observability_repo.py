@@ -92,6 +92,7 @@ class SqliteObservabilityQueries:
                 FROM agents a
                 LEFT JOIN sessions s
                     ON s.agent_id = a.agent_id AND s.status = 'active'
+                WHERE a.deleted_at IS NULL
                 GROUP BY a.agent_id
                 ORDER BY a.created_at, a.agent_id
                 """

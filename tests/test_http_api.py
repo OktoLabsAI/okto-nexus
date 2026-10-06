@@ -521,9 +521,9 @@ def test_delete_agent_removes_and_404s_afterwards(serve_env, configured):
 
 
 @pytest.mark.parametrize('reference', ['executor', 'endpoint'])
-def test_delete_agent_with_execution_references_conflicts_without_partial_cleanup(serve_env, reference):
+def test_delete_agent_with_execution_references_retires_without_losing_history(serve_env, reference):
     deps, client, operator_key = serve_env
-    client.post('/api/v1/agents', json={'agent_id': 'registered'}, headers=_h(operator_key))
+    key = client.post('/api/v1/agents', json={'agent_id': 'registered'}, headers=_h(operator_key)).json()['data']['api_key']
     client.put('/api/v1/agents/registered/execution-policy', headers=_h(operator_key),
                json=dict(expected_revision=0, execution_location='remote'))
     with deps.connection_factory.unit_of_work() as uow:
@@ -534,19 +534,35 @@ def test_delete_agent_with_execution_references_conflicts_without_partial_cleanu
                 "VALUES ('test-server','executor','connector','registered','remote','OFFLINE',1)")
         else:
             deps.repos.workspaces.upsert(uow, workspace_id='retained')
+            deps.repos.sessions.create(
+                uow, session_id='retained-session', agent_id='registered',
+                workspace_id='retained', status='closed',
+            )
             uow.connection.execute(
                 "INSERT INTO agent_endpoints(endpoint_id,agent_id,workspace_id,adapter_id,protocol,created_at,updated_at) "
                 "VALUES ('retained-endpoint','registered','retained','pi_rpc','nxl-r4','now','now')")
+            uow.connection.execute("UPDATE agent_endpoints SET enabled=1 WHERE endpoint_id='retained-endpoint'")
     response = client.delete('/api/v1/agents/registered', headers=_h(operator_key))
-    assert response.status_code == 409, response.text
-    assert 'Deactivate' in response.json()['error']['message']
+    assert response.status_code == 200, response.text
+    assert client.get('/api/v1/agents/registered', headers=_h(operator_key)).status_code == 404
+    listed = client.get('/api/v1/agents', headers=_h(operator_key))
+    assert listed.status_code == 200
+    assert 'registered' not in [item['agent_id'] for item in listed.json()['data']['items']]
+    graph = client.get('/api/v1/graph', headers=_h(operator_key))
+    assert graph.status_code == 200
+    assert 'registered' not in [item['agent_id'] for item in graph.json()['data']['nodes']]
+    assert client.get('/api/v1/graph', headers=_h(key)).status_code == 401
+    assert client.post('/api/v1/agents', json={'agent_id': 'registered'}, headers=_h(operator_key)).status_code == 409
     with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert deps.repos.agents.get(uow, 'registered').is_active
+        row = uow.connection.execute("SELECT is_active, api_key_hash, deleted_at FROM agents WHERE agent_id='registered'").fetchone()
+        assert row['is_active'] == 0 and row['api_key_hash'] is None and row['deleted_at']
         assert uow.connection.execute("SELECT 1 FROM agent_execution_policies WHERE agent_id='registered'").fetchone()
         if reference == 'executor':
             assert uow.connection.execute("SELECT 1 FROM execution_executors WHERE executor_id='executor'").fetchone()
         else:
-            assert uow.connection.execute("SELECT 1 FROM agent_endpoints WHERE endpoint_id='retained-endpoint'").fetchone()
+            endpoint = uow.connection.execute("SELECT enabled FROM agent_endpoints WHERE endpoint_id='retained-endpoint'").fetchone()
+            assert endpoint is not None and endpoint['enabled'] == 0
+            assert uow.connection.execute("SELECT 1 FROM sessions WHERE session_id='retained-session'").fetchone()
         assert not uow.connection.execute('PRAGMA foreign_key_check').fetchall()
 
 

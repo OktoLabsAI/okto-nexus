@@ -18,6 +18,9 @@ def agent_connection_statuses(uow, now_iso):
         SELECT a.agent_id, COALESCE(p.execution_location,'local') location,
                COALESCE(o.runtime_enabled,d.runtime_enabled) runtime_enabled,
                e.executor_id,e.label,e.control_state,e.last_seen_at,
+               EXISTS(SELECT 1 FROM execution_bindings b JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id
+                   WHERE b.server_id=e.server_id AND b.executor_id=e.executor_id AND ep.agent_id=a.agent_id
+                     AND ep.enabled=1 AND ep.activation_state='approved') bound,
                (EXISTS(SELECT 1 FROM execution_bindings b JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id
                    WHERE b.server_id=e.server_id AND b.executor_id=e.executor_id AND ep.agent_id=a.agent_id
                      AND ep.activation_state='revoked') AND NOT EXISTS(
@@ -35,11 +38,13 @@ def agent_connection_statuses(uow, now_iso):
         CROSS JOIN runtime_policy_defaults d
         LEFT JOIN agent_execution_policies p ON p.agent_id=a.agent_id
         LEFT JOIN agent_runtime_overrides o ON o.agent_id=a.agent_id
-        LEFT JOIN execution_executors e ON e.kind='remote' AND e.revoked_at IS NULL
-          AND (e.registered_by_agent_id=a.agent_id OR EXISTS(
+        LEFT JOIN execution_executors e ON e.revoked_at IS NULL AND (
+          (e.kind='embedded' AND COALESCE(p.execution_location,'local')='local') OR
+          (e.kind='remote' AND COALESCE(p.execution_location,'local')='remote' AND
+          (e.registered_by_agent_id=a.agent_id OR EXISTS(
               SELECT 1 FROM execution_bindings b JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id
               WHERE b.server_id=e.server_id AND b.executor_id=e.executor_id AND ep.agent_id=a.agent_id
-                AND ep.enabled=1 AND ep.activation_state='approved'))
+                AND ep.enabled=1 AND ep.activation_state='approved'))))
         ORDER BY a.agent_id,e.executor_id
     ''', (now_iso,)).fetchall()
     setups = {}
@@ -59,7 +64,17 @@ def agent_connection_statuses(uow, now_iso):
             location=row['location'], status='Offline' if row['location']=='remote' else 'Local', hosts=[]))
         if not row['runtime_enabled']:
             item['status'] = 'MCP only'
-        if row['executor_id'] is None or row['location'] != 'remote':
+        if row['executor_id'] is None:
+            continue
+        if row['location'] == 'local':
+            state = ('Not configured' if not row['bound'] else
+                     'Recovering' if row['control_state'] == 'RECOVERING' else
+                     'Offline' if row['control_state'] != 'CONTROL_READY' else
+                     'Ready')
+            item['hosts'].append(dict(executor_id=row['executor_id'], label=row['label'] or row['executor_id'],
+                                     status=state,last_seen_at=row['last_seen_at']))
+            if item['status'] != 'MCP only':
+                item['status'] = state
             continue
         fresh = _fresh(row['last_seen_at'], now)
         state = ('Connected' if fresh and row['control_state']=='CONTROL_READY' and row['admitted']
