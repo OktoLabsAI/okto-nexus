@@ -25,7 +25,7 @@ from ....config import EMBEDDING_MODE_LOCAL
 from ....errors import ErrorCode, OktoNexusError
 
 DEFAULT_PORT = 8202
-DEFAULT_HOST = "127.0.0.1"
+DEFAULT_HOST = "0.0.0.0"
 
 #: Upper bound (seconds) on uvicorn's graceful shutdown wait. Long-lived
 #: connections - the dashboard SSE feed and MCP streamable clients - never
@@ -135,14 +135,16 @@ okto-nexus serve - start the HTTP hub (MCP + REST + dashboard)
 Usage:
   okto-nexus serve [options]
 
-The zero-config default just works: data lives in ~/.okto_nexus, the
-dashboard opens key-free on http://127.0.0.1:8202 and every runtime knob
-can also be tuned later in the dashboard's Settings screen.
+By default Nexus listens on all IPv4 interfaces (0.0.0.0:8202).
+Data lives in ~/.okto_nexus. Open http://127.0.0.1:8202 locally, or use
+this machine's network IP from another computer. Remote dashboard access
+requires an operator login configured locally in Settings > Operator access.
+MCP and Connector clients use agent API keys.
 
 Options:
   --port N            Port to listen on (default 8202; env OKTO_NEXUS_PORT)
-  --host ADDR         Bind address (default 127.0.0.1; binding beyond
-                      loopback makes the dashboard/REST require an API key)
+  --host ADDR         Bind address (default 0.0.0.0; env OKTO_NEXUS_HOST).
+                      Use 127.0.0.1 for loopback-only access.
   --project-root P    Workspace the dashboard opens scoped to (default: .)
   --home P            Data directory (default ~/.okto_nexus)
   --db-path P         SQLite file (default {home}/nexus.db)

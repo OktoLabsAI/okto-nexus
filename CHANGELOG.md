@@ -6,6 +6,8 @@ All notable changes to Okto Nexus are documented in this file.
 
 ### 0.2.1
 
+- Listen on all IPv4 interfaces by default, with explicit loopback overrides
+  and unchanged remote operator and agent authentication.
 - Deliver broadcast and handoff fanout through eligible runtime connections.
 - Deduplicate broadcast timeline entries, prefer handoff titles, and constrain message widths.
 - Archive agents with runtime history while revoking access and preserving records.
