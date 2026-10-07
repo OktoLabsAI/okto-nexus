@@ -1,10 +1,21 @@
 """Attach retirement removes entry points while keeping historical records."""
 from pathlib import Path
+import importlib.util
+import pytest
 
 import okto_nexus
 from test_local_realization import local_setup
 from test_connection_setup import request_for, finish
 from okto_nexus.application.execution_local_realizations import directory_identity
+
+
+@pytest.mark.parametrize('platform', ['win32', 'linux', 'darwin'])
+def test_installed_core_cannot_load_external_attach(platform):
+    from nexus_connector_core import CoreError
+    from nexus_connector_core.native.registry import load_adapter
+    assert importlib.util.find_spec('nexus_connector_core.native.adapters.claude_code_attach') is None
+    with pytest.raises(CoreError, match='CAPABILITY_UNSUPPORTED'):
+        load_adapter('claude_attach', platform=platform)
 
 
 def test_attach_removed_from_dashboard_and_catalog(local_setup):

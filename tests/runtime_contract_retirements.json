@@ -2089,6 +2089,646 @@
         "tests/execution_r4/test_canonical_claude_approvals.py::test_claude_question_requires_explicit_answer_and_preserves_question"
       ],
       "source_sha256": "cf9fefda679c73246443e587455eaa3cacfdaf20521eaf86222942f807b0b52a"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_discover_filters_to_interactive_and_skips_malformed",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "43e808021022bd4ba93a2a7c2a8fa0aa748621c50b72f8dc138a5a91d0a2c90e"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_discover_missing_directory_returns_empty",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "00ee9d179a33c20d038f17d6051dab4c2494ddc23b2f3c4444df9c8a7d8dc57e"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_probe_missing_registry_is_negative_not_raising",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "cf63c556d3654bab978753df1bd5bd04b739dce439c34dfab99ac9574cc7b46c"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_probe_non_interactive_session_is_negative",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "7c9c5634a14b411718e927bed39935cb23450ee168a5d9d5737e8ef5f3f78b9d"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_probe_protocol_mismatch_is_loud_and_negative",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "f381f87e9ef1d2b790a7f41afb8a8b201162c10f585142634b88ddd4022d67be"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_probe_succeeds_against_live_fake_socket",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "6d10e73046b86eb604581393b04e1fc6ace49f06d395b9ef60d017cc2a6c8cd2"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_start_raises_not_found_when_registry_missing",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "007b186f107b216d44ddc904dbf0392c393f4ba234a0f8e5cc70abadbdafbde3"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_start_raises_validation_error_for_headless_session",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "3c430a2095f42cdc751df3e55553f7aaf7943b52f4b3964bc36af61751e50ce7"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_start_raises_config_error_on_multiple_key_files",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "ab2ac9bcaad742c445c6d6bae8044add0a35ae001b81694c54d59a9a694223e4"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_start_falls_back_to_computed_socket_path_when_registry_omits_field",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "266ce05168b4e7bab101904dd37c71553443715e060994eae986f1a405114248"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_start_binds_to_observed_peer_identity",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "a17845b29f88d69c37b6968d3a1bae8e21301c32b835f961401ca19b52953252"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_send_delivers_auth_then_user_ndjson_lines",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "5c8092cbecd0f04b279baa59d4a627bb8b1c63874676f012b84ed83636b40800"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_send_rejects_non_send_turn_verbs",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "fc13bff23005644e5f9eb5466423f1e2c0911f487ea992bfc592f5eae0617e77"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_send_before_start_raises_not_found",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "c460bfebea4e0557e4ed47e572600ebc3c6c3443f30c4d66e5fede68e6afa87a"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_send_rejects_oversized_content",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "275c0a727ae84c64b549d7bd3328e1b3800ee46445e3b9bdf7b62a7e0ba0606d"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_send_neutralises_banner_spoofing_attempt",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "03a8326f78719790e28cd29d4a8b4f8745c6133117d575320a0ff11bfdf4e1e0"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_send_fails_loudly_and_records_error_event_when_peer_unreachable",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "7f680ef705ba9dda7603e40b08fc5e7573824bd263ce47f2c8bd9322380fa9bf"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_send_trips_pid_reuse_guard_on_proc_start_mismatch",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "891f6707883db3da7de23b890230c92119520dfcd780ed2f2ea9965638b0a8ba"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_events_is_empty_and_finite_for_a_fresh_connector",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "c9a810000c8702d6134949bf32b4370df6b724fe0846f20cd905330fe43f3cd1"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_capabilities_match_adr_0004_d7b",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "e93800e2f6ea2976412dedac00ca05b1678eca6a04605b363970182148669f7d"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_probe_never_raises_on_embedded_null_byte_in_socket_path",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "a3f7125f9de9c80c3fd05ebe60cbdbb951d1b038edd5c4fe18a590abead75cb4"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_start_raises_oktonexuserror_not_valueerror_on_embedded_null_byte",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "b80e88162b7ebeeca3ab04330f86579ac09dda69384044efd970458a90efe8b4"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_probe_never_raises_on_a_genuinely_unexpected_internal_error",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "b59740f9b03475188e8eb9d280ae07498f97cc9271921685b61fae074b15b9c3"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_probe_and_start_agree_when_both_protocol_mismatch_and_missing_key_apply",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "186f2d6d832c7e1e7b79ca46dd7a291d255a9a1eb9eda268c9dcb5ff6edd1e12"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_probe_and_start_agree_when_key_file_exists_but_is_unparseable",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "4c52de268a00ea885865132f555f197ca0349db23c0669239ae13956a8b403ca"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_probe_reports_not_a_socket",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "133190fc3ce281d446f7a77e3b8d493ec7df13079a25e68a79edc6eabce4310f"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_start_raises_config_error_when_resolved_path_is_not_a_socket",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "cfce391753e74bcd94629edc74457bb16d0fbc64fbedf41f5526ab76fc30b7fb"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_computed_socket_path_xdg_runtime_dir_unset_matches_ev_cc_001",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "254dbf567fef10db25f7112091231fb40a0ddaed50647222e5513e95c1b86b81"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_computed_socket_path_falls_back_past_103_byte_sun_path_limit",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "fdedea243326b76779327233e23b27f0f01631556ed938a8e4d273fa46d67e95"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_pid_reuse_guard_raises_when_key_file_goes_missing",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "ab27233d12d4d12f130fffe2c31330f3ac6e5021f0da716efb4e7c3d5cfffd5e"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_pid_reuse_guard_detects_new_hash_key_file_after_recycle",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "7fc25d84c85aef4869300d2bc67848756abc9e20f0d5e23c9e9eaf046112a1c0"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_send_against_a_peer_that_accepts_then_closes_is_documented_not_detected",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "aed69cd259de23b56dded3dffb2ff4bd841649ccbd0f50d70e16a7793e084494"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_send_against_a_peer_that_reads_auth_then_rejects",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "b83f7c530d4f1ff6e631f2642259db41ca2935acf47cd77185c2a6fe4120afc7"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_send_against_a_peer_that_closes_mid_message",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "972599b7ce266a7306c9d0ed65681efe51e6a4a98b875c1fee02f23fd6bbd1d7"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_registry_fixture_matches_ev_cc_001_schema_exactly",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "d397eaeeaab8f8e5afb89dc2b6c1dab62be5e1b5fa66d76f63e048566671e364"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_send_docstring_states_the_ack_less_limitation_plainly",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "799414f21b2492db9df7e8e9238f6542341d8030a00d1cb9d7696a2aa60d2ad7"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_events_can_be_called_twice_without_hanging",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "bd53265c0ec8d8af89bd13d2bbe0595a1065071703a3e0343a7a01de20bb4d55"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_probe_rejects_socket_owned_by_a_different_uid",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "6d8bcb85341498b6db6138698ccbf65a6d2bf371932a1b2f838ef5c72883f29d"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_start_rejects_socket_owned_by_a_different_uid",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "148e727fd6a6145145d38b3a696c80bb64cd2241c054f1e50887f5178609ac86"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_res_a3_and_b3_every_blocking_wait_in_the_module_carries_a_timeout",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "7a384432ec96cad9115518e197b052430e33ccad38e03708d93af924ac3ef6fa"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_res_a4_a_failed_start_still_leaves_events_terminable",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "7c4cda89b65655aaa361afee9c5055608cb2a8283372cb91e66ffe3a08978421"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_res_a4_a_failed_start_after_partial_probe_success_still_leaves_events_terminable",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "a967077088f202c432ed4de0a7cec50b63b8d60645fcbaaa7b40a6e311d79770"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_send_rejects_socket_that_changed_owner_uid_since_start",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "ab26448c4ea3d1a615a0f30db641426145976bfacfbe64b714062ea489ce3cff"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_res_a2_concurrent_events_consumers_each_get_the_full_stream",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "7b76ab88745b873600ae5886d5645392c88f708cfe0131974213a3fd93ed5ebc"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_probe_missing_key_file_reason_is_distinct_from_missing_registry",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "81d5c33d405e870fba8fe8833cd5c6629d8f17550a8400bb0d4d4840b4814b25"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_probe_registry_missing_kind_field_is_protocol_drift_not_headless",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "4306c95a8cdfcc231b40a8ec4cc01f806d227c1b422a221b4d15a261e56b19fd"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_probe_permission_denied_registry_is_a_distinct_permission_category",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "8ad049171e5bdf24c90ed9aa5b18ebe51147800d34d262e8657d663d0cbd32ca"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_probe_permission_denied_key_file_is_a_distinct_permission_category",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "73f5e2c1544e6f1125d4ee9e07cefe94540409db48b7401a114d3de088cf4e3e"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_probe_success_reports_peer_protocol_verified_true_on_exact_match",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "38d79a009d4fe85b928245637b72300c548379643cbb0fd6ba91b29aa2d2cb92"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_probe_success_reports_peer_protocol_unverified_when_field_absent",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "4edb4b5cf7e59fe173ff940ee87f9ea2a638320332e62e0b38fc2dec0e9b22c0"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_probe_success_records_peer_features_without_enforcing_them",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "5d4e9f7377d10f8e88c41539a2e952f8df8e3c10f640881d83cc7fb582b4842c"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_probe_result_docstring_states_ok_is_not_proof_of_delivery",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "d37d41657e751f1ef189a4100a19544b9623903c0bb1b021e4c5ee7d66f88162"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_probe_success_detail_does_not_claim_delivery",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "108d71ef1eacc86d046adaa73f6e1eacace59bc4eee7893241b016764b53dfcd"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_key_file_ambiguous_reason_is_specific",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "89dc95575a56379e8d2f2e93010b9c1b94f5b8659a0e72d86113c450c34e0ea2"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_key_file_missing_token_field_reason_is_specific",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "af3b566f3659b3fd796a1c1e99800079dec43a343b689d118a32bec7d41f79e6"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_every_ok_false_probe_reason_maps_to_a_known_category",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "ffbe2e60885fc088785434181c0b59f0c9e4aa58fe71a4df621932eff6c0c71b"
+    },
+    {
+      "test": "tests/test_claude_code_attach_connector.py::test_every_oktonexuserror_raised_by_this_module_sets_reason_and_category",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "baf6bad8a1a94f2255cad7527f4438e11eb9ac8dd3cc884e78f8f889a02cd60a"
+    },
+    {
+      "test": "tests/test_runtime_attach_compatibility.py::test_unverified_attach_protocol_refuses_before_socket_or_token",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "b6c1dc235abd82f09311d87c061045b6c78073e56ad13f2beef4aca321fea857"
+    },
+    {
+      "test": "tests/test_runtime_attach_compatibility.py::test_attach_contract_and_ackless_delivery_through_authenticated_surfaces",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "9c1cf027d5cb24f2e43416259ec279cf45729f2bf62739e2c6a7ad0a6f303bc1"
+    },
+    {
+      "test": "tests/test_runtime_attach_compatibility.py::test_attach_protocol_drift_after_open_prevents_any_send",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "0c51e502e00184e747c75eeddd036fd7cc941b11521dc642a48a8fe400834160"
+    },
+    {
+      "test": "tests/test_runtime_attach_compatibility.py::test_attach_missing_protocol_field_is_not_a_compatible_default",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "4ab2a522f4c33d0d1d08806ea69ee855b3f9a09f0f611d24e23b7622835b9e61"
+    },
+    {
+      "test": "tests/test_runtime_attach_work_configuration.py::test_external_channel_approves_reference_without_native_capability_or_secret",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "3b672868bc55b8959ef5d1b57b6c08bd65191847faf51530730faf5840106379"
+    },
+    {
+      "test": "tests/test_runtime_attach_work_configuration.py::test_external_channel_rejects_unusable_session_references_atomically",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "c462dde3e76926daf0c245f22977fc70a9a3b5b49d06595eed9456fe52778e84"
+    },
+    {
+      "test": "tests/test_runtime_attach_work_configuration.py::test_external_channel_recovery_can_disable_or_remove_closed_reference",
+      "reason": "Explicit user scope change removes external Claude attach entirely. This test exercised the removed adapter or creation of new attach configuration, not retained-record authorization. Replacement tests assert absence and refusal; this is feature retirement, not equivalent positive functionality.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
+      ],
+      "source_sha256": "e61c2efb35e19ad155a847709eddac2ebfcdedbc35df3e0e8d2bce6d941aaf15"
     }
   ]
 }
