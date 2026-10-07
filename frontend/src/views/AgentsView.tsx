@@ -677,9 +677,9 @@ export function AgentsView({
                     </div>
                     <div className="flex items-center gap-1 flex-wrap">
                       {agent.connection && <span data-testid={`connection-status-${agent.agent_id}`}
-                        className={`chip ${['Connected', 'Ready'].includes(agent.connection.status) ? 'bg-emerald-100 text-emerald-700' : ['Reconnecting', 'Recovering', 'Awaiting approval', 'Completing setup', 'Needs attention'].includes(agent.connection.status) ? 'bg-amber-100 text-amber-700' : 'bg-surface-100 text-surface-600 dark:bg-surface-700 dark:text-surface-300'}`}
+                        className={`chip ${agent.is_active && ['Connected', 'Ready'].includes(agent.connection.status) ? 'bg-emerald-100 text-emerald-700' : agent.is_active && ['Reconnecting', 'Recovering', 'Awaiting approval', 'Completing setup', 'Needs attention'].includes(agent.connection.status) ? 'bg-amber-100 text-amber-700' : 'bg-surface-100 text-surface-600 dark:bg-surface-700 dark:text-surface-300'}`}
                         title={agent.connection.hosts.map(host => `${host.label}: ${host.status} · Last contact: ${host.last_seen_at || 'never'}`).join('\n') || 'Configured execution host'}>
-                        {agent.connection.status === 'MCP only' ? 'MCP only' : `${agent.connection.location === 'remote' ? 'Remote' : 'Local'} · ${agent.connection.status}`}
+                        {agent.connection.status === 'MCP only' ? 'MCP only' : `${agent.connection.location === 'remote' ? 'Remote' : 'Local'} · ${!agent.is_active ? 'Offline' : ['Ready', 'Connected'].includes(agent.connection.status) ? 'Online' : agent.connection.status}`}
                       </span>}
                       <span className={`chip ${chipCls}`} title="Effective permissions">
                         {chipLabel}

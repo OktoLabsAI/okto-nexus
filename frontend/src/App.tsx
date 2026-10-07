@@ -338,6 +338,12 @@ function Dashboard({
     loadGraph();
   }, [loadGraph, refreshTick]);
 
+  useEffect(() => {
+    if (view !== "Graph") return;
+    const timer = window.setInterval(loadGraph, 5000);
+    return () => window.clearInterval(timer);
+  }, [loadGraph, view]);
+
   // Badge count (initial fetch + every approval.* event + header refresh).
   // GET /approvals is workspace-scoped, so the "all" scope sums over every
   // known workspace. A locked gate / non-operator key just means no badge.

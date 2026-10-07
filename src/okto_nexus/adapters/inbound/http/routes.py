@@ -1770,9 +1770,10 @@ def build_router() -> APIRouter:
         deps = request.app.state.deps
 
         def _list(uow):
-            from ....application.agent_connection_status import agent_connection_statuses
+            from ....application.agent_connection_status import agent_connection_statuses, connection_presence
             statuses = agent_connection_statuses(uow, deps.clock.now_iso())
-            return [_public_agent(agent) | {'connection': statuses.get(agent.agent_id)}
+            return [_public_agent(agent) | {'connection': statuses.get(agent.agent_id),
+                    'presence': connection_presence(statuses.get(agent.agent_id), is_active=agent.is_active)}
                     for agent in deps.repos.agents.list(uow)]
 
         return _ok({"items": await _read(request, _list)})
@@ -1780,10 +1781,18 @@ def build_router() -> APIRouter:
     @router.get("/agents/{agent_id}")
     async def get_agent(request: Request, agent_id: str) -> JSONResponse:
         deps = request.app.state.deps
-        agent = await _read(request, lambda uow: deps.repos.agents.get(uow, agent_id))
-        if agent is None:
+        def _get(uow):
+            from ....application.agent_connection_status import agent_connection_statuses, connection_presence
+            agent = deps.repos.agents.get(uow, agent_id)
+            if agent is None:
+                return None
+            connection = agent_connection_statuses(uow, deps.clock.now_iso()).get(agent_id)
+            return _public_agent(agent) | {'connection': connection,
+                'presence': connection_presence(connection, is_active=agent.is_active)}
+        result = await _read(request, _get)
+        if result is None:
             return _err(404, "NOT_FOUND", "agent not found")
-        return _ok(_public_agent(agent))
+        return _ok(result)
 
     @router.patch("/agents/{agent_id}")
     async def update_agent(

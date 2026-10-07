@@ -31,7 +31,7 @@ from test_vertical_inventory import _NativeFactory
     (True, None, False, 0, 'unsent'), (True, None, False, 0, 'ack_lost'),
     (True, None, False, 0, 'cold_unsent'), (True, None, False, 0, 'cold_ack_lost'),
     (True, None, False, 0, 'active_disconnect'), (True, None, False, 0, 'lease_renewal')])
-def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery, native_decision=None, cli_admission=False, initial_prompt=False, domain_delivery=False, combined_winner=None, reset_active=False):
+def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery, native_decision=None, cli_admission=False, initial_prompt=False, domain_delivery=False, combined_winner=None, reset_active=False, check_presence=False):
     from okto_nexus_connector.transport.https_client import NexusHTTPClient, R4BindingView
     from okto_nexus_connector.transport.wss_r4 import connect_r4_connection
     from okto_nexus_connector.services.execution_selection import acknowledge_execution_binding
@@ -149,6 +149,7 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
         async def launch(_):
             return R4LaunchSetup(environment)
         owner = execution = None
+        completed_shutdown = None
         recovery_host = None
         dispatched = {}
         operations = []
@@ -363,6 +364,23 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                                 assert execution.failure is None, repr(execution.failure)
                                 await asyncio.sleep(.01)
                 turned = await admit('turn.submit', session_id=session_id, text='Hello')
+                if check_presence:
+                    def presence():
+                        response = client.get('/api/v1/graph', headers=headers['operator'])
+                        assert response.status_code == 200, response.text
+                        return next(n['presence'] for n in response.json()['data']['nodes'] if n['agent_id'] == 'subject')
+                    assert await asyncio.to_thread(presence) == 'present'
+                    await admit('runtime.close', session_id=session_id)
+                    async with asyncio.timeout(5):
+                        while execution.pending_count:
+                            await asyncio.sleep(.01)
+                    completed_shutdown = await daemon._shutdown()
+                    assert completed_shutdown == 0
+                    await owner.close()
+                    async with asyncio.timeout(5):
+                        while await asyncio.to_thread(presence) != 'offline':
+                            await asyncio.sleep(.05)
+                    return
                 if reset_active:
                     response = await asyncio.to_thread(client.post, '/api/v1/admin/reset', headers=headers['operator'])
                     assert response.status_code in (200, 202), response.text
@@ -722,7 +740,7 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
             try:
                 if recovery_host is not None:
                     await recovery_host.shutdown_all()
-                result = await daemon._shutdown()
+                result = await daemon._shutdown() if completed_shutdown is None else completed_shutdown
                 if owner is not None:
                     await owner.close()
                 assert result == (1 if publication_failure else 0)
@@ -737,6 +755,12 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
 def test_reset_stops_remote_execution_and_reuses_connection(onboarding, tmp_path, monkeypatch):
     test_owned_connector_reader_dispatches_five_actions_over_real_websocket(
         onboarding, tmp_path, monkeypatch, True, None, False, 0, None, reset_active=True)
+
+
+@pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
+def test_graph_presence_tracks_remote_connector_disconnect(onboarding, tmp_path, monkeypatch):
+    test_owned_connector_reader_dispatches_five_actions_over_real_websocket(
+        onboarding, tmp_path, monkeypatch, False, None, False, 0, None, check_presence=True)
 
 
 @pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)

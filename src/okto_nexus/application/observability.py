@@ -144,6 +144,8 @@ class ObservabilityService:
         # node below; an agent absent from a map has 0.
         pending = self._q.inbox_depth_by_agent(uow, workspace_id=workspace_id)
         open_handoffs = self._q.open_handoffs_by_agent(uow, workspace_id=workspace_id)
+        from .agent_connection_status import agent_connection_statuses, connection_presence
+        connections = agent_connection_statuses(uow, self._clock.now_iso())
         nodes: list[dict[str, Any]] = []
         for row in self._q.agent_rows(uow):
             lanes = inbox.get(row["agent_id"], {})
@@ -158,7 +160,8 @@ class ObservabilityService:
                     "has_key": bool(row.get("api_key_hash")),
                     "last_seen_at": row.get("last_seen_at"),
                     "last_action": last_actions.get(row["agent_id"]),
-                    "presence": self.classify_presence(
+                    "presence": connection_presence(connections.get(row['agent_id']),
+                        is_active=bool(row.get('is_active', True))) or self.classify_presence(
                         has_active_session=bool(row.get("active_sessions")),
                         last_heartbeat_at=row.get("last_heartbeat_at"),
                         last_seen_at=row.get("last_seen_at"),

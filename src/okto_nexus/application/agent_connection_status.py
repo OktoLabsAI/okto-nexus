@@ -2,6 +2,19 @@
 from datetime import datetime
 
 
+def connection_presence(connection, *, is_active=True):
+    """Runtime connections override activity timestamps for configured agents."""
+    if not is_active:
+        return 'offline'
+    if not connection or connection['status'] in ('MCP only', 'Local', 'Not configured'):
+        return None
+    if connection['status'] in ('Ready', 'Connected'):
+        return 'present'
+    if connection['status'] in ('Recovering', 'Reconnecting'):
+        return 'stale'
+    return 'offline'
+
+
 def _fresh(value, now):
     if not value:
         return False
@@ -18,6 +31,8 @@ def agent_connection_statuses(uow, now_iso):
         SELECT a.agent_id, COALESCE(p.execution_location,'local') location,
                COALESCE(o.runtime_enabled,d.runtime_enabled) runtime_enabled,
                e.executor_id,e.label,e.control_state,e.last_seen_at,
+               EXISTS(SELECT 1 FROM execution_bindings b JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id
+                   WHERE b.server_id=e.server_id AND b.executor_id=e.executor_id AND ep.agent_id=a.agent_id) configured,
                EXISTS(SELECT 1 FROM execution_agent_recovery r WHERE r.server_id=e.server_id AND r.executor_id=e.executor_id
                       AND r.agent_id=a.agent_id AND (r.state<>'READY' OR r.generation<>e.generation)) agent_recovering,
                EXISTS(SELECT 1 FROM execution_bindings b JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id
@@ -69,7 +84,9 @@ def agent_connection_statuses(uow, now_iso):
         if row['executor_id'] is None:
             continue
         if row['location'] == 'local':
-            state = ('Not configured' if not row['bound'] else
+            state = ('Revoked' if row['revoked'] else
+                     'Offline' if row['configured'] and not row['bound'] else
+                     'Not configured' if not row['bound'] else
                      'Recovering' if row['control_state'] == 'RECOVERING' or row['agent_recovering'] else
                      'Offline' if row['control_state'] != 'CONTROL_READY' else
                      'Ready')
