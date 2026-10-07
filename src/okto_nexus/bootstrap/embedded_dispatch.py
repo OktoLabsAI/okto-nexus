@@ -5,6 +5,7 @@ import json
 import logging
 import math
 import secrets
+import sqlite3
 import time
 
 from nexus_connector_core import (
@@ -22,6 +23,7 @@ from ..application.execution_leases import ExecutionChannel, ExecutionLeaseServi
 from ..application.execution_local_launch import ApprovedLocalLaunch
 from ..errors import ErrorCode, OktoNexusError
 from .execution_authority import build_execution_access
+from .embedded_events import EmbeddedPublicationDeferred
 
 _SCOPE = ("server_id", "executor_id", "binding_id", "agent_id", "workspace_id",
           "workspace_binding_id", "session_id", "session_owner_generation",
@@ -40,6 +42,7 @@ class EmbeddedDispatchOwner:
                                             fresh_publications=inventory.fresh)
         self.sessions = {}
         self.workers = set()
+        self.active_operations = set()
         self.worker_agents = {}
         self.renewals = set()
         self.pump = None
@@ -214,6 +217,11 @@ class EmbeddedDispatchOwner:
             if not rows:
                 return
             for row in rows:
+                # A live producer can still prove no native effect. Its
+                # SUBMISSION_STARTED journal entry is a crash fence, not a
+                # settled receipt to publish over the producer's final fact.
+                if row["operation_id"] in self.active_operations:
+                    continue
                 await asyncio.to_thread(self.verify)
                 key = OperationKey(row["server_id"],row["executor_id"],row["operation_id"])
                 receipt = await self.host.historical_receipt(session_id=row["session_id"],key=key)
@@ -290,16 +298,22 @@ class EmbeddedDispatchOwner:
                         frame["operation_id"],frame["binding_id"],frame["agent_id"]))
 
     async def _execute_owned(self, frame):
+        self.active_operations.add(frame['operation_id'])
         try:
             await self._execute(frame)
         except Exception as error:
             # Preserve uncertain work, but contain only its known subject.
             try:
+                if isinstance(error, EmbeddedPublicationDeferred):
+                    await self.agents.defer_publication(frame['agent_id'])
+                    return
                 await self.agents.fail(frame['agent_id'], error)
             except Exception as shared_error:
                 if self.failure is None:
                     self.failure = shared_error
                 await self.failed()
+        finally:
+            self.active_operations.discard(frame['operation_id'])
 
     async def _execute(self, frame):
         await asyncio.to_thread(self.verify)
@@ -443,7 +457,14 @@ class EmbeddedDispatchOwner:
             return not unchanged
         # Serialize revisions for this operation, never unrelated agents.
         async with self._publish_locks.setdefault(key, asyncio.Lock()):
-            changed = await asyncio.to_thread(persist)
+            try:
+                changed = await asyncio.to_thread(persist)
+            except (OSError, sqlite3.OperationalError) as error:
+                raise EmbeddedPublicationDeferred() from error
+            except OktoNexusError as error:
+                if error.code != ErrorCode.DB_ERROR:
+                    raise
+                raise EmbeddedPublicationDeferred() from error
             if changed and self.deps.runtime_dispatcher is not None:
                 self.deps.runtime_dispatcher.wake()
 

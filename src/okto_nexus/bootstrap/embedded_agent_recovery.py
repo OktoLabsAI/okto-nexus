@@ -211,13 +211,7 @@ class EmbeddedAgentRecovery:
                     # A failed Server commit did not invalidate the Core journal
                     # or its native process. Retain the lease and retry the same
                     # unacknowledged events instead of containing healthy work.
-                    await asyncio.to_thread(self.owner.verify)
-                    self.retry_at[agent_id] = time.monotonic() + 1
-                    if agent_id not in self.publication_pending:
-                        self.publication_pending.add(agent_id)
-                        await asyncio.to_thread(self.owner._recovery_event, 'RECOVERY_PUBLICATION_DELAYED',
-                            'Server event persistence is delayed; native execution and lease renewal remain active.',
-                            agent_id=agent_id)
+                    await self.defer_publication(agent_id)
                     return
                 await self.fail(agent_id, error)
                 delay = min(30, 2 ** min(self.attempts.get(agent_id, 0), 5))
@@ -225,6 +219,15 @@ class EmbeddedAgentRecovery:
             except Exception as shared_error:
                 self.owner.failure = shared_error
                 await self.owner.failed()
+
+    async def defer_publication(self, agent_id):
+        await asyncio.to_thread(self.owner.verify)
+        self.retry_at[agent_id] = time.monotonic() + 1
+        if agent_id not in self.publication_pending:
+            self.publication_pending.add(agent_id)
+            await asyncio.to_thread(self.owner._recovery_event, 'RECOVERY_PUBLICATION_DELAYED',
+                'Server persistence is delayed; native execution and lease renewal remain active.',
+                agent_id=agent_id)
 
     def _pending_subjects(self):
         with self.owner.factory.unit_of_work(write=False) as uow:

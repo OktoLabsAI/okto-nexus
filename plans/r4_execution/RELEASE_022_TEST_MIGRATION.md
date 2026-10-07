@@ -255,3 +255,20 @@ checks do not replace the complete installed release gate. Linux/Python 3.13 on
 the earlier f0ffd67 revision also exposed a live receipt observation race during
 a proved pre-write opening refusal; a deterministic reproduction currently fails
 and remains to be corrected before acceptance.
+
+The live provisional-receipt race now has a deterministic before/after test.
+Active producers own their unsettled Core journal facts until they finish;
+background recovery no longer publishes an intermediate crash fence over a
+proved no-effect refusal. Transient Server receipt-commit errors now defer
+publication without containing the native session or replaying its operation.
+All 51 installed receipt/isolation/command/correlation/native-approval cases
+passed with unchanged inputs (build/release-receipt-recovery-installed).
+
+The complete f0ffd67 baseline matrix (run 37625316285) finished unsuccessfully:
+Linux 3.11: 3347 passed, 439 failed, 108 skipped; Linux 3.12/3.13: 3345 passed,
+441 failed, 108 skipped each. Windows jobs reached the 120-minute limit before
+completion. These are baseline diagnostics, not current-head acceptance.
+Windows additionally exposed remote fixture event-loop blocking and a handoff
+fixture admitting a conversational creation notification before managed work.
+Their validation is pending. No full-suite approval, merge or release tag follows
+from the focused passing campaigns.
