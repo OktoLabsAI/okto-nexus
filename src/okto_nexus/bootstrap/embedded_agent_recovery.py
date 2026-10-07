@@ -143,7 +143,28 @@ class EmbeddedAgentRecovery:
             self.delayed.discard(agent_id)
         await self.owner._recover_publications(agent_id=agent_id, progress=progress)
         await self.owner.events.recover(agent_id=agent_id, live_only=True, progress=progress)
+        await asyncio.to_thread(self._check_stream_health, agent_id)
         await self._retire_closed(agent_id)
+
+    def _check_stream_health(self, agent_id):
+        # A Core stream-loss fact fences native work but deliberately retains
+        # process ownership. The host must initiate scoped containment itself.
+        # Read durable history, rather than only the latest page, so a crash
+        # after the event ACK cannot lose this recovery obligation.
+        owner = self.owner
+        with owner.factory.unit_of_work(write=False) as uow:
+            owner.verify(uow=uow)
+            fault = uow.connection.execute(
+                "SELECT 1 FROM execution_local_streams l "
+                "JOIN execution_sessions s USING(server_id,executor_id,session_id) "
+                "JOIN execution_event_ingress e USING(server_id,executor_id,session_id,stream_epoch) "
+                "WHERE l.server_id=? AND l.executor_id=? AND l.agent_id=? AND l.drained=0 "
+                "AND s.lifecycle_state NOT IN ('CLOSED','FAILED') AND e.event_type='error' "
+                "AND json_extract(e.payload_json,'$.native_type')='core.event_pump_failed' "
+                "AND json_extract(e.payload_json,'$.payload.code')='EVENT_STREAM_UNAVAILABLE' LIMIT 1",
+                (owner.channel.server_id, owner.channel.executor_id, agent_id)).fetchone()
+        if fault is not None:
+            raise CoreError('EVENT_STREAM_UNAVAILABLE', 'embedded_stream_health')
 
     async def _retire_closed(self, agent_id):
         owner = self.owner

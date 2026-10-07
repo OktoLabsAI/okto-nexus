@@ -71,6 +71,9 @@ class ExecutionReconciliation:
             self._owner(conn)
             from .execution_initial_turns import settle_failed_initial_turns
             settle_failed_initial_turns(conn, server_id=c.server_id, executor_id=c.executor_id)
+            from .execution_initial_turns import settle_unsent_closed_session_operations
+            settle_unsent_closed_session_operations(conn, server_id=c.server_id,
+                executor_id=c.executor_id, agent_id=self.agent_id)
             if self.op_high is None:
                 self.receipt_high = conn.execute('SELECT coalesce(max(rowid),0) FROM execution_receipts '
                     'WHERE server_id=? AND executor_id=? AND (? IS NULL OR operation_id IN (SELECT operation_id FROM execution_operations WHERE server_id=? AND executor_id=? AND subject_agent_id=?))',

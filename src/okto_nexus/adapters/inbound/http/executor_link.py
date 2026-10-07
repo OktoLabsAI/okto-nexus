@@ -462,6 +462,9 @@ def build_router() -> APIRouter:
                         await ws.close(code=1011)
                         break
                     if ack is not None:
+                        dispatcher = ws.app.state.deps.runtime_dispatcher
+                        if dispatcher is not None:
+                            dispatcher.wake()
                         await _send_text(encode_r4_frame(ack).decode("utf-8"))
                     continue
                 if frame["type"] == "reconcile.report":

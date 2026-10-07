@@ -70,24 +70,3 @@ def test_stale_configuration_cannot_overwrite_new_notification_audience(runtime)
     stale = client.patch(path, headers={"x-api-key": operator}, json={"expected_revision": 1,
         "public_config": {"notify_target": {"strategy": "broadcast"}}})
     assert stale.status_code == 409, stale.text
-
-
-
-
-
-
-
-
-def test_private_reply_does_not_require_initiator_to_send_to_itself(runtime):
-    from test_runtime_relay import configure, wait_blocked
-    configure(runtime, depth=1)
-    _, client, _, _, operator, _ = runtime
-    headers = {"x-api-key": operator}
-    assert client.post("/api/v1/tags", headers=headers, json={"key": "team"}).status_code == 200
-    assert client.post("/api/v1/tags/team/values", headers=headers, json={"value": "worker"}).status_code == 200
-    assert client.patch("/api/v1/agents/worker", headers=headers, json={"tags": {"team": ["worker"]}}).status_code == 200
-    assert client.patch("/api/v1/agents/caller", headers=headers, json={
-        "comm_scope": {"outbound": {"team": ["worker"]}}}).status_code == 200
-    send_message(runtime)
-    rows = wait_blocked(runtime)
-    assert len(rows) == 2

@@ -1,4 +1,4 @@
-# Nexus 0.2.2 â€” migration of runtime regressions
+# Nexus 0.2.2 — migration of runtime regressions
 
 The release remains gated on the complete installed suite. This document does
 not declare the historical suite equivalent to the current suite or authorize
@@ -131,3 +131,39 @@ An uncertain boot remains the same single operation after server restart. All
 omitted config, grant/boot invalidation, transactional rollback and refusal to
 edit a live launch. Retained endpoint reconciliation remains tested through REST
 and MCP and cannot restore the removed Server native factories.
+
+The boot/configuration/retained-reconciliation campaign passed all 34 installed
+cases with unchanged inputs. Three real Core adapter pipe cases passed (Pi,
+Codex, Claude stream): fragmented UTF-8, stdout pressure, 2 MiB of stderr, two
+durable results and confirmed process close. Core protocol faults retain bounded
+evidence and reap the child. A real Codex stale-control case exposed unnecessary
+agent containment after a durable pre-write refusal. Embedded dispatch now
+publishes a matching FAILED/no-effect Core receipt without closing the healthy
+session; missing or inconsistent proof still triggers recovery. The corrected
+real-native control case and five positive/negative proof cases passed. Four
+command admission/interrupt/atomic enqueue cases and four existing open-drift
+cases passed separately. These overlapping focused checks do not satisfy the
+complete installed release matrix.
+
+The native-command/protocol/pipe campaign passed all 39 installed cases with
+unchanged inputs. Canonical correlation adds real Codex bounded large output,
+atomic rollback recovery and consumption of two logical deliveries (four source
+cases passed). Historical session recovery retains two tests with seeded records;
+canonical open reservation passed its durable-before-effect and replay assertions.
+Audience migration exposed a missing post-commit publication notification: local
+events/receipts and remote event/receipt ingress now wake the dispatcher after
+commit. With the recovery interval left long, all three audience cases passed.
+The local dispatch/publication campaign passed 35 cases, and event/receipt/public
+remote bootstrap passed 20. A paused publication scan also preserves the native
+commit wake; the receipt route observes committed state from a separate connection.
+These incremental checks do not replace the required complete installed matrix.
+
+The real Codex foreign-terminal case also exposed a host recovery gap. Core
+correctly fences an ambiguous event stream, but Nexus did not start scoped
+containment from its durable stream-loss fact. The host now checks that fact
+across acknowledged pages. Reconciliation also settles only ACCEPTED/PENDING
+operations with zero transport attempts and no receipt/local publication on a
+proved closed session, avoiding an impossible wait for an executor receipt.
+The real-peer regression passed: owned process stopped, subject READY again,
+no result invented or old message replayed, and new authorized work succeeds.
+The existing agent-isolation and native-protocol campaign passed 17 cases.

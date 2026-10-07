@@ -67,6 +67,9 @@ class EmbeddedEventPublisher:
                 channel=channel,frame=frame,embedded_owner=self.owner,approvals=self.owner.deps.approvals)
             if ack is None or ack["sequence"]!=events[-1]["sequence"]:
                 raise CoreError("EVENT_GAP","embedded_event_ack")
+            dispatcher = self.owner.deps.runtime_dispatcher
+            if dispatcher is not None:
+                dispatcher.wake()
             await journal.acknowledge_events(cursor,ack["sequence"])
             return True
         return await self.owner.host.with_history(executor_id=scope["executor_id"],

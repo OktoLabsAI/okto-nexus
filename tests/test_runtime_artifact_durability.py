@@ -184,47 +184,6 @@ def test_blocked_artifact_worker_keeps_heartbeat_and_holds_shutdown_ownership(ru
     assert dispatcher._shutdown_finished.wait(5)
 
 
-def test_native_terminal_wake_during_publication_scan_is_not_lost(runtime):
-    from test_pr34_remediation import send_message
-    from test_runtime_result_publication import result
-    from test_runtime_commands import codex_session
-    deps = runtime[0]
-    codex_session(runtime)
-    dispatcher = deps.runtime_dispatcher
-    publish = dispatcher.publish_results
-    entered, release = threading.Event(), threading.Event()
-    calls = []
-    def paused():
-        calls.append(True)
-        if len(calls) == 1:
-            entered.set()
-            assert release.wait(10)
-            return 0
-        return publish()
-    dispatcher.publish_results = paused
-    try:
-        dispatcher.wake()
-        assert entered.wait(3)
-        source = send_message(runtime, body="publication wake during active scan")
-        result(runtime, source["runtime_operations"][0], "PENDING_AUTHORIZATION")
-        dispatcher.wake()
-        # Wait for the owner to observe this wake while publication is busy.
-        with deps.connection_factory.unit_of_work(write=False) as uow:
-            lease = uow.connection.execute("SELECT lease_expires_at FROM runtime_dispatcher_owner").fetchone()[0]
-        dispatcher.wake()
-        deadline = time.monotonic() + 3
-        while time.monotonic() < deadline:
-            with deps.connection_factory.unit_of_work(write=False) as uow:
-                renewed = uow.connection.execute("SELECT lease_expires_at FROM runtime_dispatcher_owner").fetchone()[0]
-            if renewed != lease:
-                break
-            time.sleep(.01)
-        assert renewed != lease
-        release.set()
-        assert result(runtime, source["runtime_operations"][0], "PUBLISHED")["publication_message_id"]
-    finally:
-        release.set()
-        dispatcher.publish_results = publish
 
 
 def test_runtime_artifact_quota_is_reserved_before_filesystem_effect(runtime):

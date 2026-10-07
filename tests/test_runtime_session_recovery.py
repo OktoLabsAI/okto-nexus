@@ -9,53 +9,16 @@ from test_pr34_remediation import runtime as runtime_fixture, open_rest
 runtime = runtime_fixture
 
 
-def test_revoked_binding_during_constructor_does_not_start_peer(runtime):
-    deps = runtime[0]
-    original = deps.harness_connector_factories["pi"]
-    peers = []
-    def construct(**kwargs):
-        peer = original(**kwargs)
-        peers.append(peer)
-        with deps.connection_factory.unit_of_work() as uow:
-            uow.connection.execute("UPDATE agent_endpoints SET enabled=0,revision=revision+1 WHERE endpoint_id='endpoint-pi'")
-        return peer
-    deps.harness_connector_factories["pi"] = construct
-    response = open_rest(runtime)
-    assert len(peers) == 1, "test must revoke after construction, not fail initial admission"
-    # The current start authorizer rechecks authority before creating a session.
-    # Disabled endpoints are permission refusals, ahead of revision conflict checks.
-    assert response.status_code == 403, response.text
-    assert response.json()["error"]["code"] == "PERMISSION_DENIED"
-    assert peers[0].session is None, "revoked binding still spawned a native runtime"
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute("SELECT count(*) FROM harness_sessions").fetchone()[0] == 0
 
 
-def test_open_without_client_key_reserves_before_constructor(runtime):
-    deps = runtime[0]
-    original = deps.harness_connector_factories["pi"]
-    observed = []
-
-    def construct(**kwargs):
-        with deps.connection_factory.unit_of_work(write=False) as uow:
-            observed.extend(dict(r) for r in uow.connection.execute("SELECT * FROM runtime_open_requests"))
-        assert observed and observed[0]["status"] == "RESERVED", "native construction preceded durable STARTING"
-        return original(**kwargs)
-
-    deps.harness_connector_factories["pi"] = construct
-    response = open_rest(runtime)
-    assert response.status_code == 200, response.text
-    assert response.json()["data"]["request_id"] == observed[0]["request_id"]
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        row = uow.connection.execute("SELECT * FROM harness_sessions").fetchone()
-        assert row["owner_epoch"] == deps.runtime_dispatcher.epoch
-        assert observed[0]["endpoint_id"] == row["endpoint_id"]
-        assert observed[0]["owner_epoch"] == row["owner_epoch"]
 
 
 def test_unfinished_start_is_quarantined_without_replay(runtime):
     deps = runtime[0]
     dispatcher, supervisor = deps.runtime_dispatcher, deps.harness_supervisor
+    from test_runtime_production_multiplex import retained_profile, retained_endpoint
+    retained_profile(runtime)
+    retained_endpoint(runtime, "endpoint-pi")
     from okto_nexus.adapters.outbound.sqlite.runtime_requests_repo import SqliteRuntimeRequestRepo
     from okto_nexus.adapters.outbound.sqlite.endpoints_repo import SqliteEndpointRepo
     with deps.connection_factory.unit_of_work() as uow:
@@ -81,9 +44,17 @@ def test_unfinished_start_is_quarantined_without_replay(runtime):
 
 def test_restart_expires_only_old_runtime_presence_and_quarantines_binding(runtime):
     deps = runtime[0]
-    opened = open_rest(runtime).json()["data"]
-    sid = opened["session_id"]
+    from test_runtime_production_multiplex import retained_profile, retained_endpoint
+    from test_runtime_event_journal import historical_session
+    retained_profile(runtime)
+    retained_endpoint(runtime, "endpoint-pi")
+    sid = historical_session(runtime)
     supervisor, old = deps.harness_supervisor, deps.runtime_dispatcher
+    with deps.connection_factory.unit_of_work() as uow:
+        workspace = uow.connection.execute("SELECT workspace_id FROM agent_endpoints WHERE endpoint_id='endpoint-pi'").fetchone()[0]
+        deps.repos.sessions.create(uow, session_id="old-runtime-presence", agent_id="worker", workspace_id=workspace,
+            status="active", started_at=deps.clock.now_iso(), session_secret="retained-secret")
+        uow.connection.execute("UPDATE harness_sessions SET endpoint_id='endpoint-pi',workspace_id=?,presence_session_id='old-runtime-presence',owner_epoch=? WHERE session_id=?", (workspace, old.epoch, sid))
     with deps.connection_factory.unit_of_work() as uow:
         presence = uow.connection.execute("SELECT presence_session_id,workspace_id FROM harness_sessions WHERE session_id=?", (sid,)).fetchone()
         deps.repos.sessions.create(uow, session_id="independent-presence", agent_id="worker",

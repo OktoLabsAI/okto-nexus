@@ -678,6 +678,9 @@ def build_router() -> APIRouter:
                 factory, principal=principal, frame=frame)
 
         accepted = await anyio.to_thread.run_sync(_publish)
+        dispatcher = request.app.state.deps.runtime_dispatcher
+        if dispatcher is not None:
+            dispatcher.wake()
         return JSONResponse({
             "operation_id": accepted.operation_id,
             "receipt_revision": accepted.receipt_revision,

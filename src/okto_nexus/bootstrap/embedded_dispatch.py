@@ -440,9 +440,12 @@ class EmbeddedDispatchOwner:
                     uow.connection.execute("UPDATE execution_local_publications SET terminal=1 "
                         "WHERE server_id=? AND executor_id=? AND operation_id=?",
                         (key.server_id,key.executor_id,key.operation_id))
+            return not unchanged
         # Serialize revisions for this operation, never unrelated agents.
         async with self._publish_locks.setdefault(key, asyncio.Lock()):
-            await asyncio.to_thread(persist)
+            changed = await asyncio.to_thread(persist)
+            if changed and self.deps.runtime_dispatcher is not None:
+                self.deps.runtime_dispatcher.wake()
 
     def _page(self, *, after=None, agent_id=None):
         with self.factory.unit_of_work(write=False) as uow:

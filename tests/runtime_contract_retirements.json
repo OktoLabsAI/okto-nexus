@@ -1225,6 +1225,64 @@
         "tests/execution_r4/test_harness_canonical.py::test_canonical_open_rejects_legacy_override_without_effect"
       ],
       "source_sha256": "b5e2e318637c6e80e6332b88348b2d263b0330836d2d80295386e7a86cd072fe"
+    },
+    {
+      "test": "tests/test_runtime_result_correlation.py::test_terminal_is_correlated_to_transport_attempt_and_releases_lane",
+      "reason": "Migrate legacy native-attempt/event IDs to canonical operation/stream/terminal receipt identity. Real Core native output is assembled with the 1 MiB bound; terminal/result failure rolls back consumption and recovers automatically without replay. Native output counts now include the Core empty terminal output.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_result_correlation.py::test_native_terminal_projection_is_atomic_bounded_and_releases_next_delivery"
+      ],
+      "source_sha256": "880db65953ea728a0e227ec1d157496e155e56b5393d3be2143b90ef6b61c08f"
+    },
+    {
+      "test": "tests/test_runtime_session_recovery.py::test_revoked_binding_during_constructor_does_not_start_peer",
+      "reason": "Server connector construction was removed. Canonical launch revalidates current authority after resolving its approved configuration and secrets, before native process effects.",
+      "replacements": [
+        "tests/execution_r4/test_local_launch.py::test_authority_change_during_secret_resolution_is_refused",
+        "tests/execution_r4/test_open_bootstrap.py::test_open_bootstrap_revalidates_authority_after_reservation"
+      ],
+      "source_sha256": "5bd31fc870bd4e93c119cf1aa04ef2408053de697374c4b537dbae33424ba577"
+    },
+    {
+      "test": "tests/test_runtime_session_recovery.py::test_open_without_client_key_reserves_before_constructor",
+      "reason": "Canonical opening requires an explicit stable client key. Replacement rejects a missing key before admission and checks the durable operation, dispatch and publication binding from inside the Core native factory before construction, with one-effect replay.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_open_reservation.py::test_open_requires_stable_key_and_reserves_before_native_factory"
+      ],
+      "source_sha256": "b6b79aa20060f3b89c52ba20a3a06763b1b7d077bd821e5f29daed4753c11545"
+    },
+    {
+      "test": "tests/test_runtime_audience_privacy.py::test_scope_exclusions_apply_to_delivery_and_result_without_disclosing_policy",
+      "reason": "Replaced legacy Server native factory execution with approved Core binding execution; covers both private input scopes and reverse audience changes before result publication without disclosing private rules.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_audience_privacy.py::test_private_scope_denies_input_and_changed_reverse_audience_without_policy_leak"
+      ],
+      "source_sha256": "0754f404b1eab3c5ebf4fd8cb753278f50041cc006a614b33db301e0c7b729bd"
+    },
+    {
+      "test": "tests/test_runtime_notify_targets.py::test_private_reply_does_not_require_initiator_to_send_to_itself",
+      "reason": "Canonical Core terminal result preserves private reply authorization without requiring origin self-send permission.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_audience_privacy.py::test_private_reply_does_not_require_origin_to_send_to_itself"
+      ],
+      "source_sha256": "112854f8e56497d28e1c0f8b6be21411daaf3be53faa753a9a397d7c86f397f2"
+    },
+    {
+      "test": "tests/test_runtime_artifact_durability.py::test_native_terminal_wake_during_publication_scan_is_not_lost",
+      "reason": "Approved Core terminal publication replaces removed Server native factory execution. The replacement holds the publication scan and verifies automatic publication without manual wakes after the terminal commit.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_publication_wake.py::test_native_commit_during_active_publication_scan_is_not_lost"
+      ],
+      "source_sha256": "3dee2d8efc0e991d799b841d3bc0739424c1c3a916588599dbcc828c0727f29c"
+    },
+    {
+      "test": "tests/test_runtime_result_correlation.py::test_stale_terminal_cannot_free_lane_and_matching_interrupt_wakes_next",
+      "reason": "Core R4 deliberately fences a stream with a mismatched native terminal instead of retaining the legacy interruptable stream. The replacement asserts automatic scoped containment/restoration, no fabricated result and no replay; matching interrupts on a healthy stream remain separately covered.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_result_correlation.py::test_foreign_native_terminal_is_contained_without_releasing_or_replaying_message",
+        "tests/execution_r4/test_canonical_native_protocol_regressions.py::test_stale_native_target_is_rejected_and_matching_interrupt_completes_original_turn"
+      ],
+      "source_sha256": "6b8ba274b6dcc20a80261a48fdfc7448acb2d7cff8ebb119cd232f932c05ecbb"
     }
   ]
 }
