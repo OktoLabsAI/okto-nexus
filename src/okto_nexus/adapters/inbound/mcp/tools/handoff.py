@@ -46,6 +46,7 @@ from okto_nexus.adapters.outbound.sqlite.policy_repo import (
 from okto_nexus.adapters.outbound.sqlite.identity_repo import (
     SqliteAgentRepo,
     SqliteSessionRepo,
+    SqliteWorkspaceRepo,
 )
 from okto_nexus.adapters.outbound.sqlite.messages_repo import (
     SqliteMessageDeliveryRepo,
@@ -188,6 +189,8 @@ def build_service(deps: Any, *, register_approval_executor: bool = True) -> Hand
         repos.agents = SqliteAgentRepo(deps.clock)
     if getattr(repos, "sessions", None) is None:
         repos.sessions = SqliteSessionRepo(deps.clock)
+    if getattr(repos, "workspaces", None) is None:
+        repos.workspaces = SqliteWorkspaceRepo(deps.clock)
     if getattr(repos, "messages", None) is None:
         repos.messages = SqliteMessageRepo(deps.clock)
     if getattr(repos, "deliveries", None) is None:
@@ -243,6 +246,7 @@ def build_service(deps: Any, *, register_approval_executor: bool = True) -> Hand
         agents=repos.agents,
         messages=repos.messages,
         deliveries=repos.deliveries,
+        workspaces=repos.workspaces,
         tag_catalog=repos.tag_catalog,
         capability_catalog=repos.capability_catalog,
         governance=governance,

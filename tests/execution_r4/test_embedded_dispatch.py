@@ -555,17 +555,21 @@ def test_restart_publishes_uncommitted_native_events(tmp_path,monkeypatch,agent_
         owner=app.state.embedded_dispatch_owner
         with deps.connection_factory.unit_of_work(write=False) as uow:
             scope=dict(uow.connection.execute("SELECT * FROM execution_local_streams").fetchone())
+        failed_publications = []
         def unavailable(*args,**kwargs):
+            failed_publications.append(True)
             raise OSError("Technical event storage failure")
         with monkeypatch.context() as patch:
             patch.setattr(embedded_events,"commit_execution_events",unavailable)
             client.portal.call(native.native.queue.put,RuntimeEvent(scope["server_id"],scope["executor_id"],
                 scope["session_id"],scope["stream_epoch"],0,"text_delta","technical.output",{"text":"Retained"}))
             until=time.monotonic()+5
-            while 'subject' not in owner.agents.errors:
+            while not failed_publications:
                 assert time.monotonic()<until
                 time.sleep(.02)
-            assert isinstance(owner.agents.errors['subject'],OSError)
+            # A transient Server write failure retains Core history for retry;
+            # it must not contain an otherwise healthy native session.
+            assert 'subject' not in owner.agents.errors
         if agent_state == 'archived':
             response = client.delete('/api/v1/agents/subject', headers=headers['operator'])
             assert response.status_code == 200, response.text

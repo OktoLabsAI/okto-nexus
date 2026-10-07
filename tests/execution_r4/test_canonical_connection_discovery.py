@@ -163,7 +163,8 @@ def test_self_connect_keeps_authenticated_identity_despite_operator_environment(
     assert native.opens == 1
 
 
-def test_self_connect_revalidates_grant_after_admission_before_native_open(connected_local):
+@pytest.mark.parametrize('change', ['grant', 'permission'])
+def test_self_connect_revalidates_grant_after_admission_before_native_open(connected_local, change):
     setup, binding, native = connected_local
     deps, app, client, headers, *_ = setup
     lock = app.state.embedded_dispatch_owner.pump.send_lock
@@ -174,7 +175,11 @@ def test_self_connect_revalidates_grant_after_admission_before_native_open(conne
         assert opened.status_code == 200, opened.text
         op = opened.json()["data"]["operation_id"]
         with deps.connection_factory.unit_of_work() as uow:
-            uow.connection.execute("UPDATE runtime_execution_grants SET revoked_at=?", (deps.clock.now_iso(),))
+            if change == 'grant':
+                uow.connection.execute("UPDATE runtime_execution_grants SET revoked_at=?", (deps.clock.now_iso(),))
+            else:
+                uow.connection.execute("UPDATE agents SET permissions=? WHERE agent_id='subject'",
+                    ('{"messages":{"send_direct":false}}',))
     finally:
         client.portal.call(lock.release)
     deadline = time.monotonic() + 10
@@ -182,7 +187,7 @@ def test_self_connect_revalidates_grant_after_admission_before_native_open(conne
         with deps.connection_factory.unit_of_work(write=False) as uow:
             row = uow.connection.execute("SELECT dispatch_state,last_error FROM execution_dispatch_outbox WHERE operation_id=?", (op,)).fetchone()
         if row[0] == "RESOLVED_TERMINAL":
-            assert "PERMISSION_DENIED" in row[1]
+            assert ("CONFLICT" if change == 'permission' else "PERMISSION_DENIED") in row[1]
             break
         assert time.monotonic() < deadline, tuple(row)
         time.sleep(.02)

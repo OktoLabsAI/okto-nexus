@@ -11,6 +11,7 @@ from okto_nexus.bootstrap.embedded_agent_recovery import EmbeddedAgentRecovery
 def owner_fixture():
     owner = object.__new__(EmbeddedDispatchOwner)
     owner.failure = None
+    owner.active_operations = set()
     owner._stopping = asyncio.Event()
     owner.channel = SimpleNamespace(connection_id="fixture", connection_generation=1)
     owner._request_grant = None
@@ -74,7 +75,7 @@ async def test_secondary_shared_failure_preserves_first_host_cause(monkeypatch, 
     from okto_nexus.application import runtime_recovery
     monkeypatch.setattr(runtime_recovery, "drain_pending", page)
     if later_producer == "execute":
-        await owner._execute_owned({"agent_id": "subject"})
+        await owner._execute_owned({"agent_id": "subject", "operation_id": "secondary"})
     elif later_producer == "renew":
         await owner._renew_owned("session", session)
     else:

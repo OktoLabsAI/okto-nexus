@@ -144,6 +144,15 @@ def reserve_execution_dispatch(
                 "AND o.dispatch_state='PENDING' "
                 "AND (o.next_attempt_at IS NULL OR o.next_attempt_at<=?) "
                 "AND p.admission_state IN ('ACCEPTED','DISPATCH_PENDING') "
+                # One agent may open several independent sessions. Until a
+                # productive native call is acknowledged, reserve at most one
+                # shared worker for that agent so slow opens cannot starve its
+                # peers. Controls retain their independent containment budget.
+                "AND (?='control' OR NOT EXISTS (SELECT 1 FROM execution_dispatch_outbox busy "
+                "JOIN execution_operations active USING(server_id,executor_id,operation_id) "
+                "WHERE busy.server_id=p.server_id AND busy.executor_id=p.executor_id "
+                "AND active.subject_agent_id=p.subject_agent_id AND busy.reservation_class='regular' "
+                "AND busy.dispatch_state IN ('RESERVED','SENDING','RECONCILING'))) "
                 "AND NOT EXISTS (SELECT 1 FROM execution_agent_recovery r JOIN execution_executors e USING(server_id,executor_id) "
                 "WHERE r.server_id=p.server_id AND r.executor_id=p.executor_id AND r.agent_id=p.subject_agent_id "
                 "AND (r.state<>'READY' OR r.generation<>e.generation)) "
@@ -168,7 +177,7 @@ def reserve_execution_dispatch(
                 "AND NOT EXISTS (SELECT 1 FROM execution_delivery_releases r WHERE r.domain_operation_id=earlier.operation_id) "
                 "AND earlier.status NOT IN ('REJECTED','CANCELLED','FAILED_FINAL')) "
                 "ORDER BY p.created_at,p.operation_id LIMIT 1",
-                (server_id, executor_id, datetime.now(timezone.utc).isoformat(),
+                (server_id, executor_id, datetime.now(timezone.utc).isoformat(), lane,
                  *actions, remaining),
             ).fetchone()
             if row is None:

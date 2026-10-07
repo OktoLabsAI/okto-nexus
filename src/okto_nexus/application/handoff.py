@@ -144,6 +144,7 @@ from .ports import (
     TagCatalogRepo,
     UnitOfWork,
     Waiter,
+    WorkspaceRepo,
 )
 from .tags import TagCatalogService
 
@@ -194,6 +195,7 @@ class HandoffService:
         request_context_provider: Any = None,
         runtime_work: Any = None,
         claim_trust_guard: Any = None,
+        workspaces: Optional[WorkspaceRepo] = None,
     ) -> None:
         self._cf = connection_factory
         self._handoffs = handoffs
@@ -230,6 +232,7 @@ class HandoffService:
         self._request_context_provider = request_context_provider
         self.runtime_work = runtime_work
         self._claim_trust_guard = claim_trust_guard
+        self._workspaces = workspaces
         # Blocking seam for the list_available long-poll: an injected Waiter
         # (deterministic in tests), or the store's own change waiter.
         self._waiter = (
@@ -315,6 +318,10 @@ class HandoffService:
         """
         logical_workspace = workspace_id is not None
         workspace_id = self._resolve_workspace(project_root, workspace_id)
+        from ..domain.execution_principal import current_execution_principal
+        from ..domain.ids import resolve_realpath
+        root_realpath = (resolve_realpath(project_root) if not logical_workspace
+            and current_execution_principal.get() is None and self._workspaces is not None else None)
         if not _is_nonempty_str(from_agent_id):
             raise OktoNexusError(
                 ErrorCode.VALIDATION_ERROR,
@@ -432,6 +439,15 @@ class HandoffService:
             permission_set_for(self._agents, uow, from_agent_id).require(
                 "handoffs", "create"
             )
+            # A project path may be used before any agent connection or message
+            # registered its workspace. The notification and authorization rows
+            # need that FK parent in this same transaction. Managed workspace
+            # handles never become filesystem paths on the Server.
+            if root_realpath is not None:
+                if self._workspaces.get(uow, workspace_id) is None:
+                    extras['workspace_created'] = True
+                self._workspaces.upsert(uow, workspace_id=workspace_id,
+                    root_realpath=root_realpath, last_seen_at=now)
             # Catalog EXISTENCE gate (F1, fail-closed): every 'tag' selector
             # in the target (incl. nested mixed rules / fallback) must
             # reference registered tags, or the create rolls back untouched.

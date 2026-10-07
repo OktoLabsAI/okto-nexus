@@ -312,3 +312,20 @@ canonical replay checks. All seven retained replay/inventory cases passed in
 the installed wheel (build/release-retained-replay-installed); twenty retained
 journal/admin cases also passed against source. No historical native owner is
 opened by those fixtures. The complete matrix is still pending.
+
+The dispatch/workspace follow-up passed 68 installed-wheel cases with unchanged
+inputs (build/release-fairness-workspace-installed-v2). A blocked opening now
+reserves at most one productive worker per agent, leaving capacity for healthy
+peers. First-use project handoffs register the workspace in the same transaction
+as the handoff and notifications; an injected post-insert failure rolls back
+all records. The broader source handoff/governance suite passed 175 cases.
+Restart replay tests now observe the actual failed publication without requiring
+a transient Server write failure to contain the native agent. Five installed
+first-cause isolation tests also passed after initializing the current owner
+fixture (build/release-failure-fixture-installed).
+
+Claude stream permission tests exposed a real Core 0.0.3 output normalization
+gap: a result-only response reaches the terminal event but loses its text.
+An isolated Core correction is under test; the published Core is unchanged.
+The late-cancellation close test passed with the documented 30-second drain
+and 15-second interrupt budget. Full-suite acceptance remains outstanding.
