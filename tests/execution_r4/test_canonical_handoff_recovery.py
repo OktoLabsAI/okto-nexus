@@ -12,12 +12,15 @@ from test_runtime_handoff_recovery import recovery
 
 def uncertain_work(runtime, *, terminal=False, **options):
     setup, binding, native = runtime
-    if terminal:
-        enable(setup, binding)
     response = call(runtime, 'handoff_create', from_agent_id='caller', visibility='eligible',
         target=dict(strategy='direct', agent_id='subject'), payload='Reviewed uncertain work', **options)
     assert response['ok'], response
     hid = response['data']['handoff_id']
+    if terminal:
+        # Configure result publication after creating the notification but
+        # before opening the governed work session. This avoids an unrelated
+        # conversational opening and keeps the session's profile immutable.
+        enable(setup, binding)
     admitted = claim(runtime, hid, grant(runtime, ('execute_work', 'read') if terminal else ('execute_work',)))
     assert admitted['ok'], admitted
     turn = current_turn(setup)
