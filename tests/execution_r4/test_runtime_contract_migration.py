@@ -50,17 +50,38 @@ def test_enabling_runtime_does_not_replay_historical_unread_messages(connected_l
     assert native.opens == 1 and len(native.native.sent) == 1
 
 
-def test_open_close_preserves_registered_agent_profile(connected_local):
+@pytest.mark.parametrize('transport', ['rest', 'mcp'])
+def test_open_close_preserves_registered_agent_profile(connected_local, monkeypatch, transport):
     setup, binding, native = connected_local
-    deps = setup[0]
+    deps, _, client, headers, *_, root = setup
+    operator = headers['operator']
+    assert client.post('/api/v1/tags', headers=operator, json={'key': 'org'}).status_code == 200
+    assert client.post('/api/v1/tags/org/values', headers=operator, json={'value': 'fixture'}).status_code == 200
+    changed = client.patch('/api/v1/agents/subject', headers=operator, json={
+        'tags': {'org': ['fixture']}, 'comm_scope': {'outbound': {'org': ['fixture']}},
+        # Subject-bound opens require direct-send permission; retain a separate
+        # explicit denial to prove opening cannot broaden the agent's policy.
+        'permissions': {'messages': {'send_direct': True, 'send_broadcast': False}}})
+    assert changed.status_code == 200, changed.text
     with deps.connection_factory.unit_of_work() as uow:
         uow.connection.execute("UPDATE agents SET role='reviewer',capabilities=?,metadata=? WHERE agent_id='subject'",
                                ('{"review":true}', '{"keep":"profile"}'))
         before = asdict(deps.repos.agents.get(uow, 'subject'))
-    opened = admit(setup, binding, 'profile-open', 'runtime.start', new_session=True)
-    wait_receipt(setup, opened)
-    wait_receipt(setup, admit(setup, binding, 'profile-close', 'runtime.close',
-                             session_id=opened['session_id']), stages=('SUCCEEDED',))
+    sessions = []
+    for index in range(2):
+        body = dict(agent_id='subject', kind='codex', project_root=str(root),
+            endpoint_id=binding['endpoint_id'], idempotency_key=f'profile-open-{index}')
+        if transport == 'rest':
+            opened = client.post('/api/v1/harness/sessions', headers=headers['subject'], json=body).json()
+        else:
+            opened = mcp(setup, monkeypatch, headers['subject']['Authorization'].removeprefix('Bearer '), 'harness_open', body)
+        assert opened['ok'], opened
+        wait_receipt(setup, opened['data'])
+        sid = opened['data']['scope']['session_id']
+        assert opened['data']['scope']['agent_id'] == 'subject'
+        sessions.append(sid)
+        wait_receipt(setup, admit(setup, binding, f'profile-close-{index}', 'runtime.close',
+                                 session_id=sid), stages=('SUCCEEDED',))
     with deps.connection_factory.unit_of_work(write=False) as uow:
         after = asdict(deps.repos.agents.get(uow, 'subject'))
         # Authenticated requests update presence, never the configured profile.
@@ -68,7 +89,8 @@ def test_open_close_preserves_registered_agent_profile(connected_local):
         before.pop('last_seen_at')
         assert after == before
         assert uow.connection.execute('SELECT COUNT(*) FROM harness_sessions').fetchone()[0] == 0
-    assert native.opens == 1 and native.native.stopped
+    assert len(set(sessions)) == 2
+    assert native.opens == 2 and native.native.stopped
 
 
 @pytest.mark.parametrize('transport', ['rest', 'mcp'])

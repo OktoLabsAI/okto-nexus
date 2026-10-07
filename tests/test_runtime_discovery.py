@@ -37,22 +37,3 @@ def test_discovery_internal_payload_identity_cannot_authenticate(runtime):
                     RuntimeRequestContext("caller", "agent_key", credential_binding="obsolete")):
         with pytest.raises(OktoNexusError, match="not authorized"):
             service.list(context)
-
-
-
-
-def test_discovery_preserves_partial_attach_capabilities_without_opening_peer(runtime):
-    deps, _, _, peers, _, _ = runtime
-    deps.config.feature_harness_attach = True
-    for adapter in ("codex", "claude_code.attach"):
-        issue(runtime, ["discover"], endpoint_id="endpoint-" + adapter)
-    result = discover(runtime)
-    assert result["ok"], result
-    bindings = {item["adapter_id"]: item for item in result["data"]["agents"][0]["endpoints"]}
-    assert bindings["codex"]["declared_capabilities"]["correlated_results"]
-    partial = bindings["claude_code.attach"]["declared_capabilities"]
-    assert partial["conversation"]
-    assert not any(partial[key] for key in ("events", "managed_work", "interrupt", "correlated_results", "native_deduplication"))
-    assert peers == []
-    deps.config.feature_harness_attach = False
-    assert [e["adapter_id"] for e in discover(runtime)["data"]["agents"][0]["endpoints"]] == ["codex"]

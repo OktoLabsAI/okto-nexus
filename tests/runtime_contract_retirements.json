@@ -2729,6 +2729,87 @@
         "tests/test_feature_flags.py::test_retired_attach_cannot_be_enabled_through_settings"
       ],
       "source_sha256": "e61c2efb35e19ad155a847709eddac2ebfcdedbc35df3e0e8d2bce6d941aaf15"
+    },
+    {
+      "test": "tests/test_runtime_discovery.py::test_discovery_preserves_partial_attach_capabilities_without_opening_peer",
+      "reason": "External Claude attach was explicitly removed. Advertising its partial capabilities is no longer a supported positive contract. Catalog absence, public refusal and retained records are tested instead.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_removed_attach_cannot_open_through_legacy_public_routes",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records",
+        "tests/execution_r4/test_attach_removed.py::test_attach_removed_from_dashboard_and_catalog"
+      ],
+      "source_sha256": "b4bd0c424b40e0263713925a469216c26916c7a6d468b9f169064cb6e81c5837"
+    },
+    {
+      "test": "tests/test_runtime_attach_work_channel.py::test_attach_managed_claim_requires_an_approved_external_nexus_channel",
+      "reason": "Explicit attach removal retires creation and successful completion of new attached native work. This is feature retirement, not an assertion that managed attach remains supported. Historical return-authority tests remain separate.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_removed_attach_cannot_open_through_legacy_public_routes",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records"
+      ],
+      "source_sha256": "245a1dddf508a96048b477f9d914dcae17cc8b8e1565072a1ced6559815436c2"
+    },
+    {
+      "test": "tests/test_runtime_attach_work_channel.py::test_external_work_over_real_attach_socket_and_authenticated_nexus",
+      "reason": "The removed external attach adapter no longer opens a socket to an external native process on any platform. Core loader refusal and public no-effect denial replace that positive socket integration.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_removed_attach_cannot_open_through_legacy_public_routes",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records"
+      ],
+      "source_sha256": "f74d4ee9c69c7e6d4ca02fca99b4ac6cae34e58f2c6aaebd2b1e980ba558658d"
+    },
+    {
+      "test": "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof",
+      "reason": "New attach configuration and opening were removed, so a new attached claim cannot reach the former self-claim proof stage. Public attach requests are denied before creating operations. Historical return-authority tests remain active.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_removed_attach_cannot_open_through_legacy_public_routes",
+        "tests/execution_r4/test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records"
+      ],
+      "source_sha256": "fdc2ddced3a492c075d70915e2262d0193e7d8597630129857c29f7868a393a7"
+    },
+    {
+      "test": "tests/test_runtime_retention_identity.py::test_prune_and_agent_deactivation_preserve_pending_transport_fences",
+      "reason": "Legacy injected-native dispatch was removed. Current coverage admits through Core, injects an uncertain native write, and checks unchanged delivery claims, pruning, reactivation and no duplicate native send.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_retention_identity.py::test_prune_and_reactivation_preserve_canonical_transport_exclusion"
+      ],
+      "source_sha256": "7d35e30f25b102ce298a8a23f13fde4fdec309f969391cbfdf3e7d235d2e814a"
+    },
+    {
+      "test": "tests/test_runtime_retention_identity.py::test_prune_and_reactivation_do_not_forget_command_idempotency",
+      "reason": "Legacy runtime_commands no longer own execution. Current coverage retains the exact canonical operation across pruning and activation changes, checks denial while inactive and REST/MCP idempotent replay without a second native send.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_retention_identity.py::test_pruning_does_not_forget_canonical_command_idempotency"
+      ],
+      "source_sha256": "2f0a92a1778966736c4a1d47f6de82b502916e8920b7c867e113c4511d96ac13"
+    },
+    {
+      "test": "tests/test_runtime_identity_acceptance.py::test_open_close_reopen_preserves_every_canonical_profile_field",
+      "reason": "Legacy operator opening was replaced by subject-key canonical binding admission. Current REST/MCP tests preserve the full configured agent profile, explicit permission denial, tags, scope and metadata across two open/close cycles; presence timestamps remain observations.",
+      "replacements": [
+        "tests/execution_r4/test_runtime_contract_migration.py::test_open_close_preserves_registered_agent_profile"
+      ],
+      "source_sha256": "9ba565d730d683ad8a23670cb4cecdde1eea47b79cebb3a9eeccf27e244815ae"
+    },
+    {
+      "test": "tests/test_runtime_identity_acceptance.py::test_unknown_identity_is_rejected_without_factory_or_registration",
+      "reason": "Canonical opening rejects a payload identity outside the authenticated binding before identity lookup, returning PERMISSION_DENIED instead of using the removed operator bootstrap path. Current tests assert no registration, no operation, no native opening and an unchanged existing agent.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_identity_lifecycle.py::test_unknown_identity_cannot_register_or_open_a_native_peer"
+      ],
+      "source_sha256": "31ac219c1331a34e5561a61fca91a2abb2978bfa38eb34925af6922bba728019"
+    },
+    {
+      "test": "tests/test_runtime_identity_acceptance.py::test_concurrent_same_agent_bindings_preserve_identity_and_deduplicate",
+      "reason": "Current coverage creates two separately approved Codex/Pi bindings through public APIs and races opens with the original subject key. Identical requests deduplicate to one native open; distinct bindings retain two sessions and the same unchanged registered identity. Legacy presence_session_id is replaced by canonical binding/session ownership.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_identity_lifecycle.py::test_concurrent_bindings_preserve_one_registered_agent"
+      ],
+      "source_sha256": "484ea2405fe2a7a758df1ca5298f9deb8c69364167e213d0d91062c05fdb6957"
     }
   ]
 }

@@ -28,6 +28,26 @@ def test_attach_removed_from_dashboard_and_catalog(local_setup):
         assert client.post(base + action, headers=headers['operator'], json={}).status_code == 404
 
 
+@pytest.mark.parametrize('surface', ['rest', 'mcp'])
+def test_removed_attach_cannot_open_through_legacy_public_routes(local_setup, monkeypatch, surface):
+    deps, _, client, headers, *_, root = local_setup
+    request = dict(agent_id='subject', kind='claude_code', substrate='attach',
+                   target_pid=12345, project_root=str(root))
+    if surface == 'rest':
+        response = client.post('/api/v1/harness/sessions', headers=headers['operator'], json=request)
+        assert response.status_code == 403, response.text
+        assert response.json()['error']['code'] == 'PERMISSION_DENIED'
+    else:
+        monkeypatch.syspath_prepend(str(Path(__file__).parents[1]))
+        from test_pr34_remediation import tool
+        client.headers['host'] = '127.0.0.1:8000'
+        response = tool(client, headers['operator']['Authorization'].removeprefix('Bearer '), 'harness_open', request)
+        assert not response['ok'] and response['error']['code'] == 'PERMISSION_DENIED', response
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 0
+        assert uow.connection.execute('SELECT COUNT(*) FROM harness_sessions').fetchone()[0] == 0
+
+
 def test_attach_retirement_disables_only_old_endpoints_and_preserves_records(local_setup):
     context, request = request_for(local_setup)
     result = finish(local_setup, context, request, verified={

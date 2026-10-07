@@ -102,10 +102,6 @@ def admitted(runtime, *, target_pid=12345, socket_peer=None, surface="mcp", clai
     return handoff, worker_key, proof, grant, accepted, operation
 
 
-@pytest.mark.parametrize("action", ["complete", "reject"])
-@pytest.mark.parametrize("surface", ["rest", "mcp"])
-def test_attach_managed_claim_requires_an_approved_external_nexus_channel(runtime, action, surface):
-    complete_fixture_work(runtime, action, admitted(runtime, surface=surface))
 
 
 def complete_fixture_work(runtime, action, admission):
@@ -193,17 +189,6 @@ def test_external_work_revalidates_return_authority(runtime, fault, stage):
         assert final["ack_level"] == ("TRANSPORT_WRITE" if stage == "ack" else "AGENT_ACK")
 
 
-@pytest.mark.skipif(os.name != "posix", reason="NOT_RUN: attach socket ownership requires POSIX")
-def test_external_work_over_real_attach_socket_and_authenticated_nexus(runtime, tmp_path, fake_server):
-    from legacy_native_fixture.claude_code_attach import ClaudeCodeAttachConnector
-    deps, _, _, _, _, _ = runtime
-    pid = os.getpid()
-    _write_registry(tmp_path, pid, socket_path=str(fake_server.sock_path), peer_protocol=1)
-    _write_key(tmp_path, pid)
-    deps.harness_connector_factories["claude_code"] = lambda **kw: ClaudeCodeAttachConnector(kw["target_pid"], sessions_dir=tmp_path)
-    complete_fixture_work(runtime, "complete", admitted(runtime, target_pid=pid, socket_peer=fake_server))
-    assert len(fake_server.connections) == 2
-    os.kill(pid, 0)  # Nexus never owned or terminated this external fixture.
 
 
 @pytest.mark.parametrize("draining", [False, True])
@@ -236,10 +221,6 @@ def test_external_completion_releases_lane_for_a_new_canonical_delivery(runtime)
         assert uow.connection.execute("SELECT external_completed_at FROM delivery_outbox WHERE operation_id=?", (admission[-1]["operation_id"],)).fetchone()[0]
 
 
-@pytest.mark.parametrize("surface", ["rest", "mcp"])
-@pytest.mark.parametrize("fault", ["missing_proof", "wrong_secret", "structured_completion", "foreign_actor"])
-def test_configured_attach_requires_authenticated_self_claim_proof(runtime, surface, fault):
-    admitted(runtime, surface=surface, claim_fault=fault)
 
 
 def test_mixed_external_and_pull_ack_preserves_receipt_grouping_and_provenance(runtime):
