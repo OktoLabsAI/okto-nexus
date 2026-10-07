@@ -133,6 +133,8 @@ def project_delivery_receipt(conn, *, server_id, executor_id, operation_id, acti
         "WHERE server_id=? AND executor_id=? AND operation_id=?", (server_id, executor_id, operation_id)).fetchone()
     if row is None:
         return
+    if conn.execute('SELECT 1 FROM execution_delivery_releases WHERE domain_operation_id=?', (row[0],)).fetchone():
+        return
     status = {"SUBMITTED": "ACCEPTED", "RUNNING": "ACCEPTED", "SUCCEEDED": "ACCEPTED",
               "FAILED": "FAILED_FINAL", "CANCELLED": "CANCELLED", "OUTCOME_UNKNOWN": "OUTCOME_UNKNOWN"}.get(stage)
     if status is None:
@@ -170,3 +172,33 @@ def project_delivery_refusals(conn, *, server_id, executor_id):
         "JOIN execution_dispatch_outbox x USING(server_id,executor_id,operation_id) "
         "WHERE m.server_id=? AND m.executor_id=? AND x.dispatch_state='RESOLVED_TERMINAL' "
         "AND x.last_receipt_revision IS NULL AND x.last_error IS NOT NULL LIMIT 256)", (server_id, executor_id))
+
+
+def project_released_deliveries(conn, *, server_id, executor_id, session_id, proof):
+    """Called only after validating resource release AND complete event replay.
+
+    Release ordering, not the inbox claim: an already submitted turn may have
+    caused effects. Never replay it, fabricate a receipt or publish partial text
+    as a completed response.
+    """
+    if not conn.execute("SELECT 1 FROM execution_sessions WHERE server_id=? AND executor_id=? "
+            "AND session_id=? AND lifecycle_state='CLOSED' AND lease_state='CLOSED'",
+            (server_id, executor_id, session_id)).fetchone():
+        raise ValueError('Delivery release requires a closed canonical session.')
+    rows = conn.execute("SELECT m.domain_operation_id,p.operation_id FROM execution_operations p "
+        "JOIN execution_domain_deliveries m USING(server_id,executor_id,operation_id) "
+        "JOIN delivery_outbox d ON d.operation_id=m.domain_operation_id "
+        "WHERE p.server_id=? AND p.executor_id=? AND p.session_id=? AND p.action='turn.submit' "
+        "AND d.reconciliation_id IS NULL AND d.external_completed_at IS NULL "
+        "AND d.terminal_event_id IS NULL AND d.canonical_terminal_operation_id IS NULL "
+        "AND d.status IN ('ACCEPTED','SENT_UNCONFIRMED','OUTCOME_UNKNOWN') "
+        "AND (SELECT stage FROM execution_receipts r WHERE r.server_id=p.server_id "
+        "AND r.executor_id=p.executor_id AND r.operation_id=p.operation_id "
+        "ORDER BY receipt_revision DESC LIMIT 1) IN ('SUBMITTED','RUNNING','OUTCOME_UNKNOWN')",
+        (server_id, executor_id, session_id)).fetchall()
+    for row in rows:
+        conn.execute("INSERT INTO execution_delivery_releases VALUES(?,?,?,?,?,?,strftime('%Y-%m-%dT%H:%M:%fZ','now')) "
+            "ON CONFLICT DO NOTHING", (row['domain_operation_id'], server_id, executor_id,
+            row['operation_id'], session_id, json.dumps(proof, sort_keys=True)))
+        conn.execute("UPDATE delivery_outbox SET status='OUTCOME_UNKNOWN',reason='session_released_without_result',"
+            "updated_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') WHERE operation_id=?", (row['domain_operation_id'],))

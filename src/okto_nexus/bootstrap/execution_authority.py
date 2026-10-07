@@ -26,6 +26,8 @@ def build_execution_access(deps):
         from ..errors import ErrorCode, OktoNexusError
         if (operation["status"] in {"REJECTED", "CANCELLED", "FAILED_FINAL"}
                 or operation["canonical_terminal_operation_id"] is not None
+                or uow.connection.execute('SELECT 1 FROM execution_delivery_releases WHERE domain_operation_id=?',
+                    (operation['operation_id'],)).fetchone() is not None
                 or uow.connection.execute("SELECT 1 FROM message_deliveries WHERE delivery_id=? "
                     "AND consumer_kind='push' AND consumer_operation_id=? AND status='unread'",
                     (operation["delivery_id"], operation["operation_id"])).fetchone() is None):

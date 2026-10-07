@@ -1,7 +1,7 @@
 """Independent, retained recovery/publication workers for local subjects.
 
-Timeouts bound availability, not the lifetime of a journal writer. A slow worker
-is retained and observed; it is never duplicated or abandoned on cancellation.
+Publication lag is not evidence of native failure. A slow worker is retained
+and observed; it is never duplicated or used to revoke a healthy native lease.
 """
 import asyncio
 import random
@@ -19,6 +19,7 @@ class EmbeddedAgentRecovery:
         self.owner = owner
         self.tasks = {}
         self.started = {}
+        self.delayed = set()
         self.blocked = set()
         self.retry_at = {}
         self.attempts = {}
@@ -136,8 +137,11 @@ class EmbeddedAgentRecovery:
             'Agent history reconciled. Previous work was not replayed.', agent_id=agent_id)
 
     async def _publish(self, agent_id):
-        await self.owner._recover_publications(agent_id=agent_id)
-        await self.owner.events.recover(agent_id=agent_id, live_only=True)
+        def progress():
+            self.started[agent_id] = time.monotonic()
+            self.delayed.discard(agent_id)
+        await self.owner._recover_publications(agent_id=agent_id, progress=progress)
+        await self.owner.events.recover(agent_id=agent_id, live_only=True, progress=progress)
         await self._retire_closed(agent_id)
 
     async def _retire_closed(self, agent_id):
@@ -207,8 +211,15 @@ class EmbeddedAgentRecovery:
             if task.done():
                 task.result()
                 del self.tasks[agent_id]
-            elif now - self.started[agent_id] >= self.observation_timeout and agent_id not in self.blocked:
-                await self.fail(agent_id, TimeoutError('Agent publication is still pending.'))
+                self.delayed.discard(agent_id)
+            elif (now - self.started[agent_id] >= self.observation_timeout
+                    and agent_id not in self.blocked and agent_id not in self.delayed):
+                # A publication observer can be slow while the harness is
+                # healthy. Keep its single worker and native lease alive.
+                # Actual journal/stream errors still enter isolated recovery.
+                self.delayed.add(agent_id)
+                await asyncio.to_thread(self.owner._recovery_event, 'RECOVERY_PUBLICATION_DELAYED',
+                    'Publication is delayed; native execution and lease renewal remain active.', agent_id=agent_id)
         enabled = manual or await asyncio.to_thread(self.owner._recovery_enabled)
         subjects = self.blocked | await asyncio.to_thread(self._pending_subjects)
         subjects |= {s['scope']['agent_id'] for s in self.owner.sessions.values()}

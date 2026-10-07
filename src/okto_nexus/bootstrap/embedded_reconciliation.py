@@ -160,7 +160,7 @@ class EmbeddedReconciliation:
             if sequence != await asyncio.to_thread(self._committed_stream,
                     (claim.key.server_id, claim.key.executor_id, session_id, row['stream_epoch'])):
                 raise CoreError('EVENT_GAP', 'embedded_session_release')
-            return fact
+            return fact | dict(stream_epoch=row['stream_epoch'], committed_sequence=sequence)
         fact = await host.with_history(executor_id=owner.channel.executor_id, session_id=session_id, read=inspect)
         def commit():
             with owner.factory.unit_of_work() as uow:
@@ -172,6 +172,10 @@ class EmbeddedReconciliation:
                      fact['owner_generation'], row['open_operation_id']))
                 if changed.rowcount != 1:
                     raise CoreError('STALE_GENERATION', 'embedded_session_release')
+                if not failed_open:
+                    from ..application.execution_domain_delivery import project_released_deliveries
+                    project_released_deliveries(uow.connection, server_id=owner.channel.server_id,
+                        executor_id=owner.channel.executor_id, session_id=session_id, proof=fact)
                 if failed_open:
                     key = (owner.channel.server_id, owner.channel.executor_id, session_id)
                     uow.connection.execute("UPDATE execution_leases SET status='REVOKED' "
@@ -300,6 +304,20 @@ class EmbeddedReconciliation:
                 return fact,dict(session_id=claim.key.session_id,stream_epoch=row["stream_epoch"],sequence=sequence)
             proofs[row["session_id"]] = await host.with_history(executor_id=owner.channel.executor_id,
                 session_id=row["session_id"],read=inspect)
+        # Older versions could retire the stream without settling its delivery.
+        # Revalidate the retained proof even for sessions already marked closed.
+        def settle_retained():
+            from ..application.execution_domain_delivery import project_released_deliveries
+            with owner.factory.unit_of_work() as uow:
+                owner.verify(uow=uow)
+                for session_id, (fact, stream) in proofs.items():
+                    if uow.connection.execute("SELECT 1 FROM execution_sessions WHERE server_id=? AND executor_id=? "
+                            "AND session_id=? AND lifecycle_state='CLOSED' AND lease_state='CLOSED'",
+                            (owner.channel.server_id, owner.channel.executor_id, session_id)).fetchone():
+                        project_released_deliveries(uow.connection, server_id=owner.channel.server_id,
+                            executor_id=owner.channel.executor_id, session_id=session_id,
+                            proof=dict(ownership=fact, stream=stream))
+        await asyncio.to_thread(settle_retained)
         reconciliation = ExecutionReconciliation(owner.factory,owner.channel,
             owner_guard=lambda conn:owner.verify(uow=SimpleNamespace(connection=conn)), agent_id=agent_id)
         for _ in range(128):

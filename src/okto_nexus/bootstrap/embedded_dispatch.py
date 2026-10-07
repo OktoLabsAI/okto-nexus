@@ -206,7 +206,7 @@ class EmbeddedDispatchOwner:
         self.maintenance = asyncio.create_task(self._maintain(), name="embedded-publications")
         await asyncio.to_thread(self._recovery_event,'RECOVERY_READY','Local host ready. Agents with retained history recover independently; previous work was not replayed.')
 
-    async def _recover_publications(self, *, agent_id=None):
+    async def _recover_publications(self, *, agent_id=None, progress=None):
         """Publish retained facts once before any new dispatch is enabled."""
         after = 0
         while True:
@@ -219,6 +219,8 @@ class EmbeddedDispatchOwner:
                 receipt = await self.host.historical_receipt(session_id=row["session_id"],key=key)
                 if receipt is not None:
                     await self._publish(json.loads(row["binding_json"]),receipt)
+                if progress is not None:
+                    progress()
             after = rows[-1]["rowid"]
 
     async def failed(self):

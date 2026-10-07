@@ -165,6 +165,7 @@ def reserve_execution_dispatch(
                 "AND (earlier.created_at,earlier.operation_id)<(d.created_at,d.operation_id) "
                 "AND earlier.reconciliation_id IS NULL AND earlier.external_completed_at IS NULL "
                 "AND earlier.terminal_event_id IS NULL AND earlier.canonical_terminal_operation_id IS NULL "
+                "AND NOT EXISTS (SELECT 1 FROM execution_delivery_releases r WHERE r.domain_operation_id=earlier.operation_id) "
                 "AND earlier.status NOT IN ('REJECTED','CANCELLED','FAILED_FINAL')) "
                 "ORDER BY p.created_at,p.operation_id LIMIT 1",
                 (server_id, executor_id, datetime.now(timezone.utc).isoformat(),

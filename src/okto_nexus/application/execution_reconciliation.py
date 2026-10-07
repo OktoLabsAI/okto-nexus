@@ -124,6 +124,7 @@ class ExecutionReconciliation:
                 if summary['stage'] not in ('SUBMITTED','SUCCEEDED','FAILED','CANCELLED'):
                     self.blocked = True
             facts = {r['session_id']: r for r in report['ownership_facts']}
+            released = set()
             claims = {r['session_id']: r for r in report['claims']}
             if len(facts) != len(report['ownership_facts']) or len(claims) != len(report['claims']) or set(facts) != set(claims):
                 raise ValueError('The ownership facts do not match the claims.')
@@ -172,6 +173,7 @@ class ExecutionReconciliation:
                 conn.execute("UPDATE execution_sessions SET lifecycle_state='CLOSED',lease_state='CLOSED' "
                     "WHERE server_id=? AND executor_id=? AND session_id=? AND owner_generation=?",
                     (c.server_id,c.executor_id,session_id,claim['owner_generation']))
+                released.add(session_id)
             streams = set()
             for watermark in report['stream_watermarks']:
                 stream = (watermark['session_id'], watermark['stream_epoch'])
@@ -191,6 +193,13 @@ class ExecutionReconciliation:
             if any(claim['state'] == 'RELEASED' and sum(s[0] == session for s in streams) != 1
                    for session, claim in claims.items()):
                 self.blocked = True
+            if not self.blocked:
+                from .execution_domain_delivery import project_released_deliveries
+                for watermark in report['stream_watermarks']:
+                    if watermark['session_id'] in released:
+                        project_released_deliveries(conn, server_id=c.server_id, executor_id=c.executor_id,
+                            session_id=watermark['session_id'], proof=dict(
+                                ownership=facts[watermark['session_id']], stream=watermark))
             if report['complete']:
                 self.blocked |= self.receipt_high != conn.execute(
                     'SELECT coalesce(max(rowid),0) FROM execution_receipts WHERE server_id=? AND executor_id=? '

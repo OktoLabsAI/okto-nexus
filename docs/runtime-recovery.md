@@ -11,8 +11,10 @@ agent configuration, or change the remote Connector connection contract.
 - Each local agent has durable readiness tied to the executor generation.
   Admission, dispatch selection, lease issuance and capability use check it.
 - Each agent has at most one recovery/publication worker. Slow workers remain
-  owned and observed; a five-second observation deadline fences that agent
-  without cancelling a journal writer or spawning duplicate attempts.
+  owned and observed. Five seconds without publication progress records
+  `RECOVERY_PUBLICATION_DELAYED`; it does not revoke the native lease or trigger
+  containment. Successful receipt reads and event pages reset this observation
+  window. Live streams publish one bounded page per session per pass.
 - Failed attempts retry with increasing delay and jitter, up to approximately
   thirty seconds between attempts. There is no final retry count that abandons
   an otherwise recoverable agent or an unclaimed message.
@@ -24,6 +26,12 @@ agent configuration, or change the remote Connector connection contract.
 - Closed streams stop being polled only after release evidence and matching
   committed event watermarks. This avoids accumulating recurring work for old
   sessions without discarding their durable history.
+- A proven resource release with complete event replay also releases delivery
+  ordering. An unfinished submitted turn becomes `OUTCOME_UNKNOWN` with reason
+  `session_released_without_result`. `execution_delivery_releases` retains the
+  release proof separately from native receipts/results; it neither replays the
+  turn nor publishes partial text as a completed answer. Retained closed sessions
+  from older versions are repaired through the same proof checks on recovery.
 
 The Agents view reflects each local agent's state. Last-resort recovery accepts an
 optional `agent_id` on `/v1/runtime/recovery/retry` and
@@ -55,6 +63,10 @@ proof remains recognizable on subsequent restarts.
 | Archival during failed recovery | History drains without reactivating the identity |
 | Live event projection failure | Only its agent is contained; automatic recovery restores new admission |
 | Final event captured while closing | Event commits before the closed stream stops being polled |
+| Slow live publication (Codex, Claude, Pi) | One retained observer; native session and lease renewals remain active |
+| Continuously growing event stream | A bounded live pass yields to other publication work |
+| Released incomplete turn (Codex, Claude, Pi) | New message executes; old outcome stays unknown without replay |
+| Previously retired incomplete delivery | Retained resource proofs repair ordering automatically |
 | Orderly owner process termination | All retained sessions reconcile on restart |
 | Forced owner process termination | Real Windows Job peers stop; locks and resources recover automatically |
 | Forced termination before binding | Unstarted work is settled without a native replay |

@@ -86,7 +86,7 @@ class EmbeddedEventPublisher:
                 await self.step(scope)
         return bool(rows)
 
-    async def recover(self, *, agent_id=None, live_only=False):
+    async def recover(self, *, agent_id=None, live_only=False, progress=None):
         after = 0
         while True:
             rows = await asyncio.to_thread(self._page, after=after, agent_id=agent_id, live_only=live_only)
@@ -94,7 +94,12 @@ class EmbeddedEventPublisher:
                 return
             for scope in rows:
                 for _ in range(4096):
-                    if not await self.step(scope):
+                    advanced = await self.step(scope)
+                    if progress is not None:
+                        progress()
+                    # Live streams have no finite tail. Publish a bounded page
+                    # per stream so receipts and other sessions get a turn.
+                    if live_only or not advanced:
                         break
                 else:
                     raise CoreError("CAPACITY_EXCEEDED", "embedded_event_recovery")

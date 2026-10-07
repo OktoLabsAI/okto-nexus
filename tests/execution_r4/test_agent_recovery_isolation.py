@@ -218,6 +218,145 @@ def test_close_publishes_last_captured_event_before_retiring_stream(local_setup,
         assert uow.connection.execute('SELECT COUNT(*) FROM execution_local_publications WHERE terminal=0').fetchone()[0] == 0
 
 
+@pytest.mark.parametrize('local_setup', ['codex_app_server', 'claude_stream', 'pi_rpc'], indirect=True)
+def test_slow_publication_keeps_native_and_lease_alive(local_setup, monkeypatch):
+    from okto_nexus.bootstrap.embedded_events import EmbeddedEventPublisher
+    from test_sender_sessions import Peers, configure, sender, turn_for, complete
+    setup, binding, _ = connect_local(local_setup)
+    deps, app, client, *_ = setup
+    owner = app.state.embedded_dispatch_owner
+    peers = Peers()
+    owner.native_factory = peers
+    configure(setup, binding, 'per_sender')
+    turn = turn_for(setup, sender(setup, monkeypatch)('operator'))
+    wait_receipt(setup, turn)
+    renewal_errors = []
+    original_issue = owner.leases.issue
+    def observe_issue(*args, **kwargs):
+        try:
+            return original_issue(*args, **kwargs)
+        except Exception as error:
+            renewal_errors.append(str(error))
+            raise
+    monkeypatch.setattr(owner.leases, 'issue', observe_issue)
+    owner.agents.observation_timeout = .15
+    release = asyncio.Event()
+    entered = asyncio.Event()
+    original = EmbeddedEventPublisher.step
+    calls = 0
+    async def slow(publisher, scope):
+        nonlocal calls
+        if scope['session_id'] == turn['session_id']:
+            calls += 1
+            entered.set()
+            await release.wait()
+        return await original(publisher, scope)
+    monkeypatch.setattr(EmbeddedEventPublisher, 'step', slow)
+    try:
+        eventually(entered.is_set)
+        eventually(lambda: 'subject' in owner.agents.delayed)
+        def serial():
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                return uow.connection.execute('SELECT MAX(lease_serial) FROM execution_leases WHERE session_id=?',
+                    (turn['session_id'],)).fetchone()[0]
+        # Drive real maintenance renewals while publication is suspended;
+        # do not make this test depend on sub-second CI scheduling margins.
+        for _ in range(2):
+            previous = serial()
+            client.portal.call(lambda: owner.sessions[turn['session_id']].update(renew_at=time.monotonic()))
+            def renewed():
+                assert not renewal_errors, renewal_errors
+                task = owner.sessions[turn['session_id']].get('renew_task')
+                return serial() > previous and task is not None and task.done()
+            eventually(renewed)
+        assert calls == 1, 'A retained observer must never be duplicated'
+        assert 'subject' not in owner.agents.blocked
+        assert not peers.sessions[turn['session_id']].stopped
+        assert serial() >= 3
+    finally:
+        client.portal.call(release.set)
+    complete(setup, peers, turn, 'Response survived publication lag')
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert not uow.connection.execute('SELECT 1 FROM execution_delivery_releases').fetchone()
+
+
+@pytest.mark.parametrize('local_setup', ['codex_app_server', 'claude_stream', 'pi_rpc'], indirect=True)
+def test_released_incomplete_turn_does_not_block_next_message(local_setup, monkeypatch):
+    from nexus_connector_core import RuntimeEvent
+    from okto_nexus.bootstrap import embedded_events
+    from test_sender_sessions import Peers, configure, sender, turn_for, complete
+    setup, binding, _ = connect_local(local_setup)
+    deps, app, client, *_ = setup
+    owner = app.state.embedded_dispatch_owner
+    peers = Peers()
+    owner.native_factory = peers
+    configure(setup, binding, 'per_sender')
+    send = sender(setup, monkeypatch)
+    first = turn_for(setup, send('operator'))
+    wait_receipt(setup, first)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        stream = dict(uow.connection.execute('SELECT * FROM execution_local_streams').fetchone())
+    original = embedded_events.commit_execution_events
+    broken = True
+    def fail(*args, **kwargs):
+        if broken:
+            raise OSError('Temporary publication failure')
+        return original(*args, **kwargs)
+    monkeypatch.setattr(embedded_events, 'commit_execution_events', fail)
+    client.portal.call(peers.sessions[first['session_id']].queue.put, RuntimeEvent(
+        stream['server_id'], stream['executor_id'], stream['session_id'], stream['stream_epoch'], 0,
+        'text_delta', 'fixture.output', dict(output_text='Partial response'), operation_id=first['operation_id']))
+    try:
+        eventually(lambda: 'subject' in owner.agents.blocked)
+        eventually(lambda: peers.sessions[first['session_id']].stopped)
+    finally:
+        broken = False
+    eventually(lambda: 'subject' not in owner.agents.blocked, seconds=15)
+    second = turn_for(setup, send('operator', 'A new message'))
+    assert second['session_id'] != first['session_id']
+    wait_receipt(setup, second)
+    complete(setup, peers, second, 'Recovered response')
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        conn = uow.connection
+        row = conn.execute('SELECT d.* FROM delivery_outbox d JOIN execution_delivery_releases r '
+            'ON r.domain_operation_id=d.operation_id WHERE r.operation_id=?', (first['operation_id'],)).fetchone()
+        assert row['status'] == 'OUTCOME_UNKNOWN'
+        assert row['reason'] == 'session_released_without_result'
+        assert row['canonical_terminal_operation_id'] is None
+        assert conn.execute('SELECT stage FROM execution_receipts WHERE operation_id=? ORDER BY receipt_revision DESC',
+            (first['operation_id'],)).fetchone()[0] == 'SUBMITTED'
+        assert conn.execute('SELECT terminal_sequence FROM execution_results WHERE operation_id=?',
+            (first['operation_id'],)).fetchone()[0] is None
+        assert conn.execute('SELECT MAX(attempt_no) FROM execution_dispatch_outbox').fetchone()[0] == 1
+        assert not conn.execute('PRAGMA foreign_key_check').fetchall()
+    # Reproduce retained state from before this fix: the stream was retired,
+    # but no separate delivery release was recorded. Recovery must repair it
+    # from Core proofs, without requiring the operator to edit the database.
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute('DELETE FROM execution_delivery_releases')
+        uow.connection.execute("UPDATE delivery_outbox SET status='ACCEPTED',reason=NULL WHERE operation_id=?",
+            (row['operation_id'],))
+    client.portal.call(owner.agents.fail, 'subject', OSError('Recovery of retained legacy state'))
+    eventually(lambda: 'subject' not in owner.agents.blocked, seconds=15)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT COUNT(*) FROM execution_delivery_releases').fetchone()[0] == 1
+        assert uow.connection.execute('SELECT COUNT(*) FROM runtime_results WHERE canonical_operation_id=?',
+            (first['operation_id'],)).fetchone()[0] == 0
+
+
+def test_live_publication_yields_even_when_stream_keeps_growing():
+    from okto_nexus.bootstrap.embedded_events import EmbeddedEventPublisher
+    publisher = EmbeddedEventPublisher(None)
+    calls = []
+    publisher._page = lambda **kw: [{'rowid': 1}] if kw['after'] == 0 else []
+    async def growing(scope):
+        calls.append(scope['rowid'])
+        return True  # Native output never reaches an empty tail in this pass.
+    publisher.step = growing
+    asyncio.run(publisher.recover(live_only=True))
+    assert calls == [1]
+
+
 @pytest.mark.skipif(sys.platform != 'win32', reason='Actual Windows Job crash containment')
 @pytest.mark.parametrize('termination', ['graceful', 'kill', 'kill-before-bind'])
 def test_real_process_exit_restores_without_lock_reset_or_replay(tmp_path, monkeypatch, termination):
