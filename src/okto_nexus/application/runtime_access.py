@@ -81,8 +81,8 @@ class RuntimeAccessService:
             # providers during cutover/restore. Authentication, grants and audit
             # below still apply; this does not authorize a native effect.
             enabled = action in {"read", "events"} or (
-                adapter_available and self.config.feature_harness_integrations and (
-                    substrate != "attach" or self.config.feature_harness_attach))
+                adapter_available and self.config.feature_harness_integrations
+                and substrate != "attach")
             if endpoint and action in {"open", "send", "steer", "execute_work"}:
                 if endpoint['protocol'] != 'nxl-r4':
                     raise denied()

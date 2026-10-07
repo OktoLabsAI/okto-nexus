@@ -479,8 +479,8 @@ def build_dispatcher(deps):
             messages._runtime_results.validate_relay(uow, operation["source_result_id"])
         if not managed(uow, operation):
             messages.revalidate_runtime_delivery(uow, operation)
-        if registry.get(endpoint["adapter_id"]).substrate == "attach" and not deps.config.feature_harness_attach:
-            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Attach is disabled.", {})
+        if registry.get(endpoint["adapter_id"]).substrate == "attach":
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Attach connections are no longer supported.", {})
 
     def validate_dispatch(uow, operation):
         validate(uow, operation)

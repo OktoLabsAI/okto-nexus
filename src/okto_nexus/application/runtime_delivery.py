@@ -38,7 +38,7 @@ class RuntimeDeliveryPlanner:
                     or endpoint["response_policy"] != "none"
                     or not descriptor.capabilities.context_without_execution
                     or descriptor.input_schema.get("context_observation_contract") != 1
-                    or descriptor.substrate == "attach" and not self.config.feature_harness_attach):
+                    or descriptor.substrate == "attach"):
                 continue
             profile = self.endpoints.profile(uow, endpoint["profile_id"]) if endpoint["profile_id"] else None
             if endpoint["profile_id"] and (not profile or not profile["enabled"]
@@ -80,7 +80,7 @@ class RuntimeDeliveryPlanner:
                     candidates.append((endpoint, profile, session_id))
                 continue
             descriptor = self.registry.get(endpoint["adapter_id"])
-            if not descriptor.capabilities.conversation or (descriptor.substrate == "attach" and not self.config.feature_harness_attach):
+            if not descriptor.capabilities.conversation or descriptor.substrate == "attach":
                 continue
             if not endpoint["enabled"] or endpoint["activation_state"] != "approved" or endpoint["consumption"] != "exclusive":
                 continue

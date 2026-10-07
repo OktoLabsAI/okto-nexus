@@ -324,11 +324,6 @@ SETTING_SPECS: tuple[SettingSpec, ...] = (
         group="features", requires_restart=True,
     ),
     SettingSpec(
-        "feature_harness_attach", "bool",
-        "Private Claude attach protocol, enabled by default. Requires harness integrations and an approved endpoint.",
-        group="features",
-    ),
-    SettingSpec(
         "feature_replay",
         "bool",
         "Opt-in: replay/eval export of coordination history (NDJSON + "

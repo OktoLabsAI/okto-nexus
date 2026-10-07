@@ -21,9 +21,9 @@ def authorize_runtime(context: RuntimeRequestContext, *, config, agents,
     if not allowed:
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
                             "Runtime access requires an authorized operator or explicit delegation.", {})
-    if substrate == "attach" and not config.feature_harness_attach:
+    if substrate == "attach":
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
-                            "Claude attach requires its separate opt-in.", {})
+                            "Attach connections are no longer supported.", {})
 
 
 def require_runtime_agent(*, agents, connection_factory, agent_id: str, role=None):
