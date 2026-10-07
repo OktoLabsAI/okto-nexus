@@ -236,9 +236,15 @@ class EmbeddedDispatchOwner:
             self.failure = self.pump.error
         if not self._stopping.is_set():
             error = self.failure
+            # Preserve the failure path without logging native payloads,
+            # credentials, or exception messages supplied by a harness.
+            import traceback
+            from pathlib import Path
+            origin = ' -> '.join(f'{Path(frame.filename).name}:{frame.lineno}:{frame.name}'
+                for frame in traceback.extract_tb(error.__traceback__)[-5:]) if error else 'unavailable'
             logging.getLogger(__name__).error(
-                "Embedded runtime containment: type=%s code=%s stage=%s",
-                type(error).__name__, getattr(error, "code", None), getattr(error, "stage", None))
+                "Embedded runtime containment: type=%s code=%s stage=%s origin=%s",
+                type(error).__name__, getattr(error, "code", None), getattr(error, "stage", None), origin)
         self._stopping.set()
         if self.pump is not None:
             self.pump._stopping.set()

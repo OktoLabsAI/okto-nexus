@@ -1,5 +1,7 @@
 """Transport intents refer to existing inbox deliveries, never independent work."""
 import json
+import os
+import socket
 import sqlite3
 
 from ....errors import ErrorCode, OktoNexusError
@@ -129,10 +131,14 @@ class SqliteRuntimeOutboxRepo:
             raise OktoNexusError(ErrorCode.CONFIG_ERROR,
                 "runtime_writer_incompatible: this package cannot own the store's writer contract.", {})
         row = uow.connection.execute("SELECT * FROM runtime_dispatcher_owner WHERE owner_key='dispatcher'").fetchone()
-        if row and row["lease_expires_at"] > now and row["owner_id"] != owner_id:
+        if row and row["owner_id"] != owner_id:
             from ..process_liveness import process_exited
-            if (process_host is None or row['process_host'] != process_host
-                    or process_exited(row['process_pid']) is not True):
+            local_process = (process_host is not None and row['process_host'] == process_host
+                             and row['process_pid'] is not None)
+            # Sleep pauses every heartbeat. Never evict a live local writer
+            # merely because its timer expired; a proved dead PID can be replaced.
+            if ((local_process and process_exited(row['process_pid']) is not True)
+                    or (not local_process and row['lease_expires_at'] > now)):
                 return None
         epoch = row["epoch"] + 1 if row else 1
         uow.connection.execute("UPDATE runtime_writer_contract SET required_contract=1, "
@@ -189,17 +195,20 @@ class SqliteRuntimeOutboxRepo:
 
     def heartbeat_owner(self, uow, *, owner_id, epoch, lease_expires_at, now):
         return uow.connection.execute(
-            "UPDATE runtime_dispatcher_owner SET lease_expires_at=? WHERE owner_key='dispatcher' AND owner_id=? AND epoch=? AND lease_expires_at>?",
-            (lease_expires_at, owner_id, epoch, now)).rowcount == 1
+            "UPDATE runtime_dispatcher_owner SET lease_expires_at=? WHERE owner_key='dispatcher' AND owner_id=? AND epoch=? "
+            "AND (lease_expires_at>? OR (process_pid=? AND process_host=?))",
+            (lease_expires_at, owner_id, epoch, now, os.getpid(), socket.gethostname())).rowcount == 1
 
     def owns(self, uow, *, owner_id, epoch, now):
         return uow.connection.execute(
-            "SELECT 1 FROM runtime_dispatcher_owner WHERE owner_key='dispatcher' AND owner_id=? AND epoch=? AND lease_expires_at>?",
-            (owner_id, epoch, now)).fetchone() is not None
+            "SELECT 1 FROM runtime_dispatcher_owner WHERE owner_key='dispatcher' AND owner_id=? AND epoch=? "
+            "AND (lease_expires_at>? OR (process_pid=? AND process_host=?))",
+            (owner_id, epoch, now, os.getpid(), socket.gethostname())).fetchone() is not None
 
     def release_owner(self, uow, *, owner_id, epoch, now):
         uow.connection.execute(
-            "UPDATE runtime_dispatcher_owner SET lease_expires_at=? WHERE owner_key='dispatcher' AND owner_id=? AND epoch=?",
+            "UPDATE runtime_dispatcher_owner SET lease_expires_at=?,process_pid=NULL,process_host=NULL "
+            "WHERE owner_key='dispatcher' AND owner_id=? AND epoch=?",
             (now, owner_id, epoch))
 
     def claim(self, uow, *, operation_id, epoch, attempt_id, lease_expires_at, now):
