@@ -89,12 +89,14 @@ def test_public_local_launch_resolves_only_approved_agent_vault(local_setup,back
     else:
         owner=app.state.embedded_dispatch_owner
         until=time.monotonic()+5
-        while owner.failure is None:
+        while 'subject' not in owner.agents.errors:
             assert time.monotonic()<until
             time.sleep(.02)
-        assert getattr(owner.failure,"code",None)=="PROVIDER_AUTH_REQUIRED", str(owner.failure)
-        assert owner.failure.retry_safe and not owner.failure.possible_effect
-        receipt={"code":owner.failure.code}
+        error = owner.agents.errors["subject"]
+        assert error.code == "PROVIDER_AUTH_REQUIRED", str(error)
+        assert error.retry_safe and not error.possible_effect
+        assert owner.failure is None and not owner._stopping.is_set()
+        receipt={"code":error.code}
         assert native.opens==0 and not observed
         # Resolution failed before native open: no uncertain process should
         # retain the Core slot and prevent application shutdown.

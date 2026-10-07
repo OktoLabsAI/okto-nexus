@@ -35,11 +35,12 @@ def test_open_drift_requires_durable_no_effect_proof(connected_local, monkeypatc
         rejected = admit(setup, binding, 'drift-open', 'runtime.start', new_session=True)
         if proof != 'not_sent':
             until = time.monotonic() + 15
-            while owner.failure is None:
+            while 'subject' not in owner.agents.errors:
                 assert time.monotonic() < until
                 time.sleep(.02)
-            assert owner.failure.code == 'PROFILE_DRIFT'
-            assert owner._stopping.is_set()
+            assert owner.agents.errors['subject'].code == 'PROFILE_DRIFT'
+            assert owner.failure is None
+            assert not owner._stopping.is_set()
             return
         view = wait_receipt(setup, rejected, stages=('FAILED',))
         assert view['possible_effect'] is False

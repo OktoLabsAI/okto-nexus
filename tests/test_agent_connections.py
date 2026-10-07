@@ -243,15 +243,20 @@ def test_upgrade_from_64_preserves_identity_and_is_idempotent(tmp_path):
     MigrationRunner(factory, migrations_dir=old).apply()
     agents = SqliteAgentRepo()
     with factory.unit_of_work() as uow:
-        agents.upsert(uow, agent_id='existing', role='reviewer', capabilities={'review': True}, metadata={'keep': 'profile'})
-        before = agents.get(uow, 'existing')
+        # Seed with the old schema, without invoking the current repository.
+        uow.connection.execute("INSERT INTO agents(agent_id,role,capabilities,metadata,created_at) "
+            "VALUES('existing','reviewer',?,?,'2026-10-01')",
+            ('{"review":true}', '{"keep":"profile"}'))
+        before = dict(uow.connection.execute("SELECT * FROM agents WHERE agent_id='existing'").fetchone())
     expected = sorted(int(path.name.split("_")[0])
                       for path in _default_migrations_dir().glob("*.sql")
                       if int(path.name.split("_")[0]) > 64)
     assert MigrationRunner(factory).apply() == expected
     assert MigrationRunner(factory).apply() == []
     with factory.unit_of_work(write=False) as uow:
-        assert agents.get(uow, 'existing') == before
+        after = dict(uow.connection.execute("SELECT * FROM agents WHERE agent_id='existing'").fetchone())
+        assert {key: after[key] for key in before} == before
+        assert after['deleted_at'] is None
         assert not uow.connection.execute('PRAGMA foreign_key_check').fetchall()
 
 
@@ -278,19 +283,18 @@ def test_disabling_mcp_fences_an_already_authenticated_http_client(runtime):
 
 
 @pytest.mark.parametrize('runtime', [False], indirect=True)
-def test_enabling_feature_requires_owner_restart_with_a_prescriptive_error(runtime):
+def test_enabling_feature_does_not_restore_retired_setup(runtime):
     deps, client, root, peers, operator, _ = runtime
     deps.config.feature_harness_integrations = True
     headers = {'x-api-key': operator}
-    assert client.post('/api/v1/harness/profiles', headers=headers, json={
-        'profile_id': 'profile-pi', 'adapter_id': 'pi', 'enabled': True}).status_code == 200
-    assert client.post('/api/v1/harness/endpoints', headers=headers, json={
-        'endpoint_id': 'endpoint-pi', 'agent_id': 'worker', 'adapter_id': 'pi',
-        'project_root': root, 'profile_id': 'profile-pi', 'enabled': True}).status_code == 200
-    issued = issue(client, operator)
-    response = client.post('/api/v1/connections/open', headers=issued['request']['headers'], json={})
-    assert response.status_code == 409, response.text
-    assert 'Restart serve' in response.json()['error']['message']
+    for route, body in (
+        ('profiles', {'profile_id': 'profile-pi', 'adapter_id': 'pi', 'enabled': True}),
+        ('endpoints', {'endpoint_id': 'endpoint-pi', 'agent_id': 'worker', 'adapter_id': 'pi',
+                       'project_root': root, 'profile_id': 'profile-pi', 'enabled': True}),
+    ):
+        response = client.post('/api/v1/harness/' + route, headers=headers, json=body)
+        assert response.status_code == 422, response.text
+        assert 'canonical runtime integration' in response.json()['error']['message']
     assert not peers
 
 

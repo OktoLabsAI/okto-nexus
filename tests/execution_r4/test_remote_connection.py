@@ -392,11 +392,15 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                     body.update(client_intent_id='remote-native-decision',decision=choice)
                     response = {'answers':{'question':{'answers':['remote-private-input-marker']}}} if kind=='input' and choice=='approve' else None
                     if response is not None: body['response']=response
-                    assert client.post('/v1/runtime/approval-decisions',headers=headers['subject'],json=body).status_code == 403
-                    confirmed = client.post('/v1/runtime/approval-decisions',headers=headers['operator'],json=body)
+                    # Native input belongs to its recipient; execution
+                    # permission decisions belong to the operator.
+                    responder = headers['subject' if kind == 'input' else 'operator']
+                    forbidden = headers['operator' if kind == 'input' else 'subject']
+                    assert client.post('/v1/runtime/approval-decisions',headers=forbidden,json=body).status_code == 403
+                    confirmed = client.post('/v1/runtime/approval-decisions',headers=responder,json=body)
                     assert confirmed.status_code == 202, confirmed.text
                     decision = confirmed.json()
-                    repeated = client.post('/v1/runtime/approval-decisions',headers=headers['operator'],json=body)
+                    repeated = client.post('/v1/runtime/approval-decisions',headers=responder,json=body)
                     assert repeated.status_code == 200, repeated.text
                     assert repeated.json()['native_operation_id'] == decision['native_operation_id']
                     operations.append(decision['native_operation_id'])

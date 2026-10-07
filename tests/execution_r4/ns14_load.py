@@ -39,6 +39,8 @@ def second_executor(state, root):
                      ",".join("?" for _ in row) + ")", tuple(row.values()))
     with factory.unit_of_work() as uow:
         conn = uow.connection
+        conn.execute("INSERT INTO agent_execution_policies VALUES(?,?,?,?)",
+                     ("other", "remote", None, 1))
         copy(conn, "agent_endpoints", "endpoint_id='ep'", (), endpoint_id="ep-load-second", agent_id="other")
         copy(conn, "execution_workspace_bindings", "executor_id=?", (channel.executor_id,),
              executor_id=executor, workspace_binding_id="wxb-load-second")

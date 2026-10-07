@@ -107,6 +107,11 @@ def _backfill_catalog_batch(factory, manifest, *, batch_size=100):
                     "executor_id": installation.embedded_executor_id if adapter else None,
                     "consent_required": bool(adapter)}
                 if table == "agent_endpoints":
+                    # The backup may predate additive schema columns. Retain a
+                    # separate digest in its original column space for resume.
+                    columns = baseline["inventory"]["tables"][table]["columns"]
+                    reference["backup_source_columns"] = columns
+                    reference["backup_source_digest"] = _row_digest({name: row[name] for name in columns})
                     reference.update(agent_id=row["agent_id"], workspace_id=row["workspace_id"],
                                      endpoint_id=row["endpoint_id"])
                     binding = conn.execute("SELECT binding_id,executor_id FROM execution_bindings "

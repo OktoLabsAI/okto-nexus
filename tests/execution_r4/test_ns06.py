@@ -39,10 +39,14 @@ def test_ns06_05(request, tmp_path, monkeypatch, scenario):
     for module in (embedded_dispatch, execution_compat, runtime_v1):
         info = module.protocol_info()
         monkeypatch.setattr(module, 'protocol_info', lambda info=info: {**info, 'remote_execution_ready': True})
-    if scenario in ('local', 'remote'):
-        from test_combined_consumption import test_combined_executors_and_mcp_share_one_claim
-        test_combined_executors_and_mcp_share_one_claim(
-            request.getfixturevalue('combined_onboarding'), tmp_path, monkeypatch, scenario)
+    if scenario == 'remote':
+        from test_combined_consumption import test_remote_delivery_and_claim_survive_forbidden_local_preparation
+        test_remote_delivery_and_claim_survive_forbidden_local_preparation(
+            request.getfixturevalue('combined_onboarding'), tmp_path, monkeypatch)
+    elif scenario == 'local':
+        from test_canonical_consumption import test_canonical_push_reservation_excludes_mcp_pull
+        test_canonical_push_reservation_excludes_mcp_pull(
+            request.getfixturevalue('connected_local'), monkeypatch, 'accepted')
     else:
         connected = request.getfixturevalue('connected_local')
         if scenario == 'observer':
@@ -68,6 +72,8 @@ def test_ns06_01(tmp_path):
         for agent_id in ("agent-a", "agent-b"):
             conn.execute("INSERT INTO agents(agent_id,created_at) VALUES (?,?)",
                          (agent_id, now))
+        conn.execute("INSERT INTO agent_execution_policies VALUES(?,?,?,?)",
+                     ("agent-a", "remote", None, 1))
         conn.execute("INSERT INTO workspaces(workspace_id,created_at) "
                      "VALUES ('ws',?)", (now,))
         conn.execute(
@@ -174,6 +180,8 @@ def test_ns06_02_atomic_admission_and_replay_with_synthetic_qualification(tmp_pa
         conn = uow.connection
         conn.execute("INSERT INTO agents(agent_id,api_key_hash,created_at) VALUES ('agent-a','fixture-agent-key-hash',?)",
                      (now,))
+        conn.execute("INSERT INTO agent_execution_policies VALUES(?,?,?,?)",
+                     ("agent-a", "remote", None, 1))
         conn.execute("INSERT INTO workspaces(workspace_id,created_at) "
                      "VALUES ('ws',?)", (now,))
         conn.execute(

@@ -8,6 +8,7 @@ from okto_nexus.application.execution_domain_delivery import project_delivery_re
 def deliveries():
     conn = sqlite3.connect(':memory:')
     conn.executescript('''
+        CREATE TABLE execution_delivery_releases(domain_operation_id);
         CREATE TABLE execution_domain_deliveries(server_id,executor_id,operation_id,domain_operation_id);
         CREATE TABLE delivery_outbox(operation_id,delivery_id,message_id,recipient_agent_id,
             reconciliation_id,status,ack_level,canonical_terminal_operation_id,updated_at);
