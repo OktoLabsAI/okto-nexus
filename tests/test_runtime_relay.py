@@ -99,89 +99,14 @@ def test_failed_interrupted_and_unknown_results_do_not_relay(runtime, outcome, n
         assert uow.connection.execute("SELECT count(*) FROM delivery_outbox").fetchone()[0] == 1
 
 
-def test_self_loop_is_recorded_without_starting_another_turn(runtime):
-    configure(runtime)
-    send_message(runtime, target={"strategy": "direct", "agent_id": "caller"})
-    rows = wait_blocked(runtime)
-    assert len(rows) == 1 and rows[0]["relay_reason"] == "PERMISSION_DENIED"
 
 
-def test_execution_budget_rolls_back_child_reservation_but_preserves_output(runtime):
-    runtime[0].config.max_executions_per_root = 2
-    configure(runtime, depth=4)
-    send_message(runtime)
-    rows = wait_blocked(runtime)
-    assert len(rows) == 2
-    assert rows[-1]["publication_state"] == "PUBLISHED"
-    with runtime[0].connection_factory.unit_of_work(write=False) as uow:
-        root = uow.connection.execute("SELECT * FROM runtime_causal_roots").fetchone()
-        assert root["generated_messages"] == 1
-        assert root["admitted_executions"] == 2
-        assert uow.connection.execute("SELECT purpose FROM runtime_message_causality WHERE message_id=?",
-            (rows[-1]["publication_message_id"],)).fetchone()[0] == "observation"
 
 
-def test_repeated_publication_does_not_charge_or_dispatch_again(runtime):
-    from okto_nexus.adapters.inbound.mcp.tools.messages import build_service
-    configure(runtime, depth=1)
-    send_message(runtime)
-    rows = wait_blocked(runtime)
-    messages = build_service(runtime[0])
-    with runtime[0].connection_factory.unit_of_work(write=False) as uow:
-        bound = messages._runtime_results.row(uow, rows[0]["result_id"])
-    with ThreadPoolExecutor(max_workers=8) as pool:
-        replies = list(pool.map(lambda _: messages.create_message(
-            **messages._runtime_results.arguments(bound), _runtime_result_id=bound["result_id"]), range(8)))
-    assert {again["message_id"] for again in replies} == {bound["publication_message_id"]}
-    with runtime[0].connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute("SELECT count(*) FROM delivery_outbox").fetchone()[0] == 2
-        assert uow.connection.execute("SELECT generated_messages FROM runtime_causal_roots").fetchone()[0] == 1
 
 
-def test_source_relay_revocation_before_dispatch_prevents_next_turn(runtime, monkeypatch):
-    from okto_nexus.application.runtime_results import RuntimeResultService
-    configure(runtime)
-    finish = RuntimeResultService.finish
-
-    def revoke(uow, **kwargs):
-        finish(uow, **kwargs)
-        # Deterministic cut after publication admission and before dispatcher.
-        uow.connection.execute("UPDATE agent_endpoints SET enabled=0,revision=revision+1 WHERE endpoint_id='relay-worker'")
-
-    monkeypatch.setattr(RuntimeResultService, "finish", staticmethod(revoke))
-    send_message(runtime)
-    deadline = time.monotonic() + 10
-    while time.monotonic() < deadline:
-        with runtime[0].connection_factory.unit_of_work(write=False) as uow:
-            child = uow.connection.execute("SELECT * FROM delivery_outbox WHERE source_result_id IS NOT NULL").fetchone()
-            if child and child["status"] == "REJECTED":
-                assert uow.connection.execute("SELECT count(*) FROM runtime_results").fetchone()[0] == 1
-                return
-        time.sleep(.01)
-    raise AssertionError(dict(child) if child else None)
 
 
-def test_interleaved_roots_share_sessions_without_sharing_budgets(runtime):
-    configure(runtime, depth=1)
-    entries = [send_message(runtime, body="independent root one"),
-               send_message(runtime, body="independent root two")]
-    rows = wait_blocked(runtime, count=2)
-    assert len(rows) == 4
-    with runtime[0].connection_factory.unit_of_work(write=False) as uow:
-        roots = uow.connection.execute("SELECT generated_messages,admitted_executions FROM runtime_causal_roots").fetchall()
-        assert [tuple(r) for r in roots] == [(1, 2), (1, 2)]
-        assert uow.connection.execute("SELECT count(DISTINCT runtime_session_id) FROM delivery_outbox").fetchone()[0] == 2
-        for entry in entries:
-            parent = uow.connection.execute("SELECT * FROM delivery_outbox WHERE operation_id=?",
-                (entry["runtime_operations"][0],)).fetchone()
-            child = uow.connection.execute("""SELECT child.*, result.publication_message_id
-                FROM delivery_outbox child JOIN runtime_results result ON result.result_id=child.source_result_id
-                WHERE result.operation_id=?""", (parent["operation_id"],)).fetchone()
-            assert child["root_operation_id"] == parent["root_operation_id"]
-            assert child["message_id"] == child["publication_message_id"]
-            message = uow.connection.execute("SELECT parent_message_id FROM messages WHERE message_id=?",
-                (child["message_id"],)).fetchone()
-            assert message[0] == entry["message_id"]
 
 
 def test_same_agent_on_distinct_endpoints_keeps_operation_parent(runtime):
@@ -256,29 +181,6 @@ def test_relay_configuration_cannot_be_self_authorized_or_attached_without_resul
     assert response.status_code == status, response.text
 
 
-@pytest.mark.parametrize("decision", ["approve", "reject"])
-def test_result_relay_obeys_canonical_human_approval(runtime, decision):
-    from test_governance import _attach, _rule
-    from test_runtime_result_publication import result
-    deps, client, _, _, operator, _ = runtime
-    configure(runtime, depth=1)
-    deps.config.feature_hitl = True
-    _attach(deps, "worker", governance=[_rule("message_create", "require_approval")])
-    source = send_message(runtime, body="human-controlled relay")
-    pending = result(runtime, source["runtime_operations"][0], "PENDING_APPROVAL")
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute("SELECT count(*) FROM delivery_outbox").fetchone()[0] == 1
-    response = client.post(f'/api/v1/approvals/{pending["publication_approval_id"]}/decision',
-        headers={"x-api-key": operator}, json={"decision": decision})
-    assert response.status_code == 200, response.text
-    deps.runtime_dispatcher.wake()
-    if decision == "approve":
-        rows = wait_blocked(runtime)
-        assert len(rows) == 2 and rows[0]["relay_state"] == "ENQUEUED"
-    else:
-        result(runtime, source["runtime_operations"][0], "BLOCKED")
-        with deps.connection_factory.unit_of_work(write=False) as uow:
-            assert uow.connection.execute("SELECT count(*) FROM delivery_outbox").fetchone()[0] == 1
 
 
 @pytest.mark.parametrize("kind,native,payload,expected", [

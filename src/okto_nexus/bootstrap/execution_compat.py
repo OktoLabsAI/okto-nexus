@@ -185,8 +185,11 @@ def events_view(deps, context, session_id, **options):
 def command(deps, context, session, verb, payload, options):
     """Translate product verbs only; Core owns native targeting and execution."""
     access = build_execution_access(deps)
+    # Spending belongs to the atomic dispatch reservation, not lookup of an
+    # already recorded intent. Keep current identity, grant and policy checks
+    # while allowing an exhausted grant to recover its idempotent response.
     access.authorize(context, action="send" if verb == "send_turn" else verb,
-                     endpoint_id=session["endpoint_id"])
+                     endpoint_id=session["endpoint_id"], check_budget=False)
     if any(value is not None for key, value in options.items()
            if key not in {"idempotency_key", "expected_turn_id"}):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,

@@ -221,21 +221,6 @@ def test_claude_replacement_steer_has_separate_correlated_result(runtime):
     assert first_result["result"]["result_id"] != second_result["result"]["result_id"]
 
 
-def test_idempotent_retry_does_not_charge_spent_grant_again(runtime):
-    from test_runtime_grants import issue
-    deps, client, _, _, _, caller = runtime
-    sid = open_rest(runtime).json()["data"]["session_id"]
-    grant = issue(runtime, ["send"], max_executions=1)
-    args = {"session_id": sid, "payload": {"text": "fixture"}, "idempotency_key": "one-grant-charge"}
-    first = tool(client, caller, "harness_send", args)
-    repeated = tool(client, caller, "harness_send", args)
-    assert first["ok"] and repeated["ok"], (first, repeated)
-    assert first["data"]["operation_id"] == repeated["data"]["operation_id"]
-    different = tool(client, caller, "harness_send", args | {"payload": {"text": "changed"}})
-    assert not different["ok"] and different["error"]["code"] == "CONFLICT"
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute("SELECT used_executions FROM runtime_execution_grants WHERE grant_id=?", (grant["grant_id"],)).fetchone()[0] == 1
-        assert uow.connection.execute("SELECT count(*) FROM runtime_commands").fetchone()[0] == 1
 
 
 def test_enqueue_failure_rolls_back_intent_and_grant_charge(runtime, monkeypatch):

@@ -7,35 +7,17 @@ from test_pr34_remediation import runtime as runtime_fixture, tool
 runtime = runtime_fixture
 
 
-def test_mcp_endpoint_administration_matches_rest_and_keeps_cas(runtime):
-    _, client, root, _, operator, _ = runtime
-    created = tool(client, operator, "harness_list", {"view": "profiles", "maintenance": {
-        "action": "create", "profile_id": "admin-profile", "adapter_id": "codex", "enabled": True}})
-    assert created["ok"], created
-    created = tool(client, operator, "harness_list", {"view": "endpoints", "maintenance": json.dumps({
-        "action": "create", "endpoint_id": "admin-endpoint", "agent_id": "worker", "adapter_id": "codex",
-        "project_root": root, "profile_id": "admin-profile", "enabled": True})})
-    assert created["ok"], created
-    mcp = tool(client, operator, "harness_list", {"view": "endpoints"})
-    rest = client.get("/api/v1/harness/endpoints", headers={"x-api-key": operator})
-    assert mcp["ok"] and mcp["data"] == rest.json()["data"]
-    updated = tool(client, operator, "harness_list", {"view": "endpoints", "maintenance": {
-        "action": "update", "endpoint_id": "admin-endpoint", "expected_revision": 1, "public_config": {}}})
-    assert updated["ok"] and updated["data"]["revision"] == 2, updated
-    stale = client.patch("/api/v1/harness/endpoints/admin-endpoint", headers={"x-api-key": operator},
-        json={"expected_revision": 1, "public_config": {}})
-    assert stale.status_code == 409, stale.text
-    boot = tool(client, operator, "harness_list", {"view": "endpoints", "maintenance": {
-        "action": "boot", "endpoint_id": "admin-endpoint", "expected_revision": 2, "enabled": False}})
-    assert boot["ok"] and boot["data"]["boot_enabled"] is False, boot
 
 
 def test_admin_profiles_are_redacted_on_both_surfaces(runtime):
-    _, client, root, _, operator, _ = runtime
-    response = client.post("/api/v1/harness/profiles", headers={"x-api-key": operator}, json={
-        "profile_id": "private-profile", "adapter_id": "codex", "config": {"env": {"CODEX_HOME": root}},
-        "secret_refs": {"FIXTURE_KEY": "env:FIXTURE_SOURCE"}})
-    assert response.status_code == 200, response.text
+    deps, client, root, _, operator, _ = runtime
+    # Retained historical records must remain redacted without using removed
+    # setup APIs to create a new executable legacy profile.
+    with deps.connection_factory.unit_of_work() as uow:
+        now = deps.clock.now_iso()
+        uow.connection.execute('INSERT INTO runtime_profiles(profile_id,adapter_id,config,secret_refs,created_at,updated_at) VALUES(?,?,?,?,?,?)',
+            ('private-profile', 'codex', json.dumps({'env': {'CODEX_HOME': root}}),
+             json.dumps({'FIXTURE_KEY': 'env:FIXTURE_SOURCE'}), now, now))
     mcp = tool(client, operator, "harness_list", {"view": "profiles"})
     rest = client.get("/api/v1/harness/profiles", headers={"x-api-key": operator})
     assert mcp["ok"] and rest.status_code == 200, (mcp, rest.text)

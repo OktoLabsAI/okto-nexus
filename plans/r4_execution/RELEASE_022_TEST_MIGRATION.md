@@ -62,6 +62,19 @@ inventory check. A separate artifact recheck passed four behavioral cases and
 the inventory check. These scopes overlap; they are incremental checks, not
 completion of the release gate.
 
+Further migration found and corrected exhausted-grant idempotency: the public
+REST/MCP command bridge no longer requires unused budget to recover a recorded
+intent. Current credentials, grant revocation, policy and configuration are
+still checked; atomic dispatch remains the sole budget consumption boundary.
+The before-fix REST and MCP regressions both failed with PERMISSION_DENIED;
+after the correction all 13 grant/concurrency checks passed, including a revoked
+grant that cannot recover its old reply. The relay campaign now has ten passing
+cases (self-output refusal, concurrent republication, source revocation,
+interleaved roots, approval/rejection and original budgets/outcomes). Seven
+retained admin validation/redaction cases also passed. Canonical boot, settings,
+binding replacement and command coverage passed 55 cases. Counts overlap the
+previous campaigns and do not constitute the complete installed suite.
+
 Review the remaining historical execution scenarios by contract, migrate missing
 R4 behaviors, retain service/history tests, then run the complete installed matrix.
 Do not merge PR #49 or create v0.2.2 until that gate passes. Harness support is not

@@ -11,6 +11,17 @@ from test_unbounded_local_grants import issue
 from okto_nexus.domain.base import iso_plus
 
 
+def invoke_command(setup, monkeypatch, transport, session, body):
+    client, headers = setup[2:4]
+    if transport == 'rest':
+        return client.post(f'/api/v1/harness/sessions/{session}/send', headers=headers['subject'], json=body).json()
+    monkeypatch.syspath_prepend(str(Path(__file__).parents[1]))
+    from test_pr34_remediation import tool
+    client.headers['host'] = '127.0.0.1:8000'
+    return tool(client, headers['subject']['Authorization'].removeprefix('Bearer '),
+                'harness_send', dict(session_id=session, **body))
+
+
 def open_scoped(connected, *, budget=10):
     setup, binding, native = connected
     deps = setup[0]
@@ -60,6 +71,74 @@ def test_concurrent_turns_charge_the_last_grant_slot_once(connected_local):
         assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.submit'").fetchone()[0] == len(accepted)
     assert len(native.native.sent) == 1
     wait_receipt(setup, admit(setup, binding, 'budget-close', 'runtime.close', session_id=session), stages=('SUCCEEDED',))
+
+
+@pytest.mark.parametrize('transport', ['rest', 'mcp'])
+def test_spent_grant_can_recover_its_recorded_operation_without_another_effect(connected_local, monkeypatch, transport):
+    setup, _, native, grant, session = open_scoped(connected_local, budget=1)
+    _, _, client, headers, *_ = setup
+    body = dict(idempotency_key='recover-spent', payload=dict(text='one authorized effect'))
+    if transport == 'rest':
+        def invoke():
+            response = client.post(f'/api/v1/harness/sessions/{session}/send', headers=headers['subject'], json=body)
+            assert response.status_code == 200, response.text
+            return response.json()
+    else:
+        monkeypatch.syspath_prepend(str(Path(__file__).parents[1]))
+        from test_pr34_remediation import tool
+        client.headers['host'] = '127.0.0.1:8000'
+        def invoke():
+            return tool(client, headers['subject']['Authorization'].removeprefix('Bearer '),
+                        'harness_send', dict(session_id=session, **body))
+    first = invoke()
+    assert first['ok'], first
+    wait_receipt(setup, first['data'])
+    replay = invoke()
+    assert replay['ok'] and replay['data']['reused'], replay
+    assert replay['data']['operation_id'] == first['data']['operation_id']
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT used_executions FROM runtime_execution_grants WHERE grant_id=?', (grant['grant_id'],)).fetchone()[0] == 1
+        assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.submit'").fetchone()[0] == 1
+    assert len(native.native.sent) == 1
+
+
+@pytest.mark.parametrize('transports', [('rest', 'rest'), ('mcp', 'mcp'), ('rest', 'mcp')])
+def test_concurrent_command_replay_keeps_one_effect_and_immutable_payload(connected_local, monkeypatch, transports):
+    setup, _, native, grant, session = open_scoped(connected_local, budget=1)
+    barrier = Barrier(2)
+    body = dict(idempotency_key='same-concurrent-command', payload=dict(text='immutable original'))
+    def invoke(transport):
+        barrier.wait(timeout=5)
+        return invoke_command(setup, monkeypatch, transport, session, body)
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        replies = list(pool.map(invoke, transports))
+    assert all(r['ok'] for r in replies), replies
+    assert len({r['data']['operation_id'] for r in replies}) == 1
+    wait_receipt(setup, replies[0]['data'])
+    changed = dict(body, payload=dict(text='replacement must not execute'))
+    for transport in set(transports):
+        rejected = invoke_command(setup, monkeypatch, transport, session, changed)
+        assert not rejected['ok'] and rejected['error']['code'] == 'CONFLICT', rejected
+        repeated = invoke_command(setup, monkeypatch, transport, session, body)
+        assert repeated['ok'] and repeated['data']['operation_id'] == replies[0]['data']['operation_id']
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT used_executions FROM runtime_execution_grants WHERE grant_id=?', (grant['grant_id'],)).fetchone()[0] == 1
+        assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.submit'").fetchone()[0] == 1
+    assert len(native.native.sent) == 1
+
+
+def test_revoked_grant_cannot_recover_previously_authorized_send(connected_local, monkeypatch):
+    setup, _, native, grant, session = open_scoped(connected_local, budget=1)
+    body = dict(idempotency_key='revoked-replay', payload=dict(text='authorized before revocation'))
+    first = invoke_command(setup, monkeypatch, 'rest', session, body)
+    assert first['ok'], first
+    wait_receipt(setup, first['data'])
+    revoked = setup[2].delete('/api/v1/harness/grants/' + grant['grant_id'], headers=setup[3]['operator'])
+    assert revoked.status_code == 200, revoked.text
+    for transport in ('rest', 'mcp'):
+        denied = invoke_command(setup, monkeypatch, transport, session, body)
+        assert not denied['ok'] and denied['error']['code'] == 'PERMISSION_DENIED', denied
+    assert len(native.native.sent) == 1
 
 
 @pytest.mark.parametrize('change', ['revoke', 'expire', 'credential', 'permissions', 'profile', 'configuration'])

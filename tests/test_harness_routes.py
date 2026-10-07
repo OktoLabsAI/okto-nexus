@@ -65,22 +65,6 @@ def test_harness_kinds_lists_catalog_for_authorized_operator(harness_env):
 # --------------------------------------------------------------------------- #
 # POST /harness/sessions (open) - operator-gated mutation
 # --------------------------------------------------------------------------- #
-def test_harness_open_as_operator_preserves_agent(harness_env):
-    deps, client, root, connectors, _op = harness_env
-    r = client.post(
-        "/api/v1/harness/sessions",
-        json={"agent_id": "worker", "kind": "pi", "project_root": root},
-    )
-    assert r.status_code == 200, r.text
-    data = r.json()["data"]
-    assert data["status"] == "RUNNING"
-    assert data["owning_agent_id"] == "worker"
-    assert len(connectors["pi"]) == 1
-
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        agent = deps.repos.agents.get(uow, "worker")
-    assert agent is not None and agent.role == "reviewer"
-    assert agent.capabilities == {"review": True} and agent.metadata == {"keep": "profile"}
 
 
 def test_harness_open_rejects_unknown_kind(harness_env):
@@ -193,61 +177,6 @@ def test_harness_open_as_non_operator_is_forbidden(harness_env):
 # --------------------------------------------------------------------------- #
 # send / steer / interrupt / close / get / events
 # --------------------------------------------------------------------------- #
-def test_harness_full_lifecycle_through_rest(harness_env):
-    deps, client, root, connectors, _op = harness_env
-    opened = client.post(
-        "/api/v1/harness/sessions",
-        json={"agent_id": "worker", "kind": "pi", "project_root": root},
-    ).json()["data"]
-    session_id = opened["session_id"]
-    conn = connectors["pi"][0]
-
-    r = client.post(
-        f"/api/v1/harness/sessions/{session_id}/send", json={"payload": {"text": "hi"}}
-    )
-    assert r.status_code == 200, r.text
-    assert r.json()["data"]["verb"] == "send_turn"
-    _wait_until(lambda: len(conn.sent) == 1)
-
-    r = client.post(
-        f"/api/v1/harness/sessions/{session_id}/steer",
-        json={"payload": {"text": "actually wait"}},
-    )
-    assert r.status_code == 200, r.text
-    assert r.json()["data"]["verb"] == "steer"
-
-    r = client.post(f"/api/v1/harness/sessions/{session_id}/interrupt", json={})
-    assert r.status_code == 200, r.text
-    assert r.json()["data"]["verb"] == "interrupt"
-
-    _wait_until(lambda: len(conn.sent) == 3)
-    assert [c.verb for c in conn.sent] == ["send_turn", "steer", "interrupt"]
-
-    conn.push_event(kind="turn_completed", native_event="agent_settled")
-
-    def _events_seen() -> bool:
-        resp = client.get(f"/api/v1/harness/sessions/{session_id}/events")
-        return resp.json()["data"]["count"] >= 1
-
-    _wait_until(_events_seen)
-
-    ev = client.get(f"/api/v1/harness/sessions/{session_id}/events").json()["data"]
-    assert ev["events"][0]["native_event"] == "agent_settled"
-
-    live = client.get(f"/api/v1/harness/sessions/{session_id}").json()["data"]
-    assert live["live"] is True and live["status"] == "RUNNING"
-
-    r = client.post(f"/api/v1/harness/sessions/{session_id}/close")
-    assert r.status_code == 200, r.text
-    assert wait_close_result(client, _op, r)["lifecycle_state"] == "detached"
-    assert conn.close_called is True
-
-    after = client.get(f"/api/v1/harness/sessions/{session_id}").json()["data"]
-    assert after["live"] is False and after["lifecycle_state"] == "detached"
-
-    second_close = client.post(f"/api/v1/harness/sessions/{session_id}/close")
-    assert second_close.status_code == 200
-    assert wait_close_result(client, _op, second_close)["lifecycle_state"] == "detached"
 
 
 def test_harness_get_unknown_session_is_404(harness_env):
@@ -269,25 +198,3 @@ def test_harness_send_against_unknown_session_is_404(harness_env):
 # --------------------------------------------------------------------------- #
 # MCP <-> REST: one shared supervisor instance (D1: in-process with serve)
 # --------------------------------------------------------------------------- #
-def test_mcp_and_rest_surfaces_share_one_live_registry(harness_env, tmp_path):
-    """A session opened over ONE surface must be visible/controllable over
-    the OTHER - both are wired to the SAME process-wide HarnessSupervisor
-    (``tools/harness.py``'s ``build_service`` cache on ``deps``), never two
-    independent registries."""
-    deps, client, root, connectors, _op = harness_env
-
-    opened = tool(client, _op, "harness_open", {
-        "agent_id": "worker", "kind": "pi", "project_root": root,
-        "idempotency_key": "shared-rest-mcp-fixture"})
-    assert opened["ok"], opened
-    session_id = opened["data"]["session_id"]
-
-    # Visible over REST without a second open.
-    r = client.get(f"/api/v1/harness/sessions/{session_id}")
-    assert r.status_code == 200, r.text
-    assert r.json()["data"]["live"] is True
-
-    # Controllable over REST too.
-    r = client.post(f"/api/v1/harness/sessions/{session_id}/close")
-    assert r.status_code == 200, r.text
-    assert wait_close_result(client, _op, r)["lifecycle_state"] == "detached"

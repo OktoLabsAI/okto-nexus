@@ -74,23 +74,6 @@ def test_profile_updates_are_atomic_and_do_not_erase_omitted_fields(runtime):
     assert len(edits) == 2 and edits[0]["changed_fields"] == ["enabled"]
 
 
-def test_profile_rebinding_refuses_live_session_and_revokes_equal_revision_grant(runtime):
-    _, client, root, _, operator, caller = runtime
-    headers = {"x-api-key": operator}
-    issue(runtime, ["open"])
-    assert client.post("/api/v1/harness/profiles", headers=headers, json={
-        "profile_id": "second-pi", "adapter_id": "pi", "enabled": True}).status_code == 200
-    session = open_rest(runtime).json()["data"]["session_id"]
-    body = {"expected_revision": 1, "profile_id": "second-pi"}
-    blocked = client.patch("/api/v1/harness/endpoints/endpoint-pi", headers=headers, json=body)
-    assert blocked.status_code == 409, blocked.text
-    closed = tool(client, operator, "harness_close", {"session_id": session})
-    wait_close_result(client, operator, closed)
-    changed = client.patch("/api/v1/harness/endpoints/endpoint-pi", headers=headers, json=body)
-    assert changed.status_code == 200, changed.text
-    denied = tool(client, caller, "harness_open", {"agent_id": "worker", "kind": "pi", "project_root": root,
-        "endpoint_id": "endpoint-pi"})
-    assert not denied["ok"], denied
 
 
 @pytest.mark.parametrize("kind", ["profile", "endpoint"])
@@ -113,15 +96,6 @@ def test_mutation_disables_boot_and_does_not_restore_grants_after_reenable(runti
         assert uow.connection.execute("SELECT revoked_at FROM runtime_execution_grants WHERE grant_id=?", (grant["grant_id"],)).fetchone()[0]
 
 
-@pytest.mark.parametrize("body", [{"config": {"sandbox": "danger-full-access"}}, {"enabled": None},
-    {"config": None}, {"secret_refs": None}, {"adapter_id": "pi"}, {}])
-def test_invalid_profile_update_cannot_alter_revision(runtime, body):
-    deps, client, _, _, operator, _ = runtime
-    response = client.patch("/api/v1/harness/profiles/profile-codex", headers={"x-api-key": operator},
-        json={"expected_revision": 1, **body})
-    assert response.status_code == 422, response.text
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute("SELECT revision FROM runtime_profiles WHERE profile_id='profile-codex'").fetchone()[0] == 1
 
 
 def test_configuration_commit_failure_rolls_back_grant_boot_and_revision(runtime, monkeypatch):

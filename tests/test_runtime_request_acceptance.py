@@ -35,51 +35,6 @@ def snapshot(runtime):
             "expected_operation_id,expected_turn_id FROM runtime_commands")]
 
 
-@pytest.mark.parametrize("surfaces", [("rest", "rest"), ("mcp", "mcp"), ("rest", "mcp")])
-def test_concurrent_send_key_has_one_operation_charge_and_native_effect(runtime, monkeypatch, surfaces):
-    deps, _, _, peers, _, caller = runtime
-    sid = open_rest(runtime).json()["data"]["session_id"]
-    grant = issue(runtime, ["send"], max_executions=1)
-    barrier = threading.Barrier(2)
-    entered, release = threading.Event(), threading.Event()
-    original = peers[0].send
-
-    def held_native(session, command):
-        entered.set()
-        assert release.wait(10)
-        return original(session, command)
-
-    monkeypatch.setattr(peers[0], "send", held_native)
-    arguments = {"session_id": sid, "payload": {"text": "one concurrent turn"},
-                 "idempotency_key": "concurrent-send"}
-
-    def request(surface):
-        barrier.wait(timeout=5)
-        return send(runtime, surface, caller, arguments)
-
-    try:
-        with ThreadPoolExecutor(max_workers=2) as pool:
-            futures = [pool.submit(request, surface) for surface in surfaces]
-            responses = [future.result(timeout=8) for future in futures]
-        assert entered.wait(5)
-        assert all(result["ok"] for result in responses), responses
-        operations = {result["data"]["operation_id"] for result in responses}
-        assert len(operations) == 1
-        operation = operations.pop()
-        before = snapshot(runtime)
-        assert len(before) == 1 and before[0][0] == operation
-        with deps.connection_factory.unit_of_work(write=False) as uow:
-            assert uow.connection.execute("SELECT used_executions FROM runtime_execution_grants "
-                "WHERE grant_id=?", (grant["grant_id"],)).fetchone()[0] == 1
-        assert peers[0].sent == [], "admission should finish before the blocked write"
-    finally:
-        release.set()
-    wait_operation(runtime, operation, lambda row: row["state"] == "SENT_UNCONFIRMED")
-    repeated = send(runtime, "mcp", caller, arguments)
-    assert repeated["ok"] and repeated["data"]["operation_id"] == operation
-    assert snapshot(runtime) == before
-    assert len(peers[0].sent) == 1
-    assert peers[0].sent[0].payload == {"text": "one concurrent turn"}
 
 
 @pytest.mark.parametrize("surface", ["rest", "mcp"])

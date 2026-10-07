@@ -181,6 +181,132 @@
         "tests/execution_r4/test_canonical_result_artifact.py::test_large_result_stays_private_until_governance_decision"
       ],
       "source_sha256": "a39206bef648a07a7392a330d83aa328197992be8451fc7c97ac241150e657ae"
+    },
+    {
+      "test": "tests/test_harness_routes.py::test_harness_full_lifecycle_through_rest",
+      "reason": "The Server-owned native profile/session path is removed. Its retained lifecycle or authority invariant is exercised through the approved canonical binding and Core path; removed configuration APIs remain explicitly refused.",
+      "replacements": [
+        "tests/execution_r4/test_harness_canonical.py::test_existing_rest_commands_use_core_once"
+      ],
+      "source_sha256": "24124ef94c4a2fbb021d817013ab3e63b57cde136f005917419aa6720153e118"
+    },
+    {
+      "test": "tests/test_harness_routes.py::test_harness_open_as_operator_preserves_agent",
+      "reason": "The Server-owned native profile/session path is removed. Its retained lifecycle or authority invariant is exercised through the approved canonical binding and Core path; removed configuration APIs remain explicitly refused.",
+      "replacements": [
+        "tests/execution_r4/test_runtime_contract_migration.py::test_open_close_preserves_registered_agent_profile",
+        "tests/execution_r4/test_harness_canonical.py::test_existing_open_uses_approved_realization_and_core"
+      ],
+      "source_sha256": "b6baa3a6cd09c92d286b64e9d69f2bfe33821b74c738e87f9560ddfe96e51d1b"
+    },
+    {
+      "test": "tests/test_harness_routes.py::test_mcp_and_rest_surfaces_share_one_live_registry",
+      "reason": "The Server-owned native profile/session path is removed. Its retained lifecycle or authority invariant is exercised through the approved canonical binding and Core path; removed configuration APIs remain explicitly refused.",
+      "replacements": [
+        "tests/execution_r4/test_harness_canonical.py::test_mcp_uses_same_admission_and_history",
+        "tests/execution_r4/test_harness_canonical.py::test_existing_rest_commands_use_core_once"
+      ],
+      "source_sha256": "3e57e87740057b7a46c9aa5e1d3739a49d5416abcef2839cdaf94c0a3abb9365"
+    },
+    {
+      "test": "tests/test_runtime_admin_surfaces.py::test_mcp_endpoint_administration_matches_rest_and_keeps_cas",
+      "reason": "The Server-owned native profile/session path is removed. Its retained lifecycle or authority invariant is exercised through the approved canonical binding and Core path; removed configuration APIs remain explicitly refused.",
+      "replacements": [
+        "tests/test_agent_connections.py::test_enabling_feature_does_not_restore_retired_setup",
+        "tests/execution_r4/test_harness_settings.py::test_settings_validate_scope_cas_and_revoke_old_execution_authority"
+      ],
+      "source_sha256": "77cf84d4b64e61101d1734abe3308faa436f657e5cce0acb4a3c15c8cd0b912f"
+    },
+    {
+      "test": "tests/test_runtime_boot.py::test_stable_boot_preserves_identity_and_repeated_start_does_not_duplicate",
+      "reason": "The Server-owned native profile/session path is removed. Its retained lifecycle or authority invariant is exercised through the approved canonical binding and Core path; removed configuration APIs remain explicitly refused.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_boot.py::test_serve_boot_uses_core_after_inventory_start_and_replays_once",
+        "tests/execution_r4/test_runtime_contract_migration.py::test_open_close_preserves_registered_agent_profile"
+      ],
+      "source_sha256": "00fb2ddccb2f5a80897353205ea436e463c2423a13522b415c6f9ff20348af83"
+    },
+    {
+      "test": "tests/test_runtime_configuration_updates.py::test_invalid_profile_update_cannot_alter_revision",
+      "reason": "The Server-owned native profile/session path is removed. Its retained lifecycle or authority invariant is exercised through the approved canonical binding and Core path; removed configuration APIs remain explicitly refused.",
+      "replacements": [
+        "tests/test_agent_connections.py::test_enabling_feature_does_not_restore_retired_setup",
+        "tests/execution_r4/test_harness_settings.py::test_settings_validate_scope_cas_and_revoke_old_execution_authority"
+      ],
+      "source_sha256": "283835fad32eb45cb1977f8a8e79f285944e7bfcca6f35c2b361cd33b813dc16"
+    },
+    {
+      "test": "tests/test_runtime_configuration_updates.py::test_profile_rebinding_refuses_live_session_and_revokes_equal_revision_grant",
+      "reason": "The Server-owned native profile/session path is removed. Its retained lifecycle or authority invariant is exercised through the approved canonical binding and Core path; removed configuration APIs remain explicitly refused.",
+      "replacements": [
+        "tests/execution_r4/test_binding_replacement.py::test_replacement_refuses_live_or_uncertain_target_claims",
+        "tests/execution_r4/test_harness_settings.py::test_settings_validate_scope_cas_and_revoke_old_execution_authority"
+      ],
+      "source_sha256": "ae8d34edb2ca171bc8e50c15872c26985dc714aa04c9d804526cc59573d1186e"
+    },
+    {
+      "test": "tests/test_runtime_relay.py::test_self_loop_is_recorded_without_starting_another_turn",
+      "reason": "Legacy native result production is replaced by Core terminal capture. The specific relay invariant is retained by the linked canonical regression. Generated self-addressed output is now refused at message publication before relay admission, while captured output remains private.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_relay.py::test_self_relay_is_blocked_without_another_native_turn"
+      ],
+      "source_sha256": "aa99f5e4e18cb4563ebca53a8e54d2012430e370ad0acffd1320df7929ad0cb6"
+    },
+    {
+      "test": "tests/test_runtime_relay.py::test_execution_budget_rolls_back_child_reservation_but_preserves_output",
+      "reason": "Legacy native result production is replaced by Core terminal capture. The specific relay invariant is retained by the linked canonical regression. Generated self-addressed output is now refused at message publication before relay admission, while captured output remains private.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_relay.py::test_relay_stops_at_persistent_budget_without_losing_output"
+      ],
+      "source_sha256": "5e27fd99bc7f6b10b7a088fb6a71d3897810074cb53217471b28bd923b60c8e8"
+    },
+    {
+      "test": "tests/test_runtime_relay.py::test_repeated_publication_does_not_charge_or_dispatch_again",
+      "reason": "Legacy native result production is replaced by Core terminal capture. The specific relay invariant is retained by the linked canonical regression. Generated self-addressed output is now refused at message publication before relay admission, while captured output remains private.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_relay.py::test_repeated_publication_does_not_charge_or_dispatch_again"
+      ],
+      "source_sha256": "a30f3dc33e07d4930782668e6f03d205d5135f9115e3c9e80574188bc4ca17d4"
+    },
+    {
+      "test": "tests/test_runtime_relay.py::test_source_relay_revocation_before_dispatch_prevents_next_turn",
+      "reason": "Legacy native result production is replaced by Core terminal capture. The specific relay invariant is retained by the linked canonical regression. Generated self-addressed output is now refused at message publication before relay admission, while captured output remains private.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_relay.py::test_source_revocation_after_publication_prevents_child_native_dispatch"
+      ],
+      "source_sha256": "2885370c1008aaf1db2ec2ca9c672a37a6a398d26edfa2ad1eea91784086e8f0"
+    },
+    {
+      "test": "tests/test_runtime_relay.py::test_interleaved_roots_share_sessions_without_sharing_budgets",
+      "reason": "Legacy native result production is replaced by Core terminal capture. The specific relay invariant is retained by the linked canonical regression. Generated self-addressed output is now refused at message publication before relay admission, while captured output remains private.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_relay.py::test_interleaved_roots_share_sessions_without_sharing_budgets"
+      ],
+      "source_sha256": "6eb68ad6b1ed589c868f27de92515735ff46738d24307d7cbc97ef132f55f294"
+    },
+    {
+      "test": "tests/test_runtime_relay.py::test_result_relay_obeys_canonical_human_approval",
+      "reason": "Legacy native result production is replaced by Core terminal capture. The specific relay invariant is retained by the linked canonical regression. Generated self-addressed output is now refused at message publication before relay admission, while captured output remains private.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_relay.py::test_relay_waits_for_canonical_human_approval"
+      ],
+      "source_sha256": "a0ac95e2df30e6d4d02078fc0b3a9ba2a999da384463f4cfa4bde015eee6aa30"
+    },
+    {
+      "test": "tests/test_runtime_commands.py::test_idempotent_retry_does_not_charge_spent_grant_again",
+      "reason": "Canonical dispatch replaces legacy runtime_commands. REST and MCP recover the recorded operation with an exhausted budget and no new native effect; current grant revocation is still enforced.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_grant_regressions.py::test_spent_grant_can_recover_its_recorded_operation_without_another_effect"
+      ],
+      "source_sha256": "c8e366f5a007704fa0421f229f949cfb1c3948ac33b7845a5c6d321ddfe4ac7f"
+    },
+    {
+      "test": "tests/test_runtime_request_acceptance.py::test_concurrent_send_key_has_one_operation_charge_and_native_effect",
+      "reason": "Concurrent REST/MCP admission now records canonical operations. Same-key requests, immutable content and one grant charge/native effect are retained through Core dispatch.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_grant_regressions.py::test_concurrent_command_replay_keeps_one_effect_and_immutable_payload"
+      ],
+      "source_sha256": "48b4ce252302613eb2a06ec102365b9a256589f09545764a87bd03069dc65969"
     }
   ]
 }

@@ -29,22 +29,6 @@ def fresh(runtime):
     return recovered
 
 
-def test_stable_boot_preserves_identity_and_repeated_start_does_not_duplicate(runtime):
-    assert configure(runtime).status_code == 200
-    recovered = fresh(runtime)
-    async def run():
-        app = build_app(recovered)
-        async with app.router.lifespan_context(app):
-            first = recovered.runtime_boot_status
-            assert first[0]["state"] == "protocol_ready", first
-            second = run_runtime_boot(recovered)
-            assert second[0]["session_id"] == first[0]["session_id"] and second[0]["reused"]
-            assert len(runtime[3]) == 1
-            with recovered.connection_factory.unit_of_work(write=False) as uow:
-                agent = recovered.repos.agents.get(uow, "worker")
-                assert agent.metadata == {"keep": "profile"} and agent.role == "reviewer"
-                assert uow.connection.execute("SELECT count(*) FROM runtime_open_requests").fetchone()[0] == 1
-    asyncio.run(run())
 
 
 def test_one_failed_boot_does_not_prevent_other_endpoint(runtime):
