@@ -142,31 +142,6 @@ def test_large_runtime_result_uses_private_canonical_artifact(runtime):
         build_service(deps).artifact_get(project_root=root, artifact_id=aid)
 
 
-def test_runtime_artifact_catalog_rolls_back_with_publication_and_reuses_durable_blob(runtime, monkeypatch):
-    from test_pr34_remediation import send_message
-    from test_runtime_result_publication import result
-    from okto_nexus.application.runtime_results import RuntimeResultService
-    deps = runtime[0]
-    large_output_session(runtime)
-    finish = RuntimeResultService.finish
-    failed = threading.Event()
-    def fail(uow, **kwargs):
-        finish(uow, **kwargs)
-        failed.set()
-        raise OSError("fixture artifact/publication cut")
-    with monkeypatch.context() as patch:
-        patch.setattr(RuntimeResultService, "finish", staticmethod(fail))
-        source = send_message(runtime, body="artifact commit cut")
-        result(runtime, source["runtime_operations"][0], "PENDING_AUTHORIZATION")
-        assert failed.wait(5), "production publication worker did not reach the injected commit cut"
-        with deps.connection_factory.unit_of_work(write=False) as uow:
-            assert uow.connection.execute("SELECT count(*) FROM artifacts").fetchone()[0] == 0
-        blobs = list(deps.repos.artifact_store.root.rglob("runtime-result.txt"))
-        assert len(blobs) == 1 and blobs[0].read_bytes() == b"L" * 70000
-    deps.runtime_dispatcher.wake()
-    row = result(runtime, source["runtime_operations"][0], "PUBLISHED")
-    assert row["output_artifact_id"]
-    assert list(deps.repos.artifact_store.root.rglob("runtime-result.txt")) == blobs
 
 
 def test_blocked_artifact_worker_keeps_heartbeat_and_holds_shutdown_ownership(runtime, monkeypatch):
@@ -266,31 +241,3 @@ def test_runtime_artifact_quota_is_reserved_before_filesystem_effect(runtime):
     assert row["artifact_reserved_bytes"] == 0 and not row["output_artifact_id"]
     assert row["output_text"] == "L" * 70000
     assert not list(deps.repos.artifact_store.root.rglob("runtime-result.txt"))
-
-
-@pytest.mark.parametrize("decision", ["approve", "reject"])
-def test_large_result_artifact_remains_uncatalogued_until_canonical_approval(runtime, decision):
-    from test_pr34_remediation import send_message, tool
-    from test_runtime_result_publication import result
-    from test_governance import _attach, _rule
-    from okto_nexus.application.runtime_results import RuntimeResultService
-    deps, client, root, _, operator, caller = runtime
-    deps.config.feature_hitl = True
-    large_output_session(runtime)
-    _attach(deps, "worker", governance=[_rule("message_create", "require_approval")])
-    source = send_message(runtime, body="artifact awaiting decision")
-    row = result(runtime, source["runtime_operations"][0], "PENDING_APPROVAL")
-    artifact_id = RuntimeResultService.artifact_id(row)
-    hidden = tool(client, caller, "artifact_get", {"project_root": root, "artifact_id": artifact_id})
-    assert not hidden["ok"] and hidden["error"]["code"] == "NOT_FOUND"
-    assert row["artifact_reserved_bytes"] == 70000
-    response = client.post(f"/api/v1/approvals/{row['publication_approval_id']}/decision",
-        headers={"x-api-key": operator}, json={"decision": decision})
-    assert response.status_code == 200, response.text
-    deps.runtime_dispatcher.wake()
-    final = result(runtime, source["runtime_operations"][0], "PUBLISHED" if decision == "approve" else "BLOCKED")
-    assert bool(final["output_artifact_id"]) == (decision == "approve")
-    read = tool(client, caller, "artifact_get", {"project_root": root, "artifact_id": artifact_id})
-    assert read["ok"] == (decision == "approve")
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute("SELECT count(*) FROM delivery_outbox").fetchone()[0] == 1

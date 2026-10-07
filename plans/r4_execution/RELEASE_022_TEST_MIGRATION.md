@@ -32,6 +32,13 @@ execution tests must prepare an approved R4 realization and binding.
 - Two ordinary authenticated R4 agents exchange results with persistent depth
   and execution budgets. Failed/interrupted turns publish their captured output
   without admitting a relay. The initiating actor remains unchanged.
+- Concurrent intents exhaust a one-action grant at dispatch: exactly one native
+  turn, a durable permission denial for the other, and close remains available.
+  REST and MCP refuse revoked, expired, credential-changed, permission-changed
+  profile-changed and configuration-changed authority before native dispatch.
+- Enabling canonical execution preserves historical unread inbox records.
+  Only a newly received message creates execution; repeated and historical
+  post-commit notifications cannot create additional native work.
 
 `tests/runtime_contract_retirements.json` records the exact removed functions,
 source revision, source digests, reasons and executable replacement references.
@@ -47,6 +54,13 @@ cases passed. A separate diagnostic of the old fixture consumers found 60 passes
 fixture provisioning. These scopes overlap and must not be added. The diagnostic
 is an inventory, not a successful release campaign. No blanket skip/xfail or
 collection exclusion was added.
+
+Additional combined verification: 23 cases passed for seven grant regressions
+(including a deterministic simultaneous admission barrier), 15 contract
+migration cases (including retained inbox activation), and the retirement
+inventory check. A separate artifact recheck passed four behavioral cases and
+the inventory check. These scopes overlap; they are incremental checks, not
+completion of the release gate.
 
 Review the remaining historical execution scenarios by contract, migrate missing
 R4 behaviors, retain service/history tests, then run the complete installed matrix.

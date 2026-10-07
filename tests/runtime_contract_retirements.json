@@ -149,6 +149,38 @@
         "tests/execution_r4/test_canonical_consumption.py::test_canonical_push_reservation_excludes_mcp_pull"
       ],
       "source_sha256": "3e547136757e6698f836b613c1110f636073dbe6ff963653e4becfb5c5299505"
+    },
+    {
+      "test": "tests/test_runtime_rollout.py::test_activation_does_not_replay_old_unread_and_legacy_notifications_do_not_duplicate_transport",
+      "reason": "Removed legacy supervisor activation is replaced by canonical binding activation; old inbox records remain untouched and repeated notifications cannot dispatch again.",
+      "replacements": [
+        "tests/execution_r4/test_runtime_contract_migration.py::test_enabling_runtime_does_not_replay_historical_unread_messages"
+      ],
+      "source_sha256": "e6e3ea1de284f96bd293c3c72b331159f4725cdcafc479920bc4b20616ec0d15"
+    },
+    {
+      "test": "tests/test_runtime_grants.py::test_p04_concurrent_grant_budget_has_one_admitted_send",
+      "reason": "R4 consumes the bounded grant atomically at native dispatch, rather than at legacy HTTP admission. Concurrent admitted intents must cause exactly one native turn and an explicit authority denial for the other.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_grant_regressions.py::test_concurrent_turns_charge_the_last_grant_slot_once"
+      ],
+      "source_sha256": "00cc234731613463078e55689c5f1a2355eb8a7989c360153a2a3a526b1181e7"
+    },
+    {
+      "test": "tests/test_runtime_artifact_durability.py::test_runtime_artifact_catalog_rolls_back_with_publication_and_reuses_durable_blob",
+      "reason": "Legacy supervisor result production is removed. The same artifact publication invariant is exercised through Core event capture and canonical result publication, including private staging and durable recovery.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_result_artifact.py::test_artifact_catalog_and_publication_rollback_together"
+      ],
+      "source_sha256": "28999ad6c1fcf28acc553df933e5d91547349ab63be0e87bb758e4bbe798df25"
+    },
+    {
+      "test": "tests/test_runtime_artifact_durability.py::test_large_result_artifact_remains_uncatalogued_until_canonical_approval",
+      "reason": "Legacy supervisor result production is removed. The same artifact publication invariant is exercised through Core event capture and canonical result publication, including private staging and durable recovery.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_result_artifact.py::test_large_result_stays_private_until_governance_decision"
+      ],
+      "source_sha256": "a39206bef648a07a7392a330d83aa328197992be8451fc7c97ac241150e657ae"
     }
   ]
 }

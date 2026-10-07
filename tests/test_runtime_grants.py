@@ -106,18 +106,6 @@ def test_p04_authenticated_http_reuses_grant_policy_and_durable_resource(runtime
     assert denied["error"]["code"] == "PERMISSION_DENIED"
 
 
-def test_p04_concurrent_grant_budget_has_one_admitted_send(runtime):
-    _, client, _, peers, _, caller = runtime
-    session = open_rest(runtime).json()["data"]["session_id"]
-    issue(runtime, ["send"], max_executions=1)
-
-    def send(index):
-        return client.post(f"/api/v1/harness/sessions/{session}/send", headers={"x-api-key": caller},
-                           json={"payload": {"text": f"fixture {index}"}}).status_code
-
-    with ThreadPoolExecutor(max_workers=2) as pool:
-        assert sorted(pool.map(send, [1, 2])) == [200, 403]
-    wait_sent(peers)
 
 
 def test_p04_wrong_endpoint_is_opaque_and_internal_control_is_authorized(runtime):

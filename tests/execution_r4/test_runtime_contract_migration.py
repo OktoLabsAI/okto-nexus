@@ -20,6 +20,36 @@ def mcp(setup, monkeypatch, key, name, arguments):
     return tool(setup[2], key, name, arguments)
 
 
+def test_enabling_runtime_does_not_replay_historical_unread_messages(connected_local, monkeypatch):
+    setup, binding, native = connected_local
+    deps, _, _, _, *_ = setup
+    # Messages received before execution was enabled retain their inbox state.
+    deps.config.feature_harness_integrations = False
+    historical = [send(setup, monkeypatch) for _ in range(3)]
+    assert all(item['ok'] for item in historical), historical
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        before = [dict(row) for row in uow.connection.execute('SELECT * FROM message_deliveries ORDER BY delivery_id')]
+        assert len(before) == 3 and all(row['status'] == 'unread' for row in before)
+        assert not uow.connection.execute('SELECT 1 FROM delivery_outbox').fetchone()
+    deps.config.feature_harness_integrations = True
+    enable(setup, binding)
+    fresh = send(setup, monkeypatch)
+    assert fresh['ok'], fresh
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        operation = uow.connection.execute("SELECT operation_id FROM execution_operations WHERE action='turn.submit'").fetchone()[0]
+    wait_receipt(setup, dict(operation_id=operation))
+    # Historical and repeated post-commit notifications cannot create work.
+    for item in [fresh, fresh, *historical]:
+        deps.inbox_delivery_notifier.publish('subject', item['data'])
+    deps.runtime_dispatcher.scan_once()
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        for row in before:
+            assert dict(uow.connection.execute('SELECT * FROM message_deliveries WHERE delivery_id=?', (row['delivery_id'],)).fetchone()) == row
+        assert [r[0] for r in uow.connection.execute('SELECT message_id FROM delivery_outbox')] == [fresh['data']['message_id']]
+        assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.submit'").fetchone()[0] == 1
+    assert native.opens == 1 and len(native.native.sent) == 1
+
+
 def test_open_close_preserves_registered_agent_profile(connected_local):
     setup, binding, native = connected_local
     deps = setup[0]
