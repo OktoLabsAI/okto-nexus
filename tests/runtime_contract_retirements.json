@@ -1283,6 +1283,70 @@
         "tests/execution_r4/test_canonical_native_protocol_regressions.py::test_stale_native_target_is_rejected_and_matching_interrupt_completes_original_turn"
       ],
       "source_sha256": "6b8ba274b6dcc20a80261a48fdfc7448acb2d7cff8ebb119cd232f932c05ecbb"
+    },
+    {
+      "test": "tests/test_runtime_outbox.py::test_p05_message_delivery_outbox_rollback_together",
+      "reason": "Replaced removed Server native owner setup with an approved Core binding. The canonical regression preserves this admission, authorization, ownership or transaction invariant through public APIs and actual Core dispatch.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery_regressions.py::test_message_event_failure_rolls_back_delivery_and_execution"
+      ],
+      "source_sha256": "f67dd8508d5f44513c2917975cd74f5a951ec69f8942d082df3240948d448db7"
+    },
+    {
+      "test": "tests/test_runtime_outbox.py::test_p05_reserved_push_delivery_cannot_also_be_claimed_or_acked_by_pull",
+      "reason": "Replaced removed Server native owner setup with an approved Core binding. The canonical regression preserves this admission, authorization, ownership or transaction invariant through public APIs and actual Core dispatch.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery_regressions.py::test_push_claim_cannot_be_pulled_or_manually_acked"
+      ],
+      "source_sha256": "44dda6ae5096a8ad2b8d589b29e609f489e97d9fb4aa0ee52cec293d6c071277"
+    },
+    {
+      "test": "tests/test_runtime_outbox.py::test_p06_changed_policy_blocks_previously_committed_intent",
+      "reason": "Replaced removed Server native owner setup with an approved Core binding. The canonical regression preserves this admission, authorization, ownership or transaction invariant through public APIs and actual Core dispatch.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery_regressions.py::test_permission_change_refuses_committed_delivery_before_native_effect"
+      ],
+      "source_sha256": "2532c03f7fa514c29a202fb320ddfb13c879688c0757a1f4c6f07576a99370bc"
+    },
+    {
+      "test": "tests/test_runtime_outbox.py::test_p06_native_send_is_outside_sqlite_write_transaction",
+      "reason": "Replaced removed Server native owner setup with an approved Core binding. The canonical regression preserves this admission, authorization, ownership or transaction invariant through public APIs and actual Core dispatch.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery_regressions.py::test_native_send_does_not_hold_server_sqlite_writer"
+      ],
+      "source_sha256": "f1f54946baff36ff06a362385c3f2096311e6af022ecaef4e94822308e480a39"
+    },
+    {
+      "test": "tests/test_runtime_outbox.py::test_p05_unverified_internal_sender_only_gets_logical_inbox",
+      "reason": "Replaced removed Server native owner setup with an approved Core binding. The canonical regression preserves this admission, authorization, ownership or transaction invariant through public APIs and actual Core dispatch.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery_regressions.py::test_unauthenticated_internal_sender_creates_only_logical_inbox"
+      ],
+      "source_sha256": "5f312b82767669a8ff6d34d7c123713b9af53bcea5331e97c3acc9c6d5a6771b"
+    },
+    {
+      "test": "tests/test_runtime_outbox.py::test_p05_open_idempotency_reuses_one_session_across_surfaces",
+      "reason": "Replaced removed Server native owner setup with an approved Core binding. The canonical regression preserves this admission, authorization, ownership or transaction invariant through public APIs and actual Core dispatch.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery_regressions.py::test_same_open_key_across_rest_and_mcp_has_one_native_effect"
+      ],
+      "source_sha256": "39b423348e2c6afee1150189d16a2ad66b61dcab6a8b51d1feccc7261053a9c6"
+    },
+    {
+      "test": "tests/test_runtime_outbox.py::test_p05_concurrent_open_key_never_starts_twice",
+      "reason": "Replaced removed Server native owner setup with an approved Core binding. The canonical regression preserves this admission, authorization, ownership or transaction invariant through public APIs and actual Core dispatch.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery_regressions.py::test_same_open_key_across_rest_and_mcp_has_one_native_effect"
+      ],
+      "source_sha256": "8b4e295330bdcc6a884229c308e99775d202843b647a886254f835bd1ad5dbf7"
+    },
+    {
+      "test": "tests/test_runtime_capture_admission.py::test_sqlite_page_limit_cannot_acknowledge_an_executable_intent",
+      "reason": "The canonical replacement uses the same real SQLite page limit and verifies atomic refusal, preserved foreign keys and admission after capacity recovery through the Core binding.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery_regressions.py::test_sqlite_capacity_cannot_acknowledge_message_or_execution"
+      ],
+      "source_sha256": "716bdcc4bb5512d6319a768b417fdf335b89d6de8498d87d84726b8375aa68f4"
     }
   ]
 }

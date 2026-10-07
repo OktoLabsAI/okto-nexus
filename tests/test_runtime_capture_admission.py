@@ -131,29 +131,3 @@ def test_capture_fence_preserves_cached_reply_blocks_new_open_and_fences_stale_o
         "agent_id": "worker", "kind": "codex", "endpoint_id": "endpoint-codex", "project_root": root})
     assert opened.status_code == 409, opened.text
     assert len(peers) == 1 and len(peers[0].sent) == 1
-
-
-def test_sqlite_page_limit_cannot_acknowledge_an_executable_intent(runtime, monkeypatch):
-    deps, client, root, peers, _, caller = runtime
-    assert open_rest(runtime).status_code == 200
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        pages = uow.connection.execute("PRAGMA page_count").fetchone()[0]
-    connect = deps.connection_factory.get_connection
-
-    def limited():
-        connection = connect()
-        connection.execute(f"PRAGMA max_page_count={pages}")
-        return connection
-
-    with monkeypatch.context() as patch:
-        patch.setattr(deps.connection_factory, "get_connection", limited)
-        response = tool(client, caller, "message_create", {"project_root": root, "from_agent_id": "caller",
-            "target": {"strategy": "direct", "agent_id": "worker"}, "body": "x" * 60000, "subject": "SQLite capacity"})
-    assert not response["ok"] and response["error"]["code"] == "DB_ERROR", response
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        for table in ("messages", "message_deliveries", "delivery_outbox"):
-            assert uow.connection.execute(f"SELECT count(*) FROM {table}").fetchone()[0] == 0
-        assert not uow.connection.execute("PRAGMA foreign_key_check").fetchall()
-    assert peers[0].sent == []
-    assert send_message(runtime, body="capacity restored")["runtime_operations"]
-    wait_sent(peers)

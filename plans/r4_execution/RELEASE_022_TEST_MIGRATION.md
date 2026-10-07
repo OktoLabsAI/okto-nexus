@@ -167,3 +167,9 @@ proved closed session, avoiding an impossible wait for an executor receipt.
 The real-peer regression passed: owned process stopped, subject READY again,
 no result invented or old message replayed, and new authorized work succeeds.
 The existing agent-isolation and native-protocol campaign passed 17 cases.
+
+The stream-recovery/correlation/audience/queue/reconciliation campaign passed all
+57 installed-wheel cases with unchanged inputs. Eight further source cases
+preserve message-event rollback, push/pull exclusivity, unverified internal
+senders, changed permissions, SQLite writer independence, cross-transport open
+replay/concurrency and real SQLite capacity refusal/recovery.
