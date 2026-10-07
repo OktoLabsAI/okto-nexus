@@ -1,0 +1,154 @@
+{
+  "source_revision": "23ae3e1d0d42875625ce6539800c42f57e4c9a32",
+  "retirements": [
+    {
+      "test": "tests/test_agent_connections.py::test_connection_key_opens_only_bound_identity_and_reuses",
+      "reason": "Scoped nxsconn opening keys, issuance, redemption and legacy per-method configuration were removed. R4 authenticates with the original agent API key and validates binding/session authority.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_connection_keys.py::test_scoped_key_issuance_and_opening_routes_are_removed",
+        "tests/execution_r4/test_canonical_connection_keys.py::test_retained_scoped_key_cannot_authenticate_or_resolve",
+        "tests/execution_r4/test_session_reuse.py::test_default_starts_cannot_admit_two_concurrent_claims",
+        "tests/execution_r4/test_agent_execution_policy.py::test_policy_change_after_admission_prevents_native_dispatch"
+      ],
+      "source_sha256": "873f53b8f58460ac8da755b8648be23b12aa84b2187bdd81218a58c21ae000e4"
+    },
+    {
+      "test": "tests/test_agent_connections.py::test_expiry_overrides_revocation_and_method_reenable",
+      "reason": "Scoped nxsconn opening keys, issuance, redemption and legacy per-method configuration were removed. R4 authenticates with the original agent API key and validates binding/session authority.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_connection_keys.py::test_scoped_key_issuance_and_opening_routes_are_removed",
+        "tests/execution_r4/test_canonical_connection_keys.py::test_retained_scoped_key_cannot_authenticate_or_resolve",
+        "tests/execution_r4/test_session_reuse.py::test_default_starts_cannot_admit_two_concurrent_claims",
+        "tests/execution_r4/test_agent_execution_policy.py::test_policy_change_after_admission_prevents_native_dispatch"
+      ],
+      "source_sha256": "dca874fb162f4b15f710d0ee74e3dff467306af6cd11f4be8dff3f7ace1073d3"
+    },
+    {
+      "test": "tests/test_agent_connections.py::test_all_managed_adapters_and_profile_invalidation",
+      "reason": "Scoped nxsconn opening keys, issuance, redemption and legacy per-method configuration were removed. R4 authenticates with the original agent API key and validates binding/session authority.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_connection_keys.py::test_scoped_key_issuance_and_opening_routes_are_removed",
+        "tests/execution_r4/test_canonical_connection_keys.py::test_retained_scoped_key_cannot_authenticate_or_resolve",
+        "tests/execution_r4/test_session_reuse.py::test_default_starts_cannot_admit_two_concurrent_claims",
+        "tests/execution_r4/test_agent_execution_policy.py::test_policy_change_after_admission_prevents_native_dispatch"
+      ],
+      "source_sha256": "23ce661092ed2da773facc18db3fd763b83bfddddee1deb43600e75f601fa0ff"
+    },
+    {
+      "test": "tests/test_agent_connections.py::test_mcp_bootstrap_parity_and_disable_blocks_operator_open",
+      "reason": "Scoped nxsconn opening keys, issuance, redemption and legacy per-method configuration were removed. R4 authenticates with the original agent API key and validates binding/session authority.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_connection_keys.py::test_scoped_key_issuance_and_opening_routes_are_removed",
+        "tests/execution_r4/test_canonical_connection_keys.py::test_retained_scoped_key_cannot_authenticate_or_resolve",
+        "tests/execution_r4/test_session_reuse.py::test_default_starts_cannot_admit_two_concurrent_claims",
+        "tests/execution_r4/test_agent_execution_policy.py::test_policy_change_after_admission_prevents_native_dispatch"
+      ],
+      "source_sha256": "4b5f0b00959c1c0382dfbf8dee5df67462cb671e05e22af6880f9b22b0314183"
+    },
+    {
+      "test": "tests/test_agent_connections.py::test_concurrent_redemption_one_process_and_global_unlimited",
+      "reason": "Scoped nxsconn opening keys, issuance, redemption and legacy per-method configuration were removed. R4 authenticates with the original agent API key and validates binding/session authority.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_connection_keys.py::test_scoped_key_issuance_and_opening_routes_are_removed",
+        "tests/execution_r4/test_canonical_connection_keys.py::test_retained_scoped_key_cannot_authenticate_or_resolve",
+        "tests/execution_r4/test_session_reuse.py::test_default_starts_cannot_admit_two_concurrent_claims",
+        "tests/execution_r4/test_agent_execution_policy.py::test_policy_change_after_admission_prevents_native_dispatch"
+      ],
+      "source_sha256": "2bfaef98be22b69bb97d02f509020a14019a6b6b1edf97ed175304a939db9e29"
+    },
+    {
+      "test": "tests/test_agent_connections.py::test_disabled_feature_and_attach_override",
+      "reason": "Scoped nxsconn opening keys, issuance, redemption and legacy per-method configuration were removed. R4 authenticates with the original agent API key and validates binding/session authority.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_connection_keys.py::test_scoped_key_issuance_and_opening_routes_are_removed",
+        "tests/execution_r4/test_canonical_connection_keys.py::test_retained_scoped_key_cannot_authenticate_or_resolve",
+        "tests/execution_r4/test_session_reuse.py::test_default_starts_cannot_admit_two_concurrent_claims",
+        "tests/execution_r4/test_agent_execution_policy.py::test_policy_change_after_admission_prevents_native_dispatch"
+      ],
+      "source_sha256": "2f920e0d683538b66b7f5dd8e2e7bc41398cd8e2d329861af823acad1d564778"
+    },
+    {
+      "test": "tests/test_agent_connections.py::test_agent_bootstrap_retains_grant_expiry_and_revocation",
+      "reason": "Scoped nxsconn opening keys, issuance, redemption and legacy per-method configuration were removed. R4 authenticates with the original agent API key and validates binding/session authority.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_connection_keys.py::test_scoped_key_issuance_and_opening_routes_are_removed",
+        "tests/execution_r4/test_canonical_connection_keys.py::test_retained_scoped_key_cannot_authenticate_or_resolve",
+        "tests/execution_r4/test_session_reuse.py::test_default_starts_cannot_admit_two_concurrent_claims",
+        "tests/execution_r4/test_agent_execution_policy.py::test_policy_change_after_admission_prevents_native_dispatch"
+      ],
+      "source_sha256": "c34af182b00d42b688ff831672e7d631cfd018c15f47beff714ed96b574dfdfb"
+    },
+    {
+      "test": "tests/test_agent_connections.py::test_registered_extension_uses_the_same_connection_contract",
+      "reason": "Scoped nxsconn opening keys, issuance, redemption and legacy per-method configuration were removed. R4 authenticates with the original agent API key and validates binding/session authority.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_connection_keys.py::test_scoped_key_issuance_and_opening_routes_are_removed",
+        "tests/execution_r4/test_canonical_connection_keys.py::test_retained_scoped_key_cannot_authenticate_or_resolve",
+        "tests/execution_r4/test_session_reuse.py::test_default_starts_cannot_admit_two_concurrent_claims",
+        "tests/execution_r4/test_agent_execution_policy.py::test_policy_change_after_admission_prevents_native_dispatch"
+      ],
+      "source_sha256": "c6c366ece75a76cbb76ee0963fbfbfc9a4735c4305409a73639ccec7a6ce3290"
+    },
+    {
+      "test": "tests/test_pr34_remediation.py::test_profile_is_unchanged_by_open_close",
+      "reason": "Legacy supervisor open/close was replaced by Core; configured identity must remain unchanged while authenticated presence may advance.",
+      "replacements": [
+        "tests/execution_r4/test_runtime_contract_migration.py::test_open_close_preserves_registered_agent_profile"
+      ],
+      "source_sha256": "d55171e91da1861f41b8c0374149dccff4008d955fc881f63c90aede12f95505"
+    },
+    {
+      "test": "tests/test_pr34_remediation.py::test_authenticated_mcp_cannot_control_or_read_foreign_session",
+      "reason": "Session authority remains required on every read/control operation; checks now use canonical sessions across both public transports.",
+      "replacements": [
+        "tests/execution_r4/test_runtime_contract_migration.py::test_foreign_agent_cannot_control_or_read_a_canonical_session"
+      ],
+      "source_sha256": "81cc9e41f3a013e5f5b0a95c0a191ffee6308aca282d3da5555d094fe349a9fa"
+    },
+    {
+      "test": "tests/test_pr34_remediation.py::test_p01_rest_foreign_session_matches_mcp_denial",
+      "reason": "Session authority remains required on every read/control operation; checks now use canonical sessions across both public transports.",
+      "replacements": [
+        "tests/execution_r4/test_runtime_contract_migration.py::test_foreign_agent_cannot_control_or_read_a_canonical_session"
+      ],
+      "source_sha256": "fd0fa1d15a6e298d6bbfae747ea734d46ddb00338cc8eb72449542ce3446495e"
+    },
+    {
+      "test": "tests/test_pr34_remediation.py::test_replay_keeps_event_id_and_sequence",
+      "reason": "Legacy supervisor event IDs/sequences are replaced by the scoped Core stream cursor and committed watermark.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_event_views.py::test_mcp_rest_and_r4_event_replay_share_committed_history",
+        "tests/execution_r4/test_canonical_event_views.py::test_replay_does_not_expose_durable_events_above_contiguous_watermark"
+      ],
+      "source_sha256": "322ad1cbdd25163a957d03e5280a588d7afeeb263d7b0ef23be5a16c3e597b06"
+    },
+    {
+      "test": "tests/test_pr34_remediation.py::test_committed_delivery_survives_lost_notification",
+      "reason": "Durable delivery polling now uses the canonical dispatcher; loss of post-commit notification must not lose or duplicate execution.",
+      "replacements": [
+        "tests/execution_r4/test_runtime_contract_migration.py::test_committed_message_recovers_without_post_commit_notification"
+      ],
+      "source_sha256": "fbbd1c1e1cfafbec8396ce317b6714c47d23e0dbfed7732e15ddec67fd7b7226"
+    },
+    {
+      "test": "tests/test_pr34_remediation.py::test_one_delivery_does_not_execute_on_two_sessions",
+      "reason": "Legacy same-endpoint supervisor exclusivity was replaced by canonical session reuse and a single durable delivery claim.",
+      "replacements": [
+        "tests/execution_r4/test_session_reuse.py::test_default_starts_cannot_admit_two_concurrent_claims",
+        "tests/execution_r4/test_canonical_delivery.py::test_message_admits_open_and_turn_atomically",
+        "tests/execution_r4/test_canonical_consumption.py::test_canonical_push_reservation_excludes_mcp_pull"
+      ],
+      "source_sha256": "313da93d872918034d7506d067ac02e809145de1b76bbb5b68288d766dbeb288"
+    },
+    {
+      "test": "tests/test_pr34_remediation.py::test_p01_duplicate_executor_is_rejected",
+      "reason": "Legacy same-endpoint supervisor exclusivity was replaced by canonical session reuse and a single durable delivery claim.",
+      "replacements": [
+        "tests/execution_r4/test_session_reuse.py::test_default_starts_cannot_admit_two_concurrent_claims",
+        "tests/execution_r4/test_canonical_delivery.py::test_message_admits_open_and_turn_atomically",
+        "tests/execution_r4/test_canonical_consumption.py::test_canonical_push_reservation_excludes_mcp_pull"
+      ],
+      "source_sha256": "3e547136757e6698f836b613c1110f636073dbe6ff963653e4becfb5c5299505"
+    }
+  ]
+}

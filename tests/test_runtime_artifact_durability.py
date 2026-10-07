@@ -13,6 +13,7 @@ from test_pr34_remediation import runtime as runtime_fixture
 runtime = runtime_fixture
 
 
+@pytest.mark.parametrize("runtime", ["unconfigured"], indirect=True)
 def test_artifact_storage_does_not_hold_sqlite_writer(runtime, monkeypatch):
     from okto_nexus.adapters.inbound.mcp.tools.artifacts import build_service
     deps, _, root, _, _, _ = runtime
@@ -38,6 +39,7 @@ def test_artifact_storage_does_not_hold_sqlite_writer(runtime, monkeypatch):
     assert saved["artifact_id"]
 
 
+@pytest.mark.parametrize("runtime", ["unconfigured"], indirect=True)
 def test_permission_change_during_storage_prevents_catalog_commit(runtime, monkeypatch):
     from okto_nexus.adapters.inbound.mcp.tools.artifacts import build_service
     from okto_nexus.errors import OktoNexusError
@@ -59,6 +61,7 @@ def test_permission_change_during_storage_prevents_catalog_commit(runtime, monke
     assert paths and not (service._artifact_store.root / paths[0]).exists()
 
 
+@pytest.mark.parametrize("runtime", ["unconfigured"], indirect=True)
 def test_payload_and_manifest_fsync_precede_catalog_reference(runtime, monkeypatch):
     from okto_nexus.adapters.inbound.mcp.tools.artifacts import build_service
     deps, _, root, _, _, _ = runtime
@@ -79,6 +82,7 @@ def test_payload_and_manifest_fsync_precede_catalog_reference(runtime, monkeypat
     service.artifact_put(project_root=root, agent_id="worker", artifact_type="text", content="durable fixture")
 
 
+@pytest.mark.parametrize("runtime", ["unconfigured"], indirect=True)
 def test_uncertain_artifact_fsync_never_creates_catalog_reference(runtime, monkeypatch):
     from okto_nexus.adapters.inbound.mcp.tools.artifacts import build_service
     deps, _, root, _, _, _ = runtime

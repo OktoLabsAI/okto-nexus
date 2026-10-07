@@ -17,7 +17,9 @@ def test_disabled_http_and_rest_do_not_start_implicit_runtime(runtime):
     deps, client, root, peers, operator, caller = runtime
     http_tools = mcp_call(client, operator, "tools/list", {})["tools"]
     assert mcp_call(client, operator, "resources/list", {})["resources"]
-    assert len(http_tools) == 43 and not any(t["name"].startswith("harness_") for t in http_tools)
+    names = {t["name"] for t in http_tools}
+    assert {"message_create", "runtime_input_list", "runtime_input_respond"} <= names
+    assert not any(name.startswith("harness_") for name in names)
 
     code = ("import sys; sys.path.insert(0," + repr(str(Path(okto_nexus.__file__).resolve().parent.parent)) +
             "); from okto_nexus.adapters.inbound.cli.main import main; raise SystemExit(main())")

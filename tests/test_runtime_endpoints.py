@@ -55,7 +55,8 @@ def test_p03_additive_upgrade_preserves_agent_and_legacy_history(tmp_path, last_
     assert MigrationRunner(factory).apply() == []
     with factory.unit_of_work(write=False) as uow:
         after = dict(uow.connection.execute("SELECT * FROM agents WHERE agent_id='legacy'").fetchone())
-        assert after == before
+        assert {key: after[key] for key in before} == before
+        assert after["deleted_at"] is None
         assert not uow.connection.execute("SELECT * FROM agent_endpoints").fetchall()
         assert not uow.connection.execute("SELECT * FROM delivery_outbox").fetchall()
         if last_version == 29:
