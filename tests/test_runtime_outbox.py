@@ -91,20 +91,6 @@ def test_p06_takeover_never_replays_a_send_intent(runtime, previous_status):
 
 
 
-def test_p06_http_process_producer_wakes_serve_without_owning_runtime(runtime):
-    deps, _, root, peers, _, _ = runtime
-    assert open_rest(runtime).status_code == 200
-    owner = deps.runtime_dispatcher.owner_id
-
-    result = process_tool(runtime, "message_create", {"project_root": root, "from_agent_id": "caller",
-        "subject": "cross-process fixture", "body": "one durable intent",
-        "target": {"strategy": "direct", "agent_id": "worker"}})
-    assert result["ok"], result
-    operation_id = result["data"]["runtime_operations"][0]
-    wait_sent(peers)
-    wait_status(runtime, operation_id, "SENT_UNCONFIRMED")
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute("SELECT owner_id FROM runtime_dispatcher_owner").fetchone()[0] == owner
 
 
 
@@ -131,24 +117,3 @@ def test_p05_open_reply_persistence_failure_does_not_repeat_start(runtime, monke
     second = tool(client, operator, "harness_open", arguments)
     assert second["ok"] and second["data"]["reused"], second
     assert len(peers) == 1
-
-
-def test_p06_http_process_open_runs_only_in_the_existing_serve_owner(runtime):
-    deps, client, root, peers, operator, _ = runtime
-    from pathlib import Path
-    # If a client process incorrectly spawns locally, it can only attempt an
-    # absent fixture executable. Never probe an ambient Pi installation.
-    with deps.connection_factory.unit_of_work() as uow:
-        uow.connection.execute("UPDATE runtime_profiles SET config=? WHERE profile_id='profile-pi'",
-            (json.dumps({"command": [str(Path(root) / "absent-fixture.exe"), "--mode", "rpc"]}),))
-    grant = client.post("/api/v1/harness/grants", headers={"x-api-key": operator}, json={
-        "actor_agent_id": "caller", "endpoint_id": "endpoint-pi", "actions": ["open"],
-        "expires_at": iso_plus(deps.clock.now_iso(), 3600)})
-    assert grant.status_code == 200, grant.text
-
-    result = process_tool(runtime, "harness_open", {"agent_id": "worker", "kind": "pi",
-        "endpoint_id": "endpoint-pi", "project_root": root, "idempotency_key": "http-process-owner"})
-    assert result["ok"], result
-    session_id = result["data"]["session_id"]
-    assert len(peers) == 1
-    assert deps.harness_supervisor.get(session_id) is not None

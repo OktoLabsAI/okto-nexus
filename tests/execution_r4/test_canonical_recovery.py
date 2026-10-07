@@ -61,6 +61,11 @@ def test_cancel_before_canonical_send_keeps_native_unstarted(connected_local, mo
     client.portal.call(lock.acquire)
     try:
         assert send(setup, monkeypatch)['ok']
+        from test_agent_recovery_isolation import eventually
+        def reserved():
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                return uow.connection.execute("SELECT COUNT(*) FROM execution_dispatch_outbox WHERE dispatch_state='RESERVED'").fetchone()[0] == 1
+        eventually(reserved)
         response = recover(setup, snapshot(setup), 'cancel_pending')
         assert response.status_code == 200, response.text
         assert len(pull(setup, monkeypatch)) == 1
@@ -77,6 +82,10 @@ def test_cancel_before_canonical_send_keeps_native_unstarted(connected_local, mo
         time.sleep(.02)
     assert native.opens == 0
     assert snapshot(setup)['status'] == 'CANCELLED'
+    # The cancelled reserved attempt must not close the healthy dispatch lane.
+    next_open = admit(setup, binding, 'after-reserved-cancellation', 'runtime.start', new_session=True)
+    wait_receipt(setup, next_open)
+    assert native.opens == 1 and app.state.embedded_dispatch_owner.pump.error is None
 
 
 def test_pending_domain_projection_cannot_cancel_inflight_canonical_send(connected_local, monkeypatch):

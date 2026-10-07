@@ -10,14 +10,14 @@ PAGE_BYTES = 512 * 1024
 
 def read_execution_events(factory, *, server_id, session_id, context, access,
                           executor_id=None, stream_epoch=None, after_sequence=0, limit=200):
-    if (type(after_sequence) is not int or not 0 <= after_sequence <= 9007199254740991
-            or type(limit) is not int or not 1 <= limit <= 1000
-            or (stream_epoch is not None and (type(stream_epoch) is not str
-                or not 1 <= len(stream_epoch) <= 160 or not stream_epoch.isprintable()))):
-        raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Invalid canonical event replay cursor or limit.', {})
     with factory.unit_of_work(write=False) as uow:
         view = read_execution_session(factory, server_id=server_id, session_id=session_id,
             context=context, access=access, executor_id=executor_id, _uow=uow)
+        if (type(after_sequence) is not int or not 0 <= after_sequence <= 9007199254740991
+                or type(limit) is not int or not 1 <= limit <= 1000
+                or (stream_epoch is not None and (type(stream_epoch) is not str
+                    or not 1 <= len(stream_epoch) <= 160 or not stream_epoch.isprintable()))):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Invalid canonical event replay cursor or limit.', {})
         scope = view['scope']
         key = (server_id, scope['executor_id'], session_id)
         if stream_epoch is None:

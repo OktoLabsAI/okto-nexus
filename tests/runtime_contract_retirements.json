@@ -2001,6 +2001,54 @@
       ],
       "reason": "Direct independent database composition cannot prove live executor inventory in R4. An actual isolated Python writer is refused atomically with inventory_not_fresh, while the owning authenticated HTTP composition admits the same logical delivery and launches exactly once. Retained writer-version fences remain tested unchanged.",
       "source_sha256": "e0a4828e97a5ae854d751c7ce52846c9c4737b2510bc8d4b31b44b2d553d15c3"
+    },
+    {
+      "test": "tests/test_runtime_outbox.py::test_p06_http_process_producer_wakes_serve_without_owning_runtime",
+      "replacements": [
+        "tests/execution_r4/test_canonical_http_producer.py::test_isolated_http_producer_keeps_native_execution_in_existing_owner"
+      ],
+      "reason": "The original isolated -I MCP child and sanitized environment now target a real ephemeral TCP listener on the current serve composition. Both message admission and idempotent open use one unchanged embedded owner and one Core launch; the child verifies it imports none of Nexus, Connector or Core.",
+      "source_sha256": "63d0460d214c9cf1bba238f8e1ce3c31b4eed833fe0d7faf4444bcbd0b1143b3"
+    },
+    {
+      "test": "tests/test_runtime_outbox.py::test_p06_http_process_open_runs_only_in_the_existing_serve_owner",
+      "replacements": [
+        "tests/execution_r4/test_canonical_http_producer.py::test_isolated_http_producer_keeps_native_execution_in_existing_owner"
+      ],
+      "reason": "The original isolated -I MCP child and sanitized environment now target a real ephemeral TCP listener on the current serve composition. Both message admission and idempotent open use one unchanged embedded owner and one Core launch; the child verifies it imports none of Nexus, Connector or Core.",
+      "source_sha256": "96b340667e40d8e643397fa33edcd96e3d8cfecbe50c1a8028f2627fb07209a7"
+    },
+    {
+      "test": "tests/test_runtime_delivery_acceptance.py::test_each_canonical_write_rolls_back_without_orphan_intent",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery_commit.py::test_each_logical_write_rolls_back_domain_and_execution_then_recovers"
+      ],
+      "reason": "Each original message/delivery/outbox/event cut follows the actual repository write. The replacement compares domain, causal and canonical execution tables after rollback, checks foreign keys and proves a subsequent request opens and sends once.",
+      "source_sha256": "d062cbcb8a365071d80e9bf80ef7551aea297f0fac11dc6656f14356b221b64e"
+    },
+    {
+      "test": "tests/test_runtime_delivery_acceptance.py::test_message_admission_commits_while_native_write_is_blocked",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery_regressions.py::test_native_send_does_not_hold_server_sqlite_writer"
+      ],
+      "reason": "Current Core send is held after public message admission returns. A distinct SQLite writer commits while native execution is blocked; release yields exactly one native send and one opening.",
+      "source_sha256": "e5520b77b297219f4ccf77b4c80371ce2bf679fbde20e7843070edef64abd7d2"
+    },
+    {
+      "test": "tests/test_runtime_delivery_acceptance.py::test_dropped_post_commit_wake_recovers_in_same_live_owner",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery_commit.py::test_dropped_commit_wakes_do_not_strand_pending_message"
+      ],
+      "reason": "Canonical dispatch scans the durable outbox independently of advisory legacy wakes. Dropping both message wake and inbox notification still delivers once in the same current owner, without explicit test wake, scan or restart. The retained legacy generation-counter unit test remains unchanged.",
+      "source_sha256": "18b75d0a438f7f26a995c49c1befea69595d0ffd05b4cbba329ccf5d21dae93a"
+    },
+    {
+      "test": "tests/test_runtime_wake_generation.py::test_wake_during_scan_drains_without_waiting_for_recovery",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery_commit.py::test_dropped_commit_wakes_do_not_strand_pending_message"
+      ],
+      "reason": "Canonical dispatch scans the durable outbox independently of advisory legacy wakes. Dropping both message wake and inbox notification still delivers once in the same current owner, without explicit test wake, scan or restart. The retained legacy generation-counter unit test remains unchanged.",
+      "source_sha256": "f918068daed817210528cde420f536ae71a39e79eed6e4b283c4fca8015e7034"
     }
   ]
 }

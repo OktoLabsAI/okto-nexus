@@ -296,3 +296,19 @@ Partition checks prove every test file occurs exactly once; no test selection,
 skip or xfail removes failures. Feature branches use the PR campaign instead of
 also starting an identical push campaign. This addresses Windows job timeouts;
 it does not make the outstanding full regression gate pass.
+
+The follow-up passed 42 installed-wheel cases with unchanged inputs
+(build/release-replay-cancel-installed). A deterministic reserved-before-cancel
+test now proves cancellation cannot close the healthy dispatch connection and
+that a subsequent opening succeeds. The exact cancelled reservation is an
+idempotent pre-send refusal; other stale reservations still conflict. Canonical
+event replay checks session authority before validating its cursor, preserving
+the REST/MCP foreign-session denial contract. New regressions cover concurrent
+event append, acknowledged Core compaction, all four logical write rollback
+boundaries, dropped commit wakes, and isolated MCP client processes.
+
+Retained legacy public replay tests remain in place, separately from the new
+canonical replay checks. All seven retained replay/inventory cases passed in
+the installed wheel (build/release-retained-replay-installed); twenty retained
+journal/admin cases also passed against source. No historical native owner is
+opened by those fixtures. The complete matrix is still pending.

@@ -30,6 +30,18 @@ def reject_unsent_dispatch(factory, *, reservation, error):
             (_error(error.code, error.message, possible_effect=False, operation_id=reservation.operation_id),
              *_key(reservation), reservation.reservation_class, reservation.reserved_bytes)).rowcount
         if changed != 1:
+            # Operator cancellation may atomically resolve this exact RESERVED
+            # attempt while the pump waits for its send lock. Its pre-send CAS
+            # then refuses as intended; that refusal must not close the healthy
+            # executor connection. Other stale reservations still conflict.
+            cancelled = conn.execute(
+                "SELECT 1 FROM execution_dispatch_outbox WHERE server_id=? AND executor_id=? "
+                "AND operation_id=? AND attempt_token=? AND attempt_no=? AND reservation_owner IS ? "
+                "AND reservation_generation IS ? AND dispatch_state='RESOLVED_TERMINAL' "
+                "AND json_extract(last_error,'$.code')='OPERATOR_CANCELLED' "
+                "AND json_extract(last_error,'$.possible_effect')=0", _key(reservation)).fetchone()
+            if cancelled:
+                return
             raise OktoNexusError(ErrorCode.CONFLICT, 'The unsent dispatch reservation changed.', {})
         conn.execute("UPDATE execution_operations SET admission_state='RESOLVED_TERMINAL' "
                      "WHERE server_id=? AND executor_id=? AND operation_id=?", _key(reservation)[:3])
