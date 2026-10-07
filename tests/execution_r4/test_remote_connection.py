@@ -31,7 +31,7 @@ from test_vertical_inventory import _NativeFactory
     (True, None, False, 0, 'unsent'), (True, None, False, 0, 'ack_lost'),
     (True, None, False, 0, 'cold_unsent'), (True, None, False, 0, 'cold_ack_lost'),
     (True, None, False, 0, 'active_disconnect'), (True, None, False, 0, 'lease_renewal')])
-def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery, native_decision=None, cli_admission=False, initial_prompt=False, domain_delivery=False, combined_winner=None):
+def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery, native_decision=None, cli_admission=False, initial_prompt=False, domain_delivery=False, combined_winner=None, reset_active=False):
     from okto_nexus_connector.transport.https_client import NexusHTTPClient, R4BindingView
     from okto_nexus_connector.transport.wss_r4 import connect_r4_connection
     from okto_nexus_connector.services.execution_selection import acknowledge_execution_binding
@@ -363,6 +363,25 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                                 assert execution.failure is None, repr(execution.failure)
                                 await asyncio.sleep(.01)
                 turned = await admit('turn.submit', session_id=session_id, text='Hello')
+                if reset_active:
+                    response = await asyncio.to_thread(client.post, '/api/v1/admin/reset', headers=headers['operator'])
+                    assert response.status_code in (200, 202), response.text
+                    async with asyncio.timeout(35):
+                        while response.json()['data'].get('pending'):
+                            await asyncio.sleep(.05)
+                            response = await asyncio.to_thread(client.get, '/api/v1/admin/reset', headers=headers['operator'])
+                            assert response.status_code == 200, response.text
+                    assert native.native.stopped
+                    with deps.connection_factory.unit_of_work(write=False) as uow:
+                        assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 0
+                        assert uow.connection.execute('SELECT COUNT(*) FROM execution_bindings').fetchone()[0] == 1
+                    from test_vertical_inventory import _Native
+                    native.native = _Native()
+                    restarted = await admit('runtime.start', new_session=True)
+                    await admit('turn.submit', session_id=restarted['scope']['session_id'], text='After reset')
+                    assert len(native.native.sent) == 1
+                    await admit('runtime.close', session_id=restarted['scope']['session_id'])
+                    return
                 if native_decision is not None:
                     from nexus_connector_core import RuntimeEvent
                     kind, choice = native_decision
@@ -712,6 +731,12 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 await asyncio.wait_for(serving, 5)
                 sock.close()
     asyncio.run(run())
+
+
+@pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
+def test_reset_stops_remote_execution_and_reuses_connection(onboarding, tmp_path, monkeypatch):
+    test_owned_connector_reader_dispatches_five_actions_over_real_websocket(
+        onboarding, tmp_path, monkeypatch, True, None, False, 0, None, reset_active=True)
 
 
 @pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)

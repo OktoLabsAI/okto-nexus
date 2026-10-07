@@ -1755,6 +1755,7 @@ export const api = {
       `/api/v1/admin/reset?keep_agents=${keepAgents}`,
       { method: "POST" },
     ),
+  resetStatus: () => call<Record<string, unknown>>("/api/v1/admin/reset"),
   settings: () => call<{ items: SettingItem[] }>("/api/v1/settings"),
   updateSettings: (changes: Record<string, unknown>) =>
     call<{ applied: Record<string, unknown> }>("/api/v1/settings", {

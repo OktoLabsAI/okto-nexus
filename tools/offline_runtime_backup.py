@@ -101,9 +101,17 @@ def required_core_files(db):
     return files | {"owned-slots.db"} if files else set()
 
 
+def core_directory(db):
+    if db.execute("SELECT 1 FROM sqlite_master WHERE name='runtime_reset_generation'").fetchone():
+        generation = db.execute('SELECT generation FROM runtime_reset_generation WHERE singleton=1').fetchone()[0]
+        if generation:
+            return f'core-runtime-reset-{generation}'
+    return 'core-runtime'
+
+
 def validate_r4(snapshot, db):
     """Verify Nexus-owned layout, treating Core databases as opaque SQLite."""
-    core = snapshot / "core-runtime"
+    core = snapshot / core_directory(db)
     if any(not (core / name).is_file() for name in required_core_files(db)):
         raise ValueError("Referenced embedded Core journal or slot ledger is missing")
     if core.exists():
@@ -139,7 +147,9 @@ def validate_r4(snapshot, db):
 
 
 def copy_core_databases(home, destination, stack):
-    source = home / "core-runtime"
+    with closing(sqlite3.connect(destination / 'nexus.db')) as db:
+        directory = core_directory(db)
+    source = home / directory
     if not source.exists():
         return
     files = list(regular_tree(source))
@@ -147,7 +157,7 @@ def copy_core_databases(home, destination, stack):
     allowed = {str(path) + suffix for path in databases for suffix in ("", "-wal", "-shm")}
     if any(str(path) not in allowed or path.parent != source for path in files):
         raise ValueError("Core runtime contains an unrecognized recovery file")
-    target_dir = destination / "core-runtime"
+    target_dir = destination / directory
     target_dir.mkdir()
     for path in databases:
         # Locks remain held until the combined source snapshot has finished.

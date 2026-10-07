@@ -391,6 +391,11 @@ class RuntimeDispatcher:
         self.wake()
         return self._shutdown_finished.wait(timeout)
 
+    def resume_after_cancelled_reset(self):
+        """Resume claims when reset failed before requesting owner shutdown."""
+        self._quiescing.clear()
+        self.wake()
+
     def close(self):
         self._stop.set()
         self.wake()

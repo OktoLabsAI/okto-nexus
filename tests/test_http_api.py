@@ -768,7 +768,9 @@ def _seed_full_store(deps) -> None:
 
 
 def _operational_tables(deps) -> list[str]:
+    from okto_nexus.application.database_reset import preserved_tables
     with deps.connection_factory.unit_of_work() as uow:
+        preserved = preserved_tables(uow.connection, keep_agents=True)
         rows = uow.connection.execute(
             "SELECT name FROM sqlite_master WHERE type='table' "
             "AND name NOT LIKE 'sqlite_%'"
@@ -776,7 +778,7 @@ def _operational_tables(deps) -> list[str]:
     return [
         r["name"]
         for r in rows
-        if r["name"] not in ("schema_migrations", "settings", "agents")
+        if r["name"] not in preserved
     ]
 
 
@@ -800,6 +802,7 @@ def test_admin_reset_wipes_every_table_but_keeps_agents(serve_env):
             assert count == 0, table
         agents = uow.connection.execute("SELECT COUNT(*) FROM agents").fetchone()[0]
         assert agents >= 2  # operator + survivor preserved
+        assert uow.connection.execute('SELECT COUNT(*) FROM workspaces').fetchone()[0] >= 1
 
     # The operator key still authenticates after the wipe (keys preserved).
     assert client.get("/api/v1/graph", headers=_h(operator_key)).status_code == 200

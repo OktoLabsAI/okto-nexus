@@ -3645,9 +3645,9 @@ def build_router() -> APIRouter:
         """Wipe the operational store (Settings > "Zerar banco de dados").
 
         Deletes ALL messages/deliveries/handoffs/sessions/events/channels/
-        tasks/workspaces in one transaction. ``keep_agents=true`` (default)
-        preserves agent identities and their API keys - the dashboard and
-        every connected MCP client keep working; ``false`` razes agents too
+        tasks in one transaction after draining runtime owners.
+        ``keep_agents=true`` preserves identities, keys, workspaces and
+        connection configuration; ``false`` removes agents too
         (a fresh serve will then re-issue the operator key on cold start).
         VACUUM afterwards so the file actually shrinks on disk.
         """
@@ -3661,13 +3661,12 @@ def build_router() -> APIRouter:
             # stayed out, its workspace FK broke the wipe at commit time) and
             # would break again on every future migration. Preserved tables:
             # migration bookkeeping, runtime settings and - by default - the
-            # agent identities/keys.
-            preserved = {"schema_migrations", "settings"}
-            if keep_agents:
-                preserved.add("agents")
+            # connection configuration and installation invariants.
+            from ....application.database_reset import preserved_tables
             counts: dict[str, int] = {}
             try:
                 with deps.connection_factory.unit_of_work() as uow:
+                    preserved = preserved_tables(uow.connection, keep_agents=keep_agents)
                     # FK checks deferred to commit: with every non-preserved
                     # table emptied in the same transaction, the end state is
                     # consistent regardless of deletion order.
@@ -3682,6 +3681,9 @@ def build_router() -> APIRouter:
                             continue
                         cur = uow.connection.execute(f'DELETE FROM "{table}"')
                         counts[table] = cur.rowcount
+                    # Switch journals atomically with history removal, only
+                    # after the reset coordinator has drained every runtime.
+                    uow.connection.execute('UPDATE runtime_reset_generation SET generation=generation+1 WHERE singleton=1')
             except sqlite3.Error as exc:
                 raise db_error_from_exception("wiping the store", exc) from exc
             # VACUUM is best-effort: it needs a moment without readers (the
@@ -3702,14 +3704,23 @@ def build_router() -> APIRouter:
 
         try:
             _require_operator()
-            counts, vacuumed = await anyio.to_thread.run_sync(_reset)
+            from ....bootstrap.database_reset import request_reset
+            result = await request_reset(request.app, keep_agents=keep_agents,
+                reset=_reset, context=_binding_decision_context())
         except OktoNexusError as exc:
             return _map_error(exc)
-        if not keep_agents:
-            request.app.state.auth.invalidate_all()
-        return _ok(
-            {"deleted": counts, "kept_agents": keep_agents, "vacuumed": vacuumed}
-        )
+        response = _ok(result)
+        response.status_code = 202 if result.get('pending') else 200
+        return response
+
+    @router.get("/admin/reset")
+    async def admin_reset_status(request: Request) -> JSONResponse:
+        try:
+            _require_operator()
+            from ....bootstrap.database_reset import reset_status
+            return _ok(reset_status(request.app))
+        except OktoNexusError as exc:
+            return _map_error(exc)
 
     return router
 
