@@ -213,33 +213,8 @@ def test_harness_list_reports_real_connector_capabilities(ctx):
 # --------------------------------------------------------------------------- #
 # harness_open
 # --------------------------------------------------------------------------- #
-def test_harness_open_preserves_agent_and_returns_running_session(ctx):
-    deps, server, connectors, project_root = ctx
-    result = _call(
-        server, "harness_open", agent_id="worker", kind="pi", project_root=project_root
-    )
-    assert result["ok"], result
-    data = result["data"]
-    assert data["status"] == "RUNNING"
-    assert data["kind"] == "pi"
-    assert data["owning_agent_id"] == "worker"
-    assert data["capabilities"]["steer_timing"] == "IMMEDIATE"
-    assert len(connectors["pi"]) == 1
-
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        agent = deps.repos.agents.get(uow, "worker")
-    assert agent is not None
-    assert agent.metadata == {"keep": "profile"}
-    assert agent.role == "reviewer" and agent.capabilities == {"review": True}
 
 
-def test_harness_open_rejects_unknown_kind(ctx):
-    _deps, server, _connectors, project_root = ctx
-    result = _call(
-        server, "harness_open", agent_id="worker", kind="not-a-kind", project_root=project_root
-    )
-    assert not result["ok"]
-    assert result["error"]["code"] == "NOT_FOUND"
 
 
 def test_harness_open_rejects_substrate_for_non_claude_code_kind(ctx):
@@ -293,37 +268,8 @@ def test_harness_open_claude_code_attach_with_target_pid_uses_attach_capabilitie
 # --------------------------------------------------------------------------- #
 # harness_send / harness_steer / harness_interrupt
 # --------------------------------------------------------------------------- #
-def test_harness_send_requires_a_payload(ctx):
-    deps, server, connectors, project_root = ctx
-    opened = _call(server, "harness_open", agent_id="worker", kind="pi", project_root=project_root)
-    session_id = opened["data"]["session_id"]
-
-    result = _call(server, "harness_send", session_id=session_id, payload=None)
-    assert not result["ok"]
-    assert result["error"]["code"] == "VALIDATION_ERROR"
 
 
-def test_harness_send_steer_interrupt_dispatch_the_right_verb(ctx):
-    deps, server, connectors, project_root = ctx
-    opened = _call(server, "harness_open", agent_id="worker", kind="pi", project_root=project_root)
-    session_id = opened["data"]["session_id"]
-    conn = connectors["pi"][0]
-
-    r = _call(server, "harness_send", session_id=session_id, payload={"text": "hi"})
-    assert r["ok"] and r["data"]["verb"] == "send_turn"
-    _wait_until(lambda: len(conn.sent) == 1)
-
-    r = _call(server, "harness_steer", session_id=session_id, payload={"text": "no wait"})
-    assert r["ok"] and r["data"]["verb"] == "steer"
-
-    r = _call(server, "harness_interrupt", session_id=session_id)
-    assert r["ok"] and r["data"]["verb"] == "interrupt"
-
-    _wait_until(lambda: len(conn.sent) == 3)
-    verbs = [c.verb for c in conn.sent]
-    assert verbs == ["send_turn", "steer", "interrupt"]
-    assert conn.sent[0].payload == {"text": "hi"}
-    assert conn.sent[2].payload == {}
 
 
 @pytest.mark.skipif(os.name == "nt", reason="Attach is a POSIX-only substrate; no Windows capability invented.")
@@ -356,28 +302,6 @@ def test_harness_send_against_unknown_session_is_not_found(ctx):
 # --------------------------------------------------------------------------- #
 # harness_close / harness_get (live vs durable fallback)
 # --------------------------------------------------------------------------- #
-def test_harness_close_ends_session_and_get_falls_back_to_durable_row(ctx):
-    deps, server, connectors, project_root = ctx
-    opened = _call(server, "harness_open", agent_id="worker", kind="pi", project_root=project_root)
-    session_id = opened["data"]["session_id"]
-
-    live = _call(server, "harness_get", session_id=session_id)
-    assert live["ok"] and live["data"]["live"] is True and live["data"]["status"] == "RUNNING"
-
-    closed = _call(server, "harness_close", session_id=session_id)
-    from test_runtime_commands import wait_close_result
-    assert closed["ok"]
-    assert wait_close_result(server.client, server.operator_key, closed)["lifecycle_state"] == "detached"
-    assert connectors["pi"][0].close_called is True
-
-    after = _call(server, "harness_get", session_id=session_id)
-    assert after["ok"]
-    assert after["data"]["live"] is False
-    assert after["data"]["lifecycle_state"] == "detached"
-
-    # Closing a detached fixture is idempotent, without claiming observed exit.
-    second = _call(server, "harness_close", session_id=session_id)
-    assert second["ok"]
 
 
 def test_harness_get_unknown_session_is_not_found(ctx):
@@ -390,31 +314,6 @@ def test_harness_get_unknown_session_is_not_found(ctx):
 # --------------------------------------------------------------------------- #
 # harness_event_list (D10 durable replay) + notable-message delivery
 # --------------------------------------------------------------------------- #
-def test_harness_event_list_replays_in_order_and_respects_after_sequence(ctx):
-    deps, server, connectors, project_root = ctx
-    opened = _call(server, "harness_open", agent_id="worker", kind="pi", project_root=project_root)
-    session_id = opened["data"]["session_id"]
-    conn = connectors["pi"][0]
-
-    conn.push_event(kind="turn_started", native_event="n1")
-    conn.push_event(kind="output_delta", native_event="n2", payload={"chunk": "hi"})
-    conn.push_event(kind="turn_completed", native_event="n3")
-
-    _wait_until(
-        lambda: _call(server, "harness_event_list", session_id=session_id)["data"]["count"] >= 3
-    )
-
-    result = _call(server, "harness_event_list", session_id=session_id)
-    assert result["ok"]
-    events = result["data"]["events"]
-    assert [e["native_event"] for e in events] == ["n1", "n2", "n3"]
-    assert [e["kind"] for e in events] == ["turn_started", "output_delta", "turn_completed"]
-    assert events[1]["payload"] == {"chunk": "hi"}
-
-    first_seq_result = _call(
-        server, "harness_event_list", session_id=session_id, after_sequence=1
-    )
-    assert [e["native_event"] for e in first_seq_result["data"]["events"]] == ["n2", "n3"]
 
 
 def test_harness_terminal_is_durable_without_unauthorized_broadcast(ctx):
@@ -459,51 +358,10 @@ def test_harness_open_uses_approved_isolated_profile(capturing_ctx, kind):
     assert env["CODEX_HOME" if kind == "codex" else "PI_CODING_AGENT_DIR"].startswith(env["HOME"])
 
 
-@pytest.mark.parametrize("kind,backend", [
-    ("pi", {"provider": "zai", "model": "glm-5.3", "extra_args": ["--foo"]}),
-    ("codex", {"env": {"CODEX_HOME": "/tmp/unapproved"}}),
-])
-def test_harness_open_rejects_per_call_profile_override(capturing_ctx, kind, backend):
-    _, server, _, received, root = capturing_ctx
-    result = _call(server, "harness_open", agent_id="worker", kind=kind, project_root=root, backend=backend)
-    assert not result["ok"] and result["error"]["code"] == "VALIDATION_ERROR"
-    assert received[kind] == []
 
 
-def test_harness_open_rejects_backend_field_unsupported_for_kind(capturing_ctx):
-    """A backend field the connector cannot actually honour is a
-    VALIDATION_ERROR naming the supported set - never a silent drop (the
-    exact failure class H-2 catches on the agent_id description)."""
-    _deps, server, _connectors, received_backend, project_root = capturing_ctx
-    result = _call(
-        server,
-        "harness_open",
-        agent_id="worker",
-        kind="codex",
-        project_root=project_root,
-        backend={"provider": "zai"},
-    )
-    assert not result["ok"]
-    assert result["error"]["code"] == "VALIDATION_ERROR"
-    assert "approved runtime profile" in result["error"]["message"]
-    assert received_backend["codex"] == []
 
 
-def test_harness_open_rejects_backend_for_claude_code_attach_substrate(capturing_ctx):
-    _deps, server, _connectors, received_backend, project_root = capturing_ctx
-    result = _call(
-        server,
-        "harness_open",
-        agent_id="worker",
-        kind="claude_code",
-        project_root=project_root,
-        substrate="attach",
-        target_pid=12345,
-        backend={"env": {"X": "1"}},
-    )
-    assert not result["ok"]
-    assert result["error"]["code"] == "VALIDATION_ERROR"
-    assert received_backend["claude_code"] == []
 
 
 def test_harness_open_rejects_non_object_backend(capturing_ctx):
@@ -520,19 +378,6 @@ def test_harness_open_rejects_non_object_backend(capturing_ctx):
     assert result["error"]["code"] == "VALIDATION_ERROR"
 
 
-def test_harness_open_rejects_wrong_typed_backend_env(capturing_ctx):
-    _deps, server, _connectors, _received_backend, project_root = capturing_ctx
-    result = _call(
-        server,
-        "harness_open",
-        agent_id="worker",
-        kind="codex",
-        project_root=project_root,
-        backend={"env": "not-an-object"},
-    )
-    assert not result["ok"]
-    assert result["error"]["code"] == "VALIDATION_ERROR"
-    assert "approved runtime profile" in result["error"]["message"]
 
 
 # --------------------------------------------------------------------------- #

@@ -1832,6 +1832,175 @@
         "tests/execution_r4/test_canonical_recovery_restart.py::test_restart_with_admission_disabled_recovers_retained_conversation"
       ],
       "source_sha256": "19157c0f63e903c0491637e4830f317bfee0872ddf6d0f25d2de6e11980f6997"
+    },
+    {
+      "test": "tests/test_harness_tools.py::test_harness_open_preserves_agent_and_returns_running_session",
+      "reason": "Authenticated MCP now admits the approved Core realization; the replacement checks unchanged registered identity, missing-payload refusal, exact native send/steer/interrupt verbs, one launch, idempotent close and durable CLOSED inspection instead of removed legacy RUNNING/detached rows.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_mcp_lifecycle.py::test_mcp_lifecycle_preserves_identity_and_exact_core_verbs"
+      ],
+      "source_sha256": "37e7f9036d5463b17f1b6753d84ea32eef7e4920e7be814e71fb2bdd1a5b7fb3"
+    },
+    {
+      "test": "tests/test_harness_tools.py::test_harness_send_requires_a_payload",
+      "reason": "Authenticated MCP now admits the approved Core realization; the replacement checks unchanged registered identity, missing-payload refusal, exact native send/steer/interrupt verbs, one launch, idempotent close and durable CLOSED inspection instead of removed legacy RUNNING/detached rows.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_mcp_lifecycle.py::test_mcp_lifecycle_preserves_identity_and_exact_core_verbs"
+      ],
+      "source_sha256": "553ba28cc7d0b012ffb06a2e77d8c319a868fff58c06465b2c0b2aaffbdae3a8"
+    },
+    {
+      "test": "tests/test_harness_tools.py::test_harness_send_steer_interrupt_dispatch_the_right_verb",
+      "reason": "Authenticated MCP now admits the approved Core realization; the replacement checks unchanged registered identity, missing-payload refusal, exact native send/steer/interrupt verbs, one launch, idempotent close and durable CLOSED inspection instead of removed legacy RUNNING/detached rows.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_mcp_lifecycle.py::test_mcp_lifecycle_preserves_identity_and_exact_core_verbs"
+      ],
+      "source_sha256": "0a93b2a44806f953cb8a030f63aa40067e54f5c85ccf2d79beebcbc28f048973"
+    },
+    {
+      "test": "tests/test_harness_tools.py::test_harness_close_ends_session_and_get_falls_back_to_durable_row",
+      "reason": "Authenticated MCP now admits the approved Core realization; the replacement checks unchanged registered identity, missing-payload refusal, exact native send/steer/interrupt verbs, one launch, idempotent close and durable CLOSED inspection instead of removed legacy RUNNING/detached rows.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_mcp_lifecycle.py::test_mcp_lifecycle_preserves_identity_and_exact_core_verbs"
+      ],
+      "source_sha256": "857b0331bb65386370c29d2cb45c643a580f745081db6a26f5b4937dc7da33b9"
+    },
+    {
+      "test": "tests/test_harness_tools.py::test_harness_open_rejects_unknown_kind",
+      "reason": "Both authenticated REST and MCP reject unknown kind, per-call provider/model/arguments/environment overrides, malformed environment and caller-selected attach/PID/backend against an actually approved current binding; no canonical operation or native launch is created.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_mcp_lifecycle.py::test_canonical_open_rejects_unapproved_kind_and_backend_before_effect"
+      ],
+      "source_sha256": "402b6dd726de4edbc5fd239cd023c5f60402c5c497855ebafded9f31bdbacb55"
+    },
+    {
+      "test": "tests/test_harness_tools.py::test_harness_open_rejects_per_call_profile_override",
+      "reason": "Both authenticated REST and MCP reject unknown kind, per-call provider/model/arguments/environment overrides, malformed environment and caller-selected attach/PID/backend against an actually approved current binding; no canonical operation or native launch is created.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_mcp_lifecycle.py::test_canonical_open_rejects_unapproved_kind_and_backend_before_effect"
+      ],
+      "source_sha256": "ed1fd760ce1303469922d88935eb736b7d24a2c280ea36e70071f9d00734b22e"
+    },
+    {
+      "test": "tests/test_harness_tools.py::test_harness_open_rejects_backend_field_unsupported_for_kind",
+      "reason": "Both authenticated REST and MCP reject unknown kind, per-call provider/model/arguments/environment overrides, malformed environment and caller-selected attach/PID/backend against an actually approved current binding; no canonical operation or native launch is created.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_mcp_lifecycle.py::test_canonical_open_rejects_unapproved_kind_and_backend_before_effect"
+      ],
+      "source_sha256": "1e56d7c706f3f49b97b07411dca5ecf348f1d69f240b36c93d054c0f2465fb78"
+    },
+    {
+      "test": "tests/test_harness_tools.py::test_harness_open_rejects_backend_for_claude_code_attach_substrate",
+      "reason": "Both authenticated REST and MCP reject unknown kind, per-call provider/model/arguments/environment overrides, malformed environment and caller-selected attach/PID/backend against an actually approved current binding; no canonical operation or native launch is created.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_mcp_lifecycle.py::test_canonical_open_rejects_unapproved_kind_and_backend_before_effect"
+      ],
+      "source_sha256": "9a5762c217f95f0a4248c67a39f8b59c7ffe87afac8f54cc095e6a6c69ecb108"
+    },
+    {
+      "test": "tests/test_harness_tools.py::test_harness_open_rejects_wrong_typed_backend_env",
+      "reason": "Both authenticated REST and MCP reject unknown kind, per-call provider/model/arguments/environment overrides, malformed environment and caller-selected attach/PID/backend against an actually approved current binding; no canonical operation or native launch is created.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_mcp_lifecycle.py::test_canonical_open_rejects_unapproved_kind_and_backend_before_effect"
+      ],
+      "source_sha256": "901d814c4db67f1fdbe28e29847aea8c6100b9c2377efb966eac1176d7f5f8ac"
+    },
+    {
+      "test": "tests/test_harness_routes.py::test_harness_open_rejects_unknown_kind",
+      "reason": "Current approved binding validation refuses each per-call override with REST/MCP parity before durable admission or native construction; it no longer resolves an unapproved caller-supplied legacy endpoint/profile.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_mcp_lifecycle.py::test_canonical_open_rejects_unapproved_kind_and_backend_before_effect"
+      ],
+      "source_sha256": "173a8087164e1b6bde937a4b3e1d023c24dd02823cec3745b91d6d7464649302"
+    },
+    {
+      "test": "tests/test_harness_routes.py::test_harness_open_per_call_backend_override_is_rejected",
+      "reason": "Current approved binding validation refuses each per-call override with REST/MCP parity before durable admission or native construction; it no longer resolves an unapproved caller-supplied legacy endpoint/profile.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_mcp_lifecycle.py::test_canonical_open_rejects_unapproved_kind_and_backend_before_effect"
+      ],
+      "source_sha256": "de98a519104d7871410c5af4bea0ec933aa4b5bb837e4ababb85606b23d31133"
+    },
+    {
+      "test": "tests/test_harness_routes.py::test_harness_open_rejects_backend_field_unsupported_for_kind_over_rest",
+      "reason": "Current approved binding validation refuses each per-call override with REST/MCP parity before durable admission or native construction; it no longer resolves an unapproved caller-supplied legacy endpoint/profile.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_mcp_lifecycle.py::test_canonical_open_rejects_unapproved_kind_and_backend_before_effect"
+      ],
+      "source_sha256": "fbdee0e1ee882cd4f37ad8355bd5dc69d42007317db5b85664dcc78904883279"
+    },
+    {
+      "test": "tests/test_harness_routes.py::test_harness_open_rejects_backend_for_claude_code_attach_substrate_over_rest",
+      "reason": "Current approved binding validation refuses each per-call override with REST/MCP parity before durable admission or native construction; it no longer resolves an unapproved caller-supplied legacy endpoint/profile.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_mcp_lifecycle.py::test_canonical_open_rejects_unapproved_kind_and_backend_before_effect"
+      ],
+      "source_sha256": "4c416e0b3aa60b6b1c996934c539fe2a6cd7b3cb6cc54239ecd880ec1e19eada"
+    },
+    {
+      "test": "tests/test_harness_tools.py::test_harness_event_list_replays_in_order_and_respects_after_sequence",
+      "reason": "Canonical committed Core events replay in order over REST/MCP with exact sequence pagination and remain readable after close; no legacy supervisor is consulted.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_event_views.py::test_mcp_rest_and_r4_event_replay_share_committed_history"
+      ],
+      "source_sha256": "587c9621e23dd1089ec61f27752433d252a2974badc4352a51664e8a7119fa24"
+    },
+    {
+      "test": "tests/test_runtime_outbox_backpressure.py::test_outbox_recipient_backlog_is_bounded_without_partial_message_commit",
+      "replacements": [
+        "tests/execution_r4/test_canonical_backlog.py::test_recipient_backlog_rolls_back_overflow_even_for_old_enqueue"
+      ],
+      "reason": "Current authenticated message/work admission uses canonical Core pending capacity atomically with logical delivery. Replacement exercises actual approved binding, item/byte refusal, rollback and competing writers; byte coverage lowers the aggregate budget while retaining the native per-message limit. Cancellation releases both capacities in the same transaction; logical-only recipients remain independent.",
+      "source_sha256": "100caba8cb550239829b350e7fcf5e8c15fd39175fcaac3ccac98e734fae0892"
+    },
+    {
+      "test": "tests/test_runtime_outbox_backpressure.py::test_outbox_byte_budget_rejects_before_any_canonical_commit",
+      "replacements": [
+        "tests/execution_r4/test_canonical_backlog.py::test_byte_budget_refuses_without_partial_logical_delivery"
+      ],
+      "reason": "Current authenticated message/work admission uses canonical Core pending capacity atomically with logical delivery. Replacement exercises actual approved binding, item/byte refusal, rollback and competing writers; byte coverage lowers the aggregate budget while retaining the native per-message limit. Cancellation releases both capacities in the same transaction; logical-only recipients remain independent.",
+      "source_sha256": "5fb6f59394320d93c8ac653800661df256c770e7ef3c597c6630bfcfaee96198"
+    },
+    {
+      "test": "tests/test_runtime_outbox_backpressure.py::test_full_transport_backlog_rolls_back_managed_claim_and_grant",
+      "replacements": [
+        "tests/execution_r4/test_canonical_backlog.py::test_full_backlog_rolls_back_managed_claim_and_grant"
+      ],
+      "reason": "Current authenticated message/work admission uses canonical Core pending capacity atomically with logical delivery. Replacement exercises actual approved binding, item/byte refusal, rollback and competing writers; byte coverage lowers the aggregate budget while retaining the native per-message limit. Cancellation releases both capacities in the same transaction; logical-only recipients remain independent.",
+      "source_sha256": "cabe392686b04a3932cc3adad0581473e463bc917ef823f7ffb53c8a3d37c941"
+    },
+    {
+      "test": "tests/test_runtime_outbox_backpressure.py::test_concurrent_admission_reserves_only_the_last_available_slot",
+      "replacements": [
+        "tests/execution_r4/test_canonical_backlog.py::test_concurrent_messages_compete_for_one_remaining_slot"
+      ],
+      "reason": "Current authenticated message/work admission uses canonical Core pending capacity atomically with logical delivery. Replacement exercises actual approved binding, item/byte refusal, rollback and competing writers; byte coverage lowers the aggregate budget while retaining the native per-message limit. Cancellation releases both capacities in the same transaction; logical-only recipients remain independent.",
+      "source_sha256": "3ffb219b825e5fbb3624cada82d9af5053313f4e8608bc3bb3ebec8152cd980d"
+    },
+    {
+      "test": "tests/test_runtime_outbox_backpressure.py::test_unconfirmed_attempt_keeps_capacity_reserved",
+      "replacements": [
+        "tests/execution_r4/test_canonical_backlog.py::test_native_acceptance_releases_only_pending_capacity",
+        "tests/execution_r4/test_dispatch_capacity.py::test_uncertain_send_keeps_exact_capacity_until_reconciled"
+      ],
+      "reason": "Legacy write-only acknowledgement is replaced by correlated Core native acceptance. Accepted work frees pending capacity without completing its turn; uncertain canonical sends retain exact reserved item/byte capacity until durable reconciliation, covered separately.",
+      "source_sha256": "8d3d00392f8d5b04b563635b3d6282bb7d505fe3bf2b682419e931335c9facad"
+    },
+    {
+      "test": "tests/test_runtime_capacity_writer_fence.py::test_store_capacity_fences_the_legacy_enqueue_of_a_compatible_writer",
+      "replacements": [
+        "tests/execution_r4/test_canonical_backlog.py::test_recipient_backlog_rolls_back_overflow_even_for_old_enqueue"
+      ],
+      "reason": "The original legacy_enqueue helper is retained and injected unchanged against a full canonical backlog. The store trigger rejects that old SQL writer and the complete message transaction rolls back; no native send occurs.",
+      "source_sha256": "1f1cd1664b529c5f55ef22032a998d0255c9f6f5c80b25a09218654a37f1cb94"
+    },
+    {
+      "test": "tests/test_runtime_writer_contract.py::test_compatible_writer_still_enqueues_the_canonical_delivery",
+      "replacements": [
+        "tests/execution_r4/test_canonical_writer_admission.py::test_independent_writer_cannot_invent_live_inventory"
+      ],
+      "reason": "Direct independent database composition cannot prove live executor inventory in R4. An actual isolated Python writer is refused atomically with inventory_not_fresh, while the owning authenticated HTTP composition admits the same logical delivery and launches exactly once. Retained writer-version fences remain tested unchanged.",
+      "source_sha256": "e0a4828e97a5ae854d751c7ce52846c9c4737b2510bc8d4b31b44b2d553d15c3"
     }
   ]
 }

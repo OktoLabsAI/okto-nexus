@@ -71,7 +71,9 @@ def test_old_runtime_writer_cannot_ignore_connection_policy(runtime):
     import sqlite3
 
     deps, client, _, _, operator, _ = runtime
-    issue(client, operator)
+    # Preserve the historical policy record without minting a retired key.
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("INSERT INTO agent_connection_methods(agent_id,method,enabled) VALUES('worker','pi',0)")
     connection = deps.connection_factory.get_connection()
     try:
         # Removing a function registers a NULL stub on CPython; use a raw
@@ -80,6 +82,7 @@ def test_old_runtime_writer_cannot_ignore_connection_policy(runtime):
         connection = sqlite3.connect(str(deps.config.db_path))
         connection.create_function('nexus_runtime_writer_v1', 0, lambda: 1)
         connection.create_function('nexus_runtime_admission_on', 0, lambda: 1)
+        connection.create_function('nexus_agent_execution_policy_v1', 0, lambda: 1)
         with pytest.raises(sqlite3.IntegrityError, match='runtime_writer_incompatible'):
             connection.execute("INSERT INTO runtime_open_requests(request_id,actor_agent_id,idempotency_key,request_hash,status,created_at) VALUES('legacy-open','worker','legacy','hash','RESERVED','2026-01-01')")
     finally:

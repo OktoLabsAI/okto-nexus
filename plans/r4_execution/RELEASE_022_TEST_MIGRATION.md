@@ -281,3 +281,18 @@ asserts that emitted output belongs to the managed operation being tested.
 The more recent Linux 3.11 diagnostic at 929bb87 (run 37632532345) still reports
 3376 passed, 407 failed and 108 skipped. It predates the latest local fixes and
 is not current-head acceptance; the complete release gate remains open.
+
+The pending-capacity/MCP/writer follow-up passed 44 installed-wheel cases with
+unchanged inputs (build/release-capacity-mcp-installed). A regression exposed
+that pending cancellation released the logical inbox while retaining canonical
+admission capacity until the next dispatch scan. Cancellation now resolves only
+proved unsent mapped operations in the same transaction as the audit and inbox
+release, without inventing an executor receipt. In-flight cancellation remains
+refused. Coverage includes competing admissions, legacy SQL writer fences,
+byte capacity, managed-claim rollback, REST/MCP lifecycle and recovery.
+
+CI now runs four exhaustive file partitions for each OS/Python combination.
+Partition checks prove every test file occurs exactly once; no test selection,
+skip or xfail removes failures. Feature branches use the PR campaign instead of
+also starting an identical push campaign. This addresses Windows job timeouts;
+it does not make the outstanding full regression gate pass.

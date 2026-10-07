@@ -19,6 +19,28 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def partition_tests(paths, count, *, root=ROOT):
+    """Disjoint, exhaustive file partitions; every parameterization stays intact."""
+    if count < 1:
+        raise ValueError('Shard count must be positive')
+    files = set()
+    for name in paths:
+        path = root / name
+        if path.is_file():
+            files.add(path)
+        elif path.is_dir():
+            files.update(p for p in path.rglob('*.py')
+                         if p.name.startswith('test_') or p.name.endswith('_test.py'))
+        else:
+            raise ValueError(f'Test path does not exist: {name}')
+    partitions, weights = [[] for _ in range(count)], [0] * count
+    for path in sorted(files, key=lambda p: (-p.stat().st_size, p.as_posix())):
+        index = min(range(count), key=lambda i: (weights[i], i))
+        partitions[index].append(path.relative_to(root).as_posix())
+        weights[index] += path.stat().st_size
+    return [sorted(part) for part in partitions]
+
+
 def input_hashes():
     paths = [ROOT / name for name in ('pyproject.toml', 'uv.lock', 'README.md', 'vendor/ci/manifest.json',
         'tools/ci_installed.py', 'tools/build_validation_artifacts.py', '.github/workflows/ci.yml')]
@@ -50,10 +72,14 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('action', choices=('install', 'smoke', 'test'))
     parser.add_argument('--tests', nargs='+', default=['tests'])
+    parser.add_argument('--shard-count', type=int, default=1)
+    parser.add_argument('--shard-index', type=int, default=0)
     parser.add_argument('--wheel', type=Path, help='Existing built wheel; defaults to the single dist wheel')
     parser.add_argument('--output', type=Path, default=ROOT / 'build/ci',
                         help='Directory for this campaign reports')
     args = parser.parse_args()
+    if args.shard_count < 1 or not 0 <= args.shard_index < args.shard_count:
+        parser.error('Shard index must be in [0, shard-count)')
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=True)
     wheels = dependency_wheels()
@@ -139,8 +165,14 @@ pathlib.Path(REPORT).write_text(json.dumps(results, indent=2) + "\\n", encoding=
         subprocess.run([sys.executable, '-I', '-c', probe], cwd=temp, check=True)
         if args.action == 'test':
             before = input_hashes()
+            partitions = partition_tests(args.tests, args.shard_count) if args.shard_count > 1 else [args.tests]
+            selected = partitions[args.shard_index]
+            if not selected:
+                parser.error('The selected shard is empty')
             campaign = dict(started_at=datetime.now(timezone.utc).isoformat(),
-                            tests=args.tests, input_hashes=before, status='RUNNING')
+                            tests=selected, requested_tests=args.tests,
+                            shard_index=args.shard_index, partitions=partitions,
+                            input_hashes=before, status='RUNNING')
             campaign_path = output / 'campaign.json'
             campaign_path.write_text(json.dumps(campaign, indent=2) + '\n', encoding='utf-8')
             config = Path(temp) / 'pytest.ini'
@@ -152,7 +184,7 @@ pathlib.Path(REPORT).write_text(json.dumps(results, indent=2) + "\\n", encoding=
                               + 'markers=\n' + ''.join('    ' + marker + '\n' for marker in markers), encoding='utf-8')
             command = [sys.executable, '-I', '-m', 'pytest', '-c', str(config),
                        '--rootdir=' + str(ROOT), '--confcutdir=' + str(ROOT / 'tests'),
-                       *[str(ROOT / p) for p in args.tests], '-q', '--tb=short',
+                       *[str(ROOT / p) for p in selected], '-q', '--tb=short',
                        '--junitxml=' + str(output / 'tests.xml')]
             result = subprocess.run(command, cwd=temp)
             after = input_hashes()

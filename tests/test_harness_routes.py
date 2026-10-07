@@ -67,15 +67,6 @@ def test_harness_kinds_lists_catalog_for_authorized_operator(harness_env):
 # --------------------------------------------------------------------------- #
 
 
-def test_harness_open_rejects_unknown_kind(harness_env):
-    _deps, client, root, _connectors, _op = harness_env
-    r = client.post(
-        "/api/v1/harness/sessions",
-        json={"agent_id": "worker", "kind": "not-a-kind", "project_root": root},
-    )
-    assert r.status_code == 404, r.text
-    assert r.json()["error"]["code"] == "NOT_FOUND"
-    assert "endpoint" in r.json()["error"]["message"]
 
 
 def test_harness_open_claude_code_attach_respects_explicit_disable(harness_env):
@@ -106,56 +97,10 @@ def test_harness_open_default_profile_is_isolated_and_visible_in_response(harnes
     assert backend_info == {"profile_id": "profile-pi", "inherit_ambient": False, "revision": 1}
 
 
-def test_harness_open_per_call_backend_override_is_rejected(harness_env):
-    """Backend changes require an approved profile, even for the operator."""
-    _deps, client, root, connectors, _op = harness_env
-    backend = {"provider": "zai", "model": "glm-5.3"}
-    r = client.post(
-        "/api/v1/harness/sessions",
-        json={
-            "agent_id": "worker",
-            "kind": "pi",
-            "project_root": root,
-            "backend": backend,
-        },
-    )
-    assert r.status_code == 422, r.text
-    assert r.json()["error"]["code"] == "VALIDATION_ERROR"
-    assert not connectors["pi"]
 
 
-def test_harness_open_rejects_backend_field_unsupported_for_kind_over_rest(harness_env):
-    _deps, client, root, connectors, _op = harness_env
-    r = client.post(
-        "/api/v1/harness/sessions",
-        json={
-            "agent_id": "worker",
-            "kind": "codex",
-            "project_root": root,
-            "backend": {"provider": "zai"},
-        },
-    )
-    assert r.status_code == 422, r.text
-    assert r.json()["error"]["code"] == "VALIDATION_ERROR"
-    assert connectors["codex"] == []
 
 
-def test_harness_open_rejects_backend_for_claude_code_attach_substrate_over_rest(harness_env):
-    _deps, client, root, connectors, _op = harness_env
-    r = client.post(
-        "/api/v1/harness/sessions",
-        json={
-            "agent_id": "worker",
-            "kind": "claude_code",
-            "project_root": root,
-            "substrate": "attach",
-            "target_pid": 4242,
-            "backend": {"env": {"X": "1"}},
-        },
-    )
-    assert r.status_code == 422, r.text
-    assert r.json()["error"]["code"] == "VALIDATION_ERROR"
-    assert connectors["claude_code"] == []
 
 
 def test_harness_open_as_non_operator_is_forbidden(harness_env):

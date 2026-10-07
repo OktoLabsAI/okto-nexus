@@ -106,7 +106,6 @@ def independent_writer_create(runtime, *, enabled):
 
 def test_feature_off_writer_cannot_commit_unreserved_delivery_to_active_store(runtime):
     deps, _, _, peers, _, _ = runtime
-    assert open_rest(runtime).status_code == 200
     response = independent_writer_create(runtime, enabled=False)
     assert not response["ok"], "Feature-OFF producer committed outside the active store's runtime admission"
     assert "runtime_writer_mode_mismatch" in json.dumps(response), response
@@ -121,7 +120,6 @@ def test_feature_off_writer_cannot_commit_unreserved_delivery_to_active_store(ru
 @pytest.mark.parametrize("runtime", ["stored_runtime"], indirect=True)
 def test_operator_disable_changes_writer_mode_atomically_and_retains_fences(runtime):
     deps, client, _, peers, operator, _ = runtime
-    assert open_rest(runtime).status_code == 200
     changed = client.patch("/api/v1/settings", headers={"x-api-key": operator},
         json={"feature_harness_integrations": False})
     assert changed.status_code == 200, changed.text
@@ -139,18 +137,6 @@ def test_operator_disable_changes_writer_mode_atomically_and_retains_fences(runt
     assert all(not peer.sent for peer in peers)
 
 
-def test_compatible_writer_still_enqueues_the_canonical_delivery(runtime):
-    from test_pr34_remediation import wait_sent
-    deps, _, _, peers, _, _ = runtime
-    assert open_rest(runtime).status_code == 200
-    response = independent_writer_create(runtime, enabled=True)
-    assert response["ok"], response
-    assert len(response["data"]["runtime_operations"]) == 1
-    wait_sent(peers)
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        row = uow.connection.execute("SELECT consumer_kind FROM message_deliveries").fetchone()
-        assert row["consumer_kind"] == "push"
-        assert uow.connection.execute("SELECT count(*) FROM delivery_outbox").fetchone()[0] == 1
 
 
 def test_writer_contract_diagnostics_are_operator_only(runtime):
