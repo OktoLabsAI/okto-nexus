@@ -173,3 +173,13 @@ The stream-recovery/correlation/audience/queue/reconciliation campaign passed al
 preserve message-event rollback, push/pull exclusivity, unverified internal
 senders, changed permissions, SQLite writer independence, cross-transport open
 replay/concurrency and real SQLite capacity refusal/recovery.
+
+The delivery-boundaries campaign passed nine installed cases with unchanged
+inputs. A three-agent Core competition passed private winner/loser assertions.
+Managed work tests now retain explicit completion after native output and lease
+expiry, strict REST/MCP credentials, and revoked/reworked late output. They
+exposed a compatibility inspection defect: canonical deliveries incorrectly
+reported no session, no native acceptance and no durable result. Inspection now
+uses the canonical session/acceptance and waits for materialized terminal output.
+Three lifecycle cases, the strict-before-registration case and eight scoped
+history/control/competition cases passed.

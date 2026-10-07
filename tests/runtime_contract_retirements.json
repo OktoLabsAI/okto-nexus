@@ -1347,6 +1347,38 @@
         "tests/execution_r4/test_canonical_delivery_regressions.py::test_sqlite_capacity_cannot_acknowledge_message_or_execution"
       ],
       "source_sha256": "716bdcc4bb5512d6319a768b417fdf335b89d6de8498d87d84726b8375aa68f4"
+    },
+    {
+      "test": "tests/test_runtime_work_acceptance.py::test_competitive_claim_losers_cannot_read_winning_payload_or_runtime",
+      "reason": "Three approved Core bindings compete through REST and MCP; one claim, one grant charge and one native execution, with private offer and winner history denied to the losing agents.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_competitive_work.py::test_competitive_claim_losers_cannot_read_winning_payload_or_runtime"
+      ],
+      "source_sha256": "aef73bb5b0dde41e5d92815bdbeced29168d0e84fc3ad5fcb0d39e146806132c"
+    },
+    {
+      "test": "tests/test_runtime_handoff_dispatch.py::test_claim_dispatch_result_and_explicit_completion_are_one_canonical_flow",
+      "reason": "Replaced removed Server native factories with approved Core execution while preserving governed claim, explicit completion, private durable output and current authorization assertions. Strict mode is configured before MCP tool registration.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_work_lifecycle.py::test_native_result_and_expired_lease_still_require_explicit_completion"
+      ],
+      "source_sha256": "276cce458552570b37a0bc5bfe6bd52f18d9f843235e50d445d135cc69f5db4a"
+    },
+    {
+      "test": "tests/test_runtime_handoff_dispatch.py::test_strict_claim_credentials_have_rest_mcp_parity",
+      "reason": "Replaced removed Server native factories with approved Core execution while preserving governed claim, explicit completion, private durable output and current authorization assertions. Strict mode is configured before MCP tool registration.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_work_lifecycle.py::test_strict_unmanaged_claim_is_denied_with_rest_mcp_parity"
+      ],
+      "source_sha256": "70dfa4e0856e2a197b52e6607b2a3d4cef315841c24fdeb96cc26cb15b049bd6"
+    },
+    {
+      "test": "tests/test_runtime_handoff_dispatch.py::test_late_managed_output_is_retained_without_unauthorized_publication",
+      "reason": "Replaced removed Server native factories with approved Core execution while preserving governed claim, explicit completion, private durable output and current authorization assertions. Strict mode is configured before MCP tool registration.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_work_lifecycle.py::test_changed_work_authority_retains_late_output_without_publication"
+      ],
+      "source_sha256": "499ec1d0edb7c2fd1f5520c3f518b9aa8399586fa567e9b15a279b618ea44b5f"
     }
   ]
 }

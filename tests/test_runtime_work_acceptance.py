@@ -16,68 +16,6 @@ from test_runtime_handoff_dispatch import claim, work
 runtime = runtime_fixture
 
 
-def test_competitive_claim_losers_cannot_read_winning_payload_or_runtime(runtime):
-    from okto_nexus.application.auth import AgentKeyAuthService
-    from test_pr34_remediation import wait_sent
-    deps, client, root, peers, operator, _ = runtime
-    payload = "private executable payload for the single winning claimant"
-    hid, _ = work(runtime, target={"strategy": "role", "role": "reviewer"}, payload=payload)
-    identities = []
-    for index, agent in enumerate(("worker", "reviewer-two", "reviewer-three")):
-        with deps.connection_factory.unit_of_work() as uow:
-            deps.repos.agents.upsert(uow, agent_id=agent, role="reviewer")
-            key = AgentKeyAuthService(deps.repos.agents, deps.clock).issue_key(uow, agent_id=agent)
-            ws = uow.connection.execute("SELECT workspace_id FROM handoffs WHERE handoff_id=?", (hid,)).fetchone()[0]
-        endpoint = "endpoint-codex" if index == 0 else agent
-        if index:
-            added = client.post("/api/v1/harness/endpoints", headers={"x-api-key": operator}, json={
-                "endpoint_id": endpoint, "agent_id": agent, "adapter_id": "codex", "profile_id": "profile-codex",
-                "project_root": root, "enabled": True, "response_policy": "conversation"})
-            assert added.status_code == 200, added.text
-        opened = client.post("/api/v1/harness/sessions", headers={"x-api-key": operator}, json={
-            "agent_id": agent, "kind": "codex", "endpoint_id": endpoint, "project_root": root})
-        assert opened.status_code == 200, opened.text
-        grant = issue(runtime, ["execute_work", "read"], actor_agent_id=agent, endpoint_id=endpoint)
-        offer = tool(client, key, "handoff_get", {"project_root": root, "handoff_id": hid, "agent_id": agent})
-        assert offer["ok"] and offer["data"]["status"] == "OPEN", offer
-        assert payload not in json.dumps(offer)
-        identities.append((agent, endpoint, key, grant["grant_id"]))
-    barrier = threading.Barrier(3)
-    def compete(index):
-        agent, endpoint, key, grant = identities[index]
-        args = {"agent_id": agent, "runtime_endpoint_id": endpoint, "execution_grant_id": grant,
-            "idempotency_key": f"private-pool-{index}"}
-        barrier.wait(timeout=5)
-        if index == 0:
-            reply = client.post(f"/api/v1/workspaces/{ws}/handoffs/{hid}/claim", headers={"x-api-key": key}, json=args)
-            return reply.json() | {"ok": reply.status_code == 200}
-        return tool(client, key, "handoff_claim", args | {"project_root": root, "handoff_id": hid})
-    with ThreadPoolExecutor(max_workers=3) as pool:
-        replies = list(pool.map(compete, range(3)))
-    winners = [i for i, reply in enumerate(replies) if reply["ok"]]
-    assert len(winners) == 1, replies
-    winner = winners[0]
-    op = replies[winner]["data"]["runtime_operation"]["operation_id"]
-    wait_sent(peers)
-    for index, (agent, _, key, _) in enumerate(identities):
-        handoff = tool(client, key, "handoff_get", {"project_root": root, "handoff_id": hid, "agent_id": agent})
-        observed = tool(client, key, "harness_get", {"operation_id": op})
-        rest = client.get(f"/api/v1/harness/operations/{op}", headers={"x-api-key": key})
-        if index == winner:
-            assert handoff["ok"] and handoff["data"]["payload"] == payload
-            assert observed["ok"] and rest.status_code == 200
-        else:
-            assert payload not in json.dumps(replies[index])
-            assert payload not in json.dumps(handoff)
-            assert "runtime_execution" not in handoff.get("data", {})
-            assert not observed["ok"] and observed["error"]["code"] == "PERMISSION_DENIED"
-            assert rest.status_code == 403
-            assert op not in json.dumps(handoff)
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute("SELECT count(*) FROM runtime_handoff_bindings WHERE handoff_id=?", (hid,)).fetchone()[0] == 1
-        assert uow.connection.execute("SELECT count(*) FROM delivery_outbox").fetchone()[0] == 1
-        assert uow.connection.execute("SELECT sum(used_executions) FROM runtime_execution_grants").fetchone()[0] == 1
-    assert sum(len(peer.sent) for peer in peers) == 1
 
 
 @pytest.mark.parametrize("surface", ["rest", "mcp"])

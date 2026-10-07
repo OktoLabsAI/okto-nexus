@@ -12,6 +12,17 @@ from test_agent_recovery_isolation import create_agent
 from test_canonical_result_publication import current_turn, workspace
 
 
+@pytest.fixture(autouse=True)
+def trust_mode_before_tool_registration(request, monkeypatch):
+    if getattr(request.node, "callspec", None) and request.node.callspec.params.get("strict"):
+        import test_embedded_inventory
+        original = test_embedded_inventory.build_app
+        def strict_app(deps):
+            deps.config.trust_mode = "strict"
+            return original(deps)
+        monkeypatch.setattr(test_embedded_inventory, "build_app", strict_app)
+
+
 @pytest.fixture
 def runtime(connected_local, monkeypatch):
     monkeypatch.syspath_prepend(str(Path(__file__).parents[1]))
