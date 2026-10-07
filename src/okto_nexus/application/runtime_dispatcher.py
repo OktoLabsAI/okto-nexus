@@ -256,6 +256,9 @@ class RuntimeDispatcher:
         with self.cf.unit_of_work() as uow:
             if not self.repo.owns(uow, owner_id=self.owner_id, epoch=self.epoch, now=now):
                 return
+            if self.admit_canonical:
+                from .execution_delivery_retry import prepare_retries
+                prepare_retries(uow, self, now)
             pending = self.repo.pending(uow, limit=capacity, blocked_agents=self.normal_inflight_agents(uow), now=now)
             accepted = []
             selected_endpoints = set()

@@ -255,11 +255,16 @@ class RuntimeDeliveryPlanner:
             {"endpoint_id": source["endpoint_id"], "revision": source["revision"], "selection_group": source["selection_group"],
              "profile_id": source["profile_id"], "profile_revision": source_profile["revision"] if source_profile else None})
         tried = self.outbox.attempted_endpoints(uow, operation_id=operation["operation_id"])
+        tried.add(operation['endpoint_id'])
+        tried.update(row[0] for row in uow.connection.execute(
+            'SELECT endpoint_id FROM execution_delivery_attempt_history WHERE domain_operation_id=?',
+            (operation['operation_id'],)))
         candidates = [candidate for candidate in self.candidates(uow,
             agent_id=operation["recipient_agent_id"], workspace_id=operation["workspace_id"],
             sender_agent_id=envelope["sender_agent_id"],
             source_session_key=for_message(uow.connection, operation['message_id']))
             if candidate[0]["selection_group"] == admission["selection_group"]
+            and (source['protocol'] != 'nxl-r4' or candidate[0]['protocol'] == 'nxl-r4')
             and (candidate[0]["protocol"] == "nxl-r4"
                  or self.registry.get(candidate[0]["adapter_id"]).input_schema.get("transport_binding_contract") == 1)
             and candidate[0]["endpoint_id"] not in tried]

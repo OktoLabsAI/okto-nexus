@@ -76,7 +76,15 @@ def admit_domain_delivery(uow, *, operation_id, access, fresh_publications, remo
     # artifacts are context, never execution/tool credentials.
     from .runtime_bootstrap import delivery_prompt
     text = delivery_prompt(json.loads(operation["envelope"]))
-    request = dict(client_intent_id="domain:" + operation_id,
+    if operation.get('admission_binding'):
+        endpoint = conn.execute('SELECT profile_id FROM agent_endpoints WHERE endpoint_id=?', (operation['endpoint_id'],)).fetchone()
+        current = dict(schema_version=1, operation_id=operation_id, endpoint_id=operation['endpoint_id'],
+            endpoint_revision=operation['endpoint_revision'], workspace_id=operation['workspace_id'],
+            canonical_envelope_hash=operation['request_hash'],
+            execution_profile=dict(profile_id=endpoint['profile_id'], revision=operation['profile_revision']))
+        text += '\nNEXUS TRANSPORT BINDING: current server-owned attempt; the delivery context is its admission snapshot.\n' + json.dumps(current, sort_keys=True)
+    attempt = max(1, operation['attempt_count'])
+    request = dict(client_intent_id="domain:" + operation_id + (f":attempt:{attempt}" if attempt > 1 else ''),
         intent="turn.submit" if session_id else "runtime.start", text=text,
         binding_id=binding["binding_id"], workspace_binding_id=binding["workspace_binding_id"])
     if session_id:
@@ -110,6 +118,7 @@ def admit_domain_delivery(uow, *, operation_id, access, fresh_publications, remo
     for row in rows:
         conn.execute("INSERT INTO execution_domain_deliveries VALUES (?,?,?,?)",
                      (binding["server_id"], binding["executor_id"], row[0], operation_id))
+    conn.execute('UPDATE delivery_outbox SET attempt_count=max(attempt_count,1) WHERE operation_id=?', (operation_id,))
     return [row[0] for row in rows]
 
 
@@ -159,6 +168,9 @@ def project_delivery_receipt(conn, *, server_id, executor_id, operation_id, acti
         "canonical_terminal_operation_id=CASE WHEN ? THEN ? ELSE canonical_terminal_operation_id END,"
         "updated_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') WHERE operation_id=?",
         (status, stage in {"SUBMITTED", "RUNNING", "SUCCEEDED"}, terminal, operation_id, row[0]))
+    if action == 'turn.submit' and stage == 'FAILED':
+        from .execution_delivery_retry import mark_retry_wait
+        mark_retry_wait(conn, row[0])
 
 
 def project_delivery_refusals(conn, *, server_id, executor_id):

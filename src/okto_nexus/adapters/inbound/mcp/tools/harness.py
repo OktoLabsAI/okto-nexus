@@ -479,7 +479,7 @@ def build_dispatcher(deps):
             messages._runtime_results.validate_relay(uow, operation["source_result_id"])
         if not managed(uow, operation):
             messages.revalidate_runtime_delivery(uow, operation)
-        if registry.get(endpoint["adapter_id"]).substrate == "attach":
+        if endpoint['protocol'] != 'nxl-r4' and registry.get(endpoint["adapter_id"]).substrate == "attach":
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Attach connections are no longer supported.", {})
 
     def validate_dispatch(uow, operation):

@@ -84,8 +84,17 @@ class RuntimeOperationMaintenanceService:
             no_write_proof = (table == "delivery_outbox" and row["reason"] == "native_write_not_started"
                 and row["ack_level"] == "NONE" and row["attempt_id"] is not None
                 and row["native_thread_id"] is None and row["native_turn_id"] is None)
+            if no_write_proof and (row['retry_basis'] == 'CORE_NO_EFFECT' or uow.connection.execute(
+                    'SELECT 1 FROM execution_delivery_attempt_history WHERE domain_operation_id=?', (operation_id,)).fetchone()):
+                # The display label cannot replace the correlated Core proof.
+                no_write_proof = uow.connection.execute(
+                    'SELECT 1 FROM execution_delivery_attempt_history h JOIN execution_receipts r '
+                    'ON r.server_id=h.server_id AND r.executor_id=h.executor_id '
+                    'AND r.operation_id=h.proof_operation_id AND r.receipt_revision=h.proof_receipt_revision '
+                    "WHERE h.domain_operation_id=? AND h.proof_operation_id=? AND r.stage='FAILED' "
+                    'AND r.possible_effect=0 AND r.retry_safe=1', (operation_id, row['attempt_id'])).fetchone() is not None
             not_sent = action == "release_to_inbox" and row["status"] == "REJECTED" and no_write_proof
-            safe_wait = row["status"] == "RETRY_WAIT" and no_write_proof and row["retry_basis"] in {"LANE_BUSY_BEFORE_WRITE", "APPROVED_ENDPOINT_BEFORE_WRITE"}
+            safe_wait = row["status"] == "RETRY_WAIT" and no_write_proof and row["retry_basis"] in {"LANE_BUSY_BEFORE_WRITE", "APPROVED_ENDPOINT_BEFORE_WRITE", "CORE_NO_EFFECT"}
             if pending:
                 if (row["status"] not in {"PENDING", "CLAIMED"} and not safe_wait) or acknowledge_duplicate_risk:
                     raise conflict("Cancellation requires an attempt before send-intent or a proven-safe retry wait.")
@@ -216,6 +225,10 @@ class RuntimeOperationMaintenanceService:
                                                  (row["operation_id"],)).fetchone()
                 item["handoff"] = dict(binding) if binding else None
                 if operation_id and row["source_kind"] == "delivery_outbox":
+                    item['canonical_attempt_history'] = [dict(r) for r in uow.connection.execute(
+                        'SELECT operation_id,server_id,executor_id,endpoint_id,attempt_number,'
+                        'proof_operation_id,proof_receipt_revision,archived_at FROM execution_delivery_attempt_history '
+                        'WHERE domain_operation_id=? ORDER BY attempt_number,operation_id LIMIT 6', (operation_id,))]
                     item['canonical_operations'] = [dict(r) for r in uow.connection.execute(
                         'SELECT p.server_id,p.executor_id,p.operation_id,p.session_id,p.action,x.dispatch_state,'
                         's.lifecycle_state,s.lease_state FROM execution_domain_deliveries m '
