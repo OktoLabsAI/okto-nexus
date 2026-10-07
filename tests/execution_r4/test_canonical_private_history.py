@@ -1,5 +1,6 @@
 """Foreign readers cannot enumerate captured canonical runtime evidence."""
 import json
+import time
 
 from test_harness_canonical import qualified_bridge
 from test_embedded_dispatch import local_setup, connected_local, qualified_contract, wait_receipt
@@ -22,10 +23,26 @@ def test_private_session_replay_results_and_listing_hide_foreign_evidence(connec
     operation = sent["data"]["operation_id"]
     wait_receipt(setup, sent["data"])
     emit(setup, native, dict(operation_id=operation), marker)
-    read = tool(client, subject_key, "harness_get", dict(operation_id=operation))
-    assert read["ok"] and marker in json.dumps(read), read
+    # Core terminal receipt and Server result projection are independent
+    # durable publications. Wait for the actual positive control before
+    # checking that foreign readers cannot see the nonempty evidence.
+    until = time.monotonic() + 10
+    while True:
+        read = tool(client, subject_key, "harness_get", dict(operation_id=operation))
+        assert read["ok"], read
+        if marker in json.dumps(read):
+            break
+        assert time.monotonic() < until, read
+        time.sleep(.02)
     replay = tool(client, subject_key, "harness_event_list", dict(session_id=sid))
     assert replay["ok"] and marker in json.dumps(replay), replay
+    body = dict(payload=dict(text=marker), idempotency_key="private-history")
+    owner_replay = invoke_command(setup, monkeypatch, "mcp", sid, body)
+    assert owner_replay["ok"] and owner_replay["data"]["operation_id"] == operation
+    foreign_replay = client.post(f"/api/v1/harness/sessions/{sid}/send", headers=foreign, json=body)
+    foreign_mcp = tool(client, foreign_key, "harness_send", dict(session_id=sid, **body))
+    assert foreign_replay.status_code == 403, foreign_replay.text
+    assert foreign_mcp["error"]["code"] == "PERMISSION_DENIED", foreign_mcp
     missing_stream = client.get(f"/api/v1/harness/sessions/{sid}/events", headers=headers["subject"],
         params=dict(stream_epoch="missing-stream"))
     assert missing_stream.status_code == 404, missing_stream.text

@@ -812,6 +812,216 @@
         "tests/execution_r4/test_server_shutdown.py::test_shutdown_contains_native_open_finishing_after_deadline"
       ],
       "source_sha256": "c7e3df57467e60881c7b4dc6e7c5497d0bc7da67b03a2ecd35d041b90576d481"
+    },
+    {
+      "test": "tests/test_runtime_monitor_authorization.py::test_valid_ept_can_monitor_but_cannot_reach_runtime_rest_or_mcp",
+      "reason": "The positive poll-token monitor and REST/MCP denial matrix now run against a live canonical Core session, preserving zero extra operations and native effects.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_monitor_authorization.py::test_monitor_credentials_cannot_open_read_or_control_runtime"
+      ],
+      "source_sha256": "3605c79ec88cd3a820c7f8366d1f0c48c0ff8c04b153e5d83ec00a4550fb75b6"
+    },
+    {
+      "test": "tests/test_runtime_monitor_authorization.py::test_anonymous_http_cannot_open_or_control_existing_runtime",
+      "reason": "Anonymous requests now exercise actual network-peer middleware on canonical Core sessions for both REST and MCP; the separate local-loopback dashboard trust contract is unchanged.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_monitor_authorization.py::test_monitor_credentials_cannot_open_read_or_control_runtime"
+      ],
+      "source_sha256": "158ca8fe12d1e2c67c0fca4cf8e7af611e53934777fce9f109ddb8356e5c099d"
+    },
+    {
+      "test": "tests/test_runtime_monitor_authorization.py::test_read_only_runtime_grant_has_identical_control_denials_and_audit",
+      "reason": "The read-only grant scenario now uses the subject-scoped R4 identity and asserts positive reads, identical missing/existing command denials, retained denial audit, and no new native effect.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_monitor_authorization.py::test_read_only_grant_never_grants_control_on_rest_or_mcp"
+      ],
+      "source_sha256": "2a977bd2f2bfc03db49ae38688485d46ab42db3e9547d9b17f82fd05d7fae17f"
+    },
+    {
+      "test": "tests/test_runtime_payload_boundaries.py::test_unapproved_launch_options_are_rejected_before_spawn_on_both_surfaces",
+      "reason": "The complete launch override matrix now targets approved R4 realizations on REST and MCP, asserting no Core opens or admitted operations.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_command_payload.py::test_launch_overrides_cannot_replace_approved_realization_on_either_surface"
+      ],
+      "source_sha256": "709cf2f27d1a50daf7613a4913e3998158021674aeeee49b83ae13abaf76ce75"
+    },
+    {
+      "test": "tests/test_runtime_payload_boundaries.py::test_control_payload_cannot_replace_identity_correlation_or_native_profile",
+      "reason": "The original identity/correlation/native configuration matrix now covers canonical send, steer and interrupt through REST and MCP, retaining zero native effects.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_command_payload.py::test_control_payload_cannot_replace_identity_or_native_configuration"
+      ],
+      "source_sha256": "d4b45db8a1b062a92e0a3b925f991d95b797709b57132177e1a2cfb2efbaea01"
+    },
+    {
+      "test": "tests/test_runtime_operation_authorization.py::test_foreign_actor_cannot_reuse_command_key_or_inspect_persisted_result",
+      "reason": "Canonical positive result capture and owner replay now precede foreign command-key replay and identical missing/existing operation denials on REST and MCP.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_private_history.py::test_private_session_replay_results_and_listing_hide_foreign_evidence"
+      ],
+      "source_sha256": "2061f8302e50a120af17d160e4f7cbff358b00329690860cb7dbe40418039560"
+    },
+    {
+      "test": "tests/test_runtime_operation_authorization.py::test_revoked_actor_cannot_recover_cached_control_reply",
+      "reason": "All four canonical command verbs now require current execution consent before cached replies and retain one native effect. R4 intentionally retains historical receipts for the authenticated subject after consent revocation, rather than reusing legacy grant-gated command history.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_control_authorization.py::test_revocation_denies_cached_control_without_repeating_native_effect"
+      ],
+      "source_sha256": "eb2af5eb6ffc32c927d415b76a792965600c6ce368ae51e03b0e0dcb469cf013"
+    },
+    {
+      "test": "tests/test_runtime_operation_authorization.py::test_shutdown_fence_rejects_turns_but_allows_authorized_close",
+      "reason": "The REST/MCP compatibility fence matrix now opens through Core and verifies denied new turns, unchanged canonical operation count, and successful authorized durable close.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_control_authorization.py::test_shutdown_fence_refuses_new_compatibility_turn_but_allows_close"
+      ],
+      "source_sha256": "673eb47fca2a9f256f0a78d5be961a10ec6f757df5131a69c945a21f7499e1d1"
+    },
+    {
+      "test": "tests/test_runtime_discovery.py::test_discovery_groups_authorized_endpoints_under_one_agent_and_redacts_config",
+      "reason": "The retained binding discovery projection now uses canonical Core endpoints and current authenticated grants, with positive REST/MCP parity, no native side effect from reads, and truthful durable lifecycle rather than legacy owner readiness.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_discovery_authorization.py::test_discovery_groups_authorized_history_without_private_configuration"
+      ],
+      "source_sha256": "a08142efb4f0613dbaabb8ec461a1af930b753c6d84f1c347f2286d2dc1e05ef"
+    },
+    {
+      "test": "tests/test_runtime_discovery.py::test_discovery_grant_never_grants_control_and_revocation_removes_projection",
+      "reason": "The retained binding discovery projection now uses canonical Core endpoints and current authenticated grants, with positive REST/MCP parity, no native side effect from reads, and truthful durable lifecycle rather than legacy owner readiness.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_discovery_authorization.py::test_discovery_grant_does_not_authorize_execution_and_closed_history_stays_truthful",
+        "tests/execution_r4/test_canonical_discovery_authorization.py::test_discovery_rechecks_current_authority"
+      ],
+      "source_sha256": "4f616d615d1708bd081d8be1af369f0bc46d4e72c9648b1ce0d6d88cd6b82d5a"
+    },
+    {
+      "test": "tests/test_runtime_discovery.py::test_discovery_rechecks_policy_and_cached_flag_and_marks_closed_session",
+      "reason": "The retained binding discovery projection now uses canonical Core endpoints and current authenticated grants, with positive REST/MCP parity, no native side effect from reads, and truthful durable lifecycle rather than legacy owner readiness.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_discovery_authorization.py::test_discovery_grant_does_not_authorize_execution_and_closed_history_stays_truthful",
+        "tests/execution_r4/test_canonical_discovery_authorization.py::test_discovery_rechecks_current_authority"
+      ],
+      "source_sha256": "eff15619c3c0cd7229f50e228935dcd597d909508b7e3709bbd3789346ef2e94"
+    },
+    {
+      "test": "tests/test_runtime_discovery.py::test_discovery_paginates_visible_endpoints_without_private_cursor",
+      "reason": "The retained binding discovery projection now uses canonical Core endpoints and current authenticated grants, with positive REST/MCP parity, no native side effect from reads, and truthful durable lifecycle rather than legacy owner readiness.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_discovery_authorization.py::test_discovery_pages_only_visible_endpoint_ids"
+      ],
+      "source_sha256": "0a0b964ea617f2eba53b688a030ff024dc3b29e33b220721d9e4d28d0e053a8b"
+    },
+    {
+      "test": "tests/test_runtime_discovery.py::test_discovery_revalidates_current_authority",
+      "reason": "The retained binding discovery projection now uses canonical Core endpoints and current authenticated grants, with positive REST/MCP parity, no native side effect from reads, and truthful durable lifecycle rather than legacy owner readiness.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_discovery_authorization.py::test_discovery_rechecks_current_authority"
+      ],
+      "source_sha256": "5e6b032f35d59f43717468c48fb8923a08e2a6570616f31ac9263837ed425746"
+    },
+    {
+      "test": "tests/test_runtime_discovery.py::test_discovery_authenticated_mcp_http_shares_persisted_rest_projection",
+      "reason": "A real Uvicorn socket and MCP ClientSession now compare REST/MCP discovery of nonempty canonical session history using a discover-only credential.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_discovery_authorization.py::test_actual_tcp_mcp_discovery_and_copied_connect_share_the_existing_owner"
+      ],
+      "source_sha256": "b24745f128e5d8651e47e26ac1d3d5db82f623299c3e81e9a6d33cce0f46bb32"
+    },
+    {
+      "test": "tests/test_agent_self_connections.py::test_actual_http_mcp_self_discovery_and_connect_use_existing_serve_owner",
+      "reason": "The actual TCP/MCP handshake now copies the authorized canonical connect call, repeats its key, and proves one Core open and no legacy session or second owner.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_discovery_authorization.py::test_actual_tcp_mcp_discovery_and_copied_connect_share_the_existing_owner"
+      ],
+      "source_sha256": "1f2c60e8b17763716b36b901dd4aee4b86979d6cd99adc15a7609c6138aa9341"
+    },
+    {
+      "test": "tests/test_runtime_notify_targets.py::test_explicit_broadcast_delivers_only_to_present_audience_and_removal_restores_private_reply",
+      "reason": "Result audience and child admission now run through three canonical Core bindings with authenticated original actor, positive output, per-child durable budgets and real result publication. Notification removal takes effect on a newly prepared session after the old configuration is closed; no legacy native owner is restored.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_notify_targets.py::test_result_audience_uses_canonical_routing_without_executing_observers"
+      ],
+      "source_sha256": "15bf0a43cb41f62174f54f7a689ad1ae451798c4f92274663788d29f1f247875"
+    },
+    {
+      "test": "tests/test_runtime_notify_targets.py::test_explicit_target_reuses_canonical_direct_and_role_routing",
+      "reason": "Result audience and child admission now run through three canonical Core bindings with authenticated original actor, positive output, per-child durable budgets and real result publication. Notification removal takes effect on a newly prepared session after the old configuration is closed; no legacy native owner is restored.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_notify_targets.py::test_result_audience_uses_canonical_routing_without_executing_observers"
+      ],
+      "source_sha256": "9fb7b1408f5d1af4fd8fcbd1ba1860899baa3caa1f986754fd02a35905407b3e"
+    },
+    {
+      "test": "tests/test_runtime_notify_targets.py::test_broadcast_does_not_override_sender_permission",
+      "reason": "Result audience and child admission now run through three canonical Core bindings with authenticated original actor, positive output, per-child durable budgets and real result publication. Notification removal takes effect on a newly prepared session after the old configuration is closed; no legacy native owner is restored.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_notify_targets.py::test_broadcast_cannot_borrow_sender_or_origin_permissions"
+      ],
+      "source_sha256": "3e7ca8891ce1ffda368165544325064a93e9096f81b4deac20f0e667ffbcf0b6"
+    },
+    {
+      "test": "tests/test_runtime_notify_targets.py::test_result_artifact_readers_match_explicit_audience",
+      "reason": "Result audience and child admission now run through three canonical Core bindings with authenticated original actor, positive output, per-child durable budgets and real result publication. Notification removal takes effect on a newly prepared session after the old configuration is closed; no legacy native owner is restored.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_notify_targets.py::test_large_result_artifact_readers_match_explicit_audience"
+      ],
+      "source_sha256": "7693a7b8aee433fb3484c2dfa46b267d425f327206f7a24e31ead8d0390a35c5"
+    },
+    {
+      "test": "tests/test_runtime_notify_targets.py::test_explicit_broadcast_relay_charges_one_message_and_bounded_executions",
+      "reason": "Result audience and child admission now run through three canonical Core bindings with authenticated original actor, positive output, per-child durable budgets and real result publication. Notification removal takes effect on a newly prepared session after the old configuration is closed; no legacy native owner is restored.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_notify_targets.py::test_broadcast_charges_one_message_and_bounds_each_child"
+      ],
+      "source_sha256": "3217a9f5c9477242dbb9b38fa3d58373b63d0e178cf47236189965869934d4b1"
+    },
+    {
+      "test": "tests/test_runtime_notify_targets.py::test_relay_decision_retention_does_not_delete_fences_or_fail",
+      "reason": "Result audience and child admission now run through three canonical Core bindings with authenticated original actor, positive output, per-child durable budgets and real result publication. Notification removal takes effect on a newly prepared session after the old configuration is closed; no legacy native owner is restored.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_notify_targets.py::test_broadcast_charges_one_message_and_bounds_each_child"
+      ],
+      "source_sha256": "4a5c4556c5560bc9dba46f36b3c34ef39ea80eaad836fe51766fb509f3e0d483"
+    },
+    {
+      "test": "tests/test_runtime_notify_targets.py::test_fanout_publication_commit_cut_rolls_back_all_children_and_budgets",
+      "reason": "Result audience and child admission now run through three canonical Core bindings with authenticated original actor, positive output, per-child durable budgets and real result publication. Notification removal takes effect on a newly prepared session after the old configuration is closed; no legacy native owner is restored.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_notify_targets.py::test_fanout_publication_failure_rolls_back_children_and_recovers_automatically"
+      ],
+      "source_sha256": "08e6e622c64a8ee5c8cd5abee459cad4477d115c627c4d40565b1d7bb1713a7e"
+    },
+    {
+      "test": "tests/test_runtime_notify_targets.py::test_broadcast_cannot_borrow_represented_agent_privileges",
+      "reason": "Result audience and child admission now run through three canonical Core bindings with authenticated original actor, positive output, per-child durable budgets and real result publication. Notification removal takes effect on a newly prepared session after the old configuration is closed; no legacy native owner is restored.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_notify_targets.py::test_broadcast_cannot_borrow_sender_or_origin_permissions"
+      ],
+      "source_sha256": "eb588d20dc8bca87a340799e777a4ee18f831df309facaee2b2a15c1dae6b3f5"
+    },
+    {
+      "test": "tests/test_runtime_notify_targets.py::test_originating_actor_governance_applies_to_broader_notifications",
+      "reason": "Result audience and child admission now run through three canonical Core bindings with authenticated original actor, positive output, per-child durable budgets and real result publication. Notification removal takes effect on a newly prepared session after the old configuration is closed; no legacy native owner is restored.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_notify_targets.py::test_origin_governance_applies_to_broader_result_audience"
+      ],
+      "source_sha256": "62efac87994c69ba91170da0a00ee79796e890fd62f52657dc3e9828d54aa167"
+    },
+    {
+      "test": "tests/test_runtime_notify_targets.py::test_originating_actor_broadcast_approval_is_not_bypassed",
+      "reason": "Result audience and child admission now run through three canonical Core bindings with authenticated original actor, positive output, per-child durable budgets and real result publication. Notification removal takes effect on a newly prepared session after the old configuration is closed; no legacy native owner is restored.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_notify_targets.py::test_origin_broadcast_approval_is_not_bypassed"
+      ],
+      "source_sha256": "486421b754c1632ea9ba93f21a4562237ef0a698ff21b28dec74e7942c1b9688"
+    },
+    {
+      "test": "tests/test_runtime_notify_targets.py::test_origin_permission_revocation_after_publication_blocks_native_fanout",
+      "reason": "Result audience and child admission now run through three canonical Core bindings with authenticated original actor, positive output, per-child durable budgets and real result publication. Notification removal takes effect on a newly prepared session after the old configuration is closed; no legacy native owner is restored.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_notify_targets.py::test_origin_permission_revocation_after_publication_blocks_all_native_children"
+      ],
+      "source_sha256": "71deac79b2bb29e55ef2e228a7af7448e6c5650b59fe06dbd247a48583d2d404"
     }
   ]
 }

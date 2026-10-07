@@ -38,32 +38,6 @@ def available(runtime, key):
 
 
 
-def test_actual_http_mcp_self_discovery_and_connect_use_existing_serve_owner(runtime):
-    _, client, _, peers, _, _ = runtime
-    key = worker_key(runtime)
-    grant(runtime)
-
-    async def run():
-        from mcp import ClientSession
-        from mcp.client.streamable_http import streamable_http_client
-        async with httpx.AsyncClient(headers={"x-api-key": key}, trust_env=False) as http:
-            async with streamable_http_client(str(client.base_url).rstrip("/") + "/mcp",
-                                               http_client=http) as (reader, writer, _):
-                async with ClientSession(reader, writer) as session:
-                    await session.initialize()
-                    response = await session.call_tool("harness_list", {
-                        "view": "connections", "maintenance": {"action": "available"}})
-                    result = response.structuredContent or json.loads(response.content[0].text)
-                    assert result["ok"] and result["data"]["agent_id"] == "worker"
-                    for _ in range(2):
-                        response = await session.call_tool("harness_list", {"view": "connections",
-                            "maintenance": {"action": "connect", "endpoint_id": "endpoint-pi",
-                                            "idempotency_key": "http-self-fixture"}})
-                        result = response.structuredContent or json.loads(response.content[0].text)
-                        assert result["ok"], result
-                    assert result["data"]["reused"]
-    asyncio.run(asyncio.wait_for(run(), timeout=45))
-    assert len(peers) == 1 and peers[0].session.owning_agent_id == "worker"
 
 
 

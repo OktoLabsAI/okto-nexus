@@ -108,3 +108,16 @@ five private-history/event-view cases passed. Fifteen shutdown cases passed,
 including a Core native open that returns after the shutdown deadline and is
 contained before releasing ownership. These are incremental, overlapping checks;
 the complete installed matrix remains a required release gate.
+
+The installed handoff/shutdown campaign passed 68 cases and exposed one test
+ordering race: terminal receipt persistence can precede result projection. The
+private-history test now waits for its actual positive result via the public API.
+A follow-up installed campaign passed all four private-history/monitor cases
+with unchanged inputs. Additional source checks passed six payload-boundary
+cases, seven cached-control/private-history cases, ten binding discovery cases
+and the real TCP/MCP connection/history scenario. Fourteen fanout cases now use
+three approved Core bindings, including bounded children, retained decisions,
+transaction rollback with automatic recovery, origin governance and explicit
+artifact readers. Eight retained-factory refusal cases and two result-schema
+migration cases keep their original assertions using retained records instead
+of removed setup APIs. No full matrix success is claimed by these focused runs.

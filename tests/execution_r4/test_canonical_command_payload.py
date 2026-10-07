@@ -43,3 +43,45 @@ def test_direct_command_refuses_legacy_envelopes_and_payload_authority(connected
         assert "Authorized ordinary text" in row[2]
         assert uow.connection.execute("SELECT COUNT(*) FROM runtime_commands").fetchone()[0] == 0
     assert len(native.native.sent) == 1
+
+
+def test_launch_overrides_cannot_replace_approved_realization_on_either_surface(connected_local):
+    from test_pr34_remediation import tool
+    setup, binding, native = connected_local
+    deps, _, client, headers, *_, root = setup
+    client.headers["host"] = "127.0.0.1:8000"
+    key = headers["subject"]["Authorization"].removeprefix("Bearer ")
+    overrides = dict(cwd="unapproved", sandbox="danger-full-access", provider="unapproved",
+        env={"FIXTURE_ONLY": "unapproved"}, argv=["unapproved"])
+    for field, value in overrides.items():
+        args = dict(agent_id="subject", kind="codex", endpoint_id=binding["endpoint_id"],
+            project_root=str(root), idempotency_key="no-launch-override", backend={field: value})
+        mcp = tool(client, key, "harness_open", args)
+        rest = client.post("/api/v1/harness/sessions", headers=headers["subject"], json=args)
+        assert mcp["error"]["code"] == "VALIDATION_ERROR", mcp
+        assert rest.status_code == 422, rest.text
+    assert native.opens == 0
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations").fetchone()[0] == 0
+
+
+@pytest.mark.parametrize("verb", ["send", "steer", "interrupt"])
+def test_control_payload_cannot_replace_identity_or_native_configuration(connected_local, verb):
+    from test_pr34_remediation import tool
+    setup, _, native, _, sid = open_scoped(connected_local)
+    deps, _, client, headers, *_, root = setup
+    key = headers["subject"]["Authorization"].removeprefix("Bearer ")
+    fields = dict(actor_agent_id="operator", from_agent_id="operator", grant_id="forged",
+        root_operation_id="forged", cwd=str(root) + "-other", sandbox="danger-full-access",
+        provider="unapproved", env={"FIXTURE_ONLY": "unapproved"}, argv=["unapproved"])
+    for field, value in fields.items():
+        body = dict(idempotency_key="no-control-override", payload={"text": "must not execute", field: value})
+        if verb == "steer":
+            body["expected_turn_id"] = "turn-from-native"
+        mcp = tool(client, key, "harness_" + verb, dict(session_id=sid, **body))
+        rest = client.post(f"/api/v1/harness/sessions/{sid}/{verb}", headers=headers["subject"], json=body)
+        assert mcp["error"]["code"] == "VALIDATION_ERROR", (field, mcp)
+        assert rest.status_code == 422, (field, rest.text)
+    assert native.opens == 1 and not native.native.sent
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations").fetchone()[0] == 1
