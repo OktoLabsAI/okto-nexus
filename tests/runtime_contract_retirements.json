@@ -447,6 +447,182 @@
         "tests/execution_r4/test_canonical_connection_discovery.py::test_binding_discovery_reads_canonical_history_without_native_registry"
       ],
       "source_sha256": "6b1c477bd8f23ab2c69a53a52cafe0e3a30a30e5bf28b5ee75b187b124b97d39"
+    },
+    {
+      "test": "tests/test_runtime_result_maintenance.py::test_cleanup_is_idempotent_and_retry_uses_new_artifact_generation_without_native_replay",
+      "reason": "Migrated the same artifact maintenance assertions to an approved canonical local realization and Core receipts, retaining cleanup generations, lost-response reservations, quota authorization and abandoned staging coverage; each replacement also verifies one native effect.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_artifact_maintenance.py::test_cleanup_is_idempotent_and_retry_uses_new_artifact_generation_without_native_replay"
+      ],
+      "source_sha256": "9b9b7c07b2aa7b9c4db30215749f017f2c93cd915d952de4e963625158b282f8"
+    },
+    {
+      "test": "tests/test_runtime_result_maintenance.py::test_cleanup_lost_response_retains_reservation_until_same_key_reconciliation",
+      "reason": "Migrated the same artifact maintenance assertions to an approved canonical local realization and Core receipts, retaining cleanup generations, lost-response reservations, quota authorization and abandoned staging coverage; each replacement also verifies one native effect.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_artifact_maintenance.py::test_cleanup_lost_response_retains_reservation_until_same_key_reconciliation"
+      ],
+      "source_sha256": "ba0846813672036b77fa20e2dd48e8b4c2d55e051a800c5e3dfdff5408f7e73f"
+    },
+    {
+      "test": "tests/test_runtime_result_maintenance.py::test_quota_recovery_retries_publication_once_and_published_files_cannot_be_collected",
+      "reason": "Migrated the same artifact maintenance assertions to an approved canonical local realization and Core receipts, retaining cleanup generations, lost-response reservations, quota authorization and abandoned staging coverage; each replacement also verifies one native effect.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_artifact_maintenance.py::test_quota_recovery_retries_publication_once_and_published_files_cannot_be_collected"
+      ],
+      "source_sha256": "404ed09a1ad7827c6f10c1f0a798356dcfe2fe0bd3a436e7f838a6155756b2c1"
+    },
+    {
+      "test": "tests/test_runtime_result_maintenance.py::test_owner_recovery_removes_abandoned_staging_before_creating_result_artifact",
+      "reason": "Migrated the same artifact maintenance assertions to an approved canonical local realization and Core receipts, retaining cleanup generations, lost-response reservations, quota authorization and abandoned staging coverage; each replacement also verifies one native effect.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_artifact_maintenance.py::test_owner_recovery_removes_abandoned_staging_before_creating_result_artifact"
+      ],
+      "source_sha256": "a68f6e4fc6dffa9c285c68ded9e67dc78ff1f9de568a000622275adcad63d367"
+    },
+    {
+      "test": "tests/test_runtime_result_publication.py::test_result_publication_is_private_correlated_and_idempotent",
+      "reason": "Migrated publication source/audience binding, atomicity, current policy, approvals, guardrails and strict-mode authority assertions to canonical Core execution. Disabled publication preserves output while independent canonical consumption may record a processing receipt.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_publication_regressions.py::test_result_publication_is_private_correlated_and_idempotent"
+      ],
+      "source_sha256": "0c1cf5c265b7c016147c601c0dbc7d48eb9b32b2fe61efd469ec72ea111a4f62"
+    },
+    {
+      "test": "tests/test_runtime_result_publication.py::test_result_obeys_current_sender_permissions_without_erasing_output",
+      "reason": "Migrated publication source/audience binding, atomicity, current policy, approvals, guardrails and strict-mode authority assertions to canonical Core execution. Disabled publication preserves output while independent canonical consumption may record a processing receipt.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_publication_regressions.py::test_result_obeys_current_sender_permissions_without_erasing_output"
+      ],
+      "source_sha256": "e4c5df69bf9edfc19225fb0e89ad5058841cae51aef2f737833f871c082a950c"
+    },
+    {
+      "test": "tests/test_runtime_result_publication.py::test_publication_and_canonical_message_commit_together",
+      "reason": "Migrated publication source/audience binding, atomicity, current policy, approvals, guardrails and strict-mode authority assertions to canonical Core execution. Disabled publication preserves output while independent canonical consumption may record a processing receipt.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_publication_regressions.py::test_publication_and_canonical_message_commit_together"
+      ],
+      "source_sha256": "57e1f2ebbe3a83fe89c7d3e96b6440bc37579042ca2e28d0adc7f8988d9210eb"
+    },
+    {
+      "test": "tests/test_runtime_result_publication.py::test_publication_uses_canonical_approval_and_never_grants_itself_permission",
+      "reason": "Migrated publication source/audience binding, atomicity, current policy, approvals, guardrails and strict-mode authority assertions to canonical Core execution. Disabled publication preserves output while independent canonical consumption may record a processing receipt.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_publication_regressions.py::test_publication_uses_canonical_approval_and_never_grants_itself_permission"
+      ],
+      "source_sha256": "0f1f5b655314bdc0ac246b67dec9a45981dd4cf20fed133083ba86650a1c211d"
+    },
+    {
+      "test": "tests/test_runtime_result_publication.py::test_result_identity_and_audience_cannot_be_replaced",
+      "reason": "Migrated publication source/audience binding, atomicity, current policy, approvals, guardrails and strict-mode authority assertions to canonical Core execution. Disabled publication preserves output while independent canonical consumption may record a processing receipt.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_publication_regressions.py::test_result_identity_and_audience_cannot_be_replaced"
+      ],
+      "source_sha256": "89672fa3087898e6a2c56940ebb2226031df672b93a82b9c6e5d7cd23c8ae746"
+    },
+    {
+      "test": "tests/test_runtime_result_publication.py::test_guardrail_blocks_only_publication_and_retains_the_private_native_result",
+      "reason": "Migrated publication source/audience binding, atomicity, current policy, approvals, guardrails and strict-mode authority assertions to canonical Core execution. Disabled publication preserves output while independent canonical consumption may record a processing receipt.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_publication_regressions.py::test_guardrail_blocks_only_publication_and_retains_the_private_native_result"
+      ],
+      "source_sha256": "f75347cbf2f9573bd47a1b9ef72c70efbbca188c56a097402859c1f8c1f304be"
+    },
+    {
+      "test": "tests/test_runtime_result_publication.py::test_pending_publication_revalidates_endpoint_and_requires_actual_approval",
+      "reason": "Migrated publication source/audience binding, atomicity, current policy, approvals, guardrails and strict-mode authority assertions to canonical Core execution. Disabled publication preserves output while independent canonical consumption may record a processing receipt.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_publication_regressions.py::test_pending_publication_revalidates_endpoint_and_requires_actual_approval"
+      ],
+      "source_sha256": "45f94b416a22417a2c5f1752260b9aea5ac4e872d6bf9f178b35742c20c1f17e"
+    },
+    {
+      "test": "tests/test_runtime_result_publication.py::test_disabled_feature_preserves_pending_result_and_strict_mode_uses_captured_principal",
+      "reason": "Migrated publication source/audience binding, atomicity, current policy, approvals, guardrails and strict-mode authority assertions to canonical Core execution. Disabled publication preserves output while independent canonical consumption may record a processing receipt.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_publication_regressions.py::test_disabled_feature_preserves_pending_result_and_strict_mode_uses_captured_principal"
+      ],
+      "source_sha256": "39c1ce587479fa8fb53ce99b2827e851a1aab3ad22769d51f2a281fb282f3443"
+    },
+    {
+      "test": "tests/test_runtime_causality.py::test_retention_preserves_runtime_fences_and_prunes_unrelated_history",
+      "reason": "Migrated causal budgets, concurrent child admission, deadlines, root quotas, retained history and authenticated parent lineage to canonical execution. Child-admission assertions wait for the initial Core session readiness; opening/recovery arrivals use the separately tested pending inbox.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_causality_regressions.py::test_retention_preserves_runtime_fences_and_prunes_unrelated_history"
+      ],
+      "source_sha256": "f414f0db623af2b7e6c3e63307cd0bd34fb0307325c6e48a74394b4b9c02f9c0"
+    },
+    {
+      "test": "tests/test_runtime_causality.py::test_concurrent_children_cannot_exceed_snapshotted_budget",
+      "reason": "Migrated causal budgets, concurrent child admission, deadlines, root quotas, retained history and authenticated parent lineage to canonical execution. Child-admission assertions wait for the initial Core session readiness; opening/recovery arrivals use the separately tested pending inbox.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_causality_regressions.py::test_concurrent_children_cannot_exceed_snapshotted_budget"
+      ],
+      "source_sha256": "c6eb77299cc3f8ca56a55b9adc2b51858d09abc1c9eb141873693b36537f470e"
+    },
+    {
+      "test": "tests/test_runtime_causality.py::test_expired_root_rejects_continuation_but_allows_explicit_new_entry",
+      "reason": "Migrated causal budgets, concurrent child admission, deadlines, root quotas, retained history and authenticated parent lineage to canonical execution. Child-admission assertions wait for the initial Core session readiness; opening/recovery arrivals use the separately tested pending inbox.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_causality_regressions.py::test_expired_root_rejects_continuation_but_allows_explicit_new_entry"
+      ],
+      "source_sha256": "5f55ab5d8806de13eb00af2393231914cf9a6397fc1b78663b6fb10770636941"
+    },
+    {
+      "test": "tests/test_runtime_causality.py::test_late_result_preserves_lineage_without_admitting_execution",
+      "reason": "Migrated causal budgets, concurrent child admission, deadlines, root quotas, retained history and authenticated parent lineage to canonical execution. Child-admission assertions wait for the initial Core session readiness; opening/recovery arrivals use the separately tested pending inbox.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_causality_regressions.py::test_late_result_preserves_lineage_without_admitting_execution"
+      ],
+      "source_sha256": "ff1fe780e915762c9e4c6bf40d84dfca50dd3204079b6008e80bb721a78c6311"
+    },
+    {
+      "test": "tests/test_runtime_causality.py::test_new_root_quota_is_independent_of_endpoint_count",
+      "reason": "Migrated causal budgets, concurrent child admission, deadlines, root quotas, retained history and authenticated parent lineage to canonical execution. Child-admission assertions wait for the initial Core session readiness; opening/recovery arrivals use the separately tested pending inbox.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_causality_regressions.py::test_new_root_quota_is_independent_of_endpoint_count"
+      ],
+      "source_sha256": "442787ba53ebf6cbab56cadf2998c9a5d8ca0fa943013bf4af3120465484548d"
+    },
+    {
+      "test": "tests/test_runtime_causality.py::test_authenticated_reply_inherits_root_instead_of_starting_a_new_budget",
+      "reason": "Migrated causal budgets, concurrent child admission, deadlines, root quotas, retained history and authenticated parent lineage to canonical execution. Child-admission assertions wait for the initial Core session readiness; opening/recovery arrivals use the separately tested pending inbox.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_causality_regressions.py::test_authenticated_reply_inherits_root_instead_of_starting_a_new_budget"
+      ],
+      "source_sha256": "efcce46726c88cdd00b64fd2dc18cc54c1b24327e6f9d54f56a4e23c0975c7ca"
+    },
+    {
+      "test": "tests/test_runtime_backup_restore.py::test_combined_snapshot_restores_identity_history_journal_and_artifact_without_native_replay",
+      "reason": "Migrated combined snapshot assertions to actual canonical output and private artifacts alongside a retained legacy journal. The full app owner is shut down before backup; corruption, semantic references, watermarks, custom database and no-overwrite behavior remain exercised.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_backup_artifacts.py::test_combined_snapshot_restores_identity_history_journal_and_artifact_without_native_replay"
+      ],
+      "source_sha256": "b6c8f6cbd45bef9656746e82022ee78378e0cb963d1f4629366b9b47b8a146de"
+    },
+    {
+      "test": "tests/test_runtime_backup_restore.py::test_restore_refuses_incomplete_or_corrupted_combined_snapshot",
+      "reason": "Migrated combined snapshot assertions to actual canonical output and private artifacts alongside a retained legacy journal. The full app owner is shut down before backup; corruption, semantic references, watermarks, custom database and no-overwrite behavior remain exercised.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_backup_artifacts.py::test_restore_refuses_incomplete_or_corrupted_combined_snapshot"
+      ],
+      "source_sha256": "2e9734a941b2ebe4f12ec8af13fc29bdf2264a224646479408564e1c2b342a90"
+    },
+    {
+      "test": "tests/test_runtime_backup_restore.py::test_semantic_validation_checks_references_and_watermarks_even_with_matching_file_hashes",
+      "reason": "Migrated combined snapshot assertions to actual canonical output and private artifacts alongside a retained legacy journal. The full app owner is shut down before backup; corruption, semantic references, watermarks, custom database and no-overwrite behavior remain exercised.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_backup_artifacts.py::test_semantic_validation_checks_references_and_watermarks_even_with_matching_file_hashes"
+      ],
+      "source_sha256": "da5d493a5b1ffad604843cc8c51ca995df68819897ed13e3f31602506f6d058c"
+    },
+    {
+      "test": "tests/test_runtime_backup_restore.py::test_explicit_database_override_and_no_overwrite",
+      "reason": "Migrated combined snapshot assertions to actual canonical output and private artifacts alongside a retained legacy journal. The full app owner is shut down before backup; corruption, semantic references, watermarks, custom database and no-overwrite behavior remain exercised.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_backup_artifacts.py::test_explicit_database_override_and_no_overwrite"
+      ],
+      "source_sha256": "33664be288707cace4d2ac504b694f680ba7853483a7da31b662c89784eda285"
     }
   ]
 }

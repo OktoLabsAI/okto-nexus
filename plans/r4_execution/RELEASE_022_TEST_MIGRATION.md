@@ -86,3 +86,13 @@ inventory, realization and dispatch contract checks passed 69 cases. Historical
 journal tests now seed retained sessions directly, preserving their original
 filesystem, transaction, replay and authorization assertions without opening a
 removed native owner: journal 12 passed, public replay 6 passed, retention 7 passed.
+
+Canonical publication migration retains all nine governed-publication cases,
+including guardrails, approval rejection, source/audience tampering and strict
+mode. Four artifact-maintenance cases preserve generation-safe cleanup,
+lost-response reconciliation and quota recovery while asserting one native
+effect. Eight causal cases cover simultaneous children, immutable root limits,
+deadlines, retention and authenticated parent lineage. Eight snapshot cases
+combine canonical Core output/private artifacts with a retained legacy journal;
+corruption and semantic watermark checks remain. Each focused source campaign
+passed; these results still do not replace the complete installed release gate.
