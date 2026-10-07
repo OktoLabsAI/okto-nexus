@@ -368,8 +368,15 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                     def presence():
                         response = client.get('/api/v1/graph', headers=headers['operator'])
                         assert response.status_code == 200, response.text
-                        return next(n['presence'] for n in response.json()['data']['nodes'] if n['agent_id'] == 'subject')
-                    assert await asyncio.to_thread(presence) == 'present'
+                        current = next(n['presence'] for n in response.json()['data']['nodes'] if n['agent_id'] == 'subject')
+                        from test_pr34_remediation import tool
+                        client.headers['host'] = '127.0.0.1:8000'
+                        inspected = tool(client, headers['operator']['Authorization'].removeprefix('Bearer '),
+                                         'agent_get', {'agent_id': 'subject'})
+                        assert inspected['ok'], inspected
+                        assert inspected['data']['connection']['location'] == 'remote'
+                        return current, inspected['data']['presence']
+                    assert await asyncio.to_thread(presence) == ('present', 'present')
                     await admit('runtime.close', session_id=session_id)
                     async with asyncio.timeout(5):
                         while execution.pending_count:
@@ -378,7 +385,7 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                     assert completed_shutdown == 0
                     await owner.close()
                     async with asyncio.timeout(5):
-                        while await asyncio.to_thread(presence) != 'offline':
+                        while await asyncio.to_thread(presence) != ('offline', 'offline'):
                             await asyncio.sleep(.05)
                     return
                 if reset_active:

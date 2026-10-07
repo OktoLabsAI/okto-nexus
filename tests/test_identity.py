@@ -647,6 +647,17 @@ def test_agent_list(migrated_factory, tmp_config):
     assert by_id["b"]["last_seen_at"] == "2026-06-07T00:05:00Z"
 
 
+def test_discovery_presence_falls_back_to_activity_without_runtime(migrated_factory, tmp_config):
+    clock = StubClock()
+    svc = make_service(migrated_factory, tmp_config, clock)
+    svc.agent_register(agent_id='a')
+    assert svc.agent_get(agent_id='a')['presence'] == 'present'
+    clock.advance_seconds(tmp_config.session_stale_ttl_seconds + 1)
+    assert svc.agent_list()[0]['presence'] == 'stale'
+    clock.advance_seconds(tmp_config.presence_ttl_seconds)
+    assert svc.agent_get(agent_id='a')['presence'] == 'offline'
+
+
 def test_capability_list(migrated_factory, tmp_config):
     svc = make_service(migrated_factory, tmp_config, StubClock())
     # mapping flags (js falsey -> not possessed), list, single string, none

@@ -6,7 +6,7 @@ from test_canonical_delivery import connected_local
 
 
 @pytest.mark.parametrize('state,presence', [('CONTROL_READY','present'), ('RECOVERING','stale'), ('DISCONNECTED','offline')])
-def test_graph_and_agent_presence_follow_local_connection(connected_local, state, presence):
+def test_graph_and_agent_presence_follow_local_connection(connected_local, state, presence, monkeypatch):
     setup, binding, _ = connected_local
     deps, app, client, headers, *_ = setup
     with deps.connection_factory.unit_of_work() as uow:
@@ -19,6 +19,20 @@ def test_graph_and_agent_presence_follow_local_connection(connected_local, state
         agents = client.get('/api/v1/agents', headers=headers['operator']).json()['data']['items']
         assert next(a for a in agents if a['agent_id'] == 'subject')['presence'] == presence
         assert client.get('/api/v1/agents/subject', headers=headers['operator']).json()['data']['presence'] == presence
+        from pathlib import Path
+        monkeypatch.syspath_prepend(str(Path(__file__).parents[1]))
+        from test_pr34_remediation import tool
+        client.headers['host'] = '127.0.0.1:8000'
+        key = headers['operator']['Authorization'].removeprefix('Bearer ')
+        listed = tool(client, key, 'agent_list', {})
+        assert listed['ok'], listed
+        peer = next(a for a in listed['data']['agents'] if a['agent_id'] == 'subject')
+        inspected = tool(client, key, 'agent_get', {'agent_id': 'subject'})
+        assert inspected['ok'], inspected
+        assert peer['presence'] == inspected['data']['presence'] == presence
+        assert peer['connection'] == inspected['data']['connection']
+        assert set(peer['connection']) == {'location', 'status'}
+        assert peer['connection']['location'] == 'local'
         # A disconnected runtime stays offline even if its agent just called an API.
         with deps.connection_factory.unit_of_work() as uow:
             uow.connection.execute('UPDATE agents SET last_seen_at=? WHERE agent_id=?', (deps.clock.now_iso(), 'subject'))

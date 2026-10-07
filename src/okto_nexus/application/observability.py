@@ -54,6 +54,26 @@ def _epoch_or_none(iso: str | None) -> float | None:
         return None
 
 
+def activity_presence(clock, config, *, has_active_session, last_heartbeat_at, last_seen_at=None):
+    """Shared activity fallback for dashboard and agent discovery."""
+    candidates = []
+    if has_active_session:
+        heartbeat = _epoch_or_none(last_heartbeat_at)
+        if heartbeat is not None:
+            candidates.append(heartbeat)
+    seen = _epoch_or_none(last_seen_at)
+    if seen is not None:
+        candidates.append(seen)
+    if not candidates:
+        return PRESENCE_OFFLINE
+    age = clock.now_epoch() - max(candidates)
+    if age < config.session_stale_ttl_seconds:
+        return PRESENCE_PRESENT
+    if age < config.presence_ttl_seconds:
+        return PRESENCE_STALE
+    return PRESENCE_OFFLINE
+
+
 class ObservabilityService:
     """Read-only aggregates for the dashboard surfaces."""
 
@@ -95,22 +115,9 @@ class ObservabilityService:
         never lifted by the agent's activity in a different session; omitting it
         reproduces the original session-only rule exactly.
         """
-        candidates: list[float] = []
-        if has_active_session:
-            hb_epoch = _epoch_or_none(last_heartbeat_at)
-            if hb_epoch is not None:
-                candidates.append(hb_epoch)
-        seen_epoch = _epoch_or_none(last_seen_at)
-        if seen_epoch is not None:
-            candidates.append(seen_epoch)
-        if not candidates:
-            return PRESENCE_OFFLINE
-        age = self._clock.now_epoch() - max(candidates)
-        if age < self._config.session_stale_ttl_seconds:
-            return PRESENCE_PRESENT
-        if age < self._config.presence_ttl_seconds:
-            return PRESENCE_STALE
-        return PRESENCE_OFFLINE
+        return activity_presence(self._clock, self._config,
+            has_active_session=has_active_session, last_heartbeat_at=last_heartbeat_at,
+            last_seen_at=last_seen_at)
 
     # ------------------------------------------------------------------ #
     # Graph snapshot (FR3 / AC5)
