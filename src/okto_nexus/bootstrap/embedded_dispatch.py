@@ -384,21 +384,41 @@ class EmbeddedDispatchOwner:
                     self.sessions.pop(key, None)
                     return
             elif action == "turn.submit":
-                receipt = await runtime.submit(TurnOperation(frame["operation_id"],key,payload["text"],
-                    frame.get("expected_turn_id")),context)
+                receipt = await self._command_receipt(frame, lambda: runtime.submit(
+                    TurnOperation(frame["operation_id"],key,payload["text"],frame.get("expected_turn_id")),context))
             elif action in ("turn.steer","turn.interrupt"):
-                receipt = await runtime.control(ControlOperation(frame["operation_id"],key,action.split(".")[1],
-                    text=payload.get("text"),reason=payload.get("reason"),expected_turn_id=frame.get("expected_turn_id")),context)
+                receipt = await self._command_receipt(frame, lambda: runtime.control(
+                    ControlOperation(frame["operation_id"],key,action.split(".")[1],text=payload.get("text"),
+                        reason=payload.get("reason"),expected_turn_id=frame.get("expected_turn_id")),context))
             elif action == "runtime.close":
                 receipt = await runtime.close(r4_close_operation(frame),context,wait_for_completion=True)
             elif action in ("approval.decide", "input.provide"):
-                receipt = await runtime.decide_native_approval(operation=native_operation, context=context)
+                receipt = await self._command_receipt(frame,
+                    lambda: runtime.decide_native_approval(operation=native_operation, context=context))
             else:
                 raise CoreError("CAPABILITY_UNSUPPORTED", "embedded_dispatch")
             await self._publish(binding, receipt)
             if action == "runtime.close" and receipt.stage == "SUCCEEDED":
                 await self.tools.release_session(key)
                 self.sessions.pop(key, None)
+
+    async def _command_receipt(self, frame, invoke):
+        try:
+            return await invoke()
+        except CoreError as error:
+            # A stale target or another proved pre-write refusal belongs to
+            # this command. It must not contain unrelated work in a healthy
+            # session. Exception flags alone cannot establish that proof.
+            if error.possible_effect or not error.retry_safe:
+                raise
+            receipt = await self.host.historical_receipt(session_id=frame['session_id'],
+                key=OperationKey(frame['server_id'], frame['executor_id'], frame['operation_id']))
+            if (receipt is None or receipt.stage != 'FAILED' or receipt.possible_effect
+                    or not receipt.retry_safe or receipt.error_code != error.code
+                    or receipt.operation_id != frame['operation_id']
+                    or receipt.session_id != frame['session_id']):
+                raise
+            return receipt
 
     async def _publish(self, binding, receipt):
         source = binding["source"]

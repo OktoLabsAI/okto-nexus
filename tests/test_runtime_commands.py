@@ -9,47 +9,8 @@ from test_pr34_remediation import runtime as runtime_fixture, open_rest, tool
 runtime = runtime_fixture
 
 
-def test_control_admission_does_not_wait_for_native_write(runtime, monkeypatch):
-    _, client, _, peers, operator, _ = runtime
-    sid = open_rest(runtime).json()["data"]["session_id"]
-    entered, release = threading.Event(), threading.Event()
-    send = peers[0].send
-    def blocked(session, command):
-        if command.verb == "send_turn":
-            entered.set()
-            assert release.wait(5)
-        return send(session, command)
-    monkeypatch.setattr(peers[0], "send", blocked)
-    with ThreadPoolExecutor(max_workers=1) as pool:
-        response = pool.submit(client.post, f"/api/v1/harness/sessions/{sid}/send",
-            headers={"x-api-key": operator}, json={"payload": {"text": "fixture"}, "idempotency_key": "blocked-command"})
-        try:
-            assert entered.wait(2)
-            admitted = response.result(timeout=.5)
-            assert admitted.status_code == 200, admitted.text
-            assert admitted.json()["data"]["durable"] is True
-            assert admitted.json()["data"]["external_acceptance"] == "not_observed"
-        finally:
-            release.set()
 
 
-def test_repeating_command_key_does_not_repeat_native_effect(runtime):
-    deps, client, _, peers, operator, _ = runtime
-    sid = open_rest(runtime).json()["data"]["session_id"]
-    body = {"payload": {"text": "fixture"}, "idempotency_key": "same-command"}
-    operations = []
-    for _ in range(2):
-        response = client.post(f"/api/v1/harness/sessions/{sid}/send", headers={"x-api-key": operator}, json=body)
-        assert response.status_code == 200, response.text
-        assert response.json()["data"]["idempotency_key"] == body["idempotency_key"]
-        operations.append(response.json()["data"]["operation_id"])
-    assert operations[0] == operations[1]
-    deadline = time.monotonic() + 3
-    while not peers[0].sent and time.monotonic() < deadline:
-        time.sleep(.01)
-    assert len(peers[0].sent) == 1, "a retried administrative command executed twice"
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute("SELECT count(*) FROM runtime_commands").fetchone()[0] == 1
 
 
 def wait_operation(runtime, operation_id, predicate):
@@ -91,84 +52,12 @@ def codex_session(runtime, *, outcome="completed"):
     return response.json()["data"]["session_id"]
 
 
-def test_two_admin_turns_capture_results_and_close_is_durable(runtime):
-    deps, client, _, _, operator, caller = runtime
-    sid = codex_session(runtime)
-    for index in range(2):
-        admitted = tool(client, operator, "harness_send", {"session_id": sid,
-            "payload": {"text": f"fixture reply {index}"}, "idempotency_key": f"turn-{index}"})
-        assert admitted["ok"], admitted
-        op = admitted["data"]["operation_id"]
-        result = wait_operation(runtime, op, lambda row: row["result_durable"])
-        assert f"fixture reply {index}" in result["result"]["output_text"]
-        assert result["external_acceptance"] == "harness_accepted"
-        assert not tool(client, caller, "harness_get", {"operation_id": op})["ok"]
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute("SELECT count(*) FROM runtime_results WHERE command_operation_id IS NOT NULL").fetchone()[0] == 2
-        assert uow.connection.execute("SELECT count(*) FROM delivery_outbox").fetchone()[0] == 0
-    closed = tool(client, operator, "harness_close", {"session_id": sid})
-    assert closed["ok"], closed
-    result = wait_operation(runtime, closed["data"]["operation_id"], lambda row: row["state"] == "DONE")
-    assert result["result"]["lifecycle_state"] == "stopped"
-    repeated = tool(client, operator, "harness_close", {"session_id": sid})
-    assert repeated["data"]["operation_id"] == closed["data"]["operation_id"]
 
 
-def test_interrupt_is_not_queued_behind_a_blocked_normal_write(runtime, monkeypatch):
-    _, client, _, peers, operator, _ = runtime
-    sid = open_rest(runtime).json()["data"]["session_id"]
-    entered, release = threading.Event(), threading.Event()
-    original = peers[0].send
-    def blocked(session, command):
-        if command.verb == "send_turn":
-            entered.set()
-            assert release.wait(5)
-        return original(session, command)
-    monkeypatch.setattr(peers[0], "send", blocked)
-    try:
-        normal = tool(client, operator, "harness_send", {"session_id": sid, "payload": {"text": "fixture"}})
-        assert normal["ok"] and entered.wait(2)
-        interrupt = tool(client, operator, "harness_interrupt", {"session_id": sid,
-            "expected_operation_id": normal["data"]["operation_id"]})
-        assert interrupt["ok"], interrupt
-        result = wait_operation(runtime, interrupt["data"]["operation_id"], lambda row: row["state"] == "SENT_UNCONFIRMED")
-        assert result["expected_operation_id"] == normal["data"]["operation_id"]
-        assert [c.verb for c in peers[0].sent] == ["interrupt"]
-    finally:
-        release.set()
 
 
-def test_stale_native_turn_control_is_rejected_without_effect(runtime):
-    _, client, _, _, operator, _ = runtime
-    sid = codex_session(runtime)
-    normal = tool(client, operator, "harness_send", {"session_id": sid, "payload": {"text": "TRIGGER_HOLD"}})
-    op = normal["data"]["operation_id"]
-    active = wait_operation(runtime, op, lambda row: row["external_acceptance"] == "harness_accepted")
-    stale = tool(client, operator, "harness_steer", {"session_id": sid, "payload": {"text": "never"},
-        "expected_operation_id": op, "expected_turn_id": "stale-turn"})
-    assert not stale["ok"] and stale["error"]["code"] == "CONFLICT"
-    interrupt = tool(client, operator, "harness_interrupt", {"session_id": sid,
-        "expected_operation_id": op, "expected_turn_id": active["native_turn_id"]})
-    assert interrupt["ok"], interrupt
-    result = wait_operation(runtime, op, lambda row: row["result_durable"])
-    assert result["native_turn_id"] == active["native_turn_id"]
 
 
-def test_revocation_after_admission_prevents_native_write(runtime, monkeypatch):
-    from test_runtime_grants import issue
-    deps, client, _, peers, operator, caller = runtime
-    sid = open_rest(runtime).json()["data"]["session_id"]
-    grant = issue(runtime, ["send"], max_executions=1)
-    runner = deps.runtime_dispatcher.command_dispatcher
-    scan = runner.scan_once
-    monkeypatch.setattr(runner, "scan_once", lambda: None)
-    admitted = tool(client, caller, "harness_send", {"session_id": sid, "payload": {"text": "never"}})
-    assert admitted["ok"], admitted
-    assert client.delete(f"/api/v1/harness/grants/{grant['grant_id']}", headers={"x-api-key": operator}).status_code == 200
-    monkeypatch.setattr(runner, "scan_once", scan)
-    deps.runtime_dispatcher.wake()
-    wait_operation(runtime, admitted["data"]["operation_id"], lambda row: row["state"] == "REJECTED")
-    assert peers[0].sent == []
 
 
 def test_control_queued_for_finished_turn_does_not_hit_next_turn(runtime, monkeypatch):
@@ -223,23 +112,6 @@ def test_claude_replacement_steer_has_separate_correlated_result(runtime):
 
 
 
-def test_enqueue_failure_rolls_back_intent_and_grant_charge(runtime, monkeypatch):
-    from test_runtime_grants import issue
-    deps, client, _, peers, _, caller = runtime
-    sid = open_rest(runtime).json()["data"]["session_id"]
-    grant = issue(runtime, ["send"], max_executions=1)
-    repo = deps.runtime_dispatcher.command_dispatcher.repo
-    enqueue = repo.enqueue
-    def fail(*args, **kwargs):
-        enqueue(*args, **kwargs)
-        raise OSError("fixture rollback before commit")
-    monkeypatch.setattr(repo, "enqueue", fail)
-    result = tool(client, caller, "harness_send", {"session_id": sid, "payload": {"text": "never"}})
-    assert not result["ok"]
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute("SELECT used_executions FROM runtime_execution_grants WHERE grant_id=?", (grant["grant_id"],)).fetchone()[0] == 0
-        assert uow.connection.execute("SELECT count(*) FROM runtime_commands").fetchone()[0] == 0
-    assert not peers[0].sent
 
 
 def test_command_result_recovers_after_owner_restart_without_reexecution(runtime, monkeypatch):

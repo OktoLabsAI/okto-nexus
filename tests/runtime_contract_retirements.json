@@ -1103,6 +1103,128 @@
         "tests/execution_r4/test_local_launch.py::test_approved_local_configuration_reaches_core"
       ],
       "source_sha256": "4f16e9cbb2e2ca447d5fe7f84940aa43c96da79cdf828e7db677c077c84f1ed6"
+    },
+    {
+      "test": "tests/test_runtime_commands.py::test_control_admission_does_not_wait_for_native_write",
+      "reason": "Migrate durable command admission from removed Server native factories to canonical Core dispatch. Current tests retain asynchronous control, one-effect replay, native result capture, scoped history, current authorization and atomic enqueue/spending semantics.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_command_regressions.py::test_admission_and_interrupt_do_not_wait_for_blocked_native_turn"
+      ],
+      "source_sha256": "c166ee385cf78405fe9b7061464a35e61b60519322ead8a445f9cbc2e9e0d2f2"
+    },
+    {
+      "test": "tests/test_runtime_commands.py::test_repeating_command_key_does_not_repeat_native_effect",
+      "reason": "Migrate durable command admission from removed Server native factories to canonical Core dispatch. Current tests retain asynchronous control, one-effect replay, native result capture, scoped history, current authorization and atomic enqueue/spending semantics.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_grant_regressions.py::test_concurrent_command_replay_keeps_one_effect_and_immutable_payload"
+      ],
+      "source_sha256": "ddf23b804d3d6396ebb9d7daef6b74f31f5fb7fea774ade448b38cb6e9de30d3"
+    },
+    {
+      "test": "tests/test_runtime_commands.py::test_two_admin_turns_capture_results_and_close_is_durable",
+      "reason": "Migrate durable command admission from removed Server native factories to canonical Core dispatch. Current tests retain asynchronous control, one-effect replay, native result capture, scoped history, current authorization and atomic enqueue/spending semantics.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_fragmented_pipes.py::test_core_fragmented_utf8_and_full_pipes_preserve_two_turns",
+        "tests/execution_r4/test_harness_canonical.py::test_existing_rest_commands_use_core_once",
+        "tests/execution_r4/test_canonical_private_history.py::test_private_session_replay_results_and_listing_hide_foreign_evidence"
+      ],
+      "source_sha256": "8970ee364ca4969ff5c094670bb43f7ac3059c245fe88da096df5eb003e4e9db"
+    },
+    {
+      "test": "tests/test_runtime_commands.py::test_interrupt_is_not_queued_behind_a_blocked_normal_write",
+      "reason": "Migrate durable command admission from removed Server native factories to canonical Core dispatch. Current tests retain asynchronous control, one-effect replay, native result capture, scoped history, current authorization and atomic enqueue/spending semantics.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_command_regressions.py::test_admission_and_interrupt_do_not_wait_for_blocked_native_turn"
+      ],
+      "source_sha256": "7bfaed74d58779e4963593319b6b341122b15b0724cfc0f71531750f761b5aa5"
+    },
+    {
+      "test": "tests/test_runtime_commands.py::test_stale_native_turn_control_is_rejected_without_effect",
+      "reason": "Migrate durable command admission from removed Server native factories to canonical Core dispatch. Current tests retain asynchronous control, one-effect replay, native result capture, scoped history, current authorization and atomic enqueue/spending semantics.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_native_protocol_regressions.py::test_stale_native_target_is_rejected_and_matching_interrupt_completes_original_turn"
+      ],
+      "source_sha256": "3ce2c8bbabab23b9e4a82850d032fe6dea0d900c846396ed709b797d2bc205da"
+    },
+    {
+      "test": "tests/test_runtime_commands.py::test_revocation_after_admission_prevents_native_write",
+      "reason": "Migrate durable command admission from removed Server native factories to canonical Core dispatch. Current tests retain asynchronous control, one-effect replay, native result capture, scoped history, current authorization and atomic enqueue/spending semantics.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_grant_regressions.py::test_authority_change_denies_rest_and_mcp_before_native_send"
+      ],
+      "source_sha256": "c46602abbd2d8f47c39cebe6eae625a9f9dd9be53ca89aa6fb373be37d47351d"
+    },
+    {
+      "test": "tests/test_runtime_commands.py::test_enqueue_failure_rolls_back_intent_and_grant_charge",
+      "reason": "Migrate durable command admission from removed Server native factories to canonical Core dispatch. Current tests retain asynchronous control, one-effect replay, native result capture, scoped history, current authorization and atomic enqueue/spending semantics.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_command_regressions.py::test_dispatch_enqueue_failure_rolls_back_operation_and_grant_spending"
+      ],
+      "source_sha256": "2e45f5ff6b971be12afa4e9b67fc0e56cb77b5528c57f12067690384c9cb2e12"
+    },
+    {
+      "test": "tests/test_runtime_fragmented_pipes.py::test_fragmented_utf8_and_full_pipes_preserve_two_turns",
+      "reason": "Native pipe execution now belongs to Core. Replacement runs the real copied Core adapter against a disposable process through canonical Nexus admission and durable event/result storage.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_fragmented_pipes.py::test_core_fragmented_utf8_and_full_pipes_preserve_two_turns"
+      ],
+      "source_sha256": "eda0509ae0e0842fd4d2ff2a3ce9bcca9714b697524fead17fb4ba52c4e17e52"
+    },
+    {
+      "test": "tests/test_runtime_protocol_limits.py::test_oversized_turn_fault_reaches_production_journal_without_completion",
+      "reason": "Native pipe execution now belongs to Core. Replacement runs the real copied Core adapter against a disposable process through canonical Nexus admission and durable event/result storage.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_native_protocol_regressions.py::test_native_protocol_fault_is_durable_and_reaps_peer_without_success"
+      ],
+      "source_sha256": "b07c93392b764d1df7355b906fe110c0cbe6fd8446178a1e4a532239fc6da00c"
+    },
+    {
+      "test": "tests/test_runtime_codex_early_events.py::test_unknown_thread_flood_reaps_process_and_journals_fault",
+      "reason": "Native pipe execution now belongs to Core. Replacement runs the real copied Core adapter against a disposable process through canonical Nexus admission and durable event/result storage.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_native_protocol_regressions.py::test_native_protocol_fault_is_durable_and_reaps_peer_without_success"
+      ],
+      "source_sha256": "34ae1ac1d6573550fba93d7cda88d8c529692e445543b18c563d4469a0cae861"
+    },
+    {
+      "test": "tests/test_runtime_effective_controls.py::test_unknown_version_cannot_admit_native_control",
+      "reason": "Mutable Server compatibility_report controls and per-open metadata qualification were removed. Core inventory qualification and the approved canonical realization gate execution; caller metadata cannot grant native controls.",
+      "replacements": [
+        "tests/execution_r4/test_runtime_options.py::test_unqualified_inventory_can_be_prepared_but_never_started",
+        "tests/execution_r4/test_local_realization.py::test_preparation_refuses_changed_local_evidence",
+        "tests/execution_r4/test_harness_canonical.py::test_canonical_open_rejects_legacy_override_without_effect"
+      ],
+      "source_sha256": "0be6d4a170892dacf5bfff29301cbc5949f1069fc5792fb268f684912a4da16c"
+    },
+    {
+      "test": "tests/test_runtime_effective_controls.py::test_effective_control_is_revalidated_before_dispatch",
+      "reason": "Mutable Server compatibility_report controls and per-open metadata qualification were removed. Core inventory qualification and the approved canonical realization gate execution; caller metadata cannot grant native controls.",
+      "replacements": [
+        "tests/execution_r4/test_runtime_options.py::test_unqualified_inventory_can_be_prepared_but_never_started",
+        "tests/execution_r4/test_local_realization.py::test_preparation_refuses_changed_local_evidence",
+        "tests/execution_r4/test_harness_canonical.py::test_canonical_open_rejects_legacy_override_without_effect"
+      ],
+      "source_sha256": "78be4316947d794c7c7a679eac1670f950c83d9113bc74565bbc6fda25168505"
+    },
+    {
+      "test": "tests/test_runtime_profile_requirements.py::test_persisted_profile_requiring_unsupported_input_cannot_spawn",
+      "reason": "Legacy required_native_requests profile configuration and legacy profile creation were removed. Retained profiles cannot revive execution, and supported canonical harness settings are validated through Core.",
+      "replacements": [
+        "tests/execution_r4/test_harness_settings.py::test_settings_validate_scope_cas_and_revoke_old_execution_authority",
+        "tests/test_runtime_production_multiplex.py::test_retired_native_factory_refuses_even_identical_approved_profiles",
+        "tests/execution_r4/test_harness_canonical.py::test_canonical_open_rejects_legacy_override_without_effect"
+      ],
+      "source_sha256": "3185cb8d7805a9fe57544f70ac0caf2238bcc7aef4e32026105f3b4cdc7a0f1f"
+    },
+    {
+      "test": "tests/test_runtime_profile_requirements.py::test_profile_requirements_are_validated_against_exact_adapter_contract",
+      "reason": "Legacy required_native_requests profile configuration and legacy profile creation were removed. Retained profiles cannot revive execution, and supported canonical harness settings are validated through Core.",
+      "replacements": [
+        "tests/execution_r4/test_harness_settings.py::test_settings_validate_scope_cas_and_revoke_old_execution_authority",
+        "tests/test_runtime_production_multiplex.py::test_retired_native_factory_refuses_even_identical_approved_profiles",
+        "tests/execution_r4/test_harness_canonical.py::test_canonical_open_rejects_legacy_override_without_effect"
+      ],
+      "source_sha256": "b5e2e318637c6e80e6332b88348b2d263b0330836d2d80295386e7a86cd072fe"
     }
   ]
 }
