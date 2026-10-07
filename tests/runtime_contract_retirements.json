@@ -1526,6 +1526,103 @@
         "tests/execution_r4/test_canonical_structured_work.py::test_rest_structured_claim_replays_through_mcp_without_changing_contract"
       ],
       "source_sha256": "55e66aa3a1c94bf44b2336e37658cc3fa149a745d970f2d93d956078193f23e0"
+    },
+    {
+      "test": "tests/test_runtime_artifact_durability.py::test_large_runtime_result_uses_private_canonical_artifact",
+      "reason": "Current Core result publication preserves the complete private artifact, explicit readers, truncated message preview and ordinary-agent/anonymous read denials.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_artifact_boundaries.py::test_complete_result_artifact_is_private_to_its_recorded_readers"
+      ],
+      "source_sha256": "fe534ef8ccbe27c52ae9ff72321c44b67ed987d09c988295734d680a0aff27f5"
+    },
+    {
+      "test": "tests/test_runtime_artifact_durability.py::test_blocked_artifact_worker_keeps_heartbeat_and_holds_shutdown_ownership",
+      "reason": "The canonical Core artifact path retains a blocked filesystem write independently of the dispatcher heartbeat and refuses to release shutdown ownership until its publication worker drains.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_artifact_boundaries.py::test_blocked_artifact_keeps_dispatch_heartbeat_and_shutdown_ownership"
+      ],
+      "source_sha256": "87c3e74b9aa254757d3f2d5d49980b4f3754388b934657fa1785610243ab38b8"
+    },
+    {
+      "test": "tests/test_runtime_artifact_durability.py::test_runtime_artifact_quota_is_reserved_before_filesystem_effect",
+      "reason": "A current Core large result exceeds the scoped quota, retains its private output and reaches neither artifact reservation nor filesystem put.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_artifact_boundaries.py::test_artifact_quota_refuses_before_reservation_or_filesystem_effect"
+      ],
+      "source_sha256": "4a33669193d82fb5902b736b25ea677d5cd3c203c89fd5af2260fa4267bdf243"
+    },
+    {
+      "test": "tests/test_runtime_native_approvals.py::test_cancel_only_native_denial_does_not_grant_policy_amendment",
+      "reason": "Actual Core Codex pipes preserve accept/cancel-only policy without selecting an amendment. Changed execution authority is refused by the R4 lease/dispatch gate before native effects rather than inventing an authorized denial on a stale lease.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_native_approvals.py::test_real_cancel_only_request_cannot_mint_policy_amendment",
+        "tests/execution_r4/test_canonical_native_approvals.py::test_changed_native_approval_authority_cannot_reach_the_pipe"
+      ],
+      "source_sha256": "9064ebe818c32dc6fad4126276d235a02b50709021086b590632fc88c3c6036a"
+    },
+    {
+      "test": "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide",
+      "reason": "Both Codex command and file-change permission requests traverse real Core pipes and durable canonical requests; only operator decisions can reach native I/O, matching replay is idempotent and changed replay conflicts.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_native_approvals.py::test_real_native_approval_is_durable_operator_only_and_idempotent"
+      ],
+      "source_sha256": "a06094c815f9aba48e0232b763471f1fb2cb18f2cd3c0a0ce2a8021647b260e8"
+    },
+    {
+      "test": "tests/test_runtime_native_approvals.py::test_late_approval_does_not_reach_another_turn",
+      "reason": "A real Core interrupted turn invalidates its pending native request before a new turn executes; late permission cannot cross the native turn boundary.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_native_approvals.py::test_old_native_permission_cannot_control_a_subsequent_turn"
+      ],
+      "source_sha256": "1e5b3e16cd3a8ae206c460e3547704e1070f83037788f527fdcbd593e7a70981"
+    },
+    {
+      "test": "tests/test_runtime_native_approvals.py::test_changed_authority_or_expiry_declines_the_native_request",
+      "reason": "R4 revalidates execution permission, native HITL enablement and request expiry before the native effect. Unlike the removed supervisor contract, stale authority cannot authorize a fabricated native response, including a decline.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_native_approvals.py::test_changed_native_approval_authority_cannot_reach_the_pipe"
+      ],
+      "source_sha256": "35b24e31b671956d8f8a179356d1b1314c02fd083ed13075fed67c3ac5429c0a"
+    },
+    {
+      "test": "tests/test_runtime_native_approvals.py::test_journal_retries_approval_projection_without_duplicating_request",
+      "reason": "Actual Core native permission capture survives repeated Server transaction rollbacks with no partial request or approval, no native containment and one recovered request/response. The Server no longer treats its own projection-storage error as a failed harness.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_native_approvals.py::test_native_approval_projection_rollback_recovers_without_duplicate_request"
+      ],
+      "source_sha256": "66385fcbb4113e9480baf4ae543c62fe01c252ef5f8bb637fa05b151e60cd93b"
+    },
+    {
+      "test": "tests/test_runtime_native_approvals.py::test_uncertain_native_reply_is_never_replayed",
+      "reason": "Lose acknowledgement immediately after the real Core adapter writes a permission response; the canonical decision retains OUTCOME_UNKNOWN and replay never performs a second native write.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_native_approvals.py::test_lost_native_approval_reply_never_reexecutes_on_decision_replay"
+      ],
+      "source_sha256": "63d2dde79bc126796e46235a968b9e1501997482e0065fdabff9e6eb4f0847c8"
+    },
+    {
+      "test": "tests/test_runtime_native_approvals.py::test_native_approval_on_administrative_turn_uses_same_hitl",
+      "reason": "An authenticated operator initiates a represented Core turn, retaining operator/subject provenance, and its actual native permission uses the same governed decision path.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_native_approvals.py::test_operator_initiated_turn_uses_same_native_permission_workflow"
+      ],
+      "source_sha256": "00103fd835df05a62b9f535d952473b29d6aadd75eeb1075533d58c7eaa509fe"
+    },
+    {
+      "test": "tests/test_runtime_native_approvals.py::test_authority_changed_after_decision_before_write_is_declined",
+      "reason": "A gated Core dispatch rechecks revoked authority after the human decision and records REFUSED_BEFORE_EFFECT without issuing a native response under a revoked lease.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_native_approvals.py::test_native_permission_is_rechecked_after_decision_before_dispatch"
+      ],
+      "source_sha256": "d5ac24191869e4d8d926882084e149912dc2a2192bfd7b7857717176d4636426"
+    },
+    {
+      "test": "tests/test_runtime_native_approvals.py::test_owner_restart_never_replays_a_pending_native_approval",
+      "reason": "Close and recreate the production app over the retained home with a real Core permission pending. The process is stopped, its old request cannot produce a decision/operation and no provider is relaunched or native response replayed.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_native_approvals.py::test_server_restart_does_not_replay_pending_native_permission"
+      ],
+      "source_sha256": "dbb32e9e6b8878109ba2c478bca893231c5276ba2854805f89b8414c941cf3a0"
     }
   ]
 }

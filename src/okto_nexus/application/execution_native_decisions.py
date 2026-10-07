@@ -381,6 +381,8 @@ class ExecutionNativeDecisions:
 
 def validate_native_dispatch(uow, *, operation, semantic, access):
     """Revalidate a committed human decision at the RESERVED -> SENDING CAS."""
+    if not access.config.feature_hitl:
+        _fail("Native decision dispatch is disabled.", ErrorCode.PERMISSION_DENIED)
     conn = uow.connection
     decision = conn.execute("SELECT * FROM execution_decisions WHERE decision_id=?",
                             (operation["decision_id"],)).fetchone()

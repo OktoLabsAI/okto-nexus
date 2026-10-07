@@ -207,3 +207,26 @@ The isolated source artifact-boundary follow-up passed three cases: private
 readers, quota refusal before filesystem effects, and publication-worker shutdown
 ownership with an independently advancing heartbeat. These additional cases are
 not part of the 66-case installed acceptance scope.
+
+Actual Core Codex permission tests cover command/file approval, cancel-only
+decisions without policy amendments, exact replay, lost native acknowledgement,
+expired/revoked authority, stale turns and retained requests after server restart.
+Fault injection found two gaps. Native decision dispatch did not recheck a HITL
+flag disabled after lease issuance; it now refuses before effect. A failed Server
+event transaction was treated as a failed Core stream and contained healthy work;
+only persistence errors at that commit boundary now defer publication, retaining
+the native lease and retrying the unacknowledged batch. Core journal/stream faults
+still enter scoped recovery. The deterministic projection test observes repeated
+rollbacks, an ACTIVE/READY session and no partial request, then removes the storage
+fault and observes one native response without restart or manual retry.
+
+The native permission/artifact/isolation/correlation campaign passed all 47
+installed-wheel cases with unchanged inputs (`build/release-native-recovery-installed`).
+The independent decision/ingress/recipient/managed-authority campaign passed 58
+installed-wheel cases with unchanged inputs (`build/release-native-authority-installed`).
+Containment regressions now inject unreadable Core history after an event is
+durable; transient Server commit failures separately verify automatic publication
+retry while keeping the healthy native session alive. Four focused containment
+cases also passed against source. The complete installed release matrix remains
+required: a current diagnostic of historical configuration and operation-recovery
+tests still fails 21 cases at obsolete setup, while two retained migrations pass.

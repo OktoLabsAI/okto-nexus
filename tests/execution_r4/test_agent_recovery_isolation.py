@@ -156,7 +156,6 @@ def test_restart_isolates_fault_and_accepts_new_local_and_remote_agents(tmp_path
 
 def test_live_event_failure_contains_only_its_agent_and_restores_automatically(local_setup, monkeypatch):
     from nexus_connector_core import RuntimeEvent
-    from okto_nexus.bootstrap import embedded_events
     setup, binding, native = connect_local(local_setup)
     deps, app, client, *_ = setup
     owner = app.state.embedded_dispatch_owner
@@ -166,15 +165,19 @@ def test_live_event_failure_contains_only_its_agent_and_restores_automatically(l
     other, other_binding, other_native = connect_local(other, agent_id='other-live')
     second = admit(other, other_binding, 'live-second', 'runtime.start', new_session=True)
     wait_receipt(other, second)
-    original = embedded_events.commit_execution_events
     enabled = True
-    def fail_one(*args, **kwargs):
-        if enabled and kwargs['frame']['agent_id'] == 'subject':
-            raise OSError('One subject event projection unavailable')
-        return original(*args, **kwargs)
-    monkeypatch.setattr(embedded_events, 'commit_execution_events', fail_one)
     with deps.connection_factory.unit_of_work(write=False) as uow:
         stream = dict(uow.connection.execute('SELECT * FROM execution_local_streams WHERE agent_id=?', ('subject',)).fetchone())
+    async def install_history_fault():
+        _, journal = await owner.host._runtime_tasks[(stream['executor_id'], stream['session_id'])]
+        original = journal.events
+        async def unavailable(cursor):
+            async for event in original(cursor):
+                if enabled:
+                    raise OSError('One subject Core history unavailable')
+                yield event
+        monkeypatch.setattr(journal, 'events', unavailable)
+    client.portal.call(install_history_fault)
     client.portal.call(native.native.queue.put, RuntimeEvent(stream['server_id'], stream['executor_id'],
         stream['session_id'], stream['stream_epoch'], 0, 'text_delta', 'technical.output', {'text': 'Retained once'}))
     eventually(lambda: 'subject' in owner.agents.blocked)
@@ -283,7 +286,6 @@ def test_slow_publication_keeps_native_and_lease_alive(local_setup, monkeypatch)
 @pytest.mark.parametrize('local_setup', ['codex_app_server', 'claude_stream', 'pi_rpc'], indirect=True)
 def test_released_incomplete_turn_does_not_block_next_message(local_setup, monkeypatch):
     from nexus_connector_core import RuntimeEvent
-    from okto_nexus.bootstrap import embedded_events
     from test_sender_sessions import Peers, configure, sender, turn_for, complete
     setup, binding, _ = connect_local(local_setup)
     deps, app, client, *_ = setup
@@ -296,13 +298,17 @@ def test_released_incomplete_turn_does_not_block_next_message(local_setup, monke
     wait_receipt(setup, first)
     with deps.connection_factory.unit_of_work(write=False) as uow:
         stream = dict(uow.connection.execute('SELECT * FROM execution_local_streams').fetchone())
-    original = embedded_events.commit_execution_events
     broken = True
-    def fail(*args, **kwargs):
-        if broken:
-            raise OSError('Temporary publication failure')
-        return original(*args, **kwargs)
-    monkeypatch.setattr(embedded_events, 'commit_execution_events', fail)
+    async def install_history_fault():
+        _, journal = await owner.host._runtime_tasks[(stream['executor_id'], stream['session_id'])]
+        original = journal.events
+        async def unavailable(cursor):
+            async for event in original(cursor):
+                if broken:
+                    raise OSError('Temporary Core history failure')
+                yield event
+        monkeypatch.setattr(journal, 'events', unavailable)
+    client.portal.call(install_history_fault)
     client.portal.call(peers.sessions[first['session_id']].queue.put, RuntimeEvent(
         stream['server_id'], stream['executor_id'], stream['session_id'], stream['stream_epoch'], 0,
         'text_delta', 'fixture.output', dict(output_text='Partial response'), operation_id=first['operation_id']))

@@ -10,6 +10,7 @@ import time
 from nexus_connector_core import CoreError, ShutdownPolicy
 
 from .embedded_reconciliation import EmbeddedReconciliation
+from .embedded_events import EmbeddedPublicationDeferred
 
 
 class EmbeddedAgentRecovery:
@@ -24,6 +25,7 @@ class EmbeddedAgentRecovery:
         self.retry_at = {}
         self.attempts = {}
         self.errors = {}
+        self.publication_pending = set()
         self.initialized = False
         self._tick_lock = asyncio.Lock()
 
@@ -132,6 +134,7 @@ class EmbeddedAgentRecovery:
         await asyncio.to_thread(self._state, agent_id, 'READY')
         self.blocked.discard(agent_id)
         self.errors.pop(agent_id, None)
+        self.publication_pending.discard(agent_id)
         self.attempts.pop(agent_id, None)
         self.retry_at.pop(agent_id, None)
         await asyncio.to_thread(owner._recovery_event, 'RECOVERY_AGENT_READY',
@@ -198,10 +201,24 @@ class EmbeddedAgentRecovery:
                 await self._recover(agent_id)
             else:
                 await self._publish(agent_id)
+                self.publication_pending.discard(agent_id)
+                self.retry_at.pop(agent_id, None)
         except Exception as error:
             if self.owner._stopping.is_set():
                 return
             try:
+                if isinstance(error, EmbeddedPublicationDeferred) and not recovering:
+                    # A failed Server commit did not invalidate the Core journal
+                    # or its native process. Retain the lease and retry the same
+                    # unacknowledged events instead of containing healthy work.
+                    await asyncio.to_thread(self.owner.verify)
+                    self.retry_at[agent_id] = time.monotonic() + 1
+                    if agent_id not in self.publication_pending:
+                        self.publication_pending.add(agent_id)
+                        await asyncio.to_thread(self.owner._recovery_event, 'RECOVERY_PUBLICATION_DELAYED',
+                            'Server event persistence is delayed; native execution and lease renewal remain active.',
+                            agent_id=agent_id)
+                    return
                 await self.fail(agent_id, error)
                 delay = min(30, 2 ** min(self.attempts.get(agent_id, 0), 5))
                 self.retry_at[agent_id] = time.monotonic() + delay * random.uniform(.8, 1.2)
@@ -248,8 +265,8 @@ class EmbeddedAgentRecovery:
         subjects = subjects if target_agent_id is None else subjects & {target_agent_id}
         for agent_id in subjects:
             recovering = agent_id in self.blocked
-            if agent_id in self.tasks or (recovering and (not enabled or
-                    (not manual and now < self.retry_at.get(agent_id, 0)))):
+            if (agent_id in self.tasks or (recovering and not enabled) or
+                    (not manual and now < self.retry_at.get(agent_id, 0))):
                 continue
             self.started[agent_id] = now
             self.tasks[agent_id] = asyncio.create_task(self._run(agent_id, recovering),

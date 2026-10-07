@@ -1,11 +1,17 @@
 """Bounded local Core event publication with durable Server ACK recovery."""
 import asyncio
+import sqlite3
 from dataclasses import asdict
 
 from nexus_connector_core import CoreError, EventCursor, R4_PREVIEW_REVISION
 from nexus_connector_core.protocol import canonical_json
 
 from ..application.execution_events import commit_execution_events
+from ..errors import ErrorCode, OktoNexusError
+
+
+class EmbeddedPublicationDeferred(Exception):
+    """Core history is durable; only its Server transaction needs a retry."""
 
 
 class EmbeddedEventPublisher:
@@ -63,8 +69,15 @@ class EmbeddedEventPublisher:
             frame = {k:scope[k] for k in ("server_id","executor_id","binding_id","agent_id","session_id","stream_epoch")}
             frame.update(type="event.batch",protocol_major=1,contract_revision=R4_PREVIEW_REVISION,
                 connection_id=channel.connection_id,connection_generation=channel.connection_generation,events=events)
-            ack = await asyncio.to_thread(commit_execution_events,self.owner.factory,
-                channel=channel,frame=frame,embedded_owner=self.owner,approvals=self.owner.deps.approvals)
+            try:
+                ack = await asyncio.to_thread(commit_execution_events,self.owner.factory,
+                    channel=channel,frame=frame,embedded_owner=self.owner,approvals=self.owner.deps.approvals)
+            except (OSError, sqlite3.OperationalError) as error:
+                raise EmbeddedPublicationDeferred() from error
+            except OktoNexusError as error:
+                if error.code != ErrorCode.DB_ERROR:
+                    raise
+                raise EmbeddedPublicationDeferred() from error
             if ack is None or ack["sequence"]!=events[-1]["sequence"]:
                 raise CoreError("EVENT_GAP","embedded_event_ack")
             dispatcher = self.owner.deps.runtime_dispatcher
