@@ -1,3 +1,8 @@
+# Current release dependency
+
+Core 0.0.3 is required by Nexus 0.2.2 and Connector 0.0.2.
+The shared wheel SHA-256 is `504e744002f91158995bc9bf4d6f1d6c982462abbe9c864b575865fda9c0aff7`.
+
 Current PyPI release candidate: `okto_nexus_connector_core-0.0.1-py3-none-any.whl`
 SHA-256: 1547d389913f6de6b9060f03b9492b38be660d876ab1d6a5298442720cf28421.
 Python imports remain `nexus_connector_core`.
@@ -98,11 +103,11 @@ Current: `nexus_connector_core-0.2.14.dev0-py3-none-any.whl`
 
 SHA-256: `759cdee946037ed5e215f901cdfb09b31baf350c7fde69e4d5f79bd41f515bee`
 
-Este é o mesmo artefato no Nexus, Connector e Core. O `uv.lock` referencia
-esta pasta para que `uv sync --extra serve-lite` funcione sem clone irmão.
-Este wheel inclui codec R4 `development-partial`, mas o contrato negociável
+Este Ã© o mesmo artefato no Nexus, Connector e Core. O `uv.lock` referencia
+esta pasta para que `uv sync --extra serve-lite` funcione sem clone irmÃ£o.
+Este wheel inclui codec R4 `development-partial`, mas o contrato negociÃ¡vel
 continua R3; efeitos remotos R4 permanecem fechados. O wheel 0.2.12 permanece
-somente para rastreabilidade da versão anterior. A versão 0.2.13 também
+somente para rastreabilidade da versÃ£o anterior. A versÃ£o 0.2.13 tambÃ©m
 permanece para rastreabilidade do primeiro preview R4.
 
 Current pinned artifact: `nexus_connector_core-0.2.18.dev0-py3-none-any.whl`,
