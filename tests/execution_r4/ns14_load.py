@@ -275,10 +275,15 @@ def run_load(state, root, record_property):
                         await asyncio.sleep(.01)
                 second_time = next(stamp for stamp, frame in sent
                     if frame["operation_id"] == second_intent["operation_id"])
-                async with asyncio.timeout(10):
-                    while sum(frame["executor_id"] == first.executor_id for _, frame in sent) < 3:
-                        assert not closed.is_set()
-                        await asyncio.sleep(.01)
+                # decision_state has already sent the first agent's opening,
+                # without its operation ACK. Its queued turns must remain held
+                # while the other agent and the control lane make progress.
+                with factory.unit_of_work(write=False) as uow:
+                    pending_open = uow.connection.execute(
+                        "SELECT dispatch_state FROM execution_dispatch_outbox WHERE operation_id=?",
+                        (opened["operation_id"],)).fetchone()
+                assert pending_open[0] == "SENDING"
+                assert not any(frame["executor_id"] == first.executor_id for _, frame in sent)
                 control_started = time.perf_counter()
                 response, control = await asyncio.to_thread(request, "subject", "load-control", "runtime.close")
                 assert response.status_code == 202, response.text

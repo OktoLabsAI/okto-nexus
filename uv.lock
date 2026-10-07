@@ -1079,7 +1079,7 @@ requires-dist = [
     { name = "keyring", marker = "sys_platform != 'win32' and extra == 'serve'" },
     { name = "keyring", marker = "sys_platform != 'win32' and extra == 'serve-lite'" },
     { name = "mcp", specifier = ">=1.0,<2" },
-    { name = "okto-nexus-connector-core", specifier = "==0.0.3" },
+    { name = "okto-nexus-connector-core", specifier = "==0.0.4" },
     { name = "pydantic", specifier = ">=2" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8" },
     { name = "pywin32", marker = "sys_platform == 'win32' and extra == 'serve'" },
@@ -1098,14 +1098,14 @@ provides-extras = ["serve", "serve-lite", "embeddings", "dev"]
 
 [[package]]
 name = "okto-nexus-connector-core"
-version = "0.0.3"
+version = "0.0.4"
 source = { registry = "vendor/wheels" }
 dependencies = [
     { name = "jsonschema" },
     { name = "rfc8785" },
 ]
 wheels = [
-    { path = "okto_nexus_connector_core-0.0.3-py3-none-any.whl" },
+    { path = "okto_nexus_connector_core-0.0.4-py3-none-any.whl" },
 ]
 
 [[package]]

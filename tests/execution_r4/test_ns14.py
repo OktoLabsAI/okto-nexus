@@ -185,6 +185,10 @@ def test_ns14_03(connected_local, monkeypatch):
     setup, binding, factory = connected_local
     deps, app, client, headers, *_ = setup
     owner = app.state.embedded_dispatch_owner
+    from test_agent_recovery_isolation import create_agent
+    from test_embedded_dispatch import connect_local
+    healthy_setup, healthy_binding, _ = connect_local(create_agent(setup, "healthy"), agent_id="healthy")
+    owner.native_factory = factory
     opening_entered = threading.Event()
     finish_open = threading.Event()
     finish_close = threading.Event()
@@ -221,8 +225,9 @@ def test_ns14_03(connected_local, monkeypatch):
     try:
         first = admit(setup, binding, "ns14-late-open", "runtime.start", new_session=True)
         assert opening_entered.wait(3)
-        second = admit(setup, binding, "ns14-release-pending", "runtime.start", new_session=True)
-        wait_receipt(setup, second)
+        # The pending open consumes only its own agent's productive lane.
+        second = admit(healthy_setup, healthy_binding, "ns14-release-pending", "runtime.start", new_session=True)
+        wait_receipt(healthy_setup, second)
         first_id, second_id = first["scope"]["session_id"], second["scope"]["session_id"]
         assert set(natives) == {first_id, second_id} and factory.opens == 2
         original_tasks = dict(owner.host._runtime_tasks)
@@ -282,7 +287,7 @@ def test_ns14_03(connected_local, monkeypatch):
         assert all(row["store_retained"] for row in rows.values())
         assert store_closures == []
         assert client.get("/v1/runtime/operations/" + second["operation_id"],
-                          headers=headers["subject"]).status_code == 200
+                          headers=healthy_setup[3]["subject"]).status_code == 200
         with deps.connection_factory.unit_of_work(write=False) as uow:
             dispatcher = owner.inventory.dispatcher
             assert dispatcher.repo.owns(uow, owner_id=dispatcher.owner_id,

@@ -2049,6 +2049,46 @@
       ],
       "reason": "Canonical dispatch scans the durable outbox independently of advisory legacy wakes. Dropping both message wake and inbox notification still delivers once in the same current owner, without explicit test wake, scan or restart. The retained legacy generation-counter unit test remains unchanged.",
       "source_sha256": "f918068daed817210528cde420f536ae71a39e79eed6e4b283c4fca8015e7034"
+    },
+    {
+      "test": "tests/test_runtime_claude_approvals.py::test_claude_permission_roundtrip_uses_canonical_hitl",
+      "reason": "Legacy connection setup replaced by public R4 admission and the installed Core Claude stream adapter; equivalent native permission, cancellation and question behavior is covered by the replacement.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_claude_approvals.py::test_claude_permission_uses_operator_authority_and_one_exact_reply"
+      ],
+      "source_sha256": "469fdaa4341cf64d80e66bd7fb4a95df87df6d9dde43b6b9e78a8fc552c422f7"
+    },
+    {
+      "test": "tests/test_runtime_claude_approvals.py::test_claude_late_decision_cannot_revive_native_request",
+      "reason": "Legacy connection setup replaced by public R4 admission and the installed Core Claude stream adapter; equivalent native permission, cancellation and question behavior is covered by the replacement.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_claude_approvals.py::test_claude_native_cancellation_or_terminal_prevents_late_decision"
+      ],
+      "source_sha256": "11c1194b16ca10ba4fd1f020a84111aade724e28606f3e7a993c419f05150dce"
+    },
+    {
+      "test": "tests/test_runtime_claude_approvals.py::test_claude_consumed_request_id_is_not_reused_in_next_turn",
+      "reason": "Legacy connection setup replaced by public R4 admission and the installed Core Claude stream adapter; equivalent native permission, cancellation and question behavior is covered by the replacement.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_claude_approvals.py::test_claude_consumed_request_id_cannot_authorize_following_turn"
+      ],
+      "source_sha256": "fbc995dbc5e29584044af4da99a94b81aee1f2a7134e612e6cadc77f607eaa79"
+    },
+    {
+      "test": "tests/test_runtime_claude_approvals.py::test_claude_permission_does_not_implicitly_change_policy_or_answer_questions",
+      "reason": "Legacy connection setup replaced by public R4 admission and the installed Core Claude stream adapter; equivalent native permission, cancellation and question behavior is covered by the replacement.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_claude_approvals.py::test_claude_unsupported_permission_cannot_change_policy_or_invent_answer"
+      ],
+      "source_sha256": "2fafe8f8d6c9b55a7c71657a1a9e07d552966839c72f8ee597cd7927ff01f8fe"
+    },
+    {
+      "test": "tests/test_runtime_claude_approvals.py::test_claude_question_requires_explicit_answer_then_returns_original_questions",
+      "reason": "Legacy connection setup replaced by public R4 admission and the installed Core Claude stream adapter; equivalent native permission, cancellation and question behavior is covered by the replacement.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_claude_approvals.py::test_claude_question_requires_explicit_answer_and_preserves_question"
+      ],
+      "source_sha256": "cf9fefda679c73246443e587455eaa3cacfdaf20521eaf86222942f807b0b52a"
     }
   ]
 }
