@@ -230,3 +230,28 @@ retry while keeping the healthy native session alive. Four focused containment
 cases also passed against source. The complete installed release matrix remains
 required: a current diagnostic of historical configuration and operation-recovery
 tests still fails 21 cases at obsolete setup, while two retained migrations pass.
+
+The first completed full Linux/Python 3.11 run at f0ffd67 reported 3347 passed,
+439 failed and 108 skipped in 5467 seconds (run 37625316285). This is a failed
+release gate, not an acceptance result. One failure was in the current R4
+Connector roundtrip: post-commit receipt wake assumed the optional dispatcher
+attribute had been initialized. Receipt/event wake now tolerates its absence.
+The roundtrip and three canonical recovery checks passed against source.
+
+Real Core question/form input checks passed 15 source cases, including invalid
+values, exact replies, transaction rollback and stale authority. Eight manual
+conversation-recovery cases passed, followed by 15 handoff-recovery cases and
+two retained-home/retired-stdio cases in focused source runs. The first combined
+input/recovery installed campaign had 41 passes and one test race: it fetched a
+recovery snapshot after the close receipt but before asynchronous domain release.
+The test now waits for that real release before submitting its exact snapshot.
+The corrected installed campaigns must finish before these changes are accepted.
+
+The corrected input/conversation-recovery campaign passed all 42 installed-wheel
+cases, and the handoff/restart/remote-receipt/event campaign passed all 37 cases.
+Both reports contain unchanged inputs (`build/release-input-recovery-fixed-installed`
+and `build/release-handoff-remote-recovery-installed`). These overlapping focused
+checks do not replace the complete installed release gate. Linux/Python 3.13 on
+the earlier f0ffd67 revision also exposed a live receipt observation race during
+a proved pre-write opening refusal; a deterministic reproduction currently fails
+and remains to be corrected before acceptance.

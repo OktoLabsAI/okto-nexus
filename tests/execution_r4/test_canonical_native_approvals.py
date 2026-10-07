@@ -12,7 +12,8 @@ from test_canonical_grant_regressions import mcp_helpers
 from test_harness_codex_connector import _FAKE_SERVER_SOURCE
 
 
-def approval_peer(connected, *, method="item/commandExecution/requestApproval", cancel_only=False, operator_turn=False):
+def approval_peer(connected, *, method="item/commandExecution/requestApproval", cancel_only=False, operator_turn=False,
+                  extra_params=None, expect_request=True):
     from nexus_connector_core.native.adapters.codex import CodexAppServerConnector
     from nexus_connector_core.native.runtime_bridge import CopiedAdapterSession
     setup, binding, _ = connected
@@ -21,6 +22,8 @@ def approval_peer(connected, *, method="item/commandExecution/requestApproval", 
     begin = source.index('    if "TRIGGER_SERVER_REQUEST" in text:')
     end = source.index('    if "TRIGGER_MALFORMED" in text:', begin)
     extra = ', "availableDecisions":["accept", {"acceptWithExecpolicyAmendment":{"execpolicy_amendment":["fixture-only"]}}, "cancel"]' if cancel_only else ""
+    if extra_params is not None:
+        extra += ', **' + repr(extra_params)
     source = source[:begin] + (
         '    if "TRIGGER_SERVER_REQUEST" in text:\n'
         f'        write_msg({{"jsonrpc":"2.0", "id":9001, "method":{method!r}, "params":{{"threadId":thread_id, "turnId":turn_id, "itemId":"command-fixture", "command":"echo isolated fixture"{extra}}}}})\n'
@@ -51,6 +54,9 @@ def approval_peer(connected, *, method="item/commandExecution/requestApproval", 
     else:
         turn = admit(setup, binding, "approval-turn", "turn.submit", session_id=opened["session_id"], text="TRIGGER_SERVER_REQUEST")
     wait_receipt(setup, turn)
+    if not expect_request:
+        wait_receipt(setup, turn, stages=("SUCCEEDED",))
+        return setup, binding, turn, None, peers[0], log
     deadline = time.monotonic() + 15
     while True:
         response = setup[2].get("/api/v1/approvals", headers=setup[3]["operator"], params=dict(workspace=binding["workspace_id"], status="pending"))

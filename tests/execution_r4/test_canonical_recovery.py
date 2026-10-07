@@ -38,6 +38,13 @@ def test_live_canonical_session_cannot_release_claim(connected_local, monkeypatc
     assert pull(setup, monkeypatch) == []
     closed = admit(setup, binding, 'recovery-close', 'runtime.close', session_id=turn['session_id'])
     wait_receipt(setup, closed, stages=('SUCCEEDED',))
+    # The close receipt precedes asynchronous domain release. Recover against
+    # that final snapshot, rather than racing the background reconciler.
+    import time
+    deadline = time.monotonic() + 10
+    while snapshot(setup)['status'] != 'OUTCOME_UNKNOWN':
+        assert time.monotonic() < deadline
+        time.sleep(.02)
     row = snapshot(setup)
     response = recover(setup, row, 'release_to_inbox')
     assert response.status_code == 200, response.text

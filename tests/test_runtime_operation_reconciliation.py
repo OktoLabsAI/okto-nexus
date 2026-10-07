@@ -28,113 +28,16 @@ def recovery(row, **changes):
             "reason": "Operator reviewed isolated uncertain fixture", "acknowledge_duplicate_risk": True, **changes}
 
 
-def test_explicit_takeover_releases_same_inbox_without_rewriting_transport_or_replaying(runtime):
-    deps, client, _, peers, operator, _ = runtime
-    sent, row = uncertain_delivery(runtime)
-    auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
-    with deps.connection_factory.unit_of_work() as uow:
-        worker_key = auth.issue_key(uow, agent_id="worker")
-    assert tool(client, worker_key, "inbox_pull", {"agent_id": "worker"})["data"]["messages"] == []
-    response = client.post("/api/v1/harness/outbox", headers={"x-api-key": operator}, json=recovery(row))
-    assert response.status_code == 200, response.text
-    result = response.json()["data"]
-    assert result["native_replayed"] is False and result["duplicate_risk_acknowledged"] is True
-    assert result["transport_state"] == "OUTCOME_UNKNOWN"
-    retry = tool(client, operator, "harness_list", {"view": "outbox", "maintenance": recovery(row)})
-    assert retry["ok"] and retry["data"] == result, retry
-    pulled = tool(client, worker_key, "inbox_pull", {"agent_id": "worker"})
-    assert pulled["ok"], pulled
-    assert [m["message_id"] for m in pulled["data"]["messages"]] == [sent["message_id"]]
-    assert sum(command.verb == "send_turn" for command in peers[0].sent) == 1
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        current = deps.runtime_dispatcher.repo.get(uow, row["operation_id"])
-        assert current["status"] == row["status"] and current["ack_level"] == row["ack_level"]
-        assert uow.connection.execute("SELECT count(*) FROM delivery_outbox").fetchone()[0] == 1
-        assert uow.connection.execute("SELECT count(*) FROM runtime_operation_reconciliations").fetchone()[0] == 1
 
 
-@pytest.mark.parametrize("change", [{"acknowledge_duplicate_risk": False}, {"expected_attempt_id": "stale"},
-    {"expected_owner_epoch": 9000}, {"expected_state": "SENDING"}, {"action": "cancel_pending", "acknowledge_duplicate_risk": False}])
-def test_uncertain_recovery_rejects_missing_risk_and_stale_snapshot(runtime, change):
-    deps, client, _, peers, operator, _ = runtime
-    _, row = uncertain_delivery(runtime)
-    result = client.post("/api/v1/harness/outbox", headers={"x-api-key": operator}, json=recovery(row, **change))
-    assert result.status_code == 409, result.text
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute("SELECT consumer_kind FROM message_deliveries").fetchone()[0] == "push"
-        assert uow.connection.execute("SELECT count(*) FROM runtime_operation_reconciliations").fetchone()[0] == 0
-    assert sum(c.verb == "send_turn" for c in peers[0].sent) == 1
 
 
-def test_recovery_has_operator_parity_and_survives_admission_flag_off(runtime):
-    deps, client, _, _, operator, caller = runtime
-    _, row = uncertain_delivery(runtime)
-    body = recovery(row)
-    assert client.post("/api/v1/harness/outbox", headers={"x-api-key": caller}, json=body).status_code == 403
-    assert tool(client, caller, "harness_list", {"view": "outbox", "maintenance": body})["error"]["code"] == "PERMISSION_DENIED"
-    assert client.get("/api/v1/harness/outbox", headers={"x-api-key": caller}).status_code == 403
-    deps.config.feature_harness_integrations = False
-    result = tool(client, operator, "harness_list", {"view": "outbox", "maintenance": body})
-    assert result["ok"], result
-    inspected = client.get("/api/v1/harness/outbox", headers={"x-api-key": operator}, params={"operation_id": row["operation_id"]})
-    assert inspected.status_code == 200, inspected.text
-    item = inspected.json()["data"]["items"][0]
-    assert item["state"] == "OUTCOME_UNKNOWN" and item["reconciliation"]["action"] == "release_to_inbox"
-    assert not any(key in item for key in ("envelope", "credential_binding", "context", "payload"))
 
 
-def test_concurrent_recovery_is_one_atomic_decision_and_conflicting_key_fails(runtime):
-    deps, client, _, _, operator, _ = runtime
-    _, row = uncertain_delivery(runtime)
-    body = recovery(row)
-    with ThreadPoolExecutor(max_workers=2) as pool:
-        results = list(pool.map(lambda _: client.post("/api/v1/harness/outbox", headers={"x-api-key": operator}, json=body), range(2)))
-    assert [r.status_code for r in results] == [200, 200]
-    assert results[0].json() == results[1].json()
-    changed = client.post("/api/v1/harness/outbox", headers={"x-api-key": operator}, json=recovery(row, reason="Different decision"))
-    assert changed.status_code == 409
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute("SELECT count(*) FROM runtime_operation_reconciliations").fetchone()[0] == 1
 
 
-def test_recovery_rolls_back_audit_and_source_when_inbox_release_fails(runtime, monkeypatch):
-    deps, client, _, _, operator, _ = runtime
-    _, row = uncertain_delivery(runtime)
-    original = deps.repos.deliveries.release_runtime_reservation
-    def cut(*args, **kwargs):
-        original(*args, **kwargs)
-        from okto_nexus.errors import OktoNexusError, ErrorCode
-        raise OktoNexusError(ErrorCode.CONFLICT, "Fixture transactional cut", {})
-    monkeypatch.setattr(deps.repos.deliveries, "release_runtime_reservation", cut)
-    result = client.post("/api/v1/harness/outbox", headers={"x-api-key": operator}, json=recovery(row))
-    assert result.status_code == 409
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute("SELECT consumer_kind FROM message_deliveries").fetchone()[0] == "push"
-        assert uow.connection.execute("SELECT reconciliation_id FROM delivery_outbox").fetchone()[0] is None
-        assert uow.connection.execute("SELECT count(*) FROM runtime_operation_reconciliations").fetchone()[0] == 0
 
 
-def test_pending_cancel_is_safe_before_send_intent(runtime, monkeypatch):
-    deps, client, _, peers, operator, _ = runtime
-    open_rest(runtime)
-    entered, release = threading.Event(), threading.Event()
-    original = deps.runtime_dispatcher._execute
-    def before_send(operation, attempt):
-        entered.set()
-        assert release.wait(10)
-        return original(operation, attempt)
-    monkeypatch.setattr(deps.runtime_dispatcher, "_execute", before_send)
-    try:
-        sent = send_message(runtime)
-        assert entered.wait(5)
-        row = wait_status(runtime, sent["runtime_operations"][0], "CLAIMED")
-        result = client.post("/api/v1/harness/outbox", headers={"x-api-key": operator}, json=recovery(row,
-            action="cancel_pending", acknowledge_duplicate_risk=False))
-        assert result.status_code == 200, result.text
-    finally:
-        release.set()
-    wait_status(runtime, row["operation_id"], "CANCELLED")
-    assert peers[0].sent == []
 
 
 def test_timeout_never_allows_takeover_while_original_call_is_running(runtime, monkeypatch):
@@ -161,34 +64,8 @@ def test_timeout_never_allows_takeover_while_original_call_is_running(runtime, m
         release.set()
 
 
-def test_active_runtime_cannot_be_released_just_by_acknowledging_risk(runtime):
-    _, client, _, _, operator, _ = runtime
-    open_rest(runtime)
-    sent = send_message(runtime)
-    row = wait_status(runtime, sent["runtime_operations"][0], "SENT_UNCONFIRMED")
-    response = client.post("/api/v1/harness/outbox", headers={"x-api-key": operator}, json=recovery(row))
-    assert response.status_code == 409 and "runtime before takeover" in response.text, response.text
 
 
-def test_managed_handoff_cannot_be_released_as_conversation(runtime):
-    from test_runtime_handoff_dispatch import work, claim
-    from test_runtime_grants import issue
-    deps, client, root, _, operator, caller = runtime
-    opened = client.post("/api/v1/harness/sessions", headers={"x-api-key": operator}, json={
-        "agent_id": "worker", "kind": "codex", "endpoint_id": "endpoint-codex", "project_root": root})
-    sid = opened.json()["data"]["session_id"]
-    hid, _ = work(runtime)
-    grant = issue(runtime, ["execute_work"], endpoint_id="endpoint-codex")
-    admitted = claim(runtime, hid, grant, caller)
-    assert admitted["ok"], admitted
-    op = admitted["data"]["runtime_operation"]["operation_id"]
-    wait_status(runtime, op, "SENT_UNCONFIRMED")
-    wait_close_result(client, operator, tool(client, operator, "harness_close", {"session_id": sid}))
-    row = wait_status(runtime, op, "OUTCOME_UNKNOWN")
-    response = client.post("/api/v1/harness/outbox", headers={"x-api-key": operator}, json=recovery(row))
-    assert response.status_code == 409 and "handoff recovery" in response.text, response.text
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute("SELECT status FROM handoffs WHERE handoff_id=?", (hid,)).fetchone()[0] == "CLAIMED"
 
 
 def test_abandoned_command_keeps_history_and_requires_explicit_endpoint_reconciliation(runtime):
@@ -263,23 +140,6 @@ def test_late_correlated_terminal_is_retained_without_consumption_or_publication
         assert uow.connection.execute("SELECT count(*) FROM messages WHERE subject LIKE 'runtime processing receipt:%'").fetchone()[0] == 0
 
 
-def test_retired_stdio_refuses_recovery_and_http_uses_active_owner(runtime):
-    import subprocess
-    import sys
-    from test_pr34_remediation import stdio_environment
-    deps, client, _, peers, operator, _ = runtime
-    _, row = uncertain_delivery(runtime)
-    env = stdio_environment(runtime)
-    env['OKTO_NEXUS_API_KEY'] = operator
-    retired = subprocess.run([sys.executable, '-m', 'okto_nexus.adapters.inbound.mcp.server',
-        '--home', str(deps.config.home_dir)], env=env, capture_output=True, text=True, timeout=30)
-    assert retired.returncode != 0
-    assert 'MCP stdio is no longer available' in retired.stderr
-    response = client.post('/api/v1/harness/outbox', headers={'x-api-key': operator}, json=recovery(row))
-    assert response.status_code == 200, response.text
-    retry = tool(client, operator, 'harness_list', {'view': 'outbox', 'maintenance': recovery(row)})
-    assert retry['ok'] and retry['data'] == response.json()['data'], retry
-    assert sum(c.verb == 'send_turn' for peer in peers for c in peer.sent) == 1
 
 
 def test_reconciliation_migration_is_additive_and_repeatable(tmp_path):
@@ -304,28 +164,3 @@ def test_reconciliation_migration_is_additive_and_repeatable(tmp_path):
             assert "reconciliation_id" in {row["name"] for row in uow.connection.execute(f"PRAGMA table_info({table})")}
         assert uow.connection.execute("SELECT count(*) FROM runtime_operation_reconciliations").fetchone()[0] == 0
         assert uow.connection.execute("PRAGMA foreign_key_check").fetchall() == []
-
-
-def test_restart_with_admission_disabled_can_recover_existing_operations(runtime):
-    from fastapi.testclient import TestClient
-    from okto_nexus.adapters.inbound.mcp.server import bootstrap
-    from okto_nexus.adapters.inbound.http.app import build_app
-    deps, _, _, peers, operator, _ = runtime
-    _, row = uncertain_delivery(runtime)
-    from okto_nexus.application.runtime_shutdown import shutdown_runtime
-    assert shutdown_runtime(deps.runtime_dispatcher, deps.harness_supervisor)["state"] == "drained"
-    recovered = bootstrap({}, ["--home", str(deps.config.home_dir), "--feature-harness-integrations", "false"])
-    constructed = []
-    def forbidden_native(**kwargs):
-        constructed.append(True)
-        raise AssertionError("Recovery-only serve cannot construct a native peer")
-    recovered.harness_connector_factories = {kind: forbidden_native for kind in ("pi", "codex", "claude_code")}
-    with TestClient(build_app(recovered)) as client:
-        headers = {"x-api-key": operator}
-        inspected = client.get("/api/v1/harness/outbox", headers=headers, params={"operation_id": row["operation_id"]})
-        assert inspected.status_code == 200, inspected.text
-        result = client.post("/api/v1/harness/outbox", headers=headers, json=recovery(row))
-        assert result.status_code == 200, result.text
-        assert result.json()["data"]["native_replayed"] is False
-    assert constructed == []
-    assert sum(c.verb == "send_turn" for peer in peers for c in peer.sent) == 1

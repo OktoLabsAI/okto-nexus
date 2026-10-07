@@ -1623,6 +1623,215 @@
         "tests/execution_r4/test_canonical_native_approvals.py::test_server_restart_does_not_replay_pending_native_permission"
       ],
       "source_sha256": "dbb32e9e6b8878109ba2c478bca893231c5276ba2854805f89b8414c941cf3a0"
+    },
+    {
+      "test": "tests/test_runtime_native_inputs.py::test_native_input_requires_valid_explicit_operator_answers",
+      "reason": "Real Core questions require explicit valid answers from the originating interlocutor, retain exact idempotency and refuse other actors. R4 deliberately retains sensitive answers in memory rather than exposing persisted legacy decision_detail.response.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_native_inputs.py::test_explicit_input_roundtrip_and_idempotency",
+        "tests/execution_r4/test_native_decisions.py::test_sensitive_input_is_retained_in_memory_and_explicitly_resupplied_after_loss"
+      ],
+      "source_sha256": "db94e2f8acd8a654309c07ddee05c8752b2228b5247ab8887afba188c1f0ba0b"
+    },
+    {
+      "test": "tests/test_runtime_native_inputs.py::test_native_input_and_elicitation_keep_answer_separate_from_permission",
+      "reason": "Real Core question and form requests retain exact accept/deny response encodings; no binary permission decision fabricates an answer.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_native_inputs.py::test_explicit_input_roundtrip_and_idempotency"
+      ],
+      "source_sha256": "413b2ca04a82c2d958dc326ab24f21211aa539584969b3696457787d561f715b"
+    },
+    {
+      "test": "tests/test_runtime_native_inputs.py::test_invalid_form_answer_stays_pending_without_native_write",
+      "reason": "All four original invalid form shapes traverse actual Core pipes and the current decision API, retaining pending requests without a native response.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_native_inputs.py::test_invalid_input_remains_pending_without_native_effect"
+      ],
+      "source_sha256": "6f188b65273b76f1de32b182c631a57165684e74d17dd3f5b8e328479828731f"
+    },
+    {
+      "test": "tests/test_runtime_native_inputs.py::test_unsupported_native_inputs_are_not_advertised_as_human_approvals",
+      "reason": "Actual Core rejects secret questions and malformed blocking metadata without creating a canonical human approval.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_native_inputs.py::test_unsupported_inputs_never_create_human_approval"
+      ],
+      "source_sha256": "756e4f8e913cecd2cab3bd490fed6230a49aa142efda1caffc20fb362129003e"
+    },
+    {
+      "test": "tests/test_runtime_native_inputs.py::test_uncorrelated_url_and_remote_schema_elicitation_are_rejected_without_followup",
+      "reason": "Actual Core rejects URL forms, remote schema references and uncorrelated requests without human approval or follow-up.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_native_inputs.py::test_unsupported_inputs_never_create_human_approval"
+      ],
+      "source_sha256": "14b41c637aede8d0ad6f2a50d44dd7701bdb9316803807e6c8160471ed41d385"
+    },
+    {
+      "test": "tests/test_runtime_native_inputs.py::test_input_answer_and_human_decision_rollback_together",
+      "reason": "Inject failure after the real canonical approval flip; request and decision roll back without native output, then one matching retry succeeds and changed replay conflicts.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_native_inputs.py::test_input_and_decision_rollback_together_then_retry_once"
+      ],
+      "source_sha256": "f1cc1dd5d92279653f8c02d41af3c530a2679d0e6bf6c85411d1324097b840bc"
+    },
+    {
+      "test": "tests/test_runtime_native_inputs.py::test_expired_human_input_returns_decline_without_sending_the_answer",
+      "reason": "The current R4 dispatch contract refuses expired authority before any native effect, including fabricated declines; an expired form cannot send its answer.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_native_inputs.py::test_expired_input_cannot_send_a_response_under_stale_authority"
+      ],
+      "source_sha256": "706420429ba3cdd0f4ec426de654d6790bc4147dcc51ea12d57cde79906349da"
+    },
+    {
+      "test": "tests/test_runtime_operation_reconciliation.py::test_explicit_takeover_releases_same_inbox_without_rewriting_transport_or_replaying",
+      "reason": "A real Core turn and close retain uncertain canonical evidence. Reviewed recovery releases one inbox record while preserving every receipt and one native send, with REST/MCP idempotency.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_recovery_regressions.py::test_concurrent_recovery_and_cross_transport_replay_preserve_evidence"
+      ],
+      "source_sha256": "c3651e9c3d4cc63eb424cf1bef66d5d51999447215ec8bc8d21f830dd9c560f0"
+    },
+    {
+      "test": "tests/test_runtime_operation_reconciliation.py::test_concurrent_recovery_is_one_atomic_decision_and_conflicting_key_fails",
+      "reason": "Two concurrent REST recoveries produce one audit and matching result; MCP replay matches and a changed reason conflicts without a second native effect.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_recovery_regressions.py::test_concurrent_recovery_and_cross_transport_replay_preserve_evidence"
+      ],
+      "source_sha256": "3fded743fc6a52673b5b8100b3a217d8878965dc535c9715d1dbe48a1babf466"
+    },
+    {
+      "test": "tests/test_runtime_operation_reconciliation.py::test_uncertain_recovery_rejects_missing_risk_and_stale_snapshot",
+      "reason": "All five original missing-risk/stale-state/attempt/owner/cancel cases now exercise a closed canonical Core session and retain its push reservation.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_recovery_regressions.py::test_uncertain_recovery_requires_risk_and_current_snapshot"
+      ],
+      "source_sha256": "ef676557e88e2425a851740f90afc51f91494812ab8d46d57f07d84f0cde7b26"
+    },
+    {
+      "test": "tests/test_runtime_operation_reconciliation.py::test_recovery_has_operator_parity_and_survives_admission_flag_off",
+      "reason": "REST and MCP deny ordinary recovery access; the operator can recover and inspect retained uncertain Core work with new admission disabled, without exposing payload or credentials.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_recovery_regressions.py::test_recovery_requires_operator_with_new_admission_disabled"
+      ],
+      "source_sha256": "7268e8dbf351f8e88ee23c36e6d8ba5f5dabd3fbdbc035d73fe901f39138b1fd"
+    },
+    {
+      "test": "tests/test_runtime_operation_reconciliation.py::test_recovery_rolls_back_audit_and_source_when_inbox_release_fails",
+      "reason": "Fault after the real delivery reservation release rolls back the recovery audit and source marker and preserves the unread push reservation.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_recovery_regressions.py::test_recovery_rolls_back_audit_and_inbox_on_release_failure"
+      ],
+      "source_sha256": "0f810c1a4a174a6244e922bffb9cd92582afde085ecb33f7f90b0c9eae730564"
+    },
+    {
+      "test": "tests/test_runtime_operation_reconciliation.py::test_pending_cancel_is_safe_before_send_intent",
+      "reason": "The current Core send gate is held before native launch; canonical cancellation releases the inbox, settles queued operations and never opens a provider.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_recovery.py::test_cancel_before_canonical_send_keeps_native_unstarted"
+      ],
+      "source_sha256": "1e7f03fcd3a3ef228c3b1cafc1c6ff0655bdaf12917104480d615b72654bb4a9"
+    },
+    {
+      "test": "tests/test_runtime_operation_reconciliation.py::test_active_runtime_cannot_be_released_just_by_acknowledging_risk",
+      "reason": "Current recovery refuses an active canonical session even with acknowledged risk; after proved close the same logical delivery can be explicitly released once.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_recovery.py::test_live_canonical_session_cannot_release_claim"
+      ],
+      "source_sha256": "8578e31d21ec6a039aeef74f6e3ba1c61c5aeab582e4387e4e6e74b103b5c4b3"
+    },
+    {
+      "test": "tests/test_runtime_handoff_recovery.py::test_operator_reopens_same_handoff_without_releasing_work_as_conversation",
+      "reason": "Core work recovery preserves one delivery and transport history, reopens only the original claim and prevents its stale completion or binding from pinning a new unmanaged claim.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_handoff_recovery.py::test_recovery_preserves_history_and_new_claim_epoch"
+      ],
+      "source_sha256": "58b74c9526c60c74755c495a98481684e1fa9634c8b908db64fb00be91acd1bf"
+    },
+    {
+      "test": "tests/test_runtime_handoff_recovery.py::test_recovery_rejects_stale_work_or_attempt_and_unacknowledged_risk",
+      "reason": "All four original stale claim/handoff/attempt and unacknowledged-risk cases exercise an actual closed Core session without an audit or claim mutation.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_handoff_recovery.py::test_stale_or_unreviewed_handoff_recovery_is_refused"
+      ],
+      "source_sha256": "aeabdf5d344cd170991e8cef5ed54afa50c56cf0787d4dc4f7f5f19406eb03a8"
+    },
+    {
+      "test": "tests/test_runtime_handoff_recovery.py::test_only_operator_can_recover_work_even_with_admission_disabled",
+      "reason": "REST/MCP refuse caller and worker recovery; operator recovery of Core work remains available with new admission disabled.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_handoff_recovery.py::test_operator_recovers_work_with_admission_disabled"
+      ],
+      "source_sha256": "7f035c3d87dd912c5185e44c788d196a46504e14dee60f920ef5a6de60543b0a"
+    },
+    {
+      "test": "tests/test_runtime_handoff_recovery.py::test_recovery_cannot_reopen_completed_canonical_work",
+      "reason": "Actual canonical completion, verification and rejection each fence recovery of the preceding closed Core execution.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_handoff_recovery.py::test_recovery_never_reopens_completed_work"
+      ],
+      "source_sha256": "79554b5098c71eb14cad187f2d3081f7ef82bbb8b3d20b6b137dc9bf300c15bb"
+    },
+    {
+      "test": "tests/test_runtime_handoff_recovery.py::test_work_recovery_and_transport_audit_roll_back_with_canonical_event",
+      "reason": "A failure after reopening the canonical claim rolls back handoff state, recovery audit, source marker and event.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_handoff_recovery.py::test_handoff_recovery_rolls_back_transition_event_and_audit"
+      ],
+      "source_sha256": "4bf9df71932bf2ed17b2830bfb915263002eef7765b5051615dadee8207ffd44"
+    },
+    {
+      "test": "tests/test_runtime_handoff_recovery.py::test_concurrent_recovery_records_one_canonical_transition_and_audit",
+      "reason": "Concurrent recovery returns one matching result, transition and immutable claim audit; a changed decision conflicts.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_handoff_recovery.py::test_concurrent_handoff_recovery_is_one_transition"
+      ],
+      "source_sha256": "2fb5d71ce5c02348448b417ff56806771cefc9816c4dad40ba7c5be242fa92d6"
+    },
+    {
+      "test": "tests/test_runtime_handoff_recovery.py::test_late_structured_terminal_cannot_complete_reclaimed_work",
+      "reason": "Pause governed application of an actual Core Codex structured result until after recovery and a new claim; retain the old output while blocking completion of the new epoch.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_handoff_recovery.py::test_late_structured_output_cannot_complete_reclaimed_work"
+      ],
+      "source_sha256": "0f03935f4acbb3c540b5216021216619c543c6a0516ffa3f78702ff38fa39cc3"
+    },
+    {
+      "test": "tests/test_runtime_handoff_recovery.py::test_terminal_native_turn_can_be_recovered_without_fabricating_handoff_completion",
+      "reason": "A captured and published Core terminal does not itself complete the handoff; after proved close the operator can reopen that claim.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_handoff_recovery.py::test_completed_native_turn_can_be_recovered_without_completing_work"
+      ],
+      "source_sha256": "ead30f43ae5fb086e3191a7eede6b2f1e3f6a834875fed04d09d736367cd6d9f"
+    },
+    {
+      "test": "tests/test_runtime_handoff_recovery.py::test_retired_stdio_refuses_work_recovery_and_http_uses_active_serve_owner",
+      "reason": "The retired stdio process refuses work recovery while HTTP/MCP share the active owner and one native execution.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_handoff_recovery.py::test_retired_stdio_cannot_create_another_work_recovery_owner"
+      ],
+      "source_sha256": "4f558f5e7210c6c2adc6a9a68a7abfa12647ae8cf652d58a35af45f16b16aa63"
+    },
+    {
+      "test": "tests/test_runtime_operation_reconciliation.py::test_managed_handoff_cannot_be_released_as_conversation",
+      "reason": "An actual claimed and closed Core execution remains governed handoff work and cannot be released through conversation recovery.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_handoff_recovery.py::test_handoff_claim_cannot_be_released_as_conversation"
+      ],
+      "source_sha256": "14c59dce3cfc46a08fdeb8ba52834f311444d5fa2e72cbd9f8980f86f22d62c2"
+    },
+    {
+      "test": "tests/test_runtime_operation_reconciliation.py::test_retired_stdio_refuses_recovery_and_http_uses_active_owner",
+      "reason": "An actual uncertain Core conversation is recoverable only through the retained HTTP/MCP owner; a separate retired stdio process refuses without replay.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_recovery_restart.py::test_retired_stdio_refuses_conversation_recovery_without_replaying"
+      ],
+      "source_sha256": "d5f6d2d3d87f86adba7abcc2453bf51b146ce931f056bf3ba5832832d9070d77"
+    },
+    {
+      "test": "tests/test_runtime_operation_reconciliation.py::test_restart_with_admission_disabled_can_recover_existing_operations",
+      "reason": "Restart the production app over retained Core conversation history with native admission disabled; no embedded owner starts and operator recovery preserves one native effect.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_recovery_restart.py::test_restart_with_admission_disabled_recovers_retained_conversation"
+      ],
+      "source_sha256": "19157c0f63e903c0491637e4830f317bfee0872ddf6d0f25d2de6e11980f6997"
     }
   ]
 }
