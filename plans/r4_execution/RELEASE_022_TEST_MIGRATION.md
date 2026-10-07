@@ -183,3 +183,27 @@ reported no session, no native acceptance and no durable result. Inspection now
 uses the canonical session/acceptance and waits for materialized terminal output.
 Three lifecycle cases, the strict-before-registration case and eight scoped
 history/control/competition cases passed.
+
+The work-inspection installed campaign passed 25 cases with unchanged inputs.
+The broader local R4 installed campaign was interrupted to correct a newly
+reproduced publication race; its nonzero exit is not an acceptance result.
+Structured work can arrive between the handoff scan and the conversation scan.
+The conversation publisher previously marked that pending result BLOCKED before
+the handoff projector processed or retried its admitted completion contract.
+Conversation scanning now leaves structured results pending until their work
+outcome exists. The deterministic before-fix regression failed; all 16 native
+structured-result cases passed after correction, with three additional grant,
+read-snapshot and cross-transport claim cases passing separately.
+
+Eight authority cases preserve endpoint policy revalidation while honoring the
+documented operator-only represented R4 identity. Two real Codex capture cases
+passed with Server projection paused, including delayed durable Core storage,
+256 backpressured deltas, exact reconstructed output and confirmed process close.
+These are focused checks; the complete installed release matrix is still required.
+
+The structured-work/capture/grants/operator installed-wheel campaign passed all
+66 cases with unchanged inputs (`build/release-structured-grants-installed`).
+The isolated source artifact-boundary follow-up passed three cases: private
+readers, quota refusal before filesystem effects, and publication-worker shutdown
+ownership with an independently advancing heartbeat. These additional cases are
+not part of the 66-case installed acceptance scope.

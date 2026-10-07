@@ -1379,6 +1379,153 @@
         "tests/execution_r4/test_canonical_work_lifecycle.py::test_changed_work_authority_retains_late_output_without_publication"
       ],
       "source_sha256": "499ec1d0edb7c2fd1f5520c3f518b9aa8399586fa567e9b15a279b618ea44b5f"
+    },
+    {
+      "test": "tests/test_runtime_grants.py::test_p04_grant_allows_same_scoped_action_in_rest_and_mcp",
+      "reason": "M04_OPERATOR_RUNTIME explicitly limits represented canonical execution to authenticated operators. Ordinary endpoint grants retain policy ceilings but cannot represent a foreign Core identity. Positive subject REST/MCP grants, finite budgets and operator provenance remain separately executable.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delegated_grants.py::test_ordinary_endpoint_grant_cannot_represent_another_core_identity",
+        "tests/execution_r4/test_canonical_grant_regressions.py::test_concurrent_turns_charge_the_last_grant_slot_once",
+        "tests/execution_r4/test_canonical_grant_regressions.py::test_spent_grant_can_recover_its_recorded_operation_without_another_effect",
+        "tests/execution_r4/test_operator_runtime.py::test_operator_complete_cycle_preserves_actor_and_subject"
+      ],
+      "source_sha256": "fab4067009c26fe2435ac0ebf2a1a4be80c1afad8313da918877bee83ffba6b3"
+    },
+    {
+      "test": "tests/test_runtime_grants.py::test_p04_grant_open_requires_explicit_scoped_binding",
+      "reason": "Foreign ordinary-agent opening was replaced by operator-only represented execution. Canonical explicit and unambiguous implicit binding selection are now both supported, and ambiguous selection is refused before native effects.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delegated_grants.py::test_ordinary_endpoint_grant_cannot_represent_another_core_identity",
+        "tests/execution_r4/test_harness_canonical.py::test_existing_open_uses_approved_realization_and_core",
+        "tests/execution_r4/test_harness_canonical.py::test_implicit_open_refuses_competing_targets_without_native_effect"
+      ],
+      "source_sha256": "5e6a9a8225a4cb0d404d5d163105960a40e803288f6207419188f7cea46a3426"
+    },
+    {
+      "test": "tests/test_runtime_grants.py::test_p04_authority_is_revalidated_before_send",
+      "reason": "Current Core setup replaces removed native profiles. Positive endpoint-policy authorization is checked before permissions, scope, credentials and profile mutations; each mutation then denies policy and REST/MCP dispatch. Subject grant revocation and expiry retain their own positive execution context.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delegated_grants.py::test_delegated_authority_changes_are_rechecked_on_both_transports",
+        "tests/execution_r4/test_canonical_grant_regressions.py::test_authority_change_denies_rest_and_mcp_before_native_send"
+      ],
+      "source_sha256": "e1e5523f8b09dc42bf55532838c2dabcf1a0ec7a162feb2653b801f98abd332e"
+    },
+    {
+      "test": "tests/test_runtime_grants.py::test_p04_native_options_and_payload_identity_are_rejected",
+      "reason": "The canonical send/steer/interrupt boundary rejects payload authority and native configuration overrides without constructing the removed native owner.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_command_payload.py::test_control_payload_cannot_replace_identity_or_native_configuration"
+      ],
+      "source_sha256": "5f7f8cd0db4a8d2a56aea49ad0f28ccf1201a44e66043d906e266c9cd3890b12"
+    },
+    {
+      "test": "tests/test_runtime_grants.py::test_p04_authenticated_http_reuses_grant_policy_and_durable_resource",
+      "reason": "Ordinary endpoint grants no longer grant foreign canonical session identity. Current subject MCP history and control use the same durable admission as REST; foreign existing and missing sessions remain opaque.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delegated_grants.py::test_ordinary_endpoint_grant_cannot_represent_another_core_identity",
+        "tests/execution_r4/test_harness_canonical.py::test_mcp_uses_same_admission_and_history",
+        "tests/execution_r4/test_canonical_private_history.py::test_private_session_replay_results_and_listing_hide_foreign_evidence"
+      ],
+      "source_sha256": "502debb626c9f94cc6b39506eaa1a5188e57eda115923729d0bb45916f5f1a0e"
+    },
+    {
+      "test": "tests/test_runtime_grants.py::test_p04_wrong_endpoint_is_opaque_and_internal_control_is_authorized",
+      "reason": "Current canonical foreign resources are uniformly opaque even with an endpoint policy grant. The retained unauthenticated internal-operator test continues independently of removed native setup.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delegated_grants.py::test_ordinary_endpoint_grant_cannot_represent_another_core_identity",
+        "tests/test_runtime_grants.py::test_p04_internal_missing_authentication_cannot_impersonate_operator"
+      ],
+      "source_sha256": "7a69ace361f335204a4a24681b2072745d68b9f9e1c6b9d7d78f2cccd59fe78f"
+    },
+    {
+      "test": "tests/test_runtime_grants.py::test_p04_operator_cannot_send_using_a_replaced_profile",
+      "reason": "An authenticated operator can resolve represented work but a changed approved profile invalidates the applied execution lease; dispatch records a terminal no-effect refusal and no native turn occurs.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delegated_grants.py::test_operator_cannot_control_session_after_approved_profile_changes"
+      ],
+      "source_sha256": "6eb745a4d357e42660be26e5aba86a0a4d6a0de2529d167a75e161c6b54ad3f8"
+    },
+    {
+      "test": "tests/test_runtime_capture_projection_isolation.py::test_native_burst_is_journaled_while_projection_is_blocked",
+      "reason": "Core owns the per-session durable ingress journal after the native cutover. Real Codex pipe coverage preserves 256 backpressured deltas with normal and delayed durable storage while Server projection is paused, then verifies exact reconstructed output and process release.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_capture_isolation.py::test_core_captures_native_burst_while_server_projection_is_paused"
+      ],
+      "source_sha256": "6129381e7134389e233bf0b9d20d320cd95a90b93d927872a416372e6598f0e5"
+    },
+    {
+      "test": "tests/test_runtime_work_results.py::test_explicitly_authorized_structured_result_completes_canonical_handoff",
+      "reason": "The real Codex peer now executes through Core with an approved R4 binding and returns the exact governed structured completion; operation inspection retains APPLIED and WORK_APPLIED evidence. Foreign result privacy has independent populated history coverage.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_structured_work.py::test_native_structured_work_preserves_explicit_completion_contract",
+        "tests/execution_r4/test_canonical_private_history.py::test_private_session_replay_results_and_listing_hide_foreign_evidence"
+      ],
+      "source_sha256": "8132cefa23c03f4603d4b1e1e96dc65a2e58f9a7180bd84b20bdf70888f99af1"
+    },
+    {
+      "test": "tests/test_runtime_work_results.py::test_structured_reject_uses_canonical_rejection",
+      "reason": "Current Core native output preserves explicit reject action, canonical rejection reason and durable APPLIED receipt.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_structured_work.py::test_native_structured_work_preserves_explicit_completion_contract"
+      ],
+      "source_sha256": "b5415938f51cf563cfd94fadae9683df0b65101f8b3c42bd57255061252c8039"
+    },
+    {
+      "test": "tests/test_runtime_work_results.py::test_structured_completion_cannot_self_verify",
+      "reason": "A real native structured completion with verification criteria remains VERIFYING; no native output can supply the verifier's decision.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_structured_work.py::test_native_structured_work_preserves_explicit_completion_contract"
+      ],
+      "source_sha256": "772eb64b9670d58230b1fed9c5e3d2b095bb01a4bb031b5c80259425cfa6dad2"
+    },
+    {
+      "test": "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority",
+      "reason": "All ten original authority mutations remain parameterized on actual Core native output: operation, handoff, epoch integer/boolean, action, agent, actor, sender, grant and root identity. Each records BLOCKED without completing the claim.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_structured_work.py::test_native_structured_result_cannot_replace_its_authority"
+      ],
+      "source_sha256": "61cc74e8a640b8d42f4e38ecae6505c504900e93dafe52cd371f594f3562669b"
+    },
+    {
+      "test": "tests/test_runtime_work_results.py::test_structured_looking_output_without_admission_does_not_complete",
+      "reason": "Core native output that looks structured cannot opt into a contract absent from admission. Original output stays retained, the claim remains CLAIMED and no work outcome is invented.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_structured_work.py::test_native_structured_work_preserves_explicit_completion_contract"
+      ],
+      "source_sha256": "614d7f22b9db285c1b8f172d6fad28b6c01657031144ddb0946d2e055f64b118"
+    },
+    {
+      "test": "tests/test_runtime_work_results.py::test_revoked_grant_blocks_structured_completion_and_retains_evidence",
+      "reason": "Pause the real structured completion after native output, revoke its explicit work grant through authenticated HTTP, and verify BLOCKED, private retained evidence and unchanged claim.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_structured_work.py::test_revoked_work_grant_blocks_structured_completion_and_preserves_output"
+      ],
+      "source_sha256": "3e3271addd6326f68acc92ae4326dc070935a432e3077b13a138f85ae864019b"
+    },
+    {
+      "test": "tests/test_runtime_work_results.py::test_completion_and_its_receipt_rollback_and_retry_together",
+      "reason": "Core native completion, outcome and claim roll back together on injected durable-write failure; subsequent publication recovers exactly once. A deterministic adjacent-scan test additionally fences the conversation publisher from pending structured work.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_structured_work.py::test_structured_completion_and_receipt_roll_back_then_recover_once",
+        "tests/execution_r4/test_canonical_structured_work.py::test_conversation_scan_cannot_consume_pending_structured_work"
+      ],
+      "source_sha256": "036f5ce9c09d128ea15024302c760edd1a9ab4005b493fbd92ce9b6bb508748c"
+    },
+    {
+      "test": "tests/test_runtime_work_results.py::test_managed_revalidation_does_not_write_to_a_read_snapshot",
+      "reason": "Current managed Core work retains the zero-SQL-change revalidation assertion inside a read-only unit of work after native terminal output.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_structured_work.py::test_managed_work_revalidation_keeps_read_snapshot_read_only"
+      ],
+      "source_sha256": "ba93a452e8ead7d8ba5e69de4d231dceb3dc558a554b46204300cbf7e2296e2f"
+    },
+    {
+      "test": "tests/test_runtime_work_results.py::test_rest_structured_contract_is_idempotent_with_mcp_and_cannot_be_changed",
+      "reason": "Authenticated REST and MCP recover one current Core managed claim with the original completion mode; changing that mode returns CONFLICT and cannot create another native peer.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_structured_work.py::test_rest_structured_claim_replays_through_mcp_without_changing_contract"
+      ],
+      "source_sha256": "55e66aa3a1c94bf44b2336e37658cc3fa149a745d970f2d93d956078193f23e0"
     }
   ]
 }
