@@ -79,3 +79,10 @@ Review the remaining historical execution scenarios by contract, migrate missing
 R4 behaviors, retain service/history tests, then run the complete installed matrix.
 Do not merge PR #49 or create v0.2.2 until that gate passes. Harness support is not
 being retired: Core still provides Pi, Codex, Claude stream and Claude attach.
+
+The exhausted-grant campaign also passed all 13 cases against the installed
+wheel outside the checkout with unchanged campaign inputs. Qualification,
+inventory, realization and dispatch contract checks passed 69 cases. Historical
+journal tests now seed retained sessions directly, preserving their original
+filesystem, transaction, replay and authorization assertions without opening a
+removed native owner: journal 12 passed, public replay 6 passed, retention 7 passed.

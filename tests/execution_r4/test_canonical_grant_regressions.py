@@ -11,19 +11,24 @@ from test_unbounded_local_grants import issue
 from okto_nexus.domain.base import iso_plus
 
 
+@pytest.fixture(autouse=True)
+def mcp_helpers(monkeypatch):
+    # Import-cache mutation is process-global and must precede worker threads.
+    monkeypatch.syspath_prepend(str(Path(__file__).parents[1]))
+
+
 def invoke_command(setup, monkeypatch, transport, session, body):
     client, headers = setup[2:4]
     if transport == 'rest':
         return client.post(f'/api/v1/harness/sessions/{session}/send', headers=headers['subject'], json=body).json()
-    monkeypatch.syspath_prepend(str(Path(__file__).parents[1]))
     from test_pr34_remediation import tool
-    client.headers['host'] = '127.0.0.1:8000'
     return tool(client, headers['subject']['Authorization'].removeprefix('Bearer '),
                 'harness_send', dict(session_id=session, **body))
 
 
 def open_scoped(connected, *, budget=10):
     setup, binding, native = connected
+    setup[2].headers['host'] = '127.0.0.1:8000'
     deps = setup[0]
     with deps.connection_factory.unit_of_work() as uow:
         uow.connection.execute("UPDATE runtime_execution_grants SET revoked_at='replaced'")

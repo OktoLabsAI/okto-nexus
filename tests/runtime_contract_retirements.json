@@ -307,6 +307,146 @@
         "tests/execution_r4/test_canonical_grant_regressions.py::test_concurrent_command_replay_keeps_one_effect_and_immutable_payload"
       ],
       "source_sha256": "48b4ce252302613eb2a06ec102365b9a256589f09545764a87bd03069dc65969"
+    },
+    {
+      "test": "tests/test_runtime_effective_capabilities.py::test_extension_without_trusted_probe_cannot_execute",
+      "reason": "Server-local adapter registration, probe overrides and native factory multiplexing were removed. Core inventory qualification now gates admission and approved launch; an unqualified native provider cannot acquire runtime execution.",
+      "replacements": [
+        "tests/execution_r4/test_runtime_options.py::test_unqualified_inventory_can_be_prepared_but_never_started",
+        "tests/execution_r4/test_local_realization.py::test_preparation_refuses_changed_local_evidence",
+        "tests/execution_r4/test_native_loader_cutover.py::test_clean_server_composition_does_not_import_legacy_native_loaders"
+      ],
+      "source_sha256": "0f290c7e78f960b546fa4bc883741c589ceb1a69376d4f3ff3ab148301b51b25"
+    },
+    {
+      "test": "tests/test_runtime_effective_capabilities.py::test_unknown_codex_contract_cannot_admit_a_direct_turn",
+      "reason": "Server-local adapter registration, probe overrides and native factory multiplexing were removed. Core inventory qualification now gates admission and approved launch; an unqualified native provider cannot acquire runtime execution.",
+      "replacements": [
+        "tests/execution_r4/test_runtime_options.py::test_unqualified_inventory_can_be_prepared_but_never_started",
+        "tests/execution_r4/test_local_realization.py::test_preparation_refuses_changed_local_evidence",
+        "tests/execution_r4/test_native_loader_cutover.py::test_clean_server_composition_does_not_import_legacy_native_loaders"
+      ],
+      "source_sha256": "7bf9b2f7b0fc073c07df61502caf30ead29819d10ed70659f2f552d1a5bf48d9"
+    },
+    {
+      "test": "tests/test_runtime_effective_capabilities.py::test_unknown_on_demand_contract_is_rejected_without_native_write_or_uncertain_receipt",
+      "reason": "Server-local adapter registration, probe overrides and native factory multiplexing were removed. Core inventory qualification now gates admission and approved launch; an unqualified native provider cannot acquire runtime execution.",
+      "replacements": [
+        "tests/execution_r4/test_runtime_options.py::test_unqualified_inventory_can_be_prepared_but_never_started",
+        "tests/execution_r4/test_local_realization.py::test_preparation_refuses_changed_local_evidence",
+        "tests/execution_r4/test_native_loader_cutover.py::test_clean_server_composition_does_not_import_legacy_native_loaders"
+      ],
+      "source_sha256": "7e0afc9c566a9c2f9a68a441634d0d73a36ed13e7c949f9f4687f46534d5198e"
+    },
+    {
+      "test": "tests/test_runtime_effective_capabilities.py::test_unknown_contract_cannot_share_an_explicitly_reused_native_connection",
+      "reason": "Server-local adapter registration, probe overrides and native factory multiplexing were removed. Core inventory qualification now gates admission and approved launch; an unqualified native provider cannot acquire runtime execution.",
+      "replacements": [
+        "tests/execution_r4/test_runtime_options.py::test_unqualified_inventory_can_be_prepared_but_never_started",
+        "tests/execution_r4/test_local_realization.py::test_preparation_refuses_changed_local_evidence",
+        "tests/execution_r4/test_native_loader_cutover.py::test_clean_server_composition_does_not_import_legacy_native_loaders"
+      ],
+      "source_sha256": "521a7dd26a4c21a4e1ce3a08a6ecd3bf80ece986179fb1ffff9eff6742ade91b"
+    },
+    {
+      "test": "tests/test_runtime_effective_capabilities.py::test_profile_rejects_invalid_capability_restrictions",
+      "reason": "The legacy disabled_capabilities profile configuration is removed. Arbitrary per-open configuration cannot override the approved canonical realization; supported harness settings are validated and revision-controlled.",
+      "replacements": [
+        "tests/execution_r4/test_harness_canonical.py::test_canonical_open_rejects_legacy_override_without_effect",
+        "tests/execution_r4/test_harness_settings.py::test_settings_validate_scope_cas_and_revoke_old_execution_authority"
+      ],
+      "source_sha256": "ee6080a7300ba4ae18b8b3b1ded5ebbd0631fa39d3d6b68e42c3efa984159487"
+    },
+    {
+      "test": "tests/test_runtime_effective_capabilities.py::test_profile_can_only_remove_qualified_capabilities",
+      "reason": "The legacy disabled_capabilities profile configuration is removed. Arbitrary per-open configuration cannot override the approved canonical realization; supported harness settings are validated and revision-controlled.",
+      "replacements": [
+        "tests/execution_r4/test_harness_canonical.py::test_canonical_open_rejects_legacy_override_without_effect",
+        "tests/execution_r4/test_harness_settings.py::test_settings_validate_scope_cas_and_revoke_old_execution_authority"
+      ],
+      "source_sha256": "9e9e437a4dff626e71587b95ec92c5f861eb572e1a18f4e7fbb287e97f8211f5"
+    },
+    {
+      "test": "tests/test_runtime_effective_capabilities.py::test_qualified_codex_remains_multiturn_and_discovery_matches_mcp",
+      "reason": "Legacy per-session compatibility_report and in-Server Codex factory were removed. Canonical sessions execute repeated turns through Core and expose canonical history and descriptors on authenticated surfaces.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery.py::test_message_admits_open_and_turn_atomically",
+        "tests/execution_r4/test_canonical_connection_discovery.py::test_binding_discovery_reads_canonical_history_without_native_registry"
+      ],
+      "source_sha256": "b8236aeb0431b9f2cee1dbadb3900bb7d33b062e3612b92f3991c89ed51ed3a6"
+    },
+    {
+      "test": "tests/test_runtime_effective_requirements.py::test_unknown_runtime_contract_cannot_satisfy_required_native_requests",
+      "reason": "The required_native_requests legacy profile policy and Server-owned version probe were removed. Core qualification and supported configuration replace this per-profile allowlist; user metadata cannot qualify a provider.",
+      "replacements": [
+        "tests/execution_r4/test_runtime_options.py::test_unqualified_inventory_can_be_prepared_but_never_started",
+        "tests/execution_r4/test_local_installation_check.py::test_probe_result_cannot_outlive_its_authority_or_identity",
+        "tests/execution_r4/test_harness_canonical.py::test_canonical_open_rejects_legacy_override_without_effect"
+      ],
+      "source_sha256": "d857119bc9e131707e089517488952717b414c39c49c3c1566fc31461100da57"
+    },
+    {
+      "test": "tests/test_runtime_effective_requirements.py::test_known_native_contract_can_satisfy_explicit_profile_requirement",
+      "reason": "The required_native_requests legacy profile policy and Server-owned version probe were removed. Core qualification and supported configuration replace this per-profile allowlist; user metadata cannot qualify a provider.",
+      "replacements": [
+        "tests/execution_r4/test_runtime_options.py::test_unqualified_inventory_can_be_prepared_but_never_started",
+        "tests/execution_r4/test_local_installation_check.py::test_probe_result_cannot_outlive_its_authority_or_identity",
+        "tests/execution_r4/test_harness_canonical.py::test_canonical_open_rejects_legacy_override_without_effect"
+      ],
+      "source_sha256": "00bfaa536fb476e5b060d66458cf9a4121257edf78b95ad0bbe46aabb6a7eeee"
+    },
+    {
+      "test": "tests/test_runtime_capability_admission.py::test_nonconversational_adapter_preserves_logical_inbox_without_transport_intent",
+      "reason": "The extensible Server native registry and fixture.additional.v1 protocol were removed. Canonical non-executing observers retain logical inbox delivery, and fresh approved inventory gates dispatch independently of client claims.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery.py::test_canonical_observer_does_not_receive_executable_prompt",
+        "tests/execution_r4/test_runtime_options.py::test_unqualified_inventory_can_be_prepared_but_never_started",
+        "tests/execution_r4/test_inventory_revalidation.py::test_changed_selected_installation_requires_review",
+        "tests/execution_r4/test_dispatch_pump.py::test_dispatch_revalidates_after_writer_wait_and_exposes_terminal_rejection"
+      ],
+      "source_sha256": "2cead960647281255363c80754b2238b9f772ff61baafaea8e43b378b9d10a98"
+    },
+    {
+      "test": "tests/test_runtime_capability_admission.py::test_nonconversational_adapter_rejects_direct_turn_before_durable_intent",
+      "reason": "The extensible Server native registry and fixture.additional.v1 protocol were removed. Canonical non-executing observers retain logical inbox delivery, and fresh approved inventory gates dispatch independently of client claims.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery.py::test_canonical_observer_does_not_receive_executable_prompt",
+        "tests/execution_r4/test_runtime_options.py::test_unqualified_inventory_can_be_prepared_but_never_started",
+        "tests/execution_r4/test_inventory_revalidation.py::test_changed_selected_installation_requires_review",
+        "tests/execution_r4/test_dispatch_pump.py::test_dispatch_revalidates_after_writer_wait_and_exposes_terminal_rejection"
+      ],
+      "source_sha256": "6249f89b9b73e1d9b4b8a7f3868186c13a0019b0c8450a64fa82cb4bfa09a300"
+    },
+    {
+      "test": "tests/test_runtime_capability_admission.py::test_pending_delivery_revalidates_descriptor_after_owner_restart",
+      "reason": "The extensible Server native registry and fixture.additional.v1 protocol were removed. Canonical non-executing observers retain logical inbox delivery, and fresh approved inventory gates dispatch independently of client claims.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery.py::test_canonical_observer_does_not_receive_executable_prompt",
+        "tests/execution_r4/test_runtime_options.py::test_unqualified_inventory_can_be_prepared_but_never_started",
+        "tests/execution_r4/test_inventory_revalidation.py::test_changed_selected_installation_requires_review",
+        "tests/execution_r4/test_dispatch_pump.py::test_dispatch_revalidates_after_writer_wait_and_exposes_terminal_rejection"
+      ],
+      "source_sha256": "0526aadd9396efab9af496d89f4be2d5171b57fe8720aaa8e78b786cccaeb6ce"
+    },
+    {
+      "test": "tests/test_runtime_claude_compatibility.py::test_required_claude_contract_uses_probe_in_authenticated_composition",
+      "reason": "The legacy Server Claude required_native_requests profile opener is removed. Core now observes provider installations and owns protocol qualification; the Server refuses native metadata overrides and revalidates selected evidence.",
+      "replacements": [
+        "tests/execution_r4/test_local_installation_check.py::test_probe_result_cannot_outlive_its_authority_or_identity",
+        "tests/execution_r4/test_runtime_options.py::test_unqualified_inventory_can_be_prepared_but_never_started",
+        "tests/execution_r4/test_harness_canonical.py::test_canonical_open_rejects_legacy_override_without_effect"
+      ],
+      "source_sha256": "ac6226e75e664b615840aa7791b77b8fd71071202042309b07faeaf0df526cbe"
+    },
+    {
+      "test": "tests/test_runtime_compatibility_observations.py::test_native_version_is_separate_from_metadata_and_not_a_capability_claim",
+      "reason": "Legacy initialize-version compatibility_report in harness_sessions was replaced by Core inventory evidence and canonical session views. Provider metadata cannot self-authorize runtime launch or expose private local configuration.",
+      "replacements": [
+        "tests/execution_r4/test_core_inventory.py::test_two_copies_keep_distinct_installation_refs",
+        "tests/execution_r4/test_local_installation_check.py::test_probe_result_cannot_outlive_its_authority_or_identity",
+        "tests/execution_r4/test_canonical_connection_discovery.py::test_binding_discovery_reads_canonical_history_without_native_registry"
+      ],
+      "source_sha256": "6b1c477bd8f23ab2c69a53a52cafe0e3a30a30e5bf28b5ee75b187b124b97d39"
     }
   ]
 }
