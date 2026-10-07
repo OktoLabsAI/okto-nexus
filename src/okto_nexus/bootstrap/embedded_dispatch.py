@@ -40,6 +40,7 @@ class EmbeddedDispatchOwner:
                                             fresh_publications=inventory.fresh)
         self.sessions = {}
         self.workers = set()
+        self.worker_agents = {}
         self.renewals = set()
         self.pump = None
         self.maintenance = None
@@ -52,7 +53,7 @@ class EmbeddedDispatchOwner:
         self._shutdown_policy = ShutdownPolicy()
         self._shutdown_recovery_task = None
         self._after = 0
-        self._publish_lock = asyncio.Lock()
+        self._publish_locks = {}
         self._containment_task = None
         self.containment_report = None
         self.state_failure = None
@@ -61,6 +62,8 @@ class EmbeddedDispatchOwner:
         self._recovery_lock = asyncio.Lock()
         from .embedded_events import EmbeddedEventPublisher
         self.events = EmbeddedEventPublisher(self)
+        from .embedded_agent_recovery import EmbeddedAgentRecovery
+        self.agents = EmbeddedAgentRecovery(self)
         from .embedded_tools import EmbeddedToolsOwner
         self.tools = EmbeddedToolsOwner(self)
         original_launch=self.host.local_launch_factory
@@ -115,12 +118,12 @@ class EmbeddedDispatchOwner:
         with self.factory.unit_of_work(write=False) as uow:
             return defaults(uow.connection)['automatic_recovery']
 
-    def _recovery_event(self, code, message):
+    def _recovery_event(self, code, message, *, agent_id=None):
         with self.factory.unit_of_work() as uow:
-            uow.connection.execute('INSERT INTO runtime_recovery_events(executor_id,created_at,code,message) VALUES(?,?,?,?)',
-                (self.channel.executor_id,self.deps.clock.now_iso(),code,message))
+            uow.connection.execute('INSERT INTO runtime_recovery_events(executor_id,created_at,code,message,agent_id) VALUES(?,?,?,?,?)',
+                (self.channel.executor_id,self.deps.clock.now_iso(),code,message,agent_id))
         logger = logging.getLogger(__name__)
-        (logger.info if code == 'RECOVERY_READY' else logger.warning)('Runtime recovery: %s %s',code,message)
+        (logger.info if code in ('RECOVERY_READY', 'RECOVERY_AGENT_READY') else logger.warning)('Runtime recovery: %s %s',code,message)
 
     async def _recover_automatically(self):
         from nexus_connector_core import RuntimeAutomation
@@ -145,25 +148,30 @@ class EmbeddedDispatchOwner:
                 return
             await self._start_attempt_locked(manual=manual)
 
-    async def retry_recovery(self):
+    async def retry_recovery(self, agent_id=None):
         await asyncio.to_thread(self.verify)
         await self._start_attempt(manual=True)
-        return {'state': 'READY' if self.pump is not None else 'RECOVERING',
-                'error_code': getattr(self.recovery_failure, 'code', None),
-                'message': ('Runtime restored. Previous work was not replayed.' if self.pump is not None else
-                    'Recovery could not prove that all previous runtime processes stopped. Retained history was preserved.')}
+        await self.agents.tick(manual=True, agent_id=agent_id)
+        await self.agents.observe()
+        ready = self.pump is not None and (not self.agents.blocked if agent_id is None else agent_id not in self.agents.blocked)
+        return {'state': 'READY' if ready else 'RECOVERING',
+                'recovering_agents': sorted(self.agents.blocked),
+                'error_code': getattr(self.recovery_failure or self.agents.errors.get(agent_id), 'code', None),
+                'message': ('Runtime restored. Previous work was not replayed.' if ready else
+                    'Automatic recovery is still pending for the affected agents. Retained history was preserved.')}
 
-    async def recovery_plan(self):
+    async def recovery_plan(self, agent_id=None):
         from .embedded_reconciliation import EmbeddedReconciliation
         async with self._recovery_lock:
-            return await EmbeddedReconciliation(self).recovery_plan()
+            return await EmbeddedReconciliation(self).recovery_plan(agent_id)
 
     async def confirm_recovery(self, plan, actor):
         from .embedded_reconciliation import EmbeddedReconciliation
         async with self._recovery_lock:
             await EmbeddedReconciliation(self).confirm_stopped(plan, actor)
-            await self._start_attempt_locked(manual=True)
-        return await self.retry_recovery()
+            if self.pump is None:
+                await self._start_attempt_locked(manual=True)
+        return await self.retry_recovery(plan.get('agent_id'))
 
     async def _start_attempt_locked(self, *, manual=False):
         if not protocol_info()["remote_execution_ready"]:
@@ -172,16 +180,21 @@ class EmbeddedDispatchOwner:
             if not await asyncio.to_thread(self._activate): return
         self.recovery_failure=None
         try:
-            await self._recover_publications()
-            await self.events.recover()
-            from .embedded_reconciliation import EmbeddedReconciliation
-            recovered = await EmbeddedReconciliation(self).recover()
+            await self.agents.initialize()
+            await self.agents.tick(manual=manual)
+            await self.agents.observe()
+            def activate_host():
+                with self.factory.unit_of_work() as uow:
+                    self.verify(uow=uow)
+                    uow.connection.execute("UPDATE execution_executors SET control_state='CONTROL_READY' "
+                        "WHERE server_id=? AND executor_id=? AND owner_instance_id=? AND generation=?",
+                        (self.channel.server_id,self.channel.executor_id,
+                         self.channel.connection_id,self.channel.connection_generation))
+            await asyncio.to_thread(activate_host)
         except Exception as error:
             self.recovery_failure = error
             await asyncio.to_thread(self._recovery_event,'RECOVERY_BLOCKED',
-                f"{type(error).__name__}: {getattr(error,'code','UNAVAILABLE')} at {getattr(error,'stage','retained runtime history')}")
-            return
-        if not recovered and not await asyncio.to_thread(self._activate):
+                f"{type(error).__name__}: {getattr(error,'code','UNAVAILABLE')} at {getattr(error,'stage','shared runtime resources')}")
             return
         if self._stopping.is_set():
             return
@@ -191,15 +204,14 @@ class EmbeddedDispatchOwner:
             resolve_native_input=self.deps.native_decisions.inputs.resolve)
         self.pump.start()
         self.maintenance = asyncio.create_task(self._maintain(), name="embedded-publications")
-        await asyncio.to_thread(self._recovery_event,'RECOVERY_READY','Runtime history reconciled. New messages can open a session; previous work was not replayed.')
+        await asyncio.to_thread(self._recovery_event,'RECOVERY_READY','Local host ready. Agents with retained history recover independently; previous work was not replayed.')
 
-    async def _recover_publications(self):
+    async def _recover_publications(self, *, agent_id=None):
         """Publish retained facts once before any new dispatch is enabled."""
-        self._after = 0
+        after = 0
         while True:
-            rows = await asyncio.to_thread(self._page)
+            rows = await asyncio.to_thread(self._page, after=after, agent_id=agent_id)
             if not rows:
-                self._after = 0
                 return
             for row in rows:
                 await asyncio.to_thread(self.verify)
@@ -207,7 +219,7 @@ class EmbeddedDispatchOwner:
                 receipt = await self.host.historical_receipt(session_id=row["session_id"],key=key)
                 if receipt is not None:
                     await self._publish(json.loads(row["binding_json"]),receipt)
-            self._after = rows[-1]["rowid"]
+            after = rows[-1]["rowid"]
 
     async def failed(self):
         if self.failure is None and self.pump is not None:
@@ -236,7 +248,9 @@ class EmbeddedDispatchOwner:
         # this callback. Retain every producer until it reports its receipt.
         task = asyncio.create_task(self._execute_owned(frame), name="embedded-" + frame["operation_id"])
         self.workers.add(task)
+        self.worker_agents[task] = frame["agent_id"]
         task.add_done_callback(self.workers.discard)
+        task.add_done_callback(lambda done: self.worker_agents.pop(done, None))
 
     @asynccontextmanager
     async def _gate(self, session, action):
@@ -254,6 +268,8 @@ class EmbeddedDispatchOwner:
         raw = canonical_json(binding).decode()
         with self.factory.unit_of_work() as uow:
             self.verify(uow=uow)
+            from ..application.execution_agent_recovery import require_agent_ready
+            require_agent_ready(uow.connection, frame['server_id'], frame['executor_id'], frame['agent_id'])
             c = self.channel
             row = uow.connection.execute("SELECT binding_json FROM execution_local_publications "
                 "WHERE server_id=? AND executor_id=? AND operation_id=?",
@@ -275,13 +291,12 @@ class EmbeddedDispatchOwner:
         try:
             await self._execute(frame)
         except Exception as error:
-            # A SENDING reservation has crossed the dispatch fence. Preserve it
-            # for reconciliation; neither synthesize a receipt nor retry work.
-            # Other in-flight producers may fail as containment begins. Keep
-            # the initiating diagnostic instead of replacing it with shutdown.
-            if self.failure is None:
-                self.failure = error
-            await self.failed()
+            # Preserve uncertain work, but contain only its known subject.
+            try:
+                await self.agents.fail(frame['agent_id'], error)
+            except Exception as shared_error:
+                self.failure = shared_error
+                await self.failed()
 
     async def _execute(self, frame):
         await asyncio.to_thread(self.verify)
@@ -359,7 +374,7 @@ class EmbeddedDispatchOwner:
                     if not await self.host.close_native_actions(
                             executor_id=self.channel.executor_id, session_id=key, timeout_seconds=5):
                         raise CoreError('RECONCILIATION_REQUIRED', 'embedded_native_action_containment')
-                    await self.events.recover()
+                    await self.events.recover(agent_id=frame["agent_id"])
                     from .embedded_reconciliation import EmbeddedReconciliation
                     await EmbeddedReconciliation(self).release_session(key, failed_open=True)
                     await self.tools.release_session(key)
@@ -402,16 +417,18 @@ class EmbeddedDispatchOwner:
                     uow.connection.execute("UPDATE execution_local_publications SET terminal=1 "
                         "WHERE server_id=? AND executor_id=? AND operation_id=?",
                         (key.server_id,key.executor_id,key.operation_id))
-        # Only one publisher may allocate a source revision at a time.
-        async with self._publish_lock:
+        # Serialize revisions for this operation, never unrelated agents.
+        async with self._publish_locks.setdefault(key, asyncio.Lock()):
             await asyncio.to_thread(persist)
 
-    def _page(self):
+    def _page(self, *, after=None, agent_id=None):
         with self.factory.unit_of_work(write=False) as uow:
             self.verify(uow=uow)
             rows = uow.connection.execute("SELECT rowid,* FROM execution_local_publications "
-                "WHERE server_id=? AND executor_id=? AND terminal=0 AND rowid>? ORDER BY rowid LIMIT 128",
-                (self.channel.server_id,self.channel.executor_id,self._after)).fetchall()
+                "WHERE server_id=? AND executor_id=? AND terminal=0 AND rowid>? "
+                "AND (? IS NULL OR operation_id IN (SELECT operation_id FROM execution_operations WHERE server_id=? AND executor_id=? AND subject_agent_id=?)) ORDER BY rowid LIMIT 128",
+                (self.channel.server_id,self.channel.executor_id,self._after if after is None else after,
+                 agent_id,self.channel.server_id,self.channel.executor_id,agent_id)).fetchall()
             return [dict(row) for row in rows]
 
     async def _renew_owned(self, session_id, session):
@@ -445,16 +462,18 @@ class EmbeddedDispatchOwner:
                         if not await self.host.close_native_actions(
                                 executor_id=self.channel.executor_id, session_id=session_id, timeout_seconds=5):
                             raise CoreError('RECONCILIATION_REQUIRED', 'embedded_native_action_containment')
-                        await self.events.recover()
+                        await self.events.recover(agent_id=session['scope']['agent_id'])
                         from .embedded_reconciliation import EmbeddedReconciliation
                         await EmbeddedReconciliation(self).release_session(session_id)
                         self.sessions.pop(session_id, None)
                         return
                     except Exception as containment_error:
                         error = containment_error
-                if self.failure is None:
-                    self.failure = error
-                await self.failed()
+                try:
+                    await self.agents.fail(session['scope']['agent_id'], error)
+                except Exception as shared_error:
+                    self.failure = shared_error
+                    await self.failed()
 
     async def _maintain(self):
         from nexus_connector_core import DEFAULT_RUNTIME_AUTOMATION
@@ -466,20 +485,13 @@ class EmbeddedDispatchOwner:
                     await asyncio.to_thread(drain_pending,self.deps)
                     pending_at=time.monotonic()+DEFAULT_RUNTIME_AUTOMATION.message_interval
                 for session_id, session in list(self.sessions.items()):
-                    if (session["renew_at"] is not None and time.monotonic() >= session["renew_at"]
+                    if (session["scope"]["agent_id"] not in self.agents.blocked and session["renew_at"] is not None and time.monotonic() >= session["renew_at"]
                             and (session.get("renew_task") is None or session["renew_task"].done())):
                         task = asyncio.create_task(self._renew_owned(session_id, session), name="embedded-renew-" + session_id)
                         session["renew_task"] = task
                         self.renewals.add(task)
                         task.add_done_callback(self.renewals.discard)
-                rows = await asyncio.to_thread(self._page)
-                self._after = rows[-1]["rowid"] if rows else 0
-                for row in rows:
-                    key = OperationKey(row["server_id"],row["executor_id"],row["operation_id"])
-                    receipt = await self.host.operation_receipt(session_id=row["session_id"],key=key)
-                    if receipt is not None:
-                        await self._publish(json.loads(row["binding_json"]),receipt)
-                await self.events.pass_once()
+                await self.agents.tick()
                 try:
                     await asyncio.wait_for(self._stopping.wait(),.1)
                 except asyncio.TimeoutError:
@@ -595,6 +607,7 @@ class EmbeddedDispatchOwner:
                     await task
                 except Exception as error:
                     failures.append(error)
+        await self.agents.close()
         results = await asyncio.gather(*tuple(self.workers), *tuple(self.renewals), return_exceptions=True)
         failures.extend(result for result in results if isinstance(result, BaseException))
         try:

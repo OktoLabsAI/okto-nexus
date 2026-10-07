@@ -6,6 +6,12 @@ All notable changes to Okto Nexus are documented in this file.
 
 ### 0.2.1
 
+- Isolate local runtime recovery and event publication by agent, with durable
+  admission fences, independent retries, scoped diagnostics and operator recovery.
+- Resume after confirmed local owner process exit without waiting for stale locks;
+  reconcile interrupted pre-open operations across repeated restarts.
+- Keep unclaimed messages eligible for automatic recovery and stop polling closed
+  streams only after their resource release and complete event drain are proven.
 - Listen on all IPv4 interfaces by default, with explicit loopback overrides
   and unchanged remote operator and agent authentication.
 - Deliver broadcast and handoff fanout through eligible runtime connections.

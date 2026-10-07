@@ -133,6 +133,9 @@ def resolve_execution_intent(
                 if error.details.get("reason") != "RUNTIME_DRAINING":
                     raise
                 blockers.append("runtime_draining")
+        from .execution_agent_recovery import agent_recovering
+        if agent_recovering(conn, server_id, binding['executor_id'], subject_agent_id):
+            blockers.append('agent_recovering')
         if not remote_ready:
             blockers.append("remote_execution_unavailable")
         if (binding["protocol"] != "nxl-r4" or

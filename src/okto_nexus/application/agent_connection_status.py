@@ -18,6 +18,8 @@ def agent_connection_statuses(uow, now_iso):
         SELECT a.agent_id, COALESCE(p.execution_location,'local') location,
                COALESCE(o.runtime_enabled,d.runtime_enabled) runtime_enabled,
                e.executor_id,e.label,e.control_state,e.last_seen_at,
+               EXISTS(SELECT 1 FROM execution_agent_recovery r WHERE r.server_id=e.server_id AND r.executor_id=e.executor_id
+                      AND r.agent_id=a.agent_id AND (r.state<>'READY' OR r.generation<>e.generation)) agent_recovering,
                EXISTS(SELECT 1 FROM execution_bindings b JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id
                    WHERE b.server_id=e.server_id AND b.executor_id=e.executor_id AND ep.agent_id=a.agent_id
                      AND ep.enabled=1 AND ep.activation_state='approved') bound,
@@ -68,7 +70,7 @@ def agent_connection_statuses(uow, now_iso):
             continue
         if row['location'] == 'local':
             state = ('Not configured' if not row['bound'] else
-                     'Recovering' if row['control_state'] == 'RECOVERING' else
+                     'Recovering' if row['control_state'] == 'RECOVERING' or row['agent_recovering'] else
                      'Offline' if row['control_state'] != 'CONTROL_READY' else
                      'Ready')
             item['hosts'].append(dict(executor_id=row['executor_id'], label=row['label'] or row['executor_id'],

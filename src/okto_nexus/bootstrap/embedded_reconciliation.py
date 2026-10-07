@@ -13,11 +13,11 @@ class EmbeddedReconciliation:
     def __init__(self, owner):
         self.owner = owner
 
-    async def recovery_plan(self):
+    async def recovery_plan(self, agent_id=None):
         """An exact, reviewable set for operator-confirmed legacy recovery."""
         owner = self.owner
         await asyncio.to_thread(owner.verify)
-        if owner.pump is not None or owner.sessions or owner._stopping.is_set():
+        if owner._stopping.is_set():
             raise CoreError('RECONCILIATION_REQUIRED', 'embedded_recovery_plan')
         ledger = await owner.host._ledger()
         records = {r['session_id']: r for r in await asyncio.to_thread(self._records)}
@@ -27,6 +27,10 @@ class EmbeddedReconciliation:
         sessions = []
         for slot in page.reservations:
             row = records.get(slot.key.session_id)
+            if row is not None and (row['agent_id'] not in owner.agents.blocked or (agent_id is not None and row['agent_id'] != agent_id)):
+                continue
+            if slot.key.session_id in owner.sessions:
+                raise CoreError('RECONCILIATION_REQUIRED', 'embedded_recovery_plan')
             if (slot.key.server_id != owner.channel.server_id or slot.key.executor_id != owner.channel.executor_id
                     or row is None or row['open_operation_id'] != slot.opening_operation_id or row['binding_json'] is None):
                 raise CoreError('SCOPE_MISMATCH', 'embedded_recovery_plan')
@@ -48,12 +52,12 @@ class EmbeddedReconciliation:
                             agent_id=projected['agent_id'])
             sessions.append(await owner.host.with_history(executor_id=owner.channel.executor_id,
                 session_id=slot.key.session_id, read=inspect))
-        return dict(executor_id=owner.channel.executor_id, generation=owner.channel.connection_generation,
+        return dict(executor_id=owner.channel.executor_id, generation=owner.channel.connection_generation, agent_id=agent_id,
                     sessions=sorted(sessions, key=lambda item: item['session_id']))
 
     async def confirm_stopped(self, plan, actor):
         """Operator attestation is distinct from automatic OS evidence."""
-        if plan != await self.recovery_plan() or not plan['sessions']:
+        if plan != await self.recovery_plan(plan.get('agent_id')) or not plan['sessions']:
             raise CoreError('STALE_GENERATION', 'embedded_recovery_plan')
         owner = self.owner
         await asyncio.to_thread(owner.verify)
@@ -74,27 +78,37 @@ class EmbeddedReconciliation:
                 'FROM execution_sessions s JOIN execution_dispatch_outbox d ON d.server_id=s.server_id '
                 'AND d.executor_id=s.executor_id AND d.operation_id=s.open_operation_id '
                 'WHERE s.server_id=? AND s.executor_id=? AND s.session_id=?',key).fetchone()
-            if not state or state['lifecycle_state']!='FAILED' or state['lease_state'] not in ('NONE','CLOSED') or state['dispatch_state']!='RESOLVED_TERMINAL':
+            if not state:
                 return False
-            error=json.loads(state['last_error'] or '{}')
-            if error.get('stage')!='dispatch' or error.get('possible_effect') is not False:
+            if state['lifecycle_state'] == 'FAILED':
+                error = json.loads(state['last_error'] or '{}')
+                if (state['lease_state'] not in ('NONE', 'CLOSED') or state['dispatch_state'] != 'RESOLVED_TERMINAL'
+                        or error.get('possible_effect') is not False
+                        or not (error.get('stage') == 'dispatch' or (
+                            error.get('code') == 'LOCAL_PREOPEN_FAILED' and
+                            error.get('proof') == 'fenced_owner_no_publication_no_core_claim_receipt_or_slot'))):
+                    return False
+            elif state['lifecycle_state'] != 'OPEN_PENDING':
                 return False
+            # _bind commits before Core.open. Under the new fenced owner, an
+            # absent binding/journal and empty scoped ledger prove no opening,
+            # including a crash before prepare or before dispatch began.
             for table in ('execution_local_publications','execution_receipts'):
                 if uow.connection.execute(f'SELECT 1 FROM {table} p JOIN execution_operations o '
                     'USING(server_id,executor_id,operation_id) WHERE o.server_id=? AND o.executor_id=? AND o.session_id=? LIMIT 1',key).fetchone():
                     return False
             return row['binding_json'] is None and row['stream_epoch'] is None
 
-    def _records(self):
+    def _records(self, agent_id=None):
         with self.owner.factory.unit_of_work(write=False) as uow:
             self.owner.verify(uow=uow)
-            rows = uow.connection.execute("SELECT s.session_id,s.open_operation_id,p.binding_json,l.stream_epoch "
-                "FROM execution_sessions s LEFT JOIN execution_local_publications p ON p.server_id=s.server_id "
+            rows = uow.connection.execute("SELECT s.session_id,s.open_operation_id,p.binding_json,l.stream_epoch,o.subject_agent_id AS agent_id "
+                "FROM execution_sessions s JOIN execution_operations o ON o.server_id=s.server_id AND o.executor_id=s.executor_id AND o.operation_id=s.open_operation_id LEFT JOIN execution_local_publications p ON p.server_id=s.server_id "
                 "AND p.executor_id=s.executor_id AND p.operation_id=s.open_operation_id "
                 "LEFT JOIN execution_local_streams l ON l.server_id=s.server_id AND l.executor_id=s.executor_id "
                 "AND l.session_id=s.session_id AND l.opening_operation_id=s.open_operation_id "
-                "WHERE s.server_id=? AND s.executor_id=? ORDER BY s.rowid LIMIT 32769",
-                (self.owner.channel.server_id,self.owner.channel.executor_id)).fetchall()
+                "WHERE s.server_id=? AND s.executor_id=? AND (? IS NULL OR o.subject_agent_id=?) ORDER BY s.rowid LIMIT 32769",
+                (self.owner.channel.server_id,self.owner.channel.executor_id,agent_id,agent_id)).fetchall()
             if len(rows)>32768:
                 raise CoreError("CAPACITY_EXCEEDED","embedded_recovery")
             return [dict(row) for row in rows]
@@ -167,11 +181,11 @@ class EmbeddedReconciliation:
                         (owner.deps.clock.now_iso(), *key))
         await asyncio.to_thread(commit)
 
-    async def _empty_slots(self, source):
+    async def _empty_slots(self, source, session_ids=None):
         after, high = 0, None
         for _ in range(256):
             page = await source.owned_slot_page(after_rowid=after,high_water_rowid=high,limit=128)
-            if page.reservations:
+            if any(session_ids is None or slot.key.session_id in session_ids for slot in page.reservations):
                 raise CoreError("RECONCILIATION_REQUIRED","embedded_owned_resources")
             high = page.high_water_rowid
             if page.next_after_rowid is None:
@@ -225,9 +239,9 @@ class EmbeddedReconciliation:
             await owner.host.with_history(executor_id=owner.channel.executor_id,
                 session_id=row['session_id'], read=inspect)
 
-    async def recover(self):
+    async def recover(self, agent_id=None):
         owner,host = self.owner,self.owner.host
-        records = await asyncio.to_thread(self._records)
+        records = await asyncio.to_thread(self._records, agent_id)
         if not records:
             return False
         absent = set()
@@ -242,12 +256,12 @@ class EmbeddedReconciliation:
         if len(absent) != len(records) or 'owned-slots.db' in files:
             expected.add("owned-slots.db")
         allowed = expected | {name+suffix for name in expected for suffix in ("-wal","-shm")}
-        if not files.issubset(allowed) or not expected.issubset(files):
+        if (agent_id is None and not files.issubset(allowed)) or not expected.issubset(files):
             raise CoreError("JOURNAL_UNAVAILABLE","embedded_resource_files")
         ledger = await host._ledger() if 'owned-slots.db' in expected else None
         if ledger is not None:
             await self._recover_containers(ledger, [r for r in records if r['session_id'] not in absent])
-            await self._empty_slots(ledger)
+            await self._empty_slots(ledger, {r['session_id'] for r in records} if agent_id is not None else None)
         proofs = {}
         for row in records:
             await asyncio.to_thread(owner.verify)
@@ -287,7 +301,7 @@ class EmbeddedReconciliation:
             proofs[row["session_id"]] = await host.with_history(executor_id=owner.channel.executor_id,
                 session_id=row["session_id"],read=inspect)
         reconciliation = ExecutionReconciliation(owner.factory,owner.channel,
-            owner_guard=lambda conn:owner.verify(uow=SimpleNamespace(connection=conn)))
+            owner_guard=lambda conn:owner.verify(uow=SimpleNamespace(connection=conn)), agent_id=agent_id)
         for _ in range(128):
             request = await asyncio.to_thread(reconciliation.request)
             def receipts():

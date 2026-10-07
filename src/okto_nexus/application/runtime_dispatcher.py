@@ -4,6 +4,8 @@ import logging
 import threading
 import time
 import random
+import os
+import socket
 
 from ..domain.base import iso_plus, iso_to_epoch, new_id
 from ..errors import OktoNexusError
@@ -68,7 +70,8 @@ class RuntimeDispatcher:
             return True
         now = self.clock.now_iso()
         with self.cf.unit_of_work() as uow:
-            self.epoch = self.repo.acquire_owner(uow, owner_id=self.owner_id, now=now, lease_expires_at=iso_plus(now, 40))
+            self.epoch = self.repo.acquire_owner(uow, owner_id=self.owner_id, now=now,
+                lease_expires_at=iso_plus(now, 40), process_pid=os.getpid(), process_host=socket.gethostname())
         if self.epoch is None:
             return False
         self.cf.configure_runtime_owner(self.owner_id, self.epoch, clock=self.clock)

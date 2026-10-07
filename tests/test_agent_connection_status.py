@@ -12,6 +12,7 @@ def status_db():
     conn.row_factory = sqlite3.Row
     conn.executescript('''
     CREATE TABLE agents(agent_id TEXT);
+    CREATE TABLE execution_agent_recovery(server_id TEXT,executor_id TEXT,agent_id TEXT,generation INTEGER,state TEXT);
     CREATE TABLE agent_execution_policies(agent_id TEXT,execution_location TEXT);
     CREATE TABLE agent_runtime_overrides(agent_id TEXT,runtime_enabled INTEGER);
     CREATE TABLE runtime_policy_defaults(runtime_enabled INTEGER);

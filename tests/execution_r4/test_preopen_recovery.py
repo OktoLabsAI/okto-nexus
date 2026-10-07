@@ -21,7 +21,7 @@ def test_preopen_failure_recovers_only_with_empty_owned_resources(tmp_path, monk
             opened = admit(setup, binding, 'before-native-open', 'runtime.start', new_session=True, text='Hello')
             owner = app.state.embedded_dispatch_owner
             until = time.monotonic() + 8
-            while owner.failure is None:
+            while 'subject' not in owner.agents.errors:
                 assert time.monotonic() < until
                 time.sleep(.02)
             channel = owner.channel

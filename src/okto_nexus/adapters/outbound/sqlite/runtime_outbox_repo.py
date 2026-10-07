@@ -123,24 +123,27 @@ class SqliteRuntimeOutboxRepo:
         row = uow.connection.execute("SELECT * FROM delivery_outbox WHERE operation_id=?", (operation_id,)).fetchone()
         return dict(row) if row else None
 
-    def acquire_owner(self, uow, *, owner_id, now, lease_expires_at):
+    def acquire_owner(self, uow, *, owner_id, now, lease_expires_at, process_pid=None, process_host=None):
         contract = uow.connection.execute("SELECT required_contract FROM runtime_writer_contract WHERE singleton=1").fetchone()
         if not contract or contract[0] > 1:
             raise OktoNexusError(ErrorCode.CONFIG_ERROR,
                 "runtime_writer_incompatible: this package cannot own the store's writer contract.", {})
         row = uow.connection.execute("SELECT * FROM runtime_dispatcher_owner WHERE owner_key='dispatcher'").fetchone()
         if row and row["lease_expires_at"] > now and row["owner_id"] != owner_id:
-            return None
+            from ..process_liveness import process_exited
+            if (process_host is None or row['process_host'] != process_host
+                    or process_exited(row['process_pid']) is not True):
+                return None
         epoch = row["epoch"] + 1 if row else 1
         uow.connection.execute("UPDATE runtime_writer_contract SET required_contract=1, "
             "admission_enabled=EXISTS(SELECT 1 FROM pragma_function_list "
             "WHERE name='nexus_runtime_admission_on' AND builtin=0 AND narg=0), owner_id=?,owner_epoch=? "
             "WHERE singleton=1", (owner_id, epoch))
         uow.connection.execute(
-            "INSERT INTO runtime_dispatcher_owner(owner_key,epoch,owner_id,lease_expires_at) VALUES('dispatcher',?,?,?) "
+            "INSERT INTO runtime_dispatcher_owner(owner_key,epoch,owner_id,lease_expires_at,process_pid,process_host) VALUES('dispatcher',?,?,?,?,?) "
             "ON CONFLICT(owner_key) DO UPDATE SET epoch=excluded.epoch,owner_id=excluded.owner_id,lease_expires_at=excluded.lease_expires_at,"
-            "recovery_store_id=NULL,recovery_watermark=NULL",
-            (epoch, owner_id, lease_expires_at))
+            "recovery_store_id=NULL,recovery_watermark=NULL,process_pid=excluded.process_pid,process_host=excluded.process_host",
+            (epoch, owner_id, lease_expires_at, process_pid, process_host))
         # A previous external call might still finish. Never retry SENDING.
         uow.connection.execute("UPDATE delivery_outbox SET status='OUTCOME_UNKNOWN',reason='owner_lost',updated_at=? "
             "WHERE status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED') AND terminal_event_id IS NULL AND external_completed_at IS NULL", (now,))

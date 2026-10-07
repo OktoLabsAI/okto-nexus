@@ -13,12 +13,14 @@ class EmbeddedEventPublisher:
         self.owner = owner
         self.after = 0
 
-    def _page(self):
+    def _page(self, *, after=None, agent_id=None, live_only=False):
         with self.owner.factory.unit_of_work(write=False) as uow:
             self.owner.verify(uow=uow)
             rows = uow.connection.execute("SELECT rowid,* FROM execution_local_streams "
-                "WHERE server_id=? AND executor_id=? AND rowid>? ORDER BY rowid LIMIT 128",
-                (self.owner.channel.server_id,self.owner.channel.executor_id,self.after)).fetchall()
+                "WHERE server_id=? AND executor_id=? AND rowid>? AND (? IS NULL OR agent_id=?) "
+                "AND (?=0 OR drained=0) ORDER BY rowid LIMIT 128",
+                (self.owner.channel.server_id,self.owner.channel.executor_id,self.after if after is None else after,
+                 agent_id,agent_id,live_only)).fetchall()
             return [dict(row) for row in rows]
 
     def _watermark(self, scope):
@@ -84,7 +86,16 @@ class EmbeddedEventPublisher:
                 await self.step(scope)
         return bool(rows)
 
-    async def recover(self):
-        self.after = 0
-        while await self.pass_once(drain=True):
-            pass
+    async def recover(self, *, agent_id=None, live_only=False):
+        after = 0
+        while True:
+            rows = await asyncio.to_thread(self._page, after=after, agent_id=agent_id, live_only=live_only)
+            if not rows:
+                return
+            for scope in rows:
+                for _ in range(4096):
+                    if not await self.step(scope):
+                        break
+                else:
+                    raise CoreError("CAPACITY_EXCEEDED", "embedded_event_recovery")
+            after = rows[-1]["rowid"]

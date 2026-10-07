@@ -328,9 +328,9 @@ export function AgentsView({
         />
       )}
       <div className="panel overflow-hidden" data-testid="agents-view">
-        {agents.some(agent => agent.connection?.location === 'local' && ['Recovering', 'Needs attention'].includes(agent.connection.status)) && (
-          <RuntimeRecovery onChanged={() => { reload(); onChanged(); }} />
-        )}
+        {agents.filter(agent => agent.connection?.location === 'local' && ['Recovering', 'Needs attention'].includes(agent.connection.status)).map(agent => (
+          <RuntimeRecovery key={agent.agent_id} agentId={agent.agent_id} onChanged={() => { reload(); onChanged(); }} />
+        ))}
         <div className="flex items-center justify-between px-4 h-12 border-b border-surface-200/60 dark:border-surface-700/50">
           {/* Tabs (the Pulse AgentsModal header) */}
           <div className="flex items-center gap-1 text-sm">

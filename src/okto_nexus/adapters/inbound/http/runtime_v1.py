@@ -205,7 +205,7 @@ def build_router() -> APIRouter:
         return None
 
     @router.get("/runtime/recovery/plan")
-    async def runtime_recovery_plan(request: Request):
+    async def runtime_recovery_plan(request: Request, agent_id: str | None = None):
         denied = await shutdown_authority(request, mutate=True)
         if denied is not None:
             return denied
@@ -213,7 +213,7 @@ def build_router() -> APIRouter:
         if owner is None:
             return v1_err(503, 'RECONCILIATION_REQUIRED', 'The local runtime owner is unavailable.')
         try:
-            return JSONResponse(await owner.recovery_plan(), headers={'Cache-Control': 'no-store'})
+            return JSONResponse(await owner.recovery_plan(agent_id), headers={'Cache-Control': 'no-store'})
         except Exception as error:
             return v1_err(409, getattr(error, 'code', 'RECONCILIATION_REQUIRED'),
                 'A safe recovery plan could not be prepared. Retained history was preserved.')
@@ -234,7 +234,7 @@ def build_router() -> APIRouter:
         return JSONResponse(view, headers={'Cache-Control': 'no-store'})
 
     @router.post("/runtime/recovery/retry")
-    async def retry_runtime_recovery(request: Request):
+    async def retry_runtime_recovery(request: Request, agent_id: str | None = None):
         denied = await shutdown_authority(request, mutate=True)
         if denied is not None:
             return denied
@@ -242,7 +242,7 @@ def build_router() -> APIRouter:
         if owner is None:
             return v1_err(503, 'RECONCILIATION_REQUIRED', 'The local runtime owner is unavailable.')
         try:
-            view = await owner.retry_recovery()
+            view = await owner.retry_recovery(agent_id)
         except OktoNexusError as error:
             return v1_err(409, error.code, error.message)
         return JSONResponse(view, headers={'Cache-Control': 'no-store'})

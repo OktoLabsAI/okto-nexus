@@ -101,7 +101,9 @@ def project_native_request(conn, *, event, session, channel, received_at, uow=No
         return  # Replay cannot extend expiry, rewrite display, or reopen a request.
     received = datetime.fromisoformat(received_at)
     expires = received + timedelta(seconds=_TTL_SECONDS)
+    from .execution_agent_recovery import agent_recovering
     stale = (not session["is_active"] or
+             agent_recovering(conn, event["server_id"], event["executor_id"], scope["agent_id"]) or
              scope["session_owner_generation"] != session["owner_generation"] or
              session["lifecycle_state"] != "READY")
     # A delayed request after its terminal fact is retained as non-actionable.

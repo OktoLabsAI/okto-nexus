@@ -87,6 +87,8 @@ class ExecutionLeaseService:
         return frame
 
     def _authority(self, uow, scope, grant_id, channel, now):
+        from .execution_agent_recovery import require_agent_ready
+        require_agent_ready(uow.connection, scope['server_id'], scope['executor_id'], scope['agent_id'])
         row = self.repo.authority(uow, scope)
         if (row is None or not row['is_active'] or not row['api_key_hash'] or
                 row['agent_id'] != scope['agent_id'] or row['subject_agent_id'] != scope['agent_id'] or

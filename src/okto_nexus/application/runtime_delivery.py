@@ -72,7 +72,7 @@ class RuntimeDeliveryPlanner:
                         and endpoint["health"] != "quarantined" and profile and profile["enabled"]
                         and "conversation" not in profile["config"].get("disabled_capabilities", ())):
                     from .execution_domain_delivery import select_delivery_session
-                    recovering=uow.connection.execute("SELECT 1 FROM execution_bindings b JOIN execution_executors x USING(server_id,executor_id) WHERE b.endpoint_id=? AND x.control_state='RECOVERING'",(endpoint['endpoint_id'],)).fetchone()
+                    recovering=uow.connection.execute("SELECT 1 FROM execution_bindings b JOIN execution_executors x USING(server_id,executor_id) WHERE b.endpoint_id=? AND (x.control_state<>'CONTROL_READY' OR EXISTS(SELECT 1 FROM execution_agent_recovery r WHERE r.server_id=b.server_id AND r.executor_id=b.executor_id AND r.agent_id=(SELECT agent_id FROM agent_endpoints WHERE endpoint_id=b.endpoint_id) AND (r.state<>'READY' OR r.generation<>x.generation)))",(endpoint['endpoint_id'],)).fetchone()
                     if recovering:
                         raise OktoNexusError(ErrorCode.CONFLICT,'Delivery session requires reconciliation.',{})
                     _, session_id = select_delivery_session(uow, endpoint["endpoint_id"], sender_agent_id=sender_agent_id,

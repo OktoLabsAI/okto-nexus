@@ -44,6 +44,8 @@ def read_runtime_options(factory, *, server_id, executor_id, agent_id, workspace
         executor = conn.execute('SELECT kind,control_state FROM execution_executors WHERE server_id=? AND executor_id=?',
                                 (server_id, executor_id)).fetchone()
         kind = executor['kind']
+        from .execution_agent_recovery import agent_recovering
+        recovering = agent_recovering(conn, server_id, executor_id, agent_id)
         descriptors = {item['adapter_id']: item for item in snapshot['catalog']['runtimes']}
         evidence = {(item['adapter_id'], item['candidate_ref']) for item in snapshot['evidence']}
         options = []
@@ -132,8 +134,10 @@ def read_runtime_options(factory, *, server_id, executor_id, agent_id, workspace
                         except OktoNexusError:
                             reasons.append('AUTHORIZATION_REQUIRED')
                         else:
-                            can_start = (executor['control_state'] == 'CONTROL_READY' and
+                            can_start = (not recovering and executor['control_state'] == 'CONTROL_READY' and
                                          technical['state'] == 'READY_FOR_RUNTIME')
+            if recovering:
+                reasons.append('AGENT_RECOVERING')
             if executor['control_state'] != 'CONTROL_READY':
                 reasons.append('EXECUTOR_RECOVERING' if executor['control_state'] == 'RECOVERING' else 'EXECUTOR_OFFLINE')
             if technical['state'] != 'READY_FOR_RUNTIME':

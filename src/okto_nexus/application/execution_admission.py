@@ -163,6 +163,8 @@ def submit_execution_operation(
                 "WHERE b.server_id=? AND b.executor_id=? AND b.binding_id=?",
                 (server_id, executor_id, scope["binding_id"]),
             ).fetchone()
+            from .execution_agent_recovery import require_agent_ready
+            require_agent_ready(conn, server_id, executor_id, subject_agent_id)
             if (binding is None or binding["agent_id"] != subject_agent_id or
                     binding["protocol"] != "nxl-r4" or
                     binding["control_state"] != "CONTROL_READY" or

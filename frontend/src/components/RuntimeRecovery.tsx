@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { runtimeApi, type RecoveryPlan } from '../runtimeApi';
 
-export function RuntimeRecovery({onChanged}: {onChanged: () => void}) {
+export function RuntimeRecovery({agentId, onChanged}: {agentId: string; onChanged: () => void}) {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [plan, setPlan] = useState<RecoveryPlan | null>(null);
@@ -14,19 +14,19 @@ export function RuntimeRecovery({onChanged}: {onChanged: () => void}) {
     finally { setBusy(false); }
   };
   return <div className="m-4 rounded-lg border border-amber-500/30 p-3 text-sm space-y-2">
-    <p>Local runtime recovery is in progress. Nexus tries to restore it automatically.</p>
+    <p>Nexus is automatically restoring {agentId}. Other agents remain available.</p>
     <button className="btn btn-secondary text-xs disabled:opacity-50" disabled={busy} onClick={() => act(async () => {
       setPlan(null); setConfirmed(false);
-      const result = await runtimeApi.retryRecovery();
+      const result = await runtimeApi.retryRecovery(agentId);
       setMessage(result.message); setBlocked(result.state !== 'READY'); onChanged();
     })}>{busy ? 'Recovering…' : 'Retry recovery'}</button>
     {message && <p role="status" className="break-words">{message}</p>}
     {blocked && !plan && <button className="btn btn-secondary text-xs disabled:opacity-50" disabled={busy} onClick={() => act(async () => {
-      setPlan(await runtimeApi.recoveryPlan()); setConfirmed(false);
+      setPlan(await runtimeApi.recoveryPlan(agentId)); setConfirmed(false);
     })}>Review last-resort recovery</button>}
     {plan && <div className="space-y-2">
       <p>Automatic recovery could not establish that the previous runtimes stopped.
-        This affects the shared local runtime and the {plan.sessions.length} sessions listed below.</p>
+        This concerns only the {plan.sessions.length} sessions listed below for this agent.</p>
       <p>Stop the previous runtime processes before continuing. If you cannot identify them, restart this computer and return here. History is preserved; interrupted work is not replayed.</p>
       <ul className="max-h-36 overflow-y-auto break-all font-mono text-xs">
         {plan.sessions.map(s => <li key={s.session_id}>{s.agent_id}: {s.session_id}</li>)}

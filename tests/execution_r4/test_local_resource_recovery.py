@@ -51,7 +51,7 @@ def test_restart_recovers_containers_or_requires_scoped_operator_attestation(tmp
         owner = app.state.embedded_dispatch_owner
         prefix = '/api/v1/runtime-management/runtime/recovery'
         if legacy:
-            assert owner.pump is None
+            assert owner.pump is not None and 'subject' in owner.agents.blocked
             assert client.post('/v1/runtime/recovery/retry', headers=headers['subject']).status_code == 403
             assert client.post(prefix + '/retry').status_code == 401
             response = client.post(prefix + '/retry', headers=headers['operator'], json={})

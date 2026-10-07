@@ -182,17 +182,17 @@ export function bindingRequestExists(key: string): boolean {
 }
 
 export interface RecoveryPlan {
-  executor_id: string; generation: number;
+  executor_id: string; generation: number; agent_id?: string | null;
   sessions: {session_id: string; opening_operation_id: string; agent_id: string}[];
 }
 
 export const runtimeApi = {
-  recoveryPlan: () => read<RecoveryPlan>('/v1/runtime/recovery/plan', undefined),
+  recoveryPlan: (agentId: string) => read<RecoveryPlan>(`/v1/runtime/recovery/plan?agent_id=${encodeURIComponent(agentId)}`, undefined),
   confirmStopped: (plan: RecoveryPlan) => read<{state: string; message: string}>(
     '/v1/runtime/recovery/confirm-stopped', undefined,
     {plan, confirmation: 'PREVIOUS_RUNTIME_PROCESSES_STOPPED'}),
-  retryRecovery: () => read<{state: string; error_code: string | null; message: string}>(
-    '/v1/runtime/recovery/retry', undefined, {}),
+  retryRecovery: (agentId: string) => read<{state: string; error_code: string | null; message: string}>(
+    `/v1/runtime/recovery/retry?agent_id=${encodeURIComponent(agentId)}`, undefined, {}),
   setup: (agent: string, binding?: string, signal?: AbortSignal) => read<{baseline: SetupBaseline;
     connections: (Pick<BindingView,'binding_id' | 'candidate_ref' | 'executor_id' | 'workspace_id' | 'adapter_id'> & {execution_location: 'local' | 'remote'})[];
     authorization?: {minutes: number | null; actions: number | null};

@@ -119,7 +119,9 @@ def test_embedded_native_decision_roundtrip(connected_local, kind, choice, enabl
         view = result.json()
         if view["native_stage"] == ("SUBMITTED" if enabled else "REFUSED_BEFORE_EFFECT"):
             break
-        assert view["native_stage"] == "DISPATCH_PENDING", str(view)
+        # A durable Core in-flight receipt can precede the native reply ACK.
+        # Only the final SUBMITTED/REFUSED state satisfies this test.
+        assert view["native_stage"] in ("DISPATCH_PENDING", "OUTCOME_UNKNOWN"), str(view)
         assert app.state.embedded_dispatch_owner.failure is None
         assert time.monotonic() < until, view
         time.sleep(.02)

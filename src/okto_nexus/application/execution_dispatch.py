@@ -114,6 +114,10 @@ def reserve_execution_dispatch(
             "COALESCE(SUM(reserved_bytes),0) AS bytes FROM "
             "execution_dispatch_outbox WHERE server_id=? AND executor_id=? "
             "AND dispatch_state IN ('RESERVED','SENDING','RECONCILING') "
+            "AND NOT EXISTS (SELECT 1 FROM execution_agent_recovery r JOIN execution_operations p "
+            "USING(server_id,executor_id) WHERE p.operation_id=execution_dispatch_outbox.operation_id "
+            "AND p.server_id=execution_dispatch_outbox.server_id AND p.executor_id=execution_dispatch_outbox.executor_id "
+            "AND r.agent_id=p.subject_agent_id AND r.state='RECOVERING') "
             "GROUP BY reservation_class",
             (server_id, executor_id),
         ):
@@ -140,6 +144,9 @@ def reserve_execution_dispatch(
                 "AND o.dispatch_state='PENDING' "
                 "AND (o.next_attempt_at IS NULL OR o.next_attempt_at<=?) "
                 "AND p.admission_state IN ('ACCEPTED','DISPATCH_PENDING') "
+                "AND NOT EXISTS (SELECT 1 FROM execution_agent_recovery r JOIN execution_executors e USING(server_id,executor_id) "
+                "WHERE r.server_id=p.server_id AND r.executor_id=p.executor_id AND r.agent_id=p.subject_agent_id "
+                "AND (r.state<>'READY' OR r.generation<>e.generation)) "
                 "AND p.action IN (" + placeholders + ") "
                 "AND length(CAST(p.semantic_payload AS BLOB))<=? "
                 "AND NOT EXISTS (SELECT 1 FROM execution_domain_deliveries m "
@@ -315,6 +322,8 @@ def begin_execution_send(
             (server_id, reservation.executor_id, row["binding_id"],
              row["workspace_binding_id"]),
         ).fetchone()
+        from .execution_agent_recovery import require_agent_ready
+        require_agent_ready(conn, server_id, reservation.executor_id, row["subject_agent_id"])
         if (binding is None or binding["binding_revision"] !=
                 scope["binding_revision"] or
                 binding["agent_id"] != row["subject_agent_id"] or
