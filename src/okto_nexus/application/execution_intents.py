@@ -236,6 +236,8 @@ def resolve_execution_intent(
             endpoint_config = conn.execute('SELECT public_config FROM agent_endpoints WHERE endpoint_id=?',
                                           (binding['endpoint_id'],)).fetchone()
             settings = dict(json.loads(endpoint_config[0]).get('harness_settings', {}))
+            from .runtime_policy import harness_mcp_settings
+            settings = harness_mcp_settings(conn, subject_agent_id, binding['adapter_id'], settings)
             model = settings.pop('model', None)
             if model is not None:
                 payload['model'] = model

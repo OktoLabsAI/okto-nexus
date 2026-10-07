@@ -34,6 +34,7 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
   const [test,setTest] = useState<SetupTest | null>(null);
   const [request,setRequest] = useState<SetupRequest | null>(null);
   const [details,setDetails] = useState(false);
+  const [inheritedMcps,setInheritedMcps] = useState(false);
   const [reload,setReload] = useState(0);
   const [installationBusy,setInstallationBusy] = useState(false);
   const [installationError,setInstallationError] = useState('');
@@ -65,6 +66,7 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
           authorization:setup.authorization || old.authorization,
           workspace_label:projects.workspaces.find(w => w.workspace_id === saved?.workspace_id)?.display_name || ''}));
         setRuntimeDefault(runtime.defaults?.runtime_enabled ?? true);
+        setInheritedMcps(runtime.effective?.inherit_global_mcps ?? false);
         setBaseline(setup.baseline); setWorkspaces(projects.workspaces);
         const local = hosts.filter(h => h.kind === 'embedded');
         if (saved) {setExecutor(saved.executor_id);setWorkspace(saved.workspace_id);setCandidateRef(saved.candidate_ref);setBindingId(saved.binding_id);}
@@ -296,7 +298,7 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
       <p className="text-surface-500">{bindingId ? 'The existing connection will be updated when you finish.' : 'The new connection will be created when you finish.'}</p>
     </>}
     {step === 4 && <>
-      {selected?.harness_configuration && <HarnessPreferenceFields schema={selected.harness_configuration} values={draft.harness_settings} onChange={harness_settings => patch({harness_settings})} />}
+      {selected?.harness_configuration && <HarnessPreferenceFields inheritedGlobalMcps={inheritedMcps} schema={selected.harness_configuration} values={draft.harness_settings} onChange={harness_settings => patch({harness_settings})} />}
       <label className="block">Nexus tool access <span className="text-surface-500">Required</span><ConfigurationHelp label="Nexus tool access">Always allow skips approval requests for Nexus tools. Native harness approval settings remain separate.</ConfigurationHelp><select aria-label="Nexus tool access" className={input} value={draft.tool_access} onChange={e => patch({tool_access:e.target.value as 'ask' | 'always_allow'})}><option value="ask">Ask for approval</option><option value="always_allow">Always allow</option></select></label>
     </>}
     {(step === 5 || (step === 0 && runtimeEnabled && draft.execution_location === 'remote' && connections.some(c => c.binding_id === bindingId && c.execution_location === 'remote'))) && <>

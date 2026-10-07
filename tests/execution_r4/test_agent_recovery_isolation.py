@@ -230,8 +230,10 @@ def test_real_process_exit_restores_without_lock_reset_or_replay(tmp_path, monke
     root.mkdir()
     repo = Path(__file__).resolve().parents[2]
     fixture = Path(__file__).with_name('agent_recovery_process_fixture.py')
+    import nexus_connector_core
+    core_source = str(Path(nexus_connector_core.__file__).resolve().parents[1])
     env = dict(os.environ, PYTHONPATH=os.pathsep.join([
-        str(repo / 'src'), str(fixture.parent), str(repo / 'tests')]), PYTHONIOENCODING='utf-8')
+        str(repo / 'src'), core_source, str(fixture.parent), str(repo / 'tests')]), PYTHONIOENCODING='utf-8')
     with (root / 'process.log').open('w', encoding='utf-8') as log:
         process = subprocess.Popen([sys.executable, str(fixture), str(root), 'before-bind' if termination == 'kill-before-bind' else 'running'], cwd=repo, env=env,
             stdin=subprocess.PIPE, stdout=log, stderr=log, text=True,

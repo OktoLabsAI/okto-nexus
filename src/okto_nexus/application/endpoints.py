@@ -145,8 +145,10 @@ class EndpointService:
                         old_revision=endpoint['revision'], new_revision=endpoint['revision']+1,
                         fields=['harness_settings'], now=now)
                     endpoint = self.repo.get(uow, endpoint_id)
+            from .runtime_policy import effective, harness_mcp_settings
             return dict(endpoint_id=endpoint_id, adapter_id=endpoint['adapter_id'], revision=endpoint['revision'], settings=settings,
-                        configuration=schema)
+                        configuration=schema, inherited_global_mcps=effective(uow.connection, endpoint['agent_id'])['inherit_global_mcps'],
+                        effective_settings=harness_mcp_settings(uow.connection, endpoint['agent_id'], endpoint['adapter_id'], settings))
 
     def tool_permission(self, context, *, endpoint_id, changes=None):
         """Operator policy for the generated Nexus client, applied at session start."""

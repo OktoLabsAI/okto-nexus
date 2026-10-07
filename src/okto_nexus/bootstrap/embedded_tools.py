@@ -104,7 +104,11 @@ class EmbeddedToolsOwner:
             always_allow = bool(row and json.loads(row[0]).get('nexus_tool_permission') == 'always_allow')
         if not native and adapter not in ("codex_app_server","claude_stream"):
             raise CoreError("CAPABILITY_UNSUPPORTED","local_tools")
-        provider_home_http=not native and launch.record["provider_home"] is not None and not launch.auth_refs
+        inherit_mcps = frame['payload'].get('harness_settings', {}).get('inherit_global_mcps') == 'enabled'
+        if inherit_mcps and launch.record['provider_home'] is None:
+            raise CoreError('WORKSPACE_UNAVAILABLE', 'mcp_client_configuration',
+                            message='Configure the harness directory to include its global MCPs.')
+        provider_home_http=not native and launch.record["provider_home"] is not None and (not launch.auth_refs or inherit_mcps)
         process_http=not native and (provider_home_http or always_allow)
         audience="nexus-native-session" if native else "nexus-mcp-session"
         actions=("handoff.get","handoff.claim","handoff.complete","runtime.input.list","runtime.input.respond","message.create") if native else MCP_ACTIONS

@@ -19,7 +19,7 @@ the derived `shared.md` view live outside that database.
 
 | Release fact | Value |
 |---|---|
-| Package | `okto-nexus 0.2.1` (development) |
+| Package | `okto-nexus 0.2.2` (development) |
 | Python | `>=3.11` |
 | MCP surface | Use `tools/list` for the active feature configuration |
 | MCP resources | 12 versioned reference resources |
@@ -1031,10 +1031,10 @@ Release checks:
 
 ```bash
 uv lock --check
-uv build --out-dir dist/release-0.2.1
+uv build --out-dir dist/release-0.2.2
 uvx twine check \
-  dist/release-0.2.1/okto_nexus-0.2.1-py3-none-any.whl \
-  dist/release-0.2.1/okto_nexus-0.2.1.tar.gz
+  dist/release-0.2.2/okto_nexus-0.2.2-py3-none-any.whl \
+  dist/release-0.2.2/okto_nexus-0.2.2.tar.gz
 ```
 
 Publish only explicitly named current-version artifacts. The top-level
@@ -1392,3 +1392,8 @@ Read the complete
 [LICENSE](https://github.com/OktoLabsAI/okto-nexus/blob/main/LICENSE) before use
 or redistribution. It is also included in the source distribution and served
 by the running hub at `GET /api/v1/license`.
+
+## Global harness MCPs
+
+See [global harness MCP inheritance](docs/global-mcps.md) for global defaults,
+agent/harness overrides and local/remote host behavior.

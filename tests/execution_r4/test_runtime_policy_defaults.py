@@ -57,7 +57,7 @@ def test_agent_override_can_enable_global_off_and_return_to_inheritance(connecte
     assert save(setup, runtime_enabled=False, session_policy='per_sender').status_code == 200
     result = save(setup, agent='subject', runtime_enabled=True)
     assert result.status_code == 200, result.text
-    assert result.json()['data']['effective'] == dict(runtime_enabled=True, session_policy='per_sender')
+    assert result.json()['data']['effective'] == dict(runtime_enabled=True, session_policy='per_sender', inherit_global_mcps=False)
     grant = setup[2].post('/api/v1/harness/grants', headers=setup[3]['operator'], json=dict(
         actor_agent_id='subject', endpoint_id=binding['endpoint_id'], actions=['open', 'send', 'interrupt', 'close'],
         max_executions=10, expires_at=iso_plus(setup[0].clock.now_iso(), 600)))
@@ -77,7 +77,7 @@ def test_global_changes_preserve_explicit_overrides_and_grants(connected_local):
     setup, binding, _ = connected_local
     assert save(setup, agent='subject', runtime_enabled=True, session_policy='shared').status_code == 200
     assert save(setup, runtime_enabled=False, session_policy='per_sender').status_code == 200
-    assert read(setup, 'subject')['effective'] == dict(runtime_enabled=True, session_policy='shared')
+    assert read(setup, 'subject')['effective'] == dict(runtime_enabled=True, session_policy='shared', inherit_global_mcps=False)
     with setup[0].connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute('SELECT revoked_at FROM runtime_execution_grants').fetchone()[0] is None
 

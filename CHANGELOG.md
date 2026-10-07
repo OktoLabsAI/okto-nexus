@@ -4,6 +4,17 @@ All notable changes to Okto Nexus are documented in this file.
 
 ## Unreleased
 
+### 0.2.2
+
+- Add global MCP inheritance defaults, nullable agent overrides and explicit
+  harness overrides, with the effective choice bound to each opening operation.
+- Preserve approved host configuration and OAuth state for inherited Codex/Claude
+  MCPs while continuing to inject session-scoped Nexus tools. Forward only global
+  MCP-declared credential variables, never Nexus operator/session credentials.
+- Correct Codex's recursive configuration merge so opting out disables existing
+  global MCP entries. Global policy changes preserve already-running sessions.
+- Require Connector Core 0.0.3; remote hosts should use Connector 0.0.2.
+
 ### 0.2.1
 
 - Isolate local runtime recovery and event publication by agent, with durable
