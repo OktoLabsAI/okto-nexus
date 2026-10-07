@@ -50,75 +50,14 @@ def test_endpoint_disable_and_reenable_require_cas_and_never_restore_old_grant(r
         assert [tuple(row) for row in rows] == [(1, 2), (2, 3)]
 
 
-def test_profile_updates_are_atomic_and_do_not_erase_omitted_fields(runtime):
-    deps, client, root, _, operator, _ = runtime
-    headers = {"x-api-key": operator}
-    assert client.post("/api/v1/harness/profiles", headers=headers, json={"profile_id": "isolated-profile",
-        "adapter_id": "codex", "config": {"env": {"CODEX_HOME": root}},
-        "secret_refs": {"FIXTURE_KEY": "env:FIXTURE_SOURCE"}}).status_code == 200
-    with ThreadPoolExecutor(max_workers=2) as pool:
-        replies = list(pool.map(lambda _: client.patch("/api/v1/harness/profiles/isolated-profile", headers=headers,
-            json={"expected_revision": 1, "enabled": True}), range(2)))
-    assert sorted(r.status_code for r in replies) == [200, 409]
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        from okto_nexus.adapters.outbound.sqlite.endpoints_repo import SqliteEndpointRepo
-        profile = SqliteEndpointRepo().profile(uow, "isolated-profile")
-        assert profile["revision"] == 2 and profile["config"]["env"]["CODEX_HOME"] == root
-        assert profile["secret_refs"] == {"FIXTURE_KEY": "env:FIXTURE_SOURCE"}
-        audit = [dict(r) for r in uow.connection.execute("SELECT * FROM runtime_access_audit WHERE resource_id='isolated-profile'")]
-        assert len(audit) == 2
-        assert all("FIXTURE_SOURCE" not in str(row) and root not in str(row) for row in audit)
-    diagnostic = client.get("/api/v1/harness/diagnostics", headers=headers)
-    assert diagnostic.status_code == 200, diagnostic.text
-    edits = [r for r in diagnostic.json()["data"]["configuration_changes"] if r["resource_id"] == "isolated-profile"]
-    assert len(edits) == 2 and edits[0]["changed_fields"] == ["enabled"]
 
 
 
 
-@pytest.mark.parametrize("kind", ["profile", "endpoint"])
-def test_mutation_disables_boot_and_does_not_restore_grants_after_reenable(runtime, kind):
-    deps, client, _, _, operator, caller = runtime
-    headers = {"x-api-key": operator}
-    grant = issue(runtime, ["open"])
-    assert client.put("/api/v1/harness/endpoints/endpoint-pi/boot", headers=headers,
-        json={"expected_revision": 1, "enabled": True}).status_code == 200
-    view, key, identity = ("profiles", "profile_id", "profile-pi") if kind == "profile" else ("endpoints", "endpoint_id", "endpoint-pi")
-    denied = tool(client, caller, "harness_list", {"view": view, "maintenance": {
-        "action": "update", key: identity, "expected_revision": 1, "enabled": False}})
-    assert not denied["ok"] and denied["error"]["code"] == "PERMISSION_DENIED", denied
-    for revision, enabled in ((1, False), (2, True)):
-        response = tool(client, operator, "harness_list", {"view": view, "maintenance": {
-            "action": "update", key: identity, "expected_revision": revision, "enabled": enabled}})
-        assert response["ok"], response
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute("SELECT enabled FROM runtime_boot_bindings WHERE endpoint_id='endpoint-pi'").fetchone()[0] == 0
-        assert uow.connection.execute("SELECT revoked_at FROM runtime_execution_grants WHERE grant_id=?", (grant["grant_id"],)).fetchone()[0]
 
 
 
 
-def test_configuration_commit_failure_rolls_back_grant_boot_and_revision(runtime, monkeypatch):
-    from okto_nexus.adapters.outbound.sqlite.endpoints_repo import SqliteEndpointRepo
-    deps, client, _, _, operator, _ = runtime
-    headers = {"x-api-key": operator}
-    grant = issue(runtime, ["open"])
-    assert client.put("/api/v1/harness/endpoints/endpoint-pi/boot", headers=headers,
-        json={"expected_revision": 1, "enabled": True}).status_code == 200
-    audit = SqliteEndpointRepo.audit_configuration
-    def fail(self, uow, **kwargs):
-        audit(self, uow, **kwargs)
-        raise OSError("fixture configuration commit cut")
-    with monkeypatch.context() as patch:
-        patch.setattr(SqliteEndpointRepo, "audit_configuration", fail)
-        response = client.patch("/api/v1/harness/profiles/profile-pi", headers=headers,
-            json={"expected_revision": 1, "enabled": False})
-        assert response.status_code == 500
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert tuple(uow.connection.execute("SELECT revision,enabled FROM runtime_profiles WHERE profile_id='profile-pi'").fetchone()) == (1, 1)
-        assert uow.connection.execute("SELECT revoked_at FROM runtime_execution_grants WHERE grant_id=?", (grant["grant_id"],)).fetchone()[0] is None
-        assert uow.connection.execute("SELECT enabled FROM runtime_boot_bindings WHERE endpoint_id='endpoint-pi'").fetchone()[0] == 1
-        assert not uow.connection.execute("SELECT 1 FROM runtime_access_audit WHERE action='config.profile.update'").fetchone()
 
 
 def test_configuration_audit_upgrade_preserves_old_access_rows(tmp_path):

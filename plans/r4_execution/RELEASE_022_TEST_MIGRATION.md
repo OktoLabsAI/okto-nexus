@@ -1,4 +1,4 @@
-# Nexus 0.2.2 — migration of runtime regressions
+# Nexus 0.2.2 â€” migration of runtime regressions
 
 The release remains gated on the complete installed suite. This document does
 not declare the historical suite equivalent to the current suite or authorize
@@ -121,3 +121,13 @@ transaction rollback with automatic recovery, origin governance and explicit
 artifact readers. Eight retained-factory refusal cases and two result-schema
 migration cases keep their original assertions using retained records instead
 of removed setup APIs. No full matrix success is claimed by these focused runs.
+
+The combined payload/privacy/control/discovery/monitor/fanout and retained-history
+campaign passed 52 installed-wheel cases, with unchanged inputs. Boot migration
+adds independent failed/hung native starts, pre-admission consent revalidation,
+open-only endpoint authority, bounded admission and refusal of attach-PID boot.
+An uncertain boot remains the same single operation after server restart. All
+12 source boot cases passed. Six current-settings cases preserve concurrent CAS,
+omitted config, grant/boot invalidation, transactional rollback and refusal to
+edit a live launch. Retained endpoint reconciliation remains tested through REST
+and MCP and cannot restore the removed Server native factories.

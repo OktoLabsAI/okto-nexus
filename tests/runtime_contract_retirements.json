@@ -1022,6 +1022,87 @@
         "tests/execution_r4/test_canonical_notify_targets.py::test_origin_permission_revocation_after_publication_blocks_all_native_children"
       ],
       "source_sha256": "71deac79b2bb29e55ef2e228a7af7448e6c5650b59fe06dbd247a48583d2d404"
+    },
+    {
+      "test": "tests/test_runtime_boot.py::test_one_failed_boot_does_not_prevent_other_endpoint",
+      "reason": "Server native connector factories were removed. Canonical boot admits durable Core operations, so its global budget bounds admission rather than synchronous native startup. Replacement exercises the same approval, isolation or no-replay guarantee through current canonical bindings.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_boot_regressions.py::test_one_native_boot_does_not_block_another_agent",
+        "tests/execution_r4/test_canonical_boot.py::test_serve_boot_uses_core_after_inventory_start_and_replays_once"
+      ],
+      "source_sha256": "5470c06c0d275a43acdcf7e502dd33506adc54df5177047cc0b9be96fbdd808b"
+    },
+    {
+      "test": "tests/test_runtime_boot.py::test_boot_revalidates_approval_before_any_native_effect",
+      "reason": "Server native connector factories were removed. Canonical boot admits durable Core operations, so its global budget bounds admission rather than synchronous native startup. Replacement exercises the same approval, isolation or no-replay guarantee through current canonical bindings.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_boot_regressions.py::test_boot_revalidates_persisted_consent_before_admission",
+        "tests/execution_r4/test_canonical_boot.py::test_serve_boot_uses_core_after_inventory_start_and_replays_once"
+      ],
+      "source_sha256": "1e8b4033a35636a5a0a50f6ba1d0a208e3131d5e8578a78b1f41e8ffdcb1df0b"
+    },
+    {
+      "test": "tests/test_runtime_boot.py::test_boot_authority_cannot_be_used_for_control_or_other_binding",
+      "reason": "Server native connector factories were removed. Canonical boot admits durable Core operations, so its global budget bounds admission rather than synchronous native startup. Replacement exercises the same approval, isolation or no-replay guarantee through current canonical bindings.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_boot_regressions.py::test_boot_authority_is_bound_to_one_endpoint_and_open_only",
+        "tests/execution_r4/test_canonical_boot.py::test_serve_boot_uses_core_after_inventory_start_and_replays_once"
+      ],
+      "source_sha256": "24c0cd40fe21457129635de70bd9875c7909cfa839d05c526c367b95d79fe8a2"
+    },
+    {
+      "test": "tests/test_runtime_boot.py::test_attach_pid_is_not_stable_boot_identity",
+      "reason": "Server native connector factories were removed. Canonical boot admits durable Core operations, so its global budget bounds admission rather than synchronous native startup. Replacement exercises the same approval, isolation or no-replay guarantee through current canonical bindings.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_boot_regressions.py::test_attach_pid_cannot_authorize_automatic_boot",
+        "tests/execution_r4/test_canonical_boot.py::test_serve_boot_uses_core_after_inventory_start_and_replays_once"
+      ],
+      "source_sha256": "1138b1dffcbe8a238db65f3e65f717e15248c995546a1d60fa6bf0196f65a291"
+    },
+    {
+      "test": "tests/test_runtime_boot.py::test_failed_native_start_persists_quarantine_and_boot_cannot_replay",
+      "reason": "Server native connector factories were removed. Canonical boot admits durable Core operations, so its global budget bounds admission rather than synchronous native startup. Replacement exercises the same approval, isolation or no-replay guarantee through current canonical bindings.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_boot_regressions.py::test_uncertain_boot_is_not_replayed_after_server_restart",
+        "tests/execution_r4/test_canonical_boot.py::test_serve_boot_uses_core_after_inventory_start_and_replays_once"
+      ],
+      "source_sha256": "0c41ad9d9d82d5c4eaddfa2a28739db2edbf6ce0db3488710913b4edba678c0a"
+    },
+    {
+      "test": "tests/test_runtime_boot.py::test_global_boot_budget_defers_remaining_bindings",
+      "reason": "Server native connector factories were removed. Canonical boot admits durable Core operations, so its global budget bounds admission rather than synchronous native startup. Replacement exercises the same approval, isolation or no-replay guarantee through current canonical bindings.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_boot_regressions.py::test_boot_budget_bounds_admission_without_waiting_for_native",
+        "tests/execution_r4/test_canonical_boot.py::test_serve_boot_uses_core_after_inventory_start_and_replays_once"
+      ],
+      "source_sha256": "0ff2409aae171f67af1fbfddc06eb82090fcbd937ca2e1ebcfece0328b73cec0"
+    },
+    {
+      "test": "tests/test_runtime_configuration_updates.py::test_profile_updates_are_atomic_and_do_not_erase_omitted_fields",
+      "reason": "Server launch-profile mutation was replaced by executor-owned realizations and revisioned harness settings. Preserve atomic editing, omitted configuration, authority invalidation, audit and rollback on the current public settings surfaces.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_configuration_regressions.py::test_settings_cas_preserves_other_config_and_invalidates_boot_and_grants",
+        "tests/execution_r4/test_local_launch.py::test_approved_local_configuration_reaches_core"
+      ],
+      "source_sha256": "2d644e62c142aa1f3e4fa2797d72bb7df086d58d14ce3b533212f75d946ac948"
+    },
+    {
+      "test": "tests/test_runtime_configuration_updates.py::test_mutation_disables_boot_and_does_not_restore_grants_after_reenable",
+      "reason": "Server launch-profile mutation was replaced by executor-owned realizations and revisioned harness settings. Preserve atomic editing, omitted configuration, authority invalidation, audit and rollback on the current public settings surfaces.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_configuration_regressions.py::test_settings_cas_preserves_other_config_and_invalidates_boot_and_grants",
+        "tests/execution_r4/test_local_launch.py::test_approved_local_configuration_reaches_core"
+      ],
+      "source_sha256": "b052bcfaa18ca288cf4ef70231d13d34f948422b2574f7cad23b00ec7814a532"
+    },
+    {
+      "test": "tests/test_runtime_configuration_updates.py::test_configuration_commit_failure_rolls_back_grant_boot_and_revision",
+      "reason": "Server launch-profile mutation was replaced by executor-owned realizations and revisioned harness settings. Preserve atomic editing, omitted configuration, authority invalidation, audit and rollback on the current public settings surfaces.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_configuration_regressions.py::test_failed_settings_commit_rolls_back_config_grants_boot_and_audit",
+        "tests/execution_r4/test_local_launch.py::test_approved_local_configuration_reaches_core"
+      ],
+      "source_sha256": "4f16e9cbb2e2ca447d5fe7f84940aa43c96da79cdf828e7db677c077c84f1ed6"
     }
   ]
 }

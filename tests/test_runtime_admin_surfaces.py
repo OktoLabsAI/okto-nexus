@@ -57,6 +57,9 @@ def test_profile_validation_never_coerces_authority_or_configuration(runtime, ch
 
 def test_reconciliation_retry_across_mcp_and_rest_does_not_spawn(runtime):
     deps, client, _, peers, operator, caller = runtime
+    from test_runtime_production_multiplex import retained_profile, retained_endpoint
+    retained_profile(runtime)
+    retained_endpoint(runtime, "endpoint-pi")
     with deps.connection_factory.unit_of_work() as uow:
         uow.connection.execute("UPDATE agent_endpoints SET health='quarantined',health_reason='owner_lost' WHERE endpoint_id='endpoint-pi'")
     args = {"action": "reconcile", "endpoint_id": "endpoint-pi", "expected_revision": 1,
