@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, timezone
+import time
 
 from fastapi.testclient import TestClient
 from nexus_connector_core import R4_PREVIEW_REVISION, encode_r4_frame
@@ -51,6 +52,15 @@ def test_short_disconnect_resumes_same_lane_and_generation(tmp_path, monkeypatch
     with TestClient(app, base_url='https://127.0.0.1:8202') as client:
         with client.websocket_connect(url, headers=headers, subprotocols=['nxl.v1']) as ws:
             channel = negotiate(ws, info, revisions, lane_ticket, server, executor, control_capabilities=capabilities)
+        # Closing the client socket precedes the server's durable disconnect
+        # publication. Resume only after that publication, as a real peer would.
+        deadline = time.monotonic() + 5
+        while True:
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                published = uow.connection.execute('SELECT COUNT(*) FROM execution_connection_resumes').fetchone()[0]
+            if published == 1 or time.monotonic() >= deadline:
+                break
+            time.sleep(0.01)
         with deps.connection_factory.unit_of_work(write=False) as uow:
             lane = dict(uow.connection.execute('SELECT * FROM execution_control_lanes').fetchone())
             assert uow.connection.execute('SELECT COUNT(*) FROM execution_connection_resumes').fetchone()[0] == 1

@@ -351,8 +351,8 @@ an uncertain outcome. The Server, not the operator or Connector, owns dispatch.
 
 ## Capabilities, authority and outcomes
 
-The four catalog adapters are `codex_app_server`, `pi_rpc`,
-`claude_stream` and `claude_attach`. A catalog entry is not proof
+The three catalog adapters are `codex_app_server`, `pi_rpc` and
+`claude_stream`. A catalog entry is not proof
 that its native version is installed, usable or qualified. Read current protocol
 readiness, inventory evidence, binding status, effective session capabilities
 and authorization. Missing qualification must remain unavailable; do not bypass
@@ -361,9 +361,8 @@ and authorization. Missing qualification must remain unavailable; do not bypass
 Remote NXL uses the exact negotiated R4 revision from Core. R3 persisted bytes
 remain historical data, not permission to submit a new R4 effect. An unsupported
 method, version, platform or missing capability must produce a refusal rather
-than a simulated success. Claude attach is an external session: a socket write
-does not prove native acceptance or completion, and detaching does not authorize
-termination of the external process.
+than a simulated success. Claude attach is no longer supported. Historical
+attach records remain readable, but cannot authorize new execution.
 
 For runtime message delivery, `Received` (`delivered_at`) is recorded when a
 correlated `turn.submit` receipt first proves native acceptance (`SUBMITTED`,

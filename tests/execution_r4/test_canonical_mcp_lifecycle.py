@@ -63,7 +63,9 @@ def test_canonical_open_rejects_unapproved_kind_and_backend_before_effect(connec
     payload = dict(open_body(setup, binding), **change)
     if transport == 'mcp':
         result = invoke(setup, 'harness_open', payload)
-        assert not result['ok'] and result['error']['code'] == 'VALIDATION_ERROR', result
+        # Retired attach is denied by MCP authorization before input validation.
+        expected = 'PERMISSION_DENIED' if change.get('substrate') == 'attach' else 'VALIDATION_ERROR'
+        assert not result['ok'] and result['error']['code'] == expected, result
     else:
         response = setup[2].post('/api/v1/harness/sessions', headers=setup[3]['subject'], json=payload)
         assert response.status_code == 422, response.text
