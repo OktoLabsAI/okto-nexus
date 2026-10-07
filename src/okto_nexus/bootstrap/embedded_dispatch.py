@@ -297,7 +297,8 @@ class EmbeddedDispatchOwner:
             try:
                 await self.agents.fail(frame['agent_id'], error)
             except Exception as shared_error:
-                self.failure = shared_error
+                if self.failure is None:
+                    self.failure = shared_error
                 await self.failed()
 
     async def _execute(self, frame):
@@ -474,7 +475,8 @@ class EmbeddedDispatchOwner:
                 try:
                     await self.agents.fail(session['scope']['agent_id'], error)
                 except Exception as shared_error:
-                    self.failure = shared_error
+                    if self.failure is None:
+                        self.failure = shared_error
                     await self.failed()
 
     async def _maintain(self):

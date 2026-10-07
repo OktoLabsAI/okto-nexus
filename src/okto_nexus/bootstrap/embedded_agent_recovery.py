@@ -81,7 +81,8 @@ class EmbeddedAgentRecovery:
         # Loss of the shared owner/database must still stop the whole host.
         await asyncio.to_thread(self.owner.verify)
         self.blocked.add(agent_id)
-        self.errors[agent_id] = error
+        # Secondary failures during containment must not hide the first cause.
+        error = self.errors.setdefault(agent_id, error)
         await asyncio.to_thread(self._state, agent_id, 'RECOVERING', error)
         await asyncio.to_thread(self.owner._recovery_event, 'RECOVERY_AGENT_BLOCKED',
             f"{type(error).__name__}: {getattr(error, 'code', 'UNAVAILABLE')} at {getattr(error, 'stage', 'agent runtime history')}",
