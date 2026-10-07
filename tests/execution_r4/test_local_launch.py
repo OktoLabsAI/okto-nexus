@@ -4,7 +4,7 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
-from nexus_connector_core import CoreError, ShutdownPolicy
+from nexus_connector_core import CoreError, LaunchIntent, ShutdownPolicy
 
 from okto_nexus.application.execution_local_launch import ApprovedLocalLaunch
 from okto_nexus.application.execution_dispatch import reserve_execution_dispatch, begin_execution_send
@@ -100,8 +100,8 @@ def test_approved_local_configuration_reaches_core(admitted_local, monkeypatch, 
         leases.applied(application.acknowledgement,channel=channel)
         # The technical native factory bypasses actual process creation; exercise
         # the exact Core environment callback separately with its prepared refs.
-        prepared=SimpleNamespace(intent=SimpleNamespace(adapter_id=candidate.adapter_id,
-            agent_id="subject",workspace_id=sent.scope["workspace_id"]),secret_refs=executor.local_launch.auth_refs)
+        prepared=SimpleNamespace(intent=LaunchIntent("subject", sent.scope["workspace_id"], candidate.adapter_id),
+            secret_refs=executor.local_launch.auth_refs, cwd=str(root))
         environment=await executor.environment(prepared)
         assert environment["OPENAI_API_KEY"] == "technical-provider-secret"
         receipt=await executor.open(operation_id=sent.frame["operation_id"],stream_epoch="local-stream")
@@ -152,8 +152,8 @@ def test_authority_change_during_secret_resolution_is_refused(admitted_local):
                 uow.connection.execute("UPDATE agents SET is_active=0 WHERE agent_id='subject'")
             return "technical-secret"
     launch=ApprovedLocalLaunch(app.state.embedded_inventory_owner,sent.scope,resolver=Resolver())
-    prepared=SimpleNamespace(intent=SimpleNamespace(adapter_id=candidate.adapter_id,
-        agent_id="subject",workspace_id=sent.scope["workspace_id"]),secret_refs=launch.auth_refs)
+    prepared=SimpleNamespace(intent=LaunchIntent("subject", sent.scope["workspace_id"], candidate.adapter_id),
+        secret_refs=launch.auth_refs, cwd=str(setup[-1]))
     async def scenario():
         with pytest.raises((CoreError, OktoNexusError)):
             await launch.environment(prepared)
@@ -170,8 +170,8 @@ def test_missing_or_nexus_credentials_cannot_be_provider_secrets(admitted_local,
     else:
         monkeypatch.setenv("LOCAL_TEST_KEY",value)
     launch=ApprovedLocalLaunch(app.state.embedded_inventory_owner,sent.scope)
-    prepared=SimpleNamespace(intent=SimpleNamespace(adapter_id=candidate.adapter_id,
-        agent_id="subject",workspace_id=sent.scope["workspace_id"]),secret_refs=launch.auth_refs)
+    prepared=SimpleNamespace(intent=LaunchIntent("subject", sent.scope["workspace_id"], candidate.adapter_id),
+        secret_refs=launch.auth_refs, cwd=str(setup[-1]))
     async def scenario():
         with pytest.raises(CoreError) as error:
             await launch.environment(prepared)
