@@ -45,7 +45,7 @@ from okto_nexus.domain.base import iso_plus, utc_now_iso
 from okto_nexus.domain.ids import resolve_workspace_id
 from okto_nexus.errors import ErrorCode, OktoNexusError
 
-from conftest import FakeClock
+from fake_clock import FakeClock
 
 #: The deterministic "now" every service-level test prunes at (canonical form).
 NOW = "2026-06-07T00:00:00.000000Z"
