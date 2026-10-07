@@ -207,14 +207,14 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                               'inbox_pull', dict(agent_id='subject'))
                 assert pulled['ok'] and pulled['data']['messages'] == [], pulled
             else:
-                resolved = client.post('/v1/runtime/intents:resolve', headers=headers['subject'], json={
+                resolved = (await asyncio.to_thread(client.post, '/v1/runtime/intents:resolve', headers=headers['subject'], json={
                     'client_intent_id': 'mux-' + intent, 'intent': intent, 'binding_id': binding['binding_id'],
-                    'workspace_binding_id': binding['workspace_binding_id'], **options})
+                    'workspace_binding_id': binding['workspace_binding_id'], **options}))
                 assert resolved.status_code == 200, resolved.text
                 resolution = resolved.json()
                 assert resolution['can_submit'], resolution['blockers']
-                admitted = client.post('/v1/runtime/operations', headers=headers['subject'], json={
-                    k: resolution[k] for k in ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')})
+                admitted = (await asyncio.to_thread(client.post, '/v1/runtime/operations', headers=headers['subject'], json={
+                    k: resolution[k] for k in ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')}))
                 assert admitted.status_code == 202, admitted.text
             operations.append(resolution['operation_id'])
             if publication_failure and intent == 'runtime.close':
@@ -227,8 +227,8 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 while True:
                     if execution.failure is not None:
                         raise execution.failure
-                    observed = client.get('/v1/runtime/operations/' + resolution['operation_id'],
-                                          headers=headers['subject'])
+                    observed = (await asyncio.to_thread(client.get, '/v1/runtime/operations/' + resolution['operation_id'],
+                                          headers=headers['subject']))
                     assert observed.status_code == 200, observed.text
                     assert observed.json()['error'] is None, observed.json()
                     if observed.json()['receipt_revision'] > 0:
@@ -356,7 +356,7 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                         operations.append(child)
                         async with asyncio.timeout(8):
                             while True:
-                                result = client.get("/v1/runtime/operations/" + child, headers=headers["subject"])
+                                result = (await asyncio.to_thread(client.get, "/v1/runtime/operations/" + child, headers=headers["subject"]))
                                 assert result.status_code == 200, result.text
                                 if result.json()["executor_stage"] in {"SUBMITTED", "SUCCEEDED"}:
                                     break
@@ -378,15 +378,15 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                         turned['operation_id']))
                     async with asyncio.timeout(8):
                         while True:
-                            queued = client.get('/api/v1/approvals', headers=headers['operator'],
-                                params={'workspace':binding['workspace_id'],'status':'pending'})
+                            queued = (await asyncio.to_thread(client.get, '/api/v1/approvals', headers=headers['operator'],
+                                params={'workspace':binding['workspace_id'],'status':'pending'}))
                             assert queued.status_code == 200, queued.text
                             rows = [row for row in queued.json()['data']['items'] if row['action']=='execution.native.respond']
                             if rows: break
                             assert execution.failure is None, repr(execution.failure)
                             await asyncio.sleep(.01)
                     assert len(rows) == 1
-                    detail = client.get('/api/v1/approvals/'+rows[0]['approval_id'],headers=headers['operator'])
+                    detail = (await asyncio.to_thread(client.get, '/api/v1/approvals/'+rows[0]['approval_id'],headers=headers['operator']))
                     proposal = detail.json()['data']['request_payload']['kwargs']
                     body = {k:proposal[k] for k in ('approval_key','expected_revision','request_hash','cas_token')}
                     body.update(client_intent_id='remote-native-decision',decision=choice)
@@ -396,17 +396,17 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                     # permission decisions belong to the operator.
                     responder = headers['subject' if kind == 'input' else 'operator']
                     forbidden = headers['operator' if kind == 'input' else 'subject']
-                    assert client.post('/v1/runtime/approval-decisions',headers=forbidden,json=body).status_code == 403
-                    confirmed = client.post('/v1/runtime/approval-decisions',headers=responder,json=body)
+                    assert (await asyncio.to_thread(client.post, '/v1/runtime/approval-decisions',headers=forbidden,json=body)).status_code == 403
+                    confirmed = (await asyncio.to_thread(client.post, '/v1/runtime/approval-decisions',headers=responder,json=body))
                     assert confirmed.status_code == 202, confirmed.text
                     decision = confirmed.json()
-                    repeated = client.post('/v1/runtime/approval-decisions',headers=responder,json=body)
+                    repeated = (await asyncio.to_thread(client.post, '/v1/runtime/approval-decisions',headers=responder,json=body))
                     assert repeated.status_code == 200, repeated.text
                     assert repeated.json()['native_operation_id'] == decision['native_operation_id']
                     operations.append(decision['native_operation_id'])
                     async with asyncio.timeout(8):
                         while True:
-                            result = client.get('/v1/runtime/approval-decisions/'+decision['decision_id'],headers=headers['operator'])
+                            result = (await asyncio.to_thread(client.get, '/v1/runtime/approval-decisions/'+decision['decision_id'],headers=headers['operator']))
                             assert result.status_code == 200, result.text
                             view = result.json()
                             if view['native_stage']=='SUBMITTED': break
@@ -582,7 +582,7 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                             journal=await daemon.host.ensure_history_journal())
                     assert list(recovered) == [binding['binding_id']]
                     assert not pending.pending(server_id, executor_id)
-                    final = client.get('/v1/runtime/operations/' + operations[-1], headers=headers['subject']).json()
+                    final = (await asyncio.to_thread(client.get, '/v1/runtime/operations/' + operations[-1], headers=headers['subject'])).json()
                     assert final['executor_stage'] == 'SUCCEEDED' and final['receipt_revision'] == 1
                 if reconcile_closed:
                     from okto_nexus_connector.services.r4_reconciliation import R4ReconciliationReporter

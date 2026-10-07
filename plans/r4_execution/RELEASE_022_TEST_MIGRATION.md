@@ -272,3 +272,12 @@ Windows additionally exposed remote fixture event-loop blocking and a handoff
 fixture admitting a conversational creation notification before managed work.
 Their validation is pending. No full-suite approval, merge or release tag follows
 from the focused passing campaigns.
+
+The remote and handoff fixture follow-up passed all 25 installed-wheel cases
+with unchanged inputs (build/release-windows-fixture-installed). Remote REST
+requests now run outside the asynchronous WebSocket/lease-renewal loop. The
+handoff fixture enables conversation only after its creation notification and
+asserts that emitted output belongs to the managed operation being tested.
+The more recent Linux 3.11 diagnostic at 929bb87 (run 37632532345) still reports
+3376 passed, 407 failed and 108 skipped. It predates the latest local fixes and
+is not current-head acceptance; the complete release gate remains open.

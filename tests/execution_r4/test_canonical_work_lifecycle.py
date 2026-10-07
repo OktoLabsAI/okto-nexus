@@ -89,11 +89,13 @@ def test_changed_work_authority_retains_late_output_without_publication(runtime,
     setup, binding, native = runtime
     deps, _, client, headers, *_ = setup
     deps.config.feature_verification = True
-    enable(setup, binding)
     created = call(runtime, "handoff_create", from_agent_id="caller", visibility="eligible",
         target=dict(strategy="direct", agent_id="subject"), payload="Governed evidence",
         acceptance_criteria=["Review this evidence"])
     assert created["ok"], created
+    # Creation notifications must not start an unrelated conversational turn
+    # before this test admits the managed handoff whose output it will emit.
+    enable(setup, binding)
     hid, gid = created["data"]["handoff_id"], grant(runtime)
     entered, release = threading.Event(), threading.Event()
     original = RuntimeResultService.prepare
@@ -108,6 +110,10 @@ def test_changed_work_authority_retains_late_output_without_publication(runtime,
             assert admitted["ok"], admitted
             op = admitted["data"]["runtime_operation"]["operation_id"]
             turn = current_turn(setup)
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                assert uow.connection.execute(
+                    "SELECT domain_operation_id FROM execution_domain_deliveries WHERE operation_id=?",
+                    (turn["operation_id"],)).fetchone()[0] == op
             wait_receipt(setup, turn)
             emit(setup, native, turn, "Late governed evidence")
             assert entered.wait(5)
