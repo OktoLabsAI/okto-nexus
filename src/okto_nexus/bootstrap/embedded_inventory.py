@@ -112,12 +112,13 @@ class EmbeddedInventoryOwner:
         return await asyncio.shield(self._probe_task)
 
     async def _refresh(self):
-        from ..application.execution_local_observations import apply_local_observations
+        from ..application.execution_local_observations import apply_local_observations, refresh_approved_installations
         delivery_id = await asyncio.to_thread(self._claim_refresh)
         observed_at = time.monotonic()
         raw = await self.discover_candidates()
         if self._stop.is_set():
             return
+        await refresh_approved_installations(self, raw)
         candidates = await asyncio.to_thread(apply_local_observations, self.deps.connection_factory, self.key, raw)
         age_ms = max(0, int((time.monotonic() - observed_at) * 1000))
         publication = await asyncio.to_thread(self._publish, candidates, age_ms, delivery_id)

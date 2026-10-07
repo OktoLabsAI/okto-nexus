@@ -121,7 +121,9 @@ class ApprovedLocalLaunch:
             from nexus_connector_core import resolve_installation
             candidate = resolve_installation(owner.candidates,
                 adapter_id=row["adapter_id"], candidate_ref=row["candidate_ref"])
-            if asdict(candidate) != record["candidate"] or selected_fingerprint(candidate) != candidate.fingerprint:
+            from .execution_inventory_revalidation import same_installation_location
+            if (not same_installation_location(record['candidate'], asdict(candidate))
+                    or selected_fingerprint(candidate) != candidate.fingerprint):
                 raise _refuse()
             if directory_identity(record["root"]["path"]) != record["root"]:
                 raise _refuse()

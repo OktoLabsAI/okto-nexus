@@ -72,6 +72,28 @@ def test_core_version_and_unrelated_catalog_changes_are_not_selection_changes(ad
     assert selection(snapshot, body['adapter_id'], body['candidate_ref']) == selection(upgraded, body['adapter_id'], body['candidate_ref'])
 
 
+def test_harness_version_update_preserves_existing_binding_and_launch(admitted_local, monkeypatch):
+    setup, sent, _, _ = admitted_local
+    deps, app, client, _, _, candidate, _ = setup
+    owner = app.state.embedded_inventory_owner
+    client.portal.call(owner.refresh)
+    changed = replace(candidate, version='0.999.0')
+    monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+        lambda **_: SimpleNamespace(candidates=(changed,)))
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        before = dict(uow.connection.execute('SELECT * FROM execution_bindings').fetchone())
+    client.portal.call(owner.refresh)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        after = dict(uow.connection.execute('SELECT * FROM execution_bindings').fetchone())
+        assert before == after
+        assert accepts_binding(uow.connection, after, owner.publication.inventory_revision,
+            owner.key.server_id, owner.key.executor_id)
+        assert uow.connection.execute('SELECT reason FROM execution_inventory_revalidation').fetchone()[0] == 'installation_updated'
+    launch = ApprovedLocalLaunch(owner, sent.scope)
+    assert launch.candidate.version == '0.999.0'
+    launch.check()
+
+
 def test_one_publication_revalidates_one_hundred_bindings(admitted_local, monkeypatch):
     setup, _, _, _ = admitted_local
     deps, app, client, _, _, candidate, _ = setup
@@ -96,3 +118,46 @@ def test_one_publication_revalidates_one_hundred_bindings(admitted_local, monkey
     from okto_nexus.application.execution_log import read_execution_log
     logs = read_execution_log(deps.connection_factory, limit=200)
     assert sum(row['code'] == 'INVENTORY_REVALIDATED' for row in logs['items']) == 100
+
+
+@pytest.mark.parametrize('scenario', ['updated', 'failed', 'other_path', 'disabled'])
+def test_updated_binary_is_observed_without_repeating_operator_setup(admitted_local, monkeypatch, scenario):
+    from pathlib import Path
+    from nexus_connector_core.discovery import fingerprint
+    from okto_nexus.application import execution_local_observations as observations
+
+    setup, sent, _, _ = admitted_local
+    deps, app, client, _, _, candidate, _ = setup
+    owner = app.state.embedded_inventory_owner
+    client.portal.call(owner.refresh)
+    binary = Path(candidate.executable)
+    if scenario == 'other_path':
+        binary = binary.with_name('other.exe')
+    binary.write_bytes(b'Updated harness release')
+    changed = replace(candidate, executable=str(binary), fingerprint=fingerprint(binary), trust='untrusted')
+    monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+        lambda **_: SimpleNamespace(candidates=(changed,)))
+    calls = []
+    async def probe(selected):
+        calls.append(selected)
+        if scenario == 'failed':
+            raise OSError('Version process failed')
+        return replace(selected, version='0.999.0')
+    monkeypatch.setattr(observations, 'probe_version', probe)
+    if scenario == 'disabled':
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute('UPDATE agent_endpoints SET enabled=0')
+    client.portal.call(owner.refresh)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        rows = uow.connection.execute('SELECT * FROM execution_local_observations').fetchall()
+        assert len(rows) == (1 if scenario == 'updated' else 0)
+        binding = uow.connection.execute('SELECT * FROM execution_bindings').fetchone()
+        assert accepts_binding(uow.connection, binding, owner.publication.inventory_revision,
+            owner.key.server_id, owner.key.executor_id) == (scenario == 'updated')
+    assert len(calls) == (0 if scenario in {'other_path', 'disabled'} else 1)
+    if scenario == 'updated':
+        launch = ApprovedLocalLaunch(owner, sent.scope)
+        assert launch.candidate.version == '0.999.0'
+        launch.check()
+        client.portal.call(owner.refresh)
+        assert len(calls) == 1
