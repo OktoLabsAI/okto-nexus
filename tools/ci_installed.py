@@ -71,7 +71,7 @@ for module in ("okto_nexus_connector", "torch"):
 from okto_nexus.bootstrap.dependencies import bootstrap
 deps = bootstrap({}, ["--home", sys.argv[1]])
 assert deps.approvals is not None
-assert deps.native_decisions is None
+assert deps.native_decisions is not None
 print(json.dumps({"base_boot_with_core": True, "connector_installed": False,
                   "torch_installed": False, "provider_qualified": False}))
 '''
