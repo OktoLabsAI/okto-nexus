@@ -170,16 +170,31 @@ def canonical_session(deps, session_id):
 
 
 def session_view(deps, context, session_id):
-    return read_execution_session(deps.connection_factory,
-        server_id=ensure_execution_installation(deps.connection_factory).server_id,
-        session_id=session_id, context=context, access=build_execution_access(deps))
+    try:
+        return read_execution_session(deps.connection_factory,
+            server_id=ensure_execution_installation(deps.connection_factory).server_id,
+            session_id=session_id, context=context, access=build_execution_access(deps))
+    except OktoNexusError as exc:
+        if exc.code != ErrorCode.NOT_FOUND:
+            raise
+        # This surface also serves legacy history, whose unknown/foreign IDs
+        # receive the same denial. Do not expose which store contains an ID.
+        from ..application.runtime_access import denied
+        raise denied() from None
 
 
 def events_view(deps, context, session_id, **options):
     from ..application.execution_event_views import read_execution_events
-    return read_execution_events(deps.connection_factory,
-        server_id=ensure_execution_installation(deps.connection_factory).server_id,
-        session_id=session_id, context=context, access=build_execution_access(deps), **options)
+    try:
+        return read_execution_events(deps.connection_factory,
+            server_id=ensure_execution_installation(deps.connection_factory).server_id,
+            session_id=session_id, context=context, access=build_execution_access(deps), **options)
+    except OktoNexusError as exc:
+        if exc.code == ErrorCode.NOT_FOUND:
+            # An authorized reader may still request a missing stream. Keep
+            # that error after ruling out foreign/unknown session disclosure.
+            session_view(deps, context, session_id)
+        raise
 
 
 def command(deps, context, session, verb, payload, options):

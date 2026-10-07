@@ -139,10 +139,16 @@ def read_operation(deps, operation_id):
         if canonical:
             build_execution_access(deps).authenticate(context, uow=uow, require_feature=False)
     if canonical:
-        return read_execution_operation_history(deps.connection_factory,
-            server_id=ensure_execution_installation(deps.connection_factory).server_id,
-            executor_id=None, operation_id=operation_id,
-            subject_agent_id=context.actor_agent_id, actor_agent_id=context.actor_agent_id).public_view()
+        try:
+            return read_execution_operation_history(deps.connection_factory,
+                server_id=ensure_execution_installation(deps.connection_factory).server_id,
+                executor_id=None, operation_id=operation_id,
+                subject_agent_id=context.actor_agent_id, actor_agent_id=context.actor_agent_id).public_view()
+        except OktoNexusError as exc:
+            if exc.code != ErrorCode.NOT_FOUND:
+                raise
+            from okto_nexus.application.runtime_access import denied
+            raise denied() from None
     from okto_nexus.adapters.outbound.sqlite.runtime_commands_repo import SqliteRuntimeCommandRepo
     context = authorize_request(deps, action="access")
     service = RuntimeControlService(access=build_access_service(deps), supervisor=None, commands=SqliteRuntimeCommandRepo())

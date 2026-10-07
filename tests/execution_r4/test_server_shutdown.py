@@ -18,6 +18,42 @@ from test_embedded_dispatch import (
 )
 
 
+def test_shutdown_contains_native_open_finishing_after_deadline(connected_local, monkeypatch):
+    setup, binding, factory = connected_local
+    deps, app, client, headers, *_ = setup
+    entered, release = threading.Event(), threading.Event()
+    original_open = factory.open
+
+    async def held_open(*args, **kwargs):
+        entered.set()
+        await asyncio.to_thread(release.wait)
+        return await original_open(*args, **kwargs)
+
+    monkeypatch.setattr(factory, "open", held_open)
+    admitted = admit(setup, binding, "shutdown-late-open", "runtime.start", new_session=True)
+    try:
+        assert entered.wait(5)
+        response = client.post("/v1/runtime/shutdown", headers=headers["operator"],
+            json={"timeout_seconds": .1})
+        assert response.status_code == 202, response.text
+        assert response.json()["state"] == "DRAINING_PENDING"
+        assert deps.runtime_admission_fence.closed
+        assert not deps.runtime_dispatcher._shutdown_finished.is_set()
+        assert client.get("/healthz").status_code == 200
+    finally:
+        release.set()
+        until = time.monotonic() + 15
+        while app.state.runtime_shutdown.status()["state"] != "DRAINED":
+            assert time.monotonic() < until, app.state.runtime_shutdown.status()
+            time.sleep(.02)
+    assert factory.opens == 1 and factory.native.stopped
+    assert not app.state.embedded_dispatch_owner.host._runtime_tasks
+    assert deps.runtime_dispatcher._shutdown_finished.is_set()
+    history = client.get("/v1/runtime/operations/" + admitted["operation_id"],
+        headers=headers["subject"])
+    assert history.status_code == 200
+
+
 def test_operator_shutdown_returns_pending_and_keeps_recovery_available(connected_local, monkeypatch):
     setup, binding, native = connected_local
     deps, app, client, headers, *_ = setup

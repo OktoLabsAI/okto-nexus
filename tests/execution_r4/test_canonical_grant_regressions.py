@@ -177,3 +177,40 @@ def test_authority_change_denies_rest_and_mcp_before_native_send(connected_local
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.submit'").fetchone()[0] == 0
     assert native.native.sent == []
+
+
+@pytest.mark.parametrize("transport", ["rest", "mcp"])
+@pytest.mark.parametrize("change", ["content", "target", "owner_context"])
+def test_changed_request_cannot_replace_canonical_command(connected_local, monkeypatch, transport, change):
+    setup, binding, native, grant, session = open_scoped(connected_local, budget=3)
+    first_peer = native.native
+    body = dict(idempotency_key="immutable-command", payload=dict(text="Immutable original"))
+    first = invoke_command(setup, monkeypatch, transport, session, body)
+    assert first["ok"], first
+    wait_receipt(setup, first["data"])
+    def snapshot():
+        with setup[0].connection_factory.unit_of_work(write=False) as uow:
+            return [tuple(row) for row in uow.connection.execute("SELECT operation_id,actor_agent_id,subject_agent_id,"
+                "binding_id,workspace_id,session_id,action,semantic_payload,intent_hash FROM execution_operations WHERE action='turn.submit'")]
+    before = snapshot()
+    changed, target = dict(body), session
+    if change == "content":
+        changed["payload"] = dict(text="Replacement")
+    elif change == "owner_context":
+        changed["expected_owner_epoch"] = setup[0].runtime_dispatcher.epoch
+    else:
+        opened = admit(setup, binding, "second-authorized-session", "runtime.start", new_session=True)
+        wait_receipt(setup, opened)
+        target = opened["session_id"]
+        assert native.opens == 2
+    rejected = invoke_command(setup, monkeypatch, transport, target, changed)
+    assert not rejected["ok"], rejected
+    assert rejected["error"]["code"] == ("VALIDATION_ERROR" if change == "owner_context" else "CONFLICT"), rejected
+    assert snapshot() == before
+    retry = invoke_command(setup, monkeypatch, "mcp" if transport == "rest" else "rest", session, body)
+    assert retry["ok"] and retry["data"]["operation_id"] == first["data"]["operation_id"], retry
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT used_executions FROM runtime_execution_grants WHERE grant_id=?", (grant["grant_id"],)).fetchone()[0] == 1
+    assert len(first_peer.sent) == 1
+    if change == "target":
+        assert native.native.sent == []

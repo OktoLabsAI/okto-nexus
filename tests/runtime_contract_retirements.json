@@ -623,6 +623,195 @@
         "tests/execution_r4/test_canonical_backup_artifacts.py::test_explicit_database_override_and_no_overwrite"
       ],
       "source_sha256": "33664be288707cace4d2ac504b694f680ba7853483a7da31b662c89784eda285"
+    },
+    {
+      "test": "tests/test_runtime_handoff_dispatch.py::test_managed_claim_cannot_silently_fall_back_to_unmanaged_claim",
+      "reason": "Migrated the retained managed-work contract through canonical realization, bindings, Core dispatch and receipts. Claims preserve atomicity, explicit work authority and one native effect; ordinary conversation authority remains insufficient.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_handoff_regressions.py::test_managed_claim_requires_explicit_work_authority"
+      ],
+      "source_sha256": "f8617f4d40d3cd1f166cbaf27382cbcbdc4329dd5c5659ea01243a8077ea6aab"
+    },
+    {
+      "test": "tests/test_runtime_handoff_dispatch.py::test_managed_claim_commit_cut_rolls_back_claim_delivery_and_grant",
+      "reason": "Migrated the retained managed-work contract through canonical realization, bindings, Core dispatch and receipts. Claims preserve atomicity, explicit work authority and one native effect; ordinary conversation authority remains insufficient.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_handoff_regressions.py::test_managed_claim_commit_cut_rolls_back_all_canonical_rows"
+      ],
+      "source_sha256": "4be18dfa4fb6d799f5b218e05775b248a78412f86e26636c20a540e477dcfe12"
+    },
+    {
+      "test": "tests/test_runtime_handoff_dispatch.py::test_competing_admissions_create_only_one_execution",
+      "reason": "Migrated the retained managed-work contract through canonical realization, bindings, Core dispatch and receipts. Claims preserve atomicity, explicit work authority and one native effect; ordinary conversation authority remains insufficient.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_handoff_regressions.py::test_concurrent_managed_claims_have_one_effect"
+      ],
+      "source_sha256": "76ca6abcaac20339e072e997f30c4cbb353b315e1e8ffa695deab025912288ab"
+    },
+    {
+      "test": "tests/test_runtime_handoff_dispatch.py::test_delegated_managed_claim_has_same_rest_and_mcp_admission",
+      "reason": "Migrated the retained managed-work contract through canonical realization, bindings, Core dispatch and receipts. Claims preserve atomicity, explicit work authority and one native effect; ordinary conversation authority remains insufficient.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_handoff_regressions.py::test_delegated_managed_claim_has_rest_mcp_parity"
+      ],
+      "source_sha256": "5f08f28c2b3bed2ea99882b9fa5591adb4f0d09cebe8a84994517f6e1e50ae37"
+    },
+    {
+      "test": "tests/test_runtime_handoff_dispatch.py::test_conversation_grant_cannot_authorize_work",
+      "reason": "Migrated the retained managed-work contract through canonical realization, bindings, Core dispatch and receipts. Claims preserve atomicity, explicit work authority and one native effect; ordinary conversation authority remains insufficient.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_handoff_regressions.py::test_managed_claim_requires_explicit_work_authority"
+      ],
+      "source_sha256": "6fac49016a90397fb9981db3e06a15c0225905ff15e530b11b2d7e7bba44662e"
+    },
+    {
+      "test": "tests/test_runtime_handoff_dispatch.py::test_policy_changed_after_creation_cannot_be_adopted_as_dispatch_authority",
+      "reason": "Migrated the retained managed-work contract through canonical realization, bindings, Core dispatch and receipts. Claims preserve atomicity, explicit work authority and one native effect; ordinary conversation authority remains insufficient.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_handoff_regressions.py::test_policy_change_after_creation_cannot_become_dispatch_authority"
+      ],
+      "source_sha256": "7140bc27984b6e17175c36791799aacc0b3c244794dfb3c18be7eef3043d3614"
+    },
+    {
+      "test": "tests/test_runtime_handoff_dispatch.py::test_canonical_approval_creates_dispatch_receipt_only_after_human_decision",
+      "reason": "Migrated the retained managed-work contract through canonical realization, bindings, Core dispatch and receipts. Claims preserve atomicity, explicit work authority and one native effect; ordinary conversation authority remains insufficient.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_handoff_regressions.py::test_human_approval_precedes_dispatch_authorization_receipt"
+      ],
+      "source_sha256": "ede129cd6a9339bd9d7d0b56f599503ef4299f43786d6aa9bfd02e81bfeadb49"
+    },
+    {
+      "test": "tests/test_runtime_handoff_dispatch.py::test_creation_authority_is_not_invented_for_legacy_or_new_hitl",
+      "reason": "Migrated the retained managed-work contract through canonical realization, bindings, Core dispatch and receipts. Claims preserve atomicity, explicit work authority and one native effect; ordinary conversation authority remains insufficient.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_handoff_regressions.py::test_creation_authority_is_never_invented"
+      ],
+      "source_sha256": "818c91046268195f228cb45f0f005cea8a98cc0a49d057b6274f345db5f963ac"
+    },
+    {
+      "test": "tests/test_runtime_handoff_dispatch.py::test_revocation_between_admission_and_write_prevents_native_effect",
+      "reason": "Canonical dispatch revalidates the work grant after durable claim admission and before Core invocation; a confirmed pre-write denial is terminal rather than a fabricated uncertain native effect.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_handoff.py::test_work_authority_change_after_claim_blocks_core"
+      ],
+      "source_sha256": "7cbd73753132015b85ae15438762815ad5758a85745babb4ddd2df9251ddc8f8"
+    },
+    {
+      "test": "tests/test_agent_self_connections.py::test_self_discovery_is_scoped_read_only_and_reports_authorized_open",
+      "reason": "Self discovery and connection now resolve canonical bindings with original agent credentials. The removed native Server proxy and constructor are replaced by durable Core admission; identity isolation, revocation and pre-write validation remain explicitly tested.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_connection_discovery.py::test_discovered_canonical_connect_call_opens_once",
+        "tests/execution_r4/test_canonical_connection_discovery.py::test_self_connect_refuses_foreign_identity_and_revoked_grant"
+      ],
+      "source_sha256": "3f996edda1adf2a59709eb902c25a8c4cd70dbd15a08d167edfde6b02bf88794"
+    },
+    {
+      "test": "tests/test_agent_self_connections.py::test_self_open_rechecks_grants_and_rejects_foreign_endpoint",
+      "reason": "Self discovery and connection now resolve canonical bindings with original agent credentials. The removed native Server proxy and constructor are replaced by durable Core admission; identity isolation, revocation and pre-write validation remain explicitly tested.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_connection_discovery.py::test_self_connect_refuses_foreign_identity_and_revoked_grant",
+        "tests/execution_r4/test_canonical_connection_discovery.py::test_operator_restricts_execution_without_issuing_connection_keys"
+      ],
+      "source_sha256": "38996f7a1c5ebca82ae37c1aa6bebc2d62784ddb64d62ab7122484968bd6ea15"
+    },
+    {
+      "test": "tests/test_agent_self_connections.py::test_self_connect_never_forwards_with_another_identity",
+      "reason": "Self discovery and connection now resolve canonical bindings with original agent credentials. The removed native Server proxy and constructor are replaced by durable Core admission; identity isolation, revocation and pre-write validation remain explicitly tested.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_connection_discovery.py::test_self_connect_keeps_authenticated_identity_despite_operator_environment"
+      ],
+      "source_sha256": "c078a9b4374e3c276910afa9f99b4693ce9d7c2fcd1a50f2e99612f48f5b329d"
+    },
+    {
+      "test": "tests/test_agent_self_connections.py::test_self_open_revalidates_grant_after_reservation_before_native_start",
+      "reason": "Self discovery and connection now resolve canonical bindings with original agent credentials. The removed native Server proxy and constructor are replaced by durable Core admission; identity isolation, revocation and pre-write validation remain explicitly tested.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_connection_discovery.py::test_self_connect_revalidates_grant_after_admission_before_native_open"
+      ],
+      "source_sha256": "8fe4cc2db9cca9c4f85a780ff704b4fd2554f326d4f03f7a7adf87924269ae7a"
+    },
+    {
+      "test": "tests/test_runtime_canonical_payload.py::test_canonical_content_reaches_adapter_with_server_identity",
+      "reason": "The v1 structured direct-command envelope is not an R4 command contract. Direct callers normalize text aliases and must not supply execution authority; canonical message delivery still creates its own authenticated envelope. Adapter support remains in Core, rather than the removed Server factories.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_command_payload.py::test_direct_command_refuses_legacy_envelopes_and_payload_authority",
+        "tests/execution_r4/test_canonical_delivery.py::test_message_admits_open_and_turn_atomically"
+      ],
+      "source_sha256": "17868d021fa76ca02702e607463e9254541e61b468a06d258672a96b61fd5f84"
+    },
+    {
+      "test": "tests/test_runtime_canonical_payload.py::test_canonical_payload_rejects_authority_conflicts_and_invalid_json",
+      "reason": "Moved public REST/MCP payload rejection and positive controls to a canonical Core session, preserving rejection of forged source, recipient, workspace, operation, handoff and native option authority.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_command_payload.py::test_direct_command_refuses_legacy_envelopes_and_payload_authority"
+      ],
+      "source_sha256": "2d31985a73f2638ec2de0e35315cf3492e806c5181a10a21345847a18b74a570"
+    },
+    {
+      "test": "tests/test_runtime_canonical_payload.py::test_legacy_content_aliases_normalize_without_repeating_effect",
+      "reason": "Text/content/JSON input aliases still normalize to one canonical idempotent operation. The historical runtime_commands v2 hash remains history and is not a new R4 admission key; retained native sessions cannot be reactivated by replaying that obsolete command store.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_command_payload.py::test_direct_command_refuses_legacy_envelopes_and_payload_authority",
+        "tests/execution_r4/test_ns15.py::test_ns15_02"
+      ],
+      "source_sha256": "f0febfb62ee7e2f9e453c06a7acabccbc4d8931844db2db4677aa9a03233ceb7"
+    },
+    {
+      "test": "tests/test_runtime_canonical_payload.py::test_payload_validation_does_not_precede_session_authorization",
+      "reason": "Foreign-agent REST/MCP requests are tested against current canonical sessions across controls and history, including invalid payloads, before any native effect.",
+      "replacements": [
+        "tests/execution_r4/test_runtime_contract_migration.py::test_foreign_agent_cannot_control_or_read_a_canonical_session"
+      ],
+      "source_sha256": "4bdd0ea3658bab3e7cb27b912e3a9388d25480ae2fa3c479f3e679c6962b5733"
+    },
+    {
+      "test": "tests/test_harness_target_grammar.py::test_target_reaches_one_canonical_executor_with_full_envelope",
+      "reason": "All five existing target strategies now exercise approved canonical local bindings, one durable inbox claim and Core-native delivery, preserving authenticated source, recipient, message, operation and content fields.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_target_grammar.py::test_all_target_strategies_preserve_authenticated_envelope_and_single_claim"
+      ],
+      "source_sha256": "2da02fe74eef42bf513f9946e90d0595a3c84c192b3a7e59321a27a3bcdcf507"
+    },
+    {
+      "test": "tests/test_runtime_request_acceptance.py::test_changed_request_cannot_replace_original_command",
+      "reason": "Migrated immutable request checks to canonical operations for REST/MCP: changed content or a second authorized session conflicts, unsupported legacy owner guards are rejected, the original command can replay, and one grant charge/native effect remains.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_grant_regressions.py::test_changed_request_cannot_replace_canonical_command"
+      ],
+      "source_sha256": "ed4f919d57045fcb3cd993e88c98d1fc230f25df523feda8d458296b3355d7cc"
+    },
+    {
+      "test": "tests/test_runtime_read_audience.py::test_private_session_replay_results_and_endpoint_listing_have_no_foreign_audience",
+      "reason": "The same nonempty private-result/replay audience checks now run through Core, with equal errors for foreign-existing and missing sessions/operations across REST and MCP. The regression exposed and fixed a mixed legacy/canonical compatibility response distinction; authorized missing-stream errors remain intact.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_private_history.py::test_private_session_replay_results_and_listing_hide_foreign_evidence"
+      ],
+      "source_sha256": "9922c15c043a4275003679d616ab3e1f6c08bb5be833dbb4bbf5c5e2e1f634a7"
+    },
+    {
+      "test": "tests/test_runtime_shutdown.py::test_lifespan_does_not_release_owner_before_runtime_drain",
+      "reason": "Server native ownership moved to Core; the current lifespan regression holds native close pending and proves the embedded owner and SQLite lease remain held until actual native containment.",
+      "replacements": [
+        "tests/execution_r4/test_shutdown_storage_order.py::test_lifespan_retains_embedded_owner_until_pending_recovery"
+      ],
+      "source_sha256": "7fd0eefe20f883a0efead9f4d2b8c52b3055510ef3cdd9b6b293fd822246d421"
+    },
+    {
+      "test": "tests/test_runtime_shutdown.py::test_shutdown_deadline_retains_owner_and_journal_for_late_activity",
+      "reason": "Legacy supervisor shutdown has been replaced by the public R4 coordinator. The bounded pending shutdown retains Core stores, dispatcher ownership and recovery HTTP until native close succeeds without user action.",
+      "replacements": [
+        "tests/execution_r4/test_server_shutdown.py::test_operator_shutdown_returns_pending_and_keeps_recovery_available",
+        "tests/execution_r4/test_shutdown_storage_order.py::test_lifespan_retains_embedded_owner_until_pending_recovery"
+      ],
+      "source_sha256": "69c21898ba97ac568c4be037db5da5cb1d602dca5f7d835912aa3d4422623cef"
+    },
+    {
+      "test": "tests/test_runtime_shutdown.py::test_open_finishing_after_shutdown_cannot_leave_a_live_session",
+      "reason": "Core now owns asynchronous native opening. The migrated public regression holds Core open beyond the shutdown deadline, releases it and requires the late peer to be stopped before stores and ownership drain.",
+      "replacements": [
+        "tests/execution_r4/test_server_shutdown.py::test_shutdown_contains_native_open_finishing_after_deadline"
+      ],
+      "source_sha256": "c7e3df57467e60881c7b4dc6e7c5497d0bc7da67b03a2ecd35d041b90576d481"
     }
   ]
 }

@@ -740,11 +740,14 @@ def build_router() -> APIRouter:
         if (set(query) - {"after_sequence", "limit", "executor_id", "stream_epoch"}
                 or len(query.multi_items()) != len(query)):
             return v1_err(422, "VALIDATION_ERROR", "Invalid event query.")
-        from ....bootstrap.execution_compat import events_view
+        from ....application.execution_event_views import read_execution_events
         context = runtime_request_context()
+        deps = request.app.state.deps
         try:
-            result = await anyio.to_thread.run_sync(lambda: events_view(request.app.state.deps,
-                context, session_id, after_sequence=after_sequence, limit=limit,
+            result = await anyio.to_thread.run_sync(lambda: read_execution_events(deps.connection_factory,
+                server_id=ensure_execution_installation(deps.connection_factory).server_id,
+                context=context, access=build_execution_access(deps),
+                session_id=session_id, after_sequence=after_sequence, limit=limit,
                 executor_id=executor_id, stream_epoch=stream_epoch))
         except OktoNexusError as error:
             return runtime_error(error, "session.events")

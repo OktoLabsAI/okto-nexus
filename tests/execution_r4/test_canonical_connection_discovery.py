@@ -1,6 +1,7 @@
 """Existing connection discovery/configuration follows public Core descriptors."""
 from pathlib import Path
 import pytest
+import time
 
 from okto_nexus.bootstrap import execution_compat
 from test_harness_canonical import qualified_bridge
@@ -116,3 +117,73 @@ def test_binding_discovery_reads_canonical_history_without_native_registry(conne
                          json={"idempotency_key": "binding-read-close"})
     assert closed.status_code == 200, closed.text
     wait_receipt(setup, closed.json()["data"], stages=("SUCCEEDED",))
+
+
+def test_self_connect_refuses_foreign_identity_and_revoked_grant(connected_local, monkeypatch):
+    from test_agent_recovery_isolation import create_agent
+    setup, binding, native = connected_local
+    deps, _, client, headers, *_ = setup
+    foreign = create_agent(setup, "foreign")[3]["subject"]
+    available = client.get("/api/v1/connections/available", headers=foreign)
+    assert available.status_code == 200, available.text
+    assert all(not row["endpoints"] for row in available.json()["data"]["methods"])
+    body = dict(endpoint_id=binding["endpoint_id"], idempotency_key="self-denied")
+    assert client.post("/api/v1/connections/connect", headers=foreign, json=body).status_code == 403
+    assert client.post("/api/v1/connections/connect", headers=headers["subject"],
+        json=dict(body, agent_id="foreign")).status_code == 422
+    monkeypatch.syspath_prepend(str(Path(__file__).parents[1]))
+    from test_pr34_remediation import tool
+    client.headers["host"] = "127.0.0.1:8000"
+    spoofed = tool(client, headers["subject"]["Authorization"].removeprefix("Bearer "),
+        "harness_list", dict(view="connections", maintenance=dict(action="available", agent_id="foreign")))
+    assert not spoofed["ok"], spoofed
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE runtime_execution_grants SET revoked_at=?", (deps.clock.now_iso(),))
+    assert client.post("/api/v1/connections/connect", headers=headers["subject"], json=body).status_code == 403
+    assert native.opens == 0
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations").fetchone()[0] == 0
+
+
+def test_self_connect_keeps_authenticated_identity_despite_operator_environment(connected_local, monkeypatch):
+    from okto_nexus.adapters.inbound.mcp.tools import harness
+    setup, binding, native = connected_local
+    deps, _, client, headers, *_ = setup
+    monkeypatch.setenv("OKTO_NEXUS_API_KEY", headers["operator"]["Authorization"].removeprefix("Bearer "))
+    # Canonical admission does not select an ambient credential for the old
+    # Server-to-Server proxy, even when its legacy owner predicate is false.
+    monkeypatch.setattr(harness, "is_local_runtime_owner", lambda deps: False)
+    opened = client.post("/api/v1/connections/connect", headers=headers["subject"],
+        json=dict(endpoint_id=binding["endpoint_id"], idempotency_key="self-original-principal"))
+    assert opened.status_code == 200, opened.text
+    wait_receipt(setup, opened.json()["data"])
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT subject_agent_id,actor_agent_id FROM execution_operations").fetchone()[:] == ("subject", "subject")
+        assert uow.connection.execute("SELECT COUNT(*) FROM agent_connection_keys").fetchone()[0] == 0
+    assert native.opens == 1
+
+
+def test_self_connect_revalidates_grant_after_admission_before_native_open(connected_local):
+    setup, binding, native = connected_local
+    deps, app, client, headers, *_ = setup
+    lock = app.state.embedded_dispatch_owner.pump.send_lock
+    client.portal.call(lock.acquire)
+    try:
+        opened = client.post("/api/v1/connections/connect", headers=headers["subject"],
+            json=dict(endpoint_id=binding["endpoint_id"], idempotency_key="self-revoke-before-write"))
+        assert opened.status_code == 200, opened.text
+        op = opened.json()["data"]["operation_id"]
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute("UPDATE runtime_execution_grants SET revoked_at=?", (deps.clock.now_iso(),))
+    finally:
+        client.portal.call(lock.release)
+    deadline = time.monotonic() + 10
+    while True:
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            row = uow.connection.execute("SELECT dispatch_state,last_error FROM execution_dispatch_outbox WHERE operation_id=?", (op,)).fetchone()
+        if row[0] == "RESOLVED_TERMINAL":
+            assert "PERMISSION_DENIED" in row[1]
+            break
+        assert time.monotonic() < deadline, tuple(row)
+        time.sleep(.02)
+    assert native.opens == 0

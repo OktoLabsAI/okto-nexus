@@ -15,41 +15,6 @@ from test_runtime_outbox import wait_status
 runtime = runtime_fixture
 
 
-@pytest.mark.parametrize("target", [
-    {"strategy": "direct", "agent_id": "worker"},
-    {"strategy": "capability", "capability": "review"},
-    {"strategy": "role", "role": "reviewer"},
-    {"strategy": "tag", "selector": {"org": ["fixture"]}},
-    {"strategy": "broadcast"},
-], ids=["direct", "capability", "role", "tag", "broadcast"])
-def test_target_reaches_one_canonical_executor_with_full_envelope(runtime, target):
-    deps, client, _, peers, operator, _ = runtime
-    headers = {"x-api-key": operator}
-    assert client.post("/api/v1/capabilities", headers=headers, json={"name": "review"}).status_code == 200
-    assert client.post("/api/v1/tags", headers=headers, json={"key": "org"}).status_code == 200
-    assert client.post("/api/v1/tags/org/values", headers=headers, json={"value": "fixture"}).status_code == 200
-    edited = client.patch("/api/v1/agents/worker", headers=headers, json={"tags": {"org": ["fixture"]}})
-    assert edited.status_code == 200, edited.text
-    assert open_rest(runtime).status_code == 200
-    sent = send_message(runtime, target=target, subject="canonical target", body="untrusted fixture content")
-    assert sent["delivered_count"] == 1
-    assert len(sent["runtime_operations"]) == 1
-    row = wait_status(runtime, sent["runtime_operations"][0], "SENT_UNCONFIRMED")
-    commands = [command for peer in peers for command in peer.sent if command.verb == "send_turn"]
-    assert len(commands) == 1
-    assert set(commands[0].payload) == {"text"}  # adapter owns native translation
-    banner, encoded = commands[0].payload["text"].split("\n", 1)
-    assert banner == "NEXUS DELIVERY: respond to the sender's request using your available capabilities."
-    envelope = json.loads(encoded)
-    assert envelope["sender_agent_id"] == "caller"
-    assert envelope["recipient_agent_id"] == "worker"
-    assert envelope["message_id"] == sent["message_id"]
-    assert envelope["subject"] == "canonical target"
-    assert envelope["operation_id"] == row["operation_id"]
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        delivery = uow.connection.execute("SELECT * FROM message_deliveries WHERE message_id=?", (sent["message_id"],)).fetchone()
-        assert delivery["status"] == "unread" and delivery["consumer_kind"] == "push"
-        assert deps.repos.agents.get(uow, "worker").capabilities == {"review": True}
 
 
 def test_failed_transport_preserves_durable_delivery_and_blocks_duplicate_lane(runtime, monkeypatch):

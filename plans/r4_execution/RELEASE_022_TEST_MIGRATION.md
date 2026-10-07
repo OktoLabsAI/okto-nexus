@@ -96,3 +96,15 @@ deadlines, retention and authenticated parent lineage. Eight snapshot cases
 combine canonical Core output/private artifacts with a retained legacy journal;
 corruption and semantic watermark checks remain. Each focused source campaign
 passed; these results still do not replace the complete installed release gate.
+
+The publication/artifact/causal/snapshot campaign passed 29 cases against the
+installed wheel outside the checkout, with no changed inputs. Further source
+campaigns passed self-connection discovery (10), handoff admission (12),
+immutable commands (6), canonical target grammar (5) and payload validation (2).
+A nonempty private-history regression exposed an existence leak across the mixed
+legacy/canonical compatibility views. The bridge now returns uniform denials for
+foreign/missing resources while native R4 keeps its scoped NOT_FOUND contract;
+five private-history/event-view cases passed. Fifteen shutdown cases passed,
+including a Core native open that returns after the shutdown deadline and is
+contained before releasing ownership. These are incremental, overlapping checks;
+the complete installed matrix remains a required release gate.
