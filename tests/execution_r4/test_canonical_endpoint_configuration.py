@@ -106,3 +106,66 @@ def test_endpoint_patch_cannot_replace_binding_identity(connected_local):
         assert dict(uow.connection.execute('SELECT * FROM agent_endpoints WHERE endpoint_id=?',
             (binding['endpoint_id'],)).fetchone()) == before
     assert native.opens == 0
+
+
+@pytest.mark.parametrize('local_setup', ['codex_app_server', 'pi_rpc', 'claude_stream'], indirect=True)
+def test_profile_disable_retains_history_blocks_send_and_contains_native(connected_local, monkeypatch):
+    setup, binding, native = connected_local
+    deps, _, client, headers, *_ = setup
+    # Exercise the existing renewal/containment deadline with a short real
+    # lease; do not force renewal or invoke the recovery owner from the test.
+    setup[1].state.embedded_dispatch_owner.leases.max_duration_ms = 3000
+    opened = admit(setup, binding, 'profile-disable-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        profile = dict(uow.connection.execute('SELECT p.* FROM runtime_profiles p JOIN agent_endpoints e '
+            'ON e.profile_id=p.profile_id WHERE e.endpoint_id=?', (binding['endpoint_id'],)).fetchone())
+    path = '/api/v1/harness/profiles/' + profile['profile_id']
+    changed = client.patch(path, headers=headers['operator'], json=dict(expected_revision=profile['revision'], enabled=False))
+    assert changed.status_code == 200, changed.text
+    stale = client.patch(path, headers=headers['operator'], json=dict(expected_revision=profile['revision'], enabled=True))
+    assert stale.status_code == 409, stale.text
+    body = dict(session_id=opened['session_id'], idempotency_key='disabled-profile-send', payload=dict(text='must not execute'))
+    denied = mcp(setup, monkeypatch, headers['subject']['Authorization'].removeprefix('Bearer '), 'harness_send', body)
+    assert not denied['ok'] and denied['error']['code'] in ('PERMISSION_DENIED', 'CONFLICT'), denied
+    assert native.native.sent == []
+    from test_agent_recovery_isolation import eventually
+    eventually(lambda: native.native.stopped)
+    def closed():
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            return uow.connection.execute("SELECT 1 FROM execution_sessions WHERE session_id=? AND lifecycle_state='CLOSED'",
+                                          (opened['session_id'],)).fetchone()
+    eventually(closed)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT 1 FROM execution_sessions WHERE session_id=?', (opened['session_id'],)).fetchone()
+        assert not uow.connection.execute('SELECT 1 FROM runtime_execution_grants WHERE endpoint_id=? AND revoked_at IS NULL',
+                                         (binding['endpoint_id'],)).fetchone()
+
+
+@pytest.mark.parametrize('surface', ['rest', 'mcp'])
+def test_operator_close_preserves_subject_identity_and_rejects_foreign_actor(connected_local, monkeypatch, surface):
+    from test_agent_recovery_isolation import create_agent
+    setup, binding, native = connected_local
+    opened = admit(setup, binding, 'operator-compat-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    foreign = create_agent(setup, 'foreign')[3]['subject']
+    body = dict(idempotency_key='operator-compat-close')
+    client = setup[2]
+    path = '/api/v1/harness/sessions/' + opened['session_id'] + '/close'
+    denied = client.post(path, headers=foreign, json=body)
+    assert denied.status_code == 403, denied.text
+    assert not native.native.stopped
+    if surface == 'rest':
+        response = client.post(path, headers=setup[3]['operator'], json=body)
+        assert response.status_code == 200, response.text
+        closed = response.json()
+    else:
+        closed = mcp(setup, monkeypatch, setup[3]['operator']['Authorization'].removeprefix('Bearer '),
+                     'harness_close', dict(session_id=opened['session_id'], **body))
+    assert closed['ok'], closed
+    wait_receipt(setup, closed['data'], stages=('SUCCEEDED',))
+    assert native.native.stopped
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        row = uow.connection.execute('SELECT actor_agent_id,subject_agent_id FROM execution_operations WHERE operation_id=?',
+                                     (closed['data']['operation_id'],)).fetchone()
+        assert tuple(row) == ('operator', 'subject')

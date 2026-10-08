@@ -411,9 +411,17 @@ class EndpointService:
         if profile["adapter_id"] not in {item.adapter_id for item in get_runtime_catalog().runtimes}:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Legacy runtime profile configuration was removed.", {})
         merged = profile | changes
-        config, refs = self.validate_profile(profile["adapter_id"], merged["config"], merged["secret_refs"],
-            bool(profile["inherit_ambient"]) if "inherit_ambient" not in changes else changes["inherit_ambient"],
-            bool(profile["enabled"]) if "enabled" not in changes else changes["enabled"])
+        if set(changes) == {'enabled'}:
+            # Canonical profiles refer to an approved Core realization. An
+            # administrative switch preserves that configuration instead of
+            # validating it as a legacy adapter's process-launch dictionary.
+            if type(changes['enabled']) is not bool:
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Profile switches must be booleans.', {})
+            config, refs = profile['config'], profile['secret_refs']
+        else:
+            config, refs = self.validate_profile(profile["adapter_id"], merged["config"], merged["secret_refs"],
+                bool(profile["inherit_ambient"]) if "inherit_ambient" not in changes else changes["inherit_ambient"],
+                bool(profile["enabled"]) if "enabled" not in changes else changes["enabled"])
         with self.cf.unit_of_work() as uow:
             now = self.clock.now_iso()
             cur = uow.connection.execute("UPDATE runtime_profiles SET config=?,secret_refs=?,inherit_ambient=?,enabled=?,revision=revision+1,updated_at=? WHERE profile_id=? AND revision=?",

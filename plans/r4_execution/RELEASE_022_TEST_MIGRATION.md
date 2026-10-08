@@ -490,3 +490,14 @@ Control lanes retain independent capacity. Source validation passed 26 worker,
 dispatch-pump, and agent recovery cases (including Windows owner termination),
 plus ten exact-capacity cases. Four legacy scheduler functions map to the current
 worker and SQLite backlog tests. Installed-package validation remains pending.
+
+Profile-switch review found that canonical Core IDs were incorrectly sent to
+the legacy adapter registry. Boolean enable/disable updates now preserve the
+approved profile configuration, retain CAS, and revoke its old grants. Tests
+exercise automatic containment at the lease-renewal boundary with a short real
+lease (not an immediate-stop claim). Compatibility controls now carry the
+session's subject agent explicitly, allowing authorized operator close without
+changing actor provenance or permitting foreign-agent access. Thirty related
+source cases and all three shortened-lease containment cases passed. The CI
+runner now emits test names without buffering and diagnostic stacks for long
+tests, preserving the same complete regression selection and pass criteria.

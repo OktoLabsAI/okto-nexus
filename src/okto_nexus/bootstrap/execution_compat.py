@@ -157,7 +157,7 @@ def canonical_session(deps, session_id):
         return None
     with deps.connection_factory.unit_of_work(write=False) as uow:
         rows = uow.connection.execute(
-            "SELECT s.*,ep.adapter_id,b.endpoint_id FROM execution_sessions s "
+            "SELECT s.*,ep.adapter_id,ep.agent_id,b.endpoint_id FROM execution_sessions s "
             "JOIN execution_installation i ON i.server_id=s.server_id "
             "LEFT JOIN execution_bindings b ON b.server_id=s.server_id "
             "AND b.executor_id=s.executor_id AND b.binding_id=s.binding_id "
@@ -215,7 +215,7 @@ def command(deps, context, session, verb, payload, options):
             "A stable idempotency_key is required for an R4 command.", {})
     intent = {"send_turn": "turn.submit", "steer": "turn.steer",
               "interrupt": "turn.interrupt", "close": "runtime.close"}[verb]
-    request = dict(client_intent_id=key, intent=intent,
+    request = dict(client_intent_id=key, intent=intent, agent_id=session['agent_id'],
         binding_id=session["binding_id"], workspace_binding_id=session["workspace_binding_id"],
         session_id=session["session_id"])
     if verb in {"send_turn", "steer"}:

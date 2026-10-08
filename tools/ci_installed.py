@@ -182,9 +182,10 @@ pathlib.Path(REPORT).write_text(json.dumps(results, indent=2) + "\\n", encoding=
             markers = declared['tool']['pytest']['ini_options'].get('markers', [])
             config.write_text('[pytest]\nasyncio_mode=auto\nasyncio_default_fixture_loop_scope=function\n'
                               + 'markers=\n' + ''.join('    ' + marker + '\n' for marker in markers), encoding='utf-8')
-            command = [sys.executable, '-I', '-m', 'pytest', '-c', str(config),
+            command = [sys.executable, '-I', '-u', '-m', 'pytest', '-c', str(config),
                        '--rootdir=' + str(ROOT), '--confcutdir=' + str(ROOT / 'tests'),
-                       *[str(ROOT / p) for p in selected], '-q', '--tb=short',
+                       *[str(ROOT / p) for p in selected], '-v', '--tb=short',
+                       '-o', 'faulthandler_timeout=120',
                        '--junitxml=' + str(output / 'tests.xml')]
             result = subprocess.run(command, cwd=temp)
             after = input_hashes()
