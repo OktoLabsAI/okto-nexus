@@ -40,7 +40,8 @@ async def capture_pending(self,event):
         record('pending.json',asdict(result))
     return result
 async def publish_pending(self,scope):
-    if held.is_set() and not released.is_set():
+    if (held.is_set() or Path(marker).with_name('hold-publication').exists()) and not released.is_set():
+        held.set()
         record('publication-held.json',scope)
         await released.wait()
     return await publish_original(self,scope)
@@ -85,6 +86,14 @@ for line in sys.stdin:''')
             return [dict(r) for r in connection.execute(sql, params)]
     try:
         sid = server.open(actions=('open', 'send', 'close'))
+        # Stop publication before admitting the turn: a publisher step already
+        # in flight at capture time could otherwise consume the target event
+        # before the next step reaches the original capture-triggered barrier.
+        (tmp_path / 'hold-publication').touch()
+        deadline = time.monotonic() + 8
+        while not (tmp_path / 'publication-held.json').exists():
+            assert time.monotonic() < deadline, server.log_path.read_text(encoding='utf-8')
+            time.sleep(.02)
         sent = tool(server.client, server.subject, "harness_send", {"session_id": sid,
             "idempotency_key": "signal-drain-turn", "payload": {"text": "hold active until serve shutdown"}})
         assert sent["ok"], sent

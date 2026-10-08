@@ -939,3 +939,12 @@ agent recovery, new local/remote registrations and recovery of incomplete turns.
 Final Nexus wheel SHA256:
 fba287d6b018ce4ff5b2395483891dc4610510c64d0dce7ef6f093637d09dd36.
 Core and Connector artifacts are unchanged. Full final CI remains required.
+
+A Windows CI shutdown fixture also raced its own publication barrier: an already
+running publisher could consume the target event before the next step blocked.
+The fixture now establishes that barrier before admitting the turn. All original
+shutdown drain, receipt, resource-release and no-fabricated-result assertions are
+unchanged. Installed verification passed clean shutdown on Windows (SIGTERM is
+POSIX-only) and both clean/SIGTERM cases on Linux, with unchanged inputs:
+`build/release-signal-drain-installed` and `build/release-signal-drain-linux-installed`.
+This test-only adjustment uses the same final Nexus wheel above.
