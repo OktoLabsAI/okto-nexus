@@ -169,3 +169,76 @@ def test_operator_close_preserves_subject_identity_and_rejects_foreign_actor(con
         row = uow.connection.execute('SELECT actor_agent_id,subject_agent_id FROM execution_operations WHERE operation_id=?',
                                      (closed['data']['operation_id'],)).fetchone()
         assert tuple(row) == ('operator', 'subject')
+
+
+def test_endpoint_reenable_requires_current_revision_and_new_grant(connected_local):
+    from test_unbounded_local_grants import issue
+    setup, binding, native = connected_local
+    deps, _, client, headers, *_ = setup
+    path = '/api/v1/harness/endpoints/' + binding['endpoint_id']
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        revision = uow.connection.execute('SELECT revision FROM agent_endpoints WHERE endpoint_id=?',
+                                         (binding['endpoint_id'],)).fetchone()[0]
+        old_grants = [r[0] for r in uow.connection.execute('SELECT grant_id FROM runtime_execution_grants')]
+    for offset, enabled in enumerate((False, True)):
+        response = client.patch(path, headers=headers['operator'], json=dict(expected_revision=revision + offset, enabled=enabled))
+        assert response.status_code == 200, response.text
+    stale = client.patch(path, headers=headers['operator'], json=dict(expected_revision=revision, enabled=False))
+    assert stale.status_code == 409, stale.text
+    from test_operator_runtime import resolve
+    denied = resolve(setup, binding, identity='subject', intent_id='old-grant-open', new_session=True)
+    if denied.status_code == 200:
+        resolution = denied.json()
+        rejected = client.post('/v1/runtime/operations', headers=headers['subject'], json={k: resolution[k] for k in
+            ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')})
+        assert rejected.status_code == 202, rejected.text
+        from test_agent_recovery_isolation import eventually
+        def refused():
+            response = client.get('/v1/runtime/operations/' + resolution['operation_id'], headers=headers['subject'])
+            assert response.status_code == 200, response.text
+            return response.json() if response.json()['admission_state'] == 'RESOLVED_TERMINAL' else None
+        eventually(refused)
+        assert refused()['possible_effect'] is False and refused()['result'] is None
+    else:
+        assert denied.status_code == 403, denied.text
+    assert native.opens == 0
+    grant = issue(setup, binding)
+    assert grant.status_code == 200, grant.text
+    opened = admit(setup, binding, 'new-grant-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    assert native.opens == 1
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        for grant_id in old_grants:
+            assert uow.connection.execute('SELECT revoked_at FROM runtime_execution_grants WHERE grant_id=?', (grant_id,)).fetchone()[0]
+        audit = uow.connection.execute("SELECT old_revision,new_revision FROM runtime_access_audit "
+            "WHERE action='config.endpoint.update' AND resource_id=? ORDER BY rowid", (binding['endpoint_id'],)).fetchall()
+        assert [tuple(r) for r in audit] == [(revision, revision + 1), (revision + 1, revision + 2)]
+
+
+def test_profile_disable_after_admission_prevents_native_write(connected_local):
+    from test_agent_recovery_isolation import eventually
+    setup, binding, native = connected_local
+    deps, app, client, headers, *_ = setup
+    owner = app.state.embedded_dispatch_owner
+    owner.leases.max_duration_ms = 3000
+    opened = admit(setup, binding, 'disable-after-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    client.portal.call(owner.pump.send_lock.acquire)
+    try:
+        turn = admit(setup, binding, 'disable-after-admission', 'turn.submit', session_id=opened['session_id'], text='Do not write')
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            profile = dict(uow.connection.execute('SELECT p.* FROM runtime_profiles p JOIN agent_endpoints e '
+                'ON e.profile_id=p.profile_id WHERE e.endpoint_id=?', (binding['endpoint_id'],)).fetchone())
+        response = client.patch('/api/v1/harness/profiles/' + profile['profile_id'], headers=headers['operator'],
+            json=dict(expected_revision=profile['revision'], enabled=False))
+        assert response.status_code == 200, response.text
+    finally:
+        client.portal.call(owner.pump.send_lock.release)
+    def rejected():
+        response = client.get('/v1/runtime/operations/' + turn['operation_id'], headers=headers['subject'])
+        assert response.status_code == 200, response.text
+        return response.json() if response.json()['admission_state'] == 'RESOLVED_TERMINAL' else None
+    eventually(rejected)
+    assert rejected()['possible_effect'] is False
+    assert rejected()['result'] is None and native.native.sent == []
+    eventually(lambda: native.native.stopped)

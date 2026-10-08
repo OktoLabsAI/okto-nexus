@@ -31,23 +31,6 @@ def test_profile_disable_fences_send_preserves_session_and_allows_operator_close
         assert uow.connection.execute("SELECT count(*) FROM harness_sessions WHERE session_id=?", (session,)).fetchone()[0] == 1
 
 
-def test_endpoint_disable_and_reenable_require_cas_and_never_restore_old_grant(runtime):
-    deps, client, root, peers, operator, caller = runtime
-    issue(runtime, ["open"])
-    for revision, enabled in ((1, False), (2, True)):
-        response = tool(client, operator, "harness_list", {"view": "endpoints", "maintenance": {
-            "action": "update", "endpoint_id": "endpoint-pi", "expected_revision": revision, "enabled": enabled}})
-        assert response["ok"] and response["data"]["revision"] == revision + 1, response
-    denied = tool(client, caller, "harness_open", {"agent_id": "worker", "kind": "pi", "project_root": root,
-        "endpoint_id": "endpoint-pi"})
-    assert not denied["ok"] and not peers, denied
-    stale = client.patch("/api/v1/harness/endpoints/endpoint-pi", headers={"x-api-key": operator},
-        json={"expected_revision": 1, "enabled": False})
-    assert stale.status_code == 409, stale.text
-    assert open_rest(runtime).status_code == 200
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        rows = uow.connection.execute("SELECT old_revision,new_revision FROM runtime_access_audit WHERE action='config.endpoint.update'").fetchall()
-        assert [tuple(row) for row in rows] == [(1, 2), (2, 3)]
 
 
 
@@ -103,31 +86,3 @@ def test_profile_disable_preserves_late_native_terminal_without_publishing(runti
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute("SELECT count(*) FROM delivery_outbox").fetchone()[0] == 1
         assert uow.connection.execute("SELECT count(*) FROM harness_events WHERE operation_id=? AND delivery_phase='terminal'", (operation,)).fetchone()[0] == 1
-
-
-def test_profile_change_after_send_intent_fences_native_write(runtime, monkeypatch):
-    import threading
-    from test_pr34_remediation import send_message
-    from test_runtime_commands import wait_operation
-    deps, client, _, peers, operator, _ = runtime
-    assert open_rest(runtime).status_code == 200
-    entered, release = threading.Event(), threading.Event()
-    dispatch = deps.runtime_dispatcher.dispatch
-    def before_dispatch(operation):
-        entered.set()
-        assert release.wait(10)
-        dispatch(operation)
-    monkeypatch.setattr(deps.runtime_dispatcher, "dispatch", before_dispatch)
-    try:
-        message = send_message(runtime)
-        assert entered.wait(5)
-        changed = client.patch("/api/v1/harness/profiles/profile-pi", headers={"x-api-key": operator},
-            json={"expected_revision": 1, "enabled": False})
-        assert changed.status_code == 200, changed.text
-    finally:
-        release.set()
-    row = wait_operation(runtime, message["runtime_operations"][0], lambda row: row["state"] == "OUTCOME_UNKNOWN")
-    assert row["external_acceptance"] == "not_observed"
-    assert not peers[0].sent
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute("SELECT count(*) FROM delivery_outbox").fetchone()[0] == 1

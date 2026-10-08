@@ -509,3 +509,24 @@ This includes real Windows graceful/forced owner exit, independent recovery,
 operator/subject provenance and foreign-actor rejection. Head 0288de5 is pushed;
 complete CI run 37733739695 remains pending. The superseded c5d7747 campaign was
 cancelled after preserving its completed job logs; it is not passing evidence.
+
+Public operation-state review passed 51 installed-wheel cases with unchanged
+inputs (build/release-states-installed-v2). REST and MCP distinguish queued
+admission, uncertain wire submission, accepted receipt and captured completion.
+The native Codex start event exposed a Core correlation defect: its derived
+phase and active operation were not retained. Core 0.0.7 preserves both and
+rejects foreign or idle start events. Its native bridge suite passed 44 cases.
+Profile reenable retains CAS and requires a new grant; disabling a profile
+after admission prevents the queued native write. Five historical functions
+map to these state/configuration cases and the current I/O boundary case.
+
+Final dependency validation caught and corrected the exported Core version and
+Nexus inventory version constant. A rebuilt Nexus wheel then passed 19 installed
+cases with unchanged inputs (build/release-final-core-integration-v2, Nexus
+SHA256 546e8b17503c33041765c115d3bd490a699d5672dadae1351f24874a7f20e302,
+Core SHA256 43e02485ce90e6dc58b69b761e0b013494e4526d4bf77716d6298064da904106,
+Connector SHA256 38ad3909694ee83feb5cf9ef256bb3918ddd4902729cf6049eea8c3e98876832).
+The I/O case witnesses provider secret resolution, native process creation,
+native pipe writes and embedding TCP traffic outside a write transaction.
+Core PR 32 (0.0.7) and Connector PR 45 (0.0.5) remain under CI/review; neither
+is published by this evidence. Complete Nexus regression remains a release gate.

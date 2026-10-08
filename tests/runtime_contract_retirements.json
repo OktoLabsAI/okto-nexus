@@ -3235,6 +3235,46 @@
         "tests/execution_r4/test_dispatch_capacity.py::test_fitting_control_after_oversized_rows_uses_exact_utf8_cost"
       ],
       "source_sha256": "a78fa90f48a7a92ac4b085e4e3fb88a531d5ea14b4b1a82c0427d2746dc25f21"
+    },
+    {
+      "test": "tests/test_runtime_operation_events.py::test_queued_and_unconfirmed_operation_are_distinct_without_invented_result",
+      "reason": "The removed command runner's PENDING/SENT_UNCONFIRMED vocabulary is replaced by canonical admission, possible-effect and executor receipt facts. Exercise the public REST and MCP views before native write, after write but before receipt, and after durable terminal capture.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_operation_states.py::test_pending_wire_receipt_and_native_terminal_have_distinct_public_evidence"
+      ],
+      "source_sha256": "758aef4d66a3df08df3f591b6721a4c326de4ecb2ccf75ff4da1ba77e9c53cfe"
+    },
+    {
+      "test": "tests/test_runtime_operation_events.py::test_accepted_and_final_operation_follow_push_and_public_replay",
+      "reason": "The removed in-process subscriber hub is replaced by Core native event ingestion and durable R4 replay. Exercise actual native pipe start/interrupt events, their canonical operation identity and public REST/MCP completion without outbound native status polling.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_operation_states.py::test_native_pushed_events_drive_public_completion_without_status_queries"
+      ],
+      "source_sha256": "0b08324f736e5fe73eda5c3fd8222b2bbfeb8a51e9c4764f2e879a60ac7a07e9"
+    },
+    {
+      "test": "tests/test_runtime_configuration_updates.py::test_endpoint_disable_and_reenable_require_cas_and_never_restore_old_grant",
+      "reason": "Canonical endpoint updates preserve CAS, audit and grant invalidation. The replacement waits for dispatch authority refusal after admission, then proves a separately issued current grant is necessary for a native open.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_endpoint_configuration.py::test_endpoint_reenable_requires_current_revision_and_new_grant"
+      ],
+      "source_sha256": "9c632632706f559168190e6263cc79f5b22fdd2bed73963cd35bc93062c586ac"
+    },
+    {
+      "test": "tests/test_runtime_configuration_updates.py::test_profile_change_after_send_intent_fences_native_write",
+      "reason": "Use the canonical durable turn intent and dispatch frontier instead of the removed command dispatcher. Disabling its profile after admission must terminate the pending intent with no native effect and automatically contain its existing session.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_endpoint_configuration.py::test_profile_disable_after_admission_prevents_native_write"
+      ],
+      "source_sha256": "1ec915b98c9c8ae81ed69ec063ae108c4b52e69588602d5b0e71ab81ba459880"
+    },
+    {
+      "test": "tests/test_runtime_io_boundaries.py::test_owned_spawn_secret_transport_and_fixture_model_network_are_outside_write_uow",
+      "reason": "The removed legacy profile opener is replaced by the approved local realization and Core native factory. Preserve observations of actual provider secret resolution, owned process spawning, native pipe writes and loopback embedding network I/O, and reject any callback inside a Server write transaction.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_io_boundaries.py::test_provider_spawn_native_and_embedding_io_are_outside_write_transactions"
+      ],
+      "source_sha256": "4f8973735167fba91de6afebb59b62552c0453f7170ae944901ffb1e4b382793"
     }
   ]
 }
