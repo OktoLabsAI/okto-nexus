@@ -2951,6 +2951,57 @@
         "tests/execution_r4/test_canonical_relay.py::test_explicit_three_agent_relay_keeps_original_actor_and_budget"
       ],
       "source_sha256": "01d0d20dc601f7a3b444a66f99bb02db61372ec43e89fae221931e43d37a70cb"
+    },
+    {
+      "test": "tests/test_runtime_consumption_acceptance.py::test_native_acceptance_then_terminal_never_redelivers_to_pull",
+      "reason": "The legacy opener is no longer executable. Canonical coverage preserves exclusive inbox reservation before and after acceptance, terminal processing and close, automatic read acknowledgement, one physical delivery and durable processing receipts.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_consumption.py::test_canonical_push_reservation_excludes_mcp_pull",
+        "tests/execution_r4/test_canonical_result_publication.py::test_canonical_conversation_result_uses_current_message_policy"
+      ],
+      "source_sha256": "36de643241111712f4549da0231518443fbbf55f756ace1626174087cff317e7"
+    },
+    {
+      "test": "tests/test_runtime_consumption_acceptance.py::test_lost_confirmation_and_expired_transport_lease_keep_push_reservation",
+      "reason": "Canonical replacement loses confirmation after the native effect, expires the transport lease and proves repeated scans cannot create a pull delivery, a second native operation or another attempt.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_consumption.py::test_lost_confirmation_and_expired_lease_preserve_push_claim"
+      ],
+      "source_sha256": "a1d472cdacbc1b890d6509e6d5eee1235922a8a3b97ec2c5a11381ed8ba8492c"
+    },
+    {
+      "test": "tests/test_runtime_consumption_acceptance.py::test_two_refused_sockets_do_not_consume_inbox_attempts_or_lease",
+      "reason": "Canonical replacement exercises actual refused loopback sockets across three approved bindings, preserves inbox attempts and lease, archives both superseded attempts and performs one successful native send.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_consumption.py::test_two_refused_sockets_preserve_inbox_claim_across_three_bindings"
+      ],
+      "source_sha256": "d8d104b37a16043e60c10e7dbfc0bc153f8968371d16eed570428597c10b24e4"
+    },
+    {
+      "test": "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor",
+      "reason": "Canonical replacement verifies atomic create/update refusal via REST and MCP for all three supported adapters, preserves configuration and proves authorized delivery still works. Explicitly removed Claude attach is covered by retirement tests rather than successful opening.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_consumption.py::test_unsafe_mirror_configuration_is_atomic_and_does_not_disable_delivery",
+        "tests/execution_r4/test_attach_removed.py::test_removed_attach_cannot_open_through_legacy_public_routes"
+      ],
+      "source_sha256": "c42fe739a2c24a91b2a497490c2141478e00a9dd7d4714a85580f002469ed6b4"
+    },
+    {
+      "test": "tests/test_runtime_secret_redaction.py::test_resolved_secret_is_redacted_before_journal_result_and_replay",
+      "reason": "The legacy supervisor no longer opens connections. The canonical Core test exercises a real native pipe with the same single, split and character fragmentation across repeated turns, checking durable ingress, results and logs for the approved environment credential.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_secret_redaction.py::test_native_secret_is_redacted_before_durable_result_and_replay"
+      ],
+      "source_sha256": "d08c8dedaa0864bffaa97ec3dc48dcee5a676094175d6cacf7e915562c3a3349"
+    },
+    {
+      "test": "tests/test_runtime_secret_redaction.py::test_secret_in_native_approval_is_private_without_breaking_exact_reply",
+      "reason": "Canonical execution retains the original protected native proposal separately from its scrubbed public display. Real Codex and Claude approval/denial cases verify both public REST replay routes, MCP replay, approval listing/detail, caller authorization, durable display, exact native wire replies and process closure. This uncovered and corrected public replay exposing the operational proposal.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_secret_redaction.py::test_native_secret_in_approval_is_private_and_exact_reply_remains_valid",
+        "tests/execution_r4/test_canonical_event_views.py::test_public_replay_omits_operational_request_without_a_display"
+      ],
+      "source_sha256": "375957cf6668c9445c4d91a7007c613173ebd03c1c9e69d1a17f0306c1be1d3f"
     }
   ]
 }

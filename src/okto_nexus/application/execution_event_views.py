@@ -49,6 +49,16 @@ def read_execution_events(factory, *, server_id, session_id, context, access,
                 raise OktoNexusError(ErrorCode.DB_ERROR, 'Stored canonical event integrity is invalid.', {}) from exc
             if used + len(raw) > PAGE_BYTES:
                 break
+            # Ingress retains the exact proposal for native reply validation.
+            # Public history must expose only the Core's scrubbed presentation;
+            # verify stored integrity above before constructing this view.
+            payload = dict(event.get('payload', {}))
+            if 'native_approval' in payload:
+                payload.pop('native_approval')
+                display = payload.get('native_approval_display')
+                if isinstance(display, dict):
+                    payload['native_approval'] = display
+            event = {**event, 'payload': payload}
             events.append({**event, 'received_at': row['received_at']})
             used += len(raw)
         return dict(scope=scope, stream_epoch=stream_epoch, events=events, count=len(events),

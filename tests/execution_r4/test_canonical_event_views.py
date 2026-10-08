@@ -123,3 +123,18 @@ def test_replay_does_not_expose_durable_events_above_contiguous_watermark(ingres
     assert [e['sequence'] for e in page['events']] == [1, 2, 3] and not page['gap_pending']
     commit(ingress, frame)
     assert read() == page
+
+
+def test_public_replay_omits_operational_request_without_a_display(ingress, monkeypatch):
+    from okto_nexus.application import execution_event_views
+    factory, channel, frame = ingress
+    scope = dict(server_id=channel.server_id, executor_id=channel.executor_id, session_id='session')
+    monkeypatch.setattr(execution_event_views, 'read_execution_session', lambda *a, **k: dict(scope=scope))
+    original = frame['events'][0]
+    altered = {**frame, 'events': [{**original, 'payload': {
+        **original['payload'], 'native_approval': {'params': {'secret': 'private-proposal'}}}}]}
+    commit(ingress, altered)
+    page = execution_event_views.read_execution_events(factory, server_id=channel.server_id,
+        session_id='session', context=None, access=None)
+    assert len(page['events']) == 1
+    assert 'native_approval' not in page['events'][0]['payload']

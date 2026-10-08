@@ -23,40 +23,6 @@ def configure_secret(runtime, monkeypatch, profile_id="profile-codex"):
     assert response.status_code == 200, response.text
 
 
-@pytest.mark.parametrize("fragmentation", ["single", "split", "characters"])
-def test_resolved_secret_is_redacted_before_journal_result_and_replay(runtime, monkeypatch, caplog, fragmentation):
-    deps, client, root, _, operator, _ = runtime
-    configure_secret(runtime, monkeypatch)
-    original = next(line for line in _FAKE_SERVER_SOURCE.splitlines() if '"delta": text' in line)
-    fragments = {"single": '["safe before " + value + " safe after"]',
-        "split": '["safe before " + value[:17], value[17:] + " safe after"]',
-        "characters": '["safe before "] + list(value) + [" safe after"]'}[fragmentation]
-    source = _FAKE_SERVER_SOURCE.replace(original,
-        '    value = os.environ["FIXTURE_BACKEND_KEY"]\n'
-        '    for fragment in ' + fragments + ':\n' + original.replace('"delta": text', '"delta": fragment').replace('    write_msg', '        write_msg'))
-    assert source != _FAKE_SERVER_SOURCE
-    deps.harness_connector_factories["codex"] = lambda **options: CodexAppServerConnector(
-        command=[sys._base_executable, "-u", "-c", source], cwd=root, env=options["backend"]["env"])
-    opened = client.post("/api/v1/harness/sessions", headers={"x-api-key": operator}, json={
-        "agent_id": "worker", "kind": "codex", "endpoint_id": "endpoint-codex", "project_root": root})
-    assert opened.status_code == 200, opened.text
-    sid = opened.json()["data"]["session_id"]
-    assert deps.harness_supervisor._live[sid].connector.native._env["FIXTURE_BACKEND_KEY"] == SECRET
-    assert opened.json()["data"]["compatibility_report"]["backend_secret_redaction"]["version"] == 2
-    for index in range(2):
-        sent = tool(client, operator, "harness_send", {"session_id": sid, "payload": {"text": f"fixture diagnostic {index}"}})
-        assert sent["ok"], sent
-        result = wait_operation(runtime, sent["data"]["operation_id"], lambda row: row["result_durable"])
-        assert result["result"]["output_text"] == "safe before [REDACTED] safe after"
-    journal = deps.harness_supervisor.event_ingress.journal
-    assert SECRET.encode() not in b"".join(path.read_bytes() for path in journal.root.glob("segment-*.bin"))
-    replay = tool(client, operator, "harness_event_list", {"session_id": sid})
-    assert replay["ok"], replay
-    assert SECRET not in json.dumps(replay)
-    assert SECRET not in caplog.text
-    # Reassembling raw delta payloads must not defeat normalized output scrubbing.
-    events = deps.harness_supervisor.replay_events(sid)
-    assert SECRET not in "".join(str(event.payload.get("delta", "")) for event in events)
 
 
 def test_redaction_preserves_no_write_proof_and_retry_classification():
@@ -147,43 +113,6 @@ def test_resolved_secret_is_not_exposed_by_native_start_errors(runtime, monkeypa
     assert SECRET not in caplog.text
 
 
-@pytest.mark.parametrize("kind", ["codex", "claude_code"])
-@pytest.mark.parametrize("decision", ["approve", "reject"])
-def test_secret_in_native_approval_is_private_without_breaking_exact_reply(runtime, monkeypatch, kind, decision):
-    from test_pr34_remediation import send_message
-    from test_runtime_native_approvals import approval_peer, pending
-    from test_runtime_claude_approvals import claude_peer, PEER
-    from test_runtime_handoff_dispatch import wait_result
-    deps, client, _, _, operator, caller = runtime
-    configure_secret(runtime, monkeypatch,
-        "profile-codex" if kind == "codex" else "profile-claude_code.stream")
-    if kind == "codex":
-        sid = approval_peer(runtime, extra_params={"command": "fixture-command " + SECRET})
-    else:
-        source = PEER.replace("import json,sys", "import json,sys,os").replace(
-            '"content":"fixture"', '"content":os.environ["FIXTURE_BACKEND_KEY"]')
-        sid = claude_peer(runtime, source)
-    sent = send_message(runtime, body="TRIGGER_SERVER_REQUEST")
-    request = pending(runtime)
-    assert SECRET not in json.dumps(request)
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        observed = dict(uow.connection.execute("SELECT * FROM runtime_native_approvals").fetchone())
-    assert SECRET not in json.dumps(observed)
-    url = f"/api/v1/approvals/{request['approval_id']}/decision"
-    assert client.post(url, headers={"x-api-key": caller}, json={"decision": decision}).status_code == 403
-    decided = client.post(url, headers={"x-api-key": operator}, json={"decision": decision})
-    assert decided.status_code == 200, decided.text
-    result = wait_result(runtime, sent["runtime_operations"][0])
-    wire = json.loads(result["output_text"])
-    if kind == "codex":
-        assert wire["id"] == 9001
-        assert wire["result"]["decision"] == ("accept" if decision == "approve" else "decline")
-    else:
-        assert wire["response"]["request_id"] == "permission-1"
-        assert wire["response"]["response"]["behavior"] == ("allow" if decision == "approve" else "deny")
-    assert SECRET not in result["output_text"]
-    replay = tool(client, operator, "harness_event_list", {"session_id": sid})
-    assert replay["ok"] and SECRET not in json.dumps(replay)
 
 
 def test_secret_stream_budget_is_finite_and_failure_does_not_claim_terminal():

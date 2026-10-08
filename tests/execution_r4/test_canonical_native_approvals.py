@@ -13,9 +13,10 @@ from test_harness_codex_connector import _FAKE_SERVER_SOURCE
 
 
 def approval_peer(connected, *, method="item/commandExecution/requestApproval", cancel_only=False, operator_turn=False,
-                  extra_params=None, expect_request=True):
+                  extra_params=None, expect_request=True, redaction_values=()):
     from nexus_connector_core.native.adapters.codex import CodexAppServerConnector
     from nexus_connector_core.native.runtime_bridge import CopiedAdapterSession
+    from nexus_connector_core.native.redaction import NativeSecretRedactor
     setup, binding, _ = connected
     setup[0].config.feature_hitl = True
     source = _FAKE_SERVER_SOURCE.replace("_thread_counter = 0", "_approval_ready = threading.Event()\n_approval_reply = {}\n_thread_counter = 0")
@@ -39,7 +40,8 @@ def approval_peer(connected, *, method="item/commandExecution/requestApproval", 
             peer.native_approvals_enabled = True
             peers.append(peer)
             native = await asyncio.to_thread(peer.start, owning_agent_id=context.agent_id)
-            return CopiedAdapterSession(peer, native, session_id=session_id, stream_epoch=stream_epoch, context=context)
+            return CopiedAdapterSession(peer, native, session_id=session_id, stream_epoch=stream_epoch, context=context,
+                redactor=NativeSecretRedactor(redaction_values))
     setup[1].state.embedded_dispatch_owner.native_factory = Factory()
     opened = admit(setup, binding, "approval-open", "runtime.start", new_session=True)
     wait_receipt(setup, opened)

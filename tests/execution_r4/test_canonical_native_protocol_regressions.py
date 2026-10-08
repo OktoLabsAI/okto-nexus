@@ -12,9 +12,10 @@ from test_agent_recovery_isolation import eventually
 from test_harness_codex_connector import _FAKE_SERVER_SOURCE
 
 
-def open_native(connected, source):
+def open_native(connected, source, *, environment=None):
     from nexus_connector_core.native.adapters.codex import CodexAppServerConnector
     from nexus_connector_core.native.runtime_bridge import CopiedAdapterSession
+    from nexus_connector_core.native.redaction import NativeSecretRedactor, credential_values
     setup, binding, _ = connected
     _, app, _, _, *_, root = setup
     peers = []
@@ -22,10 +23,11 @@ def open_native(connected, source):
     class Factory:
         async def open(self, prepared, session_id, context, *, stream_epoch):
             peer = CodexAppServerConnector(command=[sys._base_executable, "-u", "-c", source, str(log)],
-                cwd=str(root), env={})
+                cwd=str(root), env=environment or {})
             peers.append(peer)
             native = await asyncio.to_thread(peer.start, owning_agent_id=context.agent_id)
-            return CopiedAdapterSession(peer, native, session_id=session_id, stream_epoch=stream_epoch, context=context)
+            return CopiedAdapterSession(peer, native, session_id=session_id, stream_epoch=stream_epoch, context=context,
+                redactor=NativeSecretRedactor(credential_values(environment or {})))
     app.state.embedded_dispatch_owner.native_factory = Factory()
     opened = admit(setup, binding, "protocol-open", "runtime.start", new_session=True)
     wait_receipt(setup, opened)

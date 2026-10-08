@@ -13,9 +13,10 @@ from test_runtime_claude_approvals import PEER
 pytestmark = pytest.mark.parametrize('local_setup', ['claude_stream'], indirect=True)
 
 
-def native_peer(connected, *, tool_name='Write', inputs=None, expect_request=True, operator_turn=False):
+def native_peer(connected, *, tool_name='Write', inputs=None, expect_request=True, operator_turn=False, redaction_values=()):
     from nexus_connector_core.native.adapters.claude_code_stream import ClaudeCodeStreamConnector
     from nexus_connector_core.native.runtime_bridge import CopiedAdapterSession
+    from nexus_connector_core.native.redaction import NativeSecretRedactor
     setup, binding, _ = connected
     setup[0].config.feature_hitl = True
     source = PEER.replace('    if value.get("type")=="user":',
@@ -42,7 +43,8 @@ def native_peer(connected, *, tool_name='Write', inputs=None, expect_request=Tru
             peer.native_approvals_enabled = True
             peers.append(peer)
             native = await asyncio.to_thread(peer.start, owning_agent_id=context.agent_id)
-            return CopiedAdapterSession(peer, native, session_id=session_id, stream_epoch=stream_epoch, context=context)
+            return CopiedAdapterSession(peer, native, session_id=session_id, stream_epoch=stream_epoch, context=context,
+                redactor=NativeSecretRedactor(redaction_values))
     setup[1].state.embedded_dispatch_owner.native_factory = Factory()
     opened = admit(setup, binding, 'claude-permission-open', 'runtime.start', new_session=True)
     wait_receipt(setup, opened)

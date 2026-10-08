@@ -394,3 +394,30 @@ outcomes, three-agent routing and distinct bindings of the same agent. Unknown
 outcomes remain durable ingress evidence rather than invented terminal results.
 Core 0.0.5 was promoted through PRs 27/28 to main and tagged v0.0.5; Nexus 0.2.2
 still requires the full regression gate before promotion.
+
+The next consumption review passed 38 installed-wheel cases with unchanged
+inputs (build/release-consumption-installed). The four retired legacy functions
+have explicit replacements for native terminal consumption, lost confirmation
+without replay, refused-socket fallback across three bindings, and rejection of
+executable mirror consumers on REST and MCP. The automatic receipt check waits
+for the independent background reducer instead of acknowledging work in the test.
+
+Public replay review reproduced a credential leak in native approval events:
+the authenticated ingress retained the exact operational request as required,
+but public history returned it alongside its scrubbed presentation. Replay now
+verifies original event integrity and returns only the scrubbed request. Original
+wire correlation and protected storage are unchanged. Real Codex and Claude
+approve/deny cases cover both REST routes, MCP replay, approval list/detail,
+subject/operator reads, rejected subject decisions, exact replies and process
+closure. Fragmented native text remains scrubbed across repeated turns.
+The installed campaign build/release-event-replay-installed passed all 38 cases
+with unchanged inputs, combining this protection with consumption and identity
+coverage; the source campaign passed 12 replay/redaction cases. Two legacy
+redaction functions now reference these reviewed replacements. No runtime was
+restarted or updated for this review.
+
+The release gate remains open. CI run 37723682286 at 5f5d0e2 completed its first
+Linux shard with 48 failures, 1075 passes and 17 skips, mostly using removed
+legacy connection setup. The remaining matrix was cancelled after this failure
+and the replay correction, so it is not a passing full-suite result. The other
+historical contracts still need individual review before Nexus main/tag promotion.

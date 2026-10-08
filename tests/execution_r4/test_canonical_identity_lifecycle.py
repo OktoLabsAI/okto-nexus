@@ -8,7 +8,7 @@ from test_embedded_dispatch import local_setup, connected_local, qualified_contr
 from test_runtime_contract_migration import mcp
 
 
-def second_binding(setup, monkeypatch):
+def second_binding(setup, monkeypatch, *, name='second', adapter_id='pi_rpc'):
     from types import SimpleNamespace
     from nexus_connector_core import InstallationCandidate
     from nexus_connector_core.discovery import fingerprint
@@ -18,24 +18,26 @@ def second_binding(setup, monkeypatch):
     from test_unbounded_local_grants import issue
 
     _, app, client, headers, original, candidate, root = setup
-    binary = root.parent / 'second-pi.exe'
+    binary = root.parent / (name + '-installation.exe')
     binary.write_bytes(b'Second approved native installation')
-    other = InstallationCandidate('pi_rpc', str(binary), fingerprint(binary), 'explicit', 'selected')
+    other = InstallationCandidate(adapter_id, str(binary), fingerprint(binary), 'explicit', 'selected')
+    existing = embedded_inventory.discover_local_candidates().candidates
     monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
-        lambda **_: SimpleNamespace(candidates=(candidate, other)))
+        lambda **_: SimpleNamespace(candidates=(*existing, other)))
     owner = app.state.embedded_inventory_owner
     client.portal.call(owner.refresh)
     inventory = client.get(f'/v1/runtime/executors/{owner.key.executor_id}/inventory', headers=headers['operator']).json()['snapshot']
-    selected = next(e for e in inventory['evidence'] if e['adapter_id'] == 'pi_rpc')
-    body = {**original, 'client_intent_id': 'second-realization', 'adapter_id': 'pi_rpc',
+    selected = next(e for e in inventory['evidence'] if e['adapter_id'] == adapter_id)
+    body = {**original, 'client_intent_id': name + '-realization', 'adapter_id': adapter_id,
             'candidate_ref': selected['candidate_ref'], 'inventory_revision': inventory['inventory_revision']}
     prepared = publish((setup[0], app, client, headers, body, other, root), changes={'secret_bindings': {}})
     assert prepared.status_code == 201, prepared.text
     view = prepared.json()
-    _, request = prepare_operator(client, headers, dict(client_intent_id='second-binding', agent_id_hint='subject',
-        executor_id=view['executor_id'], adapter_id='pi_rpc', candidate_ref=body['candidate_ref'],
+    _, request = prepare_operator(client, headers, dict(client_intent_id=name + '-binding', agent_id_hint='subject',
+        executor_id=view['executor_id'], adapter_id=adapter_id, candidate_ref=body['candidate_ref'],
         inventory_revision=body['inventory_revision'], realization_ref=view['realization_ref'],
-        workspace_id=view['workspace_id'], alias='second-local'))
+        workspace_id=view['workspace_id'], alias=name + '-local'))
+    request['client_intent_id'] = name + '-apply'
     applied = client.post('/v1/connections/bindings:apply', headers=headers['operator'], json=request)
     assert applied.status_code == 200, applied.text
     binding = applied.json()
