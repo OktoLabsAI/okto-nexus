@@ -97,6 +97,32 @@ def test_reset_retains_history_until_native_stops(connected_local, monkeypatch):
     assert native.native.stopped
 
 
+def test_reset_preserves_installation_observation_without_reprobing(connected_local, monkeypatch):
+    from dataclasses import replace
+    from types import SimpleNamespace
+    from okto_nexus.bootstrap import embedded_inventory
+    from okto_nexus.application import execution_local_observations as observations
+
+    setup, _, _ = connected_local
+    deps, app, client, _, _, candidate, _ = setup
+    raw = replace(candidate, trust='untrusted')
+    monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+        lambda **_: SimpleNamespace(candidates=(raw,)))
+    calls = []
+    async def probe(selected):
+        calls.append(selected)
+        return replace(selected, version='0.999.0')
+    monkeypatch.setattr(observations, 'probe_version', probe)
+    client.portal.call(app.state.embedded_inventory_owner.refresh)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        before = [tuple(r) for r in uow.connection.execute('SELECT * FROM execution_local_observations')]
+    assert len(before) == 1 and len(calls) == 1
+    test_reset_preserves_configured_local_connection_and_can_deliver_again(connected_local, monkeypatch, False)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert [tuple(r) for r in uow.connection.execute('SELECT * FROM execution_local_observations')] == before
+    assert len(calls) == 1
+
+
 def test_failed_drain_keeps_history_and_resumes_admission(connected_local, monkeypatch):
     from okto_nexus.bootstrap import database_reset
     from okto_nexus.errors import ErrorCode, OktoNexusError

@@ -66,7 +66,7 @@ async def probe_version(selected):
 
 
 async def refresh_approved_installations(owner, candidates):
-    """Observe updated bytes only at locations already selected by an active binding."""
+    """Restore missing observations at locations selected by an active binding."""
     from .execution_inventory_revalidation import same_installation_location
     def approved():
         with owner.deps.connection_factory.unit_of_work(write=False) as uow:
@@ -85,8 +85,7 @@ async def refresh_approved_installations(owner, candidates):
         if existing.trust == 'selected' and existing.version:
             return
         selected = next((r for r in records if same_installation_location(
-            json.loads(r['local_record_json'])['candidate'], asdict(source))
-            and json.loads(r['local_record_json'])['candidate']['fingerprint'] != source.fingerprint), None)
+            json.loads(r['local_record_json'])['candidate'], asdict(source))), None)
         if selected is None:
             return
         async with semaphore:

@@ -120,7 +120,7 @@ def test_one_publication_revalidates_one_hundred_bindings(admitted_local, monkey
     assert sum(row['code'] == 'INVENTORY_REVALIDATED' for row in logs['items']) == 100
 
 
-@pytest.mark.parametrize('scenario', ['updated', 'failed', 'other_path', 'disabled'])
+@pytest.mark.parametrize('scenario', ['updated', 'unchanged', 'failed', 'other_path', 'disabled'])
 def test_updated_binary_is_observed_without_repeating_operator_setup(admitted_local, monkeypatch, scenario):
     from pathlib import Path
     from nexus_connector_core.discovery import fingerprint
@@ -133,7 +133,8 @@ def test_updated_binary_is_observed_without_repeating_operator_setup(admitted_lo
     binary = Path(candidate.executable)
     if scenario == 'other_path':
         binary = binary.with_name('other.exe')
-    binary.write_bytes(b'Updated harness release')
+    if scenario != 'unchanged':
+        binary.write_bytes(b'Updated harness release')
     changed = replace(candidate, executable=str(binary), fingerprint=fingerprint(binary), trust='untrusted')
     monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
         lambda **_: SimpleNamespace(candidates=(changed,)))
@@ -150,14 +151,32 @@ def test_updated_binary_is_observed_without_repeating_operator_setup(admitted_lo
     client.portal.call(owner.refresh)
     with deps.connection_factory.unit_of_work(write=False) as uow:
         rows = uow.connection.execute('SELECT * FROM execution_local_observations').fetchall()
-        assert len(rows) == (1 if scenario == 'updated' else 0)
+        assert len(rows) == (1 if scenario in {'updated', 'unchanged'} else 0)
         binding = uow.connection.execute('SELECT * FROM execution_bindings').fetchone()
         assert accepts_binding(uow.connection, binding, owner.publication.inventory_revision,
-            owner.key.server_id, owner.key.executor_id) == (scenario == 'updated')
+            owner.key.server_id, owner.key.executor_id) == (scenario in {'updated', 'unchanged'})
     assert len(calls) == (0 if scenario in {'other_path', 'disabled'} else 1)
-    if scenario == 'updated':
+    if scenario in {'updated', 'unchanged'}:
         launch = ApprovedLocalLaunch(owner, sent.scope)
         assert launch.candidate.version == '0.999.0'
         launch.check()
         client.portal.call(owner.refresh)
         assert len(calls) == 1
+        if scenario == 'unchanged':
+            revision = owner.publication.inventory_revision
+            with deps.connection_factory.unit_of_work() as uow:
+                uow.connection.execute('DELETE FROM execution_local_observations')
+            client.portal.call(owner.refresh)
+            assert len(calls) == 2
+            assert owner.publication.inventory_revision == revision
+            launch.check()
+            client.portal.call(owner.refresh)
+            assert len(calls) == 2
+    elif scenario == 'failed':
+        async def recovered(selected):
+            return replace(selected, version='0.999.0')
+        monkeypatch.setattr(observations, 'probe_version', recovered)
+        client.portal.call(owner.refresh)
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            assert accepts_binding(uow.connection, binding, owner.publication.inventory_revision,
+                owner.key.server_id, owner.key.executor_id)

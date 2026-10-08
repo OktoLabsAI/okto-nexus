@@ -360,3 +360,16 @@ review corrections, and the complete matrix was still running when inspected.
 Other legacy connection, historical work, protocol, fallback and recovery tests
 still require individual review. The focused campaign is not full-suite
 acceptance and does not authorize declaring the release ready for merge.
+
+The live Meta-harness incident exposed a reset omission: connection preservation
+did not include execution_local_observations. With those rows absent, unchanged
+approved executables lost their selected/version evidence, while automatic
+observation recovery only considered changed fingerprints. Reset now preserves
+the observations, and passive refresh rechecks approved locations when their
+observation is missing even if the executable is unchanged. Probe failures still
+block that installation and are retried on later refreshes; disabled bindings and
+different paths are not automatically selected. The installed-wheel campaign
+build/review-inventory-installed passed all 22 cases with unchanged inputs,
+including reset/delivery, repeated observation recovery, transient probe failure,
+and control/renewal concurrency. Read-only version checks on the affected host
+confirmed Pi 0.87.1, Claude 2.1.292 and Codex 0.160.1 responded successfully.
