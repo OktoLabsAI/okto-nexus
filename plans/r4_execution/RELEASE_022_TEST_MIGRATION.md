@@ -683,3 +683,10 @@ newly preferred ready peer, and earlier permission, metadata, credential and
 activity changes are not discarded. Installed validation passed all 65 cases
 with unchanged inputs (build/release-priority-final-installed, wheel SHA256
 c1d08f4f0a77bb18793b6783a701ee04473de7577a6ff57a0adfeee48d60dcdc).
+
+Routing presence coverage now includes broadcast, role, capability and tag
+through the public message route with no synthetic inbox-presence row. Closing
+one canonical workspace retains the other binding and its native peer. All 22
+installed delivery, session-view, workspace-isolation and presence cases pass
+with unchanged inputs (build/release-presence-installed; c1d08f4f wheel above).
+Two reviewed legacy presence functions map to these positive contracts.

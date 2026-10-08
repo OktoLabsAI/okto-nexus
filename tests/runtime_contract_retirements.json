@@ -3443,6 +3443,24 @@
         "tests/execution_r4/test_canonical_priority.py::test_priority_edit_preserves_preexisting_authority_changes"
       ],
       "source_sha256": "1ccfd85a9630ce8275664116d276f7dc32d216f99403e413be1ef4ff4b122be0"
+    },
+    {
+      "test": "tests/test_runtime_endpoints.py::test_p03_presence_participates_in_canonical_routing_without_manual_session_insert",
+      "reason": "The current public message route positively covers broadcast, role, capability and tag recipients without legacy session rows. Each selector admits exactly one delivery and reaches the owned native session. Identity changes receive a fresh approved grant rather than bypassing execution authorization.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery.py::test_broadcast_reaches_connected_canonical_runtime"
+      ],
+      "source_sha256": "20c2693b12d2d6b2e32f5ac521a5ce23a1b1c3a9083c4d1fdc42cfe849028b5c"
+    },
+    {
+      "test": "tests/test_runtime_endpoints.py::test_p03_presence_uses_canonical_session_and_close_only_owns_its_binding",
+      "reason": "Canonical public session views retain exact agent/binding/workspace identity through READY and CLOSED without inventing process-exit evidence. Two-workspace positive delivery proves closing one binding leaves the other native peer and session READY, and the closed binding can reopen automatically. Runtime-driven graph and agent presence replaces the retired inbox presence-session surrogate.",
+      "replacements": [
+        "tests/execution_r4/test_session_views.py::test_public_session_view_survives_close_without_inventing_process_facts",
+        "tests/execution_r4/test_canonical_workspace_isolation.py::test_same_agent_in_two_workspaces_keeps_context_and_close_isolated",
+        "tests/execution_r4/test_runtime_presence.py::test_graph_and_agent_presence_follow_local_connection"
+      ],
+      "source_sha256": "e273e28d01a3a6b79717301c8f47825c6c0f81a35a69467e6521d3df407db3d9"
     }
   ]
 }

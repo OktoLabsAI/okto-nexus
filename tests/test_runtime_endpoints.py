@@ -85,24 +85,6 @@ def test_p03_additive_upgrade_preserves_agent_and_legacy_history(tmp_path, last_
         assert restored.execute("SELECT metadata FROM agents WHERE agent_id='legacy'").fetchone()[0] == before["metadata"]
 
 
-def test_p03_presence_uses_canonical_session_and_close_only_owns_its_binding(runtime):
-    deps, client, _, _, key, _ = runtime
-    opened = open_rest(runtime).json()["data"]
-    assert opened["endpoint_id"] == "endpoint-pi"
-    assert opened["lifecycle_state"] == "protocol_ready"
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        presence = deps.repos.sessions.get(uow, opened["presence_session_id"])
-        assert presence.status == "active"
-        assert presence.agent_id == "worker"
-        assert presence.workspace_id == opened["workspace_id"]
-    from test_runtime_commands import wait_close_result
-    closed = tool(client, key, "harness_close", {"session_id": opened["session_id"]})
-    assert closed["ok"], closed
-    wait_close_result(client, key, closed)
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert deps.repos.sessions.get(uow, opened["presence_session_id"]).status == "closed"
-        assert uow.connection.execute("SELECT lifecycle_state FROM harness_sessions WHERE session_id=?",
-                                      (opened["session_id"],)).fetchone()[0] == "detached"
 
 
 def test_p03_diagnostics_are_operator_only_and_do_not_infer_liveness(runtime):
@@ -114,24 +96,6 @@ def test_p03_diagnostics_are_operator_only_and_do_not_infer_liveness(runtime):
     assert client.get("/api/v1/harness/diagnostics", headers={"x-api-key": caller_key}).status_code == 403
 
 
-@pytest.mark.parametrize("target", [{"strategy": "broadcast"}, {"strategy": "role", "role": "reviewer"},
-    {"strategy": "capability", "capability": "review"},
-    {"strategy": "tag", "selector": {"team": ["fixture"]}}])
-def test_p03_presence_participates_in_canonical_routing_without_manual_session_insert(runtime, target):
-    deps, client, root, peers, key, _ = runtime
-    if target["strategy"] == "capability":
-        assert client.post("/api/v1/capabilities", headers={"x-api-key": key},
-                           json={"name": "review"}).status_code == 200
-    if target["strategy"] == "tag":
-        headers = {"x-api-key": key}
-        assert client.post("/api/v1/tags", headers=headers, json={"key": "team"}).status_code == 200
-        assert client.post("/api/v1/tags/team/values", headers=headers, json={"value": "fixture"}).status_code == 200
-        assert client.patch("/api/v1/agents/worker", headers=headers,
-                            json={"tags": {"team": ["fixture"]}}).status_code == 200
-    assert open_rest(runtime).status_code == 200
-    result = send_message(runtime, subject="presence fixture", body="one response", target=target)
-    assert result["delivered_count"] == 1
-    wait_sent(peers)
 
 
 

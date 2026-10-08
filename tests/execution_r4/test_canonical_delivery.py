@@ -91,10 +91,36 @@ def test_message_admits_open_and_turn_atomically(connected_local, monkeypatch):
     wait_receipt(setup, closed, stages=("SUCCEEDED",))
 
 
-def test_broadcast_reaches_connected_canonical_runtime(connected_local, monkeypatch):
+@pytest.mark.parametrize('strategy', ['broadcast', 'role', 'capability', 'tag'])
+def test_broadcast_reaches_connected_canonical_runtime(connected_local, monkeypatch, strategy):
     setup, binding, native = connected_local
+    deps, _, client, headers, *_ = setup
+    target = {'strategy': strategy}
+    if strategy == 'role':
+        response = client.patch('/api/v1/agents/subject', headers=headers['operator'], json={'role': 'reviewer'})
+        assert response.status_code == 200, response.text
+        target['role'] = 'reviewer'
+    elif strategy == 'capability':
+        response = client.post('/api/v1/capabilities', headers=headers['operator'], json={'name': 'review'})
+        assert response.status_code == 200, response.text
+        response = client.patch('/api/v1/agents/subject', headers=headers['operator'], json={'capabilities': {'review': True}})
+        assert response.status_code == 200, response.text
+        target['capability'] = 'review'
+    elif strategy == 'tag':
+        for path, body in (('/api/v1/tags', {'key': 'team'}), ('/api/v1/tags/team/values', {'value': 'fixture'})):
+            response = client.post(path, headers=headers['operator'], json=body)
+            assert response.status_code == 200, response.text
+        response = client.patch('/api/v1/agents/subject', headers=headers['operator'], json={'tags': {'team': ['fixture']}})
+        assert response.status_code == 200, response.text
+        target['selector'] = {'team': ['fixture']}
+    # Identity edits require current authorization before dispatch, not a fake
+    # inbox-presence row or a bypass of the normal grant checks.
+    if strategy != 'broadcast':
+        from test_unbounded_local_grants import issue
+        response = issue(setup, binding)
+        assert response.status_code == 200, response.text
     enable(setup, binding)
-    result = send(setup, monkeypatch, target={"strategy": "broadcast"})
+    result = send(setup, monkeypatch, target=target)
     assert result["ok"], result
     assert result["data"]["recipients"] == ["subject"]
     assert result["data"]["delivered_count"] == 1
