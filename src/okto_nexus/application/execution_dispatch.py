@@ -158,6 +158,20 @@ def reserve_execution_dispatch(
                 "AND (r.state<>'READY' OR r.generation<>e.generation)) "
                 "AND p.action IN (" + placeholders + ") "
                 "AND length(CAST(p.semantic_payload AS BLOB))<=? "
+                # Administrative turns have no domain-delivery mapping. They
+                # still share the native session with a delivery awaiting a
+                # proven-unsent retry. Its immutable failed attempt identifies
+                # that session even after the live mapping is archived.
+                "AND (p.action<>'turn.submit' OR NOT EXISTS (SELECT 1 FROM delivery_outbox retry "
+                "JOIN execution_operations refused ON (refused.operation_id=retry.attempt_id OR EXISTS ("
+                "SELECT 1 FROM execution_domain_deliveries live WHERE live.server_id=refused.server_id "
+                "AND live.executor_id=refused.executor_id AND live.operation_id=refused.operation_id "
+                "AND live.domain_operation_id=retry.operation_id)) "
+                "WHERE retry.status='RETRY_WAIT' AND refused.server_id=p.server_id "
+                "AND refused.executor_id=p.executor_id AND refused.session_id=p.session_id "
+                "AND NOT EXISTS (SELECT 1 FROM execution_domain_deliveries own "
+                "WHERE own.server_id=p.server_id AND own.executor_id=p.executor_id "
+                "AND own.operation_id=p.operation_id AND own.domain_operation_id=retry.operation_id))) "
                 "AND NOT EXISTS (SELECT 1 FROM execution_domain_deliveries m "
                 "JOIN delivery_outbox d ON d.operation_id=m.domain_operation_id "
                 "JOIN delivery_outbox earlier ON earlier.endpoint_id=d.endpoint_id "

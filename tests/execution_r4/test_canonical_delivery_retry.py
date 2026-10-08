@@ -118,6 +118,17 @@ def test_retries_are_bounded_and_retain_durable_proof(connected_local, monkeypat
     with setup[0].connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute('SELECT COUNT(*) FROM message_deliveries').fetchone()[0] == 1
         assert uow.connection.execute('PRAGMA foreign_key_check').fetchall() == []
+    from test_canonical_consumption import pull
+    released = client.post('/api/v1/harness/outbox', headers=headers['operator'], json=dict(
+        action='release_to_inbox', operation_id=row['operation_id'], expected_state=row['status'],
+        expected_attempt_id=row['attempt_id'], expected_owner_epoch=row['owner_epoch'],
+        idempotency_key='release-exhausted-retry', reason='All attempts proved unsent',
+        acknowledge_duplicate_risk=False))
+    assert released.status_code == 200, released.text
+    assert released.json()['data']['inbox_released']
+    assert not released.json()['data']['duplicate_risk_acknowledged']
+    assert len(pull(setup, monkeypatch)) == 1
+    assert len(calls) == 3 and native.native.sent == []
 
 
 @pytest.mark.parametrize('change', ['actor', 'source', 'target', 'cancel'])
@@ -161,3 +172,127 @@ def test_retry_revalidates_authority_and_accepts_cancellation(connected_local, m
     final = wait_delivery(setup, lambda row: row['status'] in ('CANCELLED', 'REJECTED'))
     assert final['status'] == ('CANCELLED' if change == 'cancel' else 'REJECTED')
     assert len(calls) == 1 and native.native.sent == []
+
+
+def held_retry(connected, monkeypatch):
+    from nexus_connector_core.models import EffectNotSent
+    from test_vertical_inventory import _Native
+    setup, binding, native = connected
+    frozen = setup[0].clock.now_iso()
+    monkeypatch.setattr(setup[0].clock, 'now_iso', lambda: frozen)
+    calls = []
+    async def refuse(peer, verb, payload, operation_id, **kwargs):
+        calls.append(operation_id)
+        raise EffectNotSent('No bytes written', code='CAPACITY_EXCEEDED')
+    monkeypatch.setattr(_Native, 'send', refuse)
+    assert send(setup, monkeypatch)['ok']
+    row = wait_delivery(setup, lambda row: row['status'] == 'RETRY_WAIT' and row['reason'] == 'native_write_not_started')
+    return setup, row, native, calls
+
+
+def test_retry_deadline_preserves_lane_order_for_messages_and_commands(connected_local, monkeypatch):
+    from test_embedded_dispatch import admit
+    setup, first, native, calls = held_retry(connected_local, monkeypatch)
+    assert send(setup, monkeypatch)['ok']
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        session = uow.connection.execute('SELECT session_id FROM execution_sessions').fetchone()[0]
+    command = admit(setup, connected_local[1], 'later-than-retry', 'turn.submit', session_id=session, text='Later direct turn')
+    for _ in range(5):
+        setup[0].runtime_dispatcher.scan_once()
+    current = wait_delivery(setup, lambda row: row['status'] == 'RETRY_WAIT')
+    assert current['attempt_count'] == 1 and current['next_attempt_at'] == first['next_attempt_at']
+    assert len(calls) == 1 and native.native.sent == [], (calls, command['operation_id'])
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT COUNT(*) FROM execution_receipts WHERE operation_id=?', (command['operation_id'],)).fetchone()[0] == 0
+
+
+@pytest.mark.parametrize('field,value', [('ack_level','TRANSPORT_WRITE'), ('retry_basis',None), ('reason','unknown')])
+def test_retry_label_cannot_replace_no_effect_proof_for_cancel(connected_local, monkeypatch, field, value):
+    from test_canonical_recovery import recover
+    setup, row, native, calls = held_retry(connected_local, monkeypatch)
+    with setup[0].connection_factory.unit_of_work() as uow:
+        uow.connection.execute(f'UPDATE delivery_outbox SET {field}=? WHERE operation_id=?', (value, row['operation_id']))
+    denied = recover(setup, row, 'cancel_pending')
+    assert denied.status_code == 409, denied.text
+    assert len(calls) == 1 and native.native.sent == []
+
+
+def test_retry_wait_does_not_block_session_close(connected_local, monkeypatch):
+    from test_embedded_dispatch import admit
+    setup, _, native, calls = held_retry(connected_local, monkeypatch)
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        session = uow.connection.execute('SELECT session_id FROM execution_sessions').fetchone()[0]
+    closed = admit(setup, connected_local[1], 'close-during-retry', 'runtime.close', session_id=session)
+    wait_receipt(setup, closed, stages=('SUCCEEDED',))
+    assert native.native.stopped and len(calls) == 1
+
+
+def test_retry_wait_does_not_block_an_independent_session(connected_local, monkeypatch):
+    from test_embedded_dispatch import admit
+    setup, row, native, calls = held_retry(connected_local, monkeypatch)
+    opened = admit(setup, connected_local[1], 'independent-of-retry', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    other = admit(setup, connected_local[1], 'independent-turn', 'turn.submit',
+        session_id=opened['scope']['session_id'], text='A separate session can proceed')
+    wait_receipt(setup, other, stages=('FAILED',))
+    assert len(calls) == 2 and calls[-1] == other['operation_id'] and native.opens == 2
+    current = wait_delivery(setup, lambda current: current['status'] == 'RETRY_WAIT')
+    assert current['attempt_count'] == 1 and current['next_attempt_at'] == row['next_attempt_at']
+
+
+def test_new_dispatch_owner_preserves_retry_deadline(connected_local, monkeypatch):
+    from okto_nexus.application.runtime_dispatcher import RuntimeDispatcher
+    setup, row, native, calls = held_retry(connected_local, monkeypatch)
+    deps = setup[0]
+    old = deps.runtime_dispatcher
+    old.quiesce()
+    old.close()
+    fresh = RuntimeDispatcher(connection_factory=deps.connection_factory, repo=old.repo,
+        clock=deps.clock, validate=old.validate, dispatch=old.dispatch)
+    fresh.admit_canonical, fresh.select_fallback = old.admit_canonical, old.select_fallback
+    deps.runtime_dispatcher = fresh
+    assert fresh.start()
+    try:
+        fresh.scan_once()
+        current = wait_delivery(setup, lambda current: current['status'] == 'RETRY_WAIT')
+        for field in ('next_attempt_at', 'attempt_count', 'attempt_id', 'operation_id'):
+            assert current[field] == row[field]
+        assert len(calls) == 1 and native.native.sent == []
+    finally:
+        fresh.close()
+
+
+def test_uncommitted_no_effect_proof_cannot_authorize_retry(connected_local, monkeypatch):
+    import threading
+    from nexus_connector_core.models import EffectNotSent
+    from test_vertical_inventory import _Native
+    from okto_nexus.application import execution_delivery_retry
+    setup, binding, native = connected_local
+    calls, failed = [], threading.Event()
+    allow = threading.Event()
+    original = execution_delivery_retry.mark_retry_wait
+    async def refuse(peer, verb, payload, operation_id, **kwargs):
+        calls.append(operation_id)
+        raise EffectNotSent('No native write', code='CAPACITY_EXCEEDED')
+    def cut(conn, operation_id):
+        original(conn, operation_id)
+        if not allow.is_set():
+            failed.set()
+            raise OSError('Receipt transaction interrupted before commit')
+    monkeypatch.setattr(_Native, 'send', refuse)
+    monkeypatch.setattr(execution_delivery_retry, 'mark_retry_wait', cut)
+    try:
+        assert send(setup, monkeypatch)['ok']
+        assert failed.wait(10)
+        for _ in range(5):
+            setup[0].runtime_dispatcher.scan_once()
+        with setup[0].connection_factory.unit_of_work(write=False) as uow:
+            row = dict(uow.connection.execute('SELECT * FROM delivery_outbox').fetchone())
+            assert row['next_attempt_at'] is None and row['attempt_count'] == 1
+            assert uow.connection.execute('SELECT COUNT(*) FROM execution_delivery_attempt_history').fetchone()[0] == 0
+            assert uow.connection.execute("SELECT COUNT(*) FROM execution_receipts WHERE stage='FAILED'").fetchone()[0] == 0
+        assert len(calls) == 1 and native.native.sent == []
+    finally:
+        allow.set()
+    final = wait_delivery(setup, lambda current: current['status'] == 'REJECTED')
+    assert final['attempt_count'] == len(calls) == 3

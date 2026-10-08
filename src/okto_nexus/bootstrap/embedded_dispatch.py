@@ -30,6 +30,38 @@ _SCOPE = ("server_id", "executor_id", "binding_id", "agent_id", "workspace_id",
           "authorization_revision", "configuration_revision", "binding_revision", "credential_epoch")
 
 
+class SessionAuthorityGate:
+    """Concurrent containment controls, exclusive lease-context replacement."""
+    def __init__(self):
+        self.condition = asyncio.Condition()
+        self.controls = 0
+        self.updating = False
+
+    @asynccontextmanager
+    async def control(self):
+        async with self.condition:
+            await self.condition.wait_for(lambda: not self.updating)
+            self.controls += 1
+        try:
+            yield
+        finally:
+            async with self.condition:
+                self.controls -= 1
+                self.condition.notify_all()
+
+    @asynccontextmanager
+    async def update(self):
+        async with self.condition:
+            await self.condition.wait_for(lambda: not self.controls and not self.updating)
+            self.updating = True
+        try:
+            yield
+        finally:
+            async with self.condition:
+                self.updating = False
+                self.condition.notify_all()
+
+
 class EmbeddedDispatchOwner:
     def __init__(self, inventory, host):
         self.inventory, self.host = inventory, host
@@ -274,7 +306,10 @@ class EmbeddedDispatchOwner:
             async with session["gate"]:
                 yield
         else:
-            yield
+            # Controls bypass a blocked productive native call, but must keep
+            # their selected Core context current across local persistence.
+            async with session["authority_gate"].control():
+                yield
 
     async def _request_grant(self, request):
         await asyncio.to_thread(self.verify)
@@ -328,7 +363,7 @@ class EmbeddedDispatchOwner:
         if action == "runtime.open":
             if key in self.sessions or len(self.sessions) >= self.host.max_owned_slots:
                 raise CoreError("CAPACITY_EXCEEDED", "embedded_dispatch")
-            session = {"gate":asyncio.Lock(), "executor":None,
+            session = {"gate":asyncio.Lock(), "authority_gate":SessionAuthorityGate(), "executor":None,
                        "scope":{name:frame[name] for name in _SCOPE}, "renew_at":None}
             self.sessions[key] = session
         else:
@@ -486,7 +521,7 @@ class EmbeddedDispatchOwner:
 
     async def _renew_owned(self, session_id, session):
         try:
-            async with session["gate"]:
+            async with session["gate"], session["authority_gate"].update():
                 if self._stopping.is_set() or self.sessions.get(session_id) is not session:
                     return
                 executor = session["executor"]

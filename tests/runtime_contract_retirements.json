@@ -2810,6 +2810,81 @@
         "tests/execution_r4/test_canonical_identity_lifecycle.py::test_concurrent_bindings_preserve_one_registered_agent"
       ],
       "source_sha256": "484ea2405fe2a7a758df1ca5298f9deb8c69364167e213d0d91062c05fdb6957"
+    },
+    {
+      "test": "tests/test_runtime_safe_retry.py::test_busy_before_native_write_waits_for_deadline_and_preserves_logical_operation",
+      "reason": "The removed supervisor's LANE_BUSY_BEFORE_WRITE and jitter contract is replaced by bounded canonical retries authorized by a persisted Core no-effect receipt. Regression coverage checks stable logical identity, one inbox claim, distinct immutable physical attempts and the persisted deadline.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery_retry.py::test_proven_unsent_delivery_recovers_without_another_inbox_claim",
+        "tests/execution_r4/test_canonical_delivery_retry.py::test_retry_deadline_preserves_lane_order_for_messages_and_commands"
+      ],
+      "source_sha256": "41054439e2bc20257ce606fb27c76be195b52d4230d5d43cdba26efbb71822c5"
+    },
+    {
+      "test": "tests/test_runtime_safe_retry.py::test_safe_retry_exhaustion_is_bounded_and_can_be_released_to_pull",
+      "reason": "Canonical Core attempts replace the removed supervisor. Three durable no-effect attempts are now exercised through public delivery and recovery, including release to pull without duplicate-risk acknowledgement.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery_retry.py::test_retries_are_bounded_and_retain_durable_proof"
+      ],
+      "source_sha256": "94f303ad4242a0ee9b140dff7d48f073cbbc8f5b4dd366457657c2b6281dacdb"
+    },
+    {
+      "test": "tests/test_runtime_safe_retry.py::test_retry_wait_can_be_cancelled_without_sending_at_its_deadline",
+      "reason": "Canonical retry cancellation is exercised against the same public recovery operation with a real Core receipt; advancing the deadline after cancellation produces no further native call.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery_retry.py::test_retry_revalidates_authority_and_accepts_cancellation"
+      ],
+      "source_sha256": "0c70f137fbe870f6b7a7acaba851a0cea4d1e1c75a06d81e660048043ea5285a"
+    },
+    {
+      "test": "tests/test_runtime_safe_retry.py::test_new_turns_cannot_overtake_a_retry_wait_on_the_same_lane",
+      "reason": "Legacy command and delivery lanes have been replaced by canonical dispatch. The replacement reproduces and prevents direct turns bypassing a waiting conversation on the same native session, while preserving the close control lane.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery_retry.py::test_retry_deadline_preserves_lane_order_for_messages_and_commands",
+        "tests/execution_r4/test_canonical_delivery_retry.py::test_retry_wait_does_not_block_session_close"
+      ],
+      "source_sha256": "d24909c199b74c522e506c315e4eb2c8904c3d51a5382311d3c57a32d8d33af2"
+    },
+    {
+      "test": "tests/test_runtime_safe_retry.py::test_retry_revalidates_actor_authority_before_any_new_native_call",
+      "reason": "Canonical retry revalidates the actor and both source and selected fallback endpoint authority before any new Core attempt.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery_retry.py::test_retry_revalidates_authority_and_accepts_cancellation"
+      ],
+      "source_sha256": "24ed43eeda0128781b476f1ffbf82e090749f693c18f57eead99add05c783211"
+    },
+    {
+      "test": "tests/test_runtime_safe_retry.py::test_persisted_deadline_wakes_retry_without_an_external_signal",
+      "reason": "The canonical regression waits for the persisted deadline without explicit scan, wake or later native event and observes one successful second attempt before the periodic recovery interval.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery_retry.py::test_proven_unsent_delivery_recovers_without_another_inbox_claim"
+      ],
+      "source_sha256": "34f9910bce5587a13a305bbd382b9207ec216c082840cee239d41b2ac4b69c73"
+    },
+    {
+      "test": "tests/test_runtime_safe_retry.py::test_new_dispatch_owner_preserves_retry_deadline_without_early_replay",
+      "reason": "A fresh canonical retry owner now exercises the retained deadline, physical attempt proof and logical identity without early native replay.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery_retry.py::test_new_dispatch_owner_preserves_retry_deadline"
+      ],
+      "source_sha256": "f949b1185399c1cd6ab14f525d5ea26d3050df21177af88e51171a983b37291e"
+    },
+    {
+      "test": "tests/test_runtime_safe_retry.py::test_retry_wait_label_alone_does_not_authorize_safe_cancellation",
+      "reason": "All three corruption cases are retained against canonical Core proof: transport acknowledgement, missing retry basis and unknown reason cannot authorize cancellation.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery_retry.py::test_retry_label_cannot_replace_no_effect_proof_for_cancel"
+      ],
+      "source_sha256": "76ad16dfd0feee9e945738321fa96fe51f43d1e1536834750855220a6bdb5a65"
+    },
+    {
+      "test": "tests/test_runtime_safe_retry.py::test_lost_non_delivery_proof_commit_never_enables_replay",
+      "reason": "The replacement injects a failure after canonical retry projection but before the receipt transaction commits. No deadline, attempt archive or second native attempt exists until the authenticated proof can commit; recovery then remains bounded.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery_retry.py::test_uncommitted_no_effect_proof_cannot_authorize_retry",
+        "tests/execution_r4/test_canonical_delivery_retry.py::test_uncertain_or_permanent_failure_never_retries"
+      ],
+      "source_sha256": "b1f1e69ef941eacd1be6738b34bff45b0fff277fca7f0db0b9b5b71e327299b8"
     }
   ]
 }

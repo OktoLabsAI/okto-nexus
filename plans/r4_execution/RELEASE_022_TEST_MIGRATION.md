@@ -329,3 +329,34 @@ gap: a result-only response reaches the terminal event but loses its text.
 An isolated Core correction is under test; the published Core is unchanged.
 The late-cancellation close test passed with the documented 30-second drain
 and 15-second interrupt budget. Full-suite acceptance remains outstanding.
+
+The 2026-10-07 merge review validated 175 installed-wheel cases with one
+pre-existing skip and unchanged inputs (build/review-merge-installed). This
+includes local/remote MCP availability, discovery permissions, Graph presence,
+tool-description size, canonical delivery/retry and the embedded lifecycle.
+Core 0.0.4 and Connector 0.0.3 are now published; this campaign uses those
+installed dependencies rather than the earlier Core 0.0.3 checkpoint above.
+
+The review found and corrected two runtime defects: a direct turn could bypass
+a conversation waiting for a safe retry on the same session, and lease renewal
+could replace the Core context while close/interrupt persisted its pre-effect
+binding, causing STALE_GENERATION and unnecessary agent recovery. Retry ordering
+now includes direct turns. Local lease-context replacement waits for active
+controls, while controls remain concurrent and bypass blocked productive calls.
+Deterministic tests reproduce both renewal races with the former control gate;
+the corrected installed package passes both and concurrent close admission.
+The remote Connector already handles compatible pre-effect context changes and
+required no modification in this review.
+
+Nine legacy safe-retry test functions (eleven parameterized cases) were retired
+only after validating their canonical replacements. The manifest records each
+source hash and replacement. Coverage includes bounded exhaustion and pull
+release, cancellation, authority changes, preserved deadlines after ownership
+change, missing proof commits, same-session ordering and independent sessions.
+
+The full release gate remains open. Current-head CI at f042dd1 failed; four
+completed shard artifacts contain 207 distinct failing cases before these
+review corrections, and the complete matrix was still running when inspected.
+Other legacy connection, historical work, protocol, fallback and recovery tests
+still require individual review. The focused campaign is not full-suite
+acceptance and does not authorize declaring the release ready for merge.
