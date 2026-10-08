@@ -3509,6 +3509,14 @@
         "tests/execution_r4/test_canonical_start_timeout.py::test_rest_start_timeout_is_durable_contained_and_idempotent"
       ],
       "source_sha256": "f102071ccb5e03174d44af77ed4070da7b638eb2059f94a511bf01288699198b"
+    },
+    {
+      "test": "tests/test_runtime_endpoint_fallback.py::test_conversation_continuation_keeps_its_original_binding",
+      "reason": "Ported continuation no-fallback contract to canonical Core delivery, preserving retries only on the original binding after durable no-write proof.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_fallback_scope.py::test_conversation_continuation_retries_only_its_original_binding"
+      ],
+      "source_sha256": "a751835baa526c3dcd6027e2f6ab33ee74dce1d4e07b36e7e6187bb0d90a40d8"
     }
   ]
 }

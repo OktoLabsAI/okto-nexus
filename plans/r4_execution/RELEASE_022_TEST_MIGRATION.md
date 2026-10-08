@@ -764,3 +764,9 @@ updates both package metadata and that compatibility pin.
 The 668faab full CI completed all four Linux partitions without the previous
 fixture shutdown hangs. It still reports legacy runtime regression failures;
 this progress does not satisfy the final merge gate.
+
+### Continuation retry correction (2026-10-08)
+
+A causal conversation was incorrectly made permanently failed after a Core receipt proved no native write. It now retries its original binding; causal context still cannot select another endpoint. Managed work, relays and ambiguous effects remain excluded.
+
+Installed Windows campaign uild/release-continuation-installed: 34 passed, unchanged tracked inputs, including fallback authorization, bounded retries, no replay after possible effects, and the contract inventory. Wheel SHA-256: 526f7700d89fd2b10a978f8ec234523b506899286127bdbe642a816402d13e76.

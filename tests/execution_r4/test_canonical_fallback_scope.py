@@ -113,6 +113,28 @@ def test_fallback_preserves_envelope_and_exposes_both_attempts(connected_local, 
         assert uow.connection.execute('SELECT count(*) FROM delivery_outbox').fetchone()[0] == 1
 
 
+def test_conversation_continuation_retries_only_its_original_binding(connected_local, monkeypatch):
+    from test_pr34_remediation import tool
+    setup, first, second, native, clock, calls = pair(connected_local, monkeypatch)
+    parent = send(setup, monkeypatch, target=dict(strategy='direct', agent_id='operator'))
+    assert parent['ok'], parent
+    created = tool(setup[2], setup[3]['operator']['Authorization'].removeprefix('Bearer '),
+        'message_create', dict(project_root=str(setup[-1]), from_agent_id='operator',
+        subject='Continuation', body='Retain original context', parent_message_id=parent['data']['message_id'],
+        target=dict(strategy='direct', agent_id='subject')))
+    assert created['ok'], created
+    pending = wait_delivery(setup, lambda row: row['status'] == 'RETRY_WAIT')
+    assert pending['endpoint_id'] == first['endpoint_id'] and pending['next_binding'] is None
+    clock[0] = pending['next_attempt_at']
+    setup[0].runtime_dispatcher.wake()
+    accepted = wait_delivery(setup, lambda row: row['status'] == 'ACCEPTED')
+    assert accepted['endpoint_id'] == first['endpoint_id']
+    assert accepted['operation_id'] == pending['operation_id']
+    assert native.opens == 1 and len(calls) == 2 and len(native.native.sent) == 1
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        assert not uow.connection.execute('SELECT 1 FROM execution_sessions WHERE binding_id=?', (second['binding_id'],)).fetchone()
+
+
 def test_post_write_exception_cannot_use_approved_alternative(connected_local, monkeypatch):
     setup, first, second, native, _, calls = pair(connected_local, monkeypatch)
     async def ambiguous(peer, verb, payload, operation_id, **kwargs):

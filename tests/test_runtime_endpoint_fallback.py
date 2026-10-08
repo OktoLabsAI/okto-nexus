@@ -49,18 +49,6 @@ def fallback_pair(runtime, monkeypatch, group="interchangeable-fixture", *, agen
 
 
 
-def test_conversation_continuation_keeps_its_original_binding(runtime, monkeypatch):
-    _, client, root, peers, _, caller = runtime
-    fallback_pair(runtime, monkeypatch)
-    parent = send_message(runtime, target={"strategy": "direct", "agent_id": "operator"})
-    reply = tool(client, caller, "message_create", {"project_root": root, "from_agent_id": "caller",
-        "subject": "continuation", "body": "original context", "parent_message_id": parent["message_id"],
-        "target": {"strategy": "direct", "agent_id": "worker"}})
-    assert reply["ok"], reply
-    operation_id = reply["data"]["runtime_operations"][0]
-    row = wait_status(runtime, operation_id, "RETRY_WAIT")
-    assert row["next_binding"] is None
-    assert not peers[1].sent
 
 
 

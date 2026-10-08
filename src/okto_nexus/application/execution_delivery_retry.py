@@ -30,8 +30,11 @@ def mark_retry_wait(conn, domain_operation_id):
         return
     envelope = json.loads(row['envelope'])
     if (envelope.get('intent') != 'conversation' or envelope.get('handoff_id')
-            or envelope.get('causation_id') or no_effect_receipt(conn, domain_operation_id) is None):
+            or no_effect_receipt(conn, domain_operation_id) is None):
         return
+    # A continuation may retry its original binding after durable no-write
+    # proof. Endpoint selection still forbids moving that context elsewhere;
+    # result relays and managed work remain excluded above.
     # A terminal receipt belongs to one immutable attempt. It must never be
     # changed back to pending or reused as the new Core operation identity.
     conn.execute("UPDATE delivery_outbox SET status='RETRY_WAIT',reason='canonical_no_effect',"
