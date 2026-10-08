@@ -982,3 +982,20 @@ assertions remain. The corrected case passed 25 consecutive local repetitions;
 all 15 fallback/handoff cases passed installed on Windows and Linux with unchanged
 inputs (`build/release-work-fallback-installed` and
 `build/release-work-fallback-linux-installed`). Production artifacts are unchanged.
+
+The full Linux/Python 3.11 matrix exposed cancellation between draining a remote
+socket's producer and committing its disconnect/resume record. The latter commit
+now has its own AnyIO cancellation shield, so a cancelled socket cannot leave its
+durable owner unreleased. The existing continuity tests now inject cancellation
+at that exact boundary without sleeping: the previous installed wheel failed
+both resumption cases (three other cases passed), and the corrected source passed
+all five. Same lane/generation preservation and rejection of stale generation
+remain asserted; this does not authorize stale or revoked connections.
+
+The corrected installed wheel passed all 25 continuity, link storage failure,
+dispatch drain and lease authority cases on Windows (80.10s) and Linux (80.62s),
+with unchanged inputs: `build/release-continuity-cancel-installed` and
+`build/release-continuity-cancel-linux-installed`. Red campaign:
+`build/release-continuity-cancel-red`. Updated Nexus wheel SHA256:
+21029d144d76f1505a3736365daa0d160e65af4073788374cdf8f9c1e12b9800.
+Core and Connector artifacts remain unchanged; complete CI is still required.

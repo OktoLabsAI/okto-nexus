@@ -640,6 +640,9 @@ def build_router() -> APIRouter:
                             (server_id, executor_id, connection_id),
                         )
 
-                await anyio.to_thread.run_sync(_release)
+                # Socket cancellation cannot abandon the durable owner release
+                # after the retained dispatch producer has finished draining.
+                with anyio.CancelScope(shield=True):
+                    await anyio.to_thread.run_sync(_release)
 
     return router
