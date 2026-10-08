@@ -1,0 +1,108 @@
+"""Approved runtime configuration remains isolated and operator controlled."""
+import json
+from pathlib import Path
+
+import pytest
+from test_harness_canonical import qualified_bridge
+from test_embedded_dispatch import local_setup, connected_local, connect_local, qualified_contract, admit, wait_receipt
+from test_embedded_tools import enable_tools
+from test_runtime_contract_migration import mcp
+
+
+@pytest.mark.parametrize('local_setup', ['codex_app_server', 'pi_rpc', 'claude_stream'], indirect=True)
+@pytest.mark.parametrize('transport', ['rest', 'mcp'])
+def test_public_open_uses_isolated_approved_profile(local_setup, monkeypatch, transport):
+    home = local_setup[0].config.home_dir / 'approved-provider'
+    home.mkdir()
+    local_setup[4]['provider_home'] = str(home)
+    setup, binding, native, vault, environments = enable_tools(connect_local(local_setup))
+    deps, _, client, headers, *_, root = setup
+    monkeypatch.setenv('UNAPPROVED_AMBIENT_TOKEN', 'ambient-fixture-secret')
+    kind = {'codex_app_server': 'codex', 'pi_rpc': 'pi', 'claude_stream': 'claude_code'}[setup[5].adapter_id]
+    body = dict(agent_id='subject', kind=kind, endpoint_id=binding['endpoint_id'],
+                project_root=str(root), idempotency_key='isolated-profile-open')
+    if transport == 'rest':
+        response = client.post('/api/v1/harness/sessions', headers=headers['subject'], json=body)
+        assert response.status_code == 200, response.text
+        opened = response.json()
+    else:
+        opened = mcp(setup, monkeypatch, headers['subject']['Authorization'].removeprefix('Bearer '), 'harness_open', body)
+    assert opened['ok'], opened
+    wait_receipt(setup, opened['data'])
+    assert native.opens == 1 and len(environments) == 1
+    environment = environments[0]
+    home = Path(environment['HOME']).resolve()
+    assert home.is_relative_to(deps.config.home_dir.resolve())
+    if kind in ('pi', 'codex'):
+        state = Path(environment['CODEX_HOME' if kind == 'codex' else 'PI_CODING_AGENT_DIR']).resolve()
+        assert state.is_relative_to(home)
+    assert 'UNAPPROVED_AMBIENT_TOKEN' not in environment
+    for role in ('operator', 'subject'):
+        assert headers[role]['Authorization'].removeprefix('Bearer ') not in json.dumps(dict(environment))
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        profile = uow.connection.execute('SELECT p.* FROM runtime_profiles p JOIN agent_endpoints e '
+            'ON e.profile_id=p.profile_id WHERE e.endpoint_id=?', (binding['endpoint_id'],)).fetchone()
+        assert profile['inherit_ambient'] == 0
+        assert opened['data']['scope']['configuration_revision'] >= 1
+    wait_receipt(setup, admit(setup, binding, 'isolated-profile-close', 'runtime.close',
+        session_id=opened['data']['scope']['session_id']), stages=('SUCCEEDED',))
+
+
+def test_notification_configuration_requires_operator_and_rejects_open_overrides(connected_local, monkeypatch):
+    setup, binding, native = connected_local
+    _, _, client, headers, *_, root = setup
+    path = '/api/v1/harness/endpoints/' + binding['endpoint_id']
+    response = client.patch(path, headers=headers['subject'], json=dict(expected_revision=1,
+        public_config=dict(notify_target=dict(strategy='broadcast'))))
+    assert response.status_code == 403, response.text
+    body = dict(agent_id='subject', kind='codex', project_root=str(root), endpoint_id=binding['endpoint_id'],
+        idempotency_key='unauthorized-audience', notify_target=dict(strategy='broadcast'))
+    denied = mcp(setup, monkeypatch, headers['subject']['Authorization'].removeprefix('Bearer '), 'harness_open', body)
+    assert not denied['ok'] and denied['error']['code'] == 'VALIDATION_ERROR', denied
+    assert native.opens == 0
+
+
+@pytest.mark.parametrize('local_setup', ['codex_app_server', 'pi_rpc', 'claude_stream'], indirect=True)
+def test_stale_endpoint_update_preserves_approved_notification_audience(connected_local):
+    setup, binding, native = connected_local
+    deps, _, client, headers, *_ = setup
+    path = '/api/v1/harness/endpoints/' + binding['endpoint_id']
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        initial_revision = uow.connection.execute('SELECT revision FROM agent_endpoints WHERE endpoint_id=?',
+            (binding['endpoint_id'],)).fetchone()[0]
+    settings = client.put(path + '/harness-settings', headers=headers['operator'],
+        json=dict(expected_revision=initial_revision, settings=dict(model='fixture-model')))
+    assert settings.status_code == 200, settings.text
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        before = dict(uow.connection.execute('SELECT revision,public_config FROM agent_endpoints WHERE endpoint_id=?',
+            (binding['endpoint_id'],)).fetchone())
+        revision = before['revision']
+    target = dict(strategy='direct', agent_id='operator')
+    changed = client.patch(path, headers=headers['operator'], json=dict(expected_revision=revision,
+        public_config=dict(notify_target=target)))
+    assert changed.status_code == 200, changed.text
+    stale = client.patch(path, headers=headers['operator'], json=dict(expected_revision=revision,
+        public_config=dict(notify_target=dict(strategy='broadcast'))))
+    assert stale.status_code == 409, stale.text
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        row = uow.connection.execute('SELECT revision,public_config FROM agent_endpoints WHERE endpoint_id=?',
+            (binding['endpoint_id'],)).fetchone()
+        assert row['revision'] == revision + 1 and json.loads(row['public_config'])['notify_target'] == target
+        assert json.loads(row['public_config'])['alias'] == json.loads(before['public_config'])['alias']
+        assert json.loads(row['public_config'])['harness_settings'] == json.loads(before['public_config'])['harness_settings']
+    assert native.opens == 0
+
+
+def test_endpoint_patch_cannot_replace_binding_identity(connected_local):
+    setup, binding, native = connected_local
+    deps, _, client, headers, *_ = setup
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        before = dict(uow.connection.execute('SELECT * FROM agent_endpoints WHERE endpoint_id=?',
+            (binding['endpoint_id'],)).fetchone())
+    changed = client.patch('/api/v1/harness/endpoints/' + binding['endpoint_id'], headers=headers['operator'],
+        json=dict(expected_revision=before['revision'], public_config=dict(alias='unapproved-name')))
+    assert changed.status_code == 422, changed.text
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert dict(uow.connection.execute('SELECT * FROM agent_endpoints WHERE endpoint_id=?',
+            (binding['endpoint_id'],)).fetchone()) == before
+    assert native.opens == 0

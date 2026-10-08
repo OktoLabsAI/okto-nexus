@@ -246,23 +246,6 @@ def test_harness_open_claude_code_attach_respects_explicit_disable(ctx):
     assert result["error"]["code"] == "PERMISSION_DENIED"
 
 
-@pytest.mark.skipif(os.name == "nt", reason="Attach is a POSIX-only substrate; no Windows capability invented.")
-def test_harness_open_claude_code_attach_with_target_pid_uses_attach_capabilities(ctx):
-    ctx[0].config.feature_harness_attach = True
-    _deps, server, connectors, project_root = ctx
-    result = _call(
-        server,
-        "harness_open",
-        agent_id="worker",
-        kind="claude_code",
-        project_root=project_root,
-        substrate="attach",
-        target_pid=12345,
-    )
-    assert result["ok"], result
-    assert result["data"]["capabilities"]["send_only"] is True
-    assert result["data"]["capabilities"]["steer_timing"] is None
-    assert len(connectors["claude_code"]) == 1
 
 
 # --------------------------------------------------------------------------- #
@@ -272,24 +255,6 @@ def test_harness_open_claude_code_attach_with_target_pid_uses_attach_capabilitie
 
 
 
-@pytest.mark.skipif(os.name == "nt", reason="Attach is a POSIX-only substrate; no Windows capability invented.")
-def test_harness_steer_is_rejected_when_capability_forbids_it(ctx):
-    ctx[0].config.feature_harness_attach = True
-    deps, server, connectors, project_root = ctx
-    opened = _call(
-        server,
-        "harness_open",
-        agent_id="worker",
-        kind="claude_code",
-        project_root=project_root,
-        substrate="attach",
-        target_pid=12345,
-    )
-    session_id = opened["data"]["session_id"]
-
-    result = _call(server, "harness_steer", session_id=session_id, payload={"content": "x"})
-    assert not result["ok"]
-    assert result["error"]["code"] == "VALIDATION_ERROR"
 
 
 def test_harness_send_against_unknown_session_is_not_found(ctx):

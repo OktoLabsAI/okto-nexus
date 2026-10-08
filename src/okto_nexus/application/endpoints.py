@@ -282,8 +282,25 @@ class EndpointService:
                     or updated["profile_id"] is not None and (not isinstance(updated["profile_id"], str) or not 1 <= len(updated["profile_id"]) <= 128)
                     or not isinstance(updated["public_config"], dict)):
                 raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid endpoint configuration field.", {})
-            descriptor = self.registry.get(endpoint["adapter_id"])
-            config = self.validate_public_config(descriptor, updated["response_policy"], updated["public_config"])
+            # Canonical bindings store Core IDs, while this validator's
+            # descriptors are indexed by native kind/substrate.
+            from nexus_connector_core import get_runtime_catalog
+            runtime = next((item for item in get_runtime_catalog().runtimes
+                            if item.adapter_id == endpoint['adapter_id'] and item.connection_mode == 'managed'), None)
+            if runtime is None:
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Unknown managed runtime.', {})
+            descriptor = self.registry.resolve(runtime.native_kind,
+                'stream' if runtime.native_kind == 'claude_code' else None)
+            public = dict(updated['public_config'])
+            if 'alias' in public and public['alias'] != endpoint['public_config'].get('alias'):
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Use binding configuration to change the connection name.', {})
+            public.pop('alias', None)
+            for field in ('harness_settings', 'nexus_tool_permission'):
+                if field not in public and field in endpoint['public_config']:
+                    public[field] = endpoint['public_config'][field]
+            config = self.validate_public_config(descriptor, updated["response_policy"], public)
+            if 'alias' in endpoint['public_config']:
+                config['alias'] = endpoint['public_config']['alias']
             if config.get('harness_settings', {}) != endpoint['public_config'].get('harness_settings', {}):
                 raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Use the harness settings operation to change native configuration.', {})
             if config.get("nexus_tool_permission", "ask") != endpoint["public_config"].get("nexus_tool_permission", "ask"):

@@ -421,3 +421,14 @@ Linux shard with 48 failures, 1075 passes and 17 skips, mostly using removed
 legacy connection setup. The remaining matrix was cancelled after this failure
 and the replay correction, so it is not a passing full-suite result. The other
 historical contracts still need individual review before Nexus main/tag promotion.
+
+Endpoint configuration review reproduced a canonical-ID lookup failure when
+updating notification settings. The validator now resolves managed Core IDs to
+their native descriptors, preserves binding aliases and separately controlled
+settings, and rejects alias edits through this operation. The installed campaign
+build/release-endpoint-installed passed 25 cases with unchanged inputs: all three
+adapters, notification authorization and stale revisions, approved provider-home
+isolation, configuration authority, and rejection of removed attach creation.
+Two legacy notification functions map to current equivalents; two positive
+attach-creation functions are retired according to the explicit removal decision.
+This does not claim default Pi profile isolation or a passing full release gate.

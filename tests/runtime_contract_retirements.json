@@ -3002,6 +3002,40 @@
         "tests/execution_r4/test_canonical_event_views.py::test_public_replay_omits_operational_request_without_a_display"
       ],
       "source_sha256": "375957cf6668c9445c4d91a7007c613173ebd03c1c9e69d1a17f0306c1be1d3f"
+    },
+    {
+      "test": "tests/test_runtime_notify_targets.py::test_notification_configuration_and_open_override_require_authority",
+      "reason": "Canonical bindings retain operator-only endpoint configuration and refuse per-open audience overrides. The replacement uses a real approved binding and subject credential, checking both denials before native creation.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_endpoint_configuration.py::test_notification_configuration_requires_operator_and_rejects_open_overrides"
+      ],
+      "source_sha256": "07a993002e36149cec12f6da02743dd822e893ab3f9e0ab7e9934f19580a4398"
+    },
+    {
+      "test": "tests/test_runtime_notify_targets.py::test_stale_configuration_cannot_overwrite_new_notification_audience",
+      "reason": "The canonical replacement reads the actual endpoint revision and checks successful notification configuration followed by stale-update rejection for all three managed adapters. It preserves binding alias and approved harness settings, and exposed the old-registry lookup defect.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_endpoint_configuration.py::test_stale_endpoint_update_preserves_approved_notification_audience",
+        "tests/execution_r4/test_canonical_endpoint_configuration.py::test_endpoint_patch_cannot_replace_binding_identity"
+      ],
+      "source_sha256": "f5e3d94a44c913f9dd96a8f662f7dacc536933881416ccbf80d3637f6ae57b2b"
+    },
+    {
+      "test": "tests/test_harness_tools.py::test_harness_open_claude_code_attach_with_target_pid_uses_attach_capabilities",
+      "reason": "The user explicitly removed external attach. Positive creation with a PID is no longer a supported operation on any platform; canonical tests verify that Core cannot load it and both public routes reject it without effects.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_installed_core_cannot_load_external_attach",
+        "tests/execution_r4/test_attach_removed.py::test_removed_attach_cannot_open_through_legacy_public_routes"
+      ],
+      "source_sha256": "9f4c037e56ef86b7a9dbe5f190018ab3d8db5b355783eb6598e2e8e38d461cb6"
+    },
+    {
+      "test": "tests/test_harness_tools.py::test_harness_steer_is_rejected_when_capability_forbids_it",
+      "reason": "This test first created an external Claude attach session and then tried to steer it. The user removed the entire attach feature; both public entry points now refuse its creation before native effects, rather than retaining an attach session solely to reject steering.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_removed_attach_cannot_open_through_legacy_public_routes"
+      ],
+      "source_sha256": "8c3c2f75a6d9f0e5dc0196825c78c742eff959daad9d55bfc8c405920eff8c4b"
     }
   ]
 }
