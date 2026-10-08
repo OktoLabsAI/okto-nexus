@@ -27,9 +27,9 @@ def tool_call(setup, name, **kwargs):
 
 
 @pytest.mark.parametrize("actions", [["read"], ["read", "send"], ["open"]])
-def test_ordinary_endpoint_grant_cannot_represent_another_core_identity(connected_local, actions):
-    # M04_OPERATOR_RUNTIME makes represented R4 execution operator-only;
-    # a legacy endpoint grant does not mint that operator identity.
+def test_endpoint_grant_allows_only_its_explicit_command_without_operator_identity(connected_local, actions):
+    # A send grant permits a represented command, never opening or general
+    # inspection of another identity. Caller and subject remain distinct.
     setup, binding, native, sid, _ = delegated(connected_local, actions)
     known = tool_call(setup, "harness_get", session_id=sid)
     absent = tool_call(setup, "harness_get", session_id="missing-private-session")
@@ -37,11 +37,22 @@ def test_ordinary_endpoint_grant_cannot_represent_another_core_identity(connecte
     body = dict(payload=dict(text="Foreign delegated control"), idempotency_key="foreign-command")
     sent = tool_call(setup, "harness_send", session_id=sid, **body)
     rest = setup[2].post(f"/api/v1/harness/sessions/{sid}/send", headers=setup[3]["caller"], json=body)
-    assert not sent["ok"] and rest.status_code in (403, 404)
+    if 'send' in actions:
+        assert sent['ok'] and rest.status_code == 200, (sent, rest.text)
+        assert rest.json()['data']['operation_id'] == sent['data']['operation_id']
+        wait_receipt(setup, sent['data'])
+        with setup[0].connection_factory.unit_of_work(write=False) as uow:
+            identity = uow.connection.execute('SELECT actor_agent_id,subject_agent_id FROM execution_operations WHERE operation_id=?',
+                (sent['data']['operation_id'],)).fetchone()
+            assert tuple(identity) == ('caller', 'subject')
+        assert len(native.native.sent) == 1
+    else:
+        assert not sent['ok'] and rest.status_code in (403, 404)
+        assert not native.native.sent
     opened = tool_call(setup, "harness_open", agent_id="subject", kind="codex", project_root=str(setup[-1]),
         endpoint_id=binding["endpoint_id"], idempotency_key="foreign-opening")
     assert not opened["ok"] and opened["error"]["code"] == "PERMISSION_DENIED"
-    assert native.opens == 1 and not native.native.sent
+    assert native.opens == 1
 
 
 

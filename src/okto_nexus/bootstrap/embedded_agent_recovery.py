@@ -137,6 +137,10 @@ class EmbeddedAgentRecovery:
         self.publication_pending.discard(agent_id)
         self.attempts.pop(agent_id, None)
         self.retry_at.pop(agent_id, None)
+        # The readiness transaction has committed. Retry proven unsent work
+        # without waiting for the next periodic scan or a user message.
+        if owner.deps.runtime_dispatcher is not None:
+            owner.deps.runtime_dispatcher.wake()
         await asyncio.to_thread(owner._recovery_event, 'RECOVERY_AGENT_READY',
             'Agent history reconciled. Previous work was not replayed.', agent_id=agent_id)
 

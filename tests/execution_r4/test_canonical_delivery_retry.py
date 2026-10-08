@@ -194,6 +194,32 @@ def held_retry(connected, monkeypatch):
     return setup, row, native, calls
 
 
+def test_proven_unsent_retry_waits_for_its_agent_recovery(connected_local, monkeypatch):
+    from okto_nexus.domain.base import iso_plus
+    from test_vertical_inventory import _Native
+    original = _Native.send
+    setup, pending, native, calls = held_retry(connected_local, monkeypatch)
+    deps, app, *_ = setup
+    owner = app.state.embedded_dispatch_owner
+    owner.agents._state('subject', 'RECOVERING')
+    monkeypatch.setattr(deps.clock, 'now_iso', lambda: iso_plus(pending['next_attempt_at'], .1))
+    for _ in range(5):
+        deps.runtime_dispatcher.scan_once()
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        current = dict(uow.connection.execute('SELECT * FROM delivery_outbox').fetchone())
+    assert current['status'] == 'RETRY_WAIT', current
+    for field in ('attempt_count', 'next_attempt_at', 'attempt_id', 'operation_id', 'envelope'):
+        assert current[field] == pending[field]
+    assert len(calls) == 1 and native.native.sent == []
+    monkeypatch.setattr(_Native, 'send', original)
+    owner.agents._state('subject', 'READY')
+    deps.runtime_dispatcher.wake()
+    final = wait_delivery(setup, lambda row: row['status'] == 'ACCEPTED')
+    assert final['attempt_count'] == 2 and len(native.native.sent) == 1
+    for field in ('operation_id', 'message_id', 'delivery_id', 'request_hash', 'envelope'):
+        assert final[field] == pending[field]
+
+
 def test_retry_deadline_preserves_lane_order_for_messages_and_commands(connected_local, monkeypatch):
     from test_embedded_dispatch import admit
     setup, first, native, calls = held_retry(connected_local, monkeypatch)

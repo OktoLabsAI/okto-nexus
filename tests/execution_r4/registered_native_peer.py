@@ -10,6 +10,7 @@ ADAPTER = 'fixture.additional.v1'
 class RegisteredPeer:
     instances = []
     binding_contract = 1
+    context_contract = None
 
     def __init__(self, *, command, cwd, env):
         self.closed = False
@@ -26,7 +27,12 @@ class RegisteredPeer:
         return self.session
 
     def verify_protocol(self):
-        return dict(managed_contract=1, transport_binding_contract=self.binding_contract)
+        return dict(managed_contract=1, transport_binding_contract=self.binding_contract,
+                    context_observation_contract=self.context_contract)
+
+    def observe_context(self, session, envelope):
+        self._dispatch_guards.check()
+        self.contexts.append(envelope)
 
     def send(self, session, command):
         self._dispatch_guards.check()

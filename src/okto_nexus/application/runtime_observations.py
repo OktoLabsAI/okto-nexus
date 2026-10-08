@@ -9,6 +9,7 @@ class RuntimeObservationService:
     def __init__(self, *, owner, planner, messages, supervisor):
         self.owner, self.planner, self.messages, self.supervisor = owner, planner, messages, supervisor
         self.owner_identity = None
+        self.canonical_observer = None
 
     def validate(self, uow, operation):
         source = self.owner.repo.get(uow, operation["source_operation_id"])
@@ -28,11 +29,19 @@ class RuntimeObservationService:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Observation binding changed.", {})
 
     def execute(self, operation):
+        if operation.get('canonical_server_id'):
+            if self.canonical_observer is None:
+                from ..domain.runtime_commands import RuntimeCommandNotSent
+                raise RuntimeCommandNotSent('Canonical observation owner unavailable')
+            return self.canonical_observer.execute(operation, lambda: self._guard(operation))
+        self._guard(operation)
+        session = self.supervisor.get(operation["runtime_session_id"])
+        validate_effective_capability(session.compatibility_report, "context_without_execution")
+        self.supervisor.observe_context(operation["runtime_session_id"], json.loads(operation["envelope"]))
+
+    def _guard(self, operation):
         with self.owner.cf.unit_of_work(write=False) as uow:
             self.validate(uow, operation)
             if not self.owner.repo.owns(uow, owner_id=self.owner.owner_id, epoch=self.owner.epoch,
                     now=self.owner.clock.now_iso()):
                 raise OktoNexusError(ErrorCode.CONFLICT, "Observation owner changed.", {})
-        session = self.supervisor.get(operation["runtime_session_id"])
-        validate_effective_capability(session.compatibility_report, "context_without_execution")
-        self.supervisor.observe_context(operation["runtime_session_id"], json.loads(operation["envelope"]))

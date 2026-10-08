@@ -68,12 +68,22 @@ class SqliteRuntimeOutboxRepo:
         return tuple(row[0] for row in rows)
 
     def pending(self, uow, *, limit=32, blocked_agents=(), now=None):
+        # Recovery is temporary admission unavailability, not a failed attempt.
+        # Filter before ranking/limit so one recovering subject cannot consume
+        # another agent's dispatch capacity. Readiness and claim share the UoW.
         query = (
             "SELECT pending.*,ROW_NUMBER() OVER(PARTITION BY pending.recipient_agent_id "
             "ORDER BY pending.created_at,pending.operation_id) AS agent_rank "
             "FROM (SELECT *,COALESCE(json_extract(next_binding,'$.endpoint_id'),endpoint_id) AS dispatch_endpoint_id "
             "FROM delivery_outbox) pending WHERE (pending.status='PENDING' OR "
             "(pending.status='RETRY_WAIT' AND pending.next_attempt_at<=?)) AND pending.reconciliation_id IS NULL "
+            "AND NOT EXISTS (SELECT 1 FROM execution_bindings b "
+            "JOIN execution_executors e USING(server_id,executor_id) "
+            "JOIN execution_agent_recovery r USING(server_id,executor_id) "
+            "JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id "
+            "WHERE b.endpoint_id=pending.dispatch_endpoint_id AND r.agent_id=pending.recipient_agent_id "
+            "AND ep.enabled=1 AND e.revoked_at IS NULL "
+            "AND (r.state<>'READY' OR r.generation<>e.generation)) "
             "AND NOT EXISTS (SELECT 1 FROM execution_domain_deliveries m WHERE m.domain_operation_id=pending.operation_id) AND NOT EXISTS "
             "(SELECT 1 FROM delivery_outbox busy WHERE busy.endpoint_id=pending.dispatch_endpoint_id AND busy.reconciliation_id IS NULL AND busy.external_completed_at IS NULL AND "
             "(busy.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN') OR "

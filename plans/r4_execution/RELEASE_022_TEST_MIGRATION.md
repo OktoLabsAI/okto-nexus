@@ -873,3 +873,38 @@ predecessor mappings are closed. Eight context-only observation criteria and ful
 CI still block promotion. Nexus wheel: db4614518d07383b068511740b37da1d515c96bade76bac282c1c5c99661daf4;
 Core: e843c76bb40fc15cf58eb689544157549cb32a24024e0656038fb09deb59a3df;
 Connector: 81490a45e8a17d4b90d362dfab9163c8f096bf8ae0f24c66fe1dc9e384285ab5.
+
+### Final sixteen-criterion scope (2026-10-08)
+
+All sixteen predecessor criteria now have explicit executable positive mappings.
+The last eight preserve context-only observation through the owning embedded
+Core and a qualified registered adapter, with a separate host authority guard.
+They cover one observation without another execution/claim, current permissions,
+unknown outcomes without replay, independent read grants, missing qualification,
+atomic message admission, retained physical workers and close/reopen isolation.
+This does not add an execution action or unsupported built-in/remote capability.
+
+The context campaigns passed all 13 observation cases on Windows and Linux.
+Their broader 58-case runs passed 57 and exposed one actual relay-owner crash
+regression on both systems: a proven unsent child was refused while its agent
+was still recovering. The pending query now waits for that subject's durable
+readiness before claiming another attempt, without occupying sibling capacity.
+Committed readiness wakes dispatch automatically. Original causal budgets and
+no-send evidence remain intact; accepted/uncertain effects still never replay.
+
+Final installed functional validation passed 38 cases on each platform, including
+all four actual relay crash cuts, bounded retries, authority changes and the 13
+observation cases. Campaigns: `build/release-criteria-final-installed` and
+`build/release-criteria-final-linux-installed`; both record unchanged inputs.
+The only failure was an obsolete renamed-test reference in the retirement index.
+After correcting that reference and its explanation, the installed index check
+passed separately on both platforms (`build/release-criteria-inventory-installed`
+and `build/release-criteria-inventory-linux-installed`), with unchanged inputs.
+These split results are not described as a single green 39-case campaign.
+
+Nexus wheel SHA256: aaf1e47cb041991d96af58638390973867b102faf8229e2291488d08c27bb3e6.
+Core 0.0.9: 297d466664e7bfafa9d3b4c43c0cdfd4800ab52ca7a17b186043355d5418f9c9.
+Connector 0.0.7: 53f474ffdbf635ce65a045a07b490614eab01b6dc86d530128d6aa71625206d6.
+Core full local validation passed 1,415 tests and 15 subtests (48 skips);
+Connector passed 932 tests (one skip). Full final CI and reviewed main promotion
+remain the publication gates. No live Nexus restart was used for these campaigns.

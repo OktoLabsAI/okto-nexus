@@ -1382,9 +1382,9 @@
     },
     {
       "test": "tests/test_runtime_grants.py::test_p04_grant_allows_same_scoped_action_in_rest_and_mcp",
-      "reason": "M04_OPERATOR_RUNTIME explicitly limits represented canonical execution to authenticated operators. Ordinary endpoint grants retain policy ceilings but cannot represent a foreign Core identity. Positive subject REST/MCP grants, finite budgets and operator provenance remain separately executable.",
+      "reason": "An explicit endpoint command grant authorizes the same represented command through REST and MCP while retaining distinct caller and subject identities. It does not grant foreign session opening, general inspection, another endpoint or another command. Idempotent replay, finite budgets and private history remain covered by the referenced canonical tests.",
       "replacements": [
-        "tests/execution_r4/test_canonical_delegated_grants.py::test_ordinary_endpoint_grant_cannot_represent_another_core_identity",
+        "tests/execution_r4/test_canonical_delegated_grants.py::test_endpoint_grant_allows_only_its_explicit_command_without_operator_identity",
         "tests/execution_r4/test_canonical_grant_regressions.py::test_concurrent_turns_charge_the_last_grant_slot_once",
         "tests/execution_r4/test_canonical_grant_regressions.py::test_spent_grant_can_recover_its_recorded_operation_without_another_effect",
         "tests/execution_r4/test_operator_runtime.py::test_operator_complete_cycle_preserves_actor_and_subject"
@@ -1393,9 +1393,9 @@
     },
     {
       "test": "tests/test_runtime_grants.py::test_p04_grant_open_requires_explicit_scoped_binding",
-      "reason": "Foreign ordinary-agent opening was replaced by operator-only represented execution. Canonical explicit and unambiguous implicit binding selection are now both supported, and ambiguous selection is refused before native effects.",
+      "reason": "An explicit endpoint command grant authorizes the same represented command through REST and MCP while retaining distinct caller and subject identities. It does not grant foreign session opening, general inspection, another endpoint or another command. Idempotent replay, finite budgets and private history remain covered by the referenced canonical tests.",
       "replacements": [
-        "tests/execution_r4/test_canonical_delegated_grants.py::test_ordinary_endpoint_grant_cannot_represent_another_core_identity",
+        "tests/execution_r4/test_canonical_delegated_grants.py::test_endpoint_grant_allows_only_its_explicit_command_without_operator_identity",
         "tests/execution_r4/test_harness_canonical.py::test_existing_open_uses_approved_realization_and_core",
         "tests/execution_r4/test_harness_canonical.py::test_implicit_open_refuses_competing_targets_without_native_effect"
       ],
@@ -1420,9 +1420,9 @@
     },
     {
       "test": "tests/test_runtime_grants.py::test_p04_authenticated_http_reuses_grant_policy_and_durable_resource",
-      "reason": "Ordinary endpoint grants no longer grant foreign canonical session identity. Current subject MCP history and control use the same durable admission as REST; foreign existing and missing sessions remain opaque.",
+      "reason": "An explicit endpoint command grant authorizes the same represented command through REST and MCP while retaining distinct caller and subject identities. It does not grant foreign session opening, general inspection, another endpoint or another command. Idempotent replay, finite budgets and private history remain covered by the referenced canonical tests.",
       "replacements": [
-        "tests/execution_r4/test_canonical_delegated_grants.py::test_ordinary_endpoint_grant_cannot_represent_another_core_identity",
+        "tests/execution_r4/test_canonical_delegated_grants.py::test_endpoint_grant_allows_only_its_explicit_command_without_operator_identity",
         "tests/execution_r4/test_harness_canonical.py::test_mcp_uses_same_admission_and_history",
         "tests/execution_r4/test_canonical_private_history.py::test_private_session_replay_results_and_listing_hide_foreign_evidence"
       ],
@@ -1430,9 +1430,9 @@
     },
     {
       "test": "tests/test_runtime_grants.py::test_p04_wrong_endpoint_is_opaque_and_internal_control_is_authorized",
-      "reason": "Current canonical foreign resources are uniformly opaque even with an endpoint policy grant. The retained unauthenticated internal-operator test continues independently of removed native setup.",
+      "reason": "An explicit endpoint command grant authorizes the same represented command through REST and MCP while retaining distinct caller and subject identities. It does not grant foreign session opening, general inspection, another endpoint or another command. Idempotent replay, finite budgets and private history remain covered by the referenced canonical tests.",
       "replacements": [
-        "tests/execution_r4/test_canonical_delegated_grants.py::test_ordinary_endpoint_grant_cannot_represent_another_core_identity",
+        "tests/execution_r4/test_canonical_delegated_grants.py::test_endpoint_grant_allows_only_its_explicit_command_without_operator_identity",
         "tests/test_runtime_grants.py::test_p04_internal_missing_authentication_cannot_impersonate_operator"
       ],
       "source_sha256": "7a69ace361f335204a4a24681b2072745d68b9f9e1c6b9d7d78f2cccd59fe78f"
@@ -3819,6 +3819,70 @@
         "tests/execution_r4/test_canonical_registered_adapters.py::test_registered_fallback_requires_versioned_binding_and_preserves_context"
       ],
       "source_sha256": "f5fc17385fb877bdfdd4d42aba098304ddf41c67d39c8b3db2f0470216abff17"
+    },
+    {
+      "test": "tests/test_runtime_mirror_observation.py::test_context_observer_receives_delivery_without_another_executor",
+      "reason": "Qualified canonical context observation receives the same message once without inference, second claim, execution authority or result; public read-only inspection and send denial remain covered.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_context_observation.py::test_context_observer_receives_delivery_without_another_executor"
+      ],
+      "source_sha256": "75d9d461da68f960dfd5e8fc4696f394b5e96d9ba0eb0f4a5192d1692959ab3e"
+    },
+    {
+      "test": "tests/test_runtime_mirror_observation.py::test_observation_revalidates_authority_before_transport",
+      "reason": "The canonical observer rechecks endpoint, profile, credential, feature and observed capability at its final transport guard before any write.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_context_observation.py::test_observation_revalidates_authority_before_transport"
+      ],
+      "source_sha256": "80e539b99bffaed4d14c5a6b483cc136d8edee3db3c98286d6c84033af600f0a"
+    },
+    {
+      "test": "tests/test_runtime_mirror_observation.py::test_observation_failure_after_acceptance_is_unknown_and_never_replayed",
+      "reason": "An accepted context with lost acknowledgement remains unknown, rejects stale-owner settlement and never replays or creates a result.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_context_observation.py::test_observation_failure_after_acceptance_is_unknown_and_never_replayed"
+      ],
+      "source_sha256": "786e70b1ba95b948dec2da7d24541537814e96c9e251690d50164450b33397dd"
+    },
+    {
+      "test": "tests/test_runtime_mirror_observation.py::test_observation_metadata_requires_its_own_endpoint_read_authority",
+      "reason": "Public context inspection requires the observer endpoint read grant independently of the executor grant, and rechecks its revocation.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_context_observation.py::test_observation_metadata_requires_its_own_endpoint_read_authority"
+      ],
+      "source_sha256": "cd54c49e254f5f3b05c0c80958ffb91afc52c55aa1f512aa089aeee5e307b004"
+    },
+    {
+      "test": "tests/test_runtime_mirror_observation.py::test_unverified_observer_does_not_receive_context_or_execution",
+      "reason": "A registered adapter missing observed qualification or the context method receives no context or inference while the actual executor still receives the message.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_context_observation.py::test_unverified_observer_does_not_receive_context_or_execution"
+      ],
+      "source_sha256": "548cd5faf9ee054fc374ce318db97c8fda3a1c35cee7fab5c8dca4abe88a028e"
+    },
+    {
+      "test": "tests/test_runtime_mirror_observation.py::test_observation_insert_failure_rolls_back_the_canonical_delivery",
+      "reason": "Observation insertion failure rolls back message, claim, canonical admission and context together; the next valid message still reaches the observer.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_context_observation.py::test_observation_insert_failure_rolls_back_the_canonical_delivery"
+      ],
+      "source_sha256": "95bba07f420592bb5e74be0fddbb6ea6cc7518963fdaf4cab2da15fc4d211c38"
+    },
+    {
+      "test": "tests/test_runtime_mirror_observation.py::test_timed_out_observation_keeps_its_single_worker_until_return",
+      "reason": "An expired context observation retains its one physical worker, queues subsequent context without replay, and does not block the independent executor.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_context_observation.py::test_timed_out_observation_keeps_its_single_worker_until_return"
+      ],
+      "source_sha256": "c42698ae1444976fd6de7d1e67ab8bacf4ef22d88be83bd3d27466f5cb6523cc"
+    },
+    {
+      "test": "tests/test_runtime_mirror_observation.py::test_close_cancels_pending_context_without_replaying_unknown_into_new_session",
+      "reason": "Confirmed close cancels pending context, preserves unknown history and permits only fresh context in the newly opened canonical session.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_context_observation.py::test_close_cancels_pending_context_without_replaying_unknown_into_new_session"
+      ],
+      "source_sha256": "5be8aaf5393b4093c2d8e92658c5e2396205c03bf1af3482c4e1a3afb9055392"
     }
   ]
 }

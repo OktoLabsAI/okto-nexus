@@ -38,7 +38,7 @@ from test_vertical_inventory import _NativeFactory
     ('codex_app_server', 'turn.interrupt', 'none', None, False),
     ('pi_rpc', 'turn.steer', 'current_run', None, True),
     ('pi_rpc', 'turn.interrupt', 'native_turn_id', 't', False),
-    ('claude_stream', 'turn.steer', 'current_run', None, False),
+    ('claude_stream', 'turn.steer', 'current_run', None, True),
     ('claude_stream', 'turn.interrupt', 'current_run', None, True),
     ('claude_attach', 'turn.interrupt', 'current_run', None, False),
     ('codex_app_server', 'turn.submit', 'current_run', None, False),

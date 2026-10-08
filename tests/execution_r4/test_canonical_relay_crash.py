@@ -65,6 +65,18 @@ def test_actual_owner_crash_preserves_relay_lineage(tmp_path, cut, offset):
             processes.append(restarted)
             with httpx.Client(base_url=f'http://127.0.0.1:{port}', timeout=5,
                     trust_env=False, headers=record['headers']['operator']) as client:
+                # Startup reconciliation can finish before Uvicorn binds its
+                # listener. Durable recovery is not HTTP readiness.
+                ready_until = time.monotonic() + 40
+                while True:
+                    assert restarted.poll() is None, restart_log.read_text(encoding='utf-8')
+                    try:
+                        if client.get('/healthz').status_code == 200:
+                            break
+                    except httpx.ConnectError:
+                        pass
+                    assert time.monotonic() < ready_until, restart_log.read_text(encoding='utf-8')
+                    time.sleep(.02)
                 until = time.monotonic() + 60
                 while True:
                     assert restarted.poll() is None, restart_log.read_text(encoding='utf-8')

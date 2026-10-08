@@ -28,7 +28,17 @@ class RuntimeDeliveryPlanner:
             return candidates
         for endpoint in self.endpoints.list(uow, agent_id=agent_id, workspace_id=workspace_id):
             if endpoint["protocol"] == "nxl-r4":
-                # The canonical wire has no context-only observation action.
+                if (method_enabled(uow, endpoint['agent_id'], endpoint['adapter_id'])
+                        and endpoint['enabled'] and endpoint['activation_state'] == 'approved'
+                        and endpoint['health'] != 'quarantined' and endpoint['consumption'] == 'mirror_only'
+                        and endpoint['response_policy'] == 'none'):
+                    from .execution_context_observers import live_observers
+                    profile = self.endpoints.profile(uow, endpoint['profile_id']) if endpoint['profile_id'] else None
+                    live = live_observers(uow, endpoint, profile)
+                    if len(live) > 1:
+                        raise OktoNexusError(ErrorCode.CONFLICT, 'AMBIGUOUS_BINDING', {})
+                    if live:
+                        candidates.append((endpoint, profile, live[0]))
                 continue
             if not method_enabled(uow, endpoint["agent_id"], endpoint["adapter_id"]):
                 continue

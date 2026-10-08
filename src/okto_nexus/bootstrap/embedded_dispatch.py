@@ -144,6 +144,9 @@ class EmbeddedDispatchOwner:
                 (c.server_id,c.executor_id,c.connection_id,c.connection_generation)).rowcount == 1
 
     async def start(self):
+        from .embedded_context import EmbeddedContextObserver
+        self.context_observer = EmbeddedContextObserver(self)
+        self.inventory.dispatcher.context_dispatcher.service.canonical_observer = self.context_observer
         await self._start_attempt()
         if self.pump is None and not self._stopping.is_set():
             self._recovery_task = asyncio.create_task(self._recover_automatically(),name='automatic-runtime-recovery')
@@ -434,6 +437,8 @@ class EmbeddedDispatchOwner:
                     lambda: runtime.decide_native_approval(operation=native_operation, context=context))
             else:
                 raise CoreError("CAPABILITY_UNSUPPORTED", "embedded_dispatch")
+            if action == 'runtime.open' and receipt.stage == 'SUBMITTED':
+                await self.context_observer.publish_support(runtime, key)
             await self._publish(binding, receipt)
             if action == 'runtime.open' and receipt.stage == 'FAILED':
                 report = await runtime.shutdown(ShutdownPolicy(0, 0))
