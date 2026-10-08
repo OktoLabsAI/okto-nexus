@@ -261,6 +261,30 @@ class EndpointService:
                 raise OktoNexusError(ErrorCode.CONFLICT, "Endpoint revision changed.", {})
             if endpoint["protocol"] != "nxl-r4":
                 raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Legacy connection configuration was removed.", {})
+            if set(changes) == {'priority'}:
+                if type(changes['priority']) is not int:
+                    raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Priority must be an integer.', {})
+                # Selection order is not execution authority. First account for
+                # any earlier identity/policy changes, then atomically rebase
+                # the digest for this routing-only edit. No reader can observe
+                # the temporary counter advance inside this writer transaction.
+                from ..adapters.outbound.sqlite.execution_agent_revisions import current_agent_revisions
+                server_id, before, _ = current_agent_revisions(self.cf,
+                    agent_id=endpoint['agent_id'], uow=uow, require_active=False)
+                now = self.clock.now_iso()
+                uow.connection.execute('UPDATE agent_endpoints SET priority=?,revision=revision+1,updated_at=? '
+                    'WHERE endpoint_id=? AND revision=?', (changes['priority'], now, endpoint_id, expected_revision))
+                current_agent_revisions(self.cf, agent_id=endpoint['agent_id'], uow=uow, require_active=False)
+                uow.connection.execute('UPDATE execution_agent_revisions SET authorization_revision=?,configuration_revision=? '
+                    'WHERE server_id=? AND agent_id=?',
+                    (before.authorization, before.configuration, server_id, endpoint['agent_id']))
+                # Preserve only previously matching boot approval; stale or
+                # disabled records must not gain authorization through routing.
+                uow.connection.execute('UPDATE runtime_boot_bindings SET endpoint_revision=? '
+                    'WHERE endpoint_id=? AND endpoint_revision=?', (expected_revision+1, endpoint_id, expected_revision))
+                self.repo.audit_configuration(uow, context=context, kind='endpoint', resource_id=endpoint_id,
+                    old_revision=expected_revision, new_revision=expected_revision+1, fields=changes, now=now)
+                return {**endpoint, 'priority': changes['priority'], 'revision': expected_revision+1}
             # Retiring a canonical connection must not look it up in the legacy
             # adapter registry. This does not claim its native process exited.
             if changes == {"enabled": False} and type(changes["enabled"]) is bool:

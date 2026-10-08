@@ -3434,6 +3434,15 @@
         "tests/execution_r4/test_retired_attach_history.py::test_operator_can_reopen_retired_external_claim_without_resuming_attach"
       ],
       "source_sha256": "c41a3aa1e87f225440fc39afbf6945e82421bb183bdc454939c7d45bedb64e3a"
+    },
+    {
+      "test": "tests/test_runtime_binding_acceptance.py::test_priority_change_does_not_retarget_steer_or_interrupt",
+      "reason": "Two approved canonical bindings open distinct native sessions. A public priority edit preserves REST/MCP steer and interrupt on the original session and native turn, while a fresh public message selects the other now-preferred binding. Its grant is preserved and only that native peer receives the new message. Separate cases prove earlier permission, metadata, credential and activity changes still advance their proper authority dimensions.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_priority.py::test_priority_change_preserves_original_controls_and_selects_new_delivery",
+        "tests/execution_r4/test_canonical_priority.py::test_priority_edit_preserves_preexisting_authority_changes"
+      ],
+      "source_sha256": "1ccfd85a9630ce8275664116d276f7dc32d216f99403e413be1ef4ff4b122be0"
     }
   ]
 }

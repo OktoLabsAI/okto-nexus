@@ -670,3 +670,16 @@ work fail atomically, while ordinary messages remain independently consumable.
 The fixture seeds historical rows and never re-enables or instantiates attach.
 Combined installed validation passed all 16 cases with unchanged inputs
 (build/release-retired-history-installed, the same 5ba682d1 wheel above).
+
+The priority-continuation port exposed another behavior regression: editing the
+selection priority of one endpoint invalidated agent-wide authorization and
+configuration revisions, preventing controls on a different existing binding.
+A priority-only operator edit now preserves execution grants and the current
+agent revisions, after first accounting for any previous identity/policy change
+in the same transaction. UI revision/CAS and configuration audit still advance;
+only already-matching boot references follow the routing edit. Six source cases
+pass: original REST/MCP controls keep their peer, fresh delivery selects the
+newly preferred ready peer, and earlier permission, metadata, credential and
+activity changes are not discarded. Installed validation passed all 65 cases
+with unchanged inputs (build/release-priority-final-installed, wheel SHA256
+c1d08f4f0a77bb18793b6783a701ee04473de7577a6ff57a0adfeee48d60dcdc).
