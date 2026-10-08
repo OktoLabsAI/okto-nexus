@@ -153,10 +153,18 @@ def test_post_write_exception_cannot_use_approved_alternative(connected_local, m
 
 def test_work_grant_cannot_authorize_fallback_to_another_binding(connected_local, monkeypatch):
     setup, first, second, native, _, calls = pair(connected_local, monkeypatch)
+    # Preparing the handoff must not dispatch its separate creation notice
+    # through the alternative before the governed work has been claimed.
+    # prepare() gives the primary a work-only response policy as well.
+    with setup[0].connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE agent_endpoints SET response_policy='none' WHERE endpoint_id=?",
+                               (second['endpoint_id'],))
     handoff, grant, claim, _ = prepare(setup, first, monkeypatch)
+    enable(setup, second)
     created = claim()
     assert created['ok'], created
     row = wait_delivery(setup, lambda row: row['status'] == 'FAILED_FINAL')
+    assert json.loads(row['envelope'])['handoff_id'] == handoff
     for _ in range(3):
         setup[0].runtime_dispatcher.scan_once()
     assert row['next_binding'] is None and row['endpoint_id'] == first['endpoint_id']

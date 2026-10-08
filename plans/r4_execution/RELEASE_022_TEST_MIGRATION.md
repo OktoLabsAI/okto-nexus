@@ -970,3 +970,15 @@ on Windows (68.05s) and Linux (62.04s), with unchanged tracked inputs:
 `build/release-recovery-backoff-linux-installed`. Healthy and newly registered
 local/remote agents, resource release, no replay and subsequent server restarts
 remain asserted. This is a test-watchdog correction, not a recovery bypass.
+
+The work-grant fallback fixture also dispatched the independent handoff creation
+notice through its alternative endpoint before claiming the work. Its first-row
+assertion could therefore observe the notice's legitimate authorization refusal
+after the claim, rather than the governed work's no-write failure. A local
+reproduction confirmed both distinct rows. Preparation now suppresses only that
+fixture notice, restores the approved alternative before claiming, and asserts
+the exact handoff identity. All native-attempt, no-fallback and single-budget-use
+assertions remain. The corrected case passed 25 consecutive local repetitions;
+all 15 fallback/handoff cases passed installed on Windows and Linux with unchanged
+inputs (`build/release-work-fallback-installed` and
+`build/release-work-fallback-linux-installed`). Production artifacts are unchanged.
