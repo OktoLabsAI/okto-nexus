@@ -432,3 +432,17 @@ isolation, configuration authority, and rejection of removed attach creation.
 Two legacy notification functions map to current equivalents; two positive
 attach-creation functions are retired according to the explicit removal decision.
 This does not claim default Pi profile isolation or a passing full release gate.
+
+Admission-race review passed 16 installed-wheel cases with unchanged inputs
+(build/release-admission-installed). The current writer gate serializes a pull
+before SQLite BEGIN IMMEDIATE at both sides of push reservation; three concurrent
+approval decisions create one native turn; and two agents competing through three
+bindings consume one work grant and create one executor. The winner's separate
+runtime-open grant remains independently accounted. Three legacy functions now
+reference these current behavioral replacements.
+
+Core 0.0.6 and Connector 0.0.4 promotion matrices passed. Core PR 30 merged to main
+at c2f66bbe042216749b6df231ba5b984727513ccc with remote tag v0.0.6; Connector PR 44
+merged at 8a7b6a08b5849e69dfcd67fb85b6ea4620c3801f with remote tag v0.0.4. Nexus
+already pins both corresponding artifacts. Nexus main/tag promotion remains
+pending its own complete regression gate.

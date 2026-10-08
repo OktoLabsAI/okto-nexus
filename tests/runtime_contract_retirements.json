@@ -3036,6 +3036,30 @@
         "tests/execution_r4/test_attach_removed.py::test_removed_attach_cannot_open_through_legacy_public_routes"
       ],
       "source_sha256": "8c3c2f75a6d9f0e5dc0196825c78c742eff959daad9d55bfc8c405920eff8c4b"
+    },
+    {
+      "test": "tests/test_runtime_pull_push_race.py::test_pull_contends_with_uncommitted_push_reservation",
+      "reason": "The canonical replacement races an actual wired inbox pull with message admission before and after reservation. Current writes first contend on WriteGate, then execute BEGIN IMMEDIATE; the test observes both boundaries and proves no pull exposure, one claim, one outbox operation and one native effect.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_admission_races.py::test_pull_waits_for_uncommitted_canonical_push_reservation"
+      ],
+      "source_sha256": "d9ee6dca71a0a22b23265c250994f68c5b1130f598365c11a7ab745f7ae87eb9"
+    },
+    {
+      "test": "tests/test_runtime_approval_acceptance.py::test_pending_message_and_concurrent_approval_have_one_native_execution",
+      "reason": "The canonical replacement verifies zero message/outbox/native effects before approval, three concurrent decisions with exactly one winner, one work submission and durable published result, and rejection of repeated approval. Native effects use the current Core factory boundary rather than the removed harness supervisor.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_admission_races.py::test_concurrent_approval_decisions_execute_message_once"
+      ],
+      "source_sha256": "c9344a74b3354f07c132c3c234fd48cfb52d0914107d33e3dc6e86dfaa1ef1f8"
+    },
+    {
+      "test": "tests/test_runtime_handoff_dispatch.py::test_competitive_pool_with_multiple_agents_and_endpoints_has_one_executor",
+      "reason": "A role-targeted competitive offer is claimed concurrently by two registered agents across three approved bindings using their own credentials. The canonical replacement verifies no executable fanout before claim, one winner, one work grant charge, one native submission and one durable handoff binding. Runtime-open consent is charged separately from work consent.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_admission_races.py::test_competitive_handoff_pool_has_one_executor_across_agents_and_bindings"
+      ],
+      "source_sha256": "fb29dd0b703ff58a11c4dea7672f1bc5a1b0d94e1ab4f352db84b680465eec86"
     }
   ]
 }
