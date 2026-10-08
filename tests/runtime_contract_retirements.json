@@ -3200,6 +3200,41 @@
         "tests/execution_r4/test_canonical_causality_regressions.py::test_expired_root_rejects_continuation_but_allows_explicit_new_entry"
       ],
       "source_sha256": "2311182541190176b3130cc65ac52de48c03635d8d57cce89665d5ec123efc20"
+    },
+    {
+      "test": "tests/test_runtime_worker_capacity.py::test_observed_native_result_does_not_free_a_still_blocked_agent_worker",
+      "reason": "Current Core dispatch retains productive calls across receipt publication; the replacement exposed and verifies the capacity-release fix while another agent continues independently.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_worker_capacity.py::test_retained_worker_does_not_donate_agent_capacity_or_block_healthy_agent"
+      ],
+      "source_sha256": "0272bca1fce574580ae01f329930c2b2149dc86807a85defb407ad6e5d2864dd"
+    },
+    {
+      "test": "tests/test_runtime_scheduler_fairness.py::test_healthy_lane_dispatches_while_first_native_call_is_blocked",
+      "reason": "Current approved bindings exercise actual asynchronous dispatch with a retained native worker before write and after receipt, proving healthy-agent progress before release.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_worker_capacity.py::test_retained_worker_does_not_donate_agent_capacity_or_block_healthy_agent"
+      ],
+      "source_sha256": "2d99e5d0675ab9e2f7602eccbb45fdf46912af26c014e0f6a76143737e342f39"
+    },
+    {
+      "test": "tests/test_runtime_scheduler_fairness.py::test_one_agent_cannot_reserve_all_normal_workers_with_extra_endpoints",
+      "reason": "Two approved bindings of one agent share productive capacity while a separate agent dispatches. Exact item and byte budgets include still-live calls after durable receipts.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_worker_capacity.py::test_retained_worker_does_not_donate_agent_capacity_or_block_healthy_agent",
+        "tests/execution_r4/test_dispatch_capacity.py::test_receipt_does_not_release_retained_call_global_capacity"
+      ],
+      "source_sha256": "934f66d6081b97e9479007f98a492a44719756577eced54e8ea98851dd2f29e2"
+    },
+    {
+      "test": "tests/test_runtime_scheduler_fairness.py::test_pending_limit_selects_distinct_lanes_before_truncation",
+      "reason": "Canonical reservation filters eligibility before selecting the next row. A backlog of forty same-agent rows cannot hide a healthy agent, and blocked or oversized controls cannot hide productive work or fitting controls.",
+      "replacements": [
+        "tests/execution_r4/test_dispatch_capacity.py::test_retained_call_does_not_hide_healthy_agent_behind_repeated_pending_rows",
+        "tests/execution_r4/test_dispatch_capacity.py::test_blocked_control_backlog_does_not_hide_eligible_productive_work",
+        "tests/execution_r4/test_dispatch_capacity.py::test_fitting_control_after_oversized_rows_uses_exact_utf8_cost"
+      ],
+      "source_sha256": "a78fa90f48a7a92ac4b085e4e3fb88a531d5ea14b4b1a82c0427d2746dc25f21"
     }
   ]
 }

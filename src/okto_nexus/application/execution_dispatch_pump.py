@@ -24,13 +24,15 @@ class ExecutionDispatchPump:
     """
 
     def __init__(self, *, factory, channel, access, fresh_publications,
-                 send, send_lock, verify_link, close_link, poll_interval=0.1, resolve_native_input=None):
+                 send, send_lock, verify_link, close_link, poll_interval=0.1, resolve_native_input=None,
+                 retained_operations=None):
         self.factory, self.channel, self.access = factory, channel, access
         self.fresh_publications = fresh_publications
         self.send, self.send_lock = send, send_lock
         self.verify_link, self.close_link = verify_link, close_link
         self.poll_interval = poll_interval
         self.resolve_native_input = resolve_native_input
+        self.retained_operations = retained_operations or (lambda: ())
         self._stopping = asyncio.Event()
         self.task = None
         self.error = None
@@ -64,7 +66,8 @@ class ExecutionDispatchPump:
                 await self._database(self.verify_link)
                 reservation = await self._database(reserve_execution_dispatch,
                     factory=self.factory, server_id=self.channel.server_id,
-                    executor_id=self.channel.executor_id, remote_ready=True, channel=self.channel)
+                    executor_id=self.channel.executor_id, remote_ready=True, channel=self.channel,
+                    retained_operations=tuple(self.retained_operations()))
                 if reservation is None:
                     try:
                         await asyncio.wait_for(self._stopping.wait(), timeout=self.poll_interval)

@@ -80,6 +80,7 @@ def reserve_execution_dispatch(
     regular_bytes: int = 256 * 1024, control_items: int = 2,
     control_bytes: int = 128 * 1024,
     channel: ExecutionChannel | None = None,
+    retained_operations: tuple[str, ...] = (),
 ) -> DispatchReservation | None:
     """Reserve one exact row/byte cost before a dispatcher starts a task.
 
@@ -89,6 +90,7 @@ def reserve_execution_dispatch(
     """
     if not remote_ready:
         return None
+    retained = json.dumps(retained_operations)
     if (any(type(value) is not int or value <= 0 for value in (
             regular_items, regular_bytes, control_items, control_bytes)) or
             not server_id or not executor_id):
@@ -123,6 +125,24 @@ def reserve_execution_dispatch(
         ):
             if row["reservation_class"] in used:
                 used[row["reservation_class"]] = [row["items"], row["bytes"]]
+        # A receipt releases the durable reservation, but an embedded producer
+        # may still be returning from its native call. Count those live calls
+        # once, without double-counting their still-reserved outbox rows.
+        for row in conn.execute(
+            "SELECT p.action,length(CAST(p.semantic_payload AS BLOB)) AS bytes "
+            "FROM execution_operations p JOIN execution_dispatch_outbox o "
+            "USING(server_id,executor_id,operation_id) "
+            "WHERE p.server_id=? AND p.executor_id=? "
+            "AND p.operation_id IN (SELECT value FROM json_each(?)) "
+            "AND o.dispatch_state NOT IN ('RESERVED','SENDING','RECONCILING') "
+            "AND NOT EXISTS (SELECT 1 FROM execution_agent_recovery r "
+            "WHERE r.server_id=p.server_id AND r.executor_id=p.executor_id "
+            "AND r.agent_id=p.subject_agent_id AND r.state='RECOVERING')",
+            (server_id, executor_id, retained),
+        ):
+            lane = 'regular' if row['action'] in _REGULAR else 'control'
+            used[lane][0] += 1
+            used[lane][1] += row['bytes']
         # Filter each lane by its remaining budget before selecting a row.
         # A fixed mixed window lets a blocked control backlog hide all regular
         # work, or oversized rows hide later controls that still fit.
@@ -151,8 +171,9 @@ def reserve_execution_dispatch(
                 "AND (?='control' OR NOT EXISTS (SELECT 1 FROM execution_dispatch_outbox busy "
                 "JOIN execution_operations active USING(server_id,executor_id,operation_id) "
                 "WHERE busy.server_id=p.server_id AND busy.executor_id=p.executor_id "
-                "AND active.subject_agent_id=p.subject_agent_id AND busy.reservation_class='regular' "
-                "AND busy.dispatch_state IN ('RESERVED','SENDING','RECONCILING'))) "
+                "AND active.subject_agent_id=p.subject_agent_id AND active.action IN ('runtime.open','turn.submit') "
+                "AND (busy.dispatch_state IN ('RESERVED','SENDING','RECONCILING') "
+                "OR busy.operation_id IN (SELECT value FROM json_each(?))))) "
                 "AND NOT EXISTS (SELECT 1 FROM execution_agent_recovery r JOIN execution_executors e USING(server_id,executor_id) "
                 "WHERE r.server_id=p.server_id AND r.executor_id=p.executor_id AND r.agent_id=p.subject_agent_id "
                 "AND (r.state<>'READY' OR r.generation<>e.generation)) "
@@ -191,7 +212,7 @@ def reserve_execution_dispatch(
                 "AND NOT EXISTS (SELECT 1 FROM execution_delivery_releases r WHERE r.domain_operation_id=earlier.operation_id) "
                 "AND earlier.status NOT IN ('REJECTED','CANCELLED','FAILED_FINAL')) "
                 "ORDER BY p.created_at,p.operation_id LIMIT 1",
-                (server_id, executor_id, datetime.now(timezone.utc).isoformat(), lane,
+                (server_id, executor_id, datetime.now(timezone.utc).isoformat(), lane, retained,
                  *actions, remaining),
             ).fetchone()
             if row is None:

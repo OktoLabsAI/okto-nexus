@@ -236,6 +236,7 @@ class EmbeddedDispatchOwner:
         self.pump = ExecutionDispatchPump(factory=self.factory, channel=self.channel, access=self.access,
             fresh_publications=self.inventory.fresh, send=self.enqueue, send_lock=asyncio.Lock(),
             verify_link=self.verify, close_link=self.failed,
+            retained_operations=lambda: tuple(self.active_operations),
             resolve_native_input=self.deps.native_decisions.inputs.resolve)
         self.pump.start()
         self.maintenance = asyncio.create_task(self._maintain(), name="embedded-publications")

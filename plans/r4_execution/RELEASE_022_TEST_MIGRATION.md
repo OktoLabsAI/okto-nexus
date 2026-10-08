@@ -481,3 +481,12 @@ both existing and on-demand target sessions. Scope exclusions, authority changes
 uncertain writes, work grants, receipt storage recovery, and offline restore
 were exercised through current execution paths. Nine historical functions map
 to these behavioral replacements; continuation and startup fallback remain open.
+
+Retained-worker review reproduced premature capacity release after a native
+receipt. The embedded owner now supplies its still-running operation identities
+to reservation: live calls count toward item/byte and per-agent limits even
+after receipt persistence, without counting a durable reservation twice.
+Control lanes retain independent capacity. Source validation passed 26 worker,
+dispatch-pump, and agent recovery cases (including Windows owner termination),
+plus ten exact-capacity cases. Four legacy scheduler functions map to the current
+worker and SQLite backlog tests. Installed-package validation remains pending.
