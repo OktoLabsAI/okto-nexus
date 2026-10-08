@@ -373,3 +373,15 @@ build/review-inventory-installed passed all 22 cases with unchanged inputs,
 including reset/delivery, repeated observation recovery, transient probe failure,
 and control/renewal concurrency. Read-only version checks on the affected host
 confirmed Pi 0.87.1, Claude 2.1.292 and Codex 0.160.1 responded successfully.
+
+The policy/protocol review passed 38 installed-wheel cases with unchanged inputs
+(build/review-policy-protocol-installed-v2). Four legacy functions were replaced
+by reviewed canonical cases for global/agent disable, unread inbox preservation,
+pre-spawn authority changes, malformed Pi readiness and invalid Codex thread IDs.
+The actual Core native factory and subprocess handshakes exposed missing Pi
+close outcomes: a rejected startup discarded transport ownership and could be
+classified OUTCOME_UNKNOWN despite successful cleanup. Core 0.0.5 retains the
+transport and reports observed tree containment without inventing stop proof.
+Nexus and Connector pin that patch; Connector 0.0.4 has no additional behavior
+changes. The integrated cases prove the other binding of the same agent still
+opens after protocol rejection. Complete matrix validation remains outstanding.

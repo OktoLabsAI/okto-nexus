@@ -1,6 +1,6 @@
 # CI dependencies for Nexus 0.2.2
 
-Core 0.0.3 is a mandatory runtime dependency. Connector 0.0.2 is used only by
+Core 0.0.5 is a mandatory runtime dependency. Connector 0.0.4 is used only by
 the cross-repository integration tests; it is not a Nexus runtime dependency.
 Both wheels are built from the release sources. The Core wheel is identical
 in the Nexus and Connector repositories.

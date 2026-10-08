@@ -2885,6 +2885,39 @@
         "tests/execution_r4/test_canonical_delivery_retry.py::test_uncertain_or_permanent_failure_never_retries"
       ],
       "source_sha256": "b1f1e69ef941eacd1be6738b34bff45b0fff277fca7f0db0b9b5b71e327299b8"
+    },
+    {
+      "test": "tests/test_agent_connections.py::test_disable_stops_new_dispatch_and_preserves_inbox",
+      "reason": "The removed per-method legacy connection writer is replaced by global and agent runtime policy. Canonical public policy tests cover both scopes, unread inbox preservation, zero turn/outbox effects, and an already-open native session that is contained on renewal.",
+      "replacements": [
+        "tests/execution_r4/test_runtime_policy_defaults.py::test_global_disable_keeps_mcp_and_inbox_but_blocks_runtime",
+        "tests/execution_r4/test_runtime_policy_defaults.py::test_disabled_live_session_closes_on_lease_renewal"
+      ],
+      "source_sha256": "bae1652d9a5df73471ba3cacc654a68c8d2cefde79950b9be093279d91d8e1a4"
+    },
+    {
+      "test": "tests/test_agent_connections.py::test_self_bootstrap_rechecks_permissions_at_the_native_start_boundary",
+      "reason": "Legacy self-issued endpoint keys and connector construction are removed. Canonical public self-connect admission is paused before dispatch, then committed grant or permission changes are proven to refuse the reserved operation without a native open.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_connection_discovery.py::test_self_connect_revalidates_grant_after_admission_before_native_open"
+      ],
+      "source_sha256": "af3c623f8b356c5c6c7d3336d3755be132cecd1cd5e1658453de36b1461596c6"
+    },
+    {
+      "test": "tests/test_runtime_protocol_compatibility.py::test_pi_incompatible_readiness_is_quarantined_without_affecting_other_adapter",
+      "reason": "Legacy supervisor startup/quarantine is replaced by installed Core startup receipts. All three rejected/malformed Pi get_state responses now run through canonical admission and the real Core factory/pipe, require terminal NATIVE_PROTOCOL_INCOMPATIBLE with stopped process evidence, forbid READY or productive prompts, and prove a different binding of the same agent can open and close. This exposed and fixed missing Pi containment reports in Core 0.0.5.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_native_protocol_regressions.py::test_invalid_native_readiness_is_contained_and_other_binding_remains_usable"
+      ],
+      "source_sha256": "b7e1b5f426545a12d6c0c9267164bf45fc40449bc32ee68cf7248e278b613156"
+    },
+    {
+      "test": "tests/test_runtime_protocol_compatibility.py::test_codex_incompatible_thread_identity_never_becomes_ready",
+      "reason": "Canonical public admission and the real installed Core native factory replace the removed legacy supervisor. Empty, numeric and null native thread identities produce a durable protocol failure, never READY or turn/start, and do not prevent another binding of the same agent from opening.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_native_protocol_regressions.py::test_invalid_native_readiness_is_contained_and_other_binding_remains_usable"
+      ],
+      "source_sha256": "8c23b0ef245b5abfb07379dd7c2da6e5a92ccd2c84a4181394c3d3fa13962d25"
     }
   ]
 }
