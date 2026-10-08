@@ -31,7 +31,7 @@ from test_vertical_inventory import _NativeFactory
     (True, None, False, 0, 'unsent'), (True, None, False, 0, 'ack_lost'),
     (True, None, False, 0, 'cold_unsent'), (True, None, False, 0, 'cold_ack_lost'),
     (True, None, False, 0, 'active_disconnect'), (True, None, False, 0, 'lease_renewal')])
-def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery, native_decision=None, cli_admission=False, initial_prompt=False, domain_delivery=False, combined_winner=None, reset_active=False, check_presence=False):
+def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery, native_decision=None, cli_admission=False, initial_prompt=False, domain_delivery=False, combined_winner=None, reset_active=False, check_presence=False, operator_containment=False):
     from okto_nexus_connector.transport.https_client import NexusHTTPClient, R4BindingView
     from okto_nexus_connector.transport.wss_r4 import connect_r4_connection
     from okto_nexus_connector.services.execution_selection import acknowledge_execution_binding
@@ -208,13 +208,14 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                               'inbox_pull', dict(agent_id='subject'))
                 assert pulled['ok'] and pulled['data']['messages'] == [], pulled
             else:
-                resolved = (await asyncio.to_thread(client.post, '/v1/runtime/intents:resolve', headers=headers['subject'], json={
+                actor = 'operator' if operator_containment and intent in ('turn.interrupt', 'runtime.close') else 'subject'
+                resolved = (await asyncio.to_thread(client.post, '/v1/runtime/intents:resolve', headers=headers[actor], json={
                     'client_intent_id': 'mux-' + intent, 'intent': intent, 'binding_id': binding['binding_id'],
-                    'workspace_binding_id': binding['workspace_binding_id'], **options}))
+                    'workspace_binding_id': binding['workspace_binding_id'], 'agent_id': 'subject', **options}))
                 assert resolved.status_code == 200, resolved.text
                 resolution = resolved.json()
                 assert resolution['can_submit'], resolution['blockers']
-                admitted = (await asyncio.to_thread(client.post, '/v1/runtime/operations', headers=headers['subject'], json={
+                admitted = (await asyncio.to_thread(client.post, '/v1/runtime/operations', headers=headers[actor], json={
                     k: resolution[k] for k in ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')}))
                 assert admitted.status_code == 202, admitted.text
             operations.append(resolution['operation_id'])
@@ -561,6 +562,13 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                             assert tuple(uow.connection.execute('SELECT committed_contiguous,projected_through FROM execution_event_watermarks').fetchone()) == (1,0)
                 await admit('turn.steer', session_id=session_id, text='Continue carefully.',
                     target={'kind': 'native_turn_id', 'expected_turn_id': 'turn-from-native'})
+                if operator_containment:
+                    with deps.connection_factory.unit_of_work(write=False) as uow:
+                        profile = dict(uow.connection.execute('SELECT p.* FROM runtime_profiles p JOIN agent_endpoints e '
+                            'ON e.profile_id=p.profile_id WHERE e.endpoint_id=?', (binding['endpoint_id'],)).fetchone())
+                    disabled = await asyncio.to_thread(client.patch, '/api/v1/harness/profiles/' + profile['profile_id'],
+                        headers=headers['operator'], json=dict(expected_revision=profile['revision'], enabled=False))
+                    assert disabled.status_code == 200, disabled.text
                 await admit('turn.interrupt', session_id=session_id,
                     target={'kind': 'current_run', 'expected_turn_id': None})
                 await admit('runtime.close', session_id=session_id)
@@ -743,6 +751,11 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 # Receipt ingress preserves history after disconnect. Adoption
                 # of that fact into session readiness remains reconciliation.
                 assert tuple(uow.connection.execute('SELECT lifecycle_state,lease_state FROM execution_sessions').fetchone()) == expected_session
+                if operator_containment:
+                    assert not uow.connection.execute('SELECT 1 FROM runtime_execution_grants WHERE revoked_at IS NULL').fetchone()
+                    controls = uow.connection.execute("SELECT actor_agent_id,subject_agent_id FROM execution_operations "
+                        "WHERE action IN ('turn.interrupt','runtime.close')").fetchall()
+                    assert [tuple(r) for r in controls] == [('operator','subject'),('operator','subject')]
         finally:
             try:
                 if recovery_host is not None:
@@ -762,6 +775,12 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
 def test_reset_stops_remote_execution_and_reuses_connection(onboarding, tmp_path, monkeypatch):
     test_owned_connector_reader_dispatches_five_actions_over_real_websocket(
         onboarding, tmp_path, monkeypatch, True, None, False, 0, None, reset_active=True)
+
+
+@pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
+def test_remote_operator_contains_session_after_profile_revocation(onboarding, tmp_path, monkeypatch):
+    test_owned_connector_reader_dispatches_five_actions_over_real_websocket(
+        onboarding, tmp_path, monkeypatch, True, None, False, 0, None, operator_containment=True)
 
 
 @pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)

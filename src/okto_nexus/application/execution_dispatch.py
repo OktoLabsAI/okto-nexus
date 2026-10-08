@@ -523,7 +523,8 @@ def begin_execution_send(
         if binding['kind'] == 'remote':
             require_execution_lane(uow, scope=scope,
                 channel=ExecutionChannel(server_id, reservation.executor_id,
-                    connection_id, connection_generation), now=authority_now)
+                    connection_id, connection_generation), now=authority_now,
+                operator_containment=operator_containment)
         # The operator initiates and remains audited; execution still consumes
         # the represented subject's separately issued canonical grant.
         actor = access.agents.get(uow, row['subject_agent_id'])

@@ -44,10 +44,14 @@ def _stamp(value):
     return datetime.fromisoformat(value.replace('Z', '+00:00'))
 
 
-def require_execution_lane(uow, *, scope, channel, now):
+def require_execution_lane(uow, *, scope, channel, now, operator_containment=False):
     """Revalidate the binding ticket inside the effect authorization transaction."""
     lane = SqliteExecutionLeaseRepository().lane(uow, scope)
-    if (lane is None or lane['state'] != 'ADMITTED' or lane['agent_id'] != scope['agent_id'] or
+    # Revision changes retire productive lane admission. A separately
+    # authenticated operator can still stop its exact applied session while
+    # the same host connection and unrevoked ticket remain bound.
+    allowed_states = ('ADMITTED', 'DISCONNECTED') if operator_containment else ('ADMITTED',)
+    if (lane is None or lane['state'] not in allowed_states or lane['agent_id'] != scope['agent_id'] or
             lane['connection_id'] != channel.connection_id or
             lane['connection_generation'] != channel.connection_generation or
             lane['bound_connection_id'] != channel.connection_id or lane['revoked_at'] is not None or

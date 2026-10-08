@@ -254,12 +254,18 @@ def test_blocked_session_does_not_delay_other_session_renewal(connected_local):
         client.portal.call(gate.release)
 
 
-def test_lost_receipt_persistence_never_reopens_operation(connected_local):
+def test_lost_receipt_persistence_never_reopens_operation(connected_local, request):
     setup,binding,native=connected_local
     deps,app,client,headers,*_=setup
     with deps.connection_factory.unit_of_work() as uow:
         uow.connection.execute("CREATE TRIGGER reject_local_receipt BEFORE INSERT ON execution_receipts "
                                "BEGIN SELECT RAISE(ABORT,'technical receipt failure'); END")
+    def restore_storage():
+        # The test observes persistent failure while the owner is live. Its
+        # teardown must restore storage so final publication can drain.
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute('DROP TRIGGER IF EXISTS reject_local_receipt')
+    request.addfinalizer(restore_storage)
     opened=admit(setup,binding,"lost-receipt","runtime.start",new_session=True)
     until=time.monotonic()+10
     while 'subject' not in app.state.embedded_dispatch_owner.agents.errors:
@@ -395,6 +401,18 @@ def test_restart_recovers_historical_receipt_without_provider(tmp_path,monkeypat
             assert time.monotonic()<until
             time.sleep(.02)
         assert native.native.stopped
+        # This case models a process exit before publishing the retained
+        # receipt. Normal graceful shutdown now retries publication, so it
+        # cannot be used to simulate that crash boundary with a permanent
+        # database fault. Leave the real journal intact for the next owner.
+        async def exit_before_publication():
+            assert native.native.stopped
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                assert uow.connection.execute(
+                    "SELECT 1 FROM execution_receipts WHERE operation_id=?",
+                    (closed["operation_id"],)).fetchone() is None
+        monkeypatch.setattr(app.state.embedded_dispatch_owner,
+                            "_publish_shutdown_history", exit_before_publication)
     with deps.connection_factory.unit_of_work() as uow:
         uow.connection.execute("DROP TRIGGER reject_cold_receipt")
     Path(candidate.executable).unlink()
@@ -415,9 +433,20 @@ def test_restart_recovers_historical_receipt_without_provider(tmp_path,monkeypat
         history=client.get(f"/v1/runtime/operations/{closed['operation_id']}",headers=headers["subject"])
         assert history.status_code==200,history.text
         if missing_journal:
-            assert isinstance(owner.agents.errors['subject'],FileNotFoundError)
-            assert history.json().get("executor_stage")!="SUCCEEDED"
-            assert not list((tmp_path/"home/core-runtime").glob("session-*.db"))
+            try:
+                assert isinstance(owner.agents.errors['subject'],FileNotFoundError)
+                assert history.json().get("executor_stage")!="SUCCEEDED"
+                assert not list((tmp_path/"home/core-runtime").glob("session-*.db"))
+            finally:
+                # Restore the deliberately removed durable evidence before
+                # asking graceful shutdown to publish it. While it is absent,
+                # shutdown correctly retains the unresolved recovery state.
+                for retained in tmp_path.glob('session-*.db.retained'):
+                    retained.rename(tmp_path/'home/core-runtime'/retained.name.removesuffix('.retained'))
+            recovered = client.portal.call(owner.retry_recovery, 'subject')
+            assert recovered['state'] == 'READY', recovered
+            assert native.opens == 1
+            wait_receipt((deps, app, client, headers), closed, stages=('SUCCEEDED',))
         else:
             assert owner.recovery_failure is None,repr(owner.recovery_failure)
             assert history.json()["executor_stage"]=="SUCCEEDED"
@@ -570,6 +599,13 @@ def test_restart_publishes_uncommitted_native_events(tmp_path,monkeypatch,agent_
             # A transient Server write failure retains Core history for retry;
             # it must not contain an otherwise healthy native session.
             assert 'subject' not in owner.agents.errors
+            # Freeze publication at the crash boundary. The normal shutdown
+            # publisher must not make this a test of already committed events.
+            client.portal.call(owner._stopping.set)
+            async def exit_before_events():
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    assert uow.connection.execute('SELECT COUNT(*) FROM execution_event_ingress').fetchone()[0] == 0
+            monkeypatch.setattr(owner, '_publish_shutdown_history', exit_before_events)
         if agent_state == 'archived':
             response = client.delete('/api/v1/agents/subject', headers=headers['operator'])
             assert response.status_code == 200, response.text

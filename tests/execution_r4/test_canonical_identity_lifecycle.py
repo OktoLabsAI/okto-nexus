@@ -8,7 +8,7 @@ from test_embedded_dispatch import local_setup, connected_local, qualified_contr
 from test_runtime_contract_migration import mcp
 
 
-def second_binding(setup, monkeypatch, *, name='second', adapter_id='pi_rpc'):
+def second_binding(setup, monkeypatch, *, name='second', adapter_id='pi_rpc', workspace_root=None):
     from types import SimpleNamespace
     from nexus_connector_core import InstallationCandidate
     from nexus_connector_core.discovery import fingerprint
@@ -30,6 +30,14 @@ def second_binding(setup, monkeypatch, *, name='second', adapter_id='pi_rpc'):
     selected = next(e for e in inventory['evidence'] if e['adapter_id'] == adapter_id)
     body = {**original, 'client_intent_id': name + '-realization', 'adapter_id': adapter_id,
             'candidate_ref': selected['candidate_ref'], 'inventory_revision': inventory['inventory_revision']}
+    if workspace_root is not None:
+        from okto_nexus.domain.ids import resolve_workspace_id
+        root = workspace_root
+        body.update(workspace_root=str(root), workspace_id=resolve_workspace_id(str(root)),
+                    workspace_label=name)
+        with setup[0].connection_factory.unit_of_work() as uow:
+            setup[0].repos.workspaces.upsert(uow, workspace_id=body['workspace_id'],
+                root_realpath=str(root), last_seen_at=setup[0].clock.now_iso())
     prepared = publish((setup[0], app, client, headers, body, other, root), changes={'secret_bindings': {}})
     assert prepared.status_code == 201, prepared.text
     view = prepared.json()

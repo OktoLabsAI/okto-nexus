@@ -580,3 +580,45 @@ Installed recovery/containment validation passed all 60 selected cases with
 unchanged inputs (build/release-containment-final-installed). The complete
 Nexus regression still has unresolved legacy behavior cases; this focused
 campaign does not replace that release gate.
+
+The real WebSocket Connector test exposed the corresponding containment gate
+on revision-invalidated lanes. Current operator containment may now use a
+disconnected productive lane only when its original ticket, channel, generation,
+scope and expiry still validate; this does not permit lease renewal or a turn.
+The remote five-action lifecycle and eight persisted transport-fence variants
+passed, as did the ten bootstrap authority cases. Core/Connector code is unchanged.
+The injected persistent receipt failure test now removes its SQLite trigger in
+a finalizer before lifecycle teardown, preserving all live-failure assertions
+and allowing final shutdown publication. Run 37740620039 was superseded and
+cancelled; its Linux 3.12 shard exited 245 during a diagnostic dump in that test,
+and Linux 3.11 shard 3 was waiting in fixture teardown. These are unresolved CI
+evidence, not passing validation. The new installed campaign includes the entire
+embedded dispatcher module to check its shutdown fault fixtures.
+
+That campaign stopped at the historical-receipt restart fixture: its permanent
+write fault now correctly prevents graceful publication from finishing. The
+fixture explicitly cuts final publication to model its intended crash boundary,
+then verifies replay without a provider. The missing-journal variant restores
+its deliberately hidden evidence after proving the block and verifies recovery
+without a second native open. Five source history/observer cases passed. The
+event-restart fixture likewise freezes publication before shutdown and asserts
+zero Server ingress before restart; all three active/inactive/archived variants
+passed. Nine remaining resource-reconciliation cases passed separately.
+
+One historical workspace-isolation function now maps to canonical public
+broadcasts across two workspaces, exact envelopes, private prompt separation,
+independent native close and later reopening of the still-connected binding.
+That source case and the four existing identity cases passed. Installed package
+validation of these combined changes remains pending. The legacy startup-error
+redaction contract also remains pending: an exploratory untyped factory error
+retains uncertain ownership and cannot use ordinary graceful fixture teardown;
+that interrupted draft is not passing validation or a committed replacement.
+
+The combined installed campaign passed all 50 cases with unchanged inputs
+(build/release-remote-history-final-installed, wheel SHA256
+1c8cc4e548684456b3dd8cd023878c14f1a6bf9317b5762ca2aa39cc6c96bd98).
+Core's post-main campaign 37742009886 and Connector's 37742057942 both completed
+successfully. Nexus run 37742873924 was superseded after preserving logs: its
+Linux shard 1 reproduced the receipt-fault teardown fixed above; shard 3 had
+advanced to 51% without the former boot teardown stall. No complete Nexus
+regression success is claimed by this focused package validation.

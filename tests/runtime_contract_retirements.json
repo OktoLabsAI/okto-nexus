@@ -3334,6 +3334,14 @@
         "tests/execution_r4/test_canonical_publication_regressions.py::test_profile_disable_retains_late_terminal_without_publishing"
       ],
       "source_sha256": "6539d4151383b467427658be2f291f823f952466db095b3e9c5bee69767ecf7b"
+    },
+    {
+      "test": "tests/test_runtime_binding_acceptance.py::test_same_agent_in_two_workspaces_receives_only_each_authorized_context",
+      "reason": "The public canonical broadcast path now verifies the same agent in two workspaces with separate native owners, exact workspace envelopes, no cross-workspace prompt leakage, and close isolation. Runtime presence follows the configured connection as requested, so closing one conversation permits automatic reopening instead of removing the agent from routing based on a legacy presence session.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_workspace_isolation.py::test_same_agent_in_two_workspaces_keeps_context_and_close_isolated"
+      ],
+      "source_sha256": "9e895f8510083298ac44749a44b3e8293b820dbccc1ce73d540b70f30523654a"
     }
   ]
 }
