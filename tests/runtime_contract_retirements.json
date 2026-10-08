@@ -3493,6 +3493,22 @@
         "tests/execution_r4/test_canonical_native_protocol_regressions.py::test_managed_interrupt_ack_waits_for_native_terminal"
       ],
       "source_sha256": "118e25f2779d7b1c86028497601f5fb9ace44e2a0d6bb50faffd6db08c04a99f"
+    },
+    {
+      "test": "tests/test_harness_tools.py::test_harness_terminal_is_durable_without_unauthorized_broadcast",
+      "reason": "An unbound terminal remains durable, authorized session history in Core and Server without becoming a publishable runtime result or broadcast; history remains readable after close.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_event_views.py::test_unbound_terminal_is_retained_without_authorizing_a_broadcast"
+      ],
+      "source_sha256": "c77281203f27f33f587287b0e70b14e5434e0d0a9cea7bbb035f87fb84d16480"
+    },
+    {
+      "test": "tests/test_runtime_process_ownership.py::test_rest_owner_start_timeout_has_no_running_session",
+      "reason": "Preserved through the canonical public REST open path with a real Core-owned process that never answers initialize. Confirmed containment becomes a durable terminal startup failure, agent identity is unchanged and the same idempotent request does not spawn again.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_start_timeout.py::test_rest_start_timeout_is_durable_contained_and_idempotent"
+      ],
+      "source_sha256": "f102071ccb5e03174d44af77ed4070da7b638eb2059f94a511bf01288699198b"
     }
   ]
 }

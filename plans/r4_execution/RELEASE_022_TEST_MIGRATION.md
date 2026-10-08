@@ -741,3 +741,26 @@ the handoff remains CLAIMED throughout. The old positive contract maps to these
 two cases. All 20 installed protocol, handoff and retirement-inventory cases
 passed with unchanged inputs (build/release-work-interrupt-installed, 12ca9b82
 wheel above).
+
+The real startup-timeout port found a Core defect: Codex initialize failure
+reaped its private startup transport but discarded the close outcome before
+the factory could normalize the failure. Core 0.0.8 retains that observed
+containment and clears it before another startup attempt. The REST regression
+now proves terminal FAILED, no ready session, unchanged identity and no second
+spawn for the same request. Nexus and Connector 0.0.6 pin the identical Core
+artifact (SHA256 7d8003095343da7dbcb8b924abf1623b155677002b0acc435299a13504db323f).
+The full local Core suite passed 1,396 tests and 15 subtests (40 skips); the full
+local Connector suite passed 930 tests (one skip).
+
+Unbound terminals remain durable authorized session history without creating
+a publishable result or message. Both the startup and unbound-terminal legacy
+functions map to these positive replacement contracts. Installed Windows and
+Linux campaigns each passed all eight startup, event-view and inventory cases
+with unchanged inputs (build/release-core008-startup-final-installed and
+build/release-linux-core008-startup-final-installed). The earlier campaign with
+a stale Core inventory pin is retained as failed evidence; the final wheel
+updates both package metadata and that compatibility pin.
+
+The 668faab full CI completed all four Linux partitions without the previous
+fixture shutdown hangs. It still reports legacy runtime regression failures;
+this progress does not satisfy the final merge gate.

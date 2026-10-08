@@ -1,8 +1,8 @@
 # Current release dependency
 
-Core 0.0.7 is required by Nexus 0.2.2 and Connector 0.0.5.
-Shared wheel SHA-256: `43e02485ce90e6dc58b69b761e0b013494e4526d4bf77716d6298064da904106`.
-Built from Core commit `6ffa95f`: correlate native turn-start events with their operation.
+Core 0.0.8 is required by Nexus 0.2.2 and Connector 0.0.6.
+Shared wheel SHA-256: `7d8003095343da7dbcb8b924abf1623b155677002b0acc435299a13504db323f`.
+Built from Core commit `74430e7`: preserve confirmed Codex initialization-failure containment.
 The entries below document historical artifacts.
 
 Current PyPI release candidate: `okto_nexus_connector_core-0.0.1-py3-none-any.whl`

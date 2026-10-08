@@ -82,6 +82,34 @@ def test_event_replay_rejects_foreign_scope_and_invalid_queries(connected_local)
     wait_receipt(setup, admit(setup, binding, 'scope-close', 'runtime.close', session_id=session), stages=('SUCCEEDED',))
 
 
+@pytest.mark.parametrize('local_setup', ['pi_rpc'], indirect=True)
+def test_unbound_terminal_is_retained_without_authorizing_a_broadcast(connected_local):
+    from test_agent_recovery_isolation import eventually
+    setup, binding, native, session = start(connected_local)
+    deps, _, client, headers, *_ = setup
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        stream = dict(uow.connection.execute('SELECT * FROM execution_local_streams WHERE session_id=?', (session,)).fetchone())
+    client.portal.call(native.native.queue.put, RuntimeEvent(stream['server_id'], stream['executor_id'],
+        session, stream['stream_epoch'], 0, 'turn_state', 'agent_settled',
+        dict(delivery_phase='terminal', delivery_outcome='success', output_text='Private unbound observation.')))
+    path = f'/v1/runtime/sessions/{session}/events'
+    def captured():
+        response = client.get(path, headers=headers['subject'])
+        assert response.status_code == 200, response.text
+        return response.json()['events']
+    eventually(captured)
+    saved = captured()
+    assert len(saved) == 1 and saved[0].get('operation_id') is None
+    assert saved[0]['payload']['output_text'] == 'Private unbound observation.'
+    from okto_nexus.adapters.inbound.mcp.tools.inbox import build_service
+    assert build_service(deps).consume_canonical_runtime_results() == 0
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT count(*) FROM messages WHERE from_agent_id='subject'").fetchone()[0] == 0
+        assert uow.connection.execute('SELECT count(*) FROM runtime_results').fetchone()[0] == 0
+    wait_receipt(setup, admit(setup, binding, 'unbound-terminal-close', 'runtime.close', session_id=session), stages=('SUCCEEDED',))
+    assert client.get(path, headers=headers['subject']).json()['events'] == saved
+
+
 def test_event_replay_bounds_bytes_and_detects_corrupted_storage(connected_local, monkeypatch):
     setup, binding, native, session = start(connected_local)
     deps, _, client, headers, *_ = setup

@@ -281,16 +281,6 @@ def test_harness_get_unknown_session_is_not_found(ctx):
 # --------------------------------------------------------------------------- #
 
 
-def test_harness_terminal_is_durable_without_unauthorized_broadcast(ctx):
-    deps, server, connectors, root = ctx
-    opened = _call(server, "harness_open", agent_id="worker", kind="pi", project_root=root)
-    session_id = opened["data"]["session_id"]
-    connectors["pi"][0].push_event(kind="turn_completed", native_event="agent_settled")
-    _wait_until(lambda: _call(server, "harness_event_list", session_id=session_id)["data"]["count"] >= 1)
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        row = uow.connection.execute("SELECT * FROM runtime_results WHERE runtime_session_id = ?", (session_id,)).fetchone()
-        assert row["publication_state"] == "PENDING_AUTHORIZATION"
-        assert uow.connection.execute("SELECT count(*) FROM messages WHERE from_agent_id = ?", ("worker",)).fetchone()[0] == 0
 
 
 # --------------------------------------------------------------------------- #
