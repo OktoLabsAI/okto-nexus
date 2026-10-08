@@ -62,6 +62,51 @@ def test_native_protocol_fault_is_durable_and_reaps_peer_without_success(connect
     assert view.status_code == 200 and view.json().get("executor_stage") != "SUCCEEDED", view.text
 
 
+def test_slow_native_capture_overflow_is_contained_with_durable_uncertainty(connected_local, monkeypatch):
+    import threading
+    from nexus_connector_core.native import runtime_bridge
+    entered, release = threading.Event(), threading.Event()
+    original = runtime_bridge._next_event
+    def delayed_read(iterator):
+        event = original(iterator)
+        if event is not None and event.kind == 'output_delta' and not entered.is_set():
+            entered.set()
+            assert release.wait(15)
+        return event
+    monkeypatch.setattr(runtime_bridge, '_next_event', delayed_read)
+    source = _FAKE_SERVER_SOURCE.replace('    if "TRIGGER_HOLD" in text:',
+        '    if "TRIGGER_FLOOD" in text:\n'
+        '        for i in range(400):\n'
+        '            write_msg({"method":"item/agentMessage/delta","params":{'
+        '"threadId":thread_id,"turnId":turn_id,"delta":str(i)+"x"*8192}})\n'
+        '        return\n'
+        '    if "TRIGGER_HOLD" in text:')
+    setup, binding, sid, peer, _ = open_native(connected_local, source)
+    eventually(lambda: bool(peer._subscribers))
+    queues = list(peer._subscribers)
+    try:
+        sent = admit(setup, binding, 'slow-capture-flood', 'turn.submit', session_id=sid, text='TRIGGER_FLOOD')
+        assert entered.wait(5)
+        # The Core stream owns one bounded subscription. Once its queue is
+        # full, the adapter detaches it; the retained prefix then ends in a gap.
+        eventually(lambda: not peer._subscribers)
+        assert all(queue.qsize() <= 128 for queue in queues)
+    finally:
+        release.set()
+    # Allow the normal five-second graceful/force containment phases plus
+    # publication and recovery scheduling; do not manually close the peer.
+    eventually(lambda: peer._transport._proc.poll() is not None, seconds=25)
+    eventually(lambda: 'EVENT_STREAM_UNAVAILABLE' in json.dumps(events(setup)))
+    observed = events(setup)
+    assert observed
+    assert not [e for e in observed if e['payload'].get('delivery_outcome') == 'success']
+    view = setup[2].get(f"/v1/runtime/operations/{sent['operation_id']}", headers=setup[3]['subject'])
+    assert view.status_code == 200, view.text
+    assert view.json()['executor_stage'] != 'SUCCEEDED', view.text
+    faults = [e for e in observed if e['payload'].get('code') == 'EVENT_STREAM_UNAVAILABLE']
+    assert faults and all(e['sequence'] > 0 for e in faults)
+
+
 def test_stale_native_target_is_rejected_and_matching_interrupt_completes_original_turn(connected_local):
     setup, binding, sid, peer, log = open_native(connected_local, _FAKE_SERVER_SOURCE)
     sent = admit(setup, binding, "held-turn", "turn.submit", session_id=sid, text="TRIGGER_HOLD")

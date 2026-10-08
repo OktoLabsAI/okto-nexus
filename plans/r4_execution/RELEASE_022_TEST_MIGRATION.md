@@ -713,3 +713,12 @@ The installed Windows and Linux 3.11 campaigns each passed all 45 reset, attempt
 history, retention, HTTP and poll-token cases with unchanged inputs
 (build/release-reset-history-installed and build/release-linux-reset-history-installed;
 wheel SHA256 12ca9b82af7761da248802e61fcd96b5d6f31e02d01f2a76d23128c109239877).
+
+The slow-subscriber overflow contract now uses a real Codex protocol process
+through Core. A blocked consumer fills the bounded queue, which detaches and
+then reports the durable EVENT_STREAM_UNAVAILABLE incident. Normal automatic
+scoped containment stops the owned process without success or native replay.
+The test allows the documented five-second graceful and force phases plus
+recovery scheduling; no manual close is used as the containment assertion.
+All 13 installed native-protocol and retirement-inventory cases passed with
+unchanged inputs (build/release-overflow-final-installed, 12ca9b82 wheel above).

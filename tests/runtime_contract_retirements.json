@@ -3477,6 +3477,14 @@
         "tests/execution_r4/test_canonical_native_protocol_regressions.py::test_queued_control_for_finished_turn_cannot_reach_next_turn"
       ],
       "source_sha256": "6dd92de80e992b094e902b7ad9553fe0ae7535c7570a4d7dd13fbed1f5ad6e09"
+    },
+    {
+      "test": "tests/test_runtime_event_buffers.py::test_production_overflow_reaps_owned_process_and_journals_unknown",
+      "reason": "The legacy subscriber/ingress path is replaced by Core-owned capture. A real native Codex pipe floods while the consumer is blocked; the bounded subscription detaches, a durable EVENT_STREAM_UNAVAILABLE incident is projected, the owned peer is contained, and the operation never claims success. Retained prefix is drained before the gap.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_native_protocol_regressions.py::test_slow_native_capture_overflow_is_contained_with_durable_uncertainty"
+      ],
+      "source_sha256": "decd782a0ae108a5024553916de420f39d3427fccea0d68e3e76fc6a44cb759b"
     }
   ]
 }
