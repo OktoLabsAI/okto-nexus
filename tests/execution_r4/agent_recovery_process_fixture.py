@@ -82,7 +82,10 @@ def run(root, phase):
                 state = dict(headers=headers, binding=binding, body=setup[4],
                     processes=[n.process.pid for n in factory.natives],
                     sessions=sessions, expected_events=len(streams))
-                (root / 'ready.json').write_text(json.dumps(state), encoding='utf-8')
+                ready = root / 'ready.json'
+                pending = ready.with_suffix('.tmp')
+                pending.write_text(json.dumps(state), encoding='utf-8')
+                pending.replace(ready)
                 sys.stdin.readline()  # parent chooses orderly exit or exact process kill
             finally:
                 lock.release()

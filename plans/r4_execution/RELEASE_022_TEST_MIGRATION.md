@@ -948,3 +948,12 @@ unchanged. Installed verification passed clean shutdown on Windows (SIGTERM is
 POSIX-only) and both clean/SIGTERM cases on Linux, with unchanged inputs:
 `build/release-signal-drain-installed` and `build/release-signal-drain-linux-installed`.
 This test-only adjustment uses the same final Nexus wheel above.
+
+The Windows/Python 3.12 matrix then exposed a readiness-file race in the real
+process recovery fixture: existence became visible before the JSON write ended.
+The fixture now writes a temporary file and atomically replaces `ready.json`.
+Installed Windows validation passed all three real process exit modes (graceful,
+kill and kill-before-bind), preserving recovery, process containment and no-replay
+assertions. Campaign `build/release-recovery-ready-installed` records unchanged
+inputs; the production wheel is unchanged. All twelve Linux jobs passed on the
+preceding commit. The complete matrix must still pass on the final test commit.
