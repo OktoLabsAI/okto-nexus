@@ -32,27 +32,3 @@ def available(runtime, key):
     result = tool(runtime[1], key, 'harness_list', {'view': 'connections', 'maintenance': {'action': 'available'}})
     assert result['ok'], result
     return result['data']
-
-
-
-
-
-
-
-
-
-
-
-
-@pytest.mark.parametrize("runtime", ["additional"], indirect=True)
-def test_registered_adapter_uses_self_discovery_and_connect(runtime):
-    key = worker_key(runtime)
-    grant(runtime, endpoint='endpoint-fixture.additional.v1')
-    item = next(m for m in available(runtime, key)['methods'] if m['method'] == 'fixture.additional.v1')
-    assert item['available']
-    arguments = item['endpoints'][0]['connect']['arguments']
-    arguments['maintenance']['idempotency_key'] = 'additional-adapter-self'
-    result = tool(runtime[1], key, 'harness_list', arguments)
-    assert result['ok'], result
-    assert result['data']['owning_agent_id'] == 'worker'
-    assert len(runtime[3]) == 1

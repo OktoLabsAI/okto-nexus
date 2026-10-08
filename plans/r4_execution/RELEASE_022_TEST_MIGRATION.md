@@ -860,3 +860,16 @@ The installed checkpoint passed all 15 selected cases on both Windows and Linux 
 
 
 The contained-opening fallback checkpoint passed all 86 cases on both Windows (495.68s) and Linux (516.21s), with unchanged installed-campaign inputs. Campaigns: build/release-opening-fallback-installed and build/release-opening-fallback-linux-installed. Nexus wheel: e1f7947ef044e86831251238b17bc1f82a5ff335b0251925fec6e4d5025097d9; Core wheel: c3c8dd7cd0b16f8cd2228b871c4aecaa7d665170c9011687ce865a408803d244. The failed opening keeps its original receipt, independent stop proof releases the session, and a never-dispatched initial message can use its approved alternative under current authority. The post-commit wake closes the automatic recovery race. One more positive predecessor mapping is closed: eleven criteria remain, comprising three registered-adapter cases and eight context-only observation cases. Full CI and those criteria remain release gates.
+
+The registered-adapter checkpoint passed all 26 cases on Windows (185.45s) and
+Linux (191.77s), with unchanged installed inputs: build/release-registered-adapters-installed
+and build/release-registered-adapters-linux-installed. Trusted static registration
+now supports processless managed adapters through the production Core factory,
+observed protocol qualification, public REST/MCP connection and correlated results.
+Fallback requires the versioned transport-binding contract. Remote Connector launch
+preserves local approval without issuing unused tool credentials. Core directed
+source validation passed 91 cases; Connector passed 29. Three explicit positive
+predecessor mappings are closed. Eight context-only observation criteria and full
+CI still block promotion. Nexus wheel: db4614518d07383b068511740b37da1d515c96bade76bac282c1c5c99661daf4;
+Core: e843c76bb40fc15cf58eb689544157549cb32a24024e0656038fb09deb59a3df;
+Connector: 81490a45e8a17d4b90d362dfab9163c8f096bf8ae0f24c66fe1dc9e384285ab5.

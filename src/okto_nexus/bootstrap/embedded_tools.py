@@ -97,6 +97,9 @@ class EmbeddedToolsOwner:
     async def _prepare(self, frame, launch):
         await asyncio.to_thread(launch.check)
         adapter=launch.candidate.adapter_id
+        from nexus_connector_core import get_runtime_connection_contract
+        if get_runtime_connection_contract(adapter)['tool_transport'] == 'none':
+            return
         native=adapter=="pi_rpc"
         with self.owner.factory.unit_of_work(write=False) as uow:
             row=uow.connection.execute("SELECT ep.public_config FROM execution_bindings b JOIN agent_endpoints ep USING(endpoint_id) "
@@ -170,6 +173,9 @@ class EmbeddedToolsOwner:
     def decorate(self, launch):
         config=self.configurations.get(launch.scope["session_id"])
         if config is None:
+            from nexus_connector_core import get_runtime_connection_contract
+            if get_runtime_connection_contract(launch.candidate.adapter_id)['tool_transport'] == 'none':
+                return launch
             if self.origin is not None:
                 raise CoreError("RECONCILIATION_REQUIRED","local_tool_configuration")
             return launch
