@@ -10,9 +10,10 @@ from test_embedded_dispatch import local_setup, connected_local, qualified_contr
 from test_canonical_grant_regressions import mcp_helpers
 from test_agent_recovery_isolation import eventually
 from test_harness_codex_connector import _FAKE_SERVER_SOURCE
+from test_canonical_delivery import connected_local as work_connected
 
 
-def open_native(connected, source, *, environment=None):
+def install_native(connected, source, *, environment=None):
     from nexus_connector_core.native.adapters.codex import CodexAppServerConnector
     from nexus_connector_core.native.runtime_bridge import CopiedAdapterSession
     from nexus_connector_core.native.redaction import NativeSecretRedactor, credential_values
@@ -29,9 +30,77 @@ def open_native(connected, source, *, environment=None):
             return CopiedAdapterSession(peer, native, session_id=session_id, stream_epoch=stream_epoch, context=context,
                 redactor=NativeSecretRedactor(credential_values(environment or {})))
     app.state.embedded_dispatch_owner.native_factory = Factory()
+    return peers, log
+
+
+def open_native(connected, source, *, environment=None):
+    setup, binding, _ = connected
+    peers, log = install_native(connected, source, environment=environment)
     opened = admit(setup, binding, "protocol-open", "runtime.start", new_session=True)
     wait_receipt(setup, opened)
     return setup, binding, opened["scope"]["session_id"], peers[0], log
+
+
+@pytest.mark.parametrize('surface', ['rest', 'mcp'])
+def test_managed_interrupt_ack_waits_for_native_terminal(work_connected, monkeypatch, surface):
+    from test_canonical_handoff import prepare
+    from test_pr34_remediation import tool
+    setup, binding, _ = work_connected
+    deps, _, client, headers, *_, root = setup
+    release, ack = root / 'release-work-interrupt', root / 'work-interrupt-ack'
+    marker = '            write_msg(\n                {\n                    "method": "turn/completed",'
+    assert _FAKE_SERVER_SOURCE.count(marker) == 1
+    gate = (f'            open({str(ack)!r}, "w").close()\n'
+            '            deadline = time.monotonic() + 20\n'
+            f'            while not os.path.exists({str(release)!r}):\n'
+            '                assert time.monotonic() < deadline\n'
+            '                time.sleep(.01)\n')
+    peers, log = install_native(work_connected, _FAKE_SERVER_SOURCE.replace(marker, gate + marker))
+    handoff, _, claim, _ = prepare(setup, binding, monkeypatch, payload='TRIGGER_HOLD managed work')
+    claimed = claim()
+    assert claimed['ok'], claimed
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        turn = dict(uow.connection.execute("SELECT operation_id,session_id FROM execution_operations WHERE action='turn.submit'").fetchone())
+    wait_receipt(setup, turn)
+    assert len(peers) == 1
+    peer = peers[0]
+    state = next(iter(peer._sessions_by_id.values()))
+    eventually(lambda: bool(state.active_turn_id))
+    sid = turn['session_id']
+    body = dict(idempotency_key='managed-interrupt', expected_turn_id=state.active_turn_id)
+    try:
+        if surface == 'rest':
+            response = client.post(f'/api/v1/harness/sessions/{sid}/interrupt', headers=headers['operator'], json=body).json()
+        else:
+            response = tool(client, headers['operator']['Authorization'].removeprefix('Bearer '),
+                'harness_interrupt', dict(session_id=sid, **body))
+        assert response['ok'], response
+        eventually(ack.exists)
+        control = wait_receipt(setup, response['data'])
+        # An acknowledged control is independent of the original work terminal.
+        assert control['executor_stage'] in ('SUBMITTED', 'SUCCEEDED')
+        view = client.get(f"/v1/runtime/operations/{turn['operation_id']}", headers=headers['subject']).json()
+        assert view['executor_stage'] == 'SUBMITTED', view
+        assert not [e for e in events(setup) if e.get('operation_id') == turn['operation_id']
+                    and e['payload'].get('delivery_phase') == 'terminal']
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            assert uow.connection.execute('SELECT status,result FROM handoffs WHERE handoff_id=?', (handoff,)).fetchone()[:] == ('CLAIMED', None)
+            assert uow.connection.execute('SELECT canonical_terminal_operation_id FROM delivery_outbox').fetchone()[0] is None
+    finally:
+        release.touch()
+    wait_receipt(setup, turn, stages=('CANCELLED',))
+    def captured_terminals():
+        return [e for e in events(setup) if e.get('operation_id') == turn['operation_id']
+                and e['payload'].get('delivery_phase') == 'terminal']
+    eventually(captured_terminals)
+    terminals = captured_terminals()
+    assert len(terminals) == 1 and terminals[0]['payload']['delivery_outcome'] == 'interrupted'
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT status,result FROM handoffs WHERE handoff_id=?', (handoff,)).fetchone()[:] == ('CLAIMED', None)
+        assert uow.connection.execute('SELECT count(*) FROM delivery_outbox').fetchone()[0] == 1
+    wire = [json.loads(line) for line in log.read_text(encoding='utf-8').splitlines()]
+    assert sum(m.get('method') == 'turn/interrupt' for m in wire) == 1
+    wait_receipt(setup, admit(setup, binding, 'managed-interrupt-close', 'runtime.close', session_id=sid), stages=('SUCCEEDED',))
 
 
 def events(setup):

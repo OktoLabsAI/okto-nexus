@@ -3485,6 +3485,14 @@
         "tests/execution_r4/test_canonical_native_protocol_regressions.py::test_slow_native_capture_overflow_is_contained_with_durable_uncertainty"
       ],
       "source_sha256": "decd782a0ae108a5024553916de420f39d3427fccea0d68e3e76fc6a44cb759b"
+    },
+    {
+      "test": "tests/test_runtime_work_acceptance.py::test_managed_interrupt_ack_waits_for_native_terminal",
+      "reason": "Preserved through public REST/MCP controls and a real Core-owned Codex protocol process: control acknowledgement does not complete the work turn, its terminal is captured exactly once, and the handoff remains claimed until explicit completion.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_native_protocol_regressions.py::test_managed_interrupt_ack_waits_for_native_terminal"
+      ],
+      "source_sha256": "118e25f2779d7b1c86028497601f5fb9ace44e2a0d6bb50faffd6db08c04a99f"
     }
   ]
 }

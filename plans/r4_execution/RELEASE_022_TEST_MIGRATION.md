@@ -732,3 +732,12 @@ Their authorization and inactive-agent assertions remain intact. All 19 cases
 passed both from source and from the installed wheel on Windows and Linux;
 installed inputs stayed unchanged (build/release-shutdown-fixtures-installed and
 build/release-linux-shutdown-fixtures-installed, 12ca9b82 wheel above).
+
+Managed interruption now exercises REST and MCP against a real Core-owned
+Codex protocol process. A native barrier separates command acknowledgement
+from the interrupted turn terminal. The original operation remains SUBMITTED
+before that terminal, then becomes CANCELLED with exactly one captured terminal;
+the handoff remains CLAIMED throughout. The old positive contract maps to these
+two cases. All 20 installed protocol, handoff and retirement-inventory cases
+passed with unchanged inputs (build/release-work-interrupt-installed, 12ca9b82
+wheel above).
