@@ -39,6 +39,7 @@ import {
   type WorkspaceListItem,
 } from "../api";
 import { AgentSelect } from "../components/AgentSelect";
+import { CopyMessageButton } from "../components/CopyMessageButton";
 import { Markdown } from "../components/Markdown";
 import { parseStructuredMessage, StructuredMessage, type StructuredMessagePayload } from "../components/StructuredMessage";
 import { handoffLabel } from "../handoffLabel";
@@ -626,6 +627,7 @@ function ChatTurn({
           <span>{audienceLabel}</span>
           {showWorkspace && <span>· {shortWorkspace(entry.workspaceId, workspaces)}</span>}
           <span>· {stamp(entry.timestamp)}</span>
+          <CopyMessageButton text={[entry.subject, formatChatContent(entry.content)].filter(Boolean).join('\n\n')} />
         </div>
         <div
           className={`min-w-0 max-w-full rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm [overflow-wrap:anywhere] ${

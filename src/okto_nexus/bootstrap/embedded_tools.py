@@ -112,7 +112,8 @@ class EmbeddedToolsOwner:
         provider_home_http=not native and launch.record["provider_home"] is not None and (not launch.auth_refs or inherit_mcps)
         process_http=not native and (provider_home_http or always_allow)
         audience="nexus-native-session" if native else "nexus-mcp-session"
-        actions=("handoff.get","handoff.claim","handoff.complete","runtime.input.list","runtime.input.respond","message.create") if native else MCP_ACTIONS
+        from ..application.execution_tools import NATIVE_ACTIONS
+        actions=tuple(NATIVE_ACTIONS.values()) if native else MCP_ACTIONS
         request_id,context=await asyncio.to_thread(self._stage,frame,audience,actions)
         service=ExecutionCapabilityService(factory=self.owner.factory,access=self.owner.access)
         start=time.monotonic()

@@ -538,6 +538,15 @@ credentials. Use agent discovery for peer status; full communication access
 does not confer operator privileges. Existing credentials are not broadened
 in place: these added actions are issued with newly opened sessions.
 
+Pi exposes the equivalent `nexus_agent_list`, `nexus_agent_get`,
+`nexus_capability_list` and `nexus_coordination_health` through Core's native
+extension. Local and remote backends call the same Server identity/health
+services. Sender and workspace come from the authenticated native session;
+only `nexus_agent_get.agent_id` selects a peer. Each call checks the current
+capability, applied lease and domain permissions. Directory reads are fresh,
+not cached action receipts. `nexus_message_create` supports direct and broadcast
+targets under the same message permissions and routing rules as MCP.
+
 Application and public HTTP MCP tests cover these tools, malformed answers,
 recipient isolation and revocation before dispatch. Pi exposes the equivalent
 `nexus_runtime_input_list` and `nexus_runtime_input_respond` tools through its

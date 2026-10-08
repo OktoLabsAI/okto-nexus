@@ -66,6 +66,8 @@ def check_tool_arguments(name, arguments):
 
 
 NATIVE_ACTIONS = {
+    'agent_list': 'agent.list', 'agent_get': 'agent.get',
+    'capability_list': 'capability.list', 'coordination_health': 'coordination.health',
     'message_create': 'message.create',
     'input_list': 'runtime.input.list', 'input_respond': 'runtime.input.respond',
     'context': 'handoff.get', 'claim': 'handoff.claim', 'complete': 'handoff.complete',

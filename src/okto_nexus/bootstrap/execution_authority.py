@@ -70,11 +70,15 @@ def build_native_action_service(deps):
     from ..adapters.outbound.sqlite.execution_native_actions import SqliteNativeActionRepository
     from ..adapters.inbound.mcp.tools.handoff import build_service
     from ..adapters.inbound.mcp.tools.messages import build_service as build_messages
+    from ..adapters.inbound.mcp.tools.identity import build_service as build_identity
+    from ..adapters.inbound.mcp.tools.health import build_service as build_health
     capabilities = ExecutionCapabilityService(factory=deps.connection_factory,
                                                access=build_execution_access(deps))
     return NativeActionService(factory=deps.connection_factory, capabilities=capabilities,
         repository=SqliteNativeActionRepository(), clock=deps.clock,
         native_decisions=deps.native_decisions,
+        build_identity=lambda factory: build_identity(ExecutionToolDependencies(deps, factory)),
+        build_health=lambda factory: build_health(ExecutionToolDependencies(deps, factory)),
         build_messages=lambda factory: build_messages(
             ExecutionToolDependencies(deps, factory), register_approval_executor=False),
         build_handoff=lambda factory: build_service(
