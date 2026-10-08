@@ -7,7 +7,7 @@ import { harnessFieldValues, harnessSelectionError, parseHarnessConfigurationFil
 export function RuntimeHarnessSettings({endpoint, schema, onUpdated, onPendingChange, onSummaryChange}: {
   endpoint: string; schema: HarnessConfiguration; onUpdated: () => void; onSummaryChange?: (summary: string) => void; onPendingChange?: (pending: boolean) => void;
 }) {
-  const [saved, setSaved] = useState<{revision: number; settings: Record<string,string>} | null>(null);
+  const [saved, setSaved] = useState<{revision: number; inherited_global_mcps?: boolean; settings: Record<string,string>} | null>(null);
   const [values, setValues] = useState<Record<string,string>>({});
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -22,6 +22,7 @@ export function RuntimeHarnessSettings({endpoint, schema, onUpdated, onPendingCh
   }, [endpoint, reload]);
   const fileInput = useRef<HTMLInputElement>(null);
   const help: Record<string,string> = {
+    inherit_global_mcps: 'Include MCPs from the approved harness directory on the runtime host. Native configuration precedence also applies to project MCPs. Credentials stay on that host. Nexus tools remain injected. Changes apply to new sessions.',
     model: 'Model used by new sessions. Available models depend on the installation and account.',
     effort: 'Reasoning or thinking effort. Available levels depend on the selected model and harness.',
     provider: 'Provider that supplies the model. Select it when the same model name exists under multiple providers.',
@@ -65,7 +66,7 @@ export function RuntimeHarnessSettings({endpoint, schema, onUpdated, onPendingCh
       {field.label} <span className="text-xs text-surface-500">{required(field) ? "Required by policy" : "Optional"}</span><ConfigurationHelp label={field.label}>{help[field.name] || "Leave blank to use the harness default."}</ConfigurationHelp>
       {field.type === 'enum' ? <select aria-label={field.label} className="block w-full border rounded p-2 bg-white dark:bg-surface-800"
         disabled={busy || !saved} value={values[field.name] || ""} onChange={e => setValues(old => ({...old,[field.name]: e.target.value}))}>
-        <option value="">Default{field.default != null ? ` (${String(field.default)})` : " from harness"}</option>
+        <option value="">{field.name === "inherit_global_mcps" ? `Inherit agent/global policy (${saved?.inherited_global_mcps ? "enabled" : "disabled"})` : `Default${field.default != null ? ` (${String(field.default)})` : " from harness"}`}</option>
         {!!values[field.name] && !harnessFieldValues(schema, field.name, values).includes(values[field.name]) &&
           <option value={values[field.name]}>{values[field.name]} (unavailable for this selection)</option>}
         {harnessFieldValues(schema, field.name, values).map(value => <option key={value} value={value}>{value}</option>)}

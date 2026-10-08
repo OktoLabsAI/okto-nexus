@@ -1,6 +1,7 @@
 """Connection-owned reconciliation pages; readiness follows durable facts."""
 import secrets
 import hashlib
+import json
 
 from nexus_connector_core import CoreError, R4_PREVIEW_REVISION, decode_r4_frame, r4_resource_release_digest
 
@@ -21,10 +22,50 @@ def _receipt(row):
     return frame
 
 
+def pending_unstarted_session(conn, server_id, executor_id, session_id):
+    """Server evidence for an admission that has never reserved a dispatch.
+
+    The embedded caller must additionally prove absent Core history and slots.
+    This predicate alone does not establish absence of native effects.
+    """
+    key = (server_id, executor_id, session_id)
+    opening = conn.execute("SELECT 1 FROM execution_sessions s JOIN execution_operations p "
+        "ON p.server_id=s.server_id AND p.executor_id=s.executor_id AND p.operation_id=s.open_operation_id "
+        "JOIN execution_dispatch_outbox d USING(server_id,executor_id,operation_id) "
+        "WHERE s.server_id=? AND s.executor_id=? AND s.session_id=? "
+        "AND s.lifecycle_state='OPEN_PENDING' AND s.lease_state='NONE' "
+        "AND p.session_id=s.session_id AND p.action='runtime.open' AND p.admission_state='ACCEPTED' "
+        "AND d.dispatch_state='PENDING' AND d.attempt_no=0 AND d.attempt_token IS NULL "
+        "AND d.last_error IS NULL AND d.last_receipt_revision IS NULL", key).fetchone()
+    if opening is None:
+        return False
+    for table in ('execution_local_publications', 'execution_receipts'):
+        if conn.execute(f'SELECT 1 FROM {table} x JOIN execution_operations p '
+                'USING(server_id,executor_id,operation_id) WHERE p.server_id=? AND p.executor_id=? '
+                'AND p.session_id=? LIMIT 1', key).fetchone():
+            return False
+    for table in ('execution_local_streams', 'execution_leases', 'execution_event_ingress', 'execution_session_capabilities'):
+        if conn.execute(f'SELECT 1 FROM {table} WHERE server_id=? AND executor_id=? AND session_id=? LIMIT 1', key).fetchone():
+            return False
+    return conn.execute("SELECT 1 FROM execution_operations p LEFT JOIN execution_dispatch_outbox d "
+        "USING(server_id,executor_id,operation_id) WHERE p.server_id=? AND p.executor_id=? AND p.session_id=? "
+        "AND (p.admission_state<>'ACCEPTED' OR p.action NOT IN ('runtime.open','turn.submit') "
+        "OR (d.operation_id IS NOT NULL AND (d.dispatch_state<>'PENDING' OR d.attempt_no<>0 "
+        "OR d.attempt_token IS NOT NULL OR d.last_error IS NOT NULL OR d.last_receipt_revision IS NOT NULL))) LIMIT 1",
+        key).fetchone() is None
+
+
 class ExecutionReconciliation:
-    def __init__(self, factory, channel, *, owner_guard=None):
+    def __init__(self, factory, channel, *, owner_guard=None, agent_id=None, unstarted_sessions=()):
         self.factory, self.channel = factory, channel
         self.owner_guard = owner_guard
+        self.agent_id = agent_id
+        self.unstarted_sessions = tuple(sorted(set(unstarted_sessions)))
+        self.unstarted_json = json.dumps(self.unstarted_sessions)
+        if self.unstarted_sessions and owner_guard is None:
+            raise ValueError('Only the embedded owner can prove an unstarted local admission.')
+        if agent_id is not None and owner_guard is None:
+            raise ValueError("Subject recovery requires the embedded owner guard.")
         self._reset()
 
     def _reset(self):
@@ -40,6 +81,15 @@ class ExecutionReconciliation:
         if self.owner_guard is not None:
             self.owner_guard(conn)
         c = self.channel
+        for session_id in self.unstarted_sessions:
+            if not pending_unstarted_session(conn, c.server_id, c.executor_id, session_id):
+                raise ValueError('The proven unstarted admission changed during recovery.')
+        if self.agent_id is not None:
+            if conn.execute("SELECT 1 FROM execution_agent_recovery WHERE server_id=? AND executor_id=? "
+                    "AND agent_id=? AND generation=? AND state='RECOVERING'",
+                    (c.server_id, c.executor_id, self.agent_id, c.connection_generation)).fetchone() is None:
+                raise ValueError('The agent recovery owner is no longer current.')
+            return
         if conn.execute("SELECT 1 FROM execution_executors WHERE server_id=? AND executor_id=? "
             "AND owner_instance_id=? AND generation=? AND control_state='RECOVERING' AND revoked_at IS NULL",
             (c.server_id, c.executor_id, c.connection_id, c.connection_generation)).fetchone() is None:
@@ -62,19 +112,26 @@ class ExecutionReconciliation:
             self._owner(conn)
             from .execution_initial_turns import settle_failed_initial_turns
             settle_failed_initial_turns(conn, server_id=c.server_id, executor_id=c.executor_id)
+            from .execution_initial_turns import settle_unsent_closed_session_operations
+            settle_unsent_closed_session_operations(conn, server_id=c.server_id,
+                executor_id=c.executor_id, agent_id=self.agent_id)
             if self.op_high is None:
                 self.receipt_high = conn.execute('SELECT coalesce(max(rowid),0) FROM execution_receipts '
-                    'WHERE server_id=? AND executor_id=?', (c.server_id,c.executor_id)).fetchone()[0]
+                    'WHERE server_id=? AND executor_id=? AND (? IS NULL OR operation_id IN (SELECT operation_id FROM execution_operations WHERE server_id=? AND executor_id=? AND subject_agent_id=?))',
+                    (c.server_id,c.executor_id,self.agent_id,c.server_id,c.executor_id,self.agent_id)).fetchone()[0]
                 self.op_high = conn.execute('SELECT coalesce(max(rowid),0) FROM execution_operations '
                     'WHERE server_id=? AND executor_id=?', (c.server_id, c.executor_id)).fetchone()[0]
                 self.session_high = conn.execute('SELECT coalesce(max(rowid),0) FROM execution_sessions '
                     'WHERE server_id=? AND executor_id=?', (c.server_id, c.executor_id)).fetchone()[0]
             operations = conn.execute("SELECT rowid,operation_id FROM execution_operations WHERE server_id=? "
                 "AND executor_id=? AND rowid>? AND rowid<=? AND admission_state<>'RESOLVED_TERMINAL' "
-                "ORDER BY rowid LIMIT 256", (c.server_id,c.executor_id,self.op_after,self.op_high)).fetchall()
+                "AND (? IS NULL OR subject_agent_id=?) AND session_id NOT IN (SELECT value FROM json_each(?)) ORDER BY rowid LIMIT 256",
+                (c.server_id,c.executor_id,self.op_after,self.op_high,self.agent_id,self.agent_id,self.unstarted_json)).fetchall()
             sessions = conn.execute("SELECT rowid,session_id FROM execution_sessions WHERE server_id=? "
                 "AND executor_id=? AND rowid>? AND rowid<=? AND lifecycle_state NOT IN ('CLOSED','FAILED') "
-                "ORDER BY rowid LIMIT 256", (c.server_id,c.executor_id,self.session_after,self.session_high)).fetchall()
+                "AND (? IS NULL OR open_operation_id IN (SELECT operation_id FROM execution_operations WHERE server_id=? AND executor_id=? AND subject_agent_id=?)) "
+                "AND session_id NOT IN (SELECT value FROM json_each(?)) ORDER BY rowid LIMIT 256", (c.server_id,c.executor_id,self.session_after,self.session_high,
+                self.agent_id,c.server_id,c.executor_id,self.agent_id,self.unstarted_json)).fetchall()
         self.next_op = operations[-1][0] if operations else self.op_high
         self.next_session = sessions[-1][0] if sessions else self.session_high
         self.pending = dict(protocol_major=1, contract_revision=R4_PREVIEW_REVISION,
@@ -108,12 +165,20 @@ class ExecutionReconciliation:
                     (c.server_id,c.executor_id,operation_id)).fetchone())
                 if receipt is None or any(receipt[k] != summary[k] for k in ('intent_hash','receipt_revision','stage')):
                     self.blocked = True
-                if summary['stage'] not in ('SUBMITTED','SUCCEEDED','FAILED','CANCELLED'):
+                # Native availability and a historical operation's outcome are
+                # separate facts. Intermediate/unknown receipts can reconcile
+                # once every resource is proven released and its stream drained.
+                # They remain unchanged and never authorize another native send.
+                if summary['stage'] not in ('SUBMISSION_STARTED','SUBMITTED','RUNNING','OUTCOME_UNKNOWN',
+                                             'SUCCEEDED','FAILED','CANCELLED'):
                     self.blocked = True
             facts = {r['session_id']: r for r in report['ownership_facts']}
+            released = set()
             claims = {r['session_id']: r for r in report['claims']}
             if len(facts) != len(report['ownership_facts']) or len(claims) != len(report['claims']) or set(facts) != set(claims):
                 raise ValueError('The ownership facts do not match the claims.')
+            if self.agent_id is not None and not set(claims).issubset(request['session_ids']):
+                raise ValueError('The claims do not belong to this reconciliation page.')
             for session_id, claim in claims.items():
                 fact = facts[session_id]
                 session = conn.execute('SELECT owner_generation FROM execution_sessions WHERE '
@@ -147,7 +212,8 @@ class ExecutionReconciliation:
                         (c.server_id,c.executor_id,session_id,claim['owner_generation'])).fetchone()
                     opening = _receipt(opening)
                     if (opening is None or opening['session_id'] != session_id or
-                            opening['stage'] not in ('SUBMITTED','SUCCEEDED') or
+                            opening['stage'] not in ('SUBMISSION_STARTED','SUBMITTED','RUNNING','OUTCOME_UNKNOWN','SUCCEEDED','FAILED') or
+                            not opening['possible_effect'] or
                             fact['proof_digest'] != r4_resource_release_digest(
                                 server_id=c.server_id,executor_id=c.executor_id,session_id=session_id,
                                 opening_operation_id=opening['operation_id'],opening_intent_hash=opening['intent_hash'],
@@ -157,6 +223,7 @@ class ExecutionReconciliation:
                 conn.execute("UPDATE execution_sessions SET lifecycle_state='CLOSED',lease_state='CLOSED' "
                     "WHERE server_id=? AND executor_id=? AND session_id=? AND owner_generation=?",
                     (c.server_id,c.executor_id,session_id,claim['owner_generation']))
+                released.add(session_id)
             streams = set()
             for watermark in report['stream_watermarks']:
                 stream = (watermark['session_id'], watermark['stream_epoch'])
@@ -176,16 +243,32 @@ class ExecutionReconciliation:
             if any(claim['state'] == 'RELEASED' and sum(s[0] == session for s in streams) != 1
                    for session, claim in claims.items()):
                 self.blocked = True
+            if not self.blocked:
+                from .execution_domain_delivery import project_released_deliveries
+                for watermark in report['stream_watermarks']:
+                    if watermark['session_id'] in released:
+                        project_released_deliveries(conn, server_id=c.server_id, executor_id=c.executor_id,
+                            session_id=watermark['session_id'], proof=dict(
+                                ownership=facts[watermark['session_id']], stream=watermark))
             if report['complete']:
                 self.blocked |= self.receipt_high != conn.execute(
-                    'SELECT coalesce(max(rowid),0) FROM execution_receipts WHERE server_id=? AND executor_id=?',
-                    (c.server_id,c.executor_id)).fetchone()[0]
+                    'SELECT coalesce(max(rowid),0) FROM execution_receipts WHERE server_id=? AND executor_id=? '
+                    'AND (? IS NULL OR operation_id IN (SELECT operation_id FROM execution_operations WHERE server_id=? AND executor_id=? AND subject_agent_id=?))',
+                    (c.server_id,c.executor_id,self.agent_id,c.server_id,c.executor_id,self.agent_id)).fetchone()[0]
                 unscanned = conn.execute("SELECT 1 FROM execution_operations WHERE server_id=? AND executor_id=? "
-                    "AND rowid>? AND admission_state<>'RESOLVED_TERMINAL' LIMIT 1",
-                    (c.server_id,c.executor_id,self.next_op)).fetchone()
+                    "AND rowid>? AND admission_state<>'RESOLVED_TERMINAL' AND (? IS NULL OR subject_agent_id=?) "
+                    "AND session_id NOT IN (SELECT value FROM json_each(?)) LIMIT 1",
+                    (c.server_id,c.executor_id,self.next_op,self.agent_id,self.agent_id,self.unstarted_json)).fetchone()
                 active = conn.execute("SELECT 1 FROM execution_sessions WHERE server_id=? AND executor_id=? "
-                    "AND lifecycle_state NOT IN ('CLOSED','FAILED') LIMIT 1", (c.server_id,c.executor_id)).fetchone()
-                if not self.blocked and not unscanned and not active:
+                    "AND lifecycle_state NOT IN ('CLOSED','FAILED') AND (? IS NULL OR open_operation_id IN ("
+                    "SELECT operation_id FROM execution_operations WHERE server_id=? AND executor_id=? AND subject_agent_id=?)) "
+                    "AND session_id NOT IN (SELECT value FROM json_each(?)) LIMIT 1",
+                    (c.server_id,c.executor_id,self.agent_id,c.server_id,c.executor_id,self.agent_id,self.unstarted_json)).fetchone()
+                if not self.blocked and not unscanned and not active and self.agent_id is not None:
+                    # The embedded coordinator releases local tool resources
+                    # before atomically exposing this subject as READY.
+                    ready = True
+                elif not self.blocked and not unscanned and not active:
                     ready = conn.execute("UPDATE execution_executors SET control_state='CONTROL_READY' "
                         "WHERE server_id=? AND executor_id=? AND owner_instance_id=? AND generation=? "
                         "AND control_state='RECOVERING' AND revoked_at IS NULL",

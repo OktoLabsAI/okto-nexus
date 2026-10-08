@@ -145,8 +145,10 @@ class EndpointService:
                         old_revision=endpoint['revision'], new_revision=endpoint['revision']+1,
                         fields=['harness_settings'], now=now)
                     endpoint = self.repo.get(uow, endpoint_id)
+            from .runtime_policy import effective, harness_mcp_settings
             return dict(endpoint_id=endpoint_id, adapter_id=endpoint['adapter_id'], revision=endpoint['revision'], settings=settings,
-                        configuration=schema)
+                        configuration=schema, inherited_global_mcps=effective(uow.connection, endpoint['agent_id'])['inherit_global_mcps'],
+                        effective_settings=harness_mcp_settings(uow.connection, endpoint['agent_id'], endpoint['adapter_id'], settings))
 
     def tool_permission(self, context, *, endpoint_id, changes=None):
         """Operator policy for the generated Nexus client, applied at session start."""
@@ -259,6 +261,30 @@ class EndpointService:
                 raise OktoNexusError(ErrorCode.CONFLICT, "Endpoint revision changed.", {})
             if endpoint["protocol"] != "nxl-r4":
                 raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Legacy connection configuration was removed.", {})
+            if set(changes) == {'priority'}:
+                if type(changes['priority']) is not int:
+                    raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Priority must be an integer.', {})
+                # Selection order is not execution authority. First account for
+                # any earlier identity/policy changes, then atomically rebase
+                # the digest for this routing-only edit. No reader can observe
+                # the temporary counter advance inside this writer transaction.
+                from ..adapters.outbound.sqlite.execution_agent_revisions import current_agent_revisions
+                server_id, before, _ = current_agent_revisions(self.cf,
+                    agent_id=endpoint['agent_id'], uow=uow, require_active=False)
+                now = self.clock.now_iso()
+                uow.connection.execute('UPDATE agent_endpoints SET priority=?,revision=revision+1,updated_at=? '
+                    'WHERE endpoint_id=? AND revision=?', (changes['priority'], now, endpoint_id, expected_revision))
+                current_agent_revisions(self.cf, agent_id=endpoint['agent_id'], uow=uow, require_active=False)
+                uow.connection.execute('UPDATE execution_agent_revisions SET authorization_revision=?,configuration_revision=? '
+                    'WHERE server_id=? AND agent_id=?',
+                    (before.authorization, before.configuration, server_id, endpoint['agent_id']))
+                # Preserve only previously matching boot approval; stale or
+                # disabled records must not gain authorization through routing.
+                uow.connection.execute('UPDATE runtime_boot_bindings SET endpoint_revision=? '
+                    'WHERE endpoint_id=? AND endpoint_revision=?', (expected_revision+1, endpoint_id, expected_revision))
+                self.repo.audit_configuration(uow, context=context, kind='endpoint', resource_id=endpoint_id,
+                    old_revision=expected_revision, new_revision=expected_revision+1, fields=changes, now=now)
+                return {**endpoint, 'priority': changes['priority'], 'revision': expected_revision+1}
             # Retiring a canonical connection must not look it up in the legacy
             # adapter registry. This does not claim its native process exited.
             if changes == {"enabled": False} and type(changes["enabled"]) is bool:
@@ -280,8 +306,25 @@ class EndpointService:
                     or updated["profile_id"] is not None and (not isinstance(updated["profile_id"], str) or not 1 <= len(updated["profile_id"]) <= 128)
                     or not isinstance(updated["public_config"], dict)):
                 raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid endpoint configuration field.", {})
-            descriptor = self.registry.get(endpoint["adapter_id"])
-            config = self.validate_public_config(descriptor, updated["response_policy"], updated["public_config"])
+            # Canonical bindings store Core IDs, while this validator's
+            # descriptors are indexed by native kind/substrate.
+            from nexus_connector_core import get_runtime_catalog
+            runtime = next((item for item in get_runtime_catalog().runtimes
+                            if item.adapter_id == endpoint['adapter_id'] and item.connection_mode == 'managed'), None)
+            if runtime is None:
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Unknown managed runtime.', {})
+            descriptor = self.registry.resolve(runtime.native_kind,
+                'stream' if runtime.native_kind == 'claude_code' else None)
+            public = dict(updated['public_config'])
+            if 'alias' in public and public['alias'] != endpoint['public_config'].get('alias'):
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Use binding configuration to change the connection name.', {})
+            public.pop('alias', None)
+            for field in ('harness_settings', 'nexus_tool_permission'):
+                if field not in public and field in endpoint['public_config']:
+                    public[field] = endpoint['public_config'][field]
+            config = self.validate_public_config(descriptor, updated["response_policy"], public)
+            if 'alias' in endpoint['public_config']:
+                config['alias'] = endpoint['public_config']['alias']
             if config.get('harness_settings', {}) != endpoint['public_config'].get('harness_settings', {}):
                 raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Use the harness settings operation to change native configuration.', {})
             if config.get("nexus_tool_permission", "ask") != endpoint["public_config"].get("nexus_tool_permission", "ask"):
@@ -392,9 +435,25 @@ class EndpointService:
         if profile["adapter_id"] not in {item.adapter_id for item in get_runtime_catalog().runtimes}:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Legacy runtime profile configuration was removed.", {})
         merged = profile | changes
-        config, refs = self.validate_profile(profile["adapter_id"], merged["config"], merged["secret_refs"],
-            bool(profile["inherit_ambient"]) if "inherit_ambient" not in changes else changes["inherit_ambient"],
-            bool(profile["enabled"]) if "enabled" not in changes else changes["enabled"])
+        if set(changes) == {'enabled'}:
+            # Canonical profiles refer to an approved Core realization. An
+            # administrative switch preserves that configuration instead of
+            # validating it as a legacy adapter's process-launch dictionary.
+            if type(changes['enabled']) is not bool:
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Profile switches must be booleans.', {})
+            config, refs = profile['config'], profile['secret_refs']
+        else:
+            # Launch settings belong to the approved executor realization and
+            # the harness-settings API. A Server profile can only restrict it.
+            config, refs = merged['config'], merged['secret_refs']
+            if (not isinstance(config, dict) or set(config) - {'required_native_requests', 'disabled_capabilities'}
+                    or refs != profile['secret_refs'] or merged['inherit_ambient'] != profile['inherit_ambient']
+                    or ('enabled' in changes and type(changes['enabled']) is not bool)
+                    or ('inherit_ambient' in changes and type(changes['inherit_ambient']) is not bool)):
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                    'Canonical profiles accept capability restrictions; configure native settings on the connection.', {})
+            from .runtime_requirements import validate_canonical_native_requirements
+            validate_canonical_native_requirements(config, profile['adapter_id'])
         with self.cf.unit_of_work() as uow:
             now = self.clock.now_iso()
             cur = uow.connection.execute("UPDATE runtime_profiles SET config=?,secret_refs=?,inherit_ambient=?,enabled=?,revision=revision+1,updated_at=? WHERE profile_id=? AND revision=?",

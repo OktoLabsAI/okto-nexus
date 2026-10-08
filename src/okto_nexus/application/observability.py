@@ -54,6 +54,26 @@ def _epoch_or_none(iso: str | None) -> float | None:
         return None
 
 
+def activity_presence(clock, config, *, has_active_session, last_heartbeat_at, last_seen_at=None):
+    """Shared activity fallback for dashboard and agent discovery."""
+    candidates = []
+    if has_active_session:
+        heartbeat = _epoch_or_none(last_heartbeat_at)
+        if heartbeat is not None:
+            candidates.append(heartbeat)
+    seen = _epoch_or_none(last_seen_at)
+    if seen is not None:
+        candidates.append(seen)
+    if not candidates:
+        return PRESENCE_OFFLINE
+    age = clock.now_epoch() - max(candidates)
+    if age < config.session_stale_ttl_seconds:
+        return PRESENCE_PRESENT
+    if age < config.presence_ttl_seconds:
+        return PRESENCE_STALE
+    return PRESENCE_OFFLINE
+
+
 class ObservabilityService:
     """Read-only aggregates for the dashboard surfaces."""
 
@@ -95,22 +115,9 @@ class ObservabilityService:
         never lifted by the agent's activity in a different session; omitting it
         reproduces the original session-only rule exactly.
         """
-        candidates: list[float] = []
-        if has_active_session:
-            hb_epoch = _epoch_or_none(last_heartbeat_at)
-            if hb_epoch is not None:
-                candidates.append(hb_epoch)
-        seen_epoch = _epoch_or_none(last_seen_at)
-        if seen_epoch is not None:
-            candidates.append(seen_epoch)
-        if not candidates:
-            return PRESENCE_OFFLINE
-        age = self._clock.now_epoch() - max(candidates)
-        if age < self._config.session_stale_ttl_seconds:
-            return PRESENCE_PRESENT
-        if age < self._config.presence_ttl_seconds:
-            return PRESENCE_STALE
-        return PRESENCE_OFFLINE
+        return activity_presence(self._clock, self._config,
+            has_active_session=has_active_session, last_heartbeat_at=last_heartbeat_at,
+            last_seen_at=last_seen_at)
 
     # ------------------------------------------------------------------ #
     # Graph snapshot (FR3 / AC5)
@@ -144,6 +151,8 @@ class ObservabilityService:
         # node below; an agent absent from a map has 0.
         pending = self._q.inbox_depth_by_agent(uow, workspace_id=workspace_id)
         open_handoffs = self._q.open_handoffs_by_agent(uow, workspace_id=workspace_id)
+        from .agent_connection_status import agent_connection_statuses, connection_presence
+        connections = agent_connection_statuses(uow, self._clock.now_iso())
         nodes: list[dict[str, Any]] = []
         for row in self._q.agent_rows(uow):
             lanes = inbox.get(row["agent_id"], {})
@@ -158,7 +167,8 @@ class ObservabilityService:
                     "has_key": bool(row.get("api_key_hash")),
                     "last_seen_at": row.get("last_seen_at"),
                     "last_action": last_actions.get(row["agent_id"]),
-                    "presence": self.classify_presence(
+                    "presence": connection_presence(connections.get(row['agent_id']),
+                        is_active=bool(row.get('is_active', True))) or self.classify_presence(
                         has_active_session=bool(row.get("active_sessions")),
                         last_heartbeat_at=row.get("last_heartbeat_at"),
                         last_seen_at=row.get("last_seen_at"),
@@ -169,6 +179,13 @@ class ObservabilityService:
                     "open_handoffs": int(open_handoffs.get(row["agent_id"], 0)),
                 }
             )
+        visible_agents = {node["agent_id"] for node in nodes}
+        message_edges = self._q.message_edges(
+            uow, workspace_id=workspace_id, since_iso=since_iso
+        )
+        handoff_edges = self._q.handoff_rows(
+            uow, workspace_id=workspace_id, statuses=("OPEN", "CLAIMED")
+        )
 
         return {
             "workspace_id": workspace_id,
@@ -177,14 +194,15 @@ class ObservabilityService:
             "nodes": nodes,
             "channels": self._q.channel_rows(uow, workspace_id=workspace_id),
             "edges": {
-                "messages": self._q.message_edges(
-                    uow, workspace_id=workspace_id, since_iso=since_iso
-                ),
-                "handoffs": self._q.handoff_rows(
-                    uow,
-                    workspace_id=workspace_id,
-                    statuses=("OPEN", "CLAIMED"),
-                ),
+                "messages": [
+                    edge for edge in message_edges
+                    if edge["from"] in visible_agents and edge["to"] in visible_agents
+                ],
+                "handoffs": [
+                    edge for edge in handoff_edges
+                    if edge["from_agent_id"] in visible_agents
+                    and (edge["claimed_by"] is None or edge["claimed_by"] in visible_agents)
+                ],
             },
         }
 

@@ -181,13 +181,29 @@ export function bindingRequestExists(key: string): boolean {
   return sessionStorage.getItem(`okto-nexus:r4-binding:${key}`) !== null;
 }
 
+export interface RecoveryPlan {
+  executor_id: string; generation: number; agent_id?: string | null;
+  sessions: {session_id: string; opening_operation_id: string; agent_id: string}[];
+}
+
 export const runtimeApi = {
+  recoveryPlan: (agentId: string) => read<RecoveryPlan>(`/v1/runtime/recovery/plan?agent_id=${encodeURIComponent(agentId)}`, undefined),
+  confirmStopped: (plan: RecoveryPlan) => read<{state: string; message: string}>(
+    '/v1/runtime/recovery/confirm-stopped', undefined,
+    {plan, confirmation: 'PREVIOUS_RUNTIME_PROCESSES_STOPPED'}),
+  retryRecovery: (agentId: string) => read<{state: string; error_code: string | null; message: string}>(
+    `/v1/runtime/recovery/retry?agent_id=${encodeURIComponent(agentId)}`, undefined, {}),
   setup: (agent: string, binding?: string, signal?: AbortSignal) => read<{baseline: SetupBaseline;
     connections: (Pick<BindingView,'binding_id' | 'candidate_ref' | 'executor_id' | 'workspace_id' | 'adapter_id'> & {execution_location: 'local' | 'remote'})[];
     authorization?: {minutes: number | null; actions: number | null};
     folders?: {workspace_root: string; provider_home: string | null; secret_bindings: Record<string,string>};
     public_config?: {alias?: string; harness_settings?: Record<string,string>; nexus_tool_permission?: 'ask' | 'always_allow'};
     automatic_reply?: boolean}>(`/v1/connections/setup/${encodeURIComponent(agent)}${binding ? `?binding_id=${encodeURIComponent(binding)}` : ''}`, signal),
+  workspacePaths: (workspaceId: string, executorId: string, signal?: AbortSignal) =>
+    read<{workspace_id: string; executor_id: string; items: {path: string}[]}>(
+      `/v1/workspaces/${encodeURIComponent(workspaceId)}/paths?executor_id=${encodeURIComponent(executorId)}`,
+      signal,
+    ),
   testSetup: (body: SetupRequest) => read<SetupTest>('/v1/connections/setup:test', undefined, body),
   setupTest: (id: string, signal?: AbortSignal) => read<SetupTest>(`/v1/connections/setup-tests/${encodeURIComponent(id)}`, signal),
   finishSetup: (body: SetupRequest) => read<{saved: boolean}>('/v1/connections/setup:finish', undefined, body),

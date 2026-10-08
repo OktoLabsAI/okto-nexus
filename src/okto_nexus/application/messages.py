@@ -1208,6 +1208,31 @@ class MessageService:
             active_ids.add(session.agent_id)
             if session_is_present(session, now, self._presence_ttl):
                 present_ids.add(session.agent_id)
+        # R4 bindings do not create legacy `sessions` rows. A connected,
+        # approved executor is also a live member of the workspace audience.
+        for row in uow.connection.execute("""
+            SELECT DISTINCT ep.agent_id FROM execution_bindings b
+            JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id
+            JOIN execution_workspace_bindings w ON w.server_id=b.server_id
+                AND w.executor_id=b.executor_id AND w.workspace_binding_id=b.workspace_binding_id
+            JOIN execution_realizations r ON r.server_id=b.server_id
+                AND r.executor_id=b.executor_id AND r.realization_ref=b.realization_ref
+            JOIN execution_executors x ON x.server_id=b.server_id AND x.executor_id=b.executor_id
+            WHERE w.workspace_id=? AND w.status='READY' AND r.status='READY'
+                AND r.revision=b.realization_revision AND ep.enabled=1
+                AND ep.activation_state='approved' AND ep.protocol='nxl-r4'
+                AND x.control_state='CONTROL_READY' AND x.revoked_at IS NULL
+                AND (x.kind='embedded' OR (x.kind='remote'
+                    AND (julianday(?) - julianday(x.last_seen_at))*86400 BETWEEN 0 AND 45
+                    AND EXISTS (SELECT 1 FROM execution_control_lanes l
+                        JOIN execution_link_tickets t ON t.ticket_id=l.ticket_id
+                        WHERE l.server_id=b.server_id AND l.executor_id=b.executor_id
+                          AND l.binding_id=b.binding_id AND l.agent_id=ep.agent_id
+                          AND l.state='ADMITTED' AND l.connection_generation=x.generation
+                          AND l.connection_id=x.owner_instance_id AND l.expires_at>?
+                          AND t.revoked_at IS NULL AND t.expires_at>?)))
+        """, (workspace_id, now, now, now)):
+            present_ids.add(row[0])
         # Enrich the present agents with their registry profile (role /
         # capabilities / tags) so attribute-based targets - notably 'tag'
         # selectors - can evaluate against the LIVE audience. A present agent

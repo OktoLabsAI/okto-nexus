@@ -438,17 +438,17 @@ export function SettingsView({
               <div>
                 <div
                   className="text-red-600 dark:text-red-400 font-medium"
-                  title="Erases the hub's entire operational history (messages, handoffs, sessions, events, workspaces) with VACUUM. Irreversible."
+                  title="Stops running executions and permanently erases operational history."
                 >
                   Reset database
                 </div>
                 <p className="text-xs text-surface-500 mt-1">
                   Erases ALL messages, deliveries, handoffs, sessions,
-                  events, channels and workspaces (with VACUUM). Irreversible.
+                  events and channels. Running executions will stop. Irreversible.
                 </p>
                 <label
                   className="flex items-center gap-2 mt-2 text-xs text-surface-600 dark:text-surface-400"
-                  title="Keeps agent identities and API keys: the dashboard and connected MCP clients keep working after the reset."
+                  title="Keeps identities, keys, workspaces, connection settings and permissions. Agents reconnect automatically."
                 >
                   <input
                     type="checkbox"
@@ -456,7 +456,7 @@ export function SettingsView({
                     onChange={(e) => setKeepAgents(e.target.checked)}
                     className="accent-accent-500"
                   />
-                  Preserve agents and API keys (recommended)
+                  Preserve agents, API keys and connection settings (recommended)
                 </label>
               </div>
               <button
@@ -470,7 +470,7 @@ export function SettingsView({
                         The entire operational history will be permanently
                         erased.{" "}
                         {keepAgents ? (
-                          <b>Agents and keys will be preserved.</b>
+                          <b>Agents, keys, workspaces and connection settings will be preserved. Running executions will stop and agents will reconnect automatically.</b>
                         ) : (
                           <b className="text-red-500">
                             Agents and keys will ALSO be erased — every MCP
@@ -481,7 +481,17 @@ export function SettingsView({
                     ),
                     onConfirm: async () => {
                       try {
-                        const result = await api.reset(keepAgents);
+                        let result = await api.reset(keepAgents);
+                        while (result.pending) {
+                          const phases: Record<string, string> = {
+                            stopping_executions: "Stopping running executions…",
+                            clearing_history: "Clearing history…",
+                            reconnecting: "Reconnecting agents…",
+                          };
+                          setReport(phases[String(result.phase)] ?? "Reset in progress…");
+                          await new Promise((resolve) => setTimeout(resolve, 1000));
+                          result = await api.resetStatus();
+                        }
                         setReport("Database reset: " + JSON.stringify(result));
                         setError(null);
                       } catch (exc) {

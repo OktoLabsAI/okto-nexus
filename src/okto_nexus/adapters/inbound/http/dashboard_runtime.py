@@ -13,6 +13,9 @@ def build_router():
         'session_view', 'session_events', 'native_decision', 'native_decision_view',
         'native_input_requests',
         'connection_setup_read', 'connection_setup_test', 'connection_setup_test_read', 'connection_setup_finish',
+        'workspace_paths_read',
+        'retry_runtime_recovery',
+        'runtime_recovery_plan', 'confirm_runtime_stopped',
     }
     router = APIRouter()
     for source in (connections(), runtime()):

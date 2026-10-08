@@ -1,4 +1,5 @@
 """Global defaults, agent inheritance and MCP-only enforcement at real boundaries."""
+import pytest
 from test_embedded_dispatch import local_setup, connected_local, qualified_contract, admit, wait_receipt
 from test_sender_sessions import configure, sender
 from test_local_dashboard_execution import resolve, submit, keyless
@@ -30,11 +31,12 @@ def test_source_session_policy_global_and_agent_override(connected_local):
     assert read(setup, 'subject')['effective']['session_policy'] == 'per_sender_session'
 
 
-def test_global_disable_keeps_mcp_and_inbox_but_blocks_runtime(connected_local, monkeypatch):
+@pytest.mark.parametrize('agent', [None, 'subject'])
+def test_global_disable_keeps_mcp_and_inbox_but_blocks_runtime(connected_local, monkeypatch, agent):
     setup, binding, native = connected_local
     configure(setup, binding, 'shared')
     assert read(setup, 'subject')['runtime_enabled'] is None
-    assert save(setup, runtime_enabled=False).status_code == 200
+    assert save(setup, agent=agent, runtime_enabled=False).status_code == 200
     assert read(setup, 'subject')['effective']['runtime_enabled'] is False
     mid = sender(setup, monkeypatch)('operator', 'MCP-only message')
     from test_pr34_remediation import tool
@@ -57,7 +59,7 @@ def test_agent_override_can_enable_global_off_and_return_to_inheritance(connecte
     assert save(setup, runtime_enabled=False, session_policy='per_sender').status_code == 200
     result = save(setup, agent='subject', runtime_enabled=True)
     assert result.status_code == 200, result.text
-    assert result.json()['data']['effective'] == dict(runtime_enabled=True, session_policy='per_sender')
+    assert result.json()['data']['effective'] == dict(runtime_enabled=True, session_policy='per_sender', inherit_global_mcps=False)
     grant = setup[2].post('/api/v1/harness/grants', headers=setup[3]['operator'], json=dict(
         actor_agent_id='subject', endpoint_id=binding['endpoint_id'], actions=['open', 'send', 'interrupt', 'close'],
         max_executions=10, expires_at=iso_plus(setup[0].clock.now_iso(), 600)))
@@ -77,7 +79,7 @@ def test_global_changes_preserve_explicit_overrides_and_grants(connected_local):
     setup, binding, _ = connected_local
     assert save(setup, agent='subject', runtime_enabled=True, session_policy='shared').status_code == 200
     assert save(setup, runtime_enabled=False, session_policy='per_sender').status_code == 200
-    assert read(setup, 'subject')['effective'] == dict(runtime_enabled=True, session_policy='shared')
+    assert read(setup, 'subject')['effective'] == dict(runtime_enabled=True, session_policy='shared', inherit_global_mcps=False)
     with setup[0].connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute('SELECT revoked_at FROM runtime_execution_grants').fetchone()[0] is None
 
@@ -98,11 +100,17 @@ def test_disable_fences_previously_resolved_work(connected_local):
     assert submit(setup, resolved).status_code in (403, 409)  # reenabling never revives the old intent
 
 
-def test_disabled_live_session_closes_on_lease_renewal(connected_local):
+def test_disabled_live_session_closes_on_lease_renewal(connected_local, monkeypatch):
     setup, binding, native = connected_local
     opened = admit(setup, binding, 'disable-live', 'runtime.start', new_session=True)
     wait_receipt(setup, opened)
     assert save(setup, agent='subject', runtime_enabled=False).status_code == 200
+    mid = sender(setup, monkeypatch)('operator', 'Retain inbox while runtime is disabled')
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT status FROM message_deliveries WHERE message_id=?', (mid,)).fetchone()[0] == 'unread'
+        assert uow.connection.execute('SELECT COUNT(*) FROM delivery_outbox').fetchone()[0] == 0
+        assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.submit'").fetchone()[0] == 0
+    assert native.opens == 1 and not native.native.sent
     owner = setup[1].state.embedded_dispatch_owner
     session_id = opened['session_id']
     setup[2].portal.call(owner._renew_owned, session_id, owner.sessions[session_id])

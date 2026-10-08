@@ -57,8 +57,9 @@ def main(argv=None):
     assert all((guide.parent / link).is_file() for link in links)
     from nexus_connector_core import catalog
     catalog_source = Path(catalog.__file__).read_text(encoding='utf-8')
-    for adapter in ('codex_app_server', 'pi_rpc', 'claude_stream', 'claude_attach'):
+    for adapter in ('codex_app_server', 'pi_rpc', 'claude_stream'):
         assert f'`{adapter}`' in text and f'"{adapter}"' in catalog_source
+    assert 'Claude attach is no longer supported' in text
     report = {'scope': 'NS15.05 supporting docs audit; NOT full scenario acceptance',
               'package_path': str(package), 'guide_sha256': hashlib.sha256(guide.read_bytes()).hexdigest(),
               'commands': results, 'routes': documented, 'route_source_sha256': route_sources,

@@ -137,12 +137,21 @@ def read_operation(deps, operation_id):
             "SELECT 1 FROM execution_operations o JOIN execution_installation i "
             "ON i.server_id=o.server_id WHERE operation_id=? LIMIT 1", (operation_id,)).fetchone()
         if canonical:
-            build_execution_access(deps).authenticate(context, uow=uow, require_feature=False)
+            access = build_execution_access(deps)
+            access.authenticate(context, uow=uow, require_feature=False)
+            from okto_nexus.application.execution_operator_authority import require_delegated_result_read
+            require_delegated_result_read(uow, operation_id=operation_id, context=context, access=access)
     if canonical:
-        return read_execution_operation_history(deps.connection_factory,
-            server_id=ensure_execution_installation(deps.connection_factory).server_id,
-            executor_id=None, operation_id=operation_id,
-            subject_agent_id=context.actor_agent_id, actor_agent_id=context.actor_agent_id).public_view()
+        try:
+            return read_execution_operation_history(deps.connection_factory,
+                server_id=ensure_execution_installation(deps.connection_factory).server_id,
+                executor_id=None, operation_id=operation_id,
+                subject_agent_id=context.actor_agent_id, actor_agent_id=context.actor_agent_id).public_view()
+        except OktoNexusError as exc:
+            if exc.code != ErrorCode.NOT_FOUND:
+                raise
+            from okto_nexus.application.runtime_access import denied
+            raise denied() from None
     from okto_nexus.adapters.outbound.sqlite.runtime_commands_repo import SqliteRuntimeCommandRepo
     context = authorize_request(deps, action="access")
     service = RuntimeControlService(access=build_access_service(deps), supervisor=None, commands=SqliteRuntimeCommandRepo())
@@ -473,8 +482,8 @@ def build_dispatcher(deps):
             messages._runtime_results.validate_relay(uow, operation["source_result_id"])
         if not managed(uow, operation):
             messages.revalidate_runtime_delivery(uow, operation)
-        if registry.get(endpoint["adapter_id"]).substrate == "attach" and not deps.config.feature_harness_attach:
-            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Attach is disabled.", {})
+        if endpoint['protocol'] != 'nxl-r4' and registry.get(endpoint["adapter_id"]).substrate == "attach":
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Attach connections are no longer supported.", {})
 
     def validate_dispatch(uow, operation):
         validate(uow, operation)
@@ -557,9 +566,10 @@ def build_dispatcher(deps):
         from okto_nexus.bootstrap.execution_compat import admit_delivery
         admit_delivery(deps, uow, operation['operation_id'])
         # The R4 outbox now owns physical dispatch. Keep the legacy attempt in
-        # history, but do not leave a live claim under its worker owner epoch.
+        # history and the newly admitted canonical turn as the current attempt,
+        # but do not leave a live claim under the legacy worker owner epoch.
         uow.connection.execute("UPDATE delivery_outbox SET status='PENDING',owner_epoch=NULL,"
-            "attempt_id=NULL,lease_expires_at=NULL WHERE operation_id=?", (operation['operation_id'],))
+            "lease_expires_at=NULL WHERE operation_id=?", (operation['operation_id'],))
         return True
     dispatcher.admit_canonical = admit_canonical
     dispatcher.event_ingress = supervisor.event_ingress
@@ -819,6 +829,7 @@ def _default_connector_factories() -> dict[str, Any]:
 def build_connector_factories(deps: Any):
     """Trusted registry in production; explicit legacy injection stays compatible."""
     from okto_nexus.adapters.outbound.harness.compatibility import qualified_capabilities, CONVERSATION_VERSIONS
+    from okto_nexus.application.runtime_requirements import native_requirement_schema
     registry = getattr(deps, "harness_adapter_registry", None)
     if registry is not None:
         return registry
@@ -844,15 +855,7 @@ def build_connector_factories(deps: Any):
                 multiplexing=caps.multiplexes_sessions, steer_timing=caps.steer_timing,
                 interrupt=not caps.send_only, interrupt_requires_settle=caps.interrupt_requires_settle_wait,
                 observes_stop=caps.observes_session_end, approvals=kind == "codex" or (kind == "claude_code" and substrate == "stream")),
-            input_schema={"transport_binding_contract": 1, **({"native_approval_contract": 1, "requires_feature_hitl": True,
-                "methods": ["item/commandExecution/requestApproval", "item/fileChange/requestApproval",
-                            "item/tool/requestUserInput", "mcpServer/elicitation/request"],
-                "decisions": ["accept", "decline"], "input_contract": 1,
-                "input_limits": "blocking non-secret questions; correlated form elicitation with flat primitive fields only; no URL or remote schema resolution"} if kind == "codex" else
-                {"native_approval_contract": 1, "requires_feature_hitl": True,
-                 "methods": ["control_request:can_use_tool"], "tools": ["Write", "Edit", "Bash", "AskUserQuestion"],
-                 "decisions": ["accept", "decline"], "correlation": "operation_and_local_generation"}
-                if kind == "claude_code" and substrate == "stream" else {})},
+            input_schema={"transport_binding_contract": 1, **native_requirement_schema(kind, substrate)},
             legacy_capabilities=caps,
             supported_platforms=("posix",) if substrate == SUBSTRATE_ATTACH else ("nt", "linux"),
             native_versions_tested=tuple(sorted(CONVERSATION_VERSIONS.get(kind, ()))) if substrate != "attach" and kind != "pi" else (),

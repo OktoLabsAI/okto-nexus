@@ -184,7 +184,7 @@ function Detail({
       <div className="text-[9px] font-semibold uppercase tracking-wider text-surface-400 dark:text-surface-500">
         {label}
       </div>
-      <div className="mt-0.5 min-w-0 text-[11px] text-surface-700 dark:text-surface-300">
+      <div className="mt-0.5 min-w-0 text-[11px] text-surface-700 dark:text-surface-300 [overflow-wrap:anywhere]">
         {children}
       </div>
     </div>
@@ -201,7 +201,7 @@ function IdValue({ value }: { value: string }) {
 
 function ActorValue({ value }: { value: string }) {
   return (
-    <span className="inline-flex items-center gap-1 font-mono font-medium">
+    <span className="inline-flex min-w-0 items-center gap-1 font-mono font-medium [overflow-wrap:anywhere]">
       <User size={11} aria-hidden="true" />
       {value}
     </span>
@@ -210,11 +210,11 @@ function ActorValue({ value }: { value: string }) {
 
 function LongText({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-black/5 bg-white/60 px-2.5 py-2 dark:border-white/5 dark:bg-black/15">
+    <div className="min-w-0 max-w-full rounded-lg border border-black/5 bg-white/60 px-2.5 py-2 dark:border-white/5 dark:bg-black/15">
       <div className="text-[9px] font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-400">
         {label}
       </div>
-      <div className="mt-1 whitespace-pre-wrap break-words text-[11px] leading-relaxed text-surface-700 dark:text-surface-200">
+      <div className="mt-1 whitespace-pre-wrap text-[11px] leading-relaxed text-surface-700 dark:text-surface-200 [overflow-wrap:anywhere]">
         {value}
       </div>
     </div>
@@ -436,7 +436,7 @@ export function StructuredMessage({
 
   return (
     <article
-      className={`overflow-hidden rounded-xl border shadow-sm ${tone.card}`}
+      className={`min-w-0 max-w-full overflow-hidden rounded-xl border shadow-sm ${tone.card}`}
       data-testid="structured-message"
       data-kind={payload.kind}
     >
@@ -460,7 +460,7 @@ export function StructuredMessage({
           </span>
         )}
       </header>
-      <div className={`space-y-2.5 px-2.5 py-2 ${tone.detail}`}>
+      <div className={`min-w-0 space-y-2.5 px-2.5 py-2 ${tone.detail} [overflow-wrap:anywhere]`}>
         {payload.kind === "message.read_receipt" ? (
           <ReadReceiptDetails payload={payload} />
         ) : handoffKind ? (

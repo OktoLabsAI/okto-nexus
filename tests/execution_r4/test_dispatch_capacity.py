@@ -89,3 +89,38 @@ def test_fitting_control_after_oversized_rows_uses_exact_utf8_cost(owner):
     held = reserve(owner, control_bytes=len(payload.encode("utf-8")))
     assert held is not None and held.operation_id == "backlog-runtime.close-0000"
     assert held.reserved_bytes == 4 and held.reservation_class == "control"
+
+
+@pytest.mark.parametrize('receipt_recorded', [False, True])
+def test_retained_call_does_not_hide_healthy_agent_behind_repeated_pending_rows(owner, receipt_recorded):
+    first = reserve(owner)
+    backlog(owner, 'turn.submit', 40)
+    with owner[0].connection_factory.unit_of_work() as uow:
+        owner[0].repos.agents.upsert(uow, agent_id='healthy', role='reviewer')
+        uow.connection.execute("UPDATE execution_operations SET subject_agent_id='healthy' "
+                               "WHERE operation_id='backlog-turn.submit-0039'")
+        if receipt_recorded:
+            uow.connection.execute("UPDATE execution_dispatch_outbox SET dispatch_state='RESOLVED_TERMINAL',"
+                "reserved_bytes=0,reservation_class=NULL WHERE operation_id=?", (first.operation_id,))
+    retained = (first.operation_id,)
+    healthy = reserve(owner, regular_items=2, retained_operations=retained)
+    assert healthy is not None and healthy.operation_id == 'backlog-turn.submit-0039'
+    assert reserve(owner, regular_items=2, retained_operations=retained) is None
+    # Native control remains available while productive calls retain capacity.
+    backlog(owner, 'turn.interrupt', 1)
+    control = reserve(owner, regular_items=2, retained_operations=retained)
+    assert control is not None and control.reservation_class == 'control'
+
+
+@pytest.mark.parametrize('constraint', ['items', 'bytes'])
+def test_receipt_does_not_release_retained_call_global_capacity(owner, constraint):
+    first = reserve(owner)
+    backlog(owner, 'turn.submit', 1)
+    with owner[0].connection_factory.unit_of_work() as uow:
+        owner[0].repos.agents.upsert(uow, agent_id='healthy', role='reviewer')
+        uow.connection.execute("UPDATE execution_operations SET subject_agent_id='healthy' WHERE action='turn.submit'")
+        uow.connection.execute("UPDATE execution_dispatch_outbox SET dispatch_state='RESOLVED_TERMINAL',"
+            "reserved_bytes=0,reservation_class=NULL WHERE operation_id=?", (first.operation_id,))
+    limits = {'regular_items': 1} if constraint == 'items' else {'regular_bytes': first.reserved_bytes}
+    assert reserve(owner, retained_operations=(first.operation_id,), **limits) is None
+    assert reserve(owner, **limits).operation_id == 'backlog-turn.submit-0000'

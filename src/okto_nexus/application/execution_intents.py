@@ -31,6 +31,7 @@ def resolve_execution_intent(
     factory: ConnectionFactory, *, actor_agent_id: str,
     request: Mapping[str, Any], remote_ready: bool = False,
     fresh_publications: Mapping | None = None, access=None, context=None,
+    session_metadata: Mapping | None = None,
 ) -> dict[str, Any]:
     """Store a stable resolution; never write an effect outbox or call Core."""
     required = {"client_intent_id", "intent", "binding_id",
@@ -75,14 +76,23 @@ def resolve_execution_intent(
     from .execution_operator_authority import require_operator_request
     with factory.unit_of_work(write=False) as uow:
         require_operator_request(uow, actor=actor_agent_id, subject=subject_agent_id,
-                                 access=access, context=context)
+                                 access=access, context=context, binding_id=request['binding_id'],
+                                 action=_INTENTS[request['intent']])
     server_id, revisions, _ = current_agent_revisions(
         factory, agent_id=subject_agent_id)
-    body_hash = "sha256:" + hashlib.sha256(canonical_json(dict(request))).hexdigest()
+    hash_body = dict(request)
+    if session_metadata is not None:
+        if request['intent'] != 'runtime.start' or request.get('new_session') is not True:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Annotations require a new session.', {})
+        from .execution_session_metadata import normalize_metadata
+        session_metadata = normalize_metadata(session_metadata)
+        hash_body['_session_metadata'] = session_metadata
+    body_hash = "sha256:" + hashlib.sha256(canonical_json(hash_body)).hexdigest()
     with factory.unit_of_work() as uow:
         conn = uow.connection
         actor_guard = require_operator_request(uow, actor=actor_agent_id, subject=subject_agent_id,
-                                               access=access, context=context)
+                                               access=access, context=context, binding_id=request['binding_id'],
+                                               action=_INTENTS[request['intent']])
         prior = conn.execute(
             "SELECT body_hash,resolved_json FROM execution_client_intents "
             "WHERE server_id=? AND actor_agent_id=? AND client_intent_id=?",
@@ -133,6 +143,9 @@ def resolve_execution_intent(
                 if error.details.get("reason") != "RUNTIME_DRAINING":
                     raise
                 blockers.append("runtime_draining")
+        from .execution_agent_recovery import agent_recovering
+        if agent_recovering(conn, server_id, binding['executor_id'], subject_agent_id):
+            blockers.append('agent_recovering')
         if not remote_ready:
             blockers.append("remote_execution_unavailable")
         if (binding["protocol"] != "nxl-r4" or
@@ -193,7 +206,9 @@ def resolve_execution_intent(
                     session["workspace_binding_id"] !=
                     binding["workspace_binding_id"] or
                     session["lifecycle_state"] != "READY" or
-                    session["lease_state"] != "ACTIVE"):
+                    session["lease_state"] not in (
+                        ('ACTIVE', 'REVOKED') if containment and actor_agent_id != subject_agent_id
+                        else ('ACTIVE',))):
                 blockers.append("session_not_ready")
             else:
                 owner_generation = session["owner_generation"]
@@ -210,8 +225,18 @@ def resolve_execution_intent(
             "binding_revision": binding["binding_revision"],
             "credential_epoch": revisions.credential_epoch,
         }
+        if containment and actor_agent_id != subject_agent_id:
+            # A current operator may stop the existing authority, even after
+            # its productive grant was revoked. Address the applied lease's
+            # revisions rather than inventing a renewed execution context.
+            from ..adapters.outbound.sqlite.execution_leases import SqliteExecutionLeaseRepository
+            applied = SqliteExecutionLeaseRepository().effective(uow, scope)
+            if applied is not None and applied['applied_at'] and applied['scope_json']:
+                old_scope = json.loads(applied['scope_json'])
+                for name in ('authorization_revision', 'configuration_revision', 'credential_epoch'):
+                    scope[name] = old_scope[name]
         profile = conn.execute(
-            "SELECT enabled,revision FROM runtime_profiles WHERE profile_id=?",
+            "SELECT enabled,revision,launch_revision FROM runtime_profiles WHERE profile_id=?",
             (binding["profile_id"],),
         ).fetchone() if binding["profile_id"] else None
         payload = (
@@ -220,7 +245,7 @@ def resolve_execution_intent(
              "inventory_revision": binding["inventory_revision"],
              "realization_ref": binding["realization_ref"],
              "realization_revision": binding["realization_revision"],
-             "profile_revision": profile["revision"] if profile else 1,
+             "profile_revision": profile["launch_revision"] if profile else 1,
              "mode": "managed"}
             if action == "runtime.open" else
             {"reason": request.get("text", "Close requested by the authorized agent."),
@@ -233,6 +258,8 @@ def resolve_execution_intent(
             endpoint_config = conn.execute('SELECT public_config FROM agent_endpoints WHERE endpoint_id=?',
                                           (binding['endpoint_id'],)).fetchone()
             settings = dict(json.loads(endpoint_config[0]).get('harness_settings', {}))
+            from .runtime_policy import harness_mcp_settings
+            settings = harness_mcp_settings(conn, subject_agent_id, binding['adapter_id'], settings)
             model = settings.pop('model', None)
             if model is not None:
                 payload['model'] = model
@@ -267,6 +294,14 @@ def resolve_execution_intent(
         operation_id = "op_" + secrets.token_hex(16)
         if reuse is not None:
             operation_id = reuse["operation_id"]
+        if actor_guard and actor_guard.startswith('delegated:'):
+            # Native context identifies the authenticated sender; caller text
+            # cannot replace the operation or represented identity.
+            payload['text'] = json.dumps(dict(operation_id=operation_id,
+                sender_agent_id=actor_agent_id, recipient_agent_id=subject_agent_id,
+                workspace_id=scope['workspace_id'], content=[dict(type='text', text=request['text'])]))
+            if len(canonical_json(payload)) > 65536 and 'operation_payload_too_large' not in blockers:
+                blockers.append('operation_payload_too_large')
         intent_id = "r4intent_" + secrets.token_hex(16)
         resolved = {
             "client_intent_id": request["client_intent_id"],
@@ -280,6 +315,8 @@ def resolve_execution_intent(
             "can_submit": not blockers, "blockers": blockers,
             "dispatch_owner": "server",
         }
+        if session_metadata is not None:
+            resolved['_session_metadata'] = session_metadata
         conn.execute(
             "INSERT INTO execution_client_intents(server_id,actor_agent_id,"
             "client_intent_id,body_hash,intent_id,operation_id,"
@@ -315,11 +352,16 @@ def read_execution_intent(factory: ConnectionFactory, *, actor_agent_id: str,
         raise OktoNexusError(ErrorCode.NOT_FOUND,
                               "The client intent was not found.", {})
     resolution = json.loads(row["resolved_json"])
+    resolution.pop('_session_metadata', None)
     subject = resolution['scope']['agent_id']
     from .execution_operator_authority import require_operator_request
     with factory.unit_of_work(write=False) as uow:
         require_operator_request(uow, actor=actor_agent_id, subject=subject,
-                                 access=access, context=context, require_feature=False)
+                                 access=access, context=context, require_feature=False,
+                                 binding_id=resolution['scope']['binding_id'],
+                                 action=resolution['semantic_intent']['action'])
+        from .execution_operator_authority import require_delegated_result_read
+        require_delegated_result_read(uow, operation_id=resolution['operation_id'], context=context, access=access)
     from ..adapters.outbound.sqlite.execution_receipts import (
         read_execution_operation_history,
     )

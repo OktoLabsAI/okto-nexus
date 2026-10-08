@@ -4,6 +4,40 @@ from ..domain.endpoints import EndpointCapabilities
 from ..errors import ErrorCode, OktoNexusError
 
 
+def native_requirement_schema(kind, substrate=None):
+    """Declared request contracts, shared by current and historical profiles."""
+    if kind == 'codex':
+        return dict(native_approval_contract=1, requires_feature_hitl=True,
+            methods=['item/commandExecution/requestApproval', 'item/fileChange/requestApproval',
+                     'item/tool/requestUserInput', 'mcpServer/elicitation/request'],
+            decisions=['accept', 'decline'], input_contract=1,
+            input_limits='blocking non-secret questions; correlated form elicitation with flat primitive fields only; no URL or remote schema resolution')
+    if kind == 'claude_code' and substrate == 'stream':
+        return dict(native_approval_contract=1, requires_feature_hitl=True,
+            methods=['control_request:can_use_tool'], tools=['Write', 'Edit', 'Bash', 'AskUserQuestion'],
+            decisions=['accept', 'decline'], correlation='operation_and_local_generation')
+    return {}
+
+
+def validate_canonical_native_requirements(config, adapter_id, *, hitl_enabled=None):
+    """Profile restrictions do not discover, launch, or grant native authority."""
+    from types import SimpleNamespace
+    from nexus_connector_core import get_runtime_catalog
+    descriptor = next((item for item in get_runtime_catalog().runtimes if item.adapter_id == adapter_id), None)
+    if descriptor is None or descriptor.connection_mode != 'managed':
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Unsupported runtime profile adapter.', {})
+    schema = native_requirement_schema(descriptor.native_kind,
+        'stream' if descriptor.native_kind == 'claude_code' else None)
+    validate_native_requirements(config, SimpleNamespace(input_schema=schema), hitl_enabled=hitl_enabled)
+
+
+def profile_action_allowed(config, action):
+    disabled = config.get('disabled_capabilities', ())
+    return not (action in {'send', 'steer'} and 'conversation' in disabled
+                or action == 'steer' and 'steer_timing' in disabled
+                or action == 'execute_work' and 'managed_work' in disabled)
+
+
 def validate_effective_capability(report, capability):
     capabilities = report.get("effective_capabilities")
     value = capabilities.get(capability) if isinstance(capabilities, dict) else None

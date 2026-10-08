@@ -205,7 +205,6 @@ class NexusConfig:
     feature_dag: bool = False
     feature_memory: bool = False
     feature_harness_integrations: bool = True
-    feature_harness_attach: bool = True
     # Startup-only indexed recovery of lost runtime commit notifications.
     # This is internal store polling, never native peer status polling.
     runtime_recovery_interval_seconds: int = 30
@@ -463,11 +462,6 @@ _BOOL_FIELDS: dict[str, tuple[str, str, bool]] = {
     "feature_harness_integrations": (
         "OKTO_NEXUS_FEATURE_HARNESS_INTEGRATIONS",
         "--feature-harness-integrations",
-        True,
-    ),
-    "feature_harness_attach": (
-        "OKTO_NEXUS_FEATURE_HARNESS_ATTACH",
-        "--feature-harness-attach",
         True,
     ),
     "feature_health": (

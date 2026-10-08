@@ -99,8 +99,9 @@ def test_ns01_03(capsys):
     version = importlib.metadata.version("okto-nexus-connector-core")
     required_core = f"okto-nexus-connector-core=={version}"
     assert project["project"]["scripts"]["okto-nexus"].endswith("cli.main:main")
+    assert required_core in project["project"]["dependencies"]
     for extra in ("serve", "serve-lite"):
-        requirements = project["project"]["optional-dependencies"][extra]
+        requirements = project["project"]["dependencies"] + project["project"]["optional-dependencies"][extra]
         assert required_core in requirements
         assert not any(item.split("==")[0] == "okto-nexus-connector" for item in requirements)
     assert "mcp>=1.0,<2" in project["project"]["dependencies"]
@@ -111,9 +112,7 @@ def test_ns01_03(capsys):
     assert wheel.name == f"okto_nexus_connector_core-{version}-py3-none-any.whl"
     assert hashlib.sha256(wheel.read_bytes()).hexdigest() == artifact["sha256"]
     installed_requirements = importlib.metadata.requires("okto-nexus") or []
-    for extra in ("serve", "serve-lite"):
-        assert any(required_core in requirement and f'"{extra}"' in requirement
-                   for requirement in installed_requirements)
+    assert required_core in installed_requirements
     assert main(["--help"]) == 0
     assert "HTTP" in capsys.readouterr().out
 

@@ -98,24 +98,9 @@ def _runtime(tmp_path, request, monkeypatch):
     try:
         assert ready.wait(10), "production HTTP app did not start"
         with httpx.Client(base_url=f"http://127.0.0.1:{port}", timeout=10) as client:
-            if deps.config.feature_harness_integrations:
-                kinds = [("pi", None), ("codex", None), ("claude_code", "stream"), ("claude_code", "attach")]
-                if getattr(request, "param", None) in {"additional", "additional_readonly", "additional_unverified"}:
-                    kinds.append(("fixture.additional.v1", None))
-                for kind, substrate in kinds:
-                    adapter_id = kind + ("." + substrate if substrate else "")
-                    profile_id = "profile-" + adapter_id
-                    if substrate != "attach":
-                        response = client.post("/api/v1/harness/profiles", headers={"x-api-key": operator_key},
-                            json={"profile_id": profile_id, "adapter_id": adapter_id, "enabled": True})
-                        assert response.status_code == 200, response.text
-                    response = client.post("/api/v1/harness/endpoints", headers={"x-api-key": operator_key},
-                        json={"endpoint_id": "endpoint-" + adapter_id, "agent_id": "worker", "adapter_id": adapter_id,
-                              "project_root": str(root), "enabled": True,
-                              "response_policy": "conversation",
-                              "profile_id": profile_id if substrate != "attach" else None,
-                              "public_config": {"target_pid": 12345} if substrate == "attach" else {}})
-                    assert response.status_code == 200, response.text
+            # Setup no longer registers removed native profiles/endpoints.
+            # Tests requiring execution must prepare an approved R4 binding;
+            # HTTP, policy and retained-history tests can use this bare server.
             yield deps, client, str(root), peers, operator_key, caller_key
     finally:
         supervisor = getattr(deps, "harness_supervisor", None)
@@ -179,32 +164,18 @@ def stdio_environment(runtime):
     return env
 
 
-def test_profile_is_unchanged_by_open_close(runtime):
-    deps, client, _, _, key, _ = runtime
-    headers = {"x-api-key": key}
-    assert client.post("/api/v1/tags", headers=headers, json={"key": "org"}).status_code == 200
-    assert client.post("/api/v1/tags/org/values", headers=headers, json={"value": "fixture"}).status_code == 200
-    response = client.patch("/api/v1/agents/worker", headers=headers, json={
-        "tags": {"org": ["fixture"]}, "comm_scope": {"outbound": {"org": ["fixture"]}},
-        "permissions": {"messages": {"send_direct": False}}})
-    assert response.status_code == 200, response.text
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        before = asdict(deps.repos.agents.get(uow, "worker"))
-    response = open_rest(runtime)
-    assert response.status_code == 200, response.text
-    deps.harness_supervisor.close(response.json()["data"]["session_id"])
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        after = asdict(deps.repos.agents.get(uow, "worker"))
-    assert after == before
 
 
+@pytest.mark.parametrize("runtime", ["unconfigured"], indirect=True)
 def test_unknown_agent_is_rejected_before_factory(runtime):
     _, _, _, peers, _, _ = runtime
     response = open_rest(runtime, "does-not-exist")
-    assert response.status_code == 404, response.text
+    assert response.status_code == 409, response.text
+    assert 'Legacy connection setup was removed' in response.text
     assert peers == []
 
 
+@pytest.mark.parametrize("runtime", ["unconfigured"], indirect=True)
 def test_authenticated_mcp_cannot_open_another_agent(runtime):
     _, client, root, peers, _, caller = runtime
     result = tool(client, caller, "harness_open", {
@@ -214,20 +185,6 @@ def test_authenticated_mcp_cannot_open_another_agent(runtime):
     assert peers == []
 
 
-@pytest.mark.parametrize("name,args", [
-    ("harness_send", {"payload": {"text": "unauthorized"}}),
-    ("harness_steer", {"payload": {"text": "unauthorized"}}),
-    ("harness_interrupt", {}), ("harness_close", {}),
-    ("harness_get", {}), ("harness_event_list", {}),
-])
-def test_authenticated_mcp_cannot_control_or_read_foreign_session(runtime, name, args):
-    _, client, _, peers, _, caller = runtime
-    opened = open_rest(runtime).json()
-    session_id = opened["data"]["session_id"]
-    result = tool(client, caller, name, {"session_id": session_id, **args})
-    assert result["ok"] is False, result
-    assert result["error"]["code"] == "PERMISSION_DENIED"
-    assert peers[0].sent == []
 
 
 @pytest.mark.parametrize("runtime", [False], indirect=True)
@@ -242,23 +199,9 @@ def test_backend_diagnostics_do_not_echo_credentials():
     assert "fixture-secret" not in json.dumps(result)
 
 
-def test_replay_keeps_event_id_and_sequence(runtime):
-    deps, _, _, _, _, _ = runtime
-    opened = open_rest(runtime).json()
-    session_id = opened["data"]["session_id"]
-    from okto_nexus.domain.harness import HarnessEvent
-    event = HarnessEvent(session_id=session_id, harness_kind="pi", kind="turn_completed",
-                         native_event="agent_settled", occurred_at=deps.clock.now_iso(), payload={})
-    # Production sequence ownership belongs to ingress. Inserting behind its
-    # back after startup creates a fixture-only sequence collision on close.
-    captured = deps.harness_supervisor._handle_event(session_id, event)
-    replay = deps.harness_supervisor.replay_events(session_id)
-    serialized = harness.event_to_dict(replay[0])
-    assert serialized.get("sequence") == 1
-    assert serialized.get("event_id") == captured.event_id
-    assert harness.event_to_dict(deps.harness_supervisor.replay_events(session_id)[0]) == serialized
 
 
+@pytest.mark.parametrize("runtime", ["unconfigured"], indirect=True)
 def test_keyed_loopback_rest_does_not_upgrade_caller_to_operator(runtime):
     _, client, root, peers, _, caller = runtime
     response = client.post("/api/v1/harness/sessions", headers={"x-api-key": caller},
@@ -267,65 +210,15 @@ def test_keyed_loopback_rest_does_not_upgrade_caller_to_operator(runtime):
     assert peers == []
 
 
-def test_one_delivery_does_not_execute_on_two_sessions(runtime):
-    _, client, root, peers, key, _ = runtime
-    assert open_rest(runtime).status_code == 200
-    assert client.post("/api/v1/harness/endpoints", headers={"x-api-key": key}, json={
-        "endpoint_id": "second-pi", "agent_id": "worker", "adapter_id": "pi", "project_root": root,
-        "profile_id": "profile-pi", "enabled": True, "response_policy": "conversation", "priority": 1}).status_code == 200
-    assert client.post("/api/v1/harness/sessions", headers={"x-api-key": key}, json={
-        "agent_id": "worker", "kind": "pi", "project_root": root, "endpoint_id": "second-pi"}).status_code == 200
-    send_message(runtime, body="one logical delivery")
-    wait_sent(peers)
-    assert len(peers[1].sent) == 1
 
 
-def test_forward_preserves_sender_subject_and_message_identity(runtime):
-    _, _, _, peers, _, _ = runtime
-    assert open_rest(runtime).status_code == 200
-    result = send_message(runtime, subject="correlation-subject", body="body-only")
-    wait_sent(peers)
-    wire = json.dumps(peers[0].sent[0].payload)
-    assert "caller" in wire and "correlation-subject" in wire and result["message_id"] in wire
 
 
-def test_terminal_storage_failure_is_not_silently_accepted(runtime, monkeypatch):
-    deps, _, _, _, _, _ = runtime
-    session_id = open_rest(runtime).json()["data"]["session_id"]
-    from okto_nexus.domain.harness import HarnessEvent
-    def unavailable(*args, **kwargs):
-        raise OSError("fixture storage unavailable")
-    monkeypatch.setattr(deps.repos.harness_events, "append", unavailable)
-    event = HarnessEvent(session_id=session_id, harness_kind="pi", kind="turn_completed",
-                         native_event="agent_settled", occurred_at=deps.clock.now_iso(), payload={"text": "final"})
-    # A failed projection is now durable in the ingress journal, rather than
-    # pretending the event was saved in SQLite or discarding the final result.
-    ingress = deps.harness_supervisor.event_ingress
-    captured = deps.harness_supervisor._handle_event(session_id, event)
-    assert ingress.projection_pending
-    assert ingress.journal.read_after(0)[0]["event"]["event_id"] == captured.event_id
-    assert ingress.journal.read_after(0)[0]["event"]["payload"] == {"text": "final"}
-    assert deps.harness_supervisor.replay_events(session_id) == []
-    monkeypatch.undo()
-    ingress.recover()
-    replay = deps.harness_supervisor.replay_events(session_id)
-    assert replay[0].event_id == captured.event_id
-    assert replay[0].payload == {"text": "final"}
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute("SELECT count(*) FROM runtime_results").fetchone()[0] == 1
 
 
-def test_expired_relay_does_not_mint_new_root(runtime):
-    deps, _, _, _, _, _ = runtime
-    session_id = open_rest(runtime).json()["data"]["session_id"]
-    supervisor = deps.harness_supervisor
-    live = supervisor._live[session_id]
-    live.relay_depth = supervisor._max_relay_depth
-    live.relay_chain_id = "fixture-existing-root"
-    live.relay_chain_started_at = supervisor._monotonic() - supervisor._relay_chain_max_age_s - 1
-    assert supervisor._resolve_relay_depth("worker") is None
 
 
+@pytest.mark.parametrize("runtime", ["unconfigured"], indirect=True)
 def test_open_does_not_fabricate_credential_authentication(runtime):
     # Regression for the old D3 claim: opening an unknown identity used to be
     # treated as registration/authentication without any credential proof.
@@ -335,21 +228,6 @@ def test_open_does_not_fabricate_credential_authentication(runtime):
         assert deps.repos.agents.get(uow, "new-identity") is None
 
 
-def test_committed_delivery_survives_lost_notification(runtime, monkeypatch):
-    deps, _, _, _, _, _ = runtime
-    open_rest(runtime)
-    from okto_nexus.application.messages import MessageService
-    monkeypatch.setattr(MessageService, "_maybe_notify_inbox_subscribers", lambda self, **kwargs: None)
-    monkeypatch.setattr(deps.runtime_dispatcher, "wake", lambda: None)
-    result = send_message(runtime, subject="recovery", body="lost wake fixture")
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        # Inspect durable transport state, not the existence of a proposed
-        # Python module. The baseline only has the logical inbox delivery.
-        tables = {row[0] for row in uow.connection.execute("SELECT name FROM sqlite_master WHERE type='table'")}
-        assert "delivery_outbox" in tables, f"No durable attempt/intent for committed {result['message_id']}"
-        row = uow.connection.execute("SELECT operation_id FROM delivery_outbox WHERE message_id=?",
-                                     (result["message_id"],)).fetchone()
-        assert row is not None
 
 
 def test_additional_adapter_is_not_rejected_by_domain_product_enum():
@@ -361,27 +239,9 @@ def test_additional_adapter_is_not_rejected_by_domain_product_enum():
     assert session.harness_kind == "fixture.additional.v1"
 
 
-@pytest.mark.parametrize("kind,substrate", [("pi", None), ("codex", None),
-    ("claude_code", "stream"), ("claude_code", "attach")])
-def test_p01_enabled_authorized_connectors_remain_usable(runtime, kind, substrate):
-    deps, client, root, peers, key, _ = runtime
-    deps.config.feature_harness_attach = True
-    args = {"agent_id": "worker", "kind": kind, "project_root": root}
-    if substrate:
-        args["substrate"] = substrate
-    if substrate == "attach":
-        args["target_pid"] = 12345  # synthetic peer only; never opens a real session
-    opened = tool(client, key, "harness_open", args)
-    assert opened["ok"], opened
-    sid = opened["data"]["session_id"]
-    sent = tool(client, key, "harness_send", {"session_id": sid,
-                "payload": {"content" if kind == "claude_code" else "text": "test"}})
-    assert sent["ok"], sent
-    # The facade confirms durable admission; dispatch completes asynchronously.
-    wait_sent(peers)
-    assert tool(client, key, "harness_close", {"session_id": sid})["ok"]
 
 
+@pytest.mark.parametrize("runtime", ["unconfigured"], indirect=True)
 def test_p01_cached_tool_is_denied_after_disable(runtime):
     deps, client, root, peers, key, _ = runtime
     deps.config.feature_harness_integrations = False
@@ -390,6 +250,7 @@ def test_p01_cached_tool_is_denied_after_disable(runtime):
     assert peers == []
 
 
+@pytest.mark.parametrize("runtime", ["unconfigured"], indirect=True)
 def test_p01_attach_respects_explicit_disable(runtime):
     deps, client, root, peers, key, _ = runtime
     deps.config.feature_harness_attach = False
@@ -399,86 +260,9 @@ def test_p01_attach_respects_explicit_disable(runtime):
     assert peers == []
 
 
+@pytest.mark.parametrize("runtime", ["unconfigured"], indirect=True)
 def test_p01_stdio_missing_identity_has_no_operator_authority(runtime):
     deps, _, _, _, _, _ = runtime
     from okto_nexus.errors import OktoNexusError
     with pytest.raises(OktoNexusError, match="PERMISSION_DENIED"):
         harness.authorize_request(deps)
-
-
-def test_p01_duplicate_executor_is_rejected(runtime):
-    assert open_rest(runtime).status_code == 200
-    second = open_rest(runtime)
-    assert second.status_code == 409, second.text
-    assert sum(peer.session is not None for peer in runtime[3]) == 1
-
-
-@pytest.mark.parametrize("verb", ["send", "steer", "interrupt", "close", "get", "events"])
-def test_p01_rest_foreign_session_matches_mcp_denial(runtime, verb):
-    _, client, _, peers, _, caller = runtime
-    sid = open_rest(runtime).json()["data"]["session_id"]
-    path = f"/api/v1/harness/sessions/{sid}"
-    if verb in {"get", "events"}:
-        response = client.get(path + ("/events" if verb == "events" else ""),
-                              headers={"x-api-key": caller})
-    else:
-        response = client.post(path + "/" + verb, headers={"x-api-key": caller},
-                               json={"payload": {"text": "must not send"}})
-    assert response.status_code == 403, response.text
-    assert response.json()["error"]["code"] == "PERMISSION_DENIED"
-    assert peers[0].sent == []
-
-
-def test_p01_legacy_metadata_is_session_data_and_role_conflict_is_rejected(runtime):
-    deps, client, root, peers, key, _ = runtime
-    result = tool(client, key, "harness_open", {"agent_id": "worker", "kind": "pi",
-        "project_root": root, "role": "admin"})
-    assert result["error"]["code"] == "VALIDATION_ERROR"
-    assert peers == []
-    result = tool(client, key, "harness_open", {"agent_id": "worker", "kind": "pi",
-        "project_root": root, "metadata": '{"connection_note":"fixture"}'})
-    assert result["ok"], result
-    assert result["data"]["metadata"]["connection_note"] == "fixture"
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert deps.repos.agents.get(uow, "worker").metadata == {"keep": "profile"}
-
-
-@pytest.mark.parametrize("runtime", ["additional"], indirect=True)
-@pytest.mark.parametrize("delivery", ["administrative", "canonical_inbox"])
-def test_p02_additional_adapter_through_production_mcp_and_rest(runtime, delivery, monkeypatch):
-    deps, client, root, peers, key, _ = runtime
-    import subprocess
-    def forbidden_process(*args, **kwargs):
-        raise AssertionError("Processless adapter must not spawn a local runtime")
-    monkeypatch.setattr(subprocess, "Popen", forbidden_process)
-    catalog = tool(client, key, "harness_list", {})
-    assert {item["adapter_id"] for item in catalog["data"]["harnesses"]} == {
-        "pi", "codex", "claude_code.stream", "claude_code.attach", "fixture.additional.v1"}
-    rest_catalog = client.get("/api/v1/harness/kinds", headers={"x-api-key": key})
-    assert rest_catalog.status_code == 200
-    assert rest_catalog.json()["data"]["harnesses"] == catalog["data"]["harnesses"]
-    opened = tool(client, key, "harness_open", {"agent_id": "worker",
-        "kind": "fixture.additional.v1", "project_root": root})
-    assert opened["ok"], opened
-    sid = opened["data"]["session_id"]
-    if delivery == "administrative":
-        response = client.post(f"/api/v1/harness/sessions/{sid}/send", headers={"x-api-key": key},
-                               json={"payload": {"text": "fixture command"}})
-        assert response.status_code == 200, response.text
-    else:
-        from test_runtime_outbox import wait_status
-        result = send_message(runtime)
-        operation = wait_status(runtime, result["runtime_operations"][0], "SENT_UNCONFIRMED")
-        assert operation["endpoint_id"] == "endpoint-fixture.additional.v1"
-        with deps.connection_factory.unit_of_work(write=False) as uow:
-            row = uow.connection.execute("SELECT * FROM message_deliveries WHERE message_id=?",
-                                         (result["message_id"],)).fetchone()
-            assert row["consumer_kind"] == "push" and row["status"] == "unread"
-    wait_sent(peers)
-    assert opened["data"]["kind"] == "fixture.additional.v1"
-    assert [c.verb for p in peers for c in p.sent] == ["send_turn"]
-    if delivery == "canonical_inbox":
-        envelope = peers[0].sent[0].payload["envelope"]
-        assert envelope["operation_id"] == operation["operation_id"]
-        assert envelope["message_id"] == result["message_id"]
-        assert envelope["sender_agent_id"] == "caller" and envelope["recipient_agent_id"] == "worker"

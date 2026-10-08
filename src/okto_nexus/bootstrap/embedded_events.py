@@ -1,11 +1,17 @@
 """Bounded local Core event publication with durable Server ACK recovery."""
 import asyncio
+import sqlite3
 from dataclasses import asdict
 
 from nexus_connector_core import CoreError, EventCursor, R4_PREVIEW_REVISION
 from nexus_connector_core.protocol import canonical_json
 
 from ..application.execution_events import commit_execution_events
+from ..errors import ErrorCode, OktoNexusError
+
+
+class EmbeddedPublicationDeferred(Exception):
+    """Core history is durable; only its Server transaction needs a retry."""
 
 
 class EmbeddedEventPublisher:
@@ -13,12 +19,14 @@ class EmbeddedEventPublisher:
         self.owner = owner
         self.after = 0
 
-    def _page(self):
+    def _page(self, *, after=None, agent_id=None, live_only=False):
         with self.owner.factory.unit_of_work(write=False) as uow:
             self.owner.verify(uow=uow)
             rows = uow.connection.execute("SELECT rowid,* FROM execution_local_streams "
-                "WHERE server_id=? AND executor_id=? AND rowid>? ORDER BY rowid LIMIT 128",
-                (self.owner.channel.server_id,self.owner.channel.executor_id,self.after)).fetchall()
+                "WHERE server_id=? AND executor_id=? AND rowid>? AND (? IS NULL OR agent_id=?) "
+                "AND (?=0 OR drained=0) ORDER BY rowid LIMIT 128",
+                (self.owner.channel.server_id,self.owner.channel.executor_id,self.after if after is None else after,
+                 agent_id,agent_id,live_only)).fetchall()
             return [dict(row) for row in rows]
 
     def _watermark(self, scope):
@@ -61,10 +69,20 @@ class EmbeddedEventPublisher:
             frame = {k:scope[k] for k in ("server_id","executor_id","binding_id","agent_id","session_id","stream_epoch")}
             frame.update(type="event.batch",protocol_major=1,contract_revision=R4_PREVIEW_REVISION,
                 connection_id=channel.connection_id,connection_generation=channel.connection_generation,events=events)
-            ack = await asyncio.to_thread(commit_execution_events,self.owner.factory,
-                channel=channel,frame=frame,embedded_owner=self.owner,approvals=self.owner.deps.approvals)
+            try:
+                ack = await asyncio.to_thread(commit_execution_events,self.owner.factory,
+                    channel=channel,frame=frame,embedded_owner=self.owner,approvals=self.owner.deps.approvals)
+            except (OSError, sqlite3.OperationalError) as error:
+                raise EmbeddedPublicationDeferred() from error
+            except OktoNexusError as error:
+                if error.code != ErrorCode.DB_ERROR:
+                    raise
+                raise EmbeddedPublicationDeferred() from error
             if ack is None or ack["sequence"]!=events[-1]["sequence"]:
                 raise CoreError("EVENT_GAP","embedded_event_ack")
+            dispatcher = self.owner.deps.runtime_dispatcher
+            if dispatcher is not None:
+                dispatcher.wake()
             await journal.acknowledge_events(cursor,ack["sequence"])
             return True
         return await self.owner.host.with_history(executor_id=scope["executor_id"],
@@ -84,7 +102,21 @@ class EmbeddedEventPublisher:
                 await self.step(scope)
         return bool(rows)
 
-    async def recover(self):
-        self.after = 0
-        while await self.pass_once(drain=True):
-            pass
+    async def recover(self, *, agent_id=None, live_only=False, progress=None):
+        after = 0
+        while True:
+            rows = await asyncio.to_thread(self._page, after=after, agent_id=agent_id, live_only=live_only)
+            if not rows:
+                return
+            for scope in rows:
+                for _ in range(4096):
+                    advanced = await self.step(scope)
+                    if progress is not None:
+                        progress()
+                    # Live streams have no finite tail. Publish a bounded page
+                    # per stream so receipts and other sessions get a turn.
+                    if live_only or not advanced:
+                        break
+                else:
+                    raise CoreError("CAPACITY_EXCEEDED", "embedded_event_recovery")
+            after = rows[-1]["rowid"]

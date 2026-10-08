@@ -16,6 +16,7 @@ from ..application.execution_capabilities import ExecutionCapabilityService
 from ..domain.runtime_context import RuntimeRequestContext
 
 MCP_ACTIONS=("tools/call","resources/read","prompts/get","agent_whoami",
+    "agent_list","agent_get","capability_list","coordination_health",
     "handoff_list_available","handoff_get","handoff_claim","handoff_complete",
     "event_cursor","event_get","event_wait","runtime_input_list","runtime_input_respond","message_create")
 
@@ -96,6 +97,9 @@ class EmbeddedToolsOwner:
     async def _prepare(self, frame, launch):
         await asyncio.to_thread(launch.check)
         adapter=launch.candidate.adapter_id
+        from nexus_connector_core import get_runtime_connection_contract
+        if get_runtime_connection_contract(adapter)['tool_transport'] == 'none':
+            return
         native=adapter=="pi_rpc"
         with self.owner.factory.unit_of_work(write=False) as uow:
             row=uow.connection.execute("SELECT ep.public_config FROM execution_bindings b JOIN agent_endpoints ep USING(endpoint_id) "
@@ -104,10 +108,15 @@ class EmbeddedToolsOwner:
             always_allow = bool(row and json.loads(row[0]).get('nexus_tool_permission') == 'always_allow')
         if not native and adapter not in ("codex_app_server","claude_stream"):
             raise CoreError("CAPABILITY_UNSUPPORTED","local_tools")
-        provider_home_http=not native and launch.record["provider_home"] is not None and not launch.auth_refs
+        inherit_mcps = frame['payload'].get('harness_settings', {}).get('inherit_global_mcps') == 'enabled'
+        if inherit_mcps and launch.record['provider_home'] is None:
+            raise CoreError('WORKSPACE_UNAVAILABLE', 'mcp_client_configuration',
+                            message='Configure the harness directory to include its global MCPs.')
+        provider_home_http=not native and launch.record["provider_home"] is not None and (not launch.auth_refs or inherit_mcps)
         process_http=not native and (provider_home_http or always_allow)
         audience="nexus-native-session" if native else "nexus-mcp-session"
-        actions=("handoff.get","handoff.claim","handoff.complete","runtime.input.list","runtime.input.respond","message.create") if native else MCP_ACTIONS
+        from ..application.execution_tools import NATIVE_ACTIONS
+        actions=tuple(NATIVE_ACTIONS.values()) if native else MCP_ACTIONS
         request_id,context=await asyncio.to_thread(self._stage,frame,audience,actions)
         service=ExecutionCapabilityService(factory=self.owner.factory,access=self.owner.access)
         start=time.monotonic()
@@ -164,6 +173,9 @@ class EmbeddedToolsOwner:
     def decorate(self, launch):
         config=self.configurations.get(launch.scope["session_id"])
         if config is None:
+            from nexus_connector_core import get_runtime_connection_contract
+            if get_runtime_connection_contract(launch.candidate.adapter_id)['tool_transport'] == 'none':
+                return launch
             if self.origin is not None:
                 raise CoreError("RECONCILIATION_REQUIRED","local_tool_configuration")
             return launch

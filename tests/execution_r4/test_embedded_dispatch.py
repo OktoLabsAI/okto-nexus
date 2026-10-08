@@ -34,7 +34,7 @@ def connected_local(local_setup):
     return connect_local(local_setup)
 
 
-def connect_local(local_setup, *, secret_bindings=None):
+def connect_local(local_setup, *, secret_bindings=None, agent_id="subject"):
     deps,app,client,headers,body,candidate,root=local_setup
     owner=app.state.embedded_dispatch_owner
     assert owner.pump is not None
@@ -49,15 +49,16 @@ def connect_local(local_setup, *, secret_bindings=None):
     response=publish(local_setup,changes={"secret_bindings":secret_bindings or {}})
     assert response.status_code==201,response.text
     view=response.json()
-    _,apply=prepare_operator(client,headers,dict(client_intent_id="automatic-binding",agent_id_hint="subject",
+    _,apply=prepare_operator(client,headers,dict(client_intent_id="automatic-binding-" + agent_id,agent_id_hint=agent_id,
         executor_id=view["executor_id"],adapter_id=body["adapter_id"],candidate_ref=body["candidate_ref"],
         inventory_revision=body["inventory_revision"],realization_ref=view["realization_ref"],
         workspace_id=view["workspace_id"],alias="automatic-local"))
+    apply["client_intent_id"] = "apply-" + agent_id
     response=client.post("/v1/connections/bindings:apply",json=apply,headers=headers["operator"])
     assert response.status_code==200,response.text
     binding=response.json()
     grant=client.post("/api/v1/harness/grants",headers=headers["operator"],json={
-        "actor_agent_id":"subject","endpoint_id":binding["endpoint_id"],
+        "actor_agent_id":agent_id,"endpoint_id":binding["endpoint_id"],
         "actions":["open","send","steer","interrupt","close"],"max_executions":10,
         "expires_at":iso_plus(deps.clock.now_iso(),600)})
     assert grant.status_code==200,grant.text
@@ -82,7 +83,9 @@ def admit(setup,binding,intent_id,intent,**options):
 
 def wait_receipt(setup,resolution,stages=("SUBMITTED","SUCCEEDED")):
     _,app,client,headers,*_=setup
-    until=time.monotonic()+10
+    # A test watchdog includes durable I/O on loaded Windows runners; native
+    # deadlines are covered separately. Keep failures fully diagnosable.
+    until=time.monotonic()+30
     while True:
         view=client.get(f"/v1/runtime/operations/{resolution['operation_id']}",headers=headers["subject"]).json()
         if view.get("executor_stage") in stages:
@@ -90,7 +93,7 @@ def wait_receipt(setup,resolution,stages=("SUBMITTED","SUCCEEDED")):
         owner=app.state.embedded_dispatch_owner
         assert owner.failure is None,repr(owner.failure)
         assert owner.pump.error is None,repr(owner.pump.error)
-        assert time.monotonic()<until,view
+        assert time.monotonic()<until,json.dumps(view, sort_keys=True)
         time.sleep(.02)
 
 
@@ -253,15 +256,21 @@ def test_blocked_session_does_not_delay_other_session_renewal(connected_local):
         client.portal.call(gate.release)
 
 
-def test_lost_receipt_persistence_never_reopens_operation(connected_local):
+def test_lost_receipt_persistence_never_reopens_operation(connected_local, request):
     setup,binding,native=connected_local
     deps,app,client,headers,*_=setup
     with deps.connection_factory.unit_of_work() as uow:
         uow.connection.execute("CREATE TRIGGER reject_local_receipt BEFORE INSERT ON execution_receipts "
                                "BEGIN SELECT RAISE(ABORT,'technical receipt failure'); END")
+    def restore_storage():
+        # The test observes persistent failure while the owner is live. Its
+        # teardown must restore storage so final publication can drain.
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute('DROP TRIGGER IF EXISTS reject_local_receipt')
+    request.addfinalizer(restore_storage)
     opened=admit(setup,binding,"lost-receipt","runtime.start",new_session=True)
     until=time.monotonic()+10
-    while app.state.embedded_dispatch_owner.failure is None:
+    while 'subject' not in app.state.embedded_dispatch_owner.agents.errors:
         assert time.monotonic()<until
         time.sleep(.02)
     assert native.opens==1
@@ -275,7 +284,8 @@ def test_lost_receipt_persistence_never_reopens_operation(connected_local):
     until=time.monotonic()+5
     while True:
         with deps.connection_factory.unit_of_work(write=False) as uow:
-            state=uow.connection.execute("SELECT control_state FROM execution_executors WHERE kind='embedded'").fetchone()[0]
+            assert uow.connection.execute("SELECT control_state FROM execution_executors WHERE kind='embedded'").fetchone()[0] == "CONTROL_READY"
+            state=uow.connection.execute("SELECT state FROM execution_agent_recovery WHERE agent_id='subject'").fetchone()[0]
         if state=="RECOVERING":
             break
         assert time.monotonic()<until
@@ -284,7 +294,7 @@ def test_lost_receipt_persistence_never_reopens_operation(connected_local):
         "client_intent_id":"after-failure","intent":"runtime.start","binding_id":binding["binding_id"],
         "workspace_binding_id":binding["workspace_binding_id"],"new_session":True})
     assert blocked.status_code==200,blocked.text
-    assert not blocked.json()["can_submit"] and "executor_not_ready" in blocked.json()["blockers"]
+    assert not blocked.json()["can_submit"] and "agent_recovering" in blocked.json()["blockers"]
 
 
 def test_control_lane_remains_available_while_turn_send_waits(connected_local):
@@ -389,10 +399,22 @@ def test_restart_recovers_historical_receipt_without_provider(tmp_path,monkeypat
                 "BEGIN SELECT RAISE(ABORT,'technical receipt failure'); END")
         closed=admit(setup,binding,"recover-close","runtime.close",session_id=opened["scope"]["session_id"])
         until=time.monotonic()+10
-        while app.state.embedded_dispatch_owner.failure is None:
+        while 'subject' not in app.state.embedded_dispatch_owner.agents.errors:
             assert time.monotonic()<until
             time.sleep(.02)
         assert native.native.stopped
+        # This case models a process exit before publishing the retained
+        # receipt. Normal graceful shutdown now retries publication, so it
+        # cannot be used to simulate that crash boundary with a permanent
+        # database fault. Leave the real journal intact for the next owner.
+        async def exit_before_publication():
+            assert native.native.stopped
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                assert uow.connection.execute(
+                    "SELECT 1 FROM execution_receipts WHERE operation_id=?",
+                    (closed["operation_id"],)).fetchone() is None
+        monkeypatch.setattr(app.state.embedded_dispatch_owner,
+                            "_publish_shutdown_history", exit_before_publication)
     with deps.connection_factory.unit_of_work() as uow:
         uow.connection.execute("DROP TRIGGER reject_cold_receipt")
     Path(candidate.executable).unlink()
@@ -401,20 +423,32 @@ def test_restart_recovers_historical_receipt_without_provider(tmp_path,monkeypat
     monkeypatch.setattr(embedded_inventory,"discover_local_candidates",lambda **_:SimpleNamespace(candidates=()))
     if missing_journal:
         for file in (tmp_path/"home/core-runtime").glob("session-*.db"):
-            file.rename(file.with_suffix(".retained"))
+            file.rename(tmp_path / (file.name + ".retained"))
     deps,app=app_for(tmp_path/"home")
     with TestClient(app) as client:
         owner=app.state.embedded_dispatch_owner
         assert owner.channel.connection_generation>source.connection_generation
-        assert (owner.pump is None)==missing_journal
+        assert owner.pump is not None
+        assert ('subject' in owner.agents.blocked) == missing_journal
         assert not owner.host._runtime_tasks
         assert native.opens==1
         history=client.get(f"/v1/runtime/operations/{closed['operation_id']}",headers=headers["subject"])
         assert history.status_code==200,history.text
         if missing_journal:
-            assert isinstance(owner.recovery_failure,FileNotFoundError)
-            assert history.json().get("executor_stage")!="SUCCEEDED"
-            assert not list((tmp_path/"home/core-runtime").glob("session-*.db"))
+            try:
+                assert isinstance(owner.agents.errors['subject'],FileNotFoundError)
+                assert history.json().get("executor_stage")!="SUCCEEDED"
+                assert not list((tmp_path/"home/core-runtime").glob("session-*.db"))
+            finally:
+                # Restore the deliberately removed durable evidence before
+                # asking graceful shutdown to publish it. While it is absent,
+                # shutdown correctly retains the unresolved recovery state.
+                for retained in tmp_path.glob('session-*.db.retained'):
+                    retained.rename(tmp_path/'home/core-runtime'/retained.name.removesuffix('.retained'))
+            recovered = client.portal.call(owner.retry_recovery, 'subject')
+            assert recovered['state'] == 'READY', recovered
+            assert native.opens == 1
+            wait_receipt((deps, app, client, headers), closed, stages=('SUCCEEDED',))
         else:
             assert owner.recovery_failure is None,repr(owner.recovery_failure)
             assert history.json()["executor_stage"]=="SUCCEEDED"
@@ -488,7 +522,7 @@ def test_local_events_commit_and_reapply_lost_core_ack(connected_local,monkeypat
         await asyncio.wait_for(failed.wait(),5)
     client.portal.call(scenario)
     until=time.monotonic()+5
-    while owner.failure is None:
+    while 'subject' not in owner.agents.errors:
         assert time.monotonic()<until
         time.sleep(.02)
     with deps.connection_factory.unit_of_work(write=False) as uow:
@@ -540,7 +574,8 @@ def test_local_event_owner_change_prevents_commit(connected_local):
         assert uow.connection.execute("SELECT COUNT(*) FROM execution_event_ingress").fetchone()[0]==0
 
 
-def test_restart_publishes_uncommitted_native_events(tmp_path,monkeypatch):
+@pytest.mark.parametrize('agent_state', ['active', 'inactive', 'archived'])
+def test_restart_publishes_uncommitted_native_events(tmp_path,monkeypatch,agent_state):
     from nexus_connector_core import RuntimeEvent
     from okto_nexus.bootstrap import embedded_events
     with contextmanager(local_setup.__wrapped__)(tmp_path,monkeypatch,None) as setup:
@@ -551,17 +586,34 @@ def test_restart_publishes_uncommitted_native_events(tmp_path,monkeypatch):
         owner=app.state.embedded_dispatch_owner
         with deps.connection_factory.unit_of_work(write=False) as uow:
             scope=dict(uow.connection.execute("SELECT * FROM execution_local_streams").fetchone())
+        failed_publications = []
         def unavailable(*args,**kwargs):
+            failed_publications.append(True)
             raise OSError("Technical event storage failure")
         with monkeypatch.context() as patch:
             patch.setattr(embedded_events,"commit_execution_events",unavailable)
             client.portal.call(native.native.queue.put,RuntimeEvent(scope["server_id"],scope["executor_id"],
                 scope["session_id"],scope["stream_epoch"],0,"text_delta","technical.output",{"text":"Retained"}))
             until=time.monotonic()+5
-            while owner.failure is None:
+            while not failed_publications:
                 assert time.monotonic()<until
                 time.sleep(.02)
-            assert isinstance(owner.failure,OSError)
+            # A transient Server write failure retains Core history for retry;
+            # it must not contain an otherwise healthy native session.
+            assert 'subject' not in owner.agents.errors
+            # Freeze publication at the crash boundary. The normal shutdown
+            # publisher must not make this a test of already committed events.
+            client.portal.call(owner._stopping.set)
+            async def exit_before_events():
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    assert uow.connection.execute('SELECT COUNT(*) FROM execution_event_ingress').fetchone()[0] == 0
+            monkeypatch.setattr(owner, '_publish_shutdown_history', exit_before_events)
+        if agent_state == 'archived':
+            response = client.delete('/api/v1/agents/subject', headers=headers['operator'])
+            assert response.status_code == 200, response.text
+        elif agent_state == 'inactive':
+            response = client.patch('/api/v1/agents/subject', headers=headers['operator'], json={'is_active': False})
+            assert response.status_code == 200, response.text
     Path(candidate.executable).unlink()
     for _ in range(2):
         deps,app=app_for(tmp_path/"home")
@@ -573,6 +625,7 @@ def test_restart_publishes_uncommitted_native_events(tmp_path,monkeypatch):
                 rows=uow.connection.execute("SELECT payload_json FROM execution_event_ingress").fetchall()
                 assert len(rows)==1 and json.loads(rows[0][0])["payload"]=={"text":"Retained"}
                 assert uow.connection.execute("SELECT committed_contiguous,gap_state FROM execution_event_watermarks").fetchone()[:]==(1,"none")
+                assert bool(uow.connection.execute("SELECT is_active FROM agents WHERE agent_id='subject'").fetchone()[0]) == (agent_state == 'active')
     assert native.opens==1
 
 
@@ -616,7 +669,11 @@ def test_released_resources_reconcile_before_new_admission(tmp_path,monkeypatch,
             state=uow.connection.execute("SELECT control_state FROM execution_executors WHERE kind='embedded'").fetchone()[0]
             session=uow.connection.execute("SELECT lifecycle_state FROM execution_sessions WHERE session_id=?",
                 (opened["scope"]["session_id"],)).fetchone()[0]
-        if fault:
+        if fault == "event_gap":
+            assert state == "CONTROL_READY" and owner.pump is not None
+            assert "subject" in owner.agents.blocked
+            assert native.opens == 1
+        elif fault:
             assert state=="RECOVERING" and owner.pump is None
             assert owner.recovery_failure is not None
             assert native.opens==1

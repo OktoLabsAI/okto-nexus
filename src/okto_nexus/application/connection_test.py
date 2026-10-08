@@ -111,7 +111,11 @@ class ConnectionTests:
                 candidates={c['adapter_id']:candidate}, workspace_roots={'test':c['workspace_root']}, max_lease_seconds=300)
             context = ExecutionContext('connection-test', 'local', 'draft', request['agent_id'], 'test',
                 1,1,1,time.monotonic()+300,frozenset({'runtime.open','turn.submit','runtime.close','turn.interrupt'}))
+            from .runtime_policy import harness_mcp_settings
             settings = dict(c['harness_settings'])
+            if c['adapter_id'] in ('codex_app_server', 'claude_stream'):
+                with self.deps.connection_factory.unit_of_work(write=False) as uow:
+                    settings = harness_mcp_settings(uow.connection, request['agent_id'], c['adapter_id'], settings)
             model = settings.pop('model', None)
             progress('Preparing installation and login')
             prepared = await runtime.prepare(LaunchIntent(request['agent_id'], 'test', c['adapter_id'],

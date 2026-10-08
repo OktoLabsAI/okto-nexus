@@ -4,8 +4,8 @@ import os
 import pytest
 
 from okto_nexus.adapters.outbound.harness.event_journal import FileRuntimeEventJournal
-from test_runtime_event_journal import event
-from test_pr34_remediation import runtime as runtime_fixture, open_rest, tool
+from test_runtime_event_journal import event, historical_session
+from test_pr34_remediation import runtime as runtime_fixture, tool
 
 runtime = runtime_fixture
 
@@ -98,7 +98,7 @@ def test_crash_during_retention_keeps_a_valid_recovery_boundary(tmp_path, monkey
 
 def test_retention_surfaces_preserve_database_results_and_reject_foreign_actor(runtime):
     deps, client, _, _, operator, caller = runtime
-    sid = open_rest(runtime).json()["data"]["session_id"]
+    sid = historical_session(runtime)
     ingress = deps.harness_supervisor.event_ingress
     ingress.journal.segment_bytes = 900
     for i in range(5):

@@ -30,9 +30,7 @@ def test_ns04_01(monkeypatch, tmp_path):
         AssertionError("runtime composed for catalog")))
     catalog = local_catalog()
     assert any(row["adapter_id"] == "codex_app_server" for row in catalog["runtimes"])
-    attach = next(row for row in catalog["runtimes"]
-                  if row["adapter_id"] == "claude_attach")
-    assert attach["support_status"] == "registered_unqualified"
+    assert "claude_attach" not in {row["adapter_id"] for row in catalog["runtimes"]}
     assert discover_local_candidates(path_env=str(tmp_path)).candidates == ()
 
 

@@ -102,6 +102,24 @@ def test_embedded_failed_discovery_keeps_request_for_retry(tmp_path, monkeypatch
             assert uow.connection.execute('SELECT COUNT(*) FROM execution_inventory_refresh_deliveries').fetchone()[0] == 1
 
 
+def test_embedded_refresh_completes_while_runtime_recovery_is_blocked(tmp_path, monkeypatch):
+    monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+                        lambda **_: SimpleNamespace(candidates=()))
+    deps, app = app_for(tmp_path / 'home')
+    agent_key(deps, app)
+    with TestClient(app) as client:
+        owner = app.state.embedded_inventory_owner
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute("UPDATE execution_executors SET control_state='RECOVERING' "
+                                   "WHERE executor_id=?", (owner.key.executor_id,))
+        assert request_refresh(deps, owner, 'recovering')['state'] == 'PENDING'
+        client.portal.call(owner.refresh)
+        assert request_refresh(deps, owner, 'recovering')['state'] == 'UPDATED'
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            assert uow.connection.execute('SELECT control_state FROM execution_executors '
+                'WHERE executor_id=?', (owner.key.executor_id,)).fetchone()[0] == 'RECOVERING'
+
+
 def test_serve_publishes_path_free_local_inventory_without_runtime_or_wss(tmp_path, monkeypatch):
     binary = tmp_path / "codex.exe"
     binary.write_bytes(b"Discovery-only technical candidate")

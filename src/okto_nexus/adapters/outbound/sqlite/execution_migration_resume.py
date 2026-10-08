@@ -25,7 +25,8 @@ def require_adopted_baseline(conn, manifest):
             row = conn.execute("SELECT * FROM "+table+" WHERE "+field+"=?", (key,)).fetchone()
             if row is None or _row_digest(row) != digest:
                 raise ValueError("An adopted migration resource changed; review is required.")
-        adopted[record["legacy_id"]] = record["row_digest_before"]
+        adopted[record["legacy_id"]] = (record["row_digest_before"],
+            ref.get("backup_source_columns"), ref.get("backup_source_digest"))
 
     original = sqlite3.connect(Path(manifest["_backup_database"]).as_uri()+"?mode=ro",uri=True)
     original.row_factory = sqlite3.Row
@@ -38,7 +39,11 @@ def require_adopted_baseline(conn, manifest):
             columns = expected["columns"]
             for before in original.execute("SELECT * FROM "+_quoted(table)):
                 if table == "agent_endpoints" and before["endpoint_id"] in adopted:
-                    if _row_digest(before) != adopted[before["endpoint_id"]]:
+                    full_digest, source_columns, source_digest = adopted[before["endpoint_id"]]
+                    if source_columns is not None and source_columns != columns:
+                        raise ValueError("The adopted endpoint backup columns changed.")
+                    expected_digest = source_digest if source_columns is not None else full_digest
+                    if _row_digest(before) != expected_digest:
                         raise ValueError("The adopted endpoint does not match the original backup.")
                     continue
                 keys = primary or columns

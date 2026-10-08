@@ -80,6 +80,7 @@ def reserve_execution_dispatch(
     regular_bytes: int = 256 * 1024, control_items: int = 2,
     control_bytes: int = 128 * 1024,
     channel: ExecutionChannel | None = None,
+    retained_operations: tuple[str, ...] = (),
 ) -> DispatchReservation | None:
     """Reserve one exact row/byte cost before a dispatcher starts a task.
 
@@ -89,6 +90,7 @@ def reserve_execution_dispatch(
     """
     if not remote_ready:
         return None
+    retained = json.dumps(retained_operations)
     if (any(type(value) is not int or value <= 0 for value in (
             regular_items, regular_bytes, control_items, control_bytes)) or
             not server_id or not executor_id):
@@ -114,11 +116,33 @@ def reserve_execution_dispatch(
             "COALESCE(SUM(reserved_bytes),0) AS bytes FROM "
             "execution_dispatch_outbox WHERE server_id=? AND executor_id=? "
             "AND dispatch_state IN ('RESERVED','SENDING','RECONCILING') "
+            "AND NOT EXISTS (SELECT 1 FROM execution_agent_recovery r JOIN execution_operations p "
+            "USING(server_id,executor_id) WHERE p.operation_id=execution_dispatch_outbox.operation_id "
+            "AND p.server_id=execution_dispatch_outbox.server_id AND p.executor_id=execution_dispatch_outbox.executor_id "
+            "AND r.agent_id=p.subject_agent_id AND r.state='RECOVERING') "
             "GROUP BY reservation_class",
             (server_id, executor_id),
         ):
             if row["reservation_class"] in used:
                 used[row["reservation_class"]] = [row["items"], row["bytes"]]
+        # A receipt releases the durable reservation, but an embedded producer
+        # may still be returning from its native call. Count those live calls
+        # once, without double-counting their still-reserved outbox rows.
+        for row in conn.execute(
+            "SELECT p.action,length(CAST(p.semantic_payload AS BLOB)) AS bytes "
+            "FROM execution_operations p JOIN execution_dispatch_outbox o "
+            "USING(server_id,executor_id,operation_id) "
+            "WHERE p.server_id=? AND p.executor_id=? "
+            "AND p.operation_id IN (SELECT value FROM json_each(?)) "
+            "AND o.dispatch_state NOT IN ('RESERVED','SENDING','RECONCILING') "
+            "AND NOT EXISTS (SELECT 1 FROM execution_agent_recovery r "
+            "WHERE r.server_id=p.server_id AND r.executor_id=p.executor_id "
+            "AND r.agent_id=p.subject_agent_id AND r.state='RECOVERING')",
+            (server_id, executor_id, retained),
+        ):
+            lane = 'regular' if row['action'] in _REGULAR else 'control'
+            used[lane][0] += 1
+            used[lane][1] += row['bytes']
         # Filter each lane by its remaining budget before selecting a row.
         # A fixed mixed window lets a blocked control backlog hide all regular
         # work, or oversized rows hide later controls that still fit.
@@ -140,8 +164,35 @@ def reserve_execution_dispatch(
                 "AND o.dispatch_state='PENDING' "
                 "AND (o.next_attempt_at IS NULL OR o.next_attempt_at<=?) "
                 "AND p.admission_state IN ('ACCEPTED','DISPATCH_PENDING') "
+                # One agent may open several independent sessions. Until a
+                # productive native call is acknowledged, reserve at most one
+                # shared worker for that agent so slow opens cannot starve its
+                # peers. Controls retain their independent containment budget.
+                "AND (?='control' OR NOT EXISTS (SELECT 1 FROM execution_dispatch_outbox busy "
+                "JOIN execution_operations active USING(server_id,executor_id,operation_id) "
+                "WHERE busy.server_id=p.server_id AND busy.executor_id=p.executor_id "
+                "AND active.subject_agent_id=p.subject_agent_id AND active.action IN ('runtime.open','turn.submit') "
+                "AND (busy.dispatch_state IN ('RESERVED','SENDING','RECONCILING') "
+                "OR busy.operation_id IN (SELECT value FROM json_each(?))))) "
+                "AND NOT EXISTS (SELECT 1 FROM execution_agent_recovery r JOIN execution_executors e USING(server_id,executor_id) "
+                "WHERE r.server_id=p.server_id AND r.executor_id=p.executor_id AND r.agent_id=p.subject_agent_id "
+                "AND (r.state<>'READY' OR r.generation<>e.generation)) "
                 "AND p.action IN (" + placeholders + ") "
                 "AND length(CAST(p.semantic_payload AS BLOB))<=? "
+                # Administrative turns have no domain-delivery mapping. They
+                # still share the native session with a delivery awaiting a
+                # proven-unsent retry. Its immutable failed attempt identifies
+                # that session even after the live mapping is archived.
+                "AND (p.action<>'turn.submit' OR NOT EXISTS (SELECT 1 FROM delivery_outbox retry "
+                "JOIN execution_operations refused ON (refused.operation_id=retry.attempt_id OR EXISTS ("
+                "SELECT 1 FROM execution_domain_deliveries live WHERE live.server_id=refused.server_id "
+                "AND live.executor_id=refused.executor_id AND live.operation_id=refused.operation_id "
+                "AND live.domain_operation_id=retry.operation_id)) "
+                "WHERE retry.status='RETRY_WAIT' AND refused.server_id=p.server_id "
+                "AND refused.executor_id=p.executor_id AND refused.session_id=p.session_id "
+                "AND NOT EXISTS (SELECT 1 FROM execution_domain_deliveries own "
+                "WHERE own.server_id=p.server_id AND own.executor_id=p.executor_id "
+                "AND own.operation_id=p.operation_id AND own.domain_operation_id=retry.operation_id))) "
                 "AND NOT EXISTS (SELECT 1 FROM execution_domain_deliveries m "
                 "JOIN delivery_outbox d ON d.operation_id=m.domain_operation_id "
                 "JOIN delivery_outbox earlier ON earlier.endpoint_id=d.endpoint_id "
@@ -157,10 +208,11 @@ def reserve_execution_dispatch(
                 "COALESCE((SELECT source_session_key FROM execution_message_origins WHERE message_id=preceding.message_id),'')))) "
                 "AND (earlier.created_at,earlier.operation_id)<(d.created_at,d.operation_id) "
                 "AND earlier.reconciliation_id IS NULL AND earlier.external_completed_at IS NULL "
-                "AND earlier.terminal_event_id IS NULL AND earlier.canonical_terminal_operation_id IS NULL "
+                "AND earlier.terminal_event_id IS NULL AND (earlier.canonical_terminal_operation_id IS NULL OR earlier.status='RETRY_WAIT') "
+                "AND NOT EXISTS (SELECT 1 FROM execution_delivery_releases r WHERE r.domain_operation_id=earlier.operation_id) "
                 "AND earlier.status NOT IN ('REJECTED','CANCELLED','FAILED_FINAL')) "
                 "ORDER BY p.created_at,p.operation_id LIMIT 1",
-                (server_id, executor_id, datetime.now(timezone.utc).isoformat(),
+                (server_id, executor_id, datetime.now(timezone.utc).isoformat(), lane, retained,
                  *actions, remaining),
             ).fetchone()
             if row is None:
@@ -282,18 +334,21 @@ def begin_execution_send(
         ).fetchall()
         scope = json.loads(row["expected_revisions_json"])
         native_decision = row["action"] in {"approval.decide", "input.provide"}
+        operator_containment = (row['actor_agent_id'] != row['subject_agent_id'] and
+            row['action'] in {'turn.interrupt', 'runtime.close'})
         if (len(provenance) != 1 or
                 not provenance[0]["source_guard_digest"] or
                 provenance[0]["source_guard_digest"] !=
                 _agent_guard(conn, row["subject_agent_id"]) or
-                scope["authorization_revision"] != revisions.authorization or
+                (not operator_containment and (scope["authorization_revision"] != revisions.authorization or
                 scope["configuration_revision"] != revisions.configuration or
-                scope["credential_epoch"] != revisions.credential_epoch):
+                scope["credential_epoch"] != revisions.credential_epoch))):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The dispatch authority changed.", {})
+        operator_context = None
         if not native_decision:
             from .execution_operator_authority import require_recorded_operator
-            require_recorded_operator(uow, actor=row['actor_agent_id'], subject=row['subject_agent_id'],
+            operator_context = require_recorded_operator(uow, actor=row['actor_agent_id'], subject=row['subject_agent_id'],
                                       guard=provenance[0]['actor_guard_digest'], access=access)
         binding = conn.execute(
             "SELECT b.endpoint_id,b.binding_revision,b.inventory_revision,b.candidate_ref,"
@@ -315,6 +370,8 @@ def begin_execution_send(
             (server_id, reservation.executor_id, row["binding_id"],
              row["workspace_binding_id"]),
         ).fetchone()
+        from .execution_agent_recovery import require_agent_ready
+        require_agent_ready(conn, server_id, reservation.executor_id, row["subject_agent_id"])
         if (binding is None or binding["binding_revision"] !=
                 scope["binding_revision"] or
                 binding["agent_id"] != row["subject_agent_id"] or
@@ -357,6 +414,7 @@ def begin_execution_send(
         require_domain_delivery(uow, access=access, server_id=server_id,
             executor_id=reservation.executor_id, operation_id=reservation.operation_id)
         containment = row["action"] in {"turn.interrupt", "runtime.close"}
+        operator_containment = containment and operator_context is not None
         current = conn.execute(
             "SELECT c.inventory_revision,c.publication_sequence,"
             "s.observation_age_ms,s.canonical_projection "
@@ -401,7 +459,7 @@ def begin_execution_send(
                  session["lifecycle_state"] != "OPEN_PENDING") or
                 (row["action"] != "runtime.open" and
                  (session["lifecycle_state"] != "READY" or
-                  session["lease_state"] != "ACTIVE"))):
+                  session["lease_state"] not in (('ACTIVE', 'REVOKED') if operator_containment else ('ACTIVE',))))):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The dispatch session changed.", {})
         opening = json.loads(session['opening_intent']) if session['opening_intent'] else {}
@@ -421,11 +479,11 @@ def begin_execution_send(
                 require_boot_authority(uow, access=access, agent_id=row["subject_agent_id"],
                     endpoint_id=binding["endpoint_id"], proof=json.loads(row["boot_authority_json"]))
             profile = conn.execute(
-                "SELECT enabled,revision FROM runtime_profiles WHERE profile_id=?",
+                "SELECT enabled,revision,launch_revision FROM runtime_profiles WHERE profile_id=?",
                 (binding["profile_id"],),
             ).fetchone() if binding["profile_id"] else None
             if (profile is None or not profile["enabled"] or
-                    profile["revision"] != semantic["payload"]["profile_revision"]):
+                    profile["launch_revision"] != semantic["payload"]["profile_revision"]):
                 raise OktoNexusError(ErrorCode.CONFLICT,
                                       "The dispatch profile changed.", {})
         from ..adapters.outbound.sqlite.execution_leases import SqliteExecutionLeaseRepository
@@ -435,15 +493,16 @@ def begin_execution_send(
         if bootstrap and session["lease_state"] != "NONE":
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The initial lease requires reconciliation.", {})
-        if not bootstrap and (lease is None or lease["status"] != "ACTIVE" or row["action"] not in
+        if not bootstrap and (lease is None or lease["status"] not in
+                (('ACTIVE', 'REVOKED') if operator_containment else ('ACTIVE',)) or row["action"] not in
                 json.loads(lease["allowed_actions_json"]) or
                 lease["applied_at"] is None or lease["scope_json"] is None or
                 json.loads(lease["scope_json"]) != scope or
                 lease["connection_id"] != binding["owner_instance_id"] or
                 lease["connection_generation"] != binding["generation"] or
-                lease["authorization_revision"] != revisions.authorization or
-                lease["configuration_revision"] != revisions.configuration or
-                lease["credential_epoch"] != revisions.credential_epoch or
+                lease["authorization_revision"] != scope['authorization_revision'] or
+                lease["configuration_revision"] != scope['configuration_revision'] or
+                lease["credential_epoch"] != scope['credential_epoch'] or
                 lease["owner_generation"] != scope["session_owner_generation"] or
                 (not containment and datetime.fromisoformat(lease["valid_until_server"].replace(
                     "Z", "+00:00")) <= authority_now)):
@@ -464,7 +523,8 @@ def begin_execution_send(
         if binding['kind'] == 'remote':
             require_execution_lane(uow, scope=scope,
                 channel=ExecutionChannel(server_id, reservation.executor_id,
-                    connection_id, connection_generation), now=authority_now)
+                    connection_id, connection_generation), now=authority_now,
+                operator_containment=operator_containment)
         # The operator initiates and remains audited; execution still consumes
         # the represented subject's separately issued canonical grant.
         actor = access.agents.get(uow, row['subject_agent_id'])
@@ -474,14 +534,27 @@ def begin_execution_send(
             actor.agent_id, 'agent_key', credential_binding=actor.api_key_hash,
             execution_grant_id=(connection_key["source_grant_id"] if connection_key else None)
                 if bootstrap else lease['grant_id'])
-        grant = access.authorize(context, action=action, endpoint_id=binding['endpoint_id'],
-                         represented_agent_id=row['subject_agent_id'], workspace_id=row['workspace_id'],
-                         substrate=mode, consume=not bootstrap and not native_decision,
-                         check_budget=not native_decision, uow=uow)
-        if grant is None:
-            raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
-                                  "A canonical execution grant is required for dispatch.", {})
-        grant_id = grant['grant_id']
+        if operator_containment:
+            # Revoking productive authority must not prevent an authenticated
+            # operator from stopping the exact already-leased session. Keep
+            # the applied lease identity and actions; never issue new authority.
+            access.authorize(operator_context, action=action, endpoint_id=binding['endpoint_id'],
+                represented_agent_id=row['subject_agent_id'], workspace_id=row['workspace_id'],
+                substrate=mode, consume=False, check_budget=False, uow=uow)
+            grant_id = lease['grant_id']
+        else:
+            if not native_decision:
+                from .execution_operator_authority import consume_recorded_delegation
+                consume_recorded_delegation(uow, actor=row['actor_agent_id'], subject=row['subject_agent_id'],
+                    guard=provenance[0]['actor_guard_digest'], access=access)
+            grant = access.authorize(context, action=action, endpoint_id=binding['endpoint_id'],
+                             represented_agent_id=row['subject_agent_id'], workspace_id=row['workspace_id'],
+                             substrate=mode, consume=not bootstrap and not native_decision,
+                             check_budget=not native_decision, uow=uow)
+            if grant is None:
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                                      "A canonical execution grant is required for dispatch.", {})
+            grant_id = grant['grant_id']
         frame = {
             "protocol_major": 1, "contract_revision": R4_PREVIEW_REVISION,
             "type": "operation.submit", **scope, **execution_wire_intent(semantic),

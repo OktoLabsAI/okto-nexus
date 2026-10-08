@@ -457,7 +457,7 @@ Inspect the original operation after uncertainty instead of creating a new one.
 Operator inspection of another Agent does not provide that Agent's credentials
 or authorize impersonation. The public intent route requires the subject identity.
 
-Core owns the catalog IDs codex_app_server, pi_rpc, claude_stream and claude_attach,
+Core owns the catalog IDs codex_app_server, pi_rpc and claude_stream,
 native version qualification, containment and effective capabilities. Read current
 inventory and session facts; a catalog entry, configured method, connected socket
 or APPROVED binding alone does not establish READY_FOR_RUNTIME. Unknown versions

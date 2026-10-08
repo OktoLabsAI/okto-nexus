@@ -12,6 +12,11 @@ class RuntimeAdmissionFence:
         # No database/native wait may postpone the admission fence.
         self._closed.set()
 
+    def reopen_after_reset(self):
+        # Only the reset coordinator calls this after the previous runtime
+        # owner has proved all owned resources drained.
+        self._closed.clear()
+
     @property
     def closed(self):
         return self._closed.is_set()

@@ -38,7 +38,7 @@ def _receipt(server_id: str, executor_id: str, **changes) -> dict:
     return value
 
 
-def test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance(tmp_path):
+def test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance(tmp_path, monkeypatch):
     deps = bootstrap({}, ["--home", str(tmp_path / "home")])
     factory = deps.connection_factory
     installation = ensure_execution_installation(factory)
@@ -129,20 +129,32 @@ def test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance(tmp
         binding_id="binding", scopes=frozenset({"history:read"}),
     )
     with TestClient(app, raise_server_exceptions=False) as client:
-        path = "/v1/runtime/operations/op/receipts"
-        assert client.get("/v1/runtime/operations/op").status_code == 401
-        foreign_view = client.get(
-            "/v1/runtime/operations/op",
-            headers={"Authorization": f"Bearer {foreign_key}"})
-        assert foreign_view.status_code == 404
-        out_of_scope = client.get(
-            "/v1/runtime/operations/op",
-            headers={"Authorization": f"Bearer {issued.ticket}"})
-        assert out_of_scope.status_code == 403
-        assert client.post(path, json=second).status_code == 401
-        response = client.post(path, json=second,
-                               headers={"Authorization": f"Bearer {issued.ticket}"})
-        assert response.status_code == 200, response.text
+        wakes = []
+        class Observer:
+            def wake(self):
+                with factory.unit_of_work(write=False) as uow:
+                    wakes.append(uow.connection.execute(
+                        "SELECT MAX(receipt_revision) FROM execution_receipts WHERE operation_id='op'").fetchone()[0])
+        # Observe the public receipt's post-commit notification through a
+        # separate connection, without depending on a periodic worker scan.
+        with monkeypatch.context() as patch:
+            patch.setattr(deps, "runtime_dispatcher", Observer())
+            path = "/v1/runtime/operations/op/receipts"
+            assert client.get("/v1/runtime/operations/op").status_code == 401
+            foreign_view = client.get(
+                "/v1/runtime/operations/op",
+                headers={"Authorization": f"Bearer {foreign_key}"})
+            assert foreign_view.status_code == 404
+            out_of_scope = client.get(
+                "/v1/runtime/operations/op",
+                headers={"Authorization": f"Bearer {issued.ticket}"})
+            assert out_of_scope.status_code == 403
+            assert client.post(path, json=second).status_code == 401
+            assert wakes == []
+            response = client.post(path, json=second,
+                                   headers={"Authorization": f"Bearer {issued.ticket}"})
+            assert response.status_code == 200, response.text
+            assert wakes == [2]
         assert response.json() == {"operation_id": "op", "receipt_revision": 2,
                                    "stage": "RUNNING", "accepted": True,
                                    "reused": False}

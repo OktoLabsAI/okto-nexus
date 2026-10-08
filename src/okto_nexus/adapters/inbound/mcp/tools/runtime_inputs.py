@@ -25,7 +25,7 @@ def register(server, deps):
     def runtime_input_list(
         workspace_id: Annotated[str | None, Field(description='Optional canonical workspace ID. Managed sessions are always limited to their bound workspace.')] = None,
     ) -> dict[str, Any]:
-        """List live native harness questions addressed to YOU. Includes the native question contract and immutable response reference. Do not answer questions addressed to someone else. Use runtime_input_respond to return an explicit answer or decline."""
+        """List native questions addressed to YOU, with response contracts and immutable references. Use runtime_input_respond to answer or decline; never answer for someone else."""
         items = deps.native_decisions.pending_inputs(context=_context(), workspace_id=workspace_id)
         return {'items': [item['request_payload']['kwargs'] for item in items]}
 
@@ -34,6 +34,6 @@ def register(server, deps):
     def runtime_input_respond(
         request: Annotated[dict[str, Any], Field(description='Copy approval_key, expected_revision, request_hash and cas_token from runtime_input_list. Add a unique client_intent_id, decision (approve or deny), and response when approving. Do not include display, recipient_agent_id or expires_at.')],
     ) -> dict[str, Any]:
-        """Answer a native question addressed to YOU. Preserve its native response contract: Codex response={answers:{question_id:{answers:[text]}}}; Claude response={answers:{question_text:text}}; Pi response={value:text} or {confirmed:boolean}; MCP form response={content:{field:value}}. To decline, decision=deny and omit response. Session tools cannot approve execution permissions. A recorded decision is distinct from native delivery."""
+        """Answer YOUR native question using its response contract. To decline, set decision=deny and omit response. Cannot approve execution permissions; recording a decision does not prove native delivery."""
         value, reused = deps.native_decisions.confirm(context=_context(), request=request)
         return {'decision': value, 'reused': reused}

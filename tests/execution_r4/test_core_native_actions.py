@@ -20,6 +20,7 @@ from nexus_connector_core.discovery import fingerprint
 from nexus_connector_core.journal import open_journal
 from nexus_connector_core.native_action_bridge import (
     ContextGet, HandoffClaim, HandoffComplete, NativeActionGrant,
+    AgentList, AgentGet, CapabilityList, CoordinationHealth,
 )
 from okto_nexus.adapters.outbound.execution.core_native_actions import embedded_native_action_bridge
 from okto_nexus.application.execution_leases import ExecutionLeaseService
@@ -42,7 +43,9 @@ def test_core_native_bridge_uses_same_lease_and_canonical_domain(opening, tmp_pa
         from okto_nexus_connector.transport.native_actions import native_action_bridge
     deps, app, access, _, _, channel, _, _ = opening
     issued = issue(opening, audience="nexus-native-session",
-        actions=["handoff.get", "handoff.claim", "handoff.complete"]).json()
+        actions=["handoff.get", "handoff.claim", "handoff.complete",
+                 "agent.list", "agent.get", "capability.list", "coordination.health"]).json()
+    deps.config.feature_health = True
     seed_work(opening)
     sent = begin(opening)
     async def run():
@@ -139,6 +142,14 @@ def test_core_native_bridge_uses_same_lease_and_canonical_domain(opening, tmp_pa
                     return
                 read = await bridge.invoke(ContextGet("read", *base), context)
                 assert read["status"] == "OPEN"
+                discovery_base = (cap.scope['session_id'], cap.capability_ref)
+                agents = await bridge.invoke(AgentList('list-agents', *discovery_base), context)
+                assert 'other' in {a['agent_id'] for a in agents['agents']}
+                peer = await bridge.invoke(AgentGet('get-agent', *discovery_base, 'other'), context)
+                assert peer['agent_id'] == 'other' and 'presence' in peer and 'connection' in peer
+                assert 'capabilities' in await bridge.invoke(CapabilityList('list-capabilities', *discovery_base), context)
+                health = await bridge.invoke(CoordinationHealth('health', *discovery_base), context)
+                assert health['workspace_id'] == 'ws'
                 claim = HandoffClaim("claim", *base, "original-key")
                 if fault == "server_revocation":
                     with deps.connection_factory.unit_of_work() as uow:

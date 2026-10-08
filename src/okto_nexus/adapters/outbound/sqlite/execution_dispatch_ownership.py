@@ -30,6 +30,18 @@ def reject_unsent_dispatch(factory, *, reservation, error):
             (_error(error.code, error.message, possible_effect=False, operation_id=reservation.operation_id),
              *_key(reservation), reservation.reservation_class, reservation.reserved_bytes)).rowcount
         if changed != 1:
+            # Operator cancellation may atomically resolve this exact RESERVED
+            # attempt while the pump waits for its send lock. Its pre-send CAS
+            # then refuses as intended; that refusal must not close the healthy
+            # executor connection. Other stale reservations still conflict.
+            cancelled = conn.execute(
+                "SELECT 1 FROM execution_dispatch_outbox WHERE server_id=? AND executor_id=? "
+                "AND operation_id=? AND attempt_token=? AND attempt_no=? AND reservation_owner IS ? "
+                "AND reservation_generation IS ? AND dispatch_state='RESOLVED_TERMINAL' "
+                "AND json_extract(last_error,'$.code')='OPERATOR_CANCELLED' "
+                "AND json_extract(last_error,'$.possible_effect')=0", _key(reservation)).fetchone()
+            if cancelled:
+                return
             raise OktoNexusError(ErrorCode.CONFLICT, 'The unsent dispatch reservation changed.', {})
         conn.execute("UPDATE execution_operations SET admission_state='RESOLVED_TERMINAL' "
                      "WHERE server_id=? AND executor_id=? AND operation_id=?", _key(reservation)[:3])
@@ -55,6 +67,14 @@ def recover_fenced_reservations(factory, *, channel):
             (channel.server_id, channel.executor_id, channel.connection_id, channel.connection_generation)).fetchone()
         if owner is None:
             raise OktoNexusError(ErrorCode.CONFLICT, 'The recovery connection is no longer the owner.', {})
+        conn.execute(
+            "INSERT INTO execution_unsent_dispatch_proofs SELECT server_id,executor_id,operation_id,attempt_no,"
+            "attempt_token,reservation_owner,reservation_generation,?,?,strftime('%Y-%m-%dT%H:%M:%fZ','now') "
+            "FROM execution_dispatch_outbox WHERE server_id=? AND executor_id=? AND dispatch_state='RESERVED' "
+            "AND reservation_owner IS NOT NULL AND reservation_generation IS NOT NULL "
+            "AND attempt_token IS NOT NULL AND (reservation_owner<>? OR reservation_generation<>?) ON CONFLICT DO NOTHING",
+            (channel.connection_id, channel.connection_generation, channel.server_id, channel.executor_id,
+             channel.connection_id, channel.connection_generation))
         return conn.execute(
             "UPDATE execution_dispatch_outbox SET dispatch_state='PENDING',attempt_token=NULL,"
             "reservation_class=NULL,reserved_bytes=0,reserved_at=NULL,reservation_owner=NULL,reservation_generation=NULL "

@@ -38,7 +38,8 @@ from okto_nexus.errors import OktoNexusError
 
 
 def setup_authority(tmp_path, monkeypatch, *, lease_authority=True,
-                    actions=None, max_executions=1, trust_mode=None, candidate=None):
+                    actions=None, max_executions=1, trust_mode=None, candidate=None,
+                    subject_permissions=None, subject_comm_scope=None):
     class ManualDispatchFixture:
         def __init__(self, **kwargs):
             pass
@@ -62,6 +63,9 @@ def setup_authority(tmp_path, monkeypatch, *, lease_authority=True,
         for agent in ('operator', 'registrar', 'subject', 'other'):
             uow.connection.execute('INSERT OR IGNORE INTO agents(agent_id,created_at) VALUES (?,?)', (agent, now))
             app.state.test_agent_keys[agent] = app.state.auth.issue_key(uow, agent_id=agent)
+        uow.connection.execute('UPDATE agents SET permissions=?,comm_scope=? WHERE agent_id=?',
+            (json.dumps(subject_permissions) if subject_permissions is not None else None,
+             json.dumps(subject_comm_scope) if subject_comm_scope is not None else None, 'subject'))
         uow.connection.execute("INSERT INTO workspaces(workspace_id,created_at) VALUES ('ws',?)", (now,))
         # This fixture exercises a remote executor; new identities default to local.
         uow.connection.execute(

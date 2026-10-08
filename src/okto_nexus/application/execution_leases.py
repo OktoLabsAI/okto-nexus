@@ -44,10 +44,14 @@ def _stamp(value):
     return datetime.fromisoformat(value.replace('Z', '+00:00'))
 
 
-def require_execution_lane(uow, *, scope, channel, now):
+def require_execution_lane(uow, *, scope, channel, now, operator_containment=False):
     """Revalidate the binding ticket inside the effect authorization transaction."""
     lane = SqliteExecutionLeaseRepository().lane(uow, scope)
-    if (lane is None or lane['state'] != 'ADMITTED' or lane['agent_id'] != scope['agent_id'] or
+    # Revision changes retire productive lane admission. A separately
+    # authenticated operator can still stop its exact applied session while
+    # the same host connection and unrevoked ticket remain bound.
+    allowed_states = ('ADMITTED', 'DISCONNECTED') if operator_containment else ('ADMITTED',)
+    if (lane is None or lane['state'] not in allowed_states or lane['agent_id'] != scope['agent_id'] or
             lane['connection_id'] != channel.connection_id or
             lane['connection_generation'] != channel.connection_generation or
             lane['bound_connection_id'] != channel.connection_id or lane['revoked_at'] is not None or
@@ -87,6 +91,8 @@ class ExecutionLeaseService:
         return frame
 
     def _authority(self, uow, scope, grant_id, channel, now):
+        from .execution_agent_recovery import require_agent_ready
+        require_agent_ready(uow.connection, scope['server_id'], scope['executor_id'], scope['agent_id'])
         row = self.repo.authority(uow, scope)
         if (row is None or not row['is_active'] or not row['api_key_hash'] or
                 row['agent_id'] != scope['agent_id'] or row['subject_agent_id'] != scope['agent_id'] or
@@ -161,9 +167,13 @@ class ExecutionLeaseService:
         semantic = json.loads(row['semantic_payload'])
         if semantic['action'] != 'runtime.open':
             raise _conflict('The session has no canonical opening operation.')
+        from .runtime_requirements import profile_action_allowed
+        profile = self.access.endpoints.profile(uow, row['profile_id']) if row['profile_id'] else None
         actions = []
         for action in json.loads(source['actions']):
             if action not in _ACTIONS:
+                continue
+            if profile is not None and not profile_action_allowed(profile['config'], action):
                 continue
             self.access.authorize(
                 context, action=action, endpoint_id=row['endpoint_id'],
@@ -171,7 +181,8 @@ class ExecutionLeaseService:
                 substrate='attach' if semantic['payload']['mode'] == 'attach' else 'managed',
                 uow=uow, audit=False, check_budget=False)
             actions.append(_ACTIONS[action])
-        if (self.access.config.feature_hitl and 'turn.submit' in actions and
+        native_inputs_allowed = profile is not None and 'approvals' not in profile['config'].get('disabled_capabilities', ())
+        if (self.access.config.feature_hitl and native_inputs_allowed and 'turn.submit' in actions and
                 row['adapter_id'] in {'codex_app_server', 'claude_stream', 'pi_rpc'}):
             actions.extend(('approval.decide', 'input.provide'))
         if row['lifecycle_state'] == 'OPEN_PENDING' and 'runtime.open' not in actions:

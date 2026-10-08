@@ -61,7 +61,12 @@ def read_executor_inventory(factory, *, server_id: str, executor_id: str,
         receipt is not None and receipt[0] == row["publication_sequence"]
     ) else INVENTORY_TTL_MS
     remaining = max(0, INVENTORY_TTL_MS - row["observation_age_ms"] - elapsed_ms)
-    if row["control_state"] != "CONTROL_READY":
+    # Local discovery keeps publishing while native sessions are being
+    # reconciled. Its current observation is still usable for setup/version
+    # checks; opening a session has a separate control-readiness gate.
+    inventory_online = (row["control_state"] == "CONTROL_READY" or
+                        row["kind"] == "embedded" and row["control_state"] == "RECOVERING")
+    if not inventory_online:
         freshness = "OFFLINE"
     elif remaining == 0:
         freshness = "STALE"

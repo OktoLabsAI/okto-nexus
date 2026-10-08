@@ -40,6 +40,9 @@ class EmbeddedNativeActions:
     async def get_context(self, request, context):
         return await self._invoke(request)
 
+    async def read_discovery(self, request, context):
+        return await self._invoke(request)
+
     async def create_message(self, request, context):
         return await self._invoke(request)
 

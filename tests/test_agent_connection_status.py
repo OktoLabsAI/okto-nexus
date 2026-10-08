@@ -12,6 +12,7 @@ def status_db():
     conn.row_factory = sqlite3.Row
     conn.executescript('''
     CREATE TABLE agents(agent_id TEXT);
+    CREATE TABLE execution_agent_recovery(server_id TEXT,executor_id TEXT,agent_id TEXT,generation INTEGER,state TEXT);
     CREATE TABLE agent_execution_policies(agent_id TEXT,execution_location TEXT);
     CREATE TABLE agent_runtime_overrides(agent_id TEXT,runtime_enabled INTEGER);
     CREATE TABLE runtime_policy_defaults(runtime_enabled INTEGER);
@@ -65,6 +66,31 @@ def test_host_details_and_local_selection(status_db):
     assert result['hosts'][0]['last_seen_at'] == '2026-10-05T12:00:00Z'
     status_db.connection.execute("UPDATE agent_execution_policies SET execution_location='local'")
     assert agent_connection_statuses(status_db, '2026-10-05T12:00:10Z')['subject'] == dict(location='local',status='Local',hosts=[])
+
+
+@pytest.mark.parametrize('control_state,expected', [
+    ('CONTROL_READY', 'Ready'), ('RECOVERING', 'Recovering'),
+    ('DISCONNECTED', 'Offline'),
+])
+def test_local_runtime_state_is_visible_per_agent(status_db, control_state, expected):
+    conn = status_db.connection
+    conn.execute("UPDATE agent_execution_policies SET execution_location='local'")
+    conn.execute("INSERT INTO execution_executors VALUES('server','embedded',NULL,'embedded',NULL,"
+                 "'This computer',?,NULL,1,'local-owner')", (control_state,))
+    conn.execute("INSERT INTO execution_bindings VALUES('server','embedded','local-binding','local-endpoint')")
+    conn.execute("INSERT INTO agent_endpoints VALUES('local-endpoint','subject',1,'approved')")
+    result = agent_connection_statuses(status_db, '2026-10-05T12:00:10Z')['subject']
+    assert result['status'] == expected
+    assert result['hosts'][0]['status'] == expected
+    assert result['hosts'][0]['label'] == 'This computer'
+
+
+def test_local_agent_without_a_binding_is_not_reported_as_recovering(status_db):
+    conn = status_db.connection
+    conn.execute("UPDATE agent_execution_policies SET execution_location='local'")
+    conn.execute("INSERT INTO execution_executors VALUES('server','embedded',NULL,'embedded',NULL,"
+                 "'This computer','RECOVERING',NULL,1,'local-owner')")
+    assert agent_connection_statuses(status_db, '2026-10-05T12:00:10Z')['subject']['status'] == 'Not configured'
 
 
 @pytest.mark.parametrize('decision,expiry,expected', [

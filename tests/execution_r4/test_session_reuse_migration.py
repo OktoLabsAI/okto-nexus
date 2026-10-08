@@ -29,12 +29,13 @@ def test_upgrade_088_preserves_original_intent_and_is_idempotent(tmp_path):
         before = dict(conn.execute("SELECT * FROM execution_client_intents").fetchone())
     finally:
         conn.close()
-    assert MigrationRunner(factory).apply() == list(range(89, 97))
+    assert MigrationRunner(factory).apply() == sorted(int(path.name.split("_", 1)[0])
+        for path in migrations.glob("*.sql") if int(path.name.split("_", 1)[0]) > 88)
     assert MigrationRunner(factory).apply() == []
     conn = factory.get_connection()
     try:
         after = dict(conn.execute("SELECT * FROM execution_client_intents").fetchone())
-        assert after == {**before, "session_selection": "explicit", "reuse_admitted_at": None, "initial_turn_json": None}
+        assert after == {**before, "session_selection": "explicit", "reuse_admitted_at": None, "initial_turn_json": None, "actor_guard_digest": None}
         assert conn.execute("SELECT COUNT(*) FROM schema_migrations WHERE version=89").fetchone()[0] == 1
     finally:
         conn.close()

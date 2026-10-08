@@ -5,11 +5,12 @@ import json
 import logging
 import math
 import secrets
+import sqlite3
 import time
 
 from nexus_connector_core import (
     CoreError, LaunchIntent, OpenOperation, TurnOperation, ControlOperation, validate_harness_settings,
-    OperationKey, prepare_r4_receipt_binding, project_r4_bound_receipt,
+    OperationKey, OperationNotAdmitted, prepare_r4_receipt_binding, project_r4_bound_receipt,
     r4_close_operation, r4_native_decision_operation, ShutdownPolicy,
 )
 from nexus_connector_core.protocol import canonical_json
@@ -22,10 +23,43 @@ from ..application.execution_leases import ExecutionChannel, ExecutionLeaseServi
 from ..application.execution_local_launch import ApprovedLocalLaunch
 from ..errors import ErrorCode, OktoNexusError
 from .execution_authority import build_execution_access
+from .embedded_events import EmbeddedPublicationDeferred
 
 _SCOPE = ("server_id", "executor_id", "binding_id", "agent_id", "workspace_id",
           "workspace_binding_id", "session_id", "session_owner_generation",
           "authorization_revision", "configuration_revision", "binding_revision", "credential_epoch")
+
+
+class SessionAuthorityGate:
+    """Concurrent containment controls, exclusive lease-context replacement."""
+    def __init__(self):
+        self.condition = asyncio.Condition()
+        self.controls = 0
+        self.updating = False
+
+    @asynccontextmanager
+    async def control(self):
+        async with self.condition:
+            await self.condition.wait_for(lambda: not self.updating)
+            self.controls += 1
+        try:
+            yield
+        finally:
+            async with self.condition:
+                self.controls -= 1
+                self.condition.notify_all()
+
+    @asynccontextmanager
+    async def update(self):
+        async with self.condition:
+            await self.condition.wait_for(lambda: not self.controls and not self.updating)
+            self.updating = True
+        try:
+            yield
+        finally:
+            async with self.condition:
+                self.updating = False
+                self.condition.notify_all()
 
 
 class EmbeddedDispatchOwner:
@@ -40,6 +74,8 @@ class EmbeddedDispatchOwner:
                                             fresh_publications=inventory.fresh)
         self.sessions = {}
         self.workers = set()
+        self.active_operations = set()
+        self.worker_agents = {}
         self.renewals = set()
         self.pump = None
         self.maintenance = None
@@ -52,14 +88,17 @@ class EmbeddedDispatchOwner:
         self._shutdown_policy = ShutdownPolicy()
         self._shutdown_recovery_task = None
         self._after = 0
-        self._publish_lock = asyncio.Lock()
+        self._publish_locks = {}
         self._containment_task = None
         self.containment_report = None
         self.state_failure = None
         self.recovery_failure = None
         self._recovery_task = None
+        self._recovery_lock = asyncio.Lock()
         from .embedded_events import EmbeddedEventPublisher
         self.events = EmbeddedEventPublisher(self)
+        from .embedded_agent_recovery import EmbeddedAgentRecovery
+        self.agents = EmbeddedAgentRecovery(self)
         from .embedded_tools import EmbeddedToolsOwner
         self.tools = EmbeddedToolsOwner(self)
         original_launch=self.host.local_launch_factory
@@ -105,6 +144,9 @@ class EmbeddedDispatchOwner:
                 (c.server_id,c.executor_id,c.connection_id,c.connection_generation)).rowcount == 1
 
     async def start(self):
+        from .embedded_context import EmbeddedContextObserver
+        self.context_observer = EmbeddedContextObserver(self)
+        self.inventory.dispatcher.context_dispatcher.service.canonical_observer = self.context_observer
         await self._start_attempt()
         if self.pump is None and not self._stopping.is_set():
             self._recovery_task = asyncio.create_task(self._recover_automatically(),name='automatic-runtime-recovery')
@@ -114,20 +156,18 @@ class EmbeddedDispatchOwner:
         with self.factory.unit_of_work(write=False) as uow:
             return defaults(uow.connection)['automatic_recovery']
 
-    def _recovery_event(self, code, message):
+    def _recovery_event(self, code, message, *, agent_id=None):
         with self.factory.unit_of_work() as uow:
-            uow.connection.execute('INSERT INTO runtime_recovery_events(executor_id,created_at,code,message) VALUES(?,?,?,?)',
-                (self.channel.executor_id,self.deps.clock.now_iso(),code,message))
+            uow.connection.execute('INSERT INTO runtime_recovery_events(executor_id,created_at,code,message,agent_id) VALUES(?,?,?,?,?)',
+                (self.channel.executor_id,self.deps.clock.now_iso(),code,message,agent_id))
         logger = logging.getLogger(__name__)
-        (logger.info if code == 'RECOVERY_READY' else logger.warning)('Runtime recovery: %s %s',code,message)
+        (logger.info if code in ('RECOVERY_READY', 'RECOVERY_AGENT_READY') else logger.warning)('Runtime recovery: %s %s',code,message)
 
     async def _recover_automatically(self):
         from nexus_connector_core import RuntimeAutomation
         from ..application.runtime_recovery import drain_pending, mark_recovery_attention
         reported = False
         async def attempt():
-            nonlocal reported
-            reported = False
             await self._start_attempt()
             return self.pump is not None
         async def exhausted():
@@ -135,63 +175,113 @@ class EmbeddedDispatchOwner:
             await asyncio.to_thread(mark_recovery_attention, self)
             if not reported:
                 reported = True
-                await asyncio.to_thread(self._recovery_event,'RECOVERY_ATTENTION_REQUIRED','Automatic recovery attempts exhausted. Inspect retained runtime state; no work was replayed.')
+                await asyncio.to_thread(self._recovery_event,'RECOVERY_ATTENTION_REQUIRED','Initial recovery attempts did not resolve retained state. Automatic checks continue; operator recovery is available. No work was replayed.')
         await RuntimeAutomation().recover(attempt=attempt, stop=self._stopping,
             enabled=lambda: asyncio.to_thread(self._recovery_enabled),
-            pending=lambda: asyncio.to_thread(drain_pending, self.deps), exhausted=exhausted)
+            pending=lambda: asyncio.to_thread(drain_pending, self.deps), exhausted=exhausted, continuous=True)
 
-    async def _start_attempt(self):
+    async def _start_attempt(self, *, manual=False):
+        async with self._recovery_lock:
+            if self.pump is not None or self._stopping.is_set():
+                return
+            await self._start_attempt_locked(manual=manual)
+
+    async def retry_recovery(self, agent_id=None):
+        await asyncio.to_thread(self.verify)
+        await self._start_attempt(manual=True)
+        await self.agents.tick(manual=True, agent_id=agent_id)
+        await self.agents.observe()
+        ready = self.pump is not None and (not self.agents.blocked if agent_id is None else agent_id not in self.agents.blocked)
+        return {'state': 'READY' if ready else 'RECOVERING',
+                'recovering_agents': sorted(self.agents.blocked),
+                'error_code': getattr(self.recovery_failure or self.agents.errors.get(agent_id), 'code', None),
+                'message': ('Runtime restored. Previous work was not replayed.' if ready else
+                    'Automatic recovery is still pending for the affected agents. Retained history was preserved.')}
+
+    async def recovery_plan(self, agent_id=None):
+        from .embedded_reconciliation import EmbeddedReconciliation
+        async with self._recovery_lock:
+            return await EmbeddedReconciliation(self).recovery_plan(agent_id)
+
+    async def confirm_recovery(self, plan, actor):
+        from .embedded_reconciliation import EmbeddedReconciliation
+        async with self._recovery_lock:
+            await EmbeddedReconciliation(self).confirm_stopped(plan, actor)
+            if self.pump is None:
+                await self._start_attempt_locked(manual=True)
+        return await self.retry_recovery(plan.get('agent_id'))
+
+    async def _start_attempt_locked(self, *, manual=False):
         if not protocol_info()["remote_execution_ready"]:
             return
-        if not await asyncio.to_thread(self._recovery_enabled):
+        if not manual and not await asyncio.to_thread(self._recovery_enabled):
             if not await asyncio.to_thread(self._activate): return
         self.recovery_failure=None
         try:
-            await self._recover_publications()
-            await self.events.recover()
-            from .embedded_reconciliation import EmbeddedReconciliation
-            recovered = await EmbeddedReconciliation(self).recover()
+            await self.agents.initialize()
+            await self.agents.tick(manual=manual)
+            await self.agents.observe()
+            def activate_host():
+                with self.factory.unit_of_work() as uow:
+                    self.verify(uow=uow)
+                    uow.connection.execute("UPDATE execution_executors SET control_state='CONTROL_READY' "
+                        "WHERE server_id=? AND executor_id=? AND owner_instance_id=? AND generation=?",
+                        (self.channel.server_id,self.channel.executor_id,
+                         self.channel.connection_id,self.channel.connection_generation))
+            await asyncio.to_thread(activate_host)
         except Exception as error:
             self.recovery_failure = error
             await asyncio.to_thread(self._recovery_event,'RECOVERY_BLOCKED',
-                f"{type(error).__name__}: {getattr(error,'code','UNAVAILABLE')} at {getattr(error,'stage','retained runtime history')}")
-            return
-        if not recovered and not await asyncio.to_thread(self._activate):
+                f"{type(error).__name__}: {getattr(error,'code','UNAVAILABLE')} at {getattr(error,'stage','shared runtime resources')}")
             return
         if self._stopping.is_set():
             return
         self.pump = ExecutionDispatchPump(factory=self.factory, channel=self.channel, access=self.access,
             fresh_publications=self.inventory.fresh, send=self.enqueue, send_lock=asyncio.Lock(),
             verify_link=self.verify, close_link=self.failed,
+            retained_operations=lambda: tuple(self.active_operations),
+            wake_deliveries=self.deps.runtime_dispatcher.wake,
             resolve_native_input=self.deps.native_decisions.inputs.resolve)
         self.pump.start()
         self.maintenance = asyncio.create_task(self._maintain(), name="embedded-publications")
-        await asyncio.to_thread(self._recovery_event,'RECOVERY_READY','Runtime history reconciled. New messages can open a session; previous work was not replayed.')
+        await asyncio.to_thread(self._recovery_event,'RECOVERY_READY','Local host ready. Agents with retained history recover independently; previous work was not replayed.')
 
-    async def _recover_publications(self):
+    async def _recover_publications(self, *, agent_id=None, progress=None):
         """Publish retained facts once before any new dispatch is enabled."""
-        self._after = 0
+        after = 0
         while True:
-            rows = await asyncio.to_thread(self._page)
+            rows = await asyncio.to_thread(self._page, after=after, agent_id=agent_id)
             if not rows:
-                self._after = 0
                 return
             for row in rows:
+                # A live producer can still prove no native effect. Its
+                # SUBMISSION_STARTED journal entry is a crash fence, not a
+                # settled receipt to publish over the producer's final fact.
+                if row["operation_id"] in self.active_operations:
+                    continue
                 await asyncio.to_thread(self.verify)
                 key = OperationKey(row["server_id"],row["executor_id"],row["operation_id"])
                 receipt = await self.host.historical_receipt(session_id=row["session_id"],key=key)
                 if receipt is not None:
                     await self._publish(json.loads(row["binding_json"]),receipt)
-            self._after = rows[-1]["rowid"]
+                if progress is not None:
+                    progress()
+            after = rows[-1]["rowid"]
 
     async def failed(self):
         if self.failure is None and self.pump is not None:
             self.failure = self.pump.error
         if not self._stopping.is_set():
             error = self.failure
+            # Preserve the failure path without logging native payloads,
+            # credentials, or exception messages supplied by a harness.
+            import traceback
+            from pathlib import Path
+            origin = ' -> '.join(f'{Path(frame.filename).name}:{frame.lineno}:{frame.name}'
+                for frame in traceback.extract_tb(error.__traceback__)[-5:]) if error else 'unavailable'
             logging.getLogger(__name__).error(
-                "Embedded runtime containment: type=%s code=%s stage=%s",
-                type(error).__name__, getattr(error, "code", None), getattr(error, "stage", None))
+                "Embedded runtime containment: type=%s code=%s stage=%s origin=%s",
+                type(error).__name__, getattr(error, "code", None), getattr(error, "stage", None), origin)
         self._stopping.set()
         if self.pump is not None:
             self.pump._stopping.set()
@@ -211,7 +301,9 @@ class EmbeddedDispatchOwner:
         # this callback. Retain every producer until it reports its receipt.
         task = asyncio.create_task(self._execute_owned(frame), name="embedded-" + frame["operation_id"])
         self.workers.add(task)
+        self.worker_agents[task] = frame["agent_id"]
         task.add_done_callback(self.workers.discard)
+        task.add_done_callback(lambda done: self.worker_agents.pop(done, None))
 
     @asynccontextmanager
     async def _gate(self, session, action):
@@ -219,7 +311,10 @@ class EmbeddedDispatchOwner:
             async with session["gate"]:
                 yield
         else:
-            yield
+            # Controls bypass a blocked productive native call, but must keep
+            # their selected Core context current across local persistence.
+            async with session["authority_gate"].control():
+                yield
 
     async def _request_grant(self, request):
         await asyncio.to_thread(self.verify)
@@ -229,6 +324,8 @@ class EmbeddedDispatchOwner:
         raw = canonical_json(binding).decode()
         with self.factory.unit_of_work() as uow:
             self.verify(uow=uow)
+            from ..application.execution_agent_recovery import require_agent_ready
+            require_agent_ready(uow.connection, frame['server_id'], frame['executor_id'], frame['agent_id'])
             c = self.channel
             row = uow.connection.execute("SELECT binding_json FROM execution_local_publications "
                 "WHERE server_id=? AND executor_id=? AND operation_id=?",
@@ -247,16 +344,22 @@ class EmbeddedDispatchOwner:
                         frame["operation_id"],frame["binding_id"],frame["agent_id"]))
 
     async def _execute_owned(self, frame):
+        self.active_operations.add(frame['operation_id'])
         try:
             await self._execute(frame)
         except Exception as error:
-            # A SENDING reservation has crossed the dispatch fence. Preserve it
-            # for reconciliation; neither synthesize a receipt nor retry work.
-            # Other in-flight producers may fail as containment begins. Keep
-            # the initiating diagnostic instead of replacing it with shutdown.
-            if self.failure is None:
-                self.failure = error
-            await self.failed()
+            # Preserve uncertain work, but contain only its known subject.
+            try:
+                if isinstance(error, EmbeddedPublicationDeferred):
+                    await self.agents.defer_publication(frame['agent_id'])
+                    return
+                await self.agents.fail(frame['agent_id'], error)
+            except Exception as shared_error:
+                if self.failure is None:
+                    self.failure = shared_error
+                await self.failed()
+        finally:
+            self.active_operations.discard(frame['operation_id'])
 
     async def _execute(self, frame):
         await asyncio.to_thread(self.verify)
@@ -265,7 +368,7 @@ class EmbeddedDispatchOwner:
         if action == "runtime.open":
             if key in self.sessions or len(self.sessions) >= self.host.max_owned_slots:
                 raise CoreError("CAPACITY_EXCEEDED", "embedded_dispatch")
-            session = {"gate":asyncio.Lock(), "executor":None,
+            session = {"gate":asyncio.Lock(), "authority_gate":SessionAuthorityGate(), "executor":None,
                        "scope":{name:frame[name] for name in _SCOPE}, "renew_at":None}
             self.sessions[key] = session
         else:
@@ -313,49 +416,71 @@ class EmbeddedDispatchOwner:
                 try:
                     receipt = await runtime.open(OpenOperation(frame["operation_id"],key,epoch,prepared),context)
                 except CoreError as error:
-                    # Only a durable Core no-spawn receipt can localize this
-                    # refusal. An exception flag alone is not release proof.
-                    if (error.code != 'PROFILE_DRIFT' or not error.retry_safe
-                            or error.possible_effect):
-                        raise
+                    # The stored Core receipt describes the opening. Resource
+                    # containment below is a separate proof, even after spawn.
                     receipt = await self.host.historical_receipt(session_id=key,
                         key=OperationKey(frame['server_id'], frame['executor_id'], frame['operation_id']))
                     if (receipt is None or receipt.stage != 'FAILED'
-                            or receipt.possible_effect or not receipt.retry_safe
                             or receipt.error_code != error.code
                             or receipt.operation_id != frame['operation_id']):
                         raise
-                    await self._publish(binding, receipt)
-                    report = await runtime.shutdown(ShutdownPolicy(0, 0))
-                    if ('unknown' in report.session_outcomes.values() or any(
-                            facts['process_state'] != 'STOPPED' or facts['release_pending']
-                            for facts in runtime.shutdown_resources().values())):
-                        raise CoreError('RECONCILIATION_REQUIRED', 'embedded_session_containment')
-                    if not await self.host.close_native_actions(
-                            executor_id=self.channel.executor_id, session_id=key, timeout_seconds=5):
-                        raise CoreError('RECONCILIATION_REQUIRED', 'embedded_native_action_containment')
-                    await self.events.recover()
-                    from .embedded_reconciliation import EmbeddedReconciliation
-                    await EmbeddedReconciliation(self).release_session(key, failed_open=True)
-                    await self.tools.release_session(key)
-                    self.sessions.pop(key, None)
-                    return
             elif action == "turn.submit":
-                receipt = await runtime.submit(TurnOperation(frame["operation_id"],key,payload["text"],
-                    frame.get("expected_turn_id")),context)
+                receipt = await self._command_receipt(frame, lambda: runtime.submit(
+                    TurnOperation(frame["operation_id"],key,payload["text"],frame.get("expected_turn_id")),context))
             elif action in ("turn.steer","turn.interrupt"):
-                receipt = await runtime.control(ControlOperation(frame["operation_id"],key,action.split(".")[1],
-                    text=payload.get("text"),reason=payload.get("reason"),expected_turn_id=frame.get("expected_turn_id")),context)
+                receipt = await self._command_receipt(frame, lambda: runtime.control(
+                    ControlOperation(frame["operation_id"],key,action.split(".")[1],text=payload.get("text"),
+                        reason=payload.get("reason"),expected_turn_id=frame.get("expected_turn_id")),context))
             elif action == "runtime.close":
                 receipt = await runtime.close(r4_close_operation(frame),context,wait_for_completion=True)
             elif action in ("approval.decide", "input.provide"):
-                receipt = await runtime.decide_native_approval(operation=native_operation, context=context)
+                receipt = await self._command_receipt(frame,
+                    lambda: runtime.decide_native_approval(operation=native_operation, context=context))
             else:
                 raise CoreError("CAPABILITY_UNSUPPORTED", "embedded_dispatch")
+            if action == 'runtime.open' and receipt.stage == 'SUBMITTED':
+                await self.context_observer.publish_support(runtime, key)
             await self._publish(binding, receipt)
+            if action == 'runtime.open' and receipt.stage == 'FAILED':
+                report = await runtime.shutdown(ShutdownPolicy(0, 0))
+                if ('unknown' in report.session_outcomes.values() or any(
+                        facts['process_state'] != 'STOPPED' or facts['release_pending']
+                        for facts in runtime.shutdown_resources().values())):
+                    raise CoreError('RECONCILIATION_REQUIRED', 'embedded_session_containment')
+                if not await self.host.close_native_actions(
+                        executor_id=self.channel.executor_id, session_id=key, timeout_seconds=5):
+                    raise CoreError('RECONCILIATION_REQUIRED', 'embedded_native_action_containment')
+                await self.events.recover(agent_id=frame['agent_id'])
+                from .embedded_reconciliation import EmbeddedReconciliation
+                await EmbeddedReconciliation(self).release_session(key, failed_open=not receipt.possible_effect)
+                await self.tools.release_session(key)
+                self.sessions.pop(key, None)
             if action == "runtime.close" and receipt.stage == "SUCCEEDED":
                 await self.tools.release_session(key)
                 self.sessions.pop(key, None)
+
+    async def _command_receipt(self, frame, invoke):
+        try:
+            return await invoke()
+        except OperationNotAdmitted as error:
+            # Core refused admission before any effect. _publish durably
+            # records this bound fact in Server before it becomes observable;
+            # the Core journal's containment reserve remains untouched.
+            return error.refusal
+        except CoreError as error:
+            # A stale target or another proved pre-write refusal belongs to
+            # this command. It must not contain unrelated work in a healthy
+            # session. Exception flags alone cannot establish that proof.
+            if error.possible_effect or not error.retry_safe:
+                raise
+            receipt = await self.host.historical_receipt(session_id=frame['session_id'],
+                key=OperationKey(frame['server_id'], frame['executor_id'], frame['operation_id']))
+            if (receipt is None or receipt.stage != 'FAILED' or receipt.possible_effect
+                    or not receipt.retry_safe or receipt.error_code != error.code
+                    or receipt.operation_id != frame['operation_id']
+                    or receipt.session_id != frame['session_id']):
+                raise
+            return receipt
 
     async def _publish(self, binding, receipt):
         source = binding["source"]
@@ -377,21 +502,33 @@ class EmbeddedDispatchOwner:
                     uow.connection.execute("UPDATE execution_local_publications SET terminal=1 "
                         "WHERE server_id=? AND executor_id=? AND operation_id=?",
                         (key.server_id,key.executor_id,key.operation_id))
-        # Only one publisher may allocate a source revision at a time.
-        async with self._publish_lock:
-            await asyncio.to_thread(persist)
+            return not unchanged
+        # Serialize revisions for this operation, never unrelated agents.
+        async with self._publish_locks.setdefault(key, asyncio.Lock()):
+            try:
+                changed = await asyncio.to_thread(persist)
+            except (OSError, sqlite3.OperationalError) as error:
+                raise EmbeddedPublicationDeferred() from error
+            except OktoNexusError as error:
+                if error.code != ErrorCode.DB_ERROR:
+                    raise
+                raise EmbeddedPublicationDeferred() from error
+            if changed and self.deps.runtime_dispatcher is not None:
+                self.deps.runtime_dispatcher.wake()
 
-    def _page(self):
+    def _page(self, *, after=None, agent_id=None):
         with self.factory.unit_of_work(write=False) as uow:
             self.verify(uow=uow)
             rows = uow.connection.execute("SELECT rowid,* FROM execution_local_publications "
-                "WHERE server_id=? AND executor_id=? AND terminal=0 AND rowid>? ORDER BY rowid LIMIT 128",
-                (self.channel.server_id,self.channel.executor_id,self._after)).fetchall()
+                "WHERE server_id=? AND executor_id=? AND terminal=0 AND rowid>? "
+                "AND (? IS NULL OR operation_id IN (SELECT operation_id FROM execution_operations WHERE server_id=? AND executor_id=? AND subject_agent_id=?)) ORDER BY rowid LIMIT 128",
+                (self.channel.server_id,self.channel.executor_id,self._after if after is None else after,
+                 agent_id,self.channel.server_id,self.channel.executor_id,agent_id)).fetchall()
             return [dict(row) for row in rows]
 
     async def _renew_owned(self, session_id, session):
         try:
-            async with session["gate"]:
+            async with session["gate"], session["authority_gate"].update():
                 if self._stopping.is_set() or self.sessions.get(session_id) is not session:
                     return
                 executor = session["executor"]
@@ -420,16 +557,19 @@ class EmbeddedDispatchOwner:
                         if not await self.host.close_native_actions(
                                 executor_id=self.channel.executor_id, session_id=session_id, timeout_seconds=5):
                             raise CoreError('RECONCILIATION_REQUIRED', 'embedded_native_action_containment')
-                        await self.events.recover()
+                        await self.events.recover(agent_id=session['scope']['agent_id'])
                         from .embedded_reconciliation import EmbeddedReconciliation
                         await EmbeddedReconciliation(self).release_session(session_id)
                         self.sessions.pop(session_id, None)
                         return
                     except Exception as containment_error:
                         error = containment_error
-                if self.failure is None:
-                    self.failure = error
-                await self.failed()
+                try:
+                    await self.agents.fail(session['scope']['agent_id'], error)
+                except Exception as shared_error:
+                    if self.failure is None:
+                        self.failure = shared_error
+                    await self.failed()
 
     async def _maintain(self):
         from nexus_connector_core import DEFAULT_RUNTIME_AUTOMATION
@@ -441,20 +581,13 @@ class EmbeddedDispatchOwner:
                     await asyncio.to_thread(drain_pending,self.deps)
                     pending_at=time.monotonic()+DEFAULT_RUNTIME_AUTOMATION.message_interval
                 for session_id, session in list(self.sessions.items()):
-                    if (session["renew_at"] is not None and time.monotonic() >= session["renew_at"]
+                    if (session["scope"]["agent_id"] not in self.agents.blocked and session["renew_at"] is not None and time.monotonic() >= session["renew_at"]
                             and (session.get("renew_task") is None or session["renew_task"].done())):
                         task = asyncio.create_task(self._renew_owned(session_id, session), name="embedded-renew-" + session_id)
                         session["renew_task"] = task
                         self.renewals.add(task)
                         task.add_done_callback(self.renewals.discard)
-                rows = await asyncio.to_thread(self._page)
-                self._after = rows[-1]["rowid"] if rows else 0
-                for row in rows:
-                    key = OperationKey(row["server_id"],row["executor_id"],row["operation_id"])
-                    receipt = await self.host.operation_receipt(session_id=row["session_id"],key=key)
-                    if receipt is not None:
-                        await self._publish(json.loads(row["binding_json"]),receipt)
-                await self.events.pass_once()
+                await self.agents.tick()
                 try:
                     await asyncio.wait_for(self._stopping.wait(),.1)
                 except asyncio.TimeoutError:
@@ -539,15 +672,43 @@ class EmbeddedDispatchOwner:
     async def close(self):
         await asyncio.shield(self._start_close())
 
+    async def _publish_shutdown_history(self):
+        try:
+            await self._recover_publications()
+            await self.events.recover()
+            from .embedded_reconciliation import EmbeddedReconciliation
+            reconciliation = EmbeddedReconciliation(self)
+            for row in await asyncio.to_thread(reconciliation._records):
+                report = self.containment_report.get((self.channel.executor_id, row['session_id']))
+                if report is None or 'unknown' in report.session_outcomes.values():
+                    continue
+                receipt = await self.host.historical_receipt(session_id=row['session_id'],
+                    key=OperationKey(self.channel.server_id, self.channel.executor_id, row['open_operation_id']))
+                if receipt is not None and receipt.stage in ('SUBMITTED', 'SUCCEEDED'):
+                    await reconciliation.release_session(row['session_id'])
+        except OktoNexusError as error:
+            if error.code != ErrorCode.CONFLICT:
+                raise
+            # A superseded owner must still contain its processes and close
+            # its stores. Only the new owner may publish the retained history.
+            try:
+                await asyncio.to_thread(self.verify)
+            except OktoNexusError as ownership_error:
+                if ownership_error.code != ErrorCode.CONFLICT:
+                    raise
+            else:
+                raise error
+
     async def _close(self):
         self._stopping.set()
         # Native containment must start before any database or publication
         # wait. Keep the journals alive for the producers joined below.
         if self.pump is not None:
             self.pump._stopping.set()
-        if (self._containment_task is not None and self._containment_task.done()
-                and (self._containment_task.cancelled()
-                     or self._containment_task.exception() is not None)):
+        if self._containment_task is not None and self._containment_task.done():
+            # A completed pass can still leave uncertain ownership or a
+            # deferred publication. Reobserve the same owners and reopen the
+            # history phase before retrying; never duplicate a pending pass.
             self._containment_task = None
         if self._containment_task is None:
             policy = self._shutdown_policy
@@ -570,13 +731,23 @@ class EmbeddedDispatchOwner:
                     await task
                 except Exception as error:
                     failures.append(error)
+        await self.agents.close()
         results = await asyncio.gather(*tuple(self.workers), *tuple(self.renewals), return_exceptions=True)
         failures.extend(result for result in results if isinstance(result, BaseException))
         try:
             self.containment_report = await asyncio.shield(self._containment_task)
+            # A producer may have finished containment while it was being
+            # joined. Refresh the report without closing its durable history.
+            self.containment_report = await self.host.shutdown(ShutdownPolicy(0, 0), close_stores=False)
+            # Native shutdown can append its last receipt/events after the
+            # periodic publishers stop. Commit those facts before closing
+            # their journals, including unknown outcomes without a result.
+            await self._publish_shutdown_history()
             # All dispatch/publication producers have returned. The host now
             # joins history readers and closes only resolved Core resources.
-            self.containment_report = await self.host.shutdown(ShutdownPolicy(0,0))
+            if not any('unknown' in report.session_outcomes.values()
+                       for report in self.containment_report.values()):
+                self.containment_report = await self.host.shutdown(ShutdownPolicy(0,0))
         except Exception as error:
             failures.append(error)
         try:

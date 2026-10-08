@@ -68,8 +68,11 @@ def submit_execution_operation(
                                   "The operation does not match its resolution.", {})
         scope = resolved["scope"]
         subject_agent_id = scope['agent_id']
+        operator_containment = (actor_agent_id != subject_agent_id and
+            resolved['semantic_intent']['action'] in {'turn.interrupt', 'runtime.close'})
         from .execution_operator_authority import require_operator_request, require_recorded_operator
-        require_operator_request(uow, actor=actor_agent_id, subject=subject_agent_id, access=access, context=context)
+        require_operator_request(uow, actor=actor_agent_id, subject=subject_agent_id, access=access, context=context,
+            binding_id=scope['binding_id'], action=resolved['semantic_intent']['action'])
         require_recorded_operator(uow, actor=actor_agent_id, subject=subject_agent_id,
                                   guard=intent['actor_guard_digest'], access=access)
         if subject_agent_id != actor_agent_id:
@@ -140,9 +143,9 @@ def submit_execution_operation(
             if (not intent["source_guard_digest"] or
                     intent["source_guard_digest"] !=
                     _agent_guard(conn, subject_agent_id) or
-                    scope["authorization_revision"] != revisions.authorization or
+                    (not operator_containment and (scope["authorization_revision"] != revisions.authorization or
                     scope["configuration_revision"] != revisions.configuration or
-                    scope["credential_epoch"] != revisions.credential_epoch):
+                    scope["credential_epoch"] != revisions.credential_epoch))):
                 raise OktoNexusError(ErrorCode.CONFLICT,
                                       "The agent authority has changed.", {})
             binding = conn.execute(
@@ -163,6 +166,8 @@ def submit_execution_operation(
                 "WHERE b.server_id=? AND b.executor_id=? AND b.binding_id=?",
                 (server_id, executor_id, scope["binding_id"]),
             ).fetchone()
+            from .execution_agent_recovery import require_agent_ready
+            require_agent_ready(conn, server_id, executor_id, subject_agent_id)
             if (binding is None or binding["agent_id"] != subject_agent_id or
                     binding["protocol"] != "nxl-r4" or
                     binding["control_state"] != "CONTROL_READY" or
@@ -225,11 +230,11 @@ def submit_execution_operation(
                 require_identity_host(conn, server_id=server_id,
                                       agent_id=subject_agent_id, executor_id=executor_id)
                 profile = conn.execute(
-                    "SELECT enabled,revision FROM runtime_profiles "
+                    "SELECT enabled,revision,launch_revision FROM runtime_profiles "
                     "WHERE profile_id=?", (binding["profile_id"],),
                 ).fetchone() if binding["profile_id"] else None
                 if (profile is None or not profile["enabled"] or
-                        profile["revision"] !=
+                        profile["launch_revision"] !=
                         resolved["semantic_intent"]["payload"]["profile_revision"]):
                     raise OktoNexusError(ErrorCode.CONFLICT,
                                           "The runtime profile is no longer ready.", {})
@@ -254,7 +259,9 @@ def submit_execution_operation(
                         session["owner_generation"] !=
                         scope["session_owner_generation"] or
                         session["lifecycle_state"] != "READY" or
-                        session["lease_state"] != "ACTIVE"):
+                        session["lease_state"] not in (
+                            ('ACTIVE', 'REVOKED') if containment and actor_agent_id != subject_agent_id
+                            else ('ACTIVE',))):
                     raise OktoNexusError(ErrorCode.CONFLICT,
                                           "The session is no longer ready.", {})
             else:
@@ -282,12 +289,12 @@ def submit_execution_operation(
                 conn.execute(
                     "INSERT INTO execution_sessions(server_id,executor_id,"
                     "session_id,binding_id,workspace_id,workspace_binding_id,"
-                    "open_operation_id,owner_generation,lifecycle_state,lease_state) "
-                    "VALUES (?,?,?,?,?,?,?,?,?,?)",
+                    "open_operation_id,owner_generation,lifecycle_state,lease_state,metadata_json) "
+                    "VALUES (?,?,?,?,?,?,?,?,?,?,?)",
                     (server_id, executor_id, session_id, scope["binding_id"],
                      scope["workspace_id"], scope["workspace_binding_id"],
                      operation_id, scope["session_owner_generation"],
-                     "OPEN_PENDING", "NONE"),
+                     "OPEN_PENDING", "NONE", canonical_json(resolved.get('_session_metadata', {})).decode('utf-8')),
                 )
             conn.execute(
                 "INSERT INTO execution_dispatch_outbox(server_id,executor_id,"
@@ -301,4 +308,14 @@ def submit_execution_operation(
         factory, server_id=server_id, executor_id=executor_id,
         operation_id=operation_id, subject_agent_id=subject_agent_id,
     ).public_view()
+    if actor_agent_id != subject_agent_id and view.get('result') is not None:
+        from .execution_operator_authority import require_delegated_result_read
+        try:
+            with factory.unit_of_work(write=False) as uow:
+                require_delegated_result_read(uow, operation_id=operation_id, context=context, access=access)
+        except OktoNexusError as error:
+            if error.code != ErrorCode.PERMISSION_DENIED:
+                raise
+            # Replaying a send is not an alternate result-reading authority.
+            view['result'] = None
     return view, reused

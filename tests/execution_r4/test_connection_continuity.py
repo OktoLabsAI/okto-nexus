@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta, timezone
+import time
 
+import anyio
 from fastapi.testclient import TestClient
 from nexus_connector_core import R4_PREVIEW_REVISION, encode_r4_frame
 import pytest
@@ -45,12 +47,40 @@ def test_live_connection_renews_proofs_without_changing_owner(tmp_path, monkeypa
 @pytest.mark.parametrize('stale', [False, True])
 def test_short_disconnect_resumes_same_lane_and_generation(tmp_path, monkeypatch, stale):
     deps, app, _, _, _, _, info, revisions, ticket, lane_ticket, server, executor = setup_authority(tmp_path, monkeypatch)
+    from okto_nexus.adapters.inbound.http import executor_link
+    scopes = []
+    cancelled = []
+    original_stop = executor_link.ExecutionDispatchPump.stop
+    async def cancel_while_draining(pump):
+        # Cancel the socket owner at the exact boundary between producer
+        # drain and durable disconnect publication, without a timing sleep.
+        scopes[-1].cancel()
+        cancelled.append(True)
+        await original_stop(pump)
+    monkeypatch.setattr(executor_link.ExecutionDispatchPump, 'stop', cancel_while_draining)
+    async def cancellable_app(scope, receive, send):
+        if scope['type'] != 'websocket':
+            return await app(scope, receive, send)
+        with anyio.CancelScope() as owner:
+            scopes.append(owner)
+            await app(scope, receive, send)
     url = f'wss://127.0.0.1:8202/v1/runtime/executors/{executor}/link'
     headers = {'Authorization': 'Bearer ' + ticket}
     capabilities = ['connection_renewal_v1', 'heartbeat_ack_v1', 'connection_resume_v1']
-    with TestClient(app, base_url='https://127.0.0.1:8202') as client:
+    with TestClient(cancellable_app, base_url='https://127.0.0.1:8202') as client:
         with client.websocket_connect(url, headers=headers, subprotocols=['nxl.v1']) as ws:
             channel = negotiate(ws, info, revisions, lane_ticket, server, executor, control_capabilities=capabilities)
+            ws.close()
+            # Keep the test transport alive until the server handles close;
+            # cancellation is injected above at the actual cleanup boundary.
+            deadline = time.monotonic() + 5
+            while True:
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    published = uow.connection.execute('SELECT COUNT(*) FROM execution_connection_resumes').fetchone()[0]
+                if published == 1 or time.monotonic() >= deadline:
+                    break
+                time.sleep(0.01)
+        assert cancelled
         with deps.connection_factory.unit_of_work(write=False) as uow:
             lane = dict(uow.connection.execute('SELECT * FROM execution_control_lanes').fetchone())
             assert uow.connection.execute('SELECT COUNT(*) FROM execution_connection_resumes').fetchone()[0] == 1

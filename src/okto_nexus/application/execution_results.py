@@ -11,7 +11,7 @@ def project_execution_result(conn, *, event, received_at):
     operation = conn.execute(
         'SELECT action,session_id FROM execution_operations WHERE server_id=? AND executor_id=? AND operation_id=?',
         key).fetchone()
-    if not operation or operation['action'] != 'turn.submit':
+    if not operation or operation['action'] not in ('turn.submit', 'turn.steer'):
         return
     if operation['session_id'] != event['session_id']:
         raise ValueError('Result operation is outside its session.')

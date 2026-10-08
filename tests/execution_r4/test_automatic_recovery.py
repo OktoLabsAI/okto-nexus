@@ -41,7 +41,8 @@ def test_restart_after_dispatch_refusal_without_core_journal(tmp_path, monkeypat
         deps, app = app_for(tmp_path / 'home')
         with TestClient(app):
             owner = app.state.embedded_dispatch_owner
-            assert (owner.pump is not None) is (not possible_effect)
+            assert owner.pump is not None
+            assert ('subject' in owner.agents.blocked) is possible_effect
             with deps.connection_factory.unit_of_work(write=False) as uow:
                 if not possible_effect:
                     assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE admission_state<>'RESOLVED_TERMINAL'").fetchone()[0] == 0
@@ -97,7 +98,7 @@ def test_disabled_recovery_keeps_conflict(connected_local,monkeypatch):
         uow.connection.execute("UPDATE execution_executors SET control_state='CONTROL_READY'")
 
 
-def test_wait_limit_does_not_claim_or_replay_message(connected_local, monkeypatch):
+def test_long_recovery_keeps_retrying_without_claiming_or_replaying_message(connected_local, monkeypatch):
     setup, binding, _ = connected_local
     deps = setup[0]
     configure(setup, binding, 'shared')
@@ -108,13 +109,24 @@ def test_wait_limit_does_not_claim_or_replay_message(connected_local, monkeypatc
         uow.connection.execute('UPDATE runtime_pending_deliveries SET attempts=119')
     drain_pending(deps)
     with deps.connection_factory.unit_of_work() as uow:
-        assert uow.connection.execute('SELECT status FROM runtime_pending_deliveries').fetchone()[0] == 'attention'
+        assert uow.connection.execute('SELECT status FROM runtime_pending_deliveries').fetchone()[0] == 'waiting'
         assert uow.connection.execute('SELECT consumer_kind FROM message_deliveries').fetchone()[0] is None
         assert uow.connection.execute('SELECT COUNT(*) FROM delivery_outbox').fetchone()[0] == 0
         uow.connection.execute("UPDATE execution_executors SET control_state='CONTROL_READY'")
     from okto_nexus.application.execution_log import read_execution_log
-    log = read_execution_log(deps.connection_factory, agent_id='subject', severity='error')
-    assert any(row['code'] == 'RECOVERY_ATTENTION_REQUIRED' for row in log['items'])
+    log = read_execution_log(deps.connection_factory, agent_id='subject', severity='warning')
+    assert any(row['code'] == 'WAITING_FOR_RUNTIME_RECOVERY' for row in log['items'])
+    deadline = time.monotonic() + 10
+    while True:
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            status = uow.connection.execute('SELECT status FROM runtime_pending_deliveries').fetchone()[0]
+        if status == 'submitted':
+            break
+        assert time.monotonic() < deadline
+        time.sleep(.02)
+    drain_pending(deps)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT COUNT(*) FROM delivery_outbox').fetchone()[0] == 1
 
 
 def test_queued_message_revalidates_rotated_sender_key(connected_local, monkeypatch):

@@ -31,7 +31,7 @@ from test_vertical_inventory import _NativeFactory
     (True, None, False, 0, 'unsent'), (True, None, False, 0, 'ack_lost'),
     (True, None, False, 0, 'cold_unsent'), (True, None, False, 0, 'cold_ack_lost'),
     (True, None, False, 0, 'active_disconnect'), (True, None, False, 0, 'lease_renewal')])
-def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery, native_decision=None, cli_admission=False, initial_prompt=False, domain_delivery=False, combined_winner=None):
+def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery, native_decision=None, cli_admission=False, initial_prompt=False, domain_delivery=False, combined_winner=None, reset_active=False, check_presence=False, operator_containment=False):
     from okto_nexus_connector.transport.https_client import NexusHTTPClient, R4BindingView
     from okto_nexus_connector.transport.wss_r4 import connect_r4_connection
     from okto_nexus_connector.services.execution_selection import acknowledge_execution_binding
@@ -149,6 +149,7 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
         async def launch(_):
             return R4LaunchSetup(environment)
         owner = execution = None
+        completed_shutdown = None
         recovery_host = None
         dispatched = {}
         operations = []
@@ -207,14 +208,15 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                               'inbox_pull', dict(agent_id='subject'))
                 assert pulled['ok'] and pulled['data']['messages'] == [], pulled
             else:
-                resolved = client.post('/v1/runtime/intents:resolve', headers=headers['subject'], json={
+                actor = 'operator' if operator_containment and intent in ('turn.interrupt', 'runtime.close') else 'subject'
+                resolved = (await asyncio.to_thread(client.post, '/v1/runtime/intents:resolve', headers=headers[actor], json={
                     'client_intent_id': 'mux-' + intent, 'intent': intent, 'binding_id': binding['binding_id'],
-                    'workspace_binding_id': binding['workspace_binding_id'], **options})
+                    'workspace_binding_id': binding['workspace_binding_id'], 'agent_id': 'subject', **options}))
                 assert resolved.status_code == 200, resolved.text
                 resolution = resolved.json()
                 assert resolution['can_submit'], resolution['blockers']
-                admitted = client.post('/v1/runtime/operations', headers=headers['subject'], json={
-                    k: resolution[k] for k in ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')})
+                admitted = (await asyncio.to_thread(client.post, '/v1/runtime/operations', headers=headers[actor], json={
+                    k: resolution[k] for k in ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')}))
                 assert admitted.status_code == 202, admitted.text
             operations.append(resolution['operation_id'])
             if publication_failure and intent == 'runtime.close':
@@ -227,8 +229,8 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 while True:
                     if execution.failure is not None:
                         raise execution.failure
-                    observed = client.get('/v1/runtime/operations/' + resolution['operation_id'],
-                                          headers=headers['subject'])
+                    observed = (await asyncio.to_thread(client.get, '/v1/runtime/operations/' + resolution['operation_id'],
+                                          headers=headers['subject']))
                     assert observed.status_code == 200, observed.text
                     assert observed.json()['error'] is None, observed.json()
                     if observed.json()['receipt_revision'] > 0:
@@ -356,13 +358,56 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                         operations.append(child)
                         async with asyncio.timeout(8):
                             while True:
-                                result = client.get("/v1/runtime/operations/" + child, headers=headers["subject"])
+                                result = (await asyncio.to_thread(client.get, "/v1/runtime/operations/" + child, headers=headers["subject"]))
                                 assert result.status_code == 200, result.text
                                 if result.json()["executor_stage"] in {"SUBMITTED", "SUCCEEDED"}:
                                     break
                                 assert execution.failure is None, repr(execution.failure)
                                 await asyncio.sleep(.01)
                 turned = await admit('turn.submit', session_id=session_id, text='Hello')
+                if check_presence:
+                    def presence():
+                        response = client.get('/api/v1/graph', headers=headers['operator'])
+                        assert response.status_code == 200, response.text
+                        current = next(n['presence'] for n in response.json()['data']['nodes'] if n['agent_id'] == 'subject')
+                        from test_pr34_remediation import tool
+                        client.headers['host'] = '127.0.0.1:8000'
+                        inspected = tool(client, headers['operator']['Authorization'].removeprefix('Bearer '),
+                                         'agent_get', {'agent_id': 'subject'})
+                        assert inspected['ok'], inspected
+                        assert inspected['data']['connection']['location'] == 'remote'
+                        return current, inspected['data']['presence']
+                    assert await asyncio.to_thread(presence) == ('present', 'present')
+                    await admit('runtime.close', session_id=session_id)
+                    async with asyncio.timeout(5):
+                        while execution.pending_count:
+                            await asyncio.sleep(.01)
+                    completed_shutdown = await daemon._shutdown()
+                    assert completed_shutdown == 0
+                    await owner.close()
+                    async with asyncio.timeout(5):
+                        while await asyncio.to_thread(presence) != ('offline', 'offline'):
+                            await asyncio.sleep(.05)
+                    return
+                if reset_active:
+                    response = await asyncio.to_thread(client.post, '/api/v1/admin/reset', headers=headers['operator'])
+                    assert response.status_code in (200, 202), response.text
+                    async with asyncio.timeout(35):
+                        while response.json()['data'].get('pending'):
+                            await asyncio.sleep(.05)
+                            response = await asyncio.to_thread(client.get, '/api/v1/admin/reset', headers=headers['operator'])
+                            assert response.status_code == 200, response.text
+                    assert native.native.stopped
+                    with deps.connection_factory.unit_of_work(write=False) as uow:
+                        assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 0
+                        assert uow.connection.execute('SELECT COUNT(*) FROM execution_bindings').fetchone()[0] == 1
+                    from test_vertical_inventory import _Native
+                    native.native = _Native()
+                    restarted = await admit('runtime.start', new_session=True)
+                    await admit('turn.submit', session_id=restarted['scope']['session_id'], text='After reset')
+                    assert len(native.native.sent) == 1
+                    await admit('runtime.close', session_id=restarted['scope']['session_id'])
+                    return
                 if native_decision is not None:
                     from nexus_connector_core import RuntimeEvent
                     kind, choice = native_decision
@@ -378,31 +423,35 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                         turned['operation_id']))
                     async with asyncio.timeout(8):
                         while True:
-                            queued = client.get('/api/v1/approvals', headers=headers['operator'],
-                                params={'workspace':binding['workspace_id'],'status':'pending'})
+                            queued = (await asyncio.to_thread(client.get, '/api/v1/approvals', headers=headers['operator'],
+                                params={'workspace':binding['workspace_id'],'status':'pending'}))
                             assert queued.status_code == 200, queued.text
                             rows = [row for row in queued.json()['data']['items'] if row['action']=='execution.native.respond']
                             if rows: break
                             assert execution.failure is None, repr(execution.failure)
                             await asyncio.sleep(.01)
                     assert len(rows) == 1
-                    detail = client.get('/api/v1/approvals/'+rows[0]['approval_id'],headers=headers['operator'])
+                    detail = (await asyncio.to_thread(client.get, '/api/v1/approvals/'+rows[0]['approval_id'],headers=headers['operator']))
                     proposal = detail.json()['data']['request_payload']['kwargs']
                     body = {k:proposal[k] for k in ('approval_key','expected_revision','request_hash','cas_token')}
                     body.update(client_intent_id='remote-native-decision',decision=choice)
                     response = {'answers':{'question':{'answers':['remote-private-input-marker']}}} if kind=='input' and choice=='approve' else None
                     if response is not None: body['response']=response
-                    assert client.post('/v1/runtime/approval-decisions',headers=headers['subject'],json=body).status_code == 403
-                    confirmed = client.post('/v1/runtime/approval-decisions',headers=headers['operator'],json=body)
+                    # Native input belongs to its recipient; execution
+                    # permission decisions belong to the operator.
+                    responder = headers['subject' if kind == 'input' else 'operator']
+                    forbidden = headers['operator' if kind == 'input' else 'subject']
+                    assert (await asyncio.to_thread(client.post, '/v1/runtime/approval-decisions',headers=forbidden,json=body)).status_code == 403
+                    confirmed = (await asyncio.to_thread(client.post, '/v1/runtime/approval-decisions',headers=responder,json=body))
                     assert confirmed.status_code == 202, confirmed.text
                     decision = confirmed.json()
-                    repeated = client.post('/v1/runtime/approval-decisions',headers=headers['operator'],json=body)
+                    repeated = (await asyncio.to_thread(client.post, '/v1/runtime/approval-decisions',headers=responder,json=body))
                     assert repeated.status_code == 200, repeated.text
                     assert repeated.json()['native_operation_id'] == decision['native_operation_id']
                     operations.append(decision['native_operation_id'])
                     async with asyncio.timeout(8):
                         while True:
-                            result = client.get('/v1/runtime/approval-decisions/'+decision['decision_id'],headers=headers['operator'])
+                            result = (await asyncio.to_thread(client.get, '/v1/runtime/approval-decisions/'+decision['decision_id'],headers=headers['operator']))
                             assert result.status_code == 200, result.text
                             view = result.json()
                             if view['native_stage']=='SUBMITTED': break
@@ -513,6 +562,13 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                             assert tuple(uow.connection.execute('SELECT committed_contiguous,projected_through FROM execution_event_watermarks').fetchone()) == (1,0)
                 await admit('turn.steer', session_id=session_id, text='Continue carefully.',
                     target={'kind': 'native_turn_id', 'expected_turn_id': 'turn-from-native'})
+                if operator_containment:
+                    with deps.connection_factory.unit_of_work(write=False) as uow:
+                        profile = dict(uow.connection.execute('SELECT p.* FROM runtime_profiles p JOIN agent_endpoints e '
+                            'ON e.profile_id=p.profile_id WHERE e.endpoint_id=?', (binding['endpoint_id'],)).fetchone())
+                    disabled = await asyncio.to_thread(client.patch, '/api/v1/harness/profiles/' + profile['profile_id'],
+                        headers=headers['operator'], json=dict(expected_revision=profile['revision'], enabled=False))
+                    assert disabled.status_code == 200, disabled.text
                 await admit('turn.interrupt', session_id=session_id,
                     target={'kind': 'current_run', 'expected_turn_id': None})
                 await admit('runtime.close', session_id=session_id)
@@ -578,7 +634,7 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                             journal=await daemon.host.ensure_history_journal())
                     assert list(recovered) == [binding['binding_id']]
                     assert not pending.pending(server_id, executor_id)
-                    final = client.get('/v1/runtime/operations/' + operations[-1], headers=headers['subject']).json()
+                    final = (await asyncio.to_thread(client.get, '/v1/runtime/operations/' + operations[-1], headers=headers['subject'])).json()
                     assert final['executor_stage'] == 'SUCCEEDED' and final['receipt_revision'] == 1
                 if reconcile_closed:
                     from okto_nexus_connector.services.r4_reconciliation import R4ReconciliationReporter
@@ -695,11 +751,16 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 # Receipt ingress preserves history after disconnect. Adoption
                 # of that fact into session readiness remains reconciliation.
                 assert tuple(uow.connection.execute('SELECT lifecycle_state,lease_state FROM execution_sessions').fetchone()) == expected_session
+                if operator_containment:
+                    assert not uow.connection.execute('SELECT 1 FROM runtime_execution_grants WHERE revoked_at IS NULL').fetchone()
+                    controls = uow.connection.execute("SELECT actor_agent_id,subject_agent_id FROM execution_operations "
+                        "WHERE action IN ('turn.interrupt','runtime.close')").fetchall()
+                    assert [tuple(r) for r in controls] == [('operator','subject'),('operator','subject')]
         finally:
             try:
                 if recovery_host is not None:
                     await recovery_host.shutdown_all()
-                result = await daemon._shutdown()
+                result = await daemon._shutdown() if completed_shutdown is None else completed_shutdown
                 if owner is not None:
                     await owner.close()
                 assert result == (1 if publication_failure else 0)
@@ -708,6 +769,24 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 await asyncio.wait_for(serving, 5)
                 sock.close()
     asyncio.run(run())
+
+
+@pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
+def test_reset_stops_remote_execution_and_reuses_connection(onboarding, tmp_path, monkeypatch):
+    test_owned_connector_reader_dispatches_five_actions_over_real_websocket(
+        onboarding, tmp_path, monkeypatch, True, None, False, 0, None, reset_active=True)
+
+
+@pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
+def test_remote_operator_contains_session_after_profile_revocation(onboarding, tmp_path, monkeypatch):
+    test_owned_connector_reader_dispatches_five_actions_over_real_websocket(
+        onboarding, tmp_path, monkeypatch, True, None, False, 0, None, operator_containment=True)
+
+
+@pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
+def test_graph_presence_tracks_remote_connector_disconnect(onboarding, tmp_path, monkeypatch):
+    test_owned_connector_reader_dispatches_five_actions_over_real_websocket(
+        onboarding, tmp_path, monkeypatch, False, None, False, 0, None, check_presence=True)
 
 
 @pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)

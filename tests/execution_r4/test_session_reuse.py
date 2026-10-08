@@ -134,7 +134,7 @@ def test_uncertain_opening_is_not_replaced(reuse_connected):
     "UPDATE execution_realizations SET revision=revision+1",
 ])
 @pytest.mark.parametrize("boundary", ["resolve", "admit"])
-def test_reuse_revalidates_authority_at_both_boundaries(reuse_connected, sql, boundary):
+def test_reuse_revalidates_authority_at_both_boundaries(reuse_connected, sql, boundary, request):
     setup, binding, native = reuse_connected
     first = resolve(setup, binding, "first", new_session=True).json()
     admit(setup, first)
@@ -143,7 +143,19 @@ def test_reuse_revalidates_authority_at_both_boundaries(reuse_connected, sql, bo
         selected = resolve(setup, binding, "reuse")
         assert selected.status_code == 200, selected.text
         selected = selected.json()
+    # These are deliberately inconsistent persisted facts, not a real new
+    # owner with its own matching Core history. Remove only the injected fault
+    # after all rejection assertions, so normal teardown can publish containment
+    # against the actual opening generation instead of retrying forever.
+    _, table, _, assignment = sql.split(maxsplit=3)
+    column = assignment.split('=', 1)[0]
     with setup[0].connection_factory.unit_of_work() as uow:
+        original = [tuple(row) for row in uow.connection.execute(f'SELECT rowid,{column} FROM {table}')]
+        def restore_fault():
+            with setup[0].connection_factory.unit_of_work() as cleanup:
+                cleanup.connection.executemany(f'UPDATE {table} SET {column}=? WHERE rowid=?',
+                    [(value, rowid) for rowid, value in original])
+        request.addfinalizer(restore_fault)
         uow.connection.execute(sql)
     if boundary == "resolve":
         response = resolve(setup, binding, "reuse")

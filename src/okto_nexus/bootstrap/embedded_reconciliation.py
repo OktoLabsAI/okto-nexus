@@ -13,6 +13,62 @@ class EmbeddedReconciliation:
     def __init__(self, owner):
         self.owner = owner
 
+    async def recovery_plan(self, agent_id=None):
+        """An exact, reviewable set for operator-confirmed legacy recovery."""
+        owner = self.owner
+        await asyncio.to_thread(owner.verify)
+        if owner._stopping.is_set():
+            raise CoreError('RECONCILIATION_REQUIRED', 'embedded_recovery_plan')
+        ledger = await owner.host._ledger()
+        records = {r['session_id']: r for r in await asyncio.to_thread(self._records)}
+        page = await ledger.owned_slot_page(limit=128)
+        if page.next_after_rowid is not None:
+            raise CoreError('CAPACITY_EXCEEDED', 'embedded_recovery_plan')
+        sessions = []
+        for slot in page.reservations:
+            row = records.get(slot.key.session_id)
+            if row is not None and (row['agent_id'] not in owner.agents.blocked or (agent_id is not None and row['agent_id'] != agent_id)):
+                continue
+            if slot.key.session_id in owner.sessions:
+                raise CoreError('RECONCILIATION_REQUIRED', 'embedded_recovery_plan')
+            if (slot.key.server_id != owner.channel.server_id or slot.key.executor_id != owner.channel.executor_id
+                    or row is None or row['open_operation_id'] != slot.opening_operation_id or row['binding_json'] is None):
+                raise CoreError('SCOPE_MISMATCH', 'embedded_recovery_plan')
+            async def inspect(journal):
+                claims = await journal.claimed_sessions(owner.channel.server_id, owner.channel.executor_id, limit=2)
+                if len(claims.claims) != 1 or claims.next_after_rowid is not None:
+                    raise CoreError('RECONCILIATION_REQUIRED', 'embedded_recovery_plan')
+                claim = claims.claims[0]
+                if (claim.key != slot.key or claim.opening_operation_id != slot.opening_operation_id
+                        or claim.opening_connection_generation is None
+                        or claim.opening_connection_generation >= owner.channel.connection_generation):
+                    raise CoreError('STALE_GENERATION', 'embedded_recovery_plan')
+                key = OperationKey(slot.key.server_id, slot.key.executor_id, slot.opening_operation_id)
+                receipt = await journal.get_receipt(key)
+                projected = project_r4_bound_receipt(json.loads(row['binding_json']), receipt, key=key, receipt_revision=1)
+                if projected['stage'] not in ('SUBMITTED', 'SUCCEEDED') or projected['session_id'] != slot.key.session_id:
+                    raise CoreError('RECONCILIATION_REQUIRED', 'embedded_recovery_plan')
+                return dict(session_id=slot.key.session_id, opening_operation_id=slot.opening_operation_id,
+                            agent_id=projected['agent_id'])
+            sessions.append(await owner.host.with_history(executor_id=owner.channel.executor_id,
+                session_id=slot.key.session_id, read=inspect))
+        return dict(executor_id=owner.channel.executor_id, generation=owner.channel.connection_generation, agent_id=agent_id,
+                    sessions=sorted(sessions, key=lambda item: item['session_id']))
+
+    async def confirm_stopped(self, plan, actor):
+        """Operator attestation is distinct from automatic OS evidence."""
+        if plan != await self.recovery_plan(plan.get('agent_id')) or not plan['sessions']:
+            raise CoreError('STALE_GENERATION', 'embedded_recovery_plan')
+        owner = self.owner
+        await asyncio.to_thread(owner.verify)
+        await asyncio.to_thread(owner._recovery_event, 'RECOVERY_OPERATOR_CONFIRMED_STOPPED',
+            json.dumps(dict(actor=actor, plan=plan)))
+        ledger = await owner.host._ledger()
+        for session in plan['sessions']:
+            await asyncio.to_thread(owner.verify)
+            await ledger.release_owned_slot(OperationKey(owner.channel.server_id, owner.channel.executor_id,
+                session['opening_operation_id']), session['session_id'])
+
     def _never_started(self, row):
         """A durable dispatch refusal before publication proves no Core call."""
         with self.owner.factory.unit_of_work(write=False) as uow:
@@ -22,27 +78,37 @@ class EmbeddedReconciliation:
                 'FROM execution_sessions s JOIN execution_dispatch_outbox d ON d.server_id=s.server_id '
                 'AND d.executor_id=s.executor_id AND d.operation_id=s.open_operation_id '
                 'WHERE s.server_id=? AND s.executor_id=? AND s.session_id=?',key).fetchone()
-            if not state or state['lifecycle_state']!='FAILED' or state['lease_state'] not in ('NONE','CLOSED') or state['dispatch_state']!='RESOLVED_TERMINAL':
+            if not state:
                 return False
-            error=json.loads(state['last_error'] or '{}')
-            if error.get('stage')!='dispatch' or error.get('possible_effect') is not False:
+            if state['lifecycle_state'] == 'FAILED':
+                error = json.loads(state['last_error'] or '{}')
+                if (state['lease_state'] not in ('NONE', 'CLOSED') or state['dispatch_state'] != 'RESOLVED_TERMINAL'
+                        or error.get('possible_effect') is not False
+                        or not (error.get('stage') == 'dispatch' or (
+                            error.get('code') == 'LOCAL_PREOPEN_FAILED' and
+                            error.get('proof') == 'fenced_owner_no_publication_no_core_claim_receipt_or_slot'))):
+                    return False
+            elif state['lifecycle_state'] != 'OPEN_PENDING':
                 return False
+            # _bind commits before Core.open. Under the new fenced owner, an
+            # absent binding/journal and empty scoped ledger prove no opening,
+            # including a crash before prepare or before dispatch began.
             for table in ('execution_local_publications','execution_receipts'):
                 if uow.connection.execute(f'SELECT 1 FROM {table} p JOIN execution_operations o '
                     'USING(server_id,executor_id,operation_id) WHERE o.server_id=? AND o.executor_id=? AND o.session_id=? LIMIT 1',key).fetchone():
                     return False
             return row['binding_json'] is None and row['stream_epoch'] is None
 
-    def _records(self):
+    def _records(self, agent_id=None):
         with self.owner.factory.unit_of_work(write=False) as uow:
             self.owner.verify(uow=uow)
-            rows = uow.connection.execute("SELECT s.session_id,s.open_operation_id,p.binding_json,l.stream_epoch "
-                "FROM execution_sessions s LEFT JOIN execution_local_publications p ON p.server_id=s.server_id "
+            rows = uow.connection.execute("SELECT s.session_id,s.open_operation_id,p.binding_json,l.stream_epoch,o.subject_agent_id AS agent_id "
+                "FROM execution_sessions s JOIN execution_operations o ON o.server_id=s.server_id AND o.executor_id=s.executor_id AND o.operation_id=s.open_operation_id LEFT JOIN execution_local_publications p ON p.server_id=s.server_id "
                 "AND p.executor_id=s.executor_id AND p.operation_id=s.open_operation_id "
                 "LEFT JOIN execution_local_streams l ON l.server_id=s.server_id AND l.executor_id=s.executor_id "
                 "AND l.session_id=s.session_id AND l.opening_operation_id=s.open_operation_id "
-                "WHERE s.server_id=? AND s.executor_id=? ORDER BY s.rowid LIMIT 32769",
-                (self.owner.channel.server_id,self.owner.channel.executor_id)).fetchall()
+                "WHERE s.server_id=? AND s.executor_id=? AND (? IS NULL OR o.subject_agent_id=?) ORDER BY s.rowid LIMIT 32769",
+                (self.owner.channel.server_id,self.owner.channel.executor_id,agent_id,agent_id)).fetchall()
             if len(rows)>32768:
                 raise CoreError("CAPACITY_EXCEEDED","embedded_recovery")
             return [dict(row) for row in rows]
@@ -80,7 +146,6 @@ class EmbeddedReconciliation:
                     receipt_revision=1)
                 if (projected['session_id'] != session_id or projected['stage'] != 'FAILED'
                         or projected['possible_effect'] or not projected['retry_safe']
-                        or receipt.error_code != 'PROFILE_DRIFT'
                         or slot.key != claim.key or not slot.released
                         or slot.opening_operation_id != claim.opening_operation_id):
                     raise CoreError('RECONCILIATION_REQUIRED', 'embedded_failed_open_release')
@@ -94,7 +159,7 @@ class EmbeddedReconciliation:
             if sequence != await asyncio.to_thread(self._committed_stream,
                     (claim.key.server_id, claim.key.executor_id, session_id, row['stream_epoch'])):
                 raise CoreError('EVENT_GAP', 'embedded_session_release')
-            return fact
+            return fact | dict(stream_epoch=row['stream_epoch'], committed_sequence=sequence)
         fact = await host.with_history(executor_id=owner.channel.executor_id, session_id=session_id, read=inspect)
         def commit():
             with owner.factory.unit_of_work() as uow:
@@ -106,6 +171,10 @@ class EmbeddedReconciliation:
                      fact['owner_generation'], row['open_operation_id']))
                 if changed.rowcount != 1:
                     raise CoreError('STALE_GENERATION', 'embedded_session_release')
+                if not failed_open:
+                    from ..application.execution_domain_delivery import project_released_deliveries
+                    project_released_deliveries(uow.connection, server_id=owner.channel.server_id,
+                        executor_id=owner.channel.executor_id, session_id=session_id, proof=fact)
                 if failed_open:
                     key = (owner.channel.server_id, owner.channel.executor_id, session_id)
                     uow.connection.execute("UPDATE execution_leases SET status='REVOKED' "
@@ -113,13 +182,19 @@ class EmbeddedReconciliation:
                     uow.connection.execute("UPDATE execution_session_capabilities SET revoked_at=? "
                         "WHERE server_id=? AND executor_id=? AND session_id=? AND revoked_at IS NULL",
                         (owner.deps.clock.now_iso(), *key))
+                from ..application.execution_initial_turns import settle_failed_initial_turns
+                settle_failed_initial_turns(uow.connection, server_id=owner.channel.server_id,
+                    executor_id=owner.channel.executor_id)
         await asyncio.to_thread(commit)
+        # Releasing the opening can make its never-sent first turn retryable.
+        # Notify after commit; the earlier receipt wake cannot see that state.
+        owner.deps.runtime_dispatcher.wake()
 
-    async def _empty_slots(self, source):
+    async def _empty_slots(self, source, session_ids=None):
         after, high = 0, None
         for _ in range(256):
             page = await source.owned_slot_page(after_rowid=after,high_water_rowid=high,limit=128)
-            if page.reservations:
+            if any(session_ids is None or slot.key.session_id in session_ids for slot in page.reservations):
                 raise CoreError("RECONCILIATION_REQUIRED","embedded_owned_resources")
             high = page.high_water_rowid
             if page.next_after_rowid is None:
@@ -129,9 +204,53 @@ class EmbeddedReconciliation:
             after = page.next_after_rowid
         raise CoreError("CAPACITY_EXCEEDED","embedded_resource_scan")
 
-    async def recover(self):
+    async def _recover_containers(self, ledger, records):
+        """Release fenced native trees only after observing their exact container stop."""
+        from nexus_connector_core.native.process.recovery import recover_owned_container
+        owner = self.owner
+        for row in records:
+            if row['binding_json'] is None:
+                continue
+            async def inspect(journal):
+                page = await journal.claimed_sessions(owner.channel.server_id, owner.channel.executor_id, limit=2)
+                if len(page.claims) != 1 or page.next_after_rowid is not None:
+                    return
+                claim = page.claims[0]
+                slot = await ledger.owned_slot_state(claim.key)
+                if slot is None or slot.released:
+                    return
+                if (claim.key.session_id != row['session_id']
+                        or claim.opening_operation_id != row['open_operation_id']
+                        or slot.opening_operation_id != claim.opening_operation_id
+                        or claim.opening_connection_generation is None
+                        or claim.opening_connection_generation >= owner.channel.connection_generation):
+                    raise CoreError('RECONCILIATION_REQUIRED', 'embedded_container_scope')
+                key = OperationKey(claim.key.server_id, claim.key.executor_id, claim.opening_operation_id)
+                receipt = await journal.get_receipt(key)
+                projected = project_r4_bound_receipt(json.loads(row['binding_json']), receipt,
+                    key=key, receipt_revision=1)
+                if projected['session_id'] != claim.key.session_id or projected['stage'] not in ('SUBMITTED', 'SUCCEEDED'):
+                    raise CoreError('RECONCILIATION_REQUIRED', 'embedded_container_receipt')
+                birth = await journal.get_process_birth(claim.key)
+                if birth is None or birth.key != claim.key or birth.opening_operation_id != claim.opening_operation_id:
+                    return
+                await asyncio.to_thread(owner.verify)
+                if await asyncio.to_thread(recover_owned_container, birth.evidence, stop=True) != 'STOPPED':
+                    return
+                await asyncio.to_thread(owner.verify)
+                # Persist evidence before release; retries are idempotent. No receipt
+                # for a close or a completed turn is manufactured here.
+                await asyncio.to_thread(owner._recovery_event, 'RECOVERY_CONTAINER_STOPPED',
+                    json.dumps(dict(session_id=claim.key.session_id,
+                        opening_operation_id=claim.opening_operation_id,
+                        container_id=birth.evidence.container_id)))
+                await ledger.release_owned_slot(key, claim.key.session_id)
+            await owner.host.with_history(executor_id=owner.channel.executor_id,
+                session_id=row['session_id'], read=inspect)
+
+    async def recover(self, agent_id=None):
         owner,host = self.owner,self.owner.host
-        records = await asyncio.to_thread(self._records)
+        records = await asyncio.to_thread(self._records, agent_id)
         if not records:
             return False
         absent = set()
@@ -146,16 +265,19 @@ class EmbeddedReconciliation:
         if len(absent) != len(records) or 'owned-slots.db' in files:
             expected.add("owned-slots.db")
         allowed = expected | {name+suffix for name in expected for suffix in ("-wal","-shm")}
-        if not files.issubset(allowed) or not expected.issubset(files):
+        if (agent_id is None and not files.issubset(allowed)) or not expected.issubset(files):
             raise CoreError("JOURNAL_UNAVAILABLE","embedded_resource_files")
         ledger = await host._ledger() if 'owned-slots.db' in expected else None
         if ledger is not None:
-            await self._empty_slots(ledger)
+            await self._recover_containers(ledger, [r for r in records if r['session_id'] not in absent])
+            await self._empty_slots(ledger, {r['session_id'] for r in records} if agent_id is not None else None)
         proofs = {}
+        unstarted_sessions = set()
         for row in records:
             await asyncio.to_thread(owner.verify)
             if row['session_id'] in absent:
-                await self._recover_unstarted(row, proven_absent=True)
+                if await self._recover_unstarted(row, proven_absent=True):
+                    unstarted_sessions.add(row['session_id'])
                 continue
             if row["binding_json"] is None or row["stream_epoch"] is None:
                 if row['binding_json'] is None and row['stream_epoch'] is None:
@@ -189,8 +311,23 @@ class EmbeddedReconciliation:
                 return fact,dict(session_id=claim.key.session_id,stream_epoch=row["stream_epoch"],sequence=sequence)
             proofs[row["session_id"]] = await host.with_history(executor_id=owner.channel.executor_id,
                 session_id=row["session_id"],read=inspect)
+        # Older versions could retire the stream without settling its delivery.
+        # Revalidate the retained proof even for sessions already marked closed.
+        def settle_retained():
+            from ..application.execution_domain_delivery import project_released_deliveries
+            with owner.factory.unit_of_work() as uow:
+                owner.verify(uow=uow)
+                for session_id, (fact, stream) in proofs.items():
+                    if uow.connection.execute("SELECT 1 FROM execution_sessions WHERE server_id=? AND executor_id=? "
+                            "AND session_id=? AND lifecycle_state='CLOSED' AND lease_state='CLOSED'",
+                            (owner.channel.server_id, owner.channel.executor_id, session_id)).fetchone():
+                        project_released_deliveries(uow.connection, server_id=owner.channel.server_id,
+                            executor_id=owner.channel.executor_id, session_id=session_id,
+                            proof=dict(ownership=fact, stream=stream))
+        await asyncio.to_thread(settle_retained)
         reconciliation = ExecutionReconciliation(owner.factory,owner.channel,
-            owner_guard=lambda conn:owner.verify(uow=SimpleNamespace(connection=conn)))
+            owner_guard=lambda conn:owner.verify(uow=SimpleNamespace(connection=conn)), agent_id=agent_id,
+            unstarted_sessions=unstarted_sessions)
         for _ in range(128):
             request = await asyncio.to_thread(reconciliation.request)
             def receipts():
@@ -254,6 +391,12 @@ class EmbeddedReconciliation:
                 if conn.execute('SELECT 1 FROM execution_receipts r JOIN execution_operations o '
                     'USING(server_id,executor_id,operation_id) WHERE o.server_id=? AND o.executor_id=? AND o.session_id=?', key).fetchone():
                     raise CoreError('RECONCILIATION_REQUIRED', 'embedded_preopen_receipt')
+                from ..application.execution_reconciliation import pending_unstarted_session
+                if proven_absent and pending_unstarted_session(conn, *key):
+                    # No reservation, lease, local binding, Core journal or
+                    # owned slot ever existed. Preserve the original durable
+                    # admission for its first dispatch under current authority.
+                    return True
                 operations = conn.execute("SELECT operation_id FROM execution_operations WHERE server_id=? AND executor_id=? "
                     "AND session_id=? AND admission_state<>'RESOLVED_TERMINAL'", key).fetchall()
                 for operation in operations:
@@ -273,4 +416,4 @@ class EmbeddedReconciliation:
                 conn.execute("UPDATE execution_leases SET status='REVOKED' WHERE server_id=? AND executor_id=? AND session_id=?", key)
                 conn.execute("UPDATE execution_session_capabilities SET revoked_at=? WHERE server_id=? AND executor_id=? "
                     "AND session_id=? AND revoked_at IS NULL", (owner.deps.clock.now_iso(), *key))
-        await asyncio.to_thread(commit)
+        return await asyncio.to_thread(commit)

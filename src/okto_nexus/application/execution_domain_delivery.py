@@ -76,7 +76,15 @@ def admit_domain_delivery(uow, *, operation_id, access, fresh_publications, remo
     # artifacts are context, never execution/tool credentials.
     from .runtime_bootstrap import delivery_prompt
     text = delivery_prompt(json.loads(operation["envelope"]))
-    request = dict(client_intent_id="domain:" + operation_id,
+    if operation.get('admission_binding'):
+        endpoint = conn.execute('SELECT profile_id FROM agent_endpoints WHERE endpoint_id=?', (operation['endpoint_id'],)).fetchone()
+        current = dict(schema_version=1, operation_id=operation_id, endpoint_id=operation['endpoint_id'],
+            endpoint_revision=operation['endpoint_revision'], workspace_id=operation['workspace_id'],
+            canonical_envelope_hash=operation['request_hash'],
+            execution_profile=dict(profile_id=endpoint['profile_id'], revision=operation['profile_revision']))
+        text += '\nNEXUS TRANSPORT BINDING: current server-owned attempt; the delivery context is its admission snapshot.\n' + json.dumps(current, sort_keys=True)
+    attempt = max(1, operation['attempt_count'])
+    request = dict(client_intent_id="domain:" + operation_id + (f":attempt:{attempt}" if attempt > 1 else ''),
         intent="turn.submit" if session_id else "runtime.start", text=text,
         binding_id=binding["binding_id"], workspace_binding_id=binding["workspace_binding_id"])
     if session_id:
@@ -104,12 +112,18 @@ def admit_domain_delivery(uow, *, operation_id, access, fresh_publications, remo
         conn.execute("INSERT INTO execution_sender_sessions VALUES (?,?,?,?,?,?)",
                      (binding["server_id"], binding["executor_id"], resolved["session_id"], sender[0],
                       binding['session_policy'], source_session_key if binding['session_policy'] == 'per_sender_session' else ''))
-    rows = conn.execute("SELECT operation_id FROM execution_operations WHERE server_id=? AND executor_id=? "
+    rows = conn.execute("SELECT operation_id,action FROM execution_operations WHERE server_id=? AND executor_id=? "
         "AND (operation_id=? OR parent_operation_id=?)",
         (binding["server_id"], binding["executor_id"], resolved["operation_id"], resolved["operation_id"])).fetchall()
     for row in rows:
         conn.execute("INSERT INTO execution_domain_deliveries VALUES (?,?,?,?)",
                      (binding["server_id"], binding["executor_id"], row[0], operation_id))
+    # The logical inbox delivery survives retries, while each canonical turn
+    # has its own identity. Retain that identity from admission so the existing
+    # immutable history records receipt transitions even on the first attempt.
+    turn_id = next(row[0] for row in rows if row[1] == 'turn.submit')
+    conn.execute('UPDATE delivery_outbox SET attempt_count=max(attempt_count,1),attempt_id=? WHERE operation_id=?',
+                 (turn_id, operation_id))
     return [row[0] for row in rows]
 
 
@@ -132,6 +146,8 @@ def project_delivery_receipt(conn, *, server_id, executor_id, operation_id, acti
     row = conn.execute("SELECT domain_operation_id FROM execution_domain_deliveries "
         "WHERE server_id=? AND executor_id=? AND operation_id=?", (server_id, executor_id, operation_id)).fetchone()
     if row is None:
+        return
+    if conn.execute('SELECT 1 FROM execution_delivery_releases WHERE domain_operation_id=?', (row[0],)).fetchone():
         return
     status = {"SUBMITTED": "ACCEPTED", "RUNNING": "ACCEPTED", "SUCCEEDED": "ACCEPTED",
               "FAILED": "FAILED_FINAL", "CANCELLED": "CANCELLED", "OUTCOME_UNKNOWN": "OUTCOME_UNKNOWN"}.get(stage)
@@ -157,6 +173,9 @@ def project_delivery_receipt(conn, *, server_id, executor_id, operation_id, acti
         "canonical_terminal_operation_id=CASE WHEN ? THEN ? ELSE canonical_terminal_operation_id END,"
         "updated_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') WHERE operation_id=?",
         (status, stage in {"SUBMITTED", "RUNNING", "SUCCEEDED"}, terminal, operation_id, row[0]))
+    if action == 'turn.submit' and stage == 'FAILED':
+        from .execution_delivery_retry import mark_retry_wait
+        mark_retry_wait(conn, row[0])
 
 
 def project_delivery_refusals(conn, *, server_id, executor_id):
@@ -170,3 +189,35 @@ def project_delivery_refusals(conn, *, server_id, executor_id):
         "JOIN execution_dispatch_outbox x USING(server_id,executor_id,operation_id) "
         "WHERE m.server_id=? AND m.executor_id=? AND x.dispatch_state='RESOLVED_TERMINAL' "
         "AND x.last_receipt_revision IS NULL AND x.last_error IS NOT NULL LIMIT 256)", (server_id, executor_id))
+
+
+def project_released_deliveries(conn, *, server_id, executor_id, session_id, proof):
+    """Called only after validating resource release AND complete event replay.
+
+    Release ordering, not the inbox claim: an already submitted turn may have
+    caused effects. Never replay it, fabricate a receipt or publish partial text
+    as a completed response.
+    """
+    if not conn.execute("SELECT 1 FROM execution_sessions WHERE server_id=? AND executor_id=? "
+            "AND session_id=? AND lifecycle_state='CLOSED' AND lease_state='CLOSED'",
+            (server_id, executor_id, session_id)).fetchone():
+        raise ValueError('Delivery release requires a closed canonical session.')
+    rows = conn.execute("SELECT m.domain_operation_id,p.operation_id FROM execution_operations p "
+        "JOIN execution_domain_deliveries m USING(server_id,executor_id,operation_id) "
+        "JOIN delivery_outbox d ON d.operation_id=m.domain_operation_id "
+        "WHERE p.server_id=? AND p.executor_id=? AND p.session_id=? AND p.action='turn.submit' "
+        "AND d.reconciliation_id IS NULL AND d.external_completed_at IS NULL "
+        "AND d.terminal_event_id IS NULL AND d.canonical_terminal_operation_id IS NULL "
+        "AND d.status IN ('PENDING','CLAIMED','SENDING','ACCEPTED','SENT_UNCONFIRMED','OUTCOME_UNKNOWN') "
+        "AND (SELECT stage FROM execution_receipts r WHERE r.server_id=p.server_id "
+        "AND r.executor_id=p.executor_id AND r.operation_id=p.operation_id "
+        "ORDER BY receipt_revision DESC LIMIT 1) IN ('SUBMISSION_STARTED','SUBMITTED','RUNNING','OUTCOME_UNKNOWN')",
+        (server_id, executor_id, session_id)).fetchall()
+    for row in rows:
+        conn.execute("INSERT INTO execution_delivery_releases VALUES(?,?,?,?,?,?,strftime('%Y-%m-%dT%H:%M:%fZ','now')) "
+            "ON CONFLICT DO NOTHING", (row['domain_operation_id'], server_id, executor_id,
+            row['operation_id'], session_id, json.dumps(proof, sort_keys=True)))
+        conn.execute("UPDATE delivery_outbox SET status='OUTCOME_UNKNOWN',reason='session_released_without_result',"
+            "updated_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') WHERE operation_id=? "
+            "AND (status!='OUTCOME_UNKNOWN' OR reason IS NOT 'session_released_without_result')",
+            (row['domain_operation_id'],))

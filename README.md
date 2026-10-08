@@ -19,7 +19,7 @@ the derived `shared.md` view live outside that database.
 
 | Release fact | Value |
 |---|---|
-| Package | `okto-nexus 0.2.0` (development) |
+| Package | `okto-nexus 0.2.2` (development) |
 | Python | `>=3.11` |
 | MCP surface | Use `tools/list` for the active feature configuration |
 | MCP resources | 12 versioned reference resources |
@@ -142,6 +142,7 @@ okto-nexus serve
 
 Defaults:
 
+- listen address: `0.0.0.0:8202` (all IPv4 interfaces);
 - dashboard: `http://127.0.0.1:8202/`;
 - MCP: `http://127.0.0.1:8202/mcp`;
 - data directory: `~/.okto_nexus`;
@@ -153,10 +154,15 @@ Useful variants:
 
 ```bash
 okto-nexus serve --project-root /absolute/path/to/project
-okto-nexus serve --host 0.0.0.0 --port 8202
+okto-nexus serve --host 127.0.0.1 --port 8202  # loopback-only access
 okto-nexus serve --trust-mode strict
 okto-nexus serve --embedding-mode local
 ```
+
+From another computer, use `http://<server-network-IP>:8202/`. Remote dashboard
+access requires an operator login configured locally in **Settings → Operator access**.
+MCP and Connector clients continue to authenticate with agent API keys.
+`--host` overrides `OKTO_NEXUS_HOST`; either can restrict the listening address.
 
 On first use, open **Agents → New agent** in the dashboard. Create one identity
 per participant and copy its `nxs_...` key immediately: Nexus stores only the
@@ -816,7 +822,7 @@ The other flags gate live behavior.
 | Environment | CLI | Default | Scope |
 |---|---|---:|---|
 | `OKTO_NEXUS_PORT` | `--port` | 8202 | `serve` |
-| `OKTO_NEXUS_HOST` | `--host` | `127.0.0.1` | `serve` |
+| `OKTO_NEXUS_HOST` | `--host` | `0.0.0.0` | `serve` |
 | `OKTO_NEXUS_LOG_LEVEL` | `--log-level` | `warning` | `critical` through `trace` |
 | — | `--project-root` | `.` | Initial dashboard workspace |
 | `OKTO_NEXUS_NO_BANNER` | — | unset | Suppress serve banner |
@@ -1025,10 +1031,10 @@ Release checks:
 
 ```bash
 uv lock --check
-uv build --out-dir dist/release-0.2.0
+uv build --out-dir dist/release-0.2.2
 uvx twine check \
-  dist/release-0.2.0/okto_nexus-0.2.0-py3-none-any.whl \
-  dist/release-0.2.0/okto_nexus-0.2.0.tar.gz
+  dist/release-0.2.2/okto_nexus-0.2.2-py3-none-any.whl \
+  dist/release-0.2.2/okto_nexus-0.2.2.tar.gz
 ```
 
 Publish only explicitly named current-version artifacts. The top-level
@@ -1386,3 +1392,8 @@ Read the complete
 [LICENSE](https://github.com/OktoLabsAI/okto-nexus/blob/main/LICENSE) before use
 or redistribution. It is also included in the source distribution and served
 by the running hub at `GET /api/v1/license`.
+
+## Global harness MCPs
+
+See [global harness MCP inheritance](docs/global-mcps.md) for global defaults,
+agent/harness overrides and local/remote host behavior.

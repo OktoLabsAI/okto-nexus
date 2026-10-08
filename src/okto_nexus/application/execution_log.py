@@ -48,8 +48,8 @@ def read_execution_log(factory, *, workspace_id=None, severity=None, agent_id=No
       WHERE v.approved_revision<>v.current_revision
       UNION ALL
       SELECT 'recovery:'||r.id id,r.created_at timestamp,'runtime recovery' source,
-        CASE WHEN r.code='RECOVERY_READY' THEN 'info' ELSE 'warning' END severity,
-        NULL agent_id,NULL workspace_id,NULL adapter_id,NULL endpoint_id,NULL session_id,NULL operation_id,
+        CASE WHEN r.code IN ('RECOVERY_READY','RECOVERY_AGENT_READY') THEN 'info' ELSE 'warning' END severity,
+        r.agent_id,NULL workspace_id,NULL adapter_id,NULL endpoint_id,NULL session_id,NULL operation_id,
         r.executor_id,'runtime.recover' action,r.code,json_object('message',r.message) detail FROM runtime_recovery_events r
       UNION ALL
       SELECT 'pending:'||p.delivery_id,p.created_at,'runtime recovery',CASE WHEN p.status='attention' THEN 'error' ELSE 'warning' END,
@@ -121,9 +121,9 @@ def read_execution_log(factory, *, workspace_id=None, severity=None, agent_id=No
             if column in ('workspace_id', 'agent_id', 'adapter_id'):
                 # Executor recovery affects every connection on that host;
                 # keep it visible when filtering one affected connection.
-                query += f" AND ({column}=? OR (source='runtime recovery' AND log.agent_id IS NULL " \
+                query += f" AND ({column}=? OR (source='runtime recovery' " \
                     f"AND EXISTS (SELECT 1 FROM execution_bindings b JOIN agent_endpoints ep USING(endpoint_id) " \
-                    f"WHERE b.executor_id=log.executor_id AND ep.{column}=?)))"
+                    f"WHERE b.executor_id=log.executor_id AND (log.agent_id IS NULL OR ep.agent_id=log.agent_id) AND ep.{column}=?)))"
                 params.extend((value, value))
             else:
                 query += f' AND {column}=?'

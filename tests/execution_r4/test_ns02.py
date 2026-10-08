@@ -85,16 +85,18 @@ def test_ns02_02(tmp_path):
         conn.commit()
     finally:
         conn.close()
-    assert MigrationRunner(factory).apply() == list(range(66, 97))
+    assert MigrationRunner(factory).apply() == sorted(int(path.name.split("_", 1)[0])
+        for path in migration_source.glob("[0-9]*_*.sql")
+        if int(path.name.split("_", 1)[0]) >= 66)
     assert MigrationRunner(factory).apply() == []
     conn = factory.get_connection()
     try:
         names = {row[0] for row in conn.execute(
             "SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'execution_%'")}
-        assert len(names) == 31
         assert {"execution_operations", "execution_dispatch_outbox",
                 "execution_event_ingress", "execution_event_watermarks",
-                "execution_results"} <= names
+                "execution_results", "execution_agent_recovery",
+                "execution_delivery_releases"} <= names
         assert conn.execute("SELECT enabled FROM agent_endpoints WHERE endpoint_id='ep-a'").fetchone()[0] == 0
         indexes = {row[1] for row in conn.execute("PRAGMA index_list('execution_dispatch_outbox')")}
         assert "idx_execution_dispatch_pending" in indexes

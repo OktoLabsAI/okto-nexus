@@ -39,7 +39,7 @@ def view(state):
         operation_id=resolution['operation_id'], subject_agent_id='subject').public_view()
 
 
-def make_pump(state, send, lock, closed):
+def make_pump(state, send, lock, closed, **options):
     deps, app, access, _, _, channel, _, link = state
     def verify():
         return verify_execution_ticket(deps.connection_factory, ticket=link,
@@ -48,7 +48,7 @@ def make_pump(state, send, lock, closed):
         closed.set()
     return pumps.ExecutionDispatchPump(factory=deps.connection_factory, channel=channel,
         access=access, fresh_publications=app.state.inventory_fresh_publications,
-        send=send, send_lock=lock, verify_link=verify, close_link=close, poll_interval=0.01)
+        send=send, send_lock=lock, verify_link=verify, close_link=close, poll_interval=0.01, **options)
 
 
 async def wait_for_state(state, expected):
@@ -66,10 +66,14 @@ def test_dispatch_revalidates_after_writer_wait_and_exposes_terminal_rejection(o
     async def run():
         deps, app, access, operator, grant, channel, resolution, _ = owner
         lock, closed, sent = asyncio.Lock(), asyncio.Event(), []
+        notified = asyncio.Event()
+        def wake_deliveries():
+            assert view(owner)['admission_state'] == 'RESOLVED_TERMINAL'
+            notified.set()
         async def send(frame):
             sent.append(frame)
         await lock.acquire()
-        pump = make_pump(owner, send, lock, closed)
+        pump = make_pump(owner, send, lock, closed, wake_deliveries=wake_deliveries)
         pump.start()
         try:
             row = await wait_for_state(owner, 'RESERVED')
@@ -78,6 +82,7 @@ def test_dispatch_revalidates_after_writer_wait_and_exposes_terminal_rejection(o
             assert not sent and not pump.task.done()  # The lock barrier is still retained.
             lock.release()
             rejected = await wait_for_state(owner, 'RESOLVED_TERMINAL')
+            await asyncio.wait_for(notified.wait(), 3)
             assert rejected['reserved_bytes'] == 0 and rejected['reservation_class'] is None
             observed = view(owner)
             assert observed['admission_state'] == 'RESOLVED_TERMINAL'

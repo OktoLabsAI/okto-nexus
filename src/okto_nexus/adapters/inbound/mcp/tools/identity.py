@@ -308,7 +308,7 @@ def register(server: Any, deps: Any) -> None:
     @server.tool()
     @tool_envelope
     def agent_list() -> dict[str, Any]:
-        """List registered agents (global), each with role/capabilities and last_seen_at. Authenticated callers see only agents their comm scope can reach (plus themselves); anonymous callers see all."""
+        """List reachable agents with presence (present=online, stale, offline) and connection (location/status). Runtime state overrides activity. Online does not guarantee delivery."""
         caller = get_authenticated_agent()
         return {
             "agents": service.agent_list(
@@ -321,7 +321,7 @@ def register(server: Any, deps: Any) -> None:
     def agent_get(
         agent_id: Annotated[str, Field(description=_P_GET_AGENT_ID)],
     ) -> dict[str, Any]:
-        """Return one agent's details incl. last_seen_at. Scoped by reachability: an agent outside your comm scope reads as NOT_FOUND, indistinguishable from a non-existent agent_id."""
+        """Get a reachable agent's profile, presence (present=online/stale/offline), and connection (location/status). Unreachable agents return NOT_FOUND. Online does not guarantee delivery."""
         caller = get_authenticated_agent()
         return service.agent_get(
             agent_id=agent_id,

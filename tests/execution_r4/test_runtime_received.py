@@ -7,7 +7,9 @@ from okto_nexus.application.execution_domain_delivery import project_delivery_re
 @pytest.fixture
 def deliveries():
     conn = sqlite3.connect(':memory:')
+    conn.row_factory = sqlite3.Row
     conn.executescript('''
+        CREATE TABLE execution_delivery_releases(domain_operation_id);
         CREATE TABLE execution_domain_deliveries(server_id,executor_id,operation_id,domain_operation_id);
         CREATE TABLE delivery_outbox(operation_id,delivery_id,message_id,recipient_agent_id,
             reconciliation_id,status,ack_level,canonical_terminal_operation_id,updated_at);
@@ -33,13 +35,13 @@ def test_receipt_records_first_native_acceptance_without_ack(deliveries, stage):
     assert status == 'delivered' and received and read is None
     deliveries.execute("UPDATE message_deliveries SET status='read',read_at='later'")
     project(deliveries, 'SUCCEEDED')
-    assert deliveries.execute('SELECT status,delivered_at,read_at FROM message_deliveries').fetchone() == ('read',received,'later')
+    assert tuple(deliveries.execute('SELECT status,delivered_at,read_at FROM message_deliveries').fetchone()) == ('read',received,'later')
 
 
 @pytest.mark.parametrize('stage', ['ACCEPTED','FAILED','CANCELLED','OUTCOME_UNKNOWN'])
 def test_non_acceptance_does_not_claim_receipt(deliveries, stage):
     project(deliveries, stage)
-    assert deliveries.execute('SELECT status,delivered_at,read_at FROM message_deliveries').fetchone() == ('unread',None,None)
+    assert tuple(deliveries.execute('SELECT status,delivered_at,read_at FROM message_deliveries').fetchone()) == ('unread',None,None)
 
 
 @pytest.mark.parametrize('change', [
@@ -51,9 +53,9 @@ def test_non_acceptance_does_not_claim_receipt(deliveries, stage):
 def test_native_receipt_cannot_take_over_other_consumers(deliveries, change):
     deliveries.execute(change)
     project(deliveries, 'SUBMITTED')
-    assert deliveries.execute('SELECT status,delivered_at,read_at FROM message_deliveries').fetchone() == ('unread',None,None)
+    assert tuple(deliveries.execute('SELECT status,delivered_at,read_at FROM message_deliveries').fetchone()) == ('unread',None,None)
 
 
 def test_opening_a_session_does_not_mean_message_received(deliveries):
     project(deliveries, 'SUBMITTED', action='runtime.open')
-    assert deliveries.execute('SELECT delivered_at FROM message_deliveries').fetchone() == (None,)
+    assert tuple(deliveries.execute('SELECT delivered_at FROM message_deliveries').fetchone()) == (None,)

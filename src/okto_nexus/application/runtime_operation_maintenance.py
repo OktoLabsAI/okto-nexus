@@ -84,8 +84,24 @@ class RuntimeOperationMaintenanceService:
             no_write_proof = (table == "delivery_outbox" and row["reason"] == "native_write_not_started"
                 and row["ack_level"] == "NONE" and row["attempt_id"] is not None
                 and row["native_thread_id"] is None and row["native_turn_id"] is None)
+            if no_write_proof and row['retry_basis'] == 'HOST_NO_SEND':
+                no_write_proof = uow.connection.execute(
+                    'SELECT 1 FROM execution_unsent_delivery_history h JOIN execution_unsent_dispatch_proofs f '
+                    'ON f.server_id=h.server_id AND f.executor_id=h.executor_id '
+                    'AND f.operation_id=h.proof_operation_id AND f.attempt_no=h.proof_attempt_no '
+                    'WHERE h.domain_operation_id=? AND h.proof_operation_id=?',
+                    (operation_id, row['attempt_id'])).fetchone() is not None
+            elif no_write_proof and (row['retry_basis'] == 'CORE_NO_EFFECT' or uow.connection.execute(
+                    'SELECT 1 FROM execution_delivery_attempt_history WHERE domain_operation_id=?', (operation_id,)).fetchone()):
+                # The display label cannot replace the correlated Core proof.
+                no_write_proof = uow.connection.execute(
+                    'SELECT 1 FROM execution_delivery_attempt_history h JOIN execution_receipts r '
+                    'ON r.server_id=h.server_id AND r.executor_id=h.executor_id '
+                    'AND r.operation_id=h.proof_operation_id AND r.receipt_revision=h.proof_receipt_revision '
+                    "WHERE h.domain_operation_id=? AND h.proof_operation_id=? AND r.stage='FAILED' "
+                    'AND r.possible_effect=0 AND r.retry_safe=1', (operation_id, row['attempt_id'])).fetchone() is not None
             not_sent = action == "release_to_inbox" and row["status"] == "REJECTED" and no_write_proof
-            safe_wait = row["status"] == "RETRY_WAIT" and no_write_proof and row["retry_basis"] in {"LANE_BUSY_BEFORE_WRITE", "APPROVED_ENDPOINT_BEFORE_WRITE"}
+            safe_wait = row["status"] == "RETRY_WAIT" and no_write_proof and row["retry_basis"] in {"LANE_BUSY_BEFORE_WRITE", "APPROVED_ENDPOINT_BEFORE_WRITE", "CORE_NO_EFFECT", "HOST_NO_SEND"}
             if pending:
                 if (row["status"] not in {"PENDING", "CLAIMED"} and not safe_wait) or acknowledge_duplicate_risk:
                     raise conflict("Cancellation requires an attempt before send-intent or a proven-safe retry wait.")
@@ -126,12 +142,43 @@ class RuntimeOperationMaintenanceService:
                 (",status='CANCELLED',reason='operator_cancelled_before_send'" if pending else "") + " WHERE operation_id=?", (rid, now, operation_id))
             if table == "delivery_outbox" and not recover_work:
                 self.inbox.release_runtime_reservation(uow, operation_id=operation_id)
+                if pending:
+                    self._cancel_canonical_pending(uow, operation_id)
             if not pending and not not_sent:
                 uow.connection.execute("UPDATE agent_endpoints SET health='quarantined',health_reason='operator_takeover',updated_at=? WHERE endpoint_id=?",
                                        (now, row["endpoint_id"]))
                 self.access.endpoints.invalidate_configuration(uow, endpoint_ids=[row["endpoint_id"]], now=now)
         owner.wake()
         return response
+
+    @staticmethod
+    def _cancel_canonical_pending(uow, operation_id):
+        # The reconciliation marker, inbox release and capacity release share
+        # the writer transaction. A reserved sender must still cross its CAS
+        # fence, so it cannot send after this cancellation commits.
+        conn = uow.connection
+        rows = conn.execute(
+            'SELECT p.server_id,p.executor_id,p.operation_id,p.admission_state,x.dispatch_state '
+            'FROM execution_domain_deliveries m JOIN execution_operations p '
+            'USING(server_id,executor_id,operation_id) LEFT JOIN execution_dispatch_outbox x '
+            'USING(server_id,executor_id,operation_id) WHERE m.domain_operation_id=?',
+            (operation_id,)).fetchall()
+        for row in rows:
+            if (row['dispatch_state'] not in (None, 'PENDING', 'RESERVED') or
+                    row['admission_state'] not in ('ACCEPTED', 'DISPATCH_PENDING')):
+                raise conflict('Canonical dispatch crossed its send fence; pending cancellation is unavailable.')
+            key = (row['server_id'], row['executor_id'], row['operation_id'])
+            error = json.dumps(dict(code='OPERATOR_CANCELLED', stage='dispatch',
+                message='Cancelled before native dispatch.', possible_effect=False,
+                retry_safe=False, operation_id=row['operation_id']))
+            conn.execute("INSERT INTO execution_dispatch_outbox(server_id,executor_id,operation_id,dispatch_state,last_error) "
+                "VALUES(?,?,?,'RESOLVED_TERMINAL',?) ON CONFLICT(server_id,executor_id,operation_id) DO UPDATE SET "
+                "dispatch_state='RESOLVED_TERMINAL',last_error=excluded.last_error,"
+                "reservation_class=NULL,reserved_bytes=0,reserved_at=NULL", (*key, error))
+            conn.execute("UPDATE execution_operations SET admission_state='RESOLVED_TERMINAL' "
+                "WHERE server_id=? AND executor_id=? AND operation_id=?", key)
+            conn.execute("UPDATE execution_sessions SET lifecycle_state='FAILED' WHERE server_id=? AND executor_id=? "
+                "AND open_operation_id=? AND lifecycle_state='OPEN_PENDING' AND lease_state='NONE'", key)
 
     @staticmethod
     def _require_canonical_recovery(uow, operation_id, action):
@@ -185,6 +232,19 @@ class RuntimeOperationMaintenanceService:
                                                  (row["operation_id"],)).fetchone()
                 item["handoff"] = dict(binding) if binding else None
                 if operation_id and row["source_kind"] == "delivery_outbox":
+                    item['canonical_attempt_history'] = [dict(r) for r in uow.connection.execute(
+                        'SELECT operation_id,server_id,executor_id,endpoint_id,attempt_number,'
+                        'proof_operation_id,proof_receipt_revision,archived_at FROM execution_delivery_attempt_history '
+                        'WHERE domain_operation_id=? UNION ALL '
+                        'SELECT operation_id,server_id,executor_id,endpoint_id,attempt_number,'
+                        'proof_operation_id,NULL AS proof_receipt_revision,archived_at FROM execution_unsent_delivery_history '
+                        'WHERE domain_operation_id=? ORDER BY attempt_number,operation_id LIMIT 6', (operation_id, operation_id))]
+                    item['unsent_dispatch_history'] = [dict(r) for r in uow.connection.execute(
+                        'SELECT f.operation_id,f.attempt_no,f.previous_owner,f.previous_generation,'
+                        'f.fenced_by_owner,f.fenced_by_generation,f.recorded_at FROM execution_unsent_delivery_history h '
+                        'JOIN execution_unsent_dispatch_proofs f ON f.server_id=h.server_id AND f.executor_id=h.executor_id '
+                        'AND f.operation_id=h.proof_operation_id AND f.attempt_no=h.proof_attempt_no '
+                        'WHERE h.domain_operation_id=? ORDER BY h.attempt_number,h.operation_id LIMIT 6', (operation_id,))]
                     item['canonical_operations'] = [dict(r) for r in uow.connection.execute(
                         'SELECT p.server_id,p.executor_id,p.operation_id,p.session_id,p.action,x.dispatch_state,'
                         's.lifecycle_state,s.lease_state FROM execution_domain_deliveries m '

@@ -39,27 +39,19 @@ def drain_pending(deps):
                     if not effective(conn, row['recipient_agent_id'])['runtime_enabled']:
                         conn.execute("UPDATE runtime_pending_deliveries SET status='resolved',reason='Runtime disabled; available through MCP' WHERE delivery_id=?", (row['delivery_id'],))
                     else:
-                        conn.execute("UPDATE runtime_pending_deliveries SET attempts=attempts+1,"
-                            "status=CASE WHEN attempts>=119 THEN 'attention' ELSE status END,"
-                            "reason=CASE WHEN attempts>=119 THEN 'Recovery wait limit reached; message was not submitted' ELSE reason END "
+                        conn.execute("UPDATE runtime_pending_deliveries SET attempts=attempts+1 "
                             "WHERE delivery_id=?", (row['delivery_id'],))
                 conn.execute('RELEASE pending_message')
             except Exception as error:
                 conn.execute('ROLLBACK TO pending_message')
                 conn.execute('RELEASE pending_message')
-                notification = conn.execute('SELECT 1 FROM runtime_handoff_notifications WHERE message_id=?', (row['message_id'],)).fetchone()
-                transient = notification and getattr(error, 'code', None) == 'CONFLICT' and (
+                transient = getattr(error, 'code', None) == 'CONFLICT' and (
                     getattr(error, 'message', '') == 'Delivery session requires reconciliation.' or
-                    bool(set(getattr(error, 'details', {}).get('blockers', ())) & {'inventory_not_fresh', 'executor_offline'}))
+                    bool(set(getattr(error, 'details', {}).get('blockers', ())) & {'inventory_not_fresh', 'executor_offline', 'executor_not_ready', 'agent_recovering'}))
                 conn.execute("UPDATE runtime_pending_deliveries SET status=?,attempts=attempts+1,reason=? WHERE delivery_id=?",
                     ('waiting' if transient else 'attention', getattr(error,'code','RECOVERY_ADMISSION_FAILED'),row['delivery_id']))
 
 
 def mark_recovery_attention(owner):
-    """Stop queue retries for the exhausted executor without claiming messages."""
-    with owner.factory.unit_of_work() as uow:
-        owner.verify(uow=uow)
-        uow.connection.execute("UPDATE runtime_pending_deliveries SET status='attention',"
-            "reason='Automatic runtime recovery attempts exhausted' WHERE status='waiting' AND delivery_id IN ("
-            "SELECT d.delivery_id FROM message_deliveries d JOIN agent_endpoints ep ON ep.agent_id=d.recipient_agent_id "
-            "JOIN execution_bindings b ON b.endpoint_id=ep.endpoint_id WHERE b.executor_id=?)", (owner.channel.executor_id,))
+    """Initial retries exhausted; pending deliveries remain eligible for recovery."""
+    owner.verify()

@@ -28,7 +28,17 @@ class RuntimeDeliveryPlanner:
             return candidates
         for endpoint in self.endpoints.list(uow, agent_id=agent_id, workspace_id=workspace_id):
             if endpoint["protocol"] == "nxl-r4":
-                # The canonical wire has no context-only observation action.
+                if (method_enabled(uow, endpoint['agent_id'], endpoint['adapter_id'])
+                        and endpoint['enabled'] and endpoint['activation_state'] == 'approved'
+                        and endpoint['health'] != 'quarantined' and endpoint['consumption'] == 'mirror_only'
+                        and endpoint['response_policy'] == 'none'):
+                    from .execution_context_observers import live_observers
+                    profile = self.endpoints.profile(uow, endpoint['profile_id']) if endpoint['profile_id'] else None
+                    live = live_observers(uow, endpoint, profile)
+                    if len(live) > 1:
+                        raise OktoNexusError(ErrorCode.CONFLICT, 'AMBIGUOUS_BINDING', {})
+                    if live:
+                        candidates.append((endpoint, profile, live[0]))
                 continue
             if not method_enabled(uow, endpoint["agent_id"], endpoint["adapter_id"]):
                 continue
@@ -38,7 +48,7 @@ class RuntimeDeliveryPlanner:
                     or endpoint["response_policy"] != "none"
                     or not descriptor.capabilities.context_without_execution
                     or descriptor.input_schema.get("context_observation_contract") != 1
-                    or descriptor.substrate == "attach" and not self.config.feature_harness_attach):
+                    or descriptor.substrate == "attach"):
                 continue
             profile = self.endpoints.profile(uow, endpoint["profile_id"]) if endpoint["profile_id"] else None
             if endpoint["profile_id"] and (not profile or not profile["enabled"]
@@ -71,8 +81,14 @@ class RuntimeDeliveryPlanner:
                         and endpoint["consumption"] == "exclusive" and endpoint["response_policy"] == "conversation"
                         and endpoint["health"] != "quarantined" and profile and profile["enabled"]
                         and "conversation" not in profile["config"].get("disabled_capabilities", ())):
+                    from .runtime_requirements import validate_canonical_native_requirements
+                    try:
+                        validate_canonical_native_requirements(profile['config'], endpoint['adapter_id'],
+                                                               hitl_enabled=self.config.feature_hitl)
+                    except OktoNexusError:
+                        continue
                     from .execution_domain_delivery import select_delivery_session
-                    recovering=uow.connection.execute("SELECT 1 FROM execution_bindings b JOIN execution_executors x USING(server_id,executor_id) WHERE b.endpoint_id=? AND x.control_state='RECOVERING'",(endpoint['endpoint_id'],)).fetchone()
+                    recovering=uow.connection.execute("SELECT 1 FROM execution_bindings b JOIN execution_executors x USING(server_id,executor_id) WHERE b.endpoint_id=? AND (x.control_state<>'CONTROL_READY' OR EXISTS(SELECT 1 FROM execution_agent_recovery r WHERE r.server_id=b.server_id AND r.executor_id=b.executor_id AND r.agent_id=(SELECT agent_id FROM agent_endpoints WHERE endpoint_id=b.endpoint_id) AND (r.state<>'READY' OR r.generation<>x.generation)))",(endpoint['endpoint_id'],)).fetchone()
                     if recovering:
                         raise OktoNexusError(ErrorCode.CONFLICT,'Delivery session requires reconciliation.',{})
                     _, session_id = select_delivery_session(uow, endpoint["endpoint_id"], sender_agent_id=sender_agent_id,
@@ -80,7 +96,7 @@ class RuntimeDeliveryPlanner:
                     candidates.append((endpoint, profile, session_id))
                 continue
             descriptor = self.registry.get(endpoint["adapter_id"])
-            if not descriptor.capabilities.conversation or (descriptor.substrate == "attach" and not self.config.feature_harness_attach):
+            if not descriptor.capabilities.conversation or descriptor.substrate == "attach":
                 continue
             if not endpoint["enabled"] or endpoint["activation_state"] != "approved" or endpoint["consumption"] != "exclusive":
                 continue
@@ -133,6 +149,13 @@ class RuntimeDeliveryPlanner:
                 raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Captured result source does not match this delivery.", {})
         elif actor.agent_id != message.from_agent_id and actor.agent_id != "operator":
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Payload sender is not the authenticated actor.", {})
+        if result_source:
+            # Expired relay authority is terminal even while its target is
+            # recovering. Do not queue it as a temporarily missing endpoint or
+            # spend a new causal budget before selecting an actual executor.
+            cause = self.causality.node(uow, message.message_id)
+            if cause and (cause['deadline'] <= now or cause['hop_count'] > cause['max_depth']):
+                raise OktoNexusError(ErrorCode.QUOTA_EXCEEDED, "Causal depth or root deadline exhausted.", {})
         try:
             candidates = self.candidates(uow, agent_id=delivery.recipient_agent_id, workspace_id=message.workspace_id,
                                          sender_agent_id=message.from_agent_id,
@@ -226,6 +249,8 @@ class RuntimeDeliveryPlanner:
             descriptor = next((r for r in get_runtime_catalog().runtimes if r.adapter_id == endpoint["adapter_id"]), None)
             if descriptor is None or descriptor.connection_mode != "managed" or not profile or "conversation" in profile["config"].get("disabled_capabilities", ()):
                 raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Canonical conversation delivery is unavailable.", {})
+            from .runtime_requirements import validate_canonical_native_requirements
+            validate_canonical_native_requirements(profile['config'], endpoint['adapter_id'], hitl_enabled=config.feature_hitl)
             return endpoint, profile
         if profile:
             validate_native_requirements(profile["config"], self.registry.get(endpoint["adapter_id"]),
@@ -255,13 +280,23 @@ class RuntimeDeliveryPlanner:
             {"endpoint_id": source["endpoint_id"], "revision": source["revision"], "selection_group": source["selection_group"],
              "profile_id": source["profile_id"], "profile_revision": source_profile["revision"] if source_profile else None})
         tried = self.outbox.attempted_endpoints(uow, operation_id=operation["operation_id"])
+        tried.add(operation['endpoint_id'])
+        tried.update(row[0] for row in uow.connection.execute(
+            'SELECT endpoint_id FROM execution_delivery_attempt_history WHERE domain_operation_id=?',
+            (operation['operation_id'],)))
+        tried.update(row[0] for row in uow.connection.execute(
+            'SELECT endpoint_id FROM execution_unsent_delivery_history WHERE domain_operation_id=?',
+            (operation['operation_id'],)))
+        from nexus_connector_core import get_runtime_connection_contract
         candidates = [candidate for candidate in self.candidates(uow,
             agent_id=operation["recipient_agent_id"], workspace_id=operation["workspace_id"],
             sender_agent_id=envelope["sender_agent_id"],
             source_session_key=for_message(uow.connection, operation['message_id']))
             if candidate[0]["selection_group"] == admission["selection_group"]
-            and (candidate[0]["protocol"] == "nxl-r4"
-                 or self.registry.get(candidate[0]["adapter_id"]).input_schema.get("transport_binding_contract") == 1)
+            and (source['protocol'] != 'nxl-r4' or candidate[0]['protocol'] == 'nxl-r4')
+            and ((get_runtime_connection_contract(candidate[0]['adapter_id'])['transport_binding_contract']
+                  if candidate[0]['protocol'] == 'nxl-r4' else
+                  self.registry.get(candidate[0]["adapter_id"]).input_schema.get("transport_binding_contract")) == 1)
             and candidate[0]["endpoint_id"] not in tried]
         if not candidates:
             return None

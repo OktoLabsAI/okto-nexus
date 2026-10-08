@@ -1,4 +1,5 @@
 import { AgentConnectionsPanel } from "../components/AgentConnectionsPanel";
+import { RuntimeRecovery } from "../components/RuntimeRecovery";
 // Agents & API keys (spec S2 / FR5): the AgentsModal mirror. The freshly
 // issued key renders ONCE in component state - it is never written to any
 // storage, so closing the panel or reloading makes it unrecoverable
@@ -327,6 +328,9 @@ export function AgentsView({
         />
       )}
       <div className="panel overflow-hidden" data-testid="agents-view">
+        {agents.filter(agent => agent.connection?.location === 'local' && ['Recovering', 'Needs attention'].includes(agent.connection.status)).map(agent => (
+          <RuntimeRecovery key={agent.agent_id} agentId={agent.agent_id} onChanged={() => { reload(); onChanged(); }} />
+        ))}
         <div className="flex items-center justify-between px-4 h-12 border-b border-surface-200/60 dark:border-surface-700/50">
           {/* Tabs (the Pulse AgentsModal header) */}
           <div className="flex items-center gap-1 text-sm">
@@ -673,9 +677,9 @@ export function AgentsView({
                     </div>
                     <div className="flex items-center gap-1 flex-wrap">
                       {agent.connection && <span data-testid={`connection-status-${agent.agent_id}`}
-                        className={`chip ${agent.connection.status === 'Connected' ? 'bg-emerald-100 text-emerald-700' : ['Reconnecting', 'Awaiting approval', 'Completing setup', 'Needs attention'].includes(agent.connection.status) ? 'bg-amber-100 text-amber-700' : 'bg-surface-100 text-surface-600 dark:bg-surface-700 dark:text-surface-300'}`}
+                        className={`chip ${agent.is_active && ['Connected', 'Ready'].includes(agent.connection.status) ? 'bg-emerald-100 text-emerald-700' : agent.is_active && ['Reconnecting', 'Recovering', 'Awaiting approval', 'Completing setup', 'Needs attention'].includes(agent.connection.status) ? 'bg-amber-100 text-amber-700' : 'bg-surface-100 text-surface-600 dark:bg-surface-700 dark:text-surface-300'}`}
                         title={agent.connection.hosts.map(host => `${host.label}: ${host.status} · Last contact: ${host.last_seen_at || 'never'}`).join('\n') || 'Configured execution host'}>
-                        {agent.connection.status === 'MCP only' ? 'MCP only' : agent.connection.location === 'remote' ? `Remote · ${agent.connection.status}` : 'Local'}
+                        {agent.connection.status === 'MCP only' ? 'MCP only' : `${agent.connection.location === 'remote' ? 'Remote' : 'Local'} · ${!agent.is_active ? 'Offline' : ['Ready', 'Connected'].includes(agent.connection.status) ? 'Online' : agent.connection.status}`}
                       </span>}
                       <span className={`chip ${chipCls}`} title="Effective permissions">
                         {chipLabel}
@@ -806,8 +810,9 @@ export function AgentsView({
                               title: "Delete agent?",
                               body: (
                                 <span>
-                                  <b>{agent.agent_id}</b> will be removed permanently
-                                  (deactivation is the reversible path).
+                                  <b>{agent.agent_id}</b> will be removed from the agent list
+                                  and lose access. Runtime history, if present, will be preserved.
+                                  This action cannot be undone.
                                 </span>
                               ),
                               onConfirm: async () => {

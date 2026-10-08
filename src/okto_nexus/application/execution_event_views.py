@@ -10,14 +10,14 @@ PAGE_BYTES = 512 * 1024
 
 def read_execution_events(factory, *, server_id, session_id, context, access,
                           executor_id=None, stream_epoch=None, after_sequence=0, limit=200):
-    if (type(after_sequence) is not int or not 0 <= after_sequence <= 9007199254740991
-            or type(limit) is not int or not 1 <= limit <= 1000
-            or (stream_epoch is not None and (type(stream_epoch) is not str
-                or not 1 <= len(stream_epoch) <= 160 or not stream_epoch.isprintable()))):
-        raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Invalid canonical event replay cursor or limit.', {})
     with factory.unit_of_work(write=False) as uow:
         view = read_execution_session(factory, server_id=server_id, session_id=session_id,
             context=context, access=access, executor_id=executor_id, _uow=uow)
+        if (type(after_sequence) is not int or not 0 <= after_sequence <= 9007199254740991
+                or type(limit) is not int or not 1 <= limit <= 1000
+                or (stream_epoch is not None and (type(stream_epoch) is not str
+                    or not 1 <= len(stream_epoch) <= 160 or not stream_epoch.isprintable()))):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Invalid canonical event replay cursor or limit.', {})
         scope = view['scope']
         key = (server_id, scope['executor_id'], session_id)
         if stream_epoch is None:
@@ -49,6 +49,16 @@ def read_execution_events(factory, *, server_id, session_id, context, access,
                 raise OktoNexusError(ErrorCode.DB_ERROR, 'Stored canonical event integrity is invalid.', {}) from exc
             if used + len(raw) > PAGE_BYTES:
                 break
+            # Ingress retains the exact proposal for native reply validation.
+            # Public history must expose only the Core's scrubbed presentation;
+            # verify stored integrity above before constructing this view.
+            payload = dict(event.get('payload', {}))
+            if 'native_approval' in payload:
+                payload.pop('native_approval')
+                display = payload.get('native_approval_display')
+                if isinstance(display, dict):
+                    payload['native_approval'] = display
+            event = {**event, 'payload': payload}
             events.append({**event, 'received_at': row['received_at']})
             used += len(raw)
         return dict(scope=scope, stream_epoch=stream_epoch, events=events, count=len(events),

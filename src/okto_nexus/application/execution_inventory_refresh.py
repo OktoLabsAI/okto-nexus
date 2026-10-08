@@ -50,8 +50,10 @@ def request_inventory_refresh(factory, *, context, access, server_id, executor_i
                 "refresh_id,executor_id,created_at) VALUES(?,?,?,?,?,?)", (server_id, context.actor_agent_id,
                 client_intent_id, refresh_id, executor_id, datetime.now(timezone.utc).isoformat()))
             row = conn.execute("SELECT * FROM execution_inventory_refresh WHERE refresh_id=?", (refresh_id,)).fetchone()
+        inventory_available = (executor['control_state'] == 'CONTROL_READY' or
+                               executor['kind'] == 'embedded' and executor['control_state'] == 'RECOVERING')
         state = ('UPDATED' if row['completed_sequence'] is not None else
-                 'OFFLINE' if executor['control_state'] != 'CONTROL_READY' else
+                 'OFFLINE' if not inventory_available else
                  'REQUESTED' if row['delivery_id'] else 'PENDING')
         return dict(client_intent_id=client_intent_id, refresh_id=row['refresh_id'],
                     executor_id=executor_id, state=state)
@@ -65,7 +67,9 @@ def claim_inventory_refresh(uow, *, server_id, executor_id, producer_instance_id
     """
     conn = uow.connection
     owner = conn.execute("SELECT 1 FROM execution_executors WHERE server_id=? AND executor_id=? "
-        "AND owner_instance_id=? AND generation=? AND control_state='CONTROL_READY' AND revoked_at IS NULL",
+        "AND owner_instance_id=? AND generation=? AND "
+        "(control_state='CONTROL_READY' OR (kind='embedded' AND control_state='RECOVERING')) "
+        "AND revoked_at IS NULL",
         (server_id, executor_id, producer_instance_id, connection_generation)).fetchone()
     if owner is None:
         raise OktoNexusError(ErrorCode.CONFLICT, "The inventory refresh channel is not current.", {})

@@ -20,14 +20,14 @@ def connected_local(local_setup):
     return connect_local(local_setup)
 
 
-def send(setup, monkeypatch):
+def send(setup, monkeypatch, *, target=None):
     monkeypatch.syspath_prepend(str(Path(__file__).parents[1]))
     from test_pr34_remediation import tool
     _, _, client, headers, *_, root = setup
     client.headers["host"] = "127.0.0.1:8000"
     return tool(client, headers["operator"]["Authorization"].removeprefix("Bearer "), "message_create",
         dict(project_root=str(root), from_agent_id="operator", subject="Canonical conversation",
-             body="Please review this message.", target=dict(strategy="direct", agent_id="subject")))
+             body="Please review this message.", target=target or dict(strategy="direct", agent_id="subject")))
 
 
 def enable(setup, binding):
@@ -89,6 +89,49 @@ def test_message_admits_open_and_turn_atomically(connected_local, monkeypatch):
     assert native.opens == 1
     closed = admit(setup, binding, "delivery-close", "runtime.close", session_id=rows[0]["session_id"])
     wait_receipt(setup, closed, stages=("SUCCEEDED",))
+
+
+@pytest.mark.parametrize('strategy', ['broadcast', 'role', 'capability', 'tag'])
+def test_broadcast_reaches_connected_canonical_runtime(connected_local, monkeypatch, strategy):
+    setup, binding, native = connected_local
+    deps, _, client, headers, *_ = setup
+    target = {'strategy': strategy}
+    if strategy == 'role':
+        response = client.patch('/api/v1/agents/subject', headers=headers['operator'], json={'role': 'reviewer'})
+        assert response.status_code == 200, response.text
+        target['role'] = 'reviewer'
+    elif strategy == 'capability':
+        response = client.post('/api/v1/capabilities', headers=headers['operator'], json={'name': 'review'})
+        assert response.status_code == 200, response.text
+        response = client.patch('/api/v1/agents/subject', headers=headers['operator'], json={'capabilities': {'review': True}})
+        assert response.status_code == 200, response.text
+        target['capability'] = 'review'
+    elif strategy == 'tag':
+        for path, body in (('/api/v1/tags', {'key': 'team'}), ('/api/v1/tags/team/values', {'value': 'fixture'})):
+            response = client.post(path, headers=headers['operator'], json=body)
+            assert response.status_code == 200, response.text
+        response = client.patch('/api/v1/agents/subject', headers=headers['operator'], json={'tags': {'team': ['fixture']}})
+        assert response.status_code == 200, response.text
+        target['selector'] = {'team': ['fixture']}
+    # Identity edits require current authorization before dispatch, not a fake
+    # inbox-presence row or a bypass of the normal grant checks.
+    if strategy != 'broadcast':
+        from test_unbounded_local_grants import issue
+        response = issue(setup, binding)
+        assert response.status_code == 200, response.text
+    enable(setup, binding)
+    result = send(setup, monkeypatch, target=target)
+    assert result["ok"], result
+    assert result["data"]["recipients"] == ["subject"]
+    assert result["data"]["delivered_count"] == 1
+    assert len(result["data"]["runtime_operations"]) == 1
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT COUNT(*) FROM execution_domain_deliveries").fetchone()[0] == 2
+        operation_id = uow.connection.execute(
+            "SELECT operation_id FROM execution_operations WHERE action='turn.submit'").fetchone()[0]
+        assert uow.connection.execute("SELECT COUNT(*) FROM sessions").fetchone()[0] == 0
+    wait_receipt(setup, dict(operation_id=operation_id))
+    assert native.opens == 1 and len(native.native.sent) == 1
 
 
 def test_failed_canonical_admission_rolls_back_message_and_claim(connected_local, monkeypatch):
