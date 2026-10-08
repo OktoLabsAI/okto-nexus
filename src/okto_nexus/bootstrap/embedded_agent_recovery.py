@@ -146,10 +146,10 @@ class EmbeddedAgentRecovery:
             self.delayed.discard(agent_id)
         await self.owner._recover_publications(agent_id=agent_id, progress=progress)
         await self.owner.events.recover(agent_id=agent_id, live_only=True, progress=progress)
-        await asyncio.to_thread(self._check_stream_health, agent_id)
+        await asyncio.to_thread(self._check_stream_health, agent_id, frozenset(self.owner.active_operations))
         await self._retire_closed(agent_id)
 
-    def _check_stream_health(self, agent_id):
+    def _check_stream_health(self, agent_id, active_operations):
         # A Core stream-loss fact fences native work but deliberately retains
         # process ownership. The host must initiate scoped containment itself.
         # Read durable history, rather than only the latest page, so a crash
@@ -157,17 +157,28 @@ class EmbeddedAgentRecovery:
         owner = self.owner
         with owner.factory.unit_of_work(write=False) as uow:
             owner.verify(uow=uow)
-            fault = uow.connection.execute(
-                "SELECT 1 FROM execution_local_streams l "
+            faults = uow.connection.execute(
+                "SELECT DISTINCT s.session_id FROM execution_local_streams l "
                 "JOIN execution_sessions s USING(server_id,executor_id,session_id) "
                 "JOIN execution_event_ingress e USING(server_id,executor_id,session_id,stream_epoch) "
                 "WHERE l.server_id=? AND l.executor_id=? AND l.agent_id=? AND l.drained=0 "
                 "AND s.lifecycle_state NOT IN ('CLOSED','FAILED') AND e.event_type='error' "
                 "AND json_extract(e.payload_json,'$.native_type')='core.event_pump_failed' "
-                "AND json_extract(e.payload_json,'$.payload.code')='EVENT_STREAM_UNAVAILABLE' LIMIT 1",
-                (owner.channel.server_id, owner.channel.executor_id, agent_id)).fetchone()
-        if fault is not None:
-            raise CoreError('EVENT_STREAM_UNAVAILABLE', 'embedded_stream_health')
+                "AND json_extract(e.payload_json,'$.payload.code')='EVENT_STREAM_UNAVAILABLE'",
+                (owner.channel.server_id, owner.channel.executor_id, agent_id)).fetchall()
+            for fault in faults:
+                closes = uow.connection.execute(
+                    "SELECT operation_id FROM execution_operations WHERE server_id=? AND executor_id=? "
+                    "AND session_id=? AND action='runtime.close'",
+                    (owner.channel.server_id, owner.channel.executor_id, fault['session_id'])).fetchall()
+                if any(close['operation_id'] in active_operations for close in closes):
+                    # Owned close may force the pipe to end before its confirmed
+                    # stop receipt reaches Server. Its retained producer already
+                    # owns containment; let it settle without stopping siblings.
+                    # Failure/unknown is still handled by that producer, and an
+                    # unresolved stream is checked again after the worker exits.
+                    continue
+                raise CoreError('EVENT_STREAM_UNAVAILABLE', 'embedded_stream_health')
 
     async def _retire_closed(self, agent_id):
         owner = self.owner
@@ -185,6 +196,10 @@ class EmbeddedAgentRecovery:
             # before ending polling. Receipt stages themselves are unchanged.
             await EmbeddedReconciliation(owner).release_session(row['session_id'],
                 failed_open=row['lifecycle_state'] == 'FAILED')
+            # The final native event can settle a turn after the publication
+            # pass that observed close. Publish its durable receipt before
+            # retiring all obligations for this now fully released stream.
+            await owner._recover_publications(agent_id=agent_id)
             def commit():
                 with owner.factory.unit_of_work() as uow:
                     owner.verify(uow=uow)

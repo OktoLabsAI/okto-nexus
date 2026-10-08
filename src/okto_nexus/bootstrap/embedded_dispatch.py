@@ -10,7 +10,7 @@ import time
 
 from nexus_connector_core import (
     CoreError, LaunchIntent, OpenOperation, TurnOperation, ControlOperation, validate_harness_settings,
-    OperationKey, prepare_r4_receipt_binding, project_r4_bound_receipt,
+    OperationKey, OperationNotAdmitted, prepare_r4_receipt_binding, project_r4_bound_receipt,
     r4_close_operation, r4_native_decision_operation, ShutdownPolicy,
 )
 from nexus_connector_core.protocol import canonical_json
@@ -461,6 +461,11 @@ class EmbeddedDispatchOwner:
     async def _command_receipt(self, frame, invoke):
         try:
             return await invoke()
+        except OperationNotAdmitted as error:
+            # Core refused admission before any effect. _publish durably
+            # records this bound fact in Server before it becomes observable;
+            # the Core journal's containment reserve remains untouched.
+            return error.refusal
         except CoreError as error:
             # A stale target or another proved pre-write refusal belongs to
             # this command. It must not contain unrelated work in a healthy

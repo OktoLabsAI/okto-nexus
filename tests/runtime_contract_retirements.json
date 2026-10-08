@@ -3625,6 +3625,83 @@
         "tests/execution_r4/test_canonical_profile_requirements.py::test_unsupported_launch_profile_cannot_replace_claude_conversation"
       ],
       "source_sha256": "05cf5798084672ec838486b62f40e1ec087b4d0de06944647cd8e574c969c029"
+    },
+    {
+      "test": "tests/test_runtime_shared_connection.py::test_active_close_observes_interrupt_completion_before_detaching_shared_thread",
+      "reason": "Core owns independent native processes. Real held Codex turns exercise correlated and stale interrupt terminals under the public drain/interrupt deadline, confirm exact process stop, preserve uncertainty where no matching terminal exists, retain cancellation receipts, and allow the sibling to respond and close independently.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_session_close.py::test_active_close_contains_owned_process_without_stalling_sibling"
+      ],
+      "source_sha256": "e10a1191605a238f23d287e18ccb353a8c1f3b31248fe73355ae18e20531b2f9"
+    },
+    {
+      "test": "tests/test_runtime_shared_connection.py::test_shared_connection_cannot_cross_approved_profile_context",
+      "reason": "Distinct approved canonical profiles cannot reuse a physical native session: two independently prepared bindings use different owned processes and retain correctly scoped responses and session records.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_session_close.py::test_distinct_approved_profiles_have_separate_owned_native_processes"
+      ],
+      "source_sha256": "4faf13024a55b79419e10d6f2c7633453bbe0314dcec8f040fbca7cbc51187ef"
+    },
+    {
+      "test": "tests/test_runtime_uncaptured_result_crash.py::test_owner_death_before_durable_capture_leaves_detectable_unknown",
+      "reason": "Crash the actual Nexus owner before Core captures either output or the terminal. An exact process witness confirms native containment; a new serve process recovers the same exclusive delivery as uncertain, without a result, read receipt, publication, or native replay.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_process_result_crash.py::test_actual_owner_crash_recovers_only_durable_native_results"
+      ],
+      "source_sha256": "f0f43af21930c61dd14c98f4f97fc6e07fc98dfb11c4ba44fd1e97200ca92203"
+    },
+    {
+      "test": "tests/test_runtime_projection_commit_crash.py::test_committed_projection_survives_owner_death_and_replay_once",
+      "reason": "Kill the actual owner immediately after the canonical Server projection commit. A new serve process recovers one durable result, one processing receipt and the original consumed delivery without replaying the native turn.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_process_result_crash.py::test_actual_owner_crash_recovers_only_durable_native_results"
+      ],
+      "source_sha256": "2f0bf695c2a0a0db85ece2b3e32b986b0484f951a6ceb84c9d2924043529c0cb"
+    },
+    {
+      "test": "tests/test_runtime_restart.py::test_restart_recovers_captured_old_attempt_without_reexecuting",
+      "reason": "Block Server projection from the beginning and abruptly exit after Core captures the real native terminal. Actual serve restart publishes the retained result once, including a 140-delta case exceeding the current 128-event publication page, without creating another native runtime.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_process_result_crash.py::test_actual_owner_crash_recovers_only_durable_native_results",
+        "tests/execution_r4/test_canonical_capture_isolation.py::test_core_captures_native_burst_while_server_projection_is_paused"
+      ],
+      "source_sha256": "35418f72f4a7b68051b16a65baa9b8e474e43e3a22105a56d9d39bc3a9fe0013"
+    },
+    {
+      "test": "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent",
+      "reason": "Real Core output-capture write and quota failures fence public command and open admission until scoped containment completes. With the user's requested automatic recovery enabled, messages remain durably pending in Nexus without any native execution intent, then deliver once through a fresh owned process after recovery. Prewrite quota refusal now retains a Core no-effect receipt without unnecessarily recovering a healthy harness. The separate HTTP producer exercises the same admission owner.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_capture_admission.py::test_core_capture_failure_fences_subject_then_recovers_without_replay",
+        "tests/execution_r4/test_canonical_capture_admission.py::test_prewrite_quota_refusal_keeps_healthy_harness_available",
+        "tests/execution_r4/test_canonical_http_producer.py::test_isolated_http_producer_keeps_native_execution_in_existing_owner"
+      ],
+      "source_sha256": "1ff994bd26c1e3ceb61ecb04c9153190c9f10389b8e0e8b4c6c9e37441b4e264"
+    },
+    {
+      "test": "tests/test_runtime_capture_admission.py::test_quota_compaction_resumes_admission_without_losing_projected_events",
+      "reason": "The Core journal replaces the retired ingress segments. A real native response exhausts the bounded event-row budget; automatic ACK-only compaction permits the next response while the full contiguous Server history remains intact.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_capture_admission.py::test_core_quota_compacts_acked_events_and_preserves_server_history"
+      ],
+      "source_sha256": "c4b7c5f64796562f701659f7891784ee4ea63e95f6ea338d4fb8bc324cb643b4"
+    },
+    {
+      "test": "tests/test_runtime_capture_admission.py::test_capture_fence_preserves_cached_reply_blocks_new_open_and_fences_stale_owner",
+      "reason": "Actual Core capture failure preserves replay of an existing completed operation, blocks fresh opens and commands, contains only the affected subject and automatically resumes durable pending work. Canonical owner-generation guards independently reject stale native admission and stale receipt replay.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_capture_admission.py::test_core_capture_failure_fences_subject_then_recovers_without_replay",
+        "tests/execution_r4/test_embedded_dispatch.py::test_stale_local_owner_cannot_start_native_work",
+        "tests/execution_r4/test_embedded_dispatch.py::test_receipt_replay_requires_current_embedded_owner"
+      ],
+      "source_sha256": "f6c6188df52aebbc57ad37add3a41082c2b7169f4bfbc8b648e230355e183bd1"
+    },
+    {
+      "test": "tests/test_runtime_outbox.py::test_p05_lost_wake_recovered_by_new_owner_without_new_logical_delivery",
+      "reason": "The canonical replacement kills the actual serve process immediately after committing the message and before wake/dispatch. A new owner delivers that same logical claim once, preserves one delivery/outbox row and rechecks sender authority; a revoked sender cannot trigger native work.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_owner_process.py::test_committed_message_survives_serve_death_before_wake_without_duplicate_effect"
+      ],
+      "source_sha256": "48a4b1f9953fa6889cb05195ce62f4bce5a4043304bdfec1d7657a6bedcb2a9e"
     }
   ]
 }

@@ -49,19 +49,6 @@ def wait_status(runtime, operation_id, status):
 
 
 
-def test_p05_lost_wake_recovered_by_new_owner_without_new_logical_delivery(runtime):
-    deps, _, _, peers, _, _ = runtime
-    assert open_rest(runtime).status_code == 200
-    old = stop_dispatcher(runtime)
-    result = send_message(runtime, body="recover exactly this intent")
-    operation_id = result["runtime_operations"][0]
-    assert operation(runtime, operation_id)["status"] == "PENDING"
-    restart_dispatcher(runtime, old)
-    wait_sent(peers)
-    row = wait_status(runtime, operation_id, "SENT_UNCONFIRMED")
-    assert row["ack_level"] == "TRANSPORT_WRITE"
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute("SELECT COUNT(*) FROM message_deliveries").fetchone()[0] == 1
 
 
 

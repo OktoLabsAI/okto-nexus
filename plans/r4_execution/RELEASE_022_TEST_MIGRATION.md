@@ -798,3 +798,54 @@ Server profile restrictions are now validated and enforced on canonical open, co
 Migration 123 separates the immutable approved launch revision from mutable Server policy revisions. Updating only policy no longer produces a false PROFILE_DRIFT against the approved local or remote realization; current authorization/configuration guards still protect policy changes and revoked grants.
 
 Installed Windows campaign `build/release-profile-policy-installed`: 74 passed in 768.42s. Installed Linux campaign `build/release-profile-policy-linux`: 32 passed in 144.18s. Both retained unchanged inputs. The broader Windows campaign includes real Codex/Claude approvals, explicit questions, stale decisions, recovery and migration checks. Wheel SHA-256: 3f335614b795245f17aae9560bf42964514ff06af08e9353c03b49e4514f2e72. Three predecessor profile requirements now map to these positive contracts. Full Nexus regression validation remains incomplete.
+
+### Close settlement, actual owner death and capture admission (2026-10-08)
+
+A force close can end the native pipe before its owned close producer commits
+the receipt. Health checks now wait for that producer before escalating the
+same session's pipe end. Confirmed close also recovers its pending receipt
+publication before retiring stream obligations. Real sibling processes remain
+available while a held turn drains or is interrupted; stale terminal output
+cannot invent completion.
+
+Five actual application-process crash cuts now cover output before capture,
+terminal before/after Core capture, a 140-delta captured burst and the Server
+projection commit. The replacement serve process recovers only durable output,
+never replays a native turn and restores agent readiness after proven containment.
+These tests exposed missing Linux containment proof after the original pipe
+owner dies. Core 0.0.9 persists the guardian's private completed-tree receipt;
+untrusted or missing proof stays unknown. Windows recovery is unchanged.
+
+Installed campaigns: 43 close/crash/recovery cases passed on Windows
+(`build/release-close-crash-installed`); 14 actual crash/close/resource cases
+passed on Linux (`build/release-core009-linux-installed`). Capture failures now
+exercise real native output, Core journal write/quota faults, separate HTTP
+and MCP senders, pending-message recovery, no replay and ACK compaction while
+preserving Server history. Nine predecessor functions have explicit positive
+replacement mappings, including the already-covered actual death after message
+commit but before dispatcher wake.
+
+Normal admission quota uses a separate path from capture corruption. Core
+raises a correlated `OperationNotAdmitted`; Nexus and Connector persist the
+refusal in their existing publication obligations. Refusals consume no Core
+interrupt/close reserve and do not recover a healthy native session. Repeated
+remote refusals retain durable history and still permit close under saturation.
+The earlier reserve-consuming candidate is superseded and is not the release
+artifact.
+
+Final installed Nexus campaigns each passed 20 cases on Windows (224.16s) and
+Linux (219.99s), with unchanged inputs: `build/release-admission-refusal-installed`
+and `build/release-admission-refusal-linux-installed`. They include capture,
+quota, positive native recovery, atomic admission, governed result publication
+and replacement inventory. The synthetic profile fixture now sets its approved
+launch revision independently of policy revision; the receipt watchdog allows
+slow CI storage without changing native deadlines and reports the full state.
+
+Nexus wheel SHA256: `ab07d12fd61bcb3b36e70aa6954c2c0e3b303f510c6f41fb86273785fc28b698`.
+Core 0.0.9 wheel: `00094593a6e12b6239c5fad701d9fd889abe499c4a12e00a5eff0d0ac236216f`.
+Connector 0.0.7 wheel: `e4d602b309958a464af365821af56b18f0ef4b6867efb80149b5223d8758fe00`.
+The final Core source run passed 1,398 tests and 15 subtests with one documentation
+coverage failure; after adding the new public exception to the API guide, its
+three documentation checks passed. Connector focused execution/publication/recovery
+passed all 42 tests on both systems. Full CI and the remaining positive legacy
+contracts are still required before main/tag promotion.

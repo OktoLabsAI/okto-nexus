@@ -83,7 +83,9 @@ def admit(setup,binding,intent_id,intent,**options):
 
 def wait_receipt(setup,resolution,stages=("SUBMITTED","SUCCEEDED")):
     _,app,client,headers,*_=setup
-    until=time.monotonic()+10
+    # A test watchdog includes durable I/O on loaded Windows runners; native
+    # deadlines are covered separately. Keep failures fully diagnosable.
+    until=time.monotonic()+30
     while True:
         view=client.get(f"/v1/runtime/operations/{resolution['operation_id']}",headers=headers["subject"]).json()
         if view.get("executor_stage") in stages:
@@ -91,7 +93,7 @@ def wait_receipt(setup,resolution,stages=("SUBMITTED","SUCCEEDED")):
         owner=app.state.embedded_dispatch_owner
         assert owner.failure is None,repr(owner.failure)
         assert owner.pump.error is None,repr(owner.pump.error)
-        assert time.monotonic()<until,view
+        assert time.monotonic()<until,json.dumps(view, sort_keys=True)
         time.sleep(.02)
 
 

@@ -31,7 +31,7 @@ classifiers = [
     "Topic :: System :: Distributed Computing",
 ]
 dependencies = [
-    "okto-nexus-connector-core==0.0.8",
+    "okto-nexus-connector-core==0.0.9",
     # Nexus uses the MCP Python SDK v1 FastMCP API.  Keep v2 as an explicit
     # migration instead of accepting a breaking major during installation.
     "mcp>=1.0,<2",

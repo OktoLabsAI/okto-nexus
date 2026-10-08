@@ -15,7 +15,7 @@ from test_local_realization import local_setup
 from test_embedded_inventory import app_for
 
 
-@pytest.mark.skipif(sys.platform != 'win32', reason='Windows durable container recovery')
+@pytest.mark.skipif(sys.platform not in {'win32', 'linux'}, reason='Durable container recovery')
 @pytest.mark.parametrize('legacy', [False, True])
 def test_restart_recovers_containers_or_requires_scoped_operator_attestation(tmp_path, monkeypatch, legacy):
     with contextmanager(local_setup.__wrapped__)(tmp_path, monkeypatch, None) as setup:

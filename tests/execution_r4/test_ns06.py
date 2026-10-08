@@ -186,8 +186,8 @@ def test_ns06_02_atomic_admission_and_replay_with_synthetic_qualification(tmp_pa
                      "VALUES ('ws',?)", (now,))
         conn.execute(
             "INSERT INTO runtime_profiles(profile_id,adapter_id,config,enabled,"
-            "revision,created_at,updated_at) "
-            "VALUES ('profile','codex_app_server','{}',1,3,?,?)",
+            "revision,launch_revision,created_at,updated_at) "
+            "VALUES ('profile','codex_app_server','{}',1,3,3,?,?)",
             (now, now),
         )
         conn.execute(

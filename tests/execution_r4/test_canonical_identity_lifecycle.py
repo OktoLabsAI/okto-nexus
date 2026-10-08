@@ -27,7 +27,8 @@ def second_binding(setup, monkeypatch, *, name='second', adapter_id='pi_rpc', wo
     owner = app.state.embedded_inventory_owner
     client.portal.call(owner.refresh)
     inventory = client.get(f'/v1/runtime/executors/{owner.key.executor_id}/inventory', headers=headers['operator']).json()['snapshot']
-    selected = next(e for e in inventory['evidence'] if e['adapter_id'] == adapter_id)
+    selected = next(e for e in inventory['evidence'] if e['adapter_id'] == adapter_id
+                    and e['candidate_ref'] != original['candidate_ref'])
     body = {**original, 'client_intent_id': name + '-realization', 'adapter_id': adapter_id,
             'candidate_ref': selected['candidate_ref'], 'inventory_revision': inventory['inventory_revision']}
     if workspace_root is not None:
