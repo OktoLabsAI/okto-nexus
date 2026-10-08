@@ -31,6 +31,7 @@ def resolve_execution_intent(
     factory: ConnectionFactory, *, actor_agent_id: str,
     request: Mapping[str, Any], remote_ready: bool = False,
     fresh_publications: Mapping | None = None, access=None, context=None,
+    session_metadata: Mapping | None = None,
 ) -> dict[str, Any]:
     """Store a stable resolution; never write an effect outbox or call Core."""
     required = {"client_intent_id", "intent", "binding_id",
@@ -78,7 +79,14 @@ def resolve_execution_intent(
                                  access=access, context=context)
     server_id, revisions, _ = current_agent_revisions(
         factory, agent_id=subject_agent_id)
-    body_hash = "sha256:" + hashlib.sha256(canonical_json(dict(request))).hexdigest()
+    hash_body = dict(request)
+    if session_metadata is not None:
+        if request['intent'] != 'runtime.start' or request.get('new_session') is not True:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Annotations require a new session.', {})
+        from .execution_session_metadata import normalize_metadata
+        session_metadata = normalize_metadata(session_metadata)
+        hash_body['_session_metadata'] = session_metadata
+    body_hash = "sha256:" + hashlib.sha256(canonical_json(hash_body)).hexdigest()
     with factory.unit_of_work() as uow:
         conn = uow.connection
         actor_guard = require_operator_request(uow, actor=actor_agent_id, subject=subject_agent_id,
@@ -297,6 +305,8 @@ def resolve_execution_intent(
             "can_submit": not blockers, "blockers": blockers,
             "dispatch_owner": "server",
         }
+        if session_metadata is not None:
+            resolved['_session_metadata'] = session_metadata
         conn.execute(
             "INSERT INTO execution_client_intents(server_id,actor_agent_id,"
             "client_intent_id,body_hash,intent_id,operation_id,"
@@ -332,6 +342,7 @@ def read_execution_intent(factory: ConnectionFactory, *, actor_agent_id: str,
         raise OktoNexusError(ErrorCode.NOT_FOUND,
                               "The client intent was not found.", {})
     resolution = json.loads(row["resolved_json"])
+    resolution.pop('_session_metadata', None)
     subject = resolution['scope']['agent_id']
     from .execution_operator_authority import require_operator_request
     with factory.unit_of_work(write=False) as uow:

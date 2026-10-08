@@ -272,18 +272,6 @@ def test_p01_stdio_missing_identity_has_no_operator_authority(runtime):
 
 
 
-def test_p01_legacy_metadata_is_session_data_and_role_conflict_is_rejected(runtime):
-    deps, client, root, peers, key, _ = runtime
-    result = tool(client, key, "harness_open", {"agent_id": "worker", "kind": "pi",
-        "project_root": root, "role": "admin"})
-    assert result["error"]["code"] == "VALIDATION_ERROR"
-    assert peers == []
-    result = tool(client, key, "harness_open", {"agent_id": "worker", "kind": "pi",
-        "project_root": root, "metadata": '{"connection_note":"fixture"}'})
-    assert result["ok"], result
-    assert result["data"]["metadata"]["connection_note"] == "fixture"
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert deps.repos.agents.get(uow, "worker").metadata == {"keep": "profile"}
 
 
 @pytest.mark.parametrize("runtime", ["additional"], indirect=True)

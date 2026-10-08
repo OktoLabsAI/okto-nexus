@@ -3559,6 +3559,15 @@
         "tests/execution_r4/test_canonical_recovery.py::test_pending_domain_projection_cannot_cancel_inflight_canonical_send"
       ],
       "source_sha256": "a20ca5f39d8162eb3b14153ff7a09bb3dbb137471afb556ea1afb5f38d9251ae"
+    },
+    {
+      "test": "tests/test_pr34_remediation.py::test_p01_legacy_metadata_is_session_data_and_role_conflict_is_rejected",
+      "reason": "Ported positive session annotation and role-conflict contract to authenticated canonical REST/MCP opening. Opaque metadata is atomically stored with the session and its idempotency request, remains readable after close, and never changes the agent or native payload.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_session_metadata.py::test_session_metadata_is_durable_opaque_and_idempotent",
+        "tests/execution_r4/test_canonical_session_metadata.py::test_invalid_session_metadata_has_no_native_effect"
+      ],
+      "source_sha256": "4528f28b5d5efa34abf95368bf0062684d2c785f20403fa8da0e3f6fb9482326"
     }
   ]
 }

@@ -174,7 +174,7 @@ def test_existing_open_uses_approved_realization_and_core(connected_local, monke
 
 @pytest.mark.parametrize("change", [
     {"project_root": "C:/unapproved-root"}, {"kind": "pi"}, {"agent_id": "operator"},
-    {"backend": {"env": {}}}, {"metadata": {}}, {"notify_target": {}},
+    {"backend": {"env": {}}}, {"metadata": []}, {"notify_target": {}},
     {"target_pid": 123}, {"substrate": "attach"}, {"idempotency_key": None},
 ])
 def test_canonical_open_rejects_legacy_override_without_effect(connected_local, change):

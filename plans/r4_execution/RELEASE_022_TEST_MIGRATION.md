@@ -780,3 +780,9 @@ Mandatory manual quarantine after confirmed containment and permanent blocking o
 ### Admission revocation with retained native output (2026-10-08)
 
 Installed Windows campaign uild/release-admission-shutdown-installed: 22 passed in 147.68s, unchanged inputs. A real Codex pipe is gated after acceptance, grants are revoked through HTTP, further REST/MCP sends are denied, and its late structured output remains captured without completing work. A separate Core-event-to-Server projection fault proves that disabling integrations retains already captured output and exclusive inbox ownership while refusing new execution. Disabled publication remains pending authorization, as required by the predecessor contract.
+
+### Durable session annotations (2026-10-08)
+
+Compatibility harness_open again accepts bounded opaque metadata. Migration 122 stores it on the canonical session; it participates in opening idempotency but cannot change the agent, execution context, native payload, or permissions. Conflicting roles are still rejected before native work. REST and MCP can inspect the annotation after close.
+
+Installed Windows campaign `build/release-session-metadata-installed`: 62 passed in 296.55s, unchanged inputs. Coverage includes positive metadata preservation and identity isolation, invalid metadata, canonical compatibility commands, foreign-agent access denial, schema migrations, and retirement inventory. Wheel SHA-256: ba0c38d5dca1e8ba9180cf76d7b68080230d3c5ae9612778bd7f8adb9805a2b0. The full regression gate remains open.

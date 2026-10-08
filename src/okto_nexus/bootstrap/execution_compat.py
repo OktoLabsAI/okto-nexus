@@ -95,7 +95,7 @@ def open_session(deps, context, binding, arguments):
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
             "Open the canonical binding with its subject identity.", {})
     if any(arguments.get(name) is not None for name in
-           ("backend", "metadata", "notify_target", "target_pid")):
+           ("backend", "notify_target", "target_pid")):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
             "Canonical opening uses the approved realization, without per-call runtime overrides.", {})
     descriptor = next((item for item in get_runtime_catalog().runtimes
@@ -115,7 +115,10 @@ def open_session(deps, context, binding, arguments):
     from ..application.runtime_authorization import require_runtime_agent
     require_runtime_agent(agents=deps.repos.agents, connection_factory=deps.connection_factory,
                           agent_id=arguments["agent_id"], role=arguments.get("role"))
-    return _start(deps, context, access, binding, arguments.get("idempotency_key"))
+    from ..application.execution_session_metadata import normalize_metadata
+    metadata = normalize_metadata(arguments['metadata']) if arguments.get('metadata') is not None else None
+    result = _start(deps, context, access, binding, arguments.get("idempotency_key"), metadata=metadata)
+    return dict(result, metadata=metadata or {})
 
 
 def connect_endpoint(deps, context, binding, key):
@@ -143,13 +146,13 @@ def boot_endpoint(deps, context, endpoint_id, key):
     return _start(deps, replace(context, actor_agent_id=binding["agent_id"]), access, binding, key)
 
 
-def _start(deps, context, access, binding, key):
+def _start(deps, context, access, binding, key, *, metadata=None):
     if not isinstance(key, str) or not 1 <= len(key) <= 160 or key == "<unique-key-for-this-opening>":
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
             "A stable idempotency_key is required for an R4 opening.", {})
     return _admit(deps, context, access, dict(client_intent_id=key,
         intent="runtime.start", binding_id=binding["binding_id"],
-        workspace_binding_id=binding["workspace_binding_id"], new_session=True))
+        workspace_binding_id=binding["workspace_binding_id"], new_session=True), session_metadata=metadata)
 
 
 def canonical_session(deps, session_id):
@@ -171,9 +174,15 @@ def canonical_session(deps, session_id):
 
 def session_view(deps, context, session_id):
     try:
-        return read_execution_session(deps.connection_factory,
-            server_id=ensure_execution_installation(deps.connection_factory).server_id,
-            session_id=session_id, context=context, access=build_execution_access(deps))
+        server = ensure_execution_installation(deps.connection_factory).server_id
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            result = read_execution_session(deps.connection_factory, server_id=server,
+                session_id=session_id, context=context, access=build_execution_access(deps), _uow=uow)
+            scope = result['scope']
+            row = uow.connection.execute('SELECT metadata_json FROM execution_sessions '
+                'WHERE server_id=? AND executor_id=? AND session_id=?',
+                (scope['server_id'], scope['executor_id'], scope['session_id'])).fetchone()
+            return dict(result, metadata=json.loads(row[0]))
     except OktoNexusError as exc:
         if exc.code != ErrorCode.NOT_FOUND:
             raise
@@ -248,12 +257,13 @@ def admit_delivery(deps, uow, operation_id):
         remote_ready=protocol_info()["remote_execution_ready"])
 
 
-def _admit(deps, context, access, request):
+def _admit(deps, context, access, request, *, session_metadata=None):
     common = dict(actor_agent_id=context.actor_agent_id, context=context,
         access=access,
         fresh_publications=deps.execution_fresh_publications,
         remote_ready=protocol_info()["remote_execution_ready"])
-    resolved = resolve_execution_intent(deps.connection_factory, request=request, **common)
+    resolved = resolve_execution_intent(deps.connection_factory, request=request,
+                                       session_metadata=session_metadata, **common)
     view, reused = submit_execution_operation(deps.connection_factory,
         request={name: resolved[name] for name in
                  ("client_intent_id", "operation_id", "resolution_revision", "intent_hash")},

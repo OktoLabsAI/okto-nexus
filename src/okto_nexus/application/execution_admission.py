@@ -288,12 +288,12 @@ def submit_execution_operation(
                 conn.execute(
                     "INSERT INTO execution_sessions(server_id,executor_id,"
                     "session_id,binding_id,workspace_id,workspace_binding_id,"
-                    "open_operation_id,owner_generation,lifecycle_state,lease_state) "
-                    "VALUES (?,?,?,?,?,?,?,?,?,?)",
+                    "open_operation_id,owner_generation,lifecycle_state,lease_state,metadata_json) "
+                    "VALUES (?,?,?,?,?,?,?,?,?,?,?)",
                     (server_id, executor_id, session_id, scope["binding_id"],
                      scope["workspace_id"], scope["workspace_binding_id"],
                      operation_id, scope["session_owner_generation"],
-                     "OPEN_PENDING", "NONE"),
+                     "OPEN_PENDING", "NONE", canonical_json(resolved.get('_session_metadata', {})).decode('utf-8')),
                 )
             conn.execute(
                 "INSERT INTO execution_dispatch_outbox(server_id,executor_id,"
