@@ -3374,6 +3374,66 @@
         "tests/execution_r4/test_canonical_startup_privacy.py::test_native_start_failure_keeps_secret_out_of_public_history"
       ],
       "source_sha256": "1b85c0ce6aa74cf9da60680a0978171f47e9bdfefa3a2bd7ecf785000ab75368"
+    },
+    {
+      "test": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority",
+      "reason": "The user explicitly removed attach completely. New attach work and completion through a retired attach proof are no longer supported, even with otherwise valid session credentials. Retained work now tests rejection without ACK, completion, native launch or invented result; old-writer fences and explicit claim recovery remain covered separately.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_removed_attach_cannot_open_through_legacy_public_routes",
+        "tests/execution_r4/test_retired_attach_history.py::test_retired_attach_proof_cannot_resume_external_execution"
+      ],
+      "source_sha256": "d09d1e17d6c34c043f0844ad9bf13b7caaaf322511ba68d31b1c4374f238b976"
+    },
+    {
+      "test": "tests/test_runtime_attach_work_channel.py::test_external_work_can_return_after_native_detach_and_quarantine",
+      "reason": "The explicitly removed attach feature cannot continue external execution after detach. Persisted proof is retained but cannot complete work; an operator may reopen the old claim without resuming attach or inventing a result.",
+      "replacements": [
+        "tests/execution_r4/test_retired_attach_history.py::test_retired_attach_proof_cannot_resume_external_execution",
+        "tests/execution_r4/test_retired_attach_history.py::test_operator_can_reopen_retired_external_claim_without_resuming_attach"
+      ],
+      "source_sha256": "6191c1956f76e956fbe2e553045448ff7a2cc400833852caadeb5125bd4e76cb"
+    },
+    {
+      "test": "tests/test_runtime_attach_work_channel.py::test_external_completion_releases_lane_for_a_new_canonical_delivery",
+      "reason": "The positive continuation of a removed attach endpoint was explicitly retired with the feature. Current entry points reject attach; retained claims can be reopened by an operator without native replay. Ordinary inbox delivery stays usable independently of that retained claim.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_removed_attach_cannot_open_through_legacy_public_routes",
+        "tests/execution_r4/test_retired_attach_history.py::test_operator_can_reopen_retired_external_claim_without_resuming_attach",
+        "tests/execution_r4/test_retired_attach_history.py::test_retained_external_claim_does_not_consume_or_relabel_ordinary_inbox"
+      ],
+      "source_sha256": "132a157129bd8a873e401b6d96449f586f3431303ed1f84a2255d59654c58734"
+    },
+    {
+      "test": "tests/test_runtime_attach_work_channel.py::test_mixed_external_and_pull_ack_preserves_receipt_grouping_and_provenance",
+      "reason": "Attach completion was explicitly removed. A mixed ACK containing retained attach work is refused atomically; ordinary deliveries can still be acknowledged separately, grouped exactly once without invented external provenance or a receipt for the retained work.",
+      "replacements": [
+        "tests/execution_r4/test_retired_attach_history.py::test_retained_external_claim_does_not_consume_or_relabel_ordinary_inbox"
+      ],
+      "source_sha256": "55582de927aebe0cb363e673ba641c019481e63564d42700c92fc82b16dac52c"
+    },
+    {
+      "test": "tests/test_runtime_external_writer_fence.py::test_legacy_writer_cannot_complete_external_work_without_the_new_contract",
+      "reason": "A retained-history fixture replaces unsupported new attach setup. A real SQLite writer-v1 connection is refused for all three old terminal transitions and for inbox consumption of the retained external work. The handoff and delivery remain unchanged.",
+      "replacements": [
+        "tests/execution_r4/test_retired_attach_history.py::test_retained_external_work_rejects_old_writer_completion_and_ack"
+      ],
+      "source_sha256": "07af7587f85fb06b6e3baeda482506e5992fc2598ce528e38d18b94148853e07"
+    },
+    {
+      "test": "tests/test_runtime_external_writer_fence.py::test_external_work_session_is_retained_without_blocking_canonical_retention",
+      "reason": "Retained external-session foreign-key protection is tested without starting removed attach: the referenced closed session survives while an unrelated closed session is counted and pruned, with foreign keys intact.",
+      "replacements": [
+        "tests/execution_r4/test_retired_attach_history.py::test_retained_external_session_survives_ordinary_session_retention"
+      ],
+      "source_sha256": "3fd15ed5d26dbda18fd5ab66df3bea0bfdb9980f3912d3d1722447f60df26099"
+    },
+    {
+      "test": "tests/test_runtime_external_writer_fence.py::test_recovered_external_claim_does_not_block_direct_rejection_of_open_work",
+      "reason": "The operator recovers a persisted uncertain external claim through the public maintenance API, then the worker rejects the new OPEN offer through MCP. No native execution, runtime result or old external-completion marker is invented.",
+      "replacements": [
+        "tests/execution_r4/test_retired_attach_history.py::test_operator_can_reopen_retired_external_claim_without_resuming_attach"
+      ],
+      "source_sha256": "c41a3aa1e87f225440fc39afbf6945e82421bb183bdc454939c7d45bedb64e3a"
     }
   ]
 }

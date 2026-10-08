@@ -658,3 +658,15 @@ not weaken that classification. The two replaced legacy functions are recorded
 in the reviewed inventory. Combined installed validation passed all 32 cases,
 including existing native output/approval redaction, with unchanged inputs
 (build/release-reuse-privacy-installed, the same 5ba682d1 wheel above).
+
+Attach was explicitly removed by the user, including continued external work.
+Seven historical attach-work functions now map to reviewed retirement and
+retained-history contracts instead of attempting to launch the removed provider.
+Eight source cases preserve real SQLite old-writer fences, referenced-session
+retention, refusal of retired proof, public operator claim recovery and ordinary
+inbox receipt grouping. Recovery reopens the offer without native replay or an
+invented result; the worker can then reject the new offer. Mixed ACKs with retired
+work fail atomically, while ordinary messages remain independently consumable.
+The fixture seeds historical rows and never re-enables or instantiates attach.
+Combined installed validation passed all 16 cases with unchanged inputs
+(build/release-retired-history-installed, the same 5ba682d1 wheel above).
