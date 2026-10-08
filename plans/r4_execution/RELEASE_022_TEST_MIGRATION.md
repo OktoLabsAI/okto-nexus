@@ -501,3 +501,11 @@ changing actor provenance or permitting foreign-agent access. Thirty related
 source cases and all three shortened-lease containment cases passed. The CI
 runner now emits test names without buffering and diagnostic stacks for long
 tests, preserving the same complete regression selection and pass criteria.
+
+Installed validation of both corrections passed 67 cases with unchanged inputs
+(build/release-owner-installed, wheel SHA256
+25ff95afce6ba7664d4090bc9b63230a84cb5b60a1ed223796721c4ec5241257).
+This includes real Windows graceful/forced owner exit, independent recovery,
+operator/subject provenance and foreign-actor rejection. Head 0288de5 is pushed;
+complete CI run 37733739695 remains pending. The superseded c5d7747 campaign was
+cancelled after preserving its completed job logs; it is not passing evidence.
