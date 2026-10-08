@@ -2918,6 +2918,39 @@
         "tests/execution_r4/test_canonical_native_protocol_regressions.py::test_invalid_native_readiness_is_contained_and_other_binding_remains_usable"
       ],
       "source_sha256": "8c23b0ef245b5abfb07379dd7c2da6e5a92ccd2c84a4181394c3d3fa13962d25"
+    },
+    {
+      "test": "tests/test_runtime_relay.py::test_bidirectional_relay_stops_at_persistent_depth_and_keeps_result",
+      "reason": "The retired supervisor and native session routes are replaced by canonical admission. Pi, Codex and Claude binding variants now prove depth/execution budgets, original actor, alternating recipients, one causal root, durable result publication, non-executing processing receipts and no handoff binding. Real Core pipe decoding and two consecutive results for all three adapters are exercised separately.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_relay.py::test_relay_stops_at_persistent_budget_without_losing_output",
+        "tests/execution_r4/test_canonical_fragmented_pipes.py::test_core_fragmented_utf8_and_full_pipes_preserve_two_turns"
+      ],
+      "source_sha256": "5fa4d544bffe9fbd2008b57b2a582ae67af20e376f80d2ca58f4272a0cdc6d24"
+    },
+    {
+      "test": "tests/test_runtime_relay.py::test_failed_interrupted_and_unknown_results_do_not_relay",
+      "reason": "Canonical results publish failed/interrupted output without relaying. An observation with no confirmed outcome is retained as native ingress evidence, not promoted into a terminal result; it cannot authorize another native effect. This intentionally replaces the old supervisor's unconfirmed terminal publication with the canonical confirmation contract while preserving output evidence and preventing relay.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_relay.py::test_unsuccessful_result_cannot_admit_a_relay"
+      ],
+      "source_sha256": "324a3340a6ed5d64263865d7a2b5c2c8d083cac5979ef3b86535f0fa495df8cc"
+    },
+    {
+      "test": "tests/test_runtime_relay.py::test_same_agent_on_distinct_endpoints_keeps_operation_parent",
+      "reason": "Canonical public binding/session admission replaces legacy endpoint/session openers. Two independently opened bindings of the same agent preserve separate sessions and causal roots; each child points to its actual parent result and charges only its own durable budget.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_relay.py::test_different_bindings_of_same_agent_keep_independent_relay_roots"
+      ],
+      "source_sha256": "9c4e03d1d9d6f4d9f799ffc5a4b5ff4994608dce0e9bfc425bee64c19031f215"
+    },
+    {
+      "test": "tests/test_runtime_relay.py::test_explicit_three_agent_chain_preserves_initiator_and_budget",
+      "reason": "Canonical public agent/binding admission replaces the removed supervisor fixture. A caller-to-worker-to-observer chain preserves the initiating actor, distinct target and single root with one generated message and two admitted executions.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_relay.py::test_explicit_three_agent_relay_keeps_original_actor_and_budget"
+      ],
+      "source_sha256": "01d0d20dc601f7a3b444a66f99bb02db61372ec43e89fae221931e43d37a70cb"
     }
   ]
 }

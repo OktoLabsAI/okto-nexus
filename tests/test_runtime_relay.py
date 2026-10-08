@@ -59,44 +59,6 @@ def wait_blocked(runtime, count=1):
     raise AssertionError(rows)
 
 
-@pytest.mark.parametrize("kind", ["codex", "pi", "claude_code"])
-def test_bidirectional_relay_stops_at_persistent_depth_and_keeps_result(runtime, kind):
-    configure(runtime, kind=kind)
-    send_message(runtime, body="bounded conversational exchange")
-    rows = wait_blocked(runtime)
-    assert len(rows) == 3, rows
-    assert [r["delivery_outcome"] for r in rows] == ["success"] * 3
-    assert [r["relay_state"] for r in rows] == ["ENQUEUED", "ENQUEUED", "BLOCKED"]
-    assert all(r["publication_state"] == "PUBLISHED" and r["publication_message_id"] for r in rows)
-    deps = runtime[0]
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        operations = [dict(r) for r in uow.connection.execute("SELECT * FROM delivery_outbox ORDER BY created_at,operation_id")]
-        assert len(operations) == 3
-        assert [r["recipient_agent_id"] for r in operations] == ["worker", "caller", "worker"]
-        assert len({r["root_operation_id"] for r in operations}) == 1
-        assert {r["actor_agent_id"] for r in operations} == {"caller"}
-        root = uow.connection.execute("SELECT * FROM runtime_causal_roots").fetchone()
-        assert root["generated_messages"] == 2
-        assert root["admitted_executions"] == 3
-        assert uow.connection.execute("SELECT count(*) FROM runtime_handoff_bindings").fetchone()[0] == 0
-        assert [r[0] for r in uow.connection.execute("SELECT delivery_outcome FROM harness_events WHERE delivery_phase='terminal' ORDER BY sequence")] == ["success"] * 3
-        receipts = uow.connection.execute("SELECT message_id FROM messages WHERE subject LIKE 'runtime processing receipt:%'").fetchall()
-        assert len(receipts) == 3
-        for receipt in receipts:
-            assert not uow.connection.execute("SELECT 1 FROM delivery_outbox WHERE message_id=?", (receipt[0],)).fetchone()
-        assert uow.connection.execute("SELECT count(*) FROM events WHERE type='runtime.relay_blocked'").fetchone()[0] == 1
-
-
-@pytest.mark.parametrize("outcome,normalized", [("failed", "failed"), ("interrupted", "interrupted"), ("unknown", None)])
-def test_failed_interrupted_and_unknown_results_do_not_relay(runtime, outcome, normalized):
-    configure(runtime, outcome=outcome)
-    send_message(runtime)
-    rows = wait_blocked(runtime)
-    assert len(rows) == 1
-    assert rows[0]["publication_state"] == "PUBLISHED"
-    assert rows[0]["delivery_outcome"] == normalized
-    with runtime[0].connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute("SELECT count(*) FROM delivery_outbox").fetchone()[0] == 1
 
 
 
@@ -109,66 +71,10 @@ def test_failed_interrupted_and_unknown_results_do_not_relay(runtime, outcome, n
 
 
 
-def test_same_agent_on_distinct_endpoints_keeps_operation_parent(runtime):
-    deps, client, root, _, operator, _ = runtime
-    configure(runtime, depth=1)
-    first = send_message(runtime, body="first worker endpoint")
-    wait_blocked(runtime)
-    response = client.post("/api/v1/harness/endpoints", headers={"x-api-key": operator}, json={
-        "endpoint_id": "relay-worker-second", "agent_id": "worker", "adapter_id": "codex",
-        "project_root": root, "profile_id": "profile-codex", "enabled": True, "priority": 20,
-        "response_policy": "conversation", "public_config": {"relay_results": True}})
-    assert response.status_code == 200, response.text
-    response = client.post("/api/v1/harness/sessions", headers={"x-api-key": operator}, json={
-        "agent_id": "worker", "kind": "codex", "endpoint_id": "relay-worker-second", "project_root": root})
-    assert response.status_code == 200, response.text
-    second = send_message(runtime, body="second worker endpoint")
-    assert len(wait_blocked(runtime, count=2)) == 4
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        parents = [dict(uow.connection.execute("SELECT * FROM delivery_outbox WHERE operation_id=?",
-            (entry["runtime_operations"][0],)).fetchone()) for entry in (first, second)]
-        assert {p["endpoint_id"] for p in parents} == {"relay-worker", "relay-worker-second"}
-        assert len({p["runtime_session_id"] for p in parents}) == 2
-        assert len({p["root_operation_id"] for p in parents}) == 2
-        for parent in parents:
-            child = uow.connection.execute("""SELECT child.* FROM delivery_outbox child
-                JOIN runtime_results result ON result.result_id=child.source_result_id
-                WHERE result.operation_id=?""", (parent["operation_id"],)).fetchone()
-            assert child["root_operation_id"] == parent["root_operation_id"]
-            assert child["recipient_agent_id"] == "caller"
-            causal = uow.connection.execute("SELECT * FROM runtime_causal_roots WHERE root_operation_id=?",
-                (parent["root_operation_id"],)).fetchone()
-            assert (causal["generated_messages"], causal["admitted_executions"]) == (1, 2)
 
 
-def test_explicit_three_agent_chain_preserves_initiator_and_budget(runtime):
-    deps, client, root, _, operator, _ = runtime
-    configure(runtime, depth=1)
-    with deps.connection_factory.unit_of_work() as uow:
-        deps.repos.agents.upsert(uow, agent_id="observer")
-    response = client.post("/api/v1/harness/endpoints", headers={"x-api-key": operator}, json={
-        "endpoint_id": "relay-observer", "agent_id": "observer", "adapter_id": "codex",
-        "project_root": root, "profile_id": "profile-codex", "enabled": True,
-        "response_policy": "conversation", "public_config": {"relay_results": True}})
-    assert response.status_code == 200, response.text
-    response = client.post("/api/v1/harness/sessions", headers={"x-api-key": operator}, json={
-        "agent_id": "observer", "kind": "codex", "endpoint_id": "relay-observer", "project_root": root})
-    assert response.status_code == 200, response.text
-    response = client.patch("/api/v1/harness/endpoints/relay-worker", headers={"x-api-key": operator}, json={
-        "expected_revision": 1, "public_config": {"relay_results": True,
-            "notify_target": {"strategy": "direct", "agent_id": "observer"}}})
-    assert response.status_code == 200, response.text
-    send_message(runtime, body="authorized caller to worker to observer")
-    results = wait_blocked(runtime)
-    assert len(results) == 2
-    assert [r["relay_state"] for r in results] == ["ENQUEUED", "BLOCKED"]
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        operations = uow.connection.execute("SELECT * FROM delivery_outbox ORDER BY created_at,operation_id").fetchall()
-        assert [r["recipient_agent_id"] for r in operations] == ["worker", "observer"]
-        assert {r["actor_agent_id"] for r in operations} == {"caller"}
-        assert len({r["root_operation_id"] for r in operations}) == 1
-        causal = uow.connection.execute("SELECT * FROM runtime_causal_roots").fetchone()
-        assert (causal["generated_messages"], causal["admitted_executions"]) == (1, 2)
+
+
 
 
 @pytest.mark.parametrize("agent_key,status", [(True, 403), (False, 422)])

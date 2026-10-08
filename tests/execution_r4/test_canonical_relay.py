@@ -78,6 +78,7 @@ def results(setup, count):
 
 
 @pytest.mark.parametrize('limit', ['depth', 'executions'])
+@pytest.mark.parametrize('local_setup', ['pi_rpc', 'codex_app_server', 'claude_stream'], indirect=True)
 def test_relay_stops_at_persistent_budget_without_losing_output(relay_pair, monkeypatch, limit):
     setup, _, _, peers, _ = relay_pair
     deps = setup[0]
@@ -90,6 +91,11 @@ def test_relay_stops_at_persistent_budget_without_losing_output(relay_pair, monk
     rows = results(setup, expected)
     assert all(r['publication_state'] == 'PUBLISHED' and r['publication_message_id'] for r in rows)
     assert [r['relay_state'] for r in rows] == ['ENQUEUED'] * (expected - 1) + ['BLOCKED']
+    from test_agent_recovery_isolation import eventually
+    def receipts_ready():
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            return uow.connection.execute("SELECT COUNT(*) FROM messages WHERE subject LIKE 'runtime processing receipt:%'").fetchone()[0] == expected
+    eventually(receipts_ready)
     with deps.connection_factory.unit_of_work(write=False) as uow:
         operations = list(uow.connection.execute('SELECT * FROM delivery_outbox ORDER BY created_at,operation_id'))
         assert len(operations) == expected
@@ -99,21 +105,104 @@ def test_relay_stops_at_persistent_budget_without_losing_output(relay_pair, monk
         root = uow.connection.execute('SELECT generated_messages,admitted_executions FROM runtime_causal_roots').fetchone()
         assert root[:] == (expected - 1, expected)
         assert uow.connection.execute('SELECT COUNT(*) FROM harness_sessions').fetchone()[0] == 0
+        receipts = uow.connection.execute("SELECT message_id FROM messages WHERE subject LIKE 'runtime processing receipt:%'").fetchall()
+        assert len(receipts) == expected
+        assert all(not uow.connection.execute('SELECT 1 FROM delivery_outbox WHERE message_id=?', (r[0],)).fetchone()
+                   for r in receipts)
+        assert not uow.connection.execute('SELECT 1 FROM runtime_handoff_bindings').fetchone()
         assert uow.connection.execute('PRAGMA foreign_key_check').fetchall() == []
     assert sum(len(peer.sent) for peer in peers) == expected
 
 
-@pytest.mark.parametrize('outcome', ['failed', 'interrupted'])
+@pytest.mark.parametrize('outcome', ['failed', 'interrupted', None])
 def test_unsuccessful_result_cannot_admit_a_relay(relay_pair, monkeypatch, outcome):
     setup, _, _, peers, factory = relay_pair
     factory.outcome = outcome
     assert send(setup, monkeypatch)['ok']
+    if outcome is None:
+        from test_agent_recovery_isolation import eventually
+        def observed():
+            with setup[0].connection_factory.unit_of_work(write=False) as uow:
+                return any(json.loads(r[0])['native_type'] == 'fixture.relay-result'
+                    for r in uow.connection.execute('SELECT payload_json FROM execution_event_ingress'))
+        eventually(observed)
+        # An unknown outcome is retained as native evidence, never promoted
+        # to a successful terminal receipt/result that could authorize relay.
+        for _ in range(3):
+            setup[0].runtime_dispatcher.scan_once()
+        with setup[0].connection_factory.unit_of_work(write=False) as uow:
+            events = [json.loads(r[0]) for r in uow.connection.execute('SELECT payload_json FROM execution_event_ingress')]
+            assert any(e['payload'].get('output_text') == 'Bounded reply' for e in events)
+            assert uow.connection.execute('SELECT COUNT(*) FROM runtime_results').fetchone()[0] == 0
+            assert uow.connection.execute('SELECT COUNT(*) FROM delivery_outbox').fetchone()[0] == 1
+        assert len(peers) == 1 and len(peers[0].sent) == 1
+        return
     row, = results(setup, 1)
     assert row['publication_state'] == 'PUBLISHED'
     assert row['delivery_outcome'] == outcome
     with setup[0].connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute('SELECT COUNT(*) FROM delivery_outbox').fetchone()[0] == 1
     assert len(peers) == 1 and len(peers[0].sent) == 1
+
+
+def test_explicit_three_agent_relay_keeps_original_actor_and_budget(relay_pair, monkeypatch):
+    setup, first, _, peers, factory = relay_pair
+    deps, app, client, *_ = setup
+    observer = create_agent(setup, 'observer')
+    _, third, _ = connect_local(observer, agent_id='observer')
+    app.state.embedded_dispatch_owner.native_factory = factory
+    deps.config.max_relay_depth = 1
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE agent_endpoints SET consumption='exclusive',response_policy='conversation',public_config=? WHERE endpoint_id=?",
+            (json.dumps(dict(relay_results=True)), third['endpoint_id']))
+        uow.connection.execute('UPDATE agent_endpoints SET public_config=? WHERE endpoint_id=?',
+            (json.dumps(dict(relay_results=True, notify_target=dict(strategy='direct', agent_id='observer'))), first['endpoint_id']))
+    assert send(setup, monkeypatch)['ok']
+    rows = results(setup, 2)
+    assert [r['relay_state'] for r in rows] == ['ENQUEUED', 'BLOCKED']
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        operations = uow.connection.execute('SELECT * FROM delivery_outbox ORDER BY created_at,operation_id').fetchall()
+        assert [r['recipient_agent_id'] for r in operations] == ['subject', 'observer']
+        assert {r['actor_agent_id'] for r in operations} == {'caller'}
+        assert len({r['root_operation_id'] for r in operations}) == 1
+        assert uow.connection.execute('SELECT generated_messages,admitted_executions FROM runtime_causal_roots').fetchone()[:] == (1, 2)
+    assert sum(len(peer.sent) for peer in peers) == 2
+
+
+def test_different_bindings_of_same_agent_keep_independent_relay_roots(relay_pair, monkeypatch):
+    from test_canonical_identity_lifecycle import second_binding
+    setup, first, _, _, _ = relay_pair
+    deps = setup[0]
+    deps.config.max_relay_depth = 1
+    initial = send(setup, monkeypatch)
+    assert initial['ok'], initial
+    results(setup, 2)
+    second = second_binding(setup, monkeypatch)
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE agent_endpoints SET priority=20,consumption='exclusive',response_policy='conversation',public_config=? WHERE endpoint_id=?",
+            (json.dumps(dict(relay_results=True)), second['endpoint_id']))
+    from test_embedded_dispatch import admit, wait_receipt
+    opened = admit(setup, second, 'second-relay-binding', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    following = send(setup, monkeypatch)
+    assert following['ok'], following
+    results(setup, 4)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        parents = [uow.connection.execute('SELECT * FROM delivery_outbox WHERE message_id=?',
+            (r['data']['message_id'],)).fetchone() for r in (initial, following)]
+        assert {p['endpoint_id'] for p in parents} == {first['endpoint_id'], second['endpoint_id']}
+        assert len({p['root_operation_id'] for p in parents}) == 2
+        sessions = []
+        for parent in parents:
+            sessions.append(uow.connection.execute("SELECT p.session_id FROM execution_operations p JOIN execution_domain_deliveries m USING(server_id,executor_id,operation_id) WHERE m.domain_operation_id=? AND p.action='turn.submit'",
+                (parent['operation_id'],)).fetchone()[0])
+            child = uow.connection.execute('SELECT c.* FROM delivery_outbox c JOIN runtime_results r ON r.result_id=c.source_result_id WHERE r.operation_id=?',
+                (parent['operation_id'],)).fetchone()
+            assert child['recipient_agent_id'] == 'caller'
+            assert child['root_operation_id'] == parent['root_operation_id']
+            assert uow.connection.execute('SELECT generated_messages,admitted_executions FROM runtime_causal_roots WHERE root_operation_id=?',
+                (parent['root_operation_id'],)).fetchone()[:] == (1, 2)
+        assert len(set(sessions)) == 2
 
 
 def test_self_relay_is_blocked_without_another_native_turn(relay_pair, monkeypatch):

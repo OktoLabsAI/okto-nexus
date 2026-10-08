@@ -385,3 +385,12 @@ transport and reports observed tree containment without inventing stop proof.
 Nexus and Connector pin that patch; Connector 0.0.4 has no additional behavior
 changes. The integrated cases prove the other binding of the same agent still
 opens after protocol rejection. Complete matrix validation remains outstanding.
+
+Relay review passed 29 installed-wheel cases with unchanged inputs in
+build/review-relay-installed-v2, including real fragmented native pipes for all
+three adapters. Four legacy functions now map to canonical tests for persistent
+budgets, processing receipts without execution, failed/interrupted/unknown
+outcomes, three-agent routing and distinct bindings of the same agent. Unknown
+outcomes remain durable ingress evidence rather than invented terminal results.
+Core 0.0.5 was promoted through PRs 27/28 to main and tagged v0.0.5; Nexus 0.2.2
+still requires the full regression gate before promotion.
