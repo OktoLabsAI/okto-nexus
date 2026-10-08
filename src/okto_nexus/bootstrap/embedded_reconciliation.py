@@ -146,7 +146,6 @@ class EmbeddedReconciliation:
                     receipt_revision=1)
                 if (projected['session_id'] != session_id or projected['stage'] != 'FAILED'
                         or projected['possible_effect'] or not projected['retry_safe']
-                        or receipt.error_code != 'PROFILE_DRIFT'
                         or slot.key != claim.key or not slot.released
                         or slot.opening_operation_id != claim.opening_operation_id):
                     raise CoreError('RECONCILIATION_REQUIRED', 'embedded_failed_open_release')
@@ -183,7 +182,13 @@ class EmbeddedReconciliation:
                     uow.connection.execute("UPDATE execution_session_capabilities SET revoked_at=? "
                         "WHERE server_id=? AND executor_id=? AND session_id=? AND revoked_at IS NULL",
                         (owner.deps.clock.now_iso(), *key))
+                from ..application.execution_initial_turns import settle_failed_initial_turns
+                settle_failed_initial_turns(uow.connection, server_id=owner.channel.server_id,
+                    executor_id=owner.channel.executor_id)
         await asyncio.to_thread(commit)
+        # Releasing the opening can make its never-sent first turn retryable.
+        # Notify after commit; the earlier receipt wake cannot see that state.
+        owner.deps.runtime_dispatcher.wake()
 
     async def _empty_slots(self, source, session_ids=None):
         after, high = 0, None

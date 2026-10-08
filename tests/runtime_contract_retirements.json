@@ -3787,6 +3787,14 @@
         "tests/execution_r4/test_canonical_delegated_command.py::test_revoked_delegation_is_rechecked_before_native_write"
       ],
       "source_sha256": "e9b227981abf61f72ae5fc93d51b1fe6450f9c1a7206a3dc509f9a3157abfe0b"
+    },
+    {
+      "test": "tests/test_runtime_endpoint_fallback.py::test_unqualified_on_demand_native_contract_falls_back_before_any_turn_write",
+      "reason": "The real Core Codex bridge performs an incompatible native startup and proves its owned process stopped. Its original FAILED/possible-effect opening receipt is retained. A distinct never-dispatched first turn receives durable host no-send evidence, and the automatic dispatcher selects only an approved alternate binding. Advancing the retry deadline delivers the same immutable envelope once through the alternative; no turn/start reaches the failed native peer. A version string alone no longer disqualifies otherwise compatible installations.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_opening_fallback.py::test_incompatible_native_opening_preserves_unsent_child_and_approved_fallback"
+      ],
+      "source_sha256": "92c9e36d39e49c6b4b9429c936252197b48f4dae06085665d7719985f7b813ca"
     }
   ]
 }

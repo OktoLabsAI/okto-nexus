@@ -21,14 +21,17 @@ def no_effect_receipt(conn, domain_operation_id):
 
 
 def unsent_closed_proof(conn, domain_operation_id):
-    return conn.execute("SELECT f.* FROM execution_domain_deliveries m "
+    return conn.execute("SELECT f.*,p.parent_operation_id,json_extract(d.last_error,'$.code') AS reason "
+        "FROM execution_domain_deliveries m "
         "JOIN execution_operations p USING(server_id,executor_id,operation_id) "
         "JOIN execution_dispatch_outbox d USING(server_id,executor_id,operation_id) "
         "JOIN execution_unsent_dispatch_proofs f USING(server_id,executor_id,operation_id,attempt_no) "
         "JOIN execution_sessions s ON s.server_id=p.server_id AND s.executor_id=p.executor_id AND s.session_id=p.session_id "
         "WHERE m.domain_operation_id=? AND p.action='turn.submit' AND p.admission_state='RESOLVED_TERMINAL' "
-        "AND d.dispatch_state='RESOLVED_TERMINAL' AND json_extract(d.last_error,'$.code')='SESSION_CLOSED' "
-        "AND s.lifecycle_state='CLOSED' AND s.lease_state='CLOSED' "
+        "AND d.dispatch_state='RESOLVED_TERMINAL' "
+        "AND ((json_extract(d.last_error,'$.code')='SESSION_CLOSED' AND s.lifecycle_state='CLOSED' AND s.lease_state='CLOSED') "
+        "OR (json_extract(d.last_error,'$.code')='INITIAL_OPEN_FAILED' AND s.lifecycle_state IN ('CLOSED','FAILED') "
+        "AND s.lease_state IN ('NONE','CLOSED'))) "
         "AND NOT EXISTS (SELECT 1 FROM execution_receipts r WHERE r.server_id=p.server_id AND r.executor_id=p.executor_id AND r.operation_id=p.operation_id) "
         "AND NOT EXISTS (SELECT 1 FROM execution_local_publications r WHERE r.server_id=p.server_id AND r.executor_id=p.executor_id AND r.operation_id=p.operation_id) "
         "AND NOT EXISTS (SELECT 1 FROM execution_results r WHERE r.server_id=p.server_id AND r.executor_id=p.executor_id AND r.operation_id=p.operation_id)",
@@ -40,13 +43,15 @@ def mark_unsent_closed_retry(conn, server_id, executor_id, operation_id):
     row = conn.execute('SELECT d.* FROM execution_domain_deliveries m JOIN delivery_outbox d '
         'ON d.operation_id=m.domain_operation_id WHERE m.server_id=? AND m.executor_id=? AND m.operation_id=?',
         (server_id, executor_id, operation_id)).fetchone()
-    if (row is None or row['status'] not in ('PENDING', 'CLAIMED') or row['ack_level'] != 'NONE'
-            or row['reconciliation_id'] or row['terminal_event_id'] or row['canonical_terminal_operation_id']
+    if (row is None or row['status'] not in ('PENDING', 'CLAIMED', 'FAILED_FINAL') or row['ack_level'] != 'NONE'
+            or row['reconciliation_id'] or row['terminal_event_id']
             or row['external_completed_at'] or not defaults(conn)['automatic_recovery']):
         return
     envelope = json.loads(row['envelope'])
+    proof = unsent_closed_proof(conn, row['operation_id'])
     if (envelope.get('intent') != 'conversation' or envelope.get('handoff_id')
-            or unsent_closed_proof(conn, row['operation_id']) is None):
+            or proof is None or (row['canonical_terminal_operation_id'] is not None
+                and row['canonical_terminal_operation_id'] != proof['parent_operation_id'])):
         return
     conn.execute("UPDATE delivery_outbox SET status='RETRY_WAIT',reason='host_dispatch_not_started',"
         "canonical_terminal_operation_id=?,next_attempt_at=?,retry_basis='HOST_NO_SEND' WHERE operation_id=?",
@@ -91,7 +96,8 @@ def prepare_retries(uow, owner, now):
             continue
         try:
             owner.validate(uow, operation)
-            fallback = owner.select_fallback(uow, operation) if not host_proof and owner.select_fallback and operation['attempt_count'] < 3 else None
+            fallback_allowed = not host_proof or proof['reason'] == 'INITIAL_OPEN_FAILED'
+            fallback = owner.select_fallback(uow, operation) if fallback_allowed and owner.select_fallback and operation['attempt_count'] < 3 else None
         except OktoNexusError:
             conn.execute("UPDATE delivery_outbox SET status='REJECTED',reason='authorization_changed',"
                 "next_attempt_at=NULL WHERE operation_id=?", (operation['operation_id'],))
@@ -110,4 +116,4 @@ def prepare_retries(uow, owner, now):
             (json.dumps(fallback, sort_keys=True) if fallback else None,
              json.dumps(fallback['admission'], sort_keys=True) if fallback else None,
              proof['operation_id'],
-             'APPROVED_ENDPOINT_BEFORE_WRITE' if fallback else ('HOST_NO_SEND' if host_proof else 'CORE_NO_EFFECT'), operation['operation_id']))
+             'HOST_NO_SEND' if host_proof else ('APPROVED_ENDPOINT_BEFORE_WRITE' if fallback else 'CORE_NO_EFFECT'), operation['operation_id']))

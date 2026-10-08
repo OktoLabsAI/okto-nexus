@@ -53,36 +53,6 @@ def fallback_pair(runtime, monkeypatch, group="interchangeable-fixture", *, agen
 
 
 
-def test_unqualified_on_demand_native_contract_falls_back_before_any_turn_write(runtime, monkeypatch):
-    from test_runtime_effective_capabilities import configure_codex
-    deps, client, root, peers, operator, _ = runtime
-    configure_codex(runtime, version="99.0.0")
-    headers = {"x-api-key": operator}
-    for adapter in ("pi", "claude_code.stream", "claude_code.attach"):
-        result = client.patch(f"/api/v1/harness/endpoints/endpoint-{adapter}", headers=headers,
-            json={"expected_revision": 1, "enabled": False})
-        assert result.status_code == 200, result.text
-    result = client.patch("/api/v1/harness/endpoints/endpoint-codex", headers=headers,
-        json={"expected_revision": 1, "selection_group": "approved-native-alternatives", "priority": 10})
-    assert result.status_code == 200, result.text
-    result = client.post("/api/v1/harness/endpoints", headers=headers, json={
-        "endpoint_id": "zz-fallback", "agent_id": "worker", "adapter_id": "pi", "project_root": root,
-        "profile_id": "profile-pi", "enabled": True, "response_policy": "conversation",
-        "selection_group": "approved-native-alternatives"})
-    assert result.status_code == 200, result.text
-    clock = [deps.clock.now_iso()]
-    monkeypatch.setattr(deps.clock, "now_iso", lambda: clock[0])
-    operation_id = send_message(runtime)["runtime_operations"][0]
-    refused = wait_status(runtime, operation_id, "RETRY_WAIT")
-    assert refused["endpoint_id"] == "endpoint-codex" and refused["retry_basis"] == "APPROVED_ENDPOINT_BEFORE_WRITE"
-    clock[0] = refused["next_attempt_at"]
-    deps.runtime_dispatcher.wake()
-    sent = wait_status(runtime, operation_id, "SENT_UNCONFIRMED")
-    assert sent["endpoint_id"] == "zz-fallback" and sent["operation_id"] == operation_id
-    wire = [json.loads(line) for line in (Path(root) / "capability-wire.jsonl").read_text().splitlines()]
-    assert any(item.get("request_method") == "thread/start" for item in wire)
-    assert not any(item.get("request_method") == "turn/start" for item in wire)
-    assert len(peers) == 1 and sum(command.verb == "send_turn" for command in peers[0].sent) == 1
 
 
 @pytest.mark.parametrize("runtime", ["additional"], indirect=True)

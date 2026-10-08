@@ -84,7 +84,7 @@ def test_confirmed_close_makes_current_owner_ready(recovery):
     assert state(factory) == "CONTROL_READY"
 
 
-@pytest.mark.parametrize('stage', ['SUBMISSION_STARTED', 'RUNNING', 'OUTCOME_UNKNOWN'])
+@pytest.mark.parametrize('stage', ['SUBMISSION_STARTED', 'RUNNING', 'OUTCOME_UNKNOWN', 'FAILED'])
 @pytest.mark.parametrize('released', [False, True])
 def test_uncertain_opening_does_not_block_proven_resource_recovery(recovery, stage, released):
     from nexus_connector_core import r4_resource_release_digest
@@ -201,7 +201,7 @@ def test_durable_release_correlates_original_open_without_synthetic_close(recove
         if fault == "opening_generation":
             conn.execute("UPDATE execution_operations SET expected_revisions_json=?",('{"session_owner_generation":2}',))
     if fault == "opening_stage":
-        changed=dict(frame,stage="FAILED",receipt_revision=2)
+        changed=dict(frame,stage="FAILED",possible_effect=False,receipt_revision=2)
         seed_receipt(factory,changed)
         report["receipts"][0].update(stage="FAILED",receipt_revision=2)
         # Refresh the receipt high water so this tests the release predicate.

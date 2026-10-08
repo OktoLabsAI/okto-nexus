@@ -212,7 +212,7 @@ class ExecutionReconciliation:
                         (c.server_id,c.executor_id,session_id,claim['owner_generation'])).fetchone()
                     opening = _receipt(opening)
                     if (opening is None or opening['session_id'] != session_id or
-                            opening['stage'] not in ('SUBMISSION_STARTED','SUBMITTED','RUNNING','OUTCOME_UNKNOWN','SUCCEEDED') or
+                            opening['stage'] not in ('SUBMISSION_STARTED','SUBMITTED','RUNNING','OUTCOME_UNKNOWN','SUCCEEDED','FAILED') or
                             not opening['possible_effect'] or
                             fact['proof_digest'] != r4_resource_release_digest(
                                 server_id=c.server_id,executor_id=c.executor_id,session_id=session_id,

@@ -412,33 +412,14 @@ class EmbeddedDispatchOwner:
                 try:
                     receipt = await runtime.open(OpenOperation(frame["operation_id"],key,epoch,prepared),context)
                 except CoreError as error:
-                    # Only a durable Core no-spawn receipt can localize this
-                    # refusal. An exception flag alone is not release proof.
-                    if (error.code != 'PROFILE_DRIFT' or not error.retry_safe
-                            or error.possible_effect):
-                        raise
+                    # The stored Core receipt describes the opening. Resource
+                    # containment below is a separate proof, even after spawn.
                     receipt = await self.host.historical_receipt(session_id=key,
                         key=OperationKey(frame['server_id'], frame['executor_id'], frame['operation_id']))
                     if (receipt is None or receipt.stage != 'FAILED'
-                            or receipt.possible_effect or not receipt.retry_safe
                             or receipt.error_code != error.code
                             or receipt.operation_id != frame['operation_id']):
                         raise
-                    await self._publish(binding, receipt)
-                    report = await runtime.shutdown(ShutdownPolicy(0, 0))
-                    if ('unknown' in report.session_outcomes.values() or any(
-                            facts['process_state'] != 'STOPPED' or facts['release_pending']
-                            for facts in runtime.shutdown_resources().values())):
-                        raise CoreError('RECONCILIATION_REQUIRED', 'embedded_session_containment')
-                    if not await self.host.close_native_actions(
-                            executor_id=self.channel.executor_id, session_id=key, timeout_seconds=5):
-                        raise CoreError('RECONCILIATION_REQUIRED', 'embedded_native_action_containment')
-                    await self.events.recover(agent_id=frame["agent_id"])
-                    from .embedded_reconciliation import EmbeddedReconciliation
-                    await EmbeddedReconciliation(self).release_session(key, failed_open=True)
-                    await self.tools.release_session(key)
-                    self.sessions.pop(key, None)
-                    return
             elif action == "turn.submit":
                 receipt = await self._command_receipt(frame, lambda: runtime.submit(
                     TurnOperation(frame["operation_id"],key,payload["text"],frame.get("expected_turn_id")),context))
@@ -454,6 +435,20 @@ class EmbeddedDispatchOwner:
             else:
                 raise CoreError("CAPABILITY_UNSUPPORTED", "embedded_dispatch")
             await self._publish(binding, receipt)
+            if action == 'runtime.open' and receipt.stage == 'FAILED':
+                report = await runtime.shutdown(ShutdownPolicy(0, 0))
+                if ('unknown' in report.session_outcomes.values() or any(
+                        facts['process_state'] != 'STOPPED' or facts['release_pending']
+                        for facts in runtime.shutdown_resources().values())):
+                    raise CoreError('RECONCILIATION_REQUIRED', 'embedded_session_containment')
+                if not await self.host.close_native_actions(
+                        executor_id=self.channel.executor_id, session_id=key, timeout_seconds=5):
+                    raise CoreError('RECONCILIATION_REQUIRED', 'embedded_native_action_containment')
+                await self.events.recover(agent_id=frame['agent_id'])
+                from .embedded_reconciliation import EmbeddedReconciliation
+                await EmbeddedReconciliation(self).release_session(key, failed_open=not receipt.possible_effect)
+                await self.tools.release_session(key)
+                self.sessions.pop(key, None)
             if action == "runtime.close" and receipt.stage == "SUCCEEDED":
                 await self.tools.release_session(key)
                 self.sessions.pop(key, None)

@@ -84,7 +84,7 @@ def settle_failed_initial_turns(conn, *, server_id, executor_id):
         "AND s.open_operation_id=p.operation_id AND s.session_id=c.session_id "
         "WHERE c.server_id=? AND c.executor_id=? AND c.action='turn.submit' "
         "AND c.admission_state='ACCEPTED' AND p.action='runtime.open' "
-        "AND p.admission_state='RESOLVED_TERMINAL' AND s.lifecycle_state='FAILED' "
+        "AND p.admission_state='RESOLVED_TERMINAL' AND s.lifecycle_state IN ('FAILED','CLOSED') "
         "AND s.lease_state IN ('NONE','CLOSED') "
         "AND NOT EXISTS (SELECT 1 FROM execution_dispatch_outbox d WHERE d.server_id=c.server_id "
         "AND d.executor_id=c.executor_id AND d.operation_id=c.operation_id) "
@@ -100,6 +100,10 @@ def settle_failed_initial_turns(conn, *, server_id, executor_id):
                      "VALUES (?,?,?,'RESOLVED_TERMINAL',?)", (*key, error))
         conn.execute("UPDATE execution_operations SET admission_state='RESOLVED_TERMINAL' "
                      "WHERE server_id=? AND executor_id=? AND operation_id=?", key)
+        conn.execute("INSERT INTO execution_unsent_dispatch_proofs(server_id,executor_id,operation_id,attempt_no,recorded_at) "
+            "VALUES(?,?,?,0,strftime('%Y-%m-%dT%H:%M:%fZ','now')) ON CONFLICT DO NOTHING", key)
+        from .execution_delivery_retry import mark_unsent_closed_retry
+        mark_unsent_closed_retry(conn, *key)
 
 
 def settle_unsent_closed_session_operations(conn, *, server_id, executor_id, agent_id=None):
