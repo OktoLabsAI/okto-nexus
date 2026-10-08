@@ -3671,28 +3671,11 @@ def build_router() -> APIRouter:
             # would break again on every future migration. Preserved tables:
             # migration bookkeeping, runtime settings and - by default - the
             # connection configuration and installation invariants.
-            from ....application.database_reset import preserved_tables
+            from ....application.database_reset import clear_operational_history
             counts: dict[str, int] = {}
             try:
                 with deps.connection_factory.unit_of_work() as uow:
-                    preserved = preserved_tables(uow.connection, keep_agents=keep_agents)
-                    # FK checks deferred to commit: with every non-preserved
-                    # table emptied in the same transaction, the end state is
-                    # consistent regardless of deletion order.
-                    uow.connection.execute("PRAGMA defer_foreign_keys=ON")
-                    rows = uow.connection.execute(
-                        "SELECT name FROM sqlite_master WHERE type='table' "
-                        "AND name NOT LIKE 'sqlite_%'"
-                    ).fetchall()
-                    for row in rows:
-                        table = row["name"]
-                        if table in preserved:
-                            continue
-                        cur = uow.connection.execute(f'DELETE FROM "{table}"')
-                        counts[table] = cur.rowcount
-                    # Switch journals atomically with history removal, only
-                    # after the reset coordinator has drained every runtime.
-                    uow.connection.execute('UPDATE runtime_reset_generation SET generation=generation+1 WHERE singleton=1')
+                    counts = clear_operational_history(uow.connection, keep_agents=keep_agents)
             except sqlite3.Error as exc:
                 raise db_error_from_exception("wiping the store", exc) from exc
             # VACUUM is best-effort: it needs a moment without readers (the

@@ -47,3 +47,32 @@ def preserved_tables(conn, *, keep_agents):
                 preserved.add(dependency)
                 pending.append(dependency)
     return preserved
+
+
+def clear_operational_history(conn, *, keep_agents):
+    """Clear history in the drained reset's existing writer transaction.
+
+    Attempt events remain immutable for normal writers. Only this explicit
+    operator reset suspends their delete trigger, transactionally: concurrent
+    writers cannot observe the gap, and rollback restores the original schema.
+    Other writer/authority fences remain active throughout the reset.
+    """
+    preserved = preserved_tables(conn, keep_agents=keep_agents)
+    trigger = conn.execute("SELECT sql FROM sqlite_master WHERE type='trigger' "
+        "AND name='runtime_delivery_attempt_no_delete' "
+        "AND tbl_name='runtime_delivery_attempt_events'").fetchone()
+    if trigger is not None:
+        conn.execute('DROP TRIGGER runtime_delivery_attempt_no_delete')
+    conn.execute('PRAGMA defer_foreign_keys=ON')
+    tables = conn.execute("SELECT name FROM sqlite_master WHERE type='table' "
+        "AND name NOT LIKE 'sqlite_%'").fetchall()
+    counts = {}
+    for row in tables:
+        table = row[0]
+        if table not in preserved:
+            escaped = table.replace('"', '""')
+            counts[table] = conn.execute(f'DELETE FROM "{escaped}"').rowcount
+    if trigger is not None:
+        conn.execute(trigger[0])
+    conn.execute('UPDATE runtime_reset_generation SET generation=generation+1 WHERE singleton=1')
+    return counts

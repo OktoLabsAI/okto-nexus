@@ -34,6 +34,7 @@ def test_reset_preserves_configured_local_connection_and_can_deliver_again(conne
     while response.json()['data'].get('pending') and time.monotonic() < deadline:
         time.sleep(.1)
         response = client.get('/api/v1/admin/reset', headers=headers['operator'])
+        assert response.status_code in (200, 202), response.text
     assert response.status_code == 200, response.text
     assert not response.json()['data'].get('pending'), response.text
     if active:
@@ -59,6 +60,12 @@ def test_reset_preserves_configured_local_connection_and_can_deliver_again(conne
         turn = dict(uow.connection.execute("SELECT operation_id,session_id FROM execution_operations WHERE action='turn.submit'").fetchone())
     wait_receipt(setup, turn)
     assert native.opens == (2 if active else 1) and len(native.native.sent) == 1
+    # Reset must restore the immutable-history fence before admitting work.
+    import sqlite3
+    with deps.connection_factory.unit_of_work() as uow:
+        assert uow.connection.execute('SELECT COUNT(*) FROM runtime_delivery_attempt_events').fetchone()[0] > 0
+        with pytest.raises(sqlite3.IntegrityError, match='runtime_attempt_history_is_immutable'):
+            uow.connection.execute('DELETE FROM runtime_delivery_attempt_events')
     wait_receipt(setup, admit(setup, binding, 'reset-close', 'runtime.close', session_id=turn['session_id']), stages=('SUCCEEDED',))
 
 
@@ -163,3 +170,48 @@ def test_reset_generation_survives_backup_and_cold_start(tmp_path, monkeypatch, 
         assert client.app.state.embedded_core_host.store_dir.name == 'core-runtime-reset-1'
         with deps.connection_factory.unit_of_work(write=False) as uow:
             assert uow.connection.execute("SELECT control_state FROM execution_executors WHERE kind='embedded'").fetchone()[0] == 'CONTROL_READY'
+
+
+@pytest.mark.parametrize('keep_agents', [False, True])
+def test_failed_history_reset_rolls_back_data_and_immutability_fence(connected_local, monkeypatch, keep_agents):
+    import sqlite3
+    from okto_nexus.application import database_reset
+
+    setup, binding, native = connected_local
+    deps, app, client, headers, *_ = setup
+    assert send(setup, monkeypatch)['ok']
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        turn = dict(uow.connection.execute("SELECT operation_id,session_id FROM execution_operations WHERE action='turn.submit'").fetchone())
+    wait_receipt(setup, turn)
+    wait_receipt(setup, admit(setup, binding, 'rollback-close', 'runtime.close', session_id=turn['session_id']))
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        before = {table: [tuple(row) for row in uow.connection.execute('SELECT * FROM ' + table)]
+            for table in ('messages', 'runtime_delivery_attempt_events', 'execution_bindings')}
+        assert before['runtime_delivery_attempt_events']
+    clear = database_reset.clear_operational_history
+    def fail_after_clear(conn, **kwargs):
+        # Draining may append terminal attempt observations before deletion.
+        before['runtime_delivery_attempt_events'] = [tuple(row) for row in conn.execute(
+            'SELECT * FROM runtime_delivery_attempt_events ORDER BY sequence')]
+        clear(conn, **kwargs)
+        assert conn.execute('SELECT COUNT(*) FROM runtime_delivery_attempt_events').fetchone()[0] == 0
+        raise sqlite3.OperationalError('injected failure before reset commit')
+    monkeypatch.setattr(database_reset, 'clear_operational_history', fail_after_clear)
+    response = client.post('/api/v1/admin/reset', params={'keep_agents': str(keep_agents).lower()}, headers=headers['operator'])
+    deadline = time.monotonic() + 30
+    while response.status_code in (200, 202) and response.json()['data'].get('pending') and time.monotonic() < deadline:
+        time.sleep(.1)
+        response = client.get('/api/v1/admin/reset', headers=headers['operator'])
+    assert response.status_code == 503, response.text
+    assert not deps.runtime_admission_fence.closed
+    with deps.connection_factory.unit_of_work() as uow:
+        for table, rows in before.items():
+            restored = [tuple(row) for row in uow.connection.execute('SELECT * FROM ' + table)]
+            if table == 'runtime_delivery_attempt_events':
+                assert set(rows) <= set(restored)
+            else:
+                assert restored == rows
+        assert uow.connection.execute('SELECT generation FROM runtime_reset_generation').fetchone()[0] == 0
+        assert uow.connection.execute('PRAGMA foreign_key_check').fetchall() == []
+        with pytest.raises(sqlite3.IntegrityError, match='runtime_attempt_history_is_immutable'):
+            uow.connection.execute('DELETE FROM runtime_delivery_attempt_events')

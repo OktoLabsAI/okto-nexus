@@ -700,3 +700,16 @@ Linux 3.11 installed campaign passed 26 cases with two UI-only skips across
 the lifecycle, dispatch and local-realization modules implicated by the older
 CI shutdown wait (build/release-linux-shutdown-installed). Both used unchanged
 inputs and the c1d08f4f wheel. This local result does not replace full CI.
+
+The 161df22 full CI found an actual reset regression: canonical delivery now
+appends immutable runtime_delivery_attempt_events, whose delete trigger blocked
+operator history reset after the native drain. Reset now suspends only that
+delete trigger within its existing BEGIN IMMEDIATE transaction, restores its
+exact SQL before commit and rolls back both data and schema on failure. Normal
+writers still cannot update or delete attempt observations. Public reset tests
+cover both keep-agents options under an injected pre-commit failure, preserve
+all prior observations and verify the fence and generation after rollback.
+The installed Windows and Linux 3.11 campaigns each passed all 45 reset, attempt
+history, retention, HTTP and poll-token cases with unchanged inputs
+(build/release-reset-history-installed and build/release-linux-reset-history-installed;
+wheel SHA256 12ca9b82af7761da248802e61fcd96b5d6f31e02d01f2a76d23128c109239877).
