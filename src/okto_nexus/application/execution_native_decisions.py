@@ -194,6 +194,10 @@ class ExecutionNativeDecisions:
                 lease["connection_generation"] != authority["generation"] or
                 authority["control_state"] != "CONTROL_READY"):
             _fail("The native request no longer has a live session lease.")
+        endpoint = self.access.endpoints.get(uow, authority['endpoint_id'])
+        profile = self.access.endpoints.profile(uow, endpoint['profile_id']) if endpoint and endpoint['profile_id'] else None
+        if profile is not None and 'approvals' in profile['config'].get('disabled_capabilities', ()):
+            _fail('The session profile does not authorize native decisions.', ErrorCode.PERMISSION_DENIED)
         source = conn.execute("SELECT * FROM execution_operations WHERE server_id=? AND executor_id=? AND operation_id=?",
                               (scope["server_id"], scope["executor_id"], row["source_operation_id"])).fetchone()
         receipt = conn.execute("SELECT stage FROM execution_receipts WHERE server_id=? AND executor_id=? AND operation_id=? "

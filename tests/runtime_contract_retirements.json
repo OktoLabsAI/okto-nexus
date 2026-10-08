@@ -3600,6 +3600,31 @@
         "tests/execution_r4/test_canonical_session_close.py::test_repeated_close_preserves_one_native_effect_and_final_event"
       ],
       "source_sha256": "5802a571ba32f21f1b6c89feb632fe69cc84dc5e24e83c054d583bcb15e87206"
+    },
+    {
+      "test": "tests/test_runtime_profile_requirements.py::test_required_hitl_is_rechecked_for_open_conversation_and_managed_claim",
+      "reason": "Restore profile-native requirements in canonical access and delivery selection. Public profile updates preserve executor launch consent; disabling HITL refuses opening/work before quota consumption, keeps the logical inbox available, and re-enabling permits the governed claim.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_profile_requirements.py::test_required_hitl_rechecked_before_open_work_and_automatic_delivery"
+      ],
+      "source_sha256": "0c30b7b7d202c0eb9741cf557d422d2b7c36fc066d3a586992d795e9b7331fde"
+    },
+    {
+      "test": "tests/test_runtime_work_acceptance.py::test_restricted_work_profile_keeps_qualified_conversation_useful",
+      "reason": "Public canonical profile restrictions exclude work and native approval actions while retaining two real Codex conversation results. Incompatible required requests are rejected without changing profile or spending the work grant; leases restrict controls without suppressing permitted conversation.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_profile_requirements.py::test_restricted_work_profile_preserves_real_conversation",
+        "tests/execution_r4/test_canonical_profile_requirements.py::test_disabled_profile_approvals_cannot_dispatch_native_decision"
+      ],
+      "source_sha256": "36eeb59d99d4d02940dfdf53903abcd558dfba5a76184d35266cd92aa36356fd"
+    },
+    {
+      "test": "tests/test_runtime_work_acceptance.py::test_unsupported_sandbox_profile_cannot_replace_compatible_conversation",
+      "reason": "Unsupported launch settings cannot replace a canonical Server policy profile. Public rejection preserves revision/configuration and a subsequent real Claude conversation and correlated response, for both predecessor sandbox/approval-policy inputs.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_profile_requirements.py::test_unsupported_launch_profile_cannot_replace_claude_conversation"
+      ],
+      "source_sha256": "05cf5798084672ec838486b62f40e1ec087b4d0de06944647cd8e574c969c029"
     }
   ]
 }

@@ -71,6 +71,12 @@ class RuntimeDeliveryPlanner:
                         and endpoint["consumption"] == "exclusive" and endpoint["response_policy"] == "conversation"
                         and endpoint["health"] != "quarantined" and profile and profile["enabled"]
                         and "conversation" not in profile["config"].get("disabled_capabilities", ())):
+                    from .runtime_requirements import validate_canonical_native_requirements
+                    try:
+                        validate_canonical_native_requirements(profile['config'], endpoint['adapter_id'],
+                                                               hitl_enabled=self.config.feature_hitl)
+                    except OktoNexusError:
+                        continue
                     from .execution_domain_delivery import select_delivery_session
                     recovering=uow.connection.execute("SELECT 1 FROM execution_bindings b JOIN execution_executors x USING(server_id,executor_id) WHERE b.endpoint_id=? AND (x.control_state<>'CONTROL_READY' OR EXISTS(SELECT 1 FROM execution_agent_recovery r WHERE r.server_id=b.server_id AND r.executor_id=b.executor_id AND r.agent_id=(SELECT agent_id FROM agent_endpoints WHERE endpoint_id=b.endpoint_id) AND (r.state<>'READY' OR r.generation<>x.generation)))",(endpoint['endpoint_id'],)).fetchone()
                     if recovering:
@@ -226,6 +232,8 @@ class RuntimeDeliveryPlanner:
             descriptor = next((r for r in get_runtime_catalog().runtimes if r.adapter_id == endpoint["adapter_id"]), None)
             if descriptor is None or descriptor.connection_mode != "managed" or not profile or "conversation" in profile["config"].get("disabled_capabilities", ()):
                 raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Canonical conversation delivery is unavailable.", {})
+            from .runtime_requirements import validate_canonical_native_requirements
+            validate_canonical_native_requirements(profile['config'], endpoint['adapter_id'], hitl_enabled=config.feature_hitl)
             return endpoint, profile
         if profile:
             validate_native_requirements(profile["config"], self.registry.get(endpoint["adapter_id"]),

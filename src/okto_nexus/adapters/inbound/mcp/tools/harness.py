@@ -826,6 +826,7 @@ def _default_connector_factories() -> dict[str, Any]:
 def build_connector_factories(deps: Any):
     """Trusted registry in production; explicit legacy injection stays compatible."""
     from okto_nexus.adapters.outbound.harness.compatibility import qualified_capabilities, CONVERSATION_VERSIONS
+    from okto_nexus.application.runtime_requirements import native_requirement_schema
     registry = getattr(deps, "harness_adapter_registry", None)
     if registry is not None:
         return registry
@@ -851,15 +852,7 @@ def build_connector_factories(deps: Any):
                 multiplexing=caps.multiplexes_sessions, steer_timing=caps.steer_timing,
                 interrupt=not caps.send_only, interrupt_requires_settle=caps.interrupt_requires_settle_wait,
                 observes_stop=caps.observes_session_end, approvals=kind == "codex" or (kind == "claude_code" and substrate == "stream")),
-            input_schema={"transport_binding_contract": 1, **({"native_approval_contract": 1, "requires_feature_hitl": True,
-                "methods": ["item/commandExecution/requestApproval", "item/fileChange/requestApproval",
-                            "item/tool/requestUserInput", "mcpServer/elicitation/request"],
-                "decisions": ["accept", "decline"], "input_contract": 1,
-                "input_limits": "blocking non-secret questions; correlated form elicitation with flat primitive fields only; no URL or remote schema resolution"} if kind == "codex" else
-                {"native_approval_contract": 1, "requires_feature_hitl": True,
-                 "methods": ["control_request:can_use_tool"], "tools": ["Write", "Edit", "Bash", "AskUserQuestion"],
-                 "decisions": ["accept", "decline"], "correlation": "operation_and_local_generation"}
-                if kind == "claude_code" and substrate == "stream" else {})},
+            input_schema={"transport_binding_contract": 1, **native_requirement_schema(kind, substrate)},
             legacy_capabilities=caps,
             supported_platforms=("posix",) if substrate == SUBSTRATE_ATTACH else ("nt", "linux"),
             native_versions_tested=tuple(sorted(CONVERSATION_VERSIONS.get(kind, ()))) if substrate != "attach" and kind != "pi" else (),

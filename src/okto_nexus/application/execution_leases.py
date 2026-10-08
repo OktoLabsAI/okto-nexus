@@ -167,9 +167,13 @@ class ExecutionLeaseService:
         semantic = json.loads(row['semantic_payload'])
         if semantic['action'] != 'runtime.open':
             raise _conflict('The session has no canonical opening operation.')
+        from .runtime_requirements import profile_action_allowed
+        profile = self.access.endpoints.profile(uow, row['profile_id']) if row['profile_id'] else None
         actions = []
         for action in json.loads(source['actions']):
             if action not in _ACTIONS:
+                continue
+            if profile is not None and not profile_action_allowed(profile['config'], action):
                 continue
             self.access.authorize(
                 context, action=action, endpoint_id=row['endpoint_id'],
@@ -177,7 +181,8 @@ class ExecutionLeaseService:
                 substrate='attach' if semantic['payload']['mode'] == 'attach' else 'managed',
                 uow=uow, audit=False, check_budget=False)
             actions.append(_ACTIONS[action])
-        if (self.access.config.feature_hitl and 'turn.submit' in actions and
+        native_inputs_allowed = profile is not None and 'approvals' not in profile['config'].get('disabled_capabilities', ())
+        if (self.access.config.feature_hitl and native_inputs_allowed and 'turn.submit' in actions and
                 row['adapter_id'] in {'codex_app_server', 'claude_stream', 'pi_rpc'}):
             actions.extend(('approval.decide', 'input.provide'))
         if row['lifecycle_state'] == 'OPEN_PENDING' and 'runtime.open' not in actions:

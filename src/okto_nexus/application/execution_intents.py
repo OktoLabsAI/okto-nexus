@@ -234,7 +234,7 @@ def resolve_execution_intent(
                 for name in ('authorization_revision', 'configuration_revision', 'credential_epoch'):
                     scope[name] = old_scope[name]
         profile = conn.execute(
-            "SELECT enabled,revision FROM runtime_profiles WHERE profile_id=?",
+            "SELECT enabled,revision,launch_revision FROM runtime_profiles WHERE profile_id=?",
             (binding["profile_id"],),
         ).fetchone() if binding["profile_id"] else None
         payload = (
@@ -243,7 +243,7 @@ def resolve_execution_intent(
              "inventory_revision": binding["inventory_revision"],
              "realization_ref": binding["realization_ref"],
              "realization_revision": binding["realization_revision"],
-             "profile_revision": profile["revision"] if profile else 1,
+             "profile_revision": profile["launch_revision"] if profile else 1,
              "mode": "managed"}
             if action == "runtime.open" else
             {"reason": request.get("text", "Close requested by the authorized agent."),

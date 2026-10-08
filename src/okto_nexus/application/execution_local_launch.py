@@ -70,7 +70,7 @@ class ApprovedLocalLaunch:
             row = uow.connection.execute(
                 "SELECT l.local_record_json,r.configuration_digest,r.local_root_proof_digest,r.body_hash,"
                 "r.local_consent_id,r.subject_agent_id,r.candidate_ref,r.inventory_revision,"
-                "p.revision AS profile_revision,ep.adapter_id,a.is_active "
+                "p.revision AS profile_revision,p.launch_revision,ep.adapter_id,a.is_active "
                 "FROM execution_bindings b "
                 "JOIN execution_executors e ON e.server_id=b.server_id AND e.executor_id=b.executor_id "
                 "JOIN execution_realizations r ON r.server_id=b.server_id AND r.executor_id=b.executor_id AND r.realization_ref=b.realization_ref "
@@ -106,7 +106,7 @@ class ApprovedLocalLaunch:
             if (_digest(configuration) != row["configuration_digest"]
                     or _digest(record["publication"]) != row["body_hash"]
                     or configuration["local_consent_id"] != row["local_consent_id"]
-                    or configuration["profile_revision"] != row["profile_revision"]
+                    or configuration["profile_revision"] != row["launch_revision"]
                     or configuration["adapter_id"] != row["adapter_id"]
                     or any(configuration[k] != scope[k] for k in ("server_id", "executor_id", "agent_id"))
                     or configuration["provider_home"] != record["provider_home"]):

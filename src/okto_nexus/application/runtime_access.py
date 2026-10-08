@@ -108,6 +108,14 @@ class RuntimeAccessService:
                 if endpoint["profile_id"]:
                     profile = self.endpoints.profile(uow, endpoint["profile_id"])
                     enabled = enabled and profile is not None and profile["enabled"]
+                    if enabled and endpoint['protocol'] == 'nxl-r4':
+                        from .runtime_requirements import validate_canonical_native_requirements, profile_action_allowed
+                        try:
+                            validate_canonical_native_requirements(profile['config'], endpoint['adapter_id'],
+                                                                   hitl_enabled=self.config.feature_hitl)
+                        except OktoNexusError:
+                            enabled = False
+                        enabled = enabled and profile_action_allowed(profile['config'], action)
                     if enabled and self.registry and endpoint["protocol"] != "nxl-r4":
                         try:
                             validate_native_requirements(profile["config"], self.registry.get(endpoint["adapter_id"]),

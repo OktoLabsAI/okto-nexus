@@ -790,3 +790,11 @@ Installed Windows campaign `build/release-session-metadata-installed`: 62 passed
 ### Independent session closure (2026-10-08)
 
 Installed Windows campaign `build/release-session-close-installed`: 24 passed in 241.82s, unchanged inputs, using the metadata wheel above. Two real Codex processes prove closing one session leaves the sibling available to produce a correlated response. Further cases retain one close effect and one final event across repeated public requests and a Server projection outage; forged native lifecycle fields cannot close a session or prevent its next authorized command. Existing queue settlement, native protocol fault, interrupt acknowledgement and stale-control cases also passed. Four retired supervisor tests now reference these positive canonical contracts.
+
+### Canonical profile requirements (2026-10-08)
+
+Server profile restrictions are now validated and enforced on canonical open, conversation, managed work, delivery selection, leases and native human decisions. Restricted work/approvals preserve allowed real conversation; required HITL refuses execution while preserving the ordinary inbox. Unsupported Claude launch controls remain invalid without breaking its positive stream conversation.
+
+Migration 123 separates the immutable approved launch revision from mutable Server policy revisions. Updating only policy no longer produces a false PROFILE_DRIFT against the approved local or remote realization; current authorization/configuration guards still protect policy changes and revoked grants.
+
+Installed Windows campaign `build/release-profile-policy-installed`: 74 passed in 768.42s. Installed Linux campaign `build/release-profile-policy-linux`: 32 passed in 144.18s. Both retained unchanged inputs. The broader Windows campaign includes real Codex/Claude approvals, explicit questions, stale decisions, recovery and migration checks. Wheel SHA-256: 3f335614b795245f17aae9560bf42964514ff06af08e9353c03b49e4514f2e72. Three predecessor profile requirements now map to these positive contracts. Full Nexus regression validation remains incomplete.

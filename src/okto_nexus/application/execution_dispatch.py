@@ -479,11 +479,11 @@ def begin_execution_send(
                 require_boot_authority(uow, access=access, agent_id=row["subject_agent_id"],
                     endpoint_id=binding["endpoint_id"], proof=json.loads(row["boot_authority_json"]))
             profile = conn.execute(
-                "SELECT enabled,revision FROM runtime_profiles WHERE profile_id=?",
+                "SELECT enabled,revision,launch_revision FROM runtime_profiles WHERE profile_id=?",
                 (binding["profile_id"],),
             ).fetchone() if binding["profile_id"] else None
             if (profile is None or not profile["enabled"] or
-                    profile["revision"] != semantic["payload"]["profile_revision"]):
+                    profile["launch_revision"] != semantic["payload"]["profile_revision"]):
                 raise OktoNexusError(ErrorCode.CONFLICT,
                                       "The dispatch profile changed.", {})
         from ..adapters.outbound.sqlite.execution_leases import SqliteExecutionLeaseRepository

@@ -229,11 +229,11 @@ def submit_execution_operation(
                 require_identity_host(conn, server_id=server_id,
                                       agent_id=subject_agent_id, executor_id=executor_id)
                 profile = conn.execute(
-                    "SELECT enabled,revision FROM runtime_profiles "
+                    "SELECT enabled,revision,launch_revision FROM runtime_profiles "
                     "WHERE profile_id=?", (binding["profile_id"],),
                 ).fetchone() if binding["profile_id"] else None
                 if (profile is None or not profile["enabled"] or
-                        profile["revision"] !=
+                        profile["launch_revision"] !=
                         resolved["semantic_intent"]["payload"]["profile_revision"]):
                     raise OktoNexusError(ErrorCode.CONFLICT,
                                           "The runtime profile is no longer ready.", {})
