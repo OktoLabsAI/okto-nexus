@@ -722,3 +722,13 @@ The test allows the documented five-second graceful and force phases plus
 recovery scheduling; no manual close is used as the containment assertion.
 All 13 installed native-protocol and retirement-inventory cases passed with
 unchanged inputs (build/release-overflow-final-installed, 12ca9b82 wheel above).
+
+Two fixture errors explained the remaining shutdown waits in the 161df22 CI:
+the direct local-launch test opened Core without first publishing the Server
+receipt binding, and the inactive-agent approval test fabricated sequence 1 in
+Server history while Core already owned that sequence. The fixtures now register
+the binding before native open and capture the approval through the Core queue.
+Their authorization and inactive-agent assertions remain intact. All 19 cases
+passed both from source and from the installed wheel on Windows and Linux;
+installed inputs stayed unchanged (build/release-shutdown-fixtures-installed and
+build/release-linux-shutdown-fixtures-installed, 12ca9b82 wheel above).

@@ -10,11 +10,7 @@ from test_embedded_dispatch import (
 
 
 def test_inactive_agent_retained_approval_is_non_actionable(connected_local):
-    from dataclasses import asdict
-    from nexus_connector_core import R4_PREVIEW_REVISION
-    from okto_nexus.application.execution_events import commit_execution_events
-
-    setup, binding, _ = connected_local
+    setup, binding, native = connected_local
     deps, app, client, headers, *_ = setup
     opened = admit(setup, binding, "retained-open", "runtime.start", new_session=True)
     wait_receipt(setup, opened)
@@ -28,16 +24,17 @@ def test_inactive_agent_retained_approval_is_non_actionable(connected_local):
     request = dict(schema_version=1, request_id=7, request_hash="a" * 64,
         method="item/commandExecution/requestApproval",
         params={"threadId": "native-thread", "turnId": "turn-from-native", "itemId": "item"})
-    event = asdict(RuntimeEvent(stream["server_id"], stream["executor_id"],
-        stream["session_id"], stream["stream_epoch"], 1, "approval_request", request["method"],
+    # Core must assign sequence numbers and durably capture the approval.
+    # Inserting a fabricated sequence directly into Server ingress conflicts
+    # with the actual stream and prevents its final shutdown publication.
+    client.portal.call(native.native.queue.put, RuntimeEvent(stream["server_id"], stream["executor_id"],
+        stream["session_id"], stream["stream_epoch"], 0, "approval_request", request["method"],
         {"native_approval": request, "native_approval_display": dict(request)}, turned["operation_id"]))
-    frame = {key: stream[key] for key in
-             ("server_id", "executor_id", "binding_id", "agent_id", "session_id", "stream_epoch")}
-    frame.update(type="event.batch", protocol_major=1, contract_revision=R4_PREVIEW_REVISION,
-        connection_id=owner.channel.connection_id,
-        connection_generation=owner.channel.connection_generation, events=[event])
-    assert commit_execution_events(deps.connection_factory, channel=owner.channel,
-        frame=frame, embedded_owner=owner, approvals=deps.approvals) is not None
+    from test_agent_recovery_isolation import eventually
+    def retained():
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            return uow.connection.execute('SELECT 1 FROM execution_native_requests').fetchone() is not None
+    eventually(retained)
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute("SELECT state FROM execution_native_requests").fetchone()[0] == "STALE"
         assert uow.connection.execute("SELECT is_active FROM agents WHERE agent_id='subject'").fetchone()[0] == 0

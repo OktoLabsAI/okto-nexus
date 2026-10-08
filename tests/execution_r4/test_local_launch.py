@@ -104,9 +104,22 @@ def test_approved_local_configuration_reaches_core(admitted_local, monkeypatch, 
             secret_refs=executor.local_launch.auth_refs, cwd=str(root))
         environment=await executor.environment(prepared)
         assert environment["OPENAI_API_KEY"] == "technical-provider-secret"
-        receipt=await executor.open(operation_id=sent.frame["operation_id"],stream_epoch="local-stream")
+        # This manually driven boundary must retain the same receipt binding
+        # as the automatic owner before Core can create a native effect.
+        from nexus_connector_core import OpenOperation, prepare_r4_receipt_binding
+        runtime = await executor._runtime()
+        context = runtime.r4_operation_context(sent.frame, connection_id=channel.connection_id,
+            connection_generation=channel.connection_generation)
+        prepared = await runtime.prepare(LaunchIntent('subject', sent.scope['workspace_id'],
+            candidate.adapter_id, auth_refs=executor.local_launch.auth_refs), context)
+        receipt_binding = prepare_r4_receipt_binding(sent.frame, context,
+            prepared=prepared, stream_epoch='local-stream')
+        app.state.embedded_dispatch_owner._bind(sent.frame, receipt_binding, 'local-stream')
+        receipt = await runtime.open(OpenOperation(sent.frame['operation_id'],
+            sent.scope['session_id'], 'local-stream', prepared), context)
         assert receipt.operation_id == sent.frame["operation_id"] and native.opens == 1
-        await app.state.embedded_core_host.shutdown(ShutdownPolicy(0,0))
+        await app.state.embedded_dispatch_owner._publish(receipt_binding, receipt)
+        await app.state.embedded_core_host.shutdown(ShutdownPolicy(0,0), close_stores=False)
     client.portal.call(scenario)
 
 
