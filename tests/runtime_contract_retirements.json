@@ -3275,6 +3275,65 @@
         "tests/execution_r4/test_canonical_io_boundaries.py::test_provider_spawn_native_and_embedding_io_are_outside_write_transactions"
       ],
       "source_sha256": "4f8973735167fba91de6afebb59b62552c0453f7170ae944901ffb1e4b382793"
+    },
+    {
+      "test": "tests/test_runtime_not_sent_recovery.py::test_proven_not_sent_release_preserves_transport_evidence_and_original_inbox",
+      "reason": "The legacy supervisor fixture is replaced by real canonical admission and correlated Core EffectNotSent receipts. REST/MCP release, operator authorization, original inbox identity, no replay and immutable transport evidence remain covered.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_not_sent_recovery.py::test_proven_not_sent_release_preserves_transport_evidence_and_original_inbox"
+      ],
+      "source_sha256": "5eb94dad5ac0e2a9b249782106321d62a6b8523a0c45e16661b044998928bb2e"
+    },
+    {
+      "test": "tests/test_runtime_not_sent_recovery.py::test_release_requires_complete_server_owned_non_delivery_proof",
+      "reason": "All six persisted observation mutations remain rejected on the canonical execution path, which additionally requires an exact durable Core receipt proving no native write.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_not_sent_recovery.py::test_release_requires_complete_server_owned_non_delivery_proof",
+        "tests/execution_r4/test_canonical_not_sent_recovery.py::test_display_label_cannot_replace_correlated_core_proof"
+      ],
+      "source_sha256": "bae48138d009ba35da55f6ab0f6cd281e4e8d2103d4617bcb0f821c3802347f9"
+    },
+    {
+      "test": "tests/test_runtime_not_sent_recovery.py::test_safe_release_audit_and_inbox_roll_back_together",
+      "reason": "The same post-release transaction failure is now exercised after canonical Core no-write rejection, retaining the push reservation and rolling back the reconciliation audit together.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_not_sent_recovery.py::test_safe_release_audit_and_inbox_roll_back_together"
+      ],
+      "source_sha256": "f543f8f62a7e5f2bb9fe23ffa4db52dcc709f4cb13972add0f8b4bc8947c2648"
+    },
+    {
+      "test": "tests/test_harness_routes.py::test_harness_open_default_profile_is_isolated_and_visible_in_response",
+      "reason": "The canonical public open response identifies the approved configuration through its scope instead of the removed legacy backend object. REST/MCP launch tests inspect the effective isolated environment and persisted approved profile for all three managed harnesses.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_endpoint_configuration.py::test_public_open_uses_isolated_approved_profile"
+      ],
+      "source_sha256": "a6443ede5f29eba2fba70ac5dfcae38d339453c4c25eab5a9e719239e7815139"
+    },
+    {
+      "test": "tests/test_harness_tools.py::test_harness_open_uses_approved_isolated_profile",
+      "reason": "Canonical launches replace the removed harness_connector_factories hook. Both public transports now verify isolated native HOME/provider directories, no ambient token inheritance, and no original Nexus API key in the child environment.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_endpoint_configuration.py::test_public_open_uses_isolated_approved_profile"
+      ],
+      "source_sha256": "520733fdc4545043b5bf844dceba2a56cc285a8f839b3ab02dea5a0066c365f9"
+    },
+    {
+      "test": "tests/test_runtime_configuration_updates.py::test_profile_disable_fences_send_preserves_session_and_allows_operator_close",
+      "reason": "Profile disable is exercised on canonical sessions with real grant and lease revocation. Both public transports permit the current operator to stop the exact applied session without restoring productive authority; subject/foreign access and subsequent operator revocation remain fenced.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_endpoint_configuration.py::test_operator_close_preserves_subject_identity_and_rejects_foreign_actor",
+        "tests/execution_r4/test_canonical_endpoint_configuration.py::test_operator_containment_rechecks_initiating_authority_before_effect",
+        "tests/execution_r4/test_canonical_endpoint_configuration.py::test_profile_disable_retains_history_blocks_send_and_contains_native"
+      ],
+      "source_sha256": "1b3806b0fcf7a5f4602b43add672c04fa5a7382434e71f76f4f3fa90249c2a73"
+    },
+    {
+      "test": "tests/test_runtime_configuration_updates.py::test_profile_disable_preserves_late_native_terminal_without_publishing",
+      "reason": "Canonical Core event capture retains a terminal result received after profile disable while current authorization blocks its message publication. The original single delivery and single terminal event are preserved.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_publication_regressions.py::test_profile_disable_retains_late_terminal_without_publishing"
+      ],
+      "source_sha256": "6539d4151383b467427658be2f291f823f952466db095b3e9c5bee69767ecf7b"
     }
   ]
 }

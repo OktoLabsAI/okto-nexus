@@ -76,6 +76,27 @@ def test_result_obeys_current_sender_permissions_without_erasing_output(runtime)
         assert uow.connection.execute("SELECT count(*) FROM messages WHERE subject='Runtime result'").fetchone()[0] == 0
 
 
+def test_profile_disable_retains_late_terminal_without_publishing(runtime):
+    setup, binding, native = runtime
+    deps, _, client, headers, *_ = setup
+    def disable_profile():
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            profile = dict(uow.connection.execute('SELECT p.* FROM runtime_profiles p JOIN agent_endpoints e '
+                'ON e.profile_id=p.profile_id WHERE e.endpoint_id=?', (binding['endpoint_id'],)).fetchone())
+        response = client.patch('/api/v1/harness/profiles/' + profile['profile_id'], headers=headers['operator'],
+            json=dict(expected_revision=profile['revision'], enabled=False))
+        assert response.status_code == 200, response.text
+    source = send_message(runtime, body='Captured after profile disabled', before_output=disable_profile)
+    row = result(runtime, source['runtime_operations'][0], 'BLOCKED')
+    assert 'Captured after profile disabled' in row['output_text']
+    assert not row['publication_message_id'] and row['delivery_outcome'] == 'success'
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT COUNT(*) FROM execution_event_ingress WHERE "
+            "json_extract(payload_json,'$.payload.delivery_phase')='terminal'").fetchone()[0] == 1
+        assert uow.connection.execute("SELECT COUNT(*) FROM messages WHERE subject='Runtime result'").fetchone()[0] == 0
+        assert uow.connection.execute('SELECT COUNT(*) FROM delivery_outbox').fetchone()[0] == 1
+
+
 def test_publication_and_canonical_message_commit_together(runtime, monkeypatch):
     from okto_nexus.application.runtime_results import RuntimeResultService
     deps = runtime[0][0]

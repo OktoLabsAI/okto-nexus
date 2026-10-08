@@ -143,7 +143,8 @@ def test_profile_disable_retains_history_blocks_send_and_contains_native(connect
 
 
 @pytest.mark.parametrize('surface', ['rest', 'mcp'])
-def test_operator_close_preserves_subject_identity_and_rejects_foreign_actor(connected_local, monkeypatch, surface):
+@pytest.mark.parametrize('disable_profile', [False, True])
+def test_operator_close_preserves_subject_identity_and_rejects_foreign_actor(connected_local, monkeypatch, surface, disable_profile):
     from test_agent_recovery_isolation import create_agent
     setup, binding, native = connected_local
     opened = admit(setup, binding, 'operator-compat-open', 'runtime.start', new_session=True)
@@ -151,13 +152,30 @@ def test_operator_close_preserves_subject_identity_and_rejects_foreign_actor(con
     foreign = create_agent(setup, 'foreign')[3]['subject']
     body = dict(idempotency_key='operator-compat-close')
     client = setup[2]
+    if disable_profile:
+        with setup[0].connection_factory.unit_of_work(write=False) as uow:
+            profile = dict(uow.connection.execute('SELECT p.* FROM runtime_profiles p JOIN agent_endpoints e '
+                'ON e.profile_id=p.profile_id WHERE e.endpoint_id=?', (binding['endpoint_id'],)).fetchone())
+        disabled = client.patch('/api/v1/harness/profiles/' + profile['profile_id'],
+            headers=setup[3]['operator'], json=dict(expected_revision=profile['revision'], enabled=False))
+        assert disabled.status_code == 200, disabled.text
+        for role in ('operator', 'subject'):
+            denied_send = client.post('/api/v1/harness/sessions/' + opened['session_id'] + '/send',
+                headers=setup[3][role], json=dict(idempotency_key='disabled-send-' + role, payload=dict(text='No write')))
+            assert denied_send.status_code == 403, denied_send.text
+        assert native.native.sent == []
+        denied_close = client.post('/api/v1/harness/sessions/' + opened['session_id'] + '/close',
+            headers=setup[3]['subject'], json=dict(idempotency_key='disabled-subject-close'))
+        assert denied_close.status_code == 403, denied_close.text
     path = '/api/v1/harness/sessions/' + opened['session_id'] + '/close'
     denied = client.post(path, headers=foreign, json=body)
     assert denied.status_code == 403, denied.text
     assert not native.native.stopped
     if surface == 'rest':
         response = client.post(path, headers=setup[3]['operator'], json=body)
-        assert response.status_code == 200, response.text
+        with setup[0].connection_factory.unit_of_work(write=False) as uow:
+            resolutions = [json.loads(r[0]) for r in uow.connection.execute('SELECT resolved_json FROM execution_client_intents')]
+        assert response.status_code == 200, (response.text, [(r['semantic_intent']['action'], r['blockers']) for r in resolutions])
         closed = response.json()
     else:
         closed = mcp(setup, monkeypatch, setup[3]['operator']['Authorization'].removeprefix('Bearer '),
@@ -169,6 +187,9 @@ def test_operator_close_preserves_subject_identity_and_rejects_foreign_actor(con
         row = uow.connection.execute('SELECT actor_agent_id,subject_agent_id FROM execution_operations WHERE operation_id=?',
                                      (closed['data']['operation_id'],)).fetchone()
         assert tuple(row) == ('operator', 'subject')
+        if disable_profile:
+            assert not uow.connection.execute("SELECT 1 FROM execution_leases WHERE status IN ('ISSUED','ACTIVE')").fetchone()
+            assert not uow.connection.execute('SELECT 1 FROM runtime_execution_grants WHERE revoked_at IS NULL').fetchone()
 
 
 def test_endpoint_reenable_requires_current_revision_and_new_grant(connected_local):
@@ -213,6 +234,40 @@ def test_endpoint_reenable_requires_current_revision_and_new_grant(connected_loc
         audit = uow.connection.execute("SELECT old_revision,new_revision FROM runtime_access_audit "
             "WHERE action='config.endpoint.update' AND resource_id=? ORDER BY rowid", (binding['endpoint_id'],)).fetchall()
         assert [tuple(r) for r in audit] == [(revision, revision + 1), (revision + 1, revision + 2)]
+
+
+def test_operator_containment_rechecks_initiating_authority_before_effect(connected_local):
+    from test_agent_recovery_isolation import eventually
+    setup, binding, native = connected_local
+    deps, app, client, headers, *_ = setup
+    opened = admit(setup, binding, 'containment-authority-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        profile = dict(uow.connection.execute('SELECT p.* FROM runtime_profiles p JOIN agent_endpoints e '
+            'ON e.profile_id=p.profile_id WHERE e.endpoint_id=?', (binding['endpoint_id'],)).fetchone())
+    disabled = client.patch('/api/v1/harness/profiles/' + profile['profile_id'], headers=headers['operator'],
+        json=dict(expected_revision=profile['revision'], enabled=False))
+    assert disabled.status_code == 200, disabled.text
+    lock = app.state.embedded_dispatch_owner.pump.send_lock
+    client.portal.call(lock.acquire)
+    try:
+        response = client.post('/api/v1/harness/sessions/' + opened['session_id'] + '/close',
+            headers=headers['operator'], json=dict(idempotency_key='revoked-operator-close'))
+        assert response.status_code == 200, response.text
+        operation = response.json()['data']['operation_id']
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute("UPDATE agents SET api_key_hash='revoked-operator-key' WHERE agent_id='operator'")
+    finally:
+        client.portal.call(lock.release)
+    def rejected():
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            row = uow.connection.execute('SELECT dispatch_state,last_error FROM execution_dispatch_outbox WHERE operation_id=?', (operation,)).fetchone()
+            return dict(row) if row['dispatch_state'] == 'RESOLVED_TERMINAL' else None
+    eventually(rejected)
+    assert 'authority' in rejected()['last_error'].lower(), rejected()
+    assert not native.native.stopped and native.native.sent == []
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert not uow.connection.execute('SELECT 1 FROM execution_receipts WHERE operation_id=?', (operation,)).fetchone()
 
 
 def test_profile_disable_after_admission_prevents_native_write(connected_local):

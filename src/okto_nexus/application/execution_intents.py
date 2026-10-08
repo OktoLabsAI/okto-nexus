@@ -196,7 +196,9 @@ def resolve_execution_intent(
                     session["workspace_binding_id"] !=
                     binding["workspace_binding_id"] or
                     session["lifecycle_state"] != "READY" or
-                    session["lease_state"] != "ACTIVE"):
+                    session["lease_state"] not in (
+                        ('ACTIVE', 'REVOKED') if containment and actor_agent_id != subject_agent_id
+                        else ('ACTIVE',))):
                 blockers.append("session_not_ready")
             else:
                 owner_generation = session["owner_generation"]
@@ -213,6 +215,16 @@ def resolve_execution_intent(
             "binding_revision": binding["binding_revision"],
             "credential_epoch": revisions.credential_epoch,
         }
+        if containment and actor_agent_id != subject_agent_id:
+            # A current operator may stop the existing authority, even after
+            # its productive grant was revoked. Address the applied lease's
+            # revisions rather than inventing a renewed execution context.
+            from ..adapters.outbound.sqlite.execution_leases import SqliteExecutionLeaseRepository
+            applied = SqliteExecutionLeaseRepository().effective(uow, scope)
+            if applied is not None and applied['applied_at'] and applied['scope_json']:
+                old_scope = json.loads(applied['scope_json'])
+                for name in ('authorization_revision', 'configuration_revision', 'credential_epoch'):
+                    scope[name] = old_scope[name]
         profile = conn.execute(
             "SELECT enabled,revision FROM runtime_profiles WHERE profile_id=?",
             (binding["profile_id"],),

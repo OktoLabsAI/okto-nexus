@@ -334,18 +334,21 @@ def begin_execution_send(
         ).fetchall()
         scope = json.loads(row["expected_revisions_json"])
         native_decision = row["action"] in {"approval.decide", "input.provide"}
+        operator_containment = (row['actor_agent_id'] != row['subject_agent_id'] and
+            row['action'] in {'turn.interrupt', 'runtime.close'})
         if (len(provenance) != 1 or
                 not provenance[0]["source_guard_digest"] or
                 provenance[0]["source_guard_digest"] !=
                 _agent_guard(conn, row["subject_agent_id"]) or
-                scope["authorization_revision"] != revisions.authorization or
+                (not operator_containment and (scope["authorization_revision"] != revisions.authorization or
                 scope["configuration_revision"] != revisions.configuration or
-                scope["credential_epoch"] != revisions.credential_epoch):
+                scope["credential_epoch"] != revisions.credential_epoch))):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The dispatch authority changed.", {})
+        operator_context = None
         if not native_decision:
             from .execution_operator_authority import require_recorded_operator
-            require_recorded_operator(uow, actor=row['actor_agent_id'], subject=row['subject_agent_id'],
+            operator_context = require_recorded_operator(uow, actor=row['actor_agent_id'], subject=row['subject_agent_id'],
                                       guard=provenance[0]['actor_guard_digest'], access=access)
         binding = conn.execute(
             "SELECT b.endpoint_id,b.binding_revision,b.inventory_revision,b.candidate_ref,"
@@ -411,6 +414,7 @@ def begin_execution_send(
         require_domain_delivery(uow, access=access, server_id=server_id,
             executor_id=reservation.executor_id, operation_id=reservation.operation_id)
         containment = row["action"] in {"turn.interrupt", "runtime.close"}
+        operator_containment = containment and operator_context is not None
         current = conn.execute(
             "SELECT c.inventory_revision,c.publication_sequence,"
             "s.observation_age_ms,s.canonical_projection "
@@ -455,7 +459,7 @@ def begin_execution_send(
                  session["lifecycle_state"] != "OPEN_PENDING") or
                 (row["action"] != "runtime.open" and
                  (session["lifecycle_state"] != "READY" or
-                  session["lease_state"] != "ACTIVE"))):
+                  session["lease_state"] not in (('ACTIVE', 'REVOKED') if operator_containment else ('ACTIVE',))))):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The dispatch session changed.", {})
         opening = json.loads(session['opening_intent']) if session['opening_intent'] else {}
@@ -489,15 +493,16 @@ def begin_execution_send(
         if bootstrap and session["lease_state"] != "NONE":
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The initial lease requires reconciliation.", {})
-        if not bootstrap and (lease is None or lease["status"] != "ACTIVE" or row["action"] not in
+        if not bootstrap and (lease is None or lease["status"] not in
+                (('ACTIVE', 'REVOKED') if operator_containment else ('ACTIVE',)) or row["action"] not in
                 json.loads(lease["allowed_actions_json"]) or
                 lease["applied_at"] is None or lease["scope_json"] is None or
                 json.loads(lease["scope_json"]) != scope or
                 lease["connection_id"] != binding["owner_instance_id"] or
                 lease["connection_generation"] != binding["generation"] or
-                lease["authorization_revision"] != revisions.authorization or
-                lease["configuration_revision"] != revisions.configuration or
-                lease["credential_epoch"] != revisions.credential_epoch or
+                lease["authorization_revision"] != scope['authorization_revision'] or
+                lease["configuration_revision"] != scope['configuration_revision'] or
+                lease["credential_epoch"] != scope['credential_epoch'] or
                 lease["owner_generation"] != scope["session_owner_generation"] or
                 (not containment and datetime.fromisoformat(lease["valid_until_server"].replace(
                     "Z", "+00:00")) <= authority_now)):
@@ -528,14 +533,23 @@ def begin_execution_send(
             actor.agent_id, 'agent_key', credential_binding=actor.api_key_hash,
             execution_grant_id=(connection_key["source_grant_id"] if connection_key else None)
                 if bootstrap else lease['grant_id'])
-        grant = access.authorize(context, action=action, endpoint_id=binding['endpoint_id'],
-                         represented_agent_id=row['subject_agent_id'], workspace_id=row['workspace_id'],
-                         substrate=mode, consume=not bootstrap and not native_decision,
-                         check_budget=not native_decision, uow=uow)
-        if grant is None:
-            raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
-                                  "A canonical execution grant is required for dispatch.", {})
-        grant_id = grant['grant_id']
+        if operator_containment:
+            # Revoking productive authority must not prevent an authenticated
+            # operator from stopping the exact already-leased session. Keep
+            # the applied lease identity and actions; never issue new authority.
+            access.authorize(operator_context, action=action, endpoint_id=binding['endpoint_id'],
+                represented_agent_id=row['subject_agent_id'], workspace_id=row['workspace_id'],
+                substrate=mode, consume=False, check_budget=False, uow=uow)
+            grant_id = lease['grant_id']
+        else:
+            grant = access.authorize(context, action=action, endpoint_id=binding['endpoint_id'],
+                             represented_agent_id=row['subject_agent_id'], workspace_id=row['workspace_id'],
+                             substrate=mode, consume=not bootstrap and not native_decision,
+                             check_budget=not native_decision, uow=uow)
+            if grant is None:
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                                      "A canonical execution grant is required for dispatch.", {})
+            grant_id = grant['grant_id']
         frame = {
             "protocol_major": 1, "contract_revision": R4_PREVIEW_REVISION,
             "type": "operation.submit", **scope, **execution_wire_intent(semantic),

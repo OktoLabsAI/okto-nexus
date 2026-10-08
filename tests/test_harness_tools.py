@@ -310,17 +310,6 @@ def capturing_ctx(ctx):
     return deps, server, connectors, received, root
 
 
-@pytest.mark.parametrize("kind", ["pi", "codex"])
-def test_harness_open_uses_approved_isolated_profile(capturing_ctx, kind):
-    deps, server, _, received, root = capturing_ctx
-    result = _call(server, "harness_open", agent_id="worker", kind=kind, project_root=root)
-    assert result["ok"], result
-    assert result["data"]["backend"] == {"profile_id": "profile-" + kind, "inherit_ambient": False, "revision": 1}
-    env = received[kind][0]["env"]
-    assert str(deps.config.home_dir) in env["HOME"]
-    from okto_nexus.adapters.outbound.harness.environment import child_environment
-    assert not any("NEXUS" in key.upper() for key in child_environment(env))
-    assert env["CODEX_HOME" if kind == "codex" else "PI_CODING_AGENT_DIR"].startswith(env["HOME"])
 
 
 

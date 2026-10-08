@@ -68,6 +68,8 @@ def submit_execution_operation(
                                   "The operation does not match its resolution.", {})
         scope = resolved["scope"]
         subject_agent_id = scope['agent_id']
+        operator_containment = (actor_agent_id != subject_agent_id and
+            resolved['semantic_intent']['action'] in {'turn.interrupt', 'runtime.close'})
         from .execution_operator_authority import require_operator_request, require_recorded_operator
         require_operator_request(uow, actor=actor_agent_id, subject=subject_agent_id, access=access, context=context)
         require_recorded_operator(uow, actor=actor_agent_id, subject=subject_agent_id,
@@ -140,9 +142,9 @@ def submit_execution_operation(
             if (not intent["source_guard_digest"] or
                     intent["source_guard_digest"] !=
                     _agent_guard(conn, subject_agent_id) or
-                    scope["authorization_revision"] != revisions.authorization or
+                    (not operator_containment and (scope["authorization_revision"] != revisions.authorization or
                     scope["configuration_revision"] != revisions.configuration or
-                    scope["credential_epoch"] != revisions.credential_epoch):
+                    scope["credential_epoch"] != revisions.credential_epoch))):
                 raise OktoNexusError(ErrorCode.CONFLICT,
                                       "The agent authority has changed.", {})
             binding = conn.execute(
@@ -256,7 +258,9 @@ def submit_execution_operation(
                         session["owner_generation"] !=
                         scope["session_owner_generation"] or
                         session["lifecycle_state"] != "READY" or
-                        session["lease_state"] != "ACTIVE"):
+                        session["lease_state"] not in (
+                            ('ACTIVE', 'REVOKED') if containment and actor_agent_id != subject_agent_id
+                            else ('ACTIVE',))):
                     raise OktoNexusError(ErrorCode.CONFLICT,
                                           "The session is no longer ready.", {})
             else:

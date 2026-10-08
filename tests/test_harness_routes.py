@@ -85,16 +85,6 @@ def test_harness_open_claude_code_attach_respects_explicit_disable(harness_env):
     assert r.json()["error"]["code"] == "PERMISSION_DENIED"
 
 
-def test_harness_open_default_profile_is_isolated_and_visible_in_response(harness_env):
-    """Approved profile metadata is explicit and ambient inheritance defaults off."""
-    _deps, client, root, _connectors, _op = harness_env
-    r = client.post(
-        "/api/v1/harness/sessions",
-        json={"agent_id": "worker", "kind": "pi", "project_root": root},
-    )
-    assert r.status_code == 200, r.text
-    backend_info = r.json()["data"]["backend"]
-    assert backend_info == {"profile_id": "profile-pi", "inherit_ambient": False, "revision": 1}
 
 
 

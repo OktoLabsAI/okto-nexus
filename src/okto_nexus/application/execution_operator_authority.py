@@ -34,3 +34,4 @@ def require_recorded_operator(uow, *, actor, subject, guard, access):
     actual = require_operator_request(uow, actor=actor, subject=subject, access=access, context=context)
     if actual != guard:
         raise OktoNexusError(ErrorCode.CONFLICT, 'The initiating operator authority changed.', {})
+    return context

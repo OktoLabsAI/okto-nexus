@@ -558,3 +558,25 @@ publication storage failure/retry, old-owner containment, and all six boot cases
 Core PR 32 and Connector PR 45 have merged to develop; their main promotions are
 PRs 33 and 46. Core's macOS promotion rerun remains pending after two initial
 failures; Connector's promotion checks passed. No new main tag is claimed here.
+
+The no-write recovery review passed 12 source cases: REST/MCP exact-once release,
+all six historical observation mutations, three corrupted Core proof variants,
+and transactional rollback. Three historical functions now map to these paths.
+Profile review passed 46 source cases plus an operator-revocation dispatch fence.
+An operator can now stop an applied session after its profile/grant is revoked,
+using the original lease identity solely for close/interrupt and rechecking the
+current operator. Productive actions still require current consent. Late native
+terminal output remains captured while publication is blocked. Four historical
+profile functions map to these positive and negative canonical regressions.
+Installed validation of this final recovery/containment group is pending.
+
+Core PR 33 merged to main at a0d54c926830af46489bee83faf63f634d76a57b after
+the macOS rerun and dependency SBOM passed. Tag v0.0.7 points to that main commit.
+Connector PR 46 merged to main at bcb4ae5247116d192b8b808dcb19b11f8f5b3c3e
+after its complete promotion campaign passed. Tag v0.0.5 points to that main
+commit and depends on Core 0.0.7. Remote tag targets were verified directly.
+
+Installed recovery/containment validation passed all 60 selected cases with
+unchanged inputs (build/release-containment-final-installed). The complete
+Nexus regression still has unresolved legacy behavior cases; this focused
+campaign does not replace that release gate.
