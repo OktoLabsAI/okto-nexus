@@ -2,7 +2,6 @@
 import io
 import json
 import os
-import time
 from pathlib import Path
 
 import pytest
@@ -88,15 +87,12 @@ def test_public_local_launch_resolves_only_approved_agent_vault(local_setup,back
         assert "other-agent-secret" not in str(observed)
     else:
         owner=app.state.embedded_dispatch_owner
-        until=time.monotonic()+5
-        while 'subject' not in owner.agents.errors:
-            assert time.monotonic()<until
-            time.sleep(.02)
-        error = owner.agents.errors["subject"]
-        assert error.code == "PROVIDER_AUTH_REQUIRED", str(error)
-        assert error.retry_safe and not error.possible_effect
+        # A contained pre-open refusal is now a durable operation result, not
+        # an agent-wide recovery fault. Inspect the public correlated receipt.
+        receipt=wait_receipt(setup,opened,stages=('FAILED',))
+        assert receipt['error']['code'] == 'PROVIDER_AUTH_REQUIRED', receipt
+        assert receipt['retry_safe'] and not receipt['possible_effect']
         assert owner.failure is None and not owner._stopping.is_set()
-        receipt={"code":error.code}
         assert native.opens==0 and not observed
         # Resolution failed before native open: no uncertain process should
         # retain the Core slot and prevent application shutdown.

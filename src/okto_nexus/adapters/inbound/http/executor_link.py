@@ -382,6 +382,11 @@ def build_router() -> APIRouter:
                     return
                 await _send_text(encode_r4_frame(pending_reconcile).decode("utf-8"))
 
+            def _wake_deliveries():
+                dispatcher = getattr(ws.app.state.deps, 'runtime_dispatcher', None)
+                if dispatcher is not None:
+                    dispatcher.wake()
+
             if resumed:
                 # Same authenticated socket owner and still-current proofs. No
                 # new session generation, native replay, or fabricated lease.
@@ -390,6 +395,7 @@ def build_router() -> APIRouter:
                     access=leases.access, fresh_publications=ws.app.state.inventory_fresh_publications,
                     send=_send_operation, send_lock=send_lock, verify_link=_verify,
                     close_link=_close_dispatch_link,
+                    wake_deliveries=_wake_deliveries,
                     resolve_native_input=ws.app.state.deps.native_decisions.inputs.resolve)
                 pump.start()
             else:
@@ -489,6 +495,7 @@ def build_router() -> APIRouter:
                             fresh_publications=ws.app.state.inventory_fresh_publications,
                             send=_send_operation, send_lock=send_lock,
                             verify_link=_verify, close_link=_close_dispatch_link,
+                            wake_deliveries=_wake_deliveries,
                             resolve_native_input=ws.app.state.deps.native_decisions.inputs.resolve)
                         pump.start()
                     continue

@@ -240,6 +240,7 @@ class EmbeddedDispatchOwner:
             fresh_publications=self.inventory.fresh, send=self.enqueue, send_lock=asyncio.Lock(),
             verify_link=self.verify, close_link=self.failed,
             retained_operations=lambda: tuple(self.active_operations),
+            wake_deliveries=self.deps.runtime_dispatcher.wake,
             resolve_native_input=self.deps.native_decisions.inputs.resolve)
         self.pump.start()
         self.maintenance = asyncio.create_task(self._maintain(), name="embedded-publications")

@@ -908,3 +908,34 @@ Connector 0.0.7: 53f474ffdbf635ce65a045a07b490614eab01b6dc86d530128d6aa71625206d
 Core full local validation passed 1,415 tests and 15 subtests (48 skips);
 Connector passed 932 tests (one skip). Full final CI and reviewed main promotion
 remain the publication gates. No live Nexus restart was used for these campaigns.
+
+### Complete-CI integration corrections (2026-10-08)
+
+The complete matrix exposed three remaining integration failures within the
+existing recovery/retention scope. A permanent pre-send refusal now wakes logical
+delivery processing only after its durable rejection and no-send proof commit.
+This prevents revoked work from remaining in RETRY_WAIT until a periodic scan.
+The provider-vault test now checks the public correlated FAILED receipt for a
+contained pre-open credential refusal, while retaining credential isolation,
+zero native effects and successful shutdown assertions.
+
+Installed validation passed 44 cases on Windows and 43 on Linux (one Windows-only
+skip), including actual serve death, relay crash cuts, bounded retries, dispatch
+revalidation, link failures and provider isolation. Campaigns:
+`build/release-refusal-wake-installed` and `build/release-refusal-wake-linux-installed`;
+both recorded unchanged inputs. Nexus wheel SHA256:
+45c748dd63bf2686a9210fa5f6db8a859db2943169cdc51125e14bcd149384fd.
+
+Retention validation also exposed repeated resource-release projection changing
+the timestamp of an already unchanged unknown outcome. The projection is now
+idempotent. The test waits for the first legitimate release projection before
+its full-row comparison; pruning, deactivate/reactivate, claim exclusion and
+no-replay assertions remain intact. This failed locally before the correction.
+The final installed retention/recovery campaign passed all 17 cases on Windows
+and 14 on Linux (three Windows process-containment skips), with unchanged inputs:
+`build/release-retention-recovery-installed` and
+`build/release-retention-recovery-linux-installed`. These include independent
+agent recovery, new local/remote registrations and recovery of incomplete turns.
+Final Nexus wheel SHA256:
+fba287d6b018ce4ff5b2395483891dc4610510c64d0dce7ef6f093637d09dd36.
+Core and Connector artifacts are unchanged. Full final CI remains required.

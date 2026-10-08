@@ -25,7 +25,7 @@ class ExecutionDispatchPump:
 
     def __init__(self, *, factory, channel, access, fresh_publications,
                  send, send_lock, verify_link, close_link, poll_interval=0.1, resolve_native_input=None,
-                 retained_operations=None):
+                 retained_operations=None, wake_deliveries=None):
         self.factory, self.channel, self.access = factory, channel, access
         self.fresh_publications = fresh_publications
         self.send, self.send_lock = send, send_lock
@@ -33,6 +33,7 @@ class ExecutionDispatchPump:
         self.poll_interval = poll_interval
         self.resolve_native_input = resolve_native_input
         self.retained_operations = retained_operations or (lambda: ())
+        self.wake_deliveries = wake_deliveries or (lambda: None)
         self._stopping = asyncio.Event()
         self.task = None
         self.error = None
@@ -92,6 +93,10 @@ class ExecutionDispatchPump:
                             raise
                         await self._database(reject_unsent_dispatch, factory=self.factory,
                                              reservation=reservation, error=error)
+                        # Rejection may settle a never-sent initial message.
+                        # Its logical queue must see the committed proof and
+                        # current authority without waiting for a recovery tick.
+                        self.wake_deliveries()
                         reservation = None
                         continue
                     # No cancellation or disconnect path can put this attempt

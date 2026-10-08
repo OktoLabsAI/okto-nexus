@@ -1,4 +1,6 @@
 """Retention and agent activation cannot discard canonical delivery claims."""
+import time
+
 import pytest
 
 from test_harness_canonical import qualified_bridge
@@ -29,6 +31,18 @@ def test_prune_and_reactivation_preserve_canonical_transport_exclusion(connected
             turn = dict(uow.connection.execute("SELECT operation_id,session_id FROM execution_operations WHERE action='turn.submit'").fetchone())
         if uncertain:
             wait_receipt(setup, turn, stages=('OUTCOME_UNKNOWN', 'FAILED'))
+            # The receipt precedes independent resource release and its durable
+            # delivery projection. Snapshot after that legitimate transition,
+            # so retention is not compared against an in-flight recovery row.
+            deadline = time.monotonic() + 30
+            while True:
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    released = uow.connection.execute(
+                        "SELECT status,reason FROM delivery_outbox").fetchone()
+                if tuple(released) == ('OUTCOME_UNKNOWN', 'session_released_without_result'):
+                    break
+                assert time.monotonic() < deadline, tuple(released)
+                time.sleep(.02)
         with deps.connection_factory.unit_of_work() as uow:
             message = uow.connection.execute('SELECT message_id,workspace_id FROM delivery_outbox').fetchone()
             uow.connection.execute("UPDATE messages SET created_at='2000-01-01T00:00:00Z' WHERE message_id=?", (message[0],))

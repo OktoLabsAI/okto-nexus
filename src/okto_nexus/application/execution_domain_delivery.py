@@ -218,4 +218,6 @@ def project_released_deliveries(conn, *, server_id, executor_id, session_id, pro
             "ON CONFLICT DO NOTHING", (row['domain_operation_id'], server_id, executor_id,
             row['operation_id'], session_id, json.dumps(proof, sort_keys=True)))
         conn.execute("UPDATE delivery_outbox SET status='OUTCOME_UNKNOWN',reason='session_released_without_result',"
-            "updated_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') WHERE operation_id=?", (row['domain_operation_id'],))
+            "updated_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') WHERE operation_id=? "
+            "AND (status!='OUTCOME_UNKNOWN' OR reason IS NOT 'session_released_without_result')",
+            (row['domain_operation_id'],))
