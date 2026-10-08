@@ -88,7 +88,8 @@ def test_cancel_before_canonical_send_keeps_native_unstarted(connected_local, mo
     assert native.opens == 1 and app.state.embedded_dispatch_owner.pump.error is None
 
 
-def test_pending_domain_projection_cannot_cancel_inflight_canonical_send(connected_local, monkeypatch):
+@pytest.mark.parametrize('action', ['cancel_pending', 'release_to_inbox'])
+def test_pending_domain_projection_cannot_cancel_inflight_canonical_send(connected_local, monkeypatch, action):
     import asyncio
     import threading
     from test_vertical_inventory import _Native
@@ -109,9 +110,13 @@ def test_pending_domain_projection_cannot_cancel_inflight_canonical_send(connect
         assert entered.wait(10)
         row = snapshot(setup)
         assert row['status'] == 'PENDING'
-        response = recover(setup, row, 'cancel_pending')
+        # A legacy dispatcher timeout cannot donate an active Core send to
+        # another consumer, even before its receipt reaches domain projection.
+        setup[0].runtime_dispatcher.send_timeout_seconds = .001
+        setup[0].runtime_dispatcher._expire_sends()
+        response = recover(setup, row, action)
         assert response.status_code == 409, response.text
-        assert 'send fence' in response.text
+        assert ('send fence' if action == 'cancel_pending' else 'canonical session') in response.text
         assert pull(setup, monkeypatch) == []
     finally:
         release.set()

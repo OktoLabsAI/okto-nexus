@@ -40,63 +40,12 @@ def recovery(row, **changes):
 
 
 
-def test_timeout_never_allows_takeover_while_original_call_is_running(runtime, monkeypatch):
-    deps, client, _, peers, operator, _ = runtime
-    open_rest(runtime)
-    entered, release = threading.Event(), threading.Event()
-    original = peers[0].send
-    def stalled(*args, **kwargs):
-        entered.set()
-        assert release.wait(10)
-        return original(*args, **kwargs)
-    monkeypatch.setattr(peers[0], "send", stalled)
-    deps.runtime_dispatcher.send_timeout_seconds = .01
-    try:
-        sent = send_message(runtime)
-        assert entered.wait(5)
-        time.sleep(.02)
-        deps.runtime_dispatcher._expire_sends()
-        row = wait_status(runtime, sent["runtime_operations"][0], "OUTCOME_UNKNOWN")
-        result = client.post("/api/v1/harness/outbox", headers={"x-api-key": operator}, json=recovery(row))
-        assert result.status_code == 409 and "in flight" in result.text, result.text
-        assert peers[0].sent == []
-    finally:
-        release.set()
 
 
 
 
 
 
-def test_abandoned_command_keeps_history_and_requires_explicit_endpoint_reconciliation(runtime):
-    from test_runtime_commands import wait_operation
-    deps, client, _, peers, operator, _ = runtime
-    sid = open_rest(runtime).json()["data"]["session_id"]
-    args = {"session_id": sid, "payload": {"text": "uncertain original"}, "idempotency_key": "original-command"}
-    sent = tool(client, operator, "harness_send", args)
-    op = sent["data"]["operation_id"]
-    wait_operation(runtime, op, lambda r: r["state"] == "SENT_UNCONFIRMED")
-    wait_close_result(client, operator, tool(client, operator, "harness_close", {"session_id": sid}))
-    wait_operation(runtime, op, lambda r: r["state"] == "OUTCOME_UNKNOWN")
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        row = dict(uow.connection.execute("SELECT * FROM runtime_commands WHERE operation_id=?", (op,)).fetchone())
-    response = client.post("/api/v1/harness/outbox", headers={"x-api-key": operator}, json=recovery(row, action="abandon_command"))
-    assert response.status_code == 200 and not response.json()["data"]["inbox_released"], response.text
-    headers = {"x-api-key": operator}
-    endpoint = client.get("/api/v1/harness/endpoints", headers=headers).json()["data"]["items"]
-    endpoint = next(e for e in endpoint if e["endpoint_id"] == "endpoint-pi")
-    assert endpoint["health"] == "quarantined"
-    response = client.post("/api/v1/harness/endpoints/endpoint-pi/reconcile", headers=headers, json={
-        "expected_revision": endpoint["revision"], "idempotency_key": "endpoint-recovery", "reason": "Fixture reviewed closed runtime",
-        "acknowledge_uncertain_effects": True})
-    assert response.status_code == 200, response.text
-    again = tool(client, operator, "harness_send", args)
-    assert again["ok"] and again["data"]["operation_id"] == op, again
-    fresh = open_rest(runtime).json()["data"]["session_id"]
-    second = tool(client, operator, "harness_send", {"session_id": fresh, "payload": {"text": "explicit fresh turn"}, "idempotency_key": "fresh-command"})
-    assert second["ok"], second
-    wait_operation(runtime, second["data"]["operation_id"], lambda r: r["state"] == "SENT_UNCONFIRMED")
-    assert sum(c.verb == "send_turn" for peer in peers for c in peer.sent) == 2
 
 
 def test_late_correlated_terminal_is_retained_without_consumption_or_publication(runtime):

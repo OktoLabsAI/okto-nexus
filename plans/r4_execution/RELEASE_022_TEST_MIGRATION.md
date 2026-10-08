@@ -770,3 +770,9 @@ this progress does not satisfy the final merge gate.
 A causal conversation was incorrectly made permanently failed after a Core receipt proved no native write. It now retries its original binding; causal context still cannot select another endpoint. Managed work, relays and ambiguous effects remain excluded.
 
 Installed Windows campaign uild/release-continuation-installed: 34 passed, unchanged tracked inputs, including fallback authorization, bounded retries, no replay after possible effects, and the contract inventory. Wheel SHA-256: 526f7700d89fd2b10a978f8ec234523b506899286127bdbe642a816402d13e76.
+
+### Recovery contracts after canonical containment (2026-10-08)
+
+Installed Windows campaign uild/release-current-recovery-installed: 41 passed in 365.02s with unchanged tracked inputs, using the continuation wheel above. This covers uncertain administrative command replay through REST/MCP, a new session after confirmed close, refusal of inbox takeover while native send remains active, isolated recovery with new local/remote agents, actual process death and bounded delivery retries.
+
+Mandatory manual quarantine after confirmed containment and permanent blocking of subsequent messages are superseded by the user requirement for automatic restoration. Unknown historical effects remain unknown and are never replayed. Three obsolete supervisor tests are explicitly mapped to these current positive recovery and no-replay contracts.

@@ -3517,6 +3517,31 @@
         "tests/execution_r4/test_canonical_fallback_scope.py::test_conversation_continuation_retries_only_its_original_binding"
       ],
       "source_sha256": "a751835baa526c3dcd6027e2f6ab33ee74dce1d4e07b36e7e6187bb0d90a40d8"
+    },
+    {
+      "test": "tests/test_runtime_operation_reconciliation.py::test_abandoned_command_keeps_history_and_requires_explicit_endpoint_reconciliation",
+      "reason": "Ported uncertain administrative command history and idempotent replay to Core. The latest automatic-restoration requirement supersedes mandatory endpoint quarantine/reconcile after confirmed session close; a fresh session executes independently without replaying the old command.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_abandoned_commands.py::test_uncertain_command_replays_history_and_allows_fresh_session"
+      ],
+      "source_sha256": "a0cb4040ac9942320d156a1634d77035be387d974fcfcefc4107d24608be61e1"
+    },
+    {
+      "test": "tests/test_runtime_operation_reconciliation.py::test_timeout_never_allows_takeover_while_original_call_is_running",
+      "reason": "Canonical sends are fenced by Core and session ownership rather than the removed legacy worker timeout. Public cancel and inbox-release remain refused while the native call is blocked, even after running dispatcher expiration.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_recovery.py::test_pending_domain_projection_cannot_cancel_inflight_canonical_send"
+      ],
+      "source_sha256": "58c072d4f81beb5dc7c73c900aab4ce1154cb9f00675472babdf93c73e6fa45f"
+    },
+    {
+      "test": "tests/test_harness_target_grammar.py::test_failed_transport_preserves_durable_delivery_and_blocks_duplicate_lane",
+      "reason": "Possible native effects still cannot be replayed. Permanent blocking of later independent messages is superseded by the explicit automatic-restoration requirement: contain the old session, retain its unknown outcome, restore availability and execute only the new message.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery_retry.py::test_uncertain_or_permanent_failure_never_retries",
+        "tests/execution_r4/test_agent_recovery_isolation.py::test_released_incomplete_turn_does_not_block_next_message"
+      ],
+      "source_sha256": "90647174e14cff7e9e883142162e06682452abb6ed79573e9499b75d47a1b745"
     }
   ]
 }
