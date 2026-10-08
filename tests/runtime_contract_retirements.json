@@ -3060,6 +3060,47 @@
         "tests/execution_r4/test_canonical_admission_races.py::test_competitive_handoff_pool_has_one_executor_across_agents_and_bindings"
       ],
       "source_sha256": "fb29dd0b703ff58a11c4dea7672f1bc5a1b0d94e1ab4f352db84b680465eec86"
+    },
+    {
+      "test": "tests/test_runtime_bootstrap.py::test_runtime_receives_its_canonical_identity_and_delivery_purpose",
+      "reason": "Conversation and governed-work replacements cover all three current managed adapters, asserting exact public identity, instructions, profile, correlation, immutable agent configuration and absence of private fields at the native submission boundary and durable envelope.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_bootstrap_context.py::test_native_delivery_preserves_identity_purpose_and_message_correlation"
+      ],
+      "source_sha256": "ac1b9380054ccf38e85a21a3cc905a865984aa9aaa0f72ab78673f5184a3fff8"
+    },
+    {
+      "test": "tests/test_pr34_remediation.py::test_forward_preserves_sender_subject_and_message_identity",
+      "reason": "The canonical replacement verifies exact sender, recipient, subject, message ID, operation ID and root operation ID against the persisted delivery envelope for conversation and handoff delivery across all managed adapters.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_bootstrap_context.py::test_native_delivery_preserves_identity_purpose_and_message_correlation"
+      ],
+      "source_sha256": "ba5f70cf1085abe344806b88b921fe1da7c2aae3961ed7935d2326466f877002"
+    },
+    {
+      "test": "tests/test_pr34_remediation.py::test_p01_enabled_authorized_connectors_remain_usable",
+      "reason": "Codex, Claude stream and Pi now open, send once and close through both public transports using their actual canonical binding credentials. External attach is excluded because the user explicitly removed it; its entry-point rejection has separate coverage.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_bootstrap_context.py::test_enabled_managed_adapters_open_send_and_close_through_public_routes",
+        "tests/execution_r4/test_attach_removed.py::test_removed_attach_cannot_open_through_legacy_public_routes"
+      ],
+      "source_sha256": "3be0131cfc6e5ce98e8f29f5a1c148cd89d69b54b696f28775cc6816da6894bf"
+    },
+    {
+      "test": "tests/test_runtime_endpoints.py::test_p03_ambiguous_endpoint_selection_does_not_construct_connector",
+      "reason": "Canonical implicit selection refuses both canonical and retained-legacy competitors without native effects. The replacement then opens the explicitly selected approved endpoint and closes it successfully.",
+      "replacements": [
+        "tests/execution_r4/test_harness_canonical.py::test_implicit_open_refuses_competing_targets_without_native_effect"
+      ],
+      "source_sha256": "2e6bc46927b8fe145082ffc29923d24e13497af00ba412e731aa3f3ba0a5d36f"
+    },
+    {
+      "test": "tests/test_runtime_endpoints.py::test_p03_runtime_cannot_override_approved_environment",
+      "reason": "Both public surfaces reject per-call cwd, sandbox, provider, environment and argv overrides before native effects or durable operation admission.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_command_payload.py::test_launch_overrides_cannot_replace_approved_realization_on_either_surface"
+      ],
+      "source_sha256": "48a159a7a11a5bfde96bbc7c0b568cbb00740fbe9509c27cbaf67796ccb46ab6"
     }
   ]
 }

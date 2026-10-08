@@ -446,3 +446,11 @@ at c2f66bbe042216749b6df231ba5b984727513ccc with remote tag v0.0.6; Connector PR
 merged at 8a7b6a08b5849e69dfcd67fb85b6ea4620c3801f with remote tag v0.0.4. Nexus
 already pins both corresponding artifacts. Nexus main/tag promotion remains
 pending its own complete regression gate.
+
+Identity and public-route review passed 59 installed-wheel cases with unchanged
+inputs (build/release-context-installed). Native conversation/work envelopes for
+all three managed adapters preserve the exact sender, subject, logical message,
+public agent identity and approved profile without copying private metadata.
+REST and MCP both open/send/close each managed adapter. Ambiguous implicit opens
+have no effects, while an explicit choice succeeds. Five historical functions
+now map to these cases and the existing per-call environment override denials.

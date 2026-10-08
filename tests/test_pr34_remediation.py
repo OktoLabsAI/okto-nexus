@@ -212,13 +212,6 @@ def test_keyed_loopback_rest_does_not_upgrade_caller_to_operator(runtime):
 
 
 
-def test_forward_preserves_sender_subject_and_message_identity(runtime):
-    _, _, _, peers, _, _ = runtime
-    assert open_rest(runtime).status_code == 200
-    result = send_message(runtime, subject="correlation-subject", body="body-only")
-    wait_sent(peers)
-    wire = json.dumps(peers[0].sent[0].payload)
-    assert "caller" in wire and "correlation-subject" in wire and result["message_id"] in wire
 
 
 def test_terminal_storage_failure_is_not_silently_accepted(runtime, monkeypatch):
@@ -279,25 +272,6 @@ def test_additional_adapter_is_not_rejected_by_domain_product_enum():
     assert session.harness_kind == "fixture.additional.v1"
 
 
-@pytest.mark.parametrize("kind,substrate", [("pi", None), ("codex", None),
-    ("claude_code", "stream"), ("claude_code", "attach")])
-def test_p01_enabled_authorized_connectors_remain_usable(runtime, kind, substrate):
-    deps, client, root, peers, key, _ = runtime
-    deps.config.feature_harness_attach = True
-    args = {"agent_id": "worker", "kind": kind, "project_root": root}
-    if substrate:
-        args["substrate"] = substrate
-    if substrate == "attach":
-        args["target_pid"] = 12345  # synthetic peer only; never opens a real session
-    opened = tool(client, key, "harness_open", args)
-    assert opened["ok"], opened
-    sid = opened["data"]["session_id"]
-    sent = tool(client, key, "harness_send", {"session_id": sid,
-                "payload": {"content" if kind == "claude_code" else "text": "test"}})
-    assert sent["ok"], sent
-    # The facade confirms durable admission; dispatch completes asynchronously.
-    wait_sent(peers)
-    assert tool(client, key, "harness_close", {"session_id": sid})["ok"]
 
 
 @pytest.mark.parametrize("runtime", ["unconfigured"], indirect=True)

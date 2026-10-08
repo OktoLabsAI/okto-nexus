@@ -134,27 +134,8 @@ def test_p03_presence_participates_in_canonical_routing_without_manual_session_i
     wait_sent(peers)
 
 
-def test_p03_ambiguous_endpoint_selection_does_not_construct_connector(runtime):
-    _, client, root, peers, key, _ = runtime
-    created = client.post("/api/v1/harness/endpoints", headers={"x-api-key": key}, json={
-        "endpoint_id": "second-pi", "agent_id": "worker", "adapter_id": "pi",
-        "profile_id": "profile-pi", "project_root": root, "enabled": True})
-    assert created.status_code == 200, created.text
-    response = open_rest(runtime)
-    assert response.status_code == 409, response.text
-    assert "AMBIGUOUS_BINDING" in response.text
-    assert peers == []
-    opened = client.post("/api/v1/harness/sessions", headers={"x-api-key": key}, json={
-        "agent_id": "worker", "kind": "pi", "project_root": root, "endpoint_id": "second-pi"})
-    assert opened.status_code == 200, opened.text
 
 
-def test_p03_runtime_cannot_override_approved_environment(runtime):
-    _, client, root, peers, key, _ = runtime
-    result = tool(client, key, "harness_open", {"agent_id": "worker", "kind": "codex",
-        "project_root": root, "backend": {"env": {"PATH": "unapproved"}}})
-    assert result["error"]["code"] == "VALIDATION_ERROR"
-    assert peers == []
 
 
 def test_p03_profile_environment_isolated_and_operator_key_never_inherited(tmp_path, monkeypatch):

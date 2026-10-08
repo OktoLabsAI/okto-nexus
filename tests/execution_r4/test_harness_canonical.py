@@ -268,3 +268,12 @@ def test_implicit_open_refuses_competing_targets_without_native_effect(connected
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations").fetchone()[0] == 0
         assert uow.connection.execute("SELECT COUNT(*) FROM harness_sessions").fetchone()[0] == 0
+    explicit = client.post('/api/v1/harness/sessions', headers=headers['subject'], json=dict(
+        agent_id='subject', kind='codex', project_root=str(root), endpoint_id=binding['endpoint_id'],
+        idempotency_key='explicit-after-ambiguity'))
+    assert explicit.status_code == 200, explicit.text
+    opened = explicit.json()['data']
+    wait_receipt(setup, opened)
+    assert native.opens == 1
+    wait_receipt(setup, admit(setup, binding, 'ambiguity-close', 'runtime.close',
+        session_id=opened['scope']['session_id']), stages=('SUCCEEDED',))
