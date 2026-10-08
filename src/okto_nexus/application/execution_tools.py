@@ -12,7 +12,8 @@ from ..errors import ErrorCode, OktoNexusError
 
 
 MANAGED_TOOLS = frozenset({
-    'agent_whoami', 'handoff_list_available', 'handoff_get',
+    'agent_whoami', 'agent_list', 'agent_get', 'capability_list', 'coordination_health',
+    'handoff_list_available', 'handoff_get',
     'handoff_claim', 'handoff_complete',
     'event_get', 'event_cursor', 'event_wait',
     'runtime_input_list', 'runtime_input_respond',
@@ -40,10 +41,17 @@ def check_tool_arguments(name, arguments):
     principal = current_execution_principal.get()
     if principal is None:
         return
+    if name == 'harness_list':
+        raise denied('Session capabilities cannot administer runtime connections. '
+                     'Use agent_list or agent_get for reachable agent status.')
     if principal.audience != 'nexus-mcp-session' or name not in MANAGED_TOOLS:
         raise denied('This tool does not support session capabilities yet.')
     for field, target in (('agent_id', 'agent_id'), ('from_agent_id', 'agent_id'),
                           ('session_id', 'session_id'), ('workspace_id', 'workspace_id')):
+        # agent_get names a discovery target, never the authenticated caller.
+        # IdentityService applies the caller's outbound and target's inbound scope.
+        if name == 'agent_get' and field == 'agent_id':
+            continue
         if arguments.get(field) is not None and arguments[field] != principal.scope[target]:
             raise denied()
     if arguments.get('project_root') is not None:

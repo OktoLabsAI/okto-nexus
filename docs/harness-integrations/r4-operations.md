@@ -521,6 +521,23 @@ actions, owner, grant, revisions and applied lease again. The reference is
 internal provenance, never an inbound credential or a reconstructed agent key.
 Canonical-key callers and the operator UI keep their existing authentication.
 
+Managed MCP sessions can use `agent_list`, `agent_get` and `capability_list`
+for discovery. Both local and remote session credentials include these actions;
+each call still requires its explicit action and a valid session, grant and
+applied lease. Agent discovery preserves the authenticated agent's outbound
+and each peer's inbound communication scope. `agent_get.agent_id` identifies
+the peer being queried, not a replacement caller. Profiles include public
+presence and connection status without runtime host paths or credentials.
+
+`coordination_health` additionally requires `health.read`, the enabled health
+feature and the session's canonical workspace ID as `project_root`. It cannot
+read another workspace. Communication permissions continue to apply to managed
+message, handoff and event tools; session actions do not override those permissions.
+`harness_list` connection administration remains unavailable to session
+credentials. Use agent discovery for peer status; full communication access
+does not confer operator privileges. Existing credentials are not broadened
+in place: these added actions are issued with newly opened sessions.
+
 Application and public HTTP MCP tests cover these tools, malformed answers,
 recipient isolation and revocation before dispatch. Pi exposes the equivalent
 `nexus_runtime_input_list` and `nexus_runtime_input_respond` tools through its
