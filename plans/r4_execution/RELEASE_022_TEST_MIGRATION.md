@@ -957,3 +957,16 @@ kill and kill-before-bind), preserving recovery, process containment and no-repl
 assertions. Campaign `build/release-recovery-ready-installed` records unchanged
 inputs; the production wheel is unchanged. All twelve Linux jobs passed on the
 preceding commit. The complete matrix must still pass on the final test commit.
+
+The Windows/Python 3.13 isolation scenario reached its real retry backoff while
+the test was creating other agents: four expected injected failures scheduled a
+retry beyond its 15-second watchdog. A disposable diagnostic reproduced that
+failure with 19.197 seconds still scheduled. The watchdog now permits the existing
+maximum 30-second delay plus 20% jitter and durable I/O; production retry policy
+is unchanged. A controlled run through the full 35.989-second remaining backoff
+passed without retry/reset intervention. Both installed isolation cases passed
+on Windows (68.05s) and Linux (62.04s), with unchanged tracked inputs:
+`build/release-recovery-backoff-installed` and
+`build/release-recovery-backoff-linux-installed`. Healthy and newly registered
+local/remote agents, resource release, no replay and subsequent server restarts
+remain asserted. This is a test-watchdog correction, not a recovery bypass.

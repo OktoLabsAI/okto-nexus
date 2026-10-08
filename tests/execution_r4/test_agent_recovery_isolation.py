@@ -133,7 +133,10 @@ def test_restart_isolates_fault_and_accepts_new_local_and_remote_agents(tmp_path
             # Remove only the injected fault. No user retry, restart or reset.
             fault_enabled = False
             client.portal.call(release.set)
-            eventually(lambda: 'subject' not in owner.agents.blocked, seconds=15)
+            # Real recovery uses a capped 30s retry delay with up to 20% jitter.
+            # Slow setup can reach that cap while the injected fault is active;
+            # allow the scheduled automatic retry plus durable Windows I/O.
+            eventually(lambda: 'subject' not in owner.agents.blocked, seconds=60)
             assert owner.failure is None and first_native.opens == 1
             with deps.connection_factory.unit_of_work(write=False) as uow:
                 assert uow.connection.execute('SELECT lifecycle_state FROM execution_sessions WHERE session_id=?',
