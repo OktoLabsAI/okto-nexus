@@ -462,3 +462,11 @@ passed seven installed-wheel tests with unchanged inputs
 platform-skipped on Windows. Graceful exit, explicit session close and owner kill
 all stop the exact witnessed child and grandchild. The tests retain their names
 and process-identity assertions rather than replacing them with mocked shutdown.
+
+Terminal projection review passed 51 installed-wheel cases with unchanged inputs
+(build/release-terminal-installed). Atomic result projection rolls back on storage
+failure, recovers captured bytes without reexecution, and releases the next delivery.
+One historical storage-failure function maps to this current behavior. Two positive
+external-attach relay functions are retired under the explicit attach removal;
+their replacements cover creation denial and no invented results for unknown outcomes.
+This does not retire or claim coverage for custom context-only observers.

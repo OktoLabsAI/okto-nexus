@@ -3101,6 +3101,33 @@
         "tests/execution_r4/test_canonical_command_payload.py::test_launch_overrides_cannot_replace_approved_realization_on_either_surface"
       ],
       "source_sha256": "48a159a7a11a5bfde96bbc7c0b568cbb00740fbe9509c27cbaf67796ccb46ab6"
+    },
+    {
+      "test": "tests/test_pr34_remediation.py::test_terminal_storage_failure_is_not_silently_accepted",
+      "reason": "The current real Codex pipe regression faults terminal projection after creating the result, verifies the transaction leaves neither a published result nor a consumed inbox item, and resumes automatically from captured evidence without reexecuting. It also verifies bounded large output and progress of the next delivery.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_result_correlation.py::test_native_terminal_projection_is_atomic_bounded_and_releases_next_delivery"
+      ],
+      "source_sha256": "6b1ee619f6718b09beaa85a3b77a9037c345abdef666ff6e6ce50f63d8fd8c30"
+    },
+    {
+      "test": "tests/test_harness_target_grammar.py::test_send_only_target_keeps_write_distinct_from_ack",
+      "reason": "This positive case requires creation of external Claude attach, which the user explicitly removed. Current public routes refuse attach before effects. Transport acceptance remains distinct from terminal completion for the managed adapters and uncertain native effects remain unreplayed.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_removed_attach_cannot_open_through_legacy_public_routes",
+        "tests/execution_r4/test_canonical_consumption.py::test_canonical_push_reservation_excludes_mcp_pull",
+        "tests/execution_r4/test_canonical_consumption.py::test_lost_confirmation_and_expired_lease_preserve_push_claim"
+      ],
+      "source_sha256": "580c2f80f2e9b9fc1f796eab978f5e8ae521174d705ddd6365d8b56aeba42eb5"
+    },
+    {
+      "test": "tests/test_harness_target_grammar.py::test_correlated_relay_can_reach_send_only_target_without_inventing_a_reply",
+      "reason": "The sole send-only destination here is an external Claude attach endpoint created during setup. That feature was explicitly removed. Current tests refuse its public creation and retain native evidence without inventing a successful result or another relay for unknown outcomes.",
+      "replacements": [
+        "tests/execution_r4/test_attach_removed.py::test_removed_attach_cannot_open_through_legacy_public_routes",
+        "tests/execution_r4/test_canonical_relay.py::test_unsuccessful_result_cannot_admit_a_relay"
+      ],
+      "source_sha256": "1c1666c20cd20887cd237de4a4e8a97ebcee475eddf2ea3b877cd70efbc83d71"
     }
   ]
 }
