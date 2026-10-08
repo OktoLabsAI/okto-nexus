@@ -3542,6 +3542,23 @@
         "tests/execution_r4/test_agent_recovery_isolation.py::test_released_incomplete_turn_does_not_block_next_message"
       ],
       "source_sha256": "90647174e14cff7e9e883142162e06682452abb6ed79573e9499b75d47a1b745"
+    },
+    {
+      "test": "tests/test_runtime_revocation_during_turn.py::test_revoke_accepted_turn_before_terminal_keeps_evidence_and_blocks_completion",
+      "reason": "Ported the actual Codex pipe acceptance/revocation/terminal race to current Core execution. Revoke all independently valid subject grants, refuse subsequent REST/MCP sends and retain the structured output without handoff completion.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_admission_shutdown.py::test_grant_revoked_during_native_work_retains_terminal_without_completion"
+      ],
+      "source_sha256": "f8f5b92fa25194b0e90b43347a5069711768fedba2c10e29198f8e16618941d5"
+    },
+    {
+      "test": "tests/test_runtime_rollout.py::test_disable_with_accepted_turn_and_pending_journal_retains_capture_and_exclusion",
+      "reason": "Ported disable-after-Core-capture/before-Server-projection through current durable publication. Settings disable new admission while the committed journal projects, retains output pending authorization and preserves the original exclusive inbox claim without a second native write.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_admission_shutdown.py::test_feature_disable_preserves_unprojected_terminal_and_exclusive_claim",
+        "tests/execution_r4/test_canonical_recovery.py::test_pending_domain_projection_cannot_cancel_inflight_canonical_send"
+      ],
+      "source_sha256": "a20ca5f39d8162eb3b14153ff7a09bb3dbb137471afb556ea1afb5f38d9251ae"
     }
   ]
 }

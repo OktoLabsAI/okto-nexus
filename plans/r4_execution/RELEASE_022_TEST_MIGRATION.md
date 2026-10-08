@@ -776,3 +776,7 @@ Installed Windows campaign uild/release-continuation-installed: 34 passed, unch
 Installed Windows campaign uild/release-current-recovery-installed: 41 passed in 365.02s with unchanged tracked inputs, using the continuation wheel above. This covers uncertain administrative command replay through REST/MCP, a new session after confirmed close, refusal of inbox takeover while native send remains active, isolated recovery with new local/remote agents, actual process death and bounded delivery retries.
 
 Mandatory manual quarantine after confirmed containment and permanent blocking of subsequent messages are superseded by the user requirement for automatic restoration. Unknown historical effects remain unknown and are never replayed. Three obsolete supervisor tests are explicitly mapped to these current positive recovery and no-replay contracts.
+
+### Admission revocation with retained native output (2026-10-08)
+
+Installed Windows campaign uild/release-admission-shutdown-installed: 22 passed in 147.68s, unchanged inputs. A real Codex pipe is gated after acceptance, grants are revoked through HTTP, further REST/MCP sends are denied, and its late structured output remains captured without completing work. A separate Core-event-to-Server projection fault proves that disabling integrations retains already captured output and exclusive inbox ownership while refusing new execution. Disabled publication remains pending authorization, as required by the predecessor contract.
