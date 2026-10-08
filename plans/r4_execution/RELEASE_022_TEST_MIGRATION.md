@@ -470,3 +470,14 @@ One historical storage-failure function maps to this current behavior. Two posit
 external-attach relay functions are retired under the explicit attach removal;
 their replacements cover creation denial and no invented results for unknown outcomes.
 This does not retire or claim coverage for custom context-only observers.
+
+Attempt and fallback review passed 67 installed-wheel cases with unchanged inputs
+(build/release-attempt-installed, wheel SHA256
+46156560cd1cbd45791acb4eb2bda66b3d0d8d50cb4b0c6cc626c2c0d00b345c).
+Canonical admission now records the turn identity as the delivery attempt, and
+retry admission preserves it so accepted receipt transitions remain in immutable
+history. Approved fallback preserves the logical delivery and envelope across
+both existing and on-demand target sessions. Scope exclusions, authority changes,
+uncertain writes, work grants, receipt storage recovery, and offline restore
+were exercised through current execution paths. Nine historical functions map
+to these behavioral replacements; continuation and startup fallback remain open.

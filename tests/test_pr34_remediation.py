@@ -216,15 +216,6 @@ def test_keyed_loopback_rest_does_not_upgrade_caller_to_operator(runtime):
 
 
 
-def test_expired_relay_does_not_mint_new_root(runtime):
-    deps, _, _, _, _, _ = runtime
-    session_id = open_rest(runtime).json()["data"]["session_id"]
-    supervisor = deps.harness_supervisor
-    live = supervisor._live[session_id]
-    live.relay_depth = supervisor._max_relay_depth
-    live.relay_chain_id = "fixture-existing-root"
-    live.relay_chain_started_at = supervisor._monotonic() - supervisor._relay_chain_max_age_s - 1
-    assert supervisor._resolve_relay_depth("worker") is None
 
 
 @pytest.mark.parametrize("runtime", ["unconfigured"], indirect=True)

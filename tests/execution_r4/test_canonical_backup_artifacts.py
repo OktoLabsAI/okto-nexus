@@ -139,3 +139,37 @@ def test_explicit_database_override_and_no_overwrite(runtime, tmp_path):
         procedure.restore(snapshot, tmp_path / "unapproved")
     assert procedure.inventory(alternate) == before
 
+
+def test_uncertain_snapshot_restores_push_exclusion_with_admission_off(tmp_path, monkeypatch):
+    from test_canonical_recovery_regressions import uncertain
+    with contextmanager(local_setup.__wrapped__)(tmp_path, monkeypatch, None) as initial:
+        setup, _, before, native = uncertain(connected_local.__wrapped__(initial), monkeypatch)
+        headers = setup[3]['operator']
+        with setup[0].connection_factory.unit_of_work(write=False) as uow:
+            claim = tuple(uow.connection.execute('SELECT consumer_kind,consumer_operation_id,status FROM message_deliveries '
+                'WHERE delivery_id=?', (before['delivery_id'],)).fetchone())
+            history = [tuple(r) for r in uow.connection.execute('SELECT * FROM runtime_delivery_attempt_events ORDER BY sequence')]
+    snapshot = tmp_path / 'uncertain-snapshot'
+    procedure.backup(setup[0].config.home_dir, snapshot, stopped=True)
+    restored_home = procedure.restore(snapshot, tmp_path / 'uncertain-restored', stopped=True)
+    restored = bootstrap({}, ['--home', str(restored_home), '--feature-harness-integrations', 'false'])
+    launches = []
+    from nexus_connector_core.native.runtime_bridge import CopiedAdapterFactory
+    async def forbidden(*args, **kwargs):
+        launches.append(True)
+        raise AssertionError('Uncertain operation must never replay on restore')
+    monkeypatch.setattr(CopiedAdapterFactory, 'open', forbidden)
+    with TestClient(build_app(restored)) as client:
+        inspected = client.get('/api/v1/harness/outbox', headers=headers, params={'operation_id': before['operation_id']})
+        assert inspected.status_code == 200, inspected.text
+        with restored.connection_factory.unit_of_work(write=False) as uow:
+            row = uow.connection.execute('SELECT * FROM delivery_outbox WHERE operation_id=?', (before['operation_id'],)).fetchone()
+            assert row['status'] == 'OUTCOME_UNKNOWN' and row['terminal_event_id'] is None
+            assert row['attempt_id'] == before['attempt_id']
+            assert tuple(uow.connection.execute('SELECT consumer_kind,consumer_operation_id,status FROM message_deliveries '
+                'WHERE delivery_id=?', (row['delivery_id'],)).fetchone()) == claim
+            assert claim[:2] == ('push', before['operation_id']) and claim[2] != 'read'
+            assert [tuple(r) for r in uow.connection.execute('SELECT * FROM runtime_delivery_attempt_events ORDER BY sequence')] == history
+        assert not launches
+    assert native.opens == 1 and len(native.native.sent) == 1
+

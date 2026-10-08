@@ -131,7 +131,7 @@ def test_retries_are_bounded_and_retain_durable_proof(connected_local, monkeypat
     assert len(calls) == 3 and native.native.sent == []
 
 
-@pytest.mark.parametrize('change', ['actor', 'source', 'target', 'cancel'])
+@pytest.mark.parametrize('change', ['actor', 'source', 'target', 'source_profile', 'target_profile', 'cancel'])
 def test_retry_revalidates_authority_and_accepts_cancellation(connected_local, monkeypatch, change):
     from nexus_connector_core.models import EffectNotSent
     from test_vertical_inventory import _Native
@@ -165,8 +165,12 @@ def test_retry_revalidates_authority_and_accepts_cancellation(connected_local, m
             if change == 'actor':
                 uow.connection.execute("UPDATE agents SET is_active=0 WHERE agent_id='operator'")
             else:
-                target = first if change == 'source' else second
-                uow.connection.execute('UPDATE agent_endpoints SET enabled=0,revision=revision+1 WHERE endpoint_id=?', (target['endpoint_id'],))
+                target = first if change.startswith('source') else second
+                if change.endswith('_profile'):
+                    uow.connection.execute('UPDATE runtime_profiles SET enabled=0,revision=revision+1 WHERE profile_id='
+                        '(SELECT profile_id FROM agent_endpoints WHERE endpoint_id=?)', (target['endpoint_id'],))
+                else:
+                    uow.connection.execute('UPDATE agent_endpoints SET enabled=0,revision=revision+1 WHERE endpoint_id=?', (target['endpoint_id'],))
     monkeypatch.setattr(deps.clock, 'now_iso', lambda: iso_plus(pending['next_attempt_at'], .1))
     deps.runtime_dispatcher.wake()
     final = wait_delivery(setup, lambda row: row['status'] in ('CANCELLED', 'REJECTED'))

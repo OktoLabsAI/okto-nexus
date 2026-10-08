@@ -47,31 +47,6 @@ def test_prewrite_owner_change_preserves_both_attempts_in_operator_inspection(ru
     assert sum(command.verb == "send_turn" for peer in peers for command in peer.sent) == 1
 
 
-def test_attempt_observations_are_atomic_immutable_and_do_not_record_heartbeats(runtime):
-    deps = runtime[0]
-    assert open_rest(runtime).status_code == 200
-    operation_id = send_message(runtime)["runtime_operations"][0]
-    wait_status(runtime, operation_id, "SENT_UNCONFIRMED")
-    cf = deps.connection_factory
-    with cf.unit_of_work(write=False) as uow:
-        before = uow.connection.execute("SELECT count(*) FROM runtime_delivery_attempt_events WHERE operation_id=?",
-            (operation_id,)).fetchone()[0]
-    with cf.unit_of_work() as uow:
-        uow.connection.execute("UPDATE delivery_outbox SET updated_at=? WHERE operation_id=?",
-            (deps.clock.now_iso(), operation_id))
-    with pytest.raises(RuntimeError, match="commit cut"):
-        with cf.unit_of_work() as uow:
-            uow.connection.execute("UPDATE delivery_outbox SET status='OUTCOME_UNKNOWN' WHERE operation_id=?", (operation_id,))
-            raise RuntimeError("commit cut")
-    for statement in ("UPDATE runtime_delivery_attempt_events SET reason='rewrite'",
-                      "DELETE FROM runtime_delivery_attempt_events"):
-        with pytest.raises(sqlite3.IntegrityError, match="runtime_attempt_history_is_immutable"):
-            with cf.unit_of_work() as uow:
-                uow.connection.execute(statement + " WHERE operation_id=?", (operation_id,))
-    with cf.unit_of_work(write=False) as uow:
-        assert uow.connection.execute("SELECT count(*) FROM runtime_delivery_attempt_events WHERE operation_id=?",
-            (operation_id,)).fetchone()[0] == before
-        assert deps.runtime_dispatcher.repo.get(uow, operation_id)["status"] == "SENT_UNCONFIRMED"
 
 
 @pytest.mark.parametrize("interrupt_backfill", [False, True])

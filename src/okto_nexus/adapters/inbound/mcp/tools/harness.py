@@ -563,9 +563,10 @@ def build_dispatcher(deps):
         from okto_nexus.bootstrap.execution_compat import admit_delivery
         admit_delivery(deps, uow, operation['operation_id'])
         # The R4 outbox now owns physical dispatch. Keep the legacy attempt in
-        # history, but do not leave a live claim under its worker owner epoch.
+        # history and the newly admitted canonical turn as the current attempt,
+        # but do not leave a live claim under the legacy worker owner epoch.
         uow.connection.execute("UPDATE delivery_outbox SET status='PENDING',owner_epoch=NULL,"
-            "attempt_id=NULL,lease_expires_at=NULL WHERE operation_id=?", (operation['operation_id'],))
+            "lease_expires_at=NULL WHERE operation_id=?", (operation['operation_id'],))
         return True
     dispatcher.admit_canonical = admit_canonical
     dispatcher.event_ingress = supervisor.event_ingress

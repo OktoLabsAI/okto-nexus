@@ -112,13 +112,18 @@ def admit_domain_delivery(uow, *, operation_id, access, fresh_publications, remo
         conn.execute("INSERT INTO execution_sender_sessions VALUES (?,?,?,?,?,?)",
                      (binding["server_id"], binding["executor_id"], resolved["session_id"], sender[0],
                       binding['session_policy'], source_session_key if binding['session_policy'] == 'per_sender_session' else ''))
-    rows = conn.execute("SELECT operation_id FROM execution_operations WHERE server_id=? AND executor_id=? "
+    rows = conn.execute("SELECT operation_id,action FROM execution_operations WHERE server_id=? AND executor_id=? "
         "AND (operation_id=? OR parent_operation_id=?)",
         (binding["server_id"], binding["executor_id"], resolved["operation_id"], resolved["operation_id"])).fetchall()
     for row in rows:
         conn.execute("INSERT INTO execution_domain_deliveries VALUES (?,?,?,?)",
                      (binding["server_id"], binding["executor_id"], row[0], operation_id))
-    conn.execute('UPDATE delivery_outbox SET attempt_count=max(attempt_count,1) WHERE operation_id=?', (operation_id,))
+    # The logical inbox delivery survives retries, while each canonical turn
+    # has its own identity. Retain that identity from admission so the existing
+    # immutable history records receipt transitions even on the first attempt.
+    turn_id = next(row[0] for row in rows if row[1] == 'turn.submit')
+    conn.execute('UPDATE delivery_outbox SET attempt_count=max(attempt_count,1),attempt_id=? WHERE operation_id=?',
+                 (turn_id, operation_id))
     return [row[0] for row in rows]
 
 

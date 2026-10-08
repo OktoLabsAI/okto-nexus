@@ -46,3 +46,44 @@ def test_receipt_persistence_retries_without_containment_or_native_replay(connec
     assert not native.native.stopped and len(native.native.sent) == 1
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute('SELECT MAX(attempt_no) FROM execution_dispatch_outbox').fetchone()[0] == 1
+
+
+def test_open_receipt_storage_failure_replays_rest_and_mcp_without_reopening(connected_local, monkeypatch):
+    from pathlib import Path
+    from okto_nexus.bootstrap import embedded_dispatch
+    monkeypatch.syspath_prepend(str(Path(__file__).parents[1]))
+    from test_pr34_remediation import tool
+    setup, binding, native = connected_local
+    deps, app, client, headers, *_, root = setup
+    client.headers['host'] = '127.0.0.1:8000'
+    key = headers['subject']['Authorization'].removeprefix('Bearer ')
+    body = dict(agent_id='subject', kind='codex', project_root=str(root),
+                endpoint_id=binding['endpoint_id'], idempotency_key='lost-open-receipt')
+    original = embedded_dispatch.append_execution_receipt
+    reached, allow = threading.Event(), threading.Event()
+    def unavailable(*args, **kwargs):
+        if not allow.is_set():
+            reached.set()
+            raise sqlite3.OperationalError('Temporary open receipt storage failure')
+        return original(*args, **kwargs)
+    monkeypatch.setattr(embedded_dispatch, 'append_execution_receipt', unavailable)
+    try:
+        first = client.post('/api/v1/harness/sessions', headers=headers['subject'], json=body)
+        assert first.status_code == 200, first.text
+        assert reached.wait(10)
+        assert native.opens == 1
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            assert uow.connection.execute('SELECT count(*) FROM execution_receipts').fetchone()[0] == 0
+        repeated = tool(client, key, 'harness_open', body)
+        assert repeated['ok'], repeated
+        assert repeated['data']['operation_id'] == first.json()['data']['operation_id']
+        assert native.opens == 1 and not native.native.stopped
+    finally:
+        allow.set()
+    wait_receipt(setup, first.json()['data'])
+    replay = client.post('/api/v1/harness/sessions', headers=headers['subject'], json=body)
+    assert replay.status_code == 200 and replay.json()['data']['operation_id'] == repeated['data']['operation_id']
+    assert native.opens == 1 and not native.native.stopped
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT count(*) FROM execution_sessions').fetchone()[0] == 1
+        assert uow.connection.execute('SELECT max(attempt_no) FROM execution_dispatch_outbox').fetchone()[0] == 1

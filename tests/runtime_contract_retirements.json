@@ -3128,6 +3128,78 @@
         "tests/execution_r4/test_canonical_relay.py::test_unsuccessful_result_cannot_admit_a_relay"
       ],
       "source_sha256": "1c1666c20cd20887cd237de4a4e8a97ebcee475eddf2ea3b877cd70efbc83d71"
+    },
+    {
+      "test": "tests/test_runtime_attempt_history.py::test_attempt_observations_are_atomic_immutable_and_do_not_record_heartbeats",
+      "reason": "Canonical admission now binds its real turn operation to the logical delivery attempt. The current regression verifies nonempty immutable observations, heartbeat exclusion and transaction rollback with one native effect.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_attempt_history.py::test_attempt_observations_are_atomic_immutable_and_ignore_heartbeats"
+      ],
+      "source_sha256": "5411ece59b41467116d1e6ece4a96a14dd288e006846db31edf43e6e98e77c3c"
+    },
+    {
+      "test": "tests/test_runtime_backup_restore.py::test_restore_preserves_uncertain_delivery_fence_with_admission_initially_off",
+      "reason": "The current backup/restore regression creates an uncertain canonical delivery, takes a combined offline snapshot and restores with admission disabled. It checks the same attempt identity, immutable history, unconsumed push claim and absence of native launches.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_backup_artifacts.py::test_uncertain_snapshot_restores_push_exclusion_with_admission_off"
+      ],
+      "source_sha256": "65b477c0ba55683a6d4cd39e72c4fbc3da630fdf42179e84cdb4a05bbacce144"
+    },
+    {
+      "test": "tests/test_runtime_outbox.py::test_p05_open_reply_persistence_failure_does_not_repeat_start",
+      "reason": "The legacy synchronous reply table is no longer the receipt store. The current regression fails canonical open receipt persistence, repeats the same request across REST and MCP, restores storage and verifies one session, one native open and one dispatch attempt.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_receipt_persistence.py::test_open_receipt_storage_failure_replays_rest_and_mcp_without_reopening"
+      ],
+      "source_sha256": "0d772321e722f27e2637ed470e761bbaf3bc4254adc3200d659d1338c924c94b"
+    },
+    {
+      "test": "tests/test_runtime_endpoint_fallback.py::test_approved_fallback_sends_once_to_b_with_the_same_logical_delivery",
+      "reason": "Current canonical alternatives cover both pre-opened and on-demand targets, unchanged logical identity and native envelope, explicit transport binding, one inbox claim and REST/MCP inspection of both immutable attempts. Transport-only trust classification intentionally remains in storage.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_fallback_scope.py::test_fallback_preserves_envelope_and_exposes_both_attempts"
+      ],
+      "source_sha256": "06c591efb548ca36fbab20f2e789ade18f4e020d83d616c7db1799fe1d51d4ed"
+    },
+    {
+      "test": "tests/test_runtime_endpoint_fallback.py::test_fallback_never_crosses_approval_or_logical_scope",
+      "reason": "Current canonical fallback rejects alternatives with a different approval group, disabled endpoint/profile, foreign agent or workspace. A proven-unsent delivery can retry its original binding without dispatching to those alternatives.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_fallback_scope.py::test_fallback_excludes_unapproved_or_foreign_target"
+      ],
+      "source_sha256": "47ee9158d1fd49f03b564b83a54c9989364e26a380cd222f6300c96e581a8d14"
+    },
+    {
+      "test": "tests/test_runtime_endpoint_fallback.py::test_fallback_revalidates_both_admission_and_target_before_write",
+      "reason": "Current retry tests change source or target endpoint/profile authority or revoke the actor after durable fallback selection. The retry is rejected before another native call; the same suite checks explicit cancellation.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delivery_retry.py::test_retry_revalidates_authority_and_accepts_cancellation"
+      ],
+      "source_sha256": "cc7beb029c0fe7c727b297fac7fb3fee0abe5d0734e6515bb79323096816a613"
+    },
+    {
+      "test": "tests/test_runtime_endpoint_fallback.py::test_error_text_after_native_write_cannot_enable_endpoint_fallback",
+      "reason": "The current canonical test supplies an approved second binding and then raises retry-looking error text after the native write. It proves the operation remains uncertain, no fallback is selected and repeated scans cannot create another native effect.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_fallback_scope.py::test_post_write_exception_cannot_use_approved_alternative"
+      ],
+      "source_sha256": "e857401c34b5619429460ee2f97c4152c7cebd14499968e995f01291d1e8738c"
+    },
+    {
+      "test": "tests/test_runtime_endpoint_fallback.py::test_managed_work_does_not_borrow_an_endpoint_scoped_grant_for_fallback",
+      "reason": "An authenticated canonical work claim has an endpoint-scoped grant. After a proven-unsent refusal it retains the claim and grant accounting and never selects or executes the separately approved alternative binding.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_fallback_scope.py::test_work_grant_cannot_authorize_fallback_to_another_binding"
+      ],
+      "source_sha256": "7a6ad6de7811640d592daff4659b32b2454a9d56eae98e29646ea7c9a79f1656"
+    },
+    {
+      "test": "tests/test_pr34_remediation.py::test_expired_relay_does_not_mint_new_root",
+      "reason": "The legacy in-memory relay depth fields are replaced by persisted causal roots. The current regression expires the recorded root, refuses its continuation and permits only a separate explicit entry to create a new root.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_causality_regressions.py::test_expired_root_rejects_continuation_but_allows_explicit_new_entry"
+      ],
+      "source_sha256": "2311182541190176b3130cc65ac52de48c03635d8d57cce89665d5ec123efc20"
     }
   ]
 }

@@ -85,35 +85,3 @@ def test_p06_takeover_never_replays_a_send_intent(runtime, previous_status):
     with deps.connection_factory.unit_of_work() as uow:
         assert not new.repo.observe(uow, operation_id=operation_id, epoch=old.epoch, attempt_id="old-attempt",
             expected="SENDING", status="ACCEPTED", now=deps.clock.now_iso())
-
-
-
-
-
-
-
-
-
-
-
-
-def test_p05_open_reply_persistence_failure_does_not_repeat_start(runtime, monkeypatch):
-    _, client, root, peers, operator, _ = runtime
-    from okto_nexus.adapters.outbound.sqlite.runtime_requests_repo import SqliteRuntimeRequestRepo
-    original = SqliteRuntimeRequestRepo.finish
-
-    def fail_once(self, uow, *, request_id, status):
-        if status == "COMPLETED":
-            raise OSError("fixture reply persistence failure")
-        return original(self, uow, request_id=request_id, status=status)
-
-    monkeypatch.setattr(SqliteRuntimeRequestRepo, "finish", fail_once)
-    arguments = {"agent_id": "worker", "kind": "pi", "project_root": root, "idempotency_key": "lost-reply"}
-    first = client.post("/api/v1/harness/sessions", headers={"x-api-key": operator}, json=arguments)
-    assert first.status_code == 500
-    assert "application/json" in first.headers.get("content-type", ""), "open failure lost the canonical error envelope"
-    assert first.json()["error"]["code"] == "INTERNAL_ERROR"
-    monkeypatch.setattr(SqliteRuntimeRequestRepo, "finish", original)
-    second = tool(client, operator, "harness_open", arguments)
-    assert second["ok"] and second["data"]["reused"], second
-    assert len(peers) == 1
