@@ -10,41 +10,6 @@ from test_runtime_outbox import restart_dispatcher, wait_status
 runtime = runtime_fixture
 
 
-def test_prewrite_owner_change_preserves_both_attempts_in_operator_inspection(runtime, monkeypatch):
-    deps, client, _, peers, operator, _ = runtime
-    assert open_rest(runtime).status_code == 200
-    old = deps.runtime_dispatcher
-    entered, release = threading.Event(), threading.Event()
-    execute = old._execute
-
-    def hold_claim(operation, attempt):
-        entered.set()
-        assert release.wait(15)
-        return execute(operation, attempt)
-
-    monkeypatch.setattr(old, "_execute", hold_claim)
-    try:
-        sent = send_message(runtime)
-        operation_id = sent["runtime_operations"][0]
-        assert entered.wait(5)
-        first = wait_status(runtime, operation_id, "CLAIMED")
-        old.quiesce()
-        old.close()
-        new = restart_dispatcher(runtime, old)
-        second = wait_status(runtime, operation_id, "SENT_UNCONFIRMED")
-        assert first["attempt_id"] != second["attempt_id"] and new.epoch != old.epoch
-    finally:
-        release.set()
-    result = tool(client, operator, "harness_list", {"view": "outbox", "maintenance": {
-        "action": "inspect", "operation_id": operation_id}})
-    assert result["ok"], result
-    item = result["data"]["items"][0]
-    history = item.get("attempt_history", [])
-    assert {entry["attempt_id"] for entry in history} == {first["attempt_id"], second["attempt_id"]}, item
-    assert any(entry["attempt_id"] == first["attempt_id"] and entry["state"] == "CLAIMED" for entry in history)
-    assert any(entry["attempt_id"] == first["attempt_id"] and entry["state"] == "PENDING" for entry in history)
-    assert any(entry["attempt_id"] == second["attempt_id"] and entry["state"] == "SENT_UNCONFIRMED" for entry in history)
-    assert sum(command.verb == "send_turn" for peer in peers for command in peer.sent) == 1
 
 
 

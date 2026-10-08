@@ -105,12 +105,15 @@ def settle_failed_initial_turns(conn, *, server_id, executor_id):
 def settle_unsent_closed_session_operations(conn, *, server_id, executor_id, agent_id=None):
     """A proved closed session cannot execute its never-dispatched queue."""
     rows = conn.execute(
-        "SELECT o.operation_id FROM execution_operations o "
+        "SELECT o.operation_id,d.attempt_no FROM execution_operations o "
         "JOIN execution_sessions s USING(server_id,executor_id,session_id) "
         "JOIN execution_dispatch_outbox d USING(server_id,executor_id,operation_id) "
         "WHERE o.server_id=? AND o.executor_id=? AND (? IS NULL OR o.subject_agent_id=?) "
         "AND s.lifecycle_state='CLOSED' AND s.lease_state='CLOSED' "
-        "AND o.admission_state='ACCEPTED' AND d.dispatch_state='PENDING' AND d.attempt_no=0 "
+        "AND o.admission_state='ACCEPTED' AND d.dispatch_state='PENDING' "
+        "AND (d.attempt_no=0 OR EXISTS (SELECT 1 FROM execution_unsent_dispatch_proofs f "
+        "WHERE f.server_id=o.server_id AND f.executor_id=o.executor_id AND f.operation_id=o.operation_id "
+        "AND f.attempt_no=d.attempt_no)) "
         "AND NOT EXISTS (SELECT 1 FROM execution_receipts r WHERE r.server_id=o.server_id "
         "AND r.executor_id=o.executor_id AND r.operation_id=o.operation_id) "
         "AND NOT EXISTS (SELECT 1 FROM execution_local_publications p WHERE p.server_id=o.server_id "
@@ -118,6 +121,9 @@ def settle_unsent_closed_session_operations(conn, *, server_id, executor_id, age
         (server_id, executor_id, agent_id, agent_id)).fetchall()
     for row in rows:
         key = (server_id, executor_id, row['operation_id'])
+        if row['attempt_no'] == 0:
+            conn.execute("INSERT INTO execution_unsent_dispatch_proofs(server_id,executor_id,operation_id,attempt_no,recorded_at) "
+                "VALUES(?,?,?,0,strftime('%Y-%m-%dT%H:%M:%fZ','now')) ON CONFLICT DO NOTHING", key)
         error = json.dumps(dict(code='SESSION_CLOSED', stage='dispatch',
             message='The session closed before this operation was dispatched.',
             possible_effect=False, retry_safe=False, operation_id=row['operation_id']))
@@ -126,6 +132,8 @@ def settle_unsent_closed_session_operations(conn, *, server_id, executor_id, age
             "WHERE server_id=? AND executor_id=? AND operation_id=?", (error, *key))
         conn.execute("UPDATE execution_operations SET admission_state='RESOLVED_TERMINAL' "
             "WHERE server_id=? AND executor_id=? AND operation_id=?", key)
+        from .execution_delivery_retry import mark_unsent_closed_retry
+        mark_unsent_closed_retry(conn, *key)
 
 
 def require_current_parent_readiness(conn, *, server_id, executor_id, operation_id):

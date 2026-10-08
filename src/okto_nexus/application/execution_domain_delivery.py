@@ -208,10 +208,10 @@ def project_released_deliveries(conn, *, server_id, executor_id, session_id, pro
         "WHERE p.server_id=? AND p.executor_id=? AND p.session_id=? AND p.action='turn.submit' "
         "AND d.reconciliation_id IS NULL AND d.external_completed_at IS NULL "
         "AND d.terminal_event_id IS NULL AND d.canonical_terminal_operation_id IS NULL "
-        "AND d.status IN ('ACCEPTED','SENT_UNCONFIRMED','OUTCOME_UNKNOWN') "
+        "AND d.status IN ('PENDING','CLAIMED','SENDING','ACCEPTED','SENT_UNCONFIRMED','OUTCOME_UNKNOWN') "
         "AND (SELECT stage FROM execution_receipts r WHERE r.server_id=p.server_id "
         "AND r.executor_id=p.executor_id AND r.operation_id=p.operation_id "
-        "ORDER BY receipt_revision DESC LIMIT 1) IN ('SUBMITTED','RUNNING','OUTCOME_UNKNOWN')",
+        "ORDER BY receipt_revision DESC LIMIT 1) IN ('SUBMISSION_STARTED','SUBMITTED','RUNNING','OUTCOME_UNKNOWN')",
         (server_id, executor_id, session_id)).fetchall()
     for row in rows:
         conn.execute("INSERT INTO execution_delivery_releases VALUES(?,?,?,?,?,?,strftime('%Y-%m-%dT%H:%M:%fZ','now')) "

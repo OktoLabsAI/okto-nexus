@@ -84,6 +84,31 @@ def test_confirmed_close_makes_current_owner_ready(recovery):
     assert state(factory) == "CONTROL_READY"
 
 
+@pytest.mark.parametrize('stage', ['SUBMISSION_STARTED', 'RUNNING', 'OUTCOME_UNKNOWN'])
+@pytest.mark.parametrize('released', [False, True])
+def test_uncertain_opening_does_not_block_proven_resource_recovery(recovery, stage, released):
+    from nexus_connector_core import r4_resource_release_digest
+    factory, service, report, _, frame = recovery
+    c = service.channel
+    with factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE execution_operations SET action='runtime.open'")
+        uow.connection.execute("UPDATE execution_sessions SET open_operation_id='close'")
+    changed = dict(frame, stage=stage, receipt_revision=2)
+    seed_receipt(factory, changed)
+    report['receipts'][0].update(stage=stage, receipt_revision=2)
+    service.receipt_high += 1
+    report['ownership_facts'][0]['proof_digest'] = r4_resource_release_digest(
+        server_id=c.server_id, executor_id=c.executor_id, session_id='session',
+        opening_operation_id='close', opening_intent_hash=frame['intent_hash'], owner_generation=1)
+    if not released:
+        report['ownership_facts'][0]['process_state'] = 'UNKNOWN'
+    assert service.accept(report)['recovery_remaining'] is not released
+    assert state(factory) == ('CONTROL_READY' if released else 'RECOVERING')
+    with factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT stage FROM execution_receipts ORDER BY receipt_revision DESC LIMIT 1').fetchone()[0] == stage
+        assert not uow.connection.execute("SELECT 1 FROM execution_operations WHERE action='runtime.close'").fetchone()
+
+
 @pytest.mark.parametrize("fault", [
     "hash", "revision", "stage", "missing_receipt", "corrupt_frame", "corrupt_digest",
     "unknown_claim", "unknown_process", "wrong_owner", "missing_proof", "missing_watermark",

@@ -139,6 +139,13 @@ class RuntimeDeliveryPlanner:
                 raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Captured result source does not match this delivery.", {})
         elif actor.agent_id != message.from_agent_id and actor.agent_id != "operator":
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Payload sender is not the authenticated actor.", {})
+        if result_source:
+            # Expired relay authority is terminal even while its target is
+            # recovering. Do not queue it as a temporarily missing endpoint or
+            # spend a new causal budget before selecting an actual executor.
+            cause = self.causality.node(uow, message.message_id)
+            if cause and (cause['deadline'] <= now or cause['hop_count'] > cause['max_depth']):
+                raise OktoNexusError(ErrorCode.QUOTA_EXCEEDED, "Causal depth or root deadline exhausted.", {})
         try:
             candidates = self.candidates(uow, agent_id=delivery.recipient_agent_id, workspace_id=message.workspace_id,
                                          sender_agent_id=message.from_agent_id,

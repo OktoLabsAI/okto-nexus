@@ -152,7 +152,8 @@ class SqliteRuntimeOutboxRepo:
             (epoch, owner_id, lease_expires_at, process_pid, process_host))
         # A previous external call might still finish. Never retry SENDING.
         uow.connection.execute("UPDATE delivery_outbox SET status='OUTCOME_UNKNOWN',reason='owner_lost',updated_at=? "
-            "WHERE status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED') AND terminal_event_id IS NULL AND external_completed_at IS NULL", (now,))
+            "WHERE status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED') AND terminal_event_id IS NULL "
+            "AND canonical_terminal_operation_id IS NULL AND external_completed_at IS NULL", (now,))
         uow.connection.execute("UPDATE delivery_outbox SET status='PENDING',owner_epoch=NULL,attempt_id=NULL,updated_at=? WHERE status='CLAIMED'", (now,))
         uow.connection.execute("UPDATE runtime_commands SET status='OUTCOME_UNKNOWN',reason='owner_lost',updated_at=? "
             "WHERE status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED') AND terminal_event_id IS NULL", (now,))
@@ -176,7 +177,8 @@ class SqliteRuntimeOutboxRepo:
         # Captured acceptance alone is not a live connection or finished result.
         # Preserve its native identifiers for explicit reconciliation, not retry.
         uow.connection.execute("UPDATE delivery_outbox SET status='OUTCOME_UNKNOWN',reason='owner_lost',updated_at=? "
-            "WHERE owner_epoch<>? AND terminal_event_id IS NULL AND external_completed_at IS NULL AND status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED')",
+            "WHERE owner_epoch<>? AND terminal_event_id IS NULL AND canonical_terminal_operation_id IS NULL "
+            "AND external_completed_at IS NULL AND status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED')",
             (now, epoch))
         uow.connection.execute("UPDATE runtime_commands SET status='OUTCOME_UNKNOWN',reason='owner_lost',updated_at=? "
             "WHERE owner_epoch<>? AND terminal_event_id IS NULL AND status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED')", (now, epoch))

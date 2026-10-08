@@ -543,6 +543,10 @@ def begin_execution_send(
                 substrate=mode, consume=False, check_budget=False, uow=uow)
             grant_id = lease['grant_id']
         else:
+            if not native_decision:
+                from .execution_operator_authority import consume_recorded_delegation
+                consume_recorded_delegation(uow, actor=row['actor_agent_id'], subject=row['subject_agent_id'],
+                    guard=provenance[0]['actor_guard_digest'], access=access)
             grant = access.authorize(context, action=action, endpoint_id=binding['endpoint_id'],
                              represented_agent_id=row['subject_agent_id'], workspace_id=row['workspace_id'],
                              substrate=mode, consume=not bootstrap and not native_decision,

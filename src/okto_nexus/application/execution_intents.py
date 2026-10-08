@@ -76,7 +76,8 @@ def resolve_execution_intent(
     from .execution_operator_authority import require_operator_request
     with factory.unit_of_work(write=False) as uow:
         require_operator_request(uow, actor=actor_agent_id, subject=subject_agent_id,
-                                 access=access, context=context)
+                                 access=access, context=context, binding_id=request['binding_id'],
+                                 action=_INTENTS[request['intent']])
     server_id, revisions, _ = current_agent_revisions(
         factory, agent_id=subject_agent_id)
     hash_body = dict(request)
@@ -90,7 +91,8 @@ def resolve_execution_intent(
     with factory.unit_of_work() as uow:
         conn = uow.connection
         actor_guard = require_operator_request(uow, actor=actor_agent_id, subject=subject_agent_id,
-                                               access=access, context=context)
+                                               access=access, context=context, binding_id=request['binding_id'],
+                                               action=_INTENTS[request['intent']])
         prior = conn.execute(
             "SELECT body_hash,resolved_json FROM execution_client_intents "
             "WHERE server_id=? AND actor_agent_id=? AND client_intent_id=?",
@@ -292,6 +294,14 @@ def resolve_execution_intent(
         operation_id = "op_" + secrets.token_hex(16)
         if reuse is not None:
             operation_id = reuse["operation_id"]
+        if actor_guard and actor_guard.startswith('delegated:'):
+            # Native context identifies the authenticated sender; caller text
+            # cannot replace the operation or represented identity.
+            payload['text'] = json.dumps(dict(operation_id=operation_id,
+                sender_agent_id=actor_agent_id, recipient_agent_id=subject_agent_id,
+                workspace_id=scope['workspace_id'], content=[dict(type='text', text=request['text'])]))
+            if len(canonical_json(payload)) > 65536 and 'operation_payload_too_large' not in blockers:
+                blockers.append('operation_payload_too_large')
         intent_id = "r4intent_" + secrets.token_hex(16)
         resolved = {
             "client_intent_id": request["client_intent_id"],
@@ -347,7 +357,11 @@ def read_execution_intent(factory: ConnectionFactory, *, actor_agent_id: str,
     from .execution_operator_authority import require_operator_request
     with factory.unit_of_work(write=False) as uow:
         require_operator_request(uow, actor=actor_agent_id, subject=subject,
-                                 access=access, context=context, require_feature=False)
+                                 access=access, context=context, require_feature=False,
+                                 binding_id=resolution['scope']['binding_id'],
+                                 action=resolution['semantic_intent']['action'])
+        from .execution_operator_authority import require_delegated_result_read
+        require_delegated_result_read(uow, operation_id=resolution['operation_id'], context=context, access=access)
     from ..adapters.outbound.sqlite.execution_receipts import (
         read_execution_operation_history,
     )

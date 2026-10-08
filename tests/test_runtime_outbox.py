@@ -45,30 +45,3 @@ def wait_status(runtime, operation_id, status):
             return row
         time.sleep(0.01)
     pytest.fail(f"operation remained {row['status']}, expected {status}")
-
-
-
-
-
-
-
-
-
-
-@pytest.mark.parametrize("previous_status", ["SENDING", "SENT_UNCONFIRMED", "ACCEPTED"])
-def test_p06_takeover_never_replays_a_send_intent(runtime, previous_status):
-    deps, _, _, peers, _, _ = runtime
-    assert open_rest(runtime).status_code == 200
-    old = stop_dispatcher(runtime)
-    result = send_message(runtime)
-    operation_id = result["runtime_operations"][0]
-    with deps.connection_factory.unit_of_work() as uow:
-        uow.connection.execute("UPDATE delivery_outbox SET status=?,owner_epoch=?,attempt_id='old-attempt' WHERE operation_id=?",
-                               (previous_status, old.epoch, operation_id))
-    new = restart_dispatcher(runtime, old)
-    assert operation(runtime, operation_id)["status"] == "OUTCOME_UNKNOWN"
-    new.scan_once()
-    assert peers[0].sent == []
-    with deps.connection_factory.unit_of_work() as uow:
-        assert not new.repo.observe(uow, operation_id=operation_id, epoch=old.epoch, attempt_id="old-attempt",
-            expected="SENDING", status="ACCEPTED", now=deps.clock.now_iso())

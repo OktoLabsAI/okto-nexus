@@ -252,7 +252,7 @@ def test_invalid_native_readiness_is_contained_and_other_binding_remains_usable(
     from nexus_connector_core.native import runtime_bridge
     from nexus_connector_core.native.adapters.codex import CodexAppServerConnector
     from nexus_connector_core.native.adapters.pi import PiRpcConnector
-    from test_canonical_identity_lifecycle import second_binding
+    from test_canonical_identity_lifecycle import registered_identities, second_binding
     from test_vertical_inventory import _Native
 
     setup, codex_binding, _ = connected_local
@@ -289,6 +289,7 @@ def test_invalid_native_readiness_is_contained_and_other_binding_remains_usable(
                 return await bridge.open(prepared, session_id, context, stream_epoch=stream_epoch)
             return _Native()
     app.state.embedded_dispatch_owner.native_factory = Factory()
+    identities = registered_identities(setup)
     try:
         opened = admit(setup, failed_binding, 'invalid-native-readiness', 'runtime.start', new_session=True)
         refused = wait_receipt(setup, opened, stages=('FAILED',))
@@ -299,6 +300,7 @@ def test_invalid_native_readiness_is_contained_and_other_binding_remains_usable(
         assert len(peers) == 1
         transport = peers[0]._transport
         assert transport is None or transport._proc.poll() is not None
+        assert registered_identities(setup) == identities
         with deps.connection_factory.unit_of_work(write=False) as uow:
             assert not uow.connection.execute("SELECT 1 FROM execution_sessions WHERE binding_id=? AND lifecycle_state='READY'",
                 (failed_binding['binding_id'],)).fetchone()

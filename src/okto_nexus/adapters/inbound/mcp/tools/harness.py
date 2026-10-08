@@ -137,7 +137,10 @@ def read_operation(deps, operation_id):
             "SELECT 1 FROM execution_operations o JOIN execution_installation i "
             "ON i.server_id=o.server_id WHERE operation_id=? LIMIT 1", (operation_id,)).fetchone()
         if canonical:
-            build_execution_access(deps).authenticate(context, uow=uow, require_feature=False)
+            access = build_execution_access(deps)
+            access.authenticate(context, uow=uow, require_feature=False)
+            from okto_nexus.application.execution_operator_authority import require_delegated_result_read
+            require_delegated_result_read(uow, operation_id=operation_id, context=context, access=access)
     if canonical:
         try:
             return read_execution_operation_history(deps.connection_factory,

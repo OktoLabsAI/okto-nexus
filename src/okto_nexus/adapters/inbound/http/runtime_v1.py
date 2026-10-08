@@ -777,6 +777,11 @@ def build_router() -> APIRouter:
             else:
                 executor_id = None
                 subject_agent_id = agent.agent_id
+                from okto_nexus.application.execution_operator_authority import require_delegated_result_read
+                from okto_nexus.bootstrap.execution_authority import build_execution_access
+                with factory.unit_of_work(write=False) as uow:
+                    require_delegated_result_read(uow, operation_id=operation_id,
+                        context=runtime_request_context(), access=build_execution_access(request.app.state.deps))
             return read_execution_operation_history(
                 factory, server_id=server_id, executor_id=executor_id,
                 operation_id=operation_id, subject_agent_id=subject_agent_id,

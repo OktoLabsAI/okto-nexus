@@ -165,7 +165,12 @@ class ExecutionReconciliation:
                     (c.server_id,c.executor_id,operation_id)).fetchone())
                 if receipt is None or any(receipt[k] != summary[k] for k in ('intent_hash','receipt_revision','stage')):
                     self.blocked = True
-                if summary['stage'] not in ('SUBMITTED','SUCCEEDED','FAILED','CANCELLED'):
+                # Native availability and a historical operation's outcome are
+                # separate facts. Intermediate/unknown receipts can reconcile
+                # once every resource is proven released and its stream drained.
+                # They remain unchanged and never authorize another native send.
+                if summary['stage'] not in ('SUBMISSION_STARTED','SUBMITTED','RUNNING','OUTCOME_UNKNOWN',
+                                             'SUCCEEDED','FAILED','CANCELLED'):
                     self.blocked = True
             facts = {r['session_id']: r for r in report['ownership_facts']}
             released = set()
@@ -207,7 +212,8 @@ class ExecutionReconciliation:
                         (c.server_id,c.executor_id,session_id,claim['owner_generation'])).fetchone()
                     opening = _receipt(opening)
                     if (opening is None or opening['session_id'] != session_id or
-                            opening['stage'] not in ('SUBMITTED','SUCCEEDED') or
+                            opening['stage'] not in ('SUBMISSION_STARTED','SUBMITTED','RUNNING','OUTCOME_UNKNOWN','SUCCEEDED') or
+                            not opening['possible_effect'] or
                             fact['proof_digest'] != r4_resource_release_digest(
                                 server_id=c.server_id,executor_id=c.executor_id,session_id=session_id,
                                 opening_operation_id=opening['operation_id'],opening_intent_hash=opening['intent_hash'],

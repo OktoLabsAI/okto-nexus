@@ -71,7 +71,8 @@ def submit_execution_operation(
         operator_containment = (actor_agent_id != subject_agent_id and
             resolved['semantic_intent']['action'] in {'turn.interrupt', 'runtime.close'})
         from .execution_operator_authority import require_operator_request, require_recorded_operator
-        require_operator_request(uow, actor=actor_agent_id, subject=subject_agent_id, access=access, context=context)
+        require_operator_request(uow, actor=actor_agent_id, subject=subject_agent_id, access=access, context=context,
+            binding_id=scope['binding_id'], action=resolved['semantic_intent']['action'])
         require_recorded_operator(uow, actor=actor_agent_id, subject=subject_agent_id,
                                   guard=intent['actor_guard_digest'], access=access)
         if subject_agent_id != actor_agent_id:
@@ -307,4 +308,14 @@ def submit_execution_operation(
         factory, server_id=server_id, executor_id=executor_id,
         operation_id=operation_id, subject_agent_id=subject_agent_id,
     ).public_view()
+    if actor_agent_id != subject_agent_id and view.get('result') is not None:
+        from .execution_operator_authority import require_delegated_result_read
+        try:
+            with factory.unit_of_work(write=False) as uow:
+                require_delegated_result_read(uow, operation_id=operation_id, context=context, access=access)
+        except OktoNexusError as error:
+            if error.code != ErrorCode.PERMISSION_DENIED:
+                raise
+            # Replaying a send is not an alternate result-reading authority.
+            view['result'] = None
     return view, reused

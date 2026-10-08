@@ -3669,7 +3669,7 @@
     },
     {
       "test": "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent",
-      "reason": "Real Core output-capture write and quota failures fence public command and open admission until scoped containment completes. With the user's requested automatic recovery enabled, messages remain durably pending in Nexus without any native execution intent, then deliver once through a fresh owned process after recovery. Prewrite quota refusal now retains a Core no-effect receipt without unnecessarily recovering a healthy harness. The separate HTTP producer exercises the same admission owner.",
+      "reason": "Real Core output-capture write and quota failures fence public command and open admission until scoped containment completes. With the user's requested automatic recovery enabled, messages remain durably pending in Nexus without any native execution intent, then deliver once through a fresh owned process after recovery. Prewrite quota refusal now retains a host-persisted correlated no-effect refusal without unnecessarily recovering a healthy harness or consuming Core containment capacity. The separate HTTP producer exercises the same admission owner.",
       "replacements": [
         "tests/execution_r4/test_canonical_capture_admission.py::test_core_capture_failure_fences_subject_then_recovers_without_replay",
         "tests/execution_r4/test_canonical_capture_admission.py::test_prewrite_quota_refusal_keeps_healthy_harness_available",
@@ -3702,6 +3702,91 @@
         "tests/execution_r4/test_canonical_owner_process.py::test_committed_message_survives_serve_death_before_wake_without_duplicate_effect"
       ],
       "source_sha256": "48a4b1f9953fa6889cb05195ce62f4bce5a4043304bdfec1d7657a6bedcb2a9e"
+    },
+    {
+      "test": "tests/test_runtime_commands.py::test_command_result_recovers_after_owner_restart_without_reexecution",
+      "reason": "A real public administrative turn now crashes the actual serve owner after durable Core terminal capture. A fresh process returns the retained output through authenticated operation history without a second native turn, inbox consumption, or conversational publication.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_process_result_crash.py::test_actual_owner_crash_recovers_only_durable_native_results"
+      ],
+      "source_sha256": "51174bcbc019ee5aa07afc2b860c78f3fd6a26e9f5acc803fa242347760c4015"
+    },
+    {
+      "test": "tests/test_runtime_sending_expiry.py::test_owner_crash_after_wire_acceptance_with_sending_lease_never_replays",
+      "reason": "The current canonical owner is abruptly killed both before and after persisting the native turn submission receipt. A fresh serve process proves containment and restores agent availability while keeping the original delivery uncertain, unconsumed and unreplayed. Automatic availability supersedes the retired supervisor's permanent quarantine.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_process_result_crash.py::test_actual_owner_crash_recovers_only_durable_native_results"
+      ],
+      "source_sha256": "0e0c54db3d4ce156fec9db4b4f058d1263af59377a3f51eab364f57a103780a2"
+    },
+    {
+      "test": "tests/test_runtime_outbox.py::test_p06_takeover_never_replays_a_send_intent",
+      "reason": "Actual process death around native submission and capture replaces simulated owner takeover. Durable canonical operation identity, exact process containment and a new owner's recovery retain uncertainty without replay or duplicate consumption; stale generation guards separately fence the retired owner.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_process_result_crash.py::test_actual_owner_crash_recovers_only_durable_native_results",
+        "tests/execution_r4/test_embedded_dispatch.py::test_stale_local_owner_cannot_start_native_work"
+      ],
+      "source_sha256": "cd89fffe26202138419ba18292eb1966b7245429cd5740ef0601a3ff4427c286"
+    },
+    {
+      "test": "tests/test_runtime_identity_failure_acceptance.py::test_failure_after_native_start_preserves_identity_and_reaps_exact_owned_process",
+      "reason": "REST and MCP openings use a real owned Codex process and fail durable birth persistence after successful handshake. The exact process is reaped, identities remain unchanged, the agent automatically becomes ready, and idempotent replay cannot spawn again. Actual malformed Codex/Pi readiness also proves identity preservation and containment while another binding remains usable.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_identity_lifecycle.py::test_post_spawn_persistence_failure_reaps_native_without_changing_identity",
+        "tests/execution_r4/test_canonical_native_protocol_regressions.py::test_invalid_native_readiness_is_contained_and_other_binding_remains_usable"
+      ],
+      "source_sha256": "e3efc7b6bbb171e1d859e57a789bc5152c6a8e14f50fd042ea523f6392260523"
+    },
+    {
+      "test": "tests/test_runtime_operation_reconciliation.py::test_late_correlated_terminal_is_retained_without_consumption_or_publication",
+      "reason": "After public canonical close and proven release, a delayed correlated terminal enters the retained Core journal and normal authenticated event publisher. With and without an explicit release-to-inbox decision, the output remains readable once in operation history without changing the frozen logical claim, consuming its message or publishing a reply.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_recovery.py::test_late_correlated_output_after_release_is_history_only"
+      ],
+      "source_sha256": "4bb01fa46bbab24cb1f35d530d967bde8e432e4276c3d871ca4e52c5fc06c19b"
+    },
+    {
+      "test": "tests/test_runtime_restart.py::test_old_attempt_terminal_after_frozen_recovery_boundary_stays_unknown",
+      "reason": "Canonical recovery uses a durable scoped release proof instead of the retired ingress watermark boundary. Real owner restart retains uncertain attempts without replay. A correlated terminal arriving after the canonical release boundary remains readable history only and cannot settle or publish the frozen logical delivery.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_process_result_crash.py::test_actual_owner_crash_recovers_only_durable_native_results",
+        "tests/execution_r4/test_canonical_recovery.py::test_late_correlated_output_after_release_is_history_only"
+      ],
+      "source_sha256": "fd8b9a2ebecb10326c8a0c78053465ee75c36143d6aa4501d842cea5baf134fb"
+    },
+    {
+      "test": "tests/test_runtime_attempt_history.py::test_prewrite_owner_change_preserves_both_attempts_in_operator_inspection",
+      "reason": "The actual serve process dies after reserving the relay child but before its send fence. A fresh owner records the exact previous reservation and generation, closes the old session, and retries with a new canonical operation. Public outbox inspection retains both attempt identities and the host no-send proof, distinct from a Core receipt; native wire records prove exactly one child execution.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_relay_crash.py::test_actual_owner_crash_preserves_relay_lineage"
+      ],
+      "source_sha256": "a694ef7959a5beb4b6023d03712a0e52a9cb8e2eece0e60a84818e3e34ea78e7"
+    },
+    {
+      "test": "tests/test_runtime_relay_process_restart.py::test_whole_owner_crash_preserves_relay_lineage_and_never_replays_ambiguous_child",
+      "reason": "Four actual process-death cuts preserve captured parent output, recover a provably unsent reserved child once, retain accepted child uncertainty without replay, and block an expired relay even while its target recovers. The original causal root, deadline, generated-message count and execution count remain unchanged across the replacement serve process.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_relay_crash.py::test_actual_owner_crash_preserves_relay_lineage"
+      ],
+      "source_sha256": "14db72d745b56c427777286b177d8100508fe6edb18e28057002966053435639"
+    },
+    {
+      "test": "tests/test_runtime_commands.py::test_claude_replacement_steer_has_separate_correlated_result",
+      "reason": "REST and MCP now exercise the real Core Claude stream adapter against a native peer. Immediate replacement interrupts the original turn, creates a separately correlated replacement result, and retains both through public operation history. Repeating the replacement request does not create another native turn; obsolete expected_operation_id is replaced by the current ID-free active-run contract.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_claude_replacement.py::test_claude_replacement_has_separate_public_results"
+      ],
+      "source_sha256": "788ceb3f5f958e99490e477b43269ea4d554ea716d20d57e729ce00a407ba6ea"
+    },
+    {
+      "test": "tests/test_runtime_canonical_payload.py::test_canonical_command_uses_granted_actor_and_real_adapter_results",
+      "reason": "An explicitly granted non-operator sends through both REST and MCP to a real Core Codex peer using the current text payload contract. Nexus constructs the native sender/recipient/operation context, consumes the caller's own grant, preserves subject execution authority, and exposes the correlated result. Revocation before dispatch prevents native writes; a send-only grant cannot read results, including through request replay.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_delegated_command.py::test_granted_sender_has_real_result_and_independent_budget",
+        "tests/execution_r4/test_canonical_delegated_command.py::test_send_only_grant_cannot_read_results_even_through_replay",
+        "tests/execution_r4/test_canonical_delegated_command.py::test_revoked_delegation_is_rechecked_before_native_write"
+      ],
+      "source_sha256": "e9b227981abf61f72ae5fc93d51b1fe6450f9c1a7206a3dc509f9a3157abfe0b"
     }
   ]
 }

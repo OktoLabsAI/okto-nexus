@@ -84,7 +84,14 @@ class RuntimeOperationMaintenanceService:
             no_write_proof = (table == "delivery_outbox" and row["reason"] == "native_write_not_started"
                 and row["ack_level"] == "NONE" and row["attempt_id"] is not None
                 and row["native_thread_id"] is None and row["native_turn_id"] is None)
-            if no_write_proof and (row['retry_basis'] == 'CORE_NO_EFFECT' or uow.connection.execute(
+            if no_write_proof and row['retry_basis'] == 'HOST_NO_SEND':
+                no_write_proof = uow.connection.execute(
+                    'SELECT 1 FROM execution_unsent_delivery_history h JOIN execution_unsent_dispatch_proofs f '
+                    'ON f.server_id=h.server_id AND f.executor_id=h.executor_id '
+                    'AND f.operation_id=h.proof_operation_id AND f.attempt_no=h.proof_attempt_no '
+                    'WHERE h.domain_operation_id=? AND h.proof_operation_id=?',
+                    (operation_id, row['attempt_id'])).fetchone() is not None
+            elif no_write_proof and (row['retry_basis'] == 'CORE_NO_EFFECT' or uow.connection.execute(
                     'SELECT 1 FROM execution_delivery_attempt_history WHERE domain_operation_id=?', (operation_id,)).fetchone()):
                 # The display label cannot replace the correlated Core proof.
                 no_write_proof = uow.connection.execute(
@@ -94,7 +101,7 @@ class RuntimeOperationMaintenanceService:
                     "WHERE h.domain_operation_id=? AND h.proof_operation_id=? AND r.stage='FAILED' "
                     'AND r.possible_effect=0 AND r.retry_safe=1', (operation_id, row['attempt_id'])).fetchone() is not None
             not_sent = action == "release_to_inbox" and row["status"] == "REJECTED" and no_write_proof
-            safe_wait = row["status"] == "RETRY_WAIT" and no_write_proof and row["retry_basis"] in {"LANE_BUSY_BEFORE_WRITE", "APPROVED_ENDPOINT_BEFORE_WRITE", "CORE_NO_EFFECT"}
+            safe_wait = row["status"] == "RETRY_WAIT" and no_write_proof and row["retry_basis"] in {"LANE_BUSY_BEFORE_WRITE", "APPROVED_ENDPOINT_BEFORE_WRITE", "CORE_NO_EFFECT", "HOST_NO_SEND"}
             if pending:
                 if (row["status"] not in {"PENDING", "CLAIMED"} and not safe_wait) or acknowledge_duplicate_risk:
                     raise conflict("Cancellation requires an attempt before send-intent or a proven-safe retry wait.")
@@ -228,7 +235,16 @@ class RuntimeOperationMaintenanceService:
                     item['canonical_attempt_history'] = [dict(r) for r in uow.connection.execute(
                         'SELECT operation_id,server_id,executor_id,endpoint_id,attempt_number,'
                         'proof_operation_id,proof_receipt_revision,archived_at FROM execution_delivery_attempt_history '
-                        'WHERE domain_operation_id=? ORDER BY attempt_number,operation_id LIMIT 6', (operation_id,))]
+                        'WHERE domain_operation_id=? UNION ALL '
+                        'SELECT operation_id,server_id,executor_id,endpoint_id,attempt_number,'
+                        'proof_operation_id,NULL AS proof_receipt_revision,archived_at FROM execution_unsent_delivery_history '
+                        'WHERE domain_operation_id=? ORDER BY attempt_number,operation_id LIMIT 6', (operation_id, operation_id))]
+                    item['unsent_dispatch_history'] = [dict(r) for r in uow.connection.execute(
+                        'SELECT f.operation_id,f.attempt_no,f.previous_owner,f.previous_generation,'
+                        'f.fenced_by_owner,f.fenced_by_generation,f.recorded_at FROM execution_unsent_delivery_history h '
+                        'JOIN execution_unsent_dispatch_proofs f ON f.server_id=h.server_id AND f.executor_id=h.executor_id '
+                        'AND f.operation_id=h.proof_operation_id AND f.attempt_no=h.proof_attempt_no '
+                        'WHERE h.domain_operation_id=? ORDER BY h.attempt_number,h.operation_id LIMIT 6', (operation_id,))]
                     item['canonical_operations'] = [dict(r) for r in uow.connection.execute(
                         'SELECT p.server_id,p.executor_id,p.operation_id,p.session_id,p.action,x.dispatch_state,'
                         's.lifecycle_state,s.lease_state FROM execution_domain_deliveries m '

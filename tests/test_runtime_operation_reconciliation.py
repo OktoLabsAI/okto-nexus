@@ -48,45 +48,6 @@ def recovery(row, **changes):
 
 
 
-def test_late_correlated_terminal_is_retained_without_consumption_or_publication(runtime):
-    from okto_nexus.domain.harness import HarnessEvent
-    from test_runtime_handoff_dispatch import wait_result
-    deps, client, _, _, operator, _ = runtime
-    sid = open_rest(runtime).json()["data"]["session_id"]
-    op = send_message(runtime)["runtime_operations"][0]
-    row = wait_status(runtime, op, "SENT_UNCONFIRMED")
-    session = deps.harness_supervisor.get(sid)
-    ingress = deps.harness_supervisor.event_ingress
-    fields = {"session_id": sid, "harness_kind": "pi", "occurred_at": deps.clock.now_iso(),
-        "thread_id": "fixture-thread", "turn_id": "fixture-turn", "operation_id": op,
-        "attempt_id": row["attempt_id"], "owner_epoch": row["owner_epoch"]}
-    # Native event fixtures enter the real durable ingress, never direct result
-    # inserts. The closed peer's buffered terminal arrives after manual takeover.
-    ingress.capture(HarnessEvent(**fields, kind="turn_started", native_event="fixture/start", payload={},
-        delivery_phase="started"), connection_id=session.connection_id)
-    wait_status(runtime, op, "ACCEPTED")
-    wait_close_result(client, operator, tool(client, operator, "harness_close", {"session_id": sid}))
-    row = wait_status(runtime, op, "OUTCOME_UNKNOWN")
-    response = client.post("/api/v1/harness/outbox", headers={"x-api-key": operator}, json=recovery(row))
-    assert response.status_code == 200, response.text
-    ingress.capture(HarnessEvent(**fields, kind="turn_completed", native_event="fixture/terminal", payload={},
-        delivery_phase="terminal", delivery_outcome="success", output_text="Late fixture output", output_snapshot=True),
-        connection_id=session.connection_id)
-    result = wait_result(runtime, op)
-    assert result["output_text"] == "Late fixture output"
-    deadline = time.monotonic() + 5
-    while time.monotonic() < deadline:
-        with deps.connection_factory.unit_of_work(write=False) as uow:
-            result = uow.connection.execute("SELECT * FROM runtime_results WHERE operation_id=?", (op,)).fetchone()
-        if result["publication_state"] == "BLOCKED":
-            break
-        time.sleep(.01)
-    assert result["publication_state"] == "BLOCKED"
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        delivery = uow.connection.execute("SELECT status,consumer_kind FROM message_deliveries WHERE recipient_agent_id='worker'").fetchone()
-        assert delivery["status"] == "unread" and delivery["consumer_kind"] is None
-        assert uow.connection.execute("SELECT status FROM delivery_outbox WHERE operation_id=?", (op,)).fetchone()[0] == "OUTCOME_UNKNOWN"
-        assert uow.connection.execute("SELECT count(*) FROM messages WHERE subject LIKE 'runtime processing receipt:%'").fetchone()[0] == 0
 
 
 

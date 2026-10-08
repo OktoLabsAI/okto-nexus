@@ -8,6 +8,58 @@ from test_embedded_dispatch import local_setup, connected_local, qualified_contr
 from test_runtime_contract_migration import mcp
 
 
+def registered_identities(setup):
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        return [{k: row[k] for k in row.keys() if k != 'last_seen_at'}
+            for row in uow.connection.execute('SELECT * FROM agents ORDER BY agent_id')]
+
+
+@pytest.mark.parametrize('surface', ['rest', 'mcp'])
+def test_post_spawn_persistence_failure_reaps_native_without_changing_identity(connected_local, monkeypatch, surface):
+    from nexus_connector_core.journal import SQLiteJournal
+    from test_agent_recovery_isolation import eventually
+    from test_canonical_native_protocol_regressions import install_native
+    from test_harness_codex_connector import _FAKE_SERVER_SOURCE
+    from test_embedded_dispatch import wait_receipt
+    setup, binding, _ = connected_local
+    deps, app, client, headers, *_, root = setup
+    before = registered_identities(setup)
+    peers, _ = install_native(connected_local, _FAKE_SERVER_SOURCE)
+    original = SQLiteJournal.record_process_birth
+    failed = []
+    async def fail_once(journal, *args, **kwargs):
+        if not failed:
+            assert len(peers) == 1 and peers[0]._transport._proc.poll() is None
+            failed.append(peers[0]._transport._proc)
+            raise OSError('Cut durable birth persistence after a successful native handshake')
+        return await original(journal, *args, **kwargs)
+    monkeypatch.setattr(SQLiteJournal, 'record_process_birth', fail_once)
+    body = dict(agent_id='subject', kind='codex', endpoint_id=binding['endpoint_id'],
+        project_root=str(root), idempotency_key='post-spawn-persistence-failure')
+    def invoke():
+        if surface == 'rest':
+            return client.post('/api/v1/harness/sessions', headers=headers['subject'], json=body).json()
+        return mcp(setup, monkeypatch, headers['subject']['Authorization'].removeprefix('Bearer '), 'harness_open', body)
+    admitted = invoke()
+    assert admitted['ok'], admitted
+    wait_receipt(setup, admitted['data'], stages=('OUTCOME_UNKNOWN',))
+    eventually(lambda: bool(failed))
+    assert failed[0].wait(timeout=15) is not None
+    def recovered():
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            row = uow.connection.execute("SELECT state FROM execution_agent_recovery WHERE agent_id='subject'").fetchone()
+            return row is not None and row[0] == 'READY'
+    eventually(recovered, seconds=30)
+    assert registered_identities(setup) == before
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert not uow.connection.execute("SELECT 1 FROM execution_sessions WHERE lifecycle_state='READY'").fetchone()
+        assert not uow.connection.execute('PRAGMA foreign_key_check').fetchall()
+    repeated = invoke()
+    assert repeated['ok'] and repeated['data']['operation_id'] == admitted['data']['operation_id'], repeated
+    assert len(peers) == len(failed) == 1
+    assert app.state.embedded_dispatch_owner.failure is None
+
+
 def second_binding(setup, monkeypatch, *, name='second', adapter_id='pi_rpc', workspace_root=None):
     from types import SimpleNamespace
     from nexus_connector_core import InstallationCandidate
