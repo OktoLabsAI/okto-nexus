@@ -90,27 +90,6 @@ def test_excessive_secret_scope_fails_closed_before_native_construction(values):
         BackendSecretRedactor(values)
 
 
-@pytest.mark.parametrize("boundary", ["construct", "start"])
-def test_resolved_secret_is_not_exposed_by_native_start_errors(runtime, monkeypatch, caplog, boundary):
-    deps, client, root, _, operator, _ = runtime
-    configure_secret(runtime, monkeypatch)
-
-    def factory(**options):
-        value = options["backend"]["env"]["FIXTURE_BACKEND_KEY"]
-        if boundary == "construct":
-            raise RuntimeError("fixture constructor diagnostic " + value)
-        peer = FakeConnector(kind="codex")
-        def start(**kwargs):
-            raise RuntimeError("fixture handshake diagnostic " + value)
-        peer.start = start
-        return peer
-
-    deps.harness_connector_factories["codex"] = factory
-    opened = client.post("/api/v1/harness/sessions", headers={"x-api-key": operator}, json={
-        "agent_id": "worker", "kind": "codex", "endpoint_id": "endpoint-codex", "project_root": root})
-    assert opened.status_code == 500, opened.text
-    assert SECRET not in opened.text
-    assert SECRET not in caplog.text
 
 
 

@@ -20,37 +20,6 @@ def identities(deps):
             for row in uow.connection.execute("SELECT * FROM agents ORDER BY agent_id")]
 
 
-def test_canonical_catalogue_gates_rest_and_mcp_and_runtime_open_cannot_change_it(runtime):
-    deps, client, root, peers, operator, caller = runtime
-    headers = {"x-api-key": operator}
-    assert client.post("/api/v1/capabilities", headers=headers, json={"name": "catalogue-fixture"}).status_code == 200
-    before = identities(deps)
-    unknown = ["catalogue-fixture", "not-registered"]
-    rest = client.patch("/api/v1/agents/caller", headers=headers, json={"capabilities": unknown})
-    mcp = tool(client, caller, "agent_register", {"agent_id": "caller", "capabilities": unknown})
-    assert rest.status_code == 422 and not mcp["ok"]
-    assert rest.json()["error"]["code"] == mcp["error"]["code"] == "VALIDATION_ERROR"
-    assert identities(deps) == before
-    assert client.patch("/api/v1/agents/caller", headers=headers, json={"capabilities": ["catalogue-fixture"]}).status_code == 200
-    assert tool(client, caller, "agent_register", {"agent_id": "caller", "capabilities": ["catalogue-fixture"]})["ok"]
-    before = identities(deps)
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        catalogue = [dict(row) for row in uow.connection.execute("SELECT * FROM capability_names ORDER BY name")]
-    endpoint = client.post("/api/v1/harness/endpoints", headers=headers, json={
-        "endpoint_id": "catalogue-caller", "agent_id": "caller", "adapter_id": "pi", "project_root": root,
-        "profile_id": "profile-pi", "enabled": True})
-    assert endpoint.status_code == 200, endpoint.text
-    opened = tool(client, operator, "harness_open", {"agent_id": "caller", "kind": "pi",
-        "project_root": root, "endpoint_id": "catalogue-caller"})
-    assert opened["ok"], opened
-    assert identities(deps) == before and len(peers) == 1
-    closed = tool(client, operator, "harness_close", {"session_id": opened["data"]["session_id"]})
-    assert closed["ok"], closed
-    wait_close_result(client, operator, closed)
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert [dict(row) for row in uow.connection.execute("SELECT * FROM capability_names ORDER BY name")] == catalogue
-        assert not uow.connection.execute("SELECT 1 FROM capability_names WHERE name='not-registered'").fetchone()
-    assert identities(deps) == before
 
 
 @pytest.mark.parametrize("failure", ["session_validation", "persistence"])

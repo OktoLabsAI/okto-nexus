@@ -644,3 +644,17 @@ This includes the complete embedded dispatch/reconciliation modules and the
 existing signal-drain tests. The complete cross-platform release gate remains
 pending; run 37746505268 exited 245 on Linux 3.12 shard 3 while testing changed
 session ownership and dumping a two-minute timeout.
+
+That timeout reproduced locally: the authority test left its fabricated session
+generation active during teardown, so matching Core containment could not be
+projected. A test finalizer restores only the injected persisted field after all
+rejection assertions. All 14 reuse cases and six identity/catalogue cases pass.
+The catalogue test now covers both public opening surfaces without changing
+registered identity or accepting unknown capabilities. Actual serve startup
+privacy tests also pass at constructor/start boundaries through REST/MCP: the
+resolved fixture credential appears in neither public views, Server history nor
+logs. Untyped adapter failures retain uncertain ownership; the privacy test does
+not weaken that classification. The two replaced legacy functions are recorded
+in the reviewed inventory. Combined installed validation passed all 32 cases,
+including existing native output/approval redaction, with unchanged inputs
+(build/release-reuse-privacy-installed, the same 5ba682d1 wheel above).

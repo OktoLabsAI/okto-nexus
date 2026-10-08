@@ -3358,6 +3358,22 @@
         "tests/execution_r4/test_canonical_owner_process.py::test_committed_message_survives_serve_death_before_wake_without_duplicate_effect"
       ],
       "source_sha256": "756ff38e025d0f322ffb4f854fa9ccf91a2e46e2e192ecd17c1f9bc01235cb3f"
+    },
+    {
+      "test": "tests/test_runtime_identity_failure_acceptance.py::test_canonical_catalogue_gates_rest_and_mcp_and_runtime_open_cannot_change_it",
+      "reason": "REST and MCP reject unknown capability names without mutating agent identity, accept the registered capability, and preserve both registered identity and the capability catalogue through an actual canonical native open and close. Both public opening surfaces use the current binding, execution grant and durable operation path.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_identity_lifecycle.py::test_capability_catalogue_remains_authoritative_across_native_open"
+      ],
+      "source_sha256": "5549d357d85669fc35da63155d0a95f52e7f2428b4a5ddbf0092e88094b41dc8"
+    },
+    {
+      "test": "tests/test_runtime_secret_redaction.py::test_resolved_secret_is_not_exposed_by_native_start_errors",
+      "reason": "Actual serve processes inject a known resolved credential into the current Core adapter bridge at both constructor and start boundaries. REST and MCP admission, current operation and event views, persisted Server history and serve logs contain no credential after the asynchronous failure is observed. Generic adapter errors retain uncertain ownership instead of fabricating a safe terminal failure.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_startup_privacy.py::test_native_start_failure_keeps_secret_out_of_public_history"
+      ],
+      "source_sha256": "1b85c0ce6aa74cf9da60680a0978171f47e9bdfefa3a2bd7ecf785000ab75368"
     }
   ]
 }

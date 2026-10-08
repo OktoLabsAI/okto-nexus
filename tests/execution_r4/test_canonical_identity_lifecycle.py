@@ -115,3 +115,48 @@ def test_concurrent_bindings_preserve_one_registered_agent(connected_local, monk
     for index in range(expected):
         sid = results[index]['data']['scope']['session_id']
         wait_receipt(setup, admit(setup, (first, second)[index], f'identity-close-{index}', 'runtime.close', session_id=sid), stages=('SUCCEEDED',))
+
+
+@pytest.mark.parametrize('surface', ['rest', 'mcp'])
+def test_capability_catalogue_remains_authoritative_across_native_open(connected_local, monkeypatch, surface):
+    from test_embedded_dispatch import admit, wait_receipt
+    setup, binding, native = connected_local
+    deps, _, client, headers, *_, root = setup
+    key = headers['subject']['Authorization'].removeprefix('Bearer ')
+    def identities():
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            return [tuple(r) for r in uow.connection.execute(
+                'SELECT agent_id,role,capabilities,metadata,is_active,api_key_hash FROM agents ORDER BY agent_id')]
+    created = client.post('/api/v1/capabilities', headers=headers['operator'], json=dict(name='catalogue-fixture'))
+    assert created.status_code == 200, created.text
+    before = identities()
+    invalid = ['catalogue-fixture', 'not-registered']
+    rejected = client.patch('/api/v1/agents/subject', headers=headers['operator'], json=dict(capabilities=invalid))
+    denied = mcp(setup, monkeypatch, key, 'agent_register', dict(agent_id='subject', capabilities=invalid))
+    assert rejected.status_code == 422 and not denied['ok']
+    assert rejected.json()['error']['code'] == denied['error']['code'] == 'VALIDATION_ERROR'
+    assert identities() == before and native.opens == 0
+    assert client.patch('/api/v1/agents/subject', headers=headers['operator'],
+        json=dict(capabilities=['catalogue-fixture'])).status_code == 200
+    assert mcp(setup, monkeypatch, key, 'agent_register',
+        dict(agent_id='subject', capabilities=['catalogue-fixture']))['ok']
+    before = identities()
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        catalogue = [tuple(r) for r in uow.connection.execute('SELECT * FROM capability_names ORDER BY name')]
+    body = dict(agent_id='subject', kind='codex', endpoint_id=binding['endpoint_id'],
+        project_root=str(root), idempotency_key='catalogue-open')
+    if surface == 'rest':
+        response = client.post('/api/v1/harness/sessions', headers=headers['subject'], json=body)
+        assert response.status_code == 200, response.text
+        opened = response.json()
+    else:
+        opened = mcp(setup, monkeypatch, key, 'harness_open', body)
+    assert opened['ok'], opened
+    wait_receipt(setup, opened['data'])
+    assert native.opens == 1 and identities() == before
+    wait_receipt(setup, admit(setup, binding, 'catalogue-close', 'runtime.close',
+        session_id=opened['data']['scope']['session_id']), stages=('SUCCEEDED',))
+    assert identities() == before
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert [tuple(r) for r in uow.connection.execute('SELECT * FROM capability_names ORDER BY name')] == catalogue
+        assert not uow.connection.execute("SELECT 1 FROM capability_names WHERE name='not-registered'").fetchone()
