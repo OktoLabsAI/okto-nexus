@@ -24,22 +24,45 @@ Path(sys.argv[1]).write_text(json.dumps({"peer":os.getpid(),"child":child.pid,"p
 for line in sys.stdin:
     msg=json.loads(line)
     if msg.get("type"):
-        print(json.dumps({"type":"response","command":msg["type"],"success":True,"data":{}}),flush=True)
+        print(json.dumps({"type":"response","command":msg["type"],"success":True,"data":{"sessionId":"shutdown-fixture"}}),flush=True)
 # Deliberately ignore EOF: incidental pipe closure cannot satisfy the reap proof.
 while True: time.sleep(300)
 '''
 
-LAUNCHER = '''import sys,threading,uvicorn
+LAUNCHER = '''import sys,threading,uvicorn,asyncio
+from pathlib import Path
+from types import SimpleNamespace
 from okto_nexus.adapters.inbound.cli.serve import run_serve
-from okto_nexus.bootstrap import dependencies as mcp_server
-from legacy_native_fixture.pi import PiRpcConnector
+from okto_nexus.bootstrap import embedded_inventory,embedded_dispatch
+from nexus_connector_core import InstallationCandidate
+from nexus_connector_core.discovery import fingerprint
+from nexus_connector_core.native.adapters.pi import PiRpcConnector
+from nexus_connector_core.native.runtime_bridge import CopiedAdapterSession
 peer,marker=sys.argv[1:3]
-original_bootstrap=mcp_server.bootstrap
-def bootstrap(*args,**kwargs):
-    deps=original_bootstrap(*args,**kwargs)
-    deps.harness_connector_factories={"pi": lambda **options: PiRpcConnector(command=[sys._base_executable,"-u",peer,marker],env=options["backend"]["env"])}
-    return deps
-mcp_server.bootstrap=bootstrap
+candidate=InstallationCandidate("pi_rpc",peer,fingerprint(Path(peer)),"explicit","selected")
+embedded_inventory.discover_local_candidates=lambda **_:SimpleNamespace(candidates=(candidate,))
+original_init=embedded_dispatch.EmbeddedDispatchOwner.__init__
+class Vault:
+    def __init__(self): self.values={}
+    def store(self,key,value): self.values[key]=value
+    def remove(self,key): self.values.pop(key,None)
+def initialize(self,*args,**kwargs):
+    original_init(self,*args,**kwargs)
+    owner=self
+    class Factory:
+        async def open(self,prepared,session_id,context,*,stream_epoch):
+            environment=await owner.sessions[session_id]["executor"].environment(prepared)
+            connector=PiRpcConnector(command=[sys._base_executable,"-u",peer,marker],cwd=prepared.cwd,env=environment)
+            native=await asyncio.to_thread(connector.start,owning_agent_id=context.agent_id)
+            return CopiedAdapterSession(connector,native,session_id=session_id,stream_epoch=stream_epoch,context=context)
+    self.fixture_native_factory=Factory()
+    self.tools.vault=Vault()
+embedded_dispatch.EmbeddedDispatchOwner.__init__=initialize
+original_start=embedded_dispatch.EmbeddedDispatchOwner.start
+async def start(self):
+    self.native_factory=self.fixture_native_factory
+    return await original_start(self)
+embedded_dispatch.EmbeddedDispatchOwner.start=start
 Original=uvicorn.Server
 class ControlledServer(Original):
     def run(self,*args,**kwargs):
@@ -65,10 +88,12 @@ class ServeFixture:
         self.process = self.client = self.log = None
         self.witnesses = []
         deps = bootstrap({}, ["--home", str(self.home)])
+        self.deps = deps
         auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
         _, self.operator = ensure_operator_key(deps, auth)
         with deps.connection_factory.unit_of_work() as uow:
             deps.repos.agents.upsert(uow, agent_id="shutdown-fixture")
+            self.subject = auth.issue_key(uow, agent_id="shutdown-fixture")
         self.peer = root / "peer.py"
         self.peer.write_text(PEER, encoding="utf-8")
         self.marker = root / "process-identities.json"
@@ -93,7 +118,7 @@ class ServeFixture:
                 stderr=subprocess.STDOUT, text=True,
                 creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
             self.client = httpx.Client(base_url=f"http://127.0.0.1:{port}",
-                                      headers={"x-api-key": self.operator}, timeout=15)
+                                      headers={"Authorization": "Bearer " + self.operator}, timeout=15)
             deadline = time.monotonic() + 20
             while time.monotonic() < deadline:
                 assert self.process.poll() is None, self.log_path.read_text(encoding="utf-8")
@@ -108,27 +133,68 @@ class ServeFixture:
             self.close()
             raise
 
+    def wait_operation(self, operation_id, stages=('SUBMITTED', 'SUCCEEDED')):
+        deadline = time.monotonic() + 15
+        while True:
+            response = self.client.get('/v1/runtime/operations/' + operation_id,
+                                       headers={'Authorization': "Bearer " + self.subject})
+            assert response.status_code == 200, response.text
+            view = response.json()
+            if view.get('executor_stage') in stages:
+                return view
+            assert time.monotonic() < deadline, (view, self.log_path.read_text(encoding='utf-8')[-3000:])
+            time.sleep(.02)
+
     def open(self):
-        response = self.client.post("/api/v1/harness/profiles", json={"profile_id": "shutdown",
-            "adapter_id": "pi", "enabled": True, "inherit_ambient": False,
-            "config": {}})
+        from okto_nexus.domain.base import iso_plus
+        with self.deps.connection_factory.unit_of_work(write=False) as uow:
+            executor = uow.connection.execute("SELECT executor_id FROM execution_executors WHERE kind='embedded'").fetchone()[0]
+        inventory = self.client.get('/v1/runtime/executors/' + executor + '/inventory')
+        assert inventory.status_code == 200, inventory.text
+        snapshot = inventory.json()['snapshot']
+        candidate = snapshot['evidence'][0]['candidate_ref']
+        response = self.client.post('/v1/runtime/executors/' + executor + '/realizations', json=dict(
+            client_intent_id='shutdown-realization', agent_id='shutdown-fixture', workspace_root=str(self.project),
+            workspace_id=None, workspace_label='Shutdown fixture', adapter_id='pi_rpc', candidate_ref=candidate,
+            inventory_revision=snapshot['inventory_revision'], local_consent_id='shutdown-consent', approved=True,
+            provider_home=None, secret_bindings={}))
+        assert response.status_code == 201, response.text
+        realization = response.json()
+        response = self.client.post('/v1/connections/bindings:prepare', json=dict(
+            client_intent_id='shutdown-binding', agent_id_hint='shutdown-fixture', executor_id=executor,
+            adapter_id='pi_rpc', candidate_ref=candidate, inventory_revision=snapshot['inventory_revision'],
+            realization_ref=realization['realization_ref'], workspace_id=realization['workspace_id'], alias='shutdown'))
         assert response.status_code == 200, response.text
-        response = self.client.post("/api/v1/harness/endpoints", json={"endpoint_id": "shutdown",
-            "agent_id": "shutdown-fixture", "adapter_id": "pi", "profile_id": "shutdown",
-            "project_root": str(self.project), "enabled": True})
+        proposal = response.json()
+        response = self.client.post('/v1/connections/bindings:apply', json=dict(client_intent_id='shutdown-apply',
+            proposal_id=proposal['proposal_id'], proposal_revision=proposal['proposal_revision'],
+            approved_diff_hash=proposal['diff']['approved_diff_hash']))
         assert response.status_code == 200, response.text
-        response = self.client.post("/api/v1/harness/sessions", json={"agent_id": "shutdown-fixture",
-            "kind": "pi", "endpoint_id": "shutdown", "project_root": str(self.project)})
+        self.binding = response.json()
+        response = self.client.post('/api/v1/harness/grants', json=dict(actor_agent_id='shutdown-fixture',
+            endpoint_id=self.binding['endpoint_id'], actions=['open','close'], max_executions=3,
+            expires_at=iso_plus(self.deps.clock.now_iso(), 600)))
         assert response.status_code == 200, response.text
-        identities = json.loads(self.marker.read_text(encoding="utf-8"))
-        # Hold exact live process instances before triggering any shutdown.
-        for name in ("peer", "child"):
+        response = self.client.post('/api/v1/harness/sessions', headers={'Authorization': "Bearer " + self.subject}, json=dict(
+            agent_id='shutdown-fixture', kind='pi', endpoint_id=self.binding['endpoint_id'],
+            project_root=str(self.project), idempotency_key='shutdown-open'))
+        assert response.status_code == 200, response.text
+        opened = response.json()['data']
+        self.wait_operation(opened['operation_id'])
+        identities = json.loads(self.marker.read_text(encoding='utf-8'))
+        for name in ('peer', 'child'):
             self.witnesses.append(PeerWitness(identities[name]))
-        if sys.platform == "linux":
-            assert identities["parent"] != self.process.pid  # owned guardian
-            self.witnesses.append(PeerWitness(identities["parent"]))
-        self.session_id = response.json()["data"]["session_id"]
+        if sys.platform == 'linux':
+            assert identities['parent'] != self.process.pid
+            self.witnesses.append(PeerWitness(identities['parent']))
+        self.session_id = opened['scope']['session_id']
         return self.session_id
+
+    def close_session(self):
+        response = self.client.post('/api/v1/harness/sessions/' + self.session_id + '/close',
+            headers={'Authorization': "Bearer " + self.subject}, json={'idempotency_key': 'shutdown-close'})
+        assert response.status_code == 200, response.text
+        return self.wait_operation(response.json()['data']['operation_id'], stages=('SUCCEEDED',))
 
     def stop(self, mode):
         if mode == "kill":

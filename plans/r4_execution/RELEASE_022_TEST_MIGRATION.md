@@ -454,3 +454,11 @@ public agent identity and approved profile without copying private metadata.
 REST and MCP both open/send/close each managed adapter. Ambiguous implicit opens
 have no effects, while an explicit choice succeeds. Five historical functions
 now map to these cases and the existing per-call environment override denials.
+
+The serve shutdown fixture now creates an approved canonical local binding and
+uses Core's Pi adapter against a disposable real subprocess. Windows validation
+passed seven installed-wheel tests with unchanged inputs
+(build/release-shutdown-installed); the two existing POSIX signal cases remain
+platform-skipped on Windows. Graceful exit, explicit session close and owner kill
+all stop the exact witnessed child and grandchild. The tests retain their names
+and process-identity assertions rather than replacing them with mocked shutdown.
