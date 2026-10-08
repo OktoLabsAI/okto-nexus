@@ -3461,6 +3461,22 @@
         "tests/execution_r4/test_runtime_presence.py::test_graph_and_agent_presence_follow_local_connection"
       ],
       "source_sha256": "e273e28d01a3a6b79717301c8f47825c6c0f81a35a69467e6521d3df407db3d9"
+    },
+    {
+      "test": "tests/test_runtime_rest_producer.py::test_rest_steering_has_atomic_canonical_message_delivery_and_intent",
+      "reason": "The identical REST steering producer now runs with an approved canonical binding. Both normal and injected post-outbox-write rollback cases preserve the original message/delivery/outbox transaction assertions, successful recovery, actor provenance, one claim, foreign-key integrity and exactly one native turn.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_rest_producer.py::test_rest_steering_has_atomic_canonical_message_delivery_and_intent"
+      ],
+      "source_sha256": "f00a013708c91aa69847a8c1acef9e8dc86b6ce4ebfa16b7caa01de882c365be"
+    },
+    {
+      "test": "tests/test_runtime_commands.py::test_control_queued_for_finished_turn_does_not_hit_next_turn",
+      "reason": "REST and MCP enqueue an exact native-turn control while the dispatcher send lock is held. A real Core-owned Codex protocol peer completes the first turn before dispatch resumes. The queued control fails with no possible effect, the next turn completes successfully, and the wire has two turn starts and no steer write.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_native_protocol_regressions.py::test_queued_control_for_finished_turn_cannot_reach_next_turn"
+      ],
+      "source_sha256": "6dd92de80e992b094e902b7ad9553fe0ae7535c7570a4d7dd13fbed1f5ad6e09"
     }
   ]
 }

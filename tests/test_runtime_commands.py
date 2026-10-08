@@ -60,26 +60,6 @@ def codex_session(runtime, *, outcome="completed"):
 
 
 
-def test_control_queued_for_finished_turn_does_not_hit_next_turn(runtime, monkeypatch):
-    deps, client, _, peers, operator, _ = runtime
-    sid = open_rest(runtime).json()["data"]["session_id"]
-    peers[0].delivery_event_phase = lambda event: {"fixture/start": "started", "fixture/end": "terminal"}.get(event.native_event)
-    normal = tool(client, operator, "harness_send", {"session_id": sid, "payload": {"text": "fixture"}})
-    op = normal["data"]["operation_id"]
-    wait_operation(runtime, op, lambda row: row["state"] == "SENT_UNCONFIRMED")
-    peers[0].push_event(kind="turn_started", native_event="fixture/start")
-    wait_operation(runtime, op, lambda row: row["state"] == "ACCEPTED")
-    runner = deps.runtime_dispatcher.command_dispatcher
-    scan = runner.scan_once
-    monkeypatch.setattr(runner, "scan_once", lambda: None)
-    control = tool(client, operator, "harness_steer", {"session_id": sid, "payload": {"text": "stale instruction"}, "expected_operation_id": op})
-    assert control["ok"], control
-    peers[0].push_event(kind="turn_completed", native_event="fixture/end")
-    wait_operation(runtime, op, lambda row: row["result_durable"])
-    monkeypatch.setattr(runner, "scan_once", scan)
-    deps.runtime_dispatcher.wake()
-    wait_operation(runtime, control["data"]["operation_id"], lambda row: row["state"] == "REJECTED")
-    assert [c.verb for c in peers[0].sent] == ["send_turn"]
 
 
 def test_claude_replacement_steer_has_separate_correlated_result(runtime):

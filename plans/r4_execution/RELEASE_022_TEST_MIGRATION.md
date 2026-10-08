@@ -690,3 +690,13 @@ one canonical workspace retains the other binding and its native peer. All 22
 installed delivery, session-view, workspace-isolation and presence cases pass
 with unchanged inputs (build/release-presence-installed; c1d08f4f wheel above).
 Two reviewed legacy presence functions map to these positive contracts.
+
+REST producer rollback/retry and queued native controls now run through the
+current Core-backed path. The queued control targets a turn that completes
+behind a dispatcher barrier; REST/MCP both reject it before a native steer
+write, while the next turn completes. All 14 installed native-protocol and
+producer cases pass (build/release-producer-control-installed). A separate
+Linux 3.11 installed campaign passed 26 cases with two UI-only skips across
+the lifecycle, dispatch and local-realization modules implicated by the older
+CI shutdown wait (build/release-linux-shutdown-installed). Both used unchanged
+inputs and the c1d08f4f wheel. This local result does not replace full CI.

@@ -83,6 +83,51 @@ def test_stale_native_target_is_rejected_and_matching_interrupt_completes_origin
     assert peer._transport._proc.wait(timeout=5) is not None
 
 
+@pytest.mark.parametrize('surface', ['rest', 'mcp'])
+def test_queued_control_for_finished_turn_cannot_reach_next_turn(connected_local, surface):
+    from test_pr34_remediation import tool
+    release = connected_local[0][-1] / 'release-first-turn'
+    source = _FAKE_SERVER_SOURCE.replace('    if "TRIGGER_HOLD" in text:',
+        '    if "FINISH_AT_BARRIER" in text:\n'
+        '        deadline = time.monotonic() + 20\n'
+        f'        while not os.path.exists({str(release)!r}):\n'
+        '            assert time.monotonic() < deadline\n'
+        '            time.sleep(.01)\n'
+        '    if "TRIGGER_HOLD" in text:')
+    setup, binding, sid, peer, log = open_native(connected_local, source)
+    setup[2].headers['host'] = '127.0.0.1:8000'
+    first = admit(setup, binding, 'queued-control-first', 'turn.submit', session_id=sid, text='FINISH_AT_BARRIER')
+    wait_receipt(setup, first)
+    state = next(iter(peer._sessions_by_id.values()))
+    eventually(lambda: bool(state.active_turn_id))
+    target = state.active_turn_id
+    lock = setup[1].state.embedded_dispatch_owner.pump.send_lock
+    setup[2].portal.call(lock.acquire)
+    try:
+        body = dict(idempotency_key='queued-stale-control', payload=dict(text='Must not reach the next turn'),
+                    expected_turn_id=target)
+        if surface == 'rest':
+            response = setup[2].post(f'/api/v1/harness/sessions/{sid}/steer', headers=setup[3]['subject'], json=body).json()
+        else:
+            response = tool(setup[2], setup[3]['subject']['Authorization'].removeprefix('Bearer '),
+                            'harness_steer', dict(session_id=sid, **body))
+        assert response['ok'], response
+        control = response['data']
+        release.touch()
+        wait_receipt(setup, first, stages=('SUCCEEDED',))
+        second = admit(setup, binding, 'queued-control-second', 'turn.submit', session_id=sid, text='Healthy next turn')
+    finally:
+        release.touch()
+        setup[2].portal.call(lock.release)
+    refused = wait_receipt(setup, control, stages=('FAILED',))
+    assert refused['possible_effect'] is False
+    wait_receipt(setup, second, stages=('SUCCEEDED',))
+    wire = [json.loads(line) for line in log.read_text(encoding='utf-8').splitlines()]
+    assert not [m for m in wire if m.get('method') == 'turn/steer']
+    assert len([m for m in wire if m.get('method') == 'turn/start']) == 2
+    wait_receipt(setup, admit(setup, binding, 'queued-control-close', 'runtime.close', session_id=sid), stages=('SUCCEEDED',))
+
+
 @pytest.mark.parametrize('adapter,bad_reply', [
     ('pi_rpc', {'success': False, 'error': 'fixture command unsupported'}),
     ('pi_rpc', {'success': 'true', 'data': {}}),
