@@ -3568,6 +3568,38 @@
         "tests/execution_r4/test_canonical_session_metadata.py::test_invalid_session_metadata_has_no_native_effect"
       ],
       "source_sha256": "4528f28b5d5efa34abf95368bf0062684d2c785f20403fa8da0e3f6fb9482326"
+    },
+    {
+      "test": "tests/test_runtime_shared_connection.py::test_closing_one_codex_session_preserves_other_thread_and_process",
+      "reason": "Core now owns a distinct native process per session. Preserve the positive sibling-isolation contract with two real Codex pipes, confirmed stop of only the closed process, replay of its durable close receipt, and a successful correlated sibling response.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_session_close.py::test_closing_owned_codex_process_preserves_sibling_session"
+      ],
+      "source_sha256": "7ba8c3e59baba6fc08174163de9a0c0174bd1033a139b2f25e0256233305333d"
+    },
+    {
+      "test": "tests/test_runtime_shared_connection.py::test_close_state_survives_projection_failure_and_repeated_close",
+      "reason": "Port the legacy supervisor projection failure to the Core durable stream and Server event-ingress boundary. Repeated public closure preserves a single native effect, closed history, and the final event after projection recovers.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_session_close.py::test_repeated_close_preserves_one_native_effect_and_final_event"
+      ],
+      "source_sha256": "c55d1bcbce7568b0e2624beef79206601a8ce13918f3a62d39ba416e97667dd2"
+    },
+    {
+      "test": "tests/test_runtime_shared_connection.py::test_native_payload_cannot_forge_lifecycle_transition",
+      "reason": "Exercise forged lifecycle fields through the real canonical Core event queue and Server ingress, then prove the session remains READY and can execute an authorized command before an actual close.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_session_close.py::test_native_lifecycle_payload_cannot_close_authorized_session"
+      ],
+      "source_sha256": "dbab93d8b652a47e0f7528e52b1d0b6909a7df0a4a97345697641b28f98484f4"
+    },
+    {
+      "test": "tests/test_runtime_shared_connection.py::test_concurrent_close_drains_final_event_once",
+      "reason": "A public close is held at the native effect while a second submission of its stable idempotency key returns the original operation. A final event is durably captured during the close and survives normal or delayed Server projection exactly once.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_session_close.py::test_repeated_close_preserves_one_native_effect_and_final_event"
+      ],
+      "source_sha256": "5802a571ba32f21f1b6c89feb632fe69cc84dc5e24e83c054d583bcb15e87206"
     }
   ]
 }

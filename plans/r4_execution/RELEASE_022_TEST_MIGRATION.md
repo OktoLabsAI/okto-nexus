@@ -786,3 +786,7 @@ Installed Windows campaign uild/release-admission-shutdown-installed: 22 passed
 Compatibility harness_open again accepts bounded opaque metadata. Migration 122 stores it on the canonical session; it participates in opening idempotency but cannot change the agent, execution context, native payload, or permissions. Conflicting roles are still rejected before native work. REST and MCP can inspect the annotation after close.
 
 Installed Windows campaign `build/release-session-metadata-installed`: 62 passed in 296.55s, unchanged inputs. Coverage includes positive metadata preservation and identity isolation, invalid metadata, canonical compatibility commands, foreign-agent access denial, schema migrations, and retirement inventory. Wheel SHA-256: ba0c38d5dca1e8ba9180cf76d7b68080230d3c5ae9612778bd7f8adb9805a2b0. The full regression gate remains open.
+
+### Independent session closure (2026-10-08)
+
+Installed Windows campaign `build/release-session-close-installed`: 24 passed in 241.82s, unchanged inputs, using the metadata wheel above. Two real Codex processes prove closing one session leaves the sibling available to produce a correlated response. Further cases retain one close effect and one final event across repeated public requests and a Server projection outage; forged native lifecycle fields cannot close a session or prevent its next authorized command. Existing queue settlement, native protocol fault, interrupt acknowledgement and stale-control cases also passed. Four retired supervisor tests now reference these positive canonical contracts.
