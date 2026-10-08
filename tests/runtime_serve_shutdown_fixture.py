@@ -145,7 +145,7 @@ class ServeFixture:
             assert time.monotonic() < deadline, (view, self.log_path.read_text(encoding='utf-8')[-3000:])
             time.sleep(.02)
 
-    def open(self):
+    def open(self, *, actions=('open', 'close')):
         from okto_nexus.domain.base import iso_plus
         with self.deps.connection_factory.unit_of_work(write=False) as uow:
             executor = uow.connection.execute("SELECT executor_id FROM execution_executors WHERE kind='embedded'").fetchone()[0]
@@ -172,7 +172,7 @@ class ServeFixture:
         assert response.status_code == 200, response.text
         self.binding = response.json()
         response = self.client.post('/api/v1/harness/grants', json=dict(actor_agent_id='shutdown-fixture',
-            endpoint_id=self.binding['endpoint_id'], actions=['open','close'], max_executions=3,
+            endpoint_id=self.binding['endpoint_id'], actions=list(actions), max_executions=3,
             expires_at=iso_plus(self.deps.clock.now_iso(), 600)))
         assert response.status_code == 200, response.text
         response = self.client.post('/api/v1/harness/sessions', headers={'Authorization': "Bearer " + self.subject}, json=dict(

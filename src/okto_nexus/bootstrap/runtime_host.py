@@ -44,6 +44,7 @@ class EmbeddedRuntimeHost:
             tuple[RuntimeCore, SQLiteJournal]]] = {}
         self._selections: dict[tuple[str, str], tuple[dict, dict, object]] = {}
         self._closing = False
+        self._history_closing = False
         self._native_action_owners = {}
         self.local_launch_factory = None
         self._history_tasks = set()
@@ -62,7 +63,7 @@ class EmbeddedRuntimeHost:
     async def with_history(self, *, executor_id, session_id, read):
         """Retain a journal reader through observer cancellation and shutdown."""
         async with self._lock:
-            if self._closing:
+            if self._history_closing:
                 raise RuntimeError("The embedded Core host is shutting down.")
             task = asyncio.create_task(self._read_history(executor_id, session_id, read))
             self._history_tasks.add(task)
@@ -205,6 +206,9 @@ class EmbeddedRuntimeHost:
             raise ValueError("Store closure must be a boolean.")
         async with self._lock:
             self._closing = True
+            # Containment leaves journals available for final publication.
+            # The store-closing pass fences new readers before joining them.
+            self._history_closing = close_stores
             tasks = dict(self._runtime_tasks)
             ledger_task = self._ledger_task
             history_tasks = tuple(self._history_tasks)

@@ -530,3 +530,31 @@ The I/O case witnesses provider secret resolution, native process creation,
 native pipe writes and embedding TCP traffic outside a write transaction.
 Core PR 32 (0.0.7) and Connector PR 45 (0.0.5) remain under CI/review; neither
 is published by this evidence. Complete Nexus regression remains a release gate.
+
+Shutdown review found a missing final publication boundary after native
+containment. The owner now refreshes containment evidence, publishes retained
+receipts/events, and proves session release before closing Core journals.
+Unknown outcomes do not create terminal events or rewrite accepted receipts.
+Superseded owners still contain their processes and leave publication to the
+current owner. Storage failures retain journals and retry without native reopen.
+The existing real-process signal test now uses the canonical Core journal and
+a short configured shutdown budget. Windows source checks passed 18 shutdown
+cases (three POSIX cases remain platform-skipped), 15 owner/recovery cases,
+and the new final-publication failure/retry case.
+
+The full 0288de5 CI stopped progressing in canonical boot teardown. Local
+reproduction showed its synthetic factory was overwritten by server_runtime
+after constructor injection, causing an attempt to launch the placeholder
+candidate. Injecting at start preserves the boot behavior and all six boot
+cases pass. Runs 37733739695 and 37737140833 were cancelled after preserving
+failure/stack evidence; neither is passing evidence. Installed validation of
+the shutdown and boot corrections remains pending.
+
+Installed shutdown/boot validation passed 40 cases with three POSIX-only skips
+on Windows and unchanged campaign inputs (build/release-shutdown-final-installed,
+Nexus wheel SHA256 ade3d1461c4516b723778442dab64b0507baff40cda5cc3b4114900e2c2698b7).
+This includes real graceful, forced and pre-binding owner termination, final
+publication storage failure/retry, old-owner containment, and all six boot cases.
+Core PR 32 and Connector PR 45 have merged to develop; their main promotions are
+PRs 33 and 46. Core's macOS promotion rerun remains pending after two initial
+failures; Connector's promotion checks passed. No new main tag is claimed here.

@@ -14,46 +14,49 @@ from test_pr34_remediation import tool
 INSTRUMENT = r'''
 from pathlib import Path
 import json
-from okto_nexus.application.runtime_event_ingress import RuntimeEventIngress
-from okto_nexus.application.harness_supervisor import HarnessSupervisor
+from dataclasses import asdict
+from nexus_connector_core.journal import SQLiteJournal
+from okto_nexus.bootstrap.embedded_events import EmbeddedEventPublisher
+from okto_nexus.bootstrap.server_shutdown import ServerShutdownCoordinator
 held=threading.Event()
-released=threading.Event()
-capture_original=RuntimeEventIngress.capture
-recover_original=RuntimeEventIngress.recover
-shutdown_original=HarnessSupervisor.begin_shutdown
-close_original=RuntimeEventIngress.close
+released=asyncio.Event()
+capture_original=SQLiteJournal.record_event
+publish_original=EmbeddedEventPublisher.step
+shutdown_original=embedded_dispatch.EmbeddedDispatchOwner._close
+request_original=ServerShutdownCoordinator.request
+async def short_request(self,**kwargs):
+    return await request_original(self,**dict({'timeout_seconds':2},**kwargs))
+ServerShutdownCoordinator.request=short_request
 def record(name,value):
     path=Path(marker).with_name(name)
     temporary=path.with_suffix('.tmp')
     temporary.write_text(json.dumps(value))
     temporary.replace(path)
-def capture_pending(self,event,**kwargs):
-    if event.kind=='output_delta': held.set()
-    result=capture_original(self,event,**kwargs)
-    if event.kind=='output_delta':
-        record('pending.json',{
-            'event_id':result.event_id,'operation_id':result.operation_id,
-            'watermark':self.journal.watermark,'pending':self.projection_pending})
+async def capture_pending(self,event):
+    target='pending during signal' in json.dumps(asdict(event))
+    if target: held.set()
+    result=await capture_original(self,event)
+    if target:
+        record('pending.json',asdict(result))
     return result
-def recover_pending(self):
+async def publish_pending(self,scope):
     if held.is_set() and not released.is_set():
-        self.projection_pending=True
-        return 0
-    return recover_original(self)
-def begin_drain(self,**kwargs):
+        record('publication-held.json',scope)
+        await released.wait()
+    return await publish_original(self,scope)
+async def begin_drain(self):
     if held.is_set():
-        record('shutdown-boundary.json',{
-            'pending':self.event_ingress.projection_pending,
-            'watermark':self.event_ingress.journal.watermark})
+        record('shutdown-boundary.json',{'pending':not released.is_set()})
         released.set()
-    return shutdown_original(self,**kwargs)
-def close_drained(self):
-    close_original(self)
-    record('journal-closed.json',{'watermark':self.journal.watermark,'pending':self.projection_pending})
-RuntimeEventIngress.capture=capture_pending
-RuntimeEventIngress.recover=recover_pending
-HarnessSupervisor.begin_shutdown=begin_drain
-RuntimeEventIngress.close=close_drained
+    try:
+        await shutdown_original(self)
+    except Exception as error:
+        record('shutdown-error.json',{'type':type(error).__name__,'error':str(error)})
+        raise
+    record('journal-closed.json',{'resources':len(self.host._runtime_tasks)})
+SQLiteJournal.record_event=capture_pending
+EmbeddedEventPublisher.step=publish_pending
+embedded_dispatch.EmbeddedDispatchOwner._close=begin_drain
 '''
 
 
@@ -68,11 +71,11 @@ for line in sys.stdin:''')
         emit({"type":"agent_start"})
         emit({"type":"turn_start"})
         emit({"type":"message_start","role":"assistant"})
-        emit({"type":"message_update","assistantMessageEvent":{"type":"text_delta","delta":"pending during signal"}})
+        emit({"type":"message_update","assistantMessageEvent":{"type":"text_delta","delta":"pending during signal with a sufficiently long trailing stream buffer"}})
         continue
     if msg.get("type"):''')
-    launcher = fixture.LAUNCHER.replace('original_bootstrap=mcp_server.bootstrap', INSTRUMENT + '\noriginal_bootstrap=mcp_server.bootstrap')
-    launcher = launcher.replace('PiRpcConnector(command=', 'PiRpcConnector(version_command=[sys._base_executable,"-c","print(\'0.85.1\')"],command=')
+    launcher = fixture.LAUNCHER.replace('Original=uvicorn.Server', INSTRUMENT + '\nOriginal=uvicorn.Server')
+    assert launcher != fixture.LAUNCHER
     monkeypatch.setattr(fixture, "PEER", peer)
     monkeypatch.setattr(fixture, "LAUNCHER", launcher)
     server = fixture.ServeFixture(tmp_path)
@@ -81,37 +84,43 @@ for line in sys.stdin:''')
             connection.row_factory = sqlite3.Row
             return [dict(r) for r in connection.execute(sql, params)]
     try:
-        sid = server.open()
-        sent = tool(server.client, server.operator, "harness_send", {"session_id": sid,
-            "payload": {"text": "hold active until serve shutdown"}})
+        sid = server.open(actions=('open', 'send', 'close'))
+        sent = tool(server.client, server.subject, "harness_send", {"session_id": sid,
+            "idempotency_key": "signal-drain-turn", "payload": {"text": "hold active until serve shutdown"}})
         assert sent["ok"], sent
         op = sent["data"]["operation_id"]
         pending_path = tmp_path / "pending.json"
         deadline = time.monotonic() + 8
-        while not pending_path.exists():
-            assert time.monotonic() < deadline
+        while not (pending_path.exists() and (tmp_path / "publication-held.json").exists()):
+            assert time.monotonic() < deadline, server.log_path.read_text(encoding='utf-8')
             time.sleep(.02)
         pending = json.loads(pending_path.read_text())
-        assert pending["operation_id"] == op and pending["pending"] and pending["watermark"] > 0
-        assert rows("SELECT * FROM harness_events WHERE event_id=?", (pending["event_id"],)) == []
-        assert rows("SELECT * FROM runtime_results WHERE command_operation_id=?", (op,)) == []
-        assert not rows("SELECT terminal_event_id FROM runtime_commands WHERE operation_id=?", (op,))[0]["terminal_event_id"]
+        assert pending["operation_id"] == op and pending["sequence"] > 0
+        event_key = (sid, pending['stream_epoch'], pending['sequence'])
+        event_sql = "SELECT * FROM execution_event_ingress WHERE session_id=? AND stream_epoch=? AND sequence=?"
+        assert rows(event_sql, event_key) == []
+        assert rows("SELECT * FROM runtime_results WHERE canonical_operation_id=?", (op,)) == []
         began = time.monotonic()
         server.stop(mode)
         assert time.monotonic()-began < 20
         # serve deliberately converges graceful SIGTERM on normal cleanup/exit0.
         assert server.process.returncode == 0
         boundary = json.loads((tmp_path / "shutdown-boundary.json").read_text())
-        assert boundary["pending"] and boundary["watermark"] >= pending["watermark"]
-        captured = rows("SELECT * FROM harness_events WHERE event_id=?", (pending["event_id"],))
-        assert len(captured) == 1 and "pending during signal" in captured[0]["payload"]
-        assert rows("SELECT * FROM runtime_results WHERE command_operation_id=?", (op,)) == []
-        operation = rows("SELECT status,terminal_event_id,reason FROM runtime_commands WHERE operation_id=?", (op,))[0]
-        assert operation == {"status": "OUTCOME_UNKNOWN", "terminal_event_id": None, "reason": "runtime_lost"}
-        assert rows("SELECT * FROM harness_events WHERE delivery_phase='terminal'") == []
+        assert boundary["pending"]
+        captured = rows(event_sql, event_key)
+        assert len(captured) == 1 and "pending during signal" in captured[0]["payload_json"]
+        assert rows("SELECT * FROM runtime_results WHERE canonical_operation_id=?", (op,)) == []
+        receipts = rows("SELECT canonical_frame FROM execution_receipts WHERE operation_id=? ORDER BY receipt_revision DESC", (op,))
+        # Core's accepted receipt remains historical evidence. Proven resource
+        # release closes the session without inventing a terminal/result.
+        assert json.loads(receipts[0]['canonical_frame'])['stage'] == 'SUBMITTED'
+        assert rows('SELECT lifecycle_state,lease_state FROM execution_sessions WHERE session_id=?', (sid,)) == [
+            {'lifecycle_state': 'CLOSED', 'lease_state': 'CLOSED'}]
+        assert rows("SELECT * FROM execution_event_ingress WHERE json_extract(payload_json,'$.payload.delivery_phase')='terminal'") == []
         closed = json.loads((tmp_path / "journal-closed.json").read_text())
-        assert not closed["pending"] and closed["watermark"] >= boundary["watermark"]
-        assert rows("SELECT ordinal FROM runtime_journal_checkpoint")[0]["ordinal"] == closed["watermark"]
+        assert closed['resources'] == 0
+        assert rows("SELECT committed_contiguous FROM execution_event_watermarks WHERE session_id=? AND stream_epoch=?",
+                    (sid, pending['stream_epoch']))[0]['committed_contiguous'] >= pending['sequence']
         assert rows("PRAGMA foreign_key_check") == []
     finally:
         server.close()

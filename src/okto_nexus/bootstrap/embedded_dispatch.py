@@ -666,15 +666,43 @@ class EmbeddedDispatchOwner:
     async def close(self):
         await asyncio.shield(self._start_close())
 
+    async def _publish_shutdown_history(self):
+        try:
+            await self._recover_publications()
+            await self.events.recover()
+            from .embedded_reconciliation import EmbeddedReconciliation
+            reconciliation = EmbeddedReconciliation(self)
+            for row in await asyncio.to_thread(reconciliation._records):
+                report = self.containment_report.get((self.channel.executor_id, row['session_id']))
+                if report is None or 'unknown' in report.session_outcomes.values():
+                    continue
+                receipt = await self.host.historical_receipt(session_id=row['session_id'],
+                    key=OperationKey(self.channel.server_id, self.channel.executor_id, row['open_operation_id']))
+                if receipt is not None and receipt.stage in ('SUBMITTED', 'SUCCEEDED'):
+                    await reconciliation.release_session(row['session_id'])
+        except OktoNexusError as error:
+            if error.code != ErrorCode.CONFLICT:
+                raise
+            # A superseded owner must still contain its processes and close
+            # its stores. Only the new owner may publish the retained history.
+            try:
+                await asyncio.to_thread(self.verify)
+            except OktoNexusError as ownership_error:
+                if ownership_error.code != ErrorCode.CONFLICT:
+                    raise
+            else:
+                raise error
+
     async def _close(self):
         self._stopping.set()
         # Native containment must start before any database or publication
         # wait. Keep the journals alive for the producers joined below.
         if self.pump is not None:
             self.pump._stopping.set()
-        if (self._containment_task is not None and self._containment_task.done()
-                and (self._containment_task.cancelled()
-                     or self._containment_task.exception() is not None)):
+        if self._containment_task is not None and self._containment_task.done():
+            # A completed pass can still leave uncertain ownership or a
+            # deferred publication. Reobserve the same owners and reopen the
+            # history phase before retrying; never duplicate a pending pass.
             self._containment_task = None
         if self._containment_task is None:
             policy = self._shutdown_policy
@@ -702,9 +730,18 @@ class EmbeddedDispatchOwner:
         failures.extend(result for result in results if isinstance(result, BaseException))
         try:
             self.containment_report = await asyncio.shield(self._containment_task)
+            # A producer may have finished containment while it was being
+            # joined. Refresh the report without closing its durable history.
+            self.containment_report = await self.host.shutdown(ShutdownPolicy(0, 0), close_stores=False)
+            # Native shutdown can append its last receipt/events after the
+            # periodic publishers stop. Commit those facts before closing
+            # their journals, including unknown outcomes without a result.
+            await self._publish_shutdown_history()
             # All dispatch/publication producers have returned. The host now
             # joins history readers and closes only resolved Core resources.
-            self.containment_report = await self.host.shutdown(ShutdownPolicy(0,0))
+            if not any('unknown' in report.session_outcomes.values()
+                       for report in self.containment_report.values()):
+                self.containment_report = await self.host.shutdown(ShutdownPolicy(0,0))
         except Exception as error:
             failures.append(error)
         try:
