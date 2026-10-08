@@ -9,6 +9,37 @@ from test_embedded_dispatch import local_setup, connected_local, qualified_contr
 from test_embedded_inventory import app_for
 
 
+def test_pending_admission_survives_restart_alongside_released_history(tmp_path, monkeypatch):
+    from okto_nexus.bootstrap.embedded_dispatch import EmbeddedDispatchOwner
+    with contextmanager(local_setup.__wrapped__)(tmp_path, monkeypatch, None) as setup:
+        setup, binding, native = connected_local.__wrapped__(setup)
+        deps, app, client, headers, *_ = setup
+        previous = admit(setup, binding, 'mixed-history-open', 'runtime.start', new_session=True)
+        wait_receipt(setup, previous)
+        wait_receipt(setup, admit(setup, binding, 'mixed-history-close', 'runtime.close',
+            session_id=previous['session_id']), stages=('SUCCEEDED',))
+        client.portal.call(app.state.embedded_dispatch_owner.pump.stop)
+        pending = admit(setup, binding, 'mixed-pending-open', 'runtime.start', new_session=True, text='Preserved first turn')
+        assert native.opens == 1
+    original = EmbeddedDispatchOwner.start
+    async def start(owner):
+        owner.native_factory = native
+        await original(owner)
+    monkeypatch.setattr(EmbeddedDispatchOwner, 'start', start)
+    deps, app = app_for(tmp_path / 'home')
+    with TestClient(app) as client:
+        current = (deps, app, client, headers, *setup[4:])
+        wait_receipt(current, pending)
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            child = dict(uow.connection.execute('SELECT operation_id FROM execution_operations WHERE parent_operation_id=?',
+                (pending['operation_id'],)).fetchone())
+        wait_receipt(current, child)
+        assert native.opens == 2 and len(native.native.sent) == 1
+        assert app.state.embedded_dispatch_owner.recovery_failure is None
+        wait_receipt(current, admit(current, binding, 'mixed-final-close', 'runtime.close',
+            session_id=pending['session_id']), stages=('SUCCEEDED',))
+
+
 @pytest.mark.parametrize('occupied', [False, True])
 def test_preopen_failure_recovers_only_with_empty_owned_resources(tmp_path, monkeypatch, occupied):
     with contextmanager(local_setup.__wrapped__)(tmp_path, monkeypatch, None) as setup:

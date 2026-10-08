@@ -622,3 +622,25 @@ successfully. Nexus run 37742873924 was superseded after preserving logs: its
 Linux shard 1 reproduced the receipt-fault teardown fixed above; shard 3 had
 advanced to 51% without the former boot teardown stall. No complete Nexus
 regression success is claimed by this focused package validation.
+
+The real-process commit-before-wake case exposed a recovery regression: a
+committed admission with zero dispatch reservations was classified as failed
+preparation after restart. Embedded recovery now preserves that original
+admission only after proving no Core journal, ownership slot, local publication,
+receipt, lease or capability exists. The local reconciliation page excludes
+only those proved unstarted sessions and rechecks their persisted state before
+accepting recovery. The first actual dispatch still revalidates current
+authority. Failed preparations and uncertain effects keep their former fences.
+
+Source validation passed the real two-owner exclusion and commit-before-wake
+cases plus 40 reconciliation/preparation cases; a separate actual restart after
+sender credential revocation correctly prevented any native launch. A mixed
+retained-history/pending-admission restart also passed. Two historical process
+functions now map to these actual serve tests with a real owned Pi protocol
+peer. The installed campaign passed 72 cases with one POSIX-only case skipped
+on Windows and unchanged inputs (build/release-pending-admission-installed,
+wheel SHA256 5ba682d12864df68103c4a9f8cff39122bae724ac91b3bcee4f76e4c645abfd1).
+This includes the complete embedded dispatch/reconciliation modules and the
+existing signal-drain tests. The complete cross-platform release gate remains
+pending; run 37746505268 exited 245 on Linux 3.12 shard 3 while testing changed
+session ownership and dumping a two-minute timeout.

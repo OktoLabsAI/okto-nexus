@@ -3342,6 +3342,22 @@
         "tests/execution_r4/test_canonical_workspace_isolation.py::test_same_agent_in_two_workspaces_keeps_context_and_close_isolated"
       ],
       "source_sha256": "9e895f8510083298ac44749a44b3e8293b820dbccc1ce73d540b70f30523654a"
+    },
+    {
+      "test": "tests/test_runtime_owner_contention.py::test_second_server_process_cannot_take_live_owner_or_dispatch",
+      "reason": "Two actual canonical serve processes now exercise the home lock and unchanged durable owner identity. The surviving server then handles one canonical message through a real owned Pi protocol process and captures one completed result. The legacy standalone launcher and native injection hook were removed.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_owner_process.py::test_second_serve_process_cannot_take_live_owner_and_first_keeps_delivering"
+      ],
+      "source_sha256": "ee17cabb0fbbc0be83348b240d8f4f5ee8b88de945624faa15b796e677ff9724"
+    },
+    {
+      "test": "tests/test_runtime_commit_crash.py::test_committed_message_survives_owner_death_before_wake_without_duplicate_effect",
+      "reason": "The replacement kills actual serve immediately after a separate transaction observes the committed message, inbox claim and logical outbox, before wake or any dispatch reservation. A new process executes that original admission once; revoked initiating credentials instead block native execution. The original message and claim remain unique.",
+      "replacements": [
+        "tests/execution_r4/test_canonical_owner_process.py::test_committed_message_survives_serve_death_before_wake_without_duplicate_effect"
+      ],
+      "source_sha256": "756ff38e025d0f322ffb4f854fa9ccf91a2e46e2e192ecd17c1f9bc01235cb3f"
     }
   ]
 }

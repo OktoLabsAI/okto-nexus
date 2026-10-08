@@ -145,7 +145,7 @@ class ServeFixture:
             assert time.monotonic() < deadline, (view, self.log_path.read_text(encoding='utf-8')[-3000:])
             time.sleep(.02)
 
-    def open(self, *, actions=('open', 'close')):
+    def open(self, *, actions=('open', 'close'), workspace_id=None, start_native=True):
         from okto_nexus.domain.base import iso_plus
         with self.deps.connection_factory.unit_of_work(write=False) as uow:
             executor = uow.connection.execute("SELECT executor_id FROM execution_executors WHERE kind='embedded'").fetchone()[0]
@@ -155,7 +155,7 @@ class ServeFixture:
         candidate = snapshot['evidence'][0]['candidate_ref']
         response = self.client.post('/v1/runtime/executors/' + executor + '/realizations', json=dict(
             client_intent_id='shutdown-realization', agent_id='shutdown-fixture', workspace_root=str(self.project),
-            workspace_id=None, workspace_label='Shutdown fixture', adapter_id='pi_rpc', candidate_ref=candidate,
+            workspace_id=workspace_id, workspace_label='Shutdown fixture', adapter_id='pi_rpc', candidate_ref=candidate,
             inventory_revision=snapshot['inventory_revision'], local_consent_id='shutdown-consent', approved=True,
             provider_home=None, secret_bindings={}))
         assert response.status_code == 201, response.text
@@ -175,6 +175,8 @@ class ServeFixture:
             endpoint_id=self.binding['endpoint_id'], actions=list(actions), max_executions=3,
             expires_at=iso_plus(self.deps.clock.now_iso(), 600)))
         assert response.status_code == 200, response.text
+        if not start_native:
+            return None
         response = self.client.post('/api/v1/harness/sessions', headers={'Authorization': "Bearer " + self.subject}, json=dict(
             agent_id='shutdown-fixture', kind='pi', endpoint_id=self.binding['endpoint_id'],
             project_root=str(self.project), idempotency_key='shutdown-open'))

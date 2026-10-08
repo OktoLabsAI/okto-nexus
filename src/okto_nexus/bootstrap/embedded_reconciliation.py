@@ -267,10 +267,12 @@ class EmbeddedReconciliation:
             await self._recover_containers(ledger, [r for r in records if r['session_id'] not in absent])
             await self._empty_slots(ledger, {r['session_id'] for r in records} if agent_id is not None else None)
         proofs = {}
+        unstarted_sessions = set()
         for row in records:
             await asyncio.to_thread(owner.verify)
             if row['session_id'] in absent:
-                await self._recover_unstarted(row, proven_absent=True)
+                if await self._recover_unstarted(row, proven_absent=True):
+                    unstarted_sessions.add(row['session_id'])
                 continue
             if row["binding_json"] is None or row["stream_epoch"] is None:
                 if row['binding_json'] is None and row['stream_epoch'] is None:
@@ -319,7 +321,8 @@ class EmbeddedReconciliation:
                             proof=dict(ownership=fact, stream=stream))
         await asyncio.to_thread(settle_retained)
         reconciliation = ExecutionReconciliation(owner.factory,owner.channel,
-            owner_guard=lambda conn:owner.verify(uow=SimpleNamespace(connection=conn)), agent_id=agent_id)
+            owner_guard=lambda conn:owner.verify(uow=SimpleNamespace(connection=conn)), agent_id=agent_id,
+            unstarted_sessions=unstarted_sessions)
         for _ in range(128):
             request = await asyncio.to_thread(reconciliation.request)
             def receipts():
@@ -383,6 +386,12 @@ class EmbeddedReconciliation:
                 if conn.execute('SELECT 1 FROM execution_receipts r JOIN execution_operations o '
                     'USING(server_id,executor_id,operation_id) WHERE o.server_id=? AND o.executor_id=? AND o.session_id=?', key).fetchone():
                     raise CoreError('RECONCILIATION_REQUIRED', 'embedded_preopen_receipt')
+                from ..application.execution_reconciliation import pending_unstarted_session
+                if proven_absent and pending_unstarted_session(conn, *key):
+                    # No reservation, lease, local binding, Core journal or
+                    # owned slot ever existed. Preserve the original durable
+                    # admission for its first dispatch under current authority.
+                    return True
                 operations = conn.execute("SELECT operation_id FROM execution_operations WHERE server_id=? AND executor_id=? "
                     "AND session_id=? AND admission_state<>'RESOLVED_TERMINAL'", key).fetchall()
                 for operation in operations:
@@ -402,4 +411,4 @@ class EmbeddedReconciliation:
                 conn.execute("UPDATE execution_leases SET status='REVOKED' WHERE server_id=? AND executor_id=? AND session_id=?", key)
                 conn.execute("UPDATE execution_session_capabilities SET revoked_at=? WHERE server_id=? AND executor_id=? "
                     "AND session_id=? AND revoked_at IS NULL", (owner.deps.clock.now_iso(), *key))
-        await asyncio.to_thread(commit)
+        return await asyncio.to_thread(commit)
