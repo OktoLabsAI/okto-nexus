@@ -17,6 +17,20 @@ def compatible_selection(baseline, current):
         return False
     if baseline == current:
         return True
+    # Core may add an implementation for a previously unsupported control.
+    # That does not replace the selected installation or change the contract
+    # of an existing control. Current operation authorization still applies.
+    old_runtime, new_runtime = baseline['runtime'], current['runtime']
+    if ({k: v for k, v in old_runtime.items() if k != 'control_targeting'} !=
+            {k: v for k, v in new_runtime.items() if k != 'control_targeting'}):
+        return False
+    new_controls = {control['action']: control for control in new_runtime['control_targeting']}
+    if any(control['supported'] and new_controls.get(control['action']) != control
+           for control in old_runtime['control_targeting']):
+        return False
+    baseline = {**baseline, 'runtime': new_runtime}
+    if baseline == current:
+        return True
     # Candidate identity, platform, adapter contract and explicit selection
     # remain fixed. Version/build changes alone do not revoke that selection.
     changing = {'version', 'build_identity', 'content_fingerprint', 'qualification',

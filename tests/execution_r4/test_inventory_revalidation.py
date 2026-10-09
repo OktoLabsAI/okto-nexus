@@ -11,6 +11,48 @@ from okto_nexus.application.execution_local_launch import ApprovedLocalLaunch
 from okto_nexus.application.execution_inventory_revalidation import selection, accepts_binding
 
 
+@pytest.mark.parametrize('change', ['added_control', 'removed_control', 'changed_control', 'platform', 'fingerprint'])
+def test_core_control_addition_revalidates_existing_installation(admitted_local, monkeypatch, change):
+    import json
+    setup, sent, _, _ = admitted_local
+    deps, app, client, *_ = setup
+    owner = app.state.embedded_inventory_owner
+    client.portal.call(owner.refresh)
+    with deps.connection_factory.unit_of_work() as uow:
+        before = dict(uow.connection.execute('SELECT * FROM execution_bindings').fetchone())
+        row = uow.connection.execute('SELECT * FROM execution_inventory_revalidation').fetchone()
+        baseline = json.loads(row['baseline_json'])
+        controls = baseline['runtime']['control_targeting']
+        if change == 'added_control':
+            # Retained consent from a Core release that did not implement steer.
+            control = next(c for c in controls if c['action'] == 'turn.steer')
+            control.update(supported=False, requires_active_run=False, steer_timing=None)
+        elif change == 'removed_control':
+            controls.append(dict(action='future.control', supported=True))
+        elif change == 'changed_control':
+            controls[0]['native_turn_id'] = 'changed'
+        elif change == 'platform':
+            baseline['runtime']['implementation_platforms'] = ['other']
+        else:
+            baseline['evidence']['content_fingerprint'] = 'sha256:' + '0' * 64
+        uow.connection.execute('UPDATE execution_inventory_revalidation SET baseline_json=?',
+                               (json.dumps(baseline),))
+    candidate = setup[5]
+    other = replace(candidate, executable=candidate.executable + '.other', installation_ref=None)
+    monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+        lambda **_: SimpleNamespace(candidates=(candidate, other)))
+    client.portal.call(owner.refresh)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        after = dict(uow.connection.execute('SELECT * FROM execution_bindings').fetchone())
+        assert after == before
+        assert accepts_binding(uow.connection, after, owner.publication.inventory_revision,
+                               owner.key.server_id, owner.key.executor_id) == (change == 'added_control')
+        assert bool(uow.connection.execute('SELECT compatible FROM execution_inventory_revalidation').fetchone()[0]) == (change == 'added_control')
+    if change == 'added_control':
+        launch = ApprovedLocalLaunch(owner, sent.scope)
+        launch.check()
+
+
 @pytest.mark.parametrize('legacy', [False, True])
 def test_equivalent_refresh_preserves_binding_and_running_launch(admitted_local, monkeypatch, legacy):
     setup, sent, _, _ = admitted_local
