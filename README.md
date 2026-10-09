@@ -19,7 +19,7 @@ the derived `shared.md` view live outside that database.
 
 | Release fact | Value |
 |---|---|
-| Package | `okto-nexus 0.2.2` (development) |
+| Package | `okto-nexus 0.2.3` (development) |
 | Python | `>=3.11` |
 | MCP surface | Use `tools/list` for the active feature configuration |
 | MCP resources | 12 versioned reference resources |
@@ -1031,10 +1031,10 @@ Release checks:
 
 ```bash
 uv lock --check
-uv build --out-dir dist/release-0.2.2
+uv build --out-dir dist/release-0.2.3
 uvx twine check \
-  dist/release-0.2.2/okto_nexus-0.2.2-py3-none-any.whl \
-  dist/release-0.2.2/okto_nexus-0.2.2.tar.gz
+  dist/release-0.2.3/okto_nexus-0.2.3-py3-none-any.whl \
+  dist/release-0.2.3/okto_nexus-0.2.3.tar.gz
 ```
 
 Publish only explicitly named current-version artifacts. The top-level
