@@ -1,4 +1,5 @@
 import { AgentConnectionsPanel } from "../components/AgentConnectionsPanel";
+import { OneShotActivity } from '../components/OneShotActivity';
 import { RuntimeRecovery } from "../components/RuntimeRecovery";
 // Agents & API keys (spec S2 / FR5): the AgentsModal mirror. The freshly
 // issued key renders ONCE in component state - it is never written to any
@@ -827,6 +828,7 @@ export function AgentsView({
                         </button>
                       )}
                     </div>
+                    <OneShotActivity agentId={agent.agent_id} showCalls={false} />
                   </div>
 
                   {/* Full-width breakout row beneath the card (preserves the

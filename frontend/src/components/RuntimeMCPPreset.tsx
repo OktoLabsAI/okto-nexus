@@ -1,3 +1,4 @@
+import { MCPPresetFields, parseMCPPreset } from './MCPPresetFields';
 import { useEffect, useState } from 'react';
 import { api, type MCPPreset } from '../api';
 
@@ -18,32 +19,12 @@ export function RuntimeMCPPreset({endpoint, onPendingChange}: {endpoint: string;
   }, [endpoint, reload]);
   const dirty = !saved || text !== format(saved.servers);
   useEffect(() => {onPendingChange?.(busy || dirty);}, [busy, dirty, onPendingChange]);
-  const parse = () => {
-    if (new TextEncoder().encode(text).length > 32768) throw new Error('MCP preset must be 32 KiB or smaller.');
-    const result = JSON.parse(text);
-    if (!Array.isArray(result) || result.some(v => !v || typeof v !== 'object' || Array.isArray(v))) throw new Error('Enter a JSON array of MCP servers.');
-    return result as MCPPreset['servers'];
-  };
-  const add = (transport: 'stdio' | 'http') => {
-    try {const servers = parse(); servers.push(transport === 'stdio'
-      ? {name: `server${servers.length + 1}`, enabled: true, transport, command: '', args: [], env: {}, env_refs: {}}
-      : {name: `server${servers.length + 1}`, enabled: true, transport, url: '', header_refs: {}});
-      setText(format(servers)); setError(''); setNotice('');}
-    catch (e) {setError(String(e));}
-  };
   return <section aria-label="Runtime MCP preset" className="space-y-3 border-t pt-3 min-w-0">
-    <h5 className="font-semibold">MCP preset for this harness</h5>
-    <p className="text-xs text-surface-500">Applied to new runtime sessions. When global harness MCPs are enabled, a preset replaces servers with the same name; enabled: false removes that server. Nexus tools remain available according to agent permissions.</p>
-    <p className="text-xs text-surface-500">Commands and paths run on the runtime host. Use env_refs or header_refs for credentials, with references already authorized on that host, such as vault:docs-token. Do not paste credentials into this editor.</p>
-    <div className="flex flex-wrap gap-2"><button className="btn btn-secondary" disabled={busy || !saved} onClick={() => add('stdio')}>Add stdio MCP</button>
-      <button className="btn btn-secondary" disabled={busy || !saved} onClick={() => add('http')}>Add HTTP MCP</button></div>
-    <textarea aria-label="MCP preset JSON" spellCheck={false} rows={12} disabled={busy || !saved} value={text}
-      className="block w-full min-w-0 max-w-full rounded border p-2 font-mono text-xs bg-white dark:bg-surface-800"
-      onChange={e => {setText(e.target.value); setNotice('');}} />
+    <fieldset disabled={busy || !saved}><MCPPresetFields value={text} onChange={value => setText(value)} /></fieldset>
     <button className="btn btn-secondary" disabled={busy || !saved || !dirty} onClick={async () => {
       if (!saved) return;
       setError(''); setNotice('');
-      try {const servers = parse(); setBusy(true);
+      try {const servers = parseMCPPreset(text); setBusy(true);
         const p = await api.saveMcpPreset(endpoint, {expected_revision: saved.revision, servers});
         setSaved(p); setText(format(p.servers)); setNotice('MCP preset saved. New sessions use this configuration.');}
       catch (e) {setError(String(e));} finally {setBusy(false);}

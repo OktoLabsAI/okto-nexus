@@ -457,6 +457,13 @@
       "action": "Integrated runtime MCP presets into Agent Connections Preferences and existing remote connection setup. Draft follows Next/Back, participates in Test, and is persisted atomically by Finish with optimistic revision protection. Older clients preserve existing presets.",
       "validation": "22 connection setup/test/preset tests passed, including actual remote HTTP finish and concurrent preset conflict. TypeScript and Vite production build passed. Installed Nexus 0.3.0 wheel; pip check clean. Browser verified HTTP template and draft retention through Next/Back on Pi; discarded test draft without changing real preset. Health 200; Pi, Codex and Claude READY.",
       "outcome": "Available in current local instance. User confirmed preceding parallel warm-pool performance fix. Existing P06/P08 release follow-ups remain unchanged. Pending code across Nexus/Core/Connector prepared for commit on feature/v0.3.0, feature/v0.0.10 and feature/v0.0.8."
+    },
+    {
+      "date": "2026-10-10",
+      "step": "MCP-UI",
+      "action": "Replaced raw MCP JSON editors with a shared structured form for names, transport, commands, ordered arguments, environment variables and protected credential references. Removed live pool from one-shot setup and placed a graphical state bar and counters in each pooled agent card.",
+      "validation": "TypeScript/Vite build passed. Browser checked stdio draft retention through Next/Back, transport change to HTTP, URL and header references, incomplete form blocking and absence of raw JSON editor. Pi card displays 4/5 available with graphical states and parallel limit 5; pool absent from setup form. Screenshots inspected. Test draft discarded without changing real presets.",
+      "outcome": "Updated dashboard assets in current installation without restarting Nexus or interrupting runtimes. Existing release follow-ups unchanged."
     }
   ],
   "remaining": [

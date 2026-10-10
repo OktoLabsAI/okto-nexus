@@ -1,6 +1,5 @@
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { api, type OneShotPolicy, type OneShotSettings as Settings } from '../api';
-import { OneShotActivity } from './OneShotActivity';
 
 const fields: Array<{key: Exclude<keyof Settings, 'overflow'>; label: string; min: number; max: number}> = [
   {key: 'max_parallel', label: 'Maximum parallel instances (0 = unlimited)', min: 0, max: 256},
@@ -11,7 +10,7 @@ const fields: Array<{key: Exclude<keyof Settings, 'overflow'>; label: string; mi
 ];
 
 export type OneShotSettingsHandle = {save: () => Promise<boolean>};
-export const OneShotSettings = forwardRef<OneShotSettingsHandle, {agentId?: string; showActivity?: boolean; saveOnNext?: boolean; onPendingChange?: (pending: boolean) => void}>(function OneShotSettings({agentId, showActivity = true, saveOnNext = false, onPendingChange}, ref) {
+export const OneShotSettings = forwardRef<OneShotSettingsHandle, {agentId?: string; showActivity?: boolean; saveOnNext?: boolean; onPendingChange?: (pending: boolean) => void}>(function OneShotSettings({agentId, saveOnNext = false, onPendingChange}, ref) {
   const [policy, setPolicy] = useState<OneShotPolicy | null>(null);
   const [values, setValues] = useState<Partial<Settings>>({});
   const [busy, setBusy] = useState(true);
@@ -67,6 +66,5 @@ export const OneShotSettings = forwardRef<OneShotSettingsHandle, {agentId?: stri
     {!saveOnNext && <button className="btn btn-secondary" disabled={busy || !policy || !!invalid} onClick={() => void save()}>Save one-shot capacity</button>}
     <button className="btn btn-secondary ml-2" disabled={busy} onClick={() => setReload(n => n + 1)}>Reload capacity</button>
     {error && <p role="alert">{error}</p>}{notice && <p role="status">{notice}</p>}
-    {agentId && <OneShotActivity agentId={agentId} showCalls={showActivity} revision={policy?.revision} />}
   </section>;
 });
