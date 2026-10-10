@@ -29,6 +29,8 @@ def agent_connection_statuses(uow, now_iso):
     now = datetime.fromisoformat(now_iso.replace('Z', '+00:00'))
     rows = uow.connection.execute('''
         SELECT a.agent_id, COALESCE(p.execution_location,'local') location,
+               EXISTS(SELECT 1 FROM execution_bindings rb JOIN agent_endpoints rep ON rep.endpoint_id=rb.endpoint_id
+                   WHERE rep.agent_id=a.agent_id) runtime_integrated,
                COALESCE(o.runtime_enabled,d.runtime_enabled) runtime_enabled,
                e.executor_id,e.label,e.control_state,e.last_seen_at,
                EXISTS(SELECT 1 FROM execution_bindings b JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id
@@ -78,7 +80,8 @@ def agent_connection_statuses(uow, now_iso):
     result = {}
     for row in rows:
         item = result.setdefault(row['agent_id'], dict(
-            location=row['location'], status='Offline' if row['location']=='remote' else 'Local', hosts=[]))
+            location=row['location'], status='Offline' if row['location']=='remote' else 'Local', hosts=[],
+            runtime_integrated=bool(row['runtime_integrated'])))
         if not row['runtime_enabled']:
             item['status'] = 'MCP only'
         if row['executor_id'] is None:

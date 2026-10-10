@@ -45,11 +45,15 @@ def require_closed(conn, agent_ids):
                         (agent_id,)).fetchone():
             raise OktoNexusError(ErrorCode.CONFLICT,
                 'Wait for pending one-shot calls before changing session isolation.', {'agent_id': agent_id})
-        if conn.execute('SELECT 1 FROM execution_sessions s JOIN execution_bindings b '
+        bindings = conn.execute('SELECT DISTINCT s.binding_id FROM execution_sessions s JOIN execution_bindings b '
                 'USING(server_id,executor_id,binding_id) JOIN agent_endpoints e ON e.endpoint_id=b.endpoint_id '
-                "WHERE e.agent_id=? AND s.lifecycle_state NOT IN ('CLOSED','FAILED') LIMIT 1", (agent_id,)).fetchone():
+                "WHERE e.agent_id=? AND s.lifecycle_state<>'CLOSED' "
+                "AND NOT (s.lifecycle_state='FAILED' AND s.lease_state='CLOSED')", (agent_id,)).fetchall()
+        if bindings:
             raise OktoNexusError(ErrorCode.CONFLICT,
-                'Close existing sessions for affected agents before changing session isolation.', {'agent_id': agent_id})
+                'Close existing sessions for affected agents before changing session isolation.',
+                {'reason': 'ACTIVE_SESSIONS', 'agent_id': agent_id,
+                 'binding_ids': [row[0] for row in bindings]})
 
 
 def invalidate(uow, access, agent_ids, now):

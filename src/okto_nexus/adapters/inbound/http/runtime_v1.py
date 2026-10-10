@@ -952,6 +952,11 @@ def build_router() -> APIRouter:
         except CoreError as error:
             return v1_err(409, error.code, 'Refresh installations and test the selected runtime again.')
         except OktoNexusError as error:
+            if error.code == ErrorCode.CONFLICT and error.details.get('reason') == 'ACTIVE_SESSIONS':
+                return JSONResponse({'error': {'code': error.code, 'message': error.message,
+                    'stage': 'connection.finish', 'possible_effect': False, 'retry_safe': False,
+                    'operation_id': None, 'action': '', 'details': error.details}},
+                    status_code=409, headers={'Cache-Control': 'no-store'})
             return runtime_error(error, 'connection.finish')
 
     return router

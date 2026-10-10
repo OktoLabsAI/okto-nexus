@@ -1,10 +1,11 @@
+import { AgentActionModal, AgentModalFooter } from './AgentActionModal';
 // Preset editor modal - the Pulse PresetEditorModal grammar: name +
 // description inputs, Enable all / Disable all bulk actions, the flags
 // editor, and a footer that adapts (view-only built-in -> "Clone to
 // customize"; custom/new -> Save).
 
 import { useMemo, useState } from "react";
-import { Copy, Save, X } from "lucide-react";
+import { Copy, Save } from "lucide-react";
 import {
   api,
   type PermissionFlags,
@@ -81,41 +82,9 @@ export function PresetEditorModal({
   };
 
   return (
-    <div
-      className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center"
-      onClick={onClose}
-    >
-      <div
-        className="relative w-[760px] max-w-[95vw] bg-white dark:bg-surface-900 rounded-xl shadow-2xl max-h-[88vh] flex flex-col overflow-hidden border border-surface-200/50 dark:border-surface-700/50"
-        onClick={(e) => e.stopPropagation()}
-        data-testid="preset-editor"
-      >
-        <div className="px-5 py-3 border-b border-surface-200/60 dark:border-surface-700/50 flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-2">
-            <h2 className="font-display font-semibold text-sm text-surface-900 dark:text-surface-100">
-              {preset
-                ? cloning
-                  ? `Clone: ${preset.name}`
-                  : preset.name
-                : "New preset"}
-            </h2>
-            {isBuiltin && !cloning && (
-              <span className="chip bg-surface-200 text-surface-600 dark:bg-surface-700 dark:text-surface-300">
-                built-in · read-only
-              </span>
-            )}
-            <span className="chip bg-surface-100 text-surface-500 dark:bg-surface-800 dark:text-surface-400">
-              {counts.enabled}/{counts.total} enabled
-            </span>
-          </div>
-          <button
-            onClick={onClose}
-            className="p-1.5 text-surface-400 hover:text-surface-600 dark:hover:text-surface-300 hover:bg-surface-100 dark:hover:bg-white/10 rounded-lg"
-          >
-            <X size={16} />
-          </button>
-        </div>
-
+<AgentActionModal title={preset ? (cloning ? `Clone: ${preset.name}` : preset.name) : "New permission preset"} onClose={onClose} wide testId="preset-editor" busy={saving}
+  dirty={cloning || name !== (preset?.name ?? '') || description !== (preset?.description ?? '') || JSON.stringify(flags) !== JSON.stringify(mergeFlags(registry, preset?.flags ?? initialFlags ?? registry))}>
+        <p className="text-xs text-surface-500">{isBuiltin && !cloning ? 'Built-in · read-only · ' : ''}{counts.enabled}/{counts.total} enabled</p>
         <div className="flex-1 overflow-y-auto p-5 space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div>
@@ -167,7 +136,7 @@ export function PresetEditorModal({
           {error && <p className="text-xs text-red-500">{error}</p>}
         </div>
 
-        <div className="px-5 py-3 border-t border-surface-200/60 dark:border-surface-700/50 flex justify-end gap-2 shrink-0">
+        <AgentModalFooter>
           {isBuiltin && !cloning ? (
             <button
               className="btn btn-primary"
@@ -189,8 +158,7 @@ export function PresetEditorModal({
               <Save size={14} /> {preset && !isBuiltin ? "Save preset" : "Create preset"}
             </button>
           )}
-        </div>
-      </div>
-    </div>
+        </AgentModalFooter>
+    </AgentActionModal>
   );
 }

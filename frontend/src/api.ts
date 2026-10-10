@@ -635,7 +635,7 @@ export interface PresetsPayload {
 }
 
 export interface AgentRow {
-  connection?: { location: 'local' | 'remote'; status: string; hosts: {executor_id: string; label: string; status: string; last_seen_at: string | null}[] };
+  connection?: { location: 'local' | 'remote'; status: string; runtime_integrated?: boolean; hosts: {executor_id: string; label: string; status: string; last_seen_at: string | null}[] };
   agent_id: string;
   role: string | null;
   capabilities: Record<string, unknown>;
@@ -652,6 +652,13 @@ export interface AgentRow {
   comm_scope: CommScope | null;
   // Display color (spec 2d6920f4): "#RRGGBB" or null = auto-by-identity.
   color: string | null;
+}
+
+export interface AgentRuntimeOverview {
+  agent_id: string; active_count: number; has_more: boolean; next_after: number;
+  active: (import('./runtimeApi').RuntimeSession & {host: string; location: string; harness: string; pool_state: string | null})[];
+  completed: {operation_id: string; server_id: string; executor_id: string; session_id: string; binding_id: string;
+    workspace_id: string; created_at: string; completed_at: string; outcome: string; harness: string; host: string}[];
 }
 
 export interface MessageRow {
@@ -1270,6 +1277,10 @@ export const api = {
     ),
   uploadMetaHarnessArtifact: uploadArtifact,
   agents: () => call<{ items: AgentRow[] }>("/api/v1/agents"),
+  agentRuntimeOverview: (agentId: string, after = 0, signal?: AbortSignal) => call<AgentRuntimeOverview>(
+    `/api/v1/agents/${encodeURIComponent(agentId)}/runtime-administration?after=${after}`, {signal}),
+  agentRuntimeExecution: (agentId: string, operationId: string, executorId: string, signal?: AbortSignal) => call<import('./runtimeApi').RuntimeOperation>(
+    `/api/v1/agents/${encodeURIComponent(agentId)}/runtime-executions/${encodeURIComponent(operationId)}?executor_id=${encodeURIComponent(executorId)}`, {signal}),
   createAgent: (body: {
     agent_id: string;
     role?: string;

@@ -1,27 +1,37 @@
 import type { MCPPreset } from '../api';
+import { useEffect, useState } from 'react';
+import { Pencil, Trash2 } from 'lucide-react';
+import { AgentActionModal } from './AgentActionModal';
+import { MCPCredentialsHelp } from './MCPCredentialsHelp';
 
 const inputClass = 'block w-full min-w-0 rounded border p-2 bg-white dark:bg-surface-800';
 
-function MappingFields({label, value, onChange}: {label: string; value: Record<string, string>; onChange: (value: Record<string, string>) => void}) {
-  const entries = Object.entries(value);
+function MappingFields({label, value, references, onChange}: {label: string; value: Record<string, string>; references: Record<string, string>; onChange: (value: Record<string, string>, references: Record<string, string>) => void}) {
+  const [showValues, setShowValues] = useState(false);
+  const entries = [...Object.entries(value).map(([key, item]) => ({key, item, source: 'value'})), ...Object.entries(references).map(([key, ref]) => ({key, item: ref.slice(ref.indexOf(':') + 1), source: ref.startsWith('vault:') ? 'vault' : 'provider'}))];
+  const change = (rows: typeof entries) => onChange(Object.fromEntries(rows.filter(row => row.source === 'value').map(row => [row.key, row.item])), Object.fromEntries(rows.filter(row => row.source !== 'value').map(row => [row.key, `${row.source}:${row.item}`])));
   return <fieldset className="space-y-2 min-w-0"><legend className="font-medium">{label}</legend>
-    {entries.map(([key, item], index) => <div key={index} className="grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] gap-2">
+    {entries.map(({key, item, source}, index) => <div key={`${source}-${index}`} className="grid grid-cols-1 sm:grid-cols-[minmax(0,1fr)_9rem_minmax(0,1.5fr)_auto] gap-2">
       <input aria-label={`${label} name ${index + 1}`} className={inputClass} value={key} onChange={e => {
-        if (entries.some(([name], i) => i !== index && name.toLowerCase() === e.target.value.toLowerCase())) {
+        if (entries.some((row, i) => i !== index && row.key.toLowerCase() === e.target.value.toLowerCase())) {
           e.target.setCustomValidity('This name is already in use.'); e.target.reportValidity(); return;
         }
         e.target.setCustomValidity('');
-        onChange(Object.fromEntries(entries.map((entry, i) => i === index ? [e.target.value, item] : entry)));
+        change(entries.map((entry, i) => i === index ? {...entry, key: e.target.value} : entry));
       }} />
-      <input aria-label={`${label} value ${index + 1}`} className={inputClass} value={item}
-        onChange={e => onChange({...value, [key]: e.target.value})} />
+      <select aria-label={`${label} source ${index + 1}`} className={inputClass} value={source} onChange={e => change(entries.map((entry, i) => i === index ? {...entry, source: e.target.value, item: ''} : entry))}>
+        <option value="value">Direct value</option><option value="provider">Host environment</option><option value="vault">Host vault</option>
+      </select>
+      <input aria-label={`${label} value ${index + 1}`} type={source === 'value' && !showValues ? 'password' : 'text'} autoComplete="off" spellCheck={false} className={inputClass} value={item} placeholder={source === 'provider' ? 'MY_MCP_TOKEN' : source === 'vault' ? 'stored-credential-name' : 'Value (saved in configuration)'}
+        onChange={e => change(entries.map((entry, i) => i === index ? {...entry, item: e.target.value} : entry))} />
       <button type="button" className="btn btn-secondary" aria-label={`Remove ${label} ${index + 1}`}
-        onClick={() => onChange(Object.fromEntries(entries.filter((_, i) => i !== index)))}>Remove</button>
+        onClick={() => change(entries.filter((_, i) => i !== index))}>Remove</button>
     </div>)}
     <button type="button" className="btn btn-secondary" onClick={() => {
-      let n = 1; while (`VARIABLE_${n}` in value) n++;
-      onChange({...value, [`VARIABLE_${n}`]: ''});
+      let n = 1; while (entries.some(row => row.key === `VARIABLE_${n}`)) n++;
+      change([...entries, {key: `VARIABLE_${n}`, item: '', source: 'value'}]);
     }}>Add {label.toLowerCase()}</button>
+    {!!entries.length && <label className="ml-3 text-xs text-surface-500"><input type="checkbox" checked={showValues} onChange={e => setShowValues(e.target.checked)} /> Show direct values</label>}
   </fieldset>;
 }
 
@@ -47,43 +57,73 @@ export function parseMCPPreset(text: string): MCPPreset['servers'] {
         throw new Error(`${server.name}: secret references must start with vault: or provider:.`);
     if (Object.keys(server.env ?? {}).some(key => key in (server.env_refs ?? {})))
       throw new Error(`${server.name}: an environment variable cannot also have a secret reference.`);
+    const headers = [...Object.keys(server.headers ?? {}), ...Object.keys(server.header_refs ?? {})].map(key => key.toLowerCase());
+    if (new Set(headers).size !== headers.length) throw new Error(`${server.name}: each HTTP header needs a unique name.`);
   }
   return value;
 }
 
-export function MCPPresetFields({value, onChange, remote = false}: {value: string; onChange: (text: string) => void; remote?: boolean}) {
+export function MCPPresetFields({value, onChange, remote = false, standalone = false, onPendingChange}: {value: string; onChange: (text: string) => void; remote?: boolean; standalone?: boolean; onPendingChange?: (pending: boolean) => void}) {
   const servers = JSON.parse(value) as MCPPreset['servers'];
-  const update = (index: number, changes: Record<string, unknown>) => onChange(JSON.stringify(servers.map((server, i) => i === index ? {...server, ...changes} : server)));
+  const [editor, setEditor] = useState<{index: number | null; server: Record<string, unknown>} | null>(null);
+  const [editorError, setEditorError] = useState('');
+  const [notice, setNotice] = useState('');
+  const [helpOpen, setHelpOpen] = useState(false);
+  const applyHint = standalone ? 'Use Save MCP preset to apply this list.' : 'Finish the connection setup to apply this list.';
+  useEffect(() => {onPendingChange?.(editor !== null);}, [editor !== null, onPendingChange]);
+  useEffect(() => () => onPendingChange?.(false), [onPendingChange]);
+  const update = (_index: number, changes: Record<string, unknown>) => {setEditor(current => current && {...current, server: {...current.server, ...changes}}); setEditorError('');};
   let error = '';
   try {parseMCPPreset(value);} catch (reason) {error = String(reason);}
   const add = (transport: 'stdio' | 'http') => {
     let index = servers.length + 1;
     while (servers.some(server => server.name === `server${index}`)) index++;
-    servers.push(transport === 'stdio'
+    setEditor({index: null, server: transport === 'stdio'
       ? {name: `server${index}`, enabled: true, transport, command: '', args: [], env: {}, env_refs: {}}
-      : {name: `server${index}`, enabled: true, transport, url: '', header_refs: {}});
-    onChange(JSON.stringify(servers, null, 2));
+      : {name: `server${index}`, enabled: true, transport, url: '', header_refs: {}}});
+    setEditorError(''); setNotice('');
+  };
+  const saveEditor = () => {
+    if (!editor) return;
+    const next = editor.index === null ? [...servers, editor.server] : servers.map((server, index) => index === editor.index ? editor.server : server);
+    try {
+      const text = JSON.stringify(next, null, 2); parseMCPPreset(text);
+      onChange(text); setEditor(null); setEditorError('');
+      setNotice(`MCP list updated in this draft. ${applyHint}`);
+    } catch (reason) {setEditorError(reason instanceof Error ? reason.message : String(reason));}
   };
   return <section aria-label="Runtime MCP preset" className="space-y-3 border-t pt-3 min-w-0">
     <h5 className="font-semibold">MCP servers for this harness</h5>
-    <p className="text-surface-500">Add the MCPs this agent needs in new runtime sessions. These work together with the harness global MCP inheritance setting. A matching name replaces an inherited server.</p>
-    <p className="text-surface-500">Commands and paths run on the runtime host. Use secret references for credentials already authorized on that host. Nexus tools follow the agent permissions.</p>
+    <p className="text-surface-500">Extra tools for new sessions. Servers with matching names override inherited MCPs.</p>
+    <details className="text-surface-500"><summary className="cursor-pointer">Host paths and inheritance</summary><p className="mt-2 leading-relaxed">Commands run on the runtime host. Disabling a server also disables an inherited MCP with the same name. Nexus tools follow the agent permissions.</p></details>
     <div className="flex flex-wrap gap-2">
-      <button type="button" className="btn btn-secondary" disabled={servers.length >= 32} onClick={() => add('stdio')}>Add stdio MCP</button>
-      <button type="button" className="btn btn-secondary" disabled={servers.length >= 32} onClick={() => add('http')}>Add HTTP MCP</button>
+      <button type="button" className="btn btn-secondary" disabled={!!editor || servers.length >= 32} onClick={() => add('stdio')}>Add stdio MCP</button>
+      <button type="button" className="btn btn-secondary" disabled={!!editor || servers.length >= 32} onClick={() => add('http')}>Add HTTP MCP</button>
     </div>
     {!servers.length && <p className="text-surface-500">No additional MCP servers configured.</p>}
-    {servers.map((server, index) => <fieldset key={index} className="rounded-lg border p-3 space-y-3 min-w-0">
-      <legend className="font-semibold px-1">MCP {index + 1} · {server.transport === 'http' ? 'HTTP' : 'Local command'}</legend>
+    {!!servers.length && <ul aria-label="Added MCP servers" className="divide-y divide-surface-200 rounded-lg border border-surface-200 dark:divide-surface-700 dark:border-surface-700">
+      {servers.map((server, index) => <li key={index} className="flex flex-wrap items-center gap-3 p-3">
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2"><span className="font-medium break-all">{String(server.name)}</span>
+            <span className={`rounded px-1.5 py-0.5 text-[10px] font-semibold ${server.transport === 'http' ? 'bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-300' : 'bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300'}`}>{server.transport === 'http' ? 'HTTP' : 'STDIO'}</span>
+            {server.enabled === false && <span className="text-[10px] text-surface-500">Disabled</span>}
+          </div>
+          <p className="mt-1 truncate text-[11px] text-surface-500">{String(server.transport === 'http' ? server.url : server.command)}</p>
+        </div>
+        <button type="button" className="btn btn-secondary" disabled={!!editor} aria-label={`Edit MCP ${server.name}`} onClick={() => {setEditor({index, server: structuredClone(server)});setEditorError('');setNotice('');}}><Pencil size={13} /> Edit</button>
+        <button type="button" className="btn btn-secondary" disabled={!!editor} aria-label={`Delete MCP ${server.name}`} onClick={() => {onChange(JSON.stringify(servers.filter((_, i) => i !== index), null, 2));setNotice(`MCP removed from this draft. ${applyHint}`);}}><Trash2 size={13} /> Delete</button>
+      </li>)}
+    </ul>}
+    {editor && [editor.server].map((server, index) => <fieldset key="mcp-editor" aria-label="MCP editor" className="rounded-lg border p-3 space-y-3 min-w-0">
+      <legend className="font-semibold px-1">{editor.index === null ? 'Add MCP server' : `Edit ${servers[editor.index]?.name}`}</legend>
       <div className="flex flex-wrap items-end gap-3">
-        <label className="flex-1 min-w-0">Server name<input className={inputClass} value={String(server.name ?? '')} maxLength={64}
+        <label className="flex-1 min-w-0">Server name<input autoFocus className={inputClass} value={String(server.name ?? '')} maxLength={64}
           onChange={e => update(index, {name: e.target.value})} /></label>
         <label className="py-2"><input type="checkbox" checked={server.enabled !== false} onChange={e => update(index, {enabled: e.target.checked})} /> Enabled</label>
-        <button type="button" className="btn btn-secondary" aria-label={`Remove MCP ${index + 1}`} onClick={() => onChange(JSON.stringify(servers.filter((_, i) => i !== index)))}>Remove MCP</button>
       </div>
       <label className="block">Connection type<select className={inputClass} value={String(server.transport)} onChange={e => {
         const replacement = e.target.value === 'stdio' ? {command: '', args: [], env: {}, env_refs: {}} : {url: '', header_refs: {}};
-        onChange(JSON.stringify(servers.map((item, i) => i === index ? {name: server.name, enabled: server.enabled, transport: e.target.value, ...replacement} : item)));
+        setEditor({...editor, server: {name: server.name, enabled: server.enabled, transport: e.target.value, ...replacement}});setEditorError('');
       }}><option value="stdio">Local command (stdio)</option><option value="http">HTTP server</option></select></label>
       {server.transport === 'stdio' ? <>
         <label className="block">Command<input className={inputClass} value={String(server.command ?? '')} placeholder="npx"
@@ -95,16 +135,25 @@ export function MCPPresetFields({value, onChange, remote = false}: {value: strin
           </div>)}
           <button type="button" className="btn btn-secondary" onClick={() => update(index, {args: [...(server.args as string[] ?? []), '']})}>Add argument</button>
         </fieldset>
-        <MappingFields label="Environment variables" value={server.env as Record<string, string> ?? {}} onChange={env => update(index, {env})} />
-        <MappingFields label="Environment secret references" value={server.env_refs as Record<string, string> ?? {}} onChange={env_refs => update(index, {env_refs})} />
+        <details className="space-y-3" open={Object.keys(server.env as object ?? {}).length + Object.keys(server.env_refs as object ?? {}).length > 0 || undefined}>
+          <summary className="cursor-pointer text-surface-500">Environment & credentials <span className="text-[10px]">Optional</span></summary>
+          <MappingFields label="Environment variables" value={server.env as Record<string, string> ?? {}} references={server.env_refs as Record<string, string> ?? {}} onChange={(env, env_refs) => update(index, {env, env_refs})} />
+        </details>
       </> : <>
         <label className="block">Server URL<input type="url" className={inputClass} value={String(server.url ?? '')} placeholder="https://example.com/mcp"
           onChange={e => update(index, {url: e.target.value})} /></label>
-        <MappingFields label="Header secret references" value={server.header_refs as Record<string, string> ?? {}} onChange={header_refs => update(index, {header_refs})} />
+        <MappingFields label="HTTP headers" value={server.headers as Record<string, string> ?? {}} references={server.header_refs as Record<string, string> ?? {}} onChange={(headers, header_refs) => update(index, {headers, header_refs})} />
       </>}
-      <p className="text-surface-500">Use vault:name or provider:name for secret references. Disabling this server also disables an inherited MCP with the same name.</p>
+      <p className="rounded bg-amber-50 p-2 text-xs text-amber-800 dark:bg-amber-950/30 dark:text-amber-200">Direct values are allowed and saved with the MCP configuration, including exports. For sensitive values, prefer an authorized reference to the runtime host environment or vault. <button type="button" className="underline font-medium" onClick={() => setHelpOpen(true)}>Help: storing MCP credentials</button></p>
+      {editorError && <p role="alert">{editorError}</p>}
+      <div className="flex justify-end gap-2 border-t border-surface-200 pt-3 dark:border-surface-700">
+        <button type="button" className="btn btn-secondary" onClick={() => {setEditor(null);setEditorError('');}}>Cancel MCP editing</button>
+        <button type="button" className="btn btn-primary" onClick={saveEditor}>{editor.index === null ? 'Add to list' : 'Save MCP changes'}</button>
+      </div>
     </fieldset>)}
-    <p className="text-surface-500">{remote ? 'Finish saves this preset for new sessions on the remote Connector.' : 'Next keeps your changes in this draft. Test checks this preset with the harness; Finish saves it with the connection.'} Existing sessions keep their configuration.</p>
+    {notice && <p role="status" className="text-xs text-emerald-700 dark:text-emerald-300">{notice}</p>}
+    <p className="text-surface-500">{standalone ? 'Save MCP preset applies this list to new sessions.' : remote ? 'Finish saves this list for new sessions on the remote Connector.' : 'Add or save each MCP in this list, then continue with Next. Test checks the list with the harness; Finish saves it with the connection.'} Existing sessions keep their configuration.</p>
     {error && <p role="alert">{error}</p>}
+    {helpOpen && <AgentActionModal title="Help · MCP credentials" onClose={() => setHelpOpen(false)} guardChanges={false}><MCPCredentialsHelp /></AgentActionModal>}
   </section>;
 }

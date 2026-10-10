@@ -5,7 +5,7 @@
 // policy matching the operator intercepts steering too (surfaced below).
 
 import { useEffect, useState } from "react";
-import { Target, X } from "lucide-react";
+import { AgentActionModal, AgentModalFooter, ModalCancelButton } from './AgentActionModal';
 import {
   api,
   type AgentRow,
@@ -70,39 +70,7 @@ export function SteerModal({
   };
 
   return (
-    <div
-      className="fixed inset-0 z-50 bg-black/40 flex items-start justify-center pt-24"
-      onClick={onClose}
-      data-testid="steer-modal"
-    >
-      <div
-        className="relative w-[480px] max-w-[94vw] bg-white dark:bg-surface-900 rounded-xl shadow-2xl border border-surface-200/50 dark:border-surface-700/50 overflow-hidden"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="px-5 pt-4 pb-3 border-b border-surface-100 dark:border-surface-800">
-          <div className="flex items-center gap-2">
-            <Target size={15} className="text-accent-500" />
-            <h2 className="text-sm font-semibold text-surface-900 dark:text-surface-100">
-              Steer agent
-            </h2>
-            <button
-              className="ml-auto p-1 rounded text-surface-400 hover:text-surface-600 dark:hover:text-surface-300"
-              onClick={onClose}
-              title="Close"
-            >
-              <X size={14} />
-            </button>
-          </div>
-          <p className="text-[11px] text-surface-500 dark:text-surface-400 mt-1">
-            Sends a direct message as{" "}
-            <code className="font-mono bg-surface-100 dark:bg-surface-800 px-1 rounded">
-              operator
-            </code>{" "}
-            — it lands in the agent's inbox like any other message and goes
-            through the same permission and governance gates.
-          </p>
-        </div>
-
+<AgentActionModal title={`Message · ${agent.agent_id}`} onClose={onClose} testId="steer-modal" busy={sending} guardChanges={!result || !!body} dirty={!!body || !!subject}>
         <div className="px-5 py-4 space-y-3 text-xs">
           <div>
             <label className="text-[11px] uppercase tracking-wide text-surface-500 dark:text-surface-400">
@@ -205,14 +173,12 @@ export function SteerModal({
             ))}
         </div>
 
-        <div className="px-5 pb-4 flex items-center gap-2">
+        <AgentModalFooter>
           <span className="text-[11px] text-surface-400 dark:text-surface-500">
             From: <span className="font-mono text-surface-600 dark:text-surface-300">operator</span>
           </span>
           <div className="ml-auto flex gap-2">
-            <button className="btn btn-secondary" onClick={onClose}>
-              {result ? "Close" : "Cancel"}
-            </button>
+            <ModalCancelButton onClose={onClose}>{result ? "Close" : "Cancel"}</ModalCancelButton>
             <button
               className="btn btn-primary"
               disabled={sending || !body.trim() || !target}
@@ -222,8 +188,7 @@ export function SteerModal({
               {sending ? "Sending…" : "Send as operator"}
             </button>
           </div>
-        </div>
-      </div>
-    </div>
+        </AgentModalFooter>
+    </AgentActionModal>
   );
 }

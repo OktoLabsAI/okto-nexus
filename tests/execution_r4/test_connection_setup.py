@@ -133,6 +133,41 @@ def test_setup_transport_requires_operator(local_setup):
     assert client.get('/v1/connections/setup/subject',headers=headers['operator']).status_code == 200
 
 
+@pytest.mark.parametrize('change_policy', [False, True])
+def test_finish_offers_scoped_session_choice_and_retries_after_release(local_setup, monkeypatch, change_policy):
+    from test_binding_replacement import seed_claim
+    context, request = request_for(local_setup)
+    verified = {'root': directory_identity(request['configuration']['workspace_root']), 'home': None}
+    binding = finish(local_setup, context, request, verified=verified)['binding']
+    deps, app, client, headers, *_ = local_setup
+    request.update(client_intent_id='update-with-open-session', binding_id=binding['binding_id'],
+                   workspace_id=binding['workspace_id'],
+                   baseline=load_setup(deps, context, 'subject', binding['binding_id'])['baseline'])
+    request['mcp_preset'] = dict(expected_revision=0, servers=[
+        dict(name='docs', transport='http', url='https://example.test/mcp')])
+    if change_policy:
+        request['configuration']['session_policy'] = 'shared'
+    monkeypatch.setattr(app.state.connection_tests, 'verified', lambda *args: verified)
+    seed_claim(deps, binding, 'FAILED')  # Failed with a live lease still owns resources.
+    before = load_setup(deps, context, 'subject', binding['binding_id'])
+    path = '/api/v1/runtime-management/connections/setup:finish'
+    response = client.post(path, headers=headers['operator'], json=request)
+    assert response.status_code == 409, response.text
+    assert response.json()['error']['details'] == dict(reason='ACTIVE_SESSIONS', agent_id='subject',
+                                                       binding_ids=[binding['binding_id']])
+    assert load_setup(deps, context, 'subject', binding['binding_id']) == before
+    assert count(local_setup, 'connection_setup_commits') == 1
+    assert client.post(path, headers=headers['subject'], json=request).status_code == 403
+    with deps.connection_factory.unit_of_work() as uow:
+        # Simulate canonical durable release, never infer it from failure alone.
+        uow.connection.execute("UPDATE execution_sessions SET lease_state='CLOSED' WHERE session_id='claim'")
+    saved = client.post(path, headers=headers['operator'], json=request)
+    assert saved.status_code == 200, saved.text
+    assert saved.json()['saved']
+    assert client.post(path, headers=headers['operator'], json=request).json() == saved.json()
+    assert load_setup(deps, context, 'subject', binding['binding_id'])['mcp_preset']['servers'][0]['name'] == 'docs'
+
+
 @pytest.mark.parametrize('existing_local', [False, True])
 def test_remote_policy_can_finish_before_connector_registration(local_setup, existing_local):
     context, request = request_for(local_setup)

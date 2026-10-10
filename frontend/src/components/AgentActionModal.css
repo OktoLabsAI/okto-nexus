@@ -1,0 +1,50 @@
+.agent-action-modal {
+  @apply rounded-xl border border-surface-200 bg-white text-surface-800 shadow-2xl dark:border-surface-700 dark:bg-surface-900 dark:text-surface-100;
+  margin: auto; padding: 0; width: min(820px, 94vw); height: min(760px, 90dvh);
+  max-width: none; max-height: none; overflow: hidden;
+}
+.agent-action-modal[open] { display: flex; flex-direction: column; }
+.agent-action-modal::backdrop { background: rgb(0 0 0 / .5); backdrop-filter: blur(3px); }
+.agent-action-modal-wide { width: min(1320px, 94vw); height: 92dvh; }
+.agent-action-modal-compact { width: min(560px, 94vw); height: min(300px, 90dvh); }
+.agent-action-modal-compact-tall { width: min(620px, 94vw); height: min(480px, 90dvh); }
+.agent-action-modal-expanded { width: calc(100vw - 24px); height: calc(100dvh - 24px); }
+.agent-modal-header { @apply flex shrink-0 items-center gap-2 border-b border-surface-200 px-5 py-3 dark:border-surface-700; }
+.agent-modal-header h2 { @apply mr-auto truncate text-sm font-semibold; }
+.agent-modal-header > button { @apply rounded-lg p-2 text-surface-500 hover:bg-surface-100 focus-visible:ring-2 focus-visible:ring-accent-500 dark:hover:bg-surface-800; }
+.agent-modal-body { @apply min-h-0 flex-1 overflow-y-auto overscroll-contain p-5; }
+.agent-modal-footer { @apply flex shrink-0 items-center justify-end gap-2 border-t border-surface-200 px-5 py-3 dark:border-surface-700; min-height: 64px; }
+.agent-modal-footer:empty { display: none; }
+.agent-modal-footer > span { @apply mr-auto text-xs; }
+.agent-modal-discard { @apply flex shrink-0 flex-wrap items-center gap-2 bg-amber-50 px-5 py-3 text-xs text-amber-900 dark:bg-amber-900/30 dark:text-amber-200; }
+.agent-modal-discard p { @apply mr-auto; }
+.agent-modal-body > [data-testid^="agent-expand-"] > div { border: none; padding: 0; }
+.agent-modal-body:has(> [data-testid^="agent-expand-"] > .connection-form) { padding: 0; overflow: hidden; }
+.agent-modal-body > [data-testid^="agent-expand-"]:has(> .connection-form) { height: 100%; }
+.agent-action-modal .connection-form { width: 100%; max-width: none; height: 100%; margin: 0; border: 0; border-radius: 0; display: flex; flex-direction: column; overflow: hidden; }
+.agent-action-modal .connection-header { flex-shrink: 0; padding: 8px 20px; min-height: 48px; }
+.agent-action-modal .connection-header > div:first-child, .agent-action-modal .connection-header > button:last-child { display: none; }
+.agent-action-modal .connection-layout { flex: 1; min-height: 0; }
+.agent-action-modal .connection-layout > nav { overflow-y: auto; }
+.agent-action-modal .connection-content { min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.agent-modal-footer .connection-footer { border: 0; padding: 0; margin: 0; width: 100%; position: static; display: grid; grid-template-columns: minmax(0, 1fr) 88px 88px; min-height: 36px; }
+.agent-modal-footer .connection-footer .connection-back { grid-column: 2; grid-row: 1; }
+.agent-modal-footer .connection-footer .connection-next { grid-column: 3; grid-row: 1; }
+.agent-modal-footer .connection-footer .connection-done { grid-column: 1; grid-row: 1; justify-self: start; }
+.agent-modal-footer .connection-footer > svg { grid-column: 1; grid-row: 1; justify-self: end; }
+.agent-modal-footer .connection-footer > span { grid-column: 1; grid-row: 1; text-align: left; max-width: 100%; }
+.agent-modal-footer:has(> .connection-footer) { height: 64px; }
+.agent-modal-footer .connection-footer > span { max-height: 36px; overflow-y: auto; }
+.agent-modal-footer .connection-footer:has(.connection-done) > span { display: none; }
+@media (max-width: 760px) {
+  .agent-action-modal .connection-layout { grid-template-rows: auto minmax(0, 1fr); }
+  .agent-action-modal .connection-layout > nav { max-height: 120px; }
+}
+@media (max-width: 640px) {
+  .agent-action-modal, .agent-action-modal-expanded { width: 100vw; height: 100dvh; border-radius: 0; border: 0; }
+  .agent-modal-header, .agent-modal-body, .agent-modal-footer { padding: 12px; }
+  .agent-modal-footer { flex-wrap: wrap; }
+  .agent-modal-body > div.grid-cols-2 { grid-template-columns: minmax(0, 1fr); }
+  .agent-modal-body > div.grid-cols-2 > .col-span-2 { grid-column: span 1; }
+  .agent-modal-header > button[aria-label="Expand modal"], .agent-modal-header > button[aria-label="Restore modal"] { display: none; }
+}

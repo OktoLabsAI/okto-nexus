@@ -52,10 +52,11 @@ def test_mcp_preset_api_is_operator_only_and_revisioned(connected_local):
     path = '/api/v1/harness/endpoints/' + binding['endpoint_id'] + '/mcp-preset'
     initial = client.get(path, headers=headers)
     assert initial.status_code == 200, initial.text
-    servers = [dict(name='docs', transport='http', url='https://example.test/mcp')]
+    servers = [dict(name='docs', transport='http', url='https://example.test/mcp', headers={'Authorization': 'Bearer test-only'})]
     updated = client.put(path, headers=headers, json=dict(expected_revision=0, servers=servers))
     assert updated.status_code == 200, updated.text
     assert updated.json()['data']['servers'][0] == servers[0] | {'enabled': True, 'header_refs': {}}
+    assert client.get(path, headers=headers).json()['data']['servers'] == updated.json()['data']['servers']
     assert client.put(path, headers=headers, json=dict(expected_revision=0, servers=[])).status_code == 409
     assert client.get(path, headers=setup[3]['subject']).status_code == 403
     assert client.put(path, headers=setup[3]['subject'], json=dict(expected_revision=1, servers=[])).status_code == 403

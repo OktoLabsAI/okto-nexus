@@ -464,6 +464,54 @@
       "action": "Replaced raw MCP JSON editors with a shared structured form for names, transport, commands, ordered arguments, environment variables and protected credential references. Removed live pool from one-shot setup and placed a graphical state bar and counters in each pooled agent card.",
       "validation": "TypeScript/Vite build passed. Browser checked stdio draft retention through Next/Back, transport change to HTTP, URL and header references, incomplete form blocking and absence of raw JSON editor. Pi card displays 4/5 available with graphical states and parallel limit 5; pool absent from setup form. Screenshots inspected. Test draft discarded without changing real presets.",
       "outcome": "Updated dashboard assets in current installation without restarting Nexus or interrupting runtimes. Existing release follow-ups unchanged."
+    },
+    {
+      "date": "2026-10-10",
+      "step": "Connection-UX",
+      "action": "Refined connection wizard with desktop sidebar, responsive step navigation, compact numeric controls with units, grouped one-shot limits, consistent control styling, clearer header/footer and progressive disclosure for MCP details.",
+      "validation": "TypeScript/Vite build and desktop/mobile/dark browser visual checks. Draft configuration preserved; no runtime restart.",
+      "outcome": "Local preview for user review. Explicitly no commit or push until user OK."
+    },
+    {
+      "date": "2026-10-10",
+      "step": "Connection-UX",
+      "action": "Made agent-card live pool collapsible, initially collapsed with availability summary. Removed metric frame and matched card typography (12px metrics, 11px secondary labels).",
+      "outcome": "Local UI refinement; no commit or push pending user approval."
+    },
+    {
+      "date": "2026-10-10",
+      "step": "Agent-modals",
+      "action": "Moved agent creation, identity, permissions, tags/audience, communication, connection setup and one-time API key presentation into shared expandable native dialogs. Migrated steering, permission preset editors and agent confirmations; activation/deactivation now uses confirmation. Footer portals keep navigation and save actions outside scrolling content. Dialogs preserve draft on expand, trap focus, restore trigger focus and protect unsaved changes.",
+      "validation": "Production TypeScript/Vite build passed. Browser validated all editor opening/expansion/restoration, identity and new-agent discard, steering draft discard, permission preset dialog, canceling regenerate/deactivate/delete confirmations without mutations, focus restoration and containment, seven connection steps with stationary footer, and 390px mobile layout without horizontal overflow. Final adjustment reserves spinner grid slot during loading.",
+      "outcome": "Dashboard updated in existing instance without restarting runtimes. All changes local; no commit or push until user approval."
+    },
+    {
+      "date": "2026-10-10",
+      "step": "MCP-list-and-credentials",
+      "action": "Added MCP list with transport badges, edit/delete, isolated per-entry drafts and explicit Add to list/Save MCP changes/Cancel actions. Added direct-value, host-environment and host-vault sources, nonblocking warning, masked literal fields and shared credentials help. Core now validates and delivers HTTP literal headers for Pi, Claude and Codex without changing legacy preset digests or weakening reference authorization. Isolated Escape handling in nested help dialog.",
+      "validation": "20 Core tests passed (including real local HTTP MCP discovery/call with literal and referenced credentials), 8 Nexus preset/API tests passed, production TypeScript/Vite build passed, pip check passed. Browser verified add/edit/save/cancel/delete, mixed sources, literal acceptance, Next/Back preservation, pending-edit navigation guard, help draft preservation, nested Escape and mobile width. Test drafts discarded without Finish or agent configuration changes. Post-restart Pi became Ready but warm replenishment reproduced the existing P08 backoff (8 failures, 256-second retry); no recovery-policy or database changes made. Remote editor also prevents connection/host changes while an MCP draft is open. Automatic retry resumed four warm openings in parallel.",
+      "outcome": "Core wheel installed in current one-shot-install environment; dashboard deployed; Nexus restarted through graceful console shutdown for local testing. Nexus feature/v0.3.0 and Core feature/v0.0.10 remain uncommitted. Connector source unchanged; remote hosts require the updated Core build to accept literal HTTP headers. Restart verification completed: Pi, Claude and Codex Ready; Pi automatically restored 4 WARM instances after existing backoff."
+    },
+    {
+      "date": "2026-10-10",
+      "step": "Claude-preset-only-test",
+      "action": "Fixed Core process_http_arguments rejecting a valid explicit MCP preset when no internal Nexus HTTP template is injected. ConnectionTests intentionally launches this preset-only configuration. Empty explicitly supplied presets still render isolation for disabled entries; empty calls without a preset remain invalid.",
+      "validation": "35 Core regression tests and 4 Nexus connection-test tests passed. Installed Claude natively discovered a controlled stdio MCP without injected Nexus tools. Real Claude HTTP opening and full Nexus ConnectionTests.run completed authenticated MCP discovery, model response and graceful cleanup. Confirmed the user Pulse endpoint accepts X-API-Key and advertises 282 tools; no Pulse tools were invoked. Pi bridge has a separate 256-tool bound, unchanged.",
+      "outcome": "Built and installed updated Core 0.0.10 wheel in current Nexus environment and restarted through graceful console shutdown. No agent connection or global harness configuration edits. No commit or push. Test artifacts in build/mcp-preset-only and build/mcp-literals; no user credential stored in artifacts."
+    },
+    {
+      "date": "2026-10-10",
+      "step": "Connection-active-session-choice",
+      "action": "Connection Finish now offers Keep editing, Wait and save, or Close sessions and save when active sessions block replacement. Uses existing authenticated runtime close intents, waits for canonical release, preserves the immutable save request and draft, retains close identities across retries, and never closes newly discovered sessions without another choice. Backend supplies scoped ACTIVE_SESSIONS details; policy changes also respect failed sessions with unreleased leases.",
+      "validation": "37 backend tests passed for atomic setup, scoped binding replacement and runtime policy; 4 frontend tests passed including pagination, uncertain release, lost response retry and scope rejection. Production frontend build passed. Browser checks with intercepted mutations passed cancellation, non-interrupting wait, closure then retry of identical Finish, and compatibility with the currently running server error. Read-only inspection confirms Claude still has one READY/ACTIVE controllable session.",
+      "outcome": "Updated dashboard assets in current installation without restarting Nexus or closing the user session. Backend structured-error improvements are tested in source and take effect on the next backend installation/restart; the dashboard supports the existing running backend message for this binding-replacement conflict. No changes to Core or Connector for this fix. No commit or push."
+    },
+    {
+      "date": "2026-10-10",
+      "step": "Agent-runtime-administration",
+      "action": "Added expandable runtime administration modal from Agents, restricted to runtime-integrated agents. Shows paged open instances across local and remote executors, pool state, and the ten most recently completed turns ordered by terminal receipt time. Inspection exposes canonical session history and final output; live tail supports pause/resume and auto-scroll with a bounded 200-event window. Explicit confirmation closes only the selected session through existing authenticated runtime intents, retaining immutable close requests for uncertain retries.",
+      "validation": "32 backend tests passed (4 new runtime administration scenarios, 8 session-view regressions, 20 agent connection-status checks) and 5 frontend tests passed. Covered 12 turns in a shared session, last-10 ordering, operator authorization, cross-agent/host rejection, local/remote colliding session IDs, 52-instance pagination, unreleased failed sessions and closing one of two instances without affecting the other. Browser checks with intercepted mutations verified tail pause/resume, final-output inspection, cancellation and exactly one close; desktop/mobile layout checks passed. Production frontend/wheel build and installed dependency check passed. Actual installed UI and APIs successfully inspected existing Pi/Claude/Codex session history and results; no user messages were sent. Live installed modal subsequently listed all four real warm Pi instances and successfully paused/resumed their canonical event tail. Closure operation receipts are monitored so a later failure is surfaced instead of leaving a permanent Closing label.",
+      "outcome": "Nexus 0.3.0 wheel installed in build/one-shot-install and server restarted gracefully on 0.0.0.0:8202. This also installs the prior backend ACTIVE_SESSIONS structured-conflict improvements. Core and Connector unchanged by this task. No commit or push. Existing P08 warm-pool restart backoff remains outside this change; automatic replenishment completed with 4/4 warm Pi instances available. Claude, Codex and Pi report Ready. Final dashboard refinement was applied without another server restart."
     }
   ],
   "remaining": [

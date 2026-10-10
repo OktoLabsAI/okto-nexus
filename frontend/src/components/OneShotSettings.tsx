@@ -43,25 +43,28 @@ export const OneShotSettings = forwardRef<OneShotSettingsHandle, {agentId?: stri
   };
   useImperativeHandle(ref, () => ({save}));
   const inherit = (key: keyof Settings) => setValues(old => {const copy = {...old}; delete copy[key]; return copy;});
-  return <section aria-label="One-shot capacity" className="space-y-3 border-t pt-3">
+  return <section aria-label="One-shot capacity" className="capacity-settings space-y-3">
     <h4 className="font-semibold">One-shot capacity</h4>
     {saveOnNext && <p className="text-xs">Next saves these limits for this agent across its connections.</p>}
-    <p className="text-xs text-surface-500">Each call uses a fresh session and closes after its final response. Starting, preinitialized, running and closing instances share the pool limit. Use 0 for unlimited pool capacity; host capacity still applies. Preinitialized instances must be fewer than a finite limit. Replenishment runs independently from ready sessions.</p>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-      {fields.map(f => <label className="block" key={f.key}>{f.label}
-        {agentId && <span className="block text-xs"><input type="checkbox" checked={values[f.key] === undefined} disabled={busy || !policy}
-          onChange={e => e.target.checked ? inherit(f.key) : setValues(old => ({...old, [f.key]: policy!.defaults[f.key]}))} /> Inherit global ({policy?.defaults[f.key]})</span>}
+    <p className="text-xs text-surface-500">Each call gets a fresh session. Keep warm instances below the parallel limit.</p>
+    <div className="capacity-rows">
+      {fields.map(f => <div className="capacity-row" key={f.key}><div><label htmlFor={`capacity-${agentId || 'global'}-${f.key}`}>{f.label.replace(' (0 = unlimited)', '').replace(' (seconds)', '')}</label>
+        {agentId && <label className="capacity-inherit"><input type="checkbox" checked={values[f.key] === undefined} disabled={busy || !policy}
+          onChange={e => e.target.checked ? inherit(f.key) : setValues(old => ({...old, [f.key]: policy!.defaults[f.key]}))} /> Use global default ({policy?.defaults[f.key]})</label>}</div>
+        <div className="capacity-value">
         <input aria-label={f.label} type="number" min={f.min} max={f.max} step={1}
-          className="block w-full rounded border p-2 bg-white dark:bg-surface-800"
+          id={`capacity-${agentId || 'global'}-${f.key}`} className="rounded border p-2 bg-white dark:bg-surface-800"
           disabled={busy || !policy || (!!agentId && values[f.key] === undefined)} value={values[f.key] ?? policy?.defaults[f.key] ?? ''}
           onChange={e => setValues(old => ({...old, [f.key]: e.target.valueAsNumber}))} />
-      </label>)}
-      <label>When at capacity<select aria-label="One-shot overflow" className="block w-full rounded border p-2 bg-white dark:bg-surface-800"
+        <span>{f.key.endsWith('seconds') ? 'sec' : f.key === 'queue_capacity' ? 'calls' : 'instances'}</span>
+        </div></div>)}
+      <label className="capacity-overflow">When at capacity<select aria-label="One-shot overflow" className="block w-full rounded border p-2 bg-white dark:bg-surface-800"
         disabled={busy || !policy} value={values.overflow ?? 'inherit'} onChange={e => e.target.value === 'inherit' ? inherit('overflow') : setValues(old => ({...old, overflow: e.target.value as Settings['overflow']}))}>
         {agentId && <option value="inherit">Inherit global ({policy?.defaults.overflow})</option>}
         <option value="queue">Queue within limits</option><option value="reject">Reject immediately</option>
       </select></label>
     </div>
+    <details className="capacity-explanation"><summary>How these limits work</summary><p>Use 0 for unlimited parallel instances. Starting, warm, running and closing instances all count toward the limit. Host capacity still applies. Warm instances are replenished independently.</p></details>
     {invalid && <p role="alert">Use whole numbers within the limits. Preinitialized instances must be fewer than a finite maximum parallel limit.</p>}
     {!saveOnNext && <button className="btn btn-secondary" disabled={busy || !policy || !!invalid} onClick={() => void save()}>Save one-shot capacity</button>}
     <button className="btn btn-secondary ml-2" disabled={busy} onClick={() => setReload(n => n + 1)}>Reload capacity</button>
