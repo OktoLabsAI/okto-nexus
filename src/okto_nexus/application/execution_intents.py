@@ -31,7 +31,7 @@ def resolve_execution_intent(
     factory: ConnectionFactory, *, actor_agent_id: str,
     request: Mapping[str, Any], remote_ready: bool = False,
     fresh_publications: Mapping | None = None, access=None, context=None,
-    session_metadata: Mapping | None = None,
+    session_metadata: Mapping | None = None, one_shot_slot_id: str | None = None,
 ) -> dict[str, Any]:
     """Store a stable resolution; never write an effect outbox or call Core."""
     required = {"client_intent_id", "intent", "binding_id",
@@ -126,6 +126,17 @@ def resolve_execution_intent(
             raise OktoNexusError(ErrorCode.NOT_FOUND,
                                   "The binding was not found in this agent scope.", {})
         action = _INTENTS[request["intent"]]
+        from .runtime_policy import effective
+        if effective(conn, subject_agent_id)['session_policy'] == 'one_shot' and action in ('runtime.open', 'turn.submit'):
+            slot = conn.execute('SELECT * FROM one_shot_slots WHERE slot_id=? AND agent_id=? AND executor_id=? AND binding_id=?',
+                (one_shot_slot_id, subject_agent_id, binding['executor_id'], binding['binding_id'])).fetchone()
+            valid = slot is not None and (
+                action == 'runtime.open' and slot['state'] == 'STARTING' and slot['session_id'] is None or
+                action == 'turn.submit' and slot['state'] == 'CLAIMED' and slot['call_id'] is not None
+                and slot['session_id'] == request.get('session_id'))
+            if not valid:
+                raise OktoNexusError(ErrorCode.CONFLICT,
+                    'One-shot sessions are allocated per message or handoff within the configured capacity.', {})
         validate_execution_target(binding["adapter_id"], action, target)
         containment = action in {"turn.interrupt", "runtime.close"}
         if not containment:
@@ -255,6 +266,10 @@ def resolve_execution_intent(
             if action == "turn.interrupt" else {"text": request["text"]}
         )
         if action == 'runtime.open':
+            from .runtime_mcp_presets import snapshot
+            preset = snapshot(conn, binding['endpoint_id'])
+            if preset['servers']:
+                payload['mcp_preset'] = preset['servers']
             endpoint_config = conn.execute('SELECT public_config FROM agent_endpoints WHERE endpoint_id=?',
                                           (binding['endpoint_id'],)).fetchone()
             settings = dict(json.loads(endpoint_config[0]).get('harness_settings', {}))

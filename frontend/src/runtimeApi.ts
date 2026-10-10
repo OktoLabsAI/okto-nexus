@@ -194,6 +194,7 @@ export const runtimeApi = {
   retryRecovery: (agentId: string) => read<{state: string; error_code: string | null; message: string}>(
     `/v1/runtime/recovery/retry?agent_id=${encodeURIComponent(agentId)}`, undefined, {}),
   setup: (agent: string, binding?: string, signal?: AbortSignal) => read<{baseline: SetupBaseline;
+    mcp_preset?: import('./api').MCPPreset;
     connections: (Pick<BindingView,'binding_id' | 'candidate_ref' | 'executor_id' | 'workspace_id' | 'adapter_id'> & {execution_location: 'local' | 'remote'})[];
     authorization?: {minutes: number | null; actions: number | null};
     folders?: {workspace_root: string; provider_home: string | null; secret_bindings: Record<string,string>};

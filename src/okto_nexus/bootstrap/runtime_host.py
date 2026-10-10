@@ -30,7 +30,7 @@ class EmbeddedRuntimeHost:
     silently reusing a runtime would execute against the old selection.
     """
 
-    def __init__(self, store_dir: Path, *, max_owned_slots: int = 8):
+    def __init__(self, store_dir: Path, *, max_owned_slots: int = 64):
         store_dir = Path(store_dir)
         if not store_dir.is_absolute():
             raise ValueError("The embedded Core store directory must be absolute.")

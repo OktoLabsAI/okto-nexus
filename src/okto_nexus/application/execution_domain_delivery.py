@@ -31,6 +31,8 @@ def select_delivery_session(uow, endpoint_id, *, sender_agent_id=None, source_se
     from .runtime_policy import effective
     agent_id = conn.execute('SELECT agent_id FROM agent_endpoints WHERE endpoint_id=?', (endpoint_id,)).fetchone()[0]
     binding['session_policy'] = effective(conn, agent_id)['session_policy']
+    if binding['session_policy'] == 'one_shot':
+        return binding, None
     per_sender = binding["session_policy"] in {"per_sender", "per_sender_session"}
     if per_sender and not sender_agent_id:
         raise OktoNexusError(ErrorCode.CONFLICT, "Sender identity is required for an isolated session.", {})
@@ -72,6 +74,13 @@ def admit_domain_delivery(uow, *, operation_id, access, fresh_publications, remo
     source_session_key = for_message(conn, operation['message_id'])
     binding, session_id = select_delivery_session(uow, operation["endpoint_id"], sender_agent_id=sender[0],
                                                    source_session_key=source_session_key)
+    one_shot_slot = None
+    if binding['session_policy'] == 'one_shot':
+        from .one_shot_runtime import admit_call
+        one_shot_slot = admit_call(uow, operation, binding, caller_id=sender[0])
+        if one_shot_slot is None:
+            return []
+        session_id = one_shot_slot['session_id']
     # Preserve the whole authorized envelope: identity, causal references and
     # artifacts are context, never execution/tool credentials.
     from .runtime_bootstrap import delivery_prompt
@@ -94,7 +103,8 @@ def admit_domain_delivery(uow, *, operation_id, access, fresh_publications, remo
     factory = DeliveryTransactionFactory(uow)
     common = dict(actor_agent_id=operation["recipient_agent_id"], access=access,
                   fresh_publications=fresh_publications, remote_ready=remote_ready)
-    resolved = resolve_execution_intent(factory, request=request, **common)
+    resolved = resolve_execution_intent(factory, request=request,
+        one_shot_slot_id=one_shot_slot['slot_id'] if one_shot_slot else None, **common)
     if not resolved['can_submit']:
         blockers = resolved['blockers']
         message = 'Runtime delivery is unavailable: ' + ', '.join(blockers) + '.'
@@ -105,6 +115,9 @@ def admit_domain_delivery(uow, *, operation_id, access, fresh_publications, remo
         raise OktoNexusError(ErrorCode.CONFLICT, message, {'blockers': blockers})
     submit_execution_operation(factory, request={name: resolved[name] for name in
         ("client_intent_id", "operation_id", "resolution_revision", "intent_hash")}, **common)
+    if one_shot_slot is not None and session_id is None:
+        conn.execute('UPDATE one_shot_slots SET session_id=?,open_operation_id=? WHERE slot_id=?',
+                     (resolved['session_id'], resolved['operation_id'], one_shot_slot['slot_id']))
     if session_id is None and binding["session_policy"] in {"per_sender", "per_sender_session"}:
         # The admission and affinity commit together under the message's write
         # transaction, including OPENING sessions; concurrent arrivals cannot

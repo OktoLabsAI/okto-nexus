@@ -40,12 +40,20 @@ class Peers:
 
 
 def turn_for(setup, message_id):
-    with setup[0].connection_factory.unit_of_work(write=False) as uow:
-        return dict(uow.connection.execute(
-            "SELECT o.operation_id,o.session_id FROM execution_operations o "
-            "JOIN execution_domain_deliveries m USING(server_id,executor_id,operation_id) "
-            "JOIN delivery_outbox d ON d.operation_id=m.domain_operation_id "
-            "WHERE d.message_id=? AND o.action='turn.submit'", (message_id,)).fetchone())
+    deadline = time.monotonic() + 15
+    while time.monotonic() < deadline:
+        with setup[0].connection_factory.unit_of_work(write=False) as uow:
+            row = uow.connection.execute(
+                "SELECT o.operation_id,o.session_id FROM execution_operations o "
+                "JOIN execution_domain_deliveries m USING(server_id,executor_id,operation_id) "
+                "JOIN delivery_outbox d ON d.operation_id=m.domain_operation_id "
+                "WHERE d.message_id=? AND o.action='turn.submit'", (message_id,)).fetchone()
+        if row:
+            return dict(row)
+        from okto_nexus.application.one_shot_runtime import tick
+        tick(setup[0])
+        time.sleep(.02)
+    raise AssertionError('No productive turn admitted before deadline')
 
 
 def complete(setup, peers, turn, text):

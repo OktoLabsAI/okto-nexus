@@ -1,19 +1,25 @@
 import { useEffect, useRef, useState } from 'react';
 import { CheckCircle2, Loader2 } from 'lucide-react';
-import { api, type WorkspaceListItem } from '../api';
+import { api, type WorkspaceListItem, type SessionPolicy } from '../api';
 import { runtimeApi, localInstallationAvailable, type RuntimeOptions } from '../runtimeApi';
-import { emptyConnection, parseConnectionConfiguration, exportConnectionConfiguration, policyOnlySetup, type ConnectionConfiguration, type SetupBaseline, type SetupRequest, type SetupTest } from '../connectionConfiguration';
+import { emptyConnection, parseConnectionConfiguration, exportConnectionConfiguration, policyOnlySetup, sameConnectionConfiguration, type ConnectionConfiguration, type SetupBaseline, type SetupRequest, type SetupTest } from '../connectionConfiguration';
 import { ConnectionWorkflow, connectionSteps } from './ConnectionWorkflow';
 import { ConfigurationHelp } from './ConfigurationHelp';
 import { HarnessPreferenceFields } from './HarnessPreferenceFields';
 import { harnessSelectionError } from '../harnessConfiguration';
 import { InventoryRefresh } from './InventoryRefresh';
 import { RemoteConnectorCommand } from './RemoteConnectorCommand';
+import { OneShotSettings, type OneShotSettingsHandle } from './OneShotSettings';
+import { MCPPresetFields, parseMCPPreset } from './MCPPresetFields';
 
 const input = 'block w-full rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 p-2';
 export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClose: () => void}) {
   const [draft,setDraft] = useState(emptyConnection);
   const [runtimeDefault,setRuntimeDefault] = useState(true);
+  const [sessionDefault,setSessionDefault] = useState<SessionPolicy>('shared');
+  const [capacityPending,setCapacityPending] = useState(false);
+  const capacity = useRef<OneShotSettingsHandle>(null);
+  const [savedConnection,setSavedConnection] = useState<{configuration: ConnectionConfiguration; bindingId: string; executor: string; workspace: string; candidate: string} | null>(null);
   const runtimeEnabled = draft.runtime_enabled ?? runtimeDefault;
   const [step,setStep] = useState(0);
   const [visited,setVisited] = useState(0);
@@ -35,6 +41,15 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
   const [request,setRequest] = useState<SetupRequest | null>(null);
   const [details,setDetails] = useState(false);
   const [inheritedMcps,setInheritedMcps] = useState(false);
+  const [mcpText,setMcpText] = useState('[]');
+  const [savedMcp,setSavedMcp] = useState({revision:0, text:'[]'});
+  const loadMcp = (preset?: {revision: number; servers: unknown[]}) => {
+    const text = JSON.stringify(preset?.servers || [], null, 2);
+    setMcpText(text); setSavedMcp({revision:preset?.revision || 0, text});
+  };
+  let mcpError = '';
+  try {parseMCPPreset(mcpText);} catch (reason) {mcpError = String(reason);}
+  const presetChanged = mcpText !== savedMcp.text;
   const [reload,setReload] = useState(0);
   const [installationBusy,setInstallationBusy] = useState(false);
   const [installationError,setInstallationError] = useState('');
@@ -58,14 +73,19 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
         const setup = saved ? await runtimeApi.setup(agentId,saved.binding_id,controller.signal) : initial;
         if (controller.signal.aborted) return;
         setConnections(initial.connections);
-        setDraft(old => ({...old,execution_location:policy.execution_location,adapter_id:policy.local_adapter_id || '',
+        loadMcp(setup.mcp_preset);
+        const loaded: ConnectionConfiguration = {...emptyConnection(),execution_location:policy.execution_location,adapter_id:policy.local_adapter_id || '',
           runtime_enabled:runtime.runtime_enabled,session_policy:runtime.session_policy,
           ...(setup.folders || {}),alias:setup.public_config?.alias || '',
           harness_settings:setup.public_config?.harness_settings || {},
           tool_access:setup.public_config?.nexus_tool_permission || 'ask',automatic_reply:true,
-          authorization:setup.authorization || old.authorization,
-          workspace_label:projects.workspaces.find(w => w.workspace_id === saved?.workspace_id)?.display_name || ''}));
+          authorization:setup.authorization || emptyConnection().authorization,
+          workspace_label:projects.workspaces.find(w => w.workspace_id === saved?.workspace_id)?.display_name || ''};
+        setDraft(loaded);
+        setSavedConnection(saved ? {configuration:loaded,bindingId:saved.binding_id,executor:saved.executor_id,
+          workspace:saved.workspace_id,candidate:saved.candidate_ref} : null);
         setRuntimeDefault(runtime.defaults?.runtime_enabled ?? true);
+        setSessionDefault(runtime.defaults?.session_policy ?? 'shared');
         setInheritedMcps(runtime.effective?.inherit_global_mcps ?? false);
         setBaseline(setup.baseline); setWorkspaces(projects.workspaces);
         const local = hosts.filter(h => h.kind === 'embedded');
@@ -123,6 +143,7 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
       const setup = await runtimeApi.setup(agentId,binding || undefined);
       if (!live.current) return;
       setBaseline(setup.baseline);setBindingId(binding);
+      loadMcp(setup.mcp_preset);
       if (!imported.current) setDraft(old => ({...old,...(setup.folders || {}),
         provider_home:setup.folders?.provider_home ?? choice?.provider_home_suggestion ?? null,
         alias:setup.public_config?.alias || old.alias || `${agentId}-${old.adapter_id}`,
@@ -170,7 +191,7 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
     step === 1 ? (installationBusy || installationError || !selected || options?.freshness !== 'FRESH' || selected.technical_state !== 'READY_FOR_RUNTIME' ? 'Choose a verified installation to continue.' : '') :
     step === 2 ? (!draft.workspace_root.trim() || !draft.workspace_label.trim() ? 'Enter the workspace folder and name.' : '') :
     step === 3 ? (!draft.alias.trim() ? 'Enter a connection name.' : '') :
-    step === 4 ? (selected?.harness_configuration ? harnessSelectionError(selected.harness_configuration,draft.harness_settings) : '') :
+    step === 4 ? (mcpError || (selected?.harness_configuration ? harnessSelectionError(selected.harness_configuration,draft.harness_settings) : '')) :
     step === 5 ? (Object.entries(draft.authorization).some(([key,v]) => v !== null && (!Number.isInteger(v) || v < 1 || v > (key === 'minutes' ? 1440 : 1000))) ? 'Enter valid authorization limits.' : '') : '';
   const go = (value: number) => {setStep(value);setVisited(old => Math.max(old,value));setError('');};
   const buildRequest = (): SetupRequest => {
@@ -178,11 +199,16 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
     const intent = `setup_${Array.from(crypto.getRandomValues(new Uint8Array(16)), byte => byte.toString(16).padStart(2,'0')).join('')}`;
     const value = {client_intent_id:intent,agent_id:agentId,executor_id:executor,candidate_ref:candidateRef,
       inventory_revision:options?.inventory_revision || '',workspace_id:workspace || null,binding_id:bindingId,
-      baseline,configuration:draft};
+      baseline,configuration:draft,
+      ...(runtimeEnabled ? {mcp_preset:{expected_revision:savedMcp.revision,servers:parseMCPPreset(mcpText)}} : {})};
     const remoteBinding = connections.find(c => c.binding_id === bindingId && c.execution_location === 'remote');
     return portableOnly && !(runtimeEnabled && draft.execution_location === 'remote' && remoteBinding) ? policyOnlySetup(value) : value;
   };
+  const connectionUnchanged = !!savedConnection && bindingId === savedConnection.bindingId && executor === savedConnection.executor
+    && workspace === savedConnection.workspace && candidateRef === savedConnection.candidate && !presetChanged && sameConnectionConfiguration(draft, savedConnection.configuration);
   const finish = async () => {
+    if (capacity.current && !await capacity.current.save()) return;
+    if (connectionUnchanged) {if (!capacityPending) onClose(); return;}
     setBusy(true);setError('');
     try {
       const value = request || buildRequest();
@@ -226,15 +252,17 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
         imported.current=true;patch(config);setCandidateRef('');setBindingId(null);setWorkspace('');setVisited(0);setNotice('Configuration imported. Review the host, installation and folders.');
       }catch(e){setError(String(e));}
     }} />
-    <ConnectionWorkflow steps={workflowSteps} step={step} summaries={summaries} statuses={statuses} available={visited} locked={busy || installationBusy || !!testing}
-      onStep={value => {if (value <= visited && !busy && !testing) go(value);}} />
+    <ConnectionWorkflow steps={workflowSteps} step={step} summaries={summaries} statuses={statuses} available={visited} locked={busy || installationBusy || !!testing || (step===0 && capacityPending)}
+      onStep={async value => {if (value <= visited && !busy && !testing) {if (step===0 && value!==0 && capacity.current && !await capacity.current.save()) return; go(value);}}} />
     <h4 className="font-semibold">Step {step+1} of {workflowSteps.length} · {workflowSteps[step]}</h4>
+    {connectionUnchanged && <p className="text-xs text-surface-500">Next or Done saves capacity changes and preserves the existing connection and its sessions.</p>}
     <fieldset disabled={busy || installationBusy || !!testing} className="space-y-4">
     {step === 0 && <>
       {runtimeEnabled && connections.some(c => c.execution_location === draft.execution_location) && <label className="block">Existing connection <span className="text-surface-500">Select to authorize and configure this connection</span><select aria-label="Existing connection" className={input} value={bindingId || ''} onChange={async e => {
         const saved=connections.find(c => c.binding_id===e.target.value);if(!saved)return;
         setBusy(true);setError('');
         try {const setup=await runtimeApi.setup(agentId,saved.binding_id);setBaseline(setup.baseline);setBindingId(saved.binding_id);
+          loadMcp(setup.mcp_preset);
           setExecutor(saved.executor_id);setWorkspace(saved.workspace_id);setCandidateRef(saved.candidate_ref);imported.current=false;
           patch({...setup.folders,adapter_id:saved.adapter_id,alias:setup.public_config?.alias || '',
             harness_settings:setup.public_config?.harness_settings || {},tool_access:setup.public_config?.nexus_tool_permission || 'ask',
@@ -253,12 +281,15 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
         {draft.execution_location !== 'remote' && <div role="group" aria-label="Local runtime" className="flex gap-2 flex-wrap">
           {options?.catalog.runtimes.filter(r => r.support_status === 'managed_supported').map(r => <button key={r.adapter_id} className={`btn ${draft.adapter_id === r.adapter_id ? 'btn-primary':'btn-secondary'}`}
             aria-pressed={draft.adapter_id === r.adapter_id} data-testid={`local-runtime-${r.adapter_id}`}
-            onClick={() => {patch({adapter_id:r.adapter_id,harness_settings:{}});setCandidateRef('');setBindingId(null);setVisited(0);}}>{r.display_name}</button>)}
+            onClick={() => {patch({adapter_id:r.adapter_id,harness_settings:{}});loadMcp();setCandidateRef('');setBindingId(null);setVisited(0);}}>{r.display_name}</button>)}
         </div>}
         <label>Session context <span className="text-surface-500">Optional</span><ConfigurationHelp label="Session context">Shared keeps all senders together. Per sender shares history across sessions of the same agent. Per sender + source session isolates each verified source session. Messages without a verified session, including the operator UI, share a separate session per sender.</ConfigurationHelp>
-          <select aria-label="Session context" className={input} value={draft.session_policy || ''} onChange={e => patch({session_policy:e.target.value as 'shared' | 'per_sender' | 'per_sender_session' || null})}>
-            <option value="">Use global setting</option><option value="shared">Shared</option><option value="per_sender">One session per sender</option><option value="per_sender_session">One session per sender + source session</option></select></label>
+          <select aria-label="Session context" className={input} value={draft.session_policy || ''} onChange={e => patch({session_policy:e.target.value as 'shared' | 'per_sender' | 'per_sender_session' | 'one_shot' || null})}>
+            <option value="">Use global setting ({sessionDefault === 'one_shot' ? 'One shot' : sessionDefault.replaceAll('_', ' ')})</option><option value="shared">Shared</option><option value="per_sender">One session per sender</option><option value="per_sender_session">One session per sender + source session</option><option value="one_shot">One shot — fresh session per call</option></select></label>
+        {(draft.session_policy ?? sessionDefault) === 'one_shot' && <OneShotSettings ref={capacity} agentId={agentId} showActivity={false} saveOnNext onPendingChange={setCapacityPending} />}
         {draft.execution_location === 'remote' && <RemoteConnectorCommand agentId={agentId} />}
+        {draft.execution_location === 'remote' && connections.some(c => c.binding_id === bindingId && c.execution_location === 'remote') &&
+          <MCPPresetFields remote value={mcpText} onChange={text => {setMcpText(text);setTest(null);setRequest(null);setAuthorized(false);setError('');}} />}
       </>}
     </>}
     {step === 1 && <fieldset disabled={installationBusy || busy} className="space-y-3">
@@ -299,6 +330,7 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
     </>}
     {step === 4 && <>
       {selected?.harness_configuration && <HarnessPreferenceFields inheritedGlobalMcps={inheritedMcps} schema={selected.harness_configuration} values={draft.harness_settings} onChange={harness_settings => patch({harness_settings})} />}
+      <MCPPresetFields value={mcpText} onChange={text => {setMcpText(text);setTest(null);setRequest(null);setAuthorized(false);setError('');}} />
       <label className="block">Nexus tool access <span className="text-surface-500">Required</span><ConfigurationHelp label="Nexus tool access">Always allow skips approval requests for Nexus tools. Native harness approval settings remain separate.</ConfigurationHelp><select aria-label="Nexus tool access" className={input} value={draft.tool_access} onChange={e => patch({tool_access:e.target.value as 'ask' | 'always_allow'})}><option value="ask">Ask for approval</option><option value="always_allow">Always allow</option></select></label>
     </>}
     {(step === 5 || (step === 0 && runtimeEnabled && draft.execution_location === 'remote' && connections.some(c => c.binding_id === bindingId && c.execution_location === 'remote'))) && <>
@@ -328,8 +360,9 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
     </div>}
     {notice && <p role="status">{notice}</p>}{error && <p role="alert">{error}</p>}
     <footer className="sticky bottom-0 bg-white dark:bg-surface-800 border-t pt-3 flex items-center gap-3">
+      {connectionUnchanged && <button className="btn btn-primary" disabled={busy || installationBusy || !!testing || capacityPending} onClick={() => void finish()}>Done</button>}
       {step>0 && <button className="btn btn-secondary" disabled={busy || installationBusy || !!testing} onClick={() => go(step-1)}>← Back</button>}
-      {(portableOnly && step===0 || step===6 && test?.status==='succeeded') ? <button className="btn btn-primary" disabled={busy} onClick={() => void finish()}>{busy?'Saving…':'Finish'}</button> : step<6 && <button className="btn btn-primary" disabled={busy || !!validation || !!error} onClick={() => {if(step===5)setAuthorized(true);go(step+1);}}>Next →</button>}
+      {(portableOnly && step===0 || step===6 && test?.status==='succeeded') ? <button className="btn btn-primary" disabled={busy || capacityPending} onClick={() => void finish()}>{busy?'Saving…':'Finish'}</button> : step<6 && <button className="btn btn-primary" disabled={busy || !!validation || !!error || (step===0 && capacityPending)} onClick={async () => {if (step===0 && capacity.current && !await capacity.current.save()) return; if(step===5)setAuthorized(true);go(step+1);}}>Next →</button>}
       {busy && <Loader2 size={16} className="animate-spin" aria-label="Loading" />}
       {validation && <span className="text-surface-500">{validation}</span>}
     </footer>

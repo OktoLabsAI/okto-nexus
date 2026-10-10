@@ -321,6 +321,7 @@ class MessageService:
         if runtime_context is None and self._runtime_context_provider:
             runtime_context = self._runtime_context_provider()
         runtime_operations = []
+        runtime_rejections = []
 
         # Pure, write-free validation first (no row / event on rejection).
         require_message_fields(from_agent_id, subject, body)
@@ -603,9 +604,24 @@ class MessageService:
                     created_at=now,
                 )
                 if self._runtime_planner and not (_runtime_result_id or _nonexecuting_notification) and getattr(self._config, "feature_harness_integrations", False):
-                    operation_id = self._runtime_planner.enqueue(uow, context=runtime_context,
-                        message=message, delivery=delivery, now=now,
-                        authorization_revision=self.runtime_policy_revision(uow, message.from_agent_id, recipient_id))
+                    uow.connection.execute('SAVEPOINT recipient_runtime_admission')
+                    try:
+                        operation_id = self._runtime_planner.enqueue(uow, context=runtime_context,
+                            message=message, delivery=delivery, now=now,
+                            authorization_revision=self.runtime_policy_revision(uow, message.from_agent_id, recipient_id))
+                    except OktoNexusError as error:
+                        uow.connection.execute('ROLLBACK TO recipient_runtime_admission')
+                        if len(recipients) <= 1 or (error.details or {}).get('code') != 'ONE_SHOT_CAPACITY_EXCEEDED':
+                            raise
+                        # Capacity refusal is recipient-specific. Keep the
+                        # other authorized deliveries and report this refusal
+                        # directly to the caller, without retrying it later.
+                        runtime_rejections.append(dict(recipient_agent_id=recipient_id, **error.details))
+                        uow.connection.execute('DELETE FROM message_deliveries WHERE delivery_id=?',
+                                               (delivery.delivery_id,))
+                        operation_id = None
+                    finally:
+                        uow.connection.execute('RELEASE recipient_runtime_admission')
                     if operation_id:
                         runtime_operations.append(operation_id)
                 elif self._runtime_planner and _runtime_result_id and not _nonexecuting_notification:
@@ -643,10 +659,13 @@ class MessageService:
 
             data = self._message_to_data(message, target_echo=target_echo)
             data["event_id"] = event_id
-            data["recipients"] = recipients
-            data["delivered_count"] = len(recipients)
+            rejected_recipients = {item['recipient_agent_id'] for item in runtime_rejections}
+            data["recipients"] = [recipient for recipient in recipients if recipient not in rejected_recipients]
+            data["delivered_count"] = len(data['recipients'])
             if runtime_operations:
                 data["runtime_operations"] = runtime_operations
+            if runtime_rejections:
+                data["runtime_rejections"] = runtime_rejections
             if filtered_by_audience:
                 # Outbound audience scoping (F1): these agents matched the
                 # target but sit outside the sender's comm_scope - the drop is

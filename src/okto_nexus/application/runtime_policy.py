@@ -41,6 +41,10 @@ def view(conn, agent_id=None):
 
 def require_closed(conn, agent_ids):
     for agent_id in agent_ids:
+        if conn.execute("SELECT 1 FROM one_shot_calls WHERE agent_id=? AND state IN ('QUEUED','ADMITTED','RUNNING') LIMIT 1",
+                        (agent_id,)).fetchone():
+            raise OktoNexusError(ErrorCode.CONFLICT,
+                'Wait for pending one-shot calls before changing session isolation.', {'agent_id': agent_id})
         if conn.execute('SELECT 1 FROM execution_sessions s JOIN execution_bindings b '
                 'USING(server_id,executor_id,binding_id) JOIN agent_endpoints e ON e.endpoint_id=b.endpoint_id '
                 "WHERE e.agent_id=? AND s.lifecycle_state NOT IN ('CLOSED','FAILED') LIMIT 1", (agent_id,)).fetchone():
@@ -77,7 +81,7 @@ def save_policy(deps, context, *, agent_id=None, changes):
             or 'inherit_global_mcps' in changes and not (type(changes['inherit_global_mcps']) is bool or agent_id is not None and changes['inherit_global_mcps'] is None)
             or type(changes['expected_revision']) is not int or changes['expected_revision'] < (0 if agent_id else 1)
             or not (type(changes['runtime_enabled']) is bool or agent_id is not None and changes['runtime_enabled'] is None)
-            or changes['session_policy'] not in (('shared', 'per_sender', 'per_sender_session', None) if agent_id else ('shared', 'per_sender', 'per_sender_session'))):
+            or changes['session_policy'] not in (('shared', 'per_sender', 'per_sender_session', 'one_shot', None) if agent_id else ('shared', 'per_sender', 'per_sender_session', 'one_shot'))):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Invalid runtime policy; null means inherit only for agents.', {})
     with deps.connection_factory.unit_of_work() as uow:
         access.authorize_maintenance(context, uow=uow)

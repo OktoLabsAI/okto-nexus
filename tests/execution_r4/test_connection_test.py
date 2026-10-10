@@ -36,8 +36,11 @@ def test_probe_requires_output_and_cleanup(tmp_path,monkeypatch,outcome,text,cle
     entry=dict(status='running',details=[])
     request=dict(agent_id='agent',configuration=dict(adapter_id='pi_rpc',workspace_root=str(tmp_path),provider_home=None,
         secret_bindings={},harness_settings={'model':'glm-5.3','provider':'zai','effort':'low'}))
+    request['mcp_preset'] = dict(expected_revision=0, servers=[
+        dict(name='docs', transport='http', url='https://example.test/mcp')])
     asyncio.run(manager.run(entry,request,object()))
     assert entry['status']==expected
     assert observed['journal_closed']
     assert observed['intent'].model=='glm-5.3'
     assert observed['intent'].harness_settings.provider=='zai'
+    assert observed['intent'].mcp_preset == tuple(request['mcp_preset']['servers'])

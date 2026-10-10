@@ -16,7 +16,7 @@ from ..adapters.outbound.provider_vault import ProviderVault
 from ..bootstrap.execution_authority import build_execution_access
 from .execution_local_launch import ProviderSecretResolver
 from .execution_local_realizations import _digest, directory_identity, _require_binding_method
-from .connection_setup import baseline, conflict, require_operator
+from .connection_setup import baseline, conflict, require_operator, setup_mcp_preset
 
 
 class ConnectionTests:
@@ -58,6 +58,7 @@ class ConnectionTests:
             if baseline(uow, request['agent_id'], request.get('binding_id')) != request['baseline']:
                 raise conflict('The active configuration changed. Reopen Connections to review it.')
             _require_binding_method(uow.connection, subject_agent_id=request['agent_id'], adapter_id=c['adapter_id'])
+            setup_mcp_preset(uow, request)
         candidate = resolve_local_installation_selection(owner.candidates, adapter_id=c['adapter_id'],
             candidate_ref=request['candidate_ref'], expected_inventory_revision=request['inventory_revision'])
         if selected_fingerprint(candidate) != candidate.fingerprint:
@@ -120,6 +121,7 @@ class ConnectionTests:
             progress('Preparing installation and login')
             prepared = await runtime.prepare(LaunchIntent(request['agent_id'], 'test', c['adapter_id'],
                 model=model, auth_refs=tuple(sorted(set(c['secret_bindings'].values()))),
+                mcp_preset=tuple(request.get('mcp_preset', {}).get('servers', [])),
                 harness_settings=HarnessSettings(**settings)), context)
             async with asyncio.timeout(240):
                 progress('Connecting to harness')

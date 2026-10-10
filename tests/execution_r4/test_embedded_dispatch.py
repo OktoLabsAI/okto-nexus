@@ -213,6 +213,40 @@ def test_local_owner_renews_installed_lease(connected_local):
     assert native.opens==1
 
 
+@pytest.mark.parametrize('local_setup', ['pi_rpc', 'codex_app_server', 'claude_stream'], indirect=True)
+def test_opening_renews_before_native_ready(connected_local):
+    setup, binding, native = connected_local
+    deps, app, client, *_ = setup
+    owner = app.state.embedded_dispatch_owner
+    entered, release = threading.Event(), threading.Event()
+    original = native.open
+
+    async def held(*args, **kwargs):
+        entered.set()
+        while not release.is_set():
+            await asyncio.sleep(.01)
+        return await original(*args, **kwargs)
+
+    native.open = held
+    owner.leases.max_duration_ms = 4000
+    opened = admit(setup, binding, 'held-renew-open', 'runtime.start', new_session=True)
+    try:
+        assert entered.wait(10)
+        sid = opened['scope']['session_id']
+        session = owner.sessions[sid]
+        assert session['opening'] and session['gate'].locked()
+        client.portal.start_task_soon(owner._renew_owned, sid, session).result(timeout=3)
+        assert not release.is_set() and native.opens == 0
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            serial = uow.connection.execute('SELECT MAX(lease_serial) FROM execution_leases WHERE session_id=?',
+                                            (sid,)).fetchone()[0]
+        assert serial >= 2
+    finally:
+        release.set()
+    wait_receipt(setup, opened)
+    assert native.opens == 1 and owner.failure is None
+
+
 def test_receipt_replay_requires_current_embedded_owner(connected_local):
     setup,binding,native=connected_local
     deps,app,*_=setup

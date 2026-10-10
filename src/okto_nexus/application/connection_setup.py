@@ -6,7 +6,7 @@ import json
 from ..bootstrap.execution_authority import ExecutionToolDependencies, build_execution_access
 from ..errors import ErrorCode, OktoNexusError
 from .execution_local_realizations import _digest, directory_identity, stage_embedded_realization
-from . import agent_execution_policy, runtime_policy
+from . import agent_execution_policy, runtime_policy, runtime_mcp_presets
 
 
 class SetupTransaction:
@@ -51,6 +51,33 @@ def runtime_enabled(conn, configuration):
     return runtime_policy.defaults(conn)['runtime_enabled'] if value is None else value
 
 
+def setup_mcp_preset(uow, request):
+    """Check the original preset revision before testing or replacing a binding."""
+    draft = request.get('mcp_preset')
+    if draft is None:
+        return None  # Older clients leave the existing preset untouched.
+    from nexus_connector_core.mcp_presets import validate_mcp_preset
+    from nexus_connector_core import CoreError
+    try:
+        servers = validate_mcp_preset(draft['servers'])
+    except (CoreError, KeyError, TypeError) as error:
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Invalid runtime MCP preset.', {}) from error
+    if (not runtime_enabled(uow.connection, request['configuration']) or
+            (request['configuration']['execution_location'] == 'remote' and not request.get('binding_id'))):
+        raise conflict('Select a runtime connection before configuring its MCP servers.')
+    revision = 0
+    if request.get('binding_id'):
+        row = uow.connection.execute('SELECT b.endpoint_id FROM execution_bindings b '
+            'JOIN agent_endpoints e ON e.endpoint_id=b.endpoint_id WHERE b.binding_id=? AND e.agent_id=?',
+            (request['binding_id'], request['agent_id'])).fetchone()
+        if row is None:
+            raise conflict('The selected connection is no longer available.')
+        revision = runtime_mcp_presets.snapshot(uow.connection, row['endpoint_id'])['revision']
+    if type(draft.get('expected_revision')) is not int or draft['expected_revision'] != revision:
+        raise conflict('The MCP preset changed while you were editing. Reopen Connections to review it.')
+    return servers
+
+
 def load_setup(deps, context, agent_id, binding_id=None):
     access = build_execution_access(deps)
     with deps.connection_factory.unit_of_work(write=False) as uow:
@@ -67,12 +94,13 @@ def load_setup(deps, context, agent_id, binding_id=None):
             "WHERE e.agent_id=? AND e.enabled=1 AND e.activation_state='approved' "
             'ORDER BY e.workspace_id,e.adapter_id', (agent_id,))]
         if binding_id:
-            row = uow.connection.execute('SELECT e.public_config,e.response_policy,l.local_record_json FROM execution_bindings b '
+            row = uow.connection.execute('SELECT e.endpoint_id,e.public_config,e.response_policy,l.local_record_json FROM execution_bindings b '
                 'JOIN agent_endpoints e ON e.endpoint_id=b.endpoint_id '
                 'LEFT JOIN execution_local_realizations l ON l.server_id=b.server_id AND l.executor_id=b.executor_id '
                 'AND l.realization_ref=b.realization_ref WHERE b.binding_id=? AND e.agent_id=?',
                 (binding_id, agent_id)).fetchone()
             if row:
+                result['mcp_preset'] = runtime_mcp_presets.snapshot(uow.connection, row['endpoint_id'])
                 if row['local_record_json']:
                     record = json.loads(row['local_record_json'])
                     result['folders'] = dict(workspace_root=record['root']['path'],
@@ -112,6 +140,7 @@ def finish_setup(deps, context, owner, fresh, request, *, verified):
             return json.loads(prior['result_json'])
         if baseline(uow, agent_id, request.get('binding_id')) != request['baseline']:
             raise conflict('The active configuration changed while you were editing. Reopen Connections to review it.')
+        preset = setup_mcp_preset(uow, request)
         active = runtime_enabled(uow.connection, configuration)
         runtime_policy.save_policy(scoped, context, agent_id=agent_id, changes=dict(
             expected_revision=request['baseline']['runtime_revision'], runtime_enabled=configuration['runtime_enabled'],
@@ -161,6 +190,10 @@ def finish_setup(deps, context, owner, fresh, request, *, verified):
         if binding:
             endpoints = build_endpoint_service(scoped)
             endpoint_id = binding['endpoint_id']
+            if preset is not None:
+                current_preset = runtime_mcp_presets.snapshot(uow.connection, endpoint_id)
+                runtime_mcp_presets.save(uow.connection, endpoint_id=endpoint_id,
+                    expected_revision=current_preset['revision'], servers=preset)
             # These policies share one endpoint revision. Always read it inside this
             # transaction, after the previous update, rather than asking the UI to reload.
             for method, values in [(endpoints.harness_settings, {'settings': configuration['harness_settings']}),

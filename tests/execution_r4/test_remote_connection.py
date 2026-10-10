@@ -31,7 +31,7 @@ from test_vertical_inventory import _NativeFactory
     (True, None, False, 0, 'unsent'), (True, None, False, 0, 'ack_lost'),
     (True, None, False, 0, 'cold_unsent'), (True, None, False, 0, 'cold_ack_lost'),
     (True, None, False, 0, 'active_disconnect'), (True, None, False, 0, 'lease_renewal')])
-def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery, native_decision=None, cli_admission=False, initial_prompt=False, domain_delivery=False, combined_winner=None, reset_active=False, check_presence=False, operator_containment=False):
+def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery, native_decision=None, cli_admission=False, initial_prompt=False, domain_delivery=False, combined_winner=None, reset_active=False, check_presence=False, operator_containment=False, one_shot=False):
     from okto_nexus_connector.transport.https_client import NexusHTTPClient, R4BindingView
     from okto_nexus_connector.transport.wss_r4 import connect_r4_connection
     from okto_nexus_connector.services.execution_selection import acknowledge_execution_binding
@@ -53,7 +53,7 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
     server_id, executor_id = binding['server_id'], binding['executor_id']
     granted = client.post('/api/v1/harness/grants', headers=headers['operator'], json={
         'actor_agent_id': 'subject', 'endpoint_id': binding['endpoint_id'],
-        'actions': ['open', 'send', 'steer', 'interrupt', 'close'], 'max_executions': 2 + bool(initial_prompt),
+        'actions': ['open', 'send', 'steer', 'interrupt', 'close'], 'max_executions': 10 if one_shot else 2 + bool(initial_prompt),
         'expires_at': iso_plus(deps.clock.now_iso(), 600)})
     assert granted.status_code == 200, granted.text
     registered = client.post('/v1/connections/executors:register', headers=headers['subject'], json={
@@ -82,6 +82,11 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
         with deps.connection_factory.unit_of_work() as uow:
             uow.connection.execute("UPDATE agent_endpoints SET consumption='exclusive',response_policy='conversation' WHERE endpoint_id=?",
                                    (binding['endpoint_id'],))
+            if one_shot:
+                from okto_nexus.application.runtime_mcp_presets import save
+                uow.connection.execute("UPDATE runtime_policy_defaults SET session_policy='one_shot'")
+                save(uow.connection, endpoint_id=binding['endpoint_id'], expected_revision=0,
+                     servers=[dict(name='remote-preset', transport='stdio', command='example-mcp', enabled=False)])
             if combined_winner:
                 uow.connection.execute('UPDATE agent_endpoints SET priority=? WHERE endpoint_id=?',
                     (20 if combined_winner == 'remote' else 10, binding['endpoint_id']))
@@ -136,6 +141,10 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 self.opens += 1
                 self.context = context
                 self.stream_epoch = stream_epoch
+                if one_shot:
+                    from test_vertical_inventory import _Native
+                    self.native = _Native()
+                    assert prepared.intent.mcp_preset[0]['name'] == 'remote-preset'
                 return await super().open(prepared, session_id, context, stream_epoch=stream_epoch)
         native = CountedFactory()
         native_decisions = []
@@ -327,6 +336,10 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                             raise OSError('The receipt projection write was interrupted.')
                         original_record(frame)
                     monkeypatch.setattr(execution.publications, 'record', interrupted_record)
+                if one_shot:
+                    from test_one_shot_remote import run_one_shot
+                    await run_one_shot(deps, client, headers, binding, native, execution, monkeypatch)
+                    return
                 opened = await admit('runtime.start', new_session=True)
                 session_id = opened['scope']['session_id']
                 if combined_winner:

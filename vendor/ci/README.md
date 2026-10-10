@@ -1,9 +1,9 @@
-# CI dependencies for Nexus 0.2.2
+# CI dependencies for Nexus 0.3.0
 
-Core 0.0.8 is a mandatory runtime dependency. Connector 0.0.6 is used only by
+Core 0.0.10 is a mandatory runtime dependency. Connector 0.0.8 is used only by
 the cross-repository integration tests; it is not a Nexus runtime dependency.
-Both wheels are built from the release sources. The Core wheel is identical
-in the Nexus and Connector repositories.
+Both wheels are built from the versioned development branches. Connector pins
+the same Core version. These artifacts are for validation before publication.
 
 `manifest.json` records their SHA-256 digests. `tools/ci_installed.py` verifies
 the hashes before installation and compares installed files with these wheels

@@ -79,6 +79,8 @@ def reserve_execution_dispatch(
     remote_ready: bool, regular_items: int = 4,
     regular_bytes: int = 256 * 1024, control_items: int = 2,
     control_bytes: int = 128 * 1024,
+    # The remote regular inbox has 32 item credits: keep four for ready turns.
+    opening_items: int = 28, opening_bytes: int = 256 * 1024,
     channel: ExecutionChannel | None = None,
     retained_operations: tuple[str, ...] = (),
 ) -> DispatchReservation | None:
@@ -92,7 +94,7 @@ def reserve_execution_dispatch(
         return None
     retained = json.dumps(retained_operations)
     if (any(type(value) is not int or value <= 0 for value in (
-            regular_items, regular_bytes, control_items, control_bytes)) or
+            regular_items, regular_bytes, control_items, control_bytes, opening_items, opening_bytes)) or
             not server_id or not executor_id):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                               "Invalid dispatch capacity.", {})
@@ -110,26 +112,29 @@ def reserve_execution_dispatch(
         release_ready_initial_turns(conn, server_id=server_id, executor_id=executor_id)
         from .execution_domain_delivery import project_delivery_refusals
         project_delivery_refusals(conn, server_id=server_id, executor_id=executor_id)
-        used = {"regular": [0, 0], "control": [0, 0]}
+        used = {"regular": [0, 0], "control": [0, 0], "opening": [0, 0]}
+        # Warm/cold pool creation has a separate bounded budget. Slow process
+        # initialization must never consume the workers for already-ready
+        # sessions. The durable wire reservation class remains compatible.
+        pool_open = ("p.action='runtime.open' AND EXISTS (SELECT 1 FROM one_shot_slots slot "
+                     "WHERE slot.open_operation_id=p.operation_id AND slot.server_id=p.server_id "
+                     "AND slot.executor_id=p.executor_id)")
         for row in conn.execute(
-            "SELECT reservation_class,COUNT(*) AS items,"
-            "COALESCE(SUM(reserved_bytes),0) AS bytes FROM "
-            "execution_dispatch_outbox WHERE server_id=? AND executor_id=? "
-            "AND dispatch_state IN ('RESERVED','SENDING','RECONCILING') "
-            "AND NOT EXISTS (SELECT 1 FROM execution_agent_recovery r JOIN execution_operations p "
-            "USING(server_id,executor_id) WHERE p.operation_id=execution_dispatch_outbox.operation_id "
-            "AND p.server_id=execution_dispatch_outbox.server_id AND p.executor_id=execution_dispatch_outbox.executor_id "
-            "AND r.agent_id=p.subject_agent_id AND r.state='RECOVERING') "
-            "GROUP BY reservation_class",
+            "SELECT CASE WHEN " + pool_open + " THEN 'opening' ELSE o.reservation_class END AS lane,"
+            "COUNT(*) AS items,COALESCE(SUM(o.reserved_bytes),0) AS bytes FROM execution_dispatch_outbox o "
+            "JOIN execution_operations p USING(server_id,executor_id,operation_id) "
+            "WHERE o.server_id=? AND o.executor_id=? AND o.dispatch_state IN ('RESERVED','SENDING','RECONCILING') "
+            "AND NOT EXISTS (SELECT 1 FROM execution_agent_recovery r WHERE r.server_id=p.server_id "
+            "AND r.executor_id=p.executor_id AND r.agent_id=p.subject_agent_id AND r.state='RECOVERING') GROUP BY lane",
             (server_id, executor_id),
         ):
-            if row["reservation_class"] in used:
-                used[row["reservation_class"]] = [row["items"], row["bytes"]]
+            if row["lane"] in used:
+                used[row["lane"]] = [row["items"], row["bytes"]]
         # A receipt releases the durable reservation, but an embedded producer
         # may still be returning from its native call. Count those live calls
         # once, without double-counting their still-reserved outbox rows.
         for row in conn.execute(
-            "SELECT p.action,length(CAST(p.semantic_payload AS BLOB)) AS bytes "
+            "SELECT p.action,(" + pool_open + ") AS pool_open,length(CAST(p.semantic_payload AS BLOB)) AS bytes "
             "FROM execution_operations p JOIN execution_dispatch_outbox o "
             "USING(server_id,executor_id,operation_id) "
             "WHERE p.server_id=? AND p.executor_id=? "
@@ -140,7 +145,7 @@ def reserve_execution_dispatch(
             "AND r.agent_id=p.subject_agent_id AND r.state='RECOVERING')",
             (server_id, executor_id, retained),
         ):
-            lane = 'regular' if row['action'] in _REGULAR else 'control'
+            lane = 'opening' if row['pool_open'] else 'regular' if row['action'] in _REGULAR else 'control'
             used[lane][0] += 1
             used[lane][1] += row['bytes']
         # Filter each lane by its remaining budget before selecting a row.
@@ -149,8 +154,13 @@ def reserve_execution_dispatch(
         for lane, actions, max_items, max_bytes in (
             ("control", sorted(_CONTROL), control_items, control_bytes),
             ("regular", sorted(_REGULAR), regular_items, regular_bytes),
+            ("opening", ['runtime.open'], opening_items, opening_bytes),
         ):
             remaining = max_bytes - used[lane][1]
+            if lane in ('regular', 'opening'):
+                # Both use the existing productive wire inbox. Independent
+                # worker budgets must not overrun its shared byte credit.
+                remaining = min(remaining, regular_bytes - used['regular'][1] - used['opening'][1])
             if used[lane][0] >= max_items or remaining <= 0:
                 continue
             placeholders = ",".join("?" for _ in actions)
@@ -164,20 +174,22 @@ def reserve_execution_dispatch(
                 "AND o.dispatch_state='PENDING' "
                 "AND (o.next_attempt_at IS NULL OR o.next_attempt_at<=?) "
                 "AND p.admission_state IN ('ACCEPTED','DISPATCH_PENDING') "
-                # One agent may open several independent sessions. Until a
-                # productive native call is acknowledged, reserve at most one
-                # shared worker for that agent so slow opens cannot starve its
-                # peers. Controls retain their independent containment budget.
+                # Pool reservations are independent by session. Legacy sessions
+                # keep their existing agent-level producer isolation.
                 "AND (?='control' OR NOT EXISTS (SELECT 1 FROM execution_dispatch_outbox busy "
                 "JOIN execution_operations active USING(server_id,executor_id,operation_id) "
                 "WHERE busy.server_id=p.server_id AND busy.executor_id=p.executor_id "
                 "AND active.subject_agent_id=p.subject_agent_id AND active.action IN ('runtime.open','turn.submit') "
+                "AND (active.session_id=p.session_id OR NOT EXISTS (SELECT 1 FROM one_shot_slots slot "
+                "WHERE slot.session_id=p.session_id AND slot.server_id=p.server_id AND slot.executor_id=p.executor_id)) "
                 "AND (busy.dispatch_state IN ('RESERVED','SENDING','RECONCILING') "
                 "OR busy.operation_id IN (SELECT value FROM json_each(?))))) "
                 "AND NOT EXISTS (SELECT 1 FROM execution_agent_recovery r JOIN execution_executors e USING(server_id,executor_id) "
                 "WHERE r.server_id=p.server_id AND r.executor_id=p.executor_id AND r.agent_id=p.subject_agent_id "
                 "AND (r.state<>'READY' OR r.generation<>e.generation)) "
                 "AND p.action IN (" + placeholders + ") "
+                + ("AND (" + pool_open + ") " if lane == 'opening' else
+                   "AND NOT (" + pool_open + ") " if lane == 'regular' else "") +
                 "AND length(CAST(p.semantic_payload AS BLOB))<=? "
                 # Administrative turns have no domain-delivery mapping. They
                 # still share the native session with a delivery awaiting a
@@ -200,6 +212,7 @@ def reserve_execution_dispatch(
                 "LEFT JOIN agent_runtime_overrides policy ON policy.agent_id=endpoint.agent_id "
                 "JOIN runtime_policy_defaults global_policy ON global_policy.singleton=1 "
                 "WHERE m.server_id=p.server_id AND m.executor_id=p.executor_id AND m.operation_id=p.operation_id "
+                "AND COALESCE(policy.session_policy,global_policy.session_policy)<>'one_shot' "
                 "AND (COALESCE(policy.session_policy,global_policy.session_policy)='shared' OR EXISTS (SELECT 1 FROM messages incoming "
                 "JOIN messages preceding ON preceding.message_id=earlier.message_id "
                 "WHERE incoming.message_id=d.message_id AND incoming.from_agent_id=preceding.from_agent_id "
@@ -218,6 +231,7 @@ def reserve_execution_dispatch(
             if row is None:
                 continue
             cost = row["byte_cost"]
+            reservation_class = 'regular' if lane == 'opening' else lane
             token = "attempt_" + secrets.token_hex(16)
             now = datetime.now(timezone.utc).isoformat()
             changed = conn.execute(
@@ -226,7 +240,7 @@ def reserve_execution_dispatch(
                 "reservation_class=?,reserved_bytes=?,reserved_at=?,reservation_owner=?,reservation_generation=? "
                 "WHERE server_id=? AND executor_id=? AND operation_id=? "
                 "AND dispatch_state='PENDING'",
-                (token, lane, cost, now,
+                (token, reservation_class, cost, now,
                  channel.connection_id if channel else None,
                  channel.connection_generation if channel else None, server_id, executor_id,
                  row["operation_id"]),
@@ -236,7 +250,7 @@ def reserve_execution_dispatch(
                                       "The dispatch row changed during reservation.", {})
             return DispatchReservation(
                 server_id, executor_id, row["operation_id"], token,
-                row["attempt_no"] + 1, lane, cost,
+                row["attempt_no"] + 1, reservation_class, cost,
                 channel.connection_id if channel else None,
                 channel.connection_generation if channel else None)
     return None
@@ -586,6 +600,8 @@ def begin_execution_send(
         if changed != 1:
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The dispatch attempt changed before send.", {})
+        from .one_shot_runtime import before_send
+        before_send(conn, row)
         if bootstrap:
             return AuthorizedOpenBootstrap(
                 reservation, semantic, connection_generation, connection_id,

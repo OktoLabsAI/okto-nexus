@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "title": "One-shot sessions, bounded warm pools and runtime MCP presets",
+  "repositories": {
+    "nexus": "v0.3.0",
+    "core": "v0.0.10",
+    "connector": "v0.0.8"
+  },
+  "branches": {
+    "nexus": "feature/v0.3.0",
+    "core": "feature/v0.0.10",
+    "connector": "feature/v0.0.8"
+  },
+  "requirements": [
+    "Global defaults and independent agent overrides; existing session policies remain unchanged.",
+    "One logical call owns one fresh session; transport retries never create another call or consume another slot.",
+    "Per-agent concurrency and aggregate host capacity count starting, idle warm, executing and closing instances.",
+    "max_parallel=0 means no pool-specific ceiling; otherwise 0 <= warm_instances < max_parallel. Host capacity always applies; bounded queue and deadlines.",
+    "A warm instance has never served another call; each consumed instance is terminated after durable final result.",
+    "Queued calls have priority over replenishment; bounded failure backoff prevents launch storms.",
+    "Every accepted call has a durable correlated success or error, retried for a disconnected caller.",
+    "Errors include code, safe description, stage, started/possible-effect and retry safety; cleanup failure cannot replace success.",
+    "Approvals and user input continue the same call; cancellation, timeout and restart settle or recover without unsafe replay.",
+    "Normal one-shot closure does not mark agent connection Recovering or disconnect its connector.",
+    "Runtime-only MCP preset supports stdio and HTTP, enabled entries and protected host-local secret references.",
+    "Inherited harness MCPs plus preset replacements by name plus reserved Nexus integration; no global file edits.",
+    "Snapshot preset revision per session; changes affect new sessions and retire incompatible unused warm instances.",
+    "Codex, Claude and Pi tool paths preserve Nexus authorization; external MCP permissions remain harness-owned.",
+    "Local and remote runtime behavior is equivalent; paths and credentials resolve on the execution host.",
+    "UI exposes effective settings, capacity, queue and correlated outcomes; real local validation precedes publication."
+  ],
+  "steps": [
+    {
+      "id": "S01",
+      "scope": "Architecture and contracts",
+      "deliverable": "Validated capacity/preset contracts and migration design"
+    },
+    {
+      "id": "S02",
+      "scope": "Nexus one-shot admission",
+      "deliverable": "Durable calls, atomic capacity, FIFO queue, deadlines and idempotency"
+    },
+    {
+      "id": "S03",
+      "scope": "Core lifecycle and warm pool",
+      "deliverable": "Single-use process preparation, claiming, disposal, backoff and host cap"
+    },
+    {
+      "id": "S04",
+      "scope": "Connector and local runtime",
+      "deliverable": "Host integration, reconciliation and resource accounting"
+    },
+    {
+      "id": "S05",
+      "scope": "Caller outcomes",
+      "deliverable": "Durable success/error delivery, cancellation and cleanup independence"
+    },
+    {
+      "id": "S06",
+      "scope": "MCP presets",
+      "deliverable": "Storage, merging, credential references and per-harness launch translation"
+    },
+    {
+      "id": "S07",
+      "scope": "Configuration UI",
+      "deliverable": "Global/agent overrides, runtime-only MCP editor and capacity visibility"
+    },
+    {
+      "id": "S08",
+      "scope": "Validation",
+      "deliverable": "Concurrency, failure, restart, permissions and local/remote harness tests"
+    },
+    {
+      "id": "P01",
+      "scope": "Reusable pool architecture",
+      "deliverable": "Domain rules, atomic pool/queue ports and internal durable adapters"
+    },
+    {
+      "id": "P02",
+      "scope": "Independent allocation and dispatch",
+      "deliverable": "Unlimited pool option, isolated opening/ready budgets, compatible UI and lifecycle"
+    },
+    {
+      "id": "P03",
+      "scope": "Regression validation",
+      "deliverable": "Adapter contract, parallel ready work during blocked openings, capacity, timeout, restart, local/remote"
+    },
+    {
+      "id": "P04",
+      "scope": "Development artifacts",
+      "deliverable": "Rebuild affected artifacts and verify installed packages; retain explicit live-instance status"
+    }
+  ],
+  "release_gate": "All steps implemented and tested; unsupported harness behavior is explicit, never silently ignored. No publication requested in this task."
+}

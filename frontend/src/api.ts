@@ -600,6 +600,7 @@ export interface SteeringResult {
   message_id?: string;
   recipients?: string[];
   delivered_count?: number;
+  runtime_rejections?: { recipient_agent_id: string; code: string; message: string; retry_safe: boolean }[];
   status?: string;
   approval_id?: string;
   warning?: string;
@@ -1106,13 +1107,24 @@ export interface AgentExecutionPolicy {
   local_adapter_id: string | null; local_integrations: Array<{adapter_id: string; label: string}>;
 }
 
+export type SessionPolicy = 'shared' | 'per_sender' | 'per_sender_session' | 'one_shot';
+export type OneShotSettings = {
+  max_parallel: number; warm_instances: number; overflow: 'queue' | 'reject'; queue_capacity: number;
+  queue_timeout_seconds: number; execution_timeout_seconds: number;
+};
+export type OneShotPolicy = {revision: number; settings: Partial<OneShotSettings>; defaults: OneShotSettings; effective: OneShotSettings};
+export type MCPPreset = {revision: number; servers: Array<Record<string, unknown>>; configuration_digest: string};
+export type OneShotState = {slots: Record<string, number>; occupied: number; queued: number;
+  available: number; max_pool_instances: number; max_parallel: number; warm_target: number;
+  calls: Array<{call_id: string; caller_id: string; state: string; enqueued_at: number;
+    error: {code: string; message: string; possible_effect: boolean; retry_safe: boolean} | null}>};
 export type RuntimePolicy = {
   automatic_recovery?: boolean; inherit_global_mcps?: boolean | null;
   revision: number;
   runtime_enabled: boolean | null;
-  session_policy: 'shared' | 'per_sender' | 'per_sender_session' | null;
-  defaults?: {inherit_global_mcps: boolean; revision: number; runtime_enabled: boolean; session_policy: 'shared' | 'per_sender' | 'per_sender_session'};
-  effective?: {inherit_global_mcps: boolean; runtime_enabled: boolean; session_policy: 'shared' | 'per_sender' | 'per_sender_session'};
+  session_policy: SessionPolicy | null;
+  defaults?: {inherit_global_mcps: boolean; revision: number; runtime_enabled: boolean; session_policy: SessionPolicy};
+  effective?: {inherit_global_mcps: boolean; runtime_enabled: boolean; session_policy: SessionPolicy};
 };
 
 export const api = {
@@ -1137,7 +1149,13 @@ export const api = {
   saveRuntimeToolPermission: (endpoint: string, body: {expected_revision: number; mode: "ask" | "always_allow"}) =>
     call<{revision: number; mode: "ask" | "always_allow"}>(`/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/tool-permission`, {method: "PUT", body: JSON.stringify(body)}),
   runtimePolicy: (agentId?: string) => call<RuntimePolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/runtime-policy` : '/api/v1/runtime-policy'),
-  saveRuntimePolicy: (body: {expected_revision: number; runtime_enabled: boolean | null; session_policy: 'shared' | 'per_sender' | 'per_sender_session' | null; automatic_recovery?: boolean; inherit_global_mcps?: boolean | null}, agentId?: string) => call<RuntimePolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/runtime-policy` : '/api/v1/runtime-policy', {method: 'PUT', body: JSON.stringify(body)}),
+  saveRuntimePolicy: (body: {expected_revision: number; runtime_enabled: boolean | null; session_policy: SessionPolicy | null; automatic_recovery?: boolean; inherit_global_mcps?: boolean | null}, agentId?: string) => call<RuntimePolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/runtime-policy` : '/api/v1/runtime-policy', {method: 'PUT', body: JSON.stringify(body)}),
+  oneShotPolicy: (agentId?: string) => call<OneShotPolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/one-shot-policy` : '/api/v1/one-shot-policy'),
+  oneShotState: (agentId: string) => call<OneShotState>(`/api/v1/agents/${encodeURIComponent(agentId)}/one-shot-state`),
+  cancelOneShot: (agentId: string, callId: string) => call<OneShotState>(`/api/v1/agents/${encodeURIComponent(agentId)}/one-shot-calls/${encodeURIComponent(callId)}/cancel`, {method: 'POST'}),
+  mcpPreset: (endpoint: string) => call<MCPPreset>(`/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/mcp-preset`),
+  saveMcpPreset: (endpoint: string, body: {expected_revision: number; servers: Array<Record<string, unknown>>}) => call<MCPPreset>(`/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/mcp-preset`, {method: 'PUT', body: JSON.stringify(body)}),
+  saveOneShotPolicy: (body: {expected_revision: number; settings: Partial<OneShotSettings>}, agentId?: string) => call<OneShotPolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/one-shot-policy` : '/api/v1/one-shot-policy', {method: 'PUT', body: JSON.stringify(body)}),
   runtimeConversationPolicy: (endpoint: string) => call<{endpoint_id: string; agent_id: string; workspace_id: string; revision: number; enabled: boolean; session_policy: "shared" | "per_sender" | "per_sender_session"}>(
     `/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/conversation-policy`),
   saveRuntimeConversationPolicy: (endpoint: string, body: {expected_revision: number; enabled: boolean; session_policy?: "shared" | "per_sender" | "per_sender_session"}) => call<{revision: number; enabled: boolean; session_policy: "shared" | "per_sender" | "per_sender_session"}>(

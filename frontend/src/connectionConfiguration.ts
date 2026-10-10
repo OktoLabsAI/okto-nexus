@@ -1,7 +1,7 @@
 export interface ConnectionConfiguration {
   format: 'okto-nexus-connection'; version: 1;
   adapter_id: string; execution_location: 'local' | 'remote';
-  runtime_enabled: boolean | null; session_policy: 'shared' | 'per_sender' | 'per_sender_session' | null;
+  runtime_enabled: boolean | null; session_policy: 'shared' | 'per_sender' | 'per_sender_session' | 'one_shot' | null;
   workspace_root: string; workspace_label: string; provider_home: string | null;
   secret_bindings: Record<string,string>; alias: string; harness_settings: Record<string,string>;
   automatic_reply: boolean; tool_access: 'ask' | 'always_allow';
@@ -24,7 +24,7 @@ export function parseConnectionConfiguration(text: string): ConnectionConfigurat
   if (!value || Array.isArray(value) || Object.keys(value).sort().join() !== Object.keys(base).sort().join() ||
       value.format !== base.format || value.version !== 1 || !['local','remote'].includes(value.execution_location) ||
       (value.runtime_enabled !== null && typeof value.runtime_enabled !== 'boolean') || typeof value.automatic_reply !== 'boolean' ||
-      !['shared','per_sender','per_sender_session',null].includes(value.session_policy) || !['ask','always_allow'].includes(value.tool_access))
+      !['shared','per_sender','per_sender_session','one_shot',null].includes(value.session_policy) || !['ask','always_allow'].includes(value.tool_access))
     throw new Error('Use a complete Okto Nexus connection configuration (version 1).');
   for (const key of ['adapter_id','workspace_root','workspace_label','alias'])
     if (typeof value[key] !== 'string' || value[key].length > 4096) throw new Error(`Invalid ${key}.`);
@@ -46,15 +46,26 @@ export function exportConnectionConfiguration(value: ConnectionConfiguration): s
   return JSON.stringify({...portable,automatic_reply:true,version:2},null,2)+'\n';
 }
 export type SetupBaseline = Record<string,number | null>;
+export function sameConnectionConfiguration(left: ConnectionConfiguration, right: ConnectionConfiguration): boolean {
+  const canonical = (value: unknown): string => {
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      return JSON.stringify(Object.keys(value).sort().map(key => [key, canonical((value as Record<string, unknown>)[key])]));
+    }
+    return JSON.stringify(value);
+  };
+  return canonical(left) === canonical(right);
+}
 export interface SetupRequest {
   client_intent_id: string; agent_id: string; executor_id: string; candidate_ref: string;
   inventory_revision: string; workspace_id: string | null; binding_id: string | null;
   baseline: SetupBaseline; configuration: ConnectionConfiguration;
+  mcp_preset?: {expected_revision: number; servers: import('./api').MCPPreset['servers']};
 }
 export interface SetupTest {test_id: string; status: 'running' | 'succeeded' | 'failed'; stage: string; details: string[]}
 
 // Remote onboarding and MCP-only changes save policy, not a local installation.
 export function policyOnlySetup(request: SetupRequest): SetupRequest {
-  return {...request, executor_id:'', candidate_ref:'', inventory_revision:'', workspace_id:null, binding_id:null,
+  const {mcp_preset, ...policy} = request;
+  return {...policy, executor_id:'', candidate_ref:'', inventory_revision:'', workspace_id:null, binding_id:null,
     baseline:{...request.baseline,binding_revision:null,endpoint_revision:null}};
 }

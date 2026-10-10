@@ -31,6 +31,30 @@ def reserve(state, **limits):
         remote_ready=True, channel=channel, **limits)
 
 
+def test_pool_opening_budget_preserves_ready_workers_and_shared_wire_bytes(owner):
+    with owner[0].connection_factory.unit_of_work() as uow:
+        source = dict(uow.connection.execute('SELECT * FROM execution_operations WHERE operation_id=?',
+                                             (owner[6]['operation_id'],)).fetchone())
+        uow.connection.execute('INSERT INTO one_shot_slots(slot_id,executor_id,agent_id,configuration_digest,state,'
+            'created_at,session_id,server_id,open_operation_id) VALUES(?,?,?,?,?,?,?,?,?)',
+            ('opening', source['executor_id'], source['subject_agent_id'], 'config', 'STARTING', 0,
+             source['session_id'], source['server_id'], source['operation_id']))
+    opening = reserve(owner, opening_items=1, regular_items=1)
+    backlog(owner, 'turn.submit', 1, payload='"ready"')
+    with owner[0].connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE execution_operations SET session_id='ready-session' WHERE action='turn.submit'")
+        uow.connection.execute('INSERT INTO one_shot_slots(slot_id,executor_id,agent_id,configuration_digest,state,'
+            'created_at,session_id,server_id) VALUES(?,?,?,?,?,?,?,?)',
+            ('ready', source['executor_id'], source['subject_agent_id'], 'config', 'CLAIMED', 0,
+             'ready-session', source['server_id']))
+    # Opening and ready workers are independent, but the existing transport
+    # byte credit is shared and must never be exceeded by combining the lanes.
+    assert reserve(owner, regular_bytes=opening.reserved_bytes, regular_items=1) is None
+    ready = reserve(owner, regular_bytes=opening.reserved_bytes + len('"ready"'), regular_items=1)
+    assert ready.operation_id == 'backlog-turn.submit-0000'
+    assert ready.reservation_class == opening.reservation_class == 'regular'
+
+
 @pytest.mark.parametrize("constraint", ["items", "bytes", "oversized"])
 def test_blocked_control_backlog_does_not_hide_eligible_productive_work(owner, constraint):
     # More than the old 32-row selection window remains ahead of the opening.

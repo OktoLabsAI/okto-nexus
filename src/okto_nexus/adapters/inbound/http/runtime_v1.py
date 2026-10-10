@@ -52,6 +52,12 @@ class InventoryRefreshRequest(BaseModel):
     client_intent_id: _Id
 
 
+class SetupMCPPreset(BaseModel):
+    model_config = ConfigDict(extra='forbid', strict=True)
+    expected_revision: Annotated[int, Field(ge=0)]
+    servers: list[dict]
+
+
 class ConnectionSetupRequest(BaseModel):
     model_config = ConfigDict(extra='forbid', strict=True)
     client_intent_id: Annotated[str, Field(min_length=1, max_length=100)]
@@ -63,6 +69,7 @@ class ConnectionSetupRequest(BaseModel):
     binding_id: str | None = None
     baseline: dict[str, int | None]
     configuration: dict
+    mcp_preset: SetupMCPPreset | None = None
 
 
 class LocalInstallationCheckRequest(BaseModel):
@@ -892,6 +899,11 @@ def build_router() -> APIRouter:
         try:
             from ....application.connection_authorization import normalize_authorization
             result['configuration'] = normalize_authorization(parse_connection_configuration(normalize_authorization(result['configuration'])))
+            if result.get('mcp_preset') is not None:
+                from nexus_connector_core.mcp_presets import validate_mcp_preset
+                result['mcp_preset']['servers'] = validate_mcp_preset(result['mcp_preset']['servers'])
+            else:
+                result.pop('mcp_preset', None)
         except (CoreError, ValueError, TypeError):
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Invalid connection configuration file.', {}) from None
         return result

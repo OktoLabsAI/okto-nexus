@@ -7,12 +7,14 @@ INSTALLATION_TABLES = frozenset({
     'runtime_policy_defaults', 'runtime_artifact_settings',
     'runtime_writer_contract', 'runtime_dispatcher_owner', 'runtime_journal_checkpoint',
     'runtime_reset_generation',
+    'one_shot_policy_settings', 'one_shot_host_limits',
 })
 
 # Preserve the whole configured connection, including its original authority
 # and spent quota. A reset must not broaden or renew any permission.
 AGENT_CONFIGURATION_TABLES = frozenset({
     'agents', 'agent_endpoints', 'runtime_profiles', 'runtime_execution_grants',
+    'runtime_mcp_presets',
     'agent_connection_policies', 'agent_connection_methods', 'agent_connection_keys',
     'agent_execution_policies', 'agent_runtime_overrides', 'agent_runtime_policy_epochs',
     'runtime_boot_bindings', 'execution_agent_revisions', 'execution_executors',
@@ -58,6 +60,10 @@ def clear_operational_history(conn, *, keep_agents):
     Other writer/authority fences remain active throughout the reset.
     """
     preserved = preserved_tables(conn, keep_agents=keep_agents)
+    if not keep_agents:
+        # Global defaults survive a reset; removed identities must not leave
+        # overrides that could accidentally apply to a newly created agent.
+        conn.execute("DELETE FROM one_shot_policy_settings WHERE scope<>'global'")
     trigger = conn.execute("SELECT sql FROM sqlite_master WHERE type='trigger' "
         "AND name='runtime_delivery_attempt_no_delete' "
         "AND tbl_name='runtime_delivery_attempt_events'").fetchone()

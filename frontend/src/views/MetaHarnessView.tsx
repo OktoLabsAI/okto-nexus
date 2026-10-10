@@ -1092,7 +1092,7 @@ export function MetaHarnessView({
         `Attached ${artifactIds.length === 1 ? "1 document" : `${artifactIds.length} documents`}: ${staged
           .map((attachment) => attachment.file.name)
           .join(", ")}.`;
-      await api.metaHarnessSend({
+      const result = await api.metaHarnessSend({
         workspace: sendWorkspace,
         kind,
         audience,
@@ -1104,6 +1104,9 @@ export function MetaHarnessView({
       setSubject("");
       setBody("");
       setAttachments([]);
+      if (result.runtime_rejections?.length) {
+        setError(result.runtime_rejections.map((item) => `${item.recipient_agent_id}: ${item.message}`).join("\n"));
+      }
       await loadFeed();
     } catch (exc) {
       setError((exc as Error).message);

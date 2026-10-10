@@ -287,8 +287,10 @@ class EmbeddedReconciliation:
             opening_receipt = await host.historical_receipt(session_id=row['session_id'],
                 key=OperationKey(owner.channel.server_id, owner.channel.executor_id, row['open_operation_id']))
             if (opening_receipt is not None and opening_receipt.stage == 'FAILED'
-                    and not opening_receipt.possible_effect and opening_receipt.retry_safe
-                    and opening_receipt.error_code == 'PROFILE_DRIFT'):
+                    and not opening_receipt.possible_effect and opening_receipt.retry_safe):
+                # The durable no-effect fact and released reservation are the
+                # proof, independent of the refusal code (including an opening
+                # whose authority expired before native spawn).
                 await self.release_session(row['session_id'], failed_open=True)
                 continue
             async def inspect(journal):

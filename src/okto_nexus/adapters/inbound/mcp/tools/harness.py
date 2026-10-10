@@ -568,7 +568,8 @@ def build_dispatcher(deps):
         # The R4 outbox now owns physical dispatch. Keep the legacy attempt in
         # history and the newly admitted canonical turn as the current attempt,
         # but do not leave a live claim under the legacy worker owner epoch.
-        uow.connection.execute("UPDATE delivery_outbox SET status='PENDING',owner_epoch=NULL,"
+        uow.connection.execute("UPDATE delivery_outbox SET status=CASE WHEN EXISTS "
+            "(SELECT 1 FROM one_shot_calls WHERE call_id=delivery_outbox.operation_id) THEN 'ACCEPTED' ELSE 'PENDING' END,owner_epoch=NULL,"
             "lease_expires_at=NULL WHERE operation_id=?", (operation['operation_id'],))
         return True
     dispatcher.admit_canonical = admit_canonical
@@ -576,9 +577,11 @@ def build_dispatcher(deps):
     dispatcher.event_ingress.capture_health_changed = dispatcher.capture_health_changed
     def publish_results():
         from .inbox import build_service as build_inbox_service
-        return (build_inbox_service(deps).consume_canonical_runtime_results()
+        from okto_nexus.application.one_shot_runtime import tick
+        from okto_nexus.application.one_shot_notifications import publish_errors
+        return (tick(deps) + build_inbox_service(deps).consume_canonical_runtime_results()
                 + native_approvals.scan_once() + handoffs.process_runtime_results()
-                + messages._runtime_results.scan_once(messages))
+                + messages._runtime_results.scan_once(messages) + publish_errors(deps, messages))
     dispatcher.publish_results = publish_results
     dispatcher.event_ingress.wake_dispatch = dispatcher.wake
     dispatcher.wake_channel = RuntimeWakeChannel(deps.config.home_dir, getattr(deps, "runtime_owner_api_url", None))

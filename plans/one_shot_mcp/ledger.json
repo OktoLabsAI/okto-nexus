@@ -1,0 +1,485 @@
+{
+  "schema_version": 1,
+  "status": "in_progress",
+  "steps": {
+    "S01": "complete",
+    "S02": "complete",
+    "S03": "complete",
+    "S04": "complete",
+    "S05": "complete",
+    "S06": "complete",
+    "S07": "complete",
+    "S08": "complete",
+    "P01": "complete",
+    "P02": "complete",
+    "P03": "complete",
+    "P04": "complete",
+    "P05": "complete",
+    "P06": "pending",
+    "P07": "complete",
+    "P08": "pending",
+    "P09": "completed"
+  },
+  "entries": [
+    {
+      "date": "2026-10-09",
+      "step": "S01",
+      "action": "Renamed branches and bumped Nexus to 0.3.0, Core to 0.0.10 and Connector to 0.0.8. Consumer pins and Nexus inventory version now require Core 0.0.10.",
+      "validation": "Branches feature/v0.3.0, feature/v0.0.10 and feature/v0.0.8; source metadata updated.",
+      "outcome": "Vendored wheels, lockfile and installed-artifact verification still pending. No publication or global installation changed."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "S03",
+      "action": "Connected one-shot admission, FIFO dispatch, warm claims, durable results and canonical closure to embedded/remote R4 operations. Retire warm instances by binding, and block direct API starts/submits that have no reservation.",
+      "validation": "Initial 4 canonical lifecycle tests passed for Codex/Claude/Pi and single-use warm claims. Subsequent API/lifecycle run: 6 passed in 43.49s.",
+      "outcome": "Uses synthetic native harness peers. Full restart, remote and containment-failure campaigns remain pending."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "S05",
+      "action": "Added atomic, correlated server-owned inbox errors addressed only to the original caller.",
+      "validation": "Queue expiry notification and binding-isolated warm retirement: 2 passed in 11.44s.",
+      "outcome": "One notification across repeated publication scans; expired queued work creates no extra session. Active runtime caller wake-up remains to be verified."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "S06",
+      "action": "Added signed preset opening payload to Core, local runtime and Connector. Compiled Codex/Claude presets with protected environment references; added session-owned MCP SDK bridge and packaged extension for Pi.",
+      "validation": "Preset/native configuration/contracts suite: 47 passed. Native bridge/environment/Pi tests: 53 passed in 20.98s; real MCP stdio bridge test covers discovery, call, invalid token, unauthorized secret and shutdown. Pi extension passes node --check.",
+      "outcome": "Actual installed harness acceptance and remote Connector launch tests are pending. Claude preset composition currently refuses inherited headersHelper entries rather than silently losing them."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "S07",
+      "action": "Added operator-only revisioned one-shot/MCP APIs, global and independent agent capacity controls, one-shot session selection and MCP JSON preset editor in runtime harness settings.",
+      "validation": "API tests include unauthorized writes/reads and stale revisions. Frontend build passed for one-shot controls; latest build with MCP editor in progress.",
+      "outcome": "Capacity/outcome status display and cancellation controls remain pending; no feature marked complete."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "S01",
+      "action": "Created dedicated branches in three clean repositories from their published tags. Recorded requested scope and acceptance requirements.",
+      "validation": "Inspected runtime policies, canonical delivery selection, Core harness configuration and Connector launch configuration.",
+      "outcome": "Current policies reuse sessions; MCP settings are scalar and need a separate structured contract. Native Pi path differs from Codex/Claude."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "S01",
+      "action": "Added Core capacity/failure contracts and structured MCP preset validation, whole-entry composition, digest and native translation helpers.",
+      "validation": "tests/test_one_shot_contracts.py: 23 passed against local Core source.",
+      "outcome": "Validates 10 parallel / 5 warm, limits, secret references, reserved Nexus names and conservative retry safety. Pi native rendering explicitly unsupported until its bridge is implemented; helpers not wired to launch yet."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "S02",
+      "action": "Added migration 126 and transactional admission, warm reservations, single-use claims, bounded FIFO queue, expiry and host/agent capacity accounting.",
+      "validation": "tests/execution_r4/test_one_shot_capacity.py: 13 passed, including 20 concurrent admissions through independent SQLite connections with max_parallel=5.",
+      "outcome": "Five admitted and fifteen queued, durable across reconnect. No production dispatcher integration yet."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "S05",
+      "action": "Added correlated durable caller outcomes, caller-scoped acknowledgement and terminal-result protection during cleanup.",
+      "validation": "Capacity tests cover rejected, expired, cancelled, uncertain-effect and successful calls, plus wrong-caller acknowledgement rejection.",
+      "outcome": "Outbox persistence implemented; automatic notification transport remains pending."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "S08",
+      "action": "Validated additive migration and existing runtime policy behavior.",
+      "validation": "tests/test_migrations.py + tests/execution_r4/test_runtime_policy_defaults.py: 16 passed.",
+      "outcome": "Existing policies preserved. No live Nexus instance started or changed."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "S02",
+      "action": "Added global/per-agent revisioned settings, idle pool trimming after limit changes, late-open cancellation handling, opening/execution deadlines, per-agent warm backoff and capacity statistics.",
+      "validation": "One-shot capacity: 19 tests; settings: 7 tests, including cross-agent override validation.",
+      "outcome": "Limits count closing resources. Replenishment failure does not block another agent. Host totals currently cover one-shot reservations; accounting for non-one-shot runtimes remains an integration requirement."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "S06",
+      "action": "Added endpoint-scoped revisioned MCP preset persistence, integrity digests and immutable opening snapshots; runtime-only endpoint validation.",
+      "validation": "tests/execution_r4/test_runtime_mcp_presets.py: 5 passed.",
+      "outcome": "No secrets resolved during save/read. Existing endpoint authority remains untouched. Signed wire payload, launch application and operator API/UI are not wired yet."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "S08",
+      "action": "Ran the current foundation suite and runtime-policy/migration regressions together.",
+      "validation": {
+        "nexus": "47 passed in 36.44s",
+        "core": "23 passed in 0.46s",
+        "total": 70,
+        "command_nexus": "python -m pytest tests/execution_r4/test_one_shot_capacity.py tests/execution_r4/test_one_shot_settings.py tests/execution_r4/test_runtime_mcp_presets.py tests/test_migrations.py tests/execution_r4/test_runtime_policy_defaults.py -q",
+        "command_core": "python -m pytest tests/test_one_shot_contracts.py -q",
+        "environment": "Python 3.13.1; PYTHONPATH points to working-tree Nexus/Core sources; global installations unchanged"
+      },
+      "outcome": "Foundation tests pass. These are not end-to-end harness acceptance tests. Connector branch created but no Connector implementation changes yet."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "S08",
+      "action": "Validated versioned installations, actual harness MCP discovery, owned MCP subprocess containment, reset preservation and shutdown fencing.",
+      "validation": {
+        "installed_nexus": "62 passed; build/one-shot-installed-tests/campaign.json PASS, before final reset/cleanup/fanout changes.",
+        "core": "Full suite 1446 passed, 48 skipped, one stale documentation-version assertion fixed and retested (18 passed).",
+        "connector": "155 passed; signed preset selection additionally passed.",
+        "real_harnesses": "Codex, Claude and Pi discovered a real stdio MCP with isolated provider homes; provider authentication intentionally unavailable. Authentication failure acceptance: 3 passed.",
+        "pi_containment": "3 passed, including Windows parent kill with actual child handle termination proof. Real installed Pi discovery with owned transport: 1 passed.",
+        "reset": "8 passed, including active-session shutdown, preservation of MCP presets, global/agent one-shot limits and host budget.",
+        "restart": "Two durable-result versus interrupted-call restart scenarios passed; no productive replay.",
+        "artifacts": "Core 0.0.10 rebuilt after owned-process transport; MCP SDK minimum is tested 1.30. Nexus and Connector pins are 0.0.10; lockfile and vendor checksums refreshed."
+      },
+      "outcome": "UI capacity/cancellation and immutable preset snapshots implemented. Cleanup admission failure now preserves terminal result independently; final regression and updated Nexus artifact still pending."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "S08",
+      "action": "Completed final reset, shutdown, cleanup isolation, host accounting, caller errors and per-recipient capacity refusal validation.",
+      "validation": {
+        "nexus": {
+          "one-shot-reviewed-tests": {
+            "counts": {
+              "tests": 86,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            },
+            "status": "PASS",
+            "changed_inputs": [],
+            "evidence": "build/one-shot-reviewed-tests/campaign.json",
+            "installed": {
+              "okto_nexus": {
+                "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\one-shot-install\\Lib\\site-packages\\okto_nexus",
+                "wheel_sha256": "34b616388034cbce39be8473c671f0a3b0e88ff4b811761317f7774701756ba7"
+              },
+              "nexus_connector_core": {
+                "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\one-shot-install\\Lib\\site-packages\\nexus_connector_core",
+                "wheel_sha256": "c4763c07beb60fa158f4694d279b7679ded187d3d2d8f27c25c556ab84287bfb"
+              },
+              "okto_nexus_connector": {
+                "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\one-shot-install\\Lib\\site-packages\\okto_nexus_connector",
+                "wheel_sha256": "2e1dc520e9d51e50da8d5615513dc6b5e458e837a08ff9fc30337d2fa424e713"
+              }
+            }
+          },
+          "one-shot-validated-tests": {
+            "counts": {
+              "tests": 21,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            },
+            "status": "PASS",
+            "changed_inputs": [],
+            "evidence": "build/one-shot-validated-tests/campaign.json",
+            "installed": {
+              "okto_nexus": {
+                "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\one-shot-install\\Lib\\site-packages\\okto_nexus",
+                "wheel_sha256": "f4a1c1f281909ef2a5efa21402b27856db54ad46a83a24e26ae4a334663225c2"
+              },
+              "nexus_connector_core": {
+                "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\one-shot-install\\Lib\\site-packages\\nexus_connector_core",
+                "wheel_sha256": "c4763c07beb60fa158f4694d279b7679ded187d3d2d8f27c25c556ab84287bfb"
+              },
+              "okto_nexus_connector": {
+                "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\one-shot-install\\Lib\\site-packages\\okto_nexus_connector",
+                "wheel_sha256": "2e1dc520e9d51e50da8d5615513dc6b5e458e837a08ff9fc30337d2fa424e713"
+              }
+            }
+          }
+        },
+        "core_installed": "27 passed, including actual stdio/HTTP MCP calls, credential boundaries and Windows parent-death containment.",
+        "connector_installed": "15 passed in test_r4_execution.py; prior focused source regression 155 passed.",
+        "source_regression": "85 passed before the additional managed-handoff error case; the installed campaign includes that case.",
+        "frontend": "TypeScript and Vite production builds passed; refusal details appear in Meta-harness.",
+        "packaging": "All three wheel installations verified against artifact bytes; pip check found no broken requirements; generated R4 contract matches source."
+      },
+      "outcome": "86 installed regression cases passed, followed by 21 targeted installed cases after tightening broadcast refusal to remove the rejected inbox delivery. No productive replay on restart; successful results survive cleanup refusal; remote queue/open/close and signed MCP preset passed over real loopback WebSocket."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "S07",
+      "action": "Show one-shot limits directly beneath the session selector in Connections, including inherited global one-shot mode; keep global/agent policy controls adjacent to their selector too. Prevent Next while capacity edits are unsaved.",
+      "validation": "TypeScript and Vite production build; live dashboard assets updated without restarting runtimes.",
+      "outcome": "UI follow-up to operator acceptance. Previously built wheel predates this UI adjustment and must be rebuilt before publication."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "S08",
+      "action": "Read-only validation of four real user-initiated Pi one-shot calls on the running Nexus; no restart or replay.",
+      "validation": {
+        "calls": 4,
+        "distinct_sessions": 4,
+        "successful_turns": 4,
+        "published_replies": 4,
+        "confirmed_session_and_lease_closures": 4,
+        "remaining_slots": 0,
+        "effective_policy": {
+          "max_parallel": 1,
+          "warm_instances": 0,
+          "overflow": "queue",
+          "queue_capacity": 32,
+          "queue_timeout_seconds": 300
+        },
+        "seconds_until_execution": [
+          43,
+          104,
+          178,
+          269
+        ],
+        "execution_seconds": [
+          28,
+          35,
+          45,
+          135
+        ]
+      },
+      "outcome": "All four replies were correlated to their original messages and published once, within one second of result capture. Observed delay is serial queueing and cold startup, not lost delivery. This adds actual authenticated Pi execution evidence; it does not qualify real Codex/Claude responses."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "S07",
+      "action": "Avoid unnecessary connection replacement when only independently saved one-shot capacity changes. Existing unchanged connections expose Done; unchanged Finish closes without restaging or renewing grants.",
+      "validation": "Production frontend build passed. Playwright on live Pi: Save one-shot capacity then Done succeeds with 5 parallel / 4 warm; four original warm session identities preserved. No Nexus restart.",
+      "outcome": "Current capacity-only save issue fixed. General wait/stop-and-replace workflow for actual installation changes is not implemented by this UI fix. Built release wheel must be refreshed before publication."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "S08",
+      "action": "Read-only investigation of authenticated parallel Pi one-shot failure; no restart, configuration changes or productive replay.",
+      "validation": {
+        "policy": {
+          "max_parallel": 5,
+          "warm_instances": 4
+        },
+        "distinct_warm_sessions_claimed": 4,
+        "succeeded": 1,
+        "failed_after_dispatch": 1,
+        "failed_before_dispatch": 2,
+        "failed_call": "op_c965c7a00fa24aea80d0c59a31580767",
+        "stream_failure": {
+          "session_id": "ses_123d6892540e57abcadaf100c9038849",
+          "sequence": 247,
+          "native_type": "core.event_pump_failed",
+          "code": "EVENT_STREAM_UNAVAILABLE"
+        },
+        "last_pool_observation": {
+          "warm": 3,
+          "starting": 1,
+          "observed_at_epoch": 1791572022.7198303
+        }
+      },
+      "outcome": "Parallel real-harness acceptance FAILED. EmbeddedAgentRecovery._check_stream_health escalates a session stream fault into agent-wide recovery; _contain closes sibling sessions. The original pump exception is discarded by Core._pump, so native queue overflow is a hypothesis, not a confirmed cause. Four warm instances were present before the batch; failure was not missing warm capacity."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "S08",
+      "action": "Fix one-shot same-sender serialization, contain native stream failures per session with retained retry, offload Pi launch filesystem seals, batch adjacent bounded Pi deltas without losing text, preserve safe stream-loss causes, and save capacity on wizard Next/Done.",
+      "validation": {
+        "nexus_source": "40 passed in one-shot runtime, agent recovery isolation and sender-session regressions.",
+        "nexus_installed": "2 passed: four warmed calls, one injected stream overflow, three successful siblings, optional transient release failure, automatic refill and subsequent call; exact rebuilt backend wheels.",
+        "core": "70 runtime/stream tests, 36 launch/preflight tests, 15 Pi/stream tests, 63 buffer/redaction/ingestion/native bridge tests passed (suites overlap).",
+        "real_pi": {
+          "before_batching": "Four parallel authenticated Pi responses failed with NATIVE_EVENT_OVERFLOW.",
+          "after_batching": "Four successful parallel responses, final marker captured in all four, zero stream-loss incidents.",
+          "evidence": "build\\pi-parallel-1791573664\\result.json",
+          "integrity": "build\\pi-parallel-1791573664\\integrity.json"
+        },
+        "ui": "Production build passed. Playwright on running Nexus: Next advanced and persisted override revision 2; Next restored inherited queue timeout at revision 3. Limits preserved at max_parallel=5/warm_instances=4.",
+        "installation": "Previous server drained gracefully. Rebuilt Nexus 0.3.0/Core 0.0.10 installed in the existing running environment; pip check passed, backend bytes match wheels. Restarted on 0.0.0.0:8202; Pi, Claude and Codex Ready. Warm pool convergence being observed.",
+        "artifact_hashes": {
+          "okto_nexus-0.3.0-py3-none-any.whl": "20503b30ec4c1559cc3098f782d5be1eddebbc146ccdbc7d3f134ceb58ac7d71",
+          "okto_nexus_connector_core-0.0.10-py3-none-any.whl": "8d059873b3d8dc67778cfadf47fd70bf185e094993e300ab712e768b3e1fbb18"
+        }
+      },
+      "outcome": "Reproduced real Pi queue overflow and verified successful parallel responses after bounded delta batching. Old incident lacked precise cause; the reproduction now identifies it explicitly. Session fault recovery preserves siblings and does not replay uncertain work."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "S08",
+      "action": "Live pool verification found an old STARTING slot whose session was FAILED/CLOSED with LOCAL_PREOPEN_FAILED, no Core receipt and fenced no-resource proof. Treat FAILED/CLOSED as released while retaining FAILED sessions with active leases.",
+      "validation": {
+        "source": "2 passed: actual injected Core prepare failure, automatic recovery without receipt, replacement warm session; failed-resource capacity safety.",
+        "installed": "Same 2 cases passed from rebuilt Nexus wheel in 13.14s.",
+        "evidence": "build/one-shot-session-fix/installed-preopen.xml",
+        "artifact_hashes": {
+          "okto_nexus-0.3.0-py3-none-any.whl": "15681e813cb0bb55da4d0969c4f9f06ff7a5b819e34d45af9163297daf309ecd",
+          "okto_nexus_connector_core-0.0.10-py3-none-any.whl": "8d059873b3d8dc67778cfadf47fd70bf185e094993e300ab712e768b3e1fbb18"
+        },
+        "live_verified_at": "2026-10-09T19:38:44.406706+00:00",
+        "live_pool": {
+          "WARM": 4,
+          "stale_failed_slot": 0
+        }
+      },
+      "outcome": "Applied to the current instance after graceful drain. Live verification confirmed four WARM Pi sessions, no STARTING slot, and automatic removal of the original FAILED/CLOSED slot. Pi, Claude and Codex report Ready."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "P01",
+      "action": "Reusable hexagonal pool/queue with internal transactional adapters and independent startup/ready dispatch budgets.",
+      "validation": "Four real Pi responses succeeded but three waited behind an agent-wide opening gate. Initial extracted-adapter capacity suite: 20 passed.",
+      "outcome": "Generic ports/service and unlimited policy implemented. Regression and artifacts pending; running instance unchanged."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "P02",
+      "action": "Removed Connector consumer-wide await; bounded independent opening/ready/control producers and reserved preparing sessions before awaiting to prevent host overbooking.",
+      "validation": "Nexus: 41 capacity/settings/dispatch tests and 3 blocked-refill harness regressions passed. Core: 24 contracts passed. Connector initial 16 execution tests passed; capacity race regression pending.",
+      "outcome": "Remote serial one-shot path passed after using matching source versions; expanded real-WSS parallel pool scenario added."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "P03",
+      "action": "Validated internal adapter and infrastructure-free service, unlimited host-bound pools, FIFO/expiry/disposal, local and remote independent startup/ready work, recovery and host preparation accounting.",
+      "validation": "41 capacity/settings/dispatch; 3 blocked-refill local harness variants; 29 lifecycle/recovery; 5 port/architecture; 4 restart/handoff; 24 Core contracts; 17 Connector execution tests passed. Remote WSS serial lifecycle and four warm calls with two blocked replenishments passed. Frontend production build passed.",
+      "outcome": "Initial remote fixture failed from stale installed Connector, then from test Host header and synthetic event scope; corrected test inputs and used actual native session context. No production authority checks bypassed. Artifact installation validation pending."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "P04",
+      "action": "Built all three development wheels and installed into isolated hexagonal-pool-install, including serve-lite dependencies.",
+      "validation": "All 324 Nexus, 98 Core and 91 Connector Python sources matched their wheel bytes. Installed package contents also matched (466/116/92 files). Both consumers pin Core 0.0.10. pip check: no broken requirements. Final 11 dispatch quota tests passed, including shared wire byte credit across startup and ready lanes.",
+      "outcome": "Installed pool and local/remote regression tests running; no modification or restart of the active instance."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "P04",
+      "action": "Installed-artifact pool/queue contract and real-loopback remote execution checks finished.",
+      "validation": "38 passed in isolated venv, source paths disabled; pip check clean. Source/wheel/installed byte integrity verified for all three packages. Existing Nexus still responds HTTP 200 without restart.",
+      "outcome": "Awaiting final three installed local blocked-refill cases before closing the ledger."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "P04",
+      "action": "Completed reusable hexagonal pool/queue implementation and validation.",
+      "validation": "41 installed-artifact tests passed: 38 pool/queue/settings/remote and 3 blocked-refill local variants (Pi, Codex, Claude). Additional source checks: 29 lifecycle/recovery, 11 final dispatch, 24 Core contracts, 17 Connector execution. Frontend production build and pip check passed.",
+      "outcome": "Ready development wheels in build/hexagonal-pool; Core copied to both consumers and Connector CI artifact refreshed. No live-instance restart, commit, merge, tag or publication performed."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "P04",
+      "action": "User requested reinstall/restart. Gracefully drained existing Nexus, reinstalled validated Nexus 0.3.0 and Core 0.0.10 in the same one-shot-install environment, and relaunched on 0.0.0.0:8202.",
+      "validation": "Shutdown DRAINED; 582 installed files match validated wheels; pip check clean; HTTP 200; Pi, Claude and Codex READY. Pi pool replenishment in progress.",
+      "outcome": "Applied requested development build; no database reset or global package installation."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "P04",
+      "action": "Finished requested live installation verification.",
+      "validation": "HTTP/dashboard 200 with index-9l1eTwxp.js; local agents READY. Two Pi instances warmed, then a user call started while independent replenishment continued within max_parallel=5.",
+      "outcome": "Nexus available for user testing; configuration and history preserved."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "P05",
+      "action": "Investigated user burst after reinstall and reviewed OmniFlow AsyncInstancePoolManager/AsyncPooledStrategy as requested.",
+      "validation": "Five calls all succeeded; start waits in order 0.9s, 0.6s, 101.6s, 152.2s, 21.1s. Only two initial resources were warm at arrival. Requests 3/4 were admitted against cold resources; a later compatible warm instance stayed idle and request 5 overtook them. Pool eventually returned to four WARM. No restart or live DB mutation.",
+      "outcome": "Confirmed gap in partial-warm scenario, not covered by previous all-warm blocked-refill tests. Reference uses available-instance queue, factory/strategy protocols and release in finally. Adapt those principles while retaining Nexus durability, hard capacity, one-shot disposal and caller errors; reference in-memory reuse/overflow behavior is not equivalent."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "P05",
+      "action": "Implemented parallel full-deficit preparation and FIFO assignment of ready resources; pending callers reserve capacity without affinity to cold sessions. Connector open workers follow host capacity; physical ledgers in both hosts align at 64, with independent productive/control dispatch and bounded wire credits.",
+      "validation": "Source: 21 local lifecycle and partial warm-up cases passed; 13 dispatch/real-WebSocket cases passed; Connector 19 execution and 87 host/composition cases passed (one skipped). Handoff/restart regressions 4 passed after adapting test setup to deferred productive admission; settings 12 passed. Built Nexus and Connector wheels; 674 installed files match artifacts, pip check clean, 29 installed pool/capacity tests passed.",
+      "outcome": "Installed warm-up/remote scenarios still running in isolated environment. Active user instance has not been modified or restarted."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "P05",
+      "action": "Completed parallel warm-up correction and installed-artifact validation.",
+      "validation": "Installed wheels: 29 capacity/adapter tests and 11 selected contract, partial warm-up (Pi/Codex/Claude), and real-WebSocket remote scenarios passed. The four opens must enter before any release, and reversed readiness must preserve caller FIFO. 674 package files match source/artifacts, pip check and diff checks passed. Source lifecycle, restart, handoff, dispatch and Connector checks passed as recorded above.",
+      "outcome": "Development artifacts ready in build/parallel-warmup; Connector CI wheel and checksum refreshed. Active user instance remains on previous build; no live reinstall/restart, publication or provider calls performed."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "P05",
+      "action": "User requested running corrected version. Gracefully drained previous server, verified wheel hashes, reinstalled Nexus/Core into existing one-shot-install and checked 582 installed files plus pip check.",
+      "validation": "Initial start exposed upgrade-only PROFILE_DRIFT at slot_ledger_page: persisted physical capacity 8 disagreed with new host capacity 64. Stopped that server, verified all 44 reservations already released, backed up owned-slots.db, and updated only its capacity policy from 8 to 64. All reservation rows preserved. Second start reports RECOVERY_READY and HTTP 200.",
+      "outcome": "Corrected build running on 0.0.0.0:8202. Waiting for persisted warm-failure backoff to expire and refill Pi pool. Automatic ledger-capacity upgrade remains a release follow-up; existing-store migration was not covered by fresh-store tests."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "P07",
+      "action": "User requested live pool capacity in agent configuration. Added available/max-pool and maximum-parallel metrics, warm target and per-state counts, refreshing every five seconds. Compact metrics remain visible in connection wizard; activity/cancellation list remains optional. API returns effective saved global/override limits with operator authorization.",
+      "validation": "Frontend TypeScript/production build passed. Three HTTP settings tests passed, including inherited limits, unlimited override and access control. Built/installed updated Nexus wheel, verified 467 package files, gracefully restarted; HTTP serves index-K9Es_R2L.js and live Pi API returns maximum pool 5, parallel 5, warm target 4.",
+      "outcome": "Pool status feature applied in current Nexus at http://127.0.0.1:8202. Warm-up resumed after restart; no loss of configuration/history."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "P05",
+      "action": "Inspected real five-call Pi burst without mutation or restart after user reported fifth response delay.",
+      "validation": "All five SUCCEEDED. Start delays: 0.504s, 0.654s, 0.602s, 0.396s, 101.904s. Fifth outcome PUBLISHED as msg_da9dbbaa9149445fbee9e20feab22153. Its pool replacement open was admitted at 00:36:57.626975Z, before fifth arrival 00:37:07.826852Z; Windows process birth evidence is 00:38:48.330609Z, open receipt 00:38:49.212Z, productive start 00:38:49.731268Z, completion 00:38:58.493077Z. Thus approximately 110.7s elapsed before native process creation, only 0.88s from birth to ready. Four replacement resources were WARM after completion; user subsequently began another burst.",
+      "outcome": "First-ready allocation works: fifth took first replacement that became ready; no intervening compatible WARM resource was idle. Remaining cold-path latency is in prelaunch preparation, not response generation or a queue waiting for earlier answers. Exact expensive preparation step requires profiling; repeated Pi artifact/installation validation is a candidate from code inspection, not yet established by timing."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "P09",
+      "action": "Traced six-call real Pi burst after user reported only four responses, without restart or live-state mutation.",
+      "validation": "All six ultimately SUCCEEDED and PUBLISHED. First four productive starts in 0.32-0.42s; fifth waited156.08s and sixth233.41s, then executed in11.09s/10.84s. Four replacement runtime.open operations failed AGENT_REVOKED after128-132s preparation; subsequent fresh opens succeeded, and pool returned to4WARM. Read-only isolated profiling of same selected Pi installation: selected_fingerprint0.419s; launch_artifact_signature3.725s (~15k stat/lstat calls); pi_build_identity10.038s with14,097 file-size/hash tasks. Profiles retained under build/pool-status. Isolated timings do not fully attribute production concurrent delay.",
+      "outcome": "Confirmed prelaunch delay can exhaust temporary authority and force replacement retries, extending caller wait. Need production-stage timing and safe shared validation work/appropriate lease timing, preserving authorization and drift checks. No lost responses in this burst; no code change applied in this investigation."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "P09",
+      "action": "Measured installed Pi validation chain in isolated read-only process with one versus four synchronized concurrent callers. No live restart, native launches or database writes.",
+      "validation": "build/pool-status/pi-check-benchmark.json: 14,097 files and117,960,008 bytes in dependency closure. Single: fingerprint0.559s, full identity6.801s, five seals13.776s, total21.138s. Four concurrent: fingerprint~0.56s, identity27.27-28.47s each, five seals~27.44-28.46s, total56.23-56.49s each; all hashes/signatures matched. Code confirms full identity in profiles.prepare_launch and five full metadata traversals in native.runtime_bridge Pi path. Embedded dispatch acquires initial lease before runtime.prepare; runtime.open and _renew_owned acquire same per-session gate. Lease max120s; Connector also starts renewal after successful opening receipt.",
+      "outcome": "Confirmed duplicate installation scans and concurrency amplification; opening excludes lease renewal and can expire during preparation. This benchmark excludes other launch stages and production contention, so it does not fully attribute the observed110-132s prelaunch intervals. Proposed correction: share/coalesce immutable installation validation work with explicit invalidation and final current checks; avoid holding opening authorization across expensive preparation without a supported renewal/revalidation boundary. No behavioral code changes in this verification."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "P09",
+      "action": "Implemented overlapping installation validation sharing without completed-result caching, bounded hash batches and fresh scandir metadata reuse. Allowed only identical-scope serial/deadline lease renewal during preparation/opening. Local dispatch renews outside opening gate and joins updates before productive turns; Connector begins renewal before prepare/open. Core guard, kernel and registration follow installed authority without accepting stale productive contexts.",
+      "validation": "Source: 141 Core runtime/kernel/native/lease cases, 42 validation/opening/cancellation cases, 32 Nexus pool/dispatch cases, 7 local renewal/transition/control cases, 30 Connector execution/renewal cases plus new pending-open renewal case passed. Installed wheels: 14 new Core regression tests and pip check passed. Read-only actual installation benchmarks saved under build/pool-status/all-checks-{baseline,optimized}.json; Pi four-caller chain includes two full identities and five seals: baseline87.18s/216.81CPU, optimized13.24s/22.73CPU. Background workload differs; these are diagnostic measurements, not response-time guarantees. Claude/Codex have far cheaper executable-only checks and share the renewal fix.",
+      "outcome": "All three development wheels rebuilt and dependencies remain Core0.0.10, Connector0.0.8, Nexus0.3.0. Live instance upgrade in progress; no authenticated model calls made by this validation. Codex stored realization hash differs from current binary in both baseline and optimized checks; current agent recovery is READY; this is not an optimizer-induced mismatch."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "P09",
+      "action": "Live upgrade exposed historical no-spawn AGENT_REVOKED openings blocking restart reconciliation. Removed error-name restriction from the existing failed-open recovery path; it still requires a matching durable FAILED/no-effect/retry-safe receipt, released owned slot and committed stream proof.",
+      "validation": "Six drift/isolation/restart regression cases passed (PROFILE_DRIFT, AGENT_REVOKED and LEASE_EXPIRED), plus the AGENT_REVOKED restart case against installed wheel. Final Nexus package rebuilt/reinstalled after graceful DRAINED shutdown. HTTP200; Pi, Claude and Codex all READY without database edits. 584 installed Nexus/Core files match wheels. Four Pi warm resources STARTING concurrently; awaiting WARM observation.",
+      "outcome": "Corrected live instance listening on0.0.0.0:8202; launcherPID34516, logs build/cold-validation/nexus-final.*. Existing readiness backoff retained and expired automatically; P08 remains separate follow-up."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "P09",
+      "action": "Verified final live warm-up after corrected historical recovery.",
+      "validation": "All four real Pi resources reached WARM following concurrent STARTING; Pi, Codex and Claude all READY. No live database state edits, no productive model turns. Measurements under build/cold-validation/live-warmup.json; package integrity584 files and installed regressions passed.",
+      "outcome": "P09 completed for validation cost and opening authority renewal. Current instance ready for user burst tests. P06 physical capacity migration and P08 readiness backoff remain previously recorded separate release follow-ups."
+    },
+    {
+      "date": "2026-10-09",
+      "step": "MCP-UI",
+      "action": "Integrated runtime MCP presets into Agent Connections Preferences and existing remote connection setup. Draft follows Next/Back, participates in Test, and is persisted atomically by Finish with optimistic revision protection. Older clients preserve existing presets.",
+      "validation": "22 connection setup/test/preset tests passed, including actual remote HTTP finish and concurrent preset conflict. TypeScript and Vite production build passed. Installed Nexus 0.3.0 wheel; pip check clean. Browser verified HTTP template and draft retention through Next/Back on Pi; discarded test draft without changing real preset. Health 200; Pi, Codex and Claude READY.",
+      "outcome": "Available in current local instance. User confirmed preceding parallel warm-pool performance fix. Existing P06/P08 release follow-ups remain unchanged. Pending code across Nexus/Core/Connector prepared for commit on feature/v0.3.0, feature/v0.0.10 and feature/v0.0.8."
+    }
+  ],
+  "remaining": [
+    "P06: implement and validate automatic physical-ledger capacity migration for existing stores before release (8 -> 64); current installation was migrated offline with all reservations released.",
+    "P08: investigate and prevent unnecessary warm-up exponential backoff during normal restart/readiness transitions; observed failures=8 and 256-second delay despite subsequent RECOVERY_READY. Current instance resumes automatically after retry."
+  ],
+  "current_summary": {
+    "versions": {
+      "nexus": "0.3.0",
+      "core": "0.0.10",
+      "connector": "0.0.8"
+    },
+    "implementation": "P09 implemented in Nexus, Core and Connector: overlapping validation sharing and renewable independent openings, preserving authorization/drift fences.",
+    "validation": "Core141 lifecycle/security plus42 focused cases; Nexus32 pool/dispatch +7 renewal/control +6 historical refusal/restart; Connector30 existing +1 opening renewal; installed14 Core +1 Nexus restart. Wheels verified and pip check clean. Actual Pi/Claude/Codex installations measured without model turns.",
+    "artifact": "build/cold-validation",
+    "installation": "Final cold-validation build running on0.0.0.0:8202; Pi, Codex and Claude READY and Pi pool4WARM. No database edits; all584 installed Nexus/Core files match wheels.",
+    "publication": "Not published; commit/merge/tag/PyPI are outside this development request."
+  },
+  "validation_limits": [
+    "Deterministic fault/release and remote lifecycle tests use synthetic peers; real authenticated parallel responses were exercised with Pi on native Windows.",
+    "This correction did not qualify real Claude/Codex responses or a remote physical host.",
+    "The original historical failure discarded its exception; NATIVE_EVENT_OVERFLOW was confirmed in the subsequent real Pi reproduction.",
+    "Hexagonal pool refactor validated with synthetic native peers on real durable local/remote paths; no new authenticated-provider calls or remote physical machine campaign in this turn. Running user instance was preserved.",
+    "P05 uses controlled native peers for readiness ordering and failures, including real Core journals and real WebSocket transport. No new authenticated provider execution or physical remote host test; user instance remains unchanged."
+  ]
+}
