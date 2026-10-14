@@ -480,7 +480,14 @@ def test_restart_recovers_historical_receipt_without_provider(tmp_path,monkeypat
                 for retained in tmp_path.glob('session-*.db.retained'):
                     retained.rename(tmp_path/'home/core-runtime'/retained.name.removesuffix('.retained'))
             recovered = client.portal.call(owner.retry_recovery, 'subject')
-            assert recovered['state'] == 'READY', recovered
+            assert recovered['state'] in ('READY', 'RECOVERING'), recovered
+            # retry_recovery observes the retained worker for only one second.
+            # A busy test host can finish publication after that observation;
+            # await the same automatic recovery, without restarting/retrying it.
+            until = time.monotonic() + 10
+            while 'subject' in owner.agents.blocked:
+                assert time.monotonic() < until, recovered
+                time.sleep(.02)
             assert native.opens == 1
             wait_receipt((deps, app, client, headers), closed, stages=('SUCCEEDED',))
         else:
@@ -679,7 +686,8 @@ def test_released_resources_reconcile_before_new_admission(tmp_path,monkeypatch,
     if fault=="occupied_ledger":
         from nexus_connector_core import SQLiteOwnedSlotLedger,OperationKey
         async def retain():
-            ledger=SQLiteOwnedSlotLedger(store/"owned-slots.db")
+            ledger=SQLiteOwnedSlotLedger(store/"owned-slots.db",
+                max_slots=app.state.embedded_dispatch_owner.host.max_owned_slots)
             try:
                 await ledger.reserve_owned_slot(OperationKey(old_channel.server_id,old_channel.executor_id,"unknown-opening"),"unknown-session")
             finally:

@@ -4,7 +4,7 @@
   "status": "in_progress",
   "constraints": [
     "Hexagonal architecture; canonical claim remains sole ownership authority",
-    "Commit and push of the current development state authorized by the user; no release or merge requested",
+    "User authorized a new commit/push checkpoint of all current changes; merge, tags and release remain outside this checkpoint",
     "No production auto-claim activation before real local/remote capacity exclusion is verified"
   ],
   "baseline": {
@@ -31,25 +31,39 @@
     "H1": {
       "status": "in_progress",
       "evidence": [
-        "Core tests/test_capacity_contract.py: 36 passed; immutable scope/attempt/consumption records and public RuntimeCapacity port",
-        "Nexus domain/runtime_affinity.py centralizes logical session affinity; sender integration regression in progress"
+        "Core contracts/codec/R4 bundle: 67 passed; public RuntimeCapacity and CapacitySlotLedger ports; no host advertises support yet",
+        "build/handoff-broadcast/h1-affinity.xml: 25 passed; exact shared/sender/source context preserves existing delivery regressions",
+        "Core tests/test_capacity_bundle.py + codec/contracts: 53 passed; byte-pinned schema/manifest and 14 valid + 10 invalid fixtures, packaged and verified from extracted Core wheel"
       ]
     },
     "H2": {
       "status": "in_progress",
       "evidence": [
-        "build/handoff-broadcast/h2-pool.xml: 45 passed, including two-adapter immediate-only admission and existing pool regressions"
+        "build/handoff-broadcast/h2-pool.xml: 45 passed, including two-adapter immediate-only admission and existing pool regressions",
+        "Core build/handoff-capacity-h2.xml: 182 passed after the pre-journal opening-admission fix; runtime capacity gate, physical ledger, multiprocess races against reservation and ordinary opening, bounded expiry, restart, atomic-write failure, existing runtime/owned-slot/shutdown/composition and contract regressions",
+        "Core build/handoff-capacity-facade.xml: 210 passed; public ExecutionCapacity facade, exact R4 session/lease readiness, canonical-to-Core receipt binding, bounded/coalesced uncooperative observations, ordinary turn/open regressions"
       ],
       "remaining": [
-        "Actual Core next-turn gate shared with ordinary submissions",
-        "Atomic physical-slot transfer and durable technical reservation lifecycle",
-        "Cross-process last-slot races, restart and uncertain effects",
-        "Wire immediate-only admission to a successfully reserved automatic claim"
+        "Reconcile capacity gate/receipt crash windows, old-boot holds and pending releases through existing recovery owners before activation",
+        "Wire immediate-only admission to a successfully reserved automatic claim",
+        "Enable the shared gate only with queue-preserving host admission and negotiated capability"
       ]
     },
     "H3": {
-      "status": "pending",
-      "evidence": []
+      "status": "in_progress",
+      "evidence": [
+        "Connector build/handoff-capacity-composition.xml: 44 passed, 1 skipped; facade composition, shared physical cap across namespaces, reconnect fencing and existing R4 execution regressions",
+        "Embedded capacity composition: 2 passed; scope fencing, no harness/journal creation on cold reserve, original attempt lookup after owner replacement",
+        "Embedded dispatcher regression: 29 passed, 2 failures. Baseline archives reproduced the occupied-ledger fixture policy mismatch; missing-journal recovery passed both isolated baseline and current code. Test now awaits the existing bounded-observation recovery worker instead of requiring instantaneous READY; targeted follow-up build/handoff-broadcast/h3-recovery-followup.xml: 9 passed."
+      ],
+      "remaining": [
+        "Implement actual owner authority adapters and negotiate control extension on the existing authenticated transport",
+        "Wire bounded requests/results, durable attempt lookup and capacity-change notifications into dispatcher owners",
+        "Bind reserved canonical operations through their existing R4 receipt association before ordinary Core dispatch",
+        "Preserve normal ingress queue order when the Core capacity gate refuses transient contention",
+        "Reconcile reserved physical slots before legacy host resource scans to avoid treating unconsumed holds as unknown native processes",
+        "Run separate-process channel/reconnect parity and independent remote campaign"
+      ]
     },
     "H4": {
       "status": "pending",
@@ -332,6 +346,26 @@
     {
       "step": "checkpoint",
       "action": "User requested commit and push of all current changes. Focused source checks: Core capacity contracts/codec/R4 bundle 67 passed; Nexus affinity/immediate pool/ports/one-shot capacity 55 passed; Connector Core integration/capability metadata/boundaries 30 passed, 1 skipped. Overall implementation remains in_progress; lockfile and release qualification remain pending H6."
+    },
+    {
+      "step": "H2",
+      "action": "Added durable capacity storage to the installation slot ledger, shared next-turn gate, atomic physical-slot transfer, bounded boot-scoped expiry, immutable retries and proof-based release. Added opt-in Core gate integration and tests proving transport return/unknown effects do not free a turn, unrelated terminal events cannot release it, and ordinary admissions cannot steal reserved capacity. Found and fixed an opening race: capacity must be acquired before the journal claims the session identity. Changes are local; production host feature is not enabled."
+    },
+    {
+      "step": "H1/H2/H3",
+      "action": "Added public installation-scoped ExecutionCapacity and host authority port. Public RuntimeCore readiness validates exact scope and installed R4 lease without consumers reading private session maps. Canonical consumption hashes map to local Core hashes through the existing prepare_r4_receipt_binding association. Both host compositions share this facade/ledger behind a disabled integration flag. Added versioned schema, fixtures and manifest; packaged contract smoke succeeded. No auto-claim or production capability advertisement enabled; all changes remain local."
+    },
+    {
+      "step": "validation",
+      "action": "Baseline comparison: build/capacity-baseline-a63b232f/nexus/baseline.xml (1 pass, 1 known fixture failure). An occupied-ledger test reopened a 64-slot host ledger with default 8; fixed it to reuse actual host policy. Recovery endpoint observation is bounded to one second; adjusted missing-journal test to await automatic completion without a second recovery request or process restart."
+    },
+    {
+      "step": "contract packaging",
+      "action": "Built Core 0.0.11 wheel and verified the capacity manifest/schema plus 14 valid and 10 invalid fixtures by importing the extracted wheel outside src. Wheel SHA256: 2cccff3515dd6c9fb52ccf60e28653c44966197c649ff881a4e968bdbf8a594d. This is a packaging smoke, not installed tuple or remote qualification."
+    },
+    {
+      "step": "checkpoint",
+      "action": "User requested a new commit and push of all current changes across Nexus, Core and Connector. Includes durable capacity implementation, public facade, versioned contract bundle, host composition and recorded regression evidence. Implementation remains in_progress and production capacity support remains disabled."
     }
   ],
   "target_versions": {
