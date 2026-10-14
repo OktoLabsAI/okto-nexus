@@ -103,6 +103,13 @@ def build_router():
         from ....application.agent_runtime_administration import overview
         return await execute(lambda: overview(request.app.state.deps, request_context(), agent_id, after=after))
 
+    @router.get('/meta-harness/runtime-sessions')
+    async def meta_harness_runtime_sessions(request: Request, workspace: str | None = None,
+                                           agent: str | None = None, page: int = 1):
+        from ....application.meta_harness_sessions import conversation_sessions
+        return await execute(lambda: conversation_sessions(request.app.state.deps, request_context(),
+            workspace=workspace, agent=agent, page=page))
+
     @router.get('/agents/{agent_id}/runtime-executions/{operation_id}')
     async def runtime_execution(request: Request, agent_id: str, operation_id: str, executor_id: str):
         from ....application.agent_runtime_administration import execution

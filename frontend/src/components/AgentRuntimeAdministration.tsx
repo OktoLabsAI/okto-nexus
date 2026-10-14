@@ -6,6 +6,7 @@ import { SessionClosures, sessionReleased } from '../connectionSessions';
 import { AgentActionModal, AgentModalFooter } from './AgentActionModal';
 import { RuntimeHistory } from './RuntimeHistory';
 import { RuntimeSessionTail } from './RuntimeSessionTail';
+import { RuntimeFinalOutput } from './RuntimeTerminal';
 import { useConfirm } from './Confirm';
 import './AgentRuntimeAdministration.css';
 
@@ -20,6 +21,7 @@ export function AgentRuntimeAdministration({agentId, onClose}: {agentId: string;
   const [reload, setReload] = useState(0);
   const [error, setError] = useState('');
   const [selected, setSelected] = useState<RuntimeSession | null>(null);
+  const [harness, setHarness] = useState<string>();
   const [operation, setOperation] = useState<RuntimeOperation | null>(null);
   const [inspectionError, setInspectionError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -87,6 +89,7 @@ export function AgentRuntimeAdministration({agentId, onClose}: {agentId: string;
     setLoading(true);setInspectionError('');setSelected(null);setOperation(null);
     try {
       const finished = 'operation_id' in row;
+      setHarness('harness' in row ? String(row.harness) : undefined);
       const session = finished ? await runtimeApi.session(row.session_id, controller.signal, row.executor_id) : row;
       const result = finished ? await api.agentRuntimeExecution(agentId,row.operation_id,row.executor_id,controller.signal) : null;
       if (controller.signal.aborted) return;
@@ -145,13 +148,13 @@ export function AgentRuntimeAdministration({agentId, onClose}: {agentId: string;
           </header>
           {operation && <details open className="text-xs space-y-2"><summary className="cursor-pointer font-semibold">Execution result · {operation.executor_stage || operation.admission_state}</summary>
             {operation.error && <p role="alert">{operation.error.code}: {operation.error.message}</p>}
-            <pre className="whitespace-pre-wrap break-all max-h-64 overflow-y-auto">{operation.result?.output_text || 'No final output recorded.'}{operation.result?.output_truncated ? '\n[Output truncated]' : ''}</pre>
+            <RuntimeFinalOutput text={(operation.result?.output_text || 'No final output recorded.')+(operation.result?.output_truncated ? '\n[Output truncated]' : '')}/>
           </details>}
           <div className="flex gap-2" role="group" aria-label="Session inspection mode">
             <button className="btn btn-secondary" aria-pressed={tab==='tail'} onClick={() => setTab('tail')}>Live tail</button>
             <button className="btn btn-secondary" aria-pressed={tab==='history'} onClick={() => setTab('history')}>History</button>
           </div>
-          {tab==='tail' ? <RuntimeSessionTail key={key(selected)} scope={selected.scope} active={!sessionReleased(selected)}/> : <RuntimeHistory key={key(selected)} scope={selected.scope}/>}
+          {tab==='tail' ? <RuntimeSessionTail key={key(selected)} scope={selected.scope} harness={harness} active={!sessionReleased(selected)}/> : <RuntimeHistory key={key(selected)} scope={selected.scope} harness={harness}/>}
         </>}
       </div>
     </div>

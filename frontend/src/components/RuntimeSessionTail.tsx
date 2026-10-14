@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { runtimeApi, type RuntimeEventPage, type RuntimeScope } from '../runtimeApi';
 import { appendTail, validateEventPage } from '../runtimeEvents';
+import { RuntimeTerminal } from './RuntimeTerminal';
 
-export function RuntimeSessionTail({scope, active}: {scope: RuntimeScope; active: boolean}) {
+export function RuntimeSessionTail({scope, active, harness}: {scope: RuntimeScope; active: boolean; harness?: string}) {
   const [events, setEvents] = useState<RuntimeEventPage['events']>([]);
   const [following, setFollowing] = useState(true);
   const [scroll, setScroll] = useState(true);
@@ -46,12 +47,6 @@ export function RuntimeSessionTail({scope, active}: {scope: RuntimeScope; active
     <p className="text-xs text-surface-500">Showing up to 200 recent events. Full history remains available in History.</p>
     {gap && <p role="alert" className="text-xs">Some events have not arrived. Waiting for reconciliation.</p>}
     {error && <p role="alert" className="text-xs">Tail paused: {error}</p>}
-    <ol ref={box} className="runtime-admin-tail space-y-2" aria-label="Live runtime events">
-      {events.map(event => <li key={`${event.stream_epoch}:${event.sequence}`} className="rounded-lg bg-surface-50 dark:bg-surface-800 p-3 text-xs min-w-0">
-        <div className="flex justify-between gap-2 flex-wrap text-surface-500"><span>{event.sequence} · {event.native_type || event.category}</span><time>{event.received_at}</time></div>
-        <pre className="whitespace-pre-wrap break-all mt-2">{JSON.stringify(event.payload, null, 2)}</pre>
-      </li>)}
-      {loaded && !events.length && <li className="text-sm text-surface-500">No recorded events yet.</li>}
-    </ol>
+    <RuntimeTerminal events={events} harness={harness} scrollRef={box} label="Live runtime events" empty={loaded?'No activity to display yet.':'Waiting for session events…'}/>
   </section>;
 }

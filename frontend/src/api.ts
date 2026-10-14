@@ -661,6 +661,14 @@ export interface AgentRuntimeOverview {
     workspace_id: string; created_at: string; completed_at: string; outcome: string; harness: string; host: string}[];
 }
 
+export type MetaHarnessSession = import('./runtimeApi').RuntimeSession & {
+  harness: string; host: string; location: string; is_open: boolean;
+  subject: string | null; last_interaction_at: string; interaction_count: number;
+}
+export interface MetaHarnessSessions {
+  items: MetaHarnessSession[]; total: number; active_count: number; page: number; has_more: boolean;
+}
+
 export interface MessageRow {
   message_id: string;
   workspace_id: string;
@@ -1135,6 +1143,12 @@ export type RuntimePolicy = {
 };
 
 export const api = {
+  metaHarnessSessions: (workspace: string, agent: string, page: number, signal?: AbortSignal) => {
+    const params = new URLSearchParams({page: String(page)});
+    if (workspace && workspace !== 'all') params.set('workspace', workspace);
+    if (agent) params.set('agent', agent);
+    return call<MetaHarnessSessions>(`/api/v1/meta-harness/runtime-sessions?${params}`, {signal});
+  },
   operatorStatus: () => call<OperatorStatus>("/api/v1/operator-auth/status"),
   operatorLogin: (username: string, password: string) => call("/api/v1/operator-auth/login", {
     method: "POST", body: JSON.stringify({username, password}),

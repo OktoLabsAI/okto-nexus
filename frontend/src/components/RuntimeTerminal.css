@@ -1,0 +1,49 @@
+.runtime-terminal { background:#0c1018; color:#d5dce8; border:1px solid #2b3342; border-radius:10px; overflow:hidden; min-width:0; font:12px/1.65 ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace; }
+.runtime-terminal-bar { display:flex; flex-wrap:wrap; align-items:center; gap:8px; padding:10px 14px; background:#151b26; color:#b7c3d6; border-bottom:1px solid #2b3342; }
+.runtime-terminal-readonly { margin-left:auto; color:#8d9bb2; font-size:11px; }
+.runtime-terminal-screen { font-size:var(--terminal-font-size,12px); line-height:1.65; margin:0; padding:18px 16px; list-style:none; min-height:260px; max-height:60dvh; overflow:auto; overflow-x:hidden; scrollbar-color:#414d63 #0c1018; }
+.runtime-terminal-screen:focus-visible { outline:2px solid #809aff; outline-offset:-2px; }
+.runtime-terminal-action { display:flex; align-items:flex-start; gap:10px; padding:0 0 20px; min-width:0; }
+.runtime-terminal-symbol { width:14px; flex-shrink:0; padding-top:4px; color:#9baeff; }
+.runtime-terminal-action-body { min-width:0; flex:1; overflow-wrap:anywhere; }
+.runtime-terminal-action-header { display:flex; gap:10px; align-items:baseline; flex-wrap:wrap; color:#aab8d0; }
+.runtime-terminal-action-header strong { font-weight:600; color:#dfe6f4; }
+.runtime-terminal-action-header time { margin-left:auto; color:#7c8ba5; font-size:.8333em; }
+.runtime-terminal-action-header > span { font-size:.8333em; color:#9eb4ab; }
+.runtime-terminal-message { margin-top:5px; }
+.runtime-terminal-message p { margin:0 0 8px; white-space:pre-wrap; }
+.runtime-terminal-message :is(ul,ol) { padding-left:22px; margin:8px 0; }
+.runtime-terminal-message ul { list-style:disc; }
+.runtime-terminal-message ol { list-style:decimal; }
+.runtime-terminal-message a { color:#9fbaff; text-decoration:underline; }
+.runtime-terminal-message :is(h1,h2,h3,h4) { font-size:1.0833em; font-weight:600; margin:12px 0 6px; }
+.runtime-terminal-message :is(pre,code), .runtime-terminal-output pre { font:inherit; white-space:pre-wrap; overflow-wrap:anywhere; }
+.runtime-terminal-message pre { border-left:2px solid #3e4f6a; padding:8px 12px; margin:8px 0; background:#121925; }
+.runtime-terminal-message table { display:block; max-width:100%; overflow-x:auto; border-collapse:collapse; }
+.runtime-terminal-message :is(td,th) { padding:4px 8px; border:1px solid #334158; }
+.runtime-terminal-message img { max-width:100%; }
+.runtime-terminal-fields { border-left:1px solid #334158; margin:6px 0 0 3px; padding-left:12px; }
+.runtime-terminal-fields > div { margin:3px 0; }
+.runtime-terminal-fields dt { color:#8e9eb8; font-size:.8333em; }
+.runtime-terminal-fields dd { margin:0; white-space:pre-wrap; overflow-wrap:anywhere; }
+.runtime-terminal-output { margin:8px 0 0 3px; color:#aebcd2; }
+.runtime-terminal-output summary { cursor:pointer; width:fit-content; color:#9fbaff; }
+.runtime-terminal-output pre { margin:6px 0; max-height:320px; overflow:auto; padding-left:12px; border-left:1px solid #334158; }
+.runtime-terminal-user { background:#171f2d; margin:0 -8px 18px; padding:10px 8px; border-radius:4px; }
+.runtime-terminal-thinking { color:#9eacc4; }
+.runtime-terminal-status { padding-bottom:10px; font-size:.9167em; }
+.runtime-terminal-status .runtime-terminal-action-header strong { color:#8c9ab1; font-weight:400; }
+.runtime-terminal-failed :is(.runtime-terminal-symbol,.runtime-terminal-action-header strong) { color:#ff9b9b; }
+.runtime-terminal-approval .runtime-terminal-action-header strong { color:#efce82; }
+.runtime-terminal-empty { color:#8c9ab1; padding:10px 0; }
+.runtime-terminal-expand { display:inline-flex; align-items:center; justify-content:center; padding:5px; color:#b7c3d6; border-radius:4px; }
+.runtime-terminal-expand:hover { background:#2b3342; color:#fff; }
+.runtime-terminal-expand:focus-visible { outline:2px solid #9fbaff; }
+.runtime-terminal-expand:disabled { opacity:.35; cursor:not-allowed; background:transparent; color:inherit; }
+.runtime-terminal-font-controls { display:flex; align-items:center; gap:2px; margin-left:auto; }
+.runtime-terminal-font-size { min-width:42px; font-variant-numeric:tabular-nums; }
+.runtime-terminal-dialog { position:fixed; inset:0; margin:0; padding:0; width:100vw; height:100dvh; max-width:none; max-height:none; background:#0c1018; border:0; color:#d5dce8; }
+.runtime-terminal-dialog::backdrop { background:#0c1018; }
+.runtime-terminal-dialog > .runtime-terminal { height:100%; display:flex; flex-direction:column; border:0; border-radius:0; }
+.runtime-terminal-dialog .runtime-terminal-screen { flex:1; min-height:0; max-height:none; }
+@media(max-width:600px) { .runtime-terminal-screen { padding:12px 10px; } .runtime-terminal-action-header time,.runtime-terminal-readonly { display:none; } }

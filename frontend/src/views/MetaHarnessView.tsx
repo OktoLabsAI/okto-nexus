@@ -12,6 +12,7 @@ import {
   LoaderCircle,
   MessageSquare,
   Paperclip,
+  PanelRightOpen,
   Radio,
   Send,
   X,
@@ -46,6 +47,8 @@ import { handoffLabel } from "../handoffLabel";
 import { PageContainer } from "../components/PageContainer";
 import { workspaceDisplayName } from "../components/WorkspaceNames";
 import { agentColor } from "../graph/agentColor";
+
+import { MetaHarnessSessions } from "../components/MetaHarnessSessions";
 
 const OPERATOR = "operator";
 const TIMELINE_PAGE_SIZE = 20;
@@ -737,6 +740,7 @@ export function MetaHarnessView({
     Record<string, ArtifactItem>
   >({});
   const [receiptDisplay, setReceiptDisplay] = useState<ReceiptDisplay>("inline");
+  const [sessionsOpen, setSessionsOpen] = useState(false);
   const [receiptEntry, setReceiptEntry] = useState<TimelineEntry | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -1123,7 +1127,8 @@ export function MetaHarnessView({
 
   return (
     <PageContainer width="bleed" scroll="none" testId="meta-harness-view">
-      <div className="flex h-full min-h-0 flex-col bg-white dark:bg-surface-950">
+      <div className="meta-harness-layout">
+      <div className="meta-harness-conversation flex h-full min-h-0 flex-col bg-white dark:bg-surface-950">
         <header className="shrink-0 border-b border-surface-200/70 bg-white/90 px-5 py-3 backdrop-blur dark:border-surface-800 dark:bg-surface-950/90">
           <div className="mx-auto flex max-w-5xl items-center gap-4">
             <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-nexus-blue to-nexus-violet text-white shadow-glow-violet">
@@ -1142,6 +1147,10 @@ export function MetaHarnessView({
                 placeholder="all agents"
                 label="Agent"
               />
+              <button type="button" className="btn btn-secondary shrink-0" aria-label={sessionsOpen ? "Collapse conversation sessions" : "Show conversation sessions"}
+                aria-expanded={sessionsOpen} aria-controls="meta-harness-sessions" title="Agent sessions" onClick={() => setSessionsOpen(value => !value)}>
+                <PanelRightOpen size={16}/><span className="hidden xl:inline">Sessions</span>
+              </button>
             </div>
           </div>
         </header>
@@ -1385,6 +1394,11 @@ export function MetaHarnessView({
             </div>
           </form>
         </div>
+      </div>
+      {sessionsOpen && <>
+        <button className="meta-sessions-backdrop" aria-label="Close sessions panel" onClick={() => setSessionsOpen(false)}/>
+        <MetaHarnessSessions key={`${workspace}:${filterAgent}`} workspace={workspace} agent={filterAgent} workspaces={workspaces} onClose={() => setSessionsOpen(false)}/>
+      </>}
       </div>
     </PageContainer>
   );

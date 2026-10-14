@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { runtimeApi, type RuntimeEventPage, type RuntimeScope } from "../runtimeApi";
+import { RuntimeTerminal } from './RuntimeTerminal';
 
-export function RuntimeHistory({scope}: {scope: RuntimeScope}) {
+export function RuntimeHistory({scope, harness}: {scope: RuntimeScope; harness?: string}) {
   const [page, setPage] = useState<RuntimeEventPage | null>(null);
   const [cursor, setCursor] = useState(0);
   const [previous, setPrevious] = useState<number[]>([]);
@@ -42,14 +43,7 @@ export function RuntimeHistory({scope}: {scope: RuntimeScope}) {
       <p role="status">Showing {page.count ? `${cursor + 1}–${page.next_after_sequence}` : "0"} of {page.committed_contiguous} committed events.</p>
       {page.gap_pending && <p role="alert">Some events have not arrived. History is incomplete until the gap is reconciled.</p>}
       {page.events.length === 0 && <p>No recorded events on this page.</p>}
-      <ol className="max-h-96 overflow-auto space-y-2" aria-label="Recorded runtime events">
-        {page.events.map(event => <li key={event.sequence} className="rounded border p-2">
-          <details><summary>{event.sequence}. {event.category}{event.native_type ? ` · ${event.native_type}` : ""}</summary>
-            <p>{event.received_at}</p>
-            <pre className="whitespace-pre-wrap break-words">{JSON.stringify(event.payload, null, 2)}</pre>
-          </details>
-        </li>)}
-      </ol>
+      <RuntimeTerminal events={page.events} harness={harness} label="Recorded runtime events"/>
       <button className="btn btn-secondary" disabled={busy || previous.length === 0}
         onClick={() => void load(previous[previous.length - 1], previous.slice(0, -1), page.stream_epoch)}>Previous events</button>
       <button className="btn btn-secondary" disabled={busy || !page.has_more}
