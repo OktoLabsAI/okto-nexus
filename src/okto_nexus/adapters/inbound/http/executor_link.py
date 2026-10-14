@@ -429,7 +429,7 @@ def build_router() -> APIRouter:
                     await ws.close(code=4409)
                     break
                 frame = decode_control_frame(raw.encode("utf-8"), capabilities=welcome['control_capabilities'])
-                if frame['type'] in ('capacity.result', 'capacity.changed'):
+                if frame['type'] in ('capacity.result', 'capacity.changed', 'capacity.dispatch_state'):
                     if capacity_client is None or any(frame[k] != welcome[k] for k in (
                             'server_id', 'executor_id', 'connection_id', 'connection_generation')):
                         raise CoreError('SCOPE_MISMATCH', 'capacity_link')
@@ -453,7 +453,15 @@ def build_router() -> APIRouter:
                     except (OktoNexusError, sqlite3.DatabaseError) as error:
                         await ws.close(code=1011 if isinstance(error, sqlite3.DatabaseError) else 4403)
                         break
-                    if frame['type'] == 'capacity.result':
+                    if frame['type'] == 'capacity.dispatch_state':
+                        from ....adapters.outbound.sqlite.execution_capacity_flow import record_capacity_dispatch_state
+                        try:
+                            await anyio.to_thread.run_sync(lambda: record_capacity_dispatch_state(
+                                factory, channel=capacity_channel, frame=frame))
+                        except (OktoNexusError, sqlite3.DatabaseError) as error:
+                            await ws.close(code=1011 if isinstance(error, sqlite3.DatabaseError) else 4403)
+                            break
+                    elif frame['type'] == 'capacity.result':
                         capacity_client.accept_result(frame)
                     else:
                         availability.observe(capacity_host, binding_id=frame['binding_id'], boot_id=frame['boot_id'],

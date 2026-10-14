@@ -2,6 +2,7 @@
 from dataclasses import replace
 import asyncio
 import time
+import queue
 
 import pytest
 from nexus_connector_core import CAPACITY_CONTRACT_REVISION, CapacityRequest, CapacityScope
@@ -53,6 +54,87 @@ def test_cold_capacity_uses_approved_binding_without_creating_session_or_grant(c
         after = tuple(uow.connection.execute('SELECT COUNT(*) FROM ' + table).fetchone()[0]
             for table in ('execution_operations', 'execution_sessions', 'runtime_execution_grants'))
     assert after == before and native.opens == 0
+
+
+def test_embedded_publication_registers_boot_and_wakes_on_physical_capacity_change(connected_local):
+    from nexus_connector_core import OperationKey
+    setup, binding, native = connected_local
+    deps, app, client, *_ = setup
+    owner, registry = app.state.embedded_dispatch_owner, deps.runtime_availability
+    owner.host.capacity_enabled = registry.enabled = True
+    async def run():
+        publisher = owner.capacity_publication.publisher
+        async with asyncio.timeout(3):
+            while True:
+                host = registry.current_host(owner.channel.server_id, owner.channel.executor_id)
+                if host is not None and binding['binding_id'] in host.observations:
+                    break
+                await asyncio.sleep(.01)
+        assert host.boot_id == owner.capacity_boot_id
+        old_revision = host.observations[binding['binding_id']][0]
+        # Ordinary starts use the same physical ledger, so they also wake
+        # competitors without creating a capacity reservation first.
+        service = await owner.execution_capacity()
+        ledger = await owner.host._ledger()
+        key = OperationKey(owner.channel.server_id, owner.channel.executor_id, 'ordinary-open')
+        await ledger.reserve_owned_slot(key, 'ordinary-session')
+        try:
+            publisher._next_poll = 0
+            owner.capacity_publication.tick()
+            await publisher._task
+            assert host.observations[binding['binding_id']][0] > old_revision
+            assert await service.observe_capacity_revision() >= host.observations[binding['binding_id']][0]
+        finally:
+            await ledger.release_owned_slot(key, 'ordinary-session')
+        await owner.capacity_publication.close()
+        assert registry.current_host(owner.channel.server_id, owner.channel.executor_id) is None
+    client.portal.call(run)
+    assert native.opens == 0
+
+
+def test_embedded_dispatch_binds_consumed_next_turn_from_its_existing_receipt_association(connected_local):
+    from nexus_connector_core import CapacityConsumption
+    setup, binding, native = connected_local
+    deps, app, client, *_ = setup
+    owner = app.state.embedded_dispatch_owner
+    owner.host.capacity_enabled = True
+    opened = admit(setup, binding, 'capacity-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    frames = queue.Queue()
+    original = owner.pump.send
+    async def capture(frame):
+        frames.put(frame)
+    owner.pump.send = capture
+    try:
+        turn = admit(setup, binding, 'reserved-next-turn', 'turn.submit',
+                     session_id=opened['scope']['session_id'], text='Reserved work')
+        frame = frames.get(timeout=5)
+        fields = ('server_id', 'executor_id', 'agent_id', 'binding_id', 'workspace_id',
+            'workspace_binding_id', 'session_id', 'session_owner_generation', 'authorization_revision',
+            'configuration_revision', 'credential_epoch', 'binding_revision')
+        req = request(setup, binding, scope={k: frame[k] for k in fields}, unit='next_turn')
+        async def dispatch():
+            service = await owner.execution_capacity()
+            held = await service.try_reserve_capacity(req)
+            assert held.state == 'HELD'
+            await service.consume_capacity(req, held.reservation_id,
+                CapacityConsumption(frame['operation_id'], frame['intent_hash'], None, None))
+            assert not native.native.sent
+            await owner.enqueue(frame)
+            return held
+        held = client.portal.call(dispatch)
+        wait_receipt(setup, turn)
+        assert native.native.sent == [('send_turn', turn['operation_id'])]
+        assert owner.failure is None and not owner.agents.blocked
+        async def fact():
+            service = await owner.execution_capacity()
+            ledger = await owner.host._ledger()
+            record = await service.get_capacity_reservation(req)
+            assert record.reservation_id == held.reservation_id
+            assert len((await ledger.owned_slot_page()).reservations) == 1
+        client.portal.call(fact)
+    finally:
+        owner.pump.send = original
 
 
 def test_capacity_rejects_cross_scope_and_stale_revisions_without_changing_other_agents(connected_local):

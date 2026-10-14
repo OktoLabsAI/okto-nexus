@@ -150,3 +150,70 @@ e Nexus 17 testes passaram (212 no total). Os relatórios estão em
 `build/capacity-checkpoint.xml` de Core/Connector e
 `build/handoff-broadcast/capacity-checkpoint.xml` do Nexus.
 A implementação continua em andamento; este envio não é merge ou release.
+
+## Publicação limitada de capacidade
+
+O ledger do Core expõe um cursor durável de mudanças, atualizado também por
+aberturas e liberações comuns. `CapacityChangePublisher` mantém um produtor
+por host, publica páginas com prioridade para observações mais antigas e renova
+a validade periodicamente. Observação lenta não cria tarefas por agente nem
+bloqueia o despacho. Nenhum probe de provider ou payload privado é necessário.
+
+Os owners embedded e Connector compõem esse publicador sobre seus ciclos de
+manutenção. O Connector usa o writer e as lanes autenticadas existentes; o
+embedded usa a mesma fachada de aplicação. O aviso `STALE_OBSERVATION` pede
+reavaliação contextual e não afirma que todas as sessões estão ociosas.
+A perda do owner invalida a rota; uma resposta tardia de mutação exige consulta
+da tentativa original. O fechamento impede registro tardio pelo produtor retido.
+
+Passaram 205 testes focados: Core 34 + 27, Connector 48 + 67 e Nexus 10 + 18 + 1,
+nos relatórios de publicação/regressão e corrida de encerramento registrados no
+ledger. O teste do WebSocket utiliza autenticação e ledger reais com um host
+sintético no mesmo processo; não substitui os testes em processos independentes
+nem a campanha remota.
+
+A ativação continua desligada até a integração produtiva e a preservação da
+fila normal. H4, H5 e H6 seguem pendentes. Este avanço permanece local, sem novo
+commit ou push depois do checkpoint autorizado.
+
+## Vínculo da reserva com o despacho produtivo
+
+`ExecutionCapacity.bind_admitted_capacity_operation` encontra a tentativa pela
+operação canônica e reaproveita a associação R4/Core que cada host já persiste
+antes do efeito. O Connector e o embedded chamam essa porta em aberturas e
+turnos; trabalho comum sem reserva conserva seu caminho. O ledger recusa
+atribuir uma operação a duas reservas, inclusive colisões entre abertura e turno.
+
+A associação histórica permite recuperar um receipt existente após liberar a
+reserva, sem executar novamente. Um ID reservado não pode reaparecer como
+trabalho comum de outra sessão. Abertura e primeiro turno no daemon remoto e
+próximo turno no embedded foram exercitados com o Core real e peers sintéticos.
+Os relatórios de binding registram 36 testes do Core, 55 do Connector e 11 do
+Nexus nos conjuntos de follow-up.
+
+A fila normal continua sendo gate de ativação: esperar capacidade segurando o
+lock da sessão ou os workers globais bloquearia controles, renovação ou outros
+agentes. O fluxo deve reter a identidade/preparação da operação e aguardar fora
+desses gates. Na transação canônica do Server, trabalho normal que chegou antes
+do claim precisa impedir a disputa ou continuar protegido por sua ordem; após
+o claim, a reserva lógica deve impedir que ele ocupe o caminho do vencedor.
+Essa integração, as janelas de crash e H4/H5/H6 permanecem pendentes.
+
+## Checkpoint de publicação e controle de espera
+
+Novo commit e push autorizados explicitamente pelo usuário. Inclui os avanços
+de publicação e vínculo de reservas, além da implementação ainda parcial do
+contrato capacity-v2, recusa tipada antes de efeitos, observador compartilhado
+e retomada embedded. O contrato v1 permanece intacto. A validação detectou
+hashes antigos nos exemplos v2; foram recalculados com o manifesto correspondente.
+
+Passaram 83 testes focados: Core 31, Connector 32 e Nexus 20. Relatórios:
+`build/capacity-push-checkpoint.xml` nos dois componentes e
+`build/handoff-broadcast/capacity-push-checkpoint.xml` no Nexus.
+
+A espera ainda requer integração do retry produtivo no Connector, testes
+dedicados de deferral/flow e shutdown, e ajuste/validação do limite de 24
+esperas para preservar créditos de progresso sob saturação. Os testes deste
+checkpoint não qualificam esse caminho ponta a ponta. H4/H5/H6 continuam
+pendentes e a ativação produtiva permanece desligada. Nenhuma alteração foi
+aplicada à instalação em execução; este envio não é merge ou release.

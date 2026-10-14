@@ -112,7 +112,11 @@ def reserve_execution_dispatch(
         release_ready_initial_turns(conn, server_id=server_id, executor_id=executor_id)
         from .execution_domain_delivery import project_delivery_refusals
         project_delivery_refusals(conn, server_id=server_id, executor_id=executor_id)
-        used = {"regular": [0, 0], "control": [0, 0], "opening": [0, 0]}
+        used = {"regular": [0, 0], "control": [0, 0], "opening": [0, 0], "waiting": [0, 0]}
+        capacity_wait = ("EXISTS (SELECT 1 FROM execution_capacity_waits cw WHERE "
+            "cw.server_id=o.server_id AND cw.executor_id=o.executor_id AND cw.operation_id=o.operation_id "
+            "AND cw.connection_id=o.reservation_owner AND cw.connection_generation=o.reservation_generation "
+            "AND cw.state='WAITING')")
         # Warm/cold pool creation has a separate bounded budget. Slow process
         # initialization must never consume the workers for already-ready
         # sessions. The durable wire reservation class remains compatible.
@@ -120,7 +124,7 @@ def reserve_execution_dispatch(
                      "WHERE slot.open_operation_id=p.operation_id AND slot.server_id=p.server_id "
                      "AND slot.executor_id=p.executor_id)")
         for row in conn.execute(
-            "SELECT CASE WHEN " + pool_open + " THEN 'opening' ELSE o.reservation_class END AS lane,"
+            "SELECT CASE WHEN " + capacity_wait + " THEN 'waiting' WHEN " + pool_open + " THEN 'opening' ELSE o.reservation_class END AS lane,"
             "COUNT(*) AS items,COALESCE(SUM(o.reserved_bytes),0) AS bytes FROM execution_dispatch_outbox o "
             "JOIN execution_operations p USING(server_id,executor_id,operation_id) "
             "WHERE o.server_id=? AND o.executor_id=? AND o.dispatch_state IN ('RESERVED','SENDING','RECONCILING') "
@@ -160,7 +164,13 @@ def reserve_execution_dispatch(
             if lane in ('regular', 'opening'):
                 # Both use the existing productive wire inbox. Independent
                 # worker budgets must not overrun its shared byte credit.
-                remaining = min(remaining, regular_bytes - used['regular'][1] - used['opening'][1])
+                remaining = min(remaining, regular_bytes - used['regular'][1] - used['opening'][1] - used['waiting'][1])
+                # Waiting operations retain their bounded transport inbox
+                # reservation, but release the four productive worker credits.
+                # Keep eight of the 32 wire items for independent progress.
+                if (used['waiting'][0] >= 24 or
+                        used['regular'][0] + used['opening'][0] + used['waiting'][0] >= 32):
+                    continue
             if used[lane][0] >= max_items or remaining <= 0:
                 continue
             placeholders = ",".join("?" for _ in actions)

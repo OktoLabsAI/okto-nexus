@@ -13,6 +13,7 @@ from nexus_connector_core import (
     CoreError, LaunchIntent, OpenOperation, TurnOperation, ControlOperation, validate_harness_settings,
     OperationKey, OperationNotAdmitted, prepare_r4_receipt_binding, project_r4_bound_receipt,
     r4_close_operation, r4_native_decision_operation, ShutdownPolicy,
+    OperationCapacityDeferred, CapacityRetryWaiter,
 )
 from nexus_connector_core.protocol import canonical_json
 
@@ -108,6 +109,9 @@ class EmbeddedDispatchOwner:
         self.agents = EmbeddedAgentRecovery(self)
         from .embedded_tools import EmbeddedToolsOwner
         self.tools = EmbeddedToolsOwner(self)
+        from .embedded_capacity import EmbeddedCapacityPublication
+        self.capacity_publication = EmbeddedCapacityPublication(self)
+        self.capacity_waiter = CapacityRetryWaiter(self._capacity_revision)
         original_launch=self.host.local_launch_factory
         if original_launch is not None:
             self.host.local_launch_factory=lambda scope:self.tools.decorate(original_launch(scope))
@@ -121,6 +125,16 @@ class EmbeddedDispatchOwner:
         """Compose the shared Core port with this owner's real authority."""
         return await self.host.capacity_service(server_id=self.channel.server_id,
             executor_id=self.channel.executor_id, boot_id=self.capacity_boot_id, authority=self)
+
+    async def _capacity_revision(self):
+        ledger = await self.host._ledger()
+        return await ledger.capacity_revision()
+
+    async def _capacity_flow(self, binding, state, sequence):
+        from nexus_connector_core.capacity_codec import capacity_dispatch_state
+        from ..adapters.outbound.sqlite.execution_capacity_flow import record_capacity_dispatch_state
+        frame = capacity_dispatch_state(binding, state=state, sequence=sequence)
+        await asyncio.to_thread(record_capacity_dispatch_state, self.factory, channel=self.channel, frame=frame)
 
     def _quiesce(self):
         c = self.channel
@@ -374,7 +388,29 @@ class EmbeddedDispatchOwner:
     async def _execute_owned(self, frame):
         self.active_operations.add(frame['operation_id'])
         try:
-            await self._execute(frame)
+            continuation, deferred, sequence = {}, None, 0
+            while True:
+                if deferred is not None and (self._stopping.is_set() or
+                        self.sessions.get(frame['session_id']) is not continuation.get('session')):
+                    await self._publish(continuation['binding'], deferred.stopped_receipt())
+                    return
+                version = self.capacity_waiter.version
+                try:
+                    if deferred is not None:
+                        sequence += 1
+                        await self._capacity_flow(continuation['binding'], 'RUNNING', sequence)
+                        self.active_operations.add(frame['operation_id'])
+                    await self._execute(frame, continuation=continuation)
+                    break
+                except OperationCapacityDeferred as error:
+                    error.require_binding(continuation['binding'])
+                    deferred = error
+                    sequence += 1
+                    await self._capacity_flow(continuation['binding'], 'WAITING', sequence)
+                    self.active_operations.discard(frame['operation_id'])
+                    if not await self.capacity_waiter.wait(version):
+                        await self._publish(continuation['binding'], deferred.stopped_receipt())
+                        return
         except Exception as error:
             # Preserve uncertain work, but contain only its known subject.
             try:
@@ -394,11 +430,17 @@ class EmbeddedDispatchOwner:
         finally:
             self.active_operations.discard(frame['operation_id'])
 
-    async def _execute(self, frame):
+    async def _execute(self, frame, *, continuation=None):
+        continuation = {} if continuation is None else continuation
         await asyncio.to_thread(self.verify)
         action, payload = frame["action"], frame["payload"]
         key = frame["session_id"]
-        if action == "runtime.open":
+        resuming = action == 'runtime.open' and 'options' in continuation
+        if resuming:
+            session = continuation['session']
+            if self.sessions.get(key) is not session:
+                raise CoreError('SESSION_UNKNOWN', 'embedded_dispatch')
+        elif action == "runtime.open":
             if key in self.sessions or len(self.sessions) >= self.host.max_owned_slots:
                 raise CoreError("CAPACITY_EXCEEDED", "embedded_dispatch")
             session = {"gate":asyncio.Lock(), "authority_gate":SessionAuthorityGate(), "executor":None,
@@ -408,11 +450,12 @@ class EmbeddedDispatchOwner:
             session = self.sessions.get(key)
             if session is None or session["executor"] is None:
                 raise CoreError("SESSION_UNKNOWN", "embedded_dispatch")
+        continuation['session'] = session
         async with self._gate(session, action):
             await asyncio.to_thread(self.verify)
             if session.get('recovering'):
                 raise CoreError('EVENT_STREAM_UNAVAILABLE', 'embedded_session_recovery')
-            if action == "runtime.open":
+            if action == "runtime.open" and not resuming:
                 setup = await asyncio.to_thread(ApprovedLocalLaunch, self.inventory, session["scope"])
                 await self.tools.prepare(frame,setup)
                 tool_config=self.tools.configurations.get(key)
@@ -431,8 +474,8 @@ class EmbeddedDispatchOwner:
             runtime = await executor._runtime()
             context = runtime.r4_operation_context(frame, connection_id=self.channel.connection_id,
                                                    connection_generation=self.channel.connection_generation)
-            options = {}
-            if action == "runtime.open":
+            options = continuation.get('options', {})
+            if action == "runtime.open" and not resuming:
                 await asyncio.to_thread(executor.local_launch.check)
                 prepared = await runtime.prepare(LaunchIntent(frame["agent_id"],frame["workspace_id"],
                     payload["adapter_id"],mode=payload["mode"],model=payload.get("model"),
@@ -442,6 +485,7 @@ class EmbeddedDispatchOwner:
                         payload['adapter_id'], payload.get('harness_settings', {}))),context)
                 epoch = "stream_" + secrets.token_hex(16)
                 options = dict(prepared=prepared,stream_epoch=epoch)
+                continuation['options'] = options
             elif action in ("approval.decide", "input.provide"):
                 native_operation = r4_native_decision_operation(frame)
                 options = dict(applied_operation=native_operation)
@@ -449,13 +493,20 @@ class EmbeddedDispatchOwner:
                 context = runtime.r4_operation_context(frame, connection_id=self.channel.connection_id,
                     connection_generation=self.channel.connection_generation)
             binding = prepare_r4_receipt_binding(frame, context, **options)
+            continuation['binding'] = binding
             await asyncio.to_thread(self._bind, frame, binding, options.get("stream_epoch"))
+            if self.host.capacity_enabled and action in ('runtime.open', 'turn.submit'):
+                capacity = await self.execution_capacity()
+                await capacity.bind_admitted_capacity_operation(binding)
             await asyncio.to_thread(self.verify)
             if action == "runtime.open":
+                prepared, epoch = options['prepared'], options['stream_epoch']
                 try:
                     context = runtime.r4_operation_context(frame, connection_id=self.channel.connection_id,
                         connection_generation=self.channel.connection_generation)
                     receipt = await runtime.open(OpenOperation(frame["operation_id"],key,epoch,prepared),context)
+                except OperationCapacityDeferred:
+                    raise
                 except CoreError as error:
                     # The stored Core receipt describes the opening. Resource
                     # containment below is a separate proof, even after spawn.
@@ -503,6 +554,8 @@ class EmbeddedDispatchOwner:
     async def _command_receipt(self, frame, invoke):
         try:
             return await invoke()
+        except OperationCapacityDeferred:
+            raise
         except OperationNotAdmitted as error:
             # Core refused admission before any effect. _publish durably
             # records this bound fact in Server before it becomes observable;
@@ -632,6 +685,7 @@ class EmbeddedDispatchOwner:
         pending_at=0
         try:
             while not self._stopping.is_set():
+                self.capacity_publication.tick()
                 if time.monotonic()>=pending_at:
                     from ..application.runtime_recovery import drain_pending
                     await asyncio.to_thread(drain_pending,self.deps)
@@ -757,6 +811,7 @@ class EmbeddedDispatchOwner:
 
     async def _close(self):
         self._stopping.set()
+        self.capacity_waiter.stop()
         # Native containment must start before any database or publication
         # wait. Keep the journals alive for the producers joined below.
         if self.pump is not None:
@@ -781,6 +836,8 @@ class EmbeddedDispatchOwner:
             failures.append(error)
         for task in (self.pump.stop() if self.pump is not None else None,
                      asyncio.shield(self._recovery_task) if self._recovery_task is not None else None,
+                     self.capacity_publication.close(),
+                     self.capacity_waiter.aclose(),
                      asyncio.shield(self.maintenance) if self.maintenance is not None else None):
             if task is not None:
                 try:

@@ -24,6 +24,9 @@ class CapacityHost:
 class RuntimeAvailabilityService:
     def __init__(self, *, enabled=False, monotonic=time.monotonic, wake=lambda: None,
                  max_hosts=1024, max_bindings=256):
+        if (type(enabled) is not bool or any(type(n) is not int or n <= 0
+                                           for n in (max_hosts, max_bindings))):
+            raise ValueError('Invalid capacity registry limits.')
         self.enabled, self.monotonic, self.wake = enabled, monotonic, wake
         self.max_hosts, self.max_bindings = max_hosts, max_bindings
         self._hosts = {}
@@ -93,16 +96,29 @@ class RuntimeAvailabilityService:
         return host.port
 
     async def assess_capacity(self, request):
-        return await self._port(request, 'assess').assess_capacity(request)
+        return await self._call(request, 'assess', 'assess_capacity')
 
     async def try_reserve_capacity(self, request):
-        return await self._port(request, 'reserve').try_reserve_capacity(request)
+        return await self._call(request, 'reserve', 'try_reserve_capacity')
 
     async def get_capacity_reservation(self, request):
-        return await self._port(request, 'get').get_capacity_reservation(request)
+        return await self._call(request, 'get', 'get_capacity_reservation')
 
     async def consume_capacity(self, request, reservation_id, admitted):
-        return await self._port(request, 'consume').consume_capacity(request, reservation_id, admitted)
+        return await self._call(request, 'consume', 'consume_capacity', reservation_id, admitted)
 
     async def release_capacity(self, request, reservation_id, reason):
-        return await self._port(request, 'release').release_capacity(request, reservation_id, reason)
+        return await self._call(request, 'release', 'release_capacity', reservation_id, reason)
+
+    async def _call(self, request, action, method, *args):
+        port = self._port(request, action)
+        scope = request.scope
+        owner = self.current_host(scope.server_id, scope.executor_id)
+        result = await getattr(port, method)(request, *args)
+        if self.current_host(scope.server_id, scope.executor_id) is not owner:
+            # A successful stale reply cannot restore authority. Mutations
+            # may have committed and must be queried by their original ID.
+            mutated = action in ('reserve', 'consume', 'release')
+            raise CoreError('NEEDS_RECONCILIATION' if mutated else 'STALE_OBSERVATION',
+                            'capacity_owner_changed', possible_effect=mutated)
+        return result
