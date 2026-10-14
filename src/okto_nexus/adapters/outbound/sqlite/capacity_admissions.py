@@ -26,7 +26,7 @@ class SqliteCapacityAdmissionRepository:
         binding, affinity = delivery_session_context(uow, endpoint_id,
             sender_agent_id=handoff.from_agent_id, source_session_key=origin.source_session_key)
         if (scope.agent_id != conn.execute('SELECT agent_id FROM agent_endpoints WHERE endpoint_id=?', (endpoint_id,)).fetchone()[0]
-                or scope.workspace_id != handoff.workspace_id or req.affinity_key != affinity.opaque_key
+                or scope.workspace_id != handoff.workspace_id or req.affinity_key != affinity.capacity_key(scope.session_id)
                 or any(getattr(scope, k) != binding[k] for k in ('server_id', 'executor_id', 'binding_id',
                                                               'workspace_binding_id', 'binding_revision'))):
             raise conflict('RESERVATION_CONFLICT')

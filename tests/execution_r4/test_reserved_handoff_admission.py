@@ -182,7 +182,7 @@ def test_reserved_warm_one_shot_uses_existing_physical_slot(runtime, monkeypatch
         opened = uow.connection.execute("SELECT session_id,expected_revisions_json FROM execution_operations WHERE action='runtime.open'").fetchone()
         _, affinity = delivery_session_context(uow, binding['endpoint_id'], sender_agent_id='caller')
     req = replace(request(setup, binding, scope=json.loads(opened['expected_revisions_json']), unit='next_turn'),
-                  attempt_id=context.request_id, affinity_key=affinity.opaque_key, ttl_ms=60000)
+                  attempt_id=context.request_id, affinity_key=affinity.capacity_key(opened['session_id']), ttl_ms=60000)
     async def acquire():
         port = await owner.execution_capacity()
         ledger = await owner.host._ledger()

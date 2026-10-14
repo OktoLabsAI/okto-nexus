@@ -816,10 +816,20 @@ class HandoffService:
         """
         self._expire_old_leases(uow, workspace_id=workspace_id, now_iso=now)
         rows = self._handoffs.list(uow, workspace_id=workspace_id, status=STATUS_OPEN)
+        return self.filter_available_handoffs(uow, workspace_id=workspace_id, agent=agent, rows=rows, now=now)
+
+    def filter_available_handoffs(self, uow, *, workspace_id, agent, rows, now):
+        """Shared discovery predicates over a caller-supplied bounded page.
+
+        The runtime scheduler supplies canonical rows and the same routing
+        agent projection as list_available. This neither consumes its inbox nor
+        grants claim authority; the canonical claim revalidates everything.
+        """
         visible = [
             h
             for h in rows
-            if can_agent_see_event(agent, h, now)
+            if h.workspace_id == workspace_id and h.status == STATUS_OPEN
+            and can_agent_see_event(agent, h, now)
             and is_agent_eligible(agent, h.target, h.created_at, now)
             and self._claimant_in_creator_audience(uow, h, agent.agent_id)
         ]

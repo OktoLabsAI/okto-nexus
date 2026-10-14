@@ -129,9 +129,16 @@ class SQLiteInstancePool:
         where, args = scope(pool_id, host_id)
         return self.conn.execute('SELECT count(*) FROM one_shot_slots WHERE ' + where, args).fetchone()[0]
 
-    def warm(self, *, pool_id, host_id, configuration):
+    def warm(self, *, pool_id, host_id, configuration, resource_id=None, exclude_resource_ids=()):
+        extra, args = '', (host_id, pool_id, configuration)
+        if resource_id is not None:
+            extra += ' AND session_id=?'
+            args += (resource_id,)
+        if exclude_resource_ids:
+            extra += ' AND session_id NOT IN (SELECT value FROM json_each(?))'
+            args += (json.dumps(exclude_resource_ids),)
         return instance(self.conn.execute("SELECT * FROM one_shot_slots WHERE executor_id=? AND agent_id=? AND state='WARM' "
-            'AND configuration_digest=? ORDER BY created_at,slot_id LIMIT 1', (host_id, pool_id, configuration)).fetchone())
+            'AND configuration_digest=?' + extra + ' ORDER BY created_at,slot_id LIMIT 1', args).fetchone())
 
     def idle(self, *, pool_id):
         return [instance(r) for r in self.conn.execute("SELECT * FROM one_shot_slots WHERE agent_id=? "

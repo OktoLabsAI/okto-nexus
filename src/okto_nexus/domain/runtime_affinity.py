@@ -54,3 +54,11 @@ class RuntimeAffinity:
                   self.workspace_binding_id, self.configuration_key, self.policy,
                   self.sender_agent_id, self.source_session_key]
         return 'sha256:' + sha256(json.dumps(values, ensure_ascii=True, separators=(',', ':')).encode()).hexdigest()
+
+    def capacity_key(self, session_id):
+        """Reusable conversations exclude by affinity; single-use pools by instance."""
+        if self.policy != 'one_shot':
+            return self.opaque_key
+        if type(session_id) is not str or not session_id:
+            raise ValueError('One-shot capacity requires an exact session identity.')
+        return 'sha256:' + sha256(json.dumps([2, self.opaque_key, session_id], separators=(',', ':')).encode()).hexdigest()

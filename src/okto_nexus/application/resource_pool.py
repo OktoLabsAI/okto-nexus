@@ -56,10 +56,12 @@ class ResourcePool:
         return True
 
     def admit(self, *, request_id, pool_id, host_id, caller_id, request_hash,
-              configuration, host_limit, now, immediate_only=False):
+              configuration, host_limit, now, immediate_only=False, resource_id=None, require_new=False):
         self.tx.require_write()
         if type(immediate_only) is not bool:
             raise ValueError('Invalid immediate admission mode.')
+        if type(require_new) is not bool or (resource_id is not None or require_new) and not immediate_only:
+            raise ValueError('Reserved resources require immediate admission.')
         previous = self.queue.get(request_id)
         if previous:
             if (previous.pool_id, previous.host_id, previous.caller_id, previous.request_hash) != (
@@ -70,12 +72,15 @@ class ResourcePool:
                     raise PoolConflict('Immediate request configuration changed.')
                 if previous.state == 'QUEUED' or (previous.state == 'ADMITTED' and not self.instances.for_request(request_id)):
                     raise PoolUnavailable('EARLIER_WORK_PENDING')
+                instance = self.instances.for_request(request_id)
+                if resource_id is not None and (instance is None or instance.resource_id != resource_id):
+                    raise PoolConflict('The request owns another resource.')
             return previous
         policy = self.tx.policy(pool_id)
         if immediate_only:
             return self._admit_immediate(request_id=request_id, pool_id=pool_id, host_id=host_id,
                 caller_id=caller_id, request_hash=request_hash, configuration=configuration,
-                policy=policy, host_limit=host_limit, now=now)
+                policy=policy, host_limit=host_limit, now=now, resource_id=resource_id, require_new=require_new)
         waiting = self.queue.waiting_count(pool_id=pool_id)
         request = PoolRequest(request_id, pool_id, host_id, caller_id, request_hash,
             configuration, policy, 'QUEUED', now, now + policy.queue_timeout_seconds)
@@ -91,7 +96,7 @@ class ResourcePool:
         return self.request(request_id)
 
     def _admit_immediate(self, *, request_id, pool_id, host_id, caller_id, request_hash,
-                         configuration, policy, host_limit, now):
+                         configuration, policy, host_limit, now, resource_id=None, require_new=False):
         """Reserve a usable warm resource or a NEW cold slot, never a queue place.
 
         Called inside the claimant's transaction, after a technical host reserve.
@@ -99,15 +104,8 @@ class ResourcePool:
         assigned to this request so later queued calls cannot steal its startup.
         Actual startup still goes through the ordinary execution outbox.
         """
-        warm = self.instances.warm(pool_id=pool_id, host_id=host_id, configuration=configuration)
-        if (self.queue.waiting_count(pool_id=pool_id) or self.queue.preparing_count(pool_id=pool_id)
-                or (not warm and self.queue.waiting(host_id=host_id, limit=1))):
-            raise PoolUnavailable('EARLIER_WORK_PENDING')
-        own = self.instances.count(pool_id=pool_id)
-        total = self.instances.count(host_id=host_id)
-        may_claim = policy.may_claim if warm else policy.room
-        if not may_claim(occupied=own, host_occupied=total, host_limit=host_limit):
-            raise PoolUnavailable('HOST_FULL' if total > host_limit or not warm and total >= host_limit else 'POOL_FULL')
+        warm = self.preview_immediate(pool_id=pool_id, host_id=host_id, configuration=configuration,
+            host_limit=host_limit, resource_id=resource_id, require_new=require_new)
         request = PoolRequest(request_id, pool_id, host_id, caller_id, request_hash,
             configuration, policy, 'ADMITTED', now, now + policy.queue_timeout_seconds,
             admission_deadline=now + min(policy.queue_timeout_seconds, 60))
@@ -118,6 +116,31 @@ class ResourcePool:
             self.instances.add(PoolInstance(self.identity(), pool_id, host_id, configuration,
                 'STARTING', now, request_id=request_id))
         return request
+
+    def preview_immediate(self, *, pool_id, host_id, configuration, host_limit,
+                          resource_id=None, require_new=False, exclude_resource_ids=()):
+        """Read the SAME FIFO/count rules as admission, without reserving a slot."""
+        if type(require_new) is not bool or require_new and resource_id is not None:
+            raise ValueError('Invalid reserved pool resource.')
+        policy = self.tx.policy(pool_id)
+        options = {}
+        if resource_id is not None:
+            options['resource_id'] = resource_id
+        if exclude_resource_ids:
+            options['exclude_resource_ids'] = exclude_resource_ids
+        warm = None if require_new else self.instances.warm(pool_id=pool_id, host_id=host_id,
+                                                            configuration=configuration, **options)
+        if resource_id is not None and warm is None:
+            raise PoolUnavailable('BUSY_AFFINITY')
+        if (self.queue.waiting_count(pool_id=pool_id) or self.queue.preparing_count(pool_id=pool_id)
+                or (not warm and self.queue.waiting(host_id=host_id, limit=1))):
+            raise PoolUnavailable('EARLIER_WORK_PENDING')
+        own = self.instances.count(pool_id=pool_id)
+        total = self.instances.count(host_id=host_id)
+        may_claim = policy.may_claim if warm else policy.room
+        if not may_claim(occupied=own, host_occupied=total, host_limit=host_limit):
+            raise PoolUnavailable('HOST_FULL' if total > host_limit or not warm and total >= host_limit else 'POOL_FULL')
+        return warm
 
     def reserve_warm(self, *, pool_id, host_id, configuration, host_limit, now):
         self.tx.require_write()

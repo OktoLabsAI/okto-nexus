@@ -8,6 +8,7 @@ INSTALLATION_TABLES = frozenset({
     'runtime_writer_contract', 'runtime_dispatcher_owner', 'runtime_journal_checkpoint',
     'runtime_reset_generation',
     'one_shot_policy_settings', 'one_shot_host_limits',
+    'handoff_runtime_schedule_scan',
 })
 
 # Preserve the whole configured connection, including its original authority
@@ -81,4 +82,6 @@ def clear_operational_history(conn, *, keep_agents):
     if trigger is not None:
         conn.execute(trigger[0])
     conn.execute('UPDATE runtime_reset_generation SET generation=generation+1 WHERE singleton=1')
+    conn.execute('UPDATE handoff_runtime_schedule_scan SET handoff_cursor=0,attempt_cursor=0,'
+                 'wake_generation=wake_generation+1 WHERE singleton=1')
     return counts

@@ -44,10 +44,10 @@ def _row(conn, call_id):
 
 @_translate
 def admit(conn, *, call_id, agent_id, executor_id, caller_id, request_hash, configuration_digest, host_limit, now,
-          immediate_only=False):
+          immediate_only=False, reserved_session_id=None, reserved_new=False):
     return _legacy(_pool(conn).admit(request_id=call_id, pool_id=agent_id, host_id=executor_id,
         caller_id=caller_id, request_hash=request_hash, configuration=configuration_digest, host_limit=host_limit, now=now,
-        immediate_only=immediate_only))
+        immediate_only=immediate_only, resource_id=reserved_session_id, require_new=reserved_new))
 
 
 @_translate

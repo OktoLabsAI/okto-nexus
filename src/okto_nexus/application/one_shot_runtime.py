@@ -36,13 +36,15 @@ def host_limit(conn, executor_id):
     return max(0, limit - other)
 
 
-def admit_call(uow, operation, binding, *, caller_id, immediate_only=False):
+def admit_call(uow, operation, binding, *, caller_id, immediate_only=False, capacity_request=None):
     conn = uow.connection
     previous = conn.execute('SELECT call_id FROM one_shot_calls WHERE call_id=?', (operation['operation_id'],)).fetchone()
     call = capacity.admit(conn, call_id=operation['operation_id'], agent_id=operation['recipient_agent_id'],
         executor_id=binding['executor_id'], caller_id=caller_id, request_hash=operation['request_hash'],
         configuration_digest=digest(conn, binding), host_limit=host_limit(conn, binding['executor_id']), now=time.time(),
-        immediate_only=immediate_only)
+        immediate_only=immediate_only,
+        reserved_session_id=capacity_request.scope.session_id if capacity_request and capacity_request.unit == 'next_turn' else None,
+        reserved_new=bool(capacity_request and capacity_request.unit == 'new_session'))
     if call['state'] in ('FAILED', 'CANCELLED', 'SUCCEEDED'):
         if not previous and call['state'] == 'FAILED':
             error = json.loads(call['outcome_json'])['error']

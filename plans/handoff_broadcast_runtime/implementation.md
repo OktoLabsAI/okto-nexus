@@ -322,3 +322,129 @@ perdida, repetição das mesmas operações, rollback, prioridade anterior, cont
 durante espera e warm sem dupla contagem física. Resultados e correções de fixtures
 estão no ledger. Ainda faltam o journal antes da reserva, scheduler e compensação
 de falhas/expiração: esta composição não está ativada como aquisição automática.
+
+## Tentativa durável antes da reserva
+
+O checkpoint autorizado `971e540` publicou a composição anterior na branch
+`feature/v0.3.0`. Os avanços descritos a seguir permanecem locais.
+
+A migração 132 registra o principal de automação, a geração do handoff, o pedido
+técnico completo e a intenção de reservar antes da chamada ao host. Uma restrição
+parcial permite somente uma tentativa ativa por agente/handoff, mesmo que outro
+worker escolha outro binding ou outra sessão. As identidades e o escopo original
+não podem ser substituídos em um retry.
+
+O serviço de aplicação depende de uma porta de persistência e da porta técnica
+de capacidade. O adaptador SQLite mantém as transições; a composição injeta o
+mesmo núcleo de autorização e claim já utilizado pelos demais consumidores.
+Nenhuma chamada ao host ocorre dentro da transação do Server.
+
+Uma resposta de reserva perdida é recuperada primeiro por consulta ao pedido
+original. O claim grava sua operação no journal na mesma UoW que altera o
+handoff, consome o grant e admite a execução. Se o commit ocorreu mas a resposta
+foi perdida, uma nova leitura conserva a operação vencedora e impede que ela
+seja tratada como uma reserva perdedora. Falhas antes do commit deixam uma
+obrigação durável de liberação. O consumo produtivo continua usando
+`CapacityAdmissionService` e os IDs já admitidos.
+
+Falha de pré-avaliação é diferente de uma reserva possivelmente enviada:
+`reserve_started` é persistido antes do primeiro envio possível. Uma tentativa
+nunca enviada pode ser cancelada sem RPC de liberação. Depois desse marco,
+timeout, cancelamento ou consulta sem resultado conservam a identidade e a
+obrigação de recuperação. Apenas uma resposta terminal comprovadamente sem
+consumo permite retirar a tentativa. Respostas antigas não reativam uma reserva
+já encerrada, e a intenção de liberar sobrevive a erros e respostas atrasadas.
+
+Testes com SQLite e Core reais, usando peers nativos sintéticos, cobrem perda de
+respostas de reserva/claim/liberação, cancelamento, concorrência, MCP vencedor,
+rollback e tentativa atrasada após consulta vazia. Os resultados estão no ledger.
+Reinstanciar o serviço nesses testes exercita recuperação a partir da persistência;
+isso não substitui a campanha de reinício de processos e hosts independentes.
+
+Uma consulta vazia não impede que um pedido atrasado crie a reserva depois dela.
+Sem uma confirmação durável do host que impeça esse pedido, o serviço mantém
+`NEEDS_RECONCILIATION`. A proteção descrita abaixo implementa essa confirmação.
+O scheduler limitado, a descoberta dos candidatos e a compensação após consumo
+continuam pendentes. A aquisição automática permanece desligada.
+
+## Cancelamento anterior à chegada da reserva
+
+O Core fornece `capacity_reservation_id(request)`, identidade proposta derivada
+do pedido imutável completo. A liberação de um pedido ainda ausente, usando essa
+identidade, grava um registro `RELEASED` sem consumo na mesma transação e no mesmo
+journal consultado pela reserva. Assim, uma requisição atrasada somente encontra
+o registro terminal, sem recriar capacidade. O formato das mensagens e os bundles
+de contrato existentes não foram alterados.
+
+Registros anteriores continuam usando sua identidade persistida, inclusive IDs
+opacos das versões anteriores. Cancelar uma tentativa ausente não altera um
+processo ou turno de outra tentativa. Se o consumo venceu a corrida, a liberação
+permanece pendente de prova de encerramento. A autorização histórica para consulta
+e liberação usa o owner autenticado atual, inclusive após revogar a seleção ou
+política do agente; ela não concede execução nativa.
+
+O Server solicita essa confirmação somente quando nunca observou uma reserva
+para a tentativa. Se um registro já conhecido desaparecer, mantém a incerteza.
+O mesmo vale para hosts que recusam o novo comportamento de cancelamento: uma
+recusa não permite criar outra candidatura. Com confirmação persistida, uma nova
+tentativa pode prosseguir mesmo enquanto o pedido anterior ainda está em trânsito.
+
+Foram exercitados o ledger compartilhado entre processos distintos, reinício do
+objeto de armazenamento, concorrência com consumo, IDs históricos, autoridade
+revogada e o leitor real do Connector com reserva atrasada. O teste de processos
+distintos cobre o ledger do Core; não qualifica sozinho o canal completo nem o
+host remoto independente exigidos por T39/T40. Resultados estão no ledger.
+
+## Agenda durável e processamento limitado
+
+A migração 133 cria um índice por handoff e geração, com prazo de nova tentativa,
+motivo, cursor dos candidatos e token temporário de processamento. Esse token
+limita a repetição de varreduras; não autoriza execução nem substitui o claim.
+Um worker antigo não pode sobrescrever o cursor ou o resultado de outro que
+retomou a agenda após a expiração do token.
+
+`HandoffRuntimeScheduler` conserva um único planejador e uma quantidade limitada
+de processadores em andamento. Os acessos síncronos ao banco ficam fora do loop
+de eventos. Um processador lento ocupa sua própria vaga; outros handoffs continuam
+progredindo. Encerrar a espera pelo shutdown não descarta o produtor nem libera
+capacidade com base no tempo decorrido.
+
+Notificações repetidas são reunidas em um sinal compartilhado. Uma geração
+persistida de notificação permite reavaliar trabalho que estava em backoff, sem
+criar tarefas por agente ou atualizar toda a agenda a cada evento. Notificações
+específicas recebidas durante o processamento também não são perdidas no commit
+do resultado. O backoff considera o motivo e sobrevive à reconstrução do serviço.
+
+A varredura de recuperação usa cursores duráveis e páginas limitadas, com índices
+para broadcasts abertos e tentativas ativas. Handoffs concluídos e direcionados
+não atrasam a descoberta de trabalho elegível. Tentativas ainda não consumidas
+voltam à agenda mesmo se o handoff já foi adquirido. O reset preserva o registro
+inicial do scanner e zera seus cursores, permitindo descobrir trabalho novo.
+
+O processador recebe uma página limitada de tentativas por uma porta de descoberta
+e as conduz pelo journal, claim e consumo existentes. Perder a resposta de um
+commit não cria outra operação; a recuperação lê a identidade persistida. A
+listagem pública e a futura descoberta paginada compartilham o método
+`filter_available_handoffs`, que preserva visibilidade, alvo, comunicação e
+dependências. O consumo continua sem concluir automaticamente o handoff.
+
+Testes de integração retomaram candidaturas já persistidas antes e depois do
+claim, incluindo perda da resposta de consumo, com SQLite e Core reais e peers
+nativos sintéticos. A composição ainda exige explicitamente a porta de candidatos:
+a descoberta automática com rotação, escolha de binding/grant e construção do
+escopo de cada política precisa ser conectada. O vínculo dos eventos produtivos,
+a classificação estrutural dos avisos e a recuperação após consumo também
+continuam pendentes. Não houve ativação automática nem alteração da instalação.
+
+## Identidade da instância one-shot
+
+A chave de capacidade de uma sessão one-shot passa a incluir a identidade exata
+da instância. As políticas que reutilizam conversas mantêm a chave de afinidade
+existente. A admissão imediata pode selecionar a sessão aquecida reservada ou
+exigir uma nova instância, aplicando os mesmos limites e regras de fila do pool.
+Uma consulta prévia compartilha essas regras sem reservar capacidade; o adaptador
+SQLite permite excluir sessões já selecionadas por outras candidaturas.
+
+Essas mudanças preparam a descoberta automática ainda pendente. A seleção de
+candidatos e a validação completa de reservas simultâneas em instâncias distintas
+continuam necessárias antes da ativação em produção.

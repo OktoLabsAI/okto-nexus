@@ -92,7 +92,8 @@ def admit_domain_delivery(uow, *, operation_id, access, fresh_publications, remo
     one_shot_slot = None
     if binding['session_policy'] == 'one_shot':
         from .one_shot_runtime import admit_call
-        one_shot_slot = admit_call(uow, operation, binding, caller_id=sender[0], immediate_only=immediate_only)
+        one_shot_slot = admit_call(uow, operation, binding, caller_id=sender[0], immediate_only=immediate_only,
+                                  capacity_request=capacity_request)
         if one_shot_slot is None:
             return []
         session_id = one_shot_slot['session_id']
@@ -102,7 +103,7 @@ def admit_domain_delivery(uow, *, operation_id, access, fresh_publications, remo
             raise OktoNexusError(ErrorCode.CONFLICT, 'Invalid reserved delivery admission.', {})
         _, affinity = delivery_session_context(uow, operation['endpoint_id'], sender_agent_id=sender[0],
                                                 source_session_key=source_session_key)
-        if (affinity.opaque_key != capacity_request.affinity_key
+        if (affinity.capacity_key(capacity_request.scope.session_id) != capacity_request.affinity_key
                 or (capacity_request.unit == 'next_turn' and session_id != capacity_request.scope.session_id)
                 or (capacity_request.unit == 'new_session' and session_id is not None)):
             raise OktoNexusError(ErrorCode.CONFLICT, 'Reserved delivery affinity changed.', {})
