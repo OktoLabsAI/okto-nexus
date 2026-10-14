@@ -17,7 +17,8 @@ from test_embedded_inventory import app_for
 
 @pytest.mark.skipif(sys.platform not in {'win32', 'linux'}, reason='Durable container recovery')
 @pytest.mark.parametrize('legacy', [False, True])
-def test_restart_recovers_containers_or_requires_scoped_operator_attestation(tmp_path, monkeypatch, legacy):
+@pytest.mark.parametrize('uncertain', [False, True])
+def test_restart_recovers_containers_or_requires_scoped_operator_attestation(tmp_path, monkeypatch, legacy, uncertain):
     with contextmanager(local_setup.__wrapped__)(tmp_path, monkeypatch, None) as setup:
         setup, binding, native = connected_local.__wrapped__(setup)
         deps, app, client, headers, *_ = setup
@@ -30,6 +31,10 @@ def test_restart_recovers_containers_or_requires_scoped_operator_attestation(tmp
     # Model the crash window after process stop but before durable slot release.
     with sqlite3.connect(tmp_path / 'home/core-runtime/owned-slots.db') as db:
         db.execute('UPDATE owned_slot_reservations SET released=0')
+    if uncertain:
+        with sqlite3.connect(journal_path) as db:
+            db.execute("UPDATE operations_v2 SET stage='OUTCOME_UNKNOWN',possible_effect=1,retry_safe=0,error_code='OUTCOME_UNKNOWN' WHERE operation_id=?",
+                       (opened['operation_id'],))
     if not legacy:
         process = spawn_owned_process([sys.executable, '-c', 'import time; time.sleep(60)'],
             cwd=os.getcwd(), env=dict(os.environ), text=True)
@@ -76,6 +81,11 @@ def test_restart_recovers_containers_or_requires_scoped_operator_attestation(tmp
         assert response.status_code == 200 and response.json()['state'] == 'READY'
         assert owner.pump is pump
         assert native.opens == 1
+        if uncertain:
+            # Containment does not invent a successful opening or replay work.
+            with sqlite3.connect(journal_path) as db:
+                assert db.execute('SELECT stage FROM operations_v2 WHERE operation_id=?',
+                                  (opened['operation_id'],)).fetchone()[0] == 'OUTCOME_UNKNOWN'
         with deps.connection_factory.unit_of_work(write=False) as uow:
             assert uow.connection.execute('SELECT lifecycle_state FROM execution_sessions WHERE session_id=?', (session_id,)).fetchone()[0] == 'CLOSED'
             code = 'RECOVERY_OPERATOR_CONFIRMED_STOPPED' if legacy else 'RECOVERY_CONTAINER_STOPPED'

@@ -114,11 +114,36 @@ def test_discovery_preserves_scope_opt_in_and_protocol_gates(runtime, mode):
     assert runtime[2].opens == 0
 
 
+@pytest.mark.parametrize('capabilities', [(), ('nexus-lease-denial-v1',),
+    ('nexus-session-release-v1',), ('nexus-lease-denial-v1', 'nexus-session-release-v1')])
+def test_remote_candidate_requires_both_containment_extensions(runtime, capabilities):
+    _, hid, gid = prepare(runtime)
+    enable_capacity(runtime)
+    deps, app, *_ = runtime[0]
+    channel = app.state.embedded_dispatch_owner.channel
+    host = deps.runtime_availability.current_host(channel.server_id, channel.executor_id)
+    # Use the existing capacity fixture as a remote observation. No provider is
+    # invoked here: this test covers the admission gate, not a remote campaign.
+    host.channel = replace(channel, control_capabilities=capabilities)
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute('UPDATE execution_executors SET kind=?,connector_id=?,registered_by_agent_id=? '
+                              'WHERE server_id=? AND executor_id=?',
+                              ('remote', 'observation-fixture', 'subject', channel.server_id, channel.executor_id))
+        uow.connection.execute("INSERT INTO agent_execution_policies(agent_id,execution_location) VALUES ('subject','remote') "
+                              "ON CONFLICT(agent_id) DO UPDATE SET execution_location='remote'")
+    page = build_handoff_runtime_candidates(deps).prepare_page(lease(runtime, hid), limit=4)
+    assert len(page.attempt_ids) == (1 if len(capabilities) == 2 else 0)
+    if len(capabilities) != 2:
+        assert page.reason == 'CAPACITY_PROTOCOL_UNSUPPORTED'
+    assert_unclaimed(runtime, hid, gid)
+    assert runtime[2].opens == 0
+
+
 def test_sqlite_pages_rotate_logical_agents_and_resume_cursor_without_materializing_endpoints():
     conn = sqlite3.connect(':memory:')
     try:
         conn.executescript('''
-            CREATE TABLE handoff_runtime_attempts(agent_id,workspace_id,handoff_id,active,operation_id);
+            CREATE TABLE handoff_runtime_attempts(agent_id,workspace_id,handoff_id,claim_generation,active,operation_id);
             CREATE TABLE execution_capacity_admissions(domain_operation_id,state);
             CREATE TABLE agent_endpoints(agent_id,workspace_id,protocol,enabled,activation_state);
         ''')
@@ -127,7 +152,8 @@ def test_sqlite_pages_rotate_logical_agents_and_resume_cursor_without_materializ
                 conn.execute('INSERT INTO agent_endpoints VALUES(?,?,?,?,?)',
                              (f'agent-{n:03}', 'workspace', 'nxl-r4', 1, 'approved'))
         conn.execute('INSERT INTO agent_endpoints VALUES(?,?,?,?,?)', ('other', 'other-workspace', 'nxl-r4', 1, 'approved'))
-        conn.execute('INSERT INTO handoff_runtime_attempts VALUES(?,?,?,?,?)', ('revoked', 'workspace', 'handoff', 1, None))
+        conn.execute('INSERT INTO handoff_runtime_attempts VALUES(?,?,?,?,?,?)', ('revoked', 'workspace', 'handoff', 0, 1, None))
+        conn.execute('INSERT INTO handoff_runtime_attempts VALUES(?,?,?,?,?,?)', ('new-generation', 'workspace', 'handoff', 1, 1, None))
         repo = SqliteHandoffCandidateRepository(attempts=None, availability=None, pool_factory=None)
         current = HandoffScheduleLease('handoff', 'workspace', 0, 'token', 0, 0, '')
         seen = []
@@ -350,7 +376,7 @@ def test_cold_one_shot_discovery_obeys_pool_or_host_limit_without_queueing_a_los
     assert native.opens == len(native.native.sent) == 1
 
 
-def test_capacity_publication_wakes_waiting_broadcast_without_new_message_or_expired_backoff(runtime):
+def test_capacity_publication_wakes_waiting_broadcast_without_new_message_or_expired_backoff(runtime, *, lose_signal=False):
     import time
     from nexus_connector_core import OperationKey
 
@@ -368,37 +394,53 @@ def test_capacity_publication_wakes_waiting_broadcast_without_new_message_or_exp
         ledger = await owner.host._ledger()
         key = OperationKey(owner.channel.server_id, owner.channel.executor_id, 'occupied-opening')
         await ledger.reserve_owned_slot(key, 'occupied-session')
-        clock = time.time()
-        scheduler = build_handoff_runtime_scheduler(deps, now=lambda: clock, monotonic=lambda: clock)
-        scheduler._next_sweep = clock + 1000
+        clock = [time.time()]
+        scheduler = build_handoff_runtime_scheduler(deps, now=lambda: clock[0], monotonic=lambda: clock[0])
+        scheduler._next_sweep = clock[0] + 1000
+        dropped = []
+        if lose_signal:
+            deps.runtime_availability.wake = lambda: dropped.append(True)
         try:
             async with asyncio.timeout(10):
                 while scheduled()['reason'] != 'HOST_FULL' or scheduler.pending_count:
                     scheduler.tick()
                     await asyncio.sleep(.01)
             blocked = scheduled()
-            assert blocked['due_at'] > clock
+            assert blocked['due_at'] > clock[0]
             assert runtime[2].opens == 0
             await ledger.release_owned_slot(key, 'occupied-session')
             publisher = owner.capacity_publication.publisher
             publisher._next_poll = 0
             owner.capacity_publication.tick()
             await publisher._task
-            # Wall clock and fallback sweep remain frozen. Only the published
-            # capacity signal can make the backoff row immediately eligible.
+            if lose_signal:
+                assert dropped  # State was published, but its scheduler signal was lost.
+                scheduler.tick()
+                await asyncio.sleep(.05)
+                assert scheduled()['reason'] == 'HOST_FULL' and runtime[2].opens == 0
+                clock[0] = max(blocked['due_at'], scheduler._next_sweep) + 1
+            # Otherwise wall clock and fallback sweep stay frozen: only the
+            # published capacity signal can bypass the existing backoff.
             async with asyncio.timeout(10):
                 while scheduled()['reason'] not in ('CLAIM_COMMITTED', 'SETTLED') or scheduler.pending_count:
                     scheduler.tick()
                     await asyncio.sleep(.01)
-            assert scheduled()['seen_wake_generation'] > blocked['seen_wake_generation']
+            if not lose_signal:
+                assert scheduled()['seen_wake_generation'] > blocked['seen_wake_generation']
         finally:
             assert await scheduler.aclose(timeout=5) == 0
             await ledger.release_owned_slot(key, 'occupied-session')
     client.portal.call(run)
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute('SELECT state FROM execution_capacity_admissions').fetchone()[0] == 'CONSUMED'
+        assert uow.connection.execute("SELECT COUNT(*) FROM events WHERE type='handoff.claimed'").fetchone()[0] == 1
+        assert uow.connection.execute('SELECT COUNT(*) FROM runtime_handoff_bindings').fetchone()[0] == 1
     wait_receipt(runtime[0], current_turn(runtime[0]))
     assert runtime[2].opens == len(runtime[2].native.sent) == 1
+
+
+def test_lost_capacity_wakeup_recovers_by_bounded_scan_without_new_message(runtime):
+    test_capacity_publication_wakes_waiting_broadcast_without_new_message_or_expired_backoff(runtime, lose_signal=True)
 
 
 def test_mcp_only_agent_keeps_inbox_and_can_win_before_reserved_runtime(runtime):

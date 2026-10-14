@@ -4,6 +4,7 @@ from dataclasses import replace
 from ..errors import ErrorCode, OktoNexusError
 from ..bootstrap.execution_authority import build_execution_access
 from .execution_session_views import read_execution_session
+from .capacity_observations import CapacityObservationView
 
 
 def require_operator(access, context, uow):
@@ -13,7 +14,7 @@ def require_operator(access, context, uow):
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Runtime administration requires an operator.', {})
 
 
-def overview(deps, context, agent_id, *, after=0):
+def overview(deps, context, agent_id, *, handoff_views, capacity_reader: CapacityObservationView, after=0):
     if type(after) is not int or after < 0:
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Invalid instance cursor.', {})
     access = build_execution_access(deps)
@@ -62,7 +63,9 @@ def overview(deps, context, agent_id, *, after=0):
         ''', (agent_id,)).fetchall()
         return dict(agent_id=agent_id, active=active, active_count=total, has_more=len(rows)>50,
                     next_after=rows[49]['cursor'] if len(rows)>50 else after,
-                    completed=[dict(row) for row in completed])
+                    completed=[dict(row) for row in completed],
+                    broadcast_handoffs=handoff_views.agent(uow, agent_id),
+                    capacity_observations=capacity_reader.read(uow, agent_id))
 
 
 def execution(deps, context, agent_id, operation_id, executor_id):

@@ -1,4 +1,5 @@
 import { content, fields, object, string, tool, type HarnessAdapter } from './model';
+import { userInput } from './input';
 
 export const codexAdapter: HarnessAdapter = {
   id: 'codex_app_server',
@@ -13,7 +14,7 @@ export const codexAdapter: HarnessAdapter = {
     if (type === 'item/started' || type === 'item/completed') {
       const status = type.endsWith('completed') ? string(item.status) || 'completed' : 'running';
       if (itemType === 'agentMessage') return [{id,kind:'assistant',title:'Assistant',text:string(item.text)}];
-      if (itemType === 'userMessage') return [{id,kind:'user',title:'You',text:content(item.content)}];
+      if (itemType === 'userMessage') return [userInput(id,item.content)];
       if (itemType === 'reasoning') return [{id,kind:'thinking',title:'Thinking',text:content(item.summary || item.content)}];
       if (itemType === 'commandExecution') return [tool(id,'Command',{command:item.command, directory:item.cwd},item.aggregatedOutput,status)];
       if (itemType === 'mcpToolCall' || itemType === 'dynamicToolCall') return [tool(id,

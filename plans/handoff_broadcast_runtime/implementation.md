@@ -585,3 +585,993 @@ mesmos caminhos explícitos de Nexus, Core e dependências do teste principal;
 isso é evidência de execução entre processos, não qualificação de wheels.
 O ciclo produtivo de aquisição/consumo da agenda continua aguardando H5:
 ligar a manutenção de avisos não habilita auto-claim nem a capacidade técnica.
+
+## Compensação antes do consumo da reserva
+
+O checkpoint `8a743a0` foi enviado por solicitação explícita do usuário. As
+alterações desta etapa são posteriores a ele e permanecem locais.
+
+A admissão consulta a identidade original da reserva antes de consumir. Quando
+o host confirma `EXPIRED_UNCONSUMED` ou `RELEASED` sem consumo, uma única UoW
+registra a prova, cancela as operações ainda não enviadas, encerra a tentativa e
+reabre o claim canônico no mesmo epoch. O próximo claim incrementa esse epoch;
+repetir a compensação antiga não reabre a nova execução. A migração 137 preserva
+os IDs e referências das tentativas encerradas, liberando apenas a restrição de
+candidatura ativa. A recuperação canônica usa ator de sistema, sem simular
+credenciais ou autoridade de operador.
+
+A prova deve corresponder ao request, reservation ID, revisão e operações
+canônicas originais, incluindo hashes e sessão. Ausência de registro, timeout,
+consumo anterior, troca de claim ou travessia da barreira de envio não autoriza
+reabertura. Se a autorização de automação foi revogada enquanto a reserva ainda
+estava HELD, a aplicação usa a autoridade de limpeza para liberá-la e exige a
+mesma confirmação sem consumo. Todo I/O do host ocorre fora da transação SQLite.
+
+Em one-shot, o encerramento da chamada passa pelo pool. Recursos aquecidos
+continuam ocupados durante o fechamento e só desaparecem após confirmação do
+owner existente. O envelope interno cancelado conserva sua reserva de inbox
+para não ressurgir como trabalho MCP; nenhum ACK é inventado. O aviso original
+do broadcast permanece independente. Essa compensação não gera uma segunda
+resposta de erro conversacional e conserva o histórico de consumo do grant.
+
+Os testes locais usam SQLite e o Core real com peers nativos sintéticos. Cobrem
+expiração antes e durante consumo, liberação sem consumo, revogação, rollback
+da transação, repetição tardia, operação incerta, isolamento one-shot e retomada
+da descoberta automática após reconstrução do scheduler. As evidências e as
+correções de fixtures estão no ledger. Ainda faltam compensação após consumo,
+cancelamento de handoff já encerrado, integração produtiva do ciclo de vida,
+readmodels/UI e qualificação completa entre processos/host remoto.
+
+## Decisões canônicas e consumo sem início nativo
+
+O cancelamento público continua restrito a handoffs OPEN e ao criador. Uma
+reserva pendente desse handoff é limpa pela tentativa original, inclusive após
+perda da resposta de reserve, sem claim nem consumo de orçamento.
+
+Uma decisão autenticada pode ocorrer depois do claim e antes do início do
+trabalho reservado. A limpeza agora conserva COMPLETED, REJECTED, VERIFYING e
+epochs posteriores de retrabalho. O comprovante libera somente a admissão
+antiga; não desfaz a decisão, não gera outro evento de reabertura e não torna
+o trabalho elegível à disputa automática. A regressão de mudança de epoch
+foi substituída por decisões públicas de verificação/retrabalho: o histórico
+antigo pode ser limpo sem tocar a posse da geração nova.
+
+Há também um intervalo entre consumir a reserva e iniciar a operação nativa.
+O Core agora pode liberar explicitamente esse consumo ainda sem início. A
+transação SQLite é a mesma usada pelas barreiras de abertura e turno: exige
+opening_started=0 e ausência do registro de aquisição do turno; para abertura
+fria, libera exclusivamente o placeholder pertencente ao ticket. A sessão
+física existente de next_turn permanece ocupada. Identidades de consumo e
+bindings continuam no journal e impedem uma execução tardia. Isso não é
+expiração por prazo de capacidade consumida.
+
+RELEASED com consumo registrado não basta para o Server presumir ausência de
+efeito. A compensação exige também as operações canônicas exatas ainda antes
+da barreira de envio, sem receipts ou início da chamada one-shot. Se a decisão
+canônica muda durante o RPC de consumo, o Server solicita a liberação e aplica
+essas duas provas na mesma UoW da limpeza. Se abertura ou turno já começou,
+o Core mantém RELEASE_PENDING até a prova de encerramento aplicável.
+
+Os testes exercitam ambas as barreiras com ledgers independentes, decisões
+antes/depois do consumo, resposta perdida, verificação/retrabalho, pool frio e
+aquecido e o leitor R4 do Connector. O formato capacity-v2 não mudou. Evidências
+e correções de fixtures constam em capacity_terminal_cleanup_validation no
+ledger. Contenção de execução nativa já iniciada e a ativação produtiva do
+ciclo completo ainda estão pendentes; esta etapa permanece local.
+
+### Pi: contrato de claim e diagnóstico de permissão
+
+A investigação somente de leitura da instância em execução encontrou, em
+2026-10-14T02:48:32Z, uma chamada `nexus_handoff_claim` com `claim_epoch=1`
+para um handoff OPEN, ainda na epoch zero. A capability da sessão incluía
+`handoff.claim` e `handoff.complete`; o agente não tinha override que negasse
+trabalho. O campo opcional acionou a recuperação de um claim já existente,
+cuja posse de sessão naturalmente não existia. O retorno foi PERMISSION_DENIED.
+
+O Server agora distingue esse argumento inválido em um handoff OPEN e retorna
+VALIDATION_ERROR com orientação para omitir a epoch. A checagem continua depois
+da autorização de trabalho e elegibilidade. Claims existentes continuam exigindo
+a mesma sessão e geração; nenhuma permissão foi ampliada. A extensão Pi do Core
+explica como reivindicar, preservar a epoch retornada e completar, e informa que
+o payload pode ser omitido na leitura anterior ao claim. Na ocorrência analisada,
+o payload estava presente no banco; a ausência na consulta era a proteção esperada.
+
+Validação e evidências estão registradas em pi_handoff_claim_validation no ledger.
+Esta correção permanece local e não altera a instância em execução.
+
+### Vínculo do claim automático às ferramentas da sessão vencedora
+
+A revisão do ciclo completo encontrou uma lacuna distinta do argumento inválido
+enviado pelo Pi: o claim feito pelo scheduler não possuía ExecutionPrincipal e,
+portanto, não gravava execution_tool_claims. A sessão vencedora recebia o trabalho,
+mas não tinha a prova de posse exigida por handoff_complete. A persistência desse
+vínculo agora pertence a uma porta de aplicação, ExecutionClaimRepository, com
+adaptador SQLite composto no bootstrap e nos serviços MCP/native.
+
+A admissão canônica grava o vínculo depois de selecionar a sessão e persistir
+as operações, ainda na mesma UoW. O adaptador confere o handoff/epoch/claimant,
+workspace e o escopo exato do turno admitido. Um vínculo existente não pode ser
+transferido para outra sessão ou geração. Mensagens normais não criam autoridade
+de handoff. Uma chamada one-shot enfileirada só recebe esse vínculo quando o pool
+admite sua sessão real; não existe sessão fictícia para a fila.
+
+MCP e native podem retomar o claim já adquirido informando a epoch original,
+sem novo CAS nem dispatch. O payload no handoff_get e no replay nativo permanece
+restrito à sessão dona quando o chamador usa uma capability gerenciada. Credenciais
+canônicas conservam suas regras anteriores. A conclusão de negócio não libera
+um turno nativo ainda em execução; a confirmação física continua independente.
+
+Os cenários usam reserva, admissão, lease e endpoints públicos reais com peers
+nativos de teste. Qualificação com providers instalados, contenção após efeitos
+iniciados, ativação do scheduler produtivo e os demais gates do plano permanecem
+pendentes. Nenhum serviço em execução foi modificado nesta etapa.
+
+### Isolamento das gerações da agenda após compensação
+
+O teste de recuperação revelou que a descoberta consultava tentativas ativas
+apenas por handoff/agente, sem restringir claim_generation à geração da agenda.
+Uma página atrasada da geração anterior encontrava a tentativa recém-criada da
+geração seguinte, considerava-a inválida e a cancelava antes da reserva. O CAS
+canônico impedia dois vencedores, mas não impedia esse cancelamento indevido e
+a recriação de tentativas. A consulta da página e a busca da tentativa ativa
+agora incluem a geração da agenda. O teste determinístico prepara a nova
+tentativa antes de executar a página antiga e exige que ela permaneça intacta.
+O teste de reinício mantém a exigência original de exatamente duas tentativas:
+a compensada e a nova vencedora; a asserção não foi relaxada.
+
+### Autorização do trabalho durante a renovação local
+
+A lease técnica da sessão era renovada com base no grant de abertura/envio,
+sem revalidar o grant distinto de execute_work ou a autorização de automação
+do handoff em andamento. A porta RunningHandoffRepository agora seleciona o
+trabalho nativo ainda não encerrado no escopo exato da sessão. O adaptador
+SQLite usa as operações e receipts canônicos; histórico terminal e mensagens
+comuns não passam a depender do grant de um handoff antigo.
+
+ExecutionWorkLeaseAuthority reutiliza a autorização canônica de RuntimeWork
+para claims em andamento, sem consumir novamente o orçamento. Rejeição ou
+troca de epoch exige contenção da execução antiga. COMPLETED e VERIFYING na
+mesma epoch permitem finalizar a resposta nativa; a decisão de negócio não
+libera capacidade física nem reabre o handoff.
+
+Na execução embedded, a recusa da renovação é entregue ao owner de recuperação
+da sessão já existente. Esse owner conserva a tarefa de encerramento e tenta
+novamente se a prova de parada ainda não estiver disponível. Antes, uma falha
+nesse encerramento podia escalar para recuperação de todas as sessões do agente.
+Os testes retêm uma parada, forçam uma falha, executam trabalho numa sessão irmã
+e só observam RELEASED depois da confirmação real do Core. O claim, a epoch e
+o orçamento original são preservados; não se aplica compensação sem efeito a
+uma execução que já iniciou.
+
+Esta checagem adicional está habilitada apenas para embedded. A revisão do
+Connector encontrou que a recusa de lease no R4 atual é um frame error sem
+request_id/sessão: o leitor fecha o link, pois não pode atribuí-lo a uma das
+renovações concorrentes. Além disso, o owner remoto escala falhas de renovação
+para fechamento da conexão. É necessário negociar uma resposta correlacionada,
+conter a sessão original e publicar a prova de liberação sem perder o canal
+das demais sessões antes de habilitar a mesma checagem remota. O contrato R4
+imutável não foi alterado nem foi adicionada uma credencial de operador.
+
+A checagem local ocorre na renovação existente, não é um novo agendador de
+revogação imediata. Continuam pendentes o ciclo produtivo completo, a contenção
+remota, a recuperação após reinício nesse corte e a qualificação com providers
+reais. Evidências desta etapa constam em running_work_lease_validation no ledger.
+Tudo permanece local, sem reinstalação, reinício, commit ou push.
+
+### Recusa de lease correlacionada e contenção no Connector
+
+O Core agora fornece a extensão negociada `nexus-lease-denial-v1`, com schema,
+manifesto com hashes e fixtures próprios. O frame `lease.denied` carrega a
+requisição `lease.renew` original completa, sem bearer material. Sua identidade
+inclui request_id, sessão, owner generation, grant, serial e conexão. O codec
+R4 imutável continua recusando esse frame; somente o roteador de extensões o
+aceita após negociação explícita. Recusa não é recibo de execução nem prova
+de encerramento.
+
+O Nexus oferece a extensão somente quando o peer a solicita. Uma falha de
+lease.renew sob link autenticado pode então ser respondida sem perder sua
+correlação. lease.applied não recebe ACK inventado: se sua transação falhar,
+o replay da requisição usado como barreira de confirmação revalida a autoridade
+e devolve a recusa correlacionada. Peers antigos conservam o frame error antigo.
+Falha na autenticação do link não é convertida em recusa de uma sessão.
+
+O leitor único do Connector valida a requisição inteira contra a tentativa
+retida, inclusive durante a barreira de confirmação. Outra sessão ou geração,
+grant, serial ou request_id não pode receber esse erro. Uma recusa válida gera
+LeaseRequestDenied para o produtor correspondente, sem fechar o transporte das
+demais requisições. Cancelar o observador não remove a correlação do produtor.
+
+Quando a recusa corresponde à renovação de uma sessão em execução, seu owner
+fenceia novos ingressos produtivos e conserva a tarefa de renovação como dona
+da contenção. O mesmo runtime é encerrado pelas APIs públicas do Core; falha
+ou prova incompleta mantém o recurso e gera nova tentativa apenas dessa sessão.
+O teste usa dois peers distintos, trabalho nativo já submetido, uma parada que
+falha e uma sessão irmã que continua executando. Capacidade física só deixa o
+ledger após a confirmação do Core. O journal e as publicações originais ficam
+retidos; nenhum runtime.close ou sucesso de negócio é fabricado.
+
+A extensão ainda não é anunciada automaticamente pelo Connector, e a nova
+checagem de autorização de trabalho continua embedded-only. Antes da ativação
+remota faltam a obrigação durável no Server, publicação/aceitação da prova de
+liberação por sessão no canal ativo e tratamento de operações que já estavam
+enfileiradas quando a renovação falhou. Hoje elas são impedidas de executar,
+mas a exceção ainda pode entrar no fallback que fecha o link; a recusa da lease
+inicial também precisa do caminho correlacionado de operação sem efeito. Esses
+cortes não estão qualificados e não foram tratados como concluídos.
+
+O wheel local Core 0.0.11 inclui explicitamente os recursos capacity/v2 e
+lease_denial/v1. A verificação isolada importou o Core do próprio wheel usando
+somente uma raiz explícita das dependências já instaladas; isso valida os
+recursos empacotados, não substitui a campanha de instalação final dos três
+artefatos. Evidências, ajustes de fixtures e pendências estão em
+remote_lease_denial_validation. Branches/versões continuam Nexus 0.3.0,
+Core 0.0.11 e Connector 0.0.9. Todas as alterações permanecem locais.
+
+### Obrigação durável de contenção por sessão
+
+A migração 138 acrescenta `execution_session_containment`. Uma recusa de
+renovação autenticada e negociada registra a obrigação antes de responder ao
+Connector. O registro conserva a operação/hash de abertura, a geração do owner
+e a requisição original. A correlação usa a autoridade histórica aplicada,
+inclusive quando a nova lease foi emitida mas recusada na confirmação; não
+exige que o grant revogado volte a ser válido para permitir a contenção.
+Pedidos iniciais, inventados ou de outra sessão/conexão não criam esse registro.
+
+`ExecutionSessionContainment` define a porta de aplicação e o DTO de destino;
+o adaptador SQLite implementa a persistência. A obrigação não significa que o
+processo já parou. Enquanto estiver pendente, bloqueia renovação, despacho
+produtivo e autoridade de ferramentas MCP/nativas daquela sessão, mesmo se o
+grant for restaurado. Outras sessões conservam suas próprias leases. Interromper
+e fechar continuam sujeitos à autorização existente e não são bloqueados pela
+nova obrigação.
+
+A reconciliação existente de reconexão registra a liberação na mesma transação
+que valida os recursos e o fluxo de eventos originais. Digest, geração ou stream
+incorretos não encerram a obrigação. Falha após sua atualização desfaz também
+a mudança de prontidão da sessão e do executor. Não é fabricado receipt de
+fechamento, conclusão de trabalho nem ausência de efeito.
+
+Os testes desta etapa totalizam 76 casos distintos aprovados, com evidências e
+duas correções de expectativas do teste de controle registradas em
+`session_containment_obligation_validation`. A recriação dos serviços verifica
+que o estado não depende de memória; isso não substitui a campanha final de
+restart em processos/hosts independentes.
+
+Ainda falta publicar e confirmar a prova de liberação de uma única sessão pelo
+canal remoto que continua ativo. A reconciliação global existente é apenas o
+caminho de recuperação após reconexão, não a solução de isolamento ao vivo.
+Também faltam os desfechos correlacionados das operações já aguardando uma
+renovação recusada e da recusa da lease inicial. A negociação automática e a
+checagem remota de trabalho permanecem desabilitadas até esses cortes estarem
+implementados e validados. Nenhuma instalação foi alterada; sem commit ou push.
+
+### Protocolo de liberação no canal ativo e validação independente
+
+O Core acrescenta a extensão negociável `nexus-session-release-v1`, separada do
+contrato R4 imutável. O relatório identifica a abertura original, escopo e
+geração, prova de liberação, posição final dos eventos e digest dos receipts
+canônicos mais recentes. O digest é calculado incrementalmente em ordem de
+operation_id. A resposta accepted ou deferred contém a requisição original
+inteira; não confirma outra sessão nem representa conclusão de negócio.
+
+No Nexus, `ExecutionSessionRelease` usa uma porta de observação/persistência.
+A leitura e validação de todo o histórico ocorre em snapshot somente leitura;
+o commit compara uma revisão compacta da sessão, operações, receipts e eventos.
+Um escritor concorrente pode progredir durante a leitura, mas sua mudança
+invalida a confirmação. Apenas a transação curta final fecha a sessão, projeta
+a liberação e encerra a obrigação. Falhas deixam o estado anterior intacto.
+
+O WebSocket não aguarda a leitura histórica. Um owner limitado a quatro tarefas
+retém validações, deduplica pedidos em andamento e responde deferred quando
+está cheio. O encerramento do canal observa essas tarefas antes de liberar sua
+identidade. O teste segura a leitura de uma sessão e confirma uma lease de
+outra pelo mesmo socket, inclusive com escrita SQLite concorrente.
+
+O transporte do Connector mantém o leitor único, correlação integral, produtor
+retido após cancelamento do observador e repetição dos mesmos bytes/ID após
+timeout do ACK. Respostas duplicadas idênticas são toleradas. A alteração de
+sessão, geração, ID ou provas não pode confirmar o pedido original.
+
+`R4SessionReleaseReporter` constrói o relatório usando APIs públicas do Core.
+`Journal.get_session_claim` consulta a abertura exata, sem varrer o histórico
+de outras sessões. O reporter exige slot liberado, publicações reconhecidas,
+projeções iguais aos receipts atuais do Core e cursores remoto/local de eventos
+iguais ao fluxo final. A sessão irmã ativa não impede essa validação. Os testes
+também corrigiram um relógio simulado que contava duas vezes o tempo de
+renovações simultâneas; a política de prazo em produção não foi relaxada.
+
+As evidências estão em `live_session_release_validation`. O wheel Core 0.0.11
+foi construído e seus contratos foram verificados por importação do artefato;
+isso não é qualificação de uma instalação nem campanha de host independente.
+
+O vínculo durável com o owner foi implementado na etapa descrita abaixo.
+Operações já aguardando a renovação recusada e recusas de lease inicial
+continuam pendentes. As extensões não são negociadas automaticamente;
+a checagem remota de trabalho não foi ativada.
+
+### Publicação durável da liberação pelo owner do Connector
+
+`R4SessionReleasePublisher` usa a porta `SessionReleaseOutbox`; seu adaptador
+SQLite confirma os bytes exatos antes do envio. Um resultado desconhecido
+mantém o pedido original, mesmo se o reporter já conseguir observar um
+histórico mais recente. Somente uma resposta deferred correlacionada permite
+outra observação. O ID inclui o histórico observado, evitando a reutilização
+do mesmo ID com receipts ou cursores diferentes.
+
+O owner executa esse produtor na tarefa retida da sessão após confirmar a
+parada e drenar ferramentas nativas. Contenção física e confirmação do Server
+são estados separados. Uma publicação pendente não repete a parada e não
+ocupa os workers das sessões irmãs. Um evento explícito de shutdown termina
+a espera pelo ACK e preserva a outbox; cancelar apenas o observador continua
+sem abandonar o produtor. Uma confirmação tardia não é convertida em sucesso
+local sem o respectivo commit.
+
+`session_release_outbox_validation` registra 104 testes distintos aprovados,
+incluindo uma falha real de commit SQLite da confirmação, reconstrução do
+publicador, parada durante espera e execução de uma sessão irmã enquanto a
+prova permanece sem confirmação. Os testes do owner usam journal/ledger reais
+do Core e peers nativos simulados; não qualificam providers nem o restart de
+um host remoto independente.
+
+A reconciliação global autenticada continua responsável pela troca de geração;
+sua integração com a outbox está descrita a seguir. Permanecem os cortes de
+recusa de lease inicial e operações na fila, as demais entregas H5/H6 e a
+campanha do tuple instalado. Não houve ativação, reinstalação, reinício,
+commit ou push.
+
+### Baixa da outbox após reconciliação em nova geração
+
+O handshake só chama o produtor de commit após validar o ACK do ciclo exato
+e confirmar que o relatório está completo. O callback fica retido durante
+cancelamento do observador. Erro no commit impede que o Connector prossiga
+para publicação de inventário e prontidão de execução.
+
+`R4ReconciliationReporter` conserva, com orçamento limitado, os fatos de
+liberação efetivamente enviados e a identidade da abertura original. A porta
+`SessionReleaseRecoveryOutbox` aplica a baixa em páginas. Confere a geração
+nova, abertura/hash originais, binding, agente, sessão, geração do owner e
+watermark do fluxo. Registro sem fato correspondente permanece pendente;
+conexão pronta não significa liberação de qualquer sessão.
+
+A migração v2 da outbox acrescenta uma prova de reconciliação com hash sem
+modificar os bytes originais nem fabricar um ACK no canal antigo. O limite de
+publicações pendentes deixa de contar o histórico já resolvido. Um canal
+reconciliado também recusa observações com outro ID, evitando reativação local
+de uma obrigação antiga.
+
+`session_release_recovery_validation` registra a suíte de 117 testes aprovada,
+incluindo migração, páginas com registros não correspondentes, rollback de
+commit, ACK incorreto e cancelamento. A integração usa journal e ledger reais
+do Core, mas peers nativos e de protocolo simulados. Após perder o ACK da
+liberação, uma nova geração resolve a pendência sem abrir outro harness;
+falha de commit permite nova reconciliação do mesmo histórico.
+
+O próximo corte é a recusa das operações produtivas que já aguardavam uma
+renovação negada, seguida da recusa de lease inicial. A publicação/recuperação
+agora está integrada, mas esses caminhos ainda podem acionar o tratamento
+genérico que encerra o canal compartilhado. Negociação automática e guarda
+remota de trabalho continuam desativadas até essa correção e sua validação.
+
+### Recusas de operações aguardando lease e da abertura inicial
+
+O corte descrito acima foi implementado. O Core oferece uma associação pública
+de recusa, sem payload ou autoridade inventada, vinculada à negativa de lease
+correlacionada pelo host. Um domínio distinto de hash permite usar o journal
+existente para impedir execução tardia com o mesmo ID. Uma intenção nativa já
+admitida entra em conflito e conserva sua evidência; ela não pode virar uma
+recusa sem efeito. A recusa usa quota normal, preservando a reserva para
+interrupt/close, e não cria claim de sessão nem slot físico.
+
+O Connector persiste essa associação antes da admissão técnica da recusa.
+A recuperação pode concluir o mesmo receipt nos cortes entre associação,
+admissão, resultado terminal e publicação. Um vínculo genérico sem receipt
+continua incerto; a correção não infere ausência de efeito de qualquer lacuna
+no journal. O owner marca a negativa antes de liberar o gate de renovação,
+recusa a operação enfileirada sem chamá-la no provider e mantém a sessão irmã
+executando. A recusa inicial encerra os recursos do runtime ainda sem abertura
+e não tenta produzir uma prova fictícia de encerramento nativo.
+
+No Nexus, a negativa inicial fica registrada apenas quando corresponde ao
+bootstrap original autorizado e à sua geração. O ingresso HTTP exige esse
+registro para aceitar a falha sem uma lease aplicada. O receipt sem efeito,
+o encerramento da sessão pendente e a baixa da obrigação são atômicos.
+Alterações no receipt, ausência da negativa ou falha de commit não encerram a
+sessão. Recusas de renovação continuam exigindo a prova física correspondente.
+
+`lease_refusal_validation` registra 172 casos distintos aprovados nos três
+repositórios. Inclui journal/ledger reais, disputa entre duas conexões ao
+journal, quatro cortes de persistência, execução de sessão irmã, negação de
+receipts incorretos, repetição idempotente e rollback do fechamento. Fixtures
+de protocolo/provider são simuladas; houve também validação HTTP/WebSocket
+autenticada local do Server. A campanha instalada e em host independente ainda
+não foi executada.
+
+### Negociação e revalidação de trabalho remoto
+
+O Connector agora anuncia `nexus-lease-denial-v1` e
+`nexus-session-release-v1`. O canal autenticado do Server conserva somente
+as capacidades aceitas no handshake; sua identidade serializada continua
+contendo os quatro campos originais, sem estender frames imutáveis.
+
+A revalidação de trabalho em execução passa a atender também os runtimes
+remotos quando ambas as extensões estão negociadas. A descoberta de candidatos
+e a autoridade de capacidade exigem esse suporte para novas aquisições e
+consumo remoto. A segunda checagem impede que uma descoberta anterior contorne
+uma mudança de suporte. Consulta e liberação de reservas históricas permanecem
+disponíveis para recuperação. Os demais modos de execução de conectores antigos
+mantêm o comportamento anterior; nenhum LLM é acionado como fallback.
+
+`negotiated_work_containment_validation` registra 150 testes distintos aprovados:
+55 no Nexus e 95 no Connector. As falhas intermediárias dos quatro casos de
+descoberta eram de preparação da fixture remota: integridade do cadastro e
+política de localização. Após corrigir ambos, os quatro casos passaram.
+
+As evidências cobrem negociação ausente/parcial/completa, recusa antes da
+concessão e antes da aplicação da lease, repetição da negativa, progresso de
+sessão irmã no mesmo canal, recuperação de reservas, reconexão e regressões de
+contenção/publicação. O teste de revalidação usa WebSocket autenticado e regra
+real de autoridade, com a porta de leitura do trabalho controlada. Não equivale
+à campanha completa entre processos/hosts independentes.
+
+Permanecem as demais entregas H5/H6, a integração produtiva da agenda,
+UI/modelos de leitura, lockfiles/artefatos e campanhas T39/T40. Nenhum commit,
+push, reinstalação, reinício ou ativação na instância atual foi realizado.
+
+### Agenda integrada ao ciclo de vida do Server
+
+O startup compõe um `HandoffRuntimeService` que aciona a agenda limitada e
+retém seus produtores até o encerramento efetivo. A configuração de rollout
+`runtime_handoff_auto_claim_enabled` é exclusiva do startup e permanece falsa
+por padrão; o opt-in global/agente e o grant `execute_work` continuam sendo
+autoridades independentes. Quando há tentativas persistidas, o serviço inicia
+mesmo com o rollout desligado, em modo de recuperação sem novas aquisições.
+
+A descoberta desse modo cancela/reconcilia reservas ainda sem claim. Operações
+já comprometidas mantêm suas identidades e seguem a recuperação existente.
+O host embedded habilita a capacidade compartilhada quando a agenda precisa
+dela. A composição produtiva do daemon Connector agora habilita a capacidade
+do Core e anuncia suporte por negociação, mantendo a autoridade no Server.
+
+O shutdown fecha a admissão e a criação de tarefas imediatamente. A contenção
+nativa ocorre em paralelo ao esvaziamento da agenda; o lock/store só é liberado
+depois dos produtores. O caminho de falha parcial de startup fecha o owner real
+mesmo sem coordenador completo. O reset encerra esse owner e cria outro após a
+limpeza. A documentação de notificações e o help CLI descrevem ativação e rollback.
+
+Os testes de integração do Connector revelaram um observador legado de mudança
+de conexão que ficava pendente no teardown. O daemon agora retém e aguarda esses
+observadores no shutdown. A repetição da suíte passou sem o aviso.
+
+`scheduler_lifecycle_validation` registra 79 casos distintos aprovados: 47 no
+Nexus e 32 no Connector. Inclui aquisição automática sem ticks manuais, opt-in
+independente, reserva recuperada após restart com rollout desligado até a agenda
+ficar IDLE, planner bloqueado durante contenção nativa, observador de fechamento
+cancelado, falha parcial de startup, reset e novo handoff, e regressões da agenda,
+shutdown e fronteiras hexagonais. As CLIs nativas são simuladas; T39/T40 continuam
+pendentes, assim como a UI/modelos de leitura e o tuple instalado final.
+
+Todos os processos de teste terminaram. Nenhuma alteração foi instalada na
+instância atual; não houve commit nem push.
+
+### Opt-in na interface e salvamento atômico da política
+
+Settings agora oferece o opt-in global para handoffs broadcast. A modal de
+Connections permite herdar, habilitar ou desabilitar por agente. O campo explica
+a reserva de capacidade, execução somente pelo vencedor e necessidade das
+permissões e grants existentes. A interface informa separadamente quando o
+rollout de startup está desligado; salvar a preferência não ativa esse rollout.
+
+O opt-in pertence ao Server, fora da configuração técnica portátil do Core.
+No setup, campo ausente preserva a política e null restaura herança. Finish salva
+essa política na mesma transação dos demais ajustes, com CAS e idempotência.
+O snapshot inicial retorna política e revisão na mesma leitura. Importar ou
+trocar instalação/binding conserva a revisão original da política durante a
+edição, impedindo sobrescrita silenciosa de mudanças concorrentes.
+
+O teste de revisão obsoleta encontrou um defeito no tratamento HTTP: detalhes
+ausentes de um conflito provocavam AttributeError e HTTP 500. A correção mantém
+o retorno CONFLICT e a ausência de alterações persistidas. As verificações de
+modal foram atualizadas para o rodapé portado; a de revogação aguarda a prova
+real de encerramento pelo owner assíncrono, sem exigir parada no observador.
+
+`auto_claim_policy_ui_validation` registra 46 casos distintos aprovados, incluindo
+11 no navegador Edge com dashboard compilado, API e SQLite reais. O provider do
+teste de conexão é simulado. Build TypeScript/Vite, sintaxe Python e whitespace
+passaram. Capturas da política global e da modal foram inspecionadas em
+`output/playwright/auto-claim-policy/`. Todos os processos terminaram.
+
+Continuam pendentes os modelos de leitura e indicadores operacionais, auditoria
+completa dos critérios T01–T40, artefatos/locks e campanhas instaladas em processos
+e host independente. Nenhum commit, push, reinstalação ou reinício foi realizado.
+
+### Projeções de andamento e histórico de tentativas
+
+Foi implementada a porta `HandoffRuntimeViewRepository`, seu adaptador SQLite e
+composição no bootstrap. A administração recebe o serviço por injeção. As leituras
+não disputam handoffs, não consultam providers e não liberam recursos. A migração
+139 acrescenta um índice para a página limitada do histórico por agente.
+
+Cards e detalhes de handoffs broadcast mostram o andamento separadamente do
+estado canônico. Final nativo implica espera por decisão; VERIFYING continua
+sujeito à verificação. Somente o binding do epoch atual fornece receipts, impedindo
+que uma execução histórica seja apresentada como execução do novo dono. Origem
+ausente, canal de claim e latências comprováveis ficam explícitos. Com rollout
+desligado, trabalhos abertos são apresentados como disponíveis para claim explícito.
+
+A modal do agente mostra até 20 tentativas recentes, em painel recolhível, com
+motivos e horário do último relatório de reserva. O relatório de admissão/consumo
+substitui o antigo relatório da tentativa. A leitura não retorna payloads,
+credenciais, principal/request internos nem chaves de origem de sessão.
+
+`runtime_read_models_validation` registra 39 casos distintos aprovados. Inclui
+28 testes de projeção/domínio, quatro regressões de administração, seis de HTTP,
+dependências e fronteiras arquiteturais, e um fluxo real de navegador. O primeiro
+teste de VERIFYING falhou por faltar o flag de verificação na fixture; a repetição
+com esse cenário habilitado passou. Build e verificações estáticas passaram.
+As capturas em `output/playwright/handoff-runtime-views/` foram inspecionadas.
+
+Naquela etapa, a entrega cobria histórico e andamento; a inspeção contextual e
+as métricas agregadas continuavam pendentes. A etapa abaixo acrescenta essas
+leituras. A auditoria T01–T40 e as campanhas instaladas/remotas permanecem abertas.
+
+### Observações contextuais de capacidade e métricas limitadas
+
+O registro de disponibilidade agora mantém um cache limitado de observações
+reais de avaliação, reserva, consumo e liberação. Não é uma segunda autoridade
+de recursos. A leitura não consulta o host, não acorda o scheduler e não altera
+claims ou reservas. Respostas antigas, troca de owner, mudanças de revisão,
+avaliações concorrentes com mutações e expiração não restauram capacidade livre.
+Uma liberação observada nunca é convertida automaticamente em disponibilidade.
+
+A porta de leitura recebe um adaptador SQLite que verifica as revisões atuais
+de configuração/autorização/credencial, binding, workspace, owner e sessão.
+O cálculo das revisões ganhou um modo somente leitura; o comportamento de
+persistência usado na autenticação permanece o padrão. A consulta é limitada
+a uma página de contextos e não grava contadores nem invalida lanes por leitura.
+
+A modal mostra até 20 contextos em um painel recolhível, separando sessão
+observada ociosa, capacidade de abertura, reserva, uso, espera e desconhecido.
+O tempo de validade vem da observação, limitado a cinco segundos. O navegador
+também expira a apresentação quando a próxima requisição fica pendente.
+
+O endpoint local de métricas, somente para operadores, agrega amostras das
+últimas 1.000 tentativas e dos últimos 1.000 handoffs broadcast. Estados, motivos,
+canal vencedor e latências observadas usam rótulos limitados, sem IDs ou payloads.
+Truncamento e tamanho da amostra são explícitos; não se apresentam como contagem
+global de backlog ou vagas livres. Falha no armazenamento retorna indisponível,
+e latência sem evidência não é convertida em zero. A migração local 139 inclui
+índices para as duas consultas de amostragem, além do histórico por agente.
+
+Validação final: 84 testes distintos aprovados, somando diagnóstico/cache/escopo,
+métricas, regressões de autenticação/administração/projeção/arquitetura e dois
+fluxos no navegador. As falhas intermediárias eram expectativas de fixture:
+localização das credenciais, header restrito ao endpoint de operador e expiração
+de uma avaliação do Core em 100 ms durante a consulta. O teste de mudança de
+configuração agora controla apenas o relógio das observações; testes separados
+mantêm a prova de expiração, inclusive no navegador real com resposta bloqueada.
+Build TypeScript/Vite, sintaxe Python e whitespace passaram. Evidências detalhadas
+estão em `runtime_diagnostics_validation` no ledger. Capturas revisadas em
+`output/playwright/handoff-runtime-views/`. Nenhum commit, push, reinstalação,
+reinício ou alteração da instância do usuário foi realizado.
+
+### Auditoria dos critérios e campanha entre processos
+
+A matriz `acceptance-audit.md` passa a registrar cada requisito T01–T40 com
+evidência e limites explícitos. Listas de pendências nas etapas históricas do
+ledger descrevem seus checkpoints; a matriz consolida o estado atual. Não se
+considera um lote de testes aprovado como prova de requisitos não exercitados.
+
+Foram acrescentados cenários integrados de 100 candidatos realmente cadastrados
+e conectados pelas APIs, três sessões autenticadas de origem simultaneamente
+ocupadas, perda do sinal de capacidade com recuperação por varredura limitada e
+duas tarefas disputando a última vaga física. O último cenário também confirma
+o erro público de claim tardio pelo MCP e a possibilidade de o MCP assumir a
+tarefa que ficou sem capacidade runtime. Não inicia outro provider por isso.
+
+Uma recusa depois de enviar reserve não encerra imediatamente a tentativa:
+outra requisição em trânsito pode ter produzido uma reserva. O teste exige a
+confirmação durável de liberação da identidade original. A tentativa vencedora
+permanece ativa enquanto executa; as 99 perdedoras no cenário de escala são
+encerradas sem efeito. Esses ajustes corrigem expectativas dos testes e não
+enfraquecem a recuperação implementada.
+
+O novo runner `capacity_connector_process.py` inicia um daemon Connector em
+processo separado, com diretório e journals próprios. Somente descoberta e
+provider são sintéticos. Negociação, TCP HTTP/WebSocket, tickets, lanes, leases,
+reservas, execução, receipts e shutdown usam os componentes reais. O Server não
+acessa o ledger do Connector e o filho não importa componentes do Server. As
+credenciais descartáveis passam por stdin, sem serem registradas na saída.
+
+A campanha exercita perda da resposta depois da reserva remota, consulta pelo
+mesmo identificador, recusa por limite físico, desconexão/reconexão, reinício
+com ticket persistido, execução posterior e encerramento físico confirmado.
+Os resultados finais e o escopo exato ficam em `acceptance_audit_validation` no
+ledger. Isso não substitui a campanha instalada com o tuple final nem a máquina
+remota independente de T40. A instância do usuário não foi alterada.
+
+### Seleção entre executores, ordem e desfechos canônicos
+
+A campanha complementar aprovou 48 casos distintos: 26 de seleção/scheduler/
+métricas, 17 de desfechos e autorização, um de ordem por sender, um de fanout
+comum e três de fronteiras arquiteturais. Os critérios T08, T22, T32, T33 e T34
+agora têm evidência integrada registrada na matriz e no ledger.
+
+Dois Connectors foram executados em processos separados para o mesmo agente.
+O cadastro atual substitui a máquina anterior; por isso o teste prepara
+explicitamente o formato de catálogo histórico/restaurado com dois bindings
+aprovados. Grants, autenticação, canais, journals, capacidade e execução usam
+os caminhos reais. Prioridade e grupo resolvem um único destino; afinidade
+ocupada prevalece sobre outro endpoint de maior prioridade, e sessão não
+reconciliada não é ignorada para fabricar uma vaga. Grants revogados são
+excluídos. Providers e inventários são sintéticos.
+
+Esse teste revelou uma falha de diagnóstico: a seleção recusava corretamente
+um empate, mas a descoberta convertia seu motivo em RECOVERING. O resolvedor
+agora fornece o motivo estruturado AMBIGUOUS_BINDING, reconhecido pelo scheduler
+e pelas projeções limitadas. O backoff trata-o como conflito de configuração;
+nenhuma reserva ou execução é admitida durante a ambiguidade. A correção fica
+na camada de aplicação e não altera contratos negociados do Core.
+
+O teste de ordenação envia três mensagens diretas do mesmo sender; o handoff
+fica OPEN e sem consumo de grant até as três terminarem em FIFO na mesma
+sessão. A prova de fanout usa dois agentes runtime e um MCP-only com sessão no
+workspace, e confirma o encaminhamento direto apenas ao agente escolhido.
+
+Os testes de desfecho executam de fato o turno antes do final nativo e da
+conclusão autenticada, por MCP e por ferramentas nativas. Repetir completion ou
+verificação não multiplica eventos/notificações. Conversation habilitado não
+gera uma segunda resposta do auto-claim. Reprovação mantém o dono no epoch2,
+sem recolocar a tarefa na disputa inicial. Nenhuma semântica de conclusão foi
+alterada para satisfazer os testes; feedback foi retirado apenas do verdict
+pass da fixture, conforme o contrato vigente.
+
+Os processos de teste terminaram. A alteração de diagnóstico, seus testes e os
+registros permanecem locais; nenhum commit, push ou mudança da instância em uso.
+
+### Deadline de startup e contenção da abertura fria
+
+A auditoria de T16 reproduziu duas falhas reais. O pool aceitava iniciar uma
+chamada depois do admission_deadline se o despacho ganhasse a corrida contra a
+varredura de expiração. Além disso, uma abertura competitiva one-shot vencida
+ainda recebia renovação de lease. A regra de início agora compara o prazo na
+própria transação de despacho. O serviço de autoridade recebe o instante do
+Server e consulta o deadline por um método do port de repositório; o adapter
+SQLite vincula chamada, reserva, abertura e escopo exato. Uma chamada já iniciada
+continua sujeita ao prazo de execução, sem ser cancelada pelo antigo prazo de
+startup. Nenhuma regra de pool depende de SQL ou do Connector.
+
+Os novos testes usam os dois adapters de pool, o dispatcher embedded e um daemon
+Connector em processo separado. O provider sintético pode reter a abertura;
+transporte, leases, reserva física e confirmação de parada são reais. O teste
+remoto mostrou um segundo problema: o pool admitia close enquanto o owner de
+contenção já encerrava a sessão após negar a lease. O pool passou a consultar a
+obrigação existente antes do close automático. O canal permanece disponível e
+a vaga só é devolvida após a prova de liberação.
+
+T16 continua parcial. Expirar antes da primeira lease local revela uma lacuna
+no owner embedded: a negação é encaminhada para recuperação do agente, sem
+concluir o bootstrap como recusa comprovadamente sem efeito. O teste conserva
+essa falha, com OPEN_PENDING/NONE e slot CLOSING; nenhum provider é aberto.
+É necessário tratar a recusa inicial com persistência/recuperação pela mesma
+operação, incluindo os cortes de commit, antes de qualificar o critério. Os
+relatórios, falhas de fixture e resultados finais ficam em
+`startup_deadline_validation` no ledger. Nenhuma instalação foi alterada.
+
+### Recusa inicial embedded: persistência e reinício
+
+A recusa da primeira lease agora é persistida como obrigação de contenção da
+operação original antes da publicação da falha. O owner mantém a recuperação
+por sessão; falhas de gravação nessa etapa não bloqueiam as sessões irmãs.
+A associação para o receipt é persistida antes do fato no Core. O Core conserva
+sua proteção de identidade: um intent nativo existente ou efeito incerto não
+pode ser substituído por uma recusa sem efeito. Não são fabricados stream,
+sessão nativa ou contexto autorizado para registrar a recusa.
+
+As consultas e a associação persistida ficam no adaptador SQLite através de
+SessionContainmentRepository. O bootstrap coordena essa porta com as APIs de
+journal, capacidade e publicação; as regras de pool continuam independentes
+da infraestrutura.
+
+O teste com dois ciclos de vida do Server revelou outro erro: antes de Core.open,
+o slot consumido ainda usa a identidade provisória da reserva. A auditoria de
+recursos compartilhados esperava somente o ID da abertura e bloqueava o host.
+CapacitySlotLedger.capacity_opening_for_slot agora consulta a associação exata
+armazenada no Core, sem expor seu formato de ID ao Server nem liberar o slot.
+Somente a recuperação posterior com prova de abertura não iniciada pode liberar
+a reserva. IDs opacos de versões anteriores continuam válidos.
+
+Três cortes de reinício foram exercitados: antes do fato no Core, depois dele e
+depois do receipt no Server. O serviço automático, habilitado na segunda
+inicialização da fixture, executa uma tarefa nova sem reapresentar a antiga.
+Os providers são sintéticos; SQLite, journals, scheduler e controle são reais.
+A primeira ampliação do teste selecionava incorretamente o turno antigo; outra
+fixture introduzia tentativas manuais enquanto o serviço estava corretamente
+em modo apenas limpeza. As fixtures foram corrigidas para selecionar a nova
+sessão e usar o serviço automático ativado, preservando o gate de produção.
+
+Os resultados finais e limites de qualificação estão em
+startup_deadline_validation no ledger. Nenhum commit, push, instalação ou
+reinício da instância do usuário foi realizado.
+
+A campanha final aprovou 19 casos depois da extração do repositório. T16 e T17
+passam a Local na matriz; os checkpoints parciais anteriores ficam preservados
+como histórico. Restam 9 critérios parciais, T40 externo e a auditoria final
+dos invariantes/artefatos instalados. O plano completo ainda não está concluído.
+
+### Revogação entre aquisição e execução
+
+A matriz de sete fronteiras para policy/grant/binding encontrou uma reserva
+consumida que não era liberada quando o dispatcher recusava o envio. A recusa
+agora grava prova exata de não envio e obrigação de release na mesma transação.
+O serviço de admissão usa o port de capacidade fora da transação para liberar
+o ticket original; apenas confirmação do Core encerra a obrigação. Não reabre
+o claim nem encerra o processo de uma sessão aquecida.
+
+Os 71 casos distintos da campanha final passaram, incluindo Connector em
+processo separado, sessão aquecida, perda de respostas, provas inválidas e
+rollback. O ledger preserva as falhas iniciais e as correções de fixtures.
+`revocation-audit.md` mapeia as fronteiras e limitações. T23 e T26 passam a Local;
+restam sete critérios parciais, T40 externo e a qualificação final do conjunto.
+Nenhuma alteração foi instalada ou publicada.
+
+### Expiração remota, FIFO e backlog após reinício
+
+Três cenários com Connector em processo separado confirmam expiração pelo TTL
+real do Core: antes da consulta, entre consulta e consumo, e com resposta perdida.
+O ticket original nunca executa depois de expirado. A compensação ocorre uma vez
+e a vaga física pode receber uma reserva nova; T27 passa a Local.
+
+A campanha seguinte aprovou 44 casos de FIFO, backlog e arquitetura. O scheduler
+automático não ultrapassa uma execução one-shot nem as duas chamadas anteriores
+na fila, inclusive quando recriado entre rodadas. Dois ciclos de inicialização
+preservam integralmente registros de resultado desconhecido e tentativas antigas,
+retirando somente o aviso sem envio comprovado. T36 e T38 passam a Local.
+
+Restam T24/T28/T29/T30 parciais, T40 externo e a auditoria final de invariantes,
+locks e artefatos instalados. Os relatórios e limitações estão no ledger; nenhum
+commit, push ou alteração da instância em uso foi realizado.
+
+### Resultado nativo incerto no Connector
+
+O teste T28 encontrou um fato OUTCOME_UNKNOWN já durável no Core que não chegava
+ao Server: o Connector propagava a exceção nativa como falha da conexão inteira.
+Agora a camada de serviço consulta o journal pelo port do Core e usa o projetor
+público para verificar o vínculo exato antes de publicar a incerteza. Não há
+novo envio, conclusão canônica presumida ou liberação física nesse caminho.
+
+Os 45 casos distintos do Connector e o cenário com dois processos remotos
+confirmam publicação sem queda da conexão, rejeição de fatos ausentes/adulterados
+e ausência de reapresentação ao outro executor. T28 passa a Local.
+Uma tentativa de qualificar reconexão completa após desconexão explícita excedeu
+o watchdog de 25 segundos; esse ponto continua registrado para T29. O cenário
+final de T28 cobre preservação da posse antes e durante a desconexão, sem
+declarar que o host voltou a ficar pronto.
+
+Estado atual: 36 critérios Local, T24/T29/T30 parciais, T40 externo, além dos
+invariantes e da qualificação instalada. Alterações continuam somente locais.
+
+### Reconexão, gerações antigas e contenção remota
+
+A investigação da reconexão confirmou a espera deliberada pela lease já
+concedida antes de encerrar os recursos desconectados. O watchdog anterior de
+25 segundos não cobria esse prazo. A campanha isolada passou com lease real de
+15 segundos: o Connector voltou a ready em nova geração/boot, preservando o
+resultado incerto, sem outro envio ou claim. A geração anterior não restaura
+observações nem posse. Os 24 casos de mensagens fora de ordem, ACK/lease antigos,
+fences de agenda/claim e arquitetura passaram.
+
+Dois casos adicionais iniciaram trabalho remoto e retiveram seu close nativo:
+revogação de grant e runtime.close pela API. Após mais de 11 segundos, capacidade
+e Server continuavam aguardando prova; só o close confirmado permitiu reutilizar
+a vaga. O handoff conservou epoch e dono, sem compensação ou repetição.
+T29 e T30 passam a Local. Permanecem T24 parcial, T40 externo e os gates finais.
+
+`commit-boundary-audit.md` inventaria 20 fronteiras de persistência do fluxo,
+com evidências e lacunas explícitas para T24. O inventário não transforma testes
+parciais em validação de todos os commits. Nenhum commit, push, instalação ou
+reinício da instância em uso foi realizado.
+
+O complemento de T24 aprovou seis cortes: rollback e resposta de commit perdida
+em RESERVING, RESERVED e CONSUMED. O serviço reconstruído recupera o mesmo ticket
+e executa apenas uma vez, sem nova tentativa, epoch ou consumo de grant. Não foi
+necessário alterar produto nesses cortes. As lacunas restantes permanecem
+explícitas no inventário; T24 não foi marcado como concluído.
+
+### Negação inicial: falhas de gravação e reinício
+
+Os cortes da gravação da negação inicial reproduziram bloqueio do agente inteiro.
+O dispatcher agora conserva o request autenticado para repetição pela recuperação
+daquela sessão. Falhas repetidas não solicitam outra lease nem autorizam abertura
+nativa; a prova de recusa só é publicada depois de persistida.
+
+O reinício anterior ao commit revelou uma segunda lacuna: a reserva física já
+consumida continuava ocupada, mesmo sem começar Core.open. A recuperação consulta
+a admissão original por um port de aplicação e adaptador SQLite, exige proprietário
+anterior cercado por geração nova e ausência de publicação, stream e receipts no
+Server. O Core confirma a liberação somente do placeholder ainda não iniciado.
+Depois, a recuperação existente exige histórico vazio antes de encerrar a sessão.
+Não se fabrica request, receipt ou conclusão de handoff quando a negação não chegou
+a ser gravada. Claim, epoch e operação originais permanecem no histórico.
+
+A composição do serviço de capacidade é preguiçosa: recuperações sem reserva
+mantêm o comportamento anterior, inclusive quando o protocolo de pool está
+desabilitado. A primeira regressão detectou a dependência indevida desse protocolo;
+o ajuste solicita o port somente depois de encontrar uma admissão correspondente.
+Relatórios de reprodução e campanhas finais são registrados no ledger. T24 segue
+parcial até completar as demais fronteiras; a instância do usuário não foi alterada.
+
+### Commits de compensação, observações e páginas
+
+Vinte novos cenários locais passaram sem mudança de produto. Dez cobrem
+indisponibilidade antes/depois do RPC, incerteza após reserva física com resposta
+perdida e compensação de ticket expirado/liberado. Cada caso distingue rollback
+da perda de confirmação depois do commit real. A recusa pré-envio já confirmada
+permanece terminal; trabalho incerto consulta a identidade original antes de
+qualquer reserva. A compensação repetida conserva uma única reabertura no epoch1.
+
+Seis casos adicionais cortam os commits de scan/wake/aquisição de lease,
+renovação e finish/cursor da agenda. Quatro cobrem criação da tentativa e
+retirement de backlog. Recriar o serviço mantém o candidato persistido, enquanto
+um UUID que sofreu rollback nunca alcança o host. A conversão de backlog libera
+somente a inbox que possuía, sem ACK artificial nem alteração de resultado incerto.
+
+`criteria-recovery-commit-cuts.xml` contém dez aprovados e
+`criteria-page-commit-cuts.xml` mais dez. A primeira execução dos testes de agenda
+teve quatro erros na fixture (concatenação de string com alvo numérico); foi
+corrigida a mensagem de injeção, sem mudar o comportamento testado. T24 continua
+parcial para as demais fronteiras inventariadas, inclusive journals Core/Connector.
+Nenhum commit, push, instalação ou reinício da instância em uso foi realizado.
+
+### Commits físicos e publicações do Connector
+
+O Core passou em 38 casos finais: 22 cortes de reserva/consumo/bind/liberação/
+expiração, oito cortes de COMMIT nos gates de abertura/turno e provas de liberação,
+mais oito regressões de recurso iniciado versus cancelamento. A reabertura do
+ledger conserva IDs, hashes, TTL e ocupação. Um gate já commitado não se torna
+uma nova autorização de execução quando a confirmação se perde.
+
+O Connector passou em 39 casos, incluindo 16 cortes novos de reserve/bind/record/
+ACK no store e com Core real/provider sintético. A publicação retoma fatos exatos
+sem repetir abertura. As falhas iniciais eram expectativas/ambiente de fixture:
+uma reserva expirada nunca consumida não deve bloquear turnos comuns, e o host
+frio do teste precisa do diretório privado que o daemon cria na inicialização.
+Não foi necessária alteração de produto nesta campanha.
+
+Há uma lacuna distinta de liveness: a obrigação reserve/bind já persistida sem
+receipt Core continua pending depois de recover_publications. O reporter impede
+reconciliação enquanto essa pendência existir. Os testes aprovados atestam
+preservação de identidade e ausência de replay; não comprovam recuperação
+automática para ready nesse corte. T24 permanece parcial e a próxima correção
+deve usar evidência positiva de não execução, preservando o fence da geração
+anterior, em vez de eliminar a obrigação ou tratar ausência de receipt como prova.
+
+### Recuperação remota antes da abertura: reprodução e fence do Core
+
+`test_remote_preopen_publication_recovery.py` reproduziu a lacuna em dois
+processos Connector descartáveis, com HTTP/WebSocket e persistência reais.
+Perder a resposta do commit de reserve ou bind impede retorno a ready, embora
+o provider permaneça com zero aberturas e zero envios. Os dois casos falham
+intencionalmente contra o comportamento ainda incompleto; o relatório
+`remote-preopen-publication.xml` registra 2 falhas em 113,63 segundos.
+A falha de reserve também conserva uma obrigação pendente no shutdown.
+
+O Core agora oferece prepare/validate/persist_r4_preopen_refusal. A associação
+preserva a fonte original, a geração da sessão, o binding anterior quando
+existente e a conexão de recuperação estritamente posterior. Uma intenção
+separada por domínio disputa a mesma chave no Journal: se a abertura original
+venceu, mesmo sem efeito iniciado, a recusa não a sobrescreve; se o fence venceu,
+uma abertura tardia não pode admitir sua intenção. Interrupções entre admissão
+e receipt terminal retomam a mesma associação. Nenhuma lease, posse de sessão,
+liberação física ou decisão de handoff é fabricada por essa API.
+
+`preopen-refusal.xml`: 37 aprovados em 4,61 segundos, incluindo 23 novos casos
+de persistência/reabertura, disputa entre dois journals, fatos nativos existentes,
+perda de resposta e escopo, mais 14 regressões de recusa por lease. O Core usa
+somente a porta Journal existente; não há acesso ao SQLite na nova política.
+
+A integração permanece pendente. O Connector deverá persistir a associação
+antes do CAS, preservar o binding original para auditoria, distinguir uma
+proposta de recusa de um fence efetivamente confirmado e conservar fatos
+originais quando perder a disputa. Depois deverá confirmar a liberação da
+capacidade exata. O Server deverá validar a conexão autenticada de recuperação,
+a admissão original e a prova, fechando apenas a abertura comprovadamente
+impedida. O handoff canônico não é compensado nem reexecutado por essa operação.
+Os dois testes remotos continuam gates vermelhos até esse circuito e a execução
+de novo trabalho serem comprovados. T24 continua parcial. Nenhuma instalação,
+reinício da instância do usuário, commit ou push foi realizado.
+
+
+### Auditoria T24: aviso canônico e contrato de recuperação
+
+A recuperação de publicação pré-abertura foi integrada ao Connector e ao Server,
+com fence persistido no Core, liberação física confirmada e aceite atômico.
+A campanha final anterior teve 14 cenários de recuperação e 59 regressões
+aprovados, incluindo ACK perdido e trabalho novo após retorno a ready.
+
+A auditoria do artefato encontrou drift no gerador R4. A extensão negociada
+nexus-preopen-refusal-v1 agora tem schema e manifesto próprios, gerados junto
+com o contrato base, sem alterar os bytes do schema/manifesto R4 existente.
+Core: 67 testes aprovados; Connector: 30. Wheel construído e carregado diretamente
+com verificação dos recursos empacotados. O reteste integrado do Server terminou
+com 14 aprovados em 147,56s; nenhuma instalação foi modificada.
+
+Quatro novos testes de cortes nos commits de criação e desbloqueio passaram.
+Rollback preserva os registros anteriores; resposta perdida conserva uma tarefa,
+agenda e aviso por destinatário, sem execução nativa. A criação não dispõe de
+chave idempotente pública: o teste recupera a tarefa commitada por consulta,
+sem inventar deduplicação por repetir create. T24 continua parcial para as
+demais fronteiras identificadas. Sem commit ou push.
+
+A recusa de envio após consumo ganhou mais dois cortes de commit aprovados.
+A prova da abertura e do turno filho nunca enviado, o estado terminal e a
+obrigação de release são atômicos. A capacidade física permanece CONSUMED até
+a confirmação real do Core; o claim original não é compensado. Os relatórios
+finais desta etapa somam 117 casos executados (67 Core, 30 Connector, 20 Nexus),
+todos com processo terminal bem-sucedido. O gerador e diff --check dos três
+repositórios também passaram. Os gates restantes estão mantidos no ledger.
+
+### Cortes de contenção e correção do journal ao reabrir
+
+A auditoria acrescentou quatro cortes no commit da contenção após renovação
+negada e dois no aceite da prova de liberação pelo Server. Os seis passaram
+contra os pacotes instalados: uma nova factory recupera a obrigação e o pedido
+originais; perda da confirmação do commit não provoca outro close, receipt ou
+execução. No Connector, seis cortes de prepare/ACK/reconcile também passaram,
+mantendo os bytes originais e a proveniência da recuperação separada do ACK.
+
+Os quatro cortes correspondentes da recusa no journal Core expuseram um erro:
+o backfill de compatibilidade criava session_claims ao reabrir journals modernos,
+inclusive para recusas sem admissão nativa. A rotina agora cria e preenche a
+tabela atomicamente apenas na migração de um journal que ainda não a possui.
+Os claims existentes são preservados. Recusas modernas continuam sem posse de
+sessão depois do reinício. A fixture antiga de migração foi ajustada para
+representar o schema anterior, sem a tabela de claims.
+
+As fontes corrigidas passaram em 90 casos de recusa/preopen/capacidade, mais
+28 casos finais de claims/migração. A regressão adicional de journal teve
+78 aprovados e a única falha era essa fixture antiga, depois corrigida.
+O Core foi reconstruído para qualificação instalada com Nexus e Connector;
+a campanha congelada anterior permanece evidência do build anterior, não do
+novo. Os digests, resultados terminais e pendências constam no ledger.
+
+## Conclusão da etapa local — 2026-10-14
+
+A campanha final instalada terminou: Nexus 54, Core 187 e Connector 99 testes
+aprovados, sem falhas/erros/skips. O runner Nexus registrou PASS, exit 0 e
+changed_inputs vazio. Hashes dos wheels e bytes dos pacotes instalados foram
+conferidos novamente. Ambos os consumidores exigem Core==0.0.11.
+
+T24 foi consolidado com as 21 fronteiras e a composição transacional do claim.
+T01–T39 e INV-01–INV-10 estão local_verified. O Connector local foi exercitado
+em processo separado, com HTTP/WebSocket reais, reinício normal, queda abrupta,
+recuperação da operação original e contenção com parada retida. Os providers
+nativos são sintéticos; isso não qualifica universalmente os harnesses reais.
+
+Por decisão explícita do usuário, T40 em outra máquina fica para um teste
+conjunto posterior (deferred_by_user), sem bloquear a conclusão local. Essa
+decisão não converte o teste local em comprovação de host independente.
+
+Versões: Nexus 0.3.0, Connector 0.0.9, Core 0.0.11. Instância em uso preservada.
+Trabalho pronto para revisão do usuário; nenhum commit ou push realizado.
+
+## Complemento solicitado: terminal e scrollback — 2026-10-14
+
+Inputs Nexus de Codex, Claude e Pi agora exibem a mensagem, identificação e
+contexto expansível, sem despejar o envelope JSON. Live tail e History usam o
+mesmo fluxo contínuo: últimos 500 eventos na abertura, carregamento anterior
+ao rolar para cima e retenção do histórico carregado. Pausar/retomar não apaga
+eventos; chegada de eventos novos preserva a posição de leitura. Foram removidos
+o corte de texto em 32 mil caracteres e o viewport interno de 320px do output.
+
+Validação: 21 testes de apresentação/cursores e dois cenários de Edge aprovados.
+O navegador exercitou 607 eventos via API/SQLite reais com peer sintético,
+input acima de 40 mil caracteres, scroll, concorrência com live tail, pausa,
+retomada, maximização, fonte, gap, reload e rejeição de escopo adulterado.
+TypeScript/Vite compilaram os assets do repositório. As qualificações de wheels
+anteriores continuam vinculadas aos hashes anteriores; esta mudança não foi
+reinstalada na instância em uso. Nenhum commit/push.
+
+
+## 2026-10-14 — Local Pi recovery and installation revalidation
+
+Fixed discovery provenance changes blocking automatic version observations; Pi launch now tolerates same-authority lease renewal and records pre-launch refusal as a safe failure. Recovery accepts uncertain opening receipts only with retained container-stop proof or scoped operator attestation. 45 distinct targeted checks passed. Clean wheels installed and byte-verified. The old Pi unknown opening was released through the audited recovery endpoint after verifying no Pi process; its uncertainty remains in history. Live verification: Pi/Claude/Codex READY, four Pi WARM sessions, Claude/Codex intents accepted without blockers. No commit/push/publication. Evidence and wheel hashes recorded in ledger.json.

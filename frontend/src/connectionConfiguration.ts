@@ -59,6 +59,7 @@ export interface SetupRequest {
   client_intent_id: string; agent_id: string; executor_id: string; candidate_ref: string;
   inventory_revision: string; workspace_id: string | null; binding_id: string | null;
   baseline: SetupBaseline; configuration: ConnectionConfiguration;
+  broadcast_handoff_auto_claim?: boolean | null;
   mcp_preset?: {expected_revision: number; servers: import('./api').MCPPreset['servers']};
 }
 export interface SetupTest {test_id: string; status: 'running' | 'succeeded' | 'failed'; stage: string; details: string[]}

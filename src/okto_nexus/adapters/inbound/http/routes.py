@@ -717,6 +717,12 @@ def build_router() -> APIRouter:
         except Exception:
             # Storage failure is unknown, never a fabricated zero backlog.
             data["runtime_capacity"] = {"status": "unavailable"}
+        from ....bootstrap.handoff_runtime_views import handoff_runtime_metrics
+        try:
+            data['broadcast_handoffs'] = await anyio.to_thread.run_sync(
+                handoff_runtime_metrics, request.app.state.deps)
+        except Exception:
+            data['broadcast_handoffs'] = {'status': 'unavailable'}
         auth = request.app.state.auth
         data["authentication_cache"] = (auth.cache_stats() if hasattr(auth, "cache_stats")
                                         else {"status": "unavailable"})

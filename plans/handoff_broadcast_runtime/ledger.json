@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "plan": "PLANO_HANDOFF_BROADCAST_RUNTIME_MCP_v0.3.0.md",
-  "status": "in_progress",
+  "status": "local_complete_pending_user_review",
   "constraints": [
     "Hexagonal architecture; canonical claim remains sole ownership authority",
     "Changes after the latest user-authorized checkpoint remain local pending user review; no further commit/push without authorization",
@@ -29,30 +29,29 @@
       ]
     },
     "H1": {
-      "status": "in_progress",
+      "status": "local_verified",
       "evidence": [
         "Core contracts/codec/R4 bundle: 67 passed; public RuntimeCapacity and CapacitySlotLedger ports; no host advertises support yet",
         "build/handoff-broadcast/h1-affinity.xml: 25 passed; exact shared/sender/source context preserves existing delivery regressions",
-        "Core tests/test_capacity_bundle.py + codec/contracts: 53 passed; byte-pinned schema/manifest and 14 valid + 10 invalid fixtures, packaged and verified from extracted Core wheel"
-      ]
+        "Core tests/test_capacity_bundle.py + codec/contracts: 53 passed; byte-pinned schema/manifest and 14 valid + 10 invalid fixtures, packaged and verified from extracted Core wheel",
+        "Contratos públicos de capacidade e extensões versionadas/negociadas validados; schemas base R4 preservados. Evidência atual: invariant-audit.md, preopen extension e installed_tuple_validation."
+      ],
+      "remaining": []
     },
     "H2": {
-      "status": "in_progress",
+      "status": "local_verified",
       "evidence": [
         "build/handoff-broadcast/h2-pool.xml: 45 passed, including two-adapter immediate-only admission and existing pool regressions",
         "Core build/handoff-capacity-h2.xml: 182 passed after the pre-journal opening-admission fix; runtime capacity gate, physical ledger, multiprocess races against reservation and ordinary opening, bounded expiry, restart, atomic-write failure, existing runtime/owned-slot/shutdown/composition and contract regressions",
         "Core build/handoff-capacity-facade.xml: 210 passed; public ExecutionCapacity facade, exact R4 session/lease readiness, canonical-to-Core receipt binding, bounded/coalesced uncooperative observations, ordinary turn/open regressions",
         "Core build/handoff-capacity-recovery.xml: 15 passed; namespace-scoped active reservation pages, bounded cancellation of fenced HELD records, strict generation checks and consumption/cancellation race using independent SQLite adapters. Consumed resources remain occupied.",
-        "Core build/handoff-capacity-recovery-followup.xml: 4 passed; cancelling an unused next-turn reservation preserves the ordinary opening/process slot."
+        "Core build/handoff-capacity-recovery-followup.xml: 4 passed; cancelling an unused next-turn reservation preserves the ordinary opening/process slot.",
+        "Reserva física, immediate_only e gates compartilhados integrados; corridas, FIFO e compensação mapeados em acceptance-audit.md/commit-boundary-audit.md."
       ],
-      "remaining": [
-        "Reconcile capacity gate/receipt crash windows, old-boot holds and pending releases through existing recovery owners before activation",
-        "Wire immediate-only admission to a successfully reserved automatic claim",
-        "Enable the shared gate only with queue-preserving host admission and negotiated capability"
-      ]
+      "remaining": []
     },
     "H3": {
-      "status": "in_progress",
+      "status": "local_verified",
       "evidence": [
         "Connector build/handoff-capacity-composition.xml: 44 passed, 1 skipped; facade composition, shared physical cap across namespaces, reconnect fencing and existing R4 execution regressions",
         "Embedded capacity composition: 2 passed; scope fencing, no harness/journal creation on cold reserve, original attempt lookup after owner replacement",
@@ -77,19 +76,13 @@
         "Final consumer checks after the historical binding guard: Connector build/capacity-dispatch-final.xml 1 passed; Nexus build/handoff-broadcast/h3-capacity-dispatch-final.xml 1 passed. Both real dispatch integrations passed against the final local Core source. No commit or push.",
         "Core build/capacity-waiter.xml: 8 passed; one retained revision producer, bounded/cancellable observers, periodic authority recheck, typed exact pre-journal turn/open refusal and original-operation retry.",
         "Connector build/capacity-wait-regression-final.xml: 48 passed, plus build/capacity-wait-transport.xml and build/capacity-open-wait-renewal.xml: 1 each. Four actual Core-gated waits leave another session, containment controls and renewal gates available; same operation resumes only after correlated terminal release. Waiting open retains preparation, initial lease and canonical identity, renews while physically blocked, and opens once. Shutdown/session close persist bound no-effect failure; transport flow retains item/byte ownership.",
-        "Nexus build/handoff-broadcast/h3-capacity-wait.xml: 17 passed, 2 fixture failures; h3-capacity-flow.xml: 14 passed, 1 fixture failure. Fixed incomplete diagnostic fixture session IDs/new internal invocation seam and a stale-generation test that accidentally used the current generation. All affected cases passed in h3-capacity-wait-followup.xml (7 passed). h3-capacity-flow-websocket.xml: 1 passed. Real embedded reservation wait preserves SENDING/original attempt while interrupt and applied lease renewal progress; authenticated flow refuses cross-scope, conflicting sequence and replaced ownership, without creating receipts. Shared wire byte/item limits retain 24/31-waiter headroom and refuse a 33rd retained item."
+        "Nexus build/handoff-broadcast/h3-capacity-wait.xml: 17 passed, 2 fixture failures; h3-capacity-flow.xml: 14 passed, 1 fixture failure. Fixed incomplete diagnostic fixture session IDs/new internal invocation seam and a stale-generation test that accidentally used the current generation. All affected cases passed in h3-capacity-wait-followup.xml (7 passed). h3-capacity-flow-websocket.xml: 1 passed. Real embedded reservation wait preserves SENDING/original attempt while interrupt and applied lease renewal progress; authenticated flow refuses cross-scope, conflicting sequence and replaced ownership, without creating receipts. Shared wire byte/item limits retain 24/31-waiter headroom and refuse a 33rd retained item.",
+        "Embedded e Connector usam o mesmo port e negociação; T39 cobre processos distintos. A qualificação do último Core instalado e T40 permanecem em H6."
       ],
-      "remaining": [
-        "Run separate-process authenticated channel parity and reconnect with actual Connector owner, then independent remote qualification; in-process authenticated Server capacity round trips now pass",
-        "Connect the durable scheduler and Server logical admission to technical reserve/consume; both productive hosts now bind consumed operation IDs through their existing R4 receipt association",
-        "Exercise the full reserved operation lifecycle across separate-process disconnect/restart; local Core terminal receipt replay is now covered",
-        "Compose Server logical claim reservation with ingress FIFO and exact-affinity dispatch; host wait now releases workers/renewal gates but cannot alone guarantee reserved winner ordering or per-sender independence",
-        "Complete consumed/uncertain reservation and gate/receipt crash-window recovery; fenced unconsumed holds now drain before both legacy resource scans",
-        "Run separate-process channel/reconnect parity and independent remote campaign"
-      ]
+      "remaining": []
     },
     "H4": {
-      "status": "in_progress",
+      "status": "local_verified",
       "evidence": [
         "Nexus h4-origins.xml: 14 passed; authenticated creator origin, missing-origin fallback, approval replay, revocation and atomic rollback.",
         "Nexus h4-origin-regression.xml: 15 passed; h4-handoff-regressions.xml: 74 passed.",
@@ -117,274 +110,404 @@
         "Nexus h4-scheduler-execution.xml: 2 passed. Scheduler starts from persisted candidate before/after canonical claim and retries exact consumption after lost host reply; one claim epoch, one grant use and one native opening/turn. Discovery adapter intentionally starts from already prepared candidates, not automatic audience selection.",
         "Nexus h4-scheduler-final.xml: 8 passed after adding indexed active-only fallback scanning. h4-scheduler-active-index.xml: 1 passed with final fixture retaining 300 OPEN directed rows and 300 completed rows before the sole pending broadcast; the first bounded page finds only that broadcast.",
         "Nexus h4-scheduler-eligibility-reset.xml: 137 passed in 343.10s. Public handoff visibility/eligibility, communication, dependencies, import boundaries and runtime connection preservation/reset regressions after shared filter extraction and scanner seed preservation.",
-        "Nexus h4-scheduler-reset-seed.xml: 1 passed. Real reset clears history, keeps exactly the scanner singleton with zeroed cursors, then a new handoff is discovered and leased. Nine distinct scheduler/storage/execution cases now pass (h4-scheduler-final plus reset-seed, with active-index final fixture follow-up); all test handles are complete. AST for twelve changed/new Python files, ledger JSON, tracked diff and untracked whitespace checks passed. No automatic candidate discovery, production wiring, consumed-failure compensation or T39/T40 completion claimed."
+        "Nexus h4-scheduler-reset-seed.xml: 1 passed. Real reset clears history, keeps exactly the scanner singleton with zeroed cursors, then a new handoff is discovered and leased. Nine distinct scheduler/storage/execution cases now pass (h4-scheduler-final plus reset-seed, with active-index final fixture follow-up); all test handles are complete. AST for twelve changed/new Python files, ledger JSON, tracked diff and untracked whitespace checks passed. No automatic candidate discovery, production wiring, consumed-failure compensation or T39/T40 completion claimed.",
+        "scheduler_lifecycle_validation: productive serve lifecycle is now wired behind an explicit default-off startup rollout gate, with agent opt-in preserved, recovery-only rollback, retained shutdown and reset verified locally.",
+        "Scheduler, opt-in, bypass competitivo, claim/transação/proveniência e MCP integrados. Cenários T01-T23/T31-T38 e invariant-audit.md registram evidências locais."
       ],
-      "remaining": [
-      "Wire productive startup/shutdown and complete compensation before activation. Creation/unblock and unresolved-generation cleanup now notify the durable agenda; policy/grant/binding changes persist a wake generation and capacity publications wake the composed scheduler. Automatic discovery and signals are qualified locally, but productive lifecycle activation is still off. Expiry and consumed uncertainty remain.",
-        "Complete exact-affinity FIFO assessment and separate-process/local-remote lifecycle qualification; new dispatch serialization follows canonical session",
-        "Startup now fences structural control notices in both dispatch selectors while a serve-owned bounded worker converts safe backlog. Shutdown retains that writer without delaying native containment. Historical retry attempts remain conservative reconciliation cases. Productive scheduler/reservation lifecycle decisions and UI remain pending; automatic acquisition remains inactive",
-      "Extend independent one-shot reservation coverage to the complete cold/remote lifecycle and concurrent failure cuts. Distinct warm instances now use exact capacity identities and both execute through real embedded reservations/claims/consumption; pool FIFO/exact-resource tests pass with SQLite and memory adapters."
-      ]
+      "remaining": []
     },
     "H5": {
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "Local pre-consumption compensation is recorded in capacity_compensation_validation. This does not qualify consumed execution cancellation, complete productive lifecycle ownership or independent remote scenarios.",
+        "capacity_terminal_cleanup_validation covers canonical decisions, verification/rework preservation and explicitly released consumption that never crossed either productive gate. Started/uncertain native execution still requires containment and separate proof.",
+        "running_work_lease_validation covers embedded renewal revalidation and retained per-session containment after native start. Remote scoped lease denial/release and complete lifecycle qualification remain pending.",
+        "Ciclo de contenção/liberação/recusa e cortes locais auditados; novo defeito de backfill no journal foi corrigido e passou testes de fontes.",
+        "Final installed tuple verified: Nexus 0.3.0 (54 passed), Core 0.0.11 (187 passed), Connector 0.0.9 (99 passed); zero failures/errors/skips. Nexus campaign PASS, exit_code 0, changed_inputs []. Final wheel hashes and all installed package bytes rechecked against artifacts.json. Real local child Connector lifecycle, reconnect, graceful/abrupt restart, retained native stop, original operation recovery and commit cuts passed. Native providers are synthetic; this is not independent-host qualification."
+      ],
+      "remaining": []
     },
     "H6": {
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "Startup rollout gate, CLI help and runtime-handoff-notifications documentation now describe controlled activation and recovery-only rollback; operational UI, final locks/artifacts and installed/independent-host campaigns remain pending.",
+        "Auto-claim global/agent policy UI and atomic connection setup verified: auto_claim_policy_ui_validation, 46 distinct passing cases. Operational read models, final artifacts and installed/independent-host campaigns still pending.",
+        "Read-only creator progress and bounded agent attempt history verified (runtime_read_models_validation, 39 distinct tests); contextual availability and aggregate metrics still pending.",
+        "UI, métricas, documentação e migração registradas em runtime_diagnostics_validation, acceptance-audit.md e critérios T31/T36. Pins/uv.lock e três artefatos instalados verificados; novo build Core necessário após correção do journal.",
+        "Final installed tuple verified: Nexus 0.3.0 (54 passed), Core 0.0.11 (187 passed), Connector 0.0.9 (99 passed); zero failures/errors/skips. Nexus campaign PASS, exit_code 0, changed_inputs []. Final wheel hashes and all installed package bytes rechecked against artifacts.json. Real local child Connector lifecycle, reconnect, graceful/abrupt restart, retained native stop, original operation recovery and commit cuts passed. Native providers are synthetic; this is not independent-host qualification.",
+        "User explicitly deferred independent-host T40 on 2026-10-14: use the local Connector now; test another host together after this stage. T40 is deferred by user, not passed or a blocker for completion of the current local scope."
+      ],
+      "remaining": []
     }
   },
   "criteria": {
     "INV-01": {
       "requirement": "A posse é definida pelo claim canônico; nenhuma tabela de agenda, reserva ou inbox estabelece outro dono.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/invariant-audit.md: Claim canônico único, CAS e composição em UoW; escala instalada de 100 candidatos e perda de resposta do claim. Evidência local; T40 e conclusão do tuple final permanecem gates separados.",
+        "Final installed campaign completed successfully; T40 deferred by user. See final_local_validation."
+      ]
     },
     "INV-02": {
       "requirement": "O runtime não invoca o modelo por um aviso competitivo. Apenas o vencedor recebe a execução do trabalho.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/invariant-audit.md: Aviso competitivo não cria conversa; só vencedor recebe trabalho. Campanha instalada testa ausência de chamadas nos perdedores. Evidência local; T40 e conclusão do tuple final permanecem gates separados.",
+        "Final installed campaign completed successfully; T40 deferred by user. See final_local_validation."
+      ]
     },
     "INV-03": {
       "requirement": "Falta de capacidade deixa o handoff `OPEN`; espaço em fila não equivale a disponibilidade.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/invariant-audit.md: Capacidade imediata precede claim; fila explícita não concede disponibilidade automática. Corrida da última vaga e pool cheio exercitados. Evidência local; T40 e conclusão do tuple final permanecem gates separados.",
+        "Final installed campaign completed successfully; T40 deferred by user. See final_local_validation."
+      ]
     },
     "INV-04": {
       "requirement": "MCP-only não precisa publicar ocupação para continuar elegível.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/invariant-audit.md: MCP-only mantém inbox e pode vencer antes do runtime reservado; capacidade desconhecida não o exclui. Evidência local; T40 e conclusão do tuple final permanecem gates separados.",
+        "Final installed campaign completed successfully; T40 deferred by user. See final_local_validation."
+      ]
     },
     "INV-05": {
       "requirement": "Um agente tem uma identidade lógica mesmo com várias sessões, executores ou acesso simultâneo por MCP.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/invariant-audit.md: Deduplicação por agent_id e resolvedor de executor; posse de claim/epoch vinculada à sessão. Native/MCP e sessão irmã testados. Evidência local; T40 e conclusão do tuple final permanecem gates separados.",
+        "Final installed campaign completed successfully; T40 deferred by user. See final_local_validation."
+      ]
     },
     "INV-06": {
       "requirement": "A reserva não concede permissão de claim, de execução ou de acesso ao payload.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/invariant-audit.md: Contrato de reserva sem payload/credenciais; autorização revalidada em claim/consumo/envio; payload pré-claim protegido. Evidência local; T40 e conclusão do tuple final permanecem gates separados.",
+        "Final installed campaign completed successfully; T40 deferred by user. See final_local_validation."
+      ]
     },
     "INV-07": {
       "requirement": "As validações atuais de target, audiência, dependências, grants, revisões e claim epoch permanecem obrigatórias.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/invariant-audit.md: Predicados canônicos de target/audiência/dependências e principal limitado preservados; revocation-audit.md mapeia cada revalidação. Evidência local; T40 e conclusão do tuple final permanecem gates separados.",
+        "Final installed campaign completed successfully; T40 deferred by user. See final_local_validation."
+      ]
     },
     "INV-08": {
       "requirement": "Evento, heartbeat, ACK de transporte, processo vivo e final de texto do modelo não significam conclusão canônica do handoff.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/invariant-audit.md: Final nativo é evidência técnica: conclusão/verificação/retorno ao dono seguem transições canônicas. Seis cenários de desfecho instalados aprovados. Evidência local; T40 e conclusão do tuple final permanecem gates separados.",
+        "Final installed campaign completed successfully; T40 deferred by user. See final_local_validation."
+      ]
     },
     "INV-09": {
       "requirement": "Efeito incerto nunca é convertido em falha sem efeito para autorizar repetição automática.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/invariant-audit.md: UNKNOWN não libera replay; provas independentes de recurso/stream/receipt são obrigatórias. Core corrigido mantém recusa sem claim no restart; 187 testes instalados aprovados. Evidência local; T40 e conclusão do tuple final permanecem gates separados.",
+        "Final installed campaign completed successfully; T40 deferred by user. See final_local_validation."
+      ]
     },
     "INV-10": {
       "requirement": "Mensagens normais e claims explícitos não perdem sua semântica de fila por causa desta feature.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/invariant-audit.md: Fila explícita e FIFO preservados; campanha instalada de compatibilidade tem 12 aprovados, campanha principal cobre ordem e fanout comum. Evidência local; T40 e conclusão do tuple final permanecem gates separados.",
+        "Final installed campaign completed successfully; T40 deferred by user. See final_local_validation."
+      ]
     },
     "T01": {
       "requirement": "100 candidatos runtime para um broadcast | Um claim vencedor; nenhuma invocação de modelo causada por esse aviso nos perdedores.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_handoff_broadcast_scale.py`: 100 agentes cadastrados e conectados pelas APIs, descoberta paginada e scheduler real; um claim, um grant de trabalho consumido, um open/turn nativo; 99 tentativas perdedoras encerradas. Provider sintético."
+      ]
     },
     "T02": {
       "requirement": "MCP vence durante reserva runtime | Nenhum dispatch runtime do handoff; todas as reservas perdedoras reconciliadas.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_handoff_runtime_candidates.py`: MCP-only vence com reserva runtime em curso; limpeza durável sem dispatch nativo."
+      ]
     },
     "T03": {
       "requirement": "Runtime vence antes do claim MCP | Erro de claim esperado ao MCP, sem nova execução; mesmo estado canônico.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_handoff_last_slot.py`: depois do vencedor runtime, claim MCP retorna `HANDOFF_ALREADY_CLAIMED`; permanece uma execução e um vínculo canônico."
+      ]
     },
     "T04": {
       "requirement": "Todos runtimes ocupados | Handoff permanece OPEN e consultável por MCP; nenhuma chamada produtiva enfileirada por candidato.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_handoff_last_slot.py`: host com uma vaga ocupada recusa outro trabalho; a tarefa continua disponível e pode ser assumida por MCP, sem fila produtiva runtime."
+      ]
     },
     "T05": {
       "requirement": "Capacidade liberada sem nova mensagem | Agenda reavalia automaticamente e assume trabalho pendente elegível.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_handoff_runtime_candidates.py`: liberação física publica capacidade e acorda o scheduler com backoff e varredura ainda congelados, sem nova mensagem."
+      ]
     },
     "T06": {
       "requirement": "Evento de capacidade perdido | Varredura limitada recupera, sem duplicar tentativa produtiva.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: Mesmo arquivo: sinal de wakeup descartado; avanço até a varredura limitada recupera o trabalho uma única vez."
+      ]
     },
     "T07": {
       "requirement": "`shared` ocupado | Sem nova sessão para contornar o bloqueio.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: Matriz de afinidades em `test_handoff_runtime_candidates.py`: shared ocupado não cria sessão alternativa."
+      ]
     },
     "T08": {
       "requirement": "`per_sender`, mesmo sender ocupado | Candidato não assume; mensagem direta continua no fluxo/ordem normal.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_handoff_message_order.py`: três mensagens diretas do mesmo sender usam uma sessão e executam em FIFO; o handoff permanece OPEN sem consumir grant enquanto cada turno/fila está ocupado, e só reserva/assume depois da terceira mensagem."
+      ]
     },
     "T09": {
       "requirement": "`per_sender`, outro sender | Pode abrir/reutilizar afinidade distinta respeitando teto físico.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: Matriz de afinidades: outro sender pode abrir sessão distinta quando há capacidade; teto físico validado pelo gate do Core."
+      ]
     },
     "T10": {
       "requirement": "`per_sender_session`, mesma origem | Sem concorrência na afinidade ocupada.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: Matriz de afinidades e `test_handoff_source_capacity.py`: mesma sessão autenticada de origem permanece ocupada."
+      ]
     },
     "T11": {
       "requirement": "Claude/s3 enquanto s1/s2 ocupadas | Codex elegível se há capacidade para s3.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_handoff_source_capacity.py`: três origens MCP autenticadas; a terceira executa enquanto os dois primeiros turnos seguem sem receipt terminal. Não é uma invocação dos providers Claude/Codex reais."
+      ]
     },
     "T12": {
       "requirement": "Origem ausente ou histórica | Fallback explícito; não fabricar sessões novas para aparentar capacidade.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_handoff_origins.py`: fallback histórico explícito e origem persistida na mesma transação; matriz de afinidades inclui ausência de origem."
+      ]
     },
     "T13": {
       "requirement": "Origem falsificada | Nenhuma afinidade privilegiada, acesso cruzado ou escape de limite.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_handoff_origins.py`: origem adulterada, prova ausente/incorreta, teto de ferramentas e permissão do agente."
+      ]
     },
     "T14": {
       "requirement": "One-shot no limite, fila com espaço | Não ganhar claim automático; claim explícito ainda pode usar fila.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_handoff_runtime_candidates.py` mais `test_one_shot_handoffs.py`: pool cheio não admite claim automático; claims explícitos preservam fila."
+      ]
     },
     "T15": {
       "requirement": "Instância warm compatível | Consumida sem slot contado duas vezes.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_reserved_handoff_admission.py` e candidatos warm: reserva/consumo reutilizam a mesma sessão e slot físico; duas instâncias warm executam independentemente."
+      ]
     },
     "T16": {
       "requirement": "Abertura fria com vaga | Reserva sem provider antes do claim; startup limitado depois de vencer.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_handoff_startup_deadline.py` e `test_initial_refusal_restart.py`: 19 casos finais aprovados (inclui 3 checks arquiteturais). Reserva fria sem provider antes do claim; deadline validado no despacho e na lease; abertura tardia local/remota contida; recusa inicial recupera mesma operação após cortes de persistência e reinício. Serviço automático executa tarefa nova sem replay da antiga. Provider sintético, Connector em processo separado."
+      ]
     },
     "T17": {
       "requirement": "Instância CLOSING ou parada incerta | Não liberar slot antecipadamente.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_handoff_startup_deadline.py`: CLOSING e abertura remota pendente conservam HOST_FULL até stop confirmado, sem close concorrente. Core `capacity-physical-retention-review.xml` (12 casos) mantém slots consumidos/efeitos incertos ocupados após expiração e reinício; finalizar turno não libera o processo. Atribuir slot provisório na recuperação não o libera. Evidência automatizada local."
+      ]
     },
     "T18": {
       "requirement": "Max_parallel zero, host cheio | Auto-claim indisponível; zero não é capacidade física infinita.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_handoff_runtime_candidates.py`: max_parallel=0 continua sujeito ao limite físico do host."
+      ]
     },
     "T19": {
       "requirement": "Duas tarefas disputam a última vaga | Apenas uma reserva efetiva; a outra tarefa permanece disponível para outros.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_handoff_last_slot.py`: duas origens/tarefas concorrentes, uma reserva efetiva; a perdedora permanece elegível por MCP. Limpeza confirma tombstone para a tentativa recusada após envio."
+      ]
     },
     "T20": {
       "requirement": "Mensagem direta chega entre assess/reserve/claim | Não rouba a reserva; preserva ordenação e enfileiramento da mensagem.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_reserved_handoff_admission.py`: mensagem anterior bloqueia claim; mensagem posterior não rouba reserva; controle segue disponível."
+      ]
     },
     "T21": {
       "requirement": "Mesmo agente com MCP e runtime | Um dono lógico e uma execução para o claim epoch; sem adoção silenciosa de claim alheio.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_reserved_handoff_tools.py`, revalidado na campanha Pi: mesma sessão vencedora usa MCP/native; sessão irmã não assume ou conclui o claim, sem novo dispatch."
+      ]
     },
     "T22": {
       "requirement": "Vários executores do mesmo agente | Resolver binding sem ambiguidade; não multiplicar identidades concorrentes.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_handoff_executor_selection.py`: dois Connectors em PIDs distintos, canais/journals reais e provider sintético. Catálogo histórico de dois bindings aprovados é preparado explicitamente, pois onboarding atual substitui a máquina anterior. Prioridade, grupo, ambiguidade, grant revogado, afinidade ocupada e sessão não reconciliada preservam uma identidade lógica e no máximo uma execução. `AMBIGUOUS_BINDING` é exposto como motivo específico."
+      ]
     },
     "T23": {
       "requirement": "Policy/grant/binding revogado entre passos | Recusa e compensação seguras; nenhum efeito sob autoridade antiga.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `revocation-audit.md` mapeia sete fronteiras de assess até primeira lease para policy/grant/binding (21 combinações), mais trabalho em andamento. `test_handoff_revocation_boundaries.py` também cobre sessão warm, resposta perdida, prova ausente/adulterada e rollback. `test_remote_unsent_capacity_release.py` confirma liberação da reserva original por Connector em processo separado, sem provider. A recusa após consumo agora deixa obrigação durável de release, sem compensar claim ou matar sessão warm."
+      ]
     },
     "T24": {
       "requirement": "Falha antes/depois de cada commit local | Estado recuperável; mesma tentativa/operação, sem novo efeito presumido.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `commit-boundary-audit.md` inventaria 21 fronteiras e suas lacunas. `criteria-admission-commit-cuts.xml`: seis cortes em RESERVING/RESERVED/CONSUMED, mesma tentativa/reserva/operação. `criteria-preopen-capacity-final.xml`: 16 aprovados, incluindo falhas repetidas na gravação da negação inicial, reinício antes/depois do commit, perda da resposta de release, recuperação anterior e arquitetura. Quatro casos adicionais de recusa inicial e sete do Core passaram nas campanhas relacionadas. Não há novo claim, epoch, lease ou efeito presumido para recuperar. T24 continua parcial para os demais commits inventariados.",
+        "T24 complemento: criteria-recovery-commit-cuts.xml (10 passed) e criteria-page-commit-cuts.xml (10 passed), commits reais antes/depois de observações de indisponibilidade/incerteza, compensação, agenda/renovação/finish, descoberta e retirement. Todos com saída terminal 0; nenhuma alteração de produto foi necessária.",
+        "Core: capacity-commit-cuts-final.xml 30 passed; capacity-gate-commit-cuts.xml 8 passed. Connector: publication-commit-cuts-final.xml 39 passed. Todos terminais exit 0. 46 cortes novos e 31 regressões existentes, total 77 casos distintos.",
+        "Remote preopen publication recovery gap reproduced end-to-end; see remote_preopen_recovery_validation. The Core fencing primitive is locally verified but not yet wired to Connector/Server, so T24 remains partial.",
+        "Previously reproduced preopen gap is now integrated and locally verified: preopen-extension-consumer.xml 14 passed; Core versioned extension preserves base R4 bytes, 67 tests passed and Connector 30 passed. Canonical creation/unblocking adds 4 passing commit cuts; initial unsent fence/release obligation adds 2. See dedicated ledger sections. Other inventoried boundaries remain partial.",
+        "Final consolidation supersedes earlier partial checkpoints: all 21 inventoried boundaries mapped in commit-boundary-audit.md; shared claim UoW participants confirmed without intermediate commit/host I/O. New Core refusal/migration, Nexus renewal/release and Connector release-store cuts passed in the final installed tuple. T24 locally verified; no claim of distributed ACID."
+      ]
     },
     "T25": {
       "requirement": "Perda da resposta da reserva | Consulta original; nenhum segundo slot vazado.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_handoff_runtime_attempts.py` cobre consulta da tentativa original após resposta perdida. `test_capacity_connector_process.py` perde a resposta na aplicação após commit real do ledger remoto, recupera a mesma identidade e comprova limite de uma vaga; reconnect/restart não substituem o ticket."
+      ]
     },
     "T26": {
       "requirement": "Perda da resposta de claim | Reutilização do claim/operação; nenhum novo epoch por retry.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_lost_reserve_response_restores_original_attempt_and_claim_after_restart` em `test_handoff_runtime_attempts.py`: perda da resposta depois do commit de CLAIM_COMMITTED, nova instância do serviço recupera exatamente operação/tentativa; epoch1 e um único consumo de grant, abertura e turno. Passou novamente em `criteria-revocation-regression.xml`. Recriação do serviço usa o mesmo banco; não é qualificação instalada."
+      ]
     },
     "T27": {
       "requirement": "Expiração antes do consumo | Recusa comprovadamente sem efeito; sem execução tardia com ticket expirado.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_remote_capacity_expiry.py`: três casos com daemon Connector em outro PID e HTTP/WebSocket reais, TTL real no ledger do Core. Expiração antes de lookup, entre lookup/consume e resposta de consumo perdida; mesma tentativa/operação compensada uma vez, OPEN no epoch1, nenhum provider. Frame tardio não ressuscita o ticket, e nova reserva confirma reutilização física. `criteria-remote-expiry.xml`: 3 aprovados. Tupla instalada permanece um gate separado."
+      ]
     },
     "T28": {
       "requirement": "Resultado nativo desconhecido | Não reapresentar automaticamente o trabalho a outro executor.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_handoff_executor_selection.py[unknown_native_reply]`: dois daemons Connector em PIDs distintos; provider recebe o turno e lança erro sem resposta. Core grava OUTCOME_UNKNOWN, Connector publica o fato exato sem derrubar a conexão. Depois de desconectar o vencedor e aumentar a prioridade do outro host disponível, descoberta recriada não adquire nova tentativa; claim/operação/epoch e um único envio são preservados, sem compensação. Connector `test_r4_execution.py` recusa fato ausente/hash divergente e permite outra sessão após publicar incerteza. Recuperação completa após desconexão continua em T29."
+      ]
     },
     "T29": {
       "requirement": "Reconexão e mensagens fora de ordem | Gerações antigas não restauram disponibilidade ou posse.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_handoff_executor_selection.py[unknown_reconnect]`: perda explícita de link após OUTCOME_UNKNOWN, lease real de 15s, novo owner/generation/boot e retorno a ready em dois processos Connector. A geração anterior não registra owner, publica observação, consome reserva nem remove o novo registro; claim/epoch/envio únicos. `criteria-generation-fences.xml`: 24 aprovados incluindo respostas fora de ordem, frames WebSocket com conexão antiga, ACK tardio, serial de lease concorrente e agenda/claim de geração anterior. Tupla instalada e T40 seguem gates separados."
+      ]
     },
     "T30": {
       "requirement": "Cancelamento durante processamento | Contenção e liberação confirmada; não declarar processo encerrado por timeout.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_remote_running_containment.py`: Connector em processo separado, native turn iniciado, grant revogado ou runtime.close solicitado pela API. Close nativo é retido por mais de 11s; ticket permanece RELEASE_PENDING, host recusa outro slot e Server não anuncia parada confirmada. Depois de liberar o close, receipt/obrigação chegam a SUCCEEDED/RELEASED, nova reserva comprova reutilização física, sem reabrir claim ou repetir envio. Dois casos finais aprovados em `criteria-reconnect-containment-final.xml`; T40 continua separado."
+      ]
     },
     "T31": {
       "requirement": "Native final sem handoff_complete | Não declarar COMPLETED; expor pendência de decisão.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `runtime_diagnostics_validation` no ledger: final nativo permanece aguardando decisão; projeção, HTTP e navegador real, inclusive epoch e TTL."
+      ]
     },
     "T32": {
       "requirement": "Conclusão sujeita a verificação | VERIFYING preservado; reprovação vai ao dono/retrabalho, não à disputa inicial.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_handoff_business_outcomes.py`: execução e final nativo precedem conclusão autenticada por MCP/native; VERIFYING exige decisão, pass conclui e fail conserva subject como dono no epoch2. Descoberta não reabre a disputa nem admite outra execução para o retrabalho. Limpeza antes do consumo continua coberta em `test_capacity_terminal_cleanup.py`."
+      ]
     },
     "T33": {
       "requirement": "Resultado duplicado | Uma aplicação canônica e notificação correspondente, sem relay duplicado.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: Mesmo arquivo: repetição de completion e verificação mantém uma transição/evento/notificação por desfecho, um resultado capturado e uma execução. Mesmo com conversation habilitado, o final nativo do auto-claim não gera relay adicional; conclusão/verificação preservam a regra de não notificar o próprio ator."
+      ]
     },
     "T34": {
       "requirement": "Handoff direto e mensagem broadcast comuns | Manter a semântica existente e o fanout intencional.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_handoff_ordinary_fanout.py`: mensagem comum alcança dois runtimes e deixa entrega MCP disponível para agente com sessão no workspace. Após respostas, handoff direto aciona somente o runtime alvo, sem tentativa automática de broadcast nem claim implícito."
+      ]
     },
     "T35": {
       "requirement": "Texto de usuário imita aviso de controle | Não vira trigger de auto-claim.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_handoff_runtime_notifications.py`: texto imitando aviso permanece mensagem comum, sem auto-claim por regex."
+      ]
     },
     "T36": {
       "requirement": "Reinício com backlog antigo | Migrar/classificar somente avisos comprovados e não despachados; preservar efeitos incertos.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_handoff_notice_migration.py` aplica o schema 133 até 139 e reexecuta sem alterações: texto imitado não vira controle, históricos admitidos/incertos e inbox permanecem intactos. `test_handoff_notice_retirement.py` cobre fence RESERVED/SENDING/RECONCILING, rollback, ACK MCP e fila anterior. `test_handoff_notice_lifecycle.py` verifica dois ciclos reais de startup preservando OUTCOME_UNKNOWN e tentativas anteriores, além de reinício sem replay. Campanha final de fontes: `criteria-fifo-backlog-final.xml`; pacote instalado segue pendente.",
+        "Final installed Nexus campaign includes notice lifecycle/restart: passed. See final_local_validation."
+      ]
     },
     "T37": {
       "requirement": "Runtime sem novo contrato | Motivo explícito; não acionar LLM para contornar ausência de capacidade.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: Candidatos recusam contrato ausente ou apenas parte das extensões de contenção; nenhum fallback por invocação nativa."
+      ]
     },
     "T38": {
       "requirement": "Prioridade/FIFO do pool | Broadcast automático não ultrapassa consumidores com reserva/direito anterior.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_handoff_pool_priority.py`: uma mensagem one-shot em execução e duas na fila têm precedência sobre broadcast automático. Scheduler efetivo é exercitado antes/depois de cada resposta e recriado em um dos casos; nenhum claim/grant/call produtivo para o broadcast antes de drenar os três consumidores. Depois, um único claim/turno no epoch1. `test_pool_immediate_admission.py` cobre adaptadores SQLite/memória, reserva warm/cold e consumidores em preparação. Os 44 casos da campanha FIFO/backlog/arquitetura passaram."
+      ]
     },
     "T39": {
       "requirement": "Host local e Connector em processos distintos | Mesmos contratos, limites e recuperação; nenhuma dependência de memória compartilhada.",
-      "status": "pending",
-      "evidence": []
+      "status": "local_verified",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: `test_capacity_connector_process.py`: dois casos aprovados, daemon Connector em processo filho, HTTP/WebSocket reais e journals distintos. Perda de resposta, reconnect, reinício normal/queda abrupta com ticket não consumido, execução única, close confirmado e nova reserva após liberar capacidade. Descoberta/provider sintéticos; ainda não qualifica build instalado nem outra máquina.",
+        "Both graceful/abrupt Connector process cases passed again in the final installed Nexus campaign, using the corrected Core wheel. Provider remains synthetic; same machine."
+      ]
     },
     "T40": {
       "requirement": "Campanha em host remoto independente | Exercitar canal real, perda de conexão, restart e contenção; registrar versões/evidências.",
-      "status": "pending",
-      "evidence": []
+      "status": "deferred_by_user",
+      "evidence": [
+        "plans/handoff_broadcast_runtime/acceptance-audit.md: Host independente/acesso já solicitado e registrado no ledger. Teste em loopback não substitui este critério.",
+        "User explicitly deferred independent-host T40 on 2026-10-14: use the local Connector now; test another host together after this stage. T40 is deferred by user, not passed or a blocker for completion of the current local scope."
+      ]
     }
   },
   "entries": [
@@ -545,6 +668,205 @@
     ],
     "remaining": "Productive scheduler acquisition/consumption shutdown ordering and post-consumption compensation are still gated off; notice maintenance is wired and tested. H5/H6 and full T39/T40 remain. All changes since 2f81022 remain local. No changes to installed services, commits or pushes."
   },
+  "capacity_compensation_validation": {
+    "status": "in_progress",
+    "implementation": "After user-authorized checkpoint 8a743a0: migration137 retains terminal admission/attempt identities and exact host proof. The application queries the original ticket before consuming, accepts only matching unconsumed EXPIRED_UNCONSUMED/RELEASED evidence and compensates canonical claim, attempt, operations and pool call in one SQLite UoW through ports. Revoked automation retires an unused ticket using cleanup authority. Cold unstarted sessions close locally; warm one-shot resources remain occupied until the existing close owner proves disposal. Internal work envelopes retain push ownership without fabricated ACK or duplicate error replies. Missing history, mismatched/stale proof, consumed tickets, changed claims and crossed send fences retain uncertainty.",
+    "evidence": [
+      "h5-capacity-compensation.xml: 8 passed, 1 fixture failure; attempted stale revision zero violates the Core DTO itself. Changed fixture to store a newer observation and replay an older positive revision.",
+      "h5-capacity-regression.xml: 12 passed in 71.97s; existing cold/warm reserved admission, lost consume response, scheduler original-ID recovery and architecture checks.",
+      "h5-capacity-compensation-followup.xml: 8 passed, 1 assertion failure; post-compensation late consume is refused earlier by the canonical FAILED/CLOSED session gate as RECOVERING. Updated assertion to require that rejection plus original terminal host lookup with no consumption.",
+      "h5-capacity-one-shot.xml: 2 passed in 15.31s; cold/warm one-shot cancellation, physical slot disposal, no model prompt and no duplicate error notification.",
+      "h5-capacity-revoked.xml: 3 passed in 16.82s; active HELD and expired reservations clean up after automation revocation; expiration during consume is compensated and late consume remains denied.",
+      "h5-capacity-final.xml: 17 passed in 112.28s; full then-current compensation cases plus lost-response scheduler regressions, before the final exact-operation hash fence.",
+      "h5-capacity-scheduler.xml: 1 passed in 13.90s; real discovery/scheduler reconstructs after compensation, creates a new attempt at claim epoch2, and executes exactly one native turn while preserving the old attempt and proof.",
+      "h5-capacity-reset-recovery.xml: 28 passed in 266.03s; nonempty migration131/132 row preservation through migration137, terminal attempt constraints and FKs, connection-preserving resets, existing operator handoff recovery and architecture boundaries.",
+      "h5-capacity-operation-fence.xml: 6 passed, 1 fixture failure; wrong-hash fixture omitted the required sha256: prefix and failed DTO parsing before the operation fence. Corrected to a valid but mismatched hash. Cold/warm cancellation and changed claim/send fence passed on the exact-operation implementation.",
+      "h5-capacity-fence-final.xml: 7 passed in 28.05s; changed claim, crossed send fence and valid-but-mismatched operation hash all roll back compensation and preserve uncertainty, plus import and canonical I/O boundaries. All test handles completed. Final changed-file Python syntax, ledger JSON and whitespace checks passed."
+    ],
+    "remaining": "Later terminal/unstarted-consumption handling is recorded in capacity_terminal_cleanup_validation. Started native failure containment/release, productive scheduler startup/shutdown ordering, UI/readmodels and H6/T39/T40 remain. Current changes are local only; no restart, installation, commit, push or productive activation after 8a743a0. Grant usage history is preserved, not refunded by this compensation."
+  },
+  "capacity_terminal_cleanup_validation": {
+    "status": "in_progress",
+    "implementation": "Nexus preserves public cancellation semantics: only OPEN handoffs can be cancelled by the creator. Completed/rejected/VERIFYING decisions and newer rework epochs survive cleanup of an unused old admission without a reopen event or new claim. Core explicitly releases consumed-but-unstarted tickets by an atomic gate transaction, retaining original consumption/binding history. It frees only the exact cold placeholder or unused next-turn hold; started opening/turn resources remain RELEASE_PENDING. Nexus accepts this RELEASED evidence only together with its exact local unsent-operation proof, never from consumption/release state alone. No timer expires consumed work. Connector uses the same Core adapter and unchanged capacity-v2 wire schema.",
+    "evidence": [
+      "Nexus h5-capacity-terminal-cleanup.xml: 6 passed, 4 fixture failures; verification feature flag was not enabled for verifiable handoff creation. h5-capacity-terminal-followup.xml: 8 passed in 44.42s after enabling the existing flag in those scenarios; public reject/complete/verify/fail decisions retain their state and epoch with either expired or released holds.",
+      "Core capacity-unstarted-release.xml: collection failed against installed old Core, before tests ran. Reissued with explicit local src. capacity-unstarted-release-local.xml: 27 passed, 3 fixture errors from passing keyword-only intent_hash positionally; corrected calls.",
+      "Core capacity-unstarted-release-final.xml: 67 passed in 7.30s; unstarted cold/warm holds release with retained history and reject late operations; started opens/turns remain occupied; original cancellation, scope, recovery, physical ledger, facade, control and operation-lookup regressions passed. Updated previous consumed-but-unstarted expectations; retained started-resource containment assertions.",
+      "Connector capacity-unstarted-release.xml: 55 passed in 7.60s against local Core0.0.11. Real single-reader R4 control consumes/releases/queries the original unstarted ticket without native launch; namespace isolation, authority, composition and boundary regressions passed. This is an in-process wire fixture, not independent remote T40 evidence.",
+      "Nexus h5-capacity-terminal-races.xml: 29 passed in 179.76s; original compensation cases plus public creator cancellation before claim, lost reserve reply, terminal/verification/rework cleanup and decisions before/after consumption or lost consume response. Exact native count stays zero for retired work; original consumed IDs and released physical state remain inspectable.",
+      "Nexus h5-capacity-terminal-regression.xml: 16 passed in 132.63s; normal reserved execution, lost-response scheduler retries, public canonical work lifecycle, import and canonical I/O boundaries.",
+      "Nexus h5-capacity-consumed-one-shot.xml: 4 passed in 35.62s; warm/cold one-shot disposal for both expired holds and consumed-but-unstarted released tickets. No work prompt or duplicate error message; physical slot removal waits for owner confirmation.",
+      "Core capacity-unstarted-release-regression.xml: 45 passed in 5.59s; actual RuntimeCore productive gates, owned slots, change publication, codec and frozen bundle checks. capacity-unstarted-release-races.xml: 8 passed in 1.16s on final source; both opening and turn acquisition race release through independent SQLite ledgers. Only the acquisition winner retains a resource; delayed acquisition after release is refused."
+    ],
+    "remaining": "Started native effects still require retained containment/release ownership and canonical outcome reconciliation. Productive scheduler lifecycle activation, full T39/T40 and H6/UI/readmodel qualification remain. All process handles in this campaign completed; changes after 8a743a0 remain local in Nexus/Core/Connector. Manifest versions/branches remain Nexus0.3.0, Core0.0.11 and Connector0.0.9, both consumers pin Core0.0.11. No live restart, reinstall, commit, push, merge, tag or publication."
+  },
+  "pi_handoff_claim_validation": {
+    "status": "local_verified",
+    "evidence": [
+      "Read-only live investigation: at 2026-10-14T02:48:32Z, Pi supplied claim_epoch=1 for an OPEN handoff at epoch0. The native session capability included handoff.claim and handoff.complete; agent permissions were NULL (default allow). The handoff retained a nonempty payload, withheld from pre-claim context by design. No live credentials, configuration or domain state changed.",
+      "Installed source confirms optional claim_epoch selects same-session recovery before claim ownership exists; installed Core extension only provided generic handoff descriptions. Local Server now returns VALIDATION_ERROR for OPEN+epoch after authority/eligibility checks; Core explains omission, returned epoch and payload visibility. Existing-session possession checks remain.",
+      "Core build/pi-handoff-permissions.xml: 20 passed in 3.72s; actual Node extension over a loopback socket, absent epoch forwarded unchanged, action scope, revocation, confirmed rejection and uncertain replies.",
+      "Nexus build/handoff-broadcast/pi-handoff-permissions.xml: 81 passed, 1 test assertion failure in 369.34s. Native and MCP scope/permission/revocation, claim ownership and embedded/Connector bridge cases passed. The new test expected an object instead of the existing serialized payload contract; corrected the assertion to decode JSON without changing production behavior.",
+      "Nexus build/handoff-broadcast/pi-handoff-claim-final.xml: 1 passed in 8.06s after that assertion correction. OPEN+invented epoch has no claim effect, corrected request claims and receives payload, and exact-epoch completion succeeds. All process handles completed; Python syntax, ledger JSON and whitespace checks passed.",
+      "Follow-up verification on current local sources: Core build/pi-handoff-recheck.xml: 20 passed in 3.69s; Nexus build/handoff-broadcast/pi-handoff-recheck.xml: 36 passed in 176.67s. Covers the actual Pi JavaScript extension, native bridge authorization and revocation, OPEN claim epoch validation, native/MCP session ownership, reserved winners on warm/cold sessions, sibling refusal and verification outcomes. Both processes exited successfully; no live execution, installation, restart, commit or push.",
+      "Additional user-requested Pi permission recheck: Core build/pi-permission-recheck.xml: 7 passed in 1.30s; Nexus build/handoff-broadcast/pi-permission-recheck.xml: 36 passed in 249.02s; Nexus build/handoff-broadcast/pi-domain-permission-recheck.xml: 11 passed in 69.83s. All 54 selected tests passed: actual Node extension, OPEN claim epoch guidance/validation, native/MCP winner ownership, sibling refusal, agent work denial despite injected tools, capability ceilings, revocation and workspace isolation. This recheck used isolated automated fixtures, not a live Pi model invocation. All processes exited; installed instance unchanged.",
+      "Current focused recheck: installed database still grants Pi handoff.get/claim/complete with no agent permission override. Nexus build/handoff-broadcast/pi-focused-current.xml: 3 passed in 16.11s (OPEN invented epoch then claim/complete, action permission ceiling, cross-workspace/session rejection). Core build/pi-extension-source-current.xml: 7 passed in 1.16s including actual JavaScript extension/socket. Initial Core invocation without src on sys.path loaded the installed old extension and failed the new guidance assertion (1 failed, 6 passed); explicit source invocation passed. This confirms the distinction between corrected local source and the installed package. No live mutation or restart.",
+      "User-requested Pi verification: Core build/pi-user-verification.xml: 7 passed in 1.64s; Nexus build/handoff-broadcast/pi-user-verification.xml: 29 passed in 131.00s. Actual Pi JavaScript extension and complete native-action suite cover initial claim guidance, domain permission checks, revocation, session/workspace ownership, MCP/native interoperability and durable replay. Installed build/one-shot-install still contains Core 0.0.10 without the updated claim guidance. No live model invocation, reinstall or restart.",
+      "Latest review confirmed the 29 Nexus and 7 Core Pi verification cases have zero failures/errors in their JUnit reports. Installed package metadata remains Core 0.0.10; no deployment or live state change performed.",
+      "Installed tuple recheck: build/handoff-tuple-installed/pi-handoff-diagnosis.xml: 3 passed in 30.54s using isolated Python -I and installed Nexus/Core wheels. Confirms OPEN+invented epoch validation without claim mutation, corrected claim/completion lifecycle and native permission ceiling. Live database read-only trace reconfirmed original Pi call at 2026-10-14T02:48:32Z supplied claim_epoch=1. No user-instance mutation or deployment."
+    ],
+    "remaining": "102 distinct tests passed across the final local source. These are automated local scenarios, including a real Node extension socket and embedded/Connector adapters; no new live model handoff was sent. Local changes only; no reinstall, restart, commit or push. The installed Pi extension still needs deployment with the reviewed build."
+  },
+  "winner_session_tools_validation": {
+    "status": "local_verified",
+    "implementation": "Automatic claims now bind the exact admitted turn/session scope to execution_tool_claims in the original admission transaction. ExecutionClaimRepository separates application ownership checks from its SQLite adapter. Native and MCP support same-session claim recovery without another dispatch; managed handoff_get and native payload replay do not expose another session's payload. Ordinary messages create no claim authority; queued one-shot work binds only after actual admission. No change to canonical key authority or physical release semantics.",
+    "evidence": [
+      "h5-winner-tools.xml: 1 passed, 4 fixture failures. Two cold scenarios completed all authorization checks before inspecting the factory's replacement sibling peer instead of the original winner. Warm scenarios enabled the capacity extension after creating the runtime, so that runtime correctly reported CAPACITY_PROTOCOL_UNSUPPORTED. Corrected peer retention and enabled capacity before opening.",
+      "h5-winner-tools-followup.xml: 9 passed in 102.66s. Cold and reused sessions over native and MCP admit a single winner, deny sibling claims/completion and payload, allow winner recovery/completion, retain RELEASE_PENDING for an active turn, and roll back the entire claim on scope persistence failure. Import and canonical I/O boundaries passed.",
+      "h5-winner-tools-regression.xml: 59 passed in 456.20s. Native/MCP session authorization, revocation, replay, original one-shot queue behavior and canonical work lifecycle, including pending business completion and verification/rework.",
+      "h5-winner-tools-final.xml: 15 passed in 238.57s. Winner tools, cold/reused session isolation, VERIFYING through native and MCP, retained reservation after transactional scope-write failure and retry, deferred one-shot scope assignment and original reserved admission cases. No duplicate productive operation or premature physical release.",
+      "h5-winner-tools-recovery.xml: 3 passed, 1 failure in 53.62s. Native replay across application reconstruction and expired-payload protection passed. Scheduler restart produced four attempts instead of two; investigation found cross-generation cancellation, fixed and independently reproduced as recorded below."
+    ],
+    "remaining": "Historical already-admitted claims without a recorded scope need an explicit migration/recovery policy; no silent cross-session adoption. Started-native cleanup, rejection surface parity, productive scheduler lifecycle, UI/readmodels and H6/T39/T40 remain. All test processes completed. No live restart, reinstall, commit or push."
+  },
+  "schedule_generation_fence_validation": {
+    "status": "local_verified",
+    "implementation": "Recovery candidate pages and active-attempt lookup are now scoped to the schedule claim_generation. A delayed old schedule page cannot discover/cancel a new generation's WAITING candidate after no-effect compensation. Canonical CAS and one-active-candidate uniqueness remain unchanged.",
+    "evidence": [
+      "The failing recovery database contained one compensated admission, two unreserved candidates cancelled by an old generation, and one new committed admission. The test failed before its wait_receipt, then host teardown logged STALE_OBSERVATION. No live instance was involved.",
+      "h5-schedule-generation-before-fix.xml: expected failure in 8.39s. Loaded the repository class from HEAD in memory only, preserving other current code; the deterministic old-page test returned the new candidate instead of settling. No file or installed-code rollback.",
+      "h5-schedule-generation-fence.xml: 28 passed, 1 fixture failure in 152.38s. Deterministic generation isolation, original strict two-attempt restart, candidate affinity/pool/discovery and scheduler lifecycle tests passed. The small in-memory paging fixture omitted claim_generation; extended its schema and added an active candidate from a different generation.",
+      "h5-schedule-generation-pages.xml: 5 passed in 16.39s. Bounded rotating logical-agent pages exclude the unrelated generation; import and canonical I/O boundaries pass. Final syntax/ledger/whitespace checks passed."
+    ],
+    "remaining": "This fixes generation-local candidate cleanup, not the remaining started-native containment or productive scheduler lifecycle activation. Changes remain local pending user review."
+  },
+  "running_work_lease_validation": {
+    "status": "local_verified_remote_pending",
+    "evidence": [
+      "Added application RunningHandoffRepository port and ExecutionWorkLeaseAuthority with SQLite adapter. Embedded lease renewal revalidates the original active work grant/automation proof through RuntimeWork; no repeated execution budget consumption, simulated operator or native I/O in the transaction.",
+      "Embedded renewal denial now starts the existing retained per-session recovery owner. A delayed or failed stop no longer escalates into agent-wide containment. Capacity remains occupied until Core confirms physical release; canonical claim/epoch and uncertainty are not compensated as if execution never started.",
+      "build/handoff-broadcast/h5-running-work-leases.xml: 12 passed in 76.29s. Covers work/automation revocation after native submission, a delayed failing stop with concurrent sibling work and original-owner retry, business completion/verification, terminal history, existing denied renewals and first-failure diagnostics.",
+      "build/handoff-broadcast/h5-running-work-leases-final.xml: 9 passed in 73.26s. Work-grant revocation uses the public authenticated DELETE route; delayed-stop test retains cleanup through assertion failure. Existing control/renewal and capacity-wait cases passed.",
+      "build/handoff-broadcast/h5-running-work-decisions.xml: 7 passed in 72.04s. Each case first renews a valid running handoff. Rejection and verification/rework contain the old native epoch while preserving the canonical decision; completed native history does not poison subsequent ordinary work in the same session.",
+      "build/handoff-broadcast/h5-running-work-tools-boundaries.xml: 11 passed in 89.94s. Real reserved winner/sibling scope tests pass for cold/reused sessions via native and MCP, including verification and transactional rollback; architecture/import and native-I/O transaction boundary checks passed. All test processes terminated; 35 modified/new Python files parsed, ledger JSON and git diff --check passed."
+    ],
+    "remaining": [
+      "Negotiated remote work-lease enforcement is now implemented and locally verified; see negotiated_work_containment_validation. Complete independent lifecycle qualification remains pending.",
+      "Renewal uses the existing lease cadence, not an immediate revocation scheduler. Productive scheduler lifecycle, started-work recovery across restart, historical claim scope policy, reject tools, real-provider and independent remote campaigns remain pending. H5 is not complete.",
+      "All edits are local. No installed service changes, reinstall, restart, commit or push."
+    ]
+  },
+  "remote_lease_denial_validation": {
+    "status": "in_progress",
+    "evidence": [
+      "Core adds independently negotiated nexus-lease-denial-v1 with strict nested original R4 renewal request, bounded codec, pinned schema/manifest, 3 valid and 8 invalid fixtures. Existing immutable R4 bytes are unchanged. A refusal never proves native release.",
+      "Core build/lease-denial-contract.xml: 29 passed in 1.75s. Includes strict codec/bundle/negotiation, ambiguous JSON, secret/foreign fields, bundle drift and existing capacity contract/control cases.",
+      "Connector build/lease-denial-transport.xml: 24 passed and 6 fixture assertion failures in 3.49s. Invalid correlation correctly fenced the reader, but callers receive the established CONTROL_DISCONNECTED while the reader retains the precise cause; assertions initially expected the internal CoreError directly. Corrected the test to assert both public error and exact retained cause, without changing production behavior.",
+      "Connector build/lease-denial-transport-final.xml: 30 passed in 2.51s. Real single-reader R4 transport correlates grant/commit-barrier denials, preserves concurrent healthy lease/operation, rejects session/grant/serial/channel/request substitution and unnegotiated frames, retains a cancelled observer's original producer, and passes previous transport regressions.",
+      "Nexus build/handoff-broadcast/h5-lease-denial-server.xml: 4 passed in 20.00s. Authenticated WebSocket tests cover negotiated/legacy replies and revocation before grant or before applied confirmation, without applying an invalid lease or changing the healthy session's request.",
+      "Connector build/lease-denial-containment.xml: 13 passed and 1 fixture assertion failure in 19.24s. The new test used the embedded peer's two-element send tuple rather than the Connector peer's four-element tuple. Follow-up also replaces the fixture's shared Native object with two distinct peers and starts real Core work before revocation.",
+      "Connector build/lease-denial-containment-final.xml: 1 passed in 4.52s. A denied session retains its stop through a forced failure/retry, keeps both physical slots occupied before proof, executes an independent sibling turn, then releases only the denied native runtime. No new opening or synthetic close/success is created.",
+      "Connector build/lease-denial-owner-regression.xml: 50 passed in 48.86s across existing execution, daemon ownership, lease renewal and scoped containment. Nexus build/handoff-broadcast/h5-lease-denial-server-regression.xml: 17 passed in 93.90s across existing R4 lease/application/dispatch and new negotiated WebSocket cases.",
+      "Built Core build/lease-denial-dist/okto_nexus_connector_core-0.0.11-py3-none-any.whl with --no-isolation. First python -I resource smoke lacked the dependency rfc8785 because user site is excluded. Repeated with one explicit dependency root, asserting Core was imported from the wheel: lease-denial and capacity-v2 bundles/fixtures passed; immutable R4 manifest SHA256 remains 03458c596473bbefa673ff975b9da4d5bf3f0242406343565b8c31d1aa8d6bd7. This is resource packaging evidence, not installation/live-provider qualification."
+    ],
+    "remaining": [
+      "Durable containment, live release/outbox, generation recovery and initial/queued refusal are implemented; see their respective validation entries. Automatic negotiation and paired remote work enforcement are recorded in negotiated_work_containment_validation.",
+      "Exercise cancellation/shutdown/restart, original-ID recovery, changed source generations, publication/ACK loss, queued operations and real/independent remote providers before productive activation. H5/H6 and the complete goal remain unfinished.",
+      "Nexus feature/v0.3.0 version 0.3.0, Core feature/v0.0.11 version 0.0.11, Connector feature/v0.0.9 version 0.0.9. No commit, push, installation change, server restart or live activation."
+    ]
+  },
+  "session_containment_obligation_validation": {
+    "status": "local_verified_live_channel_release_pending",
+    "evidence": [
+      "Migration 138 retains one obligation per original session/owner generation, including the opening operation/hash and original denial request. REQUESTED cannot become RELEASED without recorded proof/time. Existing runtime history and the immutable R4 contract are preserved.",
+      "ExecutionSessionContainment defines the application port and immutable target DTO; SqliteSessionContainmentRepository implements durable correlation. Authenticated negotiated renewal denials persist before publication, including failure at the applied-confirmation barrier. Initial/foreign/stale requests cannot create arbitrary containment targets.",
+      "Lease renewal, productive dispatch and MCP/native capability authority reject pending containment. Restored grant authority cannot resurrect the session; sibling sessions retain lease availability. Authenticated interrupt/close controls remain available.",
+      "Existing reconnect reconciliation commits obligation release in the same transaction as verified original resource/stream projection. Bad digest, unknown/wrong generation, missing stream progress and changed receipt high water leave it pending. Injected failure after the obligation update rolls back session/executor readiness and the obligation together; no synthetic close or native outcome is written.",
+      "build/handoff-broadcast/h5-session-containment-obligation.xml: 10 passed in 33.32s (initial obligation, negotiated/legacy lease denial and import boundaries).",
+      "build/handoff-broadcast/h5-session-containment-release.xml: 52 passed in 196.76s (six new release/rollback cases and complete existing reconciliation regressions).",
+      "build/handoff-broadcast/h5-session-containment-authority.xml: 16 passed in 71.73s (three obligation cases plus existing R4 lease/dispatch regressions).",
+      "build/handoff-broadcast/h5-session-containment-obligation-final.xml: 6 passed in 16.69s after strengthening original-request replay, native/MCP capability refusal, pre-send dispatch refusal and database proof constraints; includes import boundary checks.",
+      "Control test initially failed in h5-session-containment-controls.xml (37.82s) because it required SUCCEEDED for interruption, while the fixture correctly returns SUBMITTED. The second run h5-session-containment-controls-final.xml (9.89s) reached successful close but asserted interrupt_turn instead of the existing Core verb interrupt. Corrected only test expectations and correlated the native call with its exact operation ID.",
+      "build/handoff-broadcast/h5-session-containment-controls-verified.xml: 1 passed in 8.72s. Actual embedded Core dispatch reached native interrupt and confirmed close despite the seeded pending obligation. Total coverage for this step is 76 distinct passing cases; this is local automated evidence, not a real remote-provider campaign."
+    ],
+    "remaining": [
+      "live_session_release_validation now covers the negotiated release codec, Server live-channel acceptance, bounded reader-independent workers, correlated Connector transport and public-Core proof builder. Wire durable release publication/recovery into the execution owner before enabling automatic negotiation or the remote work-lease guard; existing reconnect reconciliation remains the recovery path.",
+      "lease_refusal_validation now covers queued renewal refusals and initial denials using durable original no-effect facts. Complete negotiated remote integration, remaining cancellation/shutdown/restart cuts and independent-host qualification before productive activation.",
+      "H5/H6 and the full plan remain incomplete. No commit, push, installation change, restart or live activation was performed."
+    ]
+  },
+  "live_session_release_validation": {
+    "status": "owner_publication_recovery_and_denied_operations_verified_remote_activation_pending",
+    "evidence": [
+      "Core adds separately negotiated nexus-session-release-v1: strict release/accepted/deferred frames, full original-request correlation, pinned manifest/schema, 3 valid and 10 invalid fixtures. A streaming operation-ID ordered digest covers every byte of latest canonical receipts without an unbounded list. Existing R4 manifest remains unchanged.",
+      "Nexus ExecutionSessionRelease uses an application observation DTO/repository port. Full original-resource and receipt history validation occurs in a read snapshot; a compact revision comparison in a short writer transaction detects receipt, operation, ownership and stream changes before closing/projecting the exact original session and obligation. No handoff outcome or close receipt is fabricated.",
+      "The authenticated WebSocket routes release validation to at most four retained workers, deduplicates identical pending requests, defers excess requests, and joins producers before releasing connection ownership. A held historical receipt read does not hold the SQLite writer or prevent a sibling session from receiving a lease.",
+      "Connector single-reader transport validates ACK/deferred correlation against the complete original report, retains one producer through observer cancellation, retries identical bytes/ID after ACK timeout, and tolerates exact duplicate replies. Foreign request IDs, session, source generation, stream sequence and digests fence invalid replies instead of confirming another session.",
+      "Core Journal.get_session_claim exposes exact immutable opening history without scanning unrelated sessions. Connector R4SessionReleaseReporter uses that public getter, the public owned-slot proof, bounded acknowledged publication pages, current Core receipt projections and both event ACK cursors; it refuses live/uncertain slots, stale/unpublished receipts and undrained streams. It is a proof builder, not yet wired to automatic owner publication.",
+      "Core build/session-release-contract.xml: 16 passed in 1.37s. build/session-release-claims.xml: 29 passed in 2.69s, including exact claim lookup after reopening, namespace isolation, existing multi-process claims, receipt digest validation and contract tests.",
+      "Connector build/session-release-transport.xml: 40 passed in 2.99s across new release transport, existing R4 connection and correlated lease-denial cases.",
+      "Connector reporter test initially failed in build/session-release-reporter.xml (4.96s), reporter-diagnostic.xml (4.81s), and reporter-trace.xml (4.74s). Trace identified LEASE_REVALIDATION_REQUIRED in the healthy sibling's synthetic lease installation: the shared test clock advanced 0.8 seconds for every concurrent request, double-counting simultaneous renewal time. Changed only the fixture to track prior request time per session; production lease deadline/reducer checks were preserved.",
+      "Connector build/session-release-reporter-renewal.xml: 14 passed in 22.22s. The actual Core test holds and fails the denied peer's first stop, runs an independent sibling, confirms only the denied slot is released, then builds a stable proof covering its own open/turn while the sibling remains live. Missing/foreign claims and event cursor mismatch are rejected; no global claim scan occurs.",
+      "Nexus build/handoff-broadcast/h5-live-session-release.xml: 11 passed in 55.01s. After read-snapshot/CAS and bounded worker integration, h5-live-session-release-final.xml: 21 passed in 97.02s including wrong/missing proof/receipt/scope/epoch, lost ACK replay, a real concurrent writer invalidating the commit, slow history with independent lease issuance, retained worker shutdown, legacy lease replies and import boundaries. h5-live-session-release-rollback.xml: 1 passed in 7.15s for failure after obligation update, preserving READY/REQUESTED and returning deferred instead of ACK.",
+      "Built Core build/session-release-dist/okto_nexus_connector_core-0.0.11-py3-none-any.whl. An isolated Python import from that wheel with one explicit installed-dependency root verified session-release, lease-denial, capacity-v2 fixtures and the unchanged R4 manifest sha256:03458c596473bbefa673ff975b9da4d5bf3f0242406343565b8c31d1aa8d6bd7. This is packaging evidence, not a fresh installation or real remote-provider qualification."
+    ],
+    "remaining": [
+      "session_release_outbox_validation and session_release_recovery_validation cover retained owner publication and exact old-channel retirement after authenticated global reconciliation. Full independent-process/host restart qualification remains; do not replay old reports using new channel identities.",
+      "lease_refusal_validation covers original no-effect outcomes for queued renewal/initial denials. Integrate and qualify automatic extension negotiation and remote work-lease authority together before productive activation.",
+      "Complete productive scheduler/lifecycle integration, real mixed/independent-host campaign and remaining H5/H6 gates. Preserve full plan scope. No commit, push, installation, restart or live activation."
+    ]
+  },
+  "session_release_outbox_validation": {
+    "status": "local_owner_and_new_generation_recovery_verified",
+    "evidence": [
+      "Connector R4SessionReleasePublisher uses a SessionReleaseOutbox port. The SQLite adapter commits exact report bytes and digest before sending, allows only one pending observation per original scope/channel, validates complete reply correlation, and keeps deferred/accepted observations. Unknown replies or failed ACK commits retain the original report; only a correlated deferred reply allows another observation. Reporter IDs now include receipt/stream/proof history so distinct observations never reuse an ID.",
+      "R4ExecutionOwner invokes publication only when nexus-session-release-v1 was explicitly negotiated and only after confirmed Core shutdown and native-tool drain. Physical containment and Server acknowledgment are separate flags. Publication retries do not repeat native shutdown or stop a healthy sibling. Automatic negotiation and remote work-lease enforcement remain disabled pending the remaining lifecycle cuts.",
+      "Transport publication accepts an owner stop event: explicit shutdown drains its retained request without waiting indefinitely for ACK and without closing the shared channel. Observer cancellation still retains the producer. Late exact replies after retirement cannot falsely settle the local outbox, nor fence an unrelated session; original-byte retry remains possible.",
+      "Connector build/session-release-outbox.xml: 22 passed in 7.19s (initial outbox, new transport shutdown and existing contained-session proof).",
+      "Connector build/session-release-owner-integration.xml: 82 passed in 54.88s. Includes actual Core journal/ledger with synthetic independent native peers; held release ACK allows sibling turn execution, owner shutdown preserves pending publication, failed native stop retains only the affected session, plus existing execution/daemon/renewal/R4 transport/denial regressions.",
+      "Connector build/session-release-outbox-final.xml: 22 passed in 2.31s after adding a real SQLite trigger fault at local ACK commit. Reconstructed publisher resends the original already-accepted report; it does not ask the reporter for a new observation. Scope/generation isolation, changed ID bytes, corrupted durable state and deferred supersession are covered. Together with owner integration, 104 distinct tests pass."
+    ],
+    "remaining": [
+      "session_release_recovery_validation now covers authenticated new-generation retirement, exact opening/ownership/stream comparison, separate durable ACK provenance, bounded pages and local Core integration. Independent-process/host restart campaigns remain; no old-channel report is rewritten or republished using replacement identities.",
+      "lease_refusal_validation covers durable queued/initial denial outcomes without closing healthy siblings. Keep automatic negotiation/remote work-lease enforcement gated until end-to-end negotiation and the remaining shutdown/reconnect cuts are qualified together.",
+      "Continue the complete H5/H6 plan: productive scheduler integration, observability/docs, installed tuple and independent-host campaigns. No commit, push, installation, restart or live activation."
+    ]
+  },
+  "session_release_recovery_validation": {
+    "status": "local_verified_remote_integration_and_campaign_pending",
+    "evidence": [
+      "The Connector handshake now invokes a retained reconciliation commit callback only after the immutable Core reducer validates the exact accepted cycle and the final report is complete. Unsolicited, cross-channel/cycle and premature ACKs cannot retire outbox records. Observer cancellation joins the commit before releasing ownership; a failed commit prevents control readiness and inventory publication.",
+      "R4ReconciliationReporter retains bounded original opening metadata and the released claim, process fact and stream watermark actually reported in the accepted cycle. Its SessionReleaseRecoveryOutbox port retires observations in bounded pages; a ready channel alone is insufficient. No native operation, lease or handoff outcome is created by retirement.",
+      "SQLite outbox schema v2 preserves original request/reply bytes and adds separate hashed recovery provenance. Retirement requires a strictly newer channel generation plus matching original opening ID/hash, binding/agent/session/owner generation and drained stream. Missing or mismatched facts remain pending. An old reconciled channel rejects both original and newly named observations. Terminal history no longer consumes the pending-publication capacity budget; physical storage remains bounded.",
+      "build/session-release-recovery-initial.xml: 53 passed in 8.70s against outbox, handshake and daemon-control regressions before new fault scenarios were added.",
+      "build/session-release-recovery-contract.xml: 27 passed in 4.38s, including prior-schema migration without byte changes, page cursor behavior across 130 records with an unmatched middle record, wrong/missing opening/owner/stream/channel facts, rollback of recovery writes and retained ACK commit on cancellation.",
+      "build/session-release-recovery-owner.xml: 5 passed in 10.04s. Actual local Core journals/ledgers and synthetic native peers exercise an unacknowledged live release followed by a new authenticated-protocol cycle; original outbox data is retired without another native open or command. A failed SQLite recovery commit preserves the original pending proof and a subsequent replacement cycle completes it.",
+      "build/session-release-recovery-final.xml: 117 passed in 23.14s, covering new recovery/outbox/owner cases plus daemon startup/reconnect, capacity composition/negotiation, transport and proxy regressions. Test daemon transport now invokes the same accepted callback as production, and an injected callback failure prevents readiness and publication. These are local automated tests, not an independently hosted provider campaign.",
+      "Final review added refusal of a differently named observation on the same already-reconciled original channel. build/session-release-recovery-retired-channel.xml: 26 passed in 6.00s across all outbox/recovery cases after that change. The complete final evidence covers 117 distinct passing tests."
+    ],
+    "remaining": [
+      "Initial/queued refusal and negotiated remote work guard are locally verified; complete lifecycle/independent-host qualification remains pending.",
+      "Continue the full H5/H6 plan, including productive scheduler integration, observability/docs, installed tuple tests and T39/T40 separate-process/independent-host campaigns. No commit, push, installation change, restart or live activation."
+    ]
+  },
+  "lease_refusal_validation": {
+    "status": "core_connector_server_local_verified_remote_negotiation_pending",
+    "evidence": [
+      "Core adds prepare/validate/persist_r4_lease_refusal through the public Journal port. The persisted association contains only original provenance, scope, grant reference and correlated lease denial, never prompt/response/path/credential content. A separate hash domain fences the original operation ID with normal journal admission quota; no execution context, lease, native effect, session claim or physical slot is invented. Existing native/admitted/uncertain operations conflict and remain unchanged. Recovery can finish the same refusal after the admission/terminal-receipt cut.",
+      "Connector publication store v4 persists the refusal association atomically with its original Core receipt binding before journal admission. Startup recovery finishes only these explicit associations and publishes their original receipts through existing scoped authority. A generic binding without Core admission remains uncertain as before; absence alone never becomes a fabricated no-effect fact.",
+      "The renewal owner latches the correlated denial while still holding its gate. A queued productive operation receives a durable FAILED/LEASE_REVALIDATION_REQUIRED receipt without native send; the session's physical containment and release report still proceed independently. Initial denial drains its unstarted runtime/tools and publishes the original opening refusal without a fabricated resource-release report. Sibling opening/turn execution and the control channel remain available.",
+      "Nexus records an initial denial only for the exact original OPEN_PENDING authorized bootstrap, scope, grant and source generation. Receipt ingress permits the absent-applied-lease case only when that durable denial matches a terminal no-effect Core opening receipt. Receipt, CLOSED/CLOSED session projection and containment proof settle in one transaction. Requests lacking a recorded denial, changed receipt/source/effect fields, renewal denials and unrelated operations cannot use this exception.",
+      "Core initial lease-refusal-core.xml had six fixture-schema failures and five unmarked coroutine skips. Corrected the fixture to keep server/executor identity in the actual lease scope and marked async tests; no contract schema was relaxed. lease-refusal-core-final.xml passed 26 cases, lease-refusal-core-verified.xml passed 27, and lease-refusal-core-complete.xml passed 30 in 3.01s after adding grant tamper and containment exclusions.",
+      "Connector lease-refusal-connector-regression.xml: 41 passed in 47.74s. The first owner test run had one assertion expecting SUCCEEDED where the existing synthetic native open correctly returns SUBMITTED; corrected to the existing accepted stages. Four recovery fixtures initially lacked the cold host directory; initializing the real ledger established that fixture root without composing a provider. lease-refusal-owner-recovery-final.xml: 6 passed in 6.89s at association/admission/terminal/publication cuts plus queued/initial sibling isolation.",
+      "Connector lease-refusal-connector-final.xml: 103 passed in 76.67s across denied operations, publication/recovery, renewal, containment, execution and daemon startup. Core/native history is real local storage; native provider peers are simulated.",
+      "Nexus h5-initial-lease-refusal.xml first used the wrong HTTP route (two authentication failures). h5-lease-refusal-final.xml had four test-client exception-mode failures on intentionally rejected receipts; the other ten obligation/legacy/boundary tests passed. Corrected the route and configured the client to observe HTTP errors. h5-initial-lease-refusal-http.xml: 4 passed in 32.64s. h5-initial-lease-refusal-verified.xml: 4 passed in 27.13s including explicit rejection before any Server denial exists and rollback after containment closure.",
+      "Nexus h5-lease-refusal-receipt-regression.xml: 25 passed in 128.05s across canonical receipt persistence, lease/grant/application behavior, containment reconciliation and canonical I/O boundaries. All test handles completed. Final distinct passing coverage for this step is 172 cases across Core, Connector and Nexus; this is not an installed-tuple or independent-host campaign."
+    ],
+    "remaining": [
+      "Automatic extension negotiation and paired remote work guard are locally verified in negotiated_work_containment_validation. Complete independent-process/host lifecycle qualification remains pending.",
+      "Finish remaining H5/H6 and productive scheduler/opt-in wiring, read models/UI/docs, final dependency locks/artifacts and T39/T40 separate-process/independent-host scenarios. The full plan remains active. No commit, push, installation change, restart or live activation."
+    ]
+  },
   "checkpoint_validation": {
     "authorization": "User requested commit and push of all current changes.",
     "nexus": "build/handoff-broadcast/precommit-current.xml: 82 passed; durable attempts/scheduler, reserved warm/cold admission, immediate pool admission, pool ports, one-shot capacity and affinity regressions against local Core source.",
@@ -557,7 +879,562 @@
     "core": "0.0.11",
     "connector": "0.0.9"
   },
-  "pending_external_evidence": [
-    "T40 remote independent host/access requested from user; local implementation is not blocked."
-  ]
+  "pending_external_evidence": [],
+  "negotiated_work_containment_validation": {
+    "status": "local_verified",
+    "evidence": [
+      "Connector build/negotiated-work-containment.xml: 56 passed in 3.09s. Actual hello advertises both scoped extensions; legacy/partial/complete welcome, continuity, denial, release and capacity protocol tests pass.",
+      "Connector build/negotiated-owner-regression.xml: 39 passed in 36.36s. Initial and queued refusal, session containment, release recovery and lease renewal regressions.",
+      "Nexus build/handoff-broadcast/negotiated-work-containment.xml: 34 passed, 4 fixture failures (remote executor integrity constraint). Remote work guard over authenticated WebSocket and real application authority passes with a controlled running-work read port; this is not independent-host qualification.",
+      "Nexus build/handoff-broadcast/negotiated-work-containment-final.xml: 23 passed, 4 candidate fixture failures (local execution policy used with a remote executor). Includes final capacity acquisition/consumption support guard, historical lookup/release, continuity and architecture boundaries.",
+      "Nexus build/handoff-broadcast/remote-candidate-fixture-final.xml: 4 passed in 19.80s after setting valid remote identity and execution-location authority. No product behavior weakened.",
+      "Final distinct current cases: Nexus 55 passed, Connector 95 passed, total 150; no remaining failures/skips. Excludes obsolete unparameterized capacity case; latest candidate evidence supersedes earlier fixture failures. All test processes exited. Syntax and git diff --check passed."
+    ],
+    "remaining": [
+      "Complete integrated remote domain/provider lifecycle qualification; current scoped-work transport test controls the repository port and separate owner tests use simulated native peers. Do not claim T39/T40 from these in-process suites.",
+      "Serve-owned scheduler startup/shutdown/reset and default-off rollout/recovery-only behavior are locally verified in scheduler_lifecycle_validation. Finish UI/read models, final installed tuple and T39/T40 campaigns. No commit/push or live activation."
+    ]
+  },
+  "scheduler_lifecycle_validation": {
+    "status": "local_verified",
+    "evidence": [
+      "Server startup now composes HandoffRuntimeService with bounded ticks, synchronous shutdown fencing and retained producers. Runtime admission and store release include scheduler drainage; partial startup and reset use the actual owner.",
+      "Startup rollout setting runtime_handoff_auto_claim_enabled defaults false and is independent of inherited agent opt-in and execute_work grants. Active persisted attempts start recovery-only service when rollout is disabled; no new candidates are acquired. Embedded capacity is enabled for this service, and production Connector daemon composes Core capacity support.",
+      "Nexus build/handoff-broadcast/scheduler-lifecycle.xml: 6 passed, 1 test failure due to querying nonexistent last_reason instead of reason. Corrected the fixture query without changing product semantics.",
+      "Nexus build/handoff-broadcast/scheduler-lifecycle-regression.xml: 27 passed in 221.07s. Real serve startup, automatic claim without manual ticks, opt-in gate, slow scheduler vs native containment/store release, cancelled close observer, partial startup, reset followed by another automatic handoff, recovery-only restart and existing notice/reset/architecture regressions.",
+      "Nexus build/handoff-broadcast/scheduler-shutdown-regression.xml: 20 passed in 113.38s. Existing durable scheduler/storage/attempt execution, shutdown coordination and admission fences.",
+      "Nexus build/handoff-broadcast/scheduler-rollback-round.xml: 1 passed in 17.68s after strengthening rollback verification to wait for the full recovery-only schedule round to settle IDLE with exactly the original attempt and no execution.",
+      "Connector build/capacity-daemon-startup.xml: 31 passed, but a legacy connection watcher remained pending at loop teardown. Production daemon now retains and joins those observers at shutdown; the admission/receipt producers are unaffected.",
+      "Connector build/capacity-daemon-startup-final.xml: 32 passed in 26.17s, without the pending-task warning. Real daemon composition, IPC/runtime/approval integration, capacity and R4 execution regression; explicit check that connection observers finish.",
+      "Final distinct current tests: Nexus 47 passed, Connector 32 passed, total 79; no failures/skips. All test processes exited. Python syntax and git diff --check passed. Docs and CLI help now explain activation, inheritance and rollback."
+    ],
+    "remaining": [
+      "Finish operational UI/read models and full requirement-by-requirement T01-T40 audit; independent process/host and real installed tuple campaigns are not proven by synthetic-native in-process tests.",
+      "Rebuild matching Core/Nexus/Connector dependency locks and artifacts and verify installed negotiation before rollout. No commit/push, installation change, restart or live activation."
+    ]
+  },
+  "auto_claim_policy_ui_validation": {
+    "status": "local_verified",
+    "evidence": [
+      "Dashboard Settings exposes broadcast handoff opt-in; Agent Connections exposes independent inherit/enabled/disabled override. Shared field explains capacity reservation, winner-only execution, retained domain authorization and the separate startup rollout gate.",
+      "Connection setup transports this Server-only policy outside the Core portable harness configuration. Strict boolean/null validation, omission preservation, same-UoW Finish commit, request idempotency and baseline CAS are preserved. Technical exports do not transfer automation authorization.",
+      "Setup reads runtime policy and its baseline in the same transaction. Installation selection, binding selection and import preserve the original runtime/default revisions while a draft is open; concurrent policy changes cannot be silently rebased by refreshing a binding.",
+      "Initial backend suite auto-claim-policy-ui.xml: 31 passed, 2 failed. Invalid-type test expected 422 instead of the established R4 400; disabled-session test expected synchronous stop although renewal now delegates retained scoped cleanup. Test now waits for native stopped plus CLOSED/CLOSED proof; followup confirmed containment.",
+      "The stale-baseline HTTP test exposed an actual conflict-handler bug: absent error.details raised AttributeError and masked CONFLICT as HTTP 500. Handler now tolerates absent details. auto-claim-policy-conflict.xml: 3 passed in 15.55s, including active-session conflict choices.",
+      "Browser tests initially targeted navigation buttons inside the form although modal footer uses a portal; updated locators to the dialog. Also replaced absence-of-Finish with disabled-before-test and round-tripped the actual exported JSON instead of serializing the Core-normalized internal authorization object.",
+      "auto-claim-policy-startup.xml: 2 passed in 20.31s. Policy read and idempotent save expose the correct startup gate for disabled/enabled deployments; agent opt-in and real scheduler acquisition remain independent.",
+      "auto-claim-policy-setup-final.xml: 17 passed in 66.22s. Atomic setup snapshot, strict request, omission/null semantics, no implicit grants, rollback, idempotency, stale revisions, remote setup and existing session-conflict regression.",
+      "auto-claim-policy-browser-atomic.xml: 11 passed in 122.76s. Packaged dashboard in real headless Edge with actual HTTP application/SQLite, synthetic native probe. Global persistence, agent override/inherit, draft staging, atomic Finish, technical export/import, installation version checks/lost reply, concurrent global/agent policy changes after import.",
+      "Final distinct cases across backend, lifecycle and browser reports: 46 passed, zero unresolved failures or skips. All handles terminal. npm run build (TypeScript + Vite), seven-file Python syntax and git diff --check passed. Visual review of output/playwright/auto-claim-policy/global-defaults.png and agent-connection.png confirmed labels, disabled-rollout explanation and fixed modal footer.",
+      "Only local Nexus sources/docs/tests changed in this step. No commit, push, reinstall, restart or change to the running user instance."
+    ],
+    "remaining": [
+      "Operational read models and UI for contextual availability, reservations, waiting/recovery and creator business outcome remain to implement. Policy configuration alone does not complete H6.",
+      "Full T01-T40 requirement audit, matching dependency locks/artifacts, installed tuple and independent process/host campaigns remain pending."
+    ]
+  },
+  "runtime_read_models_validation": {
+    "status": "local_verified_partial_scope",
+    "evidence": [
+      "Added a read-only HandoffRuntimeViewRepository application port, SQLite adapter and bootstrap composition. Agent administration receives the service through injection; no new infrastructure imports in the application projection. Migration139 indexes bounded agent attempt history.",
+      "Creator broadcast cards/details now show canonical state plus managed execution progress, winner channel, verified/missing creator origin, claim latency and observed execution delay. Only current-epoch bindings contribute native receipts. Native final alone shows AWAITING_DECISION, not COMPLETED; verification, failure and uncertainty remain distinct.",
+      "Open broadcasts show explicit-claim availability when server acquisition is disabled. Manual/direct handoffs retain their previous response shape and explicit claim semantics. Domain authorization and canonical ownership are unchanged.",
+      "Agent modal has collapsed latest-20 attempt history with overflow indicator, refusal/recovery reasons, timestamped reservation report and current canonical progress. Latest admission reservation supersedes the earlier attempt reservation. These are historical observations, not a current free-capacity guarantee.",
+      "Projection selects bounded fields, never payload/principal/request/credential/source-session-key records; reason codes are allowlisted. Scoped agent history uses two read queries regardless of row count. Reading does not create claims, reserves, releases, native work or acknowledgements.",
+      "runtime-read-models.xml: 31 passed, 1 fixture failure because verification feature was disabled. Enabled feature_verification in the verification scenario. runtime-read-models-final.xml: 28 passed in 48.37s.",
+      "runtime-read-models-epoch.xml: 28 passed in 48.03s after latest-reservation and new-epoch checks. Real SQLite, reserved admission and native/MCP capability flow; synthetic native output. Covers open/reserved/claimed/native-final/complete/VERIFYING, newer canonical epoch excluding prior receipts, scoped bounded history, no secret exposure, read-only query counts and native failure/uncertainty precedence.",
+      "runtime-read-models-regression.xml: 6 passed in 35.89s. Hexagonal import boundary, existing HTTP handoff filters and terminal results, dependency aggregates and unchanged baseline rows. Four existing agent administration tests also passed in the initial suite.",
+      "runtime-read-models-browser-final.xml: 1 passed in 40.76s. Packaged React dashboard in real headless Edge against actual HTTP/SQLite, synthetic provider. Creator pending decision, missing-origin explanation, collapsible administration history and no dialog horizontal overflow at 900/1440px.",
+      "39 distinct tests passed in final evidence, no unresolved failure/skip. TypeScript/Vite build, nine-file Python syntax and git diff --check passed. Captures in output/playwright/handoff-runtime-views visually reviewed after final build. All processes terminal; no live instance, install/restart, commit or push."
+    ],
+    "remaining": [
+      "Contextual capacity observations and bounded aggregates are implemented and locally verified in runtime_diagnostics_validation. They remain diagnostic observations, not resource authority.",
+      "Complete T01-T40 final requirements audit, matching locks/artifacts and installed/independent-host qualification."
+    ]
+  },
+  "runtime_diagnostics_validation": {
+    "status": "local_verified",
+    "evidence": [
+      "Added bounded (1024 total / 20 displayed) contextual capacity observations through an application read port, SQLite current-scope adapter and bootstrap composition. Real capacity assessments/reservations feed the cache; no host I/O, wakeup, claim, release or admission occurs on a view read.",
+      "Owner/generation/revision changes, in-flight mutations, lost replies, late pre-mutation assessments and elapsed observation lifetimes cannot restore idle capacity. Released reservations do not imply free capacity. Slow scope reads cannot extend TTL. Cache output excludes request/grant/reservation credentials and identities beyond authorized context fields.",
+      "Current agent configuration/authorization/credential hashes are computed using current_agent_revisions(persist=False), preserving the existing persistence default. Scoped binding/workspace/realization/executor/session checks use one bounded join. Authorized inspection neither persists revision counters nor revokes execution lanes.",
+      "Agent UI adds a collapsed contextual-capacity panel, with distinct idle/opening/reserved/in-use/waiting/release-pending/unknown states and observation age. Server and browser enforce the reported validity (maximum five seconds); a stalled subsequent request cannot leave the previous observation fresh indefinitely.",
+      "Operator metrics add bounded latest-1000 attempt and broadcast-handoff samples with explicit sizes/truncation, fixed state/reason labels, winner channel and observed latency summaries. Missing observations remain null; storage failure is unavailable, never zero. Nonoperators receive no global broadcast aggregates. Migration139 indexes both sample queries, verified with EXPLAIN QUERY PLAN.",
+      "capacity-observations.xml: 32 passed in 1.75s. capacity-observation-views.xml: 6 passed and 1 fixture credential-location failure. handoff-runtime-metrics.xml: 5 passed and the same fixture failure. Corrected test credential lookup without changing domain logic.",
+      "runtime-diagnostics-final.xml: 44 passed, 1 fixture assertion expecting the operator no-store header on the preexisting nonoperator summary. Corrected the assertion to the endpoint's operator-only path. runtime-diagnostics-verified.xml: 45 passed, 1 configuration fixture raced Core's 100ms assessment TTL and correctly observed UNKNOWN.",
+      "capacity-observation-scope-final.xml: 7 passed in 31.35s after controlling the observation clock only in configuration-invalidation tests. Together with runtime-diagnostics-verified.xml this proves 46 distinct diagnostic/metrics cases on the final source, including separate TTL/slow-read/mutation races. No unresolved test failure remains.",
+      "runtime-diagnostics-regression.xml: 36 passed in 101.20s. Import-boundary checks, 100000-agent indexed authentication with persisted authorization/configuration/credential revisions, existing runtime administration and full canonical handoff projection cases.",
+      "runtime-diagnostics-browser.xml: 2 passed in 57.79s. Real headless Edge and packaged dashboard against HTTP/SQLite with synthetic native peers: creator pending decision, attempt history, reserved context, browser expiration despite blocked subsequent request, and no horizontal dialog overflow at 900/1440px. Reserved/expired captures visually inspected.",
+      "84 distinct tests passed in final combined evidence. TypeScript/Vite build, eleven Python module parses and git diff --check passed. All test/build processes terminal. No live model invocation, reinstall/restart, commit or push."
+    ],
+    "remaining": [
+      "Audit all plan requirements and T01-T40 against final integrated sources; bounded recent metrics are historical samples, not lifetime counters or global current capacity.",
+      "Rebuild matching Core/Nexus/Connector lockfiles and artifacts and qualify the installed tuple, separate-process campaign and independent remote host before activation."
+    ]
+  },
+  "acceptance_audit_validation": {
+    "status": "local_verified",
+    "evidence": [
+      "Current audit covers every T01-T40 criterion without changing the original requirements. Historical stage remaining lists are checkpoints, not the current release checklist; acceptance-audit.md records current gaps.",
+      "criteria-discovery-affinity.xml: 61 passed in 370.78s; actual 100 configured runtime candidates and winner-only dispatch, three authenticated creator sessions, dropped capacity wake recovered by bounded scan.",
+      "criteria-admission-lifecycle.xml: 21 passed, one fixture expectation failed. Last-slot test now requires durable release after a sent reserve refusal; late MCP claim correctly returns HANDOFF_ALREADY_CLAIMED. criteria-last-slot-final.xml: 1 passed in 9.94s. Combined current Nexus evidence: 83 distinct tests passed.",
+      "Core build/handoff-criteria-physical.xml: 29 passed in 5.40s; physical capacity ledger, runtime gate, recovery and unstarted release.",
+      "100-candidate fixture corrections: count only execute_work grants, excluding the ordinary open grant; retain the winning CLAIM_COMMITTED attempt while active, retire 99 losing attempts. Three-source fixture uses execution_operations to identify turn receipts. No product behavior changed for these assertions.",
+      "A real Connector child process campaign was added with TCP HTTP/WebSocket transport, independent journals, real daemon lifecycle and synthetic provider. Initial fixture failures: isolated Python omitted user-site dependencies; same-origin contention returned BUSY_AFFINITY as designed; restarting fixture tried to store an existing vault namespace. These were corrected in the fixture. Initial complete campaign passed in 40.36s; strengthened final campaign recorded below.",
+      "criteria-connector-process-final.xml: 2 passed in 77.14s. Real production Connector daemon in a distinct child PID, source-pinned Core/Connector imports and separate state/journals; authenticated HTTP/WebSocket. Lost reserve result is queried by original identity, physical host limit is enforced before opening, reconnect preserves history, normal and abrupt child termination recover the original unused ticket under a new boot, one subsequent work turn executes, close confirms physical stop, and the released slot admits a fresh reservation without another native invocation. Discovery/native peers remain synthetic; no installed tuple or independent-machine qualification is claimed.",
+      "Current final campaign: 85 distinct Nexus cases plus 29 Core cases, total 114 passed. Six Python fixture modules parse; ledger JSON and git diff --check validated. Test processes exited. Only tests/audit documentation changed in this audit step; no production source change, live restart, install, commit or push.",
+      "Final installed tuple verified: Nexus 0.3.0 (54 passed), Core 0.0.11 (187 passed), Connector 0.0.9 (99 passed); zero failures/errors/skips. Nexus campaign PASS, exit_code 0, changed_inputs []. Final wheel hashes and all installed package bytes rechecked against artifacts.json. Real local child Connector lifecycle, reconnect, graceful/abrupt restart, retained native stop, original operation recovery and commit cuts passed. Native providers are synthetic; this is not independent-host qualification.",
+      "User explicitly deferred independent-host T40 on 2026-10-14: use the local Connector now; test another host together after this stage. T40 is deferred by user, not passed or a blocker for completion of the current local scope."
+    ],
+    "remaining": []
+  },
+  "selection_outcomes_validation": {
+    "status": "local_verified_partial_audit",
+    "evidence": [
+      "T08: criteria-sender-message-order.xml: 1 passed in 31.09s. Three ordinary messages from one sender retain one session and FIFO. Automatic work refuses while each preceding turn runs, preserves OPEN and grant budget, and claims after the queue drains.",
+      "T22: criteria-executor-selection-final.xml: 26 passed in 208.55s. Six scenarios use two real Connector child processes and authenticated HTTP/WebSocket, independent journals and synthetic native peers. Explicit restored-catalog fixture permits two approved executors while leaving onboarding machine replacement unchanged. Priority/group select one candidate, ambiguity refuses, revocation excludes authority, occupied affinity is retained and unresolved sessions do not redirect work. Includes scheduler/metrics/ordinary selection regressions.",
+      "The T22 campaign exposed a product diagnostic defect: the correct AMBIGUOUS_BINDING refusal was projected as RECOVERING. Shared resolver/session selector now emit structured reason, and Server scheduler/public projections preserve the fixed bounded label. No capacity protocol/schema, selection authority or machine policy changed.",
+      "T22 fixture corrections: execution grants are separate from ordinary controls; the current second-machine onboarding correctly revokes the previous endpoint, so restored historical approval is seeded explicitly before issuing real grants; runtime.open reports SUBMITTED rather than SUCCEEDED. Worker cleanup now always joins every child even if one cleanup assertion fails.",
+      "T32/T33: criteria-business-outcomes.xml: 15 passed, 2 fixture failures because pass was supplied feedback. The contract only accepts feedback with fail. criteria-verification-pass.xml: corrected 2 passed in 25.02s. criteria-business-outcomes-final.xml: all 6 outcome cases passed in 71.77s with exact canonical event and inbox notification counts. Together these reports prove 17 distinct current cases including existing winner/sibling permissions and canonical lifecycle regressions.",
+      "Executed automatic winners complete via native and MCP capability paths. Actual native final does not relay a conversational result even when conversation is enabled. Repeated authenticated completion/verdict never produces another canonical event/outcome. Verification pass completes; fail retains the owner at epoch2 without initial broadcast rediscovery or another execution. Creator self-notification remains intentionally omitted.",
+      "T34: criteria-ordinary-fanout-final.xml: 1 passed in 19.84s. Two runtime agents receive the ordinary broadcast while a registered MCP-only workspace session retains its inbox delivery. Directed handoff wakes only its target, without automatic broadcast attempts or implicit canonical claim. Initial fixture incorrectly expected an operator without workspace presence to receive ordinary broadcast; replaced with an actual registered MCP session.",
+      "Architecture: criteria-selection-architecture.xml: 3 passed in 1.49s. Final selected campaign has 48 distinct passing tests, no unresolved failures/skips. Python syntax and whitespace checks passed; all test processes exited. No live restart/install, commit or push."
+    ],
+    "remaining": [
+      "Acceptance matrix now has 28 locally verified criteria, 11 partial audits, and T40 pending independent host access. INV requirements still require final cross-cutting audit.",
+      "Consolidate commit/failure/authority boundaries, startup/closing limits, installed tuple/locks/artifacts and independent remote-host evidence."
+    ]
+  },
+  "admission_commit_cuts_validation": {
+    "status": "local_verified_partial_audit",
+    "evidence": [
+      "commit-boundary-audit.md inventories 20 persistent boundaries with source owners, retained identities, existing tests and explicit gaps. It includes Server schedule/attempt/claim/admission/compensation/denial/receipt/retirement, Core capacity/refusal facts and Connector publication/release stores. This is an audit inventory, not a declaration that every commit is qualified.",
+      "criteria-admission-commit-cuts.xml: 6 passed in 92.75s. TestClient, real SQLite UoW and Core capacity ledger; synthetic native peer. Failure after writes but before commit versus lost reply after commit at RESERVING, RESERVED and CONSUMED. Reconstructed service reads the original attempt/ticket; exactly one reserve RPC, one claim epoch, one work-grant consumption, one opening and one native turn.",
+      "No product changes were needed for those six cuts. Existing pending transitions, original-identity lookup and idempotent consumption recovered correctly. Tests completed and handles exited; no live instance, install, commit or push changed."
+    ],
+    "remaining": [
+      "T24 remains partial: creation/unavailable/uncertain transitions, schedule commits, initial denial persistence and the remaining inventory cuts require explicit before/after evidence.",
+      "38 locally verified T criteria, T24 partial, T40 external. Invariants and installed tuple/dependency artifacts remain pending."
+    ]
+  },
+  "reconnect_generation_validation": {
+    "status": "local_verified",
+    "evidence": [
+      "Investigated the previous 25-second reconnect timeout: R4DaemonExecution._close(preserve_leases=True) calls CoreRuntimeHost.wait_executor_leases before shutdown. The disconnected owner retains the already-granted lease rather than shortening it. The default grant may outlive that test watchdog; this was not proof of a permanently stuck recovery.",
+      "First short-lease criteria-unknown-reconnect.xml failed before the uncertainty/reconnect boundary: a 5-second lease expired before the turn's context could be used. Source/journal inspection showed the second lease was issued but not applied before the first expired. The final fixture grants 15 seconds, without changing native stop/lease guarantees or production configuration.",
+      "criteria-reconnect-containment-final.xml includes the passing unknown_reconnect case: two real Connector child PIDs and authenticated HTTP/WebSocket. Durable OUTCOME_UNKNOWN is published while the link stays ready. After explicit disconnect, the same host returns ready with a higher connection generation and a new capacity boot. No native replay or claim compensation; one claim/epoch/operation retained.",
+      "The prior host cannot register again, overwrite availability with a higher revision, consume its old-generation reservation or unregister the replacement. The registry's current observations remain unchanged. Another authorized executor can become preferred without acquiring the old handoff.",
+      "criteria-generation-fences.xml: 24 passed in 112.92s. Bounded registry, stale/reordered capacity replies and scope correlation, cancelled waiters, actual WebSocket flow sequence conflict, missing negotiation/foreign binding/old connection rejection, lease serial race and stale socket ACK, rollback/late ACK, revoked lease projection, old scanner fencing and old claim generation refusing to cancel newer work. Three architecture boundary tests passed.",
+      "T29 is now locally verified; no installed-package or independent-host qualification is claimed. All completed test handles exited; no production source or user-instance change in this campaign."
+    ],
+    "remaining": [
+      "38 locally verified criteria, T24 partial, T40 external. Full invariant audit and installed tuple/dependency artifacts remain pending."
+    ]
+  },
+  "remote_running_containment_validation": {
+    "status": "local_verified",
+    "evidence": [
+      "criteria-reconnect-containment-final.xml: 3 passed in 185.19s; one reconnect case and both running-work containment cases. Actual Connector children, authenticated HTTP/WebSocket, independent journals and synthetic native provider. Grant revocation and API runtime.close both preserve RELEASE_PENDING/HOST_FULL while the same native close remains unfinished past 11 seconds. No false successful close or RELEASED obligation is observed.",
+      "Only after the native close completes do the Server receipt/containment obligation and Core capacity reach their confirmed terminal state. A fresh host reservation succeeds; the original handoff remains CLAIMED at epoch1 with one native turn and zero compensation.",
+      "Initial criteria-remote-running-containment.xml: grant-revoked passed with a 5-second lease; runtime-close failed before reaching its intended boundary because the initial test lease expired before the turn started, leaving pending teardown history. Handle exited. The final fixture grants a 15-second lease, preserving real renewal/expiry semantics and using unchanged product shutdown budgets.",
+      "No production source change in this campaign. Only disposable child fixtures expose hold_stop/release_stop. User instance, installed packages, commits and remote branches are unchanged."
+    ],
+    "remaining": [
+      "Independent host T40 and installed tuple qualification remain pending; a child on loopback is not an independent machine."
+    ]
+  },
+  "remote_unknown_outcome_validation": {
+    "status": "local_verified",
+    "evidence": [
+      "New T28 fault records a native send in the actual Connector child before raising OSError. Initial criteria-remote-unknown.xml failed because the Server saw DISPATCH_CONNECTION_LOST before receiving the Core fact; criteria-remote-unknown-recovery.xml still timed out after allowing transient uncertain transport errors. Inspection of the child journal proved OUTCOME_UNKNOWN/possible_effect=true/retry_safe=false was already committed while Server held only the opening receipt.",
+      "Connector R4ExecutionOwner now reads the exact durable Core fact after an execution exception and projects it through the public Core binding projector. Only OUTCOME_UNKNOWN with possible effect and no safe retry is accepted. Missing/mismatched facts retain the prior refusal/connection fencing; cancellation and storage/publication failures are not converted into success. No re-invocation, authority expansion, physical release or claim compensation occurs.",
+      "Connector build/unknown-outcome.xml: 44 passed, 1 new fixture failure. The fixture attempted to resend operation.submit after publication, which R4 deliberately rejects; corrected it to query the original Core fact. build/unknown-outcome-final.xml: all 3 new durable/missing/wrong-hash cases passed in 3.38s. Final distinct current coverage: 45 cases including execution and publication regression. Unrelated session opens after unknown publication; native send count remains one.",
+      "Nexus criteria-remote-unknown-fixed.xml published the durable unknown fact successfully but timed out awaiting complete connection recovery within 25 seconds after an explicit disconnect. This is retained as an unresolved T29 qualification observation, not declared fixed or ignored. T28 asserts behavior before and during disconnection; it does not claim successful full reconnect.",
+      "Nexus criteria-remote-unknown-final.xml: 1 passed in 40.38s. Two real Connector children, HTTP/WebSocket and independent journals, synthetic native peers. The connection remains ready after publishing unknown. After explicit disconnect, another authorized idle host is made preferred; restarted discovery at epochs0/1 creates no replacement, retries return the same operation/consumption, canonical claim stays at epoch1 and exactly one native send occurred. No compensation is recorded.",
+      "All campaign handles exited. No commit/push/install/restart or user-instance mutation. Connector remains version0.0.9 on feature/v0.0.9; Nexus remains0.3.0 on feature/v0.3.0; Core source unchanged in this step."
+    ],
+    "remaining": [
+      "36 locally verified criteria; T24, T29 and T30 partial, T40 external. Inspect the active-unknown reconnect path in T29 and retain its exact journals; do not infer readiness from no replay.",
+      "Complete invariant audit, matching locks/artifacts and installed tuple qualification. Local source tests do not prove installed packages or an independent machine."
+    ]
+  },
+  "fifo_backlog_validation": {
+    "status": "local_verified",
+    "evidence": [
+      "criteria-fifo-backlog-final.xml: 44 passed in 135.14s. Automatic scheduler and real one-shot queue preserve one running plus two queued ordinary messages; no broadcast claim, grant usage or productive call before the prior consumers finish. One case recreates the scheduler between refused rounds using the same database. Exactly one later automatic execution; queue start order equals enqueue order.",
+      "Initial criteria-pool-priority.xml failed two new assertions expecting CLAIM_COMMITTED from the final scheduler page. The actual processor legitimately emits SETTLED once its page drains. Final assertions verify canonical ownership, exact native turn count, FIFO and grant usage rather than infer execution from the schedule label. No product code changed.",
+      "Schema133 upgrade applies migrations134-139, remains idempotent and preserves inbox/admitted/uncertain histories. Updated the migration fixture's expected list to include the two newly implemented migrations. Backlog restart test now observes committed maintenance pages in two real TestClient lifetimes and compares all uncertain/prior-attempt/direct outbox records unchanged.",
+      "Campaign also covers both pool adapters, already preparing and queued consumers, exact warm/cold reservations, physical ceilings, sender fence vs retirement, ambiguous send history, MCP acknowledgement preservation, rollback, delayed maintenance and shutdown ownership. Three architectural boundary tests pass. All test handles terminal; Python syntax, ledger JSON and git diff --check passed before the later remote-outcome test addition.",
+      "T36 and T38 are locally verified on current sources. No installed tuple or independent-host evidence claimed, and no user instance/install/commit/push changed."
+    ],
+    "remaining": [
+      "35 locally verified criteria; T24, T28, T29, T30 partial and T40 external. Full invariant audit and installed dependency tuple remain pending."
+    ]
+  },
+  "remote_expiry_validation": {
+    "status": "local_verified",
+    "evidence": [
+      "criteria-remote-expiry.xml: 3 passed in 51.19s. Real Connector daemon in another PID, authenticated HTTP/WebSocket, independent Core ledger and actual 2-second monotonic TTL. Only discovery/provider peers are synthetic; the shortened request is persisted before reserve, without fabricating expired DTOs or changing a ticket after reservation.",
+      "Expiry before lookup, between lookup and consume, and lost reply after remote expiry commit. Lost reply first retains CLAIMED/epoch1 and NEEDS_RECONCILIATION, with zero compensation. Reconstructed application service queries the original ticket, cancels the original operation and compensates exactly once; no new epoch or provider invocation.",
+      "A late consume of the original expired identity cannot execute; the tombstone remains EXPIRED_UNCONSUMED with no consumption. A fresh reservation on the same physical host succeeds and is released. Child and pytest processes exited normally. No product code changed in this step, and no user instance/install/commit/push changed."
+    ],
+    "remaining": [
+      "T27 now locally verified; installed-build tuple and independent-host qualification remain separate pending gates.",
+      "33 local criteria, 6 partial audits and T40 external before the ongoing FIFO/backlog campaign."
+    ]
+  },
+  "revocation_boundaries_validation": {
+    "status": "local_verified",
+    "evidence": [
+      "Explicit T23 matrix in revocation-audit.md: policy, work grant and binding revoked before assess, after assess, after reserve, before consume, after host consume, before dispatch and before initial lease. Existing work-lease tests cover in-flight containment.",
+      "Initial criteria-revocation-boundaries.xml: 15 passed, 3 failed. Product defect: pre-dispatch refusal correctly denied work but left the consumed Core capacity ticket occupied. Server now persists exact unsent-dispatch proof and release obligation in the refusal transaction; application retries the original capacity release through its port outside SQLite writers.",
+      "criteria-revocation-unsent-fixed.xml: 3 passed. criteria-revocation-regression.xml: 59 passed, 4 warm fixture failures. Those fixtures incorrectly awaited all dispatch rows, including the healthy warm opening, rather than the refused operation. Corrected operation-scoped wait without changing product behavior.",
+      "criteria-revocation-initial.xml: 3 passed for policy/grant/binding revocation before initial lease. criteria-revocation-release-cuts-final.xml: 8 passed for warm reuse, lost release reply, missing/mismatched proof, rollback and lost commit reply. Earlier two proof-fixture failures restored only one of the opening/turn proof rows; final fixture restores the exact full set.",
+      "criteria-revocation-remote-final.xml: 1 passed in 22.62s. Actual Connector child and HTTP/WebSocket, independent journals, synthetic provider. Revocation at consumption commit invokes no provider; original ticket reaches RELEASED and a new reservation proves physical reuse. Initial remote fixture selected nonexistent binary paths; corrected to the already published installation.",
+      "Final distinct current cases: 71 passing Nexus cases across regression, initial lease, final release cuts and remote campaign. Includes lost claim response recovery with the same attempt/operation/epoch and one grant/native execution (T26). All reports are terminal; the former process handles are no longer present.",
+      "No claim compensation after pre-send consumption refusal: historical consumption remains, physical release requires exact request/reservation/consumption and nonregressive revision. Missing or mismatched unsent proof refuses before host release. Warm process remains available. No live instance change, install, commit or push."
+    ],
+    "remaining": [
+      "T24 complete local-commit inventory still pending; selected new rollback/lost-reply cuts do not prove all commits.",
+      "Acceptance matrix now has 32 locally verified criteria, 7 partial audits and T40 external. Installed tuple, dependency locks/artifacts and cross-cutting invariants remain pending."
+    ]
+  },
+  "startup_deadline_validation": {
+    "status": "local_verified",
+    "evidence": [
+      "Boundary reproduction: criteria-startup-boundary-before.xml failed four cases (SQLite/memory at and after admission_deadline); the already-started retry controls passed. ResourcePool.started now rejects late first dispatch without declaring physical release.",
+      "criteria-startup-regressions.xml: 81 passed in 288.48s. Covers immediate admission, both pool adapters, one-shot capacity/runtime, atomic claim transaction and architecture. This process loaded sources before the subsequent startup lease/cleanup changes; those changes have their own targeted campaigns.",
+      "Startup lease reproduction: criteria-startup-lease-before.xml failed because a cold expired reservation still received renewed authority. Work authority now reads the startup deadline through the repository port, matches the exact opening scope and skips already-started work.",
+      "criteria-startup-authority-regressions.xml: 29 passed in 150.84s; work grant revocation, native outcomes, remote negotiated lease denial, initial no-effect facts and containment obligations.",
+      "criteria-startup-remote-containment.xml: 1 passed in 16.84s. Real Connector child process and HTTP/WebSocket transport; synthetic provider held during opening. Expiry denies renewal, retains HOST_FULL until confirmed stop, publishes RELEASED, and invokes no native turn. Automatic pool close now waits for existing containment instead of racing its stop producer.",
+      "Fixture corrections: replaced the shared-only reservation helper with actual candidate discovery for one-shot affinity; capacity digest requires sha256 prefix; release uses the deterministic original reservation ID. The embedded renewal test checks its retained session recovery owner rather than expecting the remote lease-denial table. A wrong SQL column in the first deadline repository draft was corrected before the passing authority campaign.",
+      "Final current-source review: criteria-startup-review.xml: 43 passed, 1 failed in 138.97s. The sole failure is before_initial_lease: local bootstrap refusal remains unclosed. Passing cases include delayed local and remote opens, short-lease remote containment with confirmed RELEASED, already-started work retaining authority, both pool adapters, FIFO/cleanup and import boundaries. All test processes exited; Python syntax and whitespace checks passed.",
+      "Initial local refusal now records its original authenticated denial, persists the exact receipt association before the Core fact, publishes the no-effect receipt, and releases only the unstarted reservation. Recovery belongs to the affected session; global publication skips that retained producer. The repository port owns SQLite persistence; bootstrap composes public Core APIs.",
+      "criteria-initial-refusal-cut-final.xml: 5 passed in 46.81s. Retried cuts after binding commit, before/after Core persistence, and before/after Server publication; same operation, attempt and claim epoch, no native opening, no blocked agent.",
+      "Restart reproduction initially found SCOPE_MISMATCH in shared resource audit: a consumed pre-open capacity slot still carried its provisional identity. Core CapacitySlotLedger.capacity_opening_for_slot now attributes it through the exact retained consumption, without release or productive authority. Its SQLite adapter preserves opaque legacy reservation identities.",
+      "criteria-initial-refusal-restart-associated.xml: 3 passed in 27.13s; actual persisted journals/database reopened under a new Server generation at core_before/core_after/publish_after. No provider or stream was manufactured. criteria-initial-refusal-restart-service.xml: 3 passed in 48.94s, extended with a fresh task executed by the serve-owned automatic scheduler after recovery.",
+      "criteria-initial-refusal-regression.xml: 32 passed, 3 failed in 481.68s. All failures were in the new restart extension: selecting the historical first turn instead of the new session, or injecting candidates into intentionally cleanup-only scheduling after restart. Corrected the fixture to select the new admitted session and enable the real acquisition service; no production gate was loosened. The 32 passing cases cover startup, independent agent recovery, actual child-process termination/recovery, one-shot queue restart and import boundaries.",
+      "FINAL after repository extraction and legacy-ID compatibility: criteria-initial-refusal-final.xml: 19 passed in 180.09s. All 13 local/remote startup/persistence cases, all 3 restart-plus-fresh-automatic-work cuts, and 3 architecture checks. Connector uses a child process with real HTTP/WebSocket transport; provider peers remain synthetic.",
+      "Core capacity-refusal-recovery-regression.xml: 48 passed in 4.58s; capacity runtime, cancellation, operation mapping and session claims. capacity-slot-attribution-legacy.xml: 7 passed in 1.63s on final lookup (including both deterministic and historic opaque IDs). initial-refusal-intent-fence.xml: 14 passed in 1.91s, including existing/uncertain native intents and conflicting concurrent journal admissions. capacity-physical-retention-review.xml: 12 passed in 4.12s, including consumed slots across restart, delayed release, and physical exclusion until confirmed stop.",
+      "Two isolated failed restart-test processes were explicitly terminated after diagnosis because their deliberate permanent fault prevented graceful history drain. Both handles were observed terminal; corrected runs and all remaining campaign processes completed normally. No user instance, installation, commit or push changed."
+    ],
+    "remaining": [
+      "T16 and T17 have local automated evidence, not qualification of an installed package tuple or an independent remote machine.",
+      "T24 still requires the complete commit-boundary matrix, including failure while recording the initial Server denial itself; these selected persistence cuts do not prove every failure boundary."
+    ]
+  },
+  "initial_denial_commit_validation": {
+    "status": "local_verified_partial_audit",
+    "changes": [
+      "Initial denial persistence failures retain the exact authenticated request and retry through session-scoped recovery, without another lease issuance or native effect.",
+      "New ExecutionPreopenCapacity application port and SQLite adapter locate the original admission under a fenced embedded owner. Core confirms untouched capacity release before existing empty-history recovery retires the session. No request, receipt or business completion is invented after a rolled-back denial.",
+      "Capacity service creation is deferred until a matching admission exists; non-capacity recovery stays supported."
+    ],
+    "evidence": [
+      "criteria-denial-commit-before.xml: 2 reproduced failures, rollback stranded the session and lost reply blocked its agent.",
+      "criteria-denial-commit-after.xml: 6 passed; includes four initial refusal authority/receipt rollback cases.",
+      "criteria-denial-retry-final.xml: 7 passed, repeated persistence cuts and existing restart cases.",
+      "criteria-denial-restart-before.xml: 1 failed, 1 passed; restart before denial commit retained consumed Core placeholder.",
+      "criteria-denial-restart-after.xml: 2 passed; restart before and after denial commit now releases original capacity without native execution.",
+      "criteria-preopen-release-reply.xml: 1 passed, response lost after physical release, same identity on retry.",
+      "criteria-preopen-capacity-regression.xml: 2 failed, 4 passed; eager capacity construction broke recovery with capacity protocol disabled. Corrected by lazy port acquisition.",
+      "criteria-preopen-capacity-final.xml: all 16 passed in 220.33s, current source, terminal exit 0. Includes six restart cuts, four repeated denial cuts, three prior pre-open recovery cases and three import boundary checks.",
+      "Core build/preopen-capacity-release-regression.xml: all 7 passed in 2.64s, terminal exit 0. Core source was not changed in this campaign.",
+      "27 distinct relevant final cases passed: 20 Nexus and 7 Core. Syntax checks and git diff --check passed."
+    ],
+    "remaining": "T24 remains partial for the other inventoried commits; global invariants, matching locks/installed artifacts and independent-host T40 remain pending. No live installation, restart, commit or push."
+  },
+  "recovery_page_commit_cuts_validation": {
+    "status": "local_verified_partial_audit",
+    "evidence": [
+      "T24 complemento: criteria-recovery-commit-cuts.xml (10 passed) e criteria-page-commit-cuts.xml (10 passed), commits reais antes/depois de observações de indisponibilidade/incerteza, compensação, agenda/renovação/finish, descoberta e retirement. Todos com saída terminal 0; nenhuma alteração de produto foi necessária.",
+      "criteria-schedule-commit-cuts.xml: 4 fixture errors and 2 passes; numeric cut target could not concatenate with string. Corrected only failure message formatting; all six cases passed in criteria-page-commit-cuts.xml.",
+      "Compensation proves one retained ticket and operation, one compensation, OPEN at epoch1, cancelled outbox and closed session without native work.",
+      "Discovery lost-reply recovery preserves the committed attempt; rolled-back UUIDs never reach a host. Repeated page/cursor does not duplicate the candidate, and only one native turn executes.",
+      "Scheduling commits preserve wake, cursor and token boundaries; repeated finish cannot increase backoff twice, expired old tokens cannot overwrite a newer lease.",
+      "Retirement commits preserve unknown/prior-attempt/direct outbox rows, release only the original producer inbox without MCP acknowledgement, and retain one audit row."
+    ],
+    "reports_seconds": {
+      "criteria-recovery-commit-cuts.xml": "89.590",
+      "criteria-page-commit-cuts.xml": "30.513"
+    },
+    "remaining": "T24 remains partial for other inventoried boundaries. Final invariant audit, matching locks and installed tuple, and independent-host T40 remain pending. No product changes in this campaign; no live install/restart or commit/push."
+  },
+  "core_connector_commit_cuts_validation": {
+    "status": "partial_preopen_recovery_locally_verified",
+    "evidence": [
+      "Core: capacity-commit-cuts-final.xml 30 passed; capacity-gate-commit-cuts.xml 8 passed. Connector: publication-commit-cuts-final.xml 39 passed. Todos terminais exit 0. 46 cortes novos e 31 regressões existentes, total 77 casos distintos.",
+      "Core capacity-commit-cuts.xml: 20 passed, 2 fixture assertion failures. Expired unconsumed next_turn reservation does not own an operation; corrected assertion checks expired consumption rejection without changing ordinary turn semantics.",
+      "Connector publication-live-commit-cuts.xml: 6 passed, 2 fixture failures. Pre-reserve failure occurs before runtime creates the test host directory; initialize via production state_dir before testing cold history recovery. Product unchanged.",
+      "Core cuts wrap actual SQLite COMMIT boundaries, reopen the same ledger and verify original ticket, consumption, physical occupancy, TTL, bindings and one productive admission.",
+      "Connector store cuts cover reserve/bind/record/ack rollback and lost reply. Eight live cuts use real Core journal with synthetic provider; record/ACK recovery republishes exact provenance without second native open.",
+      "Unresolved reserve/bind obligations without a Core receipt remain pending after publication recovery. services/r4_reconciliation.py report explicitly rejects pending publications; these passing safety tests do not prove automatic readiness.",
+      "The previously documented reserve/bind recovery gap is resolved in local sources; see remote_preopen_recovery_validation for final integration and ACK-loss evidence."
+    ],
+    "next_action": "Continue remaining T24 audit; reserve/bind readiness gap is now covered by remote_preopen_recovery_validation.",
+    "remaining": "T24 other commit boundaries, invariant audit, coherent locks and installed tuple, independent-host T40. No live install/restart, commit or push."
+  },
+  "remote_preopen_recovery_validation": {
+    "status": "local_verified",
+    "evidence": [
+      "Nexus build/handoff-broadcast/remote-preopen-publication.xml: 2 failed in 113.63s, deliberately exercising the unmet recovery requirement through an actual child Connector with real HTTP/WebSocket, durable publications and capacity ledger. A lost reserve commit reply leaves RECONCILIATION_REQUIRED and a pending shutdown obligation; a lost bind commit reply also fails to regain ready. Both report exactly one cut, zero native opens and zero sends. Both test processes and fixtures reached terminal cleanup.",
+      "Core build/preopen-refusal.xml: 37 passed in 4.61s (23 new preopen fencing cases and 14 existing lease-refusal cases). New public API persists a domain-separated opening refusal through the Journal port, fences delayed native admission, refuses to overwrite any existing native intent, survives admission/final-receipt interruption and preserves containment quota. It records neither a session claim nor physical release.",
+      "Final current-source Nexus campaign: preopen-recovery-final.xml 14 passed in 304.71s; preopen-regressions.xml 59 passed in 520.38s. Both processes exited 0. Actual child Connector recovery covers reserve/bind commit reply loss, lost final ACK, next-generation readiness, exact physical capacity release and fresh work without replaying the original opening. Negative scope and transactional rollback cases passed.",
+      "Core preopen-report-contract-v2.xml: 56 passed; preopen-r4-regression.xml: 38 passed. Connector preopen-publication-regression-v2.xml: 37 passed; preopen-lease-wait.xml: 7 passed; preopen-reconciliation-regression.xml: 31 passed. Negotiated proof, durable publication preparation/fencing/acknowledgment and empty-runtime lease wait are integrated."
+    ],
+    "remaining": [
+      "T24 remaining commit boundaries and invariant audit; coherent dependency locks and installed tuple; independent remote host T40. User live instance unchanged."
+    ]
+  },
+  "canonical_notice_commit_cuts_validation": {
+    "status": "local_verified",
+    "evidence": [
+      "build/handoff-broadcast/creation-commit-cuts-final.xml: 4 passed in 7.46s. Actual SQLite rollback/lost commit reply in canonical creation and dependency completion/unblock. Fresh factory/service observes original task, atomic notices/routes/agenda/origins/authorization/dependencies; no productive runtime dispatch. Duplicate completion cannot duplicate event/notice.",
+      "Initial creation-commit-cuts.xml: 4 failed due to fixture expecting only beta/gamma; bootstrap also registers operator, which correctly receives an ordinary MCP inbox notice. Fixed test to assert all three distinct recipients explicitly; no product change."
+    ],
+    "remaining": "Other T24 commit boundaries and full invariant/installed-tuple/independent-host gates remain."
+  },
+  "preopen_extension_bundle_validation": {
+    "status": "local_verified",
+    "evidence": [
+      "Core generator --check exposed frame.schema.json/manifest.json drift. Moved negotiated preopen fields into generated contracts/preopen_refusal/v1 overlay with independent revision/manifest, pinned base schema hash and package data. Base R4 schema and manifest now have no diff from HEAD; base wire revision stays unchanged.",
+      "Core build/preopen-extension-bundle.xml: 67 passed in 7.10s; tests reject extension fields on productive frames and corrupted manifest/schema; existing preopen proofs and R4 codecs pass. Connector build/preopen-extension-consumer.xml: 30 passed in 7.79s. Generator --check passes.",
+      "Built Core 0.0.11 wheel and loaded directly from archive: package resources and overlay/base validators succeed. Wheel SHA256 21f24645432eb3ffa070bb3cb4e869a354e018efd708b64fff38db51ca5c5bbc. No install or live change.",
+      "Nexus build/handoff-broadcast/preopen-extension-consumer.xml: 14 passed in 147.56s, process exited 0. Revalidates authenticated scope/atomic proof and real Connector reserve/bind recovery, lost ready ACK and fresh work with the versioned extension bundle."
+    ],
+    "remaining": [
+      "Full installed tuple, dependency locks, remaining T24 boundaries and independent-host T40 remain separate gates."
+    ]
+  },
+  "unsent_fence_commit_cuts_validation": {
+    "status": "local_verified",
+    "evidence": [
+      "build/handoff-broadcast/send-fence-commit-cuts-v3.xml: 2 passed in 13.65s, process exited 0. Actual dispatch reservation and authorization refusal after capacity consumption; rollback/lost commit reply exercise atomic unsent proof plus pending physical release. Fresh factory observes original identity. Core remains CONSUMED until exact release, then RELEASED, without a new claim, epoch, provider invocation or invented Core receipt.",
+      "Initial reports send-fence-commit-cuts.xml and send-fence-commit-cuts-final.xml each had 2 fixture failures. Corrected assertions to query the exact opening proof alongside the legitimate never-sent child-turn proof, and read the persisted reason from SQLite rather than assuming CapacityAdmission exposes it. Product behavior unchanged."
+    ],
+    "remaining": "Other T24 rows retain explicit audit gaps; do not infer global commit coverage from these two cases."
+  },
+  "sender_commit_cuts_validation": {
+    "status": "local_verified",
+    "evidence": [
+      "build/handoff-broadcast/sender-commit-cuts.xml: 6 passed in 35.78s, terminal exit 0. Actual SQLite rollback/lost replies at dispatch reservation, begin-send and owner release. Fresh factory retains exact operation/token/attempt; proven unsent reservation can release, while possible committed send remains RECONCILING with no fabricated receipt/no-effect proof."
+    ],
+    "remaining": "Included in installed tuple campaign; T24 remaining obligations documented in commit-boundary-audit.md."
+  },
+  "installed_tuple_validation": {
+    "status": "local_verified",
+    "versions": {
+      "nexus": "0.3.0",
+      "core": "0.0.11",
+      "connector": "0.0.9"
+    },
+    "evidence": [
+      "Built wheels/sdists from current local sources. Nexus uses isolated source copy with fresh TypeScript/Vite compilation; packaged modules/assets match checkout (generated egg-info excluded). Core normalized wheel matches every packaged module source byte.",
+      "Both consumer wheel metadata pin Core==0.0.11 and both vendor/wheels copies have identical SHA256 f071812b4779bc87f8e3e72481d59170420b8a6cd6639b9e138a42d340365473. Nexus uv.lock regenerated offline with only three Core version/path lines changed; uv lock --check --offline passes. Core and Connector do not have project lockfiles.",
+      "vendor/ci/manifest.json now pins Core 0.0.11 and Connector 0.0.9. Artifact metadata/digests are recorded in build/handoff-tuple-installed/artifacts.json; package files compared byte-for-byte in installed.json.",
+      "Fresh isolated Python 3.13 environment installation succeeded; base-with-core and local-without-connector boot probes passed, HTTP dashboard/protocol returned 200, unauthenticated connection endpoint returned 401. pip check passed. No user installation, credentials, database or runtime changed.",
+      "Installed Core core-tests.xml: 140 passed in 7.392s. Installed Connector connector-tests.xml: 80 passed in 22.278s. Both processes terminal exit 0. Tests ran with -I outside source directories. Dependency inventory recorded in pip-freeze.txt.",
+      "Installed compatibility campaign completed: 12 passed in 104.981s, zero failures/errors/skips; campaign.json status PASS, exit_code 0, changed_inputs []. Explicit one-shot queue behavior and directed/competitive notification separation verified against the installed tuple.",
+      "Original frozen Nexus campaign completed: 128 passed in 1390.700s, no failures/errors/skips; campaign PASS, exit_code 0, changed_inputs []. This uses pre-correction Core hash f071812b; it is not the final journal-correction campaign.",
+      "Corrected-Core final Nexus campaign contains 54 cases, including six new commit cuts, initial refusal restarts, actual child Connector lifecycle, claim ownership/business outcomes, explicit one-shot queue, notice lifecycle and architecture boundaries. Process 1184 remains running; no terminal result claimed.",
+      "Final installed tuple verified: Nexus 0.3.0 (54 passed), Core 0.0.11 (187 passed), Connector 0.0.9 (99 passed); zero failures/errors/skips. Nexus campaign PASS, exit_code 0, changed_inputs []. Final wheel hashes and all installed package bytes rechecked against artifacts.json. Real local child Connector lifecycle, reconnect, graceful/abrupt restart, retained native stop, original operation recovery and commit cuts passed. Native providers are synthetic; this is not independent-host qualification.",
+      "User explicitly deferred independent-host T40 on 2026-10-14: use the local Connector now; test another host together after this stage. T40 is deferred by user, not passed or a blocker for completion of the current local scope."
+    ],
+    "remaining": []
+  },
+  "release_commit_audit_validation": {
+    "status": "local_verified",
+    "evidence": [
+      "Installed Nexus tuple: four renewal containment commit cuts passed in 33.86s; two release acceptance cuts passed in 15.96s. Exact original request/proof persists across rebuilt factories; rollback leaves projections unchanged; lost commit response replays the same ACK without another close or operation. Draft tests remain under build until the frozen installed campaign finishes.",
+      "Installed Connector: six session-release store cuts passed (prepare, acknowledge, new-generation reconciliation; before/after commit). Original report bytes retained, separate recovery provenance, no invented ACK.",
+      "New Core refusal commit tests exposed a real startup defect: legacy backfill created a session claim for modern pre-admission refusal receipts after journal reopen. Three of four new tests failed against the frozen installed Core.",
+      "Core correction restricts conservative session-claim backfill to journals without session_claims and atomically creates/backfills the table. Modern claim omissions remain authoritative; pre-existing claims are never deleted. Source refusal/preopen/capacity suite: 90 passed in 17.05s. Migration/commit suite: seven passed in 5.67s, including before/after migration commit.",
+      "Core journal regression: 78 passed and one legacy fixture failed because it simulated a modern journal. Fixture now explicitly removes the session_claims table to represent the legacy schema. Final claim/migration suite: 28 passed in 5.18s, including preserved legacy fencing and modern no-claim omissions.",
+      "New Nexus commit tests incorporated into tests/execution_r4 after the old campaign finished.",
+      "Final Core wheel SHA256 bf84ad1f3e12bcde9ef2b83d80985fdeca41a8ca0bce0f8ebc7dc4f141636892: verified source/package bytes, copied identically to both consumers and pinned manifest. uv lock --check --offline --python 3.13 passed.",
+      "Separate final installed environment: pip check passed; all 527 Nexus, 96 Connector and 145 Core packaged files match their wheel bytes; both consumers require Core==0.0.11.",
+      "Final installed Core: 187 passed in 58.91s. Final installed Connector: 99 passed in 91.57s. Tests include actual SQLite reopens and before/after commit cuts; no live user instance was changed.",
+      "Draft Nexus test runner initially omitted the R4 inventory fixture because the new file was temporarily under build. A py-spy dump of that exact process showed real installation discovery, before test assertions; only that draft process was terminated. Reloading the existing synthetic inventory fixture produced the four passing renewal tests. The permanent tests now inherit the normal tests/execution_r4/conftest.py.",
+      "Final installed tuple verified: Nexus 0.3.0 (54 passed), Core 0.0.11 (187 passed), Connector 0.0.9 (99 passed); zero failures/errors/skips. Nexus campaign PASS, exit_code 0, changed_inputs []. Final wheel hashes and all installed package bytes rechecked against artifacts.json. Real local child Connector lifecycle, reconnect, graceful/abrupt restart, retained native stop, original operation recovery and commit cuts passed. Native providers are synthetic; this is not independent-host qualification.",
+      "User explicitly deferred independent-host T40 on 2026-10-14: use the local Connector now; test another host together after this stage. T40 is deferred by user, not passed or a blocker for completion of the current local scope."
+    ],
+    "remaining": []
+  },
+  "scope_decision": {
+    "date": "2026-10-14",
+    "decision": "User explicitly deferred independent-host T40 on 2026-10-14: use the local Connector now; test another host together after this stage. T40 is deferred by user, not passed or a blocker for completion of the current local scope."
+  },
+  "deferred_validation": [
+    "T40: independent-host campaign with the user in a subsequent stage."
+  ],
+  "final_local_validation": {
+    "status": "passed",
+    "date": "2026-10-14",
+    "summary": "Final installed tuple verified: Nexus 0.3.0 (54 passed), Core 0.0.11 (187 passed), Connector 0.0.9 (99 passed); zero failures/errors/skips. Nexus campaign PASS, exit_code 0, changed_inputs []. Final wheel hashes and all installed package bytes rechecked against artifacts.json. Real local child Connector lifecycle, reconnect, graceful/abrupt restart, retained native stop, original operation recovery and commit cuts passed. Native providers are synthetic; this is not independent-host qualification.",
+    "reports": {
+      "nexus": "build\\handoff-tuple-final-installed\\tests.xml",
+      "core": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\build\\handoff-tuple-final-core.xml",
+      "connector": "D:\\Projetos\\Techridy\\okto-nexus-connector\\build\\handoff-tuple-final-connector.xml"
+    },
+    "results": {
+      "nexus": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "54",
+        "time": "696.126",
+        "timestamp": "2026-10-14T19:16:49.423252-03:00",
+        "hostname": "Alienware_m15"
+      },
+      "core": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "187",
+        "time": "58.398",
+        "timestamp": "2026-10-14T19:14:01.659344-03:00",
+        "hostname": "Alienware_m15"
+      },
+      "connector": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "99",
+        "time": "90.083",
+        "timestamp": "2026-10-14T19:14:15.731921-03:00",
+        "hostname": "Alienware_m15"
+      }
+    },
+    "artifacts": [
+      {
+        "package": "okto-nexus",
+        "version": "0.3.0",
+        "wheel": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\handoff-tuple-nexus-dist\\okto_nexus-0.3.0-py3-none-any.whl",
+        "sha256": "4ef46986fd1a59bf37ddf4f7d42eed518b0c8dbafc3fd96251c5e9679d500393",
+        "installed_root": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\handoff-tuple-final-venv\\Lib\\site-packages",
+        "verified_files": 527,
+        "core_requirement": [
+          "okto-nexus-connector-core==0.0.11"
+        ]
+      },
+      {
+        "package": "okto-nexus-connector",
+        "version": "0.0.9",
+        "wheel": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\ci\\okto_nexus_connector-0.0.9-py3-none-any.whl",
+        "sha256": "a1ba2f9c9307ea9c18e6fe1e9b7f398bdb7c293d762a74a3bffd8b3d82dcfd45",
+        "installed_root": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\handoff-tuple-final-venv\\Lib\\site-packages",
+        "verified_files": 96,
+        "core_requirement": [
+          "okto-nexus-connector-core==0.0.11"
+        ]
+      },
+      {
+        "package": "okto-nexus-connector-core",
+        "version": "0.0.11",
+        "wheel": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\build\\handoff-tuple-final-dist\\okto_nexus_connector_core-0.0.11-py3-none-any.whl",
+        "sha256": "bf84ad1f3e12bcde9ef2b83d80985fdeca41a8ca0bce0f8ebc7dc4f141636892",
+        "installed_root": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\handoff-tuple-final-venv\\Lib\\site-packages",
+        "verified_files": 145,
+        "core_requirement": []
+      }
+    ],
+    "criteria": "T01-T39 and INV-01 through INV-10 locally verified; T40 deferred by user.",
+    "limitations": [
+      "Synthetic native providers in deterministic integration tests; no universal real-harness qualification.",
+      "User explicitly deferred independent-host T40 on 2026-10-14: use the local Connector now; test another host together after this stage. T40 is deferred by user, not passed or a blocker for completion of the current local scope."
+    ],
+    "user_instance_changed": false,
+    "committed": false,
+    "pushed": false
+  },
+  "terminal_scrollback_validation": {
+    "status": "local_verified",
+    "date": "2026-10-14",
+    "scope": "Follow-up requested after handoff plan completion: readable session inputs and continuous scrollback in both live tail and history.",
+    "changes": [
+      "Shared frontend event stream starts with the latest 500 events; upward scroll prepends earlier events by existing authenticated cursor. Loaded history is retained across polling, pause and resume.",
+      "Scroll position is anchored while previous events load and new events arrive; previous-page requests are serialized and overlapping events deduplicated.",
+      "Removed frontend 32000-character text truncation and nested 320px tool-output viewport.",
+      "Codex, Claude and Pi user input adapters present the Nexus delivery body separately from labeled identifiers and expandable delivery context; protected fields remain masked."
+    ],
+    "evidence": [
+      "node --test tests/runtimeEvents.test.mjs tests/runtimePresentation.test.mjs: 21 passed, no failures.",
+      "build/terminal-scrollback/browser-final.xml::test_terminal_scrollback_live_resume_history_and_maximize: passed",
+      "build/terminal-scrollback/history-clean.xml::test_browser_session_history_refresh_gap_reload_and_scope: passed",
+      "Real Edge against isolated production event API/SQLite and synthetic native peer: 607 events, upward wheel loading, overlap/deduplication, concurrent live append, preserved scroll, pause/resume, maximize/restore, font controls, readable input over 40000 characters, protected session scope, history refresh/reload and gap indication.",
+      "npm run build: TypeScript and Vite succeeded; generated assets index-CxD0kD39.js and index-BUQwryH7.css.",
+      "Earlier UI failures were test navigation/interception assumptions: replaced obsolete public-route interception with authenticated runtime-management route and opened history through Agents instead of connection-test actions. Product authorization was not loosened.",
+      "The history fixture deliberately injected gap_state=pending without missing events. Its missing cleanup kept isolated shutdown waiting; restored only that disposable fixture after checking all 103 committed events and added finally cleanup. The clean rerun verifies automatic test teardown; no runtime behavior was changed to bypass reconciliation."
+    ],
+    "artifact_limit": "Previous installed wheel qualifications remain historical evidence for their exact hashes. This follow-up rebuilds repository dashboard assets; it does not rebuild or install a new Nexus wheel.",
+    "live_instance_changed": false,
+    "committed": false,
+    "pushed": false
+  },
+  "live_recovery_fix_20261014": {
+    "status": "local_verified_and_installed",
+    "date": "2026-10-14",
+    "fixes": [
+      "Ignore discovery source when matching the same consented installation; re-probe changed bytes.",
+      "Accept monotonic Pi lease renewals during native ingress launch, preserving scope/authority checks.",
+      "Classify pre-launch native ingress refusal as retry-safe with no process effect.",
+      "Allow uncertain opening receipts through existing container recovery and scoped operator attestation; never fabricate success."
+    ],
+    "tests": {
+      "core_native_ownership_and_permissions": 20,
+      "inventory_revalidation_distinct": 21,
+      "resource_recovery": 4
+    },
+    "readiness": [
+      {
+        "agent_id": "claude",
+        "state": "READY",
+        "error_code": null
+      },
+      {
+        "agent_id": "Pi",
+        "state": "READY",
+        "error_code": null
+      },
+      {
+        "agent_id": "codex",
+        "state": "READY",
+        "error_code": null
+      }
+    ],
+    "warm_pool": [
+      {
+        "agent_id": "Pi",
+        "state": "WARM",
+        "count": 4
+      }
+    ],
+    "installed_wheels": {
+      "build\\recovery-fix-dist\\okto_nexus-0.3.0-py3-none-any.whl": "96858367440928ae1aa75cb6f3116ff3044cf0c4f9d926787abe3a3adcc9df5f",
+      "build\\recovery-core-dist\\okto_nexus_connector_core-0.0.11-py3-none-any.whl": "888271d82f9a9726a4904a01cd1ff43c37dc0c448cb42c04fb175086b3cad6d6"
+    },
+    "legacy_recovery": {
+      "session": "ses_6a61a11e7d8121d3f5e3e7956d8c81b8",
+      "method": "Audited recovery API after verifying no Pi process; original unknown receipt retained.",
+      "evidence": "build/pi-recovery-process-attestation.json"
+    },
+    "scope": "Local development build; no commit, push or publication. Connector source unchanged."
+  },
+  "commit_preparation_20261014": {
+    "scope": "All accumulated changes in Nexus, Core and Connector, explicitly requested by user.",
+    "branches": {
+      "nexus": "feature/v0.3.0",
+      "core": "feature/v0.0.11",
+      "connector": "feature/v0.0.9"
+    },
+    "core_wheel_sha256": "888271d82f9a9726a4904a01cd1ff43c37dc0c448cb42c04fb175086b3cad6d6",
+    "checks": [
+      "Both consumers pin Core==0.0.11 and vendor identical corrected wheel bytes.",
+      "Every packaged Core module/resource matches current Core source.",
+      "CI manifest hashes updated; prior test results remain historical evidence."
+    ]
+  }
 }

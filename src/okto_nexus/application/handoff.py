@@ -203,6 +203,7 @@ class HandoffService:
         capabilities: Any = None,
         runtime_notifications: Any = None,
         runtime_schedule: Any = None,
+        execution_claims: Any = None,
     ) -> None:
         self._cf = connection_factory
         self._handoffs = handoffs
@@ -238,6 +239,7 @@ class HandoffService:
         self._guardrails = guardrails
         self._request_context_provider = request_context_provider
         self.runtime_work = runtime_work
+        self._execution_claims = execution_claims
         self._runtime_notifications, self._runtime_schedule = runtime_notifications, runtime_schedule
         self._claim_trust_guard = claim_trust_guard
         self._workspaces = workspaces
@@ -968,7 +970,7 @@ class HandoffService:
                                            session_id=session_id, session_secret=session_secret)
         from ..domain.execution_principal import current_execution_principal
         principal = current_execution_principal.get()
-        scoped_existing = (principal is not None and principal.audience == 'nexus-native-session'
+        scoped_existing = (principal is not None and principal.audience in {'nexus-native-session', 'nexus-mcp-session'}
                            and claim_epoch is not None)
         if not managed and (completion_mode != "authenticated_nexus_call" or any(value is not None for value in (execution_grant_id, idempotency_key)) or
                             (claim_epoch is not None and not scoped_existing)):
@@ -1106,8 +1108,12 @@ class HandoffService:
                 self.runtime_work.capacity_admissions.require_available(uow, handoff=handoff,
                     endpoint_id=runtime_endpoint_id, reservation=capacity_reservation)
         if scoped_existing:
+            if handoff.status == STATUS_OPEN:
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                    "Omit claim_epoch when claiming an OPEN handoff. Use the epoch returned "
+                    "by the successful claim for completion or same-session claim recovery.", {})
             from .execution_tool_claims import require_claim
-            require_claim(uow, handoff_id=handoff_id, claim_epoch=claim_epoch)
+            require_claim(uow, handoff_id=handoff_id, claim_epoch=claim_epoch, repository=self._execution_claims)
             if handoff.status != STATUS_CLAIMED or handoff.claimed_by != agent_id:
                 raise OktoNexusError(ErrorCode.INVALID_TRANSITION,
                                      "The session no longer owns this active claim.", {})
@@ -1132,7 +1138,7 @@ class HandoffService:
             )
         from .execution_tool_claims import remember_claim
         if not scoped_existing:
-            remember_claim(uow, claimed)
+            remember_claim(uow, claimed, self._execution_claims)
         if managed and not reused:
             operation = self.runtime_work.enqueue(uow, handoff=claimed, authorized=authorized,
                 key=idempotency_key, digest=digest, now=now, completion_mode=completion_mode,
@@ -1238,7 +1244,7 @@ class HandoffService:
                 self._require_actor(uow, agent_id)
             permission_set_for(self._agents, uow, agent_id).require("handoffs", "work")
             from .execution_tool_claims import require_claim
-            require_claim(uow, handoff_id=handoff_id, claim_epoch=claim_epoch)
+            require_claim(uow, handoff_id=handoff_id, claim_epoch=claim_epoch, repository=self._execution_claims)
             external_operation = self._authorize_external_work_return(uow, handoff_id=handoff_id,
                 agent_id=agent_id, claim_epoch=claim_epoch, session_id=session_id, session_secret=session_secret)
 
@@ -1647,7 +1653,7 @@ class HandoffService:
                 self._require_actor(uow, agent_id)
             permission_set_for(self._agents, uow, agent_id).require("handoffs", "work")
             from .execution_tool_claims import require_claim
-            require_claim(uow, handoff_id=handoff_id, claim_epoch=claim_epoch)
+            require_claim(uow, handoff_id=handoff_id, claim_epoch=claim_epoch, repository=self._execution_claims)
             external_operation = self._authorize_external_work_return(uow, handoff_id=handoff_id,
                 agent_id=agent_id, claim_epoch=claim_epoch, session_id=session_id, session_secret=session_secret)
 
@@ -1924,6 +1930,11 @@ class HandoffService:
             self._touch_agent(uow, agent_id, now)
             runtime_execution = self.runtime_work.binding(uow, handoff_id=handoff_id, claim_epoch=handoff.claim_epoch) if self.runtime_work else None
             managed_lease = self.runtime_work.owns_claim(uow, handoff_id=handoff_id) if self.runtime_work else False
+            from ..domain.execution_principal import current_execution_principal
+            principal = current_execution_principal.get()
+            payload_allowed = agent_id == handoff.claimed_by and (principal is None or (
+                self._execution_claims is not None and self._execution_claims.matches(uow,
+                    handoff_id=handoff_id, claim_epoch=handoff.claim_epoch, scope=dict(principal.scope))))
         response = {
             "handoff_id": handoff.handoff_id,
             "workspace_id": handoff.workspace_id,
@@ -1942,7 +1953,7 @@ class HandoffService:
         if managed_lease and agent_id in (handoff.from_agent_id, handoff.claimed_by):
             response["managed_lease_protected"] = True
             response["runtime_execution"] = runtime_execution
-        if agent_id == handoff.claimed_by:
+        if payload_allowed:
             response["payload"] = handoff.payload
         # Verification contract exposure (I4/FR6): the three columns surface
         # top-level ONLY when non-NULL (the trace_id pattern) - a
@@ -1991,6 +2002,36 @@ class HandoffService:
         if not self.runtime_work:
             raise OktoNexusError(ErrorCode.CONFLICT, "Runtime work recovery is unavailable.", {})
         self.runtime_work.access.authorize_maintenance(context, uow=uow)
+        return self._reopen_runtime_claim(uow, operation=operation, handoff_id=handoff_id,
+            claim_epoch=claim_epoch, reason=reason, reconciliation_id=reconciliation_id,
+            actor_agent_id=context.actor_agent_id)
+
+    def recover_unconsumed_runtime_claim(self, uow, operation_id):
+        """Internal compensation, authorized by durable exact host proof only."""
+        work = self.runtime_work
+        if work is None or work.capacity_admissions is None:
+            raise OktoNexusError(ErrorCode.CONFLICT, 'Capacity compensation is unavailable.', {})
+        admission = work.capacity_admissions.get(uow, operation_id)
+        if admission.state != 'CANCELLED_NO_EFFECT':
+            raise OktoNexusError(ErrorCode.CONFLICT, 'Unconsumed capacity proof is required.', {})
+        claim = work.capacity_admissions.compensated_claim(uow, operation_id)
+        operation = work.outbox.get(uow, operation_id)
+        handoff = self._load_in_workspace(uow, operation['workspace_id'], claim['handoff_id'])
+        if (handoff.claim_epoch > claim['claim_epoch'] or
+                handoff.claim_epoch == claim['claim_epoch']
+                and handoff.claimed_by == operation['recipient_agent_id']
+                and handoff.status in {STATUS_COMPLETED, STATUS_REJECTED, STATUS_VERIFYING}):
+            # The original ticket proves only that this admission never ran.
+            # Retire its resources without undoing an authenticated outcome,
+            # verification/rework, or a newer generation's ownership.
+            return {'handoff_id': handoff.handoff_id, 'status': handoff.status,
+                    'previous_claim_epoch': claim['claim_epoch'], 'automatic_execution': False}
+        return self._reopen_runtime_claim(uow, operation=operation, handoff_id=claim['handoff_id'],
+            claim_epoch=claim['claim_epoch'], reason=admission.reservation.state,
+            reconciliation_id=None, actor_agent_id=None)
+
+    def _reopen_runtime_claim(self, uow, *, operation, handoff_id, claim_epoch, reason,
+                              reconciliation_id, actor_agent_id):
         handoff = self._load_in_workspace(uow, operation["workspace_id"], handoff_id)
         if (handoff.status != STATUS_CLAIMED or handoff.claimed_by != operation["recipient_agent_id"]
                 or handoff.claim_epoch != claim_epoch):
@@ -2000,7 +2041,7 @@ class HandoffService:
             raise OktoNexusError(ErrorCode.CONFLICT, "Attempt does not own this claim generation.", {})
         updated = self._handoffs.reopen_managed_claim(uow, workspace_id=handoff.workspace_id,
             handoff_id=handoff_id, claimed_by=handoff.claimed_by, claim_epoch=claim_epoch, updated_at=self._clock.now_iso())
-        self._emit(uow, handoff=updated, event_type=EVENT_RECOVERED, actor_agent_id=context.actor_agent_id,
+        self._emit(uow, handoff=updated, event_type=EVENT_RECOVERED, actor_agent_id=actor_agent_id,
             payload={"handoff_id": handoff_id, "workspace_id": handoff.workspace_id, "status": STATUS_OPEN,
                 "previous_claimed_by": handoff.claimed_by, "claim_epoch": claim_epoch,
                 "operation_id": operation["operation_id"], "reconciliation_id": reconciliation_id, "reason": reason})
@@ -2082,10 +2123,13 @@ class HandoffService:
                 handoff.lease_expires_at <= self._clock.now_iso()))):
             raise OktoNexusError(ErrorCode.NOT_OWNER,
                                  "This session may no longer read the claimed payload.", {})
+        if includes_payload:
+            from .execution_tool_claims import require_claim
+            require_claim(uow, handoff_id=handoff_id, claim_epoch=claim_epoch, repository=self._execution_claims)
         if action != 'context':
             permission_set_for(self._agents, uow, agent_id).require("handoffs", "work")
             from .execution_tool_claims import require_claim
-            require_claim(uow, handoff_id=handoff_id, claim_epoch=claim_epoch)
+            require_claim(uow, handoff_id=handoff_id, claim_epoch=claim_epoch, repository=self._execution_claims)
             if handoff.claimed_by != agent_id:
                 raise OktoNexusError(ErrorCode.NOT_OWNER, "This session no longer owns the claim.", {})
             if action == 'claim':

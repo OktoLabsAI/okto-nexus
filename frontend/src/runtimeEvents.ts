@@ -11,5 +11,14 @@ export function validateEventPage(page: RuntimeEventPage, scope: RuntimeScope, a
 }
 
 export function appendTail(previous: RuntimeEventPage['events'], incoming: RuntimeEventPage['events']) {
-  return [...previous, ...incoming.filter(event => event.sequence > (previous.at(-1)?.sequence ?? 0))].slice(-200);
+  return [...previous, ...incoming.filter(event => event.sequence > (previous.at(-1)?.sequence ?? 0))];
+}
+
+export const initialEventWindow = 500;
+export const eventPageSize = 100;
+export function previousEventCursor(firstSequence: number) {
+  return Math.max(0, firstSequence - eventPageSize - 1);
+}
+export function prependEvents(previous: RuntimeEventPage['events'], incoming: RuntimeEventPage['events']) {
+  return [...incoming.filter(event => event.sequence < (previous[0]?.sequence ?? Infinity)), ...previous];
 }

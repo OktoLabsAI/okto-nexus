@@ -1,5 +1,17 @@
 # Current development dependency
 
+Core 0.0.11 is required by Nexus 0.3.0 and Connector 0.0.9.
+Shared wheel SHA-256: 888271d82f9a9726a4904a01cd1ff43c37dc0c448cb42c04fb175086b3cad6d6.
+Built from feature/v0.0.11 with the local handoff capacity, recovery and
+Pi tool guidance and native launch lease-renewal fixes. Both consumers use identical wheel bytes.
+The preopen recovery extension has its own versioned contract; base R4
+schema bytes remain unchanged. This is a local validation artifact, not
+a published release or independent-host qualification.
+
+## Historical dependency records
+
+# Current development dependency
+
 Core 0.0.10 is required by Nexus 0.3.0 and Connector 0.0.8.
 Shared wheel SHA-256: `d66b60df1db82fafd0f9f9da1a786f229a41e4fe15eacbf158ad836651fad73e`.
 Built from branch `feature/v0.0.10`, including the local implementation of

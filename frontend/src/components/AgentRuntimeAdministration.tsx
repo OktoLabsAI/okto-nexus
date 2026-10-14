@@ -9,13 +9,20 @@ import { RuntimeSessionTail } from './RuntimeSessionTail';
 import { RuntimeFinalOutput } from './RuntimeTerminal';
 import { useConfirm } from './Confirm';
 import './AgentRuntimeAdministration.css';
+import { HandoffRuntimeProgress } from './HandoffRuntimeProgress';
 
 const short = (id: string) => id.length > 22 ? `${id.slice(0,12)}…${id.slice(-6)}` : id;
 const key = (s: RuntimeSession) => `${s.scope.executor_id}:${s.scope.session_id}`;
 const date = (value: string) => new Date(value).toLocaleString();
+const capacityLabels: Record<string,string> = {IDLE_OBSERVED:'Session observed idle',
+  OPENING_CAPACITY_OBSERVED:'Capacity to open a session observed', RESERVED:'Capacity reserved',
+  IN_USE:'Capacity in use', RELEASE_PENDING:'Waiting for confirmed release',
+  WAITING_CAPACITY:'Waiting for capacity', UNKNOWN:'Availability unknown'};
 
 export function AgentRuntimeAdministration({agentId, onClose}: {agentId: string; onClose: () => void}) {
   const [view, setView] = useState<AgentRuntimeOverview | null>(null);
+  const [readAt, setReadAt] = useState(0);
+  const [observationClock, setObservationClock] = useState(0);
   const [after, setAfter] = useState(0);
   const [back, setBack] = useState<number[]>([]);
   const [reload, setReload] = useState(0);
@@ -37,16 +44,25 @@ export function AgentRuntimeAdministration({agentId, onClose}: {agentId: string;
     const controller = new AbortController(); let timer: number | undefined;
     const load = async () => {
       try {
+        const started = performance.now();
         const value = await api.agentRuntimeOverview(agentId, after, controller.signal);
         if (controller.signal.aborted) return;
         if (value.agent_id !== agentId || value.active.some(s => s.scope.agent_id !== agentId)) throw new Error('The runtime list belongs to another agent.');
-        setView(value);setError('');
+        setView(value);setReadAt(started);setObservationClock(performance.now());setError('');
       } catch (failure) {if (!controller.signal.aborted) setError(String(failure));}
       finally {if (!controller.signal.aborted) timer = window.setTimeout(() => void load(), 3000);}
     };
     void load();
     return () => {controller.abort();window.clearTimeout(timer);};
   }, [agentId, after, reload]);
+  useEffect(() => {
+    const deadlines = (view?.capacity_observations?.items || []).filter(row => row.fresh)
+      .map(row => readAt + row.valid_for_ms).filter(deadline => deadline > observationClock);
+    if (!deadlines.length) return;
+    const timer = window.setTimeout(() => setObservationClock(performance.now()),
+      Math.max(0, Math.min(...deadlines) - performance.now()) + 1);
+    return () => window.clearTimeout(timer);
+  }, [view, readAt, observationClock]);
   useEffect(() => {
     if (!Object.keys(closing).length) return;
     const controller = new AbortController();let timer: number | undefined;
@@ -106,6 +122,7 @@ export function AgentRuntimeAdministration({agentId, onClose}: {agentId: string;
       const result = await closures.current.close(runtimeApi,session);
       if (live.current) {setCloseError('');if (result) setClosing(old => ({...old,[key(session)]:result.operation_id}));setReload(n => n+1);}
     }});
+  const observationElapsed = Math.max(0, Math.max(observationClock, performance.now()) - readAt);
   return <AgentActionModal title={`Runtime administration · ${agentId}`} wide guardChanges={false} onClose={onClose}>
     {dialog}
     <div className={`runtime-admin ${selected ? 'runtime-admin-has-selection' : ''}`}>
@@ -116,6 +133,35 @@ export function AgentRuntimeAdministration({agentId, onClose}: {agentId: string;
         {error && <p role="alert" className="text-xs">Could not refresh. Displayed data may be outdated. {error}</p>}
         {closeError && <p role="alert" className="text-xs">{closeError}</p>}
         {!view && !error && <p role="status">Loading instances…</p>}
+        {view?.capacity_observations && <details className="space-y-2 text-xs" aria-label="Contextual capacity observations">
+          <summary className="cursor-pointer font-semibold">Contextual capacity</summary>
+          <p className="text-surface-500">Recent assessments made during runtime scheduling. Each applies to one workspace and session context. A ready installation or a connected control channel does not guarantee free capacity.</p>
+          {!view.capacity_observations.items.length && <p>Availability unknown: no recent contextual assessment.</p>}
+          {view.capacity_observations.items.map(row => {
+            const fresh = row.fresh && !error && observationElapsed < row.valid_for_ms;
+            return <article key={`${row.executor_id}:${row.binding_id}:${row.context_id}:${row.session_id}:${row.unit}`} className="runtime-admin-row space-y-1">
+            <strong>{capacityLabels[fresh ? row.state : 'UNKNOWN'] || capacityLabels.UNKNOWN}</strong>
+            <p className="break-all">Workspace {short(row.workspace_id)} · {row.unit === 'next_turn' ? 'Existing session' : 'New session'} {short(row.session_id)}</p>
+            <p className="break-all" title={row.context_id}>Context {short(row.context_id)}</p>
+            <p className="text-surface-500">{(fresh ? row.reason : 'STALE_OBSERVATION').replaceAll('_',' ').toLowerCase()} · observed {((row.age_ms+observationElapsed)/1000).toFixed(1)} s ago</p>
+          </article>})}
+          {view.capacity_observations.has_more && <p>Showing the 20 most recent contexts.</p>}
+          <p className="text-surface-500">Observations expire within 5 seconds and do not reserve capacity. Reservation and authority checks still occur at admission.</p>
+        </details>}
+        {view?.broadcast_handoffs && <details className="space-y-2 text-xs" aria-label="Broadcast handoff attempts">
+          <summary className="cursor-pointer font-semibold">Broadcast handoffs · recent attempts</summary>
+          <p className="text-surface-500">Capacity depends on the workspace and source session. A ready installation alone does not mean capacity is available. These observations do not reserve capacity.</p>
+          {!view.broadcast_handoffs.items.length && <p>No recorded attempts.</p>}
+          {view.broadcast_handoffs.items.map(attempt => <article key={attempt.attempt_id} className="runtime-admin-row space-y-1">
+            <p className="break-all" title={attempt.handoff_id}>{short(attempt.handoff_id)}</p>
+            <p>{attempt.state.replaceAll('_',' ').toLowerCase()}</p>
+            {attempt.reservation_state && <p>Last reservation report: {attempt.reservation_state.toLowerCase()} · {date(attempt.reservation_observed_at)}</p>}
+            {attempt.reason && <p className="text-surface-500 break-words">{attempt.reason.replaceAll('_',' ').toLowerCase()}</p>}
+            <p className="text-surface-500">{date(attempt.updated_at)} · {attempt.current_claim ? 'Current managed claim' : 'Attempt history'}</p>
+            {attempt.handoff_progress && <HandoffRuntimeProgress value={attempt.handoff_progress} details />}
+          </article>)}
+          {view.broadcast_handoffs.has_more && <p className="text-surface-500">Showing the 20 most recently updated attempts.</p>}
+        </details>}
         {view?.active.length===0 && <p className="text-sm text-surface-500">No open instances on this page.</p>}
         {view?.active.map(session => <article key={key(session)} className={`runtime-admin-row ${selected && key(selected)===key(session) ? 'runtime-admin-selected' : ''}`}>
           <div className="flex gap-2 items-center flex-wrap"><strong>{session.harness}</strong><span className="runtime-admin-badge">{closing[key(session)] || session.durable_release_pending ? 'Closing…' : session.pool_state || session.lifecycle_state}</span></div>

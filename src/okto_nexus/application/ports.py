@@ -1202,6 +1202,10 @@ class ObservabilityQueries(Protocol):
         """
         ...
 
+    def handoff_runtime_facts(self, uow: UnitOfWork, handoff_ids: list[str]) -> dict[str, dict[str, Any]]:
+        """Read execution facts only for the already-authorized page of handoffs."""
+        ...
+
     def last_actions_by_agent(
         self, uow: UnitOfWork, *, workspace_id: str | None
     ) -> dict[str, dict[str, Any]]:

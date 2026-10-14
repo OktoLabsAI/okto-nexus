@@ -46,7 +46,8 @@ class EmbeddedReconciliation:
                 key = OperationKey(slot.key.server_id, slot.key.executor_id, slot.opening_operation_id)
                 receipt = await journal.get_receipt(key)
                 projected = project_r4_bound_receipt(json.loads(row['binding_json']), receipt, key=key, receipt_revision=1)
-                if projected['stage'] not in ('SUBMITTED', 'SUCCEEDED') or projected['session_id'] != slot.key.session_id:
+                if (projected['stage'] not in ('SUBMISSION_STARTED', 'SUBMITTED', 'RUNNING', 'OUTCOME_UNKNOWN', 'SUCCEEDED', 'FAILED')
+                        or not projected['possible_effect'] or projected['session_id'] != slot.key.session_id):
                     raise CoreError('RECONCILIATION_REQUIRED', 'embedded_recovery_plan')
                 return dict(session_id=slot.key.session_id, opening_operation_id=slot.opening_operation_id,
                             agent_id=projected['agent_id'])
@@ -229,7 +230,9 @@ class EmbeddedReconciliation:
                 receipt = await journal.get_receipt(key)
                 projected = project_r4_bound_receipt(json.loads(row['binding_json']), receipt,
                     key=key, receipt_revision=1)
-                if projected['session_id'] != claim.key.session_id or projected['stage'] not in ('SUBMITTED', 'SUCCEEDED'):
+                if (projected['session_id'] != claim.key.session_id
+                        or projected['stage'] not in ('SUBMISSION_STARTED', 'SUBMITTED', 'RUNNING', 'OUTCOME_UNKNOWN', 'SUCCEEDED', 'FAILED')
+                        or not projected['possible_effect']):
                     raise CoreError('RECONCILIATION_REQUIRED', 'embedded_container_receipt')
                 birth = await journal.get_process_birth(claim.key)
                 if birth is None or birth.key != claim.key or birth.opening_operation_id != claim.opening_operation_id:
@@ -269,6 +272,18 @@ class EmbeddedReconciliation:
             raise CoreError("JOURNAL_UNAVAILABLE","embedded_resource_files")
         ledger = await host._ledger() if 'owned-slots.db' in expected else None
         if ledger is not None:
+            # Consumption can precede both the initial lease and Core.open.
+            # The new owner fences the old worker; Core alone confirms whether
+            # its original placeholder can be released without stopping work.
+            from ..application.execution_preopen_capacity import ExecutionPreopenCapacity
+            from ..adapters.outbound.sqlite.execution_preopen_capacity import SqlitePreopenCapacityRepository
+            preopen = ExecutionPreopenCapacity(factory=owner.factory,
+                repository=SqlitePreopenCapacityRepository(), capacity_provider=owner.execution_capacity,
+                channel=owner.channel)
+            for row in records:
+                if row['binding_json'] is None and row['stream_epoch'] is None:
+                    await asyncio.to_thread(owner.verify)
+                    await preopen.release(session_id=row['session_id'], opening_operation_id=row['open_operation_id'])
             await self._recover_containers(ledger, [r for r in records if r['session_id'] not in absent])
             await self._empty_slots(ledger, {r['session_id'] for r in records} if agent_id is not None else None)
         proofs = {}
@@ -280,6 +295,9 @@ class EmbeddedReconciliation:
                     unstarted_sessions.add(row['session_id'])
                 continue
             if row["binding_json"] is None or row["stream_epoch"] is None:
+                from .embedded_initial_refusal import EmbeddedInitialRefusal
+                if await EmbeddedInitialRefusal(owner).recover(session_id=row['session_id'], pending_only=False):
+                    continue
                 if row['binding_json'] is None and row['stream_epoch'] is None:
                     await self._recover_unstarted(row)
                     continue

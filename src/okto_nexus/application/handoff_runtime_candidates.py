@@ -32,9 +32,13 @@ def refusal(error):
 
 
 class HandoffCandidateDiscovery:
-    def __init__(self, *, factory, repository: HandoffCandidateRepository, attempts, handoffs):
+    def __init__(self, *, factory, repository: HandoffCandidateRepository, attempts, handoffs,
+                 acquisition_enabled=True):
+        if type(acquisition_enabled) is not bool:
+            raise ValueError('Invalid handoff acquisition setting.')
         self.factory, self.repository = factory, repository
         self.attempts, self.handoffs = attempts, handoffs
+        self.acquisition_enabled = acquisition_enabled
 
     def _eligible(self, uow, handoff, agent_id):
         agent = self.handoffs._routing_agent(uow, agent_id, handoff.workspace_id)
@@ -47,7 +51,7 @@ class HandoffCandidateDiscovery:
         with self.factory.unit_of_work() as uow:
             handoff = self.handoffs._handoffs.get(uow, workspace_id=lease.workspace_id,
                                                   handoff_id=lease.handoff_id)
-            allow_new = bool(handoff and handoff.status == 'OPEN'
+            allow_new = bool(self.acquisition_enabled and handoff and handoff.status == 'OPEN'
                 and handoff.claim_epoch == lease.claim_generation
                 and json.loads(handoff.target).get('strategy') == 'broadcast')
             agents, cursor, more = self.repository.agents_page(uow, lease, allow_new=allow_new, limit=limit)

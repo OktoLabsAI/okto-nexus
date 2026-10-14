@@ -116,6 +116,7 @@ def test_workspace_paths_aggregate_across_agents_on_the_same_host(local_setup):
 @pytest.mark.parametrize('failure',['no_test','invalid_settings','stale_baseline'])
 def test_finish_rolls_back_every_configuration_change(local_setup,failure):
     context,request=request_for(local_setup)
+    request['broadcast_handoff_auto_claim'] = True
     request['mcp_preset'] = dict(expected_revision=0, servers=[
         dict(name='docs', transport='http', url='https://example.test/mcp')])
     verified={'root':directory_identity(request['configuration']['workspace_root']),'home':None}
@@ -125,6 +126,57 @@ def test_finish_rolls_back_every_configuration_change(local_setup,failure):
     with pytest.raises(Exception): finish(local_setup,context,request,verified=verified)
     for table in ('execution_bindings','execution_local_realizations','connection_setup_commits','agent_execution_policies','agent_runtime_overrides','runtime_mcp_presets'):
         assert count(local_setup,table) == 0
+
+
+def test_setup_auto_claim_preserves_omission_and_resets_explicit_null(local_setup):
+    from okto_nexus.application import runtime_policy
+    context, request = request_for(local_setup)
+    request.update(executor_id='', candidate_ref='', inventory_revision='', workspace_id=None, binding_id=None)
+    request['configuration']['execution_location'] = 'remote'
+    client, headers = local_setup[2:4]
+    path = '/v1/connections/setup:finish'
+    for index, change in enumerate(({'broadcast_handoff_auto_claim': True}, {},
+                                    {'broadcast_handoff_auto_claim': False},
+                                    {'broadcast_handoff_auto_claim': None})):
+        request.pop('broadcast_handoff_auto_claim', None)
+        request.update(change, client_intent_id=f'policy-{index}',
+                       baseline=load_setup(local_setup[0], context, 'subject')['baseline'])
+        before = runtime_policy.read_policy(local_setup[0], context, 'subject')
+        snapshot = load_setup(local_setup[0], context, 'subject')
+        assert snapshot['runtime_policy'] == before
+        assert snapshot['baseline']['runtime_revision'] == before['revision']
+        assert snapshot['baseline']['defaults_revision'] == before['defaults']['revision']
+        response = client.post(path, headers=headers['operator'], json=request)
+        assert response.status_code == 200, response.text
+        after = runtime_policy.read_policy(local_setup[0], context, 'subject')
+        assert after['broadcast_handoff_auto_claim'] is change.get(
+            'broadcast_handoff_auto_claim', before['broadcast_handoff_auto_claim'])
+        assert client.post(path, headers=headers['operator'], json=request).json() == response.json()
+        assert runtime_policy.read_policy(local_setup[0], context, 'subject') == after
+    assert count(local_setup, 'execution_bindings') == 0
+    assert count(local_setup, 'runtime_execution_grants') == 0
+    # An opted-in agent still needs its own execution grant and a capable host.
+
+
+def test_setup_auto_claim_rejects_non_boolean_and_stale_revision(local_setup, monkeypatch):
+    from okto_nexus.application import runtime_policy
+    context, request = request_for(local_setup)
+    request['configuration']['execution_location'] = 'remote'
+    client, headers = local_setup[2:4]
+    monkeypatch.setattr(client._transport, 'raise_server_exceptions', True)
+    before = runtime_policy.read_policy(local_setup[0], context, 'subject')
+    path = '/v1/connections/setup:finish'
+    for invalid in ('true', 1, {}, []):
+        response = client.post(path, headers=headers['operator'], json=request | {
+            'broadcast_handoff_auto_claim': invalid})
+        assert response.status_code == 400, response.text
+        assert response.json()['error']['code'] == 'VALIDATION_ERROR'
+    request['baseline']['runtime_revision'] += 1
+    response = client.post(path, headers=headers['operator'], json=request | {
+        'broadcast_handoff_auto_claim': True})
+    assert response.status_code == 409, response.text
+    assert runtime_policy.read_policy(local_setup[0], context, 'subject') == before
+    assert count(local_setup, 'connection_setup_commits') == 0
 
 
 def test_setup_transport_requires_operator(local_setup):

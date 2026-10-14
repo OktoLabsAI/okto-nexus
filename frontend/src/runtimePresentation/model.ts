@@ -5,7 +5,7 @@ export type Fields = {label: string; value: string}[];
 export type ActionKind = 'assistant' | 'user' | 'tool' | 'thinking' | 'status' | 'error' | 'approval';
 export interface TerminalAction {
   id: string; kind: ActionKind; title: string; text?: string; fields?: Fields; output?: string;
-  status?: string; time?: string; sequence?: number;
+  status?: string; time?: string; sequence?: number; details?: Fields;
 }
 export interface ActionUpdate extends Omit<TerminalAction, 'time' | 'sequence'> {
   append?: boolean; appendOutput?: boolean;
@@ -35,11 +35,11 @@ export function decoded(value: unknown): unknown {
   if (typeof value !== 'string') return value;
   try { return JSON.parse(value); } catch { return value; }
 }
-// Bound arbitrary tool results and never render objects with JSON.stringify.
+// Normalize nested tool results without dumping JSON or truncating their text.
 // Escape sequences are inert text; React owns escaping, including HTML in output.
 export function clean(value: string): string {
   return value.replace(/\x1b\[[0-?]*[ -/]*[@-~]/g, '').replace(/\x1b\][^\x07]*(?:\x07|\x1b\\)/g, '')
-    .replace(/[\x00-\x08\x0b-\x1f\x7f]/g, '').slice(0, 32000);
+    .replace(/[\x00-\x08\x0b-\x1f\x7f]/g, '');
 }
 export function fields(value: unknown, prefix = '', depth = 0): Fields {
   if (depth > 6) return [{label: prefix || 'Value', value: 'Additional nested content omitted'}];

@@ -10,7 +10,7 @@ const temporary=await mkdtemp(join(tmpdir(),'nexus-presentation-'));
 let presentEvents;
 try {
   await writeFile(join(temporary,'package.json'),' {"type":"module"}');
-  for(const name of ['model','codex','claude','pi','index']) {
+  for(const name of ['model','input','codex','claude','pi','index']) {
     const source=await readFile(new URL(`../src/runtimePresentation/${name}.ts`,import.meta.url),'utf8');
     const compiled=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}}).outputText;
     await writeFile(join(temporary,`${name}.js`),compiled.replace(/from '(\.\/\w+)'/g,"from '$1.js'"));
@@ -101,13 +101,36 @@ test('identical replies in different turns are retained',()=>{
   assert.equal(actions.filter(a=>a.kind==='assistant').length,2);
 });
 
-test('partial history pages and unknown harness payloads are safe and bounded',()=>{
+test('partial history pages keep complete text and strip terminal control sequences',()=>{
   const actions=presentEvents(events([
     ['item/agentMessage/delta',{itemId:'m1',delta:'Partial history'}],
     ['future/action',{output:'\u001b[31mError\u001b[0m',empty:{},large:'a'.repeat(50000)}],
   ]));
   assert.equal(actions[0].text,'Partial history');assert.equal(actions[1].fields[0].value,'Error');
-  assert.equal(actions[1].fields[1].value.length,32000);
+  assert.equal(actions[1].fields[1].value.length,50000);
+});
+
+for (const harness of ['codex_app_server','claude_stream','pi_rpc']) test(`${harness}: delivery input separates the request from readable context`,()=>{
+  const envelope={operation_id:'op1',workspace_id:'workspace',sender_agent_id:'operator',recipient_agent_id:'worker',
+    intent:'handoff_execute',subject:'Review changes',handoff_id:'hof1',claim_epoch:2,
+    content:[{type:'text',text:'Please review **all changes**.'}],runtime_context:{instructions:'Use Nexus tools',api_key:'MUST_NOT_RENDER'}};
+  const prompt='NEXUS DELIVERY: respond to the sender request.\n'+JSON.stringify(envelope)+
+    '\nNEXUS TRANSPORT BINDING: current attempt\n'+JSON.stringify({operation_id:'op1',revision:3});
+  const blocks=[{type:'text',text:prompt}];
+  const frame=harness==='codex_app_server'?['item/completed',{item:{id:'u1',type:'userMessage',content:blocks}}]:
+    harness==='claude_stream'?['user_echo',{message:{content:blocks}}]:['message_end',{message:{role:'user',content:blocks}}];
+  const [action]=presentEvents(events([frame]),harness);
+  assert.equal(action.title,'Handoff request');assert.equal(action.text,'Please review **all changes**.');
+  assert.ok(action.fields.some(f=>f.label==='Subject' && f.value==='Review changes'));
+  assert.ok(action.details.some(f=>f.value==='Use Nexus tools'));
+  assert.ok(!JSON.stringify(action).includes('MUST_NOT_RENDER'));
+  assert.ok(!action.text.includes('NEXUS DELIVERY'));
+});
+
+test('long streamed responses retain their final suffix beyond the former 32K limit',()=>{
+  const chunks=Array.from({length:5},(_,i)=>['item/agentMessage/delta',{itemId:'message',delta:String(i).repeat(10000)}]);
+  const [action]=presentEvents(events(chunks),'codex_app_server');
+  assert.equal(action.text.length,50000);assert.ok(action.text.endsWith('4'.repeat(10000)));
 });
 
 test('Claude authoritative final replaces streamed text while failed tools retain their inputs',()=>{

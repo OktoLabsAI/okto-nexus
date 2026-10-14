@@ -3,6 +3,12 @@
 .runtime-terminal-readonly { margin-left:auto; color:#8d9bb2; font-size:11px; }
 .runtime-terminal-screen { font-size:var(--terminal-font-size,12px); line-height:1.65; margin:0; padding:18px 16px; list-style:none; min-height:260px; max-height:60dvh; overflow:auto; overflow-x:hidden; scrollbar-color:#414d63 #0c1018; }
 .runtime-terminal-screen:focus-visible { outline:2px solid #809aff; outline-offset:-2px; }
+.runtime-terminal-screen { overflow-anchor:none; overscroll-behavior:contain; }
+.runtime-terminal-previous { text-align:center; padding:0 0 16px; color:#9fbaff; }
+.runtime-terminal-previous button { padding:4px 12px; border-radius:4px; }
+.runtime-terminal-previous button:hover { background:#202c40; }
+.runtime-terminal-previous button:focus-visible { outline:2px solid #9fbaff; }
+.runtime-terminal-previous button:disabled { color:#8c9ab1; cursor:wait; }
 .runtime-terminal-action { display:flex; align-items:flex-start; gap:10px; padding:0 0 20px; min-width:0; }
 .runtime-terminal-symbol { width:14px; flex-shrink:0; padding-top:4px; color:#9baeff; }
 .runtime-terminal-action-body { min-width:0; flex:1; overflow-wrap:anywhere; }
@@ -28,7 +34,7 @@
 .runtime-terminal-fields dd { margin:0; white-space:pre-wrap; overflow-wrap:anywhere; }
 .runtime-terminal-output { margin:8px 0 0 3px; color:#aebcd2; }
 .runtime-terminal-output summary { cursor:pointer; width:fit-content; color:#9fbaff; }
-.runtime-terminal-output pre { margin:6px 0; max-height:320px; overflow:auto; padding-left:12px; border-left:1px solid #334158; }
+.runtime-terminal-output pre { margin:6px 0; padding-left:12px; border-left:1px solid #334158; }
 .runtime-terminal-user { background:#171f2d; margin:0 -8px 18px; padding:10px 8px; border-radius:4px; }
 .runtime-terminal-thinking { color:#9eacc4; }
 .runtime-terminal-status { padding-bottom:10px; font-size:.9167em; }

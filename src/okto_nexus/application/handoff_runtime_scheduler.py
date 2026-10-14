@@ -15,7 +15,7 @@ from nexus_connector_core.capacity import CAPACITY_REASONS
 from .handoff_notice_retirement import HandoffNoticeRetirement
 
 
-SCHEDULE_REASONS = CAPACITY_REASONS | {'NO_CANDIDATES', 'MORE_CANDIDATES', 'CLAIM_COMMITTED', 'SETTLED'}
+SCHEDULE_REASONS = CAPACITY_REASONS | {'NO_CANDIDATES', 'MORE_CANDIDATES', 'CLAIM_COMMITTED', 'SETTLED', 'AMBIGUOUS_BINDING'}
 
 
 @dataclass(frozen=True)
@@ -47,7 +47,7 @@ def schedule_backoff(reason, count):
         return 0.05
     base = {'BUSY_AFFINITY': 1, 'POOL_FULL': 1, 'HOST_FULL': 1, 'EARLIER_WORK_PENDING': 1,
             'RECOVERING': 2, 'STALE_OBSERVATION': 2, 'NO_CANDIDATES': 5,
-            'NOT_AUTHORIZED': 30, 'CAPACITY_PROTOCOL_UNSUPPORTED': 60}.get(reason, 5)
+            'NOT_AUTHORIZED': 30, 'AMBIGUOUS_BINDING': 30, 'CAPACITY_PROTOCOL_UNSUPPORTED': 60}.get(reason, 5)
     return min(300 if base >= 30 else 30, base * 2 ** min(max(count - 1, 0), 6))
 
 
@@ -161,10 +161,14 @@ class HandoffRuntimeScheduler:
         with self.factory.unit_of_work() as uow:
             self.repository.finish(uow, lease, outcome, now=self.now())
 
+    def begin_shutdown(self):
+        # Fence task creation synchronously, before any store/native wait.
+        self._closed = True
+
     async def aclose(self, *, timeout=1):
         if type(timeout) not in (int, float) or not math.isfinite(timeout) or timeout < 0:
             raise ValueError('Invalid scheduler close timeout.')
-        self._closed = True
+        self.begin_shutdown()
         tasks = set(self._running)
         if self._pump is not None and not self._pump.done():
             tasks.add(self._pump)

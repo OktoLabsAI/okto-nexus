@@ -350,6 +350,10 @@ class SqliteObservabilityQueries:
             items.append(item)
         return items
 
+    def handoff_runtime_facts(self, uow, handoff_ids):
+        from .handoff_runtime_views import SqliteHandoffRuntimeViewRepository
+        return SqliteHandoffRuntimeViewRepository().handoffs(uow, handoff_ids)
+
     def handoff_dependency_aggregates(
         self,
         uow: UnitOfWork,

@@ -176,6 +176,10 @@ class ResourcePool:
         instance = self.instances.for_request(request_id)
         if request.state != 'ADMITTED' or not instance or instance.state != 'CLAIMED':
             raise PoolConflict('Pool request is not ready.')
+        # Dispatch may run before the bounded maintenance scan. Enforce the
+        # same deadline here, without pretending the physical resource stopped.
+        if request.admission_deadline <= now:
+            raise PoolConflict('Pool request startup deadline was exceeded.')
         self.queue.save(replace(request, state='RUNNING', started_at=now,
             execution_deadline=now + request.policy.execution_timeout_seconds))
         self.instances.save(replace(instance, state='RUNNING'))

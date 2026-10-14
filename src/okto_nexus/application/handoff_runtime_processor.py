@@ -64,8 +64,8 @@ class HandoffRuntimeProcessor:
             if attempt.state == 'RESERVED' and attempt.disposition == 'ACQUIRE':
                 attempt = await asyncio.to_thread(self.attempts.claim, identity)
             if attempt.operation_id:
-                await self.admission.consume(attempt.operation_id)
-                return 'CLAIM_COMMITTED'
+                admission = await self.admission.consume(attempt.operation_id)
+                return 'CLAIM_COMMITTED' if admission.state == 'CONSUMED' else 'NO_CANDIDATES'
             if attempt.active:
                 attempt = await self.attempts.release(identity)
             return 'NEEDS_RECONCILIATION' if attempt.active else attempt.reason or 'NO_CANDIDATES'

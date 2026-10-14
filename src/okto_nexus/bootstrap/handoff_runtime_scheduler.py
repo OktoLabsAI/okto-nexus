@@ -6,7 +6,7 @@ from .handoff_runtime_attempts import build_handoff_runtime_attempts
 from .capacity_admission import build_capacity_admission
 
 
-def build_handoff_runtime_candidates(deps):
+def build_handoff_runtime_candidates(deps, *, acquisition_enabled=True):
     from ..adapters.inbound.mcp.tools.handoff import build_service
     from ..adapters.outbound.sqlite.handoff_runtime_candidates import SqliteHandoffCandidateRepository
     from ..adapters.outbound.sqlite.handoff_runtime_attempts import SqliteHandoffRuntimeAttemptRepository
@@ -17,7 +17,8 @@ def build_handoff_runtime_candidates(deps):
     repository = SqliteHandoffCandidateRepository(attempts=attempts,
         availability=deps.runtime_availability, pool_factory=one_shot_pool)
     return HandoffCandidateDiscovery(factory=deps.connection_factory, repository=repository,
-        attempts=attempts, handoffs=build_service(deps, register_approval_executor=False))
+        attempts=attempts, handoffs=build_service(deps, register_approval_executor=False),
+        acquisition_enabled=acquisition_enabled)
 
 
 def build_handoff_notice_retirement():
@@ -35,9 +36,9 @@ def build_handoff_notice_maintenance(deps, **limits):
         notices=build_handoff_notice_retirement(), **limits)
 
 
-def build_handoff_runtime_scheduler(deps, *, candidates=None, capacity=None, **limits):
+def build_handoff_runtime_scheduler(deps, *, candidates=None, capacity=None, acquisition_enabled=True, **limits):
     if candidates is None:
-        candidates = build_handoff_runtime_candidates(deps)
+        candidates = build_handoff_runtime_candidates(deps, acquisition_enabled=acquisition_enabled)
     processor = HandoffRuntimeProcessor(candidates=candidates,
         attempts=build_handoff_runtime_attempts(deps, capacity=capacity),
         admission=build_capacity_admission(deps, capacity=capacity))

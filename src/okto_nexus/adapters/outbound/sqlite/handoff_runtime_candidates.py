@@ -25,9 +25,9 @@ class SqliteHandoffCandidateRepository:
         # Recovery includes revoked/disabled candidates absent from the catalog.
         query = ("WITH candidates AS (SELECT a.agent_id FROM handoff_runtime_attempts a "
             "LEFT JOIN execution_capacity_admissions c ON c.domain_operation_id=a.operation_id "
-            "WHERE a.workspace_id=? AND a.handoff_id=? AND a.active=1 "
+            "WHERE a.workspace_id=? AND a.handoff_id=? AND a.claim_generation=? AND a.active=1 "
             "AND (a.operation_id IS NULL OR c.state IS NULL OR c.state<>'CONSUMED')")
-        args = (lease.workspace_id, lease.handoff_id)
+        args = (lease.workspace_id, lease.handoff_id, lease.claim_generation)
         if allow_new:
             query += (" UNION SELECT e.agent_id FROM agent_endpoints e WHERE e.workspace_id=? "
                       "AND e.protocol='nxl-r4' AND e.enabled=1 AND e.activation_state='approved'")
@@ -73,8 +73,8 @@ class SqliteHandoffCandidateRepository:
 
     def active(self, uow, lease, agent_id):
         row = uow.connection.execute('SELECT attempt_id FROM handoff_runtime_attempts '
-            'WHERE workspace_id=? AND handoff_id=? AND agent_id=? AND active=1',
-            (lease.workspace_id, lease.handoff_id, agent_id)).fetchone()
+            'WHERE workspace_id=? AND handoff_id=? AND claim_generation=? AND agent_id=? AND active=1',
+            (lease.workspace_id, lease.handoff_id, lease.claim_generation, agent_id)).fetchone()
         return self.attempts.get(uow, row[0]) if row else None
 
     def target(self, uow, handoff, endpoint_id):
@@ -89,6 +89,12 @@ class SqliteHandoffCandidateRepository:
         binding, affinity, session_id = target
         host = self.availability.current_host(binding['server_id'], binding['executor_id'])
         if host is None:
+            raise unavailable('CAPACITY_PROTOCOL_UNSUPPORTED')
+        executor = uow.connection.execute('SELECT kind FROM execution_executors WHERE server_id=? AND executor_id=?',
+            (binding['server_id'], binding['executor_id'])).fetchone()
+        if executor is None or (executor['kind'] == 'remote' and not host.channel.supports_work_containment):
+            # A reservation alone is insufficient: automatic work also needs a
+            # session-scoped revocation and durable physical-release path.
             raise unavailable('CAPACITY_PROTOCOL_UNSUPPORTED')
         observation = host.observations.get(binding['binding_id'])
         if not host.boot_id or observation is None or observation[2] <= self.availability.monotonic():

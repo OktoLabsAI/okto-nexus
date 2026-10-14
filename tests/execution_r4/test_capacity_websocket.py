@@ -4,14 +4,13 @@ The remote capacity adapter is a synthetic host with a real durable Core
 ledger. This is an in-process integration test, not remote-host qualification.
 """
 import asyncio
-from dataclasses import asdict
 
 import pytest
 from fastapi.testclient import TestClient
 from starlette.websockets import WebSocketDisconnect
 from nexus_connector_core import (
     CAPACITY_CONTRACT_REVISION, CapacityScope, CapacityRequest, SQLiteOwnedSlotLedger,
-    ExecutionCapacity, encode_capacity_frame, decode_capacity_frame, execute_capacity_control,
+    CoreError, ExecutionCapacity, encode_capacity_frame, decode_capacity_frame, execute_capacity_control,
 )
 
 from test_ns09 import setup_authority, negotiate
@@ -19,7 +18,7 @@ from test_ns09 import setup_authority, negotiate
 
 def changed(channel, **updates):
     return dict(contract_revision=CAPACITY_CONTRACT_REVISION, type='capacity.changed',
-        **asdict(channel), binding_id='binding', boot_id='host-clock', capacity_revision=0,
+        **channel.identity(), binding_id='binding', boot_id='host-clock', capacity_revision=0,
         reason='STALE_OBSERVATION', valid_for_ms=30000) | updates
 
 
@@ -32,7 +31,9 @@ async def wait_for_binding(registry, channel):
             await asyncio.sleep(.001)
 
 
-def test_authenticated_capacity_reservation_lookup_release_and_disconnect(tmp_path, monkeypatch):
+@pytest.mark.parametrize('extensions', [(), ('nexus-lease-denial-v1',),
+    ('nexus-session-release-v1',), ('nexus-lease-denial-v1', 'nexus-session-release-v1')])
+def test_authenticated_capacity_reservation_lookup_release_and_disconnect(tmp_path, monkeypatch, extensions):
     deps, app, _, _, _, _, info, revisions, ticket, lane, server, executor = setup_authority(tmp_path, monkeypatch)
     registry = deps.runtime_availability
     registry.enabled = True
@@ -47,7 +48,7 @@ def test_authenticated_capacity_reservation_lookup_release_and_disconnect(tmp_pa
             with client.websocket_connect(f'wss://127.0.0.1:8202/v1/runtime/executors/{executor}/link',
                     headers={'Authorization': 'Bearer ' + ticket}, subprotocols=['nxl.v1']) as ws:
                 channel = negotiate(ws, info, revisions, lane, server, executor,
-                                    control_capabilities=[CAPACITY_CONTRACT_REVISION])
+                                    control_capabilities=[CAPACITY_CONTRACT_REVISION, *extensions])
                 ws.send_text(encode_capacity_frame(changed(channel)).decode())
                 host = client.portal.call(wait_for_binding, registry, channel)
                 assert host.boot_id == 'host-clock'
@@ -61,7 +62,17 @@ def test_authenticated_capacity_reservation_lookup_release_and_disconnect(tmp_pa
                     result = client.portal.call(execute_capacity_control, service, frame)
                     ws.send_text(encode_capacity_frame(result).decode())
                     return future.result(timeout=5)
-                held = round_trip(registry.try_reserve_capacity)
+                if len(extensions) == 2:
+                    held = round_trip(registry.try_reserve_capacity)
+                else:
+                    # No productive capacity request is emitted to a partial peer.
+                    for method in (registry.assess_capacity, registry.try_reserve_capacity):
+                        with pytest.raises(CoreError, match='CAPACITY_PROTOCOL_UNSUPPORTED'):
+                            client.portal.call(method, req)
+                    # A reservation from before reconnect/downgrade remains
+                    # queryable and releasable; recovery must not require support
+                    # for new work admission.
+                    held = client.portal.call(service.try_reserve_capacity, req)
                 assert held.state == 'HELD'
                 assert round_trip(registry.get_capacity_reservation).reservation_id == held.reservation_id
                 assert round_trip(registry.release_capacity, held.reservation_id, 'LOST').state == 'RELEASED'

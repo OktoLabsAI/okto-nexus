@@ -85,6 +85,7 @@ def load_setup(deps, context, agent_id, binding_id=None):
         if access.agents.get(uow, agent_id) is None:
             raise OktoNexusError(ErrorCode.NOT_FOUND, 'Agent does not exist.', {})
         result = {'baseline': baseline(uow, agent_id, binding_id),
+                  'runtime_policy': runtime_policy.public_view(deps, runtime_policy.view(uow.connection, agent_id)),
                   'runtime_default': runtime_policy.defaults(uow.connection)['runtime_enabled']}
         result['connections'] = [dict(row) for row in uow.connection.execute(
             "SELECT b.binding_id,b.candidate_ref,b.executor_id,e.workspace_id,e.adapter_id,"
@@ -142,9 +143,12 @@ def finish_setup(deps, context, owner, fresh, request, *, verified):
             raise conflict('The active configuration changed while you were editing. Reopen Connections to review it.')
         preset = setup_mcp_preset(uow, request)
         active = runtime_enabled(uow.connection, configuration)
-        runtime_policy.save_policy(scoped, context, agent_id=agent_id, changes=dict(
+        policy_changes = dict(
             expected_revision=request['baseline']['runtime_revision'], runtime_enabled=configuration['runtime_enabled'],
-            session_policy=configuration['session_policy']))
+            session_policy=configuration['session_policy'])
+        if 'broadcast_handoff_auto_claim' in request:
+            policy_changes['broadcast_handoff_auto_claim'] = request['broadcast_handoff_auto_claim']
+        runtime_policy.save_policy(scoped, context, agent_id=agent_id, changes=policy_changes)
         if active or configuration['adapter_id']:
             agent_execution_policy.save_policy(scoped, context, agent_id,
                 expected_revision=request['baseline']['execution_revision'],

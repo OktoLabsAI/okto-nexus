@@ -172,6 +172,12 @@ def tick(deps):
                     conn.execute("UPDATE one_shot_slots SET state='CLOSING' WHERE slot_id=?", (slot['slot_id'],))
                     capacity.dispose_confirmed(conn, slot_id=slot['slot_id'], session_id=slot['session_id'])
                 elif slot['state'] == 'CLOSING' and slot['session_id'] and session and session['lifecycle_state'] == 'READY':
+                    # A denied lease has its own retained stop producer. Do not
+                    # race it with an automatic close against a disappearing
+                    # native session; its verified release settles this slot.
+                    access.session_containment.require_not_pending(uow, dict(
+                        server_id=slot['server_id'], executor_id=slot['executor_id'],
+                        session_id=slot['session_id'], session_owner_generation=session['owner_generation']))
                     closing = conn.execute('SELECT stage FROM execution_receipts WHERE server_id=? AND executor_id=? '
                         'AND operation_id=? ORDER BY receipt_revision DESC LIMIT 1',
                         (slot['server_id'], slot['executor_id'], slot['close_operation_id'])).fetchone()
@@ -201,7 +207,8 @@ def tick(deps):
             '(SELECT 1 FROM execution_domain_deliveries d WHERE d.domain_operation_id=c.call_id) ORDER BY enqueued_at LIMIT 32').fetchall():
             conn.execute('SAVEPOINT one_shot_admission')
             try:
-                admit_domain_delivery(uow, operation_id=row[0], access=access, fresh_publications=fresh, remote_ready=remote)
+                admit_domain_delivery(uow, operation_id=row[0], access=access, claims=access.execution_claims,
+                                      fresh_publications=fresh, remote_ready=remote)
             except OktoNexusError:
                 conn.execute('ROLLBACK TO one_shot_admission')
             finally:

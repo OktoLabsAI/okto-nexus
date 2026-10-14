@@ -23,11 +23,17 @@ def test_managed_handoffs_share_capacity_and_keep_distinct_sessions(runtime):
     second_claim = claim(runtime, second_handoff, gid, key='one-shot-second')
     assert second_claim['ok'], second_claim
     assert query(setup, "SELECT count(*) FROM one_shot_calls WHERE state='QUEUED'")[0][0] == 1
+    owners = query(setup, 'SELECT handoff_id,session_id FROM execution_tool_claims')
+    assert [(r['handoff_id'], r['session_id']) for r in owners] == [(first_handoff, first['session_id'])]
     complete(setup, peers, first, 'First handoff response')
     wait_until(setup, lambda: len(query(setup, 'SELECT * FROM execution_sessions')) == 2)
     calls = query(setup, 'SELECT state FROM one_shot_calls ORDER BY enqueued_at')
     assert calls[0]['state'] == 'SUCCEEDED'
     assert len({r[0] for r in query(setup, 'SELECT session_id FROM execution_sessions')}) == 2
+    wait_until(setup, lambda: len(query(setup, 'SELECT * FROM execution_tool_claims')) == 2)
+    owners = query(setup, 'SELECT handoff_id,session_id FROM execution_tool_claims')
+    assert {r['handoff_id'] for r in owners} == {first_handoff, second_handoff}
+    assert len({r['session_id'] for r in owners}) == 2
 
 
 def test_managed_handoff_queue_error_reaches_creator_inbox(runtime):

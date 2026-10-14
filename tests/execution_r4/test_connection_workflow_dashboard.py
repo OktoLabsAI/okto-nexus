@@ -24,13 +24,16 @@ def version_probe(monkeypatch,local_setup,request):
     monkeypatch.setattr(execution_local_observations,'probe_version',probe)
 
 
-def start(page,setup):
+def start(page,setup, *, auto_claim=False):
     from playwright.sync_api import expect
     page.get_by_role('button',name='Agents',exact=True).click()
     page.get_by_test_id('connections-subject').click()
-    panel=page.get_by_test_id('agent-connections-subject')
+    panel=page.get_by_test_id('agent-action-subject')
     expect(panel.get_by_role('button',name='Import JSON',exact=True)).to_be_visible()
     panel.get_by_test_id('local-runtime-'+setup[4]['adapter_id']).click()
+    if auto_claim:
+        panel.get_by_label('Automatically claim broadcast handoffs',exact=True).select_option('true')
+        expect(panel.get_by_text('Automatic acquisition is disabled on this server.',exact=False)).to_be_visible()
     panel.get_by_role('button',name='Next →',exact=True).click()
     expect(panel.get_by_role('radio')).to_be_checked()
     expect(panel.get_by_role('button',name='Check installation version',exact=True)).to_have_count(0)
@@ -65,7 +68,7 @@ def test_automatic_check_recovers_lost_reply(local_setup,local_browser):
     trace['drop_check']=True
     page.get_by_role('button',name='Agents',exact=True).click()
     page.get_by_test_id('connections-subject').click()
-    panel=page.get_by_test_id('agent-connections-subject')
+    panel=page.get_by_test_id('agent-action-subject')
     panel.get_by_test_id('local-runtime-'+local_setup[4]['adapter_id']).click()
     panel.get_by_role('button',name='Next →',exact=True).click()
     expect(panel.get_by_text('Could not verify this installation.',exact=True)).to_be_visible()
@@ -93,7 +96,7 @@ def test_next_stages_preferences_and_authorization(local_setup,local_browser):
     expect(panel.get_by_role('button',name='Authorize local execution',exact=True)).to_have_count(0)
     panel.get_by_role('button',name='Next →',exact=True).click()
     expect(panel.get_by_role('button',name='Test connection',exact=True)).to_be_enabled()
-    expect(panel.get_by_role('button',name='Finish',exact=True)).to_have_count(0)
+    expect(panel.get_by_role('button',name='Finish',exact=True)).to_be_disabled()
     panel.get_by_role('button',name='Details',exact=True).click()
     expect(panel.get_by_text('Checks installation, provider login',exact=False)).to_be_visible()
     writes=[path for method,path,_ in trace['requests'] if method in ('POST','PUT') and any(word in path for word in ('realizations','bindings:','harness/grants','tool-permission','harness-settings','conversation-policy','execution-policy','runtime-policy'))]
@@ -112,7 +115,7 @@ def test_verified_probe_enables_atomic_finish(local_setup,local_browser,monkeypa
         entry.update(status='succeeded',stage='Connection verified')
     monkeypatch.setattr(ConnectionTests,'run',native_probe)
     page,_=local_browser
-    panel=start(page,local_setup)
+    panel=start(page,local_setup,auto_claim=True)
     panel.get_by_label('Workspace folder',exact=True).fill(str(local_setup[-1]))
     panel.get_by_label('Workspace name',exact=True).fill('Wizard workspace')
     panel.get_by_label('Login directory',exact=True).fill('')
@@ -122,30 +125,41 @@ def test_verified_probe_enables_atomic_finish(local_setup,local_browser,monkeypa
     expect(finish).to_be_visible(timeout=15000)
     with local_setup[0].connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute('SELECT COUNT(*) FROM execution_bindings').fetchone()[0]==0
+        assert uow.connection.execute('SELECT COUNT(*) FROM agent_runtime_overrides').fetchone()[0]==0
     finish.click()
     expect(panel).to_have_count(0)
     with local_setup[0].connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute('SELECT COUNT(*) FROM execution_bindings').fetchone()[0]==1
         assert uow.connection.execute('SELECT COUNT(*) FROM connection_setup_commits').fetchone()[0]==1
+        assert uow.connection.execute("SELECT broadcast_handoff_auto_claim FROM agent_runtime_overrides WHERE agent_id='subject'").fetchone()[0]==1
     # Reopen on step 1: export must contain the saved connection, not empty defaults.
     import json
     from pathlib import Path
     from nexus_connector_core.connection_configuration import parse_portable_connection_configuration
     page.get_by_test_id('connections-subject').click()
-    panel=page.get_by_test_id('agent-connections-subject')
+    panel=page.get_by_test_id('agent-action-subject')
+    expect(panel.get_by_label('Automatically claim broadcast handoffs',exact=True)).to_have_value('true')
+    target=Path('output/playwright/auto-claim-policy')
+    target.mkdir(parents=True,exist_ok=True)
+    panel.screenshot(path=str(target/'agent-connection.png'))
     export=panel.get_by_role('button',name='Export JSON',exact=True)
     expect(export).to_be_enabled()
     with page.expect_download() as download:
         export.click()
     contents=Path(download.value.path()).read_text(encoding='utf-8')
     configuration=parse_portable_connection_configuration(contents)
+    assert 'broadcast_handoff_auto_claim' not in configuration
     assert configuration['version']==2
     assert 'workspace_root' not in configuration
     assert 'provider_home' not in configuration
     assert configuration['runtime_enabled'] is None
-    configuration['alias']='Imported connection'
+    # Reimport the actual exported format, not Core's normalized internal
+    # authorization representation (which adds explicit unlimited flags).
+    portable=json.loads(contents)
+    portable['alias']='Imported connection'
+    configuration=parse_portable_connection_configuration(portable)
     panel.get_by_label('Import connection JSON',exact=True).set_input_files({
-        'name':'connection.json','mimeType':'application/json','buffer':json.dumps(configuration).encode()})
+        'name':'connection.json','mimeType':'application/json','buffer':json.dumps(portable).encode()})
     expect(panel.get_by_text('Configuration imported.',exact=False)).to_be_visible()
     with page.expect_download() as imported_download:
         export.click()

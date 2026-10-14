@@ -17,6 +17,7 @@ def publish_errors(deps, messages):
             'JOIN messages m ON m.message_id=d.message_id '
             "WHERE c.state IN ('FAILED','CANCELLED') AND c.outcome_json IS NOT NULL AND c.notification_message_id IS NULL "
             'AND NOT EXISTS (SELECT 1 FROM runtime_handoff_notice_retirements n WHERE n.operation_id=c.call_id) '
+            'AND NOT EXISTS (SELECT 1 FROM execution_capacity_compensations x WHERE x.domain_operation_id=c.call_id) '
             'AND c.caller_id=m.from_agent_id AND c.agent_id=d.recipient_agent_id ORDER BY c.enqueued_at LIMIT 32').fetchall()
         for row in rows:
             outcome = json.loads(row['outcome_json'])

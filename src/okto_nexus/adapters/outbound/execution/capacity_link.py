@@ -9,7 +9,6 @@ from __future__ import annotations
 import asyncio
 import math
 import secrets
-from dataclasses import asdict
 
 from nexus_connector_core import (
     CAPACITY_CONTRACT_REVISION, CapacityRequest, CapacityAssessment,
@@ -52,7 +51,7 @@ class CapacityLinkClient:
     def accept_result(self, frame) -> bool:
         frame = decode_capacity_frame(encode_capacity_frame(frame))
         if (frame['type'] != 'capacity.result'
-                or any(frame[key] != value for key, value in asdict(self.channel).items())):
+                or any(frame[key] != value for key, value in self.channel.identity().items())):
             raise CoreError('SCOPE_MISMATCH', 'capacity_result')
         if self._closed:
             return False
@@ -79,7 +78,7 @@ class CapacityLinkClient:
         recovery = action in ('get', 'release')
         if sum(value == recovery for value in self._producers.values()) >= self._limits[recovery]:
             raise CoreError('STALE_OBSERVATION', 'capacity_link_budget')
-        frame = dict(contract_revision=CAPACITY_CONTRACT_REVISION, **asdict(self.channel),
+        frame = dict(contract_revision=CAPACITY_CONTRACT_REVISION, **self.channel.identity(),
             type='capacity.' + action, request_id='cap_' + secrets.token_hex(16), request=request.to_dict(), **fields)
         raw = encode_capacity_frame(frame).decode('utf-8')
         future = asyncio.get_running_loop().create_future()

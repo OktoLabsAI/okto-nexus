@@ -279,6 +279,8 @@ class EmbeddedDispatchOwner:
 
     async def _recover_publications(self, *, agent_id=None, progress=None):
         """Publish retained facts once before any new dispatch is enabled."""
+        from .embedded_initial_refusal import EmbeddedInitialRefusal
+        await EmbeddedInitialRefusal(self).recover(agent_id=agent_id)
         after = 0
         while True:
             rows = await asyncio.to_thread(self._page, after=after, agent_id=agent_id)
@@ -288,7 +290,8 @@ class EmbeddedDispatchOwner:
                 # A live producer can still prove no native effect. Its
                 # SUBMISSION_STARTED journal entry is a crash fence, not a
                 # settled receipt to publish over the producer's final fact.
-                if row["operation_id"] in self.active_operations:
+                if (row["operation_id"] in self.active_operations
+                        or self.sessions.get(row['session_id'], {}).get('initial_refusal')):
                     continue
                 await asyncio.to_thread(self.verify)
                 key = OperationKey(row["server_id"],row["executor_id"],row["operation_id"])
@@ -361,7 +364,23 @@ class EmbeddedDispatchOwner:
 
     async def _request_grant(self, request):
         await asyncio.to_thread(self.verify)
-        return await asyncio.to_thread(self.leases.issue, request, channel=self.channel)
+        try:
+            return await asyncio.to_thread(self.leases.issue, request, channel=self.channel)
+        except OktoNexusError as error:
+            if request['purpose'] == 'initial':
+                from .embedded_initial_refusal import InitialLeaseDenied
+                try:
+                    recorded = await asyncio.to_thread(self.leases.access.session_containment.denied,
+                        request, channel=self.channel)
+                except (OSError, sqlite3.OperationalError) as persistence_error:
+                    raise InitialLeaseDenied(request) from persistence_error
+                except OktoNexusError as persistence_error:
+                    if persistence_error.code != ErrorCode.DB_ERROR:
+                        raise
+                    raise InitialLeaseDenied(request) from persistence_error
+                if recorded:
+                    raise InitialLeaseDenied() from error
+            raise
 
     def _bind(self, frame, binding, stream_epoch=None):
         raw = canonical_json(binding).decode()
@@ -415,6 +434,14 @@ class EmbeddedDispatchOwner:
         except Exception as error:
             # Preserve uncertain work, but contain only its known subject.
             try:
+                from .embedded_initial_refusal import InitialLeaseDenied
+                if isinstance(error, InitialLeaseDenied):
+                    session = self.sessions[frame['session_id']]
+                    session['initial_refusal'] = True
+                    if error.pending_request is not None:
+                        session['initial_refusal_request'] = error.pending_request
+                    self.agents.recover_session(frame['session_id'])
+                    return
                 if isinstance(error, EmbeddedPublicationDeferred):
                     await self.agents.defer_publication(frame['agent_id'])
                     return
@@ -658,19 +685,10 @@ class EmbeddedDispatchOwner:
                 if expected:
                     try:
                         await asyncio.to_thread(self.verify)
-                        runtime = await session['executor']._runtime()
-                        report = await runtime.shutdown(ShutdownPolicy(5, 5))
-                        if ('unknown' in report.session_outcomes.values() or any(
-                                facts['process_state'] != 'STOPPED' or facts['release_pending']
-                                for facts in runtime.shutdown_resources().values())):
-                            raise CoreError('RECONCILIATION_REQUIRED', 'embedded_session_containment')
-                        if not await self.host.close_native_actions(
-                                executor_id=self.channel.executor_id, session_id=session_id, timeout_seconds=5):
-                            raise CoreError('RECONCILIATION_REQUIRED', 'embedded_native_action_containment')
-                        await self.events.recover(agent_id=session['scope']['agent_id'])
-                        from .embedded_reconciliation import EmbeddedReconciliation
-                        await EmbeddedReconciliation(self).release_session(session_id)
-                        self.sessions.pop(session_id, None)
+                        # Retain the scoped cleanup owner even if shutdown or
+                        # release proof is delayed. An unavailable stop must
+                        # not escalate into containment of healthy siblings.
+                        self.agents.recover_session(session_id)
                         return
                     except Exception as containment_error:
                         error = containment_error

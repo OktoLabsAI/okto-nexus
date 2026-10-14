@@ -16,15 +16,18 @@ from test_canonical_result_publication import current_turn, workspace
 from test_capacity_authority import request
 
 
-def reserve(runtime, *, opening=None):
-    service, hid, gid = prepare(runtime)
+def reserve(runtime, *, opening=None, warm=False, **handoff_options):
+    service, hid, gid = prepare(runtime, **handoff_options)
     setup, binding, _ = runtime
     deps, app, client, *_ = setup
+    owner = app.state.embedded_dispatch_owner
+    owner.host.capacity_enabled = True
+    if warm:
+        opening = admit(setup, binding, 'warm-before-reservation', 'runtime.start', new_session=True)
+        wait_receipt(setup, opening)
     context = candidate(runtime, service, hid, gid)
     with deps.connection_factory.unit_of_work() as uow:
         _, affinity = delivery_session_context(uow, binding['endpoint_id'], sender_agent_id='caller')
-    owner = app.state.embedded_dispatch_owner
-    owner.host.capacity_enabled = True
     req = request(setup, binding, scope=opening['scope'] if opening else None,
                   unit='next_turn' if opening else 'new_session')
     req = replace(req, attempt_id=context.request_id, affinity_key=affinity.opaque_key, ttl_ms=60000)
@@ -59,6 +62,9 @@ def test_cold_reserved_claim_waits_for_transfer_and_retries_same_operations(runt
     assert native.opens == 0
 
     class LoseOnce:
+        async def get_capacity_reservation(self, req):
+            return await port.get_capacity_reservation(req)
+
         async def consume_capacity(self, *args):
             # Acquiring another Server writer during host I/O must succeed.
             with deps.connection_factory.unit_of_work() as uow:

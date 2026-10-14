@@ -153,6 +153,13 @@ export interface VerifyBy {
   capability?: string;
 }
 
+export interface HandoffRuntimeProgress {
+  state: string; canonical_status: string; claimed_by: string | null;
+  winner_channel: 'runtime' | 'explicit' | null; origin: 'runtime' | 'mcp' | 'missing';
+  reason: string | null; native_stage: string | null;
+  claim_latency_ms: number | null; execution_delay_ms: number | null;
+}
+
 export interface GraphHandoff {
   handoff_id: string;
   workspace_id: string;
@@ -161,6 +168,7 @@ export interface GraphHandoff {
   from_agent_id: string | null;
   claimed_by: string | null;
   claim_epoch?: number;
+  runtime_progress?: HandoffRuntimeProgress;
   target: RoutingTarget | null;
   payload?: unknown;
   visibility?: string;
@@ -656,9 +664,19 @@ export interface AgentRow {
 
 export interface AgentRuntimeOverview {
   agent_id: string; active_count: number; has_more: boolean; next_after: number;
+  capacity_observations?: {has_more: boolean; items: {
+    executor_id: string; binding_id: string; workspace_id: string; session_id: string;
+    unit: 'next_turn' | 'new_session'; context_id: string; state: string; reason: string; age_ms: number; fresh: boolean; valid_for_ms: number;
+  }[]};
   active: (import('./runtimeApi').RuntimeSession & {host: string; location: string; harness: string; pool_state: string | null})[];
   completed: {operation_id: string; server_id: string; executor_id: string; session_id: string; binding_id: string;
     workspace_id: string; created_at: string; completed_at: string; outcome: string; harness: string; host: string}[];
+  broadcast_handoffs?: {has_more: boolean; items: {
+    attempt_id: string; handoff_id: string; workspace_id: string; claim_generation: number;
+    operation_id: string | null; state: string; active: number; reason: string | null;
+    reservation_state: string | null; reservation_observed_at: string; created_at: string; updated_at: string; current_claim: boolean;
+    handoff_progress: HandoffRuntimeProgress | null;
+  }[]};
 }
 
 export type MetaHarnessSession = import('./runtimeApi').RuntimeSession & {
@@ -1135,11 +1153,13 @@ export type OneShotState = {slots: Record<string, number>; occupied: number; que
     error: {code: string; message: string; possible_effect: boolean; retry_safe: boolean} | null}>};
 export type RuntimePolicy = {
   automatic_recovery?: boolean; inherit_global_mcps?: boolean | null;
+  broadcast_handoff_auto_claim: boolean | null;
+  handoff_auto_claim_rollout_enabled: boolean;
   revision: number;
   runtime_enabled: boolean | null;
   session_policy: SessionPolicy | null;
-  defaults?: {inherit_global_mcps: boolean; revision: number; runtime_enabled: boolean; session_policy: SessionPolicy};
-  effective?: {inherit_global_mcps: boolean; runtime_enabled: boolean; session_policy: SessionPolicy};
+  defaults?: {broadcast_handoff_auto_claim: boolean; inherit_global_mcps: boolean; revision: number; runtime_enabled: boolean; session_policy: SessionPolicy};
+  effective?: {broadcast_handoff_auto_claim: boolean; inherit_global_mcps: boolean; runtime_enabled: boolean; session_policy: SessionPolicy};
 };
 
 export const api = {
@@ -1170,7 +1190,7 @@ export const api = {
   saveRuntimeToolPermission: (endpoint: string, body: {expected_revision: number; mode: "ask" | "always_allow"}) =>
     call<{revision: number; mode: "ask" | "always_allow"}>(`/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/tool-permission`, {method: "PUT", body: JSON.stringify(body)}),
   runtimePolicy: (agentId?: string) => call<RuntimePolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/runtime-policy` : '/api/v1/runtime-policy'),
-  saveRuntimePolicy: (body: {expected_revision: number; runtime_enabled: boolean | null; session_policy: SessionPolicy | null; automatic_recovery?: boolean; inherit_global_mcps?: boolean | null}, agentId?: string) => call<RuntimePolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/runtime-policy` : '/api/v1/runtime-policy', {method: 'PUT', body: JSON.stringify(body)}),
+  saveRuntimePolicy: (body: {expected_revision: number; runtime_enabled: boolean | null; session_policy: SessionPolicy | null; automatic_recovery?: boolean; inherit_global_mcps?: boolean | null; broadcast_handoff_auto_claim?: boolean | null}, agentId?: string) => call<RuntimePolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/runtime-policy` : '/api/v1/runtime-policy', {method: 'PUT', body: JSON.stringify(body)}),
   oneShotPolicy: (agentId?: string) => call<OneShotPolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/one-shot-policy` : '/api/v1/one-shot-policy'),
   oneShotState: (agentId: string) => call<OneShotState>(`/api/v1/agents/${encodeURIComponent(agentId)}/one-shot-state`),
   cancelOneShot: (agentId: string, callId: string) => call<OneShotState>(`/api/v1/agents/${encodeURIComponent(agentId)}/one-shot-calls/${encodeURIComponent(callId)}/cancel`, {method: 'POST'}),

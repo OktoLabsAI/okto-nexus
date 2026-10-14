@@ -77,8 +77,15 @@ class EmbeddedAgentRecovery:
             for _ in range(256):
                 page = await ledger.owned_slot_page(after_rowid=after, high_water_rowid=high, limit=128)
                 for slot in page.reservations:
+                    opening = slot.opening_operation_id
+                    if known.get(slot.key.session_id) != opening:
+                        # A consumed reservation may predate Core.open, so its
+                        # slot still has Core's provisional identity. Attribute
+                        # it through Core's durable association; keep it occupied
+                        # until the agent's recovery proves release is safe.
+                        opening = await ledger.capacity_opening_for_slot(slot)
                     if (slot.key.server_id != owner.channel.server_id or slot.key.executor_id != owner.channel.executor_id
-                            or known.get(slot.key.session_id) != slot.opening_operation_id):
+                            or opening is None or known.get(slot.key.session_id) != opening):
                         raise CoreError('SCOPE_MISMATCH', 'embedded_shared_resources')
                 high = page.high_water_rowid
                 if page.next_after_rowid is None:
@@ -188,6 +195,24 @@ class EmbeddedAgentRecovery:
         owner = self.owner
         try:
             await asyncio.to_thread(owner.verify)
+            if session.get('initial_refusal'):
+                # No authorized executor was returned. Finish the exact durable
+                # refusal without containing healthy sibling sessions.
+                workers = [t for t, sid in owner.worker_sessions.items() if sid == session_id and not t.done()]
+                if workers:
+                    await asyncio.gather(*workers, return_exceptions=True)
+                request = session.get('initial_refusal_request')
+                if request is not None:
+                    if not await asyncio.to_thread(owner.access.session_containment.denied,
+                            request, channel=owner.channel):
+                        raise CoreError('RECONCILIATION_REQUIRED', 'embedded_initial_refusal_identity')
+                    session.pop('initial_refusal_request', None)
+                from .embedded_initial_refusal import EmbeddedInitialRefusal
+                if not await EmbeddedInitialRefusal(owner).recover(session_id=session_id, pending_only=False):
+                    raise CoreError('RECONCILIATION_REQUIRED', 'embedded_initial_refusal')
+                owner.sessions.pop(session_id, None)
+                self.session_retry_at.pop(session_id, None)
+                return
             runtime = await session['executor']._runtime()
             report = await runtime.shutdown(ShutdownPolicy(5, 5))
             if ('unknown' in report.session_outcomes.values() or any(

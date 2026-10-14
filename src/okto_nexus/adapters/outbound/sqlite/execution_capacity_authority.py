@@ -51,6 +51,8 @@ class SqliteExecutionCapacityAuthority:
                 # attempts after a subject/selection revocation. No new effect.
                 if action in ('get', 'release'):
                     return 'AVAILABLE' if executor['control_state'] in ('CONTROL_READY', 'RECOVERING') else 'RECOVERING'
+                if executor['kind'] == 'remote' and not channel.supports_work_containment:
+                    return 'CAPACITY_PROTOCOL_UNSUPPORTED'
                 if scope.connection_generation != channel.connection_generation:
                     return 'STALE_OBSERVATION'
                 if executor['control_state'] != 'CONTROL_READY' or agent_recovering(

@@ -94,7 +94,13 @@ def read_policy(deps, context, agent_id=None):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Runtime policy is outside this identity.', {})
         if agent_id is not None and access.agents.get(uow, agent_id) is None:
             raise OktoNexusError(ErrorCode.NOT_FOUND, 'Agent does not exist.', {})
-        return view(uow.connection, agent_id)
+        return public_view(deps, view(uow.connection, agent_id))
+
+
+def public_view(deps, policy):
+    """Expose the startup rollout gate separately from persisted opt-in."""
+    return policy | {'handoff_auto_claim_rollout_enabled': bool(
+        deps.config.runtime_handoff_auto_claim_enabled and deps.config.feature_harness_integrations)}
 
 
 def save_policy(deps, context, *, agent_id=None, changes):
@@ -122,7 +128,7 @@ def save_policy(deps, context, *, agent_id=None, changes):
             raise OktoNexusError(ErrorCode.CONFLICT, 'Runtime policy changed; reload before saving.', {})
         if all(current[key] == changes[key] for key in ('runtime_enabled', 'session_policy', 'inherit_global_mcps', 'broadcast_handoff_auto_claim')) and (
                 agent_id is not None or current['automatic_recovery']==changes.get('automatic_recovery',current['automatic_recovery'])):
-            return current
+            return public_view(deps, current)
         affected = [agent_id] if agent_id else [row[0] for row in conn.execute('SELECT agent_id FROM agents')]
         before = {aid: effective(conn, aid) for aid in affected}
         if agent_id:
@@ -146,7 +152,7 @@ def save_policy(deps, context, *, agent_id=None, changes):
             old_revision=current['revision'], new_revision=current['revision'] + 1,
             fields=[key for key in ('runtime_enabled', 'session_policy', 'automatic_recovery', 'inherit_global_mcps', 'broadcast_handoff_auto_claim')
                     if key in changes and current.get(key) != changes[key]], now=now)
-        return view(conn, agent_id)
+        return public_view(deps, view(conn, agent_id))
 
 
 def harness_mcp_settings(conn, agent_id, adapter_id, settings):

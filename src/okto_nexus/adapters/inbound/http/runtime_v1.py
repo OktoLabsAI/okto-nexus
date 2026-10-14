@@ -70,6 +70,7 @@ class ConnectionSetupRequest(BaseModel):
     baseline: dict[str, int | None]
     configuration: dict
     mcp_preset: SetupMCPPreset | None = None
+    broadcast_handoff_auto_claim: bool | None = None
 
 
 class LocalInstallationCheckRequest(BaseModel):
@@ -896,6 +897,9 @@ def build_router() -> APIRouter:
         from nexus_connector_core.connection_configuration import parse_connection_configuration
         from nexus_connector_core import CoreError
         result = body.model_dump()
+        # Omission preserves policy for older clients; explicit null inherits.
+        if 'broadcast_handoff_auto_claim' not in body.model_fields_set:
+            result.pop('broadcast_handoff_auto_claim', None)
         try:
             from ....application.connection_authorization import normalize_authorization
             result['configuration'] = normalize_authorization(parse_connection_configuration(normalize_authorization(result['configuration'])))
@@ -952,7 +956,7 @@ def build_router() -> APIRouter:
         except CoreError as error:
             return v1_err(409, error.code, 'Refresh installations and test the selected runtime again.')
         except OktoNexusError as error:
-            if error.code == ErrorCode.CONFLICT and error.details.get('reason') == 'ACTIVE_SESSIONS':
+            if error.code == ErrorCode.CONFLICT and (error.details or {}).get('reason') == 'ACTIVE_SESSIONS':
                 return JSONResponse({'error': {'code': error.code, 'message': error.message,
                     'stage': 'connection.finish', 'possible_effect': False, 'retry_safe': False,
                     'operation_id': None, 'action': '', 'details': error.details}},

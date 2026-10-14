@@ -101,6 +101,7 @@ def test_disable_fences_previously_resolved_work(connected_local):
 
 
 def test_disabled_live_session_closes_on_lease_renewal(connected_local, monkeypatch):
+    import time
     setup, binding, native = connected_local
     opened = admit(setup, binding, 'disable-live', 'runtime.start', new_session=True)
     wait_receipt(setup, opened)
@@ -114,6 +115,17 @@ def test_disabled_live_session_closes_on_lease_renewal(connected_local, monkeypa
     owner = setup[1].state.embedded_dispatch_owner
     session_id = opened['session_id']
     setup[2].portal.call(owner._renew_owned, session_id, owner.sessions[session_id])
+    # Renewal schedules a retained session cleanup owner. Its completion is
+    # independent of the renewal observer; await the actual resource proof.
+    deadline = time.monotonic() + 10
+    while True:
+        with setup[0].connection_factory.unit_of_work(write=False) as uow:
+            closed = tuple(uow.connection.execute('SELECT lifecycle_state,lease_state FROM execution_sessions WHERE session_id=?',
+                                                  (session_id,)).fetchone()) == ('CLOSED', 'CLOSED')
+        if native.native.stopped and closed:
+            break
+        assert time.monotonic() < deadline, 'Disabled session did not finish scoped containment'
+        time.sleep(.05)
     assert native.native.stopped and owner.failure is None
     with setup[0].connection_factory.unit_of_work(write=False) as uow:
         assert tuple(uow.connection.execute('SELECT lifecycle_state,lease_state FROM execution_sessions WHERE session_id=?',

@@ -56,8 +56,11 @@ def pending_unstarted_session(conn, server_id, executor_id, session_id):
 
 
 class ExecutionReconciliation:
-    def __init__(self, factory, channel, *, owner_guard=None, agent_id=None, unstarted_sessions=()):
+    def __init__(self, factory, channel, *, owner_guard=None, agent_id=None, unstarted_sessions=(), containment=None,
+                 preopen_recovery=None):
         self.factory, self.channel = factory, channel
+        self.containment = containment
+        self.preopen_recovery = preopen_recovery
         self.owner_guard = owner_guard
         self.agent_id = agent_id
         self.unstarted_sessions = tuple(sorted(set(unstarted_sessions)))
@@ -139,6 +142,8 @@ class ExecutionReconciliation:
             server_id=c.server_id, executor_id=c.executor_id, connection_id=c.connection_id,
             connection_generation=c.connection_generation, operation_ids=[r[1] for r in operations],
             session_ids=[r[1] for r in sessions], stream_watermarks=[])
+        if self.preopen_recovery is not None:
+            self.pending['preopen_refusal_supported'] = True
         return self.pending
 
     def accept(self, report):
@@ -154,10 +159,20 @@ class ExecutionReconciliation:
         with self.factory.unit_of_work() as uow:
             conn = uow.connection
             self._owner(conn)
+            retired = set()
+            if 'preopen_refusals' in report:
+                if self.preopen_recovery is None:
+                    raise ValueError('Preopening recovery was not negotiated.')
+                # Preserve detection of unrelated receipt changes. The new
+                # facts below belong to this exact recovery transaction.
+                accepted = self.preopen_recovery.accept(uow, c, report['preopen_refusals'], agent_id=self.agent_id)
+                self.blocked |= accepted.receipt_high_before != self.receipt_high
+                retired = accepted.retired_operations
+                self.receipt_high = accepted.receipt_high_after
             submitted = {r['operation_id']: r for r in report['receipts']}
             if len(submitted) != len(report['receipts']) or not set(submitted).issubset(request['operation_ids']):
                 raise ValueError('The reconciliation receipts do not match this page.')
-            if set(submitted) != set(request['operation_ids']):
+            if set(submitted) != set(request['operation_ids']) - retired:
                 self.blocked = True
             for operation_id, summary in submitted.items():
                 receipt = _receipt(conn.execute('SELECT * FROM execution_receipts '
@@ -273,6 +288,13 @@ class ExecutionReconciliation:
                         "WHERE server_id=? AND executor_id=? AND owner_instance_id=? AND generation=? "
                         "AND control_state='RECOVERING' AND revoked_at IS NULL",
                         (c.server_id,c.executor_id,c.connection_id,c.connection_generation)).rowcount == 1
+            if not self.blocked and self.containment is not None:
+                for watermark in report['stream_watermarks']:
+                    session_id = watermark['session_id']
+                    if session_id in released:
+                        self.containment.record_verified_release(uow, channel=c, session_id=session_id,
+                            owner_generation=facts[session_id]['owner_generation'],
+                            proof=dict(ownership=facts[session_id], stream=watermark))
         response = dict(protocol_major=1, contract_revision=R4_PREVIEW_REVISION, type='reconcile.accepted',
             server_id=c.server_id, executor_id=c.executor_id, connection_id=c.connection_id,
             connection_generation=c.connection_generation, reconcile_id=self.reconcile_id,

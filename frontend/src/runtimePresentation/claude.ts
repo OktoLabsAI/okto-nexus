@@ -1,4 +1,5 @@
 import { content, decoded, fields, object, string, tool, type ActionUpdate, type HarnessAdapter } from './model';
+import { userInput } from './input';
 
 export const claudeAdapter: HarnessAdapter = {
   id:'claude_stream',
@@ -49,7 +50,7 @@ export const claudeAdapter: HarnessAdapter = {
       const m=object(p.message), blocks=Array.isArray(m.content) ? m.content : [];
       const results=blocks.filter(b=>object(b).type==='tool_result').map(b=>{const r=object(b);return {
         id:`claude:tool:${string(r.tool_use_id)}`,kind:'tool' as const,title:'',output:content(r.content),status:r.is_error?'failed':'completed'};});
-      return results.length ? results : [{id:`user:${event.sequence}`,kind:'user',title:'You',text:content(m.content)}];
+      return results.length ? results : [userInput(`user:${event.sequence}`,m.content)];
     }
     // The result snapshot is authoritative and may correct the last text frame.
     if (type==='result:output') return [{id,kind:'assistant',title:'Assistant',text:string(p.text)}];

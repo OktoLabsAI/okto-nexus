@@ -101,7 +101,11 @@ def build_router():
     @router.get('/agents/{agent_id}/runtime-administration')
     async def runtime_administration(request: Request, agent_id: str, after: int = 0):
         from ....application.agent_runtime_administration import overview
-        return await execute(lambda: overview(request.app.state.deps, request_context(), agent_id, after=after))
+        from ....bootstrap.handoff_runtime_views import build_handoff_runtime_views
+        from ....bootstrap.capacity_observations import build_capacity_observation_view
+        return await execute(lambda: overview(request.app.state.deps, request_context(), agent_id, after=after,
+            handoff_views=build_handoff_runtime_views(request.app.state.deps),
+            capacity_reader=build_capacity_observation_view(request.app.state.deps)))
 
     @router.get('/meta-harness/runtime-sessions')
     async def meta_harness_runtime_sessions(request: Request, workspace: str | None = None,

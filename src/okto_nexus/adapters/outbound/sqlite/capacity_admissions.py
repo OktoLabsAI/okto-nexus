@@ -16,6 +16,73 @@ def conflict(reason):
 
 
 class SqliteCapacityAdmissionRepository:
+    def queue_unsent_release(self, uow, *, server_id, executor_id, operation_id):
+        """Called in the same commit as the exact dispatch-refusal proof."""
+        rows = uow.connection.execute('SELECT a.domain_operation_id,b.handoff_id '
+            'FROM execution_capacity_admissions a JOIN execution_domain_deliveries d '
+            'ON d.domain_operation_id=a.domain_operation_id JOIN runtime_handoff_bindings b '
+            "ON b.operation_id=a.domain_operation_id WHERE d.server_id=? AND d.executor_id=? "
+            "AND d.operation_id=? AND a.state='CONSUMED'", (server_id, executor_id, operation_id)).fetchall()
+        from .handoff_runtime_schedule import SqliteHandoffScheduleRepository
+        import time
+        schedule = SqliteHandoffScheduleRepository()
+        for row in rows:
+            uow.connection.execute("UPDATE execution_capacity_admissions SET state='NEEDS_RECONCILIATION',"
+                "reason='UNSENT_DISPATCH_RELEASE_PENDING',updated_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') "
+                'WHERE domain_operation_id=?', (row['domain_operation_id'],))
+            admission = self.get(uow, row['domain_operation_id'])
+            if not self.unsent_release_pending(uow, admission):
+                raise conflict('UNSENT_DISPATCH_PROOF_REQUIRED')
+            schedule.notify(uow, handoff_id=row['handoff_id'], now=time.time())
+        if rows:
+            schedule.wake(uow)
+
+    def unsent_release_pending(self, uow, admission):
+        row = uow.connection.execute('SELECT state,reason FROM execution_capacity_admissions '
+            'WHERE domain_operation_id=?', (admission.operation_id,)).fetchone()
+        if row is None or row['reason'] != 'UNSENT_DISPATCH_RELEASE_PENDING':
+            return False
+        if row['state'] != 'NEEDS_RECONCILIATION':
+            raise conflict('UNSENT_DISPATCH_PROOF_REQUIRED')
+        scope, consumption = admission.reservation.request.scope, admission.consumption
+        proof = uow.connection.execute('SELECT 1 FROM execution_domain_deliveries d '
+            'JOIN execution_operations o USING(server_id,executor_id,operation_id) '
+            'JOIN execution_dispatch_outbox x USING(server_id,executor_id,operation_id) '
+            'JOIN execution_unsent_dispatch_proofs p USING(server_id,executor_id,operation_id,attempt_no) '
+            'WHERE d.domain_operation_id=? AND o.server_id=? AND o.executor_id=? AND o.session_id=? '
+            "AND o.admission_state='RESOLVED_TERMINAL' AND x.dispatch_state='RESOLVED_TERMINAL' "
+            "AND json_extract(x.last_error,'$.stage')='dispatch' AND json_extract(x.last_error,'$.possible_effect')=0 "
+            'AND x.attempt_token=p.attempt_token AND x.reservation_owner=p.previous_owner '
+            'AND x.reservation_generation=p.previous_generation '
+            "AND ((o.action='runtime.open' AND o.operation_id=? AND o.intent_hash=?) "
+            "OR (o.action='turn.submit' AND o.operation_id=? AND o.intent_hash=?)) LIMIT 1",
+            (admission.operation_id, scope.server_id, scope.executor_id, scope.session_id,
+             consumption.opening_operation_id, consumption.opening_intent_hash,
+             consumption.turn_operation_id, consumption.turn_intent_hash)).fetchone()
+        if proof is None:
+            raise conflict('UNSENT_DISPATCH_PROOF_REQUIRED')
+        return True
+
+    def released_after_unsent_refusal(self, uow, admission, observed):
+        current = self.get(uow, admission.operation_id)
+        if (current.reservation.request != admission.reservation.request
+                or current.reservation.reservation_id != admission.reservation.reservation_id
+                or current.consumption != admission.consumption or type(observed) is not CapacityReservation
+                or observed.state != 'RELEASED' or observed.request != current.reservation.request
+                or observed.reservation_id != current.reservation.reservation_id
+                or observed.consumption != current.consumption
+                or observed.capacity_revision < current.reservation.capacity_revision):
+            raise conflict('RESERVATION_CONFLICT')
+        if current.state == 'CONSUMED' and current.reservation == observed:
+            return  # The release result was committed but its caller lost it.
+        if not self.unsent_release_pending(uow, current):
+            raise conflict('UNSENT_DISPATCH_PROOF_REQUIRED')
+        # Preserve the consumed operation and canonical claim as history. This
+        # release does not authorize replay or claim-generation compensation.
+        uow.connection.execute("UPDATE execution_capacity_admissions SET state='CONSUMED',"
+            "reason='UNSENT_DISPATCH_RELEASED',reservation_json=?,updated_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') "
+            'WHERE domain_operation_id=?', (canonical_json(observed.to_dict()).decode(), admission.operation_id))
+
     def require_available(self, uow, *, handoff, endpoint_id, reservation):
         if (type(reservation) is not CapacityReservation or reservation.state != 'HELD'
                 or reservation.consumption is not None or reservation.remaining_ms <= 0):
@@ -65,7 +132,15 @@ class SqliteCapacityAdmissionRepository:
                 "LEFT JOIN execution_message_origins origin USING(message_id) "
                 "LEFT JOIN runtime_handoff_bindings hb ON hb.operation_id=d.operation_id "
                 "LEFT JOIN handoffs h ON h.handoff_id=hb.handoff_id AND h.claim_epoch=hb.claim_epoch "
-                "WHERE d.endpoint_id=? AND d.workspace_id=? AND (h.status IN ('CLAIMED','VERIFYING') OR "
+                "WHERE d.endpoint_id=? AND d.workspace_id=? AND ((h.status IN ('CLAIMED','VERIFYING') "
+                "AND NOT EXISTS (SELECT 1 FROM execution_domain_deliveries prior "
+                "JOIN execution_operations op USING(server_id,executor_id,operation_id) "
+                "JOIN execution_preopen_refusals proof ON proof.server_id=op.server_id AND proof.executor_id=op.executor_id "
+                "AND proof.operation_id=CASE WHEN op.action='runtime.open' THEN op.operation_id ELSE op.parent_operation_id END "
+                "JOIN execution_sessions closed ON closed.server_id=op.server_id AND closed.executor_id=op.executor_id "
+                "AND closed.session_id=op.session_id AND closed.open_operation_id=proof.operation_id "
+                "WHERE prior.domain_operation_id=d.operation_id AND op.admission_state='RESOLVED_TERMINAL' "
+                "AND closed.lifecycle_state='CLOSED' AND closed.lease_state='CLOSED')) OR "
                 "(d.reconciliation_id IS NULL AND d.external_completed_at IS NULL AND d.terminal_event_id IS NULL "
                 "AND (d.canonical_terminal_operation_id IS NULL OR d.status='RETRY_WAIT') "
                 "AND d.status NOT IN ('REJECTED','CANCELLED','FAILED_FINAL') "
@@ -107,7 +182,10 @@ class SqliteCapacityAdmissionRepository:
 
     def consumed(self, uow, admission, observed):
         current = self.get(uow, admission.operation_id)
+        if self.unsent_release_pending(uow, current):
+            raise conflict('UNSENT_DISPATCH_RELEASE_PENDING')
         if (current.reservation.request != admission.reservation.request
+                or current.state == 'CANCELLED_NO_EFFECT'
                 or current.reservation.reservation_id != admission.reservation.reservation_id
                 or current.consumption != admission.consumption
                 or type(observed) is not CapacityReservation or observed.state != 'CONSUMED'
@@ -122,5 +200,41 @@ class SqliteCapacityAdmissionRepository:
     def uncertain(self, uow, admission):
         # Never downgrade another worker's confirmed consumption.
         uow.connection.execute("UPDATE execution_capacity_admissions SET state='NEEDS_RECONCILIATION',"
-            "reason='NEEDS_RECONCILIATION',updated_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') "
-            "WHERE domain_operation_id=? AND state<>'CONSUMED'", (admission.operation_id,))
+            "reason=CASE WHEN reason='UNSENT_DISPATCH_RELEASE_PENDING' THEN reason ELSE 'NEEDS_RECONCILIATION' END,"
+            "updated_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') "
+            "WHERE domain_operation_id=? AND state IN ('WAITING_CONSUMPTION','NEEDS_RECONCILIATION')", (admission.operation_id,))
+
+    def cancelled_no_effect(self, uow, admission, observed):
+        current = self.get(uow, admission.operation_id)
+        if (current.state not in {'WAITING_CONSUMPTION', 'NEEDS_RECONCILIATION'}
+                or current.reservation.request != admission.reservation.request
+                or current.reservation.reservation_id != admission.reservation.reservation_id
+                or current.consumption != admission.consumption
+                or current.reservation.consumption is not None
+                or type(observed) is not CapacityReservation
+                or observed.state not in {'EXPIRED_UNCONSUMED', 'RELEASED'}
+                or observed.consumption not in (None, current.consumption)
+                or observed.request != current.reservation.request
+                or observed.reservation_id != current.reservation.reservation_id
+                or observed.capacity_revision < current.reservation.capacity_revision):
+            raise conflict('RESERVATION_CONFLICT')
+        proof = canonical_json(observed.to_dict()).decode()
+        conn = uow.connection
+        conn.execute("INSERT INTO execution_capacity_compensations VALUES(?,?,'system',?,"
+                     "strftime('%Y-%m-%dT%H:%M:%fZ','now'))", (admission.operation_id, proof, observed.state))
+        conn.execute("UPDATE execution_capacity_admissions SET state='CANCELLED_NO_EFFECT',reservation_json=?,reason=?,"
+            "updated_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') WHERE domain_operation_id=?",
+            (proof, observed.state, admission.operation_id))
+        conn.execute("UPDATE handoff_runtime_attempts SET state='CANCELLED_NO_EFFECT',active=0,disposition='RELEASE',"
+            "reservation_json=?,reason=?,updated_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') "
+            "WHERE operation_id=? AND attempt_id=? AND state='CLAIM_COMMITTED'",
+            (proof, observed.state, admission.operation_id, observed.request.attempt_id))
+
+    def compensated_claim(self, uow, operation_id):
+        row = uow.connection.execute('SELECT b.handoff_id,b.claim_epoch FROM execution_capacity_compensations c '
+            'JOIN execution_capacity_admissions a USING(domain_operation_id) '
+            'JOIN runtime_handoff_bindings b ON b.operation_id=c.domain_operation_id '
+            "WHERE c.domain_operation_id=? AND a.state='CANCELLED_NO_EFFECT'", (operation_id,)).fetchone()
+        if row is None:
+            raise conflict('RESERVATION_CONFLICT')
+        return dict(row)

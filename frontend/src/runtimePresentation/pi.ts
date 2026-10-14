@@ -1,4 +1,5 @@
 import { content, object, string, tool, type HarnessAdapter } from './model';
+import { userInput } from './input';
 
 export const piAdapter: HarnessAdapter = {
   id:'pi_rpc',
@@ -22,7 +23,7 @@ export const piAdapter: HarnessAdapter = {
       if (message.stopReason==='error') return [{id:`${id}:error`,kind:'error',title:'Execution failed',text:string(message.errorMessage) || 'The harness ended the response with an error.'}];
       if (message.stopReason==='aborted') return [{id:`${id}:aborted`,kind:'status',title:'Response interrupted'}];
       if (message.role==='toolResult') return [{id:`pi:tool:${string(message.toolCallId)}`,kind:'tool',title:string(message.toolName),output:content(message.content),status:message.isError?'failed':'completed'}];
-      if (message.role==='user') return [{id:`user:${event.sequence}`,kind:'user',title:'You',text:content(message.content)}];
+      if (message.role==='user') return [userInput(`user:${event.sequence}`,message.content)];
       const blocks=Array.isArray(message.content)? message.content : [];
       const text=blocks.filter(b=>object(b).type==='text').map(b=>string(object(b).text)).join('') || string(p.output_text);
       return [{id,kind:'assistant',title:'Assistant',text}];

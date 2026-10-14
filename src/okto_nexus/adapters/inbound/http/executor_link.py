@@ -15,6 +15,7 @@ from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from nexus_connector_core import (
     CoreError, R4_PREVIEW_REVISION, decode_r4_frame, encode_r4_frame,
     CAPACITY_CONTRACT_REVISION, decode_control_frame,
+    PREOPEN_REFUSAL_REVISION,
 )
 
 from ....adapters.outbound.execution.core_inventory import protocol_info
@@ -104,8 +105,12 @@ def build_router() -> APIRouter:
         availability = ws.app.state.deps.runtime_availability
         resumable_disconnect = False
         resume_supported = False
+        negotiated_capabilities = ()
         bootstrap_ticket_id = None
         send_lock = asyncio.Lock()
+
+        def _channel():
+            return ExecutionChannel(server_id, executor_id, connection_id, generation, negotiated_capabilities)
 
         async def _send_text(raw):
             async with send_lock:
@@ -127,6 +132,15 @@ def build_router() -> APIRouter:
         leases = ExecutionLeaseService(
             factory=factory, access=build_execution_access(ws.app.state.deps),
             fresh_publications=ws.app.state.inventory_fresh_publications)
+        from .session_release_owner import SessionReleaseOwner
+        from nexus_connector_core.session_release import encode_session_release
+        def _validate_session_release(frame):
+            _verify()
+            return leases.access.session_release.accept(frame,
+                channel=_channel())
+        async def _send_session_release(frame):
+            await _send_text(encode_session_release(frame).decode('utf-8'))
+        session_releases = SessionReleaseOwner(validate=_validate_session_release, send=_send_session_release)
 
         def _admit_attach(frame: dict) -> int:
             if (frame["server_id"] != server_id or
@@ -363,11 +377,13 @@ def build_router() -> APIRouter:
                 "management_revision": info["management_revision"],
                 "accepted_nxl": R4_PREVIEW_REVISION,
                 "snapshot_format": info["executor_snapshot_format"],
-                "control_capabilities": [cap for cap in ('connection_renewal_v1', 'heartbeat_ack_v1', 'connection_resume_v1')
+                "control_capabilities": [cap for cap in ('connection_renewal_v1', 'heartbeat_ack_v1', 'connection_resume_v1',
+                                                        'nexus-lease-denial-v1', 'nexus-session-release-v1', PREOPEN_REFUSAL_REVISION)
                                          if cap in hello['control_capabilities']],
             }
             if availability.enabled and CAPACITY_CONTRACT_REVISION in hello['control_capabilities']:
                 welcome['control_capabilities'].append(CAPACITY_CONTRACT_REVISION)
+            negotiated_capabilities = tuple(welcome['control_capabilities'])
             resumed = 'resume_connection_id' in hello
             if resume_supported:
                 welcome['resumed'] = resumed
@@ -376,7 +392,7 @@ def build_router() -> APIRouter:
             if CAPACITY_CONTRACT_REVISION in welcome['control_capabilities']:
                 from ....adapters.outbound.execution.capacity_link import CapacityLinkClient
                 from ....adapters.outbound.sqlite.execution_capacity_authority import SqliteExecutionCapacityAuthority
-                capacity_channel = ExecutionChannel(server_id, executor_id, connection_id, generation)
+                capacity_channel = _channel()
                 authority = SqliteExecutionCapacityAuthority(factory=factory, channel=capacity_channel,
                     fresh_publications=ws.app.state.inventory_fresh_publications)
                 async def verify_capacity(request, *, action):
@@ -389,8 +405,14 @@ def build_router() -> APIRouter:
                 capacity_host = availability.register(capacity_channel, capacity_client)
 
             from ....application.execution_reconciliation import ExecutionReconciliation
+            preopen_recovery = None
+            if PREOPEN_REFUSAL_REVISION in negotiated_capabilities:
+                from ....application.execution_preopen_recovery import ExecutionPreopenRecovery
+                from ....adapters.outbound.sqlite.execution_preopen_recovery import SqlitePreopenRecoveryRepository
+                preopen_recovery = ExecutionPreopenRecovery(SqlitePreopenRecoveryRepository())
             reconciliation = ExecutionReconciliation(factory,
-                ExecutionChannel(server_id, executor_id, connection_id, generation))
+                _channel(),
+                containment=leases.access.session_containment, preopen_recovery=preopen_recovery)
             pending_reconcile: dict | None = None
 
             async def _request_reconcile():
@@ -411,7 +433,7 @@ def build_router() -> APIRouter:
                 # Same authenticated socket owner and still-current proofs. No
                 # new session generation, native replay, or fabricated lease.
                 pump = ExecutionDispatchPump(factory=factory,
-                    channel=ExecutionChannel(server_id, executor_id, connection_id, generation),
+                    channel=_channel(),
                     access=leases.access, fresh_publications=ws.app.state.inventory_fresh_publications,
                     send=_send_operation, send_lock=send_lock, verify_link=_verify,
                     close_link=_close_dispatch_link,
@@ -420,7 +442,7 @@ def build_router() -> APIRouter:
                 pump.start()
             else:
                 await anyio.to_thread.run_sync(lambda: recover_fenced_reservations(
-                    factory, channel=ExecutionChannel(server_id, executor_id, connection_id, generation)))
+                    factory, channel=_channel()))
                 await _request_reconcile()
             renewal_replies = {}
             while True:
@@ -429,6 +451,18 @@ def build_router() -> APIRouter:
                     await ws.close(code=4409)
                     break
                 frame = decode_control_frame(raw.encode("utf-8"), capabilities=welcome['control_capabilities'])
+                if frame['type'] == 'session.release':
+                    if any(frame[k] != welcome[k] for k in
+                            ('server_id','executor_id','connection_id','connection_generation')):
+                        await ws.close(code=4406)
+                        break
+                    try:
+                        await anyio.to_thread.run_sync(_verify)
+                    except OktoNexusError:
+                        await ws.close(code=4403)
+                        break
+                    await session_releases.submit(frame)
+                    continue
                 if frame['type'] in ('capacity.result', 'capacity.changed', 'capacity.dispatch_state'):
                     if capacity_client is None or any(frame[k] != welcome[k] for k in (
                             'server_id', 'executor_id', 'connection_id', 'connection_generation')):
@@ -478,7 +512,7 @@ def build_router() -> APIRouter:
                         from ....application.execution_continuity import renew_connection
                         try:
                             renewed = await anyio.to_thread.run_sync(lambda: renew_connection(factory,
-                                channel=ExecutionChannel(server_id, executor_id, connection_id, generation), ticket=ticket))
+                                channel=_channel(), ticket=ticket))
                         except OktoNexusError:
                             await ws.close(code=4403, reason='authorization changed')
                             break
@@ -489,9 +523,12 @@ def build_router() -> APIRouter:
                     await _send_text(encode_r4_frame(reply).decode('utf-8'))
                     continue
                 if frame["type"] in {"lease.renew", "lease.applied"}:
+                    source_verified = False
                     def _lease_transition():
+                        nonlocal source_verified
                         _verify()  # Recheck the authenticated link credential.
-                        channel = ExecutionChannel(server_id, executor_id, connection_id, generation)
+                        source_verified = True
+                        channel = _channel()
                         if frame["type"] == "lease.renew":
                             return leases.issue(frame, channel=channel)
                         leases.applied(frame, channel=channel)
@@ -499,6 +536,21 @@ def build_router() -> APIRouter:
                     try:
                         granted = await anyio.to_thread.run_sync(_lease_transition)
                     except OktoNexusError:
+                        from nexus_connector_core.lease_denial import (
+                            LEASE_DENIAL_REVISION, lease_denial_frame, encode_lease_denial)
+                        if source_verified and LEASE_DENIAL_REVISION in welcome['control_capabilities']:
+                            if frame['type'] == 'lease.renew':
+                                def _record_containment():
+                                    _verify()
+                                    return leases.access.session_containment.denied(frame,
+                                        channel=_channel())
+                                await anyio.to_thread.run_sync(_record_containment)
+                                await _send_text(encode_lease_denial(lease_denial_frame(frame)).decode('utf-8'))
+                            # lease.applied has no response. The request replay
+                            # used as the ordered commit barrier revalidates the
+                            # same authority and returns a correlated denial.
+                            # Never turn this into a successful application ACK.
+                            continue
                         await _send_text(encode_r4_frame({
                             "protocol_major": 1, "contract_revision": R4_PREVIEW_REVISION,
                             "type": "error", "server_id": server_id, "executor_id": executor_id,
@@ -548,7 +600,7 @@ def build_router() -> APIRouter:
                     if not accepted["recovery_remaining"] and pump is None:
                         pump = ExecutionDispatchPump(
                             factory=factory,
-                            channel=ExecutionChannel(server_id, executor_id, connection_id, generation),
+                            channel=_channel(),
                             access=leases.access,
                             fresh_publications=ws.app.state.inventory_fresh_publications,
                             send=_send_operation, send_lock=send_lock,
@@ -664,6 +716,8 @@ def build_router() -> APIRouter:
         except (CoreError, UnicodeError, ValueError, RecursionError):
             await ws.close(code=4406)
         finally:
+            with anyio.CancelScope(shield=True):
+                await session_releases.stop()
             if capacity_host is not None:
                 availability.unregister(capacity_host)
                 capacity_client.disconnect()

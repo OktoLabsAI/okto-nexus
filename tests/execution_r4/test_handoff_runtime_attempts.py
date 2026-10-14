@@ -11,7 +11,7 @@ from okto_nexus.bootstrap.handoff_runtime_attempts import build_handoff_runtime_
 from okto_nexus.bootstrap.capacity_admission import build_capacity_admission
 from okto_nexus.errors import OktoNexusError
 from test_harness_canonical import qualified_bridge
-from test_embedded_dispatch import local_setup, qualified_contract, wait_receipt
+from test_embedded_dispatch import local_setup, qualified_contract, wait_receipt, admit
 from test_canonical_delivery import connected_local
 from test_canonical_handoff_regressions import runtime, call, assert_unclaimed
 from test_handoff_automation_principal import prepare, candidate
@@ -19,16 +19,20 @@ from test_canonical_result_publication import current_turn
 from test_capacity_authority import request
 
 
-def prepared(runtime):
+def prepared(runtime, *, warm=False, **handoff_options):
     setup, binding, _ = runtime
     deps, app, client, *_ = setup
-    handoffs, hid, gid = prepare(runtime)
+    handoffs, hid, gid = prepare(runtime, **handoff_options)
     context = candidate(runtime, handoffs, hid, gid)
     with deps.connection_factory.unit_of_work() as uow:
         _, affinity = delivery_session_context(uow, binding['endpoint_id'], sender_agent_id='caller')
     owner = app.state.embedded_dispatch_owner
     owner.host.capacity_enabled = True
-    req = replace(request(setup, binding), attempt_id=context.request_id,
+    opening = admit(setup, binding, 'warm-before-attempt', 'runtime.start', new_session=True) if warm else None
+    if opening:
+        wait_receipt(setup, opening)
+    req = replace(request(setup, binding, scope=opening['scope'] if opening else None,
+                          unit='next_turn' if warm else 'new_session'), attempt_id=context.request_id,
                   affinity_key=affinity.opaque_key, ttl_ms=60000)
     port = client.portal.call(owner.execution_capacity)
     service = build_handoff_runtime_attempts(deps, capacity=port)

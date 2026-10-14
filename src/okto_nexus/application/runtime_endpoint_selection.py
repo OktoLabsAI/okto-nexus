@@ -17,5 +17,5 @@ def select_runtime_endpoint(candidates):
     candidates = [candidate for candidate in candidates if candidate[0]['priority'] == priority]
     groups = {candidate[0]['selection_group'] for candidate in candidates}
     if len(candidates) > 1 and (len(groups) != 1 or None in groups):
-        raise OktoNexusError(ErrorCode.CONFLICT, 'AMBIGUOUS_BINDING', {})
+        raise OktoNexusError(ErrorCode.CONFLICT, 'AMBIGUOUS_BINDING', {'reason': 'AMBIGUOUS_BINDING'})
     return min(candidates, key=lambda candidate: candidate[0]['endpoint_id'])

@@ -628,6 +628,9 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
             embedded_dispatch = getattr(app.state, 'embedded_dispatch_owner', embedded_dispatch)
             shutdown_coordinator = getattr(app.state, 'runtime_shutdown', shutdown_coordinator)
             deps.runtime_admission_fence.close()
+            handoff_runtime = getattr(app.state, 'handoff_runtime_service', None)
+            if handoff_runtime is not None:
+                handoff_runtime.begin_shutdown()
             notice_maintenance = getattr(app.state, 'handoff_notice_maintenance', None)
             if notice_maintenance is not None:
                 notice_maintenance.begin_shutdown()
@@ -662,6 +665,8 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
                 # app.state. Contain native resources first, then join the
                 # actual current writer before releasing the database owner.
                 await notice_maintenance.aclose()
+            if handoff_runtime is not None:
+                await handoff_runtime.aclose()
             dispatcher = getattr(deps, "runtime_dispatcher", None)
             supervisor = getattr(deps, "harness_supervisor", None)
             if (dispatcher and dispatcher.epoch is not None and supervisor

@@ -68,20 +68,40 @@ async def test_failed_conversion_rolls_back_and_retries_original_cursor(backlog)
         assert uow.connection.execute('SELECT count(*) FROM runtime_handoff_notice_retirements').fetchone()[0] == 1
 
 
-def test_startup_converts_backlog_even_with_runtime_admission_disabled(backlog):
-    deps, app = app_for(backlog.config.home_dir)
-    deps.config.feature_harness_integrations = False
-    with TestClient(app):
-        def retired():
+def test_startup_converts_backlog_even_with_runtime_admission_disabled(backlog, monkeypatch):
+    scanned_owners = set()
+    page = HandoffNoticeMaintenance._page
+    def observed_page(owner):
+        result = page(owner)
+        scanned_owners.add(owner)
+        return result
+    monkeypatch.setattr(HandoffNoticeMaintenance, '_page', observed_page)
+
+    def retained(conn):
+        return [tuple(row) for row in conn.execute(
+            "SELECT * FROM delivery_outbox WHERE operation_id<>'b-safe' ORDER BY operation_id")]
+
+    with backlog.unit_of_work(write=False) as uow:
+        before = retained(uow.connection)
+    # Two actual application lifetimes, not just a new repository object.
+    # OUTCOME_UNKNOWN and prior-attempt history must survive both scans.
+    for _ in range(2):
+        deps, app = app_for(backlog.config.home_dir)
+        deps.config.feature_harness_integrations = False
+        with TestClient(app):
+            owner = app.state.handoff_notice_maintenance
+            def scanned():
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    return (owner in scanned_owners and uow.connection.execute(
+                        'SELECT count(*) FROM runtime_handoff_notice_retirements').fetchone()[0] == 1)
+            eventually(scanned)
+            assert not owner.drained
             with deps.connection_factory.unit_of_work(write=False) as uow:
-                return uow.connection.execute('SELECT count(*) FROM runtime_handoff_notice_retirements').fetchone()[0] == 1
-        eventually(retired)
-        owner = app.state.handoff_notice_maintenance
-        assert not owner.drained
-        with deps.connection_factory.unit_of_work(write=False) as uow:
-            assert uow.connection.execute("SELECT status FROM delivery_outbox WHERE operation_id='b-safe'").fetchone()[0] == 'CANCELLED'
-            assert not uow.connection.execute('SELECT * FROM execution_operations').fetchall()
-    assert owner.drained
+                assert uow.connection.execute("SELECT status FROM delivery_outbox WHERE operation_id='b-safe'").fetchone()[0] == 'CANCELLED'
+                assert retained(uow.connection) == before
+                assert not uow.connection.execute('SELECT * FROM execution_operations').fetchall()
+                assert not uow.connection.execute('PRAGMA foreign_key_check').fetchall()
+        assert owner.drained
 
 
 def test_partial_startup_failure_drains_notice_writer_without_coordinator(tmp_path, monkeypatch):

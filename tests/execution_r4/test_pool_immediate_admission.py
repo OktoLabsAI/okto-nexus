@@ -1,7 +1,7 @@
 """Immediate competitive admission is distinct from explicit queued work."""
 import pytest
 
-from okto_nexus.domain.resource_pool import PoolInstance, PoolPolicy, PoolUnavailable
+from okto_nexus.domain.resource_pool import PoolConflict, PoolInstance, PoolPolicy, PoolUnavailable
 from test_pool_ports import pool, admit
 
 
@@ -39,6 +39,35 @@ def test_cold_slot_is_assigned_and_startup_is_bounded(pool):
     assert pool.instances.get(slot.instance_id).state == 'CLOSING'
     with pytest.raises(PoolUnavailable):
         admit(pool, 'next', immediate_only=True)
+
+
+@pytest.mark.parametrize('offset', [0, 1])
+def test_dispatch_cannot_beat_expiry_scan_at_startup_deadline(pool, offset):
+    request = admit(pool, 'competitive', immediate_only=True, now=5)
+    slot = pool.instances.for_request(request.request_id)
+    pool.ready(instance_id=slot.instance_id, resource_id='late-session')
+    now = request.admission_deadline + offset
+    # No maintenance scan has run yet. Dispatch itself must enforce the bound.
+    with pytest.raises(PoolConflict, match='deadline'):
+        pool.started(request_id=request.request_id, now=now)
+    assert pool.request(request.request_id).started_at is None
+    assert pool.instances.count(host_id='host') == 1
+    pool.expire_executions(host_id='host', now=now)
+    assert pool.request(request.request_id).outcome['error']['code'] == 'POOL_START_TIMEOUT'
+    assert pool.instances.get(slot.instance_id).state == 'CLOSING'
+    with pytest.raises(PoolUnavailable):
+        admit(pool, 'next', immediate_only=True, now=now)
+    assert pool.dispose_confirmed(instance_id=slot.instance_id, resource_id='late-session')
+
+
+def test_start_before_deadline_is_not_reclassified_by_late_dispatch_retry(pool):
+    request = admit(pool, 'competitive', immediate_only=True, now=5)
+    slot = pool.instances.for_request(request.request_id)
+    pool.ready(instance_id=slot.instance_id, resource_id='session')
+    pool.started(request_id=request.request_id, now=request.admission_deadline - .01)
+    running = pool.request(request.request_id)
+    pool.started(request_id=request.request_id, now=request.admission_deadline + 1)
+    assert pool.request(request.request_id) == running
 
 
 @pytest.mark.parametrize('state', ['STARTING', 'CLOSING'])

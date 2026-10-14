@@ -15,12 +15,17 @@ import './ConnectionForms.css';
 import { AgentModalFooter, useAgentModalGuard } from './AgentActionModal';
 import { ConnectionSessionConflict } from './ConnectionSessionConflict';
 import { SessionClosures } from '../connectionSessions';
+import { BroadcastHandoffPolicy } from './BroadcastHandoffPolicy';
 
 const input = 'block w-full rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 p-2';
 export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClose: () => void}) {
   const [draft,setDraft] = useState(emptyConnection);
   const [runtimeDefault,setRuntimeDefault] = useState(true);
   const [sessionDefault,setSessionDefault] = useState<SessionPolicy>('shared');
+  const [autoClaim,setAutoClaim] = useState<boolean | null>(null);
+  const [savedAutoClaim,setSavedAutoClaim] = useState<boolean | null>(null);
+  const [autoClaimDefault,setAutoClaimDefault] = useState(false);
+  const [autoClaimRollout,setAutoClaimRollout] = useState(false);
   const [mcpEditing,setMcpEditing] = useState(false);
   const [capacityPending,setCapacityPending] = useState(false);
   const capacity = useRef<OneShotSettingsHandle>(null);
@@ -42,6 +47,9 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
   const [workspacePathsLoading,setWorkspacePathsLoading] = useState(false);
   const [candidateRef,setCandidateRef] = useState('');
   const [baseline,setBaseline] = useState<SetupBaseline | null>(null);
+  const updateBindingBaseline = (value: SetupBaseline) => setBaseline(previous => previous ? {
+    ...value, runtime_revision:previous.runtime_revision, defaults_revision:previous.defaults_revision,
+  } : value);
   const [bindingId,setBindingId] = useState<string | null>(null);
   const [connections,setConnections] = useState<Awaited<ReturnType<typeof runtimeApi.setup>>['connections']>([]);
   const [test,setTest] = useState<SetupTest | null>(null);
@@ -73,12 +81,13 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
   useEffect(() => {
     live.current = true;
     const controller = new AbortController();
-    void Promise.all([api.agentExecutionPolicy(agentId),api.runtimePolicy(agentId),api.workspaces(),
+    void Promise.all([api.agentExecutionPolicy(agentId),api.workspaces(),
       runtimeApi.executors(agentId,controller.signal),runtimeApi.setup(agentId,undefined,controller.signal)])
-      .then(async ([policy,runtime,projects,hosts,initial]) => {
+      .then(async ([policy,projects,hosts,initial]) => {
         const matches = initial.connections.filter(c => c.execution_location === policy.execution_location && c.adapter_id === policy.local_adapter_id);
         const saved = matches.length === 1 ? matches[0] : null;
         const setup = saved ? await runtimeApi.setup(agentId,saved.binding_id,controller.signal) : initial;
+        const runtime = setup.runtime_policy;
         if (controller.signal.aborted) return;
         setConnections(initial.connections);
         loadMcp(setup.mcp_preset);
@@ -94,6 +103,10 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
           workspace:saved.workspace_id,candidate:saved.candidate_ref} : null);
         setRuntimeDefault(runtime.defaults?.runtime_enabled ?? true);
         setSessionDefault(runtime.defaults?.session_policy ?? 'shared');
+        setAutoClaim(runtime.broadcast_handoff_auto_claim ?? null);
+        setSavedAutoClaim(runtime.broadcast_handoff_auto_claim ?? null);
+        setAutoClaimDefault(runtime.defaults?.broadcast_handoff_auto_claim ?? false);
+        setAutoClaimRollout(runtime.handoff_auto_claim_rollout_enabled ?? false);
         setInheritedMcps(runtime.effective?.inherit_global_mcps ?? false);
         setBaseline(setup.baseline); setWorkspaces(projects.workspaces);
         const local = hosts.filter(h => h.kind === 'embedded');
@@ -150,7 +163,7 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
     try {
       const setup = await runtimeApi.setup(agentId,binding || undefined);
       if (!live.current) return;
-      setBaseline(setup.baseline);setBindingId(binding);
+      updateBindingBaseline(setup.baseline);setBindingId(binding);
       loadMcp(setup.mcp_preset);
       if (!imported.current) setDraft(old => ({...old,...(setup.folders || {}),
         provider_home:setup.folders?.provider_home ?? choice?.provider_home_suggestion ?? null,
@@ -207,14 +220,14 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
     const intent = `setup_${Array.from(crypto.getRandomValues(new Uint8Array(16)), byte => byte.toString(16).padStart(2,'0')).join('')}`;
     const value = {client_intent_id:intent,agent_id:agentId,executor_id:executor,candidate_ref:candidateRef,
       inventory_revision:options?.inventory_revision || '',workspace_id:workspace || null,binding_id:bindingId,
-      baseline,configuration:draft,
+      baseline,configuration:draft,broadcast_handoff_auto_claim:autoClaim,
       ...(runtimeEnabled ? {mcp_preset:{expected_revision:savedMcp.revision,servers:parseMCPPreset(mcpText)}} : {})};
     const remoteBinding = connections.find(c => c.binding_id === bindingId && c.execution_location === 'remote');
     return portableOnly && !(runtimeEnabled && draft.execution_location === 'remote' && remoteBinding) ? policyOnlySetup(value) : value;
   };
   const connectionUnchanged = !!savedConnection && bindingId === savedConnection.bindingId && executor === savedConnection.executor
-    && workspace === savedConnection.workspace && candidateRef === savedConnection.candidate && !presetChanged && sameConnectionConfiguration(draft, savedConnection.configuration);
-  useAgentModalGuard(mcpEditing || (!!savedConnection && !connectionUnchanged), busy || installationBusy || !!testing);
+    && workspace === savedConnection.workspace && candidateRef === savedConnection.candidate && !presetChanged && autoClaim === savedAutoClaim && sameConnectionConfiguration(draft, savedConnection.configuration);
+  useAgentModalGuard(mcpEditing || autoClaim !== savedAutoClaim || (!!savedConnection && !connectionUnchanged), busy || installationBusy || !!testing);
   const finish = async () => {
     if (mcpEditing) return;
     if (capacity.current && !await capacity.current.save()) return;
@@ -271,7 +284,7 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
     <input ref={fileInput} type="file" accept=".json,application/json" className="hidden" aria-label="Import connection JSON" onChange={async e => {
       const file=e.currentTarget.files?.[0];e.currentTarget.value='';if(!file)return;
       try {if(file.size>65536)throw new Error('The file must be 64 KiB or smaller.');const config=parseConnectionConfiguration(await file.text());
-        const setup=await runtimeApi.setup(agentId);setBaseline(setup.baseline);
+        const setup=await runtimeApi.setup(agentId);updateBindingBaseline(setup.baseline);
         imported.current=true;patch(config);setCandidateRef('');setBindingId(null);setWorkspace('');setVisited(0);setNotice('Configuration imported. Review the host, installation and folders.');
       }catch(e){setError(String(e));}
     }} />
@@ -286,7 +299,7 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
       {runtimeEnabled && connections.some(c => c.execution_location === draft.execution_location) && <label className="block">Existing connection <span className="text-surface-500">Select to authorize and configure this connection</span><select disabled={mcpEditing} aria-label="Existing connection" className={input} value={bindingId || ''} onChange={async e => {
         const saved=connections.find(c => c.binding_id===e.target.value);if(!saved)return;
         setBusy(true);setError('');
-        try {const setup=await runtimeApi.setup(agentId,saved.binding_id);setBaseline(setup.baseline);setBindingId(saved.binding_id);
+        try {const setup=await runtimeApi.setup(agentId,saved.binding_id);updateBindingBaseline(setup.baseline);setBindingId(saved.binding_id);
           loadMcp(setup.mcp_preset);
           setExecutor(saved.executor_id);setWorkspace(saved.workspace_id);setCandidateRef(saved.candidate_ref);imported.current=false;
           patch({...setup.folders,adapter_id:saved.adapter_id,alias:setup.public_config?.alias || '',
@@ -312,6 +325,8 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
           <select aria-label="Session context" className={input} value={draft.session_policy || ''} onChange={e => patch({session_policy:e.target.value as 'shared' | 'per_sender' | 'per_sender_session' | 'one_shot' || null})}>
             <option value="">Use global setting ({sessionDefault === 'one_shot' ? 'One shot' : sessionDefault.replaceAll('_', ' ')})</option><option value="shared">Shared</option><option value="per_sender">One session per sender</option><option value="per_sender_session">One session per sender + source session</option><option value="one_shot">One shot — fresh session per call</option></select></label>
         {(draft.session_policy ?? sessionDefault) === 'one_shot' && <OneShotSettings ref={capacity} agentId={agentId} showActivity={false} saveOnNext onPendingChange={setCapacityPending} />}
+        <BroadcastHandoffPolicy value={autoClaim} inherited={autoClaimDefault} rolloutEnabled={autoClaimRollout}
+          disabled={mcpEditing || busy} className={input} onChange={value => {setAutoClaim(value);setTest(null);setRequest(null);setAuthorized(false);setError('');}} />
         {draft.execution_location === 'remote' && <RemoteConnectorCommand agentId={agentId} />}
         {draft.execution_location === 'remote' && connections.some(c => c.binding_id === bindingId && c.execution_location === 'remote') &&
           <MCPPresetFields onPendingChange={setMcpEditing} remote value={mcpText} onChange={text => {setMcpText(text);setTest(null);setRequest(null);setAuthorized(false);setError('');}} />}

@@ -5,6 +5,7 @@ import json
 from ..errors import ErrorCode, OktoNexusError
 from .execution_intents import resolve_execution_intent
 from .execution_admission import submit_execution_operation
+from .execution_tool_claims import ExecutionClaimRepository
 
 
 class DeliveryTransactionFactory:
@@ -58,13 +59,13 @@ def select_delivery_session(uow, endpoint_id, *, sender_agent_id=None, source_se
         (binding["server_id"], binding["executor_id"], binding["binding_id"])
         + ((affinity.sender_agent_id, affinity.policy, affinity.source_session_key) if per_sender else ())).fetchall()
     if len(sessions) > 1:
-        raise OktoNexusError(ErrorCode.CONFLICT, "AMBIGUOUS_BINDING", {})
+        raise OktoNexusError(ErrorCode.CONFLICT, "AMBIGUOUS_BINDING", {'reason': 'AMBIGUOUS_BINDING'})
     if sessions and (sessions[0]["lifecycle_state"] != "READY" or sessions[0]["lease_state"] != "ACTIVE"):
         raise OktoNexusError(ErrorCode.CONFLICT, "Delivery session requires reconciliation.", {})
     return binding, sessions[0]["session_id"] if sessions else None
 
 
-def admit_domain_delivery(uow, *, operation_id, access, fresh_publications, remote_ready, immediate_only=False,
+def admit_domain_delivery(uow, *, operation_id, access, claims: ExecutionClaimRepository, fresh_publications, remote_ready, immediate_only=False,
                           capacity_request=None):
     if type(immediate_only) is not bool:
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid immediate admission mode.", {})
@@ -162,6 +163,7 @@ def admit_domain_delivery(uow, *, operation_id, access, fresh_publications, remo
     for row in rows:
         conn.execute("INSERT INTO execution_domain_deliveries VALUES (?,?,?,?)",
                      (binding["server_id"], binding["executor_id"], row[0], operation_id))
+    claims.bind_delivery(uow, operation_id=operation_id, scope=resolved['scope'])
     # The logical inbox delivery survives retries, while each canonical turn
     # has its own identity. Retain that identity from admission so the existing
     # immutable history records receipt transitions even on the first attempt.
@@ -195,6 +197,8 @@ def project_delivery_receipt(conn, *, server_id, executor_id, operation_id, acti
         return
     if conn.execute('SELECT 1 FROM runtime_handoff_notice_retirements WHERE operation_id=?', (row[0],)).fetchone():
         return  # A preserved opening may settle later; it cannot revive the retired notice.
+    if conn.execute('SELECT 1 FROM execution_capacity_compensations WHERE domain_operation_id=?', (row[0],)).fetchone():
+        return
     status = {"SUBMITTED": "ACCEPTED", "RUNNING": "ACCEPTED", "SUCCEEDED": "ACCEPTED",
               "FAILED": "FAILED_FINAL", "CANCELLED": "CANCELLED", "OUTCOME_UNKNOWN": "OUTCOME_UNKNOWN"}.get(stage)
     if status is None:
@@ -233,6 +237,7 @@ def project_delivery_refusals(conn, *, server_id, executor_id):
         "AND x.last_receipt_revision IS NULL AND x.last_error IS NOT NULL LIMIT 1) "
         "WHERE reconciliation_id IS NULL AND canonical_terminal_operation_id IS NULL "
         "AND NOT EXISTS (SELECT 1 FROM runtime_handoff_notice_retirements n WHERE n.operation_id=delivery_outbox.operation_id) "
+        "AND NOT EXISTS (SELECT 1 FROM execution_capacity_compensations c WHERE c.domain_operation_id=delivery_outbox.operation_id) "
         "AND operation_id IN (SELECT m.domain_operation_id FROM execution_domain_deliveries m "
         "JOIN execution_dispatch_outbox x USING(server_id,executor_id,operation_id) "
         "WHERE m.server_id=? AND m.executor_id=? AND x.dispatch_state='RESOLVED_TERMINAL' "

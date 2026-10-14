@@ -11,6 +11,7 @@ from nexus_connector_core import CoreError
 from nexus_connector_core.capacity import CAPACITY_REASONS
 
 from .execution_leases import ExecutionChannel
+from .capacity_observations import CapacityObservations
 
 
 @dataclass(eq=False)
@@ -19,6 +20,9 @@ class CapacityHost:
     port: object
     boot_id: str | None = None
     observations: dict = field(default_factory=dict)
+    diagnostic_generation: int = 0
+    diagnostic_revision: int = 0
+    diagnostic_inflight: int = 0
 
 
 class RuntimeAvailabilityService:
@@ -30,6 +34,7 @@ class RuntimeAvailabilityService:
         self.enabled, self.monotonic, self.wake = enabled, monotonic, wake
         self.max_hosts, self.max_bindings = max_hosts, max_bindings
         self._hosts = {}
+        self.diagnostics = CapacityObservations(monotonic=monotonic)
 
     def register(self, channel, port):
         if not self.enabled:
@@ -43,6 +48,7 @@ class RuntimeAvailabilityService:
         if old is None and len(self._hosts) >= self.max_hosts:
             raise CoreError('CAPACITY_EXCEEDED', 'capacity_owners')
         host = CapacityHost(channel, port)
+        self.diagnostics.invalidate_host(channel)
         self._hosts[key] = host
         self.wake()
         return host
@@ -51,6 +57,7 @@ class RuntimeAvailabilityService:
         key = (host.channel.server_id, host.channel.executor_id)
         if self._hosts.get(key) is host:
             self._hosts.pop(key)
+            self.diagnostics.invalidate_host(host.channel)
             self.wake()
 
     def observe(self, host, *, binding_id, boot_id, revision, reason, valid_for_ms):
@@ -71,6 +78,7 @@ class RuntimeAvailabilityService:
             raise CoreError('CAPACITY_EXCEEDED', 'capacity_bindings')
         now = self.monotonic()
         host.boot_id = boot_id
+        host.diagnostic_revision = max(host.diagnostic_revision, revision)
         host.observations[binding_id] = (revision, reason, now + valid_for_ms / 1000)
         if prior is None or prior[:2] != (revision, reason) or prior[2] <= now:
             self.wake()
@@ -114,11 +122,33 @@ class RuntimeAvailabilityService:
         port = self._port(request, action)
         scope = request.scope
         owner = self.current_host(scope.server_id, scope.executor_id)
-        result = await getattr(port, method)(request, *args)
+        mutated = action in ('reserve', 'consume', 'release')
+        if mutated:
+            owner.diagnostic_generation += 1
+            owner.diagnostic_inflight += 1
+            self.diagnostics.invalidate_host(owner.channel)
+        generation = owner.diagnostic_generation
+        try:
+            result = await getattr(port, method)(request, *args)
+        finally:
+            if mutated:
+                owner.diagnostic_inflight -= 1
+                owner.diagnostic_generation += 1
+                if self.current_host(scope.server_id, scope.executor_id) is owner:
+                    self.diagnostics.invalidate_host(owner.channel)
         if self.current_host(scope.server_id, scope.executor_id) is not owner:
             # A successful stale reply cannot restore authority. Mutations
             # may have committed and must be queried by their original ID.
-            mutated = action in ('reserve', 'consume', 'release')
             raise CoreError('NEEDS_RECONCILIATION' if mutated else 'STALE_OBSERVATION',
                             'capacity_owner_changed', possible_effect=mutated)
+        if not owner.diagnostic_inflight and (mutated or generation == owner.diagnostic_generation):
+            from nexus_connector_core import CapacityAssessment, CapacityReservation
+            if ((type(result) is CapacityAssessment and result.request_hash == request.request_hash)
+                    or (type(result) is CapacityReservation and result.request == request)):
+                owner.diagnostic_revision = max(owner.diagnostic_revision, result.capacity_revision)
+                self.diagnostics.record(request, result, owner.channel)
         return result
+
+    def capacity_observations(self, agent_id, *, validate=None):
+        """No host I/O, mutation, wakeup or capacity promise on an operator read."""
+        return self.diagnostics.snapshot(agent_id, self.current_host, validate=validate)

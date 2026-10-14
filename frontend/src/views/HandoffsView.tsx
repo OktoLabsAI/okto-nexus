@@ -26,6 +26,7 @@ import {
 import { useWorkspaceName } from "../components/WorkspaceNames";
 import { AgentSelect } from "../components/AgentSelect";
 import { handoffLabel } from "../handoffLabel";
+import { HandoffRuntimeProgress } from '../components/HandoffRuntimeProgress';
 
 const CARDS_PER_PAGE = 3;
 const inputCls =
@@ -144,6 +145,7 @@ function HandoffDetailModal({
         </div>
 
         <div className="px-5 py-4 overflow-auto space-y-4 text-xs text-surface-600 dark:text-surface-300">
+          {handoff.runtime_progress && <HandoffRuntimeProgress value={handoff.runtime_progress} details />}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Meta label="workspace" value={workspaceName} />
             <Meta label="created" value={handoff.created_at} />
@@ -516,6 +518,7 @@ export function HandoffsView({
                       <div title={`${handoffLabel(h)} (${h.handoff_id})`} className="text-sm font-medium text-surface-800 dark:text-surface-200 truncate">
                         {handoffLabel(h)}
                       </div>
+                      {h.runtime_progress && <HandoffRuntimeProgress value={h.runtime_progress} />}
                       <div className="mt-1 text-xs text-surface-500 dark:text-surface-400 space-y-0.5">
                         <div className="flex items-center gap-1">
                           <span className="text-surface-400">from</span>

@@ -164,6 +164,10 @@ def test_denied_renewal_releases_only_its_session_and_keeps_executor_ready(conne
     monkeypatch.setattr(current['executor'], 'renew_r4', deny)
     client.portal.call(owner._renew_owned, session_id, current)
     assert owner.failure is None and not owner._stopping.is_set()
+    deadline = time.monotonic() + 10
+    while session_id in owner.sessions:
+        assert time.monotonic() < deadline, 'Scoped renewal containment did not finish'
+        time.sleep(.02)
     assert session_id not in owner.sessions
     assert other['scope']['session_id'] in owner.sessions
     with deps.connection_factory.unit_of_work(write=False) as uow:

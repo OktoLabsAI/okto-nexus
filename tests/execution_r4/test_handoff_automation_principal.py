@@ -16,14 +16,14 @@ from test_canonical_result_publication import current_turn, workspace
 from test_runtime_policy_defaults import save
 
 
-def prepare(runtime, *, strategy='broadcast', enable=True):
+def prepare(runtime, *, strategy='broadcast', enable=True, **handoff_options):
     setup, binding, _ = runtime
     deps, _, client, headers, *_ = setup
     target = dict(strategy=strategy)
     if strategy == 'direct':
         target['agent_id'] = 'subject'
     made = call(runtime, 'handoff_create', from_agent_id='caller', visibility='eligible',
-                target=target, payload='Perform the authorized broadcast work')
+                target=target, payload='Perform the authorized broadcast work', **handoff_options)
     assert made['ok'], made
     hid = made['data']['handoff_id']
     response = client.post('/api/v1/harness/grants', headers=headers['operator'], json=dict(

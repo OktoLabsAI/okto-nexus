@@ -470,6 +470,9 @@ def begin_execution_send(
             executor_id=reservation.executor_id, operation_id=reservation.operation_id)
         containment = row["action"] in {"turn.interrupt", "runtime.close"}
         operator_containment = containment and operator_context is not None
+        session_containment = getattr(access, 'session_containment', None)
+        if not containment and session_containment is not None:
+            session_containment.require_not_pending(uow, scope)
         current = conn.execute(
             "SELECT c.inventory_revision,c.publication_sequence,"
             "s.observation_age_ms,s.canonical_projection "
