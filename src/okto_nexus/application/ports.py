@@ -27,6 +27,7 @@ from dataclasses import dataclass
 from typing import Any, Iterable, Mapping, Protocol, Sequence, runtime_checkable
 
 from ..domain.approvals import Approval
+from ..domain.handoff_origin import HandoffOrigin
 from ..domain.artifacts import StoredArtifactPayload
 from ..domain.comm_preset import CommPresetRecord, CommPresetVersion
 from ..domain.governance import Policy
@@ -2845,6 +2846,16 @@ class FileStore(Protocol):
 # --------------------------------------------------------------------------- #
 # Repository registry
 # --------------------------------------------------------------------------- #
+class HandoffOriginRepo(Protocol):
+    def record(self, uow: UnitOfWork, *, workspace_id: str, handoff_id: str,
+               origin: HandoffOrigin, captured_at: str) -> None: ...
+
+    def get(self, uow: UnitOfWork, *, workspace_id: str, handoff_id: str) -> HandoffOrigin: ...
+
+    def bind_message(self, uow: UnitOfWork, *, workspace_id: str, handoff_id: str,
+                     message_id: str) -> None: ...
+
+
 @dataclass
 class Repos:
     """Aggregate of all repository ports, injected via :class:`Deps`.
@@ -2863,6 +2874,7 @@ class Repos:
     deliveries: MessageDeliveryRepo | None = None
     tasks: TaskRepo | None = None
     handoffs: HandoffRepo | None = None
+    handoff_origins: HandoffOriginRepo | None = None
     artifacts: ArtifactRepo | None = None
     artifact_store: ArtifactStore | None = None
     files: FileStore | None = None

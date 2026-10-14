@@ -139,6 +139,8 @@ from .ports import (
     ConnectionFactory,
     EventEmitter,
     HandoffRepo,
+    HandoffOriginRepo,
+    SessionRepo,
     MessageDeliveryRepo,
     MessageRepo,
     TagCatalogRepo,
@@ -196,6 +198,9 @@ class HandoffService:
         runtime_work: Any = None,
         claim_trust_guard: Any = None,
         workspaces: Optional[WorkspaceRepo] = None,
+        sessions: SessionRepo | None = None,
+        origins: HandoffOriginRepo | None = None,
+        capabilities: Any = None,
     ) -> None:
         self._cf = connection_factory
         self._handoffs = handoffs
@@ -233,6 +238,7 @@ class HandoffService:
         self.runtime_work = runtime_work
         self._claim_trust_guard = claim_trust_guard
         self._workspaces = workspaces
+        self._sessions, self._origins, self._capabilities = sessions, origins, capabilities
         # Blocking seam for the list_available long-poll: an injected Waiter
         # (deterministic in tests), or the store's own change waiter.
         self._waiter = (
@@ -287,8 +293,10 @@ class HandoffService:
         verify_by: Any = None,
         depends_on: Any = None,
         session_id: Any = None,
+        session_secret: Any = None,
         _approved_execution: bool = False,
         _creator_binding: str | None = None,
+        _source_session_key: str | None = None,
     ) -> dict[str, Any]:
         """Create an ``OPEN`` handoff and emit ``handoff.created`` atomically.
 
@@ -316,6 +324,8 @@ class HandoffService:
         invalid target/visibility, and ``CONTENT_TOO_LARGE`` for an oversized
         inline payload.
         """
+        if _source_session_key is not None and not _approved_execution:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Handoff provenance is internal to approval replay.', {})
         logical_workspace = workspace_id is not None
         workspace_id = self._resolve_workspace(project_root, workspace_id)
         from ..domain.execution_principal import current_execution_principal
@@ -432,9 +442,31 @@ class HandoffService:
         with self._create_uow(workspace_id=workspace_id, agent_id=from_agent_id) as uow:
             self._require_logical_workspace(uow, workspace_id, logical_workspace)
             creator_binding = self._require_actor(uow, from_agent_id) if not _approved_execution else _creator_binding
+            from ..domain.handoff_origin import HandoffOrigin
+            from .handoff_provenance import managed_creator, valid_approved_creator
+            origin = HandoffOrigin(_source_session_key or '') if _approved_execution else HandoffOrigin()
+            if not _approved_execution:
+                managed = managed_creator(uow, capabilities=self._capabilities,
+                    agent_id=from_agent_id, workspace_id=workspace_id)
+                if managed is not None:
+                    if session_secret is not None or session_id not in (None, current_execution_principal.get().scope['session_id']):
+                        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Use the authenticated runtime origin.', {})
+                    creator_binding, origin = managed
+                elif session_secret is not None:
+                    from .identity import verify_session_credentials, advance_session_presence
+                    if self._sessions is None:
+                        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Session origin verification is unavailable.', {})
+                    verify_session_credentials(self._sessions, uow, trust_mode='strict', tool='handoff_create',
+                        agent_id=from_agent_id, session_id=session_id, session_secret=session_secret)
+                    verified = self._sessions.get(uow, session_id)
+                    if verified.workspace_id != workspace_id:
+                        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The creator session belongs to another workspace.', {})
+                    advance_session_presence(self._sessions, uow, session_id=session_id, at=now)
+                    origin = HandoffOrigin(json.dumps(['mcp', session_id], separators=(',', ':')))
             if _approved_execution and creator_binding:
                 creator = self._agents.get(uow, from_agent_id) if self._agents else None
-                if not creator or not creator.is_active or creator.api_key_hash != creator_binding:
+                if not valid_approved_creator(uow, actor=creator, binding=creator_binding, origin=origin,
+                        capabilities=self._capabilities, workspace_id=workspace_id):
                     raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Handoff creator authorization changed.", {})
             permission_set_for(self._agents, uow, from_agent_id).require(
                 "handoffs", "create"
@@ -556,6 +588,8 @@ class HandoffService:
                         approval_kwargs["workspace_id"] = workspace_id
                     if creator_binding:
                         approval_kwargs["_creator_binding"] = creator_binding
+                    if origin.source_session_key:
+                        approval_kwargs['_source_session_key'] = origin.source_session_key
                     if criteria_list is not None:
                         # An intercepted verifiable create re-executes with
                         # its verification contract intact (normalised values;
@@ -595,6 +629,9 @@ class HandoffService:
             )
             # An existing handoff must not acquire a freshly changed policy
             # as its original authorization when managed dispatch is requested.
+            if self._origins is not None:
+                self._origins.record(uow, workspace_id=workspace_id, handoff_id=handoff_id,
+                                     origin=origin, captured_at=now)
             uow.connection.execute(
                 "INSERT INTO handoff_authorization_receipts(handoff_id,creator_policy_revision,hitl_enabled,created_at) VALUES(?,?,?,?)",
                 (handoff_id, self._governance.authorization_revision(uow, from_agent_id) if self._governance else "unbound",

@@ -347,6 +347,12 @@ match (stays OPEN for later registrants). After creating, poll handoff_get for
 status/result - do not scan the event stream. payload: a string is returned to
 the claimant byte-for-byte; a non-string is stored/returned to the claimant as
 opaque JSON TEXT.
+Creator affinity: a managed runtime uses its authenticated session automatically.
+An ordinary MCP caller may pass ``session_id`` + ``session_secret`` to record a
+verified origin in the same workspace. A bare ``session_id`` remains attribution
+only; requests without verified origin use the shared missing-origin context.
+Approval replay preserves that captured origin without storing the secret or
+using the claimant's session as the creator's origin.
 Optional verification contract: ``acceptance_criteria`` (1..20 non-empty
 strings, max 500 chars each, no exact duplicates, IMMUTABLE after creation) +
 ``verify_by`` (one of {"kind":"creator"} - the default, materialised at

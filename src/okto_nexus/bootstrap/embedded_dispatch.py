@@ -314,6 +314,7 @@ class EmbeddedDispatchOwner:
                 "Embedded runtime containment: type=%s code=%s stage=%s origin=%s",
                 type(error).__name__, getattr(error, "code", None), getattr(error, "stage", None), origin)
         self._stopping.set()
+        self.capacity_waiter.stop()
         if self.pump is not None:
             self.pump._stopping.set()
         if self._containment_task is None:

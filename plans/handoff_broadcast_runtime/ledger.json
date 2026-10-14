@@ -74,20 +74,33 @@
         "Core build/capacity-operation-binding.xml: 33 passed. Follow-up build/capacity-operation-binding-followup.xml: 36 passed; exact indexed operation lookup, canonical operation uniqueness across consumed reservations/actions, real R4 open/turn transfer, terminal receipt replay without native duplication, cross-session/released-reservation rejection and existing physical gate regressions.",
         "Connector build/capacity-dispatch-binding-followup.xml: 55 passed; actual daemon consumes a cold reservation, dispatches its original opening plus first turn, binds both canonical hashes and uses one physical slot. Existing execution/daemon authority regressions included.",
         "Nexus build/handoff-broadcast/h3-capacity-dispatch-binding-followup.xml: 11 passed; actual embedded dispatch consumes an existing-session reservation and delivers its original admitted turn once; ordinary operation/control/opening-renewal regressions included.",
-        "Final consumer checks after the historical binding guard: Connector build/capacity-dispatch-final.xml 1 passed; Nexus build/handoff-broadcast/h3-capacity-dispatch-final.xml 1 passed. Both real dispatch integrations passed against the final local Core source. No commit or push."
+        "Final consumer checks after the historical binding guard: Connector build/capacity-dispatch-final.xml 1 passed; Nexus build/handoff-broadcast/h3-capacity-dispatch-final.xml 1 passed. Both real dispatch integrations passed against the final local Core source. No commit or push.",
+        "Core build/capacity-waiter.xml: 8 passed; one retained revision producer, bounded/cancellable observers, periodic authority recheck, typed exact pre-journal turn/open refusal and original-operation retry.",
+        "Connector build/capacity-wait-regression-final.xml: 48 passed, plus build/capacity-wait-transport.xml and build/capacity-open-wait-renewal.xml: 1 each. Four actual Core-gated waits leave another session, containment controls and renewal gates available; same operation resumes only after correlated terminal release. Waiting open retains preparation, initial lease and canonical identity, renews while physically blocked, and opens once. Shutdown/session close persist bound no-effect failure; transport flow retains item/byte ownership.",
+        "Nexus build/handoff-broadcast/h3-capacity-wait.xml: 17 passed, 2 fixture failures; h3-capacity-flow.xml: 14 passed, 1 fixture failure. Fixed incomplete diagnostic fixture session IDs/new internal invocation seam and a stale-generation test that accidentally used the current generation. All affected cases passed in h3-capacity-wait-followup.xml (7 passed). h3-capacity-flow-websocket.xml: 1 passed. Real embedded reservation wait preserves SENDING/original attempt while interrupt and applied lease renewal progress; authenticated flow refuses cross-scope, conflicting sequence and replaced ownership, without creating receipts. Shared wire byte/item limits retain 24/31-waiter headroom and refuse a 33rd retained item."
       ],
       "remaining": [
         "Run separate-process authenticated channel parity and reconnect with actual Connector owner, then independent remote qualification; in-process authenticated Server capacity round trips now pass",
         "Connect the durable scheduler and Server logical admission to technical reserve/consume; both productive hosts now bind consumed operation IDs through their existing R4 receipt association",
         "Exercise the full reserved operation lifecycle across separate-process disconnect/restart; local Core terminal receipt replay is now covered",
-        "Preserve normal ingress queue order when the Core capacity gate refuses transient contention",
+        "Compose Server logical claim reservation with ingress FIFO and exact-affinity dispatch; host wait now releases workers/renewal gates but cannot alone guarantee reserved winner ordering or per-sender independence",
         "Complete consumed/uncertain reservation and gate/receipt crash-window recovery; fenced unconsumed holds now drain before both legacy resource scans",
         "Run separate-process channel/reconnect parity and independent remote campaign"
       ]
     },
     "H4": {
-      "status": "pending",
-      "evidence": []
+      "status": "in_progress",
+      "evidence": [
+        "Nexus h4-origins.xml: 14 passed; authenticated creator origin, missing-origin fallback, approval replay, revocation and atomic rollback.",
+        "Nexus h4-origin-regression.xml: 15 passed; h4-handoff-regressions.xml: 74 passed.",
+        "Nexus h4-creator-affinity-followup.xml: 5 passed (two creator-affinity/rollback cases and three boundary checks), one permission fixture failure. Setting permissions after capability issuance correctly revoked it; configured policy before issuance. h4-origin-permission.xml: 1 passed. Initial affinity fixture table/preset errors were corrected.",
+        "Connector build/handoff-origin-actions.xml: 80 passed; approved MCP launch and boundaries."
+      ],
+      "remaining": [
+        "Scoped automation principal and logical reservation/claim/admission in the canonical transaction",
+        "Durable scheduler, exact-affinity FIFO protection and structural broadcast notification handling",
+        "Full acceptance and independent remote qualification"
+      ]
     },
     "H5": {
       "status": "pending",
@@ -418,6 +431,14 @@
     {
       "step": "checkpoint",
       "action": "User explicitly requested commit and push of all current changes across Nexus, Core and Connector. Recorded publication/binding integration and in-progress capacity-v2 dispatch flow control, typed pre-effect deferral, shared waiter and embedded retry. Corrected stale request hashes in v2 contract fixtures and refreshed their manifest digest; immutable v1 preserved. Focused source checks passed: Core 31, Connector 32, Nexus 20 (83 total), using local Core 0.0.11. Reports: Core/Connector build/capacity-push-checkpoint.xml and Nexus build/handoff-broadcast/capacity-push-checkpoint.xml. These tests do not qualify the new waiting path end to end: Connector productive retry, saturation/progress-credit behavior, shutdown races and dedicated deferral/flow tests remain pending, along with H4/H5/H6 and remote qualification. This is a development checkpoint; no production activation, live install change, merge, tag or package release."
+    },
+    {
+      "step": "H3 ordinary capacity wait",
+      "action": "Implemented Connector retained retry with per-attempt worker ownership and shared Core revision waiter. Kept ordinary operation/prepared opening/source binding stable, persisted proven no-effect outcome on stop, negotiated non-receipt dispatch flow and retained transport credits. Embedded owner failure now wakes deferred producers. Removed premature Server stop at 24 waiters while preserving 32 shared retained items and byte limits. Added actual Core/Connector, embedded Server, SQL fencing and authenticated WebSocket evidence; diagnostic fixtures corrected without relaxing assertions. All new changes local after authorized checkpoint e5ee0fd/5e31913/8cddd84. Full logical FIFO/claim integration, crash-window reconciliation, H4/H5/H6 and independent remote evidence remain incomplete; no production activation or installation change."
+    },
+    {
+      "step": "H4 creator origin and authorized checkpoint",
+      "action": "Persisted immutable authenticated creator origin and transferred it to managed execution in the claim transaction. Approval replay preserves provenance without credentials and rechecks authority. User explicitly authorized commit and push of all current changes in Nexus feature/v0.3.0, Core feature/v0.0.11 and Connector feature/v0.0.9. Development remains in progress; no automatic claim activation, live installation change, merge, tag or release."
     }
   ],
   "target_versions": {

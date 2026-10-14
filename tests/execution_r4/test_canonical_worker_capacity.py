@@ -27,12 +27,12 @@ def test_retained_worker_does_not_donate_agent_capacity_or_block_healthy_agent(c
         opened.append(operation)
     original = owner._execute
     entered, release = threading.Event(), asyncio.Event()
-    async def held(frame):
+    async def held(frame, **options):
         targeted = frame['action'] == 'turn.submit' and frame['session_id'] == opened[0]['session_id']
         if targeted and cut == 'before_write':
             entered.set()
             await release.wait()
-        await original(frame)
+        await original(frame, **options)
         if targeted and cut == 'after_receipt':
             entered.set()
             await release.wait()

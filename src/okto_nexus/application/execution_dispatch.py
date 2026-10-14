@@ -167,9 +167,10 @@ def reserve_execution_dispatch(
                 remaining = min(remaining, regular_bytes - used['regular'][1] - used['opening'][1] - used['waiting'][1])
                 # Waiting operations retain their bounded transport inbox
                 # reservation, but release the four productive worker credits.
-                # Keep eight of the 32 wire items for independent progress.
-                if (used['waiting'][0] >= 24 or
-                        used['regular'][0] + used['opening'][0] + used['waiting'][0] >= 32):
+                # Waiting alone must not block the remaining productive
+                # credits. Every retained item still counts against the
+                # transport's shared hard limit.
+                if used['regular'][0] + used['opening'][0] + used['waiting'][0] >= 32:
                     continue
             if used[lane][0] >= max_items or remaining <= 0:
                 continue

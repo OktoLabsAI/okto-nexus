@@ -217,3 +217,48 @@ esperas para preservar créditos de progresso sob saturação. Os testes deste
 checkpoint não qualificam esse caminho ponta a ponta. H4/H5/H6 continuam
 pendentes e a ativação produtiva permanece desligada. Nenhuma alteração foi
 aplicada à instalação em execução; este envio não é merge ou release.
+
+## Espera produtiva sem ocupar workers
+
+O Connector retém o produtor e a mesma operação durante a recusa transitória
+do Core, mas adquire o worker somente para cada tentativa. A espera ocorre fora
+do gate de renovação; a abertura conserva preparação, stream e lease inicial.
+Um observador compartilhado acompanha a revisão do ledger e faz revalidação
+periódica. O encerramento publica uma recusa vinculada comprovadamente sem
+efeito apenas quando ainda retém a recusa anterior do Core.
+
+O aviso negociado WAITING/RUNNING não cria receipt nem devolve o crédito de
+transporte. No Server, foram corrigidos o bloqueio prematuro em 24 esperas e
+a preservação do limite conjunto de 32 itens/bytes. Foram testados escopo,
+sequência repetida/divergente, troca de owner e o WebSocket autenticado.
+
+Evidências desta etapa: Core 8 testes; Connector 48 regressões, 1 teste do
+transporte e 1 abertura bloqueada com renovação real; Nexus 17 + 14 casos
+aprovados nos conjuntos iniciais, 7 no follow-up das fixtures e 1 no WebSocket.
+As três falhas iniciais do Nexus eram fixtures incompletas ou que usavam a
+geração atual como se fosse antiga; os casos afetados passaram após correção.
+Os relatórios e limites de cobertura estão registrados no ledger.
+
+O claim automático ainda não está habilitado. A reserva lógica do Server deve
+proteger o vencedor e a ordem anterior da fila, inclusive afinidades diferentes
+do mesmo agente. Essa composição, as janelas de crash, H4/H5/H6 e a campanha
+remota independente permanecem pendentes. Tudo desta etapa permanece local.
+
+## Origem do criador e checkpoint autorizado
+
+A origem autenticada do criador agora acompanha o handoff e a mensagem de
+execução na mesma transação do claim. Sessões runtime usam o principal corrente;
+sessões MCP fornecem prova verificada. IDs informativos e dados históricos
+continuam no contexto padrão. Aprovações conservam a origem sem armazenar
+credenciais e revalidam a autorização no replay.
+
+Validações concluídas: 14 testes de origem, 15 regressões de workspace/mensagens,
+74 regressões de handoffs/epochs, dois casos de afinidade/rollback, três checks
+de arquitetura e um teste de permissão após ajuste da fixture. Connector: 80
+testes de lançamento MCP e boundaries. As falhas iniciais das fixtures e seus
+follow-ups estão registrados no ledger.
+
+O usuário autorizou commit e push de todas as alterações atuais nos três
+repositórios. H4 permanece em andamento: principal de automação, reserva lógica
+com claim/admissão e scheduler ainda faltam, assim como as etapas posteriores.
+Este checkpoint não altera a instalação em execução nem constitui release.

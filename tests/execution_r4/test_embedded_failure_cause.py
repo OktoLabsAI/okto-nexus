@@ -13,6 +13,8 @@ def owner_fixture():
     owner.failure = None
     owner.active_operations = set()
     owner._stopping = asyncio.Event()
+    owner.capacity_waiter = SimpleNamespace(version=0)
+    owner.capacity_publication = SimpleNamespace(tick=lambda: None)
     owner.channel = SimpleNamespace(connection_id="fixture", connection_generation=1)
     owner._request_grant = None
     owner.verify = lambda: None
@@ -28,7 +30,7 @@ async def test_secondary_agent_failure_preserves_first_cause_without_failing_hos
     owner = owner_fixture()
     primary = CoreError("PROVIDER_AUTH_REQUIRED", "provider_vault", retry_safe=True)
     secondary = RuntimeError("The embedded Core host is shutting down.")
-    async def execute(frame):
+    async def execute(frame, **options):
         raise primary if frame["operation_id"] == "primary" else secondary
     async def renew(**kwargs):
         raise secondary
@@ -40,9 +42,9 @@ async def test_secondary_agent_failure_preserves_first_cause_without_failing_hos
                    scope={"agent_id": "subject"}, renew_at=None)
     owner.sessions = {"session": session}
 
-    await owner._execute_owned({"agent_id": "subject", "operation_id": "primary"})
+    await owner._execute_owned({"agent_id": "subject", "session_id": "session", "operation_id": "primary"})
     if later_producer == "execute":
-        await owner._execute_owned({"agent_id": "subject", "operation_id": "secondary"})
+        await owner._execute_owned({"agent_id": "subject", "session_id": "session", "operation_id": "secondary"})
     else:
         await owner._renew_owned("session", session)
     assert owner.failure is None
@@ -75,7 +77,7 @@ async def test_secondary_shared_failure_preserves_first_host_cause(monkeypatch, 
     from okto_nexus.application import runtime_recovery
     monkeypatch.setattr(runtime_recovery, "drain_pending", page)
     if later_producer == "execute":
-        await owner._execute_owned({"agent_id": "subject", "operation_id": "secondary"})
+        await owner._execute_owned({"agent_id": "subject", "session_id": "session", "operation_id": "secondary"})
     elif later_producer == "renew":
         await owner._renew_owned("session", session)
     else:

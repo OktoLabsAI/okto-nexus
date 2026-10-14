@@ -78,6 +78,44 @@ def test_authenticated_capacity_reservation_lookup_release_and_disconnect(tmp_pa
         ledger.close()
 
 
+def test_authenticated_dispatch_wait_changes_only_flow_and_rejects_conflicting_sequence(tmp_path, monkeypatch):
+    from test_ns09 import admit
+    from okto_nexus.application.execution_dispatch import reserve_execution_dispatch, begin_execution_send
+    deps, app, access, _, _, _, info, revisions, ticket, lane, server, executor = setup_authority(tmp_path, monkeypatch)
+    deps.runtime_availability.enabled = True
+    with TestClient(app, base_url='https://127.0.0.1:8202') as client:
+        with client.websocket_connect(f'wss://127.0.0.1:8202/v1/runtime/executors/{executor}/link',
+                headers={'Authorization': 'Bearer ' + ticket}, subprotocols=['nxl.v1']) as ws:
+            channel = negotiate(ws, info, revisions, lane, server, executor,
+                                control_capabilities=[CAPACITY_CONTRACT_REVISION])
+            resolution = admit(deps, app)
+            reservation = reserve_execution_dispatch(deps.connection_factory, server_id=server,
+                executor_id=executor, remote_ready=True, channel=channel)
+            source = begin_execution_send(deps.connection_factory, reservation=reservation, remote_ready=True,
+                access=access, fresh_publications=app.state.inventory_fresh_publications, channel=channel).frame
+            frame = {k: source[k] for k in ('server_id', 'executor_id', 'connection_id', 'connection_generation',
+                'binding_id', 'agent_id', 'session_id', 'operation_id', 'intent_hash', 'action')} | dict(
+                    type='capacity.dispatch_state', contract_revision=CAPACITY_CONTRACT_REVISION,
+                    state='WAITING', sequence=1)
+            ws.send_text(encode_capacity_frame(frame).decode())
+            async def wait_flow():
+                async with asyncio.timeout(3):
+                    while True:
+                        with deps.connection_factory.unit_of_work(write=False) as uow:
+                            row = uow.connection.execute('SELECT state FROM execution_capacity_waits WHERE operation_id=?',
+                                                         (resolution['operation_id'],)).fetchone()
+                            if row is not None:
+                                assert row['state'] == 'WAITING'
+                                assert uow.connection.execute('SELECT COUNT(*) FROM execution_receipts').fetchone()[0] == 0
+                                return
+                        await asyncio.sleep(.01)
+            client.portal.call(wait_flow)
+            ws.send_text(encode_capacity_frame(dict(frame, state='RUNNING')).decode())
+            with pytest.raises(WebSocketDisconnect) as closed:
+                ws.receive_text()
+            assert closed.value.code == 4403
+
+
 @pytest.mark.parametrize('fault', ['disabled', 'unoffered', 'foreign_binding', 'old_connection'])
 def test_capacity_notifications_require_negotiation_current_link_and_admitted_lane(tmp_path, monkeypatch, fault):
     deps, app, _, _, _, _, info, revisions, ticket, lane, server, executor = setup_authority(tmp_path, monkeypatch)

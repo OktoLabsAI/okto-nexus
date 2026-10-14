@@ -45,6 +45,7 @@ from okto_nexus.adapters.outbound.sqlite.guardrails_repo import (
     SqliteGuardrailRepo,
 )
 from okto_nexus.adapters.outbound.sqlite.handoff_repo import SqliteHandoffRepo, SqliteTaskRepo
+from okto_nexus.adapters.outbound.sqlite.handoff_origins import SqliteHandoffOriginRepo
 from okto_nexus.adapters.outbound.sqlite.identity_repo import (
     SqliteAgentRepo,
     SqliteSessionRepo,
@@ -135,6 +136,7 @@ def build_repos(clock: Clock, config: NexusConfig) -> tuple[Repos, EventEmitter]
         deliveries=SqliteMessageDeliveryRepo(clock),
         tasks=SqliteTaskRepo(clock),
         handoffs=SqliteHandoffRepo(clock),
+        handoff_origins=SqliteHandoffOriginRepo(),
         artifacts=SqliteArtifactRepo(clock),
         artifact_store=LocalArtifactStore(config.home_dir / "artifacts"),
         files=WorkspaceFileStore(),

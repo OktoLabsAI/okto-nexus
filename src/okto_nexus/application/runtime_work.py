@@ -18,12 +18,13 @@ def denied():
 
 
 class RuntimeWorkService:
-    def __init__(self, *, access, outbox, messages, deliveries, clock, validate_claim, wake, sessions, owner_provider=None, canonical_admit=None):
+    def __init__(self, *, access, outbox, messages, deliveries, clock, validate_claim, wake, sessions, owner_provider=None, canonical_admit=None, origins=None):
         self.access, self.outbox = access, outbox
         self.messages, self.deliveries, self.clock = messages, deliveries, clock
         self.validate_claim, self.wake = validate_claim, wake
         self.owner_provider = owner_provider
         self.canonical_admit = canonical_admit
+        self.origins = origins
         self.external = ExternalWorkChannel(access=access, sessions=sessions)
 
     def authorize(self, uow, *, context, endpoint_id, grant_id, agent_id, workspace_id, consume=False, audit=True,
@@ -105,6 +106,9 @@ class RuntimeWorkService:
         message = self.messages.create(uow, message_id=new_id("msg"), workspace_id=handoff.workspace_id,
             from_agent_id=handoff.from_agent_id, target=json.dumps({"strategy": "direct", "agent_id": handoff.claimed_by}),
             subject="Managed handoff execution", body=handoff.payload or "", trace_id=handoff.trace_id, created_at=now)
+        if self.origins is not None:
+            self.origins.bind_message(uow, workspace_id=handoff.workspace_id,
+                                     handoff_id=handoff.handoff_id, message_id=message.message_id)
         causality = RuntimeCausalityService(config=self.access.config, agents=self.access.agents)
         # Original creator provenance was checked by validate_claim; the
         # authenticated claimant/delegate is the actor admitting this execution.
