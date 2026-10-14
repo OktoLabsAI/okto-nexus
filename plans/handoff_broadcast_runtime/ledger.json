@@ -1,0 +1,345 @@
+{
+  "schema_version": 1,
+  "plan": "PLANO_HANDOFF_BROADCAST_RUNTIME_MCP_v0.3.0.md",
+  "status": "in_progress",
+  "constraints": [
+    "Hexagonal architecture; canonical claim remains sole ownership authority",
+    "Commit and push of the current development state authorized by the user; no release or merge requested",
+    "No production auto-claim activation before real local/remote capacity exclusion is verified"
+  ],
+  "baseline": {
+    "nexus": {
+      "commit": "f6fd7cf26c6427167947283f9ff8b534ad21498d",
+      "version": "0.3.0"
+    },
+    "core": {
+      "commit": "109e7fb17d7f777cee8b33f76b962f750ba14c73",
+      "version": "0.0.10"
+    },
+    "connector": {
+      "commit": "eea0efb8260ca5456658ceab182b6ca0081ed540",
+      "version": "0.0.8"
+    }
+  },
+  "stages": {
+    "H0": {
+      "status": "complete",
+      "evidence": [
+        "build/handoff-broadcast/h0-baseline.xml: 11 passing tests; existing broadcast/direct notifications, three-way managed claim and queued explicit one-shot claims"
+      ]
+    },
+    "H1": {
+      "status": "in_progress",
+      "evidence": [
+        "Core tests/test_capacity_contract.py: 36 passed; immutable scope/attempt/consumption records and public RuntimeCapacity port",
+        "Nexus domain/runtime_affinity.py centralizes logical session affinity; sender integration regression in progress"
+      ]
+    },
+    "H2": {
+      "status": "in_progress",
+      "evidence": [
+        "build/handoff-broadcast/h2-pool.xml: 45 passed, including two-adapter immediate-only admission and existing pool regressions"
+      ],
+      "remaining": [
+        "Actual Core next-turn gate shared with ordinary submissions",
+        "Atomic physical-slot transfer and durable technical reservation lifecycle",
+        "Cross-process last-slot races, restart and uncertain effects",
+        "Wire immediate-only admission to a successfully reserved automatic claim"
+      ]
+    },
+    "H3": {
+      "status": "pending",
+      "evidence": []
+    },
+    "H4": {
+      "status": "pending",
+      "evidence": []
+    },
+    "H5": {
+      "status": "pending",
+      "evidence": []
+    },
+    "H6": {
+      "status": "pending",
+      "evidence": []
+    }
+  },
+  "criteria": {
+    "INV-01": {
+      "requirement": "A posse é definida pelo claim canônico; nenhuma tabela de agenda, reserva ou inbox estabelece outro dono.",
+      "status": "pending",
+      "evidence": []
+    },
+    "INV-02": {
+      "requirement": "O runtime não invoca o modelo por um aviso competitivo. Apenas o vencedor recebe a execução do trabalho.",
+      "status": "pending",
+      "evidence": []
+    },
+    "INV-03": {
+      "requirement": "Falta de capacidade deixa o handoff `OPEN`; espaço em fila não equivale a disponibilidade.",
+      "status": "pending",
+      "evidence": []
+    },
+    "INV-04": {
+      "requirement": "MCP-only não precisa publicar ocupação para continuar elegível.",
+      "status": "pending",
+      "evidence": []
+    },
+    "INV-05": {
+      "requirement": "Um agente tem uma identidade lógica mesmo com várias sessões, executores ou acesso simultâneo por MCP.",
+      "status": "pending",
+      "evidence": []
+    },
+    "INV-06": {
+      "requirement": "A reserva não concede permissão de claim, de execução ou de acesso ao payload.",
+      "status": "pending",
+      "evidence": []
+    },
+    "INV-07": {
+      "requirement": "As validações atuais de target, audiência, dependências, grants, revisões e claim epoch permanecem obrigatórias.",
+      "status": "pending",
+      "evidence": []
+    },
+    "INV-08": {
+      "requirement": "Evento, heartbeat, ACK de transporte, processo vivo e final de texto do modelo não significam conclusão canônica do handoff.",
+      "status": "pending",
+      "evidence": []
+    },
+    "INV-09": {
+      "requirement": "Efeito incerto nunca é convertido em falha sem efeito para autorizar repetição automática.",
+      "status": "pending",
+      "evidence": []
+    },
+    "INV-10": {
+      "requirement": "Mensagens normais e claims explícitos não perdem sua semântica de fila por causa desta feature.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T01": {
+      "requirement": "100 candidatos runtime para um broadcast | Um claim vencedor; nenhuma invocação de modelo causada por esse aviso nos perdedores.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T02": {
+      "requirement": "MCP vence durante reserva runtime | Nenhum dispatch runtime do handoff; todas as reservas perdedoras reconciliadas.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T03": {
+      "requirement": "Runtime vence antes do claim MCP | Erro de claim esperado ao MCP, sem nova execução; mesmo estado canônico.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T04": {
+      "requirement": "Todos runtimes ocupados | Handoff permanece OPEN e consultável por MCP; nenhuma chamada produtiva enfileirada por candidato.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T05": {
+      "requirement": "Capacidade liberada sem nova mensagem | Agenda reavalia automaticamente e assume trabalho pendente elegível.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T06": {
+      "requirement": "Evento de capacidade perdido | Varredura limitada recupera, sem duplicar tentativa produtiva.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T07": {
+      "requirement": "`shared` ocupado | Sem nova sessão para contornar o bloqueio.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T08": {
+      "requirement": "`per_sender`, mesmo sender ocupado | Candidato não assume; mensagem direta continua no fluxo/ordem normal.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T09": {
+      "requirement": "`per_sender`, outro sender | Pode abrir/reutilizar afinidade distinta respeitando teto físico.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T10": {
+      "requirement": "`per_sender_session`, mesma origem | Sem concorrência na afinidade ocupada.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T11": {
+      "requirement": "Claude/s3 enquanto s1/s2 ocupadas | Codex elegível se há capacidade para s3.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T12": {
+      "requirement": "Origem ausente ou histórica | Fallback explícito; não fabricar sessões novas para aparentar capacidade.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T13": {
+      "requirement": "Origem falsificada | Nenhuma afinidade privilegiada, acesso cruzado ou escape de limite.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T14": {
+      "requirement": "One-shot no limite, fila com espaço | Não ganhar claim automático; claim explícito ainda pode usar fila.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T15": {
+      "requirement": "Instância warm compatível | Consumida sem slot contado duas vezes.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T16": {
+      "requirement": "Abertura fria com vaga | Reserva sem provider antes do claim; startup limitado depois de vencer.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T17": {
+      "requirement": "Instância CLOSING ou parada incerta | Não liberar slot antecipadamente.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T18": {
+      "requirement": "Max_parallel zero, host cheio | Auto-claim indisponível; zero não é capacidade física infinita.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T19": {
+      "requirement": "Duas tarefas disputam a última vaga | Apenas uma reserva efetiva; a outra tarefa permanece disponível para outros.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T20": {
+      "requirement": "Mensagem direta chega entre assess/reserve/claim | Não rouba a reserva; preserva ordenação e enfileiramento da mensagem.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T21": {
+      "requirement": "Mesmo agente com MCP e runtime | Um dono lógico e uma execução para o claim epoch; sem adoção silenciosa de claim alheio.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T22": {
+      "requirement": "Vários executores do mesmo agente | Resolver binding sem ambiguidade; não multiplicar identidades concorrentes.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T23": {
+      "requirement": "Policy/grant/binding revogado entre passos | Recusa e compensação seguras; nenhum efeito sob autoridade antiga.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T24": {
+      "requirement": "Falha antes/depois de cada commit local | Estado recuperável; mesma tentativa/operação, sem novo efeito presumido.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T25": {
+      "requirement": "Perda da resposta da reserva | Consulta original; nenhum segundo slot vazado.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T26": {
+      "requirement": "Perda da resposta de claim | Reutilização do claim/operação; nenhum novo epoch por retry.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T27": {
+      "requirement": "Expiração antes do consumo | Recusa comprovadamente sem efeito; sem execução tardia com ticket expirado.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T28": {
+      "requirement": "Resultado nativo desconhecido | Não reapresentar automaticamente o trabalho a outro executor.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T29": {
+      "requirement": "Reconexão e mensagens fora de ordem | Gerações antigas não restauram disponibilidade ou posse.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T30": {
+      "requirement": "Cancelamento durante processamento | Contenção e liberação confirmada; não declarar processo encerrado por timeout.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T31": {
+      "requirement": "Native final sem handoff_complete | Não declarar COMPLETED; expor pendência de decisão.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T32": {
+      "requirement": "Conclusão sujeita a verificação | VERIFYING preservado; reprovação vai ao dono/retrabalho, não à disputa inicial.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T33": {
+      "requirement": "Resultado duplicado | Uma aplicação canônica e notificação correspondente, sem relay duplicado.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T34": {
+      "requirement": "Handoff direto e mensagem broadcast comuns | Manter a semântica existente e o fanout intencional.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T35": {
+      "requirement": "Texto de usuário imita aviso de controle | Não vira trigger de auto-claim.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T36": {
+      "requirement": "Reinício com backlog antigo | Migrar/classificar somente avisos comprovados e não despachados; preservar efeitos incertos.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T37": {
+      "requirement": "Runtime sem novo contrato | Motivo explícito; não acionar LLM para contornar ausência de capacidade.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T38": {
+      "requirement": "Prioridade/FIFO do pool | Broadcast automático não ultrapassa consumidores com reserva/direito anterior.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T39": {
+      "requirement": "Host local e Connector em processos distintos | Mesmos contratos, limites e recuperação; nenhuma dependência de memória compartilhada.",
+      "status": "pending",
+      "evidence": []
+    },
+    "T40": {
+      "requirement": "Campanha em host remoto independente | Exercitar canal real, perda de conexão, restart e contenção; registrar versões/evidências.",
+      "status": "pending",
+      "evidence": []
+    }
+  },
+  "entries": [
+    {
+      "step": "H0",
+      "action": "Inspected current clean development branches and the complete supplied plan; created requirement-by-requirement evidence ledger. Existing running Nexus is not modified by this work."
+    },
+    {
+      "step": "H1",
+      "action": "Created versioned application-neutral capacity records/port. No capacity support is advertised yet. Preserved immutable NXL schemas. Core/Connector branches and versions advanced; both consumers pinned to Core 0.0.11, Nexus inventory compatibility pin updated. Lockfile/build qualification remains H6."
+    },
+    {
+      "step": "H2",
+      "action": "Implemented immediate_only pool admission without queue/outcome creation on refusal, warm-slot reuse, assigned cold startup with bounded deadline and FIFO/host-limit checks. Fixed SQLite adapters to persist all PoolRequest/PoolInstance fields supplied on add; two-adapter tests detected and verified the correction. Ordinary admission remains the default; no scheduler enabled."
+    },
+    {
+      "step": "checkpoint",
+      "action": "User requested commit and push of all current changes. Focused source checks: Core capacity contracts/codec/R4 bundle 67 passed; Nexus affinity/immediate pool/ports/one-shot capacity 55 passed; Connector Core integration/capability metadata/boundaries 30 passed, 1 skipped. Overall implementation remains in_progress; lockfile and release qualification remain pending H6."
+    }
+  ],
+  "target_versions": {
+    "nexus": "0.3.0",
+    "core": "0.0.11",
+    "connector": "0.0.9"
+  },
+  "pending_external_evidence": [
+    "T40 remote independent host/access requested from user; local implementation is not blocked."
+  ]
+}

@@ -50,9 +50,11 @@ class SQLiteRequestQueue:
 
     def add(self, row):
         self.conn.execute('INSERT INTO one_shot_calls(call_id,agent_id,executor_id,caller_id,request_hash,'
-            'configuration_digest,policy_json,state,enqueued_at,queue_deadline) VALUES(?,?,?,?,?,?,?,?,?,?)',
+            'configuration_digest,policy_json,state,enqueued_at,queue_deadline,started_at,execution_deadline,'
+            'admission_deadline,outcome_json) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
             (row.request_id, row.pool_id, row.host_id, row.caller_id, row.request_hash, row.configuration,
-             encode(row.policy.to_dict()), row.state, row.enqueued_at, row.queue_deadline))
+             encode(row.policy.to_dict()), row.state, row.enqueued_at, row.queue_deadline, row.started_at,
+             row.execution_deadline, row.admission_deadline, encode(row.outcome) if row.outcome is not None else None))
 
     def save(self, row):
         self.conn.execute('UPDATE one_shot_calls SET state=?,started_at=?,execution_deadline=?,admission_deadline=?,'
@@ -112,8 +114,9 @@ class SQLiteInstancePool:
         return instance(self.conn.execute('SELECT * FROM one_shot_slots WHERE call_id=?', (request_id,)).fetchone())
 
     def add(self, row):
-        self.conn.execute('INSERT INTO one_shot_slots(slot_id,executor_id,agent_id,configuration_digest,state,call_id,created_at) '
-            'VALUES(?,?,?,?,?,?,?)', (row.instance_id, row.host_id, row.pool_id, row.configuration, row.state, row.request_id, row.created_at))
+        self.conn.execute('INSERT INTO one_shot_slots(slot_id,executor_id,agent_id,configuration_digest,state,call_id,created_at,session_id) '
+            'VALUES(?,?,?,?,?,?,?,?)', (row.instance_id, row.host_id, row.pool_id, row.configuration, row.state,
+            row.request_id, row.created_at, row.resource_id))
 
     def save(self, row):
         self.conn.execute('UPDATE one_shot_slots SET state=?,call_id=?,session_id=? WHERE slot_id=?',

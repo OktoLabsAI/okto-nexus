@@ -78,3 +78,10 @@ class PoolConflict(ValueError):
 
 class PoolNotFound(LookupError):
     pass
+
+
+class PoolUnavailable(PoolConflict):
+    """Immediate admission failed without adding a request or an outcome."""
+    def __init__(self, reason: str):
+        self.reason = reason
+        super().__init__(reason)
