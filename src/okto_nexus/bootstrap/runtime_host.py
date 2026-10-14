@@ -128,12 +128,14 @@ class EmbeddedRuntimeHost:
                 if prior[1] is not authority:
                     raise CoreError('RESERVATION_CONFLICT', 'embedded_capacity_owner')
                 return prior[0]
-            if prior:
-                await prior[0].aclose()
             service = ExecutionCapacity(ledger, authority=authority, boot_id=boot_id, clock=clock,
                 namespace=key, runtime_lookup=self._runtime_for_capacity)
             self._capacity_services[key] = (service, authority)
-            return service
+        # Retiring a slow observer must not hold the composition gate for
+        # unrelated executor namespaces. aclose fences it before its first wait.
+        if prior:
+            await prior[0].aclose()
+        return service
 
     async def acquire(
         self, *, executor_id: str, session_id: str,

@@ -60,6 +60,18 @@ class EmbeddedAgentRecovery:
             raise CoreError('JOURNAL_UNAVAILABLE', 'embedded_shared_resources')
         if 'owned-slots.db' in files:
             ledger = await owner.host._ledger()
+            # A fenced connection's HELD capacity never crossed native
+            # admission. Cancel those holds atomically before the legacy
+            # process scan; consumed/uncertain reservations remain occupied.
+            for _ in range(256):
+                await asyncio.to_thread(owner.verify)
+                released = await ledger.release_fenced_capacity_holds(
+                    owner.channel.server_id, owner.channel.executor_id,
+                    connection_generation=owner.channel.connection_generation, limit=128)
+                if released < 128:
+                    break
+            else:
+                raise CoreError('CAPACITY_EXCEEDED', 'embedded_capacity_recovery')
             known = {r['session_id']: r['open_operation_id'] for r in records}
             after, high = 0, None
             for _ in range(256):

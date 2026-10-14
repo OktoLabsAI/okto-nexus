@@ -4,7 +4,7 @@
   "status": "in_progress",
   "constraints": [
     "Hexagonal architecture; canonical claim remains sole ownership authority",
-    "User authorized a new commit/push checkpoint of all current changes; merge, tags and release remain outside this checkpoint",
+    "User authorized commit and push of the current changes on development branches; implementation and release qualification remain in progress",
     "No production auto-claim activation before real local/remote capacity exclusion is verified"
   ],
   "baseline": {
@@ -41,7 +41,9 @@
       "evidence": [
         "build/handoff-broadcast/h2-pool.xml: 45 passed, including two-adapter immediate-only admission and existing pool regressions",
         "Core build/handoff-capacity-h2.xml: 182 passed after the pre-journal opening-admission fix; runtime capacity gate, physical ledger, multiprocess races against reservation and ordinary opening, bounded expiry, restart, atomic-write failure, existing runtime/owned-slot/shutdown/composition and contract regressions",
-        "Core build/handoff-capacity-facade.xml: 210 passed; public ExecutionCapacity facade, exact R4 session/lease readiness, canonical-to-Core receipt binding, bounded/coalesced uncooperative observations, ordinary turn/open regressions"
+        "Core build/handoff-capacity-facade.xml: 210 passed; public ExecutionCapacity facade, exact R4 session/lease readiness, canonical-to-Core receipt binding, bounded/coalesced uncooperative observations, ordinary turn/open regressions",
+        "Core build/handoff-capacity-recovery.xml: 15 passed; namespace-scoped active reservation pages, bounded cancellation of fenced HELD records, strict generation checks and consumption/cancellation race using independent SQLite adapters. Consumed resources remain occupied.",
+        "Core build/handoff-capacity-recovery-followup.xml: 4 passed; cancelling an unused next-turn reservation preserves the ordinary opening/process slot."
       ],
       "remaining": [
         "Reconcile capacity gate/receipt crash windows, old-boot holds and pending releases through existing recovery owners before activation",
@@ -54,14 +56,24 @@
       "evidence": [
         "Connector build/handoff-capacity-composition.xml: 44 passed, 1 skipped; facade composition, shared physical cap across namespaces, reconnect fencing and existing R4 execution regressions",
         "Embedded capacity composition: 2 passed; scope fencing, no harness/journal creation on cold reserve, original attempt lookup after owner replacement",
-        "Embedded dispatcher regression: 29 passed, 2 failures. Baseline archives reproduced the occupied-ledger fixture policy mismatch; missing-journal recovery passed both isolated baseline and current code. Test now awaits the existing bounded-observation recovery worker instead of requiring instantaneous READY; targeted follow-up build/handoff-broadcast/h3-recovery-followup.xml: 9 passed."
+        "Embedded dispatcher regression: 29 passed, 2 failures. Baseline archives reproduced the occupied-ledger fixture policy mismatch; missing-journal recovery passed both isolated baseline and current code. Test now awaits the existing bounded-observation recovery worker instead of requiring instantaneous READY; targeted follow-up build/handoff-broadcast/h3-recovery-followup.xml: 9 passed.",
+        "Core build/handoff-capacity-control.xml: 34 passed; strict negotiated router, immutable R4 behavior and durable lost-result control mapping. Follow-up build/handoff-capacity-control-followup.xml: 18 passed with consumed release remaining pending until proof.",
+        "Connector build/handoff-capacity-control.xml: 38 passed; real R4 single-reader owner isolates bounded acquisition/recovery workers, preserves interruptions/heartbeats and retained mutation through cancelled close. Follow-up build/handoff-capacity-control-followup.xml: 16 passed including mutual negotiation, duplicate correlation and continuity.",
+        "Nexus build/handoff-broadcast/h3-capacity-link.xml: 5 passed; outbound capacity port correlates reordered replies, fences scope, retains bounded slow sends and recovers original attempt after lost result/reconnection.",
+        "Nexus build/handoff-broadcast/h3-capacity-recovery.xml: 4 passed; actual embedded startup scan cancels fenced unconsumed holds but refuses to invent stopped evidence for consumed resources.",
+        "Connector build/handoff-capacity-recovery.xml: 41 passed; matching remote reporter behavior plus existing daemon startup/reconnect/recovery regressions.",
+        "Owner follow-up: Nexus build/handoff-broadcast/h3-capacity-owner-followup.xml 10 passed; Connector build/handoff-capacity-owner-followup.xml 6 passed. Slow uncooperative observation retirement does not hold the shared composition gate for another executor namespace.",
+        "Nexus build/handoff-broadcast/h3-recovery-isolation.xml: 14 passed in 358.32s. Existing isolation regression covers journal failure/hang, independent healthy agents, local/remote onboarding during recovery, publication continuity, actual disposable Windows process exit/kill/kill-before-bind and repeated server restoration without replay.",
+        "Core build/capacity-checkpoint.xml: 51 passed; capacity control, recovery, ledger, codec and bundle.",
+        "Connector build/capacity-checkpoint.xml: 144 passed; real scope/consent authority, execution selection, composition, daemon execution/control and negotiated transport regressions.",
+        "Nexus build/handoff-broadcast/capacity-checkpoint.xml: 17 passed; SQLite capacity authority, link correlation, embedded composition and existing link storage failure handling. Does not qualify the new enabled WebSocket/availability registry path end to end."
       ],
       "remaining": [
-        "Implement actual owner authority adapters and negotiate control extension on the existing authenticated transport",
+        "Validate negotiated authenticated Server link and availability registry end to end; actual SQLite/Connector authority adapters are now composed behind disabled capacity flags",
         "Wire bounded requests/results, durable attempt lookup and capacity-change notifications into dispatcher owners",
         "Bind reserved canonical operations through their existing R4 receipt association before ordinary Core dispatch",
         "Preserve normal ingress queue order when the Core capacity gate refuses transient contention",
-        "Reconcile reserved physical slots before legacy host resource scans to avoid treating unconsumed holds as unknown native processes",
+        "Complete consumed/uncertain reservation and gate/receipt crash-window recovery; fenced unconsumed holds now drain before both legacy resource scans",
         "Run separate-process channel/reconnect parity and independent remote campaign"
       ]
     },
@@ -366,6 +378,26 @@
     {
       "step": "checkpoint",
       "action": "User requested a new commit and push of all current changes across Nexus, Core and Connector. Includes durable capacity implementation, public facade, versioned contract bundle, host composition and recorded regression evidence. Implementation remains in_progress and production capacity support remains disabled."
+    },
+    {
+      "step": "H3",
+      "action": "Added strict negotiated control routing without modifying immutable R4 schemas; shared Core request/result mapper; independent bounded capacity workers and reply writer in the existing Connector R4 owner; explicit opt-in negotiation and exact capabilities on resume. Added Nexus outbound capacity adapter with retained producers, separate recovery budget and immutable request correlation. Production owners still do not advertise support: actual authority adapters, Server link registration, lifecycle recovery and ordinary queue integration remain pending. Changes stay local after the latest authorized checkpoint."
+    },
+    {
+      "step": "H2/H3 recovery",
+      "action": "Added bounded public active reservation pages and cancellation of HELD reservations belonging to strictly older fenced connection generations. The ledger atomically proves no consumption/opening before release; no cross-boot deadline interpretation. Both existing recovery owners invoke cleanup before legacy owned-process scans, including rollback with capacity disabled. Consumed/uncertain slots continue to block until their real lifecycle proof. Recovery of consumed-but-not-opened windows and normal productive queue integration remain pending."
+    },
+    {
+      "step": "validation",
+      "action": "Completed the existing embedded per-agent recovery isolation campaign: 14 passing tests including actual disposable Windows Job process crash/containment scenarios. No live user server was restarted or modified. All new control/recovery implementation changes remain local; H3 authority/dispatch integration, H4/H5/H6 and independent remote qualification are still incomplete."
+    },
+    {
+      "step": "H3 authority",
+      "action": "Composed actual local/remote capacity authority with current scope, identity, consent, inventory and execution lease checks. Added disabled-by-default application availability registry and capacity routing on the authenticated Server WebSocket. Fixed first-use Connector ledger directory creation. Capacity-change publication, enabled-path qualification and productive operation integration remain pending."
+    },
+    {
+      "step": "checkpoint",
+      "action": "User requested commit and push of all current changes. Focused source validation completed: Core 51, Connector 144 and Nexus 17 tests passed (212 total), using local Core 0.0.11 in both consumers. No live server restart, merge, tag or package publication; overall implementation remains in_progress."
     }
   ],
   "target_versions": {

@@ -14,6 +14,7 @@ from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 
 from nexus_connector_core import (
     CoreError, R4_PREVIEW_REVISION, decode_r4_frame, encode_r4_frame,
+    CAPACITY_CONTRACT_REVISION, decode_control_frame,
 )
 
 from ....adapters.outbound.execution.core_inventory import protocol_info
@@ -99,6 +100,8 @@ def build_router() -> APIRouter:
         connection_id: str | None = None
         generation: int | None = None
         pump = None
+        capacity_client = capacity_host = None
+        availability = ws.app.state.deps.runtime_availability
         resumable_disconnect = False
         resume_supported = False
         bootstrap_ticket_id = None
@@ -363,10 +366,27 @@ def build_router() -> APIRouter:
                 "control_capabilities": [cap for cap in ('connection_renewal_v1', 'heartbeat_ack_v1', 'connection_resume_v1')
                                          if cap in hello['control_capabilities']],
             }
+            if availability.enabled and CAPACITY_CONTRACT_REVISION in hello['control_capabilities']:
+                welcome['control_capabilities'].append(CAPACITY_CONTRACT_REVISION)
             resumed = 'resume_connection_id' in hello
             if resume_supported:
                 welcome['resumed'] = resumed
             await _send_text(encode_r4_frame(welcome).decode("utf-8"))
+
+            if CAPACITY_CONTRACT_REVISION in welcome['control_capabilities']:
+                from ....adapters.outbound.execution.capacity_link import CapacityLinkClient
+                from ....adapters.outbound.sqlite.execution_capacity_authority import SqliteExecutionCapacityAuthority
+                capacity_channel = ExecutionChannel(server_id, executor_id, connection_id, generation)
+                authority = SqliteExecutionCapacityAuthority(factory=factory, channel=capacity_channel,
+                    fresh_publications=ws.app.state.inventory_fresh_publications)
+                async def verify_capacity(request, *, action):
+                    await anyio.to_thread.run_sync(_verify)
+                    reason = await authority.check_capacity_scope(request, action=action)
+                    if reason != 'AVAILABLE':
+                        raise CoreError(reason, 'capacity_link_authority')
+                capacity_client = CapacityLinkClient(channel=capacity_channel, send=_send_text,
+                    verify=verify_capacity, capabilities=welcome['control_capabilities'])
+                capacity_host = availability.register(capacity_channel, capacity_client)
 
             from ....application.execution_reconciliation import ExecutionReconciliation
             reconciliation = ExecutionReconciliation(factory,
@@ -408,7 +428,37 @@ def build_router() -> APIRouter:
                 if len(raw.encode("utf-8")) > MAX_FRAME_BYTES:
                     await ws.close(code=4409)
                     break
-                frame = decode_r4_frame(raw.encode("utf-8"))
+                frame = decode_control_frame(raw.encode("utf-8"), capabilities=welcome['control_capabilities'])
+                if frame['type'] in ('capacity.result', 'capacity.changed'):
+                    if capacity_client is None or any(frame[k] != welcome[k] for k in (
+                            'server_id', 'executor_id', 'connection_id', 'connection_generation')):
+                        raise CoreError('SCOPE_MISMATCH', 'capacity_link')
+                    def verify_capacity_source():
+                        _verify()
+                        from ....adapters.outbound.sqlite.execution_leases import SqliteExecutionLeaseRepository
+                        from ....application.execution_leases import require_execution_lane
+                        with factory.unit_of_work(write=False) as unit:
+                            if not SqliteExecutionLeaseRepository().current_channel(unit, capacity_channel):
+                                raise CoreError('STALE_GENERATION', 'capacity_link')
+                            if frame['type'] == 'capacity.changed':
+                                lane = unit.connection.execute('SELECT * FROM execution_control_lanes '
+                                    'WHERE server_id=? AND executor_id=? AND binding_id=?',
+                                    (server_id, executor_id, frame['binding_id'])).fetchone()
+                                if lane is None:
+                                    raise CoreError('NOT_AUTHORIZED', 'capacity_observation')
+                                require_execution_lane(unit, scope=dict(lane), channel=capacity_channel,
+                                                       now=datetime.now(timezone.utc))
+                    try:
+                        await anyio.to_thread.run_sync(verify_capacity_source)
+                    except (OktoNexusError, sqlite3.DatabaseError) as error:
+                        await ws.close(code=1011 if isinstance(error, sqlite3.DatabaseError) else 4403)
+                        break
+                    if frame['type'] == 'capacity.result':
+                        capacity_client.accept_result(frame)
+                    else:
+                        availability.observe(capacity_host, binding_id=frame['binding_id'], boot_id=frame['boot_id'],
+                            revision=frame['capacity_revision'], reason=frame['reason'], valid_for_ms=frame['valid_for_ms'])
+                    continue
                 if frame['type'] == 'connection.renew':
                     if ('connection_renewal_v1' not in welcome['control_capabilities'] or
                             any(frame[k] != welcome[k] for k in
@@ -606,11 +656,17 @@ def build_router() -> APIRouter:
         except (CoreError, UnicodeError, ValueError, RecursionError):
             await ws.close(code=4406)
         finally:
+            if capacity_host is not None:
+                availability.unregister(capacity_host)
+                capacity_client.disconnect()
             # Drain the owned database/send producer before releasing the
             # connection identity. AnyIO cancellation must not orphan it.
             if pump is not None:
                 with anyio.CancelScope(shield=True):
                     await pump.stop()
+            if capacity_client is not None:
+                with anyio.CancelScope(shield=True):
+                    await capacity_client.aclose()
             if connection_id is not None and generation is not None:
                 def _release():
                     with factory.unit_of_work() as uow:

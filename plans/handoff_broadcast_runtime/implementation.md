@@ -108,3 +108,45 @@ A implementação permanece em andamento; merge, tags e publicação não fazem 
 dessa autorização.
 O usuário autorizou um novo checkpoint de commit e push das alterações atuais
 nos três repositórios. As etapas e validações pendentes continuam no ledger.
+Esse checkpoint foi enviado. O usuário autorizou novamente commit e push
+do estado atual do canal de capacidade nas branches de desenvolvimento.
+
+## Controle de capacidade sobre o canal existente
+
+O roteador compartilhado exige negociação explícita da revisão de capacidade e
+mantém intacto o codec R4. No Connector, o mesmo owner/leitor R4 admite pedidos
+de capacidade em tarefas limitadas, com orçamento separado para consulta e
+liberação. A fila de respostas também é limitada; cancelamentos, heartbeats e
+outros comandos não aguardam uma consulta lenta. Fechar o socket não abandona
+uma mutação já admitida.
+
+O adaptador de saída do Nexus correlaciona cada resultado à conexão e ao hash
+da tentativa original. Timeout, falha de armazenamento e revogação após envio
+preservam a necessidade de reconciliação. O próximo owner consulta a tentativa
+original; não infere ausência da reserva nem renova seu prazo.
+
+A negociação está disponível como integração explícita, ainda não anunciada
+pelos owners de produção. Faltam a composição da autoridade real, registro no
+link autenticado do Server, publicação por mudança e recuperação dos recursos
+antes da ativação. Os testes atuais do canal não substituem a campanha remota.
+
+Os owners de recuperação local e remoto agora cancelam, antes do scan legado,
+reservas `HELD` de gerações de conexão estritamente anteriores. O ledger prova
+atomicamente a ausência de consumo e transferência; essa operação não depende
+do relógio do boot anterior. Consultas paginadas preservam o escopo e o limite
+superior da leitura. Reservas consumidas ou incertas não são liberadas por esse
+procedimento e ainda exigem a integração das provas de ciclo de vida.
+
+## Checkpoint de autoridade e transporte
+
+Os owners agora compõem autoridade real de escopo, identidade, consentimento,
+inventário e lease. O Nexus inclui o registro de disponibilidade e o roteamento
+de capacidade no WebSocket autenticado, ainda desabilitados por padrão.
+A publicação de mudanças, a validação ponta a ponta desse caminho habilitado
+e a integração das operações produtivas continuam pendentes.
+
+Validação deste checkpoint com o Core local 0.0.11: Core 51, Connector 144
+e Nexus 17 testes passaram (212 no total). Os relatórios estão em
+`build/capacity-checkpoint.xml` de Core/Connector e
+`build/handoff-broadcast/capacity-checkpoint.xml` do Nexus.
+A implementação continua em andamento; este envio não é merge ou release.

@@ -7,6 +7,7 @@ import math
 import secrets
 import sqlite3
 import time
+from datetime import datetime
 
 from nexus_connector_core import (
     CoreError, LaunchIntent, OpenOperation, TurnOperation, ControlOperation, validate_harness_settings,
@@ -72,6 +73,11 @@ class EmbeddedDispatchOwner:
         self.access = build_execution_access(self.deps)
         self.leases = ExecutionLeaseService(factory=self.factory, access=self.access,
                                             fresh_publications=inventory.fresh)
+        from ..adapters.outbound.sqlite.execution_capacity_authority import SqliteExecutionCapacityAuthority
+        self.capacity_boot_id = 'capacity_' + secrets.token_hex(16)
+        self.capacity_authority = SqliteExecutionCapacityAuthority(factory=self.factory, channel=self.channel,
+            fresh_publications=inventory.fresh, verify_owner=self.verify,
+            now=lambda: datetime.fromisoformat(self.deps.clock.now_iso().replace('Z', '+00:00')))
         self.sessions = {}
         self.workers = set()
         self.active_operations = set()
@@ -105,6 +111,16 @@ class EmbeddedDispatchOwner:
         original_launch=self.host.local_launch_factory
         if original_launch is not None:
             self.host.local_launch_factory=lambda scope:self.tools.decorate(original_launch(scope))
+
+    async def check_capacity_scope(self, request, *, action):
+        if self._stopping.is_set() or self.failure is not None:
+            return 'RECOVERING'
+        return await self.capacity_authority.check_capacity_scope(request, action=action)
+
+    async def execution_capacity(self):
+        """Compose the shared Core port with this owner's real authority."""
+        return await self.host.capacity_service(server_id=self.channel.server_id,
+            executor_id=self.channel.executor_id, boot_id=self.capacity_boot_id, authority=self)
 
     def _quiesce(self):
         c = self.channel

@@ -12,6 +12,7 @@ from dataclasses import dataclass, field
 from typing import Any, Mapping
 
 from okto_nexus.application.runtime_admission_fence import RuntimeAdmissionFence
+from okto_nexus.application.runtime_availability import RuntimeAvailabilityService
 from okto_nexus.application.approvals import ApprovalService, seed_operator_agent
 from okto_nexus.application.artifacts import externalize_legacy_artifacts
 from okto_nexus.application.capabilities import seed_capability_catalog
@@ -106,6 +107,7 @@ class Deps:
     native_decisions: Any = None
     runtime_admission_fence: RuntimeAdmissionFence = field(default_factory=RuntimeAdmissionFence)
     execution_fresh_publications: dict = field(default_factory=dict)
+    runtime_availability: RuntimeAvailabilityService = field(default_factory=RuntimeAvailabilityService)
 
 
 def build_repos(clock: Clock, config: NexusConfig) -> tuple[Repos, EventEmitter]:
