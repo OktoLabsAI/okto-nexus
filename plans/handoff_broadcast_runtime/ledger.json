@@ -94,12 +94,22 @@
         "Nexus h4-origins.xml: 14 passed; authenticated creator origin, missing-origin fallback, approval replay, revocation and atomic rollback.",
         "Nexus h4-origin-regression.xml: 15 passed; h4-handoff-regressions.xml: 74 passed.",
         "Nexus h4-creator-affinity-followup.xml: 5 passed (two creator-affinity/rollback cases and three boundary checks), one permission fixture failure. Setting permissions after capability issuance correctly revoked it; configured policy before issuance. h4-origin-permission.xml: 1 passed. Initial affinity fixture table/preset errors were corrected.",
-        "Connector build/handoff-origin-actions.xml: 80 passed; approved MCP launch and boundaries."
+        "Connector build/handoff-origin-actions.xml: 80 passed; approved MCP launch and boundaries.",
+        "Nexus h4-claim-transaction.xml: 3 passed, 1 fixture race (queried ordinary one-shot turn before its asynchronous admission). Follow-up h4-claim-transaction-followup.xml: 1 passed after awaiting canonical admission. Supplied UoW rolls back claim, grant consumption and execution together; only caller wakes after commit; replay keeps one operation. Immediate cold slot admits with bounded startup, full pool refuses without claim/queue, explicit queue remains valid.",
+        "Nexus h4-shared-claim-regression.xml: 15 passed; explicit/delegated claims, grant checks, concurrency, existing one-shot queue and competitive work. h4-transaction-public-regression.xml: 74 passed; public handoff and epoch regressions after shared-kernel extraction.",
+        "Nexus h4-automation-policy.xml: 12 passed; default-off operator opt-in, independent global/agent inheritance, strict values/CAS, revocation epochs, ordinary live session and grant preservation.",
+        "Nexus h4-automation-principal.xml: 7 passed; internal task/agent/endpoint/grant scope, distinct creator/executor/issuer audit, one dispatch and replay, missing/revoked authority, no direct target or generic HTTP authority, policy revocation after commit prevents native effects.",
+        "Nexus h4-automation-transaction-final.xml: 26 passed against final source; internal principal and public/shared entry cannot change handoff or attempt identity, real embedded dispatch restores exact persisted authority, immediate one-shot and outer-transaction cases, existing managed claim regressions and import boundaries. Final git diff --check passed. No running test handles remain.",
+        "Nexus h4-reserved-admission-followup.xml: 4 passed. Real embedded Core cold reserve -> canonical claim/open/turn identity -> gated consumption -> one native effect, including lost consume response and retry of the original operations. Earlier ordinary turn admitted after host reserve refuses the claim; linkage persistence failure rolls back claim, grant, session and operations. Initial three fixture failures were missing remote_ready in the dispatch assertion and enabling Core capacity after creating the target runtime; corrected before successful rerun.",
+        "Nexus h4-reserved-ordering.xml: 3 passed. Reserved turn holds back later ordinary turn while interruption progresses; terminal evidence releases physical ordering without declaring handoff completion. Updated retained-worker regression now requires serialization per session and independent progress for other affinities, before write and after receipt.",
+        "Nexus h4-reserved-warm.xml: 1 passed. Real Core next-turn reservation consumes existing warm one-shot session; owned-slot page is unchanged and no extra session opens. Refill isolated in fixture to measure transfer independently.",
+        "Nexus h4-capacity-claim-regressions.xml: 13 passed; existing shared claim, automation authority, explicit one-shot queue and creator-error regressions.",
+        "Nexus h4-reserved-dispatch-regression.xml: 31 passed, 2 expected semantic conflicts in the old agent-level retained-worker test. The replacement asserts same-session pending ownership and progress for a distinct affinity; both cuts passed in h4-reserved-ordering.xml. Sender session, flow-control and architecture boundary tests passed. All test handles completed; no full T39/T40 or automatic scheduler qualification claimed."
       ],
       "remaining": [
-        "Scoped automation principal and logical reservation/claim/admission in the canonical transaction",
-        "Durable scheduler, exact-affinity FIFO protection and structural broadcast notification handling",
-        "Full acceptance and independent remote qualification"
+        "Durable pre-reserve attempt journal and scheduler, cleanup/compensation after lost claim, expired reservation and consumed uncertainty; new post-claim transfer records now retain exact IDs",
+        "Complete exact-affinity FIFO assessment and separate-process/local-remote lifecycle qualification; new dispatch serialization follows canonical session",
+        "Structural broadcast notification bypass/migration, lifecycle decisions and UI; automatic acquisition remains inactive"
       ]
     },
     "H5": {
@@ -439,6 +449,14 @@
     {
       "step": "H4 creator origin and authorized checkpoint",
       "action": "Persisted immutable authenticated creator origin and transferred it to managed execution in the claim transaction. Approval replay preserves provenance without credentials and rechecks authority. User explicitly authorized commit and push of all current changes in Nexus feature/v0.3.0, Core feature/v0.0.11 and Connector feature/v0.0.9. Development remains in progress; no automatic claim activation, live installation change, merge, tag or release."
+    },
+    {
+      "step": "H4 shared claim and scoped automation",
+      "action": "Extracted a single canonical transactional claim kernel and internal supplied-UoW entry; caller owns commit and wake. Wired immediate-only pool admission through RuntimeWork and ordinary canonical admission. Added migration130 with independent default-off global/agent auto-claim policy and revocation epochs. Added immutable internal handoff automation principal; current policy, agent and execute_work grant are rechecked without impersonation or agent key injection. Persisted noncredential proof restores only exact managed work. New tests exercise real SQLite/embedded execution with synthetic peers. This is not yet a complete automatic-claim path: technical reservation linkage/FIFO, durable scheduler, notification bypass and H5/H6 remain. All changes after checkpoint 5b8e872/96b11d8/1d7c459 stay local; live installation unchanged."
+    },
+    {
+      "step": "H4 reserved canonical admission",
+      "action": "Added a hexagonal capacity-admission service/repository port and SQLite adapter, with migration131 for durable claim-to-reservation/operation linkage. Preserve proposed cold session identity in internal intent resolution and match every canonical scope dimension to the technical reservation. Same-UoW preclaim guard rejects earlier session/logical work; admission/linkage failure rolls back canonical claim and grant. Dispatch gates productive work until confirmed consumption and retains reserved first-turn precedence across opening, while controls remain available. Host consume runs outside SQLite and lost results preserve the original reservation/operations for retry. Changed producer serialization from agent to exact session, with stronger regression evidence. No production scheduler activation: pre-reserve journaling, cleanup/compensation, full lifecycle and remote evidence still required. Changes remain local after checkpoint; live installation unchanged."
     }
   ],
   "target_versions": {

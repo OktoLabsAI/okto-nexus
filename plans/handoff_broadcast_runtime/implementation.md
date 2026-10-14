@@ -262,3 +262,63 @@ O usuário autorizou commit e push de todas as alterações atuais nos três
 repositórios. H4 permanece em andamento: principal de automação, reserva lógica
 com claim/admissão e scheduler ainda faltam, assim como as etapas posteriores.
 Este checkpoint não altera a instalação em execução nem constitui release.
+
+## Composição transacional e autorização da automação
+
+`handoff_claim` e `claim_managed_in_transaction` usam o mesmo núcleo transacional:
+permissões, audiência, dependências, CAS, epoch, grant, origem e admissão continuam
+juntos. A entrada interna aceita a UoW do chamador e não faz commit nem wake.
+Isso permite compor a reserva lógica sem transação aninhada. O chamador deve
+desfazer a transação em caso de recusa e só acordar o dispatcher após commit.
+
+A admissão `immediate_only` chega ao pool pelo caminho canônico existente.
+Pool cheio recusa sem persistir chamada, outcome, posição na fila ou claim;
+abertura fria com vaga recebe slot próprio e deadline limitado. Pedido explícito
+continua podendo enfileirar. Retorno vazio da admissão não é sucesso imediato.
+Essa integração não substitui a reserva técnica do host nem sua futura
+vinculação à identidade exata da sessão/operação.
+
+A migração 130 acrescenta `broadcast_handoff_auto_claim`, desligado por padrão,
+com herança global e override por agente. A opção não deriva de `conversation`.
+Seu epoch independente impede reativar tentativas antigas após desligar/religar,
+sem revogar sessões comuns. Edições antigas que omitem o campo o preservam.
+
+O principal interno de automação vincula agente, workspace, endpoint, handoff,
+tentativa, grant e revisões. Ele usa as verificações existentes de grants e
+permissões, sem chave fictícia ou identidade de operador. A prova persistida não
+autentica HTTP/MCP; só restaura a autoridade do mesmo trabalho gerenciado, com
+revalidação antes do efeito. Criador, executor e emissor do grant ficam distintos.
+
+Os relatórios de transação, política, principal e regressões estão no ledger.
+A integração ainda não ativa aquisições automáticas: faltam vínculo durável das
+reservas, proteção FIFO/afinidade, scheduler, bypass estrutural das notificações
+e as etapas posteriores. Alterações locais após o checkpoint autorizado;
+nenhuma modificação na instalação em execução.
+
+## Vínculo da reserva à admissão canônica
+
+`CapacityAdmissionService` consome uma reserva por uma porta de capacidade,
+fora da UoW. O adaptador SQLite implementa a porta de persistência e a migração
+131 conserva pedido, reserva, identidades/hashes das operações e estado de
+transferência. Esses registros nascem na mesma transação do claim, da mensagem,
+do consumo do grant e da admissão. Eles não estabelecem outra posse do handoff.
+
+A abertura fria conserva o ID de sessão proposto antes da reserva, usando um
+parâmetro interno que não faz parte da gramática HTTP. O resolvedor inclui essa
+seleção em sua identidade imutável; a admissão confere todas as dimensões do
+escopo. Na modalidade warm, a sessão selecionada deve ser exatamente a reservada.
+
+Antes do claim, o adaptador verifica a afinidade original e recusa trabalho
+anterior admitido ou aguardando reconciliação. O pool continua responsável pela
+ordem e contagem one-shot. Após commit, o dispatcher bloqueia efeitos até a
+transferência confirmada; a reserva protege abertura e primeiro turno contra
+turnos comuns posteriores. Comandos de controle continuam disponíveis.
+O isolamento dos produtores agora é por sessão, permitindo progresso de outras
+afinidades do mesmo agente. O terminal nativo libera a ordem física sem concluir
+automaticamente o handoff.
+
+Testes com Core real e peers sintéticos cobrem abertura fria, resposta de consumo
+perdida, repetição das mesmas operações, rollback, prioridade anterior, controle
+durante espera e warm sem dupla contagem física. Resultados e correções de fixtures
+estão no ledger. Ainda faltam o journal antes da reserva, scheduler e compensação
+de falhas/expiração: esta composição não está ativada como aquisição automática.

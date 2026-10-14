@@ -185,16 +185,27 @@ def reserve_execution_dispatch(
                 "AND o.dispatch_state='PENDING' "
                 "AND (o.next_attempt_at IS NULL OR o.next_attempt_at<=?) "
                 "AND p.admission_state IN ('ACCEPTED','DISPATCH_PENDING') "
-                # Pool reservations are independent by session. Legacy sessions
-                # keep their existing agent-level producer isolation.
+                # Producer isolation follows the canonical session. Distinct
+                # sender affinities of one agent must progress independently.
                 "AND (?='control' OR NOT EXISTS (SELECT 1 FROM execution_dispatch_outbox busy "
                 "JOIN execution_operations active USING(server_id,executor_id,operation_id) "
                 "WHERE busy.server_id=p.server_id AND busy.executor_id=p.executor_id "
                 "AND active.subject_agent_id=p.subject_agent_id AND active.action IN ('runtime.open','turn.submit') "
-                "AND (active.session_id=p.session_id OR NOT EXISTS (SELECT 1 FROM one_shot_slots slot "
-                "WHERE slot.session_id=p.session_id AND slot.server_id=p.server_id AND slot.executor_id=p.executor_id)) "
+                "AND active.session_id=p.session_id "
                 "AND (busy.dispatch_state IN ('RESERVED','SENDING','RECONCILING') "
                 "OR busy.operation_id IN (SELECT value FROM json_each(?))))) "
+                # Retain the reserved first turn across its opening. Otherwise
+                # a later ordinary turn could wait in the host gate and occupy
+                # this session's producer ahead of the reserved winner.
+                "AND (p.action NOT IN ('runtime.open','turn.submit') OR NOT EXISTS ("
+                "SELECT 1 FROM execution_capacity_admissions ca WHERE ca.server_id=p.server_id "
+                "AND ca.executor_id=p.executor_id AND ca.session_id=p.session_id AND (ca.state<>'CONSUMED' OR ("
+                "p.operation_id<>json_extract(ca.consumption_json,'$.turn_operation_id') "
+                "AND p.operation_id<>COALESCE(json_extract(ca.consumption_json,'$.opening_operation_id'),'') "
+                "AND NOT EXISTS (SELECT 1 FROM execution_receipts terminal WHERE terminal.server_id=p.server_id "
+                "AND terminal.executor_id=p.executor_id "
+                "AND terminal.operation_id=json_extract(ca.consumption_json,'$.turn_operation_id') "
+                "AND terminal.stage IN ('SUCCEEDED','FAILED','CANCELLED')))))) "
                 "AND NOT EXISTS (SELECT 1 FROM execution_agent_recovery r JOIN execution_executors e USING(server_id,executor_id) "
                 "WHERE r.server_id=p.server_id AND r.executor_id=p.executor_id AND r.agent_id=p.subject_agent_id "
                 "AND (r.state<>'READY' OR r.generation<>e.generation)) "

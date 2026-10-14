@@ -64,7 +64,10 @@ def select_delivery_session(uow, endpoint_id, *, sender_agent_id=None, source_se
     return binding, sessions[0]["session_id"] if sessions else None
 
 
-def admit_domain_delivery(uow, *, operation_id, access, fresh_publications, remote_ready):
+def admit_domain_delivery(uow, *, operation_id, access, fresh_publications, remote_ready, immediate_only=False,
+                          capacity_request=None):
+    if type(immediate_only) is not bool:
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid immediate admission mode.", {})
     conn = uow.connection
     operation = conn.execute("SELECT * FROM delivery_outbox WHERE operation_id=?", (operation_id,)).fetchone()
     if operation is None:
@@ -89,10 +92,20 @@ def admit_domain_delivery(uow, *, operation_id, access, fresh_publications, remo
     one_shot_slot = None
     if binding['session_policy'] == 'one_shot':
         from .one_shot_runtime import admit_call
-        one_shot_slot = admit_call(uow, operation, binding, caller_id=sender[0])
+        one_shot_slot = admit_call(uow, operation, binding, caller_id=sender[0], immediate_only=immediate_only)
         if one_shot_slot is None:
             return []
         session_id = one_shot_slot['session_id']
+    if capacity_request is not None:
+        from nexus_connector_core import CapacityRequest
+        if type(capacity_request) is not CapacityRequest or not immediate_only:
+            raise OktoNexusError(ErrorCode.CONFLICT, 'Invalid reserved delivery admission.', {})
+        _, affinity = delivery_session_context(uow, operation['endpoint_id'], sender_agent_id=sender[0],
+                                                source_session_key=source_session_key)
+        if (affinity.opaque_key != capacity_request.affinity_key
+                or (capacity_request.unit == 'next_turn' and session_id != capacity_request.scope.session_id)
+                or (capacity_request.unit == 'new_session' and session_id is not None)):
+            raise OktoNexusError(ErrorCode.CONFLICT, 'Reserved delivery affinity changed.', {})
     # Preserve the whole authorized envelope: identity, causal references and
     # artifacts are context, never execution/tool credentials.
     from .runtime_bootstrap import delivery_prompt
@@ -116,7 +129,12 @@ def admit_domain_delivery(uow, *, operation_id, access, fresh_publications, remo
     common = dict(actor_agent_id=operation["recipient_agent_id"], access=access,
                   fresh_publications=fresh_publications, remote_ready=remote_ready)
     resolved = resolve_execution_intent(factory, request=request,
-        one_shot_slot_id=one_shot_slot['slot_id'] if one_shot_slot else None, **common)
+        one_shot_slot_id=one_shot_slot['slot_id'] if one_shot_slot else None,
+        reserved_session_id=capacity_request.scope.session_id if capacity_request is not None and session_id is None else None,
+        **common)
+    if capacity_request is not None and any(value != getattr(capacity_request.scope, name)
+                                           for name, value in resolved['scope'].items()):
+        raise OktoNexusError(ErrorCode.CONFLICT, 'Reserved execution scope changed.', {})
     if not resolved['can_submit']:
         blockers = resolved['blockers']
         message = 'Runtime delivery is unavailable: ' + ', '.join(blockers) + '.'

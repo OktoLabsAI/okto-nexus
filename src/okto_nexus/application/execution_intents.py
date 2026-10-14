@@ -32,6 +32,7 @@ def resolve_execution_intent(
     request: Mapping[str, Any], remote_ready: bool = False,
     fresh_publications: Mapping | None = None, access=None, context=None,
     session_metadata: Mapping | None = None, one_shot_slot_id: str | None = None,
+    reserved_session_id: str | None = None,
 ) -> dict[str, Any]:
     """Store a stable resolution; never write an effect outbox or call Core."""
     required = {"client_intent_id", "intent", "binding_id",
@@ -81,6 +82,14 @@ def resolve_execution_intent(
     server_id, revisions, _ = current_agent_revisions(
         factory, agent_id=subject_agent_id)
     hash_body = dict(request)
+    if reserved_session_id is not None:
+        # Internal capacity composition only; never accepted in the public
+        # request grammar. The immutable intent hash includes this selection.
+        if (request['intent'] != 'runtime.start' or request.get('new_session') is not True
+                or type(reserved_session_id) is not str or not 1 <= len(reserved_session_id) <= 160
+                or not reserved_session_id.isprintable()):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Invalid reserved session selection.', {})
+        hash_body['_reserved_session_id'] = reserved_session_id
     if session_metadata is not None:
         if request['intent'] != 'runtime.start' or request.get('new_session') is not True:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Annotations require a new session.', {})
@@ -201,7 +210,7 @@ def resolve_execution_intent(
                     for item in snapshot["evidence"]
                 ):
                     blockers.append("candidate_not_current")
-        session_id = ("ses_" + secrets.token_hex(16)
+        session_id = (reserved_session_id or "ses_" + secrets.token_hex(16)
                       if action == "runtime.open" else request["session_id"])
         owner_generation = 1
         if action != "runtime.open":

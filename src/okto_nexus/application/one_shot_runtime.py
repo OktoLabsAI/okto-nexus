@@ -36,12 +36,13 @@ def host_limit(conn, executor_id):
     return max(0, limit - other)
 
 
-def admit_call(uow, operation, binding, *, caller_id):
+def admit_call(uow, operation, binding, *, caller_id, immediate_only=False):
     conn = uow.connection
     previous = conn.execute('SELECT call_id FROM one_shot_calls WHERE call_id=?', (operation['operation_id'],)).fetchone()
     call = capacity.admit(conn, call_id=operation['operation_id'], agent_id=operation['recipient_agent_id'],
         executor_id=binding['executor_id'], caller_id=caller_id, request_hash=operation['request_hash'],
-        configuration_digest=digest(conn, binding), host_limit=host_limit(conn, binding['executor_id']), now=time.time())
+        configuration_digest=digest(conn, binding), host_limit=host_limit(conn, binding['executor_id']), now=time.time(),
+        immediate_only=immediate_only)
     if call['state'] in ('FAILED', 'CANCELLED', 'SUCCEEDED'):
         if not previous and call['state'] == 'FAILED':
             error = json.loads(call['outcome_json'])['error']
@@ -51,9 +52,13 @@ def admit_call(uow, operation, binding, *, caller_id):
     conn.execute("UPDATE delivery_outbox SET status='ACCEPTED',owner_epoch=NULL,lease_expires_at=NULL WHERE operation_id=?",
                  (operation['operation_id'],))
     if call['state'] == 'QUEUED':
+        if immediate_only:
+            raise OktoNexusError(ErrorCode.CONFLICT, 'EARLIER_WORK_PENDING', {})
         return None
     row = conn.execute('SELECT * FROM one_shot_slots WHERE call_id=?', (call['call_id'],)).fetchone()
     if row is None:
+        if immediate_only:
+            raise OktoNexusError(ErrorCode.CONFLICT, 'Immediate admission requires a reserved pool instance.', {})
         return None  # Capacity reserved; wait for any compatible ready instance.
     slot = dict(row)
     conn.execute('UPDATE one_shot_slots SET server_id=?,binding_id=? WHERE slot_id=?',

@@ -3,19 +3,20 @@ from ..errors import ErrorCode, OktoNexusError
 
 
 def defaults(conn):
-    row = dict(conn.execute('SELECT runtime_enabled,session_policy,revision,automatic_recovery,inherit_global_mcps FROM runtime_policy_defaults WHERE singleton=1').fetchone())
+    row = dict(conn.execute('SELECT runtime_enabled,session_policy,revision,automatic_recovery,inherit_global_mcps,broadcast_handoff_auto_claim FROM runtime_policy_defaults WHERE singleton=1').fetchone())
     row['runtime_enabled'] = bool(row['runtime_enabled'])
     row['automatic_recovery'] = bool(row['automatic_recovery'])
     row['inherit_global_mcps'] = bool(row['inherit_global_mcps'])
+    row['broadcast_handoff_auto_claim'] = bool(row['broadcast_handoff_auto_claim'])
     return row
 
 
 def effective(conn, agent_id):
     global_policy = defaults(conn)
-    row = conn.execute('SELECT runtime_enabled,session_policy,inherit_global_mcps FROM agent_runtime_overrides WHERE agent_id=?', (agent_id,)).fetchone()
-    return {key: (bool(row[key]) if key in ('runtime_enabled', 'inherit_global_mcps') else row[key])
+    row = conn.execute('SELECT runtime_enabled,session_policy,inherit_global_mcps,broadcast_handoff_auto_claim FROM agent_runtime_overrides WHERE agent_id=?', (agent_id,)).fetchone()
+    return {key: (bool(row[key]) if key in ('runtime_enabled', 'inherit_global_mcps', 'broadcast_handoff_auto_claim') else row[key])
             if row is not None and row[key] is not None else global_policy[key]
-            for key in ('runtime_enabled', 'session_policy', 'inherit_global_mcps')}
+            for key in ('runtime_enabled', 'session_policy', 'inherit_global_mcps', 'broadcast_handoff_auto_claim')}
 
 
 def guard(conn, agent_id):
@@ -26,16 +27,36 @@ def guard(conn, agent_id):
     return {k: policy[k] for k in ('runtime_enabled', 'session_policy')} | {'epoch': epoch[0] if epoch else 0}
 
 
+def handoff_automation_guard(conn, agent_id):
+    """Fence future acquisitions without invalidating ordinary live sessions.
+
+    Returning to the same opt-in value cannot revive an older attempt. Changes
+    to defaults only affect agents that inherit this specific setting.
+    This snapshot is policy evidence, never a substitute for a work grant.
+    """
+    row = conn.execute('SELECT broadcast_handoff_auto_claim,handoff_auto_claim_epoch '
+                       'FROM agent_runtime_overrides WHERE agent_id=?', (agent_id,)).fetchone()
+    inherited = row is None or row['broadcast_handoff_auto_claim'] is None
+    global_epoch = conn.execute('SELECT handoff_auto_claim_epoch FROM runtime_policy_defaults WHERE singleton=1').fetchone()[0]
+    return dict(runtime=guard(conn, agent_id),
+        enabled=effective(conn, agent_id)['broadcast_handoff_auto_claim'], inherited=inherited,
+        agent_epoch=row['handoff_auto_claim_epoch'] if row else 0,
+        defaults_epoch=global_epoch if inherited else None)
+
+
 def view(conn, agent_id=None):
     global_policy = defaults(conn)
     if agent_id is None:
         return global_policy
     row = conn.execute('SELECT * FROM agent_runtime_overrides WHERE agent_id=?', (agent_id,)).fetchone()
-    result = dict(row) if row else dict(agent_id=agent_id, runtime_enabled=None, session_policy=None, inherit_global_mcps=None, revision=0)
+    result = dict(row) if row else dict(agent_id=agent_id, runtime_enabled=None, session_policy=None, inherit_global_mcps=None, broadcast_handoff_auto_claim=None, revision=0)
+    result.pop('handoff_auto_claim_epoch', None)
     if result['runtime_enabled'] is not None:
         result['runtime_enabled'] = bool(result['runtime_enabled'])
     if result['inherit_global_mcps'] is not None:
         result['inherit_global_mcps'] = bool(result['inherit_global_mcps'])
+    if result['broadcast_handoff_auto_claim'] is not None:
+        result['broadcast_handoff_auto_claim'] = bool(result['broadcast_handoff_auto_claim'])
     return result | dict(defaults=global_policy, effective=effective(conn, agent_id))
 
 
@@ -79,10 +100,11 @@ def read_policy(deps, context, agent_id=None):
 def save_policy(deps, context, *, agent_id=None, changes):
     from ..bootstrap.execution_authority import build_execution_access
     access = build_execution_access(deps)
-    if (not isinstance(changes, dict) or set(changes) - {'expected_revision', 'runtime_enabled', 'session_policy', 'automatic_recovery', 'inherit_global_mcps'}
+    if (not isinstance(changes, dict) or set(changes) - {'expected_revision', 'runtime_enabled', 'session_policy', 'automatic_recovery', 'inherit_global_mcps', 'broadcast_handoff_auto_claim'}
             or not {'expected_revision','runtime_enabled','session_policy'} <= set(changes)
             or 'automatic_recovery' in changes and (agent_id is not None or type(changes['automatic_recovery']) is not bool)
             or 'inherit_global_mcps' in changes and not (type(changes['inherit_global_mcps']) is bool or agent_id is not None and changes['inherit_global_mcps'] is None)
+            or 'broadcast_handoff_auto_claim' in changes and not (type(changes['broadcast_handoff_auto_claim']) is bool or agent_id is not None and changes['broadcast_handoff_auto_claim'] is None)
             or type(changes['expected_revision']) is not int or changes['expected_revision'] < (0 if agent_id else 1)
             or not (type(changes['runtime_enabled']) is bool or agent_id is not None and changes['runtime_enabled'] is None)
             or changes['session_policy'] not in (('shared', 'per_sender', 'per_sender_session', 'one_shot', None) if agent_id else ('shared', 'per_sender', 'per_sender_session', 'one_shot'))):
@@ -95,20 +117,26 @@ def save_policy(deps, context, *, agent_id=None, changes):
         current = view(conn, agent_id)
         changes = dict(changes)
         changes.setdefault('inherit_global_mcps', current['inherit_global_mcps'])
+        changes.setdefault('broadcast_handoff_auto_claim', current['broadcast_handoff_auto_claim'])
         if current['revision'] != changes['expected_revision']:
             raise OktoNexusError(ErrorCode.CONFLICT, 'Runtime policy changed; reload before saving.', {})
-        if all(current[key] == changes[key] for key in ('runtime_enabled', 'session_policy', 'inherit_global_mcps')) and (
+        if all(current[key] == changes[key] for key in ('runtime_enabled', 'session_policy', 'inherit_global_mcps', 'broadcast_handoff_auto_claim')) and (
                 agent_id is not None or current['automatic_recovery']==changes.get('automatic_recovery',current['automatic_recovery'])):
             return current
         affected = [agent_id] if agent_id else [row[0] for row in conn.execute('SELECT agent_id FROM agents')]
         before = {aid: effective(conn, aid) for aid in affected}
         if agent_id:
-            conn.execute('INSERT INTO agent_runtime_overrides(agent_id,runtime_enabled,session_policy,inherit_global_mcps,revision) VALUES(?,?,?,?,?) ON CONFLICT(agent_id) DO UPDATE SET '
-                'runtime_enabled=excluded.runtime_enabled,session_policy=excluded.session_policy,inherit_global_mcps=excluded.inherit_global_mcps,revision=excluded.revision',
-                (agent_id, changes['runtime_enabled'], changes['session_policy'], changes['inherit_global_mcps'], current['revision'] + 1))
+            conn.execute('INSERT INTO agent_runtime_overrides(agent_id,runtime_enabled,session_policy,inherit_global_mcps,broadcast_handoff_auto_claim,revision) VALUES(?,?,?,?,?,?) ON CONFLICT(agent_id) DO UPDATE SET '
+                'runtime_enabled=excluded.runtime_enabled,session_policy=excluded.session_policy,inherit_global_mcps=excluded.inherit_global_mcps,broadcast_handoff_auto_claim=excluded.broadcast_handoff_auto_claim,revision=excluded.revision',
+                (agent_id, changes['runtime_enabled'], changes['session_policy'], changes['inherit_global_mcps'], changes['broadcast_handoff_auto_claim'], current['revision'] + 1))
         else:
-            conn.execute('UPDATE runtime_policy_defaults SET runtime_enabled=?,session_policy=?,automatic_recovery=?,inherit_global_mcps=?,revision=revision+1 WHERE singleton=1',
-                         (changes['runtime_enabled'], changes['session_policy'],changes.get('automatic_recovery',current['automatic_recovery']),changes['inherit_global_mcps']))
+            conn.execute('UPDATE runtime_policy_defaults SET runtime_enabled=?,session_policy=?,automatic_recovery=?,inherit_global_mcps=?,broadcast_handoff_auto_claim=?,revision=revision+1 WHERE singleton=1',
+                         (changes['runtime_enabled'], changes['session_policy'],changes.get('automatic_recovery',current['automatic_recovery']),changes['inherit_global_mcps'],changes['broadcast_handoff_auto_claim']))
+        if current['broadcast_handoff_auto_claim'] != changes['broadcast_handoff_auto_claim']:
+            if agent_id:
+                conn.execute('UPDATE agent_runtime_overrides SET handoff_auto_claim_epoch=handoff_auto_claim_epoch+1 WHERE agent_id=?', (agent_id,))
+            else:
+                conn.execute('UPDATE runtime_policy_defaults SET handoff_auto_claim_epoch=handoff_auto_claim_epoch+1 WHERE singleton=1')
         changed = [aid for aid in affected if before[aid] != effective(conn, aid)]
         require_closed(conn, [aid for aid in changed if before[aid]['session_policy'] != effective(conn, aid)['session_policy']])
         now = deps.clock.now_iso()
@@ -116,7 +144,7 @@ def save_policy(deps, context, *, agent_id=None, changes):
             for k in ('runtime_enabled', 'session_policy'))], now)
         access.endpoints.audit_configuration(uow, context=context, kind='runtime_policy', resource_id=agent_id or 'global',
             old_revision=current['revision'], new_revision=current['revision'] + 1,
-            fields=[key for key in ('runtime_enabled', 'session_policy', 'automatic_recovery', 'inherit_global_mcps')
+            fields=[key for key in ('runtime_enabled', 'session_policy', 'automatic_recovery', 'inherit_global_mcps', 'broadcast_handoff_auto_claim')
                     if key in changes and current.get(key) != changes[key]], now=now)
         return view(conn, agent_id)
 
