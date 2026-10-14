@@ -84,9 +84,11 @@ class MemoryInstances:
         return sum((pool_id is None or r.pool_id == pool_id) and (host_id is None or r.host_id == host_id)
                    for r in self.rows.values())
 
-    def warm(self, *, pool_id, host_id, configuration):
+    def warm(self, *, pool_id, host_id, configuration, resource_id=None, exclude_resource_ids=()):
         return next((r for r in self.rows.values() if r.pool_id == pool_id and r.host_id == host_id
-                     and r.configuration == configuration and r.state == 'WARM'), None)
+                     and r.configuration == configuration and r.state == 'WARM'
+                     and (resource_id is None or r.resource_id == resource_id)
+                     and r.resource_id not in exclude_resource_ids), None)
 
     def idle(self, *, pool_id):
         return sorted((r for r in self.rows.values() if r.pool_id == pool_id and r.request_id is None

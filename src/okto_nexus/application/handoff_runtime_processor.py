@@ -18,6 +18,7 @@ class HandoffCandidatePage:
         if (type(self.attempt_ids) is not tuple or len(set(self.attempt_ids)) != len(self.attempt_ids)
                 or any(type(x) is not str or not x for x in self.attempt_ids)
                 or type(self.more) is not bool or type(self.settled) is not bool
+                or type(self.cursor) is not str or len(self.cursor) > 4096
                 or self.settled and (self.attempt_ids or self.more) or self.reason not in SCHEDULE_REASONS):
             raise ValueError('Invalid handoff candidate page.')
 
@@ -49,7 +50,9 @@ class HandoffRuntimeProcessor:
         results = await asyncio.gather(*(self._candidate(identity) for identity in page.attempt_ids))
         reason = ('MORE_CANDIDATES' if page.more else 'NEEDS_RECONCILIATION'
                   if 'NEEDS_RECONCILIATION' in results else 'CLAIM_COMMITTED'
-                  if 'CLAIM_COMMITTED' in results else page.reason)
+                  if 'CLAIM_COMMITTED' in results else next(
+                      (result for result in results if result in SCHEDULE_REASONS
+                       and result not in {'AVAILABLE', 'SETTLED'}), page.reason))
         # Discovery confirms canonical settlement on a subsequent page. A
         # successful consumption does not imply handoff_complete or clear
         # unresolved losing attempts from earlier pages.

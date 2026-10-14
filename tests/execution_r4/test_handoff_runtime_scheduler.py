@@ -65,6 +65,42 @@ def test_fallback_scan_has_durable_bounded_cursors_and_one_row_per_generation(sc
     assert [r['claim_generation'] for r in rows(schedule) if r['handoff_id'] == 'h000'] == [0, 1]
 
 
+@pytest.mark.parametrize('change', ['defaults', 'override', 'agent'])
+def test_policy_change_wakes_backoff_durably_but_presence_does_not(schedule, change):
+    seed(schedule, 1)
+    factory, repo = schedule
+    with factory.unit_of_work() as uow:
+        uow.connection.execute("INSERT INTO agents(agent_id,created_at) VALUES('agent','2026-01-01')")
+        repo.sweep(uow, now=10, limit=1)
+        leased, = repo.lease_due(uow, now=10, limit=1, lease_seconds=5)
+        repo.finish(uow, leased, HandoffScheduleOutcome('NOT_AUTHORIZED'), now=10)
+        before = uow.connection.execute('SELECT wake_generation FROM handoff_runtime_schedule_scan').fetchone()[0]
+        uow.connection.execute("UPDATE agents SET last_seen_at='2026-01-02' WHERE agent_id='agent'")
+        assert uow.connection.execute('SELECT wake_generation FROM handoff_runtime_schedule_scan').fetchone()[0] == before
+        assert repo.lease_due(uow, now=11, limit=1, lease_seconds=5) == ()
+        if change == 'defaults':
+            uow.connection.execute('UPDATE runtime_policy_defaults SET broadcast_handoff_auto_claim=1')
+        elif change == 'override':
+            uow.connection.execute("INSERT INTO agent_runtime_overrides(agent_id,broadcast_handoff_auto_claim,revision) VALUES('agent',1,1)")
+        else:
+            uow.connection.execute("UPDATE agents SET is_active=0 WHERE agent_id='agent'")
+    with factory.unit_of_work() as uow:
+        renewed, = SqliteHandoffScheduleRepository().lease_due(uow, now=11, limit=1, lease_seconds=5)
+        assert renewed.wake_generation > before
+        assert renewed.token != leased.token
+
+
+def test_historical_unknown_targets_do_not_become_competitive_or_break_lifecycle_events(schedule):
+    factory, repo = schedule
+    with factory.unit_of_work() as uow:
+        for n, target in enumerate((None, 'legacy-unknown', '[]')):
+            hid = f'historical-{n}'
+            uow.connection.execute("INSERT INTO handoffs(handoff_id,workspace_id,target,status,created_at) VALUES(?,'w',?,'CANCELLED','2026-01-01')",
+                                   (hid, target))
+            repo.notify(uow, handoff_id=hid, now=10)
+    assert rows(schedule) == []
+
+
 def test_expired_scanner_cannot_overwrite_new_owner_cursor_or_backoff(schedule):
     seed(schedule, 1)
     factory, repo = schedule

@@ -241,6 +241,8 @@ def build_service(deps: Any, *, register_approval_executor: bool = True) -> Hand
         )
         deps.approvals = approvals
     from okto_nexus.bootstrap.execution_authority import build_message_capabilities
+    from okto_nexus.adapters.outbound.sqlite.handoff_notifications import SqliteHandoffNotificationRepository
+    from okto_nexus.adapters.outbound.sqlite.handoff_runtime_schedule import SqliteHandoffScheduleRepository
     service = HandoffService(
         connection_factory=deps.connection_factory,
         handoffs=repos.handoffs,
@@ -254,6 +256,8 @@ def build_service(deps: Any, *, register_approval_executor: bool = True) -> Hand
         sessions=repos.sessions,
         origins=repos.handoff_origins,
         capabilities=build_message_capabilities(deps),
+        runtime_notifications=SqliteHandoffNotificationRepository(),
+        runtime_schedule=SqliteHandoffScheduleRepository(),
         tag_catalog=repos.tag_catalog,
         capability_catalog=repos.capability_catalog,
         governance=governance,

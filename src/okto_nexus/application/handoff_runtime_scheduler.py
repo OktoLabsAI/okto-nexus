@@ -36,7 +36,7 @@ class HandoffScheduleOutcome:
 
     def __post_init__(self):
         if (self.reason not in SCHEDULE_REASONS or type(self.done) is not bool
-                or type(self.candidate_cursor) is not str or len(self.candidate_cursor) > 256
+                or type(self.candidate_cursor) is not str or len(self.candidate_cursor) > 4096
                 or self.candidate_cursor and not self.candidate_cursor.isprintable()):
             raise ValueError('Invalid handoff schedule outcome.')
 

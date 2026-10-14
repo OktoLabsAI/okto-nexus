@@ -34,9 +34,23 @@ class SqliteHandoffScheduleRepository:
         arguments(now, 1)
         row = uow.connection.execute('SELECT workspace_id,claim_epoch,status,target FROM handoffs WHERE handoff_id=?',
                                      (handoff_id,)).fetchone()
-        if row and row['status'] == 'OPEN' and json.loads(row['target']).get('strategy') == 'broadcast':
-            self._ensure(uow.connection, handoff_id=handoff_id, workspace_id=row['workspace_id'],
-                         generation=row['claim_epoch'], now=now, notify=True)
+        try:
+            competitive = bool(row and json.loads(row['target']).get('strategy') == 'broadcast')
+        except (ValueError, TypeError, AttributeError):
+            competitive = False
+        if competitive:
+            if row['status'] == 'OPEN':
+                self._ensure(uow.connection, handoff_id=handoff_id, workspace_id=row['workspace_id'],
+                             generation=row['claim_epoch'], now=now, notify=True)
+            else:
+                # Claim/cancellation wakes cleanup of the original generation,
+                # not a new acquisition for the already owned/terminal work.
+                uow.connection.execute("UPDATE handoff_runtime_schedule SET state='PENDING',due_at=min(due_at,?),"
+                    "wake_revision=wake_revision+1 WHERE handoff_id=? AND EXISTS ("
+                    "SELECT 1 FROM handoff_runtime_attempts a LEFT JOIN execution_capacity_admissions c "
+                    "ON c.domain_operation_id=a.operation_id WHERE a.handoff_id=handoff_runtime_schedule.handoff_id "
+                    "AND a.claim_generation=handoff_runtime_schedule.claim_generation AND a.active=1 "
+                    "AND (a.operation_id IS NULL OR c.state IS NULL OR c.state<>'CONSUMED'))", (now, handoff_id))
 
     def sweep(self, uow, *, now, limit):
         arguments(now, limit)

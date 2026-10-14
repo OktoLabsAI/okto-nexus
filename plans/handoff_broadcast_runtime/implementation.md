@@ -430,11 +430,10 @@ dependências. O consumo continua sem concluir automaticamente o handoff.
 
 Testes de integração retomaram candidaturas já persistidas antes e depois do
 claim, incluindo perda da resposta de consumo, com SQLite e Core reais e peers
-nativos sintéticos. A composição ainda exige explicitamente a porta de candidatos:
-a descoberta automática com rotação, escolha de binding/grant e construção do
-escopo de cada política precisa ser conectada. O vínculo dos eventos produtivos,
-a classificação estrutural dos avisos e a recuperação após consumo também
-continuam pendentes. Não houve ativação automática nem alteração da instalação.
+nativos sintéticos. A composição usa por padrão a descoberta descrita abaixo e
+permite substituir sua porta em testes. O vínculo dos eventos produtivos,
+a classificação estrutural dos avisos e a recuperação após consumo continuam
+pendentes. Não houve ativação automática nem alteração da instalação.
 
 ## Identidade da instância one-shot
 
@@ -445,6 +444,74 @@ exigir uma nova instância, aplicando os mesmos limites e regras de fila do pool
 Uma consulta prévia compartilha essas regras sem reservar capacidade; o adaptador
 SQLite permite excluir sessões já selecionadas por outras candidaturas.
 
-Essas mudanças preparam a descoberta automática ainda pendente. A seleção de
-candidatos e a validação completa de reservas simultâneas em instâncias distintas
-continuam necessárias antes da ativação em produção.
+Essas mudanças são usadas pela descoberta descrita abaixo. A qualificação do
+ciclo completo entre processos e hosts continua necessária antes da ativação.
+
+## Descoberta paginada de candidatos
+
+A composição do scheduler passa a fornecer uma implementação de descoberta,
+com uma porta de aplicação e um adaptador SQLite. Cada página contém no máximo
+uma candidatura por agente, independentemente de sua quantidade de endpoints,
+grants ou instâncias. O cursor circular persiste o ponto de continuação e avança
+o primeiro agente entre rodadas. A seleção inicial varia por handoff e geração.
+Tentativas pendentes continuam aparecendo mesmo se o endpoint for desativado;
+elas são recuperadas pela identidade original antes de permitir outra tentativa.
+
+A descoberta aplica os predicados compartilhados de visibilidade, audiência e
+dependências e exige opt-in e autorização atual de `execute_work`. A escolha de
+endpoint usa a mesma regra de afinidade existente, prioridade e grupo não
+ambíguo do fluxo conversacional, mas não exige a permissão de conversar para
+executar um handoff. A capacidade não serve para desviar uma afinidade ocupada
+para outro binding.
+
+O pedido técnico preserva a origem autenticada do criador, binding, revisões e
+gerações atuais. Para one-shot, a escolha exclui sessões já vinculadas a outras
+candidaturas ainda não resolvidas e usa a admissão imediata do pool. Instâncias
+distintas possuem chaves de capacidade distintas. Descobrir e persistir uma
+candidatura não cria sessão, turno, chamada one-shot produtiva nem consumo de
+grant. O processamento posterior obtém a reserva fora da UoW e passa pelo claim
+e consumo canônicos já existentes.
+
+Os testes exercitam descoberta e execução reais com SQLite e Core embutido,
+incluindo duas sessões aquecidas em uso independente, bloqueio da mesma
+afinidade e abertura de contexto distinto apenas nas políticas que o permitem.
+O teste de paginação usa 100 agentes e endpoints repetidos e verifica retomada,
+rotação e recuperação de candidatos revogados. Resultados e limitações estão
+no ledger. Permanecem pendentes a ligação aos eventos e ao ciclo produtivo,
+a classificação estrutural dos avisos competitivos, a compensação pós-consumo
+e a qualificação entre processos e hosts. A instalação em execução não mudou.
+
+## Avisos competitivos e sinais da agenda
+
+A migração 134 acrescenta uma rota persistida ao registro de aviso criado pelo
+Server. Novos avisos de handoffs broadcast usam `competitive`: mantêm mensagens
+e entregas lógicas na inbox, inclusive para agentes MCP-only elegíveis, mas não
+criam `runtime_pending_deliveries` nem passam pelo planejador conversacional.
+Essa regra vale com auto-claim desabilitado ou host incompatível. O texto de uma
+mensagem comum não estabelece essa classificação; imitar o JSON ou o assunto
+de um aviso não muda seu roteamento. Handoffs diretos conservam o fluxo anterior.
+
+Na atualização, relações estruturais existentes identificam os avisos antigos.
+Os que ainda não possuem operação em `delivery_outbox` passam para a rota de
+controle, recebem registro na agenda quando o handoff está aberto e deixam de
+esperar na fila conversacional. A migração não lê nem reconhece a inbox em nome
+de MCP. Avisos com operação já admitida ficam identificados como
+`legacy_admitted`, com o histórico e o estado da operação intactos. A retirada
+segura de operações admitidas mas ainda não enviadas e a reconciliação das que
+possuem efeito incerto continuam pendentes antes da ativação produtiva.
+
+Criação e desbloqueio registram a agenda na mesma UoW do handoff, sem disputar
+antes do commit. Claim e encerramento acordam a limpeza da geração anterior
+quando ainda existem tentativas sem consumo confirmado. A migração 135 grava
+uma geração compartilhada de sinalização para mudanças de política, grants,
+autoridade do agente, endpoints, perfis e bindings. Heartbeats e atualizações de
+`last_seen` não reiniciam o backoff. Não são criadas tarefas por destinatário.
+
+A composição do scheduler conecta o sinal de capacidade do runtime ao despertar
+coalescido. Uma prova com o ledger físico do Core manteve o relógio da agenda e
+a varredura de fallback parados: a publicação da liberação do slot foi suficiente
+para reavaliar o handoff, confirmar o claim e consumir a reserva sem nova mensagem.
+O motivo técnico da recusa, como `HOST_FULL`, é preservado no resultado da rodada
+e determina o backoff. A inicialização e o desligamento desse consumidor no ciclo
+produtivo do Server ainda dependem da recuperação pós-consumo e da qualificação
+final. Nenhuma instalação ou processo em execução foi alterado.

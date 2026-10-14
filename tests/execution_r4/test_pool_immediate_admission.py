@@ -80,3 +80,27 @@ def test_warm_resource_with_different_configuration_is_not_admitted(pool):
     with pytest.raises(PoolUnavailable):
         admit(pool, 'competitive', immediate_only=True)
     assert pool.instances.get('old').request_id is None
+
+
+def test_exact_warm_resource_and_cold_reservation_preserve_pool_counts(pool, monkeypatch):
+    monkeypatch.setattr(pool.tx, 'policy', lambda _: PoolPolicy(max_parallel=3))
+    for n in range(2):
+        pool.instances.add(PoolInstance(f'warm-{n}', 'agent', 'host', 'configuration', 'WARM', n,
+                                       resource_id=f'session-{n}'))
+    preview = pool.preview_immediate(pool_id='agent', host_id='host', configuration='configuration',
+                                     host_limit=3, exclude_resource_ids=('session-0',))
+    assert preview.resource_id == 'session-1'
+    assert pool.instances.count(host_id='host') == 2
+    first = admit(pool, 'second-warm', immediate_only=True, resource_id='session-1')
+    assert pool.instances.for_request(first.request_id).resource_id == 'session-1'
+    assert pool.instances.get('warm-0').state == 'WARM'
+    cold = admit(pool, 'reserved-cold', immediate_only=True, require_new=True)
+    assert pool.instances.for_request(cold.request_id).state == 'STARTING'
+    assert pool.instances.get('warm-0').state == 'WARM'
+    with pytest.raises(PoolUnavailable, match='HOST_FULL'):
+        admit(pool, 'another-cold', immediate_only=True, require_new=True)
+    assert pool.queue.get('another-cold') is None
+    admit(pool, 'first-warm', immediate_only=True, resource_id='session-0')
+    assert pool.instances.count(host_id='host') == 3
+    with pytest.raises(PoolUnavailable, match='BUSY_AFFINITY'):
+        admit(pool, 'reuse-busy', immediate_only=True, resource_id='session-1')

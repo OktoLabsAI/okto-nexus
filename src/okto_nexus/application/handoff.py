@@ -201,6 +201,8 @@ class HandoffService:
         sessions: SessionRepo | None = None,
         origins: HandoffOriginRepo | None = None,
         capabilities: Any = None,
+        runtime_notifications: Any = None,
+        runtime_schedule: Any = None,
     ) -> None:
         self._cf = connection_factory
         self._handoffs = handoffs
@@ -236,6 +238,7 @@ class HandoffService:
         self._guardrails = guardrails
         self._request_context_provider = request_context_provider
         self.runtime_work = runtime_work
+        self._runtime_notifications, self._runtime_schedule = runtime_notifications, runtime_schedule
         self._claim_trust_guard = claim_trust_guard
         self._workspaces = workspaces
         self._sessions, self._origins, self._capabilities = sessions, origins, capabilities
@@ -699,7 +702,7 @@ class HandoffService:
                     trace_id=handoff.trace_id,
                 ):
                     extras["notified"] = [named]
-            elif getattr(self._config, 'feature_harness_integrations', False):
+            elif strategy == 'broadcast' or getattr(self._config, 'feature_harness_integrations', False):
                 self._notify_runtime_pool(uow, handoff=handoff, now=now, blocked=born_blocked)
         response = {
             "handoff_id": handoff.handoff_id,
@@ -2304,16 +2307,19 @@ class HandoffService:
             status=DELIVERY_UNREAD,
             created_at=now,
         )
-        if getattr(self._config, 'feature_harness_integrations', False):
+        if self._runtime_notifications is not None:
             from .runtime_handoff_notifications import queue
             queue(uow, message=message, delivery=delivery, agents=self._agents,
-                  handoffs=self._handoffs, now=now, governance=self._governance)
+                  handoffs=self._handoffs, now=now, governance=self._governance,
+                  notifications=self._runtime_notifications,
+                  runtime_enabled=bool(getattr(self._config, 'feature_harness_integrations', False)))
         return True
 
     def _notify_runtime_pool(self, uow, *, handoff, now, blocked=False, event_type='handoff.created'):
         from .runtime_handoff_notifications import eligible, has_runtime
+        competitive = json.loads(handoff.target).get('strategy') == 'broadcast'
         for recipient in self._agents.list(uow) if self._agents else ():
-            if (has_runtime(uow, recipient.agent_id, handoff.workspace_id)
+            if ((competitive or has_runtime(uow, recipient.agent_id, handoff.workspace_id))
                     and eligible(uow, agents=self._agents, handoff=handoff, recipient_id=recipient.agent_id, now=now, governance=self._governance)):
                 self._notify_inbox(uow, workspace_id=handoff.workspace_id, recipient_agent_id=recipient.agent_id,
                     from_agent_id=handoff.from_agent_id, subject=f'handoff {handoff.handoff_id} available' + (' (blocked)' if blocked else ''),
@@ -2764,7 +2770,7 @@ class HandoffService:
                     now=now,
                     trace_id=getattr(dependent, "trace_id", None),
                 )
-            elif getattr(self._config, 'feature_harness_integrations', False):
+            elif json.loads(dependent.target).get('strategy') == 'broadcast' or getattr(self._config, 'feature_harness_integrations', False):
                 self._notify_runtime_pool(uow, handoff=dependent, now=now, event_type=EVENT_UNBLOCKED)
 
     def _fail_dependents(
@@ -2892,6 +2898,10 @@ class HandoffService:
         ``event_id`` is owned/assigned by the Event Log slice (imported via the
         ``EventEmitter`` port), not redefined here.
         """
+        if self._runtime_schedule is not None:
+            from ..domain.base import iso_to_epoch
+            self._runtime_schedule.notify(uow, handoff_id=handoff.handoff_id,
+                                          now=iso_to_epoch(self._clock.now_iso()))
         if self._emitter is None:
             return
         event_payload = dict(payload) if payload else None

@@ -55,7 +55,8 @@ def test_schedule_sweep_resumes_exact_attempt_and_consumption_after_lost_reply(r
             return result
 
     adapter = LoseConsumeReply()
-    clock = [100.]
+    import time
+    clock = [time.time()]
 
     def record():
         with deps.connection_factory.unit_of_work(write=False) as uow:
