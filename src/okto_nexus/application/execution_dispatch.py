@@ -113,6 +113,7 @@ def reserve_execution_dispatch(
         from .execution_domain_delivery import project_delivery_refusals
         project_delivery_refusals(conn, server_id=server_id, executor_id=executor_id)
         used = {"regular": [0, 0], "control": [0, 0], "opening": [0, 0], "waiting": [0, 0]}
+        agent_items = {lane: {} for lane in used}
         capacity_wait = ("EXISTS (SELECT 1 FROM execution_capacity_waits cw WHERE "
             "cw.server_id=o.server_id AND cw.executor_id=o.executor_id AND cw.operation_id=o.operation_id "
             "AND cw.connection_id=o.reservation_owner AND cw.connection_generation=o.reservation_generation "
@@ -124,21 +125,23 @@ def reserve_execution_dispatch(
                      "WHERE slot.open_operation_id=p.operation_id AND slot.server_id=p.server_id "
                      "AND slot.executor_id=p.executor_id)")
         for row in conn.execute(
-            "SELECT CASE WHEN " + capacity_wait + " THEN 'waiting' WHEN " + pool_open + " THEN 'opening' ELSE o.reservation_class END AS lane,"
+            "SELECT p.subject_agent_id,CASE WHEN " + capacity_wait + " THEN 'waiting' WHEN " + pool_open + " THEN 'opening' ELSE o.reservation_class END AS lane,"
             "COUNT(*) AS items,COALESCE(SUM(o.reserved_bytes),0) AS bytes FROM execution_dispatch_outbox o "
             "JOIN execution_operations p USING(server_id,executor_id,operation_id) "
             "WHERE o.server_id=? AND o.executor_id=? AND o.dispatch_state IN ('RESERVED','SENDING','RECONCILING') "
             "AND NOT EXISTS (SELECT 1 FROM execution_agent_recovery r WHERE r.server_id=p.server_id "
-            "AND r.executor_id=p.executor_id AND r.agent_id=p.subject_agent_id AND r.state='RECOVERING') GROUP BY lane",
+            "AND r.executor_id=p.executor_id AND r.agent_id=p.subject_agent_id AND r.state='RECOVERING') GROUP BY lane,p.subject_agent_id",
             (server_id, executor_id),
         ):
             if row["lane"] in used:
-                used[row["lane"]] = [row["items"], row["bytes"]]
+                used[row['lane']][0] += row['items']
+                used[row['lane']][1] += row['bytes']
+                agent_items[row['lane']][row['subject_agent_id']] = row['items']
         # A receipt releases the durable reservation, but an embedded producer
         # may still be returning from its native call. Count those live calls
         # once, without double-counting their still-reserved outbox rows.
         for row in conn.execute(
-            "SELECT p.action,(" + pool_open + ") AS pool_open,length(CAST(p.semantic_payload AS BLOB)) AS bytes "
+            "SELECT p.action,p.subject_agent_id,(" + pool_open + ") AS pool_open,length(CAST(p.semantic_payload AS BLOB)) AS bytes "
             "FROM execution_operations p JOIN execution_dispatch_outbox o "
             "USING(server_id,executor_id,operation_id) "
             "WHERE p.server_id=? AND p.executor_id=? "
@@ -152,6 +155,7 @@ def reserve_execution_dispatch(
             lane = 'opening' if row['pool_open'] else 'regular' if row['action'] in _REGULAR else 'control'
             used[lane][0] += 1
             used[lane][1] += row['bytes']
+            agent_items[lane][row['subject_agent_id']] = agent_items[lane].get(row['subject_agent_id'], 0) + 1
         # Filter each lane by its remaining budget before selecting a row.
         # A fixed mixed window lets a blocked control backlog hide all regular
         # work, or oversized rows hide later controls that still fit.
@@ -174,6 +178,12 @@ def reserve_execution_dispatch(
                     continue
             if used[lane][0] >= max_items or remaining <= 0:
                 continue
+            # Independent sessions may run in parallel, but a single slow
+            # agent cannot occupy every productive pre-ACK worker. Keep one
+            # credit for another (including newly registered) agent. Explicit
+            # one-worker configurations cannot offer that extra headroom.
+            capped_agents = [] if lane == 'control' else [agent for agent, count in agent_items[lane].items()
+                if count >= max(1, max_items - 1)]
             placeholders = ",".join("?" for _ in actions)
             row = conn.execute(
                 "SELECT o.operation_id,o.attempt_no,"
@@ -185,6 +195,15 @@ def reserve_execution_dispatch(
                 "AND o.dispatch_state='PENDING' "
                 "AND (o.next_attempt_at IS NULL OR o.next_attempt_at<=?) "
                 "AND p.admission_state IN ('ACCEPTED','DISPATCH_PENDING') "
+                "AND p.subject_agent_id NOT IN (SELECT value FROM json_each(?)) "
+                # Upgrade conversion is bounded and may still be scanning.
+                # Persisted control classification blocks productive dispatch
+                # immediately, independently of timer/startup ordering.
+                "AND NOT EXISTS (SELECT 1 FROM execution_domain_deliveries notice_map "
+                "JOIN delivery_outbox notice_delivery ON notice_delivery.operation_id=notice_map.domain_operation_id "
+                "JOIN runtime_handoff_notifications notice ON notice.message_id=notice_delivery.message_id "
+                "WHERE notice_map.server_id=p.server_id AND notice_map.executor_id=p.executor_id "
+                "AND notice_map.operation_id=p.operation_id AND notice.runtime_route IN ('legacy_admitted','competitive')) "
                 # Producer isolation follows the canonical session. Distinct
                 # sender affinities of one agent must progress independently.
                 "AND (?='control' OR NOT EXISTS (SELECT 1 FROM execution_dispatch_outbox busy "
@@ -247,7 +266,7 @@ def reserve_execution_dispatch(
                 "AND NOT EXISTS (SELECT 1 FROM execution_delivery_releases r WHERE r.domain_operation_id=earlier.operation_id) "
                 "AND earlier.status NOT IN ('REJECTED','CANCELLED','FAILED_FINAL')) "
                 "ORDER BY p.created_at,p.operation_id LIMIT 1",
-                (server_id, executor_id, datetime.now(timezone.utc).isoformat(), lane, retained,
+                (server_id, executor_id, datetime.now(timezone.utc).isoformat(), json.dumps(capped_agents), lane, retained,
                  *actions, remaining),
             ).fetchone()
             if row is None:

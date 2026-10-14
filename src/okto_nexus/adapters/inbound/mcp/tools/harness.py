@@ -264,7 +264,8 @@ def maintain_operations(deps, parameters=None):
     owner = getattr(deps, "runtime_dispatcher", None)
     if owner is None and args["action"] != "inspect":
         return call_runtime_owner(deps.config.home_dir, "/api/v1/harness/outbox", args)
-    return RuntimeOperationMaintenanceService(access=access, owner=owner,
+    from ....outbound.sqlite.execution_pending_cancellation import SqlitePendingExecutionCancellation
+    return RuntimeOperationMaintenanceService(access=access, owner=owner, cancellations=SqlitePendingExecutionCancellation(),
         inbox=build_inbox(deps), handoffs=build_handoffs(deps)).run(context, **args)
 
 

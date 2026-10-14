@@ -12,6 +12,7 @@ import time
 from typing import Protocol
 
 from nexus_connector_core.capacity import CAPACITY_REASONS
+from .handoff_notice_retirement import HandoffNoticeRetirement
 
 
 SCHEDULE_REASONS = CAPACITY_REASONS | {'NO_CANDIDATES', 'MORE_CANDIDATES', 'CLAIM_COMMITTED', 'SETTLED'}
@@ -65,13 +66,14 @@ class HandoffScheduleProcessor(Protocol):
 
 class HandoffRuntimeScheduler:
     def __init__(self, *, factory, repository: HandoffScheduleRepository,
-                 processor: HandoffScheduleProcessor, max_running=8, scan_limit=64,
+                 processor: HandoffScheduleProcessor, notices: HandoffNoticeRetirement | None = None, max_running=8, scan_limit=64,
                  lease_seconds=30, sweep_seconds=5, now=time.time, monotonic=time.monotonic):
         if (any(type(n) is not int or not 1 <= n <= 256 for n in (max_running, scan_limit))
                 or any(type(n) not in (int, float) or not math.isfinite(n) or n <= 0
                        for n in (lease_seconds, sweep_seconds))):
             raise ValueError('Invalid handoff scheduler limits.')
         self.factory, self.repository, self.processor = factory, repository, processor
+        self.notices = notices
         self.max_running, self.scan_limit = max_running, scan_limit
         self.lease_seconds, self.sweep_seconds = lease_seconds, sweep_seconds
         self.now, self.monotonic = now, monotonic
@@ -139,6 +141,8 @@ class HandoffRuntimeScheduler:
             for lease in running:
                 self.repository.renew(uow, lease, now=now, lease_seconds=self.lease_seconds)
             if scan:
+                if self.notices is not None:
+                    self.notices.retire_page(uow, now=now, limit=self.scan_limit)
                 self.repository.sweep(uow, now=now, limit=self.scan_limit)
             return self.repository.lease_due(uow, now=now, limit=room,
                                             lease_seconds=self.lease_seconds) if room else ()

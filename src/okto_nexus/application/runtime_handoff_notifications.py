@@ -89,7 +89,7 @@ def validate(uow, *, message, recipient_id, agents, now, governance=None):
     record = uow.connection.execute('SELECT * FROM handoffs WHERE handoff_id=? AND workspace_id=?',
         (row['handoff_id'], message.workspace_id)).fetchone() if row else None
     handoff = SimpleNamespace(**dict(record)) if record else None
-    if row and row['runtime_route'] == 'competitive':
+    if row and row['runtime_route'] in {'competitive', 'legacy_admitted'}:
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Competitive handoff notices use the runtime scheduler.',
                             {'reason': 'competitive_handoff_control'})
     if (not handoff or handoff.status != 'OPEN' or not eligible(uow, agents=agents, handoff=handoff,

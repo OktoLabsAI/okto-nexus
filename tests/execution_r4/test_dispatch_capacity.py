@@ -31,6 +31,39 @@ def reserve(state, **limits):
         remote_ready=True, channel=channel, **limits)
 
 
+@pytest.mark.parametrize('pool_openings', [False, True])
+def test_one_agent_keeps_parallel_workers_without_consuming_last_credit(pool_openings, owner):
+    backlog(owner, 'runtime.open', 3)
+    with owner[0].connection_factory.unit_of_work() as uow:
+        c = uow.connection
+        c.execute("UPDATE execution_operations SET session_id=operation_id WHERE action='runtime.open'")
+        source = dict(c.execute('SELECT * FROM execution_operations LIMIT 1').fetchone())
+        owner[0].repos.agents.upsert(uow, agent_id='new-healthy', role='reviewer')
+        row = dict(source, operation_id='zz-new-healthy', session_id='zz-new-healthy', subject_agent_id='new-healthy')
+        c.execute('INSERT INTO execution_operations (' + ','.join(row) + ') VALUES (' + ','.join('?' for _ in row) + ')', tuple(row.values()))
+        c.execute("INSERT INTO execution_dispatch_outbox(server_id,executor_id,operation_id,dispatch_state) VALUES(?,?,?,'PENDING')",
+                  (row['server_id'], row['executor_id'], row['operation_id']))
+        if pool_openings:
+            for item in c.execute("SELECT * FROM execution_operations WHERE action='runtime.open'").fetchall():
+                c.execute('INSERT INTO one_shot_slots(slot_id,executor_id,agent_id,configuration_digest,state,created_at,'
+                    'session_id,server_id,open_operation_id) VALUES(?,?,?,?,?,?,?,?,?)',
+                    (item['operation_id'], item['executor_id'], item['subject_agent_id'], 'config', 'STARTING', 0,
+                     item['session_id'], item['server_id'], item['operation_id']))
+    limits = dict(regular_items=4, opening_items=4)
+    held = [reserve(owner, **limits) for _ in range(4)]
+    assert all(held)
+    assert all(item.operation_id != 'zz-new-healthy' for item in held[:3])
+    assert held[3].operation_id == 'zz-new-healthy'
+    assert reserve(owner, **limits) is None
+    with owner[0].connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE execution_dispatch_outbox SET dispatch_state='RESOLVED_TERMINAL',reserved_bytes=0,"
+            "reservation_class=NULL WHERE operation_id IN (?,?)", (held[0].operation_id, held[3].operation_id))
+    # A producer still returning after receipt resolution keeps its fair share
+    # until it exits, even though another agent has freed the global credit.
+    assert reserve(owner, retained_operations=(held[0].operation_id,), **limits) is None
+    assert reserve(owner, **limits) is not None
+
+
 def test_pool_opening_budget_preserves_ready_workers_and_shared_wire_bytes(owner):
     with owner[0].connection_factory.unit_of_work() as uow:
         source = dict(uow.connection.execute('SELECT * FROM execution_operations WHERE operation_id=?',

@@ -515,3 +515,73 @@ O motivo técnico da recusa, como `HOST_FULL`, é preservado no resultado da rod
 e determina o backoff. A inicialização e o desligamento desse consumidor no ciclo
 produtivo do Server ainda dependem da recuperação pós-consumo e da qualificação
 final. Nenhuma instalação ou processo em execução foi alterado.
+
+### Retirada de avisos antigos antes do envio
+
+Após o checkpoint `2f81022`, a migração 136 acrescenta auditoria própria para
+retiradas internas e cursor persistido. A composição da agenda usa uma porta
+de manutenção com páginas limitadas; registros incertos não impedem que o
+cursor alcance os seguintes. A implementação SQLite compartilha a mesma
+barreira de cancelamento antes do envio usada pela manutenção do operador,
+agora extraída para um adaptador injetado. A decisão interna não personifica
+um operador nem fabrica receipt do Core.
+
+Somente a relação estrutural `legacy_admitted` permite examinar uma operação.
+Estados posteriores ao envio, receipts de turno, resultados, histórico de
+tentativas anteriores e execuções produtivas continuam preservados. Um ACK
+`NONE` sozinho não comprova ausência de efeito. A transação registra a
+auditoria, cancela os turnos ainda não enviados, libera apenas a propriedade
+push correspondente e converte o aviso para a agenda, sem ACK de MCP.
+
+Uma abertura já iniciada permanece intacta: retirar o prompt pendente não
+equivale a encerrar o provider. Uma abertura comprovadamente não enviada pode
+ser cancelada junto com o turno, encerrando sua lease ainda não criada. Para
+one-shot, o cancelamento encerra a chamada lógica; o pool continua responsável
+por fechar e confirmar a disposição de qualquer instância existente. A
+retirada de um aviso de controle não publica uma falha de atendimento ao
+criador. Mensagens e handoffs produtivos comuns mantêm suas notificações.
+
+As provas incluem corrida com o lock real de envio, manutenção da conexão
+saudável, sessão já aberta reutilizada sem enviar o aviso antigo, one-shot com
+abertura independente seguida de fechamento confirmado e nova chamada,
+rollback integral, cursor retomado, preservação do ACK de pull e estados
+`SENDING`/`RECONCILING` ainda sem receipt. Os resultados detalhados, incluindo
+correções de fixtures, estão no ledger. O bloqueio do despacho durante a
+conversão e sua integração ao startup estão descritos na seção seguinte.
+A recuperação pós-consumo e a qualificação completa do plano continuam
+pendentes. Estas alterações permanecem locais.
+
+### Conversão no ciclo de vida do Server e isolamento do despacho
+
+O Server agora inicia um único consumidor de manutenção de avisos, com páginas
+limitadas e produtor retido. Ele também funciona quando novas integrações
+runtime estão desabilitadas. A classificação estrutural bloqueia o aviso nas
+seleções de despacho legado e canônico antes do envio, sem depender de terminar
+a varredura de todo o backlog. Avisos incertos continuam no histórico e não
+voltam a ser prompts competitivos. Trabalho comum em outras sessões continua
+elegível enquanto a conversão avança.
+
+No shutdown, a manutenção deixa de iniciar páginas e aguarda seu writer atual.
+Uma resposta HTTP pendente ou um observador cancelado não descarta esse
+produtor. A contenção nativa ocorre em paralelo; a liberação do owner do banco
+e o reset aguardam ambos. Falhas transacionais preservam o cursor e são
+reavaliadas; não criam um segundo produtor. Startup parcialmente concluído
+também encerra a manutenção antes de liberar os recursos.
+
+A regressão de múltiplas sessões encontrou ocupação integral dos quatro
+workers regulares por aberturas lentas de um único agente. O mesmo problema
+foi reproduzido substituindo somente o módulo de despacho pelo checkpoint
+`2f81022`. A contabilidade agora permite paralelismo por sessão, mas mantém um
+crédito de worker para outro agente: três por agente em uma lane com quatro
+workers; o limite equivalente vale para a lane separada de aberturas do pool.
+Uma configuração explícita com um único worker não oferece essa folga.
+Produtores ainda retornando após receipt continuam contando. O teto de bytes,
+os créditos de transporte e a lane de controles continuam sendo aplicados.
+
+As validações cobrem reinícios sucessivos em stores descartáveis, shutdown
+pendente com HTTP disponível, continuidade de outro agente, retomada da quarta
+abertura e regressões de reset. O subprocesso isolado do teste de CLI usa os
+mesmos caminhos explícitos de Nexus, Core e dependências do teste principal;
+isso é evidência de execução entre processos, não qualificação de wheels.
+O ciclo produtivo de aquisição/consumo da agenda continua aguardando H5:
+ligar a manutenção de avisos não habilita auto-claim nem a capacidade técnica.

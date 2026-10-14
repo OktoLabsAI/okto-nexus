@@ -9,12 +9,13 @@ from ..application.runtime_shutdown import shutdown_runtime
 
 
 class ServerShutdownCoordinator:
-    def __init__(self, deps, *, embedded, inventory, host, on_drained=None, on_embedded_report=None, connection_tests=None):
+    def __init__(self, deps, *, embedded, inventory, host, on_drained=None, on_embedded_report=None, connection_tests=None, handoff_notices=None):
         self.deps = deps
         self.embedded, self.inventory, self.host = embedded, inventory, host
         self.on_drained = on_drained
         self.on_embedded_report = on_embedded_report
         self.connection_tests = connection_tests
+        self.handoff_notices = handoff_notices
         self.deadline = None
         self._task = None
         self._embedded_done = threading.Event()
@@ -24,6 +25,9 @@ class ServerShutdownCoordinator:
 
     def status(self):
         resources = []
+        if self._task is not None and self.handoff_notices is not None and not self.handoff_notices.drained:
+            resources.append({'owner': 'handoff-notices', 'resource_id': 'notice-writer',
+                              'outcome': 'pending', 'store_retained': True})
         if self.embedded is not None:
             resources.extend(dict(resource, owner="embedded",
                 server_id=self.embedded.channel.server_id)
@@ -53,6 +57,8 @@ class ServerShutdownCoordinator:
         if self._task is None:
             self.deadline = asyncio.get_running_loop().time() + timeout_seconds
             self.deps.runtime_admission_fence.close()
+            if self.handoff_notices is not None:
+                self.handoff_notices.begin_shutdown()
             if self.inventory is not None:
                 self.inventory.begin_shutdown()
             self._task = asyncio.create_task(self._run(), name="server-shutdown-recovery")
@@ -106,7 +112,8 @@ class ServerShutdownCoordinator:
                      "outcome": "unknown", "store_retained": True}
                     for session in supervisor.list_live()]
             return shutdown_runtime(dispatcher, supervisor, timeout=timeout,
-                extra_drained=self._embedded_done.is_set)
+                extra_drained=lambda: self._embedded_done.is_set() and
+                    (self.handoff_notices is None or self.handoff_notices.drained))
         while not dispatcher._shutdown_finished.is_set():
             try:
                 await asyncio.to_thread(attempt, max(
@@ -124,6 +131,12 @@ class ServerShutdownCoordinator:
         # containment path waits for the other owner's storage/native calls.
         if self.connection_tests is not None:
             await self.connection_tests.shutdown()
-        await asyncio.gather(self._embedded(), self._legacy())
+        async def notices():
+            if self.handoff_notices is not None:
+                await self.handoff_notices.aclose()
+                dispatcher = getattr(self.deps, 'runtime_dispatcher', None)
+                if dispatcher is not None:
+                    dispatcher.wake()
+        await asyncio.gather(self._embedded(), self._legacy(), notices())
         if self.on_drained is not None:
             self.on_drained()

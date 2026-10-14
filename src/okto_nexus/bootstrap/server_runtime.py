@@ -8,7 +8,14 @@ async def start_runtime_services(app, *, native_factory=None):
     from ..adapters.outbound.sqlite.runtime_outbox_repo import SqliteRuntimeOutboxRepo
     from ..adapters.inbound.mcp.tools.harness import build_dispatcher, run_runtime_boot
     from ..application.connection_test import ConnectionTests
+    from .handoff_runtime_scheduler import build_handoff_notice_maintenance
     deps = app.state.deps
+    previous_notices = getattr(app.state, 'handoff_notice_maintenance', None)
+    if previous_notices is not None and not previous_notices.drained:
+        raise RuntimeError('The previous handoff notice owner has not drained.')
+    notices = build_handoff_notice_maintenance(deps)
+    app.state.handoff_notice_maintenance = notices
+    notices.start()
     with deps.connection_factory.unit_of_work(write=False) as uow:
         history = SqliteRuntimeOutboxRepo().has_history(uow)
     if deps.config.feature_harness_integrations or history:
@@ -40,6 +47,7 @@ async def start_runtime_services(app, *, native_factory=None):
     app.state.connection_tests = ConnectionTests(deps)
     coordinator = ServerShutdownCoordinator(deps, embedded=dispatch, inventory=inventory,
         host=host, on_drained=drained, connection_tests=app.state.connection_tests,
+        handoff_notices=notices,
         on_embedded_report=lambda report: setattr(app.state, 'embedded_shutdown_report', report))
     app.state.runtime_shutdown = coordinator
     return host, inventory, dispatch, coordinator

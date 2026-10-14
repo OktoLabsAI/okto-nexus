@@ -4,6 +4,7 @@ import json
 
 from ..domain.base import new_id
 from ..errors import ErrorCode, OktoNexusError
+from .execution_pending_cancellation import PendingExecutionCancellation
 
 
 def conflict(message):
@@ -11,9 +12,10 @@ def conflict(message):
 
 
 class RuntimeOperationMaintenanceService:
-    def __init__(self, *, access, owner, inbox, handoffs=None):
+    def __init__(self, *, access, owner, inbox, cancellations: PendingExecutionCancellation, handoffs=None):
         self.access, self.owner, self.inbox = access, owner, inbox
         self.handoffs = handoffs
+        self.cancellations = cancellations
 
     def run(self, context, *, action="inspect", operation_id=None, after_operation_id=None, limit=50,
             expected_state=None, expected_attempt_id=None, expected_owner_epoch=None,
@@ -143,42 +145,13 @@ class RuntimeOperationMaintenanceService:
             if table == "delivery_outbox" and not recover_work:
                 self.inbox.release_runtime_reservation(uow, operation_id=operation_id)
                 if pending:
-                    self._cancel_canonical_pending(uow, operation_id)
+                    self.cancellations.cancel(uow, operation_id)
             if not pending and not not_sent:
                 uow.connection.execute("UPDATE agent_endpoints SET health='quarantined',health_reason='operator_takeover',updated_at=? WHERE endpoint_id=?",
                                        (now, row["endpoint_id"]))
                 self.access.endpoints.invalidate_configuration(uow, endpoint_ids=[row["endpoint_id"]], now=now)
         owner.wake()
         return response
-
-    @staticmethod
-    def _cancel_canonical_pending(uow, operation_id):
-        # The reconciliation marker, inbox release and capacity release share
-        # the writer transaction. A reserved sender must still cross its CAS
-        # fence, so it cannot send after this cancellation commits.
-        conn = uow.connection
-        rows = conn.execute(
-            'SELECT p.server_id,p.executor_id,p.operation_id,p.admission_state,x.dispatch_state '
-            'FROM execution_domain_deliveries m JOIN execution_operations p '
-            'USING(server_id,executor_id,operation_id) LEFT JOIN execution_dispatch_outbox x '
-            'USING(server_id,executor_id,operation_id) WHERE m.domain_operation_id=?',
-            (operation_id,)).fetchall()
-        for row in rows:
-            if (row['dispatch_state'] not in (None, 'PENDING', 'RESERVED') or
-                    row['admission_state'] not in ('ACCEPTED', 'DISPATCH_PENDING')):
-                raise conflict('Canonical dispatch crossed its send fence; pending cancellation is unavailable.')
-            key = (row['server_id'], row['executor_id'], row['operation_id'])
-            error = json.dumps(dict(code='OPERATOR_CANCELLED', stage='dispatch',
-                message='Cancelled before native dispatch.', possible_effect=False,
-                retry_safe=False, operation_id=row['operation_id']))
-            conn.execute("INSERT INTO execution_dispatch_outbox(server_id,executor_id,operation_id,dispatch_state,last_error) "
-                "VALUES(?,?,?,'RESOLVED_TERMINAL',?) ON CONFLICT(server_id,executor_id,operation_id) DO UPDATE SET "
-                "dispatch_state='RESOLVED_TERMINAL',last_error=excluded.last_error,"
-                "reservation_class=NULL,reserved_bytes=0,reserved_at=NULL", (*key, error))
-            conn.execute("UPDATE execution_operations SET admission_state='RESOLVED_TERMINAL' "
-                "WHERE server_id=? AND executor_id=? AND operation_id=?", key)
-            conn.execute("UPDATE execution_sessions SET lifecycle_state='FAILED' WHERE server_id=? AND executor_id=? "
-                "AND open_operation_id=? AND lifecycle_state='OPEN_PENDING' AND lease_state='NONE'", key)
 
     @staticmethod
     def _require_canonical_recovery(uow, operation_id, action):

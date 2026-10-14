@@ -82,6 +82,6 @@ def clear_operational_history(conn, *, keep_agents):
     if trigger is not None:
         conn.execute(trigger[0])
     conn.execute('UPDATE runtime_reset_generation SET generation=generation+1 WHERE singleton=1')
-    conn.execute('UPDATE handoff_runtime_schedule_scan SET handoff_cursor=0,attempt_cursor=0,'
+    conn.execute("UPDATE handoff_runtime_schedule_scan SET handoff_cursor=0,attempt_cursor=0,notice_cursor='',"
                  'wake_generation=wake_generation+1 WHERE singleton=1')
     return counts

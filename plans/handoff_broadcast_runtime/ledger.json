@@ -122,7 +122,7 @@
       "remaining": [
       "Wire productive startup/shutdown and complete compensation before activation. Creation/unblock and unresolved-generation cleanup now notify the durable agenda; policy/grant/binding changes persist a wake generation and capacity publications wake the composed scheduler. Automatic discovery and signals are qualified locally, but productive lifecycle activation is still off. Expiry and consumed uncertainty remain.",
         "Complete exact-affinity FIFO assessment and separate-process/local-remote lifecycle qualification; new dispatch serialization follows canonical session",
-      "Finish safe retirement of legacy_admitted notices before send and preserve reconciliation after possible effects; new structural broadcast notices and unadmitted backlog now bypass conversation. Lifecycle decisions and UI remain pending; automatic acquisition remains inactive",
+        "Startup now fences structural control notices in both dispatch selectors while a serve-owned bounded worker converts safe backlog. Shutdown retains that writer without delaying native containment. Historical retry attempts remain conservative reconciliation cases. Productive scheduler/reservation lifecycle decisions and UI remain pending; automatic acquisition remains inactive",
       "Extend independent one-shot reservation coverage to the complete cold/remote lifecycle and concurrent failure cuts. Distinct warm instances now use exact capacity identities and both execute through real embedded reservations/claims/consumption; pool FIFO/exact-resource tests pass with SQLite and memory adapters."
       ]
     },
@@ -510,7 +510,40 @@
       "Nexus build/handoff-broadcast/h4-notice-mcp-reset.xml: 9 passed in 197.66s. MCP-only winner preserves inbox delivery, releases the losing runtime reservation without native execution, and reset connection regressions pass.",
       "Nexus build/handoff-broadcast/h4-notice-historical.xml: 2 passed in 9.84s. Historical unknown targets remain noncompetitive and schema upgrade preserves admitted history."
     ],
-    "remaining": "Legacy admitted-but-unsent retirement, post-consumption compensation, productive startup/shutdown, UI and T39/T40 qualification remain. All test runs above have completed. User authorized this checkpoint for commit and push; no installed-instance changes."
+    "remaining": "This checkpoint was committed as 2f81022. Subsequent retirement work is recorded separately below. Productive startup/shutdown, post-consumption compensation, UI and T39/T40 qualification remain; no installed-instance changes."
+  },
+  "notice_retirement_validation": {
+    "status": "in_progress",
+    "implementation": "Local changes after 2f81022: migration136 adds distinct system-migration audit and durable scan cursor. Bounded retirement port is composed into scheduler maintenance. Shared injected SQLite cancellation adapter fences unsent canonical operations; late RESERVED send refusals keep the lane healthy. Already started openings retain their resource/history while unsent prompts can be cancelled. One-shot calls finish through the pool, retain closing capacity until proof, and do not generate loser/error replies. No MCP ACK is fabricated.",
+    "evidence": [
+      "h4-notice-retirement.xml: 9 passed, 2 fixture failures (MCP consumer is stored as pull, and the submitted test accidentally observed an opening receipt instead of a turn receipt). Both assertions corrected.",
+      "h4-retirement-boundaries.xml: 15 passed; import/I/O boundaries and durable scheduler regressions.",
+      "h4-notice-retirement-followup.xml: 7 passed, 1 fixture failure; a one-shot pool opening has its own canonical operation and must not be asserted cancelled as part of the prompt's mapping.",
+      "h4-notice-retirement-final.xml: 6 passed, 1 fixture failure after successful one-shot disposal; the fixture incorrectly requested manual runtime.start for one-shot. Changed to a normal subsequent message.",
+      "h4-retirement-reset.xml: 9 passed in 114.03s; reset preserves connections and clears new retirement state/cursor; real schema upgrade remains repeatable.",
+      "h4-retirement-one-shot.xml: 7 passed in 70.46s; one-shot notice cancellation leaves no model prompt, confirms resource disposal, accepts the next ordinary message, and preserves explicit handoff queue/error behavior. Architecture boundaries passed on final code.",
+      "h4-retirement-send-fence.xml: 3 passed in 36.13s; real reserved-send race, SENDING/RECONCILING without receipts retained, scheduler lost-consumption recovery.",
+      "h4-retirement-receipt-history.xml: 7 passed in 69.23s; a later opening failure projection cannot revive a retired notice, the opened session remains reusable, and existing canonical operator recovery passes on the shared cancellation adapter.",
+      "h4-retirement-queued.xml: 1 passed in 4.03s; queued one-shot control notice is cancelled with no execution while the earlier ordinary admission retains capacity. All test handles completed; final Python syntax, ledger JSON and diff whitespace checks passed."
+    ],
+    "remaining": "Startup/shutdown notice integration is recorded in notice_lifecycle_validation. Suspended/retry history policy, full post-consumption compensation, productive scheduler lifecycle/UI and T39/T40 qualification remain. New code is local with no commit/push, reinstall, restart or automatic-acquisition activation."
+  },
+  "notice_lifecycle_validation": {
+    "status": "in_progress",
+    "implementation": "Serve-owned bounded notice maintenance starts independently of feature admission and survives bounded/cancelled close observers. Both legacy and canonical selectors fence structural control notices before native dispatch, independently of conversion order. Shutdown contains native processes concurrently and retains store ownership until the notice writer drains; reset replaces only a drained owner. Canonical pre-ACK worker accounting now limits one agent to max(1,lane_items-1), preserving parallel sessions and another agent's item credit; controls and shared byte/wire limits remain intact.",
+    "evidence": [
+      "h4-notice-lifecycle.xml: 5 passed in 27.33s; retained writer after cancelled close observer, transactional failure/retry, startup with admission disabled, native containment during blocked conversion, and healthy-session dispatch while a legacy notice remains fenced.",
+      "h4-notice-lifecycle-regression.xml: 25 passed in 233.97s; notice retirement, directed/broadcast routing, one-shot cancellation and reset regressions with the serve owner enabled.",
+      "h4-notice-restart-dispatch.xml: 16 passed, 1 fairness failure. Two successive disposable restarts preserve one audit/unread MCP notice and never replay native work; dispatch reservation/pump checks passed. Four slow openings of one agent starved another agent's opening.",
+      "h4-dispatch-fairness-prior-kernel.xml: reproduced that starvation with execution_dispatch.py from checkpoint 2f81022 substituted in memory (other current modules retained). The new notice fence was not responsible.",
+      "h4-dispatch-fairness-followup.xml: 27 passed in 151.73s after per-agent worker headroom. Three independent openings proceed concurrently, a healthy agent starts before they finish, and the fourth resumes afterward. Existing wire-byte, retained-producer and capacity-wait rules pass.",
+      "h4-notice-shutdown-boundaries.xml: 19 passed, 1 subprocess fixture failure; isolated Python omitted the current Core. h4-notice-lifecycle-followup.xml: 3 passed, 1 related fixture failure; current Core was included but its dependency site-packages were still omitted. Both failures occurred before CLI execution, not in shutdown.",
+      "h4-notice-lifecycle-followup.xml also proves per-agent fairness for regular and pool-opening lanes, including producer retention after receipt, and explicitly checks both native instances during delayed notice conversion.",
+      "h4-notice-cli-final.xml: 6 passed in 37.54s; isolated CLI over TCP now uses the parent test's explicit Nexus/Core/dependency paths. Pending shutdown and recovery remain available. Conversion retry and architecture boundaries passed.",
+      "h4-fairness-parallel-warmup.xml: 3 passed in 107.47s. Pi RPC, Codex app-server and Claude stream fixture adapters each start four warm resources concurrently before any finishes, preserving FIFO assignment. These use real Core execution with synthetic native peers, not an installed-provider campaign.",
+      "h4-notice-partial-startup.xml: 2 passed in 14.10s; failure before coordinator creation still drains the actual notice writer and owner, while ordinary shutdown retains native-containment independence. All tool/process handles completed. Final syntax, JSON and whitespace checks passed."
+    ],
+    "remaining": "Productive scheduler acquisition/consumption shutdown ordering and post-consumption compensation are still gated off; notice maintenance is wired and tested. H5/H6 and full T39/T40 remain. All changes since 2f81022 remain local. No changes to installed services, commits or pushes."
   },
   "checkpoint_validation": {
     "authorization": "User requested commit and push of all current changes.",

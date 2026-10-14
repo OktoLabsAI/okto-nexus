@@ -146,7 +146,10 @@ def test_shutdown_cli_over_tcp_retains_server_until_recovery(connected_local, mo
     package_root = str(Path(okto_nexus.__file__).resolve().parent.parent)
 
     def cli(command, *arguments):
-        code = "import sys; sys.path.insert(0," + repr(package_root) + "); from okto_nexus.adapters.inbound.cli.main import main; raise SystemExit(main())"
+        import nexus_connector_core
+        core_root = str(Path(nexus_connector_core.__file__).resolve().parent.parent)
+        dependencies = [path for path in sys.path if path and 'site-packages' in Path(path).parts]
+        code = "import sys; sys.path[:0]=" + repr([package_root, core_root, *dependencies]) + "; from okto_nexus.adapters.inbound.cli.main import main; raise SystemExit(main())"
         result = subprocess.run([sys.executable, "-I", "-c", code, "admin", command,
             "--url", address, *arguments], env=env, capture_output=True, text=True, timeout=15)
         assert result.returncode == 0, result.stderr

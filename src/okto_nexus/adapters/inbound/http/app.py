@@ -628,6 +628,9 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
             embedded_dispatch = getattr(app.state, 'embedded_dispatch_owner', embedded_dispatch)
             shutdown_coordinator = getattr(app.state, 'runtime_shutdown', shutdown_coordinator)
             deps.runtime_admission_fence.close()
+            notice_maintenance = getattr(app.state, 'handoff_notice_maintenance', None)
+            if notice_maintenance is not None:
+                notice_maintenance.begin_shutdown()
             if getattr(app.state, 'connection_tests', None) is not None:
                 await app.state.connection_tests.shutdown()
             if shutdown_coordinator is not None:
@@ -654,6 +657,11 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
                     deps.embedded_core_shutdown_status = await embedded_core_host.shutdown()
                 except Exception as exc:
                     embedded_shutdown_error = exc
+            if notice_maintenance is not None:
+                # Partial startup/reset can leave an older coordinator in
+                # app.state. Contain native resources first, then join the
+                # actual current writer before releasing the database owner.
+                await notice_maintenance.aclose()
             dispatcher = getattr(deps, "runtime_dispatcher", None)
             supervisor = getattr(deps, "harness_supervisor", None)
             if (dispatcher and dispatcher.epoch is not None and supervisor

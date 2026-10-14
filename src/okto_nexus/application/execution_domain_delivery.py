@@ -193,6 +193,8 @@ def project_delivery_receipt(conn, *, server_id, executor_id, operation_id, acti
         return
     if conn.execute('SELECT 1 FROM execution_delivery_releases WHERE domain_operation_id=?', (row[0],)).fetchone():
         return
+    if conn.execute('SELECT 1 FROM runtime_handoff_notice_retirements WHERE operation_id=?', (row[0],)).fetchone():
+        return  # A preserved opening may settle later; it cannot revive the retired notice.
     status = {"SUBMITTED": "ACCEPTED", "RUNNING": "ACCEPTED", "SUCCEEDED": "ACCEPTED",
               "FAILED": "FAILED_FINAL", "CANCELLED": "CANCELLED", "OUTCOME_UNKNOWN": "OUTCOME_UNKNOWN"}.get(stage)
     if status is None:
@@ -229,7 +231,9 @@ def project_delivery_refusals(conn, *, server_id, executor_id):
         "JOIN execution_dispatch_outbox x USING(server_id,executor_id,operation_id) "
         "WHERE m.domain_operation_id=delivery_outbox.operation_id AND x.dispatch_state='RESOLVED_TERMINAL' "
         "AND x.last_receipt_revision IS NULL AND x.last_error IS NOT NULL LIMIT 1) "
-        "WHERE reconciliation_id IS NULL AND canonical_terminal_operation_id IS NULL AND operation_id IN (SELECT m.domain_operation_id FROM execution_domain_deliveries m "
+        "WHERE reconciliation_id IS NULL AND canonical_terminal_operation_id IS NULL "
+        "AND NOT EXISTS (SELECT 1 FROM runtime_handoff_notice_retirements n WHERE n.operation_id=delivery_outbox.operation_id) "
+        "AND operation_id IN (SELECT m.domain_operation_id FROM execution_domain_deliveries m "
         "JOIN execution_dispatch_outbox x USING(server_id,executor_id,operation_id) "
         "WHERE m.server_id=? AND m.executor_id=? AND x.dispatch_state='RESOLVED_TERMINAL' "
         "AND x.last_receipt_revision IS NULL AND x.last_error IS NOT NULL LIMIT 256)", (server_id, executor_id))

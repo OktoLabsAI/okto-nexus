@@ -38,7 +38,7 @@ def reject_unsent_dispatch(factory, *, reservation, error):
                 "SELECT 1 FROM execution_dispatch_outbox WHERE server_id=? AND executor_id=? "
                 "AND operation_id=? AND attempt_token=? AND attempt_no=? AND reservation_owner IS ? "
                 "AND reservation_generation IS ? AND dispatch_state='RESOLVED_TERMINAL' "
-                "AND json_extract(last_error,'$.code')='OPERATOR_CANCELLED' "
+                "AND json_extract(last_error,'$.code') IN ('OPERATOR_CANCELLED','COMPETITIVE_NOTICE_RETIRED') "
                 "AND json_extract(last_error,'$.possible_effect')=0", _key(reservation)).fetchone()
             if cancelled:
                 return
