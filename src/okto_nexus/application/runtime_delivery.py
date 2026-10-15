@@ -93,7 +93,8 @@ class RuntimeDeliveryPlanner:
                     if recovering:
                         raise OktoNexusError(ErrorCode.CONFLICT,'Delivery session requires reconciliation.',{})
                     _, session_id = select_delivery_session(uow, endpoint["endpoint_id"], sender_agent_id=sender_agent_id,
-                                                            source_session_key=source_session_key)
+                        source_session_key=source_session_key,
+                        session_containment=getattr(getattr(self.capabilities, 'access', None), 'session_containment', None))
                     candidates.append((endpoint, profile, session_id))
                 continue
             descriptor = self.registry.get(endpoint["adapter_id"])

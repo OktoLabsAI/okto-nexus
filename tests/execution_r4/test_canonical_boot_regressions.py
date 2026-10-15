@@ -150,15 +150,15 @@ def test_attach_pid_cannot_authorize_automatic_boot(connected_local):
     assert harness.run_runtime_boot(deps) == [] and native.opens == 0
 
 
-def test_uncertain_boot_is_not_replayed_after_server_restart(tmp_path, monkeypatch):
+def test_interrupted_preopen_is_fenced_before_a_new_boot_after_restart(tmp_path, monkeypatch):
     from contextlib import contextmanager
     from fastapi.testclient import TestClient
     from nexus_connector_core import LocalRuntimeCore
     from test_embedded_inventory import app_for
     calls = []
     async def uncertain(*args, **kwargs):
-        # Inject at the Core boundary: an actual unknown process would retain
-        # ownership until contained and cannot be released by a test fixture.
+        # Interrupt before Core admission. Recovery must persist a positive
+        # no-effect fence before replacing this opening; absence alone cannot.
         calls.append(1)
         raise CoreError("OUTCOME_UNKNOWN", "fixture", possible_effect=True)
     with monkeypatch.context() as patch:
@@ -175,8 +175,17 @@ def test_uncertain_boot_is_not_replayed_after_server_restart(tmp_path, monkeypat
     deps, app = app_for(tmp_path / "home")
     with TestClient(app):
         current = deps.runtime_boot_status
-        assert len(current) == 1 and current[0]["state"] == "blocked", current
+        assert len(current) == 1 and current[0]["state"] == "ACCEPTED", current
+        assert current[0]['operation_id'] != original['operation_id']
         assert calls == [1]
         with deps.connection_factory.unit_of_work(write=False) as uow:
-            assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations").fetchone()[0] == 1
-            assert uow.connection.execute("SELECT operation_id FROM execution_operations").fetchone()[0] == original["operation_id"]
+            assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations").fetchone()[0] == 2
+            row = uow.connection.execute('SELECT report_json FROM execution_preopen_refusals WHERE operation_id=?',
+                                         (original['operation_id'],)).fetchone()
+            assert row is not None
+            import json
+            proof = json.loads(row[0])
+            assert proof['receipt']['possible_effect'] is False
+            assert proof['refusal']['source']['operation_id'] == original['operation_id']
+            assert uow.connection.execute('SELECT lifecycle_state FROM execution_sessions WHERE session_id=?',
+                                          (original['session_id'],)).fetchone()[0] == 'CLOSED'

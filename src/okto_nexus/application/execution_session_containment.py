@@ -54,10 +54,13 @@ class ExecutionSessionContainment:
             self.repository.record(uow, request, target, self.clock.now_iso())
         return True  # The obligation commits before the denial is published.
 
+    def pending(self, uow, scope):
+        return self.repository.pending(uow, scope)
+
     def require_not_pending(self, uow, scope):
-        if self.repository.pending(uow, scope):
+        if self.pending(uow, scope):
             raise OktoNexusError(ErrorCode.CONFLICT,
-                'This session requires confirmed resource release after lease denial.', {})
+                'This session requires confirmed resource release before accepting more work.', {})
 
     def record_verified_release(self, uow, *, channel, session_id, owner_generation, proof):
         """Internal commit hook after canonical reconciliation validates all facts.

@@ -123,9 +123,24 @@ class SqliteSessionContainmentRepository:
              target.opening_operation_id, target.opening_intent_hash, canonical_json(request).decode(), now))
 
     def pending(self, uow, scope):
-        return uow.connection.execute(
+        if uow.connection.execute(
             "SELECT 1 FROM execution_session_containment WHERE server_id=? AND executor_id=? "
             "AND session_id=? AND owner_generation=? AND state='REQUESTED'",
+            (scope['server_id'], scope['executor_id'], scope['session_id'],
+             scope['session_owner_generation'])).fetchone() is not None:
+            return True
+        # A committed Core stream failure also fences productive admission.
+        # Keep this scoped to the original session/generation and contiguous
+        # stream; host cleanup may still be running and is not release proof.
+        return uow.connection.execute(
+            'SELECT 1 FROM execution_sessions s JOIN execution_event_watermarks w '
+            'USING(server_id,executor_id,session_id,stream_epoch) '
+            'JOIN execution_event_ingress e USING(server_id,executor_id,session_id,stream_epoch) '
+            'WHERE s.server_id=? AND s.executor_id=? AND s.session_id=? AND s.owner_generation=? '
+            "AND s.lifecycle_state NOT IN ('CLOSED','FAILED') AND e.event_type='error' "
+            'AND e.sequence<=w.committed_contiguous '
+            "AND json_extract(e.payload_json,'$.native_type')='core.event_pump_failed' "
+            "AND json_extract(e.payload_json,'$.payload.code')='EVENT_STREAM_UNAVAILABLE' LIMIT 1",
             (scope['server_id'], scope['executor_id'], scope['session_id'],
              scope['session_owner_generation'])).fetchone() is not None
 

@@ -45,13 +45,7 @@ if mode == 'produce':
         assert source.count(line) == 1
         source = source.replace(line,
             '    for index in range(140):\n'
-            '        write_msg({"method":"item/agentMessage/delta", "params": {"threadId":thread_id,"turnId":turn_id,"itemId":item_id,"delta":"Please review this message. " + str(index)}})\n'
-            '        if (index + 1) % 10 == 0:\n'
-            f'            marker = {str(root / "captured-")!r} + str(index + 1)\n'
-            '            deadline = time.monotonic() + 15\n'
-            '            while not os.path.exists(marker):\n'
-            '                assert time.monotonic() < deadline\n'
-            '                time.sleep(.01)')
+            '        write_msg({"method":"item/agentMessage/delta", "params": {"threadId":thread_id,"turnId":turn_id,"itemId":item_id,"delta":"Please review this message. " + str(index)}})')
     peers, wire = install_native(connected, source)
     opened = admit(setup, binding, 'crash-open', 'runtime.start', new_session=True)
     wait_receipt(setup, opened)
@@ -78,19 +72,13 @@ if mode == 'produce':
         os._exit(78)
 
     original_record = SQLiteJournal.record_event
-    captured = 0
     async def capture(journal, event):
-        global captured
         from dataclasses import asdict
         terminal = event.payload.get('delivery_phase') == 'terminal'
         if ((cut == 'before_output_capture' and event.category == 'text_delta')
                 or (cut == 'before_terminal_capture' and terminal)):
             crash(asdict(event))
         saved = await original_record(journal, event)
-        if event.category == 'text_delta':
-            captured += 1
-            if captured % 10 == 0:
-                (root / f'captured-{captured}').touch()
         if cut.startswith('after_terminal_capture') and terminal:
             crash(asdict(saved))
         return saved

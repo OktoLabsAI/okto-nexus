@@ -42,7 +42,7 @@ def delivery_session_context(uow, endpoint_id, *, sender_agent_id=None, source_s
     return binding, affinity
 
 
-def select_delivery_session(uow, endpoint_id, *, sender_agent_id=None, source_session_key=''):
+def select_delivery_session(uow, endpoint_id, *, sender_agent_id=None, source_session_key='', session_containment=None):
     """One durable canonical target; never guess through unresolved ownership."""
     binding, affinity = delivery_session_context(uow, endpoint_id, sender_agent_id=sender_agent_id,
                                                  source_session_key=source_session_key)
@@ -51,7 +51,7 @@ def select_delivery_session(uow, endpoint_id, *, sender_agent_id=None, source_se
         return binding, None
     per_sender = affinity.per_sender
     sessions = conn.execute(
-        "SELECT s.session_id,s.lifecycle_state,s.lease_state FROM execution_sessions s "
+        "SELECT s.session_id,s.lifecycle_state,s.lease_state,s.owner_generation FROM execution_sessions s "
         "LEFT JOIN execution_sender_sessions a USING(server_id,executor_id,session_id) "
         "WHERE s.server_id=? AND s.executor_id=? AND s.binding_id=? "
         "AND s.lifecycle_state NOT IN ('CLOSED','FAILED') AND s.lease_state<>'REVOKED' AND "
@@ -61,6 +61,10 @@ def select_delivery_session(uow, endpoint_id, *, sender_agent_id=None, source_se
     if len(sessions) > 1:
         raise OktoNexusError(ErrorCode.CONFLICT, "AMBIGUOUS_BINDING", {'reason': 'AMBIGUOUS_BINDING'})
     if sessions and (sessions[0]["lifecycle_state"] != "READY" or sessions[0]["lease_state"] != "ACTIVE"):
+        raise OktoNexusError(ErrorCode.CONFLICT, "Delivery session requires reconciliation.", {})
+    if sessions and session_containment is not None and session_containment.pending(uow, {
+            'server_id': binding['server_id'], 'executor_id': binding['executor_id'],
+            'session_id': sessions[0]['session_id'], 'session_owner_generation': sessions[0]['owner_generation']}):
         raise OktoNexusError(ErrorCode.CONFLICT, "Delivery session requires reconciliation.", {})
     return binding, sessions[0]["session_id"] if sessions else None
 
@@ -89,7 +93,7 @@ def admit_domain_delivery(uow, *, operation_id, access, claims: ExecutionClaimRe
     from .message_session_origin import for_message
     source_session_key = for_message(conn, operation['message_id'])
     binding, session_id = select_delivery_session(uow, operation["endpoint_id"], sender_agent_id=sender[0],
-                                                   source_session_key=source_session_key)
+        source_session_key=source_session_key, session_containment=getattr(access, 'session_containment', None))
     one_shot_slot = None
     if binding['session_policy'] == 'one_shot':
         from .one_shot_runtime import admit_call

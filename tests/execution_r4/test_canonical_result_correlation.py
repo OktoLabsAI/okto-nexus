@@ -118,7 +118,9 @@ def test_foreign_native_terminal_is_contained_without_releasing_or_replaying_mes
         with deps.connection_factory.unit_of_work(write=False) as uow:
             closed = uow.connection.execute("SELECT lifecycle_state FROM execution_sessions WHERE session_id=?", (sid,)).fetchone()[0]
             recovery = uow.connection.execute("SELECT state FROM execution_agent_recovery WHERE agent_id='subject'").fetchone()
-            return closed == "CLOSED" and recovery is not None and recovery[0] == "READY"
+            # A stream failure is contained per session; it need not create an
+            # agent-wide recovery record or make healthy siblings unavailable.
+            return closed == "CLOSED" and (recovery is None or recovery[0] == "READY")
     try:
         eventually(restored)
     except AssertionError:
