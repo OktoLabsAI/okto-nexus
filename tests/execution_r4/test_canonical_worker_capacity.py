@@ -13,11 +13,12 @@ from test_sender_sessions import Peers
 
 
 @pytest.mark.parametrize('cut', ['before_write', 'after_receipt'])
-def test_retained_worker_does_not_donate_agent_capacity_or_block_healthy_agent(connected_local, monkeypatch, cut):
+def test_retained_worker_serializes_its_session_while_other_affinities_progress(connected_local, monkeypatch, cut):
     setup, first_binding, _ = connected_local
     healthy_setup, healthy_binding, _ = connect_local(create_agent(setup, 'healthy'), agent_id='healthy')
     extra = second_binding(setup, monkeypatch)
     owner = setup[1].state.embedded_dispatch_owner
+    owner.host.capacity_enabled = True
     peers = Peers()
     owner.native_factory = peers
     opened = []
@@ -27,12 +28,12 @@ def test_retained_worker_does_not_donate_agent_capacity_or_block_healthy_agent(c
         opened.append(operation)
     original = owner._execute
     entered, release = threading.Event(), asyncio.Event()
-    async def held(frame):
+    async def held(frame, **options):
         targeted = frame['action'] == 'turn.submit' and frame['session_id'] == opened[0]['session_id']
         if targeted and cut == 'before_write':
             entered.set()
             await release.wait()
-        await original(frame)
+        await original(frame, **options)
         if targeted and cut == 'after_receipt':
             entered.set()
             await release.wait()
@@ -58,17 +59,26 @@ def test_retained_worker_does_not_donate_agent_capacity_or_block_healthy_agent(c
                         "AND payload_json LIKE '%fixture.capacity.complete%'", (first['session_id'],)).fetchone()
             eventually(captured)
         sibling = admit(setup, extra, 'capacity-sibling', 'turn.submit',
-                        session_id=opened[1]['session_id'], text='Wait for this agent worker')
+                        session_id=opened[1]['session_id'], text='Independent affinity of the same agent')
+        same_session = admit(setup, first_binding, 'capacity-same-session', 'turn.submit',
+                             session_id=opened[0]['session_id'], text='Wait for this session worker')
         healthy = admit(healthy_setup, healthy_binding, 'capacity-healthy', 'turn.submit',
                         session_id=opened[2]['session_id'], text='Independent healthy work')
         wait_receipt(healthy_setup, healthy)
+        wait_receipt(setup, sibling)
         assert not release.is_set()
         assert first['operation_id'] in owner.active_operations
-        assert peers.sessions[opened[1]['session_id']].sent == []
+        with setup[0].connection_factory.unit_of_work(write=False) as uow:
+            assert uow.connection.execute('SELECT dispatch_state FROM execution_dispatch_outbox WHERE operation_id=?',
+                                          (same_session['operation_id'],)).fetchone()[0] == 'PENDING'
+        assert len(peers.sessions[opened[1]['session_id']].sent) == 1
         assert len(peers.sessions[opened[2]['session_id']].sent) == 1
     finally:
         setup[2].portal.call(release.set)
     wait_receipt(setup, first)
-    wait_receipt(setup, sibling)
-    assert len(peers.sessions[opened[0]['session_id']].sent) == 1
+    if cut == 'before_write':
+        from test_sender_sessions import complete
+        complete(setup, peers, first, 'Release the active turn after the retained producer returns')
+    wait_receipt(setup, same_session)
+    assert len(peers.sessions[opened[0]['session_id']].sent) == 2
     assert len(peers.sessions[opened[1]['session_id']].sent) == 1

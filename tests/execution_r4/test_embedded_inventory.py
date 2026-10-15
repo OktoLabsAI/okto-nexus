@@ -15,7 +15,11 @@ from okto_nexus.errors import OktoNexusError
 
 
 def app_for(home):
-    deps = bootstrap({}, ["--home", str(home), "--feature-harness-integrations", "true"])
+    # Most fixtures drive claim/admission boundaries explicitly. Do not let a
+    # background scheduler race those injected cuts. Lifecycle/default tests
+    # opt in separately and exercise the real automatic acquisition service.
+    deps = bootstrap({}, ["--home", str(home), "--feature-harness-integrations", "true",
+                          "--runtime-handoff-auto-claim-enabled", "false"])
     return deps, build_app(deps)
 
 

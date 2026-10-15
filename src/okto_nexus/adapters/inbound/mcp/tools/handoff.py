@@ -185,6 +185,9 @@ def build_service(deps: Any, *, register_approval_executor: bool = True) -> Hand
     repos = deps.repos
     if getattr(repos, "handoffs", None) is None:
         repos.handoffs = SqliteHandoffRepo(deps.clock)
+    if getattr(repos, 'handoff_origins', None) is None:
+        from okto_nexus.adapters.outbound.sqlite.handoff_origins import SqliteHandoffOriginRepo
+        repos.handoff_origins = SqliteHandoffOriginRepo()
     if getattr(repos, "agents", None) is None:
         repos.agents = SqliteAgentRepo(deps.clock)
     if getattr(repos, "sessions", None) is None:
@@ -237,6 +240,10 @@ def build_service(deps: Any, *, register_approval_executor: bool = True) -> Hand
             event_emitter=getattr(deps, "event_emitter", None),
         )
         deps.approvals = approvals
+    from okto_nexus.bootstrap.execution_authority import build_message_capabilities
+    from okto_nexus.adapters.outbound.sqlite.handoff_notifications import SqliteHandoffNotificationRepository
+    from okto_nexus.adapters.outbound.sqlite.handoff_runtime_schedule import SqliteHandoffScheduleRepository
+    from okto_nexus.adapters.outbound.sqlite.execution_tool_claims import SqliteExecutionClaimRepository
     service = HandoffService(
         connection_factory=deps.connection_factory,
         handoffs=repos.handoffs,
@@ -247,6 +254,12 @@ def build_service(deps: Any, *, register_approval_executor: bool = True) -> Hand
         messages=repos.messages,
         deliveries=repos.deliveries,
         workspaces=repos.workspaces,
+        sessions=repos.sessions,
+        origins=repos.handoff_origins,
+        capabilities=build_message_capabilities(deps),
+        runtime_notifications=SqliteHandoffNotificationRepository(),
+        runtime_schedule=SqliteHandoffScheduleRepository(),
+        execution_claims=SqliteExecutionClaimRepository(),
         tag_catalog=repos.tag_catalog,
         capability_catalog=repos.capability_catalog,
         governance=governance,
@@ -264,11 +277,14 @@ def build_service(deps: Any, *, register_approval_executor: bool = True) -> Hand
     from .harness import build_access_service
     from .messages import wake_runtime
     from okto_nexus.bootstrap.execution_compat import admit_delivery
+    from okto_nexus.adapters.outbound.sqlite.capacity_admissions import SqliteCapacityAdmissionRepository
     service.runtime_work = RuntimeWorkService(access=build_access_service(deps), outbox=SqliteRuntimeOutboxRepo(),
         messages=repos.messages, deliveries=repos.deliveries, clock=deps.clock, sessions=repos.sessions,
+        origins=repos.handoff_origins,
+        capacity_admissions=SqliteCapacityAdmissionRepository(),
         validate_claim=service.validate_managed_claim, wake=lambda: wake_runtime(deps),
         owner_provider=lambda: getattr(deps, "runtime_dispatcher", None),
-        canonical_admit=lambda uow, operation_id: admit_delivery(deps, uow, operation_id))
+        canonical_admit=lambda uow, operation_id, **options: admit_delivery(deps, uow, operation_id, **options))
 
     # Approved re-execution (BR2): the persisted kwargs re-enter the REAL use
     # case with the one-shot interception bypass; every other gate stays live.
@@ -305,6 +321,7 @@ def register(server: Any, deps: Any) -> None:
         verify_by: Annotated[Any, Field(description=_P_VERIFY_BY)] = None,
         depends_on: Annotated[Any, Field(description=_P_DEPENDS_ON)] = None,
         session_id: Annotated[str | None, Field(description=_P_SESSION_OPT)] = None,
+        session_secret: Annotated[str | None, Field(description="Optional session proof for creator affinity; never persisted. Without proof session_id is attribution only.")] = None,
         project_root: Annotated[str | None, Field(description=_P_ROOT)] = None,
         workspace_id: Annotated[str | None, Field(description="Existing logical workspace ID; mutually exclusive with project_root.")] = None,
     ) -> dict[str, Any]:
@@ -322,6 +339,7 @@ def register(server: Any, deps: Any) -> None:
             verify_by=verify_by,
             depends_on=depends_on,
             session_id=session_id,
+            session_secret=session_secret,
         )
 
     @server.tool()

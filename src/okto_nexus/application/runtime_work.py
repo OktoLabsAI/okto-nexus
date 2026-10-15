@@ -18,12 +18,14 @@ def denied():
 
 
 class RuntimeWorkService:
-    def __init__(self, *, access, outbox, messages, deliveries, clock, validate_claim, wake, sessions, owner_provider=None, canonical_admit=None):
+    def __init__(self, *, access, outbox, messages, deliveries, clock, validate_claim, wake, sessions, owner_provider=None, canonical_admit=None, origins=None, capacity_admissions=None):
         self.access, self.outbox = access, outbox
         self.messages, self.deliveries, self.clock = messages, deliveries, clock
         self.validate_claim, self.wake = validate_claim, wake
         self.owner_provider = owner_provider
         self.canonical_admit = canonical_admit
+        self.origins = origins
+        self.capacity_admissions = capacity_admissions
         self.external = ExternalWorkChannel(access=access, sessions=sessions)
 
     def authorize(self, uow, *, context, endpoint_id, grant_id, agent_id, workspace_id, consume=False, audit=True,
@@ -82,9 +84,12 @@ class RuntimeWorkService:
             raise OktoNexusError(ErrorCode.CONFLICT, "Managed claim key already identifies another request.", {})
         return dict(row) if row else None
 
-    def enqueue(self, uow, *, handoff, authorized, key, digest, now, completion_mode="authenticated_nexus_call"):
+    def enqueue(self, uow, *, handoff, authorized, key, digest, now, completion_mode="authenticated_nexus_call",
+                immediate_only=False, capacity_reservation=None):
         context, grant, endpoint, profile, proof = authorized
         canonical = endpoint["protocol"] == "nxl-r4"
+        if immediate_only and not canonical:
+            raise denied()
         if canonical and self.canonical_admit is None:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                 "Canonical work admission is unavailable.", {})
@@ -105,6 +110,9 @@ class RuntimeWorkService:
         message = self.messages.create(uow, message_id=new_id("msg"), workspace_id=handoff.workspace_id,
             from_agent_id=handoff.from_agent_id, target=json.dumps({"strategy": "direct", "agent_id": handoff.claimed_by}),
             subject="Managed handoff execution", body=handoff.payload or "", trace_id=handoff.trace_id, created_at=now)
+        if self.origins is not None:
+            self.origins.bind_message(uow, workspace_id=handoff.workspace_id,
+                                     handoff_id=handoff.handoff_id, message_id=message.message_id)
         causality = RuntimeCausalityService(config=self.access.config, agents=self.access.agents)
         # Original creator provenance was checked by validate_claim; the
         # authenticated claimant/delegate is the actor admitting this execution.
@@ -154,7 +162,17 @@ class RuntimeWorkService:
              context.actor_agent_id, key, digest, now, completion_mode,
              proof.session_id if proof else None, proof.secret_binding if proof else None))
         if canonical:
-            self.canonical_admit(uow, operation_id)
+            if immediate_only:
+                options = {'capacity_request': capacity_reservation.request} if capacity_reservation is not None else {}
+                admitted = self.canonical_admit(uow, operation_id, immediate_only=True, **options)
+                if not admitted:
+                    raise OktoNexusError(ErrorCode.CONFLICT, "Immediate work admission requires an execution.", {})
+            else:
+                self.canonical_admit(uow, operation_id)
+        if capacity_reservation is not None:
+            if not canonical or not immediate_only or self.capacity_admissions is None:
+                raise denied()
+            self.capacity_admissions.attach(uow, operation_id=operation_id, reservation=capacity_reservation)
         return dict(operation_id=operation_id, claim_epoch=handoff.claim_epoch, status="PENDING", grant_id=grant["grant_id"])
 
     def revalidate(self, uow, *, operation):
@@ -168,7 +186,10 @@ class RuntimeWorkService:
                                         (binding["handoff_id"],)).fetchone()
         if not handoff or handoff["status"] != "CLAIMED" or handoff["claimed_by"] != operation["recipient_agent_id"] or handoff["claim_epoch"] != binding["claim_epoch"]:
             raise denied()
-        context = RuntimeRequestContext(operation["actor_agent_id"], "agent_key", credential_binding=operation["credential_binding"])
+        from .handoff_automation import PREFIX, restore_context
+        context = (restore_context(operation, binding)
+            if (operation['credential_binding'] or '').startswith(PREFIX) else
+            RuntimeRequestContext(operation["actor_agent_id"], "agent_key", credential_binding=operation["credential_binding"]))
         proof = (ExternalWorkProof(binding["external_session_id"], binding["external_secret_binding"])
                  if binding["external_session_id"] else None)
         _, grant, endpoint, profile, _ = self.authorize(uow, context=context, endpoint_id=operation["endpoint_id"],

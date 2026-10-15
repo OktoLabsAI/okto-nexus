@@ -1,3 +1,4 @@
+import { AgentModalFooter, ModalCancelButton, useAgentModalGuard } from './AgentActionModal';
 // Agent Tags + Audience (outbound/inbound) editors (F1+F2+F3 / sm_188b58c0).
 // All operator-only and STRICTLY catalog-driven: every key/value is PICKED
 // from the central Tag Registry via dropdown pickers — no free-form input,
@@ -73,6 +74,7 @@ export function AgentTagsEditor({
   const [policyCatalog, setPolicyCatalog] = useState<PolicyRecord[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [savedPolicies, setSavedPolicies] = useState(JSON.stringify([[], []]));
 
   useEffect(() => {
     api
@@ -84,6 +86,7 @@ export function AgentTagsEditor({
       .then((bindings) => {
         setGlobals(bindings.globals);
         setInlineGov(bindings.inline?.governance ?? []);
+        setSavedPolicies(JSON.stringify([bindings.globals, bindings.inline?.governance ?? []]));
       })
       .catch(() => undefined);
   }, [agent.agent_id]);
@@ -232,6 +235,10 @@ export function AgentTagsEditor({
   const audienceChip =
     "inline-flex items-center gap-1 text-xs px-2 py-1 rounded-md bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/50 font-mono";
 
+  useAgentModalGuard(JSON.stringify(tags) !== JSON.stringify(normalizeTagMap(agent.tags)) ||
+    JSON.stringify(outbound) !== JSON.stringify(initLeg(outboundSelector(agent))) ||
+    JSON.stringify(inbound) !== JSON.stringify(initLeg(inboundSelector(agent))) ||
+    JSON.stringify([globals, inlineGov]) !== savedPolicies, saving);
   return (
     <div
       className="space-y-4 rounded-xl border border-surface-200 dark:border-surface-700 p-3 animate-slide-up"
@@ -518,7 +525,7 @@ export function AgentTagsEditor({
       </section>
 
       {error && <p className="text-xs text-red-500">{error}</p>}
-      <div className="flex items-center gap-2">
+      <AgentModalFooter>
         <button
           className="btn btn-primary"
           onClick={save}
@@ -534,14 +541,12 @@ export function AgentTagsEditor({
         >
           Save changes
         </button>
-        <button className="btn btn-secondary" onClick={onClose}>
-          Cancel
-        </button>
+        <ModalCancelButton onClose={onClose} />
         <span className="text-[10px] text-surface-400 dark:text-surface-500">
           Saving overwrites tags, audience and attached policies; clearing
           everything resets the agent to unrestricted and unbound.
         </span>
-      </div>
+      </AgentModalFooter>
     </div>
   );
 }

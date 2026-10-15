@@ -139,47 +139,55 @@ def test_browser_browses_closed_sessions_without_runtime_mutations(ready_runtime
     browser.screenshot(path=str(screenshot_root / 'closed-session-browser.png'))
 
 
-def test_browser_session_history_pagination_gap_reload_and_scope(ready_runtime, request, tmp_path):
+def test_browser_session_history_refresh_gap_reload_and_scope(ready_runtime, request, tmp_path):
     from playwright.sync_api import expect
     from test_canonical_event_views import publish
+    from test_embedded_dispatch import admit, wait_receipt
     setup, binding, native = ready_runtime
-    page, trace = request.getfixturevalue('local_browser')
-    panel = panel_for(page, setup, binding)
-    submit(panel)
-    session_id = panel.get_by_test_id('runtime-operation-session').inner_text()
+    opened = admit(setup, binding, 'history-browser-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    session_id = opened['session_id']
     published = publish(setup, native, session_id, count=103)
-    history = panel.get_by_role('region', name='Runtime session history', exact=True)
-    expect(history.get_by_role('button', name='Refresh history page')).to_be_enabled()
-    history.get_by_role('button', name='Refresh history page').click()
-    expect(history.get_by_role('listitem')).to_have_count(100)
-    expect(history.get_by_role('listitem').first).to_contain_text('fixture.output')
-    expect(history).to_contain_text('Showing 1–100 of 103')
-    history.get_by_role('button', name='Next events', exact=True).click()
-    expect(history.get_by_role('listitem')).to_have_count(3)
-    expect(history).to_contain_text('Showing 101–103 of 103')
-    expect(history.get_by_role('button', name='Next events', exact=True)).to_be_disabled()
-    history.get_by_role('button', name='Previous events', exact=True).click()
-    expect(history.get_by_role('listitem')).to_have_count(100)
+    page, trace = request.getfixturevalue('local_browser')
+    def open_history():
+        page.get_by_role('button', name='Agents', exact=True).click()
+        page.get_by_role('button', name='Runtime administration for subject', exact=True).click()
+        page.get_by_role('button', name=f'Inspect session {session_id}', exact=True).click()
+        page.get_by_role('button', name='History', exact=True).click()
+        return page.get_by_role('region', name='Runtime session history', exact=True)
+    history = open_history()
+    expect(history.get_by_role('button', name='Refresh history')).to_be_enabled()
+    history.get_by_role('button', name='Refresh history').click()
+    # Canonical deltas form one continuous assistant response.
+    expect(history.locator('[data-action-id]')).to_have_count(1)
+    expect(history.locator('[data-action-id]').first).to_contain_text('0123456789')
+    expect(history).to_contain_text('Showing 1–103 of 103')
+    expect(history.get_by_role('button', name='Next events', exact=True)).to_have_count(0)
     with setup[0].connection_factory.unit_of_work() as uow:
         uow.connection.execute("UPDATE execution_event_watermarks SET gap_state='pending' WHERE session_id=?", (session_id,))
-    history.get_by_role('button', name='Refresh history page').click()
-    expect(history.get_by_role('alert')).to_contain_text('History is incomplete')
-    screenshot_root = Path(os.environ.get('OKTO_NEXUS_UI_SCREENSHOT_DIR', str(tmp_path)))
-    screenshot_root.mkdir(parents=True, exist_ok=True)
-    history.screenshot(path=str(screenshot_root / 'session-history-gap.png'))
+    try:
+        history.get_by_role('button', name='Refresh history').click()
+        expect(history.get_by_role('alert')).to_contain_text('History is incomplete')
+        screenshot_root = Path(os.environ.get('OKTO_NEXUS_UI_SCREENSHOT_DIR', str(tmp_path)))
+        screenshot_root.mkdir(parents=True, exist_ok=True)
+        history.screenshot(path=str(screenshot_root / 'session-history-gap.png'))
+    finally:
+        # Restore the artificial gap even when a UI assertion fails. Shutdown
+        # correctly requires complete history before confirming release.
+        with setup[0].connection_factory.unit_of_work() as uow:
+            uow.connection.execute("UPDATE execution_event_watermarks SET gap_state='none' WHERE session_id=?", (session_id,))
     writes = len([r for r in trace['requests'] if r[0] == 'POST'])
     page.reload()
-    panel = panel_for(page, setup, binding)
-    history = panel.get_by_role('region', name='Runtime session history', exact=True)
-    expect(history.get_by_role('listitem')).to_have_count(100)
+    history = open_history()
+    expect(history.locator('[data-action-id]')).to_have_count(1)
     assert len([r for r in trace['requests'] if r[0] == 'POST']) == writes
     assert native.opens == 1
     # Reject a successful HTTP response whose event scope belongs elsewhere.
     altered = {**published, 'events': published['events'][:100], 'count': 100,
                'next_after_sequence': 100, 'has_more': True,
                'scope': {**published['scope'], 'executor_id': 'foreign'}}
-    page.route('**/v1/runtime/sessions/*/events?*', lambda route: route.fulfill(json=altered))
-    history.get_by_role('button', name='Refresh history page').click()
+    page.route('**/api/v1/runtime-management/runtime/sessions/*/events?*', lambda route: route.fulfill(json=altered))
+    history.get_by_role('button', name='Refresh history').click()
     expect(history.get_by_role('alert').filter(has_text='could not be refreshed')).to_contain_text('does not match')
     assert len([r for r in trace['requests'] if r[0] == 'POST']) == writes
 

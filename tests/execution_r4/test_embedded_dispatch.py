@@ -164,6 +164,10 @@ def test_denied_renewal_releases_only_its_session_and_keeps_executor_ready(conne
     monkeypatch.setattr(current['executor'], 'renew_r4', deny)
     client.portal.call(owner._renew_owned, session_id, current)
     assert owner.failure is None and not owner._stopping.is_set()
+    deadline = time.monotonic() + 10
+    while session_id in owner.sessions:
+        assert time.monotonic() < deadline, 'Scoped renewal containment did not finish'
+        time.sleep(.02)
     assert session_id not in owner.sessions
     assert other['scope']['session_id'] in owner.sessions
     with deps.connection_factory.unit_of_work(write=False) as uow:
@@ -211,6 +215,40 @@ def test_local_owner_renews_installed_lease(connected_local):
     closed=admit(setup,binding,"renew-close","runtime.close",session_id=opened["scope"]["session_id"])
     wait_receipt(setup,closed,stages=("SUCCEEDED",))
     assert native.opens==1
+
+
+@pytest.mark.parametrize('local_setup', ['pi_rpc', 'codex_app_server', 'claude_stream'], indirect=True)
+def test_opening_renews_before_native_ready(connected_local):
+    setup, binding, native = connected_local
+    deps, app, client, *_ = setup
+    owner = app.state.embedded_dispatch_owner
+    entered, release = threading.Event(), threading.Event()
+    original = native.open
+
+    async def held(*args, **kwargs):
+        entered.set()
+        while not release.is_set():
+            await asyncio.sleep(.01)
+        return await original(*args, **kwargs)
+
+    native.open = held
+    owner.leases.max_duration_ms = 4000
+    opened = admit(setup, binding, 'held-renew-open', 'runtime.start', new_session=True)
+    try:
+        assert entered.wait(10)
+        sid = opened['scope']['session_id']
+        session = owner.sessions[sid]
+        assert session['opening'] and session['gate'].locked()
+        client.portal.start_task_soon(owner._renew_owned, sid, session).result(timeout=3)
+        assert not release.is_set() and native.opens == 0
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            serial = uow.connection.execute('SELECT MAX(lease_serial) FROM execution_leases WHERE session_id=?',
+                                            (sid,)).fetchone()[0]
+        assert serial >= 2
+    finally:
+        release.set()
+    wait_receipt(setup, opened)
+    assert native.opens == 1 and owner.failure is None
 
 
 def test_receipt_replay_requires_current_embedded_owner(connected_local):
@@ -446,7 +484,14 @@ def test_restart_recovers_historical_receipt_without_provider(tmp_path,monkeypat
                 for retained in tmp_path.glob('session-*.db.retained'):
                     retained.rename(tmp_path/'home/core-runtime'/retained.name.removesuffix('.retained'))
             recovered = client.portal.call(owner.retry_recovery, 'subject')
-            assert recovered['state'] == 'READY', recovered
+            assert recovered['state'] in ('READY', 'RECOVERING'), recovered
+            # retry_recovery observes the retained worker for only one second.
+            # A busy test host can finish publication after that observation;
+            # await the same automatic recovery, without restarting/retrying it.
+            until = time.monotonic() + 10
+            while 'subject' in owner.agents.blocked:
+                assert time.monotonic() < until, recovered
+                time.sleep(.02)
             assert native.opens == 1
             wait_receipt((deps, app, client, headers), closed, stages=('SUCCEEDED',))
         else:
@@ -645,7 +690,8 @@ def test_released_resources_reconcile_before_new_admission(tmp_path,monkeypatch,
     if fault=="occupied_ledger":
         from nexus_connector_core import SQLiteOwnedSlotLedger,OperationKey
         async def retain():
-            ledger=SQLiteOwnedSlotLedger(store/"owned-slots.db")
+            ledger=SQLiteOwnedSlotLedger(store/"owned-slots.db",
+                max_slots=app.state.embedded_dispatch_owner.host.max_owned_slots)
             try:
                 await ledger.reserve_owned_slot(OperationKey(old_channel.server_id,old_channel.executor_id,"unknown-opening"),"unknown-session")
             finally:

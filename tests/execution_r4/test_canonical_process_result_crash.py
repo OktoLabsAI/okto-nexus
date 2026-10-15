@@ -116,7 +116,10 @@ def test_actual_owner_crash_recovers_only_durable_native_results(tmp_path, cut):
                         assert domain['canonical_terminal_operation_id'] == marker['turn']
                         assert delivery['status'] == 'read'
                         if cut.endswith('_burst'):
-                            assert rows("SELECT count(*) AS n FROM execution_event_ingress WHERE event_type='text_delta'")[0]['n'] == 140
+                            # Native deltas may share a bounded capture batch;
+                            # every byte must still survive the owner crash.
+                            expected = ''.join('Please review this message. ' + str(index) for index in range(140))
+                            assert expected in results[0]['output_text']
                     else:
                         assert not results and not receipts
                         assert domain['canonical_terminal_operation_id'] is None

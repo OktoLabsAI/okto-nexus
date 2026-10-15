@@ -57,7 +57,8 @@ def test_remote_state_uses_live_agent_lane_not_activity(status_db, change, expec
         status_db.connection.execute(change)
     result = agent_connection_statuses(status_db, '2026-10-05T12:00:10Z')
     assert result['subject']['status'] == expected
-    assert result['unrelated'] == dict(location='local',status='Local',hosts=[])
+    assert result['subject']['runtime_integrated'] is True
+    assert result['unrelated'] == dict(location='local',status='Local',hosts=[],runtime_integrated=False)
 
 
 def test_host_details_and_local_selection(status_db):
@@ -65,7 +66,7 @@ def test_host_details_and_local_selection(status_db):
     assert result['hosts'][0]['label'] == 'Office PC'
     assert result['hosts'][0]['last_seen_at'] == '2026-10-05T12:00:00Z'
     status_db.connection.execute("UPDATE agent_execution_policies SET execution_location='local'")
-    assert agent_connection_statuses(status_db, '2026-10-05T12:00:10Z')['subject'] == dict(location='local',status='Local',hosts=[])
+    assert agent_connection_statuses(status_db, '2026-10-05T12:00:10Z')['subject'] == dict(location='local',status='Local',hosts=[],runtime_integrated=True)
 
 
 @pytest.mark.parametrize('control_state,expected', [

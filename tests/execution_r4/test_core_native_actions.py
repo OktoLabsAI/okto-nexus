@@ -174,6 +174,12 @@ def test_core_native_bridge_uses_same_lease_and_canonical_domain(opening, tmp_pa
                         assert lost.value.possible_effect and not lost.value.retry_safe
                         assert lost.value.operation_id == "claim"
                     assert rows(opening) == (("CLAIMED", 1), 2, 1)
+                else:
+                    with pytest.raises(CoreError) as invalid_claim:
+                        await bridge.invoke(HandoffClaim("invalid-epoch", *base, "invalid-key", claim_epoch=1), context)
+                    assert invalid_claim.value.code == "VALIDATION_ERROR"
+                    assert not invalid_claim.value.possible_effect
+                    assert rows(opening) == (("OPEN", 0), 1, 0)
                 claimed = await bridge.invoke(claim, context)
                 assert await bridge.invoke(claim, context) == claimed
                 done = HandoffComplete("complete", *base, claimed["claim_epoch"], {"summary": "Done."})

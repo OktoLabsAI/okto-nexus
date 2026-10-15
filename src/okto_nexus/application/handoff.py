@@ -139,6 +139,8 @@ from .ports import (
     ConnectionFactory,
     EventEmitter,
     HandoffRepo,
+    HandoffOriginRepo,
+    SessionRepo,
     MessageDeliveryRepo,
     MessageRepo,
     TagCatalogRepo,
@@ -196,6 +198,12 @@ class HandoffService:
         runtime_work: Any = None,
         claim_trust_guard: Any = None,
         workspaces: Optional[WorkspaceRepo] = None,
+        sessions: SessionRepo | None = None,
+        origins: HandoffOriginRepo | None = None,
+        capabilities: Any = None,
+        runtime_notifications: Any = None,
+        runtime_schedule: Any = None,
+        execution_claims: Any = None,
     ) -> None:
         self._cf = connection_factory
         self._handoffs = handoffs
@@ -231,8 +239,11 @@ class HandoffService:
         self._guardrails = guardrails
         self._request_context_provider = request_context_provider
         self.runtime_work = runtime_work
+        self._execution_claims = execution_claims
+        self._runtime_notifications, self._runtime_schedule = runtime_notifications, runtime_schedule
         self._claim_trust_guard = claim_trust_guard
         self._workspaces = workspaces
+        self._sessions, self._origins, self._capabilities = sessions, origins, capabilities
         # Blocking seam for the list_available long-poll: an injected Waiter
         # (deterministic in tests), or the store's own change waiter.
         self._waiter = (
@@ -287,8 +298,10 @@ class HandoffService:
         verify_by: Any = None,
         depends_on: Any = None,
         session_id: Any = None,
+        session_secret: Any = None,
         _approved_execution: bool = False,
         _creator_binding: str | None = None,
+        _source_session_key: str | None = None,
     ) -> dict[str, Any]:
         """Create an ``OPEN`` handoff and emit ``handoff.created`` atomically.
 
@@ -316,6 +329,8 @@ class HandoffService:
         invalid target/visibility, and ``CONTENT_TOO_LARGE`` for an oversized
         inline payload.
         """
+        if _source_session_key is not None and not _approved_execution:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Handoff provenance is internal to approval replay.', {})
         logical_workspace = workspace_id is not None
         workspace_id = self._resolve_workspace(project_root, workspace_id)
         from ..domain.execution_principal import current_execution_principal
@@ -432,9 +447,31 @@ class HandoffService:
         with self._create_uow(workspace_id=workspace_id, agent_id=from_agent_id) as uow:
             self._require_logical_workspace(uow, workspace_id, logical_workspace)
             creator_binding = self._require_actor(uow, from_agent_id) if not _approved_execution else _creator_binding
+            from ..domain.handoff_origin import HandoffOrigin
+            from .handoff_provenance import managed_creator, valid_approved_creator
+            origin = HandoffOrigin(_source_session_key or '') if _approved_execution else HandoffOrigin()
+            if not _approved_execution:
+                managed = managed_creator(uow, capabilities=self._capabilities,
+                    agent_id=from_agent_id, workspace_id=workspace_id)
+                if managed is not None:
+                    if session_secret is not None or session_id not in (None, current_execution_principal.get().scope['session_id']):
+                        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Use the authenticated runtime origin.', {})
+                    creator_binding, origin = managed
+                elif session_secret is not None:
+                    from .identity import verify_session_credentials, advance_session_presence
+                    if self._sessions is None:
+                        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Session origin verification is unavailable.', {})
+                    verify_session_credentials(self._sessions, uow, trust_mode='strict', tool='handoff_create',
+                        agent_id=from_agent_id, session_id=session_id, session_secret=session_secret)
+                    verified = self._sessions.get(uow, session_id)
+                    if verified.workspace_id != workspace_id:
+                        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The creator session belongs to another workspace.', {})
+                    advance_session_presence(self._sessions, uow, session_id=session_id, at=now)
+                    origin = HandoffOrigin(json.dumps(['mcp', session_id], separators=(',', ':')))
             if _approved_execution and creator_binding:
                 creator = self._agents.get(uow, from_agent_id) if self._agents else None
-                if not creator or not creator.is_active or creator.api_key_hash != creator_binding:
+                if not valid_approved_creator(uow, actor=creator, binding=creator_binding, origin=origin,
+                        capabilities=self._capabilities, workspace_id=workspace_id):
                     raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Handoff creator authorization changed.", {})
             permission_set_for(self._agents, uow, from_agent_id).require(
                 "handoffs", "create"
@@ -556,6 +593,8 @@ class HandoffService:
                         approval_kwargs["workspace_id"] = workspace_id
                     if creator_binding:
                         approval_kwargs["_creator_binding"] = creator_binding
+                    if origin.source_session_key:
+                        approval_kwargs['_source_session_key'] = origin.source_session_key
                     if criteria_list is not None:
                         # An intercepted verifiable create re-executes with
                         # its verification contract intact (normalised values;
@@ -595,6 +634,9 @@ class HandoffService:
             )
             # An existing handoff must not acquire a freshly changed policy
             # as its original authorization when managed dispatch is requested.
+            if self._origins is not None:
+                self._origins.record(uow, workspace_id=workspace_id, handoff_id=handoff_id,
+                                     origin=origin, captured_at=now)
             uow.connection.execute(
                 "INSERT INTO handoff_authorization_receipts(handoff_id,creator_policy_revision,hitl_enabled,created_at) VALUES(?,?,?,?)",
                 (handoff_id, self._governance.authorization_revision(uow, from_agent_id) if self._governance else "unbound",
@@ -662,7 +704,7 @@ class HandoffService:
                     trace_id=handoff.trace_id,
                 ):
                     extras["notified"] = [named]
-            elif getattr(self._config, 'feature_harness_integrations', False):
+            elif strategy == 'broadcast' or getattr(self._config, 'feature_harness_integrations', False):
                 self._notify_runtime_pool(uow, handoff=handoff, now=now, blocked=born_blocked)
         response = {
             "handoff_id": handoff.handoff_id,
@@ -779,10 +821,20 @@ class HandoffService:
         """
         self._expire_old_leases(uow, workspace_id=workspace_id, now_iso=now)
         rows = self._handoffs.list(uow, workspace_id=workspace_id, status=STATUS_OPEN)
+        return self.filter_available_handoffs(uow, workspace_id=workspace_id, agent=agent, rows=rows, now=now)
+
+    def filter_available_handoffs(self, uow, *, workspace_id, agent, rows, now):
+        """Shared discovery predicates over a caller-supplied bounded page.
+
+        The runtime scheduler supplies canonical rows and the same routing
+        agent projection as list_available. This neither consumes its inbox nor
+        grants claim authority; the canonical claim revalidates everything.
+        """
         visible = [
             h
             for h in rows
-            if can_agent_see_event(agent, h, now)
+            if h.workspace_id == workspace_id and h.status == STATUS_OPEN
+            and can_agent_see_event(agent, h, now)
             and is_agent_eligible(agent, h.target, h.created_at, now)
             and self._claimant_in_creator_audience(uow, h, agent.agent_id)
         ]
@@ -918,122 +970,196 @@ class HandoffService:
                                            session_id=session_id, session_secret=session_secret)
         from ..domain.execution_principal import current_execution_principal
         principal = current_execution_principal.get()
-        scoped_existing = (principal is not None and principal.audience == 'nexus-native-session'
+        scoped_existing = (principal is not None and principal.audience in {'nexus-native-session', 'nexus-mcp-session'}
                            and claim_epoch is not None)
         if not managed and (completion_mode != "authenticated_nexus_call" or any(value is not None for value in (execution_grant_id, idempotency_key)) or
                             (claim_epoch is not None and not scoped_existing)):
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Managed claim options require runtime_endpoint_id.", {})
         if managed and not self.runtime_work:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Managed handoff execution is unavailable.", {})
-        operation = None
-        reused = False
-
         with self._cf.unit_of_work() as uow:
-            self._require_logical_workspace(uow, workspace_id, logical_workspace)
-            if managed:
-                context = self._request_context_provider() if self._request_context_provider else None
-                authorized = self.runtime_work.authorize(uow, context=context, endpoint_id=runtime_endpoint_id,
-                    grant_id=execution_grant_id, agent_id=agent_id, workspace_id=workspace_id,
-                    session_id=session_id, session_secret=session_secret)
-                context = authorized[0]
-                digest = self.runtime_work.request_hash(handoff_id=handoff_id, agent_id=agent_id,
-                    endpoint_id=runtime_endpoint_id, grant_id=execution_grant_id,
-                    claim_epoch=claim_epoch, idempotency_key=idempotency_key, completion_mode=completion_mode)
-                operation = self.runtime_work.existing(uow, context=context, key=idempotency_key, digest=digest)
-                reused = operation is not None
-            else:
-                self._require_actor(uow, agent_id)
-            permission_set_for(self._agents, uow, agent_id).require("handoffs", "work")
-            self._expire_old_leases(uow, workspace_id=workspace_id, now_iso=now)
-            handoff = self._load_in_workspace(uow, workspace_id, handoff_id)
+            context = self._request_context_provider() if managed and self._request_context_provider else None
+            response = self._claim_in_transaction(uow, workspace_id=workspace_id,
+                logical_workspace=logical_workspace, handoff_id=handoff_id, agent_id=agent_id,
+                session_id=session_id, session_secret=session_secret, runtime_endpoint_id=runtime_endpoint_id,
+                execution_grant_id=execution_grant_id, idempotency_key=idempotency_key,
+                claim_epoch=claim_epoch, completion_mode=completion_mode, context=context,
+                now=now, lease_expires_at=lease_expires_at, scoped_existing=scoped_existing)
+        if "runtime_operation" in response:
+            self.wake_claim_dispatch()
+        return response
 
-            agent = self._routing_agent(uow, agent_id, workspace_id)
-            # Eligibility is target-match AND creator-audience, evaluated
-            # DYNAMICALLY at claim time (current tags, not creation-time
-            # state). One shared, OPAQUE refusal for both legs: the claimant
-            # never learns whether the target or the creator's comm_scope
-            # excluded it (the policy never leaks).
-            if not is_agent_eligible(
-                agent, handoff.target, handoff.created_at, now
-            ) or not self._claimant_in_creator_audience(uow, handoff, agent_id):
-                raise OktoNexusError(
-                    ErrorCode.NOT_ELIGIBLE_TO_CLAIM,
-                    "Agent is not eligible to claim this handoff.",
-                    {"handoff_id": handoff_id, "agent_id": agent_id},
-                )
-            # Dependency gate (I5/BR7): read from the TABLE, never the flag -
-            # a blocked handoff stays refusable even after feature_dag is
-            # switched off. Details carry AGGREGATE counts only (BR8): the
-            # dependency ids never leak to a claimant who may not be allowed
-            # to see the sibling handoffs.
-            dep_rows = self._handoffs.read_dependencies(
-                uow, workspace_id=workspace_id, handoff_id=handoff_id
+    def wake_claim_dispatch(self):
+        # A caller supplying its transaction invokes this only after commit.
+        # Reconciliation also discovers committed work if this hint is lost.
+        try:
+            self.runtime_work.wake()
+        except Exception:
+            pass
+
+    def claim_managed_in_transaction(self, uow, *, workspace_id, handoff_id, agent_id,
+            context, runtime_endpoint_id, execution_grant_id, idempotency_key,
+            immediate_only=False, capacity_reservation=None):
+        """Compose managed claim and admission under the caller's transaction.
+
+        RuntimeWork revalidates the supplied authenticated context and grant in
+        this UoW. The caller owns commit, rollback and the subsequent wakeup.
+        Public REST/MCP handlers do not expose transaction/admission controls.
+        """
+        for name, value in (("workspace_id", workspace_id), ("handoff_id", handoff_id),
+                            ("agent_id", agent_id), ("runtime_endpoint_id", runtime_endpoint_id)):
+            self._require_id(name, value)
+        if type(immediate_only) is not bool:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid immediate admission mode.", {})
+        if not self.runtime_work:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Managed handoff execution is unavailable.", {})
+        now = self._clock.now_iso()
+        return self._claim_in_transaction(uow, workspace_id=workspace_id,
+            logical_workspace=True, handoff_id=handoff_id, agent_id=agent_id,
+            session_id=None, session_secret=None, runtime_endpoint_id=runtime_endpoint_id,
+            execution_grant_id=execution_grant_id, idempotency_key=idempotency_key,
+            claim_epoch=None, completion_mode="authenticated_nexus_call", context=context,
+            now=now, lease_expires_at=iso_plus(now, int(self._config.handoff_lease_ttl_seconds)),
+            scoped_existing=False, immediate_only=immediate_only, capacity_reservation=capacity_reservation)
+
+    def _claim_in_transaction(self, uow, *, workspace_id, logical_workspace, handoff_id,
+            agent_id, session_id, session_secret, runtime_endpoint_id, execution_grant_id,
+            idempotency_key, claim_epoch, completion_mode, context, now, lease_expires_at,
+            scoped_existing, immediate_only=False, capacity_reservation=None):
+        # Sole transactional claim path for explicit ingress and automation.
+        managed = runtime_endpoint_id is not None
+        operation, reused = None, False
+        if context is not None and context.authentication_source == 'handoff_automation':
+            from .handoff_automation import require_context, denied
+            principal = require_context(uow, context, action='execute_work', endpoint_id=runtime_endpoint_id,
+                agent_id=agent_id, workspace_id=workspace_id, handoff_id=handoff_id)
+            if idempotency_key != principal.attempt_id:
+                raise denied()
+            immediate_only = True
+        self._require_logical_workspace(uow, workspace_id, logical_workspace)
+        if managed:
+            authorized = self.runtime_work.authorize(uow, context=context, endpoint_id=runtime_endpoint_id,
+                grant_id=execution_grant_id, agent_id=agent_id, workspace_id=workspace_id,
+                session_id=session_id, session_secret=session_secret)
+            context = authorized[0]
+            digest = self.runtime_work.request_hash(handoff_id=handoff_id, agent_id=agent_id,
+                endpoint_id=runtime_endpoint_id, grant_id=execution_grant_id,
+                claim_epoch=claim_epoch, idempotency_key=idempotency_key, completion_mode=completion_mode)
+            operation = self.runtime_work.existing(uow, context=context, key=idempotency_key, digest=digest)
+            reused = operation is not None
+        else:
+            self._require_actor(uow, agent_id)
+        permission_set_for(self._agents, uow, agent_id).require("handoffs", "work")
+        self._expire_old_leases(uow, workspace_id=workspace_id, now_iso=now)
+        handoff = self._load_in_workspace(uow, workspace_id, handoff_id)
+
+        agent = self._routing_agent(uow, agent_id, workspace_id)
+        # Eligibility is target-match AND creator-audience, evaluated
+        # DYNAMICALLY at claim time (current tags, not creation-time
+        # state). One shared, OPAQUE refusal for both legs: the claimant
+        # never learns whether the target or the creator's comm_scope
+        # excluded it (the policy never leaks).
+        if not is_agent_eligible(
+            agent, handoff.target, handoff.created_at, now
+        ) or not self._claimant_in_creator_audience(uow, handoff, agent_id):
+            raise OktoNexusError(
+                ErrorCode.NOT_ELIGIBLE_TO_CLAIM,
+                "Agent is not eligible to claim this handoff.",
+                {"handoff_id": handoff_id, "agent_id": agent_id},
             )
-            if dep_rows:
-                dep_statuses = [row["status"] or "" for row in dep_rows]
-                if not dependencies_satisfied(dep_statuses):
-                    summary = summarize_dependencies(dep_statuses)
-                    raise OktoNexusError(
-                        ErrorCode.DEPENDENCY_NOT_MET,
-                        "This handoff is blocked: not every dependency is "
-                        "COMPLETED yet. Wait for its handoff.unblocked event "
-                        "(or the unblocked inbox notice on a directed "
-                        "handoff), then claim again.",
-                        {
-                            "handoff_id": handoff_id,
-                            "pending": summary["pending"],
-                            "failed": summary["failed"],
-                        },
-                    )
-
-            if scoped_existing:
-                from .execution_tool_claims import require_claim
-                require_claim(uow, handoff_id=handoff_id, claim_epoch=claim_epoch)
-                if handoff.status != STATUS_CLAIMED or handoff.claimed_by != agent_id:
-                    raise OktoNexusError(ErrorCode.INVALID_TRANSITION,
-                                         "The session no longer owns this active claim.", {})
-                self._require_claim_epoch(handoff, claim_epoch)
-                claimed = handoff
-                reused = True
-            elif reused:
-                # Lost admission response retries return the ORIGINAL claim
-                # operation, never a new rework generation or another dispatch.
-                claimed = handoff
-            elif managed and handoff.status == STATUS_CLAIMED and handoff.claimed_by == agent_id:
-                if claim_epoch is None:
-                    raise OktoNexusError(ErrorCode.INVALID_TRANSITION, "Dispatching an existing claim requires its claim_epoch.", {})
-                self._require_claim_epoch(handoff, claim_epoch)
-                claimed = handoff
-            else:
-                if claim_epoch is not None:
-                    raise OktoNexusError(ErrorCode.INVALID_TRANSITION, "An unclaimed handoff has no execution generation to dispatch.", {})
-                claimed = self._handoffs.claim(
-                    uow, workspace_id=workspace_id, handoff_id=handoff_id,
-                    claimed_by=agent_id, lease_expires_at=lease_expires_at, updated_at=now,
+        # Dependency gate (I5/BR7): read from the TABLE, never the flag -
+        # a blocked handoff stays refusable even after feature_dag is
+        # switched off. Details carry AGGREGATE counts only (BR8): the
+        # dependency ids never leak to a claimant who may not be allowed
+        # to see the sibling handoffs.
+        dep_rows = self._handoffs.read_dependencies(
+            uow, workspace_id=workspace_id, handoff_id=handoff_id
+        )
+        if dep_rows:
+            dep_statuses = [row["status"] or "" for row in dep_rows]
+            if not dependencies_satisfied(dep_statuses):
+                summary = summarize_dependencies(dep_statuses)
+                raise OktoNexusError(
+                    ErrorCode.DEPENDENCY_NOT_MET,
+                    "This handoff is blocked: not every dependency is "
+                    "COMPLETED yet. Wait for its handoff.unblocked event "
+                    "(or the unblocked inbox notice on a directed "
+                    "handoff), then claim again.",
+                    {
+                        "handoff_id": handoff_id,
+                        "pending": summary["pending"],
+                        "failed": summary["failed"],
+                    },
                 )
-            from .execution_tool_claims import remember_claim
-            if not scoped_existing:
-                remember_claim(uow, claimed)
-            if managed and not reused:
-                operation = self.runtime_work.enqueue(uow, handoff=claimed, authorized=authorized,
-                    key=idempotency_key, digest=digest, now=now, completion_mode=completion_mode)
-            self._touch_agent(uow, agent_id, now)
-            payload = {
-                "handoff_id": claimed.handoff_id,
-                "workspace_id": claimed.workspace_id,
-                "status": claimed.status,
-                "claimed_by": claimed.claimed_by,
-                "claim_epoch": claimed.claim_epoch,
-                "lease_expires_at": claimed.lease_expires_at,
-            }
-            if _is_nonempty_str(session_id):
-                payload["claimed_session_id"] = session_id
-            if operation:
-                payload["runtime_operation_id"] = operation["operation_id"]
-            if not reused:
-                self._emit(uow, handoff=claimed, event_type=(
-                    "handoff.execution_requested" if managed and handoff.status == STATUS_CLAIMED else EVENT_CLAIMED),
-                           actor_agent_id=context.actor_agent_id if managed else agent_id, payload=payload)
+
+        if capacity_reservation is not None:
+            from nexus_connector_core import CapacityReservation
+            if (type(capacity_reservation) is not CapacityReservation or not managed
+                    or capacity_reservation.request.attempt_id != idempotency_key
+                    or self.runtime_work.capacity_admissions is None):
+                raise OktoNexusError(ErrorCode.CONFLICT, 'RESERVATION_CONFLICT', {})
+            immediate_only = True
+            if reused:
+                prior = self.runtime_work.capacity_admissions.get(uow, operation['operation_id'])
+                if (prior.reservation.request != capacity_reservation.request
+                        or prior.reservation.reservation_id != capacity_reservation.reservation_id):
+                    raise OktoNexusError(ErrorCode.CONFLICT, 'RESERVATION_CONFLICT', {})
+            else:
+                self.runtime_work.capacity_admissions.require_available(uow, handoff=handoff,
+                    endpoint_id=runtime_endpoint_id, reservation=capacity_reservation)
+        if scoped_existing:
+            if handoff.status == STATUS_OPEN:
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                    "Omit claim_epoch when claiming an OPEN handoff. Use the epoch returned "
+                    "by the successful claim for completion or same-session claim recovery.", {})
+            from .execution_tool_claims import require_claim
+            require_claim(uow, handoff_id=handoff_id, claim_epoch=claim_epoch, repository=self._execution_claims)
+            if handoff.status != STATUS_CLAIMED or handoff.claimed_by != agent_id:
+                raise OktoNexusError(ErrorCode.INVALID_TRANSITION,
+                                     "The session no longer owns this active claim.", {})
+            self._require_claim_epoch(handoff, claim_epoch)
+            claimed = handoff
+            reused = True
+        elif reused:
+            # Lost admission response retries return the ORIGINAL claim
+            # operation, never a new rework generation or another dispatch.
+            claimed = handoff
+        elif managed and handoff.status == STATUS_CLAIMED and handoff.claimed_by == agent_id:
+            if claim_epoch is None:
+                raise OktoNexusError(ErrorCode.INVALID_TRANSITION, "Dispatching an existing claim requires its claim_epoch.", {})
+            self._require_claim_epoch(handoff, claim_epoch)
+            claimed = handoff
+        else:
+            if claim_epoch is not None:
+                raise OktoNexusError(ErrorCode.INVALID_TRANSITION, "An unclaimed handoff has no execution generation to dispatch.", {})
+            claimed = self._handoffs.claim(
+                uow, workspace_id=workspace_id, handoff_id=handoff_id,
+                claimed_by=agent_id, lease_expires_at=lease_expires_at, updated_at=now,
+            )
+        from .execution_tool_claims import remember_claim
+        if not scoped_existing:
+            remember_claim(uow, claimed, self._execution_claims)
+        if managed and not reused:
+            operation = self.runtime_work.enqueue(uow, handoff=claimed, authorized=authorized,
+                key=idempotency_key, digest=digest, now=now, completion_mode=completion_mode,
+                immediate_only=immediate_only, capacity_reservation=capacity_reservation)
+        self._touch_agent(uow, agent_id, now)
+        payload = {
+            "handoff_id": claimed.handoff_id,
+            "workspace_id": claimed.workspace_id,
+            "status": claimed.status,
+            "claimed_by": claimed.claimed_by,
+            "claim_epoch": claimed.claim_epoch,
+            "lease_expires_at": claimed.lease_expires_at,
+        }
+        if _is_nonempty_str(session_id):
+            payload["claimed_session_id"] = session_id
+        if operation:
+            payload["runtime_operation_id"] = operation["operation_id"]
+        if not reused:
+            self._emit(uow, handoff=claimed, event_type=(
+                "handoff.execution_requested" if managed and handoff.status == STATUS_CLAIMED else EVENT_CLAIMED),
+                       actor_agent_id=context.actor_agent_id if managed else agent_id, payload=payload)
         response = {
             "handoff_id": claimed.handoff_id,
             "workspace_id": claimed.workspace_id,
@@ -1048,12 +1174,6 @@ class HandoffService:
                 "completion_mode": operation.get("completion_mode", completion_mode),
                 "durable": True, "external_acceptance": "not_observed" if operation["status"] == "PENDING" else "inspect_operation",
                 "idempotency_key": idempotency_key, "reused": reused}
-            # Wake is only a latency hint. The durable intent survives a failed
-            # notifier and is picked up by bounded owner reconciliation.
-            try:
-                self.runtime_work.wake()
-            except Exception:
-                pass
         return response
 
     # ------------------------------------------------------------------ #
@@ -1124,7 +1244,7 @@ class HandoffService:
                 self._require_actor(uow, agent_id)
             permission_set_for(self._agents, uow, agent_id).require("handoffs", "work")
             from .execution_tool_claims import require_claim
-            require_claim(uow, handoff_id=handoff_id, claim_epoch=claim_epoch)
+            require_claim(uow, handoff_id=handoff_id, claim_epoch=claim_epoch, repository=self._execution_claims)
             external_operation = self._authorize_external_work_return(uow, handoff_id=handoff_id,
                 agent_id=agent_id, claim_epoch=claim_epoch, session_id=session_id, session_secret=session_secret)
 
@@ -1533,7 +1653,7 @@ class HandoffService:
                 self._require_actor(uow, agent_id)
             permission_set_for(self._agents, uow, agent_id).require("handoffs", "work")
             from .execution_tool_claims import require_claim
-            require_claim(uow, handoff_id=handoff_id, claim_epoch=claim_epoch)
+            require_claim(uow, handoff_id=handoff_id, claim_epoch=claim_epoch, repository=self._execution_claims)
             external_operation = self._authorize_external_work_return(uow, handoff_id=handoff_id,
                 agent_id=agent_id, claim_epoch=claim_epoch, session_id=session_id, session_secret=session_secret)
 
@@ -1810,6 +1930,11 @@ class HandoffService:
             self._touch_agent(uow, agent_id, now)
             runtime_execution = self.runtime_work.binding(uow, handoff_id=handoff_id, claim_epoch=handoff.claim_epoch) if self.runtime_work else None
             managed_lease = self.runtime_work.owns_claim(uow, handoff_id=handoff_id) if self.runtime_work else False
+            from ..domain.execution_principal import current_execution_principal
+            principal = current_execution_principal.get()
+            payload_allowed = agent_id == handoff.claimed_by and (principal is None or (
+                self._execution_claims is not None and self._execution_claims.matches(uow,
+                    handoff_id=handoff_id, claim_epoch=handoff.claim_epoch, scope=dict(principal.scope))))
         response = {
             "handoff_id": handoff.handoff_id,
             "workspace_id": handoff.workspace_id,
@@ -1828,7 +1953,7 @@ class HandoffService:
         if managed_lease and agent_id in (handoff.from_agent_id, handoff.claimed_by):
             response["managed_lease_protected"] = True
             response["runtime_execution"] = runtime_execution
-        if agent_id == handoff.claimed_by:
+        if payload_allowed:
             response["payload"] = handoff.payload
         # Verification contract exposure (I4/FR6): the three columns surface
         # top-level ONLY when non-NULL (the trace_id pattern) - a
@@ -1877,6 +2002,36 @@ class HandoffService:
         if not self.runtime_work:
             raise OktoNexusError(ErrorCode.CONFLICT, "Runtime work recovery is unavailable.", {})
         self.runtime_work.access.authorize_maintenance(context, uow=uow)
+        return self._reopen_runtime_claim(uow, operation=operation, handoff_id=handoff_id,
+            claim_epoch=claim_epoch, reason=reason, reconciliation_id=reconciliation_id,
+            actor_agent_id=context.actor_agent_id)
+
+    def recover_unconsumed_runtime_claim(self, uow, operation_id):
+        """Internal compensation, authorized by durable exact host proof only."""
+        work = self.runtime_work
+        if work is None or work.capacity_admissions is None:
+            raise OktoNexusError(ErrorCode.CONFLICT, 'Capacity compensation is unavailable.', {})
+        admission = work.capacity_admissions.get(uow, operation_id)
+        if admission.state != 'CANCELLED_NO_EFFECT':
+            raise OktoNexusError(ErrorCode.CONFLICT, 'Unconsumed capacity proof is required.', {})
+        claim = work.capacity_admissions.compensated_claim(uow, operation_id)
+        operation = work.outbox.get(uow, operation_id)
+        handoff = self._load_in_workspace(uow, operation['workspace_id'], claim['handoff_id'])
+        if (handoff.claim_epoch > claim['claim_epoch'] or
+                handoff.claim_epoch == claim['claim_epoch']
+                and handoff.claimed_by == operation['recipient_agent_id']
+                and handoff.status in {STATUS_COMPLETED, STATUS_REJECTED, STATUS_VERIFYING}):
+            # The original ticket proves only that this admission never ran.
+            # Retire its resources without undoing an authenticated outcome,
+            # verification/rework, or a newer generation's ownership.
+            return {'handoff_id': handoff.handoff_id, 'status': handoff.status,
+                    'previous_claim_epoch': claim['claim_epoch'], 'automatic_execution': False}
+        return self._reopen_runtime_claim(uow, operation=operation, handoff_id=claim['handoff_id'],
+            claim_epoch=claim['claim_epoch'], reason=admission.reservation.state,
+            reconciliation_id=None, actor_agent_id=None)
+
+    def _reopen_runtime_claim(self, uow, *, operation, handoff_id, claim_epoch, reason,
+                              reconciliation_id, actor_agent_id):
         handoff = self._load_in_workspace(uow, operation["workspace_id"], handoff_id)
         if (handoff.status != STATUS_CLAIMED or handoff.claimed_by != operation["recipient_agent_id"]
                 or handoff.claim_epoch != claim_epoch):
@@ -1886,7 +2041,7 @@ class HandoffService:
             raise OktoNexusError(ErrorCode.CONFLICT, "Attempt does not own this claim generation.", {})
         updated = self._handoffs.reopen_managed_claim(uow, workspace_id=handoff.workspace_id,
             handoff_id=handoff_id, claimed_by=handoff.claimed_by, claim_epoch=claim_epoch, updated_at=self._clock.now_iso())
-        self._emit(uow, handoff=updated, event_type=EVENT_RECOVERED, actor_agent_id=context.actor_agent_id,
+        self._emit(uow, handoff=updated, event_type=EVENT_RECOVERED, actor_agent_id=actor_agent_id,
             payload={"handoff_id": handoff_id, "workspace_id": handoff.workspace_id, "status": STATUS_OPEN,
                 "previous_claimed_by": handoff.claimed_by, "claim_epoch": claim_epoch,
                 "operation_id": operation["operation_id"], "reconciliation_id": reconciliation_id, "reason": reason})
@@ -1968,10 +2123,13 @@ class HandoffService:
                 handoff.lease_expires_at <= self._clock.now_iso()))):
             raise OktoNexusError(ErrorCode.NOT_OWNER,
                                  "This session may no longer read the claimed payload.", {})
+        if includes_payload:
+            from .execution_tool_claims import require_claim
+            require_claim(uow, handoff_id=handoff_id, claim_epoch=claim_epoch, repository=self._execution_claims)
         if action != 'context':
             permission_set_for(self._agents, uow, agent_id).require("handoffs", "work")
             from .execution_tool_claims import require_claim
-            require_claim(uow, handoff_id=handoff_id, claim_epoch=claim_epoch)
+            require_claim(uow, handoff_id=handoff_id, claim_epoch=claim_epoch, repository=self._execution_claims)
             if handoff.claimed_by != agent_id:
                 raise OktoNexusError(ErrorCode.NOT_OWNER, "This session no longer owns the claim.", {})
             if action == 'claim':
@@ -2193,16 +2351,19 @@ class HandoffService:
             status=DELIVERY_UNREAD,
             created_at=now,
         )
-        if getattr(self._config, 'feature_harness_integrations', False):
+        if self._runtime_notifications is not None:
             from .runtime_handoff_notifications import queue
             queue(uow, message=message, delivery=delivery, agents=self._agents,
-                  handoffs=self._handoffs, now=now, governance=self._governance)
+                  handoffs=self._handoffs, now=now, governance=self._governance,
+                  notifications=self._runtime_notifications,
+                  runtime_enabled=bool(getattr(self._config, 'feature_harness_integrations', False)))
         return True
 
     def _notify_runtime_pool(self, uow, *, handoff, now, blocked=False, event_type='handoff.created'):
         from .runtime_handoff_notifications import eligible, has_runtime
+        competitive = json.loads(handoff.target).get('strategy') == 'broadcast'
         for recipient in self._agents.list(uow) if self._agents else ():
-            if (has_runtime(uow, recipient.agent_id, handoff.workspace_id)
+            if ((competitive or has_runtime(uow, recipient.agent_id, handoff.workspace_id))
                     and eligible(uow, agents=self._agents, handoff=handoff, recipient_id=recipient.agent_id, now=now, governance=self._governance)):
                 self._notify_inbox(uow, workspace_id=handoff.workspace_id, recipient_agent_id=recipient.agent_id,
                     from_agent_id=handoff.from_agent_id, subject=f'handoff {handoff.handoff_id} available' + (' (blocked)' if blocked else ''),
@@ -2653,7 +2814,7 @@ class HandoffService:
                     now=now,
                     trace_id=getattr(dependent, "trace_id", None),
                 )
-            elif getattr(self._config, 'feature_harness_integrations', False):
+            elif json.loads(dependent.target).get('strategy') == 'broadcast' or getattr(self._config, 'feature_harness_integrations', False):
                 self._notify_runtime_pool(uow, handoff=dependent, now=now, event_type=EVENT_UNBLOCKED)
 
     def _fail_dependents(
@@ -2781,6 +2942,10 @@ class HandoffService:
         ``event_id`` is owned/assigned by the Event Log slice (imported via the
         ``EventEmitter`` port), not redefined here.
         """
+        if self._runtime_schedule is not None:
+            from ..domain.base import iso_to_epoch
+            self._runtime_schedule.notify(uow, handoff_id=handoff.handoff_id,
+                                          now=iso_to_epoch(self._clock.now_iso()))
         if self._emitter is None:
             return
         event_payload = dict(payload) if payload else None

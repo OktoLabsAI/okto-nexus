@@ -53,7 +53,7 @@ export function RuntimeSessions({agentId, binding}: {agentId: string; binding: B
     </>}
     {selected && <div><p>Selected session: {selected.scope.session_id}. Process: {selected.process_state}.</p>
       {selected.durable_release_pending && <p>Release confirmation is pending.</p>}
-      <RuntimeHistory key={selected.scope.session_id} scope={selected.scope} />
+      <RuntimeHistory key={selected.scope.session_id} scope={selected.scope} harness={binding.adapter_id} />
     </div>}
     {busy && <p role="status">Loading sessions…</p>}
     {error && <p role="alert">The session list could not be refreshed. Any displayed rows are from the last successful read. {error}</p>}

@@ -102,13 +102,15 @@ class EmbeddedEventPublisher:
                 await self.step(scope)
         return bool(rows)
 
-    async def recover(self, *, agent_id=None, live_only=False, progress=None):
+    async def recover(self, *, agent_id=None, session_id=None, live_only=False, progress=None):
         after = 0
         while True:
             rows = await asyncio.to_thread(self._page, after=after, agent_id=agent_id, live_only=live_only)
             if not rows:
                 return
             for scope in rows:
+                if session_id is not None and scope['session_id'] != session_id:
+                    continue
                 for _ in range(4096):
                     advanced = await self.step(scope)
                     if progress is not None:

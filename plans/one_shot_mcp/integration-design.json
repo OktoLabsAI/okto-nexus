@@ -1,0 +1,45 @@
+{
+  "status": "implemented_and_automatically_validated",
+  "canonical_delivery": {
+    "entry": "application/execution_domain_delivery.py:admit_domain_delivery",
+    "selection": "one_shot must bypass shared/per-sender session selection; use one_shot_calls plus the single-use slot claimed for the domain operation",
+    "call_identity": "Stable logical delivery operation ID, not dispatch attempt ID. Broadcast destinations already have independent delivery operations.",
+    "authorization": "Keep validate_domain_delivery and canonical resolve/admit/lease gates; a pool reservation is never a grant.",
+    "queue": "Commit logical call and queue admission in the message write transaction. Do not reserve a productive runtime operation until a slot is available.",
+    "rejection": "Expose capacity refusal in the synchronous caller response and preserve per-recipient results for fanout.",
+    "warm_scope": "Pool matching includes agent, executor, workspace/binding, approved launch configuration, harness settings and preset revision; never consume a warm instance prepared for another workspace.",
+    "dispatch": "Record possible productive dispatch before the native write; do not infer absence of effects from missing receipts. Retry only with existing canonical unsent proofs."
+  },
+  "controller": {
+    "integration": "Runtime owner scan, bounded per-host work, isolated failures; use canonical runtime.start/runtime.close and current lease authority.",
+    "ordering": "Reconcile host facts, settle terminal outcomes, expire deadlines, dispose closing resources, serve queues, then replenish idle capacity.",
+    "durability": "Call success must match final event and receipt. Persist caller outcome before requesting close; a cleanup failure cannot overwrite it.",
+    "recovery": "Host-owned process birth/journal evidence must confirm resource release. Never delete slot on disconnect, timeout or session terminal label alone.",
+    "availability": "Normal one-shot closure is expected resource lifecycle and does not revoke the agent binding or trigger agent-wide Recovering.",
+    "limits": "Host cap must also account for non-one-shot native resources without double-counting canonical sessions attached to slots."
+  },
+  "mcp_launch": {
+    "snapshot": "Bind structured preset and revision/digest to the signed opening payload, Core preparation fingerprint and receipt binding. Negotiate support explicitly with old Connectors.",
+    "secrets": "Use executor-local approved references; do not put resolved secrets into CLI arguments, wire payloads, events or the public configuration.",
+    "composition": "Inherited configuration, whole-entry preset replacement/disable, then reserved Nexus integration. Codex recursive native table merge needs explicit isolation; dictionary composition alone does not prove removal of inherited credential fields.",
+    "pi": "Implement an application-owned MCP client bridge into the Pi tool injection path with per-tool authorization, namespacing and session-owned cleanup. Existing Core helper intentionally refuses native Pi MCP rendering.",
+    "updates": "New sessions use the new snapshot; running calls keep their snapshot. Retire unused incompatible warm instances without modifying global harness files.",
+    "reset": "Preserve preset/limit configuration when preserving agents and runtime configuration; reconcile outstanding calls/resources under reset semantics."
+  },
+  "next_steps": [
+    "Apply the validated development wheels to the user instance for operator acceptance; current process was intentionally preserved.",
+    "Publication is a separate requested action."
+  ],
+  "resource_pool": {
+    "domain": "PoolPolicy, PoolRequest and PoolInstance: no SQL, Core or framework imports.",
+    "ports": "PoolTransaction composes RequestQueue and InstancePool in one serializable transaction. Caller owns commit/rollback and execution outbox atomicity.",
+    "internal_adapters": "SQLiteRequestQueue and SQLiteInstancePool retain existing tables and history; composition root selects adapters.",
+    "distribution": "Future infrastructure adapter must provide serializable admission, stable request identity, no independent dequeue acknowledgement, durable caller outcomes and fenced correlated disposal; do not substitute an unfenced expiring cache lock.",
+    "allocation": "Pool is keyed by agent; resource matching also requires host and configuration digest. Starting, warm, claimed, running and closing all count. max_parallel=0 means no pool-specific ceiling, still constrained by host. ADMITTED can reserve capacity without an instance; only WARM resources are assigned, FIFO among compatible waiters. STARTING instances are shared preparation, never productive request affinity. Legacy already-bound sessions retain their effect fences.",
+    "queue": "Bounded queue, FIFO within pool/host, interleaved pool scanning, immediate capacity rejection or durable wait expiry. Expired requests are never dispatched.",
+    "dispatch": "Reserve the full warm deficit in one pass; independent asynchronous native opens. Server opening window 28 plus four ready submissions stays within 32 productive wire credits; shared byte credit is retained. Connector opening workers follow its host session budget; controls retain independent workers. Both hosts default to 64 physical slots, including preparing and closing resources.",
+    "failures": "One outcome per request, no capacity release before disposal, no automatic replay after possible execution, warm failure backoff per pool/host.",
+    "scope": "Reusable single-use resource service, applied to all runtime harnesses and local/remote delivery. Existing shared/per-sender affinity remains unchanged.",
+    "connector": "Bounded transport reservations retained across independent producers; separate semaphores for startup/ready/control. Preparing sessions reserve host capacity before the first await."
+  }
+}

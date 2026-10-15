@@ -281,6 +281,14 @@ class ObservabilityService:
             to_agent_id=to_agent_id,
         )
         if rows:
+            from .handoff_runtime_views import progress
+            broadcast_ids = [row['handoff_id'] for row in rows if isinstance(row.get('target'), dict)
+                             and row['target'].get('strategy') == 'broadcast']
+            runtime_facts = self._q.handoff_runtime_facts(uow, broadcast_ids) if broadcast_ids else {}
+            for row in rows:
+                if row['handoff_id'] in runtime_facts:
+                    row['runtime_progress'] = progress(runtime_facts[row['handoff_id']], automation_enabled=bool(
+                        self._config.runtime_handoff_auto_claim_enabled and self._config.feature_harness_integrations))
             # Dependency exposure (I5/FR7): ONE extra aggregate query for the
             # WHOLE page (never per-row - AC9's anti-N+1). Ids absent from
             # the map have no dependency rows, so a dependency-free handoff

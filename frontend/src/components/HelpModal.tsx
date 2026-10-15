@@ -2,6 +2,7 @@
 // scrollable content on the right, Nexus-specific topics.
 
 import { type ReactNode, useState } from "react";
+import { MCPCredentialsHelp } from './MCPCredentialsHelp';
 import {
   Activity,
   Bot,
@@ -52,6 +53,7 @@ const Li = ({ children }: { children: ReactNode }) => (
 );
 
 const SECTIONS: Section[] = [
+  {id: 'mcp-credentials', title: 'MCP credentials', icon: <KeyRound size={14} />, content: <MCPCredentialsHelp />},
   {
     id: "quickstart",
     title: "Quickstart",

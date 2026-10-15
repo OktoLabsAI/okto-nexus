@@ -186,6 +186,9 @@ def submit_execution_operation(
             validate_execution_target(binding["adapter_id"], action,
                                       resolved["semantic_intent"]["target"])
             containment = action in {"turn.interrupt", "runtime.close"}
+            session_containment = getattr(access, 'session_containment', None)
+            if not containment and session_containment is not None:
+                session_containment.require_not_pending(uow, scope)
             current = conn.execute(
                 "SELECT c.inventory_revision,c.publication_sequence,"
                 "s.observation_age_ms,s.canonical_projection "

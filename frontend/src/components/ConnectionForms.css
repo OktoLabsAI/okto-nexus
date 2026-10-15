@@ -1,0 +1,88 @@
+.connection-form {
+  @apply rounded-2xl border border-surface-200 bg-white text-xs text-surface-700 shadow-sm dark:border-surface-700 dark:bg-surface-900 dark:text-surface-200;
+  max-width: 1180px;
+  margin-inline: auto;
+}
+.connection-header { @apply flex flex-wrap items-center gap-3 border-b border-surface-200 px-6 py-4 dark:border-surface-700; }
+.connection-header > div:first-child { @apply mr-auto; }
+.connection-header h3 { @apply text-base font-semibold text-surface-900 dark:text-white; }
+.connection-header h3 span { @apply font-normal text-surface-500; }
+.connection-eyebrow { @apply mb-1 text-[10px] font-semibold tracking-widest text-surface-400; }
+.connection-layout { @apply grid min-w-0; grid-template-columns: 210px minmax(0, 1fr); }
+.connection-content { @apply min-w-0 p-6; }
+.connection-step-heading { @apply mb-4; }
+.connection-step-heading > span { @apply text-[10px] font-semibold tracking-widest text-accent-600 dark:text-accent-400; }
+.connection-step-heading h4 { @apply mt-1 text-lg font-semibold text-surface-900 dark:text-white; }
+.connection-content > p { @apply mb-4 leading-relaxed; }
+.connection-form nav { @apply rounded-none border-r border-surface-200 bg-surface-50 p-3 dark:border-surface-700 dark:bg-surface-900; }
+.connection-form nav ol { display: flex; flex-direction: column; gap: 6px; }
+.connection-form nav button { @apply border-transparent p-3 transition-colors; }
+.connection-form nav button:not(:disabled):hover { @apply bg-surface-100 dark:bg-surface-800; }
+.connection-form nav button[aria-current=step] { @apply border-accent-200 bg-accent-50 text-accent-800 dark:border-accent-700 dark:bg-accent-900/30 dark:text-accent-200; }
+.connection-form nav button > span:last-child { @apply truncate text-[11px]; }
+.connection-form label { @apply leading-relaxed; }
+.connection-form label > span.text-surface-500 { @apply ml-1 text-[10px] font-normal text-surface-400; }
+.connection-form input:not([type=checkbox]):not([type=radio]):not([type=file]), .connection-form select {
+  @apply mt-1 rounded-lg border border-surface-200 bg-white px-3 py-2 text-xs text-surface-800 outline-none transition-shadow dark:border-surface-600 dark:bg-surface-800 dark:text-surface-100;
+  min-height: 36px;
+}
+.connection-form input:focus-visible, .connection-form select:focus-visible { @apply ring-2 ring-accent-500/30 border-accent-500; }
+.connection-form input:disabled, .connection-form select:disabled { @apply bg-surface-50 text-surface-400 dark:bg-surface-800/50 dark:text-surface-500; }
+.connection-form input[type=checkbox], .connection-form input[type=radio] { @apply accent-accent-600 align-middle; }
+.connection-form .btn { @apply rounded-lg px-3 py-2 text-xs; }
+.connection-fields > label { @apply block; max-width: 520px; }
+.connection-fields > label:has(input[aria-label="Workspace folder"]), .connection-fields > label:has(input[aria-label="Login directory"]) { max-width: 100%; }
+.connection-step-0 > label:has(select[aria-label="Runtime connection"]), .connection-step-0 > label:has(select[aria-label="Execution access"]) { display: inline-block; width: calc(50% - 10px); vertical-align: top; margin-right: 10px; }
+.connection-step-0 [aria-label="Local runtime"] { @apply rounded-lg bg-surface-50 p-2 dark:bg-surface-800; width: fit-content; }
+.connection-step-0 [aria-label="Local runtime"] button { @apply min-w-20; }
+.connection-form .capacity-settings { @apply rounded-xl border border-surface-200 bg-surface-50/60 p-4 dark:border-surface-700 dark:bg-surface-800/30; }
+.connection-form .capacity-settings h4 { @apply text-sm; }
+.capacity-rows { @apply divide-y divide-surface-200 dark:divide-surface-700; }
+.capacity-row { @apply flex items-center justify-between gap-4 py-3; }
+.capacity-row > div:first-child > label:first-child { @apply font-medium; }
+.capacity-inherit { @apply mt-1 flex items-center gap-1.5 text-[11px] font-normal text-surface-500; }
+.capacity-value { @apply flex shrink-0 items-center gap-2; }
+.capacity-value input { width: 86px; @apply text-right tabular-nums; }
+.capacity-value > span { @apply w-14 text-[11px] text-surface-400; }
+.capacity-overflow { @apply flex items-center justify-between gap-3 pt-3 font-medium; }
+.capacity-overflow select { max-width: 230px; }
+.capacity-explanation { @apply text-[11px] text-surface-500; }
+.capacity-explanation summary { @apply cursor-pointer; }
+.capacity-explanation p { @apply mt-2 leading-relaxed; }
+.connection-form [aria-label="Runtime MCP preset"] { @apply space-y-3 border-t border-surface-200 pt-5 dark:border-surface-700; }
+.connection-form [aria-label="Runtime MCP preset"] > h5, .connection-form [aria-label="Harness settings"] h5 { @apply text-sm font-semibold; }
+.connection-form [aria-label="Runtime MCP preset"] > p { @apply max-w-2xl text-[11px] leading-relaxed; }
+.connection-form [aria-label="Runtime MCP preset"] > fieldset { @apply rounded-xl border-surface-200 bg-surface-50/50 p-4 dark:border-surface-700 dark:bg-surface-800/30; }
+.connection-form [aria-label="Runtime MCP preset"] > fieldset > label:has(select) { max-width: 260px; }
+.connection-form [aria-label="Runtime MCP preset"] legend { @apply text-[11px]; }
+.connection-form [aria-label="Runtime MCP preset"] button[aria-label^="Remove"] { @apply border-transparent bg-transparent text-surface-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20; }
+.connection-form [aria-label="Harness settings"] > div { @apply gap-x-5 gap-y-4; }
+.connection-form .authorization-limit { @apply rounded-xl border border-surface-200 p-4 dark:border-surface-700; }
+.connection-form .authorization-limit input[type=number] { width: 100px; }
+.connection-footer { @apply sticky bottom-0 z-10 mt-6 flex flex-wrap items-center justify-end gap-2 border-t border-surface-200 bg-white/95 py-3 backdrop-blur dark:border-surface-700 dark:bg-surface-900/95; }
+.connection-footer > span { @apply basis-full text-right text-[11px]; }
+.connection-form [role=alert] { @apply rounded-lg bg-red-50 p-3 text-red-700 dark:bg-red-900/20 dark:text-red-300; }
+@media (min-width: 1200px) {
+  .capacity-rows { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; }
+  .capacity-rows > * { border-top-width: 0; }
+  .capacity-row { @apply border-b border-surface-200 dark:border-surface-700; }
+  .capacity-overflow { @apply flex-col items-start justify-center py-3; gap: 4px; }
+  .capacity-overflow select { max-width: 100%; }
+}
+@media (max-width: 760px) {
+  .connection-layout { grid-template-columns: minmax(0, 1fr); }
+  .connection-form nav { @apply border-b border-r-0; }
+  .connection-form nav ol { flex-direction: row; overflow-x: auto; }
+  .connection-form nav li { min-width: 132px; flex: 1 0 132px; }
+  .connection-header, .connection-content { @apply p-4; }
+  .connection-header > div:first-child { flex-basis: 100%; }
+}
+@media (max-width: 420px) {
+  .capacity-value { flex-direction: column; align-items: flex-end; gap: 3px; }
+  .capacity-value input { width: 70px; }
+  .capacity-value > span { width: auto; }
+  .capacity-row { gap: 8px; }
+  .capacity-overflow { @apply block; }
+  .capacity-overflow select { max-width: 100%; }
+  .connection-step-0 > label:has(select[aria-label="Runtime connection"]), .connection-step-0 > label:has(select[aria-label="Execution access"]) { width: 100%; margin-right: 0; }
+}

@@ -1,4 +1,5 @@
 import { ConfigurationHelp } from './ConfigurationHelp';
+import { RuntimeMCPPreset } from './RuntimeMCPPreset';
 import { useEffect, useRef, useState } from "react";
 import { api } from "../api";
 import type { HarnessConfiguration } from "../runtimeApi";
@@ -13,6 +14,7 @@ export function RuntimeHarnessSettings({endpoint, schema, onUpdated, onPendingCh
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [reload, setReload] = useState(0);
+  const [presetPending, setPresetPending] = useState(false);
   useEffect(() => {
     let live = true;
     setSaved(null); setError(""); setNotice(""); setValues({});
@@ -34,7 +36,7 @@ export function RuntimeHarnessSettings({endpoint, schema, onUpdated, onPendingCh
   const required = (field: HarnessConfiguration['parameters'][number]) => !!schema.constraints?.[field.name] &&
     field.default_source === 'core_adapter' && !harnessFieldValues(schema, field.name, values).includes(String(field.default));
   const selectionError = harnessSelectionError(schema, values);
-  useEffect(() => {onPendingChange?.(busy || !saved || !!selectionError || JSON.stringify(values) !== JSON.stringify(saved.settings));}, [busy, saved, values, selectionError, onPendingChange]);
+  useEffect(() => {onPendingChange?.(presetPending || busy || !saved || !!selectionError || JSON.stringify(values) !== JSON.stringify(saved.settings));}, [presetPending, busy, saved, values, selectionError, onPendingChange]);
   useEffect(() => {onSummaryChange?.(saved ? Object.entries(saved.settings).map(([key, value]) => `${key}: ${value}`).join(" · ") || "Harness defaults" : "Loading settings");}, [saved, onSummaryChange]);
   return <section aria-label="Harness settings" className="space-y-3">
     <h5 className="font-semibold">Model and native behavior <ConfigurationHelp label="Harness settings">Defaults are used for omitted parameters. Close existing sessions before saving. Changes invalidate execution permission and apply to new sessions.</ConfigurationHelp></h5>
@@ -88,5 +90,6 @@ export function RuntimeHarnessSettings({endpoint, schema, onUpdated, onPendingCh
     }}>Save harness settings</button>
     <button className="btn btn-secondary" disabled={busy} onClick={() => setReload(value => value + 1)}>Reload settings</button>
     {error && <p role="alert">{error}</p>}{notice && <p role="status">{notice}</p>}
+    <RuntimeMCPPreset endpoint={endpoint} onPendingChange={setPresetPending} />
   </section>;
 }

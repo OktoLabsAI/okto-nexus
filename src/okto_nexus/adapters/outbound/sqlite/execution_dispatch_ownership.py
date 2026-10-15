@@ -38,7 +38,7 @@ def reject_unsent_dispatch(factory, *, reservation, error):
                 "SELECT 1 FROM execution_dispatch_outbox WHERE server_id=? AND executor_id=? "
                 "AND operation_id=? AND attempt_token=? AND attempt_no=? AND reservation_owner IS ? "
                 "AND reservation_generation IS ? AND dispatch_state='RESOLVED_TERMINAL' "
-                "AND json_extract(last_error,'$.code')='OPERATOR_CANCELLED' "
+                "AND json_extract(last_error,'$.code') IN ('OPERATOR_CANCELLED','COMPETITIVE_NOTICE_RETIRED','CAPACITY_NOT_CONSUMED') "
                 "AND json_extract(last_error,'$.possible_effect')=0", _key(reservation)).fetchone()
             if cancelled:
                 return
@@ -50,6 +50,18 @@ def reject_unsent_dispatch(factory, *, reservation, error):
                      _key(reservation)[:3])
         from ....application.execution_initial_turns import settle_failed_initial_turns
         settle_failed_initial_turns(conn, server_id=reservation.server_id, executor_id=reservation.executor_id)
+        conn.execute('INSERT OR IGNORE INTO execution_unsent_dispatch_proofs '
+            'SELECT server_id,executor_id,operation_id,attempt_no,attempt_token,reservation_owner,reservation_generation,'
+            "reservation_owner,reservation_generation,strftime('%Y-%m-%dT%H:%M:%fZ','now') "
+            'FROM execution_dispatch_outbox WHERE server_id=? AND executor_id=? AND operation_id=? '
+            'AND EXISTS (SELECT 1 FROM execution_domain_deliveries d JOIN execution_capacity_admissions a '
+            'ON a.domain_operation_id=d.domain_operation_id WHERE d.server_id=execution_dispatch_outbox.server_id '
+            'AND d.executor_id=execution_dispatch_outbox.executor_id AND d.operation_id=execution_dispatch_outbox.operation_id '
+            "AND a.state='CONSUMED')",
+            _key(reservation)[:3])
+        from .capacity_admissions import SqliteCapacityAdmissionRepository
+        SqliteCapacityAdmissionRepository().queue_unsent_release(uow, server_id=reservation.server_id,
+            executor_id=reservation.executor_id, operation_id=reservation.operation_id)
 
 
 def recover_fenced_reservations(factory, *, channel):

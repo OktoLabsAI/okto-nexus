@@ -21,14 +21,22 @@ def test_slow_agent_cannot_fill_every_dispatch_slot_with_parallel_sessions(conne
             return await super().open(prepared, session_id, context, stream_epoch=stream_epoch)
     factory = Held()
     setup[1].state.embedded_dispatch_owner.native_factory = factory
+    pending = []
     try:
         for index in range(4):
-            admit(setup, binding, 'slow-parallel-'+str(index), 'runtime.start', new_session=True)
+            pending.append(admit(setup, binding, 'slow-parallel-'+str(index), 'runtime.start', new_session=True))
         eventually(lambda: 'subject' in started)
         healthy = admit(healthy_setup, healthy_binding, 'healthy-amid-openings', 'runtime.start', new_session=True)
         wait_receipt(healthy_setup, healthy)
         assert not release.is_set()
-        assert started.count('subject') == 1, started
+        # Sessions of the same agent remain independent. With four regular
+        # workers, three can start concurrently and one stays available to
+        # another agent without waiting for those openings to finish.
+        eventually(lambda: started.count('subject') == 3)
+        assert started.count('subject') == 3, started
         assert started.count('healthy') == 1, started
     finally:
         setup[2].portal.call(release.set)
+    for opening in pending:
+        wait_receipt(setup, opening)
+    assert started.count('subject') == 4

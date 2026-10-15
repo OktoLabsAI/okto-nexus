@@ -46,7 +46,8 @@ class EmbeddedReconciliation:
                 key = OperationKey(slot.key.server_id, slot.key.executor_id, slot.opening_operation_id)
                 receipt = await journal.get_receipt(key)
                 projected = project_r4_bound_receipt(json.loads(row['binding_json']), receipt, key=key, receipt_revision=1)
-                if projected['stage'] not in ('SUBMITTED', 'SUCCEEDED') or projected['session_id'] != slot.key.session_id:
+                if (projected['stage'] not in ('SUBMISSION_STARTED', 'SUBMITTED', 'RUNNING', 'OUTCOME_UNKNOWN', 'SUCCEEDED', 'FAILED')
+                        or not projected['possible_effect'] or projected['session_id'] != slot.key.session_id):
                     raise CoreError('RECONCILIATION_REQUIRED', 'embedded_recovery_plan')
                 return dict(session_id=slot.key.session_id, opening_operation_id=slot.opening_operation_id,
                             agent_id=projected['agent_id'])
@@ -102,7 +103,10 @@ class EmbeddedReconciliation:
     def _records(self, agent_id=None):
         with self.owner.factory.unit_of_work(write=False) as uow:
             self.owner.verify(uow=uow)
-            rows = uow.connection.execute("SELECT s.session_id,s.open_operation_id,p.binding_json,l.stream_epoch,o.subject_agent_id AS agent_id "
+            rows = uow.connection.execute("SELECT s.session_id,s.open_operation_id,p.binding_json,l.stream_epoch,o.subject_agent_id AS agent_id, "
+                "EXISTS(SELECT 1 FROM execution_local_preopen_fences f JOIN execution_preopen_refusals r "
+                "USING(server_id,executor_id,operation_id) WHERE f.server_id=s.server_id AND f.executor_id=s.executor_id "
+                "AND f.operation_id=s.open_operation_id AND s.lifecycle_state='CLOSED' AND s.lease_state='CLOSED') AS preopen_recovered "
                 "FROM execution_sessions s JOIN execution_operations o ON o.server_id=s.server_id AND o.executor_id=s.executor_id AND o.operation_id=s.open_operation_id LEFT JOIN execution_local_publications p ON p.server_id=s.server_id "
                 "AND p.executor_id=s.executor_id AND p.operation_id=s.open_operation_id "
                 "LEFT JOIN execution_local_streams l ON l.server_id=s.server_id AND l.executor_id=s.executor_id "
@@ -144,11 +148,16 @@ class EmbeddedReconciliation:
                 projected = project_r4_bound_receipt(binding, receipt,
                     key=OperationKey(claim.key.server_id, claim.key.executor_id, claim.opening_operation_id),
                     receipt_revision=1)
+                journal_slot = await journal.owned_slot_state(claim.key)
                 if (projected['session_id'] != session_id or projected['stage'] != 'FAILED'
                         or projected['possible_effect'] or not projected['retry_safe']
-                        or slot.key != claim.key or not slot.released
-                        or slot.opening_operation_id != claim.opening_operation_id):
+                        or any(resource is not None and (resource.key != claim.key or not resource.released
+                            or resource.opening_operation_id != claim.opening_operation_id)
+                            for resource in (slot, journal_slot))
+                        or await journal.get_process_birth(claim.key) is not None):
                     raise CoreError('RECONCILIATION_REQUIRED', 'embedded_failed_open_release')
+                # A durable pre-effect refusal can precede reservation entirely.
+                # Any reservation that does exist must still prove release.
                 # No process existed: do not manufacture the EXITED proof used
                 # for successful openings, or a successful close receipt.
                 fact = {'owner_generation': claim.opening_owner_generation}
@@ -229,7 +238,9 @@ class EmbeddedReconciliation:
                 receipt = await journal.get_receipt(key)
                 projected = project_r4_bound_receipt(json.loads(row['binding_json']), receipt,
                     key=key, receipt_revision=1)
-                if projected['session_id'] != claim.key.session_id or projected['stage'] not in ('SUBMITTED', 'SUCCEEDED'):
+                if (projected['session_id'] != claim.key.session_id
+                        or projected['stage'] not in ('SUBMISSION_STARTED', 'SUBMITTED', 'RUNNING', 'OUTCOME_UNKNOWN', 'SUCCEEDED', 'FAILED')
+                        or not projected['possible_effect']):
                     raise CoreError('RECONCILIATION_REQUIRED', 'embedded_container_receipt')
                 birth = await journal.get_process_birth(claim.key)
                 if birth is None or birth.key != claim.key or birth.opening_operation_id != claim.opening_operation_id:
@@ -267,8 +278,24 @@ class EmbeddedReconciliation:
         allowed = expected | {name+suffix for name in expected for suffix in ("-wal","-shm")}
         if (agent_id is None and not files.issubset(allowed)) or not expected.issubset(files):
             raise CoreError("JOURNAL_UNAVAILABLE","embedded_resource_files")
+        # These openings have an authenticated no-admission fence, not a
+        # native claim to release. EmbeddedPreopenRecovery revalidates their
+        # Core fact and physical slots before reaching this pass.
+        records = [row for row in records if not row['preopen_recovered']]
         ledger = await host._ledger() if 'owned-slots.db' in expected else None
         if ledger is not None:
+            # Consumption can precede both the initial lease and Core.open.
+            # The new owner fences the old worker; Core alone confirms whether
+            # its original placeholder can be released without stopping work.
+            from ..application.execution_preopen_capacity import ExecutionPreopenCapacity
+            from ..adapters.outbound.sqlite.execution_preopen_capacity import SqlitePreopenCapacityRepository
+            preopen = ExecutionPreopenCapacity(factory=owner.factory,
+                repository=SqlitePreopenCapacityRepository(), capacity_provider=owner.execution_capacity,
+                channel=owner.channel)
+            for row in records:
+                if row['binding_json'] is None and row['stream_epoch'] is None:
+                    await asyncio.to_thread(owner.verify)
+                    await preopen.release(session_id=row['session_id'], opening_operation_id=row['open_operation_id'])
             await self._recover_containers(ledger, [r for r in records if r['session_id'] not in absent])
             await self._empty_slots(ledger, {r['session_id'] for r in records} if agent_id is not None else None)
         proofs = {}
@@ -280,6 +307,9 @@ class EmbeddedReconciliation:
                     unstarted_sessions.add(row['session_id'])
                 continue
             if row["binding_json"] is None or row["stream_epoch"] is None:
+                from .embedded_initial_refusal import EmbeddedInitialRefusal
+                if await EmbeddedInitialRefusal(owner).recover(session_id=row['session_id'], pending_only=False):
+                    continue
                 if row['binding_json'] is None and row['stream_epoch'] is None:
                     await self._recover_unstarted(row)
                     continue
@@ -287,8 +317,10 @@ class EmbeddedReconciliation:
             opening_receipt = await host.historical_receipt(session_id=row['session_id'],
                 key=OperationKey(owner.channel.server_id, owner.channel.executor_id, row['open_operation_id']))
             if (opening_receipt is not None and opening_receipt.stage == 'FAILED'
-                    and not opening_receipt.possible_effect and opening_receipt.retry_safe
-                    and opening_receipt.error_code == 'PROFILE_DRIFT'):
+                    and not opening_receipt.possible_effect and opening_receipt.retry_safe):
+                # The durable no-effect fact and released reservation are the
+                # proof, independent of the refusal code (including an opening
+                # whose authority expired before native spawn).
                 await self.release_session(row['session_id'], failed_open=True)
                 continue
             async def inspect(journal):

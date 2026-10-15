@@ -160,14 +160,19 @@ def read_execution_operation_history(factory: ConnectionFactory, *,
 def append_execution_receipt(factory: ConnectionFactory, *,
                              principal: VerifiedExecutionTicket | None = None,
                              embedded_owner=None,
+                             uow=None, recovery_owner=None, preopen=None, preopen_embedded_owner=None,
                              frame: Mapping[str, Any]) -> AcceptedExecutionReceipt:
     """Accept a Core fact only for the ticket's admitted operation.
 
     This never creates an operation or authorizes a native effect. Core owns
     the frame schema and ordered receipt reducer; SQLite owns durability.
     """
-    if (principal is None) == (embedded_owner is None):
+    if sum(owner is not None for owner in (principal, embedded_owner, recovery_owner)) != 1:
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "One authenticated receipt owner is required.", {})
+    if recovery_owner is not None and (uow is None or preopen is None):
+        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Recovery requires its authenticated transaction and proof.', {})
+    if preopen_embedded_owner is not None and recovery_owner is None:
+        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Local preopening recovery requires its recovery owner.', {})
     if principal is not None and ("receipt:publish" not in principal.scopes or principal.binding_id is None):
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
                              "The ticket cannot publish operation receipts.", {})
@@ -188,7 +193,8 @@ def append_execution_receipt(factory: ConnectionFactory, *,
                              "The receipt is outside the ticket scope.", {})
     digest = "sha256:" + hashlib.sha256(raw).hexdigest()
     key = (parsed["server_id"], parsed["executor_id"], parsed["operation_id"])
-    with factory.unit_of_work() as uow:
+    from contextlib import nullcontext
+    with (factory.unit_of_work() if uow is None else nullcontext(uow)) as uow:
         conn = uow.connection
         if embedded_owner is not None:
             owner = embedded_owner
@@ -232,7 +238,17 @@ def append_execution_receipt(factory: ConnectionFactory, *,
         # Canonical R4 admissions carry an immutable scope and a dispatched
         # lease. Historical rows remain readable without promoting a session.
         scope = json.loads(operation['expected_revisions_json'])
+        preopen_verified = None
+        if recovery_owner is not None:
+            from .execution_preopen_recovery import verify_preopen_recovery
+            preopen_verified = verify_preopen_recovery(uow, recovery_owner, preopen, parsed, operation,
+                                                     embedded_owner=preopen_embedded_owner)
+        initial_refusal = None
         if scope:
+            from .execution_session_containment import SqliteSessionContainmentRepository
+            containment = SqliteSessionContainmentRepository()
+            if operation['action'] == 'runtime.open':
+                initial_refusal = containment.initial_refusal(uow, parsed, scope)
             dispatched = conn.execute(
                 "SELECT l.scope_json,l.connection_id,l.connection_generation,l.applied_at "
                 "FROM execution_dispatch_outbox o JOIN execution_leases l "
@@ -241,7 +257,7 @@ def append_execution_receipt(factory: ConnectionFactory, *,
                 "WHERE o.server_id=? AND o.executor_id=? AND o.operation_id=? "
                 "AND o.dispatch_state IN ('SENDING','DISPATCHED','RECONCILING','RESOLVED_TERMINAL')",
                 key).fetchone()
-            if (dispatched is None or not dispatched['applied_at'] or
+            if initial_refusal is None and preopen_verified is None and (dispatched is None or not dispatched['applied_at'] or
                     not dispatched['scope_json'] or json.loads(dispatched['scope_json']) != scope or
                     dispatched['connection_id'] != parsed['connection_id'] or
                     dispatched['connection_generation'] != parsed['connection_generation']):
@@ -304,6 +320,22 @@ def append_execution_receipt(factory: ConnectionFactory, *,
             "server_id=? AND executor_id=? AND operation_id=?",
             (state, *key),
         )
+        if initial_refusal is not None:
+            # The original bootstrap never admitted a native opening. Its
+            # exact recorded denial plus terminal Core no-effect fact closes
+            # only this pending session, in the receipt transaction.
+            conn.execute("UPDATE execution_sessions SET lifecycle_state='CLOSED',lease_state='CLOSED' "
+                "WHERE server_id=? AND executor_id=? AND session_id=? AND owner_generation=? "
+                "AND open_operation_id=? AND lifecycle_state='OPEN_PENDING'",
+                (key[0],key[1],parsed['session_id'],scope['session_owner_generation'],key[2]))
+            from ....application.execution_leases import ExecutionChannel
+            containment.complete_verified(uow, ExecutionChannel(key[0],key[1],
+                parsed['connection_id'],parsed['connection_generation']), parsed['session_id'],
+                scope['session_owner_generation'], dict(kind='initial_lease_refusal',request=initial_refusal,
+                    receipt=parsed), conn.execute("SELECT strftime('%Y-%m-%dT%H:%M:%fZ','now')").fetchone()[0])
+        if preopen_verified is not None:
+            from .execution_preopen_recovery import finish_preopen_recovery
+            finish_preopen_recovery(uow, recovery_owner, preopen_verified)
         if (scope and operation['action'] == 'runtime.open' and
                 projection.stage in ('SUBMITTED', 'SUCCEEDED') and projection.native_id):
             # Core open returns SUBMITTED only after registering its native

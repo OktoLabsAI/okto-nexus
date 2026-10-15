@@ -77,6 +77,8 @@ class SqliteRuntimeOutboxRepo:
             "FROM (SELECT *,COALESCE(json_extract(next_binding,'$.endpoint_id'),endpoint_id) AS dispatch_endpoint_id "
             "FROM delivery_outbox) pending WHERE (pending.status='PENDING' OR "
             "(pending.status='RETRY_WAIT' AND pending.next_attempt_at<=?)) AND pending.reconciliation_id IS NULL "
+            "AND NOT EXISTS (SELECT 1 FROM runtime_handoff_notifications notice WHERE notice.message_id=pending.message_id "
+            "AND notice.runtime_route IN ('legacy_admitted','competitive')) "
             "AND NOT EXISTS (SELECT 1 FROM execution_bindings b "
             "JOIN execution_executors e USING(server_id,executor_id) "
             "JOIN execution_agent_recovery r USING(server_id,executor_id) "

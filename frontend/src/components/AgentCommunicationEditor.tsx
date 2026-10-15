@@ -1,3 +1,4 @@
+import { AgentModalFooter, ModalCancelButton, useAgentModalGuard } from './AgentActionModal';
 // Agent communication binding editor (spec 6f961722): the per-agent, breakout
 // panel that sets the 4th axis — HOW the agent should communicate — surfaced
 // SELF-ONLY on its whoami. A communication binding is SINGLE-SOURCE (the
@@ -56,6 +57,7 @@ export function AgentCommunicationEditor({
   const [saved, setSaved] = useState<CommResolvedBlock | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [original, setOriginal] = useState<string | null>(null);
 
   // Load the catalog + the agent's current binding (reshaped for this editor).
   useEffect(() => {
@@ -67,6 +69,7 @@ export function AgentCommunicationEditor({
       .agentCommunication(agent.agent_id)
       .then((binding) => {
         setSaved(binding.communication);
+        setOriginal(JSON.stringify([binding.inline ? 'inline' : binding.global ? 'global' : 'none', binding.inline || {}, binding.global || null]));
         if (binding.inline) {
           setMode("inline");
           setInline(binding.inline);
@@ -175,6 +178,7 @@ export function AgentCommunicationEditor({
   const latest = selectedDetail?.latest_version ?? latestOf(globalRef?.preset_id);
   const globalIncomplete = mode === "global" && !globalRef?.preset_id;
 
+  useAgentModalGuard(original !== null && JSON.stringify([mode, inline, globalRef]) !== original, saving);
   return (
     <div
       className="space-y-4 rounded-xl border border-surface-200 dark:border-surface-700 p-3 animate-slide-up"
@@ -325,7 +329,7 @@ export function AgentCommunicationEditor({
       )}
 
       {error && <p className="text-xs text-red-500">{error}</p>}
-      <div className="flex items-center gap-2">
+      <AgentModalFooter>
         <button
           className="btn btn-primary"
           onClick={save}
@@ -337,16 +341,14 @@ export function AgentCommunicationEditor({
         >
           Save changes
         </button>
-        <button className="btn btn-secondary" onClick={onClose}>
-          Cancel
-        </button>
+        <ModalCancelButton onClose={onClose} />
         {saved && (
           <span className="text-[10px] text-surface-400 dark:text-surface-500">
             Currently bound · source{" "}
             <span className="font-mono">{saved.source}</span>
           </span>
         )}
-      </div>
+      </AgentModalFooter>
     </div>
   );
 }

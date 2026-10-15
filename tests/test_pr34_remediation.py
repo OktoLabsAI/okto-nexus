@@ -41,7 +41,8 @@ def _runtime(tmp_path, request, monkeypatch):
     root = tmp_path / "project"
     root.mkdir()
     deps = bootstrap({}, ["--home", str(tmp_path / "home")])
-    deps.config.feature_harness_integrations = getattr(request, "param", True)
+    runtime_mode = getattr(request, "param", True)
+    deps.config.feature_harness_integrations = runtime_mode if type(runtime_mode) is bool else True
     if getattr(request, "param", None) == "stored_runtime":
         # Preserve the declared default so this is a stored setting, not an
         # in-memory explicit override that would pin the opposite value.

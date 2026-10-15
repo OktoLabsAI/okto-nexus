@@ -1,6 +1,8 @@
 import { ConfigurationHelp } from './ConfigurationHelp';
 import { useEffect, useState } from 'react';
-import { api, type RuntimePolicy as Policy } from '../api';
+import { api, type RuntimePolicy as Policy, type SessionPolicy } from '../api';
+import { OneShotSettings } from './OneShotSettings';
+import { BroadcastHandoffPolicy } from './BroadcastHandoffPolicy';
 
 const fieldClass = 'block rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5';
 
@@ -8,8 +10,9 @@ export function RuntimePolicy({agentId, onUpdated, onPendingChange}: {agentId?: 
   const [policy, setPolicy] = useState<Policy | null>(null);
   const [enabled, setEnabled] = useState<boolean | null>(null);
   const [mcps, setMcps] = useState<boolean | null>(null);
+  const [autoClaim, setAutoClaim] = useState<boolean | null>(null);
   const [recovery,setRecovery] = useState(true);
-  const [sessions, setSessions] = useState<'shared' | 'per_sender' | 'per_sender_session' | null>(null);
+  const [sessions, setSessions] = useState<SessionPolicy | null>(null);
   const [busy, setBusy] = useState(true);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
@@ -17,6 +20,7 @@ export function RuntimePolicy({agentId, onUpdated, onPendingChange}: {agentId?: 
   const accept = (value: Policy) => {
     setMcps(value.inherit_global_mcps ?? (agentId ? null : false)); setPolicy(value); setEnabled(value.runtime_enabled); setSessions(value.session_policy);
     setRecovery(value.automatic_recovery ?? true);
+    setAutoClaim(value.broadcast_handoff_auto_claim ?? (agentId ? null : false));
     onUpdated?.(value.effective?.runtime_enabled ?? value.runtime_enabled ?? true);
   };
   useEffect(() => {
@@ -27,7 +31,8 @@ export function RuntimePolicy({agentId, onUpdated, onPendingChange}: {agentId?: 
       .finally(() => {if (active) setBusy(false);});
     return () => {active = false;};
   }, [agentId, revision]);
-  useEffect(() => {onPendingChange?.(busy || !policy || mcps !== (policy.inherit_global_mcps ?? null) || enabled !== policy.runtime_enabled || sessions !== policy.session_policy || (!agentId && recovery !== policy.automatic_recovery));}, [busy, policy, enabled, sessions, recovery, mcps, agentId, onPendingChange]);
+  const changed = !!policy && (autoClaim !== policy.broadcast_handoff_auto_claim || mcps !== (policy.inherit_global_mcps ?? null) || enabled !== policy.runtime_enabled || sessions !== policy.session_policy || (!agentId && recovery !== policy.automatic_recovery));
+  useEffect(() => {onPendingChange?.(busy || !policy || changed);}, [busy, policy, changed, onPendingChange]);
   const effectiveEnabled = enabled ?? policy?.defaults?.runtime_enabled ?? true;
   const effectiveSessions = sessions ?? policy?.defaults?.session_policy ?? 'shared';
   return <section className="space-y-3" aria-label={agentId ? 'Agent runtime override' : 'Global runtime defaults'}>
@@ -43,11 +48,16 @@ export function RuntimePolicy({agentId, onUpdated, onPendingChange}: {agentId?: 
     </label>
     <label className="block">Conversation sessions <ConfigurationHelp label="Conversation sessions">Shared uses one conversation for senders. Per sender shares history across sessions of the same agent. Per sender + source session isolates each verified source session. Senders without a verified session share a separate session per sender. Close sessions before changing this option, then authorize execution again.</ConfigurationHelp>
       <select aria-label={agentId ? 'Agent conversation sessions' : 'Global conversation sessions'} className={fieldClass} value={sessions ?? 'inherit'} disabled={busy || !policy}
-        onChange={event => {setSessions(event.target.value === 'inherit' ? null : event.target.value as 'shared' | 'per_sender' | 'per_sender_session'); setNotice('');}}>
-        {agentId && <option value="inherit">Inherit global setting ({policy?.defaults?.session_policy === 'per_sender_session' ? 'per sender + source session' : policy?.defaults?.session_policy === 'per_sender' ? 'per sender' : 'shared'})</option>}
+        onChange={event => {setSessions(event.target.value === 'inherit' ? null : event.target.value as SessionPolicy); setNotice('');}}>
+        {agentId && <option value="inherit">Inherit global setting ({policy?.defaults?.session_policy === 'one_shot' ? 'one shot' : policy?.defaults?.session_policy === 'per_sender_session' ? 'per sender + source session' : policy?.defaults?.session_policy === 'per_sender' ? 'per sender' : 'shared'})</option>}
         <option value="shared">Shared session</option><option value="per_sender">Separate session per sender</option><option value="per_sender_session">Separate session per sender + source session</option>
+        <option value="one_shot">One shot — fresh session per call</option>
       </select>
     </label>
+    {effectiveSessions === 'one_shot' && <OneShotSettings agentId={agentId} />}
+    <BroadcastHandoffPolicy value={autoClaim} onChange={value => {setAutoClaim(value);setNotice('');}}
+      inherited={agentId ? policy?.defaults?.broadcast_handoff_auto_claim ?? false : undefined}
+      rolloutEnabled={policy?.handoff_auto_claim_rollout_enabled ?? false} disabled={busy || !policy} className={fieldClass} />
     <label className="block">Include global harness MCPs <ConfigurationHelp label="Global harness MCPs">Include MCPs configured on the runtime host for Codex and Claude. Native project configuration precedence still applies. Nexus tools remain injected. This setting applies to new sessions; running sessions keep their configuration.</ConfigurationHelp>
       <select aria-label="Include global harness MCPs" className={fieldClass} disabled={busy || !policy}
         value={mcps === null ? 'inherit' : mcps ? 'enabled' : 'disabled'} onChange={e => {setMcps(e.target.value === 'inherit' ? null : e.target.value === 'enabled');setNotice('');}}>
@@ -55,11 +65,11 @@ export function RuntimePolicy({agentId, onUpdated, onPendingChange}: {agentId?: 
         <option value="disabled">Disabled</option><option value="enabled">Enabled</option>
       </select>
     </label>
-    <p>Effective selection: {effectiveEnabled ? 'runtime enabled' : 'MCP only'} · {effectiveSessions === 'per_sender_session' ? 'separate session per sender + source session' : effectiveSessions === 'per_sender' ? 'separate session per sender' : 'shared session'}.</p>
-    <button className="btn btn-primary" disabled={busy || !policy || (mcps === (policy.inherit_global_mcps ?? null) && enabled === policy.runtime_enabled && sessions === policy.session_policy && (!!agentId || recovery === policy.automatic_recovery))} onClick={async () => {
+    <p>Effective selection: {effectiveEnabled ? 'runtime enabled' : 'MCP only'} · {effectiveSessions === 'one_shot' ? 'fresh session per call' : effectiveSessions === 'per_sender_session' ? 'separate session per sender + source session' : effectiveSessions === 'per_sender' ? 'separate session per sender' : 'shared session'}.</p>
+    <button className="btn btn-primary" disabled={busy || !policy || !changed} onClick={async () => {
       if (!policy) return;
       setBusy(true); setError(''); setNotice('');
-      try {accept(await api.saveRuntimePolicy({expected_revision: policy.revision, inherit_global_mcps: mcps, runtime_enabled: enabled, session_policy: sessions,...(!agentId ? {automatic_recovery:recovery} : {})}, agentId)); setNotice('Runtime policy saved.');}
+      try {accept(await api.saveRuntimePolicy({expected_revision: policy.revision, broadcast_handoff_auto_claim: autoClaim, inherit_global_mcps: mcps, runtime_enabled: enabled, session_policy: sessions,...(!agentId ? {automatic_recovery:recovery} : {})}, agentId)); setNotice('Runtime policy saved.');}
       catch (failure) {setError(String(failure));}
       finally {setBusy(false);}
     }}>{agentId ? 'Save agent runtime policy' : 'Save global runtime defaults'}</button>

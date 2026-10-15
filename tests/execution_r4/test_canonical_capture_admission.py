@@ -1,4 +1,4 @@
-"""Capture faults fence admission until independent recovery completes."""
+"""Capture faults fence their session while independent sessions remain usable."""
 import asyncio
 import json
 import threading
@@ -41,7 +41,7 @@ def send_from_separate_process(setup):
 
 @pytest.mark.parametrize('transport', ['mcp', 'http_process'])
 @pytest.mark.parametrize('fault', ['write', 'quota'])
-def test_core_capture_failure_fences_subject_then_recovers_without_replay(connected_local, monkeypatch, fault, transport):
+def test_core_capture_failure_contains_session_without_blocking_agent_or_replaying(connected_local, monkeypatch, fault, transport):
     setup, binding, _ = connected_local
     deps, app, client, headers, *_ = setup
     peers, log = install_native(connected_local, _FAKE_SERVER_SOURCE)
@@ -72,24 +72,26 @@ def test_core_capture_failure_fences_subject_then_recovers_without_replay(connec
                 journal.limits = original_limits
         monkeypatch.setattr(journal, 'record_event', quota_at_capture)
     entered, release = threading.Event(), threading.Event()
-    contain = owner.agents._contain
-    async def held_containment(agent_id):
-        entered.set()
-        while not release.is_set():
-            await asyncio.sleep(.01)
-        return await contain(agent_id)
-    monkeypatch.setattr(owner.agents, '_contain', held_containment)
+    contain = owner.agents._recover_session
+    async def held_containment(session_id, session):
+        if session_id == sid:
+            entered.set()
+            while not release.is_set():
+                await asyncio.sleep(.01)
+        return await contain(session_id, session)
+    monkeypatch.setattr(owner.agents, '_recover_session', held_containment)
     try:
         failed = admit(setup, binding, 'failed-capture-turn', 'turn.submit', session_id=sid, text='Uncaptured native output')
         assert entered.wait(15)
-        assert 'subject' in owner.agents.blocked and owner.failure is None
+        assert owner.sessions[sid]['recovering']
+        assert 'subject' not in owner.agents.blocked and owner.failure is None
         repeated = replay(setup, first)
         assert repeated['operation_id'] == first['operation_id']
         assert wait_receipt(setup, repeated, stages=('SUCCEEDED',))['executor_stage'] == 'SUCCEEDED'
-        denied = client.post('/v1/runtime/intents:resolve', headers=headers['subject'], json=dict(
+        available = client.post('/v1/runtime/intents:resolve', headers=headers['subject'], json=dict(
             client_intent_id='storage-fault-new-open', intent='runtime.start', binding_id=binding['binding_id'],
             workspace_binding_id=binding['workspace_binding_id'], new_session=True))
-        assert denied.status_code == 200 and not denied.json()['can_submit'], denied.text
+        assert available.status_code == 200 and available.json()['can_submit'], available.text
         def counts():
             with deps.connection_factory.unit_of_work(write=False) as uow:
                 return {table: uow.connection.execute('SELECT count(*) FROM ' + table).fetchone()[0]
@@ -107,24 +109,26 @@ def test_core_capture_failure_fences_subject_then_recovers_without_replay(connec
         assert after['messages'] == before['messages'] + 1
         with deps.connection_factory.unit_of_work(write=False) as uow:
             assert uow.connection.execute('SELECT count(*) FROM runtime_pending_deliveries').fetchone()[0] == 1
-        assert len(peers) == 1
+        def recovered_turn():
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                row = uow.connection.execute("SELECT operation_id,session_id FROM execution_operations "
+                    "WHERE action='turn.submit' AND operation_id NOT IN (?,?)",
+                    (first['operation_id'], failed['operation_id'])).fetchone()
+                return dict(row) if row else None
+        # Shared-affinity messages wait for their damaged session's release;
+        # the agent itself remains available for independent new sessions.
+        assert recovered_turn() is None and len(peers) == 1
         assert not [e for e in events(setup) if e.get('operation_id') == failed['operation_id']
                     and e['payload'].get('delivery_phase') == 'terminal']
     finally:
         release.set()
-    eventually(lambda: 'subject' not in owner.agents.blocked, seconds=30)
+    eventually(lambda: sid not in owner.sessions, seconds=30)
     assert peers[0]._transport._proc.wait(timeout=5) is not None
-    # The durable pending message resumes automatically after containment;
-    # no new native intent was admitted while its event journal was faulty.
-    def recovered_turn():
-        with deps.connection_factory.unit_of_work(write=False) as uow:
-            row = uow.connection.execute("SELECT operation_id,session_id FROM execution_operations "
-                "WHERE action='turn.submit' AND operation_id NOT IN (?,?)",
-                (first['operation_id'], failed['operation_id'])).fetchone()
-            return dict(row) if row else None
+    assert 'subject' not in owner.agents.blocked
     eventually(recovered_turn, seconds=30)
     sent = recovered_turn()
     second = sent['session_id']
+    assert second != sid
     wait_receipt(setup, sent, stages=('SUCCEEDED',))
     assert len(peers) == 2
     wire = [json.loads(line) for line in log.read_text(encoding='utf-8').splitlines()]

@@ -91,6 +91,29 @@ def test_native_actions_use_domain_permission_not_mcp_permission(opening):
     assert rows(opening) == (('OPEN', 0), 0, 0)
 
 
+def test_native_open_claim_rejects_invented_epoch_then_accepts_correct_request(opening):
+    cap = native_cap(opening)
+    seed_work(opening)
+    read = invoke(opening, cap, request_body(cap, 'context', 'read-before-claim'))
+    assert read.status_code == 200, read.text
+    assert 'payload' not in read.json()['result']
+    response = invoke(opening, cap, request_body(cap, claim_epoch=1))
+    assert response.status_code == 422, response.text
+    assert response.json()['error']['code'] == 'VALIDATION_ERROR'
+    assert 'Omit claim_epoch' in response.json()['error']['message']
+    assert rows(opening) == (('OPEN', 0), 1, 0)
+    with opening[0].connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT count(*) FROM execution_tool_claims').fetchone()[0] == 0
+    claimed = invoke(opening, cap)
+    assert claimed.status_code == 200, claimed.text
+    assert json.loads(claimed.json()['result']['payload']) == {'task': 'Review this change.'}
+    epoch = claimed.json()['result']['claim_epoch']
+    completed = invoke(opening, cap, request_body(cap, 'complete', 'complete-1',
+                                                claim_epoch=epoch, result='Done.'))
+    assert completed.status_code == 200, completed.text
+    assert rows(opening) == (('COMPLETED', 1), 3, 1)
+
+
 def test_native_route_rejects_mcp_canonical_and_missing_credentials(opening):
     cap = activate(opening)
     seed_work(opening)
@@ -254,6 +277,7 @@ def test_native_context_and_complete_cannot_cross_workspace_or_claim_scope(openi
     assert invoke(opening, cap, request_body(cap, 'context', 'read-1')).status_code == 404
     with opening[0].connection_factory.unit_of_work() as uow:
         uow.connection.execute("UPDATE handoffs SET workspace_id='ws',status='CLAIMED',claimed_by='subject',claim_epoch=1")
+    assert invoke(opening, cap, request_body(cap, claim_epoch=1)).status_code == 403
     body = request_body(cap, 'complete', 'complete-1', claim_epoch=1, result='Done.')
     assert invoke(opening, cap, body).status_code == 403
 

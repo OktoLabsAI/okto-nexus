@@ -6,6 +6,13 @@ from .runtime_policy import defaults
 
 
 def drain_pending(deps):
+    # The normal idle path must not compete with lease/event writers. The
+    # authoritative scan below repeats under the write transaction, so this
+    # read is only a hint; a concurrent arrival waits for the next tick.
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        if not uow.connection.execute(
+                "SELECT 1 FROM runtime_pending_deliveries WHERE status='waiting' LIMIT 1").fetchone():
+            return
     from ..adapters.inbound.mcp.tools.messages import build_service
     service=build_service(deps)
     with deps.connection_factory.unit_of_work() as uow:

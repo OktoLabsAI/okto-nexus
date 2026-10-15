@@ -1,8 +1,23 @@
-# Current release dependency
+# Current development dependency
 
-Core 0.0.8 is required by Nexus 0.2.2 and Connector 0.0.6.
-Shared wheel SHA-256: `7d8003095343da7dbcb8b924abf1623b155677002b0acc435299a13504db323f`.
-Built from Core commit `74430e7`: preserve confirmed Codex initialization-failure containment.
+Core 0.0.11 is required by Nexus 0.3.0 and Connector 0.0.9.
+Shared wheel SHA-256: c475bc793605b6f375c4e88140764e90425f43d83b67dc96c86b2d95cc83f6d1.
+Built from feature/v0.0.11 with the local handoff capacity, recovery and
+Pi tool guidance, native launch lease renewal, streamed output batching and
+portable LF contract manifests. Both consumers use identical wheel bytes.
+The preopen recovery extension has its own versioned contract; base R4
+schema bytes remain unchanged. This is a local validation artifact, not
+a published release or independent-host qualification.
+
+## Historical dependency records
+
+# Current development dependency
+
+Core 0.0.10 is required by Nexus 0.3.0 and Connector 0.0.8.
+Shared wheel SHA-256: `d66b60df1db82fafd0f9f9da1a786f229a41e4fe15eacbf158ad836651fad73e`.
+Built from branch `feature/v0.0.10`, including the local implementation of
+one-shot contracts, MCP presets and process ownership for the Pi MCP bridge.
+This development artifact has not been published.
 The entries below document historical artifacts.
 
 Current PyPI release candidate: `okto_nexus_connector_core-0.0.1-py3-none-any.whl`
@@ -105,11 +120,11 @@ Current: `nexus_connector_core-0.2.14.dev0-py3-none-any.whl`
 
 SHA-256: `759cdee946037ed5e215f901cdfb09b31baf350c7fde69e4d5f79bd41f515bee`
 
-Este Ã© o mesmo artefato no Nexus, Connector e Core. O `uv.lock` referencia
-esta pasta para que `uv sync --extra serve-lite` funcione sem clone irmÃ£o.
-Este wheel inclui codec R4 `development-partial`, mas o contrato negociÃ¡vel
+Este ÃƒÆ’Ã‚Â© o mesmo artefato no Nexus, Connector e Core. O `uv.lock` referencia
+esta pasta para que `uv sync --extra serve-lite` funcione sem clone irmÃƒÆ’Ã‚Â£o.
+Este wheel inclui codec R4 `development-partial`, mas o contrato negociÃƒÆ’Ã‚Â¡vel
 continua R3; efeitos remotos R4 permanecem fechados. O wheel 0.2.12 permanece
-somente para rastreabilidade da versÃ£o anterior. A versÃ£o 0.2.13 tambÃ©m
+somente para rastreabilidade da versÃƒÆ’Ã‚Â£o anterior. A versÃƒÆ’Ã‚Â£o 0.2.13 tambÃƒÆ’Ã‚Â©m
 permanece para rastreabilidade do primeiro preview R4.
 
 Current pinned artifact: `nexus_connector_core-0.2.18.dev0-py3-none-any.whl`,

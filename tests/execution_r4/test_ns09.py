@@ -147,7 +147,8 @@ def negotiate(ws, info, revisions, lane_ticket, server_id, executor_id, *, bindi
         credential_epoch=revisions.credential_epoch, authorization_revision=revisions.authorization,
         configuration_revision=revisions.configuration)).decode())
     assert ws.receive_json()['type'] == 'binding.attached'
-    return ExecutionChannel(server_id, executor_id, **connection)
+    return ExecutionChannel(server_id, executor_id, **connection,
+                            control_capabilities=tuple(welcome['control_capabilities']))
 
 
 def admit(deps, app):

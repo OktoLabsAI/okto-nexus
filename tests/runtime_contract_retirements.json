@@ -1063,7 +1063,7 @@
       "test": "tests/test_runtime_boot.py::test_failed_native_start_persists_quarantine_and_boot_cannot_replay",
       "reason": "Server native connector factories were removed. Canonical boot admits durable Core operations, so its global budget bounds admission rather than synchronous native startup. Replacement exercises the same approval, isolation or no-replay guarantee through current canonical bindings.",
       "replacements": [
-        "tests/execution_r4/test_canonical_boot_regressions.py::test_uncertain_boot_is_not_replayed_after_server_restart",
+        "tests/execution_r4/test_canonical_boot_regressions.py::test_interrupted_preopen_is_fenced_before_a_new_boot_after_restart",
         "tests/execution_r4/test_canonical_boot.py::test_serve_boot_uses_core_after_inventory_start_and_replays_once"
       ],
       "source_sha256": "0c41ad9d9d82d5c4eaddfa2a28739db2edbf6ce0db3488710913b4edba678c0a"
@@ -3205,7 +3205,7 @@
       "test": "tests/test_runtime_worker_capacity.py::test_observed_native_result_does_not_free_a_still_blocked_agent_worker",
       "reason": "Current Core dispatch retains productive calls across receipt publication; the replacement exposed and verifies the capacity-release fix while another agent continues independently.",
       "replacements": [
-        "tests/execution_r4/test_canonical_worker_capacity.py::test_retained_worker_does_not_donate_agent_capacity_or_block_healthy_agent"
+        "tests/execution_r4/test_canonical_worker_capacity.py::test_retained_worker_serializes_its_session_while_other_affinities_progress"
       ],
       "source_sha256": "0272bca1fce574580ae01f329930c2b2149dc86807a85defb407ad6e5d2864dd"
     },
@@ -3213,7 +3213,7 @@
       "test": "tests/test_runtime_scheduler_fairness.py::test_healthy_lane_dispatches_while_first_native_call_is_blocked",
       "reason": "Current approved bindings exercise actual asynchronous dispatch with a retained native worker before write and after receipt, proving healthy-agent progress before release.",
       "replacements": [
-        "tests/execution_r4/test_canonical_worker_capacity.py::test_retained_worker_does_not_donate_agent_capacity_or_block_healthy_agent"
+        "tests/execution_r4/test_canonical_worker_capacity.py::test_retained_worker_serializes_its_session_while_other_affinities_progress"
       ],
       "source_sha256": "2d99e5d0675ab9e2f7602eccbb45fdf46912af26c014e0f6a76143737e342f39"
     },
@@ -3221,7 +3221,7 @@
       "test": "tests/test_runtime_scheduler_fairness.py::test_one_agent_cannot_reserve_all_normal_workers_with_extra_endpoints",
       "reason": "Two approved bindings of one agent share productive capacity while a separate agent dispatches. Exact item and byte budgets include still-live calls after durable receipts.",
       "replacements": [
-        "tests/execution_r4/test_canonical_worker_capacity.py::test_retained_worker_does_not_donate_agent_capacity_or_block_healthy_agent",
+        "tests/execution_r4/test_canonical_worker_capacity.py::test_retained_worker_serializes_its_session_while_other_affinities_progress",
         "tests/execution_r4/test_dispatch_capacity.py::test_receipt_does_not_release_retained_call_global_capacity"
       ],
       "source_sha256": "934f66d6081b97e9479007f98a492a44719756577eced54e8ea98851dd2f29e2"
@@ -3671,7 +3671,7 @@
       "test": "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent",
       "reason": "Real Core output-capture write and quota failures fence public command and open admission until scoped containment completes. With the user's requested automatic recovery enabled, messages remain durably pending in Nexus without any native execution intent, then deliver once through a fresh owned process after recovery. Prewrite quota refusal now retains a host-persisted correlated no-effect refusal without unnecessarily recovering a healthy harness or consuming Core containment capacity. The separate HTTP producer exercises the same admission owner.",
       "replacements": [
-        "tests/execution_r4/test_canonical_capture_admission.py::test_core_capture_failure_fences_subject_then_recovers_without_replay",
+        "tests/execution_r4/test_canonical_capture_admission.py::test_core_capture_failure_contains_session_without_blocking_agent_or_replaying",
         "tests/execution_r4/test_canonical_capture_admission.py::test_prewrite_quota_refusal_keeps_healthy_harness_available",
         "tests/execution_r4/test_canonical_http_producer.py::test_isolated_http_producer_keeps_native_execution_in_existing_owner"
       ],
@@ -3689,7 +3689,7 @@
       "test": "tests/test_runtime_capture_admission.py::test_capture_fence_preserves_cached_reply_blocks_new_open_and_fences_stale_owner",
       "reason": "Actual Core capture failure preserves replay of an existing completed operation, blocks fresh opens and commands, contains only the affected subject and automatically resumes durable pending work. Canonical owner-generation guards independently reject stale native admission and stale receipt replay.",
       "replacements": [
-        "tests/execution_r4/test_canonical_capture_admission.py::test_core_capture_failure_fences_subject_then_recovers_without_replay",
+        "tests/execution_r4/test_canonical_capture_admission.py::test_core_capture_failure_contains_session_without_blocking_agent_or_replaying",
         "tests/execution_r4/test_embedded_dispatch.py::test_stale_local_owner_cannot_start_native_work",
         "tests/execution_r4/test_embedded_dispatch.py::test_receipt_replay_requires_current_embedded_owner"
       ],

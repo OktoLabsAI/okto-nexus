@@ -18,18 +18,12 @@ def test_core_captures_native_burst_while_server_projection_is_paused(connected_
     setup = connected_local[0]
     root = setup[-1]
     gate = root / "emit-burst"
-    prefix = str(root / "captured-")
     source = _FAKE_SERVER_SOURCE.replace('if "TRIGGER_HOLD" in text:\n        return',
         'if "TRIGGER_HOLD" in text:\n'
         '        deadline = time.monotonic() + 30\n'
         f'        while not os.path.exists({str(gate)!r}) and time.monotonic() < deadline: time.sleep(.01)\n'
         '        for index in range(256):\n'
         '            write_msg({"method":"item/agentMessage/delta", "params":{"threadId":thread_id,"turnId":turn_id,"delta":"x"}})\n'
-        '            if (index+1) % 32 == 0:\n'
-        f'                ack = {prefix!r} + str(index+1)\n'
-        '                deadline = time.monotonic() + 30\n'
-        '                while not os.path.exists(ack) and time.monotonic() < deadline: time.sleep(.01)\n'
-        '                assert os.path.exists(ack), "Capture did not commit the batch"\n'
         '        text = "BURST_COMPLETE"')
     assert source != _FAKE_SERVER_SOURCE
     setup, binding, sid, peer, _ = open_native(connected_local, source)
@@ -44,9 +38,6 @@ def test_core_captures_native_burst_while_server_projection_is_paused(connected_
         result = await original_record(journal, event)
         if event.session_id == sid:
             captured.append(result)
-            count = sum(e.native_type == "item/agentMessage/delta" for e in captured)
-            if count and count % 32 == 0:
-                (root / f"captured-{count}").touch()
             if event.payload.get("delivery_phase") == "terminal":
                 terminal.set()
         return result
@@ -65,7 +56,7 @@ def test_core_captures_native_burst_while_server_projection_is_paused(connected_
         gate.write_text("ready", encoding="utf-8")
         assert terminal.wait(25), len(captured)
         assert peer._transport._proc.poll() is None
-        assert sum(e.native_type == "item/agentMessage/delta" for e in captured) == 257
+        assert "".join(e.payload.get("output_text", "") for e in captured) == "x" * 256 + "BURST_COMPLETE"
         assert all(e.sequence > 0 for e in captured)
         with setup[0].connection_factory.unit_of_work(write=False) as uow:
             assert not uow.connection.execute("SELECT 1 FROM execution_event_ingress WHERE session_id=? AND payload_json LIKE '%BURST_COMPLETE%'", (sid,)).fetchone()
@@ -80,7 +71,6 @@ def test_core_captures_native_burst_while_server_projection_is_paused(connected_
             break
         assert time.monotonic() < deadline
         time.sleep(.02)
-    assert sum(e["native_type"] == "item/agentMessage/delta" for e in events) == 257
     assert "".join(e["payload"].get("output_text", "") for e in events) == "x" * 256 + "BURST_COMPLETE"
     wait_receipt(setup, admit(setup, binding, "capture-close", "runtime.close", session_id=sid), stages=("SUCCEEDED",))
     assert peer._transport._proc.wait(timeout=5) is not None

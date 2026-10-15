@@ -28,6 +28,8 @@ class EmbeddedAgentRecovery:
         self.publication_pending = set()
         self.initialized = False
         self._tick_lock = asyncio.Lock()
+        self.session_tasks = {}
+        self.session_retry_at = {}
 
     def _state(self, agent_id, state, error=None):
         owner = self.owner
@@ -58,13 +60,32 @@ class EmbeddedAgentRecovery:
             raise CoreError('JOURNAL_UNAVAILABLE', 'embedded_shared_resources')
         if 'owned-slots.db' in files:
             ledger = await owner.host._ledger()
+            # A fenced connection's HELD capacity never crossed native
+            # admission. Cancel those holds atomically before the legacy
+            # process scan; consumed/uncertain reservations remain occupied.
+            for _ in range(256):
+                await asyncio.to_thread(owner.verify)
+                released = await ledger.release_fenced_capacity_holds(
+                    owner.channel.server_id, owner.channel.executor_id,
+                    connection_generation=owner.channel.connection_generation, limit=128)
+                if released < 128:
+                    break
+            else:
+                raise CoreError('CAPACITY_EXCEEDED', 'embedded_capacity_recovery')
             known = {r['session_id']: r['open_operation_id'] for r in records}
             after, high = 0, None
             for _ in range(256):
                 page = await ledger.owned_slot_page(after_rowid=after, high_water_rowid=high, limit=128)
                 for slot in page.reservations:
+                    opening = slot.opening_operation_id
+                    if known.get(slot.key.session_id) != opening:
+                        # A consumed reservation may predate Core.open, so its
+                        # slot still has Core's provisional identity. Attribute
+                        # it through Core's durable association; keep it occupied
+                        # until the agent's recovery proves release is safe.
+                        opening = await ledger.capacity_opening_for_slot(slot)
                     if (slot.key.server_id != owner.channel.server_id or slot.key.executor_id != owner.channel.executor_id
-                            or known.get(slot.key.session_id) != slot.opening_operation_id):
+                            or opening is None or known.get(slot.key.session_id) != opening):
                         raise CoreError('SCOPE_MISMATCH', 'embedded_shared_resources')
                 high = page.high_water_rowid
                 if page.next_after_rowid is None:
@@ -124,6 +145,8 @@ class EmbeddedAgentRecovery:
         owner = self.owner
         self.attempts[agent_id] = self.attempts.get(agent_id, 0) + 1
         await self._contain(agent_id)
+        from .embedded_preopen_recovery import EmbeddedPreopenRecovery
+        await EmbeddedPreopenRecovery(owner).recover(agent_id)
         await owner._recover_publications(agent_id=agent_id)
         await owner.events.recover(agent_id=agent_id)
         if not await EmbeddedReconciliation(owner).recover(agent_id=agent_id):
@@ -150,8 +173,86 @@ class EmbeddedAgentRecovery:
             self.delayed.discard(agent_id)
         await self.owner._recover_publications(agent_id=agent_id, progress=progress)
         await self.owner.events.recover(agent_id=agent_id, live_only=True, progress=progress)
-        await asyncio.to_thread(self._check_stream_health, agent_id, frozenset(self.owner.active_operations))
+        faults = await asyncio.to_thread(self._check_stream_health, agent_id, frozenset(self.owner.active_operations))
+        for session_id in faults:
+            self.recover_session(session_id)
         await self._retire_closed(agent_id)
+
+    def recover_session(self, session_id):
+        session = self.owner.sessions.get(session_id)
+        if session is None:
+            raise CoreError('SESSION_UNKNOWN', 'embedded_session_recovery')
+        # Fence only this session. Retain one worker, including during slow
+        # containment; healthy siblings continue dispatch and publication.
+        session['recovering'] = True
+        task = self.session_tasks.get(session_id)
+        if task is not None and not task.done():
+            return
+        if time.monotonic() < self.session_retry_at.get(session_id, 0):
+            return
+        self.session_tasks[session_id] = asyncio.create_task(
+            self._recover_session(session_id, session), name='embedded-session-' + session_id)
+
+    async def _recover_session(self, session_id, session):
+        owner = self.owner
+        try:
+            await asyncio.to_thread(owner.verify)
+            if session.get('initial_refusal'):
+                # No authorized executor was returned. Finish the exact durable
+                # refusal without containing healthy sibling sessions.
+                workers = [t for t, sid in owner.worker_sessions.items() if sid == session_id and not t.done()]
+                if workers:
+                    await asyncio.gather(*workers, return_exceptions=True)
+                request = session.get('initial_refusal_request')
+                if request is not None:
+                    if not await asyncio.to_thread(owner.access.session_containment.denied,
+                            request, channel=owner.channel):
+                        raise CoreError('RECONCILIATION_REQUIRED', 'embedded_initial_refusal_identity')
+                    session.pop('initial_refusal_request', None)
+                from .embedded_initial_refusal import EmbeddedInitialRefusal
+                if not await EmbeddedInitialRefusal(owner).recover(session_id=session_id, pending_only=False):
+                    raise CoreError('RECONCILIATION_REQUIRED', 'embedded_initial_refusal')
+                owner.sessions.pop(session_id, None)
+                self.session_retry_at.pop(session_id, None)
+                return
+            runtime = await session['executor']._runtime()
+            report = await runtime.shutdown(ShutdownPolicy(5, 5))
+            if ('unknown' in report.session_outcomes.values() or any(
+                    facts['process_state'] != 'STOPPED' or facts['release_pending']
+                    for facts in runtime.shutdown_resources().values())):
+                raise CoreError('RECONCILIATION_REQUIRED', 'embedded_session_containment')
+            if not await owner.host.close_native_actions(executor_id=owner.channel.executor_id,
+                    session_id=session_id, timeout_seconds=5):
+                raise CoreError('RECONCILIATION_REQUIRED', 'embedded_session_native_actions')
+            workers = [t for t, sid in owner.worker_sessions.items() if sid == session_id and not t.done()]
+            if workers:
+                await asyncio.gather(*workers, return_exceptions=True)
+            renewal = session.get('renew_task')
+            if renewal is not None and not renewal.done():
+                await asyncio.shield(renewal)
+            agent_id = session['scope']['agent_id']
+            await owner._recover_publications(agent_id=agent_id)
+            await owner.events.recover(agent_id=agent_id, session_id=session_id)
+            await EmbeddedReconciliation(owner).release_session(session_id)
+            await owner.tools.release_session(session_id)
+            owner.sessions.pop(session_id, None)
+            self.session_retry_at.pop(session_id, None)
+            await asyncio.to_thread(owner._recovery_event, 'RECOVERY_SESSION_RELEASED',
+                'Failed session contained; sibling sessions preserved. Previous work was not replayed.',
+                agent_id=agent_id)
+        except Exception as error:
+            # Retry the same owned resource without escalating a local fault
+            # into agent-wide containment. Shared authority loss remains fatal.
+            try:
+                await asyncio.to_thread(owner.verify)
+            except Exception as shared_error:
+                owner.failure = shared_error
+                await owner.failed()
+                return
+            self.session_retry_at[session_id] = time.monotonic() + 2
+            await asyncio.to_thread(owner._recovery_event, 'RECOVERY_SESSION_PENDING',
+                f"Session containment pending: {getattr(error, 'code', type(error).__name__)}",
+                agent_id=session['scope']['agent_id'])
 
     def _check_stream_health(self, agent_id, active_operations):
         # A Core stream-loss fact fences native work but deliberately retains
@@ -170,6 +271,7 @@ class EmbeddedAgentRecovery:
                 "AND json_extract(e.payload_json,'$.native_type')='core.event_pump_failed' "
                 "AND json_extract(e.payload_json,'$.payload.code')='EVENT_STREAM_UNAVAILABLE'",
                 (owner.channel.server_id, owner.channel.executor_id, agent_id)).fetchall()
+            pending = []
             for fault in faults:
                 closes = uow.connection.execute(
                     "SELECT operation_id FROM execution_operations WHERE server_id=? AND executor_id=? "
@@ -182,7 +284,8 @@ class EmbeddedAgentRecovery:
                     # Failure/unknown is still handled by that producer, and an
                     # unresolved stream is checked again after the worker exits.
                     continue
-                raise CoreError('EVENT_STREAM_UNAVAILABLE', 'embedded_stream_health')
+                pending.append(fault['session_id'])
+            return pending
 
     async def _retire_closed(self, agent_id):
         owner = self.owner
@@ -196,6 +299,8 @@ class EmbeddedAgentRecovery:
                     "AND s.lifecycle_state IN ('CLOSED','FAILED')",
                     (owner.channel.server_id, owner.channel.executor_id, agent_id))]
         for row in await asyncio.to_thread(closed):
+            if owner.sessions.get(row['session_id'], {}).get('recovering'):
+                continue  # The retained session worker owns its release proof.
             # Prove resource release and that every Core event was committed
             # before ending polling. Receipt stages themselves are unchanged.
             await EmbeddedReconciliation(owner).release_session(row['session_id'],
@@ -268,6 +373,13 @@ class EmbeddedAgentRecovery:
             return
         target_agent_id = agent_id
         now = time.monotonic()
+        for session_id, task in list(self.session_tasks.items()):
+            if task.done():
+                task.result()
+                del self.session_tasks[session_id]
+        for session_id, session in list(self.owner.sessions.items()):
+            if session.get('recovering'):
+                self.recover_session(session_id)
         for agent_id, task in list(self.tasks.items()):
             if task.done():
                 task.result()
@@ -301,3 +413,5 @@ class EmbeddedAgentRecovery:
     async def close(self):
         if self.tasks:
             await asyncio.gather(*tuple(self.tasks.values()))
+        if self.session_tasks:
+            await asyncio.gather(*tuple(self.session_tasks.values()))

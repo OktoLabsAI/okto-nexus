@@ -47,6 +47,42 @@ def build_router():
         from ....application.runtime_policy import read_policy
         return await execute(lambda: read_policy(request.app.state.deps, request_context()))
 
+    @router.get('/one-shot-policy')
+    @router.get('/agents/{agent_id}/one-shot-policy')
+    async def one_shot_policy(request: Request, agent_id: str | None = None):
+        from ....application.runtime_feature_settings import configure
+        return await execute(lambda: configure(request.app.state.deps, request_context(),
+                             kind='one_shot', resource_id=agent_id))
+
+    @router.put('/one-shot-policy')
+    @router.put('/agents/{agent_id}/one-shot-policy')
+    async def save_one_shot_policy(request: Request, body: dict, agent_id: str | None = None):
+        from ....application.runtime_feature_settings import configure
+        return await execute(lambda: configure(request.app.state.deps, request_context(),
+                             kind='one_shot', resource_id=agent_id, changes=body))
+
+    @router.get('/harness/endpoints/{endpoint_id}/mcp-preset')
+    async def mcp_preset(request: Request, endpoint_id: str):
+        from ....application.runtime_feature_settings import configure
+        return await execute(lambda: configure(request.app.state.deps, request_context(),
+                             kind='mcp_preset', resource_id=endpoint_id))
+
+    @router.get('/agents/{agent_id}/one-shot-state')
+    async def one_shot_state(request: Request, agent_id: str):
+        from ....application.runtime_feature_settings import one_shot_state as state
+        return await execute(lambda: state(request.app.state.deps, request_context(), agent_id=agent_id))
+
+    @router.post('/agents/{agent_id}/one-shot-calls/{call_id}/cancel')
+    async def cancel_one_shot(request: Request, agent_id: str, call_id: str):
+        from ....application.runtime_feature_settings import one_shot_state as state
+        return await execute(lambda: state(request.app.state.deps, request_context(), agent_id=agent_id, cancel_call_id=call_id))
+
+    @router.put('/harness/endpoints/{endpoint_id}/mcp-preset')
+    async def save_mcp_preset(request: Request, endpoint_id: str, body: dict):
+        from ....application.runtime_feature_settings import configure
+        return await execute(lambda: configure(request.app.state.deps, request_context(),
+                             kind='mcp_preset', resource_id=endpoint_id, changes=body))
+
     @router.put('/runtime-policy')
     async def update_global_runtime_policy(request: Request, body: dict):
         from ....application.runtime_policy import save_policy
@@ -61,6 +97,27 @@ def build_router():
     async def agent_runtime_sessions(request: Request, agent_id: str, workspace: str | None = None):
         from ....application.execution_session_views import agent_session_summary
         return await execute(lambda: agent_session_summary(request.app.state.deps, request_context(), agent_id, workspace))
+
+    @router.get('/agents/{agent_id}/runtime-administration')
+    async def runtime_administration(request: Request, agent_id: str, after: int = 0):
+        from ....application.agent_runtime_administration import overview
+        from ....bootstrap.handoff_runtime_views import build_handoff_runtime_views
+        from ....bootstrap.capacity_observations import build_capacity_observation_view
+        return await execute(lambda: overview(request.app.state.deps, request_context(), agent_id, after=after,
+            handoff_views=build_handoff_runtime_views(request.app.state.deps),
+            capacity_reader=build_capacity_observation_view(request.app.state.deps)))
+
+    @router.get('/meta-harness/runtime-sessions')
+    async def meta_harness_runtime_sessions(request: Request, workspace: str | None = None,
+                                           agent: str | None = None, page: int = 1):
+        from ....application.meta_harness_sessions import conversation_sessions
+        return await execute(lambda: conversation_sessions(request.app.state.deps, request_context(),
+            workspace=workspace, agent=agent, page=page))
+
+    @router.get('/agents/{agent_id}/runtime-executions/{operation_id}')
+    async def runtime_execution(request: Request, agent_id: str, operation_id: str, executor_id: str):
+        from ....application.agent_runtime_administration import execution
+        return await execute(lambda: execution(request.app.state.deps, request_context(), agent_id, operation_id, executor_id))
 
     @router.put('/agents/{agent_id}/runtime-policy')
     async def update_agent_runtime_policy(request: Request, agent_id: str, body: dict):

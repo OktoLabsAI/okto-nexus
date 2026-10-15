@@ -11,7 +11,7 @@ from okto_nexus.application.execution_local_launch import ApprovedLocalLaunch
 from okto_nexus.application.execution_inventory_revalidation import selection, accepts_binding
 
 
-@pytest.mark.parametrize('change', ['added_control', 'removed_control', 'changed_control', 'platform', 'fingerprint'])
+@pytest.mark.parametrize('change', ['added_control', 'removed_control', 'changed_control', 'platform', 'fingerprint', 'source'])
 def test_core_control_addition_revalidates_existing_installation(admitted_local, monkeypatch, change):
     import json
     setup, sent, _, _ = admitted_local
@@ -33,6 +33,8 @@ def test_core_control_addition_revalidates_existing_installation(admitted_local,
             controls[0]['native_turn_id'] = 'changed'
         elif change == 'platform':
             baseline['runtime']['implementation_platforms'] = ['other']
+        elif change == 'source':
+            baseline['evidence']['source'] = 'trusted_root'
         else:
             baseline['evidence']['content_fingerprint'] = 'sha256:' + '0' * 64
         uow.connection.execute('UPDATE execution_inventory_revalidation SET baseline_json=?',
@@ -46,9 +48,9 @@ def test_core_control_addition_revalidates_existing_installation(admitted_local,
         after = dict(uow.connection.execute('SELECT * FROM execution_bindings').fetchone())
         assert after == before
         assert accepts_binding(uow.connection, after, owner.publication.inventory_revision,
-                               owner.key.server_id, owner.key.executor_id) == (change == 'added_control')
-        assert bool(uow.connection.execute('SELECT compatible FROM execution_inventory_revalidation').fetchone()[0]) == (change == 'added_control')
-    if change == 'added_control':
+                               owner.key.server_id, owner.key.executor_id) == (change in {'added_control', 'source'})
+        assert bool(uow.connection.execute('SELECT compatible FROM execution_inventory_revalidation').fetchone()[0]) == (change in {'added_control', 'source'})
+    if change in {'added_control', 'source'}:
         launch = ApprovedLocalLaunch(owner, sent.scope)
         launch.check()
 
@@ -162,7 +164,7 @@ def test_one_publication_revalidates_one_hundred_bindings(admitted_local, monkey
     assert sum(row['code'] == 'INVENTORY_REVALIDATED' for row in logs['items']) == 100
 
 
-@pytest.mark.parametrize('scenario', ['updated', 'unchanged', 'failed', 'other_path', 'disabled'])
+@pytest.mark.parametrize('scenario', ['updated', 'unchanged', 'failed', 'other_path', 'disabled', 'source_changed', 'source_and_version_changed'])
 def test_updated_binary_is_observed_without_repeating_operator_setup(admitted_local, monkeypatch, scenario):
     from pathlib import Path
     from nexus_connector_core.discovery import fingerprint
@@ -175,9 +177,12 @@ def test_updated_binary_is_observed_without_repeating_operator_setup(admitted_lo
     binary = Path(candidate.executable)
     if scenario == 'other_path':
         binary = binary.with_name('other.exe')
-    if scenario != 'unchanged':
+    if scenario not in {'unchanged', 'source_changed'}:
         binary.write_bytes(b'Updated harness release')
     changed = replace(candidate, executable=str(binary), fingerprint=fingerprint(binary), trust='untrusted')
+    if scenario.startswith('source_'):
+        changed = replace(changed, source='trusted_root')
+    accepted = scenario in {'updated', 'unchanged', 'source_changed', 'source_and_version_changed'}
     monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
         lambda **_: SimpleNamespace(candidates=(changed,)))
     calls = []
@@ -193,12 +198,12 @@ def test_updated_binary_is_observed_without_repeating_operator_setup(admitted_lo
     client.portal.call(owner.refresh)
     with deps.connection_factory.unit_of_work(write=False) as uow:
         rows = uow.connection.execute('SELECT * FROM execution_local_observations').fetchall()
-        assert len(rows) == (1 if scenario in {'updated', 'unchanged'} else 0)
+        assert len(rows) == (1 if accepted else 0)
         binding = uow.connection.execute('SELECT * FROM execution_bindings').fetchone()
         assert accepts_binding(uow.connection, binding, owner.publication.inventory_revision,
-            owner.key.server_id, owner.key.executor_id) == (scenario in {'updated', 'unchanged'})
+            owner.key.server_id, owner.key.executor_id) == accepted
     assert len(calls) == (0 if scenario in {'other_path', 'disabled'} else 1)
-    if scenario in {'updated', 'unchanged'}:
+    if accepted:
         launch = ApprovedLocalLaunch(owner, sent.scope)
         assert launch.candidate.version == '0.999.0'
         launch.check()

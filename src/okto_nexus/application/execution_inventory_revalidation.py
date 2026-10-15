@@ -7,7 +7,7 @@ log = logging.getLogger(__name__)
 
 def same_installation_location(approved, current):
     """Consent selects an installation location, not an immutable release."""
-    changing = {'version', 'fingerprint', 'build_identity', 'trust'}
+    changing = {'version', 'fingerprint', 'build_identity', 'trust', 'source'}
     return ({k: v for k, v in approved.items() if k not in changing}
             == {k: v for k, v in current.items() if k not in changing})
 
@@ -28,7 +28,12 @@ def compatible_selection(baseline, current):
     if any(control['supported'] and new_controls.get(control['action']) != control
            for control in old_runtime['control_targeting']):
         return False
-    baseline = {**baseline, 'runtime': new_runtime}
+    # Discovery provenance is not installation identity or execution authority.
+    # The same selected executable can be found through PATH or a trusted root.
+    baseline = {**baseline, 'runtime': new_runtime,
+                'evidence': {k: v for k, v in baseline['evidence'].items() if k != 'source'}}
+    current = {**current,
+               'evidence': {k: v for k, v in current['evidence'].items() if k != 'source'}}
     if baseline == current:
         return True
     # Candidate identity, platform, adapter contract and explicit selection

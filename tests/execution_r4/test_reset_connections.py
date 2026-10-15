@@ -20,9 +20,21 @@ def test_reset_preserves_configured_local_connection_and_can_deliver_again(conne
         old_native = native.native
     tables = ('agents', 'agent_endpoints', 'runtime_profiles', 'runtime_execution_grants',
         'execution_bindings', 'execution_workspace_bindings', 'execution_realizations',
-        'execution_local_realizations', 'execution_installation', 'runtime_policy_defaults', 'workspaces')
+        'execution_local_realizations', 'execution_installation', 'runtime_policy_defaults', 'workspaces',
+        'one_shot_policy_settings', 'one_shot_host_limits', 'runtime_mcp_presets')
     # Seed unrelated history without starting a native turn.
     with deps.connection_factory.unit_of_work() as uow:
+        from okto_nexus.application import one_shot_settings, runtime_mcp_presets
+        defaults = one_shot_settings.read(uow.connection)['settings']
+        one_shot_settings.save(uow.connection, expected_revision=1,
+            settings=defaults | dict(max_parallel=10, warm_instances=5))
+        agent_id = uow.connection.execute('SELECT agent_id FROM agent_endpoints WHERE endpoint_id=?',
+            (binding['endpoint_id'],)).fetchone()[0]
+        one_shot_settings.save(uow.connection, agent_id=agent_id, expected_revision=0,
+            settings={'max_parallel': 8})
+        uow.connection.execute('INSERT INTO one_shot_host_limits VALUES(?,?)', (binding['executor_id'], 20))
+        runtime_mcp_presets.save(uow.connection, endpoint_id=binding['endpoint_id'], expected_revision=0,
+            servers=[dict(name='example', transport='stdio', command='example-mcp', enabled=False)])
         workspace = uow.connection.execute('SELECT workspace_id FROM agent_endpoints WHERE endpoint_id=?', (binding['endpoint_id'],)).fetchone()[0]
         deps.repos.messages.create(uow, message_id='before-reset', workspace_id=workspace,
             from_agent_id='operator', body='History to remove', created_at=deps.clock.now_iso())

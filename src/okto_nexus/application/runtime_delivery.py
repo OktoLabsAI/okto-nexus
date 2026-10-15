@@ -11,6 +11,7 @@ from .runtime_requirements import validate_native_requirements
 from .runtime_causality import RuntimeCausalityService
 from .runtime_actor_authority import authenticated_message_context, valid_actor_binding
 from .message_session_origin import for_message
+from .runtime_endpoint_selection import select_runtime_endpoint
 
 
 class RuntimeDeliveryPlanner:
@@ -92,7 +93,8 @@ class RuntimeDeliveryPlanner:
                     if recovering:
                         raise OktoNexusError(ErrorCode.CONFLICT,'Delivery session requires reconciliation.',{})
                     _, session_id = select_delivery_session(uow, endpoint["endpoint_id"], sender_agent_id=sender_agent_id,
-                                                            source_session_key=source_session_key)
+                        source_session_key=source_session_key,
+                        session_containment=getattr(getattr(self.capabilities, 'access', None), 'session_containment', None))
                     candidates.append((endpoint, profile, session_id))
                 continue
             descriptor = self.registry.get(endpoint["adapter_id"])
@@ -170,14 +172,7 @@ class RuntimeDeliveryPlanner:
             return None
         if not candidates:
             return None
-        ready = [c for c in candidates if c[2]]
-        candidates = ready or candidates
-        priority = max(c[0]["priority"] for c in candidates)
-        candidates = [c for c in candidates if c[0]["priority"] == priority]
-        groups = {c[0]["selection_group"] for c in candidates}
-        if len(candidates) > 1 and (len(groups) != 1 or None in groups):
-            raise OktoNexusError(ErrorCode.CONFLICT, "AMBIGUOUS_BINDING", {})
-        endpoint, profile, session = min(candidates, key=lambda c: c[0]["endpoint_id"])
+        endpoint, profile, session = select_runtime_endpoint(candidates)
         if result_source:
             self.causality.admit_result_relay(uow, message_id=message.message_id,
                 source_result_id=result_source["result_id"], now=now)

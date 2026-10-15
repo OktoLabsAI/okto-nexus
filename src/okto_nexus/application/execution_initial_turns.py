@@ -109,15 +109,16 @@ def settle_failed_initial_turns(conn, *, server_id, executor_id):
 def settle_unsent_closed_session_operations(conn, *, server_id, executor_id, agent_id=None):
     """A proved closed session cannot execute its never-dispatched queue."""
     rows = conn.execute(
-        "SELECT o.operation_id,d.attempt_no FROM execution_operations o "
+        "SELECT o.operation_id,coalesce(d.attempt_no,0) AS attempt_no FROM execution_operations o "
         "JOIN execution_sessions s USING(server_id,executor_id,session_id) "
-        "JOIN execution_dispatch_outbox d USING(server_id,executor_id,operation_id) "
+        "LEFT JOIN execution_dispatch_outbox d USING(server_id,executor_id,operation_id) "
         "WHERE o.server_id=? AND o.executor_id=? AND (? IS NULL OR o.subject_agent_id=?) "
         "AND s.lifecycle_state='CLOSED' AND s.lease_state='CLOSED' "
-        "AND o.admission_state='ACCEPTED' AND d.dispatch_state='PENDING' "
-        "AND (d.attempt_no=0 OR EXISTS (SELECT 1 FROM execution_unsent_dispatch_proofs f "
+        "AND o.admission_state='ACCEPTED' "
+        "AND ((d.operation_id IS NULL AND o.action='turn.submit' AND o.parent_operation_id=s.open_operation_id) "
+        "OR (d.dispatch_state='PENDING' AND (d.attempt_no=0 OR EXISTS (SELECT 1 FROM execution_unsent_dispatch_proofs f "
         "WHERE f.server_id=o.server_id AND f.executor_id=o.executor_id AND f.operation_id=o.operation_id "
-        "AND f.attempt_no=d.attempt_no)) "
+        "AND f.attempt_no=d.attempt_no)))) "
         "AND NOT EXISTS (SELECT 1 FROM execution_receipts r WHERE r.server_id=o.server_id "
         "AND r.executor_id=o.executor_id AND r.operation_id=o.operation_id) "
         "AND NOT EXISTS (SELECT 1 FROM execution_local_publications p WHERE p.server_id=o.server_id "
@@ -131,9 +132,12 @@ def settle_unsent_closed_session_operations(conn, *, server_id, executor_id, age
         error = json.dumps(dict(code='SESSION_CLOSED', stage='dispatch',
             message='The session closed before this operation was dispatched.',
             possible_effect=False, retry_safe=False, operation_id=row['operation_id']))
-        conn.execute("UPDATE execution_dispatch_outbox SET dispatch_state='RESOLVED_TERMINAL',last_error=?,"
-            "reserved_bytes=0,reservation_class=NULL,reserved_at=NULL "
-            "WHERE server_id=? AND executor_id=? AND operation_id=?", (error, *key))
+        # An initial turn can still be waiting for its first outbox row when
+        # the opening is contained. It never crossed the dispatch boundary.
+        conn.execute("INSERT INTO execution_dispatch_outbox(server_id,executor_id,operation_id,dispatch_state,last_error) "
+            "VALUES(?,?,?,'RESOLVED_TERMINAL',?) ON CONFLICT(server_id,executor_id,operation_id) "
+            "DO UPDATE SET dispatch_state='RESOLVED_TERMINAL',last_error=excluded.last_error,"
+            "reserved_bytes=0,reservation_class=NULL,reserved_at=NULL", (*key, error))
         conn.execute("UPDATE execution_operations SET admission_state='RESOLVED_TERMINAL' "
             "WHERE server_id=? AND executor_id=? AND operation_id=?", key)
         from .execution_delivery_retry import mark_unsent_closed_retry

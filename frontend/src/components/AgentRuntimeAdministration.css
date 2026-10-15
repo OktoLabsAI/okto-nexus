@@ -1,0 +1,15 @@
+.agent-modal-body:has(> .runtime-admin) { overflow: hidden; }
+.runtime-admin { display: grid; grid-template-columns: minmax(260px, 34%) minmax(0, 1fr); gap: 24px; height: 100%; min-height: 0; }
+.runtime-admin-list, .runtime-admin-inspector { min-width: 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding-right: 8px; }
+.runtime-admin-row { @apply rounded-lg border border-surface-200 dark:border-surface-700 p-3 text-xs space-y-1; }
+.runtime-admin-selected { @apply border-accent-500 bg-accent-50 dark:bg-accent-900/20; }
+.runtime-admin-badge { @apply rounded bg-surface-100 dark:bg-surface-800 px-2 py-0.5 text-[10px] font-medium; }
+.runtime-admin-tail { max-height: 55dvh; overflow-y: auto; overflow-x: hidden; min-width: 0; }
+.runtime-admin-back { display: none; }
+@media (max-width: 760px) {
+  .agent-modal-body:has(> .runtime-admin) { overflow-y: auto; }
+  .runtime-admin { display: flex; flex-direction: column; height: auto; }
+  .runtime-admin-list, .runtime-admin-inspector { overflow: visible; padding: 0; }
+  .runtime-admin-has-selection .runtime-admin-list { display: none; }
+  .runtime-admin-back { display: inline-flex; }
+}

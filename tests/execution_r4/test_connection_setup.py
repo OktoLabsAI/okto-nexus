@@ -34,6 +34,8 @@ def count(setup, table):
 
 def test_finish_atomic_idempotent(local_setup):
     context,request=request_for(local_setup)
+    request['mcp_preset'] = dict(expected_revision=0, servers=[
+        dict(name='docs', transport='http', url='https://example.test/mcp')])
     request['configuration']['automatic_reply'] = False  # Legacy JSON cannot disable routing.
     assert count(local_setup,'execution_bindings') == 0
     result=finish(local_setup,context,request,verified={'root':directory_identity(request['configuration']['workspace_root']),'home':None})
@@ -64,6 +66,8 @@ def test_finish_atomic_idempotent(local_setup):
     assert view['folders']['workspace_root'] == request['configuration']['workspace_root']
     assert view['public_config']['nexus_tool_permission'] == 'always_allow'
     assert view['automatic_reply'] is True
+    assert view['mcp_preset']['revision'] == 1
+    assert view['mcp_preset']['servers'][0]['name'] == 'docs'
     endpoint = result['binding']['endpoint_id']
     client,headers = local_setup[2:4]
     policy = client.get(f'/api/v1/harness/endpoints/{endpoint}/conversation-policy',headers=headers['operator']).json()['data']
@@ -112,19 +116,126 @@ def test_workspace_paths_aggregate_across_agents_on_the_same_host(local_setup):
 @pytest.mark.parametrize('failure',['no_test','invalid_settings','stale_baseline'])
 def test_finish_rolls_back_every_configuration_change(local_setup,failure):
     context,request=request_for(local_setup)
+    request['broadcast_handoff_auto_claim'] = True
+    request['mcp_preset'] = dict(expected_revision=0, servers=[
+        dict(name='docs', transport='http', url='https://example.test/mcp')])
     verified={'root':directory_identity(request['configuration']['workspace_root']),'home':None}
     if failure == 'no_test': verified=None
     if failure == 'invalid_settings': request['configuration']['harness_settings']={'effort':'impossible'}
     if failure == 'stale_baseline': request['baseline']['execution_revision'] += 1
     with pytest.raises(Exception): finish(local_setup,context,request,verified=verified)
-    for table in ('execution_bindings','execution_local_realizations','connection_setup_commits','agent_execution_policies','agent_runtime_overrides'):
+    for table in ('execution_bindings','execution_local_realizations','connection_setup_commits','agent_execution_policies','agent_runtime_overrides','runtime_mcp_presets'):
         assert count(local_setup,table) == 0
+
+
+def test_setup_auto_claim_preserves_omission_and_resets_explicit_null(local_setup):
+    from okto_nexus.application import runtime_policy
+    context, request = request_for(local_setup)
+    request.update(executor_id='', candidate_ref='', inventory_revision='', workspace_id=None, binding_id=None)
+    request['configuration']['execution_location'] = 'remote'
+    client, headers = local_setup[2:4]
+    path = '/v1/connections/setup:finish'
+    for index, change in enumerate(({'broadcast_handoff_auto_claim': True}, {},
+                                    {'broadcast_handoff_auto_claim': False},
+                                    {'broadcast_handoff_auto_claim': None})):
+        request.pop('broadcast_handoff_auto_claim', None)
+        request.update(change, client_intent_id=f'policy-{index}',
+                       baseline=load_setup(local_setup[0], context, 'subject')['baseline'])
+        before = runtime_policy.read_policy(local_setup[0], context, 'subject')
+        snapshot = load_setup(local_setup[0], context, 'subject')
+        assert snapshot['runtime_policy'] == before
+        assert snapshot['baseline']['runtime_revision'] == before['revision']
+        assert snapshot['baseline']['defaults_revision'] == before['defaults']['revision']
+        response = client.post(path, headers=headers['operator'], json=request)
+        assert response.status_code == 200, response.text
+        after = runtime_policy.read_policy(local_setup[0], context, 'subject')
+        assert after['broadcast_handoff_auto_claim'] is change.get(
+            'broadcast_handoff_auto_claim', before['broadcast_handoff_auto_claim'])
+        assert client.post(path, headers=headers['operator'], json=request).json() == response.json()
+        assert runtime_policy.read_policy(local_setup[0], context, 'subject') == after
+    assert count(local_setup, 'execution_bindings') == 0
+    assert count(local_setup, 'runtime_execution_grants') == 0
+    # An opted-in agent still needs its own execution grant and a capable host.
+
+
+def test_setup_auto_claim_rejects_non_boolean_and_stale_revision(local_setup, monkeypatch):
+    from okto_nexus.application import runtime_policy
+    context, request = request_for(local_setup)
+    request['configuration']['execution_location'] = 'remote'
+    client, headers = local_setup[2:4]
+    monkeypatch.setattr(client._transport, 'raise_server_exceptions', True)
+    before = runtime_policy.read_policy(local_setup[0], context, 'subject')
+    path = '/v1/connections/setup:finish'
+    for invalid in ('true', 1, {}, []):
+        response = client.post(path, headers=headers['operator'], json=request | {
+            'broadcast_handoff_auto_claim': invalid})
+        assert response.status_code == 400, response.text
+        assert response.json()['error']['code'] == 'VALIDATION_ERROR'
+    request['baseline']['runtime_revision'] += 1
+    response = client.post(path, headers=headers['operator'], json=request | {
+        'broadcast_handoff_auto_claim': True})
+    assert response.status_code == 409, response.text
+    assert runtime_policy.read_policy(local_setup[0], context, 'subject') == before
+    assert count(local_setup, 'connection_setup_commits') == 0
 
 
 def test_setup_transport_requires_operator(local_setup):
     _,_,client,headers,*_=local_setup
     assert client.get('/v1/connections/setup/subject',headers=headers['subject']).status_code == 403
     assert client.get('/v1/connections/setup/subject',headers=headers['operator']).status_code == 200
+
+
+@pytest.mark.parametrize('global_enabled,override,expected', [
+    (False, None, False), (True, None, True), (True, False, False), (False, True, True),
+])
+def test_finish_authorizes_work_only_with_effective_handoff_opt_in(local_setup, global_enabled, override, expected):
+    from test_runtime_policy_defaults import save
+    assert save(local_setup, broadcast_handoff_auto_claim=global_enabled).status_code == 200
+    context, request = request_for(local_setup)
+    request['broadcast_handoff_auto_claim'] = override
+    result = finish(local_setup, context, request, verified={
+        'root': directory_identity(request['configuration']['workspace_root']), 'home': None})
+    with local_setup[0].connection_factory.unit_of_work(write=False) as uow:
+        grants = uow.connection.execute('SELECT actions,max_executions,no_expiry FROM runtime_execution_grants '
+            'WHERE endpoint_id=?', (result['binding']['endpoint_id'],)).fetchall()
+        assert len(grants) == 1
+        assert ('execute_work' in json.loads(grants[0]['actions'])) is expected
+        assert grants[0]['max_executions'] == 20 and not grants[0]['no_expiry']
+
+
+@pytest.mark.parametrize('change_policy', [False, True])
+def test_finish_offers_scoped_session_choice_and_retries_after_release(local_setup, monkeypatch, change_policy):
+    from test_binding_replacement import seed_claim
+    context, request = request_for(local_setup)
+    verified = {'root': directory_identity(request['configuration']['workspace_root']), 'home': None}
+    binding = finish(local_setup, context, request, verified=verified)['binding']
+    deps, app, client, headers, *_ = local_setup
+    request.update(client_intent_id='update-with-open-session', binding_id=binding['binding_id'],
+                   workspace_id=binding['workspace_id'],
+                   baseline=load_setup(deps, context, 'subject', binding['binding_id'])['baseline'])
+    request['mcp_preset'] = dict(expected_revision=0, servers=[
+        dict(name='docs', transport='http', url='https://example.test/mcp')])
+    if change_policy:
+        request['configuration']['session_policy'] = 'shared'
+    monkeypatch.setattr(app.state.connection_tests, 'verified', lambda *args: verified)
+    seed_claim(deps, binding, 'FAILED')  # Failed with a live lease still owns resources.
+    before = load_setup(deps, context, 'subject', binding['binding_id'])
+    path = '/api/v1/runtime-management/connections/setup:finish'
+    response = client.post(path, headers=headers['operator'], json=request)
+    assert response.status_code == 409, response.text
+    assert response.json()['error']['details'] == dict(reason='ACTIVE_SESSIONS', agent_id='subject',
+                                                       binding_ids=[binding['binding_id']])
+    assert load_setup(deps, context, 'subject', binding['binding_id']) == before
+    assert count(local_setup, 'connection_setup_commits') == 1
+    assert client.post(path, headers=headers['subject'], json=request).status_code == 403
+    with deps.connection_factory.unit_of_work() as uow:
+        # Simulate canonical durable release, never infer it from failure alone.
+        uow.connection.execute("UPDATE execution_sessions SET lease_state='CLOSED' WHERE session_id='claim'")
+    saved = client.post(path, headers=headers['operator'], json=request)
+    assert saved.status_code == 200, saved.text
+    assert saved.json()['saved']
+    assert client.post(path, headers=headers['operator'], json=request).json() == saved.json()
+    assert load_setup(deps, context, 'subject', binding['binding_id'])['mcp_preset']['servers'][0]['name'] == 'docs'
 
 
 @pytest.mark.parametrize('existing_local', [False, True])
@@ -177,13 +288,43 @@ def test_remote_finish_updates_approved_binding_atomically(local_setup):
     assert 'folders' not in remote_view
     request['baseline']=remote_view['baseline']
     request['configuration'].update(execution_location='remote',tool_access='ask')
-    result=finish(local_setup,context,request,verified=None)
+    request['mcp_preset'] = dict(expected_revision=0, servers=[
+        dict(name='remote-docs', transport='http', url='https://example.test/mcp')])
+    response = local_setup[2].post('/v1/connections/setup:finish',
+        headers=local_setup[3]['operator'], json=request)
+    assert response.status_code == 200, response.text
+    result = response.json()
     assert result['saved']
     assert count(local_setup,'execution_bindings')==1
     view=load_setup(local_setup[0],context,'subject',request['binding_id'])
     assert view['public_config']['nexus_tool_permission']=='ask'
     assert count(local_setup,'runtime_execution_grants')==1
     assert view['authorization']=={'minutes':60,'actions':20}
+    assert view['mcp_preset']['servers'][0]['name'] == 'remote-docs'
+
+
+def test_setup_refuses_concurrent_preset_change_before_any_commit(local_setup):
+    from okto_nexus.application.runtime_mcp_presets import save
+    from okto_nexus.application.connection_setup import setup_mcp_preset
+    context, request = request_for(local_setup)
+    created = finish(local_setup, context, request, verified={
+        'root': directory_identity(request['configuration']['workspace_root']), 'home': None})
+    request.update(client_intent_id='stale-preset', binding_id=created['binding']['binding_id'])
+    view = load_setup(local_setup[0], context, 'subject', request['binding_id'])
+    request['baseline'] = view['baseline']
+    request['mcp_preset'] = dict(expected_revision=view['mcp_preset']['revision'], servers=[])
+    with local_setup[0].connection_factory.unit_of_work() as uow:
+        save(uow.connection, endpoint_id=created['binding']['endpoint_id'], expected_revision=0,
+             servers=[dict(name='other-edit', transport='http', url='https://example.test/mcp')])
+    with local_setup[0].connection_factory.unit_of_work(write=False) as uow:
+        with pytest.raises(Exception, match='MCP preset changed'):
+            setup_mcp_preset(uow, request)
+    with pytest.raises(Exception, match='MCP preset changed'):
+        finish(local_setup, context, request, verified=None)
+    after = load_setup(local_setup[0], context, 'subject', request['binding_id'])
+    assert after['baseline'] == view['baseline']
+    assert after['mcp_preset']['servers'][0]['name'] == 'other-edit'
+    assert count(local_setup, 'connection_setup_commits') == 1
 
 
 def test_remote_finish_rejects_embedded_binding_without_partial_writes(local_setup):

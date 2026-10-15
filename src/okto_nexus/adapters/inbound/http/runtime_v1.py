@@ -52,6 +52,12 @@ class InventoryRefreshRequest(BaseModel):
     client_intent_id: _Id
 
 
+class SetupMCPPreset(BaseModel):
+    model_config = ConfigDict(extra='forbid', strict=True)
+    expected_revision: Annotated[int, Field(ge=0)]
+    servers: list[dict]
+
+
 class ConnectionSetupRequest(BaseModel):
     model_config = ConfigDict(extra='forbid', strict=True)
     client_intent_id: Annotated[str, Field(min_length=1, max_length=100)]
@@ -63,6 +69,8 @@ class ConnectionSetupRequest(BaseModel):
     binding_id: str | None = None
     baseline: dict[str, int | None]
     configuration: dict
+    mcp_preset: SetupMCPPreset | None = None
+    broadcast_handoff_auto_claim: bool | None = None
 
 
 class LocalInstallationCheckRequest(BaseModel):
@@ -874,6 +882,16 @@ def build_router() -> APIRouter:
         except OktoNexusError as error:
             return runtime_error(error, 'connection.setup')
 
+    @router.get('/connections/workspaces')
+    async def connection_workspaces(request: Request, limit: int = 100, after_workspace_id: str | None = None):
+        from ....application.connection_workspaces import list_connection_workspaces
+        try:
+            result = await anyio.to_thread.run_sync(lambda: list_connection_workspaces(
+                request.app.state.deps, runtime_request_context(), limit=limit, after_workspace_id=after_workspace_id))
+            return JSONResponse(result, headers={'Cache-Control': 'no-store'})
+        except OktoNexusError as error:
+            return runtime_error(error, 'connection.workspaces')
+
     @router.get('/workspaces/{workspace_id}/paths')
     async def workspace_paths_read(workspace_id: str, executor_id: str, request: Request):
         from ....application.workspace_paths import list_workspace_paths
@@ -889,9 +907,17 @@ def build_router() -> APIRouter:
         from nexus_connector_core.connection_configuration import parse_connection_configuration
         from nexus_connector_core import CoreError
         result = body.model_dump()
+        # Omission preserves policy for older clients; explicit null inherits.
+        if 'broadcast_handoff_auto_claim' not in body.model_fields_set:
+            result.pop('broadcast_handoff_auto_claim', None)
         try:
             from ....application.connection_authorization import normalize_authorization
             result['configuration'] = normalize_authorization(parse_connection_configuration(normalize_authorization(result['configuration'])))
+            if result.get('mcp_preset') is not None:
+                from nexus_connector_core.mcp_presets import validate_mcp_preset
+                result['mcp_preset']['servers'] = validate_mcp_preset(result['mcp_preset']['servers'])
+            else:
+                result.pop('mcp_preset', None)
         except (CoreError, ValueError, TypeError):
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Invalid connection configuration file.', {}) from None
         return result
@@ -940,6 +966,11 @@ def build_router() -> APIRouter:
         except CoreError as error:
             return v1_err(409, error.code, 'Refresh installations and test the selected runtime again.')
         except OktoNexusError as error:
+            if error.code == ErrorCode.CONFLICT and (error.details or {}).get('reason') == 'ACTIVE_SESSIONS':
+                return JSONResponse({'error': {'code': error.code, 'message': error.message,
+                    'stage': 'connection.finish', 'possible_effect': False, 'retry_safe': False,
+                    'operation_id': None, 'action': '', 'details': error.details}},
+                    status_code=409, headers={'Cache-Control': 'no-store'})
             return runtime_error(error, 'connection.finish')
 
     return router

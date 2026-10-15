@@ -59,7 +59,7 @@ def test_agent_override_can_enable_global_off_and_return_to_inheritance(connecte
     assert save(setup, runtime_enabled=False, session_policy='per_sender').status_code == 200
     result = save(setup, agent='subject', runtime_enabled=True)
     assert result.status_code == 200, result.text
-    assert result.json()['data']['effective'] == dict(runtime_enabled=True, session_policy='per_sender', inherit_global_mcps=False)
+    assert result.json()['data']['effective'] == dict(runtime_enabled=True, session_policy='per_sender', inherit_global_mcps=False, broadcast_handoff_auto_claim=False)
     grant = setup[2].post('/api/v1/harness/grants', headers=setup[3]['operator'], json=dict(
         actor_agent_id='subject', endpoint_id=binding['endpoint_id'], actions=['open', 'send', 'interrupt', 'close'],
         max_executions=10, expires_at=iso_plus(setup[0].clock.now_iso(), 600)))
@@ -79,7 +79,7 @@ def test_global_changes_preserve_explicit_overrides_and_grants(connected_local):
     setup, binding, _ = connected_local
     assert save(setup, agent='subject', runtime_enabled=True, session_policy='shared').status_code == 200
     assert save(setup, runtime_enabled=False, session_policy='per_sender').status_code == 200
-    assert read(setup, 'subject')['effective'] == dict(runtime_enabled=True, session_policy='shared', inherit_global_mcps=False)
+    assert read(setup, 'subject')['effective'] == dict(runtime_enabled=True, session_policy='shared', inherit_global_mcps=False, broadcast_handoff_auto_claim=False)
     with setup[0].connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute('SELECT revoked_at FROM runtime_execution_grants').fetchone()[0] is None
 
@@ -101,6 +101,7 @@ def test_disable_fences_previously_resolved_work(connected_local):
 
 
 def test_disabled_live_session_closes_on_lease_renewal(connected_local, monkeypatch):
+    import time
     setup, binding, native = connected_local
     opened = admit(setup, binding, 'disable-live', 'runtime.start', new_session=True)
     wait_receipt(setup, opened)
@@ -114,6 +115,17 @@ def test_disabled_live_session_closes_on_lease_renewal(connected_local, monkeypa
     owner = setup[1].state.embedded_dispatch_owner
     session_id = opened['session_id']
     setup[2].portal.call(owner._renew_owned, session_id, owner.sessions[session_id])
+    # Renewal schedules a retained session cleanup owner. Its completion is
+    # independent of the renewal observer; await the actual resource proof.
+    deadline = time.monotonic() + 10
+    while True:
+        with setup[0].connection_factory.unit_of_work(write=False) as uow:
+            closed = tuple(uow.connection.execute('SELECT lifecycle_state,lease_state FROM execution_sessions WHERE session_id=?',
+                                                  (session_id,)).fetchone()) == ('CLOSED', 'CLOSED')
+        if native.native.stopped and closed:
+            break
+        assert time.monotonic() < deadline, 'Disabled session did not finish scoped containment'
+        time.sleep(.05)
     assert native.native.stopped and owner.failure is None
     with setup[0].connection_factory.unit_of_work(write=False) as uow:
         assert tuple(uow.connection.execute('SELECT lifecycle_state,lease_state FROM execution_sessions WHERE session_id=?',

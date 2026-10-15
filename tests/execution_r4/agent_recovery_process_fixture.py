@@ -55,10 +55,10 @@ def run(root, phase):
                 if phase == 'before-bind':
                     original_execute = owner._execute
                     held = asyncio.Event()
-                    async def before_bind(frame):
+                    async def before_bind(frame, **options):
                         if frame['agent_id'] == 'subject':
                             await held.wait()
-                        return await original_execute(frame)
+                        return await original_execute(frame, **options)
                     owner._execute = before_bind
                 sessions = []
                 for subject_setup, subject_binding in [(setup, binding), (second, other_binding)]:

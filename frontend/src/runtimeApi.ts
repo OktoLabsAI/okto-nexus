@@ -149,7 +149,7 @@ async function read<T>(path: string, signal: AbortSignal | undefined, body?: unk
   catch { throw new ApiError(response.status, `HTTP_${response.status}`, response.statusText || "Invalid server response"); }
   if (!response.ok) {
     const error = value.error ?? value;
-    throw new ApiError(response.status, error.code ?? `HTTP_${response.status}`, error.message ?? response.statusText);
+    throw new ApiError(response.status, error.code ?? `HTTP_${response.status}`, error.message ?? response.statusText, error.details);
   }
   return value as T;
 }
@@ -194,6 +194,8 @@ export const runtimeApi = {
   retryRecovery: (agentId: string) => read<{state: string; error_code: string | null; message: string}>(
     `/v1/runtime/recovery/retry?agent_id=${encodeURIComponent(agentId)}`, undefined, {}),
   setup: (agent: string, binding?: string, signal?: AbortSignal) => read<{baseline: SetupBaseline;
+    runtime_policy: import('./api').RuntimePolicy;
+    mcp_preset?: import('./api').MCPPreset;
     connections: (Pick<BindingView,'binding_id' | 'candidate_ref' | 'executor_id' | 'workspace_id' | 'adapter_id'> & {execution_location: 'local' | 'remote'})[];
     authorization?: {minutes: number | null; actions: number | null};
     folders?: {workspace_root: string; provider_home: string | null; secret_bindings: Record<string,string>};
@@ -219,8 +221,8 @@ export const runtimeApi = {
     resolution_revision: resolution.resolution_revision, intent_hash: resolution.intent_hash,
   }),
   operation: (id: string, signal?: AbortSignal) => read<RuntimeOperation>(`/v1/runtime/operations/${encodeURIComponent(id)}`, signal),
-  session: (id: string, signal?: AbortSignal) => read<RuntimeSession>(`/v1/runtime/sessions/${encodeURIComponent(id)}`, signal),
-  sessions: (agentId: string, binding: BindingView, after: string, signal?: AbortSignal) => {
+  session: (id: string, signal?: AbortSignal, executorId?: string) => read<RuntimeSession>(`/v1/runtime/sessions/${encodeURIComponent(id)}${executorId ? `?executor_id=${encodeURIComponent(executorId)}` : ''}`, signal),
+  sessions: (agentId: string, binding: Pick<BindingView, 'executor_id' | 'binding_id'>, after: string, signal?: AbortSignal) => {
     const query = new URLSearchParams({agent_id: agentId, executor_id: binding.executor_id,
       binding_id: binding.binding_id, after_session_id: after, limit: "25"});
     return read<{sessions: RuntimeSession[]; has_more: boolean; next_after_session_id: string}>(`/v1/runtime/sessions?${query}`, signal);

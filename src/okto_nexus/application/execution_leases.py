@@ -34,6 +34,18 @@ class ExecutionChannel:
     executor_id: str
     connection_id: str
     connection_generation: int
+    control_capabilities: tuple[str, ...] = ()
+
+    @property
+    def supports_work_containment(self):
+        from nexus_connector_core.lease_denial import LEASE_DENIAL_REVISION
+        from nexus_connector_core.session_release import SESSION_RELEASE_REVISION
+        return {LEASE_DENIAL_REVISION, SESSION_RELEASE_REVISION} <= set(self.control_capabilities)
+
+    def identity(self):
+        """Wire identity only; negotiated host capabilities are not frame fields."""
+        return {key: getattr(self, key) for key in
+                ('server_id', 'executor_id', 'connection_id', 'connection_generation')}
 
 
 def _conflict(message):
@@ -91,6 +103,9 @@ class ExecutionLeaseService:
         return frame
 
     def _authority(self, uow, scope, grant_id, channel, now):
+        containment = getattr(self.access, 'session_containment', None)
+        if containment is not None:
+            containment.require_not_pending(uow, scope)
         from .execution_agent_recovery import require_agent_ready
         require_agent_ready(uow.connection, scope['server_id'], scope['executor_id'], scope['agent_id'])
         row = self.repo.authority(uow, scope)
@@ -129,6 +144,12 @@ class ExecutionLeaseService:
             from .execution_domain_delivery import require_domain_delivery
             require_domain_delivery(uow, access=self.access, server_id=scope["server_id"],
                 executor_id=scope["executor_id"], operation_id=row["open_operation_id"])
+        work_authority = getattr(self.access, 'work_lease_authority', None)
+        # Old peers cannot contain and report a scoped work refusal without
+        # fencing their shared link. Only the authenticated handshake can enable
+        # this additional check; capabilities in a lease request have no authority.
+        if (row['kind'] == 'embedded' or channel.supports_work_containment) and work_authority is not None:
+            work_authority.require(uow, scope, now=now.timestamp())
         if row["boot_authority_json"] is not None and row["lifecycle_state"] == "OPEN_PENDING":
             from .execution_boot_authority import require_boot_authority
             require_boot_authority(uow, access=self.access, agent_id=scope["agent_id"],

@@ -250,11 +250,13 @@ def command(deps, context, session, verb, payload, options):
     return _admit(deps, context, access, request)
 
 
-def admit_delivery(deps, uow, operation_id):
+def admit_delivery(deps, uow, operation_id, *, immediate_only=False, capacity_request=None):
     from ..application.execution_domain_delivery import admit_domain_delivery
-    return admit_domain_delivery(uow, operation_id=operation_id, access=build_execution_access(deps),
+    access = build_execution_access(deps)
+    return admit_domain_delivery(uow, operation_id=operation_id, access=access, claims=access.execution_claims,
         fresh_publications=deps.execution_fresh_publications,
-        remote_ready=protocol_info()["remote_execution_ready"])
+        remote_ready=protocol_info()["remote_execution_ready"], immediate_only=immediate_only,
+        capacity_request=capacity_request)
 
 
 def _admit(deps, context, access, request, *, session_metadata=None):
