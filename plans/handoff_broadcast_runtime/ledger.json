@@ -1681,5 +1681,128 @@
     ],
     "branch": "feature/v0.3.0",
     "supersedes_pending_issue": "pending_admission_recovery_fix_20261014.remaining_issue"
+  },
+  "native_delta_batch_fix_20261014": {
+    "status": "implemented_and_validated_locally",
+    "recorded_at": "2026-10-15T01:55:49.641327+00:00",
+    "incident": {
+      "agent": "claude",
+      "session_id": "ses_2c8c610e19667f6a91ef218ba735514b",
+      "operation_id": "op_ae4113dca013d89699facd1279bb35cf",
+      "fault_sequence": 198,
+      "code": "EVENT_STREAM_UNAVAILABLE",
+      "reason": "NATIVE_EVENT_OVERFLOW",
+      "cause": "Claude live subscriber exceeded its 128-event queue during a burst of small text deltas. Codex used the same unbatched subscription; Pi already batches compatible deltas.",
+      "original_work_replayed": false
+    },
+    "implementation": {
+      "component": "connector-core",
+      "changes": [
+        "Batch adjacent compatible Claude text/thinking/tool-input and Codex text/reasoning/plan fragments before bridge normalization and durable append.",
+        "Preserve exact text, session/turn/item/block/operation identity, lifecycle, approval, snapshot and terminal boundaries.",
+        "Bound each merged payload to 24 KiB UTF-8; retain queue byte limits and explicit overflow for genuine overload.",
+        "Keep original native replay history and independent subscribers."
+      ],
+      "version": "0.0.11",
+      "branch": "feature/v0.0.11"
+    },
+    "validation": {
+      "source_tests": 95,
+      "skipped": 1,
+      "installed_wheel_tests": 30,
+      "regression": "Paused actual Claude/Codex subscriber receives 1800 fragments and terminal twice, with exact Unicode output. The former plain queue overflows with the same burst.",
+      "suites": [
+        "test_native_delta_batches",
+        "test_pi_output_correlation",
+        "test_claude_output_snapshot",
+        "test_pc04_stream_loss",
+        "test_native_parity",
+        "test_claude_replacement_correlation",
+        "legacy/test_codex_legacy"
+      ],
+      "live": {
+        "run": "delta-7365d012",
+        "cases": [
+          {
+            "agent": "claude",
+            "marker": "delta-7365d012-claude",
+            "message_id": "msg_cb8e4c6a87f04602acfec847a18b555d",
+            "followup": false,
+            "finished": true,
+            "outcome": "success",
+            "published": true,
+            "output_chars": 7105,
+            "session_id": "ses_866b168c1a5e346ce3903c723a006012",
+            "complete": true
+          },
+          {
+            "agent": "codex",
+            "marker": "delta-7365d012-codex",
+            "message_id": "msg_7c961ab808c048f5a2f97a18912266a0",
+            "followup": false,
+            "finished": true,
+            "outcome": "success",
+            "published": true,
+            "output_chars": 7104,
+            "session_id": "ses_fcdfb6ca0805666f2e699aeb80aea543",
+            "complete": true
+          },
+          {
+            "agent": "claude",
+            "marker": "delta-7365d012-claude-followup",
+            "message_id": "msg_d617cb1f016242159c5d2201957568cf",
+            "followup": true,
+            "finished": true,
+            "outcome": "success",
+            "published": true,
+            "output_chars": 30,
+            "session_id": "ses_866b168c1a5e346ce3903c723a006012",
+            "complete": true
+          },
+          {
+            "agent": "codex",
+            "marker": "delta-7365d012-codex-followup",
+            "message_id": "msg_ac1ee507aa5744a7953fe32dc602e4f3",
+            "followup": true,
+            "finished": true,
+            "outcome": "success",
+            "published": true,
+            "output_chars": 29,
+            "session_id": "ses_fcdfb6ca0805666f2e699aeb80aea543",
+            "complete": true
+          }
+        ]
+      },
+      "live_new_session_pump_failures": 0,
+      "agent_states": [
+        {
+          "agent_id": "claude",
+          "state": "READY",
+          "error_code": null
+        },
+        {
+          "agent_id": "Pi",
+          "state": "READY",
+          "error_code": null
+        },
+        {
+          "agent_id": "codex",
+          "state": "READY",
+          "error_code": null
+        }
+      ]
+    },
+    "installation": {
+      "core_wheel_sha256": "3592e811a060cce8abc4ca62154e795f534c30b9860b3e3177122e62389acdee",
+      "installed_files_verified": {
+        "nexus": 529,
+        "connector_core": 146,
+        "connector": 96
+      },
+      "consumer_dependencies": "Nexus 0.3.0 and Connector 0.0.9 both pin Core 0.0.11; both vendored wheels updated.",
+      "backup": "before-delta-batch-fix-20261014-225201",
+      "listener": "http://127.0.0.1:8202",
+      "pid": 14968
+    }
   }
 }
