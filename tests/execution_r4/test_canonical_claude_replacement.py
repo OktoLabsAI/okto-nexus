@@ -23,11 +23,17 @@ def test_claude_replacement_has_separate_public_results(connected_local, surface
     client, headers = setup[2:4]
     client.headers['host'] = '127.0.0.1:8000'
     peers = []
+    # Keep the original turn generating until its real interrupt arrives.
+    # A two-second wall-clock window can expire during REST/MCP observation
+    # on a slower host, changing this into a successful-turn scenario.
+    source = _FAKE_CLAUDE_SCRIPT.replace(
+        'while time.monotonic() < deadline:',
+        'while content == "original" or time.monotonic() < deadline:')
 
     class Factory:
         async def open(self, prepared, session_id, context, *, stream_epoch):
             peer = ClaudeCodeStreamConnector(binary=sys._base_executable,
-                argv=['-u', '-c', _FAKE_CLAUDE_SCRIPT],
+                argv=['-u', '-c', source],
                 version_argv=['-c', "print('2.1.281 (Claude Code)')"],
                 cwd=str(setup[-1]), env={'FAKE_CC_SCENARIO': 'slow_start'})
             peers.append(peer)
