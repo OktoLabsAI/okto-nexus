@@ -208,8 +208,11 @@ def finish_setup(deps, context, owner, fresh, request, *, verified):
             limits = configuration['authorization']
             expiry = None if limits['minutes'] is None else (
                 datetime.now(timezone.utc) + timedelta(minutes=limits['minutes'])).isoformat()
+            actions = ['open','send','steer','interrupt','close']
+            if runtime_policy.effective(uow.connection, agent_id)['broadcast_handoff_auto_claim']:
+                actions.append('execute_work')
             access.issue(context, actor_agent_id=agent_id, endpoint_id=endpoint_id,
-                actions=['open','send','steer','interrupt','close'], expires_at=expiry, max_executions=limits['actions'])
+                actions=actions, expires_at=expiry, max_executions=limits['actions'])
             result['binding'] = binding
         uow.connection.execute('INSERT INTO connection_setup_commits VALUES(?,?,?,?,?)',
             (commit_actor, request['client_intent_id'], digest, json.dumps(result), deps.clock.now_iso()))

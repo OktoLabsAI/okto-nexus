@@ -206,7 +206,7 @@ class NexusConfig:
     feature_memory: bool = False
     feature_harness_integrations: bool = True
     # Startup rollout gate. Agent/global opt-in remains independently required.
-    runtime_handoff_auto_claim_enabled: bool = False
+    runtime_handoff_auto_claim_enabled: bool = True
     # Startup-only indexed recovery of lost runtime commit notifications.
     # This is internal store polling, never native peer status polling.
     runtime_recovery_interval_seconds: int = 30
@@ -423,7 +423,7 @@ _BOOL_FIELDS: dict[str, tuple[str, str, bool]] = {
     "runtime_handoff_auto_claim_enabled": (
         "OKTO_NEXUS_RUNTIME_HANDOFF_AUTO_CLAIM_ENABLED",
         "--runtime-handoff-auto-claim-enabled",
-        False,
+        True,
     ),
     "auto_prune_on_start": (
         "OKTO_NEXUS_AUTO_PRUNE_ON_START",

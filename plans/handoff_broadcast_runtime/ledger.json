@@ -1893,5 +1893,60 @@
       "listener": "http://127.0.0.1:8202",
       "pid": 42736
     }
+  },
+  "handoff_startup_defaults_and_workspace_selection_20261015": {
+    "status": "validated",
+    "changes": [
+      "Enable handoff scheduler startup gate by default; preserve explicit startup opt-out and operator/agent policies.",
+      "Connection Finish authorizes execute_work only when effective broadcast handoff opt-in is enabled, with the selected authorization limits.",
+      "Authenticated workspace catalog exposes logical IDs and names, enforces workspaces.list, and omits host paths.",
+      "Connector wizard selects existing workspace independently of local folder, preserves explicit IDs and resumable requests."
+    ],
+    "validation": {
+      "nexus_handoff_policy_lifecycle_connection_setup_passed": 32,
+      "nexus_workspace_catalog_and_realization_passed": 2,
+      "connector_workspace_wizard_and_onboarding_passed": 30,
+      "live_handoffs": [
+        {
+          "handoff_id": "hof_f4c9281ac9de494d8f2299d533526b08",
+          "state": "COMPLETED",
+          "agent": "codex"
+        },
+        {
+          "handoff_id": "hof_37f41d38b5c8499e812873e11df005c8",
+          "state": "COMPLETED",
+          "agent": "claude"
+        }
+      ],
+      "live_authorization": "Three explicit execute_work grants issued via authenticated operator API within existing unlimited/no-expiry local connection scope; no database patch.",
+      "independent_remote_host_tested": false
+    },
+    "versions": {
+      "nexus": "0.3.0",
+      "connector": "0.0.9",
+      "core": "0.0.11"
+    },
+    "wheel_sha256": {
+      "nexus": "771452b9fdd1ae39a5040614bc37192a761579c8a8f7c0da3bd10a452a29714f",
+      "connector": "25ea66e97dc7ed035fe7de1f30fbf3fccfe00e922f6a69776511b92cd6effd95"
+    },
+    "installation": {
+      "verified_files": {
+        "nexus": 530,
+        "connector": 97,
+        "core": 146
+      },
+      "installed_connector_tests_passed": 30,
+      "installed_nexus_workspace_tests_passed": 2,
+      "listener": "http://127.0.0.1:8202",
+      "pid": 27084,
+      "agents_ready": [
+        "claude",
+        "Pi",
+        "codex"
+      ],
+      "global_handoff_policy_enabled": true,
+      "handoff_startup_gate_enabled": true
+    }
   }
 }

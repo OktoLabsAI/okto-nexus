@@ -18,18 +18,22 @@ broadcast messages retain intentional fanout and can produce multiple replies.
 
 ## Controlled activation
 
-The current development build keeps productive automatic acquisition behind a
-startup rollout setting, disabled by default:
+The server enables automatic acquisition support by default. The startup
+setting can explicitly disable it for an installation:
 
 ```powershell
-okto-nexus serve --runtime-handoff-auto-claim-enabled true
+okto-nexus serve --runtime-handoff-auto-claim-enabled false
 ```
 
-The environment equivalent is `OKTO_NEXUS_RUNTIME_HANDOFF_AUTO_CLAIM_ENABLED=true`.
+The environment equivalent is `OKTO_NEXUS_RUNTIME_HANDOFF_AUTO_CLAIM_ENABLED=false`.
 The startup setting does not grant any agent authority. The effective runtime
 policy must also enable `broadcast_handoff_auto_claim`, and the agent needs a
 current `execute_work` grant for its selected endpoint. Existing conversation
-response settings do not imply this opt-in.
+response settings do not imply this opt-in. Finishing connection setup with
+effective broadcast automation enabled includes `execute_work` in that
+connection's authorization, using its selected duration and action budget.
+Existing grants are not silently expanded by a global policy change; existing
+connections need an explicit work grant or renewed connection authorization.
 
 The policy is available through the existing operator-authorized runtime policy
 API: `GET`/`PUT /api/v1/runtime-policy` for global defaults, or

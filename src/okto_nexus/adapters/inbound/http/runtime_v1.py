@@ -882,6 +882,16 @@ def build_router() -> APIRouter:
         except OktoNexusError as error:
             return runtime_error(error, 'connection.setup')
 
+    @router.get('/connections/workspaces')
+    async def connection_workspaces(request: Request, limit: int = 100, after_workspace_id: str | None = None):
+        from ....application.connection_workspaces import list_connection_workspaces
+        try:
+            result = await anyio.to_thread.run_sync(lambda: list_connection_workspaces(
+                request.app.state.deps, runtime_request_context(), limit=limit, after_workspace_id=after_workspace_id))
+            return JSONResponse(result, headers={'Cache-Control': 'no-store'})
+        except OktoNexusError as error:
+            return runtime_error(error, 'connection.workspaces')
+
     @router.get('/workspaces/{workspace_id}/paths')
     async def workspace_paths_read(workspace_id: str, executor_id: str, request: Request):
         from ....application.workspace_paths import list_workspace_paths

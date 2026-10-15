@@ -185,6 +185,24 @@ def test_setup_transport_requires_operator(local_setup):
     assert client.get('/v1/connections/setup/subject',headers=headers['operator']).status_code == 200
 
 
+@pytest.mark.parametrize('global_enabled,override,expected', [
+    (False, None, False), (True, None, True), (True, False, False), (False, True, True),
+])
+def test_finish_authorizes_work_only_with_effective_handoff_opt_in(local_setup, global_enabled, override, expected):
+    from test_runtime_policy_defaults import save
+    assert save(local_setup, broadcast_handoff_auto_claim=global_enabled).status_code == 200
+    context, request = request_for(local_setup)
+    request['broadcast_handoff_auto_claim'] = override
+    result = finish(local_setup, context, request, verified={
+        'root': directory_identity(request['configuration']['workspace_root']), 'home': None})
+    with local_setup[0].connection_factory.unit_of_work(write=False) as uow:
+        grants = uow.connection.execute('SELECT actions,max_executions,no_expiry FROM runtime_execution_grants '
+            'WHERE endpoint_id=?', (result['binding']['endpoint_id'],)).fetchall()
+        assert len(grants) == 1
+        assert ('execute_work' in json.loads(grants[0]['actions'])) is expected
+        assert grants[0]['max_executions'] == 20 and not grants[0]['no_expiry']
+
+
 @pytest.mark.parametrize('change_policy', [False, True])
 def test_finish_offers_scoped_session_choice_and_retries_after_release(local_setup, monkeypatch, change_policy):
     from test_binding_replacement import seed_claim

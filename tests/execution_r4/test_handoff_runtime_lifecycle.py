@@ -49,8 +49,10 @@ def state(deps, hid):
                                       (hid,)).fetchone()
 
 
-def test_rollout_setting_is_explicit_and_startup_only(tmp_path):
-    assert not load_config({}, ['--home', str(tmp_path)]).runtime_handoff_auto_claim_enabled
+def test_rollout_defaults_enabled_with_explicit_startup_opt_out(tmp_path):
+    assert load_config({}, ['--home', str(tmp_path)]).runtime_handoff_auto_claim_enabled
+    assert not load_config({'OKTO_NEXUS_RUNTIME_HANDOFF_AUTO_CLAIM_ENABLED': 'false'},
+                          ['--home', str(tmp_path)]).runtime_handoff_auto_claim_enabled
     assert load_config({'OKTO_NEXUS_RUNTIME_HANDOFF_AUTO_CLAIM_ENABLED': 'true'},
                        ['--home', str(tmp_path)]).runtime_handoff_auto_claim_enabled
     assert not load_config({'OKTO_NEXUS_RUNTIME_HANDOFF_AUTO_CLAIM_ENABLED': 'true'},
