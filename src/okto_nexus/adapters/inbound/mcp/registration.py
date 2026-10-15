@@ -26,7 +26,7 @@ from okto_nexus.bootstrap.dependencies import Deps, _package_version
 #: ``event_wait`` long-poll on THIS connection, or an EPT-backed remote
 #: data-plane poller when the harness can run a wake-up background process
 #: without carrying the permanent ``nxs_`` key.
-SERVER_INSTRUCTIONS = """\nOkto Nexus - local agent coordination bus (workspace-scoped; pass project_root). Agents are global identities - discover them with agent_list and their advertised capabilities with capability_list. DEEP reference docs live in MCP resources (okto-nexus://reference/...); read them on demand. This inline block keeps only what you need to act correctly on the first try.
+SERVER_INSTRUCTIONS = """\nOkto Nexus coordinates agents by workspace; pass project_root. Agents are global: discover them with agent_list and capabilities with capability_list. Read detailed MCP resources (okto-nexus://reference/...) on demand.
 
 YOUR IDENTITY. You connect over MCP streamable HTTP; the nxs_ API key sent in your Authorization bearer header IS your agent identity, created by the operator on the dashboard. Use that agent_id consistently as from_agent_id / agent_id in every call. EVERYTHING you need is exposed as MCP tools on THIS connection - never shell out to the okto-nexus CLI, attach a stdio server, or spawn helper processes (sole exception: an EPT poller holding only a short-lived nxsept_ token, never your nxs_ key).
 

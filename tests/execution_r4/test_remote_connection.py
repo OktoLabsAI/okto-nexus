@@ -377,6 +377,23 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                                     break
                                 assert execution.failure is None, repr(execution.failure)
                                 await asyncio.sleep(.01)
+                        # A submitted initial prompt still owns its turn. The
+                        # synthetic harness must finish it before another turn
+                        # can enter this same session.
+                        from nexus_connector_core import RuntimeEvent
+                        await native.native.queue.put(RuntimeEvent(server_id, executor_id, session_id,
+                            native.stream_epoch, 0, 'turn_state', 'fixture.result',
+                            dict(delivery_phase='terminal', delivery_outcome='success',
+                                 output_text='Initial CLI response'), operation_id=child))
+                        async with asyncio.timeout(8):
+                            while True:
+                                result = await asyncio.to_thread(client.get, '/v1/runtime/operations/' + child,
+                                                                 headers=headers['subject'])
+                                assert result.status_code == 200, result.text
+                                if result.json()['executor_stage'] == 'SUCCEEDED':
+                                    break
+                                assert execution.failure is None, repr(execution.failure)
+                                await asyncio.sleep(.01)
                 turned = await admit('turn.submit', session_id=session_id, text='Hello')
                 if check_presence:
                     def presence():
@@ -526,7 +543,7 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                         row = uow.connection.execute(
                             'SELECT lease_serial,status FROM execution_leases ORDER BY lease_serial DESC LIMIT 1').fetchone()
                         assert row['lease_serial'] >= 2 and row['status'] == 'ACTIVE'
-                if native_decision is None and ((automatic and event_recovery != 'lease_renewal') or (reconcile_closed and not publication_failure and not history_count)):
+                if native_decision is None and not initial_prompt and ((automatic and event_recovery != 'lease_renewal') or (reconcile_closed and not publication_failure and not history_count)):
                     from nexus_connector_core import RuntimeEvent
                     journal = await daemon.host.ensure_history_journal()
                     original_ack = journal.acknowledge_events
@@ -758,7 +775,8 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 if initial_prompt:
                     assert uow.connection.execute("SELECT SUM(used_executions) FROM runtime_execution_grants").fetchone()[0] == 3
                 assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 5 + history_count + bool(native_decision) + bool(initial_prompt)
-                assert uow.connection.execute('SELECT COUNT(*) FROM execution_receipts').fetchone()[0] == 5 + history_count + bool(native_decision) + bool(initial_prompt)
+                # Initial text has both a submission and a terminal receipt.
+                assert uow.connection.execute('SELECT COUNT(*) FROM execution_receipts').fetchone()[0] == 5 + history_count + bool(native_decision) + 2 * bool(initial_prompt)
                 assert uow.connection.execute('SELECT COUNT(*) FROM execution_dispatch_outbox WHERE attempt_no<>1').fetchone()[0] == 0
                 expected_session = ('READY', 'SUPERSEDED') if publication_failure in ('before_commit', 'core_commit') and not reconcile_closed else ('CLOSED', 'CLOSED')
                 # Receipt ingress preserves history after disconnect. Adoption

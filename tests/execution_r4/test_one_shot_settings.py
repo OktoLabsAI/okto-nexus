@@ -51,13 +51,16 @@ def test_missing_agent_cannot_have_policy(conn):
         settings.save(conn, agent_id='missing', expected_revision=0, settings={})
 
 
-def test_reset_without_agents_keeps_defaults_but_discards_agent_overrides(conn):
+def test_reset_without_agents_keeps_defaults_but_discards_agent_overrides(tmp_path):
     from okto_nexus.application.database_reset import clear_operational_history
-    settings.save(conn, agent_id='agent', expected_revision=0, settings={'max_parallel': 5})
-    conn.execute('CREATE TABLE runtime_reset_generation(singleton,generation)')
-    conn.execute('INSERT INTO runtime_reset_generation VALUES(1,0)')
-    clear_operational_history(conn, keep_agents=False)
-    assert settings.read(conn)['effective']['max_parallel'] == 1
-    assert conn.execute('SELECT scope FROM one_shot_policy_settings').fetchall()[0][0] == 'global'
-    assert conn.execute('SELECT count(*) FROM one_shot_policy_settings').fetchone()[0] == 1
-    assert not conn.execute('SELECT * FROM agents').fetchall()
+    from okto_nexus.bootstrap.dependencies import bootstrap
+    deps = bootstrap({}, ['--home', str(tmp_path / 'home')])
+    with deps.connection_factory.unit_of_work() as uow:
+        deps.repos.agents.upsert(uow, agent_id='agent')
+        conn = uow.connection
+        settings.save(conn, agent_id='agent', expected_revision=0, settings={'max_parallel': 5})
+        clear_operational_history(conn, keep_agents=False)
+        assert settings.read(conn)['effective']['max_parallel'] == 1
+        assert conn.execute('SELECT scope FROM one_shot_policy_settings').fetchall()[0][0] == 'global'
+        assert conn.execute('SELECT count(*) FROM one_shot_policy_settings').fetchone()[0] == 1
+        assert not conn.execute('SELECT * FROM agents').fetchall()

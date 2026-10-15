@@ -104,6 +104,12 @@ def test_capacity_survives_lost_reply_reconnect_and_connector_process_restart(on
             assert line, 'Connector worker exited; inspect connector-process.stderr'
             return json.loads(line)
 
+        async def finish_process():
+            # Drain/close all pipe transports before asyncio.run closes its
+            # Proactor loop on Windows, including a cancelled stdout read.
+            await asyncio.wait_for(process.communicate(), 15)
+            return process.returncode
+
         async def start():
             nonlocal process
             process = await asyncio.create_subprocess_exec(sys.executable, '-I', '-u',
@@ -182,12 +188,12 @@ def test_capacity_survives_lost_reply_reconnect_and_connector_process_restart(on
             old_pid = process.pid
             if restart_mode == 'graceful':
                 assert (await command('stop'))['pending'] == 0
-                assert await asyncio.wait_for(process.wait(), 15) == 0
+                assert await finish_process() == 0
             else:
                 # Only this disposable child is terminated; no provider has
                 # started. Its journal/slot ledger must survive the process.
                 process.kill()
-                assert await asyncio.wait_for(process.wait(), 15) != 0
+                assert await finish_process() != 0
             await start()
             assert process.pid != old_pid
             assert registry.current_host(binding['server_id'], binding['executor_id']).boot_id != before.request.scope.boot_id
@@ -234,16 +240,16 @@ def test_capacity_survives_lost_reply_reconnect_and_connector_process_restart(on
                 assert uow.connection.execute('SELECT COUNT(*) FROM runtime_handoff_bindings').fetchone()[0] == 1
                 assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.submit'").fetchone()[0] == 1
             assert (await command('stop'))['pending'] == 0
-            assert await asyncio.wait_for(process.wait(), 15) == 0
+            assert await finish_process() == 0
         finally:
             if process is not None and process.returncode is None:
                 try:
                     await command('stop')
-                    await asyncio.wait_for(process.wait(), 15)
+                    await finish_process()
                 except (Exception, asyncio.CancelledError):
                     if process.returncode is None:
                         process.kill()
-                        await process.wait()
+                        await finish_process()
             server.should_exit = True
             await asyncio.wait_for(serving, 15)
             sock.close()

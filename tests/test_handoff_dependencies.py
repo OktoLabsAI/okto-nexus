@@ -1048,6 +1048,9 @@ def test_ts9_br10_dep_failing_before_approval_reverts_to_pending(tmp_path):
 # --------------------------------------------------------------------------- #
 def test_ts10_rest_list_aggregates_one_query_and_baseline_rows(tmp_path):
     deps, tools, root, workspace_id = make_env(tmp_path)
+    # Compare dependency projections without concurrent scheduler observations
+    # changing runtime_progress between the two snapshots.
+    deps.config.runtime_handoff_auto_claim_enabled = False
     plains = [
         _ok(_create(tools, root, target=_broadcast()))["handoff_id"] for _ in range(2)
     ]

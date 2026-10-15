@@ -19,7 +19,9 @@ def test_first_project_handoff_registers_workspace_with_notification(runtime, ta
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert deps.repos.workspaces.get(uow, workspace) is not None
         assert uow.connection.execute('SELECT workspace_id FROM handoffs').fetchone()[0] == workspace
-        assert uow.connection.execute('SELECT COUNT(*) FROM message_deliveries').fetchone()[0] == (target['strategy'] == 'direct')
+        expected = {'worker'} if target['strategy'] == 'direct' else {'worker', 'operator'}
+        assert {row[0] for row in uow.connection.execute(
+            'SELECT recipient_agent_id FROM message_deliveries')} == expected
         assert not uow.connection.execute('PRAGMA foreign_key_check').fetchall()
 
 

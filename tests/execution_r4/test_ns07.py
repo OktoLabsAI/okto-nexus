@@ -93,15 +93,25 @@ def test_ns07_01(tmp_path, monkeypatch):
     asyncio.run(scenario())
 
 
-def test_passive_serve_does_not_open_core_stores(tmp_path):
+def test_passive_serve_does_not_open_native_sessions(tmp_path):
     home = tmp_path / "home"
     deps = bootstrap({}, ["--home", str(home)])
     app = build_app(deps)
     with TestClient(app) as client:
         assert client.get("/v1/connections/protocol").status_code == 200
         assert isinstance(app.state.embedded_core_host, EmbeddedRuntimeHost)
-        assert not (home / "core-runtime").exists()
-    assert not (home / "core-runtime").exists()
+        host = app.state.embedded_core_host
+        assert not host._runtime_tasks
+        assert not list((home / "core-runtime").glob("session-*.db"))
+        # Default capacity publication may initialize the shared slot ledger;
+        # observing inventory must not reserve slots or acquire native sessions.
+        async def reservations():
+            if host._ledger_task is None:
+                return ()
+            ledger = await host._ledger_task
+            return (await ledger.owned_slot_page()).reservations
+        assert not client.portal.call(reservations)
+    assert not list((home / "core-runtime").glob("session-*.db"))
 
 
 def test_ns07_02(tmp_path):

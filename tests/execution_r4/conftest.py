@@ -5,6 +5,12 @@ import pytest
 
 
 @pytest.fixture(autouse=True)
+def shutdown_diagnostics(monkeypatch):
+    from shutdown_diagnostics import install_shutdown_diagnostics
+    install_shutdown_diagnostics(monkeypatch)
+
+
+@pytest.fixture(autouse=True)
 def isolated_embedded_inventory(monkeypatch):
     # These campaigns provide their own selected candidates/native peers.
     # Inventory tests can override this default explicitly; direct calls to

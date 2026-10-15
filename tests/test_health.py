@@ -790,7 +790,9 @@ def test_ts4_seeded_scenario_exact_values_and_scoping(tmp_path):
     # other workspace's delivery for beta is EXCLUDED (its message is in ws2).
     expected_unread = _sql_unread_by_agent(deps, wid)
     assert expected_unread[0]["agent_id"] == "beta"  # most unread ranks first
-    assert {row["agent_id"] for row in expected_unread} == {"alpha", "beta", "gamma"}
+    # Handoff outcomes also notify the operator; include that real delivery in
+    # the independently recomputed workspace backlog.
+    assert {row["agent_id"] for row in expected_unread} == {"alpha", "beta", "gamma", "operator"}
     for m in (m1, m7):
         backlog = m["inbox_backlog"]
         assert backlog["scope"] == "snapshot"
