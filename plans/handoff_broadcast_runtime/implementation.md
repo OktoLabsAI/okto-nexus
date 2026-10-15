@@ -1596,3 +1596,12 @@ Validation: 51 targeted source cases passed across recovery, authority, publicat
 - Validation: 95 source tests passed, 1 skipped; all 30 new tests also passed against the installed wheel. Paused actual subscriptions processed bursts of 1,800 Unicode fragments plus terminal events in two consecutive turns. The previous plain queue fails that same burst.
 - Live Nexus validation: Claude and Codex each returned all 120 requested lines (7,105 and 7,104 characters), published successfully, then answered a follow-up in the same session. Neither new session recorded a pump failure; Claude, Codex and Pi are READY.
 - Installed the rebuilt development Core 0.0.11, verified all installed package files, and updated its vendored wheel in Nexus and Connector. Existing development versions remain Nexus 0.3.0 / Core 0.0.11 / Connector 0.0.9. Nexus is running on port 8202. No original user request was replayed and no database records were manually patched.
+
+
+### 2026-10-14 — Codex command-output burst coverage
+
+- Session `ses_fcdfb6ca0805666f2e699aeb80aea543` recorded `NATIVE_EVENT_OVERFLOW` at sequence 553 after 188 `item/commandExecution/outputDelta` events. The preceding fix batched text/reasoning but omitted command output. The original user operation was not replayed.
+- Extended Core's bounded batching to command output, preserving exact command item, turn, thread and channel metadata. Logs remain tool activity rather than agent reply text; completion/control boundaries and explicit true-overload faults remain intact.
+- Validation: 102 distinct source tests passed (one skipped); 37 passed against the installed wheel. Regressions cover paused actual subscriptions, two command bursts, quiet sibling isolation, item/channel boundaries, final reply, bridge normalization and durable SQLite replay.
+- Live Meta-harness: Codex executed one read-only command with exit code 0; all 1,200 output lines (31,200 characters) were recorded in three events. Its final response and a same-session follow-up were published successfully, with zero pump faults. All three agents are READY.
+- Rebuilt/installed development Core 0.0.11, updated the vendored wheel in both consumers, and restarted Nexus on port 8202. Existing development versions remain Nexus 0.3.0 / Core 0.0.11 / Connector 0.0.9. No database records were manually patched.

@@ -1804,5 +1804,94 @@
       "listener": "http://127.0.0.1:8202",
       "pid": 14968
     }
+  },
+  "codex_command_delta_fix_20261014": {
+    "status": "implemented_and_validated_locally",
+    "recorded_at": "2026-10-15T02:16:14.499230+00:00",
+    "incident": {
+      "session_id": "ses_fcdfb6ca0805666f2e699aeb80aea543",
+      "operation_id": "op_83bf696b14be1621c0143485610e3eb1",
+      "fault_sequence": 553,
+      "reason": "NATIVE_EVENT_OVERFLOW",
+      "command_output_events_before_fault": 188,
+      "cause": "The preceding delta batching fix omitted item/commandExecution/outputDelta. A command-output burst exhausted the live subscriber queue.",
+      "original_work_replayed": false
+    },
+    "implementation": "Extend bounded Codex delta batching to commandExecution/outputDelta, preserving command item, thread, turn and output-channel boundaries and keeping tool output separate from agent reply text.",
+    "validation": {
+      "distinct_source_tests_passed": 102,
+      "skipped": 1,
+      "installed_wheel_tests_passed": 37,
+      "regressions": [
+        "Two commands with 1800 fragments each while actual adapter subscriber is paused; exact output, item completion, final reply and quiet sibling preserved.",
+        "Different item/turn/thread/channel or invalid delta never merged.",
+        "Bridge plus SQLite durable replay preserves 1800 command-output fragments and successful correlated terminal response."
+      ],
+      "live": {
+        "run": "command-3c903628",
+        "cases": [
+          {
+            "marker": "command-3c903628",
+            "message_id": "msg_36f747941b0847ab9a22d5a9b9c5ab64",
+            "followup": false,
+            "outcome": "success",
+            "complete": true,
+            "session_id": "ses_fdf66eb339b6fa464538f67d8a44ac25",
+            "published": true,
+            "command_output_events": 3,
+            "command_output_chars": 31200,
+            "all_command_lines": true,
+            "pump_failures": 0
+          },
+          {
+            "marker": "command-3c903628-followup",
+            "message_id": "msg_00c222c1b4d1454b9f854ea3feda5753",
+            "followup": true,
+            "outcome": "success",
+            "complete": true,
+            "session_id": "ses_fdf66eb339b6fa464538f67d8a44ac25",
+            "published": true,
+            "command_output_events": 3,
+            "command_output_chars": 31200,
+            "all_command_lines": true,
+            "pump_failures": 0
+          }
+        ]
+      },
+      "live_command_executions": 1,
+      "live_command_exit_code": 0,
+      "agents": [
+        {
+          "agent_id": "claude",
+          "state": "READY",
+          "error_code": null
+        },
+        {
+          "agent_id": "Pi",
+          "state": "READY",
+          "error_code": null
+        },
+        {
+          "agent_id": "codex",
+          "state": "READY",
+          "error_code": null
+        }
+      ]
+    },
+    "installation": {
+      "nexus": "0.3.0",
+      "core": "0.0.11",
+      "connector": "0.0.9",
+      "core_wheel_sha256": "eaddf7b0627167d6175160cb10ffebe81ad80c78db982ada3ff8aaf25488a26a",
+      "verified_files": {
+        "nexus": 529,
+        "core": 146,
+        "connector": 96
+      },
+      "consumer_wheels_updated": true,
+      "backup": "before-command-delta-fix-20261014-231155",
+      "listener": "http://127.0.0.1:8202",
+      "pid": 42736
+    }
   }
 }
