@@ -297,10 +297,9 @@ def prepare_execution_binding(
                                   "The selected adapter is not supported.", {})
         profile_id = ("profile_" + secrets.token_hex(16)
                       if enable_requested and descriptor.connection_mode == "managed" else None)
-        if (enable_requested and descriptor.connection_mode == "attach" and
-                not access.config.feature_harness_attach):
+        if descriptor.connection_mode == "attach":
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
-                                  "Attach connections are disabled.", {})
+                                  "Attach connections are no longer supported.", {})
         approval_id = ("apr_" + secrets.token_hex(16)
                        if request_operator_proof and not blockers else None)
         proposal_id = "prop_" + secrets.token_hex(16)

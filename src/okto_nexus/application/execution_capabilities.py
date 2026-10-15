@@ -52,6 +52,11 @@ class ExecutionCapabilityService:
         return rows[0]
 
     def _authority(self, uow, scope, *, grant_id=None, grant_revision=None):
+        containment = getattr(self.access, 'session_containment', None)
+        if containment is not None:
+            containment.require_not_pending(uow, scope)
+        from .execution_agent_recovery import require_agent_ready
+        require_agent_ready(uow.connection, scope['server_id'], scope['executor_id'], scope['agent_id'])
         revisions = uow.connection.execute(
             'SELECT credential_epoch,authorization_revision,configuration_revision '
             'FROM execution_agent_revisions WHERE server_id=? AND agent_id=?',

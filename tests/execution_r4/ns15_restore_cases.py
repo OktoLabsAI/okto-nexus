@@ -139,8 +139,14 @@ def restore_case(tmp_path, monkeypatch, request, *, backfilled_policies=False):
             with deps.connection_factory.unit_of_work(write=False) as uow:
                 dispatch = dict(uow.connection.execute('SELECT * FROM execution_dispatch_outbox WHERE operation_id=?',
                     (turn['operation_id'],)).fetchone())
-            if dispatch['dispatch_state'] == 'RECONCILING':
-                assert json.loads(dispatch['last_error'])['possible_effect'] is True
+            # Reconciliation projects the durable Core receipt; last_error
+            # on the transport outbox need not contain the native failure.
+            result = client.get('/v1/runtime/operations/' + turn['operation_id'],
+                                headers=headers['subject'])
+            assert result.status_code == 200, result.text
+            if (result.json().get('possible_effect') is True
+                    and app.state.embedded_dispatch_owner.agents.errors.get('subject') is not None):
+                assert result.json()['retry_safe'] is False
                 break
             assert time.monotonic() < deadline, dispatch
             time.sleep(.02)

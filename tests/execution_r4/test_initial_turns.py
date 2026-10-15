@@ -90,3 +90,35 @@ def test_initial_prompt_obeys_encoded_payload_limit(reuse_connected):
     assert "operation_payload_too_large" in response.json()["blockers"]
     admit(setup, response.json(), 409)
     assert native.opens == 0
+
+
+def test_restart_settles_initial_turn_never_released_to_dispatch(tmp_path, monkeypatch):
+    from contextlib import contextmanager
+    from fastapi.testclient import TestClient
+    from test_embedded_inventory import app_for
+    import time
+    with contextmanager(local_setup.__wrapped__)(tmp_path, monkeypatch, None) as setup:
+        setup, binding, native = reuse_connected.__wrapped__(None, setup)
+        opened = resolve(setup, binding, 'open-before-stall', new_session=True).json()
+        admit(setup, opened)
+        wait_receipt(setup, opened)
+        setup[2].portal.call(setup[1].state.embedded_dispatch_owner.pump.stop)
+        selected = resolve(setup, binding, 'initial-before-stop', text='Never sent').json()
+        child, = admit(setup, selected, 200)['follow_up_operation_ids']
+        with setup[0].connection_factory.unit_of_work(write=False) as uow:
+            assert uow.connection.execute('SELECT 1 FROM execution_dispatch_outbox WHERE operation_id=?', (child,)).fetchone() is None
+        assert native.native.sent == []
+    deps, app = app_for(tmp_path / 'home')
+    with TestClient(app):
+        owner = app.state.embedded_dispatch_owner
+        deadline = time.monotonic() + 10
+        while 'subject' in owner.agents.blocked:
+            assert time.monotonic() < deadline, owner.agents.errors
+            time.sleep(.05)
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            row = uow.connection.execute('SELECT admission_state,dispatch_state,last_error FROM execution_operations JOIN execution_dispatch_outbox USING(server_id,executor_id,operation_id) WHERE operation_id=?', (child,)).fetchone()
+            assert row['admission_state'] == row['dispatch_state'] == 'RESOLVED_TERMINAL'
+            import json
+            assert json.loads(row['last_error'])['possible_effect'] is False
+            assert uow.connection.execute('SELECT 1 FROM execution_receipts WHERE operation_id=?', (child,)).fetchone() is None
+    assert native.native.sent == []

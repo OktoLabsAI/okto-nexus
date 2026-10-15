@@ -22,10 +22,13 @@ class SqliteRuntimeObservationRepo:
             raise OktoNexusError(ErrorCode.QUOTA_EXCEEDED, "Runtime observation capacity exhausted.", {})
         try:
             uow.connection.execute("INSERT INTO runtime_context_observations(operation_id,source_operation_id,"
-                "endpoint_id,endpoint_revision,profile_revision,runtime_session_id,expected_owner_epoch,envelope,created_at,updated_at) "
-                "VALUES(?,?,?,?,?,?,?,?,?,?)", (envelope.operation_id, source_operation_id, endpoint["endpoint_id"],
+                "endpoint_id,endpoint_revision,profile_revision,runtime_session_id,expected_owner_epoch,envelope,created_at,updated_at,"
+                "legacy_session_id,canonical_server_id,canonical_executor_id) "
+                "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)", (envelope.operation_id, source_operation_id, endpoint["endpoint_id"],
                     endpoint["revision"], profile["revision"] if profile else None, session["session_id"],
-                    session["owner_epoch"], envelope.canonical_json(), now, now))
+                    session["owner_epoch"], envelope.canonical_json(), now, now,
+                    None if session.get('canonical_server_id') else session['session_id'],
+                    session.get('canonical_server_id'), session.get('canonical_executor_id')))
         except sqlite3.IntegrityError as exc:
             if str(exc) == "runtime_context_backpressure":
                 raise OktoNexusError(ErrorCode.QUOTA_EXCEEDED, "Runtime observation capacity exhausted.", {}) from exc
@@ -35,8 +38,12 @@ class SqliteRuntimeObservationRepo:
         now = self.clock.now_iso() if self.clock else utc_now_iso()
         uow.connection.execute("UPDATE runtime_context_observations SET status='CANCELLED',"
             "reason='observation_session_closed_before_send',updated_at=? WHERE status='PENDING' "
-            "AND NOT EXISTS(SELECT 1 FROM harness_sessions s WHERE s.session_id=runtime_session_id "
-            "AND s.lifecycle_state='protocol_ready' AND s.owner_epoch=expected_owner_epoch)", (now,))
+            "AND NOT EXISTS(SELECT 1 FROM harness_sessions s WHERE s.session_id=legacy_session_id "
+            "AND s.lifecycle_state='protocol_ready' AND s.owner_epoch=expected_owner_epoch) "
+            "AND NOT EXISTS(SELECT 1 FROM execution_sessions s JOIN execution_context_observers o "
+            "USING(server_id,executor_id,session_id) WHERE s.server_id=canonical_server_id "
+            "AND s.executor_id=canonical_executor_id AND s.session_id=runtime_session_id "
+            "AND s.lifecycle_state='READY' AND s.lease_state='ACTIVE' AND o.owner_epoch=expected_owner_epoch)", (now,))
         return [dict(row, verb="observe_context") for row in uow.connection.execute(
             "SELECT o.* FROM runtime_context_observations o WHERE o.status='PENDING' "
             "AND NOT EXISTS(SELECT 1 FROM runtime_context_observations busy WHERE busy.endpoint_id=o.endpoint_id "

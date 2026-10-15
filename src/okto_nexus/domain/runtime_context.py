@@ -2,6 +2,7 @@
 from dataclasses import dataclass, field
 
 from .base import new_id
+from .handoff_automation import HandoffAutomationPrincipal
 
 
 @dataclass(frozen=True, slots=True)
@@ -20,6 +21,7 @@ class RuntimeRequestContext:
     request_deadline: str | None = None
     runtime_owner_id: str | None = None
     runtime_owner_epoch: int | None = None
+    handoff_automation: HandoffAutomationPrincipal | None = None
 
 
 @dataclass(frozen=True, slots=True)

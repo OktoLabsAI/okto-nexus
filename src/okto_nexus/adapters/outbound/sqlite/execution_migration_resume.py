@@ -25,7 +25,8 @@ def require_adopted_baseline(conn, manifest):
             row = conn.execute("SELECT * FROM "+table+" WHERE "+field+"=?", (key,)).fetchone()
             if row is None or _row_digest(row) != digest:
                 raise ValueError("An adopted migration resource changed; review is required.")
-        adopted[record["legacy_id"]] = record["row_digest_before"]
+        adopted[record["legacy_id"]] = (record["row_digest_before"],
+            ref.get("backup_source_columns"), ref.get("backup_source_digest"))
 
     original = sqlite3.connect(Path(manifest["_backup_database"]).as_uri()+"?mode=ro",uri=True)
     original.row_factory = sqlite3.Row
@@ -38,7 +39,11 @@ def require_adopted_baseline(conn, manifest):
             columns = expected["columns"]
             for before in original.execute("SELECT * FROM "+_quoted(table)):
                 if table == "agent_endpoints" and before["endpoint_id"] in adopted:
-                    if _row_digest(before) != adopted[before["endpoint_id"]]:
+                    full_digest, source_columns, source_digest = adopted[before["endpoint_id"]]
+                    if source_columns is not None and source_columns != columns:
+                        raise ValueError("The adopted endpoint backup columns changed.")
+                    expected_digest = source_digest if source_columns is not None else full_digest
+                    if _row_digest(before) != expected_digest:
                         raise ValueError("The adopted endpoint does not match the original backup.")
                     continue
                 keys = primary or columns
@@ -59,6 +64,11 @@ def require_adopted_baseline(conn, manifest):
                     volatile = {"owner_id", "owner_epoch", "admission_enabled"}
                     if current is not None and before["required_contract"] == 0 and current["required_contract"] == 1:
                         volatile.add("required_contract")
+                if table == "handoff_runtime_schedule_scan":
+                    # Resuming after reviewed adoption may follow a server
+                    # start. Scan progress is operational, not source history;
+                    # preserve the singleton while allowing its cursors/wake.
+                    volatile = {"handoff_cursor", "attempt_cursor", "notice_cursor", "wake_generation"}
                 if current is None or any(current[key] != before[key] for key in columns if key not in volatile):
                     raise ValueError(f"A preserved migration source row changed or disappeared in {table}.")
     finally:

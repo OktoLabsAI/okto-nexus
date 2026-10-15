@@ -148,6 +148,7 @@ def make_deps(factory, config, clock, emitter=None):
         clock=clock,
         repos=Repos(),
         event_emitter=emitter,
+        runtime_admission_fence=None,
     )
 
 

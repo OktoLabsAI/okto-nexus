@@ -60,6 +60,11 @@ class RuntimeAccessService:
         now, allowed, selected = self.clock.now_iso(), False, None
         with (nullcontext(uow) if uow is not None else self.cf.unit_of_work()) as uow:
             actor = self.agents.get(uow, context.actor_agent_id) if context.actor_agent_id else None
+            automated = context.authentication_source == 'handoff_automation'
+            if automated:
+                from .handoff_automation import require_context
+                require_context(uow, context, action=action, endpoint_id=endpoint_id,
+                    agent_id=represented_agent_id, workspace_id=workspace_id)
             if session_id:
                 endpoint_id = self.grants.runtime_endpoint(uow, session_id)
             endpoint = self.endpoints.get(uow, endpoint_id) if endpoint_id else None
@@ -81,8 +86,8 @@ class RuntimeAccessService:
             # providers during cutover/restore. Authentication, grants and audit
             # below still apply; this does not authorize a native effect.
             enabled = action in {"read", "events"} or (
-                adapter_available and self.config.feature_harness_integrations and (
-                    substrate != "attach" or self.config.feature_harness_attach))
+                adapter_available and self.config.feature_harness_integrations
+                and substrate != "attach")
             if endpoint and action in {"open", "send", "steer", "execute_work"}:
                 if endpoint['protocol'] != 'nxl-r4':
                     raise denied()
@@ -108,6 +113,14 @@ class RuntimeAccessService:
                 if endpoint["profile_id"]:
                     profile = self.endpoints.profile(uow, endpoint["profile_id"])
                     enabled = enabled and profile is not None and profile["enabled"]
+                    if enabled and endpoint['protocol'] == 'nxl-r4':
+                        from .runtime_requirements import validate_canonical_native_requirements, profile_action_allowed
+                        try:
+                            validate_canonical_native_requirements(profile['config'], endpoint['adapter_id'],
+                                                                   hitl_enabled=self.config.feature_hitl)
+                        except OktoNexusError:
+                            enabled = False
+                        enabled = enabled and profile_action_allowed(profile['config'], action)
                     if enabled and self.registry and endpoint["protocol"] != "nxl-r4":
                         try:
                             validate_native_requirements(profile["config"], self.registry.get(endpoint["adapter_id"]),
@@ -132,10 +145,13 @@ class RuntimeAccessService:
                 allowed = self.endpoints.boot_authorized(uow, context=context, endpoint=endpoint, action=action, now=now)
             elif enabled and self._operator(context, actor) and not context.execution_grant_id:
                 allowed = True
-            elif (enabled and actor and actor.is_active and context.authentication_source == "agent_key"
-                  and context.credential_binding and context.credential_binding == actor.api_key_hash):
+            elif (enabled and actor and actor.is_active and (automated or (
+                  context.authentication_source == "agent_key" and context.credential_binding
+                  and context.credential_binding == actor.api_key_hash))):
                 for grant in self.grants.candidates(uow, actor_id=actor.agent_id, endpoint_id=endpoint_id):
                     if context.execution_grant_id and context.execution_grant_id != grant["grant_id"]:
+                        continue
+                    if automated and grant['revision'] != context.handoff_automation.grant_revision:
                         continue
                     if endpoint_id and endpoint_id != grant["endpoint_id"]:
                         continue

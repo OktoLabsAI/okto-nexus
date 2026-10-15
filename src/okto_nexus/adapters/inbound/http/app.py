@@ -613,49 +613,27 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
 
             metrics_task = asyncio.create_task(_publish_metrics())
         try:
-            from ...outbound.sqlite.runtime_outbox_repo import SqliteRuntimeOutboxRepo
-            with deps.connection_factory.unit_of_work(write=False) as uow:
-                runtime_history = SqliteRuntimeOutboxRepo().has_history(uow)
-            if deps.config.feature_harness_integrations or runtime_history:
-                from ..mcp.tools.harness import build_dispatcher, run_runtime_boot
-                acquired = await anyio.to_thread.run_sync(build_dispatcher(deps).start)
-                if not acquired:
-                    raise RuntimeError("Another runtime owner holds this store; serve startup refused.")
-            # Composition is owned by serve's lifespan. No Core stores or
-            # native workers are opened until an approved local selection is
-            # passed to acquire().
-            embedded_core_host = EmbeddedRuntimeHost(
-                deps.config.home_dir.resolve() / "core-runtime")
-            app.state.embedded_core_host = embedded_core_host
-            if deps.config.feature_harness_integrations:
-                from ....bootstrap.embedded_inventory import EmbeddedInventoryOwner
-                embedded_inventory = EmbeddedInventoryOwner(deps, app.state.inventory_fresh_publications)
-                app.state.embedded_inventory_owner = embedded_inventory
-                await embedded_inventory.start()
-                from ....application.execution_local_launch import ApprovedLocalLaunch
-                embedded_core_host.local_launch_factory = lambda scope: ApprovedLocalLaunch(embedded_inventory, scope)
-                from ....bootstrap.embedded_dispatch import EmbeddedDispatchOwner
-                embedded_dispatch = EmbeddedDispatchOwner(embedded_inventory, embedded_core_host)
-                app.state.embedded_dispatch_owner = embedded_dispatch
-                await embedded_dispatch.start()
-                await anyio.to_thread.run_sync(run_runtime_boot, deps)
-            from ....bootstrap.server_shutdown import ServerShutdownCoordinator
-            def server_drained():
-                server = getattr(app.state, "server", None)
-                if server is not None:
-                    server.should_exit = True
-            from ....application.connection_test import ConnectionTests
-            app.state.connection_tests = ConnectionTests(deps)
-            shutdown_coordinator = ServerShutdownCoordinator(deps,
-                embedded=embedded_dispatch, inventory=embedded_inventory,
-                host=embedded_core_host, on_drained=server_drained,
-                connection_tests=app.state.connection_tests,
-                on_embedded_report=lambda report: setattr(app.state, "embedded_shutdown_report", report))
-            app.state.runtime_shutdown = shutdown_coordinator
+            from ....bootstrap.server_runtime import start_runtime_services
+            embedded_core_host, embedded_inventory, embedded_dispatch, shutdown_coordinator = await start_runtime_services(app)
             async with mcp_server.session_manager.run():
                 yield
         finally:
+            # A database reset may have replaced the serve-owned services.
+            reset_task = getattr(app.state, 'database_reset_task', None)
+            if reset_task is not None and not reset_task.done():
+                with contextlib.suppress(Exception):
+                    await asyncio.shield(reset_task)
+            embedded_core_host = getattr(app.state, 'embedded_core_host', embedded_core_host)
+            embedded_inventory = getattr(app.state, 'embedded_inventory_owner', embedded_inventory)
+            embedded_dispatch = getattr(app.state, 'embedded_dispatch_owner', embedded_dispatch)
+            shutdown_coordinator = getattr(app.state, 'runtime_shutdown', shutdown_coordinator)
             deps.runtime_admission_fence.close()
+            handoff_runtime = getattr(app.state, 'handoff_runtime_service', None)
+            if handoff_runtime is not None:
+                handoff_runtime.begin_shutdown()
+            notice_maintenance = getattr(app.state, 'handoff_notice_maintenance', None)
+            if notice_maintenance is not None:
+                notice_maintenance.begin_shutdown()
             if getattr(app.state, 'connection_tests', None) is not None:
                 await app.state.connection_tests.shutdown()
             if shutdown_coordinator is not None:
@@ -682,6 +660,13 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
                     deps.embedded_core_shutdown_status = await embedded_core_host.shutdown()
                 except Exception as exc:
                     embedded_shutdown_error = exc
+            if notice_maintenance is not None:
+                # Partial startup/reset can leave an older coordinator in
+                # app.state. Contain native resources first, then join the
+                # actual current writer before releasing the database owner.
+                await notice_maintenance.aclose()
+            if handoff_runtime is not None:
+                await handoff_runtime.aclose()
             dispatcher = getattr(deps, "runtime_dispatcher", None)
             supervisor = getattr(deps, "harness_supervisor", None)
             if (dispatcher and dispatcher.epoch is not None and supervisor

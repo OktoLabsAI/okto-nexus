@@ -142,6 +142,8 @@ def test_ns05_02(tmp_path):
             ("2026-09-29T00:00:00Z",),
         )
     with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("INSERT INTO agent_execution_policies VALUES(?,?,?,?)",
+                               ("agent-a", "remote", None, 1))
         key = app.state.auth.issue_key(uow, agent_id="agent-a")
     with TestClient(app, raise_server_exceptions=False) as client:
         registration = client.post(
@@ -233,6 +235,8 @@ def test_ns05_03(tmp_path):
             ("2026-09-29T00:00:00Z",),
         )
     with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("INSERT INTO agent_execution_policies VALUES(?,?,?,?)",
+                               ("agent-a", "remote", None, 1))
         key = app.state.auth.issue_key(uow, agent_id="agent-a")
         operator_key = app.state.auth.issue_key(uow, agent_id="operator")
     headers = {"Authorization": f"Bearer {key}"}

@@ -3,6 +3,7 @@
 // Pulse modal grammar: blurred overlay, rounded-2xl content, slideUp.
 
 import { type ReactNode, useState } from "react";
+import { AgentActionModal, AgentModalFooter } from './AgentActionModal';
 
 interface ConfirmState {
   title: string;
@@ -10,12 +11,24 @@ interface ConfirmState {
   onConfirm: () => void | Promise<void>;
 }
 
-export function useConfirm() {
+export function useConfirm({agentModal = false}: {agentModal?: boolean} = {}) {
   const [state, setState] = useState<ConfirmState | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
-  const dialog = state ? (
+  const dialog = state && agentModal ? <AgentActionModal title={state.title} onClose={() => setState(null)} guardChanges={false} busy={busy} compact testId="confirm-dialog">
+    <div className="text-sm leading-relaxed">{state.body}</div>
+    {error && <p role="alert" className="mt-3 text-xs text-red-600">{error}</p>}
+    <AgentModalFooter>
+      <button className="btn btn-secondary" disabled={busy} onClick={() => setState(null)}>Cancel</button>
+      <button className="btn btn-danger" disabled={busy} onClick={async () => {
+        setBusy(true); setError('');
+        try {await state.onConfirm(); setState(null);}
+        catch (failure) {setError(failure instanceof Error ? failure.message : String(failure));}
+        finally {setBusy(false);}
+      }}>{busy ? 'Working…' : 'Confirm'}</button>
+    </AgentModalFooter>
+  </AgentActionModal> : state ? (
     <div className="modal-overlay">
       <div
         className="modal-content w-[440px] max-w-[92vw]"

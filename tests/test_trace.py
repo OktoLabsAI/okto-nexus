@@ -642,7 +642,7 @@ def test_ts7_migration_015_idempotent_on_populated_db(tmp_path):
     real_dir = _default_migrations_dir()
     partial = tmp_path / "partial"
     partial.mkdir()
-    for sql in sorted(real_dir.glob("0*.sql")):
+    for sql in sorted(real_dir.glob("*.sql")):
         if not sql.name.startswith("015"):
             shutil.copy(sql, partial)
 

@@ -272,7 +272,7 @@ export function RuntimeOperations({agentId, binding, canStart, connectionTest = 
         {operation.result && <pre className="whitespace-pre-wrap break-words">{operation.result.output_text}{operation.result.output_truncated ? "\n[Output truncated]" : ""}</pre>}
       </div>}
       {session && <p>Session: {session.lifecycle_state}. Lease: {session.lease_state}.{session.durable_release_pending ? " Release confirmation pending." : ""}</p>}
-      {!connectionTest && session && <RuntimeHistory key={JSON.stringify([session.scope.server_id, session.scope.executor_id, session.scope.session_id])} scope={session.scope} />}
+      {!connectionTest && session && <RuntimeHistory key={JSON.stringify([session.scope.server_id, session.scope.executor_id, session.scope.session_id])} scope={session.scope} harness={binding.adapter_id} />}
       {canClear && (!connectionTest || !session || session.lifecycle_state === "CLOSED") && <button className="btn btn-secondary" disabled={busy} onClick={() => {
         sessionStorage.removeItem(storageKey); currentRecord.current = null; setSaved(null); setOperation(null); setFollowUps([]); setSession(null); setText(""); setError("");
         if (connectionTest) {setIntent(session && session.lifecycle_state !== "CLOSED" ? "runtime.close" : "runtime.start"); setText(testPrompt);} else if (sessionId) setIntent("turn.submit");

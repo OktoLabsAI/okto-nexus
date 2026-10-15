@@ -89,6 +89,8 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
             ("agent-a", "2026-09-29T00:00:00Z"),
         )
     with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("INSERT INTO agent_execution_policies VALUES(?,?,?,?)",
+                               ("agent-a", "remote", None, 1))
         key = app.state.auth.issue_key(uow, agent_id="agent-a")
         operator_key = app.state.auth.issue_key(uow, agent_id="operator")
     async def roundtrip():

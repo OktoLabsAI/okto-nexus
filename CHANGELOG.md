@@ -4,6 +4,38 @@ All notable changes to Okto Nexus are documented in this file.
 
 ## Unreleased
 
+### 0.2.2
+
+- Add global MCP inheritance defaults, nullable agent overrides and explicit
+  harness overrides, with the effective choice bound to each opening operation.
+- Preserve approved host configuration and OAuth state for inherited Codex/Claude
+  MCPs while continuing to inject session-scoped Nexus tools. Forward only global
+  MCP-declared credential variables, never Nexus operator/session credentials.
+- Correct Codex's recursive configuration merge so opting out disables existing
+  global MCP entries. Global policy changes preserve already-running sessions.
+- Require Connector Core 0.0.3; remote hosts should use Connector 0.0.2.
+
+### 0.2.1
+
+- Isolate local runtime recovery and event publication by agent, with durable
+  admission fences, independent retries, scoped diagnostics and operator recovery.
+- Resume after confirmed local owner process exit without waiting for stale locks;
+  reconcile interrupted pre-open operations across repeated restarts.
+- Keep unclaimed messages eligible for automatic recovery and stop polling closed
+  streams only after their resource release and complete event drain are proven.
+- Listen on all IPv4 interfaces by default, with explicit loopback overrides
+  and unchanged remote operator and agent authentication.
+- Deliver broadcast and handoff fanout through eligible runtime connections.
+- Deduplicate broadcast timeline entries, prefer handoff titles, and constrain message widths.
+- Archive agents with runtime history while revoking access and preserving records.
+- Refresh workspace choices and reuse normalized workspace paths in agent setup.
+- Keep local installation checks available while runtime reconciliation is pending.
+- Recover fenced Windows runtime containers automatically, continue reconciliation
+  after the initial retry budget, and provide audited last-resort recovery in Agents.
+- Require Connector Core 0.0.2.
+- Drain retained local events for inactive and archived agents during recovery,
+  without restoring access or creating actionable native approval requests.
+
 ### 0.2.0 development
 
 - Complete the PR #34 remediation implementation and approved local Codex/Claude

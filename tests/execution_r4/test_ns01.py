@@ -31,27 +31,23 @@ from okto_nexus.domain.keys import generate_api_key
 ROOT = Path(__file__).resolve().parents[2]
 
 
-def test_basic_bootstrap_does_not_import_optional_core(tmp_path):
+def test_basic_bootstrap_uses_required_core_without_remote_connector(tmp_path):
     probe = subprocess.run(
         [sys.executable, "-I", "-c", """
 import importlib.abc
 import importlib.util
 import sys
-class NoCore(importlib.abc.MetaPathFinder):
+class NoConnector(importlib.abc.MetaPathFinder):
     def find_spec(self, fullname, path=None, target=None):
-        if fullname == 'nexus_connector_core' or fullname.startswith('nexus_connector_core.'):
-            raise ModuleNotFoundError('Core intentionally unavailable')
-sys.meta_path.insert(0, NoCore())
-# Absent optional modules are discovered as None. Keep the import blocker
-# separately so any actual Core import still fails the bootstrap check.
-original_find_spec = importlib.util.find_spec
-importlib.util.find_spec = lambda name, package=None: (
-    None if name == 'nexus_connector_core' else original_find_spec(name, package))
+        if fullname == 'okto_nexus_connector' or fullname.startswith('okto_nexus_connector.'):
+            raise ModuleNotFoundError('Remote Connector intentionally unavailable')
+sys.meta_path.insert(0, NoConnector())
 from okto_nexus.bootstrap.dependencies import bootstrap
 deps = bootstrap({}, ['--home', sys.argv[1]])
 assert deps.approvals is not None
-assert deps.native_decisions is None
-assert 'nexus_connector_core' not in sys.modules
+assert deps.native_decisions is not None
+assert 'nexus_connector_core' in sys.modules
+assert 'okto_nexus_connector' not in sys.modules
 print('ok')
 """, str(tmp_path / "base-home")],
         cwd=tmp_path, capture_output=True, text=True, timeout=15,
@@ -99,8 +95,9 @@ def test_ns01_03(capsys):
     version = importlib.metadata.version("okto-nexus-connector-core")
     required_core = f"okto-nexus-connector-core=={version}"
     assert project["project"]["scripts"]["okto-nexus"].endswith("cli.main:main")
+    assert required_core in project["project"]["dependencies"]
     for extra in ("serve", "serve-lite"):
-        requirements = project["project"]["optional-dependencies"][extra]
+        requirements = project["project"]["dependencies"] + project["project"]["optional-dependencies"][extra]
         assert required_core in requirements
         assert not any(item.split("==")[0] == "okto-nexus-connector" for item in requirements)
     assert "mcp>=1.0,<2" in project["project"]["dependencies"]
@@ -111,9 +108,7 @@ def test_ns01_03(capsys):
     assert wheel.name == f"okto_nexus_connector_core-{version}-py3-none-any.whl"
     assert hashlib.sha256(wheel.read_bytes()).hexdigest() == artifact["sha256"]
     installed_requirements = importlib.metadata.requires("okto-nexus") or []
-    for extra in ("serve", "serve-lite"):
-        assert any(required_core in requirement and f'"{extra}"' in requirement
-                   for requirement in installed_requirements)
+    assert required_core in installed_requirements
     assert main(["--help"]) == 0
     assert "HTTP" in capsys.readouterr().out
 

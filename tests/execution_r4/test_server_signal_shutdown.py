@@ -3,6 +3,7 @@ import asyncio
 import os
 from pathlib import Path
 import socket
+import site
 import subprocess
 import sys
 import time
@@ -23,6 +24,7 @@ LAUNCHER = '''
 import sys, threading, signal
 from pathlib import Path
 from types import SimpleNamespace
+# dependency_paths
 sys.path.insert(0, sys.argv[1])
 from okto_nexus.bootstrap import embedded_inventory
 from okto_nexus.adapters.inbound.cli.runtime_server import RuntimeServer
@@ -62,7 +64,12 @@ def test_signal_keeps_serve_process_and_http_until_inventory_release(tmp_path, s
         sock.bind(("127.0.0.1", 0))
         port = sock.getsockname()[1]
     launcher = tmp_path / "serve.py"
-    launcher.write_text(LAUNCHER, encoding="utf-8")
+    # -I and the disposable USERPROFILE must isolate state, while retaining the
+    # dependencies installed for the interpreter running this test (including
+    # Windows --user installations). Source selection remains first on sys.path.
+    dependency_paths = site.getsitepackages() + [site.getusersitepackages()]
+    launcher.write_text(LAUNCHER.replace('# dependency_paths',
+        f'sys.path.extend({dependency_paths!r})'), encoding="utf-8")
     env = {k:v for k,v in os.environ.items() if k.upper() in {
         "PATH", "SYSTEMROOT", "WINDIR", "TEMP", "TMP"}}
     env.update(HOME=str(home), USERPROFILE=str(home), PYTHONIOENCODING="utf-8",

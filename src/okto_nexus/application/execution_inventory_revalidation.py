@@ -5,6 +5,50 @@ import logging
 log = logging.getLogger(__name__)
 
 
+def same_installation_location(approved, current):
+    """Consent selects an installation location, not an immutable release."""
+    changing = {'version', 'fingerprint', 'build_identity', 'trust', 'source'}
+    return ({k: v for k, v in approved.items() if k not in changing}
+            == {k: v for k, v in current.items() if k not in changing})
+
+
+def compatible_selection(baseline, current):
+    if baseline is None or current is None:
+        return False
+    if baseline == current:
+        return True
+    # Core may add an implementation for a previously unsupported control.
+    # That does not replace the selected installation or change the contract
+    # of an existing control. Current operation authorization still applies.
+    old_runtime, new_runtime = baseline['runtime'], current['runtime']
+    if ({k: v for k, v in old_runtime.items() if k != 'control_targeting'} !=
+            {k: v for k, v in new_runtime.items() if k != 'control_targeting'}):
+        return False
+    new_controls = {control['action']: control for control in new_runtime['control_targeting']}
+    if any(control['supported'] and new_controls.get(control['action']) != control
+           for control in old_runtime['control_targeting']):
+        return False
+    # Discovery provenance is not installation identity or execution authority.
+    # The same selected executable can be found through PATH or a trusted root.
+    baseline = {**baseline, 'runtime': new_runtime,
+                'evidence': {k: v for k, v in baseline['evidence'].items() if k != 'source'}}
+    current = {**current,
+               'evidence': {k: v for k, v in current['evidence'].items() if k != 'source'}}
+    if baseline == current:
+        return True
+    # Candidate identity, platform, adapter contract and explicit selection
+    # remain fixed. Version/build changes alone do not revoke that selection.
+    changing = {'version', 'build_identity', 'content_fingerprint', 'qualification',
+                'qualified_control_actions'}
+    def stable(value):
+        return {**value, 'evidence': {k: v for k, v in value['evidence'].items() if k not in changing}}
+    return (current['evidence']['state'] in {'READY_FOR_RUNTIME', baseline['evidence']['state']}
+            and current['evidence']['trust'] == 'selected'
+            and bool(current['evidence']['version'])
+            and current['evidence']['version'] != baseline['evidence']['version']
+            and stable(baseline) == stable(current))
+
+
 def accepts_binding(conn, binding, current_revision, server_id, executor_id):
     return inventory_accepted(conn, server_id=server_id, executor_id=executor_id,
         approved_revision=binding['inventory_revision'], candidate_ref=binding['candidate_ref'],
@@ -76,8 +120,9 @@ def revalidate_inventory(conn, snapshot):
                         baseline = selection(retained, adapter, candidate)
                 except (CoreError, ValueError, TypeError, KeyError):
                     baseline = None
-        compatible = baseline is not None and current is not None and baseline == current
-        reason = ('installation_unchanged' if compatible else 'installation_missing' if current is None
+        compatible = compatible_selection(baseline, current)
+        reason = ('installation_unchanged' if compatible and baseline == current else
+                  'installation_updated' if compatible else 'installation_missing' if current is None
                   else 'approved_evidence_missing' if baseline is None else 'selected_installation_changed')
         conn.execute('INSERT INTO execution_inventory_revalidation VALUES (?,?,?,?,?,?,?,?,'
             "strftime('%Y-%m-%dT%H:%M:%fZ','now')) ON CONFLICT(server_id,executor_id,approved_revision,candidate_ref) "

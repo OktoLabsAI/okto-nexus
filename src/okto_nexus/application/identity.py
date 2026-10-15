@@ -576,7 +576,7 @@ class IdentityService:
         with self._cf.unit_of_work() as uow:
             rows = self._agents.list(uow)
             rows = self._filter_reachable(uow, caller_agent_id, rows)
-        return [self._agent_to_data(agent) for agent in rows]
+            return self._discovery_data(uow, rows)
 
     def agent_get(
         self, *, agent_id: Any, caller_agent_id: Any = None
@@ -602,13 +602,38 @@ class IdentityService:
                 and self._filter_reachable(uow, caller_agent_id, [agent]) == []
             ):
                 agent = None
+            if agent is not None:
+                return self._discovery_data(uow, [agent])[0]
         if agent is None:
             raise OktoNexusError(
                 ErrorCode.NOT_FOUND,
                 "agent_id does not exist.",
                 {"agent_id": agent_id},
             )
-        return self._agent_to_data(agent)
+
+    def _discovery_data(self, uow, agents):
+        """Add live availability only after applying discovery visibility."""
+        from .agent_connection_status import agent_connection_statuses, connection_presence
+        from .observability import activity_presence
+        if not agents:
+            return []
+        connections = agent_connection_statuses(uow, self._clock.now_iso())
+        heartbeats = {row['agent_id']: row['heartbeat'] for row in uow.connection.execute(
+            "SELECT agent_id,MAX(last_heartbeat_at) heartbeat FROM sessions WHERE status='active' GROUP BY agent_id")}
+        result = []
+        for agent in agents:
+            connection = connections.get(agent.agent_id)
+            presence = connection_presence(connection, is_active=agent.is_active)
+            if presence is None:
+                presence = activity_presence(self._clock, self._config,
+                    has_active_session=agent.agent_id in heartbeats,
+                    last_heartbeat_at=heartbeats.get(agent.agent_id), last_seen_at=agent.last_seen_at)
+            # Host identities, paths and control credentials belong to the
+            # operator view, not peer discovery.
+            public_connection = ({key: connection[key] for key in ('location', 'status')}
+                                 if connection else None)
+            result.append(self._agent_to_data(agent) | {'presence': presence, 'connection': public_connection})
+        return result
 
     def capability_list(self, *, caller_agent_id: Any = None) -> list[dict[str, Any]]:
         """List the capability CATALOG merged with who advertises each name.

@@ -30,13 +30,7 @@ def test_mixed_endpoint_selection_before_native_effects(connected_local, monkeyp
         opened = admit(setup, binding, "mixed-open", "runtime.start", new_session=True)
         wait_receipt(setup, opened)
     result = send(setup, monkeypatch)
-    if mode == "ambiguous":
-        assert not result["ok"] and "AMBIGUOUS_BINDING" in str(result), result
-        assert native.opens == 0
-        with setup[0].connection_factory.unit_of_work(write=False) as uow:
-            assert uow.connection.execute("SELECT COUNT(*) FROM messages").fetchone()[0] == 0
-            assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations").fetchone()[0] == 0
-        return
+    # Retired adapter IDs are excluded even at equal or higher priority.
     assert result["ok"], result
     with setup[0].connection_factory.unit_of_work(write=False) as uow:
         delivery = uow.connection.execute("SELECT endpoint_id,runtime_session_id FROM delivery_outbox").fetchone()

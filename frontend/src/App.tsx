@@ -338,6 +338,12 @@ function Dashboard({
     loadGraph();
   }, [loadGraph, refreshTick]);
 
+  useEffect(() => {
+    if (view !== "Graph") return;
+    const timer = window.setInterval(loadGraph, 5000);
+    return () => window.clearInterval(timer);
+  }, [loadGraph, view]);
+
   // Badge count (initial fetch + every approval.* event + header refresh).
   // GET /approvals is workspace-scoped, so the "all" scope sums over every
   // known workspace. A locked gate / non-operator key just means no badge.
@@ -365,14 +371,23 @@ function Dashboard({
   // with no live session yet (TR8).
   useEffect(() => {
     let active = true;
+    let requestVersion = 0;
     const reload = () => {
-      api.workspaces().then(({workspaces}) => {if (active) setWorkspaces(workspaces);})
+      const version = ++requestVersion;
+      api.workspaces().then(({workspaces}) => {
+        if (active && version === requestVersion) setWorkspaces(workspaces);
+      })
         .catch(() => undefined);
     };
     reload();
     window.addEventListener("nexus-workspaces-changed", reload);
-    return () => {active = false; window.removeEventListener("nexus-workspaces-changed", reload);};
-  }, [refreshTick]);
+    const timer = view === "Meta-harness" ? window.setInterval(reload, 10000) : undefined;
+    return () => {
+      active = false;
+      window.removeEventListener("nexus-workspaces-changed", reload);
+      if (timer !== undefined) window.clearInterval(timer);
+    };
+  }, [refreshTick, view]);
 
   // Default scope = the serve's --project-root workspace (AC1) - applied
   // ONLY when the user never picked a scope on this browser AND the default

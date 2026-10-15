@@ -20,6 +20,7 @@ def options_host(request, monkeypatch):
         # or independent-host acceptance is claimed by this unit fixture.
         with monkeypatch.context() as patch:
             patch.setattr(availability, 'qualified_build', lambda *a, **k: getattr(request, 'param', 'ready') == 'ready')
+            patch.setattr(availability, 'can_probe_protocol', lambda *a, **k: getattr(request, 'param', 'ready') == 'ready')
             patch.setattr(availability, 'containment_preflight', lambda **k: {'job_objects': 'ok'})
             return original([replace(c, version='0.159.0', architecture='x86_64') for c in candidates], **kwargs)
     monkeypatch.setattr(test_binding_operator, 'local_inventory_snapshot', snapshot)

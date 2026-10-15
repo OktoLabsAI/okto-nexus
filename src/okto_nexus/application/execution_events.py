@@ -20,7 +20,11 @@ def commit_execution_events(factory, *, channel, frame, embedded_owner=None, app
     if frame["type"] != "event.batch" or any(frame[k] != getattr(channel,k) for k in (
             "server_id","executor_id","connection_id","connection_generation")):
         raise ValueError("The event channel does not match its authenticated owner.")
-    _, revisions, _ = current_agent_revisions(factory, agent_id=frame["agent_id"])
+    # The serve owner drains facts from its approved durable Core streams even
+    # after their subjects are disabled/archived. Remote ingress still requires
+    # an active authenticated agent and its current execution lane.
+    _, revisions, _ = current_agent_revisions(factory, agent_id=frame["agent_id"],
+                                            require_active=embedded_owner is None)
     scope = {**frame, "credential_epoch":revisions.credential_epoch,
              "authorization_revision":revisions.authorization, "configuration_revision":revisions.configuration}
     key = tuple(frame[k] for k in ("server_id","executor_id","session_id","stream_epoch"))
@@ -57,7 +61,9 @@ def commit_execution_events(factory, *, channel, frame, embedded_owner=None, app
             "JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id JOIN agents a ON a.agent_id=ep.agent_id "
             "WHERE s.server_id=? AND s.executor_id=? AND s.session_id=? AND s.binding_id=?",
             (*key[:3],frame["binding_id"])).fetchone()
-        if session is None or session["agent_id"] != frame["agent_id"] or not session["is_active"] or session["stream_epoch"] not in (None,key[3]):
+        if (session is None or session["agent_id"] != frame["agent_id"]
+                or (embedded_owner is None and not session["is_active"])
+                or session["stream_epoch"] not in (None,key[3])):
             raise ValueError("The event has no matching authorized session.")
         row = conn.execute("SELECT committed_contiguous FROM execution_event_watermarks WHERE "
                            "server_id=? AND executor_id=? AND session_id=? AND stream_epoch=?",key).fetchone()

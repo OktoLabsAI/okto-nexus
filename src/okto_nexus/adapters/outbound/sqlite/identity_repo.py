@@ -153,6 +153,15 @@ class SqliteAgentRepo(_ClockBacked):
     ) -> Agent:
         now = self._now()
         try:
+            archived = uow.connection.execute(
+                "SELECT deleted_at FROM agents WHERE agent_id = ?", (agent_id,)
+            ).fetchone()
+            if archived is not None and archived[0] is not None:
+                raise OktoNexusError(
+                    ErrorCode.CONFLICT,
+                    "This agent ID belongs to a removed agent and cannot be reused.",
+                    {"agent_id": agent_id, "reason": "AGENT_ID_RETIRED"},
+                )
             uow.connection.execute(
                 """
                 INSERT INTO agents (agent_id, role, capabilities, metadata, created_at, color)
@@ -179,7 +188,7 @@ class SqliteAgentRepo(_ClockBacked):
     def get(self, uow: UnitOfWork, agent_id: str) -> Agent | None:
         try:
             cur = uow.connection.execute(
-                f"SELECT {self._COLUMNS} FROM agents WHERE agent_id = ?",
+                f"SELECT {self._COLUMNS} FROM agents WHERE agent_id = ? AND deleted_at IS NULL",
                 (agent_id,),
             )
             row = cur.fetchone()
@@ -190,10 +199,11 @@ class SqliteAgentRepo(_ClockBacked):
         return self._row_to_agent(row)
 
     def list(self, uow: UnitOfWork) -> list[Agent]:
-        """Return ALL agents (global; not workspace-scoped), oldest first."""
+        """Return visible agents (global; not workspace-scoped), oldest first."""
         try:
             cur = uow.connection.execute(
-                f"SELECT {self._COLUMNS} FROM agents ORDER BY created_at, agent_id"
+                f"SELECT {self._COLUMNS} FROM agents WHERE deleted_at IS NULL "
+                "ORDER BY created_at, agent_id"
             )
             rows = cur.fetchall()
         except sqlite3.Error as exc:
@@ -333,7 +343,7 @@ class SqliteAgentRepo(_ClockBacked):
         """Flip the revocation switch; True if the agent existed."""
         try:
             cur = uow.connection.execute(
-                "UPDATE agents SET is_active = ? WHERE agent_id = ?",
+                "UPDATE agents SET is_active = ? WHERE agent_id = ? AND deleted_at IS NULL",
                 (1 if is_active else 0, agent_id),
             )
         except sqlite3.Error as exc:
@@ -345,7 +355,8 @@ class SqliteAgentRepo(_ClockBacked):
         try:
             cur = uow.connection.execute(
                 f"SELECT {self._COLUMNS} FROM agents "
-                "WHERE api_key_hash IS NULL ORDER BY created_at, agent_id"
+                "WHERE api_key_hash IS NULL AND deleted_at IS NULL "
+                "ORDER BY created_at, agent_id"
             )
             rows = cur.fetchall()
         except sqlite3.Error as exc:
@@ -353,7 +364,7 @@ class SqliteAgentRepo(_ClockBacked):
         return [self._row_to_agent(row) for row in rows]
 
     def delete(self, uow: UnitOfWork, *, agent_id: str) -> bool:
-        """Remove the agent and its OWN dependent rows; True if it existed.
+        """Remove an unused agent, or retire one needed by runtime history.
 
         ``agents(agent_id)`` is referenced by ``sessions.agent_id`` and
         ``message_deliveries.recipient_agent_id`` (both NOT NULL FKs), so a
@@ -366,7 +377,17 @@ class SqliteAgentRepo(_ClockBacked):
         still reference those rows; erasing them would orphan peers'
         deliveries. (Whole-store history removal is the reset surface, not
         this.)
+        Runtime references must remain intact for audit. In that case the
+        identity is hidden and its credential revoked instead of deleting
+        historical rows. The savepoint restores any preliminary cleanup before
+        retiring the identity.
         """
+        row = uow.connection.execute(
+            "SELECT deleted_at FROM agents WHERE agent_id = ?", (agent_id,)
+        ).fetchone()
+        if row is None or row[0] is not None:
+            return False
+        uow.connection.execute("SAVEPOINT agent_delete")
         try:
             # Configuration/revision caches belong to the identity. Execution
             # records intentionally retain their restrictive foreign keys.
@@ -387,17 +408,28 @@ class SqliteAgentRepo(_ClockBacked):
                 "DELETE FROM agents WHERE agent_id = ?", (agent_id,)
             )
         except sqlite3.IntegrityError as exc:
-            if (getattr(exc, "sqlite_errorcode", None) == sqlite3.SQLITE_CONSTRAINT_FOREIGNKEY or
-                    str(exc) == "FOREIGN KEY constraint failed"):
-                raise OktoNexusError(
-                    ErrorCode.CONFLICT,
-                    "This agent is referenced by runtime connections or execution history. "
-                    "Deactivate it to revoke access while preserving those records.",
-                    {"agent_id": agent_id, "reason": "AGENT_IN_USE"},
-                ) from exc
+            uow.connection.execute("ROLLBACK TO SAVEPOINT agent_delete")
+            uow.connection.execute("RELEASE SAVEPOINT agent_delete")
+            if ("FOREIGN KEY constraint failed" in str(exc) or
+                    "Deactivate agent instead of deleting runtime audit history" in str(exc)):
+                try:
+                    uow.connection.execute(
+                        "UPDATE agents SET is_active = 0, api_key_hash = NULL, deleted_at = ? "
+                        "WHERE agent_id = ?", (self._now(), agent_id)
+                    )
+                    uow.connection.execute(
+                        "UPDATE agent_endpoints SET enabled = 0 WHERE agent_id = ?",
+                        (agent_id,),
+                    )
+                except sqlite3.Error as retire_exc:
+                    raise _db_error("retiring agent", retire_exc) from retire_exc
+                return True
             raise _db_error("deleting agent", exc) from exc
         except sqlite3.Error as exc:
+            uow.connection.execute("ROLLBACK TO SAVEPOINT agent_delete")
+            uow.connection.execute("RELEASE SAVEPOINT agent_delete")
             raise _db_error("deleting agent", exc) from exc
+        uow.connection.execute("RELEASE SAVEPOINT agent_delete")
         return cur.rowcount > 0
 
     @staticmethod

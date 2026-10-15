@@ -11,7 +11,7 @@ from test_embedded_dispatch import local_setup, qualified_contract, admit, wait_
 from test_canonical_delivery import connected_local
 
 
-def prepare(setup, binding, monkeypatch, *, workspace_id=None):
+def prepare(setup, binding, monkeypatch, *, workspace_id=None, payload="Perform this governed review."):
     monkeypatch.syspath_prepend(str(Path(__file__).parents[1]))
     from test_pr34_remediation import tool
     deps, _, client, headers, *_, root = setup
@@ -23,7 +23,7 @@ def prepare(setup, binding, monkeypatch, *, workspace_id=None):
         return tool(client, headers[actor]["Authorization"].removeprefix("Bearer "), name,
                     dict(**selector, **kwargs))
     created = call("handoff_create", actor="operator", from_agent_id="operator", visibility="eligible",
-                   target=dict(strategy="direct", agent_id="subject"), payload="Perform this governed review.")
+                   target=dict(strategy="direct", agent_id="subject"), payload=payload)
     assert created["ok"], created
     handoff = created["data"]["handoff_id"]
     response = client.post("/api/v1/harness/grants", headers=headers["operator"], json=dict(

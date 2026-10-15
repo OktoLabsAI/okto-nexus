@@ -19,7 +19,8 @@ from okto_nexus.errors import OktoNexusError
 @pytest.fixture
 def onboarding(tmp_path, request):
     deps = bootstrap({}, ["--home", str(tmp_path / "home"),
-                          "--feature-harness-integrations", "true"])
+                          "--feature-harness-integrations", "true",
+                          "--runtime-handoff-auto-claim-enabled", "false"])
     app = build_app(deps)
     headers = {}
     with deps.connection_factory.unit_of_work() as uow:

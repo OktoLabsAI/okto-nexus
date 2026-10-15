@@ -8,17 +8,36 @@ from okto_nexus.adapters.outbound.sqlite.connection import ConnectionFactory
 from okto_nexus.adapters.outbound.sqlite.migrations import MigrationRunner, _split_statements
 from okto_nexus.config import NexusConfig
 from okto_nexus.errors import OktoNexusError
-from test_pr34_remediation import runtime as runtime_fixture, send_message
-from test_runtime_commands import codex_session
-from test_runtime_result_publication import result
+from test_pr34_remediation import runtime as runtime_fixture
+from test_runtime_event_journal import historical_session, event
 
 runtime = runtime_fixture
 
 
 def test_result_rebuild_preserves_published_history_and_causal_foreign_keys(runtime, tmp_path):
-    codex_session(runtime)
-    sent = send_message(runtime, body='Historical result and references')
-    published = result(runtime, sent['runtime_operations'][0], 'PUBLISHED')
+    # Migrate real retained journal/result rows. Current Core results cannot be
+    # inserted into the pre-96 schema, whose legacy event/session IDs are NOT NULL.
+    deps = runtime[0]
+    session = historical_session(runtime)
+    deps.harness_supervisor.event_ingress.capture(event(session, text='Historical result and references'))
+    from okto_nexus.domain.ids import resolve_workspace_id
+    from okto_nexus.domain.base import iso_plus
+    workspace = resolve_workspace_id(runtime[2])
+    with deps.connection_factory.unit_of_work() as uow:
+        now = deps.clock.now_iso()
+        deps.repos.workspaces.upsert(uow, workspace_id=workspace, root_realpath=runtime[2])
+        for message, actor in (('historical-source', 'caller'), ('historical-publication', 'worker')):
+            deps.repos.messages.create(uow, message_id=message, workspace_id=workspace,
+                from_agent_id=actor, subject='Historical result', body='Historical result and references')
+        published = dict(uow.connection.execute('SELECT * FROM runtime_results').fetchone())
+        uow.connection.execute("UPDATE runtime_results SET publication_state='PUBLISHED',publication_message_id='historical-publication',output_text=?",
+            ('Historical result and references',))
+        uow.connection.execute('INSERT INTO runtime_causal_roots(root_operation_id,workspace_id,actor_agent_id,'
+            'created_at,deadline,max_depth,max_messages,max_executions,generated_messages,admitted_executions) '
+            "VALUES('historical-root',?,'caller',?,?,3,5,5,1,1)", (workspace, now, iso_plus(now, 600)))
+        uow.connection.execute("INSERT INTO runtime_message_causality VALUES('historical-source','historical-root',NULL,0,'entry',NULL)")
+        uow.connection.execute("INSERT INTO runtime_message_causality VALUES('historical-publication','historical-root','historical-source',1,'continuation',?)",
+            (published['result_id'],))
     config = NexusConfig(home_dir=tmp_path / 'migration-copy')
     factory = ConnectionFactory(config)
     migrations = Path(okto_nexus.__file__).parent / 'migrations'

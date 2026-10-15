@@ -204,14 +204,20 @@ class RuntimeControlService:
                     "FROM runtime_handoff_bindings b JOIN handoffs h USING(handoff_id) "
                     "WHERE b.operation_id=? AND b.external_session_id IS NOT NULL", (operation_id,)).fetchone()
                 outcome = uow.connection.execute("SELECT state,reason,response FROM runtime_work_outcomes WHERE operation_id=?", (operation_id,)).fetchone()
-            return {"operation_id": operation_id, "session_id": delivery["runtime_session_id"], "state": delivery["status"],
+                canonical = uow.connection.execute("SELECT p.session_id FROM execution_domain_deliveries m "
+                    "JOIN execution_operations p USING(server_id,executor_id,operation_id) "
+                    "WHERE m.domain_operation_id=? AND p.action='turn.submit'", (operation_id,)).fetchone()
+            return {"operation_id": operation_id,
+                "session_id": canonical["session_id"] if canonical else delivery["runtime_session_id"], "state": delivery["status"],
                 "attempt_id": delivery["attempt_id"], "owner_epoch": delivery["owner_epoch"], "reconciliation_id": delivery["reconciliation_id"],
                 "durable": True, "ack_level": delivery["ack_level"], "reason": delivery["reason"],
                 "context_observations": self._context_observations(context, operation_id),
                 "external_work": (dict(external, contract_version=1, completion_channel="authenticated_nexus_call",
                     completed_at=delivery["external_completed_at"]) if external else None),
-                "external_acceptance": "observed" if delivery["ack_level"] in {"HARNESS_ACCEPTED", "AGENT_ACK"} else "not_observed",
-                "result_durable": delivery["terminal_event_id"] is not None, "result": dict(result) if result else None,
+                "external_acceptance": "observed" if delivery["ack_level"] in {"HARNESS_ACCEPTED", "AGENT_ACK", "NATIVE_ACCEPTED"} else "not_observed",
+                "result_durable": (delivery["terminal_event_id"] is not None or
+                    (result is not None and delivery["canonical_terminal_operation_id"] is not None)),
+                "result": dict(result) if result else None,
                 "handoff": dict(binding) if binding else None,
                 "work_outcome": {"state": outcome["state"], "reason": outcome["reason"],
                     "response": json.loads(outcome["response"]) if outcome["response"] else None} if outcome else None}

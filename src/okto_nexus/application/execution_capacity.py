@@ -28,6 +28,8 @@ def require_admission_capacity(conn, *, server_id, executor_id, action, byte_cos
         "SELECT max(admission_bytes,length(CAST(semantic_payload AS BLOB))) AS bytes "
         "FROM execution_operations WHERE server_id=? AND executor_id=? "
         "AND admission_state IN ('ACCEPTED','DISPATCH_PENDING','RECONCILING') "
+        "AND NOT EXISTS (SELECT 1 FROM execution_agent_recovery r WHERE r.server_id=execution_operations.server_id "
+        "AND r.executor_id=execution_operations.executor_id AND r.agent_id=execution_operations.subject_agent_id AND r.state='RECOVERING') "
         "AND action IN (" + ",".join("?" for _ in actions) + ") LIMIT ?",
         (server_id, executor_id, *actions, items),
     ).fetchall()

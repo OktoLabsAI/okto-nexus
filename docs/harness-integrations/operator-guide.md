@@ -15,10 +15,11 @@ session is an instance of the connection. Opening a session neither registers an
 Agent nor replaces its profile. Several endpoints may belong to one Agent; a
 logical delivery has one selected executor, not one execution per endpoint.
 
-Native integrations and attach are enabled by default. Explicit stored,
+Managed native integrations are enabled by default. Explicit stored,
 environment or CLI `false` settings remain effective; defaults do not overwrite
-operator choices. Use `OKTO_NEXUS_FEATURE_HARNESS_INTEGRATIONS=false` or
-`OKTO_NEXUS_FEATURE_HARNESS_ATTACH=false` to disable them. `serve` owns the durable dispatcher and embeds Core for local native execution.
+operator choices. Use `OKTO_NEXUS_FEATURE_HARNESS_INTEGRATIONS=false` to disable them.
+External Claude attach and its configuration flag have been removed.
+`serve` owns the durable dispatcher and embeds Core for local native execution.
 Agents connect directly to HTTP `/mcp`; Nexus MCP stdio has been removed. Use existing
 Nexus operator authentication for administration. A payload `agent_id` is an
 identifier, never a credential. Ordinary agents require current scoped grants and

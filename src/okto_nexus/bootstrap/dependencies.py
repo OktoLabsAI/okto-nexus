@@ -12,6 +12,7 @@ from dataclasses import dataclass, field
 from typing import Any, Mapping
 
 from okto_nexus.application.runtime_admission_fence import RuntimeAdmissionFence
+from okto_nexus.application.runtime_availability import RuntimeAvailabilityService
 from okto_nexus.application.approvals import ApprovalService, seed_operator_agent
 from okto_nexus.application.artifacts import externalize_legacy_artifacts
 from okto_nexus.application.capabilities import seed_capability_catalog
@@ -44,6 +45,7 @@ from okto_nexus.adapters.outbound.sqlite.guardrails_repo import (
     SqliteGuardrailRepo,
 )
 from okto_nexus.adapters.outbound.sqlite.handoff_repo import SqliteHandoffRepo, SqliteTaskRepo
+from okto_nexus.adapters.outbound.sqlite.handoff_origins import SqliteHandoffOriginRepo
 from okto_nexus.adapters.outbound.sqlite.identity_repo import (
     SqliteAgentRepo,
     SqliteSessionRepo,
@@ -106,6 +108,7 @@ class Deps:
     native_decisions: Any = None
     runtime_admission_fence: RuntimeAdmissionFence = field(default_factory=RuntimeAdmissionFence)
     execution_fresh_publications: dict = field(default_factory=dict)
+    runtime_availability: RuntimeAvailabilityService = field(default_factory=RuntimeAvailabilityService)
 
 
 def build_repos(clock: Clock, config: NexusConfig) -> tuple[Repos, EventEmitter]:
@@ -133,6 +136,7 @@ def build_repos(clock: Clock, config: NexusConfig) -> tuple[Repos, EventEmitter]
         deliveries=SqliteMessageDeliveryRepo(clock),
         tasks=SqliteTaskRepo(clock),
         handoffs=SqliteHandoffRepo(clock),
+        handoff_origins=SqliteHandoffOriginRepo(),
         artifacts=SqliteArtifactRepo(clock),
         artifact_store=LocalArtifactStore(config.home_dir / "artifacts"),
         files=WorkspaceFileStore(),

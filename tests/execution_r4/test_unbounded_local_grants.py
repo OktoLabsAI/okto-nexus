@@ -1,4 +1,5 @@
 """Explicit unbounded local delegation retains revocation and renewable leases."""
+import asyncio
 import pytest
 
 from test_embedded_dispatch import local_setup, connected_local, qualified_contract, admit, wait_receipt
@@ -56,6 +57,13 @@ def test_unbounded_grant_opens_renews_and_revokes(connected_local):
     with setup[0].connection_factory.unit_of_work() as uow:
         owner.pump.access.grants.revoke(uow, grant_id=grant['grant_id'], now=setup[0].clock.now_iso())
     setup[2].portal.call(owner._renew_owned, opened['session_id'], owner.sessions[opened['session_id']])
+    async def wait_contained():
+        # Renewal schedules the independent session cleanup; it does not wait
+        # for native termination or publication on behalf of healthy sessions.
+        async with asyncio.timeout(10):
+            while opened['session_id'] in owner.sessions or not native.native.stopped:
+                await asyncio.sleep(.01)
+    setup[2].portal.call(wait_contained)
     assert native.native.stopped and owner.failure is None
 
 

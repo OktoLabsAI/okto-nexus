@@ -149,7 +149,7 @@ async function read<T>(path: string, signal: AbortSignal | undefined, body?: unk
   catch { throw new ApiError(response.status, `HTTP_${response.status}`, response.statusText || "Invalid server response"); }
   if (!response.ok) {
     const error = value.error ?? value;
-    throw new ApiError(response.status, error.code ?? `HTTP_${response.status}`, error.message ?? response.statusText);
+    throw new ApiError(response.status, error.code ?? `HTTP_${response.status}`, error.message ?? response.statusText, error.details);
   }
   return value as T;
 }
@@ -181,13 +181,31 @@ export function bindingRequestExists(key: string): boolean {
   return sessionStorage.getItem(`okto-nexus:r4-binding:${key}`) !== null;
 }
 
+export interface RecoveryPlan {
+  executor_id: string; generation: number; agent_id?: string | null;
+  sessions: {session_id: string; opening_operation_id: string; agent_id: string}[];
+}
+
 export const runtimeApi = {
+  recoveryPlan: (agentId: string) => read<RecoveryPlan>(`/v1/runtime/recovery/plan?agent_id=${encodeURIComponent(agentId)}`, undefined),
+  confirmStopped: (plan: RecoveryPlan) => read<{state: string; message: string}>(
+    '/v1/runtime/recovery/confirm-stopped', undefined,
+    {plan, confirmation: 'PREVIOUS_RUNTIME_PROCESSES_STOPPED'}),
+  retryRecovery: (agentId: string) => read<{state: string; error_code: string | null; message: string}>(
+    `/v1/runtime/recovery/retry?agent_id=${encodeURIComponent(agentId)}`, undefined, {}),
   setup: (agent: string, binding?: string, signal?: AbortSignal) => read<{baseline: SetupBaseline;
+    runtime_policy: import('./api').RuntimePolicy;
+    mcp_preset?: import('./api').MCPPreset;
     connections: (Pick<BindingView,'binding_id' | 'candidate_ref' | 'executor_id' | 'workspace_id' | 'adapter_id'> & {execution_location: 'local' | 'remote'})[];
     authorization?: {minutes: number | null; actions: number | null};
     folders?: {workspace_root: string; provider_home: string | null; secret_bindings: Record<string,string>};
     public_config?: {alias?: string; harness_settings?: Record<string,string>; nexus_tool_permission?: 'ask' | 'always_allow'};
     automatic_reply?: boolean}>(`/v1/connections/setup/${encodeURIComponent(agent)}${binding ? `?binding_id=${encodeURIComponent(binding)}` : ''}`, signal),
+  workspacePaths: (workspaceId: string, executorId: string, signal?: AbortSignal) =>
+    read<{workspace_id: string; executor_id: string; items: {path: string}[]}>(
+      `/v1/workspaces/${encodeURIComponent(workspaceId)}/paths?executor_id=${encodeURIComponent(executorId)}`,
+      signal,
+    ),
   testSetup: (body: SetupRequest) => read<SetupTest>('/v1/connections/setup:test', undefined, body),
   setupTest: (id: string, signal?: AbortSignal) => read<SetupTest>(`/v1/connections/setup-tests/${encodeURIComponent(id)}`, signal),
   finishSetup: (body: SetupRequest) => read<{saved: boolean}>('/v1/connections/setup:finish', undefined, body),
@@ -203,8 +221,8 @@ export const runtimeApi = {
     resolution_revision: resolution.resolution_revision, intent_hash: resolution.intent_hash,
   }),
   operation: (id: string, signal?: AbortSignal) => read<RuntimeOperation>(`/v1/runtime/operations/${encodeURIComponent(id)}`, signal),
-  session: (id: string, signal?: AbortSignal) => read<RuntimeSession>(`/v1/runtime/sessions/${encodeURIComponent(id)}`, signal),
-  sessions: (agentId: string, binding: BindingView, after: string, signal?: AbortSignal) => {
+  session: (id: string, signal?: AbortSignal, executorId?: string) => read<RuntimeSession>(`/v1/runtime/sessions/${encodeURIComponent(id)}${executorId ? `?executor_id=${encodeURIComponent(executorId)}` : ''}`, signal),
+  sessions: (agentId: string, binding: Pick<BindingView, 'executor_id' | 'binding_id'>, after: string, signal?: AbortSignal) => {
     const query = new URLSearchParams({agent_id: agentId, executor_id: binding.executor_id,
       binding_id: binding.binding_id, after_session_id: after, limit: "25"});
     return read<{sessions: RuntimeSession[]; has_more: boolean; next_after_session_id: string}>(`/v1/runtime/sessions?${query}`, signal);

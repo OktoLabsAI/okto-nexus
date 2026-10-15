@@ -1,11 +1,14 @@
 import { AgentConnectionsPanel } from "../components/AgentConnectionsPanel";
+import { AgentRuntimeAdministration } from '../components/AgentRuntimeAdministration';
+import { OneShotActivity } from '../components/OneShotActivity';
+import { AgentActionModal, AgentModalFooter, ModalCancelButton } from '../components/AgentActionModal';
+import { RuntimeRecovery } from "../components/RuntimeRecovery";
 // Agents & API keys (spec S2 / FR5): the AgentsModal mirror. The freshly
 // issued key renders ONCE in component state - it is never written to any
 // storage, so closing the panel or reloading makes it unrecoverable
 // (br_ae340cae). Pulse light/dark grammar, including the permissions
 // surface (presets + per-agent flags, migration 011). Full-width responsive
-// card grid; heavy editors (key / permissions / identity) break out to a
-// full-row col-span-full panel beneath the card, preserving click-to-expand.
+// card grid; agent actions use expandable modals without moving the cards.
 
 import { Fragment, useEffect, useMemo, useState } from "react";
 import {
@@ -85,7 +88,7 @@ export function AgentsView({
   // The App scope, handed to the Steer modal (steering is workspace-scoped).
   workspace?: string;
 }) {
-  const { confirm, dialog } = useConfirm();
+  const { confirm, dialog } = useConfirm({agentModal: true});
   const [tab, setTab] = useState<"agents" | "presets">("agents");
   const [agents, setAgents] = useState<AgentRow[]>([]);
   const [presets, setPresets] = useState<PresetsPayload | null>(null);
@@ -96,6 +99,7 @@ export function AgentsView({
   );
   const [copied, setCopied] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
+  const [actionBusy, setActionBusy] = useState(false);
   const [newAgent, setNewAgent] = useState<{
     agent_id: string;
     role: string;
@@ -122,6 +126,7 @@ export function AgentsView({
   // Communication binding editor (spec 6f961722) — the 4th per-agent axis
   // (inline style XOR a reference to a reusable Communication preset).
   const [connectionsOpen, setConnectionsOpen] = useState<string | null>(null);
+  const [runtimeOpen, setRuntimeOpen] = useState<string | null>(null);
   const [commOpen, setCommOpen] = useState<string | null>(null);
   const [catalog, setCatalog] = useState<TagKeyRow[]>([]);
   // Capability catalog (migration 014) — the picker's only vocabulary.
@@ -198,6 +203,8 @@ export function AgentsView({
   }, [presets]);
 
   const create = async () => {
+    if (actionBusy) return;
+    setActionBusy(true);
     try {
       const created = await api.createAgent({
         agent_id: newAgent.agent_id.trim(),
@@ -225,7 +232,7 @@ export function AgentsView({
       onChanged();
     } catch (exc) {
       setError((exc as Error).message);
-    }
+    } finally {setActionBusy(false);}
   };
 
   const applyPermissions = async (
@@ -266,6 +273,8 @@ export function AgentsView({
       setEditError("Fix the highlighted metadata field(s) before saving.");
       return;
     }
+    if (actionBusy) return;
+    setActionBusy(true);
     try {
       // Send the full identity triple so cleared fields actually clear
       // (the PATCH/upsert COALESCEs nulls, not empty values). An empty editor
@@ -283,7 +292,7 @@ export function AgentsView({
       onChanged();
     } catch (exc) {
       setEditError((exc as Error).message);
-    }
+    } finally {setActionBusy(false);}
   };
 
   const permChip = (agent: AgentRow) => {
@@ -327,6 +336,9 @@ export function AgentsView({
         />
       )}
       <div className="panel overflow-hidden" data-testid="agents-view">
+        {agents.filter(agent => agent.connection?.location === 'local' && ['Recovering', 'Needs attention'].includes(agent.connection.status)).map(agent => (
+          <RuntimeRecovery key={agent.agent_id} agentId={agent.agent_id} onChanged={() => { reload(); onChanged(); }} />
+        ))}
         <div className="flex items-center justify-between px-4 h-12 border-b border-surface-200/60 dark:border-surface-700/50">
           {/* Tabs (the Pulse AgentsModal header) */}
           <div className="flex items-center gap-1 text-sm">
@@ -553,6 +565,8 @@ export function AgentsView({
         {/* Agents tab — create form                                      */}
         {/* ------------------------------------------------------------ */}
         {tab === "agents" && creating && (
+          <AgentActionModal title="New agent" onClose={() => {setCreating(false);setNewAgent({agent_id:'',role:'',capabilities:[],preset_id:'',color:null});setNewMeta({value:{},valid:true});}} testId="new-agent-modal" busy={actionBusy}
+            dirty={!!newAgent.agent_id || !!newAgent.role || !!newAgent.color || !!newAgent.capabilities.length || !!Object.keys(newMeta.value).length}>
           <div className="px-4 py-3 border-b border-surface-200/60 dark:border-surface-700/50 grid grid-cols-2 gap-2 text-xs">
             <input
               placeholder="agent_id (e.g. researcher)"
@@ -617,16 +631,18 @@ export function AgentsView({
                   </option>
                 ))}
               </select>
-              <button
+              <AgentModalFooter><ModalCancelButton onClose={() => setCreating(false)} /><button
                 className="btn btn-primary"
                 onClick={create}
-                disabled={!newAgent.agent_id.trim() || !newMeta.valid}
+                disabled={actionBusy || !newAgent.agent_id.trim() || !newMeta.valid}
                 data-testid="create-agent"
               >
                 Create
-              </button>
+              </button></AgentModalFooter>
             </div>
           </div>
+          {error && <p role="alert" className="text-xs text-red-500">{error}</p>}
+          </AgentActionModal>
         )}
 
         {/* ------------------------------------------------------------ */}
@@ -673,9 +689,9 @@ export function AgentsView({
                     </div>
                     <div className="flex items-center gap-1 flex-wrap">
                       {agent.connection && <span data-testid={`connection-status-${agent.agent_id}`}
-                        className={`chip ${agent.connection.status === 'Connected' ? 'bg-emerald-100 text-emerald-700' : ['Reconnecting', 'Awaiting approval', 'Completing setup', 'Needs attention'].includes(agent.connection.status) ? 'bg-amber-100 text-amber-700' : 'bg-surface-100 text-surface-600 dark:bg-surface-700 dark:text-surface-300'}`}
+                        className={`chip ${agent.is_active && ['Connected', 'Ready'].includes(agent.connection.status) ? 'bg-emerald-100 text-emerald-700' : agent.is_active && ['Reconnecting', 'Recovering', 'Awaiting approval', 'Completing setup', 'Needs attention'].includes(agent.connection.status) ? 'bg-amber-100 text-amber-700' : 'bg-surface-100 text-surface-600 dark:bg-surface-700 dark:text-surface-300'}`}
                         title={agent.connection.hosts.map(host => `${host.label}: ${host.status} · Last contact: ${host.last_seen_at || 'never'}`).join('\n') || 'Configured execution host'}>
-                        {agent.connection.status === 'MCP only' ? 'MCP only' : agent.connection.location === 'remote' ? `Remote · ${agent.connection.status}` : 'Local'}
+                        {agent.connection.status === 'MCP only' ? 'MCP only' : `${agent.connection.location === 'remote' ? 'Remote' : 'Local'} · ${!agent.is_active ? 'Offline' : ['Ready', 'Connected'].includes(agent.connection.status) ? 'Online' : agent.connection.status}`}
                       </span>}
                       <span className={`chip ${chipCls}`} title="Effective permissions">
                         {chipLabel}
@@ -742,6 +758,9 @@ export function AgentsView({
                       </button>
                       {/* Steering to yourself is a no-op — hide it for the
                           reserved operator identity. */}
+                      {agent.connection?.runtime_integrated && agent.connection.status !== 'MCP only' && <button
+                        className={ICON_BTN} title="Runtime instances and executions" aria-label={`Runtime administration for ${agent.agent_id}`}
+                        onClick={() => setRuntimeOpen(agent.agent_id)}><Terminal size={14}/></button>}
                       {agent.agent_id !== "operator" && (
                         <button
                           className={ICON_BTN}
@@ -779,13 +798,14 @@ export function AgentsView({
                       <button
                         className={ICON_BTN}
                         title={agent.is_active ? "Deactivate" : "Activate"}
-                        onClick={async () => {
-                          await api.updateAgent(agent.agent_id, {
-                            is_active: !agent.is_active,
-                          });
-                          await reload();
-                          onChanged();
-                        }}
+                        onClick={() => confirm({
+                          title: `${agent.is_active ? 'Deactivate' : 'Activate'} agent?`,
+                          body: `${agent.agent_id} will be ${agent.is_active ? 'deactivated' : 'activated'}.`,
+                          onConfirm: async () => {
+                            await api.updateAgent(agent.agent_id, {is_active: !agent.is_active});
+                            await reload(); onChanged();
+                          },
+                        })}
                       >
                         <Power size={14} />
                       </button>
@@ -806,8 +826,9 @@ export function AgentsView({
                               title: "Delete agent?",
                               body: (
                                 <span>
-                                  <b>{agent.agent_id}</b> will be removed permanently
-                                  (deactivation is the reversible path).
+                                  <b>{agent.agent_id}</b> will be removed from the agent list
+                                  and lose access. Runtime history, if present, will be preserved.
+                                  This action cannot be undone.
                                 </span>
                               ),
                               onConfirm: async () => {
@@ -822,11 +843,19 @@ export function AgentsView({
                         </button>
                       )}
                     </div>
+                    <OneShotActivity agentId={agent.agent_id} showCalls={false} />
                   </div>
 
-                  {/* Full-width breakout row beneath the card (preserves the
-                      loved click-to-expand; spans every column). */}
+                  {/* Portal-based editor keeps the agent grid in place. */}
+                  {runtimeOpen === agent.agent_id && <AgentRuntimeAdministration agentId={agent.agent_id} onClose={() => setRuntimeOpen(null)} />}
                   {(showKey || showEdit || showPerms || showTags || showComm || showConnections) && (
+                    <AgentActionModal
+                      title={`${showConnections ? 'Connections' : showKey ? 'API key' : showEdit ? 'Identity' : showPerms ? 'Permissions' : showTags ? 'Tags & audience' : 'Communication'} · ${agent.agent_id}`}
+                      wide={showConnections || showTags || showPerms} guardChanges={!showPerms && !showKey}
+                      busy={actionBusy}
+                      dirty={showEdit && (editDraft.role !== (agent.role || '') || editDraft.color !== (agent.color || null) || JSON.stringify(editDraft.capabilities) !== JSON.stringify(Object.entries(agent.capabilities || {}).filter(([,flag]) => Boolean(flag)).map(([name]) => name)) || JSON.stringify(editMeta.value) !== JSON.stringify(agent.metadata || {}))}
+                      testId={`agent-action-${agent.agent_id}`}
+                      onClose={() => {setConnectionsOpen(null);setFreshKey(null);setEditOpen(null);setPermsOpen(null);setTagsOpen(null);setCommOpen(null);}}>
                     <div
                       className="col-span-full space-y-3"
                       data-testid={`agent-expand-${agent.agent_id}`}
@@ -888,9 +917,9 @@ export function AgentsView({
                               ))}
                             </div>
                           </div>
-                          <button className="btn btn-secondary" onClick={() => setFreshKey(null)}>
+                          <AgentModalFooter><button className="btn btn-secondary" onClick={() => setFreshKey(null)}>
                             Close key panel
-                          </button>
+                          </button></AgentModalFooter>
                         </div>
                       )}
 
@@ -963,25 +992,20 @@ export function AgentsView({
                             </div>
                           </div>
                           {editError && <p className="text-xs text-red-500">{editError}</p>}
-                          <div className="flex items-center gap-2">
+                          <AgentModalFooter>
                             <button
                               className="btn btn-primary"
                               onClick={() => saveEdit(agent.agent_id)}
-                              disabled={!editMeta.valid}
+                              disabled={actionBusy || !editMeta.valid}
                               data-testid={`save-edit-${agent.agent_id}`}
                             >
                               Save changes
                             </button>
-                            <button
-                              className="btn btn-secondary"
-                              onClick={() => setEditOpen(null)}
-                            >
-                              Cancel
-                            </button>
+                            <ModalCancelButton onClose={() => setEditOpen(null)} />
                             <span className="text-[10px] text-surface-400 dark:text-surface-500">
                               Permissions are managed via the shield icon; this edits identity.
                             </span>
-                          </div>
+                          </AgentModalFooter>
                         </div>
                       )}
 
@@ -1057,13 +1081,16 @@ export function AgentsView({
                               applyPermissions(agent.agent_id, { permissions: flags })
                             }
                           />
-                          <p className="text-[10px] text-surface-400 dark:text-surface-500">
+                          {error && <p role="alert" className="text-xs text-red-500">{error}</p>}
+                          <AgentModalFooter><p className="mr-auto text-[10px] text-surface-400 dark:text-surface-500">
                             Changes apply immediately to MCP HTTP and REST.
                             “Full access” agents have no stored flags.
                           </p>
+                          <ModalCancelButton onClose={() => setPermsOpen(null)}>Done</ModalCancelButton></AgentModalFooter>
                         </div>
                       )}
                     </div>
+                    </AgentActionModal>
                   )}
                 </Fragment>
               );

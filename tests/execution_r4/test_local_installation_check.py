@@ -71,6 +71,29 @@ def test_checked_bytes_survive_passive_refresh_without_another_probe(checking):
     assert len(calls) == 1
 
 
+def test_version_check_remains_available_during_runtime_recovery(checking):
+    deps, app, client, headers, body, route, _, calls = checking
+    owner = app.state.embedded_inventory_owner
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE execution_executors SET control_state='RECOVERING' "
+                               "WHERE executor_id=?", (owner.key.executor_id,))
+    inventory = client.get(f'/v1/runtime/executors/{owner.key.executor_id}/inventory',
+                           headers=headers['operator'])
+    assert inventory.json()['freshness'] == 'FRESH'
+    choices = client.get('/v1/agents/subject/runtime-options',
+                         params={'executor_id': owner.key.executor_id}, headers=headers['operator'])
+    assert choices.status_code == 200, choices.text
+    assert choices.json()['freshness'] == 'FRESH'
+    assert any(row['can_configure'] for row in choices.json()['options'])
+    response = client.post(route, json=body, headers=headers['operator'])
+    assert response.status_code == 200, response.text
+    assert response.json()['runtime_authorized'] is False
+    assert len(calls) == 1
+    choices = client.get('/v1/agents/subject/runtime-options',
+                         params={'executor_id': owner.key.executor_id}, headers=headers['operator'])
+    assert all(not row['can_start'] for row in choices.json()['options'])
+
+
 def test_observation_is_reused_after_server_restart(tmp_path, monkeypatch):
     from fastapi.testclient import TestClient
     from nexus_connector_core import InstallationCandidate

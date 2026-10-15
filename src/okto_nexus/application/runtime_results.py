@@ -251,8 +251,15 @@ class RuntimeResultService:
                 "WHERE publication_state='PENDING_APPROVAL' AND publication_approval_id IN "
                 "(SELECT approval_id FROM approvals WHERE status='rejected')")
         with self.cf.unit_of_work(write=False) as uow:
-            rows = uow.connection.execute("SELECT result_id FROM runtime_results WHERE publication_state='PENDING_AUTHORIZATION' "
-                "AND operation_id IS NOT NULL ORDER BY captured_at,result_id LIMIT 4").fetchall()
+            # A result can arrive between the structured-work scan and this
+            # conversation scan. Keep its admitted completion contract pending
+            # until that projector records an outcome, including after rollback.
+            rows = uow.connection.execute("SELECT r.result_id FROM runtime_results r WHERE r.publication_state='PENDING_AUTHORIZATION' "
+                "AND r.operation_id IS NOT NULL AND NOT EXISTS ("
+                "SELECT 1 FROM runtime_handoff_bindings b WHERE b.operation_id=r.operation_id "
+                "AND b.completion_mode='structured_result_v1' AND NOT EXISTS ("
+                "SELECT 1 FROM runtime_work_outcomes o WHERE o.result_id=r.result_id)) "
+                "ORDER BY r.captured_at,r.result_id LIMIT 4").fetchall()
             pending = [self.row(uow, row["result_id"]) for row in rows]
         for row in pending:
             if row is None:

@@ -28,12 +28,20 @@ class RuntimeCausalityService:
                 return None  # Legacy result, never silently minted as a new root.
             purpose, depth, root = "observation", parent["hop_count"] + 1, parent["root_operation_id"]
         else:
-            context = authenticated_message_context(uow, context, self.agents,
-                capabilities=self.capabilities, workspace_id=message.workspace_id)
+            automated = context is not None and context.authentication_source == 'handoff_automation'
+            if automated:
+                from .handoff_automation import require_context, denied
+                if not authorized_work:
+                    raise denied()
+                require_context(uow, context, action='execute_work', endpoint_id=context.endpoint_id,
+                    agent_id=context.actor_agent_id, workspace_id=message.workspace_id)
+            else:
+                context = authenticated_message_context(uow, context, self.agents,
+                    capabilities=self.capabilities, workspace_id=message.workspace_id)
             if context is None:
                 return None
             actor = self.agents.get(uow, context.actor_agent_id)
-            if (not valid_actor_binding(uow, actor, context.credential_binding,
+            if (not automated and not valid_actor_binding(uow, actor, context.credential_binding,
                     capabilities=self.capabilities, workspace_id=message.workspace_id) or
                     (not authorized_work and actor.agent_id not in {message.from_agent_id, "operator"})):
                 raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Causal entry requires an authenticated sender.", {})

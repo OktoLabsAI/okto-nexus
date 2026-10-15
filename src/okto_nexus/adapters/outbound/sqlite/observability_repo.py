@@ -92,6 +92,7 @@ class SqliteObservabilityQueries:
                 FROM agents a
                 LEFT JOIN sessions s
                     ON s.agent_id = a.agent_id AND s.status = 'active'
+                WHERE a.deleted_at IS NULL
                 GROUP BY a.agent_id
                 ORDER BY a.created_at, a.agent_id
                 """
@@ -348,6 +349,10 @@ class SqliteObservabilityQueries:
                 item["rejected_reason"] = row["rejected_reason"]
             items.append(item)
         return items
+
+    def handoff_runtime_facts(self, uow, handoff_ids):
+        from .handoff_runtime_views import SqliteHandoffRuntimeViewRepository
+        return SqliteHandoffRuntimeViewRepository().handoffs(uow, handoff_ids)
 
     def handoff_dependency_aggregates(
         self,

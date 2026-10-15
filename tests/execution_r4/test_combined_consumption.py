@@ -93,9 +93,38 @@ async def verify_competition(onboarding, remote_binding, embedded, remote_native
         assert uow.connection.execute('SELECT COUNT(*) FROM harness_sessions').fetchone()[0] == 0
 
 
-@pytest.mark.parametrize('winner', ['local', 'remote'])
-def test_combined_executors_and_mcp_share_one_claim(combined_onboarding, tmp_path, monkeypatch, winner):
+def test_remote_delivery_and_claim_survive_forbidden_local_preparation(
+        combined_onboarding, tmp_path, monkeypatch):
     from test_remote_connection import test_owned_connector_reader_dispatches_five_actions_over_real_websocket
     test_owned_connector_reader_dispatches_five_actions_over_real_websocket(
         combined_onboarding, tmp_path, monkeypatch, True, None, False, 0, None,
-        domain_delivery=True, combined_winner=winner)
+        domain_delivery=True)
+    deps, client, headers, prepare = combined_onboarding
+    owner = client.app.state.embedded_inventory_owner
+    snapshot = client.get(f'/v1/runtime/executors/{owner.key.executor_id}/inventory',
+        headers=headers['operator']).json()['snapshot']
+    root = tmp_path / 'forbidden-local-workspace'
+    root.mkdir()
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        before = [tuple(row) for row in uow.connection.execute(
+            'SELECT endpoint_id,enabled,activation_state,revision FROM agent_endpoints ORDER BY endpoint_id')]
+        claims = [tuple(row) for row in uow.connection.execute(
+            'SELECT delivery_id,consumer_kind,consumer_operation_id FROM message_deliveries ORDER BY delivery_id')]
+        assert claims and all(row[1] == 'push' for row in claims)
+    response = client.post(f'/v1/runtime/executors/{owner.key.executor_id}/realizations',
+        headers=headers['operator'], json=dict(
+            client_intent_id='forbidden-local', agent_id='subject', workspace_root=str(root),
+            workspace_id=prepare['workspace_id'], workspace_label='Shared logical project',
+            adapter_id='codex_app_server', candidate_ref=snapshot['evidence'][0]['candidate_ref'],
+            inventory_revision=snapshot['inventory_revision'], local_consent_id='local-consent',
+            approved=True, provider_home=None, secret_bindings={}))
+    assert response.status_code == 403, response.text
+    assert response.json()['error']['code'] == 'PERMISSION_DENIED'
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert [tuple(row) for row in uow.connection.execute(
+            'SELECT endpoint_id,enabled,activation_state,revision FROM agent_endpoints ORDER BY endpoint_id')] == before
+        assert [tuple(row) for row in uow.connection.execute(
+            'SELECT delivery_id,consumer_kind,consumer_operation_id FROM message_deliveries ORDER BY delivery_id')] == claims
+        assert uow.connection.execute(
+            'SELECT COUNT(*) FROM execution_bindings WHERE executor_id=?',
+            (owner.key.executor_id,)).fetchone()[0] == 0

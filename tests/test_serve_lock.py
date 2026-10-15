@@ -24,12 +24,12 @@ def test_acquire_writes_pid_and_release_removes(tmp_path):
 
 def test_second_acquire_fails_citing_active_pid(tmp_path):
     first = ServeLock(tmp_path)
-    first.acquire(pid=1111)
+    first.acquire(pid=os.getpid())
     second = ServeLock(tmp_path)
     with pytest.raises(OktoNexusError) as excinfo:
         second.acquire(pid=2222)
     assert excinfo.value.code == ErrorCode.CONFIG_ERROR
-    assert "1111" in excinfo.value.message  # PID is surfaced to the operator
+    assert str(os.getpid()) in excinfo.value.message  # PID is surfaced to the operator
     assert first.path.exists()  # loser never clobbers a fresh lock
     first.release()
 

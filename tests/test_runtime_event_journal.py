@@ -7,9 +7,22 @@ import pytest
 
 from okto_nexus.adapters.outbound.harness.event_journal import FileRuntimeEventJournal
 from okto_nexus.domain.harness import HarnessEvent
-from test_pr34_remediation import runtime as runtime_fixture, open_rest
+from test_pr34_remediation import runtime as runtime_fixture
 
 runtime = runtime_fixture
+
+
+def historical_session(runtime):
+    """Retained journal replay does not require starting an obsolete native owner."""
+    deps = runtime[0]
+    session_id = "retained-journal-session"
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute(
+            "INSERT INTO harness_sessions(session_id,kind,owning_agent_id,status,capabilities,"
+            "started_at,ended_at,created_at,updated_at) "
+            "VALUES(?,'codex','worker','ENDED','{}','2026-09-22','2026-09-22',"
+            "'2026-09-22','2026-09-22')", (session_id,))
+    return session_id
 
 
 def event(session="fixture", **payload):
@@ -117,7 +130,7 @@ def test_credentials_redacted_before_bytes_are_written(tmp_path):
 
 def test_projection_rollback_and_restart_recover_exactly_once(runtime, monkeypatch):
     deps, _, _, _, _, _ = runtime
-    session_id = open_rest(runtime).json()["data"]["session_id"]
+    session_id = historical_session(runtime)
     ingress = deps.harness_supervisor.event_ingress
     original = ingress.repo.project
     def fail_after_result(uow, **kwargs):
@@ -143,7 +156,7 @@ def test_projection_rollback_and_restart_recover_exactly_once(runtime, monkeypat
 
 def test_journal_io_outside_write_uow_and_full_sync(runtime, monkeypatch):
     deps, _, _, _, _, _ = runtime
-    session_id = open_rest(runtime).json()["data"]["session_id"]
+    session_id = historical_session(runtime)
     from okto_nexus.adapters.outbound.sqlite.connection import SqliteUnitOfWork
     import threading
     active = threading.local()
@@ -174,7 +187,7 @@ def test_journal_io_outside_write_uow_and_full_sync(runtime, monkeypatch):
 
 def test_projection_batch_rolls_back_before_publication(runtime, monkeypatch):
     deps, _, _, _, _, _ = runtime
-    session_id = open_rest(runtime).json()["data"]["session_id"]
+    session_id = historical_session(runtime)
     ingress = deps.harness_supervisor.event_ingress
     original = ingress.repo.project
     published = []
@@ -215,7 +228,7 @@ def test_hardlink_replacement_is_refused(tmp_path):
 
 def test_replay_after_checkpoint_loss_does_not_duplicate_result(runtime):
     deps, _, _, _, _, _ = runtime
-    session_id = open_rest(runtime).json()["data"]["session_id"]
+    session_id = historical_session(runtime)
     ingress = deps.harness_supervisor.event_ingress
     ingress.capture(event(session_id, text="same result"))
     with deps.connection_factory.unit_of_work() as uow:
@@ -228,7 +241,7 @@ def test_replay_after_checkpoint_loss_does_not_duplicate_result(runtime):
 
 def test_replay_cursors_cover_append_and_reject_unbounded_limits(runtime):
     deps, _, _, _, _, _ = runtime
-    session_id = open_rest(runtime).json()["data"]["session_id"]
+    session_id = historical_session(runtime)
     supervisor = deps.harness_supervisor
     for index in range(4):
         supervisor._handle_event(session_id, event(session_id, text=str(index)))

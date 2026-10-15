@@ -88,10 +88,11 @@ def test_vault_failure_prevents_native_tool_launch(connected_local):
     vault.store=broken
     admit(setup,binding,"tools-vault-failure","runtime.start",new_session=True)
     until=time.monotonic()+5
-    while app.state.embedded_dispatch_owner.failure is None:
+    while 'subject' not in app.state.embedded_dispatch_owner.agents.errors:
         assert time.monotonic()<until
         time.sleep(.02)
-    assert isinstance(app.state.embedded_dispatch_owner.failure,OSError)
+    assert isinstance(app.state.embedded_dispatch_owner.agents.errors['subject'],OSError)
+    assert app.state.embedded_dispatch_owner.failure is None
     assert native.opens==0 and not environments
 
 

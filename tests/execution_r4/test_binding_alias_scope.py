@@ -48,7 +48,7 @@ def apply(client, headers, prepare, suffix):
     return response.json()
 
 
-def test_same_alias_on_another_executor_preserves_both_bindings_and_agent(onboarding, tmp_path):
+def test_same_alias_on_replacement_machine_preserves_history_and_agent(onboarding, tmp_path):
     deps, client, headers, first = onboarding
     left = apply(client, headers, first, "first")
     with deps.connection_factory.unit_of_work(write=False) as uow:
@@ -62,7 +62,12 @@ def test_same_alias_on_another_executor_preserves_both_bindings_and_agent(onboar
     with deps.connection_factory.unit_of_work(write=False) as uow:
         current_agent = dict(uow.connection.execute("SELECT * FROM agents WHERE agent_id='subject'").fetchone())
         assert {k: v for k, v in current_agent.items() if k != "last_seen_at"} == {k: v for k, v in agent.items() if k != "last_seen_at"}
-        assert dict(uow.connection.execute("SELECT * FROM agent_endpoints WHERE endpoint_id=?", (left["endpoint_id"],)).fetchone()) == endpoint
+        retained = dict(uow.connection.execute("SELECT * FROM agent_endpoints WHERE endpoint_id=?", (left["endpoint_id"],)).fetchone())
+        assert retained["enabled"] == 0 and retained["activation_state"] == "revoked"
+        assert retained["revision"] == endpoint["revision"] + 1
+        changed = {"enabled", "activation_state", "revision", "updated_at"}
+        assert {k: v for k, v in retained.items() if k not in changed} == {k: v for k, v in endpoint.items() if k not in changed}
+        assert uow.connection.execute("SELECT enabled,activation_state FROM agent_endpoints WHERE endpoint_id=?", (right["endpoint_id"],)).fetchone()[:] == (1, "approved")
         assert uow.connection.execute("SELECT COUNT(*) FROM execution_bindings").fetchone()[0] == 2
 
 

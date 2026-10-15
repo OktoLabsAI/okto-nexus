@@ -29,9 +29,7 @@ def test_rows_closes_sqlite_without_relying_on_gc(tmp_path):
 
 
 def test_load_worker_survives_snapshot_reader(tmp_path):
-    import runpy
-    source = runpy.run_path(str(Path(__file__).resolve().parents[1] /
-        "plans/pr34-remediation/runtime_crash_pressure_campaign.py"))["LOAD"]
+    source = Path(__file__).with_name("pressure_load_fixture.py").read_text(encoding="utf-8")
     script = tmp_path / "load.py"
     script.write_text(source, encoding="utf-8")
     snapshot = tmp_path / "load-0.json"

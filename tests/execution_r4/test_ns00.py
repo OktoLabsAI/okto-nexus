@@ -32,7 +32,9 @@ def _git(*args: str) -> bytes:
 def test_ns00_01():
     baseline = json.loads((PLANS / "r4_execution/baseline.json").read_text())
     source = baseline["source"]
-    assert _git("branch", "--show-current").decode().strip() == "feature/v0.2.0"
+    # The historical baseline remains verifiable from release branches and
+    # detached PR/main checkouts; it does not constrain today's branch name.
+    assert source["branch"] == "feature/v0.2.0"
     subprocess.run(("git", "merge-base", "--is-ancestor",
                     source["head_at_start"], "HEAD"), cwd=ROOT, check=True)
     for path, expected in source["head_file_sha256"].items():

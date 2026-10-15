@@ -4,8 +4,8 @@ from concurrent.futures import ThreadPoolExecutor
 
 import pytest
 
-from test_pr34_remediation import runtime as runtime_fixture, open_rest, tool
-from test_runtime_event_journal import event
+from test_pr34_remediation import runtime as runtime_fixture, tool
+from test_runtime_event_journal import event, historical_session
 
 runtime = runtime_fixture
 
@@ -13,7 +13,7 @@ runtime = runtime_fixture
 @pytest.mark.parametrize("surface", ["rest", "mcp"])
 def test_replay_pages_keep_concurrent_append_and_retained_cursor_with_acl(runtime, surface):
     deps, client, _, _, operator, caller = runtime
-    sid = open_rest(runtime).json()["data"]["session_id"]
+    sid = historical_session(runtime)
     supervisor = deps.harness_supervisor
     supervisor.event_ingress.journal.segment_bytes = 900
     for index in range(4):
@@ -56,7 +56,7 @@ def test_replay_pages_keep_concurrent_append_and_retained_cursor_with_acl(runtim
 @pytest.mark.parametrize("arguments", [{"limit": -1}, {"limit": 0}, {"limit": 1001}, {"after_sequence": -1}])
 def test_invalid_replay_cursor_or_limit_has_same_validation_contract(runtime, arguments):
     _, client, _, _, operator, caller = runtime
-    sid = open_rest(runtime).json()["data"]["session_id"]
+    sid = historical_session(runtime)
     mcp = tool(client, operator, "harness_event_list", {"session_id": sid, **arguments})
     rest = client.get(f"/api/v1/harness/sessions/{sid}/events", headers={"x-api-key": operator}, params=arguments)
     assert not mcp["ok"] and mcp["error"]["code"] == "VALIDATION_ERROR", mcp

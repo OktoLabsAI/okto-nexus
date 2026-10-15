@@ -19,7 +19,7 @@ the derived `shared.md` view live outside that database.
 
 | Release fact | Value |
 |---|---|
-| Package | `okto-nexus 0.2.0` (development) |
+| Package | `okto-nexus 0.3.0` (development) |
 | Python | `>=3.11` |
 | MCP surface | Use `tools/list` for the active feature configuration |
 | MCP resources | 12 versioned reference resources |
@@ -142,6 +142,7 @@ okto-nexus serve
 
 Defaults:
 
+- listen address: `0.0.0.0:8202` (all IPv4 interfaces);
 - dashboard: `http://127.0.0.1:8202/`;
 - MCP: `http://127.0.0.1:8202/mcp`;
 - data directory: `~/.okto_nexus`;
@@ -153,10 +154,15 @@ Useful variants:
 
 ```bash
 okto-nexus serve --project-root /absolute/path/to/project
-okto-nexus serve --host 0.0.0.0 --port 8202
+okto-nexus serve --host 127.0.0.1 --port 8202  # loopback-only access
 okto-nexus serve --trust-mode strict
 okto-nexus serve --embedding-mode local
 ```
+
+From another computer, use `http://<server-network-IP>:8202/`. Remote dashboard
+access requires an operator login configured locally in **Settings → Operator access**.
+MCP and Connector clients continue to authenticate with agent API keys.
+`--host` overrides `OKTO_NEXUS_HOST`; either can restrict the listening address.
 
 On first use, open **Agents → New agent** in the dashboard. Create one identity
 per participant and copy its `nxs_...` key immediately: Nexus stores only the
@@ -719,6 +725,59 @@ against its frozen baseline; it is not a measurement of the R4 surface.
 
 ## Configuration
 
+### One-shot runtime sessions and MCP presets (0.3.0)
+
+Select `one_shot` in the runtime session policy to create one single-use session
+per call. Global capacity defaults and independent agent overrides configure
+parallel executions, unused warm instances, queue size, overflow rejection,
+queue timeout and execution timeout. Set the parallel limit to **0** for no
+pool-specific ceiling; the host resource budget still applies. Warm instances
+must be fewer than a finite parallel limit: for example, 10 parallel and 5 warm. Starting and closing
+instances still occupy capacity; a successful response remains successful if
+resource cleanup needs another attempt. Queued calls run before replenishment.
+
+Each instance is claimed independently. Pool openings have a separate bounded
+dispatch budget, so slow replenishment cannot hold up ready sessions. Capacity
+is released only after confirmed disposal, never merely because a call ended
+or timed out. The connection wizard saves these settings on **Next**.
+
+Warm-up reserves the full deficit in one maintenance pass and starts independent
+opens in parallel, within host and transport credits. Calls arriving during
+warm-up reserve capacity without binding to a cold process: the oldest compatible
+caller receives the next ready instance. A slower opening cannot pin that caller
+while another compatible instance sits idle. No productive turn is sent until
+the resource is ready; cancellation and waiting deadlines remain durable.
+
+The pool and queue use hexagonal boundaries: `domain/resource_pool.py` contains
+the rules, `application/resource_pool.py` coordinates them through the ports in
+`application/resource_pool_ports.py`, and `adapters/outbound/sqlite/resource_pool.py`
+provides the internal durable implementation. `bootstrap/resource_pool.py`
+wires these adapters. Local and remote runtimes use the same allocation service;
+process operations continue through the authorized execution outbox.
+A future distributed adapter must atomically couple dequeue, capacity claims
+and outcomes with the execution outbox, preserving idempotency and fenced
+disposal. Replacing storage does not change the pool rules; a broker alone is
+not a substitute for this transactional contract.
+
+The agent settings show occupied capacity, queued calls, recent outcomes and
+cancellation controls. Capacity refusals return directly to the caller;
+broadcast responses identify refused recipients separately. Later failures
+create a correlated private inbox message for the original caller, including
+execution stage, possible effects and retry safety. These notices are durable
+coordination messages; they do not automatically start a new agent turn.
+
+Runtime harness settings also accept an MCP preset with `stdio` or `http`
+servers. Presets compose with the existing **inherit global MCPs** setting:
+an entry replaces the same inherited name, a disabled entry removes it, and
+Nexus integrations remain reserved. Use approved execution-host `env_refs`
+or `header_refs` for credentials, rather than literal secrets. Paths resolve
+on that host, including when using a remote Connector. Codex and Claude use
+their native MCP integration; Pi receives tools through a session-owned MCP
+bridge. A preset change applies to new sessions and retires incompatible unused
+warm instances. Resetting history with agent preservation keeps these settings.
+
+Implementation evidence is tracked in `plans/one_shot_mcp/ledger.json`.
+
 For `serve` settings managed by the runtime catalog, effective precedence is:
 
 ```text
@@ -816,7 +875,7 @@ The other flags gate live behavior.
 | Environment | CLI | Default | Scope |
 |---|---|---:|---|
 | `OKTO_NEXUS_PORT` | `--port` | 8202 | `serve` |
-| `OKTO_NEXUS_HOST` | `--host` | `127.0.0.1` | `serve` |
+| `OKTO_NEXUS_HOST` | `--host` | `0.0.0.0` | `serve` |
 | `OKTO_NEXUS_LOG_LEVEL` | `--log-level` | `warning` | `critical` through `trace` |
 | — | `--project-root` | `.` | Initial dashboard workspace |
 | `OKTO_NEXUS_NO_BANNER` | — | unset | Suppress serve banner |
@@ -1025,10 +1084,10 @@ Release checks:
 
 ```bash
 uv lock --check
-uv build --out-dir dist/release-0.2.0
+uv build --out-dir dist/release-0.3.0
 uvx twine check \
-  dist/release-0.2.0/okto_nexus-0.2.0-py3-none-any.whl \
-  dist/release-0.2.0/okto_nexus-0.2.0.tar.gz
+  dist/release-0.3.0/okto_nexus-0.3.0-py3-none-any.whl \
+  dist/release-0.3.0/okto_nexus-0.3.0.tar.gz
 ```
 
 Publish only explicitly named current-version artifacts. The top-level
@@ -1386,3 +1445,8 @@ Read the complete
 [LICENSE](https://github.com/OktoLabsAI/okto-nexus/blob/main/LICENSE) before use
 or redistribution. It is also included in the source distribution and served
 by the running hub at `GET /api/v1/license`.
+
+## Global harness MCPs
+
+See [global harness MCP inheritance](docs/global-mcps.md) for global defaults,
+agent/harness overrides and local/remote host behavior.

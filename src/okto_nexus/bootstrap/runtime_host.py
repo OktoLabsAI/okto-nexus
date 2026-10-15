@@ -15,7 +15,7 @@ from pathlib import Path
 
 from nexus_connector_core import (
     InstallationCandidate, RuntimeCore, SQLiteOwnedSlotLedger,
-    ShutdownPolicy, create_runtime,
+    ShutdownPolicy, create_runtime, ExecutionCapacity, CoreError,
 )
 from nexus_connector_core.journal import SQLiteJournal, open_journal
 from nexus_connector_core.models import PreparedLaunch
@@ -30,7 +30,7 @@ class EmbeddedRuntimeHost:
     silently reusing a runtime would execute against the old selection.
     """
 
-    def __init__(self, store_dir: Path, *, max_owned_slots: int = 8):
+    def __init__(self, store_dir: Path, *, max_owned_slots: int = 64, capacity_enabled: bool = False):
         store_dir = Path(store_dir)
         if not store_dir.is_absolute():
             raise ValueError("The embedded Core store directory must be absolute.")
@@ -38,12 +38,18 @@ class EmbeddedRuntimeHost:
             raise ValueError("The embedded Core slot limit must be positive.")
         self.store_dir = store_dir
         self.max_owned_slots = max_owned_slots
+        if type(capacity_enabled) is not bool:
+            raise ValueError('Capacity support must be a boolean.')
+        self.capacity_enabled = capacity_enabled
+        self._capacity_services = {}
+        self._capacity_gate = asyncio.Lock()
         self._lock = asyncio.Lock()
         self._ledger_task: asyncio.Task[SQLiteOwnedSlotLedger] | None = None
         self._runtime_tasks: dict[tuple[str, str], asyncio.Task[
             tuple[RuntimeCore, SQLiteJournal]]] = {}
         self._selections: dict[tuple[str, str], tuple[dict, dict, object]] = {}
         self._closing = False
+        self._history_closing = False
         self._native_action_owners = {}
         self.local_launch_factory = None
         self._history_tasks = set()
@@ -62,7 +68,7 @@ class EmbeddedRuntimeHost:
     async def with_history(self, *, executor_id, session_id, read):
         """Retain a journal reader through observer cancellation and shutdown."""
         async with self._lock:
-            if self._closing:
+            if self._history_closing:
                 raise RuntimeError("The embedded Core host is shutting down.")
             task = asyncio.create_task(self._read_history(executor_id, session_id, read))
             self._history_tasks.add(task)
@@ -96,6 +102,40 @@ class EmbeddedRuntimeHost:
             SQLiteOwnedSlotLedger, self.store_dir / "owned-slots.db",
             max_slots=self.max_owned_slots,
         )
+
+    def _runtime_for_capacity(self, session):
+        task = self._runtime_tasks.get((session.executor_id, session.session_id))
+        if task is None or not task.done() or task.cancelled() or task.exception() is not None:
+            return None
+        return task.result()[0]
+
+    async def capacity_service(self, *, server_id, executor_id, boot_id, authority, clock=None):
+        """Compose the shared public Core port without creating a harness.
+
+        The dispatch owner supplies its current authority checks. A new owner
+        fences the previous observer; outstanding durable reservations remain
+        recoverable under their original immutable requests.
+        """
+        if not self.capacity_enabled:
+            raise CoreError('CAPACITY_PROTOCOL_UNSUPPORTED', 'embedded_capacity')
+        ledger = await self._ledger()
+        key = (server_id, executor_id)
+        async with self._capacity_gate:
+            if self._closing:
+                raise CoreError('RECOVERING', 'embedded_capacity')
+            prior = self._capacity_services.get(key)
+            if prior and prior[0].boot_id == boot_id:
+                if prior[1] is not authority:
+                    raise CoreError('RESERVATION_CONFLICT', 'embedded_capacity_owner')
+                return prior[0]
+            service = ExecutionCapacity(ledger, authority=authority, boot_id=boot_id, clock=clock,
+                namespace=key, runtime_lookup=self._runtime_for_capacity)
+            self._capacity_services[key] = (service, authority)
+        # Retiring a slow observer must not hold the composition gate for
+        # unrelated executor namespaces. aclose fences it before its first wait.
+        if prior:
+            await prior[0].aclose()
+        return service
 
     async def acquire(
         self, *, executor_id: str, session_id: str,
@@ -150,6 +190,7 @@ class EmbeddedRuntimeHost:
                 candidates=selection[0], workspace_roots=selection[1],
                 owned_slot_ledger=ledger, native_factory=native_factory,
                 max_owned_sessions=self.max_owned_slots,
+                capacity_enabled=self.capacity_enabled,
                 pi_native_action=native_launch if selection[2] is not None else None,
                 native_approvals_enabled=selection[3],
             )
@@ -205,9 +246,13 @@ class EmbeddedRuntimeHost:
             raise ValueError("Store closure must be a boolean.")
         async with self._lock:
             self._closing = True
+            # Containment leaves journals available for final publication.
+            # The store-closing pass fences new readers before joining them.
+            self._history_closing = close_stores
             tasks = dict(self._runtime_tasks)
             ledger_task = self._ledger_task
             history_tasks = tuple(self._history_tasks)
+        await asyncio.gather(*(service.aclose() for service, _ in self._capacity_services.values()))
         # Canceled observers cannot abandon an open history journal.
         if close_stores:
             await asyncio.gather(*history_tasks, return_exceptions=True)

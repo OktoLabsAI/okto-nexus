@@ -1,5 +1,6 @@
-"""Explicit operator version checks; observations never grant runtime authority."""
+"""Version checks for selected installations; observations never grant runtime authority."""
 import asyncio
+import json
 from dataclasses import asdict, replace
 import os
 from pathlib import Path
@@ -62,6 +63,56 @@ async def probe_version(selected):
     # No workspace, provider home or credentials are supplied to the process.
     with tempfile.TemporaryDirectory(prefix='nexus-version-check-') as directory:
         return await probe(selected, cwd=Path(directory), env=env)
+
+
+async def refresh_approved_installations(owner, candidates):
+    """Restore missing observations at locations selected by an active binding."""
+    from .execution_inventory_revalidation import same_installation_location
+    def approved():
+        with owner.deps.connection_factory.unit_of_work(write=False) as uow:
+            return [dict(row) for row in uow.connection.execute(
+                'SELECT b.candidate_ref,e.agent_id,l.local_record_json FROM execution_bindings b '
+                'JOIN agent_endpoints e USING(endpoint_id) JOIN agents a ON a.agent_id=e.agent_id '
+                'JOIN execution_local_realizations l ON l.server_id=b.server_id '
+                'AND l.executor_id=b.executor_id AND l.realization_ref=b.realization_ref '
+                "WHERE b.server_id=? AND b.executor_id=? AND e.enabled=1 AND a.is_active=1 "
+                "AND e.activation_state='approved'", (owner.key.server_id, owner.key.executor_id))]
+    records = await asyncio.to_thread(approved)
+    observed_candidates = await asyncio.to_thread(apply_local_observations,
+        owner.deps.connection_factory, owner.key, candidates)
+    semaphore = asyncio.Semaphore(4)
+    async def refresh(source, existing):
+        if existing.trust == 'selected' and existing.version:
+            return
+        selected = next((r for r in records if same_installation_location(
+            json.loads(r['local_record_json'])['candidate'], asdict(source))), None)
+        if selected is None:
+            return
+        async with semaphore:
+            try:
+                observed = await probe_version(replace(source, trust='selected'))
+                if (type(observed.version) is not str or not 1 <= len(observed.version) <= 160
+                        or replace(observed, trust=source.trust, version=source.version) != source
+                        or await asyncio.to_thread(selected_fingerprint, source) != source.fingerprint
+                        or owner._stop.is_set()):
+                    return
+                if selected not in await asyncio.to_thread(approved):
+                    return
+                def save():
+                    with owner.deps.connection_factory.unit_of_work() as uow:
+                        uow.connection.execute('INSERT INTO execution_local_observations VALUES (?,?,?,?,?,?,?,?,?) '
+                            'ON CONFLICT(server_id,executor_id,candidate_ref) DO UPDATE SET '
+                            'core_version=excluded.core_version,platform=excluded.platform,source_json=excluded.source_json,'
+                            'version=excluded.version,actor_agent_id=excluded.actor_agent_id,observed_at=excluded.observed_at',
+                            (owner.key.server_id, owner.key.executor_id, selected['candidate_ref'], CORE_VERSION,
+                             sys.platform, canonical_json(asdict(source)).decode(), observed.version,
+                             selected['agent_id'], owner.deps.clock.now_iso()))
+                await asyncio.to_thread(save)
+            except (CoreError, OktoNexusError, OSError, ValueError):
+                # A technical probe failure remains visible; other installations
+                # still publish and retain their independent readiness.
+                return
+    await asyncio.gather(*(refresh(source, existing) for source, existing in zip(candidates, observed_candidates)))
 
 
 async def observe_local_installation(owner, *, access, context, request):

@@ -351,8 +351,8 @@ an uncertain outcome. The Server, not the operator or Connector, owns dispatch.
 
 ## Capabilities, authority and outcomes
 
-The four catalog adapters are `codex_app_server`, `pi_rpc`,
-`claude_stream` and `claude_attach`. A catalog entry is not proof
+The three catalog adapters are `codex_app_server`, `pi_rpc` and
+`claude_stream`. A catalog entry is not proof
 that its native version is installed, usable or qualified. Read current protocol
 readiness, inventory evidence, binding status, effective session capabilities
 and authorization. Missing qualification must remain unavailable; do not bypass
@@ -361,9 +361,8 @@ and authorization. Missing qualification must remain unavailable; do not bypass
 Remote NXL uses the exact negotiated R4 revision from Core. R3 persisted bytes
 remain historical data, not permission to submit a new R4 effect. An unsupported
 method, version, platform or missing capability must produce a refusal rather
-than a simulated success. Claude attach is an external session: a socket write
-does not prove native acceptance or completion, and detaching does not authorize
-termination of the external process.
+than a simulated success. Claude attach is no longer supported. Historical
+attach records remain readable, but cannot authorize new execution.
 
 For runtime message delivery, `Received` (`delivered_at`) is recorded when a
 correlated `turn.submit` receipt first proves native acceptance (`SUBMITTED`,
@@ -521,6 +520,32 @@ revision guard. Before native dispatch, Nexus checks the same capability,
 actions, owner, grant, revisions and applied lease again. The reference is
 internal provenance, never an inbound credential or a reconstructed agent key.
 Canonical-key callers and the operator UI keep their existing authentication.
+
+Managed MCP sessions can use `agent_list`, `agent_get` and `capability_list`
+for discovery. Both local and remote session credentials include these actions;
+each call still requires its explicit action and a valid session, grant and
+applied lease. Agent discovery preserves the authenticated agent's outbound
+and each peer's inbound communication scope. `agent_get.agent_id` identifies
+the peer being queried, not a replacement caller. Profiles include public
+presence and connection status without runtime host paths or credentials.
+
+`coordination_health` additionally requires `health.read`, the enabled health
+feature and the session's canonical workspace ID as `project_root`. It cannot
+read another workspace. Communication permissions continue to apply to managed
+message, handoff and event tools; session actions do not override those permissions.
+`harness_list` connection administration remains unavailable to session
+credentials. Use agent discovery for peer status; full communication access
+does not confer operator privileges. Existing credentials are not broadened
+in place: these added actions are issued with newly opened sessions.
+
+Pi exposes the equivalent `nexus_agent_list`, `nexus_agent_get`,
+`nexus_capability_list` and `nexus_coordination_health` through Core's native
+extension. Local and remote backends call the same Server identity/health
+services. Sender and workspace come from the authenticated native session;
+only `nexus_agent_get.agent_id` selects a peer. Each call checks the current
+capability, applied lease and domain permissions. Directory reads are fresh,
+not cached action receipts. `nexus_message_create` supports direct and broadcast
+targets under the same message permissions and routing rules as MCP.
 
 Application and public HTTP MCP tests cover these tools, malformed answers,
 recipient isolation and revocation before dispatch. Pi exposes the equivalent

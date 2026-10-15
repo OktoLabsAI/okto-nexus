@@ -14,6 +14,17 @@ from okto_nexus.adapters.inbound.cli.serve import (
 from okto_nexus.errors import ErrorCode, OktoNexusError
 
 
+@pytest.mark.parametrize('args,env,expected', [
+    ([], {}, '0.0.0.0'),
+    ([], {'OKTO_NEXUS_HOST': ''}, '0.0.0.0'),
+    ([], {'OKTO_NEXUS_HOST': '127.0.0.1'}, '127.0.0.1'),
+    (['--host', '127.0.0.1'], {'OKTO_NEXUS_HOST': '0.0.0.0'}, '127.0.0.1'),
+    (['--host=192.168.0.146'], {}, '192.168.0.146'),
+])
+def test_listen_address_default_and_explicit_overrides(args, env, expected):
+    assert _split_serve_args(args, env)[1] == expected
+
+
 def test_log_level_defaults_to_warning():
     port, host, root, level, rest = _split_serve_args([], {})
     assert level == "warning" == DEFAULT_LOG_LEVEL

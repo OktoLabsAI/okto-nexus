@@ -2,6 +2,7 @@
 from dataclasses import asdict
 import json
 from types import SimpleNamespace
+from typing import Protocol
 
 from ..domain.routing import RoutingAgent, can_agent_see_event, is_agent_eligible
 from ..domain.runtime_context import RuntimeRequestContext
@@ -12,6 +13,11 @@ from .permissions import permission_set_for
 from .runtime_policy import effective
 
 PREFIX = 'handoff-notification-v1:'
+
+
+class HandoffNotificationRepository(Protocol):
+    def record(self, uow, *, message_id, handoff_id, recipient_id, event_type, actor_guard, competitive): ...
+    def competitive(self, uow, *, message_id, recipient_id) -> bool: ...
 
 
 def has_runtime(uow, agent_id, workspace_id):
@@ -42,20 +48,26 @@ def eligible(uow, *, agents, handoff, recipient_id, now, governance=None):
         return False
 
 
-def queue(uow, *, message, delivery, agents, handoffs, now, governance=None):
+def queue(uow, *, message, delivery, agents, handoffs, now, governance=None,
+          notifications: HandoffNotificationRepository | None = None, runtime_enabled=True):
     body = json.loads(message.body)
     kind = body.get('kind')
     if kind not in {'handoff.directed', 'handoff.created', 'handoff.unblocked'}:
         return
     handoff = handoffs.get(uow, workspace_id=message.workspace_id, handoff_id=body['handoff_id'])
+    competitive = bool(handoff and json.loads(handoff.target).get('strategy') == 'broadcast')
     if (not handoff
-            or not has_runtime(uow, delivery.recipient_agent_id, message.workspace_id)
+            or not competitive and (not runtime_enabled or not has_runtime(uow, delivery.recipient_agent_id, message.workspace_id))
             or not eligible(uow, agents=agents, handoff=handoff, recipient_id=delivery.recipient_agent_id, now=now, governance=governance)):
         return
     event = 'handoff.created' if kind == 'handoff.directed' else kind
-    uow.connection.execute('INSERT INTO runtime_handoff_notifications VALUES(?,?,?,?,?)',
-        (message.message_id, handoff.handoff_id, delivery.recipient_agent_id, event,
-         _agent_guard(uow.connection, message.from_agent_id)))
+    if notifications is None:
+        raise RuntimeError('Handoff notification persistence is not configured.')
+    notifications.record(uow, message_id=message.message_id, handoff_id=handoff.handoff_id,
+        recipient_id=delivery.recipient_agent_id, event_type=event,
+        actor_guard=_agent_guard(uow.connection, message.from_agent_id), competitive=competitive)
+    if competitive:
+        return  # Logical inbox remains unread; no conversational producer exists.
     context = RuntimeRequestContext(message.from_agent_id, 'handoff_notification',
                                     credential_binding=PREFIX + message.message_id)
     uow.connection.execute('INSERT INTO runtime_pending_deliveries(delivery_id,context_json,authorization_revision,created_at) VALUES(?,?,?,?)',
@@ -64,9 +76,10 @@ def queue(uow, *, message, delivery, agents, handoffs, now, governance=None):
 
 def valid_binding(uow, actor, binding, workspace_id):
     row = uow.connection.execute(
-        'SELECT n.actor_guard,m.from_agent_id,m.workspace_id FROM runtime_handoff_notifications n '
+        'SELECT n.actor_guard,n.runtime_route,m.from_agent_id,m.workspace_id FROM runtime_handoff_notifications n '
         'JOIN messages m USING(message_id) WHERE n.message_id=?', (binding[len(PREFIX):],)).fetchone()
-    return bool(row and row['from_agent_id'] == actor.agent_id and row['workspace_id'] == workspace_id
+    return bool(row and row['runtime_route'] != 'competitive'
+                and row['from_agent_id'] == actor.agent_id and row['workspace_id'] == workspace_id
                 and row['actor_guard'] == _agent_guard(uow.connection, actor.agent_id))
 
 
@@ -76,6 +89,9 @@ def validate(uow, *, message, recipient_id, agents, now, governance=None):
     record = uow.connection.execute('SELECT * FROM handoffs WHERE handoff_id=? AND workspace_id=?',
         (row['handoff_id'], message.workspace_id)).fetchone() if row else None
     handoff = SimpleNamespace(**dict(record)) if record else None
+    if row and row['runtime_route'] in {'competitive', 'legacy_admitted'}:
+        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Competitive handoff notices use the runtime scheduler.',
+                            {'reason': 'competitive_handoff_control'})
     if (not handoff or handoff.status != 'OPEN' or not eligible(uow, agents=agents, handoff=handoff,
                                                               recipient_id=recipient_id, now=now, governance=governance)):
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Handoff notification is no longer available to this recipient.', {})

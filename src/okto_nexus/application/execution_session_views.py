@@ -107,7 +107,8 @@ def read_execution_session(factory, *, server_id, session_id, context, access,
             (server_id, row["executor_id"], session_id)).fetchone()
         expired = bool(lease and lease["status"] == "ACTIVE" and
             datetime.fromisoformat(lease["valid_until_server"].replace("Z", "+00:00")) <= datetime.now(timezone.utc))
-        available = bool(not expired and lease and lease["status"] == "ACTIVE" and row["lease_state"] == "ACTIVE"
+        from .execution_agent_recovery import agent_recovering
+        available = bool(not agent_recovering(conn, server_id, row['executor_id'], row['subject_agent_id']) and not expired and lease and lease["status"] == "ACTIVE" and row["lease_state"] == "ACTIVE"
             and row["lifecycle_state"] == "READY" and row["control_state"] == "CONTROL_READY"
             and row["revoked_at"] is None and lease["owner_generation"] == row["owner_generation"]
             and lease["connection_generation"] == row["generation"])

@@ -4,9 +4,9 @@ At most ONE serve process per nexus home: two would duplicate the reaper,
 retention sweeps and SSE pollers. The lock is a file created with
 ``O_CREAT | O_EXCL`` containing the owner PID; liveness is the file mtime,
 refreshed by the owner (heartbeat). A second serve fails closed with a
-message citing the active PID; takeover is allowed only when the heartbeat
-has been silent for longer than ``stale_after_seconds`` (covers a crashed
-serve that never released). stdio clients never touch this lock - WAL
+message citing the active PID. A recorded same-host process that the OS
+confirms has exited can be recovered immediately; older locks retain the
+``stale_after_seconds`` heartbeat fallback. stdio clients never touch this lock - WAL
 concurrency between stdio and serve is unaffected by design.
 """
 
@@ -15,6 +15,7 @@ from __future__ import annotations
 import json
 import os
 import time
+import socket
 from pathlib import Path
 
 from ....errors import ErrorCode, OktoNexusError
@@ -45,9 +46,8 @@ class ServeLock:
     def acquire(self, *, pid: int | None = None) -> None:
         """Take the lock or raise ``CONFIG_ERROR`` citing the active PID.
 
-        One takeover attempt is made when the existing lock's heartbeat is
-        stale (owner crashed); a FRESH lock always aborts the bootstrap
-        before anything touches the database.
+        Take over a confirmed dead local owner or a stale legacy heartbeat.
+        A live or uncertain fresh owner still aborts before database access.
         """
         pid = os.getpid() if pid is None else pid
         for attempt in (1, 2):
@@ -55,7 +55,13 @@ class ServeLock:
                 fd = os.open(self.path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
             except FileExistsError:
                 holder_pid, age = self._holder()
-                if age is not None and age > self._stale_after and attempt == 1:
+                from ...outbound.process_liveness import process_exited
+                try:
+                    same_host = json.loads(self.path.read_text(encoding='utf-8')).get('host') == socket.gethostname()
+                except (OSError, ValueError, AttributeError):
+                    same_host = False
+                dead = same_host and process_exited(holder_pid) is True
+                if attempt == 1 and (dead or (age is not None and age > self._stale_after)):
                     # Abandoned lock (crashed serve): take it over, loudly.
                     try:
                         self.path.unlink()
@@ -76,7 +82,7 @@ class ServeLock:
                 )
             else:
                 with os.fdopen(fd, "w", encoding="utf-8") as handle:
-                    json.dump({"pid": pid}, handle)
+                    json.dump({"pid": pid, "host": socket.gethostname()}, handle)
                 self._owned = True
                 return
 

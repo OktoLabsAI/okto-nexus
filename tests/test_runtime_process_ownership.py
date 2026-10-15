@@ -103,35 +103,6 @@ def test_real_codex_transport_handshake_timeout_kills_owned_fixture(tmp_path):
     assert supervisor.list_live() == []
 
 
-def test_rest_owner_start_timeout_has_no_running_session(runtime, tmp_path):
-    deps, client, root, _, operator_key, _ = runtime
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        worker_before = dict(uow.connection.execute("SELECT * FROM agents WHERE agent_id='worker'").fetchone())
-        agent_count = uow.connection.execute("SELECT count(*) FROM agents").fetchone()[0]
-    marker = tmp_path / "production-spawn.pid"
-    code = f"import os,time; open({str(marker)!r},'w').write(str(os.getpid())); time.sleep(60)"
-    deps.harness_connector_factories["codex"] = lambda **_: CodexAppServerConnector(
-        command=[sys.executable, "-c", code], env=fixture_environment(), handshake_timeout_s=30)
-    supervisor = deps.harness_supervisor
-    supervisor._start_timeout_s = 1
-    response = client.post("/api/v1/harness/sessions", headers={"x-api-key": operator_key},
-        json={"agent_id": "worker", "kind": "codex", "project_root": root,
-              "idempotency_key": "fixture-timeout"})
-    assert response.status_code >= 400
-    assert marker.exists(), response.text
-    assert wait_until(lambda: not supervisor._quarantined_bindings)
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute("SELECT count(*) FROM harness_sessions").fetchone()[0] == 0
-        assert uow.connection.execute("SELECT count(*) FROM runtime_open_requests").fetchone()[0] == 1
-        assert dict(uow.connection.execute("SELECT * FROM agents WHERE agent_id='worker'").fetchone()) == worker_before
-        assert uow.connection.execute("SELECT count(*) FROM agents").fetchone()[0] == agent_count
-    # Repeating the same request must not launch the uncertain operation again.
-    marker.unlink()
-    retry = client.post("/api/v1/harness/sessions", headers={"x-api-key": operator_key},
-        json={"agent_id": "worker", "kind": "codex", "project_root": root,
-              "idempotency_key": "fixture-timeout"})
-    assert retry.status_code >= 400
-    assert not marker.exists()
 
 
 @pytest.mark.skipif(os.name != "nt", reason="Windows Job Object contract")

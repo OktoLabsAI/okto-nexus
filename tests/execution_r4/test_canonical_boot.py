@@ -34,11 +34,13 @@ def test_serve_boot_uses_core_after_inventory_start_and_replays_once(tmp_path, m
         assert native.opens == 0
     finally:
         generator.close()
-    original_init = EmbeddedDispatchOwner.__init__
-    def initialize(owner, *args, **kwargs):
-        original_init(owner, *args, **kwargs)
+    original_start = EmbeddedDispatchOwner.start
+    async def start(owner):
+        # server_runtime assigns the selected factory after construction.
+        # Inject the synthetic peer at start, before boot can dispatch.
         owner.native_factory = native
-    monkeypatch.setattr(EmbeddedDispatchOwner, "__init__", initialize)
+        return await original_start(owner)
+    monkeypatch.setattr(EmbeddedDispatchOwner, "start", start)
     def forbidden(*args, **kwargs):
         raise AssertionError("Canonical boot reached the legacy connector")
     monkeypatch.setattr(harness, "construct_profile_connector", forbidden)

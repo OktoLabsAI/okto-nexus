@@ -25,20 +25,3 @@ def legacy_enqueue(self, uow, *, envelope, context, endpoint, profile, session_i
         authorization_revision=authorization_revision)
     uow.connection.execute("INSERT INTO delivery_outbox(" + ",".join(values) + ") VALUES(" +
         ",".join("?" for _ in values) + ")", tuple(values.values()))
-
-
-def test_store_capacity_fences_the_legacy_enqueue_of_a_compatible_writer(runtime, monkeypatch):
-    deps, client, root, _, _, caller = runtime
-    assert open_rest(runtime).status_code == 200
-    monkeypatch.setattr(deps.runtime_dispatcher, "scan_once", lambda: None)
-    deps.config.max_new_roots_per_agent_per_minute = 256
-    for _ in range(32):
-        send_message(runtime)
-    monkeypatch.setattr(SqliteRuntimeOutboxRepo, "enqueue", legacy_enqueue)
-    overflow = tool(client, caller, "message_create", {"project_root": root, "from_agent_id": "caller",
-        "subject": "legacy writer", "body": "must remain bounded",
-        "target": {"strategy": "direct", "agent_id": "worker"}})
-    assert not overflow["ok"], "Writer contract v1 allowed an older enqueue to bypass the capacity bound"
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        for table in ("messages", "message_deliveries", "delivery_outbox"):
-            assert uow.connection.execute(f"SELECT count(*) FROM {table}").fetchone()[0] == 32

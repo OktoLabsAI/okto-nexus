@@ -35,11 +35,12 @@ def test_open_drift_requires_durable_no_effect_proof(connected_local, monkeypatc
         rejected = admit(setup, binding, 'drift-open', 'runtime.start', new_session=True)
         if proof != 'not_sent':
             until = time.monotonic() + 15
-            while owner.failure is None:
+            while 'subject' not in owner.agents.errors:
                 assert time.monotonic() < until
                 time.sleep(.02)
-            assert owner.failure.code == 'PROFILE_DRIFT'
-            assert owner._stopping.is_set()
+            assert owner.agents.errors['subject'].code == 'PROFILE_DRIFT'
+            assert owner.failure is None
+            assert not owner._stopping.is_set()
             return
         view = wait_receipt(setup, rejected, stages=('FAILED',))
         assert view['possible_effect'] is False
@@ -71,12 +72,13 @@ def test_open_drift_requires_durable_no_effect_proof(connected_local, monkeypatc
                                           (scope,)).fetchone()
 
 
-def test_failed_open_proof_survives_server_restart(tmp_path, monkeypatch):
+@pytest.mark.parametrize('error_code', ['PROFILE_DRIFT', 'AGENT_REVOKED', 'LEASE_EXPIRED'])
+def test_failed_open_proof_survives_server_restart(tmp_path, monkeypatch, error_code):
     with contextmanager(local_setup.__wrapped__)(tmp_path, monkeypatch, None) as setup:
         setup, binding, native = connected_local.__wrapped__(setup)
         owner = setup[1].state.embedded_dispatch_owner
         async def refuse(*args, **kwargs):
-            raise CoreError('PROFILE_DRIFT', 'environment', retry_safe=True)
+            raise CoreError(error_code, 'environment', retry_safe=True)
         monkeypatch.setattr(native, 'open', refuse)
         rejected = admit(setup, binding, 'refused-before-restart', 'runtime.start', new_session=True)
         wait_receipt(setup, rejected, stages=('FAILED',))

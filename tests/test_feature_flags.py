@@ -32,11 +32,20 @@ FEATURE_FLAGS = [
     ("feature_health", "OKTO_NEXUS_FEATURE_HEALTH", "--feature-health"),
     ("feature_replay", "OKTO_NEXUS_FEATURE_REPLAY", "--feature-replay"),
     ("feature_harness_integrations", "OKTO_NEXUS_FEATURE_HARNESS_INTEGRATIONS", "--feature-harness-integrations"),
-    ("feature_harness_attach", "OKTO_NEXUS_FEATURE_HARNESS_ATTACH", "--feature-harness-attach"),
 ]
 
 FEATURE_FIELDS = [field for field, _, _ in FEATURE_FLAGS]
-DEFAULT_ON = {"feature_harness_integrations", "feature_harness_attach"}
+DEFAULT_ON = {"feature_harness_integrations"}
+
+
+def test_retired_attach_cannot_be_enabled_through_settings(loopback_client):
+    deps, client = loopback_client
+    assert not hasattr(deps.config, 'feature_harness_attach')
+    assert not hasattr(load_config({'OKTO_NEXUS_FEATURE_HARNESS_ATTACH': 'true'}), 'feature_harness_attach')
+    items = client.get('/api/v1/settings').json()['data']['items']
+    assert 'feature_harness_attach' not in {item['key'] for item in items}
+    response = client.patch('/api/v1/settings', json={'feature_harness_attach': True})
+    assert response.status_code == 422
 
 
 # --------------------------------------------------------------------------- #
@@ -143,7 +152,7 @@ def test_settings_catalogue_lists_features_with_defaults(loopback_client):
 
 
 @pytest.mark.parametrize("field,value", [("feature_trace", True),
-    ("feature_harness_integrations", False), ("feature_harness_attach", False)])
+    ("feature_harness_integrations", False)])
 def test_patch_feature_flag_persists_and_applies_live(tmp_path, field, value):
     """TS2 (REST half): PATCH -> 200, live config mutated, stored survives
     a fresh bootstrap over the same home."""

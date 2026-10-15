@@ -198,6 +198,44 @@ def test_cancelled_shutdown_request_keeps_cleanup_owned(connected_local, monkeyp
     client.portal.call(scenario)
 
 
+def test_shutdown_retries_final_publication_without_reopening_native(connected_local, monkeypatch):
+    setup, binding, native = connected_local
+    owner = setup[1].state.embedded_dispatch_owner
+    opened = admit(setup, binding, 'publication-shutdown-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    restored = threading.Event()
+    original = owner.events.recover
+
+    async def unavailable(**kwargs):
+        if owner._stopping.is_set() and not restored.is_set():
+            raise OSError('Final publication storage unavailable')
+        return await original(**kwargs)
+
+    monkeypatch.setattr(owner.events, 'recover', unavailable)
+
+    async def scenario():
+        try:
+            await owner.request_shutdown(timeout_seconds=.05)
+            with pytest.raises(OSError, match='Final publication storage unavailable'):
+                await asyncio.wait_for(owner.close(), 10)
+            assert native.native.stopped
+            assert owner.shutdown_status()['state'] == 'DRAINING_PENDING'
+            assert owner.host._runtime_tasks
+            receipt = await owner.host.historical_receipt(session_id=opened['session_id'],
+                key=OperationKey(opened['scope']['server_id'], opened['scope']['executor_id'], opened['operation_id']))
+            assert receipt is not None and receipt.stage == 'SUBMITTED'
+        finally:
+            restored.set()
+            await asyncio.wait_for(owner.wait_shutdown(), 10)
+        assert owner.shutdown_status()['state'] == 'DRAINED'
+        assert not owner.host._runtime_tasks and native.opens == 1
+
+    setup[2].portal.call(scenario)
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT lifecycle_state FROM execution_sessions WHERE session_id=?',
+                                      (opened['session_id'],)).fetchone()[0] == 'CLOSED'
+
+
 def test_lifespan_retains_embedded_owner_until_pending_recovery(tmp_path, monkeypatch):
     from contextlib import contextmanager
     import time

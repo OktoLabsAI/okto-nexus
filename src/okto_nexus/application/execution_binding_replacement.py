@@ -24,7 +24,9 @@ def replacement_target(conn, *, server_id, subject_agent_id, executor_id,
                     "AND NOT (lifecycle_state='FAILED' AND lease_state='CLOSED') LIMIT 1",
                     (server_id, executor_id, binding_id)).fetchone():
         raise OktoNexusError(ErrorCode.CONFLICT,
-            "Close or reconcile the binding's active sessions before replacing its realization.", {})
+            "Close or reconcile the binding's active sessions before replacing its realization.",
+            {"reason": "ACTIVE_SESSIONS", "agent_id": subject_agent_id,
+             "binding_ids": [binding_id]})
     return {key: row[key] for key in ("binding_id", "endpoint_id", "profile_id", "binding_revision",
         "workspace_binding_id", "candidate_ref", "inventory_revision", "realization_ref", "realization_revision")}
 

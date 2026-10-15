@@ -46,6 +46,11 @@ BASELINE: dict[str, int] = {
 #: so gratuitous description bloat stays caught. The BASELINE above remains
 #: frozen (BR8) - this ledger is additive and auditable per spec.
 APPROVED_GROWTH: dict[str, int] = {
+    # Native runtime questions added after the frozen coordination baseline.
+    # Core is mandatory in 0.2.2, so both tools are on the default surface:
+    # runtime_input_list (168 description + 94 params), runtime_input_respond
+    # (196 description + 235 params). Measured with the live MCP schema.
+    "runtime_inputs_r4": 693,
     # I4 handoff verification (spec c692da7e, SURFACE_REVISION 21): the
     # handoff_verify tool (docstring + params, 1076) + the optional
     # acceptance_criteria/verify_by params on handoff_create (569) + the

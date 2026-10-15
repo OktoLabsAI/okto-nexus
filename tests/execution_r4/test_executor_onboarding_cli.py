@@ -31,6 +31,10 @@ def test_connector_public_commands_publish_realization_over_tcp(tmp_path, monkey
     with deps.connection_factory.unit_of_work() as uow:
         uow.connection.execute("INSERT OR IGNORE INTO agents(agent_id,created_at) VALUES (?,?)",
                                ("subject", deps.clock.now_iso()))
+        # Connector onboarding requires an agent explicitly assigned remote
+        # execution; new agents otherwise default to the local host.
+        uow.connection.execute("INSERT INTO agent_execution_policies VALUES(?,?,?,?)",
+                               ("subject", "remote", None, 1))
         key = app.state.auth.issue_key(uow, agent_id="subject")
         uow.connection.execute("INSERT OR IGNORE INTO agents(agent_id,created_at) VALUES (?,?)",
                                ("operator", deps.clock.now_iso()))

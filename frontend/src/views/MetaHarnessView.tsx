@@ -12,6 +12,7 @@ import {
   LoaderCircle,
   MessageSquare,
   Paperclip,
+  PanelRightOpen,
   Radio,
   Send,
   X,
@@ -39,12 +40,15 @@ import {
   type WorkspaceListItem,
 } from "../api";
 import { AgentSelect } from "../components/AgentSelect";
+import { CopyMessageButton } from "../components/CopyMessageButton";
 import { Markdown } from "../components/Markdown";
 import { parseStructuredMessage, StructuredMessage, type StructuredMessagePayload } from "../components/StructuredMessage";
 import { handoffLabel } from "../handoffLabel";
 import { PageContainer } from "../components/PageContainer";
 import { workspaceDisplayName } from "../components/WorkspaceNames";
 import { agentColor } from "../graph/agentColor";
+
+import { MetaHarnessSessions } from "../components/MetaHarnessSessions";
 
 const OPERATOR = "operator";
 const TIMELINE_PAGE_SIZE = 20;
@@ -219,9 +223,29 @@ function buildTimeline(
   receiptDisplay: ReceiptDisplay,
 ): TimelineEntry[] {
   const rows: TimelineEntry[] = [];
+  const handoffsById = new Map(handoffs.map((handoff) => [handoff.handoff_id, handoff]));
+  const seenLifecycleMessages = new Set<string>();
 
   for (const message of messages) {
     if (receiptDisplay === "inline" && isReadReceiptMessage(message)) continue;
+    const parsed = parseStructuredMessage(message.body ?? message.preview);
+    const handoffId = typeof parsed?.handoff_id === "string" ? parsed.handoff_id : null;
+    const handoff = handoffId ? handoffsById.get(handoffId) : undefined;
+    const handoffKind = parsed?.kind;
+    if (handoffId && handoffKind && ["handoff.created", "handoff.directed", "handoff.completed", "handoff.rejected"].includes(handoffKind)) {
+      const representedByHandoff = handoff && (
+        handoffKind === "handoff.created" || handoffKind === "handoff.directed" ||
+        handoffKind === "handoff.completed" && handoff.result != null ||
+        handoffKind === "handoff.rejected" && handoff.rejected_reason != null
+      );
+      if (representedByHandoff) continue;
+      const lifecycleKey = `${handoffId}:${handoffKind}`;
+      if (seenLifecycleMessages.has(lifecycleKey)) continue;
+      seenLifecycleMessages.add(lifecycleKey);
+    }
+    const handoffTitle = handoff ? handoffLabel(handoff) :
+      (typeof parsed?.title === "string" && parsed.title.trim()) ||
+      (typeof parsed?.subject === "string" && parsed.subject.trim()) || handoffId;
     const outgoing = message.from_agent_id === OPERATOR;
     const recipients = message.deliveries.map((delivery) => delivery.recipient_agent_id);
     const directTarget = targetAgent(message);
@@ -234,8 +258,9 @@ function buildTimeline(
       audience: audienceOf(message),
       agentId: outgoing ? OPERATOR : message.from_agent_id,
       recipients: recipients.length ? recipients : directTarget ? [directTarget] : [],
-      subject: message.subject,
+      subject: handoffId ? handoffTitle : message.subject,
       content: message.body ?? message.preview,
+      structured: handoffId && parsed ? { ...parsed, title: handoffTitle } : undefined,
       artifacts: artifactIds(message.artifacts),
       deliveries: outgoing ? message.deliveries : undefined,
       status: outgoing
@@ -581,7 +606,7 @@ function ChatTurn({
 
   return (
     <article
-      className={`flex gap-3 ${outgoing ? "justify-end" : "justify-start"}`}
+      className={`flex min-w-0 gap-3 ${outgoing ? "justify-end" : "justify-start"}`}
       data-testid={`meta-harness-turn-${entry.id.replaceAll(":", "-")}`}
     >
       {!outgoing && (
@@ -605,9 +630,10 @@ function ChatTurn({
           <span>{audienceLabel}</span>
           {showWorkspace && <span>· {shortWorkspace(entry.workspaceId, workspaces)}</span>}
           <span>· {stamp(entry.timestamp)}</span>
+          <CopyMessageButton text={[entry.subject, formatChatContent(entry.content)].filter(Boolean).join('\n\n')} />
         </div>
         <div
-          className={`rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${
+          className={`min-w-0 max-w-full rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm [overflow-wrap:anywhere] ${
             outgoing
               ? "rounded-br-md bg-accent-600 text-white"
               : entry.outcome === "rejected"
@@ -714,6 +740,7 @@ export function MetaHarnessView({
     Record<string, ArtifactItem>
   >({});
   const [receiptDisplay, setReceiptDisplay] = useState<ReceiptDisplay>("inline");
+  const [sessionsOpen, setSessionsOpen] = useState(false);
   const [receiptEntry, setReceiptEntry] = useState<TimelineEntry | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -1069,7 +1096,7 @@ export function MetaHarnessView({
         `Attached ${artifactIds.length === 1 ? "1 document" : `${artifactIds.length} documents`}: ${staged
           .map((attachment) => attachment.file.name)
           .join(", ")}.`;
-      await api.metaHarnessSend({
+      const result = await api.metaHarnessSend({
         workspace: sendWorkspace,
         kind,
         audience,
@@ -1081,6 +1108,9 @@ export function MetaHarnessView({
       setSubject("");
       setBody("");
       setAttachments([]);
+      if (result.runtime_rejections?.length) {
+        setError(result.runtime_rejections.map((item) => `${item.recipient_agent_id}: ${item.message}`).join("\n"));
+      }
       await loadFeed();
     } catch (exc) {
       setError((exc as Error).message);
@@ -1097,7 +1127,8 @@ export function MetaHarnessView({
 
   return (
     <PageContainer width="bleed" scroll="none" testId="meta-harness-view">
-      <div className="flex h-full min-h-0 flex-col bg-white dark:bg-surface-950">
+      <div className="meta-harness-layout">
+      <div className="meta-harness-conversation flex h-full min-h-0 flex-col bg-white dark:bg-surface-950">
         <header className="shrink-0 border-b border-surface-200/70 bg-white/90 px-5 py-3 backdrop-blur dark:border-surface-800 dark:bg-surface-950/90">
           <div className="mx-auto flex max-w-5xl items-center gap-4">
             <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-nexus-blue to-nexus-violet text-white shadow-glow-violet">
@@ -1116,16 +1147,20 @@ export function MetaHarnessView({
                 placeholder="all agents"
                 label="Agent"
               />
+              <button type="button" className="btn btn-secondary shrink-0" aria-label={sessionsOpen ? "Collapse conversation sessions" : "Show conversation sessions"}
+                aria-expanded={sessionsOpen} aria-controls="meta-harness-sessions" title="Agent sessions" onClick={() => setSessionsOpen(value => !value)}>
+                <PanelRightOpen size={16}/><span className="hidden xl:inline">Sessions</span>
+              </button>
             </div>
           </div>
         </header>
 
         <div
           ref={timelineRef}
-          className="min-h-0 flex-1 overflow-y-auto"
+          className="min-h-0 min-w-0 flex-1 overflow-x-hidden overflow-y-auto"
           data-testid="meta-harness-timeline"
         >
-          <div className="mx-auto flex min-h-full max-w-5xl flex-col px-4 py-6 sm:px-6">
+          <div className="mx-auto flex min-h-full min-w-0 max-w-5xl flex-col px-4 py-6 sm:px-6">
             <NativeQuestions workspace={workspace} agent={filterAgent} />
             {loading ? (
               <div className="grid flex-1 place-items-center text-sm text-surface-400">
@@ -1359,6 +1394,11 @@ export function MetaHarnessView({
             </div>
           </form>
         </div>
+      </div>
+      {sessionsOpen && <>
+        <button className="meta-sessions-backdrop" aria-label="Close sessions panel" onClick={() => setSessionsOpen(false)}/>
+        <MetaHarnessSessions key={`${workspace}:${filterAgent}`} workspace={workspace} agent={filterAgent} workspaces={workspaces} onClose={() => setSessionsOpen(false)}/>
+      </>}
       </div>
     </PageContainer>
   );

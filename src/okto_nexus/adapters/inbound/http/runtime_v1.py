@@ -52,6 +52,12 @@ class InventoryRefreshRequest(BaseModel):
     client_intent_id: _Id
 
 
+class SetupMCPPreset(BaseModel):
+    model_config = ConfigDict(extra='forbid', strict=True)
+    expected_revision: Annotated[int, Field(ge=0)]
+    servers: list[dict]
+
+
 class ConnectionSetupRequest(BaseModel):
     model_config = ConfigDict(extra='forbid', strict=True)
     client_intent_id: Annotated[str, Field(min_length=1, max_length=100)]
@@ -63,6 +69,8 @@ class ConnectionSetupRequest(BaseModel):
     binding_id: str | None = None
     baseline: dict[str, int | None]
     configuration: dict
+    mcp_preset: SetupMCPPreset | None = None
+    broadcast_handoff_auto_claim: bool | None = None
 
 
 class LocalInstallationCheckRequest(BaseModel):
@@ -175,6 +183,12 @@ class CapabilityRequest(BaseModel):
     replaces_capability_id: _Id | None = None
 
 
+class RecoveryConfirmation(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    plan: dict
+    confirmation: Literal['PREVIOUS_RUNTIME_PROCESSES_STOPPED']
+
+
 def build_router() -> APIRouter:
     router = APIRouter()
 
@@ -197,6 +211,49 @@ def build_router() -> APIRouter:
         except OktoNexusError as error:
             return v1_err(403, error.code, error.message)
         return None
+
+    @router.get("/runtime/recovery/plan")
+    async def runtime_recovery_plan(request: Request, agent_id: str | None = None):
+        denied = await shutdown_authority(request, mutate=True)
+        if denied is not None:
+            return denied
+        owner = getattr(request.app.state, 'embedded_dispatch_owner', None)
+        if owner is None:
+            return v1_err(503, 'RECONCILIATION_REQUIRED', 'The local runtime owner is unavailable.')
+        try:
+            return JSONResponse(await owner.recovery_plan(agent_id), headers={'Cache-Control': 'no-store'})
+        except Exception as error:
+            return v1_err(409, getattr(error, 'code', 'RECONCILIATION_REQUIRED'),
+                'A safe recovery plan could not be prepared. Retained history was preserved.')
+
+    @router.post("/runtime/recovery/confirm-stopped")
+    async def confirm_runtime_stopped(body: RecoveryConfirmation, request: Request):
+        denied = await shutdown_authority(request, mutate=True)
+        if denied is not None:
+            return denied
+        owner = getattr(request.app.state, 'embedded_dispatch_owner', None)
+        if owner is None:
+            return v1_err(503, 'RECONCILIATION_REQUIRED', 'The local runtime owner is unavailable.')
+        try:
+            view = await owner.confirm_recovery(body.plan, get_authenticated_agent().agent_id)
+        except Exception as error:
+            return v1_err(409, getattr(error, 'code', 'RECONCILIATION_REQUIRED'),
+                'Recovery state changed or remains unresolved. Review a new plan before continuing.')
+        return JSONResponse(view, headers={'Cache-Control': 'no-store'})
+
+    @router.post("/runtime/recovery/retry")
+    async def retry_runtime_recovery(request: Request, agent_id: str | None = None):
+        denied = await shutdown_authority(request, mutate=True)
+        if denied is not None:
+            return denied
+        owner = getattr(request.app.state, 'embedded_dispatch_owner', None)
+        if owner is None:
+            return v1_err(503, 'RECONCILIATION_REQUIRED', 'The local runtime owner is unavailable.')
+        try:
+            view = await owner.retry_recovery(agent_id)
+        except OktoNexusError as error:
+            return v1_err(409, error.code, error.message)
+        return JSONResponse(view, headers={'Cache-Control': 'no-store'})
 
     @router.post("/runtime/shutdown")
     async def request_shutdown(body: ShutdownRequest, request: Request):
@@ -629,6 +686,9 @@ def build_router() -> APIRouter:
                 factory, principal=principal, frame=frame)
 
         accepted = await anyio.to_thread.run_sync(_publish)
+        dispatcher = getattr(request.app.state.deps, "runtime_dispatcher", None)
+        if dispatcher is not None:
+            dispatcher.wake()
         return JSONResponse({
             "operation_id": accepted.operation_id,
             "receipt_revision": accepted.receipt_revision,
@@ -691,11 +751,14 @@ def build_router() -> APIRouter:
         if (set(query) - {"after_sequence", "limit", "executor_id", "stream_epoch"}
                 or len(query.multi_items()) != len(query)):
             return v1_err(422, "VALIDATION_ERROR", "Invalid event query.")
-        from ....bootstrap.execution_compat import events_view
+        from ....application.execution_event_views import read_execution_events
         context = runtime_request_context()
+        deps = request.app.state.deps
         try:
-            result = await anyio.to_thread.run_sync(lambda: events_view(request.app.state.deps,
-                context, session_id, after_sequence=after_sequence, limit=limit,
+            result = await anyio.to_thread.run_sync(lambda: read_execution_events(deps.connection_factory,
+                server_id=ensure_execution_installation(deps.connection_factory).server_id,
+                context=context, access=build_execution_access(deps),
+                session_id=session_id, after_sequence=after_sequence, limit=limit,
                 executor_id=executor_id, stream_epoch=stream_epoch))
         except OktoNexusError as error:
             return runtime_error(error, "session.events")
@@ -722,6 +785,11 @@ def build_router() -> APIRouter:
             else:
                 executor_id = None
                 subject_agent_id = agent.agent_id
+                from okto_nexus.application.execution_operator_authority import require_delegated_result_read
+                from okto_nexus.bootstrap.execution_authority import build_execution_access
+                with factory.unit_of_work(write=False) as uow:
+                    require_delegated_result_read(uow, operation_id=operation_id,
+                        context=runtime_request_context(), access=build_execution_access(request.app.state.deps))
             return read_execution_operation_history(
                 factory, server_id=server_id, executor_id=executor_id,
                 operation_id=operation_id, subject_agent_id=subject_agent_id,
@@ -814,13 +882,42 @@ def build_router() -> APIRouter:
         except OktoNexusError as error:
             return runtime_error(error, 'connection.setup')
 
+    @router.get('/connections/workspaces')
+    async def connection_workspaces(request: Request, limit: int = 100, after_workspace_id: str | None = None):
+        from ....application.connection_workspaces import list_connection_workspaces
+        try:
+            result = await anyio.to_thread.run_sync(lambda: list_connection_workspaces(
+                request.app.state.deps, runtime_request_context(), limit=limit, after_workspace_id=after_workspace_id))
+            return JSONResponse(result, headers={'Cache-Control': 'no-store'})
+        except OktoNexusError as error:
+            return runtime_error(error, 'connection.workspaces')
+
+    @router.get('/workspaces/{workspace_id}/paths')
+    async def workspace_paths_read(workspace_id: str, executor_id: str, request: Request):
+        from ....application.workspace_paths import list_workspace_paths
+        try:
+            result = await anyio.to_thread.run_sync(lambda: list_workspace_paths(
+                request.app.state.deps, runtime_request_context(),
+                workspace_id=workspace_id, executor_id=executor_id))
+            return JSONResponse(result, headers={'Cache-Control': 'no-store'})
+        except OktoNexusError as error:
+            return runtime_error(error, 'workspace.paths')
+
     def setup_request(body):
         from nexus_connector_core.connection_configuration import parse_connection_configuration
         from nexus_connector_core import CoreError
         result = body.model_dump()
+        # Omission preserves policy for older clients; explicit null inherits.
+        if 'broadcast_handoff_auto_claim' not in body.model_fields_set:
+            result.pop('broadcast_handoff_auto_claim', None)
         try:
             from ....application.connection_authorization import normalize_authorization
             result['configuration'] = normalize_authorization(parse_connection_configuration(normalize_authorization(result['configuration'])))
+            if result.get('mcp_preset') is not None:
+                from nexus_connector_core.mcp_presets import validate_mcp_preset
+                result['mcp_preset']['servers'] = validate_mcp_preset(result['mcp_preset']['servers'])
+            else:
+                result.pop('mcp_preset', None)
         except (CoreError, ValueError, TypeError):
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Invalid connection configuration file.', {}) from None
         return result
@@ -869,6 +966,11 @@ def build_router() -> APIRouter:
         except CoreError as error:
             return v1_err(409, error.code, 'Refresh installations and test the selected runtime again.')
         except OktoNexusError as error:
+            if error.code == ErrorCode.CONFLICT and (error.details or {}).get('reason') == 'ACTIVE_SESSIONS':
+                return JSONResponse({'error': {'code': error.code, 'message': error.message,
+                    'stage': 'connection.finish', 'possible_effect': False, 'retry_safe': False,
+                    'operation_id': None, 'action': '', 'details': error.details}},
+                    status_code=409, headers={'Cache-Control': 'no-store'})
             return runtime_error(error, 'connection.finish')
 
     return router

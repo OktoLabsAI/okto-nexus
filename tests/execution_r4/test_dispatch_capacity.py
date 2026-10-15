@@ -31,6 +31,63 @@ def reserve(state, **limits):
         remote_ready=True, channel=channel, **limits)
 
 
+@pytest.mark.parametrize('pool_openings', [False, True])
+def test_one_agent_keeps_parallel_workers_without_consuming_last_credit(pool_openings, owner):
+    backlog(owner, 'runtime.open', 3)
+    with owner[0].connection_factory.unit_of_work() as uow:
+        c = uow.connection
+        c.execute("UPDATE execution_operations SET session_id=operation_id WHERE action='runtime.open'")
+        source = dict(c.execute('SELECT * FROM execution_operations LIMIT 1').fetchone())
+        owner[0].repos.agents.upsert(uow, agent_id='new-healthy', role='reviewer')
+        row = dict(source, operation_id='zz-new-healthy', session_id='zz-new-healthy', subject_agent_id='new-healthy')
+        c.execute('INSERT INTO execution_operations (' + ','.join(row) + ') VALUES (' + ','.join('?' for _ in row) + ')', tuple(row.values()))
+        c.execute("INSERT INTO execution_dispatch_outbox(server_id,executor_id,operation_id,dispatch_state) VALUES(?,?,?,'PENDING')",
+                  (row['server_id'], row['executor_id'], row['operation_id']))
+        if pool_openings:
+            for item in c.execute("SELECT * FROM execution_operations WHERE action='runtime.open'").fetchall():
+                c.execute('INSERT INTO one_shot_slots(slot_id,executor_id,agent_id,configuration_digest,state,created_at,'
+                    'session_id,server_id,open_operation_id) VALUES(?,?,?,?,?,?,?,?,?)',
+                    (item['operation_id'], item['executor_id'], item['subject_agent_id'], 'config', 'STARTING', 0,
+                     item['session_id'], item['server_id'], item['operation_id']))
+    limits = dict(regular_items=4, opening_items=4)
+    held = [reserve(owner, **limits) for _ in range(4)]
+    assert all(held)
+    assert all(item.operation_id != 'zz-new-healthy' for item in held[:3])
+    assert held[3].operation_id == 'zz-new-healthy'
+    assert reserve(owner, **limits) is None
+    with owner[0].connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE execution_dispatch_outbox SET dispatch_state='RESOLVED_TERMINAL',reserved_bytes=0,"
+            "reservation_class=NULL WHERE operation_id IN (?,?)", (held[0].operation_id, held[3].operation_id))
+    # A producer still returning after receipt resolution keeps its fair share
+    # until it exits, even though another agent has freed the global credit.
+    assert reserve(owner, retained_operations=(held[0].operation_id,), **limits) is None
+    assert reserve(owner, **limits) is not None
+
+
+def test_pool_opening_budget_preserves_ready_workers_and_shared_wire_bytes(owner):
+    with owner[0].connection_factory.unit_of_work() as uow:
+        source = dict(uow.connection.execute('SELECT * FROM execution_operations WHERE operation_id=?',
+                                             (owner[6]['operation_id'],)).fetchone())
+        uow.connection.execute('INSERT INTO one_shot_slots(slot_id,executor_id,agent_id,configuration_digest,state,'
+            'created_at,session_id,server_id,open_operation_id) VALUES(?,?,?,?,?,?,?,?,?)',
+            ('opening', source['executor_id'], source['subject_agent_id'], 'config', 'STARTING', 0,
+             source['session_id'], source['server_id'], source['operation_id']))
+    opening = reserve(owner, opening_items=1, regular_items=1)
+    backlog(owner, 'turn.submit', 1, payload='"ready"')
+    with owner[0].connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE execution_operations SET session_id='ready-session' WHERE action='turn.submit'")
+        uow.connection.execute('INSERT INTO one_shot_slots(slot_id,executor_id,agent_id,configuration_digest,state,'
+            'created_at,session_id,server_id) VALUES(?,?,?,?,?,?,?,?)',
+            ('ready', source['executor_id'], source['subject_agent_id'], 'config', 'CLAIMED', 0,
+             'ready-session', source['server_id']))
+    # Opening and ready workers are independent, but the existing transport
+    # byte credit is shared and must never be exceeded by combining the lanes.
+    assert reserve(owner, regular_bytes=opening.reserved_bytes, regular_items=1) is None
+    ready = reserve(owner, regular_bytes=opening.reserved_bytes + len('"ready"'), regular_items=1)
+    assert ready.operation_id == 'backlog-turn.submit-0000'
+    assert ready.reservation_class == opening.reservation_class == 'regular'
+
+
 @pytest.mark.parametrize("constraint", ["items", "bytes", "oversized"])
 def test_blocked_control_backlog_does_not_hide_eligible_productive_work(owner, constraint):
     # More than the old 32-row selection window remains ahead of the opening.
@@ -89,3 +146,38 @@ def test_fitting_control_after_oversized_rows_uses_exact_utf8_cost(owner):
     held = reserve(owner, control_bytes=len(payload.encode("utf-8")))
     assert held is not None and held.operation_id == "backlog-runtime.close-0000"
     assert held.reserved_bytes == 4 and held.reservation_class == "control"
+
+
+@pytest.mark.parametrize('receipt_recorded', [False, True])
+def test_retained_call_does_not_hide_healthy_agent_behind_repeated_pending_rows(owner, receipt_recorded):
+    first = reserve(owner)
+    backlog(owner, 'turn.submit', 40)
+    with owner[0].connection_factory.unit_of_work() as uow:
+        owner[0].repos.agents.upsert(uow, agent_id='healthy', role='reviewer')
+        uow.connection.execute("UPDATE execution_operations SET subject_agent_id='healthy' "
+                               "WHERE operation_id='backlog-turn.submit-0039'")
+        if receipt_recorded:
+            uow.connection.execute("UPDATE execution_dispatch_outbox SET dispatch_state='RESOLVED_TERMINAL',"
+                "reserved_bytes=0,reservation_class=NULL WHERE operation_id=?", (first.operation_id,))
+    retained = (first.operation_id,)
+    healthy = reserve(owner, regular_items=2, retained_operations=retained)
+    assert healthy is not None and healthy.operation_id == 'backlog-turn.submit-0039'
+    assert reserve(owner, regular_items=2, retained_operations=retained) is None
+    # Native control remains available while productive calls retain capacity.
+    backlog(owner, 'turn.interrupt', 1)
+    control = reserve(owner, regular_items=2, retained_operations=retained)
+    assert control is not None and control.reservation_class == 'control'
+
+
+@pytest.mark.parametrize('constraint', ['items', 'bytes'])
+def test_receipt_does_not_release_retained_call_global_capacity(owner, constraint):
+    first = reserve(owner)
+    backlog(owner, 'turn.submit', 1)
+    with owner[0].connection_factory.unit_of_work() as uow:
+        owner[0].repos.agents.upsert(uow, agent_id='healthy', role='reviewer')
+        uow.connection.execute("UPDATE execution_operations SET subject_agent_id='healthy' WHERE action='turn.submit'")
+        uow.connection.execute("UPDATE execution_dispatch_outbox SET dispatch_state='RESOLVED_TERMINAL',"
+            "reserved_bytes=0,reservation_class=NULL WHERE operation_id=?", (first.operation_id,))
+    limits = {'regular_items': 1} if constraint == 'items' else {'regular_bytes': first.reserved_bytes}
+    assert reserve(owner, retained_operations=(first.operation_id,), **limits) is None
+    assert reserve(owner, **limits).operation_id == 'backlog-turn.submit-0000'

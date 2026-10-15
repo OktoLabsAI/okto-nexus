@@ -19,6 +19,28 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def partition_tests(paths, count, *, root=ROOT):
+    """Disjoint, exhaustive file partitions; every parameterization stays intact."""
+    if count < 1:
+        raise ValueError('Shard count must be positive')
+    files = set()
+    for name in paths:
+        path = root / name
+        if path.is_file():
+            files.add(path)
+        elif path.is_dir():
+            files.update(p for p in path.rglob('*.py')
+                         if p.name.startswith('test_') or p.name.endswith('_test.py'))
+        else:
+            raise ValueError(f'Test path does not exist: {name}')
+    partitions, weights = [[] for _ in range(count)], [0] * count
+    for path in sorted(files, key=lambda p: (-p.stat().st_size, p.as_posix())):
+        index = min(range(count), key=lambda i: (weights[i], i))
+        partitions[index].append(path.relative_to(root).as_posix())
+        weights[index] += path.stat().st_size
+    return [sorted(part) for part in partitions]
+
+
 def input_hashes():
     paths = [ROOT / name for name in ('pyproject.toml', 'uv.lock', 'README.md', 'vendor/ci/manifest.json',
         'tools/ci_installed.py', 'tools/build_validation_artifacts.py', '.github/workflows/ci.yml')]
@@ -50,10 +72,14 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('action', choices=('install', 'smoke', 'test'))
     parser.add_argument('--tests', nargs='+', default=['tests'])
+    parser.add_argument('--shard-count', type=int, default=1)
+    parser.add_argument('--shard-index', type=int, default=0)
     parser.add_argument('--wheel', type=Path, help='Existing built wheel; defaults to the single dist wheel')
     parser.add_argument('--output', type=Path, default=ROOT / 'build/ci',
                         help='Directory for this campaign reports')
     args = parser.parse_args()
+    if args.shard_count < 1 or not 0 <= args.shard_index < args.shard_count:
+        parser.error('Shard index must be in [0, shard-count)')
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=True)
     wheels = dependency_wheels()
@@ -61,22 +87,23 @@ def main():
     assert len(nexus) == 1, 'Build exactly one Nexus wheel in dist first'
     wheel = nexus[0]
     if args.action == 'install':
-        # The base distribution must bootstrap before any serve/Core extras.
-        subprocess.run([sys.executable, '-m', 'pip', 'install', str(wheel)], check=True)
+        # Core is mandatory; the remote Connector and HTTP extras are not.
+        subprocess.run([sys.executable, '-m', 'pip', 'install', str(wheel), str(wheels[0])], check=True)
         with tempfile.TemporaryDirectory(prefix='nexus-ci-base-') as temp:
             probe = '''import importlib.util, json, sys
-for module in ("nexus_connector_core", "okto_nexus_connector", "torch"):
+assert importlib.util.find_spec("nexus_connector_core") is not None
+for module in ("okto_nexus_connector", "torch"):
     assert importlib.util.find_spec(module) is None, module
 from okto_nexus.bootstrap.dependencies import bootstrap
 deps = bootstrap({}, ["--home", sys.argv[1]])
 assert deps.approvals is not None
-assert deps.native_decisions is None
-print(json.dumps({"base_boot_without_core": True, "connector_installed": False,
+assert deps.native_decisions is not None
+print(json.dumps({"base_boot_with_core": True, "connector_installed": False,
                   "torch_installed": False, "provider_qualified": False}))
 '''
             result = subprocess.run([sys.executable, '-I', '-c', probe, str(Path(temp)/'home')],
                                     cwd=temp, capture_output=True, text=True)
-            (output / 'base-without-core.log').write_text(result.stdout + result.stderr, encoding='utf-8')
+            (output / 'base-with-core.log').write_text(result.stdout + result.stderr, encoding='utf-8')
             if result.returncode:
                 print(result.stdout + result.stderr, file=sys.stderr)
                 raise SystemExit(result.returncode)
@@ -138,8 +165,14 @@ pathlib.Path(REPORT).write_text(json.dumps(results, indent=2) + "\\n", encoding=
         subprocess.run([sys.executable, '-I', '-c', probe], cwd=temp, check=True)
         if args.action == 'test':
             before = input_hashes()
+            partitions = partition_tests(args.tests, args.shard_count) if args.shard_count > 1 else [args.tests]
+            selected = partitions[args.shard_index]
+            if not selected:
+                parser.error('The selected shard is empty')
             campaign = dict(started_at=datetime.now(timezone.utc).isoformat(),
-                            tests=args.tests, input_hashes=before, status='RUNNING')
+                            tests=selected, requested_tests=args.tests,
+                            shard_index=args.shard_index, partitions=partitions,
+                            input_hashes=before, status='RUNNING')
             campaign_path = output / 'campaign.json'
             campaign_path.write_text(json.dumps(campaign, indent=2) + '\n', encoding='utf-8')
             config = Path(temp) / 'pytest.ini'
@@ -149,9 +182,10 @@ pathlib.Path(REPORT).write_text(json.dumps(results, indent=2) + "\\n", encoding=
             markers = declared['tool']['pytest']['ini_options'].get('markers', [])
             config.write_text('[pytest]\nasyncio_mode=auto\nasyncio_default_fixture_loop_scope=function\n'
                               + 'markers=\n' + ''.join('    ' + marker + '\n' for marker in markers), encoding='utf-8')
-            command = [sys.executable, '-I', '-m', 'pytest', '-c', str(config),
+            command = [sys.executable, '-I', '-u', '-m', 'pytest', '-c', str(config),
                        '--rootdir=' + str(ROOT), '--confcutdir=' + str(ROOT / 'tests'),
-                       *[str(ROOT / p) for p in args.tests], '-q', '--tb=short',
+                       *[str(ROOT / p) for p in selected], '-v', '--tb=short',
+                       '-o', 'faulthandler_timeout=120',
                        '--junitxml=' + str(output / 'tests.xml')]
             result = subprocess.run(command, cwd=temp)
             after = input_hashes()

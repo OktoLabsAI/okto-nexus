@@ -43,7 +43,7 @@ from ..domain.health import (
     compute_health,
     is_valid_window,
 )
-from ..domain.ids import resolve_workspace_id
+from .execution_tools import resolve_tool_workspace
 from ..errors import ErrorCode, OktoNexusError
 from .observability import ObservabilityService
 from .permissions import permission_set_for
@@ -153,7 +153,7 @@ class HealthService:
         if isinstance(workspace_id, str) and workspace_id.strip():
             return workspace_id.strip()
         if isinstance(project_root, str) and project_root.strip():
-            return resolve_workspace_id(project_root)
+            return resolve_tool_workspace(project_root)
         raise OktoNexusError(
             ErrorCode.WORKSPACE_REQUIRED,
             "project_root (or workspace_id) is required to resolve the workspace.",
@@ -184,6 +184,15 @@ class HealthService:
         since_iso = _epoch_to_iso(now_epoch - HEALTH_WINDOWS[window])
 
         with self._cf.unit_of_work(write=False) as uow:
+            # Recheck managed permissions in the transaction reading metrics,
+            # after any writer-lock wait, not just at the transport boundary.
+            from ..domain.execution_principal import current_execution_principal
+            principal = current_execution_principal.get()
+            if principal is not None:
+                if wid != principal.scope['workspace_id']:
+                    from .execution_tools import denied
+                    raise denied()
+                permission_set_for(self._agents, uow, principal.scope['agent_id']).require('health', 'read')
             if self._workspaces.get(uow, wid) is None:
                 raise OktoNexusError(
                     ErrorCode.NOT_FOUND,

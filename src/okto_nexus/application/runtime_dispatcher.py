@@ -4,6 +4,8 @@ import logging
 import threading
 import time
 import random
+import os
+import socket
 
 from ..domain.base import iso_plus, iso_to_epoch, new_id
 from ..errors import OktoNexusError
@@ -68,7 +70,8 @@ class RuntimeDispatcher:
             return True
         now = self.clock.now_iso()
         with self.cf.unit_of_work() as uow:
-            self.epoch = self.repo.acquire_owner(uow, owner_id=self.owner_id, now=now, lease_expires_at=iso_plus(now, 40))
+            self.epoch = self.repo.acquire_owner(uow, owner_id=self.owner_id, now=now,
+                lease_expires_at=iso_plus(now, 40), process_pid=os.getpid(), process_host=socket.gethostname())
         if self.epoch is None:
             return False
         self.cf.configure_runtime_owner(self.owner_id, self.epoch, clock=self.clock)
@@ -253,6 +256,9 @@ class RuntimeDispatcher:
         with self.cf.unit_of_work() as uow:
             if not self.repo.owns(uow, owner_id=self.owner_id, epoch=self.epoch, now=now):
                 return
+            if self.admit_canonical:
+                from .execution_delivery_retry import prepare_retries
+                prepare_retries(uow, self, now)
             pending = self.repo.pending(uow, limit=capacity, blocked_agents=self.normal_inflight_agents(uow), now=now)
             accepted = []
             selected_endpoints = set()
@@ -384,6 +390,11 @@ class RuntimeDispatcher:
         self._shutdown_ready = ready
         self.wake()
         return self._shutdown_finished.wait(timeout)
+
+    def resume_after_cancelled_reset(self):
+        """Resume claims when reset failed before requesting owner shutdown."""
+        self._quiescing.clear()
+        self.wake()
 
     def close(self):
         self._stop.set()

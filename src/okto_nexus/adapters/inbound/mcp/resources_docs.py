@@ -347,6 +347,12 @@ match (stays OPEN for later registrants). After creating, poll handoff_get for
 status/result - do not scan the event stream. payload: a string is returned to
 the claimant byte-for-byte; a non-string is stored/returned to the claimant as
 opaque JSON TEXT.
+Creator affinity: a managed runtime uses its authenticated session automatically.
+An ordinary MCP caller may pass ``session_id`` + ``session_secret`` to record a
+verified origin in the same workspace. A bare ``session_id`` remains attribution
+only; requests without verified origin use the shared missing-origin context.
+Approval replay preserves that captured origin without storing the secret or
+using the claimant's session as the creator's origin.
 Optional verification contract: ``acceptance_criteria`` (1..20 non-empty
 strings, max 500 chars each, no exact duplicates, IMMUTABLE after creation) +
 ``verify_by`` (one of {"kind":"creator"} - the default, materialised at
@@ -457,7 +463,7 @@ Inspect the original operation after uncertainty instead of creating a new one.
 Operator inspection of another Agent does not provide that Agent's credentials
 or authorize impersonation. The public intent route requires the subject identity.
 
-Core owns the catalog IDs codex_app_server, pi_rpc, claude_stream and claude_attach,
+Core owns the catalog IDs codex_app_server, pi_rpc and claude_stream,
 native version qualification, containment and effective capabilities. Read current
 inventory and session facts; a catalog entry, configured method, connected socket
 or APPROVED binding alone does not establish READY_FOR_RUNTIME. Unknown versions

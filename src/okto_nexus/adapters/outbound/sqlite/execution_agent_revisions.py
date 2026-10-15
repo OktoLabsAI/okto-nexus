@@ -26,7 +26,7 @@ def _digest(value: object) -> str:
 
 def current_agent_revisions(factory: ConnectionFactory, *,
                             agent_id: str, uow=None,
-                            require_active: bool = True) -> tuple[str, AgentExecutionRevisions, dict]:
+                            require_active: bool = True, persist: bool = True) -> tuple[str, AgentExecutionRevisions, dict]:
     """Advance only changed revision dimensions, scoped to one agent.
 
     The writer reads the same persisted identity/policy rows used by existing
@@ -34,8 +34,10 @@ def current_agent_revisions(factory: ConnectionFactory, *,
     filesystem resolution occurs in this short transaction.
     Authorized historical readers may include inactive subjects; authentication
     callers retain the active-only default.
+    Read models may use persist=False to compute the same revisions without
+    advancing persisted counters or invalidating execution lanes on a read.
     """
-    with nullcontext(uow) if uow is not None else factory.unit_of_work() as uow:
+    with nullcontext(uow) if uow is not None else factory.unit_of_work(write=persist) as uow:
         conn = uow.connection
         installation = conn.execute(
             "SELECT server_id FROM execution_installation WHERE singleton=1"
@@ -98,14 +100,15 @@ def current_agent_revisions(factory: ConnectionFactory, *,
         ).fetchone()
         if old is None:
             revisions = AgentExecutionRevisions(1, 1, 1)
-            conn.execute(
-                "INSERT INTO execution_agent_revisions(server_id,agent_id,"
-                "authorization_revision,configuration_revision,credential_epoch,"
-                "authorization_digest,configuration_digest,credential_digest) "
-                "VALUES (?,?,?,?,?,?,?,?)",
-                (server_id, agent_id, 1, 1, 1, auth_digest,
-                 config_digest, credential_digest),
-            )
+            if persist:
+                conn.execute(
+                    "INSERT INTO execution_agent_revisions(server_id,agent_id,"
+                    "authorization_revision,configuration_revision,credential_epoch,"
+                    "authorization_digest,configuration_digest,credential_digest) "
+                    "VALUES (?,?,?,?,?,?,?,?)",
+                    (server_id, agent_id, 1, 1, 1, auth_digest,
+                     config_digest, credential_digest),
+                )
         else:
             revisions = AgentExecutionRevisions(
                 old["authorization_revision"] +
@@ -115,7 +118,7 @@ def current_agent_revisions(factory: ConnectionFactory, *,
                 old["credential_epoch"] +
                 int(old["credential_digest"] != credential_digest),
             )
-            if (revisions.authorization != old["authorization_revision"] or
+            if persist and (revisions.authorization != old["authorization_revision"] or
                     revisions.configuration != old["configuration_revision"] or
                     revisions.credential_epoch != old["credential_epoch"]):
                 conn.execute(

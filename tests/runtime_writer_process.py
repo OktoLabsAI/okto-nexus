@@ -16,10 +16,10 @@ def create(request):
         assert getattr(deps, 'runtime_dispatcher', None) is None
         with deps.connection_factory.unit_of_work() as uow:
             actor = AgentKeyAuthService(deps.repos.agents, deps.clock).resolve(uow, request['key'])
-        assert actor is not None and actor.agent_id == 'caller'
+        assert actor is not None and actor.agent_id == request.get('actor', 'caller')
         result = build_service(deps).create_message(project_root=request['root'],
             from_agent_id=actor.agent_id, subject='writer fence fixture', body='isolated fixture',
-            target={'strategy': 'direct', 'agent_id': 'worker'},
+            target={'strategy': 'direct', 'agent_id': request.get('target', 'worker')},
             _runtime_context=RuntimeRequestContext(actor.agent_id, 'agent_key',
                                                   credential_binding=actor.api_key_hash))
         assert getattr(deps, 'runtime_dispatcher', None) is None

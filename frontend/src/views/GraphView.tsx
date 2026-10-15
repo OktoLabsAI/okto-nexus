@@ -814,17 +814,17 @@ function Legend({ viewMode }: { viewMode: GraphViewMode }) {
           ●
         </span>{" "}
         online{" "}
-        <span className="text-surface-400">· heartbeat/activity &lt; 1 min</span>
+        <span className="text-surface-400">· runtime connected or recent MCP activity</span>
       </div>
       <div>
         <span className="text-amber-500 text-base align-middle">●</span> stale{" "}
-        <span className="text-surface-400">· silent for 1–30 min</span>
+        <span className="text-surface-400">· reconnecting or stale MCP activity</span>
       </div>
       <div>
         <span className="text-base align-middle" style={{ color: "#9ca3af" }}>
           ●
         </span>{" "}
-        offline <span className="text-surface-400">· no active session</span>
+        offline <span className="text-surface-400">· runtime disconnected or no recent MCP activity</span>
       </div>
       <div>
         <span className="text-accent-500 font-bold align-middle">→</span>{" "}

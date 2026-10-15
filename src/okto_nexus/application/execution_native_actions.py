@@ -10,6 +10,7 @@ from ..errors import ErrorCode, OktoNexusError
 from .execution_tools import NATIVE_ACTIONS, BoundExecutionConnectionFactory, denied
 
 MAX_NATIVE_BYTES = 16 * 1024
+DISCOVERY_READS = {'agent_list', 'agent_get', 'capability_list', 'coordination_health'}
 
 
 def invalid(message='The native action request does not match the contract.'):
@@ -27,15 +28,23 @@ def validate_request(body):
             or type(body['payload']) is not dict):
         raise invalid()
     action, payload = body['action'], body['payload']
-    required = ({'message'} if action == 'message_create' else set() if action == 'input_list'
+    required = ({'agent_id'} if action == 'agent_get' else set() if action in DISCOVERY_READS else
+                {'message'} if action == 'message_create' else set() if action == 'input_list'
                 else {'request'} if action == 'input_respond' else {'handoff_id'})
     optional = set()
+    if action == 'coordination_health':
+        optional.add('window')
     if action == 'claim':
         required.add('idempotency_key')
         optional.add('claim_epoch')
     elif action == 'complete':
         required |= {'claim_epoch', 'result'}
     if not required <= payload.keys() or not payload.keys() <= required | optional:
+        raise invalid()
+    if action == 'agent_get' and not identifier(payload['agent_id']):
+        raise invalid()
+    if action == 'coordination_health' and (type(payload.get('window', '24h')) is not str
+            or payload.get('window', '24h') not in ('1h', '24h', '7d')):
         raise invalid()
     if action == 'message_create':
         message = payload['message']
@@ -60,11 +69,13 @@ def validate_request(body):
 
 
 class NativeActionService:
-    def __init__(self, *, factory, capabilities, repository, build_handoff, clock, native_decisions=None, build_messages=None):
+    def __init__(self, *, factory, capabilities, repository, build_handoff, clock, native_decisions=None, build_messages=None,
+                 build_identity=None, build_health=None):
         self.factory, self.capabilities = factory, capabilities
         self.repository, self.build_handoff, self.clock = repository, build_handoff, clock
         self.native_decisions = native_decisions
         self.build_messages = build_messages
+        self.build_identity, self.build_health = build_identity, build_health
 
     def invoke(self, *, principal, body):
         encoded = validate_request(body)
@@ -78,10 +89,12 @@ class NativeActionService:
         try:
             if action in {'input_list', 'input_respond'}:
                 return self._input(principal, body)
-            with self.factory.unit_of_work() as uow:
+            with self.factory.unit_of_work(write=action not in DISCOVERY_READS) as uow:
                 self.capabilities.authorize_principal(uow, principal=principal,
                                                       actions=(NATIVE_ACTIONS[action],))
                 factory = BoundExecutionConnectionFactory(self.factory, self.capabilities, uow)
+                if action in DISCOVERY_READS:
+                    return self._discovery(factory, principal, body)
                 if action == 'message_create':
                     return self._message(uow, factory, principal, body, digest)
                 handoffs = self.build_handoff(factory)
@@ -126,6 +139,31 @@ class NativeActionService:
         finally:
             current_execution_tool.reset(action_token)
             current_execution_principal.reset(principal_token)
+
+    def _discovery(self, factory, principal, body):
+        # Read current domain state on every call, never replay a stale directory.
+        actor = principal.scope['agent_id']
+        action, payload = body['action'], body['payload']
+        if action == 'coordination_health':
+            if self.build_health is None:
+                raise denied('Native health is unavailable.')
+            service = self.build_health(factory)
+            service.require_feature_health()
+            result = service.health(workspace_id=principal.scope['workspace_id'], **payload)
+        else:
+            if self.build_identity is None:
+                raise denied('Native discovery is unavailable.')
+            service = self.build_identity(factory)
+            if action == 'agent_list':
+                result = {'agents': service.agent_list(caller_agent_id=actor)}
+            elif action == 'agent_get':
+                result = service.agent_get(agent_id=payload['agent_id'], caller_agent_id=actor)
+            else:
+                result = {'capabilities': service.capability_list(caller_agent_id=actor)}
+        response = dict(action_id=body['action_id'], action=action, state='SUCCEEDED', result=result)
+        if len(canonical_json(response)) > MAX_NATIVE_BYTES:
+            raise OktoNexusError('CAPACITY_EXCEEDED', 'The native discovery result is too large.', {})
+        return response
 
     def _message(self, uow, factory, principal, body, digest):
         if self.build_messages is None:
