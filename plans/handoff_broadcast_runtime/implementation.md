@@ -1613,3 +1613,10 @@ Validation: 51 targeted source cases passed across recovery, authority, publicat
 - Connector setup now selects an existing Nexus workspace (including one belonging to another harness) independently of its local folder. The paginated catalog enforces workspaces.list and returns no host paths. Explicit IDs, unavailable-catalog choices and saved-request resume remain supported; listing never grants execution access.
 - Validation: 32 handoff/connection/policy cases, 2 workspace API/realization cases and 30 Connector wizard/onboarding cases passed. The realization test preserves the existing workspace name and other-host path while storing a separate local connection directory. Independent remote-host testing remains for the user's joint test.
 - Rebuilt development Nexus 0.3.0 and Connector 0.0.9; Core 0.0.11 is unchanged. Package hashes are recorded in the ledger.
+
+### 2026-10-15 — Promotion validation
+
+- Opened feature-to-develop PRs Core #40, Connector #51 and Nexus #58 for the authorized develop-to-main promotion sequence. Full CI remains a merge prerequisite.
+- Core's clean-checkout CI exposed extension manifests generated from Windows CRLF resources while Git stored LF, and missing LF attributes on the generated preopen extension. Canonicalized extension hashes and pinned contract JSON to LF without changing protocol semantics or disabling integrity checks. The new wheel's nine manifest-pinned resources match committed Git bytes.
+- Updated the Core 0.0.11 API/version documentation. Targeted validation passed 108 contract cases and all three public documentation cases. Both consumers now use the same corrected Core wheel, SHA-256 c931685f84d1be1af8a09bb373a8e7a1fb5c2b78dcc7bbb4f45e5593b054668a.
+- Connector CI exposed legacy test fixtures bypassing CoreRuntimeHost initialization and an obsolete blanket ban on the MCP SDK now owned by Core for presets. The correction uses the real host constructor and retains checks for no direct Connector MCP dependency and no Nexus Server dependency.
