@@ -1,7 +1,7 @@
 # Current development dependency
 
 Core 0.0.11 is required by Nexus 0.3.0 and Connector 0.0.9.
-Shared wheel SHA-256: 0c8a5911a6d514879d7d4754cda4b4a5e3e97eb2436392a964c208b0233bb345.
+Shared wheel SHA-256: c475bc793605b6f375c4e88140764e90425f43d83b67dc96c86b2d95cc83f6d1.
 Built from feature/v0.0.11 with the local handoff capacity, recovery and
 Pi tool guidance, native launch lease renewal, streamed output batching and
 portable LF contract manifests. Both consumers use identical wheel bytes.
