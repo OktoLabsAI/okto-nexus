@@ -6,7 +6,10 @@ from . import one_shot_settings, runtime_mcp_presets
 def configure(deps, context, *, kind, resource_id=None, changes=None):
     from ..bootstrap.execution_authority import build_execution_access
     access = build_execution_access(deps)
-    with deps.connection_factory.unit_of_work(write=changes is not None) as uow:
+    # Maintenance authorization records an audit even for GET requests.
+    # Reserve the writer before reading so a concurrent commit cannot turn
+    # that audit into an unsafe read-to-write snapshot upgrade.
+    with deps.connection_factory.unit_of_work() as uow:
         # Presets contain host commands and secret references: operator only,
         # including reads. Managed agent capabilities cannot grant maintenance.
         access.authorize_maintenance(context, uow=uow)
@@ -41,7 +44,7 @@ def one_shot_state(deps, context, *, agent_id, cancel_call_id=None):
     from ..bootstrap.execution_authority import build_execution_access
     from . import one_shot_capacity as capacity
     access = build_execution_access(deps)
-    with deps.connection_factory.unit_of_work(write=cancel_call_id is not None) as uow:
+    with deps.connection_factory.unit_of_work() as uow:
         access.authorize_maintenance(context, uow=uow)
         conn = uow.connection
         if access.agents.get(uow, agent_id) is None:

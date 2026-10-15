@@ -75,6 +75,9 @@ def test_timeout_preserves_attempt_and_reconnect_lookup_returns_durable_reservat
         try:
             with pytest.raises(CoreError, match='NEEDS_RECONCILIATION'):
                 await first.try_reserve_capacity(request())
+            # A timed-out observer does not cancel the retained producer.
+            # Wait for its durable result before examining the lost response.
+            await until(lambda: bool(stored))
             assert stored[0]['result']['state'] == 'HELD'
             await first.aclose()
             async def delivered(raw):

@@ -12,7 +12,9 @@ permissions:
 jobs:
   installed:
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 120
+    # Includes frontend/artifact builds and durable installed tests. The
+    # Windows matrix can still be progressing after the old two-hour budget.
+    timeout-minutes: 180
     strategy:
       fail-fast: false
       matrix:

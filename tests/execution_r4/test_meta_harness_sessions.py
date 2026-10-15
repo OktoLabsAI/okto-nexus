@@ -9,6 +9,19 @@ from test_canonical_result_publication import current_turn, emit
 PATH = '/api/v1/meta-harness/runtime-sessions'
 
 
+@pytest.fixture(autouse=True)
+def automatic_broadcast_scheduler(monkeypatch, request):
+    params = getattr(getattr(request.node, 'callspec', None), 'params', {})
+    if (params.get('kind'), params.get('audience')) != ('handoff', 'broadcast'):
+        return
+    import test_embedded_inventory
+    original = test_embedded_inventory.build_app
+    def build(deps):
+        deps.config.runtime_handoff_auto_claim_enabled = True
+        return original(deps)
+    monkeypatch.setattr(test_embedded_inventory, 'build_app', build)
+
+
 def send(setup, binding, *, kind='message', audience='private'):
     response = setup[2].post('/api/v1/meta-harness/send', headers=setup[3]['operator'], json=dict(
         workspace=binding['workspace_id'], kind=kind, audience=audience,
@@ -24,6 +37,14 @@ def test_operator_message_and_handoff_sessions_are_scoped(connected_local, kind,
     assert client.get(PATH,headers=headers['operator']).json()['data']['items']==[]
     from test_canonical_delivery import enable
     enable(setup,binding)
+    if (kind, audience) == ('handoff', 'broadcast'):
+        from test_runtime_policy_defaults import save
+        from okto_nexus.domain.base import iso_plus
+        assert save(setup, agent='subject', broadcast_handoff_auto_claim=True).status_code == 200
+        grant = client.post('/api/v1/harness/grants', headers=headers['operator'], json=dict(
+            actor_agent_id='subject', endpoint_id=binding['endpoint_id'], actions=['execute_work'],
+            max_executions=10, expires_at=iso_plus(setup[0].clock.now_iso(), 600)))
+        assert grant.status_code == 200, grant.text
     send(setup,binding,kind=kind,audience=audience)
     deadline=time.monotonic()+15
     while True:

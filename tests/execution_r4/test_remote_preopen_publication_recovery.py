@@ -95,8 +95,17 @@ def test_remote_preopen_publication_cut_reconciles_without_reexecuting(onboardin
                 dict(workspace_id=binding['workspace_id'], from_agent_id='other', visibility='eligible',
                      target={'strategy': 'broadcast'}, payload='New work after confirmed preopening recovery'))
             assert fresh['ok'], fresh
-            fresh_page = build_handoff_runtime_candidates(deps).prepare_page(
-                HandoffScheduleLease(fresh['data']['handoff_id'], binding['workspace_id'], 0, 'fresh-recovery', 0, 0, ''), limit=4)
+            # The reconnect ACK and a fresh capacity notification are distinct
+            # messages. Drive the same stale-observation retry as the scheduler.
+            async with asyncio.timeout(15):
+                while True:
+                    fresh_page = build_handoff_runtime_candidates(deps).prepare_page(
+                        HandoffScheduleLease(fresh['data']['handoff_id'], binding['workspace_id'], 0,
+                                             'fresh-recovery', 0, 0, ''), limit=4)
+                    if fresh_page.attempt_ids:
+                        break
+                    assert fresh_page.reason == 'STALE_OBSERVATION', fresh_page
+                    await asyncio.sleep(.05)
             assert len(fresh_page.attempt_ids) == 1
             assert (await attempts.reserve(fresh_page.attempt_ids[0])).state == 'RESERVED'
             fresh_claim = attempts.claim(fresh_page.attempt_ids[0])

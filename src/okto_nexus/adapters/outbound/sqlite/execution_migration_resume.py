@@ -64,6 +64,11 @@ def require_adopted_baseline(conn, manifest):
                     volatile = {"owner_id", "owner_epoch", "admission_enabled"}
                     if current is not None and before["required_contract"] == 0 and current["required_contract"] == 1:
                         volatile.add("required_contract")
+                if table == "handoff_runtime_schedule_scan":
+                    # Resuming after reviewed adoption may follow a server
+                    # start. Scan progress is operational, not source history;
+                    # preserve the singleton while allowing its cursors/wake.
+                    volatile = {"handoff_cursor", "attempt_cursor", "notice_cursor", "wake_generation"}
                 if current is None or any(current[key] != before[key] for key in columns if key not in volatile):
                     raise ValueError(f"A preserved migration source row changed or disappeared in {table}.")
     finally:

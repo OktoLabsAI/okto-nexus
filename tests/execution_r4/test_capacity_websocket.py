@@ -130,9 +130,11 @@ def test_authenticated_dispatch_wait_changes_only_flow_and_rejects_conflicting_s
 @pytest.mark.parametrize('fault', ['disabled', 'unoffered', 'foreign_binding', 'old_connection'])
 def test_capacity_notifications_require_negotiation_current_link_and_admitted_lane(tmp_path, monkeypatch, fault):
     deps, app, _, _, _, _, info, revisions, ticket, lane, server, executor = setup_authority(tmp_path, monkeypatch)
-    deps.runtime_availability.enabled = fault != 'disabled'
     offered = [] if fault == 'unoffered' else [CAPACITY_CONTRACT_REVISION]
     with TestClient(app, base_url='https://127.0.0.1:8202') as client:
+        # Startup enables capacity for the default automatic scheduler. Apply
+        # this test's deliberate feature-disable fault after that startup.
+        deps.runtime_availability.enabled = fault != 'disabled'
         with client.websocket_connect(f'wss://127.0.0.1:8202/v1/runtime/executors/{executor}/link',
                 headers={'Authorization': 'Bearer ' + ticket}, subprotocols=['nxl.v1']) as ws:
             channel = negotiate(ws, info, revisions, lane, server, executor, control_capabilities=offered)

@@ -32,9 +32,12 @@ def test_parallel_warmup_assigns_first_ready_instance_to_oldest_caller(connected
 
     class HeldWarmup(Peers):
         async def open(self, prepared, session_id, context, *, stream_epoch):
-            release = entered.setdefault(session_id, threading.Event())
-            while not release.is_set() and not release_all.is_set():
-                await asyncio.sleep(.01)
+            release = entered.setdefault(session_id, asyncio.Event())
+            # Park each synthetic opener until explicitly released. Sub-tick
+            # sleep polling can spin on Windows/Python 3.11's coarse clock
+            # and starve the durable worker threads this test is observing.
+            if not release_all.is_set():
+                await release.wait()
             return await super().open(prepared, session_id, context, stream_epoch=stream_epoch)
 
     setup, binding, _ = connected_local
@@ -56,7 +59,7 @@ def test_parallel_warmup_assigns_first_ready_instance_to_oldest_caller(connected
         assert not query(setup, "SELECT * FROM one_shot_slots WHERE call_id IS NOT NULL")
         turns = []
         for message, session in zip(messages, reversed(original)):
-            entered[session].set()
+            setup[2].portal.call(entered[session].set)
             turn = turn_for(setup, message)
             wait_receipt(setup, turn)
             assert turn['session_id'] == session
@@ -67,6 +70,8 @@ def test_parallel_warmup_assigns_first_ready_instance_to_oldest_caller(connected
         wait_until(setup, lambda: len(query(setup, "SELECT * FROM one_shot_calls WHERE state='SUCCEEDED'")) == 4)
     finally:
         release_all.set()
+        for release in list(entered.values()):
+            setup[2].portal.call(release.set)
     wait_until(setup, lambda: len(query(setup, "SELECT * FROM one_shot_slots WHERE state='WARM'")) == 4)
 
 
