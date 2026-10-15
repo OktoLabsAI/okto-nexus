@@ -145,6 +145,8 @@ class EmbeddedAgentRecovery:
         owner = self.owner
         self.attempts[agent_id] = self.attempts.get(agent_id, 0) + 1
         await self._contain(agent_id)
+        from .embedded_preopen_recovery import EmbeddedPreopenRecovery
+        await EmbeddedPreopenRecovery(owner).recover(agent_id)
         await owner._recover_publications(agent_id=agent_id)
         await owner.events.recover(agent_id=agent_id)
         if not await EmbeddedReconciliation(owner).recover(agent_id=agent_id):

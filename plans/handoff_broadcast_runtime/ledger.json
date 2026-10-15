@@ -1436,5 +1436,250 @@
       "Every packaged Core module/resource matches current Core source.",
       "CI manifest hashes updated; prior test results remain historical evidence."
     ]
+  },
+  "pending_admission_recovery_fix_20261014": {
+    "status": "claude_live_verified_pi_recovery_pending",
+    "recorded_at": "2026-10-15T00:54:34.345015+00:00",
+    "cause": "Retryable SQLite writer admission timeout in drain_pending escaped maintenance and contained the shared embedded executor; the Claude initial turn never entered the dispatch outbox.",
+    "changes": [
+      "Defer retryable DB_ERROR only in pending queue maintenance, after session renewal scheduling; nonretryable errors retain containment.",
+      "Use a read-only empty-queue check before taking writer admission.",
+      "Settle never-dispatched initial turns when their session has proven CLOSED ownership, including children with no outbox row; preserve no-effect evidence without fabricating a Core receipt."
+    ],
+    "validation": {
+      "distinct_targeted_tests_passed": 54,
+      "suites": {
+        "pending_admission_contention": 3,
+        "automatic_recovery": 9,
+        "initial_turns": 6,
+        "closed_session_queue": 5,
+        "pool_ports_and_immediate_admission": 31
+      },
+      "restart_regression": "Failed before correction with RECONCILIATION_REQUIRED; passed with automatic recovery and no manual recovery request.",
+      "pool_startup": "SQLite and in-memory adapters both confirm first-ready instance serves oldest request before the whole pool warms; second request starts while first remains RUNNING; excess stays queued.",
+      "installed_package_files_verified": {
+        "nexus": 527,
+        "core": 145,
+        "connector": 96
+      }
+    },
+    "wheel_sha256": "2eab68475b0a43058cac1525ee9880d60192eba68f0e5f1b0af23fa108f7a4d2",
+    "live": {
+      "agents": [
+        {
+          "agent_id": "claude",
+          "generation": 52,
+          "state": "READY",
+          "error_code": null,
+          "updated_at": "2026-10-15T00:49:43.662731Z"
+        },
+        {
+          "agent_id": "Pi",
+          "generation": 52,
+          "state": "RECOVERING",
+          "error_code": "RECONCILIATION_REQUIRED",
+          "updated_at": "2026-10-15T00:53:23.935919Z"
+        },
+        {
+          "agent_id": "codex",
+          "generation": 52,
+          "state": "READY",
+          "error_code": null,
+          "updated_at": "2026-10-15T00:49:41.582627Z"
+        }
+      ],
+      "executor": [
+        {
+          "executor_id": "exe_8dfe549a557ab8c704fae66df36e35d0",
+          "generation": 52,
+          "control_state": "CONTROL_READY"
+        },
+        {
+          "executor_id": "exe_b9490d5be96cc2ec9f4cbbe83fbafc62",
+          "generation": 3,
+          "control_state": "DISCONNECTED"
+        },
+        {
+          "executor_id": "exe_e066a520aab7c29457bd50c7cac141fb",
+          "generation": 56,
+          "control_state": "DISCONNECTED"
+        },
+        {
+          "executor_id": "exe_1c49b195835c23fafa14ce9372d0040a",
+          "generation": 1,
+          "control_state": "DISCONNECTED"
+        }
+      ],
+      "session": {
+        "session_id": "ses_e6fb2e9a81d8cc48110021224301e65c",
+        "lifecycle_state": "CLOSED",
+        "lease_state": "CLOSED"
+      },
+      "initial_turn": {
+        "operation_id": "op_24dc2675d40042c078035d7ca487df4a",
+        "admission_state": "RESOLVED_TERMINAL",
+        "dispatch_state": "RESOLVED_TERMINAL",
+        "last_error": "{\"code\": \"SESSION_CLOSED\", \"stage\": \"dispatch\", \"message\": \"The session closed before this operation was dispatched.\", \"possible_effect\": false, \"retry_safe\": false, \"operation_id\": \"op_24dc2675d40042c078035d7ca487df4a\"}"
+      },
+      "initial_receipt_count": 0,
+      "delivery": {
+        "operation_id": "op_9d804c144d344959857613f43fa97589",
+        "status": "REJECTED",
+        "reason": "authorization_changed",
+        "attempt_count": 1,
+        "updated_at": "2026-10-14T23:55:12.176768Z"
+      },
+      "listeners": [
+        {
+          "pid": 15284,
+          "host": "0.0.0.0",
+          "port": 8202
+        }
+      ]
+    },
+    "remaining_issue": {
+      "agent_id": "Pi",
+      "code": "RECONCILIATION_REQUIRED",
+      "stage": "embedded_resource_claim",
+      "finding": "Two warm replacement opens raced graceful shutdown and raised SESSION_CONFLICT at open before a Core claim or receipt. Their retained publication/stream bindings block local reconciliation. No database edits or stop attestations were used.",
+      "sessions": [
+        "ses_2f62a4d7b44a960818c4d89833a7cc1a",
+        "ses_f16ec1f0a490bd21551695c1b428cd6f"
+      ]
+    },
+    "publication": "No commit or push for these changes."
+  },
+  "shared_preopen_recovery_20261014": {
+    "status": "local_verified",
+    "recorded_at": "2026-10-15T01:15:31.291521+00:00",
+    "causes": [
+      "Interrupted local publication before Core admission left no claim/receipt and could not reconcile.",
+      "A durable no-effect opening refusal could precede slot reservation; recovery incorrectly dereferenced the absent slot."
+    ],
+    "changes": [
+      "Persist the exact Core preopening admission fence before attempting its journal CAS; retain original publication provenance.",
+      "Authorize local acceptance only for the fenced embedded owner and the recovering subject; preserve remote recovery rules.",
+      "Retire the session and publication atomically with the verified no-effect receipt and released capacity proof.",
+      "Accept absent reservations only with authenticated FAILED/no-effect/retry-safe Core receipt and no process birth; existing reservations must prove release."
+    ],
+    "common_scope": [
+      "pi_rpc",
+      "codex_app_server",
+      "claude_stream"
+    ],
+    "tests": {
+      "targeted_source_cases_passed": 51,
+      "installed_wheel_restart_case_passed": 1,
+      "source_breakdown": {
+        "interrupted_open_and_commit_cuts": 6,
+        "preopen_authority": 10,
+        "preopen_recovery": 3,
+        "parallel_warmup_and_fifo_sessions": 6,
+        "real_process_normal_and_abrupt_exit": 3,
+        "pending_admission_contention": 3,
+        "initial_turns": 6,
+        "closed_session_queue": 5,
+        "refusal_before_reservation": 3,
+        "open_drift_isolation": 6
+      },
+      "pool_adapter_checks_previously_passed": 31,
+      "test_corrections": "Nonretryable containment test now waits for the containment fence rather than racing its diagnostic assignment. No production check was relaxed."
+    },
+    "live": {
+      "agents": [
+        {
+          "agent_id": "claude",
+          "generation": 54,
+          "state": "READY",
+          "error_code": null
+        },
+        {
+          "agent_id": "Pi",
+          "generation": 54,
+          "state": "READY",
+          "error_code": null
+        },
+        {
+          "agent_id": "codex",
+          "generation": 54,
+          "state": "READY",
+          "error_code": null
+        }
+      ],
+      "pool": [
+        {
+          "agent_id": "Pi",
+          "state": "WARM",
+          "count": 4
+        }
+      ],
+      "messages": {
+        "run": "recovery-c2b6eeedc6",
+        "cases": [
+          {
+            "agent": "Pi",
+            "marker": "recovery-c2b6eeedc6-Pi",
+            "message_id": "msg_ba0201d31d2147cab2db8d51d013e15d",
+            "finished": true,
+            "outcome": "success",
+            "marker_received": true,
+            "captured_at": "2026-10-15T01:13:50.913Z",
+            "publication_state": "PUBLISHED",
+            "delivery_outcome": "success",
+            "publication_message_id": "msg_c87dd886e88a41059b75a412dd7b6948"
+          },
+          {
+            "agent": "claude",
+            "marker": "recovery-c2b6eeedc6-claude",
+            "message_id": "msg_bd351c93d782401badd637494475e96d",
+            "finished": true,
+            "outcome": "success",
+            "marker_received": true,
+            "captured_at": "2026-10-15T01:13:31.120Z",
+            "publication_state": "PUBLISHED",
+            "delivery_outcome": "success",
+            "publication_message_id": "msg_10e9b581fb6e44abbd02852bc083a98a"
+          },
+          {
+            "agent": "codex",
+            "marker": "recovery-c2b6eeedc6-codex",
+            "message_id": "msg_8dc98759d3034f1cb08b566826e04eb1",
+            "finished": true,
+            "outcome": "success",
+            "marker_received": true,
+            "captured_at": "2026-10-15T01:13:39.457Z",
+            "publication_state": "PUBLISHED",
+            "delivery_outcome": "success",
+            "publication_message_id": "msg_89861224f0414897b98c9dea160b313e"
+          }
+        ]
+      },
+      "original_pi_preopen_fences": [
+        {
+          "operation_id": "op_0be841c5fb397d396ee8c79450175f70"
+        },
+        {
+          "operation_id": "op_ead0df1c10683d8d19469244fd956d71"
+        }
+      ],
+      "database_edits": false,
+      "manual_recovery_attestation": false,
+      "listener": "http://127.0.0.1:8202",
+      "pid": 34508
+    },
+    "installation": {
+      "nexus": "0.3.0",
+      "connector_core": "0.0.11",
+      "connector": "0.0.9",
+      "wheel_sha256": "650154e2f6b8425098813dbf9db77a811f965ad5466e5ce044b507483e8368dc",
+      "source_wheel_installed_bytes_verified": true,
+      "nexus_package_files": 529,
+      "backup": "before-preopen-recovery-fix-20261014-220325"
+    },
+    "repositories_changed": [
+      "okto-nexus"
+    ],
+    "branch": "feature/v0.3.0",
+    "supersedes_pending_issue": "pending_admission_recovery_fix_20261014.remaining_issue"
   }
 }

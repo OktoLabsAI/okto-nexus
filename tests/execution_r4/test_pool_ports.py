@@ -178,6 +178,32 @@ def test_adapter_contract_expiry_is_durable_and_not_executed(pool):
     assert pool.queue.outcomes(caller_id='caller', limit=100) == []
 
 
+def test_first_ready_startup_instance_serves_oldest_request_without_waiting_for_pool(pool, monkeypatch):
+    policy = PoolPolicy(max_parallel=3, warm_instances=2, queue_capacity=4)
+    monkeypatch.setattr(pool.tx, 'policy', lambda _: policy)
+    options = dict(pool_id='agent', host_id='host', configuration='configuration', host_limit=3)
+    first_slot = pool.reserve_warm(**options, now=0)
+    second_slot = pool.reserve_warm(**options, now=1)
+    assert first_slot and second_slot
+    for i, name in enumerate(('first', 'second', 'third', 'fourth'), start=2):
+        admit(pool, name, now=i)
+    assert pool.instances.count(pool_id='agent') == 3
+    assert pool.request('fourth').state == 'QUEUED'
+    # The later reservation becomes ready first; no caller is pinned to the
+    # slower first reservation and no full-pool warmup barrier exists.
+    pool.ready(instance_id=second_slot, resource_id='fast-session')
+    pool.advance_queue(host_id='host', host_limit=3, now=6)
+    assert pool.instances.for_request('first').resource_id == 'fast-session'
+    assert pool.instances.get(first_slot).state == 'STARTING'
+    pool.started(request_id='first', now=6)
+    pool.ready(instance_id=first_slot, resource_id='second-session')
+    pool.advance_queue(host_id='host', host_limit=3, now=7)
+    pool.started(request_id='second', now=7)
+    assert pool.instances.for_request('second').resource_id == 'second-session'
+    assert pool.request('first').state == pool.request('second').state == 'RUNNING'
+    assert pool.request('fourth').state == 'QUEUED'
+
+
 def test_architecture_has_no_infrastructure_dependencies():
     import ast
     import inspect

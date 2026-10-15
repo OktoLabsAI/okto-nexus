@@ -13,18 +13,29 @@ def conflict():
     return OktoNexusError(ErrorCode.CONFLICT, 'The preopening recovery proof does not match its original admission.', {})
 
 
-def verify_preopen_recovery(uow, channel, report, frame, operation):
+def verify_preopen_recovery(uow, channel, report, frame, operation, *, embedded_owner=None):
     report = validate_r4_preopen_report(report)
     refusal, conn = report['refusal'], uow.connection
     source, recovery = refusal['source'], refusal['recovery']
     key = source['server_id'], source['executor_id'], source['operation_id']
     scope = json.loads(operation['expected_revisions_json'])
+    local = False
+    if embedded_owner is not None:
+        embedded_owner.verify(uow=uow)
+        local = embedded_owner.channel == channel and conn.execute(
+            "SELECT 1 FROM execution_executors e JOIN execution_agent_recovery a USING(server_id,executor_id) "
+            "WHERE e.server_id=? AND e.executor_id=? AND e.kind='embedded' "
+            "AND e.owner_instance_id=? AND e.generation=? AND e.revoked_at IS NULL "
+            "AND a.agent_id=? AND a.generation=e.generation AND a.state='RECOVERING'",
+            (*key[:2], channel.connection_id, channel.connection_generation, source['agent_id'])).fetchone() is not None
+        if not local:
+            raise conflict()
     if (report['receipt'] != frame or operation['action'] != 'runtime.open' or not scope
             or scope['session_owner_generation'] != refusal['session_owner_generation']
             or (channel.server_id, channel.executor_id) != key[:2]
             or not source['connection_generation'] < recovery['connection_generation'] <= channel.connection_generation
             or recovery['connection_generation'] == channel.connection_generation and recovery['connection_id'] != channel.connection_id
-            or conn.execute("SELECT 1 FROM execution_executors WHERE server_id=? AND executor_id=? "
+            or not local and conn.execute("SELECT 1 FROM execution_executors WHERE server_id=? AND executor_id=? "
                 "AND owner_instance_id=? AND generation=? AND control_state='RECOVERING' AND revoked_at IS NULL",
                 (*key[:2], channel.connection_id, channel.connection_generation)).fetchone() is None):
         raise conflict()

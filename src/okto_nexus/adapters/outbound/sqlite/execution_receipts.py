@@ -160,7 +160,7 @@ def read_execution_operation_history(factory: ConnectionFactory, *,
 def append_execution_receipt(factory: ConnectionFactory, *,
                              principal: VerifiedExecutionTicket | None = None,
                              embedded_owner=None,
-                             uow=None, recovery_owner=None, preopen=None,
+                             uow=None, recovery_owner=None, preopen=None, preopen_embedded_owner=None,
                              frame: Mapping[str, Any]) -> AcceptedExecutionReceipt:
     """Accept a Core fact only for the ticket's admitted operation.
 
@@ -171,6 +171,8 @@ def append_execution_receipt(factory: ConnectionFactory, *,
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "One authenticated receipt owner is required.", {})
     if recovery_owner is not None and (uow is None or preopen is None):
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Recovery requires its authenticated transaction and proof.', {})
+    if preopen_embedded_owner is not None and recovery_owner is None:
+        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Local preopening recovery requires its recovery owner.', {})
     if principal is not None and ("receipt:publish" not in principal.scopes or principal.binding_id is None):
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
                              "The ticket cannot publish operation receipts.", {})
@@ -239,7 +241,8 @@ def append_execution_receipt(factory: ConnectionFactory, *,
         preopen_verified = None
         if recovery_owner is not None:
             from .execution_preopen_recovery import verify_preopen_recovery
-            preopen_verified = verify_preopen_recovery(uow, recovery_owner, preopen, parsed, operation)
+            preopen_verified = verify_preopen_recovery(uow, recovery_owner, preopen, parsed, operation,
+                                                     embedded_owner=preopen_embedded_owner)
         initial_refusal = None
         if scope:
             from .execution_session_containment import SqliteSessionContainmentRepository

@@ -705,10 +705,6 @@ class EmbeddedDispatchOwner:
         try:
             while not self._stopping.is_set():
                 self.capacity_publication.tick()
-                if time.monotonic()>=pending_at:
-                    from ..application.runtime_recovery import drain_pending
-                    await asyncio.to_thread(drain_pending,self.deps)
-                    pending_at=time.monotonic()+DEFAULT_RUNTIME_AUTOMATION.message_interval
                 for session_id, session in list(self.sessions.items()):
                     if (not session.get('recovering') and session["scope"]["agent_id"] not in self.agents.blocked and session["renew_at"] is not None and time.monotonic() >= session["renew_at"]
                             and (session.get("renew_task") is None or session["renew_task"].done())):
@@ -717,6 +713,20 @@ class EmbeddedDispatchOwner:
                         self.renewals.add(task)
                         task.add_done_callback(self.renewals.discard)
                 await self.agents.tick()
+                if time.monotonic()>=pending_at:
+                    from ..application.runtime_recovery import drain_pending
+                    try:
+                        await asyncio.to_thread(drain_pending,self.deps)
+                    except OktoNexusError as error:
+                        # Queue admission is transactional and precedes native
+                        # delivery. Contention here does not invalidate live
+                        # sessions or the executor's ownership. Retry the same
+                        # durable queue on a later tick, after lease renewal.
+                        if error.code != ErrorCode.DB_ERROR or not error.retryable:
+                            raise
+                        logging.getLogger(__name__).warning(
+                            'Pending-message admission deferred by transient storage contention; runtime remains active.')
+                    pending_at=time.monotonic()+DEFAULT_RUNTIME_AUTOMATION.message_interval
                 try:
                     await asyncio.wait_for(self._stopping.wait(),.1)
                 except asyncio.TimeoutError:

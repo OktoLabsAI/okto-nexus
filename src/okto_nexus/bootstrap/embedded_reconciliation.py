@@ -103,7 +103,10 @@ class EmbeddedReconciliation:
     def _records(self, agent_id=None):
         with self.owner.factory.unit_of_work(write=False) as uow:
             self.owner.verify(uow=uow)
-            rows = uow.connection.execute("SELECT s.session_id,s.open_operation_id,p.binding_json,l.stream_epoch,o.subject_agent_id AS agent_id "
+            rows = uow.connection.execute("SELECT s.session_id,s.open_operation_id,p.binding_json,l.stream_epoch,o.subject_agent_id AS agent_id, "
+                "EXISTS(SELECT 1 FROM execution_local_preopen_fences f JOIN execution_preopen_refusals r "
+                "USING(server_id,executor_id,operation_id) WHERE f.server_id=s.server_id AND f.executor_id=s.executor_id "
+                "AND f.operation_id=s.open_operation_id AND s.lifecycle_state='CLOSED' AND s.lease_state='CLOSED') AS preopen_recovered "
                 "FROM execution_sessions s JOIN execution_operations o ON o.server_id=s.server_id AND o.executor_id=s.executor_id AND o.operation_id=s.open_operation_id LEFT JOIN execution_local_publications p ON p.server_id=s.server_id "
                 "AND p.executor_id=s.executor_id AND p.operation_id=s.open_operation_id "
                 "LEFT JOIN execution_local_streams l ON l.server_id=s.server_id AND l.executor_id=s.executor_id "
@@ -145,11 +148,16 @@ class EmbeddedReconciliation:
                 projected = project_r4_bound_receipt(binding, receipt,
                     key=OperationKey(claim.key.server_id, claim.key.executor_id, claim.opening_operation_id),
                     receipt_revision=1)
+                journal_slot = await journal.owned_slot_state(claim.key)
                 if (projected['session_id'] != session_id or projected['stage'] != 'FAILED'
                         or projected['possible_effect'] or not projected['retry_safe']
-                        or slot.key != claim.key or not slot.released
-                        or slot.opening_operation_id != claim.opening_operation_id):
+                        or any(resource is not None and (resource.key != claim.key or not resource.released
+                            or resource.opening_operation_id != claim.opening_operation_id)
+                            for resource in (slot, journal_slot))
+                        or await journal.get_process_birth(claim.key) is not None):
                     raise CoreError('RECONCILIATION_REQUIRED', 'embedded_failed_open_release')
+                # A durable pre-effect refusal can precede reservation entirely.
+                # Any reservation that does exist must still prove release.
                 # No process existed: do not manufacture the EXITED proof used
                 # for successful openings, or a successful close receipt.
                 fact = {'owner_generation': claim.opening_owner_generation}
@@ -270,6 +278,10 @@ class EmbeddedReconciliation:
         allowed = expected | {name+suffix for name in expected for suffix in ("-wal","-shm")}
         if (agent_id is None and not files.issubset(allowed)) or not expected.issubset(files):
             raise CoreError("JOURNAL_UNAVAILABLE","embedded_resource_files")
+        # These openings have an authenticated no-admission fence, not a
+        # native claim to release. EmbeddedPreopenRecovery revalidates their
+        # Core fact and physical slots before reaching this pass.
+        records = [row for row in records if not row['preopen_recovered']]
         ledger = await host._ledger() if 'owned-slots.db' in expected else None
         if ledger is not None:
             # Consumption can precede both the initial lease and Core.open.
