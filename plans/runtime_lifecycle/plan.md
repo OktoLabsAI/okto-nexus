@@ -147,7 +147,10 @@ não prova que não existe. O marco M2 trata explicitamente essa distinção.
   em `LEASE_REVALIDATION_REQUIRED`, reproduzida também com o Core M0. Isolar a
   agenda de renovação de manutenção/admissão de pendências e instrumentar as
   fronteiras de envio, aplicação, prazo e geração. Não aumentar TTLs ou afrouxar
-  fences para ocultar o problema. Atribuição exata da falha permanece aberta.
+  fences para ocultar o problema. Checkpoint M3a: grant tardio reproduzido com
+  identidade estável; agendamento independente e margem de custo implementados,
+  com 18 testes da wheel instalada aprovados. Ver `m3a-validation.md`. Isso não
+  conclui os critérios abaixo nem a qualificação de carga do M7/M8.
 - Modelar separadamente conexão, autoridade, capacidade e sincronização.
 - Pending de histórico não bloqueia capacidade independente; slot físico incerto
   permanece ocupado. Não redirecionar uma conversa persistente ainda incerta.

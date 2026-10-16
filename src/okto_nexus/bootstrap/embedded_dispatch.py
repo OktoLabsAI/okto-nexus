@@ -87,6 +87,7 @@ class EmbeddedDispatchOwner:
         self.renewals = set()
         self.pump = None
         self.maintenance = None
+        self.lease_maintenance = None
         self.native_factory = None
         self.failure = None
         self._stopping = asyncio.Event()
@@ -274,6 +275,7 @@ class EmbeddedDispatchOwner:
             wake_deliveries=self.deps.runtime_dispatcher.wake,
             resolve_native_input=self.deps.native_decisions.inputs.resolve)
         self.pump.start()
+        self.lease_maintenance = asyncio.create_task(self._maintain_leases(), name="embedded-lease-renewals")
         self.maintenance = asyncio.create_task(self._maintain(), name="embedded-publications")
         await asyncio.to_thread(self._recovery_event,'RECOVERY_READY','Local host ready. Agents with retained history recover independently; previous work was not replayed.')
 
@@ -497,7 +499,7 @@ class EmbeddedDispatchOwner:
                         setup.candidate.adapter_id in {"codex_app_server", "claude_stream", "pi_rpc"}))
                 await asyncio.to_thread(self.leases.applied, applied.acknowledgement, channel=self.channel)
                 session["executor"] = executor
-                session["renew_at"] = time.monotonic() + max(0, applied.context.lease_deadline_monotonic-time.monotonic())/2
+                self._schedule_renewal(session, applied)
             executor = session["executor"]
             runtime = await executor._runtime()
             context = runtime.r4_operation_context(frame, connection_id=self.channel.connection_id,
@@ -660,6 +662,16 @@ class EmbeddedDispatchOwner:
         async with session["gate"], session["authority_gate"].update():
             yield
 
+    def _schedule_renewal(self, session, applied):
+        now = time.monotonic()
+        # Reserve the observed request/application cost on top of the normal
+        # half-life margin. In particular, short leases must not spend half
+        # their remaining life waiting before starting another slow grant.
+        # This changes scheduling only, never the authority's actual deadline.
+        elapsed = max(0, now - session['executor'].lease_request_started)
+        remaining = max(0, applied.context.lease_deadline_monotonic - now)
+        session['renew_at'] = now + max(0, remaining / 2 - elapsed)
+
     async def _renew_owned(self, session_id, session):
         try:
             async with self._renewal_gate(session):
@@ -670,7 +682,7 @@ class EmbeddedDispatchOwner:
                     connection_id=self.channel.connection_id,connection_generation=self.channel.connection_generation,
                     request_grant=self._request_grant)
                 await asyncio.to_thread(self.leases.applied,applied.acknowledgement,channel=self.channel)
-                session["renew_at"] = time.monotonic() + max(0,applied.context.lease_deadline_monotonic-time.monotonic())/2
+                self._schedule_renewal(session, applied)
         except Exception as error:
             if self.sessions.get(session_id) is session:
                 if session.get('recovering'):
@@ -679,7 +691,8 @@ class EmbeddedDispatchOwner:
                 # Expired/revoked session authority is an expected containment
                 # boundary, not a failure of every runtime on this executor.
                 expected = (isinstance(error, CoreError) and error.code in {
-                    'AGENT_REVOKED', 'SESSION_UNKNOWN', 'STALE_GENERATION'}) or (
+                    'AGENT_REVOKED', 'SESSION_UNKNOWN', 'STALE_GENERATION',
+                    'LEASE_EXPIRED', 'LEASE_REVALIDATION_REQUIRED'}) or (
                     isinstance(error, OktoNexusError) and error.code in {
                         ErrorCode.CONFLICT, ErrorCode.PERMISSION_DENIED})
                 if expected:
@@ -699,12 +712,15 @@ class EmbeddedDispatchOwner:
                         self.failure = shared_error
                     await self.failed()
 
-    async def _maintain(self):
-        from nexus_connector_core import DEFAULT_RUNTIME_AUTOMATION
-        pending_at=0
+    async def _maintain_leases(self):
+        """Schedule authority independently of history and queue admission.
+
+        Only dispatch work here. Each session keeps its single renewal worker;
+        a slow database request or authority gate never delays its siblings.
+        Shutdown joins both this scheduler and every worker it produced.
+        """
         try:
             while not self._stopping.is_set():
-                self.capacity_publication.tick()
                 for session_id, session in list(self.sessions.items()):
                     if (not session.get('recovering') and session["scope"]["agent_id"] not in self.agents.blocked and session["renew_at"] is not None and time.monotonic() >= session["renew_at"]
                             and (session.get("renew_task") is None or session["renew_task"].done())):
@@ -712,6 +728,21 @@ class EmbeddedDispatchOwner:
                         session["renew_task"] = task
                         self.renewals.add(task)
                         task.add_done_callback(self.renewals.discard)
+                try:
+                    await asyncio.wait_for(self._stopping.wait(), .05)
+                except asyncio.TimeoutError:
+                    pass
+        except Exception as error:
+            if self.failure is None:
+                self.failure = error
+            await self.failed()
+
+    async def _maintain(self):
+        from nexus_connector_core import DEFAULT_RUNTIME_AUTOMATION
+        pending_at=0
+        try:
+            while not self._stopping.is_set():
+                self.capacity_publication.tick()
                 await self.agents.tick()
                 if time.monotonic()>=pending_at:
                     from ..application.runtime_recovery import drain_pending
@@ -867,6 +898,7 @@ class EmbeddedDispatchOwner:
                      asyncio.shield(self._recovery_task) if self._recovery_task is not None else None,
                      self.capacity_publication.close(),
                      self.capacity_waiter.aclose(),
+                     asyncio.shield(self.lease_maintenance) if self.lease_maintenance is not None else None,
                      asyncio.shield(self.maintenance) if self.maintenance is not None else None):
             if task is not None:
                 try:

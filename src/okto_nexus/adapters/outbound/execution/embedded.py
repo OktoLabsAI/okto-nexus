@@ -71,6 +71,7 @@ class EmbeddedExecutor:
             environment=environment, native_factory=native_factory,
             native_action_factory=native_action_factory, native_approvals_enabled=native_approvals_enabled)
         executor.local_launch = local_launch
+        executor.lease_request_started = attempt.sent_at_monotonic
         return executor, application
 
     async def renew_r4(
@@ -89,6 +90,7 @@ class EmbeddedExecutor:
         grant = await request_grant(r4_lease_renew_frame(attempt))
         application = await runtime.install_r4_lease(attempt, grant)
         self.context = application.context
+        self.lease_request_started = attempt.sent_at_monotonic
         return application
 
     async def revoke_r4(self, *, authorization_revision: int) -> R4LeaseApplication:

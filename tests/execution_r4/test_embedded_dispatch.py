@@ -145,7 +145,7 @@ def test_serve_dispatches_local_open_turn_controls_and_close(connected_local):
     assert history.status_code==200 and history.json()["executor_stage"]=="SUCCEEDED"
 
 
-@pytest.mark.parametrize('failure', ['expired', 'revoked'])
+@pytest.mark.parametrize('failure', ['expired', 'revoked', 'late_grant'])
 def test_denied_renewal_releases_only_its_session_and_keeps_executor_ready(connected_local, monkeypatch, failure):
     from okto_nexus.errors import ErrorCode
     setup, binding, native = connected_local
@@ -159,6 +159,8 @@ def test_denied_renewal_releases_only_its_session_and_keeps_executor_ready(conne
     async def deny(**kwargs):
         if failure == 'expired':
             raise OktoNexusError(ErrorCode.CONFLICT, 'The authority has expired.', {})
+        if failure == 'late_grant':
+            raise CoreError('LEASE_REVALIDATION_REQUIRED', 'r4_lease')
         raise CoreError('AGENT_REVOKED', 'lease_renew')
     current = owner.sessions[session_id]
     monkeypatch.setattr(current['executor'], 'renew_r4', deny)
@@ -467,6 +469,13 @@ def test_restart_recovers_historical_receipt_without_provider(tmp_path,monkeypat
         owner=app.state.embedded_dispatch_owner
         assert owner.channel.connection_generation>source.connection_generation
         assert owner.pump is not None
+        # Startup admits independent agents while retained history progresses.
+        # Observe the retained worker's result, not a race with ASGI startup.
+        until = time.monotonic() + 10
+        while (('subject' not in owner.agents.errors) if missing_journal else
+               ('subject' in owner.agents.blocked)):
+            assert time.monotonic() < until, owner.agents.errors
+            time.sleep(.02)
         assert ('subject' in owner.agents.blocked) == missing_journal
         assert not owner.host._runtime_tasks
         assert native.opens==1

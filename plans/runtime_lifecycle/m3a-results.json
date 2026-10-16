@@ -1,0 +1,525 @@
+{
+  "date": "2026-10-16",
+  "checkpoint": "M3a",
+  "automated": [
+    {
+      "name": "scheduler_source",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        {
+          "name": "test_renewals_progress_while_maintenance_and_another_renewal_are_held[history]",
+          "seconds": 0.935
+        },
+        {
+          "name": "test_renewals_progress_while_maintenance_and_another_renewal_are_held[queue]",
+          "seconds": 0.459
+        },
+        {
+          "name": "test_renewal_reserves_observed_application_cost[99.4-101-100]",
+          "seconds": 0.003
+        },
+        {
+          "name": "test_renewal_reserves_observed_application_cost[99.9-160-129.9]",
+          "seconds": 0.003
+        },
+        {
+          "name": "test_renewal_reserves_observed_application_cost[99-99.5-100]",
+          "seconds": 0.002
+        }
+      ]
+    },
+    {
+      "name": "targeted_source",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        {
+          "name": "test_local_owner_renews_installed_lease",
+          "seconds": 30.168
+        },
+        {
+          "name": "test_denied_renewal_releases_only_its_session_and_keeps_executor_ready[expired]",
+          "seconds": 21.152
+        },
+        {
+          "name": "test_denied_renewal_releases_only_its_session_and_keeps_executor_ready[revoked]",
+          "seconds": 20.561
+        },
+        {
+          "name": "test_denied_renewal_releases_only_its_session_and_keeps_executor_ready[late_grant]",
+          "seconds": 20.297
+        },
+        {
+          "name": "test_restart_recovers_historical_receipt_without_provider[False]",
+          "seconds": 14.471
+        },
+        {
+          "name": "test_restart_recovers_historical_receipt_without_provider[True]",
+          "seconds": 15.78
+        }
+      ]
+    },
+    {
+      "name": "installed",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        {
+          "name": "test_renewals_progress_while_maintenance_and_another_renewal_are_held[history]",
+          "seconds": 0.246
+        },
+        {
+          "name": "test_renewals_progress_while_maintenance_and_another_renewal_are_held[queue]",
+          "seconds": 0.216
+        },
+        {
+          "name": "test_renewal_reserves_observed_application_cost[99.4-101-100]",
+          "seconds": 0.003
+        },
+        {
+          "name": "test_renewal_reserves_observed_application_cost[99.9-160-129.9]",
+          "seconds": 0.002
+        },
+        {
+          "name": "test_renewal_reserves_observed_application_cost[99-99.5-100]",
+          "seconds": 0.002
+        },
+        {
+          "name": "test_local_owner_renews_installed_lease",
+          "seconds": 12.822
+        },
+        {
+          "name": "test_denied_renewal_releases_only_its_session_and_keeps_executor_ready[expired]",
+          "seconds": 18.86
+        },
+        {
+          "name": "test_denied_renewal_releases_only_its_session_and_keeps_executor_ready[revoked]",
+          "seconds": 18.041
+        },
+        {
+          "name": "test_denied_renewal_releases_only_its_session_and_keeps_executor_ready[late_grant]",
+          "seconds": 16.69
+        },
+        {
+          "name": "test_restart_recovers_historical_receipt_without_provider[False]",
+          "seconds": 14.192
+        },
+        {
+          "name": "test_restart_recovers_historical_receipt_without_provider[True]",
+          "seconds": 14.839
+        },
+        {
+          "name": "test_opening_renews_before_native_ready[pi_rpc]",
+          "seconds": 7.592
+        },
+        {
+          "name": "test_opening_renews_before_native_ready[codex_app_server]",
+          "seconds": 6.308
+        },
+        {
+          "name": "test_opening_renews_before_native_ready[claude_stream]",
+          "seconds": 6.865
+        },
+        {
+          "name": "test_blocked_session_does_not_delay_other_session_renewal",
+          "seconds": 12.078
+        },
+        {
+          "name": "test_cancelled_shutdown_observer_keeps_native_producer_owned",
+          "seconds": 9.241
+        },
+        {
+          "name": "test_dispatch_cleanup_failure_still_drains_core",
+          "seconds": 7.691
+        },
+        {
+          "name": "test_serve_dispatches_local_open_turn_controls_and_close",
+          "seconds": 15.035
+        }
+      ]
+    }
+  ],
+  "wheels": {
+    "okto_nexus": {
+      "sha256": "10a6f52ec0cc20a68ddf33d07740d86cabb97c6ad4286b9013bf376fe554dd70"
+    },
+    "nexus_connector_core": {
+      "sha256": "d2799bb6249c28fca5e56d9e17862ca1b3f72b15a59c5f9e2d15d509a0d2da8f"
+    }
+  },
+  "pip_check": "No broken requirements found",
+  "ui_before_update": {
+    "scope": "Real Meta-harness sends and terminal observations; M1 installed",
+    "calls": {
+      "claude": {
+        "session_id": "ses_d36338ec1e683aae9b2c8cb58d95d900",
+        "receipts": [
+          {
+            "operation_id": "op_be50a977cea54bcdef22e284bab69b3a",
+            "action": "runtime.open",
+            "created_at": "2026-10-16T15:56:11.332424+00:00",
+            "stage": "SUBMITTED",
+            "error_code": null,
+            "received_at": "2026-10-16T15:56:51.242Z"
+          },
+          {
+            "operation_id": "op_e38cc0916f160ef07545d9a6598d3b83",
+            "action": "turn.submit",
+            "created_at": "2026-10-16T15:56:11.346Z",
+            "stage": "SUBMITTED",
+            "error_code": null,
+            "received_at": "2026-10-16T15:56:53.783Z"
+          },
+          {
+            "operation_id": "op_e38cc0916f160ef07545d9a6598d3b83",
+            "action": "turn.submit",
+            "created_at": "2026-10-16T15:56:11.346Z",
+            "stage": "SUCCEEDED",
+            "error_code": null,
+            "received_at": "2026-10-16T15:57:05.866Z"
+          }
+        ],
+        "evidence_tables": [
+          "process_births",
+          "process_containers"
+        ],
+        "process_births": [
+          {
+            "server_id": "srv_79a1607399d8e06ba9bc7d896b7171d6",
+            "executor_id": "exe_8dfe549a557ab8c704fae66df36e35d0",
+            "session_id": "ses_d36338ec1e683aae9b2c8cb58d95d900",
+            "operation_id": "op_be50a977cea54bcdef22e284bab69b3a",
+            "platform": "win32",
+            "pid": 23208,
+            "birth_token": "filetime:01dd5d86f25cbb96",
+            "containment": "windows_job"
+          }
+        ],
+        "process_containers": [
+          {
+            "server_id": "srv_79a1607399d8e06ba9bc7d896b7171d6",
+            "executor_id": "exe_8dfe549a557ab8c704fae66df36e35d0",
+            "session_id": "ses_d36338ec1e683aae9b2c8cb58d95d900",
+            "container_id": "Global\\nexus-core-ae687a794f7d4389b440ea9865aac063"
+          }
+        ]
+      },
+      "codex": {
+        "session_id": "ses_c980471333df7f02c3d247d7d99e8bd5",
+        "receipts": [
+          {
+            "operation_id": "op_1d3ed4db2edd94302ea313f143eda330",
+            "action": "runtime.open",
+            "created_at": "2026-10-16T15:57:07.772988+00:00",
+            "stage": "SUBMITTED",
+            "error_code": null,
+            "received_at": "2026-10-16T15:58:04.211Z"
+          },
+          {
+            "operation_id": "op_bcb6f3c7fbcc6581c8971d2c4ed0347b",
+            "action": "turn.submit",
+            "created_at": "2026-10-16T15:57:07.865Z",
+            "stage": "SUBMITTED",
+            "error_code": null,
+            "received_at": "2026-10-16T15:58:06.923Z"
+          },
+          {
+            "operation_id": "op_bcb6f3c7fbcc6581c8971d2c4ed0347b",
+            "action": "turn.submit",
+            "created_at": "2026-10-16T15:57:07.865Z",
+            "stage": "SUCCEEDED",
+            "error_code": null,
+            "received_at": "2026-10-16T15:58:15.025Z"
+          }
+        ],
+        "evidence_tables": [
+          "process_births",
+          "process_containers"
+        ],
+        "process_births": [
+          {
+            "server_id": "srv_79a1607399d8e06ba9bc7d896b7171d6",
+            "executor_id": "exe_8dfe549a557ab8c704fae66df36e35d0",
+            "session_id": "ses_c980471333df7f02c3d247d7d99e8bd5",
+            "operation_id": "op_1d3ed4db2edd94302ea313f143eda330",
+            "platform": "win32",
+            "pid": 2768,
+            "birth_token": "filetime:01dd5d871c974aca",
+            "containment": "windows_job"
+          }
+        ],
+        "process_containers": [
+          {
+            "server_id": "srv_79a1607399d8e06ba9bc7d896b7171d6",
+            "executor_id": "exe_8dfe549a557ab8c704fae66df36e35d0",
+            "session_id": "ses_c980471333df7f02c3d247d7d99e8bd5",
+            "container_id": "Global\\nexus-core-c8d8df7dbcfe4ea6a17941d310e9b159"
+          }
+        ]
+      },
+      "Pi": {
+        "session_id": "ses_b36e0a4841ff777fd2505b15d5d076f6",
+        "receipts": [
+          {
+            "operation_id": "op_e412895a2253dc87e04fa9f867ef1683",
+            "action": "runtime.open",
+            "created_at": "2026-10-16T15:55:44.627935+00:00",
+            "stage": "SUBMITTED",
+            "error_code": null,
+            "received_at": "2026-10-16T15:56:29.578Z"
+          },
+          {
+            "operation_id": "op_100f3750599facd80b989f9e234b2209",
+            "action": "turn.submit",
+            "created_at": "2026-10-16T15:59:18.815073+00:00",
+            "stage": "SUBMITTED",
+            "error_code": null,
+            "received_at": "2026-10-16T15:59:21.483Z"
+          },
+          {
+            "operation_id": "op_100f3750599facd80b989f9e234b2209",
+            "action": "turn.submit",
+            "created_at": "2026-10-16T15:59:18.815073+00:00",
+            "stage": "SUCCEEDED",
+            "error_code": null,
+            "received_at": "2026-10-16T15:59:32.089Z"
+          },
+          {
+            "operation_id": "op_9845954aea8a75cb055620032617651a",
+            "action": "runtime.close",
+            "created_at": "2026-10-16T15:59:33.394794+00:00",
+            "stage": "SUCCEEDED",
+            "error_code": null,
+            "received_at": "2026-10-16T15:59:35.747Z"
+          }
+        ],
+        "evidence_tables": [
+          "process_births",
+          "process_containers"
+        ],
+        "process_births": [
+          {
+            "server_id": "srv_79a1607399d8e06ba9bc7d896b7171d6",
+            "executor_id": "exe_8dfe549a557ab8c704fae66df36e35d0",
+            "session_id": "ses_b36e0a4841ff777fd2505b15d5d076f6",
+            "operation_id": "op_e412895a2253dc87e04fa9f867ef1683",
+            "platform": "win32",
+            "pid": 44316,
+            "birth_token": "filetime:01dd5d86e6452193",
+            "containment": "windows_job"
+          }
+        ],
+        "process_containers": [
+          {
+            "server_id": "srv_79a1607399d8e06ba9bc7d896b7171d6",
+            "executor_id": "exe_8dfe549a557ab8c704fae66df36e35d0",
+            "session_id": "ses_b36e0a4841ff777fd2505b15d5d076f6",
+            "container_id": "Global\\nexus-core-fff6b7f1a9c34452ac533d8f2767755b"
+          }
+        ]
+      }
+    },
+    "extra_findings": {
+      "failures": [
+        {
+          "operation_id": "op_0df683a515acaffea44841b44c14e630",
+          "session_id": "ses_a30b6ebfb9d62fdf93084d6d0d707188",
+          "executor_id": "exe_8dfe549a557ab8c704fae66df36e35d0",
+          "action": "runtime.open",
+          "created_at": "2026-10-16T16:01:51.960145+00:00",
+          "stage": "FAILED",
+          "error_code": "BINDING_NOT_AUTHORIZED",
+          "received_at": "2026-10-16T16:03:09.783Z",
+          "journal_exists": true,
+          "birth_count": 0,
+          "claims": [
+            {
+              "server_id": "srv_79a1607399d8e06ba9bc7d896b7171d6",
+              "executor_id": "exe_8dfe549a557ab8c704fae66df36e35d0",
+              "session_id": "ses_a30b6ebfb9d62fdf93084d6d0d707188",
+              "operation_id": "op_0df683a515acaffea44841b44c14e630"
+            }
+          ],
+          "operation_schema": [
+            "server_id",
+            "executor_id",
+            "operation_id",
+            "intent_hash",
+            "session_id",
+            "stage",
+            "possible_effect",
+            "retry_safe",
+            "native_id",
+            "error_code"
+          ]
+        },
+        {
+          "operation_id": "op_dab0319f56ccdc7c04cd23f71c497b59",
+          "session_id": "ses_78cbe21a66c9f04523de916248355f06",
+          "executor_id": "exe_8dfe549a557ab8c704fae66df36e35d0",
+          "action": "runtime.open",
+          "created_at": "2026-10-16T16:03:21.706869+00:00",
+          "stage": "FAILED",
+          "error_code": "BINDING_NOT_AUTHORIZED",
+          "received_at": "2026-10-16T16:04:40.182Z",
+          "journal_exists": true,
+          "birth_count": 0,
+          "claims": [
+            {
+              "server_id": "srv_79a1607399d8e06ba9bc7d896b7171d6",
+              "executor_id": "exe_8dfe549a557ab8c704fae66df36e35d0",
+              "session_id": "ses_78cbe21a66c9f04523de916248355f06",
+              "operation_id": "op_dab0319f56ccdc7c04cd23f71c497b59"
+            }
+          ],
+          "operation_schema": [
+            "server_id",
+            "executor_id",
+            "operation_id",
+            "intent_hash",
+            "session_id",
+            "stage",
+            "possible_effect",
+            "retry_safe",
+            "native_id",
+            "error_code"
+          ]
+        }
+      ],
+      "recovery": [
+        {
+          "created_at": "2026-10-16T15:54:46.913969Z",
+          "code": "RECOVERY_READY",
+          "message": "Local host ready. Agents with retained history recover independently; previous work was not replayed.",
+          "agent_id": null
+        },
+        {
+          "created_at": "2026-10-16T15:54:48.775131Z",
+          "code": "RECOVERY_AGENT_READY",
+          "message": "Agent history reconciled. Previous work was not replayed.",
+          "agent_id": "codex"
+        },
+        {
+          "created_at": "2026-10-16T15:54:50.427538Z",
+          "code": "RECOVERY_AGENT_READY",
+          "message": "Agent history reconciled. Previous work was not replayed.",
+          "agent_id": "claude"
+        },
+        {
+          "created_at": "2026-10-16T15:55:23.350070Z",
+          "code": "RECOVERY_AGENT_READY",
+          "message": "Agent history reconciled. Previous work was not replayed.",
+          "agent_id": "Pi"
+        },
+        {
+          "created_at": "2026-10-16T16:01:31.419953Z",
+          "code": "RECOVERY_SESSION_RELEASED",
+          "message": "Failed session contained; sibling sessions preserved. Previous work was not replayed.",
+          "agent_id": "claude"
+        },
+        {
+          "created_at": "2026-10-16T16:01:34.629144Z",
+          "code": "RECOVERY_SESSION_RELEASED",
+          "message": "Failed session contained; sibling sessions preserved. Previous work was not replayed.",
+          "agent_id": "codex"
+        },
+        {
+          "created_at": "2026-10-16T16:01:37.854826Z",
+          "code": "RECOVERY_SESSION_RELEASED",
+          "message": "Failed session contained; sibling sessions preserved. Previous work was not replayed.",
+          "agent_id": "Pi"
+        }
+      ]
+    }
+  },
+  "ui_after_update": {
+    "agents": [
+      "Pi",
+      "claude",
+      "codex"
+    ],
+    "observed_status": "Local Online",
+    "manual_recovery_actions": 0,
+    "messages": {
+      "Pi": {
+        "session_id": "ses_fa3e9917e3db2e443854235cf7b290eb",
+        "marker": "NEXUS_M3A_RESTART_PI_20261016_OK",
+        "chat": "Observed exact assistant response and 1/1 acknowledgement",
+        "terminal": "CLOSED; 19 committed events; Turn completed; exact assistant response",
+        "receipts": [
+          {
+            "operation_id": "op_688a7fee6763723016a33e889188125a",
+            "action": "runtime.open",
+            "created_at": "2026-10-16T16:30:23.997659+00:00",
+            "stage": "SUBMITTED",
+            "error_code": null,
+            "received_at": "2026-10-16T16:30:59.955Z"
+          },
+          {
+            "operation_id": "op_a290fcce01b22c85a51d5cec782e6729",
+            "action": "turn.submit",
+            "created_at": "2026-10-16T16:31:00.159374+00:00",
+            "stage": "SUBMITTED",
+            "error_code": null,
+            "received_at": "2026-10-16T16:31:01.750Z"
+          },
+          {
+            "operation_id": "op_a290fcce01b22c85a51d5cec782e6729",
+            "action": "turn.submit",
+            "created_at": "2026-10-16T16:31:00.159374+00:00",
+            "stage": "SUCCEEDED",
+            "error_code": null,
+            "received_at": "2026-10-16T16:31:09.385Z"
+          },
+          {
+            "operation_id": "op_9b9f2c574e7928fcd7ed00a9180b882e",
+            "action": "runtime.close",
+            "created_at": "2026-10-16T16:31:10.195656+00:00",
+            "stage": "SUCCEEDED",
+            "error_code": null,
+            "received_at": "2026-10-16T16:31:13.455Z"
+          }
+        ]
+      }
+    },
+    "recovery_events": [
+      {
+        "created_at": "2026-10-16T16:28:23.344782Z",
+        "code": "RECOVERY_READY",
+        "agent_id": null
+      },
+      {
+        "created_at": "2026-10-16T16:28:25.446152Z",
+        "code": "RECOVERY_AGENT_READY",
+        "agent_id": "codex"
+      },
+      {
+        "created_at": "2026-10-16T16:28:27.507199Z",
+        "code": "RECOVERY_AGENT_READY",
+        "agent_id": "claude"
+      },
+      {
+        "created_at": "2026-10-16T16:28:27.532598Z",
+        "code": "RECOVERY_PUBLICATION_DELAYED",
+        "agent_id": "claude"
+      },
+      {
+        "created_at": "2026-10-16T16:29:12.556560Z",
+        "code": "RECOVERY_AGENT_READY",
+        "agent_id": "Pi"
+      },
+      {
+        "created_at": "2026-10-16T16:29:12.602776Z",
+        "code": "RECOVERY_PUBLICATION_DELAYED",
+        "agent_id": "Pi"
+      }
+    ]
+  }
+}
