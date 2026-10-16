@@ -29,11 +29,12 @@ def loopback_client(tmp_path):
         yield deps, client
 
 
-def test_settings_catalogue_lists_every_spec_with_description(loopback_client):
+def test_settings_catalogue_lists_only_implemented_specs_with_description(loopback_client):
     _, client = loopback_client
     items = client.get("/api/v1/settings").json()["data"]["items"]
     by_key = {item["key"]: item for item in items}
-    assert set(by_key) == {spec.key for spec in SETTING_SPECS}
+    assert set(by_key) == {spec.key for spec in SETTING_SPECS if spec.implemented}
+    assert 'metrics_retention_days' not in by_key  # No pruning consumer yet.
     for item in items:
         assert item["description"]  # the tooltip text is mandatory
         assert item["source"] == "default"

@@ -38,6 +38,7 @@ class RuntimeMaintenanceService:
             with owner.cf.unit_of_work(write=False) as uow:
                 quota = uow.connection.execute("SELECT quota_bytes FROM runtime_artifact_settings").fetchone()[0]
                 used = uow.connection.execute("SELECT COALESCE(sum(artifact_reserved_bytes),0) FROM runtime_results").fetchone()[0]
+                event_used = uow.connection.execute('SELECT COALESCE(sum(size_bytes),0) FROM execution_event_artifacts').fetchone()[0]
                 results = [dict(row) for row in uow.connection.execute("SELECT result_id,publication_state,publication_reason,"
                     "artifact_reserved_bytes,artifact_generation,output_artifact_id FROM runtime_results "
                     "WHERE artifact_reserved_bytes>0 OR publication_state IN ('BLOCKED','REVIEW_REQUIRED','ARTIFACT_CLEANUP') "
@@ -45,7 +46,8 @@ class RuntimeMaintenanceService:
                 pending = [dict(row) for row in uow.connection.execute("SELECT maintenance_id,result_id,action,status,created_at,idempotency_key,reason "
                     "FROM runtime_result_maintenance WHERE status='PENDING' ORDER BY created_at LIMIT 100")]
             return {"quota_bytes": quota, "agent_quota_bytes": quota // 4, "workspace_quota_bytes": quota // 2,
-                "reserved_bytes": used, "results": results, "pending_maintenance": pending}
+                "reserved_bytes": used + event_used, "event_artifact_reserved_bytes": event_used,
+                "results": results, "pending_maintenance": pending}
         if (not isinstance(action, str) or action not in {"cleanup", "retry", "quota"} or not isinstance(idempotency_key, str) or
                 not 1 <= len(idempotency_key) <= 128 or not isinstance(reason, str) or not 1 <= len(reason) <= 512 or not reason.strip()):
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Maintenance requires action, idempotency key and audit reason.", {})

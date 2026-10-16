@@ -88,7 +88,8 @@ def test_public_binding_grant_admission_bootstrap_core_and_receipts(onboarding, 
 
     with client.websocket_connect(f'wss://127.0.0.1:8202/v1/runtime/executors/{executor}/link',
             headers={'Authorization': f'Bearer {link}'}, subprotocols=['nxl.v1']) as ws:
-        channel = negotiate(ws, info, revisions, lane, server, executor, binding_id=binding['binding_id'])
+        channel = negotiate(ws, info, revisions, lane, server, executor, binding_id=binding['binding_id'],
+                            control_capabilities=('nexus-event-artifacts-v1',))
         resolution, sent = admit_public('open-public', 'runtime.start', new_session=True)
         with deps.connection_factory.unit_of_work(write=False) as uow:
             dispatched = uow.connection.execute(
@@ -199,6 +200,24 @@ def test_public_binding_grant_admission_bootstrap_core_and_receipts(onboarding, 
                                 "FROM execution_event_watermarks").fetchone()) == (2,0,"none")
                         await peer.send(encode_r4_frame({**batch,"events":[{**event_base,"sequence":1}]}).decode())
                         assert decode_r4_frame((await peer.recv()).encode())["sequence"] == 2
+                        # Upload through the authenticated WSS extension before
+                        # publishing a reference, then read the full payload via
+                        # the session-authorized public history endpoint.
+                        from nexus_connector_core.event_artifacts import (
+                            externalize_event,artifact_chunks,encode_event_artifact,decode_event_artifact,artifact_ack)
+                        large_text='arquivo🙂'*15000
+                        wire,content=externalize_event(dict(event_base,sequence=3,payload={'text':large_text}))
+                        artifact_base={k:v for k,v in batch.items() if k not in ('events','type','session_id','stream_epoch')}
+                        for chunk in artifact_chunks(artifact_base,wire,content):
+                            await asyncio.to_thread(ws.send_text,encode_event_artifact(chunk).decode())
+                            reply=decode_event_artifact((await peer.recv()).encode())
+                            assert reply==artifact_ack(chunk)
+                        await peer.send(encode_r4_frame(dict(batch,events=[wire])).decode())
+                        assert decode_r4_frame((await peer.recv()).encode())['sequence']==3
+                        history=await asyncio.to_thread(client.get,
+                            f"/v1/runtime/sessions/{sent.scope['session_id']}/events",headers=headers['subject'])
+                        assert history.status_code==200,history.text
+                        assert history.json()['events'][-1]['payload']['text']==large_text
                         turn, dispatched = admit_public('turn-public', 'turn.submit', session_id=sent.scope['session_id'], text='Hello')
                         turn_context = runtime.r4_operation_context(dispatched.frame, connection_id=channel.connection_id,
                                                                    connection_generation=channel.connection_generation)

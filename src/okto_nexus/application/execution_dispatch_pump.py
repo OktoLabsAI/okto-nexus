@@ -52,12 +52,25 @@ class ExecutionDispatchPump:
     async def _database(self, function, **kwargs):
         # A cancelled waiter must not leave an unobserved transaction that can
         # reserve or fence an operation after its connection has been released.
-        task = asyncio.create_task(asyncio.to_thread(partial(function, **kwargs)))
-        try:
-            return await asyncio.shield(task)
-        except asyncio.CancelledError:
-            await asyncio.shield(task)
-            raise
+        delay = self.poll_interval
+        while True:
+            task = asyncio.create_task(asyncio.to_thread(partial(function, **kwargs)))
+            try:
+                return await asyncio.shield(task)
+            except asyncio.CancelledError:
+                await asyncio.shield(task)
+                raise
+            except OktoNexusError as error:
+                # Admission/BEGIN contention has no committed effect. Retry
+                # this database boundary, never the native send. Closing the
+                # shared local executor here would strand every healthy agent.
+                if error.code != ErrorCode.DB_ERROR or not error.retryable or self._stopping.is_set():
+                    raise
+                try:
+                    await asyncio.wait_for(self._stopping.wait(), timeout=delay)
+                except asyncio.TimeoutError:
+                    pass
+                delay = min(max(delay * 2, 0.01), 1.0)
 
     async def _run(self):
         reservation = None

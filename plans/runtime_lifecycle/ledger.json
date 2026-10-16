@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "started_on": "2026-10-16",
+  "plan": "plan.md",
+  "repositories": {
+    "nexus": {"version": "0.3.1", "branch": "feature/v0.3.1", "core": "0.0.12"},
+    "core": {"version": "0.0.12", "branch": "feature/v0.0.12"},
+    "connector": {"version": "0.0.10", "branch": "feature/v0.0.10", "core": "0.0.12"}
+  },
+  "milestones": [
+    {"id": "M0", "status": "validated", "title": "Baseline and implementation plan", "evidence": ["m0-validation.md", "../event-artifact-implementation.md", "../settings-and-dispatch-contention.md", "../pi-recovery-20261016.md"], "commits": {"core": "fb86548", "connector": "4e86785"}},
+    {"id": "M1", "status": "planned", "title": "Persist process birth before native handshake", "evidence": [], "commits": {}},
+    {"id": "M2", "status": "planned", "title": "Durable launch intent and producer fencing", "evidence": [], "commits": {}},
+    {"id": "M3", "status": "planned", "title": "Independent readiness and per-resource recovery", "evidence": [], "commits": {}},
+    {"id": "M4", "status": "planned", "title": "Incremental recovery and stream fairness", "evidence": [], "commits": {}},
+    {"id": "M5", "status": "planned", "title": "Shared local and remote lifecycle", "evidence": [], "commits": {}},
+    {"id": "M6", "status": "planned", "title": "Independent supervisor experiment and decision", "evidence": [], "commits": {}},
+    {"id": "M7", "status": "planned", "title": "Budgeted parallel startup and pool scheduling", "evidence": [], "commits": {}},
+    {"id": "M8", "status": "planned", "title": "Installed-package qualification and rollout", "evidence": [], "commits": {}}
+  ],
+  "live_installation": "M0 fixes installed previously; new lifecycle milestones not installed",
+  "publication": "Feature branches only; no main merge, tag or PyPI publication authorized by this plan"
+}

@@ -259,6 +259,9 @@ def project_released_deliveries(conn, *, server_id, executor_id, session_id, pro
             "AND session_id=? AND lifecycle_state='CLOSED' AND lease_state='CLOSED'",
             (server_id, executor_id, session_id)).fetchone():
         raise ValueError('Delivery release requires a closed canonical session.')
+    from .execution_released_closes import settle_released_closes
+    settle_released_closes(conn, server_id=server_id, executor_id=executor_id,
+        session_id=session_id, proof=proof)
     rows = conn.execute("SELECT m.domain_operation_id,p.operation_id FROM execution_operations p "
         "JOIN execution_domain_deliveries m USING(server_id,executor_id,operation_id) "
         "JOIN delivery_outbox d ON d.operation_id=m.domain_operation_id "

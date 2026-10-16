@@ -5,6 +5,7 @@ from dataclasses import asdict
 
 from nexus_connector_core import CoreError, EventCursor, R4_PREVIEW_REVISION
 from nexus_connector_core.protocol import canonical_json
+from nexus_connector_core.event_artifacts import externalize_event, artifact_chunks
 
 from ..application.execution_events import commit_execution_events
 from ..errors import ErrorCode, OktoNexusError
@@ -51,8 +52,16 @@ class EmbeddedEventPublisher:
                     if value["operation_id"] is None:
                         value.pop("operation_id")
                     raw = canonical_json(value)
-                    if len(raw)>64*1024:
-                        raise CoreError("CAPACITY_EXCEEDED","embedded_event")
+                    value, artifact = externalize_event(value)
+                    if artifact is not None:
+                        channel = self.owner.channel
+                        base = {k:scope[k] for k in ('server_id','executor_id','binding_id','agent_id')}
+                        base.update(protocol_major=1,connection_id=channel.connection_id,
+                                    connection_generation=channel.connection_generation)
+                        for chunk in artifact_chunks(base,value,artifact):
+                            await asyncio.to_thread(self.owner.factory.event_artifacts.receive,chunk,
+                                channel=channel,embedded_owner=self.owner)
+                        raw = canonical_json(value)
                     if value["sequence"] != after+len(events)+1:
                         raise CoreError("EVENT_GAP","embedded_event")
                     if size+len(raw)>768*1024:

@@ -197,6 +197,8 @@ def bootstrap(
     ensure_execution_installation(factory)
     clock = SystemClock()
     repos, emitter = build_repos(clock, config)
+    from ..application.execution_event_artifacts import ExecutionEventArtifacts
+    factory.event_artifacts = ExecutionEventArtifacts(factory, repos.artifact_store)
     externalize_legacy_artifacts(
         connection_factory=factory,
         artifacts=repos.artifacts,

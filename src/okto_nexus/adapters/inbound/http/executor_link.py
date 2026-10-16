@@ -378,7 +378,7 @@ def build_router() -> APIRouter:
                 "accepted_nxl": R4_PREVIEW_REVISION,
                 "snapshot_format": info["executor_snapshot_format"],
                 "control_capabilities": [cap for cap in ('connection_renewal_v1', 'heartbeat_ack_v1', 'connection_resume_v1',
-                                                        'nexus-lease-denial-v1', 'nexus-session-release-v1', PREOPEN_REFUSAL_REVISION)
+                                                        'nexus-lease-denial-v1', 'nexus-session-release-v1', PREOPEN_REFUSAL_REVISION, 'nexus-event-artifacts-v1')
                                          if cap in hello['control_capabilities']],
             }
             if availability.enabled and CAPACITY_CONTRACT_REVISION in hello['control_capabilities']:
@@ -451,6 +451,26 @@ def build_router() -> APIRouter:
                     await ws.close(code=4409)
                     break
                 frame = decode_control_frame(raw.encode("utf-8"), capabilities=welcome['control_capabilities'])
+                if frame['type'] == 'event.artifact.put':
+                    from nexus_connector_core.event_artifacts import encode_event_artifact, artifact_ack
+                    def _store_event_artifact():
+                        _verify()
+                        return factory.event_artifacts.receive(frame,channel=_channel())
+                    try:
+                        ack = await anyio.to_thread.run_sync(_store_event_artifact)
+                    except OktoNexusError as error:
+                        if error.code not in ('QUOTA_EXCEEDED','DB_ERROR'):
+                            await ws.close(code=4403)
+                            break
+                        ack = dict(artifact_ack(frame),type='event.artifact.rejected',
+                                   code='QUOTA_EXCEEDED' if error.code=='QUOTA_EXCEEDED' else 'ARTIFACT_STORAGE_UNAVAILABLE')
+                    except (ValueError, CoreError):
+                        await ws.close(code=4403)
+                        break
+                    except (OSError, sqlite3.DatabaseError):
+                        ack = dict(artifact_ack(frame),type='event.artifact.rejected',code='ARTIFACT_STORAGE_UNAVAILABLE')
+                    await _send_text(encode_event_artifact(ack).decode('utf-8'))
+                    continue
                 if frame['type'] == 'session.release':
                     if any(frame[k] != welcome[k] for k in
                             ('server_id','executor_id','connection_id','connection_generation')):

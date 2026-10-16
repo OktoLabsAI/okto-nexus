@@ -1,3 +1,4 @@
+import { useSettingsDraft } from './SettingsDrafts';
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { api, type OneShotPolicy, type OneShotSettings as Settings } from '../api';
 
@@ -41,6 +42,7 @@ export const OneShotSettings = forwardRef<OneShotSettingsHandle, {agentId?: stri
     } catch (e) {setError(String(e)); return false;}
     finally {setBusy(false);}
   };
+  const managed = useSettingsDraft('one-shot', {dirty, valid: !busy && !!policy && !invalid, save});
   useImperativeHandle(ref, () => ({save}));
   const inherit = (key: keyof Settings) => setValues(old => {const copy = {...old}; delete copy[key]; return copy;});
   return <section aria-label="One-shot capacity" className="capacity-settings space-y-3">
@@ -66,8 +68,8 @@ export const OneShotSettings = forwardRef<OneShotSettingsHandle, {agentId?: stri
     </div>
     <details className="capacity-explanation"><summary>How these limits work</summary><p>Use 0 for unlimited parallel instances. Starting, warm, running and closing instances all count toward the limit. Host capacity still applies. Warm instances are replenished independently.</p></details>
     {invalid && <p role="alert">Use whole numbers within the limits. Preinitialized instances must be fewer than a finite maximum parallel limit.</p>}
-    {!saveOnNext && <button className="btn btn-secondary" disabled={busy || !policy || !!invalid} onClick={() => void save()}>Save one-shot capacity</button>}
-    <button className="btn btn-secondary ml-2" disabled={busy} onClick={() => setReload(n => n + 1)}>Reload capacity</button>
+    {!managed && !saveOnNext && <button className="btn btn-secondary" disabled={busy || !policy || !!invalid} onClick={() => void save()}>Save one-shot capacity</button>}
+    {!managed && <button className="btn btn-secondary ml-2" disabled={busy} onClick={() => setReload(n => n + 1)}>Reload capacity</button>}
     {error && <p role="alert">{error}</p>}{notice && <p role="status">{notice}</p>}
   </section>;
 });

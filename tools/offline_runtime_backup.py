@@ -184,6 +184,14 @@ def validate(snapshot):
                 raise ValueError("Referenced artifact is missing or outside the snapshot")
             if payload.stat().st_size != size or not (payload.parent / "manifest.json").is_file():
                 raise ValueError("Referenced artifact bytes/manifest mismatch")
+        if db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='execution_event_artifacts'").fetchone():
+            for storage_path, size, reference in db.execute(
+                    'SELECT storage_path,size_bytes,reference_json FROM execution_event_artifacts WHERE storage_path IS NOT NULL'):
+                payload = snapshot / 'artifacts' / storage_path
+                if not payload.resolve().is_relative_to((snapshot / 'artifacts').resolve()) or not payload.is_file():
+                    raise ValueError('Runtime event artifact is missing from backup')
+                if payload.stat().st_size != size or hashlib.sha256(payload.read_bytes()).hexdigest() != json.loads(reference)['sha256']:
+                    raise ValueError('Runtime event artifact integrity mismatch')
     journal = FileRuntimeEventJournal(snapshot)
     try:
         journal.start(repair_tail=False)

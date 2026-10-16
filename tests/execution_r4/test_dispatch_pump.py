@@ -51,6 +51,36 @@ def make_pump(state, send, lock, closed, **options):
         send=send, send_lock=lock, verify_link=verify, close_link=close, poll_interval=0.01, **options)
 
 
+@pytest.mark.parametrize('boundary', ['reserve_execution_dispatch', 'begin_execution_send'])
+def test_transient_writer_contention_retries_without_closing_executor(owner, monkeypatch, boundary):
+    original = getattr(pumps, boundary)
+    failures = 0
+    def contended(**kwargs):
+        nonlocal failures
+        if failures < 2:
+            failures += 1
+            raise OktoNexusError('DB_ERROR', 'writer admission timeout', {}, retryable=True)
+        return original(**kwargs)
+    monkeypatch.setattr(pumps, boundary, contended)
+    async def run():
+        closed, delivered = asyncio.Event(), asyncio.Event()
+        sent = []
+        async def send(frame):
+            sent.append(frame)
+            delivered.set()
+        pump = make_pump(owner, send, asyncio.Lock(), closed)
+        pump.start()
+        try:
+            await asyncio.wait_for(delivered.wait(), 5)
+            assert failures == 2
+            assert len(sent) == 1
+            assert not closed.is_set() and pump.error is None
+            assert (await wait_for_state(owner, 'SENDING'))['attempt_no'] == 1
+        finally:
+            await pump.stop()
+    asyncio.run(run())
+
+
 async def wait_for_state(state, expected):
     async def wait():
         while True:
