@@ -18,7 +18,8 @@
         "m3a-ui-broadcast.md",
         "m2e-validation.md",
         "m2e-results.json",
-        "m2e-ui-broadcast.md"
+        "m2e-ui-broadcast.md",
+        "m3c-ui-recovery.md"
       ]
     },
     {
@@ -152,11 +153,13 @@
         "m3b-validation.md",
         "m3b-results.json",
         "m3c-validation.md",
-        "m3c-results.json"
+        "m3c-results.json",
+        "m3c-ui-recovery.md"
       ],
       "commits": {
         "core_m3c": "7bab651",
-        "connector_m3c": "0db859c"
+        "connector_m3c": "0db859c",
+        "nexus_m3c": "3a68909"
       },
       "checkpoints": [
         {
@@ -167,16 +170,16 @@
         {
           "id": "M3b",
           "status": "complete",
-          "title": "HTTP startup independent of retained inventory/approved boot; 103 installed tests passed; global rollout deferred for live Pi recurrence"
+          "title": "HTTP startup independent of inventory; 103 installed tests passed; globally deployed and observed during M3c UI recovery"
         },
         {
           "id": "M3c",
           "status": "complete",
-          "title": "Original-owner failed-launch recovery and current-error diagnostics; 266 installed tests passed; live rollout pending"
+          "title": "Original-owner failed-launch recovery and diagnostics; 266 installed tests; coordinated global install and real Pi/Claude responses; graceful shutdown and automatic restart verified"
         }
       ],
       "nexus_m3b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3b-validation.md",
-      "next": "Complete M3c installed Nexus validation, coordinated rollout and real UI Pi recovery. Continue resource readiness, inventory isolation and remote renewal failure scope.",
+      "next": "Resource readiness, inventory isolation, remote renewal failure scope and consistent availability projections. M4 must eliminate terminal-history rescans observed during real restart.",
       "nexus_m3c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3c-validation.md"
     },
     {
@@ -241,8 +244,8 @@
       "id": "L4",
       "milestone": "M3",
       "priority": "high",
-      "status": "fixed_installed_validation",
-      "description": "M2e live HTTP startup waited about 2m20s for initial Pi build-identity inventory scan; stack dump confirms dependency through EmbeddedInventoryOwner.start. Separate owner claim from background initial discovery with retry and retained shutdown."
+      "status": "fixed_live_validation",
+      "description": "M2e live HTTP startup waited about 2m20s for initial Pi build-identity inventory scan; stack dump confirms dependency through EmbeddedInventoryOwner.start. Separate owner claim from background initial discovery with retry and retained shutdown. M3c global rollout and second normal boot served HTTP before per-agent recovery; see m3c-ui-recovery.md."
     },
     {
       "id": "L5",
@@ -262,10 +265,10 @@
       "id": "L7",
       "milestone": "M3",
       "priority": "critical",
-      "status": "fixed_installed_validation",
-      "description": "M2e Pi recurrence retained for diagnosis. Three CLAIMED launches have OUTCOME_UNKNOWN without births; Core shutdown had no containment route for failed factories returning no native handle. Reproduced and fixed in shared Core, installed Core/Connector qualification passed. Exact initial CONFIG_ERROR subtype was not retained; version probe timeout is a reproduction, not a proven original cause. Nexus final installed campaign and live rollout pending. Claude real UI request succeeded while Pi remained recovering."
+      "status": "fixed_live_validation",
+      "description": "M2e Pi recurrence diagnosed: three claimed openings without births had no original-owner containment path after native factory failure. Shared Core fix passed installed process tests. Joint M3c rollout automatically contained all three retained launches; Pi and Claude replied via Meta-harness. M3c then shut down gracefully in 6.46s and recovered all agents after restart, with a fresh Pi response. Initial CONFIG_ERROR subtype remains unproven. See m3c-ui-recovery.md."
     }
   ],
-  "live_installation": "All three M2e wheels globally installed and byte-verified on 2026-10-16 (533 Nexus, 156 Core, 98 Connector files); embedded generation 66; Pi/Claude/Codex Online without manual recovery. UI results and external Codex quota documented in m2e-ui-broadcast.md. Later, Pi recurred to RECOVERING/CONFIG_ERROR before M3b rollout; M2e server intentionally retained for diagnosis (L7). M3b validated only in isolated installed environment so far.",
+  "live_installation": "M3c globally installed and all wheel bytes verified on 2026-10-16: 534 Nexus, 156 Core, 98 Connector files. Nexus 3a68909/Core 7bab651/Connector 0db859c; generation 68, server PID 44320, launcher 44180. Pi and Claude real responses, Pi response after normal restart, all local agents READY. Codex provider quota still excludes full UI-A success. See m3c-ui-recovery.md.",
   "publication": "Feature branches only; no main merge, tag or PyPI publication authorized by this plan"
 }

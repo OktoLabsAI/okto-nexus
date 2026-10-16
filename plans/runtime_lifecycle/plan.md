@@ -165,8 +165,10 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   supervisionada no Core pelo owner original; primeira causa e causa atual
   ficam separadas no Nexus. 266 testes instalados passaram nos três pacotes.
   Claude respondeu pelo Meta-harness durante o incidente do Pi ainda em M2e.
-  Ver `m3c-validation.md`; rollout e recuperação real do Pi seguem como próximo
-  gate, sem declarar concluídos os demais critérios de M3.
+  Rollout global e recuperação real do Pi foram verificados, incluindo resposta
+  de Pi/Claude, shutdown normal em 6,46s e nova resposta do Pi após reinício.
+  Ver `m3c-validation.md` e `m3c-ui-recovery.md`; os demais critérios de M3 e
+  o gate UI-A completo permanecem pendentes.
 - Checkpoint M3b: a campanha M2e revelou que a descoberta inicial do Pi bloqueia
   a abertura HTTP por aproximadamente 2m20s. Claim de geração e descoberta agora
   estão separados, com retry automático e workers retidos no shutdown; o boot
