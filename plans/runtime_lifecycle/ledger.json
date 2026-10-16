@@ -156,12 +156,17 @@
         "m3c-results.json",
         "m3c-ui-recovery.md",
         "m3d-validation.md",
-        "m3d-results.json"
+        "m3d-results.json",
+        "m3e-validation.md",
+        "m3e-results.json"
       ],
       "commits": {
         "core_m3c": "7bab651",
         "connector_m3c": "0db859c",
-        "nexus_m3c": "3a68909"
+        "nexus_m3c": "3a68909",
+        "nexus_m3d": "c634356",
+        "core_m3e": "50eaabc",
+        "connector_m3e": "7e1710a"
       },
       "checkpoints": [
         {
@@ -183,11 +188,17 @@
           "id": "M3d",
           "status": "complete",
           "title": "Embedded contact and presence follow exact live owner; 46 source/installed cases passed; global rollout reserved for next major UI gate"
+        },
+        {
+          "id": "M3e",
+          "status": "complete",
+          "title": "Opened remote session lease failures contained independently; 138 installed cases passed; initial opening isolation and global rollout remain pending"
         }
       ],
       "nexus_m3b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3b-validation.md",
-      "next": "Resource readiness, inventory isolation, remote renewal failure scope and consistent availability projections. M4 must eliminate terminal-history rescans observed during real restart.",
-      "nexus_m3c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3c-validation.md"
+      "next": "Initial-opening renewal isolation, per-harness inventory readiness and remaining resource availability criteria; M4 must remove repeated terminal-history recovery scans.",
+      "nexus_m3c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3c-validation.md",
+      "nexus_m3e_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3e-validation.md"
     },
     {
       "id": "M4",

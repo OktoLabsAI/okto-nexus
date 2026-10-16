@@ -1,0 +1,76 @@
+{
+  "core": {
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "43",
+        "time": "7.832",
+        "timestamp": "2026-10-16T18:10:41.704528-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ],
+    "manifest_sha256": "d1dd007242b992cfeb60701723b2203aba2c483ada35595da31276f6bf8ae774",
+    "junit_sha256": "af7e43796cefa713cf82337265b203ded749daa98a0df175d0ee92a388d8b09c",
+    "evidence": "build/runtime-lifecycle-m3e-installed/manifest.json",
+    "exit_code": 0,
+    "wheel_sha256": "d658de647db7e9dec106ce496525703d9284492ded401cb3ad55c901e460e8cf"
+  },
+  "connector": {
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "71",
+        "time": "109.683",
+        "timestamp": "2026-10-16T18:11:40.362481-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ],
+    "manifest_sha256": "d1a21e5283cd60ad698da5ac07bca58b6e5c9d20052640ecee1f08b13eb2a39a",
+    "junit_sha256": "164452ea62465784f1f876c70cad5bad1bf2101af386952244578022c8ea5793",
+    "evidence": "build/runtime-lifecycle-m3e-installed/manifest.json",
+    "exit_code": 0,
+    "changed_inputs": [],
+    "artifacts": [
+      {
+        "module": "nexus_connector_core",
+        "sha256": "d658de647db7e9dec106ce496525703d9284492ded401cb3ad55c901e460e8cf",
+        "files": 156
+      },
+      {
+        "module": "okto_nexus_connector",
+        "sha256": "64f0bb0567dec34d73500981f0bbab43b2a9f78ecda695bd63518127bc4dc25a",
+        "files": 98
+      }
+    ]
+  },
+  "nexus": {
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "24",
+        "time": "171.851",
+        "timestamp": "2026-10-16T18:12:22.055450-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ],
+    "manifest_sha256": "8384bb42417867f0fb2d8d3b0c4ed67081a76adcbb5b04fefdfaea0f9bbedb84",
+    "junit_sha256": "77bf7224e9eefed1b213cb0a907ea65a3910ed718f7916bd764276084c507087",
+    "evidence": "build/runtime-lifecycle-m3e-installed/campaign.json",
+    "exit_code": 0,
+    "changed_inputs": [],
+    "wheel_sha256": "3fc93dff855a281799730439ba7f50e843604cabe359023efd8719014b3184a7"
+  },
+  "checkpoint": "M3e",
+  "global_rollout": false,
+  "total_passed": 138,
+  "qualification": "Installed Windows contracts with synthetic peers; M3c remains the global UI-tested installation."
+}
