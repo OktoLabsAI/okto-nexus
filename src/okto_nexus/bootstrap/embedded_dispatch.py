@@ -641,13 +641,20 @@ class EmbeddedDispatchOwner:
                 self.deps.runtime_dispatcher.wake()
 
     def _page(self, *, after=None, agent_id=None):
+        parameters = [self.channel.server_id, self.channel.executor_id,
+                      self._after if after is None else after]
+        agent_predicate = ""
+        if agent_id is not None:
+            # Drive from pending rows; never materialize an agent's full history.
+            agent_predicate = (" AND EXISTS (SELECT 1 FROM execution_operations o "
+                "WHERE o.server_id=p.server_id AND o.executor_id=p.executor_id "
+                "AND o.operation_id=p.operation_id AND o.subject_agent_id=?)")
+            parameters.append(agent_id)
         with self.factory.unit_of_work(write=False) as uow:
             self.verify(uow=uow)
-            rows = uow.connection.execute("SELECT rowid,* FROM execution_local_publications "
-                "WHERE server_id=? AND executor_id=? AND terminal=0 AND rowid>? "
-                "AND (? IS NULL OR operation_id IN (SELECT operation_id FROM execution_operations WHERE server_id=? AND executor_id=? AND subject_agent_id=?)) ORDER BY rowid LIMIT 128",
-                (self.channel.server_id,self.channel.executor_id,self._after if after is None else after,
-                 agent_id,self.channel.server_id,self.channel.executor_id,agent_id)).fetchall()
+            rows = uow.connection.execute("SELECT p.rowid,p.* FROM execution_local_publications p "
+                "WHERE p.server_id=? AND p.executor_id=? AND p.terminal=0 AND p.rowid>?"
+                + agent_predicate + " ORDER BY p.rowid LIMIT 128", parameters).fetchall()
             return [dict(row) for row in rows]
 
     @asynccontextmanager

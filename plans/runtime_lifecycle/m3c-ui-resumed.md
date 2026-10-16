@@ -32,3 +32,23 @@ qualifica o desligamento desconhecido como crash induzido/controlado nem fecha
 UI-A/M6. Last contact continua “never” na instalação M3c; a correção M3d está
 validada apenas na instalação isolada. Codex não recebeu nova solicitação por
 continuar pendente a restrição de quota do provedor já observada.
+
+## Complemento: Claude após retomada
+
+Em 2026-10-16 às 18:50:09 (America/Sao_Paulo), enviado uma única vez pela UI
+Meta-harness, privado para `claude` no workspace Techridy, o assunto
+`Runtime M3c · Claude após retomada`. A solicitação pediu somente o marcador
+`NEXUS_M3C_RESUMED_CLAUDE_OK`, sem ferramentas, leitura/alteração de arquivos
+ou criação de tarefas.
+
+A UI exibiu o marcador exato e ACK 1/1. O terminal da sessão
+`ses_544f3e41b9cdc82c795adfcaa41448d1` mostrou 16 eventos comprometidos:
+Harness ready às 18:50:48, Turn started às 18:50:50 e Turn completed às
+18:50:52. A sessão persistente permaneceu READY, conforme esperado depois
+da conclusão do turno. Esses tempos distinguem preparação (~39 s) e turno
+(~2 s); não são um benchmark isolado de carga da máquina.
+
+Evidência local: `build/runtime-lifecycle-m3c-live/claude-resumed-terminal.png`.
+Não houve reinstalação nem reinício adicional para este teste. A instância
+continua M3c; isso não qualifica M3d/M3e/M4a/M4b na UI. Codex não foi chamado
+novamente, pois o bloqueio de quota L5 continua sem confirmação de resolução.

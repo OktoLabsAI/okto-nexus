@@ -1,0 +1,58 @@
+{
+  "checkpoint": "M4b",
+  "global_rollout": false,
+  "passed": 60,
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "60",
+      "time": "619.134",
+      "timestamp": "2026-10-16T18:49:34.350700-03:00",
+      "hostname": "Alienware_m15"
+    }
+  ],
+  "tests": [
+    "tests/execution_r4/test_local_pending_queries.py",
+    "tests/execution_r4/test_embedded_dispatch.py",
+    "tests/execution_r4/test_event_ingress.py",
+    "tests/execution_r4/test_event_artifacts.py"
+  ],
+  "exit_code": 0,
+  "changed_inputs": [],
+  "query_costs": [
+    {
+      "history_sessions": "1000",
+      "publications_vm_steps": "81",
+      "agent_publications_vm_steps": "145",
+      "streams_vm_steps": "96",
+      "agent_streams_vm_steps": "113",
+      "exact_session_vm_steps": "63",
+      "pending_subjects_vm_steps": "151"
+    },
+    {
+      "history_sessions": "10000",
+      "publications_vm_steps": "81",
+      "agent_publications_vm_steps": "145",
+      "streams_vm_steps": "96",
+      "agent_streams_vm_steps": "113",
+      "exact_session_vm_steps": "63",
+      "pending_subjects_vm_steps": "151"
+    },
+    {
+      "history_sessions": "100000",
+      "publications_vm_steps": "81",
+      "agent_publications_vm_steps": "145",
+      "streams_vm_steps": "96",
+      "agent_streams_vm_steps": "113",
+      "exact_session_vm_steps": "63",
+      "pending_subjects_vm_steps": "151"
+    }
+  ],
+  "wheel_sha256": "883c0fcb657053c94647815a2f3bc8dcbf18428ab4476080dbb6a6578f427281",
+  "campaign_sha256": "b9de497b06263f98958ecb486b8d6fea3eaf3628c588cc49070ca9cc1acda960",
+  "junit_sha256": "f1b430e8710cb86b8e2d0aa7d51e846462bf66a1aa2aecdda686de16813ce166",
+  "installed_sha256": "55a41746761c91ba3703fda9e9c46a20cd0226eae6d626e9a80e376cc4e1b974"
+}

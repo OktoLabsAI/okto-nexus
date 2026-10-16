@@ -20,14 +20,21 @@ class EmbeddedEventPublisher:
         self.owner = owner
         self.after = 0
 
-    def _page(self, *, after=None, agent_id=None, live_only=False):
+    def _page(self, *, after=None, agent_id=None, session_id=None, live_only=False):
+        predicates = ["server_id=?", "executor_id=?", "rowid>?"]
+        parameters = [self.owner.channel.server_id, self.owner.channel.executor_id,
+                      self.after if after is None else after]
+        for column, value in (("agent_id", agent_id), ("session_id", session_id)):
+            if value is not None:
+                predicates.append(f"{column}=?")
+                parameters.append(value)
+        if live_only:
+            predicates.append("drained=0")
         with self.owner.factory.unit_of_work(write=False) as uow:
             self.owner.verify(uow=uow)
             rows = uow.connection.execute("SELECT rowid,* FROM execution_local_streams "
-                "WHERE server_id=? AND executor_id=? AND rowid>? AND (? IS NULL OR agent_id=?) "
-                "AND (?=0 OR drained=0) ORDER BY rowid LIMIT 128",
-                (self.owner.channel.server_id,self.owner.channel.executor_id,self.after if after is None else after,
-                 agent_id,agent_id,live_only)).fetchall()
+                "WHERE " + " AND ".join(predicates) + " ORDER BY rowid LIMIT 128",
+                parameters).fetchall()
             return [dict(row) for row in rows]
 
     def _watermark(self, scope):
@@ -114,12 +121,11 @@ class EmbeddedEventPublisher:
     async def recover(self, *, agent_id=None, session_id=None, live_only=False, progress=None):
         after = 0
         while True:
-            rows = await asyncio.to_thread(self._page, after=after, agent_id=agent_id, live_only=live_only)
+            rows = await asyncio.to_thread(self._page, after=after, agent_id=agent_id,
+                                          session_id=session_id, live_only=live_only)
             if not rows:
                 return
             for scope in rows:
-                if session_id is not None and scope['session_id'] != session_id:
-                    continue
                 for _ in range(4096):
                     advanced = await self.step(scope)
                     if progress is not None:

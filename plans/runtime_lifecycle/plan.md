@@ -209,7 +209,12 @@ Claude responderam; Codex recusado por quota do provedor. Ver
 - Checkpoint M4a: liberação busca a sessão por chave exata, sem varrer todo
   o histórico ou aplicar o teto do plano de recuperação. Custo constante
   da consulta medido em 1k/10k/100k sessões; 30 cenários instalados passaram.
-  Os critérios abaixo continuam pendentes. Ver `m4a-validation.md`.
+  Ver `m4a-validation.md`.
+- Checkpoint M4b: índices parciais de publicações/streams pendentes e busca
+  direta de eventos por sessão; 60 testes da wheel instalada passaram.
+  O custo das consultas permaneceu constante com 1k/10k/100k sessões
+  encerradas. Ver `m4b-validation.md`. Checkpoints terminais, auditoria
+  retomável e justiça de streams continuam pendentes.
 
 - Índice durável de pendências e checkpoints terminais; atualizar com a mesma
   transação do journal/outbox, sem segundo estado divergente.

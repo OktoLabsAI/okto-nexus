@@ -208,7 +208,9 @@
       "title": "Incremental recovery and stream fairness",
       "evidence": [
         "m4a-validation.md",
-        "m4a-results.json"
+        "m4a-results.json",
+        "m4b-validation.md",
+        "m4b-results.json"
       ],
       "commits": {},
       "checkpoints": [
@@ -216,10 +218,16 @@
           "id": "M4a",
           "status": "complete",
           "title": "Exact-session release lookup; constant SQLite VM work across 1k/10k/100k history; 30 installed scenarios passed"
+        },
+        {
+          "id": "M4b",
+          "status": "complete",
+          "title": "Pending partial indexes and exact-session event lookup; constant work across 1k/10k/100k history; 60 installed tests passed"
         }
       ],
       "nexus_m4a_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4a-validation.md",
-      "next": "Durable pending indexes/checkpoints, resumable history audit/backfill and fair bounded streams; current full recovery scans remain explicit."
+      "next": "Terminal checkpoints, resumable journal audit/backfill and stream budgets/fairness; full startup/recovery history scans remain explicit.",
+      "nexus_m4b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4b-validation.md"
     },
     {
       "id": "M5",
@@ -308,6 +316,6 @@
       "description": "M3c generation 68 process absent when UI was revisited, last access log 20:58:19 UTC, no recorded normal shutdown/traceback or matching Application Error event. Cause/initiator unproven. Logs preserved; generation 69 recovered all agents and Pi answered. Supervisor/host-lifetime qualification must distinguish host termination from runtime faults."
     }
   ],
-  "live_installation": "M3c remains globally installed (Nexus 3a68909/Core 7bab651/Connector 0db859c). Generation 68 process ended without recorded shutdown/traceback; cause unresolved (L8). Evidence preserved before starting generation 69: server PID 18616, launcher 35864. All local agents recovered automatically; Pi replied once via Meta-harness and pool refilled to 4/5. M3d/M3e/M4a only installed in isolated qualification environment. See m3c-ui-resumed.md.",
+  "live_installation": "M3c remains globally installed (Nexus 3a68909/Core 7bab651/Connector 0db859c). Generation 68 process ended without recorded shutdown/traceback; cause unresolved (L8). Evidence preserved before starting generation 69: server PID 18616, launcher 35864. All local agents recovered automatically; Pi replied once via Meta-harness and pool refilled to 4/5. M3d/M3e/M4a only installed in isolated qualification environment. See m3c-ui-resumed.md. Claude also answered through Meta-harness after generation 69 recovery: ses_544f3e41b9cdc82c795adfcaa41448d1, exact marker, ACK 1/1, 16 committed events and completed turn. M4b is installed only in the isolated qualification environment.",
   "publication": "Feature branches only; no main merge, tag or PyPI publication authorized by this plan"
 }
