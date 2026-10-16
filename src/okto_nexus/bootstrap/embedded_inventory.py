@@ -54,9 +54,9 @@ class EmbeddedInventoryOwner:
                 raise RuntimeError("The embedded executor is unavailable.")
             generation = row["generation"] + (row["owner_instance_id"] != dispatcher.owner_id)
             uow.connection.execute(
-                "UPDATE execution_executors SET owner_instance_id=?,generation=?,control_state='RECOVERING' "
+                "UPDATE execution_executors SET owner_instance_id=?,generation=?,control_state='RECOVERING',last_seen_at=? "
                 "WHERE server_id=? AND executor_id=?",
-                (dispatcher.owner_id, generation, self.key.server_id, self.key.executor_id))
+                (dispatcher.owner_id, generation, self.deps.clock.now_iso(), self.key.server_id, self.key.executor_id))
             return generation
 
     async def start(self):

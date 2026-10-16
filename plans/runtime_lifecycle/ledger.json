@@ -154,7 +154,9 @@
         "m3b-results.json",
         "m3c-validation.md",
         "m3c-results.json",
-        "m3c-ui-recovery.md"
+        "m3c-ui-recovery.md",
+        "m3d-validation.md",
+        "m3d-results.json"
       ],
       "commits": {
         "core_m3c": "7bab651",
@@ -176,6 +178,11 @@
           "id": "M3c",
           "status": "complete",
           "title": "Original-owner failed-launch recovery and diagnostics; 266 installed tests; coordinated global install and real Pi/Claude responses; graceful shutdown and automatic restart verified"
+        },
+        {
+          "id": "M3d",
+          "status": "complete",
+          "title": "Embedded contact and presence follow exact live owner; 46 source/installed cases passed; global rollout reserved for next major UI gate"
         }
       ],
       "nexus_m3b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3b-validation.md",
@@ -258,8 +265,8 @@
       "id": "L6",
       "milestone": "M3",
       "priority": "medium",
-      "status": "open",
-      "description": "Agents Ready/Online tooltip still reports Last contact: never; broadcast ACK visible count 3/3 differs from accessible label 0/3. Correct status/accessibility projections."
+      "status": "partially_fixed_installed_validation",
+      "description": "Local contact is now refreshed only by current owner heartbeat; stale or replaced owner cannot preserve Ready. 46 source/installed cases passed (M3d), global rollout pending. Accessible ACK discrepancy did not recur in M3c; no ACK fix claimed."
     },
     {
       "id": "L7",
