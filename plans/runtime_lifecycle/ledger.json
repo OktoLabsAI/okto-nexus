@@ -87,14 +87,15 @@
       "id": "M2",
       "status": "in_progress",
       "title": "Durable launch intent and producer fencing",
-      "evidence": ["Core: plans/runtime-lifecycle-m2a.md", "Core: plans/runtime-lifecycle-m2b.md"],
-      "commits": {"core_m2a": "261dc2e", "core_m2b": "788f3f7"},
+      "evidence": ["Core: plans/runtime-lifecycle-m2a.md", "Core: plans/runtime-lifecycle-m2b.md", "Core: plans/runtime-lifecycle-m2c.md"],
+      "commits": {"core_m2a": "261dc2e", "core_m2b": "788f3f7", "core_m2c": "877393b"},
       "checkpoints": [
         {"id": "M2a", "status": "complete", "title": "Durable identity and producer exclusion; 53 installed tests passed"},
-        {"id": "M2b", "status": "complete", "title": "Atomic launch admission and shared producer controller; 80 installed tests passed"}
+        {"id": "M2b", "status": "complete", "title": "Atomic launch admission and shared producer controller; 80 installed tests passed"},
+        {"id": "M2c", "status": "complete", "title": "Managed native integration and five Windows crash frontiers; 159 installed tests passed"}
       ],
-      "qualification": "Foundation and shared control validated; runtime spawn and host recovery integration still pending. Live installation uses M1 Core.",
-      "next": "Wire planned container identity and producer control through managed native factories, then embedded/Connector recovery. Qualify native crash frontiers before UI-A and updating the live installation."
+      "qualification": "Managed Pi/Codex/Claude adapters now use planned identities and producer control; Windows native crash evidence validated. Consumer recovery/publication and Linux/macOS qualification remain pending. Live installation uses M1 Core.",
+      "next": "Integrate the shared recovery proof into embedded and Connector publication, preserving monotonic possible-effect receipts and distinguishing never-started resources. Qualify later crash frontiers before UI-A/live rollout."
     },
     {
       "id": "M3",

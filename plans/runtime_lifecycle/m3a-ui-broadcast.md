@@ -36,3 +36,12 @@ copiada para a evidência versionada.
 O gate UI-A completo permanece pendente: ainda depende de M2 integrado,
 contenção e isolamento de falhas. O presente resultado complementa somente a
 validação instalada de M3a e a disponibilidade observada na interface.
+# Follow-up observation — 2026-10-16 17:48 UTC
+
+Read-only follow-up through the same Nexus UI: Meta-harness still shows the
+single broadcast with 3/3 acknowledgments and the Pi/Claude/Codex marker replies.
+Agents shows all three Local Online and Pi 4/5 available. No restart or repair
+was performed. The embedded tooltip says Last contact: never despite Ready;
+this is an observability detail to check in M3, not proof of disconnection.
+The installation remains M3a Nexus plus M1 Core, not the isolated M2c candidate.
+

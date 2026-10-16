@@ -127,11 +127,12 @@ não prova que não existe. O marco M2 trata explicitamente essa distinção.
 
 ### M2 — Intenção durável, contenção identificável e produtor cercado
 
-Checkpoints M2a/M2b publicados no Core: contrato e exclusão por produtor,
-admissão atômica da intenção e controlador compartilhado. Campanha instalada
-mais recente: 80 testes aprovados. Ainda falta conectar os adaptadores nativos
-e os recuperadores dos consumidores, qualificar as fronteiras de crash e
-executar o gate UI-A completo. Ver ledger e relatórios M2a/M2b no Core.
+Checkpoints M2a/M2b/M2c publicados no Core: contrato e exclusão por produtor,
+admissão atômica, controlador compartilhado e integração dos adaptadores nativos.
+Campanha instalada mais recente: 159 testes aprovados, incluindo cinco fronteiras
+de crash com processos Windows descartáveis. Ainda falta integrar a recuperação
+e publicação dos consumidores, qualificar as demais fronteiras/plataformas e
+executar o gate UI-A completo. Ver ledger e relatórios M2a/M2b/M2c no Core.
 
 - Contrato versionado de launch intent: operação, sessão, executor, geração,
   identidade do container, estado/prova e revisão. Sem argumentos ou segredos.
