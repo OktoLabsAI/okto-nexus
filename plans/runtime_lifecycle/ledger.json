@@ -15,7 +15,10 @@
       "interim_evidence": [
         "m3a-validation.md",
         "m3a-results.json",
-        "m3a-ui-broadcast.md"
+        "m3a-ui-broadcast.md",
+        "m2e-validation.md",
+        "m2e-results.json",
+        "m2e-ui-broadcast.md"
       ]
     },
     {
@@ -87,17 +90,55 @@
       "id": "M2",
       "status": "in_progress",
       "title": "Durable launch intent and producer fencing",
-      "evidence": ["Core: plans/runtime-lifecycle-m2a.md", "Core: plans/runtime-lifecycle-m2b.md", "Core: plans/runtime-lifecycle-m2c.md", "m2d-validation.md", "m2d-results.json"],
-      "commits": {"core_m2a": "261dc2e", "core_m2b": "788f3f7", "core_m2c": "877393b"},
+      "evidence": [
+        "Core: plans/runtime-lifecycle-m2a.md",
+        "Core: plans/runtime-lifecycle-m2b.md",
+        "Core: plans/runtime-lifecycle-m2c.md",
+        "m2d-validation.md",
+        "m2d-results.json",
+        "m2e-validation.md",
+        "m2e-results.json",
+        "m2e-ui-broadcast.md"
+      ],
+      "commits": {
+        "core_m2a": "261dc2e",
+        "core_m2b": "788f3f7",
+        "core_m2c": "877393b",
+        "core_m2e": "90b4ef6",
+        "connector_m2e": "2dca512",
+        "nexus_m2d": "1f96d73"
+      },
       "nexus_m2d_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m2d-validation.md",
       "checkpoints": [
-        {"id": "M2a", "status": "complete", "title": "Durable identity and producer exclusion; 53 installed tests passed"},
-        {"id": "M2b", "status": "complete", "title": "Atomic launch admission and shared producer controller; 80 installed tests passed"},
-        {"id": "M2c", "status": "complete", "title": "Managed native integration and five Windows crash frontiers; 159 installed tests passed"},
-        {"id": "M2d", "status": "complete", "title": "Embedded recovery integration including no physical slot; 24 distinct Windows scenarios passed"}
+        {
+          "id": "M2a",
+          "status": "complete",
+          "title": "Durable identity and producer exclusion; 53 installed tests passed"
+        },
+        {
+          "id": "M2b",
+          "status": "complete",
+          "title": "Atomic launch admission and shared producer controller; 80 installed tests passed"
+        },
+        {
+          "id": "M2c",
+          "status": "complete",
+          "title": "Managed native integration and five Windows crash frontiers; 159 installed tests passed"
+        },
+        {
+          "id": "M2d",
+          "status": "complete",
+          "title": "Embedded recovery integration including no physical slot; 24 distinct Windows scenarios passed"
+        },
+        {
+          "id": "M2e",
+          "status": "complete",
+          "title": "Shared Connector launch recovery and negotiated NOT_STARTED proof; 261 installed tests passed"
+        }
       ],
-      "qualification": "Managed adapters and embedded recovery now use launch intent/fencing. Six disposable Nexus owner-crash frontiers passed. Connector integration, later crash frontiers and Linux/macOS qualification remain pending. Live installation uses M1 Core.",
-      "next": "Integrate shared recovery proof into Connector publication under current authority, including never-started openings without weakening monotonic receipts. Qualify remaining crash frontiers and UI-A before full rollout."
+      "qualification": "Core, embedded and Connector recovery integrated and jointly installed. Windows disposable owner crashes and 261 installed tests passed. Real UI broadcast: three ACKs, Pi/Claude success, Codex provider quota. Later crash frontiers, Linux/macOS and full UI-A remain pending.",
+      "next": "M3b: separate initial discovery from HTTP startup while retaining authority and workers. Continue remaining M2/M3 acceptance and UI-A.",
+      "nexus_m2e_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m2e-validation.md"
     },
     {
       "id": "M3",
@@ -175,8 +216,29 @@
       "priority": "high",
       "status": "open",
       "description": "Two Pi warm replacements failed BINDING_NOT_AUTHORIZED during M1 live UI campaign, without birth records; later refill succeeded automatically. Exact refusal frontier absent from receipts; not attributed to L1 without evidence."
+    },
+    {
+      "id": "L4",
+      "milestone": "M3",
+      "priority": "high",
+      "status": "open",
+      "description": "M2e live HTTP startup waited about 2m20s for initial Pi build-identity inventory scan; stack dump confirms dependency through EmbeddedInventoryOwner.start. Separate owner claim from background initial discovery with retry and retained shutdown."
+    },
+    {
+      "id": "L5",
+      "milestone": "M8",
+      "priority": "external",
+      "status": "open",
+      "description": "M2e real Codex request delivered and acknowledged, but provider returned usageLimitExceeded. Pi and Claude succeeded. Full three-provider UI success cannot be claimed; no quota bypass or repeated requests."
+    },
+    {
+      "id": "L6",
+      "milestone": "M3",
+      "priority": "medium",
+      "status": "open",
+      "description": "Agents Ready/Online tooltip still reports Last contact: never; broadcast ACK visible count 3/3 differs from accessible label 0/3. Correct status/accessibility projections."
     }
   ],
-  "live_installation": "M3a Nexus wheel and M1 Core globally installed and byte-verified on 2026-10-16; graceful M1 shutdown DRAINED, post-update Pi/Claude/Codex online in Agents without manual recovery.",
+  "live_installation": "All three M2e wheels globally installed and byte-verified on 2026-10-16 (533 Nexus, 156 Core, 98 Connector files); embedded generation 66; Pi/Claude/Codex Online without manual recovery. UI results and external Codex quota documented in m2e-ui-broadcast.md.",
   "publication": "Feature branches only; no main merge, tag or PyPI publication authorized by this plan"
 }

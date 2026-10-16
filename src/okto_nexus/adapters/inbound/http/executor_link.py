@@ -378,7 +378,7 @@ def build_router() -> APIRouter:
                 "accepted_nxl": R4_PREVIEW_REVISION,
                 "snapshot_format": info["executor_snapshot_format"],
                 "control_capabilities": [cap for cap in ('connection_renewal_v1', 'heartbeat_ack_v1', 'connection_resume_v1',
-                                                        'nexus-lease-denial-v1', 'nexus-session-release-v1', PREOPEN_REFUSAL_REVISION, 'nexus-event-artifacts-v1')
+                                                        'nexus-lease-denial-v1', 'nexus-session-release-v1', PREOPEN_REFUSAL_REVISION, 'nexus-event-artifacts-v1', 'nexus-launch-recovery-v1')
                                          if cap in hello['control_capabilities']],
             }
             if availability.enabled and CAPACITY_CONTRACT_REVISION in hello['control_capabilities']:
@@ -412,7 +412,8 @@ def build_router() -> APIRouter:
                 preopen_recovery = ExecutionPreopenRecovery(SqlitePreopenRecoveryRepository())
             reconciliation = ExecutionReconciliation(factory,
                 _channel(),
-                containment=leases.access.session_containment, preopen_recovery=preopen_recovery)
+                containment=leases.access.session_containment, preopen_recovery=preopen_recovery,
+                launch_recovery='nexus-launch-recovery-v1' in negotiated_capabilities)
             pending_reconcile: dict | None = None
 
             async def _request_reconcile():

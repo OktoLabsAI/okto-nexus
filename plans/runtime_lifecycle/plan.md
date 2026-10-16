@@ -137,7 +137,13 @@ executar o gate UI-A completo. Ver ledger e relatórios M2a/M2b/M2c no Core.
 Checkpoint M2d no Nexus: recuperação embedded integrada, incluindo intenção
 gravada antes de existir slot físico. 24 cenários distintos aprovados, com seis
 fronteiras de crash de um owner descartável e testes de isolamento. Ver
-`m2d-validation.md`; Connector e gate UI-A completo ainda pendentes.
+`m2d-validation.md`.
+
+Checkpoint M2e: Connector integrado ao controlador do Core e prova negociada
+de abertura nunca iniciada validada pelo Nexus. 261 testes instalados aprovados
+nos três pacotes. Instalação global conjunta validada pela UI: três ACKs, Pi e
+Claude responderam; Codex recusado por quota do provedor. Ver
+`m2e-validation.md` e `m2e-ui-broadcast.md`. O gate UI-A completo segue pendente.
 
 - Contrato versionado de launch intent: operação, sessão, executor, geração,
   identidade do container, estado/prova e revisão. Sem argumentos ou segredos.
@@ -155,6 +161,10 @@ fronteiras de crash de um owner descartável e testes de isolamento. Ver
 
 ### M3 — Disponibilidade por recurso e recuperação isolada (três repos + UI)
 
+- Checkpoint M3b: a campanha M2e revelou que a descoberta inicial do Pi bloqueia
+  a abertura HTTP por aproximadamente 2m20s. Separar claim de geração e descoberta
+  em background, com retry automático e workers retidos no shutdown. Inventário
+  ainda não observado não pode ser anunciado como fresco nem autorizar startup.
 - Prioridade revelada pelo gate M1: investigar renovação de lease curta entrando
   em `LEASE_REVALIDATION_REQUIRED`, reproduzida também com o Core M0. Isolar a
   agenda de renovação de manutenção/admissão de pendências e instrumentar as
