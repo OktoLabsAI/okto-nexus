@@ -158,7 +158,8 @@
         "m3d-validation.md",
         "m3d-results.json",
         "m3e-validation.md",
-        "m3e-results.json"
+        "m3e-results.json",
+        "m3c-ui-resumed.md"
       ],
       "commits": {
         "core_m3c": "7bab651",
@@ -166,7 +167,8 @@
         "nexus_m3c": "3a68909",
         "nexus_m3d": "c634356",
         "core_m3e": "50eaabc",
-        "connector_m3e": "7e1710a"
+        "connector_m3e": "7e1710a",
+        "nexus_m3e": "193b0a3"
       },
       "checkpoints": [
         {
@@ -202,10 +204,22 @@
     },
     {
       "id": "M4",
-      "status": "planned",
+      "status": "in_progress",
       "title": "Incremental recovery and stream fairness",
-      "evidence": [],
-      "commits": {}
+      "evidence": [
+        "m4a-validation.md",
+        "m4a-results.json"
+      ],
+      "commits": {},
+      "checkpoints": [
+        {
+          "id": "M4a",
+          "status": "complete",
+          "title": "Exact-session release lookup; constant SQLite VM work across 1k/10k/100k history; 30 installed scenarios passed"
+        }
+      ],
+      "nexus_m4a_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4a-validation.md",
+      "next": "Durable pending indexes/checkpoints, resumable history audit/backfill and fair bounded streams; current full recovery scans remain explicit."
     },
     {
       "id": "M5",
@@ -285,8 +299,15 @@
       "priority": "critical",
       "status": "fixed_live_validation",
       "description": "M2e Pi recurrence diagnosed: three claimed openings without births had no original-owner containment path after native factory failure. Shared Core fix passed installed process tests. Joint M3c rollout automatically contained all three retained launches; Pi and Claude replied via Meta-harness. M3c then shut down gracefully in 6.46s and recovered all agents after restart, with a fresh Pi response. Initial CONFIG_ERROR subtype remains unproven. See m3c-ui-recovery.md."
+    },
+    {
+      "id": "L8",
+      "milestone": "M6",
+      "priority": "high",
+      "status": "open",
+      "description": "M3c generation 68 process absent when UI was revisited, last access log 20:58:19 UTC, no recorded normal shutdown/traceback or matching Application Error event. Cause/initiator unproven. Logs preserved; generation 69 recovered all agents and Pi answered. Supervisor/host-lifetime qualification must distinguish host termination from runtime faults."
     }
   ],
-  "live_installation": "M3c globally installed and all wheel bytes verified on 2026-10-16: 534 Nexus, 156 Core, 98 Connector files. Nexus 3a68909/Core 7bab651/Connector 0db859c; generation 68, server PID 44320, launcher 44180. Pi and Claude real responses, Pi response after normal restart, all local agents READY. Codex provider quota still excludes full UI-A success. See m3c-ui-recovery.md.",
+  "live_installation": "M3c remains globally installed (Nexus 3a68909/Core 7bab651/Connector 0db859c). Generation 68 process ended without recorded shutdown/traceback; cause unresolved (L8). Evidence preserved before starting generation 69: server PID 18616, launcher 35864. All local agents recovered automatically; Pi replied once via Meta-harness and pool refilled to 4/5. M3d/M3e/M4a only installed in isolated qualification environment. See m3c-ui-resumed.md.",
   "publication": "Feature branches only; no main merge, tag or PyPI publication authorized by this plan"
 }

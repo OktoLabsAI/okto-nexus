@@ -161,6 +161,13 @@ Claude responderam; Codex recusado por quota do provedor. Ver
 
 ### M3 — Disponibilidade por recurso e recuperação isolada (três repos + UI)
 
+- Checkpoints M3d/M3e: presença local segue o owner válido; falhas de lease
+  de sessões remotas já abertas são contidas por sessão. 46 e 138 testes
+  instalados aprovados, respectivamente. Rollout global desses checkpoints
+  pendente. A descoberta por harness precisa representar explicitamente
+  observação pendente, ausente e falha: publicar snapshot parcial como
+  completo causaria falsa perda de instalação. Ver relatórios e ledger.
+
 - Checkpoint M3c: falha nativa sem retorno de handle agora recebe contenção
   supervisionada no Core pelo owner original; primeira causa e causa atual
   ficam separadas no Nexus. 266 testes instalados passaram nos três pacotes.
@@ -198,6 +205,11 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   nenhuma violação de capacidade ou autorização nos casos de incerteza.
 
 ### M4 — Recuperação incremental e justiça entre streams
+
+- Checkpoint M4a: liberação busca a sessão por chave exata, sem varrer todo
+  o histórico ou aplicar o teto do plano de recuperação. Custo constante
+  da consulta medido em 1k/10k/100k sessões; 30 cenários instalados passaram.
+  Os critérios abaixo continuam pendentes. Ver `m4a-validation.md`.
 
 - Índice durável de pendências e checkpoints terminais; atualizar com a mesma
   transação do journal/outbox, sem segundo estado divergente.

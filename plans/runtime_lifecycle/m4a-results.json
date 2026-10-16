@@ -1,0 +1,46 @@
+{
+  "checkpoint": "M4a",
+  "global_rollout": false,
+  "passed": 30,
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "30",
+      "time": "665.896",
+      "timestamp": "2026-10-16T18:28:21.337955-03:00",
+      "hostname": "Alienware_m15"
+    }
+  ],
+  "tests": [
+    "tests/execution_r4/test_local_recovery_lookup.py",
+    "tests/execution_r4/test_local_resource_recovery.py",
+    "tests/execution_r4/test_local_launch_recovery.py",
+    "tests/execution_r4/test_agent_recovery_isolation.py"
+  ],
+  "exit_code": 0,
+  "changed_inputs": [],
+  "lookup_costs": [
+    {
+      "history_sessions": "1000",
+      "lookup_vm_steps": "255",
+      "missing_lookup_vm_steps": "201"
+    },
+    {
+      "history_sessions": "10000",
+      "lookup_vm_steps": "255",
+      "missing_lookup_vm_steps": "201"
+    },
+    {
+      "history_sessions": "100000",
+      "lookup_vm_steps": "255",
+      "missing_lookup_vm_steps": "201"
+    }
+  ],
+  "wheel_sha256": "212617fa512a1e5afa5f2c5564f73aad59191145d8d01e838d136729da71864f",
+  "campaign_sha256": "f57e04dd7642a0dff5fbb62d114830fa781996957c22d122dc6704bf3af464b9",
+  "junit_sha256": "d1c3944724df82615152f5a6af51adb3d8278b9ebab5efab7482a2ba46b7fd41",
+  "installed_sha256": "5486476a66ecdaf352caa74fdcc6e4d0b32b3a7b94019e86ef5594de86f335a6"
+}

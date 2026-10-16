@@ -100,9 +100,18 @@ class EmbeddedReconciliation:
                     return False
             return row['binding_json'] is None and row['stream_epoch'] is None
 
-    def _records(self, agent_id=None):
+    def _records(self, agent_id=None, *, session_id=None):
         with self.owner.factory.unit_of_work(write=False) as uow:
             self.owner.verify(uow=uow)
+            # A release proves one exact session. Do not scan every historical
+            # session (or apply the recovery-plan history cap) for each close.
+            # Keep an equality predicate so SQLite can seek the composite key;
+            # an optional-parameter OR would turn this back into a prefix scan.
+            target = " AND s.session_id=?" if session_id is not None else ""
+            params = (self.owner.channel.server_id, self.owner.channel.executor_id, agent_id, agent_id)
+            if session_id is not None:
+                params += (session_id,)
+            params += (2 if session_id is not None else 32769,)
             rows = uow.connection.execute("SELECT s.session_id,s.open_operation_id,p.binding_json,l.stream_epoch,o.subject_agent_id AS agent_id, "
                 "EXISTS(SELECT 1 FROM execution_local_preopen_fences f JOIN execution_preopen_refusals r "
                 "USING(server_id,executor_id,operation_id) WHERE f.server_id=s.server_id AND f.executor_id=s.executor_id "
@@ -111,8 +120,8 @@ class EmbeddedReconciliation:
                 "AND p.executor_id=s.executor_id AND p.operation_id=s.open_operation_id "
                 "LEFT JOIN execution_local_streams l ON l.server_id=s.server_id AND l.executor_id=s.executor_id "
                 "AND l.session_id=s.session_id AND l.opening_operation_id=s.open_operation_id "
-                "WHERE s.server_id=? AND s.executor_id=? AND (? IS NULL OR o.subject_agent_id=?) ORDER BY s.rowid LIMIT 32769",
-                (self.owner.channel.server_id,self.owner.channel.executor_id,agent_id,agent_id)).fetchall()
+                "WHERE s.server_id=? AND s.executor_id=? AND (? IS NULL OR o.subject_agent_id=?)" + target +
+                " ORDER BY s.rowid LIMIT ?", params).fetchall()
             if len(rows)>32768:
                 raise CoreError("CAPACITY_EXCEEDED","embedded_recovery")
             return [dict(row) for row in rows]
@@ -129,7 +138,7 @@ class EmbeddedReconciliation:
     async def release_session(self, session_id, *, failed_open=False):
         """Project one contained session without quiescing unrelated runtimes."""
         owner, host = self.owner, self.owner.host
-        rows = [row for row in await asyncio.to_thread(self._records) if row['session_id'] == session_id]
+        rows = await asyncio.to_thread(self._records, session_id=session_id)
         if len(rows) != 1:
             raise CoreError('RECONCILIATION_REQUIRED', 'embedded_session_release')
         row = rows[0]
