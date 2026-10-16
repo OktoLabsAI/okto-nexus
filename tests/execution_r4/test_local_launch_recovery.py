@@ -1,0 +1,68 @@
+"""Real owner crashes recover durable launches without operator repair/replay."""
+import json
+from pathlib import Path
+import subprocess
+import sys
+from types import SimpleNamespace
+
+import pytest
+from fastapi.testclient import TestClient
+from nexus_connector_core import InstallationCandidate, OperationKey, SessionKey
+from nexus_connector_core.discovery import fingerprint
+from okto_nexus.adapters.inbound.http.lock import ServeLock
+from okto_nexus.bootstrap import embedded_inventory
+
+from test_agent_recovery_isolation import eventually
+from test_embedded_dispatch import admit, wait_receipt
+from test_embedded_inventory import app_for
+from test_vertical_inventory import _NativeFactory
+
+
+@pytest.mark.skipif(sys.platform != 'win32', reason='Actual Windows Job owner-crash recovery')
+@pytest.mark.parametrize('boundary', ['intent', 'effect', 'claim', 'container', 'spawn', 'birth'])
+def test_embedded_restart_recovers_interrupted_launch_automatically(tmp_path, monkeypatch, boundary):
+    root = tmp_path/'disposable'
+    root.mkdir()
+    fixture = Path(__file__).with_name('launch_recovery_process_fixture.py')
+    paths = json.dumps([str(Path(p).resolve()) for p in sys.path if p])
+    code = 'import sys,json,runpy; sys.path[:]=json.loads(sys.argv.pop(1)); runpy.run_path(sys.argv.pop(1),run_name="__main__")'
+    result = subprocess.run([sys.executable, '-I', '-c', code, paths, str(fixture), str(root), boundary],
+        capture_output=True, text=True, timeout=60, creationflags=subprocess.CREATE_NO_WINDOW)
+    assert result.returncode == 17, result.stderr[-5000:]
+    state = json.loads((root/'opening.json').read_text(encoding='utf-8'))
+    binary = root/'codex.exe'
+    candidate = InstallationCandidate('codex_app_server', str(binary), fingerprint(binary), 'explicit', 'selected')
+    monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+        lambda **_: SimpleNamespace(candidates=(candidate,)))
+    with ServeLock(root/'home'):
+        deps, app = app_for(root/'home')
+        with TestClient(app) as client:
+            owner = app.state.embedded_dispatch_owner
+            eventually(lambda: not owner.agents.blocked, seconds=25)
+            assert owner.failure is None and owner.pump is not None
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                session = dict(uow.connection.execute('SELECT * FROM execution_sessions WHERE session_id=?',
+                    (state['session_id'],)).fetchone())
+                assert session['lifecycle_state'] == ('FAILED' if boundary in ('intent', 'effect') else 'CLOSED')
+                assert session['lease_state'] == 'CLOSED'
+                assert uow.connection.execute('SELECT count(*) FROM execution_operations').fetchone()[0] == 1
+                assert uow.connection.execute('SELECT max(attempt_no) FROM execution_dispatch_outbox').fetchone()[0] == 1
+                assert not uow.connection.execute('PRAGMA foreign_key_check').fetchall()
+            async def verify_history():
+                key = SessionKey(owner.channel.server_id, owner.channel.executor_id, state['session_id'])
+                async def inspect(journal):
+                    launch = await journal.get_process_launch(key)
+                    receipt = await journal.get_receipt(OperationKey(key.server_id, key.executor_id, state['operation_id']))
+                    assert launch.stop_proof == ('NEVER_CLAIMED' if boundary in ('intent', 'effect') else 'CONTAINER_STOPPED')
+                    assert receipt.possible_effect is (boundary != 'intent')
+                    assert receipt.stage == ('FAILED' if boundary in ('intent', 'effect') else 'SUBMISSION_STARTED')
+                await owner.host.with_history(executor_id=key.executor_id, session_id=key.session_id, read=inspect)
+                assert not (await (await owner.host._ledger()).owned_slot_page()).reservations
+            client.portal.call(verify_history)
+            # A new request on the original agent works without a retry/repair API.
+            native = _NativeFactory()
+            owner.native_factory = native
+            setup = deps, app, client, state['headers'], state['body'], candidate, root/'workspace'
+            replacement = admit(setup, state['binding'], 'new-after-crash', 'runtime.start', new_session=True)
+            wait_receipt(setup, replacement)
+            assert replacement['session_id'] != state['session_id']

@@ -87,15 +87,17 @@
       "id": "M2",
       "status": "in_progress",
       "title": "Durable launch intent and producer fencing",
-      "evidence": ["Core: plans/runtime-lifecycle-m2a.md", "Core: plans/runtime-lifecycle-m2b.md", "Core: plans/runtime-lifecycle-m2c.md"],
+      "evidence": ["Core: plans/runtime-lifecycle-m2a.md", "Core: plans/runtime-lifecycle-m2b.md", "Core: plans/runtime-lifecycle-m2c.md", "m2d-validation.md", "m2d-results.json"],
       "commits": {"core_m2a": "261dc2e", "core_m2b": "788f3f7", "core_m2c": "877393b"},
+      "nexus_m2d_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m2d-validation.md",
       "checkpoints": [
         {"id": "M2a", "status": "complete", "title": "Durable identity and producer exclusion; 53 installed tests passed"},
         {"id": "M2b", "status": "complete", "title": "Atomic launch admission and shared producer controller; 80 installed tests passed"},
-        {"id": "M2c", "status": "complete", "title": "Managed native integration and five Windows crash frontiers; 159 installed tests passed"}
+        {"id": "M2c", "status": "complete", "title": "Managed native integration and five Windows crash frontiers; 159 installed tests passed"},
+        {"id": "M2d", "status": "complete", "title": "Embedded recovery integration including no physical slot; 24 distinct Windows scenarios passed"}
       ],
-      "qualification": "Managed Pi/Codex/Claude adapters now use planned identities and producer control; Windows native crash evidence validated. Consumer recovery/publication and Linux/macOS qualification remain pending. Live installation uses M1 Core.",
-      "next": "Integrate the shared recovery proof into embedded and Connector publication, preserving monotonic possible-effect receipts and distinguishing never-started resources. Qualify later crash frontiers before UI-A/live rollout."
+      "qualification": "Managed adapters and embedded recovery now use launch intent/fencing. Six disposable Nexus owner-crash frontiers passed. Connector integration, later crash frontiers and Linux/macOS qualification remain pending. Live installation uses M1 Core.",
+      "next": "Integrate shared recovery proof into Connector publication under current authority, including never-started openings without weakening monotonic receipts. Qualify remaining crash frontiers and UI-A before full rollout."
     },
     {
       "id": "M3",

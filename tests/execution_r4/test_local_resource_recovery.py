@@ -3,6 +3,7 @@ from contextlib import contextmanager
 import os
 import sqlite3
 import sys
+import time
 
 import pytest
 from fastapi.testclient import TestClient
@@ -74,7 +75,15 @@ def test_restart_recovers_containers_or_requires_scoped_operator_attestation(tmp
             response = client.post(prefix + '/confirm-stopped', headers=headers['operator'],
                 json={'plan': plan, 'confirmation': confirmation})
             assert response.status_code == 200, response.text
-            assert response.json()['state'] == 'READY'
+            assert response.json()['state'] in ('READY', 'RECOVERING')
+            # A retained recovery worker may still hold the pre-attestation
+            # observation. The API reports that truthfully and the automatic
+            # next pass converges; do not require synchronous completion or
+            # issue another repair action to make the assertion pass.
+            deadline = time.monotonic() + 20
+            while 'subject' in owner.agents.blocked:
+                assert time.monotonic() < deadline, repr(owner.agents.errors.get('subject'))
+                time.sleep(.02)
         assert owner.pump is not None
         pump = owner.pump
         response = client.post('/v1/runtime/recovery/retry', headers=headers['operator'])

@@ -131,8 +131,13 @@ Checkpoints M2a/M2b/M2c publicados no Core: contrato e exclusão por produtor,
 admissão atômica, controlador compartilhado e integração dos adaptadores nativos.
 Campanha instalada mais recente: 159 testes aprovados, incluindo cinco fronteiras
 de crash com processos Windows descartáveis. Ainda falta integrar a recuperação
-e publicação dos consumidores, qualificar as demais fronteiras/plataformas e
+e publicação do Connector, qualificar as demais fronteiras/plataformas e
 executar o gate UI-A completo. Ver ledger e relatórios M2a/M2b/M2c no Core.
+
+Checkpoint M2d no Nexus: recuperação embedded integrada, incluindo intenção
+gravada antes de existir slot físico. 24 cenários distintos aprovados, com seis
+fronteiras de crash de um owner descartável e testes de isolamento. Ver
+`m2d-validation.md`; Connector e gate UI-A completo ainda pendentes.
 
 - Contrato versionado de launch intent: operação, sessão, executor, geração,
   identidade do container, estado/prova e revisão. Sem argumentos ou segredos.
