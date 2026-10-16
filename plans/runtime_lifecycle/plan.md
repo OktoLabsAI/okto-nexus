@@ -28,9 +28,16 @@ nos repositórios afetados. Não há publicação PyPI, tag ou merge neste plano
 Se uma dessas versões for publicada por outra frente antes da conclusão, parar
 a reutilização da versão e definir o próximo bump antes de gerar artefatos.
 
+Decisão do usuário (2026-10-16): **breaking changes estão autorizadas**. Não há
+requisito de interoperar com versões anteriores. Core, Nexus e Connector podem
+ser atualizados juntos; remover contratos/caminhos antigos quando isso reduzir
+complexidade. Migração segura de configurações e evidências existentes continua
+necessária: incompatibilidade de API não autoriza perder registros de processos
+potencialmente vivos. Cada marco explicita a atualização conjunta necessária.
+
 ## Evidências e diagnóstico inicial
 
-1. `CoreRuntime.open` registra `ProcessBirthEvidence` somente após o retorno de
+1. No baseline, `LocalRuntimeCore.open` registra `ProcessBirthEvidence` somente após o retorno de
    `native_factory.open`. O bridge pode aguardar startup/handshake antes disso.
    Uma operação pode ficar incerta sem identidade durável do processo criado.
 2. Cancelar a espera não encerra uma thread de startup. A liberação de capacidade
@@ -110,8 +117,8 @@ não prova que não existe. O marco M2 trata explicitamente essa distinção.
 - Core associa a notificação ao opening claim original e persiste pelo journal.
 - Uma falha de persistência impede continuar o startup e provoca contenção; não
   permite publicar uma abertura bem-sucedida. A incerteza continua conservadora.
-- Preservar compatibilidade com factories sem o novo parâmetro e a gravação
-  idempotente após abertura para adaptadores legados.
+- Registrar idempotentemente pelo claim original. A notificação deve funcionar
+  nos três adapters mantidos; suporte a versões anteriores não é critério de aceite.
 - Testes: handshake bloqueado; gravação falha; isolamento entre dois startups;
   cancelamento do chamador; registro imutável/reabertura; adapters existentes.
 - Aceite: birth record consultável enquanto o handshake ainda está pendente,
@@ -127,7 +134,7 @@ não prova que não existe. O marco M2 trata explicitamente essa distinção.
   Linux/macOS: guardian/serviço equivalente qualificado por plataforma.
 - Fechar a autoridade do produtor antigo antes de inferir ausência/encerramento;
   observar/encerrar container, sem adotar ou matar processos por PID reutilizado.
-- Recuperar intenções interrompidas sem replay de comandos. Registros antigos sem
+- Recuperar intenções interrompidas sem replay de comandos. Registros existentes sem
   prova suficiente mantêm comportamento conservador e diagnóstico explícito.
 - Testes de crash em cada fronteira: antes/depois de intenção, container, spawn,
   birth, handshake, receipt e ACK; thread atrasada após cancelamento/revogação.
@@ -136,6 +143,11 @@ não prova que não existe. O marco M2 trata explicitamente essa distinção.
 
 ### M3 — Disponibilidade por recurso e recuperação isolada (três repos + UI)
 
+- Prioridade revelada pelo gate M1: investigar renovação de lease curta entrando
+  em `LEASE_REVALIDATION_REQUIRED`, reproduzida também com o Core M0. Isolar a
+  agenda de renovação de manutenção/admissão de pendências e instrumentar as
+  fronteiras de envio, aplicação, prazo e geração. Não aumentar TTLs ou afrouxar
+  fences para ocultar o problema. Atribuição exata da falha permanece aberta.
 - Modelar separadamente conexão, autoridade, capacidade e sincronização.
 - Pending de histórico não bloqueia capacidade independente; slot físico incerto
   permanece ocupado. Não redirecionar uma conversa persistente ainda incerta.
@@ -152,8 +164,9 @@ não prova que não existe. O marco M2 trata explicitamente essa distinção.
 
 - Índice durável de pendências e checkpoints terminais; atualizar com a mesma
   transação do journal/outbox, sem segundo estado divergente.
-- Recuperar pendências/ativos por lotes e cursores. Backfill compatível e resumível
-  para journals antigos; auditoria completa fora do caminho de admissão.
+- Recuperar pendências/ativos por lotes e cursores. Migração resumível dos journals
+  existentes; auditoria completa fora do caminho de admissão. Não manter caminhos
+  antigos de consulta apenas para interoperabilidade com versões anteriores.
 - Separar orçamento de controle/resultado do volume de artefatos; retry apenas na
   fronteira idempotente, sem repetir escrita nativa por erro SQLite/transporte.
 - Testes: reinício entre transações/checkpoints, eventos grandes, disco cheio,
@@ -166,7 +179,8 @@ não prova que não existe. O marco M2 trata explicitamente essa distinção.
 - Extrair políticas de estado/transição para Core e manter adaptadores de host no
   Nexus/Connector. Remover duplicação somente após testes diferenciais.
 - Unificar interpretação de close sem receipt, prova de contenção, retomada de
-  stream, geração/lease e versões de contrato; negociar extensão quando necessário.
+  stream, geração/lease e versões de contrato. Atualizar os três componentes em
+  conjunto e rejeitar contratos incompatíveis explicitamente, sem fallback legado.
 - Rodar o mesmo roteiro pelo embedded e pelo Connector local em processo separado.
 - Aceite: resultados equivalentes para mesmas evidências, inclusive retransmissão,
   perda de receipt, revogação, reconnect e reset com preservação de agentes.
@@ -231,6 +245,42 @@ Os testes de fault injection usam recursos próprios e nunca encerram processos
 da sessão do usuário. Gates rápidos por milestone precedem a campanha integrada.
 Comparações de desempenho usam distribuição e trabalho realizado, não um timeout
 estreito que falhe apenas por carga da máquina de desenvolvimento.
+
+## Gates de testes reais pela interface do Nexus
+
+Decisão do usuário (2026-10-16): testes automatizados são necessários, mas não
+substituem testes reais com os harnesses. Os testes reais devem ser operados pela
+**interface do próprio Nexus** e ocorrer nos grandes milestones, sem repetir a
+campanha completa a cada commit ou ajuste intermediário.
+
+| Gate | Quando | Fluxos reais obrigatórios |
+|---|---|---|
+| UI-A | M2 + M3 | Startup, mensagens e respostas reais nos três harnesses; terminal; reinício e recuperação automática; indisponibilidade isolada de um agente |
+| UI-B | M5 + M7 | Embedded e Connector local; pool warm/cold; carga acima do limite; fila/rejeição/deadline; criação de agente durante recuperação |
+| UI-C | M8, incluindo M6 se adotado | Campanha final instalada; atualização/restart; permissões/MCP/ferramentas; artefatos grandes; configurações e histórico preservados |
+
+Protocolo para cada gate:
+
+1. Confirmar na instalação os commits/wheels testados e conferir pela UI as sessões
+   existentes. Usar instância/agentes de teste, ou janela sem trabalho em andamento;
+   injeção de falha deve atingir somente processos identificados como parte do teste.
+2. Pela UI, configurar/selecionar Pi, Codex e Claude com os harnesses instalados e
+   autenticação real. Enviar tarefas curtas com marcadores únicos e sem efeitos
+   destrutivos; observar resposta final e correlacionar sessão/execução no terminal.
+3. Pela UI, conferir números do pool e enviar uma rajada abaixo/acima do limite.
+   Verificar respostas, fila, negativa e timeout. Não inferir paralelismo somente
+   pela quantidade de mensagens exibidas; registrar horários e sessões observadas.
+4. Exercitar os cenários de recuperação próprios do gate. Após a falha induzida,
+   voltar à UI e confirmar retomada sem reparo manual, sem duplicação e com estado
+   coerente em Agents, Graph, Meta-harness e terminal.
+5. Registrar versões, configuração, horário, marcadores, IDs, observações e imagens
+   da interface sem segredos. Distinguir resultado real de teste sintético; repetir
+   somente o cenário afetado por correção/interferência, salvo mudança de contrato.
+
+M1 é um checkpoint técnico, sem alegação de validação com provedores reais. Um gate
+real não é aprovado por unit tests, mocks, chamada direta da API ou screenshot sem
+execução correspondente. Ausência de host remoto físico permanece explícita: o
+Connector local comprova o caminho remoto em loopback, não outra máquina/rede.
 
 ## Fontes que orientam as decisões
 

@@ -2,14 +2,21 @@
   "schema_version": 1,
   "started_on": "2026-10-16",
   "plan": "plan.md",
+  "compatibility_policy": "Breaking changes authorized on 2026-10-16; coordinate all three upgrades, preserve configuration and live-process evidence, do not require old-version interoperability",
+  "real_test_policy": "Real installed harness tests through Nexus UI at large milestones, not at every intermediate commit",
+  "real_ui_gates": [
+    {"id": "UI-A", "after": ["M2", "M3"], "status": "pending"},
+    {"id": "UI-B", "after": ["M5", "M7"], "status": "pending"},
+    {"id": "UI-C", "after": ["M8"], "status": "pending", "includes_supervisor_if_adopted": true}
+  ],
   "repositories": {
     "nexus": {"version": "0.3.1", "branch": "feature/v0.3.1", "core": "0.0.12"},
     "core": {"version": "0.0.12", "branch": "feature/v0.0.12"},
     "connector": {"version": "0.0.10", "branch": "feature/v0.0.10", "core": "0.0.12"}
   },
   "milestones": [
-    {"id": "M0", "status": "validated", "title": "Baseline and implementation plan", "evidence": ["m0-validation.md", "../event-artifact-implementation.md", "../settings-and-dispatch-contention.md", "../pi-recovery-20261016.md"], "commits": {"core": "fb86548", "connector": "4e86785"}},
-    {"id": "M1", "status": "planned", "title": "Persist process birth before native handshake", "evidence": [], "commits": {}},
+    {"id": "M0", "status": "complete", "title": "Baseline and implementation plan", "evidence": ["m0-validation.md", "../event-artifact-implementation.md", "../settings-and-dispatch-contention.md", "../pi-recovery-20261016.md"], "commits": {"core": "fb86548", "connector": "4e86785", "nexus": "5181605"}},
+    {"id": "M1", "status": "complete", "qualification": "Technical checkpoint only; integrated campaign has known findings, real UI gates pending", "title": "Persist process birth before native handshake", "evidence": ["m1-validation.md", "m1-results.json"], "commits": {"core": "8520deb", "connector": "3aa841c"}, "nexus_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m1-validation.md"},
     {"id": "M2", "status": "planned", "title": "Durable launch intent and producer fencing", "evidence": [], "commits": {}},
     {"id": "M3", "status": "planned", "title": "Independent readiness and per-resource recovery", "evidence": [], "commits": {}},
     {"id": "M4", "status": "planned", "title": "Incremental recovery and stream fairness", "evidence": [], "commits": {}},
@@ -18,6 +25,10 @@
     {"id": "M7", "status": "planned", "title": "Budgeted parallel startup and pool scheduling", "evidence": [], "commits": {}},
     {"id": "M8", "status": "planned", "title": "Installed-package qualification and rollout", "evidence": [], "commits": {}}
   ],
-  "live_installation": "M0 fixes installed previously; new lifecycle milestones not installed",
+  "open_findings": [
+    {"id": "L1", "milestone": "M3", "priority": "high", "status": "open", "description": "Short-lease renewal enters LEASE_REVALIDATION_REQUIRED; reproduced with both M0 and M1 Core; cause and automatic recovery still require investigation"},
+    {"id": "L2", "milestone": "M3", "priority": "medium", "status": "open", "description": "Immediate startup-readiness assertion failed during async history recovery; targeted rerun passed and retained receipt was durable; add deterministic readiness/progress observation"}
+  ],
+  "live_installation": "M0 fixes installed previously; M1 installed only in isolated validation environment",
   "publication": "Feature branches only; no main merge, tag or PyPI publication authorized by this plan"
 }

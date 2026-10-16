@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-16",
+  "scope": "early process-birth technical checkpoint",
+  "core_wheel_sha256": "d2799bb6249c28fca5e56d9e17862ca1b3f72b15a59c5f9e2d15d509a0d2da8f",
+  "baseline_core_wheel_sha256": "5bfda0a72de6d57fd638172bf5b955842565a8917b08456dacc0f42dc7dfbc36",
+  "runs": [
+    {"repo": "core", "kind": "source focused regression", "passed": 39, "failed": 0, "evidence": "build/runtime-lifecycle-m1-regression.xml"},
+    {"repo": "core", "kind": "installed new early-birth cases", "passed": 10, "failed": 0, "evidence": "build/runtime-lifecycle-m1-installed.xml"},
+    {"repo": "core", "kind": "installed unresponsive-handshake case", "passed": 1, "failed": 0, "evidence": "build/runtime-lifecycle-m1-handshake.xml"},
+    {"repo": "connector", "kind": "installed execution and daemon", "passed": 43, "failed": 0, "evidence": "build/runtime-lifecycle-m1-installed.xml"},
+    {"repo": "nexus", "kind": "installed embedded dispatch, preopen fences and reconciliation", "passed": 82, "failed": 2, "inputs_changed": false, "evidence": "build/runtime-lifecycle-m1-installed-evidence/tests.xml"},
+    {"repo": "nexus", "kind": "targeted failure recheck", "passed": 1, "failed": 1, "evidence": "build/runtime-lifecycle-m1-targeted-recheck.xml"},
+    {"repo": "nexus", "kind": "lease comparison with verified pre-M1 Core", "passed": 0, "failed": 1, "evidence": "build/runtime-lifecycle-m0-lease-comparison.xml"}
+  ],
+  "installed_files_match_wheels": true,
+  "pip_check": "pass",
+  "real_provider_ui_tests": "pending UI-A/UI-B/UI-C at large milestones",
+  "platform": "Windows native; synthetic protocol peers",
+  "integration_gate": "not all green; L1 and L2 remain open in ledger"
+}
