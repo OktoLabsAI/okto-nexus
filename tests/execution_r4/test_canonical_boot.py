@@ -48,6 +48,7 @@ def test_serve_boot_uses_core_after_inventory_start_and_replays_once(tmp_path, m
     app = build_app(deps)
     with TestClient(app) as client:
         current = deps, app, client, headers, body, candidate, root
+        client.portal.call(app.state.runtime_boot_owner.wait)
         first = deps.runtime_boot_status[0]
         assert first["state"] == "ACCEPTED", first
         wait_receipt(current, first)

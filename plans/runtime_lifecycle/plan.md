@@ -162,9 +162,13 @@ Claude responderam; Codex recusado por quota do provedor. Ver
 ### M3 — Disponibilidade por recurso e recuperação isolada (três repos + UI)
 
 - Checkpoint M3b: a campanha M2e revelou que a descoberta inicial do Pi bloqueia
-  a abertura HTTP por aproximadamente 2m20s. Separar claim de geração e descoberta
-  em background, com retry automático e workers retidos no shutdown. Inventário
-  ainda não observado não pode ser anunciado como fresco nem autorizar startup.
+  a abertura HTTP por aproximadamente 2m20s. Claim de geração e descoberta agora
+  estão separados, com retry automático e workers retidos no shutdown; o boot
+  aprovado aguarda inventário utilizável em background. 103 testes instalados
+  aprovados. Ver `m3b-validation.md`. Rollout global adiado após recorrência do
+  Pi em M2e: investigar L7 sem reiniciar a instância e distinguir causa original
+  da causa atual de recuperação. O inventário por harness e a independência de
+  recursos abaixo ainda não estão concluídos.
 - Prioridade revelada pelo gate M1: investigar renovação de lease curta entrando
   em `LEASE_REVALIDATION_REQUIRED`, reproduzida também com o Core M0. Isolar a
   agenda de renovação de manutenção/admissão de pendências e instrumentar as

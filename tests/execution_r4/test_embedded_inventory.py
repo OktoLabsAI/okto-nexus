@@ -30,6 +30,18 @@ def agent_key(deps, app):
         return app.state.auth.issue_key(uow, agent_id="viewer")
 
 
+def wait_inventory(client):
+    """Fixtures needing candidates wait for observation, not HTTP readiness."""
+    async def observed():
+        owner = client.app.state.embedded_inventory_owner
+        async with asyncio.timeout(10):
+            while owner.publication is None:
+                if owner.failure is not None:
+                    raise owner.failure
+                await asyncio.sleep(.01)
+    client.portal.call(observed)
+
+
 def request_refresh(deps, owner, intent):
     from okto_nexus.application.execution_inventory_refresh import request_inventory_refresh
     from okto_nexus.bootstrap.execution_authority import build_execution_access
@@ -49,6 +61,7 @@ def test_embedded_refresh_only_completes_requests_claimed_before_discovery(tmp_p
     deps, app = app_for(tmp_path / 'home')
     agent_key(deps, app)
     with TestClient(app) as client:
+        wait_inventory(client)
         owner = app.state.embedded_inventory_owner
         assert request_refresh(deps, owner, 'before')['state'] == 'PENDING'
         entered, release = threading.Event(), threading.Event()
@@ -86,6 +99,7 @@ def test_embedded_failed_discovery_keeps_request_for_retry(tmp_path, monkeypatch
     deps, app = app_for(tmp_path / 'home')
     agent_key(deps, app)
     with TestClient(app) as client:
+        wait_inventory(client)
         owner = app.state.embedded_inventory_owner
         request_refresh(deps, owner, 'retry')
         previous = owner.publication.publication_sequence
@@ -112,6 +126,7 @@ def test_embedded_refresh_completes_while_runtime_recovery_is_blocked(tmp_path, 
     deps, app = app_for(tmp_path / 'home')
     agent_key(deps, app)
     with TestClient(app) as client:
+        wait_inventory(client)
         owner = app.state.embedded_inventory_owner
         with deps.connection_factory.unit_of_work() as uow:
             uow.connection.execute("UPDATE execution_executors SET control_state='RECOVERING' "
@@ -133,6 +148,7 @@ def test_serve_publishes_path_free_local_inventory_without_runtime_or_wss(tmp_pa
     deps, app = app_for(tmp_path / "home")
     key = agent_key(deps, app)
     with TestClient(app) as client:
+        wait_inventory(client)
         owner = app.state.embedded_inventory_owner
         assert owner.candidates == (candidate,)
         assert not (tmp_path / "home/core-runtime").exists()
@@ -163,7 +179,8 @@ def test_new_serve_owner_republishes_empty_inventory_and_retains_two_snapshots(t
     records = []
     for _ in range(3):
         deps, app = app_for(tmp_path / "home")
-        with TestClient(app):
+        with TestClient(app) as client:
+            wait_inventory(client)
             owner = app.state.embedded_inventory_owner
             records.append((owner.key, owner.generation, owner.publication.publication_sequence))
             assert owner.candidates == ()
@@ -181,6 +198,7 @@ def test_delayed_publication_cannot_cross_embedded_owner_change(tmp_path, monkey
                         lambda **_: SimpleNamespace(candidates=()))
     deps, app = app_for(tmp_path / "home")
     with TestClient(app) as client:
+        wait_inventory(client)
         owner = app.state.embedded_inventory_owner
         with deps.connection_factory.unit_of_work() as uow:
             sql = {
@@ -202,6 +220,7 @@ def test_cancelled_waiters_keep_discovery_and_cleanup_owned(tmp_path, monkeypatc
                         lambda **_: SimpleNamespace(candidates=()))
     deps, app = app_for(tmp_path / "home")
     with TestClient(app) as client:
+        wait_inventory(client)
         owner = app.state.embedded_inventory_owner
         entered, release = threading.Event(), threading.Event()
 
@@ -253,6 +272,7 @@ def test_close_interrupts_passive_core_read_without_publishing(tmp_path, monkeyp
     configuration, _ = split_discovery_args(["--harness-root", str(directory)])
     monkeypatch.setenv("PATH", str(directory))
     with TestClient(app) as client:
+        wait_inventory(client)
         owner = app.state.embedded_inventory_owner
         previous = owner.publication.publication_sequence
         monkeypatch.setattr(deps, "local_discovery", configuration, raising=False)
@@ -301,6 +321,7 @@ def test_close_waits_for_started_inventory_publication(tmp_path, monkeypatch):
                         lambda **_: SimpleNamespace(candidates=()))
     deps, app = app_for(tmp_path / "home")
     with TestClient(app) as client:
+        wait_inventory(client)
         owner = app.state.embedded_inventory_owner
         previous = owner.publication.publication_sequence
         entered, release = threading.Event(), threading.Event()

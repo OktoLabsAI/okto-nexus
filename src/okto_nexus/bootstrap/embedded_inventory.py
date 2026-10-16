@@ -38,6 +38,7 @@ class EmbeddedInventoryOwner:
         self._close_task = None
         self._inventory_lock = asyncio.Lock()
         self._probe_task = None
+        self._observation_changed = asyncio.Event()
 
     def _claim(self):
         dispatcher = self.dispatcher
@@ -59,13 +60,19 @@ class EmbeddedInventoryOwner:
             return generation
 
     async def start(self):
+        """Claim the generation before dispatch starts; observe asynchronously.
+
+        Serving the dashboard must not wait for a provider tree scan. No
+        current-process freshness is advertised until the retained refresh
+        worker has published an observation under this generation.
+        """
         if self._startup_task is None:
             self._startup_task = asyncio.create_task(self._start(), name="embedded-inventory-start")
         return await asyncio.shield(self._startup_task)
 
     async def _start(self):
         self.generation = await asyncio.to_thread(self._claim)
-        await self.refresh()
+        self.fresh.pop((self.key.server_id, self.key.executor_id), None)
         if not self._stop.is_set():
             self._task = asyncio.create_task(self._run(), name="embedded-inventory")
 
@@ -100,6 +107,19 @@ class EmbeddedInventoryOwner:
             **(configuration.arguments() if configuration is not None else {}))
         return tuple(discovery.candidates)
 
+    async def wait_usable_observation(self):
+        """Wait for current-process freshness; never treat a saved view as ready."""
+        from ..application.executor_inventory_views import INVENTORY_TTL_MS
+        while not self._stop.is_set():
+            self._observation_changed.clear()
+            receipt = self.fresh.get((self.key.server_id, self.key.executor_id))
+            if (receipt is not None and self.publication is not None
+                    and receipt[0] == self.publication.publication_sequence
+                    and receipt[2] + max(0, (time.monotonic() - receipt[1]) * 1000) < INVENTORY_TTL_MS):
+                return True
+            await self._observation_changed.wait()
+        return False
+
     async def check_installation(self, *, access, context, request):
         if self._stop.is_set() or (self._probe_task is not None and not self._probe_task.done()):
             raise OktoNexusError(ErrorCode.CONFLICT, 'A local version check is active or the executor is stopping.', {})
@@ -128,6 +148,7 @@ class EmbeddedInventoryOwner:
         self.failure = None
         self.fresh[(self.key.server_id, self.key.executor_id)] = (
             publication.publication_sequence, time.monotonic(), age_ms)
+        self._observation_changed.set()
 
     def _claim_refresh(self):
         # Claim before discovery: requests arriving during a scan must wait for
@@ -165,15 +186,18 @@ class EmbeddedInventoryOwner:
     async def _run(self):
         while not self._stop.is_set():
             try:
-                await asyncio.wait_for(self._stop.wait(), self.refresh_seconds)
-                return
-            except TimeoutError:
-                pass
-            try:
                 await self.refresh()
             except Exception as error:
                 self.failure = error
                 self.fresh.pop((self.key.server_id, self.key.executor_id), None)
+            # Initial discovery has the same retry/lifetime contract as later
+            # refreshes. A first-scan failure must not strand the HTTP server
+            # or leave an owner without an automatic observation worker.
+            try:
+                await asyncio.wait_for(self._stop.wait(), self.refresh_seconds)
+                return
+            except TimeoutError:
+                pass
 
     def _release(self):
         with self.deps.connection_factory.unit_of_work() as uow:
@@ -186,6 +210,7 @@ class EmbeddedInventoryOwner:
     def begin_shutdown(self):
         self._discovery_stopped.set()
         self._stop.set()
+        self._observation_changed.set()
 
     async def close(self):
         if (self._close_task is not None and self._close_task.done()

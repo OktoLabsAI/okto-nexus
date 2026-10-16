@@ -173,7 +173,8 @@ def test_interrupted_preopen_is_fenced_before_a_new_boot_after_restart(tmp_path,
             assert repeat["operation_id"] == original["operation_id"] and repeat["reused"]
             assert calls == [1] and native.opens == 0
     deps, app = app_for(tmp_path / "home")
-    with TestClient(app):
+    with TestClient(app) as client:
+        client.portal.call(app.state.runtime_boot_owner.wait)
         current = deps.runtime_boot_status
         assert len(current) == 1 and current[0]["state"] == "ACCEPTED", current
         assert current[0]['operation_id'] != original['operation_id']
