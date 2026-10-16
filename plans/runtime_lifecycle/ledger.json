@@ -14,7 +14,8 @@
       "status": "pending",
       "interim_evidence": [
         "m3a-validation.md",
-        "m3a-results.json"
+        "m3a-results.json",
+        "m3a-ui-broadcast.md"
       ]
     },
     {
@@ -84,10 +85,16 @@
     },
     {
       "id": "M2",
-      "status": "planned",
+      "status": "in_progress",
       "title": "Durable launch intent and producer fencing",
-      "evidence": [],
-      "commits": {}
+      "evidence": ["Core: plans/runtime-lifecycle-m2a.md", "Core: plans/runtime-lifecycle-m2b.md"],
+      "commits": {"core_m2a": "261dc2e", "core_m2b": "788f3f7"},
+      "checkpoints": [
+        {"id": "M2a", "status": "complete", "title": "Durable identity and producer exclusion; 53 installed tests passed"},
+        {"id": "M2b", "status": "complete", "title": "Atomic launch admission and shared producer controller; 80 installed tests passed"}
+      ],
+      "qualification": "Foundation and shared control validated; runtime spawn and host recovery integration still pending. Live installation uses M1 Core.",
+      "next": "Wire planned container identity and producer control through managed native factories, then embedded/Connector recovery. Qualify native crash frontiers before UI-A and updating the live installation."
     },
     {
       "id": "M3",
@@ -96,7 +103,8 @@
       "nexus_checkpoint_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3a-validation.md",
       "evidence": [
         "m3a-validation.md",
-        "m3a-results.json"
+        "m3a-results.json",
+        "m3a-ui-broadcast.md"
       ],
       "commits": {},
       "checkpoints": [
