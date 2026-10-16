@@ -1,0 +1,55 @@
+{
+  "scope": "M3c installed Windows technical checkpoint; real UI pre-rollout isolation documented separately",
+  "core": {
+    "tests": 111,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "manifest_sha256": "044a46b1d035590f395d6a2549c82a8e4e4cbc91b4b7b2e7462f45c8d23de321",
+    "junit_sha256": "5aab2372caa317fd38beb6ee732804404642f7a773a9f2e6d3ff0a4ea45944ed",
+    "evidence_directory": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\build\\failed-launch-m3c-final-installed",
+    "changed_inputs": [],
+    "started_at": "2026-10-16T20:28:27.637403+00:00",
+    "ended_at": "2026-10-16T20:28:41.443812+00:00"
+  },
+  "connector": {
+    "tests": 103,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "manifest_sha256": "19cba7be936db700ecea5d8de707e75c257c9730e84283a67175a822679e751b",
+    "junit_sha256": "2f422ac046cba40b2cdf860054afd60a34f397fb901b83260b5159de824310ed",
+    "evidence_directory": "D:\\Projetos\\Techridy\\okto-nexus-connector\\build\\runtime-lifecycle-m3c-final-installed",
+    "changed_inputs": [],
+    "started_at": null,
+    "ended_at": null
+  },
+  "nexus": {
+    "tests": 52,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "manifest_sha256": "1ee972105c3301127ddeae698f46cba7dbc4e8acdcced6931dbb82dc36cf051d",
+    "junit_sha256": "063dcd7e3de982e2160c59ce801b55ca99afc986912abd0a76ec6f46eec21740",
+    "evidence_directory": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\runtime-lifecycle-m3c-installed",
+    "changed_inputs": [],
+    "started_at": "2026-10-16T20:30:36.402030+00:00",
+    "ended_at": "2026-10-16T20:39:44.925230+00:00"
+  },
+  "wheels": {
+    "okto_nexus": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\event-artifacts-installed\\Lib\\site-packages\\okto_nexus",
+      "wheel_sha256": "4de169fc59af2f0dd3c7cc7ec35dcfa1c89db08dda2bf331207b8677aa118e94"
+    },
+    "nexus_connector_core": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\event-artifacts-installed\\Lib\\site-packages\\nexus_connector_core",
+      "wheel_sha256": "a24e21028e997cc5db3f1a55b179dd8e01d410fb7483ead9cb7350e1ca170398"
+    },
+    "okto_nexus_connector": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\event-artifacts-installed\\Lib\\site-packages\\okto_nexus_connector",
+      "wheel_sha256": "fa3e82c9e2b2359c81f4a16e39f6e7ac4b547392a5a593c56cb14f4c02bf3abe"
+    }
+  },
+  "global_installation": "M2e still running; M3c rollout pending",
+  "full_UI_A_complete": false
+}

@@ -4,7 +4,7 @@ from types import SimpleNamespace
 
 import pytest
 from nexus_connector_core import CoreError
-from okto_nexus.bootstrap.embedded_dispatch import EmbeddedDispatchOwner
+from okto_nexus.bootstrap.embedded_dispatch import EmbeddedDispatchOwner, SessionAuthorityGate
 from okto_nexus.bootstrap.embedded_agent_recovery import EmbeddedAgentRecovery
 
 
@@ -39,7 +39,7 @@ async def test_secondary_agent_failure_preserves_first_cause_without_failing_hos
     owner._execute = execute
     owner.failed = host_failed
     session = dict(gate=asyncio.Lock(), executor=SimpleNamespace(renew_r4=renew),
-                   scope={"agent_id": "subject"}, renew_at=None)
+                   authority_gate=SessionAuthorityGate(), scope={"agent_id": "subject"}, renew_at=None)
     owner.sessions = {"session": session}
 
     await owner._execute_owned({"agent_id": "subject", "session_id": "session", "operation_id": "primary"})
@@ -50,7 +50,27 @@ async def test_secondary_agent_failure_preserves_first_cause_without_failing_hos
     assert owner.failure is None
     assert owner.agents.blocked == {"subject"}
     assert owner.agents.errors == {"subject": primary}
+    assert owner.agents.current_errors == {"subject": secondary}
     assert primary.retry_safe and not primary.possible_effect
+
+
+@pytest.mark.asyncio
+async def test_current_failure_is_persisted_without_overwriting_first_cause():
+    from nexus_connector_core.native.adapter_types import NativeAdapterError, ErrorCode
+    owner = owner_fixture()
+    states, events = [], []
+    owner.agents._state = lambda *args: states.append(args)
+    owner._recovery_event = lambda *args, **kwargs: events.append(args)
+    first = NativeAdapterError(ErrorCode.CONFIG_ERROR, 'Do not log provider credentials',
+                               {'reason':'version_probe_timeout'})
+    current = CoreError('RECONCILIATION_REQUIRED','embedded_agent_containment')
+    await owner.agents.fail('subject',first)
+    await owner.agents.fail('subject',current)
+    assert states[-1] == ('subject','RECOVERING',current)
+    assert owner.agents.errors['subject'] is first
+    assert owner.agents.current_errors['subject'] is current
+    assert 'embedded_agent_containment' in events[-1][1] and 'version_probe_timeout' in events[-1][1]
+    assert 'Do not log' not in events[-1][1]
 
 
 @pytest.mark.asyncio

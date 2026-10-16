@@ -226,7 +226,7 @@ class EmbeddedDispatchOwner:
         ready = self.pump is not None and (not self.agents.blocked if agent_id is None else agent_id not in self.agents.blocked)
         return {'state': 'READY' if ready else 'RECOVERING',
                 'recovering_agents': sorted(self.agents.blocked),
-                'error_code': getattr(self.recovery_failure or self.agents.errors.get(agent_id), 'code', None),
+                'error_code': getattr(self.recovery_failure or self.agents.current_errors.get(agent_id), 'code', None),
                 'message': ('Runtime restored. Previous work was not replayed.' if ready else
                     'Automatic recovery is still pending for the affected agents. Retained history was preserved.')}
 

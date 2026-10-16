@@ -150,9 +150,14 @@
         "m3a-results.json",
         "m3a-ui-broadcast.md",
         "m3b-validation.md",
-        "m3b-results.json"
+        "m3b-results.json",
+        "m3c-validation.md",
+        "m3c-results.json"
       ],
-      "commits": {},
+      "commits": {
+        "core_m3c": "7bab651",
+        "connector_m3c": "0db859c"
+      },
       "checkpoints": [
         {
           "id": "M3a",
@@ -163,10 +168,16 @@
           "id": "M3b",
           "status": "complete",
           "title": "HTTP startup independent of retained inventory/approved boot; 103 installed tests passed; global rollout deferred for live Pi recurrence"
+        },
+        {
+          "id": "M3c",
+          "status": "complete",
+          "title": "Original-owner failed-launch recovery and current-error diagnostics; 266 installed tests passed; live rollout pending"
         }
       ],
       "nexus_m3b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3b-validation.md",
-      "next": "Investigate live Pi recurrence before restart. Separate original and current recovery errors, reproduce transient startup/lease failures under resource pressure, then proceed with resource-level readiness and inventory isolation."
+      "next": "Complete M3c installed Nexus validation, coordinated rollout and real UI Pi recovery. Continue resource readiness, inventory isolation and remote renewal failure scope.",
+      "nexus_m3c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3c-validation.md"
     },
     {
       "id": "M4",
@@ -251,8 +262,8 @@
       "id": "L7",
       "milestone": "M3",
       "priority": "critical",
-      "status": "open",
-      "description": "M2e live Pi returned to RECOVERING before M3b rollout. Session releases from 19:45:47 UTC, NativeAdapterError/CONFIG_ERROR from 19:47:21. Snapshot/logs/stack and CPU sample retained. CPU saturation observed, causal link unproven. fail() persists first error as current error, hiding later recovery causes. Server intentionally not restarted; diagnose and reproduce."
+      "status": "fixed_installed_validation",
+      "description": "M2e Pi recurrence retained for diagnosis. Three CLAIMED launches have OUTCOME_UNKNOWN without births; Core shutdown had no containment route for failed factories returning no native handle. Reproduced and fixed in shared Core, installed Core/Connector qualification passed. Exact initial CONFIG_ERROR subtype was not retained; version probe timeout is a reproduction, not a proven original cause. Nexus final installed campaign and live rollout pending. Claude real UI request succeeded while Pi remained recovering."
     }
   ],
   "live_installation": "All three M2e wheels globally installed and byte-verified on 2026-10-16 (533 Nexus, 156 Core, 98 Connector files); embedded generation 66; Pi/Claude/Codex Online without manual recovery. UI results and external Codex quota documented in m2e-ui-broadcast.md. Later, Pi recurred to RECOVERING/CONFIG_ERROR before M3b rollout; M2e server intentionally retained for diagnosis (L7). M3b validated only in isolated installed environment so far.",

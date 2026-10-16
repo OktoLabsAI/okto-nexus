@@ -5,12 +5,23 @@ and observed; it is never duplicated or used to revoke a healthy native lease.
 """
 import asyncio
 import random
+import re
 import time
 
 from nexus_connector_core import CoreError, ShutdownPolicy
 
 from .embedded_reconciliation import EmbeddedReconciliation
 from .embedded_events import EmbeddedPublicationDeferred
+
+
+def _diagnostic(error):
+    details = getattr(error, 'details', None)
+    reason = details.get('reason') if isinstance(details, dict) else None
+    # Keep technical reason identifiers, never arbitrary provider messages,
+    # commands, URLs or environment values in the shared recovery log.
+    suffix = f" ({reason})" if isinstance(reason, str) and re.fullmatch(r'[a-z][a-z0-9_.-]{0,79}', reason) else ''
+    return (f"{type(error).__name__}: {getattr(error, 'code', 'UNAVAILABLE')} "
+            f"at {getattr(error, 'stage', 'agent runtime history')}{suffix}")
 
 
 class EmbeddedAgentRecovery:
@@ -25,6 +36,7 @@ class EmbeddedAgentRecovery:
         self.retry_at = {}
         self.attempts = {}
         self.errors = {}
+        self.current_errors = {}
         self.publication_pending = set()
         self.initialized = False
         self._tick_lock = asyncio.Lock()
@@ -105,10 +117,11 @@ class EmbeddedAgentRecovery:
         await asyncio.to_thread(self.owner.verify)
         self.blocked.add(agent_id)
         # Secondary failures during containment must not hide the first cause.
-        error = self.errors.setdefault(agent_id, error)
+        first = self.errors.setdefault(agent_id, error)
+        self.current_errors[agent_id] = error
         await asyncio.to_thread(self._state, agent_id, 'RECOVERING', error)
         await asyncio.to_thread(self.owner._recovery_event, 'RECOVERY_AGENT_BLOCKED',
-            f"{type(error).__name__}: {getattr(error, 'code', 'UNAVAILABLE')} at {getattr(error, 'stage', 'agent runtime history')}",
+            f"Current: {_diagnostic(error)}; first: {_diagnostic(first)}",
             agent_id=agent_id)
 
     async def _contain(self, agent_id):
@@ -157,6 +170,7 @@ class EmbeddedAgentRecovery:
         await asyncio.to_thread(self._state, agent_id, 'READY')
         self.blocked.discard(agent_id)
         self.errors.pop(agent_id, None)
+        self.current_errors.pop(agent_id, None)
         self.publication_pending.discard(agent_id)
         self.attempts.pop(agent_id, None)
         self.retry_at.pop(agent_id, None)
