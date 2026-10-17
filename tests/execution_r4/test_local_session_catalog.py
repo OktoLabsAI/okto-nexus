@@ -7,7 +7,8 @@ import time
 from types import SimpleNamespace
 
 import pytest
-from nexus_connector_core import CoreError, OwnedSlotPage, OwnedSlotReservation, SessionKey
+from nexus_connector_core import (CoreError, JournalRegistryHead, OwnedSlotPage,
+                                  OwnedSlotReservation, SessionKey)
 
 from okto_nexus.bootstrap.embedded_agent_recovery import EmbeddedAgentRecovery
 from okto_nexus.bootstrap.embedded_reconciliation import EmbeddedReconciliation
@@ -259,6 +260,35 @@ async def test_audit_anchor_retries_after_core_commit_without_server_commit(tmp_
     finally:
         owner._stopping.set()
         await recovery.close()
+        await owner.host.shutdown()
+
+
+@pytest.mark.asyncio
+async def test_same_identity_core_head_rollback_is_refused_before_admission(tmp_path, monkeypatch):
+    catalog, factory, _ = catalog_fixture(tmp_path, 1)
+    owner = catalog.owner
+    await catalog.backfill()
+    await owner.host._ledger()
+    (owner.host.store_dir / catalog._name('session-0')).touch()
+    first = EmbeddedAgentRecovery(owner)
+    first._state = lambda *args: None
+    try:
+        await first.initialize()
+        await first.registry_import_task
+        ledger = await owner.host._ledger()
+        head = await ledger.journal_registry_head()
+        assert head.revision == 1
+        async def rolled_back_head():
+            return JournalRegistryHead(head.store_id, 0, '0' * 64, True)
+        monkeypatch.setattr(ledger, 'journal_registry_head', rolled_back_head)
+        with pytest.raises(CoreError, match='PROFILE_DRIFT'):
+            await EmbeddedAgentRecovery(owner).initialize()
+        with factory.unit_of_work(write=False) as uow:
+            assert uow.connection.execute('SELECT audit_revision FROM '
+                'execution_embedded_store_bindings WHERE reset_generation=0').fetchone()[0] == 1
+    finally:
+        owner._stopping.set()
+        await first.close()
         await owner.host.shutdown()
 
 

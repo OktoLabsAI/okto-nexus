@@ -347,7 +347,9 @@
       "m4d4e1-validation.md",
       "Core: plans/runtime-lifecycle-m4d4e2.md",
       "m4d4e3-validation.md",
-      "Connector: plans/runtime-lifecycle-m4d4e4.md"
+      "Connector: plans/runtime-lifecycle-m4d4e4.md",
+      "Core: plans/runtime-lifecycle-m4d4e5.md",
+      "m4d4e5-validation.md"
       ],
       "commits": {
         "nexus_m4d2": "132d8ba",
@@ -365,7 +367,9 @@
       "core_m4d4e1": "1d38900",
       "core_m4d4e2": "905ad8f",
       "nexus_m4d4e3": "47e0567",
-      "connector_m4d4e4": "8a9ee1e"
+      "connector_m4d4e4": "8a9ee1e",
+      "core_m4d4e5": "9c3d4dd",
+      "connector_m4d4e5": "df41f82"
       },
       "checkpoints": [
         {
@@ -489,10 +493,21 @@
           "evidence": [
             "plans/runtime-lifecycle-m4d4e4.md"
           ]
+        },
+        {
+          "id": "M4d4e5",
+          "status": "qualified_rollout_pending",
+          "title": "Shared Core rule fences definite same-identity physical-ledger rollback before Nexus or Connector admission; 21 installed Core, 10 Connector and 7 Nexus focused cases passed",
+          "core_commit": "9c3d4dd",
+          "connector_commit": "df41f82",
+          "evidence": [
+            "m4d4e5-validation.md",
+            "Core: plans/runtime-lifecycle-m4d4e5.md"
+          ]
         }
       ],
       "nexus_m4a_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4a-validation.md",
-    "next": "M4d4e1/e2 add the transactional Core head and staged nonce; M4d4e3/e4 persist matching Nexus and Connector tokens in independent state. Next qualify partial-restore invalidation, bounded physical anomaly audit and the interval before completion; only then consider removing the full startup scan. Combined metadata budget, scan caps, stream fairness, M4d3/M4d4b rollout and controlled real-history latency remain pending; production generation 73 unchanged.",
+    "next": "M4d4e1/e2 add the transactional Core head and staged nonce; M4d4e3/e4 persist matching Nexus and Connector tokens; M4d4e5 fences definite same-identity Core rollback before admission. Next prove bounded head extension for forward revisions and qualify physical anomaly auditing plus the interval before completion; only then consider removing the full startup scan. Combined metadata budget, scan caps, stream fairness, M4d3/M4d4b rollout and controlled real-history latency remain pending; production generation 73 unchanged.",
       "nexus_m4b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4b-validation.md",
       "nexus_m4c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4c-validation.md",
       "nexus_m4d1_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d1-validation.md",

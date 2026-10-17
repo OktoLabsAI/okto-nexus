@@ -38,6 +38,11 @@ background worker. The Connector still has one shared journal, and its token
 is likewise not used to bypass admission. The anomaly policy and partial
 restore matrix remain open.
 
+M4d4e5 now fences a definite same-identity Core rollback before Nexus or
+Connector admission, while allowing a newer Core head to proceed only through
+the unchanged full physical audit. Proving that a newer head extends a stored
+host anchor remains an open gate.
+
 After the initial full physical audit and M4d4d import have completed, Server
 commits its first frontier with the exact Core head and a fresh audit nonce.
 Core durably records the same nonce/head in its ledger before Server commits

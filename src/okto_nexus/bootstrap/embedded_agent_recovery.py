@@ -10,7 +10,8 @@ import re
 import secrets
 import time
 
-from nexus_connector_core import CoreError, ShutdownPolicy
+from nexus_connector_core import (CoreError, ShutdownPolicy,
+    require_audit_snapshot_not_rolled_back)
 from ..errors import ErrorCode, OktoNexusError
 
 from .embedded_reconciliation import EmbeddedReconciliation
@@ -82,11 +83,23 @@ class EmbeddedAgentRecovery:
                         recorded_at=owner.deps.clock.now_iso())
             await asyncio.to_thread(bind_store)
             return store_id
+        async def verify_anchor_snapshot(ledger, store_id):
+            from ..adapters.outbound.sqlite.execution_embedded_store_binding import stored_audit_anchor
+            def read_stored():
+                with owner.factory.unit_of_work(write=False) as uow:
+                    owner.verify(uow=uow)
+                    return stored_audit_anchor(uow.connection, store_id=store_id)
+            stored = await asyncio.to_thread(read_stored)
+            if stored is not None:
+                require_audit_snapshot_not_rolled_back(stored,
+                    await ledger.journal_audit_anchor(),
+                    await ledger.journal_registry_head())
         # Only unattributable/shared resources block the host. Missing or bad
         # journals with a known subject are handled by that subject's worker.
         if await catalog.audit_files():
             ledger = await owner.host._ledger()
             store_id = await bind_ledger(ledger)
+            await verify_anchor_snapshot(ledger, store_id)
             # A fenced connection's HELD capacity never crossed native
             # admission. Cancel those holds atomically before the legacy
             # process scan; consumed/uncertain reservations remain occupied.
@@ -138,6 +151,7 @@ class EmbeddedAgentRecovery:
             # admit native work. A later startup must observe this same ID.
             ledger = await owner.host._ledger()
             store_id = await bind_ledger(ledger)
+            await verify_anchor_snapshot(ledger, store_id)
         self.blocked = await asyncio.to_thread(catalog.pending_agents)
         for agent_id in self.blocked:
             await asyncio.to_thread(self._state, agent_id, 'RECOVERING')
