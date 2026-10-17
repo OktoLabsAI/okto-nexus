@@ -337,7 +337,8 @@
         "m4d3-results.json",
         "m4d4-store-audit-design.md",
         "m4d4b-validation.md",
-        "m4d4b-results.json"
+        "m4d4b-results.json",
+        "Core: plans/runtime-lifecycle-m4d4c1.md"
       ],
       "commits": {
         "nexus_m4d2": "132d8ba",
@@ -347,7 +348,8 @@
         "nexus_m4d3": "ef852e9",
         "core_m4d4a": "2afb894",
         "connector_m4d4b": "5f444c9",
-        "core_m4d4_cost": "4ea0dab"
+        "core_m4d4_cost": "4ea0dab",
+        "core_m4d4c1": "10906e9"
       },
       "checkpoints": [
         {
@@ -395,10 +397,20 @@
           "id": "M4d4b",
           "status": "qualified_rollout_pending",
           "title": "Host physical registration and retained store lifetime; 37 initial and 26 final Nexus installed cases, 118 Connector cases plus one platform skip; audit frontier pending"
+        },
+        {
+          "id": "M4d4c1",
+          "status": "core_foundation_qualified",
+          "title": "Durable physical ledger identity; 14 focused source and 26 installed registry/capacity tests passed. Cross-store binding and audit frontier pending",
+          "core_commit": "10906e9",
+          "evidence_repository": "okto-nexus-connector-core",
+          "evidence": [
+            "plans/runtime-lifecycle-m4d4c1.md"
+          ]
         }
       ],
       "nexus_m4a_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4a-validation.md",
-      "next": "First audit frontier and partial-restore/reset invalidation, combined metadata budget, then scan caps and stream fairness. Creation discipline is adopted by both hosts. M4d3/M4d4b rollout and controlled real-history latency remain pending; production generation 73 unchanged.",
+      "next": "M4d4c1 adds a durable physical ledger identity in Core; neither host consumes it yet. Bind it to trusted Nexus/Connector state and journal evidence, then complete the first audit frontier and partial-restore/reset invalidation before removing the startup scan. Combined metadata budget, scan caps, stream fairness, M4d3/M4d4b rollout and controlled real-history latency remain pending; production generation 73 unchanged.",
       "nexus_m4b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4b-validation.md",
       "nexus_m4c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4c-validation.md",
       "nexus_m4d1_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d1-validation.md",
