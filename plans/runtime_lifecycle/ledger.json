@@ -333,7 +333,9 @@
         "nexus_m4d2": "132d8ba",
         "core_m4d3": "feae7fe",
         "core_m4d3_documentation": "57fa45a",
-        "connector_m4d3": "1b12367"
+        "connector_m4d3": "1b12367",
+        "nexus_m4d3": "ef852e9",
+        "core_m4d4a": "2afb894"
       },
       "checkpoints": [
         {
@@ -365,6 +367,17 @@
           "id": "M4d3",
           "status": "qualified_rollout_pending",
           "title": "Positive no-native-admission retirement; 61 installed Nexus cases, 38 Core cases and 70 distinct Connector cases qualified; global rollout pending"
+        },
+        {
+          "id": "M4d4a",
+          "status": "core_foundation_qualified",
+          "title": "Physical journal registry port and SQLite adapter; 44 installed Core cases passed; host integration and audit frontier pending",
+          "core_commit": "2afb894",
+          "evidence_repository": "okto-nexus-connector-core",
+          "evidence": [
+            "plans/runtime-lifecycle-m4d4.md",
+            "plans/runtime-lifecycle-m4d4-results.json"
+          ]
         }
       ],
       "nexus_m4a_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4a-validation.md",

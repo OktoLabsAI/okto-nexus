@@ -1,6 +1,6 @@
 # M4d3 — Retire sessions that never admitted native execution
 
-Status: installed qualification passed; checkpoint ready for publication on the
+Status: installed qualification passed; Nexus checkpoint `ef852e9` pushed on the
 feature branch. Global rollout remains pending.
 
 The previous maintenance query required a local stream. A terminal opening

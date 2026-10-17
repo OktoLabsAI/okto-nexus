@@ -1,7 +1,8 @@
 # M4d4 — Storage-owned journal registration and audit frontier
 
-Status: Core creation-registry foundation in development; full audit mechanism
-not implemented or qualified. Follows M4d3. The existing
+Status: Core creation-registry foundation qualified in `2afb894` (44 installed
+cases); host integration and full audit mechanism not implemented or qualified.
+Follows M4d3. The existing
 `EmbeddedSessionCatalog.audit_files()` must remain on startup until the
 replacement below is implemented and its crash boundaries are qualified.
 
