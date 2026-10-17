@@ -1,0 +1,34 @@
+{
+  "checkpoint": "M3g",
+  "source_passed": 11,
+  "installed_suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "18",
+      "time": "255.422",
+      "timestamp": "2026-10-17T00:44:18.454015-03:00",
+      "hostname": "Alienware_m15"
+    }
+  ],
+  "changed_inputs": [],
+  "tests": [
+    "tests/execution_r4/test_one_shot_refusal.py",
+    "tests/execution_r4/test_one_shot_runtime.py::test_failed_preopen_without_receipt_releases_warm_slot_and_refills",
+    "tests/execution_r4/test_one_shot_runtime.py::test_host_budget_retains_failed_resources_without_disposal_proof",
+    "tests/execution_r4/test_one_shot_runtime.py::test_cleanup_failure_cannot_erase_success_or_release_capacity",
+    "tests/execution_r4/test_one_shot_runtime.py::test_shutdown_fence_prevents_warm_replenishment",
+    "tests/execution_r4/test_one_shot_remote.py::test_remote_connector_queues_disposes_and_opens_fresh_session",
+    "tests/execution_r4/test_one_shot_restart.py"
+  ],
+  "wheel_sha256": "5295d1ef4563d83c528605f628f94a05ef0788d47fcabf89a2a3b2555f81550d",
+  "evidence_hashes": {
+    "campaign.json": "b0eff0ae6837f34c862e264f97a9f9db4d0d729535dd07d22732d09fe69f1c14",
+    "tests.xml": "afac5698d1c5e653c63c221b936c70b15e3cd234acaf65602e310b68718db7bd",
+    "installed.json": "f1b26be50d94fee27c52bc8d24344fc29200465fb5a3d4ffc399d0615d9632de"
+  },
+  "provider_execution": false,
+  "global_deployment": false
+}

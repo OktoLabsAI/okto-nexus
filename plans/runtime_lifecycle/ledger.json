@@ -162,7 +162,9 @@
         "m3e-results.json",
         "m3c-ui-resumed.md",
         "m3f-diagnostic-contention.md",
-        "m3f-results.json"
+        "m3f-results.json",
+        "m3g-pool-refusal.md",
+        "m3g-results.json"
       ],
       "commits": {
         "core_m3c": "7bab651",
@@ -203,12 +205,18 @@
           "id": "M3f",
           "status": "complete",
           "title": "Transient diagnostic-write contention cannot contain the shared host; 12 source and 20 installed tests, including all three adapters and stopped-owner readiness"
+        },
+        {
+          "id": "M3g",
+          "status": "complete",
+          "title": "Pool reservations from exact pre-Core dispatch refusals settle and replenish automatically; 18 installed cases passed; global rollout pending"
         }
       ],
       "nexus_m3b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3b-validation.md",
       "next": "Initial-opening renewal isolation, per-harness inventory readiness and remaining resource availability criteria; M4 must remove repeated terminal-history recovery scans.",
       "nexus_m3c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3c-validation.md",
-      "nexus_m3e_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3e-validation.md"
+      "nexus_m3e_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3e-validation.md",
+      "nexus_m3g_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3g-pool-refusal.md"
     },
     {
       "id": "M4",
@@ -380,8 +388,8 @@
       "id": "L13",
       "milestone": "M7",
       "priority": "high",
-      "status": "open",
-      "description": "Generation 70 Pi has four warm STARTING slots with FAILED/NONE sessions, terminal dispatch refusals (CONFLICT, possible_effect=false) and no Core receipts. Pool settlement recognizes CLOSED lease or failed Core receipt but misses pre-Core refusal. Pi UI response used fifth on-demand slot. Require exact durable no-send proof, never infer safe release from FAILED/NONE alone."
+      "status": "fixed_installed_validation",
+      "description": "Generation 70 Pi has four warm STARTING slots with FAILED/NONE sessions, terminal dispatch refusals (CONFLICT, possible_effect=false) and no Core receipts. Pool settlement recognizes CLOSED lease or failed Core receipt but misses pre-Core refusal. Pi UI response used fifth on-demand slot. Require exact durable no-send proof, never infer safe release from FAILED/NONE alone. Exact message matched dispatch inventory freshness refusal. M3g recognizes the terminal pre-Core refusal with no lease, stream, receipt or publication; 18 installed tests passed. Current global process has not yet loaded this fix."
     }
   ],
   "live_installation": "M3f Nexus 78e0b5c (including M4d1) globally installed with Core M3e 50eaabc and Connector M3e 7e1710a. Generation 70 PID 39648. Pi, Claude and Codex READY/ONLINE; Pi and Claude replied via Meta-harness with 1/1 ACK without further restart. M4d2 qualified in isolated installed environment only. Pi warm slots L13 remain unresolved in current global process. See m3f-diagnostic-contention.md and m4d2-validation.md.",

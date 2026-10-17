@@ -160,6 +160,11 @@ def tick(deps):
                     'AND operation_id=? ORDER BY receipt_revision DESC LIMIT 1',
                     (slot['server_id'], slot['executor_id'], slot['open_operation_id'])).fetchone()
                 no_effect = bool(opening and opening['stage'] == 'FAILED' and not opening['possible_effect'])
+                if session and session['lifecycle_state'] == 'FAILED' and session['lease_state'] == 'NONE':
+                    from .one_shot_refusal import opening_refused_before_core
+                    # Pre-send refusal has no Core receipt by design. Its exact
+                    # durable proof releases only the unused logical pool slot.
+                    no_effect = no_effect or opening_refused_before_core(conn, slot)
                 never_opened = (slot['state'] == 'CLOSING' and slot['session_id'] is None
                     and slot['open_operation_id'] is None and not conn.execute(
                         'SELECT 1 FROM execution_domain_deliveries WHERE domain_operation_id=?', (slot['call_id'],)).fetchone())
