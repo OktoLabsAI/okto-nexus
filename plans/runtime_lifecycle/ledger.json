@@ -173,7 +173,9 @@
         "m3h-startup-observation.md",
         "m3h-results.json",
         "m3j-renewal-contention.md",
-        "m3j-results.json"
+        "m3j-results.json",
+        "m3i-independent-observations.md",
+        "m3i-core-results.json"
       ],
       "commits": {
         "core_m3c": "7bab651",
@@ -185,7 +187,8 @@
         "nexus_m3e": "193b0a3",
         "nexus_m3g": "8c5cf2b",
         "core_m3h": "695ff09",
-        "connector_m3h": "0a72072"
+        "connector_m3h": "0a72072",
+        "core_m3i_foundation": "6e97362"
       },
       "checkpoints": [
         {
@@ -226,12 +229,17 @@
         {
           "id": "M3h",
           "status": "complete",
-          "title": "Bounded parallel discovery and prerequisite-aware pool warmup; 59 Core, 35 Connector and 46 Nexus installed cases passed; global rollout pending"
+          "title": "Bounded parallel discovery and prerequisite-aware pool warmup; 59 Core, 35 Connector and 46 Nexus installed cases passed; deployed with M3j in generation 72"
         },
         {
           "id": "M3j",
           "status": "complete",
           "title": "Transient renewal/status writer contention stays scoped; 13 source and 43 campaign cases passed; generation 72 restored and Pi/Claude replied through Meta-harness"
+        },
+        {
+          "id": "M3i",
+          "status": "in_progress",
+          "title": "Core format-3 contract and independent observer qualified: 117 installed tests; Nexus/Connector integration, consent migration and joint UI gate pending"
         }
       ],
       "nexus_m3b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3b-validation.md",
@@ -447,5 +455,5 @@
   ],
   "live_installation": "Generation 72, Nexus 0.3.1 M3j with Core 0.0.12 M3h and Connector 0.0.10 unchanged code. PID 29220, launcher 44848, port 8202. 541/156/98 files and dependencies verified. Previous process drained normally; 271 DB backups preserved. Pi/Claude/Codex Online, Pi 4 WARM and renewed leases; Pi and Claude responded through Meta-harness. Initial readiness latency remains L14. See m3j-renewal-contention.md.",
   "publication": "Feature branches only; no main merge, tag or PyPI publication authorized by this plan",
-  "pending_installation": "M3i format-3 observation contract remains isolated/in development and is not installed globally. M3h and M3j are now deployed."
+  "pending_installation": "M3i Core contract and independent workers qualified in isolation (117 installed cases), not globally installed. Nexus/Connector still vendor M3h and require coordinated integration and baseline migration before format-3 rollout. Global generation 72 remains healthy on M3j/M3h."
 }
