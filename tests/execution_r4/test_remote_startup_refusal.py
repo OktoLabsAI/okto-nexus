@@ -70,6 +70,49 @@ def test_prelease_startup_refusal_requires_current_control_channel(tmp_path, mon
                         startup_owner=ExecutionChannel(server_id, executor_id,
                             'foreign-owner', channel.connection_generation),
                         startup_report=report, frame=receipt)
+            for forged in (
+                    dict(report, connection_generation=channel.connection_generation + 1),
+                    dict(report, connection_id='foreign-owner',
+                        connection_generation=channel.connection_generation + 1)):
+                with deps.connection_factory.unit_of_work() as uow:
+                    with pytest.raises(OktoNexusError):
+                        append_execution_receipt(None, uow=uow, startup_owner=channel,
+                            startup_report=forged, frame=receipt)
+            for table, column, replacement in (
+                    ('execution_sessions', 'stream_epoch', 1),
+                    ('execution_sessions', 'owner_generation',
+                        report['refusal']['scope']['session_owner_generation'] + 1),
+                    ('execution_dispatch_outbox', 'dispatch_phase', 'LEASE_AUTHORIZED'),
+                    ('execution_dispatch_outbox', 'dispatch_connection_id', 'foreign-owner')):
+                with deps.connection_factory.unit_of_work() as uow:
+                    original = uow.connection.execute(f'SELECT {column} FROM {table}').fetchone()[0]
+                    uow.connection.execute(f'UPDATE {table} SET {column}=?', (replacement,))
+                try:
+                    with deps.connection_factory.unit_of_work() as uow:
+                        with pytest.raises(OktoNexusError):
+                            append_execution_receipt(None, uow=uow, startup_owner=channel,
+                                startup_report=report, frame=receipt)
+                finally:
+                    with deps.connection_factory.unit_of_work() as uow:
+                        uow.connection.execute(f'UPDATE {table} SET {column}=?', (original,))
+            session_id = report['refusal']['scope']['session_id']
+            with deps.connection_factory.unit_of_work() as uow:
+                uow.connection.execute('INSERT INTO execution_event_ingress '
+                    '(server_id,executor_id,session_id,stream_epoch,sequence,event_hash,'
+                    'event_type,payload_json,received_at) VALUES (?,?,?,?,?,?,?,?,?)',
+                    (server_id, executor_id, session_id, 'forged-stream', 1,
+                        'sha256:' + '0' * 64, 'message', '{}', deps.clock.now_iso()))
+            try:
+                with deps.connection_factory.unit_of_work() as uow:
+                    with pytest.raises(OktoNexusError):
+                        append_execution_receipt(None, uow=uow, startup_owner=channel,
+                            startup_report=report, frame=receipt)
+            finally:
+                with deps.connection_factory.unit_of_work() as uow:
+                    uow.connection.execute('DELETE FROM execution_event_ingress WHERE session_id=?',
+                        (session_id,))
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                assert uow.connection.execute('SELECT count(*) FROM execution_receipts').fetchone()[0] == 0
             for _ in range(2):
                 ws.send_text(encode_startup_refusal(report).decode())
                 ack = ws.receive_json()
