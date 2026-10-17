@@ -336,6 +336,10 @@ class EmbeddedAgentRecovery:
         if any(sid == row['session_id'] and not task.done()
                for task, sid in owner.worker_sessions.items()):
             return  # Native stop alone does not join host publication producers.
+        if row['stream_epoch'] is None:
+            from .embedded_unopened_retirement import EmbeddedUnopenedRetirement
+            await EmbeddedUnopenedRetirement(owner).retire(row['session_id'])
+            return
         # Prove resource release and that every Core event was committed
         # before ending polling. Receipt stages themselves are unchanged.
         proof = await EmbeddedReconciliation(owner).release_session(row['session_id'],
@@ -401,8 +405,7 @@ class EmbeddedAgentRecovery:
                 "JOIN execution_operations o ON o.server_id=s.server_id AND o.executor_id=s.executor_id "
                 "AND o.operation_id=s.open_operation_id "
                 "WHERE s.server_id=? AND s.executor_id=? AND s.local_retirement_json IS NULL "
-                "AND s.lifecycle_state IN ('CLOSED','FAILED') AND EXISTS (SELECT 1 FROM execution_local_streams l "
-                "WHERE l.server_id=s.server_id AND l.executor_id=s.executor_id AND l.session_id=s.session_id)",
+                "AND s.lifecycle_state IN ('CLOSED','FAILED')",
                 (self.owner.channel.server_id, self.owner.channel.executor_id) * 3)}
 
     async def tick(self, *, manual=False, agent_id=None):

@@ -16,10 +16,12 @@ class EmbeddedRetirement:
             self.owner.verify(uow=uow)
             # Drive from unverified sessions, not an agent's entire stream history.
             return [dict(r) for r in uow.connection.execute(
-                "SELECT s.rowid AS retirement_rowid,s.session_id,s.lifecycle_state FROM execution_sessions s "
-                "CROSS JOIN execution_local_streams l USING(server_id,executor_id,session_id) "
+                "SELECT s.rowid AS retirement_rowid,s.session_id,s.lifecycle_state,l.stream_epoch FROM execution_sessions s "
+                "CROSS JOIN execution_operations o ON o.server_id=s.server_id AND o.executor_id=s.executor_id "
+                "AND o.operation_id=s.open_operation_id "
+                "LEFT JOIN execution_local_streams l USING(server_id,executor_id,session_id) "
                 "WHERE s.server_id=? AND s.executor_id=? AND s.local_retirement_json IS NULL "
-                "AND l.agent_id=? AND s.lifecycle_state IN ('CLOSED','FAILED') AND s.rowid>? "
+                "AND o.subject_agent_id=? AND s.lifecycle_state IN ('CLOSED','FAILED') AND s.rowid>? "
                 "ORDER BY s.rowid LIMIT ?",
                 (self.owner.channel.server_id, self.owner.channel.executor_id, agent_id, after, limit))]
 

@@ -1,5 +1,6 @@
 """Restart from retained initial-denial facts without opening a provider."""
 from contextlib import contextmanager
+import json
 import threading
 
 import pytest
@@ -118,6 +119,7 @@ def test_restart_recovers_initial_refusal_without_native_execution(tmp_path, mon
         restarted = deps, app, client, headers
         owner = app.state.embedded_dispatch_owner
         wait_until(restarted, lambda: not query(restarted, 'SELECT * FROM one_shot_slots'))
+
         wait_until(restarted, lambda: not owner.agents.blocked)
         assert owner.channel.connection_generation > original_generation
         assert owner.failure is None and owner.recovery_failure is None
@@ -135,6 +137,15 @@ def test_restart_recovers_initial_refusal_without_native_execution(tmp_path, mon
             assert query(restarted, 'SELECT state FROM execution_session_containment')[0][0] == 'RELEASED'
             assert query(restarted, 'SELECT stage,error_code,possible_effect,retry_safe FROM execution_receipts')[0][:] == ('FAILED', 'LEASE_REVALIDATION_REQUIRED', 0, 1)
         assert query(restarted, 'SELECT count(*) FROM execution_local_streams')[0][0] == 0
+        # No native stream existed. Retire only the separately proven refusal,
+        # so a later boot need not reopen this already verified history.
+        wait_until(restarted, lambda: query(restarted,
+            'SELECT local_retirement_json FROM execution_sessions WHERE session_id=?', (sid,))[0][0] is not None)
+        checkpoint = json.loads(query(restarted,
+            'SELECT local_retirement_json FROM execution_sessions WHERE session_id=?', (sid,))[0][0])
+        assert checkpoint['release_kind'] == 'no_native_admission'
+        assert checkpoint['evidence_kind'] == ('dispatch_refusal' if cut.startswith('denial_before') else 'initial_lease_refusal')
+        assert 'stream_epoch' not in checkpoint and 'process_state' not in checkpoint
         if cut == 'denial_before_release_after':
             assert len(release_retries) >= 2
             assert all(value == release_retries[0] for value in release_retries)
@@ -157,3 +168,24 @@ def test_restart_recovers_initial_refusal_without_native_execution(tmp_path, mon
         assert len(peers.sessions) == 1 and len(peers.sessions[turn['session_id']].sent) == 1
         complete(restarted, peers, turn, 'Fresh work after initial refusal recovery')
         wait_until(restarted, lambda: not query(restarted, 'SELECT * FROM one_shot_slots'))
+
+    if cut in ('denial_before', 'publish_after'):
+        # A second boot must consume the checkpoint, not reopen the original
+        # no-stream journal and repeat its evidence work indefinitely.
+        from okto_nexus.bootstrap import runtime_host
+        old_path = owner.host._journal_path(owner.channel.executor_id, sid)
+        original_open = runtime_host.open_journal
+        reopened = []
+        async def observe_open(path):
+            if path == old_path:
+                reopened.append(path)
+            return await original_open(path)
+        monkeypatch.setattr(runtime_host, 'open_journal', observe_open)
+        next_deps, next_app = app_for(tmp_path / 'home')
+        with restart_client(next_app) as next_client:
+            next_setup = next_deps, next_app, next_client, headers
+            next_owner = next_app.state.embedded_dispatch_owner
+            wait_until(next_setup, lambda: next_owner.agents.initialized and not next_owner.agents.blocked)
+            assert not reopened
+            assert json.loads(query(next_setup, 'SELECT local_retirement_json FROM execution_sessions '
+                'WHERE session_id=?', (sid,))[0][0]) == checkpoint
