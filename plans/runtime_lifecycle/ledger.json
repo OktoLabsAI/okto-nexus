@@ -159,7 +159,9 @@
         "m3d-results.json",
         "m3e-validation.md",
         "m3e-results.json",
-        "m3c-ui-resumed.md"
+        "m3c-ui-resumed.md",
+        "m3f-diagnostic-contention.md",
+        "m3f-results.json"
       ],
       "commits": {
         "core_m3c": "7bab651",
@@ -195,6 +197,11 @@
           "id": "M3e",
           "status": "complete",
           "title": "Opened remote session lease failures contained independently; 138 installed cases passed; initial opening isolation and global rollout remain pending"
+        },
+        {
+          "id": "M3f",
+          "status": "complete",
+          "title": "Transient diagnostic-write contention cannot contain the shared host; 12 source and 20 installed tests, including all three adapters and stopped-owner readiness"
         }
       ],
       "nexus_m3b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3b-validation.md",
@@ -331,6 +338,20 @@
       "priority": "high",
       "status": "open",
       "description": "M3c generation 68 process absent when UI was revisited, last access log 20:58:19 UTC, no recorded normal shutdown/traceback or matching Application Error event. Cause/initiator unproven. Logs preserved; generation 69 recovered all agents and Pi answered. Supervisor/host-lifetime qualification must distinguish host termination from runtime faults."
+    },
+    {
+      "id": "L9",
+      "milestone": "M3",
+      "priority": "critical",
+      "status": "fixed_installed_validation",
+      "description": "Generation 69: RECOVERY_PUBLICATION_DELAYED diagnostic write timed out and escalated to host containment, stranding all local agents. M3f makes transient diagnostic persistence best-effort without changing receipt/authority durability. Origin of initial writer delay unproven. Live rollout pending."
+    },
+    {
+      "id": "L10",
+      "milestone": "M6",
+      "priority": "high",
+      "status": "open",
+      "description": "An already-contained embedded owner has no automatic replacement while HTTP remains alive. Initial-start recovery is not post-containment supervision. Need retained producer join/resource release proof before replacement; M3f prevents the observed diagnostic trigger and stops manual recovery falsely reporting READY, but does not implement general owner replacement."
     }
   ],
   "live_installation": "M3c remains globally installed (Nexus 3a68909/Core 7bab651/Connector 0db859c). Generation 68 process ended without recorded shutdown/traceback; cause unresolved (L8). Evidence preserved before starting generation 69: server PID 18616, launcher 35864. All local agents recovered automatically; Pi replied once via Meta-harness and pool refilled to 4/5. M3d/M3e/M4a only installed in isolated qualification environment. See m3c-ui-resumed.md. Claude also answered through Meta-harness after generation 69 recovery: ses_544f3e41b9cdc82c795adfcaa41448d1, exact marker, ACK 1/1, 16 committed events and completed turn. M4b is installed only in the isolated qualification environment. M4c qualified only in the isolated environment; global remains M3c. Read-only UI follow-up still showed all three local agents online and a later user Pi response with artifact. M4d1 qualified in the isolated environment only; global remains M3c. Earlier read-only Agents UI showed ONLINE; subsequent live incident at 2026-10-17T02:03Z left generation 69 RECOVERING after a publication-delay diagnostic write timed out and triggered shared containment. M4d1 does not fix this incident.",

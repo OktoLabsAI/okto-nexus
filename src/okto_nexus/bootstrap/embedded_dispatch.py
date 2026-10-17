@@ -189,10 +189,20 @@ class EmbeddedDispatchOwner:
             return defaults(uow.connection)['automatic_recovery']
 
     def _recovery_event(self, code, message, *, agent_id=None):
-        with self.factory.unit_of_work() as uow:
-            uow.connection.execute('INSERT INTO runtime_recovery_events(executor_id,created_at,code,message,agent_id) VALUES(?,?,?,?,?)',
-                (self.channel.executor_id,self.deps.clock.now_iso(),code,message,agent_id))
         logger = logging.getLogger(__name__)
+        try:
+            with self.factory.unit_of_work() as uow:
+                uow.connection.execute('INSERT INTO runtime_recovery_events(executor_id,created_at,code,message,agent_id) VALUES(?,?,?,?,?)',
+                    (self.channel.executor_id,self.deps.clock.now_iso(),code,message,agent_id))
+        except OktoNexusError as error:
+            if error.code != ErrorCode.DB_ERROR or not error.retryable:
+                raise
+            # This table is diagnostic, never proof of ownership, containment,
+            # receipt publication or resource release. In particular, reporting
+            # delayed persistence must not require that same writer to be free:
+            # doing so turned a publication retry into shared host containment.
+            logger.warning('Runtime recovery diagnostic was not persisted due to transient storage contention: code=%s agent=%s',
+                code, agent_id)
         (logger.info if code in ('RECOVERY_READY', 'RECOVERY_AGENT_READY') else logger.warning)('Runtime recovery: %s %s',code,message)
 
     async def _recover_automatically(self):
@@ -223,10 +233,12 @@ class EmbeddedDispatchOwner:
         await self._start_attempt(manual=True)
         await self.agents.tick(manual=True, agent_id=agent_id)
         await self.agents.observe()
-        ready = self.pump is not None and (not self.agents.blocked if agent_id is None else agent_id not in self.agents.blocked)
+        ready = (self.pump is not None and not self._stopping.is_set() and self.failure is None
+            and not self.pump._stopping.is_set() and not self.pump.task.done()
+            and (not self.agents.blocked if agent_id is None else agent_id not in self.agents.blocked))
         return {'state': 'READY' if ready else 'RECOVERING',
                 'recovering_agents': sorted(self.agents.blocked),
-                'error_code': getattr(self.recovery_failure or self.agents.current_errors.get(agent_id), 'code', None),
+                'error_code': getattr(self.failure or self.recovery_failure or self.agents.current_errors.get(agent_id), 'code', None),
                 'message': ('Runtime restored. Previous work was not replayed.' if ready else
                     'Automatic recovery is still pending for the affected agents. Retained history was preserved.')}
 
