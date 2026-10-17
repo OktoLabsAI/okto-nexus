@@ -33,7 +33,10 @@ and catalog-cost cases with up to 10k historical sessions.
 M4d4e2 now provides the Core token stage, and M4d4e3 records the matching
 token in Nexus reset-generation storage after background import and a repeated
 physical audit. Neither component consumes that token to bypass startup audit.
-Connector's corresponding state write and the anomaly policy remain open.
+M4d4e4 persists the matching token in Connector schema 15 from a retained
+background worker. The Connector still has one shared journal, and its token
+is likewise not used to bypass admission. The anomaly policy and partial
+restore matrix remain open.
 
 After the initial full physical audit and M4d4d import have completed, Server
 commits its first frontier with the exact Core head and a fresh audit nonce.

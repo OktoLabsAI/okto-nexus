@@ -346,7 +346,8 @@
       "m4d4e-frontier-protocol.md",
       "m4d4e1-validation.md",
       "Core: plans/runtime-lifecycle-m4d4e2.md",
-      "m4d4e3-validation.md"
+      "m4d4e3-validation.md",
+      "Connector: plans/runtime-lifecycle-m4d4e4.md"
       ],
       "commits": {
         "nexus_m4d2": "132d8ba",
@@ -362,7 +363,9 @@
       "connector_m4d4c3": "1e9f768",
       "nexus_m4d4d": "48cd8f3",
       "core_m4d4e1": "1d38900",
-      "core_m4d4e2": "905ad8f"
+      "core_m4d4e2": "905ad8f",
+      "nexus_m4d4e3": "47e0567",
+      "connector_m4d4e4": "8a9ee1e"
       },
       "checkpoints": [
         {
@@ -476,10 +479,20 @@
           "evidence": [
             "m4d4e3-validation.md"
           ]
+        },
+        {
+          "id": "M4d4e4",
+          "status": "qualified_rollout_pending",
+          "title": "Connector stores matching Core audit token in schema 15 from a retained background worker; 39 source and 39 installed selected tests passed; no admission change or load guarantee",
+          "connector_commit": "8a9ee1e",
+          "evidence_repository": "okto-nexus-connector",
+          "evidence": [
+            "plans/runtime-lifecycle-m4d4e4.md"
+          ]
         }
       ],
       "nexus_m4a_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4a-validation.md",
-    "next": "M4d4e1/e2 add the transactional Core head and staged nonce; M4d4e3 persists the matching Nexus token after background import and full audit. Next add Connector's independent token, then qualify partial-restore invalidation and background anomaly policy before removing the startup scan. Combined metadata budget, scan caps, stream fairness, M4d3/M4d4b rollout and controlled real-history latency remain pending; production generation 73 unchanged.",
+    "next": "M4d4e1/e2 add the transactional Core head and staged nonce; M4d4e3/e4 persist matching Nexus and Connector tokens in independent state. Next qualify partial-restore invalidation, bounded physical anomaly audit and the interval before completion; only then consider removing the full startup scan. Combined metadata budget, scan caps, stream fairness, M4d3/M4d4b rollout and controlled real-history latency remain pending; production generation 73 unchanged.",
       "nexus_m4b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4b-validation.md",
       "nexus_m4c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4c-validation.md",
       "nexus_m4d1_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d1-validation.md",
