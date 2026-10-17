@@ -30,7 +30,7 @@ def test_failed_preparation_recovers_without_restarting_owner(local_setup, monke
     monkeypatch.setattr(owner.agents, 'fail', fail)
     monkeypatch.setattr(LocalRuntimeCore, 'prepare', unavailable)
     opened = admit(setup, binding, 'preparation-failed', 'runtime.start', new_session=True)
-    eventually(lambda: bool(failures))
+    eventually(lambda: bool(injected))
     def settled():
         with setup[0].connection_factory.unit_of_work(write=False) as uow:
             state = uow.connection.execute('SELECT lifecycle_state FROM execution_sessions WHERE session_id=?',
@@ -41,6 +41,7 @@ def test_failed_preparation_recovers_without_restarting_owner(local_setup, monke
     except AssertionError as error:
         raise AssertionError(f'Recovery did not converge: {failures}') from error
     assert native.opens == 0
+    assert not failures, 'Preparation recovery must not fence the whole agent'
     assert owner.failure is None
     with setup[0].connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute('SELECT lifecycle_state FROM execution_sessions WHERE session_id=?',

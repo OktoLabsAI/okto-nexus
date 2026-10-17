@@ -187,7 +187,9 @@
         "m3k-results.json",
         "m3k-real-ui.md",
         "m3k-reset-ui.md",
-        "m3k-notifications-results.json"
+        "m3k-notifications-results.json",
+        "m3l-session-isolation.md",
+        "m3l-results.json"
       ],
       "commits": {
         "core_m3c": "7bab651",
@@ -268,10 +270,15 @@
           "id": "M3k",
           "status": "qualified_rollout_pending",
           "title": "Automatic contained-owner replacement and original-caller interruption notice. Initial replacement 82 installed cases; final notification artifact qualified across 59 distinct cases (57 initial passes plus 8 reset reruns after test synchronization only). Real Pi replacement and idle/active preserve-agent resets passed through UI. Global rollout pending."
+        },
+        {
+          "id": "M3l",
+          "status": "qualified_rollout_pending",
+          "title": "Authorized startup failures recover by session; 34 installed cases, slow containment and all three adapters; global rollout and full M3 qualification pending"
         }
       ],
       "nexus_m3b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3b-validation.md",
-      "next": "Deploy qualified M3k artifact at the next controlled rollout; L12 status-display attribution; L14 initial-readiness load qualification; initial-opening renewal isolation and remaining availability criteria.",
+      "next": "Qualify pre-authorization/consumed-capacity startup isolation and local Connector differential (M5); retain remaining load/UI gates and L12 attribution; controlled rollout of qualified changes remains pending.",
       "nexus_m3c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3c-validation.md",
       "nexus_m3e_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3e-validation.md",
       "nexus_m3g_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3g-pool-refusal.md",
@@ -304,7 +311,8 @@
         "real_ui": "m3k-reset-ui.md"
       },
       "nexus_m3i_embedded_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3i-embedded-results.json",
-      "nexus_m3k_notifications_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3k-notifications-results.json"
+      "nexus_m3k_notifications_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3k-notifications-results.json",
+      "nexus_m3l_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3l-results.json"
     },
     {
       "id": "M4",
@@ -581,11 +589,11 @@
       "id": "L20",
       "milestone": "M3",
       "priority": "high",
-      "status": "open",
-      "description": "Code inspection after the Pi version_probe_timeout report: EmbeddedDispatchOwner._execute_owned still sends unclassified opening failures to agent-wide recovery. Reproduce one failed startup while healthy sessions of the same agent continue, and verify exact session containment for all maintained harnesses. This is an M3 resource-isolation requirement, not a proven attribution of the simultaneous Recovering report. Do not relax authority or native-release proofs."
+      "status": "in_progress",
+      "description": "Code inspection after the Pi version_probe_timeout report: EmbeddedDispatchOwner._execute_owned still sends unclassified opening failures to agent-wide recovery. Reproduce one failed startup while healthy sessions of the same agent continue, and verify exact session containment for all maintained harnesses. This is an M3 resource-isolation requirement, not a proven attribution of the simultaneous Recovering report. Do not relax authority or native-release proofs. M3l reproduced Pi preparation failure stopping a healthy sibling and fixes post-authorization embedded failures. 34 installed cases passed across all adapters and held containment. Pre-authorization, consumed capacity and local Connector differential remain pending. Connector preparation before durable binding still reaches connection-wide close by code inspection; no remote reproduction claimed. See m3l-session-isolation.md."
     }
   ],
   "live_installation": "Generation 73, Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers. Server PID 32480, launcher 39500, port 8202. Exact qualified wheels installed together; 542/158/99 package files and dependencies verified. Previous process drained normally; full offline backup preserved. Pi/Claude/Codex Online, Pi four WARM; Pi and Claude responded through the real Meta-harness, Claude terminal inspected. L12 cause remains unproven; L14 load qualification remains pending. See m3i-ui-rollout.md.",
   "publication": "Feature branches only; no main merge, tag or PyPI publication authorized by this plan",
-  "pending_installation": "M3k final wheel dc0d8130ec7ac33fb368e0c035c4a85dc1cef4d519c2e45b44a524348cd7c5db is source/installed/real-Pi-UI qualified. Controlled global rollout pending; generation 73 remains on M3i, untouched during production Recovering investigation and disposable tests. M4d4b final Nexus wheel 95fe2fda95e4cc0c3c32fb492ba1e62ea1f9d514340bd5fcef2a3c6a5fe985b3 is qualified in isolation with Core e93dc1e1 and Connector 2e222043; no new real UI or global rollout at this technical checkpoint."
+  "pending_installation": "M3k final wheel dc0d8130ec7ac33fb368e0c035c4a85dc1cef4d519c2e45b44a524348cd7c5db is source/installed/real-Pi-UI qualified. Controlled global rollout pending; generation 73 remains on M3i, untouched during production Recovering investigation and disposable tests. M4d4b final Nexus wheel 95fe2fda95e4cc0c3c32fb492ba1e62ea1f9d514340bd5fcef2a3c6a5fe985b3 is qualified in isolation with Core e93dc1e1 and Connector 2e222043; no new real UI or global rollout at this technical checkpoint. M3l Nexus wheel 5d5f31c04552088833ac28fe1f6b00790f717a01cb982503f643ff6fcc44f31f passed 34 installed cases; supersedes the earlier Nexus validation wheel for the next controlled rollout, with unchanged Core e93dc1e1 and Connector 2e222043. Global generation 73 remains untouched."
 }

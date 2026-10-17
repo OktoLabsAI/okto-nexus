@@ -1,0 +1,68 @@
+{
+  "checkpoint": "M3l",
+  "status": "qualified_rollout_pending",
+  "scope": "Embedded runtime post-authorization startup/session containment; synthetic harness peers and isolated restart fixtures",
+  "reproduction": {
+    "before": "prepare-pi_rpc stopped the already healthy sibling; assertion healthy_peer.stopped failed",
+    "before_exit_code": 1,
+    "before_duration_seconds": 24.85
+  },
+  "source": [
+    {
+      "cases": 6,
+      "passed": 6,
+      "duration_seconds": 190.5,
+      "scope": "three adapters x prepare/native failure"
+    },
+    {
+      "report": "build/runtime-m3l-source.xml",
+      "passed": 24,
+      "duration_seconds": 272.24,
+      "scope": "preparation, open drift and live release proof regression; precedes final added slow-containment case"
+    }
+  ],
+  "installed": {
+    "report": "build/runtime-m3l-session-installed",
+    "tests": [
+      "tests/execution_r4/test_startup_session_isolation.py",
+      "tests/execution_r4/test_preparation_recovery.py",
+      "tests/execution_r4/test_open_drift_isolation.py",
+      "tests/execution_r4/test_preopen_recovery.py",
+      "tests/execution_r4/test_agent_recovery_isolation.py"
+    ],
+    "passed": 34,
+    "skipped": 0,
+    "failures": 0,
+    "duration_seconds": 861.36,
+    "changed_inputs": [],
+    "started_at": "2026-10-17T11:48:52.979464+00:00",
+    "ended_at": "2026-10-17T12:03:21.870890+00:00",
+    "packages": {
+      "okto_nexus": {
+        "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\m3k-owner-env\\Lib\\site-packages\\okto_nexus",
+        "wheel_sha256": "5d5f31c04552088833ac28fe1f6b00790f717a01cb982503f643ff6fcc44f31f"
+      },
+      "nexus_connector_core": {
+        "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\m3k-owner-env\\Lib\\site-packages\\nexus_connector_core",
+        "wheel_sha256": "e93dc1e1cdcc5d0868265c36c0e1200a1ff048aa79371e410727b3dfe74cad3b"
+      },
+      "okto_nexus_connector": {
+        "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\m3k-owner-env\\Lib\\site-packages\\okto_nexus_connector",
+        "wheel_sha256": "2e222043b889314a21492191a77b41b1ba890f1a8cc12b3885efecc651ce0893"
+      }
+    }
+  },
+  "wheel": {
+    "path": "build\\runtime-m3l-session-dist\\okto_nexus-0.3.1-py3-none-any.whl",
+    "sha256": "5d5f31c04552088833ac28fe1f6b00790f717a01cb982503f643ff6fcc44f31f"
+  },
+  "pip_check": "No broken requirements found; exit 0",
+  "production": "Not upgraded or restarted; global generation 73 remains M3i",
+  "remaining": [
+    "pre-authorization failures",
+    "same fault differential through local Connector process",
+    "capacity-consumed startup fault campaign",
+    "remaining M3 load/UI acceptance",
+    "L12 simultaneous Recovering attribution remains unproven"
+  ]
+}

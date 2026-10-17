@@ -212,13 +212,15 @@ class EmbeddedAgentRecovery:
         for session_id in faults:
             self.recover_session(session_id)
 
-    def recover_session(self, session_id):
+    def recover_session(self, session_id, *, error=None):
         session = self.owner.sessions.get(session_id)
         if session is None:
             raise CoreError('SESSION_UNKNOWN', 'embedded_session_recovery')
         # Fence only this session. Retain one worker, including during slow
         # containment; healthy siblings continue dispatch and publication.
         session['recovering'] = True
+        if error is not None:
+            session.setdefault('recovery_error', error)
         task = self.session_tasks.get(session_id)
         if task is not None and not task.done():
             return
@@ -231,6 +233,11 @@ class EmbeddedAgentRecovery:
         owner = self.owner
         try:
             await asyncio.to_thread(owner.verify)
+            if session.get('recovery_error') is not None and not session.get('recovery_error_recorded'):
+                await asyncio.to_thread(owner._recovery_event, 'RECOVERY_SESSION_BLOCKED',
+                    f"Session {session_id}: {_diagnostic(session['recovery_error'])}",
+                    agent_id=session['scope']['agent_id'])
+                session['recovery_error_recorded'] = True
             if session.get('initial_refusal'):
                 # No authorized executor was returned. Finish the exact durable
                 # refusal without containing healthy sibling sessions.
@@ -265,9 +272,9 @@ class EmbeddedAgentRecovery:
             if renewal is not None and not renewal.done():
                 await asyncio.shield(renewal)
             agent_id = session['scope']['agent_id']
-            await owner._recover_publications(agent_id=agent_id)
+            await owner._recover_publications(agent_id=agent_id, session_id=session_id)
             await owner.events.recover(agent_id=agent_id, session_id=session_id)
-            await EmbeddedReconciliation(owner).release_session(session_id)
+            await EmbeddedReconciliation(owner).release_stopped_session(session_id)
             await owner.tools.release_session(session_id)
             owner.sessions.pop(session_id, None)
             self.session_retry_at.pop(session_id, None)

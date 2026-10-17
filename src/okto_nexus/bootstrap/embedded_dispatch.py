@@ -292,13 +292,13 @@ class EmbeddedDispatchOwner:
         self.maintenance = asyncio.create_task(self._maintain(), name="embedded-publications")
         await asyncio.to_thread(self._recovery_event,'RECOVERY_READY','Local host ready. Agents with retained history recover independently; previous work was not replayed.')
 
-    async def _recover_publications(self, *, agent_id=None, progress=None):
+    async def _recover_publications(self, *, agent_id=None, session_id=None, progress=None):
         """Publish retained facts once before any new dispatch is enabled."""
         from .embedded_initial_refusal import EmbeddedInitialRefusal
-        await EmbeddedInitialRefusal(self).recover(agent_id=agent_id)
+        await EmbeddedInitialRefusal(self).recover(agent_id=agent_id, session_id=session_id)
         after = 0
         while True:
-            rows = await asyncio.to_thread(self._page, after=after, agent_id=agent_id)
+            rows = await asyncio.to_thread(self._page, after=after, agent_id=agent_id, session_id=session_id)
             if not rows:
                 return
             for row in rows:
@@ -469,9 +469,9 @@ class EmbeddedDispatchOwner:
                     await self.agents.defer_publication(frame['agent_id'])
                     return
                 session = self.sessions.get(frame['session_id'])
-                if session is not None and (session.get('recovering') or (
+                if session is not None and (session.get('executor') is not None or session.get('recovering') or (
                         isinstance(error, CoreError) and error.code == 'EVENT_STREAM_UNAVAILABLE')):
-                    self.agents.recover_session(frame['session_id'])
+                    self.agents.recover_session(frame['session_id'], error=error)
                     return
                 await self.agents.fail(frame['agent_id'], error)
             except Exception as shared_error:
@@ -521,8 +521,8 @@ class EmbeddedDispatchOwner:
                     native_action_factory=tool_config["native_factory"] if tool_config else None,
                     native_approvals_enabled=bool(self.deps.config.feature_hitl and
                         setup.candidate.adapter_id in {"codex_app_server", "claude_stream", "pi_rpc"}))
-                await asyncio.to_thread(self.leases.applied, applied.acknowledgement, channel=self.channel)
                 session["executor"] = executor
+                await asyncio.to_thread(self.leases.applied, applied.acknowledgement, channel=self.channel)
                 self._schedule_renewal(session, applied)
             executor = session["executor"]
             runtime = await executor._runtime()
@@ -596,7 +596,7 @@ class EmbeddedDispatchOwner:
                 if not await self.host.close_native_actions(
                         executor_id=self.channel.executor_id, session_id=key, timeout_seconds=5):
                     raise CoreError('RECONCILIATION_REQUIRED', 'embedded_native_action_containment')
-                await self.events.recover(agent_id=frame['agent_id'])
+                await self.events.recover(agent_id=frame['agent_id'], session_id=key)
                 from .embedded_reconciliation import EmbeddedReconciliation
                 await EmbeddedReconciliation(self).release_session(key, failed_open=not receipt.possible_effect)
                 await self.tools.release_session(key)
@@ -664,7 +664,7 @@ class EmbeddedDispatchOwner:
             if changed and self.deps.runtime_dispatcher is not None:
                 self.deps.runtime_dispatcher.wake()
 
-    def _page(self, *, after=None, agent_id=None):
+    def _page(self, *, after=None, agent_id=None, session_id=None):
         parameters = [self.channel.server_id, self.channel.executor_id,
                       self._after if after is None else after]
         agent_predicate = ""
@@ -674,6 +674,9 @@ class EmbeddedDispatchOwner:
                 "WHERE o.server_id=p.server_id AND o.executor_id=p.executor_id "
                 "AND o.operation_id=p.operation_id AND o.subject_agent_id=?)")
             parameters.append(agent_id)
+        if session_id is not None:
+            agent_predicate += " AND p.session_id=?"
+            parameters.append(session_id)
         with self.factory.unit_of_work(write=False) as uow:
             self.verify(uow=uow)
             rows = uow.connection.execute("SELECT p.rowid,p.* FROM execution_local_publications p "

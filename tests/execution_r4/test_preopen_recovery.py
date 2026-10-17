@@ -52,9 +52,14 @@ def test_preopen_failure_recovers_only_with_empty_owned_resources(tmp_path, monk
             opened = admit(setup, binding, 'before-native-open', 'runtime.start', new_session=True, text='Hello')
             owner = app.state.embedded_dispatch_owner
             until = time.monotonic() + 8
-            while 'subject' not in owner.agents.errors:
+            def settled():
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    return tuple(uow.connection.execute('SELECT lifecycle_state,lease_state '
+                        'FROM execution_sessions WHERE session_id=?', (opened['session_id'],)).fetchone()) == ('FAILED', 'CLOSED')
+            while not settled():
                 assert time.monotonic() < until
                 time.sleep(.02)
+            assert 'subject' not in owner.agents.blocked
             channel = owner.channel
             assert native.opens == 0
     if occupied:

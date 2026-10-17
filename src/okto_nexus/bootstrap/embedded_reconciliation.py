@@ -137,6 +137,48 @@ class EmbeddedReconciliation:
                 raise CoreError("EVENT_GAP","embedded_resource_stream")
             return row["committed_contiguous"] if row is not None else 0
 
+    async def release_stopped_session(self, session_id):
+        """Reconcile one fenced, joined producer, including failed preparation.
+
+        The caller has contained its Core and native action owner. Never infer
+        absence of native effects from the exception that triggered recovery.
+        """
+        owner = self.owner
+        session = owner.sessions.get(session_id)
+        if (session is None or not session.get('recovering') or
+                any(sid == session_id and not task.done() for task, sid in owner.worker_sessions.items()) or
+                session.get('renew_task') is not None and not session['renew_task'].done()):
+            raise CoreError('RECONCILIATION_REQUIRED', 'embedded_session_producer')
+        rows = await asyncio.to_thread(self._records, session_id=session_id)
+        if len(rows) != 1:
+            raise CoreError('RECONCILIATION_REQUIRED', 'embedded_session_release')
+        row = rows[0]
+        if row['binding_json'] is None and row['stream_epoch'] is None:
+            from nexus_connector_core import SessionKey
+            ledger = await owner.host._ledger()
+            slot = await ledger.owned_slot_state(SessionKey(
+                owner.channel.server_id, owner.channel.executor_id, session_id))
+            if slot is not None and not slot.released:
+                raise CoreError('RECONCILIATION_REQUIRED', 'embedded_owned_resources')
+            await self._recover_unstarted(row)
+            if owner.deps.runtime_dispatcher is not None:
+                owner.deps.runtime_dispatcher.wake()
+            return
+        if row['binding_json'] is None or row['stream_epoch'] is None:
+            raise CoreError('RECONCILIATION_REQUIRED', 'embedded_resource_binding')
+        receipt = await owner.host.historical_receipt(session_id=session_id,
+            key=OperationKey(owner.channel.server_id, owner.channel.executor_id, row['open_operation_id']))
+        failed_open = False
+        if receipt is not None and receipt.stage == 'FAILED':
+            async def never_claimed(journal):
+                from nexus_connector_core import SessionKey
+                launch = await journal.get_process_launch(SessionKey(
+                    owner.channel.server_id, owner.channel.executor_id, session_id))
+                return launch is not None and launch.stop_proof == 'NEVER_CLAIMED'
+            failed_open = (not receipt.possible_effect and receipt.retry_safe) or await owner.host.with_history(
+                executor_id=owner.channel.executor_id, session_id=session_id, read=never_claimed)
+        await self.release_session(session_id, failed_open=failed_open)
+
     async def release_session(self, session_id, *, failed_open=False):
         """Project one contained session without quiescing unrelated runtimes."""
         owner, host = self.owner, self.owner.host
