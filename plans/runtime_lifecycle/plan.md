@@ -226,8 +226,15 @@ Claude responderam; Codex recusado por quota do provedor. Ver
 - Índice durável de pendências e checkpoints terminais; atualizar com a mesma
   transação do journal/outbox, sem segundo estado divergente.
 - Recuperar pendências/ativos por lotes e cursores. Migração resumível dos journals
-  existentes; auditoria completa fora do caminho de admissão. Não manter caminhos
+  existentes; inspeção histórica profunda fora do caminho de admissão. Não manter caminhos
   antigos de consulta apenas para interoperabilidade com versões anteriores.
+- Revisão M4d4f1 da fronteira física: o índice e o token não demonstram que o
+  diretório ficou intacto durante o desligamento. Até qualificar um registro
+  durável de mudanças do filesystem ou diretórios fisicamente isolados por
+  agente, manter a varredura de nomes no caminho de admissão. Transferir a
+  inspeção histórica profunda para manutenção retomável, medir e limitar o
+  custo da varredura, e preservar o fence de arquivos não atribuíveis. Ver
+  `m4d4f1-physical-audit-measurement.md`.
 - Separar orçamento de controle/resultado do volume de artefatos; retry apenas na
   fronteira idempotente, sem repetir escrita nativa por erro SQLite/transporte.
 - Testes: reinício entre transações/checkpoints, eventos grandes, disco cheio,

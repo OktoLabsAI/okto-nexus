@@ -351,7 +351,8 @@
       "Core: plans/runtime-lifecycle-m4d4e5.md",
       "m4d4e5-validation.md",
       "Core: plans/runtime-lifecycle-m4d4e6.md",
-      "m4d4e6-validation.md"
+      "m4d4e6-validation.md",
+      "m4d4f1-physical-audit-measurement.md"
       ],
       "commits": {
         "nexus_m4d2": "132d8ba",
@@ -520,10 +521,19 @@
             "m4d4e6-validation.md",
             "Core: plans/runtime-lifecycle-m4d4e6.md"
           ]
+        },
+        {
+          "id": "M4d4f1",
+          "status": "measurement_complete_optimization_pending",
+          "title": "Measured physical name audit at 1k/10k/100k real files: 0.159/1.634/27.520s, with the 100k run instrumented at every SQLite VM step; retained the startup fence because offline filesystem changes are not attested",
+          "evidence": [
+            "m4d4f1-physical-audit-measurement.md",
+            "tools/benchmark_runtime_directory_audit.py"
+          ]
         }
       ],
       "nexus_m4a_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4a-validation.md",
-    "next": "M4d4e1-e6 provide a transactional Core head, paired Nexus/Connector tokens, definite rollback refusal and bounded forward-prefix proof. Next qualify physical anomaly auditing and the interval before its completion; only then consider removing the full startup scan. Combined metadata budget, scan caps, stream fairness, M4d3/M4d4b rollout and controlled real-history latency remain pending; production generation 73 unchanged.",
+    "next": "M4d4e1-e6 provide transactional registry/head and paired tokens; M4d4f1 shows the physical name scan remains an admission prerequisite without durable offline filesystem evidence. Next optimize and scope the physical audit without weakening unknown-file fencing, measure mixed Core metadata capacity, then qualify real installed UI and stream fairness. M4d3/M4d4b rollout and controlled retained-history latency remain pending; production generation 73 unchanged.",
       "nexus_m4b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4b-validation.md",
       "nexus_m4c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4c-validation.md",
       "nexus_m4d1_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d1-validation.md",

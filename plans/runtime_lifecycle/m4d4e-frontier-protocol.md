@@ -78,6 +78,13 @@ Do not remove the full startup scan until this residual interval and its
 fault-injection tests are accepted. A mere `registry_import_complete` bit is
 not an audit frontier.
 
+M4d4f1 measured the existing physical name scan up to 100k files. In the
+current trust model, the registry/token cannot attest offline filesystem
+changes; the full name scan remains an admission prerequisite. The next
+implementation should shorten and isolate this scan or adopt a physical layout
+whose ownership can be audited independently, rather than treating a matching
+database digest as physical proof. See `m4d4f1-physical-audit-measurement.md`.
+
 ## Required qualification
 
 - Crash after each of: Core row registration, registry-head update, Core nonce
