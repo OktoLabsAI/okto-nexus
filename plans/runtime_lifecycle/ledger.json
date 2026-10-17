@@ -341,7 +341,10 @@
       "Core: plans/runtime-lifecycle-m4d4c1.md",
       "m4d4c2-validation.md",
       "Connector: plans/runtime-lifecycle-m4d4c3.md",
-      "m4d4d-validation.md"
+      "m4d4d-validation.md",
+      "Core: plans/runtime-lifecycle-m4d4e1.md",
+      "m4d4e-frontier-protocol.md",
+      "m4d4e1-validation.md"
       ],
       "commits": {
         "nexus_m4d2": "132d8ba",
@@ -354,7 +357,9 @@
         "core_m4d4_cost": "4ea0dab",
       "core_m4d4c1": "10906e9",
       "nexus_m4d4c2": "de0f5fc",
-      "connector_m4d4c3": "1e9f768"
+      "connector_m4d4c3": "1e9f768",
+      "nexus_m4d4d": "48cd8f3",
+      "core_m4d4e1": "1d38900"
       },
       "checkpoints": [
         {
@@ -434,14 +439,26 @@
         {
           "id": "M4d4d",
           "status": "qualified_rollout_pending",
-          "title": "Convert legacy physical journals into Core's registry in retained bounded background pages; selected source campaigns and 11 installed cases passed; audit frontier pending",
+          "title": "Convert legacy physical journals into Core's registry in retained bounded background pages; selected source campaigns, 11 installed cases and a separate 100k retained-history cost case passed; audit frontier pending",
           "evidence": [
             "m4d4d-validation.md"
+          ]
+        },
+        {
+          "id": "M4d4e1",
+          "status": "core_foundation_qualified",
+          "title": "Transactional Core registry hash-chain head with bounded resumable legacy conversion; 21 source, 21 installed registry/cost, 43 installed capacity and 27 installed Nexus composition cases passed; cross-store audit frontier pending",
+          "core_commit": "1d38900",
+          "evidence_repository": "okto-nexus-connector-core",
+          "evidence": [
+            "plans/runtime-lifecycle-m4d4e1.md",
+            "m4d4e-frontier-protocol.md",
+            "m4d4e1-validation.md"
           ]
         }
       ],
       "nexus_m4a_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4a-validation.md",
-    "next": "M4d4c2/c3 bind Nexus and Connector to Core's physical ledger identity; M4d4d imports legacy Nexus journals in bounded retained background pages without holding agent readiness. The first verified audit frontier, partial-restore invalidation and background anomaly policy must qualify before removing the startup scan. Combined metadata budget, 100k post-change cost, scan caps, stream fairness, M4d3/M4d4b rollout and controlled real-history latency remain pending; production generation 73 unchanged.",
+    "next": "M4d4e1 adds a transactional registry hash-chain head and bounded resumable conversion. Next bind the Core head with independent Server/Connector nonce only after complete physical audit; qualify partial-restore invalidation and background anomaly policy before removing the startup scan. Combined metadata budget, scan caps, stream fairness, M4d3/M4d4b rollout and controlled real-history latency remain pending; production generation 73 unchanged.",
       "nexus_m4b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4b-validation.md",
       "nexus_m4c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4c-validation.md",
       "nexus_m4d1_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d1-validation.md",

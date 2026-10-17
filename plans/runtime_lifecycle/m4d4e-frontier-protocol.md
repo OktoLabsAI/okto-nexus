@@ -1,0 +1,79 @@
+# M4d4e — verified registry frontier protocol
+
+Status: design for the next implementation cut; no startup-scan removal is
+authorized by this document. M4d4d imports physical names but deliberately
+keeps the existing full startup audit.
+
+## Authority and persistence
+
+The physical ledger owns its immutable `store_id`, journal registrations and
+their monotonically increasing revisions. Server stores the `store_id` it has
+accepted for each reset generation. Connector stores its accepted `store_id`
+in independent atomic state. A trusted host, never a tool payload, supplies
+physical names and session scope to Core.
+
+M4d4e1 adds a Core-owned registry head containing `(store_id, revision, digest,
+complete)`.
+Every new registration updates the digest in the same SQLite transaction as
+the immutable row. The digest is a deterministic chain over the previous
+digest, revision, canonical basename and exact session scope; idempotent
+re-registration leaves it unchanged. A bounded, resumable conversion computes
+the head for pre-existing registrations before any host may use it as an audit
+proof. Core returns the head with bounded indexed reads and rejects a missing or inconsistent
+head. This is registry integrity metadata, not proof that journal files exist
+or that native processes stopped.
+
+The M4d4e1 installed Core wheel passed 21 registry/cost cases at 1k, 10k and
+100k registrations; the head read used 35 SQLite VM steps in each case.
+Another 43 installed slot/capacity cases passed. The cross-store nonce and
+host admission protocol below remain design, not implemented behavior. Nexus
+composition with that installed Core passed 27 selected binding, import, reset
+and catalog-cost cases with up to 10k historical sessions.
+
+After the initial full physical audit and M4d4d import have completed, Server
+commits its first frontier with the exact Core head and a fresh audit nonce.
+Core durably records the same nonce/head in its ledger before Server commits
+the frontier; a crash between those commits leaves Server without a usable
+frontier and repeats the audit. Connector follows the analogous two-store
+protocol with its locked state snapshot. Neither host may infer an empty store
+from a missing ledger when it has retained execution history or a prior
+binding.
+
+## Startup and background audit
+
+With a matching cross-store nonce and head, startup reads the Core registry
+head and bounded pages of registrations after the pinned revision. It checks
+new names against exact canonical Server or Connector ownership before
+admitting their subjects. Occupied physical slots, pending native claims and
+unsettled publications are still reconciled independently; an audit frontier
+cannot override them. A restored Core ledger with the same identity but an
+older or divergent head fails closed. A restored Server/Connector snapshot
+without the matching nonce returns to the first-audit path.
+
+The file directory cannot be proven unchanged while Nexus is stopped without
+reading it or relying on an external durable filesystem event source. The
+optimized startup therefore needs an explicit, bounded background directory
+audit and a policy for the interval before it finishes. It may only admit
+work for subjects whose known resource ownership is independently proven;
+an unattributable physical anomaly fences the shared host when discovered.
+Do not remove the full startup scan until this residual interval and its
+fault-injection tests are accepted. A mere `registry_import_complete` bit is
+not an audit frontier.
+
+## Required qualification
+
+- Crash after each of: Core row registration, registry-head update, Core nonce
+  commit, Server/Connector nonce commit, physical journal creation and scan
+  checkpoint. Resume with identical identities and no duplicate native claim.
+- Restore Server, Connector or Core alone to earlier snapshots, including a
+  same-identity ledger fork with equal revision but different registrations.
+- Missing/corrupt registry/head, sidecars, unregistered physical files,
+  registered-but-absent journals, disk-full/locked writes and owner replacement
+  preserve evidence and expose a technical diagnosis.
+- Measure conversion once and later boots separately at 1k/10k/100k retained
+  sessions. Include registry, reservations, claims and slot metadata under the
+  same configured Core storage limit. Measure SQL work and opened files, not
+  only wall time.
+- Run the qualified change in a disposable installed Nexus UI campaign with
+  Pi, Claude and Codex plus a separate local Connector process. The real UI
+  gate remains distinct from focused storage tests.
