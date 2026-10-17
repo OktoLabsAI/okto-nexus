@@ -291,6 +291,11 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   testes source e oito da wheel instalada passaram. O transporte padrão não
   mudou; comparação de disponibilidade, cliente CLI, sessão real e gate UI
   ainda faltam. Ver relatório M6a no Connector.
+- Checkpoint M6b: cliente CLI síncrono fala com o pipe experimental, incluindo
+  autenticação, ping, status e shutdown do daemon real em processo separado.
+  Oito testes de source e oito da wheel instalada passaram. O transporte padrão
+  segue inalterado. Sessão nativa/reconnect, custo, gate UI e decisão de adoção
+  ainda faltam. Ver relatório M6b no Connector.
 - Primeiro ADR e protótipo isolado: processo por usuário/host, IPC autenticado
   (named pipe no Windows/socket local onde suportado), uma autoridade de processo.
 - Nexus pode reiniciar enquanto supervisor mantém contenção, spool e leases
