@@ -9,6 +9,9 @@ from nexus_connector_core import (
     persist_r4_startup_refusal, project_r4_bound_receipt,
 )
 from nexus_connector_core.journal import open_journal
+from nexus_connector_core.startup_refusal_link import (
+    STARTUP_REFUSAL_REVISION, encode_startup_refusal,
+)
 from okto_nexus.application.execution_dispatch import reserve_execution_dispatch, begin_execution_send
 from okto_nexus.application.execution_leases import ExecutionLeaseService
 from okto_nexus.application.handoff_runtime_scheduler import HandoffScheduleLease
@@ -21,6 +24,52 @@ from test_binding_operator import onboarding
 from test_handoff_executor_selection import bind, running_pair
 from test_one_shot_runtime import query
 from test_runtime_policy_defaults import save
+
+
+def test_prelease_startup_refusal_requires_current_control_channel(tmp_path, monkeypatch):
+    deps, app, access, _, _, _, info, revisions, link_ticket, lane_ticket, server_id, executor_id = setup_authority(tmp_path, monkeypatch)
+    with TestClient(app, base_url='https://127.0.0.1:8202', raise_server_exceptions=False) as client:
+        with client.websocket_connect(f'wss://127.0.0.1:8202/v1/runtime/executors/{executor_id}/link',
+                headers={'Authorization': f'Bearer {link_ticket}'}, subprotocols=['nxl.v1']) as ws:
+            channel = negotiate(ws, info, revisions, lane_ticket, server_id, executor_id,
+                control_capabilities=(STARTUP_REFUSAL_REVISION,))
+            assert STARTUP_REFUSAL_REVISION in channel.control_capabilities
+            resolved = admit(deps, app)
+            reservation = reserve_execution_dispatch(deps.connection_factory, server_id=server_id,
+                executor_id=executor_id, remote_ready=True)
+            opening = begin_execution_send(deps.connection_factory, reservation=reservation,
+                remote_ready=True, fresh_publications=app.state.inventory_fresh_publications, access=access)
+
+            async def fact():
+                journal = await open_journal(tmp_path / 'prelease-core.db')
+                try:
+                    refusal = prepare_r4_startup_refusal(opening.frame)
+                    receipt = await persist_r4_startup_refusal(journal, refusal)
+                    return refusal, project_r4_bound_receipt(refusal['binding'], receipt,
+                        key=OperationKey(server_id, executor_id, resolved['operation_id']), receipt_revision=1)
+                finally:
+                    await journal.aclose()
+            refusal, receipt = asyncio.run(fact())
+            ticket = issue_execution_ticket(deps.connection_factory, server_id=server_id,
+                executor_id=executor_id, agent_id='subject', binding_id='binding',
+                scopes=frozenset({'receipt:publish'})).ticket
+            path = f'/v1/runtime/operations/{resolved["operation_id"]}/receipts'
+            assert client.post(path, json=receipt,
+                headers={'Authorization': f'Bearer {ticket}'}).status_code == 409
+            report = dict(contract_revision=STARTUP_REFUSAL_REVISION, type='startup.refuse',
+                request_id='startup-refusal-1', server_id=server_id, executor_id=executor_id,
+                connection_id=channel.connection_id,
+                connection_generation=channel.connection_generation,
+                refusal=refusal, receipt=receipt, capacity=None, native_absent=True)
+            for _ in range(2):
+                ws.send_text(encode_startup_refusal(report).decode())
+                ack = ws.receive_json()
+                assert ack['type'] == 'startup.refuse.accepted'
+                assert ack['request'] == report
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                assert tuple(uow.connection.execute('SELECT lifecycle_state,lease_state FROM execution_sessions').fetchone()) == ('CLOSED', 'CLOSED')
+                assert uow.connection.execute('SELECT count(*) FROM execution_receipts').fetchone()[0] == 1
+                assert uow.connection.execute('SELECT control_state FROM execution_executors').fetchone()[0] == 'CONTROL_READY'
 
 
 def test_remote_failed_preparation_receipt_closes_pending_session_without_disconnect(tmp_path, monkeypatch):
@@ -75,7 +124,8 @@ def test_remote_failed_preparation_receipt_closes_pending_session_without_discon
 
 
 @pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
-def test_remote_failed_preparation_releases_capacity_and_keeps_next_work_available(onboarding, tmp_path, monkeypatch):
+@pytest.mark.parametrize('failure', ['prepare', 'candidate'])
+def test_remote_failed_preparation_releases_capacity_and_keeps_next_work_available(onboarding, tmp_path, monkeypatch, failure):
     from okto_nexus_connector.storage.state_store import StateStore
     monkeypatch.syspath_prepend(str(Path(__file__).parents[1]))
     from test_pr34_remediation import tool
@@ -97,7 +147,7 @@ def test_remote_failed_preparation_releases_capacity_and_keeps_next_work_availab
 
     async def run():
         async with running_pair(onboarding, records, tmp_path) as command:
-            await command(0, 'fail_next_prepare')
+            await command(0, 'fail_next_' + failure)
             attempts = build_handoff_runtime_attempts(deps)
             for ordinal in (0, 1):
                 made = tool(client, headers['other']['Authorization'].removeprefix('Bearer '),
@@ -132,7 +182,7 @@ def test_remote_failed_preparation_releases_capacity_and_keeps_next_work_availab
                             break
                         await asyncio.sleep(.05)
                 if ordinal == 0:
-                    assert state['preparation_failures'] == 1 and state['ready']
+                    assert state['preparation_failures' if failure == 'prepare' else 'candidate_failures'] == 1 and state['ready']
                     assert state['opens'] == state['sends'] == 0
                     assert opening[0][1:] == ('FAILED', 'PREPARATION_FAILED', 0)
                     assert query(setup, 'SELECT status FROM delivery_outbox WHERE operation_id=?',

@@ -83,7 +83,18 @@ async def run(config):
     stop_allowed.set()
     faults = {'lose_next_send': False, 'stop_allowed': stop_allowed,
               'publication_cut': None, 'publication_cuts': 0,
-              'fail_next_prepare': False, 'preparation_failures': 0}
+              'fail_next_prepare': False, 'preparation_failures': 0,
+              'fail_next_candidate': False, 'candidate_failures': 0}
+    original_candidates = r4_execution.R4DaemonExecution._candidates
+    async def candidates_with_cut(self, frame):
+        if faults['fail_next_candidate']:
+            faults['fail_next_candidate'] = False
+            faults['candidate_failures'] += 1
+            from okto_nexus_connector.errors import ConnectorError
+            raise ConnectorError('VALIDATION_ERROR', 'r4_launch',
+                'Synthetic candidate discovery failure.')
+        return await original_candidates(self, frame)
+    r4_execution.R4DaemonExecution._candidates = candidates_with_cut
     original_prepare = LocalRuntimeCore.prepare
     async def prepare_with_cut(runtime, *args, **kwargs):
         if faults['fail_next_prepare']:
@@ -137,6 +148,8 @@ async def run(config):
                 faults['lose_next_send'] = True
             elif command == 'fail_next_prepare':
                 faults['fail_next_prepare'] = True
+            elif command == 'fail_next_candidate':
+                faults['fail_next_candidate'] = True
             elif command in ('cut_publication_reserve', 'cut_publication_bind'):
                 faults['publication_cut'] = command.removeprefix('cut_publication_')
             elif command == 'hold_stop':
@@ -153,6 +166,7 @@ async def run(config):
             state = control.status()
             print(json.dumps(dict(pid=os.getpid(), ready=state['execution_ready'],
                 error=state['error_code'], generation=state['connection_generation'],
+                candidate_failures=faults['candidate_failures'],
                 publication_cuts=faults['publication_cuts'],
                 preparation_failures=faults['preparation_failures'],
                 opens=len(peers), opening=len(opening), sends=sum(len(peer.sent) for peer in peers.values()),

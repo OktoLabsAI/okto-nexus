@@ -161,18 +161,22 @@ def append_execution_receipt(factory: ConnectionFactory, *,
                              principal: VerifiedExecutionTicket | None = None,
                              embedded_owner=None,
                              uow=None, recovery_owner=None, preopen=None, preopen_embedded_owner=None,
+                             startup_owner=None, startup_report=None,
                              frame: Mapping[str, Any]) -> AcceptedExecutionReceipt:
     """Accept a Core fact only for the ticket's admitted operation.
 
     This never creates an operation or authorizes a native effect. Core owns
     the frame schema and ordered receipt reducer; SQLite owns durability.
     """
-    if sum(owner is not None for owner in (principal, embedded_owner, recovery_owner)) != 1:
+    if sum(owner is not None for owner in (principal, embedded_owner, recovery_owner, startup_owner)) != 1:
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "One authenticated receipt owner is required.", {})
     if recovery_owner is not None and (uow is None or preopen is None):
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Recovery requires its authenticated transaction and proof.', {})
     if preopen_embedded_owner is not None and recovery_owner is None:
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Local preopening recovery requires its recovery owner.', {})
+    if startup_owner is not None and (uow is None or startup_report is None):
+        raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+            'Startup refusal requires its authenticated transaction and report.', {})
     if principal is not None and ("receipt:publish" not in principal.scopes or principal.binding_id is None):
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
                              "The ticket cannot publish operation receipts.", {})
@@ -249,6 +253,11 @@ def append_execution_receipt(factory: ConnectionFactory, *,
             from .execution_preopen_recovery import verify_preopen_recovery
             preopen_verified = verify_preopen_recovery(uow, recovery_owner, preopen, parsed, operation,
                                                      embedded_owner=preopen_embedded_owner)
+        startup_verified = None
+        if startup_owner is not None:
+            from .execution_startup_refusal import verify_startup_refusal
+            startup_verified = verify_startup_refusal(uow, startup_owner, startup_report,
+                parsed, operation, scope)
         initial_refusal = None
         if scope:
             from .execution_session_containment import SqliteSessionContainmentRepository
@@ -263,7 +272,7 @@ def append_execution_receipt(factory: ConnectionFactory, *,
                 "WHERE o.server_id=? AND o.executor_id=? AND o.operation_id=? "
                 "AND o.dispatch_state IN ('SENDING','DISPATCHED','RECONCILING','RESOLVED_TERMINAL')",
                 key).fetchone()
-            if initial_refusal is None and preopen_verified is None and (dispatched is None or not dispatched['applied_at'] or
+            if initial_refusal is None and preopen_verified is None and startup_verified is None and (dispatched is None or not dispatched['applied_at'] or
                     not dispatched['scope_json'] or json.loads(dispatched['scope_json']) != scope or
                     dispatched['connection_id'] != parsed['connection_id'] or
                     dispatched['connection_generation'] != parsed['connection_generation']):

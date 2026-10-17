@@ -17,6 +17,7 @@ from nexus_connector_core import (
     CAPACITY_CONTRACT_REVISION, decode_control_frame,
     PREOPEN_REFUSAL_REVISION,
 )
+from nexus_connector_core.startup_refusal_link import STARTUP_REFUSAL_REVISION
 
 from ....adapters.outbound.execution.core_inventory import protocol_info
 from ....adapters.outbound.sqlite.execution_identity import (
@@ -141,6 +142,19 @@ def build_router() -> APIRouter:
         async def _send_session_release(frame):
             await _send_text(encode_session_release(frame).decode('utf-8'))
         session_releases = SessionReleaseOwner(validate=_validate_session_release, send=_send_session_release)
+        from .startup_refusal_owner import StartupRefusalOwner
+        from nexus_connector_core.startup_refusal_link import encode_startup_refusal, startup_refusal_accepted
+        def _validate_startup_refusal(frame):
+            _verify()
+            from ....adapters.outbound.sqlite.execution_receipts import append_execution_receipt
+            with factory.unit_of_work() as uow:
+                append_execution_receipt(None, uow=uow, startup_owner=_channel(),
+                    startup_report=frame, frame=frame['receipt'])
+            return startup_refusal_accepted(frame)
+        async def _send_startup_refusal(frame):
+            await _send_text(encode_startup_refusal(frame).decode('utf-8'))
+        startup_refusals = StartupRefusalOwner(validate=_validate_startup_refusal,
+            send=_send_startup_refusal)
 
         def _admit_attach(frame: dict) -> int:
             if (frame["server_id"] != server_id or
@@ -378,7 +392,7 @@ def build_router() -> APIRouter:
                 "accepted_nxl": R4_PREVIEW_REVISION,
                 "snapshot_format": info["executor_snapshot_format"],
                 "control_capabilities": [cap for cap in ('connection_renewal_v1', 'heartbeat_ack_v1', 'connection_resume_v1',
-                                                        'nexus-lease-denial-v1', 'nexus-session-release-v1', PREOPEN_REFUSAL_REVISION, 'nexus-event-artifacts-v1', 'nexus-launch-recovery-v1')
+                                                        'nexus-lease-denial-v1', 'nexus-session-release-v1', STARTUP_REFUSAL_REVISION, PREOPEN_REFUSAL_REVISION, 'nexus-event-artifacts-v1', 'nexus-launch-recovery-v1')
                                          if cap in hello['control_capabilities']],
             }
             if availability.enabled and CAPACITY_CONTRACT_REVISION in hello['control_capabilities']:
@@ -483,6 +497,18 @@ def build_router() -> APIRouter:
                         await ws.close(code=4403)
                         break
                     await session_releases.submit(frame)
+                    continue
+                if frame['type'] == 'startup.refuse':
+                    if any(frame[k] != welcome[k] for k in
+                            ('server_id','executor_id','connection_id','connection_generation')):
+                        await ws.close(code=4406)
+                        break
+                    try:
+                        await anyio.to_thread.run_sync(_verify)
+                    except OktoNexusError:
+                        await ws.close(code=4403)
+                        break
+                    await startup_refusals.submit(frame)
                     continue
                 if frame['type'] in ('capacity.result', 'capacity.changed', 'capacity.dispatch_state'):
                     if capacity_client is None or any(frame[k] != welcome[k] for k in (
@@ -739,6 +765,7 @@ def build_router() -> APIRouter:
         finally:
             with anyio.CancelScope(shield=True):
                 await session_releases.stop()
+                await startup_refusals.stop()
             if capacity_host is not None:
                 availability.unregister(capacity_host)
                 capacity_client.disconnect()
