@@ -414,14 +414,15 @@
         "m5a-consumers.md",
         "m5a-consumers-results.json",
         "m5b-startup-refusal.md",
-        "m5b-results.json"
+        "m5b-results.json",
+        "m5c-prelease-refusal-design.md"
       ],
       "commits": {
         "core_foundation": "19bb8f2",
         "m5b_nexus_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m5b-startup-refusal.md",
         "m5b_connector_commit_lookup": "git -C ../okto-nexus-connector log --format=%H --diff-filter=A -- plans/runtime-lifecycle-m5b.md"
       },
-      "next": "Finish pre-authorization and uncertain-effect startup isolation, storage failure retention, differential reconnect/revoke/reset and load cases; qualify major milestone through real Nexus UI. M5b covers post-lease native preparation errors in the separate local Connector, not full M5."
+      "next": "Implement an authenticated in-band prelease refusal; a ticket-only terminal receipt has no correlated applied lease and cannot safely close the operation. Then finish uncertain-effect startup isolation, storage failure retention, differential reconnect/revoke/reset and load cases; qualify major milestone through real Nexus UI. M5b covers post-lease native preparation errors in the separate local Connector, not full M5."
     },
     {
       "id": "M6",
