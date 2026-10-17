@@ -47,7 +47,7 @@ class EmbeddedRuntimeHost:
         self._ledger_task: asyncio.Task[SQLiteOwnedSlotLedger] | None = None
         self._runtime_tasks: dict[tuple[str, str], asyncio.Task[
             tuple[RuntimeCore, SQLiteJournal]]] = {}
-        self._selections: dict[tuple[str, str], tuple[dict, dict, object]] = {}
+        self._selections: dict[tuple[str, str], tuple[dict, dict, object, bool, str]] = {}
         self._closing = False
         self._history_closing = False
         self._native_action_owners = {}
@@ -91,6 +91,10 @@ class EmbeddedRuntimeHost:
 
     async def _ledger(self) -> SQLiteOwnedSlotLedger:
         async with self._lock:
+            # A delayed composition must not create a worker after the final
+            # shutdown pass captured the stores it is responsible for closing.
+            if self._history_closing:
+                raise CoreError('RUNTIME_DRAINING', 'embedded_store_owner', retry_safe=True)
             if self._ledger_task is None:
                 self._ledger_task = asyncio.create_task(self._open_ledger())
             task = self._ledger_task
@@ -138,13 +142,13 @@ class EmbeddedRuntimeHost:
         return service
 
     async def acquire(
-        self, *, executor_id: str, session_id: str,
+        self, *, server_id: str, executor_id: str, session_id: str,
         candidates: Mapping[str, InstallationCandidate],
         workspace_roots: Mapping[str, str],
         environment: Callable[[PreparedLaunch], Awaitable[Mapping[str, str]]],
         native_factory=None, native_action_factory=None, native_approvals_enabled=False,
     ) -> RuntimeCore:
-        for value, label in ((executor_id, "executor"), (session_id, "session")):
+        for value, label in ((server_id, "server"), (executor_id, "executor"), (session_id, "session")):
             if (not isinstance(value, str) or not value or len(value) > 160 or
                     not all(char.isascii() and (char.isalnum() or char in "_-")
                             for char in value)):
@@ -158,7 +162,7 @@ class EmbeddedRuntimeHost:
             raise ValueError("A native action factory requires one approved Pi installation.")
         if type(native_approvals_enabled) is not bool:
             raise ValueError("Native approval capture must be a boolean.")
-        selection = (dict(candidates), dict(workspace_roots), native_action_factory, native_approvals_enabled)
+        selection = (dict(candidates), dict(workspace_roots), native_action_factory, native_approvals_enabled, server_id)
         key = (executor_id, session_id)
         async with self._lock:
             if self._closing:
@@ -175,9 +179,12 @@ class EmbeddedRuntimeHost:
         return runtime
 
     async def _compose(self, key, selection, environment, native_factory):
-        ledger = await self._ledger()
         journal: SQLiteJournal | None = None
         try:
+            ledger = await self._ledger()
+            from nexus_connector_core import JournalLocation, SessionKey
+            await ledger.register_journal_locations((JournalLocation(
+                self._journal_path(*key).name, SessionKey(selection[4], *key)),))
             await asyncio.to_thread(self.store_dir.mkdir, parents=True, exist_ok=True)
             journal = await open_journal(self._journal_path(*key))
             native_owner = None
@@ -248,7 +255,7 @@ class EmbeddedRuntimeHost:
             self._closing = True
             # Containment leaves journals available for final publication.
             # The store-closing pass fences new readers before joining them.
-            self._history_closing = close_stores
+            self._history_closing |= close_stores
             tasks = dict(self._runtime_tasks)
             ledger_task = self._ledger_task
             history_tasks = tuple(self._history_tasks)

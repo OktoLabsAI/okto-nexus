@@ -327,7 +327,9 @@
         "m4d3-unopened-design.md",
         "m4d3-validation.md",
         "m4d3-results.json",
-        "m4d4-store-audit-design.md"
+        "m4d4-store-audit-design.md",
+        "m4d4b-validation.md",
+        "m4d4b-results.json"
       ],
       "commits": {
         "nexus_m4d2": "132d8ba",
@@ -335,7 +337,9 @@
         "core_m4d3_documentation": "57fa45a",
         "connector_m4d3": "1b12367",
         "nexus_m4d3": "ef852e9",
-        "core_m4d4a": "2afb894"
+        "core_m4d4a": "2afb894",
+        "connector_m4d4b": "5f444c9",
+        "core_m4d4_cost": "4ea0dab"
       },
       "checkpoints": [
         {
@@ -378,15 +382,21 @@
             "plans/runtime-lifecycle-m4d4.md",
             "plans/runtime-lifecycle-m4d4-results.json"
           ]
+        },
+        {
+          "id": "M4d4b",
+          "status": "qualified_rollout_pending",
+          "title": "Host physical registration and retained store lifetime; 37 initial and 26 final Nexus installed cases, 118 Connector cases plus one platform skip; audit frontier pending"
         }
       ],
       "nexus_m4a_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4a-validation.md",
-      "next": "M4d4 storage-owned creation registry and first audit frontier, then scan caps and stream fairness. M4d3 rollout and controlled real-history latency qualification remain pending; production generation 73 unchanged.",
+      "next": "First audit frontier and partial-restore/reset invalidation, combined metadata budget, then scan caps and stream fairness. Creation discipline is adopted by both hosts. M4d3/M4d4b rollout and controlled real-history latency remain pending; production generation 73 unchanged.",
       "nexus_m4b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4b-validation.md",
       "nexus_m4c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4c-validation.md",
       "nexus_m4d1_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d1-validation.md",
       "nexus_m4d2_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d2-validation.md",
-      "nexus_m4d3_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d3-results.json"
+      "nexus_m4d3_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d3-results.json",
+      "nexus_m4d4b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d4b-results.json"
     },
     {
       "id": "M5",
@@ -516,7 +526,7 @@
       "milestone": "M3",
       "priority": "medium",
       "status": "open",
-      "description": "Agents initially displayed old RECOVERING until Refresh Agents while all three backend recovery rows were READY; subsequent view mount showed ONLINE. Existing poll pauses when document.hidden; cause not yet attributed and no frontend fix claimed. Follow-up 06:44–06:46 UTC 2026-10-17: generation 72 CONTROL_READY; Pi/Claude/Codex READY and Online in both existing Chrome tabs without reload/restart, four Pi WARM slots, renewed leases. Cause remains unproven. Follow-up 07:30–07:32 UTC again READY/Online with renewed leases and Pi 4 WARM; stale last-contact display observed but cause not proven. One delayed Pi publication did not change durable readiness. Follow-up 07:52 UTC: generation 73 CONTROL_READY, all three READY/Online, Pi four WARM and no backoff. Both existing tabs Online without reload; one retained 07:32 last-contact while the other showed current heartbeat. Cause of the original Recovering report remains unproven. See m3i-ui-rollout.md. Follow-up 08:42-08:43 UTC: generation 73 CONTROL_READY, three agents READY/Online in both existing tabs without reload, four Pi WARM and no pending deliveries. No newer durable recovery event after initial readiness at 07:46 UTC; cause remains unproven. Follow-up 09:25-09:27 UTC: user again reported all Recovering. Read-only inspection found generation 73 CONTROL_READY with fresh heartbeat, Pi/Claude/Codex READY, four Pi WARM slots and no pending deliveries. Both existing 8202 Chrome tabs displayed Online without reload or restart; one had an older last-contact observation. AgentsView polling skips hidden documents and has no visibility-change refresh, but this does not establish the cause of the reported Recovering state. Requested the affected screen/address; finding remains open. Follow-up 09:58-09:59 UTC: same production PID 32480 and generation 73, CONTROL_READY with fresh heartbeat; all three local agents READY since 07:46 UTC, Pi four WARM and no pending deliveries. Both existing browser tabs displayed Local Online without refresh, reload or restart. One tab retained an older last-contact observation (09:37 UTC). No causal attribution or deployed fix claimed."
+      "description": "Agents initially displayed old RECOVERING until Refresh Agents while all three backend recovery rows were READY; subsequent view mount showed ONLINE. Existing poll pauses when document.hidden; cause not yet attributed and no frontend fix claimed. Follow-up 06:44–06:46 UTC 2026-10-17: generation 72 CONTROL_READY; Pi/Claude/Codex READY and Online in both existing Chrome tabs without reload/restart, four Pi WARM slots, renewed leases. Cause remains unproven. Follow-up 07:30–07:32 UTC again READY/Online with renewed leases and Pi 4 WARM; stale last-contact display observed but cause not proven. One delayed Pi publication did not change durable readiness. Follow-up 07:52 UTC: generation 73 CONTROL_READY, all three READY/Online, Pi four WARM and no backoff. Both existing tabs Online without reload; one retained 07:32 last-contact while the other showed current heartbeat. Cause of the original Recovering report remains unproven. See m3i-ui-rollout.md. Follow-up 08:42-08:43 UTC: generation 73 CONTROL_READY, three agents READY/Online in both existing tabs without reload, four Pi WARM and no pending deliveries. No newer durable recovery event after initial readiness at 07:46 UTC; cause remains unproven. Follow-up 09:25-09:27 UTC: user again reported all Recovering. Read-only inspection found generation 73 CONTROL_READY with fresh heartbeat, Pi/Claude/Codex READY, four Pi WARM slots and no pending deliveries. Both existing 8202 Chrome tabs displayed Online without reload or restart; one had an older last-contact observation. AgentsView polling skips hidden documents and has no visibility-change refresh, but this does not establish the cause of the reported Recovering state. Requested the affected screen/address; finding remains open. Follow-up 09:58-09:59 UTC: same production PID 32480 and generation 73, CONTROL_READY with fresh heartbeat; all three local agents READY since 07:46 UTC, Pi four WARM and no pending deliveries. Both existing browser tabs displayed Local Online without refresh, reload or restart. One tab retained an older last-contact observation (09:37 UTC). No causal attribution or deployed fix claimed. Follow-up 10:55-10:58 UTC: same PID 32480 and generation 73, fresh CONTROL_READY; both existing Agents tabs show the three local agents Online without refresh/restart. Second tab still displays 09:59 last-contact. Unlike previous observations, Pi has four post-startup recoveries, with version_probe_timeout logged before containment and automatic READY at 10:34:29 UTC. Claude/Codex recovery rows remain READY since 07:46 UTC; no evidence establishes a simultaneous three-agent recovery. Pi has four WARM slots and four direct child node processes. Probe timeout cause and reported simultaneous Recovering remain unproven. See recovering-20261017-1055.md."
     },
     {
       "id": "L13",
@@ -559,9 +569,23 @@
       "priority": "high",
       "status": "qualified_rollout_pending",
       "description": "Proven release of an unfinished persistent turn now queues an idempotent original-caller status reply separately from native results. Five focused source cases passed; final installed artifact qualified across 59 distinct cases, with two rollback-test races corrected by waiting for the real notice before exact baseline capture (no implementation change). Real Pi UI displayed one interruption notice and a subsequent successful reply after automatic owner replacement. Pending-index scan is independent of historical rows. Global rollout pending; see m3k-real-ui.md and m3k-notifications-results.json."
+    },
+    {
+      "id": "L19",
+      "milestone": "M4",
+      "priority": "high",
+      "status": "qualified_rollout_pending",
+      "description": "Review reproduced embedded shutdown missing a ledger created after its initial snapshot: no runtime tasks remained but the ledger still answered queries. Final storage fence now rejects late construction; ledger-opening failure retires effect-free composition and the fence cannot reopen. 11 source and 26 final installed cases passed; standalone installed reproduction no longer leaks. Not attributed to the production Recovering report; no global rollout. See m4d4b-validation.md."
+    },
+    {
+      "id": "L20",
+      "milestone": "M3",
+      "priority": "high",
+      "status": "open",
+      "description": "Code inspection after the Pi version_probe_timeout report: EmbeddedDispatchOwner._execute_owned still sends unclassified opening failures to agent-wide recovery. Reproduce one failed startup while healthy sessions of the same agent continue, and verify exact session containment for all maintained harnesses. This is an M3 resource-isolation requirement, not a proven attribution of the simultaneous Recovering report. Do not relax authority or native-release proofs."
     }
   ],
   "live_installation": "Generation 73, Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers. Server PID 32480, launcher 39500, port 8202. Exact qualified wheels installed together; 542/158/99 package files and dependencies verified. Previous process drained normally; full offline backup preserved. Pi/Claude/Codex Online, Pi four WARM; Pi and Claude responded through the real Meta-harness, Claude terminal inspected. L12 cause remains unproven; L14 load qualification remains pending. See m3i-ui-rollout.md.",
   "publication": "Feature branches only; no main merge, tag or PyPI publication authorized by this plan",
-  "pending_installation": "M3k final wheel dc0d8130ec7ac33fb368e0c035c4a85dc1cef4d519c2e45b44a524348cd7c5db is source/installed/real-Pi-UI qualified. Controlled global rollout pending; generation 73 remains on M3i, untouched during production Recovering investigation and disposable tests."
+  "pending_installation": "M3k final wheel dc0d8130ec7ac33fb368e0c035c4a85dc1cef4d519c2e45b44a524348cd7c5db is source/installed/real-Pi-UI qualified. Controlled global rollout pending; generation 73 remains on M3i, untouched during production Recovering investigation and disposable tests. M4d4b final Nexus wheel 95fe2fda95e4cc0c3c32fb492ba1e62ea1f9d514340bd5fcef2a3c6a5fe985b3 is qualified in isolation with Core e93dc1e1 and Connector 2e222043; no new real UI or global rollout at this technical checkpoint."
 }

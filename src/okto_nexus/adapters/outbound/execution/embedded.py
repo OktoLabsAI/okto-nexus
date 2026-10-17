@@ -55,7 +55,7 @@ class EmbeddedExecutor:
                 raise CoreError("PROFILE_DRIFT", "embedded_selection")
             environment = local_launch.environment
         runtime = await host.acquire(
-            executor_id=scope["executor_id"], session_id=scope["session_id"],
+            server_id=scope["server_id"], executor_id=scope["executor_id"], session_id=scope["session_id"],
             candidates={candidate.adapter_id: candidate},
             workspace_roots={scope["workspace_id"]: workspace_root},
             environment=environment, native_factory=native_factory,
@@ -131,7 +131,7 @@ class EmbeddedExecutor:
 
     async def _runtime(self):
         return await self.host.acquire(
-            executor_id=self.context.executor_id, session_id=self.session_id,
+            server_id=self.context.server_id, executor_id=self.context.executor_id, session_id=self.session_id,
             candidates={self.candidate.adapter_id: self.candidate},
             workspace_roots={self.context.workspace_id: self.workspace_root},
             environment=self.environment, native_factory=self.native_factory,

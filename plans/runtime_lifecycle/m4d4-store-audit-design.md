@@ -1,7 +1,8 @@
 # M4d4 — Storage-owned journal registration and audit frontier
 
 Status: Core creation-registry foundation qualified in `2afb894` (44 installed
-cases); host integration and full audit mechanism not implemented or qualified.
+cases); host integration implemented in M4d4b, with qualification recorded in
+`m4d4b-validation.md`. Full audit frontier is not implemented or qualified.
 Follows M4d3. The existing
 `EmbeddedSessionCatalog.audit_files()` must remain on startup until the
 replacement below is implemented and its crash boundaries are qualified.
@@ -41,6 +42,15 @@ the store budget; a storage-full error must retain prior evidence and cannot
 turn into an empty registry. Compare metadata cost at 1k/10k/100k entries before
 adopting the default. No unbounded in-memory directory map or duplicate native
 claim table is needed.
+
+Installed Core measurement now covers 1k/10k/100k representative registrations.
+Exact lookup, 128-row page and tail query use 17/1322/22 SQLite VM steps at all
+three sizes. At 100k entries the registry plus empty host schema allocates
+43,925,504 bytes, about 41.9 MiB of the default 64 MiB ledger limit. This is not
+a mixed capacity/slot-history budget qualification. The audit implementation
+must account for the remaining metadata and maximum identifier sizes before
+adopting a default; do not infer that all 100k-session host data fits from this
+registry-only measurement. Core evidence: `plans/runtime-lifecycle-m4d4-cost.md`.
 
 ## Initial conversion and subsequent startup
 

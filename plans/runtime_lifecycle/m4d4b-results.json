@@ -1,0 +1,484 @@
+{
+  "checkpoint": "M4d4b",
+  "global_rollout": false,
+  "real_ui_gate": "NOT_RUN_FOR_THIS_TECHNICAL_CHECKPOINT",
+  "installed_campaigns": [
+    {
+      "directory": "build/runtime-m4d4b-host-installed",
+      "junit": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "37",
+        "time": "575.671",
+        "timestamp": "2026-10-17T08:09:32.043302-03:00",
+        "hostname": "Alienware_m15"
+      },
+      "installed": {
+        "okto_nexus": {
+          "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\m3k-owner-env\\Lib\\site-packages\\okto_nexus",
+          "wheel_sha256": "630a55ff027795ca50748719806df9ed4db9cc44739f5b70c27990c844fc26c4"
+        },
+        "nexus_connector_core": {
+          "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\m3k-owner-env\\Lib\\site-packages\\nexus_connector_core",
+          "wheel_sha256": "e93dc1e1cdcc5d0868265c36c0e1200a1ff048aa79371e410727b3dfe74cad3b"
+        },
+        "okto_nexus_connector": {
+          "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\m3k-owner-env\\Lib\\site-packages\\okto_nexus_connector",
+          "wheel_sha256": "2e222043b889314a21492191a77b41b1ba890f1a8cc12b3885efecc651ce0893"
+        }
+      },
+      "changed_inputs": [],
+      "campaign_sha256": "92a2da20a9aa0dabc155cc6c9a04c8d55a83a3e3dd89f7d924d6791095d34b0b",
+      "junit_sha256": "fd4326064e2d664534dda5b8f53d6aa1e101990891f6cc0029542327efc42ded",
+      "cases": [
+        {
+          "classname": "tests.execution_r4.test_host_journal_registration",
+          "name": "test_registration_commits_before_file_creation_and_is_exact",
+          "time": "0.102",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_host_journal_registration",
+          "name": "test_failed_file_open_retains_intent_for_new_host_retry",
+          "time": "0.095",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_host_journal_registration",
+          "name": "test_scope_conflict_cannot_create_or_retarget_file",
+          "time": "0.045",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_host_journal_registration",
+          "name": "test_cancelled_observer_keeps_one_owned_composition",
+          "time": "0.107",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_ns07",
+          "name": "test_ns07_01",
+          "time": "0.129",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_ns07",
+          "name": "test_passive_serve_does_not_open_native_sessions",
+          "time": "10.275",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_ns07",
+          "name": "test_ns07_02",
+          "time": "0.258",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_ns07",
+          "name": "test_failed_composition_does_not_leave_a_pending_shutdown_resource",
+          "time": "0.133",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_embedded_capacity_composition",
+          "name": "test_slow_retiring_observer_does_not_block_another_capacity_namespace",
+          "time": "0.046",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_embedded_capacity_composition",
+          "name": "test_embedded_reservation_is_shared_with_new_owner_and_never_creates_runtime",
+          "time": "0.060",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_embedded_capacity_composition",
+          "name": "test_embedded_default_does_not_advertise_or_create_capacity_store",
+          "time": "0.009",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_embedded_capacity_composition",
+          "name": "test_boot_resource_scan_releases_only_fenced_unconsumed_reservations[False]",
+          "time": "4.289",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_embedded_capacity_composition",
+          "name": "test_boot_resource_scan_releases_only_fenced_unconsumed_reservations[True]",
+          "time": "4.586",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_session_catalog",
+          "name": "test_backfill_is_atomic_resumable_and_does_not_create_native_stores",
+          "time": "4.049",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_session_catalog",
+          "name": "test_registration_requires_exact_canonical_session_and_current_owner",
+          "time": "2.928",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_session_catalog",
+          "name": "test_upgrade_preserves_existing_sessions_and_retirement_before_backfill",
+          "time": "3.078",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_session_catalog",
+          "name": "test_directory_audit_is_bounded_and_rejects_unattributed_files_and_missing_ledger",
+          "time": "3.485",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_session_catalog",
+          "name": "test_catalog_lookup_and_startup_sql_cost_ignore_verified_history[1000]",
+          "time": "3.615",
+          "properties": {
+            "history_sessions": "1000",
+            "catalog_lookup_vm_steps": "63",
+            "startup_sql_vm_steps": "142"
+          }
+        },
+        {
+          "classname": "tests.execution_r4.test_local_session_catalog",
+          "name": "test_catalog_lookup_and_startup_sql_cost_ignore_verified_history[10000]",
+          "time": "21.708",
+          "properties": {
+            "history_sessions": "10000",
+            "catalog_lookup_vm_steps": "63",
+            "startup_sql_vm_steps": "142"
+          }
+        },
+        {
+          "classname": "tests.execution_r4.test_local_session_catalog",
+          "name": "test_catalog_lookup_and_startup_sql_cost_ignore_verified_history[100000]",
+          "time": "157.607",
+          "properties": {
+            "history_sessions": "100000",
+            "catalog_lookup_vm_steps": "63",
+            "startup_sql_vm_steps": "142"
+          }
+        },
+        {
+          "classname": "tests.execution_r4.test_local_session_catalog",
+          "name": "test_ledger_sidecar_without_ledger_is_not_an_empty_store",
+          "time": "4.105",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_session_catalog",
+          "name": "test_occupied_slot_is_attributed_by_exact_lookup_not_history_map[session-1]",
+          "time": "4.200",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_session_catalog",
+          "name": "test_occupied_slot_is_attributed_by_exact_lookup_not_history_map[unknown]",
+          "time": "4.139",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_session_catalog",
+          "name": "test_real_composition_registers_canonical_location_before_journal_creation[pi_rpc]",
+          "time": "15.260",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_session_catalog",
+          "name": "test_real_composition_registers_canonical_location_before_journal_creation[codex_app_server]",
+          "time": "11.280",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_session_catalog",
+          "name": "test_real_composition_registers_canonical_location_before_journal_creation[claude_stream]",
+          "time": "13.687",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_approved_mcp_host",
+          "name": "test_approved_mcp_environment_claims_and_completes_with_session_authority[strict]",
+          "time": "11.750",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_pi_native_hosts",
+          "name": "test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[False-embedded]",
+          "time": "21.376",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_pi_native_hosts",
+          "name": "test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[False-connector]",
+          "time": "32.580",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_pi_native_hosts",
+          "name": "test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[True-embedded]",
+          "time": "11.882",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_pi_native_hosts",
+          "name": "test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[True-connector]",
+          "time": "30.082",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_initial_refusal_restart",
+          "name": "test_restart_recovers_initial_refusal_without_native_execution[denial_before]",
+          "time": "34.724",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_initial_refusal_restart",
+          "name": "test_restart_recovers_initial_refusal_without_native_execution[denial_before_release_after]",
+          "time": "31.136",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_initial_refusal_restart",
+          "name": "test_restart_recovers_initial_refusal_without_native_execution[denial_after]",
+          "time": "30.311",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_initial_refusal_restart",
+          "name": "test_restart_recovers_initial_refusal_without_native_execution[core_before]",
+          "time": "28.605",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_initial_refusal_restart",
+          "name": "test_restart_recovers_initial_refusal_without_native_execution[core_after]",
+          "time": "28.772",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_initial_refusal_restart",
+          "name": "test_restart_recovers_initial_refusal_without_native_execution[publish_after]",
+          "time": "34.994",
+          "properties": {}
+        }
+      ]
+    },
+    {
+      "directory": "build/runtime-m4d4b-final-installed",
+      "junit": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "26",
+        "time": "300.188",
+        "timestamp": "2026-10-17T08:21:48.857558-03:00",
+        "hostname": "Alienware_m15"
+      },
+      "installed": {
+        "okto_nexus": {
+          "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\m3k-owner-env\\Lib\\site-packages\\okto_nexus",
+          "wheel_sha256": "95fe2fda95e4cc0c3c32fb492ba1e62ea1f9d514340bd5fcef2a3c6a5fe985b3"
+        },
+        "nexus_connector_core": {
+          "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\m3k-owner-env\\Lib\\site-packages\\nexus_connector_core",
+          "wheel_sha256": "e93dc1e1cdcc5d0868265c36c0e1200a1ff048aa79371e410727b3dfe74cad3b"
+        },
+        "okto_nexus_connector": {
+          "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\m3k-owner-env\\Lib\\site-packages\\okto_nexus_connector",
+          "wheel_sha256": "2e222043b889314a21492191a77b41b1ba890f1a8cc12b3885efecc651ce0893"
+        }
+      },
+      "changed_inputs": [],
+      "campaign_sha256": "306c428bc45e814cece69fce4ee028ca634c984a45fd53dfa588f7022bec96ae",
+      "junit_sha256": "a5a10bb0712df92038674cfaff58c6aa71081f1904b44d4f39b034420b1101e3",
+      "cases": [
+        {
+          "classname": "tests.execution_r4.test_host_journal_registration",
+          "name": "test_registration_commits_before_file_creation_and_is_exact",
+          "time": "0.058",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_host_journal_registration",
+          "name": "test_failed_file_open_retains_intent_for_new_host_retry",
+          "time": "0.049",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_host_journal_registration",
+          "name": "test_scope_conflict_cannot_create_or_retarget_file",
+          "time": "0.025",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_host_journal_registration",
+          "name": "test_cancelled_observer_keeps_one_owned_composition",
+          "time": "0.044",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_host_journal_registration",
+          "name": "test_late_composition_cannot_create_ledger_after_final_shutdown_snapshot",
+          "time": "0.007",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_host_journal_registration",
+          "name": "test_ledger_creation_failure_leaves_no_uncertain_composition",
+          "time": "0.006",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_host_journal_registration",
+          "name": "test_final_store_fence_cannot_be_reopened_by_containment_only_pass",
+          "time": "0.024",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_ns07",
+          "name": "test_ns07_01",
+          "time": "0.085",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_ns07",
+          "name": "test_passive_serve_does_not_open_native_sessions",
+          "time": "5.161",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_ns07",
+          "name": "test_ns07_02",
+          "time": "0.123",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_ns07",
+          "name": "test_failed_composition_does_not_leave_a_pending_shutdown_resource",
+          "time": "0.047",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_embedded_capacity_composition",
+          "name": "test_slow_retiring_observer_does_not_block_another_capacity_namespace",
+          "time": "0.026",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_embedded_capacity_composition",
+          "name": "test_embedded_reservation_is_shared_with_new_owner_and_never_creates_runtime",
+          "time": "0.034",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_embedded_capacity_composition",
+          "name": "test_embedded_default_does_not_advertise_or_create_capacity_store",
+          "time": "0.006",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_embedded_capacity_composition",
+          "name": "test_boot_resource_scan_releases_only_fenced_unconsumed_reservations[False]",
+          "time": "2.076",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_embedded_capacity_composition",
+          "name": "test_boot_resource_scan_releases_only_fenced_unconsumed_reservations[True]",
+          "time": "2.127",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_pi_native_hosts",
+          "name": "test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[False-embedded]",
+          "time": "14.062",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_pi_native_hosts",
+          "name": "test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[False-connector]",
+          "time": "31.541",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_pi_native_hosts",
+          "name": "test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[True-embedded]",
+          "time": "18.082",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_pi_native_hosts",
+          "name": "test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[True-connector]",
+          "time": "37.526",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_initial_refusal_restart",
+          "name": "test_restart_recovers_initial_refusal_without_native_execution[denial_before]",
+          "time": "28.565",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_initial_refusal_restart",
+          "name": "test_restart_recovers_initial_refusal_without_native_execution[denial_before_release_after]",
+          "time": "24.833",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_initial_refusal_restart",
+          "name": "test_restart_recovers_initial_refusal_without_native_execution[denial_after]",
+          "time": "31.622",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_initial_refusal_restart",
+          "name": "test_restart_recovers_initial_refusal_without_native_execution[core_before]",
+          "time": "32.106",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_initial_refusal_restart",
+          "name": "test_restart_recovers_initial_refusal_without_native_execution[core_after]",
+          "time": "30.716",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_initial_refusal_restart",
+          "name": "test_restart_recovers_initial_refusal_without_native_execution[publish_after]",
+          "time": "38.191",
+          "properties": {}
+        }
+      ]
+    }
+  ],
+  "late_ledger_reproduction": {
+    "artifact_sha256": "630a55ff027795ca50748719806df9ed4db9cc44739f5b70c27990c844fc26c4",
+    "late_ledger_open_after_shutdown": true,
+    "runtime_tasks_after_shutdown": 0,
+    "expected_assertion_exit_code": 1,
+    "cleanup": "same host shutdown called again in finally; disposable directory removed",
+    "production_touched": false
+  },
+  "fixed_reproduction": {
+    "late_ledger_open_after_shutdown": false,
+    "runtime_tasks_after_shutdown": 0,
+    "exit_code": 0
+  },
+  "final_source_files_match_wheel": 547,
+  "source_followup": {
+    "passed": 11,
+    "report": "build/m4d4b-late-ledger-source.xml"
+  },
+  "scope_limits": [
+    "First audit frontier and restore/copy mismatch detection pending",
+    "Combined registry/capacity/slot budget pending",
+    "Scan caps, stream fairness and major UI gates pending"
+  ]
+}
