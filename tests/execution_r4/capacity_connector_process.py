@@ -99,12 +99,36 @@ async def run(config):
         if faults['forge_next_capacity']:
             faults['forge_next_capacity'] = False
             assert request['capacity'] is not None
-            forged = copy.deepcopy(request)
-            forged['request_id'] += '-forged'
-            forged['capacity']['reservation_id'] += '-foreign'
-            response = await original_startup_publish(self, forged, **options)
-            assert response['type'] == 'startup.refuse.deferred', response
-            faults['startup_forgery_rejections'] += 1
+            # Exercise distinct, protocol-valid changes to the physical
+            # reservation while the original durable report is held back.
+            # The Server must reject each one against its canonical admission.
+            def changed(value, field, replacement):
+                target = value['capacity']
+                for part in field[:-1]:
+                    target = target[part]
+                target[field[-1]] = replacement
+
+            def other_digest(value):
+                return 'sha256:' + ('1' if value[7] == '0' else '0') + value[8:]
+
+            capacity = request['capacity']
+            ttl = capacity['request']['ttl_ms']
+
+            cases = (
+                (('reservation_id',), capacity['reservation_id'] + '-foreign'),
+                (('request', 'attempt_id'), capacity['request']['attempt_id'] + '-foreign'),
+                (('request', 'scope', 'boot_id'), capacity['request']['scope']['boot_id'] + '-foreign'),
+                (('request', 'affinity_key'), other_digest(capacity['request']['affinity_key'])),
+                (('request', 'ttl_ms'), ttl - 1 if ttl > 100 else ttl + 1),
+                (('consumption', 'turn_intent_hash'), other_digest(capacity['consumption']['turn_intent_hash'])),
+            )
+            for ordinal, (field, replacement) in enumerate(cases):
+                forged = copy.deepcopy(request)
+                forged['request_id'] += f'-forged-{ordinal}'
+                changed(forged, field, replacement)
+                response = await original_startup_publish(self, forged, **options)
+                assert response['type'] == 'startup.refuse.deferred', (field, response)
+                faults['startup_forgery_rejections'] += 1
             faults['startup_forgery_entered'] = True
             await asyncio.wait_for(faults['startup_forgery_gate'].wait(), 60)
             return response

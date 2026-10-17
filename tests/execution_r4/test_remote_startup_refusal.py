@@ -247,7 +247,7 @@ def test_remote_failed_preparation_releases_capacity_and_keeps_next_work_availab
                             if state['startup_forgery_entered']:
                                 break
                             await asyncio.sleep(.05)
-                    assert state['ready'] and state['startup_forgery_rejections'] == 1
+                    assert state['ready'] and state['startup_forgery_rejections'] == 6
                     assert not query(setup, 'SELECT operation_id FROM execution_receipts WHERE '
                         'operation_id IN (SELECT open_operation_id FROM execution_sessions WHERE session_id=?)',
                         (held.request.scope.session_id,))
@@ -271,7 +271,7 @@ def test_remote_failed_preparation_releases_capacity_and_keeps_next_work_availab
                     assert state['preparation_failures' if failure == 'prepare' else 'candidate_failures'] == 1 and state['ready']
                     if cut:
                         if cut == 'forged_capacity':
-                            assert state['startup_forgery_rejections'] == 1
+                            assert state['startup_forgery_rejections'] == 6
                         else:
                             assert state['startup_ack_losses' if cut == 'lost_ack' else 'publication_cuts'] == 1
                             assert state['generation'] > initial['generation']

@@ -256,6 +256,11 @@ Claude responderam; Codex recusado por quota do provedor. Ver
 
 ### M5 — Núcleo compartilhado de recuperação local/remota
 
+- Checkpoint M5i: no Connector local em processo separado, seis relatórios
+  `startup.refuse` válidos no protocolo mas com campos físicos da reserva
+  adulterados foram recusados pelo Server; o relatório durável original foi
+  aceito e o handoff seguinte progrediu uma vez. Um teste source-tuple passou.
+  A instalação global permaneceu desligada. Ver `m5i-capacity-field-matrix.md`.
 - Extrair políticas de estado/transição para Core e manter adaptadores de host no
   Nexus/Connector. Remover duplicação somente após testes diferenciais.
 - Unificar interpretação de close sem receipt, prova de contenção, retomada de
