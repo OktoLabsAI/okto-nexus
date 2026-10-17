@@ -219,6 +219,13 @@ class EmbeddedAgentRecovery:
             await asyncio.sleep(0.01)
         else:
             return
+        while not owner._stopping.is_set() and not self._registry_stop.is_set():
+            await asyncio.to_thread(owner.verify)
+            if await ledger.advance_journal_extension_index(limit=128):
+                break
+            await asyncio.sleep(0.01)
+        else:
+            return
         # Physical audit is repeated after legacy import so the staged token
         # cannot represent a directory that changed during conversion.
         if not await catalog.audit_files():
@@ -231,6 +238,10 @@ class EmbeddedAgentRecovery:
                 owner.verify(uow=uow)
                 return stored_audit_anchor(uow.connection, store_id=store_id)
         stored = await asyncio.to_thread(read_stored)
+        if stored is not None:
+            prefix = await ledger.journal_digest_at_revision(stored.revision)
+            if prefix != stored.digest:
+                raise CoreError('PROFILE_DRIFT', 'embedded_audit_anchor')
         core_anchor = await ledger.journal_audit_anchor()
         if (stored is not None and stored == core_anchor
                 and stored.revision == head.revision and stored.digest == head.digest):

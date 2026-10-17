@@ -349,7 +349,9 @@
       "m4d4e3-validation.md",
       "Connector: plans/runtime-lifecycle-m4d4e4.md",
       "Core: plans/runtime-lifecycle-m4d4e5.md",
-      "m4d4e5-validation.md"
+      "m4d4e5-validation.md",
+      "Core: plans/runtime-lifecycle-m4d4e6.md",
+      "m4d4e6-validation.md"
       ],
       "commits": {
         "nexus_m4d2": "132d8ba",
@@ -369,7 +371,10 @@
       "nexus_m4d4e3": "47e0567",
       "connector_m4d4e4": "8a9ee1e",
       "core_m4d4e5": "9c3d4dd",
-      "connector_m4d4e5": "df41f82"
+      "connector_m4d4e5": "df41f82",
+      "nexus_m4d4e5": "b21565d",
+      "core_m4d4e6": "7e1a19d",
+      "connector_m4d4e6": "76dda1e"
       },
       "checkpoints": [
         {
@@ -504,10 +509,21 @@
             "m4d4e5-validation.md",
             "Core: plans/runtime-lifecycle-m4d4e5.md"
           ]
+        },
+        {
+          "id": "M4d4e6",
+          "status": "qualified_rollout_pending",
+          "title": "Sparse Core digest checkpoints prove forward-head prefixes with at most 128 row hashes; 26 installed Core, 7 Nexus and 11 Connector focused cases passed; physical anomaly policy pending",
+          "core_commit": "7e1a19d",
+          "connector_commit": "76dda1e",
+          "evidence": [
+            "m4d4e6-validation.md",
+            "Core: plans/runtime-lifecycle-m4d4e6.md"
+          ]
         }
       ],
       "nexus_m4a_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4a-validation.md",
-    "next": "M4d4e1/e2 add the transactional Core head and staged nonce; M4d4e3/e4 persist matching Nexus and Connector tokens; M4d4e5 fences definite same-identity Core rollback before admission. Next prove bounded head extension for forward revisions and qualify physical anomaly auditing plus the interval before completion; only then consider removing the full startup scan. Combined metadata budget, scan caps, stream fairness, M4d3/M4d4b rollout and controlled real-history latency remain pending; production generation 73 unchanged.",
+    "next": "M4d4e1-e6 provide a transactional Core head, paired Nexus/Connector tokens, definite rollback refusal and bounded forward-prefix proof. Next qualify physical anomaly auditing and the interval before its completion; only then consider removing the full startup scan. Combined metadata budget, scan caps, stream fairness, M4d3/M4d4b rollout and controlled real-history latency remain pending; production generation 73 unchanged.",
       "nexus_m4b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4b-validation.md",
       "nexus_m4c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4c-validation.md",
       "nexus_m4d1_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d1-validation.md",

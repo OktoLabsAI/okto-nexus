@@ -293,6 +293,42 @@ async def test_same_identity_core_head_rollback_is_refused_before_admission(tmp_
 
 
 @pytest.mark.asyncio
+async def test_forward_registry_head_requires_stored_digest_prefix(tmp_path, monkeypatch):
+    from nexus_connector_core import JournalLocation, SessionKey
+    catalog, factory, _ = catalog_fixture(tmp_path, 1)
+    owner = catalog.owner
+    recovery = EmbeddedAgentRecovery(owner)
+    recovery._state = lambda *args: None
+    try:
+        await owner.host._ledger()
+        await recovery.initialize()
+        await recovery.registry_import_task
+        ledger = await owner.host._ledger()
+        store_id = await ledger.physical_store_id()
+        with factory.unit_of_work(write=False) as uow:
+            stored = uow.connection.execute('SELECT audit_nonce,audit_revision,audit_digest '
+                'FROM execution_embedded_store_bindings WHERE reset_generation=0').fetchone()
+        assert stored[1] == 0
+        name = catalog._name('session-0')
+        (owner.host.store_dir / name).touch()
+        await ledger.register_journal_locations((JournalLocation(name,
+            SessionKey(owner.channel.server_id, owner.channel.executor_id, 'session-0')),))
+        async def forged_prefix(revision):
+            assert revision == 0
+            return 'f' * 64
+        monkeypatch.setattr(ledger, 'journal_digest_at_revision', forged_prefix)
+        with pytest.raises(CoreError, match='PROFILE_DRIFT'):
+            await recovery._stage_audit_anchor(catalog, ledger, store_id)
+        with factory.unit_of_work(write=False) as uow:
+            assert tuple(uow.connection.execute('SELECT audit_nonce,audit_revision,audit_digest '
+                'FROM execution_embedded_store_bindings WHERE reset_generation=0').fetchone()) == tuple(stored)
+    finally:
+        owner._stopping.set()
+        await recovery.close()
+        await owner.host.shutdown()
+
+
+@pytest.mark.asyncio
 async def test_interrupted_registry_import_resumes_without_rebinding_or_skipping_files(tmp_path, monkeypatch):
     catalog, factory, _ = catalog_fixture(tmp_path, 140)
     owner = catalog.owner

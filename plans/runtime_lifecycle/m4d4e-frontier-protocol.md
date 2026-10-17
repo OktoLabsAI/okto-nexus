@@ -43,6 +43,11 @@ Connector admission, while allowing a newer Core head to proceed only through
 the unchanged full physical audit. Proving that a newer head extends a stored
 host anchor remains an open gate.
 
+M4d4e6 adds sparse Core digest checkpoints and an exact bounded prefix read.
+Both hosts now verify that a forward Core head extends their prior digest
+before renewing the token. This does not answer whether the physical directory
+changed while the host was stopped, so admission still uses the full audit.
+
 After the initial full physical audit and M4d4d import have completed, Server
 commits its first frontier with the exact Core head and a fresh audit nonce.
 Core durably records the same nonce/head in its ledger before Server commits
