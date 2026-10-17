@@ -1,7 +1,9 @@
 # M3k: automatic replacement after host containment
 
-Status: source and installed qualification passed. Disposable real UI and global
-rollout pending.
+Status: replacement and caller-notification correction passed source, installed
+and disposable real Pi UI qualification. Idle/active preserve-agent resets also
+passed through the UI. Global rollout remains pending. See `m3k-real-ui.md`,
+`m3k-reset-ui.md` and `m3k-notifications-results.json`.
 
 L10 is distinct from initial-start retry and per-agent recovery: once a shared
 embedded dispatch owner failed, it stopped itself and contained native work,
@@ -68,7 +70,9 @@ were byte-verified against their artifacts. See `m3k-results.json`.
 
 These tests use synthetic native peers, real durable SQLite and real HTTP/CLI
 shutdown paths. They do not establish a real provider fault-injection UI result.
-That test remains pending in a disposable home before production rollout.
+The later disposable real-provider test is recorded in `m3k-real-ui.md`, including
+its caller-notification failure. The automated result above is not superseded
+by or sufficient to close that live acceptance finding.
 
 Nexus wheel SHA-256: `bdeb038d0c1a4d8e7ed167b9fc07faf91875871113cd3c53fdaba119d0cab876`.
 Source reports: `build/m3k-owner-source.xml`,

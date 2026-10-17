@@ -281,3 +281,12 @@ def project_released_deliveries(conn, *, server_id, executor_id, session_id, pro
             "updated_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') WHERE operation_id=? "
             "AND (status!='OUTCOME_UNKNOWN' OR reason IS NOT 'session_released_without_result')",
             (row['domain_operation_id'],))
+        # Queue the server status reply in the same transaction as its release
+        # proof. Poll only this pending index, never the complete delivery history.
+        # One-shot calls own their own terminal error notification.
+        conn.execute("INSERT INTO execution_release_notifications(domain_operation_id,state,created_at) "
+            "SELECT ?,'PENDING',strftime('%Y-%m-%dT%H:%M:%fZ','now') "
+            "WHERE NOT EXISTS (SELECT 1 FROM one_shot_calls WHERE call_id=?) "
+            "AND NOT EXISTS (SELECT 1 FROM runtime_handoff_notice_retirements WHERE operation_id=?) "
+            "AND NOT EXISTS (SELECT 1 FROM execution_capacity_compensations WHERE domain_operation_id=?) "
+            "ON CONFLICT DO NOTHING", (row['domain_operation_id'],) * 4)

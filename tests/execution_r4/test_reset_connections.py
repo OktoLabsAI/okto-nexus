@@ -196,6 +196,18 @@ def test_failed_history_reset_rolls_back_data_and_immutability_fence(connected_l
         turn = dict(uow.connection.execute("SELECT operation_id,session_id FROM execution_operations WHERE action='turn.submit'").fetchone())
     wait_receipt(setup, turn)
     wait_receipt(setup, admit(setup, binding, 'rollback-close', 'runtime.close', session_id=turn['session_id']))
+    # Closing unfinished work also publishes an asynchronous caller notice.
+    # Include that committed message in the baseline instead of racing it;
+    # rollback must preserve the complete message rows, including the notice.
+    from test_embedded_owner_replacement import wait_until
+    def notice_published():
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            return uow.connection.execute(
+                "SELECT 1 FROM execution_release_notifications n "
+                "JOIN execution_delivery_releases r USING(domain_operation_id) "
+                "WHERE r.operation_id=? AND n.state='PUBLISHED'",
+                (turn['operation_id'],)).fetchone()
+    wait_until(notice_published)
     with deps.connection_factory.unit_of_work(write=False) as uow:
         before = {table: [tuple(row) for row in uow.connection.execute('SELECT * FROM ' + table)]
             for table in ('messages', 'runtime_delivery_attempt_events', 'execution_bindings')}

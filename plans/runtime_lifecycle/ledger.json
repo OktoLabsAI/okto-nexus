@@ -24,7 +24,8 @@
         "m3g-ui-rollout.md",
         "m3j-renewal-contention.md",
         "m3j-results.json",
-        "m3i-ui-rollout.md"
+        "m3i-ui-rollout.md",
+        "m3k-real-ui.md"
       ]
     },
     {
@@ -183,7 +184,10 @@
         "m3i-embedded-first-results.json",
         "m3i-embedded-results.json",
         "m3k-owner-replacement.md",
-        "m3k-results.json"
+        "m3k-results.json",
+        "m3k-real-ui.md",
+        "m3k-reset-ui.md",
+        "m3k-notifications-results.json"
       ],
       "commits": {
         "core_m3c": "7bab651",
@@ -262,12 +266,12 @@
         },
         {
           "id": "M3k",
-          "status": "in_progress",
-          "title": "Automatic replacement after retained host containment, exact predecessor generation fence and shutdown/reset integration. Final source 12 passed; installed 82 passed with stable inputs. Disposable real UI and rollout pending."
+          "status": "qualified_rollout_pending",
+          "title": "Automatic contained-owner replacement and original-caller interruption notice. Initial replacement 82 installed cases; final notification artifact qualified across 59 distinct cases (57 initial passes plus 8 reset reruns after test synchronization only). Real Pi replacement and idle/active preserve-agent resets passed through UI. Global rollout pending."
         }
       ],
       "nexus_m3b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3b-validation.md",
-      "next": "L10 automatic contained-owner replacement; L14 initial-readiness load qualification; initial-opening renewal isolation and remaining availability criteria. M3i independent producers deployed; see m3i-ui-rollout.md.",
+      "next": "Deploy qualified M3k artifact at the next controlled rollout; L12 status-display attribution; L14 initial-readiness load qualification; initial-opening renewal isolation and remaining availability criteria.",
       "nexus_m3c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3c-validation.md",
       "nexus_m3e_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3e-validation.md",
       "nexus_m3g_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3g-pool-refusal.md",
@@ -286,7 +290,7 @@
         "global_rollout": "pending"
       },
       "reset_readiness_work": {
-        "status": "installed_validated_real_ui_pending",
+        "status": "installed_and_real_pi_ui_validated",
         "behavior": "Reset remains reconnecting until preserved enabled local selections are freshly observed. Admission reopened; unused harnesses and remote hosts do not block reset.",
         "source_reports": [
           "build/m3i-reset-readiness.xml",
@@ -296,9 +300,11 @@
         "new_isolation_cases_passed": 2,
         "initial_new_test_failures": "Status GET uses HTTP 200 with pending=true; tests corrected to inspect pending, without relaxing existing immediate-send cases.",
         "joint_build": "build/runtime-m3i-joint-dist",
-        "installed_report": "build/runtime-m3i-joint-installed"
+        "installed_report": "build/runtime-m3i-joint-installed",
+        "real_ui": "m3k-reset-ui.md"
       },
-      "nexus_m3i_embedded_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3i-embedded-results.json"
+      "nexus_m3i_embedded_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3i-embedded-results.json",
+      "nexus_m3k_notifications_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3k-notifications-results.json"
     },
     {
       "id": "M4",
@@ -469,8 +475,8 @@
       "id": "L10",
       "milestone": "M6",
       "priority": "high",
-      "status": "installed_validated_real_ui_pending",
-      "description": "An already-contained embedded owner has no automatic replacement while HTTP remains alive. Initial-start recovery is not post-containment supervision. Need retained producer join/resource release proof before replacement; M3f prevents the observed diagnostic trigger and stops manual recovery falsely reporting READY, but does not implement general owner replacement. Generation 69 also remained DRAINING_PENDING after normal shutdown despite zero occupied slots/active turns and no server child processes; exact PID termination was needed for deployment. Preserved stacks; no lock reset. Generation 70 later drained and exited normally for M3g rollout; automatic replacement of an already-contained owner is still unimplemented. Generation 71 reproduced containment after a transient recovery-status writer timeout. M3j prevents this escalation; general owner replacement remains open. Generation 71 later drained and exited normally for the qualified rollout. M3k implements same-process replacement after retained dispatch/native/publication/inventory cleanup, with an exact predecessor generation claim and shutdown/reset coordination. All three adapters, no replay, held native/discovery, policy and stale owner cases passed source tests. A candidate shutdown release error was reproduced and fixed; final 12-case source campaign passed. Installed qualification and real disposable UI remain pending; global generation 73 is unchanged. This does not implement or decide the M6 independent-process experiment. Final installed M3k campaign: 82 passed, no skips/failures, unchanged inputs; 536 source files match the wheel. Disposable real UI validation and global rollout remain pending."
+      "status": "qualified_rollout_pending",
+      "description": "Contained embedded owner replacement waits for retained cleanup and claims the exact predecessor generation. Source, installed and real Pi UI qualification passed; same HTTP process recovered and served new work without replay. Caller interruption notice is covered by L18. Production generation 73 still runs M3i; rollout pending. See m3k-owner-replacement.md and m3k-real-ui.md."
     },
     {
       "id": "L11",
@@ -484,7 +490,7 @@
       "milestone": "M3",
       "priority": "medium",
       "status": "open",
-      "description": "Agents initially displayed old RECOVERING until Refresh Agents while all three backend recovery rows were READY; subsequent view mount showed ONLINE. Existing poll pauses when document.hidden; cause not yet attributed and no frontend fix claimed. Follow-up 06:44–06:46 UTC 2026-10-17: generation 72 CONTROL_READY; Pi/Claude/Codex READY and Online in both existing Chrome tabs without reload/restart, four Pi WARM slots, renewed leases. Cause remains unproven. Follow-up 07:30–07:32 UTC again READY/Online with renewed leases and Pi 4 WARM; stale last-contact display observed but cause not proven. One delayed Pi publication did not change durable readiness. Follow-up 07:52 UTC: generation 73 CONTROL_READY, all three READY/Online, Pi four WARM and no backoff. Both existing tabs Online without reload; one retained 07:32 last-contact while the other showed current heartbeat. Cause of the original Recovering report remains unproven. See m3i-ui-rollout.md."
+      "description": "Agents initially displayed old RECOVERING until Refresh Agents while all three backend recovery rows were READY; subsequent view mount showed ONLINE. Existing poll pauses when document.hidden; cause not yet attributed and no frontend fix claimed. Follow-up 06:44–06:46 UTC 2026-10-17: generation 72 CONTROL_READY; Pi/Claude/Codex READY and Online in both existing Chrome tabs without reload/restart, four Pi WARM slots, renewed leases. Cause remains unproven. Follow-up 07:30–07:32 UTC again READY/Online with renewed leases and Pi 4 WARM; stale last-contact display observed but cause not proven. One delayed Pi publication did not change durable readiness. Follow-up 07:52 UTC: generation 73 CONTROL_READY, all three READY/Online, Pi four WARM and no backoff. Both existing tabs Online without reload; one retained 07:32 last-contact while the other showed current heartbeat. Cause of the original Recovering report remains unproven. See m3i-ui-rollout.md. Follow-up 08:42-08:43 UTC: generation 73 CONTROL_READY, three agents READY/Online in both existing tabs without reload, four Pi WARM and no pending deliveries. No newer durable recovery event after initial readiness at 07:46 UTC; cause remains unproven. Follow-up 09:25-09:27 UTC: user again reported all Recovering. Read-only inspection found generation 73 CONTROL_READY with fresh heartbeat, Pi/Claude/Codex READY, four Pi WARM slots and no pending deliveries. Both existing 8202 Chrome tabs displayed Online without reload or restart; one had an older last-contact observation. AgentsView polling skips hidden documents and has no visibility-change refresh, but this does not establish the cause of the reported Recovering state. Requested the affected screen/address; finding remains open."
     },
     {
       "id": "L13",
@@ -518,11 +524,18 @@
       "id": "L17",
       "milestone": "M3",
       "priority": "high",
-      "status": "installed_validated_real_ui_pending",
-      "description": "M3i installed campaign: reset keep_agents=true completes before the new selected adapter observation is accepted. Immediate persistent message fails inventory_not_fresh (both idle and previously active reset cases); no configuration loss shown. Preserve automatic recovery and independent readiness without weakening freshness or requiring manual resend. Reproduce deterministically before choosing truthful reset readiness versus durable startup queue admission. The existing reset tests are retained unchanged. Fix keeps reset operation reconnecting until selected local inventory is accepted while independent dispatch is reopened. Eight existing reset cases and two deterministic isolation cases passed across the focused source runs. Joint installed qualification and real UI remain pending. Joint installed campaign passed both original regressions and both isolation tests; real UI validation pending."
+      "status": "installed_and_real_pi_ui_validated",
+      "description": "Reset previously completed before preserved selected inventory was accepted. It now remains reconnecting until usable selected observations, with independent admission reopened. Installed reset and isolation cases passed. Disposable real UI idle and in-flight Pi resets preserved connection/key/workspace configuration and immediately admitted subsequent new messages, which returned with 1/1 ACK without manual review/reload. Full provider/Connector matrix remains a separate gate. See m3k-reset-ui.md."
+    },
+    {
+      "id": "L18",
+      "milestone": "M3",
+      "priority": "high",
+      "status": "qualified_rollout_pending",
+      "description": "Proven release of an unfinished persistent turn now queues an idempotent original-caller status reply separately from native results. Five focused source cases passed; final installed artifact qualified across 59 distinct cases, with two rollback-test races corrected by waiting for the real notice before exact baseline capture (no implementation change). Real Pi UI displayed one interruption notice and a subsequent successful reply after automatic owner replacement. Pending-index scan is independent of historical rows. Global rollout pending; see m3k-real-ui.md and m3k-notifications-results.json."
     }
   ],
   "live_installation": "Generation 73, Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers. Server PID 32480, launcher 39500, port 8202. Exact qualified wheels installed together; 542/158/99 package files and dependencies verified. Previous process drained normally; full offline backup preserved. Pi/Claude/Codex Online, Pi four WARM; Pi and Claude responded through the real Meta-harness, Claude terminal inspected. L12 cause remains unproven; L14 load qualification remains pending. See m3i-ui-rollout.md.",
   "publication": "Feature branches only; no main merge, tag or PyPI publication authorized by this plan",
-  "pending_installation": "M3k owner replacement installed-qualified: 82 passed, zero skips/failures and unchanged inputs. Disposable real UI fault-injection validation pending before global rollout. Global generation 73 remains on M3i."
+  "pending_installation": "M3k final wheel dc0d8130ec7ac33fb368e0c035c4a85dc1cef4d519c2e45b44a524348cd7c5db is source/installed/real-Pi-UI qualified. Controlled global rollout pending; generation 73 remains on M3i, untouched during production Recovering investigation and disposable tests."
 }

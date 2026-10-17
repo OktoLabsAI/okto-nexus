@@ -583,9 +583,11 @@ def build_dispatcher(deps):
         from .inbox import build_service as build_inbox_service
         from okto_nexus.application.one_shot_runtime import tick
         from okto_nexus.application.one_shot_notifications import publish_errors
+        from okto_nexus.application.execution_release_notifications import publish_release_notifications
         return (tick(deps) + build_inbox_service(deps).consume_canonical_runtime_results()
                 + native_approvals.scan_once() + handoffs.process_runtime_results()
-                + messages._runtime_results.scan_once(messages) + publish_errors(deps, messages))
+                + messages._runtime_results.scan_once(messages) + publish_errors(deps, messages)
+                + publish_release_notifications(deps, messages))
     dispatcher.publish_results = publish_results
     dispatcher.event_ingress.wake_dispatch = dispatcher.wake
     dispatcher.wake_channel = RuntimeWakeChannel(deps.config.home_dir, getattr(deps, "runtime_owner_api_url", None))
