@@ -1,0 +1,150 @@
+{
+  "checkpoint": "M3j",
+  "source_tests": {
+    "before_fix_failed": 4,
+    "after_fix_passed": 13
+  },
+  "installed_campaign": {
+    "tests": 43,
+    "failures": 0,
+    "errors": 0,
+    "seconds": 814.842,
+    "changed_inputs": [],
+    "report": "build/runtime-m3j-installed",
+    "limitation": "The process-exit helper still includes repo/src in PYTHONPATH; not an isolated installed-child proof."
+  },
+  "nexus_wheel_sha256": "9dae54d0f28b55fc3576754a83a129aba26b102126aa1d2137ee90d17f48b571",
+  "global_installation": {
+    "versions": {
+      "nexus": "0.3.1",
+      "core": "0.0.12",
+      "connector": "0.0.10"
+    },
+    "verified_files": {
+      "nexus": 541,
+      "core": 156,
+      "connector": 98
+    },
+    "pid": 29220,
+    "launcher_pid": 44848,
+    "generation": 72,
+    "graceful_previous_shutdown": true,
+    "forced_termination": false
+  },
+  "real_ui": {
+    "pi_responses": [
+      "M3J_PI_OK",
+      "M3J_PI_WARM_OK"
+    ],
+    "claude_response": "M3J_CLAUDE_OK",
+    "codex_not_prompted": "Existing external quota finding L5",
+    "agents_online": [
+      "Pi",
+      "claude",
+      "codex"
+    ]
+  },
+  "observation": {
+    "at": "2026-10-17T05:23:28.024396+00:00",
+    "host": [
+      {
+        "executor_id": "exe_8dfe549a557ab8c704fae66df36e35d0",
+        "control_state": "CONTROL_READY",
+        "generation": 72,
+        "last_seen_at": "2026-10-17T05:23:24.103096Z"
+      }
+    ],
+    "agents": [
+      {
+        "agent_id": "claude",
+        "state": "READY",
+        "generation": 72,
+        "updated_at": "2026-10-17T05:16:33.963366Z"
+      },
+      {
+        "agent_id": "Pi",
+        "state": "READY",
+        "generation": 72,
+        "updated_at": "2026-10-17T05:16:42.309880Z"
+      },
+      {
+        "agent_id": "codex",
+        "state": "READY",
+        "generation": 72,
+        "updated_at": "2026-10-17T05:16:33.455906Z"
+      }
+    ],
+    "pool": [
+      {
+        "agent_id": "Pi",
+        "state": "WARM",
+        "count": 4
+      }
+    ],
+    "backoff": [],
+    "calls": [
+      {
+        "agent_id": "Pi",
+        "call_id": "op_0399145e12544a208ce0cdf3f4e4df00",
+        "state": "SUCCEEDED",
+        "enqueued_at": 1792214308.499266,
+        "started_at": 1792214435.9384565,
+        "completed_at": 1792214446.165827,
+        "admission_to_running_seconds": 127.43919062614441,
+        "admission_to_completion_seconds": 137.66656112670898
+      },
+      {
+        "agent_id": "Pi",
+        "call_id": "op_e899dbee3fe049449f438bda84560063",
+        "state": "SUCCEEDED",
+        "enqueued_at": 1792214486.7461545,
+        "started_at": 1792214487.315318,
+        "completed_at": 1792214493.8061159,
+        "admission_to_running_seconds": 0.5691635608673096,
+        "admission_to_completion_seconds": 7.059961318969727
+      }
+    ],
+    "leases": [
+      {
+        "session_id": "ses_46c030f9926f099b26894b82fc270673",
+        "lifecycle_state": "READY",
+        "lease_serial": 2,
+        "status": "ACTIVE",
+        "issued_at": "2026-10-17T05:22:32.804779+00:00",
+        "valid_until_server": "2026-10-17T05:24:32.804779+00:00"
+      },
+      {
+        "session_id": "ses_607e4a26ffd13ef058b352e12cacb800",
+        "lifecycle_state": "READY",
+        "lease_serial": 4,
+        "status": "ACTIVE",
+        "issued_at": "2026-10-17T05:22:45.905435+00:00",
+        "valid_until_server": "2026-10-17T05:24:45.905435+00:00"
+      },
+      {
+        "session_id": "ses_608048da446a8246a513c08b0f110574",
+        "lifecycle_state": "READY",
+        "lease_serial": 4,
+        "status": "ACTIVE",
+        "issued_at": "2026-10-17T05:22:46.809445+00:00",
+        "valid_until_server": "2026-10-17T05:24:46.809445+00:00"
+      },
+      {
+        "session_id": "ses_926d66821173ecb6b57ea034a3d8ecac",
+        "lifecycle_state": "READY",
+        "lease_serial": 4,
+        "status": "ACTIVE",
+        "issued_at": "2026-10-17T05:22:48.090885+00:00",
+        "valid_until_server": "2026-10-17T05:24:48.090885+00:00"
+      },
+      {
+        "session_id": "ses_fab57ec0adb910d22affe8cd5f055ccd",
+        "lifecycle_state": "READY",
+        "lease_serial": 2,
+        "status": "ACTIVE",
+        "issued_at": "2026-10-17T05:23:00.916948+00:00",
+        "valid_until_server": "2026-10-17T05:25:00.916948+00:00"
+      }
+    ]
+  }
+}

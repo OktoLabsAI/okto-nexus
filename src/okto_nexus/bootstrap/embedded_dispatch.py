@@ -397,10 +397,18 @@ class EmbeddedDispatchOwner:
                     raise InitialLeaseDenied() from error
             raise
 
+    def _require_subject_available(self, frame):
+        # A recovery-status writer can be delayed while its retained owner has
+        # already fenced this subject. Containment controls remain available.
+        if (frame['action'] in ('runtime.open', 'turn.submit', 'turn.steer')
+                and frame['agent_id'] in self.agents.blocked):
+            raise CoreError('RECONCILIATION_REQUIRED', 'embedded_agent_recovery')
+
     def _bind(self, frame, binding, stream_epoch=None):
         raw = canonical_json(binding).decode()
         with self.factory.unit_of_work() as uow:
             self.verify(uow=uow)
+            self._require_subject_available(frame)
             from ..application.execution_agent_recovery import require_agent_ready
             require_agent_ready(uow.connection, frame['server_id'], frame['executor_id'], frame['agent_id'])
             c = self.channel
@@ -476,6 +484,7 @@ class EmbeddedDispatchOwner:
     async def _execute(self, frame, *, continuation=None):
         continuation = {} if continuation is None else continuation
         await asyncio.to_thread(self.verify)
+        self._require_subject_available(frame)
         action, payload = frame["action"], frame["payload"]
         key = frame["session_id"]
         resuming = action == 'runtime.open' and 'options' in continuation
@@ -700,16 +709,40 @@ class EmbeddedDispatchOwner:
                 if self._stopping.is_set() or self.sessions.get(session_id) is not session:
                     return
                 executor = session["executor"]
-                applied = await executor.renew_r4(scope=session["scope"],
-                    connection_id=self.channel.connection_id,connection_generation=self.channel.connection_generation,
-                    request_grant=self._request_grant)
+                applied = session.get('renewal_application')
+                if applied is None:
+                    applied = await executor.renew_r4(scope=session["scope"],
+                        connection_id=self.channel.connection_id,connection_generation=self.channel.connection_generation,
+                        request_grant=self._request_grant)
+                    # Core has installed this exact grant. A Server ACK write
+                    # may time out: retain it instead of issuing another grant.
+                    session['renewal_application'] = applied
                 await asyncio.to_thread(self.leases.applied,applied.acknowledgement,channel=self.channel)
+                session.pop('renewal_application', None)
                 self._schedule_renewal(session, applied)
         except Exception as error:
             if self.sessions.get(session_id) is session:
                 if session.get('recovering'):
                     self.agents.recover_session(session_id)
                     return
+                if (isinstance(error, OktoNexusError) and error.code == ErrorCode.DB_ERROR
+                        and error.retryable):
+                    try:
+                        # Writer contention is not ownership loss. Verify the
+                        # owner through a read snapshot; never extend authority.
+                        await asyncio.to_thread(self.verify)
+                        now = time.monotonic()
+                        deadline = session['executor'].context.lease_deadline_monotonic
+                        if now < deadline:
+                            session['renew_at'] = min(deadline, now + 1)
+                        else:
+                            self.agents.recover_session(session_id)
+                        logging.getLogger(__name__).warning(
+                            'Runtime lease persistence delayed; retry scoped to session=%s, expired=%s',
+                            session_id, now >= deadline)
+                        return
+                    except Exception as authority_error:
+                        error = authority_error
                 # Expired/revoked session authority is an expected containment
                 # boundary, not a failure of every runtime on this executor.
                 expected = (isinstance(error, CoreError) and error.code in {

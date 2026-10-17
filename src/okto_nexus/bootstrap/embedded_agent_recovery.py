@@ -4,11 +4,13 @@ Publication lag is not evidence of native failure. A slow worker is retained
 and observed; it is never duplicated or used to revoke a healthy native lease.
 """
 import asyncio
+import logging
 import random
 import re
 import time
 
 from nexus_connector_core import CoreError, ShutdownPolicy
+from ..errors import ErrorCode, OktoNexusError
 
 from .embedded_reconciliation import EmbeddedReconciliation
 from .embedded_events import EmbeddedPublicationDeferred
@@ -122,10 +124,24 @@ class EmbeddedAgentRecovery:
         # Secondary failures during containment must not hide the first cause.
         first = self.errors.setdefault(agent_id, error)
         self.current_errors[agent_id] = error
-        await asyncio.to_thread(self._state, agent_id, 'RECOVERING', error)
-        await asyncio.to_thread(self.owner._recovery_event, 'RECOVERY_AGENT_BLOCKED',
-            f"Current: {_diagnostic(error)}; first: {_diagnostic(first)}",
-            agent_id=agent_id)
+        # Record the original sanitized classification before the durable
+        # write: a secondary storage failure must not erase its provenance.
+        logging.getLogger(__name__).warning('Runtime agent recovery requested: agent=%s current=%s first=%s',
+            agent_id, _diagnostic(error), _diagnostic(first))
+        try:
+            await asyncio.to_thread(self._state, agent_id, 'RECOVERING', error)
+            await asyncio.to_thread(self.owner._recovery_event, 'RECOVERY_AGENT_BLOCKED',
+                f"Current: {_diagnostic(error)}; first: {_diagnostic(first)}",
+                agent_id=agent_id)
+        except OktoNexusError as persistence_error:
+            if persistence_error.code != ErrorCode.DB_ERROR or not persistence_error.retryable:
+                raise
+            # The in-memory subject fence is enforced before native dispatch.
+            # Keep the same recovery worker/obligation: inability to save its
+            # status does not prove loss of the shared owner. READY still needs
+            # its durable commit after containment and reconciliation.
+            logging.getLogger(__name__).warning(
+                'Agent recovery status delayed by writer contention: agent=%s', agent_id)
 
     async def _contain(self, agent_id):
         owner = self.owner
