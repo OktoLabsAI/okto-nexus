@@ -59,6 +59,19 @@ pre-spawn authorization checks refused the first opening. This is a separate
 M3/M7 diagnostic issue, not evidence that the longer Pi version-probe
 allowance caused the entire wait.
 
+Subsequent Core review found a specific pre-spawn bug matching this trace:
+the general opening authority accepts a renewed lease ID/serial/deadline,
+but the Pi native-action owner compared the old and new lease IDs for exact
+equality. A red test that rotated the ID during listener startup failed at
+`native_action_launch`; Core commit `f5325af` corrects the comparison and
+keeps authorization/grant/boot drift refused. The trace's stable receipt
+still does not identify its exact frontier, so this is a reproduced matching
+defect, not definitive attribution of that historical refusal. The corrected
+Core wheel has SHA-256
+`95a6238deae20d1a98ea8c8a44dcb808c24e037eb01e0d38163265fc1dc72193`
+and is vendored by Nexus and Connector. Focused installed cases passed;
+exact-wheel real UI requalification remains pending.
+
 The same disposable home was drained normally with no remaining resources or
 error codes and resumed once more with its saved connection. The HTTP owner
 became `RECOVERY_READY`, then published `RECOVERY_AGENT_READY` without manual

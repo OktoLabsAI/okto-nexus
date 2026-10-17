@@ -199,6 +199,11 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   shutdown/restart automático e novo turno com 1/1 ACK. A primeira sessão
   ainda levou cerca de 162s até ficar pronta: análise de fases e M7 pendentes.
   Ver `m3n-pi-probe-ui.md`.
+- Checkpoint M3o: a renovação de lease durante abertura do Pi troca também o
+  identificador, mas a validação de native action exigia igualdade com o lease
+  anterior. O teste reproduziu a recusa pré-spawn; Core `f5325af` aceita o novo
+  ID somente com serial avançando e escopo estável. Wheel instalada e vendors
+  sincronizados; requalificação real pela UI e custo de cold start pendentes.
 - Modelar separadamente conexão, autoridade, capacidade e sincronização.
 - Pending de histórico não bloqueia capacidade independente; slot físico incerto
   permanece ocupado. Não redirecionar uma conversa persistente ainda incerta.

@@ -776,6 +776,13 @@
       "priority": "high",
       "status": "diagnosed_not_fixed",
       "description": "Disposable installed Pi UI first delivery spent 73s in a pre-spawn runtime.open that returned BINDING_NOT_AUTHORIZED, then safely retried after host_dispatch_not_started/native_write_not_started proof. Its successful second open took 83s; a post-restart open took 42s. Renewed leases were present, but the stable receipt lacks the pre-spawn failure frontier. Investigate precise authorization stage and Pi dependency-closure/launch startup costs before changing policy or timeouts. See m3n-pi-probe-ui.md."
+    },
+    {
+      "id": "L23",
+      "milestone": "M3",
+      "priority": "high",
+      "status": "installed_fix_exact_wheel_ui_pending",
+      "description": "Core f5325af fixes a reproducible Pi pre-spawn native-action refusal during valid lease ID rotation; red/green test matches the historical UI trace but the historical stable receipt lacks stage, so causality is not conclusive. Eight focused source and installed cases plus one installed bridge case passed. Nexus and Connector vendor exact Core wheel 95a6238deae20d1a98ea8c8a44dcb808c24e037eb01e0d38163265fc1dc72193. Real UI requalification of this exact artifact remains pending; global generation 73 untouched. See m3n-pi-probe-ui.md."
     }
   ],
   "live_installation": "Generation 73, Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers. Server PID 32480, launcher 39500, port 8202. Exact qualified wheels installed together; 542/158/99 package files and dependencies verified. Previous process drained normally; full offline backup preserved. Pi/Claude/Codex Online, Pi four WARM; Pi and Claude responded through the real Meta-harness, Claude terminal inspected. L12 cause remains unproven; L14 load qualification remains pending. See m3i-ui-rollout.md.",
