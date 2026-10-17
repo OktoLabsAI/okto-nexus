@@ -286,6 +286,11 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   completa levou 13,185s e é recalculada em `prepare` e `open`. Ver
   `m7-pi-cold-cost.md`. Reduzir verificação duplicada somente após rastrear
   as fronteiras e manter validação completa antes do spawn.
+- Checkpoint M7a: Core `680c677` evita a primeira verificação de conteúdo
+  completa no `prepare` sem efeito; o `open` ainda a executa antes da reserva
+  de capacidade e do spawn. 88 testes source e 11 da wheel instalada passaram.
+  Uma amostra Pi com cache aquecido mediu 0,651s contra 8,300s na preparação;
+  UI-B e distribuição de latência seguem pendentes. Ver relatório M7a no Core.
 
 - Requests pendentes aproveitam primeira instância pronta; warmup independente,
   concorrente e limitado por orçamento físico do host, além do limite por agente.

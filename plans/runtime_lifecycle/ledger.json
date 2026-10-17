@@ -791,6 +791,13 @@
       "priority": "high",
       "status": "measured_design_pending",
       "description": "Read-only profiling of the real local Pi installation (14,097 closure entries) measured full build identity at 13.185s, selected fingerprint at 0.913s and three stat-only signatures at 1.290-1.864s. Core prepare and open each recompute full identity, contributing about 26s before native startup at this measured rate. Preserve a full pre-spawn validation while removing redundant work within one admitted open; actual per-open stage trace and load qualification remain pending. See m7-pi-cold-cost.md."
+    },
+    {
+      "id": "L25",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "installed_checkpoint_ui_pending",
+      "description": "Core 680c677 defers the duplicate full Pi build hash from non-effectful runtime prepare to admitted open, which retains full identity validation before capacity reservation or spawn. 88 source and 11 isolated installed tests passed; real Pi prepare_launch measured 0.651s deferred versus 8.300s full in one warm-cache run. Nexus/Connector vendor exact Core wheel f0d6c9141ce59c04e01c419711b2b1e40f026ff99ba79c88c157f95da36ca457. UI-B, per-frontier trace and latency distribution remain pending. Global generation 73 untouched. See Core runtime-lifecycle-m7a-cold-preparation.md."
     }
   ],
   "live_installation": "Generation 73, Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers. Server PID 32480, launcher 39500, port 8202. Exact qualified wheels installed together; 542/158/99 package files and dependencies verified. Previous process drained normally; full offline backup preserved. Pi/Claude/Codex Online, Pi four WARM; Pi and Claude responded through the real Meta-harness, Claude terminal inspected. L12 cause remains unproven; L14 load qualification remains pending. See m3i-ui-rollout.md.",
