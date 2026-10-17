@@ -63,6 +63,54 @@ class EmbeddedSessionCatalog:
             if found != names:
                 raise CoreError('JOURNAL_UNAVAILABLE', 'embedded_shared_resources')
 
+    def locations_for_names(self, names):
+        """Resolve one physical page to exact, canonical Server identities."""
+        names = set(names)
+        if not names:
+            return ()
+        if len(names) > self.page_size:
+            raise ValueError('Catalog lookup exceeds its page budget.')
+        from nexus_connector_core import JournalLocation, SessionKey
+        owner = self.owner
+        with owner.factory.unit_of_work(write=False) as uow:
+            owner.verify(uow=uow)
+            rows = uow.connection.execute(
+                'SELECT local_journal_name,session_id FROM execution_sessions '
+                'WHERE server_id=? AND executor_id=? AND local_journal_name IN ('
+                + ','.join('?' for _ in names) + ')',
+                (owner.channel.server_id, owner.channel.executor_id, *names)).fetchall()
+        if {row[0] for row in rows} != names:
+            raise CoreError('JOURNAL_UNAVAILABLE', 'embedded_shared_resources')
+        return tuple(JournalLocation(row[0], SessionKey(
+            owner.channel.server_id, owner.channel.executor_id, row[1])) for row in rows)
+
+    async def import_verified_files(self, ledger, *, stop=None):
+        """Resumable bounded conversion after the existing full audit passed."""
+        entries = await asyncio.to_thread(os.scandir, self.owner.host.store_dir)
+        def page():
+            result = []
+            for _ in range(self.page_size):
+                entry = next(entries, None)
+                if entry is None:
+                    break
+                result.append(entry.name)
+            return result
+        try:
+            while names := await asyncio.to_thread(page):
+                if stop is not None and stop.is_set():
+                    return False
+                bases = {name[:-4] if name.endswith(('-wal', '-shm')) else name for name in names}
+                bases.discard('owned-slots.db')
+                if bases:
+                    locations = await asyncio.to_thread(self.locations_for_names, bases)
+                    await ledger.register_journal_locations(locations)
+                    # Physical import is background maintenance. Let live
+                    # capacity and receipt producers use the shared worker.
+                    await asyncio.sleep(0.01)
+        finally:
+            await asyncio.to_thread(entries.close)
+        return True
+
     async def audit_files(self):
         """Stream directory entries in bounded pages, without a history-sized set.
 

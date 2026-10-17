@@ -7,6 +7,7 @@ from nexus_connector_core import CoreError
 
 from okto_nexus.adapters.outbound.sqlite.execution_embedded_store_binding import (
     bind_embedded_store, require_no_missing_store,
+    registry_import_pending, complete_registry_import,
 )
 
 
@@ -17,9 +18,10 @@ def database():
     conn.execute('INSERT INTO runtime_reset_generation VALUES(1,0)')
     conn.execute('CREATE TABLE execution_sessions (session_id TEXT)')
     conn.execute('CREATE TABLE execution_operations (operation_id TEXT)')
-    migration = files('okto_nexus').joinpath(
-        'migrations/148_execution_embedded_store_binding.sql').read_text()
-    conn.executescript(migration)
+    for name in ('148_execution_embedded_store_binding.sql',
+                 '149_execution_journal_registry_conversion.sql'):
+        migration = files('okto_nexus').joinpath('migrations', name)
+        conn.executescript(migration.read_text())
     return conn
 
 
@@ -28,6 +30,9 @@ def test_binding_is_immutable_within_reset_generation_and_reset_selects_new_stor
         original = 'store_' + 'a' * 32
         replacement = 'store_' + 'b' * 32
         assert bind_embedded_store(conn, store_id=original, recorded_at='first')
+        assert registry_import_pending(conn, store_id=original)
+        complete_registry_import(conn, store_id=original)
+        assert not registry_import_pending(conn, store_id=original)
         assert not bind_embedded_store(conn, store_id=original, recorded_at='second')
         assert conn.execute('SELECT bound_at FROM execution_embedded_store_bindings '
             'WHERE reset_generation=0').fetchone()[0] == 'first'
@@ -35,6 +40,7 @@ def test_binding_is_immutable_within_reset_generation_and_reset_selects_new_stor
             bind_embedded_store(conn, store_id=replacement, recorded_at='forged')
         conn.execute('UPDATE runtime_reset_generation SET generation=1 WHERE singleton=1')
         assert bind_embedded_store(conn, store_id=replacement, recorded_at='reset')
+        assert registry_import_pending(conn, store_id=replacement)
         assert conn.execute('SELECT reset_generation,store_id FROM execution_embedded_store_bindings '
             'ORDER BY reset_generation').fetchall() == [(0, original), (1, replacement)]
 

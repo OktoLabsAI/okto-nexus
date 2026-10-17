@@ -44,6 +44,8 @@ class EmbeddedAgentRecovery:
         self._tick_lock = asyncio.Lock()
         self.session_tasks = {}
         self.session_retry_at = {}
+        self.registry_import_task = None
+        self._registry_stop = asyncio.Event()
         from .embedded_retirement_maintenance import EmbeddedRetirementMaintenance
         self.retirement = EmbeddedRetirementMaintenance(self)
 
@@ -78,11 +80,12 @@ class EmbeddedAgentRecovery:
                     bind_embedded_store(uow.connection, store_id=store_id,
                         recorded_at=owner.deps.clock.now_iso())
             await asyncio.to_thread(bind_store)
+            return store_id
         # Only unattributable/shared resources block the host. Missing or bad
         # journals with a known subject are handled by that subject's worker.
         if await catalog.audit_files():
             ledger = await owner.host._ledger()
-            await bind_ledger(ledger)
+            store_id = await bind_ledger(ledger)
             # A fenced connection's HELD capacity never crossed native
             # admission. Cancel those holds atomically before the legacy
             # process scan; consumed/uncertain reservations remain occupied.
@@ -132,11 +135,53 @@ class EmbeddedAgentRecovery:
             await asyncio.to_thread(check_missing)
             # Create and bind the first ledger before the dispatch pump can
             # admit native work. A later startup must observe this same ID.
-            await bind_ledger(await owner.host._ledger())
+            ledger = await owner.host._ledger()
+            store_id = await bind_ledger(ledger)
         self.blocked = await asyncio.to_thread(catalog.pending_agents)
         for agent_id in self.blocked:
             await asyncio.to_thread(self._state, agent_id, 'RECOVERING')
         self.initialized = True
+        # Registry conversion is maintenance, not evidence required for this
+        # boot's admission: the existing full directory audit already passed.
+        self.registry_import_task = asyncio.create_task(
+            self._import_registry(catalog, ledger, store_id), name='embedded-registry-import')
+
+    async def _import_registry(self, catalog, ledger, store_id):
+        from ..adapters.outbound.sqlite.execution_embedded_store_binding import (
+            registry_import_pending, complete_registry_import,
+        )
+        owner = self.owner
+        attempts = 0
+        while not owner._stopping.is_set() and not self._registry_stop.is_set():
+            try:
+                def pending():
+                    with owner.factory.unit_of_work(write=False) as uow:
+                        owner.verify(uow=uow)
+                        return registry_import_pending(uow.connection, store_id=store_id)
+                if not await asyncio.to_thread(pending):
+                    return
+                if not await catalog.import_verified_files(ledger, stop=self._registry_stop):
+                    return
+                def complete():
+                    with owner.factory.unit_of_work() as uow:
+                        owner.verify(uow=uow)
+                        complete_registry_import(uow.connection, store_id=store_id)
+                await asyncio.to_thread(complete)
+                return
+            except OktoNexusError as error:
+                if error.code == ErrorCode.CONFLICT:
+                    return  # The previous owner cannot mutate a replacement.
+                failure = error
+            except Exception as error:
+                failure = error
+            attempts += 1
+            logging.getLogger(__name__).warning(
+                'Embedded registry import pending: %s', _diagnostic(failure))
+            try:
+                await asyncio.wait_for(self._registry_stop.wait(),
+                    timeout=min(30, 2 ** min(attempts, 5)))
+            except asyncio.TimeoutError:
+                pass
 
     async def fail(self, agent_id, error):
         # Loss of the shared owner/database must still stop the whole host.
@@ -484,7 +529,10 @@ class EmbeddedAgentRecovery:
             await asyncio.wait(tuple(self.tasks.values()), timeout=timeout)
 
     async def close(self):
+        self._registry_stop.set()
         await self.retirement.close()
+        if self.registry_import_task is not None:
+            await self.registry_import_task
         if self.tasks:
             await asyncio.gather(*tuple(self.tasks.values()))
         if self.session_tasks:

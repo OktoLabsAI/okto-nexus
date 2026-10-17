@@ -25,6 +25,7 @@ def catalog_fixture(tmp_path, count):
     owner.factory = factory
     owner.host = EmbeddedRuntimeHost(tmp_path / 'store')
     owner.deps = SimpleNamespace(clock=SimpleNamespace(now_iso=lambda: '2026-10-17T00:00:00Z'))
+    owner._stopping = asyncio.Event()
     owner.channel.connection_generation = 2
     verify = owner.verify
     owner.verify = lambda *, uow=None: verify(uow=uow)
@@ -170,6 +171,7 @@ async def test_catalog_lookup_and_startup_sql_cost_ignore_verified_history(tmp_p
     assert stats['steps']-before < 1000
     assert recovery.blocked == {'agent'} and states == [('agent', 'RECOVERING')]
     assert recovery.initialized
+    await recovery.registry_import_task
     # The valid physical ledger is constant-size; journal enumeration remains
     # a separate cost from the historical Server SQL lookup.
     assert (owner.host.store_dir / 'owned-slots.db').exists()
@@ -192,7 +194,9 @@ async def test_fresh_start_binds_ledger_before_admission_and_replacement_is_refu
     owner = catalog.owner
     first = owner.host
     try:
-        await EmbeddedAgentRecovery(owner).initialize()
+        first_recovery = EmbeddedAgentRecovery(owner)
+        await first_recovery.initialize()
+        await first_recovery.registry_import_task
         with factory.unit_of_work(write=False) as uow:
             bound = uow.connection.execute('SELECT store_id FROM execution_embedded_store_bindings '
                 'WHERE reset_generation=0').fetchone()[0]
@@ -209,6 +213,90 @@ async def test_fresh_start_binds_ledger_before_admission_and_replacement_is_refu
         await first.shutdown()
         if owner.host is not first:
             await owner.host.shutdown()
+
+
+@pytest.mark.asyncio
+async def test_interrupted_registry_import_resumes_without_rebinding_or_skipping_files(tmp_path, monkeypatch):
+    catalog, factory, _ = catalog_fixture(tmp_path, 140)
+    owner = catalog.owner
+    await catalog.backfill()
+    ledger = await owner.host._ledger()
+    for index in range(140):
+        (owner.host.store_dir / catalog._name(f'session-{index}')).touch()
+    original = ledger.register_journal_locations
+    batches = []
+    interrupted_once = asyncio.Event()
+    resume = asyncio.Event()
+    async def interrupted(locations):
+        batches.append(len(locations))
+        if len(batches) >= 2 and not resume.is_set():
+            interrupted_once.set()
+            raise OSError('registry import interrupted')
+        return await original(locations)
+    monkeypatch.setattr(ledger, 'register_journal_locations', interrupted)
+    recovery = EmbeddedAgentRecovery(owner)
+    recovery._state = lambda *args: None
+    try:
+        await recovery.initialize()
+        assert recovery.initialized  # Conversion does not hold admission.
+        await asyncio.wait_for(interrupted_once.wait(), 10)
+        with factory.unit_of_work(write=False) as uow:
+            row = uow.connection.execute('SELECT registry_import_complete FROM '
+                'execution_embedded_store_bindings WHERE reset_generation=0').fetchone()
+            assert row[0] == 0
+        partial = await ledger.journal_location_page(limit=128)
+        assert 0 < len(partial.registrations) < 140
+        resume.set()
+        await asyncio.wait_for(recovery.registry_import_task, 15)
+        with factory.unit_of_work(write=False) as uow:
+            assert uow.connection.execute('SELECT registry_import_complete FROM '
+                'execution_embedded_store_bindings WHERE reset_generation=0').fetchone()[0] == 1
+        page = await ledger.journal_location_page(limit=128)
+        assert len(page.registrations) == 128
+        second = await ledger.journal_location_page(after_revision=page.next_after_revision,
+            high_water_revision=page.high_water_revision, limit=128)
+        assert len(second.registrations) == 12
+        assert len(batches) >= 2 and batches[0] <= 128
+    finally:
+        owner._stopping.set()
+        await recovery.registry_import_task
+        await owner.host.shutdown()
+
+
+@pytest.mark.asyncio
+async def test_shutdown_joins_inflight_registry_import_without_marking_it_complete(tmp_path, monkeypatch):
+    catalog, factory, _ = catalog_fixture(tmp_path, 140)
+    owner = catalog.owner
+    await catalog.backfill()
+    ledger = await owner.host._ledger()
+    for index in range(140):
+        (owner.host.store_dir / catalog._name(f'session-{index}')).touch()
+    original = ledger.register_journal_locations
+    entered, release = asyncio.Event(), asyncio.Event()
+    async def held(locations):
+        entered.set()
+        await release.wait()
+        return await original(locations)
+    monkeypatch.setattr(ledger, 'register_journal_locations', held)
+    recovery = EmbeddedAgentRecovery(owner)
+    recovery._state = lambda *args: None
+    try:
+        await recovery.initialize()
+        await asyncio.wait_for(entered.wait(), 10)
+        owner._stopping.set()
+        closing = asyncio.create_task(recovery.close())
+        await asyncio.sleep(0)
+        assert not closing.done()
+        release.set()
+        await asyncio.wait_for(closing, 10)
+        with factory.unit_of_work(write=False) as uow:
+            assert uow.connection.execute('SELECT registry_import_complete FROM '
+                'execution_embedded_store_bindings WHERE reset_generation=0').fetchone()[0] == 0
+    finally:
+        release.set()
+        owner._stopping.set()
+        await recovery.close()
+        await owner.host.shutdown()
 
 
 @pytest.mark.asyncio
@@ -246,6 +334,7 @@ async def test_occupied_slot_is_attributed_by_exact_lookup_not_history_map(tmp_p
         assert not recovery.initialized
     else:
         await recovery.initialize()
+        await recovery.registry_import_task
         assert recovery.blocked == {'agent'}
         with factory.unit_of_work(write=False) as uow:
             assert uow.connection.execute("SELECT local_retirement_json FROM execution_sessions "
