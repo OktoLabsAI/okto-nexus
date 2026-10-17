@@ -188,7 +188,8 @@ def test_remote_failed_preparation_receipt_closes_pending_session_without_discon
 @pytest.mark.parametrize('failure,cut', [('prepare', None), ('candidate', None),
                                           ('candidate', 'bind'),
                                           ('candidate', 'record_startup'),
-                                          ('candidate', 'lost_ack')])
+                                          ('candidate', 'lost_ack'),
+                                          ('candidate', 'forged_capacity')])
 def test_remote_failed_preparation_releases_capacity_and_keeps_next_work_available(onboarding, tmp_path, monkeypatch, failure, cut):
     from okto_nexus_connector.storage.state_store import StateStore
     monkeypatch.syspath_prepend(str(Path(__file__).parents[1]))
@@ -215,6 +216,7 @@ def test_remote_failed_preparation_releases_capacity_and_keeps_next_work_availab
             await command(0, 'fail_next_' + failure)
             if cut:
                 await command(0, 'lose_next_startup_ack' if cut == 'lost_ack'
+                    else 'forge_next_capacity' if cut == 'forged_capacity'
                     else 'cut_publication_' + cut)
             attempts = build_handoff_runtime_attempts(deps)
             for ordinal in (0, 1):
@@ -238,6 +240,20 @@ def test_remote_failed_preparation_releases_capacity_and_keeps_next_work_availab
                 assert held.state == 'RESERVED'
                 claimed = attempts.claim(page.attempt_ids[0])
                 consumed = await build_capacity_admission(deps).consume(claimed.operation_id)
+                if ordinal == 0 and cut == 'forged_capacity':
+                    async with asyncio.timeout(45):
+                        while True:
+                            state = await command(0, 'status')
+                            if state['startup_forgery_entered']:
+                                break
+                            await asyncio.sleep(.05)
+                    assert state['ready'] and state['startup_forgery_rejections'] == 1
+                    assert not query(setup, 'SELECT operation_id FROM execution_receipts WHERE '
+                        'operation_id IN (SELECT open_operation_id FROM execution_sessions WHERE session_id=?)',
+                        (held.request.scope.session_id,))
+                    assert query(setup, 'SELECT lifecycle_state FROM execution_sessions '
+                        'WHERE session_id=?', (held.request.scope.session_id,))[0][0] == 'OPEN_PENDING'
+                    await command(0, 'release_startup_forgery')
                 async with asyncio.timeout(35):
                     while True:
                         state = await command(0, 'status')
@@ -247,15 +263,18 @@ def test_remote_failed_preparation_releases_capacity_and_keeps_next_work_availab
                             'execution_receipts WHERE operation_id IN (SELECT open_operation_id FROM '
                             'execution_sessions WHERE session_id=?)', (held.request.scope.session_id,))
                         if (opening and state['ready'] and (ordinal == 0 or receipt)
-                                and (ordinal != 0 or not cut
+                                and (ordinal != 0 or not cut or cut == 'forged_capacity'
                                      or state['generation'] > initial['generation'])):
                             break
                         await asyncio.sleep(.05)
                 if ordinal == 0:
                     assert state['preparation_failures' if failure == 'prepare' else 'candidate_failures'] == 1 and state['ready']
                     if cut:
-                        assert state['startup_ack_losses' if cut == 'lost_ack' else 'publication_cuts'] == 1
-                        assert state['generation'] > initial['generation']
+                        if cut == 'forged_capacity':
+                            assert state['startup_forgery_rejections'] == 1
+                        else:
+                            assert state['startup_ack_losses' if cut == 'lost_ack' else 'publication_cuts'] == 1
+                            assert state['generation'] > initial['generation']
                     assert state['opens'] == state['sends'] == 0
                     assert opening[0][1:] == ('FAILED', 'PREPARATION_FAILED', 0)
                     assert query(setup, 'SELECT status FROM delivery_outbox WHERE operation_id=?',

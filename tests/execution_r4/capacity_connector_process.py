@@ -5,6 +5,7 @@ leases, capacity ledger, reconciliation and receipts use production owners.
 The parent sends test credentials through stdin; responses exclude secrets.
 """
 import asyncio
+import copy
 from functools import partial
 import json
 import os
@@ -89,10 +90,24 @@ async def run(config):
               'fail_next_candidate': False, 'candidate_failures': 0,
               'lose_next_open': False, 'open_ack_losses': 0,
               'lose_next_startup_ack': False, 'startup_ack_losses': 0,
+              'forge_next_capacity': False, 'startup_forgery_entered': False,
+              'startup_forgery_rejections': 0, 'startup_forgery_gate': asyncio.Event(),
               'hold_bind_commit': False, 'bind_commit_entered': False,
               'bind_commit_gate': threading.Event()}
     original_startup_publish = R4Connection.publish_startup_refusal
     async def publish_startup_with_lost_ack(self, request, **options):
+        if faults['forge_next_capacity']:
+            faults['forge_next_capacity'] = False
+            assert request['capacity'] is not None
+            forged = copy.deepcopy(request)
+            forged['request_id'] += '-forged'
+            forged['capacity']['reservation_id'] += '-foreign'
+            response = await original_startup_publish(self, forged, **options)
+            assert response['type'] == 'startup.refuse.deferred', response
+            faults['startup_forgery_rejections'] += 1
+            faults['startup_forgery_entered'] = True
+            await asyncio.wait_for(faults['startup_forgery_gate'].wait(), 60)
+            return response
         reply = await original_startup_publish(self, request, **options)
         if faults['lose_next_startup_ack']:
             faults['lose_next_startup_ack'] = False
@@ -178,6 +193,10 @@ async def run(config):
                 faults['fail_next_candidate'] = True
             elif command == 'lose_next_startup_ack':
                 faults['lose_next_startup_ack'] = True
+            elif command == 'forge_next_capacity':
+                faults['forge_next_capacity'] = True
+            elif command == 'release_startup_forgery':
+                faults['startup_forgery_gate'].set()
             elif command == 'hold_bind_commit':
                 faults['hold_bind_commit'] = True
             elif command == 'release_bind_commit':
@@ -201,6 +220,8 @@ async def run(config):
                 error=state['error_code'], generation=state['connection_generation'],
                 candidate_failures=faults['candidate_failures'],
                 startup_ack_losses=faults['startup_ack_losses'],
+                startup_forgery_entered=faults['startup_forgery_entered'],
+                startup_forgery_rejections=faults['startup_forgery_rejections'],
                 open_ack_losses=faults['open_ack_losses'],
                 bind_commit_entered=faults['bind_commit_entered'],
                 publication_cuts=faults['publication_cuts'],
