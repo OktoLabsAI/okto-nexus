@@ -21,7 +21,8 @@ def test_reset_preserves_configured_local_connection_and_can_deliver_again(conne
     tables = ('agents', 'agent_endpoints', 'runtime_profiles', 'runtime_execution_grants',
         'execution_bindings', 'execution_workspace_bindings', 'execution_realizations',
         'execution_local_realizations', 'execution_installation', 'runtime_policy_defaults', 'workspaces',
-        'one_shot_policy_settings', 'one_shot_host_limits', 'runtime_mcp_presets')
+        'one_shot_policy_settings', 'one_shot_host_limits', 'runtime_mcp_presets',
+        'execution_embedded_store_bindings')
     # Seed unrelated history without starting a native turn.
     with deps.connection_factory.unit_of_work() as uow:
         from okto_nexus.application import one_shot_settings, runtime_mcp_presets
@@ -59,6 +60,12 @@ def test_reset_preserves_configured_local_connection_and_can_deliver_again(conne
                 ignored = names.index('last_seen_at')
                 trim = lambda rows: [r[:ignored] + r[ignored+1:] for r in rows]
                 assert trim([tuple(r) for r in uow.connection.execute('SELECT * FROM agents')]) == trim(before[table])
+            elif table == 'execution_embedded_store_bindings':
+                rows = [tuple(r) for r in uow.connection.execute(
+                    'SELECT * FROM execution_embedded_store_bindings ORDER BY reset_generation')]
+                assert rows[:-1] == before[table]
+                assert len(rows) == len(before[table]) + 1
+                assert rows[-1][0] == 1 and rows[-1][1] != rows[0][1]
             else:
                 assert [tuple(r) for r in uow.connection.execute('SELECT * FROM ' + table)] == before[table], table
         assert uow.connection.execute('SELECT COUNT(*) FROM messages').fetchone()[0] == 0
@@ -70,6 +77,10 @@ def test_reset_preserves_configured_local_connection_and_can_deliver_again(conne
     assert delivered['ok'], delivered
     with deps.connection_factory.unit_of_work(write=False) as uow:
         turn = dict(uow.connection.execute("SELECT operation_id,session_id FROM execution_operations WHERE action='turn.submit'").fetchone())
+        stores = uow.connection.execute('SELECT reset_generation,store_id FROM '
+            'execution_embedded_store_bindings ORDER BY reset_generation').fetchall()
+        assert len(stores) == 2 and [row[0] for row in stores] == [0, 1]
+        assert stores[0][1] != stores[1][1]
     wait_receipt(setup, turn)
     assert native.opens == (2 if active else 1) and len(native.native.sent) == 1
     # Reset must restore the immutable-history fence before admitting work.

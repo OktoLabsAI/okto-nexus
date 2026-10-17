@@ -67,10 +67,22 @@ class EmbeddedAgentRecovery:
         from .embedded_session_catalog import EmbeddedSessionCatalog
         catalog = EmbeddedSessionCatalog(owner)
         await catalog.backfill()
+        from ..adapters.outbound.sqlite.execution_embedded_store_binding import (
+            bind_embedded_store, require_no_missing_store,
+        )
+        async def bind_ledger(ledger):
+            store_id = await ledger.physical_store_id()
+            def bind_store():
+                with owner.factory.unit_of_work() as uow:
+                    owner.verify(uow=uow)
+                    bind_embedded_store(uow.connection, store_id=store_id,
+                        recorded_at=owner.deps.clock.now_iso())
+            await asyncio.to_thread(bind_store)
         # Only unattributable/shared resources block the host. Missing or bad
         # journals with a known subject are handled by that subject's worker.
         if await catalog.audit_files():
             ledger = await owner.host._ledger()
+            await bind_ledger(ledger)
             # A fenced connection's HELD capacity never crossed native
             # admission. Cancel those holds atomically before the legacy
             # process scan; consumed/uncertain reservations remain occupied.
@@ -112,6 +124,15 @@ class EmbeddedAgentRecovery:
                 after = page.next_after_rowid
             else:
                 raise CoreError('CAPACITY_EXCEEDED', 'embedded_shared_resources')
+        else:
+            def check_missing():
+                with owner.factory.unit_of_work(write=False) as uow:
+                    owner.verify(uow=uow)
+                    require_no_missing_store(uow.connection)
+            await asyncio.to_thread(check_missing)
+            # Create and bind the first ledger before the dispatch pump can
+            # admit native work. A later startup must observe this same ID.
+            await bind_ledger(await owner.host._ledger())
         self.blocked = await asyncio.to_thread(catalog.pending_agents)
         for agent_id in self.blocked:
             await asyncio.to_thread(self._state, agent_id, 'RECOVERING')

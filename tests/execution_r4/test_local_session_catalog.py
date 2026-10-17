@@ -24,6 +24,7 @@ def catalog_fixture(tmp_path, count):
     owner = reconciliation.owner
     owner.factory = factory
     owner.host = EmbeddedRuntimeHost(tmp_path / 'store')
+    owner.deps = SimpleNamespace(clock=SimpleNamespace(now_iso=lambda: '2026-10-17T00:00:00Z'))
     owner.channel.connection_generation = 2
     verify = owner.verify
     owner.verify = lambda *, uow=None: verify(uow=uow)
@@ -143,6 +144,7 @@ async def test_catalog_lookup_and_startup_sql_cost_ignore_verified_history(tmp_p
     def instruction():
         stats['steps'] += 1
         return 0
+    await owner.host._ledger()
     @contextmanager
     def measured_uow(*, write=True):
         with factory.unit_of_work(write=write) as uow:
@@ -168,8 +170,10 @@ async def test_catalog_lookup_and_startup_sql_cost_ignore_verified_history(tmp_p
     assert stats['steps']-before < 1000
     assert recovery.blocked == {'agent'} and states == [('agent', 'RECOVERING')]
     assert recovery.initialized
-    # This benchmark has no files; directory enumeration remains a separate cost.
-    assert not owner.host.store_dir.exists()
+    # The valid physical ledger is constant-size; journal enumeration remains
+    # a separate cost from the historical Server SQL lookup.
+    assert (owner.host.store_dir / 'owned-slots.db').exists()
+    await owner.host.shutdown()
 
 
 @pytest.mark.asyncio
@@ -180,6 +184,31 @@ async def test_ledger_sidecar_without_ledger_is_not_an_empty_store(tmp_path):
     (store / 'owned-slots.db-wal').touch()
     with pytest.raises(CoreError, match='JOURNAL_UNAVAILABLE'):
         await catalog.audit_files()
+
+
+@pytest.mark.asyncio
+async def test_fresh_start_binds_ledger_before_admission_and_replacement_is_refused(tmp_path):
+    catalog, factory, _ = catalog_fixture(tmp_path, 0)
+    owner = catalog.owner
+    first = owner.host
+    try:
+        await EmbeddedAgentRecovery(owner).initialize()
+        with factory.unit_of_work(write=False) as uow:
+            bound = uow.connection.execute('SELECT store_id FROM execution_embedded_store_bindings '
+                'WHERE reset_generation=0').fetchone()[0]
+        assert bound == await (await first._ledger()).physical_store_id()
+        await first.shutdown()
+        owner.host = EmbeddedRuntimeHost(tmp_path / 'replacement')
+        with pytest.raises(CoreError, match='JOURNAL_UNAVAILABLE'):
+            await EmbeddedAgentRecovery(owner).initialize()
+        second = await owner.host._ledger()
+        assert await second.physical_store_id() != bound
+        with pytest.raises(CoreError, match='PROFILE_DRIFT'):
+            await EmbeddedAgentRecovery(owner).initialize()
+    finally:
+        await first.shutdown()
+        if owner.host is not first:
+            await owner.host.shutdown()
 
 
 @pytest.mark.asyncio
@@ -197,9 +226,11 @@ async def test_occupied_slot_is_attributed_by_exact_lookup_not_history_map(tmp_p
         return OwnedSlotPage((OwnedSlotReservation(SessionKey('server', 'executor', session_id), 'provisional'),), 1, None)
     async def opening(slot):
         return 'open-1'
+    async def physical_store_id():
+        return 'store_' + 'a' * 32
     async def ledger():
         return SimpleNamespace(release_fenced_capacity_holds=holds, owned_slot_page=page,
-            capacity_opening_for_slot=opening)
+            capacity_opening_for_slot=opening, physical_store_id=physical_store_id)
     owner.host._ledger = ledger
     original, lookups = EmbeddedReconciliation._records, []
     def exact(self, agent_id=None, *, session_id=None, **kwargs):

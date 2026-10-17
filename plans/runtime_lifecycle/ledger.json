@@ -338,7 +338,8 @@
         "m4d4-store-audit-design.md",
         "m4d4b-validation.md",
         "m4d4b-results.json",
-        "Core: plans/runtime-lifecycle-m4d4c1.md"
+      "Core: plans/runtime-lifecycle-m4d4c1.md",
+      "m4d4c2-validation.md"
       ],
       "commits": {
         "nexus_m4d2": "132d8ba",
@@ -407,10 +408,18 @@
           "evidence": [
             "plans/runtime-lifecycle-m4d4c1.md"
           ]
+        },
+        {
+          "id": "M4d4c2",
+          "status": "qualified_rollout_pending",
+          "title": "Bind Nexus reset generations to physical Core ledger identity; 17 focused source and 20 installed cases passed, including reset and cold restore; audit frontier pending",
+          "evidence": [
+            "m4d4c2-validation.md"
+          ]
         }
       ],
       "nexus_m4a_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4a-validation.md",
-      "next": "M4d4c1 adds a durable physical ledger identity in Core; neither host consumes it yet. Bind it to trusted Nexus/Connector state and journal evidence, then complete the first audit frontier and partial-restore/reset invalidation before removing the startup scan. Combined metadata budget, scan caps, stream fairness, M4d3/M4d4b rollout and controlled real-history latency remain pending; production generation 73 unchanged.",
+    "next": "M4d4c2 binds Nexus reset generations to Core's physical ledger identity; 20 selected installed cases passed, including composition, reset and cold restore. Bind Connector's physical ledger to trusted local state, then complete the first audit frontier and partial-restore invalidation before removing the startup scan. Combined metadata budget, 100k post-change cost, scan caps, stream fairness, M4d3/M4d4b rollout and controlled real-history latency remain pending; production generation 73 unchanged.",
       "nexus_m4b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4b-validation.md",
       "nexus_m4c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4c-validation.md",
       "nexus_m4d1_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d1-validation.md",
