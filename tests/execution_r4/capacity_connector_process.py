@@ -87,6 +87,7 @@ async def run(config):
               'publication_cut': None, 'publication_cuts': 0,
               'fail_next_prepare': False, 'preparation_failures': 0,
               'fail_next_candidate': False, 'candidate_failures': 0,
+              'lose_next_open': False, 'open_ack_losses': 0,
               'lose_next_startup_ack': False, 'startup_ack_losses': 0,
               'hold_bind_commit': False, 'bind_commit_entered': False,
               'bind_commit_gate': threading.Event()}
@@ -146,6 +147,10 @@ async def run(config):
                 await allow_open.wait()
                 peer = Native(faults)
                 peers[session_id] = peer
+                if faults['lose_next_open']:
+                    faults['lose_next_open'] = False
+                    faults['open_ack_losses'] += 1
+                    raise OSError('Synthetic native open may have succeeded; reply lost')
                 return peer
             finally:
                 opening.discard(session_id)
@@ -165,6 +170,8 @@ async def run(config):
                 allow_open.set()
             elif command == 'lose_next_send':
                 faults['lose_next_send'] = True
+            elif command == 'lose_next_open':
+                faults['lose_next_open'] = True
             elif command == 'fail_next_prepare':
                 faults['fail_next_prepare'] = True
             elif command == 'fail_next_candidate':
@@ -194,6 +201,7 @@ async def run(config):
                 error=state['error_code'], generation=state['connection_generation'],
                 candidate_failures=faults['candidate_failures'],
                 startup_ack_losses=faults['startup_ack_losses'],
+                open_ack_losses=faults['open_ack_losses'],
                 bind_commit_entered=faults['bind_commit_entered'],
                 publication_cuts=faults['publication_cuts'],
                 preparation_failures=faults['preparation_failures'],

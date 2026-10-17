@@ -114,6 +114,12 @@ async def running_pair(onboarding, records, tmp_path):
         return child
 
     async def command(index, name):
+        if name == 'kill':
+            child = children[index]
+            if child.returncode is None:
+                child.kill()  # Only the child created by this disposable test.
+                await asyncio.wait_for(child.wait(), 15)
+            return dict(pid=child.pid, returncode=child.returncode)
         if name == 'restart':
             previous = children[index]
             previous.kill()  # Only the child created by this disposable test.
