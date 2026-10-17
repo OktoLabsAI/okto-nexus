@@ -65,9 +65,8 @@ def canonical_available(uow, *, access, context, endpoints, fresh, remote_ready)
                         binding["realization_revision"] != binding["current_realization_revision"]):
                     reasons.append("realization_not_ready")
                 receipt = fresh.get((binding["server_id"], binding["executor_id"]))
-                if (receipt is None or receipt[0] != binding["publication_sequence"] or
-                        binding["observation_age_ms"] is None or binding["observation_age_ms"] +
-                        max(0, int((time.monotonic() - receipt[1]) * 1000)) >= 120000):
+                from .execution_inventory_freshness import inventory_is_fresh
+                if not inventory_is_fresh(binding, receipt, descriptor.adapter_id):
                     reasons.append("inventory_not_fresh")
                 else:
                     from .execution_inventory_revalidation import accepts_binding

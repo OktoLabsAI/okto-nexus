@@ -118,14 +118,15 @@ def stage_embedded_realization(factory, *, owner, executor_id, access, context, 
             raise _error("The local realization authority changed during preparation.")
         conn = uow.connection
         current = conn.execute(
-            "SELECT c.publication_sequence,c.inventory_revision,s.observation_age_ms "
+            "SELECT c.publication_sequence,c.inventory_revision,s.observation_age_ms,s.canonical_projection "
             "FROM execution_inventory_current c JOIN execution_inventory_snapshots s "
             "ON s.server_id=c.server_id AND s.executor_id=c.executor_id AND s.publication_sequence=c.publication_sequence "
             "WHERE c.server_id=? AND c.executor_id=?", (owner.key.server_id, executor_id)).fetchone()
         fresh = owner.fresh.get((owner.key.server_id, executor_id))
+        from .execution_inventory_freshness import inventory_is_fresh
         if (current is None or fresh is None or fresh[0] != current["publication_sequence"]
                 or current["inventory_revision"] != request["inventory_revision"]
-                or current["observation_age_ms"] + (time.monotonic()-fresh[1])*1000 >= 120000):
+                or not inventory_is_fresh(current, fresh, request['adapter_id'])):
             raise _error("Refresh the local inventory before preparing this realization.")
         prior = conn.execute(
             "SELECT * FROM execution_local_realizations WHERE server_id=? AND executor_id=? "

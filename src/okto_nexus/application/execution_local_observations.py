@@ -41,13 +41,14 @@ def _authorize(owner, access, context, request, *, uow, identity_reobserved=Fals
     guard = _authority(uow, owner=owner, access=access, context=context,
                        subject=request['agent_id'], adapter_id=request['adapter_id'], check_execution_policy=False)
     current = uow.connection.execute(
-        'SELECT publication_sequence,inventory_revision FROM execution_inventory_current '
-        'WHERE server_id=? AND executor_id=?', (owner.key.server_id, owner.key.executor_id)).fetchone()
+        'SELECT c.publication_sequence,c.inventory_revision,s.canonical_projection FROM execution_inventory_current c '
+        'JOIN execution_inventory_snapshots s USING(server_id,executor_id,publication_sequence) '
+        'WHERE c.server_id=? AND c.executor_id=?', (owner.key.server_id, owner.key.executor_id)).fetchone()
     fresh = owner.fresh.get((owner.key.server_id, owner.key.executor_id))
+    from .execution_inventory_freshness import inventory_is_fresh
     if (current is None or fresh is None or fresh[0] != current['publication_sequence']
             or current['inventory_revision'] != request['inventory_revision']
-            or (not identity_reobserved and
-                (time.monotonic() - fresh[1]) * 1000 + (fresh[2] if len(fresh) > 2 else 0) >= 120000)):
+            or (not identity_reobserved and not inventory_is_fresh(current, fresh, request['adapter_id']))):
         raise _error('Refresh the local inventory and select the installation again.')
     return guard
 

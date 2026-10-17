@@ -485,11 +485,10 @@ def begin_execution_send(
         ).fetchone()
         fresh = fresh_publications.get((server_id, reservation.executor_id))
         from .execution_inventory_revalidation import accepts_binding
+        from .execution_inventory_freshness import inventory_is_fresh
         if not containment and (current is None or fresh is None or
                 not accepts_binding(conn, binding, current['inventory_revision'], server_id, reservation.executor_id) or
-                fresh[0] != current["publication_sequence"] or
-                current["observation_age_ms"] +
-                max(0, int((time.monotonic() - fresh[1]) * 1000)) >= 120_000):
+                not inventory_is_fresh(current, fresh, binding['adapter_id'])):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The dispatch inventory is no longer fresh.", {})
         if not containment and not any(

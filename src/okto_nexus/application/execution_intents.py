@@ -190,10 +190,8 @@ def resolve_execution_intent(
         fresh = (fresh_publications or {}).get(
             (server_id, binding["executor_id"]))
         from .execution_inventory_revalidation import accepts_binding
-        if not containment and (current is None or fresh is None or
-                fresh[0] != current["publication_sequence"] or
-                current["observation_age_ms"] +
-                max(0, int((time.monotonic() - fresh[1]) * 1000)) >= 120_000):
+        from .execution_inventory_freshness import inventory_is_fresh
+        if not containment and not inventory_is_fresh(current, fresh, binding['adapter_id']):
             blockers.append("inventory_not_fresh")
         elif not containment and not accepts_binding(conn, binding, current['inventory_revision'],
                                                      server_id, binding['executor_id']):

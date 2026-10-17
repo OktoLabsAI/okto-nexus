@@ -36,10 +36,12 @@ def read_execution_log(factory, *, workspace_id=None, severity=None, agent_id=No
     query = """
     WITH log AS (
       SELECT 'inventory:'||b.binding_id id,v.checked_at timestamp,'inventory revalidation' source,
-        CASE WHEN v.compatible=1 THEN 'info' ELSE 'warning' END severity,
+        CASE WHEN v.reason='observation_pending' OR v.compatible=1 THEN 'info' ELSE 'warning' END severity,
         ep.agent_id,ep.workspace_id,ep.adapter_id,b.endpoint_id,NULL session_id,NULL operation_id,
         b.executor_id,'inventory.revalidate' action,
-        CASE WHEN v.compatible=1 THEN 'INVENTORY_REVALIDATED' ELSE 'INVENTORY_REVIEW_REQUIRED' END code,
+        CASE WHEN v.reason='observation_pending' THEN 'INVENTORY_OBSERVATION_PENDING'
+             WHEN v.reason='observation_failed' THEN 'INVENTORY_OBSERVATION_FAILED'
+             WHEN v.compatible=1 THEN 'INVENTORY_REVALIDATED' ELSE 'INVENTORY_REVIEW_REQUIRED' END code,
         json_object('reason',v.reason,'approved_revision',v.approved_revision,'current_revision',v.current_revision) detail
       FROM execution_inventory_revalidation v JOIN execution_bindings b
         ON b.server_id=v.server_id AND b.executor_id=v.executor_id

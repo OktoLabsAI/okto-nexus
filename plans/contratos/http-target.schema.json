@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://nexus.oktolabs.ai/plans/server-r4/http-target.schema.json",
-  "$comment": "PLANEJAMENTO. N\u00c3\u00a3o instalar como SDK publicado. Estado real: Core0.2.10 NXLr3; DTOs novos exigem gera\u00c3\u00a7\u00c3\u00a3o/valida\u00c3\u00a7\u00c3\u00a3o coordenada. Validar byte-size, rela\u00c3\u00a7\u00c3\u00a3o entre campos, auth e JCS no c\u00c3\u00b3digo de produto.",
+  "$comment": "PLANEJAMENTO. NÃ£o instalar como SDK publicado. Estado real: Core0.2.10 NXLr3; DTOs novos exigem geraÃ§Ã£o/validaÃ§Ã£o coordenada. Validar byte-size, relaÃ§Ã£o entre campos, auth e JCS no cÃ³digo de produto.",
   "title": "Contrato de planejamento para Nexus Server R4",
   "$defs": {
     "Id": {
@@ -432,50 +432,94 @@
       "additionalProperties": false
     },
     "RuntimeDescriptor": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "adapter_id": {
-          "type": "string",
+          "maxLength": 160,
           "minLength": 1,
-          "maxLength": 160
-        },
-        "display_name": {
-          "type": "string",
-          "maxLength": 4096
-        },
-        "harness_family": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 160
-        },
-        "native_kind": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 160
+          "type": "string"
         },
         "connection_mode": {
-          "type": "string",
           "enum": [
             "managed",
             "attach"
-          ]
+          ],
+          "type": "string"
         },
-        "implementation_platforms": {
-          "type": "array",
+        "control_targeting": {
           "items": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 160
+            "additionalProperties": false,
+            "properties": {
+              "action": {
+                "enum": [
+                  "turn.steer",
+                  "turn.interrupt"
+                ]
+              },
+              "native_turn_id": {
+                "enum": [
+                  "required",
+                  "optional",
+                  "forbidden"
+                ]
+              },
+              "requires_active_run": {
+                "type": "boolean"
+              },
+              "steer_timing": {
+                "enum": [
+                  "IMMEDIATE",
+                  "NEXT_TURN_BOUNDARY",
+                  null
+                ]
+              },
+              "supported": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "action",
+              "supported",
+              "native_turn_id",
+              "requires_active_run",
+              "steer_timing"
+            ],
+            "type": "object"
           },
-          "maxItems": 16
-        },
-        "support_status": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 160
+          "maxItems": 2,
+          "minItems": 2,
+          "type": "array"
         },
         "discoverable": {
           "type": "boolean"
+        },
+        "display_name": {
+          "maxLength": 4096,
+          "type": "string"
+        },
+        "harness_family": {
+          "maxLength": 160,
+          "minLength": 1,
+          "type": "string"
+        },
+        "implementation_platforms": {
+          "items": {
+            "maxLength": 160,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 16,
+          "type": "array"
+        },
+        "native_kind": {
+          "maxLength": 160,
+          "minLength": 1,
+          "type": "string"
+        },
+        "support_status": {
+          "maxLength": 160,
+          "minLength": 1,
+          "type": "string"
         }
       },
       "required": [
@@ -486,27 +530,28 @@
         "connection_mode",
         "implementation_platforms",
         "support_status",
-        "discoverable"
+        "discoverable",
+        "control_targeting"
       ],
-      "additionalProperties": false
+      "type": "object"
     },
     "RuntimeCatalog": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "core_version": {
-          "type": "string",
+          "maxLength": 160,
           "minLength": 1,
-          "maxLength": 160
+          "type": "string"
         },
         "format_version": {
-          "const": 1
+          "const": 2
         },
         "runtimes": {
-          "type": "array",
           "items": {
             "$ref": "#/$defs/RuntimeDescriptor"
           },
-          "maxItems": 128
+          "maxItems": 128,
+          "type": "array"
         }
       },
       "required": [
@@ -514,77 +559,22 @@
         "format_version",
         "runtimes"
       ],
-      "additionalProperties": false
+      "type": "object"
     },
     "CandidateAvailability": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "adapter_id": {
-          "type": "string",
+          "maxLength": 160,
           "minLength": 1,
-          "maxLength": 160
-        },
-        "candidate_ref": {
-          "anyOf": [
-            {
-              "type": "string",
-              "pattern": "^nexus-install-v1:[0-9a-f]{64}$"
-            },
-            {
-              "const": ""
-            }
-          ]
-        },
-        "display_name": {
-          "type": "string",
-          "maxLength": 4096
-        },
-        "connection_mode": {
-          "type": "string",
-          "enum": [
-            "managed",
-            "attach"
-          ]
-        },
-        "state": {
-          "type": "string",
-          "enum": [
-            "NOT_INSTALLED",
-            "UNSUPPORTED_PLATFORM",
-            "NOT_PROBED",
-            "UNQUALIFIED_BUILD",
-            "CONTAINMENT_UNAVAILABLE",
-            "PREPARATION_REQUIRED",
-            "READY_FOR_RUNTIME"
-          ]
-        },
-        "reasons": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 160
-          },
-          "maxItems": 64
-        },
-        "version": {
-          "anyOf": [
-            {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 160
-            },
-            {
-              "type": "null"
-            }
-          ]
+          "type": "string"
         },
         "architecture": {
           "anyOf": [
             {
-              "type": "string",
+              "maxLength": 160,
               "minLength": 1,
-              "maxLength": 160
+              "type": "string"
             },
             {
               "type": "null"
@@ -594,41 +584,96 @@
         "build_identity": {
           "anyOf": [
             {
-              "type": "string",
-              "pattern": "^sha256:[0-9a-f]{64}$"
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
             },
             {
               "type": "null"
             }
           ]
         },
-        "trust": {
-          "type": "string",
-          "maxLength": 80
-        },
-        "source": {
-          "type": "string",
-          "maxLength": 80
-        },
-        "qualification": {
-          "type": "string",
-          "enum": [
-            "qualified",
-            "unqualified",
-            "not_probed"
+        "candidate_ref": {
+          "anyOf": [
+            {
+              "pattern": "^nexus-install-v1:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "const": ""
+            }
           ]
         },
+        "connection_mode": {
+          "enum": [
+            "managed",
+            "attach"
+          ],
+          "type": "string"
+        },
         "containment": {
-          "type": "string",
           "enum": [
             "available",
             "unavailable",
             "unverified"
-          ]
+          ],
+          "type": "string"
+        },
+        "display_name": {
+          "maxLength": 4096,
+          "type": "string"
         },
         "label": {
-          "type": "string",
-          "maxLength": 4096
+          "maxLength": 4096,
+          "type": "string"
+        },
+        "qualification": {
+          "enum": [
+            "qualified",
+            "unqualified",
+            "not_probed"
+          ],
+          "type": "string"
+        },
+        "reasons": {
+          "items": {
+            "maxLength": 160,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 64,
+          "type": "array"
+        },
+        "source": {
+          "maxLength": 80,
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "NOT_INSTALLED",
+            "UNSUPPORTED_PLATFORM",
+            "NOT_PROBED",
+            "UNQUALIFIED_BUILD",
+            "CONTAINMENT_UNAVAILABLE",
+            "PREPARATION_REQUIRED",
+            "READY_FOR_RUNTIME"
+          ],
+          "type": "string"
+        },
+        "trust": {
+          "maxLength": 80,
+          "type": "string"
+        },
+        "version": {
+          "anyOf": [
+            {
+              "maxLength": 160,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "required": [
@@ -647,30 +692,30 @@
         "containment",
         "label"
       ],
-      "additionalProperties": false
+      "type": "object"
     },
     "AvailabilityReport": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
+        "availability": {
+          "items": {
+            "$ref": "#/$defs/CandidateAvailability"
+          },
+          "maxItems": 256,
+          "type": "array"
+        },
         "core_version": {
-          "type": "string",
+          "maxLength": 160,
           "minLength": 1,
-          "maxLength": 160
+          "type": "string"
         },
         "format_version": {
           "const": 2
         },
         "platform": {
-          "type": "string",
+          "maxLength": 160,
           "minLength": 1,
-          "maxLength": 160
-        },
-        "availability": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/CandidateAvailability"
-          },
-          "maxItems": 256
+          "type": "string"
         }
       },
       "required": [
@@ -679,71 +724,71 @@
         "platform",
         "availability"
       ],
-      "additionalProperties": false
+      "type": "object"
     },
     "ObservedCapabilities": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "evidence_revision": {
-          "type": "string",
-          "pattern": "^sha256:[0-9a-f]{64}$"
+        "approvals": {
+          "type": "boolean"
         },
         "conversation": {
+          "type": "boolean"
+        },
+        "evidence_revision": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "input": {
+          "type": "boolean"
+        },
+        "interrupt": {
           "type": "boolean"
         },
         "managed_work": {
           "type": "boolean"
         },
-        "tool_path": {
-          "type": "string",
-          "enum": [
-            "direct_mcp_http",
-            "structured_native",
-            "none"
-          ]
-        },
-        "interrupt": {
-          "type": "boolean"
-        },
         "steer_timing": {
-          "type": "string",
           "enum": [
             "IMMEDIATE",
             "NEXT_TURN_BOUNDARY",
             "UNSUPPORTED"
-          ]
-        },
-        "approvals": {
-          "type": "boolean"
-        },
-        "input": {
-          "type": "boolean"
+          ],
+          "type": "string"
         },
         "targeting": {
-          "type": "object",
+          "additionalProperties": false,
           "properties": {
-            "steer": {
-              "type": "string",
-              "enum": [
-                "native_turn_id",
-                "current_run",
-                "unsupported"
-              ]
-            },
             "interrupt": {
-              "type": "string",
               "enum": [
                 "native_turn_id",
                 "current_run",
                 "unsupported"
-              ]
+              ],
+              "type": "string"
+            },
+            "steer": {
+              "enum": [
+                "native_turn_id",
+                "current_run",
+                "unsupported"
+              ],
+              "type": "string"
             }
           },
           "required": [
             "steer",
             "interrupt"
           ],
-          "additionalProperties": false
+          "type": "object"
+        },
+        "tool_path": {
+          "enum": [
+            "direct_mcp_http",
+            "structured_native",
+            "none"
+          ],
+          "type": "string"
         }
       },
       "required": [
@@ -757,81 +802,104 @@
         "input",
         "targeting"
       ],
-      "additionalProperties": false
+      "type": "object"
     },
     "CandidateEvidence": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "adapter_id": {
-          "type": "string",
+          "maxLength": 160,
           "minLength": 1,
-          "maxLength": 160
-        },
-        "candidate_ref": {
-          "type": "string",
-          "pattern": "^nexus-install-v1:[0-9a-f]{64}$"
-        },
-        "content_fingerprint": {
-          "type": "string",
-          "pattern": "^sha256:[0-9a-f]{64}$"
-        },
-        "build_identity": {
-          "anyOf": [
-            {
-              "type": "string",
-              "pattern": "^sha256:[0-9a-f]{64}$"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "version": {
-          "anyOf": [
-            {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 160
-            },
-            {
-              "type": "null"
-            }
-          ]
+          "type": "string"
         },
         "architecture": {
           "anyOf": [
             {
-              "type": "string",
+              "maxLength": 160,
               "minLength": 1,
-              "maxLength": 160
+              "type": "string"
             },
             {
               "type": "null"
             }
           ]
         },
-        "trust": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 160
+        "build_identity": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
-        "source": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 160
+        "candidate_ref": {
+          "pattern": "^nexus-install-v1:[0-9a-f]{64}$",
+          "type": "string"
         },
-        "support_status": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 160
+        "capability_report": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ObservedCapabilities"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "containment": {
+          "enum": [
+            "available",
+            "unavailable",
+            "unverified"
+          ],
+          "type": "string"
+        },
+        "content_fingerprint": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
         },
         "platform": {
-          "type": "string",
+          "maxLength": 160,
           "minLength": 1,
-          "maxLength": 160
+          "type": "string"
+        },
+        "qualification": {
+          "enum": [
+            "qualified",
+            "unqualified",
+            "not_probed"
+          ],
+          "type": "string"
+        },
+        "qualified_control_actions": {
+          "items": {
+            "enum": [
+              "turn.steer",
+              "turn.interrupt"
+            ]
+          },
+          "maxItems": 2,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "reasons": {
+          "items": {
+            "maxLength": 160,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 64,
+          "type": "array"
+        },
+        "source": {
+          "maxLength": 160,
+          "minLength": 1,
+          "type": "string"
         },
         "state": {
-          "type": "string",
           "enum": [
             "NOT_INSTALLED",
             "UNSUPPORTED_PLATFORM",
@@ -840,21 +908,25 @@
             "CONTAINMENT_UNAVAILABLE",
             "PREPARATION_REQUIRED",
             "READY_FOR_RUNTIME"
-          ]
+          ],
+          "type": "string"
         },
-        "reasons": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 160
-          },
-          "maxItems": 64
+        "support_status": {
+          "maxLength": 160,
+          "minLength": 1,
+          "type": "string"
         },
-        "capability_report": {
+        "trust": {
+          "maxLength": 160,
+          "minLength": 1,
+          "type": "string"
+        },
+        "version": {
           "anyOf": [
             {
-              "$ref": "#/$defs/ObservedCapabilities"
+              "maxLength": 160,
+              "minLength": 1,
+              "type": "string"
             },
             {
               "type": "null"
@@ -875,61 +947,71 @@
         "platform",
         "state",
         "reasons",
-        "capability_report"
+        "capability_report",
+        "qualification",
+        "containment",
+        "qualified_control_actions"
       ],
-      "additionalProperties": false
+      "type": "object"
     },
     "ExecutorInventorySnapshot": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "snapshot_format_version": {
-          "const": 1
-        },
-        "server_id": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 160
-        },
-        "executor_id": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 160
-        },
-        "producer_instance_id": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 160
-        },
-        "publication_sequence": {
-          "type": "integer",
-          "minimum": 1
-        },
-        "inventory_revision": {
-          "type": "string",
-          "pattern": "^sha256:[0-9a-f]{64}$"
-        },
-        "core_version": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 160
+        "availability": {
+          "$ref": "#/$defs/AvailabilityReport"
         },
         "catalog": {
           "$ref": "#/$defs/RuntimeCatalog"
         },
-        "availability": {
-          "$ref": "#/$defs/AvailabilityReport"
+        "core_version": {
+          "maxLength": 160,
+          "minLength": 1,
+          "type": "string"
         },
         "evidence": {
-          "type": "array",
           "items": {
             "$ref": "#/$defs/CandidateEvidence"
           },
-          "maxItems": 128
+          "maxItems": 128,
+          "type": "array"
+        },
+        "executor_id": {
+          "maxLength": 160,
+          "minLength": 1,
+          "type": "string"
+        },
+        "inventory_revision": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
         },
         "observation_age_ms": {
-          "type": "integer",
+          "maximum": 300000,
           "minimum": 0,
-          "maximum": 300000
+          "type": "integer"
+        },
+        "observations": {
+          "items": {
+            "$ref": "#/$defs/HarnessObservation"
+          },
+          "maxItems": 128,
+          "type": "array"
+        },
+        "producer_instance_id": {
+          "maxLength": 160,
+          "minLength": 1,
+          "type": "string"
+        },
+        "publication_sequence": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "server_id": {
+          "maxLength": 160,
+          "minLength": 1,
+          "type": "string"
+        },
+        "snapshot_format_version": {
+          "const": 3
         }
       },
       "required": [
@@ -943,9 +1025,10 @@
         "catalog",
         "availability",
         "evidence",
-        "observation_age_ms"
+        "observation_age_ms",
+        "observations"
       ],
-      "additionalProperties": false
+      "type": "object"
     },
     "InventoryAccepted": {
       "type": "object",
@@ -1004,12 +1087,23 @@
         },
         "eligible_for_new_start": {
           "type": "boolean"
+        },
+        "adapter_freshness": {
+          "type": "object",
+          "additionalProperties": {
+            "enum": [
+              "FRESH",
+              "STALE",
+              "OFFLINE"
+            ]
+          }
         }
       },
       "required": [
         "snapshot",
         "freshness",
-        "eligible_for_new_start"
+        "eligible_for_new_start",
+        "adapter_freshness"
       ],
       "additionalProperties": false
     },
@@ -1782,6 +1876,23 @@
             "$ref": "#/$defs/RuntimeOption"
           },
           "maxItems": 256
+        },
+        "adapter_freshness": {
+          "type": "object",
+          "additionalProperties": {
+            "enum": [
+              "FRESH",
+              "STALE",
+              "OFFLINE"
+            ]
+          }
+        },
+        "observations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/HarnessObservation"
+          },
+          "maxItems": 128
         }
       },
       "required": [
@@ -1791,7 +1902,9 @@
         "catalog",
         "availability",
         "freshness",
-        "options"
+        "options",
+        "adapter_freshness",
+        "observations"
       ],
       "additionalProperties": false
     },
@@ -1995,7 +2108,7 @@
         }
       },
       "additionalProperties": true,
-      "description": "Estrutura operacional original validada pelo schema do Core/adapter. Impor tamb\u00c3\u00a9m 16 KiB e profundidade64; n\u00c3\u00a3o renomear campos nativos aqui."
+      "description": "Estrutura operacional original validada pelo schema do Core/adapter. Impor tambÃ©m 16 KiB e profundidade64; nÃ£o renomear campos nativos aqui."
     },
     "ApprovalPayload": {
       "type": "object",
@@ -4323,6 +4436,101 @@
         "runtime_authorized",
         "publication_pending"
       ]
+    },
+    "HarnessObservation": {
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "error_code": {
+              "type": "null"
+            },
+            "observation_age_ms": {
+              "maximum": 300000,
+              "minimum": 0,
+              "type": "integer"
+            },
+            "state": {
+              "enum": [
+                "PRESENT",
+                "ABSENT"
+              ]
+            }
+          }
+        },
+        {
+          "properties": {
+            "error_code": {
+              "type": "null"
+            },
+            "observation_age_ms": {
+              "type": "null"
+            },
+            "state": {
+              "const": "PENDING"
+            }
+          }
+        },
+        {
+          "properties": {
+            "error_code": {
+              "type": "string"
+            },
+            "observation_age_ms": {
+              "type": "null"
+            },
+            "state": {
+              "const": "FAILED"
+            }
+          }
+        }
+      ],
+      "properties": {
+        "adapter_id": {
+          "maxLength": 160,
+          "minLength": 1,
+          "type": "string"
+        },
+        "error_code": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "pattern": "^[A-Z][A-Z0-9_]*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observation_age_ms": {
+          "anyOf": [
+            {
+              "maximum": 300000,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "state": {
+          "enum": [
+            "PENDING",
+            "PRESENT",
+            "ABSENT",
+            "FAILED"
+          ]
+        }
+      },
+      "required": [
+        "adapter_id",
+        "state",
+        "observation_age_ms",
+        "error_code"
+      ],
+      "type": "object"
     }
   }
 }

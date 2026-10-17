@@ -175,7 +175,9 @@
         "m3j-renewal-contention.md",
         "m3j-results.json",
         "m3i-independent-observations.md",
-        "m3i-core-results.json"
+        "m3i-core-results.json",
+        "m3i-consumers.md",
+        "m3i-consumers-results.json"
       ],
       "commits": {
         "core_m3c": "7bab651",
@@ -188,7 +190,8 @@
         "nexus_m3g": "8c5cf2b",
         "core_m3h": "695ff09",
         "connector_m3h": "0a72072",
-        "core_m3i_foundation": "6e97362"
+        "core_m3i_foundation": "6e97362",
+        "connector_m3i_selection": "15e1d53"
       },
       "checkpoints": [
         {
@@ -239,7 +242,7 @@
         {
           "id": "M3i",
           "status": "in_progress",
-          "title": "Core format-3 contract and independent observer qualified: 117 installed tests; Nexus/Connector integration, consent migration and joint UI gate pending"
+          "title": "Core contract/workers (117 installed cases), Server per-harness freshness/consent migration (94 installed cases), Connector partial selection (36 installed cases) qualified; producer integration and major UI gate pending"
         }
       ],
       "nexus_m3b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3b-validation.md",
@@ -248,7 +251,8 @@
       "nexus_m3e_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3e-validation.md",
       "nexus_m3g_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3g-pool-refusal.md",
       "nexus_m3h_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3h-startup-observation.md",
-      "nexus_m3j_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3j-renewal-contention.md"
+      "nexus_m3j_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3j-renewal-contention.md",
+      "nexus_m3i_consumers_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3i-consumers.md"
     },
     {
       "id": "M4",
@@ -455,5 +459,5 @@
   ],
   "live_installation": "Generation 72, Nexus 0.3.1 M3j with Core 0.0.12 M3h and Connector 0.0.10 unchanged code. PID 29220, launcher 44848, port 8202. 541/156/98 files and dependencies verified. Previous process drained normally; 271 DB backups preserved. Pi/Claude/Codex Online, Pi 4 WARM and renewed leases; Pi and Claude responded through Meta-harness. Initial readiness latency remains L14. See m3j-renewal-contention.md.",
   "publication": "Feature branches only; no main merge, tag or PyPI publication authorized by this plan",
-  "pending_installation": "M3i Core contract and independent workers qualified in isolation (117 installed cases), not globally installed. Nexus/Connector still vendor M3h and require coordinated integration and baseline migration before format-3 rollout. Global generation 72 remains healthy on M3j/M3h."
+  "pending_installation": "M3i Core and consumer foundation qualified in isolation; all vendor wheels synchronized. No global deployment before retained independent producers, exact published selection, refresh frontiers and joint UI qualification. Generation 72 continues on M3j/M3h."
 }

@@ -228,11 +228,10 @@ def prepare_execution_binding(
             (server_id, request["executor_id"]),
         ).fetchone()
         fresh = fresh_publications.get((server_id, request["executor_id"]))
+        from .execution_inventory_freshness import inventory_is_fresh
         if (current is None or
                 current["inventory_revision"] != request["inventory_revision"] or
-                fresh is None or fresh[0] != current["publication_sequence"] or
-                current["observation_age_ms"] +
-                int((time.monotonic() - fresh[1]) * 1000) >= 120_000):
+                not inventory_is_fresh(current, fresh, request['adapter_id'])):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The selected inventory is no longer fresh.", {})
         snapshot = load_current_executor_inventory(current["canonical_projection"])
@@ -587,7 +586,7 @@ def apply_execution_binding(
                                   "The selected realization has changed.", {})
         current = conn.execute(
             "SELECT c.inventory_revision,c.publication_sequence,"
-            "s.observation_age_ms FROM execution_inventory_current c "
+            "s.observation_age_ms,s.canonical_projection FROM execution_inventory_current c "
             "JOIN execution_inventory_snapshots s ON s.server_id=c.server_id "
             "AND s.executor_id=c.executor_id AND "
             "s.publication_sequence=c.publication_sequence "
@@ -595,11 +594,10 @@ def apply_execution_binding(
             (server_id, proposal["executor_id"]),
         ).fetchone()
         fresh = fresh_publications.get((server_id, proposal["executor_id"]))
+        from .execution_inventory_freshness import inventory_is_fresh
         if (current is None or
                 current["inventory_revision"] != expected["inventory_revision"] or
-                fresh is None or fresh[0] != current["publication_sequence"] or
-                current["observation_age_ms"] +
-                int((time.monotonic() - fresh[1]) * 1000) >= 120_000):
+                not inventory_is_fresh(current, fresh, proposal['adapter_id'])):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The selected inventory is no longer fresh.", {})
         existing = _binding_alias_conflicts(conn, server_id=server_id,
