@@ -417,17 +417,20 @@
         "m5b-results.json",
         "m5c-prelease-refusal-design.md",
         "m5c-core-contract.md",
-        "m5c-inband-checkpoint.md"
+        "m5c-inband-checkpoint.md",
+        "m5d-replay-checkpoint.md"
       ],
       "commits": {
         "core_foundation": "19bb8f2",
         "core_m5c_contract": "4e67dc0",
         "core_m5c_channel": "2cefaa9",
         "connector_m5c_inband": "9093b86",
+        "core_m5d_replay": "99bdd00",
+        "connector_m5d_replay": "dca2cc7",
         "m5b_nexus_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m5b-startup-refusal.md",
         "m5b_connector_commit_lookup": "git -C ../okto-nexus-connector log --format=%H --diff-filter=A -- plans/runtime-lifecycle-m5b.md"
       },
-      "next": "M5c now has source-tested current-channel prelease reporting and durable Connector production. Complete safe replay from an old generation after full Connector restart without admitting another native effect or blocking healthy bindings. Then validate crash/storage cuts, forged/stale reports, installed wheels, uncertain-effect startup isolation, differential reconnect/revoke/reset and load; qualify the major milestone through real Nexus UI. M5 remains in progress."
+      "next": "M5d source-tested prelease refusal replay through replacement control generations under separate-process binding/report/ACK cuts, with exact capacity release and a successful later handoff. Qualify an actual Connector process kill/restart and installed wheels, then finish storage/forgery matrix, uncertain-effect startup isolation, per-binding containment, differential reconnect/revoke/reset and load. Qualify the major milestone through real Nexus UI. M5 remains in progress."
     },
     {
       "id": "M6",

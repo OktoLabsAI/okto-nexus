@@ -51,6 +51,7 @@ async def run(config):
     from okto_nexus_connector.storage.state_store import (
         IdentityRecord, ServerProfileRecord, ExecutionExecutorRecord)
     from okto_nexus_connector.storage.r4_publications import R4PublicationStore
+    from okto_nexus_connector.transport.r4_connection import R4Connection
 
     daemon = DaemonApp(Path(config['root']))
     daemon.host.max_owned_slots = 1
@@ -84,7 +85,17 @@ async def run(config):
     faults = {'lose_next_send': False, 'stop_allowed': stop_allowed,
               'publication_cut': None, 'publication_cuts': 0,
               'fail_next_prepare': False, 'preparation_failures': 0,
-              'fail_next_candidate': False, 'candidate_failures': 0}
+              'fail_next_candidate': False, 'candidate_failures': 0,
+              'lose_next_startup_ack': False, 'startup_ack_losses': 0}
+    original_startup_publish = R4Connection.publish_startup_refusal
+    async def publish_startup_with_lost_ack(self, request, **options):
+        reply = await original_startup_publish(self, request, **options)
+        if faults['lose_next_startup_ack']:
+            faults['lose_next_startup_ack'] = False
+            faults['startup_ack_losses'] += 1
+            raise OSError('Synthetic startup ACK observation lost')
+        return reply
+    R4Connection.publish_startup_refusal = publish_startup_with_lost_ack
     original_candidates = r4_execution.R4DaemonExecution._candidates
     async def candidates_with_cut(self, frame):
         if faults['fail_next_candidate']:
@@ -106,7 +117,7 @@ async def run(config):
     LocalRuntimeCore.prepare = prepare_with_cut
     # Cut after a real durable commit, before the execution owner receives its
     # result. Never replace the store or manufacture a Core operation fact.
-    for method_name in ('reserve', 'bind'):
+    for method_name in ('reserve', 'bind', 'record_startup'):
         original = getattr(R4PublicationStore, method_name)
         def cut_publication(self, *args, _original=original, _name=method_name, **kwargs):
             result = _original(self, *args, **kwargs)
@@ -150,7 +161,10 @@ async def run(config):
                 faults['fail_next_prepare'] = True
             elif command == 'fail_next_candidate':
                 faults['fail_next_candidate'] = True
-            elif command in ('cut_publication_reserve', 'cut_publication_bind'):
+            elif command == 'lose_next_startup_ack':
+                faults['lose_next_startup_ack'] = True
+            elif command in ('cut_publication_reserve', 'cut_publication_bind',
+                    'cut_publication_record_startup'):
                 faults['publication_cut'] = command.removeprefix('cut_publication_')
             elif command == 'hold_stop':
                 stop_allowed.clear()
@@ -167,6 +181,7 @@ async def run(config):
             print(json.dumps(dict(pid=os.getpid(), ready=state['execution_ready'],
                 error=state['error_code'], generation=state['connection_generation'],
                 candidate_failures=faults['candidate_failures'],
+                startup_ack_losses=faults['startup_ack_losses'],
                 publication_cuts=faults['publication_cuts'],
                 preparation_failures=faults['preparation_failures'],
                 opens=len(peers), opening=len(opening), sends=sum(len(peer.sent) for peer in peers.values()),

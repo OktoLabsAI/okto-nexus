@@ -30,9 +30,11 @@ def verify_startup_refusal(uow, channel, report, receipt, operation, scope):
                 channel.connection_generation) != tuple(report[k] for k in (
                     'server_id', 'executor_id', 'connection_id', 'connection_generation'))
             or conn.execute("SELECT 1 FROM execution_executors WHERE server_id=? AND executor_id=? "
-                "AND owner_instance_id=? AND generation=? AND control_state='CONTROL_READY' "
+                "AND owner_instance_id=? AND generation=? AND control_state=? "
                 "AND revoked_at IS NULL", (channel.server_id, channel.executor_id,
-                channel.connection_id, channel.connection_generation)).fetchone() is None):
+                channel.connection_id, channel.connection_generation,
+                'CONTROL_READY' if channel.connection_generation == source['connection_generation']
+                else 'RECOVERING')).fetchone() is None):
         raise _conflict()
     admissions = conn.execute('SELECT reservation_json,consumption_json FROM execution_capacity_admissions '
         'WHERE server_id=? AND executor_id=? AND session_id=?', session_key).fetchall()

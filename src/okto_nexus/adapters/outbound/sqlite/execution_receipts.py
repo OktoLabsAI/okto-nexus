@@ -357,10 +357,14 @@ def append_execution_receipt(factory: ConnectionFactory, *,
             # stopping the preparation producer, proving no native claim and
             # releasing its exact capacity. Keep the terminal result and close
             # only the session named by that opening; healthy siblings stay up.
+            owner = startup_owner if startup_verified is not None else None
             current = conn.execute('SELECT 1 FROM execution_executors WHERE server_id=? '
                 'AND executor_id=? AND owner_instance_id=? AND generation=? '
-                "AND control_state='CONTROL_READY' AND revoked_at IS NULL",
-                (key[0], key[1], parsed['connection_id'], parsed['connection_generation'])).fetchone()
+                "AND control_state=? AND revoked_at IS NULL",
+                (key[0], key[1], owner.connection_id if owner else parsed['connection_id'],
+                 owner.connection_generation if owner else parsed['connection_generation'],
+                 ('CONTROL_READY' if owner.connection_generation == parsed['connection_generation']
+                  else 'RECOVERING') if owner else 'CONTROL_READY')).fetchone()
             if current is None or conn.execute('SELECT 1 FROM execution_event_ingress WHERE '
                     'server_id=? AND executor_id=? AND session_id=? LIMIT 1',
                     (key[0], key[1], parsed['session_id'])).fetchone() is not None:
