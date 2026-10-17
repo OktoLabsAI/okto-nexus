@@ -153,11 +153,20 @@ def test_remote_failed_preparation_receipt_closes_pending_session_without_discon
                 try:
                     refusal = prepare_r4_startup_refusal(opening.frame)
                     receipt = await persist_r4_startup_refusal(journal, refusal)
-                    return project_r4_bound_receipt(refusal['binding'], receipt,
+                    return refusal, project_r4_bound_receipt(refusal['binding'], receipt,
                         key=OperationKey(server_id, executor_id, resolved['operation_id']), receipt_revision=1)
                 finally:
                     await journal.aclose()
-            receipt = asyncio.run(fact())
+            refusal, receipt = asyncio.run(fact())
+            report = dict(contract_revision=STARTUP_REFUSAL_REVISION, type='startup.refuse',
+                request_id='late-startup-refusal', server_id=server_id, executor_id=executor_id,
+                connection_id=channel.connection_id,
+                connection_generation=channel.connection_generation,
+                refusal=refusal, receipt=receipt, capacity=None, native_absent=True)
+            with deps.connection_factory.unit_of_work() as uow:
+                with pytest.raises(OktoNexusError):
+                    append_execution_receipt(None, uow=uow, startup_owner=channel,
+                        startup_report=report, frame=receipt)
             ticket = issue_execution_ticket(deps.connection_factory, server_id=server_id,
                 executor_id=executor_id, agent_id='subject', binding_id='binding',
                 scopes=frozenset({'receipt:publish'})).ticket

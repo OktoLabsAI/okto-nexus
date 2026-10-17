@@ -432,7 +432,7 @@
         "m5b_nexus_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m5b-startup-refusal.md",
         "m5b_connector_commit_lookup": "git -C ../okto-nexus-connector log --format=%H --diff-filter=A -- plans/runtime-lifecycle-m5b.md"
       },
-      "next": "M5e qualified actual Connector process death/restart and byte-verified installed wheels. M5f rejects forged current-channel identity and selected changed storage facts without committing a receipt; valid idempotent replay still succeeds. Finish physical capacity mismatch, applied lease/native-action and replacement-owner races, then uncertain-effect startup isolation, per-binding containment, differential reconnect/revoke/reset and load. Qualify the major milestone through real Nexus UI. M5 remains in progress."
+      "next": "M5e qualified actual Connector process death/restart and byte-verified installed wheels. M5f rejects forged current-channel identity, selected changed storage facts and applied-lease prelease reports without committing a receipt; valid idempotent replay still succeeds. Finish physical capacity mismatch, native-action and replacement-owner races, then uncertain-effect startup isolation, per-binding containment, differential reconnect/revoke/reset and load. Qualify the major milestone through real Nexus UI. M5 remains in progress."
     },
     {
       "id": "M6",
