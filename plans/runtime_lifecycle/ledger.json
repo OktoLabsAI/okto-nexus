@@ -601,9 +601,13 @@
         "m3g-pool-refusal.md",
         "m3h-startup-observation.md",
         "m3h-results.json",
-        "m7-pi-cold-cost.md"
+        "m7-pi-cold-cost.md",
+        "m7b-passive-budget.md",
+        "Core: plans/runtime-lifecycle-m7b-passive-budget.md"
       ],
-      "commits": {}
+      "commits": {
+        "core_m7b": "ab87980"
+      }
     },
     {
       "id": "M8",
@@ -798,9 +802,16 @@
       "priority": "high",
       "status": "installed_checkpoint_ui_pending",
       "description": "Core 680c677 defers the duplicate full Pi build hash from non-effectful runtime prepare to admitted open, which retains full identity validation before capacity reservation or spawn. 88 source and 11 isolated installed tests passed; real Pi prepare_launch measured 0.651s deferred versus 8.300s full in one warm-cache run. Nexus/Connector vendor exact Core wheel f0d6c9141ce59c04e01c419711b2b1e40f026ff99ba79c88c157f95da36ca457. UI-B, per-frontier trace and latency distribution remain pending. Global generation 73 untouched. See Core runtime-lifecycle-m7a-cold-preparation.md."
+    },
+    {
+      "id": "L26",
+      "milestone": "M7",
+      "priority": "medium",
+      "status": "installed_checkpoint_ui_pending",
+      "description": "Core ab87980 gives passive Pi identity discovery a two-reader budget while admitted open retains four; both still hash every file and produce identical content identity. 100 selected source and 100 isolated installed-wheel tests passed. Nexus and Connector vendor wheel d9cf577731e123c417eb731c6b34b5e6fa208be7f33d86441e426c8fedadc1e8. No comparable real-host CPU/latency distribution or UI-B claim; global Nexus remains stopped. See m7b-passive-budget.md."
     }
   ],
-  "live_installation": "Generation 73, Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers. Server PID 32480, launcher 39500, port 8202. Exact qualified wheels installed together; 542/158/99 package files and dependencies verified. Previous process drained normally; full offline backup preserved. Pi/Claude/Codex Online, Pi four WARM; Pi and Claude responded through the real Meta-harness, Claude terminal inspected. L12 cause remains unproven; L14 load qualification remains pending. See m3i-ui-rollout.md.",
+  "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",
   "publication": "Feature branches only; no main merge, tag or PyPI publication authorized by this plan",
   "pending_installation": "M3k final wheel dc0d8130ec7ac33fb368e0c035c4a85dc1cef4d519c2e45b44a524348cd7c5db is source/installed/real-Pi-UI qualified. Controlled global rollout pending; generation 73 remains on M3i, untouched during production Recovering investigation and disposable tests. M4d4b final Nexus wheel 95fe2fda95e4cc0c3c32fb492ba1e62ea1f9d514340bd5fcef2a3c6a5fe985b3 is qualified in isolation with Core e93dc1e1 and Connector 2e222043; no new real UI or global rollout at this technical checkpoint. M3l Nexus wheel 5d5f31c04552088833ac28fe1f6b00790f717a01cb982503f643ff6fcc44f31f passed 34 installed cases; supersedes the earlier Nexus validation wheel for the next controlled rollout, with unchanged Core e93dc1e1 and Connector 2e222043. Global generation 73 remains untouched."
 }

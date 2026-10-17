@@ -291,6 +291,12 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   de capacidade e do spawn. 88 testes source e 11 da wheel instalada passaram.
   Uma amostra Pi com cache aquecido mediu 0,651s contra 8,300s na preparação;
   UI-B e distribuição de latência seguem pendentes. Ver relatório M7a no Core.
+- Checkpoint M7b: Core `ab87980` limita a dois leitores de arquivo a observação
+  passiva da identidade do Pi, preservando quatro na abertura admitida. Os dois
+  caminhos continuam lendo todo o conteúdo, sem cache, e geram a mesma identidade.
+  100 testes source e os mesmos 100 da wheel instalada passaram. Nexus e Connector
+  vendorizam a wheel idêntica; medição comparável de carga e UI-B permanecem
+  pendentes. Ver `m7b-passive-budget.md`.
 
 - Requests pendentes aproveitam primeira instância pronta; warmup independente,
   concorrente e limitado por orçamento físico do host, além do limite por agente.
