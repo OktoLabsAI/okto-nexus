@@ -1,0 +1,39 @@
+{
+  "checkpoint": "M4d2",
+  "source_initial": {
+    "passed": 35,
+    "failed": 1,
+    "reason": "Certificate assertion assumed maintenance completed before READY"
+  },
+  "source_retirement_rerun": {
+    "passed": 24,
+    "failed": 0
+  },
+  "installed_suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "50",
+      "time": "896.246",
+      "timestamp": "2026-10-17T00:24:06.534677-03:00",
+      "hostname": "Alienware_m15"
+    }
+  ],
+  "changed_inputs": [],
+  "tests": [
+    "tests/execution_r4/test_retirement_maintenance.py",
+    "tests/execution_r4/test_local_retirement.py",
+    "tests/execution_r4/test_recovery_diagnostic_contention.py",
+    "tests/execution_r4/test_agent_recovery_isolation.py"
+  ],
+  "wheel_sha256": "7df2ae0d16099c98c616b027f43a2ad5e1aa750f7eab750ff6eff74c05b51438",
+  "evidence_hashes": {
+    "campaign.json": "5e7c119454e056b964f1d9f55ac5f9774a11690886515fc1cec63dc100e4f5d4",
+    "tests.xml": "f3be7c1542e0fef43bd07ab2544f2a67faa996f37c503c9cd93a9d7dedb51504",
+    "installed.json": "fce1cb604b7394c470656685ea8c05cff33d1a5dd6c5f280cc453858dfb275dd"
+  },
+  "provider_execution": false,
+  "global_deployment": false
+}

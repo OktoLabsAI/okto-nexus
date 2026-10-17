@@ -25,9 +25,10 @@ comprovar encerramento dos produtores e liberação dos recursos antigos.
 
 ## Correção
 
-- Timeout transitório ao persistir diagnóstico mantém o aviso no log e não
-  derruba o host. `runtime_recovery_events` é observabilidade, não uma prova de
-  encerramento, autorização, resultado ou liberação.
+- Timeout transitório ao persistir o aviso `RECOVERY_PUBLICATION_DELAYED`
+  mantém esse aviso no log e não derruba o host. A revisão M4d2 restringe
+  explicitamente a exceção a esse código: outros registros de recuperação
+  também são usados antes de liberar recursos e continuam obrigatórios.
 - A escrita dos fatos de execução continua obrigatória. Publicações pendentes
   continuam sendo tentadas pelo owner existente, sem repetir o efeito nativo.
 - Falhas não transitórias não são suprimidas.
@@ -89,3 +90,17 @@ Evidências privadas locais: `build/runtime-recovery-diagnostic-live/`,
 `build/recovery-diagnostic-before.json`, dumps de stacks e relatórios instalados
 em `build/runtime-recovery-diagnostic-installed/`. A aplicação foi deixada em
 execução para teste pelo usuário.
+
+## Complemento da validação pela UI
+
+Na continuação da mesma geração 70, sem novo restart, o teste enviado ao Pi
+pelo Meta-harness às 00:14 locais respondeu `M3F_PI_OK` às 00:15. O teste
+enviado ao Claude às 00:20 respondeu `M3F_CLAUDE_OK` às 00:21. Ambos mostraram
+1/1 ACK na interface. Esses horários são a resolução apresentada pela UI,
+não medições precisas de latência. Codex não foi chamado novamente por L5.
+
+A aba Agents inicialmente reteve RECOVERING antigo até Refresh Agents;
+o backend confirmou READY para os três. A origem dessa observação da UI
+permanece em investigação. Também foram identificadas quatro reservas de
+aquecimento Pi presas em STARTING após recusas anteriores ao Core; a resposta
+real usou capacidade adicional. Detalhes em `m4d2-validation.md`.

@@ -195,12 +195,13 @@ class EmbeddedDispatchOwner:
                 uow.connection.execute('INSERT INTO runtime_recovery_events(executor_id,created_at,code,message,agent_id) VALUES(?,?,?,?,?)',
                     (self.channel.executor_id,self.deps.clock.now_iso(),code,message,agent_id))
         except OktoNexusError as error:
-            if error.code != ErrorCode.DB_ERROR or not error.retryable:
+            if (code != 'RECOVERY_PUBLICATION_DELAYED'
+                    or error.code != ErrorCode.DB_ERROR or not error.retryable):
                 raise
-            # This table is diagnostic, never proof of ownership, containment,
-            # receipt publication or resource release. In particular, reporting
-            # delayed persistence must not require that same writer to be free:
-            # doing so turned a publication retry into shared host containment.
+            # Only this advisory may fall back to logging. Other callers also
+            # record recovery evidence before releasing resources: do not waive
+            # their durable writes. Reporting delayed publication must not
+            # require that same writer to be free and contain the whole host.
             logger.warning('Runtime recovery diagnostic was not persisted due to transient storage contention: code=%s agent=%s',
                 code, agent_id)
         (logger.info if code in ('RECOVERY_READY', 'RECOVERY_AGENT_READY') else logger.warning)('Runtime recovery: %s %s',code,message)

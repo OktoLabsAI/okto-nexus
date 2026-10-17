@@ -9,17 +9,19 @@ class EmbeddedRetirement:
     def __init__(self, owner):
         self.owner = owner
 
-    def pending(self, agent_id):
+    def pending(self, agent_id, *, after=0, limit=128):
+        if not 1 <= limit <= 128:
+            raise ValueError('Retirement page size must be between 1 and 128')
         with self.owner.factory.unit_of_work(write=False) as uow:
             self.owner.verify(uow=uow)
             # Drive from unverified sessions, not an agent's entire stream history.
             return [dict(r) for r in uow.connection.execute(
-                "SELECT s.session_id,s.lifecycle_state FROM execution_sessions s "
+                "SELECT s.rowid AS retirement_rowid,s.session_id,s.lifecycle_state FROM execution_sessions s "
                 "CROSS JOIN execution_local_streams l USING(server_id,executor_id,session_id) "
                 "WHERE s.server_id=? AND s.executor_id=? AND s.local_retirement_json IS NULL "
-                "AND l.agent_id=? AND s.lifecycle_state IN ('CLOSED','FAILED') "
-                "ORDER BY s.rowid LIMIT 128",
-                (self.owner.channel.server_id, self.owner.channel.executor_id, agent_id))]
+                "AND l.agent_id=? AND s.lifecycle_state IN ('CLOSED','FAILED') AND s.rowid>? "
+                "ORDER BY s.rowid LIMIT ?",
+                (self.owner.channel.server_id, self.owner.channel.executor_id, agent_id, after, limit))]
 
     def invalidate(self, session_id):
         """A retained occupied Core slot overrides a previous Server checkpoint."""

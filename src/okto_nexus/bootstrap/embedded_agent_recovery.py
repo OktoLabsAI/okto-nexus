@@ -42,6 +42,8 @@ class EmbeddedAgentRecovery:
         self._tick_lock = asyncio.Lock()
         self.session_tasks = {}
         self.session_retry_at = {}
+        from .embedded_retirement_maintenance import EmbeddedRetirementMaintenance
+        self.retirement = EmbeddedRetirementMaintenance(self)
 
     def _state(self, agent_id, state, error=None):
         owner = self.owner
@@ -167,7 +169,9 @@ class EmbeddedAgentRecovery:
             raise CoreError('RECONCILIATION_REQUIRED', 'embedded_agent_history')
         for row in await asyncio.to_thread(EmbeddedReconciliation(owner)._records, agent_id, pending_only=True):
             await owner.tools.release_session(row['session_id'])
-        await self._retire_closed(agent_id)
+        # Resource containment, stream continuity and delivery settlement above
+        # are mandatory. Re-saving historical release checkpoints is maintenance
+        # and must not delay readiness after those proofs have converged.
         await asyncio.to_thread(self._state, agent_id, 'READY')
         self.blocked.discard(agent_id)
         self.errors.pop(agent_id, None)
@@ -191,7 +195,6 @@ class EmbeddedAgentRecovery:
         faults = await asyncio.to_thread(self._check_stream_health, agent_id, frozenset(self.owner.active_operations))
         for session_id in faults:
             self.recover_session(session_id)
-        await self._retire_closed(agent_id)
 
     def recover_session(self, session_id):
         session = self.owner.sessions.get(session_id)
@@ -303,32 +306,37 @@ class EmbeddedAgentRecovery:
             return pending
 
     async def _retire_closed(self, agent_id):
+        from .embedded_retirement import EmbeddedRetirement
+        retirement = EmbeddedRetirement(self.owner)
+        for row in await asyncio.to_thread(retirement.pending, agent_id):
+            await self._retire_session(agent_id, row)
+
+    async def _retire_session(self, agent_id, row):
         owner = self.owner
         from .embedded_retirement import EmbeddedRetirement
         retirement = EmbeddedRetirement(owner)
-        for row in await asyncio.to_thread(retirement.pending, agent_id):
-            if owner.sessions.get(row['session_id'], {}).get('recovering'):
-                continue  # The retained session worker owns its release proof.
-            if any(sid == row['session_id'] and not task.done()
-                   for task, sid in owner.worker_sessions.items()):
-                continue  # Native stop alone does not join host publication producers.
-            # Prove resource release and that every Core event was committed
-            # before ending polling. Receipt stages themselves are unchanged.
-            proof = await EmbeddedReconciliation(owner).release_session(row['session_id'],
-                failed_open=row['lifecycle_state'] == 'FAILED')
-            # The final native event can settle a turn after the publication
-            # pass that observed close. Publish its durable receipt before
-            # retiring all obligations for this now fully released stream.
-            await owner._recover_publications(agent_id=agent_id)
-            revision = await asyncio.to_thread(retirement.snapshot, row['session_id'])
-            if revision is None:
-                continue
-            proof['retirement_revision'] = revision
-            await owner.tools.release_session(row['session_id'])
-            if any(sid == row['session_id'] and not task.done()
-                   for task, sid in owner.worker_sessions.items()):
-                continue
-            await asyncio.to_thread(retirement.commit, row['session_id'], proof)
+        if owner.sessions.get(row['session_id'], {}).get('recovering'):
+            return  # The retained session worker owns its release proof.
+        if any(sid == row['session_id'] and not task.done()
+               for task, sid in owner.worker_sessions.items()):
+            return  # Native stop alone does not join host publication producers.
+        # Prove resource release and that every Core event was committed
+        # before ending polling. Receipt stages themselves are unchanged.
+        proof = await EmbeddedReconciliation(owner).release_session(row['session_id'],
+            failed_open=row['lifecycle_state'] == 'FAILED')
+        # The final native event can settle a turn after the publication
+        # pass that observed close. Publish its durable receipt before
+        # retiring all obligations for this now fully released stream.
+        await owner._recover_publications(agent_id=agent_id)
+        revision = await asyncio.to_thread(retirement.snapshot, row['session_id'])
+        if revision is None:
+            return
+        proof['retirement_revision'] = revision
+        await owner.tools.release_session(row['session_id'])
+        if any(sid == row['session_id'] and not task.done()
+               for task, sid in owner.worker_sessions.items()):
+            return
+        await asyncio.to_thread(retirement.commit, row['session_id'], proof)
 
     async def _run(self, agent_id, recovering):
         try:
@@ -414,6 +422,7 @@ class EmbeddedAgentRecovery:
         subjects = self.blocked | await asyncio.to_thread(self._pending_subjects)
         subjects |= {s['scope']['agent_id'] for s in self.owner.sessions.values()}
         subjects = subjects if target_agent_id is None else subjects & {target_agent_id}
+        self.retirement.tick(subjects)
         for agent_id in subjects:
             recovering = agent_id in self.blocked
             if (agent_id in self.tasks or (recovering and not enabled) or
@@ -428,6 +437,7 @@ class EmbeddedAgentRecovery:
             await asyncio.wait(tuple(self.tasks.values()), timeout=timeout)
 
     async def close(self):
+        await self.retirement.close()
         if self.tasks:
             await asyncio.gather(*tuple(self.tasks.values()))
         if self.session_tasks:

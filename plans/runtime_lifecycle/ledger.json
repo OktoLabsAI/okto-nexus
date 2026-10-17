@@ -19,7 +19,8 @@
         "m2e-validation.md",
         "m2e-results.json",
         "m2e-ui-broadcast.md",
-        "m3c-ui-recovery.md"
+        "m3c-ui-recovery.md",
+        "m3f-diagnostic-contention.md"
       ]
     },
     {
@@ -222,7 +223,9 @@
         "m4c-results.json",
         "m4d-design.md",
         "m4d1-validation.md",
-        "m4d1-results.json"
+        "m4d1-results.json",
+        "m4d2-validation.md",
+        "m4d2-results.json"
       ],
       "commits": {},
       "checkpoints": [
@@ -245,13 +248,19 @@
           "id": "M4d1",
           "status": "complete",
           "title": "Canonical location catalog and exact occupied-slot attribution; 52 distinct scenarios qualified (50/52 initial, 7/7 after test synchronization and owner-PID fixes; unchanged wheel)"
+        },
+        {
+          "id": "M4d2",
+          "status": "complete",
+          "title": "Retained per-agent historical maintenance outside readiness and live response publication; 50 installed tests passed; global rollout pending"
         }
       ],
       "nexus_m4a_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4a-validation.md",
-      "next": "Prioritize L11: separate closed-history retirement from agent readiness after resource/stream proofs, then remaining M4d caps, no-stream retirement, initial audit frontier and stream fairness.",
+      "next": "Qualify M4d2 against real retained history; remaining M4d no-stream retirement, initial audit frontier, scan caps and stream fairness. Address live refused-warm-slot finding L13 separately.",
       "nexus_m4b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4b-validation.md",
       "nexus_m4c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4c-validation.md",
-      "nexus_m4d1_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d1-validation.md"
+      "nexus_m4d1_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d1-validation.md",
+      "nexus_m4d2_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d2-validation.md"
     },
     {
       "id": "M5",
@@ -344,7 +353,7 @@
       "milestone": "M3",
       "priority": "critical",
       "status": "fixed_deployed",
-      "description": "Generation 69: RECOVERY_PUBLICATION_DELAYED diagnostic write timed out and escalated to host containment, stranding all local agents. M3f makes transient diagnostic persistence best-effort without changing receipt/authority durability. Origin of initial writer delay unproven. Global generation 70 recovered all agents; Graph presence confirmed. Real Meta-harness response still pending because browser automation detached."
+      "description": "Generation 69: RECOVERY_PUBLICATION_DELAYED diagnostic write timed out and escalated to host containment, stranding all local agents. M3f makes transient diagnostic persistence best-effort without changing receipt/authority durability. Origin of initial writer delay unproven. Global generation 70 recovered all agents; Graph presence confirmed. Pi and Claude replied through the real Meta-harness with 1/1 ACK on generation 70. M4d2 narrows diagnostic fallback to RECOVERY_PUBLICATION_DELAYED only; other durable recovery evidence stays required."
     },
     {
       "id": "L10",
@@ -357,10 +366,24 @@
       "id": "L11",
       "milestone": "M4",
       "priority": "high",
+      "status": "fixed_installed_validation",
+      "description": "First global M4d1 migration: Pi stayed RECOVERING until 03:03:20.844Z after host ready at 02:54:18Z. Closed-history retirement still precedes agent READY; certificates progressed 3/18/55 then readiness after first page. Move verified historical maintenance outside admission while retaining exact release/publication proofs; qualify with real retained history. CPU was saturated in one observation, not an attribution of the complete delay. M4d2 separates historical checkpoints from READY and live response publication; 50 installed tests passed. Real retained-history latency qualification remains pending."
+    },
+    {
+      "id": "L12",
+      "milestone": "M3",
+      "priority": "medium",
       "status": "open",
-      "description": "First global M4d1 migration: Pi stayed RECOVERING until 03:03:20.844Z after host ready at 02:54:18Z. Closed-history retirement still precedes agent READY; certificates progressed 3/18/55 then readiness after first page. Move verified historical maintenance outside admission while retaining exact release/publication proofs; qualify with real retained history. CPU was saturated in one observation, not an attribution of the complete delay."
+      "description": "Agents initially displayed old RECOVERING until Refresh Agents while all three backend recovery rows were READY; subsequent view mount showed ONLINE. Existing poll pauses when document.hidden; cause not yet attributed and no frontend fix claimed."
+    },
+    {
+      "id": "L13",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "open",
+      "description": "Generation 70 Pi has four warm STARTING slots with FAILED/NONE sessions, terminal dispatch refusals (CONFLICT, possible_effect=false) and no Core receipts. Pool settlement recognizes CLOSED lease or failed Core receipt but misses pre-Core refusal. Pi UI response used fifth on-demand slot. Require exact durable no-send proof, never infer safe release from FAILED/NONE alone."
     }
   ],
-  "live_installation": "M3f (Nexus 78e0b5c, including M4d1 b816fd7) globally installed with Core M3e 50eaabc and Connector M3e 7e1710a on 2026-10-17. Wheel bytes/dependencies verified: 539/156/98 files. Generation 70, server PID 39648, launcher 12792; all three local agents READY and present on Graph. Pi initial historical retirement took about nine minutes; M4 readiness barrier remains unresolved. Meta-harness opened but browser automation detached during message fill; no new real response claimed. See m3f-diagnostic-contention.md.",
+  "live_installation": "M3f Nexus 78e0b5c (including M4d1) globally installed with Core M3e 50eaabc and Connector M3e 7e1710a. Generation 70 PID 39648. Pi, Claude and Codex READY/ONLINE; Pi and Claude replied via Meta-harness with 1/1 ACK without further restart. M4d2 qualified in isolated installed environment only. Pi warm slots L13 remain unresolved in current global process. See m3f-diagnostic-contention.md and m4d2-validation.md.",
   "publication": "Feature branches only; no main merge, tag or PyPI publication authorized by this plan"
 }

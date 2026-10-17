@@ -225,9 +225,19 @@ def test_restart_uses_verified_retirement_unless_core_still_owns_resources(tmp_p
             assert time.monotonic() < deadline, repr(owner.agents.errors)
             time.sleep(.02)
         assert owner.pump is not None and native.opens == 1
-        with deps.connection_factory.unit_of_work(write=False) as uow:
-            retained = uow.connection.execute('SELECT local_retirement_json FROM execution_sessions WHERE session_id=?',
-                (session_id,)).fetchone()[0]
+        # READY follows mandatory reconciliation; re-saving the historical
+        # optimization certificate is now an independent maintenance worker.
+        # Still require that certificate, without assuming it shares READY's
+        # transaction or bypassing the occupied-resource assertion above.
+        deadline = time.monotonic() + 20
+        while True:
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                retained = uow.connection.execute('SELECT local_retirement_json FROM execution_sessions WHERE session_id=?',
+                    (session_id,)).fetchone()[0]
+            if retained is not None or not occupied:
+                break
+            assert time.monotonic() < deadline, repr(owner.agents.retirement.errors)
+            time.sleep(.02)
         if occupied:
             assert reads and retained is not None
         else:
