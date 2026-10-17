@@ -486,6 +486,8 @@ class EmbeddedDispatchOwner:
             if session.get('recovering'):
                 raise CoreError('EVENT_STREAM_UNAVAILABLE', 'embedded_session_recovery')
             if action == "runtime.open" and not resuming:
+                from .embedded_session_catalog import EmbeddedSessionCatalog
+                await asyncio.to_thread(EmbeddedSessionCatalog(self).register, key)
                 setup = await asyncio.to_thread(ApprovedLocalLaunch, self.inventory, session["scope"])
                 await self.tools.prepare(frame,setup)
                 tool_config=self.tools.configurations.get(key)

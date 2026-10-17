@@ -79,7 +79,7 @@ def run(root, phase):
                 # Core owns sequences; process termination may race publication.
                 # Both pre-ACK and post-ACK outcomes must restore without duplicates.
                 client.portal.call(retain)
-                state = dict(headers=headers, binding=binding, body=setup[4],
+                state = dict(owner_pid=os.getpid(), headers=headers, binding=binding, body=setup[4],
                     processes=[n.process.pid for n in factory.natives],
                     sessions=sessions, expected_events=len(streams))
                 ready = root / 'ready.json'

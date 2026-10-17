@@ -382,7 +382,7 @@ def test_live_publication_yields_even_when_stream_keeps_growing():
 
 @pytest.mark.skipif(sys.platform != 'win32', reason='Actual Windows Job crash containment')
 @pytest.mark.parametrize('termination', ['graceful', 'kill', 'kill-before-bind'])
-def test_real_process_exit_restores_without_lock_reset_or_replay(tmp_path, monkeypatch, termination):
+def test_real_process_exit_restores_without_lock_reset_or_replay(tmp_path, monkeypatch, termination, record_property):
     from nexus_connector_core import InstallationCandidate
     from nexus_connector_core.discovery import fingerprint
     from okto_nexus.bootstrap import embedded_inventory
@@ -396,16 +396,33 @@ def test_real_process_exit_restores_without_lock_reset_or_replay(tmp_path, monke
     core_source = str(Path(nexus_connector_core.__file__).resolve().parents[1])
     env = dict(os.environ, PYTHONPATH=os.pathsep.join([
         str(repo / 'src'), core_source, str(fixture.parent), str(repo / 'tests')]), PYTHONIOENCODING='utf-8')
+    # Windows venv python.exe is a redirector: killing it can leave the actual
+    # owner alive briefly, so a lock refusal would not be a recovery failure.
+    # Use this environment's base interpreter with the same explicit package
+    # paths, and verify the fixture's owner is the process we will terminate.
+    interpreter = getattr(sys, '_base_executable', sys.executable)
+    prepared_at = time.monotonic()
     with (root / 'process.log').open('w', encoding='utf-8') as log:
-        process = subprocess.Popen([sys.executable, str(fixture), str(root), 'before-bind' if termination == 'kill-before-bind' else 'running'], cwd=repo, env=env,
+        process = subprocess.Popen([interpreter, str(fixture), str(root), 'before-bind' if termination == 'kill-before-bind' else 'running'], cwd=repo, env=env,
             stdin=subprocess.PIPE, stdout=log, stderr=log, text=True,
             creationflags=subprocess.CREATE_NO_WINDOW | subprocess.CREATE_NEW_PROCESS_GROUP)
         try:
             def ready():
                 assert process.poll() is None, (root / 'process.log').read_text(encoding='utf-8')[-4000:]
                 return (root / 'ready.json').exists()
-            eventually(ready, seconds=40)
+            # This sets up a new database, two native peers and three remote
+            # handshakes; it is not the recovery interval measured below.
+            # Keep its own bounded deadline and diagnostic instead of reporting
+            # a slow fixture as a failed recovery before the crash even occurs.
+            deadline = prepared_at + 120
+            while not ready():
+                assert time.monotonic() < deadline, (
+                    'Disposable fixture did not finish setup before termination; '
+                    + (root / 'process.log').read_text(encoding='utf-8')[-4000:])
+                time.sleep(.02)
+            record_property('fixture_ready_seconds', time.monotonic() - prepared_at)
             state = json.loads((root / 'ready.json').read_text(encoding='utf-8'))
+            assert state['owner_pid'] == process.pid, 'Termination must target the actual disposable Nexus owner'
             assert all(process_exited(pid) is False for pid in state['processes'])
             if termination.startswith('kill'):
                 process.kill()  # exact disposable Nexus owner; Windows Jobs contain its peers
@@ -428,10 +445,12 @@ def test_real_process_exit_restores_without_lock_reset_or_replay(tmp_path, monke
             deps, app = app_for(root / 'home')
             with TestClient(app) as client:
                 owner = app.state.embedded_dispatch_owner
-                eventually(lambda: not owner.agents.blocked)
+                eventually(lambda: owner.pump is not None and owner.agents.initialized and not owner.agents.blocked)
                 assert owner.pump is not None and owner.failure is None
                 if cycle == 0:
-                    assert time.monotonic() - started < 20, 'Dead owner must not require the 40/60 second lease timeout'
+                    recovered_in = time.monotonic() - started
+                    record_property('first_recovery_seconds', recovered_in)
+                    assert recovered_in < 20, 'Dead owner must not require the 40/60 second lease timeout'
                 with deps.connection_factory.unit_of_work(write=False) as uow:
                     assert uow.connection.execute("SELECT COUNT(*) FROM execution_sessions WHERE lifecycle_state NOT IN ('CLOSED','FAILED')").fetchone()[0] == 0
                     assert uow.connection.execute('SELECT COUNT(*) FROM execution_event_ingress').fetchone()[0] == state['expected_events']

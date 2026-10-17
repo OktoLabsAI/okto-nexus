@@ -213,7 +213,9 @@
         "m4b-results.json",
         "m4c-validation.md",
         "m4c-results.json",
-        "m4d-design.md"
+        "m4d-design.md",
+        "m4d1-validation.md",
+        "m4d1-results.json"
       ],
       "commits": {},
       "checkpoints": [
@@ -231,12 +233,18 @@
           "id": "M4c",
           "status": "complete",
           "title": "Verified resource-retirement checkpoints and transactional invalidation; bounded resumable retirement; 44 final installed tests passed"
+        },
+        {
+          "id": "M4d1",
+          "status": "complete",
+          "title": "Canonical location catalog and exact occupied-slot attribution; 52 distinct scenarios qualified (50/52 initial, 7/7 after test synchronization and owner-PID fixes; unchanged wheel)"
         }
       ],
       "nexus_m4a_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4a-validation.md",
-      "next": "M4d: remove full startup catalog/history scans and caps with a durable ownership catalog, resumable first audit and exact occupied-slot lookup; no-stream terminal paths and stream budgets/fairness remain.",
+      "next": "M4d: remove remaining per-agent history caps with resumable pending work; no-stream retirement, durable first-audit frontier outside admission, and stream budgets/fairness remain. M4d1 still enumerates the full store at startup in bounded pages.",
       "nexus_m4b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4b-validation.md",
-      "nexus_m4c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4c-validation.md"
+      "nexus_m4c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4c-validation.md",
+      "nexus_m4d1_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d1-validation.md"
     },
     {
       "id": "M5",
@@ -325,6 +333,6 @@
       "description": "M3c generation 68 process absent when UI was revisited, last access log 20:58:19 UTC, no recorded normal shutdown/traceback or matching Application Error event. Cause/initiator unproven. Logs preserved; generation 69 recovered all agents and Pi answered. Supervisor/host-lifetime qualification must distinguish host termination from runtime faults."
     }
   ],
-  "live_installation": "M3c remains globally installed (Nexus 3a68909/Core 7bab651/Connector 0db859c). Generation 68 process ended without recorded shutdown/traceback; cause unresolved (L8). Evidence preserved before starting generation 69: server PID 18616, launcher 35864. All local agents recovered automatically; Pi replied once via Meta-harness and pool refilled to 4/5. M3d/M3e/M4a only installed in isolated qualification environment. See m3c-ui-resumed.md. Claude also answered through Meta-harness after generation 69 recovery: ses_544f3e41b9cdc82c795adfcaa41448d1, exact marker, ACK 1/1, 16 committed events and completed turn. M4b is installed only in the isolated qualification environment. M4c qualified only in the isolated environment; global remains M3c. Read-only UI follow-up still showed all three local agents online and a later user Pi response with artifact.",
+  "live_installation": "M3c remains globally installed (Nexus 3a68909/Core 7bab651/Connector 0db859c). Generation 68 process ended without recorded shutdown/traceback; cause unresolved (L8). Evidence preserved before starting generation 69: server PID 18616, launcher 35864. All local agents recovered automatically; Pi replied once via Meta-harness and pool refilled to 4/5. M3d/M3e/M4a only installed in isolated qualification environment. See m3c-ui-resumed.md. Claude also answered through Meta-harness after generation 69 recovery: ses_544f3e41b9cdc82c795adfcaa41448d1, exact marker, ACK 1/1, 16 committed events and completed turn. M4b is installed only in the isolated qualification environment. M4c qualified only in the isolated environment; global remains M3c. Read-only UI follow-up still showed all three local agents online and a later user Pi response with artifact. M4d1 qualified in the isolated environment only; global remains M3c. Earlier read-only Agents UI showed ONLINE; subsequent live incident at 2026-10-17T02:03Z left generation 69 RECOVERING after a publication-delay diagnostic write timed out and triggered shared containment. M4d1 does not fix this incident.",
   "publication": "Feature branches only; no main merge, tag or PyPI publication authorized by this plan"
 }

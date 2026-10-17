@@ -20,13 +20,13 @@ class EmbeddedReconciliation:
         if owner._stopping.is_set():
             raise CoreError('RECONCILIATION_REQUIRED', 'embedded_recovery_plan')
         ledger = await owner.host._ledger()
-        records = {r['session_id']: r for r in await asyncio.to_thread(self._records)}
         page = await ledger.owned_slot_page(limit=128)
         if page.next_after_rowid is not None:
             raise CoreError('CAPACITY_EXCEEDED', 'embedded_recovery_plan')
         sessions = []
         for slot in page.reservations:
-            row = records.get(slot.key.session_id)
+            rows = await asyncio.to_thread(self._records, session_id=slot.key.session_id)
+            row = rows[0] if len(rows) == 1 else None
             if row is not None and (row['agent_id'] not in owner.agents.blocked or (agent_id is not None and row['agent_id'] != agent_id)):
                 continue
             if slot.key.session_id in owner.sessions:
@@ -327,11 +327,17 @@ class EmbeddedReconciliation:
         # An installation containing only pre-dispatch refusals never opened
         # Core, including its global ledger. Never waive a ledger for a session
         # that might have reached the native boundary.
-        files = await asyncio.to_thread(lambda: {p.name for p in host.store_dir.iterdir()} if host.store_dir.exists() else set())
-        if len(absent) != len(records) or 'owned-slots.db' in files:
+        ledger_present = await asyncio.to_thread((host.store_dir / 'owned-slots.db').is_file)
+        if len(absent) != len(records) or ledger_present:
             expected.add("owned-slots.db")
-        allowed = expected | {name+suffix for name in expected for suffix in ("-wal","-shm")}
-        if (agent_id is None and not files.issubset(allowed)) or not expected.issubset(files):
+        if agent_id is None:
+            from .embedded_session_catalog import EmbeddedSessionCatalog
+            catalog = EmbeddedSessionCatalog(owner)
+            await catalog.backfill()
+            await catalog.audit_files()
+        # Shared directory attribution belongs to initialize. A subject worker
+        # checks only its pending paths, never enumerating other agents' history.
+        if not await asyncio.to_thread(lambda: all((host.store_dir / name).is_file() for name in expected)):
             raise CoreError("JOURNAL_UNAVAILABLE","embedded_resource_files")
         # These openings have an authenticated no-admission fence, not a
         # native claim to release. EmbeddedPreopenRecovery revalidates their

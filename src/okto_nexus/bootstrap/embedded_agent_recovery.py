@@ -60,17 +60,12 @@ class EmbeddedAgentRecovery:
         if self.initialized:
             return
         owner = self.owner
-        records = await asyncio.to_thread(EmbeddedReconciliation(owner)._records)
+        from .embedded_session_catalog import EmbeddedSessionCatalog
+        catalog = EmbeddedSessionCatalog(owner)
+        await catalog.backfill()
         # Only unattributable/shared resources block the host. Missing or bad
         # journals with a known subject are handled by that subject's worker.
-        names = {owner.host._journal_path(owner.channel.executor_id, r['session_id']).name for r in records}
-        files = await asyncio.to_thread(lambda: {p.name for p in owner.host.store_dir.iterdir()}
-                                       if owner.host.store_dir.exists() else set())
-        allowed = names | {'owned-slots.db'}
-        allowed |= {name + suffix for name in allowed for suffix in ('-wal', '-shm')}
-        if not files.issubset(allowed) or (files & names and 'owned-slots.db' not in files):
-            raise CoreError('JOURNAL_UNAVAILABLE', 'embedded_shared_resources')
-        if 'owned-slots.db' in files:
+        if await catalog.audit_files():
             ledger = await owner.host._ledger()
             # A fenced connection's HELD capacity never crossed native
             # admission. Cancel those holds atomically before the legacy
@@ -84,20 +79,22 @@ class EmbeddedAgentRecovery:
                     break
             else:
                 raise CoreError('CAPACITY_EXCEEDED', 'embedded_capacity_recovery')
-            known = {r['session_id']: r['open_operation_id'] for r in records}
             after, high = 0, None
             for _ in range(256):
                 page = await ledger.owned_slot_page(after_rowid=after, high_water_rowid=high, limit=128)
                 for slot in page.reservations:
+                    rows = await asyncio.to_thread(EmbeddedReconciliation(owner)._records,
+                        session_id=slot.key.session_id)
+                    known = rows[0]['open_operation_id'] if len(rows) == 1 else None
                     opening = slot.opening_operation_id
-                    if known.get(slot.key.session_id) != opening:
+                    if known != opening:
                         # A consumed reservation may predate Core.open, so its
                         # slot still has Core's provisional identity. Attribute
                         # it through Core's durable association; keep it occupied
                         # until the agent's recovery proves release is safe.
                         opening = await ledger.capacity_opening_for_slot(slot)
                     if (slot.key.server_id != owner.channel.server_id or slot.key.executor_id != owner.channel.executor_id
-                            or opening is None or known.get(slot.key.session_id) != opening):
+                            or opening is None or known is None or known != opening):
                         raise CoreError('SCOPE_MISMATCH', 'embedded_shared_resources')
                     # Occupied physical ownership wins over a stored retirement
                     # checkpoint, including a restored/stale ledger after a crash.
@@ -111,7 +108,7 @@ class EmbeddedAgentRecovery:
                 after = page.next_after_rowid
             else:
                 raise CoreError('CAPACITY_EXCEEDED', 'embedded_shared_resources')
-        self.blocked = {r['agent_id'] for r in records}
+        self.blocked = await asyncio.to_thread(catalog.pending_agents)
         for agent_id in self.blocked:
             await asyncio.to_thread(self._state, agent_id, 'RECOVERING')
         self.initialized = True

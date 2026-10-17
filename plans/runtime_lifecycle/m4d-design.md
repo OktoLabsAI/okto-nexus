@@ -1,10 +1,13 @@
 # M4d — Retirar o histórico do caminho de admissão
 
-Planejamento do próximo checkpoint; não implementado nem qualificado.
+Plano em implementação. O checkpoint M4d1 está descrito em `m4d1-validation.md`;
+a retirada completa do histórico do caminho de admissão permanece pendente.
 
-O M4c evita reabrir journals já verificados, mas a inicialização ainda carrega
-todas as sessões, enumera o diretório e aplica o limite de 32.768 registros.
-Essas operações continuam sendo uma dependência compartilhada de startup.
+No M4c, a inicialização ainda carregava todas as sessões, enumerava o diretório
+e aplicava o limite de 32.768 registros, apesar de não reabrir journals já
+verificados. O M4d1 substitui o mapa completo de sessões pelo catálogo canônico
+e por buscas exatas de reservas; a enumeração inicial de arquivos e os tetos
+dos caminhos de recuperação por agente continuam pendentes.
 
 Antes de introduzir outro índice persistente, comparar duas opções no código:
 manter os journals por sessão com catálogo durável, ou adotar um journal por host
@@ -13,6 +16,11 @@ catálogo de arquivos e duplicação de recuperação, mas exige demonstrar isol
 de falhas, limites de armazenamento e migração retomável das evidências existentes.
 Não escolher somente pela redução do número de arquivos. Registrar a decisão
 antes da mudança de armazenamento e coordená-la com M5.
+
+Decisão inicial registrada no M4d1: preservar journals por sessão e acrescentar
+somente a localização derivada à sessão canônica. Isso não altera o protocolo
+Core nem cria um segundo ledger. A adoção de armazenamento físico compartilhado
+não foi qualificada; M5 mantém a unificação das políticas pelos adaptadores.
 
 ## Ordem de implementação
 
