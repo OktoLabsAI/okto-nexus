@@ -252,6 +252,12 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   instalada passaram; amostra descartável com 10 mil arquivos levou 0,997s
   para auditar. A varredura continua na admissão. Ver
   `m4d4f2-typed-entry-validation.md`.
+- Checkpoint M4d4g: 100 mil registros físicos combinados com 100 mil reservas
+  terminais ocuparam 256,6 MB no ledger do Core, acima do teto anterior de
+  64 MiB. O teto padrão passou a 512 MiB sem pré-alocação; 15 testes source e
+  15 da wheel instalada passaram. Nexus e Connector vendorizam a mesma wheel,
+  com verificações de manifesto/empacotamento aprovadas. Retenção e gate UI
+  permanecem pendentes. Ver `m4d4g-mixed-ledger-budget.md`.
 - Separar orçamento de controle/resultado do volume de artefatos; retry apenas na
   fronteira idempotente, sem repetir escrita nativa por erro SQLite/transporte.
 - Testes: reinício entre transações/checkpoints, eventos grandes, disco cheio,
