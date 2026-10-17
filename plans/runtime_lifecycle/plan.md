@@ -282,6 +282,11 @@ Claude responderam; Codex recusado por quota do provedor. Ver
 
 ### M7 — Pool e startup com orçamento e prioridade
 
+- Amostra instalada M7: Pi local percorre 14.097 entradas; a identidade
+  completa levou 13,185s e é recalculada em `prepare` e `open`. Ver
+  `m7-pi-cold-cost.md`. Reduzir verificação duplicada somente após rastrear
+  as fronteiras e manter validação completa antes do spawn.
+
 - Requests pendentes aproveitam primeira instância pronta; warmup independente,
   concorrente e limitado por orçamento físico do host, além do limite por agente.
 - Separar contagem disponível, em startup, ocupada, drenando e incerta; não chamar

@@ -600,7 +600,8 @@
       "evidence": [
         "m3g-pool-refusal.md",
         "m3h-startup-observation.md",
-        "m3h-results.json"
+        "m3h-results.json",
+        "m7-pi-cold-cost.md"
       ],
       "commits": {}
     },
@@ -783,6 +784,13 @@
       "priority": "high",
       "status": "installed_fix_exact_wheel_ui_pending",
       "description": "Core f5325af fixes a reproducible Pi pre-spawn native-action refusal during valid lease ID rotation; red/green test matches the historical UI trace but the historical stable receipt lacks stage, so causality is not conclusive. Eight focused source and installed cases plus one installed bridge case passed. Nexus and Connector vendor exact Core wheel 95a6238deae20d1a98ea8c8a44dcb808c24e037eb01e0d38163265fc1dc72193. Real UI requalification of this exact artifact remains pending; global generation 73 untouched. See m3n-pi-probe-ui.md."
+    },
+    {
+      "id": "L24",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "measured_design_pending",
+      "description": "Read-only profiling of the real local Pi installation (14,097 closure entries) measured full build identity at 13.185s, selected fingerprint at 0.913s and three stat-only signatures at 1.290-1.864s. Core prepare and open each recompute full identity, contributing about 26s before native startup at this measured rate. Preserve a full pre-spawn validation while removing redundant work within one admitted open; actual per-open stage trace and load qualification remain pending. See m7-pi-cold-cost.md."
     }
   ],
   "live_installation": "Generation 73, Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers. Server PID 32480, launcher 39500, port 8202. Exact qualified wheels installed together; 542/158/99 package files and dependencies verified. Previous process drained normally; full offline backup preserved. Pi/Claude/Codex Online, Pi four WARM; Pi and Claude responded through the real Meta-harness, Claude terminal inspected. L12 cause remains unproven; L14 load qualification remains pending. See m3i-ui-rollout.md.",
