@@ -192,6 +192,13 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   identidade estável; agendamento independente e margem de custo implementados,
   com 18 testes da wheel instalada aprovados. Ver `m3a-validation.md`. Isso não
   conclui os critérios abaixo nem a qualificação de carga do M7/M8.
+- Checkpoint M3n: a sonda `Pi --version` tinha prazo de 3s e falhou na UI real;
+  a execução local saudável levou 2,593s. O Core concede 10s somente ao Pi,
+  preservando contenção e demais verificações. Três testes de source e três da
+  wheel instalada passaram; a UI descartável validou conexão, dois turnos,
+  shutdown/restart automático e novo turno com 1/1 ACK. A primeira sessão
+  ainda levou cerca de 162s até ficar pronta: análise de fases e M7 pendentes.
+  Ver `m3n-pi-probe-ui.md`.
 - Modelar separadamente conexão, autoridade, capacidade e sincronização.
 - Pending de histórico não bloqueia capacidade independente; slot físico incerto
   permanece ocupado. Não redirecionar uma conversa persistente ainda incerta.

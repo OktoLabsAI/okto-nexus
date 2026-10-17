@@ -25,7 +25,8 @@
         "m3j-renewal-contention.md",
         "m3j-results.json",
         "m3i-ui-rollout.md",
-        "m3k-real-ui.md"
+        "m3k-real-ui.md",
+        "m3n-pi-probe-ui.md"
       ]
     },
     {
@@ -189,7 +190,9 @@
         "m3k-reset-ui.md",
         "m3k-notifications-results.json",
         "m3l-session-isolation.md",
-        "m3l-results.json"
+        "m3l-results.json",
+        "m3n-pi-probe-ui.md",
+        "Core: plans/runtime-lifecycle-m3-pi-version-probe.md"
       ],
       "commits": {
         "core_m3c": "7bab651",
@@ -275,6 +278,15 @@
           "id": "M3l",
           "status": "qualified_rollout_pending",
           "title": "Authorized startup failures recover by session; 34 installed cases, slow containment and all three adapters; global rollout and full M3 qualification pending"
+        },
+        {
+          "id": "M3n",
+          "status": "qualified_disposable_ui",
+          "title": "Pi-specific owned version probe tolerates healthy startup beyond 3s; three source and three installed tests, real connection, two Meta-harness turns and post-restart 1/1 ACK. Cold-start latency and full UI-A remain open.",
+          "commits": {
+            "core": "5d88562",
+            "connector_vendor": "aaa9951"
+          }
         }
       ],
       "nexus_m3b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3b-validation.md",
@@ -750,6 +762,13 @@
       "priority": "high",
       "status": "in_progress",
       "description": "Code inspection after the Pi version_probe_timeout report: EmbeddedDispatchOwner._execute_owned sent unclassified opening failures to agent-wide recovery. M3l reproduced Pi preparation failure stopping a healthy sibling and fixes post-authorization embedded failures; 34 installed cases passed across all adapters and held containment. M5b reproduced Connector preparation failure taking the whole control connection down, then isolated that post-lease failure to its exact session, proved no native claim, released correlated capacity and delivered a terminal caller error. A separate Connector process failed its first preparation and delivered a second handoff without reconnect; Nexus 17 and Connector 54 installed cases passed. Pre-authorization, uncertain-effect startup, storage failure, broader differential behavior and global rollout remain pending. Neither M3l nor M5b is proven to explain the reported simultaneous Recovering state. See m3l-session-isolation.md and m5b-startup-refusal.md."
+    },
+    {
+      "id": "L21",
+      "milestone": "M3",
+      "priority": "high",
+      "status": "qualified_disposable_ui_global_rollout_pending",
+      "description": "Pi's three-second owned version probe failed in real Nexus installation verification and a first connection test. Direct healthy Node bundle version took 2.593s. M3n extends only Pi's probe deadline to 10s; three source and three isolated installed tests passed. An installed disposable Nexus/Core test then verified the real Pi connection, two Meta-harness turns with 1/1 ACK, normal shutdown/restart, automatic READY/Online and a post-restart 1/1 ACK. The first new Pi session took about 162s to become ready; exact phase attribution and M7 load qualification remain open. Global generation 73 is unchanged. See m3n-pi-probe-ui.md."
     }
   ],
   "live_installation": "Generation 73, Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers. Server PID 32480, launcher 39500, port 8202. Exact qualified wheels installed together; 542/158/99 package files and dependencies verified. Previous process drained normally; full offline backup preserved. Pi/Claude/Codex Online, Pi four WARM; Pi and Claude responded through the real Meta-harness, Claude terminal inspected. L12 cause remains unproven; L14 load qualification remains pending. See m3i-ui-rollout.md.",
