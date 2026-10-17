@@ -77,7 +77,7 @@ def test_approved_local_configuration_reaches_core(admitted_local, monkeypatch, 
         from okto_nexus.bootstrap import embedded_inventory
         other = replace(candidate, executable=candidate.executable + '.other', installation_ref=None)
         monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
-            lambda **_: SimpleNamespace(candidates=(candidate, other)))
+            lambda **_: SimpleNamespace(candidates=tuple(c for c in (candidate, other) if not _.get('adapter_ids') or c.adapter_id in _['adapter_ids'])))
         client.portal.call(app.state.embedded_inventory_owner.refresh)
     leases=ExecutionLeaseService(factory=deps.connection_factory,access=access,
                                  fresh_publications=app.state.inventory_fresh_publications)

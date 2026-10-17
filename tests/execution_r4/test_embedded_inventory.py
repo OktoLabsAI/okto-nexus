@@ -35,7 +35,7 @@ def wait_inventory(client):
     async def observed():
         owner = client.app.state.embedded_inventory_owner
         async with asyncio.timeout(10):
-            while owner.publication is None:
+            while owner.published_batch is None or any(row.state == 'PENDING' for row in owner.published_batch.observations):
                 if owner.failure is not None:
                     raise owner.failure
                 await asyncio.sleep(.01)
@@ -108,10 +108,11 @@ def test_embedded_failed_discovery_keeps_request_for_retry(tmp_path, monkeypatch
             raise OSError('discovery failed')
 
         monkeypatch.setattr(embedded_inventory, 'discover_local_candidates', failed)
-        with pytest.raises(OSError, match='discovery failed'):
-            client.portal.call(owner.refresh)
+        client.portal.call(owner.refresh)
         assert request_refresh(deps, owner, 'retry')['state'] == 'REQUESTED'
-        assert owner.publication.publication_sequence == previous
+        assert owner.publication.publication_sequence > previous
+        assert all(row.state == 'FAILED' for row in owner.published_batch.observations)
+        assert owner.failure is None  # Adapter failure is explicit coverage, not host failure.
         monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
                             lambda **_: SimpleNamespace(candidates=()))
         client.portal.call(owner.refresh)
@@ -144,7 +145,7 @@ def test_serve_publishes_path_free_local_inventory_without_runtime_or_wss(tmp_pa
     binary.write_bytes(b"Discovery-only technical candidate")
     candidate = InstallationCandidate("codex_app_server", str(binary), fingerprint(binary), "explicit", "selected")
     monkeypatch.setattr(embedded_inventory, "discover_local_candidates",
-                        lambda **_: SimpleNamespace(candidates=(candidate,)))
+                        lambda **_: SimpleNamespace(candidates=tuple(c for c in (candidate,) if not _.get('adapter_ids') or c.adapter_id in _['adapter_ids'])))
     deps, app = app_for(tmp_path / "home")
     key = agent_key(deps, app)
     with TestClient(app) as client:
@@ -187,9 +188,11 @@ def test_new_serve_owner_republishes_empty_inventory_and_retains_two_snapshots(t
         assert not (tmp_path / "home/core-runtime").exists()
     assert len({row[0] for row in records}) == 1
     assert [row[1] for row in records] == [2, 3, 4]
-    assert [row[2] for row in records] == [1, 2, 3]
+    sequences = [row[2] for row in records]
+    assert all(later > earlier for earlier, later in zip(sequences, sequences[1:]))
     with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert [row[0] for row in uow.connection.execute("SELECT publication_sequence FROM execution_inventory_snapshots ORDER BY publication_sequence")] == [2, 3]
+        retained = [row[0] for row in uow.connection.execute("SELECT publication_sequence FROM execution_inventory_snapshots ORDER BY publication_sequence")]
+        assert retained == [sequences[-1] - 1, sequences[-1]]
 
 
 @pytest.mark.parametrize("change", ["generation", "owner", "revoked"])
@@ -200,6 +203,7 @@ def test_delayed_publication_cannot_cross_embedded_owner_change(tmp_path, monkey
     with TestClient(app) as client:
         wait_inventory(client)
         owner = app.state.embedded_inventory_owner
+        previous = owner.publication.publication_sequence
         with deps.connection_factory.unit_of_work() as uow:
             sql = {
                 "generation":"generation=generation+1",
@@ -210,8 +214,8 @@ def test_delayed_publication_cannot_cross_embedded_owner_change(tmp_path, monkey
         with pytest.raises(OktoNexusError, match="no longer current"):
             client.portal.call(owner.refresh)
         with deps.connection_factory.unit_of_work(write=False) as uow:
-            assert uow.connection.execute("SELECT MAX(publication_sequence) FROM execution_inventory_snapshots").fetchone()[0] == 1
-        assert owner.publication.publication_sequence == 1
+            assert uow.connection.execute("SELECT MAX(publication_sequence) FROM execution_inventory_snapshots").fetchone()[0] == previous
+        assert owner.publication.publication_sequence == previous
         assert (owner.key.server_id, owner.key.executor_id) not in app.state.inventory_fresh_publications
 
 
@@ -243,7 +247,8 @@ def test_cancelled_waiters_keep_discovery_and_cleanup_owned(tmp_path, monkeypatc
                 closing.cancel()
                 with pytest.raises(asyncio.CancelledError):
                     await closing
-                assert not owner._refresh_task.done() and not owner._close_task.done()
+                assert any(not task.done() for task in owner._observer._tasks.values())
+                assert not owner._close_task.done()
             finally:
                 release.set()
                 await asyncio.wait_for(owner.close(), 3)

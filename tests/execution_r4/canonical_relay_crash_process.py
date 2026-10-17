@@ -139,7 +139,7 @@ if mode == 'produce':
 
 record = json.loads(record_path.read_text(encoding='utf-8'))
 candidate = InstallationCandidate(**record['candidate'])
-patches.setattr(embedded_inventory, 'discover_local_candidates', lambda **_: SimpleNamespace(candidates=(candidate,)))
+patches.setattr(embedded_inventory, 'discover_local_candidates', lambda **_: SimpleNamespace(candidates=tuple(c for c in (candidate,) if not _.get('adapter_ids') or c.adapter_id in _['adapter_ids'])))
 # The fixture models only the external credential vault, never a developer store.
 from okto_nexus.bootstrap.embedded_tools import SessionToolVault
 patches.setattr(SessionToolVault, 'store', lambda *args: None)

@@ -44,6 +44,7 @@ class RuntimeBootOwner:
             await asyncio.gather(ready, stopping, return_exceptions=True)
 
     async def _run(self):
+        completed = set()
         while not self._stop.is_set():
             try:
                 if not await self._ready():
@@ -52,9 +53,29 @@ class RuntimeBootOwner:
                 # still passes the current owner/fence and storage stays
                 # owned until it returns. Retries use the same boot intent
                 # keys; canonical admission never replays a possible effect.
-                await asyncio.to_thread(self.boot, self.deps)
+                sequence = self.inventory.publication.publication_sequence
+                results = await asyncio.to_thread(self.boot, self.deps, exclude_endpoint_ids=frozenset(completed))
                 self.failure = None
-                return
+                retry = False
+                for row in results or ():
+                    if row['state'] == 'deferred' or row.get('retryable'):
+                        retry = True
+                    else:
+                        completed.add(row['endpoint_id'])
+                if not retry and self.inventory.initial_observations_complete():
+                    return
+                # A sibling's completion wakes a new pass immediately. Accepted
+                # intents are excluded; deferred work retains its original key.
+                changed = asyncio.create_task(self.inventory.wait_publication_change(sequence))
+                stopping = asyncio.create_task(self._stop.wait())
+                try:
+                    await asyncio.wait((changed, stopping), timeout=self.retry_seconds,
+                                       return_when=asyncio.FIRST_COMPLETED)
+                finally:
+                    for observer in (changed, stopping):
+                        observer.cancel()
+                    await asyncio.gather(changed, stopping, return_exceptions=True)
+                continue
             except Exception as error:
                 self.failure = error
                 logging.getLogger(__name__).warning('Approved runtime boot deferred: %s', type(error).__name__)

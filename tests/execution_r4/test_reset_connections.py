@@ -126,7 +126,7 @@ def test_reset_preserves_installation_observation_without_reprobing(connected_lo
     deps, app, client, _, _, candidate, _ = setup
     raw = replace(candidate, trust='untrusted')
     monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
-        lambda **_: SimpleNamespace(candidates=(raw,)))
+        lambda **_: SimpleNamespace(candidates=tuple(c for c in (raw,) if not _.get('adapter_ids') or c.adapter_id in _['adapter_ids'])))
     calls = []
     async def probe(selected):
         calls.append(selected)

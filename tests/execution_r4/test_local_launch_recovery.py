@@ -33,7 +33,7 @@ def test_embedded_restart_recovers_interrupted_launch_automatically(tmp_path, mo
     binary = root/'codex.exe'
     candidate = InstallationCandidate('codex_app_server', str(binary), fingerprint(binary), 'explicit', 'selected')
     monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
-        lambda **_: SimpleNamespace(candidates=(candidate,)))
+        lambda **_: SimpleNamespace(candidates=tuple(c for c in (candidate,) if not _.get('adapter_ids') or c.adapter_id in _['adapter_ids'])))
     with ServeLock(root/'home'):
         deps, app = app_for(root/'home')
         with TestClient(app) as client:

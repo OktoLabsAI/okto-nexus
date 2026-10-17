@@ -35,7 +35,7 @@ def apply_local_observations(factory, key, candidates):
                  for candidate in candidates)
 
 
-def _authorize(owner, access, context, request, *, uow, identity_reobserved=False):
+def _authorize(owner, access, context, request, *, uow, identity_reobserved=False, selected_evidence=None):
     if owner._stop.is_set():
         raise _error('The local executor is shutting down.')
     guard = _authority(uow, owner=owner, access=access, context=context,
@@ -46,8 +46,11 @@ def _authorize(owner, access, context, request, *, uow, identity_reobserved=Fals
         'WHERE c.server_id=? AND c.executor_id=?', (owner.key.server_id, owner.key.executor_id)).fetchone()
     fresh = owner.fresh.get((owner.key.server_id, owner.key.executor_id))
     from .execution_inventory_freshness import inventory_is_fresh
+    from .execution_inventory_revalidation import selection
+    same_selection = (current is not None and selected_evidence is not None and
+        selection(json.loads(current['canonical_projection']), request['adapter_id'], request['candidate_ref']) == selected_evidence)
     if (current is None or fresh is None or fresh[0] != current['publication_sequence']
-            or current['inventory_revision'] != request['inventory_revision']
+            or (current['inventory_revision'] != request['inventory_revision'] and not same_selection)
             or (not identity_reobserved and not inventory_is_fresh(current, fresh, request['adapter_id']))):
         raise _error('Refresh the local inventory and select the installation again.')
     return guard
@@ -117,19 +120,27 @@ async def refresh_approved_installations(owner, candidates):
 
 
 async def observe_local_installation(owner, *, access, context, request):
-    """Called only by the owner-held task, under the inventory publication lock."""
+    """Retained per-adapter probe; sibling inventory can publish throughout."""
     factory = owner.deps.connection_factory
     if request.get('approved') is not True:
         raise _error('Explicit operator consent is required for a version check.', ErrorCode.VALIDATION_ERROR)
+    selected_evidence = None
     def authorize():
         with factory.unit_of_work(write=False) as uow:
-            return _authorize(owner, access, context, request, uow=uow)
+            return _authorize(owner, access, context, request, uow=uow, selected_evidence=selected_evidence)
     guard = await asyncio.to_thread(authorize)
     try:
-        resolve_local_installation_selection(owner.candidates,
+        batch = owner.published_batch
+        resolve_local_installation_selection(batch.candidates, observations=batch.coverage(),
             adapter_id=request['adapter_id'], candidate_ref=request['candidate_ref'],
             expected_inventory_revision=request['inventory_revision'])
-        source = resolve_installation(owner.raw_candidates, request['adapter_id'], request['candidate_ref'])
+        from .execution_inventory_revalidation import selection
+        from ..adapters.outbound.execution.core_inventory import local_inventory_snapshot
+        selected_evidence = selection(local_inventory_snapshot(batch.candidates, observations=batch.coverage(),
+            server_id=owner.key.server_id, executor_id=owner.key.executor_id,
+            producer_instance_id=owner.dispatcher.owner_id, publication_sequence=1),
+            request['adapter_id'], request['candidate_ref'])
+        source = resolve_installation(batch.raw_candidates, request['adapter_id'], request['candidate_ref'])
         if await asyncio.to_thread(selected_fingerprint, source) != source.fingerprint:
             raise _error('The selected local installation changed.')
         # Selection is an explicit local operator decision, scoped to these
@@ -140,7 +151,7 @@ async def observe_local_installation(owner, *, access, context, request):
         if (type(observed.version) is not str or not 1 <= len(observed.version) <= 160 or
                 replace(observed, trust=source.trust, version=source.version) != source):
             raise _error('The selected installation version could not be verified.')
-        raw = await owner.discover_candidates()
+        raw = await owner.discover_candidates(request['adapter_id'])
         if resolve_installation(raw, request['adapter_id'], request['candidate_ref']) != source:
             raise _error('The local installation changed during the version check.')
     except CoreError as error:
@@ -149,11 +160,12 @@ async def observe_local_installation(owner, *, access, context, request):
         raise _error('The local installation is unavailable or changed.') from None
     def commit():
         with factory.unit_of_work() as uow:
-            # The full discovery above revalidated the exact source identity
-            # under the publication lock. Its duration must not expire its own
-            # result. Keep checking ownership, authority and revision; this
+            # The selected adapter revalidated the exact source identity.
+            # Its duration must not expire its own result. Sibling publication
+            # is allowed only while this selected evidence stays identical;
             # records a version observation, never execution authorization.
-            if guard != _authorize(owner, access, context, request, uow=uow, identity_reobserved=True):
+            if guard != _authorize(owner, access, context, request, uow=uow, identity_reobserved=True,
+                                   selected_evidence=selected_evidence):
                 raise _error('Operator authority changed during the version check.')
             conn = uow.connection
             count = conn.execute('SELECT COUNT(*) FROM execution_local_observations WHERE server_id=? AND executor_id=?',
@@ -172,6 +184,5 @@ async def observe_local_installation(owner, *, access, context, request):
     await asyncio.to_thread(commit)
     # Publication failure does not erase the durable observation. Passive
     # refresh/restart can publish it without running --version again.
-    await owner._refresh()
     return dict(executor_id=owner.key.executor_id, candidate_ref=request['candidate_ref'],
                 version=observed.version, runtime_authorized=False, publication_pending=False)

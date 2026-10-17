@@ -177,7 +177,10 @@
         "m3i-independent-observations.md",
         "m3i-core-results.json",
         "m3i-consumers.md",
-        "m3i-consumers-results.json"
+        "m3i-consumers-results.json",
+        "m3i-embedded.md",
+        "m3i-embedded-first-results.json",
+        "m3i-embedded-results.json"
       ],
       "commits": {
         "core_m3c": "7bab651",
@@ -243,6 +246,16 @@
           "id": "M3i",
           "status": "in_progress",
           "title": "Core contract/workers (117 installed cases), Server per-harness freshness/consent migration (94 installed cases), Connector partial selection (36 installed cases) qualified; producer integration and major UI gate pending"
+        },
+        {
+          "id": "M3i-connector",
+          "status": "complete",
+          "title": "Independent daemon observations/publication, exact accepted-batch onboarding/open and current authorization recheck after storage work. 164 installed tests passed; commit b12b8b8 pushed; joint rollout/UI pending."
+        },
+        {
+          "id": "M3i-embedded",
+          "status": "complete",
+          "title": "Installed independent producer/boot/reset checkpoint: 115 passed, 8 optional browser skips. Global rollout and real UI pending."
         }
       ],
       "nexus_m3b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3b-validation.md",
@@ -252,7 +265,32 @@
       "nexus_m3g_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3g-pool-refusal.md",
       "nexus_m3h_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3h-startup-observation.md",
       "nexus_m3j_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3j-renewal-contention.md",
-      "nexus_m3i_consumers_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3i-consumers.md"
+      "nexus_m3i_consumers_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3i-consumers.md",
+      "embedded_producer_work": "Joint installed artifacts qualified: 115 passed, 8 optional browser skips, zero failures; stable inputs and source/wheel equality. Independent discovery/publication, selected probes, retained shutdown, deferred boot and reset readiness. Global rollout and real UI pending.",
+      "connector_producer_work": {
+        "commit": "b12b8b8",
+        "branch": "feature/v0.0.10",
+        "pushed": true,
+        "installed_tests": 164,
+        "changed_inputs": [],
+        "wheel_sha256": "41331e7b9405e830d990141e48e7702d461559a779b66ee39ec8aedc9e52d7c2",
+        "report": "../okto-nexus-connector/plans/runtime-lifecycle-m3i-producer-results.json",
+        "global_rollout": "pending"
+      },
+      "reset_readiness_work": {
+        "status": "installed_validated_real_ui_pending",
+        "behavior": "Reset remains reconnecting until preserved enabled local selections are freshly observed. Admission reopened; unused harnesses and remote hosts do not block reset.",
+        "source_reports": [
+          "build/m3i-reset-readiness.xml",
+          "build/m3i-reset-isolation.xml"
+        ],
+        "existing_reset_cases_passed": 8,
+        "new_isolation_cases_passed": 2,
+        "initial_new_test_failures": "Status GET uses HTTP 200 with pending=true; tests corrected to inspect pending, without relaxing existing immediate-send cases.",
+        "joint_build": "build/runtime-m3i-joint-dist",
+        "installed_report": "build/runtime-m3i-joint-installed"
+      },
+      "nexus_m3i_embedded_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3i-embedded-results.json"
     },
     {
       "id": "M4",
@@ -337,10 +375,19 @@
     },
     {
       "id": "M8",
-      "status": "planned",
+      "status": "in_progress",
       "title": "Installed-package qualification and rollout",
       "evidence": [],
-      "commits": {}
+      "commits": {
+        "connector_installed_processes": "a7dd588"
+      },
+      "installed_process_checkpoint": {
+        "passed": 11,
+        "skipped": 0,
+        "changed_inputs": [],
+        "evidence": "../okto-nexus-connector/plans/runtime-lifecycle-m8-process-results.json",
+        "scope": "Real isolated Windows daemon processes, actual CLI exit, bad-token rejection, singleton and restrictive Job Objects. No provider or physical remote-host qualification."
+      }
     }
   ],
   "open_findings": [
@@ -426,7 +473,7 @@
       "milestone": "M3",
       "priority": "medium",
       "status": "open",
-      "description": "Agents initially displayed old RECOVERING until Refresh Agents while all three backend recovery rows were READY; subsequent view mount showed ONLINE. Existing poll pauses when document.hidden; cause not yet attributed and no frontend fix claimed."
+      "description": "Agents initially displayed old RECOVERING until Refresh Agents while all three backend recovery rows were READY; subsequent view mount showed ONLINE. Existing poll pauses when document.hidden; cause not yet attributed and no frontend fix claimed. Follow-up 06:44–06:46 UTC 2026-10-17: generation 72 CONTROL_READY; Pi/Claude/Codex READY and Online in both existing Chrome tabs without reload/restart, four Pi WARM slots, renewed leases. Cause remains unproven. Follow-up 07:30–07:32 UTC again READY/Online with renewed leases and Pi 4 WARM; stale last-contact display observed but cause not proven. One delayed Pi publication did not change durable readiness."
     },
     {
       "id": "L13",
@@ -455,6 +502,13 @@
       "priority": "critical",
       "status": "fixed_live_validation",
       "description": "Generation 71 status write in EmbeddedAgentRecovery.fail timed out and contained the shared host, leaving all local agents recovering. M3j scopes transient renewal and recovery-status persistence failures, retains exact installed lease ACK and enforces an in-memory agent fence before dispatch. 43 campaign cases passed; generation 72 restored all agents and real Pi/Claude replies. Original writer holder and first error are not conclusively attributed; sanitized first-error logging added. General owner replacement remains L10."
+    },
+    {
+      "id": "L17",
+      "milestone": "M3",
+      "priority": "high",
+      "status": "installed_validated_real_ui_pending",
+      "description": "M3i installed campaign: reset keep_agents=true completes before the new selected adapter observation is accepted. Immediate persistent message fails inventory_not_fresh (both idle and previously active reset cases); no configuration loss shown. Preserve automatic recovery and independent readiness without weakening freshness or requiring manual resend. Reproduce deterministically before choosing truthful reset readiness versus durable startup queue admission. The existing reset tests are retained unchanged. Fix keeps reset operation reconnecting until selected local inventory is accepted while independent dispatch is reopened. Eight existing reset cases and two deterministic isolation cases passed across the focused source runs. Joint installed qualification and real UI remain pending. Joint installed campaign passed both original regressions and both isolation tests; real UI validation pending."
     }
   ],
   "live_installation": "Generation 72, Nexus 0.3.1 M3j with Core 0.0.12 M3h and Connector 0.0.10 unchanged code. PID 29220, launcher 44848, port 8202. 541/156/98 files and dependencies verified. Previous process drained normally; 271 DB backups preserved. Pi/Claude/Codex Online, Pi 4 WARM and renewed leases; Pi and Claude responded through Meta-harness. Initial readiness latency remains L14. See m3j-renewal-contention.md.",

@@ -102,7 +102,10 @@ def stage_embedded_realization(factory, *, owner, executor_id, access, context, 
         guard = _authority(uow, owner=owner, access=access, context=context,
                            subject=request["agent_id"], adapter_id=request["adapter_id"])
     try:
-        candidate = resolve_local_installation_selection(owner.candidates,
+        batch = owner.published_batch
+        if batch is None:
+            raise _error('The selected host has not published current installation evidence.')
+        candidate = resolve_local_installation_selection(batch.candidates, observations=batch.coverage(),
             adapter_id=request["adapter_id"], candidate_ref=request["candidate_ref"],
             expected_inventory_revision=request["inventory_revision"])
         if selected_fingerprint(candidate) != candidate.fingerprint:

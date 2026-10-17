@@ -25,7 +25,7 @@ def test_http_serves_during_initial_discovery_without_fresh_inventory(tmp_path, 
             wait_inventory(client)
 
     booted = []
-    monkeypatch.setattr(harness, 'run_runtime_boot', lambda deps: booted.append(True))
+    monkeypatch.setattr(harness, 'run_runtime_boot', lambda deps, **kwargs: booted.append(True))
 
     def discover(**_):
         entered.set()
@@ -59,7 +59,7 @@ def test_http_serves_during_initial_discovery_without_fresh_inventory(tmp_path, 
             assert finish.wait(15)
             wait_inventory(client)
             client.portal.call(app.state.runtime_boot_owner.wait)
-            assert booted == [True]
+            assert booted  # Partial publication can wake more than one bounded boot pass.
             assert client.get(route, headers=headers).json()['freshness'] == 'FRESH'
 
     with ThreadPoolExecutor(max_workers=1) as executor:
@@ -84,7 +84,7 @@ def test_shutdown_retains_approved_boot_worker_and_reports_it(tmp_path, monkeypa
     monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
                         lambda **_: SimpleNamespace(candidates=()))
 
-    def boot(deps):
+    def boot(deps, **kwargs):
         entered.set()
         assert release.wait(15)
         assert not deps.runtime_dispatcher._shutdown_finished.is_set()
@@ -129,7 +129,7 @@ def test_shutdown_before_inventory_is_ready_does_not_boot(tmp_path, monkeypatch)
         return SimpleNamespace(candidates=())
 
     monkeypatch.setattr(embedded_inventory, 'discover_local_candidates', discover)
-    monkeypatch.setattr(harness, 'run_runtime_boot', lambda deps: calls.append(True))
+    monkeypatch.setattr(harness, 'run_runtime_boot', lambda deps, **kwargs: calls.append(True))
     _, app = app_for(tmp_path / 'home')
     with TestClient(app) as client:
         try:
@@ -147,12 +147,13 @@ def test_initial_discovery_failure_retries_without_restart_or_manual_refresh(tmp
     retried, release = threading.Event(), threading.Event()
     calls = []
 
-    def discover(**_):
-        calls.append(True)
-        if len(calls) == 1:
+    def discover(*, adapter_ids, **_):
+        calls.append(adapter_ids[0])
+        if adapter_ids == ('pi_rpc',) and calls.count('pi_rpc') == 1:
             raise OSError('initial discovery unavailable')
-        retried.set()
-        assert release.wait(15)
+        if adapter_ids == ('pi_rpc',):
+            retried.set()
+            assert release.wait(15)
         return SimpleNamespace(candidates=())
 
     monkeypatch.setattr(embedded_inventory, 'discover_local_candidates', discover)
@@ -168,20 +169,20 @@ def test_initial_discovery_failure_retries_without_restart_or_manual_refresh(tmp
         try:
             assert client.get('/healthz').status_code == 200
             assert retried.wait(5)
-            assert isinstance(owner.failure, OSError)
-            assert owner.publication is None and not owner.fresh
+            assert owner.failure is None
+            assert owner.published_batch.coverage()['pi_rpc']['state'] == 'FAILED'
         finally:
             release.set()
 
         async def recovered():
             async with asyncio.timeout(5):
-                while owner.publication is None:
+                while owner.published_batch.coverage()['pi_rpc']['state'] != 'ABSENT':
                     await asyncio.sleep(.01)
             assert owner.failure is None
             assert (owner.key.server_id, owner.key.executor_id) in owner.fresh
 
         client.portal.call(recovered)
-        assert len(calls) >= 2
+        assert calls.count('pi_rpc') >= 2
 
 
 def test_shutdown_retains_initial_scan_after_cancelled_observer(tmp_path, monkeypatch):
@@ -207,13 +208,13 @@ def test_shutdown_retains_initial_scan_after_cancelled_observer(tmp_path, monkey
                 closing.cancel()
                 with pytest.raises(asyncio.CancelledError):
                     await closing
-                assert not owner._refresh_task.done() and not owner._task.done()
+                assert any(not task.done() for task in owner._observer._tasks.values())
                 assert not owner._close_task.done()
                 assert owner.publication is None and not owner.fresh
             finally:
                 release.set()
                 await asyncio.wait_for(owner.close(), 5)
-            assert owner._refresh_task.done() and owner._task.done()
+            assert all(task.done() for task in owner._observer._tasks.values()) and owner._task.done()
             assert owner.publication is None and not owner.fresh
 
         client.portal.call(scenario)

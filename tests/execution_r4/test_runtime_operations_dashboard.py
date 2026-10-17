@@ -24,7 +24,7 @@ def ready_runtime(local_setup, monkeypatch):
     owner = setup[1].state.embedded_inventory_owner
     source = replace(setup[5], architecture='x86_64')
     monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
-                        lambda **_: SimpleNamespace(candidates=(source,)))
+                        lambda **_: SimpleNamespace(candidates=tuple(c for c in (source,) if not _.get('adapter_ids') or c.adapter_id in _['adapter_ids'])))
     # Native qualification is the explicit synthetic boundary of this UI test.
     # Production selection, consent, grants, admission and dispatch remain real.
     monkeypatch.setattr(availability, 'qualified_build', lambda *args, **kwargs: True)

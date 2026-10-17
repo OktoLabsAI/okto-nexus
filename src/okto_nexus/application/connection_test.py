@@ -59,7 +59,10 @@ class ConnectionTests:
                 raise conflict('The active configuration changed. Reopen Connections to review it.')
             _require_binding_method(uow.connection, subject_agent_id=request['agent_id'], adapter_id=c['adapter_id'])
             setup_mcp_preset(uow, request)
-        candidate = resolve_local_installation_selection(owner.candidates, adapter_id=c['adapter_id'],
+        batch = owner.published_batch
+        if batch is None:
+            raise conflict('The selected host has not published current installation evidence.')
+        candidate = resolve_local_installation_selection(batch.candidates, observations=batch.coverage(), adapter_id=c['adapter_id'],
             candidate_ref=request['candidate_ref'], expected_inventory_revision=request['inventory_revision'])
         if selected_fingerprint(candidate) != candidate.fingerprint:
             raise conflict('The selected installation changed. Refresh installations.')
@@ -87,7 +90,10 @@ class ConnectionTests:
         entry = self.get(context, request['client_intent_id'])
         if entry['status'] != 'succeeded' or not entry['task'].done() or entry['digest'] != _digest(request) or time.monotonic()-entry['created'] > 3600:
             raise conflict('Run a successful test of the current configuration before finishing.')
-        candidate = resolve_local_installation_selection(owner.candidates,
+        batch = owner.published_batch
+        if batch is None:
+            raise conflict('The selected host has not published current installation evidence.')
+        candidate = resolve_local_installation_selection(batch.candidates, observations=batch.coverage(),
             adapter_id=request['configuration']['adapter_id'], candidate_ref=request['candidate_ref'],
             expected_inventory_revision=request['inventory_revision'])
         if asdict(candidate) != entry['candidate'] or selected_fingerprint(candidate) != candidate.fingerprint:

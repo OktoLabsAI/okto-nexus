@@ -75,7 +75,7 @@ def second_binding(setup, monkeypatch, *, name='second', adapter_id='pi_rpc', wo
     other = InstallationCandidate(adapter_id, str(binary), fingerprint(binary), 'explicit', 'selected')
     existing = embedded_inventory.discover_local_candidates().candidates
     monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
-        lambda **_: SimpleNamespace(candidates=(*existing, other)))
+        lambda **_: SimpleNamespace(candidates=tuple(c for c in (*existing, other) if not _.get('adapter_ids') or c.adapter_id in _['adapter_ids'])))
     owner = app.state.embedded_inventory_owner
     client.portal.call(owner.refresh)
     inventory = client.get(f'/v1/runtime/executors/{owner.key.executor_id}/inventory', headers=headers['operator']).json()['snapshot']

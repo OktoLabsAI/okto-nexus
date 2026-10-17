@@ -22,7 +22,8 @@ def checking(local_setup, monkeypatch):
     deps, app, client, headers, preparation, candidate, _ = local_setup
     source = replace(candidate, trust='untrusted')
     def discover(**_):
-        return SimpleNamespace(candidates=(replace(source, fingerprint=fingerprint(Path(source.executable))),))
+        return SimpleNamespace(candidates=(replace(source, fingerprint=fingerprint(Path(source.executable))),)
+            if not _.get('adapter_ids') or source.adapter_id in _['adapter_ids'] else ())
     monkeypatch.setattr(embedded_inventory, 'discover_local_candidates', discover)
     owner = app.state.embedded_inventory_owner
     client.portal.call(owner.refresh)
@@ -101,7 +102,7 @@ def test_observation_is_reused_after_server_restart(tmp_path, monkeypatch):
     binary = tmp_path / 'codex'
     binary.write_bytes(b'persistent local check candidate')
     source = InstallationCandidate('codex_app_server', str(binary), fingerprint(binary), 'path', 'untrusted')
-    monkeypatch.setattr(embedded_inventory, 'discover_local_candidates', lambda **_: SimpleNamespace(candidates=(source,)))
+    monkeypatch.setattr(embedded_inventory, 'discover_local_candidates', lambda **_: SimpleNamespace(candidates=tuple(c for c in (source,) if not _.get('adapter_ids') or c.adapter_id in _['adapter_ids'])))
     calls = []
     async def probe(selected):
         calls.append(selected)
@@ -257,8 +258,8 @@ def test_fresh_selection_survives_slow_identity_revalidation(checking, monkeypat
         owner.fresh[key] = (sequence, timestamp - 121, age)
     if expires_during_check:
         original = owner.discover_candidates
-        async def discover():
-            result = await original()
+        async def discover(adapter_id=None):
+            result = await original(adapter_id)
             expire()
             return result
         monkeypatch.setattr(owner, 'discover_candidates', discover)

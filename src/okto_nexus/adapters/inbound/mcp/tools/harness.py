@@ -383,15 +383,18 @@ def build_open_service(deps):
         owner_identity=(deps.runtime_dispatcher.owner_id, deps.runtime_dispatcher.epoch))
 
 
-def run_runtime_boot(deps):
+def run_runtime_boot(deps, *, exclude_endpoint_ids=()):
     from okto_nexus.application.runtime_boot import RuntimeBootService
     from okto_nexus.bootstrap.execution_compat import boot_endpoint
     service = RuntimeBootService(connection_factory=deps.connection_factory, endpoints=SqliteEndpointRepo(),
         registry=build_connector_factories(deps), open_service=build_open_service(deps),
         owner_id=deps.runtime_dispatcher.owner_id, owner_epoch=deps.runtime_dispatcher.epoch,
         canonical_open=lambda context, endpoint_id, key: boot_endpoint(deps, context, endpoint_id, key))
-    deps.runtime_boot_status = service.run()
-    return deps.runtime_boot_status
+    results = service.run(exclude_endpoint_ids=exclude_endpoint_ids)
+    previous = {row['endpoint_id']: row for row in (getattr(deps, 'runtime_boot_status', ()) or ())}
+    previous.update({row['endpoint_id']: row for row in results})
+    deps.runtime_boot_status = list(previous.values())
+    return results
 
 
 def construct_profile_connector(deps, *, endpoint, profile, kind, project_root, substrate, target_pid=None):

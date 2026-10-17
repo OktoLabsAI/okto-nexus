@@ -437,7 +437,7 @@ def test_real_process_exit_restores_without_lock_reset_or_replay(tmp_path, monke
                 process.wait(timeout=10)
     binary = root / 'codex.exe'
     candidate = InstallationCandidate('codex_app_server', str(binary), fingerprint(binary), 'explicit', 'selected')
-    monkeypatch.setattr(embedded_inventory, 'discover_local_candidates', lambda **_: SimpleNamespace(candidates=(candidate,)))
+    monkeypatch.setattr(embedded_inventory, 'discover_local_candidates', lambda **_: SimpleNamespace(candidates=tuple(c for c in (candidate,) if not _.get('adapter_ids') or c.adapter_id in _['adapter_ids'])))
     started = time.monotonic()
     # Neither lock files nor leases are deleted/expired by the test.
     with ServeLock(root / 'home'):
