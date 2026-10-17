@@ -44,12 +44,29 @@ phase breakdown has not been measured, so it is not attributed solely to the
 version probe. UI-A and the full three-provider/Connector scenarios remain
 pending.
 
+The disposable SQLite receipts divide that delay further. The first
+`runtime.open` began at 19:49:04 UTC and failed at 19:50:17 UTC with
+`BINDING_NOT_AUTHORIZED`. Its Core journal has a durable launch intent but no
+spawn claim or process birth. The original delivery was retried only after
+`host_dispatch_not_started` and `native_write_not_started` were recorded.
+The second open began at 19:50:19 UTC, reached `SUBMITTED` at 19:51:42 UTC,
+and the turn was natively accepted at 19:51:45 UTC. Thus about 73 seconds
+were spent on a pre-spawn refusal and another 83 seconds on the successful
+opening path; the final model turn took about 21 seconds. The saved lease
+grants were renewed during both openings. The receipt carries the stable
+error code without a frontier/stage, so it does not prove which of the
+pre-spawn authorization checks refused the first opening. This is a separate
+M3/M7 diagnostic issue, not evidence that the longer Pi version-probe
+allowance caused the entire wait.
+
 The same disposable home was drained normally with no remaining resources or
 error codes and resumed once more with its saved connection. The HTTP owner
 became `RECOVERY_READY`, then published `RECOVERY_AGENT_READY` without manual
 Recover. Agents showed `m4-pi` as `Local · Online` in the existing browser.
 A post-restart Meta-harness message then returned `M4_PI_RESTART_OK` with
 `1/1 ack` in the same browser, without changing the connection configuration.
+That cold open ran from 20:01:41 to 20:02:23 UTC (about 42 seconds), and
+the turn was accepted at 20:02:25 UTC and completed at 20:02:36 UTC.
 The owner initially recorded `m4-pi` blocked at 19:59:43.532 UTC and cleared
 that fence at 19:59:45.699 UTC. The final disposable run drained with no
 remaining resources or error codes at 20:04:13.375 UTC; its port listener and

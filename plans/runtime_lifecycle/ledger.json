@@ -769,6 +769,13 @@
       "priority": "high",
       "status": "qualified_disposable_ui_global_rollout_pending",
       "description": "Pi's three-second owned version probe failed in real Nexus installation verification and a first connection test. Direct healthy Node bundle version took 2.593s. M3n extends only Pi's probe deadline to 10s; three source and three isolated installed tests passed. An installed disposable Nexus/Core test then verified the real Pi connection, two Meta-harness turns with 1/1 ACK, normal shutdown/restart, automatic READY/Online and a post-restart 1/1 ACK. The first new Pi session took about 162s to become ready; exact phase attribution and M7 load qualification remain open. Global generation 73 is unchanged. See m3n-pi-probe-ui.md."
+    },
+    {
+      "id": "L22",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "diagnosed_not_fixed",
+      "description": "Disposable installed Pi UI first delivery spent 73s in a pre-spawn runtime.open that returned BINDING_NOT_AUTHORIZED, then safely retried after host_dispatch_not_started/native_write_not_started proof. Its successful second open took 83s; a post-restart open took 42s. Renewed leases were present, but the stable receipt lacks the pre-spawn failure frontier. Investigate precise authorization stage and Pi dependency-closure/launch startup costs before changing policy or timeouts. See m3n-pi-probe-ui.md."
     }
   ],
   "live_installation": "Generation 73, Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers. Server PID 32480, launcher 39500, port 8202. Exact qualified wheels installed together; 542/158/99 package files and dependencies verified. Previous process drained normally; full offline backup preserved. Pi/Claude/Codex Online, Pi four WARM; Pi and Claude responded through the real Meta-harness, Claude terminal inspected. L12 cause remains unproven; L14 load qualification remains pending. See m3i-ui-rollout.md.",
