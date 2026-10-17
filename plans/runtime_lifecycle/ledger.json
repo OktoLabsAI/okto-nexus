@@ -23,7 +23,8 @@
         "m3f-diagnostic-contention.md",
         "m3g-ui-rollout.md",
         "m3j-renewal-contention.md",
-        "m3j-results.json"
+        "m3j-results.json",
+        "m3i-ui-rollout.md"
       ]
     },
     {
@@ -244,29 +245,29 @@
         },
         {
           "id": "M3i",
-          "status": "in_progress",
-          "title": "Core contract/workers (117 installed cases), Server per-harness freshness/consent migration (94 installed cases), Connector partial selection (36 installed cases) qualified; producer integration and major UI gate pending"
+          "status": "complete",
+          "title": "Independent producers integrated and jointly qualified: Nexus 115 passed/8 optional browser skips, Connector 164 passed. Exact artifacts deployed in generation 73; Pi and Claude replied through the real Meta-harness and Pi warm pool replenished. Broader M3/UI-A acceptance remains pending."
         },
         {
           "id": "M3i-connector",
           "status": "complete",
-          "title": "Independent daemon observations/publication, exact accepted-batch onboarding/open and current authorization recheck after storage work. 164 installed tests passed; commit b12b8b8 pushed; joint rollout/UI pending."
+          "title": "Independent daemon observations/publication, exact accepted-batch onboarding/open and current authorization recheck after storage work. 164 installed tests passed; commit b12b8b8 pushed; exact wheel installed globally. Separate Connector process workflow/UI remains M5/M8."
         },
         {
           "id": "M3i-embedded",
           "status": "complete",
-          "title": "Installed independent producer/boot/reset checkpoint: 115 passed, 8 optional browser skips. Global rollout and real UI pending."
+          "title": "Installed independent producer/boot/reset checkpoint: 115 passed, 8 optional browser skips. Deployed in generation 73; Pi and Claude real UI replies passed. Disposable-home reset UI remains L17."
         }
       ],
       "nexus_m3b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3b-validation.md",
-      "next": "L10 automatic contained-owner replacement and L14/M3i independent per-harness inventory/readiness; initial-opening renewal isolation and remaining availability criteria.",
+      "next": "L10 automatic contained-owner replacement; L14 initial-readiness load qualification; initial-opening renewal isolation and remaining availability criteria. M3i independent producers deployed; see m3i-ui-rollout.md.",
       "nexus_m3c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3c-validation.md",
       "nexus_m3e_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3e-validation.md",
       "nexus_m3g_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3g-pool-refusal.md",
       "nexus_m3h_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3h-startup-observation.md",
       "nexus_m3j_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3j-renewal-contention.md",
       "nexus_m3i_consumers_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3i-consumers.md",
-      "embedded_producer_work": "Joint installed artifacts qualified: 115 passed, 8 optional browser skips, zero failures; stable inputs and source/wheel equality. Independent discovery/publication, selected probes, retained shutdown, deferred boot and reset readiness. Global rollout and real UI pending.",
+      "embedded_producer_work": "Joint installed artifacts qualified: 115 passed, 8 optional browser skips, zero failures; stable inputs and source/wheel equality. Independent discovery/publication, selected probes, retained shutdown, deferred boot and reset readiness. Exact artifacts globally installed in generation 73, with Pi/Claude real UI replies and automatic pool replenishment. See m3i-ui-rollout.md; full UI-A and disposable reset UI remain pending.",
       "connector_producer_work": {
         "commit": "b12b8b8",
         "branch": "feature/v0.0.10",
@@ -357,10 +358,13 @@
     },
     {
       "id": "M6",
-      "status": "planned",
+      "status": "in_progress",
       "title": "Independent supervisor experiment and decision",
       "evidence": [],
-      "commits": {}
+      "commits": {
+        "connector_experiment_adr": "0944a0e"
+      },
+      "experiment_design": "Connector plans/runtime-lifecycle-m6-supervisor-adr.md defines existing daemon/Core host comparison, Windows IPC and authority constraints. Prototype, measurement and adoption decision pending."
     },
     {
       "id": "M7",
@@ -473,7 +477,7 @@
       "milestone": "M3",
       "priority": "medium",
       "status": "open",
-      "description": "Agents initially displayed old RECOVERING until Refresh Agents while all three backend recovery rows were READY; subsequent view mount showed ONLINE. Existing poll pauses when document.hidden; cause not yet attributed and no frontend fix claimed. Follow-up 06:44–06:46 UTC 2026-10-17: generation 72 CONTROL_READY; Pi/Claude/Codex READY and Online in both existing Chrome tabs without reload/restart, four Pi WARM slots, renewed leases. Cause remains unproven. Follow-up 07:30–07:32 UTC again READY/Online with renewed leases and Pi 4 WARM; stale last-contact display observed but cause not proven. One delayed Pi publication did not change durable readiness."
+      "description": "Agents initially displayed old RECOVERING until Refresh Agents while all three backend recovery rows were READY; subsequent view mount showed ONLINE. Existing poll pauses when document.hidden; cause not yet attributed and no frontend fix claimed. Follow-up 06:44–06:46 UTC 2026-10-17: generation 72 CONTROL_READY; Pi/Claude/Codex READY and Online in both existing Chrome tabs without reload/restart, four Pi WARM slots, renewed leases. Cause remains unproven. Follow-up 07:30–07:32 UTC again READY/Online with renewed leases and Pi 4 WARM; stale last-contact display observed but cause not proven. One delayed Pi publication did not change durable readiness. Follow-up 07:52 UTC: generation 73 CONTROL_READY, all three READY/Online, Pi four WARM and no backoff. Both existing tabs Online without reload; one retained 07:32 last-contact while the other showed current heartbeat. Cause of the original Recovering report remains unproven. See m3i-ui-rollout.md."
     },
     {
       "id": "L13",
@@ -487,7 +491,7 @@
       "milestone": "M3",
       "priority": "high",
       "status": "partially_fixed_installed_validation",
-      "description": "Generation 71 agents reached READY within about 8s, but first new warm reservations appeared about 4m46s after recovery began. Inventory worker observed in fingerprint/discovery; full interval also includes publication/backoff and is not wholly attributed to hashing. Need per-harness effective readiness and lower-cost initial discovery; do not relax inventory freshness or ownership checks. Four warm sessions and real Pi UI response eventually succeeded automatically. M3h parallel passive discovery measured 10.74-13.94s versus 21.75-21.94s serial with identical evidence. Startup readiness no longer inflates warm failure backoff (L15). Installed tests passed; global rollout and independent per-harness publication/readiness remain pending. M3h rolled out with M3j in generation 72. First UI Pi call waited 127.439s to RUNNING and completed in 137.667s; next warm call ran after 0.569s and completed in 7.060s. Initial observation/readiness latency remains unresolved."
+      "description": "Generation 71 agents reached READY within about 8s, but first new warm reservations appeared about 4m46s after recovery began. Inventory worker observed in fingerprint/discovery; full interval also includes publication/backoff and is not wholly attributed to hashing. Need per-harness effective readiness and lower-cost initial discovery; do not relax inventory freshness or ownership checks. Four warm sessions and real Pi UI response eventually succeeded automatically. M3h parallel passive discovery measured 10.74-13.94s versus 21.75-21.94s serial with identical evidence. Startup readiness no longer inflates warm failure backoff (L15). Installed tests passed; global rollout and independent per-harness publication/readiness remain pending. M3h rolled out with M3j in generation 72. First UI Pi call waited 127.439s to RUNNING and completed in 137.667s; next warm call ran after 0.569s and completed in 7.060s. Initial observation/readiness latency remains unresolved. M3i independent producers globally deployed in generation 73. Pi READY 07:46:24 UTC; four warm opens admitted within 141 ms at 07:46:32. First real UI request at 07:47:00 reached RUNNING after 0.6952s, completed after 10.2113s, and pool replenished automatically. Single functional sample, not full initial-readiness/load qualification."
     },
     {
       "id": "L15",
@@ -511,7 +515,7 @@
       "description": "M3i installed campaign: reset keep_agents=true completes before the new selected adapter observation is accepted. Immediate persistent message fails inventory_not_fresh (both idle and previously active reset cases); no configuration loss shown. Preserve automatic recovery and independent readiness without weakening freshness or requiring manual resend. Reproduce deterministically before choosing truthful reset readiness versus durable startup queue admission. The existing reset tests are retained unchanged. Fix keeps reset operation reconnecting until selected local inventory is accepted while independent dispatch is reopened. Eight existing reset cases and two deterministic isolation cases passed across the focused source runs. Joint installed qualification and real UI remain pending. Joint installed campaign passed both original regressions and both isolation tests; real UI validation pending."
     }
   ],
-  "live_installation": "Generation 72, Nexus 0.3.1 M3j with Core 0.0.12 M3h and Connector 0.0.10 unchanged code. PID 29220, launcher 44848, port 8202. 541/156/98 files and dependencies verified. Previous process drained normally; 271 DB backups preserved. Pi/Claude/Codex Online, Pi 4 WARM and renewed leases; Pi and Claude responded through Meta-harness. Initial readiness latency remains L14. See m3j-renewal-contention.md.",
+  "live_installation": "Generation 73, Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers. Server PID 32480, launcher 39500, port 8202. Exact qualified wheels installed together; 542/158/99 package files and dependencies verified. Previous process drained normally; full offline backup preserved. Pi/Claude/Codex Online, Pi four WARM; Pi and Claude responded through the real Meta-harness, Claude terminal inspected. L12 cause remains unproven; L14 load qualification remains pending. See m3i-ui-rollout.md.",
   "publication": "Feature branches only; no main merge, tag or PyPI publication authorized by this plan",
-  "pending_installation": "M3i Core and consumer foundation qualified in isolation; all vendor wheels synchronized. No global deployment before retained independent producers, exact published selection, refresh frontiers and joint UI qualification. Generation 72 continues on M3j/M3h."
+  "pending_installation": "None for the qualified M3i checkpoint. Connector a7dd588 and 0944a0e change tests/documentation only; deployed product wheel remains byte-identical. Broader plan implementation and UI gates remain pending."
 }
