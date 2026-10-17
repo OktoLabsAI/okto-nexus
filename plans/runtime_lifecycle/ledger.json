@@ -408,10 +408,16 @@
     },
     {
       "id": "M5",
-      "status": "planned",
+      "status": "in_progress",
       "title": "Shared local and remote lifecycle",
-      "evidence": [],
-      "commits": {}
+      "evidence": [
+        "m5a-consumers.md",
+        "m5a-consumers-results.json"
+      ],
+      "commits": {
+        "core_foundation": "19bb8f2"
+      },
+      "next": "Integrate startup refusal with exact resource release and canonical session closure; prove healthy sibling availability and caller outcomes in both hosts. Shared foundation alone does not complete M5."
     },
     {
       "id": "M6",

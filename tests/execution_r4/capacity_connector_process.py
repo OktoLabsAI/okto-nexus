@@ -73,8 +73,10 @@ async def run(config):
     daemon.store.update(configure)
     binary = Path(config['binary'])
     candidate = InstallationCandidate('codex_app_server', str(binary), fingerprint(binary), 'explicit', 'selected')
-    async def discover():
-        return [candidate]
+    async def discover(*, adapter_ids, cancel_requested):
+        # Match the production per-harness discovery port. Do not report the
+        # synthetic Codex installation as evidence for sibling adapters.
+        return [candidate] if candidate.adapter_id in adapter_ids else []
     peers, opening = {}, set()
     stop_allowed = asyncio.Event()
     stop_allowed.set()
