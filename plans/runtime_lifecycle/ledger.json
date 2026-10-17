@@ -20,7 +20,8 @@
         "m2e-results.json",
         "m2e-ui-broadcast.md",
         "m3c-ui-recovery.md",
-        "m3f-diagnostic-contention.md"
+        "m3f-diagnostic-contention.md",
+        "m3g-ui-rollout.md"
       ]
     },
     {
@@ -164,7 +165,9 @@
         "m3f-diagnostic-contention.md",
         "m3f-results.json",
         "m3g-pool-refusal.md",
-        "m3g-results.json"
+        "m3g-results.json",
+        "m3g-ui-rollout.md",
+        "m3g-live-results.json"
       ],
       "commits": {
         "core_m3c": "7bab651",
@@ -173,7 +176,8 @@
         "nexus_m3d": "c634356",
         "core_m3e": "50eaabc",
         "connector_m3e": "7e1710a",
-        "nexus_m3e": "193b0a3"
+        "nexus_m3e": "193b0a3",
+        "nexus_m3g": "8c5cf2b"
       },
       "checkpoints": [
         {
@@ -209,11 +213,11 @@
         {
           "id": "M3g",
           "status": "complete",
-          "title": "Pool reservations from exact pre-Core dispatch refusals settle and replenish automatically; 18 installed cases passed; global rollout pending"
+          "title": "Pool reservations from exact pre-Core dispatch refusals settle and replenish automatically; 18 installed cases passed; deployed in generation 71; Pi UI response used a warm session and pool replenished to 4/5"
         }
       ],
       "nexus_m3b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3b-validation.md",
-      "next": "Initial-opening renewal isolation, per-harness inventory readiness and remaining resource availability criteria; M4 must remove repeated terminal-history recovery scans.",
+      "next": "Prioritize L14: per-harness inventory readiness and first-discovery cost. Continue initial-opening renewal isolation and remaining resource availability criteria.",
       "nexus_m3c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3c-validation.md",
       "nexus_m3e_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3e-validation.md",
       "nexus_m3g_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3g-pool-refusal.md"
@@ -233,9 +237,13 @@
         "m4d1-validation.md",
         "m4d1-results.json",
         "m4d2-validation.md",
-        "m4d2-results.json"
+        "m4d2-results.json",
+        "m3g-ui-rollout.md",
+        "m3g-live-results.json"
       ],
-      "commits": {},
+      "commits": {
+        "nexus_m4d2": "132d8ba"
+      },
       "checkpoints": [
         {
           "id": "M4a",
@@ -260,11 +268,11 @@
         {
           "id": "M4d2",
           "status": "complete",
-          "title": "Retained per-agent historical maintenance outside readiness and live response publication; 50 installed tests passed; global rollout pending"
+          "title": "Retained per-agent historical maintenance outside readiness and live response publication; 50 installed tests passed; deployed in generation 71; all three agents recovered and real Pi response confirmed"
         }
       ],
       "nexus_m4a_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4a-validation.md",
-      "next": "Qualify M4d2 against real retained history; remaining M4d no-stream retirement, initial audit frontier, scan caps and stream fairness. Address live refused-warm-slot finding L13 separately.",
+      "next": "Remaining M4d no-stream retirement, initial audit frontier, scan caps and stream fairness. Controlled real-history latency qualification remains pending; generation 71 rollout evidence recorded.",
       "nexus_m4b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4b-validation.md",
       "nexus_m4c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4c-validation.md",
       "nexus_m4d1_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d1-validation.md",
@@ -368,14 +376,14 @@
       "milestone": "M6",
       "priority": "high",
       "status": "open",
-      "description": "An already-contained embedded owner has no automatic replacement while HTTP remains alive. Initial-start recovery is not post-containment supervision. Need retained producer join/resource release proof before replacement; M3f prevents the observed diagnostic trigger and stops manual recovery falsely reporting READY, but does not implement general owner replacement. Generation 69 also remained DRAINING_PENDING after normal shutdown despite zero occupied slots/active turns and no server child processes; exact PID termination was needed for deployment. Preserved stacks; no lock reset."
+      "description": "An already-contained embedded owner has no automatic replacement while HTTP remains alive. Initial-start recovery is not post-containment supervision. Need retained producer join/resource release proof before replacement; M3f prevents the observed diagnostic trigger and stops manual recovery falsely reporting READY, but does not implement general owner replacement. Generation 69 also remained DRAINING_PENDING after normal shutdown despite zero occupied slots/active turns and no server child processes; exact PID termination was needed for deployment. Preserved stacks; no lock reset. Generation 70 later drained and exited normally for M3g rollout; automatic replacement of an already-contained owner is still unimplemented."
     },
     {
       "id": "L11",
       "milestone": "M4",
       "priority": "high",
-      "status": "fixed_installed_validation",
-      "description": "First global M4d1 migration: Pi stayed RECOVERING until 03:03:20.844Z after host ready at 02:54:18Z. Closed-history retirement still precedes agent READY; certificates progressed 3/18/55 then readiness after first page. Move verified historical maintenance outside admission while retaining exact release/publication proofs; qualify with real retained history. CPU was saturated in one observation, not an attribution of the complete delay. M4d2 separates historical checkpoints from READY and live response publication; 50 installed tests passed. Real retained-history latency qualification remains pending."
+      "status": "fixed_deployed",
+      "description": "First global M4d1 migration: Pi stayed RECOVERING until 03:03:20.844Z after host ready at 02:54:18Z. Closed-history retirement still precedes agent READY; certificates progressed 3/18/55 then readiness after first page. Move verified historical maintenance outside admission while retaining exact release/publication proofs; qualify with real retained history. CPU was saturated in one observation, not an attribution of the complete delay. M4d2 separates historical checkpoints from READY and live response publication; 50 installed tests passed. Real retained-history latency qualification remains pending. Deployed in generation 71; Pi reached READY in about 8s, but this boot reused earlier checkpoints and is not a controlled first-backfill comparison."
     },
     {
       "id": "L12",
@@ -388,10 +396,17 @@
       "id": "L13",
       "milestone": "M7",
       "priority": "high",
-      "status": "fixed_installed_validation",
-      "description": "Generation 70 Pi has four warm STARTING slots with FAILED/NONE sessions, terminal dispatch refusals (CONFLICT, possible_effect=false) and no Core receipts. Pool settlement recognizes CLOSED lease or failed Core receipt but misses pre-Core refusal. Pi UI response used fifth on-demand slot. Require exact durable no-send proof, never infer safe release from FAILED/NONE alone. Exact message matched dispatch inventory freshness refusal. M3g recognizes the terminal pre-Core refusal with no lease, stream, receipt or publication; 18 installed tests passed. Current global process has not yet loaded this fix."
+      "status": "fixed_live_validation",
+      "description": "Generation 70 Pi has four warm STARTING slots with FAILED/NONE sessions, terminal dispatch refusals (CONFLICT, possible_effect=false) and no Core receipts. Pool settlement recognizes CLOSED lease or failed Core receipt but misses pre-Core refusal. Pi UI response used fifth on-demand slot. Require exact durable no-send proof, never infer safe release from FAILED/NONE alone. Exact message matched dispatch inventory freshness refusal. M3g recognizes the terminal pre-Core refusal with no lease, stream, receipt or publication; 18 installed tests passed. Globally deployed in generation 71; old slots were reclaimed, four new warm sessions became available, a real UI call used one and its replacement restored 4/5 availability."
+    },
+    {
+      "id": "L14",
+      "milestone": "M3",
+      "priority": "high",
+      "status": "open",
+      "description": "Generation 71 agents reached READY within about 8s, but first new warm reservations appeared about 4m46s after recovery began. Inventory worker observed in fingerprint/discovery; full interval also includes publication/backoff and is not wholly attributed to hashing. Need per-harness effective readiness and lower-cost initial discovery; do not relax inventory freshness or ownership checks. Four warm sessions and real Pi UI response eventually succeeded automatically."
     }
   ],
-  "live_installation": "M3f Nexus 78e0b5c (including M4d1) globally installed with Core M3e 50eaabc and Connector M3e 7e1710a. Generation 70 PID 39648. Pi, Claude and Codex READY/ONLINE; Pi and Claude replied via Meta-harness with 1/1 ACK without further restart. M4d2 qualified in isolated installed environment only. Pi warm slots L13 remain unresolved in current global process. See m3f-diagnostic-contention.md and m4d2-validation.md.",
+  "live_installation": "Nexus 0.3.1 M4d2 132d8ba + M3g 8c5cf2b installed globally with unchanged Core 0.0.12 M3e 50eaabc and Connector 0.0.10 M3e 7e1710a. Files and dependencies verified (541/156/98). Generation 71 PID 40832, launcher 25092. Normal prior shutdown, backup of 265 DBs. All three local agents READY/ONLINE; Pi warm pool restored to 4/5 and a real Meta-harness call succeeded on a prewarmed session (0.566s to RUNNING, 9.944s to SUCCEEDED), with automatic refill. Initial inventory delay remains L14. See m3g-ui-rollout.md.",
   "publication": "Feature branches only; no main merge, tag or PyPI publication authorized by this plan"
 }
