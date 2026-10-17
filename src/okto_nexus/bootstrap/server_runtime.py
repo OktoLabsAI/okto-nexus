@@ -12,6 +12,9 @@ async def start_runtime_services(app, *, native_factory=None):
     from .handoff_runtime_scheduler import build_handoff_notice_maintenance, build_handoff_runtime_scheduler
     from ..application.handoff_runtime_service import HandoffRuntimeService
     deps = app.state.deps
+    previous_supervisor = getattr(app.state, 'embedded_runtime_supervisor', None)
+    if previous_supervisor is not None and not previous_supervisor.drained:
+        raise RuntimeError('The previous embedded supervisor has not drained.')
     previous_boot = getattr(app.state, 'runtime_boot_owner', None)
     if previous_boot is not None and not previous_boot.drained:
         raise RuntimeError('The previous runtime boot owner has not drained.')
@@ -78,4 +81,10 @@ async def start_runtime_services(app, *, native_factory=None):
         handoff_runtime=handoffs,
         on_embedded_report=lambda report: setattr(app.state, 'embedded_shutdown_report', report))
     app.state.runtime_shutdown = coordinator
+    app.state.embedded_runtime_supervisor = None
+    if dispatch is not None:
+        from .embedded_supervisor import EmbeddedRuntimeSupervisor
+        supervisor = EmbeddedRuntimeSupervisor(app, coordinator)
+        app.state.embedded_runtime_supervisor = coordinator.supervisor = supervisor
+        supervisor.start()
     return host, inventory, dispatch, coordinator

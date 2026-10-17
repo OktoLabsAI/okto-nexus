@@ -18,6 +18,7 @@ class ServerShutdownCoordinator:
         self.handoff_notices = handoff_notices
         self.handoff_runtime = handoff_runtime
         self.runtime_boot = runtime_boot
+        self.supervisor = None
         self.deadline = None
         self._task = None
         self._embedded_done = threading.Event()
@@ -27,6 +28,9 @@ class ServerShutdownCoordinator:
 
     def status(self):
         resources = []
+        if self._task is not None and self.supervisor is not None and not self.supervisor.drained:
+            resources.append({'owner': 'embedded-supervisor', 'resource_id': 'replacement',
+                              'outcome': 'pending', 'store_retained': True})
         if self._task is not None and self.runtime_boot is not None and not self.runtime_boot.drained:
             resources.append({'owner': 'runtime-boot', 'resource_id': 'approved-endpoints',
                               'outcome': 'pending', 'store_retained': True})
@@ -65,6 +69,8 @@ class ServerShutdownCoordinator:
         if self._task is None:
             self.deadline = asyncio.get_running_loop().time() + timeout_seconds
             self.deps.runtime_admission_fence.close()
+            if self.supervisor is not None:
+                self.supervisor.begin_shutdown()
             if self.runtime_boot is not None:
                 self.runtime_boot.begin_shutdown()
             if self.handoff_runtime is not None:
@@ -141,6 +147,11 @@ class ServerShutdownCoordinator:
         self._legacy_done = True
 
     async def _run(self):
+        # A replacement can already be joining the previous native producers.
+        # Fence replacement synchronously in request(), then join it before
+        # reading the current bundle or releasing the exclusive store owner.
+        if self.supervisor is not None:
+            await self.supervisor.aclose()
         # Legacy release is gated by embedded completion, but neither native
         # containment path waits for the other owner's storage/native calls.
         if self.connection_tests is not None:

@@ -20,7 +20,7 @@ from ..errors import ErrorCode, OktoNexusError
 class EmbeddedInventoryOwner:
     """Retain full local candidates; publish path-free facts without runtime readiness."""
 
-    def __init__(self, deps, fresh_publications, *, refresh_seconds=30):
+    def __init__(self, deps, fresh_publications, *, refresh_seconds=30, predecessor_generation=None):
         self.deps = deps
         self.fresh = fresh_publications
         self.dispatcher = deps.runtime_dispatcher
@@ -34,6 +34,7 @@ class EmbeddedInventoryOwner:
         self._publication_failures = 0
         self.refresh_seconds = refresh_seconds
         self.generation = None
+        self.predecessor_generation = predecessor_generation
         self._stop = asyncio.Event()
         self._discovery_stopped = threading.Event()
         self._task = None
@@ -61,7 +62,16 @@ class EmbeddedInventoryOwner:
                 (self.key.server_id, self.key.executor_id)).fetchone()
             if row is None:
                 raise RuntimeError("The embedded executor is unavailable.")
-            generation = row["generation"] + (row["owner_instance_id"] != dispatcher.owner_id)
+            if self.predecessor_generation is not None:
+                # Same-process replacement is a new authority generation too.
+                # Never take over a changed owner or revive a revoked executor.
+                if (row['owner_instance_id'] != dispatcher.owner_id
+                        or row['generation'] != self.predecessor_generation
+                        or row['control_state'] != 'DISCONNECTED'):
+                    raise RuntimeError('The predecessor embedded owner has not been released or changed.')
+                generation = row['generation'] + 1
+            else:
+                generation = row["generation"] + (row["owner_instance_id"] != dispatcher.owner_id)
             uow.connection.execute(
                 "UPDATE execution_executors SET owner_instance_id=?,generation=?,control_state='RECOVERING',last_seen_at=? "
                 "WHERE server_id=? AND executor_id=?",

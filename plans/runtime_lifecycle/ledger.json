@@ -181,7 +181,9 @@
         "m3i-consumers-results.json",
         "m3i-embedded.md",
         "m3i-embedded-first-results.json",
-        "m3i-embedded-results.json"
+        "m3i-embedded-results.json",
+        "m3k-owner-replacement.md",
+        "m3k-results.json"
       ],
       "commits": {
         "core_m3c": "7bab651",
@@ -257,6 +259,11 @@
           "id": "M3i-embedded",
           "status": "complete",
           "title": "Installed independent producer/boot/reset checkpoint: 115 passed, 8 optional browser skips. Deployed in generation 73; Pi and Claude real UI replies passed. Disposable-home reset UI remains L17."
+        },
+        {
+          "id": "M3k",
+          "status": "in_progress",
+          "title": "Automatic replacement after retained host containment, exact predecessor generation fence and shutdown/reset integration. Final source 12 passed; installed 82 passed with stable inputs. Disposable real UI and rollout pending."
         }
       ],
       "nexus_m3b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3b-validation.md",
@@ -462,8 +469,8 @@
       "id": "L10",
       "milestone": "M6",
       "priority": "high",
-      "status": "open",
-      "description": "An already-contained embedded owner has no automatic replacement while HTTP remains alive. Initial-start recovery is not post-containment supervision. Need retained producer join/resource release proof before replacement; M3f prevents the observed diagnostic trigger and stops manual recovery falsely reporting READY, but does not implement general owner replacement. Generation 69 also remained DRAINING_PENDING after normal shutdown despite zero occupied slots/active turns and no server child processes; exact PID termination was needed for deployment. Preserved stacks; no lock reset. Generation 70 later drained and exited normally for M3g rollout; automatic replacement of an already-contained owner is still unimplemented. Generation 71 reproduced containment after a transient recovery-status writer timeout. M3j prevents this escalation; general owner replacement remains open. Generation 71 later drained and exited normally for the qualified rollout."
+      "status": "installed_validated_real_ui_pending",
+      "description": "An already-contained embedded owner has no automatic replacement while HTTP remains alive. Initial-start recovery is not post-containment supervision. Need retained producer join/resource release proof before replacement; M3f prevents the observed diagnostic trigger and stops manual recovery falsely reporting READY, but does not implement general owner replacement. Generation 69 also remained DRAINING_PENDING after normal shutdown despite zero occupied slots/active turns and no server child processes; exact PID termination was needed for deployment. Preserved stacks; no lock reset. Generation 70 later drained and exited normally for M3g rollout; automatic replacement of an already-contained owner is still unimplemented. Generation 71 reproduced containment after a transient recovery-status writer timeout. M3j prevents this escalation; general owner replacement remains open. Generation 71 later drained and exited normally for the qualified rollout. M3k implements same-process replacement after retained dispatch/native/publication/inventory cleanup, with an exact predecessor generation claim and shutdown/reset coordination. All three adapters, no replay, held native/discovery, policy and stale owner cases passed source tests. A candidate shutdown release error was reproduced and fixed; final 12-case source campaign passed. Installed qualification and real disposable UI remain pending; global generation 73 is unchanged. This does not implement or decide the M6 independent-process experiment. Final installed M3k campaign: 82 passed, no skips/failures, unchanged inputs; 536 source files match the wheel. Disposable real UI validation and global rollout remain pending."
     },
     {
       "id": "L11",
@@ -517,5 +524,5 @@
   ],
   "live_installation": "Generation 73, Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers. Server PID 32480, launcher 39500, port 8202. Exact qualified wheels installed together; 542/158/99 package files and dependencies verified. Previous process drained normally; full offline backup preserved. Pi/Claude/Codex Online, Pi four WARM; Pi and Claude responded through the real Meta-harness, Claude terminal inspected. L12 cause remains unproven; L14 load qualification remains pending. See m3i-ui-rollout.md.",
   "publication": "Feature branches only; no main merge, tag or PyPI publication authorized by this plan",
-  "pending_installation": "None for the qualified M3i checkpoint. Connector a7dd588 and 0944a0e change tests/documentation only; deployed product wheel remains byte-identical. Broader plan implementation and UI gates remain pending."
+  "pending_installation": "M3k owner replacement installed-qualified: 82 passed, zero skips/failures and unchanged inputs. Disposable real UI fault-injection validation pending before global rollout. Global generation 73 remains on M3i."
 }

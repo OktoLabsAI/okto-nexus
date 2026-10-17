@@ -623,6 +623,10 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
             if reset_task is not None and not reset_task.done():
                 with contextlib.suppress(Exception):
                     await asyncio.shield(reset_task)
+            runtime_supervisor = getattr(app.state, 'embedded_runtime_supervisor', None)
+            deps.runtime_admission_fence.close()
+            if runtime_supervisor is not None:
+                await runtime_supervisor.aclose()
             embedded_core_host = getattr(app.state, 'embedded_core_host', embedded_core_host)
             embedded_inventory = getattr(app.state, 'embedded_inventory_owner', embedded_inventory)
             embedded_dispatch = getattr(app.state, 'embedded_dispatch_owner', embedded_dispatch)
