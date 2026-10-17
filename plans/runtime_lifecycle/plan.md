@@ -285,6 +285,12 @@ Claude responderam; Codex recusado por quota do provedor. Ver
 
 ### M6 — Experimento de supervisor independente por host
 
+- Checkpoint M6a: Connector implementou adaptador Windows named pipe opt-in
+  com DACL da sessão de logon, recusa de clientes remotos e I/O overlapped.
+  O dispatcher e host Core reais responderam em processo separado; oito
+  testes source e oito da wheel instalada passaram. O transporte padrão não
+  mudou; comparação de disponibilidade, cliente CLI, sessão real e gate UI
+  ainda faltam. Ver relatório M6a no Connector.
 - Primeiro ADR e protótipo isolado: processo por usuário/host, IPC autenticado
   (named pipe no Windows/socket local onde suportado), uma autoridade de processo.
 - Nexus pode reiniciar enquanto supervisor mantém contenção, spool e leases

@@ -609,11 +609,16 @@
       "id": "M6",
       "status": "in_progress",
       "title": "Independent supervisor experiment and decision",
-      "evidence": [],
+      "evidence": [
+        "Connector: plans/runtime-lifecycle-m6-supervisor-adr.md",
+        "Connector: plans/runtime-lifecycle-m6a-named-pipe.md"
+      ],
       "commits": {
-        "connector_experiment_adr": "0944a0e"
+        "connector_experiment_adr": "0944a0e",
+        "connector_m6a": "521f7b9"
       },
-      "experiment_design": "Connector plans/runtime-lifecycle-m6-supervisor-adr.md defines existing daemon/Core host comparison, Windows IPC and authority constraints. Prototype, measurement and adoption decision pending."
+      "experiment_design": "Connector plans/runtime-lifecycle-m6-supervisor-adr.md defines existing daemon/Core host comparison, Windows IPC and authority constraints. M6a opt-in named pipe reached the actual dispatcher/Core host in a separate disposable process; 8 source and 8 installed-wheel cases passed. CLI pipe client, real session/reconnect comparison, cost, UI gate and adoption decision remain pending.",
+      "next": "Add bounded synchronous pipe client and qualify the same daemon through actual session/control reconnect, revocation and host restart. Compare installed embedded and Connector availability, memory and shutdown with identical harnesses before deciding adoption. Global Nexus remains stopped."
     },
     {
       "id": "M7",
