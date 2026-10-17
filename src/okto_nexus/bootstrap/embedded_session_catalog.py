@@ -128,6 +128,11 @@ class EmbeddedSessionCatalog:
                 entry = next(entries, None)
                 if entry is None:
                     break
+                # A catalogued name is not proof of a usable journal. Reject
+                # directories, links and other non-files before admission;
+                # never follow a link outside the physical host store.
+                if not entry.is_file(follow_symlinks=False):
+                    raise CoreError('JOURNAL_UNAVAILABLE', 'embedded_shared_resources')
                 result.append(entry.name)
             return result
         try:

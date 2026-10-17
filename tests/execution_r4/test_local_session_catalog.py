@@ -127,7 +127,18 @@ async def test_directory_audit_is_bounded_and_rejects_unattributed_files_and_mis
     with pytest.raises(CoreError, match='JOURNAL_UNAVAILABLE'):
         await catalog.audit_files()
     unknown.unlink()
+    journal = store / catalog._name('session-1')
+    journal.unlink()
+    journal.mkdir()
+    with pytest.raises(CoreError, match='JOURNAL_UNAVAILABLE'):
+        await catalog.audit_files()
+    journal.rmdir()
+    journal.touch()
     ledger.unlink()
+    ledger.mkdir()
+    with pytest.raises(CoreError, match='JOURNAL_UNAVAILABLE'):
+        await catalog.audit_files()
+    ledger.rmdir()
     with pytest.raises(CoreError, match='JOURNAL_UNAVAILABLE'):
         await catalog.audit_files()
 

@@ -247,6 +247,11 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   inspeção histórica profunda para manutenção retomável, medir e limitar o
   custo da varredura, e preservar o fence de arquivos não atribuíveis. Ver
   `m4d4f1-physical-audit-measurement.md`.
+- Checkpoint M4d4f2: a varredura agora rejeita diretórios e links mesmo quando
+  usam nomes cadastrados de journals/ledger. Três casos source e três da wheel
+  instalada passaram; amostra descartável com 10 mil arquivos levou 0,997s
+  para auditar. A varredura continua na admissão. Ver
+  `m4d4f2-typed-entry-validation.md`.
 - Separar orçamento de controle/resultado do volume de artefatos; retry apenas na
   fronteira idempotente, sem repetir escrita nativa por erro SQLite/transporte.
 - Testes: reinício entre transações/checkpoints, eventos grandes, disco cheio,
