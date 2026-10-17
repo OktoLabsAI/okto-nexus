@@ -93,13 +93,37 @@ async def running_pair(onboarding, records, tmp_path):
     sock.listen()
     server = uvicorn.Server(uvicorn.Config(client.app, lifespan='off', log_level='error'))
     serving = asyncio.create_task(server.serve(sockets=[sock]))
-    children, logs = [], []
+    children, logs, configs = [], [], []
+
+    async def spawn(index, config, *, suffix=''):
+        log = (tmp_path / f'selection-{index}{suffix}.stderr').open('wb')
+        logs.append(log)
+        # A Windows venv executable can be a redirector with a different PID
+        # from the Python worker. Use the real interpreter so a crash cut
+        # terminates the process that owns the Core journal and control link.
+        child = await asyncio.create_subprocess_exec(getattr(sys, '_base_executable', sys.executable), '-I', '-u',
+            str(Path(__file__).with_name('capacity_connector_process.py')),
+            stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE, stderr=log,
+            creationflags=0x08000000 if os.name == 'nt' else 0)
+        if index == len(children):
+            children.append(child)
+        else:
+            children[index] = child
+        child.stdin.write((json.dumps(config) + '\n').encode())
+        await child.stdin.drain()
+        return child
 
     async def command(index, name):
+        if name == 'restart':
+            previous = children[index]
+            previous.kill()  # Only the child created by this disposable test.
+            await asyncio.wait_for(previous.wait(), 15)
+            child = await spawn(index, configs[index], suffix='-restart')
+            return dict(previous_pid=previous.pid, pid=child.pid)
         child = children[index]
         child.stdin.write((json.dumps({'command': name}) + '\n').encode())
         await child.stdin.drain()
-        line = await asyncio.wait_for(child.stdout.readline(), 35)
+        line = await asyncio.wait_for(child.stdout.readline(), 120)
         assert line, 'Connector child exited; inspect selection-*.stderr'
         return json.loads(line)
 
@@ -117,13 +141,6 @@ async def running_pair(onboarding, records, tmp_path):
             state = store.load()
             state.preferences['vault.fallback_file.approved'] = True
             StateStore(state_file(root)).save(state)
-            log = (tmp_path / f'selection-{index}.stderr').open('wb')
-            logs.append(log)
-            child = await asyncio.create_subprocess_exec(sys.executable, '-I', '-u',
-                str(Path(__file__).with_name('capacity_connector_process.py')),
-                stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE, stderr=log,
-                creationflags=0x08000000 if os.name == 'nt' else 0)
-            children.append(child)
             config = dict(root=str(root), base_url=f'http://127.0.0.1:{sock.getsockname()[1]}',
                 server_id=binding['server_id'], executor_id=binding['executor_id'],
                 connector_id=connector_id, register_intent=intent,
@@ -131,14 +148,15 @@ async def running_pair(onboarding, records, tmp_path):
                 binary=str(binary), workspace_root=str(workspace_root),
                 source_roots=[str(Path(module.__file__).resolve().parents[1])
                     for module in (nexus_connector_core, okto_nexus_connector)] + site.getsitepackages() + [site.getusersitepackages()])
-            child.stdin.write((json.dumps(config) + '\n').encode())
-            await child.stdin.drain()
-        async with asyncio.timeout(35):
+            configs.append(config)
+            await spawn(index, config)
+        async with asyncio.timeout(180):
             while True:
                 states = [await command(i, 'status') for i in range(len(records))]
                 hosts = [registry.current_host(row[0]['server_id'], row[0]['executor_id']) for row in records]
-                if all(state['ready'] and host and row[0]['binding_id'] in host.observations
-                       for state, host, row in zip(states, hosts, records)):
+                if all(state['ready'] and state['pid'] == children[index].pid
+                       and host and row[0]['binding_id'] in host.observations
+                       for index, (state, host, row) in enumerate(zip(states, hosts, records))):
                     assert len({os.getpid(), *(state['pid'] for state in states)}) == len(records) + 1
                     break
                 await asyncio.sleep(.1)
@@ -149,6 +167,10 @@ async def running_pair(onboarding, records, tmp_path):
             if child.returncode is None:
                 try:
                     result = await command(index, 'stop')
+                    while 'pending' not in result:
+                        line = await asyncio.wait_for(child.stdout.readline(), 30)
+                        assert line, 'Connector child exited before shutdown result'
+                        result = json.loads(line)
                     assert result['pending'] == 0, result
                     assert await asyncio.wait_for(child.wait(), 15) == 0
                 except (Exception, asyncio.CancelledError) as error:

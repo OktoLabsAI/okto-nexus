@@ -10,6 +10,7 @@ import json
 import os
 from pathlib import Path
 import sys
+import threading
 
 
 class Native:
@@ -86,7 +87,9 @@ async def run(config):
               'publication_cut': None, 'publication_cuts': 0,
               'fail_next_prepare': False, 'preparation_failures': 0,
               'fail_next_candidate': False, 'candidate_failures': 0,
-              'lose_next_startup_ack': False, 'startup_ack_losses': 0}
+              'lose_next_startup_ack': False, 'startup_ack_losses': 0,
+              'hold_bind_commit': False, 'bind_commit_entered': False,
+              'bind_commit_gate': threading.Event()}
     original_startup_publish = R4Connection.publish_startup_refusal
     async def publish_startup_with_lost_ack(self, request, **options):
         reply = await original_startup_publish(self, request, **options)
@@ -121,6 +124,11 @@ async def run(config):
         original = getattr(R4PublicationStore, method_name)
         def cut_publication(self, *args, _original=original, _name=method_name, **kwargs):
             result = _original(self, *args, **kwargs)
+            if _name == 'bind' and faults['hold_bind_commit']:
+                faults['hold_bind_commit'] = False
+                faults['bind_commit_entered'] = True
+                if not faults['bind_commit_gate'].wait(60):
+                    raise OSError('Synthetic binding commit observer timed out')
             if faults['publication_cut'] == _name:
                 faults['publication_cut'] = None
                 faults['publication_cuts'] += 1
@@ -163,6 +171,10 @@ async def run(config):
                 faults['fail_next_candidate'] = True
             elif command == 'lose_next_startup_ack':
                 faults['lose_next_startup_ack'] = True
+            elif command == 'hold_bind_commit':
+                faults['hold_bind_commit'] = True
+            elif command == 'release_bind_commit':
+                faults['bind_commit_gate'].set()
             elif command in ('cut_publication_reserve', 'cut_publication_bind',
                     'cut_publication_record_startup'):
                 faults['publication_cut'] = command.removeprefix('cut_publication_')
@@ -182,6 +194,7 @@ async def run(config):
                 error=state['error_code'], generation=state['connection_generation'],
                 candidate_failures=faults['candidate_failures'],
                 startup_ack_losses=faults['startup_ack_losses'],
+                bind_commit_entered=faults['bind_commit_entered'],
                 publication_cuts=faults['publication_cuts'],
                 preparation_failures=faults['preparation_failures'],
                 opens=len(peers), opening=len(opening), sends=sum(len(peer.sent) for peer in peers.values()),

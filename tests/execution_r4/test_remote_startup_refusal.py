@@ -218,3 +218,100 @@ def test_remote_failed_preparation_releases_capacity_and_keeps_next_work_availab
                     assert receipt[0][0] == 'SUBMITTED'
                     assert state['ready']
     asyncio.run(run())
+
+
+@pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
+def test_process_death_after_startup_binding_commit_replays_without_manual_repair(onboarding, tmp_path, monkeypatch):
+    from okto_nexus_connector.storage.state_store import StateStore
+    monkeypatch.syspath_prepend(str(Path(__file__).parents[1]))
+    from test_pr34_remediation import tool
+    from okto_nexus.domain.base import iso_plus
+    deps, client, headers, proposal = onboarding
+    binding = bind(client, headers, proposal, 'startup-process-crash')
+    setup = deps, client.app, client, headers
+    assert save(setup, agent='subject', broadcast_handoff_auto_claim=True).status_code == 200
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE agent_endpoints SET response_policy='none',consumption='exclusive'")
+    for actions in (['execute_work'], ['open', 'send', 'close']):
+        response = client.post('/api/v1/harness/grants', headers=headers['operator'], json=dict(
+            actor_agent_id='subject', endpoint_id=binding['endpoint_id'], actions=actions,
+            max_executions=10, expires_at=iso_plus(deps.clock.now_iso(), 600)))
+        assert response.status_code == 200, response.text
+    client.headers['host'] = '127.0.0.1:8000'
+    records = [(binding, StateStore(tmp_path/'connector-state.json'),
+        tmp_path/'remote-only'/'codex.exe', tmp_path/'remote-workspace', 'connector', 'register')]
+
+    async def dispatch(payload):
+        made = tool(client, headers['other']['Authorization'].removeprefix('Bearer '),
+            'handoff_create', dict(workspace_id=binding['workspace_id'], from_agent_id='other',
+                visibility='eligible', target={'strategy': 'broadcast'}, payload=payload))
+        assert made['ok'], made
+        hid = made['data']['handoff_id']
+        async with asyncio.timeout(30):
+            while True:
+                page = build_handoff_runtime_candidates(deps).prepare_page(
+                    HandoffScheduleLease(hid, binding['workspace_id'], 0,
+                        'startup-process-crash', 0, 0, ''), limit=4)
+                if page.attempt_ids:
+                    break
+                assert page.reason == 'STALE_OBSERVATION', page
+                await asyncio.sleep(.05)
+        assert len(page.attempt_ids) == 1
+        attempts = build_handoff_runtime_attempts(deps)
+        held = await attempts.reserve(page.attempt_ids[0])
+        claimed = attempts.claim(page.attempt_ids[0])
+        consumed = await build_capacity_admission(deps).consume(claimed.operation_id)
+        return held, claimed, consumed
+
+    async def run():
+        async with running_pair(onboarding, records, tmp_path) as command:
+            before = await command(0, 'status')
+            await command(0, 'hold_bind_commit')
+            await command(0, 'fail_next_candidate')
+            held, claimed, _ = await dispatch('Crash after durable binding')
+            async with asyncio.timeout(35):
+                while True:
+                    state = await command(0, 'status')
+                    if state['bind_commit_entered']:
+                        break
+                    await asyncio.sleep(.05)
+            assert state['candidate_failures'] == 1
+            assert state['opens'] == state['sends'] == 0
+            assert not query(setup, 'SELECT operation_id FROM execution_receipts WHERE '
+                'operation_id IN (SELECT open_operation_id FROM execution_sessions WHERE session_id=?)',
+                (held.request.scope.session_id,))
+            restarted = await command(0, 'restart')
+            assert restarted['previous_pid'] == before['pid']
+            assert restarted['pid'] != before['pid']
+            async with asyncio.timeout(90):
+                while True:
+                    state = await command(0, 'status')
+                    opening = query(setup, 'SELECT stage,error_code,possible_effect FROM execution_receipts '
+                        'WHERE operation_id IN (SELECT open_operation_id FROM execution_sessions WHERE session_id=?)',
+                        (held.request.scope.session_id,))
+                    if state['ready'] and opening:
+                        break
+                    await asyncio.sleep(.1)
+            assert state['generation'] > before['generation']
+            assert [tuple(row) for row in opening] == [('FAILED', 'PREPARATION_FAILED', 0)]
+            assert [tuple(row) for row in query(setup, 'SELECT lifecycle_state FROM execution_sessions WHERE session_id=?',
+                (held.request.scope.session_id,))] == [('CLOSED',)]
+            assert [tuple(row) for row in query(setup, 'SELECT status FROM delivery_outbox WHERE operation_id=?',
+                (claimed.operation_id,))] == [('FAILED_FINAL',)]
+            released = await deps.runtime_availability.get_capacity_reservation(held.request)
+            assert released.state == 'RELEASED'
+            follow, _, consumed = await dispatch('Healthy after process restart')
+            async with asyncio.timeout(90):
+                while True:
+                    state = await command(0, 'status')
+                    receipt = query(setup, 'SELECT stage FROM execution_receipts WHERE operation_id=?',
+                        (consumed.consumption.turn_operation_id,))
+                    if state['ready'] and receipt:
+                        break
+                    await asyncio.sleep(.1)
+            assert state['opens'] == state['sends'] == 1
+            assert [tuple(row) for row in receipt] == [('SUBMITTED',)]
+            assert [tuple(row) for row in query(setup, 'SELECT stage FROM execution_receipts WHERE operation_id IN '
+                '(SELECT open_operation_id FROM execution_sessions WHERE session_id=?)',
+                (follow.request.scope.session_id,))] == [('SUBMITTED',)]
+    asyncio.run(run())

@@ -418,7 +418,8 @@
         "m5c-prelease-refusal-design.md",
         "m5c-core-contract.md",
         "m5c-inband-checkpoint.md",
-        "m5d-replay-checkpoint.md"
+        "m5d-replay-checkpoint.md",
+        "m5e-installed-process-restart.md"
       ],
       "commits": {
         "core_foundation": "19bb8f2",
@@ -430,7 +431,7 @@
         "m5b_nexus_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m5b-startup-refusal.md",
         "m5b_connector_commit_lookup": "git -C ../okto-nexus-connector log --format=%H --diff-filter=A -- plans/runtime-lifecycle-m5b.md"
       },
-      "next": "M5d source-tested prelease refusal replay through replacement control generations under separate-process binding/report/ACK cuts, with exact capacity release and a successful later handoff. Qualify an actual Connector process kill/restart and installed wheels, then finish storage/forgery matrix, uncertain-effect startup isolation, per-binding containment, differential reconnect/revoke/reset and load. Qualify the major milestone through real Nexus UI. M5 remains in progress."
+      "next": "M5e qualified actual Connector process death/restart after durable refusal binding, plus byte-verified installed Core, Connector and Nexus wheels. The original terminal receipt and exact capacity release recovered automatically, and a later handoff succeeded. Finish storage/forgery matrix, uncertain-effect startup isolation, per-binding containment, differential reconnect/revoke/reset and load. Qualify the major milestone through real Nexus UI. M5 remains in progress."
     },
     {
       "id": "M6",
