@@ -339,7 +339,8 @@
         "m4d4b-validation.md",
         "m4d4b-results.json",
       "Core: plans/runtime-lifecycle-m4d4c1.md",
-      "m4d4c2-validation.md"
+      "m4d4c2-validation.md",
+      "Connector: plans/runtime-lifecycle-m4d4c3.md"
       ],
       "commits": {
         "nexus_m4d2": "132d8ba",
@@ -350,7 +351,9 @@
         "core_m4d4a": "2afb894",
         "connector_m4d4b": "5f444c9",
         "core_m4d4_cost": "4ea0dab",
-        "core_m4d4c1": "10906e9"
+      "core_m4d4c1": "10906e9",
+      "nexus_m4d4c2": "de0f5fc",
+      "connector_m4d4c3": "1e9f768"
       },
       "checkpoints": [
         {
@@ -416,10 +419,20 @@
           "evidence": [
             "m4d4c2-validation.md"
           ]
+        },
+        {
+          "id": "M4d4c3",
+          "status": "qualified_rollout_pending",
+          "title": "Bind Connector state to Core physical ledger identity before daemon readiness; 200 selected source, 8 focused source and 32 final installed cases passed",
+          "connector_commit": "1e9f768",
+          "evidence_repository": "okto-nexus-connector",
+          "evidence": [
+            "plans/runtime-lifecycle-m4d4c3.md"
+          ]
         }
       ],
       "nexus_m4a_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4a-validation.md",
-    "next": "M4d4c2 binds Nexus reset generations to Core's physical ledger identity; 20 selected installed cases passed, including composition, reset and cold restore. Bind Connector's physical ledger to trusted local state, then complete the first audit frontier and partial-restore invalidation before removing the startup scan. Combined metadata budget, 100k post-change cost, scan caps, stream fairness, M4d3/M4d4b rollout and controlled real-history latency remain pending; production generation 73 unchanged.",
+    "next": "M4d4c2 and M4d4c3 bind Nexus and Connector state to Core's physical ledger identity; 20 Nexus and 32 Connector selected installed cases passed. Complete the first audit frontier and partial-restore invalidation before removing the startup scan. Combined metadata budget, 100k post-change cost, scan caps, stream fairness, M4d3/M4d4b rollout and controlled real-history latency remain pending; production generation 73 unchanged.",
       "nexus_m4b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4b-validation.md",
       "nexus_m4c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4c-validation.md",
       "nexus_m4d1_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d1-validation.md",
