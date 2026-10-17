@@ -186,14 +186,32 @@ export function AgentsView({
   useEffect(() => {
     let active = true;
     let pending = false;
-    const timer = window.setInterval(async () => {
-      if (pending || document.hidden) return;
+    let refreshRequested = false;
+    const refreshAgents = async () => {
+      if (document.hidden || !active) return;
+      if (pending) {
+        refreshRequested = true;
+        return;
+      }
       pending = true;
-      try { const value = await api.agents(); if (active) setAgents(value.items); }
-      catch { /* Keep the last observation; the next poll retries. */ }
-      finally { pending = false; }
-    }, 10000);
-    return () => { active = false; window.clearInterval(timer); };
+      try {
+        do {
+          refreshRequested = false;
+          try { const value = await api.agents(); if (active) setAgents(value.items); }
+          catch { /* Keep the last observation; the next poll retries. */ }
+        } while (active && !document.hidden && refreshRequested);
+      } finally { pending = false; }
+    };
+    const refreshWhenVisible = () => { if (!document.hidden) void refreshAgents(); };
+    const timer = window.setInterval(() => { void refreshAgents(); }, 10000);
+    document.addEventListener('visibilitychange', refreshWhenVisible);
+    window.addEventListener('focus', refreshWhenVisible);
+    return () => {
+      active = false;
+      window.clearInterval(timer);
+      document.removeEventListener('visibilitychange', refreshWhenVisible);
+      window.removeEventListener('focus', refreshWhenVisible);
+    };
   }, []);
 
   const presetName = useMemo(() => {
