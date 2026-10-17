@@ -1,0 +1,101 @@
+{
+  "checkpoint": "M4c",
+  "global_rollout": false,
+  "passed": 44,
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "44",
+      "time": "440.797",
+      "timestamp": "2026-10-16T22:07:27.559990-03:00",
+      "hostname": "Alienware_m15"
+    }
+  ],
+  "tests": [
+    "tests/execution_r4/test_local_retirement.py",
+    "tests/execution_r4/test_local_pending_queries.py",
+    "tests/execution_r4/test_embedded_preopen_fences.py",
+    "tests/execution_r4/test_agent_recovery_isolation.py::test_released_incomplete_turn_does_not_block_next_message"
+  ],
+  "exit_code": 0,
+  "changed_inputs": [],
+  "query_costs": [
+    {
+      "history_sessions": "1000",
+      "publications_vm_steps": "90",
+      "agent_publications_vm_steps": "157",
+      "streams_vm_steps": "96",
+      "agent_streams_vm_steps": "113",
+      "exact_session_vm_steps": "63",
+      "unretired_streams_vm_steps": "168",
+      "pending_retirement_vm_steps": "211",
+      "unretired_records_vm_steps": "368",
+      "pending_subjects_vm_steps": "325",
+      "retirement_commit_vm_steps": "411"
+    },
+    {
+      "history_sessions": "10000",
+      "publications_vm_steps": "90",
+      "agent_publications_vm_steps": "157",
+      "streams_vm_steps": "96",
+      "agent_streams_vm_steps": "113",
+      "exact_session_vm_steps": "63",
+      "unretired_streams_vm_steps": "168",
+      "pending_retirement_vm_steps": "211",
+      "unretired_records_vm_steps": "368",
+      "pending_subjects_vm_steps": "325",
+      "retirement_commit_vm_steps": "411"
+    },
+    {
+      "history_sessions": "100000",
+      "publications_vm_steps": "90",
+      "agent_publications_vm_steps": "157",
+      "streams_vm_steps": "96",
+      "agent_streams_vm_steps": "113",
+      "exact_session_vm_steps": "63",
+      "unretired_streams_vm_steps": "168",
+      "pending_retirement_vm_steps": "211",
+      "unretired_records_vm_steps": "368",
+      "pending_subjects_vm_steps": "325",
+      "retirement_commit_vm_steps": "411"
+    }
+  ],
+  "wheel_sha256": "5ea91e2a0cb64a77a5b9c5b7dfd3ef4525fd695690154db95a40c7e0d6bb00ac",
+  "campaign_sha256": "22f0f7c1904602f5c5d3fb0e80fb855414cc96e6e0607b1d8061aa67531bde74",
+  "junit_sha256": "14a1d97b4d589ee1a3213bb829983341e933d786d5fdfd623449f6be834e4751",
+  "installed_sha256": "2eb9850fafeb8ef66935e9a5cf150434076f94da4863682dc667e5e17cf6dec6",
+  "exploratory_campaign": {
+    "status": "INPUTS_CHANGED",
+    "exit_code": 1,
+    "changed_inputs": [
+      "src/okto_nexus/bootstrap/embedded_preopen_recovery.py",
+      "src/okto_nexus/bootstrap/embedded_retirement.py",
+      "src/okto_nexus/migrations/144_execution_local_retirement.sql",
+      "tests/execution_r4/test_agent_recovery_isolation.py",
+      "tests/execution_r4/test_embedded_preopen_fences.py",
+      "tests/execution_r4/test_local_pending_queries.py",
+      "tests/execution_r4/test_local_retirement.py"
+    ],
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "3",
+        "skipped": "0",
+        "tests": "126",
+        "time": "1234.202",
+        "timestamp": "2026-10-16T19:21:54.174925-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ],
+    "failures": [
+      "test_released_incomplete_turn_does_not_block_next_message[codex_app_server]",
+      "test_released_incomplete_turn_does_not_block_next_message[claude_stream]",
+      "test_released_incomplete_turn_does_not_block_next_message[pi_rpc]"
+    ],
+    "qualifies_final_wheel": false
+  }
+}

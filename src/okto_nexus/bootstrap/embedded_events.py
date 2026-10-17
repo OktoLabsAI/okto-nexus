@@ -20,20 +20,29 @@ class EmbeddedEventPublisher:
         self.owner = owner
         self.after = 0
 
-    def _page(self, *, after=None, agent_id=None, session_id=None, live_only=False):
-        predicates = ["server_id=?", "executor_id=?", "rowid>?"]
+    def _page(self, *, after=None, agent_id=None, session_id=None, live_only=False, unretired_only=False):
+        predicates = ["l.server_id=?", "l.executor_id=?", "l.rowid>?"]
         parameters = [self.owner.channel.server_id, self.owner.channel.executor_id,
                       self.after if after is None else after]
         for column, value in (("agent_id", agent_id), ("session_id", session_id)):
             if value is not None:
-                predicates.append(f"{column}=?")
+                predicates.append(f"l.{column}=?")
                 parameters.append(value)
         if live_only:
-            predicates.append("drained=0")
+            predicates.append("l.drained=0")
+        source = "execution_local_streams l"
+        if unretired_only and not live_only:
+            source = ("execution_sessions s CROSS JOIN execution_local_streams l "
+                      "USING(server_id,executor_id,session_id)")
+            predicates.append("s.local_retirement_json IS NULL")
+        elif unretired_only:
+            predicates.append("EXISTS (SELECT 1 FROM execution_sessions s "
+                "WHERE s.server_id=l.server_id AND s.executor_id=l.executor_id "
+                "AND s.session_id=l.session_id AND s.local_retirement_json IS NULL)")
         with self.owner.factory.unit_of_work(write=False) as uow:
             self.owner.verify(uow=uow)
-            rows = uow.connection.execute("SELECT rowid,* FROM execution_local_streams "
-                "WHERE " + " AND ".join(predicates) + " ORDER BY rowid LIMIT 128",
+            rows = uow.connection.execute("SELECT l.rowid,l.* FROM " + source +
+                " WHERE " + " AND ".join(predicates) + " ORDER BY l.rowid LIMIT 128",
                 parameters).fetchall()
             return [dict(row) for row in rows]
 
@@ -122,7 +131,7 @@ class EmbeddedEventPublisher:
         after = 0
         while True:
             rows = await asyncio.to_thread(self._page, after=after, agent_id=agent_id,
-                                          session_id=session_id, live_only=live_only)
+                                          session_id=session_id, live_only=live_only, unretired_only=True)
             if not rows:
                 return
             for scope in rows:

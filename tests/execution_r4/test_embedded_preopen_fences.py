@@ -14,6 +14,7 @@ from test_embedded_inventory import app_for
 @pytest.mark.parametrize('adapter,cut', [
     ('pi_rpc', None), ('codex_app_server', None), ('claude_stream', None),
     ('codex_app_server', 'prepare'), ('codex_app_server', 'core'), ('codex_app_server', 'commit'),
+    ('codex_app_server', 'tools'), ('codex_app_server', 'checkpoint'),
 ])
 def test_bound_open_without_core_admission_recovers_and_new_work_runs(tmp_path, monkeypatch, adapter, cut):
     from okto_nexus.bootstrap import embedded_preopen_recovery as recovery
@@ -35,7 +36,7 @@ def test_bound_open_without_core_admission_recovers_and_new_work_runs(tmp_path, 
             assert uow.connection.execute('SELECT count(*) FROM execution_receipts').fetchone()[0] == 0
 
     cuts = []
-    if cut in ('prepare', 'commit'):
+    if cut in ('prepare', 'commit', 'checkpoint'):
         name = '_' + cut
         original = getattr(recovery.EmbeddedPreopenRecovery, name)
         def interrupted_commit(*args):
@@ -54,6 +55,18 @@ def test_bound_open_without_core_admission_recovers_and_new_work_runs(tmp_path, 
                 raise OSError('Synthetic lost reply after Core admission fence')
             return result
         monkeypatch.setattr(recovery, 'persist_r4_preopen_refusal', interrupted_core)
+    elif cut == 'tools':
+        from okto_nexus.bootstrap.embedded_tools import EmbeddedToolsOwner
+        original = EmbeddedToolsOwner.release_session
+        async def interrupted_tools(self, session_id):
+            if session_id == opened['session_id'] and not cuts:
+                with self.owner.factory.unit_of_work(write=False) as uow:
+                    assert uow.connection.execute('SELECT local_retirement_json FROM execution_sessions '
+                        'WHERE session_id=?', (session_id,)).fetchone()[0] is None
+                cuts.append(cut)
+                raise OSError('Synthetic cleanup failure before retirement')
+            return await original(self, session_id)
+        monkeypatch.setattr(EmbeddedToolsOwner, 'release_session', interrupted_tools)
     for boot in range(2):
         deps, app = app_for(tmp_path / 'home')
         with TestClient(app) as client:

@@ -99,6 +99,10 @@ class EmbeddedAgentRecovery:
                     if (slot.key.server_id != owner.channel.server_id or slot.key.executor_id != owner.channel.executor_id
                             or opening is None or known.get(slot.key.session_id) != opening):
                         raise CoreError('SCOPE_MISMATCH', 'embedded_shared_resources')
+                    # Occupied physical ownership wins over a stored retirement
+                    # checkpoint, including a restored/stale ledger after a crash.
+                    from .embedded_retirement import EmbeddedRetirement
+                    await asyncio.to_thread(EmbeddedRetirement(owner).invalidate, slot.key.session_id)
                 high = page.high_water_rowid
                 if page.next_after_rowid is None:
                     break
@@ -164,7 +168,7 @@ class EmbeddedAgentRecovery:
         await owner.events.recover(agent_id=agent_id)
         if not await EmbeddedReconciliation(owner).recover(agent_id=agent_id):
             raise CoreError('RECONCILIATION_REQUIRED', 'embedded_agent_history')
-        for row in await asyncio.to_thread(EmbeddedReconciliation(owner)._records, agent_id):
+        for row in await asyncio.to_thread(EmbeddedReconciliation(owner)._records, agent_id, pending_only=True):
             await owner.tools.release_session(row['session_id'])
         await self._retire_closed(agent_id)
         await asyncio.to_thread(self._state, agent_id, 'READY')
@@ -303,35 +307,31 @@ class EmbeddedAgentRecovery:
 
     async def _retire_closed(self, agent_id):
         owner = self.owner
-        def closed():
-            with owner.factory.unit_of_work(write=False) as uow:
-                owner.verify(uow=uow)
-                return [dict(r) for r in uow.connection.execute(
-                    "SELECT s.session_id,s.lifecycle_state FROM execution_local_streams l "
-                    "JOIN execution_sessions s USING(server_id,executor_id,session_id) "
-                    "WHERE l.server_id=? AND l.executor_id=? AND l.agent_id=? AND l.drained=0 "
-                    "AND s.lifecycle_state IN ('CLOSED','FAILED')",
-                    (owner.channel.server_id, owner.channel.executor_id, agent_id))]
-        for row in await asyncio.to_thread(closed):
+        from .embedded_retirement import EmbeddedRetirement
+        retirement = EmbeddedRetirement(owner)
+        for row in await asyncio.to_thread(retirement.pending, agent_id):
             if owner.sessions.get(row['session_id'], {}).get('recovering'):
                 continue  # The retained session worker owns its release proof.
+            if any(sid == row['session_id'] and not task.done()
+                   for task, sid in owner.worker_sessions.items()):
+                continue  # Native stop alone does not join host publication producers.
             # Prove resource release and that every Core event was committed
             # before ending polling. Receipt stages themselves are unchanged.
-            await EmbeddedReconciliation(owner).release_session(row['session_id'],
+            proof = await EmbeddedReconciliation(owner).release_session(row['session_id'],
                 failed_open=row['lifecycle_state'] == 'FAILED')
             # The final native event can settle a turn after the publication
             # pass that observed close. Publish its durable receipt before
             # retiring all obligations for this now fully released stream.
             await owner._recover_publications(agent_id=agent_id)
-            def commit():
-                with owner.factory.unit_of_work() as uow:
-                    owner.verify(uow=uow)
-                    key = (owner.channel.server_id, owner.channel.executor_id, row['session_id'])
-                    uow.connection.execute("UPDATE execution_local_streams SET drained=1 "
-                        "WHERE server_id=? AND executor_id=? AND session_id=?", key)
-                    uow.connection.execute("UPDATE execution_local_publications SET terminal=1 "
-                        "WHERE server_id=? AND executor_id=? AND session_id=?", key)
-            await asyncio.to_thread(commit)
+            revision = await asyncio.to_thread(retirement.snapshot, row['session_id'])
+            if revision is None:
+                continue
+            proof['retirement_revision'] = revision
+            await owner.tools.release_session(row['session_id'])
+            if any(sid == row['session_id'] and not task.done()
+                   for task, sid in owner.worker_sessions.items()):
+                continue
+            await asyncio.to_thread(retirement.commit, row['session_id'], proof)
 
     async def _run(self, agent_id, recovering):
         try:
@@ -375,8 +375,14 @@ class EmbeddedAgentRecovery:
                 "JOIN execution_operations o USING(server_id,executor_id,operation_id) "
                 "WHERE p.server_id=? AND p.executor_id=? AND p.terminal=0 "
                 "UNION SELECT agent_id FROM execution_local_streams "
-                "WHERE server_id=? AND executor_id=? AND drained=0",
-                (self.owner.channel.server_id, self.owner.channel.executor_id) * 2)}
+                "WHERE server_id=? AND executor_id=? AND drained=0 "
+                "UNION SELECT o.subject_agent_id FROM execution_sessions s "
+                "JOIN execution_operations o ON o.server_id=s.server_id AND o.executor_id=s.executor_id "
+                "AND o.operation_id=s.open_operation_id "
+                "WHERE s.server_id=? AND s.executor_id=? AND s.local_retirement_json IS NULL "
+                "AND s.lifecycle_state IN ('CLOSED','FAILED') AND EXISTS (SELECT 1 FROM execution_local_streams l "
+                "WHERE l.server_id=s.server_id AND l.executor_id=s.executor_id AND l.session_id=s.session_id)",
+                (self.owner.channel.server_id, self.owner.channel.executor_id) * 3)}
 
     async def tick(self, *, manual=False, agent_id=None):
         async with self._tick_lock:

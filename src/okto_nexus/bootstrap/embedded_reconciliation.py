@@ -100,7 +100,7 @@ class EmbeddedReconciliation:
                     return False
             return row['binding_json'] is None and row['stream_epoch'] is None
 
-    def _records(self, agent_id=None, *, session_id=None):
+    def _records(self, agent_id=None, *, session_id=None, pending_only=False):
         with self.owner.factory.unit_of_work(write=False) as uow:
             self.owner.verify(uow=uow)
             # A release proves one exact session. Do not scan every historical
@@ -108,11 +108,13 @@ class EmbeddedReconciliation:
             # Keep an equality predicate so SQLite can seek the composite key;
             # an optional-parameter OR would turn this back into a prefix scan.
             target = " AND s.session_id=?" if session_id is not None else ""
+            if pending_only:
+                target += " AND s.local_retirement_json IS NULL"
             params = (self.owner.channel.server_id, self.owner.channel.executor_id, agent_id, agent_id)
             if session_id is not None:
                 params += (session_id,)
             params += (2 if session_id is not None else 32769,)
-            rows = uow.connection.execute("SELECT s.session_id,s.open_operation_id,p.binding_json,l.stream_epoch,o.subject_agent_id AS agent_id, "
+            rows = uow.connection.execute("SELECT s.session_id,s.open_operation_id,s.local_retirement_json,p.binding_json,l.stream_epoch,o.subject_agent_id AS agent_id, "
                 "EXISTS(SELECT 1 FROM execution_local_preopen_fences f JOIN execution_preopen_refusals r "
                 "USING(server_id,executor_id,operation_id) WHERE f.server_id=s.server_id AND f.executor_id=s.executor_id "
                 "AND f.operation_id=s.open_operation_id AND s.lifecycle_state='CLOSED' AND s.lease_state='CLOSED') AS preopen_recovered "
@@ -216,6 +218,9 @@ class EmbeddedReconciliation:
         # Releasing the opening can make its never-sent first turn retryable.
         # Notify after commit; the earlier receipt wake cannot see that state.
         owner.deps.runtime_dispatcher.wake()
+        return dict(fact, server_id=owner.channel.server_id, executor_id=owner.channel.executor_id,
+                    session_id=session_id, opening_operation_id=row['open_operation_id'],
+                    release_kind='failed_open' if failed_open else 'resource_released')
 
     async def _empty_slots(self, source, session_ids=None):
         after, high = 0, None
@@ -313,9 +318,7 @@ class EmbeddedReconciliation:
 
     async def recover(self, agent_id=None):
         owner,host = self.owner,self.owner.host
-        records = await asyncio.to_thread(self._records, agent_id)
-        if not records:
-            return False
+        records = await asyncio.to_thread(self._records, agent_id, pending_only=True)
         absent = set()
         for row in records:
             if not host._journal_path(owner.channel.executor_id,row['session_id']).exists() and await asyncio.to_thread(self._never_started,row):

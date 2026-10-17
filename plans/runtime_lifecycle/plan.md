@@ -216,6 +216,13 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   encerradas. Ver `m4b-validation.md`. Checkpoints terminais, auditoria
   retomável e justiça de streams continuam pendentes.
 
+- Checkpoint M4c: prova de liberação persistida, invalidação transacional e
+  aposentadoria retomável em lotes de 128; 44 testes da wheel final instalada
+  passaram. Journals verificados deixam de ser reabertos, e a perda de uma
+  projeção de liberação volta a exigir recuperação. Ver `m4c-validation.md`.
+  A varredura inicial completa, casos sem stream e justiça entre streams ainda
+  estão pendentes; sequência de trabalho detalhada em `m4d-design.md`.
+
 - Índice durável de pendências e checkpoints terminais; atualizar com a mesma
   transação do journal/outbox, sem segundo estado divergente.
 - Recuperar pendências/ativos por lotes e cursores. Migração resumível dos journals

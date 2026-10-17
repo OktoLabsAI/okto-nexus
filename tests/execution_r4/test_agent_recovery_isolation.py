@@ -341,8 +341,22 @@ def test_released_incomplete_turn_does_not_block_next_message(local_setup, monke
     # Reproduce retained state from before this fix: the stream was retired,
     # but no separate delivery release was recorded. Recovery must repair it
     # from Core proofs, without requiring the operator to edit the database.
+    client.portal.call(owner.agents._retire_closed, 'subject')
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        checkpoint = uow.connection.execute('SELECT local_retirement_json FROM execution_sessions '
+            'WHERE session_id=?', (first['session_id'],)).fetchone()[0]
+        assert checkpoint is not None
+    with pytest.raises(RuntimeError, match='rollback release removal'):
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute('DELETE FROM execution_delivery_releases')
+            raise RuntimeError('rollback release removal')
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT local_retirement_json FROM execution_sessions '
+            'WHERE session_id=?', (first['session_id'],)).fetchone()[0] == checkpoint
     with deps.connection_factory.unit_of_work() as uow:
         uow.connection.execute('DELETE FROM execution_delivery_releases')
+        assert uow.connection.execute('SELECT local_retirement_json FROM execution_sessions '
+            'WHERE session_id=?', (first['session_id'],)).fetchone()[0] is None
         uow.connection.execute("UPDATE delivery_outbox SET status='ACCEPTED',reason=NULL WHERE operation_id=?",
             (row['operation_id'],))
     client.portal.call(owner.agents.fail, 'subject', OSError('Recovery of retained legacy state'))

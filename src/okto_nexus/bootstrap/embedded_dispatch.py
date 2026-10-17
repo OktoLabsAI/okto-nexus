@@ -855,7 +855,7 @@ class EmbeddedDispatchOwner:
             await self.events.recover()
             from .embedded_reconciliation import EmbeddedReconciliation
             reconciliation = EmbeddedReconciliation(self)
-            for row in await asyncio.to_thread(reconciliation._records):
+            for row in await asyncio.to_thread(reconciliation._records, pending_only=True):
                 report = self.containment_report.get((self.channel.executor_id, row['session_id']))
                 if report is None or 'unknown' in report.session_outcomes.values():
                     continue
