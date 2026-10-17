@@ -43,8 +43,9 @@ class Native:
 
 
 async def run(config):
-    from nexus_connector_core import InstallationCandidate
+    from nexus_connector_core import InstallationCandidate, LocalRuntimeCore
     from nexus_connector_core.discovery import fingerprint
+    from nexus_connector_core.native.adapter_types import NativeAdapterError, ErrorCode
     from okto_nexus_connector.daemon.app import DaemonApp
     from okto_nexus_connector.daemon import r4_control, r4_execution
     from okto_nexus_connector.storage.state_store import (
@@ -81,7 +82,17 @@ async def run(config):
     stop_allowed = asyncio.Event()
     stop_allowed.set()
     faults = {'lose_next_send': False, 'stop_allowed': stop_allowed,
-              'publication_cut': None, 'publication_cuts': 0}
+              'publication_cut': None, 'publication_cuts': 0,
+              'fail_next_prepare': False, 'preparation_failures': 0}
+    original_prepare = LocalRuntimeCore.prepare
+    async def prepare_with_cut(runtime, *args, **kwargs):
+        if faults['fail_next_prepare']:
+            faults['fail_next_prepare'] = False
+            faults['preparation_failures'] += 1
+            raise NativeAdapterError(ErrorCode.CONFIG_ERROR, 'Synthetic version probe deadline',
+                                     {'reason': 'version_probe_timeout'})
+        return await original_prepare(runtime, *args, **kwargs)
+    LocalRuntimeCore.prepare = prepare_with_cut
     # Cut after a real durable commit, before the execution owner receives its
     # result. Never replace the store or manufacture a Core operation fact.
     for method_name in ('reserve', 'bind'):
@@ -124,6 +135,8 @@ async def run(config):
                 allow_open.set()
             elif command == 'lose_next_send':
                 faults['lose_next_send'] = True
+            elif command == 'fail_next_prepare':
+                faults['fail_next_prepare'] = True
             elif command in ('cut_publication_reserve', 'cut_publication_bind'):
                 faults['publication_cut'] = command.removeprefix('cut_publication_')
             elif command == 'hold_stop':
@@ -141,6 +154,7 @@ async def run(config):
             print(json.dumps(dict(pid=os.getpid(), ready=state['execution_ready'],
                 error=state['error_code'], generation=state['connection_generation'],
                 publication_cuts=faults['publication_cuts'],
+                preparation_failures=faults['preparation_failures'],
                 opens=len(peers), opening=len(opening), sends=sum(len(peer.sent) for peer in peers.values()),
                 stopping=sum(peer.closing and not peer.stopped for peer in peers.values()),
                 stopped=sum(peer.stopped for peer in peers.values()))), flush=True)

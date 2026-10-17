@@ -412,12 +412,16 @@
       "title": "Shared local and remote lifecycle",
       "evidence": [
         "m5a-consumers.md",
-        "m5a-consumers-results.json"
+        "m5a-consumers-results.json",
+        "m5b-startup-refusal.md",
+        "m5b-results.json"
       ],
       "commits": {
-        "core_foundation": "19bb8f2"
+        "core_foundation": "19bb8f2",
+        "m5b_nexus_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m5b-startup-refusal.md",
+        "m5b_connector_commit_lookup": "git -C ../okto-nexus-connector log --format=%H --diff-filter=A -- plans/runtime-lifecycle-m5b.md"
       },
-      "next": "Integrate startup refusal with exact resource release and canonical session closure; prove healthy sibling availability and caller outcomes in both hosts. Shared foundation alone does not complete M5."
+      "next": "Finish pre-authorization and uncertain-effect startup isolation, storage failure retention, differential reconnect/revoke/reset and load cases; qualify major milestone through real Nexus UI. M5b covers post-lease native preparation errors in the separate local Connector, not full M5."
     },
     {
       "id": "M6",
@@ -596,7 +600,7 @@
       "milestone": "M3",
       "priority": "high",
       "status": "in_progress",
-      "description": "Code inspection after the Pi version_probe_timeout report: EmbeddedDispatchOwner._execute_owned still sends unclassified opening failures to agent-wide recovery. Reproduce one failed startup while healthy sessions of the same agent continue, and verify exact session containment for all maintained harnesses. This is an M3 resource-isolation requirement, not a proven attribution of the simultaneous Recovering report. Do not relax authority or native-release proofs. M3l reproduced Pi preparation failure stopping a healthy sibling and fixes post-authorization embedded failures. 34 installed cases passed across all adapters and held containment. Pre-authorization, consumed capacity and local Connector differential remain pending. Connector preparation before durable binding still reaches connection-wide close by code inspection; no remote reproduction claimed. See m3l-session-isolation.md."
+      "description": "Code inspection after the Pi version_probe_timeout report: EmbeddedDispatchOwner._execute_owned sent unclassified opening failures to agent-wide recovery. M3l reproduced Pi preparation failure stopping a healthy sibling and fixes post-authorization embedded failures; 34 installed cases passed across all adapters and held containment. M5b reproduced Connector preparation failure taking the whole control connection down, then isolated that post-lease failure to its exact session, proved no native claim, released correlated capacity and delivered a terminal caller error. A separate Connector process failed its first preparation and delivered a second handoff without reconnect; Nexus 17 and Connector 54 installed cases passed. Pre-authorization, uncertain-effect startup, storage failure, broader differential behavior and global rollout remain pending. Neither M3l nor M5b is proven to explain the reported simultaneous Recovering state. See m3l-session-isolation.md and m5b-startup-refusal.md."
     }
   ],
   "live_installation": "Generation 73, Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers. Server PID 32480, launcher 39500, port 8202. Exact qualified wheels installed together; 542/158/99 package files and dependencies verified. Previous process drained normally; full offline backup preserved. Pi/Claude/Codex Online, Pi four WARM; Pi and Claude responded through the real Meta-harness, Claude terminal inspected. L12 cause remains unproven; L14 load qualification remains pending. See m3i-ui-rollout.md.",

@@ -1,0 +1,34 @@
+{
+  "artifacts": {
+    "core": {
+      "sha256": "dfdfef2edeb9f8db8697e6b850c05a704698e692a3592ed6d9d827887235f816",
+      "package_files": 161
+    },
+    "connector": {
+      "sha256": "10a431703cda77061eadbc8449cdf502df93ee725b4fa969443a57fef0e35f1b",
+      "package_files": 99
+    },
+    "nexus": {
+      "sha256": "82bd810694e583892ed8e54f9a41f175bd628d827eee8a73c01af4d741d6ac15",
+      "package_files": 547
+    }
+  },
+  "nexus_installed": {
+    "tests": 17,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "connector_installed": {
+    "tests": 54,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "nexus_tests_xml_sha256": "4148596a0703e87331181f2a489902e964b192fa8c1db04879fc36720a5d7876",
+  "connector_tests_xml_sha256": "b243b073fc557684e41de89fbace9685e1df8766aa831cd7809608c2a99779b8",
+  "nexus_changed_inputs": [],
+  "connector_changed_inputs": [],
+  "environment": "Isolated Windows validation venv; production installation unchanged",
+  "ui_gate": "pending"
+}
