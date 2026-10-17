@@ -167,7 +167,9 @@
         "m3g-pool-refusal.md",
         "m3g-results.json",
         "m3g-ui-rollout.md",
-        "m3g-live-results.json"
+        "m3g-live-results.json",
+        "m3h-startup-observation.md",
+        "m3h-results.json"
       ],
       "commits": {
         "core_m3c": "7bab651",
@@ -177,7 +179,9 @@
         "core_m3e": "50eaabc",
         "connector_m3e": "7e1710a",
         "nexus_m3e": "193b0a3",
-        "nexus_m3g": "8c5cf2b"
+        "nexus_m3g": "8c5cf2b",
+        "core_m3h": "695ff09",
+        "connector_m3h": "0a72072"
       },
       "checkpoints": [
         {
@@ -214,13 +218,19 @@
           "id": "M3g",
           "status": "complete",
           "title": "Pool reservations from exact pre-Core dispatch refusals settle and replenish automatically; 18 installed cases passed; deployed in generation 71; Pi UI response used a warm session and pool replenished to 4/5"
+        },
+        {
+          "id": "M3h",
+          "status": "complete",
+          "title": "Bounded parallel discovery and prerequisite-aware pool warmup; 59 Core, 35 Connector and 46 Nexus installed cases passed; global rollout pending"
         }
       ],
       "nexus_m3b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3b-validation.md",
-      "next": "Prioritize L14: per-harness inventory readiness and first-discovery cost. Continue initial-opening renewal isolation and remaining resource availability criteria.",
+      "next": "L14 independent per-harness inventory coverage/readiness and M3h rollout at next major UI gate; initial-opening renewal isolation and remaining availability criteria.",
       "nexus_m3c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3c-validation.md",
       "nexus_m3e_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3e-validation.md",
-      "nexus_m3g_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3g-pool-refusal.md"
+      "nexus_m3g_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3g-pool-refusal.md",
+      "nexus_m3h_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3h-startup-observation.md"
     },
     {
       "id": "M4",
@@ -294,9 +304,13 @@
     },
     {
       "id": "M7",
-      "status": "planned",
+      "status": "in_progress",
       "title": "Budgeted parallel startup and pool scheduling",
-      "evidence": [],
+      "evidence": [
+        "m3g-pool-refusal.md",
+        "m3h-startup-observation.md",
+        "m3h-results.json"
+      ],
       "commits": {}
     },
     {
@@ -403,10 +417,18 @@
       "id": "L14",
       "milestone": "M3",
       "priority": "high",
-      "status": "open",
-      "description": "Generation 71 agents reached READY within about 8s, but first new warm reservations appeared about 4m46s after recovery began. Inventory worker observed in fingerprint/discovery; full interval also includes publication/backoff and is not wholly attributed to hashing. Need per-harness effective readiness and lower-cost initial discovery; do not relax inventory freshness or ownership checks. Four warm sessions and real Pi UI response eventually succeeded automatically."
+      "status": "partially_fixed_installed_validation",
+      "description": "Generation 71 agents reached READY within about 8s, but first new warm reservations appeared about 4m46s after recovery began. Inventory worker observed in fingerprint/discovery; full interval also includes publication/backoff and is not wholly attributed to hashing. Need per-harness effective readiness and lower-cost initial discovery; do not relax inventory freshness or ownership checks. Four warm sessions and real Pi UI response eventually succeeded automatically. M3h parallel passive discovery measured 10.74-13.94s versus 21.75-21.94s serial with identical evidence. Startup readiness no longer inflates warm failure backoff (L15). Installed tests passed; global rollout and independent per-harness publication/readiness remain pending."
+    },
+    {
+      "id": "L15",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "fixed_installed_validation",
+      "description": "Pool attempted four speculative starts before current inventory existed and counted admission refusals as warm failures; two rounds can grow backoff to 256s without native startup. Reproduced before fix. Await current host/agent/inventory prerequisites before warm reservation; nine all-harness regression cases and the 46-case installed campaign passed. Actual startup interval attribution remains incomplete; global rollout pending."
     }
   ],
   "live_installation": "Nexus 0.3.1 M4d2 132d8ba + M3g 8c5cf2b installed globally with unchanged Core 0.0.12 M3e 50eaabc and Connector 0.0.10 M3e 7e1710a. Files and dependencies verified (541/156/98). Generation 71 PID 40832, launcher 25092. Normal prior shutdown, backup of 265 DBs. All three local agents READY/ONLINE; Pi warm pool restored to 4/5 and a real Meta-harness call succeeded on a prewarmed session (0.566s to RUNNING, 9.944s to SUCCEEDED), with automatic refill. Initial inventory delay remains L14. See m3g-ui-rollout.md.",
-  "publication": "Feature branches only; no main merge, tag or PyPI publication authorized by this plan"
+  "publication": "Feature branches only; no main merge, tag or PyPI publication authorized by this plan",
+  "pending_installation": "M3h qualified with Nexus 0.3.1, Core 0.0.12, Connector 0.0.10 in isolated installation. Global generation 71 unchanged; rollout and real startup UI check reserved for next major milestone."
 }

@@ -100,6 +100,32 @@ def _admit(uow, access, fresh, remote, binding, identity, intent, session_id=Non
     return resolved
 
 
+def _warm_observation_ready(deps, uow, binding, agent_id, fresh):
+    """Await startup/reconnection evidence without penalizing native health.
+
+    This only postpones speculative warm reservations. Normal admission still
+    validates the exact binding, authority and inventory before every effect.
+    """
+    from .execution_agent_recovery import agent_recovering
+    from .executor_inventory_views import read_executor_inventory
+    server, executor = binding['server_id'], binding['executor_id']
+    host = uow.connection.execute(
+        'SELECT control_state,revoked_at FROM execution_executors '
+        'WHERE server_id=? AND executor_id=?', (server, executor)).fetchone()
+    if (host is None or host['control_state'] != 'CONTROL_READY' or host['revoked_at'] is not None
+            or agent_recovering(uow.connection, server, executor, agent_id)):
+        return False
+    try:
+        observation = read_executor_inventory(deps.connection_factory,
+            server_id=server, executor_id=executor, agent_id=agent_id,
+            fresh_publications=fresh, uow=uow)
+    except OktoNexusError as error:
+        if error.code == ErrorCode.NOT_FOUND:
+            return False
+        raise
+    return observation['freshness'] == 'FRESH'
+
+
 def _settle(conn, slot, now):
     if not slot['call_id']:
         return
@@ -228,6 +254,8 @@ def tick(deps):
             capacity.retire_warm(conn, agent_id=agent['agent_id'], executor_id=binding['executor_id'],
                                  configuration_digest=key, binding_id=binding['binding_id'])
             capacity.trim_warm(conn, agent_id=agent['agent_id'], executor_id=binding['executor_id'])
+            if not _warm_observation_ready(deps, uow, binding, agent['agent_id'], fresh):
+                continue
             # Reserve the whole deficit in this pass. Native opens are independent
             # outbox effects, never awaited here or spread across maintenance ticks.
             for _ in range(256):
