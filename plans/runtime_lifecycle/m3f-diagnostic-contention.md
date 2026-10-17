@@ -45,3 +45,47 @@ determinísticos; a validação real pela interface será registrada separadamen
 O diagnóstico foi realizado antes de qualquer reinício. Para aplicar código ao
 processo já contido será necessário encerramento controlado, backup e nova
 inicialização; isso não deve ser descrito como recuperação espontânea do M3c.
+
+## Implantação real em 17/10/2026
+
+Correção commitada e enviada em `78e0b5c`, após M4d1 em `b816fd7`.
+O sinal de encerramento normal foi aceito pelo processo antigo, mas a versão
+M3c continuou em drenagem pendente. Antes da finalização desse PID específico,
+foram preservados os stacks e confirmados zero slots ocupados, zero turnos
+ativos no ledger e ausência de processos filhos do servidor. Foi necessário
+finalizar o processo 18616; não houve limpeza de locks nem edição de estados.
+Os 263 bancos foram copiados depois da saída do processo.
+
+Pacotes instalados e comparados byte a byte com os artefatos: Nexus 0.3.1
+(539 arquivos), Core 0.0.12 (156), Connector 0.0.10 (98). As dependências também
+foram verificadas. Core e Connector são os artefatos M3e já publicados nas
+branches, sem mudança adicional de código neste incidente.
+
+A geração 70 iniciou no processo 39648, launcher 12792. O host ficou
+CONTROL_READY às 02:54:18 UTC. Os agentes concluíram automaticamente:
+
+| Agente | READY em UTC |
+| --- | --- |
+| Codex | 02:54:53.813 |
+| Claude | 02:55:23.999 |
+| Pi | 03:03:20.844 |
+
+A UI Graph confirmou os três presentes após a recuperação. Pi ainda levou
+cerca de nove minutos: a primeira passagem verificou o histórico antigo e
+persistiu certificados de retirement antes de liberar READY. O avanço foi
+observado (3, 18, 55 certificados do Pi), sem novo erro. Essa barreira de
+histórico permanece como pendência M4; este resultado não qualifica a latência
+de recuperação. Durante o acompanhamento houve uma amostra de CPU total em
+100%; não se atribuiu a causa integral ao Nexus nem se usou isso para dispensar
+a correção da barreira histórica.
+
+O Meta-harness foi aberto pela UI, mas o controle do Chrome sofreu timeouts e
+desconexão ao preencher a mensagem. Nenhum novo envio/resposta real foi
+confirmado nesta campanha. Não houve nova chamada ao Codex, cuja quota externa
+continua registrada em L5. O teste funcional de resposta pela UI permanece
+pendente; não foi substituído por envio direto via API.
+
+Evidências privadas locais: `build/runtime-recovery-diagnostic-live/`,
+`build/recovery-diagnostic-before.json`, dumps de stacks e relatórios instalados
+em `build/runtime-recovery-diagnostic-installed/`. A aplicação foi deixada em
+execução para teste pelo usuário.
