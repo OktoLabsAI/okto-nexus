@@ -3,11 +3,12 @@ import sqlite3
 
 import pytest
 from importlib.resources import files
-from nexus_connector_core import CoreError
+from nexus_connector_core import CoreError, JournalAuditAnchor
 
 from okto_nexus.adapters.outbound.sqlite.execution_embedded_store_binding import (
     bind_embedded_store, require_no_missing_store,
     registry_import_pending, complete_registry_import,
+    stored_audit_anchor, record_audit_anchor,
 )
 
 
@@ -19,7 +20,8 @@ def database():
     conn.execute('CREATE TABLE execution_sessions (session_id TEXT)')
     conn.execute('CREATE TABLE execution_operations (operation_id TEXT)')
     for name in ('148_execution_embedded_store_binding.sql',
-                 '149_execution_journal_registry_conversion.sql'):
+                 '149_execution_journal_registry_conversion.sql',
+                 '150_execution_embedded_audit_anchor.sql'):
         migration = files('okto_nexus').joinpath('migrations', name)
         conn.executescript(migration.read_text())
     return conn
@@ -67,3 +69,22 @@ def test_unbound_store_with_history_cannot_be_recreated_as_empty():
         conn.execute("INSERT INTO execution_sessions VALUES('previous')")
         with pytest.raises(CoreError, match='JOURNAL_UNAVAILABLE'):
             require_no_missing_store(conn)
+
+
+def test_audit_anchor_requires_import_and_is_scoped_to_reset_generation():
+    with database() as conn:
+        store_id = 'store_' + 'a' * 32
+        anchor = JournalAuditAnchor(store_id, 'audit_' + 'b' * 32, 3, 'c' * 64)
+        bind_embedded_store(conn, store_id=store_id, recorded_at='first')
+        assert stored_audit_anchor(conn, store_id=store_id) is None
+        with pytest.raises(CoreError, match='PROFILE_DRIFT'):
+            record_audit_anchor(conn, anchor=anchor, recorded_at='before-import')
+        complete_registry_import(conn, store_id=store_id)
+        record_audit_anchor(conn, anchor=anchor, recorded_at='after-import')
+        assert stored_audit_anchor(conn, store_id=store_id) == anchor
+        with pytest.raises(CoreError, match='PROFILE_DRIFT'):
+            stored_audit_anchor(conn, store_id='store_' + 'd' * 32)
+        conn.execute('UPDATE runtime_reset_generation SET generation=1 WHERE singleton=1')
+        replacement = 'store_' + 'd' * 32
+        bind_embedded_store(conn, store_id=replacement, recorded_at='reset')
+        assert stored_audit_anchor(conn, store_id=replacement) is None

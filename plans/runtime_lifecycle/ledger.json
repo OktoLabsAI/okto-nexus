@@ -344,7 +344,9 @@
       "m4d4d-validation.md",
       "Core: plans/runtime-lifecycle-m4d4e1.md",
       "m4d4e-frontier-protocol.md",
-      "m4d4e1-validation.md"
+      "m4d4e1-validation.md",
+      "Core: plans/runtime-lifecycle-m4d4e2.md",
+      "m4d4e3-validation.md"
       ],
       "commits": {
         "nexus_m4d2": "132d8ba",
@@ -359,7 +361,8 @@
       "nexus_m4d4c2": "de0f5fc",
       "connector_m4d4c3": "1e9f768",
       "nexus_m4d4d": "48cd8f3",
-      "core_m4d4e1": "1d38900"
+      "core_m4d4e1": "1d38900",
+      "core_m4d4e2": "905ad8f"
       },
       "checkpoints": [
         {
@@ -455,10 +458,28 @@
             "m4d4e-frontier-protocol.md",
             "m4d4e1-validation.md"
           ]
+        },
+        {
+          "id": "M4d4e2",
+          "status": "core_foundation_qualified",
+          "title": "Core stages an opaque audit nonce only at an exact complete registry head; 32 source and 35 installed cases passed including 100k registry cost; host handshake pending",
+          "core_commit": "905ad8f",
+          "evidence_repository": "okto-nexus-connector-core",
+          "evidence": [
+            "plans/runtime-lifecycle-m4d4e2.md"
+          ]
+        },
+        {
+          "id": "M4d4e3",
+          "status": "qualified_rollout_pending",
+          "title": "Nexus persists the matching Core audit nonce after import and full directory audit; 27 source and 27 installed store/import/reset cases passed; startup still runs the full scan",
+          "evidence": [
+            "m4d4e3-validation.md"
+          ]
         }
       ],
       "nexus_m4a_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4a-validation.md",
-    "next": "M4d4e1 adds a transactional registry hash-chain head and bounded resumable conversion. Next bind the Core head with independent Server/Connector nonce only after complete physical audit; qualify partial-restore invalidation and background anomaly policy before removing the startup scan. Combined metadata budget, scan caps, stream fairness, M4d3/M4d4b rollout and controlled real-history latency remain pending; production generation 73 unchanged.",
+    "next": "M4d4e1/e2 add the transactional Core head and staged nonce; M4d4e3 persists the matching Nexus token after background import and full audit. Next add Connector's independent token, then qualify partial-restore invalidation and background anomaly policy before removing the startup scan. Combined metadata budget, scan caps, stream fairness, M4d3/M4d4b rollout and controlled real-history latency remain pending; production generation 73 unchanged.",
       "nexus_m4b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4b-validation.md",
       "nexus_m4c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4c-validation.md",
       "nexus_m4d1_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d1-validation.md",

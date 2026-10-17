@@ -200,7 +200,12 @@ async def test_fresh_start_binds_ledger_before_admission_and_replacement_is_refu
         with factory.unit_of_work(write=False) as uow:
             bound = uow.connection.execute('SELECT store_id FROM execution_embedded_store_bindings '
                 'WHERE reset_generation=0').fetchone()[0]
-        assert bound == await (await first._ledger()).physical_store_id()
+            anchor = uow.connection.execute('SELECT audit_nonce,audit_revision,audit_digest '
+                'FROM execution_embedded_store_bindings WHERE reset_generation=0').fetchone()
+        ledger = await first._ledger()
+        assert bound == await ledger.physical_store_id()
+        core_anchor = await ledger.journal_audit_anchor()
+        assert tuple(anchor) == (core_anchor.nonce, core_anchor.revision, core_anchor.digest)
         await first.shutdown()
         owner.host = EmbeddedRuntimeHost(tmp_path / 'replacement')
         with pytest.raises(CoreError, match='JOURNAL_UNAVAILABLE'):
@@ -213,6 +218,48 @@ async def test_fresh_start_binds_ledger_before_admission_and_replacement_is_refu
         await first.shutdown()
         if owner.host is not first:
             await owner.host.shutdown()
+
+
+@pytest.mark.asyncio
+async def test_audit_anchor_retries_after_core_commit_without_server_commit(tmp_path, monkeypatch):
+    import threading
+    from okto_nexus.adapters.outbound.sqlite import execution_embedded_store_binding as binding
+
+    catalog, factory, _ = catalog_fixture(tmp_path, 0)
+    owner = catalog.owner
+    failed = threading.Event()
+    original = binding.record_audit_anchor
+    calls = 0
+
+    def interrupted(conn, *, anchor, recorded_at):
+        nonlocal calls
+        calls += 1
+        if calls == 1:
+            failed.set()
+            raise OSError('Server commit interrupted')
+        return original(conn, anchor=anchor, recorded_at=recorded_at)
+
+    monkeypatch.setattr(binding, 'record_audit_anchor', interrupted)
+    recovery = EmbeddedAgentRecovery(owner)
+    try:
+        await recovery.initialize()
+        assert await asyncio.to_thread(failed.wait, 10)
+        ledger = await owner.host._ledger()
+        assert await ledger.journal_audit_anchor() is not None
+        with factory.unit_of_work(write=False) as uow:
+            assert uow.connection.execute('SELECT audit_nonce FROM '
+                'execution_embedded_store_bindings WHERE reset_generation=0').fetchone()[0] is None
+        await asyncio.wait_for(recovery.registry_import_task, 15)
+        with factory.unit_of_work(write=False) as uow:
+            row = uow.connection.execute('SELECT audit_nonce,audit_revision,audit_digest '
+                'FROM execution_embedded_store_bindings WHERE reset_generation=0').fetchone()
+        core = await ledger.journal_audit_anchor()
+        assert tuple(row) == (core.nonce, core.revision, core.digest)
+        assert calls == 2
+    finally:
+        owner._stopping.set()
+        await recovery.close()
+        await owner.host.shutdown()
 
 
 @pytest.mark.asyncio
@@ -328,6 +375,9 @@ async def test_occupied_slot_is_attributed_by_exact_lookup_not_history_map(tmp_p
     monkeypatch.setattr(EmbeddedReconciliation, '_records', exact)
     recovery = EmbeddedAgentRecovery(owner)
     recovery._state = lambda *args: None
+    async def skip_unrelated_anchor(*args):
+        return None
+    recovery._stage_audit_anchor = skip_unrelated_anchor
     if session_id == 'unknown':
         with pytest.raises(CoreError, match='SCOPE_MISMATCH'):
             await recovery.initialize()

@@ -30,6 +30,11 @@ host admission protocol below remain design, not implemented behavior. Nexus
 composition with that installed Core passed 27 selected binding, import, reset
 and catalog-cost cases with up to 10k historical sessions.
 
+M4d4e2 now provides the Core token stage, and M4d4e3 records the matching
+token in Nexus reset-generation storage after background import and a repeated
+physical audit. Neither component consumes that token to bypass startup audit.
+Connector's corresponding state write and the anomaly policy remain open.
+
 After the initial full physical audit and M4d4d import have completed, Server
 commits its first frontier with the exact Core head and a fresh audit nonce.
 Core durably records the same nonce/head in its ledger before Server commits

@@ -7,6 +7,7 @@ import asyncio
 import logging
 import random
 import re
+import secrets
 import time
 
 from nexus_connector_core import CoreError, ShutdownPolicy
@@ -159,6 +160,7 @@ class EmbeddedAgentRecovery:
                         owner.verify(uow=uow)
                         return registry_import_pending(uow.connection, store_id=store_id)
                 if not await asyncio.to_thread(pending):
+                    await self._stage_audit_anchor(catalog, ledger, store_id)
                     return
                 if not await catalog.import_verified_files(ledger, stop=self._registry_stop):
                     return
@@ -167,6 +169,7 @@ class EmbeddedAgentRecovery:
                         owner.verify(uow=uow)
                         complete_registry_import(uow.connection, store_id=store_id)
                 await asyncio.to_thread(complete)
+                await self._stage_audit_anchor(catalog, ledger, store_id)
                 return
             except OktoNexusError as error:
                 if error.code == ErrorCode.CONFLICT:
@@ -182,6 +185,50 @@ class EmbeddedAgentRecovery:
                     timeout=min(30, 2 ** min(attempts, 5)))
             except asyncio.TimeoutError:
                 pass
+
+    async def _stage_audit_anchor(self, catalog, ledger, store_id):
+        """Record matching Core/Server tokens only after this boot's full audit.
+
+        This remains a candidate frontier. Admission still scans the directory
+        on every startup until anomaly and partial-restore policy qualify.
+        """
+        from ..adapters.outbound.sqlite.execution_embedded_store_binding import (
+            stored_audit_anchor, record_audit_anchor,
+        )
+        owner = self.owner
+        while not owner._stopping.is_set() and not self._registry_stop.is_set():
+            await asyncio.to_thread(owner.verify)
+            head = await ledger.journal_registry_head()
+            if head.complete:
+                break
+            await ledger.advance_journal_registry_head(limit=128)
+            await asyncio.sleep(0.01)
+        else:
+            return
+        # Physical audit is repeated after legacy import so the staged token
+        # cannot represent a directory that changed during conversion.
+        if not await catalog.audit_files():
+            raise CoreError('JOURNAL_UNAVAILABLE', 'embedded_audit_anchor')
+        head = await ledger.journal_registry_head()
+        if not head.complete or head.store_id != store_id:
+            raise CoreError('PROFILE_DRIFT', 'embedded_audit_anchor')
+        def read_stored():
+            with owner.factory.unit_of_work(write=False) as uow:
+                owner.verify(uow=uow)
+                return stored_audit_anchor(uow.connection, store_id=store_id)
+        stored = await asyncio.to_thread(read_stored)
+        core_anchor = await ledger.journal_audit_anchor()
+        if (stored is not None and stored == core_anchor
+                and stored.revision == head.revision and stored.digest == head.digest):
+            return
+        anchor = await ledger.stage_journal_audit_anchor(
+            nonce='audit_' + secrets.token_hex(16), head=head)
+        def commit_stored():
+            with owner.factory.unit_of_work() as uow:
+                owner.verify(uow=uow)
+                record_audit_anchor(uow.connection, anchor=anchor,
+                    recorded_at=owner.deps.clock.now_iso())
+        await asyncio.to_thread(commit_stored)
 
     async def fail(self, agent_id, error):
         # Loss of the shared owner/database must still stop the whole host.
