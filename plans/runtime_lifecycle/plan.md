@@ -362,6 +362,13 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   cada. Ambas as respostas tiveram ACK 1/1; o pool voltou a 1/2 disponível.
   São amostras sem distribuição controlada. Ver `m7f-ui-concurrent-cold.md`
   e o relatório M7f no Connector.
+- Checkpoint M7g: a reserva imediata usada por handoff one-shot agora respeita
+  o prazo configurado para começar, sem o corte fixo de 60 s que podia encerrar
+  um cold start saudável sob carga. A expiração ainda impede envio tardio e
+  conserva o slot até prova de encerramento. A wheel Nexus instalada passou
+  67 casos direcionados (39 de startup, 4 de claim, 24 de capacidade), e o
+  frontend foi compilado. Um handoff real acima de 60 s e a distribuição de
+  latência permanecem no gate UI-B. Ver `m7g-immediate-startup-budget.md`.
 
 - Requests pendentes aproveitam primeira instância pronta; warmup independente,
   concorrente e limitado por orçamento físico do host, além do limite por agente.

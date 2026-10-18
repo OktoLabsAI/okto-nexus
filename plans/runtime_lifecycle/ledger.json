@@ -654,9 +654,12 @@
         "m7b-passive-budget.md",
         "m7c-remote-open-receipts.md",
         "m7e-ui-pool-burst.md",
+        "m7f-ui-concurrent-cold.md",
+        "m7g-immediate-startup-budget.md",
         "Core: plans/runtime-lifecycle-m7b-passive-budget.md",
         "Connector: plans/runtime-lifecycle-m7c-remote-opening.md",
-        "Connector: plans/runtime-lifecycle-m7d-shared-selection.md"
+        "Connector: plans/runtime-lifecycle-m7d-shared-selection.md",
+        "Connector: plans/runtime-lifecycle-m7f-post-environment.md"
       ],
       "commits": {
         "core_m7b": "ab87980",
@@ -665,7 +668,7 @@
         "connector_m7c": "20abb83",
         "connector_m7d": "b39cc65"
       },
-      "next": "M7e partial UI-B: remote Pi one-shot pool max 2/warm 1/queue 1 returned 3 exact responses with ACK 1/1 from a 4-tab burst; the fourth got HTTP 409 and retained its text. The pool replenished to 1/2. Durable start waits were 2.020s, 91.174s and 117.051s. Two cold runtime.open receipts took 89.063s and 65.565s and their intervals overlapped about 38s, so the waits are not wholly serial; trace their internal cost under concurrent load and observe transient queue depth/deadline, then qualify a load distribution and embedded comparison with other harnesses. M7d passed all 96 selected source and installed-wheel tests, with four full Pi identity reads remaining. See m7e-ui-pool-burst.md and Connector plans/runtime-lifecycle-m7d-shared-selection.md."
+      "next": "M7e/M7f partial UI-B: remote Pi one-shot pool max 2/warm 1/queue 1 returned exact responses and recovered its warm target. M7f reduced the installed cold-open path to three full Pi build checks; two concurrent openings reached first receipts in 47.319s and 38.260s, versus prior uncontrolled M7e 89.063s and 65.565s. M7g removes a separate 60s cap from immediate handoff admission so the configured wait-to-start timeout also covers cold startup; 67 installed tests passed. The samples are not a controlled latency distribution. Observe transient queue depth/deadline and a real handoff beyond 60s, then qualify a load distribution, embedded comparison and other harnesses. See m7e-ui-pool-burst.md, m7f-ui-concurrent-cold.md and m7g-immediate-startup-budget.md."
     },
     {
       "id": "M8",
@@ -874,6 +877,13 @@
       "priority": "high",
       "status": "installed_real_ui_partial",
       "description": "Connector M7f removes one duplicate full Pi dependency-closure read after materializing the launch environment, only for an exact host-produced approved callback. Arbitrary callbacks retain the host's independent full check and Core still fully qualifies before spawn. Executable drift during secret resolution is refused. Source and isolated installed-wheel suites each passed 98 selected cases; Connector wheel SHA-256 7267f377ebcfce175c11828f2fe4febd0d1d2f75010b622e01372b7c93fd7b67. In a disposable real Pi UI pair, a warm turn succeeded in 6.413s; an admitted cold open and independent pool replenishment overlapped, reached first receipts in 47.319s and 38.260s, and each made three full Pi identity calls. Both exact responses appeared with ACK 1/1 and the pool returned to 1/2 available. These are uncontrolled samples; UI-B and a latency distribution remain pending. Global Nexus unchanged. See Connector plans/runtime-lifecycle-m7f-post-environment.md and m7f-ui-concurrent-cold.md."
+    },
+    {
+      "id": "L28",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "installed_checkpoint_real_ui_pending",
+      "description": "Immediate one-shot handoff admission previously capped startup at 60s despite a 300s configured queue/start-wait policy, while ordinary queued admission used the full policy. Real Pi queued cold opens measured 89.063s and 65.565s in M7e; direct handoff failure at that duration is inferred, not observed. M7g gives immediate admission the configured start-wait deadline and retains expiration fencing and physical-slot containment. A 90s simulated healthy cold start now proceeds. Final installed Nexus wheel f5f26b2e6d29f3658c77ef7c6fb3716df31130cb569f18b5adc3cd53a0913aba and current Connector wheel passed 67 focused cases including separate Connector processes; frontend build and installed UI text checked. Real UI handoff beyond 60s and UI-B remain pending. See m7g-immediate-startup-budget.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",

@@ -6,7 +6,7 @@ const fields: Array<{key: Exclude<keyof Settings, 'overflow'>; label: string; mi
   {key: 'max_parallel', label: 'Maximum parallel instances (0 = unlimited)', min: 0, max: 256},
   {key: 'warm_instances', label: 'Preinitialized instances', min: 0, max: 255},
   {key: 'queue_capacity', label: 'Maximum queued calls', min: 0, max: 10000},
-  {key: 'queue_timeout_seconds', label: 'Queue timeout (seconds)', min: 1, max: 86400},
+  {key: 'queue_timeout_seconds', label: 'Wait to start timeout (seconds)', min: 1, max: 86400},
   {key: 'execution_timeout_seconds', label: 'Execution timeout (seconds)', min: 1, max: 604800},
 ];
 
@@ -66,7 +66,7 @@ export const OneShotSettings = forwardRef<OneShotSettingsHandle, {agentId?: stri
         <option value="queue">Queue within limits</option><option value="reject">Reject immediately</option>
       </select></label>
     </div>
-    <details className="capacity-explanation"><summary>How these limits work</summary><p>Use 0 for unlimited parallel instances. Starting, warm, running and closing instances all count toward the limit. Host capacity still applies. Warm instances are replenished independently.</p></details>
+    <details className="capacity-explanation"><summary>How these limits work</summary><p>Use 0 for unlimited parallel instances. Starting, warm, running and closing instances all count toward the limit. Host capacity still applies. Warm instances are replenished independently. The wait to start timeout also covers cold startup after a call is admitted; an expired call is reported to its caller and its instance stays occupied until closure is confirmed.</p></details>
     {invalid && <p role="alert">Use whole numbers within the limits. Preinitialized instances must be fewer than a finite maximum parallel limit.</p>}
     {!managed && !saveOnNext && <button className="btn btn-secondary" disabled={busy || !policy || !!invalid} onClick={() => void save()}>Save one-shot capacity</button>}
     {!managed && <button className="btn btn-secondary ml-2" disabled={busy} onClick={() => setReload(n => n + 1)}>Reload capacity</button>}
