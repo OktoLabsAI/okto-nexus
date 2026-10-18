@@ -649,15 +649,17 @@
         "m7b-passive-budget.md",
         "m7c-remote-open-receipts.md",
         "Core: plans/runtime-lifecycle-m7b-passive-budget.md",
-        "Connector: plans/runtime-lifecycle-m7c-remote-opening.md"
+        "Connector: plans/runtime-lifecycle-m7c-remote-opening.md",
+        "Connector: plans/runtime-lifecycle-m7d-shared-selection.md"
       ],
       "commits": {
         "core_m7b": "ab87980",
         "nexus_m7b": "3d30341",
         "connector_m7b": "19427c2",
-        "connector_m7c": "20abb83"
+        "connector_m7c": "20abb83",
+        "connector_m7d": "b39cc65"
       },
-      "next": "Qualify a latency distribution and concurrent warm/cold behavior through UI-B. Six full Pi identity reads remain in the Connector path, with actual startup dominated by repeated closure reads rather than native Pi start in one traced sample. Preserve full initial, pre-spawn Core and post-environment validation while reducing only demonstrably redundant work."
+      "next": "Qualify a latency distribution and concurrent warm/cold behavior through UI-B. M7d shared one full opening proof across trusted Connector layers: 94 source and 94 isolated-wheel selected tests passed; one installed Pi UI message returned exact response with ACK 1/1. Four full Pi identity reads remain in the Connector/Core path (27.198s of a 39.311s opening in one traced sample). Preserve full initial, pre-spawn Core and post-environment validation while reducing only demonstrably redundant work. See Connector plans/runtime-lifecycle-m7d-shared-selection.md."
     },
     {
       "id": "M8",
@@ -830,7 +832,7 @@
       "milestone": "M7",
       "priority": "high",
       "status": "partially_fixed_installed_real_ui",
-      "description": "Disposable installed Pi UI first delivery spent 73s in a pre-spawn runtime.open that returned BINDING_NOT_AUTHORIZED, then safely retried after host_dispatch_not_started/native_write_not_started proof. Its successful second open took 83s; a post-restart open took 42s. Renewed leases were present, but the stable receipt lacks the pre-spawn failure frontier. M7c read-only durable receipts from a later real Connector/Pi UI test measured 94.498s and 104.522s from two runtime.open creations to first SUBMITTED receipt. Phase tracing of another installed real Pi UI opening then measured ten full dependency-closure hashes consuming 122.957s of a 146.316s opening. Connector 20abb83 removed four redundant rehashes while keeping full initial, Core pre-spawn and post-environment checks; the new installed wheel made six hashes consuming 46.706s of a 61.994s opening, with final response and ACK 1/1. One before/after sample is not a load distribution; six hashes and UI-B remain. See m3n-pi-probe-ui.md, m7c-remote-open-receipts.md and Connector plans/runtime-lifecycle-m7c-remote-opening.md."
+      "description": "Disposable installed Pi UI first delivery spent 73s in a pre-spawn runtime.open that returned BINDING_NOT_AUTHORIZED, then safely retried after host_dispatch_not_started/native_write_not_started proof. Its successful second open took 83s; a post-restart open took 42s. Renewed leases were present, but the stable receipt lacks the pre-spawn failure frontier. M7c read-only durable receipts from a later real Connector/Pi UI test measured 94.498s and 104.522s from two runtime.open creations to first SUBMITTED receipt. Phase tracing of another installed real Pi UI opening then measured ten full dependency-closure hashes consuming 122.957s of a 146.316s opening. Connector 20abb83 removed four redundant rehashes while keeping full initial, Core pre-spawn and post-environment checks; the new installed wheel made six hashes consuming 46.706s of a 61.994s opening, with final response and ACK 1/1. M7d shared the first qualified selection across trusted Connector layers and reduced the count to four hashes consuming 27.198s of a 39.311s real installed UI open, again with exact Pi response and ACK 1/1. Each comparison is a single uncontrolled sample, not a load distribution; four hashes and UI-B remain. See m3n-pi-probe-ui.md, m7c-remote-open-receipts.md and Connector plans/runtime-lifecycle-m7d-shared-selection.md."
     },
     {
       "id": "L23",

@@ -336,6 +336,14 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   observado da abertura de 146,316 s para 61,994 s, com resposta e ACK 1/1.
   É uma amostra, não a distribuição de carga nem o gate UI-B completo. Ver
   Connector `plans/runtime-lifecycle-m7c-remote-opening.md`.
+- Checkpoint M7d: o Connector `b39cc65` compartilha a seleção física integralmente
+  qualificada entre o provedor de ferramentas, a configuração e a composição do
+  runtime na mesma abertura. Revalida consentimento, root e entrypoint em cada
+  fronteira, preservando checks integrais após o ambiente e antes do spawn.
+  A wheel instalada passou 94 testes selecionados; pela UI, Pi respondeu com
+  ACK 1/1. Quatro hashes completos somaram 27,198 s numa abertura de 39,311 s.
+  A comparação com M7c é amostral; UI-B e distribuição de carga seguem abertas.
+  Ver Connector `plans/runtime-lifecycle-m7d-shared-selection.md`.
 
 - Requests pendentes aproveitam primeira instância pronta; warmup independente,
   concorrente e limitado por orçamento físico do host, além do limite por agente.
