@@ -43,7 +43,8 @@
         "m7g-immediate-startup-budget.md",
         "m7h-ui-queue-capacity.md",
         "m7i-ui-delayed-native-start.md",
-        "m7k-ui-queue-deadline.md"
+        "m7k-ui-queue-deadline.md",
+        "m5j-ui-initial-lease-refusal.md"
       ]
     },
     {
@@ -927,6 +928,13 @@
       "priority": "high",
       "status": "installed_real_ui_partial",
       "description": "Installed disposable Nexus/Core and real Pi 0.87.1 UI registered a new embedded one-shot agent with the same max 2/warm 1/queue 1/5s policy as Connector M7k. The connection test passed and Agents showed 1/2 ready. Three near-simultaneous Meta-harness sends yielded exact M5J_C_OK with ACK 1/1 plus two caller-visible ONE_SHOT_START_TIMEOUT outcomes without native execution; the pool returned to 1/2. One queued call was admitted before its queue deadline, so the error split differed from M7k's queue expiry. This is a partial embedded comparison, not an M5j handoff recovery proof or full UI-B gate. Fixture DRAINED empty and exited, with global Nexus stopped. See m7l-ui-embedded-queue.md."
+    },
+    {
+      "id": "L34",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "installed_real_ui_reopen_verified_completion_pending",
+      "description": "A real Meta-harness broadcast handoff to remote Pi hit an authenticated initial LEASE_REVALIDATION_REQUIRED no-effect receipt, then remained CLAIMED because the unsent initial turn was still ACCEPTED. The refusal receipt now settles that child before commit; 18 focused proof, refusal and restart tests passed. The isolated installed Nexus 0.3.1 wheel d8f2109cac3eaee1316ed209c7a19112db14cd1c302b3887da31d30f55a4599c resumed the disposable fixture, settled retained history and reopened the same handoff in the UI. The old attempt became FAILED_NO_EFFECT with a 15s agent cooldown, with no duplicate native turn. The Connector then entered repeated reconciliation of older fixture history, so eventual Pi completion and the 75s pre-Core delay remain unproven in this run. No global rollout. See m5j-ui-initial-lease-refusal.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",

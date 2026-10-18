@@ -348,6 +348,10 @@ def append_execution_receipt(factory: ConnectionFactory, *,
                 parsed['connection_id'],parsed['connection_generation']), parsed['session_id'],
                 scope['session_owner_generation'], dict(kind='initial_lease_refusal',request=initial_refusal,
                     receipt=parsed), conn.execute("SELECT strftime('%Y-%m-%dT%H:%M:%fZ','now')").fetchone()[0])
+            from ....application.execution_initial_turns import (
+                settle_failed_initial_turns, settle_unsent_closed_session_operations)
+            settle_failed_initial_turns(conn, server_id=key[0], executor_id=key[1])
+            settle_unsent_closed_session_operations(conn, server_id=key[0], executor_id=key[1])
         if (scope and operation['action'] == 'runtime.open'
                 and parsed.get('error_code') == 'PREPARATION_FAILED'
                 and projection.stage == 'FAILED' and not projection.possible_effect

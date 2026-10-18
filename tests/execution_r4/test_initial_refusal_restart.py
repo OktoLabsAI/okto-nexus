@@ -127,7 +127,8 @@ def test_restart_recovers_initial_refusal_without_native_execution(tmp_path, mon
         assert query(restarted, 'SELECT operation_id FROM execution_operations ORDER BY operation_id') == operation_ids
         assert query(restarted, 'SELECT count(*) FROM handoff_runtime_attempts')[0][0] == 1
         assert query(restarted, 'SELECT count(*) FROM execution_capacity_admissions')[0][0] == 1
-        assert query(restarted, 'SELECT status,claim_epoch FROM handoffs WHERE handoff_id=?', (hid,))[0][:] == ('CLAIMED', 1)
+        expected_claim = 'CLAIMED' if cut.startswith('denial_before') else 'OPEN'
+        assert query(restarted, 'SELECT status,claim_epoch FROM handoffs WHERE handoff_id=?', (hid,))[0][:] == (expected_claim, 1)
         expected_lifecycle = 'FAILED' if cut.startswith('denial_before') else 'CLOSED'
         assert query(restarted, 'SELECT lifecycle_state,lease_state FROM execution_sessions WHERE session_id=?', (sid,))[0][:] == (expected_lifecycle, 'CLOSED')
         if cut.startswith('denial_before'):
@@ -136,6 +137,8 @@ def test_restart_recovers_initial_refusal_without_native_execution(tmp_path, mon
         else:
             assert query(restarted, 'SELECT state FROM execution_session_containment')[0][0] == 'RELEASED'
             assert query(restarted, 'SELECT stage,error_code,possible_effect,retry_safe FROM execution_receipts')[0][:] == ('FAILED', 'LEASE_REVALIDATION_REQUIRED', 0, 1)
+            assert query(restarted, 'SELECT state,active FROM handoff_runtime_attempts WHERE handoff_id=?', (hid,))[0][:] == ('FAILED_NO_EFFECT', 0)
+            assert query(restarted, 'SELECT failure_count FROM handoff_runtime_no_effect_retries WHERE handoff_id=?', (hid,))[0][0] == 1
         assert query(restarted, 'SELECT count(*) FROM execution_local_streams')[0][0] == 0
         # No native stream existed. Retire only the separately proven refusal,
         # so a later boot need not reopen this already verified history.
@@ -150,7 +153,7 @@ def test_restart_recovers_initial_refusal_without_native_execution(tmp_path, mon
             assert len(release_retries) >= 2
             assert all(value == release_retries[0] for value in release_retries)
         # Readiness must allow new work with fresh authority, without replaying
-        # the expired handoff or requiring an operator recovery action.
+        # the original failed operation or requiring an operator recovery action.
         owner.native_factory = peers
         client.headers['host'] = '127.0.0.1:8000'
         rt = restarted, binding, peers
