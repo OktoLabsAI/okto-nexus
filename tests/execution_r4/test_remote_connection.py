@@ -286,8 +286,8 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                                 repr(failure), traceback.extract_tb(error.__traceback__).format()))
                             raise
                     monkeypatch.setattr(r4_control.R4DaemonControl, '_attempt', diagnosed_attempt)
-                    async def discover():
-                        return [candidate]
+                    async def discover(*, adapter_ids=None, cancel_requested=None):
+                        return [candidate] if adapter_ids is None or candidate.adapter_id in adapter_ids else []
                     monkeypatch.setattr(r4_control, 'R4DaemonControl',
                         partial(r4_control.R4DaemonControl, discover=discover))
                     monkeypatch.setattr(r4_execution, 'R4DaemonExecution',
@@ -299,6 +299,23 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                             if control.error_code:
                                 raise AssertionError((control.status(), startup_errors))
                             await asyncio.sleep(.01)
+                    # Control readiness and independent installation observation
+                    # are separate frontiers. Resolve a new runtime.start only
+                    # after the selected observation was accepted by the Server.
+                    import time
+                    observation_deadline = time.monotonic() + 20
+                    while True:
+                        try:
+                            await control.inventory_owner.require_batch(candidate.adapter_id)
+                            break
+                        except ConnectorError as error:
+                            if error.code != 'INVENTORY_NOT_FRESH':
+                                raise
+                            if time.monotonic() >= observation_deadline:
+                                raise AssertionError((control.inventory_owner.failure,
+                                    control.inventory_owner.observer.snapshot(),
+                                    control.status(), startup_errors)) from error
+                            await asyncio.sleep(.05)
                     owner = control.connection
                     execution = control.execution.owner
                 else:

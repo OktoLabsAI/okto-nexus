@@ -306,6 +306,13 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   de isolamento ativo está verificada; comparação diferencial completa e
   distribuição de carga/latência continuam pendentes. Ver
   `m5m-ui-active-reconciliation-isolation.md`.
+- Checkpoint M5n: o fixture remoto de decisão nativa foi alinhado ao contrato
+  de observação independente; antes disso, o controle estava pronto mas a
+  descoberta sintética falhava e a admissão retornava `inventory_not_fresh`.
+  Na wheel instalada, quatro casos remotos de aprovação/input e 11 casos
+  embedded de substituição do dono passaram. A corrida explícita entre decisão
+  nativa em andamento e substituição do dono continua pendente. Ver
+  `m5n-native-decision-test-frontier.md`.
 - Extrair políticas de estado/transição para Core e manter adaptadores de host no
   Nexus/Connector. Remover duplicação somente após testes diferenciais.
 - Unificar interpretação de close sem receipt, prova de contenção, retomada de

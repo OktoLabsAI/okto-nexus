@@ -605,7 +605,8 @@
         "m5j-managed-no-effect-claim-gap.md",
         "m5k-ui-capacity-recovery.md",
         "m5l-ui-new-agent-while-remote-offline.md",
-        "m5m-ui-active-reconciliation-isolation.md"
+        "m5m-ui-active-reconciliation-isolation.md",
+        "m5n-native-decision-test-frontier.md"
       ],
       "commits": {
         "core_foundation": "19bb8f2",
@@ -959,6 +960,13 @@
       "priority": "high",
       "status": "installed_real_ui_active_reconciliation_verified",
       "description": "With controlled reconcile.report refusals, the separate local Connector was alive but RECOVERING through 19 failed attempts, and Agents showed remote m6d-pi Offline. During active recovery, the real UI created and connected a new embedded Pi in the same workspace. It returned exact M5M_LOCAL_OK with durable read and ACK 1/1. Removing the fault restored remote CONTROL_READY/CONNECTED without a restart. A subsequent inventory-publication transport interruption briefly reconnected on its own; the queued remote message was then read and returned exact M5M_REMOTE_OK with NATIVE_ACCEPTED and ACK 1/1. This verifies the active-reconciliation isolation slice, not the full M5 differential matrix or UI-B load distribution. Global Nexus was untouched. See m5m-ui-active-reconciliation-isolation.md."
+    },
+    {
+      "id": "L38",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "installed_fixture_frontier_qualified_race_pending",
+      "description": "The remote native-decision fixture failed before execution with inventory_not_fresh because its synthetic discovery callback did not accept the independent observer's adapter_ids/cancel_requested parameters. It now waits for accepted selected-adapter observation separately from CONTROL_READY. In the installed environment, four remote approval/input roundtrips and 11 embedded owner-replacement cases passed; the matching embedded approval case also passed. Production code was unchanged. The explicit in-flight native-decision/replacement-owner race remains open. See m5n-native-decision-test-frontier.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",
