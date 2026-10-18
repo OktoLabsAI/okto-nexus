@@ -171,6 +171,43 @@ def test_pre_authorization_refusal_storage_failure_retains_only_failed_session(l
     assert not healthy_peer.stopped
 
 
+def test_authorizer_failure_after_core_composition_preserves_healthy_session(local_setup, monkeypatch):
+    from okto_nexus.adapters.outbound.execution.embedded import EmbeddedExecutor
+
+    setup, binding, _ = connect_local(local_setup)
+    owner = setup[1].state.embedded_dispatch_owner
+    owner.native_factory = Peers()
+    healthy = admit(setup, binding, 'authorize-healthy', 'runtime.start', new_session=True)
+    wait_receipt(setup, healthy)
+    healthy_peer = owner.native_factory.sessions[healthy['session_id']]
+    original = EmbeddedExecutor.authorize_r4
+    composed = []
+
+    async def fail_once(host, **kwargs):
+        if not composed:
+            scope = kwargs['scope']
+            await host.acquire(server_id=scope['server_id'], executor_id=scope['executor_id'],
+                session_id=scope['session_id'], candidates={kwargs['candidate'].adapter_id: kwargs['candidate']},
+                workspace_roots={scope['workspace_id']: kwargs['workspace_root']},
+                environment=kwargs['environment'], native_factory=kwargs['native_factory'],
+                native_action_factory=kwargs['native_action_factory'],
+                native_approvals_enabled=kwargs['native_approvals_enabled'])
+            composed.append(scope['session_id'])
+            raise OSError('Synthetic authorization interruption after Core composition')
+        return await original(host, **kwargs)
+
+    monkeypatch.setattr(EmbeddedExecutor, 'authorize_r4', staticmethod(fail_once))
+    failed = admit(setup, binding, 'authorize-failed', 'runtime.start', new_session=True)
+    eventually(lambda: bool(composed))
+    wait_receipt(setup, failed, stages=('FAILED',))
+    eventually(lambda: failed['session_id'] not in owner.sessions, seconds=30)
+    assert not healthy_peer.stopped
+    assert 'subject' not in owner.agents.blocked
+    wait_receipt(setup, admit(setup, binding, 'authorize-healthy-turn', 'turn.submit',
+        session_id=healthy['session_id'], text='Still available'))
+    wait_receipt(setup, admit(setup, binding, 'authorize-fresh-open', 'runtime.start', new_session=True))
+
+
 def test_consumed_handoff_preauthorization_refusal_releases_exact_reservation(runtime, monkeypatch):
     from okto_nexus.bootstrap import embedded_dispatch
 

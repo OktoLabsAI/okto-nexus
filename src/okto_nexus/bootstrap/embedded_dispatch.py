@@ -470,11 +470,11 @@ class EmbeddedDispatchOwner:
                     return
                 session = self.sessions.get(frame['session_id'])
                 if (frame['action'] == 'runtime.open' and session is not None
-                        and session.get('executor') is None
-                        and session.get('authorization_started') is False):
-                    # The original worker has not invoked Core authorization.
-                    # A retained session worker will join it and obtain the
-                    # journal's positive no-admission proof before release.
+                        and session.get('executor') is None):
+                    # The original worker may have composed a Core runtime.
+                    # Join it and require a positive no-claim/no-birth proof
+                    # before releasing this session. An uncertain Core claim
+                    # stays contained without stopping healthy siblings.
                     session['startup_refusal_frame'] = frame
                     self.agents.recover_session(frame['session_id'], error=error)
                     return
@@ -505,7 +505,6 @@ class EmbeddedDispatchOwner:
             if key in self.sessions or len(self.sessions) >= self.host.max_owned_slots:
                 raise CoreError("CAPACITY_EXCEEDED", "embedded_dispatch")
             session = {"gate":asyncio.Lock(), "authority_gate":SessionAuthorityGate(), "executor":None,
-                       "authorization_started":False,
                        "scope":{name:frame[name] for name in _SCOPE}, "renew_at":None}
             self.sessions[key] = session
         else:
@@ -523,7 +522,6 @@ class EmbeddedDispatchOwner:
                 setup = await asyncio.to_thread(ApprovedLocalLaunch, self.inventory, session["scope"])
                 await self.tools.prepare(frame,setup)
                 tool_config=self.tools.configurations.get(key)
-                session['authorization_started'] = True
                 executor, applied = await EmbeddedExecutor.authorize_r4(self.host, scope=session["scope"],
                     grant_id=frame["grant_id"], connection_id=self.channel.connection_id,
                     connection_generation=self.channel.connection_generation, request_grant=self._request_grant,
