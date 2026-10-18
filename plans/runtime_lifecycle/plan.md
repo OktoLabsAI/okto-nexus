@@ -429,6 +429,14 @@ Claude responderam; Codex recusado por quota do provedor. Ver
 - Host remoto físico será uma qualificação posterior com o usuário; teste em
   loopback não será descrito como validação em outra máquina.
 
+- Checkpoint M5x/M5y: os cinco resultados locais de aceite foram mapeados e
+  verificados nas wheels instaladas e na UI real. A falha de publicação do
+  receipt antes do commit também foi recuperada com o Connector em processo
+  separado: um único efeito, receipt terminal durável e reconexão automática
+  em nova geração. M5 local concluído; host remoto físico permanece para
+  qualificação posterior. Ver `m5x-differential-evidence-audit.md` e
+  `m5y-separate-process-receipt-recovery.md`.
+
 ### M6 — Experimento de supervisor independente por host
 
 - Checkpoint M6a: Connector implementou adaptador Windows named pipe opt-in

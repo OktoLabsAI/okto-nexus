@@ -35,7 +35,7 @@
         "M5",
         "M7"
       ],
-      "status": "local_flows_verified_m5_m7_acceptance_pending",
+      "status": "local_flows_verified_m7_acceptance_pending",
       "interim_evidence": [
         "m6d-real-ui.md",
         "m7e-ui-pool-burst.md",
@@ -53,7 +53,9 @@
         "m5w-ui-connector-preserve-reset.md",
         "m5m-ui-active-reconciliation-isolation.md",
         "m4l-ui-recovery.md",
-        "ui-b-evidence-audit.md"
+        "ui-b-evidence-audit.md",
+        "m5x-differential-evidence-audit.md",
+        "m5y-separate-process-receipt-recovery.md"
       ]
     },
     {
@@ -659,7 +661,7 @@
     },
     {
       "id": "M5",
-      "status": "in_progress",
+      "status": "complete",
       "title": "Shared local and remote lifecycle",
       "evidence": [
         "m5a-consumers.md",
@@ -689,7 +691,8 @@
         "m5u-ui-revocation.md",
         "m5v-ui-preserve-reset.md",
         "m5w-ui-connector-preserve-reset.md",
-        "m5x-differential-evidence-audit.md"
+        "m5x-differential-evidence-audit.md",
+        "m5y-separate-process-receipt-recovery.md"
       ],
       "commits": {
         "core_foundation": "19bb8f2",
@@ -701,7 +704,7 @@
         "m5b_nexus_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m5b-startup-refusal.md",
         "m5b_connector_commit_lookup": "git -C ../okto-nexus-connector log --format=%H --diff-filter=A -- plans/runtime-lifecycle-m5b.md"
       },
-      "next": "M5x maps the five fixed criteria to installed and real-UI evidence. With pytest source imports disabled, 18 parameterized bridge cases, three receipt-failure cases and two embedded cold-recovery variants passed from installed wheels. The fixed outcome invariants are covered on both routes. The remaining process-boundary check is receipt loss/recovery with a separate Connector daemon, matched to the embedded fault. Physical remote-host qualification remains later and user-assisted."
+      "next": null
     },
     {
       "id": "M6",
@@ -1217,6 +1220,13 @@
       "priority": "high",
       "status": "fixed_outcomes_verified_separate_connector_receipt_fault_pending",
       "description": "Audited the five fixed M5 acceptance cases without adding requirements. With pytest source imports disabled, installed wheels passed 18 paired embedded/Connector bridge cases, three selected receipt-failure cases and two embedded restart/recovery cases. Real UI M5t/M5m/M5u/M5v/M5w and M8a cover reconnect, isolation, revocation and preserve-agents reset with real local Pi. The remaining process-boundary comparison is receipt loss/recovery with a separate Connector daemon; the current fault test uses a real loopback WebSocket but runs its daemon in-process. See m5x-differential-evidence-audit.md. The global Nexus remained stopped."
+    },
+    {
+      "id": "L62",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "local_acceptance_complete",
+      "description": "A separate Windows Connector process lost the terminal close receipt request before Server commit, retained its Core fact and publication, then reconnected automatically. The Server reached SUCCEEDED with one canonical close receipt, one native open/close and no second dispatch attempt; the Connector returned to CONTROL_READY in a newer generation. Three installed-wheel cross-process variants passed together, and the fault variant passed again with the explicit readiness assertion. This closes the local M5 receipt-loss process-boundary comparison alongside M5x. Real Pi UI coverage for the other fixed criteria is in M5t/M5m/M5u/M5v/M5w. Physical remote-host qualification is deferred as the plan states. See m5y-separate-process-receipt-recovery.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",

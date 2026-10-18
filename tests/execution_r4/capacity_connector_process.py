@@ -54,6 +54,7 @@ async def run(config):
         IdentityRecord, ServerProfileRecord, ExecutionExecutorRecord)
     from okto_nexus_connector.storage.r4_publications import R4PublicationStore
     from okto_nexus_connector.transport.r4_connection import R4Connection
+    from okto_nexus_connector.transport.https_client import NexusHTTPClient
 
     daemon = DaemonApp(Path(config['root']))
     daemon.host.max_owned_slots = 1
@@ -86,6 +87,7 @@ async def run(config):
     stop_allowed.set()
     faults = {'lose_next_send': False, 'stop_allowed': stop_allowed,
               'publication_cut': None, 'publication_cuts': 0,
+              'cut_next_receipt': False, 'receipt_cuts': 0,
               'fail_next_prepare': False, 'preparation_failures': 0,
               'fail_next_candidate': False, 'candidate_failures': 0,
               'lose_next_open': False, 'open_ack_losses': 0,
@@ -139,6 +141,14 @@ async def run(config):
             raise OSError('Synthetic startup ACK observation lost')
         return reply
     R4Connection.publish_startup_refusal = publish_startup_with_lost_ack
+    original_publish_receipt = NexusHTTPClient.publish_operation_receipt
+    async def publish_receipt_with_cut(self, ticket, *, frame):
+        if faults['cut_next_receipt'] and frame['stage'] == 'SUCCEEDED':
+            faults['cut_next_receipt'] = False
+            faults['receipt_cuts'] += 1
+            raise OSError('Synthetic receipt request lost before Server commit')
+        return await original_publish_receipt(self, ticket, frame=frame)
+    NexusHTTPClient.publish_operation_receipt = publish_receipt_with_cut
     original_candidates = r4_execution.R4DaemonExecution._candidates
     async def candidates_with_cut(self, frame):
         if faults['fail_next_candidate']:
@@ -228,6 +238,8 @@ async def run(config):
             elif command in ('cut_publication_reserve', 'cut_publication_bind',
                     'cut_publication_record_startup'):
                 faults['publication_cut'] = command.removeprefix('cut_publication_')
+            elif command == 'cut_next_receipt':
+                faults['cut_next_receipt'] = True
             elif command == 'hold_stop':
                 stop_allowed.clear()
             elif command == 'release_stop':
@@ -249,6 +261,7 @@ async def run(config):
                 open_ack_losses=faults['open_ack_losses'],
                 bind_commit_entered=faults['bind_commit_entered'],
                 publication_cuts=faults['publication_cuts'],
+                receipt_cuts=faults['receipt_cuts'],
                 preparation_failures=faults['preparation_failures'],
                 opens=len(peers), opening=len(opening), sends=sum(len(peer.sent) for peer in peers.values()),
                 stopping=sum(peer.closing and not peer.stopped for peer in peers.values()),

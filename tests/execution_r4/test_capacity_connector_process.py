@@ -25,8 +25,10 @@ from test_runtime_policy_defaults import save
 
 
 @pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
-@pytest.mark.parametrize('restart_mode', ['graceful', 'abrupt'])
-def test_capacity_survives_lost_reply_reconnect_and_connector_process_restart(onboarding, tmp_path, monkeypatch, restart_mode):
+@pytest.mark.parametrize('restart_mode,receipt_fault', [
+    ('graceful', False), ('abrupt', False), ('abrupt', True)])
+def test_capacity_survives_lost_reply_reconnect_and_connector_process_restart(
+        onboarding, tmp_path, monkeypatch, restart_mode, receipt_fault):
     import nexus_connector_core
     import okto_nexus_connector
     from okto_nexus_connector.services.execution_selection import acknowledge_execution_binding
@@ -132,15 +134,17 @@ def test_capacity_survives_lost_reply_reconnect_and_connector_process_restart(on
                         return state
                     await asyncio.sleep(.1)
 
-        async def wait_turn(operation_id, stage):
-            async with asyncio.timeout(25):
+        async def wait_turn(operation_id, stage, *, allow_uncertain=False):
+            async with asyncio.timeout(35 if allow_uncertain else 25):
                 while True:
                     response = client.get('/v1/runtime/operations/' + operation_id, headers=headers['subject'])
                     assert response.status_code == 200, response.text
                     view = response.json()
                     if view['executor_stage'] == stage:
                         return view
-                    assert view['error'] is None, view
+                    assert view['error'] is None or (allow_uncertain and
+                        view['error']['code'] == 'DISPATCH_CONNECTION_LOST' and
+                        view['error']['possible_effect']), view
                     await asyncio.sleep(.05)
 
         try:
@@ -219,11 +223,29 @@ def test_capacity_survives_lost_reply_reconnect_and_connector_process_restart(on
             assert response.status_code == 200, response.text
             resolved = response.json()
             assert resolved['can_submit'], resolved
+            if receipt_fault:
+                prior_generation = (await command('status'))['generation']
+                assert (await command('cut_next_receipt'))['receipt_cuts'] == 0
             response = client.post('/v1/runtime/operations', headers=headers['subject'], json={
                 key: resolved[key] for key in ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')})
             assert response.status_code == 202, response.text
-            await wait_turn(resolved['operation_id'], 'SUCCEEDED')
-            assert (await command('status'))['stopped'] == 1
+            await wait_turn(resolved['operation_id'], 'SUCCEEDED',
+                            allow_uncertain=receipt_fault)
+            state = await command('status')
+            assert state['receipt_cuts'] == int(receipt_fault), state
+            assert state['opens'] == 1 and state['stopped'] == 1, state
+            if receipt_fault:
+                state = await ready(prior_generation)
+                assert state['ready'] and state['error'] is None, state
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    assert uow.connection.execute(
+                        'SELECT COUNT(*) FROM execution_receipts WHERE operation_id=?',
+                        (resolved['operation_id'],)).fetchone()[0] == 1
+                    assert uow.connection.execute(
+                        'SELECT COUNT(*) FROM execution_dispatch_outbox WHERE attempt_no<>1').fetchone()[0] == 0
+                assert (await command('stop'))['pending'] == 0
+                assert await finish_process() == 0
+                return
             async with asyncio.timeout(15):
                 while True:
                     released = await registry.release_capacity(committed.request, committed.reservation.reservation_id, 'CANCELLED')
