@@ -35,7 +35,7 @@
         "M5",
         "M7"
       ],
-      "status": "pending",
+      "status": "local_flows_verified_m5_m7_acceptance_pending",
       "interim_evidence": [
         "m6d-real-ui.md",
         "m7e-ui-pool-burst.md",
@@ -50,7 +50,10 @@
         "m7o-installed-load-results.md",
         "m5u-ui-revocation.md",
         "m5v-ui-preserve-reset.md",
-        "m5w-ui-connector-preserve-reset.md"
+        "m5w-ui-connector-preserve-reset.md",
+        "m5m-ui-active-reconciliation-isolation.md",
+        "m4l-ui-recovery.md",
+        "ui-b-evidence-audit.md"
       ]
     },
     {
@@ -696,7 +699,7 @@
         "m5b_nexus_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m5b-startup-refusal.md",
         "m5b_connector_commit_lookup": "git -C ../okto-nexus-connector log --format=%H --diff-filter=A -- plans/runtime-lifecycle-m5b.md"
       },
-      "next": "Fixed M5/UI-B acceptance remaining: real Connector preserve-agents reset from a fresh consistent Server/Connector state, paired with the embedded success in M5v. M5u verified real-UI revocation and sibling availability on both modes; M5t verified paired restart/reconnect delivery. An intentionally restored Server snapshot behind the Connector journal safely refused reset without deleting history. A physical remote host remains a later user-assisted qualification; no additional criterion is introduced."
+      "next": "M5v/M5w have now passed real preserve-agents reset on embedded and local Connector with consistent fixtures; M5m passed new-agent creation during active Connector reconciliation, and M5u/M5t passed revocation and restart slices. The local UI-B flows are mapped in ui-b-evidence-audit.md. Next audit the fixed M5 equivalence criteria against the same retransmission, lost-receipt, revocation, reconnect and reset evidence on both routes; run only missing paired cases. A physical remote host remains a later user-assisted qualification."
     },
     {
       "id": "M6",
@@ -1198,6 +1201,13 @@
       "priority": "high",
       "status": "installed_historical_release_backfill_verified",
       "description": "The reconnect path now retires at most one 128-row resolved release page before reconciliation, then the accepted-cycle background worker continues the indexed backlog independently. Checkpoints retain durable progress across interruptions. Installed Connector 0.0.10 wheel passed 29/29 focused tests, including 4097 accepted rows without a Ready refusal and 129 rows completed after accepted reconciliation. With three pending releases, indexed lookup cost remained under 200 SQLite VM steps at 1k/10k/100k retired rows. The physical unknown-file admission fence and controlled global rollout remain pending. See Connector plans/runtime-lifecycle-m4m-historical-backfill.md."
+    },
+    {
+      "id": "L60",
+      "milestone": "M5/M7/UI-B",
+      "priority": "high",
+      "status": "installed_local_ui_flows_verified_acceptance_audit_pending",
+      "description": "A requirement-by-requirement UI-B evidence audit found existing real-UI coverage for embedded/Connector Pi delivery and preserve reset, warm/cold Pi/Claude/Codex load, queue overflow/deadline errors, agent creation during active Connector reconciliation, revocation and restart. A targeted installed-wheel UI check found the selected Graph detail retained an old Offline snapshot after Agents had returned Online. GraphView now reads its selected node from the latest snapshot. With the same detail panel open, a scoped Connector stop/restart produced present→offline→present without reselecting. A new remote Pi Meta-harness message had exact UIB_GRAPH_TERMINAL_OK reply, read/NATIVE_ACCEPTED delivery, 1/1 ACK, and formatted input/final output in the live terminal. The global Nexus stayed stopped. M5 same-evidence differential acceptance and M7 unlimited mode above two simultaneous real instances remain unqualified. See ui-b-evidence-audit.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",

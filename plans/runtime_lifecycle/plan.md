@@ -655,6 +655,12 @@ campanha completa a cada commit ou ajuste intermediário.
 | UI-B | M5 + M7 | Embedded e Connector local; pool warm/cold; carga acima do limite; fila/rejeição/deadline; criação de agente durante recuperação |
 | UI-C | M8, incluindo M6 se adotado | Campanha final instalada; atualização/restart; permissões/MCP/ferramentas; artefatos grandes; configurações e histórico preservados |
 
+A auditoria [UI-B](ui-b-evidence-audit.md) mapeia as evidências reais locais já
+obtidas e corrige a atualização do detalhe selecionado no Graph durante a
+reconexão. Os fluxos da tabela foram observados; o aceite completo de M5/M7
+continua sujeito aos critérios de equivalência e limite físico já definidos
+acima. O Connector em loopback não comprova outro host físico.
+
 Protocolo para cada gate:
 
 1. Confirmar na instalação os commits/wheels testados e conferir pela UI as sessões
