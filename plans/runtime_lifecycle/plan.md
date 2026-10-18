@@ -329,6 +329,13 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   100 testes source e os mesmos 100 da wheel instalada passaram. Nexus e Connector
   vendorizam a wheel idêntica; medição comparável de carga e UI-B permanecem
   pendentes. Ver `m7b-passive-budget.md`.
+- Checkpoint M7c: o Connector `20abb83` remove quatro releituras completas da
+  instalação Pi entre provas da mesma abertura. Mantém validação integral inicial,
+  no Core antes do spawn e após materializar o ambiente. Uma chamada real pela UI,
+  com wheels instaladas, reduziu os hashes completos de 10 para 6 e o tempo
+  observado da abertura de 146,316 s para 61,994 s, com resposta e ACK 1/1.
+  É uma amostra, não a distribuição de carga nem o gate UI-B completo. Ver
+  Connector `plans/runtime-lifecycle-m7c-remote-opening.md`.
 
 - Requests pendentes aproveitam primeira instância pronta; warmup independente,
   concorrente e limitado por orçamento físico do host, além do limite por agente.

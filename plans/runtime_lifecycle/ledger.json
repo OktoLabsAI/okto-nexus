@@ -648,13 +648,16 @@
         "m7-pi-cold-cost.md",
         "m7b-passive-budget.md",
         "m7c-remote-open-receipts.md",
-        "Core: plans/runtime-lifecycle-m7b-passive-budget.md"
+        "Core: plans/runtime-lifecycle-m7b-passive-budget.md",
+        "Connector: plans/runtime-lifecycle-m7c-remote-opening.md"
       ],
       "commits": {
         "core_m7b": "ab87980",
         "nexus_m7b": "3d30341",
-        "connector_m7b": "19427c2"
-      }
+        "connector_m7b": "19427c2",
+        "connector_m7c": "20abb83"
+      },
+      "next": "Qualify a latency distribution and concurrent warm/cold behavior through UI-B. Six full Pi identity reads remain in the Connector path, with actual startup dominated by repeated closure reads rather than native Pi start in one traced sample. Preserve full initial, pre-spawn Core and post-environment validation while reducing only demonstrably redundant work."
     },
     {
       "id": "M8",
@@ -826,8 +829,8 @@
       "id": "L22",
       "milestone": "M7",
       "priority": "high",
-      "status": "diagnosed_not_fixed",
-      "description": "Disposable installed Pi UI first delivery spent 73s in a pre-spawn runtime.open that returned BINDING_NOT_AUTHORIZED, then safely retried after host_dispatch_not_started/native_write_not_started proof. Its successful second open took 83s; a post-restart open took 42s. Renewed leases were present, but the stable receipt lacks the pre-spawn failure frontier. M7c read-only durable receipts from a later real Connector/Pi UI test measured 94.498s and 104.522s from two runtime.open creations to first SUBMITTED receipt; a reused-session turn reached SUBMITTED in 1.980s. Those receipts do not isolate delivery, authorization, preparation, spawn or handshake, so no cause is assigned. Investigate precise phase and Pi dependency-closure/launch startup costs before changing policy or timeouts. See m3n-pi-probe-ui.md and m7c-remote-open-receipts.md."
+      "status": "partially_fixed_installed_real_ui",
+      "description": "Disposable installed Pi UI first delivery spent 73s in a pre-spawn runtime.open that returned BINDING_NOT_AUTHORIZED, then safely retried after host_dispatch_not_started/native_write_not_started proof. Its successful second open took 83s; a post-restart open took 42s. Renewed leases were present, but the stable receipt lacks the pre-spawn failure frontier. M7c read-only durable receipts from a later real Connector/Pi UI test measured 94.498s and 104.522s from two runtime.open creations to first SUBMITTED receipt. Phase tracing of another installed real Pi UI opening then measured ten full dependency-closure hashes consuming 122.957s of a 146.316s opening. Connector 20abb83 removed four redundant rehashes while keeping full initial, Core pre-spawn and post-environment checks; the new installed wheel made six hashes consuming 46.706s of a 61.994s opening, with final response and ACK 1/1. One before/after sample is not a load distribution; six hashes and UI-B remain. See m3n-pi-probe-ui.md, m7c-remote-open-receipts.md and Connector plans/runtime-lifecycle-m7c-remote-opening.md."
     },
     {
       "id": "L23",
