@@ -258,6 +258,12 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   15 da wheel instalada passaram. Nexus e Connector vendorizam a mesma wheel,
   com verificações de manifesto/empacotamento aprovadas. Retenção e gate UI
   permanecem pendentes. Ver `m4d4g-mixed-ledger-budget.md`.
+- Checkpoint M4d4h: o replay de eventos do Connector alterna uma página por
+  stream, e uma falha de commit em um stream não impede outro de avançar. Os 50
+  testes adjacentes passaram em source e wheel instalada, incluindo os dois
+  cenários de justiça e ACK retido. O cursor da varredura de mais de 4096
+  streams ainda não é durável; esta fatia não conclui o aceite M4. Ver
+  `../okto-nexus-connector/plans/runtime-lifecycle-m4d4h-stream-fairness.md`.
 - Separar orçamento de controle/resultado do volume de artefatos; retry apenas na
   fronteira idempotente, sem repetir escrita nativa por erro SQLite/transporte.
 - Testes: reinício entre transações/checkpoints, eventos grandes, disco cheio,
