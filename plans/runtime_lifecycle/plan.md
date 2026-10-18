@@ -340,6 +340,12 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   continuou executando, e uma nova sessão do binding afetado abriu depois.
   Treze testes adjacentes passaram em source e wheel isolada. O fixture usa
   peers sintéticos; ver `m5r-managed-binding-isolation.md`.
+- Checkpoint M5s: as wheels isoladas passaram casos já existentes de reset
+  preservando configuração, revogação, desconexão e restauração: dez casos
+  embedded de reset, quatro casos integrados Connector/Server via WebSocket,
+  quatro casos embedded de restauração/revogação e cinco casos de ciclo de vida
+  do Connector. A comparação final na UI com harnesses reais permanece aberta.
+  Ver `m5s-differential-recovery-reset-check.md`.
 - Extrair políticas de estado/transição para Core e manter adaptadores de host no
   Nexus/Connector. Remover duplicação somente após testes diferenciais.
 - Unificar interpretação de close sem receipt, prova de contenção, retomada de

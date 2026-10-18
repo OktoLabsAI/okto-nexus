@@ -610,7 +610,8 @@
         "m5o-inflight-native-decision-owner-race.md",
         "m5p-embedded-native-action-owner-race.md",
         "m5q-connector-native-action-owner-race.md",
-        "m5r-managed-binding-isolation.md"
+        "m5r-managed-binding-isolation.md",
+        "m5s-differential-recovery-reset-check.md"
       ],
       "commits": {
         "core_foundation": "19bb8f2",
@@ -622,7 +623,7 @@
         "m5b_nexus_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m5b-startup-refusal.md",
         "m5b_connector_commit_lookup": "git -C ../okto-nexus-connector log --format=%H --diff-filter=A -- plans/runtime-lifecycle-m5b.md"
       },
-    "next": "Fixed remaining M5 acceptance: differential embedded/Connector evidence for reconnect, revocation and preserve-agents reset. Native approval/input owner races, embedded post-commit claim, Connector pre/post-commit native ingress retention, and managed-adapter cross-binding startup containment were verified in M5o-M5r. The real UI has already verified new-agent creation and execution during active Connector reconciliation (M5m). A physical remote host remains a later user-assisted qualification."
+    "next": "Fixed remaining M5/UI-B acceptance: paired real-UI embedded/Connector checks for reconnect, revocation and preserve-agents reset with real harnesses and operator-visible status; existing installed automated slices passed in M5s. Native approval/input owner races, embedded post-commit claim, Connector pre/post-commit native ingress retention, and managed-adapter cross-binding startup containment were verified in M5o-M5r. The real UI already verified new-agent creation and execution during active Connector reconciliation (M5m). A physical remote host remains a later user-assisted qualification."
     },
     {
       "id": "M6",
@@ -999,6 +1000,13 @@
       "priority": "high",
       "status": "installed_managed_cross_binding_isolation_verified",
       "description": "For Codex, Pi and Claude, a synthetic native preparation failure in a second approved Connector binding produced a terminal no-effect receipt while the first binding's session and shared control connection stayed available. A turn on the healthy session and a later opening on the failed binding succeeded. Thirteen adjacent cases passed in both source and isolated installed environments. No production code or global Nexus process changed. The fixture uses synthetic native peers, not real providers or a physical remote host. See m5r-managed-binding-isolation.md."
+    },
+    {
+      "id": "L43",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "installed_differential_slices_verified_ui_pending",
+      "description": "Selected installed-wheel tests passed for preserve-agents reset and its data/fence behavior (10 embedded), real loopback Connector/Server reset, revocation, presence and active disconnect (4), embedded process exit and delayed-stop revocation (4), and Connector cleanup/reconnect/revoked-binding behavior (5). These are passing slices with synthetic native peers, not a paired real-UI run with the same provider/fault timing. The final M5/UI-B comparison remains restricted to reconnect, revocation and preserve-agents reset; no production code or global Nexus process changed. See m5s-differential-recovery-reset-check.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",
