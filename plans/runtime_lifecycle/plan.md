@@ -280,6 +280,12 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   cercando o produtor original e limitando novas tentativas por agente. Casos
   de efeito incerto continuam sob reconciliação explícita. Ver
   `m5j-managed-no-effect-claim-gap.md`.
+  A migração 151 e a descoberta agendada implementam a recuperação estreita
+  com espera exponencial por agente; oito testes focados e três integrações
+  selecionadas passaram tanto no código-fonte quanto na wheel instalada.
+  Migração real de uma cópia do banco com histórico preservou o attempt e
+  passou `foreign_key_check`. A comparação embedded/Connector e o gate UI
+  principal ainda estão pendentes.
 - Extrair políticas de estado/transição para Core e manter adaptadores de host no
   Nexus/Connector. Remover duplicação somente após testes diferenciais.
 - Unificar interpretação de close sem receipt, prova de contenção, retomada de

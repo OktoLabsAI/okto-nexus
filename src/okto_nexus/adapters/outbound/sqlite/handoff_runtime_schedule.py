@@ -57,7 +57,9 @@ class SqliteHandoffScheduleRepository:
         conn = uow.connection
         cursors = conn.execute('SELECT handoff_cursor,attempt_cursor FROM handoff_runtime_schedule_scan WHERE singleton=1').fetchone()
         rows = conn.execute('SELECT rowid AS scan_id,handoff_id,workspace_id,claim_epoch,status,target '
-            "FROM handoffs WHERE rowid>? AND status='OPEN' AND "
+            "FROM handoffs WHERE rowid>? AND (status='OPEN' OR (status='CLAIMED' "
+            "AND EXISTS (SELECT 1 FROM handoff_runtime_proved_no_effect p "
+            "WHERE p.handoff_id=handoffs.handoff_id AND p.claim_epoch=handoffs.claim_epoch))) AND "
             "CASE WHEN json_valid(target) THEN json_extract(target,'$.strategy') END='broadcast' "
             'ORDER BY rowid LIMIT ?', (cursors[0], limit)).fetchall()
         for row in rows:
@@ -65,7 +67,7 @@ class SqliteHandoffScheduleRepository:
                 competitive = json.loads(row['target']).get('strategy') == 'broadcast'
             except (ValueError, TypeError, AttributeError):
                 competitive = False
-            if row['status'] == 'OPEN' and competitive:
+            if competitive:
                 self._ensure(conn, handoff_id=row['handoff_id'], workspace_id=row['workspace_id'],
                              generation=row['claim_epoch'], now=now)
         pending = conn.execute('SELECT a.rowid AS scan_id,a.handoff_id,a.workspace_id,a.claim_generation,a.active,a.state,'
