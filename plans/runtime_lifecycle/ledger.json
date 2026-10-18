@@ -602,7 +602,10 @@
         "m5g-uncertain-native-open.md",
         "m5h-capacity-forgery.md",
         "m5i-capacity-field-matrix.md",
-        "m5j-managed-no-effect-claim-gap.md"
+        "m5j-managed-no-effect-claim-gap.md",
+        "m5k-ui-capacity-recovery.md",
+        "m5l-ui-new-agent-while-remote-offline.md",
+        "m5m-ui-active-reconciliation-isolation.md"
       ],
       "commits": {
         "core_foundation": "19bb8f2",
@@ -614,7 +617,7 @@
         "m5b_nexus_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m5b-startup-refusal.md",
         "m5b_connector_commit_lookup": "git -C ../okto-nexus-connector log --format=%H --diff-filter=A -- plans/runtime-lifecycle-m5b.md"
       },
-    "next": "M5e qualified actual Connector process death/restart and byte-verified installed wheels. M5f rejects forged current-channel identity and incompatible storage. M5g confirms uncertain native opening retains CONSUMED capacity. M5h/M5i reject six protocol-valid forged physical capacity fields, then accept the original durable refusal and a later handoff. Finish native-action and replacement-owner races; qualify managed-adapter containment, per-binding isolation, differential reconnect/revoke/reset and load. Qualify the major milestone through real Nexus UI. M5 remains in progress."
+    "next": "Fixed remaining M5 acceptance: native-action and replacement-owner races; managed-adapter containment and per-binding isolation; the same embedded/Connector evidence for reconnect, revocation and preserve-agents reset. The real UI has already verified new-agent creation and execution during active Connector reconciliation (M5m). A physical remote host remains a later user-assisted qualification."
     },
     {
       "id": "M6",
@@ -677,7 +680,7 @@
         "connector_m7c": "20abb83",
         "connector_m7d": "b39cc65"
       },
-      "next": "M7e/M7f partial UI-B: remote Pi one-shot pool max 2/warm 1/queue 1 returned exact responses and recovered its warm target. M7f reduced the installed cold-open path to three full Pi build checks; two concurrent openings reached first receipts in 47.319s and 38.260s, versus prior uncontrolled M7e 89.063s and 65.565s. M7g removes a separate 60s cap from immediate handoff admission so the configured wait-to-start timeout also covers cold startup; 67 installed tests passed. An installed real-UI broadcast handoff with warm 0 auto-claimed and completed with exact Pi result after a 37.737s cold open. M7h UI set max 1/warm 0/queue 1: three accepted real Pi messages returned exact responses with 1/1 ACK and serialized physical sessions; a fourth received ONE_SHOT_CAPACITY_EXCEEDED without a sent message. M7i UI with 75s controlled delay inside Pi native startup completed a real Pi broadcast handoff after 114.152s open with exact result and 1/1 ACK, crossing the old 60s cap. The samples are not a controlled latency distribution. M7k observed queue and cold-opening deadlines in the installed Pi UI; next qualify a load distribution, embedded comparison, other harnesses and agent creation during recovery. See m7e-ui-pool-burst.md, m7f-ui-concurrent-cold.md, m7g-immediate-startup-budget.md, m7h-ui-queue-capacity.md, m7i-ui-delayed-native-start.md and m7k-ui-queue-deadline.md."
+      "next": "Fixed remaining M7/UI-B acceptance: embedded queue-expiry equivalence with the Connector; Codex and Claude native warm/cold behavior; and a bounded installed load distribution of admission, cold start, warm dispatch and queue times (p50/p95/p99) under the documented host budget. Pi remote warm/cold, queue rejection/deadline and long native startup were checked by UI in M7e-M7k; Pi embedded startup timeout in M7l; new-agent creation during active recovery in M5m. These samples do not constitute the remaining distribution."
     },
     {
       "id": "M8",
