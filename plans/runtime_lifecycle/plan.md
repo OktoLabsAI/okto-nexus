@@ -261,8 +261,9 @@ Claude responderam; Codex recusado por quota do provedor. Ver
 - Checkpoint M4d4h: o replay de eventos do Connector alterna uma página por
   stream, e uma falha de commit em um stream não impede outro de avançar. Os 50
   testes adjacentes passaram em source e wheel instalada, incluindo os dois
-  cenários de justiça e ACK retido. O cursor da varredura de mais de 4096
-  streams ainda não é durável; esta fatia não conclui o aceite M4. Ver
+  cenários de justiça e ACK retido. O store ainda limita sua vida útil a 4096
+  streams sem aposentadoria; capacidade/retenção continuam pendentes e esta
+  fatia não conclui o aceite M4. Ver
   `../okto-nexus-connector/plans/runtime-lifecycle-m4d4h-stream-fairness.md`.
 - Separar orçamento de controle/resultado do volume de artefatos; retry apenas na
   fronteira idempotente, sem repetir escrita nativa por erro SQLite/transporte.

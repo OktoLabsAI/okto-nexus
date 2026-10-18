@@ -583,8 +583,8 @@
         },
         {
           "id": "M4d4h",
-          "status": "installed_stream_fairness_verified_cursor_pending",
-          "title": "Connector event replay rotates one bounded page per stream; an injected local ACK failure does not starve a sibling. Fifty adjacent tests passed in source and installed wheel; durable scan cursor beyond 4096 registered streams remains pending.",
+          "status": "installed_stream_fairness_verified_retention_pending",
+          "title": "Connector event replay rotates one bounded page per stream; an injected local ACK failure does not starve a sibling. Fifty adjacent tests passed in source and installed wheel; the store's 4096-stream lifetime cap and safe retirement remain pending.",
           "connector_commit": "08aa171",
           "evidence": [
             "Connector: plans/runtime-lifecycle-m4d4h-stream-fairness.md"
@@ -592,7 +592,7 @@
         }
       ],
       "nexus_m4a_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4a-validation.md",
-    "next": "M4d4e1-e6 provide transactional registry/head and paired tokens. The physical name scan remains an admission prerequisite without durable offline filesystem evidence; M4d4f2 rejects non-file entries and M4d4g sizes the Core ledger budget for 100k mixed records. M4d4h proves two-stream Connector replay fairness and per-stream ACK-failure isolation, but the scan cursor beyond 4096 registered streams is not durable. Next address that cursor, lifecycle-safe terminal retention and scoped physical audit without weakening unknown-file fencing; qualify the planned major real UI gate. M4d3/M4d4b rollout and controlled retained-history latency remain pending; global Nexus stopped.",
+    "next": "M4d4e1-e6 provide transactional registry/head and paired tokens. The physical name scan remains an admission prerequisite without durable offline filesystem evidence; M4d4f2 rejects non-file entries and M4d4g sizes the Core ledger budget for 100k mixed records. M4d4h proves two-stream Connector replay fairness and per-stream ACK-failure isolation. The Connector event store still has a 4096-stream lifetime cap; next address lifecycle-safe terminal retirement or a larger store with resumable scanning, and scope the physical audit without weakening unknown-file fencing. Qualify the planned major real UI gate. M4d3/M4d4b rollout and controlled retained-history latency remain pending; global Nexus stopped.",
       "nexus_m4b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4b-validation.md",
       "nexus_m4c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4c-validation.md",
       "nexus_m4d1_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d1-validation.md",
@@ -1099,8 +1099,8 @@
       "id": "L53",
       "milestone": "M4",
       "priority": "high",
-      "status": "installed_two_stream_fairness_verified_scan_cursor_pending",
-      "description": "Connector pre-ready event replay now rotates one finite page per stream. A failure applying the first stream's Core ACK leaves its remote ACK durable while a second stream advances, and a retry applies the retained ACK without resend. Fifty adjacent source and installed-wheel tests passed. The scan still begins at row zero with a 4096-stream attempt cap, so durable scan-cursor fairness at larger cardinality and full M4 qualification remain open. See Connector plans/runtime-lifecycle-m4d4h-stream-fairness.md."
+      "status": "installed_two_stream_fairness_verified_retention_pending",
+      "description": "Connector pre-ready event replay now rotates one finite page per stream. A failure applying the first stream's Core ACK leaves its remote ACK durable while a second stream advances, and a retry applies the retained ACK without resend. Fifty adjacent source and installed-wheel tests passed. The event store rejects a 4097th lifetime stream; safe retirement or a larger store with resumable scanning and full M4 qualification remain open. See Connector plans/runtime-lifecycle-m4d4h-stream-fairness.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",
