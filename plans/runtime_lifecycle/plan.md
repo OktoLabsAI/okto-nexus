@@ -491,6 +491,13 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   execução nativa. O pool voltou a 1/2 disponível. A equivalência do prazo
   de fila embedded/Connector está verificada; Codex/Claude e a distribuição
   controlada seguem pendentes. Ver `m7m-ui-embedded-queue-expiry.md`.
+- Checkpoint parcial UI-B/M7n: Claude Code 2.1.301 e Codex CLI 0.162.1 foram
+  configurados e testados pela UI instalada em one-shot com máximo 2 e 1
+  aquecida. Dois envios simultâneos por harness retornaram os quatro
+  marcadores exatos com ACK 1/1, usando uma sessão previamente aquecida e
+  outra aberta sob demanda em cada agente. Ambos os pools retornaram a 1/2
+  disponível. A distribuição controlada p50/p95/p99 segue pendente. Ver
+  `m7n-ui-claude-codex-warm-cold.md`.
 
 - Requests pendentes aproveitam primeira instância pronta; warmup independente,
   concorrente e limitado por orçamento físico do host, além do limite por agente.
