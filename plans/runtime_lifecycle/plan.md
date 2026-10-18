@@ -372,6 +372,13 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   levou 37,737 s, portanto não exercitou o antigo corte de 60 s. Um handoff
   real acima de 60 s e a distribuição de latência permanecem no gate UI-B.
   Ver `m7g-immediate-startup-budget.md`.
+- Checkpoint parcial UI-B/M7h: pela UI instalada, Pi one-shot remoto com
+  máximo 1, aquecidas 0 e fila 1 recebeu três mensagens. As três foram
+  concluídas em sequência com resposta exata e ACK 1/1; uma quarta tentativa
+  recebeu `ONE_SHOT_CAPACITY_EXCEEDED` sem criar mensagem. Receipts duráveis
+  mostram cada abertura começando após o close da anterior. Deadline de fila,
+  distribuição de carga e demais harnesses ainda pendem. Ver
+  `m7h-ui-queue-capacity.md`.
 
 - Requests pendentes aproveitam primeira instância pronta; warmup independente,
   concorrente e limitado por orçamento físico do host, além do limite por agente.
