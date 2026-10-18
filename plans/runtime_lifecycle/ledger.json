@@ -606,7 +606,8 @@
         "m5k-ui-capacity-recovery.md",
         "m5l-ui-new-agent-while-remote-offline.md",
         "m5m-ui-active-reconciliation-isolation.md",
-        "m5n-native-decision-test-frontier.md"
+        "m5n-native-decision-test-frontier.md",
+        "m5o-inflight-native-decision-owner-race.md"
       ],
       "commits": {
         "core_foundation": "19bb8f2",
@@ -618,7 +619,7 @@
         "m5b_nexus_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m5b-startup-refusal.md",
         "m5b_connector_commit_lookup": "git -C ../okto-nexus-connector log --format=%H --diff-filter=A -- plans/runtime-lifecycle-m5b.md"
       },
-    "next": "Fixed remaining M5 acceptance: native-action and replacement-owner races; managed-adapter containment and per-binding isolation; the same embedded/Connector evidence for reconnect, revocation and preserve-agents reset. The real UI has already verified new-agent creation and execution during active Connector reconciliation (M5m). A physical remote host remains a later user-assisted qualification."
+    "next": "Fixed remaining M5 acceptance: native-action races beyond approval/input decisions checked in M5o; managed-adapter containment and per-binding isolation; the same embedded/Connector evidence for reconnect, revocation and preserve-agents reset. The real UI has already verified new-agent creation and execution during active Connector reconciliation (M5m). A physical remote host remains a later user-assisted qualification."
     },
     {
       "id": "M6",
@@ -967,6 +968,13 @@
       "priority": "high",
       "status": "installed_fixture_frontier_qualified_race_pending",
       "description": "The remote native-decision fixture failed before execution with inventory_not_fresh because its synthetic discovery callback did not accept the independent observer's adapter_ids/cancel_requested parameters. It now waits for accepted selected-adapter observation separately from CONTROL_READY. In the installed environment, four remote approval/input roundtrips and 11 embedded owner-replacement cases passed; the matching embedded approval case also passed. Production code was unchanged. The explicit in-flight native-decision/replacement-owner race remains open. See m5n-native-decision-test-frontier.md."
+    },
+    {
+      "id": "L39",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "installed_inflight_native_decision_race_verified",
+      "description": "Three embedded adapters and one automatic local Connector exercised held native approval and input callbacks against owner replacement. The remote link closed and its lease expired before each callback was released; no successor was execution-ready or native process marked stopped while an effect was possible. Afterwards the Connector reconnected in a higher generation. All eight source cases passed in 120.39s and the corresponding installed cases passed. Each retained one SUBMITTED receipt, one physical reply, an idempotent decision replay and no second dispatch attempt. No production code changed. Other native-action races and M5 differential cases remain open. See m5o-inflight-native-decision-owner-race.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",

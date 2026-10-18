@@ -313,6 +313,14 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   embedded de substituição do dono passaram. A corrida explícita entre decisão
   nativa em andamento e substituição do dono continua pendente. Ver
   `m5n-native-decision-test-frontier.md`.
+- Checkpoint M5o: três adapters embedded e o Connector local separado
+  mantiveram decisões nativas de aprovação e input em andamento durante a troca do
+  dono. O Connector perdeu o link e passou do prazo do lease antes de liberar
+  o callback; o processo nativo permaneceu contido até então. Os quatro casos
+  por modalidade, oito ao todo, passaram em source e nas wheels isoladas: um efeito físico, receipt
+  `SUBMITTED`, replay idempotente, nenhuma nova tentativa de dispatch. Outras
+  corridas de ações nativas e a matriz diferencial M5 seguem abertas. Ver
+  `m5o-inflight-native-decision-owner-race.md`.
 - Extrair políticas de estado/transição para Core e manter adaptadores de host no
   Nexus/Connector. Remover duplicação somente após testes diferenciais.
 - Unificar interpretação de close sem receipt, prova de contenção, retomada de

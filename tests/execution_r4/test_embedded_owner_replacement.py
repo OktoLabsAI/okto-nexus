@@ -6,6 +6,7 @@ import time
 import pytest
 
 from okto_nexus.errors import ErrorCode, OktoNexusError
+from nexus_connector_core import RuntimeEvent
 from test_embedded_dispatch import local_setup, connected_local, qualified_contract, admit, wait_receipt
 
 
@@ -222,3 +223,86 @@ def test_opening_producer_finishing_late_is_contained_before_replacement(connect
     wait_until(lambda: app.state.embedded_dispatch_owner is not old)
     assert factory.opens == 1 and factory.native.stopped
     assert not old.workers and old.shutdown_status()['state'] == 'DRAINED'
+
+
+@pytest.mark.parametrize('local_setup', ['pi_rpc', 'claude_stream', 'codex_app_server'], indirect=True)
+@pytest.mark.parametrize('kind', ['approval', 'input'])
+def test_native_decision_in_flight_is_contained_before_owner_replacement(connected_local, kind):
+    setup, binding, factory = connected_local
+    deps, app, client, headers, *_ = setup
+    deps.config.feature_hitl = True
+    old = app.state.embedded_dispatch_owner
+    opened = admit(setup, binding, 'native-race-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    session_id = opened['scope']['session_id']
+    turned = admit(setup, binding, 'native-race-turn', 'turn.submit',
+                   session_id=session_id, text='Wait for approval')
+    wait_receipt(setup, turned)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        stream = dict(uow.connection.execute('SELECT * FROM execution_local_streams WHERE session_id=?',
+                                             (session_id,)).fetchone())
+    request = dict(schema_version=1, request_id=7, request_hash='a' * 64,
+                   method=('item/tool/requestUserInput' if kind == 'input'
+                           else 'item/commandExecution/requestApproval'),
+                   params={'threadId': 'native-thread', 'turnId': 'turn-from-native', 'itemId': 'item'})
+    if kind == 'input':
+        request['params'].update(isBlocking=True, questions=[
+            {'id': 'question', 'header': 'Response', 'question': 'Provide input.', 'isOther': True}])
+    client.portal.call(factory.native.queue.put, RuntimeEvent(
+        stream['server_id'], stream['executor_id'], session_id, stream['stream_epoch'], 0,
+        'input_request' if kind == 'input' else 'approval_request', request['method'],
+        {'native_approval': request, 'native_approval_display': dict(request)},
+        turned['operation_id']))
+
+    def pending():
+        response = client.get('/api/v1/approvals', headers=headers['operator'],
+                              params={'workspace': binding['workspace_id'], 'status': 'pending'})
+        assert response.status_code == 200, response.text
+        return next((row for row in response.json()['data']['items']
+                     if row['action'] == 'execution.native.respond'), None)
+
+    wait_until(pending)
+    row = pending()
+    detail = client.get('/api/v1/approvals/' + row['approval_id'], headers=headers['operator'])
+    assert detail.status_code == 200, detail.text
+    proposal = detail.json()['data']['request_payload']['kwargs']
+    body = {key: proposal[key] for key in ('approval_key', 'expected_revision',
+                                            'request_hash', 'cas_token')}
+    body.update(client_intent_id='native-owner-race', decision='approve')
+    if kind == 'input':
+        body['response'] = {'answers': {'question': {'answers': ['fixture answer']}}}
+    responder = headers['subject' if kind == 'input' else 'operator']
+    entered, release = threading.Event(), threading.Event()
+    effects = []
+
+    async def held_reply(native_request, decision, response):
+        entered.set()
+        await asyncio.to_thread(release.wait)
+        effects.append((native_request, decision, response))
+
+    factory.native.reply_native_approval = held_reply
+    try:
+        accepted = client.post('/v1/runtime/approval-decisions', headers=responder, json=body)
+        assert accepted.status_code == 202, accepted.text
+        decision_id = accepted.json()['decision_id']
+        assert entered.wait(10)
+        fail_owner(client, old)
+        wait_until(lambda: old._shutdown_recovery_task is not None)
+        assert app.state.embedded_dispatch_owner is old
+        assert client.get('/healthz').status_code == 200
+    finally:
+        release.set()
+
+    wait_until(lambda: app.state.embedded_dispatch_owner is not old)
+    result = client.get('/v1/runtime/approval-decisions/' + decision_id,
+                        headers=headers['operator'])
+    assert result.status_code == 200, result.text
+    assert result.json()['native_stage'] == 'SUBMITTED'
+    repeated = client.post('/v1/runtime/approval-decisions', headers=responder, json=body)
+    assert repeated.status_code == 200, repeated.text
+    assert repeated.json()['native_operation_id'] == accepted.json()['native_operation_id']
+    assert len(effects) == 1
+    assert old.shutdown_status()['state'] == 'DRAINED'
+    assert factory.native.stopped
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT MAX(attempt_no) FROM execution_dispatch_outbox').fetchone()[0] == 1

@@ -31,7 +31,7 @@ from test_vertical_inventory import _NativeFactory
     (True, None, False, 0, 'unsent'), (True, None, False, 0, 'ack_lost'),
     (True, None, False, 0, 'cold_unsent'), (True, None, False, 0, 'cold_ack_lost'),
     (True, None, False, 0, 'active_disconnect'), (True, None, False, 0, 'lease_renewal')])
-def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery, native_decision=None, cli_admission=False, initial_prompt=False, domain_delivery=False, combined_winner=None, reset_active=False, check_presence=False, operator_containment=False, one_shot=False):
+def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery, native_decision=None, cli_admission=False, initial_prompt=False, domain_delivery=False, combined_winner=None, reset_active=False, check_presence=False, operator_containment=False, one_shot=False, native_decision_disconnect=False):
     from okto_nexus_connector.transport.https_client import NexusHTTPClient, R4BindingView
     from okto_nexus_connector.transport.wss_r4 import connect_r4_connection
     from okto_nexus_connector.services.execution_selection import acknowledge_execution_binding
@@ -148,7 +148,11 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 return await super().open(prepared, session_id, context, stream_epoch=stream_epoch)
         native = CountedFactory()
         native_decisions = []
+        decision_entered, decision_release = asyncio.Event(), asyncio.Event()
         async def reply_native_approval(request, decision, response):
+            decision_entered.set()
+            if native_decision_disconnect:
+                await decision_release.wait()
             native_decisions.append((request, decision, response))
         native.native.reply_native_approval = reply_native_approval
         async def environment(_):
@@ -496,6 +500,40 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                     assert repeated.status_code == 200, repeated.text
                     assert repeated.json()['native_operation_id'] == decision['native_operation_id']
                     operations.append(decision['native_operation_id'])
+                    if native_decision_disconnect:
+                        await asyncio.wait_for(decision_entered.wait(), 8)
+                        previous_generation = owner.state.connection_generation
+                        await owner.close()
+                        assert not owner.online
+                        import time
+                        runtime = next(iter(execution._sessions.values())).runtime
+                        installed_deadline = runtime.r4_operation_context(
+                            dispatched['turn.submit'],
+                            connection_id=owner.state.connection_id,
+                            connection_generation=previous_generation).lease_deadline_monotonic
+                        await asyncio.sleep(max(0, installed_deadline + .1 - time.monotonic()))
+                        assert not control.status()['execution_ready']
+                        assert not native.native.stopped
+                        assert native_decisions == []
+                        decision_release.set()
+                        async with asyncio.timeout(20):
+                            while not (control.status()['execution_ready'] and
+                                       control.connection.state.connection_generation > previous_generation):
+                                await asyncio.sleep(.01)
+                        result = await asyncio.to_thread(client.get,
+                            '/v1/runtime/approval-decisions/' + decision['decision_id'],
+                            headers=headers['operator'])
+                        assert result.status_code == 200, result.text
+                        assert result.json()['native_stage'] == 'SUBMITTED'
+                        replay = await asyncio.to_thread(client.post,
+                            '/v1/runtime/approval-decisions', headers=responder, json=body)
+                        assert replay.status_code == 200, replay.text
+                        assert replay.json()['native_operation_id'] == decision['native_operation_id']
+                        assert len(native_decisions) == 1
+                        assert native.native.stopped
+                        with deps.connection_factory.unit_of_work(write=False) as uow:
+                            assert uow.connection.execute('SELECT MAX(attempt_no) FROM execution_dispatch_outbox').fetchone()[0] == 1
+                        return
                     async with asyncio.timeout(8):
                         while True:
                             result = (await asyncio.to_thread(client.get, '/v1/runtime/approval-decisions/'+decision['decision_id'],headers=headers['operator']))
@@ -805,6 +843,7 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                         "WHERE action IN ('turn.interrupt','runtime.close')").fetchall()
                     assert [tuple(r) for r in controls] == [('operator','subject'),('operator','subject')]
         finally:
+            decision_release.set()
             try:
                 if recovery_host is not None:
                     await recovery_host.shutdown_all()
@@ -848,6 +887,15 @@ def test_remote_domain_delivery_keeps_exclusive_claim_from_mcp(onboarding, tmp_p
 def test_canonical_native_decision_roundtrip_through_automatic_connector(onboarding, tmp_path, monkeypatch, kind, choice):
     test_owned_connector_reader_dispatches_five_actions_over_real_websocket(
         onboarding,tmp_path,monkeypatch,True,None,False,0,None,native_decision=(kind,choice))
+
+
+@pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
+@pytest.mark.parametrize('kind', ['approval', 'input'])
+def test_native_decision_in_flight_survives_remote_owner_replacement(onboarding, tmp_path, monkeypatch, kind):
+    test_owned_connector_reader_dispatches_five_actions_over_real_websocket(
+        onboarding, tmp_path, monkeypatch, True, None, False, 0,
+        'active_disconnect', native_decision=(kind, 'approve'),
+        native_decision_disconnect=True)
 
 
 @pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
