@@ -118,6 +118,59 @@ def test_pre_authorization_refusal_recovers_after_restart_before_server_receipt(
         assert owner.failure is None
 
 
+def test_pre_authorization_refusal_storage_failure_retains_only_failed_session(local_setup, monkeypatch):
+    from okto_nexus.bootstrap import embedded_dispatch, embedded_startup_refusal
+
+    setup, binding, _ = connect_local(local_setup)
+    owner = setup[1].state.embedded_dispatch_owner
+    owner.native_factory = Peers()
+    healthy = admit(setup, binding, 'preauth-storage-healthy', 'runtime.start', new_session=True)
+    wait_receipt(setup, healthy)
+    healthy_peer = owner.native_factory.sessions[healthy['session_id']]
+    original_launch = embedded_dispatch.ApprovedLocalLaunch
+    original_persist = embedded_startup_refusal.persist_r4_startup_refusal
+    failed_once = []
+    storage_restored = threading.Event()
+
+    def fail_launch_once(*args, **kwargs):
+        if not failed_once:
+            failed_once.append(True)
+            raise NativeAdapterError(ErrorCode.CONFIG_ERROR, 'Local preparation refused',
+                                     {'reason': 'preauthorization_storage_fixture'})
+        return original_launch(*args, **kwargs)
+
+    async def fail_storage_until_restored(*args, **kwargs):
+        if not storage_restored.is_set():
+            raise OSError('Synthetic Core startup refusal storage failure')
+        return await original_persist(*args, **kwargs)
+
+    monkeypatch.setattr(embedded_dispatch, 'ApprovedLocalLaunch', fail_launch_once)
+    monkeypatch.setattr(embedded_startup_refusal, 'persist_r4_startup_refusal', fail_storage_until_restored)
+    failed = admit(setup, binding, 'preauth-storage-failed', 'runtime.start', new_session=True)
+    try:
+        def pending():
+            with setup[0].connection_factory.unit_of_work(write=False) as uow:
+                return uow.connection.execute("SELECT 1 FROM runtime_recovery_events "
+                    "WHERE code='RECOVERY_SESSION_PENDING' AND agent_id='subject' "
+                    "AND message LIKE '%OSError%' LIMIT 1").fetchone()
+        eventually(pending, seconds=20)
+        with setup[0].connection_factory.unit_of_work(write=False) as uow:
+            conn = uow.connection
+            assert conn.execute('SELECT 1 FROM execution_receipts WHERE operation_id=?',
+                (failed['operation_id'],)).fetchone() is None
+            assert conn.execute('SELECT lifecycle_state FROM execution_sessions WHERE session_id=?',
+                (failed['session_id'],)).fetchone()[0] == 'OPEN_PENDING'
+        assert not healthy_peer.stopped
+        assert 'subject' not in owner.agents.blocked
+        wait_receipt(setup, admit(setup, binding, 'preauth-storage-healthy-turn', 'turn.submit',
+            session_id=healthy['session_id'], text='Still available'))
+    finally:
+        storage_restored.set()
+    wait_receipt(setup, failed, stages=('FAILED',))
+    eventually(lambda: failed['session_id'] not in owner.sessions, seconds=30)
+    assert not healthy_peer.stopped
+
+
 def test_consumed_handoff_preauthorization_refusal_releases_exact_reservation(runtime, monkeypatch):
     from okto_nexus.bootstrap import embedded_dispatch
 

@@ -319,10 +319,18 @@
           "evidence": [
             "m3p-preauthorization-session-refusal.md"
           ]
+        },
+        {
+          "id": "M3q",
+          "status": "local_technical_qualified_global_rollout_pending",
+          "title": "Startup refusal storage failure retains only the affected session without premature receipt or release and retries automatically; one source and one installed-wheel case passed.",
+          "evidence": [
+            "m3q-startup-refusal-storage-boundary.md"
+          ]
         }
       ],
       "nexus_m3b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3b-validation.md",
-      "next": "Qualify the remaining uncertain-effect and storage-failure startup boundaries, then the already listed M2/M3 acceptance gaps. M3p pre-authorization and consumed-capacity cases are qualified locally; global rollout remains pending.",
+      "next": "Qualify the remaining uncertain-effect startup boundary, then the already listed M2/M3 acceptance gaps. M3p pre-authorization/consumed-capacity and M3q storage-failure cases are qualified locally; global rollout remains pending.",
       "nexus_m3c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3c-validation.md",
       "nexus_m3e_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3e-validation.md",
       "nexus_m3g_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3g-pool-refusal.md",
@@ -944,8 +952,8 @@
       "id": "L20",
       "milestone": "M3",
       "priority": "high",
-      "status": "preauthorization_local_qualified_remaining_boundaries_pending",
-      "description": "M3l isolated post-authorization embedded startup failures; M5b isolated Connector preparation failures. M3p now proves local pre-authorization failure isolation with a healthy sibling, restart after Core fact before Server receipt, and exact release of consumed handoff capacity: 39 source and 4 installed-wheel cases passed. Uncertain-effect startup, storage-failure boundaries, broader differential behavior and global rollout remain pending. None is proven to explain the reported simultaneous Recovering state. See m3l-session-isolation.md, m5b-startup-refusal.md and m3p-preauthorization-session-refusal.md."
+      "status": "preauthorization_and_storage_local_qualified_uncertainty_pending",
+      "description": "M3l isolated post-authorization embedded startup failures; M5b isolated Connector preparation failures. M3p proves local pre-authorization failure isolation with a healthy sibling, restart after Core fact before Server receipt, and exact release of consumed handoff capacity: 39 source and 4 installed-wheel cases passed. M3q proves a Core storage interruption retains only the failed session without premature release and retries automatically: one source and one installed-wheel case passed. Uncertain-effect startup, broader differential behavior and global rollout remain pending. None is proven to explain the reported simultaneous Recovering state. See m3l-session-isolation.md, m5b-startup-refusal.md, m3p-preauthorization-session-refusal.md and m3q-startup-refusal-storage-boundary.md."
     },
     {
       "id": "L21",
@@ -1268,6 +1276,13 @@
       "priority": "high",
       "status": "local_technical_qualified_global_rollout_pending",
       "description": "An embedded opening failed before Core authorization and originally stopped a healthy session of the same agent. M3p retains an exact durable refusal, proves no Core native claim/birth, publishes PREPARATION_FAILED, releases only the failed session and resumes after an interrupted Server receipt. A consumed handoff reservation releases its capacity-owned physical slot by exact identity. 39 related source cases and 4 installed-wheel cases passed. No global rollout or new UI run at this technical checkpoint. See m3p-preauthorization-session-refusal.md."
+    },
+    {
+      "id": "L67",
+      "milestone": "M3",
+      "priority": "high",
+      "status": "local_technical_qualified_global_rollout_pending",
+      "description": "M3q injected a Core startup-refusal storage failure after an embedded preparation error. The affected session remained OPEN_PENDING with no Server receipt, a healthy sibling completed another turn, and restoration caused automatic terminal publication and retirement. One source and one installed-wheel case passed; production code was unchanged after M3p. Uncertain native-effect cases remain a separate L20 requirement. See m3q-startup-refusal-storage-boundary.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",
