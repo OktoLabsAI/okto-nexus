@@ -682,8 +682,16 @@ campanha completa a cada commit ou ajuste intermediário.
 A auditoria [UI-B](ui-b-evidence-audit.md) mapeia as evidências reais locais já
 obtidas e corrige a atualização do detalhe selecionado no Graph durante a
 reconexão. Os fluxos da tabela foram observados; o aceite completo de M5/M7
-continua sujeito aos critérios de equivalência e limite físico já definidos
-acima. O Connector em loopback não comprova outro host físico.
+foi concluído localmente nos checkpoints M5y e M7r, após comparação de receipts
+em processos distintos e três instâncias Codex reais simultâneas. O Connector
+em loopback não comprova outro host físico.
+
+O checkpoint [UI-A](ui-a-installed-restart-evidence.md) verificou pela interface
+instalada as respostas exatas de Pi, Claude e Codex, os terminais, a volta da
+mesma aba após interrupção abrupta do Nexus e um novo turno Pi sem recuperação
+manual, enquanto a conexão remota indisponível permaneceu isolada. Os fluxos
+reais locais de UI-A estão verificados; os critérios técnicos ainda abertos de
+M2/M3 não são encerrados por essa observação.
 
 Protocolo para cada gate:
 

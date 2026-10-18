@@ -11,7 +11,7 @@
         "M2",
         "M3"
       ],
-      "status": "pending",
+      "status": "local_ui_flows_verified_m2_m3_technical_pending",
       "interim_evidence": [
         "m3a-validation.md",
         "m3a-results.json",
@@ -26,7 +26,8 @@
         "m3j-results.json",
         "m3i-ui-rollout.md",
         "m3k-real-ui.md",
-        "m3n-pi-probe-ui.md"
+        "m3n-pi-probe-ui.md",
+        "ui-a-installed-restart-evidence.md"
       ]
     },
     {
@@ -1245,6 +1246,13 @@
       "priority": "high",
       "status": "local_acceptance_complete",
       "description": "A copied UI fixture with an expired Codex runtime grant exposed repeated permanently denied native opens while three calls stayed ADMITTED. Nexus now forwards proved pre-Core PERMISSION_DENIED/possible_effect=false to waiting calls of the same configuration, stopping the retry loop. Twelve targeted source tests and four installed-wheel selected tests passed. After UI grant renewal, three real Codex one-shot calls ran concurrently in three native processes, all returned exact distinct replies with 1/1 ACK and SUCCEEDED. Local M7/UI-B criteria are complete within the user-selected Connector-local topology; physical remote-host qualification is not claimed. See m7r-ui-unlimited-and-expired-grant.md."
+    },
+    {
+      "id": "L65",
+      "milestone": "M2/M3/UI-A",
+      "priority": "high",
+      "status": "real_ui_flows_verified_technical_acceptance_pending",
+      "description": "Installed disposable Nexus 0.3.1, Connector 0.0.10 and Core 0.0.12 showed Pi, Claude and Codex Online and delivered three exact UI responses with 1/1 ACK; their session terminals showed formatted input and final output. A remote Pi stayed Offline without blocking those local agents. After abrupt termination of the disposable Nexus with a warm Pi slot, the same browser changed RECONNECTING to LIVE without reload, all three local agents returned Online, and a new Pi call succeeded with exact reply, 1/1 ACK and warm-pool replenishment. No manual recovery was used. This closes the real-UI flow evidence only; M2/M3 technical requirements remain open. See ui-a-installed-restart-evidence.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",
