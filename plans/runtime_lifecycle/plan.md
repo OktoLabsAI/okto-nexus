@@ -297,6 +297,15 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   restart embedded e 15 de recusa Connector passaram. A criação durante uma
   reconciliação remota efetivamente ativa e a comparação diferencial completa
   seguem abertas. Ver `m5l-ui-new-agent-while-remote-offline.md`.
+- Checkpoint M5m: com falhas controladas de `reconcile.report` no Connector
+  separado, o remoto permaneceu em `RECOVERING` enquanto a UI criou e
+  conectou outro Pi embedded. Esse agente respondeu `M5M_LOCAL_OK` com ACK 1/1.
+  Removida a falha, o remoto reconectou sem intervenção. Uma interrupção
+  transitória posterior de publicação de inventário foi recuperada, e a
+  mensagem pendente ao remoto recebeu `M5M_REMOTE_OK` com ACK 1/1. Esta fatia
+  de isolamento ativo está verificada; comparação diferencial completa e
+  distribuição de carga/latência continuam pendentes. Ver
+  `m5m-ui-active-reconciliation-isolation.md`.
 - Extrair políticas de estado/transição para Core e manter adaptadores de host no
   Nexus/Connector. Remover duplicação somente após testes diferenciais.
 - Unificar interpretação de close sem receipt, prova de contenção, retomada de

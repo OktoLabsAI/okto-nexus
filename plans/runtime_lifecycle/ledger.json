@@ -949,6 +949,13 @@
       "priority": "high",
       "status": "installed_real_ui_partial",
       "description": "With the disposable remote Connector stopped and m6d-pi Offline, the operator created and configured a new embedded Pi in the same M6D workspace through Agents. Its real connection test passed, Agents showed the new local agent Online, and Meta-harness received exact M5L_LOCAL_OK with ACK 1/1 while the remote remained unavailable. After Connector restart with the fixture file vault, first-attempt control became CONTROL_READY and Connected; both agents appeared Online and the remote Pi returned exact M5L_REMOTE_OK with ACK 1/1. The isolated installed Nexus and Connector suites passed six initial-refusal restart and 15 denied-operation cases respectively. This is a real offline-isolation/reconnect slice; creation during an active long-running reconciliation and full cross-host differential equivalence remain open. See m5l-ui-new-agent-while-remote-offline.md."
+    },
+    {
+      "id": "L37",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "installed_real_ui_active_reconciliation_verified",
+      "description": "With controlled reconcile.report refusals, the separate local Connector was alive but RECOVERING through 19 failed attempts, and Agents showed remote m6d-pi Offline. During active recovery, the real UI created and connected a new embedded Pi in the same workspace. It returned exact M5M_LOCAL_OK with durable read and ACK 1/1. Removing the fault restored remote CONTROL_READY/CONNECTED without a restart. A subsequent inventory-publication transport interruption briefly reconnected on its own; the queued remote message was then read and returned exact M5M_REMOTE_OK with NATIVE_ACCEPTED and ACK 1/1. This verifies the active-reconciliation isolation slice, not the full M5 differential matrix or UI-B load distribution. Global Nexus was untouched. See m5m-ui-active-reconciliation-isolation.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",
