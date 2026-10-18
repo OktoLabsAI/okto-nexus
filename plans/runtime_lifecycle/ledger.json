@@ -46,7 +46,8 @@
         "m7k-ui-queue-deadline.md",
         "m7m-ui-embedded-queue-expiry.md",
         "m7n-ui-claude-codex-warm-cold.md",
-        "m5j-ui-initial-lease-refusal.md"
+        "m5j-ui-initial-lease-refusal.md",
+        "m7o-installed-load-results.md"
       ]
     },
     {
@@ -680,6 +681,8 @@
         "m7m-ui-embedded-queue-expiry.md",
         "m7n-ui-claude-codex-warm-cold.md",
         "m7o-load-protocol.md",
+        "m7o-installed-load-results.md",
+        "m7o-results.json",
         "Core: plans/runtime-lifecycle-m7b-passive-budget.md",
         "Connector: plans/runtime-lifecycle-m7c-remote-opening.md",
         "Connector: plans/runtime-lifecycle-m7d-shared-selection.md",
@@ -692,7 +695,7 @@
         "connector_m7c": "20abb83",
         "connector_m7d": "b39cc65"
       },
-      "next": "Fixed remaining M7/UI-B acceptance: a bounded installed load distribution of admission, cold start, warm dispatch and queue times (p50/p95/p99) under the documented host budget. Pi remote warm/cold, queue rejection/deadline and long native startup were checked by UI in M7e-M7k; the matching embedded queue expiration and startup timeout were checked in M7m; Claude/Codex native warm/cold were checked in M7n; new-agent creation during active recovery in M5m. These samples do not constitute the remaining distribution."
+      "next": "The fixed installed-local load distribution passed in M7o: 54/54 exact responses across real Pi, Claude and Codex, with empirical p50/p95/p99 and a peak of two open sessions per harness. UI-B remains pending only its previously specified M5 revocation/preserve-agents reset comparison. The original M7 unlimited-mode criterion remains unqualified under a physical host budget; no new acceptance criterion is added."
     },
     {
       "id": "M8",
@@ -1041,6 +1044,13 @@
       "priority": "high",
       "status": "load_protocol_fixed_before_run",
       "description": "The remaining installed M7 load gate is pre-registered as six three-call UI bursts per real Pi/Claude/Codex harness, one harness at a time, max 2/warm 1/queue 1/start 300s, with a 4 GiB free-memory abort threshold. Browser and durable timestamps plus read-only queue-state polling will produce empirical p50/p95/p99 with sample counts and failures retained. No result is claimed yet. See m7o-load-protocol.md."
+    },
+    {
+      "id": "L48",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "installed_real_ui_load_distribution_verified",
+      "description": "The fixed M7o installed-local protocol ran 54 Meta-harness browser sends to real Claude, Codex and Pi (18 each, six three-call bursts per harness). All 54 calls succeeded with exact unique replies, read delivery, NATIVE_ACCEPTED ACK and distinct one-shot turn sessions; each harness peaked at two open-to-close campaign sessions and returned to 1/2 warm availability. Empirical p50/p95/p99 for UI send, warm dispatch, cold open, observed queue and queued wait are recorded with sample counts. The lowest pre-burst free RAM was 5.20 GiB above the 4 GiB abort floor; no continuous memory trace or population tail guarantee is claimed. The scoped Nexus fixture and browser stopped, port 8204 is free, and global Nexus stayed stopped. See m7o-installed-load-results.md and m7o-results.json."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",

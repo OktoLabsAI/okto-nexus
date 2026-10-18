@@ -502,6 +502,17 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   da carga: seis rajadas de três mensagens reais por harness, um harness por
   vez, com limite 2/1/1 e medição de admissão, abertura, dispatch e fila.
   Ver `m7o-load-protocol.md`; nenhum resultado de carga é inferido do protocolo.
+- Checkpoint M7o: o protocolo instalado e predefinido foi executado pela UI em
+  Pi, Claude e Codex reais: 54/54 respostas exatas, ACK e leitura duráveis,
+  54 sessões one-shot distintas, pico de duas sessões abertas por harness e
+  retorno a 1/2 instância aquecida após cada rajada. O relatório registra
+  p50/p95/p99 com contagens para envio pela UI, dispatch aquecido, abertura
+  fria e espera na fila. RAM livre pré-rajada mínima: 5,20 GiB, acima do piso
+  de 4 GiB. A instância descartável e o navegador foram encerrados; a porta
+  8204 está livre. Isso fecha a distribuição instalada local definida em M7o,
+  sem alegar garantia de cauda populacional, telemetria contínua de memória
+  ou qualificação em host remoto físico. Ver `m7o-installed-load-results.md`
+  e `m7o-results.json`.
 
 - Requests pendentes aproveitam primeira instância pronta; warmup independente,
   concorrente e limitado por orçamento físico do host, além do limite por agente.
