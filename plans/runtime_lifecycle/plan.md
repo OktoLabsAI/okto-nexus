@@ -351,6 +351,18 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   Meta-harness ao Pi remoto e ao Pi embedded retornaram os marcadores exatos,
   `1/1 ack`, leitura durável e `NATIVE_ACCEPTED`. Reset e revogação pela UI
   continuam fora desta fatia. Ver `m5t-ui-local-remote-restart.md`.
+- Checkpoint M5u: pela UI instalada com Pi real, revogar o agente Connector
+  tornou-o Offline enquanto um Pi embedded respondeu normalmente; revogar um
+  Pi embedded o tornou Offline e fora da lista de destinatários, enquanto outro
+  Pi embedded respondeu. Os envios de referência e de isolamento tiveram
+  resposta exata, ACK 1/1 e leitura durável. Ver `m5u-ui-revocation.md`.
+- Checkpoint M5v: o reset com preservação recusou, sem apagar nada, um snapshot
+  do Server cuja geração havia ficado atrás do journal do Connector. Em home
+  novo e consistente, o reset pela UI encerrou uma sessão Pi embedded ativa,
+  limpou o histórico, preservou agente/workspace/binding e reabriu a conexão:
+  nova mensagem teve resposta exata e ACK 1/1. A comparação real do reset
+  Connector continua como critério M5 já definido. Ver
+  `m5v-ui-preserve-reset.md`.
 - Extrair políticas de estado/transição para Core e manter adaptadores de host no
   Nexus/Connector. Remover duplicação somente após testes diferenciais.
 - Unificar interpretação de close sem receipt, prova de contenção, retomada de

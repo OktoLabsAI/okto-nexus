@@ -47,7 +47,9 @@
         "m7m-ui-embedded-queue-expiry.md",
         "m7n-ui-claude-codex-warm-cold.md",
         "m5j-ui-initial-lease-refusal.md",
-        "m7o-installed-load-results.md"
+        "m7o-installed-load-results.md",
+        "m5u-ui-revocation.md",
+        "m5v-ui-preserve-reset.md"
       ]
     },
     {
@@ -615,7 +617,9 @@
         "m5q-connector-native-action-owner-race.md",
         "m5r-managed-binding-isolation.md",
         "m5s-differential-recovery-reset-check.md",
-        "m5t-ui-local-remote-restart.md"
+        "m5t-ui-local-remote-restart.md",
+        "m5u-ui-revocation.md",
+        "m5v-ui-preserve-reset.md"
       ],
       "commits": {
         "core_foundation": "19bb8f2",
@@ -627,7 +631,7 @@
         "m5b_nexus_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m5b-startup-refusal.md",
         "m5b_connector_commit_lookup": "git -C ../okto-nexus-connector log --format=%H --diff-filter=A -- plans/runtime-lifecycle-m5b.md"
       },
-    "next": "Fixed remaining M5/UI-B acceptance: paired real-UI embedded/Connector checks for revocation and preserve-agents reset with real harnesses and operator-visible status; installed automated slices passed in M5s and paired real-Pi restart/reconnect delivery passed in M5t. Native approval/input owner races, embedded post-commit claim, Connector pre/post-commit native ingress retention, and managed-adapter cross-binding startup containment were verified in M5o-M5r. The real UI already verified new-agent creation and execution during active Connector reconciliation (M5m). A physical remote host remains a later user-assisted qualification."
+      "next": "Fixed M5/UI-B acceptance remaining: real Connector preserve-agents reset from a fresh consistent Server/Connector state, paired with the embedded success in M5v. M5u verified real-UI revocation and sibling availability on both modes; M5t verified paired restart/reconnect delivery. An intentionally restored Server snapshot behind the Connector journal safely refused reset without deleting history. A physical remote host remains a later user-assisted qualification; no additional criterion is introduced."
     },
     {
       "id": "M6",
@@ -695,7 +699,7 @@
         "connector_m7c": "20abb83",
         "connector_m7d": "b39cc65"
       },
-      "next": "The fixed installed-local load distribution passed in M7o: 54/54 exact responses across real Pi, Claude and Codex, with empirical p50/p95/p99 and a peak of two open sessions per harness. UI-B remains pending only its previously specified M5 revocation/preserve-agents reset comparison. The original M7 unlimited-mode criterion remains unqualified under a physical host budget; no new acceptance criterion is added."
+      "next": "The fixed installed-local load distribution passed in M7o: 54/54 exact responses across real Pi, Claude and Codex, with empirical p50/p95/p99 and a peak of two open sessions per harness. UI-B remains pending the previously specified real Connector preserve-agents reset comparison; revocation passed in M5u and embedded reset passed in M5v. The original M7 unlimited-mode criterion remains unqualified under a physical host budget; no new acceptance criterion is added."
     },
     {
       "id": "M8",
@@ -1051,6 +1055,20 @@
       "priority": "high",
       "status": "installed_real_ui_load_distribution_verified",
       "description": "The fixed M7o installed-local protocol ran 54 Meta-harness browser sends to real Claude, Codex and Pi (18 each, six three-call bursts per harness). All 54 calls succeeded with exact unique replies, read delivery, NATIVE_ACCEPTED ACK and distinct one-shot turn sessions; each harness peaked at two open-to-close campaign sessions and returned to 1/2 warm availability. Empirical p50/p95/p99 for UI send, warm dispatch, cold open, observed queue and queued wait are recorded with sample counts. The lowest pre-burst free RAM was 5.20 GiB above the 4 GiB abort floor; no continuous memory trace or population tail guarantee is claimed. The scoped Nexus fixture and browser stopped, port 8204 is free, and global Nexus stayed stopped. See m7o-installed-load-results.md and m7o-results.json."
+    },
+    {
+      "id": "L49",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "installed_real_ui_revocation_isolation_verified",
+      "description": "The installed UI exercised real Pi revocation on a separate local Connector and on embedded runtime. Remote and local baseline messages returned exact markers with read/NATIVE_ACCEPTED/1-of-1 ACK. Deactivating remote Pi made it Offline while embedded Pi returned an exact post-revoke marker; deactivating one embedded Pi made it Offline and removed it from Meta-harness recipient choices while another embedded Pi returned an exact marker. The remote Connector remained AUTH_FAILED after UI reactivation during the observation window; no automatic reauthorization is claimed. The scoped fixture was stopped. See m5u-ui-revocation.md."
+    },
+    {
+      "id": "L50",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "installed_real_ui_embedded_preserve_reset_verified_remote_pending",
+      "description": "The UI preserve-agents reset safely refused an intentionally inconsistent Server snapshot whose generation lagged the Connector journal, leaving all 7 agents/284 messages/6 bindings and other history intact. In a new isolated Server home, a real Pi embedded connection with one READY/ACTIVE session and exact baseline response was reset through Settings with preservation checked. Counts changed from 2 agents/1 workspace/1 binding/1 session/3 messages to 2/1/1/0/0; Agents returned Online, and a new exact response had read/NATIVE_ACCEPTED/1-of-1 ACK on a fresh READY/ACTIVE session. The real Connector reset comparison remains the fixed M5 criterion. The scoped fixture was stopped. See m5v-ui-preserve-reset.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",
