@@ -612,14 +612,16 @@
       "evidence": [
         "Connector: plans/runtime-lifecycle-m6-supervisor-adr.md",
         "Connector: plans/runtime-lifecycle-m6a-named-pipe.md",
-        "Connector: plans/runtime-lifecycle-m6b-pipe-client.md"
+        "Connector: plans/runtime-lifecycle-m6b-pipe-client.md",
+        "Connector: plans/runtime-lifecycle-m6c-process-exit.md"
       ],
       "commits": {
         "connector_experiment_adr": "0944a0e",
         "connector_m6a": "521f7b9",
-        "connector_m6b": "986178d"
+        "connector_m6b": "986178d",
+        "connector_m6c": "14b2249"
       },
-      "experiment_design": "Connector plans/runtime-lifecycle-m6-supervisor-adr.md defines existing daemon/Core host comparison, Windows IPC and authority constraints. M6a opt-in named pipe reached the actual dispatcher/Core host in a separate disposable process. M6b synchronous CLI client authenticated, pinged, read status, reconnected and shut down that real daemon. Eight source and eight installed-wheel selected tests passed, including default IPC regressions. Real native session/reconnect comparison, cost, UI gate and adoption decision remain pending; default transport unchanged.",
+      "experiment_design": "Connector plans/runtime-lifecycle-m6-supervisor-adr.md defines existing daemon/Core host comparison, Windows IPC and authority constraints. M6a opt-in named pipe reached the actual dispatcher/Core host in a separate disposable process. M6b synchronous CLI client authenticated, pinged, read status, reconnected and shut down that real daemon. M6c shutdown joins a stalled authentication read and fixes Windows process identity falsely treating an exited, still-handle-backed daemon as live. Sixteen selected source and twenty installed-wheel tests passed at M6c, including default daemon process lifecycle. Real native session/reconnect comparison, cost, UI gate and adoption decision remain pending; default transport unchanged.",
       "next": "Qualify the same daemon through actual session/control reconnect, revocation and host restart. Compare installed embedded and Connector availability, memory and shutdown with identical harnesses before deciding adoption. Global Nexus remains stopped."
     },
     {

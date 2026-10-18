@@ -296,6 +296,11 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   Oito testes de source e oito da wheel instalada passaram. O transporte padrão
   segue inalterado. Sessão nativa/reconnect, custo, gate UI e decisão de adoção
   ainda faltam. Ver relatório M6b no Connector.
+- Checkpoint M6c: shutdown autenticado encerra o daemon mesmo com uma leitura
+  de autenticação pendente no pipe. A observação de processo no Windows agora
+  distingue processo encerrado com handle retido de processo vivo. Dezesseis
+  testes selecionados de source e vinte da wheel instalada passaram. Sessões
+  reais/reconnect e gate UI continuam pendentes. Ver relatório M6c no Connector.
 - Primeiro ADR e protótipo isolado: processo por usuário/host, IPC autenticado
   (named pipe no Windows/socket local onde suportado), uma autoridade de processo.
 - Nexus pode reiniciar enquanto supervisor mantém contenção, spool e leases
