@@ -542,6 +542,13 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   sem alegar garantia de cauda populacional, telemetria contínua de memória
   ou qualificação em host remoto físico. Ver `m7o-installed-load-results.md`
   e `m7o-results.json`.
+- Checkpoint parcial M7p: pela UI instalada, Pi embedded one-shot com
+  `max_parallel=0` respondeu três chamadas com marcadores distintos e ACK 1/1.
+  Duas aberturas nativas se sobrepuseram; não houve três simultâneas. A RAM
+  livre caiu de 10,77 para 4,58 GiB, então a rajada adicional foi abortada
+  antes do piso de 4 GiB. Após encerrar o fixture, voltou a 10,68 GiB, sem
+  processos de teste remanescentes. O critério ilimitado acima de duas
+  instâncias permanece aberto. Ver `m7p-unlimited-ui-budget.md`.
 
 - Requests pendentes aproveitam primeira instância pronta; warmup independente,
   concorrente e limitado por orçamento físico do host, além do limite por agente.

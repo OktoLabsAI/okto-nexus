@@ -698,6 +698,7 @@
         "m7o-load-protocol.md",
         "m7o-installed-load-results.md",
         "m7o-results.json",
+        "m7p-unlimited-ui-budget.md",
         "Core: plans/runtime-lifecycle-m7b-passive-budget.md",
         "Connector: plans/runtime-lifecycle-m7c-remote-opening.md",
         "Connector: plans/runtime-lifecycle-m7d-shared-selection.md",
@@ -710,7 +711,7 @@
         "connector_m7c": "20abb83",
         "connector_m7d": "b39cc65"
       },
-      "next": "The fixed installed-local load distribution passed in M7o: 54/54 exact responses across real Pi, Claude and Codex, with empirical p50/p95/p99 and a peak of two open sessions per harness. UI-B remains pending the previously specified real Connector preserve-agents reset comparison; revocation passed in M5u and embedded reset passed in M5v. The original M7 unlimited-mode criterion remains unqualified under a physical host budget; no new acceptance criterion is added."
+      "next": "The fixed installed-local load distribution passed in M7o: 54/54 exact responses across real Pi, Claude and Codex, with empirical p50/p95/p99 and a peak of two open sessions per harness. Real Connector preserve-agents reset passed in M5w; the full UI-B gate still requires its requirement-by-requirement audit. M7p saved max_parallel=0 through the UI and returned three exact Pi responses with two overlapping opens, but free RAM approached the 4 GiB abort floor; more than two simultaneous instances remains unqualified under a measured physical host budget. No new acceptance criterion is added."
     },
     {
       "id": "M8",
@@ -1101,6 +1102,13 @@
       "priority": "high",
       "status": "installed_two_stream_fairness_verified_retention_pending",
       "description": "Connector pre-ready event replay now rotates one finite page per stream. A failure applying the first stream's Core ACK leaves its remote ACK durable while a second stream advances, and a retry applies the retained ACK without resend. Fifty adjacent source and installed-wheel tests passed. The event store rejects a 4097th lifetime stream; safe retirement or a larger store with resumable scanning and full M4 qualification remain open. See Connector plans/runtime-lifecycle-m4d4h-stream-fairness.md."
+    },
+    {
+      "id": "L54",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "installed_real_ui_unlimited_two_open_overlap_verified_three_parallel_pending",
+      "description": "In a disposable installed Nexus/Core fixture, Agents saved a real Pi embedded one-shot policy with max_parallel=0 and showed Unlimited capacity. Three Meta-harness calls returned exact distinct markers, each with 1-of-1 ACK and a distinct terminal one-shot session. Durable runtime.open records show two overlapping openings, not three. Free RAM fell from 10.77 to 4.58 GiB; the next burst was aborted at the pre-existing 4 GiB safety floor. No test Pi process remained after closure, and free RAM returned to 10.68 GiB after the scoped Nexus stopped. Above-two concurrency and RAM attribution remain unqualified. See m7p-unlimited-ui-budget.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",
