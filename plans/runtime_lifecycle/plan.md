@@ -272,6 +272,15 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   Claims históricos do Core, releases resolvidos só por reconciliação e a
   medição com 1k/10k/100k sessões continuam pendentes. Ver
   `../okto-nexus-connector/plans/runtime-lifecycle-m4d4i-terminal-stream-checkpoints.md`.
+- Checkpoint M4d4j: o Core indexa claims ainda pendentes sem apagar o histórico,
+  e o Connector retira a claim somente após o ACK durável de liberação. As
+  duas varreduras de claims na reconciliação usam essa projeção. Com três
+  pendências constantes, 1k/10k/100k claims consumiram 176/106/106 passos VM
+  SQLite; o relatório instalado incluiu apenas as três em uma página. As
+  wheels finais passaram 23 testes Core e 53 Connector focados. Releases
+  resolvidos só por reconciliação e backfill antigo em lotes permanecem
+  pendentes. Ver `../okto-nexus-connector-core/plans/runtime-lifecycle-m4d4j-pending-claims.md`
+  e `../okto-nexus-connector/plans/runtime-lifecycle-m4d4j-pending-reconciliation.md`.
 - Separar orçamento de controle/resultado do volume de artefatos; retry apenas na
   fronteira idempotente, sem repetir escrita nativa por erro SQLite/transporte.
 - Testes: reinício entre transações/checkpoints, eventos grandes, disco cheio,
