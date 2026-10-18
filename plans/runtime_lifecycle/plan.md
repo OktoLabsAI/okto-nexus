@@ -363,6 +363,16 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   nova mensagem teve resposta exata e ACK 1/1. A comparação real do reset
   Connector continua como critério M5 já definido. Ver
   `m5v-ui-preserve-reset.md`.
+- Checkpoint M5w: no mesmo home consistente, a UI conectou um Pi real pelo
+  Connector local. O reset com preservação encerrou as duas sessões, limpou o
+  histórico e manteve 3 agentes, 1 workspace e 2 bindings; o Pi remoto respondeu
+  após o reset com marcador exato e ACK 1/1. Corrigimos a autoridade do operador
+  no fechamento remoto e a classificação de sessões `FAILED/NONE` já liberadas.
+  Depois de renovar pela UI uma autorização local que expirara pelo tempo, o
+  Pi embedded também respondeu exatamente. Reinícios forçados adicionais do
+  Server revelaram uma falha distinta de reconexão do daemon (`4406`) que segue
+  no critério de recuperação M8; não declaramos UI-B/M8 concluídos. Ver
+  `m5w-ui-connector-preserve-reset.md`.
 - Extrair políticas de estado/transição para Core e manter adaptadores de host no
   Nexus/Connector. Remover duplicação somente após testes diferenciais.
 - Unificar interpretação de close sem receipt, prova de contenção, retomada de

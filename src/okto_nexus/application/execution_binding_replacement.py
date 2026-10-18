@@ -21,7 +21,7 @@ def replacement_target(conn, *, server_id, subject_agent_id, executor_id,
         raise OktoNexusError(ErrorCode.CONFLICT, "The replacement must preserve the approved binding scope.", {})
     if conn.execute("SELECT 1 FROM execution_sessions WHERE server_id=? AND executor_id=? "
                     "AND binding_id=? AND lifecycle_state<>'CLOSED' "
-                    "AND NOT (lifecycle_state='FAILED' AND lease_state='CLOSED') LIMIT 1",
+                    "AND NOT (lifecycle_state='FAILED' AND lease_state IN ('NONE','CLOSED')) LIMIT 1",
                     (server_id, executor_id, binding_id)).fetchone():
         raise OktoNexusError(ErrorCode.CONFLICT,
             "Close or reconcile the binding's active sessions before replacing its realization.",

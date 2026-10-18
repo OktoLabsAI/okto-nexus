@@ -33,7 +33,7 @@ def overview(deps, context, agent_id, *, handoff_views, capacity_reader: Capacit
             'JOIN execution_executors e USING(server_id,executor_id) '
             'JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id '
             "WHERE ep.agent_id=? AND s.lifecycle_state<>'CLOSED' "
-            "AND NOT (s.lifecycle_state='FAILED' AND s.lease_state='CLOSED') ")
+            "AND NOT (s.lifecycle_state='FAILED' AND s.lease_state IN ('NONE','CLOSED')) ")
         total = conn.execute('SELECT COUNT(*)' + source, (agent_id,)).fetchone()[0]
         rows = conn.execute('SELECT s.rowid AS cursor,s.server_id,s.executor_id,s.session_id,e.label,e.kind,ep.adapter_id' +
             source + 'AND s.rowid>? ORDER BY s.rowid LIMIT 51', (agent_id, after)).fetchall()

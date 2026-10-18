@@ -49,7 +49,8 @@
         "m5j-ui-initial-lease-refusal.md",
         "m7o-installed-load-results.md",
         "m5u-ui-revocation.md",
-        "m5v-ui-preserve-reset.md"
+        "m5v-ui-preserve-reset.md",
+        "m5w-ui-connector-preserve-reset.md"
       ]
     },
     {
@@ -1069,6 +1070,13 @@
       "priority": "high",
       "status": "installed_real_ui_embedded_preserve_reset_verified_remote_pending",
       "description": "The UI preserve-agents reset safely refused an intentionally inconsistent Server snapshot whose generation lagged the Connector journal, leaving all 7 agents/284 messages/6 bindings and other history intact. In a new isolated Server home, a real Pi embedded connection with one READY/ACTIVE session and exact baseline response was reset through Settings with preservation checked. Counts changed from 2 agents/1 workspace/1 binding/1 session/3 messages to 2/1/1/0/0; Agents returned Online, and a new exact response had read/NATIVE_ACCEPTED/1-of-1 ACK on a fresh READY/ACTIVE session. The real Connector reset comparison remains the fixed M5 criterion. The scoped fixture was stopped. See m5v-ui-preserve-reset.md."
+    },
+    {
+      "id": "L51",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "installed_real_ui_connector_preserve_reset_verified_restart_recovery_failed",
+      "description": "The installed UI configured a real Pi on a same-machine Connector and confirmed baseline exact response/1-of-1 ACK. Preserve-agents reset initially refused because remote close lacked the authenticated dashboard operator actor; no history was deleted. The correction passed a targeted test. Repeating the UI reset preserved 3 agents/1 workspace/2 bindings while clearing 2 sessions/8 messages/8 deliveries/10 events. Connector remained CONTROL_READY and returned exact M5W_REMOTE_AFTER_RESET_OK with 1-of-1 ACK. An independently expired 60-minute embedded grant was renewed through the UI; after FAILED/NONE released-session filtering was corrected, local Pi returned exact M5W_LOCAL_REAUTHORIZED_OK with 1-of-1 ACK. Extra forced Server restarts used to install the correction exposed persistent Connector reconnect failure (4406) even after a controlled daemon restart. A direct R4 hello to the same executor succeeded; daemon-path root cause remains open under the pre-existing M8 restart/recovery criterion. See m5w-ui-connector-preserve-reset.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",

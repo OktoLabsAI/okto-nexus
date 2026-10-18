@@ -7,6 +7,58 @@ from test_embedded_dispatch import local_setup, qualified_contract, admit, wait_
 from test_canonical_delivery import connected_local, enable, send
 
 
+def test_reset_remote_close_uses_authenticated_dashboard_operator(monkeypatch):
+    import asyncio
+    import sqlite3
+    from contextlib import contextmanager
+    from types import SimpleNamespace
+    from okto_nexus.bootstrap import database_reset
+    from okto_nexus.domain.runtime_context import RuntimeRequestContext
+
+    db = sqlite3.connect(':memory:', check_same_thread=False)
+    db.row_factory = sqlite3.Row
+    db.executescript('''
+        CREATE TABLE execution_sessions (server_id TEXT, executor_id TEXT,
+            binding_id TEXT, workspace_binding_id TEXT, session_id TEXT, lifecycle_state TEXT,
+            lease_state TEXT);
+        CREATE TABLE execution_executors (server_id TEXT, executor_id TEXT, kind TEXT);
+        CREATE TABLE execution_bindings (server_id TEXT, executor_id TEXT,
+            binding_id TEXT, endpoint_id TEXT);
+        CREATE TABLE agent_endpoints (endpoint_id TEXT, agent_id TEXT);
+        INSERT INTO execution_executors VALUES ('srv', 'exe', 'remote');
+        INSERT INTO execution_bindings VALUES ('srv', 'exe', 'bind', 'ep');
+        INSERT INTO agent_endpoints VALUES ('ep', 'remote-agent');
+        INSERT INTO execution_sessions VALUES ('srv', 'exe', 'bind', 'wxb', 'ses', 'READY', 'ACTIVE');
+    ''')
+
+    @contextmanager
+    def unit_of_work(*, write=False):
+        yield SimpleNamespace(connection=db)
+
+    factory = SimpleNamespace(unit_of_work=unit_of_work)
+    app = SimpleNamespace(state=SimpleNamespace(deps=SimpleNamespace(connection_factory=factory),
+        inventory_fresh_publications=None))
+    from okto_nexus.bootstrap import execution_authority
+    from okto_nexus.application import execution_intents, execution_admission
+    monkeypatch.setattr(execution_authority, 'build_execution_access', lambda deps: object())
+    observed = []
+
+    def resolve(factory, *, context, request, **kwargs):
+        observed.append((context.actor_agent_id, context.authentication_source,
+            context.trusted_local_operator, request['intent']))
+        return dict(can_submit=True, client_intent_id=request['client_intent_id'],
+            operation_id='close-op', resolution_revision=1, intent_hash='hash')
+
+    def submit(factory, *, context, request, **kwargs):
+        db.execute("UPDATE execution_sessions SET lifecycle_state='CLOSED' WHERE session_id='ses'")
+
+    monkeypatch.setattr(execution_intents, 'resolve_execution_intent', resolve)
+    monkeypatch.setattr(execution_admission, 'submit_execution_operation', submit)
+    context = RuntimeRequestContext(None, 'operator_session', trusted_local_operator=True)
+    asyncio.run(database_reset._close_remote_sessions(app, context))
+    assert observed == [('operator', 'operator_session', True, 'runtime.close')]
+
+
 @pytest.mark.parametrize('active', [False, True])
 def test_reset_preserves_configured_local_connection_and_can_deliver_again(connected_local, monkeypatch, active):
     setup, binding, native = connected_local

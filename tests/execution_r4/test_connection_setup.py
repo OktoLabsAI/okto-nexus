@@ -204,7 +204,8 @@ def test_finish_authorizes_work_only_with_effective_handoff_opt_in(local_setup, 
 
 
 @pytest.mark.parametrize('change_policy', [False, True])
-def test_finish_offers_scoped_session_choice_and_retries_after_release(local_setup, monkeypatch, change_policy):
+@pytest.mark.parametrize('released_lease', ['NONE', 'CLOSED'])
+def test_finish_offers_scoped_session_choice_and_retries_after_release(local_setup, monkeypatch, change_policy, released_lease):
     from test_binding_replacement import seed_claim
     context, request = request_for(local_setup)
     verified = {'root': directory_identity(request['configuration']['workspace_root']), 'home': None}
@@ -230,7 +231,7 @@ def test_finish_offers_scoped_session_choice_and_retries_after_release(local_set
     assert client.post(path, headers=headers['subject'], json=request).status_code == 403
     with deps.connection_factory.unit_of_work() as uow:
         # Simulate canonical durable release, never infer it from failure alone.
-        uow.connection.execute("UPDATE execution_sessions SET lease_state='CLOSED' WHERE session_id='claim'")
+        uow.connection.execute("UPDATE execution_sessions SET lease_state=? WHERE session_id='claim'", (released_lease,))
     saved = client.post(path, headers=headers['operator'], json=request)
     assert saved.status_code == 200, saved.text
     assert saved.json()['saved']

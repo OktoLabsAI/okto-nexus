@@ -1,6 +1,7 @@
 """Reset history only after draining runtimes; restart their owned services."""
 import asyncio
 import time
+from dataclasses import replace
 
 from ..errors import ErrorCode, OktoNexusError
 
@@ -36,6 +37,12 @@ async def _close_remote_sessions(app, context):
     from ..application.execution_admission import submit_execution_operation
     deps = app.state.deps
     access = build_execution_access(deps)
+    # The dashboard's authenticated operator session has no agent-key principal.
+    # Resolve the same trusted operator identity used by runtime management
+    # before submitting remote close intents on its behalf.
+    if (context.actor_agent_id is None and context.trusted_local_operator
+            and context.authentication_source in ('http_loopback', 'operator_session')):
+        context = replace(context, actor_agent_id='operator')
     submitted = set()
     until = time.monotonic() + 30
     while True:
@@ -45,7 +52,8 @@ async def _close_remote_sessions(app, context):
                 'JOIN execution_executors x USING(server_id,executor_id) '
                 'JOIN execution_bindings b USING(server_id,executor_id,binding_id) '
                 'JOIN agent_endpoints e ON e.endpoint_id=b.endpoint_id '
-                "WHERE x.kind='remote' AND s.lifecycle_state<>'CLOSED'")]
+                "WHERE x.kind='remote' AND s.lifecycle_state<>'CLOSED' "
+                "AND NOT (s.lifecycle_state='FAILED' AND s.lease_state IN ('NONE','CLOSED'))")]
         if not rows:
             return
         for row in rows:

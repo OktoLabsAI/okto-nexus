@@ -89,9 +89,17 @@ def test_active_pagination_keeps_failed_unreleased_sessions(connected_local):
             sid, oid = f'history-session-{index}', f'history-open-{index}'
             op = operation | dict(operation_id=oid, session_id=sid,
                 expected_revisions_json=json.dumps(opened['scope'] | dict(session_id=sid)))
-            record = session | dict(session_id=sid, open_operation_id=oid, lifecycle_state='FAILED', lease_state='ACTIVE')
+            record = session | dict(session_id=sid, open_operation_id=oid, lifecycle_state='FAILED',
+                lease_state='ACTIVE', local_journal_name=None)
             for table, row in [('execution_operations',op),('execution_sessions',record)]:
                 conn.execute('INSERT INTO '+table+'('+','.join(row)+') VALUES('+','.join('?' for _ in row)+')',tuple(row.values()))
+        terminal = session | dict(session_id='history-terminal', open_operation_id='history-terminal-open',
+            lifecycle_state='FAILED', lease_state='NONE', local_journal_name=None)
+        terminal_open = operation | dict(operation_id='history-terminal-open', session_id='history-terminal',
+            expected_revisions_json=json.dumps(opened['scope'] | dict(session_id='history-terminal')))
+        for table, row in [('execution_operations', terminal_open), ('execution_sessions', terminal)]:
+            conn.execute('INSERT INTO '+table+'('+','.join(row)+') VALUES('+','.join('?' for _ in row)+')',
+                tuple(row.values()))
     path = '/api/v1/agents/subject/runtime-administration'
     first = setup[2].get(path, headers=setup[3]['operator']).json()['data']
     second = setup[2].get(path, params={'after':first['next_after']}, headers=setup[3]['operator']).json()['data']
