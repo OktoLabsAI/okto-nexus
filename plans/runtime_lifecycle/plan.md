@@ -340,7 +340,7 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   qualificada entre o provedor de ferramentas, a configuração e a composição do
   runtime na mesma abertura. Revalida consentimento, root e entrypoint em cada
   fronteira, preservando checks integrais após o ambiente e antes do spawn.
-  A wheel instalada passou 94 testes selecionados; pela UI, Pi respondeu com
+  A wheel instalada passou 96 testes selecionados; pela UI, Pi respondeu com
   ACK 1/1. Quatro hashes completos somaram 27,198 s numa abertura de 39,311 s.
   A comparação com M7c é amostral; UI-B e distribuição de carga seguem abertas.
   Ver Connector `plans/runtime-lifecycle-m7d-shared-selection.md`.
