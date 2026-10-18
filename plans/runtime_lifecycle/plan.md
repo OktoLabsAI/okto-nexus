@@ -388,6 +388,15 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   constitui falha de startup nativo. Faltam deadline de fila, comparação
   embedded, demais harnesses e distribuição de carga. Ver
   `m7i-ui-delayed-native-start.md`.
+- Checkpoint parcial UI-B/M7k: três mensagens reais foram enviadas quase juntas
+  pela UI para Pi com máximo 2, aquecida 1, fila 1 e espera de 5 s. A chamada
+  aquecida respondeu exatamente; uma abertura fria venceu o prazo com
+  `ONE_SHOT_START_TIMEOUT` e a chamada na fila recebeu
+  `ONE_SHOT_QUEUE_EXPIRED`. Ambos os erros chegaram ao Meta-harness sem execução
+  nativa das chamadas expiradas. A sessão fria concluída após o timeout foi
+  reaproveitada como instância aquecida, sem executar a chamada vencida.
+  Comparação embedded, demais harnesses e distribuição de carga ainda pendem.
+  Ver `m7k-ui-queue-deadline.md`.
 
 - Requests pendentes aproveitam primeira instância pronta; warmup independente,
   concorrente e limitado por orçamento físico do host, além do limite por agente.
