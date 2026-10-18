@@ -38,7 +38,8 @@
       "status": "pending",
       "interim_evidence": [
         "m6d-real-ui.md",
-        "m7e-ui-pool-burst.md"
+        "m7e-ui-pool-burst.md",
+        "m7f-ui-concurrent-cold.md"
       ]
     },
     {
@@ -871,8 +872,8 @@
       "id": "L27",
       "milestone": "M7",
       "priority": "high",
-      "status": "installed_checkpoint_ui_pending",
-      "description": "Connector M7f removes one duplicate full Pi dependency-closure read after materializing the launch environment, only for an exact host-produced approved callback. Arbitrary callbacks retain the host's independent full check and Core still fully qualifies before spawn. Executable drift during secret resolution is refused. Source and isolated installed-wheel suites each passed 98 selected cases; Connector wheel SHA-256 7267f377ebcfce175c11828f2fe4febd0d1d2f75010b622e01372b7c93fd7b67. Concurrent cold-start latency and UI-B remain pending; global Nexus unchanged. See Connector plans/runtime-lifecycle-m7f-post-environment.md."
+      "status": "installed_real_ui_partial",
+      "description": "Connector M7f removes one duplicate full Pi dependency-closure read after materializing the launch environment, only for an exact host-produced approved callback. Arbitrary callbacks retain the host's independent full check and Core still fully qualifies before spawn. Executable drift during secret resolution is refused. Source and isolated installed-wheel suites each passed 98 selected cases; Connector wheel SHA-256 7267f377ebcfce175c11828f2fe4febd0d1d2f75010b622e01372b7c93fd7b67. In a disposable real Pi UI pair, a warm turn succeeded in 6.413s; an admitted cold open and independent pool replenishment overlapped, reached first receipts in 47.319s and 38.260s, and each made three full Pi identity calls. Both exact responses appeared with ACK 1/1 and the pool returned to 1/2 available. These are uncontrolled samples; UI-B and a latency distribution remain pending. Global Nexus unchanged. See Connector plans/runtime-lifecycle-m7f-post-environment.md and m7f-ui-concurrent-cold.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",

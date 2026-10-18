@@ -356,8 +356,12 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   mesmo store, frame, inventário e seleção. Callbacks arbitrários mantêm a
   checagem integral do host, e o Core ainda valida a instalação antes do spawn.
   98 testes source e 98 da wheel instalada passaram, incluindo drift durante
-  resolução de segredo. O efeito sobre cold starts concorrentes ainda precisa
-  de medição no próximo gate UI-B. Ver relatório M7f no Connector.
+  resolução de segredo. Pela UI instalada, um turno quente terminou em 6,413 s;
+  a abertura da chamada fria e a reposição do pool se sobrepuseram, chegando
+  ao primeiro receipt após 47,319 s e 38,260 s, com três hashes completos
+  cada. Ambas as respostas tiveram ACK 1/1; o pool voltou a 1/2 disponível.
+  São amostras sem distribuição controlada. Ver `m7f-ui-concurrent-cold.md`
+  e o relatório M7f no Connector.
 
 - Requests pendentes aproveitam primeira instância pronta; warmup independente,
   concorrente e limitado por orçamento físico do host, além do limite por agente.
