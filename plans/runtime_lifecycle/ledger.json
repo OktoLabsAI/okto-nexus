@@ -942,6 +942,13 @@
       "priority": "high",
       "status": "installed_real_ui_recovery_and_completion_verified",
       "description": "Connector M5k releases only initial lease-refusal capacity with a durable no-effect receipt and no native claim or launch. Fifteen focused cases passed. Installed Connector 0.0.10 reconciled 21 retained operations on its first new control attempt without restarting the disposable Nexus; all four refused opening slots became RELEASED. The real UI showed a five-second one-shot start deadline for Pi; the operator saved 300 seconds through Connections. After cooldown the original broadcast handoff was claimed, the native Pi one-shot returned M5J_RECOVERY_OK, Handoffs displayed COMPLETED, and its slot was RELEASED. Connector control remained CONTROL_READY with zero consecutive failures. Global Nexus was untouched. Separate-host, other-harness and broader M7 load qualification remain pending. See m5k-ui-capacity-recovery.md and Connector runtime-lifecycle-m5k-denied-capacity.md."
+    },
+    {
+      "id": "L36",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "installed_real_ui_partial",
+      "description": "With the disposable remote Connector stopped and m6d-pi Offline, the operator created and configured a new embedded Pi in the same M6D workspace through Agents. Its real connection test passed, Agents showed the new local agent Online, and Meta-harness received exact M5L_LOCAL_OK with ACK 1/1 while the remote remained unavailable. After Connector restart with the fixture file vault, first-attempt control became CONTROL_READY and Connected; both agents appeared Online and the remote Pi returned exact M5L_REMOTE_OK with ACK 1/1. The isolated installed Nexus and Connector suites passed six initial-refusal restart and 15 denied-operation cases respectively. This is a real offline-isolation/reconnect slice; creation during an active long-running reconciliation and full cross-host differential equivalence remain open. See m5l-ui-new-agent-while-remote-offline.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",

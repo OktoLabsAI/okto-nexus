@@ -286,6 +286,17 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   Migração real de uma cópia do banco com histórico preservou o attempt e
   passou `foreign_key_check`. A comparação embedded/Connector e o gate UI
   principal ainda estão pendentes.
+- Checkpoint M5k: o Connector libera a capacidade consumida por uma recusa
+  inicial de lease somente com receipt durável sem efeito e sem claim/spawn
+  nativo. A wheel instalada reconciliou 21 operações retidas e o handoff Pi
+  original concluiu na UI após corrigir o prazo de início configurado no
+  fixture. Ver `m5k-ui-capacity-recovery.md`.
+- Checkpoint M5l: com o Connector remoto parado, a UI criou e conectou um
+  novo Pi embedded, que respondeu enquanto o remoto estava Offline; após o
+  restart, o remoto reconectou e também respondeu. Seis casos instalados de
+  restart embedded e 15 de recusa Connector passaram. A criação durante uma
+  reconciliação remota efetivamente ativa e a comparação diferencial completa
+  seguem abertas. Ver `m5l-ui-new-agent-while-remote-offline.md`.
 - Extrair políticas de estado/transição para Core e manter adaptadores de host no
   Nexus/Connector. Remover duplicação somente após testes diferenciais.
 - Unificar interpretação de close sem receipt, prova de contenção, retomada de
