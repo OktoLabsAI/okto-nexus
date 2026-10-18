@@ -277,7 +277,7 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   duas varreduras de claims na reconciliação usam essa projeção. Com três
   pendências constantes, 1k/10k/100k claims consumiram 176/106/106 passos VM
   SQLite; o relatório instalado incluiu apenas as três em uma página. As
-  wheels finais passaram 23 testes Core e 53 Connector focados. Releases
+  wheels finais passaram 23 testes Core, 53 Connector focados e 65 adjacentes. Releases
   resolvidos só por reconciliação e backfill antigo em lotes permanecem
   pendentes. Ver `../okto-nexus-connector-core/plans/runtime-lifecycle-m4d4j-pending-claims.md`
   e `../okto-nexus-connector/plans/runtime-lifecycle-m4d4j-pending-reconciliation.md`.

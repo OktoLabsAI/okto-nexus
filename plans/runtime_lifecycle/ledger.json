@@ -608,6 +608,7 @@
           "title": "Core retains immutable claims and indexes pending reconciliation claims. Connector retires a claim after Server-accepted release, repairs interrupted cross-store updates and scans only pending claims in report and launch recovery. With three pending claims across 1k/10k/100k history, SQLite VM steps were 176/106/106; 23 Core and 53 Connector final-wheel tests passed.",
           "core_commit": "e37fd3a",
           "connector_commit": "19a0825",
+          "connector_validation_commit": "4415306",
           "evidence": [
             "Core: plans/runtime-lifecycle-m4d4j-pending-claims.md",
             "Connector: plans/runtime-lifecycle-m4d4j-pending-reconciliation.md"
@@ -1145,7 +1146,7 @@
       "milestone": "M4",
       "priority": "high",
       "status": "installed_pending_claim_projection_verified_reconciliation_only_pending",
-      "description": "Core 0.0.12 retains immutable claim history while a partial index exposes only pending claims. Connector 0.0.10 checkpoints that projection after durable Server-accepted release and repairs interrupted event/Core/outbox commits; report and launch recovery use pending pages. With three pending claims and 1k/10k/100k history, SQLite VM steps were 176/106/106 and the installed report emitted one three-claim page at each size. Final wheels passed 23 Core and 53 Connector focused tests; another 57 adjacent Connector cases passed before a final internal method rename. Reconciliation-only release retirement, resumable older-history backfill and the major real UI gate remain open. See Core plans/runtime-lifecycle-m4d4j-pending-claims.md and Connector plans/runtime-lifecycle-m4d4j-pending-reconciliation.md."
+      "description": "Core 0.0.12 retains immutable claim history while a partial index exposes only pending claims. Connector 0.0.10 checkpoints that projection after durable Server-accepted release and repairs interrupted event/Core/outbox commits; report and launch recovery use pending pages. With three pending claims and 1k/10k/100k history, SQLite VM steps were 176/106/106 and the installed report emitted one three-claim page at each size. Final wheels passed 23 Core, 53 focused Connector and 65 adjacent Connector tests; two adjacent fixtures were corrected for required recovery authority and the already-current schema 15. Reconciliation-only release retirement, resumable older-history backfill and the major real UI gate remain open. See Core plans/runtime-lifecycle-m4d4j-pending-claims.md and Connector plans/runtime-lifecycle-m4d4j-pending-reconciliation.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",
