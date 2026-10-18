@@ -325,8 +325,16 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   mas a resposta foi retida durante a falha do dono. A geração antiga drenou
   antes da sucessora; o Server preservou um único claim e receipt, e recusou o
   material antigo de capacidade após o fechamento da sessão. O caso passou
-  em source e na wheel isolada. O equivalente no Connector continua pendente.
+  em source e na wheel isolada. A fronteira de retenção no Connector foi
+  verificada em M5q.
   Ver `m5p-embedded-native-action-owner-race.md`.
+- Checkpoint M5q: o Connector local recebeu `handoff.claim` pela entrada JSONL
+  real do Pi. Com a consulta de capacidade retida antes do commit, o fechamento
+  do dono preservou a tarefa até sua recusa, sem enviar o claim. Com a resposta
+  HTTP retida após o efeito, preservou a tarefa e houve um único claim, sem
+  replay. As 41 verificações adjacentes passaram em source e wheel isolada.
+  Este fixture não comprova a persistência do Server nem um host remoto físico.
+  Ver `m5q-connector-native-action-owner-race.md`.
 - Extrair políticas de estado/transição para Core e manter adaptadores de host no
   Nexus/Connector. Remover duplicação somente após testes diferenciais.
 - Unificar interpretação de close sem receipt, prova de contenção, retomada de
