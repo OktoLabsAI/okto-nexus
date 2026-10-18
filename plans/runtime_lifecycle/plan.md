@@ -367,8 +367,11 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   um cold start saudável sob carga. A expiração ainda impede envio tardio e
   conserva o slot até prova de encerramento. A wheel Nexus instalada passou
   67 casos direcionados (39 de startup, 4 de claim, 24 de capacidade), e o
-  frontend foi compilado. Um handoff real acima de 60 s e a distribuição de
-  latência permanecem no gate UI-B. Ver `m7g-immediate-startup-budget.md`.
+  frontend foi compilado. Pela UI instalada, um handoff broadcast one-shot
+  frio foi reivindicado pelo Pi e concluído com o resultado exato; a abertura
+  levou 37,737 s, portanto não exercitou o antigo corte de 60 s. Um handoff
+  real acima de 60 s e a distribuição de latência permanecem no gate UI-B.
+  Ver `m7g-immediate-startup-budget.md`.
 
 - Requests pendentes aproveitam primeira instância pronta; warmup independente,
   concorrente e limitado por orçamento físico do host, além do limite por agente.
