@@ -411,6 +411,14 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   reaproveitada como instância aquecida, sem executar a chamada vencida.
   Comparação embedded, demais harnesses e distribuição de carga ainda pendem.
   Ver `m7k-ui-queue-deadline.md`.
+- Checkpoint parcial UI-B/M7l: pela UI instalada, um novo agente Pi embedded
+  one-shot usou os mesmos limites de M7k (máximo 2, aquecida 1, fila 1, espera
+  de 5 s). Três envios reais resultaram em uma resposta exata com ACK 1/1 e
+  dois `ONE_SHOT_START_TIMEOUT` sem efeito; o slot aquecido voltou a 1/2.
+  A divisão dos erros diferiu de M7k porque a chamada na fila foi admitida
+  antes de seu prazo. O teste embedded de expiração na fila, a recuperação
+  real de handoff M5j, os demais harnesses e a distribuição continuam no
+  gate UI-B. Ver `m7l-ui-embedded-queue.md`.
 
 - Requests pendentes aproveitam primeira instância pronta; warmup independente,
   concorrente e limitado por orçamento físico do host, além do limite por agente.
