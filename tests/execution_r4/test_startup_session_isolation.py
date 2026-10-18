@@ -1,13 +1,166 @@
 """A failed opening must not stop another session of the same agent."""
+# Imported fixtures are discovered by pytest from this module.
+# ruff: noqa: F401, F811
 import asyncio
 import threading
+from contextlib import contextmanager
 import pytest
+from starlette.testclient import TestClient
 from nexus_connector_core import LocalRuntimeCore
 from nexus_connector_core.native.adapter_types import NativeAdapterError, ErrorCode
 
 from test_agent_recovery_isolation import eventually
-from test_embedded_dispatch import local_setup, connect_local, admit, wait_receipt
+from test_embedded_dispatch import local_setup, qualified_contract, connect_local, admit, wait_receipt
 from test_sender_sessions import Peers
+from test_embedded_inventory import app_for
+from test_harness_canonical import qualified_bridge
+from test_canonical_delivery import connected_local
+from test_canonical_handoff_regressions import runtime
+from test_reserved_handoff_admission import reserve
+from okto_nexus.bootstrap.capacity_admission import build_capacity_admission
+
+
+@pytest.mark.parametrize('capacity_enabled', [False, True])
+def test_pre_authorization_open_failure_preserves_healthy_sibling(local_setup, monkeypatch, capacity_enabled):
+    from okto_nexus.bootstrap import embedded_dispatch
+
+    setup, binding, _ = connect_local(local_setup)
+    owner = setup[1].state.embedded_dispatch_owner
+    owner.host.capacity_enabled = capacity_enabled
+    peers = Peers()
+    owner.native_factory = peers
+    healthy = admit(setup, binding, 'preauth-healthy-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, healthy)
+    healthy_peer = peers.sessions[healthy['session_id']]
+    original = embedded_dispatch.ApprovedLocalLaunch
+    injected = []
+
+    def fail_once(*args, **kwargs):
+        if not injected:
+            injected.append(True)
+            raise NativeAdapterError(ErrorCode.CONFIG_ERROR, 'Local preparation refused',
+                                     {'reason': 'preauthorization_fixture'})
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(embedded_dispatch, 'ApprovedLocalLaunch', fail_once)
+    failed = admit(setup, binding, 'preauth-failed-open', 'runtime.start', new_session=True)
+    eventually(lambda: bool(injected))
+    eventually(lambda: failed['session_id'] not in owner.sessions, seconds=30)
+    receipt = wait_receipt(setup, failed, stages=('FAILED',))
+    assert receipt['executor_stage'] == 'FAILED'
+    assert not healthy_peer.stopped, 'Pre-authorization failure stopped a healthy sibling'
+    assert 'subject' not in owner.agents.blocked
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        conn = uow.connection
+        terminal = conn.execute('SELECT stage,error_code,possible_effect,retry_safe '
+            'FROM execution_receipts WHERE operation_id=?', (failed['operation_id'],)).fetchone()
+        assert tuple(terminal) == ('FAILED', 'PREPARATION_FAILED', 0, 1)
+        session = conn.execute('SELECT lifecycle_state,lease_state,local_retirement_json '
+            'FROM execution_sessions WHERE session_id=?', (failed['session_id'],)).fetchone()
+        assert session['lifecycle_state'] == session['lease_state'] == 'CLOSED'
+        assert session['local_retirement_json'] is not None
+        admissions = conn.execute('SELECT reservation_json FROM execution_capacity_admissions '
+            'WHERE session_id=?', (failed['session_id'],)).fetchall()
+        # Direct runtime messages do not reserve capacity before authorization.
+        # A consumed prelease handoff needs its separate reservation test.
+        assert not admissions
+    turn = admit(setup, binding, 'preauth-healthy-turn', 'turn.submit',
+                 session_id=healthy['session_id'], text='Still available')
+    wait_receipt(setup, turn)
+
+
+def test_pre_authorization_refusal_recovers_after_restart_before_server_receipt(tmp_path, monkeypatch):
+    from okto_nexus.bootstrap import embedded_dispatch, embedded_startup_refusal
+
+    with contextmanager(local_setup.__wrapped__)(tmp_path, monkeypatch, None) as setup:
+        setup, binding, _ = connect_local(setup)
+        owner = setup[1].state.embedded_dispatch_owner
+        original = embedded_dispatch.ApprovedLocalLaunch
+        failed_once = []
+
+        def fail_once(*args, **kwargs):
+            if not failed_once:
+                failed_once.append(True)
+                raise NativeAdapterError(ErrorCode.CONFIG_ERROR, 'Local preparation refused',
+                                         {'reason': 'preauthorization_restart_fixture'})
+            return original(*args, **kwargs)
+
+        def hold_receipt(*args, **kwargs):
+            raise OSError('Synthetic Server receipt interruption')
+
+        with monkeypatch.context() as patch:
+            patch.setattr(embedded_dispatch, 'ApprovedLocalLaunch', fail_once)
+            patch.setattr(embedded_startup_refusal, 'append_execution_receipt', hold_receipt)
+            failed = admit(setup, binding, 'preauth-restart-failed', 'runtime.start', new_session=True)
+            def retained():
+                with setup[0].connection_factory.unit_of_work(write=False) as uow:
+                    return uow.connection.execute('SELECT 1 FROM execution_local_startup_refusals '
+                        'WHERE operation_id=? AND accepted_at IS NULL AND report_json IS NULL',
+                        (failed['operation_id'],)).fetchone()
+            eventually(retained)
+            assert owner.failure is None
+
+    deps, app = app_for(tmp_path / 'home')
+    with TestClient(app) as client:
+        owner = app.state.embedded_dispatch_owner
+        restored = (deps, app, client, setup[3], *setup[4:])
+        eventually(lambda: not owner.agents.blocked, seconds=30)
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            conn = uow.connection
+            assert tuple(conn.execute('SELECT stage,error_code,possible_effect FROM execution_receipts '
+                'WHERE operation_id=?', (failed['operation_id'],)).fetchone()) == (
+                    'FAILED', 'PREPARATION_FAILED', 0)
+            assert conn.execute('SELECT local_retirement_json FROM execution_sessions '
+                'WHERE session_id=?', (failed['session_id'],)).fetchone()[0] is not None
+        owner.native_factory = Peers()
+        fresh = admit(restored, binding, 'preauth-restart-fresh', 'runtime.start', new_session=True)
+        wait_receipt(restored, fresh)
+        assert owner.failure is None
+
+
+def test_consumed_handoff_preauthorization_refusal_releases_exact_reservation(runtime, monkeypatch):
+    from okto_nexus.bootstrap import embedded_dispatch
+
+    setup, binding, _ = runtime
+    deps, app, client, *_ = setup
+    owner = app.state.embedded_dispatch_owner
+    owner.host.capacity_enabled = True
+    service, hid, gid, port, held, claim = reserve(runtime)
+    original = embedded_dispatch.ApprovedLocalLaunch
+    injected = []
+
+    def fail_once(*args, **kwargs):
+        if not injected:
+            injected.append(True)
+            raise NativeAdapterError(ErrorCode.CONFIG_ERROR, 'Local preparation refused',
+                                     {'reason': 'preauthorization_capacity_fixture'})
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(embedded_dispatch, 'ApprovedLocalLaunch', fail_once)
+    claimed = claim()
+    turn = claimed['runtime_operation']
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        opening_id = uow.connection.execute('SELECT operation_id FROM execution_operations '
+            "WHERE session_id=? AND action='runtime.open'", (held.request.scope.session_id,)).fetchone()[0]
+    opening = dict(operation_id=opening_id, session_id=held.request.scope.session_id)
+    assert client.portal.call(build_capacity_admission(deps, capacity=port).consume,
+                              turn['operation_id']).state == 'CONSUMED'
+    eventually(lambda: bool(injected))
+    view = wait_receipt(setup, opening, stages=('FAILED',))
+    assert view['executor_stage'] == 'FAILED'
+    assert 'subject' not in owner.agents.blocked
+    released = client.portal.call(port.get_capacity_reservation, held.request)
+    assert released.state == 'RELEASED'
+    assert released.reservation_id == held.reservation_id
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        conn = uow.connection
+        assert tuple(conn.execute('SELECT stage,error_code,possible_effect FROM execution_receipts '
+            'WHERE operation_id=?', (opening['operation_id'],)).fetchone()) == (
+            'FAILED', 'PREPARATION_FAILED', 0)
+        assert conn.execute('SELECT local_retirement_json FROM execution_sessions '
+            'WHERE session_id=?', (held.request.scope.session_id,)).fetchone()[0] is not None
+    fresh = admit(setup, binding, 'preauth-capacity-fresh', 'runtime.start', new_session=True)
+    wait_receipt(setup, fresh)
 
 
 @pytest.mark.parametrize('local_setup', ['pi_rpc', 'codex_app_server', 'claude_stream'], indirect=True)

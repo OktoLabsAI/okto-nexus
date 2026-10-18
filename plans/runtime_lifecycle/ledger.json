@@ -311,10 +311,18 @@
             "core": "5d88562",
             "connector_vendor": "aaa9951"
           }
+        },
+        {
+          "id": "M3p",
+          "status": "local_technical_qualified_global_rollout_pending",
+          "title": "Pre-authorization embedded startup refusal isolates its session, resumes across restart, and releases an exact consumed handoff reservation; 39 source and 4 installed-wheel cases passed.",
+          "evidence": [
+            "m3p-preauthorization-session-refusal.md"
+          ]
         }
       ],
       "nexus_m3b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3b-validation.md",
-      "next": "Qualify pre-authorization/consumed-capacity startup isolation and local Connector differential (M5); retain remaining load/UI gates and L12 attribution; controlled rollout of qualified changes remains pending.",
+      "next": "Qualify the remaining uncertain-effect and storage-failure startup boundaries, then the already listed M2/M3 acceptance gaps. M3p pre-authorization and consumed-capacity cases are qualified locally; global rollout remains pending.",
       "nexus_m3c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3c-validation.md",
       "nexus_m3e_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3e-validation.md",
       "nexus_m3g_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3g-pool-refusal.md",
@@ -936,8 +944,8 @@
       "id": "L20",
       "milestone": "M3",
       "priority": "high",
-      "status": "in_progress",
-      "description": "Code inspection after the Pi version_probe_timeout report: EmbeddedDispatchOwner._execute_owned sent unclassified opening failures to agent-wide recovery. M3l reproduced Pi preparation failure stopping a healthy sibling and fixes post-authorization embedded failures; 34 installed cases passed across all adapters and held containment. M5b reproduced Connector preparation failure taking the whole control connection down, then isolated that post-lease failure to its exact session, proved no native claim, released correlated capacity and delivered a terminal caller error. A separate Connector process failed its first preparation and delivered a second handoff without reconnect; Nexus 17 and Connector 54 installed cases passed. Pre-authorization, uncertain-effect startup, storage failure, broader differential behavior and global rollout remain pending. Neither M3l nor M5b is proven to explain the reported simultaneous Recovering state. See m3l-session-isolation.md and m5b-startup-refusal.md."
+      "status": "preauthorization_local_qualified_remaining_boundaries_pending",
+      "description": "M3l isolated post-authorization embedded startup failures; M5b isolated Connector preparation failures. M3p now proves local pre-authorization failure isolation with a healthy sibling, restart after Core fact before Server receipt, and exact release of consumed handoff capacity: 39 source and 4 installed-wheel cases passed. Uncertain-effect startup, storage-failure boundaries, broader differential behavior and global rollout remain pending. None is proven to explain the reported simultaneous Recovering state. See m3l-session-isolation.md, m5b-startup-refusal.md and m3p-preauthorization-session-refusal.md."
     },
     {
       "id": "L21",
@@ -1253,6 +1261,13 @@
       "priority": "high",
       "status": "real_ui_flows_verified_technical_acceptance_pending",
       "description": "Installed disposable Nexus 0.3.1, Connector 0.0.10 and Core 0.0.12 showed Pi, Claude and Codex Online and delivered three exact UI responses with 1/1 ACK; their session terminals showed formatted input and final output. A remote Pi stayed Offline without blocking those local agents. After abrupt termination of the disposable Nexus with a warm Pi slot, the same browser changed RECONNECTING to LIVE without reload, all three local agents returned Online, and a new Pi call succeeded with exact reply, 1/1 ACK and warm-pool replenishment. No manual recovery was used. This closes the real-UI flow evidence only; M2/M3 technical requirements remain open. See ui-a-installed-restart-evidence.md."
+    },
+    {
+      "id": "L66",
+      "milestone": "M3",
+      "priority": "high",
+      "status": "local_technical_qualified_global_rollout_pending",
+      "description": "An embedded opening failed before Core authorization and originally stopped a healthy session of the same agent. M3p retains an exact durable refusal, proves no Core native claim/birth, publishes PREPARATION_FAILED, releases only the failed session and resumes after an interrupted Server receipt. A consumed handoff reservation releases its capacity-owned physical slot by exact identity. 39 related source cases and 4 installed-wheel cases passed. No global rollout or new UI run at this technical checkpoint. See m3p-preauthorization-session-refusal.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",

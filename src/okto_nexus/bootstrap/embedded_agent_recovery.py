@@ -315,6 +315,11 @@ class EmbeddedAgentRecovery:
         owner = self.owner
         self.attempts[agent_id] = self.attempts.get(agent_id, 0) + 1
         await self._contain(agent_id)
+        from .embedded_startup_refusal import EmbeddedStartupRefusal
+        from .embedded_unopened_retirement import EmbeddedUnopenedRetirement
+        for session_id in await EmbeddedStartupRefusal(owner).recover(agent_id=agent_id):
+            if not await EmbeddedUnopenedRetirement(owner).retire(session_id):
+                raise CoreError('RECONCILIATION_REQUIRED', 'embedded_startup_retirement')
         from .embedded_preopen_recovery import EmbeddedPreopenRecovery
         await EmbeddedPreopenRecovery(owner).recover(agent_id)
         await owner._recover_publications(agent_id=agent_id)
@@ -376,6 +381,25 @@ class EmbeddedAgentRecovery:
                     f"Session {session_id}: {_diagnostic(session['recovery_error'])}",
                     agent_id=session['scope']['agent_id'])
                 session['recovery_error_recorded'] = True
+            if session.get('startup_refusal_frame') is not None:
+                # The opening worker is the only possible producer. Join it
+                # before the Core admission CAS and retain this session alone
+                # until the terminal receipt and retirement both commit.
+                workers = [t for t, sid in owner.worker_sessions.items()
+                           if sid == session_id and not t.done()]
+                if workers:
+                    await asyncio.gather(*workers, return_exceptions=True)
+                from .embedded_startup_refusal import EmbeddedStartupRefusal
+                from .embedded_unopened_retirement import EmbeddedUnopenedRetirement
+                refusal = EmbeddedStartupRefusal(owner)
+                await asyncio.to_thread(refusal.record, session['startup_refusal_frame'])
+                if session_id not in await refusal.recover(session_id=session_id):
+                    raise CoreError('RECONCILIATION_REQUIRED', 'embedded_startup_refusal')
+                if not await EmbeddedUnopenedRetirement(owner).retire(session_id):
+                    raise CoreError('RECONCILIATION_REQUIRED', 'embedded_startup_retirement')
+                owner.sessions.pop(session_id, None)
+                self.session_retry_at.pop(session_id, None)
+                return
             if session.get('initial_refusal'):
                 # No authorized executor was returned. Finish the exact durable
                 # refusal without containing healthy sibling sessions.

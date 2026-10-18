@@ -37,32 +37,54 @@ class EmbeddedUnopenedRetirement:
         receipts = db.execute('SELECT r.* FROM execution_receipts r JOIN execution_operations o '
             'USING(server_id,executor_id,operation_id) WHERE o.server_id=? AND o.executor_id=? '
             'AND o.session_id=? ORDER BY r.receipt_revision', key).fetchall()
+        startup = db.execute('SELECT refusal_json,report_json,accepted_at '
+            'FROM execution_local_startup_refusals WHERE server_id=? AND executor_id=? '
+            'AND operation_id=? AND session_id=?', (*key[:2], opening['operation_id'], session_id)).fetchone()
         binding = None
         if publications or receipts:
             # Only the authenticated refusal of the original opening qualifies.
             # A missing stream for anything possibly executed stays unverified.
-            if (len(publications) != 1 or not receipts or publications[0]['terminal'] != 1
+            if (startup is not None and startup['accepted_at'] is not None
+                    and not publications and len(receipts) == 1):
+                from nexus_connector_core.startup_refusal_link import decode_startup_refusal
+                report = decode_startup_refusal(startup['report_json'].encode())
+                if (report['refusal'] != json.loads(startup['refusal_json'])
+                        or report['receipt'] != json.loads(receipts[0]['canonical_frame'])
+                        or report['capacity'] is None and db.execute(
+                            'SELECT 1 FROM execution_capacity_admissions WHERE server_id=? '
+                            'AND executor_id=? AND session_id=?', key).fetchone()):
+                    return None
+                binding = report['refusal']['binding']
+                if (receipts[0]['operation_id'] != opening['operation_id']
+                        or receipts[0]['stage'] != 'FAILED'
+                        or receipts[0]['error_code'] != 'PREPARATION_FAILED'
+                        or receipts[0]['possible_effect'] or not receipts[0]['retry_safe']):
+                    return None
+                evidence_kind = 'startup_refusal'
+                evidence = [startup['refusal_json'], startup['report_json'], receipts[0]['canonical_frame']]
+            elif (len(publications) != 1 or not receipts or publications[0]['terminal'] != 1
                     or publications[0]['operation_id'] != opening['operation_id']
                     or any(r['operation_id'] != opening['operation_id'] or r['stage'] != 'FAILED'
                         or r['error_code'] != 'LEASE_REVALIDATION_REQUIRED'
                         or r['possible_effect'] or not r['retry_safe'] for r in receipts)):
                 return None
-            denial = db.execute('SELECT * FROM execution_session_containment WHERE server_id=? '
-                'AND executor_id=? AND session_id=? AND owner_generation=?',
-                (*key, session['owner_generation'])).fetchone()
-            if (denial is None or denial['state'] != 'RELEASED'
-                    or denial['opening_operation_id'] != opening['operation_id']
-                    or denial['opening_intent_hash'] != opening['intent_hash']
-                    or json.loads(denial['request_json']).get('purpose') != 'initial'):
-                return None
-            from .embedded_initial_refusal import EmbeddedInitialRefusal
-            rows = self.owner.access.session_containment.repository.initial_refusal_records(
-                uow, owner.channel, session_id=session_id, pending_only=False)
-            if len(rows) != 1:
-                return None
-            binding = EmbeddedInitialRefusal.proof(rows[0])['binding']
-            evidence_kind = 'initial_lease_refusal'
-            evidence = [denial['request_json'], publications[0]['binding_json'], receipts[-1]['canonical_frame']]
+            else:
+                denial = db.execute('SELECT * FROM execution_session_containment WHERE server_id=? '
+                    'AND executor_id=? AND session_id=? AND owner_generation=?',
+                    (*key, session['owner_generation'])).fetchone()
+                if (denial is None or denial['state'] != 'RELEASED'
+                        or denial['opening_operation_id'] != opening['operation_id']
+                        or denial['opening_intent_hash'] != opening['intent_hash']
+                        or json.loads(denial['request_json']).get('purpose') != 'initial'):
+                    return None
+                from .embedded_initial_refusal import EmbeddedInitialRefusal
+                rows = self.owner.access.session_containment.repository.initial_refusal_records(
+                    uow, owner.channel, session_id=session_id, pending_only=False)
+                if len(rows) != 1:
+                    return None
+                binding = EmbeddedInitialRefusal.proof(rows[0])['binding']
+                evidence_kind = 'initial_lease_refusal'
+                evidence = [denial['request_json'], publications[0]['binding_json'], receipts[-1]['canonical_frame']]
         else:
             dispatch = db.execute('SELECT dispatch_state,last_error FROM execution_dispatch_outbox '
                 'WHERE server_id=? AND executor_id=? AND operation_id=?', (*key[:2], opening['operation_id'])).fetchone()
@@ -129,7 +151,9 @@ class EmbeddedUnopenedRetirement:
                     raise CoreError('RECONCILIATION_REQUIRED', 'embedded_unopened_resources')
                 receipt = await journal.get_receipt(operation)
                 expected = (OperationReceipt(operation.operation_id, binding['core_intent_hash'],
-                    'FAILED', False, True, session_id, error_code='LEASE_REVALIDATION_REQUIRED')
+                    'FAILED', False, True, session_id,
+                    error_code='PREPARATION_FAILED' if proof['evidence_kind'] == 'startup_refusal'
+                    else 'LEASE_REVALIDATION_REQUIRED')
                     if binding is not None else None)
                 if receipt != expected:
                     raise CoreError('RECONCILIATION_REQUIRED', 'embedded_unopened_receipt')
