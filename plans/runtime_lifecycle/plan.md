@@ -272,6 +272,14 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   adulterados foram recusados pelo Server; o relatório durável original foi
   aceito e o handoff seguinte progrediu uma vez. Um teste source-tuple passou.
   A instalação global permaneceu desligada. Ver `m5i-capacity-field-matrix.md`.
+- Checkpoint M5j: uma abertura gerenciada que falhou com prova Core de ausência
+  de efeito após consumir a reserva deixou o handoff `CLAIMED`, mesmo após o
+  fechamento físico e o fim do lease. A compensação atual cobre apenas reserva
+  não consumida; a expiração comum exclui o binding gerenciado. Recuperar somente
+  com prova conjunta de no-effect, liberação física e ausência de decisão/turn,
+  cercando o produtor original e limitando novas tentativas por agente. Casos
+  de efeito incerto continuam sob reconciliação explícita. Ver
+  `m5j-managed-no-effect-claim-gap.md`.
 - Extrair políticas de estado/transição para Core e manter adaptadores de host no
   Nexus/Connector. Remover duplicação somente após testes diferenciais.
 - Unificar interpretação de close sem receipt, prova de contenção, retomada de

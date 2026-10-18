@@ -600,7 +600,8 @@
         "m5f-refusal-forgery-matrix.md",
         "m5g-uncertain-native-open.md",
         "m5h-capacity-forgery.md",
-        "m5i-capacity-field-matrix.md"
+        "m5i-capacity-field-matrix.md",
+        "m5j-managed-no-effect-claim-gap.md"
       ],
       "commits": {
         "core_foundation": "19bb8f2",
@@ -912,6 +913,13 @@
       "priority": "high",
       "status": "installed_real_ui_partial",
       "description": "Installed disposable Nexus/Connector/Pi UI set one-shot max 2, warm 1, queue 1 and 5s start-wait. Three near-simultaneous private sends produced exact M7K_C_OK from the warm slot, ONE_SHOT_START_TIMEOUT for an admitted cold opening, and ONE_SHOT_QUEUE_EXPIRED for the queued call. Both no-effect retry-safe failures reached Meta-harness; the cold runtime.open completed late without running its expired turn and became the configured warm slot. Connector CLI stop and Nexus fixture DRAINED with empty resources/errors; no port remained. Embedded comparison, other harnesses, agent creation during recovery and a latency distribution remain pending. See m7k-ui-queue-deadline.md."
+    },
+    {
+      "id": "L32",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "reproduced_design_pending",
+      "description": "Read-only forensic review of the M7i artificial lease-boundary failure found a consumed capacity admission and PRE_EXECUTION_FENCED Core opening receipt with possible_effect=0/retry_safe=1, no turn receipt, a CLOSED/CLOSED session and a one-shot error delivered to the operator. The broadcast handoff stayed CLAIMED past its lease until test operator cancellation because the existing automatic compensation only covers unconsumed reservations and ordinary lease expiry excludes managed bindings. Implement exact no-effect plus physical-release automatic recovery with bounded candidate retry/backoff; retain explicit reconciliation for ambiguous cases. See m5j-managed-no-effect-claim-gap.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",
