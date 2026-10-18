@@ -2,12 +2,15 @@
 # Imported fixtures are discovered by pytest from this module.
 # ruff: noqa: F401, F811
 import asyncio
+import os
+import sys
 import threading
 from contextlib import contextmanager
 import pytest
 from starlette.testclient import TestClient
-from nexus_connector_core import LocalRuntimeCore
+from nexus_connector_core import LocalRuntimeCore, OperationKey, SessionKey
 from nexus_connector_core.native.adapter_types import NativeAdapterError, ErrorCode
+from nexus_connector_core.native.process import spawn_owned_process
 
 from test_agent_recovery_isolation import eventually
 from test_embedded_dispatch import local_setup, qualified_contract, connect_local, admit, wait_receipt
@@ -251,6 +254,71 @@ def test_consumed_handoff_preauthorization_refusal_releases_exact_reservation(ru
             'WHERE session_id=?', (held.request.scope.session_id,)).fetchone()[0] is not None
     fresh = admit(setup, binding, 'preauth-capacity-fresh', 'runtime.start', new_session=True)
     wait_receipt(setup, fresh)
+
+
+@pytest.mark.skipif(sys.platform != 'win32', reason='Managed Windows Job startup containment')
+def test_native_spawn_failure_contains_exact_session_and_preserves_sibling(local_setup, monkeypatch):
+    from okto_nexus.adapters.outbound.process_liveness import process_exited
+
+    setup, binding, _ = connect_local(local_setup)
+    owner = setup[1].state.embedded_dispatch_owner
+    peers = Peers()
+    owner.native_factory = peers
+    healthy = admit(setup, binding, 'spawn-healthy', 'runtime.start', new_session=True)
+    wait_receipt(setup, healthy)
+    healthy_peer = peers.sessions[healthy['session_id']]
+    original = peers.open
+    spawned = []
+
+    async def fail_once(prepared, session_id, context, *, stream_epoch, process_launch):
+        if not spawned:
+            def start():
+                child = spawn_owned_process([sys.executable, '-c', 'import time; time.sleep(60)'],
+                    container_id=process_launch.identity.container_id,
+                    cwd=os.getcwd(), env=dict(os.environ), text=True)
+                spawned.append(child)
+                raise NativeAdapterError(ErrorCode.INTERNAL_ERROR, 'Lost response after native spawn', {})
+            return await process_launch.produce(validate_authority=lambda: None, start=start)
+        return await original(prepared, session_id, context, stream_epoch=stream_epoch)
+
+    monkeypatch.setattr(peers, 'open', fail_once)
+    try:
+        failed = admit(setup, binding, 'spawn-failed', 'runtime.start', new_session=True)
+        eventually(lambda: bool(spawned), seconds=20)
+        eventually(lambda: failed['session_id'] not in owner.sessions, seconds=45)
+        eventually(lambda: process_exited(spawned[0].pid) is True, seconds=15)
+        assert not healthy_peer.stopped
+        assert 'subject' not in owner.agents.blocked
+        key = OperationKey(owner.channel.server_id, owner.channel.executor_id, failed['operation_id'])
+        session_key = SessionKey(key.server_id, key.executor_id, failed['session_id'])
+        async def core_proof():
+            async def inspect(journal):
+                launch = await journal.get_process_launch(session_key)
+                receipt = await journal.get_receipt(key)
+                assert launch.spawn_claimed and launch.stop_proof == 'CONTAINER_STOPPED'
+                assert receipt.stage == 'OUTCOME_UNKNOWN' and receipt.possible_effect
+                assert not receipt.retry_safe
+            await owner.host.with_history(executor_id=key.executor_id,
+                session_id=session_key.session_id, read=inspect)
+            slot = await (await owner.host._ledger()).owned_slot_state(session_key)
+            assert slot is not None and slot.released
+        setup[2].portal.call(core_proof)
+        with setup[0].connection_factory.unit_of_work(write=False) as uow:
+            conn = uow.connection
+            row = conn.execute('SELECT lifecycle_state,lease_state FROM execution_sessions WHERE session_id=?',
+                (failed['session_id'],)).fetchone()
+            assert tuple(row) in (('CLOSED', 'CLOSED'), ('FAILED', 'CLOSED'))
+        view = setup[2].get(f"/v1/runtime/operations/{failed['operation_id']}",
+            headers=setup[3]['subject']).json()
+        assert view['possible_effect'] is True and view['error'] is not None
+        wait_receipt(setup, admit(setup, binding, 'spawn-healthy-turn', 'turn.submit',
+            session_id=healthy['session_id'], text='Still available'))
+        wait_receipt(setup, admit(setup, binding, 'spawn-fresh-open', 'runtime.start', new_session=True))
+    finally:
+        for child in spawned:
+            if child.poll() is None:
+                child.kill()
+                child.wait(timeout=10)
 
 
 @pytest.mark.parametrize('local_setup', ['pi_rpc', 'codex_app_server', 'claude_stream'], indirect=True)

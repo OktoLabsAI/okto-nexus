@@ -335,10 +335,18 @@
           "evidence": [
             "m3r-authorizer-interruption.md"
           ]
+        },
+        {
+          "id": "M3s",
+          "status": "windows_embedded_qualified_global_rollout_pending",
+          "title": "A real Job-owned child failing after spawn retains OUTCOME_UNKNOWN, stops with CONTAINER_STOPPED, releases its slot, reports possible effect, and preserves a healthy sibling; installed restart spawn/birth frontiers passed.",
+          "evidence": [
+            "m3s-positive-native-effect-isolation.md"
+          ]
         }
       ],
       "nexus_m3b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3b-validation.md",
-      "next": "Qualify the remaining positive native-claim/uncertain-effect startup convergence, then the already listed M2/M3 acceptance gaps. M3p pre-authorization/consumed-capacity, M3q storage failure and M3r interrupted authorization with proven no effect are qualified locally; global rollout remains pending.",
+      "next": "M3s qualifies the positive native-effect startup boundary for the embedded Windows host. Continue the already listed M2/M3 acceptance gaps, Connector process differential and platform qualification; controlled global rollout remains pending.",
       "nexus_m3c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3c-validation.md",
       "nexus_m3e_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3e-validation.md",
       "nexus_m3g_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3g-pool-refusal.md",
@@ -960,8 +968,8 @@
       "id": "L20",
       "milestone": "M3",
       "priority": "high",
-      "status": "no_effect_startup_boundaries_qualified_positive_effect_pending",
-      "description": "M3l isolated post-authorization embedded startup failures; M5b isolated Connector preparation failures. M3p proves pre-authorization isolation, restart after Core fact before Server receipt, and exact consumed-capacity release: 39 source and 4 installed cases. M3q proves Core storage interruption retains only the failed session and retries: one source and one installed case. M3r proves interruption after Core runtime composition remains session-scoped when no claim/birth exists: 41 source, 6 installed Nexus and 20 installed Core contract cases. Positive native-claim/uncertain-effect convergence, broader differential behavior and global rollout remain pending. None is proven to explain the reported simultaneous Recovering state. See m3l-session-isolation.md, m5b-startup-refusal.md, m3p-preauthorization-session-refusal.md, m3q-startup-refusal-storage-boundary.md and m3r-authorizer-interruption.md."
+      "status": "embedded_windows_startup_boundaries_qualified_connector_differential_pending",
+      "description": "M3l isolated post-authorization embedded startup failures; M5b isolated Connector preparation failures. M3p proves pre-authorization isolation, restart after Core fact before Server receipt and exact consumed-capacity release (39 source/4 installed). M3q proves storage interruption retains only the failed session and retries (one source/one installed). M3r proves interruption after Core runtime composition remains session-scoped on no-claim/no-birth proof (41 source/6 installed Nexus/20 Core). M3s proves a real Windows Job-owned child failing after spawn retains possible effect, receives CONTAINER_STOPPED before slot release, reports caller error and preserves a healthy sibling; one source, one installed, two installed crash frontiers and one installed uncertain-birth recovery passed. Connector differential, other platforms and global rollout remain pending. None is proven to explain the reported simultaneous Recovering state. See m3l-session-isolation.md, m5b-startup-refusal.md, m3p-preauthorization-session-refusal.md, m3q-startup-refusal-storage-boundary.md, m3r-authorizer-interruption.md and m3s-positive-native-effect-isolation.md."
     },
     {
       "id": "L21",
@@ -1298,6 +1306,13 @@
       "priority": "high",
       "status": "local_technical_qualified_global_rollout_pending",
       "description": "M3r reproduced agent-wide recovery when authorization failed after the Core runtime was composed but before executor return. Nexus now contains the opening session and accepts PREPARATION_FAILED only with a Core no-claim/no-birth proof. A healthy sibling served another turn and a fresh session opened. 41 source, 6 installed Nexus and 20 installed Core contract cases passed. Positive native-claim uncertainty still requires separate convergence qualification. See m3r-authorizer-interruption.md."
+    },
+    {
+      "id": "L69",
+      "milestone": "M3",
+      "priority": "high",
+      "status": "windows_embedded_qualified_global_rollout_pending",
+      "description": "M3s exercised a real Job-owned Windows child with an ambiguous post-spawn opening failure while a sibling session of the same agent stayed healthy. Core retained OUTCOME_UNKNOWN/possible_effect=true, proved CONTAINER_STOPPED, and released the exact slot; Server reported possible effect to the caller, and a fresh opening succeeded without replay. The final source and installed case passed; installed crash frontiers after spawn and birth, plus uncertain historical birth recovery, also passed. The initial fixture omitted container_id and was invalid evidence; the final fixture uses the production container identity. Connector differential, other platforms and global rollout remain pending. See m3s-positive-native-effect-isolation.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",
