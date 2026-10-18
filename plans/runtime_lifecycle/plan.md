@@ -351,6 +351,13 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   Os inícios das chamadas admitidas esperaram 2,020 s, 91,174 s e 117,051 s:
   investigar os cold starts e observar profundidade/deadline da fila antes de
   fechar UI-B. Ver `m7e-ui-pool-burst.md`.
+- Checkpoint M7f: o Connector elimina a segunda validação integral após montar
+  o ambiente somente quando o callback veio do próprio host e corresponde ao
+  mesmo store, frame, inventário e seleção. Callbacks arbitrários mantêm a
+  checagem integral do host, e o Core ainda valida a instalação antes do spawn.
+  98 testes source e 98 da wheel instalada passaram, incluindo drift durante
+  resolução de segredo. O efeito sobre cold starts concorrentes ainda precisa
+  de medição no próximo gate UI-B. Ver relatório M7f no Connector.
 
 - Requests pendentes aproveitam primeira instância pronta; warmup independente,
   concorrente e limitado por orçamento físico do host, além do limite por agente.
