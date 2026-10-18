@@ -484,6 +484,13 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   antes de seu prazo. O teste embedded de expiração na fila, a recuperação
   real de handoff M5j, os demais harnesses e a distribuição continuam no
   gate UI-B. Ver `m7l-ui-embedded-queue.md`.
+- Checkpoint parcial UI-B/M7m: três abas do Meta-harness enviaram chamadas
+  simultâneas ao Pi embedded com os mesmos limites de M7k. A chamada curta
+  ocupou a instância aquecida e respondeu com ACK 1/1; as demais retornaram
+  `ONE_SHOT_START_TIMEOUT` e `ONE_SHOT_QUEUE_EXPIRED` ao operador, ambas sem
+  execução nativa. O pool voltou a 1/2 disponível. A equivalência do prazo
+  de fila embedded/Connector está verificada; Codex/Claude e a distribuição
+  controlada seguem pendentes. Ver `m7m-ui-embedded-queue-expiry.md`.
 
 - Requests pendentes aproveitam primeira instância pronta; warmup independente,
   concorrente e limitado por orçamento físico do host, além do limite por agente.

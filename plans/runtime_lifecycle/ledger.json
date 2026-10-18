@@ -44,6 +44,7 @@
         "m7h-ui-queue-capacity.md",
         "m7i-ui-delayed-native-start.md",
         "m7k-ui-queue-deadline.md",
+        "m7m-ui-embedded-queue-expiry.md",
         "m5j-ui-initial-lease-refusal.md"
       ]
     },
@@ -675,6 +676,7 @@
         "m7h-ui-queue-capacity.md",
         "m7i-ui-delayed-native-start.md",
         "m7k-ui-queue-deadline.md",
+        "m7m-ui-embedded-queue-expiry.md",
         "Core: plans/runtime-lifecycle-m7b-passive-budget.md",
         "Connector: plans/runtime-lifecycle-m7c-remote-opening.md",
         "Connector: plans/runtime-lifecycle-m7d-shared-selection.md",
@@ -687,7 +689,7 @@
         "connector_m7c": "20abb83",
         "connector_m7d": "b39cc65"
       },
-      "next": "Fixed remaining M7/UI-B acceptance: embedded queue-expiry equivalence with the Connector; Codex and Claude native warm/cold behavior; and a bounded installed load distribution of admission, cold start, warm dispatch and queue times (p50/p95/p99) under the documented host budget. Pi remote warm/cold, queue rejection/deadline and long native startup were checked by UI in M7e-M7k; Pi embedded startup timeout in M7l; new-agent creation during active recovery in M5m. These samples do not constitute the remaining distribution."
+      "next": "Fixed remaining M7/UI-B acceptance: Codex and Claude native warm/cold behavior; and a bounded installed load distribution of admission, cold start, warm dispatch and queue times (p50/p95/p99) under the documented host budget. Pi remote warm/cold, queue rejection/deadline and long native startup were checked by UI in M7e-M7k; the matching embedded queue expiration and startup timeout were checked in M7m; new-agent creation during active recovery in M5m. These samples do not constitute the remaining distribution."
     },
     {
       "id": "M8",
@@ -1015,6 +1017,13 @@
       "priority": "high",
       "status": "installed_real_ui_local_remote_restart_verified",
       "description": "In the disposable installed Nexus 0.3.1 at 127.0.0.1:8204, Agents showed remote Pi Offline before its retained Connector 0.0.10 daemon started and Online/Connected afterwards; embedded Pi remained Online. Two new Meta-harness messages to real Pi on remote and embedded paths each returned an exact marker with 1/1 ACK, durable read and NATIVE_ACCEPTED outbox. Core 0.0.12 was installed. This verifies paired real-Pi restart/reconnect delivery, not reset, revocation or a latency distribution. The global Nexus listener remained stopped. See m5t-ui-local-remote-restart.md."
+    },
+    {
+      "id": "L45",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "installed_real_ui_embedded_queue_expiry_verified",
+      "description": "Installed disposable Nexus 0.3.1 and real Pi 0.87.1 embedded one-shot used max 2, warm 1, queue 1, and a 5s start deadline. Three prepared Meta-harness tabs sent concurrently: the short request returned exact M7_TAB_QUEUE_OK with 1/1 ACK, while the two other calls returned caller-visible ONE_SHOT_START_TIMEOUT and ONE_SHOT_QUEUE_EXPIRED, both execution_started=false/possible_effect=false/retry_safe=true. Agents returned to 1/2 available. This matches the Connector-local queue deadline split in M7k. The scoped fixture and port 8204 stopped; the global Nexus remained untouched. Codex/Claude and controlled latency distributions remain pending. See m7m-ui-embedded-queue-expiry.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",
