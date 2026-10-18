@@ -35,7 +35,11 @@
         "M5",
         "M7"
       ],
-      "status": "pending"
+      "status": "pending",
+      "interim_evidence": [
+        "m6d-real-ui.md",
+        "m7e-ui-pool-burst.md"
+      ]
     },
     {
       "id": "UI-C",
@@ -648,6 +652,7 @@
         "m7-pi-cold-cost.md",
         "m7b-passive-budget.md",
         "m7c-remote-open-receipts.md",
+        "m7e-ui-pool-burst.md",
         "Core: plans/runtime-lifecycle-m7b-passive-budget.md",
         "Connector: plans/runtime-lifecycle-m7c-remote-opening.md",
         "Connector: plans/runtime-lifecycle-m7d-shared-selection.md"
@@ -659,7 +664,7 @@
         "connector_m7c": "20abb83",
         "connector_m7d": "b39cc65"
       },
-      "next": "Qualify a latency distribution and concurrent warm/cold behavior through UI-B. M7d shared one full opening proof across trusted Connector layers: all 96 selected source and 96 isolated-wheel tests passed after updating two stale schema-14 assertions to schema 15; one installed Pi UI message returned exact response with ACK 1/1. Four full Pi identity reads remain in the Connector/Core path (27.198s of a 39.311s opening in one traced sample). Preserve full initial, pre-spawn Core and post-environment validation while reducing only demonstrably redundant work. See Connector plans/runtime-lifecycle-m7d-shared-selection.md."
+      "next": "M7e partial UI-B: remote Pi one-shot pool max 2/warm 1/queue 1 returned 3 exact responses with ACK 1/1 from a 4-tab burst; the fourth got HTTP 409 and retained its text. The pool replenished to 1/2. Durable start waits were 2.020s, 91.174s and 117.051s. Attribute cold/contended latency and observe transient queue depth/deadline, then qualify a load distribution and embedded comparison with the other harnesses. M7d passed all 96 selected source and installed-wheel tests, with four full Pi identity reads remaining. See m7e-ui-pool-burst.md and Connector plans/runtime-lifecycle-m7d-shared-selection.md."
     },
     {
       "id": "M8",

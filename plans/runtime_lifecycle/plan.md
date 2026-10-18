@@ -344,6 +344,13 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   ACK 1/1. Quatro hashes completos somaram 27,198 s numa abertura de 39,311 s.
   A comparação com M7c é amostral; UI-B e distribuição de carga seguem abertas.
   Ver Connector `plans/runtime-lifecycle-m7d-shared-selection.md`.
+- Checkpoint parcial UI-B/M7e: pela UI instalada, Pi remoto one-shot com
+  limite paralelo 2, aquecido 1 e fila 1 entregou três respostas com ACK 1/1
+  em uma rajada de quatro; a quarta tentativa recebeu HTTP 409 e o texto
+  permaneceu no compositor. O pool voltou automaticamente a 1/2 disponível.
+  Os inícios das chamadas admitidas esperaram 2,020 s, 91,174 s e 117,051 s:
+  investigar os cold starts e observar profundidade/deadline da fila antes de
+  fechar UI-B. Ver `m7e-ui-pool-burst.md`.
 
 - Requests pendentes aproveitam primeira instância pronta; warmup independente,
   concorrente e limitado por orçamento físico do host, além do limite por agente.

@@ -1,0 +1,13 @@
+# M7e — Partial UI-B Pi one-shot pool burst
+
+Date: 2026-10-18 UTC. This is a real installed-package Nexus UI checkpoint, not completion of UI-B.
+
+The disposable Nexus 0.3.1 on `127.0.0.1:8204` and the installed Connector 0.0.10/Core 0.0.12 ran a remote Pi 0.87.1 agent through the local Connector daemon. The global Nexus remained stopped. In **Agents → Connections**, the operator changed the existing disposable Pi connection from `per_sender` to **one-shot**, with 2 maximum parallel instances, 1 preinitialized instance, a 1-call queue and the default 300-second queue timeout. The UI first showed 0/2 with 1 warming, then 1/2 available with no active or queued work.
+
+One Meta-harness message tested the warm path. It received the exact `M7E_POOL_1_OK` response and ACK 1/1. The UI then showed the pool replenishing.
+
+Four prepared browser tabs sent private Meta-harness turns nearly together at 01:22:27–29 UTC. Three messages were admitted and received their exact `M7E_BURST_4_OK`, `M7E_BURST_1_OK` and `M7E_BURST_2_OK` responses with ACK 1/1. The fourth request, `M7E_BURST_3_OK`, received **HTTP 409 Conflict** from `/api/v1/meta-harness/send`; the UI retained its unsent text for retry. Its browser console showed the failed request. This is the expected bounded-capacity outcome, though this run did not capture the error body's code or how long the user-facing notice remained visible. A UI observation during the burst showed 2 warming slots and no count above the configured parallel limit. After the three completed, the pool returned automatically to 1/2 available, with 0 warming/running/queued.
+
+Read-only durable call records confirm three admitted burst calls succeeded. From enqueue to execution start they waited **2.020 s, 91.174 s and 117.051 s**. The 2-second start is consistent with the available warm slot; the other waits require cold/contended-start attribution. The third durable call remained admitted without a start timestamp while capacity was unavailable; the UI snapshot taken later showed zero queued, so this run does not prove the accuracy of the transient queued counter. No accepted call was left without a terminal result in this sample.
+
+The test browser closed. The Connector stopped via CLI, and Nexus recorded `DRAINED` with no resources or error codes before its lifespan ended at 01:27:27 UTC. Port 8204 has no listener. UI-B still needs an installed embedded comparison, explicit queue-depth/deadline observation, agent creation during recovery, larger load distribution and the other real harnesses. The 91/117-second cold waits need phase attribution before this gate can pass.
