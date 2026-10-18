@@ -679,6 +679,7 @@
         "m7k-ui-queue-deadline.md",
         "m7m-ui-embedded-queue-expiry.md",
         "m7n-ui-claude-codex-warm-cold.md",
+        "m7o-load-protocol.md",
         "Core: plans/runtime-lifecycle-m7b-passive-budget.md",
         "Connector: plans/runtime-lifecycle-m7c-remote-opening.md",
         "Connector: plans/runtime-lifecycle-m7d-shared-selection.md",
@@ -1033,6 +1034,13 @@
       "priority": "high",
       "status": "installed_real_ui_claude_codex_warm_cold_verified",
       "description": "Installed disposable Nexus 0.3.1/Core 0.0.12 and real Claude Code 2.1.301/Codex CLI 0.162.1 were configured through Agents as embedded one-shot max 2/warm 1/queue 1. Both connection tests passed. Two concurrent Meta-harness messages per harness returned exact markers with 1/1 ACK: warm starts took 1.606s Claude and 2.024s Codex; cold starts took 47.310s Claude and 56.306s Codex. Durable turn.submit sessions were distinct, and the cold runtime.open started after admission. Agents returned to 1/2 available for both. A controlled p50/p95/p99 distribution remains the fixed M7 gate. See m7n-ui-claude-codex-warm-cold.md."
+    },
+    {
+      "id": "L47",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "load_protocol_fixed_before_run",
+      "description": "The remaining installed M7 load gate is pre-registered as six three-call UI bursts per real Pi/Claude/Codex harness, one harness at a time, max 2/warm 1/queue 1/start 300s, with a 4 GiB free-memory abort threshold. Browser and durable timestamps plus read-only queue-state polling will produce empirical p50/p95/p99 with sample counts and failures retained. No result is claimed yet. See m7o-load-protocol.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",

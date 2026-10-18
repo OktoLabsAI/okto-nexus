@@ -498,6 +498,10 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   outra aberta sob demanda em cada agente. Ambos os pools retornaram a 1/2
   disponível. A distribuição controlada p50/p95/p99 segue pendente. Ver
   `m7n-ui-claude-codex-warm-cold.md`.
+- O protocolo fixo M7o para a distribuição instalada foi registrado antes
+  da carga: seis rajadas de três mensagens reais por harness, um harness por
+  vez, com limite 2/1/1 e medição de admissão, abertura, dispatch e fila.
+  Ver `m7o-load-protocol.md`; nenhum resultado de carga é inferido do protocolo.
 
 - Requests pendentes aproveitam primeira instância pronta; warmup independente,
   concorrente e limitado por orçamento físico do host, além do limite por agente.
