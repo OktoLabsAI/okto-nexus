@@ -603,6 +603,15 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   piso físico de 4 GiB; não substituímos essa observação por peers sintéticos.
   Ver `m7q-unlimited-integrated-concurrency.md`.
 
+- Checkpoint M7r: pela UI instalada, três chamadas Codex em modo ilimitado
+  ocuparam três processos e sessões nativas simultâneos, retornaram três
+  respostas exatas e finalizaram `SUCCEEDED`; a RAM livre permaneceu acima de
+  10 GiB. Um grant vencido no fixture havia revelado repetição de aberturas
+  recusadas e chamadas presas em `ADMITTED`. A recusa definitiva pré-Core agora
+  falha as chamadas pendentes e interrompe a reposição sem demanda. O gate
+  local M7/UI-B está concluído; host remoto físico não foi qualificado.
+  Ver `m7r-ui-unlimited-and-expired-grant.md`.
+
 - Requests pendentes aproveitam primeira instância pronta; warmup independente,
   concorrente e limitado por orçamento físico do host, além do limite por agente.
 - Separar contagem disponível, em startup, ocupada, drenando e incerta; não chamar

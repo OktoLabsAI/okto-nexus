@@ -150,6 +150,27 @@ def _settle(conn, slot, now):
             retry_safe=not call['started_at'], cancelled=bool(failure and failure['stage'] == 'CANCELLED'))
 
 
+def _fail_permanently_denied_openings(conn, slot, now):
+    """Propagate a proved pre-Core authorization refusal to waiting callers."""
+    row = conn.execute("SELECT last_error FROM execution_dispatch_outbox WHERE server_id=? AND executor_id=? "
+        "AND operation_id=? AND dispatch_state='RESOLVED_TERMINAL'",
+        (slot['server_id'], slot['executor_id'], slot['open_operation_id'])).fetchone()
+    if not row or not row['last_error']:
+        return
+    try:
+        error = json.loads(row['last_error'])
+    except (TypeError, ValueError):
+        return
+    if error.get('code') != 'PERMISSION_DENIED' or error.get('possible_effect') is not False:
+        return
+    pending = conn.execute("SELECT call_id FROM one_shot_calls WHERE agent_id=? AND executor_id=? "
+        "AND configuration_digest=? AND state IN ('QUEUED','ADMITTED') ORDER BY enqueued_at",
+        (slot['agent_id'], slot['executor_id'], slot['configuration_digest'])).fetchall()
+    for call in pending:
+        capacity.fail(conn, call_id=call['call_id'], code='PERMISSION_DENIED', stage='opening',
+            message=error.get('message') or 'Runtime action is not authorized.', now=now)
+
+
 def tick(deps):
     """A bounded owner scan; no native I/O while holding a database transaction."""
     from ..bootstrap.execution_authority import build_execution_access
@@ -190,7 +211,10 @@ def tick(deps):
                     from .one_shot_refusal import opening_refused_before_core
                     # Pre-send refusal has no Core receipt by design. Its exact
                     # durable proof releases only the unused logical pool slot.
-                    no_effect = no_effect or opening_refused_before_core(conn, slot)
+                    refused = opening_refused_before_core(conn, slot)
+                    no_effect = no_effect or refused
+                    if refused:
+                        _fail_permanently_denied_openings(conn, slot, now)
                 never_opened = (slot['state'] == 'CLOSING' and slot['session_id'] is None
                     and slot['open_operation_id'] is None and not conn.execute(
                         'SELECT 1 FROM execution_domain_deliveries WHERE domain_operation_id=?', (slot['call_id'],)).fetchone())
