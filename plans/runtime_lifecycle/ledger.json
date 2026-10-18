@@ -384,7 +384,8 @@
         "m4d4f2-typed-entry-validation.md",
         "m4d4g-mixed-ledger-budget.md",
         "Core: plans/runtime-lifecycle-m4d4g-mixed-capacity.md",
-        "Connector: plans/runtime-lifecycle-m4d4h-stream-fairness.md"
+        "Connector: plans/runtime-lifecycle-m4d4h-stream-fairness.md",
+        "Connector: plans/runtime-lifecycle-m4d4i-terminal-stream-checkpoints.md"
       ],
       "commits": {
         "nexus_m4d2": "132d8ba",
@@ -589,10 +590,19 @@
           "evidence": [
             "Connector: plans/runtime-lifecycle-m4d4h-stream-fairness.md"
           ]
+        },
+        {
+          "id": "M4d4i",
+          "status": "installed_terminal_checkpoint_verified_historical_scale_pending",
+          "title": "Server-accepted releases retire event streams from active replay while retaining exact final ACK proof. Seventy-one installed-wheel tests passed, including the 4096-active-stream boundary and crash recovery between stores. Core historical scanning and reconciliation-only release retirement remain pending.",
+          "connector_commit": "56222d1",
+          "evidence": [
+            "Connector: plans/runtime-lifecycle-m4d4i-terminal-stream-checkpoints.md"
+          ]
         }
       ],
       "nexus_m4a_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4a-validation.md",
-    "next": "M4d4e1-e6 provide transactional registry/head and paired tokens. The physical name scan remains an admission prerequisite without durable offline filesystem evidence; M4d4f2 rejects non-file entries and M4d4g sizes the Core ledger budget for 100k mixed records. M4d4h proves two-stream Connector replay fairness and per-stream ACK-failure isolation. The Connector event store still has a 4096-stream lifetime cap; next address lifecycle-safe terminal retirement or a larger store with resumable scanning, and scope the physical audit without weakening unknown-file fencing. Qualify the planned major real UI gate. M4d3/M4d4b rollout and controlled retained-history latency remain pending; global Nexus stopped.",
+    "next": "M4d4e1-e6 provide transactional registry/head and paired tokens. The physical name scan remains an admission prerequisite without durable offline filesystem evidence; M4d4f2 rejects non-file entries and M4d4g sizes the Core ledger budget for 100k mixed records. M4d4h proves two-stream Connector replay fairness and per-stream ACK-failure isolation. M4d4i retires Server-accepted event streams from active replay while retaining final ACK evidence. Next qualify reconciliation-only release retirement and make Core startup proportional to pending claims at 1k/10k/100k historical scale, preserving the unknown-file fence. Qualify the planned major real UI gate. M4d3/M4d4b rollout and controlled retained-history latency remain pending; global Nexus stopped.",
       "nexus_m4b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4b-validation.md",
       "nexus_m4c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4c-validation.md",
       "nexus_m4d1_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d1-validation.md",
@@ -1109,6 +1119,13 @@
       "priority": "high",
       "status": "installed_real_ui_unlimited_two_open_overlap_verified_three_parallel_pending",
       "description": "In a disposable installed Nexus/Core fixture, Agents saved a real Pi embedded one-shot policy with max_parallel=0 and showed Unlimited capacity. Three Meta-harness calls returned exact distinct markers, each with 1-of-1 ACK and a distinct terminal one-shot session. Durable runtime.open records show two overlapping openings, not three. Free RAM fell from 10.77 to 4.58 GiB; the next burst was aborted at the pre-existing 4 GiB safety floor. No test Pi process remained after closure, and free RAM returned to 10.68 GiB after the scoped Nexus stopped. Above-two concurrency and RAM attribution remain unqualified. See m7p-unlimited-ui-budget.md."
+    },
+    {
+      "id": "L55",
+      "milestone": "M4",
+      "priority": "high",
+      "status": "installed_terminal_stream_checkpoint_verified_historical_scale_pending",
+      "description": "Connector 0.0.10 now retires a stream from active replay only after a durable Server-accepted session release, retaining the final remote/Core ACK and exact release proof. Seventy-one focused and adjacent tests passed against the freshly installed wheel, including the 4096-active-stream limit, admission after retirement, idempotent crash repair and old-schema migration. No UI run was done at this technical checkpoint. Core historical claim scanning, reconciliation-only release retirement and 1k/10k/100k pending-proportional qualification remain open. See Connector plans/runtime-lifecycle-m4d4i-terminal-stream-checkpoints.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",

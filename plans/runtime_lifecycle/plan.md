@@ -265,6 +265,13 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   streams sem aposentadoria; capacidade/retenção continuam pendentes e esta
   fatia não conclui o aceite M4. Ver
   `../okto-nexus-connector/plans/runtime-lifecycle-m4d4h-stream-fairness.md`.
+- Checkpoint M4d4i: após `session.release.accepted`, o Connector conserva os
+  ACKs finais em um checkpoint terminal e retira o stream da tabela ativa.
+  O 4097º stream entra após uma liberação aceita; 71 testes da wheel instalada
+  passaram, incluindo queda entre os dois stores e retomada na reconexão.
+  Claims históricos do Core, releases resolvidos só por reconciliação e a
+  medição com 1k/10k/100k sessões continuam pendentes. Ver
+  `../okto-nexus-connector/plans/runtime-lifecycle-m4d4i-terminal-stream-checkpoints.md`.
 - Separar orçamento de controle/resultado do volume de artefatos; retry apenas na
   fronteira idempotente, sem repetir escrita nativa por erro SQLite/transporte.
 - Testes: reinício entre transações/checkpoints, eventos grandes, disco cheio,
