@@ -387,7 +387,8 @@
         "Connector: plans/runtime-lifecycle-m4d4h-stream-fairness.md",
         "Connector: plans/runtime-lifecycle-m4d4i-terminal-stream-checkpoints.md",
         "Core: plans/runtime-lifecycle-m4d4j-pending-claims.md",
-        "Connector: plans/runtime-lifecycle-m4d4j-pending-reconciliation.md"
+        "Connector: plans/runtime-lifecycle-m4d4j-pending-reconciliation.md",
+        "Connector: plans/runtime-lifecycle-m4d4k-reconciled-release-retirement.md"
       ],
       "commits": {
         "nexus_m4d2": "132d8ba",
@@ -613,10 +614,19 @@
             "Core: plans/runtime-lifecycle-m4d4j-pending-claims.md",
             "Connector: plans/runtime-lifecycle-m4d4j-pending-reconciliation.md"
           ]
+        },
+        {
+          "id": "M4d4k",
+          "status": "installed_reconciled_release_retirement_verified_historical_backfill_pending",
+          "title": "Accepted reconciliation proof retires terminal event and Core claim checkpoints using the final watermark. Independent maintenance does not gate Ready and reconnect repairs interrupted commits. The installed Connector wheel passed 56 focused and 57 adjacent tests; histories above the 4096-row pre-ready pass remain unqualified.",
+          "connector_commit": "1e770f6",
+          "evidence": [
+            "Connector: plans/runtime-lifecycle-m4d4k-reconciled-release-retirement.md"
+          ]
         }
       ],
       "nexus_m4a_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4a-validation.md",
-    "next": "M4d4e1-e6 provide transactional registry/head and paired tokens. The physical name scan remains an admission prerequisite without durable offline filesystem evidence; M4d4f2 rejects non-file entries and M4d4g sizes the Core ledger budget for 100k mixed records. M4d4h proves two-stream Connector replay fairness and per-stream ACK-failure isolation. M4d4i retires Server-accepted event streams, and M4d4j indexes pending Core claims so direct-accepted history no longer scales report/launch scans. Next qualify retirement for reconciliation-only releases and resumable older-history backfill, then the planned major real UI gate, without weakening the unknown-file fence. M4d3/M4d4b rollout and controlled retained-history latency remain pending; global Nexus stopped.",
+    "next": "M4d4e1-e6 provide transactional registry/head and paired tokens. The physical name scan remains an admission prerequisite without durable offline filesystem evidence; M4d4f2 rejects non-file entries and M4d4g sizes the Core ledger budget for 100k mixed records. M4d4h proves replay fairness; M4d4i-j retire direct accepted events and index pending Core claims; M4d4k retires reconciliation-accepted releases without gating Ready. Next make older-history backfill resumable outside admission, test the planned major real UI gate, and preserve the unknown-file fence. M4d3/M4d4b rollout and controlled retained-history latency remain pending; global Nexus stopped.",
       "nexus_m4b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4b-validation.md",
       "nexus_m4c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4c-validation.md",
       "nexus_m4d1_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d1-validation.md",
@@ -1147,6 +1157,13 @@
       "priority": "high",
       "status": "installed_pending_claim_projection_verified_reconciliation_only_pending",
       "description": "Core 0.0.12 retains immutable claim history while a partial index exposes only pending claims. Connector 0.0.10 checkpoints that projection after durable Server-accepted release and repairs interrupted event/Core/outbox commits; report and launch recovery use pending pages. With three pending claims and 1k/10k/100k history, SQLite VM steps were 176/106/106 and the installed report emitted one three-claim page at each size. Final wheels passed 23 Core, 53 focused Connector and 65 adjacent Connector tests; two adjacent fixtures were corrected for required recovery authority and the already-current schema 15. Reconciliation-only release retirement, resumable older-history backfill and the major real UI gate remain open. See Core plans/runtime-lifecycle-m4d4j-pending-claims.md and Connector plans/runtime-lifecycle-m4d4j-pending-reconciliation.md."
+    },
+    {
+      "id": "L57",
+      "milestone": "M4",
+      "priority": "high",
+      "status": "installed_reconciled_release_retirement_verified_historical_backfill_pending",
+      "description": "A durable accepted reconciliation proof now supplies final watermark and separate recovery digest for terminal event and Core claim checkpoints. Cleanup starts after acceptance in an independent task, with a repeated accepted cycle requesting a rescan; reconnect repairs interrupted updates. Schema 5 indexes direct and reconciliation-resolved releases. The final isolated installed Connector 0.0.10 wheel passed 56 focused and 57 adjacent tests, including background nonblocking behavior, proof tampering rejection and schema migration. Histories above the 4096-row pre-ready checkpoint pass and the major Nexus UI gate remain open. See Connector plans/runtime-lifecycle-m4d4k-reconciled-release-retirement.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",

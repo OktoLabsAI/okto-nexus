@@ -281,6 +281,13 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   resolvidos só por reconciliação e backfill antigo em lotes permanecem
   pendentes. Ver `../okto-nexus-connector-core/plans/runtime-lifecycle-m4d4j-pending-claims.md`
   e `../okto-nexus-connector/plans/runtime-lifecycle-m4d4j-pending-reconciliation.md`.
+- Checkpoint M4d4k: releases comprovados por reconciliação aceita agora
+  aposentam stream e claim com o watermark final, preservando separadamente a
+  prova original. A manutenção roda após o aceite sem bloquear Ready e é
+  retomável após queda. A wheel instalada passou 56 testes focados e 57
+  adjacentes. Backfill histórico acima de 4096 linhas ainda precisa sair do
+  caminho de admissão. Ver
+  `../okto-nexus-connector/plans/runtime-lifecycle-m4d4k-reconciled-release-retirement.md`.
 - Separar orçamento de controle/resultado do volume de artefatos; retry apenas na
   fronteira idempotente, sem repetir escrita nativa por erro SQLite/transporte.
 - Testes: reinício entre transações/checkpoints, eventos grandes, disco cheio,
