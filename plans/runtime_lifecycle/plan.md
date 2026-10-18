@@ -321,6 +321,12 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   `SUBMITTED`, replay idempotente, nenhuma nova tentativa de dispatch. Outras
   corridas de ações nativas e a matriz diferencial M5 seguem abertas. Ver
   `m5o-inflight-native-decision-owner-race.md`.
+- Checkpoint M5p: o Pi embedded concluiu um `handoff.claim` pelo bridge nativo,
+  mas a resposta foi retida durante a falha do dono. A geração antiga drenou
+  antes da sucessora; o Server preservou um único claim e receipt, e recusou o
+  material antigo de capacidade após o fechamento da sessão. O caso passou
+  em source e na wheel isolada. O equivalente no Connector continua pendente.
+  Ver `m5p-embedded-native-action-owner-race.md`.
 - Extrair políticas de estado/transição para Core e manter adaptadores de host no
   Nexus/Connector. Remover duplicação somente após testes diferenciais.
 - Unificar interpretação de close sem receipt, prova de contenção, retomada de
