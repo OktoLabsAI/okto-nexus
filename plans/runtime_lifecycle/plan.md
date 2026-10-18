@@ -560,6 +560,16 @@ Claude responderam; Codex recusado por quota do provedor. Ver
 - Aceite: zero chamadas admitidas sem resultado/erro rastreável, zero processos
   órfãos no cenário qualificado e recuperação automática com ambiente estável.
 - PRs/main/tags/publicação serão uma etapa separada se solicitada.
+- Checkpoint M8a: corrigida a recusa `4406` na reconciliação do Connector após
+  reset com preservação de agentes. O journal remoto retém sessões já liberadas
+  cujo histórico canônico foi apagado pelo reset; o Server agora as reconhece
+  somente com prova de liberação válida, sem aplicá-las ao estado atual. No
+  Nexus instalado, o Connector local reconectou automaticamente após reinício
+  forçado do Server e uma nova mensagem pela UI ao Pi real teve resposta exata
+  e ACK 1/1. A autorização de runtime com prazo de 60 minutos expirou durante
+  um teste intermediário e foi alterada pela UI para ilimitada antes da prova
+  instalada. A qualificação M8 completa permanece aberta. Ver
+  `m8a-connector-reconnect-after-reset.md`.
 
 ## Matriz mínima de validação
 

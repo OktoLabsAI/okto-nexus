@@ -199,12 +199,31 @@ class ExecutionReconciliation:
                 raise ValueError('The ownership facts do not match the claims.')
             if self.agent_id is not None and not set(claims).issubset(request['session_ids']):
                 raise ValueError('The claims do not belong to this reconciliation page.')
+            reset_generation = conn.execute(
+                'SELECT generation FROM runtime_reset_generation WHERE singleton=1').fetchone()[0]
+            prior_reset_claims = set()
             for session_id, claim in claims.items():
                 fact = facts[session_id]
                 session = conn.execute('SELECT owner_generation FROM execution_sessions WHERE '
                     'server_id=? AND executor_id=? AND session_id=?', (c.server_id,c.executor_id,session_id)).fetchone()
-                if session is None or fact['owner_generation'] != claim['owner_generation']:
+                if fact['owner_generation'] != claim['owner_generation']:
                     raise ValueError('The claim has no matching canonical session.')
+                if session is None:
+                    if self.agent_id is not None or reset_generation == 0:
+                        raise ValueError('The claim has no matching canonical session.')
+                    # Preserve-agents reset deletes operational history after
+                    # draining the remote runtime. Its durable journal may
+                    # still report that released history on every reconnect.
+                    # It cannot change current Server state or prove a new
+                    # release, but an unreleased/invalid claim still blocks.
+                    prior_reset_claims.add(session_id)
+                    digest = fact.get('proof_digest')
+                    if (claim['state'] != 'RELEASED' or fact['process_state'] not in ('EXITED', 'NOT_STARTED')
+                            or not isinstance(digest, str) or len(digest) != 71
+                            or not digest.startswith('sha256:')
+                            or any(char not in '0123456789abcdef' for char in digest[7:])):
+                        self.blocked = True
+                    continue
                 not_started = fact['process_state'] == 'NOT_STARTED'
                 if (claim['state'] != 'RELEASED' or fact['process_state'] not in ('EXITED', 'NOT_STARTED') or
                         fact.get('proof_digest') is None or session['owner_generation'] != claim['owner_generation']):
@@ -269,6 +288,8 @@ class ExecutionReconciliation:
                 if stream in streams or watermark['session_id'] not in claims:
                     raise ValueError('The stream watermark has no matching claim.')
                 streams.add(stream)
+                if watermark['session_id'] in prior_reset_claims:
+                    continue
                 persisted = conn.execute("SELECT committed_contiguous,gap_state FROM execution_event_watermarks "
                     "WHERE server_id=? AND executor_id=? AND session_id=? AND stream_epoch=?",
                     (c.server_id,c.executor_id,*stream)).fetchone()

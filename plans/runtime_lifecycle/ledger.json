@@ -1077,6 +1077,13 @@
       "priority": "high",
       "status": "installed_real_ui_connector_preserve_reset_verified_restart_recovery_failed",
       "description": "The installed UI configured a real Pi on a same-machine Connector and confirmed baseline exact response/1-of-1 ACK. Preserve-agents reset initially refused because remote close lacked the authenticated dashboard operator actor; no history was deleted. The correction passed a targeted test. Repeating the UI reset preserved 3 agents/1 workspace/2 bindings while clearing 2 sessions/8 messages/8 deliveries/10 events. Connector remained CONTROL_READY and returned exact M5W_REMOTE_AFTER_RESET_OK with 1-of-1 ACK. An independently expired 60-minute embedded grant was renewed through the UI; after FAILED/NONE released-session filtering was corrected, local Pi returned exact M5W_LOCAL_REAUTHORIZED_OK with 1-of-1 ACK. Extra forced Server restarts used to install the correction exposed persistent Connector reconnect failure (4406) even after a controlled daemon restart. A direct R4 hello to the same executor succeeded; daemon-path root cause remains open under the pre-existing M8 restart/recovery criterion. See m5w-ui-connector-preserve-reset.md."
+    },
+    {
+      "id": "L52",
+      "milestone": "M8",
+      "priority": "high",
+      "status": "installed_connector_post_reset_restart_recovery_verified",
+      "description": "The Connector's durable journal retained already-released claims after preserve-agents reset removed canonical Server execution history; strict reconciliation rejected them with WebSocket 4406. The Server now accepts only syntactically valid, released prior-reset remote claims without applying them to current state. Targeted tests passed 16 cases, including invalid claim variants and strict malformed-report rejection. The unchanged local Connector automatically reached CONTROL_READY after a forced restart of the installed Nexus 0.3.1, and the real Pi returned exact M8_INSTALLED_RESTART_OK through Meta-harness with 1-of-1 ACK. A timed 60-minute runtime grant expired during an intermediate attempt and was changed through the UI to unlimited before installed verification; no broader M8 qualification or physical remote host is claimed. See m8a-connector-reconnect-after-reset.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",

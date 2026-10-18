@@ -7,6 +7,7 @@ import logging
 from datetime import datetime, timedelta, timezone
 import secrets
 import sqlite3
+import traceback
 from urllib.parse import urlsplit
 
 import anyio
@@ -434,8 +435,12 @@ def build_router() -> APIRouter:
                 nonlocal pending_reconcile
                 try:
                     pending_reconcile = await anyio.to_thread.run_sync(reconciliation.request)
-                except Exception:
+                except Exception as error:
                     # Storage failure is never represented as an empty report.
+                    logging.getLogger(__name__).warning(
+                        'R4 reconciliation request unavailable: executor=%s type=%s code=%s stage=%s',
+                        executor_id, type(error).__name__, getattr(error, 'code', None),
+                        getattr(error, 'stage', None))
                     return
                 await _send_text(encode_r4_frame(pending_reconcile).decode("utf-8"))
 
@@ -760,7 +765,12 @@ def build_router() -> APIRouter:
             resumable_disconnect = resume_supported and error.code in (1000, 1001, 1006)
         except asyncio.TimeoutError:
             resumable_disconnect = resume_supported
-        except (CoreError, UnicodeError, ValueError, RecursionError):
+        except (CoreError, UnicodeError, ValueError, RecursionError) as error:
+            logging.getLogger(__name__).warning(
+                'R4 control protocol rejected: executor=%s type=%s code=%s stage=%s location=%s',
+                executor_id, type(error).__name__, getattr(error, 'code', None),
+                getattr(error, 'stage', None),
+                ' > '.join(f'{frame.name}:{frame.lineno}' for frame in traceback.extract_tb(error.__traceback__)))
             await ws.close(code=4406)
         finally:
             with anyio.CancelScope(shield=True):
