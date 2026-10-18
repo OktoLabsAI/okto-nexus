@@ -298,8 +298,10 @@ Claude responderam; Codex recusado por quota do provedor. Ver
 - Checkpoint M4d4m: apenas uma página de até 128 releases resolvidos é
   aposentada antes da reconciliação; o restante segue em manutenção independente
   após o aceite. A wheel instalada passou 29 testes, incluindo 4097 releases
-  sem recusa de Ready e conclusão do backlog de uma segunda página. A varredura
-  física de nomes e o fence de entradas não atribuíveis permanecem na admissão.
+  sem recusa de Ready e conclusão do backlog de uma segunda página. Com três
+  pendências fixas, consultas indexadas ficaram abaixo de 200 passos VM SQLite
+  diante de 1k/10k/100k linhas históricas aposentadas. A varredura física de
+  nomes e o fence de entradas não atribuíveis permanecem na admissão.
   Ver `../okto-nexus-connector/plans/runtime-lifecycle-m4m-historical-backfill.md`.
 - Separar orçamento de controle/resultado do volume de artefatos; retry apenas na
   fronteira idempotente, sem repetir escrita nativa por erro SQLite/transporte.

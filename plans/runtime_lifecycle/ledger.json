@@ -637,8 +637,9 @@
         {
           "id": "M4d4m",
           "status": "installed_historical_release_backfill_verified",
-          "title": "Reconnect repairs one bounded resolved-release page before readiness; accepted reconciliation continues indexed checkpoint cleanup independently. Installed tests passed 29/29, including a 4097-release admission case and a 129-release background completion case. The physical directory admission fence remains intact.",
+          "title": "Reconnect repairs one bounded resolved-release page before readiness; accepted reconciliation continues indexed checkpoint cleanup independently. Installed tests passed 29/29, including a 4097-release admission case and a 129-release background completion case. With three pending releases, indexed lookups stayed under 200 SQLite VM steps against 1k/10k/100k retired rows. The physical directory admission fence remains intact.",
           "connector_commit": "58d1ef8",
+          "connector_validation_commit": "ffc90d1",
           "evidence": [
             "Connector: plans/runtime-lifecycle-m4m-historical-backfill.md"
           ]
@@ -1196,7 +1197,7 @@
       "milestone": "M4",
       "priority": "high",
       "status": "installed_historical_release_backfill_verified",
-      "description": "The reconnect path now retires at most one 128-row resolved release page before reconciliation, then the accepted-cycle background worker continues the indexed backlog independently. Checkpoints retain durable progress across interruptions. Installed Connector 0.0.10 wheel passed 29/29 focused tests, including 4097 accepted rows without a Ready refusal and 129 rows completed after accepted reconciliation. The physical unknown-file admission fence and controlled global rollout remain pending. See Connector plans/runtime-lifecycle-m4m-historical-backfill.md."
+      "description": "The reconnect path now retires at most one 128-row resolved release page before reconciliation, then the accepted-cycle background worker continues the indexed backlog independently. Checkpoints retain durable progress across interruptions. Installed Connector 0.0.10 wheel passed 29/29 focused tests, including 4097 accepted rows without a Ready refusal and 129 rows completed after accepted reconciliation. With three pending releases, indexed lookup cost remained under 200 SQLite VM steps at 1k/10k/100k retired rows. The physical unknown-file admission fence and controlled global rollout remain pending. See Connector plans/runtime-lifecycle-m4m-historical-backfill.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",
