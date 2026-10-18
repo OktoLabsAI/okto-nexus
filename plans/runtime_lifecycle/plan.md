@@ -335,6 +335,11 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   replay. As 41 verificações adjacentes passaram em source e wheel isolada.
   Este fixture não comprova a persistência do Server nem um host remoto físico.
   Ver `m5q-connector-native-action-owner-race.md`.
+- Checkpoint M5r: no Connector, a falha de preparação de um segundo binding
+  recebeu erro terminal sem efeito para Codex, Pi e Claude. O primeiro binding
+  continuou executando, e uma nova sessão do binding afetado abriu depois.
+  Treze testes adjacentes passaram em source e wheel isolada. O fixture usa
+  peers sintéticos; ver `m5r-managed-binding-isolation.md`.
 - Extrair políticas de estado/transição para Core e manter adaptadores de host no
   Nexus/Connector. Remover duplicação somente após testes diferenciais.
 - Unificar interpretação de close sem receipt, prova de contenção, retomada de
