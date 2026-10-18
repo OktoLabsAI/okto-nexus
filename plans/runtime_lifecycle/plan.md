@@ -596,6 +596,13 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   processos de teste remanescentes. O critério ilimitado acima de duas
   instâncias permanece aberto. Ver `m7p-unlimited-ui-budget.md`.
 
+- Checkpoint M7q: as wheels instaladas passaram seis casos integrados de
+  aquecimento e execução independente com quatro sessões simultâneas nos
+  adaptadores Pi, Codex e Claude, tanto com limite 5 quanto no modo ilimitado.
+  O teste real M7p pela UI segue limitado a duas aberturas sobrepostas pelo
+  piso físico de 4 GiB; não substituímos essa observação por peers sintéticos.
+  Ver `m7q-unlimited-integrated-concurrency.md`.
+
 - Requests pendentes aproveitam primeira instância pronta; warmup independente,
   concorrente e limitado por orçamento físico do host, além do limite por agente.
 - Separar contagem disponível, em startup, ocupada, drenando e incerta; não chamar

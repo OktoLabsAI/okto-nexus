@@ -1,0 +1,7 @@
+# M7q: unlimited pool concurrency without breaching the host budget
+
+Date: 2026-10-18. The installed one-shot runtime test now runs the same four-session scenario with `max_parallel=5` and `max_parallel=0` for each Pi, Codex and Claude adapter. Four independent native openings enter before any finishes; releasing them in reverse order assigns each prepared session to a distinct waiting call. All four calls reach `RUNNING` concurrently, finish `SUCCEEDED`, and the warm pool refills to four instances. **Six cases passed** from installed Nexus 0.3.1 / Connector 0.0.10 / Core 0.0.12 with pytest's source path disabled (`-o pythonpath=`); 18 unrelated cases were deselected.
+
+This proves the unlimited policy does not silently retain a two-instance software ceiling, using deterministic native peers. The existing [M7p](m7p-unlimited-ui-budget.md) real Nexus UI test configured `max_parallel=0` and delivered three exact Pi responses, but its sessions reached at most two overlapping native openings. Free physical memory fell to 4.58 GiB against the fixed 4 GiB abort floor. No additional real-process burst was attempted on that fixture. The fixed UI-B/M7 physical-host qualification above two simultaneous real instances remains open; this integrated test does not substitute synthetic peers for that observation.
+
+The global Nexus stayed stopped. After the integrated run, free physical memory was 10.82 GiB and no disposable Nexus listener was running.

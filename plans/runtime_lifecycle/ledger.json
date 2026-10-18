@@ -55,7 +55,8 @@
         "m4l-ui-recovery.md",
         "ui-b-evidence-audit.md",
         "m5x-differential-evidence-audit.md",
-        "m5y-separate-process-receipt-recovery.md"
+        "m5y-separate-process-receipt-recovery.md",
+        "m7q-unlimited-integrated-concurrency.md"
       ]
     },
     {
@@ -761,6 +762,7 @@
         "m7o-installed-load-results.md",
         "m7o-results.json",
         "m7p-unlimited-ui-budget.md",
+        "m7q-unlimited-integrated-concurrency.md",
         "Core: plans/runtime-lifecycle-m7b-passive-budget.md",
         "Connector: plans/runtime-lifecycle-m7c-remote-opening.md",
         "Connector: plans/runtime-lifecycle-m7d-shared-selection.md",
@@ -773,7 +775,7 @@
         "connector_m7c": "20abb83",
         "connector_m7d": "b39cc65"
       },
-      "next": "The fixed installed-local load distribution passed in M7o: 54/54 exact responses across real Pi, Claude and Codex, with empirical p50/p95/p99 and a peak of two open sessions per harness. Real Connector preserve-agents reset passed in M5w; the full UI-B gate still requires its requirement-by-requirement audit. M7p saved max_parallel=0 through the UI and returned three exact Pi responses with two overlapping opens, but free RAM approached the 4 GiB abort floor; more than two simultaneous instances remains unqualified under a measured physical host budget. No new acceptance criterion is added."
+      "next": "M7o passed the fixed installed-local real-harness distribution (54/54 exact responses and measured p50/p95/p99). M7p configured max_parallel=0 in the UI and delivered three real Pi responses, but only two native openings overlapped before the 4 GiB free-memory abort floor was approached. M7q proves four concurrent independent sessions for Pi/Codex/Claude adapters with deterministic native peers under both finite and unlimited policies (6 installed tests passed). The pre-existing UI-B physical-host criterion above two simultaneous real instances remains unqualified; do not exceed the fixed memory floor or infer that synthetic peers satisfy it."
     },
     {
       "id": "M8",
@@ -1227,6 +1229,13 @@
       "priority": "high",
       "status": "local_acceptance_complete",
       "description": "A separate Windows Connector process lost the terminal close receipt request before Server commit, retained its Core fact and publication, then reconnected automatically. The Server reached SUCCEEDED with one canonical close receipt, one native open/close and no second dispatch attempt; the Connector returned to CONTROL_READY in a newer generation. Three installed-wheel cross-process variants passed together, and the fault variant passed again with the explicit readiness assertion. This closes the local M5 receipt-loss process-boundary comparison alongside M5x. Real Pi UI coverage for the other fixed criteria is in M5t/M5m/M5u/M5v/M5w. Physical remote-host qualification is deferred as the plan states. See m5y-separate-process-receipt-recovery.md."
+    },
+    {
+      "id": "L63",
+      "milestone": "M7/UI-B",
+      "priority": "high",
+      "status": "integrated_unlimited_four_concurrent_real_host_budget_pending",
+      "description": "Installed Nexus 0.3.1 with Connector 0.0.10 and Core 0.0.12 passed six parameterized integrated cases, with pytest source imports disabled. Pi, Codex and Claude adapters each ran four independently opened one-shot sessions concurrently under max_parallel=5 and max_parallel=0, completed all four calls and refilled four warm slots. Native peers were deterministic. M7p previously delivered three real Pi UI calls in unlimited mode but only two openings overlapped as free RAM approached the fixed 4 GiB floor. The physical real-harness above-two observation remains open; no extra burst was forced on the current host. See m7q-unlimited-integrated-concurrency.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",
