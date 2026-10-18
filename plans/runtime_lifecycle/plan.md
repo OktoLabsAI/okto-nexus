@@ -346,6 +346,11 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   quatro casos embedded de restauração/revogação e cinco casos de ciclo de vida
   do Connector. A comparação final na UI com harnesses reais permanece aberta.
   Ver `m5s-differential-recovery-reset-check.md`.
+- Checkpoint M5t: após iniciar Nexus e Connector descartáveis, a UI mostrou
+  o Pi remoto voltar de Offline para Online/Connected. Mensagens novas pelo
+  Meta-harness ao Pi remoto e ao Pi embedded retornaram os marcadores exatos,
+  `1/1 ack`, leitura durável e `NATIVE_ACCEPTED`. Reset e revogação pela UI
+  continuam fora desta fatia. Ver `m5t-ui-local-remote-restart.md`.
 - Extrair políticas de estado/transição para Core e manter adaptadores de host no
   Nexus/Connector. Remover duplicação somente após testes diferenciais.
 - Unificar interpretação de close sem receipt, prova de contenção, retomada de
