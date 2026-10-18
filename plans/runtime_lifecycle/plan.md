@@ -370,7 +370,8 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   frontend foi compilado. Pela UI instalada, um handoff broadcast one-shot
   frio foi reivindicado pelo Pi e concluído com o resultado exato; a abertura
   levou 37,737 s, portanto não exercitou o antigo corte de 60 s. Um handoff
-  real acima de 60 s e a distribuição de latência permanecem no gate UI-B.
+  real acima de 60 s e a distribuição de latência permaneciam no gate UI-B
+  neste checkpoint; o primeiro foi exercitado em M7i.
   Ver `m7g-immediate-startup-budget.md`.
 - Checkpoint parcial UI-B/M7h: pela UI instalada, Pi one-shot remoto com
   máximo 1, aquecidas 0 e fila 1 recebeu três mensagens. As três foram
@@ -379,6 +380,14 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   mostram cada abertura começando após o close da anterior. Deadline de fila,
   distribuição de carga e demais harnesses ainda pendem. Ver
   `m7h-ui-queue-capacity.md`.
+- Checkpoint parcial UI-B/M7i: pela UI instalada, um broadcast handoff
+  one-shot foi reivindicado pelo Pi e concluiu após **114,152 s** de abertura,
+  incluindo 75 s de atraso controlado no startup nativo. Resultado exato e
+  ACK 1/1. Um ensaio anterior, com atraso antes do Core.open, foi cercado
+  por contexto de lease obsoleto e encaminhou erro seguro ao operador; não
+  constitui falha de startup nativo. Faltam deadline de fila, comparação
+  embedded, demais harnesses e distribuição de carga. Ver
+  `m7i-ui-delayed-native-start.md`.
 
 - Requests pendentes aproveitam primeira instância pronta; warmup independente,
   concorrente e limitado por orçamento físico do host, além do limite por agente.

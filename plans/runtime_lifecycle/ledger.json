@@ -41,7 +41,8 @@
         "m7e-ui-pool-burst.md",
         "m7f-ui-concurrent-cold.md",
         "m7g-immediate-startup-budget.md",
-        "m7h-ui-queue-capacity.md"
+        "m7h-ui-queue-capacity.md",
+        "m7i-ui-delayed-native-start.md"
       ]
     },
     {
@@ -670,7 +671,7 @@
         "connector_m7c": "20abb83",
         "connector_m7d": "b39cc65"
       },
-      "next": "M7e/M7f partial UI-B: remote Pi one-shot pool max 2/warm 1/queue 1 returned exact responses and recovered its warm target. M7f reduced the installed cold-open path to three full Pi build checks; two concurrent openings reached first receipts in 47.319s and 38.260s, versus prior uncontrolled M7e 89.063s and 65.565s. M7g removes a separate 60s cap from immediate handoff admission so the configured wait-to-start timeout also covers cold startup; 67 installed tests passed. An installed real-UI broadcast handoff with warm 0 auto-claimed and completed with exact Pi result; its cold open took 37.737s and therefore did not cross the old 60s cap. M7h UI set max 1/warm 0/queue 1: three accepted real Pi messages returned exact responses with 1/1 ACK and serialized physical sessions; a fourth received ONE_SHOT_CAPACITY_EXCEEDED without a sent message. The samples are not a controlled latency distribution. Observe a queue deadline and a real handoff beyond 60s, then qualify a load distribution, embedded comparison and other harnesses. See m7e-ui-pool-burst.md, m7f-ui-concurrent-cold.md, m7g-immediate-startup-budget.md and m7h-ui-queue-capacity.md."
+      "next": "M7e/M7f partial UI-B: remote Pi one-shot pool max 2/warm 1/queue 1 returned exact responses and recovered its warm target. M7f reduced the installed cold-open path to three full Pi build checks; two concurrent openings reached first receipts in 47.319s and 38.260s, versus prior uncontrolled M7e 89.063s and 65.565s. M7g removes a separate 60s cap from immediate handoff admission so the configured wait-to-start timeout also covers cold startup; 67 installed tests passed. An installed real-UI broadcast handoff with warm 0 auto-claimed and completed with exact Pi result after a 37.737s cold open. M7h UI set max 1/warm 0/queue 1: three accepted real Pi messages returned exact responses with 1/1 ACK and serialized physical sessions; a fourth received ONE_SHOT_CAPACITY_EXCEEDED without a sent message. M7i UI with 75s controlled delay inside Pi native startup completed a real Pi broadcast handoff after 114.152s open with exact result and 1/1 ACK, crossing the old 60s cap. The samples are not a controlled latency distribution. Observe a queue deadline, then qualify a load distribution, embedded comparison and other harnesses. See m7e-ui-pool-burst.md, m7f-ui-concurrent-cold.md, m7g-immediate-startup-budget.md, m7h-ui-queue-capacity.md and m7i-ui-delayed-native-start.md."
     },
     {
       "id": "M8",
@@ -885,7 +886,7 @@
       "milestone": "M7",
       "priority": "high",
       "status": "installed_real_ui_partial",
-      "description": "Immediate one-shot handoff admission previously capped startup at 60s despite a 300s configured queue/start-wait policy, while ordinary queued admission used the full policy. Real Pi queued cold opens measured 89.063s and 65.565s in M7e; direct handoff failure at that duration is inferred, not observed. M7g gives immediate admission the configured start-wait deadline and retains expiration fencing and physical-slot containment. A 90s simulated healthy cold start now proceeds. Final installed Nexus wheel f5f26b2e6d29f3658c77ef7c6fb3716df31130cb569f18b5adc3cd53a0913aba and current Connector wheel passed 67 focused cases including separate Connector processes; frontend build and installed UI text checked. In a disposable real-UI broadcast handoff with warm 0, Pi auto-claimed and completed with exact result; durable cold open took 37.737s, so the former 60s cap was not exercised. Fixture drained empty; global Nexus remained stopped. Real UI handoff beyond 60s and UI-B remain pending. See m7g-immediate-startup-budget.md."
+      "description": "Immediate one-shot handoff admission previously capped startup at 60s despite a 300s configured queue/start-wait policy, while ordinary queued admission used the full policy. Real Pi queued cold opens measured 89.063s and 65.565s in M7e; direct handoff failure at that duration is inferred, not observed. M7g gives immediate admission the configured start-wait deadline and retains expiration fencing and physical-slot containment. A 90s simulated healthy cold start now proceeds. Final installed Nexus wheel f5f26b2e6d29f3658c77ef7c6fb3716df31130cb569f18b5adc3cd53a0913aba and current Connector wheel passed 67 focused cases including separate Connector processes; frontend build and installed UI text checked. In a disposable real-UI broadcast handoff with warm 0, Pi auto-claimed and completed with exact result; durable cold open took 37.737s, so the former 60s cap was not exercised there. M7i later exercised it with 114.152s open and controlled native delay. UI-B remains pending. See m7g-immediate-startup-budget.md and m7i-ui-delayed-native-start.md."
     },
     {
       "id": "L29",
@@ -893,6 +894,13 @@
       "priority": "high",
       "status": "installed_real_ui_partial",
       "description": "An installed disposable Nexus/Connector/Pi UI sample set one-shot max 1, warm 0, queue 1 and 300s start wait. Three real UI sends returned exact Pi markers and 1/1 ACK; a fourth was visibly refused with ONE_SHOT_CAPACITY_EXCEEDED and no sent message. Durable opens, turns and closes succeeded serially, with each new open after its predecessor's close. Fixture drained empty; global Nexus remained stopped. Queue deadline, wider load distribution, embedded comparison and other harnesses remain pending. See m7h-ui-queue-capacity.md."
+    },
+    {
+      "id": "L30",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "installed_real_ui_partial",
+      "description": "A disposable installed Nexus/Connector/Pi UI broadcast handoff completed after a 114.152s runtime.open containing a controlled 75s delay inside real Pi native startup; exact result M7J_HANDOFF_OK and managed-request ACK 1/1. An earlier injection between binding and Core.open crossed lease renewal, was safely fenced before execution as PRE_EXECUTION_FENCED, and sent a one-shot error to the operator; its test handoff was cancelled via UI. The Connector and Nexus fixture drained with no resources/errors, global Nexus remained stopped. No natural latency distribution, queue deadline, embedded comparison or other harnesses claimed. See m7i-ui-delayed-native-start.md."
     }
   ],
   "live_installation": "Generation 73 was the last globally installed and real-UI-checked build (Nexus 0.3.1 M3i with Core 0.0.12 and Connector 0.0.10 independent producers). The operator stopped all Nexus and test processes; no Nexus or test process remains and neither port 8202 nor 8204 is listening. Pi/Claude/Codex were Online at the earlier M3i UI check, but no current availability is claimed. L12 cause and L14 load qualification remain pending. See m3i-ui-rollout.md.",
