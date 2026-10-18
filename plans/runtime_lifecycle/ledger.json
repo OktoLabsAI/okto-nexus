@@ -613,7 +613,8 @@
         "Connector: plans/runtime-lifecycle-m6-supervisor-adr.md",
         "Connector: plans/runtime-lifecycle-m6a-named-pipe.md",
         "Connector: plans/runtime-lifecycle-m6b-pipe-client.md",
-        "Connector: plans/runtime-lifecycle-m6c-process-exit.md"
+          "Connector: plans/runtime-lifecycle-m6c-process-exit.md",
+          "m6d-real-ui.md"
       ],
       "commits": {
         "connector_experiment_adr": "0944a0e",
@@ -621,8 +622,20 @@
         "connector_m6b": "986178d",
         "connector_m6c": "14b2249"
       },
-      "experiment_design": "Connector plans/runtime-lifecycle-m6-supervisor-adr.md defines existing daemon/Core host comparison, Windows IPC and authority constraints. M6a opt-in named pipe reached the actual dispatcher/Core host in a separate disposable process. M6b synchronous CLI client authenticated, pinged, read status, reconnected and shut down that real daemon. M6c shutdown joins a stalled authentication read and fixes Windows process identity falsely treating an exited, still-handle-backed daemon as live. Sixteen selected source and twenty installed-wheel tests passed at M6c, including default daemon process lifecycle. Real native session/reconnect comparison, cost, UI gate and adoption decision remain pending; default transport unchanged.",
-      "next": "Qualify the same daemon through actual session/control reconnect, revocation and host restart. Compare installed embedded and Connector availability, memory and shutdown with identical harnesses before deciding adoption. Global Nexus remains stopped."
+      "experiment_design": "Connector plans/runtime-lifecycle-m6-supervisor-adr.md defines existing daemon/Core host comparison, Windows IPC and authority constraints. M6a opt-in named pipe reached the actual dispatcher/Core host in a separate disposable process. M6b synchronous CLI client authenticated, pinged, read status, reconnected and shut down that real daemon. M6c shutdown joins a stalled authentication read and fixes Windows process identity falsely treating an exited, still-handle-backed daemon as live. Sixteen selected source and twenty installed-wheel tests passed at M6c, including default daemon process lifecycle. M6d used installed Nexus/Core/Connector artifacts, a separate named-pipe daemon and real Pi via the Nexus UI. Three turns returned exact responses with 1/1 ACK. A retained Nexus restart recovered the same remote configuration automatically; a controlled embedded-owner failure was replaced within the same HTTP process, after which the existing Connector Pi session answered again. First and post-restart Pi opens still took about 96/106 seconds to reach harness ready. M6d is a partial gate, not a host adoption decision; default transport unchanged.",
+      "real_ui_checkpoint": {
+        "id": "M6d",
+        "status": "partial_pass",
+        "evidence": "m6d-real-ui.md",
+        "provider": "Pi 0.87.1; installed Nexus 0.3.1, Connector 0.0.10, Core 0.0.12",
+        "responses": 3,
+        "acknowledged": 3,
+        "nexus_restart_reconnected_without_manual_agent_action": true,
+        "embedded_owner_replaced_same_http_process": true,
+        "warm_one_shot_pool_tested": false,
+        "in_flight_control_interruption_tested": false
+      },
+      "next": "Qualify warm one-shot pool, in-flight control interruption, revocation/lease expiry and Connector host restart with exact effect/receipt proofs. Compare installed embedded and Connector availability, memory and shutdown with identical harnesses before deciding adoption. Attribute and reduce the measured Pi opening latency in M7. Global Nexus remains stopped."
     },
     {
       "id": "M7",
