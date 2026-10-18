@@ -288,6 +288,19 @@ Claude responderam; Codex recusado por quota do provedor. Ver
   adjacentes. Backfill histórico acima de 4096 linhas ainda precisa sair do
   caminho de admissão. Ver
   `../okto-nexus-connector/plans/runtime-lifecycle-m4d4k-reconciled-release-retirement.md`.
+- Checkpoint M4d4l: no gate real de UI, o Pi remoto recebeu e respondeu pelo
+  Meta-harness antes e depois de reiniciar apenas o Nexus. A primeira retomada
+  revelou um ticket renovado ainda ativo que o Connector tentou substituir sem
+  sua referência explícita. Corrigido no Connector; uma segunda retomada antes
+  do vencimento do ticket voltou a `CONTROL_READY` sem ação do operador. Ver
+  `m4l-ui-recovery.md` e
+  `../okto-nexus-connector/plans/runtime-lifecycle-m4l-ticket-replacement.md`.
+- Checkpoint M4d4m: apenas uma página de até 128 releases resolvidos é
+  aposentada antes da reconciliação; o restante segue em manutenção independente
+  após o aceite. A wheel instalada passou 29 testes, incluindo 4097 releases
+  sem recusa de Ready e conclusão do backlog de uma segunda página. A varredura
+  física de nomes e o fence de entradas não atribuíveis permanecem na admissão.
+  Ver `../okto-nexus-connector/plans/runtime-lifecycle-m4m-historical-backfill.md`.
 - Separar orçamento de controle/resultado do volume de artefatos; retry apenas na
   fronteira idempotente, sem repetir escrita nativa por erro SQLite/transporte.
 - Testes: reinício entre transações/checkpoints, eventos grandes, disco cheio,
