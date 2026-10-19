@@ -97,3 +97,15 @@ another message. The session-pagination fixture now gives cloned sessions
 distinct journal names. The relevant local installed cases passed, including
 the three Windows shard-3 cases. The remaining matrix jobs and a replacement
 full Nexus matrix are required before M8 qualification.
+
+Windows 3.13 shard 0 also exposed a real pending-work failure: after restart,
+the sender could reserve a retained operation while inventory publication or
+binding revalidation was still converging, then terminate the unsent operation
+with `inventory_not_fresh`. The sender now releases that exact unsent
+reservation back to PENDING for incomplete receipt, observation, or
+revalidation and retries after the normal poll. A confirmed incompatible
+revalidation remains a terminal denial. Eleven installed dispatch and preopen
+recovery cases passed locally, including deterministic transient and confirmed
+incompatible paths. The interim matrix `39213179560` was cancelled after this
+new product finding; its commit lacked the fix. The first matrix
+`39204884009` continues to collect the remaining shard results.

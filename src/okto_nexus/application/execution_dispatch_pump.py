@@ -112,6 +112,16 @@ class ExecutionDispatchPump:
                             fresh_publications=self.fresh_publications, access=self.access, channel=self.channel,
                             resolve_native_input=self.resolve_native_input)
                     except OktoNexusError as error:
+                        if (error.code == ErrorCode.CONFLICT and
+                                (error.details or {}).get('transient') == 'inventory_not_fresh'):
+                            await self._database(release_unsent_dispatch, factory=self.factory,
+                                                 reservation=reservation)
+                            reservation = None
+                            try:
+                                await asyncio.wait_for(self._stopping.wait(), timeout=self.poll_interval)
+                            except asyncio.TimeoutError:
+                                pass
+                            continue
                         if error.code not in {ErrorCode.CONFLICT, ErrorCode.PERMISSION_DENIED,
                                               ErrorCode.NOT_FOUND, ErrorCode.VALIDATION_ERROR,
                                               "AUTHORIZED_INPUT_UNAVAILABLE", "APPROVAL_AUTHORITY_REQUIRED"}:

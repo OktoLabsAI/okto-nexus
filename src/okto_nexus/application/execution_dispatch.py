@@ -487,10 +487,32 @@ def begin_execution_send(
         from .execution_inventory_revalidation import accepts_binding
         from .execution_inventory_freshness import inventory_is_fresh
         if not containment and (current is None or fresh is None or
-                not accepts_binding(conn, binding, current['inventory_revision'], server_id, reservation.executor_id) or
-                not inventory_is_fresh(current, fresh, binding['adapter_id'])):
+                fresh[0] != current['publication_sequence']):
+            # The new owner may reserve retained work before its inventory
+            # receipt and current snapshot converge. No send has begun.
+            raise OktoNexusError(ErrorCode.CONFLICT,
+                                  "The dispatch inventory is no longer fresh.",
+                                  {"transient": "inventory_not_fresh"})
+        if not containment and not accepts_binding(
+                conn, binding, current['inventory_revision'], server_id, reservation.executor_id):
+            revalidation = conn.execute(
+                'SELECT reason FROM execution_inventory_revalidation '
+                'WHERE server_id=? AND executor_id=? AND approved_revision=? '
+                'AND candidate_ref=? AND current_revision=?',
+                (server_id, reservation.executor_id, binding['inventory_revision'],
+                 binding['candidate_ref'], current['inventory_revision']),
+            ).fetchone()
+            if revalidation is None or revalidation['reason'] in {
+                    'observation_pending', 'observation_failed'}:
+                raise OktoNexusError(ErrorCode.CONFLICT,
+                                      "The dispatch inventory is no longer fresh.",
+                                      {"transient": "inventory_not_fresh"})
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The dispatch inventory is no longer fresh.", {})
+        if not containment and not inventory_is_fresh(current, fresh, binding['adapter_id']):
+            raise OktoNexusError(ErrorCode.CONFLICT,
+                                  "The dispatch inventory is no longer fresh.",
+                                  {"transient": "inventory_not_fresh"})
         if not containment and not any(
             item["adapter_id"] == binding["adapter_id"] and
             item["candidate_ref"] == binding["candidate_ref"]
