@@ -299,3 +299,12 @@ and physical reuse assertions remain unchanged. The complete case passed
 against the installed current Nexus/Core/Connector wheels on Linux and Windows.
 Other jobs of this matrix were still running at this checkpoint; its final
 result is not yet known.
+
+Ubuntu 3.11 shard 0 of the same matrix hit the identical pre-reservation
+`STALE_OBSERVATION` window in the running-work containment fixture. Its first
+capacity assessment now retries only that no-effect result with the same
+attempt identity and a 30-second bound. The assertions that a running remote
+child retains the slot past the stop deadline and frees it only after physical
+release are unchanged. Both `grant_revoked` and `runtime_close` variants passed
+with installed wheels on Linux (2/2) and Windows (2/2). No additional product
+change was required; the full matrix remains open.

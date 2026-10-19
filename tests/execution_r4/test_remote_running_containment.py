@@ -5,6 +5,7 @@ from functools import partial
 from pathlib import Path
 
 import pytest
+from nexus_connector_core import CoreError
 from nexus_connector_core.capacity import capacity_reservation_id
 
 from okto_nexus.adapters.inbound.http import executor_link
@@ -66,7 +67,17 @@ def test_running_remote_work_retains_slot_past_stop_timeout_until_physical_relea
                 HandoffScheduleLease(hid, binding['workspace_id'], 0, 'containment', 0, 0, ''), limit=4)
             assert len(page.attempt_ids) == 1
             attempts = build_handoff_runtime_attempts(deps)
-            held = await attempts.reserve(page.attempt_ids[0])
+            # Selection and remote capacity assessment observe separate
+            # publications; retry only a stale read before any reservation.
+            async with asyncio.timeout(30):
+                while True:
+                    try:
+                        held = await attempts.reserve(page.attempt_ids[0])
+                        break
+                    except CoreError as error:
+                        if error.code != 'STALE_OBSERVATION':
+                            raise
+                        await asyncio.sleep(.05)
             assert held.state == 'RESERVED'
             claimed = attempts.claim(page.attempt_ids[0])
             admitted = await build_capacity_admission(deps).consume(claimed.operation_id)
