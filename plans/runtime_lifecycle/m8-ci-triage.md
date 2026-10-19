@@ -121,3 +121,15 @@ owner lease, so a Windows `nexus.db-shm` file could disappear during that
 precheck. The tree check now runs under the fence after lease validation.
 Both affected modules passed 21 installed local tests. The rest of the matrix
 is still required; no full Nexus pass is claimed.
+
+Windows 3.13 shard 0 then exposed a canonical identity test still requiring
+agent-wide recovery after an uncertain post-spawn failure. The native process
+was reaped, the one failed session closed, the agent stayed unblocked, and
+the operation retained `OUTCOME_UNKNOWN` without replay; the test now checks
+those current guarantees. All eight installed identity cases passed. Ubuntu
+3.12 shard 1 exposed an exact replay-count assertion after journal checkpoint
+loss. Independent compaction may retire the already projected record before
+manual recovery, producing zero replayed records instead of one while the
+result remains singular. The test now accepts either bounded replay count and
+still checks exactly one durable event and result. All 12 installed journal
+cases passed. The matrix remains a triage run pending final rerun.

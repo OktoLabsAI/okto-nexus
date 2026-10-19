@@ -42,13 +42,20 @@ def test_post_spawn_persistence_failure_reaps_native_without_changing_identity(c
         return mcp(setup, monkeypatch, headers['subject']['Authorization'].removeprefix('Bearer '), 'harness_open', body)
     admitted = invoke()
     assert admitted['ok'], admitted
-    wait_receipt(setup, admitted['data'], stages=('OUTCOME_UNKNOWN',))
+    uncertain = wait_receipt(setup, admitted['data'], stages=('OUTCOME_UNKNOWN',))
+    assert uncertain['possible_effect'] and not uncertain['retry_safe']
+    session_id = uncertain['scope']['session_id']
     eventually(lambda: bool(failed))
     assert failed[0].wait(timeout=15) is not None
     def recovered():
         with deps.connection_factory.unit_of_work(write=False) as uow:
-            row = uow.connection.execute("SELECT state FROM execution_agent_recovery WHERE agent_id='subject'").fetchone()
-            return row is not None and row[0] == 'READY'
+            row = uow.connection.execute(
+                'SELECT lifecycle_state,lease_state FROM execution_sessions WHERE session_id=?',
+                (session_id,)).fetchone()
+        owner = app.state.embedded_dispatch_owner
+        return (row is not None and tuple(row) == ('CLOSED', 'CLOSED')
+                and session_id not in owner.sessions
+                and 'subject' not in owner.agents.blocked)
     eventually(recovered, seconds=30)
     assert registered_identities(setup) == before
     with deps.connection_factory.unit_of_work(write=False) as uow:
