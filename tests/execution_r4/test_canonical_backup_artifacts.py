@@ -1,8 +1,9 @@
 """Offline snapshots preserve canonical output and retained legacy journals."""
-from contextlib import contextmanager
+from contextlib import closing, contextmanager
 import importlib.util
 import json
 from pathlib import Path
+import sqlite3
 
 import pytest
 from fastapi.testclient import TestClient
@@ -49,6 +50,16 @@ def quiesced_snapshot(runtime, tmp_path):
     assert any(name.startswith("core-runtime/session-") for name in report["files"])
     assert any(name.startswith("runtime-journal-v1/") for name in report["files"])
     return snapshot, report, source, published
+
+
+def test_snapshot_manifest_survives_database_reopen(runtime, tmp_path):
+    snapshot, report, _, _ = quiesced_snapshot(runtime, tmp_path)
+    assert not any(name.endswith(("-wal", "-shm")) for name in report["files"])
+    restored = procedure.restore(snapshot, tmp_path / "restored", stopped=True)
+    for home in (snapshot, restored):
+        with closing(sqlite3.connect(home / "nexus.db")) as db:
+            assert db.execute("PRAGMA integrity_check").fetchone() == ("ok",)
+        assert procedure.validate(home) == report
 
 
 def test_combined_snapshot_restores_identity_history_journal_and_artifact_without_native_replay(runtime, tmp_path, monkeypatch):

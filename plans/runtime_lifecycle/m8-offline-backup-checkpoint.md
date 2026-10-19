@@ -5,21 +5,32 @@ usada no gate real UI-C. A instância global do Nexus permaneceu parada.
 As portas 8202 e 8204 estavam livres antes do procedimento; nenhum owner ou
 writer dessa home estava em execução. A home foi preservada sem alterações.
 
-O procedimento `tools/offline_runtime_backup.py`, importando Nexus instalado
-no ambiente isolado `build/m3k-owner-env`, produziu
-`build/runtime-uic-ui/m8-backup` com o reconhecimento explícito de owners e
-writers parados. Ele validou o snapshot ao término. A restauração para o novo
-diretório `build/runtime-uic-ui/m8-restored` e a validação independente dessa
-cópia também retornaram `PASS`, sem iniciar processos nativos.
+O primeiro backup e a restauração passaram, mas reabrir o banco da cópia fez
+`validate` falhar: conexões SQLite ainda abertas tinham incluído `nexus.db-wal`
+e `nexus.db-shm` transitórios no manifesto. A leitura posterior removeu esses
+arquivos. Os registros do banco não mudaram; o problema era a estabilidade do
+manifesto. O procedimento agora fecha explicitamente cada conexão de cópia e
+lê o banco de destino em modo imutável. O teste de regressão reabre o banco e
+valida novamente tanto o snapshot quanto a cópia restaurada.
 
-O manifesto v2 contém 114 arquivos e 44.534.770 bytes. O banco validado está
+Com Nexus instalado no ambiente isolado `build/m3k-owner-env`, o procedimento
+corrigido produziu `build/runtime-uic-ui/m8-backup-fixed` e restaurou em
+`build/runtime-uic-ui/m8-restored-fixed`. Backup, restauração e revalidação
+após acesso SQLite retornaram `PASS`, sem iniciar processos nativos.
+
+O manifesto v2 contém 112 arquivos duráveis e 44.502.002 bytes, sem `-wal` ou
+`-shm`. O banco validado está
 na migração 152 e contém sete agentes, 338 mensagens, 338 entregas, quatro
 handoffs, 102 resultados de runtime e um artefato. A comparação de hashes do
 manifesto e as verificações de integridade SQLite/journal passaram na cópia
-restaurada. Os diretórios de backup e restauração permanecem ignorados no
-workspace e não contêm dados para commit.
+restaurada. Um conjunto de migrações limitado à versão 151 recusou a cópia com
+`MIGRATION_ERROR` (152 > 151), sem alterar o ledger; a validação do backup
+continuou passando depois dessa recusa. O caso de regressão e dois testes
+adjacentes passaram, 3/3, com os pacotes instalados no Windows. Os diretórios
+de backup e restauração permanecem ignorados no workspace e não contêm dados
+para commit.
 
-Este checkpoint comprova cópia, restauração e integridade com a home parada.
-Ainda falta inicializar a cópia restaurada com o artefato final, demonstrar
-recusa segura de downgrade incompatível, concluir a matriz instalada e o
-rollout controlado antes de aceitar M8.
+Este checkpoint comprova cópia, restauração, integridade e recusa de esquema
+mais novo com a home parada. Ainda falta inicializar a cópia restaurada com o
+artefato final, concluir a matriz instalada e o rollout controlado antes de
+aceitar M8.

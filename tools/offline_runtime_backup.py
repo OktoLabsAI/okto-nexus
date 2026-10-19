@@ -147,7 +147,7 @@ def validate_r4(snapshot, db):
 
 
 def copy_core_databases(home, destination, stack):
-    with closing(sqlite3.connect(destination / 'nexus.db')) as db:
+    with closing(sqlite3.connect((destination / 'nexus.db').as_uri() + "?mode=ro&immutable=1", uri=True)) as db:
         directory = core_directory(db)
     source = home / directory
     if not source.exists():
@@ -174,7 +174,7 @@ def validate(snapshot):
     manifest = json.loads((snapshot / "backup-manifest.json").read_text(encoding="utf-8"))
     if manifest.get("version") not in (1, 2) or inventory(snapshot) != manifest["files"]:
         raise ValueError("Backup inventory/checksum mismatch")
-    with sqlite3.connect((snapshot / "nexus.db").as_uri() + "?mode=ro", uri=True) as db:
+    with closing(sqlite3.connect((snapshot / "nexus.db").as_uri() + "?mode=ro&immutable=1", uri=True)) as db:
         if database_report(db) != manifest["database"]:
             raise ValueError("Backup database metadata mismatch")
         validate_r4(snapshot, db)
@@ -225,7 +225,7 @@ def backup(home, destination, *, stopped=False, db_path=None):
         raise FileExistsError("Backup destination already exists; refusing overwrite")
     # These are exclusion locks, not permission to stop another process. The
     # operator must first stop every writer, including artifact maintenance.
-    with ExitStack() as stack, journal_lock(home), sqlite3.connect(database.as_uri() + "?mode=rw", uri=True, timeout=1) as fence:
+    with ExitStack() as stack, journal_lock(home), closing(sqlite3.connect(database.as_uri() + "?mode=rw", uri=True, timeout=1)) as fence:
         fence.execute("BEGIN IMMEDIATE")
         owner = fence.execute("SELECT lease_expires_at FROM runtime_dispatcher_owner WHERE owner_key='dispatcher'").fetchone()
         if owner and datetime.fromisoformat(owner[0].replace("Z", "+00:00")) > datetime.now(timezone.utc):
@@ -234,8 +234,8 @@ def backup(home, destination, *, stopped=False, db_path=None):
         # retire a transient -shm file while an active owner is shutting down.
         list(regular_tree(home))
         destination.mkdir(mode=0o700, parents=False)
-        with sqlite3.connect(database.as_uri() + "?mode=ro", uri=True) as reader:
-            with sqlite3.connect(destination / "nexus.db") as target:
+        with closing(sqlite3.connect(database.as_uri() + "?mode=ro", uri=True)) as reader:
+            with closing(sqlite3.connect(destination / "nexus.db")) as target:
                 reader.backup(target)
                 report = database_report(target)
         copy_core_databases(home, destination, stack)
