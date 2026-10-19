@@ -48,7 +48,7 @@ def test_restart_after_dispatch_refusal_without_core_journal(tmp_path, monkeypat
                     assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE admission_state<>'RESOLVED_TERMINAL'").fetchone()[0] == 0
                     session = uow.connection.execute(
                         'SELECT lifecycle_state,lease_state FROM execution_sessions').fetchone()
-                    assert tuple(session) in (('FAILED', 'NONE'), ('CLOSED', 'CLOSED'))
+                    assert tuple(session) in (('FAILED', 'NONE'), ('FAILED', 'CLOSED'), ('CLOSED', 'CLOSED'))
                     assert not owner.host._runtime_tasks
         assert native.opens == 0
 

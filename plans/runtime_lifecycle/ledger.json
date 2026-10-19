@@ -832,7 +832,7 @@
       "m8-uic-installed-ui.md",
       "m8-ci-triage.md"
       ],
-      "ci_checkpoint": "Core 39180450008 and Connector 39204601574 passed. Nexus full installed matrix 39292190027 on 1902baa is running; no failure was reported at the 2026-10-19 17:54 UTC checkpoint. Focused installed Windows and Linux restart/native-start cases passed after fixture synchronization corrections. Current Nexus wheel 8c18c8d4 was UI-tested on a disposable Windows instance: real Claude replied exactly before and after abrupt server restart with 1/1 ACK, and Agents returned to Local Online/Ready without manual reconciliation. See m8-ci-triage.md and m8-uic-installed-ui.md. M8 acceptance and global rollout remain open.",
+      "ci_checkpoint": "Core 39180450008 and Connector 39204601574 passed. Nexus full installed matrix 39292190027 on 1902baa exposed four Ubuntu job failures while other jobs continued: a capacity fixture admitted before binding revalidation, a read-only capacity assessment incorrectly reported possible effect after stale post-send authority, and a valid FAILED/CLOSED terminal session expectation (three shards). The focused four failing scenarios passed 4/4 on current installed Windows and Linux wheels; the capacity-link suite passed 7/7 on each. A replacement full Nexus matrix is still required after all old jobs are classified. Earlier wheel 8c18c8d4 passed real Claude UI turns before and after disposable server restart with 1/1 ACK and Online/Ready restoration. See m8-ci-triage.md and m8-uic-installed-ui.md. M8 acceptance and global rollout remain open.",
       "commits": {
         "connector_installed_processes": "a7dd588"
       },

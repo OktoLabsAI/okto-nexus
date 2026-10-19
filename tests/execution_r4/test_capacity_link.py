@@ -60,6 +60,51 @@ def test_out_of_order_results_are_correlated_and_scope_cannot_be_substituted():
     asyncio.run(run())
 
 
+def test_assessment_post_send_stale_observation_has_no_uncertain_effect():
+    async def run():
+        checks = 0
+        port = None
+
+        async def verify(req, *, action):
+            nonlocal checks
+            assert action == 'assess'
+            checks += 1
+            if checks == 2:
+                raise CoreError('STALE_OBSERVATION', 'inventory_changed')
+
+        async def send(raw):
+            frame = decode_capacity_frame(raw.encode())
+            port.accept_result(capacity_denial_frame(frame, 'HOST_FULL'))
+
+        port = client(send, verify=verify)
+        try:
+            with pytest.raises(CoreError, match='STALE_OBSERVATION') as stale:
+                await port.assess_capacity(request())
+            assert not stale.value.possible_effect
+            assert (await port.assess_capacity(request())).reason == 'HOST_FULL'
+        finally:
+            await port.aclose()
+
+    asyncio.run(run())
+
+
+def test_assessment_lost_reply_is_retryable_without_capacity_reconciliation():
+    async def run():
+        async def dropped(raw):
+            return None
+
+        port = client(dropped, request_timeout=.03)
+        try:
+            with pytest.raises(CoreError, match='STALE_OBSERVATION') as stale:
+                await port.assess_capacity(request())
+            assert not stale.value.possible_effect
+            await until(lambda: not port._producers)
+        finally:
+            await port.aclose()
+
+    asyncio.run(run())
+
+
 def test_timeout_preserves_attempt_and_reconnect_lookup_returns_durable_reservation(tmp_path):
     async def run():
         ledger = SQLiteOwnedSlotLedger(tmp_path / 'slots.db', max_slots=1)

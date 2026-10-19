@@ -257,3 +257,27 @@ claim on Linux, preserving the Windows post-claim coverage. Its three
 Pi/Codex/Claude variants passed with installed packages on Linux. The first
 replacement matrix was canceled before this correction; one final matrix on
 the corrected commit is required.
+
+Matrix `39292190027` on `1902baa` reached four failing Ubuntu jobs while the
+remaining jobs continued. Ubuntu 3.12 shard 3 called the separate Connector's
+capacity port as soon as its inventory publication sequence matched, before
+the selected binding was revalidated and its observation was fresh. The
+process fixture now waits for those admission facts and retries only a
+pre-reservation `STALE_OBSERVATION` with the same attempt identity. Ubuntu
+3.11 shard 2 exposed the same transient in a remote preopening test, but Core
+had converted a post-send stale result from the read-only `capacity.assess`
+into `NEEDS_RECONCILIATION` with possible effect. Assessment cannot reserve a
+slot or admit native work; Nexus now reports a retryable stale observation for
+its lost reply, disconnect, or invalidated post-send check. Mutating capacity
+operations retain uncertain-effect fencing. The focused capacity-link suite
+passed 7/7 on installed Windows and Linux wheels; the four failing scenarios
+passed 4/4 on each platform. The final focused Nexus wheel SHA-256 was
+`0d4c1adea040e012611584f185227605c9bc0fe9a5b7ad3d76bde1452ec0638a`.
+
+Ubuntu 3.11/3.12/3.13 shard 2 observed `FAILED/CLOSED` after a no-Core-journal
+dispatch refusal. The already permitted terminal alternatives were
+`FAILED/NONE` and `CLOSED/CLOSED`; `FAILED/CLOSED` is also terminal, with no
+native opening or retained runtime task. The expectation now accepts that
+asynchronous lease close. No product state transition was changed for this
+case. This checkpoint does not declare the full matrix passed; the active
+jobs must finish and the corrected wheel must pass a replacement run.
