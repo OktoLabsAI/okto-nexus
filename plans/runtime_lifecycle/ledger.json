@@ -141,6 +141,7 @@
         "core_m2b": "788f3f7",
         "core_m2c": "877393b",
         "core_m2e": "90b4ef6",
+    "core_m2f": "f9fc188",
         "connector_m2e": "2dca512",
         "nexus_m2d": "1f96d73"
       },
@@ -170,10 +171,15 @@
           "id": "M2e",
           "status": "complete",
           "title": "Shared Connector launch recovery and negotiated NOT_STARTED proof; 261 installed tests passed"
+    },
+    {
+      "id": "M2f",
+      "status": "complete",
+      "title": "Four Linux planned-launch crash cuts passed against source and installed Core; claim without guardian proof retains capacity"
         }
       ],
-      "qualification": "Core, embedded and Connector recovery integrated and jointly installed. Windows disposable owner crashes and 261 installed tests passed. Real UI broadcast: three ACKs, Pi/Claude success, Codex provider quota. Later crash frontiers, Linux/macOS and full UI-A remain pending.",
-      "next": "M3b: separate initial discovery from HTTP startup while retaining authority and workers. Continue remaining M2/M3 acceptance and UI-A.",
+  "qualification": "Core, embedded and Connector recovery integrated and jointly installed. Windows disposable owner crashes and 261 installed tests passed. Four Linux planned-launch crash cuts passed with Core 0.0.12 installed. Real UI-A flows were later verified separately. Later handshake/receipt/ACK crash frontiers and macOS platform qualification remain pending.",
+  "next": "Qualify the remaining handshake/receipt/ACK crash cuts and macOS containment; do not release Linux claimed capacity without guardian proof.",
       "nexus_m2e_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m2e-validation.md"
     },
     {

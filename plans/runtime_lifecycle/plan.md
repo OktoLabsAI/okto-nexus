@@ -145,6 +145,14 @@ nos três pacotes. Instalação global conjunta validada pela UI: três ACKs, Pi
 Claude responderam; Codex recusado por quota do provedor. Ver
 `m2e-validation.md` e `m2e-ui-broadcast.md`. O gate UI-A completo segue pendente.
 
+Checkpoint M2f: quatro fronteiras de queda de launch no Linux passaram com
+Core 0.0.12 instalado: intenção antes do claim, claim antes de guardian,
+spawn e birth. Sem receipt após claim, o slot permanece incerto; após spawn
+ou birth, só o receipt durável do guardian prova encerramento. Cinco casos
+Windows selecionados continuaram passando. Sem mudança de produto ou instalação
+global. Ver Core `plans/runtime-lifecycle-m2f-linux-crash.md`; macOS e as
+fronteiras posteriores de handshake, receipt e ACK seguem abertas.
+
 - Contrato versionado de launch intent: operação, sessão, executor, geração,
   identidade do container, estado/prova e revisão. Sem argumentos ou segredos.
 - Persistir identidade antes do spawn. Transições CAS monotônicas e idempotentes.
