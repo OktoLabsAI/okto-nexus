@@ -133,3 +133,12 @@ manual recovery, producing zero replayed records instead of one while the
 result remains singular. The test now accepts either bounded replay count and
 still checks exactly one durable event and result. All 12 installed journal
 cases passed. The matrix remains a triage run pending final rerun.
+
+Windows 3.11 shard 0 exposed two restart-process fixtures publishing a new
+local realization with the inventory revision saved by the previous process.
+The running owner and independent observer were healthy; the stale selection
+was correctly refused. The fixture now waits for accepted inventory from the
+replacement owner and uses its current candidate/revision. All three real
+process-exit variants (`graceful`, `kill`, and `kill-before-bind`) passed in the
+installed local environment. Windows 3.12 shard 0 and Windows 3.11 shard 3
+repeated already corrected identity and compensation expectations.

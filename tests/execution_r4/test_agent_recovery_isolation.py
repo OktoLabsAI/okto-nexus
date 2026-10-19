@@ -457,6 +457,25 @@ def test_real_process_exit_restores_without_lock_reset_or_replay(tmp_path, monke
                 owner = app.state.embedded_dispatch_owner
                 eventually(lambda: owner.pump is not None and owner.agents.initialized and not owner.agents.blocked)
                 assert owner.pump is not None and owner.failure is None
+                from test_embedded_inventory import wait_inventory
+                wait_inventory(client)
+                inventory_owner = app.state.embedded_inventory_owner
+                key = (inventory_owner.key.server_id, inventory_owner.key.executor_id)
+                def inventory_accepted():
+                    marker = app.state.inventory_fresh_publications.get(key)
+                    with deps.connection_factory.unit_of_work(write=False) as uow:
+                        row = uow.connection.execute(
+                            'SELECT publication_sequence FROM execution_inventory_current '
+                            'WHERE server_id=? AND executor_id=?', key).fetchone()
+                    return marker is not None and row is not None and marker[0] == row[0]
+                eventually(inventory_accepted, seconds=20)
+                inventory = client.get(
+                    f'/v1/runtime/executors/{key[1]}/inventory',
+                    headers=state['headers']['operator']).json()['snapshot']
+                selected = next(item for item in inventory['evidence']
+                                if item['adapter_id'] == 'codex_app_server')
+                current_body = dict(state['body'], candidate_ref=selected['candidate_ref'],
+                                    inventory_revision=inventory['inventory_revision'])
                 if cycle == 0:
                     recovered_in = time.monotonic() - started
                     record_property('first_recovery_seconds', recovered_in)
@@ -464,7 +483,7 @@ def test_real_process_exit_restores_without_lock_reset_or_replay(tmp_path, monke
                 with deps.connection_factory.unit_of_work(write=False) as uow:
                     assert uow.connection.execute("SELECT COUNT(*) FROM execution_sessions WHERE lifecycle_state NOT IN ('CLOSED','FAILED')").fetchone()[0] == 0
                     assert uow.connection.execute('SELECT COUNT(*) FROM execution_event_ingress').fetchone()[0] == state['expected_events']
-                current = (deps, app, client, state['headers'], state['body'], candidate, root / 'workspace')
+                current = (deps, app, client, state['headers'], current_body, candidate, root / 'workspace')
                 local = create_agent(current, f'local-cycle-{cycle}')
                 local, binding, native = connect_local(local, agent_id=f'local-cycle-{cycle}')
                 wait_receipt(local, admit(local, binding, f'new-{cycle}', 'runtime.start', new_session=True))
