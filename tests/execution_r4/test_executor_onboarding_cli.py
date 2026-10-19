@@ -105,7 +105,17 @@ def test_connector_public_commands_publish_realization_over_tcp(tmp_path, monkey
                                 raise
                     assert not daemon_task.done()
                     await asyncio.sleep(.02)
-            inventory = await run_discover(parser.parse_args(["discover", "--server-id", server_id]), output, root)
+            async def discover_current():
+                async with asyncio.timeout(20):
+                    while True:
+                        try:
+                            return await run_discover(
+                                parser.parse_args(["discover", "--server-id", server_id]), output, root)
+                        except ConnectorError as error:
+                            if error.code != 'STALE_GENERATION':
+                                raise
+                            await asyncio.sleep(.05)
+            inventory = await discover_current()
             row = next(r for r in inventory["availability"]["rows"]
                        if r["adapter_id"] == "codex_app_server" and r["candidate_ref"])
             configuration = await execute(["configure-launch", "--identity", "subject",
@@ -116,7 +126,22 @@ def test_connector_public_commands_publish_realization_over_tcp(tmp_path, monkey
                 "--inventory-revision", inventory["availability"]["executor_revision"],
                 "--configuration-digest", configuration["configuration_digest"],
                 "--project", str(project), "--label", "Test project"]
-            result = await execute(words)
+            async def realize_current(selection_words):
+                async with asyncio.timeout(20):
+                    while True:
+                        try:
+                            return await execute(selection_words)
+                        except ConnectorError as error:
+                            if error.code not in {'INVENTORY_NOT_FRESH', 'STALE_GENERATION'}:
+                                raise
+                            await asyncio.sleep(.05)
+                            latest = await discover_current()
+                            current = next(r for r in latest["availability"]["rows"]
+                                if r["adapter_id"] == "codex_app_server" and r["candidate_ref"])
+                            selection_words[selection_words.index("--candidate-ref") + 1] = current["candidate_ref"]
+                            selection_words[selection_words.index("--inventory-revision") + 1] = (
+                                latest["availability"]["executor_revision"])
+            result = await realize_current(words)
             assert await execute(words) == result
             local = store.load()
             assert len(local.realizations) == 1 and local.realizations[0].status == "PENDING_APPROVAL"
@@ -165,15 +190,7 @@ def test_connector_public_commands_publish_realization_over_tcp(tmp_path, monkey
                     replacement_words[replacement_words.index("--client-intent-id") + 1] = "realize-replacement"
                     replacement_words[replacement_words.index("--project") + 1] = str(replacement_project)
                     replacement_words += ["--workspace-id", bound["binding"]["workspace_id"]]
-                    async with asyncio.timeout(20):
-                        while True:
-                            try:
-                                replacement = await execute(replacement_words)
-                                break
-                            except ConnectorError as error:
-                                if error.code != 'INVENTORY_NOT_FRESH':
-                                    raise
-                                await asyncio.sleep(.05)
+                    replacement = await realize_current(replacement_words)
                     draft = await bind(["prepare", "--identity", "subject", "--realization-ref", replacement["realization_ref"],
                         "--alias", "assistant", "--client-intent-id", "prepare-replacement",
                         "--replace-binding-id", bound["binding"]["binding_id"]])

@@ -832,7 +832,7 @@
       "m8-uic-installed-ui.md",
       "m8-ci-triage.md"
       ],
-      "ci_checkpoint": "Core 39180450008 passed. Nexus matrix 39198137896 is running; initial Ubuntu shards exposed a missing Connector recovery-channel is_attached method, fixed in Connector 748c0ba, plus bounded inventory-readiness and contract/test expectation fixes. The affected local installed tests passed, including seven deadline/restart/expiry and two startup-refusal cases. Connector matrix 39203007257 exposed a Windows SQLite writer-lock timeout after 1203 passes. Connector 8310f9b removes schema DDL and writer locks from steady-state publication reads; 29 installed local module cases passed. Replacement Connector matrix 39204601574 is running and the Nexus CI vendor wheel includes that commit. Final matrices remain pending.",
+      "ci_checkpoint": "Core 39180450008 and Connector 39204601574 passed. Nexus 39204884009 remains in progress on commit 78093da; first completed shards exposed bounded test readiness/session-isolation expectations. Focused installed corrections passed locally and await remaining shards plus replacement full matrix. See m8-ci-triage.md.",
       "commits": {
         "connector_installed_processes": "a7dd588"
       },

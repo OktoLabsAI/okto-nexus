@@ -161,8 +161,19 @@ async def running_pair(onboarding, records, tmp_path):
             while True:
                 states = [await command(i, 'status') for i in range(len(records))]
                 hosts = [registry.current_host(row[0]['server_id'], row[0]['executor_id']) for row in records]
+                fresh = client.app.state.inventory_fresh_publications
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    accepted = []
+                    for binding, *_ in records:
+                        current = uow.connection.execute(
+                            'SELECT publication_sequence FROM execution_inventory_current '
+                            'WHERE server_id=? AND executor_id=?',
+                            (binding['server_id'], binding['executor_id'])).fetchone()
+                        marker = fresh.get((binding['server_id'], binding['executor_id']))
+                        accepted.append(current is not None and marker is not None
+                                        and marker[0] == current['publication_sequence'])
                 if all(state['ready'] and state['pid'] == children[index].pid
-                       and host and row[0]['binding_id'] in host.observations
+                       and host and row[0]['binding_id'] in host.observations and accepted[index]
                        for index, (state, host, row) in enumerate(zip(states, hosts, records))):
                     assert len({os.getpid(), *(state['pid'] for state in states)}) == len(records) + 1
                     break

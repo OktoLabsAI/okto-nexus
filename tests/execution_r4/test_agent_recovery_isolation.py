@@ -110,15 +110,25 @@ def test_restart_isolates_fault_and_accepts_new_local_and_remote_agents(tmp_path
         owner = app.state.embedded_dispatch_owner
         current = (deps, app, client, setup[3], *setup[4:])
         try:
+            def inventory_accepted(binding):
+                key = (binding['server_id'], binding['executor_id'])
+                marker = app.state.inventory_fresh_publications.get(key)
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    published = uow.connection.execute(
+                        'SELECT publication_sequence FROM execution_inventory_current '
+                        'WHERE server_id=? AND executor_id=?', key).fetchone()
+                return marker is not None and published is not None and marker[0] == published[0]
             assert owner.pump is not None and owner.failure is None
             assert 'subject' in owner.agents.blocked
             eventually(lambda: 'healthy' not in owner.agents.blocked)
             # A configured healthy agent starts again while the old peer waits.
             restored = (deps, app, client, healthy_setup[3], *healthy_setup[4:])
             owner.native_factory = healthy_native
+            eventually(lambda: inventory_accepted(healthy_binding))
             wait_receipt(restored, admit(restored, healthy_binding, 'healthy-after', 'runtime.start', new_session=True))
             newcomer = create_agent(current, 'new-local')
             newcomer, new_binding, new_native = connect_local(newcomer, agent_id='new-local')
+            eventually(lambda: inventory_accepted(new_binding))
             wait_receipt(newcomer, admit(newcomer, new_binding, 'new-during-recovery', 'runtime.start', new_session=True))
             remote_roundtrip(create_agent(current, 'new-remote'), 'new-remote')
             listing = client.get('/api/v1/agents', headers=current[3]['operator']).json()['data']['items']

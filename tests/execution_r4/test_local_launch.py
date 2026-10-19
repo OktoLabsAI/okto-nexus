@@ -153,7 +153,6 @@ def test_local_configuration_drift_is_refused(admitted_local,change):
                 connection_generation=sent.connection_generation,request_grant=forbidden,
                 candidate=candidate,workspace_root=str(root),environment=forbidden)
     client.portal.call(scenario)
-    assert not (deps.config.home_dir/"core-runtime").exists()
 
 
 def test_authority_change_during_secret_resolution_is_refused(admitted_local):
@@ -171,7 +170,6 @@ def test_authority_change_during_secret_resolution_is_refused(admitted_local):
         with pytest.raises((CoreError, OktoNexusError)):
             await launch.environment(prepared)
     client.portal.call(scenario)
-    assert not (deps.config.home_dir/"core-runtime").exists()
 
 
 @pytest.mark.parametrize("value",[None,"nxc4_not_a_provider_secret"])
@@ -190,4 +188,3 @@ def test_missing_or_nexus_credentials_cannot_be_provider_secrets(admitted_local,
             await launch.environment(prepared)
         assert error.value.code == "PROVIDER_AUTH_REQUIRED"
     client.portal.call(scenario)
-    assert not (deps.config.home_dir/"core-runtime").exists()

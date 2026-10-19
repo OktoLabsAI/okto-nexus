@@ -63,6 +63,15 @@ def test_embedded_restart_recovers_interrupted_launch_automatically(tmp_path, mo
             native = _NativeFactory()
             owner.native_factory = native
             setup = deps, app, client, state['headers'], state['body'], candidate, root/'workspace'
+            key = (state['binding']['server_id'], state['binding']['executor_id'])
+            def inventory_accepted():
+                marker = app.state.inventory_fresh_publications.get(key)
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    published = uow.connection.execute(
+                        'SELECT publication_sequence FROM execution_inventory_current '
+                        'WHERE server_id=? AND executor_id=?', key).fetchone()
+                return marker is not None and published is not None and marker[0] == published[0]
+            eventually(inventory_accepted, seconds=25)
             replacement = admit(setup, state['binding'], 'new-after-crash', 'runtime.start', new_session=True)
             wait_receipt(setup, replacement)
             assert replacement['session_id'] != state['session_id']

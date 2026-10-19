@@ -57,7 +57,7 @@ three test variants and full 22-test module pass locally. The watchdog now
 allows 30 seconds for hosted-runner durable journal I/O. A full Connector
 matrix rerun is still required.
 
-The next installed Nexus matrix, `39198137896`, is still running. Its first
+The next installed Nexus matrix, `39198137896`, was cancelled after its first
 Ubuntu 3.11–3.13 shards reproduced four bounded findings. Remote reconnect
 replay called `is_attached` on the recovery channel, which did not implement
 the regular connection's method; Connector `748c0ba` adds it. The Nexus CI
@@ -80,3 +80,20 @@ Connector commit (SHA-256 `562dd5e174a6a974440a28038cd2a10e4d103772d609d8dc512e5
 The rebuilt wheel also passed the seven Nexus vendor-integrity cases and
 three real Connector process/restart capacity cases in the isolated installed
 environment.
+
+Connector matrix `39204601574` passed all eight jobs, including the six
+installed Linux/Windows Python combinations, macOS daemon, and build. Core
+matrix `39180450008` also passed. Nexus matrix `39204884009` remains in
+progress on the `78093da` vendor-wheel checkpoint. Its first nine completed
+jobs exposed existing tests that raced independent inventory publication or
+asserted agent-wide containment after session-scoped recovery. The focused
+installed corrections now wait for accepted inventory in remote handoff,
+daemon startup, local recovery and isolated recovery fixtures; retry only
+typed stale-inventory/generation failures in the CLI and remote preopen
+fixtures; and assert the current session-scoped outcome in embedded failure
+and NS15 restore tests. The canonical recovery test counts its original
+message by identity, since a legitimate asynchronous release notice can add
+another message. The session-pagination fixture now gives cloned sessions
+distinct journal names. The relevant local installed cases passed, including
+the three Windows shard-3 cases. The remaining matrix jobs and a replacement
+full Nexus matrix are required before M8 qualification.

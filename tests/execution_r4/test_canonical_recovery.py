@@ -134,7 +134,8 @@ def test_late_correlated_output_after_release_is_history_only(connected_local, m
         delivery = uow.connection.execute('SELECT read_at FROM message_deliveries WHERE message_id=?',
             (sent['data']['message_id'],)).fetchone()
         assert delivery['read_at'] is None
-        assert uow.connection.execute('SELECT COUNT(*) FROM messages').fetchone()[0] == 1
+        assert uow.connection.execute('SELECT COUNT(*) FROM messages WHERE message_id=?',
+            (sent['data']['message_id'],)).fetchone()[0] == 1
     client.portal.call(owner.events.recover)
     assert client.get('/v1/runtime/operations/' + turn['operation_id'],
         headers=headers['subject']).json()['result'] == result

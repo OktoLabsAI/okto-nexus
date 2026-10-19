@@ -26,7 +26,7 @@ def owner_fixture():
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("later_producer", ["execute", "renew"])
-async def test_secondary_agent_failure_preserves_first_cause_without_failing_host(later_producer):
+async def test_secondary_session_failure_preserves_first_cause_without_failing_host(later_producer):
     owner = owner_fixture()
     primary = CoreError("PROVIDER_AUTH_REQUIRED", "provider_vault", retry_safe=True)
     secondary = RuntimeError("The embedded Core host is shutting down.")
@@ -41,16 +41,24 @@ async def test_secondary_agent_failure_preserves_first_cause_without_failing_hos
     session = dict(gate=asyncio.Lock(), executor=SimpleNamespace(renew_r4=renew),
                    authority_gate=SessionAuthorityGate(), scope={"agent_id": "subject"}, renew_at=None)
     owner.sessions = {"session": session}
+    observed = []
+    def recover_session(session_id, *, error=None):
+        assert session_id == "session"
+        session['recovering'] = True
+        if error is not None:
+            session.setdefault('recovery_error', error)
+        observed.append(error)
+    owner.agents.recover_session = recover_session
 
-    await owner._execute_owned({"agent_id": "subject", "session_id": "session", "operation_id": "primary"})
+    await owner._execute_owned({"agent_id": "subject", "session_id": "session", "operation_id": "primary", "action": "turn.submit"})
     if later_producer == "execute":
-        await owner._execute_owned({"agent_id": "subject", "session_id": "session", "operation_id": "secondary"})
+        await owner._execute_owned({"agent_id": "subject", "session_id": "session", "operation_id": "secondary", "action": "turn.submit"})
     else:
         await owner._renew_owned("session", session)
     assert owner.failure is None
-    assert owner.agents.blocked == {"subject"}
-    assert owner.agents.errors == {"subject": primary}
-    assert owner.agents.current_errors == {"subject": secondary}
+    assert owner.agents.blocked == set()
+    assert session['recovery_error'] is primary
+    assert observed == ([primary, secondary] if later_producer == "execute" else [primary, None])
     assert primary.retry_safe and not primary.possible_effect
 
 

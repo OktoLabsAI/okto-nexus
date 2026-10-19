@@ -52,9 +52,15 @@ def completing_peer(monkeypatch):
 
 
 def send(server):
-    return tool(server.client, server.operator, 'message_create', dict(project_root=str(server.project),
-        from_agent_id='operator', target=dict(strategy='direct', agent_id='shutdown-fixture'),
-        subject='Canonical ownership', body='One surviving owner'))
+    deadline = time.monotonic() + 20
+    while True:
+        result = tool(server.client, server.operator, 'message_create', dict(project_root=str(server.project),
+            from_agent_id='operator', target=dict(strategy='direct', agent_id='shutdown-fixture'),
+            subject='Canonical ownership', body='One surviving owner'))
+        if result['ok'] or result.get('error', {}).get('details', {}).get('blockers') != ['inventory_not_fresh']:
+            return result
+        assert time.monotonic() < deadline, result
+        time.sleep(.05)
 
 
 def open_for_messages(server, *, start_native=True):
