@@ -279,5 +279,12 @@ dispatch refusal. The already permitted terminal alternatives were
 `FAILED/NONE` and `CLOSED/CLOSED`; `FAILED/CLOSED` is also terminal, with no
 native opening or retained runtime task. The expectation now accepts that
 asynchronous lease close. No product state transition was changed for this
-case. This checkpoint does not declare the full matrix passed; the active
-jobs must finish and the corrected wheel must pass a replacement run.
+case. This checkpoint does not declare the full matrix passed; the corrected
+wheel must pass a replacement run.
+
+The old matrix was then canceled with 13 successful jobs, five classified
+failures, and six Windows jobs still running. Those six jobs used the obsolete
+commit and were superseded by the full replacement matrix `39305360323` on
+`9e16d60`, which now tests the corrected installed wheel across the same 24
+platform/Python/shard combinations. No result from the canceled run is counted
+as final qualification.
