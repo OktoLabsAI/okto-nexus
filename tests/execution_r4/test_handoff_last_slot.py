@@ -20,6 +20,15 @@ def test_two_handoffs_race_for_one_slot_and_mcp_can_still_claim_the_waiting_task
     owner = app.state.embedded_dispatch_owner
     owner.native_factory = peers
     owner.host.max_owned_slots = 1
+    # The capacity ledger is initialized during startup; changing only the
+    # host field after that does not alter its durable admission policy.
+    async def limit_existing_ledger():
+        ledger = await owner.host._ledger()
+        ledger.max_slots = 1
+        await ledger._run(lambda db: db.execute(
+            'INSERT INTO owned_slot_policy(singleton,max_slots) VALUES(1,1) '
+            'ON CONFLICT(singleton) DO UPDATE SET max_slots=1'))
+    client.portal.call(limit_existing_ledger)
     configure(setup, binding, 'per_sender_session')
     with deps.connection_factory.unit_of_work() as uow:
         uow.connection.execute("UPDATE agent_endpoints SET response_policy='none' WHERE endpoint_id=?", (binding['endpoint_id'],))

@@ -168,7 +168,7 @@ def test_interrupted_preopen_is_fenced_before_a_new_boot_after_restart(tmp_path,
             configure(setup, binding)
             original = harness.run_runtime_boot(setup[0])[0]
             owner = setup[1].state.embedded_dispatch_owner
-            eventually(lambda: "subject" in owner.agents.blocked)
+            eventually(lambda: owner.sessions.get(original['session_id'], {}).get('recovering'))
             repeat = harness.run_runtime_boot(setup[0])[0]
             assert repeat["operation_id"] == original["operation_id"] and repeat["reused"]
             assert calls == [1] and native.opens == 0

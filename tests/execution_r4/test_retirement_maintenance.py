@@ -52,6 +52,8 @@ def test_restart_is_ready_and_publishes_new_response_while_retirement_waits(tmp_
         try:
             eventually(lambda: owner.agents.initialized and 'subject' not in owner.agents.blocked)
             assert entered.wait(10), 'Independent retirement worker was not scheduled'
+            assert client.portal.call(lambda: asyncio.wait_for(
+                app.state.embedded_inventory_owner.wait_usable_observation(adapter), 10))
             task = owner.agents.retirement.tasks['subject']
             pump = owner.pump
             with deps.connection_factory.unit_of_work(write=False) as uow:

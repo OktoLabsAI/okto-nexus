@@ -55,6 +55,13 @@ def test_result_rebuild_preserves_published_history_and_causal_foreign_keys(runt
         with runtime[0].connection_factory.unit_of_work(write=False) as uow:
             uow.connection.backup(target)
         target.execute('PRAGMA foreign_keys=OFF')
+        # This fixture rewinds one table in an otherwise current database.
+        # Later views are absent in a genuine pre-96 database and make SQLite
+        # reject the temporary table rename if left in place.
+        views = [row[0] for row in target.execute(
+            "SELECT sql FROM sqlite_master WHERE type='view' AND sql IS NOT NULL ORDER BY rowid")]
+        for name, in target.execute("SELECT name FROM sqlite_master WHERE type='view'").fetchall():
+            target.execute(f'DROP VIEW "{name}"')
         target.execute(schema.replace('CREATE TABLE runtime_results', 'CREATE TABLE prior_results', 1))
         target.execute(f'INSERT INTO prior_results({columns}) SELECT {columns} FROM runtime_results')
         target.execute('DROP TABLE runtime_results')
@@ -68,6 +75,9 @@ def test_result_rebuild_preserves_published_history_and_causal_foreign_keys(runt
         assert target.execute('PRAGMA foreign_key_check').fetchall() == []
     assert MigrationRunner(factory).apply() == [96]
     assert MigrationRunner(factory).apply() == []
+    with factory.unit_of_work() as uow:
+        for statement in views:
+            uow.connection.execute(statement)
     with factory.unit_of_work(write=False) as uow:
         assert [tuple(r) for r in uow.connection.execute(f'SELECT {columns} FROM runtime_results ORDER BY result_id')] == expected
         assert [tuple(r) for r in uow.connection.execute('SELECT * FROM runtime_message_causality ORDER BY message_id')] == causal

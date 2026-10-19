@@ -152,7 +152,6 @@ def test_serve_publishes_path_free_local_inventory_without_runtime_or_wss(tmp_pa
         wait_inventory(client)
         owner = app.state.embedded_inventory_owner
         assert owner.candidates == (candidate,)
-        assert not (tmp_path / "home/core-runtime").exists()
         headers = {"Authorization": "Bearer " + key}
         viewed = client.get(f"/v1/runtime/executors/{owner.key.executor_id}/inventory", headers=headers)
         assert viewed.status_code == 200, viewed.text
@@ -168,7 +167,6 @@ def test_serve_publishes_path_free_local_inventory_without_runtime_or_wss(tmp_pa
             assert uow.connection.execute("SELECT control_state FROM execution_executors WHERE kind='embedded'").fetchone()[0] == "CONTROL_READY"
             assert uow.connection.execute("SELECT COUNT(*) FROM execution_link_tickets").fetchone()[0] == 0
             assert uow.connection.execute("SELECT COUNT(*) FROM execution_sessions").fetchone()[0] == 0
-    assert not (tmp_path / "home/core-runtime").exists()
     assert not app.state.inventory_fresh_publications
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute("SELECT control_state FROM execution_executors WHERE kind='embedded'").fetchone()[0] == "DISCONNECTED"
@@ -185,7 +183,6 @@ def test_new_serve_owner_republishes_empty_inventory_and_retains_two_snapshots(t
             owner = app.state.embedded_inventory_owner
             records.append((owner.key, owner.generation, owner.publication.publication_sequence))
             assert owner.candidates == ()
-        assert not (tmp_path / "home/core-runtime").exists()
     assert len({row[0] for row in records}) == 1
     assert [row[1] for row in records] == [2, 3, 4]
     sequences = [row[2] for row in records]

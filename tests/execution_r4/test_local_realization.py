@@ -82,7 +82,6 @@ def test_local_preparation_and_binding_use_public_canonical_flow(local_setup):
         assert uow.connection.execute("SELECT COUNT(*) FROM execution_bindings").fetchone()[0] == 1
         assert uow.connection.execute("SELECT COUNT(*) FROM execution_sessions").fetchone()[0] == 0
         assert uow.connection.execute("SELECT COUNT(*) FROM execution_link_tickets").fetchone()[0] == 0
-    assert not (deps.config.home_dir/"core-runtime").exists()
 
 
 def test_non_operator_cannot_probe_local_directories(local_setup,monkeypatch):

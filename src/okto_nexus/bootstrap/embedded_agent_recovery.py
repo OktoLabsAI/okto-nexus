@@ -454,7 +454,8 @@ class EmbeddedAgentRecovery:
                 return
             self.session_retry_at[session_id] = time.monotonic() + 2
             await asyncio.to_thread(owner._recovery_event, 'RECOVERY_SESSION_PENDING',
-                f"Session containment pending: {getattr(error, 'code', type(error).__name__)}",
+                f"Session containment pending: {getattr(error, 'code', type(error).__name__)}"
+                f" at {getattr(error, 'stage', 'unknown')}",
                 agent_id=session['scope']['agent_id'])
 
     def _check_stream_health(self, agent_id, active_operations):

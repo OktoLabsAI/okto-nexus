@@ -66,8 +66,12 @@
       "after": [
         "M8"
       ],
-      "status": "pending",
-      "includes_supervisor_if_adopted": true
+      "status": "local_installed_ui_flows_verified_ci_pending",
+      "includes_supervisor_if_adopted": true,
+      "interim_evidence": [
+        "m8-uic-installed-ui.md",
+        "m8-ci-triage.md"
+      ]
     }
   ],
   "repositories": {
@@ -824,7 +828,10 @@
       "id": "M8",
       "status": "in_progress",
       "title": "Installed-package qualification and rollout",
-      "evidence": [],
+      "evidence": [
+      "m8-uic-installed-ui.md",
+      "m8-ci-triage.md"
+      ],
       "commits": {
         "connector_installed_processes": "a7dd588"
       },

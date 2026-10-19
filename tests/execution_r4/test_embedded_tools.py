@@ -86,12 +86,12 @@ def test_vault_failure_prevents_native_tool_launch(connected_local):
     _,app,*_=setup
     def broken(*args): raise OSError("Technical vault write failure")
     vault.store=broken
-    admit(setup,binding,"tools-vault-failure","runtime.start",new_session=True)
+    opened=admit(setup,binding,"tools-vault-failure","runtime.start",new_session=True)
     until=time.monotonic()+5
-    while 'subject' not in app.state.embedded_dispatch_owner.agents.errors:
+    while not app.state.embedded_dispatch_owner.sessions.get(opened['session_id'], {}).get('recovering'):
         assert time.monotonic()<until
         time.sleep(.02)
-    assert isinstance(app.state.embedded_dispatch_owner.agents.errors['subject'],OSError)
+    assert isinstance(app.state.embedded_dispatch_owner.sessions[opened['session_id']]['recovery_error'],OSError)
     assert app.state.embedded_dispatch_owner.failure is None
     assert native.opens==0 and not environments
 

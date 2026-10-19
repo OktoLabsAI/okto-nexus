@@ -149,10 +149,18 @@ class ServeFixture:
         from okto_nexus.domain.base import iso_plus
         with self.deps.connection_factory.unit_of_work(write=False) as uow:
             executor = uow.connection.execute("SELECT executor_id FROM execution_executors WHERE kind='embedded'").fetchone()[0]
-        inventory = self.client.get('/v1/runtime/executors/' + executor + '/inventory')
-        assert inventory.status_code == 200, inventory.text
-        snapshot = inventory.json()['snapshot']
-        candidate = snapshot['evidence'][0]['candidate_ref']
+        deadline = time.monotonic() + 15
+        while True:
+            inventory = self.client.get('/v1/runtime/executors/' + executor + '/inventory')
+            assert inventory.status_code == 200, inventory.text
+            view = inventory.json()
+            snapshot = view['snapshot']
+            candidates = [row for row in snapshot['evidence'] if row['adapter_id'] == 'pi_rpc']
+            if view['freshness'] == 'FRESH' and candidates:
+                candidate = candidates[0]['candidate_ref']
+                break
+            assert time.monotonic() < deadline, view
+            time.sleep(.02)
         response = self.client.post('/v1/runtime/executors/' + executor + '/realizations', json=dict(
             client_intent_id='shutdown-realization', agent_id='shutdown-fixture', workspace_root=str(self.project),
             workspace_id=workspace_id, workspace_label='Shutdown fixture', adapter_id='pi_rpc', candidate_ref=candidate,

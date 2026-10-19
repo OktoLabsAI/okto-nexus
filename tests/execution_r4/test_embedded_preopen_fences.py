@@ -27,7 +27,7 @@ def test_bound_open_without_core_admission_recovers_and_new_work_runs(tmp_path, 
             patch.setattr(LocalRuntimeCore, 'open', interrupted)
             opened = admit(setup, binding, 'interrupted-open', 'runtime.start', new_session=True, text='Never sent')
             until = time.monotonic() + 10
-            while 'subject' not in app.state.embedded_dispatch_owner.agents.errors:
+            while not app.state.embedded_dispatch_owner.sessions.get(opened['session_id'], {}).get('recovering'):
                 assert time.monotonic() < until
                 time.sleep(.02)
         assert native.opens == 0

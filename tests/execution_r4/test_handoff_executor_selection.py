@@ -130,7 +130,8 @@ async def running_pair(onboarding, records, tmp_path):
         child.stdin.write((json.dumps({'command': name}) + '\n').encode())
         await child.stdin.drain()
         line = await asyncio.wait_for(child.stdout.readline(), 120)
-        assert line, 'Connector child exited; inspect selection-*.stderr'
+        assert line, ('Connector child exited: ' +
+            (tmp_path / f'selection-{index}.stderr').read_text(errors='replace')[-2500:])
         return json.loads(line)
 
     try:
