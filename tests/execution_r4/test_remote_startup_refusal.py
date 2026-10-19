@@ -5,7 +5,7 @@ import pytest
 
 from starlette.testclient import TestClient
 from nexus_connector_core import (
-    R4_PREVIEW_REVISION, OperationKey, prepare_r4_startup_refusal,
+    CoreError, R4_PREVIEW_REVISION, OperationKey, prepare_r4_startup_refusal,
     persist_r4_startup_refusal, project_r4_bound_receipt,
 )
 from nexus_connector_core.journal import open_journal
@@ -236,7 +236,15 @@ def test_remote_failed_preparation_releases_capacity_and_keeps_next_work_availab
                         assert page.reason == 'STALE_OBSERVATION', page
                         await asyncio.sleep(.05)
                 assert len(page.attempt_ids) == 1
-                held = await attempts.reserve(page.attempt_ids[0])
+                async with asyncio.timeout(30):
+                    while True:
+                        try:
+                            held = await attempts.reserve(page.attempt_ids[0])
+                            break
+                        except CoreError as error:
+                            if error.code != 'STALE_OBSERVATION':
+                                raise
+                            await asyncio.sleep(.05)
                 assert held.state == 'RESERVED'
                 claimed = attempts.claim(page.attempt_ids[0])
                 consumed = await build_capacity_admission(deps).consume(claimed.operation_id)
@@ -333,7 +341,15 @@ def test_uncertain_native_open_retains_capacity_and_never_claims_prelease_refusa
                         await asyncio.sleep(.05)
                 assert len(page.attempt_ids) == 1
                 attempts = build_handoff_runtime_attempts(deps)
-                held = await attempts.reserve(page.attempt_ids[0])
+                async with asyncio.timeout(30):
+                    while True:
+                        try:
+                            held = await attempts.reserve(page.attempt_ids[0])
+                            break
+                        except CoreError as error:
+                            if error.code != 'STALE_OBSERVATION':
+                                raise
+                            await asyncio.sleep(.05)
                 claimed = attempts.claim(page.attempt_ids[0])
                 await build_capacity_admission(deps).consume(claimed.operation_id)
                 async with asyncio.timeout(90):
@@ -399,7 +415,15 @@ def test_process_death_after_startup_binding_commit_replays_without_manual_repai
                 await asyncio.sleep(.05)
         assert len(page.attempt_ids) == 1
         attempts = build_handoff_runtime_attempts(deps)
-        held = await attempts.reserve(page.attempt_ids[0])
+        async with asyncio.timeout(30):
+            while True:
+                try:
+                    held = await attempts.reserve(page.attempt_ids[0])
+                    break
+                except CoreError as error:
+                    if error.code != 'STALE_OBSERVATION':
+                        raise
+                    await asyncio.sleep(.05)
         claimed = attempts.claim(page.attempt_ids[0])
         consumed = await build_capacity_admission(deps).consume(claimed.operation_id)
         return held, claimed, consumed

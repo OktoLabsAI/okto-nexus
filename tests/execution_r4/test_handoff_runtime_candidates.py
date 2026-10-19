@@ -396,6 +396,12 @@ def test_capacity_publication_wakes_waiting_broadcast_without_new_message_or_exp
 
     async def run():
         ledger = await owner.host._ledger()
+        # This host has already opened its durable ledger at startup. Keep
+        # the stored slot policy aligned with the test's one-slot host limit.
+        ledger.max_slots = 1
+        await ledger._run(lambda db: db.execute(
+            'INSERT INTO owned_slot_policy(singleton,max_slots) VALUES(1,1) '
+            'ON CONFLICT(singleton) DO UPDATE SET max_slots=1'))
         key = OperationKey(owner.channel.server_id, owner.channel.executor_id, 'occupied-opening')
         await ledger.reserve_owned_slot(key, 'occupied-session')
         clock = [time.time()]

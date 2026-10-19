@@ -832,7 +832,7 @@
       "m8-uic-installed-ui.md",
       "m8-ci-triage.md"
       ],
-      "ci_checkpoint": "Core 39180450008 passed. Nexus isolated Ubuntu 3.12 rerun 39190838641 had 27 failures; four identified causes were corrected and 29 local installed recovery/compensation cases plus one installed remote Connector case passed. Connector 39195567707 passed all but Windows 3.13; its cold-opening watchdog was adjusted after 22 local module cases passed. Final matrices remain pending.",
+      "ci_checkpoint": "Core 39180450008 passed. Nexus matrix 39198137896 is running; initial Ubuntu shards exposed a missing Connector recovery-channel is_attached method, fixed in Connector 748c0ba and included in the updated Nexus CI wheel, plus bounded inventory-readiness and contract/test expectation fixes. The affected local installed tests passed, including seven deadline/restart/expiry and two startup-refusal cases. Connector matrix 39203007257 is queued. Final matrices remain pending.",
       "commits": {
         "connector_installed_processes": "a7dd588"
       },

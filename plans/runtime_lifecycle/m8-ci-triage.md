@@ -56,3 +56,15 @@ Linux, macOS, Windows 3.11 and 3.12. Windows 3.13 alone timed out in a
 three test variants and full 22-test module pass locally. The watchdog now
 allows 30 seconds for hosted-runner durable journal I/O. A full Connector
 matrix rerun is still required.
+
+The next installed Nexus matrix, `39198137896`, is still running. Its first
+Ubuntu 3.11–3.13 shards reproduced four bounded findings. Remote reconnect
+replay called `is_attached` on the recovery channel, which did not implement
+the regular connection's method; Connector `748c0ba` adds it. The Nexus CI
+vendor wheel now contains that exact Connector build. Existing tests also
+needed to wait for accepted inventory after remote startup, use the current
+session-scoped containment result, and compare the current schema 152 and
+executor snapshot format 3. The affected local installed cases passed,
+including seven deadline/restart/expiry variants and two startup-refusal
+variants. These are checkpoint results, not a final matrix pass. Connector
+matrix `39203007257` is queued on the current source.

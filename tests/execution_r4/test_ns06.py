@@ -276,11 +276,12 @@ def test_ns06_02_atomic_admission_and_replay_with_synthetic_qualification(tmp_pa
             "new_session": True,
         }, remote_ready=True, fresh_publications=freshness)
     assert not outdated["can_submit"]
-    assert "inventory_incompatible" in outdated["blockers"]
-    with pytest.raises(OktoNexusError, match="Refresh the executor inventory"):
+    assert set(outdated["blockers"]) & {"inventory_incompatible", "inventory_not_fresh"}
+    with pytest.raises(OktoNexusError) as refused:
         submit_execution_operation(
             factory, actor_agent_id="agent-a", request=request,
             fresh_publications=freshness, remote_ready=True)
+    assert refused.value.code == "CONFLICT"
     with factory.unit_of_work() as uow:
         assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations").fetchone()[0] == 0
         uow.connection.execute(

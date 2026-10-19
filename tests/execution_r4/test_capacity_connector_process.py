@@ -127,9 +127,17 @@ def test_capacity_survives_lost_reply_reconnect_and_connector_process_restart(
                 while True:
                     state = await command('status')
                     host = registry.current_host(binding['server_id'], binding['executor_id'])
+                    fresh = client.app.state.inventory_fresh_publications.get(
+                        (binding['server_id'], binding['executor_id']))
+                    with deps.connection_factory.unit_of_work(write=False) as uow:
+                        inventory = uow.connection.execute(
+                            'SELECT publication_sequence FROM execution_inventory_current '
+                            'WHERE server_id=? AND executor_id=?',
+                            (binding['server_id'], binding['executor_id'])).fetchone()
                     if (state['ready'] and state['generation'] > after_generation and host
                             and host.channel.connection_generation == state['generation']
-                            and binding['binding_id'] in host.observations):
+                            and binding['binding_id'] in host.observations and inventory
+                            and fresh is not None and fresh[0] == inventory['publication_sequence']):
                         assert state['pid'] != os.getpid()
                         return state
                     await asyncio.sleep(.1)
