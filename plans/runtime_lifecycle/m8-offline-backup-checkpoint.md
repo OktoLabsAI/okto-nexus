@@ -30,7 +30,16 @@ adjacentes passaram, 3/3, com os pacotes instalados no Windows. Os diretórios
 de backup e restauração permanecem ignorados no workspace e não contêm dados
 para commit.
 
-Este checkpoint comprova cópia, restauração, integridade e recusa de esquema
-mais novo com a home parada. Ainda falta inicializar a cópia restaurada com o
-artefato final, concluir a matriz instalada e o rollout controlado antes de
-aceitar M8.
+O pacote Nexus instalado também iniciou a **cópia restaurada** em
+`127.0.0.1:8204`, sem tocar na home original. O servidor anunciou startup
+completo e a página raiz respondeu HTTP 200. Durante a execução, o banco
+permaneceu na migração 152 com sete agentes, 338 mensagens e um artefato.
+Após a parada da instância descartável, a porta 8204 ficou livre e não restou
+processo com o caminho dessa cópia na linha de comando. O snapshot original
+continuou validando `PASS`. Essa inicialização verifica leitura e bootstrap;
+não é uma nova campanha de mensagens reais pela UI.
+
+Este checkpoint comprova cópia, restauração, integridade, recusa de esquema
+mais novo e inicialização da cópia com o pacote instalado. A matriz instalada,
+o gate UI-C no artefato final e o rollout controlado ainda precisam terminar
+antes de aceitar M8.
