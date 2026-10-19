@@ -64,14 +64,30 @@ def test_embedded_restart_recovers_interrupted_launch_automatically(tmp_path, mo
             owner.native_factory = native
             setup = deps, app, client, state['headers'], state['body'], candidate, root/'workspace'
             key = (state['binding']['server_id'], state['binding']['executor_id'])
-            def inventory_accepted():
+            def binding_ready():
+                from okto_nexus.application.execution_inventory_freshness import inventory_is_fresh
+                from okto_nexus.application.execution_inventory_revalidation import accepts_binding
                 marker = app.state.inventory_fresh_publications.get(key)
                 with deps.connection_factory.unit_of_work(write=False) as uow:
-                    published = uow.connection.execute(
-                        'SELECT publication_sequence FROM execution_inventory_current '
-                        'WHERE server_id=? AND executor_id=?', key).fetchone()
-                return marker is not None and published is not None and marker[0] == published[0]
-            eventually(inventory_accepted, seconds=25)
+                    conn = uow.connection
+                    published = conn.execute(
+                        'SELECT c.publication_sequence,c.inventory_revision,s.observation_age_ms,'
+                        's.canonical_projection FROM execution_inventory_current c '
+                        'JOIN execution_inventory_snapshots s ON s.server_id=c.server_id '
+                        'AND s.executor_id=c.executor_id AND s.publication_sequence=c.publication_sequence '
+                        'WHERE c.server_id=? AND c.executor_id=?', key).fetchone()
+                    if marker is None or published is None or marker[0] != published['publication_sequence']:
+                        return False
+                    binding = conn.execute(
+                        'SELECT b.inventory_revision,b.candidate_ref,ep.adapter_id,e.control_state '
+                        'FROM execution_bindings b JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id '
+                        'JOIN execution_executors e ON e.server_id=b.server_id AND e.executor_id=b.executor_id '
+                        'WHERE b.server_id=? AND b.binding_id=?',
+                        (key[0], state['binding']['binding_id'])).fetchone()
+                    return (binding is not None and binding['control_state'] == 'CONTROL_READY'
+                        and inventory_is_fresh(published, marker, binding['adapter_id'])
+                        and accepts_binding(conn, binding, published['inventory_revision'], *key))
+            eventually(binding_ready, seconds=25)
             replacement = admit(setup, state['binding'], 'new-after-crash', 'runtime.start', new_session=True)
             wait_receipt(setup, replacement)
             assert replacement['session_id'] != state['session_id']

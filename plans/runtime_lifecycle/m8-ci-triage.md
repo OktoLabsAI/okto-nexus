@@ -172,3 +172,42 @@ binding revalidation, or executor control readiness. The test now waits for
 those admission conditions. Both fault variants
 (`unavailable` and `hung`) passed locally against the installed Nexus wheel.
 The other matrix shards remain in progress; this is not a full-matrix pass.
+
+Matrix `39239613854` on commit `c679603` passed the earlier failing Ubuntu
+3.13 shard 0. Windows 3.13 shard 0 then refused a fresh request with the
+specific blocker `inventory_not_fresh` in a second interrupted-launch restart
+test. That test also waited only for the publication sequence. It now waits
+for the selected adapter's fresh observation, accepted binding, and ready
+executor before admitting the replacement request. All six interrupted-launch
+cuts (`intent`, `effect`, `claim`, `container`, `spawn`, `birth`) passed locally
+against the installed wheel. Remaining shards of the matrix are still being
+classified before another full run.
+
+Ubuntu 3.11 and 3.13 shard 1 in the same matrix timed out at three hours in
+`test_heartbeat_storage_failure_closes_link_and_releases_owner`. Local
+reproduction showed the test's failure wrapper also intercepted
+`last_seen_at` writes from unrelated executors during `TestClient` startup,
+before the remote heartbeat under test. The fixture now arms the failure only
+after the remote link's handshake and matches that executor. All three
+storage/authority variants passed locally against the installed wheel in
+20 seconds. This was a test-injection scope error; the heartbeat handler was
+not changed.
+
+The same matrix also timed out during server teardown after a deliberately
+failed outbox stop. Repeating embedded shutdown tried to republish Core
+history after its journals had already closed, so the retained shutdown
+coordinator retried indefinitely. The embedded owner now records when final
+history was published and skips that phase on a certain, completed retry.
+Its cleanup-failure test explicitly verifies the second close drains. The
+installed `test_embedded_dispatch.py` file passed all 30 cases in 296 seconds,
+including canceled observers, the cleanup failure, and retained-history
+recovery, with no changed inputs.
+
+Ubuntu shard 2 found an outdated protocol-limit test: its 2 MB frame no
+longer exceeded the Core's 16 MB maximum. The stimulus now derives its size
+from `MAX_FRAME_BYTES`; the installed oversized-frame case passed. The entire
+installed startup-isolation file passed all 14 cases in 175 seconds on
+Windows. Ubuntu shard 2 also failed the preauthorization restart case and
+timed out after the prepare-stage cases; that Linux-only result is still
+unclassified. Matrix `39239613854` was canceled after these findings.
+The full Nexus matrix remains required.

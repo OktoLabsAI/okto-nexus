@@ -100,6 +100,7 @@ class EmbeddedDispatchOwner:
         self._publish_locks = {}
         self._containment_task = None
         self.containment_report = None
+        self._shutdown_history_published = False
         self.state_failure = None
         self.recovery_failure = None
         self._recovery_task = None
@@ -983,11 +984,13 @@ class EmbeddedDispatchOwner:
             # Native shutdown can append its last receipt/events after the
             # periodic publishers stop. Commit those facts before closing
             # their journals, including unknown outcomes without a result.
-            await self._publish_shutdown_history()
+            if not self._shutdown_history_published:
+                await self._publish_shutdown_history()
             # All dispatch/publication producers have returned. The host now
             # joins history readers and closes only resolved Core resources.
             if not any('unknown' in report.session_outcomes.values()
                        for report in self.containment_report.values()):
+                self._shutdown_history_published = True
                 self.containment_report = await self.host.shutdown(ShutdownPolicy(0,0))
         except Exception as error:
             failures.append(error)

@@ -410,6 +410,8 @@ def test_dispatch_cleanup_failure_still_drains_core(connected_local,monkeypatch)
         with pytest.raises(OSError,match="Technical outbox cleanup failure"):
             client.portal.call(owner._close)
     assert native.native.stopped and not owner.workers and not owner.renewals
+    client.portal.call(owner.close)
+    assert client.portal.call(owner.shutdown_status)["state"] == "DRAINED"
 
 
 @pytest.mark.parametrize("filename",["session-retained.db","owned-slots.db"])

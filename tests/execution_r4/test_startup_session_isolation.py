@@ -107,7 +107,17 @@ def test_pre_authorization_refusal_recovers_after_restart_before_server_receipt(
     with TestClient(app) as client:
         owner = app.state.embedded_dispatch_owner
         restored = (deps, app, client, setup[3], *setup[4:])
-        eventually(lambda: not owner.agents.blocked, seconds=30)
+        def refusal_recovered():
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                conn = uow.connection
+                receipt = conn.execute('SELECT stage FROM execution_receipts '
+                    'WHERE operation_id=?', (failed['operation_id'],)).fetchone()
+                session = conn.execute('SELECT local_retirement_json FROM execution_sessions '
+                    'WHERE session_id=?', (failed['session_id'],)).fetchone()
+            return (receipt is not None and receipt[0] == 'FAILED'
+                and session is not None and session[0] is not None
+                and not owner.agents.blocked)
+        eventually(refusal_recovered, seconds=30)
         with deps.connection_factory.unit_of_work(write=False) as uow:
             conn = uow.connection
             assert tuple(conn.execute('SELECT stage,error_code,possible_effect FROM execution_receipts '
