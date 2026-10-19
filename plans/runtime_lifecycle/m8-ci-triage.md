@@ -353,3 +353,38 @@ Core run `39323802278` completed successfully across Ubuntu 3.11–3.13,
 Windows 3.11–3.13 and macOS 3.13 after the Linux launch-crash fixture update.
 Connector run `39204601574` had already passed. Nexus remains the only
 pending full installed matrix.
+
+The replacement Nexus matrix `39330278855` was later canceled while its jobs
+were still running. Core M2g now changes the wheel consumed by both Nexus and
+Connector, so that matrix could not qualify the final joint artifact. Core CI
+`39332931455` must first qualify the Darwin stop receipt, including the
+installed native macOS crash cuts; only then can the consumers vendor that
+wheel and run their final matrices. No canceled Nexus job counts as final
+qualification.
+
+Core M2g's first CI run `39332931455` passed Ubuntu 3.11–3.13, Windows
+3.11–3.12 and Intel macOS 3.13, including four installed-wheel native
+owner-crash cuts. Windows 3.13 completed its source suite and offline wheel
+installation, but the 30-minute job cap interrupted the final clean-wheel
+resource check. Core commit `3239533` changed only that cap to 45 minutes and
+dispatched replacement run `39336889894`. That run passed Ubuntu and Windows
+3.11–3.13, Intel macOS 3.13 with native owner-crash cuts, and the dependent
+SBOM. Its exact Core 0.0.12 wheel SHA-256 is
+`fe0659ec366029a72475cdf300b0be1705e796d32044bf9c0ab0bc81d3b574b5`.
+Nexus and Connector now vendor those same bytes. Their full installed matrices
+remain the next gate.
+
+Before replacing the consumers' candidate wheel with the CI artifact, a fresh
+installed Connector 0.0.10 environment passed 20 directed launch/lifecycle
+cases and 13 structural boundary cases. A fresh installed Nexus 0.3.1
+environment passed the base boot probes and 13 directed local launch, remote
+publication/ACK and presence cases (3m49s). These local results use a wheel
+built from the same Core source commit but do not replace the final CI artifact
+or full consumer matrices.
+
+After installing the exact Core CI wheel in those isolated environments,
+Connector repeated its 20 launch/lifecycle and 13 structural boundary cases
+successfully. Nexus repeated its 13 installed recovery, remote ACK and
+presence cases successfully (4m06s). Connector CI `39339307577` is running;
+its resulting wheel must replace the older test-only Connector artifact in
+Nexus before the final Nexus matrix is dispatched.

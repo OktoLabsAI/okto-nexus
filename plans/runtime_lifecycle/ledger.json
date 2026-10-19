@@ -181,12 +181,12 @@
         },
         {
           "id": "M2g",
-          "status": "implemented_native_ci_pending",
-          "title": "Core now persists an identity-bound Darwin guardian stop proof; 32 source and 32 wheel tests passed, with four installed native macOS crash cuts pending in CI"
+          "status": "complete",
+          "title": "Darwin guardian durable stop receipt qualified: four installed native crash cuts, complete Core CI 39336889894 and SBOM"
         }
       ],
-      "qualification": "Core, embedded and Connector recovery integrated and jointly installed. Windows disposable owner crashes and 261 installed tests passed. Four Linux planned-launch crash cuts passed with Core 0.0.12 installed. Real UI-A flows were later verified separately. Later handshake/receipt/ACK crash frontiers and macOS platform qualification remain pending. M2g Core c91b75a implements the durable Darwin stop receipt; native hosted CI and consumer vendor updates remain pending.",
-      "next": "Qualify remaining handshake/receipt/ACK crash cuts. Complete Core macOS native owner-crash CI 39332931455, then update Nexus and Connector vendor wheels and run joint installed validation. Do not release Linux or macOS claimed capacity without guardian proof.",
+      "qualification": "Core, embedded and Connector recovery integrated. Windows disposable owner crashes and 261 installed tests passed. Four Linux planned-launch crash cuts passed with Core 0.0.12. Darwin M2g physical owner-crash cuts and full Core CI 39336889894 passed; exact qualified wheel SHA-256 fe0659ec366029a72475cdf300b0be1705e796d32044bf9c0ab0bc81d3b574b5. Real UI-A flows were verified separately. Later handshake/receipt/ACK crash frontiers and joint consumer CI remain pending.",
+      "next": "Qualify remaining handshake/receipt/ACK crash cuts, then run joint installed Connector and Nexus matrices against the exact Core M2g wheel. Do not release claimed capacity without guardian proof.",
       "nexus_m2e_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m2e-validation.md"
     },
     {
