@@ -142,3 +142,13 @@ replacement owner and uses its current candidate/revision. All three real
 process-exit variants (`graceful`, `kill`, and `kill-before-bind`) passed in the
 installed local environment. Windows 3.12 shard 0 and Windows 3.11 shard 3
 repeated already corrected identity and compensation expectations.
+
+Windows 3.11 shard 2 and Windows 3.12 shard 2 exposed the same remaining
+fixture failures. The real-serve setup could race a new independent inventory
+publication between selection and realization/binding, so it now retries only
+the typed stale-selection conflicts with a fresh snapshot and a new intent.
+The startup privacy test still waited for the obsolete agent-wide recovery
+row; it now observes the session-specific blocked event for the failed
+session. Four privacy variants and the clean signal-drain process case passed
+in the installed local environment. These are triage fixes; the full Nexus
+matrix has not yet passed.

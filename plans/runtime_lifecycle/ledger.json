@@ -832,7 +832,7 @@
       "m8-uic-installed-ui.md",
       "m8-ci-triage.md"
       ],
-      "ci_checkpoint": "Core 39180450008 and Connector 39204601574 passed. Nexus triage matrix 39214894629 has four passed shards and six classified failures so far. Windows 3.13 shard 3 exposed a stale compensation expectation and backup SHM precheck race; 21 installed cases passed. Windows 3.13 shard 0 and Ubuntu 3.12 shard 1 exposed old agent-wide recovery and journal replay-count expectations; 8 identity and 12 journal cases passed. Windows 3.11 shard 0 reused stale prior-process inventory for a new local realization; all 3 real process-exit variants passed after fixture correction. Remaining shards and final full Nexus matrix are required. See m8-ci-triage.md.",
+      "ci_checkpoint": "Core 39180450008 and Connector 39204601574 passed. Nexus triage matrix 39214894629 has four passed shards and eight classified failures so far. Windows 3.13 shard 3 exposed a stale compensation expectation and backup SHM precheck race; 21 installed cases passed. Windows 3.13 shard 0 and Ubuntu 3.12 shard 1 exposed old agent-wide recovery and journal replay-count expectations; 8 identity and 12 journal cases passed. Windows 3.11 shard 0 reused stale prior-process inventory for a new local realization; all 3 real process-exit variants passed after fixture correction. Windows 3.11 and 3.12 shard 2 repeated stale agent-wide recovery and real-serve inventory-selection fixture races; five affected installed cases passed after correction. Remaining shards and final full Nexus matrix are required. See m8-ci-triage.md.",
       "commits": {
         "connector_installed_processes": "a7dd588"
       },
