@@ -41,7 +41,8 @@ The Nexus run was cancelled after both Ubuntu shard-0 jobs failed, avoiding
 additional runner use. Focused installed Windows verification of the CI
 corrections passed: 11 preopen recovery cases, 12 registered adapter and
 retirement cases, the migration case, four inventory/realization/shutdown
-cases, two canonical boot/tool cases, and the one-slot handoff case. The
+cases, two canonical boot/tool cases, the one-slot handoff case, and four
+renewal containment commit cuts. The
 remaining CI failures are tracked in `m8-ci-triage.md`. They remain a release
 blocker. This UI-C checkpoint is local evidence, not final M8 acceptance or a
 global rollout.

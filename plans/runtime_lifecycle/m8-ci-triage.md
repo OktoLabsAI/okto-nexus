@@ -26,12 +26,17 @@ Closed findings in this checkpoint, with focused installed Windows tests:
   test capacity facts to one; the real concurrent reservation test passed.
 - The runtime-options test no longer monkeypatches the shared platform probe
   while the independent inventory observer can legitimately run it.
+- A renewal denial claims one retirement checkpoint revision when it records
+  the containment obligation. The four commit-cut assertions now require that
+  exact increment while still rejecting any physical release; all four passed
+  locally.
 - A registered, rootless workspace can now upload managed artifacts. The
   focused HTTP test and real UI upload/send/read passed.
 
 Open Nexus CI groups from the cancelled run: Linux subprocess Connector
-startup in remote handoff/containment cases; renewal containment commit cuts;
-and remaining shard results. The subprocess fixture now includes its stderr
+startup in remote handoff/containment cases and remaining shard results. The
+same remote cold-start and preopen cases passed on installed Windows. The
+subprocess fixture now includes its stderr
 on failure so the next Linux run can identify the root cause. Treat failures
 as open until rerun; do not infer a full pass from Windows focused tests.
 

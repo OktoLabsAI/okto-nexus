@@ -62,7 +62,13 @@ def test_renewal_denial_commit_reopens_same_obligation_without_release(tmp_path,
         assert obligation['opening_operation_id'] == opened['operation_id']
         assert obligation['opening_intent_hash'] == opened['intent_hash']
         for table in TABLES[1:]:
-            assert settled[table] == before[table], table
+            expected = [dict(row) for row in before[table]]
+            if table == 'execution_sessions':
+                # Containment claims the retirement checkpoint revision but
+                # does not close the session or prove a physical release.
+                assert len(expected) == 1
+                expected[0]['local_retirement_revision'] += 1
+            assert settled[table] == expected, table
         if boundary == 'lost_reply':
             assert settled == observed
         assert replacement.denied(renewal, channel=channel)
