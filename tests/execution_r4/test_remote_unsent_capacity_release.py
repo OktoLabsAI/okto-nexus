@@ -4,6 +4,7 @@ from dataclasses import replace
 from pathlib import Path
 
 import pytest
+from nexus_connector_core import CoreError
 
 from okto_nexus.application.handoff_runtime_scheduler import HandoffScheduleLease
 from okto_nexus.application.handoff_runtime_service import HandoffRuntimeService
@@ -62,7 +63,17 @@ def test_remote_grant_revocation_after_consume_releases_same_ticket_without_open
                 HandoffScheduleLease(hid, binding['workspace_id'], 0, 'remote-revoke', 0, 0, ''), limit=4)
             assert len(page.attempt_ids) == 1
             attempts = build_handoff_runtime_attempts(deps)
-            held = await attempts.reserve(page.attempt_ids[0])
+            # The remote observation can be revalidated between candidate
+            # selection and this read-only capacity assessment.
+            async with asyncio.timeout(30):
+                while True:
+                    try:
+                        held = await attempts.reserve(page.attempt_ids[0])
+                        break
+                    except CoreError as error:
+                        if error.code != 'STALE_OBSERVATION':
+                            raise
+                        await asyncio.sleep(.05)
             assert held.state == 'RESERVED'
             committed = attempts.claim(page.attempt_ids[0])
             await build_capacity_admission(deps).consume(committed.operation_id)

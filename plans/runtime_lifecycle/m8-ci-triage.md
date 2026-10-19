@@ -288,3 +288,14 @@ commit and were superseded by the full replacement matrix `39305360323` on
 `9e16d60`, which now tests the corrected installed wheel across the same 24
 platform/Python/shard combinations. No result from the canceled run is counted
 as final qualification.
+
+The replacement matrix `39305360323` reached one new Ubuntu 3.13 shard-3
+fixture race: the remote unsent-capacity-release case assessed its first
+handoff candidate while the selected installation observation was being
+revalidated. Nexus correctly returned `STALE_OBSERVATION` before reservation.
+The test now retries only that no-effect pre-reservation result with the same
+attempt identity and a 30-second bound; the revocation, exact ticket release,
+and physical reuse assertions remain unchanged. The complete case passed
+against the installed current Nexus/Core/Connector wheels on Linux and Windows.
+Other jobs of this matrix were still running at this checkpoint; its final
+result is not yet known.
