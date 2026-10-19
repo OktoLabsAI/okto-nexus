@@ -150,5 +150,25 @@ the typed stale-selection conflicts with a fresh snapshot and a new intent.
 The startup privacy test still waited for the obsolete agent-wide recovery
 row; it now observes the session-specific blocked event for the failed
 session. Four privacy variants and the clean signal-drain process case passed
-in the installed local environment. These are triage fixes; the full Nexus
-matrix has not yet passed.
+in the local source run. A separate wheel-based run used
+`tools/ci_installed.py` with an independent working directory and verified
+that Nexus, Core, and Connector were imported from `site-packages`. Across all
+five modules using the real-serve fixture, it passed 15 cases, skipped three
+POSIX-only cases on Windows, and reported no changed inputs. The rebuilt
+Nexus 0.3.1 wheel SHA-256 was
+`d4f8f46ebc48c87666cd68f7cbc664fc816497ba8364168491922bfa08955d9c`.
+The same installed wheel passed 11 dispatch/independent-boot cases and 41
+compensation, offline-backup, canonical-identity, and journal cases, each
+with unchanged inputs. Total focused installed result: 67 passed, three
+Windows platform skips, zero failures.
+The old triage matrix was cancelled after eight classified failures; final
+matrix `39230234802` runs against commit `1f2558e`. The full Nexus matrix
+has not yet passed.
+
+Ubuntu 3.13 shard 0 of that matrix refused a healthy agent's new opening
+immediately after restart. The test had waited only for the current
+publication sequence, which does not prove the selected adapter's observation,
+binding revalidation, or executor control readiness. The test now waits for
+those admission conditions. Both fault variants
+(`unavailable` and `hung`) passed locally against the installed Nexus wheel.
+The other matrix shards remain in progress; this is not a full-matrix pass.

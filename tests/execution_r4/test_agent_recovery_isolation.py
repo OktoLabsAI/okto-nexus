@@ -110,25 +110,41 @@ def test_restart_isolates_fault_and_accepts_new_local_and_remote_agents(tmp_path
         owner = app.state.embedded_dispatch_owner
         current = (deps, app, client, setup[3], *setup[4:])
         try:
-            def inventory_accepted(binding):
+            def binding_ready(binding):
+                from okto_nexus.application.execution_inventory_freshness import inventory_is_fresh
+                from okto_nexus.application.execution_inventory_revalidation import accepts_binding
                 key = (binding['server_id'], binding['executor_id'])
                 marker = app.state.inventory_fresh_publications.get(key)
                 with deps.connection_factory.unit_of_work(write=False) as uow:
-                    published = uow.connection.execute(
-                        'SELECT publication_sequence FROM execution_inventory_current '
-                        'WHERE server_id=? AND executor_id=?', key).fetchone()
-                return marker is not None and published is not None and marker[0] == published[0]
+                    conn = uow.connection
+                    published = conn.execute(
+                        'SELECT c.publication_sequence,c.inventory_revision,s.observation_age_ms,'
+                        's.canonical_projection FROM execution_inventory_current c '
+                        'JOIN execution_inventory_snapshots s ON s.server_id=c.server_id '
+                        'AND s.executor_id=c.executor_id AND s.publication_sequence=c.publication_sequence '
+                        'WHERE c.server_id=? AND c.executor_id=?', key).fetchone()
+                    if marker is None or published is None or marker[0] != published['publication_sequence']:
+                        return False
+                    selected = conn.execute(
+                        'SELECT b.inventory_revision,b.candidate_ref,ep.adapter_id,e.control_state '
+                        'FROM execution_bindings b JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id '
+                        'JOIN execution_executors e ON e.server_id=b.server_id AND e.executor_id=b.executor_id '
+                        'WHERE b.server_id=? AND b.binding_id=?',
+                        (binding['server_id'], binding['binding_id'])).fetchone()
+                    return (selected is not None and selected['control_state'] == 'CONTROL_READY'
+                        and inventory_is_fresh(published, marker, selected['adapter_id'])
+                        and accepts_binding(conn, selected, published['inventory_revision'], *key))
             assert owner.pump is not None and owner.failure is None
             assert 'subject' in owner.agents.blocked
             eventually(lambda: 'healthy' not in owner.agents.blocked)
             # A configured healthy agent starts again while the old peer waits.
             restored = (deps, app, client, healthy_setup[3], *healthy_setup[4:])
             owner.native_factory = healthy_native
-            eventually(lambda: inventory_accepted(healthy_binding))
+            eventually(lambda: binding_ready(healthy_binding))
             wait_receipt(restored, admit(restored, healthy_binding, 'healthy-after', 'runtime.start', new_session=True))
             newcomer = create_agent(current, 'new-local')
             newcomer, new_binding, new_native = connect_local(newcomer, agent_id='new-local')
-            eventually(lambda: inventory_accepted(new_binding))
+            eventually(lambda: binding_ready(new_binding))
             wait_receipt(newcomer, admit(newcomer, new_binding, 'new-during-recovery', 'runtime.start', new_session=True))
             remote_roundtrip(create_agent(current, 'new-remote'), 'new-remote')
             listing = client.get('/api/v1/agents', headers=current[3]['operator']).json()['data']['items']

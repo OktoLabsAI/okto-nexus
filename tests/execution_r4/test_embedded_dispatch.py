@@ -72,7 +72,7 @@ def admit(setup,binding,intent_id,intent,**options):
         "workspace_binding_id":binding["workspace_binding_id"],**options})
     assert response.status_code==200,response.text
     resolution=response.json()
-    assert resolution["can_submit"],resolution
+    assert resolution["can_submit"], resolution["blockers"]
     request={k:resolution[k] for k in ("client_intent_id","operation_id","resolution_revision","intent_hash")}
     response=client.post("/v1/runtime/operations",headers=headers["subject"],json=request)
     assert response.status_code==202,response.text
