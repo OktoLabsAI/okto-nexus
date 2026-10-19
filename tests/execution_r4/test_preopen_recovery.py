@@ -6,7 +6,7 @@ import pytest
 from fastapi.testclient import TestClient
 from nexus_connector_core import CoreError, LocalRuntimeCore, SQLiteOwnedSlotLedger, OperationKey
 from test_embedded_dispatch import local_setup, connected_local, qualified_contract, admit, wait_receipt
-from test_embedded_inventory import app_for
+from test_embedded_inventory import app_for, wait_inventory
 
 
 def test_pending_admission_survives_restart_alongside_released_history(tmp_path, monkeypatch):
@@ -28,6 +28,7 @@ def test_pending_admission_survives_restart_alongside_released_history(tmp_path,
     monkeypatch.setattr(EmbeddedDispatchOwner, 'start', start)
     deps, app = app_for(tmp_path / 'home')
     with TestClient(app) as client:
+        wait_inventory(client)
         current = (deps, app, client, headers, *setup[4:])
         wait_receipt(current, pending)
         with deps.connection_factory.unit_of_work(write=False) as uow:
@@ -72,6 +73,7 @@ def test_preopen_failure_recovers_only_with_empty_owned_resources(tmp_path, monk
         asyncio.run(occupy())
     deps, app = app_for(tmp_path / 'home')
     with TestClient(app) as client:
+        wait_inventory(client)
         owner = app.state.embedded_dispatch_owner
         if occupied:
             assert owner.recovery_failure is not None and owner.pump is None

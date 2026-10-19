@@ -230,7 +230,7 @@ class SqliteCapacityAdmissionRepository:
         conn.execute("UPDATE execution_capacity_admissions SET state='CANCELLED_NO_EFFECT',reservation_json=?,reason=?,"
             "updated_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') WHERE domain_operation_id=?",
             (proof, observed.state, admission.operation_id))
-        conn.execute("UPDATE handoff_runtime_attempts SET state='CANCELLED_NO_EFFECT',active=0,disposition='RELEASE',"
+        conn.execute("UPDATE handoff_runtime_attempts SET state='FAILED_NO_EFFECT',active=0,disposition='RELEASE',"
             "reservation_json=?,reason=?,updated_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') "
             "WHERE operation_id=? AND attempt_id=? AND state='CLAIM_COMMITTED'",
             (proof, observed.state, admission.operation_id, observed.request.attempt_id))

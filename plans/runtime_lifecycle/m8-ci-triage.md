@@ -33,17 +33,26 @@ Closed findings in this checkpoint, with focused installed Windows tests:
 - A registered, rootless workspace can now upload managed artifacts. The
   focused HTTP test and real UI upload/send/read passed.
 
-Open Nexus CI groups from the cancelled run: Linux subprocess Connector
-startup in remote handoff/containment cases and remaining shard results. The
-same remote cold-start and preopen cases passed on installed Windows. The
-subprocess fixture now includes its stderr
-on failure so the next Linux run can identify the root cause. Treat failures
-as open until rerun; do not infer a full pass from Windows focused tests.
+The isolated Ubuntu 3.12 shard-0 rerun of `39190838641` failed 27 cases and
+passed 1164. Its remote Connector subprocess failed at import time because
+the Nexus CI vendor wheel omitted `R4Connection.publish_startup_refusal`,
+which exists in current Connector source. The vendor wheel and manifest now
+contain the current Connector 0.0.10 build; its installed remote handoff case
+and vendor integrity tests passed locally. This accounts for 11 failures.
 
-Core `39180450008` passed, including SBOM. Connector `39183939833` passed
-Linux/macOS but had one failure each on Windows 3.12 (an inventory startup
-attempt did not begin before its 15-second deadline, with a transient
-`RUNTIME_DRAINING` startup log) and 3.13 (a native claim committed before the
-socket closed). The latter test now accepts either settled race outcome and
-checks any success reply against the committed effect; its focused tests pass
-on Windows. Connector matrix rerun remains pending.
+The remaining failures exposed three bounded issues: the handoff compensation
+writer used `CANCELLED_NO_EFFECT` for an attempt with a committed operation,
+while schema 151 requires `FAILED_NO_EFFECT` (four cases); a capacity recovery
+fixture omitted `deps` (two cases); and tests sent new work immediately after
+restart before asynchronous inventory publication (nine cases). Those cases
+now await observation. The dispatch pump also retains pending work while the
+new owner's inventory publication is absent, instead of recording a terminal
+conflict. All 29 local installed recovery/compensation cases passed, including
+the pending-work restart case. A new full Nexus matrix is still required.
+
+Core `39180450008` passed, including SBOM. Connector `39195567707` passed
+Linux, macOS, Windows 3.11 and 3.12. Windows 3.13 alone timed out in a
+15-second test watchdog waiting for four concurrent cold openings; the same
+three test variants and full 22-test module pass locally. The watchdog now
+allows 30 seconds for hosted-runner durable journal I/O. A full Connector
+matrix rerun is still required.

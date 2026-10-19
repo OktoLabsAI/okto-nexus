@@ -8,7 +8,7 @@ from fastapi.testclient import TestClient
 from nexus_connector_core import CoreError, LocalRuntimeCore
 
 from test_embedded_dispatch import local_setup, connected_local, qualified_contract, admit, wait_receipt
-from test_embedded_inventory import app_for
+from test_embedded_inventory import app_for, wait_inventory
 
 
 @pytest.mark.parametrize('adapter,cut', [
@@ -70,6 +70,7 @@ def test_bound_open_without_core_admission_recovers_and_new_work_runs(tmp_path, 
     for boot in range(2):
         deps, app = app_for(tmp_path / 'home')
         with TestClient(app) as client:
+            wait_inventory(client)
             owner = app.state.embedded_dispatch_owner
             until = time.monotonic() + 20
             while 'subject' in owner.agents.blocked:
@@ -125,6 +126,7 @@ def test_durable_refusal_before_slot_reservation_recovers(tmp_path, monkeypatch,
         assert not app.state.embedded_dispatch_owner.agents.blocked
     deps, app = app_for(tmp_path / 'home')
     with TestClient(app) as client:
+        wait_inventory(client)
         owner = app.state.embedded_dispatch_owner
         until = time.monotonic() + 15
         while owner.agents.blocked:

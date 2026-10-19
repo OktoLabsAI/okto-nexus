@@ -101,7 +101,7 @@ def test_boot_resource_scan_releases_only_fenced_unconsumed_reservations(tmp_pat
         if consumed:
             await port.consume_capacity(req, held.reservation_id,
                 CapacityConsumption('turn', 'sha256:' + 'b' * 64, 'open', 'sha256:' + 'c' * 64))
-        owner = SimpleNamespace(host=host, factory=deps.connection_factory,
+        owner = SimpleNamespace(host=host, factory=deps.connection_factory, deps=deps,
             channel=ExecutionChannel('srv', 'exe', 'replacement', 2), verify=lambda **kwargs: None)
         recovery = EmbeddedAgentRecovery(owner)
         try:

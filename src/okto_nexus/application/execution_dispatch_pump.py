@@ -88,6 +88,18 @@ class ExecutionDispatchPump:
                     except asyncio.TimeoutError:
                         pass
                     continue
+                # After an embedded owner restart, queued work can be reserved
+                # before the new inventory observation is published. Keep it
+                # pending until that observation exists; rejecting it here
+                # would turn a transient startup gap into a terminal failure.
+                if self.fresh_publications.get((self.channel.server_id, self.channel.executor_id)) is None:
+                    await self._database(release_unsent_dispatch, factory=self.factory, reservation=reservation)
+                    reservation = None
+                    try:
+                        await asyncio.wait_for(self._stopping.wait(), timeout=self.poll_interval)
+                    except asyncio.TimeoutError:
+                        pass
+                    continue
                 async with self.send_lock:
                     if self._stopping.is_set():
                         break

@@ -832,6 +832,7 @@
       "m8-uic-installed-ui.md",
       "m8-ci-triage.md"
       ],
+      "ci_checkpoint": "Core 39180450008 passed. Nexus isolated Ubuntu 3.12 rerun 39190838641 had 27 failures; four identified causes were corrected and 29 local installed recovery/compensation cases plus one installed remote Connector case passed. Connector 39195567707 passed all but Windows 3.13; its cold-opening watchdog was adjusted after 22 local module cases passed. Final matrices remain pending.",
       "commits": {
         "connector_installed_processes": "a7dd588"
       },
