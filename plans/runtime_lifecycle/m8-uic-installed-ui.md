@@ -46,3 +46,28 @@ renewal containment commit cuts. The
 remaining CI failures are tracked in `m8-ci-triage.md`. They remain a release
 blocker. This UI-C checkpoint is local evidence, not final M8 acceptance or a
 global rollout.
+
+## Current wheel restart check (2026-10-19)
+
+The current Nexus 0.3.1 wheel, SHA-256
+`8c18c8d4a8fcbf93322bf857d1e87a991309a1818cb0b5b9b3b0a8b62a972502`,
+was force-installed into the isolated `build/m3k-owner-env` environment. Its
+`embedded_dispatch.py` bytes match the current source, including the shutdown
+retry correction. Core 0.0.12 and Connector 0.0.10 remained installed. The
+same disposable UI-C home ran on loopback port 8204; the global instance stayed
+stopped.
+
+From Meta-harness, a real Claude turn returned exactly
+`UIC_M8_PRE_RESTART_OK` with 1/1 ACK. The disposable server process tree was
+then terminated abruptly, without touching other Nexus instances or user
+processes, and the same installed wheel and home were restarted. The original
+browser tab retained both the request and answer. Agents showed Claude
+**Local · Online** and runtime **Ready**; a new Meta-harness turn returned
+exactly `UIC_M8_POST_RESTART_OK` with 1/1 ACK. This verifies an interrupted
+server restart and subsequent delivery; the graceful shutdown retry path is
+covered by focused installed tests, not by this UI check. The scoped browser
+and server process tree were stopped afterward, and port 8204 is free.
+
+The full installed Nexus matrix `39292190027` on `1902baa` was still running
+when this UI checkpoint was recorded. Final M8 acceptance and global rollout
+remain open.
