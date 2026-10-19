@@ -832,7 +832,7 @@
       "m8-uic-installed-ui.md",
       "m8-ci-triage.md"
       ],
-      "ci_checkpoint": "Core 39180450008 and Connector 39204601574 passed. Nexus matrix 39269210262 on 77e74d7 exposed narrow fixture synchronization failures on Windows and Ubuntu; nine Windows and five Linux targeted installed cases passed after corrections. The Linux synthetic native-start test claimed a launch without creating the guardian proof, so its recoverable failure is now injected before claim; Windows retains the post-claim path. Ubuntu shards of the old matrix remain in progress. A final full Nexus matrix is still required. See m8-ci-triage.md.",
+      "ci_checkpoint": "Core 39180450008 and Connector 39204601574 passed. Nexus matrix 39269210262 on 77e74d7 exposed narrow fixture synchronization failures on Windows and Ubuntu; nine Windows and eight Linux targeted installed cases passed after corrections. Two Linux synthetic native-start tests claimed launches without creating guardian proofs; their recoverable refusals are now injected before claim, while Windows retains the post-claim path. The old matrix and a premature replacement were canceled. One final full Nexus matrix is still required. See m8-ci-triage.md.",
       "commits": {
         "connector_installed_processes": "a7dd588"
       },

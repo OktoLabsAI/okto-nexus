@@ -1,4 +1,6 @@
 """A failed pre-Core preparation must converge under its current host owner."""
+import sys
+
 from nexus_connector_core import LocalRuntimeCore
 from nexus_connector_core.native.adapter_types import NativeAdapterError, ErrorCode
 import pytest
@@ -66,6 +68,10 @@ def test_failed_native_launch_recovers_under_current_owner(local_setup, monkeypa
                 failures.append(session_id)
                 raise NativeAdapterError(ErrorCode.CONFIG_ERROR, 'Version probe deadline',
                                          {'reason':'version_probe_timeout'})
+            # A synthetic failure cannot create the Linux guardian receipt
+            # required to retire a durably claimed process launch.
+            if sys.platform == 'linux':
+                fail()
             return await process_launch.produce(validate_authority=lambda: None, start=fail)
         return await original(prepared, session_id, context, stream_epoch=stream_epoch)
 

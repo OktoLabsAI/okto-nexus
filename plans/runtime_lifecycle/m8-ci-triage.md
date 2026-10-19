@@ -249,3 +249,11 @@ All three native-failure variants passed against installed Nexus/Core/Connector
 packages on Linux. This corrects the synthetic test frontier; it does not
 weaken containment of genuinely uncertain process launches. The full Nexus
 matrix is still required.
+
+The canceled Ubuntu shard 2 logs stopped after the preparation-recovery case.
+The next case in its file partition used the same synthetic post-claim Linux
+launch without a guardian receipt. It now injects the refusal before the
+claim on Linux, preserving the Windows post-claim coverage. Its three
+Pi/Codex/Claude variants passed with installed packages on Linux. The first
+replacement matrix was canceled before this correction; one final matrix on
+the corrected commit is required.
