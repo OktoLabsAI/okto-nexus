@@ -767,8 +767,9 @@
         "Connector: plans/runtime-lifecycle-m6-supervisor-adr.md",
         "Connector: plans/runtime-lifecycle-m6a-named-pipe.md",
         "Connector: plans/runtime-lifecycle-m6b-pipe-client.md",
-          "Connector: plans/runtime-lifecycle-m6c-process-exit.md",
-          "m6d-real-ui.md"
+        "Connector: plans/runtime-lifecycle-m6c-process-exit.md",
+        "m6d-real-ui.md",
+        "m6e-paired-connector-abort.md"
       ],
       "commits": {
         "connector_experiment_adr": "0944a0e",
@@ -788,6 +789,18 @@
         "embedded_owner_replaced_same_http_process": true,
         "warm_one_shot_pool_tested": false,
         "in_flight_control_interruption_tested": false
+      },
+      "paired_connector_checkpoint": {
+        "id": "M6e",
+        "status": "aborted_at_fixed_memory_floor",
+        "evidence": "m6e-paired-connector-abort.md",
+        "paired_configuration_created": true,
+        "remote_binding_connected": true,
+        "real_message_comparison_tested": false,
+        "free_memory_gib_at_abort": 3.17,
+        "second_attempt_free_memory_gib_at_abort": 4.04,
+        "second_attempt_ipc_transport": "loopback",
+        "fixed_floor_gib": 4
       },
       "next": "Qualify warm one-shot pool, in-flight control interruption, revocation/lease expiry and Connector host restart with exact effect/receipt proofs. Compare installed embedded and Connector availability, memory and shutdown with identical harnesses before deciding adoption. Attribute and reduce the measured Pi opening latency in M7. Global Nexus remains stopped."
     },

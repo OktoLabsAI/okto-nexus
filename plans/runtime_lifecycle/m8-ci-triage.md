@@ -336,6 +336,20 @@ checkpoint mutation was visible to the writer but not to the validator's
 immutable database read. The tests now close those connections explicitly.
 The complete backup test module passed 10/10 with the installed Nexus wheel on
 Windows; the two failing cases passed 2/2 with the installed wheel on Linux.
-No backup product code changed. The other final-matrix jobs remain active, so
-this is not a full CI pass. The global offline backup and independent
-validation are recorded in `m8-global-preupgrade-backup.md`.
+Ubuntu 3.12 shard 2 of the same obsolete commit also passed 1086 cases and
+failed those same two backup tests, with the same mismatch between open SQLite
+WAL/SHM state and the validator's immutable read. No new failure class was
+observed. No backup product code changed. The other final-matrix jobs remain
+active, so this is not a full CI pass. The global offline backup and
+independent validation are recorded in `m8-global-preupgrade-backup.md`.
+
+After those two failures were classified, the obsolete matrix `39318164167`
+was canceled with seven successful jobs and 15 unfinished jobs. A full
+replacement matrix `39330278855` was dispatched on pushed commit `3cf99be`,
+which closes the test connections explicitly. Its result is pending; none of
+the canceled jobs is counted toward final qualification.
+
+Core run `39323802278` completed successfully across Ubuntu 3.11–3.13,
+Windows 3.11–3.13 and macOS 3.13 after the Linux launch-crash fixture update.
+Connector run `39204601574` had already passed. Nexus remains the only
+pending full installed matrix.
