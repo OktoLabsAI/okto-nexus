@@ -119,7 +119,7 @@ def test_semantic_validation_checks_references_and_watermarks_even_with_matching
             stream.write(b"NJR")
     else:
         import sqlite3
-        with sqlite3.connect(snapshot / "nexus.db") as db:
+        with closing(sqlite3.connect(snapshot / "nexus.db")) as db:
             db.execute("UPDATE runtime_journal_checkpoint SET ordinal=ordinal+10000")
             db.commit()
             manifest["database"] = procedure.database_report(db)
@@ -136,7 +136,8 @@ def test_explicit_database_override_and_no_overwrite(runtime, tmp_path):
     import sqlite3
     snapshot, report, _, _ = quiesced_snapshot(runtime, tmp_path)
     custom = tmp_path / "custom.sqlite"
-    with sqlite3.connect(snapshot / "nexus.db") as db, sqlite3.connect(custom) as target:
+    with closing(sqlite3.connect(snapshot / "nexus.db")) as db, \
+            closing(sqlite3.connect(custom)) as target:
         db.backup(target)
     alternate = tmp_path / "alternate-backup"
     saved = procedure.backup(runtime[0].config.home_dir, alternate, stopped=True, db_path=custom)

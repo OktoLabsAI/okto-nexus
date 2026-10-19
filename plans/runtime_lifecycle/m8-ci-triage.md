@@ -326,3 +326,16 @@ backup manifest fix and its regression test. Matrix `39305360323` remains
 active so that its seven unfinished jobs can reveal any further distinct
 failure class. Neither run is counted as final acceptance until its relevant
 jobs complete.
+
+The obsolete `39305360323` run was canceled after its two remaining Windows
+jobs were already running in the final matrix. Ubuntu 3.11 shard 2 of
+`39318164167` passed 1086 cases but failed two backup tests. Both tests kept
+SQLite connections open after changing or reading a snapshot. On Linux, the
+open connection left transient WAL/SHM files in the snapshot inventory; the
+checkpoint mutation was visible to the writer but not to the validator's
+immutable database read. The tests now close those connections explicitly.
+The complete backup test module passed 10/10 with the installed Nexus wheel on
+Windows; the two failing cases passed 2/2 with the installed wheel on Linux.
+No backup product code changed. The other final-matrix jobs remain active, so
+this is not a full CI pass. The global offline backup and independent
+validation are recorded in `m8-global-preupgrade-backup.md`.
