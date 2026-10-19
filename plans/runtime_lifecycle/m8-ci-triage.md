@@ -308,3 +308,14 @@ child retains the slot past the stop deadline and frees it only after physical
 release are unchanged. Both `grant_revoked` and `runtime_close` variants passed
 with installed wheels on Linux (2/2) and Windows (2/2). No additional product
 change was required; the full matrix remains open.
+
+Ubuntu 3.12 shard 0 passed 1172 cases and failed one consumed-handoff
+preauthorization test. Its exact reservation was already `RELEASED` and the
+opening had the durable `FAILED/PREPARATION_FAILED` receipt, but the test read
+the independently persisted `local_retirement_json` immediately. Retirement
+can follow those two observations asynchronously. The test now waits up to
+30 seconds for that same session's retirement proof before asserting it and
+admitting fresh work. The exact installed Linux and Windows cases passed after
+the change (1/1 on each platform);
+the other assertions and product code were unchanged. Matrix `39305360323`
+still tests an older commit, and its remaining jobs must be classified.

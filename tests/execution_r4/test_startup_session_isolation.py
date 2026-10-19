@@ -257,6 +257,12 @@ def test_consumed_handoff_preauthorization_refusal_releases_exact_reservation(ru
     released = client.portal.call(port.get_capacity_reservation, held.request)
     assert released.state == 'RELEASED'
     assert released.reservation_id == held.reservation_id
+    def retirement_persisted():
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            row = uow.connection.execute('SELECT local_retirement_json FROM execution_sessions '
+                'WHERE session_id=?', (held.request.scope.session_id,)).fetchone()
+            return row is not None and row[0] is not None
+    eventually(retirement_persisted, seconds=30)
     with deps.connection_factory.unit_of_work(write=False) as uow:
         conn = uow.connection
         assert tuple(conn.execute('SELECT stage,error_code,possible_effect FROM execution_receipts '
