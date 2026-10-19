@@ -17,6 +17,8 @@ from nexus_connector_core.discovery import fingerprint
 from okto_nexus.adapters.outbound.sqlite.execution_agent_revisions import current_agent_revisions
 from okto_nexus.adapters.outbound.execution.core_inventory import local_inventory_snapshot
 from okto_nexus.application.handoff_runtime_scheduler import HandoffScheduleLease
+from okto_nexus.application.execution_inventory_freshness import inventory_is_fresh
+from okto_nexus.application.execution_inventory_revalidation import accepts_binding
 from okto_nexus.bootstrap.capacity_admission import build_capacity_admission
 from okto_nexus.bootstrap.handoff_runtime_attempts import build_handoff_runtime_attempts
 from okto_nexus.bootstrap.handoff_runtime_scheduler import build_handoff_runtime_candidates
@@ -166,12 +168,26 @@ async def running_pair(onboarding, records, tmp_path):
                     accepted = []
                     for binding, *_ in records:
                         current = uow.connection.execute(
-                            'SELECT publication_sequence FROM execution_inventory_current '
-                            'WHERE server_id=? AND executor_id=?',
+                            'SELECT c.publication_sequence,c.inventory_revision,s.observation_age_ms,'
+                            's.canonical_projection FROM execution_inventory_current c '
+                            'JOIN execution_inventory_snapshots s ON s.server_id=c.server_id '
+                            'AND s.executor_id=c.executor_id AND s.publication_sequence=c.publication_sequence '
+                            'WHERE c.server_id=? AND c.executor_id=?',
                             (binding['server_id'], binding['executor_id'])).fetchone()
                         marker = fresh.get((binding['server_id'], binding['executor_id']))
+                        selected = uow.connection.execute(
+                            'SELECT b.*,ep.adapter_id,e.control_state FROM execution_bindings b '
+                            'JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id '
+                            'JOIN execution_executors e ON e.server_id=b.server_id AND e.executor_id=b.executor_id '
+                            'WHERE b.server_id=? AND b.binding_id=?',
+                            (binding['server_id'], binding['binding_id'])).fetchone()
                         accepted.append(current is not None and marker is not None
-                                        and marker[0] == current['publication_sequence'])
+                                        and selected is not None
+                                        and selected['control_state'] == 'CONTROL_READY'
+                                        and marker[0] == current['publication_sequence']
+                                        and inventory_is_fresh(current, marker, selected['adapter_id'])
+                                        and accepts_binding(uow.connection, selected, current['inventory_revision'],
+                                                            binding['server_id'], binding['executor_id']))
                 if all(state['ready'] and state['pid'] == children[index].pid
                        and host and row[0]['binding_id'] in host.observations and accepted[index]
                        for index, (state, host, row) in enumerate(zip(states, hosts, records))):

@@ -229,3 +229,23 @@ reports the parent receipt/session evidence if a failure recurs. Nine
 targeted installed cases covering those changes passed locally. The Ubuntu
 shards of that matrix were still running at this checkpoint; no final
 full-matrix result is claimed.
+
+The same matrix's Ubuntu 3.11 shard 1 refused an initial remote opening with
+`inventory_not_fresh`, and Ubuntu 3.12 shard 1 rejected a capacity reservation
+with `STALE_OBSERVATION`. Their shared two-connector fixture had waited for a
+matching publication sequence but not for current observation age, binding
+acceptance, and executor readiness. The fixture now waits for those exact
+admission facts. The affected unresolved-affinity and remote ticket-release
+cases each passed against the installed Nexus wheel on Linux.
+
+Ubuntu shard 2 stalled in the synthetic native-start failure of the Pi test.
+The injected callback threw after Core durably claimed a Linux process launch,
+but never created the Linux guardian receipt needed to prove that claimed
+container stopped. Nexus correctly retained only the failed session for
+recovery; the healthy sibling remained available. The test now injects a
+pre-claim refusal on Linux, where no claimed launch requires a nonexistent
+guardian proof. Windows continues to exercise its post-claim Job-object path.
+All three native-failure variants passed against installed Nexus/Core/Connector
+packages on Linux. This corrects the synthetic test frontier; it does not
+weaken containment of genuinely uncertain process launches. The full Nexus
+matrix is still required.

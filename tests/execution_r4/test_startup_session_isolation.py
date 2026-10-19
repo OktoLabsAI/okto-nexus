@@ -359,6 +359,11 @@ def test_startup_failure_preserves_healthy_sibling(local_setup, monkeypatch, sta
 
     async def fail_native(prepared, session_id, context, *, stream_epoch, process_launch):
         if not injected:
+            # Linux requires a guardian receipt to prove that a claimed launch
+            # has stopped. A synthetic exception before spawning cannot create
+            # that receipt; inject this recoverable refusal before the claim.
+            if sys.platform == 'linux':
+                fail()
             return await process_launch.produce(validate_authority=lambda: None, start=fail)
         return await native_open(prepared, session_id, context, stream_epoch=stream_epoch)
 
