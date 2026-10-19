@@ -21,3 +21,10 @@ session-isolation file passed all 14 cases in 229.26 seconds. The earlier
 Nexus run `39178808095` was cancelled because it used the superseded wheel;
 the full installed matrix for this exact consumer set remains pending. The
 global Nexus instance remains stopped. No current UI availability is claimed.
+
+The first rerun, `39181288320`, stopped in every started shard before tests:
+`tools/ci_installed.py` correctly rejected the new Core wheel because
+`vendor/ci/manifest.json` still pinned the old SHA. The manifest is now
+updated to the exact wheel above and `dependency_wheels()` verifies both
+artifacts locally. This is an artifact metadata correction; it does not
+change execution code or acceptance criteria.
