@@ -20,3 +20,10 @@ Qualificar as fronteiras de crash antes do guardian, após spawn e após birth
 em um host macOS com sessão `gui/<uid>` suportada. Os testes portáteis atuais
 do Core não substituem essa execução nativa. Não alterar o comportamento
 global do Nexus com base apenas nesta auditoria.
+
+Checkpoint de implementação: Core `c91b75a` criou o recibo durável e passou
+32 testes focados em source e 32 contra a wheel construída (16 skips de
+plataforma em cada execução). A CI `39332931455` inclui quatro cortes físicos
+macOS sobre a wheel instalada; seu resultado ainda está pendente. Nexus e
+Connector ainda consomem a wheel Core anterior. Portanto M2g continua aberto
+até a validação nativa e a atualização conjunta dos consumidores.

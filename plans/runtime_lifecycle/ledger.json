@@ -143,6 +143,7 @@
         "core_m2c": "877393b",
         "core_m2e": "90b4ef6",
         "core_m2f": "f9fc188",
+        "core_m2g": "c91b75a",
         "connector_m2e": "2dca512",
         "nexus_m2d": "1f96d73"
       },
@@ -180,12 +181,12 @@
         },
         {
           "id": "M2g",
-          "status": "audited_implementation_pending",
-          "title": "macOS owner crash cannot converge from the observer-only guardian stop proof; a durable identity-bound proof and native crash qualification remain necessary"
+          "status": "implemented_native_ci_pending",
+          "title": "Core now persists an identity-bound Darwin guardian stop proof; 32 source and 32 wheel tests passed, with four installed native macOS crash cuts pending in CI"
         }
       ],
-      "qualification": "Core, embedded and Connector recovery integrated and jointly installed. Windows disposable owner crashes and 261 installed tests passed. Four Linux planned-launch crash cuts passed with Core 0.0.12 installed. Real UI-A flows were later verified separately. Later handshake/receipt/ACK crash frontiers and macOS platform qualification remain pending. M2g identified that macOS recovery currently retains UNKNOWN because the guardian stop proof is observer-only.",
-      "next": "Qualify remaining handshake/receipt/ACK crash cuts. On macOS, persist exact guardian stop proof before releasing the planned launch, then qualify native owner-crash boundaries in a supported GUI login session. Do not release Linux or macOS claimed capacity without guardian proof.",
+      "qualification": "Core, embedded and Connector recovery integrated and jointly installed. Windows disposable owner crashes and 261 installed tests passed. Four Linux planned-launch crash cuts passed with Core 0.0.12 installed. Real UI-A flows were later verified separately. Later handshake/receipt/ACK crash frontiers and macOS platform qualification remain pending. M2g Core c91b75a implements the durable Darwin stop receipt; native hosted CI and consumer vendor updates remain pending.",
+      "next": "Qualify remaining handshake/receipt/ACK crash cuts. Complete Core macOS native owner-crash CI 39332931455, then update Nexus and Connector vendor wheels and run joint installed validation. Do not release Linux or macOS claimed capacity without guardian proof.",
       "nexus_m2e_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m2e-validation.md"
     },
     {
