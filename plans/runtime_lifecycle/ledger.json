@@ -343,6 +343,14 @@
           "evidence": [
             "m3s-positive-native-effect-isolation.md"
           ]
+        },
+        {
+          "id": "M3u",
+          "status": "consumer_wheels_aligned_multiplatform_ci_pending",
+          "title": "Core matrix regression fixes and identical Core 0.0.12 wheel synchronized in Nexus and Connector; 14 installed Nexus startup-isolation cases passed.",
+          "evidence": [
+            "m3u-ci-consumer-alignment.md"
+          ]
         }
       ],
       "nexus_m3b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3b-validation.md",
