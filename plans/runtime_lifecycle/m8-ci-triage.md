@@ -66,5 +66,17 @@ needed to wait for accepted inventory after remote startup, use the current
 session-scoped containment result, and compare the current schema 152 and
 executor snapshot format 3. The affected local installed cases passed,
 including seven deadline/restart/expiry variants and two startup-refusal
-variants. These are checkpoint results, not a final matrix pass. Connector
-matrix `39203007257` is queued on the current source.
+variants. These are checkpoint results, not a final matrix pass.
+
+Connector `39203007257` subsequently failed one Windows 3.11 capacity-wait
+case after 1203 passes: four concurrent turns contended for the publication
+store's writer lock until SQLite's 10-second timeout. The store acquired
+`BEGIN IMMEDIATE` and repeated schema DDL for every read. Connector `8310f9b`
+initializes the schema once per store instance and uses read transactions for
+queries, retaining immediate transactions for mutations. The installed
+capacity-wait and publication modules passed 29 cases locally. Its replacement
+matrix is `39204601574`. The Nexus CI vendor wheel was rebuilt from that
+Connector commit (SHA-256 `562dd5e174a6a974440a28038cd2a10e4d103772d609d8dc512e58fb8e20fa0c`).
+The rebuilt wheel also passed the seven Nexus vendor-integrity cases and
+three real Connector process/restart capacity cases in the isolated installed
+environment.
