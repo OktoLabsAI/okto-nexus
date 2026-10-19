@@ -319,3 +319,10 @@ admitting fresh work. The exact installed Linux and Windows cases passed after
 the change (1/1 on each platform);
 the other assertions and product code were unchanged. Matrix `39305360323`
 still tests an older commit, and its remaining jobs must be classified.
+
+The final installed matrix was dispatched as `39318164167` on Nexus commit
+`95770d3`, which includes all three focused fixture corrections, the offline
+backup manifest fix and its regression test. Matrix `39305360323` remains
+active so that its seven unfinished jobs can reveal any further distinct
+failure class. Neither run is counted as final acceptance until its relevant
+jobs complete.
