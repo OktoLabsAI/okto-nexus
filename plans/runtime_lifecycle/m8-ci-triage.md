@@ -211,3 +211,21 @@ Windows. Ubuntu shard 2 also failed the preauthorization restart case and
 timed out after the prepare-stage cases; that Linux-only result is still
 unclassified. Matrix `39239613854` was canceled after these findings.
 The full Nexus matrix remains required.
+
+Matrix `39269210262` on `77e74d7` has confirmed the two restart readiness
+fixes: Ubuntu 3.12/3.13 and Windows 3.12/3.13 shard 0 passed. Windows shard 1
+and 3 then exposed three distinct remaining test expectations. A
+preauthorization-restart case and a released-resource restart case admitted a
+new operation before the selected binding's inventory observation was fresh.
+Both now wait for the same executor, observation, and binding admission facts
+already required by the other restart tests. A no-effect dispatch refusal
+sometimes retained the valid terminal `FAILED/NONE` state instead of the
+also-valid `CLOSED/CLOSED`; its test now accepts both and verifies there are
+no nonterminal operations or Core runtime owners. Finally, the 100-candidate
+handoff scale case occasionally claimed one winner whose initial open failed.
+Its fixture had established candidate observations but not fresh admission
+for all 100 bindings. It now waits for those facts before competition and
+reports the parent receipt/session evidence if a failure recurs. Nine
+targeted installed cases covering those changes passed locally. The Ubuntu
+shards of that matrix were still running at this checkpoint; no final
+full-matrix result is claimed.

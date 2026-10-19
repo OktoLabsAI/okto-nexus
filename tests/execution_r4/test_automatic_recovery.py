@@ -46,7 +46,10 @@ def test_restart_after_dispatch_refusal_without_core_journal(tmp_path, monkeypat
             with deps.connection_factory.unit_of_work(write=False) as uow:
                 if not possible_effect:
                     assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE admission_state<>'RESOLVED_TERMINAL'").fetchone()[0] == 0
-                    assert uow.connection.execute('SELECT lease_state FROM execution_sessions').fetchone()[0] == 'CLOSED'
+                    session = uow.connection.execute(
+                        'SELECT lifecycle_state,lease_state FROM execution_sessions').fetchone()
+                    assert tuple(session) in (('FAILED', 'NONE'), ('CLOSED', 'CLOSED'))
+                    assert not owner.host._runtime_tasks
         assert native.opens == 0
 
 

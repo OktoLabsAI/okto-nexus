@@ -832,7 +832,7 @@
       "m8-uic-installed-ui.md",
       "m8-ci-triage.md"
       ],
-      "ci_checkpoint": "Core 39180450008 and Connector 39204601574 passed. Nexus matrix 39239613854 passed the prior Ubuntu 3.13 restart failure, then exposed a second stale-inventory wait, an unscoped heartbeat fault injection, a non-idempotent embedded shutdown retry, and an obsolete 2 MB native-frame stimulus. Focused installed runs passed all six interrupted-launch cuts, three heartbeat cases, 30 embedded-dispatch cases, 14 startup-isolation cases, and the oversized-frame case. Ubuntu shard 2 still has an unclassified preauthorization restart failure and subsequent timeout. The next full installed Nexus matrix remains required. See m8-ci-triage.md.",
+      "ci_checkpoint": "Core 39180450008 and Connector 39204601574 passed. Nexus matrix 39269210262 on 77e74d7 passed the earlier Ubuntu and Windows shard-0 restart cases. Its completed Windows shards exposed three remaining test classes: admission before fresh inventory in two restart fixtures, valid FAILED/NONE terminal lease after no-effect refusal, and a 100-candidate handoff fixture that did not ensure all bindings were admissible. Nine targeted installed cases passed after narrow fixture corrections. Ubuntu shards remain in progress; the final full Nexus matrix is still required. See m8-ci-triage.md.",
       "commits": {
         "connector_installed_processes": "a7dd588"
       },

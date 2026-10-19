@@ -97,6 +97,39 @@ def wait_receipt(setup,resolution,stages=("SUBMITTED","SUCCEEDED")):
         time.sleep(.02)
 
 
+def wait_binding_ready(deps, app, binding, *, seconds=25):
+    from okto_nexus.application.execution_inventory_freshness import inventory_is_fresh
+    from okto_nexus.application.execution_inventory_revalidation import accepts_binding
+
+    key = (binding['server_id'], binding['executor_id'])
+    until = time.monotonic() + seconds
+    while True:
+        marker = app.state.inventory_fresh_publications.get(key)
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            conn = uow.connection
+            published = conn.execute(
+                'SELECT c.publication_sequence,c.inventory_revision,s.observation_age_ms,'
+                's.canonical_projection FROM execution_inventory_current c '
+                'JOIN execution_inventory_snapshots s ON s.server_id=c.server_id '
+                'AND s.executor_id=c.executor_id AND s.publication_sequence=c.publication_sequence '
+                'WHERE c.server_id=? AND c.executor_id=?', key).fetchone()
+            selected = conn.execute(
+                'SELECT b.inventory_revision,b.candidate_ref,ep.adapter_id,e.control_state '
+                'FROM execution_bindings b JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id '
+                'JOIN execution_executors e ON e.server_id=b.server_id AND e.executor_id=b.executor_id '
+                'WHERE b.server_id=? AND b.binding_id=?',
+                (key[0], binding['binding_id'])).fetchone()
+            ready = (marker is not None and published is not None and selected is not None
+                and marker[0] == published['publication_sequence']
+                and selected['control_state'] == 'CONTROL_READY'
+                and inventory_is_fresh(published, marker, selected['adapter_id'])
+                and accepts_binding(conn, selected, published['inventory_revision'], *key))
+        if ready:
+            return
+        assert time.monotonic() < until, 'The selected local binding did not become admissible'
+        time.sleep(.02)
+
+
 def test_serve_dispatches_local_open_turn_controls_and_close(connected_local):
     setup,binding,native=connected_local
     deps,app,client,headers,*_=setup
@@ -739,6 +772,7 @@ def test_released_resources_reconcile_before_new_admission(tmp_path,monkeypatch,
             assert owner.recovery_failure is None and owner.pump is not None
             owner.native_factory=native
             next_setup=(deps,app,client,headers,*setup[4:])
+            wait_binding_ready(deps, app, binding)
             next_open=admit(next_setup,binding,"after-recovery","runtime.start",new_session=True)
             wait_receipt(next_setup,next_open)
             assert native.opens==2

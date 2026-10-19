@@ -126,6 +126,8 @@ def test_pre_authorization_refusal_recovers_after_restart_before_server_receipt(
             assert conn.execute('SELECT local_retirement_json FROM execution_sessions '
                 'WHERE session_id=?', (failed['session_id'],)).fetchone()[0] is not None
         owner.native_factory = Peers()
+        from test_embedded_dispatch import wait_binding_ready
+        wait_binding_ready(deps, app, binding)
         fresh = admit(restored, binding, 'preauth-restart-fresh', 'runtime.start', new_session=True)
         wait_receipt(restored, fresh)
         assert owner.failure is None
