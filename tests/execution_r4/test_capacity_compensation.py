@@ -41,7 +41,7 @@ def test_unconsumed_claim_reopens_once_and_next_generation_executes(runtime, ter
     assert client.portal.call(transfer.consume, claim.operation_id) == result
     retired = attempts.get(held.request.attempt_id)
     assert not retired.active and retired.operation_id == claim.operation_id
-    assert retired.state == 'CANCELLED_NO_EFFECT'
+    assert retired.state == 'FAILED_NO_EFFECT'
     assert runtime[2].opens == 0
     with deps.connection_factory.unit_of_work(write=False) as uow:
         conn = uow.connection

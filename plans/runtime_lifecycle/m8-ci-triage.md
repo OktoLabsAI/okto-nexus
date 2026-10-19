@@ -108,4 +108,16 @@ revalidation remains a terminal denial. Eleven installed dispatch and preopen
 recovery cases passed locally, including deterministic transient and confirmed
 incompatible paths. The interim matrix `39213179560` was cancelled after this
 new product finding; its commit lacked the fix. The first matrix
-`39204884009` continues to collect the remaining shard results.
+`39204884009` was cancelled after 12 completed jobs, all of whose failures
+were classified, to free runners for the corrected matrix.
+
+The corrected-commit matrix `39214894629` passed Ubuntu 3.13 shard 1 but
+Windows 3.13 shard 3 exposed two bounded issues. The compensation test still
+expected the old handoff-attempt state `CANCELLED_NO_EFFECT`; the current
+schema-151 writer correctly persists `FAILED_NO_EFFECT` for that attempt,
+while the admission remains `CANCELLED_NO_EFFECT`. The offline backup checked
+the source tree before acquiring its SQLite writer fence and checking the
+owner lease, so a Windows `nexus.db-shm` file could disappear during that
+precheck. The tree check now runs under the fence after lease validation.
+Both affected modules passed 21 installed local tests. The rest of the matrix
+is still required; no full Nexus pass is claimed.

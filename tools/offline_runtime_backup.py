@@ -221,7 +221,6 @@ def backup(home, destination, *, stopped=False, db_path=None):
     FileRuntimeEventJournal._regular(database)
     if destination.resolve().is_relative_to(home.resolve()):
         raise ValueError("Backup destination must be outside the source home")
-    list(regular_tree(home))
     if destination.exists():
         raise FileExistsError("Backup destination already exists; refusing overwrite")
     # These are exclusion locks, not permission to stop another process. The
@@ -231,6 +230,9 @@ def backup(home, destination, *, stopped=False, db_path=None):
         owner = fence.execute("SELECT lease_expires_at FROM runtime_dispatcher_owner WHERE owner_key='dispatcher'").fetchone()
         if owner and datetime.fromisoformat(owner[0].replace("Z", "+00:00")) > datetime.now(timezone.utc):
             raise ValueError("Runtime owner lease is still live; stop the owner before backup")
+        # Inspect only after the writer fence and lease check. SQLite may
+        # retire a transient -shm file while an active owner is shutting down.
+        list(regular_tree(home))
         destination.mkdir(mode=0o700, parents=False)
         with sqlite3.connect(database.as_uri() + "?mode=ro", uri=True) as reader:
             with sqlite3.connect(destination / "nexus.db") as target:
