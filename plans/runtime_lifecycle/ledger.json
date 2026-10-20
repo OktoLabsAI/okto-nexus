@@ -1498,6 +1498,7 @@
     }
   ],
   "live_installation": "Global Nexus 0.3.1 CI wheel from successful matrix 39472894540 is running on 0.0.0.0:8202 with pinned Core 0.0.12 and Connector 0.0.10. Schema 152 preserves seven agents, six handoffs, three artifacts and FK 0. Pi, Claude and Codex show Online; a real Pi Meta-harness turn returned M8_PI_CI_WHEEL_OK with 1/1 ACK. Pi pool is 4/5 available after consumed session retirement. See m8-global-ci-wheel-rollout.md.",
+  "completion_audit": "M0-M8 and UI-A/B/C local acceptance are closed with requirement-to-evidence mapping in plan-closure-audit.md. Independent physical remote-host qualification and PR/main/tag/PyPI publication are separate phases.",
   "publication": "Feature branches only; no main merge, tag or PyPI publication authorized by this plan",
   "pending_installation": null
 }

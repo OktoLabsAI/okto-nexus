@@ -718,6 +718,20 @@ multiplataforma 39352913186 e o rollout global seguem pendentes. Ver
   instalada. A qualificação M8 completa permanece aberta. Ver
   `m8a-connector-reconnect-after-reset.md`.
 
+Fechamento em 2026-10-20: M0–M8 estão completos no escopo local autorizado.
+Os cortes finais de M2/M3/M4 foram auditados em
+`m2-final-acceptance.md`, `m3-final-acceptance.md` e
+`m4-final-acceptance.md`. Core e Connector passaram suas matrizes instaladas
+8/8; a matriz Nexus `39472894540` passou 24/24 no commit `252788f`. Após
+backup offline validado, o wheel CI foi instalado no home global: a UI mostrou
+Pi, Claude e Codex Online, uma nova mensagem ao Pi teve resposta exata e ACK
+1/1, a sessão consumida foi aposentada e as quatro instâncias aquecidas
+continuaram disponíveis. Ver `m8-fixed-acceptance-audit.md` e
+`m8-global-ci-wheel-rollout.md`. Os gates UI-A/B/C estão completos no escopo
+local; outro host físico Connector continua reservado para teste posterior com
+o usuário. A auditoria final por marco está em `plan-closure-audit.md`.
+PRs, merge, tags e publicação permanecem etapa separada.
+
 ## Matriz mínima de validação
 
 | Eixo | Casos obrigatórios |
