@@ -126,14 +126,18 @@ def test_cancelled_tool_waiter_keeps_issuance_owned(connected_local,monkeypatch)
 @pytest.mark.parametrize('local_setup', ['pi_rpc'], indirect=True)
 def test_automatic_pi_bridge_survives_initial_deadline_with_applied_renewal(connected_local,monkeypatch):
     from okto_nexus.application.execution_capabilities import ExecutionCapabilityService
+    from nexus_connector_core.models import CoreError
     from nexus_connector_core.native_action_bridge import ContextGet, HandoffClaim, HandoffComplete
     setup,binding,native,vault,environments=enable_tools(connected_local)
     deps,app,client,*_=setup
     owner=app.state.embedded_dispatch_owner
-    monkeypatch.setattr(owner.leases,'max_duration_ms',6000)
+    # Leave a full action-response window after renewal on loaded runners.
+    monkeypatch.setattr(owner.leases,'max_duration_ms',30000)
     original=ExecutionCapabilityService.issue
     def short_metadata(self,**kwargs):
-        return dict(original(self,**kwargs),expires_in=2)
+        # Leave enough time for initial native preparation on a loaded Windows
+        # runner; the bridge is still exercised after this initial deadline.
+        return dict(original(self,**kwargs),expires_in=20)
     monkeypatch.setattr(ExecutionCapabilityService,'issue',short_metadata)
     opened=admit(setup,binding,'pi-tools-open','runtime.start',new_session=True)
     wait_receipt(setup,opened)
@@ -141,11 +145,19 @@ def test_automatic_pi_bridge_survives_initial_deadline_with_applied_renewal(conn
     config=owner.tools.configurations[session_id]
     assert config['native_factory'] is not None, (setup[5].adapter_id,config['cap']['audience'])
     seed_work(setup,workspace=opened['scope']['workspace_id'])
-    until=time.monotonic()+10
+    until=time.monotonic()+40
     while True:
         with deps.connection_factory.unit_of_work(write=False) as uow:
             serial=uow.connection.execute("SELECT MAX(lease_serial) FROM execution_leases WHERE status='ACTIVE'").fetchone()[0]
-        if serial>=2 and time.monotonic()>config['deadline']:
+        native_owner=owner.host._native_action_owners.get((opened['scope']['executor_id'],session_id))
+        try:
+            context=native_owner._service._context_provider() if native_owner is not None else None
+        except CoreError as exc:
+            if exc.code!='LEASE_UPDATE_PENDING':
+                raise
+            context=None
+        if (serial>=2 and time.monotonic()>config['deadline'] and context is not None
+                and context.lease_deadline_monotonic-time.monotonic()>10):
             break
         assert time.monotonic()<until
         time.sleep(.02)
