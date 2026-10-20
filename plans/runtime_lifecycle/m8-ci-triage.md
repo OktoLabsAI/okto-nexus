@@ -413,3 +413,19 @@ With both exact CI wheels installed, Nexus' wheel-integrity check and seven
 directed remote preopen/ACK and agent-presence cases passed on Windows in
 3m05s. The next validation is the complete installed Nexus matrix on this
 same manifest; no UI or rollout claim is inferred from these directed tests.
+
+Nexus installed run `39352913186` on product commit `c7006e2` reached 13
+successful jobs before Windows 2022/Python 3.11 shard 3 failed one of 1222
+executed cases (`1221 passed, 21 skipped`). In
+`test_repeated_publication_does_not_charge_or_dispatch_again`, the initial
+MCP `message_create` returned HTTP 503 `DB_ERROR: SQLite writer admission
+timed out`. The `WriteGate` raises this exact error before `BEGIN IMMEDIATE`;
+no message was admitted. The same installed case passed in isolation, then
+twice reached an accepted child dispatch that needed more than the fixture's
+15-second result wait under local Windows load. The test now retries only the
+exact pre-transaction 503 within 20 seconds and gives this case a 60-second
+bound to observe the durable terminal result. All other errors and any missing
+terminal result still fail. With the same installed product wheel, the revised
+case passed twice in 29.53 and 30.99 seconds. No product code or write-gate
+semantics changed. The other CI jobs are still running; classify their results
+before dispatching one replacement full matrix on the final test commit.

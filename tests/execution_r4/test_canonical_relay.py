@@ -58,8 +58,8 @@ def send(setup, monkeypatch, *, target='subject'):
              body='Start an authorized exchange', target=dict(strategy='direct', agent_id=target)))
 
 
-def results(setup, count):
-    deadline = time.monotonic() + 15
+def results(setup, count, *, timeout=15):
+    deadline = time.monotonic() + timeout
     while True:
         with setup[0].connection_factory.unit_of_work(write=False) as uow:
             rows = [dict(r) for r in uow.connection.execute('SELECT * FROM runtime_results ORDER BY captured_at,result_id')]
@@ -224,8 +224,26 @@ def test_repeated_publication_does_not_charge_or_dispatch_again(relay_pair, monk
     from okto_nexus.adapters.inbound.mcp.tools.messages import build_service
     setup, _, _, peers, _ = relay_pair
     setup[0].config.max_relay_depth = 1
-    assert send(setup, monkeypatch)['ok']
-    rows = results(setup, 2)
+    # A saturated Windows CI runner can exhaust the SQLite writer gate before
+    # BEGIN IMMEDIATE. That typed error proves this send was not admitted; retry
+    # only that exact pre-transaction refusal, never an uncertain result.
+    deadline = time.monotonic() + 20
+    while True:
+        try:
+            sent = send(setup, monkeypatch)
+            break
+        except AssertionError as exc:
+            try:
+                error = json.loads(str(exc)).get('error')
+            except (TypeError, ValueError):
+                raise exc
+            if (error != dict(code='DB_ERROR',
+                    message='SQLite writer admission timed out. Retry the transaction.')
+                    or time.monotonic() >= deadline):
+                raise
+            time.sleep(.05)
+    assert sent['ok'], sent
+    rows = results(setup, 2, timeout=60)
     messages = build_service(setup[0])
     with setup[0].connection_factory.unit_of_work(write=False) as uow:
         bound = messages._runtime_results.row(uow, rows[0]['result_id'])
