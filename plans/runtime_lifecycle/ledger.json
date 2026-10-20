@@ -777,7 +777,8 @@
         "Connector: plans/runtime-lifecycle-m6c-process-exit.md",
         "m6d-real-ui.md",
         "m6e-paired-connector-abort.md",
-        "m6f-paired-ui-checkpoint.md"
+        "m6f-paired-ui-checkpoint.md",
+        "m6g-inflight-server-restart.md"
       ],
       "commits": {
         "connector_experiment_adr": "0944a0e",
@@ -821,7 +822,16 @@
         "acknowledged": 3,
         "in_flight_control_interruption_tested": false
       },
-      "next": "Qualify in-flight control interruption, revocation/lease expiry, host restart, stop boundaries and upgrade/rollback with exact effect/receipt proofs. Compare installed embedded and Connector availability, memory and shutdown before deciding adoption. Attribute and reduce the measured Pi opening latency in M7. Global Nexus remains stopped outside the disposable experiment."
+      "inflight_restart_checkpoint": {
+        "id": "M6g",
+        "status": "partial_pass_exact_receipt_proof_pending",
+        "evidence": "m6g-inflight-server-restart.md",
+        "connector_reconnected_without_manual_action": true,
+        "one_visible_reply_and_ack": true,
+        "one_file_effect": true,
+        "exact_native_receipt_correlation": false
+      },
+      "next": "Close fixed M6 criteria: exact in-flight receipt/effect proof, revocation and lease expiry, stop boundaries, upgrade/rollback, then compare installed embedded and Connector availability, memory and shutdown before an adoption decision. Global Nexus remains stopped outside disposable experiments."
     },
     {
       "id": "M7",

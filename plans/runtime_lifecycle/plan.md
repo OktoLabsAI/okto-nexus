@@ -468,6 +468,13 @@ aprovados. As fronteiras posteriores de handshake, receipt e ACK seguem abertas.
   distingue processo encerrado com handle retido de processo vivo. Dezesseis
   testes selecionados de source e vinte da wheel instalada passaram. Sessões
   reais/reconnect e gate UI continuam pendentes. Ver relatório M6c no Connector.
+- Checkpoint M6g: um reinício do Nexus durante uma execução Pi real revelou
+  ticket preso ao socket anterior e erro HTTP 500 classificado pelo Connector
+  como incompatibilidade de versão. O fence de startup e a substituição segura
+  de ticket expirado permitiram reconexão automática do mesmo daemon; a UI
+  mostrou ACK 1/1, uma resposta e um único efeito no arquivo. A correlação
+  exata do receipt nativo e os demais cortes fixos de M6 ainda estão pendentes.
+  Ver `m6g-inflight-server-restart.md`.
 - Primeiro ADR e protótipo isolado: processo por usuário/host, IPC autenticado
   (named pipe no Windows/socket local onde suportado), uma autoridade de processo.
 - Nexus pode reiniciar enquanto supervisor mantém contenção, spool e leases

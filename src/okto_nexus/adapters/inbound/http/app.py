@@ -558,6 +558,9 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     @contextlib.asynccontextmanager
     async def lifespan(app: FastAPI):
         from ....application.execution_revocation import repair_revoked_sessions
+        from ....bootstrap.remote_connection_recovery import fence_remote_connections_after_restart
+        await anyio.to_thread.run_sync(
+            fence_remote_connections_after_restart, deps.connection_factory)
         with deps.connection_factory.unit_of_work() as uow:
             repair_revoked_sessions(uow.connection, now=deps.clock.now_iso())
         # Quiet a benign Windows ProactorEventLoop teardown race: when a client
