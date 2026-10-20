@@ -95,7 +95,10 @@ def test_capacity_survives_lost_reply_reconnect_and_connector_process_restart(
         serving = asyncio.create_task(server.serve(sockets=[sock]))
         process = None
         log = (tmp_path / 'connector-process.stderr').open('wb')
+        # Reconciliation after a lost receipt needs a real launch claim and
+        # container stop proof; a synthetic peer cannot provide either.
         config = dict(root=str(root), base_url=f'http://127.0.0.1:{sock.getsockname()[1]}',
+            real_native_child=receipt_fault,
             server_id=binding['server_id'], executor_id=binding['executor_id'],
             credential_epoch=revisions.credential_epoch,
             agent_key=headers['subject']['Authorization'].removeprefix('Bearer '),

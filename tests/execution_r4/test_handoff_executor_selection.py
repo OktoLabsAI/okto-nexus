@@ -305,8 +305,9 @@ def test_one_candidate_selects_authorized_unambiguous_executor_without_busy_fall
         return resolved
 
     async def run():
+        # A reconnect must recover the same durable native launch on every OS.
         async with running_pair(onboarding, records, tmp_path,
-                                managed_native=os.name == 'nt' and mode in {
+                                managed_native=mode in {
                                     'unknown_reconnect', 'unknown_host_restart'}) as command:
             if unknown:
                 await command(1, 'lose_next_send')

@@ -438,3 +438,16 @@ executor. The latter passed the same installed load on both baseline and
 current wheels; see `m8-same-load-comparison.md`. At this checkpoint the
 replacement has 20 jobs running and four queued, with no completed result to
 claim. M8 CI qualification and the controlled global rollout remain open.
+
+The replacement's Ubuntu shard 1 failed on a cross-process reconnect after a
+lost close receipt. It reproduced with the installed wheels on Windows. The
+diagnostic trace identified `PROCESS_LAUNCH_CONFLICT`: the test's synthetic
+native peer reported a successful opening without ever claiming its durable
+process launch. On reconnect, Core correctly rejected a contradictory
+`NEVER_CLAIMED` proof. The receipt-loss case now uses an owned native child,
+which supplies the real launch and stop evidence. The `unknown_reconnect`
+handoff case uses the same owned-child fixture on Linux as on Windows. The
+two exact installed-wheel cases passed on Windows (102.02 s together) after
+removing diagnostic hooks. This is a fixture correction; no Core, Connector,
+or Nexus production behavior was relaxed. The replacement Linux matrix is
+still required before M8 CI qualification.
