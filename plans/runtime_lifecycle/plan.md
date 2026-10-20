@@ -686,6 +686,11 @@ multiplataforma 39352913186 e o rollout global seguem pendentes. Ver
 
 ### M8 — Qualificação, instalação e fechamento
 
+- Ensaio do backup global: restore offline em diretório descartável com zero
+  processos nativos; schema 145→152 na wheel instalada, totais de agentes,
+  mensagens, entregas, handoffs e artefatos preservados, sem violação de FK.
+  O home global continua parado e intacto. Ver
+  `m8-global-backup-migration-rehearsal.md`.
 - Matriz integrada abaixo, wheels instaladas em ambiente limpo, pins e vendors
   regenerados a partir dos commits de implementação. Nenhum teste apenas de source
   será usado como evidência de que a instalação foi atualizada.
