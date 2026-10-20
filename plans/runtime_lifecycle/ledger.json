@@ -779,7 +779,8 @@
         "m6e-paired-connector-abort.md",
         "m6f-paired-ui-checkpoint.md",
         "m6g-inflight-server-restart.md",
-        "m6h-process-open-stop.md"
+        "m6h-process-open-stop.md",
+        "m6i-process-publication-stop.md"
       ],
       "commits": {
         "connector_experiment_adr": "0944a0e",
@@ -842,7 +843,14 @@
         "opening_held_until_original_producer_settled": true,
         "all_four_installed_variants_passed": true
       },
-      "next": "Close fixed M6 criteria: revocation and lease expiry in a separate process, stop during publication, upgrade/rollback, then compare installed embedded and Connector availability, memory and shutdown before an adoption decision. Global Nexus remains stopped outside disposable experiments."
+      "publication_stop_checkpoint": {
+        "id": "M6i",
+        "status": "local_process_boundary_pass",
+        "evidence": "m6i-process-publication-stop.md",
+        "durable_bind_commit_held_through_shutdown": true,
+        "all_five_installed_variants_passed": true
+      },
+      "next": "Close fixed M6 criteria: revocation and lease expiry with generation and host restart in a separate process, upgrade/rollback, then compare installed embedded and Connector availability, memory and shutdown before an adoption decision. Global Nexus remains stopped outside disposable experiments."
     },
     {
       "id": "M7",

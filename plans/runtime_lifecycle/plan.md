@@ -479,9 +479,14 @@ aprovados. As fronteiras posteriores de handshake, receipt e ACK seguem abertas.
 - Checkpoint M6h: o Connector instalado em processo separado manteve o
   shutdown pendente enquanto uma abertura nativa determinística estava retida,
   encerrou após o produtor resolver a abertura e não repetiu o dispatch. Os
-  quatro cenários instalados do fixture passaram. Publicação, expiração de
-  lease e upgrade/rollback permanecem como cortes fixos do ADR. Ver
+  quatro cenários instalados do fixture passaram. Expiração de lease e
+  upgrade/rollback permanecem como cortes fixos do ADR. Ver
   `m6h-process-open-stop.md`.
+- Checkpoint M6i: o Connector em processo separado também manteve o shutdown
+  pendente enquanto um commit durável de publicação estava retido, encerrou
+  após a liberação e não repetiu o dispatch. Os cinco cenários instalados do
+  fixture passaram; os três cortes de parada do ADR estão cobertos com M6c/M6h.
+  Ver `m6i-process-publication-stop.md`.
 - Primeiro ADR e protótipo isolado: processo por usuário/host, IPC autenticado
   (named pipe no Windows/socket local onde suportado), uma autoridade de processo.
 - Nexus pode reiniciar enquanto supervisor mantém contenção, spool e leases
