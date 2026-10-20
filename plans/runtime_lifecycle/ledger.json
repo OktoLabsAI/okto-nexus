@@ -824,14 +824,16 @@
       },
       "inflight_restart_checkpoint": {
         "id": "M6g",
-        "status": "partial_pass_exact_receipt_proof_pending",
+        "status": "inflight_restart_pass_other_m6_cuts_pending",
         "evidence": "m6g-inflight-server-restart.md",
         "connector_reconnected_without_manual_action": true,
         "one_visible_reply_and_ack": true,
         "one_file_effect": true,
-        "exact_native_receipt_correlation": false
+        "exact_native_receipt_correlation": true,
+        "native_dispatch_attempts": 1,
+        "native_receipt_stages": ["SUBMITTED", "SUCCEEDED"]
       },
-      "next": "Close fixed M6 criteria: exact in-flight receipt/effect proof, revocation and lease expiry, stop boundaries, upgrade/rollback, then compare installed embedded and Connector availability, memory and shutdown before an adoption decision. Global Nexus remains stopped outside disposable experiments."
+      "next": "Close fixed M6 criteria: revocation and lease expiry, stop boundaries, upgrade/rollback, then compare installed embedded and Connector availability, memory and shutdown before an adoption decision. Global Nexus remains stopped outside disposable experiments."
     },
     {
       "id": "M7",

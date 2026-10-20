@@ -472,8 +472,9 @@ aprovados. As fronteiras posteriores de handshake, receipt e ACK seguem abertas.
   ticket preso ao socket anterior e erro HTTP 500 classificado pelo Connector
   como incompatibilidade de versão. O fence de startup e a substituição segura
   de ticket expirado permitiram reconexão automática do mesmo daemon; a UI
-  mostrou ACK 1/1, uma resposta e um único efeito no arquivo. A correlação
-  exata do receipt nativo e os demais cortes fixos de M6 ainda estão pendentes.
+  mostrou ACK 1/1, uma resposta e um único efeito no arquivo. A entrega foi
+  correlacionada à operação nativa com uma tentativa e receipts SUBMITTED e
+  SUCCEEDED nas duas bases. Os demais cortes fixos de M6 ainda estão pendentes.
   Ver `m6g-inflight-server-restart.md`.
 - Primeiro ADR e protótipo isolado: processo por usuário/host, IPC autenticado
   (named pipe no Windows/socket local onde suportado), uma autoridade de processo.
