@@ -208,6 +208,7 @@ async def run(config):
     daemon._start_transports()
     control = daemon.r4_controls[config['server_id']]
     stopped = False
+    stopping = None
     try:
         while line := await asyncio.to_thread(sys.stdin.readline):
             command = json.loads(line)['command']
@@ -217,6 +218,15 @@ async def run(config):
                 allow_open.clear()
             elif command == 'release_open':
                 allow_open.set()
+            elif command == 'begin_stop':
+                assert stopping is None
+                stopping = asyncio.create_task(daemon._shutdown())
+            elif command == 'finish_stop':
+                assert stopping is not None
+                result = await stopping
+                stopped = True
+                print(json.dumps({'pending': result}), flush=True)
+                return
             elif command == 'lose_next_send':
                 faults['lose_next_send'] = True
             elif command == 'lose_next_open':
@@ -265,7 +275,8 @@ async def run(config):
                 preparation_failures=faults['preparation_failures'],
                 opens=len(peers), opening=len(opening), sends=sum(len(peer.sent) for peer in peers.values()),
                 stopping=sum(peer.closing and not peer.stopped for peer in peers.values()),
-                stopped=sum(peer.stopped for peer in peers.values()))), flush=True)
+                stopped=sum(peer.stopped for peer in peers.values()),
+                stop_pending=stopping is not None and not stopping.done())), flush=True)
     finally:
         if not stopped:
             await daemon._shutdown()

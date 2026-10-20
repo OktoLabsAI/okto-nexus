@@ -476,6 +476,12 @@ aprovados. As fronteiras posteriores de handshake, receipt e ACK seguem abertas.
   correlacionada à operação nativa com uma tentativa e receipts SUBMITTED e
   SUCCEEDED nas duas bases. Os demais cortes fixos de M6 ainda estão pendentes.
   Ver `m6g-inflight-server-restart.md`.
+- Checkpoint M6h: o Connector instalado em processo separado manteve o
+  shutdown pendente enquanto uma abertura nativa determinística estava retida,
+  encerrou após o produtor resolver a abertura e não repetiu o dispatch. Os
+  quatro cenários instalados do fixture passaram. Publicação, expiração de
+  lease e upgrade/rollback permanecem como cortes fixos do ADR. Ver
+  `m6h-process-open-stop.md`.
 - Primeiro ADR e protótipo isolado: processo por usuário/host, IPC autenticado
   (named pipe no Windows/socket local onde suportado), uma autoridade de processo.
 - Nexus pode reiniciar enquanto supervisor mantém contenção, spool e leases

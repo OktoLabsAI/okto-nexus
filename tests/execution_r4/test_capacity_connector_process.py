@@ -27,10 +27,12 @@ from test_runtime_policy_defaults import save
 
 
 @pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
-@pytest.mark.parametrize('restart_mode,receipt_fault', [
-    ('graceful', False), ('abrupt', False), ('abrupt', True)])
+@pytest.mark.parametrize('restart_mode,receipt_fault,stop_during_open', [
+    ('graceful', False, False), ('abrupt', False, False),
+    ('abrupt', True, False), ('graceful', False, True)])
 def test_capacity_survives_lost_reply_reconnect_and_connector_process_restart(
-        onboarding, tmp_path, monkeypatch, restart_mode, receipt_fault):
+        onboarding, tmp_path, monkeypatch, restart_mode, receipt_fault,
+        stop_during_open):
     import nexus_connector_core
     import okto_nexus_connector
     from okto_nexus_connector.services.execution_selection import acknowledge_execution_binding
@@ -253,8 +255,28 @@ def test_capacity_survives_lost_reply_reconnect_and_connector_process_restart(
 
             _, work_id = new_candidate()
             assert (await reserve_fresh(work_id)).state == 'RESERVED'
+            if stop_during_open:
+                assert (await command('hold_open'))['opening'] == 0
             committed = attempts.claim(work_id)
             admitted = await build_capacity_admission(deps).consume(committed.operation_id)
+            if stop_during_open:
+                async with asyncio.timeout(15):
+                    while (opening_state := await command('status'))['opening'] != 1:
+                        await asyncio.sleep(.05)
+                assert opening_state['opens'] == 0
+                assert (await command('begin_stop'))['stop_pending']
+                await asyncio.sleep(.2)
+                held = await command('status')
+                assert held['stop_pending'] and held['opens'] == 0
+                assert (await command('release_open'))['stop_pending']
+                assert (await asyncio.wait_for(command('finish_stop'), 60))['pending'] == 0
+                assert await finish_process() == 0
+                assert process.returncode == 0
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    assert uow.connection.execute(
+                        'SELECT COUNT(*) FROM execution_dispatch_outbox WHERE operation_id=? AND attempt_no>1',
+                        (admitted.consumption.turn_operation_id,)).fetchone()[0] == 0
+                return
             await wait_turn(admitted.consumption.turn_operation_id, 'SUBMITTED')
             state = await command('status')
             assert (state['opens'], state['sends'], state['stopped']) == (1, 1, 0), state
