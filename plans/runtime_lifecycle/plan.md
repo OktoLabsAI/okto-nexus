@@ -150,8 +150,13 @@ Core 0.0.12 instalado: intenção antes do claim, claim antes de guardian,
 spawn e birth. Sem receipt após claim, o slot permanece incerto; após spawn
 ou birth, só o receipt durável do guardian prova encerramento. Cinco casos
 Windows selecionados continuaram passando. Sem mudança de produto ou instalação
-global. Ver Core `plans/runtime-lifecycle-m2f-linux-crash.md`; macOS e as
-fronteiras posteriores de handshake, receipt e ACK seguem abertas.
+global. Ver Core `plans/runtime-lifecycle-m2f-linux-crash.md`.
+
+Checkpoint M2g: o guardian nativo do macOS qualificou as quatro fronteiras de
+crash de launch com drenagem física e receipt durável; a matriz Core
+39336889894 passou Linux, macOS e Windows 3.11–3.13. Nexus e Connector foram
+instalados com o mesmo wheel Core 0.0.12 e tiveram os testes direcionados
+aprovados. As fronteiras posteriores de handshake, receipt e ACK seguem abertas.
 
 - Contrato versionado de launch intent: operação, sessão, executor, geração,
   identidade do container, estado/prova e revisão. Sem argumentos ou segredos.
