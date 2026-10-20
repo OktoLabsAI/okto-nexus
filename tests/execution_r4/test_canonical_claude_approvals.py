@@ -94,9 +94,14 @@ def completed_result(setup, turn):
     return result['result']
 
 
+def close_peer(setup, binding, turn, intent_id):
+    closed = admit(setup, binding, intent_id, 'runtime.close', session_id=turn['session_id'])
+    wait_receipt(setup, closed, stages=('SUCCEEDED',))
+
+
 @pytest.mark.parametrize('decision,wire', [('approve', 'allow'), ('deny', 'deny')])
 def test_claude_permission_uses_operator_authority_and_one_exact_reply(connected_local, decision, wire):
-    setup, _, turn, body, log, _ = native_peer(connected_local)
+    setup, binding, turn, body, log, _ = native_peer(connected_local)
     body['decision'] = decision
     path = '/v1/runtime/approval-decisions'
     assert setup[2].post(path, headers=setup[3]['subject'], json=body).status_code == 403
@@ -112,6 +117,7 @@ def test_claude_permission_uses_operator_authority_and_one_exact_reply(connected
     assert answer['behavior'] == wire and 'updatedPermissions' not in answer
     if decision == 'approve':
         assert answer['updatedInput'] == dict(file_path='fixture.txt', content='fixture')
+    close_peer(setup, binding, turn, 'claude-permission-close')
 
 
 @pytest.mark.parametrize('answer,multi,decision', [('blue', False, 'approve'),
@@ -119,7 +125,7 @@ def test_claude_permission_uses_operator_authority_and_one_exact_reply(connected
 def test_claude_question_requires_explicit_answer_and_preserves_question(connected_local, answer, multi, decision):
     questions = [dict(question='Choose fixture color', header='Color', multiSelect=multi,
         options=[dict(label='blue', description='Fixture blue'), dict(label='green', description='Fixture green')])]
-    setup, _, turn, body, log, _ = native_peer(connected_local, tool_name='AskUserQuestion', inputs=dict(questions=questions), operator_turn=True)
+    setup, binding, turn, body, log, _ = native_peer(connected_local, tool_name='AskUserQuestion', inputs=dict(questions=questions), operator_turn=True)
     path = '/v1/runtime/approval-decisions'
     assert setup[2].post(path, headers=setup[3]['operator'], json=body).status_code == 422
     body['decision'] = decision
@@ -135,16 +141,18 @@ def test_claude_question_requires_explicit_answer_and_preserves_question(connect
         assert wire == dict(behavior='allow', updatedInput=dict(questions=questions, answers={'Choose fixture color': answer}))
     else:
         assert wire['behavior'] == 'deny' and 'updatedInput' not in wire
+    close_peer(setup, binding, turn, 'claude-question-close')
 
 
 @pytest.mark.parametrize('tool_name', ['ExitPlanMode', 'AskUserQuestion', 'unknown'])
 def test_claude_unsupported_permission_cannot_change_policy_or_invent_answer(connected_local, tool_name):
-    setup, _, _, _, log, _ = native_peer(connected_local, tool_name=tool_name, expect_request=False)
+    setup, binding, turn, _, log, _ = native_peer(connected_local, tool_name=tool_name, expect_request=False)
     actual = replies(log)
     assert len(actual) == 1 and actual[0]['response']['subtype'] == 'error', actual
     with setup[0].connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute('SELECT COUNT(*) FROM execution_native_requests').fetchone()[0] == 0
         assert uow.connection.execute("SELECT COUNT(*) FROM approvals WHERE action='execution.native.respond'").fetchone()[0] == 0
+    close_peer(setup, binding, turn, 'claude-unsupported-close')
 
 
 @pytest.mark.parametrize('ending', ['cancel', 'terminal'])
@@ -195,3 +203,4 @@ def test_claude_consumed_request_id_cannot_authorize_following_turn(connected_lo
     assert 'behavior' not in actual[1]['response']
     with setup[0].connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute('SELECT COUNT(*) FROM execution_native_requests').fetchone()[0] == 1
+    close_peer(setup, binding, turn, 'claude-consumed-close')
