@@ -776,7 +776,8 @@
         "Connector: plans/runtime-lifecycle-m6b-pipe-client.md",
         "Connector: plans/runtime-lifecycle-m6c-process-exit.md",
         "m6d-real-ui.md",
-        "m6e-paired-connector-abort.md"
+        "m6e-paired-connector-abort.md",
+        "m6f-paired-ui-checkpoint.md"
       ],
       "commits": {
         "connector_experiment_adr": "0944a0e",
@@ -809,7 +810,18 @@
         "second_attempt_ipc_transport": "loopback",
         "fixed_floor_gib": 4
       },
-      "next": "Qualify warm one-shot pool, in-flight control interruption, revocation/lease expiry and Connector host restart with exact effect/receipt proofs. Compare installed embedded and Connector availability, memory and shutdown with identical harnesses before deciding adoption. Attribute and reduce the measured Pi opening latency in M7. Global Nexus remains stopped."
+      "paired_ui_checkpoint": {
+        "id": "M6f",
+        "status": "partial_pass",
+        "evidence": "m6f-paired-ui-checkpoint.md",
+        "provider": "Pi 0.87.1; installed Nexus 0.3.1, Connector 0.0.10, Core 0.0.12",
+        "embedded_one_shot_warm_response": true,
+        "connector_one_shot_warm_response": true,
+        "remote_response_after_nexus_restart": true,
+        "acknowledged": 3,
+        "in_flight_control_interruption_tested": false
+      },
+      "next": "Qualify in-flight control interruption, revocation/lease expiry, host restart, stop boundaries and upgrade/rollback with exact effect/receipt proofs. Compare installed embedded and Connector availability, memory and shutdown before deciding adoption. Attribute and reduce the measured Pi opening latency in M7. Global Nexus remains stopped outside the disposable experiment."
     },
     {
       "id": "M7",
