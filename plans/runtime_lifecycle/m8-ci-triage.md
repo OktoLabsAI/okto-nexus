@@ -427,5 +427,14 @@ exact pre-transaction 503 within 20 seconds and gives this case a 60-second
 bound to observe the durable terminal result. All other errors and any missing
 terminal result still fail. With the same installed product wheel, the revised
 case passed twice in 29.53 and 30.99 seconds. No product code or write-gate
-semantics changed. The other CI jobs are still running; classify their results
-before dispatching one replacement full matrix on the final test commit.
+semantics changed. The other CI jobs were still running at that checkpoint.
+
+Follow-up on 2026-10-20: that run reached 19 successful jobs and retained the
+one classified failure. Its four remaining jobs were cancelled after the full
+replacement matrix `39365534478` was dispatched on commit `f9ecdcf`; they
+were not counted as passes. The replacement contains the exact pre-admission
+retry above and a fixture-only independent heartbeat for the NS14 synthetic
+executor. The latter passed the same installed load on both baseline and
+current wheels; see `m8-same-load-comparison.md`. At this checkpoint the
+replacement has 20 jobs running and four queued, with no completed result to
+claim. M8 CI qualification and the controlled global rollout remain open.
