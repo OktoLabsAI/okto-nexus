@@ -8,6 +8,16 @@ CONTROL_ITEMS = 8
 REGULAR_BYTES = REGULAR_ITEMS * 64 * 1024
 CONTROL_BYTES = CONTROL_ITEMS * 64 * 1024
 
+# A verified local retirement proves that no native work remains for this
+# session. Keep an uncertain receipt unchanged, but do not let its historical
+# admission consume executor capacity forever after release.
+_NOT_LOCALLY_RETIRED = (
+    "AND NOT EXISTS (SELECT 1 FROM execution_sessions s WHERE "
+    "s.server_id=execution_operations.server_id AND s.executor_id=execution_operations.executor_id "
+    "AND s.session_id=execution_operations.session_id AND s.lifecycle_state='CLOSED' "
+    "AND s.lease_state='CLOSED' AND s.local_retirement_json IS NOT NULL) "
+)
+
 
 def require_admission_capacity(conn, *, server_id, executor_id, action, byte_cost):
     """Called inside the operation's write transaction, before any side effect.
@@ -30,6 +40,7 @@ def require_admission_capacity(conn, *, server_id, executor_id, action, byte_cos
         "AND admission_state IN ('ACCEPTED','DISPATCH_PENDING','RECONCILING') "
         "AND NOT EXISTS (SELECT 1 FROM execution_agent_recovery r WHERE r.server_id=execution_operations.server_id "
         "AND r.executor_id=execution_operations.executor_id AND r.agent_id=execution_operations.subject_agent_id AND r.state='RECOVERING') "
+        + _NOT_LOCALLY_RETIRED +
         "AND action IN (" + ",".join("?" for _ in actions) + ") LIMIT ?",
         (server_id, executor_id, *actions, items),
     ).fetchall()
@@ -50,6 +61,7 @@ def execution_capacity_snapshot(factory):
             "SUM(max(admission_bytes,length(CAST(semantic_payload AS BLOB)))) AS bytes "
             "FROM execution_operations "
             "WHERE admission_state IN ('ACCEPTED','DISPATCH_PENDING','RECONCILING') "
+            + _NOT_LOCALLY_RETIRED +
             "GROUP BY lane"
         ):
             pending[row["lane"]] = {"items": row["items"], "bytes": row["bytes"]}

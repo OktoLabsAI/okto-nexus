@@ -1,4 +1,5 @@
 """Public admission budgets include children and native decisions atomically."""
+import json
 import pytest
 
 from test_session_reuse import reuse_qualified, reuse_connected, resolve, admit
@@ -6,6 +7,7 @@ from test_local_realization import local_setup
 from test_embedded_dispatch import wait_receipt
 from test_native_decisions import decision_state, opening, post, snapshot
 from okto_nexus.application import execution_capacity
+from okto_nexus.errors import OktoNexusError
 
 
 def submit(setup, resolved):
@@ -86,6 +88,50 @@ def test_byte_budget_refuses_before_operation_creation(reuse_connected, monkeypa
         assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations").fetchone()[0] == 0
         assert uow.connection.execute("SELECT COUNT(*) FROM execution_sessions").fetchone()[0] == 0
     assert native.opens == 0
+
+
+def test_verified_local_retirement_releases_pending_budget_without_resolving_operation(
+        reuse_connected, monkeypatch):
+    setup, binding, _ = reuse_connected
+    setup[2].portal.call(setup[1].state.embedded_dispatch_owner.pump.stop)
+    planned = resolve(setup, binding, "retired-capacity-open", new_session=True).json()
+    assert submit(setup, planned).status_code == 202
+    with setup[0].connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE execution_operations SET admission_state='RECONCILING' "
+            "WHERE operation_id=?", (planned["operation_id"],))
+    monkeypatch.setattr(execution_capacity, "REGULAR_ITEMS", 1)
+    scope = dict(server_id=binding["server_id"], executor_id=binding["executor_id"],
+                 action="runtime.open", byte_cost=1)
+
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        with pytest.raises(OktoNexusError, match="pending operation capacity"):
+            execution_capacity.require_admission_capacity(uow.connection, **scope)
+    with setup[0].connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE execution_sessions SET lifecycle_state='CLOSED',lease_state='CLOSED' "
+            "WHERE session_id=?", (planned["scope"]["session_id"],))
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        with pytest.raises(OktoNexusError, match="pending operation capacity"):
+            execution_capacity.require_admission_capacity(uow.connection, **scope)
+
+    # The embedded retirement writer persists this only after proving release
+    # and draining the stream; the uncertain receipt and outbox stay intact.
+    with setup[0].connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE execution_sessions SET local_retirement_json=? WHERE session_id=?",
+            (json.dumps(dict(version=1, opening_operation_id=planned["operation_id"], process_state="EXITED")),
+             planned["scope"]["session_id"]))
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        execution_capacity.require_admission_capacity(uow.connection, **scope)
+        assert uow.connection.execute("SELECT admission_state FROM execution_operations WHERE operation_id=?",
+            (planned["operation_id"],)).fetchone()[0] == "RECONCILING"
+    assert execution_capacity.execution_capacity_snapshot(setup[0].connection_factory)[
+        "pending_totals"]["regular"]["items"] == 0
+
+    with setup[0].connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE execution_sessions SET local_retirement_json=NULL WHERE session_id=?",
+            (planned["scope"]["session_id"],))
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        with pytest.raises(OktoNexusError, match="pending operation capacity"):
+            execution_capacity.require_admission_capacity(uow.connection, **scope)
 
 
 @pytest.mark.parametrize("decision_state", [None, "input"], indirect=True)
