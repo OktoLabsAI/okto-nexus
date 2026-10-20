@@ -11,7 +11,7 @@
         "M2",
         "M3"
       ],
-      "status": "local_ui_flows_verified_m2_m3_technical_pending",
+      "status": "local_acceptance_complete",
       "interim_evidence": [
         "m3a-validation.md",
         "m3a-results.json",
@@ -27,7 +27,10 @@
         "m3i-ui-rollout.md",
         "m3k-real-ui.md",
         "m3n-pi-probe-ui.md",
-        "ui-a-installed-restart-evidence.md"
+        "ui-a-installed-restart-evidence.md",
+        "m2-final-acceptance.md",
+        "m3-final-acceptance.md",
+        "m8-global-ci-wheel-rollout.md"
       ]
     },
     {
@@ -204,7 +207,7 @@
     },
     {
       "id": "M3",
-      "status": "in_progress",
+      "status": "complete",
       "title": "Independent readiness and per-resource recovery",
       "nexus_checkpoint_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3a-validation.md",
       "evidence": [
@@ -247,7 +250,8 @@
         "m3l-results.json",
         "m3n-pi-probe-ui.md",
         "Core: plans/runtime-lifecycle-m3-pi-version-probe.md",
-        "m3v-current-availability-audit.md"
+        "m3v-current-availability-audit.md",
+        "m3-final-acceptance.md"
       ],
       "commits": {
         "core_m3c": "7bab651",
@@ -385,7 +389,7 @@
         }
       ],
       "nexus_m3b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3b-validation.md",
-      "next": "M3s qualifies the Windows positive native-effect boundary; M5x/M5y close the local Connector differential criteria. M3v audits current real-UI recovery, Pi load and visibility refresh without attributing old reports without proof. Await the full Nexus multiplatform installed matrix and controlled global rollout; L3/L12 remain historical observations, not new acceptance gates.",
+      "next": null,
       "nexus_m3c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3c-validation.md",
       "nexus_m3e_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3e-validation.md",
       "nexus_m3g_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3g-pool-refusal.md",
@@ -419,7 +423,8 @@
       },
       "nexus_m3i_embedded_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3i-embedded-results.json",
       "nexus_m3k_notifications_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3k-notifications-results.json",
-      "nexus_m3l_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3l-results.json"
+      "nexus_m3l_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3l-results.json",
+      "final_qualification": "Per-agent discovery, authorization, capacity and recovery isolation were qualified by installed M3p-M3s cases, UI-A/UI-B real harness flows, 18/18 Pi load calls, final 24/24 Nexus installed CI and controlled global CI-wheel rollout. The global Pi turn returned an exact reply with 1/1 ACK and pool replenishment; Pi, Claude and Codex showed Online. Historical L3/L12 causes remain unproven, not claimed fixed by causal attribution. A physically separate remote host remains outside this local acceptance. See m3-final-acceptance.md."
     },
     {
       "id": "M4",
@@ -1451,8 +1456,9 @@
       "id": "L65",
       "milestone": "M2/M3/UI-A",
       "priority": "high",
-      "status": "real_ui_flows_verified_technical_acceptance_pending",
-      "description": "Installed disposable Nexus 0.3.1, Connector 0.0.10 and Core 0.0.12 showed Pi, Claude and Codex Online and delivered three exact UI responses with 1/1 ACK; their session terminals showed formatted input and final output. A remote Pi stayed Offline without blocking those local agents. After abrupt termination of the disposable Nexus with a warm Pi slot, the same browser changed RECONNECTING to LIVE without reload, all three local agents returned Online, and a new Pi call succeeded with exact reply, 1/1 ACK and warm-pool replenishment. No manual recovery was used. This closes the real-UI flow evidence only; M2/M3 technical requirements remain open. See ui-a-installed-restart-evidence.md."
+      "status": "local_acceptance_complete",
+      "description": "Installed disposable Nexus 0.3.1, Connector 0.0.10 and Core 0.0.12 showed Pi, Claude and Codex Online and delivered three exact UI responses with 1/1 ACK; their session terminals showed formatted input and final output. A remote Pi stayed Offline without blocking those local agents. After abrupt termination of the disposable Nexus with a warm Pi slot, the same browser changed RECONNECTING to LIVE without reload, all three local agents returned Online, and a new Pi call succeeded with exact reply, 1/1 ACK and warm-pool replenishment. No manual recovery was used. This closes the real-UI flow evidence only; M2/M3 technical requirements remain open. See ui-a-installed-restart-evidence.md.",
+      "current_qualification": "M2 and M3 technical local acceptance closed after Core/Connector/Nexus installed CI and global CI-wheel rollout; UI-A real restart gate had already passed. See m2-final-acceptance.md and m3-final-acceptance.md."
     },
     {
       "id": "L66",
