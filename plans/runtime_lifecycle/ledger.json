@@ -127,7 +127,7 @@
     },
     {
       "id": "M2",
-      "status": "in_progress",
+      "status": "complete",
       "title": "Durable launch intent and producer fencing",
       "evidence": [
         "Core: plans/runtime-lifecycle-m2a.md",
@@ -139,7 +139,8 @@
         "m2e-results.json",
         "m2e-ui-broadcast.md",
         "m2g-macos-recovery-gap.md",
-        "m2h-late-crash-cuts.md"
+        "m2h-late-crash-cuts.md",
+        "m2-final-acceptance.md"
       ],
       "commits": {
         "core_m2a": "261dc2e",
@@ -190,15 +191,15 @@
         },
         {
           "id": "M2h",
-          "status": "local_installed_crash_cuts_qualified_full_nexus_ci_pending",
-          "title": "Native handshake, ACK, Core receipt, Nexus process receipt/projection and late producer cuts passed against installed wheels; full Nexus matrix pending",
+          "status": "installed_late_crash_cuts_and_final_ci_qualified",
+          "title": "Native handshake, ACK, Core receipt, Nexus receipt/projection and late-producer cuts passed against installed wheels; final Nexus matrix and global rollout passed",
           "evidence": [
             "m2h-late-crash-cuts.md"
           ]
         }
       ],
-      "qualification": "Core, embedded and Connector recovery integrated. Windows disposable owner crashes and 261 installed tests passed. Four Linux planned-launch crash cuts passed with Core 0.0.12. Darwin M2g physical owner-crash cuts and full Core CI 39336889894 passed; exact qualified wheel SHA-256 fe0659ec366029a72475cdf300b0be1705e796d32044bf9c0ab0bc81d3b574b5. Real UI-A flows were verified separately. Later handshake/receipt/ACK crash frontiers and joint consumer CI remain pending.",
-      "next": "M2h qualified the late local crash cuts on installed wheels. Core 39336889894 and Connector 39343006146 passed; await full Nexus matrix 39352913186 against the exact Core 0.0.12 wheel, then controlled global rollout. Do not release claimed capacity without guardian proof.",
+      "qualification": "Durable launch intent, physical container identity and fenced producer recovery are integrated in Core, Nexus embedded and Connector. Windows, Linux and macOS launch-cut evidence plus installed local late handshake, native ACK, receipt, Server crash and delayed-producer cuts passed. Core CI 39336889894 and Connector CI 39343006146 each passed 8/8 jobs; Nexus installed CI 39472894540 passed 24/24. UI-A recovered Pi, Claude and Codex after an abrupt disposable Server stop, and the global CI-wheel turn retired a Pi session without leaving a native process. Physical remote-host qualification remains outside the authorized local scope. See m2-final-acceptance.md.",
+      "next": null,
       "nexus_m2e_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m2e-validation.md"
     },
     {
