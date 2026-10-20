@@ -1,0 +1,1504 @@
+{
+  "schema_version": 1,
+  "started_on": "2026-10-16",
+  "plan": "plan.md",
+  "compatibility_policy": "Breaking changes authorized on 2026-10-16; coordinate all three upgrades, preserve configuration and live-process evidence, do not require old-version interoperability",
+  "real_test_policy": "Real installed harness tests through Nexus UI at large milestones, not at every intermediate commit",
+  "real_ui_gates": [
+    {
+      "id": "UI-A",
+      "after": [
+        "M2",
+        "M3"
+      ],
+      "status": "local_acceptance_complete",
+      "interim_evidence": [
+        "m3a-validation.md",
+        "m3a-results.json",
+        "m3a-ui-broadcast.md",
+        "m2e-validation.md",
+        "m2e-results.json",
+        "m2e-ui-broadcast.md",
+        "m3c-ui-recovery.md",
+        "m3f-diagnostic-contention.md",
+        "m3g-ui-rollout.md",
+        "m3j-renewal-contention.md",
+        "m3j-results.json",
+        "m3i-ui-rollout.md",
+        "m3k-real-ui.md",
+        "m3n-pi-probe-ui.md",
+        "ui-a-installed-restart-evidence.md",
+        "m2-final-acceptance.md",
+        "m3-final-acceptance.md",
+        "m8-global-ci-wheel-rollout.md"
+      ]
+    },
+    {
+      "id": "UI-B",
+      "after": [
+        "M5",
+        "M7"
+      ],
+      "status": "local_acceptance_complete",
+      "interim_evidence": [
+        "m6d-real-ui.md",
+        "m7e-ui-pool-burst.md",
+        "m7f-ui-concurrent-cold.md",
+        "m7g-immediate-startup-budget.md",
+        "m7h-ui-queue-capacity.md",
+        "m7i-ui-delayed-native-start.md",
+        "m7k-ui-queue-deadline.md",
+        "m7m-ui-embedded-queue-expiry.md",
+        "m7n-ui-claude-codex-warm-cold.md",
+        "m5j-ui-initial-lease-refusal.md",
+        "m7o-installed-load-results.md",
+        "m5u-ui-revocation.md",
+        "m5v-ui-preserve-reset.md",
+        "m5w-ui-connector-preserve-reset.md",
+        "m5m-ui-active-reconciliation-isolation.md",
+        "m4l-ui-recovery.md",
+        "ui-b-evidence-audit.md",
+        "m5x-differential-evidence-audit.md",
+        "m5y-separate-process-receipt-recovery.md",
+        "m7q-unlimited-integrated-concurrency.md",
+        "m7r-ui-unlimited-and-expired-grant.md"
+      ]
+    },
+    {
+      "id": "UI-C",
+      "after": [
+        "M8"
+      ],
+      "status": "local_acceptance_complete",
+      "includes_supervisor_if_adopted": true,
+      "interim_evidence": [
+        "m8-uic-installed-ui.md",
+        "m8-ci-triage.md",
+        "m8-final-prewheel-backup.md",
+        "m8-global-ci-wheel-rollout.md",
+        "m8-fixed-acceptance-audit.md"
+      ]
+    }
+  ],
+  "repositories": {
+    "nexus": {
+      "version": "0.3.1",
+      "branch": "feature/v0.3.1",
+      "core": "0.0.12"
+    },
+    "core": {
+      "version": "0.0.12",
+      "branch": "feature/v0.0.12"
+    },
+    "connector": {
+      "version": "0.0.10",
+      "branch": "feature/v0.0.10",
+      "core": "0.0.12"
+    }
+  },
+  "milestones": [
+    {
+      "id": "M0",
+      "status": "complete",
+      "title": "Baseline and implementation plan",
+      "evidence": [
+        "m0-validation.md",
+        "../event-artifact-implementation.md",
+        "../settings-and-dispatch-contention.md",
+        "../pi-recovery-20261016.md"
+      ],
+      "commits": {
+        "core": "fb86548",
+        "connector": "4e86785",
+        "nexus": "5181605"
+      }
+    },
+    {
+      "id": "M1",
+      "status": "complete",
+      "qualification": "Technical checkpoint only; integrated campaign has known findings, real UI gates pending",
+      "title": "Persist process birth before native handshake",
+      "evidence": [
+        "m1-validation.md",
+        "m1-results.json"
+      ],
+      "commits": {
+        "core": "8520deb",
+        "connector": "3aa841c"
+      },
+      "nexus_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m1-validation.md"
+    },
+    {
+      "id": "M2",
+      "status": "complete",
+      "title": "Durable launch intent and producer fencing",
+      "evidence": [
+        "Core: plans/runtime-lifecycle-m2a.md",
+        "Core: plans/runtime-lifecycle-m2b.md",
+        "Core: plans/runtime-lifecycle-m2c.md",
+        "m2d-validation.md",
+        "m2d-results.json",
+        "m2e-validation.md",
+        "m2e-results.json",
+        "m2e-ui-broadcast.md",
+        "m2g-macos-recovery-gap.md",
+        "m2h-late-crash-cuts.md",
+        "m2-final-acceptance.md"
+      ],
+      "commits": {
+        "core_m2a": "261dc2e",
+        "core_m2b": "788f3f7",
+        "core_m2c": "877393b",
+        "core_m2e": "90b4ef6",
+        "core_m2f": "f9fc188",
+        "core_m2g": "c91b75a",
+        "connector_m2e": "2dca512",
+        "nexus_m2d": "1f96d73"
+      },
+      "nexus_m2d_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m2d-validation.md",
+      "checkpoints": [
+        {
+          "id": "M2a",
+          "status": "complete",
+          "title": "Durable identity and producer exclusion; 53 installed tests passed"
+        },
+        {
+          "id": "M2b",
+          "status": "complete",
+          "title": "Atomic launch admission and shared producer controller; 80 installed tests passed"
+        },
+        {
+          "id": "M2c",
+          "status": "complete",
+          "title": "Managed native integration and five Windows crash frontiers; 159 installed tests passed"
+        },
+        {
+          "id": "M2d",
+          "status": "complete",
+          "title": "Embedded recovery integration including no physical slot; 24 distinct Windows scenarios passed"
+        },
+        {
+          "id": "M2e",
+          "status": "complete",
+          "title": "Shared Connector launch recovery and negotiated NOT_STARTED proof; 261 installed tests passed"
+        },
+        {
+          "id": "M2f",
+          "status": "complete",
+          "title": "Four Linux planned-launch crash cuts passed against source and installed Core; claim without guardian proof retains capacity"
+        },
+        {
+          "id": "M2g",
+          "status": "complete",
+          "title": "Darwin guardian durable stop receipt qualified: four installed native crash cuts, complete Core CI 39336889894 and SBOM"
+        },
+        {
+          "id": "M2h",
+          "status": "installed_late_crash_cuts_and_final_ci_qualified",
+          "title": "Native handshake, ACK, Core receipt, Nexus receipt/projection and late-producer cuts passed against installed wheels; final Nexus matrix and global rollout passed",
+          "evidence": [
+            "m2h-late-crash-cuts.md"
+          ]
+        }
+      ],
+      "qualification": "Durable launch intent, physical container identity and fenced producer recovery are integrated in Core, Nexus embedded and Connector. Windows, Linux and macOS launch-cut evidence plus installed local late handshake, native ACK, receipt, Server crash and delayed-producer cuts passed. Core CI 39336889894 and Connector CI 39343006146 each passed 8/8 jobs; Nexus installed CI 39472894540 passed 24/24. UI-A recovered Pi, Claude and Codex after an abrupt disposable Server stop, and the global CI-wheel turn retired a Pi session without leaving a native process. Physical remote-host qualification remains outside the authorized local scope. See m2-final-acceptance.md.",
+      "next": null,
+      "nexus_m2e_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m2e-validation.md"
+    },
+    {
+      "id": "M3",
+      "status": "complete",
+      "title": "Independent readiness and per-resource recovery",
+      "nexus_checkpoint_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3a-validation.md",
+      "evidence": [
+        "m3a-validation.md",
+        "m3a-results.json",
+        "m3a-ui-broadcast.md",
+        "m3b-validation.md",
+        "m3b-results.json",
+        "m3c-validation.md",
+        "m3c-results.json",
+        "m3c-ui-recovery.md",
+        "m3d-validation.md",
+        "m3d-results.json",
+        "m3e-validation.md",
+        "m3e-results.json",
+        "m3c-ui-resumed.md",
+        "m3f-diagnostic-contention.md",
+        "m3f-results.json",
+        "m3g-pool-refusal.md",
+        "m3g-results.json",
+        "m3g-ui-rollout.md",
+        "m3g-live-results.json",
+        "m3h-startup-observation.md",
+        "m3h-results.json",
+        "m3j-renewal-contention.md",
+        "m3j-results.json",
+        "m3i-independent-observations.md",
+        "m3i-core-results.json",
+        "m3i-consumers.md",
+        "m3i-consumers-results.json",
+        "m3i-embedded.md",
+        "m3i-embedded-first-results.json",
+        "m3i-embedded-results.json",
+        "m3k-owner-replacement.md",
+        "m3k-results.json",
+        "m3k-real-ui.md",
+        "m3k-reset-ui.md",
+        "m3k-notifications-results.json",
+        "m3l-session-isolation.md",
+        "m3l-results.json",
+        "m3n-pi-probe-ui.md",
+        "Core: plans/runtime-lifecycle-m3-pi-version-probe.md",
+        "m3v-current-availability-audit.md",
+        "m3-final-acceptance.md"
+      ],
+      "commits": {
+        "core_m3c": "7bab651",
+        "connector_m3c": "0db859c",
+        "nexus_m3c": "3a68909",
+        "nexus_m3d": "c634356",
+        "core_m3e": "50eaabc",
+        "connector_m3e": "7e1710a",
+        "nexus_m3e": "193b0a3",
+        "nexus_m3g": "8c5cf2b",
+        "core_m3h": "695ff09",
+        "connector_m3h": "0a72072",
+        "core_m3i_foundation": "6e97362",
+        "connector_m3i_selection": "15e1d53"
+      },
+      "checkpoints": [
+        {
+          "id": "M3a",
+          "status": "complete",
+          "title": "Independent embedded lease renewal and scoped expiry recovery"
+        },
+        {
+          "id": "M3b",
+          "status": "complete",
+          "title": "HTTP startup independent of inventory; 103 installed tests passed; globally deployed and observed during M3c UI recovery"
+        },
+        {
+          "id": "M3c",
+          "status": "complete",
+          "title": "Original-owner failed-launch recovery and diagnostics; 266 installed tests; coordinated global install and real Pi/Claude responses; graceful shutdown and automatic restart verified"
+        },
+        {
+          "id": "M3d",
+          "status": "complete",
+          "title": "Embedded contact and presence follow exact live owner; 46 source/installed cases passed; global rollout reserved for next major UI gate"
+        },
+        {
+          "id": "M3e",
+          "status": "complete",
+          "title": "Opened remote session lease failures contained independently; 138 installed cases passed; initial opening isolation and global rollout remain pending"
+        },
+        {
+          "id": "M3f",
+          "status": "complete",
+          "title": "Transient diagnostic-write contention cannot contain the shared host; 12 source and 20 installed tests, including all three adapters and stopped-owner readiness"
+        },
+        {
+          "id": "M3g",
+          "status": "complete",
+          "title": "Pool reservations from exact pre-Core dispatch refusals settle and replenish automatically; 18 installed cases passed; deployed in generation 71; Pi UI response used a warm session and pool replenished to 4/5"
+        },
+        {
+          "id": "M3h",
+          "status": "complete",
+          "title": "Bounded parallel discovery and prerequisite-aware pool warmup; 59 Core, 35 Connector and 46 Nexus installed cases passed; deployed with M3j in generation 72"
+        },
+        {
+          "id": "M3j",
+          "status": "complete",
+          "title": "Transient renewal/status writer contention stays scoped; 13 source and 43 campaign cases passed; generation 72 restored and Pi/Claude replied through Meta-harness"
+        },
+        {
+          "id": "M3i",
+          "status": "complete",
+          "title": "Independent producers integrated and jointly qualified: Nexus 115 passed/8 optional browser skips, Connector 164 passed. Exact artifacts deployed in generation 73; Pi and Claude replied through the real Meta-harness and Pi warm pool replenished. Broader M3/UI-A acceptance remains pending."
+        },
+        {
+          "id": "M3i-connector",
+          "status": "complete",
+          "title": "Independent daemon observations/publication, exact accepted-batch onboarding/open and current authorization recheck after storage work. 164 installed tests passed; commit b12b8b8 pushed; exact wheel installed globally. Separate Connector process workflow/UI remains M5/M8."
+        },
+        {
+          "id": "M3i-embedded",
+          "status": "complete",
+          "title": "Installed independent producer/boot/reset checkpoint: 115 passed, 8 optional browser skips. Deployed in generation 73; Pi and Claude real UI replies passed. Disposable-home reset UI remains L17."
+        },
+        {
+          "id": "M3k",
+          "status": "qualified_rollout_pending",
+          "title": "Automatic contained-owner replacement and original-caller interruption notice. Initial replacement 82 installed cases; final notification artifact qualified across 59 distinct cases (57 initial passes plus 8 reset reruns after test synchronization only). Real Pi replacement and idle/active preserve-agent resets passed through UI. Global rollout pending."
+        },
+        {
+          "id": "M3l",
+          "status": "qualified_rollout_pending",
+          "title": "Authorized startup failures recover by session; 34 installed cases, slow containment and all three adapters; global rollout and full M3 qualification pending"
+        },
+        {
+          "id": "M3n",
+          "status": "qualified_disposable_ui",
+          "title": "Pi-specific owned version probe tolerates healthy startup beyond 3s; three source and three installed tests, real connection, two Meta-harness turns and post-restart 1/1 ACK. Cold-start latency and full UI-A remain open.",
+          "commits": {
+            "core": "5d88562",
+            "connector_vendor": "aaa9951"
+          }
+        },
+        {
+          "id": "M3p",
+          "status": "local_technical_qualified_global_rollout_pending",
+          "title": "Pre-authorization embedded startup refusal isolates its session, resumes across restart, and releases an exact consumed handoff reservation; 39 source and 4 installed-wheel cases passed.",
+          "evidence": [
+            "m3p-preauthorization-session-refusal.md"
+          ]
+        },
+        {
+          "id": "M3q",
+          "status": "local_technical_qualified_global_rollout_pending",
+          "title": "Startup refusal storage failure retains only the affected session without premature receipt or release and retries automatically; one source and one installed-wheel case passed.",
+          "evidence": [
+            "m3q-startup-refusal-storage-boundary.md"
+          ]
+        },
+        {
+          "id": "M3r",
+          "status": "local_technical_qualified_global_rollout_pending",
+          "title": "An interruption after Core runtime composition and before executor return remains session-scoped when Core proves no claim or birth; 41 source, 6 installed Nexus and 20 installed Core contract cases passed.",
+          "evidence": [
+            "m3r-authorizer-interruption.md"
+          ]
+        },
+        {
+          "id": "M3s",
+          "status": "windows_embedded_qualified_global_rollout_pending",
+          "title": "A real Job-owned child failing after spawn retains OUTCOME_UNKNOWN, stops with CONTAINER_STOPPED, releases its slot, reports possible effect, and preserves a healthy sibling; installed restart spawn/birth frontiers passed.",
+          "evidence": [
+            "m3s-positive-native-effect-isolation.md"
+          ]
+        },
+        {
+          "id": "M3u",
+          "status": "consumer_wheels_aligned_multiplatform_ci_pending",
+          "title": "Core matrix regression fixes and identical Core 0.0.12 wheel synchronized in Nexus and Connector; 14 installed Nexus startup-isolation cases passed.",
+          "evidence": [
+            "m3u-ci-consumer-alignment.md"
+          ]
+        }
+      ],
+      "nexus_m3b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3b-validation.md",
+      "next": null,
+      "nexus_m3c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3c-validation.md",
+      "nexus_m3e_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3e-validation.md",
+      "nexus_m3g_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3g-pool-refusal.md",
+      "nexus_m3h_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3h-startup-observation.md",
+      "nexus_m3j_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3j-renewal-contention.md",
+      "nexus_m3i_consumers_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3i-consumers.md",
+      "embedded_producer_work": "Joint installed artifacts qualified: 115 passed, 8 optional browser skips, zero failures; stable inputs and source/wheel equality. Independent discovery/publication, selected probes, retained shutdown, deferred boot and reset readiness. Exact artifacts globally installed in generation 73, with Pi/Claude real UI replies and automatic pool replenishment. See m3i-ui-rollout.md; full UI-A and disposable reset UI remain pending.",
+      "connector_producer_work": {
+        "commit": "b12b8b8",
+        "branch": "feature/v0.0.10",
+        "pushed": true,
+        "installed_tests": 164,
+        "changed_inputs": [],
+        "wheel_sha256": "41331e7b9405e830d990141e48e7702d461559a779b66ee39ec8aedc9e52d7c2",
+        "report": "../okto-nexus-connector/plans/runtime-lifecycle-m3i-producer-results.json",
+        "global_rollout": "pending"
+      },
+      "reset_readiness_work": {
+        "status": "installed_and_real_pi_ui_validated",
+        "behavior": "Reset remains reconnecting until preserved enabled local selections are freshly observed. Admission reopened; unused harnesses and remote hosts do not block reset.",
+        "source_reports": [
+          "build/m3i-reset-readiness.xml",
+          "build/m3i-reset-isolation.xml"
+        ],
+        "existing_reset_cases_passed": 8,
+        "new_isolation_cases_passed": 2,
+        "initial_new_test_failures": "Status GET uses HTTP 200 with pending=true; tests corrected to inspect pending, without relaxing existing immediate-send cases.",
+        "joint_build": "build/runtime-m3i-joint-dist",
+        "installed_report": "build/runtime-m3i-joint-installed",
+        "real_ui": "m3k-reset-ui.md"
+      },
+      "nexus_m3i_embedded_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3i-embedded-results.json",
+      "nexus_m3k_notifications_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3k-notifications-results.json",
+      "nexus_m3l_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3l-results.json",
+      "final_qualification": "Per-agent discovery, authorization, capacity and recovery isolation were qualified by installed M3p-M3s cases, UI-A/UI-B real harness flows, 18/18 Pi load calls, final 24/24 Nexus installed CI and controlled global CI-wheel rollout. The global Pi turn returned an exact reply with 1/1 ACK and pool replenishment; Pi, Claude and Codex showed Online. Historical L3/L12 causes remain unproven, not claimed fixed by causal attribution. A physically separate remote host remains outside this local acceptance. See m3-final-acceptance.md."
+    },
+    {
+      "id": "M4",
+      "status": "complete",
+      "title": "Incremental recovery and stream fairness",
+      "evidence": [
+        "m4a-validation.md",
+        "m4a-results.json",
+        "m4b-validation.md",
+        "m4b-results.json",
+        "m4c-validation.md",
+        "m4c-results.json",
+        "m4d-design.md",
+        "m4d1-validation.md",
+        "m4d1-results.json",
+        "m4d2-validation.md",
+        "m4d2-results.json",
+        "m3g-ui-rollout.md",
+        "m3g-live-results.json",
+        "m4d3-unopened-design.md",
+        "m4d3-validation.md",
+        "m4d3-results.json",
+        "m4d4-store-audit-design.md",
+        "m4d4b-validation.md",
+        "m4d4b-results.json",
+        "Core: plans/runtime-lifecycle-m4d4c1.md",
+        "m4d4c2-validation.md",
+        "Connector: plans/runtime-lifecycle-m4d4c3.md",
+        "m4d4d-validation.md",
+        "Core: plans/runtime-lifecycle-m4d4e1.md",
+        "m4d4e-frontier-protocol.md",
+        "m4d4e1-validation.md",
+        "Core: plans/runtime-lifecycle-m4d4e2.md",
+        "m4d4e3-validation.md",
+        "Connector: plans/runtime-lifecycle-m4d4e4.md",
+        "Core: plans/runtime-lifecycle-m4d4e5.md",
+        "m4d4e5-validation.md",
+        "Core: plans/runtime-lifecycle-m4d4e6.md",
+        "m4d4e6-validation.md",
+        "m4d4f1-physical-audit-measurement.md",
+        "m4d4f2-typed-entry-validation.md",
+        "m4d4g-mixed-ledger-budget.md",
+        "Core: plans/runtime-lifecycle-m4d4g-mixed-capacity.md",
+        "Connector: plans/runtime-lifecycle-m4d4h-stream-fairness.md",
+        "Connector: plans/runtime-lifecycle-m4d4i-terminal-stream-checkpoints.md",
+        "Core: plans/runtime-lifecycle-m4d4j-pending-claims.md",
+        "Connector: plans/runtime-lifecycle-m4d4j-pending-reconciliation.md",
+        "Connector: plans/runtime-lifecycle-m4d4k-reconciled-release-retirement.md",
+        "m4n-retained-directory-latency.md",
+        "m4-final-acceptance.md"
+      ],
+      "commits": {
+        "nexus_m4d2": "132d8ba",
+        "core_m4d3": "feae7fe",
+        "core_m4d3_documentation": "57fa45a",
+        "connector_m4d3": "1b12367",
+        "nexus_m4d3": "ef852e9",
+        "core_m4d4a": "2afb894",
+        "connector_m4d4b": "5f444c9",
+        "core_m4d4_cost": "4ea0dab",
+        "core_m4d4c1": "10906e9",
+        "nexus_m4d4c2": "de0f5fc",
+        "connector_m4d4c3": "1e9f768",
+        "nexus_m4d4d": "48cd8f3",
+        "core_m4d4e1": "1d38900",
+        "core_m4d4e2": "905ad8f",
+        "nexus_m4d4e3": "47e0567",
+        "connector_m4d4e4": "8a9ee1e",
+        "core_m4d4e5": "9c3d4dd",
+        "connector_m4d4e5": "df41f82",
+        "nexus_m4d4e5": "b21565d",
+        "core_m4d4e6": "7e1a19d",
+        "connector_m4d4e6": "76dda1e"
+      },
+      "checkpoints": [
+        {
+          "id": "M4a",
+          "status": "complete",
+          "title": "Exact-session release lookup; constant SQLite VM work across 1k/10k/100k history; 30 installed scenarios passed"
+        },
+        {
+          "id": "M4b",
+          "status": "complete",
+          "title": "Pending partial indexes and exact-session event lookup; constant work across 1k/10k/100k history; 60 installed tests passed"
+        },
+        {
+          "id": "M4c",
+          "status": "complete",
+          "title": "Verified resource-retirement checkpoints and transactional invalidation; bounded resumable retirement; 44 final installed tests passed"
+        },
+        {
+          "id": "M4d1",
+          "status": "complete",
+          "title": "Canonical location catalog and exact occupied-slot attribution; 52 distinct scenarios qualified (50/52 initial, 7/7 after test synchronization and owner-PID fixes; unchanged wheel)"
+        },
+        {
+          "id": "M4d2",
+          "status": "complete",
+          "title": "Retained per-agent historical maintenance outside readiness and live response publication; 50 installed tests passed; deployed in generation 71; all three agents recovered and real Pi response confirmed"
+        },
+        {
+          "id": "M4d3",
+          "status": "qualified_rollout_pending",
+          "title": "Positive no-native-admission retirement; 61 installed Nexus cases, 38 Core cases and 70 distinct Connector cases qualified; global rollout pending"
+        },
+        {
+          "id": "M4d4a",
+          "status": "core_foundation_qualified",
+          "title": "Physical journal registry port and SQLite adapter; 44 installed Core cases passed; host integration and audit frontier pending",
+          "core_commit": "2afb894",
+          "evidence_repository": "okto-nexus-connector-core",
+          "evidence": [
+            "plans/runtime-lifecycle-m4d4.md",
+            "plans/runtime-lifecycle-m4d4-results.json"
+          ]
+        },
+        {
+          "id": "M4d4b",
+          "status": "qualified_rollout_pending",
+          "title": "Host physical registration and retained store lifetime; 37 initial and 26 final Nexus installed cases, 118 Connector cases plus one platform skip; audit frontier pending"
+        },
+        {
+          "id": "M4d4c1",
+          "status": "core_foundation_qualified",
+          "title": "Durable physical ledger identity; 14 focused source and 27 installed registry/capacity tests passed, including legacy registration migration. Cross-store binding and audit frontier pending",
+          "core_commit": "10906e9",
+          "evidence_repository": "okto-nexus-connector-core",
+          "evidence": [
+            "plans/runtime-lifecycle-m4d4c1.md"
+          ]
+        },
+        {
+          "id": "M4d4c2",
+          "status": "qualified_rollout_pending",
+          "title": "Bind Nexus reset generations to physical Core ledger identity; 17 focused source and 20 installed cases passed, including reset and cold restore; audit frontier pending",
+          "evidence": [
+            "m4d4c2-validation.md"
+          ]
+        },
+        {
+          "id": "M4d4c3",
+          "status": "qualified_rollout_pending",
+          "title": "Bind Connector state to Core physical ledger identity before daemon readiness; 200 selected source, 8 focused source and 32 final installed cases passed",
+          "connector_commit": "1e9f768",
+          "evidence_repository": "okto-nexus-connector",
+          "evidence": [
+            "plans/runtime-lifecycle-m4d4c3.md"
+          ]
+        },
+        {
+          "id": "M4d4d",
+          "status": "qualified_rollout_pending",
+          "title": "Convert legacy physical journals into Core's registry in retained bounded background pages; selected source campaigns, 11 installed cases and a separate 100k retained-history cost case passed; audit frontier pending",
+          "evidence": [
+            "m4d4d-validation.md"
+          ]
+        },
+        {
+          "id": "M4d4e1",
+          "status": "core_foundation_qualified",
+          "title": "Transactional Core registry hash-chain head with bounded resumable legacy conversion; 21 source, 21 installed registry/cost, 43 installed capacity and 27 installed Nexus composition cases passed; cross-store audit frontier pending",
+          "core_commit": "1d38900",
+          "evidence_repository": "okto-nexus-connector-core",
+          "evidence": [
+            "plans/runtime-lifecycle-m4d4e1.md",
+            "m4d4e-frontier-protocol.md",
+            "m4d4e1-validation.md"
+          ]
+        },
+        {
+          "id": "M4d4e2",
+          "status": "core_foundation_qualified",
+          "title": "Core stages an opaque audit nonce only at an exact complete registry head; 32 source and 35 installed cases passed including 100k registry cost; host handshake pending",
+          "core_commit": "905ad8f",
+          "evidence_repository": "okto-nexus-connector-core",
+          "evidence": [
+            "plans/runtime-lifecycle-m4d4e2.md"
+          ]
+        },
+        {
+          "id": "M4d4e3",
+          "status": "qualified_rollout_pending",
+          "title": "Nexus persists the matching Core audit nonce after import and full directory audit; 27 source and 27 installed store/import/reset cases passed; startup still runs the full scan",
+          "evidence": [
+            "m4d4e3-validation.md"
+          ]
+        },
+        {
+          "id": "M4d4e4",
+          "status": "qualified_rollout_pending",
+          "title": "Connector stores matching Core audit token in schema 15 from a retained background worker; 39 source and 39 installed selected tests passed; no admission change or load guarantee",
+          "connector_commit": "8a9ee1e",
+          "evidence_repository": "okto-nexus-connector",
+          "evidence": [
+            "plans/runtime-lifecycle-m4d4e4.md"
+          ]
+        },
+        {
+          "id": "M4d4e5",
+          "status": "qualified_rollout_pending",
+          "title": "Shared Core rule fences definite same-identity physical-ledger rollback before Nexus or Connector admission; 21 installed Core, 10 Connector and 7 Nexus focused cases passed",
+          "core_commit": "9c3d4dd",
+          "connector_commit": "df41f82",
+          "evidence": [
+            "m4d4e5-validation.md",
+            "Core: plans/runtime-lifecycle-m4d4e5.md"
+          ]
+        },
+        {
+          "id": "M4d4e6",
+          "status": "qualified_rollout_pending",
+          "title": "Sparse Core digest checkpoints prove forward-head prefixes with at most 128 row hashes; 26 installed Core, 7 Nexus and 11 Connector focused cases passed; physical anomaly policy pending",
+          "core_commit": "7e1a19d",
+          "connector_commit": "76dda1e",
+          "evidence": [
+            "m4d4e6-validation.md",
+            "Core: plans/runtime-lifecycle-m4d4e6.md"
+          ]
+        },
+        {
+          "id": "M4d4f1",
+          "status": "measurement_complete_optimization_pending",
+          "title": "Measured physical name audit at 1k/10k/100k real files: 0.159/1.634/27.520s, with the 100k run instrumented at every SQLite VM step; retained the startup fence because offline filesystem changes are not attested",
+          "evidence": [
+            "m4d4f1-physical-audit-measurement.md",
+            "tools/benchmark_runtime_directory_audit.py"
+          ]
+        },
+        {
+          "id": "M4d4f2",
+          "status": "installed_checkpoint_ui_pending",
+          "title": "Admission audit rejects non-files with registered journal or ledger names; 3 source and 3 installed-wheel tests passed; 10k-file audit measured 0.997s without a comparable load baseline",
+          "evidence": [
+            "m4d4f2-typed-entry-validation.md"
+          ]
+        },
+        {
+          "id": "M4d4g",
+          "status": "installed_checkpoint_ui_pending",
+          "title": "Measured 100k mixed registry and terminal capacity records at 256,573,440 bytes; Core default ledger growth ceiling raised from 64 to 512 MiB; 15 source and 15 installed Core tests, Nexus manifest and Connector packaging passed",
+          "core_commit": "9b84aa4",
+          "evidence": [
+            "m4d4g-mixed-ledger-budget.md",
+            "Core: plans/runtime-lifecycle-m4d4g-mixed-capacity.md"
+          ]
+        },
+        {
+          "id": "M4d4h",
+          "status": "installed_stream_fairness_verified_retention_pending",
+          "title": "Connector event replay rotates one bounded page per stream; an injected local ACK failure does not starve a sibling. Fifty adjacent tests passed in source and installed wheel; the store's 4096-stream lifetime cap and safe retirement remain pending.",
+          "connector_commit": "08aa171",
+          "evidence": [
+            "Connector: plans/runtime-lifecycle-m4d4h-stream-fairness.md"
+          ]
+        },
+        {
+          "id": "M4d4i",
+          "status": "installed_terminal_checkpoint_verified_historical_scale_pending",
+          "title": "Server-accepted releases retire event streams from active replay while retaining exact final ACK proof. Seventy-one installed-wheel tests passed, including the 4096-active-stream boundary and crash recovery between stores. Core historical scanning and reconciliation-only release retirement remain pending.",
+          "connector_commit": "56222d1",
+          "evidence": [
+            "Connector: plans/runtime-lifecycle-m4d4i-terminal-stream-checkpoints.md"
+          ]
+        },
+        {
+          "id": "M4d4j",
+          "status": "installed_pending_claim_projection_verified_reconciliation_only_pending",
+          "title": "Core retains immutable claims and indexes pending reconciliation claims. Connector retires a claim after Server-accepted release, repairs interrupted cross-store updates and scans only pending claims in report and launch recovery. With three pending claims across 1k/10k/100k history, SQLite VM steps were 176/106/106; 23 Core and 53 Connector final-wheel tests passed.",
+          "core_commit": "e37fd3a",
+          "connector_commit": "19a0825",
+          "connector_validation_commit": "4415306",
+          "evidence": [
+            "Core: plans/runtime-lifecycle-m4d4j-pending-claims.md",
+            "Connector: plans/runtime-lifecycle-m4d4j-pending-reconciliation.md"
+          ]
+        },
+        {
+          "id": "M4d4k",
+          "status": "installed_reconciled_release_retirement_verified_historical_backfill_pending",
+          "title": "Accepted reconciliation proof retires terminal event and Core claim checkpoints using the final watermark. Independent maintenance does not gate Ready and reconnect repairs interrupted commits. The installed Connector wheel passed 56 focused and 57 adjacent tests; histories above the 4096-row pre-ready pass remain unqualified.",
+          "connector_commit": "1e770f6",
+          "evidence": [
+            "Connector: plans/runtime-lifecycle-m4d4k-reconciled-release-retirement.md"
+          ]
+        },
+        {
+          "id": "M4d4l",
+          "status": "installed_remote_ui_restart_recovery_verified_backfill_pending",
+          "title": "Disposable installed Nexus/Connector/Core wheels passed the major real Meta-harness remote-Pi delivery gate before and after a Nexus-only restart. Connector ticket recovery was corrected for a Server-renewed active ticket after the local age hint expired. A second restart rejoined before ticket expiry without operator action. Installed Connector tests: 53 focused and 66 adjacent passed on final rerun.",
+          "connector_commit": "081fd26",
+          "evidence": [
+            "Nexus: plans/runtime_lifecycle/m4l-ui-recovery.md",
+            "Connector: plans/runtime-lifecycle-m4l-ticket-replacement.md"
+          ]
+        },
+        {
+          "id": "M4d4m",
+          "status": "installed_historical_release_backfill_verified",
+          "title": "Reconnect repairs one bounded resolved-release page before readiness; accepted reconciliation continues indexed checkpoint cleanup independently. Installed tests passed 29/29, including a 4097-release admission case and a 129-release background completion case. With three pending releases, indexed lookups stayed under 200 SQLite VM steps against 1k/10k/100k retired rows. The physical directory admission fence remains intact.",
+          "connector_commit": "58d1ef8",
+          "connector_validation_commit": "ffc90d1",
+          "evidence": [
+            "Connector: plans/runtime-lifecycle-m4m-historical-backfill.md"
+          ]
+        }
+      ],
+      "nexus_m4a_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4a-validation.md",
+      "next": null,
+      "nexus_m4b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4b-validation.md",
+      "nexus_m4c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4c-validation.md",
+      "nexus_m4d1_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d1-validation.md",
+      "nexus_m4d2_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d2-validation.md",
+      "nexus_m4d3_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d3-results.json",
+      "nexus_m4d4b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d4b-results.json",
+      "final_qualification": "Indexed pending claims and releases, bounded historical backfill, durable terminal checkpoints and fair replay passed installed Core/Connector tests at 1k/10k/100k history. The retained physical-name admission fence was measured separately and remains linear. A separate local Connector reconnected and delivered through the real UI after Nexus-only restart. Core/Connector CI passed 8/8 each; Nexus installed CI 39472894540 passed 24/24. The global CI-wheel rollout preserved history and delivered a new Pi turn with durable ACK and proven session retirement. Physical remote-host qualification remains outside local acceptance. See m4-final-acceptance.md."
+    },
+    {
+      "id": "M5",
+      "status": "complete",
+      "title": "Shared local and remote lifecycle",
+      "evidence": [
+        "m5a-consumers.md",
+        "m5a-consumers-results.json",
+        "m5b-startup-refusal.md",
+        "m5b-results.json",
+        "m5c-prelease-refusal-design.md",
+        "m5c-core-contract.md",
+        "m5c-inband-checkpoint.md",
+        "m5d-replay-checkpoint.md",
+        "m5e-installed-process-restart.md",
+        "m5f-refusal-forgery-matrix.md",
+        "m5g-uncertain-native-open.md",
+        "m5h-capacity-forgery.md",
+        "m5i-capacity-field-matrix.md",
+        "m5j-managed-no-effect-claim-gap.md",
+        "m5k-ui-capacity-recovery.md",
+        "m5l-ui-new-agent-while-remote-offline.md",
+        "m5m-ui-active-reconciliation-isolation.md",
+        "m5n-native-decision-test-frontier.md",
+        "m5o-inflight-native-decision-owner-race.md",
+        "m5p-embedded-native-action-owner-race.md",
+        "m5q-connector-native-action-owner-race.md",
+        "m5r-managed-binding-isolation.md",
+        "m5s-differential-recovery-reset-check.md",
+        "m5t-ui-local-remote-restart.md",
+        "m5u-ui-revocation.md",
+        "m5v-ui-preserve-reset.md",
+        "m5w-ui-connector-preserve-reset.md",
+        "m5x-differential-evidence-audit.md",
+        "m5y-separate-process-receipt-recovery.md"
+      ],
+      "commits": {
+        "core_foundation": "19bb8f2",
+        "core_m5c_contract": "4e67dc0",
+        "core_m5c_channel": "2cefaa9",
+        "connector_m5c_inband": "9093b86",
+        "core_m5d_replay": "99bdd00",
+        "connector_m5d_replay": "dca2cc7",
+        "m5b_nexus_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m5b-startup-refusal.md",
+        "m5b_connector_commit_lookup": "git -C ../okto-nexus-connector log --format=%H --diff-filter=A -- plans/runtime-lifecycle-m5b.md"
+      },
+      "next": null
+    },
+    {
+      "id": "M6",
+      "status": "complete",
+      "title": "Independent supervisor experiment and decision",
+      "evidence": [
+        "Connector: plans/runtime-lifecycle-m6-supervisor-adr.md",
+        "Connector: plans/runtime-lifecycle-m6a-named-pipe.md",
+        "Connector: plans/runtime-lifecycle-m6b-pipe-client.md",
+        "Connector: plans/runtime-lifecycle-m6c-process-exit.md",
+        "m6d-real-ui.md",
+        "m6e-paired-connector-abort.md",
+        "m6f-paired-ui-checkpoint.md",
+        "m6g-inflight-server-restart.md",
+        "m6h-process-open-stop.md",
+        "m6i-process-publication-stop.md",
+        "m6j-managed-host-restart.md",
+        "m6k-upgrade-rollback.md",
+        "m6l-supervisor-decision.md"
+      ],
+      "commits": {
+        "connector_experiment_adr": "0944a0e",
+        "connector_m6a": "521f7b9",
+        "connector_m6b": "986178d",
+        "connector_m6c": "14b2249"
+      },
+      "experiment_design": "Connector plans/runtime-lifecycle-m6-supervisor-adr.md defines existing daemon/Core host comparison, Windows IPC and authority constraints. M6a opt-in named pipe reached the actual dispatcher/Core host in a separate disposable process. M6b synchronous CLI client authenticated, pinged, read status, reconnected and shut down that real daemon. M6c shutdown joins a stalled authentication read and fixes Windows process identity falsely treating an exited, still-handle-backed daemon as live. Sixteen selected source and twenty installed-wheel tests passed at M6c, including default daemon process lifecycle. M6d used installed Nexus/Core/Connector artifacts, a separate named-pipe daemon and real Pi via the Nexus UI. Three turns returned exact responses with 1/1 ACK. A retained Nexus restart recovered the same remote configuration automatically; a controlled embedded-owner failure was replaced within the same HTTP process, after which the existing Connector Pi session answered again. First and post-restart Pi opens still took about 96/106 seconds to reach harness ready. M6d is a partial gate, not a host adoption decision; default transport unchanged.",
+      "real_ui_checkpoint": {
+        "id": "M6d",
+        "status": "partial_pass",
+        "evidence": "m6d-real-ui.md",
+        "provider": "Pi 0.87.1; installed Nexus 0.3.1, Connector 0.0.10, Core 0.0.12",
+        "responses": 3,
+        "acknowledged": 3,
+        "nexus_restart_reconnected_without_manual_agent_action": true,
+        "embedded_owner_replaced_same_http_process": true,
+        "warm_one_shot_pool_tested": false,
+        "in_flight_control_interruption_tested": false
+      },
+      "paired_connector_checkpoint": {
+        "id": "M6e",
+        "status": "aborted_at_fixed_memory_floor",
+        "evidence": "m6e-paired-connector-abort.md",
+        "paired_configuration_created": true,
+        "remote_binding_connected": true,
+        "real_message_comparison_tested": false,
+        "free_memory_gib_at_abort": 3.17,
+        "second_attempt_free_memory_gib_at_abort": 4.04,
+        "second_attempt_ipc_transport": "loopback",
+        "fixed_floor_gib": 4
+      },
+      "paired_ui_checkpoint": {
+        "id": "M6f",
+        "status": "partial_pass",
+        "evidence": "m6f-paired-ui-checkpoint.md",
+        "provider": "Pi 0.87.1; installed Nexus 0.3.1, Connector 0.0.10, Core 0.0.12",
+        "embedded_one_shot_warm_response": true,
+        "connector_one_shot_warm_response": true,
+        "remote_response_after_nexus_restart": true,
+        "acknowledged": 3,
+        "in_flight_control_interruption_tested": false
+      },
+      "inflight_restart_checkpoint": {
+        "id": "M6g",
+        "status": "inflight_restart_pass_other_m6_cuts_pending",
+        "evidence": "m6g-inflight-server-restart.md",
+        "connector_reconnected_without_manual_action": true,
+        "one_visible_reply_and_ack": true,
+        "one_file_effect": true,
+        "exact_native_receipt_correlation": true,
+        "native_dispatch_attempts": 1,
+        "native_receipt_stages": [
+          "SUBMITTED",
+          "SUCCEEDED"
+        ]
+      },
+      "open_stop_checkpoint": {
+        "id": "M6h",
+        "status": "local_process_boundary_pass",
+        "evidence": "m6h-process-open-stop.md",
+        "separate_connector_process": true,
+        "opening_held_until_original_producer_settled": true,
+        "all_four_installed_variants_passed": true
+      },
+      "publication_stop_checkpoint": {
+        "id": "M6i",
+        "status": "local_process_boundary_pass",
+        "evidence": "m6i-process-publication-stop.md",
+        "durable_bind_commit_held_through_shutdown": true,
+        "all_five_installed_variants_passed": true
+      },
+      "managed_host_restart_checkpoint": {
+        "id": "M6j",
+        "status": "local_windows_process_boundary_pass",
+        "evidence": "m6j-managed-host-restart.md",
+        "lease_expired_before_restart": true,
+        "managed_native_stop_proof": "CONTAINER_STOPPED",
+        "physical_slot_released_after_proof": true,
+        "native_dispatch_attempts": 1,
+        "all_nine_selection_variants_passed": true
+      },
+      "upgrade_rollback_checkpoint": {
+        "id": "M6k",
+        "status": "local_version_boundary_pass",
+        "evidence": "m6k-upgrade-rollback.md",
+        "old_connector_version": "0.0.9",
+        "old_core_version": "0.0.11",
+        "current_connector_version": "0.0.10",
+        "current_core_version": "0.0.12",
+        "incompatible_state_schema_refused": true,
+        "rollback_refusal_preserved_eight_file_hashes": true,
+        "current_host_reconnected_after_refusal": true,
+        "protocol_negotiation_tested": false
+      },
+      "adoption_decision": {
+        "id": "M6l",
+        "evidence": "m6l-supervisor-decision.md",
+        "choice": "retain_embedded_default",
+        "separate_supervisor": "experimental_opt_in",
+        "availability_improvement_demonstrated": false,
+        "local_connector_process_working_set_mb_observed": 96.1,
+        "physical_remote_host_qualified": false
+      },
+      "next": null
+    },
+    {
+      "id": "M7",
+      "status": "complete",
+      "title": "Budgeted parallel startup and pool scheduling",
+      "evidence": [
+        "m3g-pool-refusal.md",
+        "m3h-startup-observation.md",
+        "m3h-results.json",
+        "m7-pi-cold-cost.md",
+        "m7b-passive-budget.md",
+        "m7c-remote-open-receipts.md",
+        "m7e-ui-pool-burst.md",
+        "m7f-ui-concurrent-cold.md",
+        "m7g-immediate-startup-budget.md",
+        "m7h-ui-queue-capacity.md",
+        "m7i-ui-delayed-native-start.md",
+        "m7k-ui-queue-deadline.md",
+        "m7m-ui-embedded-queue-expiry.md",
+        "m7n-ui-claude-codex-warm-cold.md",
+        "m7o-load-protocol.md",
+        "m7o-installed-load-results.md",
+        "m7o-results.json",
+        "m7p-unlimited-ui-budget.md",
+        "m7q-unlimited-integrated-concurrency.md",
+        "m7r-ui-unlimited-and-expired-grant.md",
+        "Core: plans/runtime-lifecycle-m7b-passive-budget.md",
+        "Connector: plans/runtime-lifecycle-m7c-remote-opening.md",
+        "Connector: plans/runtime-lifecycle-m7d-shared-selection.md",
+        "Connector: plans/runtime-lifecycle-m7f-post-environment.md"
+      ],
+      "commits": {
+        "core_m7b": "ab87980",
+        "nexus_m7b": "3d30341",
+        "connector_m7b": "19427c2",
+        "connector_m7c": "20abb83",
+        "connector_m7d": "b39cc65"
+      },
+      "next": null
+    },
+    {
+      "id": "M8",
+      "status": "complete",
+      "title": "Installed-package qualification and rollout",
+      "evidence": [
+        "m8-uic-installed-ui.md",
+        "m8-ci-triage.md",
+        "m8-offline-backup-checkpoint.md",
+        "m8-global-preupgrade-backup.md",
+        "m8-global-backup-migration-rehearsal.md",
+        "m8-global-rollout-capacity.md",
+        "m8-ci-pi-bridge-timeout.md",
+        "m8-ci-presence-race.md",
+        "m8-ci-claude-teardown.md",
+        "m8-ci-handoff-inventory-refresh.md",
+        "m8-same-load-comparison.md",
+        "m8-fixed-acceptance-audit.md",
+        "m8-final-meta-results-20261019.png",
+        "m8-final-pi-terminal-20261019.png",
+        "m8-final-agents-20261019.png",
+        "m8-final-graph-20261019.png",
+        "m8-final-prewheel-backup.md",
+        "m8-global-ci-wheel-rollout.md"
+      ],
+      "ci_checkpoint": "Core 39180450008 and Connector 39204601574 passed. Nexus installed matrix 39292190027 on 1902baa was canceled after 13 successes, five classified failures and six obsolete Windows jobs in progress. Those failures were corrected and focused installed Windows/Linux cases passed. Replacement full matrix 39305360323 on 9e16d60 exposed two further Ubuntu pre-reservation STALE_OBSERVATION fixture races, in remote unsent release and running-work containment. Each fixture now retries only that no-effect result with a bounded wait and exact attempt identity; the affected cases passed on installed Windows and Linux wheels (1/1 and 2/2 respectively). Other matrix jobs remain active, so another complete run is required after classification. Earlier wheel 8c18c8d4 passed real Claude UI turns before and after disposable restart with 1/1 ACK and Online/Ready restoration. See m8-ci-triage.md and m8-uic-installed-ui.md. M8 acceptance and global rollout remain open.",
+      "current_ci_checkpoint": "Nexus installed matrix 39472894540 passed 24/24 jobs on commit 252788f across Ubuntu and Windows, Python 3.11-3.13. The final Windows wheel SHA-256 d7471125aa4096de9b8c29e4e22252e812d0b228e54f67647d9d3c6554d33e92 matches its CI installed manifest and the global installed direct_url.json. Core 0.0.12 and Connector 0.0.10 pinned CI wheels remain installed. See m8-global-ci-wheel-rollout.md.",
+      "global_rollout_capacity": "The CI wheel from matrix 39472894540 runs globally on port 8202 after a validated offline backup. Schema 152 retains seven agents, six handoffs, three artifacts and zero FK violations. Pi, Claude and Codex show Online. A new Pi Meta-harness turn returned exact M8_PI_CI_WHEEL_OK with 1/1 ACK and NATIVE_ACCEPTED. Its session retired; the configured Pi pool returned to 4/5 available with four native children under one Server. See m8-global-ci-wheel-rollout.md.",
+      "same_load_comparison": "Installed Nexus 0.3.0/Core 0.0.11 and Nexus 0.3.1/Core 0.0.12 each passed the same NS14 fixture on one Windows 11 host and Python 3.13.1: 100k identities, 20 correct queue refusals and independent control/second-executor progress. Current identity phase was 92.10s versus baseline 73.78s, total 219.98s versus 171.62s, control 2.091s versus 0.907s. One sample each; no speedup claimed. Fixture-only independent synthetic heartbeat corrected a peer disconnect in the HTTP phase; both versions used the same fixture. See m8-same-load-comparison.md.",
+      "fixed_gate_audit": "The fixed M8 installed matrix, reversible backup/upgrade, same-load comparison, real UI-A/B/C local flows and global CI-wheel post-install turn passed. The independent physical remote host was explicitly deferred by the user; the same-host Connector gate is qualified. The cause of a pre-rollout global Server stop was not established. See m8-fixed-acceptance-audit.md.",
+      "offline_backup_checkpoint": "Disposable UI-C home backed up and restored offline with installed Nexus. A transient SQLite WAL/SHM manifest mismatch was corrected by closing copy connections and using immutable destination reads. The corrected 112-file snapshot revalidates after database reopen; schema-151 code refuses restored schema 152 without changing its ledger. Three focused installed Windows tests passed. The restored home booted on isolated port 8204 from the installed package, returned HTTP 200, retained seven agents/338 messages/one artifact, and was stopped with the port free. See m8-offline-backup-checkpoint.md. The subsequent three-harness final-wheel UI check is recorded separately; installed CI and controlled rollout remain pending.",
+      "additional_ci_finding": "Nexus matrix 39305360323 Ubuntu 3.12 shard 0 passed 1172 cases and failed one asynchronous local-retirement assertion after exact handoff capacity release. The test now awaits the same session's durable retirement proof, with a 30-second bound; the exact case passed against installed Linux and Windows packages. Other jobs remain active. See m8-ci-triage.md.",
+      "final_ci_run": "Nexus installed matrix 39318164167 was dispatched on 95770d3. Ubuntu 3.11 shard 2 passed 1086 cases but failed two backup tests that retained SQLite connections after snapshot access. Explicit close passed the complete installed Windows module (10/10) and both exact installed Linux cases (2/2); product code is unchanged. Other final-matrix jobs remain active. The obsolete matrix 39305360323 was canceled after its last two jobs were duplicated by active final-matrix shards. No full pass claimed. See m8-ci-triage.md.",
+      "global_backup_checkpoint": "With the global Nexus stopped and no listener on 8202/8204, installed Nexus 0.3.1 created and independently validated an offline backup of the generation-73 home. Its ignored local manifest covers 407 files, 225503491 bytes, schema 145, 7 agents, 325 messages, 337 deliveries, 6 handoffs and 3 artifacts. No global upgrade or native launch occurred. See m8-global-preupgrade-backup.md.",
+      "global_backup_migration_rehearsal": "The installed Nexus 0.3.1 backup procedure restored the validated generation-73 snapshot to a new disposable directory without native processes. Offline MigrationRunner applied schema 146-152. Counts remained 7 agents, 325 messages, 337 deliveries, 6 handoffs and 3 artifacts, with zero foreign-key violations. A scoped HTTP boot with harness integrations disabled returned 200 and stopped with port 8204 free. The original snapshot and global home were untouched. See m8-global-backup-migration-rehearsal.md.",
+      "final_ui_checkpoint": "Installed Nexus wheel 0d4c1ade with Core 0.0.12 and Connector 0.0.10 served a disposable UI-C home. Through the real Meta-harness browser, Claude, Codex and Pi each returned a unique exact final response with 1/1 ACK. Their deliveries are read, results PUBLISHED, and sessions CLOSED/CLOSED with retirement proof. Pi terminal showed formatted input and final output. Agents and Graph showed all three local runtimes Online while disconnected remote Pi stayed Offline. Browser and scoped server were stopped; port 8204 is free. See m8-uic-installed-ui.md and four committed screenshots. Full CI, same-load comparison and controlled rollout remain pending.",
+      "commits": {
+        "connector_installed_processes": "a7dd588"
+      },
+      "installed_process_checkpoint": {
+        "passed": 11,
+        "skipped": 0,
+        "changed_inputs": [],
+        "evidence": "../okto-nexus-connector/plans/runtime-lifecycle-m8-process-results.json",
+        "scope": "Real isolated Windows daemon processes, actual CLI exit, bad-token rejection, singleton and restrictive Job Objects. No provider or physical remote-host qualification."
+      },
+      "final_global_backup_checkpoint": "The current schema-152 home was backed up offline before the final wheel install and independently validated: 434 files, 250005763 bytes, seven agents, 336 messages, 348 deliveries, six handoffs, three artifacts. See m8-final-prewheel-backup.md.",
+      "final_global_ui_checkpoint": "The real Meta-harness UI sent a private Techridy message to Pi after the qualified CI-wheel install. It displayed 1/1 ACK and the exact response M8_PI_CI_WHEEL_OK; its terminal showed formatted input and the final turn. The DB records read/NATIVE_ACCEPTED and the consumed session CLOSED/CLOSED with retirement proof. Agents showed Pi, Claude and Codex Online; Pi pool showed 4/5 available. See m8-global-ci-wheel-rollout.md."
+    }
+  ],
+  "open_findings": [
+    {
+      "id": "L1",
+      "milestone": "M3",
+      "priority": "high",
+      "status": "fixed_targeted_validation",
+      "description": "Late lease application reproduced with unchanged identity; independent scheduler and observed-cost margin validated by source and installed tests. Full load qualification remains in M7/M8."
+    },
+    {
+      "id": "L2",
+      "milestone": "M3",
+      "priority": "medium",
+      "status": "closed",
+      "description": "Startup test now observes retained recovery worker result with bounded wait; installed restart cases passed."
+    },
+    {
+      "id": "L3",
+      "milestone": "M3",
+      "priority": "high",
+      "status": "historical_not_reproduced_current_installed_load",
+      "current_qualification": "M7o: 18/18 installed real Pi one-shot UI calls succeeded with exact replies, ACK and pool replenishment; original M1 refusal frontier/cause remains unproven. See m3v-current-availability-audit.md.",
+      "description": "Two Pi warm replacements failed BINDING_NOT_AUTHORIZED during M1 live UI campaign, without birth records; later refill succeeded automatically. Exact refusal frontier absent from receipts; not attributed to L1 without evidence."
+    },
+    {
+      "id": "L4",
+      "milestone": "M3",
+      "priority": "high",
+      "status": "fixed_live_validation",
+      "description": "M2e live HTTP startup waited about 2m20s for initial Pi build-identity inventory scan; stack dump confirms dependency through EmbeddedInventoryOwner.start. Separate owner claim from background initial discovery with retry and retained shutdown. M3c global rollout and second normal boot served HTTP before per-agent recovery; see m3c-ui-recovery.md."
+    },
+    {
+      "id": "L5",
+      "milestone": "M8",
+      "priority": "external",
+      "status": "open",
+      "description": "M2e real Codex request delivered and acknowledged, but provider returned usageLimitExceeded. Pi and Claude succeeded. Full three-provider UI success cannot be claimed; no quota bypass or repeated requests."
+    },
+    {
+      "id": "L6",
+      "milestone": "M3",
+      "priority": "medium",
+      "status": "partially_fixed_installed_validation",
+      "description": "Local contact is now refreshed only by current owner heartbeat; stale or replaced owner cannot preserve Ready. 46 source/installed cases passed (M3d), global rollout pending. Accessible ACK discrepancy did not recur in M3c; no ACK fix claimed."
+    },
+    {
+      "id": "L7",
+      "milestone": "M3",
+      "priority": "critical",
+      "status": "fixed_live_validation",
+      "description": "M2e Pi recurrence diagnosed: three claimed openings without births had no original-owner containment path after native factory failure. Shared Core fix passed installed process tests. Joint M3c rollout automatically contained all three retained launches; Pi and Claude replied via Meta-harness. M3c then shut down gracefully in 6.46s and recovered all agents after restart, with a fresh Pi response. Initial CONFIG_ERROR subtype remains unproven. See m3c-ui-recovery.md."
+    },
+    {
+      "id": "L8",
+      "milestone": "M6",
+      "priority": "high",
+      "status": "open",
+      "description": "M3c generation 68 process absent when UI was revisited, last access log 20:58:19 UTC, no recorded normal shutdown/traceback or matching Application Error event. Cause/initiator unproven. Logs preserved; generation 69 recovered all agents and Pi answered. Supervisor/host-lifetime qualification must distinguish host termination from runtime faults."
+    },
+    {
+      "id": "L9",
+      "milestone": "M3",
+      "priority": "critical",
+      "status": "fixed_deployed",
+      "description": "Generation 69: RECOVERY_PUBLICATION_DELAYED diagnostic write timed out and escalated to host containment, stranding all local agents. M3f makes transient diagnostic persistence best-effort without changing receipt/authority durability. Origin of initial writer delay unproven. Global generation 70 recovered all agents; Graph presence confirmed. Pi and Claude replied through the real Meta-harness with 1/1 ACK on generation 70. M4d2 narrows diagnostic fallback to RECOVERY_PUBLICATION_DELAYED only; other durable recovery evidence stays required."
+    },
+    {
+      "id": "L10",
+      "milestone": "M6",
+      "priority": "high",
+      "status": "qualified_rollout_pending",
+      "description": "Contained embedded owner replacement waits for retained cleanup and claims the exact predecessor generation. Source, installed and real Pi UI qualification passed; same HTTP process recovered and served new work without replay. Caller interruption notice is covered by L18. Production generation 73 still runs M3i; rollout pending. See m3k-owner-replacement.md and m3k-real-ui.md."
+    },
+    {
+      "id": "L11",
+      "milestone": "M4",
+      "priority": "high",
+      "status": "fixed_deployed",
+      "description": "First global M4d1 migration: Pi stayed RECOVERING until 03:03:20.844Z after host ready at 02:54:18Z. Closed-history retirement still precedes agent READY; certificates progressed 3/18/55 then readiness after first page. Move verified historical maintenance outside admission while retaining exact release/publication proofs; qualify with real retained history. CPU was saturated in one observation, not an attribution of the complete delay. M4d2 separates historical checkpoints from READY and live response publication; 50 installed tests passed. Real retained-history latency qualification remains pending. Deployed in generation 71; Pi reached READY in about 8s, but this boot reused earlier checkpoints and is not a controlled first-backfill comparison."
+    },
+    {
+      "id": "L12",
+      "milestone": "M3",
+      "priority": "medium",
+      "status": "mitigated_current_installed_ui_original_cause_unproven",
+      "current_qualification": "AgentsView visibility/focus refresh is in commit 7ad675a; UI-A existing tab recovered LIVE/Online after abrupt restart without reload. Original stale display cause remains unproven. See m3v-current-availability-audit.md.",
+      "latest_evidence": "m3m-agent-status-refresh.md: At 13:04-13:11 UTC generation 73 and the /api/v1/agents response showed Pi, Claude and Codex Ready/present; the operator confirmed that reloading Agents changed the displayed Recovering state to Online. A visibility/focus refresh mitigation is source-built but not deployed. Cause of the original display remains unproven.",
+      "description": "Agents initially displayed old RECOVERING until Refresh Agents while all three backend recovery rows were READY; subsequent view mount showed ONLINE. Existing poll pauses when document.hidden; cause not yet attributed and no frontend fix claimed. Follow-up 06:44–06:46 UTC 2026-10-17: generation 72 CONTROL_READY; Pi/Claude/Codex READY and Online in both existing Chrome tabs without reload/restart, four Pi WARM slots, renewed leases. Cause remains unproven. Follow-up 07:30–07:32 UTC again READY/Online with renewed leases and Pi 4 WARM; stale last-contact display observed but cause not proven. One delayed Pi publication did not change durable readiness. Follow-up 07:52 UTC: generation 73 CONTROL_READY, all three READY/Online, Pi four WARM and no backoff. Both existing tabs Online without reload; one retained 07:32 last-contact while the other showed current heartbeat. Cause of the original Recovering report remains unproven. See m3i-ui-rollout.md. Follow-up 08:42-08:43 UTC: generation 73 CONTROL_READY, three agents READY/Online in both existing tabs without reload, four Pi WARM and no pending deliveries. No newer durable recovery event after initial readiness at 07:46 UTC; cause remains unproven. Follow-up 09:25-09:27 UTC: user again reported all Recovering. Read-only inspection found generation 73 CONTROL_READY with fresh heartbeat, Pi/Claude/Codex READY, four Pi WARM slots and no pending deliveries. Both existing 8202 Chrome tabs displayed Online without reload or restart; one had an older last-contact observation. AgentsView polling skips hidden documents and has no visibility-change refresh, but this does not establish the cause of the reported Recovering state. Requested the affected screen/address; finding remains open. Follow-up 09:58-09:59 UTC: same production PID 32480 and generation 73, CONTROL_READY with fresh heartbeat; all three local agents READY since 07:46 UTC, Pi four WARM and no pending deliveries. Both existing browser tabs displayed Local Online without refresh, reload or restart. One tab retained an older last-contact observation (09:37 UTC). No causal attribution or deployed fix claimed. Follow-up 10:55-10:58 UTC: same PID 32480 and generation 73, fresh CONTROL_READY; both existing Agents tabs show the three local agents Online without refresh/restart. Second tab still displays 09:59 last-contact. Unlike previous observations, Pi has four post-startup recoveries, with version_probe_timeout logged before containment and automatic READY at 10:34:29 UTC. Claude/Codex recovery rows remain READY since 07:46 UTC; no evidence establishes a simultaneous three-agent recovery. Pi has four WARM slots and four direct child node processes. Probe timeout cause and reported simultaneous Recovering remain unproven. See recovering-20261017-1055.md."
+    },
+    {
+      "id": "L13",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "fixed_live_validation",
+      "description": "Generation 70 Pi has four warm STARTING slots with FAILED/NONE sessions, terminal dispatch refusals (CONFLICT, possible_effect=false) and no Core receipts. Pool settlement recognizes CLOSED lease or failed Core receipt but misses pre-Core refusal. Pi UI response used fifth on-demand slot. Require exact durable no-send proof, never infer safe release from FAILED/NONE alone. Exact message matched dispatch inventory freshness refusal. M3g recognizes the terminal pre-Core refusal with no lease, stream, receipt or publication; 18 installed tests passed. Globally deployed in generation 71; old slots were reclaimed, four new warm sessions became available, a real UI call used one and its replacement restored 4/5 availability."
+    },
+    {
+      "id": "L14",
+      "milestone": "M3",
+      "priority": "high",
+      "status": "qualified_current_warm_load_global_rollout_pending",
+      "current_qualification": "M3i generation 73 admitted four Pi warm opens in 141 ms after Ready; M7o installed UI passed 18/18 Pi one-shot calls with pool replenishment. See m3v-current-availability-audit.md.",
+      "description": "Generation 71 agents reached READY within about 8s, but first new warm reservations appeared about 4m46s after recovery began. Inventory worker observed in fingerprint/discovery; full interval also includes publication/backoff and is not wholly attributed to hashing. Need per-harness effective readiness and lower-cost initial discovery; do not relax inventory freshness or ownership checks. Four warm sessions and real Pi UI response eventually succeeded automatically. M3h parallel passive discovery measured 10.74-13.94s versus 21.75-21.94s serial with identical evidence. Startup readiness no longer inflates warm failure backoff (L15). Installed tests passed; global rollout and independent per-harness publication/readiness remain pending. M3h rolled out with M3j in generation 72. First UI Pi call waited 127.439s to RUNNING and completed in 137.667s; next warm call ran after 0.569s and completed in 7.060s. Initial observation/readiness latency remains unresolved. M3i independent producers globally deployed in generation 73. Pi READY 07:46:24 UTC; four warm opens admitted within 141 ms at 07:46:32. First real UI request at 07:47:00 reached RUNNING after 0.6952s, completed after 10.2113s, and pool replenished automatically. Single functional sample, not full initial-readiness/load qualification."
+    },
+    {
+      "id": "L15",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "fixed_deployed",
+      "description": "Pool attempted four speculative starts before current inventory existed and counted admission refusals as warm failures; two rounds can grow backoff to 256s without native startup. Reproduced before fix. Await current host/agent/inventory prerequisites before warm reservation; nine all-harness regression cases and the 46-case installed campaign passed. Actual startup interval attribution remains incomplete; global rollout pending. M3h deployed with M3j generation 72; four warm sessions restored automatically. Historical ended warm sessions still count as actual failures; no manual backoff edit."
+    },
+    {
+      "id": "L16",
+      "milestone": "M3",
+      "priority": "critical",
+      "status": "fixed_live_validation",
+      "description": "Generation 71 status write in EmbeddedAgentRecovery.fail timed out and contained the shared host, leaving all local agents recovering. M3j scopes transient renewal and recovery-status persistence failures, retains exact installed lease ACK and enforces an in-memory agent fence before dispatch. 43 campaign cases passed; generation 72 restored all agents and real Pi/Claude replies. Original writer holder and first error are not conclusively attributed; sanitized first-error logging added. General owner replacement remains L10."
+    },
+    {
+      "id": "L17",
+      "milestone": "M3",
+      "priority": "high",
+      "status": "installed_and_real_pi_ui_validated",
+      "description": "Reset previously completed before preserved selected inventory was accepted. It now remains reconnecting until usable selected observations, with independent admission reopened. Installed reset and isolation cases passed. Disposable real UI idle and in-flight Pi resets preserved connection/key/workspace configuration and immediately admitted subsequent new messages, which returned with 1/1 ACK without manual review/reload. Full provider/Connector matrix remains a separate gate. See m3k-reset-ui.md."
+    },
+    {
+      "id": "L18",
+      "milestone": "M3",
+      "priority": "high",
+      "status": "qualified_rollout_pending",
+      "description": "Proven release of an unfinished persistent turn now queues an idempotent original-caller status reply separately from native results. Five focused source cases passed; final installed artifact qualified across 59 distinct cases, with two rollback-test races corrected by waiting for the real notice before exact baseline capture (no implementation change). Real Pi UI displayed one interruption notice and a subsequent successful reply after automatic owner replacement. Pending-index scan is independent of historical rows. Global rollout pending; see m3k-real-ui.md and m3k-notifications-results.json."
+    },
+    {
+      "id": "L19",
+      "milestone": "M4",
+      "priority": "high",
+      "status": "qualified_global_rollout_complete",
+      "description": "Review reproduced embedded shutdown missing a ledger created after its initial snapshot: no runtime tasks remained but the ledger still answered queries. Final storage fence now rejects late construction; ledger-opening failure retires effect-free composition and the fence cannot reopen. 11 source and 26 final installed cases passed; standalone installed reproduction no longer leaks. Not attributed to the production Recovering report; no global rollout. See m4d4b-validation.md.",
+      "current_qualification": "See m4-final-acceptance.md and m8-global-ci-wheel-rollout.md."
+    },
+    {
+      "id": "L20",
+      "milestone": "M3",
+      "priority": "high",
+      "status": "embedded_windows_startup_boundaries_qualified_platform_rollout_pending",
+      "description": "M3l isolated post-authorization embedded startup failures; M5b isolated Connector preparation failures. M3p proves pre-authorization isolation, restart after Core fact before Server receipt and exact consumed-capacity release (39 source/4 installed). M3q proves storage interruption retains only the failed session and retries (one source/one installed). M3r proves interruption after Core runtime composition remains session-scoped on no-claim/no-birth proof (41 source/6 installed Nexus/20 Core). M3s proves a real Windows Job-owned child failing after spawn retains possible effect, receives CONTAINER_STOPPED before slot release, reports caller error and preserves a healthy sibling; one source, one installed, two installed crash frontiers and one installed uncertain-birth recovery passed. The fixed local Connector differential criteria were already completed in M5x/M5y; M5g's synthetic uncertain opening remains a narrower physical observation, not a new M5 gate. Other platforms and global rollout remain pending. None is proven to explain the reported simultaneous Recovering state. See m3l-session-isolation.md, m5b-startup-refusal.md, m3p-preauthorization-session-refusal.md, m3q-startup-refusal-storage-boundary.md, m3r-authorizer-interruption.md, m3s-positive-native-effect-isolation.md, m5x-differential-evidence-audit.md and m5y-separate-process-receipt-recovery.md."
+    },
+    {
+      "id": "L21",
+      "milestone": "M3",
+      "priority": "high",
+      "status": "qualified_disposable_ui_global_rollout_pending",
+      "description": "Pi's three-second owned version probe failed in real Nexus installation verification and a first connection test. Direct healthy Node bundle version took 2.593s. M3n extends only Pi's probe deadline to 10s; three source and three isolated installed tests passed. An installed disposable Nexus/Core test then verified the real Pi connection, two Meta-harness turns with 1/1 ACK, normal shutdown/restart, automatic READY/Online and a post-restart 1/1 ACK. The first new Pi session took about 162s to become ready; exact phase attribution and M7 load qualification remain open. Global generation 73 is unchanged. See m3n-pi-probe-ui.md."
+    },
+    {
+      "id": "L22",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "partially_fixed_installed_real_ui",
+      "description": "Disposable installed Pi UI first delivery spent 73s in a pre-spawn runtime.open that returned BINDING_NOT_AUTHORIZED, then safely retried after host_dispatch_not_started/native_write_not_started proof. Its successful second open took 83s; a post-restart open took 42s. Renewed leases were present, but the stable receipt lacks the pre-spawn failure frontier. M7c read-only durable receipts from a later real Connector/Pi UI test measured 94.498s and 104.522s from two runtime.open creations to first SUBMITTED receipt. Phase tracing of another installed real Pi UI opening then measured ten full dependency-closure hashes consuming 122.957s of a 146.316s opening. Connector 20abb83 removed four redundant rehashes while keeping full initial, Core pre-spawn and post-environment checks; the new installed wheel made six hashes consuming 46.706s of a 61.994s opening, with final response and ACK 1/1. M7d shared the first qualified selection across trusted Connector layers and reduced the count to four hashes consuming 27.198s of a 39.311s real installed UI open, again with exact Pi response and ACK 1/1. Each comparison is a single uncontrolled sample, not a load distribution; four hashes and UI-B remain. See m3n-pi-probe-ui.md, m7c-remote-open-receipts.md and Connector plans/runtime-lifecycle-m7d-shared-selection.md."
+    },
+    {
+      "id": "L23",
+      "milestone": "M3",
+      "priority": "high",
+      "status": "qualified_current_installed_ui_historical_cause_unproven",
+      "current_qualification": "Core 0.0.12 current installed wheel includes lease ID rotation fix; UI-A and M7o qualified real harness responses after its installation. Historical receipt did not identify the refusal stage. See m3v-current-availability-audit.md.",
+      "description": "Core f5325af fixes a reproducible Pi pre-spawn native-action refusal during valid lease ID rotation; red/green test matches the historical UI trace but the historical stable receipt lacks stage, so causality is not conclusive. Eight focused source and installed cases plus one installed bridge case passed. Nexus and Connector vendor exact Core wheel 95a6238deae20d1a98ea8c8a44dcb808c24e037eb01e0d38163265fc1dc72193. Real UI requalification of this exact artifact remains pending; global generation 73 untouched. See m3n-pi-probe-ui.md."
+    },
+    {
+      "id": "L24",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "measured_design_pending",
+      "description": "Read-only profiling of the real local Pi installation (14,097 closure entries) measured full build identity at 13.185s, selected fingerprint at 0.913s and three stat-only signatures at 1.290-1.864s. Core prepare and open each recompute full identity, contributing about 26s before native startup at this measured rate. Preserve a full pre-spawn validation while removing redundant work within one admitted open; actual per-open stage trace and load qualification remain pending. See m7-pi-cold-cost.md."
+    },
+    {
+      "id": "L25",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "installed_checkpoint_ui_pending",
+      "description": "Core 680c677 defers the duplicate full Pi build hash from non-effectful runtime prepare to admitted open, which retains full identity validation before capacity reservation or spawn. 88 source and 11 isolated installed tests passed; real Pi prepare_launch measured 0.651s deferred versus 8.300s full in one warm-cache run. Nexus/Connector vendor exact Core wheel f0d6c9141ce59c04e01c419711b2b1e40f026ff99ba79c88c157f95da36ca457. UI-B, per-frontier trace and latency distribution remain pending. Global generation 73 untouched. See Core runtime-lifecycle-m7a-cold-preparation.md."
+    },
+    {
+      "id": "L26",
+      "milestone": "M7",
+      "priority": "medium",
+      "status": "installed_checkpoint_ui_pending",
+      "description": "Core ab87980 gives passive Pi identity discovery a two-reader budget while admitted open retains four; both still hash every file and produce identical content identity. 100 selected source and 100 isolated installed-wheel tests passed. Nexus and Connector vendor wheel d9cf577731e123c417eb731c6b34b5e6fa208be7f33d86441e426c8fedadc1e8. No comparable real-host CPU/latency distribution or UI-B claim; global Nexus remains stopped. See m7b-passive-budget.md."
+    },
+    {
+      "id": "L27",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "installed_real_ui_partial",
+      "description": "Connector M7f removes one duplicate full Pi dependency-closure read after materializing the launch environment, only for an exact host-produced approved callback. Arbitrary callbacks retain the host's independent full check and Core still fully qualifies before spawn. Executable drift during secret resolution is refused. Source and isolated installed-wheel suites each passed 98 selected cases; Connector wheel SHA-256 7267f377ebcfce175c11828f2fe4febd0d1d2f75010b622e01372b7c93fd7b67. In a disposable real Pi UI pair, a warm turn succeeded in 6.413s; an admitted cold open and independent pool replenishment overlapped, reached first receipts in 47.319s and 38.260s, and each made three full Pi identity calls. Both exact responses appeared with ACK 1/1 and the pool returned to 1/2 available. These are uncontrolled samples; UI-B and a latency distribution remain pending. Global Nexus unchanged. See Connector plans/runtime-lifecycle-m7f-post-environment.md and m7f-ui-concurrent-cold.md."
+    },
+    {
+      "id": "L28",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "installed_real_ui_partial",
+      "description": "Immediate one-shot handoff admission previously capped startup at 60s despite a 300s configured queue/start-wait policy, while ordinary queued admission used the full policy. Real Pi queued cold opens measured 89.063s and 65.565s in M7e; direct handoff failure at that duration is inferred, not observed. M7g gives immediate admission the configured start-wait deadline and retains expiration fencing and physical-slot containment. A 90s simulated healthy cold start now proceeds. Final installed Nexus wheel f5f26b2e6d29f3658c77ef7c6fb3716df31130cb569f18b5adc3cd53a0913aba and current Connector wheel passed 67 focused cases including separate Connector processes; frontend build and installed UI text checked. In a disposable real-UI broadcast handoff with warm 0, Pi auto-claimed and completed with exact result; durable cold open took 37.737s, so the former 60s cap was not exercised there. M7i later exercised it with 114.152s open and controlled native delay. UI-B remains pending. See m7g-immediate-startup-budget.md and m7i-ui-delayed-native-start.md."
+    },
+    {
+      "id": "L29",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "installed_real_ui_partial",
+      "description": "An installed disposable Nexus/Connector/Pi UI sample set one-shot max 1, warm 0, queue 1 and 300s start wait. Three real UI sends returned exact Pi markers and 1/1 ACK; a fourth was visibly refused with ONE_SHOT_CAPACITY_EXCEEDED and no sent message. Durable opens, turns and closes succeeded serially, with each new open after its predecessor's close. Fixture drained empty; global Nexus remained stopped. Queue deadline, wider load distribution, embedded comparison and other harnesses remain pending. See m7h-ui-queue-capacity.md."
+    },
+    {
+      "id": "L30",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "installed_real_ui_partial",
+      "description": "A disposable installed Nexus/Connector/Pi UI broadcast handoff completed after a 114.152s runtime.open containing a controlled 75s delay inside real Pi native startup; exact result M7J_HANDOFF_OK and managed-request ACK 1/1. An earlier injection between binding and Core.open crossed lease renewal, was safely fenced before execution as PRE_EXECUTION_FENCED, and sent a one-shot error to the operator; its test handoff was cancelled via UI. The Connector and Nexus fixture drained with no resources/errors, global Nexus remained stopped. No natural latency distribution, queue deadline, embedded comparison or other harnesses claimed. See m7i-ui-delayed-native-start.md."
+    },
+    {
+      "id": "L31",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "installed_real_ui_partial",
+      "description": "Installed disposable Nexus/Connector/Pi UI set one-shot max 2, warm 1, queue 1 and 5s start-wait. Three near-simultaneous private sends produced exact M7K_C_OK from the warm slot, ONE_SHOT_START_TIMEOUT for an admitted cold opening, and ONE_SHOT_QUEUE_EXPIRED for the queued call. Both no-effect retry-safe failures reached Meta-harness; the cold runtime.open completed late without running its expired turn and became the configured warm slot. Connector CLI stop and Nexus fixture DRAINED with empty resources/errors; no port remained. Embedded comparison, other harnesses, agent creation during recovery and a latency distribution remain pending. See m7k-ui-queue-deadline.md."
+    },
+    {
+      "id": "L32",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "installed_checkpoint_major_ui_pending",
+      "description": "M7i forensic review found a consumed capacity admission, PRE_EXECUTION_FENCED Core opening with possible_effect=0/retry_safe=1, no turn receipt, CLOSED/CLOSED session and a broadcast handoff left CLAIMED past lease expiry. Migration 151 and the bounded scheduler now recheck exact no-effect/physical-release proof, atomically reopen the claim, retire the old attempt and cool only that agent for 15-300s; ambiguous cases remain claimed. Eight focused and three selected integration cases passed in source and isolated installed Nexus; the final wheel a98b2ee35f18d04360306da2291f5a839bf13e9974179d48d4ccb7ab09e5727a passed the focused cases and candidate pagination. The actual runner upgraded a copy of the historical UI database from 150 to 151 without losing the attempt or breaking foreign keys. New real UI and embedded/Connector differential validation remain pending. See m5j-managed-no-effect-claim-gap.md."
+    },
+    {
+      "id": "L33",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "installed_real_ui_partial",
+      "description": "Installed disposable Nexus/Core and real Pi 0.87.1 UI registered a new embedded one-shot agent with the same max 2/warm 1/queue 1/5s policy as Connector M7k. The connection test passed and Agents showed 1/2 ready. Three near-simultaneous Meta-harness sends yielded exact M5J_C_OK with ACK 1/1 plus two caller-visible ONE_SHOT_START_TIMEOUT outcomes without native execution; the pool returned to 1/2. One queued call was admitted before its queue deadline, so the error split differed from M7k's queue expiry. This is a partial embedded comparison, not an M5j handoff recovery proof or full UI-B gate. Fixture DRAINED empty and exited, with global Nexus stopped. See m7l-ui-embedded-queue.md."
+    },
+    {
+      "id": "L34",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "installed_real_ui_reopen_verified_completion_pending",
+      "description": "A real Meta-harness broadcast handoff to remote Pi hit an authenticated initial LEASE_REVALIDATION_REQUIRED no-effect receipt, then remained CLAIMED because the unsent initial turn was still ACCEPTED. The refusal receipt now settles that child before commit; 18 focused proof, refusal and restart tests passed. The isolated installed Nexus 0.3.1 wheel d8f2109cac3eaee1316ed209c7a19112db14cd1c302b3887da31d30f55a4599c resumed the disposable fixture, settled retained history and reopened the same handoff in the UI. The old attempt became FAILED_NO_EFFECT with a 15s agent cooldown, with no duplicate native turn. The Connector then entered repeated reconciliation of older fixture history, so eventual Pi completion and the 75s pre-Core delay remain unproven in this run. No global rollout. See m5j-ui-initial-lease-refusal.md."
+    },
+    {
+      "id": "L35",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "installed_real_ui_recovery_and_completion_verified",
+      "description": "Connector M5k releases only initial lease-refusal capacity with a durable no-effect receipt and no native claim or launch. Fifteen focused cases passed. Installed Connector 0.0.10 reconciled 21 retained operations on its first new control attempt without restarting the disposable Nexus; all four refused opening slots became RELEASED. The real UI showed a five-second one-shot start deadline for Pi; the operator saved 300 seconds through Connections. After cooldown the original broadcast handoff was claimed, the native Pi one-shot returned M5J_RECOVERY_OK, Handoffs displayed COMPLETED, and its slot was RELEASED. Connector control remained CONTROL_READY with zero consecutive failures. Global Nexus was untouched. Separate-host, other-harness and broader M7 load qualification remain pending. See m5k-ui-capacity-recovery.md and Connector runtime-lifecycle-m5k-denied-capacity.md."
+    },
+    {
+      "id": "L36",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "installed_real_ui_partial",
+      "description": "With the disposable remote Connector stopped and m6d-pi Offline, the operator created and configured a new embedded Pi in the same M6D workspace through Agents. Its real connection test passed, Agents showed the new local agent Online, and Meta-harness received exact M5L_LOCAL_OK with ACK 1/1 while the remote remained unavailable. After Connector restart with the fixture file vault, first-attempt control became CONTROL_READY and Connected; both agents appeared Online and the remote Pi returned exact M5L_REMOTE_OK with ACK 1/1. The isolated installed Nexus and Connector suites passed six initial-refusal restart and 15 denied-operation cases respectively. This is a real offline-isolation/reconnect slice; creation during an active long-running reconciliation and full cross-host differential equivalence remain open. See m5l-ui-new-agent-while-remote-offline.md."
+    },
+    {
+      "id": "L37",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "installed_real_ui_active_reconciliation_verified",
+      "description": "With controlled reconcile.report refusals, the separate local Connector was alive but RECOVERING through 19 failed attempts, and Agents showed remote m6d-pi Offline. During active recovery, the real UI created and connected a new embedded Pi in the same workspace. It returned exact M5M_LOCAL_OK with durable read and ACK 1/1. Removing the fault restored remote CONTROL_READY/CONNECTED without a restart. A subsequent inventory-publication transport interruption briefly reconnected on its own; the queued remote message was then read and returned exact M5M_REMOTE_OK with NATIVE_ACCEPTED and ACK 1/1. This verifies the active-reconciliation isolation slice, not the full M5 differential matrix or UI-B load distribution. Global Nexus was untouched. See m5m-ui-active-reconciliation-isolation.md."
+    },
+    {
+      "id": "L38",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "installed_fixture_frontier_qualified_race_pending",
+      "description": "The remote native-decision fixture failed before execution with inventory_not_fresh because its synthetic discovery callback did not accept the independent observer's adapter_ids/cancel_requested parameters. It now waits for accepted selected-adapter observation separately from CONTROL_READY. In the installed environment, four remote approval/input roundtrips and 11 embedded owner-replacement cases passed; the matching embedded approval case also passed. Production code was unchanged. The explicit in-flight native-decision/replacement-owner race remains open. See m5n-native-decision-test-frontier.md."
+    },
+    {
+      "id": "L39",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "installed_inflight_native_decision_race_verified",
+      "description": "Three embedded adapters and one automatic local Connector exercised held native approval and input callbacks against owner replacement. The remote link closed and its lease expired before each callback was released; no successor was execution-ready or native process marked stopped while an effect was possible. Afterwards the Connector reconnected in a higher generation. All eight source cases passed in 120.39s and the corresponding installed cases passed. Each retained one SUBMITTED receipt, one physical reply, an idempotent decision replay and no second dispatch attempt. No production code changed. Other native-action races and M5 differential cases remain open. See m5o-inflight-native-decision-owner-race.md."
+    },
+    {
+      "id": "L40",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "installed_embedded_native_action_owner_race_verified",
+      "description": "A real embedded Pi native bridge handoff claim committed before its HTTP response was held across owner failure. The old owner remained until release, then drained before replacement. The caller received epoch 1; durable state had one native-action receipt and one handoff.claimed event. The old capability material was removed from the vault and refused by the Server after its session closed. Source and installed cases passed (16.89s and 15.94s). No production code changed. Connector and pre-commit cases remain open. See m5p-embedded-native-action-owner-race.md."
+    },
+    {
+      "id": "L41",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "installed_connector_native_ingress_owner_race_verified",
+      "description": "The local Connector's approved Pi runtime received a handoff.claim through its actual loopback JSONL ingress. Holding capability metadata before the canonical call yielded no effect after owner closure; holding the HTTP response after one fake canonical effect retained the owner until settlement and did not replay the claim. The socket observer closed while the Core backend task remained owned. Forty-one adjacent cases passed in both source and isolated installed environments. No production code or global Nexus process changed. This is Connector ingress ownership evidence, not durable Server state or a physical remote-host check. See m5q-connector-native-action-owner-race.md."
+    },
+    {
+      "id": "L42",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "installed_managed_cross_binding_isolation_verified",
+      "description": "For Codex, Pi and Claude, a synthetic native preparation failure in a second approved Connector binding produced a terminal no-effect receipt while the first binding's session and shared control connection stayed available. A turn on the healthy session and a later opening on the failed binding succeeded. Thirteen adjacent cases passed in both source and isolated installed environments. No production code or global Nexus process changed. The fixture uses synthetic native peers, not real providers or a physical remote host. See m5r-managed-binding-isolation.md."
+    },
+    {
+      "id": "L43",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "installed_differential_slices_verified_ui_pending",
+      "description": "Selected installed-wheel tests passed for preserve-agents reset and its data/fence behavior (10 embedded), real loopback Connector/Server reset, revocation, presence and active disconnect (4), embedded process exit and delayed-stop revocation (4), and Connector cleanup/reconnect/revoked-binding behavior (5). These are passing slices with synthetic native peers, not a paired real-UI run with the same provider/fault timing. The final M5/UI-B comparison remains restricted to reconnect, revocation and preserve-agents reset; no production code or global Nexus process changed. See m5s-differential-recovery-reset-check.md."
+    },
+    {
+      "id": "L44",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "installed_real_ui_local_remote_restart_verified",
+      "description": "In the disposable installed Nexus 0.3.1 at 127.0.0.1:8204, Agents showed remote Pi Offline before its retained Connector 0.0.10 daemon started and Online/Connected afterwards; embedded Pi remained Online. Two new Meta-harness messages to real Pi on remote and embedded paths each returned an exact marker with 1/1 ACK, durable read and NATIVE_ACCEPTED outbox. Core 0.0.12 was installed. This verifies paired real-Pi restart/reconnect delivery, not reset, revocation or a latency distribution. The global Nexus listener remained stopped. See m5t-ui-local-remote-restart.md."
+    },
+    {
+      "id": "L45",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "installed_real_ui_embedded_queue_expiry_verified",
+      "description": "Installed disposable Nexus 0.3.1 and real Pi 0.87.1 embedded one-shot used max 2, warm 1, queue 1, and a 5s start deadline. Three prepared Meta-harness tabs sent concurrently: the short request returned exact M7_TAB_QUEUE_OK with 1/1 ACK, while the two other calls returned caller-visible ONE_SHOT_START_TIMEOUT and ONE_SHOT_QUEUE_EXPIRED, both execution_started=false/possible_effect=false/retry_safe=true. Agents returned to 1/2 available. This matches the Connector-local queue deadline split in M7k. The scoped fixture and port 8204 stopped; the global Nexus remained untouched. Codex/Claude and controlled latency distributions remain pending. See m7m-ui-embedded-queue-expiry.md."
+    },
+    {
+      "id": "L46",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "installed_real_ui_claude_codex_warm_cold_verified",
+      "description": "Installed disposable Nexus 0.3.1/Core 0.0.12 and real Claude Code 2.1.301/Codex CLI 0.162.1 were configured through Agents as embedded one-shot max 2/warm 1/queue 1. Both connection tests passed. Two concurrent Meta-harness messages per harness returned exact markers with 1/1 ACK: warm starts took 1.606s Claude and 2.024s Codex; cold starts took 47.310s Claude and 56.306s Codex. Durable turn.submit sessions were distinct, and the cold runtime.open started after admission. Agents returned to 1/2 available for both. A controlled p50/p95/p99 distribution remains the fixed M7 gate. See m7n-ui-claude-codex-warm-cold.md."
+    },
+    {
+      "id": "L47",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "load_protocol_fixed_before_run",
+      "description": "The remaining installed M7 load gate is pre-registered as six three-call UI bursts per real Pi/Claude/Codex harness, one harness at a time, max 2/warm 1/queue 1/start 300s, with a 4 GiB free-memory abort threshold. Browser and durable timestamps plus read-only queue-state polling will produce empirical p50/p95/p99 with sample counts and failures retained. No result is claimed yet. See m7o-load-protocol.md."
+    },
+    {
+      "id": "L48",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "installed_real_ui_load_distribution_verified",
+      "description": "The fixed M7o installed-local protocol ran 54 Meta-harness browser sends to real Claude, Codex and Pi (18 each, six three-call bursts per harness). All 54 calls succeeded with exact unique replies, read delivery, NATIVE_ACCEPTED ACK and distinct one-shot turn sessions; each harness peaked at two open-to-close campaign sessions and returned to 1/2 warm availability. Empirical p50/p95/p99 for UI send, warm dispatch, cold open, observed queue and queued wait are recorded with sample counts. The lowest pre-burst free RAM was 5.20 GiB above the 4 GiB abort floor; no continuous memory trace or population tail guarantee is claimed. The scoped Nexus fixture and browser stopped, port 8204 is free, and global Nexus stayed stopped. See m7o-installed-load-results.md and m7o-results.json."
+    },
+    {
+      "id": "L49",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "installed_real_ui_revocation_isolation_verified",
+      "description": "The installed UI exercised real Pi revocation on a separate local Connector and on embedded runtime. Remote and local baseline messages returned exact markers with read/NATIVE_ACCEPTED/1-of-1 ACK. Deactivating remote Pi made it Offline while embedded Pi returned an exact post-revoke marker; deactivating one embedded Pi made it Offline and removed it from Meta-harness recipient choices while another embedded Pi returned an exact marker. The remote Connector remained AUTH_FAILED after UI reactivation during the observation window; no automatic reauthorization is claimed. The scoped fixture was stopped. See m5u-ui-revocation.md."
+    },
+    {
+      "id": "L50",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "installed_real_ui_embedded_preserve_reset_verified_remote_pending",
+      "description": "The UI preserve-agents reset safely refused an intentionally inconsistent Server snapshot whose generation lagged the Connector journal, leaving all 7 agents/284 messages/6 bindings and other history intact. In a new isolated Server home, a real Pi embedded connection with one READY/ACTIVE session and exact baseline response was reset through Settings with preservation checked. Counts changed from 2 agents/1 workspace/1 binding/1 session/3 messages to 2/1/1/0/0; Agents returned Online, and a new exact response had read/NATIVE_ACCEPTED/1-of-1 ACK on a fresh READY/ACTIVE session. The real Connector reset comparison remains the fixed M5 criterion. The scoped fixture was stopped. See m5v-ui-preserve-reset.md."
+    },
+    {
+      "id": "L51",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "installed_real_ui_connector_preserve_reset_verified_restart_recovery_failed",
+      "description": "The installed UI configured a real Pi on a same-machine Connector and confirmed baseline exact response/1-of-1 ACK. Preserve-agents reset initially refused because remote close lacked the authenticated dashboard operator actor; no history was deleted. The correction passed a targeted test. Repeating the UI reset preserved 3 agents/1 workspace/2 bindings while clearing 2 sessions/8 messages/8 deliveries/10 events. Connector remained CONTROL_READY and returned exact M5W_REMOTE_AFTER_RESET_OK with 1-of-1 ACK. An independently expired 60-minute embedded grant was renewed through the UI; after FAILED/NONE released-session filtering was corrected, local Pi returned exact M5W_LOCAL_REAUTHORIZED_OK with 1-of-1 ACK. Extra forced Server restarts used to install the correction exposed persistent Connector reconnect failure (4406) even after a controlled daemon restart. A direct R4 hello to the same executor succeeded; daemon-path root cause remains open under the pre-existing M8 restart/recovery criterion. See m5w-ui-connector-preserve-reset.md."
+    },
+    {
+      "id": "L52",
+      "milestone": "M8",
+      "priority": "high",
+      "status": "installed_connector_post_reset_restart_recovery_verified",
+      "description": "The Connector's durable journal retained already-released claims after preserve-agents reset removed canonical Server execution history; strict reconciliation rejected them with WebSocket 4406. The Server now accepts only syntactically valid, released prior-reset remote claims without applying them to current state. Targeted tests passed 16 cases, including invalid claim variants and strict malformed-report rejection. The unchanged local Connector automatically reached CONTROL_READY after a forced restart of the installed Nexus 0.3.1, and the real Pi returned exact M8_INSTALLED_RESTART_OK through Meta-harness with 1-of-1 ACK. A timed 60-minute runtime grant expired during an intermediate attempt and was changed through the UI to unlimited before installed verification; no broader M8 qualification or physical remote host is claimed. See m8a-connector-reconnect-after-reset.md."
+    },
+    {
+      "id": "L53",
+      "milestone": "M4",
+      "priority": "high",
+      "status": "superseded_by_terminal_stream_retirement",
+      "description": "Connector pre-ready event replay now rotates one finite page per stream. A failure applying the first stream's Core ACK leaves its remote ACK durable while a second stream advances, and a retry applies the retained ACK without resend. Fifty adjacent source and installed-wheel tests passed. The event store rejects a 4097th lifetime stream; safe retirement or a larger store with resumable scanning and full M4 qualification remain open. See Connector plans/runtime-lifecycle-m4d4h-stream-fairness.md.",
+      "current_qualification": "See m4-final-acceptance.md and m8-global-ci-wheel-rollout.md."
+    },
+    {
+      "id": "L54",
+      "milestone": "M7",
+      "priority": "high",
+      "status": "installed_real_ui_unlimited_two_open_overlap_verified_three_parallel_pending",
+      "description": "In a disposable installed Nexus/Core fixture, Agents saved a real Pi embedded one-shot policy with max_parallel=0 and showed Unlimited capacity. Three Meta-harness calls returned exact distinct markers, each with 1-of-1 ACK and a distinct terminal one-shot session. Durable runtime.open records show two overlapping openings, not three. Free RAM fell from 10.77 to 4.58 GiB; the next burst was aborted at the pre-existing 4 GiB safety floor. No test Pi process remained after closure, and free RAM returned to 10.68 GiB after the scoped Nexus stopped. Above-two concurrency and RAM attribution remain unqualified. See m7p-unlimited-ui-budget.md."
+    },
+    {
+      "id": "L55",
+      "milestone": "M4",
+      "priority": "high",
+      "status": "superseded_by_pending_claim_and_release_backfill",
+      "description": "Connector 0.0.10 now retires a stream from active replay only after a durable Server-accepted session release, retaining the final remote/Core ACK and exact release proof. Seventy-one focused and adjacent tests passed against the freshly installed wheel, including the 4096-active-stream limit, admission after retirement, idempotent crash repair and old-schema migration. No UI run was done at this technical checkpoint. Core historical claim scanning, reconciliation-only release retirement and 1k/10k/100k pending-proportional qualification remain open. See Connector plans/runtime-lifecycle-m4d4i-terminal-stream-checkpoints.md.",
+      "current_qualification": "See m4-final-acceptance.md and m8-global-ci-wheel-rollout.md."
+    },
+    {
+      "id": "L56",
+      "milestone": "M4",
+      "priority": "high",
+      "status": "superseded_by_reconciled_release_retirement",
+      "description": "Core 0.0.12 retains immutable claim history while a partial index exposes only pending claims. Connector 0.0.10 checkpoints that projection after durable Server-accepted release and repairs interrupted event/Core/outbox commits; report and launch recovery use pending pages. With three pending claims and 1k/10k/100k history, SQLite VM steps were 176/106/106 and the installed report emitted one three-claim page at each size. Final wheels passed 23 Core, 53 focused Connector and 65 adjacent Connector tests; two adjacent fixtures were corrected for required recovery authority and the already-current schema 15. Reconciliation-only release retirement, resumable older-history backfill and the major real UI gate remain open. See Core plans/runtime-lifecycle-m4d4j-pending-claims.md and Connector plans/runtime-lifecycle-m4d4j-pending-reconciliation.md.",
+      "current_qualification": "See m4-final-acceptance.md and m8-global-ci-wheel-rollout.md."
+    },
+    {
+      "id": "L57",
+      "milestone": "M4",
+      "priority": "high",
+      "status": "superseded_by_historical_release_backfill",
+      "description": "A durable accepted reconciliation proof now supplies final watermark and separate recovery digest for terminal event and Core claim checkpoints. Cleanup starts after acceptance in an independent task, with a repeated accepted cycle requesting a rescan; reconnect repairs interrupted updates. Schema 5 indexes direct and reconciliation-resolved releases. The final isolated installed Connector 0.0.10 wheel passed 56 focused and 57 adjacent tests, including background nonblocking behavior, proof tampering rejection and schema migration. Histories above the 4096-row pre-ready checkpoint pass and the major Nexus UI gate remain open. See Connector plans/runtime-lifecycle-m4d4k-reconciled-release-retirement.md.",
+      "current_qualification": "See m4-final-acceptance.md and m8-global-ci-wheel-rollout.md."
+    },
+    {
+      "id": "L58",
+      "milestone": "M4",
+      "priority": "high",
+      "status": "superseded_by_historical_release_backfill",
+      "description": "The major disposable real-UI gate sent remote Pi messages through Nexus Meta-harness before and after a Nexus-only restart. Both yielded exact replies and 1/1 acknowledgement. The first restart exposed a Connector ticket-recovery error: local intent age implied expiry while the Server still held a renewed active derivative. Connector now validates the Server's active-ticket reference, persists an explicit replacement and retries within three attempts. Corrected installed wheel passed 53 ticket/HTTP and 66 adjacent daemon tests on final rerun. A second Nexus-only restart rejoined before active-ticket expiry without operator action; Agents showed remote Pi Online. The global Nexus stayed stopped. Historical backfill above the 4096-row pre-ready pass and the physical directory audit remain open. See Nexus plans/runtime_lifecycle/m4l-ui-recovery.md and Connector plans/runtime-lifecycle-m4l-ticket-replacement.md.",
+      "current_qualification": "See m4-final-acceptance.md and m8-global-ci-wheel-rollout.md."
+    },
+    {
+      "id": "L59",
+      "milestone": "M4",
+      "priority": "high",
+      "status": "installed_historical_release_backfill_verified",
+      "description": "The reconnect path now retires at most one 128-row resolved release page before reconciliation, then the accepted-cycle background worker continues the indexed backlog independently. Checkpoints retain durable progress across interruptions. Installed Connector 0.0.10 wheel passed 29/29 focused tests, including 4097 accepted rows without a Ready refusal and 129 rows completed after accepted reconciliation. With three pending releases, indexed lookup cost remained under 200 SQLite VM steps at 1k/10k/100k retired rows. The physical unknown-file admission fence and controlled global rollout remain pending. See Connector plans/runtime-lifecycle-m4m-historical-backfill.md."
+    },
+    {
+      "id": "L60",
+      "milestone": "M5/M7/UI-B",
+      "priority": "high",
+      "status": "installed_local_ui_flows_verified_acceptance_audit_pending",
+      "description": "A requirement-by-requirement UI-B evidence audit found existing real-UI coverage for embedded/Connector Pi delivery and preserve reset, warm/cold Pi/Claude/Codex load, queue overflow/deadline errors, agent creation during active Connector reconciliation, revocation and restart. A targeted installed-wheel UI check found the selected Graph detail retained an old Offline snapshot after Agents had returned Online. GraphView now reads its selected node from the latest snapshot. With the same detail panel open, a scoped Connector stop/restart produced present→offline→present without reselecting. A new remote Pi Meta-harness message had exact UIB_GRAPH_TERMINAL_OK reply, read/NATIVE_ACCEPTED delivery, 1/1 ACK, and formatted input/final output in the live terminal. The global Nexus stayed stopped. M5 same-evidence differential acceptance and M7 unlimited mode above two simultaneous real instances remain unqualified. See ui-b-evidence-audit.md."
+    },
+    {
+      "id": "L61",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "fixed_outcomes_verified_separate_connector_receipt_fault_pending",
+      "description": "Audited the five fixed M5 acceptance cases without adding requirements. With pytest source imports disabled, installed wheels passed 18 paired embedded/Connector bridge cases, three selected receipt-failure cases and two embedded restart/recovery cases. Real UI M5t/M5m/M5u/M5v/M5w and M8a cover reconnect, isolation, revocation and preserve-agents reset with real local Pi. The remaining process-boundary comparison is receipt loss/recovery with a separate Connector daemon; the current fault test uses a real loopback WebSocket but runs its daemon in-process. See m5x-differential-evidence-audit.md. The global Nexus remained stopped."
+    },
+    {
+      "id": "L62",
+      "milestone": "M5",
+      "priority": "high",
+      "status": "local_acceptance_complete",
+      "description": "A separate Windows Connector process lost the terminal close receipt request before Server commit, retained its Core fact and publication, then reconnected automatically. The Server reached SUCCEEDED with one canonical close receipt, one native open/close and no second dispatch attempt; the Connector returned to CONTROL_READY in a newer generation. Three installed-wheel cross-process variants passed together, and the fault variant passed again with the explicit readiness assertion. This closes the local M5 receipt-loss process-boundary comparison alongside M5x. Real Pi UI coverage for the other fixed criteria is in M5t/M5m/M5u/M5v/M5w. Physical remote-host qualification is deferred as the plan states. See m5y-separate-process-receipt-recovery.md."
+    },
+    {
+      "id": "L63",
+      "milestone": "M7/UI-B",
+      "priority": "high",
+      "status": "integrated_unlimited_four_concurrent_real_host_budget_pending",
+      "description": "Installed Nexus 0.3.1 with Connector 0.0.10 and Core 0.0.12 passed six parameterized integrated cases, with pytest source imports disabled. Pi, Codex and Claude adapters each ran four independently opened one-shot sessions concurrently under max_parallel=5 and max_parallel=0, completed all four calls and refilled four warm slots. Native peers were deterministic. M7p previously delivered three real Pi UI calls in unlimited mode but only two openings overlapped as free RAM approached the fixed 4 GiB floor. The physical real-harness above-two observation remains open; no extra burst was forced on the current host. See m7q-unlimited-integrated-concurrency.md."
+    },
+    {
+      "id": "L64",
+      "milestone": "M7/UI-B",
+      "priority": "high",
+      "status": "local_acceptance_complete",
+      "description": "A copied UI fixture with an expired Codex runtime grant exposed repeated permanently denied native opens while three calls stayed ADMITTED. Nexus now forwards proved pre-Core PERMISSION_DENIED/possible_effect=false to waiting calls of the same configuration, stopping the retry loop. Twelve targeted source tests and four installed-wheel selected tests passed. After UI grant renewal, three real Codex one-shot calls ran concurrently in three native processes, all returned exact distinct replies with 1/1 ACK and SUCCEEDED. Local M7/UI-B criteria are complete within the user-selected Connector-local topology; physical remote-host qualification is not claimed. See m7r-ui-unlimited-and-expired-grant.md."
+    },
+    {
+      "id": "L65",
+      "milestone": "M2/M3/UI-A",
+      "priority": "high",
+      "status": "local_acceptance_complete",
+      "description": "Installed disposable Nexus 0.3.1, Connector 0.0.10 and Core 0.0.12 showed Pi, Claude and Codex Online and delivered three exact UI responses with 1/1 ACK; their session terminals showed formatted input and final output. A remote Pi stayed Offline without blocking those local agents. After abrupt termination of the disposable Nexus with a warm Pi slot, the same browser changed RECONNECTING to LIVE without reload, all three local agents returned Online, and a new Pi call succeeded with exact reply, 1/1 ACK and warm-pool replenishment. No manual recovery was used. This closes the real-UI flow evidence only; M2/M3 technical requirements remain open. See ui-a-installed-restart-evidence.md.",
+      "current_qualification": "M2 and M3 technical local acceptance closed after Core/Connector/Nexus installed CI and global CI-wheel rollout; UI-A real restart gate had already passed. See m2-final-acceptance.md and m3-final-acceptance.md."
+    },
+    {
+      "id": "L66",
+      "milestone": "M3",
+      "priority": "high",
+      "status": "local_technical_qualified_global_rollout_pending",
+      "description": "An embedded opening failed before Core authorization and originally stopped a healthy session of the same agent. M3p retains an exact durable refusal, proves no Core native claim/birth, publishes PREPARATION_FAILED, releases only the failed session and resumes after an interrupted Server receipt. A consumed handoff reservation releases its capacity-owned physical slot by exact identity. 39 related source cases and 4 installed-wheel cases passed. No global rollout or new UI run at this technical checkpoint. See m3p-preauthorization-session-refusal.md."
+    },
+    {
+      "id": "L67",
+      "milestone": "M3",
+      "priority": "high",
+      "status": "local_technical_qualified_global_rollout_pending",
+      "description": "M3q injected a Core startup-refusal storage failure after an embedded preparation error. The affected session remained OPEN_PENDING with no Server receipt, a healthy sibling completed another turn, and restoration caused automatic terminal publication and retirement. One source and one installed-wheel case passed; production code was unchanged after M3p. Uncertain native-effect cases remain a separate L20 requirement. See m3q-startup-refusal-storage-boundary.md."
+    },
+    {
+      "id": "L68",
+      "milestone": "M3",
+      "priority": "high",
+      "status": "local_technical_qualified_global_rollout_pending",
+      "description": "M3r reproduced agent-wide recovery when authorization failed after the Core runtime was composed but before executor return. Nexus now contains the opening session and accepts PREPARATION_FAILED only with a Core no-claim/no-birth proof. A healthy sibling served another turn and a fresh session opened. 41 source, 6 installed Nexus and 20 installed Core contract cases passed. Positive native-claim uncertainty still requires separate convergence qualification. See m3r-authorizer-interruption.md."
+    },
+    {
+      "id": "L69",
+      "milestone": "M3",
+      "priority": "high",
+      "status": "windows_embedded_qualified_global_rollout_pending",
+      "description": "M3s exercised a real Job-owned Windows child with an ambiguous post-spawn opening failure while a sibling session of the same agent stayed healthy. Core retained OUTCOME_UNKNOWN/possible_effect=true, proved CONTAINER_STOPPED, and released the exact slot; Server reported possible effect to the caller, and a fresh opening succeeded without replay. The final source and installed case passed; installed crash frontiers after spawn and birth, plus uncertain historical birth recovery, also passed. The initial fixture omitted container_id and was invalid evidence; the final fixture uses the production container identity. M5x/M5y already qualified the fixed local Connector differential criteria; other platforms and global rollout remain pending. See m3s-positive-native-effect-isolation.md."
+    }
+  ],
+  "live_installation": "Global Nexus 0.3.1 CI wheel from successful matrix 39472894540 is running on 0.0.0.0:8202 with pinned Core 0.0.12 and Connector 0.0.10. Schema 152 preserves seven agents, six handoffs, three artifacts and FK 0. Pi, Claude and Codex show Online; a real Pi Meta-harness turn returned M8_PI_CI_WHEEL_OK with 1/1 ACK. Pi pool is 4/5 available after consumed session retirement. See m8-global-ci-wheel-rollout.md.",
+  "completion_audit": "M0-M8 and UI-A/B/C local acceptance are closed with requirement-to-evidence mapping in plan-closure-audit.md. Independent physical remote-host qualification and PR/main/tag/PyPI publication are separate phases.",
+  "publication": "Feature branches only; no main merge, tag or PyPI publication authorized by this plan",
+  "pending_installation": null
+}

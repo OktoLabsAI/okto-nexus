@@ -170,9 +170,10 @@ class ExecutionLeaseService:
         inventory = self.repo.inventory(uow, scope)
         fresh = self.fresh_publications.get((scope['server_id'], scope['executor_id']))
         from .execution_inventory_revalidation import accepts_binding
+        from .execution_inventory_freshness import inventory_is_fresh
         if (inventory is None or fresh is None or fresh[0] != inventory['publication_sequence'] or
                 not accepts_binding(uow.connection, row, inventory['inventory_revision'], scope['server_id'], scope['executor_id']) or
-                inventory['observation_age_ms'] + max(0, int((time.monotonic() - fresh[1]) * 1000)) >= 120000):
+                not inventory_is_fresh(inventory, fresh, row['adapter_id'])):
             raise _conflict('The lease inventory is no longer fresh.')
         snapshot = load_current_executor_inventory(inventory['canonical_projection'])
         if not any(item['candidate_ref'] == row['candidate_ref'] and item['adapter_id'] == row['adapter_id']

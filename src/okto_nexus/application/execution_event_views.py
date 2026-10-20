@@ -4,6 +4,8 @@ import json
 
 from ..errors import ErrorCode, OktoNexusError
 from .execution_session_views import read_execution_session
+from .execution_event_artifacts import resolve_event
+from nexus_connector_core.protocol import canonical_json
 
 PAGE_BYTES = 512 * 1024
 
@@ -47,7 +49,9 @@ def read_execution_events(factory, *, server_id, session_id, context, access,
                     raise ValueError('Missing committed event')
             except (ValueError, TypeError, KeyError) as exc:
                 raise OktoNexusError(ErrorCode.DB_ERROR, 'Stored canonical event integrity is invalid.', {}) from exc
-            if used + len(raw) > PAGE_BYTES:
+            event = resolve_event(factory,uow.connection,event)
+            presentation_bytes = len(canonical_json(event))
+            if events and used + presentation_bytes > PAGE_BYTES:
                 break
             # Ingress retains the exact proposal for native reply validation.
             # Public history must expose only the Core's scrubbed presentation;
@@ -60,7 +64,7 @@ def read_execution_events(factory, *, server_id, session_id, context, access,
                     payload['native_approval'] = display
             event = {**event, 'payload': payload}
             events.append({**event, 'received_at': row['received_at']})
-            used += len(raw)
+            used += presentation_bytes
         return dict(scope=scope, stream_epoch=stream_epoch, events=events, count=len(events),
             next_after_sequence=events[-1]['sequence'] if events else after_sequence,
             committed_contiguous=committed, gap_pending=bool(watermark and watermark['gap_state'] != 'none'),

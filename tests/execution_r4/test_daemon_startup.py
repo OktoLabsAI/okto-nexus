@@ -83,7 +83,7 @@ def test_daemon_starts_registered_r4_control_without_legacy_fallback(onboarding,
                 def ipc(op):
                     with IPCClient(daemon.ipc.transport, daemon.ipc.address, daemon.lock.ensure_token()) as observer:
                         return observer.call(op)
-                async with asyncio.timeout(10):
+                async with asyncio.timeout(20):
                     while True:
                         if running.done():
                             raise AssertionError(f'Daemon exited during startup: {await running}')
@@ -94,7 +94,13 @@ def test_daemon_starts_registered_r4_control_without_legacy_fallback(onboarding,
                             control = status['r4_controls'].get(server_id)
                             if control and (control['control_ready'] if qualified else
                                             control['error_code'] == 'VERSION_INCOMPATIBLE'):
-                                break
+                                with deps.connection_factory.unit_of_work(write=False) as uow:
+                                    published = uow.connection.execute(
+                                        'SELECT publication_sequence FROM execution_inventory_current '
+                                        'WHERE executor_id=?', (executor_id,)).fetchone()
+                                if (control['publication_sequence'] >= boot + 1 and published
+                                        and published[0] == control['publication_sequence']):
+                                    break
                         await asyncio.sleep(0.02)
                 assert status['transports'] == {} and not control['execution_ready']
                 assert control['executor_id'] == executor_id and control['publication_sequence'] >= boot + 1

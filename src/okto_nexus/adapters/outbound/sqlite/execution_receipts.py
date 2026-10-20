@@ -161,18 +161,22 @@ def append_execution_receipt(factory: ConnectionFactory, *,
                              principal: VerifiedExecutionTicket | None = None,
                              embedded_owner=None,
                              uow=None, recovery_owner=None, preopen=None, preopen_embedded_owner=None,
+                             startup_owner=None, startup_report=None,
                              frame: Mapping[str, Any]) -> AcceptedExecutionReceipt:
     """Accept a Core fact only for the ticket's admitted operation.
 
     This never creates an operation or authorizes a native effect. Core owns
     the frame schema and ordered receipt reducer; SQLite owns durability.
     """
-    if sum(owner is not None for owner in (principal, embedded_owner, recovery_owner)) != 1:
+    if sum(owner is not None for owner in (principal, embedded_owner, recovery_owner, startup_owner)) != 1:
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "One authenticated receipt owner is required.", {})
     if recovery_owner is not None and (uow is None or preopen is None):
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Recovery requires its authenticated transaction and proof.', {})
     if preopen_embedded_owner is not None and recovery_owner is None:
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Local preopening recovery requires its recovery owner.', {})
+    if startup_owner is not None and (uow is None or startup_report is None):
+        raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+            'Startup refusal requires its authenticated transaction and report.', {})
     if principal is not None and ("receipt:publish" not in principal.scopes or principal.binding_id is None):
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
                              "The ticket cannot publish operation receipts.", {})
@@ -238,11 +242,22 @@ def append_execution_receipt(factory: ConnectionFactory, *,
         # Canonical R4 admissions carry an immutable scope and a dispatched
         # lease. Historical rows remain readable without promoting a session.
         scope = json.loads(operation['expected_revisions_json'])
+        if parsed.get('error_code') == 'PREPARATION_FAILED' and (
+                operation['action'] != 'runtime.open' or not scope
+                or parsed['stage'] != 'FAILED' or parsed['possible_effect']
+                or not parsed['retry_safe'] or parsed.get('native_id') is not None):
+            raise OktoNexusError(ErrorCode.CONFLICT,
+                'A preparation refusal must prove a terminal opening without native effect.', {})
         preopen_verified = None
         if recovery_owner is not None:
             from .execution_preopen_recovery import verify_preopen_recovery
             preopen_verified = verify_preopen_recovery(uow, recovery_owner, preopen, parsed, operation,
                                                      embedded_owner=preopen_embedded_owner)
+        startup_verified = None
+        if startup_owner is not None:
+            from .execution_startup_refusal import verify_startup_refusal
+            startup_verified = verify_startup_refusal(uow, startup_owner, startup_report,
+                parsed, operation, scope)
         initial_refusal = None
         if scope:
             from .execution_session_containment import SqliteSessionContainmentRepository
@@ -257,7 +272,7 @@ def append_execution_receipt(factory: ConnectionFactory, *,
                 "WHERE o.server_id=? AND o.executor_id=? AND o.operation_id=? "
                 "AND o.dispatch_state IN ('SENDING','DISPATCHED','RECONCILING','RESOLVED_TERMINAL')",
                 key).fetchone()
-            if initial_refusal is None and preopen_verified is None and (dispatched is None or not dispatched['applied_at'] or
+            if initial_refusal is None and preopen_verified is None and startup_verified is None and (dispatched is None or not dispatched['applied_at'] or
                     not dispatched['scope_json'] or json.loads(dispatched['scope_json']) != scope or
                     dispatched['connection_id'] != parsed['connection_id'] or
                     dispatched['connection_generation'] != parsed['connection_generation']):
@@ -333,6 +348,43 @@ def append_execution_receipt(factory: ConnectionFactory, *,
                 parsed['connection_id'],parsed['connection_generation']), parsed['session_id'],
                 scope['session_owner_generation'], dict(kind='initial_lease_refusal',request=initial_refusal,
                     receipt=parsed), conn.execute("SELECT strftime('%Y-%m-%dT%H:%M:%fZ','now')").fetchone()[0])
+            from ....application.execution_initial_turns import (
+                settle_failed_initial_turns, settle_unsent_closed_session_operations)
+            settle_failed_initial_turns(conn, server_id=key[0], executor_id=key[1])
+            settle_unsent_closed_session_operations(conn, server_id=key[0], executor_id=key[1])
+        if (scope and operation['action'] == 'runtime.open'
+                and parsed.get('error_code') == 'PREPARATION_FAILED'
+                and projection.stage == 'FAILED' and not projection.possible_effect
+                and projection.retry_safe and projection.native_id is None
+                and initial_refusal is None and preopen_verified is None):
+            # The authenticated current host publishes this fact only after
+            # stopping the preparation producer, proving no native claim and
+            # releasing its exact capacity. Keep the terminal result and close
+            # only the session named by that opening; healthy siblings stay up.
+            owner = startup_owner if startup_verified is not None else None
+            current = conn.execute('SELECT 1 FROM execution_executors WHERE server_id=? '
+                'AND executor_id=? AND owner_instance_id=? AND generation=? '
+                "AND control_state=? AND revoked_at IS NULL",
+                (key[0], key[1], owner.connection_id if owner else parsed['connection_id'],
+                 owner.connection_generation if owner else parsed['connection_generation'],
+                 ('CONTROL_READY' if owner.connection_generation == parsed['connection_generation']
+                  else 'RECOVERING') if owner else 'CONTROL_READY')).fetchone()
+            if current is None or conn.execute('SELECT 1 FROM execution_event_ingress WHERE '
+                    'server_id=? AND executor_id=? AND session_id=? LIMIT 1',
+                    (key[0], key[1], parsed['session_id'])).fetchone() is not None:
+                raise OktoNexusError(ErrorCode.CONFLICT,
+                    'The startup refusal has no current, unstarted owner.', {})
+            closed = conn.execute("UPDATE execution_sessions SET lifecycle_state='CLOSED',lease_state='CLOSED' "
+                'WHERE server_id=? AND executor_id=? AND session_id=? AND owner_generation=? '
+                "AND open_operation_id=? AND lifecycle_state='OPEN_PENDING'",
+                (key[0], key[1], parsed['session_id'], scope['session_owner_generation'], key[2]))
+            if closed.rowcount != 1:
+                raise OktoNexusError(ErrorCode.CONFLICT,
+                    'The startup refusal no longer owns its pending session.', {})
+            from ....application.execution_initial_turns import (
+                settle_failed_initial_turns, settle_unsent_closed_session_operations)
+            settle_failed_initial_turns(conn, server_id=key[0], executor_id=key[1])
+            settle_unsent_closed_session_operations(conn, server_id=key[0], executor_id=key[1])
         if preopen_verified is not None:
             from .execution_preopen_recovery import finish_preopen_recovery
             finish_preopen_recovery(uow, recovery_owner, preopen_verified)

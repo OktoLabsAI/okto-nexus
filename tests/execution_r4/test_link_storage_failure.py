@@ -17,6 +17,7 @@ def test_heartbeat_storage_failure_closes_link_and_releases_owner(tmp_path, monk
     factory = deps.connection_factory
     original = factory.unit_of_work
     touches = []
+    armed = False
 
     class Connection:
         def __init__(self, connection):
@@ -26,7 +27,8 @@ def test_heartbeat_storage_failure_closes_link_and_releases_owner(tmp_path, monk
             return getattr(self.connection, name)
 
         def execute(self, sql, *args):
-            if sql.startswith("UPDATE execution_executors SET last_seen_at="):
+            if (armed and sql.startswith("UPDATE execution_executors SET last_seen_at=")
+                    and args and executor in args[0]):
                 touches.append(sql)
                 if failure == "normalized":
                     raise OktoNexusError("DB_ERROR", "fixture private storage diagnostic", retryable=True)
@@ -58,6 +60,7 @@ def test_heartbeat_storage_failure_closes_link_and_releases_owner(tmp_path, monk
             welcome = ws.receive_json()
             assert welcome["type"] == "welcome"
             assert ws.receive_json()["type"] == "reconcile.request"
+            armed = True
             ws.send_text(encode_r4_frame(dict(**base, type="heartbeat",
                 connection_id=welcome["connection_id"],
                 connection_generation=welcome["connection_generation"])).decode())

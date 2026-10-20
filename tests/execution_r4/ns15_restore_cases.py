@@ -144,9 +144,10 @@ def restore_case(tmp_path, monkeypatch, request, *, backfilled_policies=False):
             result = client.get('/v1/runtime/operations/' + turn['operation_id'],
                                 headers=headers['subject'])
             assert result.status_code == 200, result.text
-            if (result.json().get('possible_effect') is True
-                    and app.state.embedded_dispatch_owner.agents.errors.get('subject') is not None):
+            owner = app.state.embedded_dispatch_owner
+            if result.json().get('possible_effect') is True and session not in owner.sessions:
                 assert result.json()['retry_safe'] is False
+                assert 'subject' not in owner.agents.blocked
                 break
             assert time.monotonic() < deadline, dispatch
             time.sleep(.02)

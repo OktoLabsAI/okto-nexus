@@ -1,0 +1,198 @@
+{
+  "expected": 54,
+  "harnesses": {
+    "CLAUDE": {
+      "ack_levels": {
+        "NATIVE_ACCEPTED": 18
+      },
+      "agent": "m7-claude",
+      "attempted": 18,
+      "browser_sends": 18,
+      "delivery_statuses": {
+        "read": 18
+      },
+      "distinct_turn_sessions": 18,
+      "errors": [],
+      "exact_responses": 18,
+      "metrics": {
+        "browser_send_seconds": {
+          "maximum": 2.308,
+          "n": 18,
+          "p50": 1.88,
+          "p95": 2.307,
+          "p99": 2.308
+        },
+        "observed_queue_seconds": {
+          "maximum": 19.443,
+          "n": 6,
+          "p50": 18.175,
+          "p95": 19.316,
+          "p99": 19.417
+        },
+        "post_admission_cold_open_to_start_seconds": {
+          "maximum": 62.182,
+          "n": 6,
+          "p50": 54.082,
+          "p95": 60.4,
+          "p99": 61.826
+        },
+        "preexisting_warm_dispatch_seconds": {
+          "maximum": 2.938,
+          "n": 6,
+          "p50": 1.934,
+          "p95": 2.788,
+          "p99": 2.908
+        },
+        "queued_user_wait_to_start_seconds": {
+          "maximum": 77.31,
+          "n": 6,
+          "p50": 70.839,
+          "p95": 76.743,
+          "p99": 77.197
+        }
+      },
+      "peak_open_to_close_sessions": 2,
+      "states": {
+        "SUCCEEDED": 18
+      },
+      "waves": {
+        "01": 3,
+        "02": 3,
+        "03": 3,
+        "04": 3,
+        "05": 3,
+        "06": 3
+      }
+    },
+    "CODEX": {
+      "ack_levels": {
+        "NATIVE_ACCEPTED": 18
+      },
+      "agent": "m7-codex",
+      "attempted": 18,
+      "browser_sends": 18,
+      "delivery_statuses": {
+        "read": 18
+      },
+      "distinct_turn_sessions": 18,
+      "errors": [],
+      "exact_responses": 18,
+      "metrics": {
+        "browser_send_seconds": {
+          "maximum": 8.859,
+          "n": 18,
+          "p50": 1.873,
+          "p95": 4.415,
+          "p99": 7.97
+        },
+        "observed_queue_seconds": {
+          "maximum": 18.639,
+          "n": 6,
+          "p50": 16.13,
+          "p95": 18.292,
+          "p99": 18.57
+        },
+        "post_admission_cold_open_to_start_seconds": {
+          "maximum": 52.322,
+          "n": 6,
+          "p50": 48.22,
+          "p95": 51.869,
+          "p99": 52.231
+        },
+        "preexisting_warm_dispatch_seconds": {
+          "maximum": 2.084,
+          "n": 6,
+          "p50": 1.788,
+          "p95": 2.039,
+          "p99": 2.075
+        },
+        "queued_user_wait_to_start_seconds": {
+          "maximum": 71.505,
+          "n": 6,
+          "p50": 63.102,
+          "p95": 69.546,
+          "p99": 71.113
+        }
+      },
+      "peak_open_to_close_sessions": 2,
+      "states": {
+        "SUCCEEDED": 18
+      },
+      "waves": {
+        "01": 3,
+        "02": 3,
+        "03": 3,
+        "04": 3,
+        "05": 3,
+        "06": 3
+      }
+    },
+    "PI": {
+      "ack_levels": {
+        "NATIVE_ACCEPTED": 18
+      },
+      "agent": "m5m-pi-new",
+      "attempted": 18,
+      "browser_sends": 18,
+      "delivery_statuses": {
+        "read": 18
+      },
+      "distinct_turn_sessions": 18,
+      "errors": [],
+      "exact_responses": 18,
+      "metrics": {
+        "browser_send_seconds": {
+          "maximum": 5.872,
+          "n": 18,
+          "p50": 1.965,
+          "p95": 2.656,
+          "p99": 5.229
+        },
+        "observed_queue_seconds": {
+          "maximum": 20.206,
+          "n": 6,
+          "p50": 18.036,
+          "p95": 20.186,
+          "p99": 20.202
+        },
+        "post_admission_cold_open_to_start_seconds": {
+          "maximum": 58.001,
+          "n": 6,
+          "p50": 51.893,
+          "p95": 57.097,
+          "p99": 57.82
+        },
+        "preexisting_warm_dispatch_seconds": {
+          "maximum": 2.482,
+          "n": 6,
+          "p50": 1.761,
+          "p95": 2.35,
+          "p99": 2.456
+        },
+        "queued_user_wait_to_start_seconds": {
+          "maximum": 71.469,
+          "n": 6,
+          "p50": 67.252,
+          "p95": 70.616,
+          "p99": 71.298
+        }
+      },
+      "peak_open_to_close_sessions": 2,
+      "states": {
+        "SUCCEEDED": 18
+      },
+      "waves": {
+        "01": 3,
+        "02": 3,
+        "03": 3,
+        "04": 3,
+        "05": 3,
+        "06": 3
+      }
+    }
+  },
+  "observed_browser_sends": 54,
+  "observed_messages": 54,
+  "poll_errors": 0,
+  "protocol": "M7o"
+}

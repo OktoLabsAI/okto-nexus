@@ -147,7 +147,7 @@ def validate_r4(snapshot, db):
 
 
 def copy_core_databases(home, destination, stack):
-    with closing(sqlite3.connect(destination / 'nexus.db')) as db:
+    with closing(sqlite3.connect((destination / 'nexus.db').as_uri() + "?mode=ro&immutable=1", uri=True)) as db:
         directory = core_directory(db)
     source = home / directory
     if not source.exists():
@@ -174,7 +174,7 @@ def validate(snapshot):
     manifest = json.loads((snapshot / "backup-manifest.json").read_text(encoding="utf-8"))
     if manifest.get("version") not in (1, 2) or inventory(snapshot) != manifest["files"]:
         raise ValueError("Backup inventory/checksum mismatch")
-    with sqlite3.connect((snapshot / "nexus.db").as_uri() + "?mode=ro", uri=True) as db:
+    with closing(sqlite3.connect((snapshot / "nexus.db").as_uri() + "?mode=ro&immutable=1", uri=True)) as db:
         if database_report(db) != manifest["database"]:
             raise ValueError("Backup database metadata mismatch")
         validate_r4(snapshot, db)
@@ -184,6 +184,14 @@ def validate(snapshot):
                 raise ValueError("Referenced artifact is missing or outside the snapshot")
             if payload.stat().st_size != size or not (payload.parent / "manifest.json").is_file():
                 raise ValueError("Referenced artifact bytes/manifest mismatch")
+        if db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='execution_event_artifacts'").fetchone():
+            for storage_path, size, reference in db.execute(
+                    'SELECT storage_path,size_bytes,reference_json FROM execution_event_artifacts WHERE storage_path IS NOT NULL'):
+                payload = snapshot / 'artifacts' / storage_path
+                if not payload.resolve().is_relative_to((snapshot / 'artifacts').resolve()) or not payload.is_file():
+                    raise ValueError('Runtime event artifact is missing from backup')
+                if payload.stat().st_size != size or hashlib.sha256(payload.read_bytes()).hexdigest() != json.loads(reference)['sha256']:
+                    raise ValueError('Runtime event artifact integrity mismatch')
     journal = FileRuntimeEventJournal(snapshot)
     try:
         journal.start(repair_tail=False)
@@ -213,19 +221,21 @@ def backup(home, destination, *, stopped=False, db_path=None):
     FileRuntimeEventJournal._regular(database)
     if destination.resolve().is_relative_to(home.resolve()):
         raise ValueError("Backup destination must be outside the source home")
-    list(regular_tree(home))
     if destination.exists():
         raise FileExistsError("Backup destination already exists; refusing overwrite")
     # These are exclusion locks, not permission to stop another process. The
     # operator must first stop every writer, including artifact maintenance.
-    with ExitStack() as stack, journal_lock(home), sqlite3.connect(database.as_uri() + "?mode=rw", uri=True, timeout=1) as fence:
+    with ExitStack() as stack, journal_lock(home), closing(sqlite3.connect(database.as_uri() + "?mode=rw", uri=True, timeout=1)) as fence:
         fence.execute("BEGIN IMMEDIATE")
         owner = fence.execute("SELECT lease_expires_at FROM runtime_dispatcher_owner WHERE owner_key='dispatcher'").fetchone()
         if owner and datetime.fromisoformat(owner[0].replace("Z", "+00:00")) > datetime.now(timezone.utc):
             raise ValueError("Runtime owner lease is still live; stop the owner before backup")
+        # Inspect only after the writer fence and lease check. SQLite may
+        # retire a transient -shm file while an active owner is shutting down.
+        list(regular_tree(home))
         destination.mkdir(mode=0o700, parents=False)
-        with sqlite3.connect(database.as_uri() + "?mode=ro", uri=True) as reader:
-            with sqlite3.connect(destination / "nexus.db") as target:
+        with closing(sqlite3.connect(database.as_uri() + "?mode=ro", uri=True)) as reader:
+            with closing(sqlite3.connect(destination / "nexus.db")) as target:
                 reader.backup(target)
                 report = database_report(target)
         copy_core_databases(home, destination, stack)

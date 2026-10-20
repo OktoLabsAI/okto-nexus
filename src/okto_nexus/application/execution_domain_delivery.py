@@ -259,6 +259,9 @@ def project_released_deliveries(conn, *, server_id, executor_id, session_id, pro
             "AND session_id=? AND lifecycle_state='CLOSED' AND lease_state='CLOSED'",
             (server_id, executor_id, session_id)).fetchone():
         raise ValueError('Delivery release requires a closed canonical session.')
+    from .execution_released_closes import settle_released_closes
+    settle_released_closes(conn, server_id=server_id, executor_id=executor_id,
+        session_id=session_id, proof=proof)
     rows = conn.execute("SELECT m.domain_operation_id,p.operation_id FROM execution_operations p "
         "JOIN execution_domain_deliveries m USING(server_id,executor_id,operation_id) "
         "JOIN delivery_outbox d ON d.operation_id=m.domain_operation_id "
@@ -278,3 +281,12 @@ def project_released_deliveries(conn, *, server_id, executor_id, session_id, pro
             "updated_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') WHERE operation_id=? "
             "AND (status!='OUTCOME_UNKNOWN' OR reason IS NOT 'session_released_without_result')",
             (row['domain_operation_id'],))
+        # Queue the server status reply in the same transaction as its release
+        # proof. Poll only this pending index, never the complete delivery history.
+        # One-shot calls own their own terminal error notification.
+        conn.execute("INSERT INTO execution_release_notifications(domain_operation_id,state,created_at) "
+            "SELECT ?,'PENDING',strftime('%Y-%m-%dT%H:%M:%fZ','now') "
+            "WHERE NOT EXISTS (SELECT 1 FROM one_shot_calls WHERE call_id=?) "
+            "AND NOT EXISTS (SELECT 1 FROM runtime_handoff_notice_retirements WHERE operation_id=?) "
+            "AND NOT EXISTS (SELECT 1 FROM execution_capacity_compensations WHERE domain_operation_id=?) "
+            "ON CONFLICT DO NOTHING", (row['domain_operation_id'],) * 4)

@@ -55,11 +55,11 @@ def reusable_opening(uow, *, factory, access, context, server_id, executor_id,
     current = service.repo.inventory(uow, scope)
     fresh = (fresh_publications or {}).get((server_id, executor_id))
     from .execution_inventory_revalidation import accepts_binding
+    from .execution_inventory_freshness import inventory_is_fresh
     if (current is None or fresh is None
             or authority['inventory_revision'] != semantic['payload']['inventory_revision']
             or not accepts_binding(conn, authority, current['inventory_revision'], server_id, executor_id)
-            or fresh[0] != current["publication_sequence"]
-            or current["observation_age_ms"] + max(0, int((time.monotonic() - fresh[1]) * 1000)) >= 120_000):
+            or not inventory_is_fresh(current, fresh, authority['adapter_id'])):
         raise OktoNexusError(ErrorCode.CONFLICT, "The reusable installation inventory is no longer fresh.", {})
     if any(semantic["payload"][name] != authority[name] for name in
            ("candidate_ref", "realization_revision")):

@@ -38,7 +38,7 @@ def conversation_sessions(deps, context, *, workspace=None, agent=None, page=1):
             JOIN execution_executors e USING(server_id,executor_id)
             WHERE (? IS NULL OR s.workspace_id=?) AND (? IS NULL OR ep.agent_id=?)'''
         args = (workspace, workspace, agent, agent)
-        opened = "(s.lifecycle_state<>'CLOSED' AND NOT (s.lifecycle_state='FAILED' AND s.lease_state='CLOSED'))"
+        opened = "(s.lifecycle_state<>'CLOSED' AND NOT (s.lifecycle_state='FAILED' AND s.lease_state IN ('NONE','CLOSED')))"
         conn = uow.connection
         counts = conn.execute(source + 'SELECT COUNT(*),COALESCE(SUM(' + opened + '),0)' + joins, args).fetchone()
         rows = conn.execute(source + '''SELECT s.server_id,s.executor_id,s.session_id,ep.agent_id,ep.adapter_id,

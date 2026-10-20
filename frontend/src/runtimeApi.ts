@@ -54,6 +54,9 @@ export interface RuntimeOptions {
   executor_id: string;
   inventory_revision: string;
   freshness: string;
+  adapter_freshness: Record<string, 'FRESH' | 'STALE' | 'OFFLINE'>;
+  observations: {adapter_id: string; state: 'PENDING' | 'PRESENT' | 'ABSENT' | 'FAILED';
+    observation_age_ms: number | null; error_code: string | null}[];
   options: RuntimeChoice[];
   catalog: {runtimes: {adapter_id: string; display_name: string; support_status: string; implementation_platforms: string[]}[]};
   availability: {platform: string; availability?: {adapter_id: string; candidate_ref: string;
@@ -69,9 +72,12 @@ export function localRuntimeAvailability(options: RuntimeOptions, adapterId: str
   const runtime = options.catalog.runtimes.find(item => item.adapter_id === adapterId);
   if (!runtime || runtime.support_status !== 'managed_supported') return {available: false, label: 'Not supported'};
   if (!runtime.implementation_platforms.includes(options.availability.platform)) return {available: false, label: 'Not supported on this system'};
+  const observation = options.observations.find(item => item.adapter_id === adapterId);
+  if (observation?.state === 'PENDING') return {available: false, label: 'Checking installation…'};
+  if (observation?.state === 'FAILED') return {available: false, label: 'Installation check unavailable · retrying'};
+  if (options.adapter_freshness[adapterId] !== 'FRESH') return {available: false, label: 'Inventory unavailable'};
   const candidates = options.options.filter(item => item.adapter_id === adapterId && item.candidate_ref);
   if (!candidates.length) return {available: false, label: 'Not installed'};
-  if (options.freshness !== 'FRESH') return {available: false, label: 'Inventory unavailable'};
   const usable = candidates.filter(localInstallationAvailable);
   if (!usable.length) return {available: false, label: 'Installation not supported'};
   if (usable.every(item => !item.can_configure)) return {available: false, label: 'Configuration unavailable'};

@@ -57,10 +57,11 @@ def pending_unstarted_session(conn, server_id, executor_id, session_id):
 
 class ExecutionReconciliation:
     def __init__(self, factory, channel, *, owner_guard=None, agent_id=None, unstarted_sessions=(), containment=None,
-                 preopen_recovery=None):
+                 preopen_recovery=None, launch_recovery=False):
         self.factory, self.channel = factory, channel
         self.containment = containment
         self.preopen_recovery = preopen_recovery
+        self.launch_recovery = launch_recovery
         self.owner_guard = owner_guard
         self.agent_id = agent_id
         self.unstarted_sessions = tuple(sorted(set(unstarted_sessions)))
@@ -144,10 +145,14 @@ class ExecutionReconciliation:
             session_ids=[r[1] for r in sessions], stream_watermarks=[])
         if self.preopen_recovery is not None:
             self.pending['preopen_refusal_supported'] = True
+        if self.launch_recovery:
+            self.pending['launch_recovery_supported'] = True
         return self.pending
 
     def accept(self, report):
         request = self.pending
+        if report.get('launch_recovery_supported') and not self.launch_recovery:
+            raise ValueError('Launch recovery was not negotiated.')
         if request is None or any(report[k] != request[k] for k in (
                 'server_id','executor_id','connection_id','connection_generation','reconcile_id','cursor')):
             raise ValueError('The reconciliation response is stale.')
@@ -194,13 +199,33 @@ class ExecutionReconciliation:
                 raise ValueError('The ownership facts do not match the claims.')
             if self.agent_id is not None and not set(claims).issubset(request['session_ids']):
                 raise ValueError('The claims do not belong to this reconciliation page.')
+            reset_generation = conn.execute(
+                'SELECT generation FROM runtime_reset_generation WHERE singleton=1').fetchone()[0]
+            prior_reset_claims = set()
             for session_id, claim in claims.items():
                 fact = facts[session_id]
                 session = conn.execute('SELECT owner_generation FROM execution_sessions WHERE '
                     'server_id=? AND executor_id=? AND session_id=?', (c.server_id,c.executor_id,session_id)).fetchone()
-                if session is None or fact['owner_generation'] != claim['owner_generation']:
+                if fact['owner_generation'] != claim['owner_generation']:
                     raise ValueError('The claim has no matching canonical session.')
-                if (claim['state'] != 'RELEASED' or fact['process_state'] != 'EXITED' or
+                if session is None:
+                    if self.agent_id is not None or reset_generation == 0:
+                        raise ValueError('The claim has no matching canonical session.')
+                    # Preserve-agents reset deletes operational history after
+                    # draining the remote runtime. Its durable journal may
+                    # still report that released history on every reconnect.
+                    # It cannot change current Server state or prove a new
+                    # release, but an unreleased/invalid claim still blocks.
+                    prior_reset_claims.add(session_id)
+                    digest = fact.get('proof_digest')
+                    if (claim['state'] != 'RELEASED' or fact['process_state'] not in ('EXITED', 'NOT_STARTED')
+                            or not isinstance(digest, str) or len(digest) != 71
+                            or not digest.startswith('sha256:')
+                            or any(char not in '0123456789abcdef' for char in digest[7:])):
+                        self.blocked = True
+                    continue
+                not_started = fact['process_state'] == 'NOT_STARTED'
+                if (claim['state'] != 'RELEASED' or fact['process_state'] not in ('EXITED', 'NOT_STARTED') or
                         fact.get('proof_digest') is None or session['owner_generation'] != claim['owner_generation']):
                     self.blocked = True
                     continue
@@ -212,7 +237,7 @@ class ExecutionReconciliation:
                     "AND json_extract(o.expected_revisions_json,'$.session_owner_generation')=? LIMIT 1",
                     (c.server_id,c.executor_id,session_id,claim['owner_generation'])).fetchone()
                 closed = _receipt(closed)
-                if closed is None or closed['session_id'] != session_id:
+                if not_started or closed is None or closed['session_id'] != session_id:
                     # A released managed resource can be reconciled after
                     # lease containment without inventing a close operation.
                     opening = conn.execute(
@@ -226,7 +251,19 @@ class ExecutionReconciliation:
                         "ORDER BY r.receipt_revision DESC LIMIT 1",
                         (c.server_id,c.executor_id,session_id,claim['owner_generation'])).fetchone()
                     opening = _receipt(opening)
-                    if (opening is None or opening['session_id'] != session_id or
+                    if not_started:
+                        from nexus_connector_core.launch_release_r4 import validate_unstarted_release
+                        if not self.launch_recovery or not report.get('launch_recovery_supported') or opening is None:
+                            self.blocked = True
+                            continue
+                        validate_unstarted_release(fact, opening, connection_generation=c.connection_generation)
+                        # A later failure cannot erase an earlier confirmed native
+                        # opening. Never-started proof must agree with all receipts.
+                        if conn.execute("SELECT 1 FROM execution_receipts WHERE server_id=? AND executor_id=? "
+                                "AND operation_id=? AND (native_id IS NOT NULL OR stage IN ('SUBMITTED','RUNNING','SUCCEEDED')) LIMIT 1",
+                                (c.server_id, c.executor_id, opening['operation_id'])).fetchone():
+                            raise ValueError('Never-started proof contradicts opening history.')
+                    elif (opening is None or opening['session_id'] != session_id or
                             opening['stage'] not in ('SUBMISSION_STARTED','SUBMITTED','RUNNING','OUTCOME_UNKNOWN','SUCCEEDED','FAILED') or
                             not opening['possible_effect'] or
                             fact['proof_digest'] != r4_resource_release_digest(
@@ -235,9 +272,15 @@ class ExecutionReconciliation:
                                 owner_generation=claim['owner_generation'])):
                         self.blocked = True
                         continue
-                conn.execute("UPDATE execution_sessions SET lifecycle_state='CLOSED',lease_state='CLOSED' "
+                conn.execute("UPDATE execution_sessions SET lifecycle_state=?,lease_state='CLOSED' "
                     "WHERE server_id=? AND executor_id=? AND session_id=? AND owner_generation=?",
-                    (c.server_id,c.executor_id,session_id,claim['owner_generation']))
+                    ('FAILED' if not_started else 'CLOSED',c.server_id,c.executor_id,session_id,claim['owner_generation']))
+                if not_started:
+                    conn.execute("UPDATE execution_leases SET status='REVOKED' WHERE server_id=? AND executor_id=? AND session_id=?",
+                        (c.server_id,c.executor_id,session_id))
+                    conn.execute("UPDATE execution_session_capabilities SET revoked_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') "
+                        "WHERE server_id=? AND executor_id=? AND session_id=? AND revoked_at IS NULL",
+                        (c.server_id,c.executor_id,session_id))
                 released.add(session_id)
             streams = set()
             for watermark in report['stream_watermarks']:
@@ -245,6 +288,8 @@ class ExecutionReconciliation:
                 if stream in streams or watermark['session_id'] not in claims:
                     raise ValueError('The stream watermark has no matching claim.')
                 streams.add(stream)
+                if watermark['session_id'] in prior_reset_claims:
+                    continue
                 persisted = conn.execute("SELECT committed_contiguous,gap_state FROM execution_event_watermarks "
                     "WHERE server_id=? AND executor_id=? AND session_id=? AND stream_epoch=?",
                     (c.server_id,c.executor_id,*stream)).fetchone()
@@ -259,9 +304,12 @@ class ExecutionReconciliation:
                    for session, claim in claims.items()):
                 self.blocked = True
             if not self.blocked:
+                from .execution_initial_turns import settle_failed_initial_turns
+                settle_failed_initial_turns(conn, server_id=c.server_id, executor_id=c.executor_id)
                 from .execution_domain_delivery import project_released_deliveries
                 for watermark in report['stream_watermarks']:
-                    if watermark['session_id'] in released:
+                    if (watermark['session_id'] in released
+                            and facts[watermark['session_id']]['process_state'] != 'NOT_STARTED'):
                         project_released_deliveries(conn, server_id=c.server_id, executor_id=c.executor_id,
                             session_id=watermark['session_id'], proof=dict(
                                 ownership=facts[watermark['session_id']], stream=watermark))

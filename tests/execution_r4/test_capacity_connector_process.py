@@ -15,6 +15,8 @@ import pytest
 import uvicorn
 
 from okto_nexus.adapters.outbound.sqlite.execution_agent_revisions import current_agent_revisions
+from okto_nexus.application.execution_inventory_freshness import inventory_is_fresh
+from okto_nexus.application.execution_inventory_revalidation import accepts_binding
 from okto_nexus.application.handoff_runtime_scheduler import HandoffScheduleLease
 from okto_nexus.bootstrap.capacity_admission import build_capacity_admission
 from okto_nexus.bootstrap.handoff_runtime_attempts import build_handoff_runtime_attempts
@@ -25,8 +27,13 @@ from test_runtime_policy_defaults import save
 
 
 @pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
-@pytest.mark.parametrize('restart_mode', ['graceful', 'abrupt'])
-def test_capacity_survives_lost_reply_reconnect_and_connector_process_restart(onboarding, tmp_path, monkeypatch, restart_mode):
+@pytest.mark.parametrize('restart_mode,receipt_fault,stop_phase', [
+    ('graceful', False, None), ('abrupt', False, None),
+    ('abrupt', True, None), ('graceful', False, 'open'),
+    ('graceful', False, 'publication')])
+def test_capacity_survives_lost_reply_reconnect_and_connector_process_restart(
+        onboarding, tmp_path, monkeypatch, restart_mode, receipt_fault,
+        stop_phase):
     import nexus_connector_core
     import okto_nexus_connector
     from okto_nexus_connector.services.execution_selection import acknowledge_execution_binding
@@ -88,7 +95,10 @@ def test_capacity_survives_lost_reply_reconnect_and_connector_process_restart(on
         serving = asyncio.create_task(server.serve(sockets=[sock]))
         process = None
         log = (tmp_path / 'connector-process.stderr').open('wb')
+        # Reconciliation after a lost receipt needs a real launch claim and
+        # container stop proof; a synthetic peer cannot provide either.
         config = dict(root=str(root), base_url=f'http://127.0.0.1:{sock.getsockname()[1]}',
+            real_native_child=receipt_fault,
             server_id=binding['server_id'], executor_id=binding['executor_id'],
             credential_epoch=revisions.credential_epoch,
             agent_key=headers['subject']['Authorization'].removeprefix('Bearer '),
@@ -121,27 +131,73 @@ def test_capacity_survives_lost_reply_reconnect_and_connector_process_restart(on
             await ready()
 
         async def ready(after_generation=0):
-            async with asyncio.timeout(35):
-                while True:
-                    state = await command('status')
-                    host = registry.current_host(binding['server_id'], binding['executor_id'])
-                    if (state['ready'] and state['generation'] > after_generation and host
-                            and host.channel.connection_generation == state['generation']
-                            and binding['binding_id'] in host.observations):
-                        assert state['pid'] != os.getpid()
-                        return state
-                    await asyncio.sleep(.1)
+            last = {}
+            try:
+                async with asyncio.timeout(35):
+                    while True:
+                        state = await command('status')
+                        host = registry.current_host(binding['server_id'], binding['executor_id'])
+                        fresh = client.app.state.inventory_fresh_publications.get(
+                            (binding['server_id'], binding['executor_id']))
+                        with deps.connection_factory.unit_of_work(write=False) as uow:
+                            conn = uow.connection
+                            inventory = conn.execute(
+                                'SELECT c.publication_sequence,c.inventory_revision,s.observation_age_ms,'
+                                's.canonical_projection FROM execution_inventory_current c '
+                                'JOIN execution_inventory_snapshots s ON s.server_id=c.server_id '
+                                'AND s.executor_id=c.executor_id AND s.publication_sequence=c.publication_sequence '
+                                'WHERE c.server_id=? AND c.executor_id=?',
+                                (binding['server_id'], binding['executor_id'])).fetchone()
+                            selected = conn.execute(
+                                'SELECT b.inventory_revision,b.candidate_ref,ep.adapter_id '
+                                'FROM execution_bindings b JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id '
+                                'WHERE b.server_id=? AND b.binding_id=?',
+                                (binding['server_id'], binding['binding_id'])).fetchone()
+                            binding_ready = (inventory is not None and fresh is not None and selected is not None
+                                and fresh[0] == inventory['publication_sequence']
+                                and inventory_is_fresh(inventory, fresh, selected['adapter_id'])
+                                and accepts_binding(conn, selected, inventory['inventory_revision'],
+                                                    binding['server_id'], binding['executor_id']))
+                            last = dict(connector_ready=state['ready'],
+                                generation=state['generation'], host_generation=(host.channel.connection_generation
+                                    if host else None), observed=(binding['binding_id'] in host.observations
+                                    if host else False), publication=(inventory['publication_sequence'] if inventory else None),
+                                fresh=(fresh[0] if fresh else None), selected=selected is not None,
+                                binding_ready=binding_ready)
+                        if (state['ready'] and state['generation'] > after_generation and host
+                                and host.channel.connection_generation == state['generation']
+                                and binding['binding_id'] in host.observations and binding_ready):
+                            assert state['pid'] != os.getpid()
+                            return state
+                        await asyncio.sleep(.1)
+            except TimeoutError:
+                pytest.fail(f'Connector capacity readiness timeout: {last}')
 
-        async def wait_turn(operation_id, stage):
-            async with asyncio.timeout(25):
+        async def wait_turn(operation_id, stage, *, allow_uncertain=False):
+            async with asyncio.timeout(35 if allow_uncertain else 25):
                 while True:
                     response = client.get('/v1/runtime/operations/' + operation_id, headers=headers['subject'])
                     assert response.status_code == 200, response.text
                     view = response.json()
                     if view['executor_stage'] == stage:
                         return view
-                    assert view['error'] is None, view
+                    assert view['error'] is None or (allow_uncertain and
+                        view['error']['code'] == 'DISPATCH_CONNECTION_LOST' and
+                        view['error']['possible_effect']), view
                     await asyncio.sleep(.05)
+
+        async def reserve_fresh(attempt_id):
+            # Publication and binding revalidation can advance between the
+            # readiness snapshot and an assessment. Only a pre-reservation
+            # stale observation is retryable; keep uncertain writes visible.
+            async with asyncio.timeout(30):
+                while True:
+                    try:
+                        return await attempts.reserve(attempt_id)
+                    except nexus_connector_core.CoreError as error:
+                        if error.code != 'STALE_OBSERVATION':
+                            raise
+                        await asyncio.sleep(.05)
 
         try:
             async with asyncio.timeout(5):
@@ -162,14 +218,14 @@ def test_capacity_survives_lost_reply_reconnect_and_connector_process_restart(on
                     raise ConnectionError('Synthetic lost reserve response')
             attempts.capacity = LostReply()
             with pytest.raises(ConnectionError, match='lost reserve'):
-                await attempts.reserve(aid)
+                await reserve_fresh(aid)
             original_request = attempts.get(aid).request
             attempts.capacity = registry
-            held = await attempts.reserve(aid)
+            held = await reserve_fresh(aid)
             assert held.state == 'RESERVED' and held.request == original_request
             assert (await command('status'))['opens'] == 0
             _, other = new_candidate()
-            denied = await attempts.reserve(other)
+            denied = await reserve_fresh(other)
             assert denied.state == 'NOT_AVAILABLE' and denied.reason == 'HOST_FULL'
             assert not (await attempts.release(other)).active
             generation = (await command('status'))['generation']
@@ -183,7 +239,7 @@ def test_capacity_survives_lost_reply_reconnect_and_connector_process_restart(on
             # Persist another unused ticket, terminate this process, and load
             # its original record from a new process with a different boot.
             _, restart_id = new_candidate()
-            before = await attempts.reserve(restart_id)
+            before = await reserve_fresh(restart_id)
             assert before.state == 'RESERVED'
             old_pid = process.pid
             if restart_mode == 'graceful':
@@ -202,14 +258,43 @@ def test_capacity_survives_lost_reply_reconnect_and_connector_process_restart(on
             assert not (await attempts.release(restart_id)).active
 
             _, work_id = new_candidate()
-            assert (await attempts.reserve(work_id)).state == 'RESERVED'
+            assert (await reserve_fresh(work_id)).state == 'RESERVED'
+            if stop_phase == 'open':
+                assert (await command('hold_open'))['opening'] == 0
+            elif stop_phase == 'publication':
+                assert not (await command('hold_bind_commit'))['bind_commit_entered']
             committed = attempts.claim(work_id)
             admitted = await build_capacity_admission(deps).consume(committed.operation_id)
+            if stop_phase is not None:
+                pending_field = ('opening' if stop_phase == 'open'
+                                 else 'bind_commit_entered')
+                async with asyncio.timeout(15):
+                    while not (opening_state := await command('status'))[pending_field]:
+                        await asyncio.sleep(.05)
+                if stop_phase == 'open':
+                    assert opening_state['opens'] == 0
+                assert (await command('begin_stop'))['stop_pending']
+                await asyncio.sleep(.2)
+                held = await command('status')
+                assert held['stop_pending']
+                if stop_phase == 'open':
+                    assert held['opens'] == 0
+                release = ('release_open' if stop_phase == 'open'
+                           else 'release_bind_commit')
+                assert (await command(release))['stop_pending']
+                assert (await asyncio.wait_for(command('finish_stop'), 60))['pending'] == 0
+                assert await finish_process() == 0
+                assert process.returncode == 0
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    assert uow.connection.execute(
+                        'SELECT COUNT(*) FROM execution_dispatch_outbox WHERE operation_id=? AND attempt_no>1',
+                        (admitted.consumption.turn_operation_id,)).fetchone()[0] == 0
+                return
             await wait_turn(admitted.consumption.turn_operation_id, 'SUBMITTED')
             state = await command('status')
             assert (state['opens'], state['sends'], state['stopped']) == (1, 1, 0), state
             _, waiting = new_candidate()
-            unavailable = await attempts.reserve(waiting)
+            unavailable = await reserve_fresh(waiting)
             assert unavailable.state == 'NOT_AVAILABLE' and unavailable.reason in {'BUSY_AFFINITY', 'HOST_FULL', 'EARLIER_WORK_PENDING'}
             await attempts.release(waiting)
             response = client.post('/v1/runtime/intents:resolve', headers=headers['subject'], json=dict(
@@ -219,11 +304,29 @@ def test_capacity_survives_lost_reply_reconnect_and_connector_process_restart(on
             assert response.status_code == 200, response.text
             resolved = response.json()
             assert resolved['can_submit'], resolved
+            if receipt_fault:
+                prior_generation = (await command('status'))['generation']
+                assert (await command('cut_next_receipt'))['receipt_cuts'] == 0
             response = client.post('/v1/runtime/operations', headers=headers['subject'], json={
                 key: resolved[key] for key in ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')})
             assert response.status_code == 202, response.text
-            await wait_turn(resolved['operation_id'], 'SUCCEEDED')
-            assert (await command('status'))['stopped'] == 1
+            await wait_turn(resolved['operation_id'], 'SUCCEEDED',
+                            allow_uncertain=receipt_fault)
+            state = await command('status')
+            assert state['receipt_cuts'] == int(receipt_fault), state
+            assert state['opens'] == 1 and state['stopped'] == 1, state
+            if receipt_fault:
+                state = await ready(prior_generation)
+                assert state['ready'] and state['error'] is None, state
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    assert uow.connection.execute(
+                        'SELECT COUNT(*) FROM execution_receipts WHERE operation_id=?',
+                        (resolved['operation_id'],)).fetchone()[0] == 1
+                    assert uow.connection.execute(
+                        'SELECT COUNT(*) FROM execution_dispatch_outbox WHERE attempt_no<>1').fetchone()[0] == 0
+                assert (await command('stop'))['pending'] == 0
+                assert await finish_process() == 0
+                return
             async with asyncio.timeout(15):
                 while True:
                     released = await registry.release_capacity(committed.request, committed.reservation.reservation_id, 'CANCELLED')
@@ -232,7 +335,7 @@ def test_capacity_survives_lost_reply_reconnect_and_connector_process_restart(on
                     assert released.state == 'RELEASE_PENDING'
                     await asyncio.sleep(.05)
             _, available_again = new_candidate()
-            fresh = await attempts.reserve(available_again)
+            fresh = await reserve_fresh(available_again)
             assert fresh.state == 'RESERVED', fresh
             assert not (await attempts.release(available_again)).active
             assert (await command('status'))['opens'] == 1

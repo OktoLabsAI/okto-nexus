@@ -17,6 +17,8 @@ from nexus_connector_core.discovery import fingerprint
 from okto_nexus.adapters.outbound.sqlite.execution_agent_revisions import current_agent_revisions
 from okto_nexus.adapters.outbound.execution.core_inventory import local_inventory_snapshot
 from okto_nexus.application.handoff_runtime_scheduler import HandoffScheduleLease
+from okto_nexus.application.execution_inventory_freshness import inventory_is_fresh
+from okto_nexus.application.execution_inventory_revalidation import accepts_binding
 from okto_nexus.bootstrap.capacity_admission import build_capacity_admission
 from okto_nexus.bootstrap.handoff_runtime_attempts import build_handoff_runtime_attempts
 from okto_nexus.bootstrap.handoff_runtime_scheduler import build_handoff_runtime_candidates
@@ -78,7 +80,7 @@ def second_remote(onboarding, tmp_path, workspace_id):
 
 
 @asynccontextmanager
-async def running_pair(onboarding, records, tmp_path):
+async def running_pair(onboarding, records, tmp_path, *, managed_native=False):
     import nexus_connector_core
     import okto_nexus_connector
     from okto_nexus_connector.services.execution_selection import acknowledge_execution_binding
@@ -93,14 +95,46 @@ async def running_pair(onboarding, records, tmp_path):
     sock.listen()
     server = uvicorn.Server(uvicorn.Config(client.app, lifespan='off', log_level='error'))
     serving = asyncio.create_task(server.serve(sockets=[sock]))
-    children, logs = [], []
+    children, logs, configs = [], [], []
+
+    async def spawn(index, config, *, suffix=''):
+        log = (tmp_path / f'selection-{index}{suffix}.stderr').open('wb')
+        logs.append(log)
+        # A Windows venv executable can be a redirector with a different PID
+        # from the Python worker. Use the real interpreter so a crash cut
+        # terminates the process that owns the Core journal and control link.
+        child = await asyncio.create_subprocess_exec(getattr(sys, '_base_executable', sys.executable), '-I', '-u',
+            str(Path(__file__).with_name('capacity_connector_process.py')),
+            stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE, stderr=log,
+            creationflags=0x08000000 if os.name == 'nt' else 0)
+        if index == len(children):
+            children.append(child)
+        else:
+            children[index] = child
+        child.stdin.write((json.dumps(config) + '\n').encode())
+        await child.stdin.drain()
+        return child
 
     async def command(index, name):
+        if name == 'kill':
+            child = children[index]
+            if child.returncode is None:
+                child.kill()  # Only the child created by this disposable test.
+                await asyncio.wait_for(child.wait(), 15)
+            return dict(pid=child.pid, returncode=child.returncode)
+        if name == 'restart':
+            previous = children[index]
+            if previous.returncode is None:
+                previous.kill()  # Only the child created by this disposable test.
+                await asyncio.wait_for(previous.wait(), 15)
+            child = await spawn(index, configs[index], suffix='-restart')
+            return dict(previous_pid=previous.pid, pid=child.pid)
         child = children[index]
         child.stdin.write((json.dumps({'command': name}) + '\n').encode())
         await child.stdin.drain()
-        line = await asyncio.wait_for(child.stdout.readline(), 35)
-        assert line, 'Connector child exited; inspect selection-*.stderr'
+        line = await asyncio.wait_for(child.stdout.readline(), 120)
+        assert line, ('Connector child exited: ' +
+            (tmp_path / f'selection-{index}.stderr').read_text(errors='replace')[-2500:])
         return json.loads(line)
 
     try:
@@ -117,28 +151,48 @@ async def running_pair(onboarding, records, tmp_path):
             state = store.load()
             state.preferences['vault.fallback_file.approved'] = True
             StateStore(state_file(root)).save(state)
-            log = (tmp_path / f'selection-{index}.stderr').open('wb')
-            logs.append(log)
-            child = await asyncio.create_subprocess_exec(sys.executable, '-I', '-u',
-                str(Path(__file__).with_name('capacity_connector_process.py')),
-                stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE, stderr=log,
-                creationflags=0x08000000 if os.name == 'nt' else 0)
-            children.append(child)
             config = dict(root=str(root), base_url=f'http://127.0.0.1:{sock.getsockname()[1]}',
                 server_id=binding['server_id'], executor_id=binding['executor_id'],
                 connector_id=connector_id, register_intent=intent,
                 credential_epoch=revisions.credential_epoch, agent_key=headers['subject']['Authorization'].removeprefix('Bearer '),
                 binary=str(binary), workspace_root=str(workspace_root),
+                real_native_child=managed_native,
                 source_roots=[str(Path(module.__file__).resolve().parents[1])
                     for module in (nexus_connector_core, okto_nexus_connector)] + site.getsitepackages() + [site.getusersitepackages()])
-            child.stdin.write((json.dumps(config) + '\n').encode())
-            await child.stdin.drain()
-        async with asyncio.timeout(35):
+            configs.append(config)
+            await spawn(index, config)
+        async with asyncio.timeout(180):
             while True:
                 states = [await command(i, 'status') for i in range(len(records))]
                 hosts = [registry.current_host(row[0]['server_id'], row[0]['executor_id']) for row in records]
-                if all(state['ready'] and host and row[0]['binding_id'] in host.observations
-                       for state, host, row in zip(states, hosts, records)):
+                fresh = client.app.state.inventory_fresh_publications
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    accepted = []
+                    for binding, *_ in records:
+                        current = uow.connection.execute(
+                            'SELECT c.publication_sequence,c.inventory_revision,s.observation_age_ms,'
+                            's.canonical_projection FROM execution_inventory_current c '
+                            'JOIN execution_inventory_snapshots s ON s.server_id=c.server_id '
+                            'AND s.executor_id=c.executor_id AND s.publication_sequence=c.publication_sequence '
+                            'WHERE c.server_id=? AND c.executor_id=?',
+                            (binding['server_id'], binding['executor_id'])).fetchone()
+                        marker = fresh.get((binding['server_id'], binding['executor_id']))
+                        selected = uow.connection.execute(
+                            'SELECT b.*,ep.adapter_id,e.control_state FROM execution_bindings b '
+                            'JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id '
+                            'JOIN execution_executors e ON e.server_id=b.server_id AND e.executor_id=b.executor_id '
+                            'WHERE b.server_id=? AND b.binding_id=?',
+                            (binding['server_id'], binding['binding_id'])).fetchone()
+                        accepted.append(current is not None and marker is not None
+                                        and selected is not None
+                                        and selected['control_state'] == 'CONTROL_READY'
+                                        and marker[0] == current['publication_sequence']
+                                        and inventory_is_fresh(current, marker, selected['adapter_id'])
+                                        and accepts_binding(uow.connection, selected, current['inventory_revision'],
+                                                            binding['server_id'], binding['executor_id']))
+                if all(state['ready'] and state['pid'] == children[index].pid
+                       and host and row[0]['binding_id'] in host.observations and accepted[index]
+                       for index, (state, host, row) in enumerate(zip(states, hosts, records))):
                     assert len({os.getpid(), *(state['pid'] for state in states)}) == len(records) + 1
                     break
                 await asyncio.sleep(.1)
@@ -149,6 +203,10 @@ async def running_pair(onboarding, records, tmp_path):
             if child.returncode is None:
                 try:
                     result = await command(index, 'stop')
+                    while 'pending' not in result:
+                        line = await asyncio.wait_for(child.stdout.readline(), 30)
+                        assert line, 'Connector child exited before shutdown result'
+                        result = json.loads(line)
                     assert result['pending'] == 0, result
                     assert await asyncio.wait_for(child.wait(), 15) == 0
                 except (Exception, asyncio.CancelledError) as error:
@@ -169,13 +227,15 @@ async def running_pair(onboarding, records, tmp_path):
 
 
 @pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
-@pytest.mark.parametrize('mode', ['priority', 'group', 'ambiguous', 'busy_affinity', 'unresolved_affinity', 'revoked', 'unknown_native_reply', 'unknown_reconnect'])
+@pytest.mark.parametrize('mode', ['priority', 'group', 'ambiguous', 'busy_affinity', 'unresolved_affinity', 'revoked', 'unknown_native_reply', 'unknown_reconnect', 'unknown_host_restart'])
 def test_one_candidate_selects_authorized_unambiguous_executor_without_busy_fallback(onboarding, tmp_path, monkeypatch, mode):
+    if mode == 'unknown_host_restart' and os.name != 'nt':
+        pytest.skip('M6 Windows Job host restart qualification')
     from okto_nexus_connector.storage.state_store import StateStore
     monkeypatch.syspath_prepend(str(Path(__file__).parents[1]))
     from test_pr34_remediation import tool
-    unknown = mode in {'unknown_native_reply', 'unknown_reconnect'}
-    if mode == 'unknown_reconnect':
+    unknown = mode in {'unknown_native_reply', 'unknown_reconnect', 'unknown_host_restart'}
+    if mode in {'unknown_reconnect', 'unknown_host_restart'}:
         from functools import partial
         from okto_nexus.adapters.inbound.http import executor_link
         # The production disconnect path preserves a granted lease until its
@@ -233,11 +293,22 @@ def test_one_candidate_selects_authorized_unambiguous_executor_without_busy_fall
                 await asyncio.sleep(.05)
 
     async def admit(intent, **kwargs):
-        response = client.post('/v1/runtime/intents:resolve', headers=headers['subject'], json=dict(
-            client_intent_id='selection-' + intent, intent=intent, binding_id=first['binding_id'],
-            workspace_binding_id=first['workspace_binding_id'], **kwargs))
-        assert response.status_code == 200 and response.json()['can_submit'], response.text
-        resolved = response.json()
+        deadline = asyncio.get_running_loop().time() + 20
+        attempt = 0
+        while True:
+            response = client.post('/v1/runtime/intents:resolve', headers=headers['subject'], json=dict(
+                client_intent_id=f'selection-{intent}-{attempt}', intent=intent,
+                binding_id=first['binding_id'], workspace_binding_id=first['workspace_binding_id'], **kwargs))
+            assert response.status_code == 200, response.text
+            resolved = response.json()
+            if resolved['can_submit']:
+                break
+            # A refused intent is durable, so retry a fresh no-effect intent
+            # only while the live Connector refreshes its inventory marker.
+            assert resolved['blockers'] == ['inventory_not_fresh'], response.text
+            assert asyncio.get_running_loop().time() < deadline, response.text
+            attempt += 1
+            await asyncio.sleep(.05)
         response = client.post('/v1/runtime/operations', headers=headers['subject'], json={
             key: resolved[key] for key in ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')})
         assert response.status_code == 202, response.text
@@ -245,7 +316,10 @@ def test_one_candidate_selects_authorized_unambiguous_executor_without_busy_fall
         return resolved
 
     async def run():
-        async with running_pair(onboarding, records, tmp_path) as command:
+        # A reconnect must recover the same durable native launch on every OS.
+        async with running_pair(onboarding, records, tmp_path,
+                                managed_native=mode in {
+                                    'unknown_reconnect', 'unknown_host_restart'}) as command:
             if unknown:
                 await command(1, 'lose_next_send')
             if mode in {'busy_affinity', 'unresolved_affinity'}:
@@ -290,13 +364,41 @@ def test_one_candidate_selects_authorized_unambiguous_executor_without_busy_fall
                 assert before['ready'], 'Publishing a durable unknown fact must not collapse the connection'
                 registry = deps.runtime_availability
                 old_host = registry.current_host(second['server_id'], second['executor_id'])
-                after = await command(1, 'disconnect')
-                assert not after['ready']
+                if mode == 'unknown_host_restart':
+                    import time
+                    from datetime import datetime
+                    from okto_nexus.adapters.outbound.process_liveness import process_exited
+                    assert before['opens'] == before['sends'] == 1
+                    child_pid, = before['native_child_pids']
+                    from okto_nexus_connector.platform.paths import state_dir
+                    daemon_root = state_dir(tmp_path / 'selection-daemon-1')
+                    import sqlite3
+                    with sqlite3.connect(
+                            f'file:{daemon_root / "owned-slots.db"}?mode=ro', uri=True) as ledger:
+                        assert ledger.execute(
+                            'SELECT released FROM owned_slot_reservations WHERE session_id=?',
+                            (held.request.scope.session_id,),
+                        ).fetchone()[0] == 0
+                    await command(1, 'kill')
+                    async with asyncio.timeout(5):
+                        while process_exited(child_pid) is not True:
+                            await asyncio.sleep(.05)
+                    with deps.connection_factory.unit_of_work(write=False) as uow:
+                        deadline = uow.connection.execute(
+                            'SELECT valid_until_server FROM execution_leases '
+                            'WHERE session_id=? ORDER BY lease_serial DESC LIMIT 1',
+                            (held.request.scope.session_id,),
+                        ).fetchone()[0]
+                    await asyncio.sleep(max(0, datetime.fromisoformat(deadline).timestamp() - time.time() + .2))
+                    await command(1, 'restart')
+                else:
+                    after = await command(1, 'disconnect')
+                    assert not after['ready']
                 # While the failed host drains/reconciles, the other executor
                 # is live. Its availability still grants no right to replay.
                 # Full reconnect/generation qualification belongs to T29.
                 assert (await command(0, 'status'))['ready']
-                if mode == 'unknown_reconnect':
+                if mode in {'unknown_reconnect', 'unknown_host_restart'}:
                     async with asyncio.timeout(60):
                         while True:
                             after = await command(1, 'status')
@@ -317,6 +419,27 @@ def test_one_candidate_selects_authorized_unambiguous_executor_without_busy_fall
                     registry.unregister(old_host)
                     assert registry.current_host(second['server_id'], second['executor_id']) is new_host
                     assert new_host.observations == snapshot
+                    if mode == 'unknown_host_restart':
+                        assert after['opens'] == after['sends'] == 0
+                        with sqlite3.connect(
+                                f'file:{daemon_root / "executor-journal.db"}?mode=ro', uri=True) as journal:
+                            launch = journal.execute(
+                                'SELECT spawn_claimed,producer_fenced,stop_proof '
+                                'FROM process_launches WHERE session_id=?',
+                                (held.request.scope.session_id,),
+                            ).fetchone()
+                        assert launch == (1, 1, 'CONTAINER_STOPPED')
+                        with sqlite3.connect(
+                                f'file:{daemon_root / "owned-slots.db"}?mode=ro', uri=True) as ledger:
+                            assert ledger.execute(
+                                'SELECT released FROM owned_slot_reservations WHERE session_id=?',
+                                (held.request.scope.session_id,),
+                            ).fetchone()[0] == 1
+                        with deps.connection_factory.unit_of_work(write=False) as uow:
+                            assert uow.connection.execute(
+                                'SELECT attempt_no FROM execution_dispatch_outbox WHERE operation_id=?',
+                                (admitted.consumption.turn_operation_id,),
+                            ).fetchone()[0] == 1
                 with deps.connection_factory.unit_of_work() as uow:
                     uow.connection.execute('UPDATE agent_endpoints SET priority=20 WHERE endpoint_id=?', (first['endpoint_id'],))
                 for generation in (0, 1):
@@ -333,8 +456,12 @@ def test_one_candidate_selects_authorized_unambiguous_executor_without_busy_fall
                     assert receipt[:] == ('OUTCOME_UNKNOWN', 1)
             states = [await command(i, 'status') for i in range(2)]
             successful = mode in {'priority', 'group', 'revoked'} or unknown
-            assert sum(s['opens'] for s in states) == int(successful or mode in {'busy_affinity', 'unresolved_affinity'})
-            assert sum(s['sends'] for s in states) == int(successful or mode == 'busy_affinity')
+            assert sum(s['opens'] for s in states) == int(
+                (successful or mode in {'busy_affinity', 'unresolved_affinity'})
+                and mode != 'unknown_host_restart')
+            assert sum(s['sends'] for s in states) == int(
+                (successful or mode == 'busy_affinity')
+                and mode != 'unknown_host_restart')
             with deps.connection_factory.unit_of_work(write=False) as uow:
                 assert uow.connection.execute('SELECT COUNT(*) FROM handoff_runtime_attempts').fetchone()[0] <= 1
                 assert uow.connection.execute('SELECT COUNT(*) FROM runtime_handoff_bindings').fetchone()[0] == int(successful)

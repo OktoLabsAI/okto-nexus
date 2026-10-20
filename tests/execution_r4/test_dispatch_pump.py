@@ -4,6 +4,7 @@ import asyncio
 import json
 from pathlib import Path
 import threading
+import time
 
 from fastapi.testclient import TestClient
 from jsonschema import Draft202012Validator
@@ -49,6 +50,115 @@ def make_pump(state, send, lock, closed, **options):
     return pumps.ExecutionDispatchPump(factory=deps.connection_factory, channel=channel,
         access=access, fresh_publications=app.state.inventory_fresh_publications,
         send=send, send_lock=lock, verify_link=verify, close_link=close, poll_interval=0.01, **options)
+
+
+@pytest.mark.parametrize('boundary', ['reserve_execution_dispatch', 'begin_execution_send'])
+def test_transient_writer_contention_retries_without_closing_executor(owner, monkeypatch, boundary):
+    original = getattr(pumps, boundary)
+    failures = 0
+    def contended(**kwargs):
+        nonlocal failures
+        if failures < 2:
+            failures += 1
+            raise OktoNexusError('DB_ERROR', 'writer admission timeout', {}, retryable=True)
+        return original(**kwargs)
+    monkeypatch.setattr(pumps, boundary, contended)
+    async def run():
+        closed, delivered = asyncio.Event(), asyncio.Event()
+        sent = []
+        async def send(frame):
+            sent.append(frame)
+            delivered.set()
+        pump = make_pump(owner, send, asyncio.Lock(), closed)
+        pump.start()
+        try:
+            await asyncio.wait_for(delivered.wait(), 5)
+            assert failures == 2
+            assert len(sent) == 1
+            assert not closed.is_set() and pump.error is None
+            assert (await wait_for_state(owner, 'SENDING'))['attempt_no'] == 1
+        finally:
+            await pump.stop()
+    asyncio.run(run())
+
+
+def test_pending_dispatch_waits_for_matching_inventory_receipt(owner, monkeypatch):
+    deps, app, _, _, _, channel, _, _ = owner
+    key = (channel.server_id, channel.executor_id)
+    original_begin = pumps.begin_execution_send
+    original_release = pumps.release_unsent_dispatch
+    released = threading.Event()
+    stale = True
+
+    def begin_with_publication_gap(**kwargs):
+        if stale:
+            receipt = app.state.inventory_fresh_publications[key]
+            app.state.inventory_fresh_publications[key] = (receipt[0] - 1, *receipt[1:])
+        return original_begin(**kwargs)
+
+    def release_pending(**kwargs):
+        original_release(**kwargs)
+        released.set()
+
+    monkeypatch.setattr(pumps, 'begin_execution_send', begin_with_publication_gap)
+    monkeypatch.setattr(pumps, 'release_unsent_dispatch', release_pending)
+
+    async def run():
+        nonlocal stale
+        closed, delivered = asyncio.Event(), asyncio.Event()
+        sent = []
+        async def send(frame):
+            sent.append(frame)
+            delivered.set()
+        pump = make_pump(owner, send, asyncio.Lock(), closed)
+        pump.start()
+        try:
+            assert await asyncio.to_thread(released.wait, 3)
+            assert not sent and view(owner)['admission_state'] != 'RESOLVED_TERMINAL'
+            stale = False
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                current = uow.connection.execute(
+                    'SELECT publication_sequence FROM execution_inventory_current '
+                    'WHERE server_id=? AND executor_id=?', key).fetchone()
+            receipt = app.state.inventory_fresh_publications[key]
+            app.state.inventory_fresh_publications[key] = (current[0], *receipt[1:])
+            await asyncio.wait_for(delivered.wait(), 3)
+            assert len(sent) == 1 and not closed.is_set() and pump.error is None
+        finally:
+            await pump.stop()
+    asyncio.run(run())
+
+
+def test_confirmed_incompatible_inventory_still_rejects_unsent_dispatch(owner):
+    deps, app, access, _, _, channel, _, _ = owner
+    reservation = reserve_execution_dispatch(deps.connection_factory,
+        server_id=channel.server_id, executor_id=channel.executor_id,
+        remote_ready=True, channel=channel)
+    previous_revision = 'sha256:' + '0' * 64
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute('UPDATE execution_bindings SET inventory_revision=?',
+                               (previous_revision,))
+        uow.connection.execute(
+            'INSERT INTO execution_inventory_revalidation '
+            '(server_id,executor_id,approved_revision,candidate_ref,current_revision,'
+            'compatible,reason,checked_at) '
+            'SELECT b.server_id,b.executor_id,b.inventory_revision,b.candidate_ref,'
+            "c.inventory_revision,0,'installation_changed','fixture' "
+            'FROM execution_bindings b JOIN execution_inventory_current c '
+            'ON c.server_id=b.server_id AND c.executor_id=b.executor_id',
+        )
+        current = uow.connection.execute(
+            'SELECT publication_sequence FROM execution_inventory_current '
+            'WHERE server_id=? AND executor_id=?',
+            (channel.server_id, channel.executor_id)).fetchone()
+    app.state.inventory_fresh_publications[(channel.server_id, channel.executor_id)] = (
+        current[0], time.monotonic(), 0)
+    with pytest.raises(OktoNexusError, match='inventory is no longer fresh') as denied:
+        begin_execution_send(deps.connection_factory, reservation=reservation,
+            remote_ready=True, fresh_publications=app.state.inventory_fresh_publications,
+            access=access, channel=channel)
+    assert not (denied.value.details or {}).get('transient')
+    release_unsent_dispatch(deps.connection_factory, reservation=reservation)
 
 
 async def wait_for_state(state, expected):

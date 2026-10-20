@@ -473,6 +473,15 @@ export function GraphView({
     requestAnimationFrame(() => spaceCardsRef.current());
   }, [viewMode]);
 
+  // A click captures the node at that moment. Keep the open detail panel tied
+  // to the latest graph snapshot so presence changes appear without reselecting.
+  const liveSelection: Selection = selection?.kind === "node" && graph
+    ? (() => {
+        const node = graph.nodes.find((item) => item.agent_id === selection.node.agent_id);
+        return node ? { kind: "node", node } : null;
+      })()
+    : selection;
+
   return (
     <div className="h-full flex">
       <div className="flex-1 min-w-0 flex flex-col bg-surface-50 dark:bg-surface-950 transition-colors">
@@ -693,10 +702,10 @@ export function GraphView({
         )}
         </div>
       </div>
-      {selection && (
+      {liveSelection && (
         <ResizablePanel testId="side-panel">
           <SidePanel
-            selection={selection}
+            selection={liveSelection}
             workspace={workspace}
             theme={theme}
             onClose={() => setSelection(null)}

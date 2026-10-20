@@ -512,6 +512,15 @@ class SqliteObservabilityQueries:
                 tuple(params) + (page_size, offset),
             ).fetchall()
 
+            # Correlate only persisted runtime publications, never agent-written
+            # titles/body claims. This also labels historical partial replies.
+            runtime_results = {}
+            if rows:
+                placeholders = ','.join('?' for _ in rows)
+                runtime_results = {r['publication_message_id']: r for r in uow.connection.execute(
+                    f'SELECT publication_message_id,delivery_outcome,output_truncated FROM runtime_results '
+                    f'WHERE publication_message_id IN ({placeholders})',
+                    tuple(row['message_id'] for row in rows)).fetchall()}
             items: list[dict[str, Any]] = []
             for row in rows:
                 deliveries = uow.connection.execute(
@@ -539,6 +548,12 @@ class SqliteObservabilityQueries:
                 }
                 if include_body:
                     item["body"] = body
+                result = runtime_results.get(row['message_id'])
+                if result is not None:
+                    item['runtime_result'] = {
+                        'outcome': result['delivery_outcome'],
+                        'partial': result['delivery_outcome'] in ('interrupted', 'failed') or bool(result['output_truncated']),
+                    }
                 artifacts = _loads(row["artifacts"])
                 if isinstance(artifacts, list) and artifacts:
                     item["artifacts"] = artifacts

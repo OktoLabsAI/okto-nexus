@@ -100,6 +100,32 @@ def _admit(uow, access, fresh, remote, binding, identity, intent, session_id=Non
     return resolved
 
 
+def _warm_observation_ready(deps, uow, binding, agent_id, fresh):
+    """Await startup/reconnection evidence without penalizing native health.
+
+    This only postpones speculative warm reservations. Normal admission still
+    validates the exact binding, authority and inventory before every effect.
+    """
+    from .execution_agent_recovery import agent_recovering
+    from .executor_inventory_views import read_executor_inventory
+    server, executor = binding['server_id'], binding['executor_id']
+    host = uow.connection.execute(
+        'SELECT control_state,revoked_at FROM execution_executors '
+        'WHERE server_id=? AND executor_id=?', (server, executor)).fetchone()
+    if (host is None or host['control_state'] != 'CONTROL_READY' or host['revoked_at'] is not None
+            or agent_recovering(uow.connection, server, executor, agent_id)):
+        return False
+    try:
+        observation = read_executor_inventory(deps.connection_factory,
+            server_id=server, executor_id=executor, agent_id=agent_id,
+            fresh_publications=fresh, uow=uow)
+    except OktoNexusError as error:
+        if error.code == ErrorCode.NOT_FOUND:
+            return False
+        raise
+    return observation['freshness'] == 'FRESH'
+
+
 def _settle(conn, slot, now):
     if not slot['call_id']:
         return
@@ -122,6 +148,27 @@ def _settle(conn, slot, now):
         capacity.fail(conn, call_id=slot['call_id'], code=code, stage='execution' if call['started_at'] else 'opening',
             message='The one-shot call could not complete. Its execution details are retained in Nexus.', now=now,
             retry_safe=not call['started_at'], cancelled=bool(failure and failure['stage'] == 'CANCELLED'))
+
+
+def _fail_permanently_denied_openings(conn, slot, now):
+    """Propagate a proved pre-Core authorization refusal to waiting callers."""
+    row = conn.execute("SELECT last_error FROM execution_dispatch_outbox WHERE server_id=? AND executor_id=? "
+        "AND operation_id=? AND dispatch_state='RESOLVED_TERMINAL'",
+        (slot['server_id'], slot['executor_id'], slot['open_operation_id'])).fetchone()
+    if not row or not row['last_error']:
+        return
+    try:
+        error = json.loads(row['last_error'])
+    except (TypeError, ValueError):
+        return
+    if error.get('code') != 'PERMISSION_DENIED' or error.get('possible_effect') is not False:
+        return
+    pending = conn.execute("SELECT call_id FROM one_shot_calls WHERE agent_id=? AND executor_id=? "
+        "AND configuration_digest=? AND state IN ('QUEUED','ADMITTED') ORDER BY enqueued_at",
+        (slot['agent_id'], slot['executor_id'], slot['configuration_digest'])).fetchall()
+    for call in pending:
+        capacity.fail(conn, call_id=call['call_id'], code='PERMISSION_DENIED', stage='opening',
+            message=error.get('message') or 'Runtime action is not authorized.', now=now)
 
 
 def tick(deps):
@@ -160,6 +207,14 @@ def tick(deps):
                     'AND operation_id=? ORDER BY receipt_revision DESC LIMIT 1',
                     (slot['server_id'], slot['executor_id'], slot['open_operation_id'])).fetchone()
                 no_effect = bool(opening and opening['stage'] == 'FAILED' and not opening['possible_effect'])
+                if session and session['lifecycle_state'] == 'FAILED' and session['lease_state'] == 'NONE':
+                    from .one_shot_refusal import opening_refused_before_core
+                    # Pre-send refusal has no Core receipt by design. Its exact
+                    # durable proof releases only the unused logical pool slot.
+                    refused = opening_refused_before_core(conn, slot)
+                    no_effect = no_effect or refused
+                    if refused:
+                        _fail_permanently_denied_openings(conn, slot, now)
                 never_opened = (slot['state'] == 'CLOSING' and slot['session_id'] is None
                     and slot['open_operation_id'] is None and not conn.execute(
                         'SELECT 1 FROM execution_domain_deliveries WHERE domain_operation_id=?', (slot['call_id'],)).fetchone())
@@ -223,6 +278,8 @@ def tick(deps):
             capacity.retire_warm(conn, agent_id=agent['agent_id'], executor_id=binding['executor_id'],
                                  configuration_digest=key, binding_id=binding['binding_id'])
             capacity.trim_warm(conn, agent_id=agent['agent_id'], executor_id=binding['executor_id'])
+            if not _warm_observation_ready(deps, uow, binding, agent['agent_id'], fresh):
+                continue
             # Reserve the whole deficit in this pass. Native opens are independent
             # outbox effects, never awaited here or spread across maintenance ticks.
             for _ in range(256):

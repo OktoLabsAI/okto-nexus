@@ -146,6 +146,7 @@ def test_sqlite_pages_rotate_logical_agents_and_resume_cursor_without_materializ
             CREATE TABLE handoff_runtime_attempts(agent_id,workspace_id,handoff_id,claim_generation,active,operation_id);
             CREATE TABLE execution_capacity_admissions(domain_operation_id,state);
             CREATE TABLE agent_endpoints(agent_id,workspace_id,protocol,enabled,activation_state);
+                CREATE TABLE handoff_runtime_no_effect_retries(handoff_id,agent_id,retry_after);
         ''')
         for n in range(100):
             for _ in range(20 if n == 0 else 1):
@@ -158,7 +159,8 @@ def test_sqlite_pages_rotate_logical_agents_and_resume_cursor_without_materializ
         current = HandoffScheduleLease('handoff', 'workspace', 0, 'token', 0, 0, '')
         seen = []
         while True:
-            ids, cursor, more = repo.agents_page(SimpleNamespace(connection=conn), current, allow_new=True, limit=4)
+            ids, cursor, more = repo.agents_page(SimpleNamespace(connection=conn), current, allow_new=True,
+                                                 limit=4, now_epoch=1000)
             assert len(ids) <= 4
             seen.extend(ids)
             current = replace(current, candidate_cursor=cursor)
@@ -167,17 +169,19 @@ def test_sqlite_pages_rotate_logical_agents_and_resume_cursor_without_materializ
             repo = SqliteHandoffCandidateRepository(attempts=None, availability=None, pool_factory=None)
         assert len(seen) == len(set(seen)) == 101
         assert 'revoked' in seen and 'other' not in seen
-        next_ids, _, _ = repo.agents_page(SimpleNamespace(connection=conn), current, allow_new=True, limit=4)
+        next_ids, _, _ = repo.agents_page(SimpleNamespace(connection=conn), current, allow_new=True,
+                                          limit=4, now_epoch=1000)
         assert next_ids[0] != seen[0]
         recovery, _, more = repo.agents_page(SimpleNamespace(connection=conn), replace(current, candidate_cursor=''),
-                                             allow_new=False, limit=4)
+                                             allow_new=False, limit=4, now_epoch=1000)
         assert recovery == ('revoked',) and not more
         import json
         suffix = replace(current, candidate_cursor=json.dumps({'anchor': 'revoked', 'after': 'revoked'}))
-        ids, cursor, more = repo.agents_page(SimpleNamespace(connection=conn), suffix, allow_new=False, limit=4)
+        ids, cursor, more = repo.agents_page(SimpleNamespace(connection=conn), suffix, allow_new=False,
+                                             limit=4, now_epoch=1000)
         assert ids == () and more
         ids, _, _ = repo.agents_page(SimpleNamespace(connection=conn), replace(current, candidate_cursor=cursor),
-                                     allow_new=False, limit=4)
+                                     allow_new=False, limit=4, now_epoch=1000)
         assert ids == ('revoked',)
     finally:
         conn.close()
@@ -392,6 +396,12 @@ def test_capacity_publication_wakes_waiting_broadcast_without_new_message_or_exp
 
     async def run():
         ledger = await owner.host._ledger()
+        # This host has already opened its durable ledger at startup. Keep
+        # the stored slot policy aligned with the test's one-slot host limit.
+        ledger.max_slots = 1
+        await ledger._run(lambda db: db.execute(
+            'INSERT INTO owned_slot_policy(singleton,max_slots) VALUES(1,1) '
+            'ON CONFLICT(singleton) DO UPDATE SET max_slots=1'))
         key = OperationKey(owner.channel.server_id, owner.channel.executor_id, 'occupied-opening')
         await ledger.reserve_owned_slot(key, 'occupied-session')
         clock = [time.time()]

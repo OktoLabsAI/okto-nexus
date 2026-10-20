@@ -139,9 +139,14 @@ def boot_endpoint(deps, context, endpoint_id, key):
     if binding is None:
         raise OktoNexusError(ErrorCode.CONFLICT, "Canonical boot requires an approved binding.", {})
     access = build_execution_access(deps)
-    with deps.connection_factory.unit_of_work(write=False) as uow:
+    # Serialize the no-admission proof with concurrent submitters. A read-only
+    # snapshot could miss an operation already being committed by another caller.
+    with deps.connection_factory.unit_of_work() as uow:
         require_boot_authority(uow, access=access, agent_id=binding["agent_id"],
                                endpoint_id=endpoint_id, context=context)
+        from ..application.runtime_boot import next_boot_intent_key
+        key = next_boot_intent_key(uow.connection, server_id=binding['server_id'],
+            agent_id=binding['agent_id'], binding_id=binding['binding_id'], key=key, now=deps.clock.now_iso())
     # The host keeps the runtime_boot source; it never constructs an agent key.
     return _start(deps, replace(context, actor_agent_id=binding["agent_id"]), access, binding, key)
 

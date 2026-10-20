@@ -37,6 +37,25 @@ def test_local_discovery_calls_public_core_facade_without_runtime(tmp_path):
     assert found.candidates == ()
 
 
+def test_local_selection_uses_exact_partial_coverage(tmp_path):
+    import pytest
+    from nexus_connector_core import CoreError, get_runtime_catalog
+    from okto_nexus.adapters.outbound.execution.core_inventory import resolve_local_installation_selection
+    candidate = InstallationCandidate('codex_app_server', str(tmp_path/'codex'),
+        'sha256:'+'a'*64, 'explicit', 'selected')
+    coverage = {row.adapter_id: dict(state='PENDING', observation_age_ms=None, error_code=None)
+                for row in get_runtime_catalog().runtimes if row.discoverable}
+    coverage[candidate.adapter_id] = dict(state='PRESENT', observation_age_ms=10, error_code=None)
+    snapshot = local_inventory_snapshot((candidate,), server_id='server', executor_id='executor',
+        producer_instance_id='owner', publication_sequence=1, observations=coverage)
+    kwargs = dict(adapter_id=candidate.adapter_id, candidate_ref=snapshot['evidence'][0]['candidate_ref'],
+                  expected_inventory_revision=snapshot['inventory_revision'])
+    assert resolve_local_installation_selection((candidate,), observations=coverage, **kwargs) == candidate
+    with pytest.raises(CoreError) as refused:
+        resolve_local_installation_selection((candidate,), **kwargs)
+    assert refused.value.code == 'STALE_GENERATION'
+
+
 def test_two_copies_keep_distinct_installation_refs(tmp_path):
     candidates = [
         InstallationCandidate(

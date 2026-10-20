@@ -15,6 +15,11 @@ def same_installation_location(approved, current):
 def compatible_selection(baseline, current):
     if baseline is None or current is None:
         return False
+    # Format 3 adds independent observation coverage, not a new installation
+    # identity or execution contract. Preserve retained format-2 consent while
+    # still comparing every selected runtime/evidence field below.
+    if baseline.get('format') == 2 and current.get('format') == 3:
+        baseline = {**baseline, 'format': 3}
     if baseline == current:
         return True
     # Core may add an implementation for a previously unsupported control.
@@ -75,8 +80,21 @@ def inventory_accepted(conn, *, server_id, executor_id, approved_revision, candi
         return True
     return conn.execute(
         'SELECT 1 FROM execution_inventory_revalidation WHERE server_id=? AND executor_id=? '
-        'AND approved_revision=? AND candidate_ref=? AND current_revision=? AND compatible=1',
+        'AND approved_revision=? AND candidate_ref=? AND current_revision=? AND compatible=1 '
+        "AND reason NOT IN ('observation_pending','observation_failed')",
         (server_id, executor_id, approved_revision, candidate_ref, current_revision)).fetchone() is not None
+
+
+def binding_consent_preserved(conn, binding, current_revision, server_id, executor_id):
+    """Read-only consent projection; deferred observation grants no execution."""
+    if accepts_binding(conn, binding, current_revision, server_id, executor_id):
+        return True
+    return conn.execute(
+        'SELECT 1 FROM execution_inventory_revalidation WHERE server_id=? AND executor_id=? '
+        'AND approved_revision=? AND candidate_ref=? AND current_revision=? AND compatible=1 '
+        "AND baseline_json IS NOT NULL AND reason IN ('observation_pending','observation_failed')",
+        (server_id, executor_id, binding['inventory_revision'], binding['candidate_ref'], current_revision)
+    ).fetchone() is not None
 
 
 def revalidate_inventory(conn, snapshot):
@@ -124,6 +142,13 @@ def revalidate_inventory(conn, snapshot):
         reason = ('installation_unchanged' if compatible and baseline == current else
                   'installation_updated' if compatible else 'installation_missing' if current is None
                   else 'approved_evidence_missing' if baseline is None else 'selected_installation_changed')
+        observation = next((row for row in snapshot.get('observations', ()) if row['adapter_id'] == adapter), None)
+        if observation and observation['state'] in ('PENDING', 'FAILED'):
+            # Lack of completed evidence cannot revoke a prior selection, nor
+            # repair one already found incompatible. Execution still requires
+            # fresh completed evidence via inventory_accepted + freshness.
+            compatible = baseline is not None and (bool(prior['compatible']) if prior else True)
+            reason = 'observation_' + observation['state'].lower()
         conn.execute('INSERT INTO execution_inventory_revalidation VALUES (?,?,?,?,?,?,?,?,'
             "strftime('%Y-%m-%dT%H:%M:%fZ','now')) ON CONFLICT(server_id,executor_id,approved_revision,candidate_ref) "
             'DO UPDATE SET current_revision=excluded.current_revision,baseline_json=excluded.baseline_json,'

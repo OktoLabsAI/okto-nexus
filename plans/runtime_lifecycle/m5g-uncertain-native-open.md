@@ -1,0 +1,5 @@
+# M5g uncertain native opening
+
+A separate local Connector process now injects a lost response after its synthetic native factory has performed the opening side effect. The production Core, Connector and Nexus packages are the byte-verified installed wheels from M5e. The opening receives one `OUTCOME_UNKNOWN` receipt with `possible_effect=true` and `retry_safe=false`. The authenticated control connection remains ready, the exact reservation stays `CONSUMED`, no turn is sent, and no `PREPARATION_FAILED` or final no-effect delivery is fabricated. The focused installed-wheel test passed twice, including a rerun that asserts the exact consumed state.
+
+The synthetic factory intentionally cannot provide a native process birth handle after raising, so this test cannot establish eventual physical containment or safe reclamation. Its first graceful test teardown waited past the fixture timeout on that unresolved synthetic effect. The fixture now kills only its own child after the assertions; it does not touch the global Nexus or other processes. A separate managed-adapter/process-birth test and cross-host recovery comparison remain necessary before M5 completion.

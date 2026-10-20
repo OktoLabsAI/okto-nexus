@@ -18,7 +18,7 @@ def version_probe(monkeypatch,local_setup,request):
     _,app,client,_,_,candidate,_=local_setup
     monkeypatch.setattr(availability,'qualified_build',lambda *a,**k:True)
     candidate=replace(candidate,architecture='x86_64',version='0.159.0' if request.param else None,trust='untrusted' if request.param else 'selected')
-    monkeypatch.setattr(embedded_inventory,'discover_local_candidates',lambda **k:SimpleNamespace(candidates=(candidate,)))
+    monkeypatch.setattr(embedded_inventory,'discover_local_candidates',lambda **k:SimpleNamespace(candidates=tuple(c for c in (candidate,) if not k.get('adapter_ids') or c.adapter_id in k['adapter_ids'])))
     client.portal.call(app.state.embedded_inventory_owner.refresh)
     async def probe(candidate): return replace(candidate,version='0.159.0')
     monkeypatch.setattr(execution_local_observations,'probe_version',probe)

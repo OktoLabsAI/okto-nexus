@@ -42,7 +42,7 @@ def test_core_control_addition_revalidates_existing_installation(admitted_local,
     candidate = setup[5]
     other = replace(candidate, executable=candidate.executable + '.other', installation_ref=None)
     monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
-        lambda **_: SimpleNamespace(candidates=(candidate, other)))
+        lambda **_: SimpleNamespace(candidates=tuple(c for c in (candidate, other) if not _.get('adapter_ids') or c.adapter_id in _['adapter_ids'])))
     client.portal.call(owner.refresh)
     with deps.connection_factory.unit_of_work(write=False) as uow:
         after = dict(uow.connection.execute('SELECT * FROM execution_bindings').fetchone())
@@ -68,7 +68,7 @@ def test_equivalent_refresh_preserves_binding_and_running_launch(admitted_local,
             uow.connection.execute('DELETE FROM execution_inventory_snapshots')
     other = replace(candidate, executable=candidate.executable + '.other', installation_ref=None)
     monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
-        lambda **_: SimpleNamespace(candidates=(candidate, other)))
+        lambda **_: SimpleNamespace(candidates=tuple(c for c in (candidate, other) if not _.get('adapter_ids') or c.adapter_id in _['adapter_ids'])))
     client.portal.call(owner.refresh)
     launch.check()
     with deps.connection_factory.unit_of_work() as uow:
@@ -92,7 +92,7 @@ def test_changed_selected_installation_requires_review(admitted_local, monkeypat
     client.portal.call(owner.refresh)  # capture the approved baseline
     changed = (() if change == 'missing' else
                (replace(candidate, **{change: 'untrusted' if change == 'trust' else 'sha256:' + '0'*64}),))
-    monkeypatch.setattr(embedded_inventory, 'discover_local_candidates', lambda **_: SimpleNamespace(candidates=changed))
+    monkeypatch.setattr(embedded_inventory, 'discover_local_candidates', lambda **_: SimpleNamespace(candidates=tuple(c for c in changed if not _.get('adapter_ids') or c.adapter_id in _['adapter_ids'])))
     client.portal.call(owner.refresh)
     with deps.connection_factory.unit_of_work() as uow:
         binding = uow.connection.execute('SELECT * FROM execution_bindings').fetchone()
@@ -123,7 +123,7 @@ def test_harness_version_update_preserves_existing_binding_and_launch(admitted_l
     client.portal.call(owner.refresh)
     changed = replace(candidate, version='0.999.0')
     monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
-        lambda **_: SimpleNamespace(candidates=(changed,)))
+        lambda **_: SimpleNamespace(candidates=tuple(c for c in (changed,) if not _.get('adapter_ids') or c.adapter_id in _['adapter_ids'])))
     with deps.connection_factory.unit_of_work(write=False) as uow:
         before = dict(uow.connection.execute('SELECT * FROM execution_bindings').fetchone())
     client.portal.call(owner.refresh)
@@ -152,7 +152,7 @@ def test_one_publication_revalidates_one_hundred_bindings(admitted_local, monkey
             for table, values in [('agent_endpoints', ep), ('execution_bindings', b)]:
                 conn.execute(f'INSERT INTO {table} (' + ','.join(values) + ') VALUES (' + ','.join('?' for _ in values) + ')', tuple(values.values()))
     other = replace(candidate, executable=candidate.executable + '.other', installation_ref=None)
-    monkeypatch.setattr(embedded_inventory, 'discover_local_candidates', lambda **_: SimpleNamespace(candidates=(candidate, other)))
+    monkeypatch.setattr(embedded_inventory, 'discover_local_candidates', lambda **_: SimpleNamespace(candidates=tuple(c for c in (candidate, other) if not _.get('adapter_ids') or c.adapter_id in _['adapter_ids'])))
     client.portal.call(owner.refresh)
     with deps.connection_factory.unit_of_work() as uow:
         bindings = uow.connection.execute('SELECT * FROM execution_bindings').fetchall()
@@ -184,7 +184,7 @@ def test_updated_binary_is_observed_without_repeating_operator_setup(admitted_lo
         changed = replace(changed, source='trusted_root')
     accepted = scenario in {'updated', 'unchanged', 'source_changed', 'source_and_version_changed'}
     monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
-        lambda **_: SimpleNamespace(candidates=(changed,)))
+        lambda **_: SimpleNamespace(candidates=tuple(c for c in (changed,) if not _.get('adapter_ids') or c.adapter_id in _['adapter_ids'])))
     calls = []
     async def probe(selected):
         calls.append(selected)

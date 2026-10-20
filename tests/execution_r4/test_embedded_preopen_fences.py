@@ -8,12 +8,13 @@ from fastapi.testclient import TestClient
 from nexus_connector_core import CoreError, LocalRuntimeCore
 
 from test_embedded_dispatch import local_setup, connected_local, qualified_contract, admit, wait_receipt
-from test_embedded_inventory import app_for
+from test_embedded_inventory import app_for, wait_inventory
 
 
 @pytest.mark.parametrize('adapter,cut', [
     ('pi_rpc', None), ('codex_app_server', None), ('claude_stream', None),
     ('codex_app_server', 'prepare'), ('codex_app_server', 'core'), ('codex_app_server', 'commit'),
+    ('codex_app_server', 'tools'), ('codex_app_server', 'checkpoint'),
 ])
 def test_bound_open_without_core_admission_recovers_and_new_work_runs(tmp_path, monkeypatch, adapter, cut):
     from okto_nexus.bootstrap import embedded_preopen_recovery as recovery
@@ -26,7 +27,7 @@ def test_bound_open_without_core_admission_recovers_and_new_work_runs(tmp_path, 
             patch.setattr(LocalRuntimeCore, 'open', interrupted)
             opened = admit(setup, binding, 'interrupted-open', 'runtime.start', new_session=True, text='Never sent')
             until = time.monotonic() + 10
-            while 'subject' not in app.state.embedded_dispatch_owner.agents.errors:
+            while not app.state.embedded_dispatch_owner.sessions.get(opened['session_id'], {}).get('recovering'):
                 assert time.monotonic() < until
                 time.sleep(.02)
         assert native.opens == 0
@@ -35,7 +36,7 @@ def test_bound_open_without_core_admission_recovers_and_new_work_runs(tmp_path, 
             assert uow.connection.execute('SELECT count(*) FROM execution_receipts').fetchone()[0] == 0
 
     cuts = []
-    if cut in ('prepare', 'commit'):
+    if cut in ('prepare', 'commit', 'checkpoint'):
         name = '_' + cut
         original = getattr(recovery.EmbeddedPreopenRecovery, name)
         def interrupted_commit(*args):
@@ -54,9 +55,22 @@ def test_bound_open_without_core_admission_recovers_and_new_work_runs(tmp_path, 
                 raise OSError('Synthetic lost reply after Core admission fence')
             return result
         monkeypatch.setattr(recovery, 'persist_r4_preopen_refusal', interrupted_core)
+    elif cut == 'tools':
+        from okto_nexus.bootstrap.embedded_tools import EmbeddedToolsOwner
+        original = EmbeddedToolsOwner.release_session
+        async def interrupted_tools(self, session_id):
+            if session_id == opened['session_id'] and not cuts:
+                with self.owner.factory.unit_of_work(write=False) as uow:
+                    assert uow.connection.execute('SELECT local_retirement_json FROM execution_sessions '
+                        'WHERE session_id=?', (session_id,)).fetchone()[0] is None
+                cuts.append(cut)
+                raise OSError('Synthetic cleanup failure before retirement')
+            return await original(self, session_id)
+        monkeypatch.setattr(EmbeddedToolsOwner, 'release_session', interrupted_tools)
     for boot in range(2):
         deps, app = app_for(tmp_path / 'home')
         with TestClient(app) as client:
+            wait_inventory(client)
             owner = app.state.embedded_dispatch_owner
             until = time.monotonic() + 20
             while 'subject' in owner.agents.blocked:
@@ -112,6 +126,7 @@ def test_durable_refusal_before_slot_reservation_recovers(tmp_path, monkeypatch,
         assert not app.state.embedded_dispatch_owner.agents.blocked
     deps, app = app_for(tmp_path / 'home')
     with TestClient(app) as client:
+        wait_inventory(client)
         owner = app.state.embedded_dispatch_owner
         until = time.monotonic() + 15
         while owner.agents.blocked:

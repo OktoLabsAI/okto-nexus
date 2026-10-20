@@ -1,0 +1,23 @@
+{
+  "checkpoint": "M3b",
+  "date": "2026-10-16",
+  "counts": {
+    "tests": 103,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "started_at": "2026-10-16T19:26:27.280673+00:00",
+  "ended_at": "2026-10-16T19:41:05.825964+00:00",
+  "isolated_interpreter": true,
+  "application_source_imported": false,
+  "changed_inputs": [],
+  "wheel_sha256": "76412c9687ee647cc1ad96d75b0ace3caec3a280fe708d0e0873bc5612f7bf7d",
+  "evidence": {
+    "tests.xml": "639ff14a1795ae21528e535ac0e68c6866526b713192fd2227ba708d07e0441d",
+    "campaign.json": "2747db2b1d87742453683cfa99884f2eaa2b7a55bc50aeb798d68a6ff88f6f2a",
+    "installed.json": "2907a0cc93435708ed01456349f00d2c148b47fa6d9f2ba3635cdb1a90a306fb"
+  },
+  "live_installation": "M2e retained; Pi recurrence observed before planned upgrade, not restarted",
+  "dependency_check": "PASS: 48 distributions compatible"
+}

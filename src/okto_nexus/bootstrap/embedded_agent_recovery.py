@@ -4,13 +4,28 @@ Publication lag is not evidence of native failure. A slow worker is retained
 and observed; it is never duplicated or used to revoke a healthy native lease.
 """
 import asyncio
+import logging
 import random
+import re
+import secrets
 import time
 
-from nexus_connector_core import CoreError, ShutdownPolicy
+from nexus_connector_core import (CoreError, ShutdownPolicy,
+    require_audit_snapshot_not_rolled_back)
+from ..errors import ErrorCode, OktoNexusError
 
 from .embedded_reconciliation import EmbeddedReconciliation
 from .embedded_events import EmbeddedPublicationDeferred
+
+
+def _diagnostic(error):
+    details = getattr(error, 'details', None)
+    reason = details.get('reason') if isinstance(details, dict) else None
+    # Keep technical reason identifiers, never arbitrary provider messages,
+    # commands, URLs or environment values in the shared recovery log.
+    suffix = f" ({reason})" if isinstance(reason, str) and re.fullmatch(r'[a-z][a-z0-9_.-]{0,79}', reason) else ''
+    return (f"{type(error).__name__}: {getattr(error, 'code', 'UNAVAILABLE')} "
+            f"at {getattr(error, 'stage', 'agent runtime history')}{suffix}")
 
 
 class EmbeddedAgentRecovery:
@@ -25,11 +40,16 @@ class EmbeddedAgentRecovery:
         self.retry_at = {}
         self.attempts = {}
         self.errors = {}
+        self.current_errors = {}
         self.publication_pending = set()
         self.initialized = False
         self._tick_lock = asyncio.Lock()
         self.session_tasks = {}
         self.session_retry_at = {}
+        self.registry_import_task = None
+        self._registry_stop = asyncio.Event()
+        from .embedded_retirement_maintenance import EmbeddedRetirementMaintenance
+        self.retirement = EmbeddedRetirementMaintenance(self)
 
     def _state(self, agent_id, state, error=None):
         owner = self.owner
@@ -48,18 +68,38 @@ class EmbeddedAgentRecovery:
         if self.initialized:
             return
         owner = self.owner
-        records = await asyncio.to_thread(EmbeddedReconciliation(owner)._records)
+        from .embedded_session_catalog import EmbeddedSessionCatalog
+        catalog = EmbeddedSessionCatalog(owner)
+        await catalog.backfill()
+        from ..adapters.outbound.sqlite.execution_embedded_store_binding import (
+            bind_embedded_store, require_no_missing_store,
+        )
+        async def bind_ledger(ledger):
+            store_id = await ledger.physical_store_id()
+            def bind_store():
+                with owner.factory.unit_of_work() as uow:
+                    owner.verify(uow=uow)
+                    bind_embedded_store(uow.connection, store_id=store_id,
+                        recorded_at=owner.deps.clock.now_iso())
+            await asyncio.to_thread(bind_store)
+            return store_id
+        async def verify_anchor_snapshot(ledger, store_id):
+            from ..adapters.outbound.sqlite.execution_embedded_store_binding import stored_audit_anchor
+            def read_stored():
+                with owner.factory.unit_of_work(write=False) as uow:
+                    owner.verify(uow=uow)
+                    return stored_audit_anchor(uow.connection, store_id=store_id)
+            stored = await asyncio.to_thread(read_stored)
+            if stored is not None:
+                require_audit_snapshot_not_rolled_back(stored,
+                    await ledger.journal_audit_anchor(),
+                    await ledger.journal_registry_head())
         # Only unattributable/shared resources block the host. Missing or bad
         # journals with a known subject are handled by that subject's worker.
-        names = {owner.host._journal_path(owner.channel.executor_id, r['session_id']).name for r in records}
-        files = await asyncio.to_thread(lambda: {p.name for p in owner.host.store_dir.iterdir()}
-                                       if owner.host.store_dir.exists() else set())
-        allowed = names | {'owned-slots.db'}
-        allowed |= {name + suffix for name in allowed for suffix in ('-wal', '-shm')}
-        if not files.issubset(allowed) or (files & names and 'owned-slots.db' not in files):
-            raise CoreError('JOURNAL_UNAVAILABLE', 'embedded_shared_resources')
-        if 'owned-slots.db' in files:
+        if await catalog.audit_files():
             ledger = await owner.host._ledger()
+            store_id = await bind_ledger(ledger)
+            await verify_anchor_snapshot(ledger, store_id)
             # A fenced connection's HELD capacity never crossed native
             # admission. Cancel those holds atomically before the legacy
             # process scan; consumed/uncertain reservations remain occupied.
@@ -72,21 +112,27 @@ class EmbeddedAgentRecovery:
                     break
             else:
                 raise CoreError('CAPACITY_EXCEEDED', 'embedded_capacity_recovery')
-            known = {r['session_id']: r['open_operation_id'] for r in records}
             after, high = 0, None
             for _ in range(256):
                 page = await ledger.owned_slot_page(after_rowid=after, high_water_rowid=high, limit=128)
                 for slot in page.reservations:
+                    rows = await asyncio.to_thread(EmbeddedReconciliation(owner)._records,
+                        session_id=slot.key.session_id)
+                    known = rows[0]['open_operation_id'] if len(rows) == 1 else None
                     opening = slot.opening_operation_id
-                    if known.get(slot.key.session_id) != opening:
+                    if known != opening:
                         # A consumed reservation may predate Core.open, so its
                         # slot still has Core's provisional identity. Attribute
                         # it through Core's durable association; keep it occupied
                         # until the agent's recovery proves release is safe.
                         opening = await ledger.capacity_opening_for_slot(slot)
                     if (slot.key.server_id != owner.channel.server_id or slot.key.executor_id != owner.channel.executor_id
-                            or opening is None or known.get(slot.key.session_id) != opening):
+                            or opening is None or known is None or known != opening):
                         raise CoreError('SCOPE_MISMATCH', 'embedded_shared_resources')
+                    # Occupied physical ownership wins over a stored retirement
+                    # checkpoint, including a restored/stale ledger after a crash.
+                    from .embedded_retirement import EmbeddedRetirement
+                    await asyncio.to_thread(EmbeddedRetirement(owner).invalidate, slot.key.session_id)
                 high = page.high_water_rowid
                 if page.next_after_rowid is None:
                     break
@@ -95,21 +141,145 @@ class EmbeddedAgentRecovery:
                 after = page.next_after_rowid
             else:
                 raise CoreError('CAPACITY_EXCEEDED', 'embedded_shared_resources')
-        self.blocked = {r['agent_id'] for r in records}
+        else:
+            def check_missing():
+                with owner.factory.unit_of_work(write=False) as uow:
+                    owner.verify(uow=uow)
+                    require_no_missing_store(uow.connection)
+            await asyncio.to_thread(check_missing)
+            # Create and bind the first ledger before the dispatch pump can
+            # admit native work. A later startup must observe this same ID.
+            ledger = await owner.host._ledger()
+            store_id = await bind_ledger(ledger)
+            await verify_anchor_snapshot(ledger, store_id)
+        self.blocked = await asyncio.to_thread(catalog.pending_agents)
         for agent_id in self.blocked:
             await asyncio.to_thread(self._state, agent_id, 'RECOVERING')
         self.initialized = True
+        # Registry conversion is maintenance, not evidence required for this
+        # boot's admission: the existing full directory audit already passed.
+        self.registry_import_task = asyncio.create_task(
+            self._import_registry(catalog, ledger, store_id), name='embedded-registry-import')
+
+    async def _import_registry(self, catalog, ledger, store_id):
+        from ..adapters.outbound.sqlite.execution_embedded_store_binding import (
+            registry_import_pending, complete_registry_import,
+        )
+        owner = self.owner
+        attempts = 0
+        while not owner._stopping.is_set() and not self._registry_stop.is_set():
+            try:
+                def pending():
+                    with owner.factory.unit_of_work(write=False) as uow:
+                        owner.verify(uow=uow)
+                        return registry_import_pending(uow.connection, store_id=store_id)
+                if not await asyncio.to_thread(pending):
+                    await self._stage_audit_anchor(catalog, ledger, store_id)
+                    return
+                if not await catalog.import_verified_files(ledger, stop=self._registry_stop):
+                    return
+                def complete():
+                    with owner.factory.unit_of_work() as uow:
+                        owner.verify(uow=uow)
+                        complete_registry_import(uow.connection, store_id=store_id)
+                await asyncio.to_thread(complete)
+                await self._stage_audit_anchor(catalog, ledger, store_id)
+                return
+            except OktoNexusError as error:
+                if error.code == ErrorCode.CONFLICT:
+                    return  # The previous owner cannot mutate a replacement.
+                failure = error
+            except Exception as error:
+                failure = error
+            attempts += 1
+            logging.getLogger(__name__).warning(
+                'Embedded registry import pending: %s', _diagnostic(failure))
+            try:
+                await asyncio.wait_for(self._registry_stop.wait(),
+                    timeout=min(30, 2 ** min(attempts, 5)))
+            except asyncio.TimeoutError:
+                pass
+
+    async def _stage_audit_anchor(self, catalog, ledger, store_id):
+        """Record matching Core/Server tokens only after this boot's full audit.
+
+        This remains a candidate frontier. Admission still scans the directory
+        on every startup until anomaly and partial-restore policy qualify.
+        """
+        from ..adapters.outbound.sqlite.execution_embedded_store_binding import (
+            stored_audit_anchor, record_audit_anchor,
+        )
+        owner = self.owner
+        while not owner._stopping.is_set() and not self._registry_stop.is_set():
+            await asyncio.to_thread(owner.verify)
+            head = await ledger.journal_registry_head()
+            if head.complete:
+                break
+            await ledger.advance_journal_registry_head(limit=128)
+            await asyncio.sleep(0.01)
+        else:
+            return
+        while not owner._stopping.is_set() and not self._registry_stop.is_set():
+            await asyncio.to_thread(owner.verify)
+            if await ledger.advance_journal_extension_index(limit=128):
+                break
+            await asyncio.sleep(0.01)
+        else:
+            return
+        # Physical audit is repeated after legacy import so the staged token
+        # cannot represent a directory that changed during conversion.
+        if not await catalog.audit_files():
+            raise CoreError('JOURNAL_UNAVAILABLE', 'embedded_audit_anchor')
+        head = await ledger.journal_registry_head()
+        if not head.complete or head.store_id != store_id:
+            raise CoreError('PROFILE_DRIFT', 'embedded_audit_anchor')
+        def read_stored():
+            with owner.factory.unit_of_work(write=False) as uow:
+                owner.verify(uow=uow)
+                return stored_audit_anchor(uow.connection, store_id=store_id)
+        stored = await asyncio.to_thread(read_stored)
+        if stored is not None:
+            prefix = await ledger.journal_digest_at_revision(stored.revision)
+            if prefix != stored.digest:
+                raise CoreError('PROFILE_DRIFT', 'embedded_audit_anchor')
+        core_anchor = await ledger.journal_audit_anchor()
+        if (stored is not None and stored == core_anchor
+                and stored.revision == head.revision and stored.digest == head.digest):
+            return
+        anchor = await ledger.stage_journal_audit_anchor(
+            nonce='audit_' + secrets.token_hex(16), head=head)
+        def commit_stored():
+            with owner.factory.unit_of_work() as uow:
+                owner.verify(uow=uow)
+                record_audit_anchor(uow.connection, anchor=anchor,
+                    recorded_at=owner.deps.clock.now_iso())
+        await asyncio.to_thread(commit_stored)
 
     async def fail(self, agent_id, error):
         # Loss of the shared owner/database must still stop the whole host.
         await asyncio.to_thread(self.owner.verify)
         self.blocked.add(agent_id)
         # Secondary failures during containment must not hide the first cause.
-        error = self.errors.setdefault(agent_id, error)
-        await asyncio.to_thread(self._state, agent_id, 'RECOVERING', error)
-        await asyncio.to_thread(self.owner._recovery_event, 'RECOVERY_AGENT_BLOCKED',
-            f"{type(error).__name__}: {getattr(error, 'code', 'UNAVAILABLE')} at {getattr(error, 'stage', 'agent runtime history')}",
-            agent_id=agent_id)
+        first = self.errors.setdefault(agent_id, error)
+        self.current_errors[agent_id] = error
+        # Record the original sanitized classification before the durable
+        # write: a secondary storage failure must not erase its provenance.
+        logging.getLogger(__name__).warning('Runtime agent recovery requested: agent=%s current=%s first=%s',
+            agent_id, _diagnostic(error), _diagnostic(first))
+        try:
+            await asyncio.to_thread(self._state, agent_id, 'RECOVERING', error)
+            await asyncio.to_thread(self.owner._recovery_event, 'RECOVERY_AGENT_BLOCKED',
+                f"Current: {_diagnostic(error)}; first: {_diagnostic(first)}",
+                agent_id=agent_id)
+        except OktoNexusError as persistence_error:
+            if persistence_error.code != ErrorCode.DB_ERROR or not persistence_error.retryable:
+                raise
+            # The in-memory subject fence is enforced before native dispatch.
+            # Keep the same recovery worker/obligation: inability to save its
+            # status does not prove loss of the shared owner. READY still needs
+            # its durable commit after containment and reconciliation.
+            logging.getLogger(__name__).warning(
+                'Agent recovery status delayed by writer contention: agent=%s', agent_id)
 
     async def _contain(self, agent_id):
         owner = self.owner
@@ -145,18 +315,26 @@ class EmbeddedAgentRecovery:
         owner = self.owner
         self.attempts[agent_id] = self.attempts.get(agent_id, 0) + 1
         await self._contain(agent_id)
+        from .embedded_startup_refusal import EmbeddedStartupRefusal
+        from .embedded_unopened_retirement import EmbeddedUnopenedRetirement
+        for session_id in await EmbeddedStartupRefusal(owner).recover(agent_id=agent_id):
+            if not await EmbeddedUnopenedRetirement(owner).retire(session_id):
+                raise CoreError('RECONCILIATION_REQUIRED', 'embedded_startup_retirement')
         from .embedded_preopen_recovery import EmbeddedPreopenRecovery
         await EmbeddedPreopenRecovery(owner).recover(agent_id)
         await owner._recover_publications(agent_id=agent_id)
         await owner.events.recover(agent_id=agent_id)
         if not await EmbeddedReconciliation(owner).recover(agent_id=agent_id):
             raise CoreError('RECONCILIATION_REQUIRED', 'embedded_agent_history')
-        for row in await asyncio.to_thread(EmbeddedReconciliation(owner)._records, agent_id):
+        for row in await asyncio.to_thread(EmbeddedReconciliation(owner)._records, agent_id, pending_only=True):
             await owner.tools.release_session(row['session_id'])
-        await self._retire_closed(agent_id)
+        # Resource containment, stream continuity and delivery settlement above
+        # are mandatory. Re-saving historical release checkpoints is maintenance
+        # and must not delay readiness after those proofs have converged.
         await asyncio.to_thread(self._state, agent_id, 'READY')
         self.blocked.discard(agent_id)
         self.errors.pop(agent_id, None)
+        self.current_errors.pop(agent_id, None)
         self.publication_pending.discard(agent_id)
         self.attempts.pop(agent_id, None)
         self.retry_at.pop(agent_id, None)
@@ -176,15 +354,16 @@ class EmbeddedAgentRecovery:
         faults = await asyncio.to_thread(self._check_stream_health, agent_id, frozenset(self.owner.active_operations))
         for session_id in faults:
             self.recover_session(session_id)
-        await self._retire_closed(agent_id)
 
-    def recover_session(self, session_id):
+    def recover_session(self, session_id, *, error=None):
         session = self.owner.sessions.get(session_id)
         if session is None:
             raise CoreError('SESSION_UNKNOWN', 'embedded_session_recovery')
         # Fence only this session. Retain one worker, including during slow
         # containment; healthy siblings continue dispatch and publication.
         session['recovering'] = True
+        if error is not None:
+            session.setdefault('recovery_error', error)
         task = self.session_tasks.get(session_id)
         if task is not None and not task.done():
             return
@@ -197,6 +376,30 @@ class EmbeddedAgentRecovery:
         owner = self.owner
         try:
             await asyncio.to_thread(owner.verify)
+            if session.get('recovery_error') is not None and not session.get('recovery_error_recorded'):
+                await asyncio.to_thread(owner._recovery_event, 'RECOVERY_SESSION_BLOCKED',
+                    f"Session {session_id}: {_diagnostic(session['recovery_error'])}",
+                    agent_id=session['scope']['agent_id'])
+                session['recovery_error_recorded'] = True
+            if session.get('startup_refusal_frame') is not None:
+                # The opening worker is the only possible producer. Join it
+                # before the Core admission CAS and retain this session alone
+                # until the terminal receipt and retirement both commit.
+                workers = [t for t, sid in owner.worker_sessions.items()
+                           if sid == session_id and not t.done()]
+                if workers:
+                    await asyncio.gather(*workers, return_exceptions=True)
+                from .embedded_startup_refusal import EmbeddedStartupRefusal
+                from .embedded_unopened_retirement import EmbeddedUnopenedRetirement
+                refusal = EmbeddedStartupRefusal(owner)
+                await asyncio.to_thread(refusal.record, session['startup_refusal_frame'])
+                if session_id not in await refusal.recover(session_id=session_id):
+                    raise CoreError('RECONCILIATION_REQUIRED', 'embedded_startup_refusal')
+                if not await EmbeddedUnopenedRetirement(owner).retire(session_id):
+                    raise CoreError('RECONCILIATION_REQUIRED', 'embedded_startup_retirement')
+                owner.sessions.pop(session_id, None)
+                self.session_retry_at.pop(session_id, None)
+                return
             if session.get('initial_refusal'):
                 # No authorized executor was returned. Finish the exact durable
                 # refusal without containing healthy sibling sessions.
@@ -231,9 +434,9 @@ class EmbeddedAgentRecovery:
             if renewal is not None and not renewal.done():
                 await asyncio.shield(renewal)
             agent_id = session['scope']['agent_id']
-            await owner._recover_publications(agent_id=agent_id)
+            await owner._recover_publications(agent_id=agent_id, session_id=session_id)
             await owner.events.recover(agent_id=agent_id, session_id=session_id)
-            await EmbeddedReconciliation(owner).release_session(session_id)
+            await EmbeddedReconciliation(owner).release_stopped_session(session_id)
             await owner.tools.release_session(session_id)
             owner.sessions.pop(session_id, None)
             self.session_retry_at.pop(session_id, None)
@@ -251,7 +454,8 @@ class EmbeddedAgentRecovery:
                 return
             self.session_retry_at[session_id] = time.monotonic() + 2
             await asyncio.to_thread(owner._recovery_event, 'RECOVERY_SESSION_PENDING',
-                f"Session containment pending: {getattr(error, 'code', type(error).__name__)}",
+                f"Session containment pending: {getattr(error, 'code', type(error).__name__)}"
+                f" at {getattr(error, 'stage', 'unknown')}",
                 agent_id=session['scope']['agent_id'])
 
     def _check_stream_health(self, agent_id, active_operations):
@@ -288,36 +492,41 @@ class EmbeddedAgentRecovery:
             return pending
 
     async def _retire_closed(self, agent_id):
+        from .embedded_retirement import EmbeddedRetirement
+        retirement = EmbeddedRetirement(self.owner)
+        for row in await asyncio.to_thread(retirement.pending, agent_id):
+            await self._retire_session(agent_id, row)
+
+    async def _retire_session(self, agent_id, row):
         owner = self.owner
-        def closed():
-            with owner.factory.unit_of_work(write=False) as uow:
-                owner.verify(uow=uow)
-                return [dict(r) for r in uow.connection.execute(
-                    "SELECT s.session_id,s.lifecycle_state FROM execution_local_streams l "
-                    "JOIN execution_sessions s USING(server_id,executor_id,session_id) "
-                    "WHERE l.server_id=? AND l.executor_id=? AND l.agent_id=? AND l.drained=0 "
-                    "AND s.lifecycle_state IN ('CLOSED','FAILED')",
-                    (owner.channel.server_id, owner.channel.executor_id, agent_id))]
-        for row in await asyncio.to_thread(closed):
-            if owner.sessions.get(row['session_id'], {}).get('recovering'):
-                continue  # The retained session worker owns its release proof.
-            # Prove resource release and that every Core event was committed
-            # before ending polling. Receipt stages themselves are unchanged.
-            await EmbeddedReconciliation(owner).release_session(row['session_id'],
-                failed_open=row['lifecycle_state'] == 'FAILED')
-            # The final native event can settle a turn after the publication
-            # pass that observed close. Publish its durable receipt before
-            # retiring all obligations for this now fully released stream.
-            await owner._recover_publications(agent_id=agent_id)
-            def commit():
-                with owner.factory.unit_of_work() as uow:
-                    owner.verify(uow=uow)
-                    key = (owner.channel.server_id, owner.channel.executor_id, row['session_id'])
-                    uow.connection.execute("UPDATE execution_local_streams SET drained=1 "
-                        "WHERE server_id=? AND executor_id=? AND session_id=?", key)
-                    uow.connection.execute("UPDATE execution_local_publications SET terminal=1 "
-                        "WHERE server_id=? AND executor_id=? AND session_id=?", key)
-            await asyncio.to_thread(commit)
+        from .embedded_retirement import EmbeddedRetirement
+        retirement = EmbeddedRetirement(owner)
+        if owner.sessions.get(row['session_id'], {}).get('recovering'):
+            return  # The retained session worker owns its release proof.
+        if any(sid == row['session_id'] and not task.done()
+               for task, sid in owner.worker_sessions.items()):
+            return  # Native stop alone does not join host publication producers.
+        if row['stream_epoch'] is None:
+            from .embedded_unopened_retirement import EmbeddedUnopenedRetirement
+            await EmbeddedUnopenedRetirement(owner).retire(row['session_id'])
+            return
+        # Prove resource release and that every Core event was committed
+        # before ending polling. Receipt stages themselves are unchanged.
+        proof = await EmbeddedReconciliation(owner).release_session(row['session_id'],
+            failed_open=row['lifecycle_state'] == 'FAILED')
+        # The final native event can settle a turn after the publication
+        # pass that observed close. Publish its durable receipt before
+        # retiring all obligations for this now fully released stream.
+        await owner._recover_publications(agent_id=agent_id)
+        revision = await asyncio.to_thread(retirement.snapshot, row['session_id'])
+        if revision is None:
+            return
+        proof['retirement_revision'] = revision
+        await owner.tools.release_session(row['session_id'])
+        if any(sid == row['session_id'] and not task.done()
+               for task, sid in owner.worker_sessions.items()):
+            return
+        await asyncio.to_thread(retirement.commit, row['session_id'], proof)
 
     async def _run(self, agent_id, recovering):
         try:
@@ -361,8 +570,13 @@ class EmbeddedAgentRecovery:
                 "JOIN execution_operations o USING(server_id,executor_id,operation_id) "
                 "WHERE p.server_id=? AND p.executor_id=? AND p.terminal=0 "
                 "UNION SELECT agent_id FROM execution_local_streams "
-                "WHERE server_id=? AND executor_id=? AND drained=0",
-                (self.owner.channel.server_id, self.owner.channel.executor_id) * 2)}
+                "WHERE server_id=? AND executor_id=? AND drained=0 "
+                "UNION SELECT o.subject_agent_id FROM execution_sessions s "
+                "JOIN execution_operations o ON o.server_id=s.server_id AND o.executor_id=s.executor_id "
+                "AND o.operation_id=s.open_operation_id "
+                "WHERE s.server_id=? AND s.executor_id=? AND s.local_retirement_json IS NULL "
+                "AND s.lifecycle_state IN ('CLOSED','FAILED')",
+                (self.owner.channel.server_id, self.owner.channel.executor_id) * 3)}
 
     async def tick(self, *, manual=False, agent_id=None):
         async with self._tick_lock:
@@ -397,6 +611,7 @@ class EmbeddedAgentRecovery:
         subjects = self.blocked | await asyncio.to_thread(self._pending_subjects)
         subjects |= {s['scope']['agent_id'] for s in self.owner.sessions.values()}
         subjects = subjects if target_agent_id is None else subjects & {target_agent_id}
+        self.retirement.tick(subjects)
         for agent_id in subjects:
             recovering = agent_id in self.blocked
             if (agent_id in self.tasks or (recovering and not enabled) or
@@ -411,6 +626,10 @@ class EmbeddedAgentRecovery:
             await asyncio.wait(tuple(self.tasks.values()), timeout=timeout)
 
     async def close(self):
+        self._registry_stop.set()
+        await self.retirement.close()
+        if self.registry_import_task is not None:
+            await self.registry_import_task
         if self.tasks:
             await asyncio.gather(*tuple(self.tasks.values()))
         if self.session_tasks:

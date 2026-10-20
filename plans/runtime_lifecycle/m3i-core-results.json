@@ -1,0 +1,46 @@
+{
+  "checkpoint": "M3i Core contract and independent observation workers",
+  "status": "qualified_foundation_consumers_pending",
+  "core_version": "0.0.12",
+  "wheel_sha256": "13d72e63d1406a8cd6fcb154ce31bb218c0e042cce0bf946cc8e0350f69a3b9a",
+  "installed_package_files": 158,
+  "installed_campaign": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "117",
+    "time": "10.208",
+    "timestamp": "2026-10-17T02:36:57.899843-03:00",
+    "hostname": "Alienware_m15",
+    "changed_inputs": [],
+    "passed": 117,
+    "isolated_interpreter": true,
+    "application_source_added_to_import_path": false,
+    "pip_check": "passed",
+    "results_sha256": "54c9153039c1ffc3eb502f2a8a21b3164aaa8bfb09b039052dd3e03b073e84de",
+    "manifest_sha256": "37df963d98361590b88d976636ef4bee170b3f819cb874bad0b28fb3a664b24a",
+    "test_files": [
+      "test_inventory_observer.py",
+      "test_inventory_observations.py",
+      "test_executor_inventory.py",
+      "test_control_targeting.py",
+      "test_r4_development_bundle.py",
+      "test_consumer_conformance.py",
+      "test_parallel_discovery.py",
+      "test_parallel_identity_reads.py",
+      "test_discovery_cancellation.py",
+      "test_passive_discovery.py"
+    ]
+  },
+  "global_rollout": "NOT_RUN; generation 72 retains M3j Nexus and M3h Core",
+  "real_provider_qualification": "NOT_RUN; synthetic observations and retained real thread",
+  "real_ui": "Read-only 2026-10-17 05:34 UTC: Pi/Claude/Codex Online, Pi pool 4/5",
+  "pending": [
+    "Nexus/Connector publication and refresh integration",
+    "Per-adapter freshness in every consumer",
+    "Preserve retained consent across format migration",
+    "Joint installed campaign and real UI gate",
+    "M3 and full plan completion"
+  ]
+}

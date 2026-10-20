@@ -90,9 +90,9 @@ def test_boot_resource_scan_releases_only_fenced_unconsumed_reservations(tmp_pat
     from types import SimpleNamespace
     from nexus_connector_core import CapacityConsumption
     from okto_nexus.bootstrap.embedded_agent_recovery import EmbeddedAgentRecovery
-    from okto_nexus.bootstrap.embedded_reconciliation import EmbeddedReconciliation
     from okto_nexus.application.execution_leases import ExecutionChannel
-    monkeypatch.setattr(EmbeddedReconciliation, '_records', lambda self: [])
+    from test_embedded_inventory import app_for
+    deps, _ = app_for(tmp_path / 'home')
     async def run():
         host = EmbeddedRuntimeHost(tmp_path / 'core', max_owned_slots=1, capacity_enabled=True)
         req = request()
@@ -101,7 +101,8 @@ def test_boot_resource_scan_releases_only_fenced_unconsumed_reservations(tmp_pat
         if consumed:
             await port.consume_capacity(req, held.reservation_id,
                 CapacityConsumption('turn', 'sha256:' + 'b' * 64, 'open', 'sha256:' + 'c' * 64))
-        owner = SimpleNamespace(host=host, channel=ExecutionChannel('srv', 'exe', 'replacement', 2), verify=lambda: None)
+        owner = SimpleNamespace(host=host, factory=deps.connection_factory, deps=deps,
+            channel=ExecutionChannel('srv', 'exe', 'replacement', 2), verify=lambda **kwargs: None)
         recovery = EmbeddedAgentRecovery(owner)
         try:
             if consumed:

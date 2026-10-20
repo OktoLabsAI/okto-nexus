@@ -1,0 +1,20 @@
+{
+  "generation": 71,
+  "server_pid": 40832,
+  "launcher_pid": 25092,
+  "normal_shutdown": true,
+  "backup_databases": 265,
+  "ready": {
+    "claude": "2026-10-17T03:51:55.401287Z",
+    "Pi": "2026-10-17T03:52:01.411799Z",
+    "codex": "2026-10-17T03:51:54.284606Z"
+  },
+  "used_preexisting_warm_session": true,
+  "admission_to_running_seconds": 0.566279411315918,
+  "admission_to_success_seconds": 9.943925857543945,
+  "warm_after": 4,
+  "max_parallel": 5,
+  "response": "M3G_PI_OK",
+  "ui_ack": "1/1",
+  "evidence": "m3g-ui-rollout.md"
+}

@@ -75,6 +75,7 @@ class CapacityLinkClient:
             raise CoreError('NOT_AUTHORIZED', 'capacity_link_scope')
         if self._closed:
             raise CoreError('RECOVERING', 'capacity_link')
+        read_only = action == 'assess'
         recovery = action in ('get', 'release')
         if sum(value == recovery for value in self._producers.values()) >= self._limits[recovery]:
             raise CoreError('STALE_OBSERVATION', 'capacity_link_budget')
@@ -95,16 +96,26 @@ class CapacityLinkClient:
                 response = await asyncio.wait_for(asyncio.shield(future), self._timeout)
                 await self._verify(request, action=action)
                 if self._closed:
-                    raise CoreError('NEEDS_RECONCILIATION', 'capacity_disconnect', possible_effect=True)
+                    raise CoreError('STALE_OBSERVATION' if read_only else 'NEEDS_RECONCILIATION',
+                        'capacity_disconnect', possible_effect=not read_only)
                 if response['result_type'] == 'reservation':
                     return CapacityReservation.from_dict(response['result'])
                 if response['result_type'] == 'assessment':
                     return CapacityAssessment.from_dict(response['result'])
+                if read_only:
+                    raise CoreError('STALE_OBSERVATION', 'capacity_missing_result')
                 if action != 'get':
                     raise CoreError('NEEDS_RECONCILIATION', 'capacity_missing_result', possible_effect=True)
                 return None
             except Exception as error:
                 if send_started:
+                    # An assessment cannot reserve a slot or admit native work.
+                    # Losing its reply or post-send freshness does not create an
+                    # uncertain effect; the caller may assess again.
+                    if read_only:
+                        if isinstance(error, CoreError):
+                            raise
+                        raise CoreError('STALE_OBSERVATION', 'capacity_response') from error
                     raise CoreError('NEEDS_RECONCILIATION', 'capacity_response', possible_effect=True) from error
                 raise
             finally:
@@ -125,7 +136,8 @@ class CapacityLinkClient:
         # or ignores cancellation. It stays charged until actually completed.
         completed, _ = await asyncio.wait({task}, timeout=self._timeout)
         if not completed:
-            raise CoreError('NEEDS_RECONCILIATION', 'capacity_observation', possible_effect=True)
+            raise CoreError('STALE_OBSERVATION' if read_only else 'NEEDS_RECONCILIATION',
+                'capacity_observation', possible_effect=not read_only)
         return task.result()
 
     async def assess_capacity(self, request):

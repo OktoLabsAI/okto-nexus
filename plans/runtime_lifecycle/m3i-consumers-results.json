@@ -1,0 +1,69 @@
+{
+  "checkpoint": "M3i consumer freshness and consent migration; producers pending",
+  "nexus_source": {
+    "consumer_cases_passed": 64,
+    "additional_authority_and_wrapper_cases_passed": 10
+  },
+  "nexus_installed": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "94",
+    "time": "670.689",
+    "timestamp": "2026-10-17T02:59:59.822050-03:00",
+    "hostname": "Alienware_m15",
+    "changed_inputs": [],
+    "test_files": [
+      "tests/execution_r4/test_independent_inventory_consumers.py",
+      "tests/execution_r4/test_runtime_options.py",
+      "tests/execution_r4/test_inventory_operator_views.py",
+      "tests/execution_r4/test_binding_views.py",
+      "tests/execution_r4/test_inventory_revalidation.py",
+      "tests/execution_r4/test_core_inventory.py",
+      "tests/execution_r4/test_capacity_authority.py",
+      "tests/execution_r4/test_session_reuse.py"
+    ],
+    "manifest_sha256": "04c1ec574c6c41915e6390a797ddf1d526153ab25bc3e1caff0a82fa9840a7ed",
+    "results_sha256": "332296a2d5433ea394e0c7c73c8d9a98f149aff1d8d7c588b1e0039ca29b0ca1"
+  },
+  "connector_installed": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "36",
+    "time": "3.603",
+    "timestamp": "2026-10-17T02:55:44.488694-03:00",
+    "hostname": "Alienware_m15",
+    "changed_inputs": [],
+    "commit": "15e1d53"
+  },
+  "artifacts": [
+    {
+      "module": "okto_nexus",
+      "sha256": "98315f8734277e33a04e4052c1124d85330f69afc7b6764fce38e942ec978c09",
+      "files": 542
+    },
+    {
+      "module": "nexus_connector_core",
+      "sha256": "13d72e63d1406a8cd6fcb154ce31bb218c0e042cce0bf946cc8e0350f69a3b9a",
+      "files": 158
+    },
+    {
+      "module": "okto_nexus_connector",
+      "sha256": "cc7c9151d13d4115be38fd0d2c3fd728af5b109af459121b44b5533c349ca514",
+      "files": 98
+    }
+  ],
+  "dependencies": "uv pip check passed for 48 installed packages; Connector pip check passed",
+  "dashboard": "Fresh tsc/vite production build; no live UI gate in this checkpoint",
+  "global_rollout": "NOT_RUN; live generation 72 remains Nexus M3j/Core M3h",
+  "remaining": [
+    "Independent embedded and daemon inventory workers/publication",
+    "Exact published-batch integration in configuration and onboarding",
+    "Refresh frontier acknowledgements and retained shutdown",
+    "Independent initial boot/readiness",
+    "Joint execution campaign and real UI gate"
+  ]
+}

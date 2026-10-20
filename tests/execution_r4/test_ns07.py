@@ -49,7 +49,7 @@ def test_ns07_01(tmp_path, monkeypatch):
         async def environment(_launch):
             return {}
 
-        options = dict(executor_id="exe_one", session_id="session_one",
+        options = dict(server_id="server", executor_id="exe_one", session_id="session_one",
                        candidates={"codex": _candidate()},
                        workspace_roots={"workspace": str(tmp_path)},
                        environment=environment)
@@ -263,7 +263,7 @@ def test_failed_composition_does_not_leave_a_pending_shutdown_resource(tmp_path,
 
         monkeypatch.setattr(runtime_host, "create_runtime", fail)
         with pytest.raises(OSError, match="Technical composition failure"):
-            await host.acquire(executor_id="executor", session_id="failed",
+            await host.acquire(server_id="server", executor_id="executor", session_id="failed",
                 candidates={"codex": _candidate()},
                 workspace_roots={"workspace": str(tmp_path)},
                 environment=environment)

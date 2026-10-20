@@ -72,7 +72,7 @@ def admit(setup,binding,intent_id,intent,**options):
         "workspace_binding_id":binding["workspace_binding_id"],**options})
     assert response.status_code==200,response.text
     resolution=response.json()
-    assert resolution["can_submit"],resolution
+    assert resolution["can_submit"], resolution["blockers"]
     request={k:resolution[k] for k in ("client_intent_id","operation_id","resolution_revision","intent_hash")}
     response=client.post("/v1/runtime/operations",headers=headers["subject"],json=request)
     assert response.status_code==202,response.text
@@ -94,6 +94,39 @@ def wait_receipt(setup,resolution,stages=("SUBMITTED","SUCCEEDED")):
         assert owner.failure is None,repr(owner.failure)
         assert owner.pump.error is None,repr(owner.pump.error)
         assert time.monotonic()<until,json.dumps(view, sort_keys=True)
+        time.sleep(.02)
+
+
+def wait_binding_ready(deps, app, binding, *, seconds=25):
+    from okto_nexus.application.execution_inventory_freshness import inventory_is_fresh
+    from okto_nexus.application.execution_inventory_revalidation import accepts_binding
+
+    key = (binding['server_id'], binding['executor_id'])
+    until = time.monotonic() + seconds
+    while True:
+        marker = app.state.inventory_fresh_publications.get(key)
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            conn = uow.connection
+            published = conn.execute(
+                'SELECT c.publication_sequence,c.inventory_revision,s.observation_age_ms,'
+                's.canonical_projection FROM execution_inventory_current c '
+                'JOIN execution_inventory_snapshots s ON s.server_id=c.server_id '
+                'AND s.executor_id=c.executor_id AND s.publication_sequence=c.publication_sequence '
+                'WHERE c.server_id=? AND c.executor_id=?', key).fetchone()
+            selected = conn.execute(
+                'SELECT b.inventory_revision,b.candidate_ref,ep.adapter_id,e.control_state '
+                'FROM execution_bindings b JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id '
+                'JOIN execution_executors e ON e.server_id=b.server_id AND e.executor_id=b.executor_id '
+                'WHERE b.server_id=? AND b.binding_id=?',
+                (key[0], binding['binding_id'])).fetchone()
+            ready = (marker is not None and published is not None and selected is not None
+                and marker[0] == published['publication_sequence']
+                and selected['control_state'] == 'CONTROL_READY'
+                and inventory_is_fresh(published, marker, selected['adapter_id'])
+                and accepts_binding(conn, selected, published['inventory_revision'], *key))
+        if ready:
+            return
+        assert time.monotonic() < until, 'The selected local binding did not become admissible'
         time.sleep(.02)
 
 
@@ -145,7 +178,7 @@ def test_serve_dispatches_local_open_turn_controls_and_close(connected_local):
     assert history.status_code==200 and history.json()["executor_stage"]=="SUCCEEDED"
 
 
-@pytest.mark.parametrize('failure', ['expired', 'revoked'])
+@pytest.mark.parametrize('failure', ['expired', 'revoked', 'late_grant'])
 def test_denied_renewal_releases_only_its_session_and_keeps_executor_ready(connected_local, monkeypatch, failure):
     from okto_nexus.errors import ErrorCode
     setup, binding, native = connected_local
@@ -159,6 +192,8 @@ def test_denied_renewal_releases_only_its_session_and_keeps_executor_ready(conne
     async def deny(**kwargs):
         if failure == 'expired':
             raise OktoNexusError(ErrorCode.CONFLICT, 'The authority has expired.', {})
+        if failure == 'late_grant':
+            raise CoreError('LEASE_REVALIDATION_REQUIRED', 'r4_lease')
         raise CoreError('AGENT_REVOKED', 'lease_renew')
     current = owner.sessions[session_id]
     monkeypatch.setattr(current['executor'], 'renew_r4', deny)
@@ -408,6 +443,8 @@ def test_dispatch_cleanup_failure_still_drains_core(connected_local,monkeypatch)
         with pytest.raises(OSError,match="Technical outbox cleanup failure"):
             client.portal.call(owner._close)
     assert native.native.stopped and not owner.workers and not owner.renewals
+    client.portal.call(owner.close)
+    assert client.portal.call(owner.shutdown_status)["state"] == "DRAINED"
 
 
 @pytest.mark.parametrize("filename",["session-retained.db","owned-slots.db"])
@@ -467,6 +504,13 @@ def test_restart_recovers_historical_receipt_without_provider(tmp_path,monkeypat
         owner=app.state.embedded_dispatch_owner
         assert owner.channel.connection_generation>source.connection_generation
         assert owner.pump is not None
+        # Startup admits independent agents while retained history progresses.
+        # Observe the retained worker's result, not a race with ASGI startup.
+        until = time.monotonic() + 10
+        while (('subject' not in owner.agents.errors) if missing_journal else
+               ('subject' in owner.agents.blocked)):
+            assert time.monotonic() < until, owner.agents.errors
+            time.sleep(.02)
         assert ('subject' in owner.agents.blocked) == missing_journal
         assert not owner.host._runtime_tasks
         assert native.opens==1
@@ -728,6 +772,7 @@ def test_released_resources_reconcile_before_new_admission(tmp_path,monkeypatch,
             assert owner.recovery_failure is None and owner.pump is not None
             owner.native_factory=native
             next_setup=(deps,app,client,headers,*setup[4:])
+            wait_binding_ready(deps, app, binding)
             next_open=admit(next_setup,binding,"after-recovery","runtime.start",new_session=True)
             wait_receipt(next_setup,next_open)
             assert native.opens==2

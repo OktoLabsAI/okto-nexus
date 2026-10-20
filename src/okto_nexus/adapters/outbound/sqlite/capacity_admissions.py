@@ -135,11 +135,16 @@ class SqliteCapacityAdmissionRepository:
                 "WHERE d.endpoint_id=? AND d.workspace_id=? AND ((h.status IN ('CLAIMED','VERIFYING') "
                 "AND NOT EXISTS (SELECT 1 FROM execution_domain_deliveries prior "
                 "JOIN execution_operations op USING(server_id,executor_id,operation_id) "
-                "JOIN execution_preopen_refusals proof ON proof.server_id=op.server_id AND proof.executor_id=op.executor_id "
+                "LEFT JOIN execution_preopen_refusals proof ON proof.server_id=op.server_id AND proof.executor_id=op.executor_id "
                 "AND proof.operation_id=CASE WHEN op.action='runtime.open' THEN op.operation_id ELSE op.parent_operation_id END "
+                "LEFT JOIN execution_receipts startup ON startup.server_id=op.server_id AND startup.executor_id=op.executor_id "
+                "AND startup.operation_id=CASE WHEN op.action='runtime.open' THEN op.operation_id ELSE op.parent_operation_id END "
+                "AND startup.stage='FAILED' AND startup.error_code='PREPARATION_FAILED' "
+                "AND startup.possible_effect=0 AND startup.retry_safe=1 "
                 "JOIN execution_sessions closed ON closed.server_id=op.server_id AND closed.executor_id=op.executor_id "
-                "AND closed.session_id=op.session_id AND closed.open_operation_id=proof.operation_id "
+                "AND closed.session_id=op.session_id AND closed.open_operation_id=COALESCE(proof.operation_id,startup.operation_id) "
                 "WHERE prior.domain_operation_id=d.operation_id AND op.admission_state='RESOLVED_TERMINAL' "
+                "AND (proof.operation_id IS NOT NULL OR startup.operation_id IS NOT NULL) "
                 "AND closed.lifecycle_state='CLOSED' AND closed.lease_state='CLOSED')) OR "
                 "(d.reconciliation_id IS NULL AND d.external_completed_at IS NULL AND d.terminal_event_id IS NULL "
                 "AND (d.canonical_terminal_operation_id IS NULL OR d.status='RETRY_WAIT') "
@@ -225,7 +230,7 @@ class SqliteCapacityAdmissionRepository:
         conn.execute("UPDATE execution_capacity_admissions SET state='CANCELLED_NO_EFFECT',reservation_json=?,reason=?,"
             "updated_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') WHERE domain_operation_id=?",
             (proof, observed.state, admission.operation_id))
-        conn.execute("UPDATE handoff_runtime_attempts SET state='CANCELLED_NO_EFFECT',active=0,disposition='RELEASE',"
+        conn.execute("UPDATE handoff_runtime_attempts SET state='FAILED_NO_EFFECT',active=0,disposition='RELEASE',"
             "reservation_json=?,reason=?,updated_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') "
             "WHERE operation_id=? AND attempt_id=? AND state='CLAIM_COMMITTED'",
             (proof, observed.state, admission.operation_id, observed.request.attempt_id))

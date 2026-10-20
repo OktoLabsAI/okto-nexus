@@ -198,10 +198,14 @@ def issue_execution_ticket(factory: ConnectionFactory, *, server_id: str,
                     (replaces_ticket_id, server_id, executor_id,
                      binding_id, agent_id, AUDIENCE),
                 ).fetchone()
+                # A bound ticket no longer owns a lane after expiry. Its
+                # durable intent may be replaced after a long Server outage;
+                # scope and revisions must still match exactly.
+                expired = (replaced is not None and
+                           replaced["expires_at"] <= instant.isoformat())
                 if (replaced is None or replaced["revoked_at"] is not None or
-                        replaced["bound_connection_id"] is not None or
+                        (replaced["bound_connection_id"] is not None and not expired) or
                         replaced["client_intent_id"] != client_intent_id or
-                        replaced["expires_at"] <= instant.isoformat() or
                         replaced["scopes_json"] != canonical_json(
                             list(ordered_scopes)).decode("utf-8") or
                         replaced["credential_epoch"] != revisions.credential_epoch or

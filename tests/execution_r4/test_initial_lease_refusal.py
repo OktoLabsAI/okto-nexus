@@ -30,6 +30,18 @@ def test_initial_denial_commits_exact_no_effect_receipt_and_closes_only_its_sess
                 executor_id=executor_id, remote_ready=True)
             opening = begin_execution_send(deps.connection_factory, reservation=reservation, remote_ready=True,
                 fresh_publications=app.state.inventory_fresh_publications, access=access)
+            # Managed one-shot delivery admits its initial turn before the
+            # opening is proved. A denied bootstrap must retire that unsent turn.
+            with deps.connection_factory.unit_of_work() as uow:
+                uow.connection.execute(
+                    "INSERT INTO execution_operations(server_id,executor_id,operation_id,subject_agent_id,"
+                    "actor_agent_id,binding_id,workspace_id,workspace_binding_id,session_id,action,intent_hash,"
+                    "semantic_payload,expected_revisions_json,delivery_id,admission_state,created_at,"
+                    "parent_operation_id,admission_bytes) "
+                    "SELECT server_id,executor_id,'initial-turn',subject_agent_id,actor_agent_id,binding_id,"
+                    "workspace_id,workspace_binding_id,session_id,'turn.submit',intent_hash,semantic_payload,"
+                    "expected_revisions_json,'initial-turn-delivery','ACCEPTED',created_at,operation_id,admission_bytes "
+                    "FROM execution_operations WHERE operation_id=?", (resolved['operation_id'],))
             request = dict(protocol_major=1, contract_revision=R4_PREVIEW_REVISION, type='lease.renew',
                 request_id='denied-original', grant_id=grant['grant_id'], expected_lease_serial=0,
                 scope=resolved['scope'], connection_id=channel.connection_id,
@@ -90,4 +102,9 @@ def test_initial_denial_commits_exact_no_effect_receipt_and_closes_only_its_sess
                 row = conn.execute('SELECT state,release_proof_json FROM execution_session_containment').fetchone()
                 assert row['state'] == 'RELEASED' and json.loads(row['release_proof_json'])['receipt'] == receipt
                 assert conn.execute('SELECT count(*) FROM execution_receipts').fetchone()[0] == 1
+                assert tuple(conn.execute("SELECT admission_state,dispatch_state,"
+                    "json_extract(last_error,'$.code') FROM execution_operations "
+                    "JOIN execution_dispatch_outbox USING(server_id,executor_id,operation_id) "
+                    "WHERE operation_id='initial-turn'").fetchone()) == (
+                        'RESOLVED_TERMINAL','RESOLVED_TERMINAL','INITIAL_OPEN_FAILED')
                 assert conn.execute('SELECT control_state FROM execution_executors WHERE executor_id=?',(executor_id,)).fetchone()[0] == 'CONTROL_READY'

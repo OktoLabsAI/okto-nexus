@@ -110,7 +110,8 @@ def events(setup):
 
 @pytest.mark.parametrize("fault", ["oversized", "unknown_threads"])
 def test_native_protocol_fault_is_durable_and_reaps_peer_without_success(connected_local, fault):
-    injection = ('        sys.stdout.write("x" * 2000000)\n        sys.stdout.flush()\n        time.sleep(60)\n'
+    from nexus_connector_core.native.framing import MAX_FRAME_BYTES
+    injection = (f'        sys.stdout.write("x" * {MAX_FRAME_BYTES + 2})\n        sys.stdout.flush()\n        time.sleep(60)\n'
         if fault == "oversized" else
         '        for i in range(512):\n            write_msg({"method":"item/agentMessage/delta", '
         '"params":{"threadId":"unknown-"+str(i), "delta":"fixture"}})\n        return\n')

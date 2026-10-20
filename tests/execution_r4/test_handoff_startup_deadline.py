@@ -5,6 +5,7 @@ import threading
 from pathlib import Path
 
 import pytest
+from nexus_connector_core import CoreError
 
 from okto_nexus.application import one_shot_capacity, one_shot_runtime
 from okto_nexus.bootstrap.capacity_admission import build_capacity_admission
@@ -77,7 +78,7 @@ def test_late_cold_open_keeps_slot_until_stop_and_never_sends_work(
         assert not peers.sessions
         row = query(setup, 'SELECT state,admission_deadline,enqueued_at FROM one_shot_calls')[0]
         assert row['state'] == 'ADMITTED'
-        assert 0 < row['admission_deadline'] - row['enqueued_at'] <= 60
+        assert row['admission_deadline'] - row['enqueued_at'] == 300
         # Advance only this durable call's deadline; do not alter leases or clocks.
         with deps.connection_factory.unit_of_work() as uow:
             uow.connection.execute('UPDATE one_shot_calls SET admission_deadline=0 WHERE call_id=?', (identity,))
@@ -331,7 +332,15 @@ def test_remote_cold_start_deadline_preserves_real_slot_until_confirmed_stop(
                 assert len(page.attempt_ids) == 1, page
                 attempts = build_handoff_runtime_attempts(deps)
                 aid = page.attempt_ids[0]
-                held = await attempts.reserve(aid)
+                async with asyncio.timeout(25):
+                    while True:
+                        try:
+                            held = await attempts.reserve(aid)
+                            break
+                        except CoreError as error:
+                            if error.code != 'STALE_OBSERVATION':
+                                raise
+                            await asyncio.sleep(.05)
                 assert held.state == 'RESERVED'
                 state = await command(0, 'status')
                 assert state['opening'] == state['opens'] == 0
@@ -342,7 +351,7 @@ def test_remote_cold_start_deadline_preserves_real_slot_until_confirmed_stop(
                 await until(lambda state: state['opening'] == 1)
                 row = query(setup, 'SELECT state,admission_deadline,enqueued_at FROM one_shot_calls')[0]
                 assert row['state'] == 'ADMITTED'
-                assert 0 < row['admission_deadline'] - row['enqueued_at'] <= 60
+                assert row['admission_deadline'] - row['enqueued_at'] == 300
                 with deps.connection_factory.unit_of_work() as uow:
                     uow.connection.execute('UPDATE one_shot_calls SET admission_deadline=0')
                 if expire_before_ready:

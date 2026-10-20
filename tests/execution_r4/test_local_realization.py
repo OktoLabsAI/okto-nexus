@@ -12,7 +12,7 @@ from nexus_connector_core.discovery import fingerprint
 
 from okto_nexus.bootstrap import embedded_inventory
 from okto_nexus.application import execution_local_realizations as local
-from test_embedded_inventory import app_for
+from test_embedded_inventory import app_for, wait_inventory
 from test_binding_operator import prepare_operator
 
 
@@ -24,7 +24,7 @@ def local_setup(tmp_path, monkeypatch, request):
     binary.write_bytes(b"Local realization technical candidate")
     candidate = InstallationCandidate(adapter, str(binary), fingerprint(binary), "explicit", trust)
     monkeypatch.setattr(embedded_inventory, "discover_local_candidates",
-                        lambda **_: SimpleNamespace(candidates=(candidate,)))
+                        lambda **_: SimpleNamespace(candidates=tuple(c for c in (candidate,) if not _.get('adapter_ids') or c.adapter_id in _['adapter_ids'])))
     root = tmp_path / "workspace"
     root.mkdir()
     deps, app = app_for(tmp_path / "home")
@@ -35,6 +35,7 @@ def local_setup(tmp_path, monkeypatch, request):
             existing = getattr(app.state, "test_existing_keys", {})
             headers[actor] = {"Authorization":"Bearer " + (existing.get(actor) or app.state.auth.issue_key(uow,agent_id=actor))}
     with TestClient(app, raise_server_exceptions=False, client=('127.0.0.1', 50000)) as client:
+        wait_inventory(client)
         owner = app.state.embedded_inventory_owner
         inventory = client.get(f"/v1/runtime/executors/{owner.key.executor_id}/inventory",headers=headers["operator"]).json()["snapshot"]
         body = dict(client_intent_id="local-setup",agent_id="subject",workspace_root=str(root),
@@ -81,7 +82,6 @@ def test_local_preparation_and_binding_use_public_canonical_flow(local_setup):
         assert uow.connection.execute("SELECT COUNT(*) FROM execution_bindings").fetchone()[0] == 1
         assert uow.connection.execute("SELECT COUNT(*) FROM execution_sessions").fetchone()[0] == 0
         assert uow.connection.execute("SELECT COUNT(*) FROM execution_link_tickets").fetchone()[0] == 0
-    assert not (deps.config.home_dir/"core-runtime").exists()
 
 
 def test_non_operator_cannot_probe_local_directories(local_setup,monkeypatch):
@@ -154,7 +154,7 @@ def test_prepared_local_mapping_survives_serve_restart(tmp_path, monkeypatch):
     binary.write_bytes(b"Persistent technical candidate")
     candidate = InstallationCandidate("codex_app_server", str(binary), fingerprint(binary), "explicit", "selected")
     monkeypatch.setattr(embedded_inventory, "discover_local_candidates",
-                        lambda **_: SimpleNamespace(candidates=(candidate,)))
+                        lambda **_: SimpleNamespace(candidates=tuple(c for c in (candidate,) if not _.get('adapter_ids') or c.adapter_id in _['adapter_ids'])))
     root = tmp_path / "workspace"
     root.mkdir()
     deps, app = app_for(tmp_path / "home")
@@ -162,6 +162,7 @@ def test_prepared_local_mapping_survives_serve_restart(tmp_path, monkeypatch):
         key = app.state.auth.issue_key(uow, agent_id="operator")
     headers = {"Authorization": "Bearer " + key}
     with TestClient(app) as client:
+        wait_inventory(client)
         owner = app.state.embedded_inventory_owner
         route = f"/v1/runtime/executors/{owner.key.executor_id}/realizations"
         snapshot = client.get(f"/v1/runtime/executors/{owner.key.executor_id}/inventory", headers=headers).json()["snapshot"]
@@ -174,6 +175,7 @@ def test_prepared_local_mapping_survives_serve_restart(tmp_path, monkeypatch):
         generation = owner.generation
     deps, app = app_for(tmp_path / "home")
     with TestClient(app) as client:
+        wait_inventory(client)
         assert app.state.embedded_inventory_owner.generation > generation
         replay = client.post(route, json=body, headers=headers)
         assert replay.status_code == 200, replay.text

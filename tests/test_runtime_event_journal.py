@@ -233,7 +233,9 @@ def test_replay_after_checkpoint_loss_does_not_duplicate_result(runtime):
     ingress.capture(event(session_id, text="same result"))
     with deps.connection_factory.unit_of_work() as uow:
         uow.connection.execute("DELETE FROM runtime_journal_checkpoint")
-    assert ingress.recover() == 1
+    # Background compaction may already have retired the projected record.
+    # Either replay count is valid; neither may duplicate the durable result.
+    assert ingress.recover() in {0, 1}
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute("SELECT count(*) FROM harness_events").fetchone()[0] == 1
         assert uow.connection.execute("SELECT count(*) FROM runtime_results").fetchone()[0] == 1

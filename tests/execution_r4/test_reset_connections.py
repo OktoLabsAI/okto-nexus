@@ -7,6 +7,58 @@ from test_embedded_dispatch import local_setup, qualified_contract, admit, wait_
 from test_canonical_delivery import connected_local, enable, send
 
 
+def test_reset_remote_close_uses_authenticated_dashboard_operator(monkeypatch):
+    import asyncio
+    import sqlite3
+    from contextlib import contextmanager
+    from types import SimpleNamespace
+    from okto_nexus.bootstrap import database_reset
+    from okto_nexus.domain.runtime_context import RuntimeRequestContext
+
+    db = sqlite3.connect(':memory:', check_same_thread=False)
+    db.row_factory = sqlite3.Row
+    db.executescript('''
+        CREATE TABLE execution_sessions (server_id TEXT, executor_id TEXT,
+            binding_id TEXT, workspace_binding_id TEXT, session_id TEXT, lifecycle_state TEXT,
+            lease_state TEXT);
+        CREATE TABLE execution_executors (server_id TEXT, executor_id TEXT, kind TEXT);
+        CREATE TABLE execution_bindings (server_id TEXT, executor_id TEXT,
+            binding_id TEXT, endpoint_id TEXT);
+        CREATE TABLE agent_endpoints (endpoint_id TEXT, agent_id TEXT);
+        INSERT INTO execution_executors VALUES ('srv', 'exe', 'remote');
+        INSERT INTO execution_bindings VALUES ('srv', 'exe', 'bind', 'ep');
+        INSERT INTO agent_endpoints VALUES ('ep', 'remote-agent');
+        INSERT INTO execution_sessions VALUES ('srv', 'exe', 'bind', 'wxb', 'ses', 'READY', 'ACTIVE');
+    ''')
+
+    @contextmanager
+    def unit_of_work(*, write=False):
+        yield SimpleNamespace(connection=db)
+
+    factory = SimpleNamespace(unit_of_work=unit_of_work)
+    app = SimpleNamespace(state=SimpleNamespace(deps=SimpleNamespace(connection_factory=factory),
+        inventory_fresh_publications=None))
+    from okto_nexus.bootstrap import execution_authority
+    from okto_nexus.application import execution_intents, execution_admission
+    monkeypatch.setattr(execution_authority, 'build_execution_access', lambda deps: object())
+    observed = []
+
+    def resolve(factory, *, context, request, **kwargs):
+        observed.append((context.actor_agent_id, context.authentication_source,
+            context.trusted_local_operator, request['intent']))
+        return dict(can_submit=True, client_intent_id=request['client_intent_id'],
+            operation_id='close-op', resolution_revision=1, intent_hash='hash')
+
+    def submit(factory, *, context, request, **kwargs):
+        db.execute("UPDATE execution_sessions SET lifecycle_state='CLOSED' WHERE session_id='ses'")
+
+    monkeypatch.setattr(execution_intents, 'resolve_execution_intent', resolve)
+    monkeypatch.setattr(execution_admission, 'submit_execution_operation', submit)
+    context = RuntimeRequestContext(None, 'operator_session', trusted_local_operator=True)
+    asyncio.run(database_reset._close_remote_sessions(app, context))
+    assert observed == [('operator', 'operator_session', True, 'runtime.close')]
+
+
 @pytest.mark.parametrize('active', [False, True])
 def test_reset_preserves_configured_local_connection_and_can_deliver_again(connected_local, monkeypatch, active):
     setup, binding, native = connected_local
@@ -21,7 +73,8 @@ def test_reset_preserves_configured_local_connection_and_can_deliver_again(conne
     tables = ('agents', 'agent_endpoints', 'runtime_profiles', 'runtime_execution_grants',
         'execution_bindings', 'execution_workspace_bindings', 'execution_realizations',
         'execution_local_realizations', 'execution_installation', 'runtime_policy_defaults', 'workspaces',
-        'one_shot_policy_settings', 'one_shot_host_limits', 'runtime_mcp_presets')
+        'one_shot_policy_settings', 'one_shot_host_limits', 'runtime_mcp_presets',
+        'execution_embedded_store_bindings')
     # Seed unrelated history without starting a native turn.
     with deps.connection_factory.unit_of_work() as uow:
         from okto_nexus.application import one_shot_settings, runtime_mcp_presets
@@ -59,6 +112,12 @@ def test_reset_preserves_configured_local_connection_and_can_deliver_again(conne
                 ignored = names.index('last_seen_at')
                 trim = lambda rows: [r[:ignored] + r[ignored+1:] for r in rows]
                 assert trim([tuple(r) for r in uow.connection.execute('SELECT * FROM agents')]) == trim(before[table])
+            elif table == 'execution_embedded_store_bindings':
+                rows = [tuple(r) for r in uow.connection.execute(
+                    'SELECT * FROM execution_embedded_store_bindings ORDER BY reset_generation')]
+                assert rows[:-1] == before[table]
+                assert len(rows) == len(before[table]) + 1
+                assert rows[-1][0] == 1 and rows[-1][1] != rows[0][1]
             else:
                 assert [tuple(r) for r in uow.connection.execute('SELECT * FROM ' + table)] == before[table], table
         assert uow.connection.execute('SELECT COUNT(*) FROM messages').fetchone()[0] == 0
@@ -70,6 +129,10 @@ def test_reset_preserves_configured_local_connection_and_can_deliver_again(conne
     assert delivered['ok'], delivered
     with deps.connection_factory.unit_of_work(write=False) as uow:
         turn = dict(uow.connection.execute("SELECT operation_id,session_id FROM execution_operations WHERE action='turn.submit'").fetchone())
+        stores = uow.connection.execute('SELECT reset_generation,store_id FROM '
+            'execution_embedded_store_bindings ORDER BY reset_generation').fetchall()
+        assert len(stores) == 2 and [row[0] for row in stores] == [0, 1]
+        assert stores[0][1] != stores[1][1]
     wait_receipt(setup, turn)
     assert native.opens == (2 if active else 1) and len(native.native.sent) == 1
     # Reset must restore the immutable-history fence before admitting work.
@@ -126,7 +189,7 @@ def test_reset_preserves_installation_observation_without_reprobing(connected_lo
     deps, app, client, _, _, candidate, _ = setup
     raw = replace(candidate, trust='untrusted')
     monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
-        lambda **_: SimpleNamespace(candidates=(raw,)))
+        lambda **_: SimpleNamespace(candidates=tuple(c for c in (raw,) if not _.get('adapter_ids') or c.adapter_id in _['adapter_ids'])))
     calls = []
     async def probe(selected):
         calls.append(selected)
@@ -196,6 +259,18 @@ def test_failed_history_reset_rolls_back_data_and_immutability_fence(connected_l
         turn = dict(uow.connection.execute("SELECT operation_id,session_id FROM execution_operations WHERE action='turn.submit'").fetchone())
     wait_receipt(setup, turn)
     wait_receipt(setup, admit(setup, binding, 'rollback-close', 'runtime.close', session_id=turn['session_id']))
+    # Closing unfinished work also publishes an asynchronous caller notice.
+    # Include that committed message in the baseline instead of racing it;
+    # rollback must preserve the complete message rows, including the notice.
+    from test_embedded_owner_replacement import wait_until
+    def notice_published():
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            return uow.connection.execute(
+                "SELECT 1 FROM execution_release_notifications n "
+                "JOIN execution_delivery_releases r USING(domain_operation_id) "
+                "WHERE r.operation_id=? AND n.state='PUBLISHED'",
+                (turn['operation_id'],)).fetchone()
+    wait_until(notice_published)
     with deps.connection_factory.unit_of_work(write=False) as uow:
         before = {table: [tuple(row) for row in uow.connection.execute('SELECT * FROM ' + table)]
             for table in ('messages', 'runtime_delivery_attempt_events', 'execution_bindings')}

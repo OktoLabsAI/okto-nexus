@@ -1,4 +1,4 @@
-"""Only durable no-spawn refusals may leave other embedded sessions running."""
+"""Unknown openings retain their own resources while healthy sessions continue."""
 import time
 from contextlib import contextmanager
 
@@ -35,12 +35,24 @@ def test_open_drift_requires_durable_no_effect_proof(connected_local, monkeypatc
         rejected = admit(setup, binding, 'drift-open', 'runtime.start', new_session=True)
         if proof != 'not_sent':
             until = time.monotonic() + 15
-            while 'subject' not in owner.agents.errors:
+            session_id = rejected['session_id']
+            while not owner.sessions.get(session_id, {}).get('recovering'):
                 assert time.monotonic() < until
                 time.sleep(.02)
-            assert owner.agents.errors['subject'].code == 'PROFILE_DRIFT'
+            assert owner.sessions[session_id]['recovery_error'].code == 'PROFILE_DRIFT'
+            assert 'subject' not in owner.agents.blocked
             assert owner.failure is None
             assert not owner._stopping.is_set()
+            sent = admit(setup, binding, 'healthy-with-unknown-sibling', 'turn.submit',
+                         session_id=first_session, text='Still usable')
+            wait_receipt(setup, sent)
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                row = uow.connection.execute('SELECT lifecycle_state,lease_state FROM execution_sessions '
+                    'WHERE session_id=?', (session_id,)).fetchone()
+                assert row['lifecycle_state'] not in ('CLOSED', 'FAILED')
+                assert row['lease_state'] != 'CLOSED'
+                assert uow.connection.execute('SELECT count(*) FROM execution_receipts WHERE operation_id=?',
+                    (rejected['operation_id'],)).fetchone()[0] == 0
             return
         view = wait_receipt(setup, rejected, stages=('FAILED',))
         assert view['possible_effect'] is False

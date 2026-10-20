@@ -183,7 +183,16 @@ function Dashboard({
   localOpen: boolean;
 }) {
   const { theme, toggle } = useTheme();
-  const [view, setView] = useState<View>("Graph");
+  const [view, setViewState] = useState<View>("Graph");
+  const settingsPending = useRef(false);
+  const onSettingsPending = useCallback((pending: boolean) => {settingsPending.current = pending;}, []);
+  const mayLeaveSettings = () => !settingsPending.current || window.confirm('Discard unsaved settings and leave this page?');
+  const setView = useCallback((next: View) => {
+    if (!settingsPending.current || window.confirm('Discard unsaved settings and leave this page?')) {
+      settingsPending.current = false;
+      setViewState(next);
+    }
+  }, []);
   const [info, setInfo] = useState<NexusInfo | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(
     () => localStorage.getItem("okto-nexus-sidebar") !== "closed",
@@ -466,7 +475,7 @@ function Dashboard({
           {!localOpen && (
             <button
               className="btn btn-secondary !px-2"
-              onClick={onLock}
+              onClick={() => {if (mayLeaveSettings()) onLock();}}
               title="Sign out" aria-label="Sign out"
             >
               <Lock size={14} />
@@ -691,7 +700,7 @@ function Dashboard({
               onChanged={loadApprovalCount}
             />
           )}
-          {view === "Settings" && <SettingsView onSettingsApplied={loadInfo} />}
+          {view === "Settings" && <SettingsView onSettingsApplied={loadInfo} onPendingChange={onSettingsPending} />}
       </main>
       </div>
     </div>

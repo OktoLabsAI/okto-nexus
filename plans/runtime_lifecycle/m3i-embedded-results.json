@@ -1,0 +1,20 @@
+{
+  "checkpoint": "M3i independent embedded producer and reset readiness",
+  "tests_total": 123,
+  "passed": 115,
+  "skipped": 8,
+  "failures": 0,
+  "errors": 0,
+  "seconds": 1023.303,
+  "changed_inputs": [],
+  "source_files_matching_wheel": 535,
+  "artifacts": {
+    "okto_nexus": "62917fdecc582f9d31a31d639d17ca713bf2f73c619b18f43a414abdcc86b99f",
+    "nexus_connector_core": "13d72e63d1406a8cd6fcb154ce31bb218c0e042cce0bf946cc8e0350f69a3b9a",
+    "okto_nexus_connector": "41331e7b9405e830d990141e48e7702d461559a779b66ee39ec8aedc9e52d7c2"
+  },
+  "report": "build/runtime-m3i-joint-installed",
+  "global_installation_changed": false,
+  "real_ui_gate": "pending",
+  "skipped_reason": "Optional automated browser workflow; not evidence for real UI gate"
+}

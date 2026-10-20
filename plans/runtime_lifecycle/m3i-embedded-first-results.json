@@ -1,0 +1,18 @@
+{
+  "checkpoint": "M3i embedded producer first installed campaign",
+  "tests": 121,
+  "failures": 2,
+  "errors": 0,
+  "skipped": 8,
+  "passed": 111,
+  "seconds": 2080.811,
+  "changed_inputs": [],
+  "report": "build/runtime-m3i-embedded-installed",
+  "wheel_sha256": "08461ea2a07895e487a873611be2833a4d912e676312628ebfb15f8fcb3f71c5",
+  "failed_cases": [
+    "test_reset_preserves_configured_local_connection_and_can_deliver_again[False]",
+    "test_reset_preserves_configured_local_connection_and_can_deliver_again[True]"
+  ],
+  "global_installation_changed": false,
+  "qualified": false
+}

@@ -105,12 +105,12 @@ def test_startup_converts_backlog_even_with_runtime_admission_disabled(backlog, 
 
 
 def test_partial_startup_failure_drains_notice_writer_without_coordinator(tmp_path, monkeypatch):
-    from okto_nexus.adapters.inbound.mcp.tools import harness
+    from okto_nexus.bootstrap.embedded_dispatch import EmbeddedDispatchOwner
     deps, app = app_for(tmp_path / 'partial-startup')
     deps.config.feature_harness_integrations = True
-    def fail_boot(*args):
+    async def fail_boot(*args):
         raise RuntimeError('Injected boot failure before coordinator creation')
-    monkeypatch.setattr(harness, 'run_runtime_boot', fail_boot)
+    monkeypatch.setattr(EmbeddedDispatchOwner, 'start', fail_boot)
     with pytest.raises(RuntimeError, match='Injected boot failure'):
         with TestClient(app):
             pass

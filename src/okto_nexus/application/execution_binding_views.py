@@ -4,7 +4,7 @@ from contextlib import nullcontext
 
 from ..adapters.outbound.sqlite.execution_agent_revisions import current_agent_revisions
 from ..errors import ErrorCode, OktoNexusError
-from .execution_inventory_revalidation import accepts_binding
+from .execution_inventory_revalidation import binding_consent_preserved
 
 
 def read_execution_binding(factory, *, server_id, binding_id, context, access, uow=None):
@@ -59,7 +59,7 @@ def read_execution_binding(factory, *, server_id, binding_id, context, access, u
               or row['bound_workspace_id'] != row['workspace_id']
               or row['realization_candidate'] != row['candidate_ref']
               or row['realization_inventory'] != row['inventory_revision']
-              or not accepts_binding(conn, row, row['current_inventory_revision'], server_id, row['executor_id'])):
+              or not binding_consent_preserved(conn, row, row['current_inventory_revision'], server_id, row['executor_id'])):
             state = 'STALE'
         else:
             # Consent persists across executor disconnection. APPROVED is not a

@@ -330,6 +330,8 @@ def build_router() -> APIRouter:
                 "action": "Request a replacement with a new credential_request_id."
                 if exc.code == "CREDENTIAL_MATERIAL_UNAVAILABLE" else None,
             }}, status_code=409, headers={"Cache-Control": "no-store"})
+        except OktoNexusError as exc:
+            return binding_error(exc, 'credential')
         if issued is None:
             return v1_err(404, "NOT_FOUND",
                           "The binding was not found in this scope.",

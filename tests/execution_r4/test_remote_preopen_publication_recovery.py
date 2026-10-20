@@ -4,6 +4,7 @@ from functools import partial
 from pathlib import Path
 
 import pytest
+from nexus_connector_core import CoreError
 
 from okto_nexus.adapters.inbound.http import executor_link
 from okto_nexus.application.handoff_runtime_scheduler import HandoffScheduleLease
@@ -63,7 +64,16 @@ def test_remote_preopen_publication_cut_reconciles_without_reexecuting(onboardin
                 HandoffScheduleLease(hid, binding['workspace_id'], 0, 'publication-recovery', 0, 0, ''), limit=4)
             assert len(page.attempt_ids) == 1
             attempts = build_handoff_runtime_attempts(deps)
-            held = await attempts.reserve(page.attempt_ids[0])
+            async def reserve_fresh(attempt_id):
+                async with asyncio.timeout(30):
+                    while True:
+                        try:
+                            return await attempts.reserve(attempt_id)
+                        except CoreError as error:
+                            if error.code != 'STALE_OBSERVATION':
+                                raise
+                            await asyncio.sleep(.05)
+            held = await reserve_fresh(page.attempt_ids[0])
             assert held.state == 'RESERVED'
             committed = attempts.claim(page.attempt_ids[0])
             await build_capacity_admission(deps).consume(committed.operation_id)
@@ -107,7 +117,7 @@ def test_remote_preopen_publication_cut_reconciles_without_reexecuting(onboardin
                     assert fresh_page.reason == 'STALE_OBSERVATION', fresh_page
                     await asyncio.sleep(.05)
             assert len(fresh_page.attempt_ids) == 1
-            assert (await attempts.reserve(fresh_page.attempt_ids[0])).state == 'RESERVED'
+            assert (await reserve_fresh(fresh_page.attempt_ids[0])).state == 'RESERVED'
             fresh_claim = attempts.claim(fresh_page.attempt_ids[0])
             fresh_admission = await build_capacity_admission(deps).consume(fresh_claim.operation_id)
             async with asyncio.timeout(20):

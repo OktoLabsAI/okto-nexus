@@ -1,0 +1,120 @@
+{
+  "checkpoint": "M4d1",
+  "global_rollout": false,
+  "qualification": "Passing coverage of 52 distinct installed scenarios after test synchronization and exact owner-process corrections; product wheel unchanged",
+  "passed": 52,
+  "initial_campaign": {
+    "status": "FAIL",
+    "exit_code": 1,
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "2",
+        "skipped": "0",
+        "tests": "52",
+        "time": "1611.169",
+        "timestamp": "2026-10-16T22:54:26.414821-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ],
+    "changed_inputs": [],
+    "failures": [
+      "test_restart_recovers_containers_or_requires_scoped_operator_attestation[True-False]",
+      "test_real_process_exit_restores_without_lock_reset_or_replay[graceful]"
+    ],
+    "tests": [
+      "tests/execution_r4/test_local_session_catalog.py",
+      "tests/execution_r4/test_local_retirement.py::test_restart_uses_verified_retirement_unless_core_still_owns_resources",
+      "tests/execution_r4/test_local_resource_recovery.py",
+      "tests/execution_r4/test_agent_recovery_isolation.py",
+      "tests/execution_r4/test_embedded_preopen_fences.py",
+      "tests/execution_r4/test_initial_refusal_restart.py"
+    ]
+  },
+  "followup_campaign": {
+    "status": "PASS",
+    "exit_code": 0,
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "7",
+        "time": "349.156",
+        "timestamp": "2026-10-16T23:30:46.868816-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ],
+    "changed_inputs": [],
+    "tests": [
+      "tests/execution_r4/test_local_resource_recovery.py",
+      "tests/execution_r4/test_agent_recovery_isolation.py::test_real_process_exit_restores_without_lock_reset_or_replay"
+    ]
+  },
+  "intermediate_campaign": {
+    "status": "FAIL",
+    "exit_code": 1,
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "1",
+        "skipped": "0",
+        "tests": "7",
+        "time": "356.456",
+        "timestamp": "2026-10-16T23:22:47.865493-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ],
+    "changed_inputs": [],
+    "failure_reason": "Windows venv redirector termination did not prove actual owner exit; ServeLock correctly refused its live PID",
+    "campaign_sha256": "dcf42070960c438dc4cb4c50ffebac37376667b8c4e9cc3cbd670a2b34eeac65",
+    "junit_sha256": "17e1f7f1a69c9862786052d1d3c126391e3a75d97e59803269582e05488700b2"
+  },
+  "corrected_test_inputs": [
+    "tests/execution_r4/agent_recovery_process_fixture.py",
+    "tests/execution_r4/test_agent_recovery_isolation.py",
+    "tests/execution_r4/test_local_resource_recovery.py"
+  ],
+  "query_costs": [
+    {
+      "history_sessions": "1000",
+      "catalog_lookup_vm_steps": "63",
+      "startup_sql_vm_steps": "142"
+    },
+    {
+      "history_sessions": "10000",
+      "catalog_lookup_vm_steps": "63",
+      "startup_sql_vm_steps": "142"
+    },
+    {
+      "history_sessions": "100000",
+      "catalog_lookup_vm_steps": "63",
+      "startup_sql_vm_steps": "142"
+    }
+  ],
+  "process_timings": [
+    {
+      "fixture_ready_seconds": "35.59020010000677",
+      "first_recovery_seconds": "5.200076999986777"
+    },
+    {
+      "fixture_ready_seconds": "33.80384799998137",
+      "first_recovery_seconds": "6.360745299985865"
+    },
+    {
+      "fixture_ready_seconds": "34.574064999993425",
+      "first_recovery_seconds": "4.572564700007206"
+    }
+  ],
+  "source_files_matched": 529,
+  "wheel_sha256": "5c46bdddd22f5117a712f2a06d74dc65985b47780bcc0747c29d9d4b79957953",
+  "campaign_sha256": "de9ce72ca5e8a60e0f7b69c0d883979320d9938e9d15ed81a1b7a639e0aa4824",
+  "junit_sha256": "959106de48e95733676d1d884597b14df3c029b7577f1fcfff9b06369e00881c",
+  "installed_sha256": "06dfbe5974736d54c25d039ae82b7b30543307f8c072bdb6db5b19ac67a16c8d",
+  "followup_campaign_sha256": "ca1baf6d6d525eded067c6e0d0c716e78fb89c6d54bbd43b50e83b9d612d31da",
+  "followup_junit_sha256": "e9b738b66cfd47f2fe52612b6aebbfd289ee05c2a43d1a76cac1080ea6459516",
+  "followup_installed_sha256": "06dfbe5974736d54c25d039ae82b7b30543307f8c072bdb6db5b19ac67a16c8d"
+}

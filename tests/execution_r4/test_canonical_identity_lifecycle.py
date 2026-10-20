@@ -42,13 +42,20 @@ def test_post_spawn_persistence_failure_reaps_native_without_changing_identity(c
         return mcp(setup, monkeypatch, headers['subject']['Authorization'].removeprefix('Bearer '), 'harness_open', body)
     admitted = invoke()
     assert admitted['ok'], admitted
-    wait_receipt(setup, admitted['data'], stages=('OUTCOME_UNKNOWN',))
+    uncertain = wait_receipt(setup, admitted['data'], stages=('OUTCOME_UNKNOWN',))
+    assert uncertain['possible_effect'] and not uncertain['retry_safe']
+    session_id = uncertain['scope']['session_id']
     eventually(lambda: bool(failed))
     assert failed[0].wait(timeout=15) is not None
     def recovered():
         with deps.connection_factory.unit_of_work(write=False) as uow:
-            row = uow.connection.execute("SELECT state FROM execution_agent_recovery WHERE agent_id='subject'").fetchone()
-            return row is not None and row[0] == 'READY'
+            row = uow.connection.execute(
+                'SELECT lifecycle_state,lease_state FROM execution_sessions WHERE session_id=?',
+                (session_id,)).fetchone()
+        owner = app.state.embedded_dispatch_owner
+        return (row is not None and tuple(row) == ('CLOSED', 'CLOSED')
+                and session_id not in owner.sessions
+                and 'subject' not in owner.agents.blocked)
     eventually(recovered, seconds=30)
     assert registered_identities(setup) == before
     with deps.connection_factory.unit_of_work(write=False) as uow:
@@ -75,7 +82,7 @@ def second_binding(setup, monkeypatch, *, name='second', adapter_id='pi_rpc', wo
     other = InstallationCandidate(adapter_id, str(binary), fingerprint(binary), 'explicit', 'selected')
     existing = embedded_inventory.discover_local_candidates().candidates
     monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
-        lambda **_: SimpleNamespace(candidates=(*existing, other)))
+        lambda **_: SimpleNamespace(candidates=tuple(c for c in (*existing, other) if not _.get('adapter_ids') or c.adapter_id in _['adapter_ids'])))
     owner = app.state.embedded_inventory_owner
     client.portal.call(owner.refresh)
     inventory = client.get(f'/v1/runtime/executors/{owner.key.executor_id}/inventory', headers=headers['operator']).json()['snapshot']

@@ -1,0 +1,41 @@
+{
+  "checkpoint": "M3k interrupted caller notification and real reset UI",
+  "initial_installed": {
+    "tests": 59,
+    "failures": 2,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focused_installed": {
+    "tests": 8,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "distinct_cases_qualified": 59,
+  "initial_failure": "Two rollback tests captured messages before the new asynchronous interruption notice committed.",
+  "test_correction": "Wait for the close notification before baseline capture; preserve exact full-row rollback assertions.",
+  "implementation_changed_after_initial_campaign": false,
+  "changed_inputs_during_campaigns": [],
+  "changed_between_campaigns": [
+    "tests/execution_r4/test_reset_connections.py"
+  ],
+  "artifacts": {
+    "okto_nexus": "dc0d8130ec7ac33fb368e0c035c4a85dc1cef4d519c2e45b44a524348cd7c5db",
+    "nexus_connector_core": "13d72e63d1406a8cd6fcb154ce31bb218c0e042cce0bf946cc8e0350f69a3b9a",
+    "okto_nexus_connector": "41331e7b9405e830d990141e48e7702d461559a779b66ee39ec8aedc9e52d7c2"
+  },
+  "final_source_tests": 5,
+  "source_files_matching": 538,
+  "installed_files_matching": 545,
+  "real_ui": [
+    "m3k-real-ui.md",
+    "m3k-reset-ui.md"
+  ],
+  "global_installation_changed": false,
+  "limitations": "Real Pi only. Full UI-A/three-provider/load/separate Connector process gates remain open.",
+  "reports": [
+    "build\\runtime-m3k-notifications-final-installed",
+    "build\\runtime-m3k-notifications-reset-installed"
+  ]
+}

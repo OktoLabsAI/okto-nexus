@@ -84,6 +84,33 @@ def test_confirmed_close_makes_current_owner_ready(recovery):
     assert state(factory) == "CONTROL_READY"
 
 
+@pytest.mark.parametrize('fault', [None, 'unreleased', 'missing_proof', 'missing_watermark'])
+def test_preserve_reset_accepts_only_released_prior_session_claims(recovery, fault):
+    from okto_nexus.application.database_reset import clear_operational_history
+
+    factory, previous, old_report, _, _ = recovery
+    with factory.unit_of_work() as uow:
+        clear_operational_history(uow.connection, keep_agents=True)
+    service = ExecutionReconciliation(factory, previous.channel)
+    request = service.request()
+    assert request['operation_ids'] == []
+    assert request['session_ids'] == []
+    report = {k: v for k, v in request.items()
+              if k not in ('operation_ids', 'session_ids', 'stream_watermarks')}
+    report.update(type='reconcile.report', complete=True, next_cursor=None,
+                  receipts=[], claims=old_report['claims'],
+                  ownership_facts=old_report['ownership_facts'],
+                  stream_watermarks=[dict(old_report['stream_watermarks'][0], sequence=1)])
+    if fault == 'unreleased':
+        report['claims'][0]['state'] = 'UNKNOWN'
+    elif fault == 'missing_proof':
+        report['ownership_facts'][0].pop('proof_digest')
+    elif fault == 'missing_watermark':
+        report['stream_watermarks'] = []
+    assert service.accept(report)['recovery_remaining'] is (fault is not None)
+    assert state(factory) == ('CONTROL_READY' if fault is None else 'RECOVERING')
+
+
 @pytest.mark.parametrize('stage', ['SUBMISSION_STARTED', 'RUNNING', 'OUTCOME_UNKNOWN', 'FAILED'])
 @pytest.mark.parametrize('released', [False, True])
 def test_uncertain_opening_does_not_block_proven_resource_recovery(recovery, stage, released):

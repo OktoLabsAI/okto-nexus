@@ -12,6 +12,8 @@ def status_db():
     conn.row_factory = sqlite3.Row
     conn.executescript('''
     CREATE TABLE agents(agent_id TEXT);
+    CREATE TABLE runtime_dispatcher_owner(owner_key TEXT,owner_id TEXT,lease_expires_at TEXT);
+    INSERT INTO runtime_dispatcher_owner VALUES('dispatcher','local-owner','2026-10-05T12:00:40Z');
     CREATE TABLE execution_agent_recovery(server_id TEXT,executor_id TEXT,agent_id TEXT,generation INTEGER,state TEXT);
     CREATE TABLE agent_execution_policies(agent_id TEXT,execution_location TEXT);
     CREATE TABLE agent_runtime_overrides(agent_id TEXT,runtime_enabled INTEGER);
@@ -92,6 +94,27 @@ def test_local_agent_without_a_binding_is_not_reported_as_recovering(status_db):
     conn.execute("INSERT INTO execution_executors VALUES('server','embedded',NULL,'embedded',NULL,"
                  "'This computer','RECOVERING',NULL,1,'local-owner')")
     assert agent_connection_statuses(status_db, '2026-10-05T12:00:10Z')['subject']['status'] == 'Not configured'
+
+
+@pytest.mark.parametrize('change', [
+    "UPDATE runtime_dispatcher_owner SET lease_expires_at='2026-10-05T12:00:10Z'",
+    "UPDATE runtime_dispatcher_owner SET owner_id='replacement-owner'",
+    'DELETE FROM runtime_dispatcher_owner',
+])
+@pytest.mark.parametrize('control_state', ['CONTROL_READY', 'RECOVERING'])
+def test_local_status_cannot_outlive_its_exact_owner(status_db, change, control_state):
+    from okto_nexus.application.agent_connection_status import connection_presence
+    conn = status_db.connection
+    conn.execute("UPDATE agent_execution_policies SET execution_location='local'")
+    conn.execute("INSERT INTO execution_executors VALUES('server','embedded',NULL,'embedded',NULL,"
+                 "'This computer',?,'2026-10-05T12:00:09Z',1,'local-owner')", (control_state,))
+    conn.execute("INSERT INTO execution_bindings VALUES('server','embedded','local-binding','local-endpoint')")
+    conn.execute("INSERT INTO agent_endpoints VALUES('local-endpoint','subject',1,'approved')")
+    conn.execute(change)
+    result = agent_connection_statuses(status_db, '2026-10-05T12:00:10Z')['subject']
+    assert result['status'] == result['hosts'][0]['status'] == 'Offline'
+    assert result['hosts'][0]['last_seen_at'] == '2026-10-05T12:00:09Z'
+    assert connection_presence(result) == 'offline'
 
 
 @pytest.mark.parametrize('decision,expiry,expected', [

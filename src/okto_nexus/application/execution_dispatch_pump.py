@@ -52,12 +52,25 @@ class ExecutionDispatchPump:
     async def _database(self, function, **kwargs):
         # A cancelled waiter must not leave an unobserved transaction that can
         # reserve or fence an operation after its connection has been released.
-        task = asyncio.create_task(asyncio.to_thread(partial(function, **kwargs)))
-        try:
-            return await asyncio.shield(task)
-        except asyncio.CancelledError:
-            await asyncio.shield(task)
-            raise
+        delay = self.poll_interval
+        while True:
+            task = asyncio.create_task(asyncio.to_thread(partial(function, **kwargs)))
+            try:
+                return await asyncio.shield(task)
+            except asyncio.CancelledError:
+                await asyncio.shield(task)
+                raise
+            except OktoNexusError as error:
+                # Admission/BEGIN contention has no committed effect. Retry
+                # this database boundary, never the native send. Closing the
+                # shared local executor here would strand every healthy agent.
+                if error.code != ErrorCode.DB_ERROR or not error.retryable or self._stopping.is_set():
+                    raise
+                try:
+                    await asyncio.wait_for(self._stopping.wait(), timeout=delay)
+                except asyncio.TimeoutError:
+                    pass
+                delay = min(max(delay * 2, 0.01), 1.0)
 
     async def _run(self):
         reservation = None
@@ -75,6 +88,18 @@ class ExecutionDispatchPump:
                     except asyncio.TimeoutError:
                         pass
                     continue
+                # After an embedded owner restart, queued work can be reserved
+                # before the new inventory observation is published. Keep it
+                # pending until that observation exists; rejecting it here
+                # would turn a transient startup gap into a terminal failure.
+                if self.fresh_publications.get((self.channel.server_id, self.channel.executor_id)) is None:
+                    await self._database(release_unsent_dispatch, factory=self.factory, reservation=reservation)
+                    reservation = None
+                    try:
+                        await asyncio.wait_for(self._stopping.wait(), timeout=self.poll_interval)
+                    except asyncio.TimeoutError:
+                        pass
+                    continue
                 async with self.send_lock:
                     if self._stopping.is_set():
                         break
@@ -87,6 +112,16 @@ class ExecutionDispatchPump:
                             fresh_publications=self.fresh_publications, access=self.access, channel=self.channel,
                             resolve_native_input=self.resolve_native_input)
                     except OktoNexusError as error:
+                        if (error.code == ErrorCode.CONFLICT and
+                                (error.details or {}).get('transient') == 'inventory_not_fresh'):
+                            await self._database(release_unsent_dispatch, factory=self.factory,
+                                                 reservation=reservation)
+                            reservation = None
+                            try:
+                                await asyncio.wait_for(self._stopping.wait(), timeout=self.poll_interval)
+                            except asyncio.TimeoutError:
+                                pass
+                            continue
                         if error.code not in {ErrorCode.CONFLICT, ErrorCode.PERMISSION_DENIED,
                                               ErrorCode.NOT_FOUND, ErrorCode.VALIDATION_ERROR,
                                               "AUTHORIZED_INPUT_UNAVAILABLE", "APPROVAL_AUTHORITY_REQUIRED"}:

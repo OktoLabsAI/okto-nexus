@@ -28,9 +28,12 @@ class EmbeddedPreopenRecovery:
                 "FROM execution_local_publications p JOIN execution_operations o USING(server_id,executor_id,operation_id) "
                 "JOIN execution_local_streams l ON l.server_id=p.server_id AND l.executor_id=p.executor_id "
                 "AND l.session_id=p.session_id AND l.opening_operation_id=p.operation_id "
+                "JOIN execution_sessions s ON s.server_id=p.server_id AND s.executor_id=p.executor_id "
+                "AND s.session_id=p.session_id "
                 "LEFT JOIN execution_local_preopen_fences f USING(server_id,executor_id,operation_id) "
                 "LEFT JOIN execution_preopen_refusals r USING(server_id,executor_id,operation_id) "
                 "WHERE p.server_id=? AND p.executor_id=? AND o.subject_agent_id=? AND o.action='runtime.open' "
+                "AND s.local_retirement_json IS NULL "
                 "AND (f.operation_id IS NOT NULL OR NOT EXISTS (SELECT 1 FROM execution_receipts x "
                 "WHERE x.server_id=p.server_id AND x.executor_id=p.executor_id AND x.operation_id=p.operation_id)) "
                 "ORDER BY p.rowid LIMIT 32769",
@@ -68,6 +71,24 @@ class EmbeddedPreopenRecovery:
             uow.connection.execute('UPDATE execution_local_streams SET drained=1 '
                 'WHERE server_id=? AND executor_id=? AND session_id=?',
                 (source['server_id'], source['executor_id'], source['session_id']))
+    def _checkpoint(self, report):
+        owner, source = self.owner, report['refusal']['source']
+        with owner.factory.unit_of_work() as uow:
+            owner.verify(uow=uow)
+            # The durable refusal excludes native opening. Capacity and an
+            # empty stream were proved before _commit; tool cleanup has now
+            # completed as well. A cleanup failure leaves this checkpoint absent.
+            row = uow.connection.execute('SELECT s.owner_generation,s.local_retirement_revision,l.stream_epoch '
+                'FROM execution_sessions s JOIN execution_local_streams l '
+                'USING(server_id,executor_id,session_id) WHERE s.server_id=? AND s.executor_id=? '
+                'AND s.session_id=?',
+                (source['server_id'], source['executor_id'], source['session_id'])).fetchone()
+            from .embedded_retirement import EmbeddedRetirement
+            EmbeddedRetirement(owner).commit(source['session_id'], dict(
+                server_id=source['server_id'], executor_id=source['executor_id'], session_id=source['session_id'],
+                opening_operation_id=source['operation_id'], owner_generation=row['owner_generation'],
+                stream_epoch=row['stream_epoch'], committed_sequence=0,
+                release_kind='preopen_refusal', retirement_revision=row['local_retirement_revision']), uow=uow)
 
     async def recover(self, agent_id):
         owner = self.owner
@@ -135,5 +156,7 @@ class EmbeddedPreopenRecovery:
                         raise CoreError('RECONCILIATION_REQUIRED', 'embedded_preopen_report')
                     report = previous
                 await asyncio.to_thread(self._commit, report)
+                await owner.tools.release_session(session.session_id)
+                await asyncio.to_thread(self._checkpoint, report)
 
             await owner.host.with_history(executor_id=key.executor_id, session_id=session.session_id, read=recover)

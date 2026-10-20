@@ -1,0 +1,1015 @@
+{
+  "checkpoint": "M4d3",
+  "global_rollout": false,
+  "real_ui_gate": "NOT_RUN_FOR_THIS_TECHNICAL_CHECKPOINT",
+  "installed": {
+    "path": "build\\runtime-m4d3-unopened-installed\\tests.xml",
+    "sha256": "cdcf95059768dbe9ff00543dc1c2b872d96a5b6af8aabf85808ebc7c0453f7ef",
+    "totals": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "61",
+      "time": "1118.066",
+      "timestamp": "2026-10-17T07:19:46.799328-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "cases": [
+      {
+        "classname": "tests.execution_r4.test_unopened_retirement",
+        "name": "test_dispatch_refusal_retires_without_creating_journal_stream_or_result",
+        "time": "16.853",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_unopened_retirement",
+        "name": "test_missing_or_conflicting_proof_does_not_retire[UPDATE execution_sessions SET lifecycle_state='OPEN_PENDING']",
+        "time": "10.599",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_unopened_retirement",
+        "name": "test_missing_or_conflicting_proof_does_not_retire[UPDATE execution_dispatch_outbox SET last_error='{\"stage\":\"dispatch\",\"possible_effect\":true}']",
+        "time": "6.698",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_unopened_retirement",
+        "name": "test_missing_or_conflicting_proof_does_not_retire[UPDATE execution_dispatch_outbox SET last_error=NULL]",
+        "time": "8.443",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_unopened_retirement",
+        "name": "test_missing_or_conflicting_proof_does_not_retire[UPDATE execution_operations SET admission_state='ACCEPTED']",
+        "time": "7.214",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_unopened_retirement",
+        "name": "test_missing_or_conflicting_proof_does_not_retire[UPDATE execution_sessions SET lease_state='ACTIVE']",
+        "time": "5.738",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_unopened_retirement",
+        "name": "test_missing_or_conflicting_proof_does_not_retire[INSERT INTO execution_local_streams(server_id,executor_id,session_id,stream_epoch,opening_operation_id,binding_id,agent_id) VALUES('server','executor','session-0','epoch','open-0','binding','agent')]",
+        "time": "10.219",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_unopened_retirement",
+        "name": "test_producer_and_cleanup_must_finish_before_checkpoint",
+        "time": "8.709",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_unopened_retirement",
+        "name": "test_checkpoint_commit_failure_retains_obligation_and_retries",
+        "time": "12.884",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_unopened_retirement",
+        "name": "test_changed_refusal_invalidates_checkpoint_transactionally[UPDATE execution_dispatch_outbox SET last_error='{\"possible_effect\":true}']",
+        "time": "13.309",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_unopened_retirement",
+        "name": "test_changed_refusal_invalidates_checkpoint_transactionally[DELETE FROM execution_dispatch_outbox]",
+        "time": "13.287",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_unopened_retirement",
+        "name": "test_changed_refusal_invalidates_checkpoint_transactionally[UPDATE execution_operations SET admission_state='ACCEPTED']",
+        "time": "13.589",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_unopened_retirement",
+        "name": "test_changed_evidence_between_observation_and_commit_is_not_hidden",
+        "time": "17.985",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_unopened_retirement",
+        "name": "test_stale_owner_cannot_certify_non_admission",
+        "time": "17.013",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_unopened_retirement",
+        "name": "test_occupied_slot_without_journal_prevents_retirement",
+        "time": "15.906",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_unopened_retirement",
+        "name": "test_unverified_local_history_cannot_certify_non_admission[sidecar]",
+        "time": "14.097",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_unopened_retirement",
+        "name": "test_unverified_local_history_cannot_certify_non_admission[missing_ledger]",
+        "time": "14.192",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_unopened_retirement",
+        "name": "test_unverified_local_history_cannot_certify_non_admission[unknown_receipt]",
+        "time": "12.205",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_initial_refusal_restart",
+        "name": "test_restart_recovers_initial_refusal_without_native_execution[denial_before]",
+        "time": "68.440",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_initial_refusal_restart",
+        "name": "test_restart_recovers_initial_refusal_without_native_execution[denial_before_release_after]",
+        "time": "52.369",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_initial_refusal_restart",
+        "name": "test_restart_recovers_initial_refusal_without_native_execution[denial_after]",
+        "time": "55.917",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_initial_refusal_restart",
+        "name": "test_restart_recovers_initial_refusal_without_native_execution[core_before]",
+        "time": "57.881",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_initial_refusal_restart",
+        "name": "test_restart_recovers_initial_refusal_without_native_execution[core_after]",
+        "time": "52.664",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_initial_refusal_restart",
+        "name": "test_restart_recovers_initial_refusal_without_native_execution[publish_after]",
+        "time": "58.956",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_retirement",
+        "name": "test_checkpoint_and_retirement_flags_commit_or_roll_back_together",
+        "time": "14.169",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_retirement",
+        "name": "test_mismatched_retirement_proof_cannot_retire_obligations[owner_generation-2]",
+        "time": "14.487",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_retirement",
+        "name": "test_mismatched_retirement_proof_cannot_retire_obligations[opening_operation_id-other]",
+        "time": "11.885",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_retirement",
+        "name": "test_mismatched_retirement_proof_cannot_retire_obligations[session_id-other]",
+        "time": "11.499",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_retirement",
+        "name": "test_mismatched_retirement_proof_cannot_retire_obligations[executor_id-other]",
+        "time": "11.086",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_retirement",
+        "name": "test_mismatched_retirement_proof_cannot_retire_obligations[server_id-other]",
+        "time": "9.234",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_retirement",
+        "name": "test_mismatched_retirement_proof_cannot_retire_obligations[stream_epoch-other]",
+        "time": "10.758",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_retirement",
+        "name": "test_mismatched_retirement_proof_cannot_retire_obligations[committed_sequence-1]",
+        "time": "10.407",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_retirement",
+        "name": "test_new_obligation_invalidates_checkpoint_in_its_own_transaction[UPDATE execution_local_publications SET terminal=0]",
+        "time": "10.334",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_retirement",
+        "name": "test_new_obligation_invalidates_checkpoint_in_its_own_transaction[UPDATE execution_local_streams SET drained=0]",
+        "time": "11.532",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_retirement",
+        "name": "test_new_obligation_invalidates_checkpoint_in_its_own_transaction[UPDATE execution_sessions SET owner_generation=2]",
+        "time": "9.949",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_retirement",
+        "name": "test_new_obligation_invalidates_checkpoint_in_its_own_transaction[UPDATE execution_sessions SET lifecycle_state='READY']",
+        "time": "9.237",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_retirement",
+        "name": "test_new_obligation_invalidates_checkpoint_in_its_own_transaction[UPDATE execution_sessions SET lifecycle_state='FAILED']",
+        "time": "8.657",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_retirement",
+        "name": "test_new_obligation_invalidates_checkpoint_in_its_own_transaction[UPDATE execution_sessions SET lease_state='ACTIVE']",
+        "time": "6.541",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_retirement",
+        "name": "test_new_obligation_invalidates_checkpoint_in_its_own_transaction[UPDATE execution_sessions SET stream_epoch='new-epoch']",
+        "time": "7.104",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_retirement",
+        "name": "test_new_obligation_between_proof_and_checkpoint_cannot_be_hidden[UPDATE execution_local_publications SET terminal=0]",
+        "time": "7.200",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_retirement",
+        "name": "test_new_obligation_between_proof_and_checkpoint_cannot_be_hidden[INSERT INTO execution_event_watermarks(server_id,executor_id,session_id,stream_epoch) VALUES('server','executor','session-0','epoch')]",
+        "time": "6.591",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_retirement",
+        "name": "test_new_obligation_between_proof_and_checkpoint_cannot_be_hidden[INSERT INTO execution_event_ingress(server_id,executor_id,session_id,stream_epoch,sequence,event_hash,event_type,payload_json,received_at) VALUES('server','executor','session-0','epoch',1,'hash','text_delta','{}','now')]",
+        "time": "4.593",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_retirement",
+        "name": "test_stale_owner_cannot_commit_checkpoint",
+        "time": "5.896",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_retirement",
+        "name": "test_retirement_backfill_resumes_committed_sessions_in_bounded_batches",
+        "time": "20.569",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_retirement",
+        "name": "test_restart_uses_verified_retirement_unless_core_still_owns_resources[pi_rpc-False]",
+        "time": "28.139",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_retirement",
+        "name": "test_restart_uses_verified_retirement_unless_core_still_owns_resources[codex_app_server-False]",
+        "time": "29.114",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_retirement",
+        "name": "test_restart_uses_verified_retirement_unless_core_still_owns_resources[claude_stream-False]",
+        "time": "26.981",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_retirement",
+        "name": "test_restart_uses_verified_retirement_unless_core_still_owns_resources[pi_rpc-True]",
+        "time": "30.498",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_retirement_maintenance",
+        "name": "test_restart_is_ready_and_publishes_new_response_while_retirement_waits[codex_app_server]",
+        "time": "32.497",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_retirement_maintenance",
+        "name": "test_restart_is_ready_and_publishes_new_response_while_retirement_waits[claude_stream]",
+        "time": "25.407",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_retirement_maintenance",
+        "name": "test_restart_is_ready_and_publishes_new_response_while_retirement_waits[pi_rpc]",
+        "time": "20.215",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_retirement_maintenance",
+        "name": "test_pending_cursor_wraps_without_starving_other_sessions_and_joins_shutdown",
+        "time": "4.449",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_retirement_maintenance",
+        "name": "test_recovering_agent_does_not_start_historical_maintenance",
+        "time": "0.004",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_retirement_maintenance",
+        "name": "test_retryable_recovery_evidence_write_failure_still_propagates[RECOVERY_CONTAINER_STOPPED]",
+        "time": "0.002",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_retirement_maintenance",
+        "name": "test_retryable_recovery_evidence_write_failure_still_propagates[RECOVERY_AGENT_READY]",
+        "time": "0.002",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_pending_queries",
+        "name": "test_pending_queries_have_bounded_cost_with_terminal_history[1000]",
+        "time": "3.168",
+        "properties": {
+          "history_sessions": "1000",
+          "publications_vm_steps": "90",
+          "agent_publications_vm_steps": "157",
+          "streams_vm_steps": "96",
+          "agent_streams_vm_steps": "113",
+          "exact_session_vm_steps": "63",
+          "unretired_streams_vm_steps": "168",
+          "pending_retirement_vm_steps": "214",
+          "unretired_records_vm_steps": "368",
+          "pending_subjects_vm_steps": "263",
+          "retirement_commit_vm_steps": "414"
+        }
+      },
+      {
+        "classname": "tests.execution_r4.test_local_pending_queries",
+        "name": "test_pending_queries_have_bounded_cost_with_terminal_history[10000]",
+        "time": "12.711",
+        "properties": {
+          "history_sessions": "10000",
+          "publications_vm_steps": "90",
+          "agent_publications_vm_steps": "157",
+          "streams_vm_steps": "96",
+          "agent_streams_vm_steps": "113",
+          "exact_session_vm_steps": "63",
+          "unretired_streams_vm_steps": "168",
+          "pending_retirement_vm_steps": "214",
+          "unretired_records_vm_steps": "368",
+          "pending_subjects_vm_steps": "263",
+          "retirement_commit_vm_steps": "414"
+        }
+      },
+      {
+        "classname": "tests.execution_r4.test_local_pending_queries",
+        "name": "test_pending_queries_have_bounded_cost_with_terminal_history[100000]",
+        "time": "105.402",
+        "properties": {
+          "history_sessions": "100000",
+          "publications_vm_steps": "90",
+          "agent_publications_vm_steps": "157",
+          "streams_vm_steps": "96",
+          "agent_streams_vm_steps": "113",
+          "exact_session_vm_steps": "63",
+          "unretired_streams_vm_steps": "168",
+          "pending_retirement_vm_steps": "214",
+          "unretired_records_vm_steps": "368",
+          "pending_subjects_vm_steps": "263",
+          "retirement_commit_vm_steps": "414"
+        }
+      },
+      {
+        "classname": "tests.execution_r4.test_local_pending_queries",
+        "name": "test_pending_membership_is_transactional_and_paging_preserves_all_rows",
+        "time": "2.458",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_pending_queries",
+        "name": "test_session_recovery_passes_exact_scope_to_storage",
+        "time": "0.005",
+        "properties": {}
+      },
+      {
+        "classname": "tests.execution_r4.test_local_pending_queries",
+        "name": "test_upgrade_builds_pending_indexes_from_existing_flags",
+        "time": "2.701",
+        "properties": {}
+      }
+    ]
+  },
+  "source": [
+    {
+      "path": "build\\m4d2-restart-final-source.xml",
+      "sha256": "5da7c2e9d22439aa8aa7018d7967e6bb7631c365fad7c8c8ce3bcbdf34323293",
+      "totals": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "20",
+        "time": "203.594",
+        "timestamp": "2026-10-17T06:54:51.163306-03:00",
+        "hostname": "Alienware_m15"
+      },
+      "cases": [
+        {
+          "classname": "tests.execution_r4.test_initial_refusal_restart",
+          "name": "test_restart_recovers_initial_refusal_without_native_execution[denial_before]",
+          "time": "31.899",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_initial_refusal_restart",
+          "name": "test_restart_recovers_initial_refusal_without_native_execution[denial_before_release_after]",
+          "time": "27.248",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_initial_refusal_restart",
+          "name": "test_restart_recovers_initial_refusal_without_native_execution[denial_after]",
+          "time": "24.714",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_initial_refusal_restart",
+          "name": "test_restart_recovers_initial_refusal_without_native_execution[core_before]",
+          "time": "24.952",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_initial_refusal_restart",
+          "name": "test_restart_recovers_initial_refusal_without_native_execution[core_after]",
+          "time": "24.954",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_initial_refusal_restart",
+          "name": "test_restart_recovers_initial_refusal_without_native_execution[publish_after]",
+          "time": "27.838",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_dispatch_refusal_retires_without_creating_journal_stream_or_result",
+          "time": "2.842",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_missing_or_conflicting_proof_does_not_retire[UPDATE execution_sessions SET lifecycle_state='OPEN_PENDING']",
+          "time": "2.327",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_missing_or_conflicting_proof_does_not_retire[UPDATE execution_dispatch_outbox SET last_error='{\"stage\":\"dispatch\",\"possible_effect\":true}']",
+          "time": "2.627",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_missing_or_conflicting_proof_does_not_retire[UPDATE execution_dispatch_outbox SET last_error=NULL]",
+          "time": "2.654",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_missing_or_conflicting_proof_does_not_retire[UPDATE execution_operations SET admission_state='ACCEPTED']",
+          "time": "2.763",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_missing_or_conflicting_proof_does_not_retire[UPDATE execution_sessions SET lease_state='ACTIVE']",
+          "time": "2.617",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_missing_or_conflicting_proof_does_not_retire[INSERT INTO execution_local_streams(server_id,executor_id,session_id,stream_epoch,opening_operation_id,binding_id,agent_id) VALUES('server','executor','session-0','epoch','open-0','binding','agent')]",
+          "time": "2.300",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_producer_and_cleanup_must_finish_before_checkpoint",
+          "time": "3.058",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_checkpoint_commit_failure_retains_obligation_and_retries",
+          "time": "2.706",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_changed_refusal_invalidates_checkpoint_transactionally[UPDATE execution_dispatch_outbox SET last_error='{\"possible_effect\":true}']",
+          "time": "3.100",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_changed_refusal_invalidates_checkpoint_transactionally[DELETE FROM execution_dispatch_outbox]",
+          "time": "2.968",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_changed_refusal_invalidates_checkpoint_transactionally[UPDATE execution_operations SET admission_state='ACCEPTED']",
+          "time": "4.256",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_changed_evidence_between_observation_and_commit_is_not_hidden",
+          "time": "2.647",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_stale_owner_cannot_certify_non_admission",
+          "time": "2.176",
+          "properties": {}
+        }
+      ]
+    },
+    {
+      "path": "build\\m4d2-retirement-final-source.xml",
+      "sha256": "c215ed17321736f0f65f4250e60849152c94674106d1f810f9839b46c8f7a5e8",
+      "totals": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "55",
+        "time": "1031.582",
+        "timestamp": "2026-10-17T07:04:21.362693-03:00",
+        "hostname": "Alienware_m15"
+      },
+      "cases": [
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_dispatch_refusal_retires_without_creating_journal_stream_or_result",
+          "time": "39.744",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_missing_or_conflicting_proof_does_not_retire[UPDATE execution_sessions SET lifecycle_state='OPEN_PENDING']",
+          "time": "29.694",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_missing_or_conflicting_proof_does_not_retire[UPDATE execution_dispatch_outbox SET last_error='{\"stage\":\"dispatch\",\"possible_effect\":true}']",
+          "time": "13.562",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_missing_or_conflicting_proof_does_not_retire[UPDATE execution_dispatch_outbox SET last_error=NULL]",
+          "time": "14.030",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_missing_or_conflicting_proof_does_not_retire[UPDATE execution_operations SET admission_state='ACCEPTED']",
+          "time": "13.550",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_missing_or_conflicting_proof_does_not_retire[UPDATE execution_sessions SET lease_state='ACTIVE']",
+          "time": "13.405",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_missing_or_conflicting_proof_does_not_retire[INSERT INTO execution_local_streams(server_id,executor_id,session_id,stream_epoch,opening_operation_id,binding_id,agent_id) VALUES('server','executor','session-0','epoch','open-0','binding','agent')]",
+          "time": "17.596",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_producer_and_cleanup_must_finish_before_checkpoint",
+          "time": "13.544",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_checkpoint_commit_failure_retains_obligation_and_retries",
+          "time": "13.631",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_changed_refusal_invalidates_checkpoint_transactionally[UPDATE execution_dispatch_outbox SET last_error='{\"possible_effect\":true}']",
+          "time": "14.859",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_changed_refusal_invalidates_checkpoint_transactionally[DELETE FROM execution_dispatch_outbox]",
+          "time": "16.697",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_changed_refusal_invalidates_checkpoint_transactionally[UPDATE execution_operations SET admission_state='ACCEPTED']",
+          "time": "16.833",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_changed_evidence_between_observation_and_commit_is_not_hidden",
+          "time": "14.344",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_stale_owner_cannot_certify_non_admission",
+          "time": "12.704",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_occupied_slot_without_journal_prevents_retirement",
+          "time": "15.102",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_unverified_local_history_cannot_certify_non_admission[sidecar]",
+          "time": "17.870",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_unverified_local_history_cannot_certify_non_admission[missing_ledger]",
+          "time": "13.909",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_unopened_retirement",
+          "name": "test_unverified_local_history_cannot_certify_non_admission[unknown_receipt]",
+          "time": "11.301",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_pending_queries",
+          "name": "test_pending_queries_have_bounded_cost_with_terminal_history[1000]",
+          "time": "19.358",
+          "properties": {
+            "history_sessions": "1000",
+            "publications_vm_steps": "90",
+            "agent_publications_vm_steps": "157",
+            "streams_vm_steps": "96",
+            "agent_streams_vm_steps": "113",
+            "exact_session_vm_steps": "63",
+            "unretired_streams_vm_steps": "168",
+            "pending_retirement_vm_steps": "214",
+            "unretired_records_vm_steps": "368",
+            "pending_subjects_vm_steps": "263",
+            "retirement_commit_vm_steps": "414"
+          }
+        },
+        {
+          "classname": "tests.execution_r4.test_local_pending_queries",
+          "name": "test_pending_queries_have_bounded_cost_with_terminal_history[10000]",
+          "time": "63.640",
+          "properties": {
+            "history_sessions": "10000",
+            "publications_vm_steps": "90",
+            "agent_publications_vm_steps": "157",
+            "streams_vm_steps": "96",
+            "agent_streams_vm_steps": "113",
+            "exact_session_vm_steps": "63",
+            "unretired_streams_vm_steps": "168",
+            "pending_retirement_vm_steps": "214",
+            "unretired_records_vm_steps": "368",
+            "pending_subjects_vm_steps": "263",
+            "retirement_commit_vm_steps": "414"
+          }
+        },
+        {
+          "classname": "tests.execution_r4.test_local_pending_queries",
+          "name": "test_pending_queries_have_bounded_cost_with_terminal_history[100000]",
+          "time": "241.935",
+          "properties": {
+            "history_sessions": "100000",
+            "publications_vm_steps": "90",
+            "agent_publications_vm_steps": "157",
+            "streams_vm_steps": "96",
+            "agent_streams_vm_steps": "113",
+            "exact_session_vm_steps": "63",
+            "unretired_streams_vm_steps": "168",
+            "pending_retirement_vm_steps": "214",
+            "unretired_records_vm_steps": "368",
+            "pending_subjects_vm_steps": "263",
+            "retirement_commit_vm_steps": "414"
+          }
+        },
+        {
+          "classname": "tests.execution_r4.test_local_pending_queries",
+          "name": "test_pending_membership_is_transactional_and_paging_preserves_all_rows",
+          "time": "5.431",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_pending_queries",
+          "name": "test_session_recovery_passes_exact_scope_to_storage",
+          "time": "0.008",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_pending_queries",
+          "name": "test_upgrade_builds_pending_indexes_from_existing_flags",
+          "time": "4.380",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_retirement",
+          "name": "test_checkpoint_and_retirement_flags_commit_or_roll_back_together",
+          "time": "4.517",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_retirement",
+          "name": "test_mismatched_retirement_proof_cannot_retire_obligations[owner_generation-2]",
+          "time": "4.117",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_retirement",
+          "name": "test_mismatched_retirement_proof_cannot_retire_obligations[opening_operation_id-other]",
+          "time": "3.886",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_retirement",
+          "name": "test_mismatched_retirement_proof_cannot_retire_obligations[session_id-other]",
+          "time": "3.774",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_retirement",
+          "name": "test_mismatched_retirement_proof_cannot_retire_obligations[executor_id-other]",
+          "time": "3.510",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_retirement",
+          "name": "test_mismatched_retirement_proof_cannot_retire_obligations[server_id-other]",
+          "time": "3.901",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_retirement",
+          "name": "test_mismatched_retirement_proof_cannot_retire_obligations[stream_epoch-other]",
+          "time": "5.264",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_retirement",
+          "name": "test_mismatched_retirement_proof_cannot_retire_obligations[committed_sequence-1]",
+          "time": "4.848",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_retirement",
+          "name": "test_new_obligation_invalidates_checkpoint_in_its_own_transaction[UPDATE execution_local_publications SET terminal=0]",
+          "time": "3.926",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_retirement",
+          "name": "test_new_obligation_invalidates_checkpoint_in_its_own_transaction[UPDATE execution_local_streams SET drained=0]",
+          "time": "4.648",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_retirement",
+          "name": "test_new_obligation_invalidates_checkpoint_in_its_own_transaction[UPDATE execution_sessions SET owner_generation=2]",
+          "time": "3.967",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_retirement",
+          "name": "test_new_obligation_invalidates_checkpoint_in_its_own_transaction[UPDATE execution_sessions SET lifecycle_state='READY']",
+          "time": "3.770",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_retirement",
+          "name": "test_new_obligation_invalidates_checkpoint_in_its_own_transaction[UPDATE execution_sessions SET lifecycle_state='FAILED']",
+          "time": "3.169",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_retirement",
+          "name": "test_new_obligation_invalidates_checkpoint_in_its_own_transaction[UPDATE execution_sessions SET lease_state='ACTIVE']",
+          "time": "3.878",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_retirement",
+          "name": "test_new_obligation_invalidates_checkpoint_in_its_own_transaction[UPDATE execution_sessions SET stream_epoch='new-epoch']",
+          "time": "4.026",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_retirement",
+          "name": "test_new_obligation_between_proof_and_checkpoint_cannot_be_hidden[UPDATE execution_local_publications SET terminal=0]",
+          "time": "4.202",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_retirement",
+          "name": "test_new_obligation_between_proof_and_checkpoint_cannot_be_hidden[INSERT INTO execution_event_watermarks(server_id,executor_id,session_id,stream_epoch) VALUES('server','executor','session-0','epoch')]",
+          "time": "4.253",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_retirement",
+          "name": "test_new_obligation_between_proof_and_checkpoint_cannot_be_hidden[INSERT INTO execution_event_ingress(server_id,executor_id,session_id,stream_epoch,sequence,event_hash,event_type,payload_json,received_at) VALUES('server','executor','session-0','epoch',1,'hash','text_delta','{}','now')]",
+          "time": "5.130",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_retirement",
+          "name": "test_stale_owner_cannot_commit_checkpoint",
+          "time": "7.977",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_retirement",
+          "name": "test_retirement_backfill_resumes_committed_sessions_in_bounded_batches",
+          "time": "21.393",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_retirement",
+          "name": "test_restart_uses_verified_retirement_unless_core_still_owns_resources[pi_rpc-False]",
+          "time": "28.003",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_retirement",
+          "name": "test_restart_uses_verified_retirement_unless_core_still_owns_resources[codex_app_server-False]",
+          "time": "27.310",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_retirement",
+          "name": "test_restart_uses_verified_retirement_unless_core_still_owns_resources[claude_stream-False]",
+          "time": "30.328",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_local_retirement",
+          "name": "test_restart_uses_verified_retirement_unless_core_still_owns_resources[pi_rpc-True]",
+          "time": "31.725",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_retirement_maintenance",
+          "name": "test_restart_is_ready_and_publishes_new_response_while_retirement_waits[codex_app_server]",
+          "time": "34.408",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_retirement_maintenance",
+          "name": "test_restart_is_ready_and_publishes_new_response_while_retirement_waits[claude_stream]",
+          "time": "36.275",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_retirement_maintenance",
+          "name": "test_restart_is_ready_and_publishes_new_response_while_retirement_waits[pi_rpc]",
+          "time": "37.512",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_retirement_maintenance",
+          "name": "test_pending_cursor_wraps_without_starving_other_sessions_and_joins_shutdown",
+          "time": "10.945",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_retirement_maintenance",
+          "name": "test_recovering_agent_does_not_start_historical_maintenance",
+          "time": "0.005",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_retirement_maintenance",
+          "name": "test_retryable_recovery_evidence_write_failure_still_propagates[RECOVERY_CONTAINER_STOPPED]",
+          "time": "0.002",
+          "properties": {}
+        },
+        {
+          "classname": "tests.execution_r4.test_retirement_maintenance",
+          "name": "test_retryable_recovery_evidence_write_failure_still_propagates[RECOVERY_AGENT_READY]",
+          "time": "0.042",
+          "properties": {}
+        }
+      ]
+    }
+  ],
+  "artifacts": {
+    "okto_nexus": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\m3k-owner-env\\Lib\\site-packages\\okto_nexus",
+      "wheel_sha256": "bb9a0e2cf97af2ba04b20a59ab9df0feb885e1ffbe4d46bf4a3b869fcbc5bffe"
+    },
+    "nexus_connector_core": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\m3k-owner-env\\Lib\\site-packages\\nexus_connector_core",
+      "wheel_sha256": "fffcfad6a82a67fb4b9cc4b25b0718a3c3e30bf119dde71ee07dcb062b814898"
+    },
+    "okto_nexus_connector": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\m3k-owner-env\\Lib\\site-packages\\okto_nexus_connector",
+      "wheel_sha256": "41331e7b9405e830d990141e48e7702d461559a779b66ee39ec8aedc9e52d7c2"
+    }
+  },
+  "campaign": {
+    "started_at": "2026-10-17T10:19:37.844098+00:00",
+    "tests": [
+      "tests/execution_r4/test_unopened_retirement.py",
+      "tests/execution_r4/test_initial_refusal_restart.py",
+      "tests/execution_r4/test_local_retirement.py",
+      "tests/execution_r4/test_retirement_maintenance.py",
+      "tests/execution_r4/test_local_pending_queries.py"
+    ],
+    "requested_tests": [
+      "tests/execution_r4/test_unopened_retirement.py",
+      "tests/execution_r4/test_initial_refusal_restart.py",
+      "tests/execution_r4/test_local_retirement.py",
+      "tests/execution_r4/test_retirement_maintenance.py",
+      "tests/execution_r4/test_local_pending_queries.py"
+    ],
+    "shard_index": 0,
+    "partitions": [
+      [
+        "tests/execution_r4/test_unopened_retirement.py",
+        "tests/execution_r4/test_initial_refusal_restart.py",
+        "tests/execution_r4/test_local_retirement.py",
+        "tests/execution_r4/test_retirement_maintenance.py",
+        "tests/execution_r4/test_local_pending_queries.py"
+      ]
+    ],
+    "status": "PASS",
+    "ended_at": "2026-10-17T10:39:07.941563+00:00",
+    "command": [
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\m3k-owner-env\\Scripts\\python.exe",
+      "-I",
+      "-u",
+      "-m",
+      "pytest",
+      "-c",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ci-installed-4pulhk6_\\pytest.ini",
+      "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+      "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_unopened_retirement.py",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_initial_refusal_restart.py",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_local_retirement.py",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_retirement_maintenance.py",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_local_pending_queries.py",
+      "-v",
+      "--tb=short",
+      "-o",
+      "faulthandler_timeout=120",
+      "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\runtime-m4d3-unopened-installed\\tests.xml"
+    ],
+    "exit_code": 0,
+    "changed_inputs": []
+  },
+  "inputs_sha256": "1f43b842c905a64c38bf3e045c206c7668fd04d5da98ea44f015e360bb12f0b2",
+  "source_package_files_verified": 547,
+  "dependency_check": "No broken requirements found",
+  "core_commit": "feae7fe",
+  "core_documentation_commit": "57fa45a",
+  "connector_commit": "1b12367"
+}
