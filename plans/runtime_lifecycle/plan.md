@@ -323,6 +323,11 @@ multiplataforma 39352913186 e o rollout global seguem pendentes. Ver
   diante de 1k/10k/100k linhas históricas aposentadas. A varredura física de
   nomes e o fence de entradas não atribuíveis permanecem na admissão.
   Ver `../okto-nexus-connector/plans/runtime-lifecycle-m4m-historical-backfill.md`.
+- Checkpoint M4n: a wheel instalada auditou 1k/10k/100k arquivos históricos
+  físicos em 0,092/0,991/9,798 s, com lotes de até 128 e custo linear
+  explícito. A varredura permanece na admissão para detectar alteração offline;
+  o trabalho de pendências segue indexado. O rollout global controlado é o
+  único corte M4 ainda aberto. Ver `m4n-retained-directory-latency.md`.
 - Separar orçamento de controle/resultado do volume de artefatos; retry apenas na
   fronteira idempotente, sem repetir escrita nativa por erro SQLite/transporte.
 - Testes: reinício entre transações/checkpoints, eventos grandes, disco cheio,

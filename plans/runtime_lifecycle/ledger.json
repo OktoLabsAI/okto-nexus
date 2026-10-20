@@ -460,7 +460,8 @@
         "Connector: plans/runtime-lifecycle-m4d4i-terminal-stream-checkpoints.md",
         "Core: plans/runtime-lifecycle-m4d4j-pending-claims.md",
         "Connector: plans/runtime-lifecycle-m4d4j-pending-reconciliation.md",
-        "Connector: plans/runtime-lifecycle-m4d4k-reconciled-release-retirement.md"
+        "Connector: plans/runtime-lifecycle-m4d4k-reconciled-release-retirement.md",
+        "m4n-retained-directory-latency.md"
       ],
       "commits": {
         "nexus_m4d2": "132d8ba",
@@ -718,7 +719,7 @@
         }
       ],
       "nexus_m4a_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4a-validation.md",
-    "next": "M4d4e1-e6 provide transactional registry/head and paired tokens. The physical name scan remains an admission prerequisite without durable offline filesystem evidence; M4d4f2 rejects non-file entries and M4d4g sizes the Core ledger budget for 100k mixed records. M4d4h proves replay fairness; M4d4i-j retire direct accepted events and index pending Core claims; M4d4k retires reconciliation-accepted releases without gating Ready. M4d4l passed the major real remote-Pi Meta-harness/restart UI gate after fixing Connector ticket recovery. M4d4m made accepted-history checkpoint backfill resumable outside admission. The physical unknown-file fence, M4d3/M4d4b controlled global rollout and retained-history latency qualification remain pending; global Nexus stopped.",
+    "next": "M4d4e1-e6 provide transactional registry/head and paired tokens. The physical name scan remains an admission prerequisite without durable offline filesystem evidence; M4d4f2 rejects non-file entries and M4d4g sizes the Core ledger budget for 100k mixed records. M4d4h proves replay fairness; M4d4i-j retire direct accepted events and index pending Core claims; M4d4k retires reconciliation-accepted releases without gating Ready. M4d4l passed the real remote-Pi UI/restart gate. M4d4m made accepted-history backfill resumable outside admission. M4n measured the retained physical-name audit at 1k/10k/100k; it remains linear but preserves the offline unknown-file fence. Only M4d3/M4d4b controlled global rollout remains pending; global Nexus stopped.",
       "nexus_m4b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4b-validation.md",
       "nexus_m4c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4c-validation.md",
       "nexus_m4d1_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d1-validation.md",
