@@ -293,11 +293,22 @@ def test_one_candidate_selects_authorized_unambiguous_executor_without_busy_fall
                 await asyncio.sleep(.05)
 
     async def admit(intent, **kwargs):
-        response = client.post('/v1/runtime/intents:resolve', headers=headers['subject'], json=dict(
-            client_intent_id='selection-' + intent, intent=intent, binding_id=first['binding_id'],
-            workspace_binding_id=first['workspace_binding_id'], **kwargs))
-        assert response.status_code == 200 and response.json()['can_submit'], response.text
-        resolved = response.json()
+        deadline = asyncio.get_running_loop().time() + 20
+        attempt = 0
+        while True:
+            response = client.post('/v1/runtime/intents:resolve', headers=headers['subject'], json=dict(
+                client_intent_id=f'selection-{intent}-{attempt}', intent=intent,
+                binding_id=first['binding_id'], workspace_binding_id=first['workspace_binding_id'], **kwargs))
+            assert response.status_code == 200, response.text
+            resolved = response.json()
+            if resolved['can_submit']:
+                break
+            # A refused intent is durable, so retry a fresh no-effect intent
+            # only while the live Connector refreshes its inventory marker.
+            assert resolved['blockers'] == ['inventory_not_fresh'], response.text
+            assert asyncio.get_running_loop().time() < deadline, response.text
+            attempt += 1
+            await asyncio.sleep(.05)
         response = client.post('/v1/runtime/operations', headers=headers['subject'], json={
             key: resolved[key] for key in ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')})
         assert response.status_code == 202, response.text
