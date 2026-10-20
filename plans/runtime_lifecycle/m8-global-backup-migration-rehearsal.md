@@ -14,4 +14,4 @@ Na cópia restaurada, `MigrationRunner.apply()` da mesma wheel aplicou as versõ
 | Artefatos | 3 | 3 |
 | Violações de chave estrangeira | 0 | 0 |
 
-O backup original permanece validável e imutável; somente a cópia foi migrada. O ensaio comprova a migração estrutural e preservação desses registros, não o startup com harnesses nem a disponibilidade pós-upgrade. A matriz Nexus instalada e o rollout global controlado ainda são gates separados. O script e o estado do ensaio ficam apenas em `build/`, ignorados pelo Git.
+O mesmo ambiente instalado iniciou depois o Nexus a partir da cópia migrada em `127.0.0.1:8204`, com integrações de harness desativadas. O dashboard respondeu HTTP 200; o processo PID 17664 foi encerrado e a porta 8204 ficou livre. O backup original permanece validável e imutável; somente a cópia foi migrada. O ensaio comprova migração estrutural e boot HTTP, não startup com harnesses nem disponibilidade pós-upgrade. A matriz Nexus instalada e o rollout global controlado ainda são gates separados. O script e o estado do ensaio ficam apenas em `build/`, ignorados pelo Git.
