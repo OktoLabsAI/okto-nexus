@@ -388,3 +388,28 @@ successfully. Nexus repeated its 13 installed recovery, remote ACK and
 presence cases successfully (4m06s). Connector CI `39339307577` is running;
 its resulting wheel must replace the older test-only Connector artifact in
 Nexus before the final Nexus matrix is dispatched.
+
+Connector run `39339307577` passed macOS, Ubuntu 3.11–3.13 and Windows
+3.13/3.11, but Windows 3.12 failed one of 1204 cases: the renewal fixture
+captured its initial deadline while a previously authorized renewal was still
+in flight. Commit `fd9c55f` compares the post-refusal deadline with the
+deadline captured at the refused request, preserving the no-extension
+assertion; the complete module passed 13/13 on local Python 3.13 and 3.12.
+Run `39341290229` then passed Windows 3.12 and the other five OS/Python test
+jobs except Windows 3.11. Its pre-handshake audit fixture constructed a frame
+from peer IDs that could still be empty when the socket first appeared.
+Commit `a9cb7f5` supplies the configured valid IDs at that boundary; the
+exact case passed on local Python 3.12 and 3.13. Replacement Connector CI
+`39343006146` passed macOS and all Ubuntu/Windows 3.11–3.13 jobs after one
+same-commit rerun of Windows 3.12. The first attempt timed out after physical
+stop while waiting five seconds for the release stream's contiguous ACK; the
+isolated Python 3.12 case passed locally and the unchanged rerun passed its
+full suite. The accepted Connector 0.0.10 wheel SHA-256 is
+`a25fcda8dffeefa05da5d47656b41c29a8975e988c04c820f1b42ec5e46f4bd9`.
+Nexus now vendors these exact bytes as its test-only remote dependency. The
+full Nexus matrix remains pending.
+
+With both exact CI wheels installed, Nexus' wheel-integrity check and seven
+directed remote preopen/ACK and agent-presence cases passed on Windows in
+3m05s. The next validation is the complete installed Nexus matrix on this
+same manifest; no UI or rollout claim is inferred from these directed tests.
