@@ -428,7 +428,7 @@
     },
     {
       "id": "M4",
-      "status": "in_progress",
+      "status": "complete",
       "title": "Incremental recovery and stream fairness",
       "evidence": [
         "m4a-validation.md",
@@ -473,7 +473,8 @@
         "Core: plans/runtime-lifecycle-m4d4j-pending-claims.md",
         "Connector: plans/runtime-lifecycle-m4d4j-pending-reconciliation.md",
         "Connector: plans/runtime-lifecycle-m4d4k-reconciled-release-retirement.md",
-        "m4n-retained-directory-latency.md"
+        "m4n-retained-directory-latency.md",
+        "m4-final-acceptance.md"
       ],
       "commits": {
         "nexus_m4d2": "132d8ba",
@@ -731,13 +732,14 @@
         }
       ],
       "nexus_m4a_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4a-validation.md",
-      "next": "M4d4e1-e6 provide transactional registry/head and paired tokens. The physical name scan remains an admission prerequisite without durable offline filesystem evidence; M4d4f2 rejects non-file entries and M4d4g sizes the Core ledger budget for 100k mixed records. M4d4h proves replay fairness; M4d4i-j retire direct accepted events and index pending Core claims; M4d4k retires reconciliation-accepted releases without gating Ready. M4d4l passed the real remote-Pi UI/restart gate. M4d4m made accepted-history backfill resumable outside admission. M4n measured the retained physical-name audit at 1k/10k/100k; it remains linear but preserves the offline unknown-file fence. Only M4d3/M4d4b controlled global rollout remains pending; global Nexus stopped.",
+      "next": null,
       "nexus_m4b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4b-validation.md",
       "nexus_m4c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4c-validation.md",
       "nexus_m4d1_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d1-validation.md",
       "nexus_m4d2_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d2-validation.md",
       "nexus_m4d3_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d3-results.json",
-      "nexus_m4d4b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d4b-results.json"
+      "nexus_m4d4b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d4b-results.json",
+      "final_qualification": "Indexed pending claims and releases, bounded historical backfill, durable terminal checkpoints and fair replay passed installed Core/Connector tests at 1k/10k/100k history. The retained physical-name admission fence was measured separately and remains linear. A separate local Connector reconnected and delivered through the real UI after Nexus-only restart. Core/Connector CI passed 8/8 each; Nexus installed CI 39472894540 passed 24/24. The global CI-wheel rollout preserved history and delivered a new Pi turn with durable ACK and proven session retirement. Physical remote-host qualification remains outside local acceptance. See m4-final-acceptance.md."
     },
     {
       "id": "M5",
@@ -1133,8 +1135,9 @@
       "id": "L19",
       "milestone": "M4",
       "priority": "high",
-      "status": "qualified_rollout_pending",
-      "description": "Review reproduced embedded shutdown missing a ledger created after its initial snapshot: no runtime tasks remained but the ledger still answered queries. Final storage fence now rejects late construction; ledger-opening failure retires effect-free composition and the fence cannot reopen. 11 source and 26 final installed cases passed; standalone installed reproduction no longer leaks. Not attributed to the production Recovering report; no global rollout. See m4d4b-validation.md."
+      "status": "qualified_global_rollout_complete",
+      "description": "Review reproduced embedded shutdown missing a ledger created after its initial snapshot: no runtime tasks remained but the ledger still answered queries. Final storage fence now rejects late construction; ledger-opening failure retires effect-free composition and the fence cannot reopen. 11 source and 26 final installed cases passed; standalone installed reproduction no longer leaks. Not attributed to the production Recovering report; no global rollout. See m4d4b-validation.md.",
+      "current_qualification": "See m4-final-acceptance.md and m8-global-ci-wheel-rollout.md."
     },
     {
       "id": "L20",
@@ -1372,8 +1375,9 @@
       "id": "L53",
       "milestone": "M4",
       "priority": "high",
-      "status": "installed_two_stream_fairness_verified_retention_pending",
-      "description": "Connector pre-ready event replay now rotates one finite page per stream. A failure applying the first stream's Core ACK leaves its remote ACK durable while a second stream advances, and a retry applies the retained ACK without resend. Fifty adjacent source and installed-wheel tests passed. The event store rejects a 4097th lifetime stream; safe retirement or a larger store with resumable scanning and full M4 qualification remain open. See Connector plans/runtime-lifecycle-m4d4h-stream-fairness.md."
+      "status": "superseded_by_terminal_stream_retirement",
+      "description": "Connector pre-ready event replay now rotates one finite page per stream. A failure applying the first stream's Core ACK leaves its remote ACK durable while a second stream advances, and a retry applies the retained ACK without resend. Fifty adjacent source and installed-wheel tests passed. The event store rejects a 4097th lifetime stream; safe retirement or a larger store with resumable scanning and full M4 qualification remain open. See Connector plans/runtime-lifecycle-m4d4h-stream-fairness.md.",
+      "current_qualification": "See m4-final-acceptance.md and m8-global-ci-wheel-rollout.md."
     },
     {
       "id": "L54",
@@ -1386,29 +1390,33 @@
       "id": "L55",
       "milestone": "M4",
       "priority": "high",
-      "status": "installed_terminal_stream_checkpoint_verified_historical_scale_pending",
-      "description": "Connector 0.0.10 now retires a stream from active replay only after a durable Server-accepted session release, retaining the final remote/Core ACK and exact release proof. Seventy-one focused and adjacent tests passed against the freshly installed wheel, including the 4096-active-stream limit, admission after retirement, idempotent crash repair and old-schema migration. No UI run was done at this technical checkpoint. Core historical claim scanning, reconciliation-only release retirement and 1k/10k/100k pending-proportional qualification remain open. See Connector plans/runtime-lifecycle-m4d4i-terminal-stream-checkpoints.md."
+      "status": "superseded_by_pending_claim_and_release_backfill",
+      "description": "Connector 0.0.10 now retires a stream from active replay only after a durable Server-accepted session release, retaining the final remote/Core ACK and exact release proof. Seventy-one focused and adjacent tests passed against the freshly installed wheel, including the 4096-active-stream limit, admission after retirement, idempotent crash repair and old-schema migration. No UI run was done at this technical checkpoint. Core historical claim scanning, reconciliation-only release retirement and 1k/10k/100k pending-proportional qualification remain open. See Connector plans/runtime-lifecycle-m4d4i-terminal-stream-checkpoints.md.",
+      "current_qualification": "See m4-final-acceptance.md and m8-global-ci-wheel-rollout.md."
     },
     {
       "id": "L56",
       "milestone": "M4",
       "priority": "high",
-      "status": "installed_pending_claim_projection_verified_reconciliation_only_pending",
-      "description": "Core 0.0.12 retains immutable claim history while a partial index exposes only pending claims. Connector 0.0.10 checkpoints that projection after durable Server-accepted release and repairs interrupted event/Core/outbox commits; report and launch recovery use pending pages. With three pending claims and 1k/10k/100k history, SQLite VM steps were 176/106/106 and the installed report emitted one three-claim page at each size. Final wheels passed 23 Core, 53 focused Connector and 65 adjacent Connector tests; two adjacent fixtures were corrected for required recovery authority and the already-current schema 15. Reconciliation-only release retirement, resumable older-history backfill and the major real UI gate remain open. See Core plans/runtime-lifecycle-m4d4j-pending-claims.md and Connector plans/runtime-lifecycle-m4d4j-pending-reconciliation.md."
+      "status": "superseded_by_reconciled_release_retirement",
+      "description": "Core 0.0.12 retains immutable claim history while a partial index exposes only pending claims. Connector 0.0.10 checkpoints that projection after durable Server-accepted release and repairs interrupted event/Core/outbox commits; report and launch recovery use pending pages. With three pending claims and 1k/10k/100k history, SQLite VM steps were 176/106/106 and the installed report emitted one three-claim page at each size. Final wheels passed 23 Core, 53 focused Connector and 65 adjacent Connector tests; two adjacent fixtures were corrected for required recovery authority and the already-current schema 15. Reconciliation-only release retirement, resumable older-history backfill and the major real UI gate remain open. See Core plans/runtime-lifecycle-m4d4j-pending-claims.md and Connector plans/runtime-lifecycle-m4d4j-pending-reconciliation.md.",
+      "current_qualification": "See m4-final-acceptance.md and m8-global-ci-wheel-rollout.md."
     },
     {
       "id": "L57",
       "milestone": "M4",
       "priority": "high",
-      "status": "installed_reconciled_release_retirement_verified_historical_backfill_pending",
-      "description": "A durable accepted reconciliation proof now supplies final watermark and separate recovery digest for terminal event and Core claim checkpoints. Cleanup starts after acceptance in an independent task, with a repeated accepted cycle requesting a rescan; reconnect repairs interrupted updates. Schema 5 indexes direct and reconciliation-resolved releases. The final isolated installed Connector 0.0.10 wheel passed 56 focused and 57 adjacent tests, including background nonblocking behavior, proof tampering rejection and schema migration. Histories above the 4096-row pre-ready checkpoint pass and the major Nexus UI gate remain open. See Connector plans/runtime-lifecycle-m4d4k-reconciled-release-retirement.md."
+      "status": "superseded_by_historical_release_backfill",
+      "description": "A durable accepted reconciliation proof now supplies final watermark and separate recovery digest for terminal event and Core claim checkpoints. Cleanup starts after acceptance in an independent task, with a repeated accepted cycle requesting a rescan; reconnect repairs interrupted updates. Schema 5 indexes direct and reconciliation-resolved releases. The final isolated installed Connector 0.0.10 wheel passed 56 focused and 57 adjacent tests, including background nonblocking behavior, proof tampering rejection and schema migration. Histories above the 4096-row pre-ready checkpoint pass and the major Nexus UI gate remain open. See Connector plans/runtime-lifecycle-m4d4k-reconciled-release-retirement.md.",
+      "current_qualification": "See m4-final-acceptance.md and m8-global-ci-wheel-rollout.md."
     },
     {
       "id": "L58",
       "milestone": "M4",
       "priority": "high",
-      "status": "installed_remote_ui_restart_recovery_verified_backfill_pending",
-      "description": "The major disposable real-UI gate sent remote Pi messages through Nexus Meta-harness before and after a Nexus-only restart. Both yielded exact replies and 1/1 acknowledgement. The first restart exposed a Connector ticket-recovery error: local intent age implied expiry while the Server still held a renewed active derivative. Connector now validates the Server's active-ticket reference, persists an explicit replacement and retries within three attempts. Corrected installed wheel passed 53 ticket/HTTP and 66 adjacent daemon tests on final rerun. A second Nexus-only restart rejoined before active-ticket expiry without operator action; Agents showed remote Pi Online. The global Nexus stayed stopped. Historical backfill above the 4096-row pre-ready pass and the physical directory audit remain open. See Nexus plans/runtime_lifecycle/m4l-ui-recovery.md and Connector plans/runtime-lifecycle-m4l-ticket-replacement.md."
+      "status": "superseded_by_historical_release_backfill",
+      "description": "The major disposable real-UI gate sent remote Pi messages through Nexus Meta-harness before and after a Nexus-only restart. Both yielded exact replies and 1/1 acknowledgement. The first restart exposed a Connector ticket-recovery error: local intent age implied expiry while the Server still held a renewed active derivative. Connector now validates the Server's active-ticket reference, persists an explicit replacement and retries within three attempts. Corrected installed wheel passed 53 ticket/HTTP and 66 adjacent daemon tests on final rerun. A second Nexus-only restart rejoined before active-ticket expiry without operator action; Agents showed remote Pi Online. The global Nexus stayed stopped. Historical backfill above the 4096-row pre-ready pass and the physical directory audit remain open. See Nexus plans/runtime_lifecycle/m4l-ui-recovery.md and Connector plans/runtime-lifecycle-m4l-ticket-replacement.md.",
+      "current_qualification": "See m4-final-acceptance.md and m8-global-ci-wheel-rollout.md."
     },
     {
       "id": "L59",
