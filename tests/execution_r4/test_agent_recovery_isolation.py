@@ -110,15 +110,41 @@ def test_restart_isolates_fault_and_accepts_new_local_and_remote_agents(tmp_path
         owner = app.state.embedded_dispatch_owner
         current = (deps, app, client, setup[3], *setup[4:])
         try:
+            def binding_ready(binding):
+                from okto_nexus.application.execution_inventory_freshness import inventory_is_fresh
+                from okto_nexus.application.execution_inventory_revalidation import accepts_binding
+                key = (binding['server_id'], binding['executor_id'])
+                marker = app.state.inventory_fresh_publications.get(key)
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    conn = uow.connection
+                    published = conn.execute(
+                        'SELECT c.publication_sequence,c.inventory_revision,s.observation_age_ms,'
+                        's.canonical_projection FROM execution_inventory_current c '
+                        'JOIN execution_inventory_snapshots s ON s.server_id=c.server_id '
+                        'AND s.executor_id=c.executor_id AND s.publication_sequence=c.publication_sequence '
+                        'WHERE c.server_id=? AND c.executor_id=?', key).fetchone()
+                    if marker is None or published is None or marker[0] != published['publication_sequence']:
+                        return False
+                    selected = conn.execute(
+                        'SELECT b.inventory_revision,b.candidate_ref,ep.adapter_id,e.control_state '
+                        'FROM execution_bindings b JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id '
+                        'JOIN execution_executors e ON e.server_id=b.server_id AND e.executor_id=b.executor_id '
+                        'WHERE b.server_id=? AND b.binding_id=?',
+                        (binding['server_id'], binding['binding_id'])).fetchone()
+                    return (selected is not None and selected['control_state'] == 'CONTROL_READY'
+                        and inventory_is_fresh(published, marker, selected['adapter_id'])
+                        and accepts_binding(conn, selected, published['inventory_revision'], *key))
             assert owner.pump is not None and owner.failure is None
             assert 'subject' in owner.agents.blocked
             eventually(lambda: 'healthy' not in owner.agents.blocked)
             # A configured healthy agent starts again while the old peer waits.
             restored = (deps, app, client, healthy_setup[3], *healthy_setup[4:])
             owner.native_factory = healthy_native
+            eventually(lambda: binding_ready(healthy_binding))
             wait_receipt(restored, admit(restored, healthy_binding, 'healthy-after', 'runtime.start', new_session=True))
             newcomer = create_agent(current, 'new-local')
             newcomer, new_binding, new_native = connect_local(newcomer, agent_id='new-local')
+            eventually(lambda: binding_ready(new_binding))
             wait_receipt(newcomer, admit(newcomer, new_binding, 'new-during-recovery', 'runtime.start', new_session=True))
             remote_roundtrip(create_agent(current, 'new-remote'), 'new-remote')
             listing = client.get('/api/v1/agents', headers=current[3]['operator']).json()['data']['items']
@@ -341,8 +367,22 @@ def test_released_incomplete_turn_does_not_block_next_message(local_setup, monke
     # Reproduce retained state from before this fix: the stream was retired,
     # but no separate delivery release was recorded. Recovery must repair it
     # from Core proofs, without requiring the operator to edit the database.
+    client.portal.call(owner.agents._retire_closed, 'subject')
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        checkpoint = uow.connection.execute('SELECT local_retirement_json FROM execution_sessions '
+            'WHERE session_id=?', (first['session_id'],)).fetchone()[0]
+        assert checkpoint is not None
+    with pytest.raises(RuntimeError, match='rollback release removal'):
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute('DELETE FROM execution_delivery_releases')
+            raise RuntimeError('rollback release removal')
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT local_retirement_json FROM execution_sessions '
+            'WHERE session_id=?', (first['session_id'],)).fetchone()[0] == checkpoint
     with deps.connection_factory.unit_of_work() as uow:
         uow.connection.execute('DELETE FROM execution_delivery_releases')
+        assert uow.connection.execute('SELECT local_retirement_json FROM execution_sessions '
+            'WHERE session_id=?', (first['session_id'],)).fetchone()[0] is None
         uow.connection.execute("UPDATE delivery_outbox SET status='ACCEPTED',reason=NULL WHERE operation_id=?",
             (row['operation_id'],))
     client.portal.call(owner.agents.fail, 'subject', OSError('Recovery of retained legacy state'))
@@ -368,7 +408,7 @@ def test_live_publication_yields_even_when_stream_keeps_growing():
 
 @pytest.mark.skipif(sys.platform != 'win32', reason='Actual Windows Job crash containment')
 @pytest.mark.parametrize('termination', ['graceful', 'kill', 'kill-before-bind'])
-def test_real_process_exit_restores_without_lock_reset_or_replay(tmp_path, monkeypatch, termination):
+def test_real_process_exit_restores_without_lock_reset_or_replay(tmp_path, monkeypatch, termination, record_property):
     from nexus_connector_core import InstallationCandidate
     from nexus_connector_core.discovery import fingerprint
     from okto_nexus.bootstrap import embedded_inventory
@@ -382,16 +422,33 @@ def test_real_process_exit_restores_without_lock_reset_or_replay(tmp_path, monke
     core_source = str(Path(nexus_connector_core.__file__).resolve().parents[1])
     env = dict(os.environ, PYTHONPATH=os.pathsep.join([
         str(repo / 'src'), core_source, str(fixture.parent), str(repo / 'tests')]), PYTHONIOENCODING='utf-8')
+    # Windows venv python.exe is a redirector: killing it can leave the actual
+    # owner alive briefly, so a lock refusal would not be a recovery failure.
+    # Use this environment's base interpreter with the same explicit package
+    # paths, and verify the fixture's owner is the process we will terminate.
+    interpreter = getattr(sys, '_base_executable', sys.executable)
+    prepared_at = time.monotonic()
     with (root / 'process.log').open('w', encoding='utf-8') as log:
-        process = subprocess.Popen([sys.executable, str(fixture), str(root), 'before-bind' if termination == 'kill-before-bind' else 'running'], cwd=repo, env=env,
+        process = subprocess.Popen([interpreter, str(fixture), str(root), 'before-bind' if termination == 'kill-before-bind' else 'running'], cwd=repo, env=env,
             stdin=subprocess.PIPE, stdout=log, stderr=log, text=True,
             creationflags=subprocess.CREATE_NO_WINDOW | subprocess.CREATE_NEW_PROCESS_GROUP)
         try:
             def ready():
                 assert process.poll() is None, (root / 'process.log').read_text(encoding='utf-8')[-4000:]
                 return (root / 'ready.json').exists()
-            eventually(ready, seconds=40)
+            # This sets up a new database, two native peers and three remote
+            # handshakes; it is not the recovery interval measured below.
+            # Keep its own bounded deadline and diagnostic instead of reporting
+            # a slow fixture as a failed recovery before the crash even occurs.
+            deadline = prepared_at + 120
+            while not ready():
+                assert time.monotonic() < deadline, (
+                    'Disposable fixture did not finish setup before termination; '
+                    + (root / 'process.log').read_text(encoding='utf-8')[-4000:])
+                time.sleep(.02)
+            record_property('fixture_ready_seconds', time.monotonic() - prepared_at)
             state = json.loads((root / 'ready.json').read_text(encoding='utf-8'))
+            assert state['owner_pid'] == process.pid, 'Termination must target the actual disposable Nexus owner'
             assert all(process_exited(pid) is False for pid in state['processes'])
             if termination.startswith('kill'):
                 process.kill()  # exact disposable Nexus owner; Windows Jobs contain its peers
@@ -406,7 +463,7 @@ def test_real_process_exit_restores_without_lock_reset_or_replay(tmp_path, monke
                 process.wait(timeout=10)
     binary = root / 'codex.exe'
     candidate = InstallationCandidate('codex_app_server', str(binary), fingerprint(binary), 'explicit', 'selected')
-    monkeypatch.setattr(embedded_inventory, 'discover_local_candidates', lambda **_: SimpleNamespace(candidates=(candidate,)))
+    monkeypatch.setattr(embedded_inventory, 'discover_local_candidates', lambda **_: SimpleNamespace(candidates=tuple(c for c in (candidate,) if not _.get('adapter_ids') or c.adapter_id in _['adapter_ids'])))
     started = time.monotonic()
     # Neither lock files nor leases are deleted/expired by the test.
     with ServeLock(root / 'home'):
@@ -414,14 +471,35 @@ def test_real_process_exit_restores_without_lock_reset_or_replay(tmp_path, monke
             deps, app = app_for(root / 'home')
             with TestClient(app) as client:
                 owner = app.state.embedded_dispatch_owner
-                eventually(lambda: not owner.agents.blocked)
+                eventually(lambda: owner.pump is not None and owner.agents.initialized and not owner.agents.blocked)
                 assert owner.pump is not None and owner.failure is None
+                from test_embedded_inventory import wait_inventory
+                wait_inventory(client)
+                inventory_owner = app.state.embedded_inventory_owner
+                key = (inventory_owner.key.server_id, inventory_owner.key.executor_id)
+                def inventory_accepted():
+                    marker = app.state.inventory_fresh_publications.get(key)
+                    with deps.connection_factory.unit_of_work(write=False) as uow:
+                        row = uow.connection.execute(
+                            'SELECT publication_sequence FROM execution_inventory_current '
+                            'WHERE server_id=? AND executor_id=?', key).fetchone()
+                    return marker is not None and row is not None and marker[0] == row[0]
+                eventually(inventory_accepted, seconds=20)
+                inventory = client.get(
+                    f'/v1/runtime/executors/{key[1]}/inventory',
+                    headers=state['headers']['operator']).json()['snapshot']
+                selected = next(item for item in inventory['evidence']
+                                if item['adapter_id'] == 'codex_app_server')
+                current_body = dict(state['body'], candidate_ref=selected['candidate_ref'],
+                                    inventory_revision=inventory['inventory_revision'])
                 if cycle == 0:
-                    assert time.monotonic() - started < 20, 'Dead owner must not require the 40/60 second lease timeout'
+                    recovered_in = time.monotonic() - started
+                    record_property('first_recovery_seconds', recovered_in)
+                    assert recovered_in < 20, 'Dead owner must not require the 40/60 second lease timeout'
                 with deps.connection_factory.unit_of_work(write=False) as uow:
                     assert uow.connection.execute("SELECT COUNT(*) FROM execution_sessions WHERE lifecycle_state NOT IN ('CLOSED','FAILED')").fetchone()[0] == 0
                     assert uow.connection.execute('SELECT COUNT(*) FROM execution_event_ingress').fetchone()[0] == state['expected_events']
-                current = (deps, app, client, state['headers'], state['body'], candidate, root / 'workspace')
+                current = (deps, app, client, state['headers'], current_body, candidate, root / 'workspace')
                 local = create_agent(current, f'local-cycle-{cycle}')
                 local, binding, native = connect_local(local, agent_id=f'local-cycle-{cycle}')
                 wait_receipt(local, admit(local, binding, f'new-{cycle}', 'runtime.start', new_session=True))

@@ -7,9 +7,7 @@ import time
 from contextlib import nullcontext
 
 from ..errors import ErrorCode, OktoNexusError
-
-
-INVENTORY_TTL_MS = 120_000
+from .execution_inventory_freshness import INVENTORY_TTL_MS, inventory_is_fresh
 
 
 def read_executor_inventory(factory, *, server_id: str, executor_id: str,
@@ -57,20 +55,21 @@ def read_executor_inventory(factory, *, server_id: str, executor_id: str,
     snapshot = json.loads(row["canonical_projection"])
     receipt = fresh_publications.get((server_id, executor_id))
     now = time.monotonic() if monotonic_now is None else monotonic_now
-    elapsed_ms = max(0, int((now - receipt[1]) * 1000)) if (
-        receipt is not None and receipt[0] == row["publication_sequence"]
-    ) else INVENTORY_TTL_MS
-    remaining = max(0, INVENTORY_TTL_MS - row["observation_age_ms"] - elapsed_ms)
     # Local discovery keeps publishing while native sessions are being
     # reconciled. Its current observation is still usable for setup/version
     # checks; opening a session has a separate control-readiness gate.
     inventory_online = (row["control_state"] == "CONTROL_READY" or
                         row["kind"] == "embedded" and row["control_state"] == "RECOVERING")
+    adapter_freshness = {
+        descriptor['adapter_id']: ('OFFLINE' if not inventory_online else
+            'FRESH' if inventory_is_fresh(row, receipt, descriptor['adapter_id'], monotonic_now=now) else 'STALE')
+        for descriptor in snapshot['catalog']['runtimes'] if descriptor['discoverable']}
     if not inventory_online:
         freshness = "OFFLINE"
-    elif remaining == 0:
-        freshness = "STALE"
-    else:
+    elif 'FRESH' in adapter_freshness.values():
         freshness = "FRESH"
+    else:
+        freshness = "STALE"
     return {"snapshot": snapshot, "freshness": freshness,
+            "adapter_freshness": adapter_freshness,
             "eligible_for_new_start": False}

@@ -18,7 +18,7 @@ from registered_native_peer import ADAPTER, RegisteredPeer
 @pytest.fixture
 def registered_setup(tmp_path, monkeypatch):
     monkeypatch.setitem(registry._SPECS, ADAPTER, registry.AdapterSpec(
-        ADAPTER, ADAPTER, 'registered_native_peer', 'RegisteredPeer', 'managed', None,
+        ADAPTER, ADAPTER, 'registered_native_peer', 'RegisteredPeer', 'managed', 'registered-peer',
         frozenset({sys.platform}),
         (ControlTargeting('turn.steer', False, 'forbidden', False),
          ControlTargeting('turn.interrupt', False, 'forbidden', False)),

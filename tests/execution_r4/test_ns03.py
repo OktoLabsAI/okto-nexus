@@ -311,6 +311,7 @@ def test_binding_ticket_follows_endpoint_agent_not_executor_registrar(tmp_path):
                 "Authorization": f"Bearer {keys['lane-agent']}"})
         assert installed.status_code == 409
         assert installed.json()["error"]["code"] == "CONFLICT"
+        assert installed.headers["X-Nexus-Connections-Revision"].endswith("-r4")
     with pytest.raises(OktoNexusError):
         verify_execution_ticket(
             factory, ticket=first.json()["ticket"], server_id=server_id,

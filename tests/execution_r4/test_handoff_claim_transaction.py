@@ -101,7 +101,7 @@ def test_immediate_cold_one_shot_is_admitted_in_claim_transaction(runtime, monke
         call_id = result['runtime_operation']['operation_id']
         row = uow.connection.execute('SELECT state,admission_deadline,enqueued_at FROM one_shot_calls WHERE call_id=?', (call_id,)).fetchone()
         assert row['state'] == 'ADMITTED'
-        assert 0 < row['admission_deadline'] - row['enqueued_at'] <= 60
+        assert row['admission_deadline'] - row['enqueued_at'] == 300
         slot = uow.connection.execute('SELECT state,session_id,open_operation_id FROM one_shot_slots WHERE call_id=?', (call_id,)).fetchone()
         assert slot['state'] == 'STARTING' and slot['session_id'] and slot['open_operation_id']
         assert wakes == [] and runtime[2].opens == 0

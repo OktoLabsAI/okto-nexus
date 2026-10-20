@@ -69,7 +69,7 @@ def require_closed(conn, agent_ids):
         bindings = conn.execute('SELECT DISTINCT s.binding_id FROM execution_sessions s JOIN execution_bindings b '
                 'USING(server_id,executor_id,binding_id) JOIN agent_endpoints e ON e.endpoint_id=b.endpoint_id '
                 "WHERE e.agent_id=? AND s.lifecycle_state<>'CLOSED' "
-                "AND NOT (s.lifecycle_state='FAILED' AND s.lease_state='CLOSED')", (agent_id,)).fetchall()
+                "AND NOT (s.lifecycle_state='FAILED' AND s.lease_state IN ('NONE','CLOSED'))", (agent_id,)).fetchall()
         if bindings:
             raise OktoNexusError(ErrorCode.CONFLICT,
                 'Close existing sessions for affected agents before changing session isolation.',

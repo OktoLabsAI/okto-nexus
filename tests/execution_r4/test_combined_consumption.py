@@ -19,7 +19,7 @@ def combined_onboarding(tmp_path, monkeypatch):
     binary.write_bytes(b'Combined local native fixture')
     candidate = InstallationCandidate('codex_app_server', str(binary), fingerprint(binary), 'explicit', 'selected')
     monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
-                        lambda **_: SimpleNamespace(candidates=(candidate,)))
+                        lambda **_: SimpleNamespace(candidates=tuple(c for c in (candidate,) if not _.get('adapter_ids') or c.adapter_id in _['adapter_ids'])))
     yield from remote_onboarding.__wrapped__(tmp_path, SimpleNamespace(param='connector-configured'))
 
 

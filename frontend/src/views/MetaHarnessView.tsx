@@ -57,6 +57,7 @@ const MAX_ATTACHMENT_BYTES = 25 * 1024 * 1024;
 type ReceiptDisplay = "inline" | "timeline";
 
 type TimelineEntry = {
+  runtimeResult?: MessageRow["runtime_result"];
   id: string;
   timestamp: string;
   workspaceId: string;
@@ -251,6 +252,7 @@ function buildTimeline(
     const directTarget = targetAgent(message);
     rows.push({
       id: `message:${message.message_id}`,
+      runtimeResult: message.runtime_result,
       timestamp: message.created_at,
       workspaceId: message.workspace_id,
       direction: outgoing ? "outgoing" : "incoming",
@@ -630,7 +632,7 @@ function ChatTurn({
           <span>{audienceLabel}</span>
           {showWorkspace && <span>· {shortWorkspace(entry.workspaceId, workspaces)}</span>}
           <span>· {stamp(entry.timestamp)}</span>
-          <CopyMessageButton text={[entry.subject, formatChatContent(entry.content)].filter(Boolean).join('\n\n')} />
+          <CopyMessageButton text={formatChatContent(entry.content)} />
         </div>
         <div
           className={`min-w-0 max-w-full rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm [overflow-wrap:anywhere] ${
@@ -643,6 +645,10 @@ function ChatTurn({
                   : "rounded-bl-md border border-surface-200 bg-white text-surface-800 dark:border-surface-700 dark:bg-surface-800 dark:text-surface-100"
           }`}
         >
+          {entry.runtimeResult?.partial && <div role="note" className="mb-3 rounded-lg border border-amber-300/50 bg-amber-50 px-3 py-2 text-xs text-amber-800 dark:border-amber-700/50 dark:bg-amber-950/40 dark:text-amber-200">
+            <strong>{entry.runtimeResult.outcome === 'interrupted' ? 'Execution interrupted' : entry.runtimeResult.outcome === 'failed' ? 'Execution failed' : 'Output truncated'} — partial response</strong>
+            <p className="mt-1">This output is incomplete. It must not be treated as the full response, even if the message says otherwise. Attached output, when present, has the same limitation.</p>
+          </div>}
           {!structured && entry.subject && (
             <div className={`mb-1.5 text-xs font-semibold ${outgoing ? "text-white/80" : "text-surface-500 dark:text-surface-400"}`}>
               {entry.subject}

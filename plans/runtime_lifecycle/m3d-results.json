@@ -1,0 +1,26 @@
+{
+  "checkpoint": "M3d",
+  "tests": 46,
+  "errors": 0,
+  "failures": 0,
+  "skipped": 0,
+  "source_tests": 46,
+  "installed_seconds": 84.551,
+  "started_at": "2026-10-16T20:56:21.656834+00:00",
+  "ended_at": "2026-10-16T20:57:52.142075+00:00",
+  "changed_inputs": [],
+  "selected_tests": [
+    "tests/test_agent_connection_status.py",
+    "tests/test_runtime_owner_pause.py",
+    "tests/execution_r4/test_runtime_presence.py",
+    "tests/execution_r4/test_inventory_startup.py"
+  ],
+  "wheel_sha256": "3fc93dff855a281799730439ba7f50e843604cabe359023efd8719014b3184a7",
+  "artifacts": {
+    "campaign.json": "40a82b8631c548b68568061429b4f6ae72db33737012388562dc45cc3d37685a",
+    "tests.xml": "e14dc80e6e66008695ee32622cc34ddadb66fc8815fc830ab396dfb6ba6ef619",
+    "installed.json": "b0bde8a641f0756b113bb53da76df8cc0db0c0550fdf3ba8bc36fa6d3df5dd03"
+  },
+  "global_rollout": false,
+  "live_instance": "M3c; see m3c-ui-recovery.md"
+}

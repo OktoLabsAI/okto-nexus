@@ -33,6 +33,9 @@ def agent_connection_statuses(uow, now_iso):
                    WHERE rep.agent_id=a.agent_id) runtime_integrated,
                COALESCE(o.runtime_enabled,d.runtime_enabled) runtime_enabled,
                e.executor_id,e.label,e.control_state,e.last_seen_at,
+               EXISTS(SELECT 1 FROM runtime_dispatcher_owner host
+                   WHERE host.owner_key='dispatcher' AND host.owner_id=e.owner_instance_id
+                     AND host.lease_expires_at>?) host_current,
                EXISTS(SELECT 1 FROM execution_bindings b JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id
                    WHERE b.server_id=e.server_id AND b.executor_id=e.executor_id AND ep.agent_id=a.agent_id) configured,
                EXISTS(SELECT 1 FROM execution_agent_recovery r WHERE r.server_id=e.server_id AND r.executor_id=e.executor_id
@@ -65,7 +68,7 @@ def agent_connection_statuses(uow, now_iso):
               WHERE b.server_id=e.server_id AND b.executor_id=e.executor_id AND ep.agent_id=a.agent_id
                 AND ep.enabled=1 AND ep.activation_state='approved'))))
         ORDER BY a.agent_id,e.executor_id
-    ''', (now_iso,)).fetchall()
+    ''', (now_iso, now_iso)).fetchall()
     setups = {}
     for proposal in uow.connection.execute('''
         SELECT p.subject_agent_id,p.executor_id,p.expires_at,a.status
@@ -90,6 +93,7 @@ def agent_connection_statuses(uow, now_iso):
             state = ('Revoked' if row['revoked'] else
                      'Offline' if row['configured'] and not row['bound'] else
                      'Not configured' if not row['bound'] else
+                     'Offline' if not row['host_current'] else
                      'Recovering' if row['control_state'] == 'RECOVERING' or row['agent_recovering'] else
                      'Offline' if row['control_state'] != 'CONTROL_READY' else
                      'Ready')

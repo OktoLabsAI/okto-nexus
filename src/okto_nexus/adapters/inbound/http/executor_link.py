@@ -7,6 +7,7 @@ import logging
 from datetime import datetime, timedelta, timezone
 import secrets
 import sqlite3
+import traceback
 from urllib.parse import urlsplit
 
 import anyio
@@ -17,6 +18,7 @@ from nexus_connector_core import (
     CAPACITY_CONTRACT_REVISION, decode_control_frame,
     PREOPEN_REFUSAL_REVISION,
 )
+from nexus_connector_core.startup_refusal_link import STARTUP_REFUSAL_REVISION
 
 from ....adapters.outbound.execution.core_inventory import protocol_info
 from ....adapters.outbound.sqlite.execution_identity import (
@@ -141,6 +143,19 @@ def build_router() -> APIRouter:
         async def _send_session_release(frame):
             await _send_text(encode_session_release(frame).decode('utf-8'))
         session_releases = SessionReleaseOwner(validate=_validate_session_release, send=_send_session_release)
+        from .startup_refusal_owner import StartupRefusalOwner
+        from nexus_connector_core.startup_refusal_link import encode_startup_refusal, startup_refusal_accepted
+        def _validate_startup_refusal(frame):
+            _verify()
+            from ....adapters.outbound.sqlite.execution_receipts import append_execution_receipt
+            with factory.unit_of_work() as uow:
+                append_execution_receipt(None, uow=uow, startup_owner=_channel(),
+                    startup_report=frame, frame=frame['receipt'])
+            return startup_refusal_accepted(frame)
+        async def _send_startup_refusal(frame):
+            await _send_text(encode_startup_refusal(frame).decode('utf-8'))
+        startup_refusals = StartupRefusalOwner(validate=_validate_startup_refusal,
+            send=_send_startup_refusal)
 
         def _admit_attach(frame: dict) -> int:
             if (frame["server_id"] != server_id or
@@ -378,7 +393,7 @@ def build_router() -> APIRouter:
                 "accepted_nxl": R4_PREVIEW_REVISION,
                 "snapshot_format": info["executor_snapshot_format"],
                 "control_capabilities": [cap for cap in ('connection_renewal_v1', 'heartbeat_ack_v1', 'connection_resume_v1',
-                                                        'nexus-lease-denial-v1', 'nexus-session-release-v1', PREOPEN_REFUSAL_REVISION)
+                                                        'nexus-lease-denial-v1', 'nexus-session-release-v1', STARTUP_REFUSAL_REVISION, PREOPEN_REFUSAL_REVISION, 'nexus-event-artifacts-v1', 'nexus-launch-recovery-v1')
                                          if cap in hello['control_capabilities']],
             }
             if availability.enabled and CAPACITY_CONTRACT_REVISION in hello['control_capabilities']:
@@ -412,15 +427,20 @@ def build_router() -> APIRouter:
                 preopen_recovery = ExecutionPreopenRecovery(SqlitePreopenRecoveryRepository())
             reconciliation = ExecutionReconciliation(factory,
                 _channel(),
-                containment=leases.access.session_containment, preopen_recovery=preopen_recovery)
+                containment=leases.access.session_containment, preopen_recovery=preopen_recovery,
+                launch_recovery='nexus-launch-recovery-v1' in negotiated_capabilities)
             pending_reconcile: dict | None = None
 
             async def _request_reconcile():
                 nonlocal pending_reconcile
                 try:
                     pending_reconcile = await anyio.to_thread.run_sync(reconciliation.request)
-                except Exception:
+                except Exception as error:
                     # Storage failure is never represented as an empty report.
+                    logging.getLogger(__name__).warning(
+                        'R4 reconciliation request unavailable: executor=%s type=%s code=%s stage=%s',
+                        executor_id, type(error).__name__, getattr(error, 'code', None),
+                        getattr(error, 'stage', None))
                     return
                 await _send_text(encode_r4_frame(pending_reconcile).decode("utf-8"))
 
@@ -451,6 +471,26 @@ def build_router() -> APIRouter:
                     await ws.close(code=4409)
                     break
                 frame = decode_control_frame(raw.encode("utf-8"), capabilities=welcome['control_capabilities'])
+                if frame['type'] == 'event.artifact.put':
+                    from nexus_connector_core.event_artifacts import encode_event_artifact, artifact_ack
+                    def _store_event_artifact():
+                        _verify()
+                        return factory.event_artifacts.receive(frame,channel=_channel())
+                    try:
+                        ack = await anyio.to_thread.run_sync(_store_event_artifact)
+                    except OktoNexusError as error:
+                        if error.code not in ('QUOTA_EXCEEDED','DB_ERROR'):
+                            await ws.close(code=4403)
+                            break
+                        ack = dict(artifact_ack(frame),type='event.artifact.rejected',
+                                   code='QUOTA_EXCEEDED' if error.code=='QUOTA_EXCEEDED' else 'ARTIFACT_STORAGE_UNAVAILABLE')
+                    except (ValueError, CoreError):
+                        await ws.close(code=4403)
+                        break
+                    except (OSError, sqlite3.DatabaseError):
+                        ack = dict(artifact_ack(frame),type='event.artifact.rejected',code='ARTIFACT_STORAGE_UNAVAILABLE')
+                    await _send_text(encode_event_artifact(ack).decode('utf-8'))
+                    continue
                 if frame['type'] == 'session.release':
                     if any(frame[k] != welcome[k] for k in
                             ('server_id','executor_id','connection_id','connection_generation')):
@@ -462,6 +502,18 @@ def build_router() -> APIRouter:
                         await ws.close(code=4403)
                         break
                     await session_releases.submit(frame)
+                    continue
+                if frame['type'] == 'startup.refuse':
+                    if any(frame[k] != welcome[k] for k in
+                            ('server_id','executor_id','connection_id','connection_generation')):
+                        await ws.close(code=4406)
+                        break
+                    try:
+                        await anyio.to_thread.run_sync(_verify)
+                    except OktoNexusError:
+                        await ws.close(code=4403)
+                        break
+                    await startup_refusals.submit(frame)
                     continue
                 if frame['type'] in ('capacity.result', 'capacity.changed', 'capacity.dispatch_state'):
                     if capacity_client is None or any(frame[k] != welcome[k] for k in (
@@ -713,11 +765,17 @@ def build_router() -> APIRouter:
             resumable_disconnect = resume_supported and error.code in (1000, 1001, 1006)
         except asyncio.TimeoutError:
             resumable_disconnect = resume_supported
-        except (CoreError, UnicodeError, ValueError, RecursionError):
+        except (CoreError, UnicodeError, ValueError, RecursionError) as error:
+            logging.getLogger(__name__).warning(
+                'R4 control protocol rejected: executor=%s type=%s code=%s stage=%s location=%s',
+                executor_id, type(error).__name__, getattr(error, 'code', None),
+                getattr(error, 'stage', None),
+                ' > '.join(f'{frame.name}:{frame.lineno}' for frame in traceback.extract_tb(error.__traceback__)))
             await ws.close(code=4406)
         finally:
             with anyio.CancelScope(shield=True):
                 await session_releases.stop()
+                await startup_refusals.stop()
             if capacity_host is not None:
                 availability.unregister(capacity_host)
                 capacity_client.disconnect()

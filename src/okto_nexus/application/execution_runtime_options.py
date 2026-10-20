@@ -25,8 +25,6 @@ def read_runtime_options(factory, *, server_id, executor_id, agent_id, workspace
         operator = access.authenticate(context, uow=uow, require_feature=False)
         snapshot = view['snapshot']
         common = []
-        if view['freshness'] != 'FRESH':
-            common.append('EXECUTOR_OFFLINE' if view['freshness'] == 'OFFLINE' else 'INVENTORY_STALE')
         try:
             load_current_executor_inventory(json.dumps(snapshot))
         except OktoNexusError:
@@ -52,6 +50,9 @@ def read_runtime_options(factory, *, server_id, executor_id, agent_id, workspace
         for technical in snapshot['availability']['availability']:
             adapter, candidate = technical['adapter_id'], technical['candidate_ref']
             reasons = list(common)
+            freshness = view['adapter_freshness'].get(adapter, 'STALE')
+            if freshness != 'FRESH':
+                reasons.append('EXECUTOR_OFFLINE' if freshness == 'OFFLINE' else 'INVENTORY_STALE')
             descriptor = descriptors.get(adapter)
             if descriptor is None or descriptor['support_status'] != 'managed_supported':
                 reasons.append('ADAPTER_UNSUPPORTED')
@@ -162,4 +163,5 @@ def read_runtime_options(factory, *, server_id, executor_id, agent_id, workspace
                 options[-1]['provider_home_suggestion'] = discover_provider_home(adapter)
         return dict(agent_id=agent_id, executor_id=executor_id, inventory_revision=snapshot['inventory_revision'],
                     catalog=snapshot['catalog'], availability=snapshot['availability'],
-                    freshness=view['freshness'], options=options)
+                    freshness=view['freshness'], adapter_freshness=view['adapter_freshness'],
+                    observations=snapshot.get('observations', []), options=options)

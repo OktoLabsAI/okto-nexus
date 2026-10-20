@@ -1,8 +1,34 @@
 """Reset history only after draining runtimes; restart their owned services."""
 import asyncio
 import time
+from dataclasses import replace
 
 from ..errors import ErrorCode, OktoNexusError
+
+
+async def _wait_preserved_local_inventory(app):
+    """Reset stays reconnecting until preserved local selections are observed.
+
+    Admission is already reopened: each ready agent can work independently.
+    Unconfigured harnesses and external remote hosts do not delay this reset.
+    The waits observe owned producers; they do not start another discovery.
+    """
+    inventory = getattr(app.state, 'embedded_inventory_owner', None)
+    if inventory is None:
+        return
+    def selected_adapters():
+        with app.state.deps.connection_factory.unit_of_work(write=False) as uow:
+            return tuple(row[0] for row in uow.connection.execute(
+                'SELECT DISTINCT e.adapter_id FROM execution_bindings b '
+                'JOIN agent_endpoints e ON e.endpoint_id=b.endpoint_id '
+                'JOIN execution_executors x USING(server_id,executor_id) '
+                "WHERE x.kind='embedded' AND x.revoked_at IS NULL AND e.enabled=1"))
+    adapters = await asyncio.to_thread(selected_adapters)
+    observed = await asyncio.gather(*(inventory.wait_usable_observation(adapter) for adapter in adapters))
+    if not all(observed):
+        raise OktoNexusError(ErrorCode.CONFLICT,
+            'History was reset, but runtime shutdown interrupted automatic reconnection.',
+            {'history_reset_completed': True})
 
 
 async def _close_remote_sessions(app, context):
@@ -11,6 +37,12 @@ async def _close_remote_sessions(app, context):
     from ..application.execution_admission import submit_execution_operation
     deps = app.state.deps
     access = build_execution_access(deps)
+    # The dashboard's authenticated operator session has no agent-key principal.
+    # Resolve the same trusted operator identity used by runtime management
+    # before submitting remote close intents on its behalf.
+    if (context.actor_agent_id is None and context.trusted_local_operator
+            and context.authentication_source in ('http_loopback', 'operator_session')):
+        context = replace(context, actor_agent_id='operator')
     submitted = set()
     until = time.monotonic() + 30
     while True:
@@ -20,7 +52,8 @@ async def _close_remote_sessions(app, context):
                 'JOIN execution_executors x USING(server_id,executor_id) '
                 'JOIN execution_bindings b USING(server_id,executor_id,binding_id) '
                 'JOIN agent_endpoints e ON e.endpoint_id=b.endpoint_id '
-                "WHERE x.kind='remote' AND s.lifecycle_state<>'CLOSED'")]
+                "WHERE x.kind='remote' AND s.lifecycle_state<>'CLOSED' "
+                "AND NOT (s.lifecycle_state='FAILED' AND s.lease_state IN ('NONE','CLOSED'))")]
         if not rows:
             return
         for row in rows:
@@ -79,6 +112,8 @@ async def _run(app, *, keep_agents, reset, context):
             deps.runtime_admission_fence.reopen_after_reset()
             try:
                 await start_runtime_services(app, native_factory=native_factory)
+                if keep_agents:
+                    await _wait_preserved_local_inventory(app)
             except BaseException:
                 deps.runtime_admission_fence.close()
                 raise

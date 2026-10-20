@@ -39,6 +39,7 @@ class SettingSpec:
     choices: tuple[str, ...] | None = None
     requires_restart: bool = False
     group: str = "general"
+    implemented: bool = True
 
 
 #: The dashboard-editable subset of NexusConfig. ``home_dir``/``db_path``
@@ -225,6 +226,7 @@ SETTING_SPECS: tuple[SettingSpec, ...] = (
         minimum=0,
         maximum=3650,
         group="metrics",
+        implemented=False,
     ),
     SettingSpec(
         "metrics_publish_interval_seconds",
@@ -275,32 +277,28 @@ SETTING_SPECS: tuple[SettingSpec, ...] = (
         "feature_trace",
         "bool",
         "Opt-in: trace-id propagation across messages and handoffs so "
-        "multi-agent trajectories can be reconstructed. No effect until "
-        "the consuming feature ships.",
+        "multi-agent trajectories can be reconstructed.",
         group="features",
     ),
     SettingSpec(
         "feature_hitl",
         "bool",
         "Opt-in: human-in-the-loop steering - operator pause, inject and "
-        "redirect over agent coordination. No effect until the consuming "
-        "feature ships.",
+        "redirect over agent coordination.",
         group="features",
     ),
     SettingSpec(
         "feature_verification",
         "bool",
         "Opt-in: handoff verification - completion evidence is checked "
-        "before a handoff closes. No effect until the consuming feature "
-        "ships.",
+        "before a handoff closes.",
         group="features",
     ),
     SettingSpec(
         "feature_dag",
         "bool",
         "Opt-in: handoff dependency graphs (depends_on) with "
-        "dependency-aware claiming. No effect until the consuming "
-        "feature ships.",
+        "dependency-aware claiming.",
         group="features",
     ),
     SettingSpec(
@@ -315,7 +313,7 @@ SETTING_SPECS: tuple[SettingSpec, ...] = (
         "feature_health",
         "bool",
         "Opt-in: coordination health reporting (windowed metrics over "
-        "bus activity). No effect until the consuming feature ships.",
+        "bus activity).",
         group="features",
     ),
     SettingSpec(
@@ -327,7 +325,7 @@ SETTING_SPECS: tuple[SettingSpec, ...] = (
         "feature_replay",
         "bool",
         "Opt-in: replay/eval export of coordination history (NDJSON + "
-        "manifest). No effect until the consuming feature ships.",
+        "manifest).",
         group="features",
     ),
 )
@@ -434,6 +432,8 @@ class SettingsService:
         defaults = NexusConfig()
         items: list[dict[str, Any]] = []
         for spec in SETTING_SPECS:
+            if not spec.implemented:
+                continue
             current = getattr(self._config, spec.key)
             if spec.key in self._pinned:
                 source = "cli/env"

@@ -1,0 +1,23 @@
+{
+  "checkpoint": "M3k automatic contained-owner replacement",
+  "installed_tests": {
+    "tests": 82,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "seconds": 1169.412,
+  "changed_inputs": [],
+  "artifacts": {
+    "okto_nexus": "bdeb038d0c1a4d8e7ed167b9fc07faf91875871113cd3c53fdaba119d0cab876",
+    "nexus_connector_core": "13d72e63d1406a8cd6fcb154ce31bb218c0e042cce0bf946cc8e0350f69a3b9a",
+    "okto_nexus_connector": "41331e7b9405e830d990141e48e7702d461559a779b66ee39ec8aedc9e52d7c2"
+  },
+  "source_files_matching": 536,
+  "final_source_tests": 12,
+  "expanded_source_tests": 28,
+  "global_installation_changed": false,
+  "real_ui_gate": "pending_disposable_home",
+  "report": "build/runtime-m3k-owner-installed",
+  "scope": "Installed application with synthetic native peers; real HTTP/CLI shutdown, durable SQLite and retained async/thread work. No real provider fault-injection UI claim."
+}

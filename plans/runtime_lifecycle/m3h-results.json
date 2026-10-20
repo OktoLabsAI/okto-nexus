@@ -1,0 +1,107 @@
+{
+  "core_installed": {
+    "tests": 77,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 18,
+    "passed": 59,
+    "seconds": 5.268,
+    "sha256": "d0be29ab8cdfc6f34c263b27d17fd9aa8c3ee56403c0b792a87642e1529c991c"
+  },
+  "connector_installed": {
+    "tests": 35,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 35,
+    "seconds": 8.685,
+    "sha256": "cb393b4d84ce5b1b0531e0831ae151a119e2e5dbdfb2548b338f3a2889657466"
+  },
+  "nexus_installed": {
+    "tests": 46,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 46,
+    "seconds": 564.419,
+    "sha256": "ea57e2e1ddde5b6ef1c1d0084d20a6a63e92299109b920a4a49915bab3ccc795"
+  },
+  "nexus_source": {
+    "tests": 9,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 9,
+    "seconds": 194.568,
+    "sha256": "896802e7670f53bca8a9e9fbdbbdb529a262bd4c2cdf46e9dbd8adeeda72bf39"
+  },
+  "expected_pre_fix_regression": {
+    "tests": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 0,
+    "seconds": 22.868,
+    "sha256": "a6d174ce57d66e34370d8bc46fbd856e19a96ada92afb39aed9f1e21b33bda47"
+  },
+  "nexus_changed_inputs": [],
+  "nexus_tests": [
+    "tests/execution_r4/test_warm_inventory_wait.py",
+    "tests/execution_r4/test_one_shot_refusal.py",
+    "tests/execution_r4/test_local_discovery.py",
+    "tests/execution_r4/test_inventory_startup.py",
+    "tests/execution_r4/test_one_shot_remote.py",
+    "tests/execution_r4/test_one_shot_runtime.py::test_parallel_warmup_assigns_first_ready_instance_to_oldest_caller",
+    "tests/execution_r4/test_one_shot_runtime.py::test_failed_preopen_without_receipt_releases_warm_slot_and_refills",
+    "tests/execution_r4/test_one_shot_runtime.py::test_shutdown_fence_prevents_warm_replenishment"
+  ],
+  "passive_real_installations": [
+    {
+      "mode": "serial",
+      "seconds": 21.940373599994928,
+      "candidates": 3,
+      "content_digest": "beb51e2c9a7fa683cd0000e55ab086489ff17197acc0ec5e7b129b12bf033b69"
+    },
+    {
+      "mode": "parallel",
+      "seconds": 10.740385100012645,
+      "candidates": 3,
+      "content_digest": "beb51e2c9a7fa683cd0000e55ab086489ff17197acc0ec5e7b129b12bf033b69"
+    },
+    {
+      "mode": "parallel",
+      "seconds": 13.941219700005604,
+      "candidates": 3,
+      "content_digest": "beb51e2c9a7fa683cd0000e55ab086489ff17197acc0ec5e7b129b12bf033b69"
+    },
+    {
+      "mode": "serial",
+      "seconds": 21.747882800002117,
+      "candidates": 3,
+      "content_digest": "beb51e2c9a7fa683cd0000e55ab086489ff17197acc0ec5e7b129b12bf033b69"
+    }
+  ],
+  "global_rollout": "NOT_RUN: generation 71 remains on M4d2/M3g and Core M3e",
+  "real_ui": "Read-only Agents check: Pi, Claude, Codex Online; Pi pool 4/5; no restart in this checkpoint",
+  "scope": "M3h technical checkpoint; M3/M7 and UI-A remain open",
+  "artifacts": [
+    {
+      "package": "okto_nexus",
+      "wheel": "okto_nexus-0.3.1-py3-none-any.whl",
+      "sha256": "59f27caccd2600a5386388d22f7b760d2e005f05f982423369e36ae6370b419d",
+      "files": 541
+    },
+    {
+      "package": "nexus_connector_core",
+      "wheel": "okto_nexus_connector_core-0.0.12-py3-none-any.whl",
+      "sha256": "e95a306637c784dedd8e07215e957cfc7f343116bf4517400c5d46bfde605917",
+      "files": 156
+    },
+    {
+      "package": "okto_nexus_connector",
+      "wheel": "okto_nexus_connector-0.0.10-py3-none-any.whl",
+      "sha256": "64f0bb0567dec34d73500981f0bbab43b2a9f78ecda695bd63518127bc4dc25a",
+      "files": 98
+    }
+  ]
+}

@@ -108,7 +108,7 @@ class ResourcePool:
             host_limit=host_limit, resource_id=resource_id, require_new=require_new)
         request = PoolRequest(request_id, pool_id, host_id, caller_id, request_hash,
             configuration, policy, 'ADMITTED', now, now + policy.queue_timeout_seconds,
-            admission_deadline=now + min(policy.queue_timeout_seconds, 60))
+            admission_deadline=now + policy.queue_timeout_seconds)
         self.queue.add(request)
         if warm:
             self.instances.save(replace(warm, state='CLAIMED', request_id=request_id))

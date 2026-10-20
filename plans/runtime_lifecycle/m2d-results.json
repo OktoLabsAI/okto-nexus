@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-16",
+  "milestone": "M2d",
+  "platform": "Windows AMD64 / Python 3.13.1",
+  "unique_scenarios_passed": 24,
+  "campaigns": [
+    {
+      "path": "build/runtime-lifecycle-m2d2-installed",
+      "passed": 23,
+      "failed": 1,
+      "skipped": 0,
+      "xml_sha256": "0fe139b745bc9d01533d0dd5b64c7d26c8ad5cef459d10f3437976f6ff66d774",
+      "campaign_sha256": "6b137c4b6e2bbbb8a28dade62d048a8b8bb7719781db97a19985ea0b807a6c8d"
+    },
+    {
+      "path": "build/runtime-lifecycle-m2d2-manual",
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "xml_sha256": "90beb1f5685a1e55af627fa5eb822b10789b970b8a06d25a057fd8f1bfb42c31",
+      "campaign_sha256": "46dd7622fbc7e6353b1f3adf17fdb51872287f6dcdfd64b6e1a924a7d9e83f14"
+    }
+  ],
+  "packages": {
+    "okto_nexus": "0a178bdc76651d0bc0ea562b95b4520ebb78170907765a8db458d96ad6756603",
+    "nexus_connector_core": "5042ca20a0fa9389f8749f5208701790e0f0d672f42bdb72334f05fe25375cf5",
+    "okto_nexus_connector": "1c8436d2e59a6a8b3f702765614d75c25bc90203ab8df57a07e8543da17c9e06"
+  },
+  "dependency_check": "passed",
+  "real_provider_test": false,
+  "global_install_updated": false,
+  "limitations": [
+    "Connector recovery integration pending",
+    "Linux/macOS qualification pending",
+    "Three pre-existing crash-regression helpers import matching checkout source; six new crash children use isolated inherited installed paths"
+  ]
+}

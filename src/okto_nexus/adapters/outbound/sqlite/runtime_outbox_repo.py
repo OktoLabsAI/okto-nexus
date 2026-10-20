@@ -208,10 +208,19 @@ class SqliteRuntimeOutboxRepo:
             "AND (owner_epoch IS NULL OR owner_epoch<>?)", (epoch,))
 
     def heartbeat_owner(self, uow, *, owner_id, epoch, lease_expires_at, now):
-        return uow.connection.execute(
+        renewed = uow.connection.execute(
             "UPDATE runtime_dispatcher_owner SET lease_expires_at=? WHERE owner_key='dispatcher' AND owner_id=? AND epoch=? "
             "AND (lease_expires_at>? OR (process_pid=? AND process_host=?))",
             (lease_expires_at, owner_id, epoch, now, os.getpid(), socket.gethostname())).rowcount == 1
+        if renewed:
+            # Contact is host evidence, independent of agent messages and
+            # inventory scans. A fenced writer cannot refresh a new owner's
+            # status; both facts commit in the same owner transaction.
+            uow.connection.execute(
+                "UPDATE execution_executors SET last_seen_at=? WHERE kind='embedded' "
+                "AND owner_instance_id=? AND revoked_at IS NULL "
+                "AND control_state IN ('RECOVERING','CONTROL_READY')", (now, owner_id))
+        return renewed
 
     def owns(self, uow, *, owner_id, epoch, now):
         return uow.connection.execute(

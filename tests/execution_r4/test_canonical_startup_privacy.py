@@ -49,8 +49,10 @@ def test_native_start_failure_keeps_secret_out_of_public_history(tmp_path, monke
         else:
             opened = tool(server.client, server.subject, 'harness_open', body)
         assert opened['ok'], opened
+        sid = opened['data']['scope']['session_id']
         deadline = time.monotonic() + 10
-        while not rows(server, "SELECT 1 FROM execution_agent_recovery WHERE agent_id='shutdown-fixture' AND state='RECOVERING' AND error_code='RuntimeError'"):
+        while not rows(server, "SELECT 1 FROM runtime_recovery_events WHERE agent_id='shutdown-fixture' "
+                       "AND code='RECOVERY_SESSION_BLOCKED' AND message LIKE ?", ('%' + sid + '%',)):
             assert server.process.poll() is None
             assert time.monotonic() < deadline, server.log_path.read_text(encoding='utf-8')
             time.sleep(.02)
@@ -66,7 +68,6 @@ def test_native_start_failure_keeps_secret_out_of_public_history(tmp_path, monke
         assert SECRET not in json.dumps(opened) + json.dumps(failed)
         for table in ('execution_receipts', 'execution_event_ingress', 'runtime_recovery_events'):
             assert SECRET not in json.dumps(rows(server, 'SELECT * FROM ' + table))
-        sid = opened['data']['scope']['session_id']
         for route in (f'/v1/runtime/sessions/{sid}/events', f'/api/v1/harness/sessions/{sid}/events'):
             response = server.client.get(route, headers={'Authorization': 'Bearer ' + server.subject})
             assert response.status_code == 200, response.text

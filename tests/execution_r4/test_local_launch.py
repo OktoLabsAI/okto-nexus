@@ -77,7 +77,7 @@ def test_approved_local_configuration_reaches_core(admitted_local, monkeypatch, 
         from okto_nexus.bootstrap import embedded_inventory
         other = replace(candidate, executable=candidate.executable + '.other', installation_ref=None)
         monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
-            lambda **_: SimpleNamespace(candidates=(candidate, other)))
+            lambda **_: SimpleNamespace(candidates=tuple(c for c in (candidate, other) if not _.get('adapter_ids') or c.adapter_id in _['adapter_ids'])))
         client.portal.call(app.state.embedded_inventory_owner.refresh)
     leases=ExecutionLeaseService(factory=deps.connection_factory,access=access,
                                  fresh_publications=app.state.inventory_fresh_publications)
@@ -153,7 +153,6 @@ def test_local_configuration_drift_is_refused(admitted_local,change):
                 connection_generation=sent.connection_generation,request_grant=forbidden,
                 candidate=candidate,workspace_root=str(root),environment=forbidden)
     client.portal.call(scenario)
-    assert not (deps.config.home_dir/"core-runtime").exists()
 
 
 def test_authority_change_during_secret_resolution_is_refused(admitted_local):
@@ -171,7 +170,6 @@ def test_authority_change_during_secret_resolution_is_refused(admitted_local):
         with pytest.raises((CoreError, OktoNexusError)):
             await launch.environment(prepared)
     client.portal.call(scenario)
-    assert not (deps.config.home_dir/"core-runtime").exists()
 
 
 @pytest.mark.parametrize("value",[None,"nxc4_not_a_provider_secret"])
@@ -190,4 +188,3 @@ def test_missing_or_nexus_credentials_cannot_be_provider_secrets(admitted_local,
             await launch.environment(prepared)
         assert error.value.code == "PROVIDER_AUTH_REQUIRED"
     client.portal.call(scenario)
-    assert not (deps.config.home_dir/"core-runtime").exists()

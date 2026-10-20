@@ -13,6 +13,7 @@ from ..adapters.outbound.sqlite.execution_leases import SqliteExecutionLeaseRepo
 from .execution_leases import require_execution_lane
 from .execution_native_requests import project_native_request
 from .execution_results import project_execution_result
+from .execution_event_artifacts import resolve_event
 
 
 def commit_execution_events(factory, *, channel, frame, embedded_owner=None, approvals=None):
@@ -77,6 +78,7 @@ def commit_execution_events(factory, *, channel, frame, embedded_owner=None, app
                 raise ValueError("Stored event integrity validation failed.")
             known[saved["sequence"]] = saved["event_hash"][7:]
         for event,raw,digest in prepared:
+            resolve_event(factory,conn,event)  # No ACK for an unavailable artifact.
             sequence = event["sequence"]
             prior = conn.execute("SELECT event_hash,payload_json FROM execution_event_ingress WHERE "
                 "server_id=? AND executor_id=? AND session_id=? AND stream_epoch=? AND sequence=?",(*key,sequence)).fetchone()
@@ -109,8 +111,9 @@ def commit_execution_events(factory, *, channel, frame, embedded_owner=None, app
                 "server_id=? AND executor_id=? AND session_id=? AND stream_epoch=? "
                 "AND sequence>? AND sequence<=? ORDER BY sequence",
                 (*key,watermark,projection.watermark)).fetchall():
-            project_execution_result(conn, event=json.loads(saved["payload_json"]), received_at=saved["received_at"])
-            project_native_request(conn,event=json.loads(saved["payload_json"]),
+            hydrated = resolve_event(factory,conn,json.loads(saved["payload_json"]))
+            project_execution_result(conn, event=hydrated, received_at=saved["received_at"])
+            project_native_request(conn,event=hydrated,
                                    session=session,channel=channel,
                                    received_at=saved["received_at"], uow=uow, approvals=approvals)
         conn.execute("UPDATE execution_sessions SET stream_epoch=? WHERE server_id=? AND executor_id=? AND session_id=?",

@@ -25,6 +25,7 @@ def test_connector_public_commands_publish_realization_over_tcp(tmp_path, monkey
     from okto_nexus_connector.cli.commands import executor as executor_cli
     from okto_nexus_connector.platform import paths
     from okto_nexus_connector.storage.state_store import ConnectorState, StateStore, IdentityRecord, ServerProfileRecord
+    from okto_nexus_connector.errors import ConnectorError
 
     deps = bootstrap({}, ["--home", str(tmp_path / "nexus"), "--feature-harness-integrations", "true"])
     app = build_app(deps)
@@ -89,7 +90,32 @@ def test_connector_public_commands_publish_realization_over_tcp(tmp_path, monkey
                     if published: break
                     assert not daemon_task.done()
                     await asyncio.sleep(.02)
-            inventory = await run_discover(parser.parse_args(["discover", "--server-id", server_id]), output, root)
+            # The Server may have the first inventory row before the daemon
+            # has accepted a fresh per-harness observation for realization.
+            async with asyncio.timeout(15):
+                while True:
+                    control = daemon.r4_controls.get(server_id)
+                    owner = control.inventory_owner if control is not None else None
+                    if owner is not None:
+                        try:
+                            await owner.require_batch('codex_app_server')
+                            break
+                        except ConnectorError as error:
+                            if error.code != 'INVENTORY_NOT_FRESH':
+                                raise
+                    assert not daemon_task.done()
+                    await asyncio.sleep(.02)
+            async def discover_current():
+                async with asyncio.timeout(20):
+                    while True:
+                        try:
+                            return await run_discover(
+                                parser.parse_args(["discover", "--server-id", server_id]), output, root)
+                        except ConnectorError as error:
+                            if error.code != 'STALE_GENERATION':
+                                raise
+                            await asyncio.sleep(.05)
+            inventory = await discover_current()
             row = next(r for r in inventory["availability"]["rows"]
                        if r["adapter_id"] == "codex_app_server" and r["candidate_ref"])
             configuration = await execute(["configure-launch", "--identity", "subject",
@@ -100,7 +126,22 @@ def test_connector_public_commands_publish_realization_over_tcp(tmp_path, monkey
                 "--inventory-revision", inventory["availability"]["executor_revision"],
                 "--configuration-digest", configuration["configuration_digest"],
                 "--project", str(project), "--label", "Test project"]
-            result = await execute(words)
+            async def realize_current(selection_words):
+                async with asyncio.timeout(20):
+                    while True:
+                        try:
+                            return await execute(selection_words)
+                        except ConnectorError as error:
+                            if error.code not in {'INVENTORY_NOT_FRESH', 'STALE_GENERATION'}:
+                                raise
+                            await asyncio.sleep(.05)
+                            latest = await discover_current()
+                            current = next(r for r in latest["availability"]["rows"]
+                                if r["adapter_id"] == "codex_app_server" and r["candidate_ref"])
+                            selection_words[selection_words.index("--candidate-ref") + 1] = current["candidate_ref"]
+                            selection_words[selection_words.index("--inventory-revision") + 1] = (
+                                latest["availability"]["executor_revision"])
+            result = await realize_current(words)
             assert await execute(words) == result
             local = store.load()
             assert len(local.realizations) == 1 and local.realizations[0].status == "PENDING_APPROVAL"
@@ -117,7 +158,6 @@ def test_connector_public_commands_publish_realization_over_tcp(tmp_path, monkey
             assert denied.headers["X-Nexus-Connections-Revision"] == MANAGEMENT_REVISION
             assert denied.json()["error"]["code"] == "PERMISSION_DENIED"
             if bind_flow:
-                from okto_nexus_connector.errors import ConnectorError
                 async def bind(words):
                     return await run_bind(parser.parse_args(["bind", *words]), output, root)
                 draft = await bind(["prepare", "--identity", "subject", "--realization-ref", result["realization_ref"],
@@ -150,7 +190,7 @@ def test_connector_public_commands_publish_realization_over_tcp(tmp_path, monkey
                     replacement_words[replacement_words.index("--client-intent-id") + 1] = "realize-replacement"
                     replacement_words[replacement_words.index("--project") + 1] = str(replacement_project)
                     replacement_words += ["--workspace-id", bound["binding"]["workspace_id"]]
-                    replacement = await execute(replacement_words)
+                    replacement = await realize_current(replacement_words)
                     draft = await bind(["prepare", "--identity", "subject", "--realization-ref", replacement["realization_ref"],
                         "--alias", "assistant", "--client-intent-id", "prepare-replacement",
                         "--replace-binding-id", bound["binding"]["binding_id"]])

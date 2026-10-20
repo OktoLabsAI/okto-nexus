@@ -1332,6 +1332,25 @@ def test_meta_harness_artifact_upload_validates_transport_and_workspace(serve_en
     assert imported.json()["data"]["stored"] == "path"
     assert imported.json()["data"]["size_bytes"] == len(large_text)
 
+    # Connector workspaces may have an opaque ID and no server-local root.
+    # Browser uploads use the managed store keyed by that existing ID.
+    rootless_ws = "wsr_" + "a" * 32
+    with deps.connection_factory.unit_of_work() as uow:
+        deps.repos.workspaces.upsert(
+            uow, workspace_id=rootless_ws, display_name="Remote workspace"
+        )
+    rootless_upload = client.post(
+        "/api/v1/meta-harness/artifacts",
+        params={"workspace": rootless_ws, "filename": "remote-notes.txt"},
+        content=large_text,
+        headers={**_h(key), "content-type": "text/plain"},
+    )
+    assert rootless_upload.status_code == 200, rootless_upload.text
+    assert rootless_upload.json()["data"]["workspace_id"] == rootless_ws
+    assert rootless_upload.json()["data"]["size_bytes"] == len(large_text)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert deps.repos.workspaces.get(uow, rootless_ws).root_realpath is None
+
 
 def test_events_no_filters_is_backward_compatible(serve_env):
     """AC7: omitting type/agent keeps the exact prior shape (items+next_cursor)."""

@@ -1,0 +1,28 @@
+{
+  "checkpoint": "M3f",
+  "source_tests_passed": 12,
+  "installed_suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "20",
+      "time": "243.541",
+      "timestamp": "2026-10-16T23:42:27.107429-03:00",
+      "hostname": "Alienware_m15"
+    }
+  ],
+  "changed_inputs": [],
+  "tests": [
+    "tests/execution_r4/test_recovery_diagnostic_contention.py",
+    "tests/execution_r4/test_agent_recovery_isolation.py::test_slow_publication_keeps_native_and_lease_alive",
+    "tests/execution_r4/test_pending_admission_contention.py",
+    "tests/execution_r4/test_automatic_recovery.py"
+  ],
+  "wheel_sha256": "444be9528ff86c37659897e8fee44b54b4f15ce8880bbed05c5550b75c39e78d",
+  "campaign_sha256": "cba2c0f583896f9d50a4bb818da2c3e276fab82fd135071d038393eb51b0500a",
+  "junit_sha256": "3de6410f7ca2f597c6387ed6e2e00abc4cc8e6d6e0b4dec15c707572a86b061e",
+  "installed_sha256": "f873c492820f40fe7f913e76cd91111fbca0bfcb320e2ecc99b4a43612fa94dd",
+  "provider_execution": false
+}

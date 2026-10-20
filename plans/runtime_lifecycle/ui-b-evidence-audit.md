@@ -1,0 +1,21 @@
+# UI-B evidence audit and selected-agent Graph refresh
+
+Date: 2026-10-18. The fixed UI-B flows were checked against installed real-UI reports, without repeating their full campaigns:
+
+| Required flow | Evidence | Finding |
+| --- | --- | --- |
+| Embedded and separate local Connector with real harness | [M5t](m5t-ui-local-remote-restart.md), [M5v](m5v-ui-preserve-reset.md), [M5w](m5w-ui-connector-preserve-reset.md) | Both routes delivered exact Pi responses, recovered, and preserved connections through reset. |
+| Warm/cold pool and load above the parallel limit | [M7e](m7e-ui-pool-burst.md), [M7n](m7n-ui-claude-codex-warm-cold.md), [M7o](m7o-installed-load-results.md) | Real Pi on Connector and Pi/Claude/Codex embedded returned exact responses; the fixed 54-call load used two overlapping opens per harness. |
+| Bounded queue, overflow refusal and deadlines | [M7h](m7h-ui-queue-capacity.md), [M7k](m7k-ui-queue-deadline.md), [M7m](m7m-ui-embedded-queue-expiry.md) | Caller-visible capacity, queue-expiry and start-timeout outcomes were observed through Meta-harness. |
+| New agent while another actively reconciles | [M5m](m5m-ui-active-reconciliation-isolation.md) | The operator created and ran a new embedded Pi while the separate Connector repeatedly failed `reconcile.report`; it later recovered without manual repair. |
+| Revocation, restart and connection status | [M5u](m5u-ui-revocation.md), [M5t](m5t-ui-local-remote-restart.md), [M4l](m4l-ui-recovery.md) | Sibling availability, automatic Connector rejoin and delivery were observed. |
+
+The remaining UI observation was made on a disposable installed Nexus 0.3.1 / Core 0.0.12 / Connector 0.0.10 fixture at `127.0.0.1:8204`, using the real remote Pi and the existing private test home. With the Connector stopped, Agents changed to Remote Offline and Graph detail showed `presence: offline`. After restart the Connector became `CONTROL_READY` and Agents changed to Remote Online, but the already-open Graph detail still displayed Offline after **Refresh Graph**. Closing and reselecting the node showed Present. The panel had captured a `GraphNode` object at click time instead of reading the latest graph snapshot.
+
+The Graph detail now derives its selected node from the current snapshot. The dashboard built successfully and a new Nexus wheel was installed in the disposable environment. Repeating the fault with the detail continuously open showed `present → offline → present` without reselecting the node. A new Meta-harness message (`msg_25ad4c2a139c4182954fb1f1f6e92b53`) received one `NATIVE_ACCEPTED` attempt, durable `read`, 1/1 acknowledgement and exact response `UIB_GRAPH_TERMINAL_OK` (`msg_82bff33b0fd942d5a93fb63e2a767e54`). The open session `ses_76e02fadb5d9e263cf338ad2cd0f3791` was inspected in the UI terminal with live tail; it showed the formatted input and exact final output. The global Nexus stayed stopped. The disposable Nexus, Connector and browser were stopped after the test.
+
+The table's local UI-B flows now have direct evidence. The broader M5 acceptance still requires a requirement-by-requirement equivalence audit across embedded and Connector fault outcomes; M7's unlimited mode above two simultaneous real instances remains unqualified under the recorded 4 GiB free-memory floor. UI-C and the final M8 installed campaign also remain pending. This audit does not treat loopback Connector as a physical remote host.
+
+Update 2026-10-18: [M5x](m5x-differential-evidence-audit.md) mapped all five fixed M5 outcomes; [M5y](m5y-separate-process-receipt-recovery.md) completed the remaining receipt-loss/recovery check with a separate Connector process. M5 local acceptance is complete. UI-B remains open solely on the pre-existing M7 unlimited-pool physical-budget criterion. The physical remote-host qualification remains separate.
+
+[M7q](m7q-unlimited-integrated-concurrency.md) verified four concurrent one-shot sessions with `max_parallel=0` for deterministic Pi, Codex and Claude adapters on the installed wheel. This does not replace the outstanding observation of more than two simultaneous real harness processes under the fixed 4 GiB free-memory floor.

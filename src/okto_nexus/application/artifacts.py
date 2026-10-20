@@ -332,7 +332,8 @@ class ArtifactService:
     def artifact_upload(
         self,
         *,
-        project_root: Any,
+        project_root: Any = None,
+        workspace_id: str | None = None,
         filename: Any,
         data: Any,
         media_type: Any = None,
@@ -347,7 +348,14 @@ class ArtifactService:
         applies the same artifact permission, guardrail, governance, audience,
         catalog and audit-event rules as agent-originated artifacts.
         """
-        workspace_id, root_realpath = self._resolve_workspace(project_root)
+        if workspace_id is None:
+            workspace_id, root_realpath = self._resolve_workspace(project_root)
+        else:
+            with self._cf.unit_of_work(write=False) as uow:
+                workspace = self._workspaces.get(uow, workspace_id)
+            if workspace is None:
+                raise OktoNexusError(ErrorCode.NOT_FOUND, "Workspace is not registered.", {})
+            root_realpath = workspace.root_realpath
         if not _is_nonempty_str(filename):
             raise OktoNexusError(
                 ErrorCode.VALIDATION_ERROR,
@@ -474,7 +482,7 @@ class ArtifactService:
         self,
         *,
         workspace_id: str,
-        root_realpath: str,
+        root_realpath: str | None,
         artifact_type: str,
         name: str | None,
         stored: str,

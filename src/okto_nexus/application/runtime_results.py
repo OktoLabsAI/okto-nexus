@@ -52,9 +52,17 @@ class RuntimeResultService:
         artifact_id = RuntimeResultService.artifact_id(row)
         if row["output_truncated"]:
             body += "\n[Captured output exceeded the materialization limit; the artifact is also truncated.]"
+        outcome = row.get("delivery_outcome")
+        subject = "Runtime result"
+        if outcome in ("interrupted", "failed"):
+            state = "interrupted" if outcome == "interrupted" else "failed"
+            subject = f"Runtime {state} — partial output" if row["output_text"] else f"Runtime {state}"
+            notice = (f"Execution {state}. The content below is partial and must not be treated as a complete response."
+                      if row["output_text"] else f"Execution {state} before a textual response was captured.")
+            body = f"> **{notice}**\n\n{body}" if row["output_text"] else notice
         selector = {"workspace_id": row["workspace_id"], "project_root": None} if row.get("canonical_server_id") else {"project_root": row["root_realpath"]}
         return {**selector, "from_agent_id": row["recipient_agent_id"],
-            "subject": "Runtime result", "body": body, "channel_id": row["channel_id"],
+            "subject": subject, "body": body, "channel_id": row["channel_id"],
             "parent_message_id": row["parent_id"],
             "target": json.loads(row["notification_config"]).get("notify_target", {"strategy": "direct", "agent_id": row["recipient_id"]}),
             "artifacts": [artifact_id] if artifact_id else []}
@@ -84,6 +92,8 @@ class RuntimeResultService:
                     (row["recipient_agent_id"], row["workspace_id"])).fetchone()
                 configured = uow.connection.execute("SELECT quota_bytes FROM runtime_artifact_settings WHERE singleton=1").fetchone()
                 quota = configured[0] if configured else self.ARTIFACT_QUOTA_BYTES
+                event_usage = uow.connection.execute('SELECT COALESCE(sum(size_bytes),0) FROM execution_event_artifacts').fetchone()[0]
+                usage = (usage[0] + event_usage, *usage[1:])
                 if any(used + size > limit for used, limit in zip(usage, (quota, quota // 4, quota // 2))):
                     raise OktoNexusError(ErrorCode.QUOTA_EXCEEDED, "Runtime artifact retention quota requires operator maintenance.", {})
                 uow.connection.execute("UPDATE runtime_results SET artifact_reserved_bytes=? WHERE result_id=?", (size, result_id))

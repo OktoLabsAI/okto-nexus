@@ -86,12 +86,12 @@ def test_vault_failure_prevents_native_tool_launch(connected_local):
     _,app,*_=setup
     def broken(*args): raise OSError("Technical vault write failure")
     vault.store=broken
-    admit(setup,binding,"tools-vault-failure","runtime.start",new_session=True)
+    opened=admit(setup,binding,"tools-vault-failure","runtime.start",new_session=True)
     until=time.monotonic()+5
-    while 'subject' not in app.state.embedded_dispatch_owner.agents.errors:
+    while not app.state.embedded_dispatch_owner.sessions.get(opened['session_id'], {}).get('recovering'):
         assert time.monotonic()<until
         time.sleep(.02)
-    assert isinstance(app.state.embedded_dispatch_owner.agents.errors['subject'],OSError)
+    assert isinstance(app.state.embedded_dispatch_owner.sessions[opened['session_id']]['recovery_error'],OSError)
     assert app.state.embedded_dispatch_owner.failure is None
     assert native.opens==0 and not environments
 
@@ -126,14 +126,18 @@ def test_cancelled_tool_waiter_keeps_issuance_owned(connected_local,monkeypatch)
 @pytest.mark.parametrize('local_setup', ['pi_rpc'], indirect=True)
 def test_automatic_pi_bridge_survives_initial_deadline_with_applied_renewal(connected_local,monkeypatch):
     from okto_nexus.application.execution_capabilities import ExecutionCapabilityService
+    from nexus_connector_core.models import CoreError
     from nexus_connector_core.native_action_bridge import ContextGet, HandoffClaim, HandoffComplete
     setup,binding,native,vault,environments=enable_tools(connected_local)
     deps,app,client,*_=setup
     owner=app.state.embedded_dispatch_owner
-    monkeypatch.setattr(owner.leases,'max_duration_ms',6000)
+    # Leave a full action-response window after renewal on loaded runners.
+    monkeypatch.setattr(owner.leases,'max_duration_ms',30000)
     original=ExecutionCapabilityService.issue
     def short_metadata(self,**kwargs):
-        return dict(original(self,**kwargs),expires_in=2)
+        # Leave enough time for initial native preparation on a loaded Windows
+        # runner; the bridge is still exercised after this initial deadline.
+        return dict(original(self,**kwargs),expires_in=20)
     monkeypatch.setattr(ExecutionCapabilityService,'issue',short_metadata)
     opened=admit(setup,binding,'pi-tools-open','runtime.start',new_session=True)
     wait_receipt(setup,opened)
@@ -141,11 +145,19 @@ def test_automatic_pi_bridge_survives_initial_deadline_with_applied_renewal(conn
     config=owner.tools.configurations[session_id]
     assert config['native_factory'] is not None, (setup[5].adapter_id,config['cap']['audience'])
     seed_work(setup,workspace=opened['scope']['workspace_id'])
-    until=time.monotonic()+10
+    until=time.monotonic()+40
     while True:
         with deps.connection_factory.unit_of_work(write=False) as uow:
             serial=uow.connection.execute("SELECT MAX(lease_serial) FROM execution_leases WHERE status='ACTIVE'").fetchone()[0]
-        if serial>=2 and time.monotonic()>config['deadline']:
+        native_owner=owner.host._native_action_owners.get((opened['scope']['executor_id'],session_id))
+        try:
+            context=native_owner._service._context_provider() if native_owner is not None else None
+        except CoreError as exc:
+            if exc.code!='LEASE_UPDATE_PENDING':
+                raise
+            context=None
+        if (serial>=2 and time.monotonic()>config['deadline'] and context is not None
+                and context.lease_deadline_monotonic-time.monotonic()>10):
             break
         assert time.monotonic()<until
         time.sleep(.02)
@@ -167,6 +179,71 @@ def test_automatic_pi_bridge_survives_initial_deadline_with_applied_renewal(conn
     wait_receipt(setup,closed,stages=('SUCCEEDED',))
     client.portal.call(owner.close)
     assert not vault.values
+
+
+@pytest.mark.parametrize('local_setup', ['pi_rpc'], indirect=True)
+def test_committed_native_handoff_claim_remains_single_during_owner_replacement(connected_local, monkeypatch):
+    import threading
+    from nexus_connector_core.native_action_bridge import HandoffClaim
+    from test_embedded_owner_replacement import fail_owner, wait_until
+
+    setup, binding, native, vault, _ = enable_tools(connected_local)
+    deps, app, client, *_ = setup
+    owner = app.state.embedded_dispatch_owner
+    opened = admit(setup, binding, 'native-claim-race-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    session_id = opened['scope']['session_id']
+    seed_work(setup, workspace=opened['scope']['workspace_id'])
+    native_owner = owner.host._native_action_owners[(opened['scope']['executor_id'], session_id)]
+    service = native_owner._service
+    bridge = service._bridge
+    old_capability = next(iter(vault.values.values()))
+    original = bridge.invoke
+    entered, release = threading.Event(), threading.Event()
+
+    async def held(operation, context):
+        result = await original(operation, context)
+        entered.set()
+        await asyncio.to_thread(release.wait)
+        return result
+
+    monkeypatch.setattr(bridge, 'invoke', held)
+
+    async def claim():
+        context = service._context_provider()
+        config = owner.tools.configurations[session_id]
+        return await bridge.invoke(HandoffClaim('native-race-claim', session_id,
+            config['cap']['capability_ref'], 'work', 'native-race-key'), context)
+
+    future = client.portal.start_task_soon(claim)
+    try:
+        assert entered.wait(10)
+        fail_owner(client, owner)
+        wait_until(lambda: owner._shutdown_recovery_task is not None)
+        assert app.state.embedded_dispatch_owner is owner
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            assert tuple(uow.connection.execute(
+                "SELECT status,claim_epoch FROM handoffs WHERE handoff_id='work'").fetchone()) == ('CLAIMED', 1)
+            assert uow.connection.execute(
+                "SELECT COUNT(*) FROM events WHERE type='handoff.claimed'").fetchone()[0] == 1
+    finally:
+        release.set()
+
+    result = future.result(timeout=30)
+    assert result['claim_epoch'] == 1
+    wait_until(lambda: app.state.embedded_dispatch_owner is not owner)
+    assert owner.shutdown_status()['state'] == 'DRAINED'
+    assert native.native.stopped
+    assert not vault.values
+    expired = client.post('/v1/runtime/native-actions',
+        headers={'Authorization': 'Bearer ' + old_capability},
+        json={'action_id': 'post-owner-context', 'scope': opened['scope'],
+              'action': 'context', 'payload': {'handoff_id': 'work'}})
+    assert expired.status_code in (401, 403), expired.text
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT COUNT(*) FROM execution_native_actions').fetchone()[0] == 1
+        assert uow.connection.execute(
+            "SELECT COUNT(*) FROM events WHERE type='handoff.claimed'").fetchone()[0] == 1
 
 
 @pytest.mark.parametrize('local_setup',['codex_app_server','claude_stream'],indirect=True)

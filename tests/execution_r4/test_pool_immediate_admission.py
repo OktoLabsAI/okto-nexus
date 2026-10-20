@@ -31,14 +31,23 @@ def test_cold_slot_is_assigned_and_startup_is_bounded(pool):
     first = admit(pool, 'competitive', immediate_only=True, now=5)
     slot = pool.instances.for_request(first.request_id)
     assert slot.state == 'STARTING' and slot.resource_id is None
-    assert first.admission_deadline == 65
+    assert first.admission_deadline == 305
     assert pool.queue.waiting(host_id='host', limit=100) == []
     # This admission does not launch a provider. Its deadline cannot free an
     # uncertain STARTING resource; disposal still needs the normal proof.
-    pool.expire_executions(host_id='host', now=66)
+    pool.expire_executions(host_id='host', now=306)
     assert pool.instances.get(slot.instance_id).state == 'CLOSING'
     with pytest.raises(PoolUnavailable):
         admit(pool, 'next', immediate_only=True)
+
+
+def test_immediate_cold_start_can_use_configured_budget_beyond_old_fixed_cutoff(pool):
+    request = admit(pool, 'competitive', immediate_only=True, now=5)
+    slot = pool.instances.for_request(request.request_id)
+    pool.ready(instance_id=slot.instance_id, resource_id='slow-but-healthy')
+    assert request.admission_deadline == 305
+    pool.started(request_id=request.request_id, now=90)
+    assert pool.request(request.request_id).state == 'RUNNING'
 
 
 @pytest.mark.parametrize('offset', [0, 1])

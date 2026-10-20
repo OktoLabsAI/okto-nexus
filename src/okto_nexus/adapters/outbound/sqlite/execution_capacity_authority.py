@@ -18,6 +18,7 @@ from ....application.execution_agent_recovery import agent_recovering
 from ....application.execution_leases import require_execution_lane
 from ....application.execution_inventory_revalidation import accepts_binding
 from ....application.executor_inventory import load_current_executor_inventory
+from ....application.execution_inventory_freshness import inventory_is_fresh
 from ....errors import OktoNexusError
 
 
@@ -90,7 +91,7 @@ class SqliteExecutionCapacityAuthority:
                 fresh = self.fresh.get((scope.server_id, scope.executor_id))
                 if (inventory is None or fresh is None or fresh[0] != inventory['publication_sequence']
                         or not accepts_binding(conn, binding, inventory['inventory_revision'], scope.server_id, scope.executor_id)
-                        or inventory['observation_age_ms'] + max(0, int((self.monotonic() - fresh[1]) * 1000)) >= 120000):
+                        or not inventory_is_fresh(inventory, fresh, binding['adapter_id'], monotonic_now=self.monotonic())):
                     return 'STALE_OBSERVATION'
                 snapshot = load_current_executor_inventory(inventory['canonical_projection'])
                 if not any(item['adapter_id'] == binding['adapter_id'] and item['candidate_ref'] == binding['candidate_ref']

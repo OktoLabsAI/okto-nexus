@@ -1,0 +1,63 @@
+{
+  "scope": "M5a dependency qualification; startup isolation integration pending",
+  "campaigns": [
+    {
+      "name": "runtime-m5a-preopen-installed",
+      "junit": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "4",
+        "skipped": "0",
+        "tests": "20",
+        "time": "422.174",
+        "timestamp": "2026-10-17T09:21:26.578749-03:00",
+        "hostname": "Alienware_m15"
+      },
+      "xml_sha256": "49016ebfdb987a1fb68883cf5d9dbcf6ac69f35adaf7e600b8094fb008e8ee83",
+      "artifacts": {
+        "okto_nexus": {
+          "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\m3k-owner-env\\Lib\\site-packages\\okto_nexus",
+          "wheel_sha256": "5d5f31c04552088833ac28fe1f6b00790f717a01cb982503f643ff6fcc44f31f"
+        },
+        "nexus_connector_core": {
+          "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\m3k-owner-env\\Lib\\site-packages\\nexus_connector_core",
+          "wheel_sha256": "dfdfef2edeb9f8db8697e6b850c05a704698e692a3592ed6d9d827887235f816"
+        },
+        "okto_nexus_connector": {
+          "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\m3k-owner-env\\Lib\\site-packages\\okto_nexus_connector",
+          "wheel_sha256": "2e222043b889314a21492191a77b41b1ba890f1a8cc12b3885efecc651ce0893"
+        }
+      },
+      "changed_inputs": []
+    },
+    {
+      "name": "runtime-m5a-preopen-recheck",
+      "junit": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "4",
+        "time": "186.673",
+        "timestamp": "2026-10-17T09:31:30.103788-03:00",
+        "hostname": "Alienware_m15"
+      },
+      "xml_sha256": "6375ddb24f9bc8b78e4388c73c8e32f895eece5340fecbdd4c2a1fb14b91662d",
+      "artifacts": {
+        "okto_nexus": {
+          "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\m3k-owner-env\\Lib\\site-packages\\okto_nexus",
+          "wheel_sha256": "5d5f31c04552088833ac28fe1f6b00790f717a01cb982503f643ff6fcc44f31f"
+        },
+        "nexus_connector_core": {
+          "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\m3k-owner-env\\Lib\\site-packages\\nexus_connector_core",
+          "wheel_sha256": "dfdfef2edeb9f8db8697e6b850c05a704698e692a3592ed6d9d827887235f816"
+        },
+        "okto_nexus_connector": {
+          "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\build\\m3k-owner-env\\Lib\\site-packages\\okto_nexus_connector",
+          "wheel_sha256": "2e222043b889314a21492191a77b41b1ba890f1a8cc12b3885efecc651ce0893"
+        }
+      },
+      "changed_inputs": []
+    }
+  ]
+}

@@ -100,7 +100,13 @@ def test_only_matching_durable_no_effect_receipt_preserves_healthy_session(conne
             dict(idempotency_key="prewrite-refusal", payload=dict(text="Refused before write")))
         assert result["ok"], result
         if proof != "valid":
-            eventually(lambda: "subject" in owner.agents.blocked)
+            if proof in ("missing", "different_error"):
+                # Exact Core containment can retire this session before an
+                # agent-wide recovery state is observable.
+                eventually(lambda: sid not in owner.sessions)
+                assert "subject" not in owner.agents.blocked
+            else:
+                eventually(lambda: "subject" in owner.agents.blocked)
             assert not native.native.sent
             return
         view = wait_receipt(setup, result["data"], stages=("FAILED",))

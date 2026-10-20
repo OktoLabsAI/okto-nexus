@@ -383,15 +383,18 @@ def build_open_service(deps):
         owner_identity=(deps.runtime_dispatcher.owner_id, deps.runtime_dispatcher.epoch))
 
 
-def run_runtime_boot(deps):
+def run_runtime_boot(deps, *, exclude_endpoint_ids=()):
     from okto_nexus.application.runtime_boot import RuntimeBootService
     from okto_nexus.bootstrap.execution_compat import boot_endpoint
     service = RuntimeBootService(connection_factory=deps.connection_factory, endpoints=SqliteEndpointRepo(),
         registry=build_connector_factories(deps), open_service=build_open_service(deps),
         owner_id=deps.runtime_dispatcher.owner_id, owner_epoch=deps.runtime_dispatcher.epoch,
         canonical_open=lambda context, endpoint_id, key: boot_endpoint(deps, context, endpoint_id, key))
-    deps.runtime_boot_status = service.run()
-    return deps.runtime_boot_status
+    results = service.run(exclude_endpoint_ids=exclude_endpoint_ids)
+    previous = {row['endpoint_id']: row for row in (getattr(deps, 'runtime_boot_status', ()) or ())}
+    previous.update({row['endpoint_id']: row for row in results})
+    deps.runtime_boot_status = list(previous.values())
+    return results
 
 
 def construct_profile_connector(deps, *, endpoint, profile, kind, project_root, substrate, target_pid=None):
@@ -580,9 +583,11 @@ def build_dispatcher(deps):
         from .inbox import build_service as build_inbox_service
         from okto_nexus.application.one_shot_runtime import tick
         from okto_nexus.application.one_shot_notifications import publish_errors
+        from okto_nexus.application.execution_release_notifications import publish_release_notifications
         return (tick(deps) + build_inbox_service(deps).consume_canonical_runtime_results()
                 + native_approvals.scan_once() + handoffs.process_runtime_results()
-                + messages._runtime_results.scan_once(messages) + publish_errors(deps, messages))
+                + messages._runtime_results.scan_once(messages) + publish_errors(deps, messages)
+                + publish_release_notifications(deps, messages))
     dispatcher.publish_results = publish_results
     dispatcher.event_ingress.wake_dispatch = dispatcher.wake
     dispatcher.wake_channel = RuntimeWakeChannel(deps.config.home_dir, getattr(deps, "runtime_owner_api_url", None))

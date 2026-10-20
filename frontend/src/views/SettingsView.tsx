@@ -1,3 +1,4 @@
+import { SettingsDrafts, type SettingsDraft } from "../components/SettingsDrafts";
 // Settings: appearance, hub info, RUNTIME parameters (except dedicated
 // product panels such as Metrics),
 // non-exclusively: precedence CLI > env > stored > default) and store
@@ -5,7 +6,7 @@
 // label + tiny description + bounded input, with a native tooltip
 // (title) on every field and amber "restart required" banner.
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Database,
   Eraser,
@@ -134,11 +135,18 @@ function SettingField({
 }
 
 export function SettingsView({
-  onSettingsApplied,
+  onSettingsApplied, onPendingChange,
 }: {
   onSettingsApplied?: () => void | Promise<unknown>;
+  onPendingChange?: (pending: boolean) => void;
 }) {
   const { theme, toggle } = useTheme();
+  const [themeDraft, setThemeDraft] = useState(theme);
+  const [tab, setTab] = useState('Interface');
+  const [sections, setSections] = useState<Record<string, SettingsDraft>>({});
+  const register = useCallback((id: string, draft: SettingsDraft | null) => {
+    setSections(current => {const next = {...current}; if (draft) next[id] = draft; else delete next[id]; return next;});
+  }, []);
   const { confirm, dialog } = useConfirm();
   const [info, setInfo] = useState<NexusInfo | null>(null);
   const [items, setItems] = useState<SettingItem[]>([]);
@@ -169,12 +177,12 @@ export function SettingsView({
     () =>
       Object.keys(drafts).filter((key) => {
         const item = items.find((i) => i.key === key);
-        return item && drafts[key] !== item.value;
+        return item && (item.type === "int" ? Number(drafts[key]) !== Number(item.value) : drafts[key] !== item.value);
       }),
     [drafts, items],
   );
   const generalItems = useMemo(
-    () => items.filter((i) => i.group === "general"),
+    () => items.filter((i) => i.group === "general" && !["trust_mode", "transport_security", "remote_machine_policy", "connection_key_ttl_seconds", "poll_token_ttl_seconds", "expose_workspace_path"].includes(i.key) && !i.key.startsWith("retention_") && i.key !== "auto_prune_on_start"),
     [items],
   );
   const interfaceItems = useMemo(
@@ -185,17 +193,37 @@ export function SettingsView({
     () => items.filter((i) => i.group === "features"),
     [items],
   );
+  const dirty = dirtyKeys.length > 0 || themeDraft !== theme || Object.values(sections).some(s => s.dirty);
+  const invalid = items.some(item => dirtyKeys.includes(item.key) && item.type === 'int' &&
+    (drafts[item.key] === '' || !Number.isInteger(Number(drafts[item.key])) || (item.min !== null && Number(drafts[item.key]) < item.min) || (item.max !== null && Number(drafts[item.key]) > item.max)));
+  const blocked = invalid || Object.values(sections).some(s => s.dirty && !s.valid);
+  useEffect(() => {onPendingChange?.(dirty || saving); return () => onPendingChange?.(false);}, [dirty, saving, onPendingChange]);
+  useEffect(() => {
+    const warn = (event: BeforeUnloadEvent) => {if (dirty || saving) {event.preventDefault(); event.returnValue = '';}};
+    window.addEventListener('beforeunload', warn);
+    return () => window.removeEventListener('beforeunload', warn);
+  }, [dirty, saving]);
   const restartTouched = dirtyKeys.some(
     (key) => items.find((i) => i.key === key)?.requires_restart,
   );
 
   const save = async () => {
+    if (blocked || saving) return;
     setSaving(true);
+    setReport(null);
     try {
       const changes: Record<string, unknown> = {};
-      for (const key of dirtyKeys) changes[key] = drafts[key];
-      await api.updateSettings(changes);
-      await loadSettings();
+      for (const key of dirtyKeys) changes[key] = items.find(i => i.key === key)?.type === 'int' ? Number(drafts[key]) : drafts[key];
+      // Each endpoint commits independently. Clear only successful sections so retry is safe.
+      if (dirtyKeys.length) {
+        await api.updateSettings(changes);
+        setItems(current => current.map(item => Object.prototype.hasOwnProperty.call(changes, item.key) ? {...item, value: changes[item.key] as SettingItem['value']} : item));
+        setDrafts({});
+      }
+      for (const [id, section] of Object.entries(sections).sort(([a], [b]) => Number(a === 'operator') - Number(b === 'operator'))) {
+        if (section.dirty && !await section.save()) throw new Error(`Could not save ${id}. Review its tab. Successfully saved sections were retained.`);
+      }
+      if (themeDraft !== theme) toggle();
       await onSettingsApplied?.();
       setReport("Settings saved and applied.");
       setError(null);
@@ -220,10 +248,23 @@ export function SettingsView({
   };
 
   return (
-    <div className="h-full overflow-y-auto p-6">
+    <SettingsDrafts.Provider value={register}><div className="h-full min-h-0 flex flex-col">
       {dialog}
-      <div className="max-w-2xl mx-auto space-y-4">
-        <OperatorAccess />
+      <header className="shrink-0 border-b border-surface-200 dark:border-surface-800 px-6 pt-5">
+        <h1 className="text-lg font-semibold">Settings</h1>
+        <p className="mt-1 mb-4 text-xs text-surface-500">Configure this Nexus instance. Changes across tabs are saved together.</p>
+        <div role="tablist" aria-label="Settings categories" className="flex gap-1 overflow-x-auto">
+          {['Interface', 'Runtime', 'Coordination', 'Security', 'Storage'].map(name => <button key={name} id={`settings-tab-${name}`} role="tab" aria-selected={tab === name} aria-controls={`settings-panel-${name}`} tabIndex={tab === name ? 0 : -1}
+            onKeyDown={event => {const names = ['Interface', 'Runtime', 'Coordination', 'Security', 'Storage']; const index = names.indexOf(name); const next = event.key === 'ArrowRight' ? names[(index+1)%names.length] : event.key === 'ArrowLeft' ? names[(index+names.length-1)%names.length] : event.key === 'Home' ? names[0] : event.key === 'End' ? names[names.length-1] : null; if (next) {event.preventDefault(); setTab(next); document.getElementById(`settings-tab-${next}`)?.focus();}}}
+            onClick={() => setTab(name)} className={`px-4 py-3 text-sm whitespace-nowrap border-b-2 ${tab === name ? 'border-accent-500 text-accent-600 dark:text-accent-400' : 'border-transparent text-surface-500 hover:text-surface-900 dark:hover:text-white'}`}>{name}</button>)}
+        </div>
+      </header>
+      <div className="flex-1 min-h-0 overflow-y-auto p-6">
+      <fieldset disabled={saving} className="min-w-0 space-y-5">
+        <div role="tabpanel" id="settings-panel-Security" aria-labelledby="settings-tab-Security" hidden={tab !== 'Security'}><OperatorAccess />
+          <section className="panel p-5 mt-5 grid sm:grid-cols-2 gap-5">{items.filter(i => ['trust_mode', 'transport_security', 'remote_machine_policy', 'connection_key_ttl_seconds', 'poll_token_ttl_seconds', 'expose_workspace_path'].includes(i.key)).map(item => <SettingField key={item.key} item={item} draft={drafts[item.key]} onChange={value => setDrafts(d => ({...d, [item.key]: value}))}/>)}</section>
+        </div>
+        <div role="tabpanel" id="settings-panel-Interface" aria-labelledby="settings-tab-Interface" hidden={tab !== 'Interface'} className="space-y-5">
         {/* Appearance */}
         <section className="panel p-5 space-y-3">
           <h2 className="font-display font-semibold text-sm">Appearance</h2>
@@ -234,9 +275,9 @@ export function SettingsView({
             >
               Interface theme
             </span>
-            <button className="btn btn-secondary" onClick={toggle}>
-              {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
-              {theme === "dark" ? "Switch to light" : "Switch to dark"}
+            <button className="btn btn-secondary" onClick={() => setThemeDraft(value => value === "dark" ? "light" : "dark")}>
+              {themeDraft === "dark" ? <Sun size={14} /> : <Moon size={14} />}
+              {themeDraft === "dark" ? "Switch to light" : "Switch to dark"}
             </button>
           </div>
         </section>
@@ -266,6 +307,8 @@ export function SettingsView({
           </section>
         )}
 
+        </div>
+        <div role="tabpanel" id="settings-panel-Storage" aria-labelledby="settings-tab-Storage" hidden={tab !== "Storage"} className="space-y-5">
         {/* Hub info */}
         <section className="panel p-5 space-y-3">
           <h2 className="font-display font-semibold text-sm flex items-center gap-2">
@@ -294,41 +337,15 @@ export function SettingsView({
           )}
         </section>
 
-        {/* Runtime parameters */}
-        <RuntimePolicy />
+        </div>
+        <div role="tabpanel" id="settings-panel-Runtime" aria-labelledby="settings-tab-Runtime" hidden={tab !== 'Runtime'} className="space-y-5">
+        <div className="panel p-5 text-sm"><RuntimePolicy /></div>
         <section className="panel p-5 space-y-4" data-testid="runtime-settings">
           <div className="flex items-center justify-between">
             <h2 className="font-display font-semibold text-sm flex items-center gap-2">
               <SlidersHorizontal size={14} /> Runtime parameters
             </h2>
-            <div className="flex gap-2">
-              <button
-                className="btn btn-secondary !py-1 !text-xs"
-                title="Removes every stored override and restores defaults (values pinned by CLI/env are not affected)."
-                onClick={() =>
-                  confirm({
-                    title: "Restore defaults?",
-                    body: "Every stored override will be removed and the default values restored immediately.",
-                    onConfirm: async () => {
-                      await api.resetSettings();
-                      await loadSettings();
-                      await onSettingsApplied?.();
-                      setReport("Defaults restored.");
-                    },
-                  })
-                }
-              >
-                <RotateCcw size={12} /> Defaults
-              </button>
-              <button
-                className="btn btn-primary !py-1 !text-xs"
-                disabled={dirtyKeys.length === 0 || saving}
-                onClick={save}
-                data-testid="save-settings"
-              >
-                <Save size={12} /> Save{dirtyKeys.length > 0 ? ` (${dirtyKeys.length})` : ""}
-              </button>
-            </div>
+            <button className="btn btn-secondary !text-xs" onClick={() => setDrafts(current => ({...current, ...Object.fromEntries(generalItems.filter(i => i.editable).map(i => [i.key, i.default]))}))}><RotateCcw size={12}/> Use parameter defaults</button>
           </div>
           <p className="text-[11px] text-surface-400 dark:text-surface-500">
             The same operational parameters as the CLI, non-exclusively —
@@ -360,6 +377,8 @@ export function SettingsView({
           </div>
         </section>
 
+        </div>
+        <div role="tabpanel" id="settings-panel-Coordination" aria-labelledby="settings-tab-Coordination" hidden={tab !== "Coordination"}>
         {/* Features (meta-harness opt-ins) */}
         {featureItems.length > 0 && (
           <section className="panel p-5 space-y-4" data-testid="feature-settings">
@@ -368,11 +387,11 @@ export function SettingsView({
                 <ToggleLeft size={14} /> Features
               </h2>
               <span className="chip bg-surface-200 text-surface-600 dark:bg-surface-700 dark:text-surface-300">
-                Opt-in · default off
+                Feature controls
               </span>
             </div>
             <p className="text-[11px] text-surface-400 dark:text-surface-500">
-              Coordination features ship disabled and only run when switched
+              Coordination features run when switched
               on here (or pinned via{" "}
               <span className="font-mono">OKTO_NEXUS_FEATURE_*</span> /{" "}
               <span className="font-mono">--feature-*</span>). Experimental
@@ -396,6 +415,9 @@ export function SettingsView({
           </section>
         )}
 
+        </div>
+        <div hidden={tab !== 'Storage'} className="space-y-5">
+        <section className="panel p-5"><h2 className="text-sm font-semibold mb-4">Retention</h2><div className="grid sm:grid-cols-2 gap-5">{items.filter(i => i.key.startsWith('retention_') || i.key === 'auto_prune_on_start').map(item => <SettingField key={item.key} item={item} draft={drafts[item.key]} onChange={value => setDrafts(d => ({...d, [item.key]: value}))}/>)}</div></section>
         {/* Maintenance */}
         <section className="panel p-5 space-y-4">
           <h2 className="font-display font-semibold text-sm flex items-center gap-2">
@@ -506,15 +528,14 @@ export function SettingsView({
             </div>
           </div>
 
-          {report && (
-            <pre className="text-[11px] bg-surface-100 dark:bg-surface-900 rounded-lg p-2 overflow-x-auto text-surface-600 dark:text-surface-400">
-              {report}
-            </pre>
-          )}
-          {error && <p className="text-xs text-red-500">{error}</p>}
         </section>
-      </div>
-    </div>
+        </div>
+      </fieldset></div>
+      <footer className="shrink-0 border-t border-surface-200 dark:border-surface-800 bg-white dark:bg-surface-950 px-6 py-4 flex items-center justify-between gap-4">
+        <div className="min-w-0 text-xs" aria-live="polite">{error ? <p role="alert" className="text-red-500">{error}</p> : report ? <p className="break-words">{report}</p> : <p className="text-surface-500">{dirty ? 'Unsaved changes' : 'All changes saved'}</p>}{blocked && <p className="text-amber-600">Review invalid or incomplete fields before saving.</p>}</div>
+        <button className="btn btn-primary shrink-0" disabled={!dirty || blocked || saving} onClick={() => void save()} data-testid="save-settings"><Save size={14}/>{saving ? 'Saving…' : 'Save changes'}</button>
+      </footer>
+    </div></SettingsDrafts.Provider>
   );
 }
 

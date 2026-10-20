@@ -688,6 +688,7 @@ export interface MetaHarnessSessions {
 }
 
 export interface MessageRow {
+  runtime_result?: { outcome: string | null; partial: boolean };
   message_id: string;
   workspace_id: string;
   channel_id: string | null;

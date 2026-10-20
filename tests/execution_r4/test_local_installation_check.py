@@ -22,7 +22,8 @@ def checking(local_setup, monkeypatch):
     deps, app, client, headers, preparation, candidate, _ = local_setup
     source = replace(candidate, trust='untrusted')
     def discover(**_):
-        return SimpleNamespace(candidates=(replace(source, fingerprint=fingerprint(Path(source.executable))),))
+        return SimpleNamespace(candidates=(replace(source, fingerprint=fingerprint(Path(source.executable))),)
+            if not _.get('adapter_ids') or source.adapter_id in _['adapter_ids'] else ())
     monkeypatch.setattr(embedded_inventory, 'discover_local_candidates', discover)
     owner = app.state.embedded_inventory_owner
     client.portal.call(owner.refresh)
@@ -97,11 +98,11 @@ def test_version_check_remains_available_during_runtime_recovery(checking):
 def test_observation_is_reused_after_server_restart(tmp_path, monkeypatch):
     from fastapi.testclient import TestClient
     from nexus_connector_core import InstallationCandidate
-    from test_embedded_inventory import app_for
+    from test_embedded_inventory import app_for, wait_inventory
     binary = tmp_path / 'codex'
     binary.write_bytes(b'persistent local check candidate')
     source = InstallationCandidate('codex_app_server', str(binary), fingerprint(binary), 'path', 'untrusted')
-    monkeypatch.setattr(embedded_inventory, 'discover_local_candidates', lambda **_: SimpleNamespace(candidates=(source,)))
+    monkeypatch.setattr(embedded_inventory, 'discover_local_candidates', lambda **_: SimpleNamespace(candidates=tuple(c for c in (source,) if not _.get('adapter_ids') or c.adapter_id in _['adapter_ids'])))
     calls = []
     async def probe(selected):
         calls.append(selected)
@@ -112,6 +113,7 @@ def test_observation_is_reused_after_server_restart(tmp_path, monkeypatch):
     with deps.connection_factory.unit_of_work() as uow:
         headers = {'Authorization': 'Bearer ' + app.state.auth.issue_key(uow, agent_id='operator')}
     with TestClient(app) as client:
+        wait_inventory(client)
         owner = app.state.embedded_inventory_owner
         route = f'/v1/runtime/executors/{owner.key.executor_id}'
         snapshot = client.get(route + '/inventory', headers=headers).json()['snapshot']
@@ -119,7 +121,8 @@ def test_observation_is_reused_after_server_restart(tmp_path, monkeypatch):
                     candidate_ref=snapshot['evidence'][0]['candidate_ref'], inventory_revision=snapshot['inventory_revision'])
         assert client.post(route + '/installations:check', json=body, headers=headers).status_code == 200
     _, app = app_for(home)
-    with TestClient(app):
+    with TestClient(app) as client:
+        wait_inventory(client)
         assert app.state.embedded_inventory_owner.candidates == (replace(source, trust='selected', version='0.159.0'),)
         assert len(calls) == 1
 
@@ -255,8 +258,8 @@ def test_fresh_selection_survives_slow_identity_revalidation(checking, monkeypat
         owner.fresh[key] = (sequence, timestamp - 121, age)
     if expires_during_check:
         original = owner.discover_candidates
-        async def discover():
-            result = await original()
+        async def discover(adapter_id=None):
+            result = await original(adapter_id)
             expire()
             return result
         monkeypatch.setattr(owner, 'discover_candidates', discover)

@@ -23,7 +23,8 @@ def query(setup, sql, args=()):
 
 
 @pytest.mark.parametrize('local_setup', ['pi_rpc', 'codex_app_server', 'claude_stream'], indirect=True)
-def test_parallel_warmup_assigns_first_ready_instance_to_oldest_caller(connected_local, monkeypatch):
+@pytest.mark.parametrize('max_parallel', [5, 0])
+def test_parallel_warmup_assigns_first_ready_instance_to_oldest_caller(connected_local, monkeypatch, max_parallel):
     import asyncio
     import threading
     from okto_nexus.application.one_shot_settings import read, save
@@ -47,7 +48,7 @@ def test_parallel_warmup_assigns_first_ready_instance_to_oldest_caller(connected
     with setup[0].connection_factory.unit_of_work() as uow:
         current = read(uow.connection)
         save(uow.connection, expected_revision=current['revision'],
-             settings=current['settings'] | {'max_parallel': 5, 'warm_instances': 4})
+             settings=current['settings'] | {'max_parallel': max_parallel, 'warm_instances': 4})
     send = sender(setup, monkeypatch)
     try:
         tick(setup[0])

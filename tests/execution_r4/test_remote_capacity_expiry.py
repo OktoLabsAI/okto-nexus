@@ -57,7 +57,15 @@ def test_expired_remote_ticket_cannot_execute_and_recovers_original_identity(onb
                 HandoffScheduleLease(hid, binding['workspace_id'], 0, 'remote-expiry', 0, 0, ''), limit=4)
             assert len(page.attempt_ids) == 1
             attempts = build_handoff_runtime_attempts(deps)
-            held = await attempts.reserve(page.attempt_ids[0])
+            async with asyncio.timeout(30):
+                while True:
+                    try:
+                        held = await attempts.reserve(page.attempt_ids[0])
+                        break
+                    except CoreError as error:
+                        if error.code != 'STALE_OBSERVATION':
+                            raise
+                        await asyncio.sleep(.05)
             assert held.state == 'RESERVED'
             claimed = attempts.claim(page.attempt_ids[0])
             remote = deps.runtime_availability

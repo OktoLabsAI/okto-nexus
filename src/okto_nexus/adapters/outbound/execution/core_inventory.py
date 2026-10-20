@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 R4_NXL_REVISION = "nxl-1-agent-centric-http-only-2026-09-29-r4"
 MANAGEMENT_REVISION = "nexus-connections-2026-09-29-r4"
-CORE_INVENTORY_VERSION = "0.0.11"
+CORE_INVENTORY_VERSION = "0.0.12"
 # Promoted only after admission, lease, dispatcher and Connector conformance.
 SERVER_R4_EXECUTION_READY = True
 
@@ -83,11 +83,12 @@ def local_catalog() -> dict[str, Any]:
 def discover_local_candidates(*, trusted_roots: tuple[Path, ...] = (),
                               path_env: str | None = None,
                               pi_install_root: Path | None = None, pi_node: Path | None = None,
-                              cancel_requested=None):
+                              cancel_requested=None, adapter_ids=None):
     """Retain complete candidates on the Nexus host without a dummy runtime."""
     return _core().discover_installations(
         trusted_roots=trusted_roots, path_env=path_env,
         pi_install_root=pi_install_root, pi_node=pi_node,
+        adapter_ids=adapter_ids,
         **({"cancel_requested": cancel_requested} if cancel_requested is not None else {}),
     )
 
@@ -95,7 +96,7 @@ def discover_local_candidates(*, trusted_roots: tuple[Path, ...] = (),
 def local_inventory_snapshot(
     candidates: Iterable[InstallationCandidate], *, server_id: str,
     executor_id: str, producer_instance_id: str, publication_sequence: int,
-    observation_age_ms: int = 0,
+    observation_age_ms: int = 0, observations=None,
 ) -> dict[str, Any]:
     """Project the complete local candidates through the same Core as Connector."""
     core = _core()
@@ -104,6 +105,7 @@ def local_inventory_snapshot(
         producer_instance_id=producer_instance_id,
         publication_sequence=publication_sequence,
         observation_age_ms=observation_age_ms,
+        observations=observations,
     )
     core.verify_executor_inventory_snapshot(snapshot)
     return snapshot
@@ -111,7 +113,7 @@ def local_inventory_snapshot(
 
 def resolve_local_installation_selection(
     candidates: Iterable[InstallationCandidate], *, adapter_id: str,
-    candidate_ref: str, expected_inventory_revision: str,
+    candidate_ref: str, expected_inventory_revision: str, observations=None,
 ) -> InstallationCandidate:
     """Resolve a displayed local selection against fresh Core evidence.
 
@@ -121,7 +123,7 @@ def resolve_local_installation_selection(
     """
     core = _core()
     items = tuple(candidates)
-    current_revision = core.calculate_inventory_revision(items)
+    current_revision = core.calculate_inventory_revision(items, observations=observations)
     if current_revision != expected_inventory_revision:
         raise core.CoreError("STALE_GENERATION", "inventory_selection",
                              retry_safe=True,

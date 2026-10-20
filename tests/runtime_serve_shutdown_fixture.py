@@ -149,28 +149,50 @@ class ServeFixture:
         from okto_nexus.domain.base import iso_plus
         with self.deps.connection_factory.unit_of_work(write=False) as uow:
             executor = uow.connection.execute("SELECT executor_id FROM execution_executors WHERE kind='embedded'").fetchone()[0]
-        inventory = self.client.get('/v1/runtime/executors/' + executor + '/inventory')
-        assert inventory.status_code == 200, inventory.text
-        snapshot = inventory.json()['snapshot']
-        candidate = snapshot['evidence'][0]['candidate_ref']
-        response = self.client.post('/v1/runtime/executors/' + executor + '/realizations', json=dict(
-            client_intent_id='shutdown-realization', agent_id='shutdown-fixture', workspace_root=str(self.project),
-            workspace_id=workspace_id, workspace_label='Shutdown fixture', adapter_id='pi_rpc', candidate_ref=candidate,
-            inventory_revision=snapshot['inventory_revision'], local_consent_id='shutdown-consent', approved=True,
-            provider_home=None, secret_bindings={}))
-        assert response.status_code == 201, response.text
-        realization = response.json()
-        response = self.client.post('/v1/connections/bindings:prepare', json=dict(
-            client_intent_id='shutdown-binding', agent_id_hint='shutdown-fixture', executor_id=executor,
-            adapter_id='pi_rpc', candidate_ref=candidate, inventory_revision=snapshot['inventory_revision'],
-            realization_ref=realization['realization_ref'], workspace_id=realization['workspace_id'], alias='shutdown'))
-        assert response.status_code == 200, response.text
-        proposal = response.json()
-        response = self.client.post('/v1/connections/bindings:apply', json=dict(client_intent_id='shutdown-apply',
-            proposal_id=proposal['proposal_id'], proposal_revision=proposal['proposal_revision'],
-            approved_diff_hash=proposal['diff']['approved_diff_hash']))
-        assert response.status_code == 200, response.text
-        self.binding = response.json()
+        deadline = time.monotonic() + 30
+        attempt = 0
+        while True:
+            inventory = self.client.get('/v1/runtime/executors/' + executor + '/inventory')
+            assert inventory.status_code == 200, inventory.text
+            view = inventory.json()
+            snapshot = view['snapshot']
+            candidates = [row for row in snapshot['evidence'] if row['adapter_id'] == 'pi_rpc']
+            if view['freshness'] != 'FRESH' or not candidates:
+                assert time.monotonic() < deadline, view
+                time.sleep(.02)
+                continue
+            candidate = candidates[0]['candidate_ref']
+            revision = snapshot['inventory_revision']
+            attempt += 1
+            response = self.client.post('/v1/runtime/executors/' + executor + '/realizations', json=dict(
+                client_intent_id=f'shutdown-realization-{attempt}', agent_id='shutdown-fixture',
+                workspace_root=str(self.project), workspace_id=workspace_id, workspace_label='Shutdown fixture',
+                adapter_id='pi_rpc', candidate_ref=candidate, inventory_revision=revision,
+                local_consent_id='shutdown-consent', approved=True, provider_home=None, secret_bindings={}))
+            if self._inventory_changed(response):
+                assert time.monotonic() < deadline, response.text
+                continue
+            assert response.status_code == 201, response.text
+            realization = response.json()
+            response = self.client.post('/v1/connections/bindings:prepare', json=dict(
+                client_intent_id=f'shutdown-binding-{attempt}', agent_id_hint='shutdown-fixture', executor_id=executor,
+                adapter_id='pi_rpc', candidate_ref=candidate, inventory_revision=revision,
+                realization_ref=realization['realization_ref'], workspace_id=realization['workspace_id'], alias='shutdown'))
+            if self._inventory_changed(response):
+                assert time.monotonic() < deadline, response.text
+                continue
+            assert response.status_code == 200, response.text
+            proposal = response.json()
+            response = self.client.post('/v1/connections/bindings:apply', json=dict(
+                client_intent_id=f'shutdown-apply-{attempt}', proposal_id=proposal['proposal_id'],
+                proposal_revision=proposal['proposal_revision'],
+                approved_diff_hash=proposal['diff']['approved_diff_hash']))
+            if self._inventory_changed(response):
+                assert time.monotonic() < deadline, response.text
+                continue
+            assert response.status_code == 200, response.text
+            self.binding = response.json()
+            break
         response = self.client.post('/api/v1/harness/grants', json=dict(actor_agent_id='shutdown-fixture',
             endpoint_id=self.binding['endpoint_id'], actions=list(actions), max_executions=3,
             expires_at=iso_plus(self.deps.clock.now_iso(), 600)))
@@ -191,6 +213,18 @@ class ServeFixture:
             self.witnesses.append(PeerWitness(identities['parent']))
         self.session_id = opened['scope']['session_id']
         return self.session_id
+
+    @staticmethod
+    def _inventory_changed(response):
+        if response.status_code != 409:
+            return False
+        error = response.json().get('error', {})
+        return (error.get('stage') in {'realization.publish', 'binding.prepare', 'binding.apply'}
+                and error.get('message') in {
+                    'The selected local installation changed.',
+                    'Refresh the local inventory before preparing this realization.',
+                    'The selected inventory is no longer fresh.',
+                })
 
     def close_session(self):
         response = self.client.post('/api/v1/harness/sessions/' + self.session_id + '/close',

@@ -9,7 +9,7 @@ from ..application.runtime_shutdown import shutdown_runtime
 
 
 class ServerShutdownCoordinator:
-    def __init__(self, deps, *, embedded, inventory, host, on_drained=None, on_embedded_report=None, connection_tests=None, handoff_notices=None, handoff_runtime=None):
+    def __init__(self, deps, *, embedded, inventory, host, on_drained=None, on_embedded_report=None, connection_tests=None, handoff_notices=None, handoff_runtime=None, runtime_boot=None):
         self.deps = deps
         self.embedded, self.inventory, self.host = embedded, inventory, host
         self.on_drained = on_drained
@@ -17,6 +17,8 @@ class ServerShutdownCoordinator:
         self.connection_tests = connection_tests
         self.handoff_notices = handoff_notices
         self.handoff_runtime = handoff_runtime
+        self.runtime_boot = runtime_boot
+        self.supervisor = None
         self.deadline = None
         self._task = None
         self._embedded_done = threading.Event()
@@ -26,6 +28,12 @@ class ServerShutdownCoordinator:
 
     def status(self):
         resources = []
+        if self._task is not None and self.supervisor is not None and not self.supervisor.drained:
+            resources.append({'owner': 'embedded-supervisor', 'resource_id': 'replacement',
+                              'outcome': 'pending', 'store_retained': True})
+        if self._task is not None and self.runtime_boot is not None and not self.runtime_boot.drained:
+            resources.append({'owner': 'runtime-boot', 'resource_id': 'approved-endpoints',
+                              'outcome': 'pending', 'store_retained': True})
         if self._task is not None and self.handoff_runtime is not None and not self.handoff_runtime.drained:
             resources.append({'owner': 'handoff-runtime', 'resource_id': 'scheduler',
                               'outcome': 'pending', 'store_retained': True})
@@ -61,6 +69,10 @@ class ServerShutdownCoordinator:
         if self._task is None:
             self.deadline = asyncio.get_running_loop().time() + timeout_seconds
             self.deps.runtime_admission_fence.close()
+            if self.supervisor is not None:
+                self.supervisor.begin_shutdown()
+            if self.runtime_boot is not None:
+                self.runtime_boot.begin_shutdown()
             if self.handoff_runtime is not None:
                 self.handoff_runtime.begin_shutdown()
             if self.handoff_notices is not None:
@@ -120,7 +132,8 @@ class ServerShutdownCoordinator:
             return shutdown_runtime(dispatcher, supervisor, timeout=timeout,
                 extra_drained=lambda: self._embedded_done.is_set() and
                     (self.handoff_notices is None or self.handoff_notices.drained) and
-                    (self.handoff_runtime is None or self.handoff_runtime.drained))
+                    (self.handoff_runtime is None or self.handoff_runtime.drained) and
+                    (self.runtime_boot is None or self.runtime_boot.drained))
         while not dispatcher._shutdown_finished.is_set():
             try:
                 await asyncio.to_thread(attempt, max(
@@ -134,6 +147,11 @@ class ServerShutdownCoordinator:
         self._legacy_done = True
 
     async def _run(self):
+        # A replacement can already be joining the previous native producers.
+        # Fence replacement synchronously in request(), then join it before
+        # reading the current bundle or releasing the exclusive store owner.
+        if self.supervisor is not None:
+            await self.supervisor.aclose()
         # Legacy release is gated by embedded completion, but neither native
         # containment path waits for the other owner's storage/native calls.
         if self.connection_tests is not None:
@@ -150,6 +168,12 @@ class ServerShutdownCoordinator:
                 dispatcher = getattr(self.deps, 'runtime_dispatcher', None)
                 if dispatcher is not None:
                     dispatcher.wake()
-        await asyncio.gather(self._embedded(), self._legacy(), notices(), handoffs())
+        async def boot():
+            if self.runtime_boot is not None:
+                await self.runtime_boot.aclose()
+                dispatcher = getattr(self.deps, 'runtime_dispatcher', None)
+                if dispatcher is not None:
+                    dispatcher.wake()
+        await asyncio.gather(self._embedded(), self._legacy(), notices(), handoffs(), boot())
         if self.on_drained is not None:
             self.on_drained()

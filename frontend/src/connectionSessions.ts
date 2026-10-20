@@ -2,7 +2,7 @@ import type { RuntimeRequest, RuntimeResolution, RuntimeSession, runtimeApi } fr
 
 type SessionApi = Pick<typeof runtimeApi, 'binding' | 'sessions' | 'session' | 'resolve' | 'submit'>;
 export const sessionReleased = (session: RuntimeSession) => session.lifecycle_state === 'CLOSED' ||
-  session.lifecycle_state === 'FAILED' && session.lease_state === 'CLOSED';
+  session.lifecycle_state === 'FAILED' && (session.lease_state === 'NONE' || session.lease_state === 'CLOSED');
 
 export async function connectionSessions(api: SessionApi, agentId: string, bindingIds: string[], signal?: AbortSignal) {
   const result: RuntimeSession[] = [];

@@ -55,7 +55,7 @@ class EmbeddedExecutor:
                 raise CoreError("PROFILE_DRIFT", "embedded_selection")
             environment = local_launch.environment
         runtime = await host.acquire(
-            executor_id=scope["executor_id"], session_id=scope["session_id"],
+            server_id=scope["server_id"], executor_id=scope["executor_id"], session_id=scope["session_id"],
             candidates={candidate.adapter_id: candidate},
             workspace_roots={scope["workspace_id"]: workspace_root},
             environment=environment, native_factory=native_factory,
@@ -71,6 +71,7 @@ class EmbeddedExecutor:
             environment=environment, native_factory=native_factory,
             native_action_factory=native_action_factory, native_approvals_enabled=native_approvals_enabled)
         executor.local_launch = local_launch
+        executor.lease_request_started = attempt.sent_at_monotonic
         return executor, application
 
     async def renew_r4(
@@ -89,6 +90,7 @@ class EmbeddedExecutor:
         grant = await request_grant(r4_lease_renew_frame(attempt))
         application = await runtime.install_r4_lease(attempt, grant)
         self.context = application.context
+        self.lease_request_started = attempt.sent_at_monotonic
         return application
 
     async def revoke_r4(self, *, authorization_revision: int) -> R4LeaseApplication:
@@ -129,7 +131,7 @@ class EmbeddedExecutor:
 
     async def _runtime(self):
         return await self.host.acquire(
-            executor_id=self.context.executor_id, session_id=self.session_id,
+            server_id=self.context.server_id, executor_id=self.context.executor_id, session_id=self.session_id,
             candidates={self.candidate.adapter_id: self.candidate},
             workspace_roots={self.context.workspace_id: self.workspace_root},
             environment=self.environment, native_factory=self.native_factory,

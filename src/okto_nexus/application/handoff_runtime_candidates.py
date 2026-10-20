@@ -7,6 +7,7 @@ import json
 from typing import Protocol
 
 from ..domain.base import new_id
+from ..domain.base import iso_to_epoch
 from ..domain.resource_pool import PoolUnavailable
 from ..errors import ErrorCode, OktoNexusError
 from .handoff_automation import create_context, context_for
@@ -16,10 +17,12 @@ from .runtime_endpoint_selection import select_runtime_endpoint
 
 
 class HandoffCandidateRepository(Protocol):
-    def agents_page(self, uow, lease, *, allow_new, limit): ...
+    def agents_page(self, uow, lease, *, allow_new, limit, now_epoch): ...
     def active(self, uow, lease, agent_id): ...
     def target(self, uow, handoff, endpoint_id): ...
     def request(self, uow, *, handoff, agent_id, target, attempt_id): ...
+    def proved_no_effect(self, uow, lease): ...
+    def retire_no_effect(self, uow, proof, *, now_iso, now_epoch): ...
 
 
 def refusal(error):
@@ -51,10 +54,26 @@ class HandoffCandidateDiscovery:
         with self.factory.unit_of_work() as uow:
             handoff = self.handoffs._handoffs.get(uow, workspace_id=lease.workspace_id,
                                                   handoff_id=lease.handoff_id)
+            if (handoff and handoff.status == 'CLAIMED'
+                    and handoff.claim_epoch == lease.claim_generation
+                    and json.loads(handoff.target).get('strategy') == 'broadcast'):
+                proof = self.repository.proved_no_effect(uow, lease)
+                if proof:
+                    now_iso = self.handoffs._clock.now_iso()
+                    now_epoch = iso_to_epoch(now_iso)
+                    self.handoffs._reopen_runtime_claim(uow, operation=proof['operation'],
+                        handoff_id=lease.handoff_id, claim_epoch=lease.claim_generation,
+                        reason=proof['error_code'] or 'OPENING_NO_EFFECT',
+                        reconciliation_id=None, actor_agent_id=None)
+                    self.repository.retire_no_effect(uow, proof,
+                        now_iso=now_iso, now_epoch=now_epoch)
+                    handoff = self.handoffs._handoffs.get(uow, workspace_id=lease.workspace_id,
+                                                          handoff_id=lease.handoff_id)
             allow_new = bool(self.acquisition_enabled and handoff and handoff.status == 'OPEN'
                 and handoff.claim_epoch == lease.claim_generation
                 and json.loads(handoff.target).get('strategy') == 'broadcast')
-            agents, cursor, more = self.repository.agents_page(uow, lease, allow_new=allow_new, limit=limit)
+            agents, cursor, more = self.repository.agents_page(uow, lease, allow_new=allow_new,
+                limit=limit, now_epoch=iso_to_epoch(self.handoffs._clock.now_iso()))
             identities, reason = [], 'NO_CANDIDATES'
             for agent_id in agents:
                 attempt = self.repository.active(uow, lease, agent_id)

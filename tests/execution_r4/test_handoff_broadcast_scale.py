@@ -13,7 +13,7 @@ from okto_nexus.bootstrap.handoff_runtime_scheduler import (
 from okto_nexus.bootstrap.handoff_runtime_attempts import build_handoff_runtime_attempts
 from okto_nexus.domain.base import iso_plus
 from test_harness_canonical import qualified_bridge
-from test_embedded_dispatch import local_setup, qualified_contract, connect_local, wait_receipt
+from test_embedded_dispatch import local_setup, qualified_contract, connect_local, wait_binding_ready, wait_receipt
 from test_canonical_delivery import connected_local
 from test_canonical_handoff_regressions import runtime, call
 from test_agent_recovery_isolation import create_agent
@@ -54,6 +54,8 @@ def test_hundred_runtime_candidates_have_one_winner_and_no_loser_native_invocati
                     return
                 await asyncio.sleep(.02)
     client.portal.call(published)
+    for binding in bindings.values():
+        wait_binding_ready(deps, app, binding)
     created = call(runtime, 'handoff_create', from_agent_id='caller', visibility='eligible',
                    target=dict(strategy='broadcast'), payload='One task, one runtime winner.')
     assert created['ok'], created
@@ -107,7 +109,25 @@ def test_hundred_runtime_candidates_have_one_winner_and_no_loser_native_invocati
         operations = conn.execute('SELECT operation_id,subject_agent_id,action FROM execution_operations').fetchall()
         assert len(operations) == 2 and {r['subject_agent_id'] for r in operations} == {winner}
         turn = next(dict(r) for r in operations if r['action'] == 'turn.submit')
-    wait_receipt(setups[winner], turn)
+    try:
+        wait_receipt(setups[winner], turn)
+    except AssertionError as error:
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            conn = uow.connection
+            opening = conn.execute('SELECT parent_operation_id FROM execution_operations '
+                'WHERE operation_id=?', (turn['operation_id'],)).fetchone()
+            parent = opening[0] if opening else None
+            receipts = [tuple(row) for row in conn.execute(
+                'SELECT stage,error_code,possible_effect FROM execution_receipts '
+                'WHERE operation_id=? ORDER BY receipt_revision', (parent,))]
+            sessions = [tuple(row) for row in conn.execute(
+                'SELECT lifecycle_state,lease_state,local_retirement_json IS NOT NULL FROM execution_sessions '
+                'WHERE open_operation_id=?', (parent,))]
+            recovery = [tuple(row) for row in conn.execute(
+                'SELECT code,message FROM runtime_recovery_events WHERE agent_id=? '
+                'ORDER BY rowid DESC LIMIT 5', (winner,))]
+        raise AssertionError(dict(winner=winner, parent=parent, receipts=receipts,
+            sessions=sessions, recovery=recovery, native_sessions=len(peers.sessions))) from error
     assert len(peers.sessions) == 1 and sum(len(p.sent) for p in peers.sessions.values()) == 1
     attempts = build_handoff_runtime_attempts(deps)
     port = client.portal.call(owner.execution_capacity)

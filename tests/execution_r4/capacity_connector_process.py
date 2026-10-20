@@ -5,21 +5,24 @@ leases, capacity ledger, reconciliation and receipts use production owners.
 The parent sends test credentials through stdin; responses exclude secrets.
 """
 import asyncio
+import copy
 from functools import partial
 import json
 import os
 from pathlib import Path
 import sys
+import threading
 
 
 class Native:
     native_id = 'capacity-process-native'
     active_turn_id = 'capacity-process-turn'
 
-    def __init__(self, faults):
+    def __init__(self, faults, child=None):
         self.queue, self.sent, self.stopped = asyncio.Queue(), [], False
         self.faults = faults
         self.closing = False
+        self.child = child
 
     async def send(self, verb, payload, operation_id, **options):
         self.sent.append((verb, operation_id))
@@ -32,24 +35,31 @@ class Native:
             yield event
 
     async def observe(self):
-        return ('STOPPED' if self.stopped else 'RUNNING', 'IDLE')
+        return ('STOPPED' if self.stopped or self.child is not None and self.child.poll() is not None
+                else 'RUNNING', 'IDLE')
 
     async def close(self):
         self.closing = True
         await self.faults['stop_allowed'].wait()
+        if self.child is not None and self.child.poll() is None:
+            self.child.terminate()
+            await asyncio.to_thread(self.child.wait, 5)
         self.stopped = True
         await self.queue.put(None)
         return 'graceful'
 
 
 async def run(config):
-    from nexus_connector_core import InstallationCandidate
+    from nexus_connector_core import InstallationCandidate, LocalRuntimeCore
     from nexus_connector_core.discovery import fingerprint
+    from nexus_connector_core.native.adapter_types import NativeAdapterError, ErrorCode
     from okto_nexus_connector.daemon.app import DaemonApp
     from okto_nexus_connector.daemon import r4_control, r4_execution
     from okto_nexus_connector.storage.state_store import (
         IdentityRecord, ServerProfileRecord, ExecutionExecutorRecord)
     from okto_nexus_connector.storage.r4_publications import R4PublicationStore
+    from okto_nexus_connector.transport.r4_connection import R4Connection
+    from okto_nexus_connector.transport.https_client import NexusHTTPClient
 
     daemon = DaemonApp(Path(config['root']))
     daemon.host.max_owned_slots = 1
@@ -73,19 +83,107 @@ async def run(config):
     daemon.store.update(configure)
     binary = Path(config['binary'])
     candidate = InstallationCandidate('codex_app_server', str(binary), fingerprint(binary), 'explicit', 'selected')
-    async def discover():
-        return [candidate]
+    async def discover(*, adapter_ids, cancel_requested):
+        # Match the production per-harness discovery port. Do not report the
+        # synthetic Codex installation as evidence for sibling adapters.
+        return [candidate] if candidate.adapter_id in adapter_ids else []
     peers, opening = {}, set()
     stop_allowed = asyncio.Event()
     stop_allowed.set()
     faults = {'lose_next_send': False, 'stop_allowed': stop_allowed,
-              'publication_cut': None, 'publication_cuts': 0}
+              'publication_cut': None, 'publication_cuts': 0,
+              'cut_next_receipt': False, 'receipt_cuts': 0,
+              'fail_next_prepare': False, 'preparation_failures': 0,
+              'fail_next_candidate': False, 'candidate_failures': 0,
+              'lose_next_open': False, 'open_ack_losses': 0,
+              'lose_next_startup_ack': False, 'startup_ack_losses': 0,
+              'forge_next_capacity': False, 'startup_forgery_entered': False,
+              'startup_forgery_rejections': 0, 'startup_forgery_gate': asyncio.Event(),
+              'hold_bind_commit': False, 'bind_commit_entered': False,
+              'bind_commit_gate': threading.Event()}
+    original_startup_publish = R4Connection.publish_startup_refusal
+    async def publish_startup_with_lost_ack(self, request, **options):
+        if faults['forge_next_capacity']:
+            faults['forge_next_capacity'] = False
+            assert request['capacity'] is not None
+            # Exercise distinct, protocol-valid changes to the physical
+            # reservation while the original durable report is held back.
+            # The Server must reject each one against its canonical admission.
+            def changed(value, field, replacement):
+                target = value['capacity']
+                for part in field[:-1]:
+                    target = target[part]
+                target[field[-1]] = replacement
+
+            def other_digest(value):
+                return 'sha256:' + ('1' if value[7] == '0' else '0') + value[8:]
+
+            capacity = request['capacity']
+            ttl = capacity['request']['ttl_ms']
+
+            cases = (
+                (('reservation_id',), capacity['reservation_id'] + '-foreign'),
+                (('request', 'attempt_id'), capacity['request']['attempt_id'] + '-foreign'),
+                (('request', 'scope', 'boot_id'), capacity['request']['scope']['boot_id'] + '-foreign'),
+                (('request', 'affinity_key'), other_digest(capacity['request']['affinity_key'])),
+                (('request', 'ttl_ms'), ttl - 1 if ttl > 100 else ttl + 1),
+                (('consumption', 'turn_intent_hash'), other_digest(capacity['consumption']['turn_intent_hash'])),
+            )
+            for ordinal, (field, replacement) in enumerate(cases):
+                forged = copy.deepcopy(request)
+                forged['request_id'] += f'-forged-{ordinal}'
+                changed(forged, field, replacement)
+                response = await original_startup_publish(self, forged, **options)
+                assert response['type'] == 'startup.refuse.deferred', (field, response)
+                faults['startup_forgery_rejections'] += 1
+            faults['startup_forgery_entered'] = True
+            await asyncio.wait_for(faults['startup_forgery_gate'].wait(), 60)
+            return response
+        reply = await original_startup_publish(self, request, **options)
+        if faults['lose_next_startup_ack']:
+            faults['lose_next_startup_ack'] = False
+            faults['startup_ack_losses'] += 1
+            raise OSError('Synthetic startup ACK observation lost')
+        return reply
+    R4Connection.publish_startup_refusal = publish_startup_with_lost_ack
+    original_publish_receipt = NexusHTTPClient.publish_operation_receipt
+    async def publish_receipt_with_cut(self, ticket, *, frame):
+        if faults['cut_next_receipt'] and frame['stage'] == 'SUCCEEDED':
+            faults['cut_next_receipt'] = False
+            faults['receipt_cuts'] += 1
+            raise OSError('Synthetic receipt request lost before Server commit')
+        return await original_publish_receipt(self, ticket, frame=frame)
+    NexusHTTPClient.publish_operation_receipt = publish_receipt_with_cut
+    original_candidates = r4_execution.R4DaemonExecution._candidates
+    async def candidates_with_cut(self, frame):
+        if faults['fail_next_candidate']:
+            faults['fail_next_candidate'] = False
+            faults['candidate_failures'] += 1
+            from okto_nexus_connector.errors import ConnectorError
+            raise ConnectorError('VALIDATION_ERROR', 'r4_launch',
+                'Synthetic candidate discovery failure.')
+        return await original_candidates(self, frame)
+    r4_execution.R4DaemonExecution._candidates = candidates_with_cut
+    original_prepare = LocalRuntimeCore.prepare
+    async def prepare_with_cut(runtime, *args, **kwargs):
+        if faults['fail_next_prepare']:
+            faults['fail_next_prepare'] = False
+            faults['preparation_failures'] += 1
+            raise NativeAdapterError(ErrorCode.CONFIG_ERROR, 'Synthetic version probe deadline',
+                                     {'reason': 'version_probe_timeout'})
+        return await original_prepare(runtime, *args, **kwargs)
+    LocalRuntimeCore.prepare = prepare_with_cut
     # Cut after a real durable commit, before the execution owner receives its
     # result. Never replace the store or manufacture a Core operation fact.
-    for method_name in ('reserve', 'bind'):
+    for method_name in ('reserve', 'bind', 'record_startup'):
         original = getattr(R4PublicationStore, method_name)
         def cut_publication(self, *args, _original=original, _name=method_name, **kwargs):
             result = _original(self, *args, **kwargs)
+            if _name == 'bind' and faults['hold_bind_commit']:
+                faults['hold_bind_commit'] = False
+                faults['bind_commit_entered'] = True
+                if not faults['bind_commit_gate'].wait(60):
+                    raise OSError('Synthetic binding commit observer timed out')
             if faults['publication_cut'] == _name:
                 faults['publication_cut'] = None
                 faults['publication_cuts'] += 1
@@ -95,14 +193,31 @@ async def run(config):
     allow_open = asyncio.Event()
     allow_open.set()
     class Factory:
-        async def open(self, prepared, session_id, context, *, stream_epoch):
+        async def open(self, prepared, session_id, context, *, stream_epoch, process_launch=None):
             assert prepared.cwd == config['workspace_root']
             assert context.r4_authority is not None
             opening.add(session_id)
             try:
                 await allow_open.wait()
-                peer = Native(faults)
+                if config.get('real_native_child'):
+                    from nexus_connector_core.native.process import spawn_owned_process
+                    assert process_launch is not None
+                    def start():
+                        child = spawn_owned_process(
+                            [sys.executable, '-c', 'import time; time.sleep(120)'],
+                            container_id=process_launch.identity.container_id,
+                            cwd=str(Path(config['workspace_root']).resolve()),
+                            env=dict(os.environ), text=True)
+                        return Native(faults, child)
+                    peer = await process_launch.produce(
+                        validate_authority=lambda: None, start=start)
+                else:
+                    peer = Native(faults)
                 peers[session_id] = peer
+                if faults['lose_next_open']:
+                    faults['lose_next_open'] = False
+                    faults['open_ack_losses'] += 1
+                    raise OSError('Synthetic native open may have succeeded; reply lost')
                 return peer
             finally:
                 opening.discard(session_id)
@@ -111,6 +226,7 @@ async def run(config):
     daemon._start_transports()
     control = daemon.r4_controls[config['server_id']]
     stopped = False
+    stopping = None
     try:
         while line := await asyncio.to_thread(sys.stdin.readline):
             command = json.loads(line)['command']
@@ -120,10 +236,38 @@ async def run(config):
                 allow_open.clear()
             elif command == 'release_open':
                 allow_open.set()
+            elif command == 'begin_stop':
+                assert stopping is None
+                stopping = asyncio.create_task(daemon._shutdown())
+            elif command == 'finish_stop':
+                assert stopping is not None
+                result = await stopping
+                stopped = True
+                print(json.dumps({'pending': result}), flush=True)
+                return
             elif command == 'lose_next_send':
                 faults['lose_next_send'] = True
-            elif command in ('cut_publication_reserve', 'cut_publication_bind'):
+            elif command == 'lose_next_open':
+                faults['lose_next_open'] = True
+            elif command == 'fail_next_prepare':
+                faults['fail_next_prepare'] = True
+            elif command == 'fail_next_candidate':
+                faults['fail_next_candidate'] = True
+            elif command == 'lose_next_startup_ack':
+                faults['lose_next_startup_ack'] = True
+            elif command == 'forge_next_capacity':
+                faults['forge_next_capacity'] = True
+            elif command == 'release_startup_forgery':
+                faults['startup_forgery_gate'].set()
+            elif command == 'hold_bind_commit':
+                faults['hold_bind_commit'] = True
+            elif command == 'release_bind_commit':
+                faults['bind_commit_gate'].set()
+            elif command in ('cut_publication_reserve', 'cut_publication_bind',
+                    'cut_publication_record_startup'):
                 faults['publication_cut'] = command.removeprefix('cut_publication_')
+            elif command == 'cut_next_receipt':
+                faults['cut_next_receipt'] = True
             elif command == 'hold_stop':
                 stop_allowed.clear()
             elif command == 'release_stop':
@@ -138,10 +282,20 @@ async def run(config):
             state = control.status()
             print(json.dumps(dict(pid=os.getpid(), ready=state['execution_ready'],
                 error=state['error_code'], generation=state['connection_generation'],
+                candidate_failures=faults['candidate_failures'],
+                startup_ack_losses=faults['startup_ack_losses'],
+                startup_forgery_entered=faults['startup_forgery_entered'],
+                startup_forgery_rejections=faults['startup_forgery_rejections'],
+                open_ack_losses=faults['open_ack_losses'],
+                bind_commit_entered=faults['bind_commit_entered'],
                 publication_cuts=faults['publication_cuts'],
+                receipt_cuts=faults['receipt_cuts'],
+                preparation_failures=faults['preparation_failures'],
                 opens=len(peers), opening=len(opening), sends=sum(len(peer.sent) for peer in peers.values()),
+                native_child_pids=[peer.child.pid for peer in peers.values() if peer.child is not None],
                 stopping=sum(peer.closing and not peer.stopped for peer in peers.values()),
-                stopped=sum(peer.stopped for peer in peers.values()))), flush=True)
+                stopped=sum(peer.stopped for peer in peers.values()),
+                stop_pending=stopping is not None and not stopping.done())), flush=True)
     finally:
         if not stopped:
             await daemon._shutdown()

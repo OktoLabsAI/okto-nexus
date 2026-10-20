@@ -106,7 +106,8 @@ def test_session_pagination_deduplicates_runtime_operations(connected_local):
             sid,oid=f'prior-session-{index}',f'prior-operation-{index}'
             op=operation | dict(operation_id=oid,session_id=sid,
                 expected_revisions_json=json.dumps(json.loads(operation['expected_revisions_json']) | dict(session_id=sid)))
-            record=session | dict(session_id=sid,open_operation_id=oid,lifecycle_state='CLOSED',lease_state='CLOSED')
+            record=session | dict(session_id=sid,open_operation_id=oid,lifecycle_state='CLOSED',
+                lease_state='CLOSED',local_journal_name=f'fixture-{sid}')
             mapping=link | dict(operation_id=oid)
             for table,row in [('execution_operations',op),('execution_sessions',record),('execution_domain_deliveries',mapping)]:
                 conn.execute('INSERT INTO '+table+'('+','.join(row)+') VALUES('+','.join('?' for _ in row)+')',tuple(row.values()))

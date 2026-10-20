@@ -48,8 +48,16 @@ def test_prune_and_reactivation_preserve_canonical_transport_exclusion(connected
             uow.connection.execute("UPDATE messages SET created_at='2000-01-01T00:00:00Z' WHERE message_id=?", (message[0],))
             deps.repos.messages.create(uow, message_id='unrelated-expired', workspace_id=message[1],
                 from_agent_id='operator', created_at='2000-01-01T00:00:00Z')
-            tables = ('delivery_outbox', 'message_deliveries', 'execution_domain_deliveries')
-            before = {t: [tuple(r) for r in uow.connection.execute('SELECT * FROM ' + t)] for t in tables}
+            operation_id = uow.connection.execute(
+                'SELECT operation_id FROM delivery_outbox WHERE message_id=?', (message[0],)).fetchone()[0]
+            claims = {
+                'delivery_outbox': ('message_id', message[0]),
+                'message_deliveries': ('message_id', message[0]),
+                'execution_domain_deliveries': ('domain_operation_id', operation_id),
+            }
+            before = {table: [tuple(row) for row in uow.connection.execute(
+                f'SELECT * FROM {table} WHERE {column}=?', (value,))]
+                for table, (column, value) in claims.items()}
         disabled = client.patch('/api/v1/agents/subject', headers=headers['operator'], json={'is_active': False})
         assert disabled.status_code == 200, disabled.text
         for _ in range(2):
@@ -58,7 +66,9 @@ def test_prune_and_reactivation_preserve_canonical_transport_exclusion(connected
         with deps.connection_factory.unit_of_work(write=False) as uow:
             assert uow.connection.execute('SELECT 1 FROM messages WHERE message_id=?', (message[0],)).fetchone()
             assert not uow.connection.execute("SELECT 1 FROM messages WHERE message_id='unrelated-expired'").fetchone()
-            assert before == {t: [tuple(r) for r in uow.connection.execute('SELECT * FROM ' + t)] for t in tables}
+            assert before == {table: [tuple(row) for row in uow.connection.execute(
+                f'SELECT * FROM {table} WHERE {column}=?', (value,))]
+                for table, (column, value) in claims.items()}
             assert uow.connection.execute('PRAGMA foreign_key_check').fetchall() == []
         assert client.patch('/api/v1/agents/subject', headers=headers['operator'], json={'is_active': True}).status_code == 200
         assert pull(setup, monkeypatch) == []

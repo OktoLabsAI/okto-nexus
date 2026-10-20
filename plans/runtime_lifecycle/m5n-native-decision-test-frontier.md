@@ -1,0 +1,7 @@
+# M5n: native-decision qualification after independent inventory split
+
+The installed Nexus/Connector/Core test environment initially passed the embedded native decision case but failed the corresponding automatic Connector case at `inventory_not_fresh`, before any native decision could run. The Connector control channel was `CONTROL_READY`; its independent observer reported `DISCOVERY_FAILED` for every adapter. The synthetic test discovery callback accepted no keyword arguments, while the current observer calls it with `adapter_ids` and `cancel_requested`. The test also assumed control readiness implied a published installation observation.
+
+The fixture now accepts the observer's discovery contract and waits for the selected adapter's accepted observation before resolving `runtime.start`. This changes only the test fixture; the production control and observation boundaries remain independent. In the isolated installed environment, all four remote approval/input decision roundtrips passed (four tests, 20 deselected), including approve/deny and private input handling. The matching embedded approval case passed. The installed embedded owner-replacement suite passed all 11 cases, including delayed native opening and uncertain close containment.
+
+These tests qualify existing decision paths and replacement behavior separately. They do not yet prove the explicit in-flight native decision versus owner-replacement race required by M5; that criterion remains open. No global Nexus process was started.

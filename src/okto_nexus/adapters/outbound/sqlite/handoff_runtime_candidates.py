@@ -20,7 +20,38 @@ class SqliteHandoffCandidateRepository:
     def __init__(self, *, attempts, availability, pool_factory):
         self.attempts, self.availability, self.pool_factory = attempts, availability, pool_factory
 
-    def agents_page(self, uow, lease, *, allow_new, limit):
+    def proved_no_effect(self, uow, lease):
+        row = uow.connection.execute('SELECT * FROM handoff_runtime_proved_no_effect '
+            'WHERE handoff_id=? AND workspace_id=? AND claim_epoch=?',
+            (lease.handoff_id, lease.workspace_id, lease.claim_generation)).fetchone()
+        if row is None:
+            return None
+        operation = uow.connection.execute('SELECT * FROM delivery_outbox WHERE operation_id=?',
+            (row['operation_id'],)).fetchone()
+        return dict(row) | {'operation': dict(operation)}
+
+    def retire_no_effect(self, uow, proof, *, now_iso, now_epoch):
+        conn = uow.connection
+        updated = conn.execute("UPDATE handoff_runtime_attempts SET state='FAILED_NO_EFFECT',"
+            "active=0,disposition='RELEASE',reason=?,updated_at=? "
+            "WHERE attempt_id=? AND operation_id=? AND state='CLAIM_COMMITTED' AND active=1",
+            (proof['error_code'] or 'OPENING_NO_EFFECT', now_iso,
+             proof['attempt_id'], proof['operation_id']))
+        if updated.rowcount != 1:
+            raise OktoNexusError(ErrorCode.CONFLICT, 'The recovered attempt changed.', {})
+        previous = conn.execute('SELECT failure_count FROM handoff_runtime_no_effect_retries '
+            'WHERE handoff_id=? AND agent_id=?', (proof['handoff_id'], proof['agent_id'])).fetchone()
+        count = min((previous[0] if previous else 0) + 1, 32)
+        delay = min(300, 15 * 2 ** min(count - 1, 5))
+        conn.execute('INSERT INTO handoff_runtime_no_effect_retries '
+            '(handoff_id,agent_id,failure_count,retry_after,last_operation_id,updated_at) '
+            'VALUES(?,?,?,?,?,?) ON CONFLICT(handoff_id,agent_id) DO UPDATE SET '
+            'failure_count=excluded.failure_count,retry_after=excluded.retry_after,'
+            'last_operation_id=excluded.last_operation_id,updated_at=excluded.updated_at',
+            (proof['handoff_id'], proof['agent_id'], count, now_epoch + delay,
+             proof['operation_id'], now_iso))
+
+    def agents_page(self, uow, lease, *, allow_new, limit, now_epoch):
         # UNION collapses grants, endpoints and physical slots to one agent.
         # Recovery includes revoked/disabled candidates absent from the catalog.
         query = ("WITH candidates AS (SELECT a.agent_id FROM handoff_runtime_attempts a "
@@ -30,8 +61,10 @@ class SqliteHandoffCandidateRepository:
         args = (lease.workspace_id, lease.handoff_id, lease.claim_generation)
         if allow_new:
             query += (" UNION SELECT e.agent_id FROM agent_endpoints e WHERE e.workspace_id=? "
-                      "AND e.protocol='nxl-r4' AND e.enabled=1 AND e.activation_state='approved'")
-            args += (lease.workspace_id,)
+                      "AND e.protocol='nxl-r4' AND e.enabled=1 AND e.activation_state='approved' "
+                      "AND NOT EXISTS (SELECT 1 FROM handoff_runtime_no_effect_retries f "
+                      "WHERE f.handoff_id=? AND f.agent_id=e.agent_id AND f.retry_after>?)")
+            args += (lease.workspace_id, lease.handoff_id, now_epoch)
         query += ') '
         cursor = json.loads(lease.candidate_cursor) if lease.candidate_cursor else None
         if cursor is not None and (type(cursor) is not dict or set(cursor) != {'anchor', 'after'}

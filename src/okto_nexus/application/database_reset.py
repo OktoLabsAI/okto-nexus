@@ -6,7 +6,7 @@ INSTALLATION_TABLES = frozenset({
     'schema_migrations', 'settings', 'execution_installation',
     'runtime_policy_defaults', 'runtime_artifact_settings',
     'runtime_writer_contract', 'runtime_dispatcher_owner', 'runtime_journal_checkpoint',
-    'runtime_reset_generation',
+    'runtime_reset_generation', 'execution_embedded_store_bindings',
     'one_shot_policy_settings', 'one_shot_host_limits',
     'handoff_runtime_schedule_scan',
 })

@@ -2316,14 +2316,14 @@ def build_router() -> APIRouter:
                 deps = request.app.state.deps
                 with deps.connection_factory.unit_of_work(write=False) as uow:
                     ws = deps.repos.workspaces.get(uow, workspace)
-                if ws is None or not ws.root_realpath:
+                if ws is None:
                     raise OktoNexusError(
                         ErrorCode.NOT_FOUND,
                         f"workspace '{workspace}' is not registered.",
                         {"workspace": workspace},
                     )
                 result = service.artifact_upload(
-                    project_root=ws.root_realpath,
+                    workspace_id=workspace,
                     filename=filename,
                     data=bytes(payload),
                     media_type=media_type,

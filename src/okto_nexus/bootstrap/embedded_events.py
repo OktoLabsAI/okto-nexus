@@ -5,6 +5,7 @@ from dataclasses import asdict
 
 from nexus_connector_core import CoreError, EventCursor, R4_PREVIEW_REVISION
 from nexus_connector_core.protocol import canonical_json
+from nexus_connector_core.event_artifacts import externalize_event, artifact_chunks
 
 from ..application.execution_events import commit_execution_events
 from ..errors import ErrorCode, OktoNexusError
@@ -19,14 +20,30 @@ class EmbeddedEventPublisher:
         self.owner = owner
         self.after = 0
 
-    def _page(self, *, after=None, agent_id=None, live_only=False):
+    def _page(self, *, after=None, agent_id=None, session_id=None, live_only=False, unretired_only=False):
+        predicates = ["l.server_id=?", "l.executor_id=?", "l.rowid>?"]
+        parameters = [self.owner.channel.server_id, self.owner.channel.executor_id,
+                      self.after if after is None else after]
+        for column, value in (("agent_id", agent_id), ("session_id", session_id)):
+            if value is not None:
+                predicates.append(f"l.{column}=?")
+                parameters.append(value)
+        if live_only:
+            predicates.append("l.drained=0")
+        source = "execution_local_streams l"
+        if unretired_only and not live_only:
+            source = ("execution_sessions s CROSS JOIN execution_local_streams l "
+                      "USING(server_id,executor_id,session_id)")
+            predicates.append("s.local_retirement_json IS NULL")
+        elif unretired_only:
+            predicates.append("EXISTS (SELECT 1 FROM execution_sessions s "
+                "WHERE s.server_id=l.server_id AND s.executor_id=l.executor_id "
+                "AND s.session_id=l.session_id AND s.local_retirement_json IS NULL)")
         with self.owner.factory.unit_of_work(write=False) as uow:
             self.owner.verify(uow=uow)
-            rows = uow.connection.execute("SELECT rowid,* FROM execution_local_streams "
-                "WHERE server_id=? AND executor_id=? AND rowid>? AND (? IS NULL OR agent_id=?) "
-                "AND (?=0 OR drained=0) ORDER BY rowid LIMIT 128",
-                (self.owner.channel.server_id,self.owner.channel.executor_id,self.after if after is None else after,
-                 agent_id,agent_id,live_only)).fetchall()
+            rows = uow.connection.execute("SELECT l.rowid,l.* FROM " + source +
+                " WHERE " + " AND ".join(predicates) + " ORDER BY l.rowid LIMIT 128",
+                parameters).fetchall()
             return [dict(row) for row in rows]
 
     def _watermark(self, scope):
@@ -51,8 +68,16 @@ class EmbeddedEventPublisher:
                     if value["operation_id"] is None:
                         value.pop("operation_id")
                     raw = canonical_json(value)
-                    if len(raw)>64*1024:
-                        raise CoreError("CAPACITY_EXCEEDED","embedded_event")
+                    value, artifact = externalize_event(value)
+                    if artifact is not None:
+                        channel = self.owner.channel
+                        base = {k:scope[k] for k in ('server_id','executor_id','binding_id','agent_id')}
+                        base.update(protocol_major=1,connection_id=channel.connection_id,
+                                    connection_generation=channel.connection_generation)
+                        for chunk in artifact_chunks(base,value,artifact):
+                            await asyncio.to_thread(self.owner.factory.event_artifacts.receive,chunk,
+                                channel=channel,embedded_owner=self.owner)
+                        raw = canonical_json(value)
                     if value["sequence"] != after+len(events)+1:
                         raise CoreError("EVENT_GAP","embedded_event")
                     if size+len(raw)>768*1024:
@@ -105,12 +130,11 @@ class EmbeddedEventPublisher:
     async def recover(self, *, agent_id=None, session_id=None, live_only=False, progress=None):
         after = 0
         while True:
-            rows = await asyncio.to_thread(self._page, after=after, agent_id=agent_id, live_only=live_only)
+            rows = await asyncio.to_thread(self._page, after=after, agent_id=agent_id,
+                                          session_id=session_id, live_only=live_only, unretired_only=True)
             if not rows:
                 return
             for scope in rows:
-                if session_id is not None and scope['session_id'] != session_id:
-                    continue
                 for _ in range(4096):
                     advanced = await self.step(scope)
                     if progress is not None:

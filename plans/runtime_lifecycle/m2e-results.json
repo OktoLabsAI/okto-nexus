@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-16",
+  "checkpoint": "M2e",
+  "platform": "Windows",
+  "campaigns": {
+    "core": {
+      "evidence": "build/process-launch-m2e-installed",
+      "counts": {
+        "tests": 95,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "hashes": {
+        "results.xml": "526a715a8ba34f38d01cd9688ac1d23da4345cb2761de687c6887df0cb19ba97",
+        "manifest.json": "27019b479e8c2c7ad1cf7d59b32aa93835fcefd42265bab4f3eedd62c249c801"
+      },
+      "isolated_interpreter": true,
+      "application_source_imported": false
+    },
+    "connector": {
+      "evidence": "build/runtime-lifecycle-m2e-installed",
+      "counts": {
+        "tests": 103,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "hashes": {
+        "results.xml": "5c43e6c6881a307174f3d8e7f79cd5cb09ff534a9100af519530c2667c2d1c52",
+        "manifest.json": "798776ddeba8ef2104012043c05145e80427fb25e7ea450188afdea1ca5065e0"
+      },
+      "isolated_interpreter": true,
+      "application_source_imported": false,
+      "changed_inputs": []
+    },
+    "nexus": {
+      "evidence": "build/runtime-lifecycle-m2e-installed",
+      "counts": {
+        "tests": 63,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "hashes": {
+        "tests.xml": "ee7a1282b9a2abb3a21e2554c7c74162c0cd177d2a50a6fd5f8e8e7f89d01c5c",
+        "campaign.json": "a391d90ee38d6c42d55a811f8b287f10dfdfdfca7b9a62095b924a5bd7c00a14"
+      },
+      "isolated_interpreter": true,
+      "application_source_imported": false,
+      "changed_inputs": []
+    }
+  },
+  "dependency_check": "PASS: 48 installed distributions compatible",
+  "limitations": [
+    "Windows native containment only",
+    "Real UI evidence recorded separately",
+    "Local Connector provider end-to-end and physical remote-host qualification remain pending"
+  ]
+}
