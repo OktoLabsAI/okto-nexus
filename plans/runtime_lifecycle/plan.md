@@ -158,6 +158,13 @@ crash de launch com drenagem física e receipt durável; a matriz Core
 instalados com o mesmo wheel Core 0.0.12 e tiveram os testes direcionados
 aprovados. As fronteiras posteriores de handshake, receipt e ACK seguem abertas.
 
+Checkpoint M2h: os cortes tardios locais de handshake nativo, ACK, receipt do
+Core, queda real do processo Nexus após receipt/projeção e produtor atrasado
+passaram com wheels instaladas. A falha de ACK do evento foi exercitada com
+troca de owner, sem morte do processo naquele instante. A matriz Nexus
+multiplataforma 39352913186 e o rollout global seguem pendentes. Ver
+`m2h-late-crash-cuts.md`.
+
 - Contrato versionado de launch intent: operação, sessão, executor, geração,
   identidade do container, estado/prova e revisão. Sem argumentos ou segredos.
 - Persistir identidade antes do spawn. Transições CAS monotônicas e idempotentes.
