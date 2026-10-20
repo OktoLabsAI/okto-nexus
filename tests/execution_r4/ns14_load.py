@@ -1,5 +1,6 @@
 """Synthetic identity churn and two authenticated executor senders on one store."""
 import asyncio
+from contextlib import contextmanager
 import json
 import os
 import platform
@@ -19,6 +20,35 @@ from okto_nexus.application.execution_dispatch_pump import ExecutionDispatchPump
 from okto_nexus.domain.base import iso_plus
 from okto_nexus.domain.keys import hash_api_key
 from test_ns09 import negotiate
+
+
+@contextmanager
+def maintain_peer_heartbeat(app, channel):
+    """Keep the synthetic control peer alive during the independent HTTP burst."""
+    stopped = threading.Event()
+    failures = []
+
+    def send():
+        while not stopped.wait(3):
+            try:
+                app.state.test_opening_socket.send_text(encode_r4_frame(dict(
+                    protocol_major=1, contract_revision=R4_PREVIEW_REVISION, type="heartbeat",
+                    server_id=channel.server_id, executor_id=channel.executor_id,
+                    connection_id=channel.connection_id,
+                    connection_generation=channel.connection_generation)).decode())
+            except Exception as error:
+                failures.append(error)
+                return
+
+    worker = threading.Thread(target=send, name="ns14-synthetic-heartbeat", daemon=True)
+    worker.start()
+    try:
+        yield
+    finally:
+        stopped.set()
+        worker.join(timeout=5)
+    if failures:
+        raise AssertionError("Synthetic control heartbeat stopped") from failures[0]
 
 
 def second_executor(state, root):
@@ -233,7 +263,7 @@ def run_load(state, root, record_property):
             json={k: resolved[k] for k in ("client_intent_id", "operation_id", "resolution_revision", "intent_hash")})
         return result, resolved
 
-    with client.websocket_connect(f"wss://127.0.0.1:8202/v1/runtime/executors/{executor}/link",
+    with maintain_peer_heartbeat(app, first), client.websocket_connect(f"wss://127.0.0.1:8202/v1/runtime/executors/{executor}/link",
             headers={"Authorization": "Bearer " + link}, subprotocols=["nxl.v1"]) as ws:
         second = negotiate(ws, info, revisions, lane, first.server_id, executor,
                            binding_id="binding-load-second", agent_id="other")
