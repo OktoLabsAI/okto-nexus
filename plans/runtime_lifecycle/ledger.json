@@ -240,7 +240,8 @@
         "m3l-session-isolation.md",
         "m3l-results.json",
         "m3n-pi-probe-ui.md",
-        "Core: plans/runtime-lifecycle-m3-pi-version-probe.md"
+        "Core: plans/runtime-lifecycle-m3-pi-version-probe.md",
+        "m3v-current-availability-audit.md"
       ],
       "commits": {
         "core_m3c": "7bab651",
@@ -378,7 +379,7 @@
         }
       ],
       "nexus_m3b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3b-validation.md",
-      "next": "M3s qualifies the positive native-effect startup boundary for the embedded Windows host. M5x/M5y already close the fixed local Connector differential criteria. Continue the remaining M2/M3 acceptance gaps, platform qualification and controlled global rollout.",
+      "next": "M3s qualifies the Windows positive native-effect boundary; M5x/M5y close the local Connector differential criteria. M3v audits current real-UI recovery, Pi load and visibility refresh without attributing old reports without proof. Await the full Nexus multiplatform installed matrix and controlled global rollout; L3/L12 remain historical observations, not new acceptance gates.",
       "nexus_m3c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3c-validation.md",
       "nexus_m3e_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3e-validation.md",
       "nexus_m3g_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m3g-pool-refusal.md",
@@ -988,7 +989,8 @@
       "id": "L3",
       "milestone": "M3",
       "priority": "high",
-      "status": "open",
+      "status": "historical_not_reproduced_current_installed_load",
+      "current_qualification": "M7o: 18/18 installed real Pi one-shot UI calls succeeded with exact replies, ACK and pool replenishment; original M1 refusal frontier/cause remains unproven. See m3v-current-availability-audit.md.",
       "description": "Two Pi warm replacements failed BINDING_NOT_AUTHORIZED during M1 live UI campaign, without birth records; later refill succeeded automatically. Exact refusal frontier absent from receipts; not attributed to L1 without evidence."
     },
     {
@@ -1051,7 +1053,8 @@
       "id": "L12",
       "milestone": "M3",
       "priority": "medium",
-      "status": "open",
+      "status": "mitigated_current_installed_ui_original_cause_unproven",
+      "current_qualification": "AgentsView visibility/focus refresh is in commit 7ad675a; UI-A existing tab recovered LIVE/Online after abrupt restart without reload. Original stale display cause remains unproven. See m3v-current-availability-audit.md.",
       "latest_evidence": "m3m-agent-status-refresh.md: At 13:04-13:11 UTC generation 73 and the /api/v1/agents response showed Pi, Claude and Codex Ready/present; the operator confirmed that reloading Agents changed the displayed Recovering state to Online. A visibility/focus refresh mitigation is source-built but not deployed. Cause of the original display remains unproven.",
       "description": "Agents initially displayed old RECOVERING until Refresh Agents while all three backend recovery rows were READY; subsequent view mount showed ONLINE. Existing poll pauses when document.hidden; cause not yet attributed and no frontend fix claimed. Follow-up 06:44–06:46 UTC 2026-10-17: generation 72 CONTROL_READY; Pi/Claude/Codex READY and Online in both existing Chrome tabs without reload/restart, four Pi WARM slots, renewed leases. Cause remains unproven. Follow-up 07:30–07:32 UTC again READY/Online with renewed leases and Pi 4 WARM; stale last-contact display observed but cause not proven. One delayed Pi publication did not change durable readiness. Follow-up 07:52 UTC: generation 73 CONTROL_READY, all three READY/Online, Pi four WARM and no backoff. Both existing tabs Online without reload; one retained 07:32 last-contact while the other showed current heartbeat. Cause of the original Recovering report remains unproven. See m3i-ui-rollout.md. Follow-up 08:42-08:43 UTC: generation 73 CONTROL_READY, three agents READY/Online in both existing tabs without reload, four Pi WARM and no pending deliveries. No newer durable recovery event after initial readiness at 07:46 UTC; cause remains unproven. Follow-up 09:25-09:27 UTC: user again reported all Recovering. Read-only inspection found generation 73 CONTROL_READY with fresh heartbeat, Pi/Claude/Codex READY, four Pi WARM slots and no pending deliveries. Both existing 8202 Chrome tabs displayed Online without reload or restart; one had an older last-contact observation. AgentsView polling skips hidden documents and has no visibility-change refresh, but this does not establish the cause of the reported Recovering state. Requested the affected screen/address; finding remains open. Follow-up 09:58-09:59 UTC: same production PID 32480 and generation 73, CONTROL_READY with fresh heartbeat; all three local agents READY since 07:46 UTC, Pi four WARM and no pending deliveries. Both existing browser tabs displayed Local Online without refresh, reload or restart. One tab retained an older last-contact observation (09:37 UTC). No causal attribution or deployed fix claimed. Follow-up 10:55-10:58 UTC: same PID 32480 and generation 73, fresh CONTROL_READY; both existing Agents tabs show the three local agents Online without refresh/restart. Second tab still displays 09:59 last-contact. Unlike previous observations, Pi has four post-startup recoveries, with version_probe_timeout logged before containment and automatic READY at 10:34:29 UTC. Claude/Codex recovery rows remain READY since 07:46 UTC; no evidence establishes a simultaneous three-agent recovery. Pi has four WARM slots and four direct child node processes. Probe timeout cause and reported simultaneous Recovering remain unproven. See recovering-20261017-1055.md."
     },
@@ -1066,7 +1069,8 @@
       "id": "L14",
       "milestone": "M3",
       "priority": "high",
-      "status": "partially_fixed_installed_validation",
+      "status": "qualified_current_warm_load_global_rollout_pending",
+      "current_qualification": "M3i generation 73 admitted four Pi warm opens in 141 ms after Ready; M7o installed UI passed 18/18 Pi one-shot calls with pool replenishment. See m3v-current-availability-audit.md.",
       "description": "Generation 71 agents reached READY within about 8s, but first new warm reservations appeared about 4m46s after recovery began. Inventory worker observed in fingerprint/discovery; full interval also includes publication/backoff and is not wholly attributed to hashing. Need per-harness effective readiness and lower-cost initial discovery; do not relax inventory freshness or ownership checks. Four warm sessions and real Pi UI response eventually succeeded automatically. M3h parallel passive discovery measured 10.74-13.94s versus 21.75-21.94s serial with identical evidence. Startup readiness no longer inflates warm failure backoff (L15). Installed tests passed; global rollout and independent per-harness publication/readiness remain pending. M3h rolled out with M3j in generation 72. First UI Pi call waited 127.439s to RUNNING and completed in 137.667s; next warm call ran after 0.569s and completed in 7.060s. Initial observation/readiness latency remains unresolved. M3i independent producers globally deployed in generation 73. Pi READY 07:46:24 UTC; four warm opens admitted within 141 ms at 07:46:32. First real UI request at 07:47:00 reached RUNNING after 0.6952s, completed after 10.2113s, and pool replenished automatically. Single functional sample, not full initial-readiness/load qualification."
     },
     {
@@ -1129,7 +1133,8 @@
       "id": "L23",
       "milestone": "M3",
       "priority": "high",
-      "status": "installed_fix_exact_wheel_ui_pending",
+      "status": "qualified_current_installed_ui_historical_cause_unproven",
+      "current_qualification": "Core 0.0.12 current installed wheel includes lease ID rotation fix; UI-A and M7o qualified real harness responses after its installation. Historical receipt did not identify the refusal stage. See m3v-current-availability-audit.md.",
       "description": "Core f5325af fixes a reproducible Pi pre-spawn native-action refusal during valid lease ID rotation; red/green test matches the historical UI trace but the historical stable receipt lacks stage, so causality is not conclusive. Eight focused source and installed cases plus one installed bridge case passed. Nexus and Connector vendor exact Core wheel 95a6238deae20d1a98ea8c8a44dcb808c24e037eb01e0d38163265fc1dc72193. Real UI requalification of this exact artifact remains pending; global generation 73 untouched. See m3n-pi-probe-ui.md."
     },
     {

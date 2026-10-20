@@ -224,6 +224,11 @@ multiplataforma 39352913186 e o rollout global seguem pendentes. Ver
   anterior. O teste reproduziu a recusa pré-spawn; Core `f5325af` aceita o novo
   ID somente com serial avançando e escopo estável. Wheel instalada e vendors
   sincronizados; requalificação real pela UI e custo de cold start pendentes.
+- Auditoria M3v: a wheel Core 0.0.12 atual respondeu pela UI real em UI-A/M7o;
+  o Pi completou 18/18 chamadas de carga com reposição do pool. A atualização
+  de Agents ao voltar à aba está no código e foi observada após restart. As
+  causas exatas dos relatos antigos L3/L12 seguem sem prova, sem ampliar os
+  critérios de aceite. Ver `m3v-current-availability-audit.md`.
 - Modelar separadamente conexão, autoridade, capacidade e sincronização.
 - Pending de histórico não bloqueia capacidade independente; slot físico incerto
   permanece ocupado. Não redirecionar uma conversa persistente ainda incerta.

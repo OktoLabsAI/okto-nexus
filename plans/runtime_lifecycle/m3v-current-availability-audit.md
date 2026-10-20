@@ -1,0 +1,10 @@
+# M3v — auditoria das pendências de disponibilidade
+
+Data: 2026-10-20 UTC. Revisão das evidências existentes na wheel Nexus 0.3.1 com Core 0.0.12/Connector 0.0.10, sem alterar produto ou repetir testes de interface.
+
+- **L3:** duas recusas `BINDING_NOT_AUTHORIZED` em refills Pi foram observadas no M1 e não receberam prova durável da fronteira exata. A campanha instalada M7o executou 18 chamadas Pi one-shot, todas com resposta exata, ACK e reposição do pool. A falha antiga não reapareceu nessa campanha; sua causa não pode ser declarada corrigida apenas por ausência de recorrência.
+- **L12:** a mitigação de atualização em `visibilitychange` e `focus` está no `AgentsView` desde `7ad675a`. UI-A observou a aba já aberta passar de `RECONNECTING` a `LIVE` após restart, com três agentes Online e resposta Pi, sem reload. O relato original de Recovering divergente da API não tem causa comprovada; o comportamento atual e a mitigação são evidência, não atribuição causal.
+- **L14:** após os produtores independentes de M3i na geração 73, quatro reservas Pi aquecidas foram admitidas em 141 ms após a prontidão; a primeira chamada real iniciou em 0,695 s. M7o confirmou, na wheel instalada, 18/18 chamadas Pi com resultado e reposição do pool após cada burst. Isso qualifica o caminho funcional atual, sem afirmar que todo cold start ou host externo tenha a mesma latência.
+- **L23:** o Core 0.0.12 atual inclui a correção de rotação válida de `lease_id` e passou sua matriz completa. UI-A e M7o, posteriores à instalação dessa wheel, comprovaram respostas reais Pi/Claude/Codex e carga Pi pela interface. O receipt histórico que originou o diagnóstico ainda não permite afirmar que a rotação era sua causa exata.
+
+Os critérios técnicos locais de M3 estão documentados em M3s/M3u e nesta auditoria; a matriz Nexus multiplataforma e o rollout global controlado seguem pendentes. L3/L12 continuam visíveis no ledger como observações históricas sem causa provada, sem criar um novo bloqueio ou critério de aceite.
