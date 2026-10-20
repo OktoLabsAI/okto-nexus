@@ -18,10 +18,11 @@ class Native:
     native_id = 'capacity-process-native'
     active_turn_id = 'capacity-process-turn'
 
-    def __init__(self, faults):
+    def __init__(self, faults, child=None):
         self.queue, self.sent, self.stopped = asyncio.Queue(), [], False
         self.faults = faults
         self.closing = False
+        self.child = child
 
     async def send(self, verb, payload, operation_id, **options):
         self.sent.append((verb, operation_id))
@@ -34,11 +35,15 @@ class Native:
             yield event
 
     async def observe(self):
-        return ('STOPPED' if self.stopped else 'RUNNING', 'IDLE')
+        return ('STOPPED' if self.stopped or self.child is not None and self.child.poll() is not None
+                else 'RUNNING', 'IDLE')
 
     async def close(self):
         self.closing = True
         await self.faults['stop_allowed'].wait()
+        if self.child is not None and self.child.poll() is None:
+            self.child.terminate()
+            await asyncio.to_thread(self.child.wait, 5)
         self.stopped = True
         await self.queue.put(None)
         return 'graceful'
@@ -188,13 +193,26 @@ async def run(config):
     allow_open = asyncio.Event()
     allow_open.set()
     class Factory:
-        async def open(self, prepared, session_id, context, *, stream_epoch):
+        async def open(self, prepared, session_id, context, *, stream_epoch, process_launch=None):
             assert prepared.cwd == config['workspace_root']
             assert context.r4_authority is not None
             opening.add(session_id)
             try:
                 await allow_open.wait()
-                peer = Native(faults)
+                if config.get('real_native_child'):
+                    from nexus_connector_core.native.process import spawn_owned_process
+                    assert process_launch is not None
+                    def start():
+                        child = spawn_owned_process(
+                            [sys.executable, '-c', 'import time; time.sleep(120)'],
+                            container_id=process_launch.identity.container_id,
+                            cwd=str(Path(config['workspace_root']).resolve()),
+                            env=dict(os.environ), text=True)
+                        return Native(faults, child)
+                    peer = await process_launch.produce(
+                        validate_authority=lambda: None, start=start)
+                else:
+                    peer = Native(faults)
                 peers[session_id] = peer
                 if faults['lose_next_open']:
                     faults['lose_next_open'] = False
@@ -274,6 +292,7 @@ async def run(config):
                 receipt_cuts=faults['receipt_cuts'],
                 preparation_failures=faults['preparation_failures'],
                 opens=len(peers), opening=len(opening), sends=sum(len(peer.sent) for peer in peers.values()),
+                native_child_pids=[peer.child.pid for peer in peers.values() if peer.child is not None],
                 stopping=sum(peer.closing and not peer.stopped for peer in peers.values()),
                 stopped=sum(peer.stopped for peer in peers.values()),
                 stop_pending=stopping is not None and not stopping.done())), flush=True)

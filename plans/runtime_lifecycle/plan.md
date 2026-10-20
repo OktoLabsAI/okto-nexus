@@ -487,6 +487,12 @@ aprovados. As fronteiras posteriores de handshake, receipt e ACK seguem abertas.
   após a liberação e não repetiu o dispatch. Os cinco cenários instalados do
   fixture passaram; os três cortes de parada do ADR estão cobertos com M6c/M6h.
   Ver `m6i-process-publication-stop.md`.
+- Checkpoint M6j: uma lease curta expirou após a morte do host Connector
+  separado que havia iniciado um filho real em Windows Job. O host novo
+  reconciliou com prova `CONTAINER_STOPPED`, liberou o slot físico e não
+  repetiu o dispatch incerto; os nove casos instalados de seleção/recuperação
+  passaram. Upgrade/rollback e comparação para adoção continuam pendentes.
+  Ver `m6j-managed-host-restart.md`.
 - Primeiro ADR e protótipo isolado: processo por usuário/host, IPC autenticado
   (named pipe no Windows/socket local onde suportado), uma autoridade de processo.
 - Nexus pode reiniciar enquanto supervisor mantém contenção, spool e leases

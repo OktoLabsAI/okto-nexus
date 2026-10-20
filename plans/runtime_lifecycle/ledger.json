@@ -780,7 +780,8 @@
         "m6f-paired-ui-checkpoint.md",
         "m6g-inflight-server-restart.md",
         "m6h-process-open-stop.md",
-        "m6i-process-publication-stop.md"
+        "m6i-process-publication-stop.md",
+        "m6j-managed-host-restart.md"
       ],
       "commits": {
         "connector_experiment_adr": "0944a0e",
@@ -850,7 +851,17 @@
         "durable_bind_commit_held_through_shutdown": true,
         "all_five_installed_variants_passed": true
       },
-      "next": "Close fixed M6 criteria: revocation and lease expiry with generation and host restart in a separate process, upgrade/rollback, then compare installed embedded and Connector availability, memory and shutdown before an adoption decision. Global Nexus remains stopped outside disposable experiments."
+      "managed_host_restart_checkpoint": {
+        "id": "M6j",
+        "status": "local_windows_process_boundary_pass",
+        "evidence": "m6j-managed-host-restart.md",
+        "lease_expired_before_restart": true,
+        "managed_native_stop_proof": "CONTAINER_STOPPED",
+        "physical_slot_released_after_proof": true,
+        "native_dispatch_attempts": 1,
+        "all_nine_selection_variants_passed": true
+      },
+      "next": "Close fixed M6 criteria: upgrade/rollback of the separate host with explicit incompatible-contract refusal and preserved evidence, then compare installed embedded and Connector availability, memory and shutdown before an adoption decision. Global Nexus remains stopped outside disposable experiments."
     },
     {
       "id": "M7",
