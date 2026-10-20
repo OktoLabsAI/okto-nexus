@@ -768,7 +768,7 @@
     },
     {
       "id": "M6",
-      "status": "in_progress",
+      "status": "complete",
       "title": "Independent supervisor experiment and decision",
       "evidence": [
         "Connector: plans/runtime-lifecycle-m6-supervisor-adr.md",
@@ -782,7 +782,8 @@
         "m6h-process-open-stop.md",
         "m6i-process-publication-stop.md",
         "m6j-managed-host-restart.md",
-        "m6k-upgrade-rollback.md"
+        "m6k-upgrade-rollback.md",
+        "m6l-supervisor-decision.md"
       ],
       "commits": {
         "connector_experiment_adr": "0944a0e",
@@ -875,7 +876,16 @@
         "current_host_reconnected_after_refusal": true,
         "protocol_negotiation_tested": false
       },
-      "next": "Compare the installed embedded and separate local Connector availability, memory, installation and shutdown cost against the fixed ADR criteria; record an adoption decision. Global Nexus remains stopped outside disposable experiments."
+      "adoption_decision": {
+        "id": "M6l",
+        "evidence": "m6l-supervisor-decision.md",
+        "choice": "retain_embedded_default",
+        "separate_supervisor": "experimental_opt_in",
+        "availability_improvement_demonstrated": false,
+        "local_connector_process_working_set_mb_observed": 96.1,
+        "physical_remote_host_qualified": false
+      },
+      "next": null
     },
     {
       "id": "M7",

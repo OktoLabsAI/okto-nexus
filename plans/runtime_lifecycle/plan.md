@@ -499,6 +499,11 @@ aprovados. As fronteiras posteriores de handshake, receipt e ACK seguem abertas.
   recusa; hashes de oito arquivos permaneceram idênticos no rollback. Falta a
   comparação de disponibilidade/custo e a decisão de adoção. Ver
   `m6k-upgrade-rollback.md`.
+- Decisão M6l: manter o host embedded como padrão. O Connector separado
+  respondeu e recuperou pela UI, mas não demonstrou melhora de disponibilidade
+  frente ao embedded; adiciona daemon observado em ~96 MB, instalação e ciclo
+  de recuperação próprios. Named pipe permanece experimental opt-in. Ver
+  `m6l-supervisor-decision.md`.
 - Primeiro ADR e protótipo isolado: processo por usuário/host, IPC autenticado
   (named pipe no Windows/socket local onde suportado), uma autoridade de processo.
 - Nexus pode reiniciar enquanto supervisor mantém contenção, spool e leases
