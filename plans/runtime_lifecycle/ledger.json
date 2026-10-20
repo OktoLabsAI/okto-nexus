@@ -66,11 +66,14 @@
       "after": [
         "M8"
       ],
-      "status": "final_product_wheel_three_harnesses_verified_ci_pending",
+      "status": "local_acceptance_complete",
       "includes_supervisor_if_adopted": true,
       "interim_evidence": [
         "m8-uic-installed-ui.md",
-        "m8-ci-triage.md"
+        "m8-ci-triage.md",
+        "m8-final-prewheel-backup.md",
+        "m8-global-ci-wheel-rollout.md",
+        "m8-fixed-acceptance-audit.md"
       ]
     }
   ],
@@ -189,7 +192,9 @@
           "id": "M2h",
           "status": "local_installed_crash_cuts_qualified_full_nexus_ci_pending",
           "title": "Native handshake, ACK, Core receipt, Nexus process receipt/projection and late producer cuts passed against installed wheels; full Nexus matrix pending",
-          "evidence": ["m2h-late-crash-cuts.md"]
+          "evidence": [
+            "m2h-late-crash-cuts.md"
+          ]
         }
       ],
       "qualification": "Core, embedded and Connector recovery integrated. Windows disposable owner crashes and 261 installed tests passed. Four Linux planned-launch crash cuts passed with Core 0.0.12. Darwin M2g physical owner-crash cuts and full Core CI 39336889894 passed; exact qualified wheel SHA-256 fe0659ec366029a72475cdf300b0be1705e796d32044bf9c0ab0bc81d3b574b5. Real UI-A flows were verified separately. Later handshake/receipt/ACK crash frontiers and joint consumer CI remain pending.",
@@ -439,20 +444,20 @@
         "m4d4-store-audit-design.md",
         "m4d4b-validation.md",
         "m4d4b-results.json",
-      "Core: plans/runtime-lifecycle-m4d4c1.md",
-      "m4d4c2-validation.md",
-      "Connector: plans/runtime-lifecycle-m4d4c3.md",
-      "m4d4d-validation.md",
-      "Core: plans/runtime-lifecycle-m4d4e1.md",
-      "m4d4e-frontier-protocol.md",
-      "m4d4e1-validation.md",
-      "Core: plans/runtime-lifecycle-m4d4e2.md",
-      "m4d4e3-validation.md",
-      "Connector: plans/runtime-lifecycle-m4d4e4.md",
-      "Core: plans/runtime-lifecycle-m4d4e5.md",
-      "m4d4e5-validation.md",
-      "Core: plans/runtime-lifecycle-m4d4e6.md",
-      "m4d4e6-validation.md",
+        "Core: plans/runtime-lifecycle-m4d4c1.md",
+        "m4d4c2-validation.md",
+        "Connector: plans/runtime-lifecycle-m4d4c3.md",
+        "m4d4d-validation.md",
+        "Core: plans/runtime-lifecycle-m4d4e1.md",
+        "m4d4e-frontier-protocol.md",
+        "m4d4e1-validation.md",
+        "Core: plans/runtime-lifecycle-m4d4e2.md",
+        "m4d4e3-validation.md",
+        "Connector: plans/runtime-lifecycle-m4d4e4.md",
+        "Core: plans/runtime-lifecycle-m4d4e5.md",
+        "m4d4e5-validation.md",
+        "Core: plans/runtime-lifecycle-m4d4e6.md",
+        "m4d4e6-validation.md",
         "m4d4f1-physical-audit-measurement.md",
         "m4d4f2-typed-entry-validation.md",
         "m4d4g-mixed-ledger-budget.md",
@@ -473,19 +478,19 @@
         "core_m4d4a": "2afb894",
         "connector_m4d4b": "5f444c9",
         "core_m4d4_cost": "4ea0dab",
-      "core_m4d4c1": "10906e9",
-      "nexus_m4d4c2": "de0f5fc",
-      "connector_m4d4c3": "1e9f768",
-      "nexus_m4d4d": "48cd8f3",
-      "core_m4d4e1": "1d38900",
-      "core_m4d4e2": "905ad8f",
-      "nexus_m4d4e3": "47e0567",
-      "connector_m4d4e4": "8a9ee1e",
-      "core_m4d4e5": "9c3d4dd",
-      "connector_m4d4e5": "df41f82",
-      "nexus_m4d4e5": "b21565d",
-      "core_m4d4e6": "7e1a19d",
-      "connector_m4d4e6": "76dda1e"
+        "core_m4d4c1": "10906e9",
+        "nexus_m4d4c2": "de0f5fc",
+        "connector_m4d4c3": "1e9f768",
+        "nexus_m4d4d": "48cd8f3",
+        "core_m4d4e1": "1d38900",
+        "core_m4d4e2": "905ad8f",
+        "nexus_m4d4e3": "47e0567",
+        "connector_m4d4e4": "8a9ee1e",
+        "core_m4d4e5": "9c3d4dd",
+        "connector_m4d4e5": "df41f82",
+        "nexus_m4d4e5": "b21565d",
+        "core_m4d4e6": "7e1a19d",
+        "connector_m4d4e6": "76dda1e"
       },
       "checkpoints": [
         {
@@ -720,7 +725,7 @@
         }
       ],
       "nexus_m4a_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4a-validation.md",
-    "next": "M4d4e1-e6 provide transactional registry/head and paired tokens. The physical name scan remains an admission prerequisite without durable offline filesystem evidence; M4d4f2 rejects non-file entries and M4d4g sizes the Core ledger budget for 100k mixed records. M4d4h proves replay fairness; M4d4i-j retire direct accepted events and index pending Core claims; M4d4k retires reconciliation-accepted releases without gating Ready. M4d4l passed the real remote-Pi UI/restart gate. M4d4m made accepted-history backfill resumable outside admission. M4n measured the retained physical-name audit at 1k/10k/100k; it remains linear but preserves the offline unknown-file fence. Only M4d3/M4d4b controlled global rollout remains pending; global Nexus stopped.",
+      "next": "M4d4e1-e6 provide transactional registry/head and paired tokens. The physical name scan remains an admission prerequisite without durable offline filesystem evidence; M4d4f2 rejects non-file entries and M4d4g sizes the Core ledger budget for 100k mixed records. M4d4h proves replay fairness; M4d4i-j retire direct accepted events and index pending Core claims; M4d4k retires reconciliation-accepted releases without gating Ready. M4d4l passed the real remote-Pi UI/restart gate. M4d4m made accepted-history backfill resumable outside admission. M4n measured the retained physical-name audit at 1k/10k/100k; it remains linear but preserves the offline unknown-file fence. Only M4d3/M4d4b controlled global rollout remains pending; global Nexus stopped.",
       "nexus_m4b_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4b-validation.md",
       "nexus_m4c_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4c-validation.md",
       "nexus_m4d1_commit_lookup": "git log --format=%H --diff-filter=A -- plans/runtime_lifecycle/m4d1-validation.md",
@@ -845,7 +850,10 @@
         "one_file_effect": true,
         "exact_native_receipt_correlation": true,
         "native_dispatch_attempts": 1,
-        "native_receipt_stages": ["SUBMITTED", "SUCCEEDED"]
+        "native_receipt_stages": [
+          "SUBMITTED",
+          "SUCCEEDED"
+        ]
       },
       "open_stop_checkpoint": {
         "id": "M6h",
@@ -937,7 +945,7 @@
     },
     {
       "id": "M8",
-      "status": "in_progress",
+      "status": "complete",
       "title": "Installed-package qualification and rollout",
       "evidence": [
         "m8-uic-installed-ui.md",
@@ -955,13 +963,15 @@
         "m8-final-meta-results-20261019.png",
         "m8-final-pi-terminal-20261019.png",
         "m8-final-agents-20261019.png",
-        "m8-final-graph-20261019.png"
+        "m8-final-graph-20261019.png",
+        "m8-final-prewheel-backup.md",
+        "m8-global-ci-wheel-rollout.md"
       ],
       "ci_checkpoint": "Core 39180450008 and Connector 39204601574 passed. Nexus installed matrix 39292190027 on 1902baa was canceled after 13 successes, five classified failures and six obsolete Windows jobs in progress. Those failures were corrected and focused installed Windows/Linux cases passed. Replacement full matrix 39305360323 on 9e16d60 exposed two further Ubuntu pre-reservation STALE_OBSERVATION fixture races, in remote unsent release and running-work containment. Each fixture now retries only that no-effect result with a bounded wait and exact attempt identity; the affected cases passed on installed Windows and Linux wheels (1/1 and 2/2 respectively). Other matrix jobs remain active, so another complete run is required after classification. Earlier wheel 8c18c8d4 passed real Claude UI turns before and after disposable restart with 1/1 ACK and Online/Ready restoration. See m8-ci-triage.md and m8-uic-installed-ui.md. M8 acceptance and global rollout remain open.",
-      "current_ci_checkpoint": "Nexus installed matrix 39370966337 passed 24/24 before the capacity correction. Matrix 39389028762 had 23 passes and a Pi bridge fixture timeout; 39421464096 had 22 passes, a presence fixture race and a Claude fixture shutdown timeout. Those cases passed focused local checks after correction. Matrix 39451295539 on 28f82a0 passed 22 jobs, including all Windows jobs and the prior Claude and presence shards. Ubuntu 3.13 shard 0 failed npm ci with runner-network ECONNRESET before build. Ubuntu 3.12 shard 1 had one no-effect inventory_not_fresh resolution in the handoff selection fixture; a bounded fresh-intent retry passed the exact Linux case. Complete replacement installed matrix pending. See m8-ci-pi-bridge-timeout.md, m8-ci-presence-race.md, m8-ci-claude-teardown.md and m8-ci-handoff-inventory-refresh.md.",
-      "global_rollout_capacity": "All 24 installed Nexus jobs in matrix 39370966337 passed on 2a8caea. The pinned wheels were installed globally; schema migrated 145 to 152 with original counts and zero foreign-key violations. Real UI exposed 32 proved-retired Pi openings filling executor admission. Commit 82c8324 corrects only capacity accounting and passed 11 focused cases. A local wheel from that commit is running globally and fresh Pi, Claude and Codex Meta-harness turns each returned exact replies with 1/1 ACK and NATIVE_ACCEPTED. The qualified CI wheel and final post-install check remain open. See m8-global-rollout-capacity.md and m8-ci-pi-bridge-timeout.md.",
+      "current_ci_checkpoint": "Nexus installed matrix 39472894540 passed 24/24 jobs on commit 252788f across Ubuntu and Windows, Python 3.11-3.13. The final Windows wheel SHA-256 d7471125aa4096de9b8c29e4e22252e812d0b228e54f67647d9d3c6554d33e92 matches its CI installed manifest and the global installed direct_url.json. Core 0.0.12 and Connector 0.0.10 pinned CI wheels remain installed. See m8-global-ci-wheel-rollout.md.",
+      "global_rollout_capacity": "The CI wheel from matrix 39472894540 runs globally on port 8202 after a validated offline backup. Schema 152 retains seven agents, six handoffs, three artifacts and zero FK violations. Pi, Claude and Codex show Online. A new Pi Meta-harness turn returned exact M8_PI_CI_WHEEL_OK with 1/1 ACK and NATIVE_ACCEPTED. Its session retired; the configured Pi pool returned to 4/5 available with four native children under one Server. See m8-global-ci-wheel-rollout.md.",
       "same_load_comparison": "Installed Nexus 0.3.0/Core 0.0.11 and Nexus 0.3.1/Core 0.0.12 each passed the same NS14 fixture on one Windows 11 host and Python 3.13.1: 100k identities, 20 correct queue refusals and independent control/second-executor progress. Current identity phase was 92.10s versus baseline 73.78s, total 219.98s versus 171.62s, control 2.091s versus 0.907s. One sample each; no speedup claimed. Fixture-only independent synthetic heartbeat corrected a peer disconnect in the HTTP phase; both versions used the same fixture. See m8-same-load-comparison.md.",
-      "fixed_gate_audit": "The original M8 plan, minimum matrix and UI-A/B/C gates were mapped to local installed/UI evidence without adding criteria. Backup was revalidated on 2026-10-20. Nexus matrix 39365534478 and controlled global rollout remain the two open acceptance gates; loopback Connector does not claim a physical remote host. See m8-fixed-acceptance-audit.md.",
+      "fixed_gate_audit": "The fixed M8 installed matrix, reversible backup/upgrade, same-load comparison, real UI-A/B/C local flows and global CI-wheel post-install turn passed. The independent physical remote host was explicitly deferred by the user; the same-host Connector gate is qualified. The cause of a pre-rollout global Server stop was not established. See m8-fixed-acceptance-audit.md.",
       "offline_backup_checkpoint": "Disposable UI-C home backed up and restored offline with installed Nexus. A transient SQLite WAL/SHM manifest mismatch was corrected by closing copy connections and using immutable destination reads. The corrected 112-file snapshot revalidates after database reopen; schema-151 code refuses restored schema 152 without changing its ledger. Three focused installed Windows tests passed. The restored home booted on isolated port 8204 from the installed package, returned HTTP 200, retained seven agents/338 messages/one artifact, and was stopped with the port free. See m8-offline-backup-checkpoint.md. The subsequent three-harness final-wheel UI check is recorded separately; installed CI and controlled rollout remain pending.",
       "additional_ci_finding": "Nexus matrix 39305360323 Ubuntu 3.12 shard 0 passed 1172 cases and failed one asynchronous local-retirement assertion after exact handoff capacity release. The test now awaits the same session's durable retirement proof, with a 30-second bound; the exact case passed against installed Linux and Windows packages. Other jobs remain active. See m8-ci-triage.md.",
       "final_ci_run": "Nexus installed matrix 39318164167 was dispatched on 95770d3. Ubuntu 3.11 shard 2 passed 1086 cases but failed two backup tests that retained SQLite connections after snapshot access. Explicit close passed the complete installed Windows module (10/10) and both exact installed Linux cases (2/2); product code is unchanged. Other final-matrix jobs remain active. The obsolete matrix 39305360323 was canceled after its last two jobs were duplicated by active final-matrix shards. No full pass claimed. See m8-ci-triage.md.",
@@ -977,7 +987,9 @@
         "changed_inputs": [],
         "evidence": "../okto-nexus-connector/plans/runtime-lifecycle-m8-process-results.json",
         "scope": "Real isolated Windows daemon processes, actual CLI exit, bad-token rejection, singleton and restrictive Job Objects. No provider or physical remote-host qualification."
-      }
+      },
+      "final_global_backup_checkpoint": "The current schema-152 home was backed up offline before the final wheel install and independently validated: 434 files, 250005763 bytes, seven agents, 336 messages, 348 deliveries, six handoffs, three artifacts. See m8-final-prewheel-backup.md.",
+      "final_global_ui_checkpoint": "The real Meta-harness UI sent a private Techridy message to Pi after the qualified CI-wheel install. It displayed 1/1 ACK and the exact response M8_PI_CI_WHEEL_OK; its terminal showed formatted input and the final turn. The DB records read/NATIVE_ACCEPTED and the consumed session CLOSED/CLOSED with retirement proof. Agents showed Pi, Claude and Codex Online; Pi pool showed 4/5 available. See m8-global-ci-wheel-rollout.md."
     }
   ],
   "open_findings": [
@@ -1470,7 +1482,7 @@
       "description": "M3s exercised a real Job-owned Windows child with an ambiguous post-spawn opening failure while a sibling session of the same agent stayed healthy. Core retained OUTCOME_UNKNOWN/possible_effect=true, proved CONTAINER_STOPPED, and released the exact slot; Server reported possible effect to the caller, and a fresh opening succeeded without replay. The final source and installed case passed; installed crash frontiers after spawn and birth, plus uncertain historical birth recovery, also passed. The initial fixture omitted container_id and was invalid evidence; the final fixture uses the production container identity. M5x/M5y already qualified the fixed local Connector differential criteria; other platforms and global rollout remain pending. See m3s-positive-native-effect-isolation.md."
     }
   ],
-  "live_installation": "The global Nexus 0.3.1 local wheel from corrective commit 82c8324 is running on port 8202 with pinned Core 0.0.12 and Connector 0.0.10. Schema 152 preserves seven agents, six handoffs and three artifacts with zero foreign-key violations. Pi, Claude and Codex returned exact real Meta-harness responses with 1/1 ACK after the capacity fix. The qualified CI wheel and final restart remain pending. See m8-global-rollout-capacity.md and m8-ci-pi-bridge-timeout.md.",
+  "live_installation": "Global Nexus 0.3.1 CI wheel from successful matrix 39472894540 is running on 0.0.0.0:8202 with pinned Core 0.0.12 and Connector 0.0.10. Schema 152 preserves seven agents, six handoffs, three artifacts and FK 0. Pi, Claude and Codex show Online; a real Pi Meta-harness turn returned M8_PI_CI_WHEEL_OK with 1/1 ACK. Pi pool is 4/5 available after consumed session retirement. See m8-global-ci-wheel-rollout.md.",
   "publication": "Feature branches only; no main merge, tag or PyPI publication authorized by this plan",
-  "pending_installation": "Nexus 0.3.1 capacity correction passed real Pi, Claude and Codex Meta-harness checks on the running global local wheel. Run 39451295539 passed 22 jobs; one job failed from runner npm ECONNRESET before build and one from no-effect inventory_not_fresh during a handoff fixture. The exact latter case passed locally on Linux Python 3.12 after a bounded fresh-intent retry. A replacement 24-job installed CI remains required. After it passes, install its wheel over the backed-up global home, verify one real UI response, preservation and process/slot cleanup. Core 0.0.12 and Connector 0.0.10 pinned CI wheels are already installed globally. See m8-ci-handoff-inventory-refresh.md."
+  "pending_installation": null
 }
