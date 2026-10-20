@@ -493,6 +493,12 @@ aprovados. As fronteiras posteriores de handshake, receipt e ACK seguem abertas.
   repetiu o dispatch incerto; os nove casos instalados de seleção/recuperação
   passaram. Upgrade/rollback e comparação para adoção continuam pendentes.
   Ver `m6j-managed-host-restart.md`.
+- Checkpoint M6k: Connector 0.0.9/Core 0.0.11 recusou estado schema 15 da
+  versão corrente com `VERSION_INCOMPATIBLE`, sem alterar os arquivos. O host
+  Connector 0.0.10/Core 0.0.12 retomou `CONNECTED`/`CONTROL_READY` após cada
+  recusa; hashes de oito arquivos permaneceram idênticos no rollback. Falta a
+  comparação de disponibilidade/custo e a decisão de adoção. Ver
+  `m6k-upgrade-rollback.md`.
 - Primeiro ADR e protótipo isolado: processo por usuário/host, IPC autenticado
   (named pipe no Windows/socket local onde suportado), uma autoridade de processo.
 - Nexus pode reiniciar enquanto supervisor mantém contenção, spool e leases

@@ -781,7 +781,8 @@
         "m6g-inflight-server-restart.md",
         "m6h-process-open-stop.md",
         "m6i-process-publication-stop.md",
-        "m6j-managed-host-restart.md"
+        "m6j-managed-host-restart.md",
+        "m6k-upgrade-rollback.md"
       ],
       "commits": {
         "connector_experiment_adr": "0944a0e",
@@ -861,7 +862,20 @@
         "native_dispatch_attempts": 1,
         "all_nine_selection_variants_passed": true
       },
-      "next": "Close fixed M6 criteria: upgrade/rollback of the separate host with explicit incompatible-contract refusal and preserved evidence, then compare installed embedded and Connector availability, memory and shutdown before an adoption decision. Global Nexus remains stopped outside disposable experiments."
+      "upgrade_rollback_checkpoint": {
+        "id": "M6k",
+        "status": "local_version_boundary_pass",
+        "evidence": "m6k-upgrade-rollback.md",
+        "old_connector_version": "0.0.9",
+        "old_core_version": "0.0.11",
+        "current_connector_version": "0.0.10",
+        "current_core_version": "0.0.12",
+        "incompatible_state_schema_refused": true,
+        "rollback_refusal_preserved_eight_file_hashes": true,
+        "current_host_reconnected_after_refusal": true,
+        "protocol_negotiation_tested": false
+      },
+      "next": "Compare the installed embedded and separate local Connector availability, memory, installation and shutdown cost against the fixed ADR criteria; record an adoption decision. Global Nexus remains stopped outside disposable experiments."
     },
     {
       "id": "M7",
