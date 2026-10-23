@@ -14,7 +14,7 @@ from ..errors import ErrorCode, OktoNexusError
 MANAGED_TOOLS = frozenset({
     'agent_whoami', 'agent_list', 'agent_get', 'capability_list', 'coordination_health',
     'handoff_create', 'handoff_list_available', 'handoff_get',
-    'handoff_claim', 'handoff_complete',
+    'handoff_claim', 'handoff_complete', 'handoff_verify', 'handoff_cancel',
     'event_get', 'event_cursor', 'event_wait',
     'runtime_input_list', 'runtime_input_respond',
     'message_create',

@@ -134,3 +134,23 @@ def test_local_and_remote_issuance_include_only_reviewed_domain_tools():
     from okto_nexus.application.execution_tools import MANAGED_TOOLS
     assert set(MCP_ACTIONS) == set(MCP_SESSION_ACTIONS)
     assert set(MCP_ACTIONS) - {'tools/call', 'resources/read', 'prompts/get'} == MANAGED_TOOLS
+
+
+def test_session_principal_may_verify_and_cancel_own_handoffs():
+    from types import SimpleNamespace
+    from okto_nexus.application import execution_tools
+    from okto_nexus.bootstrap.embedded_tools import MCP_ACTIONS
+    from okto_nexus.errors import OktoNexusError
+    scope = {'agent_id': 'subject', 'session_id': 'ses', 'workspace_id': 'ws'}
+    principal = SimpleNamespace(audience='nexus-mcp-session', scope=scope)
+    token = execution_tools.current_execution_principal.set(principal)
+    try:
+        for name in ('handoff_verify', 'handoff_cancel'):
+            execution_tools.check_tool_arguments(name, {'agent_id': 'subject', 'workspace_id': 'ws'})
+            assert name in MCP_ACTIONS
+        with pytest.raises(OktoNexusError):
+            execution_tools.check_tool_arguments('handoff_verify', {'agent_id': 'other'})
+        with pytest.raises(OktoNexusError):
+            execution_tools.check_tool_arguments('inbox_pull', {})
+    finally:
+        execution_tools.current_execution_principal.reset(token)
