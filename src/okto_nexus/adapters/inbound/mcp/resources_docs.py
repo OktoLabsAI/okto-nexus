@@ -125,7 +125,7 @@ add_resource(
     slug="tool-docs/messages",
     name="Tool docs - messages & channels",
     description="Full reference for message_create / channel_create / channel_list and the migrated message_get/list/wait shims.",
-    version="5",
+    version="6",
     body="""\
 # message_create
 Select either ``project_root`` or ``workspace_id``. An explicit ``workspace_id``
@@ -155,6 +155,10 @@ announcements, discoveries, risks and alignment. If another agent is expected
 to execute work or produce a deliverable, create a handoff; a message may
 discuss or reference that handoff but must not be the sole delegation record.
 See okto-nexus://reference/communication for the normative decision policy.
+
+Set ``no_reply=true`` on a final message (for example an acknowledgement). The
+message reaches the recipient inbox, but the hub starts no runtime turn for it,
+so no reply is expected. The default is false.
 
 # channel_create
 Create a channel by name (idempotent). Channels are organizational LABELS, not

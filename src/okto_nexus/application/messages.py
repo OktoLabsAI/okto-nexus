@@ -255,6 +255,7 @@ class MessageService:
         parent_message_id: Any = None,
         trace_id: Any = None,
         session_secret: Any = None,
+        no_reply: Any = False,
         _approved_execution: bool = False,
         _runtime_context=None,
         _runtime_result_id=None,
@@ -263,6 +264,9 @@ class MessageService:
         _source_session_key=None,
     ) -> dict[str, Any]:
         """Persist a message and emit ``message.created`` atomically.
+
+        ``no_reply=True`` marks the message as final. It is delivered to every
+        recipient inbox, but it never starts a runtime turn (no runtime operation).
 
         ``_approved_execution`` is the INTERNAL one-shot bypass of the HITL
         interception (spec 2948b2a2 BR2): only the approval decision path sets
@@ -325,6 +329,8 @@ class MessageService:
 
         # Pure, write-free validation first (no row / event on rejection).
         require_message_fields(from_agent_id, subject, body)
+        if type(no_reply) is not bool:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "no_reply must be a boolean.", {})
         enforce_inline_size(subject, body, self._max_inline_bytes)
         validate_target(target, now)
         # Reject targets that would broadcast against the GLOBAL registry under
@@ -555,6 +561,7 @@ class MessageService:
                             "artifacts": artifact_refs,
                             "parent_message_id": parent,
                             "trace_id": resolved_trace,
+                            **({"no_reply": True} if no_reply else {}),
                             **({"_runtime_result_id": _runtime_result_id} if _runtime_result_id else {}),
                             **({'_managed_message_binding': managed_binding} if managed_binding else {}),
                             **({'_source_session_key': source_session_key} if source_session_key else {}),
@@ -603,7 +610,7 @@ class MessageService:
                     status=DELIVERY_UNREAD,
                     created_at=now,
                 )
-                if self._runtime_planner and not (_runtime_result_id or _nonexecuting_notification) and getattr(self._config, "feature_harness_integrations", False):
+                if self._runtime_planner and not (_runtime_result_id or _nonexecuting_notification or no_reply) and getattr(self._config, "feature_harness_integrations", False):
                     uow.connection.execute('SAVEPOINT recipient_runtime_admission')
                     try:
                         operation_id = self._runtime_planner.enqueue(uow, context=runtime_context,

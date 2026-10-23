@@ -118,6 +118,10 @@ _P_TARGET_MSG = (
 )
 _P_ARTIFACTS = "List of artifact_id strings to attach (optional; at most 20, no exact duplicates; reference large content instead of inlining it in body)."
 _P_PARENT = "Message_id this is a reply to, to thread the conversation (optional)."
+_P_NO_REPLY = (
+    "Set true to mark this message as final (optional, default false). It reaches the "
+    "recipient inbox but starts no runtime turn, so no reply is expected."
+)
 _P_TRACE = (
     "Trajectory trace_id to stamp on this message (optional; non-empty string, "
     "max 128 chars). Needs the feature_trace flag ON, else accepted and ignored; "
@@ -307,6 +311,7 @@ def register(server: Any, deps: Any) -> None:
         session_secret: Annotated[
             str | None, Field(description=_P_SESSION_SECRET)
         ] = None,
+        no_reply: Annotated[bool, Field(description=_P_NO_REPLY)] = False,
     ) -> dict[str, Any]:
         """Persist a message and fan it out to recipient inboxes; emit message.created. The response confirms delivery (recipients + delivered_count). Full docs: okto-nexus://reference/tool-docs/messages."""
         require_json_object_param("target", target)
@@ -323,6 +328,7 @@ def register(server: Any, deps: Any) -> None:
             parent_message_id=parent_message_id,
             trace_id=trace_id,
             session_secret=session_secret,
+            no_reply=no_reply,
         )
 
     @server.tool()
