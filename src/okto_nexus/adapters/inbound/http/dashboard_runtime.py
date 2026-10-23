@@ -8,7 +8,7 @@ def build_router():
     allowed = {
         'me', 'prepare_binding', 'apply_binding', 'binding_view',
         'agent_executors', 'runtime_options', 'check_local_installation',
-        'refresh_inventory', 'publish_realization', 'resolve_intent',
+        'refresh_inventory', 'revalidate_bindings', 'publish_realization', 'resolve_intent',
         'intent_view', 'submit_operation', 'operation_view', 'session_list',
         'session_view', 'session_events', 'native_decision', 'native_decision_view',
         'native_input_requests',

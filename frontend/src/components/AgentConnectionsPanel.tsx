@@ -8,6 +8,7 @@ import { ConfigurationHelp } from './ConfigurationHelp';
 import { HarnessPreferenceFields } from './HarnessPreferenceFields';
 import { harnessSelectionError } from '../harnessConfiguration';
 import { InventoryRefresh } from './InventoryRefresh';
+import { RevalidateBindings } from './RevalidateBindings';
 import { RemoteConnectorCommand } from './RemoteConnectorCommand';
 import { OneShotSettings, type OneShotSettingsHandle } from './OneShotSettings';
 import { MCPPresetFields, parseMCPPreset } from './MCPPresetFields';
@@ -349,6 +350,7 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
         <details><summary>Details</summary><p>{installationError}</p></details>
       </div> : selected?.technical_state === 'READY_FOR_RUNTIME' && <p role="status" className="flex items-center gap-2 text-green-600"><CheckCircle2 size={16} />Installation verified</p>}
       <InventoryRefresh compact executorId={executor} onUpdated={() => {setTest(null);setRequest(null);setReload(v => v+1);}} />
+      <RevalidateBindings onDone={() => setReload(v => v+1)} />
     </fieldset>}
     {step === 2 && <>
       <label className="block">Workspace name <span className="text-surface-500">Required</span><input aria-label="Workspace name" className={input} value={draft.workspace_label} onChange={e => patch({workspace_label:e.target.value})} /></label>
