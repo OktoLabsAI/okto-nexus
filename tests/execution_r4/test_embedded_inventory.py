@@ -354,3 +354,30 @@ def test_close_waits_for_started_inventory_publication(tmp_path, monkeypatch):
         with deps.connection_factory.unit_of_work(write=False) as uow:
             assert uow.connection.execute("SELECT MAX(publication_sequence) FROM execution_inventory_snapshots").fetchone()[0] == previous + 1
             assert uow.connection.execute("SELECT control_state FROM execution_executors WHERE kind='embedded'").fetchone()[0] == "DISCONNECTED"
+
+
+def test_untrusted_candidate_reason_is_logged_and_in_inventory_api(tmp_path, monkeypatch, caplog):
+    """#67: the Core trust reason reaches the log and the inventory API."""
+    import dataclasses
+    if 'reason' not in {f.name for f in dataclasses.fields(InstallationCandidate)}:
+        pytest.skip('Core without the discovery reason field')
+    binary = tmp_path / "codex.exe"
+    binary.write_bytes(b"Untrusted technical candidate")
+    text = f"APPROVAL_REQUIRED: the resolved path {binary} is outside every trusted root."
+    candidate = InstallationCandidate("codex_app_server", str(binary), fingerprint(binary), "path",
+                                      "untrusted", reason=text)
+    monkeypatch.setattr(embedded_inventory, "discover_local_candidates",
+                        lambda **_: SimpleNamespace(candidates=(candidate,)))
+    deps, app = app_for(tmp_path / "home")
+    key = agent_key(deps, app)
+    with caplog.at_level('WARNING', logger=embedded_inventory.__name__):
+        with TestClient(app) as client:
+            wait_inventory(client)
+            owner = app.state.embedded_inventory_owner
+            viewed = client.get(f"/v1/runtime/executors/{owner.key.executor_id}/inventory",
+                                headers={"Authorization": "Bearer " + key})
+    assert viewed.status_code == 200, viewed.text
+    evidence = viewed.json()["snapshot"]["evidence"]
+    assert [item["trust_detail"] for item in evidence if item["trust"] == "untrusted"] == [text]
+    assert sum(text in record.getMessage() for record in caplog.records
+               if record.levelname == 'WARNING') == 1

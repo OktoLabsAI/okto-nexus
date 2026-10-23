@@ -527,6 +527,14 @@ def build_router() -> APIRouter:
             view = await anyio.to_thread.run_sync(_read)
         except OktoNexusError as error:
             return runtime_error(error, 'inventory.read')
+        owner = getattr(request.app.state, "embedded_inventory_owner", None)
+        details = getattr(owner, "trust_details", None)
+        if details and owner.key.executor_id == executor_id:
+            # Additive and optional: the Core reason for an untrusted candidate (#67).
+            for item in view["snapshot"].get("evidence", ()):
+                detail = details.get((item.get("adapter_id"), item.get("candidate_ref")))
+                if detail:
+                    item["trust_detail"] = detail
         return JSONResponse(view, headers={"Cache-Control": "no-store"})
 
     @router.post("/runtime/executors/{executor_id}/realizations")

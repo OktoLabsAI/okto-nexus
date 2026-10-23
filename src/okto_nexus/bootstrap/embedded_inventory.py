@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 import time
 import threading
 
@@ -17,6 +18,9 @@ from ..domain.execution.keys import ExecutorKey
 from ..errors import ErrorCode, OktoNexusError
 
 
+logger = logging.getLogger(__name__)
+
+
 class EmbeddedInventoryOwner:
     """Retain full local candidates; publish path-free facts without runtime readiness."""
 
@@ -28,6 +32,8 @@ class EmbeddedInventoryOwner:
         self.key = ExecutorKey(self.identity.server_id, self.identity.embedded_executor_id)
         self.candidates = ()
         self.raw_candidates = ()
+        # (adapter_id, candidate_ref) -> why discovery left a candidate untrusted (#67).
+        self.trust_details = {}
         self.publication = None
         self.published_batch = None
         self.failure = None
@@ -141,7 +147,24 @@ class EmbeddedInventoryOwner:
             cancel_requested=self._discovery_stopped.is_set,
             adapter_ids=(adapter_id,) if adapter_id is not None else None,
             **(configuration.arguments() if configuration is not None else {}))
-        return tuple(discovery.candidates)
+        found = tuple(discovery.candidates)
+        self._note_trust_reasons(found, adapter_id)
+        return found
+
+    def _note_trust_reasons(self, candidates, adapter_id=None):
+        """Log and keep the Core reason of each untrusted candidate; an older Core has none."""
+        from nexus_connector_core.availability import effective_installation_ref
+        details = {}
+        for item in candidates:
+            reason = getattr(item, 'reason', None)
+            if item.trust == 'untrusted' and reason:
+                details[(item.adapter_id, effective_installation_ref(item))] = reason
+        previous = self.trust_details
+        for key, reason in details.items():
+            if previous.get(key) != reason:
+                logger.warning('Untrusted %s candidate: %s', key[0], reason)
+        self.trust_details = {**{k: v for k, v in previous.items()
+                                 if adapter_id is not None and k[0] != adapter_id}, **details}
 
     async def _observe(self, adapter_id, cancel_requested):
         from ..application.execution_local_observations import apply_local_observations, refresh_approved_installations
