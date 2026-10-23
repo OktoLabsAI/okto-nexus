@@ -198,6 +198,10 @@ function Dashboard({
     () => localStorage.getItem("okto-nexus-sidebar") !== "closed",
   );
   const [workspaces, setWorkspaces] = useState<WorkspaceListItem[]>([]);
+  // True once GET /workspaces answered, so an empty list is not mistaken for
+  // "not loaded yet" when the saved scope is checked.
+  const [workspacesLoaded, setWorkspacesLoaded] = useState(false);
+  const [workspaceNotice, setWorkspaceNotice] = useState<string | null>(null);
   // The workspace SCOPE is the user's choice and survives reloads: the
   // serve's default only applies when nothing was ever picked (otherwise a
   // default pointing at an empty workspace silently hides the whole graph
@@ -306,9 +310,14 @@ function Dashboard({
   // state at all - otherwise every SSE event rebuilds the whole Sigma scene
   // (layout + camera) for nothing.
   const lastSnapshotRef = useRef<string>("");
+  const workspaceRef = useRef(workspace);
+  workspaceRef.current = workspace;
   const loadGraph = useCallback(async () => {
     try {
       const snapshot = await api.graph(workspace);
+      // A late answer for a scope that is no longer selected must not
+      // replace the graph of the new scope.
+      if (workspaceRef.current !== workspace) return;
       const fingerprint = JSON.stringify({
         n: snapshot.nodes,
         e: snapshot.edges,
@@ -384,7 +393,10 @@ function Dashboard({
     const reload = () => {
       const version = ++requestVersion;
       api.workspaces().then(({workspaces}) => {
-        if (active && version === requestVersion) setWorkspaces(workspaces);
+        if (active && version === requestVersion) {
+          setWorkspaces(workspaces);
+          setWorkspacesLoaded(true);
+        }
       })
         .catch(() => undefined);
     };
@@ -397,6 +409,42 @@ function Dashboard({
       if (timer !== undefined) window.clearInterval(timer);
     };
   }, [refreshTick, view]);
+
+  // A saved scope can name a workspace that this hub does not have (for
+  // example after the hub starts with a new data directory). Once the list is
+  // known, replace such a scope with the serve default (or the first
+  // workspace) and tell the operator. The check never runs before the list
+  // arrives, and never when the list request failed.
+  useEffect(() => {
+    if (!workspacesLoaded || workspace === "all") return;
+    if (workspaces.some((item) => item.workspace_id === workspace)) return;
+    let active = true;
+    const missing = workspace;
+    const apply = (defaultId: string | null | undefined) => {
+      if (!active) return;
+      const fallback =
+        workspaces.find((item) => item.workspace_id === defaultId) ??
+        workspaces[0];
+      if (fallback) {
+        pickWorkspace(fallback.workspace_id);
+      } else {
+        localStorage.removeItem("okto-nexus-workspace");
+        setWorkspace("all");
+      }
+      setWorkspaceNotice(
+        `The saved workspace (${missing}) does not exist on this hub. ` +
+          (fallback ? "A default workspace is selected." : "All workspaces are selected."),
+      );
+    };
+    loadInfo()
+      .then((next) =>
+        apply((next as { default_workspace_id?: string | null }).default_workspace_id),
+      )
+      .catch(() => apply(null));
+    return () => {
+      active = false;
+    };
+  }, [workspacesLoaded, workspaces, workspace, loadInfo]);
 
   // Default scope = the serve's --project-root workspace (AC1) - applied
   // ONLY when the user never picked a scope on this browser AND the default
@@ -582,6 +630,25 @@ function Dashboard({
             await loadInfo();
           }}
         />
+      )}
+
+      {workspaceNotice && (
+        <div
+          role="status"
+          data-testid="workspace-notice"
+          className="shrink-0 flex items-center gap-3 px-4 py-2 text-xs
+            bg-amber-50 text-amber-900 dark:bg-amber-900/30 dark:text-amber-100
+            border-b border-amber-200 dark:border-amber-800"
+        >
+          <span className="flex-1">{workspaceNotice}</span>
+          <button
+            className="btn btn-secondary !px-2 !py-0.5"
+            onClick={() => setWorkspaceNotice(null)}
+            aria-label="Dismiss notice"
+          >
+            Dismiss
+          </button>
+        </div>
       )}
 
       <div className="flex flex-1 overflow-hidden">
