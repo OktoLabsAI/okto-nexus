@@ -73,11 +73,25 @@ def test_each_creator_gets_one_notice_per_claimed_handoff_and_the_operator_one(e
     assert notices(deps, "gamma") == [] and notices(deps, "beta") == []
 
 
-def test_no_notice_without_a_claimed_handoff(env):
-    deps, tools, root, _ = env
+def test_idle_agent_containment_sends_one_operator_notice_and_no_creator_notice(env):
+    deps, tools, root, workspace = env
     claimed(tools, root, "gamma")
+    conn = deps.connection_factory.get_connection()
+    try:
+        conn.execute("PRAGMA foreign_keys=OFF")
+        conn.execute("INSERT INTO execution_sessions(server_id,executor_id,session_id,binding_id,workspace_id,"
+            "workspace_binding_id,open_operation_id,owner_generation,lifecycle_state,lease_state) "
+            "VALUES('server','executor','session-1','binding',?,'wb','op',1,'FAILED','CLOSED')", (workspace,))
+    finally:
+        conn.close()
+    assert contain(deps) == 1
+    operator = notices(deps, "operator")
+    assert len(operator) == 1
+    for text in ("beta", "EVENT_OPERATION_MISMATCH", "session-1"):
+        assert text in operator[0]["body"]
+    assert notices(deps, "alpha") == [] and notices(deps, "gamma") == []
     assert contain(deps) == 0
-    assert notices(deps, "alpha") == [] and notices(deps, "operator") == []
+    assert len(notices(deps, "operator")) == 1
 
 
 def test_creator_who_is_the_operator_gets_the_operator_notice_only_once(env):

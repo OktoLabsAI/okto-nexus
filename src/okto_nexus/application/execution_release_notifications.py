@@ -64,17 +64,18 @@ def publish_release_notifications(deps, messages):
 
 
 def notify_contained_claimant(deps, messages, *, server_id, executor_id, session_id, agent_id, reason):
-    """Record why a session was contained and tell who waits for its handoffs.
+    """Record why a session was contained and tell the operator and the waiting creators.
 
     Each CLAIMED handoff of the agent gets one notice to its creator. The
-    operator gets one notice that lists all of them. The reason, the notices and
+    operator always gets one notice with the agent, the reason and the session.
+    It lists the claimed handoffs when there are any. The reason, the notices and
     the event commit together. A second call for the same session does nothing.
     These notices are inbox messages. They do not start a runtime turn.
     """
     with deps.connection_factory.unit_of_work() as uow:
         conn = uow.connection
         recorded = conn.execute(
-            "SELECT containment_reason FROM execution_sessions WHERE server_id=? AND executor_id=? AND session_id=?",
+            "SELECT containment_reason,workspace_id FROM execution_sessions WHERE server_id=? AND executor_id=? AND session_id=?",
             (server_id, executor_id, session_id)).fetchone()
         if recorded is not None and recorded[0] is not None:
             return 0
@@ -88,19 +89,19 @@ def notify_contained_claimant(deps, messages, *, server_id, executor_id, session
             "WHERE status='CLAIMED' AND claimed_by=? ORDER BY created_at,handoff_id", (agent_id,)).fetchall()
         sent = 0
 
-        def send(recipient_id, handoff, subject, body):
+        def send(recipient_id, handoff_id, workspace_id, subject, body):
             nonlocal sent
-            if deps.repos.agents.get(uow, recipient_id) is None:
+            if workspace_id is None or deps.repos.agents.get(uow, recipient_id) is None:
                 return
-            identity = hashlib.sha256(f'{session_id}|{handoff["handoff_id"]}|{recipient_id}'.encode()).hexdigest()
+            identity = hashlib.sha256(f'{session_id}|{handoff_id}|{recipient_id}'.encode()).hexdigest()
             message_id = 'msg_claimant_contained_' + identity
             target = dict(strategy='direct', agent_id=recipient_id)
-            messages._messages.create(uow, message_id=message_id, workspace_id=handoff['workspace_id'],
+            messages._messages.create(uow, message_id=message_id, workspace_id=workspace_id,
                 from_agent_id=agent_id, channel_id=None, from_session_id=None, target=json.dumps(target),
                 subject=subject, body=body, artifacts=[], parent_message_id=None, trace_id=None, created_at=now)
             messages._deliveries.create(uow, delivery_id='del_claimant_contained_' + identity,
                 message_id=message_id, recipient_agent_id=recipient_id, status='unread', created_at=now)
-            messages._emitter.emit(uow, workspace_id=handoff['workspace_id'], stream=MESSAGE_STREAM,
+            messages._emitter.emit(uow, workspace_id=workspace_id, stream=MESSAGE_STREAM,
                 type=MESSAGE_CREATED_TYPE, payload=dict(message_id=message_id, channel_id=None,
                     from_agent_id=agent_id, target=target, subject=subject, created_at=now,
                     system_notification=True), actor_agent_id=None, visibility='eligible',
@@ -110,15 +111,17 @@ def notify_contained_claimant(deps, messages, *, server_id, executor_id, session
         for handoff in handoffs:
             creator = handoff['from_agent_id']
             if creator and creator not in (agent_id, 'operator'):
-                send(creator, handoff, f"handoff {handoff['handoff_id']} claimant session contained",
+                send(creator, handoff['handoff_id'], handoff['workspace_id'], f"handoff {handoff['handoff_id']} claimant session contained",
                     f"Claimant session contained (reason: {reason}). "
                     f"Work after {handoff['updated_at']} may be lost. "
                     f"The lease of {agent_id} runs to {handoff['lease_expires_at']}.\n\n"
                     f"Handoff: {handoff['handoff_id']}\nClaimant: {agent_id}\nSession: {session_id}")
-        if handoffs:
-            lines = ''.join(f"\nHandoff: {h['handoff_id']} (lease to {h['lease_expires_at']})" for h in handoffs)
-            send('operator', handoffs[0], f'claimant session of {agent_id} contained',
-                f"Claimant session contained (reason: {reason}). "
-                f"Work of {agent_id} on {len(handoffs)} claimed handoff(s) may be lost.{lines}\n\n"
-                f"Claimant: {agent_id}\nSession: {session_id}")
+        lines = ''.join(f"\nHandoff: {h['handoff_id']} (lease to {h['lease_expires_at']})" for h in handoffs)
+        affected = (f"Work of {agent_id} on {len(handoffs)} claimed handoff(s) may be lost.{lines}\n\n"
+            if handoffs else f"{agent_id} holds no claimed handoff.\n\n")
+        workspace_id = handoffs[0]['workspace_id'] if handoffs else (
+            recorded['workspace_id'] if recorded is not None else None)
+        send('operator', '', workspace_id, f'claimant session of {agent_id} contained',
+            f"Claimant session contained (reason: {reason}). {affected}"
+            f"Claimant: {agent_id}\nSession: {session_id}")
         return sent
