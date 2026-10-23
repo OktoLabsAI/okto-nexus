@@ -285,6 +285,8 @@ add_resource(
     body="""\
 All handoff operations accept exactly one project_root or existing workspace_id.
 Use workspace_id for a logical or remote workspace without a Server-local path.
+A workspace created in the dashboard has an ID that starts with wsr_. A project_root
+path does not resolve to that ID. Always pass workspace_id (wsr_...) for such a workspace.
 Managed sessions must use their bound workspace; the selector does not change
 actor, claim, visibility, approval or execution-grant authorization.
 

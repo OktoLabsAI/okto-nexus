@@ -76,7 +76,11 @@ from ._guardrails import build_guardrail_service
 #: Reused parameter descriptions (kept DRY across the handoff tools).
 #: House style (mirrors okto-pulse): enums as "one of: a, b, c (default: x)";
 #: optionals marked "(optional)"/"(default: ...)"; cross-refs to sibling tools.
-_P_ROOT = "Absolute project path, or the bound workspace ID for a managed session; mutually exclusive with workspace_id."
+_P_ROOT = (
+    "Absolute project path, or the bound workspace ID for a managed session; mutually exclusive with "
+    "workspace_id. A path resolves to a path-based workspace only. For a workspace created in the "
+    "dashboard, pass workspace_id (wsr_...) instead."
+)
 _P_FROM_AGENT = (
     "Your agent_id (the creator); recorded as the handoff's originator - the owner "
     "is whichever agent later claims it (handoff_claim), not necessarily you."

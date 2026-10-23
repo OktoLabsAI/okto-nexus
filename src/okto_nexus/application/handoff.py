@@ -2245,7 +2245,8 @@ class HandoffService:
         if not _is_nonempty_str(project_root):
             raise OktoNexusError(
                 ErrorCode.WORKSPACE_REQUIRED,
-                "project_root (workspace_id) is required for handoff operations.",
+                "project_root or workspace_id is required for handoff operations. "
+                "Use workspace_id (wsr_...) for a workspace created in the dashboard.",
                 {},
             )
         # resolve_workspace_id raises WORKSPACE_UNRESOLVED for irresolvable paths.
@@ -2527,7 +2528,8 @@ class HandoffService:
         if self._handoffs.exists_any_workspace(uow, handoff_id=handoff_id):
             raise OktoNexusError(
                 ErrorCode.WORKSPACE_MISMATCH,
-                "handoff belongs to a different workspace.",
+                "handoff belongs to a different workspace. A project_root path never "
+                "resolves to a dashboard workspace. Pass workspace_id (wsr_...) instead.",
                 {"handoff_id": handoff_id, "workspace_id": workspace_id},
             )
         raise OktoNexusError(

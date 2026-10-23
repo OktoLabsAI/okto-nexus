@@ -91,3 +91,17 @@ def test_logical_handoff_approval_retains_workspace(connected_local, monkeypatch
     assert response.json()["data"]["executed_result"]["workspace_id"] == wid
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute("SELECT workspace_id FROM handoffs").fetchone()[0] == wid
+
+
+def test_project_root_on_dashboard_workspace_names_workspace_id(connected_local, monkeypatch):
+    setup, binding, _ = connected_local
+    wid = workspace(setup)
+    hid, _, _, call = prepare(setup, binding, monkeypatch, workspace_id=wid)
+    from test_pr34_remediation import tool
+    _, _, client, headers, *_, root = setup
+    key = headers["subject"]["Authorization"].removeprefix("Bearer ")
+    wrong = tool(client, key, "handoff_get", dict(project_root=str(root), handoff_id=hid, agent_id="subject"))
+    assert not wrong["ok"] and wrong["error"]["code"] == "WORKSPACE_MISMATCH", wrong
+    assert "workspace_id" in wrong["error"]["message"] and "wsr_" in wrong["error"]["message"]
+    right = call("handoff_get", handoff_id=hid, agent_id="subject")
+    assert right["ok"], right
