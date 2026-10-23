@@ -310,3 +310,27 @@ def test_revalidate_is_available_on_the_mcp_admin_path(stale_binding, monkeypatc
     result = tool(client, headers['operator']['Authorization'].removeprefix('Bearer '), 'harness_list', arguments)
     assert result['ok'] and result['data']['revalidated'] == 1, result
     assert state() == 'APPROVED'
+
+
+def _stored_candidate_without_reason():
+    # Shape stored before core added InstallationCandidate.reason (#67).
+    return {'adapter_id': 'claude', 'executable': '/usr/bin/claude', 'fingerprint': 'f1',
+            'source': 'path', 'trust': 'selected', 'version': '1.0', 'architecture': 'arm64',
+            'launch_script': None, 'build_identity': 'b1', 'installation_ref': 'inst_1'}
+
+
+@pytest.mark.parametrize('reason', [None, 'resolved path is outside trusted roots'])
+def test_same_installation_location_ignores_missing_reason_key(reason):
+    from okto_nexus.application.execution_inventory_revalidation import same_installation_location
+    stored = _stored_candidate_without_reason()
+    assert 'reason' not in stored
+    assert same_installation_location(stored, {**stored, 'reason': reason, 'trust': 'untrusted'})
+
+
+def test_same_installation_location_still_rejects_identity_change():
+    from okto_nexus.application.execution_inventory_revalidation import same_installation_location
+    stored = _stored_candidate_without_reason()
+    for key, value in (('executable', '/other/claude'), ('installation_ref', 'inst_2'),
+                       ('adapter_id', 'codex'), ('architecture', 'x86_64')):
+        assert not same_installation_location(stored, {**stored, 'reason': None, key: value})
+    assert not same_installation_location(stored, {**stored, 'reason': None, 'launch_script': '/x.sh'})

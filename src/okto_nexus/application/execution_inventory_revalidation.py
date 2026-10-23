@@ -6,10 +6,14 @@ log = logging.getLogger(__name__)
 
 
 def same_installation_location(approved, current):
-    """Consent selects an installation location, not an immutable release."""
-    changing = {'version', 'fingerprint', 'build_identity', 'trust', 'source'}
-    return ({k: v for k, v in approved.items() if k not in changing}
-            == {k: v for k, v in current.items() if k not in changing})
+    """Consent selects an installation location, not an immutable release.
+
+    Descriptive fields never take part in the comparison. A key that the
+    stored record lacks (a core field added after approval) counts as None.
+    """
+    changing = {'version', 'fingerprint', 'build_identity', 'trust', 'source', 'reason'}
+    keys = (set(approved) | set(current)) - changing
+    return all(approved.get(k) == current.get(k) for k in keys)
 
 
 def compatible_selection(baseline, current):
