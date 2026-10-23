@@ -154,7 +154,7 @@ Options:
   --pi-node P        Absolute Node executable; required with --pi-install-root
   --trust-mode M      open | strict
   --runtime-handoff-auto-claim-enabled true|false
-                      Startup rollout gate (default false); agent opt-in and
+                      Startup rollout gate (default true); agent opt-in and
                       execution grants are also required. Off preserves recovery.
   --log-level L       Console verbosity: critical|error|warning|info|debug|
                       trace (default warning; env OKTO_NEXUS_LOG_LEVEL). Only
