@@ -40,6 +40,14 @@ def test_reused_connection_keeps_pragmas_and_functions(factory):
         assert conn.execute("SELECT nexus_runtime_owner_id()").fetchone()[0] is None
 
 
+def test_query_only_set_by_a_unit_of_work_does_not_reach_the_next_one(factory):
+    with factory.unit_of_work(write=False) as uow:
+        uow.connection.execute("PRAGMA query_only=ON")
+    with factory.unit_of_work() as uow:
+        uow.connection.execute("INSERT INTO items VALUES('written')")
+        assert uow.connection.execute("PRAGMA query_only").fetchone()[0] == 0
+
+
 def test_every_unit_of_work_keeps_its_transaction_boundary(factory):
     with pytest.raises(ValueError):
         with factory.unit_of_work() as uow:

@@ -375,6 +375,14 @@ class ConnectionFactory:
 
     def _releaser(self, holder: _PooledConnection):
         def release(conn: sqlite3.Connection, reuse: bool) -> None:
+            if reuse:
+                # A unit of work may set ``query_only`` on its connection. The
+                # next unit of work on this thread must not inherit it. Without
+                # this reset, a later write fails with "readonly database".
+                try:
+                    conn.execute("PRAGMA query_only=OFF")
+                except sqlite3.Error:
+                    reuse = False
             with self._pool_lock:
                 holder.busy = False
                 if not reuse or holder.retire:
