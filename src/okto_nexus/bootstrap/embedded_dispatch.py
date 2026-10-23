@@ -324,8 +324,9 @@ class EmbeddedDispatchOwner:
                 key = OperationKey(row["server_id"],row["executor_id"],row["operation_id"])
                 receipt = await self.host.historical_receipt(session_id=row["session_id"],key=key)
                 if receipt is not None:
-                    await self._publish(json.loads(row["binding_json"]),receipt)
-                    published = True
+                    # An open session keeps a non-terminal receipt for its whole life.
+                    # Only a changed receipt is new work. Else an idle session never goes idle.
+                    published = await self._publish(json.loads(row["binding_json"]),receipt) or published
                 if progress is not None:
                     progress()
             after = rows[-1]["rowid"]
@@ -687,6 +688,7 @@ class EmbeddedDispatchOwner:
                 raise EmbeddedPublicationDeferred() from error
             if changed and self.deps.runtime_dispatcher is not None:
                 self.deps.runtime_dispatcher.wake()
+            return changed
 
     def _page(self, *, after=None, agent_id=None, session_id=None):
         parameters = [self.channel.server_id, self.channel.executor_id,

@@ -178,6 +178,33 @@ def test_serve_dispatches_local_open_turn_controls_and_close(connected_local):
     assert history.status_code==200 and history.json()["executor_stage"]=="SUCCEEDED"
 
 
+def test_open_idle_session_backs_off_to_the_idle_interval(connected_local):
+    """An open session keeps a non-terminal receipt. It must not keep the host on its short tick."""
+    setup,binding,native=connected_local
+    deps,app,client,headers,*_=setup
+    owner=app.state.embedded_dispatch_owner
+    owner.agents.busy_linger=.2
+    opened=admit(setup,binding,"auto-open","runtime.start",new_session=True)
+    wait_receipt(setup,opened)
+    passes=[]
+    recover=owner.events.recover
+    async def counted(*args,**kwargs):
+        passes.append(time.monotonic())
+        return await recover(*args,**kwargs)
+    owner.events.recover=counted
+    time.sleep(1.5)  # The host leaves its short tick after the open work settles.
+    del passes[:]
+    time.sleep(4)
+    assert not owner.agents.busy()
+    # The idle interval is one second. The short tick would pass about forty times.
+    assert len(passes)<=6, f"An idle open session was polled {len(passes)} times in 4 s"
+    # A real delivery still reaches the native session within one second.
+    started=time.monotonic()
+    sent=admit(setup,binding,"auto-send","turn.submit",session_id=opened["scope"]["session_id"],text="Hello")
+    wait_receipt(setup,sent)
+    assert time.monotonic()-started<1.5
+
+
 @pytest.mark.parametrize('failure', ['expired', 'revoked', 'late_grant'])
 def test_denied_renewal_releases_only_its_session_and_keeps_executor_ready(connected_local, monkeypatch, failure):
     from okto_nexus.errors import ErrorCode
