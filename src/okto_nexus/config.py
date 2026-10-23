@@ -210,6 +210,9 @@ class NexusConfig:
     # Startup-only indexed recovery of lost runtime commit notifications.
     # This is internal store polling, never native peer status polling.
     runtime_recovery_interval_seconds: int = 30
+    # Longest sleep (ms) of the serve runtime loops when no work is pending.
+    # While work is pending, the loops keep their short interval.
+    runtime_idle_interval_ms: int = 1000
     max_relay_depth: int = 4
     max_generated_messages_per_root: int = 32
     max_executions_per_root: int = 16
@@ -221,6 +224,7 @@ class NexusConfig:
 
     def __post_init__(self) -> None:
         for name, low, high in (("runtime_recovery_interval_seconds", 1, 86400),
+                ("runtime_idle_interval_ms", 100, 60000),
                 ("max_relay_depth", 0, 64), ("max_generated_messages_per_root", 1, 4096),
                 ("max_executions_per_root", 1, 1024), ("root_deadline_seconds", 1, 86400),
                 ("max_new_roots_per_agent_per_minute", 1, 4096), ("max_new_roots_per_workspace_per_minute", 1, 16384)):
@@ -250,6 +254,7 @@ _INT_FIELDS: dict[str, tuple[str, str, int, int]] = {
         "OKTO_NEXUS_RUNTIME_RECOVERY_INTERVAL_SECONDS",
         "--runtime-recovery-interval-seconds", 30, 1,
     ),
+    "runtime_idle_interval_ms": ("OKTO_NEXUS_RUNTIME_IDLE_INTERVAL_MS", "--runtime-idle-interval-ms", 1000, 100),
     "max_relay_depth": ("OKTO_NEXUS_MAX_RELAY_DEPTH", "--max-relay-depth", 4, 0),
     "max_generated_messages_per_root": ("OKTO_NEXUS_MAX_GENERATED_MESSAGES_PER_ROOT", "--max-generated-messages-per-root", 32, 1),
     "max_executions_per_root": ("OKTO_NEXUS_MAX_EXECUTIONS_PER_ROOT", "--max-executions-per-root", 16, 1),

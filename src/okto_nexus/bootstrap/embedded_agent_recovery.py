@@ -30,6 +30,8 @@ def _diagnostic(error):
 
 class EmbeddedAgentRecovery:
     observation_timeout = 5.0
+    # Seconds the host keeps its short tick after the last sign of work.
+    busy_linger = 5.0
 
     def __init__(self, owner):
         self.owner = owner
@@ -47,6 +49,8 @@ class EmbeddedAgentRecovery:
         self.session_tasks = {}
         self.session_retry_at = {}
         self.registry_import_task = None
+        self.last_active = time.monotonic()
+        self.unsettled = True
         self._registry_stop = asyncio.Event()
         from .embedded_retirement_maintenance import EmbeddedRetirementMaintenance
         self.retirement = EmbeddedRetirementMaintenance(self)
@@ -345,15 +349,28 @@ class EmbeddedAgentRecovery:
         await asyncio.to_thread(owner._recovery_event, 'RECOVERY_AGENT_READY',
             'Agent history reconciled. Previous work was not replayed.', agent_id=agent_id)
 
+    def touch(self):
+        """Record work. The host keeps its short tick and wakes at once."""
+        self.last_active = time.monotonic()
+        self.owner._activity.set()
+
+    def busy(self):
+        """True while work is pending. An idle host may sleep up to its idle interval."""
+        return (time.monotonic() - self.last_active < self.busy_linger
+                or bool(self.blocked or self.session_tasks or self.unsettled or self.owner.workers)
+                or any(session.get('recovering') for session in self.owner.sessions.values()))
+
     async def _publish(self, agent_id):
         def progress():
             self.started[agent_id] = time.monotonic()
             self.delayed.discard(agent_id)
-        await self.owner._recover_publications(agent_id=agent_id, progress=progress)
-        await self.owner.events.recover(agent_id=agent_id, live_only=True, progress=progress)
+        published = await self.owner._recover_publications(agent_id=agent_id, progress=progress)
+        published = await self.owner.events.recover(agent_id=agent_id, live_only=True, progress=progress) or published
         faults = await asyncio.to_thread(self._check_stream_health, agent_id, frozenset(self.owner.active_operations))
         for session_id in faults:
             self.recover_session(session_id)
+        if published or faults:
+            self.touch()
 
     def recover_session(self, session_id, *, error=None):
         session = self.owner.sessions.get(session_id)
@@ -362,6 +379,7 @@ class EmbeddedAgentRecovery:
         # Fence only this session. Retain one worker, including during slow
         # containment; healthy siblings continue dispatch and publication.
         session['recovering'] = True
+        self.touch()
         if error is not None:
             session.setdefault('recovery_error', error)
         task = self.session_tasks.get(session_id)
@@ -608,8 +626,12 @@ class EmbeddedAgentRecovery:
                 await asyncio.to_thread(self.owner._recovery_event, 'RECOVERY_PUBLICATION_DELAYED',
                     'Publication is delayed; native execution and lease renewal remain active.', agent_id=agent_id)
         enabled = manual or await asyncio.to_thread(self.owner._recovery_enabled)
-        subjects = self.blocked | await asyncio.to_thread(self._pending_subjects)
-        subjects |= {s['scope']['agent_id'] for s in self.owner.sessions.values()}
+        pending = await asyncio.to_thread(self._pending_subjects)
+        live = {s['scope']['agent_id'] for s in self.owner.sessions.values()}
+        # An open session keeps its own stream row, so only the other pending
+        # subjects show unfinished work. Live subjects report work when they run.
+        self.unsettled = bool(pending - live)
+        subjects = self.blocked | pending | live
         subjects = subjects if target_agent_id is None else subjects & {target_agent_id}
         self.retirement.tick(subjects)
         for agent_id in subjects:

@@ -91,6 +91,8 @@ class EmbeddedDispatchOwner:
         self.native_factory = None
         self.failure = None
         self._stopping = asyncio.Event()
+        # Set when work starts, so the maintenance loop leaves its idle sleep.
+        self._activity = asyncio.Event()
         self._close_task = None
         self._shutdown_started = None
         self._shutdown_deadline = None
@@ -287,7 +289,8 @@ class EmbeddedDispatchOwner:
             verify_link=self.verify, close_link=self.failed,
             retained_operations=lambda: tuple(self.active_operations),
             wake_deliveries=self.deps.runtime_dispatcher.wake,
-            resolve_native_input=self.deps.native_decisions.inputs.resolve)
+            resolve_native_input=self.deps.native_decisions.inputs.resolve,
+            idle_interval=self.idle_interval)
         self.pump.start()
         self.lease_maintenance = asyncio.create_task(self._maintain_leases(), name="embedded-lease-renewals")
         self.maintenance = asyncio.create_task(self._maintain(), name="embedded-publications")
@@ -298,10 +301,11 @@ class EmbeddedDispatchOwner:
         from .embedded_initial_refusal import EmbeddedInitialRefusal
         await EmbeddedInitialRefusal(self).recover(agent_id=agent_id, session_id=session_id)
         after = 0
+        published = False
         while True:
             rows = await asyncio.to_thread(self._page, after=after, agent_id=agent_id, session_id=session_id)
             if not rows:
-                return
+                return published
             for row in rows:
                 # A live producer can still prove no native effect. Its
                 # SUBMISSION_STARTED journal entry is a crash fence, not a
@@ -314,6 +318,7 @@ class EmbeddedDispatchOwner:
                 receipt = await self.host.historical_receipt(session_id=row["session_id"],key=key)
                 if receipt is not None:
                     await self._publish(json.loads(row["binding_json"]),receipt)
+                    published = True
                 if progress is not None:
                     progress()
             after = rows[-1]["rowid"]
@@ -357,6 +362,8 @@ class EmbeddedDispatchOwner:
         task.add_done_callback(self.workers.discard)
         task.add_done_callback(lambda done: self.worker_agents.pop(done, None))
         task.add_done_callback(lambda done: self.worker_sessions.pop(done, None))
+        task.add_done_callback(lambda done: self.agents.touch())
+        self.agents.touch()
 
     @asynccontextmanager
     async def _gate(self, session, action):
@@ -810,6 +817,7 @@ class EmbeddedDispatchOwner:
         pending_at=0
         try:
             while not self._stopping.is_set():
+                self._activity.clear()
                 self.capacity_publication.tick()
                 await self.agents.tick()
                 if time.monotonic()>=pending_at:
@@ -826,14 +834,34 @@ class EmbeddedDispatchOwner:
                         logging.getLogger(__name__).warning(
                             'Pending-message admission deferred by transient storage contention; runtime remains active.')
                     pending_at=time.monotonic()+DEFAULT_RUNTIME_AUTOMATION.message_interval
-                try:
-                    await asyncio.wait_for(self._stopping.wait(),.1)
-                except asyncio.TimeoutError:
-                    pass
+                if self.agents.busy():
+                    try:
+                        await asyncio.wait_for(self._stopping.wait(),.1)
+                    except asyncio.TimeoutError:
+                        pass
+                else:
+                    await self._idle_sleep(self.idle_interval)
         except Exception as error:
             if self.failure is None:
                 self.failure = error
             await self.failed()
+
+    @property
+    def idle_interval(self):
+        """Longest sleep of the maintenance loop while no work is pending."""
+        config = getattr(self.deps, 'config', None)
+        return max(.1, getattr(config, 'runtime_idle_interval_ms', 1000) / 1000)
+
+    async def _idle_sleep(self, delay):
+        """Sleep until the delay ends, shutdown starts or new work arrives."""
+        if self._activity.is_set():
+            return
+        waiters = [asyncio.ensure_future(self._stopping.wait()), asyncio.ensure_future(self._activity.wait())]
+        try:
+            await asyncio.wait(waiters, timeout=delay, return_when=asyncio.FIRST_COMPLETED)
+        finally:
+            for waiter in waiters:
+                waiter.cancel()
 
     def _start_close(self):
         if self._close_task is None:

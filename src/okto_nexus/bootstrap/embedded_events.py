@@ -129,14 +129,16 @@ class EmbeddedEventPublisher:
 
     async def recover(self, *, agent_id=None, session_id=None, live_only=False, progress=None):
         after = 0
+        published = False
         while True:
             rows = await asyncio.to_thread(self._page, after=after, agent_id=agent_id,
                                           session_id=session_id, live_only=live_only, unretired_only=True)
             if not rows:
-                return
+                return published
             for scope in rows:
                 for _ in range(4096):
                     advanced = await self.step(scope)
+                    published = published or advanced
                     if progress is not None:
                         progress()
                     # Live streams have no finite tail. Publish a bounded page

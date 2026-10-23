@@ -702,6 +702,10 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
                 lock.release()
             if deps.native_decisions is not None:
                 deps.native_decisions.inputs.close()
+            # Close the reusable connections, so SQLite checkpoints the WAL.
+            close_connections = getattr(deps.connection_factory, "close", None)
+            if close_connections is not None:
+                close_connections()
             if embedded_shutdown_error is not None:
                 raise embedded_shutdown_error
 

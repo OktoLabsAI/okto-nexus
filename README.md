@@ -838,6 +838,7 @@ an explicit value such as `--feature-trace true`.
 | `OKTO_NEXUS_DB_PATH` | `--db-path` | `{home}/nexus.db` | SQLite database |
 | `OKTO_NEXUS_BUSY_TIMEOUT_MS` | `--busy-timeout-ms` | 5000 | Minimum 0 |
 | `OKTO_NEXUS_POLL_INTERVAL_MS` | `--poll-interval-ms` | 200 | Waiter interval; minimum 1 |
+| `OKTO_NEXUS_RUNTIME_IDLE_INTERVAL_MS` | `--runtime-idle-interval-ms` | 1000 | Longest sleep of the serve runtime loops when no work is pending; 100 to 60000 |
 | `OKTO_NEXUS_MAX_WAIT_TIMEOUT_SECONDS` | `--max-wait-timeout-seconds` | 30 | Server wait ceiling; minimum 0 |
 | `OKTO_NEXUS_HANDOFF_LEASE_TTL_SECONDS` | `--handoff-lease-ttl-seconds` | 300 | Minimum 1 |
 | `OKTO_NEXUS_MAX_INLINE_BYTES` | `--max-inline-bytes` | 65536 | Inline artifact/content limit |
