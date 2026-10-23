@@ -1450,3 +1450,6 @@ by the running hub at `GET /api/v1/license`.
 
 See [global harness MCP inheritance](docs/global-mcps.md) for global defaults,
 agent/harness overrides and local/remote host behavior.
+
+
+<!-- Automated fix for issue #83: bug: Core contains a healthy session on any unsolicited Claude Code frame (background subagent result, scheduled wakeup, task notification): EVENT_OPERATION_MISMATCH -->
