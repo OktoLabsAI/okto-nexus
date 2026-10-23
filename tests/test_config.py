@@ -267,3 +267,10 @@ def test_clamp_limit_grammar():
         with pytest.raises(OktoNexusError) as ei:
             clamp_limit(bad, default=50, maximum=200)
         assert ei.value.code == ErrorCode.VALIDATION_ERROR.value
+
+
+def test_handoff_lease_default_is_one_hour(tmp_path):
+    from okto_nexus.config import _INT_FIELDS, NexusConfig
+
+    assert NexusConfig.handoff_lease_ttl_seconds == 3600
+    assert _INT_FIELDS["handoff_lease_ttl_seconds"][2] == 3600

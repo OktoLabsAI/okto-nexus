@@ -153,7 +153,7 @@ class NexusConfig:
     busy_timeout_ms: int = 5000
     poll_interval_ms: int = 200
     max_wait_timeout_seconds: int = 30
-    handoff_lease_ttl_seconds: int = 300
+    handoff_lease_ttl_seconds: int = 3600
     max_inline_bytes: int = DEFAULT_MAX_INLINE_BYTES
     inbox_lease_ttl_seconds: int = DEFAULT_INBOX_LEASE_TTL_SECONDS
     session_stale_ttl_seconds: int = DEFAULT_SESSION_STALE_TTL_SECONDS
@@ -268,7 +268,7 @@ _INT_FIELDS: dict[str, tuple[str, str, int, int]] = {
     "handoff_lease_ttl_seconds": (
         "OKTO_NEXUS_HANDOFF_LEASE_TTL_SECONDS",
         "--handoff-lease-ttl-seconds",
-        300,
+        3600,
         1,
     ),
     "max_inline_bytes": (
