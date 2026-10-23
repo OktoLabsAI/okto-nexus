@@ -49,6 +49,7 @@ import { workspaceDisplayName } from "../components/WorkspaceNames";
 import { agentColor } from "../graph/agentColor";
 
 import { MetaHarnessSessions } from "../components/MetaHarnessSessions";
+import { formatTime } from "../timeFormat";
 
 const OPERATOR = "operator";
 const TIMELINE_PAGE_SIZE = 20;
@@ -520,17 +521,6 @@ function shortWorkspace(id: string, workspaces: WorkspaceListItem[]): string {
   return index >= 0 ? workspaceDisplayName(workspaces[index], index) : id.slice(0, 8);
 }
 
-function stamp(value: string): string {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return value;
-  return new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(date);
-}
-
 function formatBytes(value: number): string {
   if (value < 1024) return `${value} B`;
   if (value < 1024 * 1024) return `${(value / 1024).toFixed(1)} KB`;
@@ -631,7 +621,7 @@ function ChatTurn({
           </span>
           <span>{audienceLabel}</span>
           {showWorkspace && <span>· {shortWorkspace(entry.workspaceId, workspaces)}</span>}
-          <span>· {stamp(entry.timestamp)}</span>
+          <span>· {formatTime(entry.timestamp)}</span>
           <CopyMessageButton text={formatChatContent(entry.content)} />
         </div>
         <div

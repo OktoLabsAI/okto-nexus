@@ -26,6 +26,7 @@ import { LiveChip } from "../components/LiveChip";
 import { MessageDetail } from "../components/MessageDetailModal";
 import { PageContainer } from "../components/PageContainer";
 import { ResizablePanel } from "../components/ResizablePanel";
+import { formatTime, isoTitle } from "../timeFormat";
 
 const PAGE_SIZE = 25;
 
@@ -51,6 +52,32 @@ const inputCls =
 function recipientsKey(m: MessageRow): string {
   const to = m.deliveries.map((d) => d.recipient_agent_id).sort();
   return `${m.from_agent_id} → ${to.length ? to.join(", ") : "(no recipient)"}`;
+}
+
+const PREVIEW_CHARS = 120;
+
+// Body preview line: the preview field when the API sends one, else the
+// first 120 characters of the body.
+function previewText(m: MessageRow): string {
+  const text = m.preview || (m.body ?? "").slice(0, PREVIEW_CHARS);
+  return text.replace(/\s+/g, " ").trim();
+}
+
+// Receipt rows carry body kind "message.read_receipt". The subject prefix is
+// a fallback when the body is missing.
+function isReceipt(m: MessageRow): boolean {
+  if (m.body) {
+    try {
+      if (JSON.parse(m.body)?.kind === "message.read_receipt") return true;
+    } catch {
+      /* not JSON: an ordinary message */
+    }
+  }
+  const subject = (m.subject ?? "").toLowerCase();
+  return (
+    subject.startsWith("read receipt:") ||
+    subject.startsWith("runtime processing receipt:")
+  );
 }
 
 function MessageRowItem({
@@ -97,12 +124,20 @@ function MessageRowItem({
           </span>
         )}
         <span className="ml-auto text-surface-400 dark:text-surface-500">
-          {m.created_at}
+          <span title={isoTitle(m.created_at)}>{formatTime(m.created_at)}</span>
         </span>
       </div>
-      <div className="text-surface-600 dark:text-surface-400 mt-1 truncate text-xs">
-        {m.subject ?? m.preview ?? ""}
+      <div className="text-surface-700 dark:text-surface-300 mt-1 truncate text-xs font-medium">
+        {m.subject ?? ""}
       </div>
+      {previewText(m) && (
+        <div
+          className="text-surface-500 dark:text-surface-400 truncate text-xs"
+          data-testid="message-preview"
+        >
+          {previewText(m)}
+        </div>
+      )}
     </button>
   );
 }
@@ -126,6 +161,7 @@ export function MessagesView({
   const [fromAgent, setFromAgent] = useState("");
   const [toAgent, setToAgent] = useState("");
   const [grouped, setGrouped] = useState(false);
+  const [showReceipts, setShowReceipts] = useState(false);
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const [agents, setAgents] = useState<AgentRow[]>([]);
   const [selected, setSelected] = useState<MessageRow | null>(null);
@@ -217,6 +253,7 @@ export function MessagesView({
   };
 
   const reset = () => {
+    setShowReceipts(false);
     setLane("");
     setFromAgent("");
     setToAgent("");
@@ -236,6 +273,11 @@ export function MessagesView({
     }
   };
 
+  // Receipts are hidden by default. The count drops the receipts on this page.
+  const visibleItems = showReceipts ? items : items.filter((m) => !isReceipt(m));
+  const hiddenReceipts = items.length - visibleItems.length;
+  const visibleTotal = Math.max(0, total - hiddenReceipts);
+
   // Keyboard: ↑/↓ (or j/k) move the selection; Esc clears; "/" focuses search.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -252,24 +294,24 @@ export function MessagesView({
         else if (hits !== null) clearSearch();
         return;
       }
-      if (hits !== null || items.length === 0) return;
+      if (hits !== null || visibleItems.length === 0) return;
       if (e.key === "ArrowDown" || e.key === "j") {
         e.preventDefault();
         const i = selected
-          ? items.findIndex((m) => m.message_id === selected.message_id)
+          ? visibleItems.findIndex((m) => m.message_id === selected.message_id)
           : -1;
-        setSelected(items[Math.min(items.length - 1, i + 1)]);
+        setSelected(visibleItems[Math.min(visibleItems.length - 1, i + 1)]);
       } else if (e.key === "ArrowUp" || e.key === "k") {
         e.preventDefault();
         const i = selected
-          ? items.findIndex((m) => m.message_id === selected.message_id)
-          : items.length;
-        setSelected(items[Math.max(0, i - 1)]);
+          ? visibleItems.findIndex((m) => m.message_id === selected.message_id)
+          : visibleItems.length;
+        setSelected(visibleItems[Math.max(0, i - 1)]);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [selected, hits, items]);
+  }, [selected, hits, visibleItems]);
 
   const toggleGroup = (key: string) =>
     setCollapsed((prev) => {
@@ -282,7 +324,7 @@ export function MessagesView({
   const groups: { key: string; rows: MessageRow[] }[] = [];
   if (grouped) {
     const byKey = new Map<string, MessageRow[]>();
-    for (const m of items) {
+    for (const m of visibleItems) {
       const k = recipientsKey(m);
       (byKey.get(k) ?? byKey.set(k, []).get(k)!).push(m);
     }
@@ -345,6 +387,16 @@ export function MessagesView({
             agents={agents}
           />
         </div>
+
+        <label className="flex items-center gap-2 text-xs text-surface-600 dark:text-surface-300">
+          <input
+            type="checkbox"
+            checked={showReceipts}
+            onChange={(e) => setShowReceipts(e.target.checked)}
+            data-testid="show-receipts"
+          />
+          Show receipts
+        </label>
 
         <button className="btn btn-secondary w-full justify-center" onClick={reset}>
           Reset filters
@@ -409,7 +461,7 @@ export function MessagesView({
             )}
             {sseStatus && <LiveChip status={sseStatus} />}
             <span className="ml-auto text-surface-500">
-              {hits !== null ? `${hits.length} results` : `${total} messages`}
+              {hits !== null ? `${hits.length} results` : `${visibleTotal} messages`}
             </span>
             {hits === null && (
               <>
@@ -470,7 +522,7 @@ export function MessagesView({
                         {h.score.toFixed(3)}
                       </span>
                       <span className="ml-auto text-surface-400 dark:text-surface-500">
-                        {h.created_at}
+                        <span title={isoTitle(h.created_at)}>{formatTime(h.created_at)}</span>
                       </span>
                     </div>
                     <div className="text-surface-600 dark:text-surface-400 mt-1 truncate pl-7 text-xs">
@@ -480,7 +532,7 @@ export function MessagesView({
                 ))}
               </div>
             )
-          ) : items.length === 0 ? (
+          ) : visibleItems.length === 0 ? (
             <EmptyState icon="inbox" text="No messages match these filters." onReset={reset} />
           ) : grouped ? (
             <div className="divide-y divide-surface-100 dark:divide-surface-700/50">
@@ -515,7 +567,7 @@ export function MessagesView({
             </div>
           ) : (
             <div className="divide-y divide-surface-100 dark:divide-surface-700/50">
-              {items.map((m) => (
+              {visibleItems.map((m) => (
                 <MessageRowItem
                   key={m.message_id}
                   m={m}
