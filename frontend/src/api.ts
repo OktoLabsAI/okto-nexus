@@ -196,6 +196,13 @@ export interface GraphHandoff {
     pending: number;
     failed: number;
   };
+  // The session of the claimant was contained while it held this handoff.
+  // Present only when the hub reports it; older hubs omit the field.
+  claimant_session_lost?: {
+    reason: string | null;
+    session_id?: string | null;
+    at?: string | null;
+  } | null;
 }
 
 export interface GraphSnapshot {
@@ -684,6 +691,9 @@ export interface AgentRuntimeOverview {
 export type MetaHarnessSession = import('./runtimeApi').RuntimeSession & {
   harness: string; host: string; location: string; is_open: boolean;
   subject: string | null; last_interaction_at: string; interaction_count: number;
+  // Why the session ended (for example a containment cause). Present only
+  // when the hub reports it; older hubs omit the field.
+  end_reason?: string | null;
 }
 export interface MetaHarnessSessions {
   items: MetaHarnessSession[]; total: number; active_count: number; page: number; has_more: boolean;

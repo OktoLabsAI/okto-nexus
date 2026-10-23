@@ -36,6 +36,7 @@ import {
   type ArtifactItem,
   type GraphHandoff,
   type MessageRow,
+  type MetaHarnessSession,
   type MetaHarnessAudience,
   type MetaHarnessKind,
   type WorkspaceListItem,
@@ -49,6 +50,7 @@ import { PageContainer } from "../components/PageContainer";
 import { workspaceDisplayName } from "../components/WorkspaceNames";
 import { agentColor } from "../graph/agentColor";
 import { isNewForOperator } from "../operatorUnread";
+import { placeMarkers, restartMarkers } from "../sessionRestarts";
 
 import { MetaHarnessSessions } from "../components/MetaHarnessSessions";
 import { formatTime } from "../timeFormat";
@@ -749,6 +751,7 @@ export function MetaHarnessView({
   >({});
   const [receiptDisplay, setReceiptDisplay] = useState<ReceiptDisplay>("inline");
   const [sessionsOpen, setSessionsOpen] = useState(false);
+  const [sessionList, setSessionList] = useState<MetaHarnessSession[]>([]);
   const [receiptEntry, setReceiptEntry] = useState<TimelineEntry | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -901,6 +904,31 @@ export function MetaHarnessView({
     return () => window.clearTimeout(timer);
   }, [liveTick, loadFeed]);
 
+  // Runtime sessions of this conversation, for the "session restarted"
+  // dividers. A failed read only hides the dividers.
+  useEffect(() => {
+    let active = true;
+    const controller = new AbortController();
+    const timer = window.setTimeout(async () => {
+      try {
+        const all: MetaHarnessSession[] = [];
+        for (let page = 1; page <= 5; page += 1) {
+          const result = await api.metaHarnessSessions(workspace, filterAgent, page, controller.signal);
+          all.push(...result.items);
+          if (!result.has_more) break;
+        }
+        if (active) setSessionList(all);
+      } catch {
+        /* the dividers are optional */
+      }
+    }, 1500);
+    return () => {
+      active = false;
+      controller.abort();
+      window.clearTimeout(timer);
+    };
+  }, [workspace, filterAgent, liveTick]);
+
   const timeline = useMemo(
     () =>
       preserveArrivalOrder(
@@ -933,6 +961,10 @@ export function MetaHarnessView({
         isNewForOperator(entry.operatorDeliveries ?? [], newSince),
       ),
     [visibleTimeline, newSince],
+  );
+  const restartsAt = useMemo(
+    () => placeMarkers(visibleTimeline, restartMarkers(sessionList)),
+    [visibleTimeline, sessionList],
   );
   const newCount = useMemo(
     () =>
@@ -1233,6 +1265,21 @@ export function MetaHarnessView({
                 )}
                 {visibleTimeline.map((entry, index) => (
                   <Fragment key={entry.id}>
+                  {(restartsAt.get(index) ?? []).map((marker) => (
+                    <div
+                      key={`restart:${marker.id}`}
+                      className="flex items-center gap-3 text-[11px] font-medium text-amber-700 dark:text-amber-400"
+                      role="separator"
+                      data-testid="meta-harness-session-restart"
+                    >
+                      <span className="h-px flex-1 bg-amber-300 dark:bg-amber-700" />
+                      <span>
+                        {marker.agentId}: session restarted
+                        {marker.reason ? ` · ${marker.reason}` : ""}
+                      </span>
+                      <span className="h-px flex-1 bg-amber-300 dark:bg-amber-700" />
+                    </div>
+                  ))}
                   {index === firstNewIndex && (
                     <div
                       ref={newDividerRef}

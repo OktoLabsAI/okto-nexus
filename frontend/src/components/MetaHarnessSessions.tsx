@@ -41,6 +41,7 @@ export function MetaHarnessSessions({workspace,agent,workspaces,onClose}: {
       {view?.items.length===0 && <div className="meta-sessions-empty"><Terminal size={24}/><p>No sessions in this conversation yet.</p><span>They appear when a runtime starts handling a request from the operator.</span></div>}
       {view?.items.map(session=><article key={`${session.scope.executor_id}:${session.scope.session_id}`} className="meta-session-card">
         <div className="meta-session-heading"><strong>{session.scope.agent_id}</strong><span className={session.is_open?'meta-session-open':''}>{session.is_open?'Open':'Ended'}</span></div>
+        {!session.is_open && session.end_reason && <p className="meta-sessions-caption" data-testid="session-end-reason">Ended: {session.end_reason}</p>}
         <p className="meta-session-subject" title={session.subject || session.scope.session_id}>{session.subject || 'Conversation session'}</p>
         <p className="meta-sessions-caption">{session.harness==='codex_app_server'?'Codex':session.harness==='claude_stream'?'Claude':session.harness==='pi_rpc'?'Pi':session.harness} · {session.location==='embedded'?'Local':'Remote'}</p>
         {workspace==='all' && <p className="meta-sessions-caption">{names[session.scope.workspace_id] || session.scope.workspace_id}</p>}

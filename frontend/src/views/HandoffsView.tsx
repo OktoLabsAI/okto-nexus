@@ -16,7 +16,7 @@
 // (BR11) and the flag is never consulted.
 
 import { useCallback, useEffect, useState } from "react";
-import { Ban, CheckCircle2, ShieldCheck, UserCheck, X } from "lucide-react";
+import { Ban, CheckCircle2, CircleAlert, ShieldCheck, UserCheck, X } from "lucide-react";
 import { api, type AgentRow, type GraphHandoff } from "../api";
 import { useConfirm } from "../components/Confirm";
 import {
@@ -153,6 +153,12 @@ function HandoffDetailModal({
             {handoff.updated_at && <Meta label="updated" value={formatTime(handoff.updated_at)} title={isoTitle(handoff.updated_at)} />}
             <Meta label="from" value={handoff.from_agent_id ?? "—"} mono />
             <Meta label="claimed by" value={handoff.claimed_by ?? "—"} mono />
+            {handoff.claimant_session_lost && (
+              <Meta
+                label="claimant session"
+                value={`contained${handoff.claimant_session_lost.reason ? `: ${handoff.claimant_session_lost.reason}` : ""}`}
+              />
+            )}
             <Meta label="visibility" value={handoff.visibility ?? "—"} mono />
             <Meta
               label="lease expires"
@@ -552,6 +558,15 @@ export function HandoffsView({
                         {handoffLabel(h)}
                       </div>
                       {h.runtime_progress && <HandoffRuntimeProgress value={h.runtime_progress} />}
+                      {h.claimant_session_lost && (
+                        <div
+                          className="chip mt-1 bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300"
+                          title={`The session of the claimant was contained${h.claimant_session_lost.reason ? ` (${h.claimant_session_lost.reason})` : ""}. Work after the containment may be lost.`}
+                          data-testid="claimant-session-lost"
+                        >
+                          <CircleAlert size={10} /> claimant session lost
+                        </div>
+                      )}
                       <div className="mt-1 text-xs text-surface-500 dark:text-surface-400 space-y-0.5">
                         <div className="flex items-center gap-1">
                           <span className="text-surface-400">from</span>

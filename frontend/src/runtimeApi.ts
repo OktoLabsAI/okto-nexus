@@ -248,6 +248,9 @@ export const runtimeApi = {
   refreshInventory: (executorId: string, clientIntentId: string, signal?: AbortSignal) =>
     read<{client_intent_id: string; refresh_id: string; executor_id: string; state: "PENDING" | "REQUESTED" | "UPDATED" | "OFFLINE"}>(
       `/v1/runtime/executors/${encodeURIComponent(executorId)}/inventory:refresh`, signal, {client_intent_id: clientIntentId}),
+  // TODO(#77): bulk revalidation needs a hub route that lists the bindings in
+  // review. Until then each binding goes through prepareBinding and
+  // applyBinding: /api/v1/runtime-management/connections/bindings:prepare, then :apply.
   prepareBinding: (body: Record<string, unknown>) => read<BindingProposal>("/v1/connections/bindings:prepare", undefined, body),
   applyBinding: (body: Record<string, unknown>) => read<BindingView>("/v1/connections/bindings:apply", undefined, body),
   binding: (id: string) => read<BindingView>(`/v1/connections/bindings/${encodeURIComponent(id)}`, undefined),
