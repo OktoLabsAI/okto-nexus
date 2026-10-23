@@ -107,9 +107,20 @@ class ConnectionTests:
         batch = owner.published_batch
         if batch is None:
             raise conflict('The selected host has not published current installation evidence.')
-        candidate = resolve_local_installation_selection(batch.candidates, observations=batch.coverage(),
-            adapter_id=request['configuration']['adapter_id'], candidate_ref=request['candidate_ref'],
-            expected_inventory_revision=request['inventory_revision'])
+        try:
+            candidate = resolve_local_installation_selection(batch.candidates, observations=batch.coverage(),
+                adapter_id=request['configuration']['adapter_id'], candidate_ref=request['candidate_ref'],
+                expected_inventory_revision=request['inventory_revision'])
+        except CoreError as error:
+            if error.code != 'STALE_GENERATION':
+                raise
+            raise conflict('The inventory revision is stale. The current revision is %s. '
+                           'Refresh installations and test again.' % owner.publication.inventory_revision) from error
+        if candidate.trust != 'selected':
+            # A later version check selects this installation and publishes a new
+            # revision. A binding made before that check then needs a review.
+            raise conflict('Check the installation version before finishing: call installations:check. '
+                           'The current inventory revision is %s.' % owner.publication.inventory_revision)
         if asdict(candidate) != entry['candidate'] or selected_fingerprint(candidate) != candidate.fingerprint:
             raise conflict('The tested installation changed. Run the connection test again.')
         return entry

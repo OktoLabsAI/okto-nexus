@@ -3,8 +3,9 @@ import json
 from copy import deepcopy
 import pytest
 from test_local_realization import local_setup
+from test_local_installation_check import checking  # noqa: F401
 from okto_nexus.application.connection_setup import finish_setup, load_setup
-from okto_nexus.application.execution_local_realizations import directory_identity
+from okto_nexus.application.execution_local_realizations import _digest, directory_identity
 from okto_nexus.domain.runtime_context import RuntimeRequestContext
 
 
@@ -336,3 +337,46 @@ def test_remote_finish_rejects_embedded_binding_without_partial_writes(local_set
     request['configuration'].update(execution_location='remote')
     with pytest.raises(Exception,match='approved remote'):finish(local_setup,context,request,verified=None)
     assert load_setup(local_setup[0],context,'subject',request['binding_id'])['baseline']==request['baseline']
+
+
+def test_finish_refuses_unchecked_or_stale_installation_revision(checking):
+    """A binding made before installations:check goes stale when the check publishes a new revision."""
+    import time
+    from dataclasses import asdict
+    from types import SimpleNamespace
+    from okto_nexus.application.execution_inventory_revalidation import accepts_binding
+    from okto_nexus.errors import OktoNexusError
+    deps, app, client, headers, body, route, source, _ = checking
+    owner = app.state.embedded_inventory_owner
+    setup = (deps, app, client, headers, body, source, deps.config.home_dir.parent)
+    context, request = request_for(setup)
+    manager = app.state.connection_tests
+    old_revision = body['inventory_revision']
+
+    def verified(request):
+        entry = dict(status='succeeded', task=SimpleNamespace(done=lambda: True), digest=_digest(request), agent='subject',
+            created=time.monotonic(), candidate=asdict(owner.published_batch.candidates[0]))
+        manager.tests[(context.actor_agent_id, request['client_intent_id'])] = entry
+        return manager.verified(context, request, owner)
+
+    # The installation is listed but its version was never checked.
+    with pytest.raises(OktoNexusError, match='installations:check') as error:
+        verified(request)
+    assert owner.publication.inventory_revision in error.value.message
+    assert count(setup, 'execution_bindings') == 0
+    # The check publishes a new revision. The old revision is refused and the message names the current one.
+    assert client.post(route, json=body, headers=headers['operator']).status_code == 200
+    current = owner.publication.inventory_revision
+    assert current != old_revision
+    with pytest.raises(OktoNexusError, match='stale') as error:
+        verified(request)
+    assert current in error.value.message
+    # With the current revision, Finish binds and the binding stays valid.
+    request['inventory_revision'] = current
+    result = finish(setup, context, request, verified={
+        'root': directory_identity(request['configuration']['workspace_root']), 'home': None})
+    assert verified(request)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        binding = uow.connection.execute('SELECT * FROM execution_bindings').fetchone()
+        assert accepts_binding(uow.connection, binding, owner.publication.inventory_revision,
+                               owner.key.server_id, owner.key.executor_id)
