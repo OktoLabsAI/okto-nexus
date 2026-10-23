@@ -50,6 +50,7 @@ from ..domain.messages import (
     MESSAGE_DELIVERED_TYPE,
     MESSAGE_READ_TYPE,
     MESSAGE_STREAM,
+    READ_RECEIPT_KIND,
     parse_target,
 )
 from ..errors import ErrorCode, OktoNexusError
@@ -74,11 +75,6 @@ DEFAULT_MAX_DELIVERY_ATTEMPTS = 5
 #: envelope-only ``peek`` projection - enough to triage who/what without
 #: materialising up to ``max_inline_bytes`` (64KB) per item in a polling read.
 PEEK_BODY_PREVIEW_CHARS = 200
-
-#: Inbox read receipts (opt-out via config.inbox_read_receipts): the body
-#: ``kind`` that marks a receipt notification. Receipts NEVER generate
-#: receipts (acknowledging one is a terminal act - no ping-pong).
-READ_RECEIPT_KIND = "message.read_receipt"
 
 #: Separator of the opaque history cursor (``<read_at>~<delivery_id>``).
 _HISTORY_CURSOR_SEP = "~"

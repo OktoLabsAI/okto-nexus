@@ -786,6 +786,7 @@ def build_router() -> APIRouter:
         to_agent: str | None = None,
         undelivered: bool = False,
         include_body: bool = False,
+        include_receipts: bool = False,
     ) -> JSONResponse:
         observability = request.app.state.observability
         try:
@@ -806,6 +807,7 @@ def build_router() -> APIRouter:
                     to_agent_id=to_agent,
                     undelivered_only=undelivered,
                     include_body=include_body,
+                    include_receipts=include_receipts,
                 ),
             )
         except ValueError as exc:

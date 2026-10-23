@@ -227,6 +227,7 @@ class ObservabilityService:
         undelivered_only: bool = False,
         include_body: bool = False,
         message_id: str | None = None,
+        include_receipts: bool = False,
     ) -> dict[str, Any]:
         if lane is not None and lane not in _LANES:
             raise ValueError(f"invalid lane: {lane!r} (one of {', '.join(_LANES)})")
@@ -250,6 +251,7 @@ class ObservabilityService:
             undelivered_only=undelivered_only,
             include_body=include_body,
             message_id=message_id,
+            include_receipts=include_receipts,
         )
         return {"items": items, "page": page, "page_size": page_size, "total": total}
 

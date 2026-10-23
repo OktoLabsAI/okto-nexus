@@ -1276,8 +1276,13 @@ class ObservabilityQueries(Protocol):
         undelivered_only: bool = False,
         include_body: bool = False,
         message_id: str | None = None,
+        include_receipts: bool = False,
     ) -> tuple[list[dict[str, Any]], int]:
         """Paginated message history with per-recipient deliveries; (items, total).
+
+        Receipt notifications are left out unless ``include_receipts`` is true
+        or ``message_id`` selects one message. Each item carries ``kind``
+        (``message`` or ``receipt``).
 
         ``peer_id`` (with ``agent_id``) narrows to the CONVERSATION between the
         pair, in both directions. ``undelivered_only`` selects the agent's

@@ -45,6 +45,59 @@ def test_partial_outcome_subjects_ignore_output_text():
     assert result['subject'] == 'Runtime failed \u2014 partial output'
 
 
+def _memory_db():
+    db = sqlite3.connect(':memory:')
+    db.row_factory = sqlite3.Row
+    db.executescript('''
+        CREATE TABLE messages(message_id TEXT,workspace_id TEXT,channel_id TEXT,from_agent_id TEXT,
+            created_at TEXT,subject TEXT,body TEXT,target TEXT,artifacts TEXT,trace_id TEXT);
+        CREATE TABLE message_deliveries(delivery_id TEXT,message_id TEXT,recipient_agent_id TEXT,
+            status TEXT,created_at TEXT,delivered_at TEXT,read_at TEXT);
+        CREATE TABLE runtime_pending_deliveries(delivery_id TEXT,status TEXT);
+        CREATE TABLE runtime_results(publication_message_id TEXT,delivery_outcome TEXT,output_truncated INTEGER);
+    ''')
+    return db
+
+
+def _page(db, **kwargs):
+    return SqliteObservabilityQueries().messages_page(SimpleNamespace(connection=db),
+        workspace_id='one', agent_id=None, channel_id=None, lane=None, since_iso=None,
+        until_iso=None, page=1, page_size=50, **kwargs)
+
+
+def test_messages_page_hides_receipts_by_default_and_keeps_odd_bodies():
+    db = _memory_db()
+    receipt = '{"kind": "message.read_receipt", "read_by": "Pi"}'
+    rows = [('ordinary', 'plain text'), ('json', '{"kind": "other"}'), ('null', None),
+            ('mention', 'about message.read_receipt in prose'), ('receipt', receipt),
+            ('array', '[1, 2, "message.read_receipt"]')]
+    for message, body in rows:
+        db.execute('INSERT INTO messages VALUES(?,?,?,?,?,?,?,?,?,?)',
+            (message, 'one', None, 'Pi', '2026-10-16', 'S', body, '{}', '[]', None))
+    try:
+        items, total = _page(db)
+        assert total == 5 and 'receipt' not in {item['message_id'] for item in items}
+        assert {item['kind'] for item in items} == {'message'}
+        items, total = _page(db, include_receipts=True)
+        assert total == 6
+        assert {item['message_id']: item['kind'] for item in items}['receipt'] == 'receipt'
+        items, total = _page(db, message_id='receipt')
+        assert total == 1 and items[0]['kind'] == 'receipt'
+    finally:
+        db.close()
+
+
+def test_messages_page_preview_is_first_120_characters():
+    db = _memory_db()
+    db.execute('INSERT INTO messages VALUES(?,?,?,?,?,?,?,?,?,?)',
+        ('long', 'one', None, 'Pi', '2026-10-16', 'S', 'a' * 300, '{}', '[]', None))
+    try:
+        items, _ = _page(db)
+        assert items[0]['preview'] == 'a' * 120
+    finally:
+        db.close()
+
+
 def test_history_uses_recorded_outcome_without_rewriting_or_trusting_message_text():
     db = sqlite3.connect(':memory:')
     db.row_factory = sqlite3.Row

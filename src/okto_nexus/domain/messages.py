@@ -41,6 +41,7 @@ __all__ = [
     "validate_channel_name",
     "GENERIC_RUNTIME_SUBJECT",
     "MAX_DERIVED_SUBJECT_CHARS",
+    "READ_RECEIPT_KIND",
     "derive_subject",
     "require_message_fields",
     "enforce_inline_size",
@@ -80,6 +81,11 @@ MESSAGE_CREATED_TYPE = "message.created"
 MESSAGE_DELIVERED_TYPE = "message.delivered"
 MESSAGE_READ_TYPE = "message.read"
 
+
+#: Inbox read receipts (opt-out via config.inbox_read_receipts): the body
+#: ``kind`` that marks a receipt notification. Receipts NEVER generate
+#: receipts (acknowledging one is a terminal act - no ping-pong).
+READ_RECEIPT_KIND = "message.read_receipt"
 
 #: Subject that the runtime gave to every captured reply. It carries no
 #: information, so a subject derived from the body replaces it.

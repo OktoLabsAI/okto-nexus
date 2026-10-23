@@ -18,6 +18,7 @@ from ....domain.handoff import (
     EVENT_CREATED,
     EVENT_REJECTED,
 )
+from ....domain.messages import READ_RECEIPT_KIND
 from ....errors import OktoNexusError, db_error_from_exception
 from .handoff_repo import dependency_aggregates_for
 
@@ -26,6 +27,23 @@ MAX_EDGES = 2000
 MAX_HANDOFFS = 1000
 MAX_SESSIONS = 2000
 MAX_CHANNELS = 500
+
+#: Characters of the body that the messages list shows under the subject.
+MESSAGE_PREVIEW_CHARS = 120
+
+
+def _is_receipt_sql(body: str) -> str:
+    """SQL predicate: ``body`` is a read/processing receipt notification.
+
+    The ``instr`` test is a cheap pre-filter. CASE keeps ``json_extract`` safe
+    for a non-JSON body, and COALESCE keeps ``NOT (...)`` true for a NULL body.
+    """
+    return (
+        f"COALESCE(instr({body}, '{READ_RECEIPT_KIND}') > 0 "
+        f"AND json_extract(CASE WHEN json_valid({body}) THEN {body} "
+        f"ELSE '{{}}' END, '$.kind') = '{READ_RECEIPT_KIND}', 0)"
+    )
+
 
 # A recipient can be represented by a direct routing target or by the common
 # payload recipient fields.  CASE keeps SQLite's JSON1 functions safe for
@@ -147,6 +165,13 @@ class SqliteObservabilityQueries:
         sql = (
             "SELECT actor_agent_id, type, created_at, MAX(event_id) AS event_id "
             "FROM events WHERE actor_agent_id IS NOT NULL"
+            # Receipts are not activity: skip events about a receipt message.
+            " AND (type NOT LIKE 'message.%' OR NOT EXISTS ("
+            "SELECT 1 FROM messages rm WHERE rm.message_id = "
+            "json_extract(CASE WHEN json_valid(events.payload) "
+            "THEN events.payload ELSE '{}' END, '$.message_id') AND "
+            + _is_receipt_sql("rm.body")
+            + "))"
         )
         params: list[Any] = []
         if workspace_id is not None:
@@ -238,6 +263,7 @@ class SqliteObservabilityQueries:
             JOIN messages m ON m.message_id = d.message_id
             WHERE m.created_at >= ?
         """
+        sql += " AND NOT " + _is_receipt_sql("m.body")
         params: list[Any] = [since_iso]
         if workspace_id is not None:
             sql += " AND m.workspace_id = ?"
@@ -431,12 +457,15 @@ class SqliteObservabilityQueries:
         undelivered_only: bool = False,
         include_body: bool = False,
         message_id: str | None = None,
+        include_receipts: bool = False,
     ) -> tuple[list[dict[str, Any]], int]:
         where = ["1=1"]
         params: list[Any] = []
         if message_id is not None:
             where.append("m.message_id = ?")
             params.append(message_id)
+        elif not include_receipts:
+            where.append("NOT " + _is_receipt_sql("m.body"))
         if workspace_id is not None:
             where.append("m.workspace_id = ?")
             params.append(workspace_id)
@@ -504,7 +533,7 @@ class SqliteObservabilityQueries:
                 f"""
                 SELECT m.message_id, m.workspace_id, m.channel_id, m.from_agent_id,
                        m.created_at, m.subject, m.body, m.target, m.artifacts,
-                       m.trace_id
+                       m.trace_id, {_is_receipt_sql("m.body")} AS is_receipt
                 FROM messages m WHERE {where_sql}
                 ORDER BY m.created_at DESC, m.message_id
                 LIMIT ? OFFSET ?
@@ -543,7 +572,8 @@ class SqliteObservabilityQueries:
                     "subject": row["subject"],
                     "target": _loads(row["target"]),
                     "trace_id": row["trace_id"],
-                    "preview": body[:160],
+                    "kind": "receipt" if row["is_receipt"] else "message",
+                    "preview": body[:MESSAGE_PREVIEW_CHARS],
                     "deliveries": [{k:v for k,v in dict(d).items() if k!='runtime_recovery' or v is not None} for d in deliveries],
                 }
                 if include_body:
