@@ -567,6 +567,55 @@ def test_message_create_rolls_back_when_event_append_fails(
     assert count(migrated_factory, "events") == 0
 
 
+def _stored_subject(factory, message_id):
+    conn = factory.get_connection()
+    try:
+        return conn.execute(
+            "SELECT subject FROM messages WHERE message_id = ?", (message_id,)
+        ).fetchone()[0]
+    finally:
+        conn.close()
+
+
+@pytest.mark.parametrize("given", [None, "", "   ", "Runtime result"])
+def test_message_create_derives_subject_from_first_body_line(
+    migrated_factory, tmp_config, tmp_path, given
+):
+    svc = make_service(migrated_factory, tmp_config, StubClock(), emitter=FakeEmitter())
+    proj = mkdir(tmp_path, "P")
+    long_line = "L" * 200
+    data = svc.create_message(
+        project_root=str(proj), from_agent_id="agentA", subject=given,
+        body=f"\n  Milestone: draft PR open  \nsecond line",
+    )
+    assert _stored_subject(migrated_factory, data["message_id"]) == "Milestone: draft PR open"
+    data = svc.create_message(
+        project_root=str(proj), from_agent_id="agentA", subject=given, body=long_line
+    )
+    assert _stored_subject(migrated_factory, data["message_id"]) == "L" * 80
+
+
+def test_message_create_keeps_explicit_subject(migrated_factory, tmp_config, tmp_path):
+    svc = make_service(migrated_factory, tmp_config, StubClock(), emitter=FakeEmitter())
+    proj = mkdir(tmp_path, "P")
+    data = svc.create_message(
+        project_root=str(proj), from_agent_id="agentA", subject="Explicit title", body="other text"
+    )
+    assert _stored_subject(migrated_factory, data["message_id"]) == "Explicit title"
+
+
+@pytest.mark.parametrize("body", [None, "", "  \n "])
+def test_message_create_without_subject_or_body_is_rejected(
+    migrated_factory, tmp_config, tmp_path, body
+):
+    svc = make_service(migrated_factory, tmp_config, StubClock(), emitter=FakeEmitter())
+    proj = mkdir(tmp_path, "P")
+    with pytest.raises(OktoNexusError) as ei:
+        svc.create_message(project_root=str(proj), from_agent_id="agentA", subject=None, body=body)
+    assert ei.value.code == ErrorCode.VALIDATION_ERROR.value
+    assert count(migrated_factory, "messages") == 0
+
+
 # --------------------------------------------------------------------------- #
 # message_create - error catalogue
 # --------------------------------------------------------------------------- #
@@ -681,7 +730,7 @@ def test_message_create_content_too_large_boundary(
     "kwargs",
     [
         {"from_agent_id": "", "subject": "s", "body": "b"},
-        {"from_agent_id": "a", "subject": "", "body": "b"},
+        {"from_agent_id": "a", "subject": "", "body": ""},
         {"from_agent_id": "a", "subject": "s", "body": ""},
         {
             "from_agent_id": "a",

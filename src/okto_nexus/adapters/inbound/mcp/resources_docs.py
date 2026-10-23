@@ -133,7 +133,9 @@ must already exist; it requires no local path and never creates a workspace.
 Supplying both selectors is rejected. All message permissions, audience rules,
 channel/parent scope checks and approval requirements apply to either selector.
 
-Persist a message and emit ``message.created`` in one transaction. The response
+Persist a message and emit ``message.created`` in one transaction. ``subject``
+is optional: without it (or with the generic ``Runtime result``), the subject is
+the first line of ``body``, cut to 80 characters. The response
 IS your delivery confirmation: ``recipients`` names exactly who received it in
 their inbox (the fan-out commits atomically with the send) and
 ``delivered_count`` totals it. Track what happens next with

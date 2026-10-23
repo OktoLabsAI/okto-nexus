@@ -94,7 +94,7 @@ _MIGRATED_CODE: str = (
 #: optionals marked "(optional)"/"(default: ...)"; cross-refs to sibling tools.
 _P_ROOT = "Absolute path to the project (defines the workspace scope)."
 _P_FROM_AGENT = "Your agent_id (the sender); recorded as the author - recipients reply by targeting it."
-_P_SUBJECT = "Short message subject/title (one line)."
+_P_SUBJECT = "Short message subject/title (one line). Optional: when omitted, the first line of body (max 80 chars) is the subject."
 _P_BODY = "Message body (inline text). For large content, attach an artifact and keep body a short pointer."
 _P_CHANNEL = "Channel_id to post into (optional; omit = no channel). Organizational label only; does NOT decide recipients (the target does)."
 _P_CHANNEL_NAME = "Channel name (REQUIRED; short topic label, max 64 chars, unique per workspace). Idempotent by name (existing -> created=false)."
@@ -296,8 +296,8 @@ def register(server: Any, deps: Any) -> None:
     @tool_envelope
     def message_create(
         from_agent_id: Annotated[str, Field(description=_P_FROM_AGENT)],
-        subject: Annotated[str, Field(description=_P_SUBJECT)],
         body: Annotated[str, Field(description=_P_BODY)],
+        subject: Annotated[str | None, Field(description=_P_SUBJECT)] = None,
         project_root: Annotated[str | None, Field(description="Absolute local project path. Supply exactly one of project_root or existing workspace_id.")] = None,
         workspace_id: Annotated[str | None, Field(description="Existing logical workspace ID. Select this or project_root, never both.")] = None,
         channel_id: Annotated[str | None, Field(description=_P_CHANNEL)] = None,

@@ -39,6 +39,9 @@ __all__ = [
     "new_message_id",
     "new_channel_id",
     "validate_channel_name",
+    "GENERIC_RUNTIME_SUBJECT",
+    "MAX_DERIVED_SUBJECT_CHARS",
+    "derive_subject",
     "require_message_fields",
     "enforce_inline_size",
     "normalize_artifacts",
@@ -76,6 +79,37 @@ MESSAGE_CREATED_TYPE = "message.created"
 #: at-least-once); ``message.read`` = the recipient ACKNOWLEDGED it.
 MESSAGE_DELIVERED_TYPE = "message.delivered"
 MESSAGE_READ_TYPE = "message.read"
+
+
+#: Subject that the runtime gave to every captured reply. It carries no
+#: information, so a subject derived from the body replaces it.
+GENERIC_RUNTIME_SUBJECT = "Runtime result"
+
+#: Maximum length of a subject derived from the body.
+MAX_DERIVED_SUBJECT_CHARS = 80
+
+
+def derive_subject(subject: Any, body: Any) -> Any:
+    """Return ``subject``, or the first body line when it is missing or generic.
+
+    An explicit subject stays unchanged. A missing, blank or generic subject
+    becomes the first non-blank line of ``body``, cut to
+    :data:`MAX_DERIVED_SUBJECT_CHARS` characters. Without a usable body the
+    subject stays unchanged.
+    """
+    if (
+        isinstance(subject, str)
+        and subject.strip()
+        and subject != GENERIC_RUNTIME_SUBJECT
+    ):
+        return subject
+    if not isinstance(body, str):
+        return subject
+    for line in body.splitlines():
+        line = line.strip()
+        if line:
+            return line[:MAX_DERIVED_SUBJECT_CHARS].rstrip()
+    return subject
 
 
 def new_message_id() -> str:

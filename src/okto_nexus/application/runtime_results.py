@@ -9,6 +9,7 @@ import hashlib
 from ..errors import ErrorCode, OktoNexusError
 from ..domain.runtime_context import RuntimeRequestContext
 from ..domain.inbox import requires_known_recipient
+from ..domain.messages import GENERIC_RUNTIME_SUBJECT, derive_subject
 from ..domain.tag_selector import reachable
 from ..domain.targets import target_strategy
 from .permissions import permission_set_for
@@ -53,7 +54,7 @@ class RuntimeResultService:
         if row["output_truncated"]:
             body += "\n[Captured output exceeded the materialization limit; the artifact is also truncated.]"
         outcome = row.get("delivery_outcome")
-        subject = "Runtime result"
+        subject = derive_subject(GENERIC_RUNTIME_SUBJECT, row["output_text"])
         if outcome in ("interrupted", "failed"):
             state = "interrupted" if outcome == "interrupted" else "failed"
             subject = f"Runtime {state} — partial output" if row["output_text"] else f"Runtime {state}"

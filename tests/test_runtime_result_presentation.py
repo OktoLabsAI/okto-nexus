@@ -14,7 +14,7 @@ def test_result_labels_follow_terminal_outcome_and_preserve_artifact_threshold(o
     result = RuntimeResultService.arguments(row)
     assert bool(result['artifacts']) == (size > 60000)
     if outcome == 'success':
-        assert result['subject'] == 'Runtime result'
+        assert result['subject'] == ('x' * 80 if size else 'Runtime result')
         assert not result['body'].startswith('> **Execution')
     else:
         assert outcome in result['subject']
@@ -22,6 +22,27 @@ def test_result_labels_follow_terminal_outcome_and_preserve_artifact_threshold(o
         if size:
             assert 'must not be treated as a complete response' in result['body']
     assert len(result['body'].encode()) < 65536
+
+
+def _result_row(output_text, outcome='success'):
+    return dict(result_id='result-test', output_text=output_text, output_truncated=False,
+                delivery_outcome=outcome, root_realpath='workspace', recipient_agent_id='Pi',
+                recipient_id='operator', channel_id=None, parent_id='message', notification_config='{}')
+
+
+def test_success_subject_is_first_non_blank_line_of_output():
+    result = RuntimeResultService.arguments(_result_row('\n  Milestone: draft PR open \nDetails follow'))
+    assert result['subject'] == 'Milestone: draft PR open'
+
+
+@pytest.mark.parametrize('output', [None, '', '  \n '])
+def test_success_subject_stays_generic_without_output(output):
+    assert RuntimeResultService.arguments(_result_row(output))['subject'] == 'Runtime result'
+
+
+def test_partial_outcome_subjects_ignore_output_text():
+    result = RuntimeResultService.arguments(_result_row('First line\nrest', outcome='failed'))
+    assert result['subject'] == 'Runtime failed \u2014 partial output'
 
 
 def test_history_uses_recorded_outcome_without_rewriting_or_trusting_message_text():

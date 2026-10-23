@@ -39,6 +39,7 @@ from ..domain.messages import (
     new_message_id,
     normalize_artifacts,
     parse_target,
+    derive_subject,
     require_message_fields,
     serialize_target,
     validate_channel_name,
@@ -328,6 +329,9 @@ class MessageService:
         runtime_rejections = []
 
         # Pure, write-free validation first (no row / event on rejection).
+        # A runtime result keeps its subject: it must equal the authorized one.
+        if _runtime_result_id is None:
+            subject = derive_subject(subject, body)
         require_message_fields(from_agent_id, subject, body)
         if type(no_reply) is not bool:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "no_reply must be a boolean.", {})
