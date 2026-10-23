@@ -142,7 +142,8 @@ def stage_embedded_realization(factory, *, owner, executor_id, access, context, 
             if stored["root"] != root or stored["provider_home"] != home or stored["candidate"] != asdict(candidate):
                 raise _error("The approved local directory or installation changed.")
             publication = _persist_realization(uow, server_id=owner.key.server_id,
-                executor_id=executor_id, agent_id=request["agent_id"], request=stored["publication"])
+                executor_id=executor_id, agent_id=request["agent_id"], request=stored["publication"],
+                workspace_root=root["path"])
             return publication
         configuration = {"version":1,"server_id":owner.key.server_id,"executor_id":executor_id,
             "agent_id":request["agent_id"],"adapter_id":request["adapter_id"],"profile_revision":1,
@@ -156,7 +157,8 @@ def stage_embedded_realization(factory, *, owner, executor_id, access, context, 
             local_root_proof_digest=_digest({"root":root,"nonce":nonce,"agent_id":request["agent_id"],
                                              "server_id":owner.key.server_id,"executor_id":executor_id}))
         publication = _persist_realization(uow, server_id=owner.key.server_id,
-            executor_id=executor_id, agent_id=request["agent_id"], request=public)
+            executor_id=executor_id, agent_id=request["agent_id"], request=public,
+            workspace_root=root["path"])
         record = {"root":root,"provider_home":home,"candidate":asdict(candidate),
                   "configuration":configuration,"root_proof_nonce":nonce,"publication":public}
         conn.execute(
