@@ -816,6 +816,26 @@ def build_router() -> APIRouter:
             return _map_error(exc)
         return _ok(data)
 
+    @router.get("/operator/unread-count")
+    async def operator_unread_count(
+        request: Request, since: str | None = None, limit: int = 5
+    ) -> JSONResponse:
+        """Unread messages addressed to the operator: count plus newest items.
+
+        ``since`` (ISO timestamp) keeps only deliveries created after it.
+        """
+        observability = request.app.state.observability
+        try:
+            data = await _read(
+                request,
+                lambda uow: observability.operator_unread(
+                    uow, since_iso=since, limit=limit
+                ),
+            )
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(data)
+
     @router.get("/messages/search")
     async def messages_search(
         request: Request, q: str | None = None, k: str | None = None

@@ -32,6 +32,7 @@ import {
   Tags,
   Users,
   Waypoints,
+  X,
 } from "lucide-react";
 import { AboutModal } from "./components/AboutModal";
 import { HelpModal } from "./components/HelpModal";
@@ -53,6 +54,15 @@ import {
   type NexusEvent,
 } from "./api";
 import { useSSE } from "./useSSE";
+import {
+  newItems,
+  notifyInBackground,
+  OPERATOR_VIEWS,
+  readSeenMarker,
+  toastText,
+  toastTitle,
+  writeSeenMarker,
+} from "./operatorUnread";
 import { useTheme } from "./hooks/useTheme";
 import { GraphView } from "./views/GraphView";
 import { AgentsView } from "./views/AgentsView";
@@ -187,9 +197,18 @@ function Dashboard({
   const settingsPending = useRef(false);
   const onSettingsPending = useCallback((pending: boolean) => {settingsPending.current = pending;}, []);
   const mayLeaveSettings = () => !settingsPending.current || window.confirm('Discard unsaved settings and leave this page?');
+  const viewRef = useRef<View>(view);
+  viewRef.current = view;
+  // Operator notifications (#78). visitBaseline is the "seen" marker from
+  // before the operator opened Messages or Meta-harness. Meta-harness uses it
+  // for the "new since your last visit" divider.
+  const [visitBaseline, setVisitBaseline] = useState<string | null>(null);
   const setView = useCallback((next: View) => {
     if (!settingsPending.current || window.confirm('Discard unsaved settings and leave this page?')) {
       settingsPending.current = false;
+      if (OPERATOR_VIEWS.includes(next) && !OPERATOR_VIEWS.includes(viewRef.current)) {
+        setVisitBaseline(readSeenMarker());
+      }
       setViewState(next);
     }
   }, []);
@@ -231,6 +250,14 @@ function Dashboard({
   // SSE events so the Approvals screen refetches exactly when it matters.
   const [pendingApprovals, setPendingApprovals] = useState(0);
   const [approvalTick, setApprovalTick] = useState(0);
+  // Unread operator messages: server count behind the sidebar badge, a tick
+  // bumped on message.created events, and the toasts shown in every view.
+  const [operatorUnread, setOperatorUnread] = useState(0);
+  const [operatorTick, setOperatorTick] = useState(0);
+  const [toasts, setToasts] = useState<
+    { id: string; title: string; text: string }[]
+  >([]);
+  const reportedRef = useRef<Set<string> | null>(null);
   const [showMenu, setShowMenu] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
@@ -345,6 +372,7 @@ function Dashboard({
         // approval.requested/granted/denied move the pending queue — bump
         // the dedicated tick (badge + Approvals screen refetch on it).
         if (event.type.startsWith("approval.")) setApprovalTick((t) => t + 1);
+        if (event.type === "message.created") setOperatorTick((t) => t + 1);
         window.clearTimeout(refetchTimerRef.current);
         refetchTimerRef.current = window.setTimeout(loadGraph, 400);
       },
@@ -383,6 +411,58 @@ function Dashboard({
   useEffect(() => {
     loadApprovalCount();
   }, [loadApprovalCount, approvalTick, refreshTick]);
+
+  // Unread messages for the operator. The first answer only seeds the list of
+  // reported messages, so opening the dashboard does not toast old messages.
+  // While Messages or Meta-harness is open, the messages count as seen.
+  const loadOperatorUnread = useCallback(async () => {
+    try {
+      const data = await api.operatorUnread(readSeenMarker());
+      const watching = OPERATOR_VIEWS.includes(viewRef.current);
+      if (watching && data.latest_created_at) writeSeenMarker(data.latest_created_at);
+      setOperatorUnread(watching ? 0 : data.count);
+      const reported = reportedRef.current;
+      if (reported === null) {
+        reportedRef.current = new Set(data.items.map((item) => item.message_id));
+        return;
+      }
+      const fresh = newItems(data.items, reported).reverse();
+      if (fresh.length === 0) return;
+      fresh.forEach((item) => reported.add(item.message_id));
+      const shown = fresh.slice(-3);
+      shown.forEach((item) =>
+        notifyInBackground(item, () => setView("Meta-harness")),
+      );
+      setToasts((current) =>
+        [
+          ...current,
+          ...shown.map((item) => ({
+            id: item.message_id,
+            title: toastTitle(item),
+            text: toastText(item),
+          })),
+        ].slice(-3),
+      );
+      shown.forEach((item) =>
+        window.setTimeout(
+          () => setToasts((current) => current.filter((t) => t.id !== item.message_id)),
+          8000,
+        ),
+      );
+    } catch {
+      /* the badge is optional: a locked gate just shows none */
+    }
+  }, [setView]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(loadOperatorUnread, 250);
+    return () => window.clearTimeout(timer);
+  }, [loadOperatorUnread, view, refreshTick, operatorTick]);
+
+  useEffect(() => {
+    const timer = window.setInterval(loadOperatorUnread, 10000);
+    return () => window.clearInterval(timer);
+  }, [loadOperatorUnread]);
 
   // The workspace scope picker is fed by the rich /api/v1/workspaces list (not
   // derived from /sessions): every KNOWN workspace shows up, including ones
@@ -679,6 +759,16 @@ function Dashboard({
                   >
                     <Icon size={16} />
                     <span className="truncate">{name}</span>
+                    {(name === "Messages" || name === "Meta-harness") &&
+                      operatorUnread > 0 && (
+                      <span
+                        className="ml-auto min-w-[18px] px-1.5 py-0.5 rounded-full bg-red-500 text-white text-[10px] font-semibold text-center leading-none"
+                        data-testid={`unread-badge-${name}`}
+                        title="Unread messages addressed to the operator"
+                      >
+                        {operatorUnread}
+                      </span>
+                    )}
                     {name === "Approvals" && pendingApprovals > 0 && (
                       <span
                         className="ml-auto min-w-[18px] px-1.5 py-0.5 rounded-full bg-red-500 text-white text-[10px] font-semibold text-center leading-none"
@@ -726,6 +816,7 @@ function Dashboard({
               workspace={workspace}
               workspaces={workspaces}
               liveTick={liveTick}
+              newSince={visitBaseline}
             />
           )}
           {view === "Events" && (
@@ -770,6 +861,47 @@ function Dashboard({
           {view === "Settings" && <SettingsView onSettingsApplied={loadInfo} onPendingChange={onSettingsPending} />}
       </main>
       </div>
+      {toasts.length > 0 && (
+        <div
+          className="fixed bottom-4 right-4 z-50 flex w-80 flex-col gap-2"
+          role="status"
+          aria-live="polite"
+          data-testid="operator-toasts"
+        >
+          {toasts.map((toast) => (
+            <div
+              key={toast.id}
+              className="flex items-start gap-2 rounded-lg border border-accent-300 bg-white p-3 text-xs shadow-xl dark:border-accent-700/60 dark:bg-surface-800"
+              data-testid="operator-toast"
+            >
+              <button
+                className="min-w-0 flex-1 text-left"
+                onClick={() => {
+                  setToasts((current) => current.filter((t) => t.id !== toast.id));
+                  setView("Meta-harness");
+                }}
+                title="Open Meta-harness"
+              >
+                <div className="font-semibold text-surface-800 dark:text-surface-100">
+                  {toast.title}
+                </div>
+                <div className="mt-0.5 truncate text-surface-600 dark:text-surface-300">
+                  {toast.text}
+                </div>
+              </button>
+              <button
+                className="text-surface-400 hover:text-surface-600 dark:hover:text-surface-200"
+                onClick={() =>
+                  setToasts((current) => current.filter((t) => t.id !== toast.id))
+                }
+                aria-label="Dismiss message notice"
+              >
+                <X size={14} />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
     </WorkspaceNamesProvider>
   );

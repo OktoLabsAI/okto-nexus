@@ -592,6 +592,56 @@ class SqliteObservabilityQueries:
             raise _db_error("reading message history", exc) from exc
         return items, total
 
+    def agent_unread_deliveries(
+        self,
+        uow: UnitOfWork,
+        *,
+        agent_id: str,
+        since_iso: str | None,
+        limit: int,
+    ) -> tuple[list[dict[str, Any]], int]:
+        """Unread deliveries addressed to one agent: (newest ``limit`` rows, count).
+
+        Counts only deliveries whose own status is ``unread`` and whose own
+        recipient is ``agent_id``. Read receipt notifications do not count.
+        ``since_iso`` keeps only deliveries created strictly after that
+        timestamp.
+        """
+        # A read receipt is a notification about a message, not a message.
+        # CASE keeps json_extract away from bodies that are not JSON.
+        where = (
+            "d.recipient_agent_id = ? AND d.status = 'unread' "
+            "AND NOT COALESCE(CASE WHEN json_valid(m.body) "
+            "THEN json_extract(m.body, '$.kind') END = 'message.read_receipt', 0)"
+        )
+        params: list[Any] = [agent_id]
+        if since_iso is not None:
+            where += " AND d.created_at > ?"
+            params.append(since_iso)
+        try:
+            total = int(
+                uow.connection.execute(
+                    "SELECT COUNT(*) FROM message_deliveries d "
+                    f"JOIN messages m ON m.message_id = d.message_id WHERE {where}",
+                    tuple(params),
+                ).fetchone()[0]
+            )
+            rows = uow.connection.execute(
+                f"""
+                SELECT m.message_id, m.workspace_id, m.from_agent_id, m.subject,
+                       substr(m.body, 1, 160) AS preview, d.created_at
+                FROM message_deliveries d
+                JOIN messages m ON m.message_id = d.message_id
+                WHERE {where}
+                ORDER BY d.created_at DESC, m.message_id
+                LIMIT ?
+                """,
+                (*params, limit),
+            ).fetchall()
+        except sqlite3.Error as exc:
+            raise _db_error("reading unread deliveries", exc) from exc
+        return [dict(row) for row in rows], total
+
     def conversation_peers(self, uow: UnitOfWork, *, agent_id: str) -> dict[str, Any]:
         """Aggregate conversation partners + failed-send count in SQL.
 

@@ -1258,6 +1258,17 @@ class ObservabilityQueries(Protocol):
         status: str | None = None,
     ) -> list[dict[str, Any]]: ...
 
+    def agent_unread_deliveries(
+        self,
+        uow: UnitOfWork,
+        *,
+        agent_id: str,
+        since_iso: str | None,
+        limit: int,
+    ) -> tuple[list[dict[str, Any]], int]:
+        """Newest unread deliveries for one recipient and their total count."""
+        ...
+
     def messages_page(
         self,
         uow: UnitOfWork,

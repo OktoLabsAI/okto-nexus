@@ -2,6 +2,8 @@
 // envelope ({ok, data | error}). Human sessions use HttpOnly cookies;
 // issued AGENT keys are never stored by the dashboard.
 
+import type { OperatorUnread } from "./operatorUnread";
+
 export interface Envelope<T> {
   ok: boolean;
   data?: T;
@@ -1227,6 +1229,12 @@ export const api = {
     ),
   message: (messageId: string) =>
     call<MessageRow>(`/api/v1/messages/${encodeURIComponent(messageId)}`),
+  // Unread messages addressed to the operator (badge, toast, divider).
+  // `since` keeps only deliveries created after that timestamp.
+  operatorUnread: (since?: string | null) =>
+    call<OperatorUnread>(
+      `/api/v1/operator/unread-count${since ? `?${new URLSearchParams({ since })}` : ""}`,
+    ),
   conversationPeers: (agent: string) =>
     call<{ items: ConversationPeer[]; failed_count: number }>(
       `/api/v1/conversations/peers?agent=${encodeURIComponent(agent)}`,

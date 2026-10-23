@@ -25,6 +25,7 @@ from __future__ import annotations
 from typing import Any
 
 from ..config import NexusConfig
+from ..domain.approvals import OPERATOR_AGENT_ID
 from ..domain.base import iso_to_epoch
 from ..domain.trace import TRACE_ID_MAX_LEN
 from .ports import Clock, ObservabilityQueries, UnitOfWork
@@ -254,6 +255,30 @@ class ObservabilityService:
             include_receipts=include_receipts,
         )
         return {"items": items, "page": page, "page_size": page_size, "total": total}
+
+    def operator_unread(
+        self,
+        uow: UnitOfWork,
+        *,
+        since_iso: str | None = None,
+        limit: int = 5,
+    ) -> dict[str, Any]:
+        """Unread messages addressed to the operator (dashboard badge and toast).
+
+        ``count`` is the number of operator deliveries still in the unread
+        state (the same state as the Messages "Unread" lane). ``items`` holds
+        the newest ``limit`` of them. ``since_iso`` keeps only deliveries
+        created after that timestamp. Read-only.
+        """
+        limit = min(MAX_PAGE_SIZE, max(1, int(limit)))
+        items, count = self._q.agent_unread_deliveries(
+            uow, agent_id=OPERATOR_AGENT_ID, since_iso=since_iso, limit=limit
+        )
+        return {
+            "count": count,
+            "latest_created_at": items[0]["created_at"] if items else None,
+            "items": items,
+        }
 
     def conversation_peers(self, uow: UnitOfWork, *, agent_id: str) -> dict[str, Any]:
         """The agent's conversation partners (SQL aggregate; chat peer picker)."""
