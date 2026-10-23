@@ -209,6 +209,13 @@ class EmbeddedDispatchOwner:
                 code, agent_id)
         (logger.info if code in ('RECOVERY_READY', 'RECOVERY_AGENT_READY') else logger.warning)('Runtime recovery: %s %s',code,message)
 
+    def _notify_contained_claimant(self, session_id, agent_id, reason):
+        from ..adapters.inbound.mcp.tools.messages import build_service
+        from ..application.execution_release_notifications import notify_contained_claimant
+        return notify_contained_claimant(self.deps, build_service(self.deps),
+            server_id=self.channel.server_id, executor_id=self.channel.executor_id,
+            session_id=session_id, agent_id=agent_id, reason=reason)
+
     async def _recover_automatically(self):
         from nexus_connector_core import RuntimeAutomation
         from ..application.runtime_recovery import drain_pending, mark_recovery_attention
@@ -756,6 +763,7 @@ class EmbeddedDispatchOwner:
                         if now < deadline:
                             session['renew_at'] = min(deadline, now + 1)
                         else:
+                            session.setdefault('recovery_reason', 'LEASE_EXPIRED')
                             self.agents.recover_session(session_id)
                         logging.getLogger(__name__).warning(
                             'Runtime lease persistence delayed; retry scoped to session=%s, expired=%s',
@@ -776,6 +784,8 @@ class EmbeddedDispatchOwner:
                         # Retain the scoped cleanup owner even if shutdown or
                         # release proof is delayed. An unavailable stop must
                         # not escalate into containment of healthy siblings.
+                        session.setdefault('recovery_reason', str(getattr(
+                            error.code, 'value', error.code)))
                         self.agents.recover_session(session_id)
                         return
                     except Exception as containment_error:

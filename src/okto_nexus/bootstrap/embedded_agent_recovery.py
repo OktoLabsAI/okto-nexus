@@ -28,6 +28,19 @@ def _diagnostic(error):
             f"at {getattr(error, 'stage', 'agent runtime history')}{suffix}")
 
 
+_REASON = re.compile(r'[A-Za-z][A-Za-z0-9_.-]{0,79}')
+
+
+def _containment_reason(session):
+    """Technical cause of a containment, safe to show to an operator."""
+    error = session.get('recovery_error')
+    reason = session.get('recovery_reason')
+    if reason is None and error is not None:
+        code = getattr(error, 'code', None) or type(error).__name__
+        reason = getattr(code, 'value', code)
+    return reason if isinstance(reason, str) and _REASON.fullmatch(reason) else 'SESSION_CONTAINED'
+
+
 class EmbeddedAgentRecovery:
     observation_timeout = 5.0
     # Seconds the host keeps its short tick after the last sign of work.
@@ -368,6 +381,7 @@ class EmbeddedAgentRecovery:
         published = await self.owner.events.recover(agent_id=agent_id, live_only=True, progress=progress) or published
         faults = await asyncio.to_thread(self._check_stream_health, agent_id, frozenset(self.owner.active_operations))
         for session_id in faults:
+            self.owner.sessions.get(session_id, {}).setdefault('recovery_reason', 'EVENT_STREAM_UNAVAILABLE')
             self.recover_session(session_id)
         if published or faults:
             self.touch()
@@ -456,6 +470,9 @@ class EmbeddedAgentRecovery:
             await owner.events.recover(agent_id=agent_id, session_id=session_id)
             await EmbeddedReconciliation(owner).release_stopped_session(session_id)
             await owner.tools.release_session(session_id)
+            # Before the session leaves the owner: a failed write retries with it.
+            await asyncio.to_thread(owner._notify_contained_claimant, session_id, agent_id,
+                _containment_reason(session))
             owner.sessions.pop(session_id, None)
             self.session_retry_at.pop(session_id, None)
             await asyncio.to_thread(owner._recovery_event, 'RECOVERY_SESSION_RELEASED',
