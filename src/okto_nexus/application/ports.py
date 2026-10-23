@@ -1202,6 +1202,12 @@ class ObservabilityQueries(Protocol):
         """
         ...
 
+    def contained_claimant_sessions(
+        self, uow: UnitOfWork, claims: dict[str, tuple[str, str]]
+    ) -> dict[str, dict[str, Any]]:
+        """Handoffs whose claimant's newest session was contained since the claim."""
+        ...
+
     def handoff_runtime_facts(self, uow: UnitOfWork, handoff_ids: list[str]) -> dict[str, dict[str, Any]]:
         """Read execution facts only for the already-authorized page of handoffs."""
         ...

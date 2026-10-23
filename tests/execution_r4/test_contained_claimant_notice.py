@@ -184,3 +184,48 @@ def test_stream_fault_names_its_reason():
         assert _containment_reason(owner.sessions["s"]) == "EVENT_STREAM_UNAVAILABLE"
 
     asyncio.run(scenario())
+
+
+def test_handoff_list_marks_a_claimant_whose_newest_session_was_contained(env):
+    from okto_nexus.adapters.outbound.sqlite.observability_repo import SqliteObservabilityQueries
+    from okto_nexus.application.observability import ObservabilityService
+    deps, tools, root, workspace = env
+    lost, other = claimed(tools, root, "beta"), claimed(tools, root, "gamma")
+    conn = deps.connection_factory.get_connection()
+    try:
+        conn.execute("PRAGMA foreign_keys=OFF")
+        conn.execute("INSERT INTO agent_endpoints(endpoint_id,agent_id,workspace_id,adapter_id,protocol,created_at,updated_at) "
+            "VALUES('ep-beta','beta',?,'claude','stream','t','t'),('ep-gamma','gamma',?,'claude','stream','t','t')",
+            (workspace, workspace))
+        conn.execute("INSERT INTO execution_bindings(server_id,binding_id,executor_id,endpoint_id,"
+            "workspace_binding_id,candidate_ref,inventory_revision,realization_ref,realization_revision,"
+            "binding_revision) VALUES('server','b-beta','executor','ep-beta','wb','c','r','x',1,1),"
+            "('server','b-gamma','executor','ep-gamma','wb','c','r','x',1,1)")
+        conn.execute("INSERT INTO execution_sessions(server_id,executor_id,session_id,binding_id,workspace_id,"
+            "workspace_binding_id,open_operation_id,owner_generation,lifecycle_state,lease_state) "
+            "VALUES('server','executor','session-beta','b-beta',?,'wb','op1',1,'FAILED','CLOSED'),"
+            "('server','executor','session-gamma','b-gamma',?,'wb','op2',1,'READY','ACTIVE')",
+            (workspace, workspace))
+    finally:
+        conn.close()
+    contain(deps, session_id="session-beta")
+    service = ObservabilityService(SqliteObservabilityQueries(), deps.clock, deps.config)
+
+    def rows():
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            return {row["handoff_id"]: row for row in service.handoffs(uow, workspace_id=workspace)}
+
+    listed = rows()
+    assert listed[lost]["claimant_session_lost"]["reason"] == "EVENT_OPERATION_MISMATCH"
+    assert listed[lost]["claimant_session_lost"]["session_id"] == "session-beta"
+    assert "claimant_session_lost" not in listed[other]
+    # A newer, healthy session of the same agent means the claimant is back.
+    conn = deps.connection_factory.get_connection()
+    try:
+        conn.execute("PRAGMA foreign_keys=OFF")
+        conn.execute("INSERT INTO execution_sessions(server_id,executor_id,session_id,binding_id,workspace_id,"
+            "workspace_binding_id,open_operation_id,owner_generation,lifecycle_state,lease_state) "
+            "VALUES('server','executor','session-beta-2','b-beta',?,'wb','op3',1,'READY','ACTIVE')", (workspace,))
+    finally:
+        conn.close()
+    assert "claimant_session_lost" not in rows()[lost]

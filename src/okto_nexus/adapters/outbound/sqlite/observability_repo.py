@@ -380,6 +380,38 @@ class SqliteObservabilityQueries:
         from .handoff_runtime_views import SqliteHandoffRuntimeViewRepository
         return SqliteHandoffRuntimeViewRepository().handoffs(uow, handoff_ids)
 
+    def contained_claimant_sessions(self, uow, claims):
+        """Latest execution session per claimant, when the hub contained it.
+
+        ``claims`` maps handoff_id to ``(agent_id, claimed_since)``. A handoff
+        is listed when the newest session of the agent has a containment
+        reason and ``contained_at >= claimed_since``. A newer session means
+        the agent restarted and no longer is in the lost state.
+        """
+        agents = sorted({agent for agent, _ in claims.values()})
+        if not agents:
+            return {}
+        marks = ",".join("?" for _ in agents)
+        try:
+            rows = uow.connection.execute(
+                "SELECT agent_id,session_id,containment_reason,contained_at FROM ("
+                "SELECT ep.agent_id,s.session_id,s.containment_reason,s.contained_at,"
+                "ROW_NUMBER() OVER (PARTITION BY ep.agent_id ORDER BY s.rowid DESC) AS n "
+                "FROM execution_sessions s "
+                "JOIN execution_bindings b ON b.server_id=s.server_id AND b.executor_id=s.executor_id "
+                "AND b.binding_id=s.binding_id JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id "
+                f"WHERE ep.agent_id IN ({marks})) WHERE n=1 AND containment_reason IS NOT NULL",
+                agents).fetchall()
+        except sqlite3.Error as exc:
+            raise _db_error("reading contained claimant sessions", exc) from exc
+        latest = {row["agent_id"]: row for row in rows}
+        return {
+            handoff_id: {"reason": latest[agent]["containment_reason"],
+                         "session_id": latest[agent]["session_id"], "at": latest[agent]["contained_at"]}
+            for handoff_id, (agent, since) in claims.items()
+            if agent in latest and (latest[agent]["contained_at"] or "") >= since
+        }
+
     def handoff_dependency_aggregates(
         self,
         uow: UnitOfWork,

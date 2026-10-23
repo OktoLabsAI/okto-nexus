@@ -316,6 +316,13 @@ class ObservabilityService:
                 if row['handoff_id'] in runtime_facts:
                     row['runtime_progress'] = progress(runtime_facts[row['handoff_id']], automation_enabled=bool(
                         self._config.runtime_handoff_auto_claim_enabled and self._config.feature_harness_integrations))
+            # Claimant containment (#84): updated_at stands in for the claim
+            # time. A contained session cannot renew the lease or update the handoff.
+            claims = {row['handoff_id']: (row['claimed_by'], row['updated_at'] or row['created_at'])
+                      for row in rows if row['status'] == 'CLAIMED' and row['claimed_by']}
+            by_id = {row['handoff_id']: row for row in rows}
+            for handoff_id, lost in self._q.contained_claimant_sessions(uow, claims).items():
+                by_id[handoff_id]['claimant_session_lost'] = lost
             # Dependency exposure (I5/FR7): ONE extra aggregate query for the
             # WHOLE page (never per-row - AC9's anti-N+1). Ids absent from
             # the map have no dependency rows, so a dependency-free handoff
