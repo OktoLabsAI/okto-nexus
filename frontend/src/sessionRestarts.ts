@@ -12,7 +12,7 @@ export interface RestartMarker {
   agentId: string;
   // Time of the last operator message that the ended session handled.
   after: string;
-  // End reason of the ended session, when the hub reports one.
+  // Containment reason of the ended session, when the hub reports one.
   reason: string | null;
 }
 
@@ -41,7 +41,7 @@ export function restartMarkers(sessions: MetaHarnessSession[]): RestartMarker[] 
         id: ended.scope.session_id,
         agentId: ended.scope.agent_id,
         after: ended.last_interaction_at,
-        reason: ended.end_reason ?? null,
+        reason: ended.containment_reason ?? null,
       });
     }
   }

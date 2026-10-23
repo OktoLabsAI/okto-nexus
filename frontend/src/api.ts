@@ -691,9 +691,10 @@ export interface AgentRuntimeOverview {
 export type MetaHarnessSession = import('./runtimeApi').RuntimeSession & {
   harness: string; host: string; location: string; is_open: boolean;
   subject: string | null; last_interaction_at: string; interaction_count: number;
-  // Why the session ended (for example a containment cause). Present only
-  // when the hub reports it; older hubs omit the field.
-  end_reason?: string | null;
+  // Why the hub contained the session and when (migration 154). Both are null
+  // for a session that was never contained.
+  containment_reason?: string | null;
+  contained_at?: string | null;
 }
 export interface MetaHarnessSessions {
   items: MetaHarnessSession[]; total: number; active_count: number; page: number; has_more: boolean;

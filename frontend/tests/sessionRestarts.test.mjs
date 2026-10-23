@@ -9,7 +9,7 @@ const {restartMarkers, placeMarkers} = await import(`data:text/javascript;base64
 
 const session = (id, agent, last, open = false, reason) => ({
   scope: {session_id: id, agent_id: agent, workspace_id: 'w'}, is_open: open, last_interaction_at: last,
-  ...(reason ? {end_reason: reason} : {}),
+  ...(reason ? {containment_reason: reason} : {}),
 });
 
 test('an ended session with a later session of the same agent is a restart', () => {
