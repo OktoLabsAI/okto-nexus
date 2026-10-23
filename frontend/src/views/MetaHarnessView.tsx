@@ -53,7 +53,7 @@ import { isNewForOperator } from "../operatorUnread";
 import { placeMarkers, restartMarkers } from "../sessionRestarts";
 
 import { MetaHarnessSessions } from "../components/MetaHarnessSessions";
-import { formatTime } from "../timeFormat";
+import { formatTime, isoTitle } from "../timeFormat";
 
 const OPERATOR = "operator";
 const TIMELINE_PAGE_SIZE = 20;
@@ -480,9 +480,9 @@ function ReceiptDetailsModal({
                     </span>
                   </div>
                   <dl className="mt-3 grid grid-cols-1 gap-2 border-t border-surface-100 pt-3 text-[11px] sm:grid-cols-3 dark:border-surface-800">
-                    <div><dt className="text-surface-400">Queued</dt><dd className="mt-0.5 text-surface-700 dark:text-surface-200">{fullStamp(delivery.created_at)}</dd></div>
-                    <div><dt className="text-surface-400">Received</dt><dd className="mt-0.5 text-surface-700 dark:text-surface-200">{fullStamp(delivery.delivered_at)}</dd></div>
-                    <div><dt className="text-surface-400">Acknowledged</dt><dd className="mt-0.5 text-surface-700 dark:text-surface-200">{fullStamp(delivery.read_at)}</dd></div>
+                    <div><dt className="text-surface-400">Queued</dt><dd title={isoTitle(delivery.created_at)} className="mt-0.5 text-surface-700 dark:text-surface-200">{fullStamp(delivery.created_at)}</dd></div>
+                    <div><dt className="text-surface-400">Received</dt><dd title={isoTitle(delivery.delivered_at)} className="mt-0.5 text-surface-700 dark:text-surface-200">{fullStamp(delivery.delivered_at)}</dd></div>
+                    <div><dt className="text-surface-400">Acknowledged</dt><dd title={isoTitle(delivery.read_at)} className="mt-0.5 text-surface-700 dark:text-surface-200">{fullStamp(delivery.read_at)}</dd></div>
                   </dl>
                 </div>
               );
@@ -631,7 +631,7 @@ function ChatTurn({
           </span>
           <span>{audienceLabel}</span>
           {showWorkspace && <span>· {shortWorkspace(entry.workspaceId, workspaces)}</span>}
-          <span>· {formatTime(entry.timestamp)}</span>
+          <span title={isoTitle(entry.timestamp)}>· {formatTime(entry.timestamp)}</span>
           <CopyMessageButton text={formatChatContent(entry.content)} />
         </div>
         <div
