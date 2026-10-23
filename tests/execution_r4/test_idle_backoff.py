@@ -2,7 +2,6 @@
 import asyncio
 from contextlib import contextmanager
 import functools
-import threading
 import time
 from types import SimpleNamespace
 

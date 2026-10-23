@@ -1,6 +1,5 @@
 """A contained session tells the creators of its claimed handoffs and the operator."""
 import asyncio
-import json
 from types import SimpleNamespace
 
 import pytest

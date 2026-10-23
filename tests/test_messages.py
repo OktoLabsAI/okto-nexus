@@ -586,7 +586,7 @@ def test_message_create_derives_subject_from_first_body_line(
     long_line = "L" * 200
     data = svc.create_message(
         project_root=str(proj), from_agent_id="agentA", subject=given,
-        body=f"\n  Milestone: draft PR open  \nsecond line",
+        body="\n  Milestone: draft PR open  \nsecond line",
     )
     assert _stored_subject(migrated_factory, data["message_id"]) == "Milestone: draft PR open"
     data = svc.create_message(

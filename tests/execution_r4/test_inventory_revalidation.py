@@ -237,7 +237,6 @@ def stale_binding(checking, monkeypatch):
     monkeypatch.setattr(availability, 'qualified_build', lambda *a, **k: True)
     from test_connection_setup import request_for, finish
     from okto_nexus.application.execution_local_realizations import directory_identity
-    from okto_nexus.domain.runtime_context import RuntimeRequestContext
     deps, app, client, headers, body, route, source, _ = checking
     # Qualify the build, so a checked installation is ready for runtime.
     source = replace(source, architecture='x86_64')

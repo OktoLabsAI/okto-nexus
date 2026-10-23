@@ -373,7 +373,7 @@ def test_finish_refuses_unchecked_or_stale_installation_revision(checking):
     assert current in error.value.message
     # With the current revision, Finish binds and the binding stays valid.
     request['inventory_revision'] = current
-    result = finish(setup, context, request, verified={
+    finish(setup, context, request, verified={
         'root': directory_identity(request['configuration']['workspace_root']), 'home': None})
     assert verified(request)
     with deps.connection_factory.unit_of_work(write=False) as uow:
