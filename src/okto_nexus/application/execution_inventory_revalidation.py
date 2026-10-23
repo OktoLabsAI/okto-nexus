@@ -157,3 +157,55 @@ def revalidate_inventory(conn, snapshot):
         if approved != revision and (prior is None or prior['current_revision'] != revision or
                                      prior['compatible'] != int(compatible)):
             log.info('Runtime inventory revalidation: binding=%s result=%s', binding['binding_id'], reason)
+
+
+def revalidate_all_bindings(factory, *, context, access):
+    """Operator action: accept the current installation for every binding that needs review.
+
+    A binding is accepted only when its installation is present, selected and
+    ready in the current inventory. The action records the current evidence as
+    the new baseline. It does not change a binding, a grant or a session.
+    """
+
+    with factory.unit_of_work() as uow:
+        access.authorize_maintenance(context, uow=uow)
+        conn = uow.connection
+        rows = conn.execute(
+            'SELECT b.binding_id,b.endpoint_id,b.server_id,b.executor_id,b.inventory_revision,b.candidate_ref,'
+            'ep.adapter_id,c.inventory_revision AS current_revision,s.canonical_projection '
+            'FROM execution_bindings b JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id '
+            'JOIN execution_executors e ON e.server_id=b.server_id AND e.executor_id=b.executor_id '
+            'LEFT JOIN execution_inventory_current c ON c.server_id=b.server_id AND c.executor_id=b.executor_id '
+            'LEFT JOIN execution_inventory_snapshots s ON s.server_id=c.server_id AND s.executor_id=c.executor_id '
+            "AND s.publication_sequence=c.publication_sequence WHERE ep.activation_state='approved' "
+            'AND e.revoked_at IS NULL ORDER BY b.binding_id').fetchall()
+        results = []
+        for row in rows:
+            result = dict(binding_id=row['binding_id'], endpoint_id=row['endpoint_id'], adapter_id=row['adapter_id'])
+            if row['current_revision'] is None:
+                outcome = 'inventory_unavailable'
+            elif accepts_binding(conn, row, row['current_revision'], row['server_id'], row['executor_id']):
+                outcome = 'already_current'
+            else:
+                current = selection(json.loads(row['canonical_projection']), row['adapter_id'], row['candidate_ref'])
+                evidence = (current or {}).get('evidence', {})
+                if current is None:
+                    outcome = 'installation_missing'
+                elif evidence.get('state') != 'READY_FOR_RUNTIME' or evidence.get('trust') != 'selected':
+                    outcome = 'installation_not_ready'
+                else:
+                    conn.execute('INSERT INTO execution_inventory_revalidation VALUES (?,?,?,?,?,?,1,?,'
+                        "strftime('%Y-%m-%dT%H:%M:%fZ','now')) ON CONFLICT(server_id,executor_id,approved_revision,"
+                        'candidate_ref) DO UPDATE SET current_revision=excluded.current_revision,'
+                        'baseline_json=excluded.baseline_json,compatible=1,reason=excluded.reason,'
+                        'checked_at=excluded.checked_at',
+                        (row['server_id'], row['executor_id'], row['inventory_revision'], row['candidate_ref'],
+                         row['current_revision'], json.dumps(current, sort_keys=True), 'operator_revalidated'))
+                    outcome = 'revalidated'
+            results.append({**result, 'outcome': outcome})
+        counts = {name: sum(item['outcome'] == name for item in results)
+                  for name in ('revalidated', 'already_current', 'installation_missing',
+                               'installation_not_ready', 'inventory_unavailable')}
+        log.info('Operator revalidated %d binding(s); %d need another action',
+                 counts['revalidated'], len(results) - counts['revalidated'] - counts['already_current'])
+        return dict(counts, bindings=results)

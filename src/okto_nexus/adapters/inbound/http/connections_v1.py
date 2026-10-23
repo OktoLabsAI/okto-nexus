@@ -249,6 +249,21 @@ def build_router() -> APIRouter:
             return binding_error(error, "binding.apply")
         return JSONResponse(view, headers={"Cache-Control": "no-store"})
 
+    @router.post('/connections/bindings:revalidate')
+    async def revalidate_bindings(request: Request) -> JSONResponse:
+        """Operator recovery after a harness update: accept the current installation for all bindings."""
+        if get_authenticated_agent() is None:
+            return v1_err(401, 'AUTH_FAILED', 'Authentication is required.')
+        from ....application.execution_inventory_revalidation import revalidate_all_bindings
+        deps = request.app.state.deps
+        context = runtime_request_context()
+        try:
+            value = await anyio.to_thread.run_sync(lambda: revalidate_all_bindings(
+                deps.connection_factory, context=context, access=build_execution_access(deps)))
+        except OktoNexusError as error:
+            return binding_error(error, 'binding.revalidate')
+        return JSONResponse(value, headers={'Cache-Control': 'no-store'})
+
     @router.get('/connections/status')
     async def connections_status(request: Request) -> JSONResponse:
         if get_authenticated_agent() is None:
