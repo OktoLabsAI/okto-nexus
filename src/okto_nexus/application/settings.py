@@ -95,6 +95,30 @@ SETTING_SPECS: tuple[SettingSpec, ...] = (
         maximum=86400,
     ),
     SettingSpec(
+        "max_relay_depth",
+        "int",
+        "Maximum relay depth of one chain. A relay past this depth is "
+        "refused. Applies to new chains only.",
+        minimum=0,
+        maximum=64,
+    ),
+    SettingSpec(
+        "max_executions_per_root",
+        "int",
+        "Maximum executions that one root message can start. Applies to "
+        "new roots only.",
+        minimum=1,
+        maximum=1024,
+    ),
+    SettingSpec(
+        "root_deadline_seconds",
+        "int",
+        "Seconds that a root message chain can run before it closes. "
+        "Applies to new roots only.",
+        minimum=1,
+        maximum=86400,
+    ),
+    SettingSpec(
         "inbox_lease_ttl_seconds",
         "int",
         "Lease (s) for messages pulled via inbox_pull: without an ack within "
