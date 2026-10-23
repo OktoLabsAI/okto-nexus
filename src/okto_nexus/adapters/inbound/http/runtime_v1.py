@@ -189,6 +189,14 @@ class RecoveryConfirmation(BaseModel):
     confirmation: Literal['PREVIOUS_RUNTIME_PROCESSES_STOPPED']
 
 
+def _path_free_trust_detail(reason: str) -> str:
+    """Sentence for the inventory API: the full reason, with its paths, stays in the log (#67)."""
+    code = reason.split(":", 1)[0].strip() if ":" in reason else ""
+    prefix = f"{code}: " if code.isidentifier() and code.isupper() else ""
+    return (prefix + "the binary resolves outside the trusted --harness-root directories; "
+            "see the server log for the resolved path")
+
+
 def build_router() -> APIRouter:
     router = APIRouter()
 
@@ -534,7 +542,7 @@ def build_router() -> APIRouter:
             for item in view["snapshot"].get("evidence", ()):
                 detail = details.get((item.get("adapter_id"), item.get("candidate_ref")))
                 if detail:
-                    item["trust_detail"] = detail
+                    item["trust_detail"] = _path_free_trust_detail(detail)
         return JSONResponse(view, headers={"Cache-Control": "no-store"})
 
     @router.post("/runtime/executors/{executor_id}/realizations")

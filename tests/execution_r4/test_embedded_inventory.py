@@ -378,6 +378,10 @@ def test_untrusted_candidate_reason_is_logged_and_in_inventory_api(tmp_path, mon
                                 headers={"Authorization": "Bearer " + key})
     assert viewed.status_code == 200, viewed.text
     evidence = viewed.json()["snapshot"]["evidence"]
-    assert [item["trust_detail"] for item in evidence if item["trust"] == "untrusted"] == [text]
+    details = [item["trust_detail"] for item in evidence if item["trust"] == "untrusted"]
+    assert len(details) == 1
+    assert "/" not in details[0].replace("--harness-root", "") and str(binary) not in details[0]
+    assert "\\" not in details[0]
+    assert "see the server log" in details[0]
     assert sum(text in record.getMessage() for record in caplog.records
                if record.levelname == 'WARNING') == 1
