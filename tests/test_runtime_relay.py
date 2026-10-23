@@ -77,7 +77,7 @@ def wait_blocked(runtime, count=1):
 
 
 
-@pytest.mark.parametrize("agent_key,status", [(True, 403), (False, 422)])
+@pytest.mark.parametrize("agent_key,status", [(True, 403), (False, 410)])
 def test_relay_configuration_cannot_be_self_authorized_or_attached_without_results(runtime, agent_key, status):
     _, client, root, _, operator, caller = runtime
     response = client.post("/api/v1/harness/endpoints", headers={"x-api-key": caller if agent_key else operator}, json={

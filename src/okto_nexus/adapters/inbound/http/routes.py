@@ -1010,12 +1010,15 @@ def build_router() -> APIRouter:
     async def runtime_endpoint_create(request: Request, body: RuntimeEndpointBody) -> JSONResponse:
         deps = request.app.state.deps
         try:
-            context = _harness_authorize(deps)
-            result = await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).create_endpoint(
-                context, **body.model_dump()))
-            return _ok(result)
+            _harness_authorize(deps)
         except OktoNexusError as exc:
             return _map_error(exc)
+        return _err(
+            410,
+            "GONE",
+            "Legacy connection setup was removed. Use /api/v1/runtime-management/connections/setup.",
+            {"replacement": "/api/v1/runtime-management/connections/setup"},
+        )
 
     @router.get("/harness/endpoints")
     async def runtime_endpoints(request: Request, agent_id: str | None = None) -> JSONResponse:

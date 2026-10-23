@@ -136,3 +136,15 @@ def test_profile_cannot_claim_unimplemented_sandbox_controls(runtime, adapter):
         json={"profile_id": "unsupported-controls", "adapter_id": adapter,
               "config": {"sandbox": "read-only", "approval_policy": "on-request"}})
     assert response.status_code == 422, response.text
+
+
+def test_endpoint_create_route_returns_gone_with_replacement_path(runtime):
+    _, client, root, _, key, caller_key = runtime
+    body = {"endpoint_id": "x", "agent_id": "worker", "adapter_id": "pi", "project_root": root}
+    response = client.post("/api/v1/harness/endpoints", headers={"x-api-key": key}, json=body)
+    assert response.status_code == 410, response.text
+    error = response.json()["error"]
+    assert error["code"] == "GONE"
+    assert "/api/v1/runtime-management/connections/setup" in error["message"]
+    assert error["details"]["replacement"] == "/api/v1/runtime-management/connections/setup"
+    assert client.post("/api/v1/harness/endpoints", headers={"x-api-key": caller_key}, json=body).status_code == 403

@@ -42,7 +42,7 @@ string); its `action` defaults to `list` for endpoint/profile views. Do not pass
 | profiles/create | POST /api/v1/harness/profiles | profile_id, adapter_id |
 | profiles/update | PATCH /api/v1/harness/profiles/{id} | profile_id, expected_revision and one or more mutable fields |
 | endpoints/list | GET /api/v1/harness/endpoints | None; agent_id is an optional filter |
-| endpoints/create | POST /api/v1/harness/endpoints | endpoint_id, agent_id, adapter_id, project_root; profile_id for managed processes |
+| endpoints/create | POST /api/v1/harness/endpoints | Removed. The route returns 410 Gone. Use POST /api/v1/runtime-management/connections/setup |
 | endpoints/update | PATCH /api/v1/harness/endpoints/{id} | endpoint_id, expected_revision and one or more mutable fields |
 | endpoints/boot | PUT /api/v1/harness/endpoints/{id}/boot | endpoint_id, expected_revision, enabled |
 | endpoints/reconcile | POST /api/v1/harness/endpoints/{id}/reconcile | endpoint_id, expected_revision, idempotency_key, reason, acknowledge_uncertain_effects=true |
