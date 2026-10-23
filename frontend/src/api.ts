@@ -1847,16 +1847,24 @@ export const api = {
 };
 
 // MCP snippets per client format (mirrors the Pulse getMcpConfigJson).
+// The key goes in an Authorization: Bearer header, never in the URL (the
+// query-key form is kept by the server only for migration).
 export function mcpSnippet(format: string, apiKey: string): string {
-  const url = `http://${location.hostname}:${location.port || "8202"}/mcp?api_key=${apiKey}`;
+  const url = `http://${location.hostname}:${location.port || "8202"}/mcp`;
+  const headers = { Authorization: `Bearer ${apiKey}` };
   switch (format) {
     case "claude-cli":
-      return `claude mcp add -t http okto-nexus "${url}"`;
+      return `claude mcp add -t http okto-nexus "${url}" --header "Authorization: Bearer ${apiKey}"`;
     case "codex":
-      return `codex mcp add okto-nexus --url "${url}"`;
+      // codex has no inline header option: it reads the bearer token from an
+      // environment variable that the operator exports first.
+      return [
+        `export OKTO_NEXUS_API_KEY="${apiKey}"`,
+        `codex mcp add okto-nexus --url "${url}" --bearer-token-env-var OKTO_NEXUS_API_KEY`,
+      ].join("\n");
     case "vscode":
       return JSON.stringify(
-        { servers: { "okto-nexus": { type: "http", url } } },
+        { servers: { "okto-nexus": { type: "http", url, headers } } },
         null,
         2,
       );
@@ -1864,7 +1872,7 @@ export function mcpSnippet(format: string, apiKey: string): string {
     case "cursor":
     case "windsurf":
       return JSON.stringify(
-        { mcpServers: { "okto-nexus": { url } } },
+        { mcpServers: { "okto-nexus": { url, headers } } },
         null,
         2,
       );
