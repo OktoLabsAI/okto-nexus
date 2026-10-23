@@ -107,7 +107,7 @@ class EndpointService:
     def harness_settings(self, context, *, endpoint_id, changes=None):
         """Revisioned native launch settings, independent of Nexus tool policy."""
         from nexus_connector_core import validate_harness_configuration, CoreError
-        from .execution_harness_configuration import read_harness_configuration
+        from .execution_harness_configuration import approvals_routing_enabled, read_harness_configuration
         self.authorize(context)
         if changes is not None and (not isinstance(changes, dict) or
                 set(changes) != {'expected_revision', 'settings'} or
@@ -122,7 +122,7 @@ class EndpointService:
             config = dict(endpoint['public_config'])
             settings = config.get('harness_settings', {})
             schema = read_harness_configuration(uow.connection, endpoint_id=endpoint_id,
-                                               adapter_id=endpoint['adapter_id'])
+                adapter_id=endpoint['adapter_id'], native_approvals_enabled=approvals_routing_enabled(self.config))
             if changes is not None:
                 if changes['expected_revision'] != endpoint['revision']:
                     raise OktoNexusError(ErrorCode.CONFLICT, 'Connection changed. Reload its settings.', {})
