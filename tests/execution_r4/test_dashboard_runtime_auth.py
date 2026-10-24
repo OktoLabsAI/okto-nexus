@@ -1,5 +1,7 @@
 """Loopback UI authority is explicit; canonical agent transports stay keyed."""
 import pytest
+from test_installation_succession import World
+from test_local_launch import admitted_local  # noqa: F401
 from test_local_realization import local_setup
 
 
@@ -65,3 +67,15 @@ def test_dashboard_bridge_rejects_unkeyed_nonlocal_server_and_has_no_ticket_rout
     assert client.get('/api/v1/runtime-management/agents/subject/executors').status_code == 401
     response = client.post('/api/v1/runtime-management/connections/executors', headers=headers['operator'], json={})
     assert response.status_code == 404
+
+
+def test_loopback_operator_accepts_a_held_succession_but_an_agent_key_cannot(admitted_local, monkeypatch):
+    world = World(admitted_local, monkeypatch, hub='review')
+    world.run((world.successor(),))
+    held = world.rows()[0]
+    world.app.state.local_open = True
+    path = f"/api/v1/runtime-management/connections/installation-successions/{held['id']}:accept"
+    assert world.client.post(path, headers=world.setup[3]['subject']).status_code == 403
+    accepted = world.client.post(path)
+    assert accepted.status_code == 200, accepted.text
+    assert (accepted.json()['decision'], accepted.json()['decided_by']) == ('accepted', 'operator')
