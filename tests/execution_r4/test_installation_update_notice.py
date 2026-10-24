@@ -63,7 +63,7 @@ def test_log_union_shows_succession_history(opening):
     deps = opening[0]
     row = bound(deps)
     with deps.connection_factory.unit_of_work() as uow:
-        for decision, reason in (('held', 'downgrade'), ('accepted', None)):
+        for decision, reason in (('held', 'downgrade'), ('accepted', 'newer_version')):
             uow.connection.execute(
                 "INSERT INTO execution_installation_succession(server_id,executor_id,adapter_id,stable_ref,decision,"
                 "reason,policy,policy_source,decided_by,from_version,to_version,to_build_identity,decided_at) "
