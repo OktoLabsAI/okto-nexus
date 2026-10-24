@@ -154,6 +154,21 @@ def test_operator_accept_relabels_on_next_call_without_probe(admitted_local, mon
     assert world.probed == [] and len(world.rows()) == 2
 
 
+def test_operator_accept_writes_one_warning_log_line(admitted_local, monkeypatch, caplog):
+    world = World(admitted_local, monkeypatch, hub='review')
+    world.run((world.successor(),))
+    held = world.rows()[0]
+    caplog.clear()
+    with caplog.at_level('WARNING', logger='okto_nexus.application.execution_installation_succession'):
+        with world.deps.connection_factory.unit_of_work() as uow:
+            accept_succession(uow.connection, held['id'], 'operator')
+            accept_succession(uow.connection, held['id'], 'operator')
+    lines = [r for r in caplog.records if r.getMessage().startswith('Runtime installation update:')]
+    assert len(lines) == 1 and lines[0].levelname == 'WARNING'
+    assert lines[0].getMessage() == ('Runtime installation update: decision=accepted reason=operator_accepted '
+                                     'from=2.1.309 to=None policy=review')
+
+
 def test_held_row_takes_every_from_field_from_the_last_accepted_build(world):
     first = world.successor('codex2.exe', build_identity='sha256:build-310')
     world.run((first,))

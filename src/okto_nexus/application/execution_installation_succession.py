@@ -226,4 +226,8 @@ def accept_succession(conn, succession_id, actor):
     row = {name: held[name] for name in _COLUMNS}
     row.update(decision='accepted', reason='operator_accepted', decided_by=actor)
     row['decided_at'] = conn.execute("SELECT strftime('%Y-%m-%dT%H:%M:%fZ','now')").fetchone()[0]
-    return record_succession(conn, row) or dict(row, id=None)
+    new_row = record_succession(conn, row)
+    if new_row is not None:
+        log.warning('Runtime installation update: decision=%s reason=%s from=%s to=%s policy=%s',
+                    'accepted', 'operator_accepted', row['from_version'], row['to_version'], row['policy'])
+    return new_row or dict(row, id=None)
