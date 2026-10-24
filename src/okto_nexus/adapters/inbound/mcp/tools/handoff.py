@@ -76,11 +76,8 @@ from ._guardrails import build_guardrail_service
 #: Reused parameter descriptions (kept DRY across the handoff tools).
 #: House style (mirrors okto-pulse): enums as "one of: a, b, c (default: x)";
 #: optionals marked "(optional)"/"(default: ...)"; cross-refs to sibling tools.
-_P_ROOT = (
-    "Absolute project path, or the bound workspace ID for a managed session; mutually exclusive with "
-    "workspace_id. A path resolves to a path-based workspace only. For a workspace created in the "
-    "dashboard, pass workspace_id (wsr_...) instead."
-)
+_P_ROOT = "Absolute project path, or bound workspace ID (managed session)."
+_P_WSID = "Workspace ID (wsr_... for dashboard workspaces); use instead of project_root."
 _P_FROM_AGENT = (
     "Your agent_id (the creator); recorded as the handoff's originator - the owner "
     "is whichever agent later claims it (handoff_claim), not necessarily you."
@@ -327,7 +324,7 @@ def register(server: Any, deps: Any) -> None:
         session_id: Annotated[str | None, Field(description=_P_SESSION_OPT)] = None,
         session_secret: Annotated[str | None, Field(description="Optional session proof for creator affinity; never persisted. Without proof session_id is attribution only.")] = None,
         project_root: Annotated[str | None, Field(description=_P_ROOT)] = None,
-        workspace_id: Annotated[str | None, Field(description="Existing logical workspace ID; mutually exclusive with project_root.")] = None,
+        workspace_id: Annotated[str | None, Field(description=_P_WSID)] = None,
     ) -> dict[str, Any]:
         """Create an OPEN handoff (validates target/visibility); emit handoff.created. After creating, poll handoff_get for status/result. Full docs: okto-nexus://reference/tool-docs/handoff."""
         require_json_object_param("target", target, required=True)
@@ -354,7 +351,7 @@ def register(server: Any, deps: Any) -> None:
         limit: Annotated[Any, Field(description=_P_LIMIT)] = None,
         timeout_seconds: Annotated[Any, Field(description=_P_TIMEOUT)] = None,
         project_root: Annotated[str | None, Field(description=_P_ROOT)] = None,
-        workspace_id: Annotated[str | None, Field(description="Existing logical workspace ID; mutually exclusive with project_root.")] = None,
+        workspace_id: Annotated[str | None, Field(description=_P_WSID)] = None,
     ) -> dict[str, Any]:
         """Expire leases, then list OPEN handoffs visible+eligible to the caller (paginated); entries are metadata-only until claimed."""
         # Long-poll OFF the event loop (mirrors event_wait): the blocking wait
@@ -387,7 +384,7 @@ def register(server: Any, deps: Any) -> None:
         claim_epoch: Annotated[int | None, Field(description="Required when dispatching an already-owned claim or rework.", strict=True)] = None,
         completion_mode: Annotated[str, Field(description="Managed completion contract: authenticated_nexus_call (default) or explicitly authorize structured_result_v1 on the correlated native result. Neither permits self-verification.")] = "authenticated_nexus_call",
         project_root: Annotated[str | None, Field(description=_P_ROOT)] = None,
-        workspace_id: Annotated[str | None, Field(description="Existing logical workspace ID; mutually exclusive with project_root.")] = None,
+        workspace_id: Annotated[str | None, Field(description=_P_WSID)] = None,
     ) -> dict[str, Any]:
         """Atomically claim an OPEN handoff; single winner, others get a structured error. Returns the payload + claimed_by/lease_expires_at. In strict mode pass session_id + session_secret."""
         return service.handoff_claim(
@@ -416,7 +413,7 @@ def register(server: Any, deps: Any) -> None:
             str | None, Field(description=_P_SESSION_SECRET)
         ] = None,
         project_root: Annotated[str | None, Field(description=_P_ROOT)] = None,
-        workspace_id: Annotated[str | None, Field(description="Existing logical workspace ID; mutually exclusive with project_root.")] = None,
+        workspace_id: Annotated[str | None, Field(description=_P_WSID)] = None,
     ) -> dict[str, Any]:
         """Owner-only delivery of a CLAIMED handoff: -> COMPLETED, or -> VERIFYING when acceptance_criteria were set (verifier decides via handoff_verify). In strict mode pass session creds."""
         trust.require(
@@ -448,7 +445,7 @@ def register(server: Any, deps: Any) -> None:
             str | None, Field(description=_P_SESSION_SECRET)
         ] = None,
         project_root: Annotated[str | None, Field(description=_P_ROOT)] = None,
-        workspace_id: Annotated[str | None, Field(description="Existing logical workspace ID; mutually exclusive with project_root.")] = None,
+        workspace_id: Annotated[str | None, Field(description=_P_WSID)] = None,
     ) -> dict[str, Any]:
         """Verifier-only verdict on a VERIFYING handoff: 'pass' -> COMPLETED (verified_by), 'fail' -> CLAIMED for rework (feedback + renewed lease). In strict mode pass session creds."""
         trust.require(
@@ -479,7 +476,7 @@ def register(server: Any, deps: Any) -> None:
             str | None, Field(description=_P_SESSION_SECRET)
         ] = None,
         project_root: Annotated[str | None, Field(description=_P_ROOT)] = None,
-        workspace_id: Annotated[str | None, Field(description="Existing logical workspace ID; mutually exclusive with project_root.")] = None,
+        workspace_id: Annotated[str | None, Field(description=_P_WSID)] = None,
     ) -> dict[str, Any]:
         """Reject a handoff (owner CLAIMED->REJECTED or direct-target OPEN->REJECTED). In trust_mode=strict pass session_id + session_secret."""
         trust.require(
@@ -514,7 +511,7 @@ def register(server: Any, deps: Any) -> None:
             str | None, Field(description=_P_SESSION_SECRET)
         ] = None,
         project_root: Annotated[str | None, Field(description=_P_ROOT)] = None,
-        workspace_id: Annotated[str | None, Field(description="Existing logical workspace ID; mutually exclusive with project_root.")] = None,
+        workspace_id: Annotated[str | None, Field(description=_P_WSID)] = None,
     ) -> dict[str, Any]:
         """Creator-only OPEN -> CANCELLED; retract a handoff nobody should take (e.g. a pool target matching zero agents). Only OPEN handoffs cancel. In strict mode pass session creds."""
         trust.require(
@@ -537,7 +534,7 @@ def register(server: Any, deps: Any) -> None:
         handoff_id: Annotated[str, Field(description=_P_HANDOFF_ID)],
         agent_id: Annotated[str, Field(description=_P_GET_AGENT)],
         project_root: Annotated[str | None, Field(description=_P_ROOT)] = None,
-        workspace_id: Annotated[str | None, Field(description="Existing logical workspace ID; mutually exclusive with project_root.")] = None,
+        workspace_id: Annotated[str | None, Field(description=_P_WSID)] = None,
     ) -> dict[str, Any]:
         """Read a handoff by id: status, claimant, payload, result/rejected_reason + verification/dependency fields if set. The creator's path to the outcome. Full docs: okto-nexus://reference/tool-docs/handoff."""
         return service.handoff_get(
