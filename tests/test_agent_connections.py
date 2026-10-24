@@ -158,14 +158,19 @@ def test_enabling_feature_does_not_restore_retired_setup(runtime):
     deps, client, root, peers, operator, _ = runtime
     deps.config.feature_harness_integrations = True
     headers = {'x-api-key': operator}
-    for route, body in (
-        ('profiles', {'profile_id': 'profile-pi', 'adapter_id': 'pi', 'enabled': True}),
+    for route, body, status, code in (
+        ('profiles', {'profile_id': 'profile-pi', 'adapter_id': 'pi', 'enabled': True}, 422, None),
         ('endpoints', {'endpoint_id': 'endpoint-pi', 'agent_id': 'worker', 'adapter_id': 'pi',
-                       'project_root': root, 'profile_id': 'profile-pi', 'enabled': True}),
+                       'project_root': root, 'profile_id': 'profile-pi', 'enabled': True}, 410, 'GONE'),
     ):
         response = client.post('/api/v1/harness/' + route, headers=headers, json=body)
-        assert response.status_code == 422, response.text
-        assert 'canonical runtime integration' in response.json()['error']['message']
+        assert response.status_code == status, response.text
+        error = response.json()['error']
+        if code:
+            assert error['code'] == code
+            assert error['details']['replacement'] == '/api/v1/runtime-management/connections/setup'
+        else:
+            assert 'canonical runtime integration' in error['message']
     assert not peers
 
 
