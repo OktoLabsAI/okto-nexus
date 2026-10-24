@@ -153,6 +153,10 @@ Options:
   --pi-install-root P  Pi installation directory containing releases/
   --pi-node P        Absolute Node executable; required with --pi-install-root
   --trust-mode M      open | strict
+  --runtime-update-policy P
+                      review | follow (default review; env
+                      OKTO_NEXUS_RUNTIME_UPDATE_POLICY). follow adopts a
+                      newer runtime build under an approved installation.
   --runtime-handoff-auto-claim-enabled true|false
                       Startup rollout gate (default true); agent opt-in and
                       execution grants are also required. Off preserves recovery.

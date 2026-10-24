@@ -60,6 +60,13 @@ SETTING_SPECS: tuple[SettingSpec, ...] = (
         "restart to close existing streams. TLS can terminate at a trusted reverse proxy.",
         choices=("http_https", "https_only"),
     ),
+    SettingSpec(
+        "runtime_update_policy", "enum",
+        "When a runtime installation updates to a newer build: 'review' (default) holds the "
+        "new build for operator review. 'follow' adopts one strictly newer build under the "
+        "approved installation and keeps live sessions.",
+        choices=("review", "follow"),
+    ),
     SettingSpec("connection_key_ttl_seconds", "int", "New connection key lifetime in seconds; 86400 = 24 hours, 0 = unlimited. Agents may override this default. Existing keys keep their issued expiry.", minimum=0, maximum=315360000),
     SettingSpec(
         "session_stale_ttl_seconds",
