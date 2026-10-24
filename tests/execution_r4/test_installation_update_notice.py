@@ -17,7 +17,7 @@ def bound(deps):
 def update_for(row, **fields):
     values = dict(server_id=row['server_id'], executor_id=row['executor_id'], stable_ref=row['candidate_ref'],
         decision='held', reason='downgrade', from_version='2.1.309', to_version='2.1.306',
-        from_build_identity='a' * 40, to_build_identity='b' * 40)
+        from_build_identity='sha256:' + 'a' * 64, to_build_identity='sha256:' + 'b' * 64)
     values.update(fields)
     return InstallationUpdate(**values)
 
@@ -53,7 +53,7 @@ def test_two_runs_give_one_message_and_one_delivery_per_workspace(opening):
     body = found[0]['body']
     for text in (row['agent_id'], '2.1.309', '2.1.306', 'a' * 12, 'b' * 12, 'held', 'downgrade'):
         assert text in body
-    assert 'a' * 13 not in body
+    assert 'a' * 13 not in body and 'sha256' not in body
     accepted = update_for(row, decision='accepted', reason=None)
     assert notify_installation_update(deps, messages, accepted) == 1
     assert len(operator_notices(deps)) == 2

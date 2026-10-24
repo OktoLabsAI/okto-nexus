@@ -163,7 +163,7 @@ def notify_installation_update(deps, messages, update):
         agents = {}
         for row in rows:
             agents.setdefault(row['workspace_id'], []).append(row['agent_id'])
-        short = lambda value: (value or 'unknown')[:12]
+        short = lambda value: (value or 'unknown').removeprefix('sha256:')[:12]
         now = deps.clock.now_iso()
         sent = 0
         for workspace_id, names in agents.items():
