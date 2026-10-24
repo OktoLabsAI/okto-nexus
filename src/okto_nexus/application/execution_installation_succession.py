@@ -105,15 +105,24 @@ def _probe(candidate):
     return asyncio.run(observations.probe_version(replace(candidate, trust='selected')))
 
 
-def _row(key, adapter, stable, decision, reason, policy, source, by, record, base_version, candidate, version, now):
+def _from_build(record, last):
+    """Return the 'from' build: the last accepted row when one exists, else the consent record."""
+    if last is not None:
+        return dict(executable=last['to_executable'], version=last['to_version'],
+                    build_identity=last['to_build_identity'], fingerprint=last['to_fingerprint'])
     consented = record['candidate']
+    return dict(executable=consented['executable'], version=consented.get('version'),
+                build_identity=consented.get('build_identity'), fingerprint=consented.get('fingerprint'))
+
+
+def _row(key, adapter, stable, decision, reason, policy, source, by, origin, candidate, version, now):
     return dict(server_id=key.server_id, executor_id=key.executor_id, adapter_id=adapter,
                 stable_ref=stable, decision=decision, reason=reason, policy=policy, policy_source=source,
-                decided_by=by, from_executable=consented['executable'], to_executable=candidate.executable,
-                from_version=base_version, to_version=version,
-                from_build_identity=consented.get('build_identity'),
+                decided_by=by, from_executable=origin['executable'], to_executable=candidate.executable,
+                from_version=origin['version'], to_version=version,
+                from_build_identity=origin['build_identity'],
                 to_build_identity=candidate.build_identity or candidate.fingerprint,
-                from_fingerprint=consented.get('fingerprint'), to_fingerprint=candidate.fingerprint,
+                from_fingerprint=origin['fingerprint'], to_fingerprint=candidate.fingerprint,
                 to_natural_ref=effective_installation_ref(candidate), decided_at=now)
 
 
@@ -154,7 +163,8 @@ def apply_update_policy(deps, key, candidates, notify=None):
         if last is not None and last['to_build_identity'] == (chosen.build_identity or chosen.fingerprint) and why is None:
             result[result.index(chosen)] = replace(chosen, installation_ref=stable)
             continue
-        base_version = (last['to_version'] if last is not None and last['to_version'] else record['candidate'].get('version'))
+        origin = _from_build(record, last if last is not None and last['to_version'] else None)
+        base_version = origin['version']
         version, decision, reason = None, 'held', why
         if why is None and policy != 'follow':
             reason = 'policy_review'
@@ -178,7 +188,7 @@ def apply_update_policy(deps, key, candidates, notify=None):
                 else:
                     decision, reason = 'accepted', 'newer_version'
         now = deps.clock.now_iso()
-        row = _row(key, adapter, stable, decision, reason, policy, source, 'hub', record, base_version,
+        row = _row(key, adapter, stable, decision, reason, policy, source, 'hub', origin,
                    chosen, version, now)
         with factory.unit_of_work() as uow:
             if decision == 'accepted':

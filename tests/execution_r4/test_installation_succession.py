@@ -154,6 +154,20 @@ def test_operator_accept_relabels_on_next_call_without_probe(admitted_local, mon
     assert world.probed == [] and len(world.rows()) == 2
 
 
+def test_held_row_takes_every_from_field_from_the_last_accepted_build(world):
+    first = world.successor('codex2.exe', build_identity='sha256:build-310')
+    world.run((first,))
+    world.probe_version = '2.1.308'
+    second = world.successor('codex3.exe', build_identity='sha256:build-308')
+    world.run((second,))
+    accepted, held = world.rows()
+    assert (accepted['decision'], held['decision'], held['reason']) == ('accepted', 'held', 'downgrade')
+    assert held['from_version'] == '2.1.310'
+    assert held['from_build_identity'] == 'sha256:build-310'
+    assert held['from_executable'] == first.executable
+    assert held['from_fingerprint'] == first.fingerprint
+
+
 def test_parse_version():
     assert parse_version('2.1.310') > parse_version('2.1.99') and parse_version('2.1') < parse_version('2.1.1')
     assert parse_version('2.1.x') is None and parse_version(None) is None
