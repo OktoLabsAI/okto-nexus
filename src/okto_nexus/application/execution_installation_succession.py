@@ -22,10 +22,11 @@ from ..errors import ErrorCode, OktoNexusError
 log = logging.getLogger(__name__)
 
 POLICIES = ('review', 'follow')
-# Rules 1-5 decide which binary is the successor. An operator accept cannot
+# Rules 1-6 decide which binary is the successor. An operator accept cannot
 # override them: the relabel on the next tick would never apply.
 TRUST_RULE_REASONS = frozenset({'architecture_mismatch', 'untrusted', 'launch_script_mismatch',
-                                'other_parent', 'ambiguous_successors'})
+                                'other_parent', 'ambiguous_successors', 'downgrade',
+                                'same_version_new_bytes'})
 _VERSION = re.compile(r'\d+(?:\.\d+)*')
 _COLUMNS = ('server_id', 'executor_id', 'adapter_id', 'stable_ref', 'decision', 'reason', 'policy',
             'policy_source', 'decided_by', 'from_executable', 'to_executable', 'from_version',
@@ -140,7 +141,7 @@ def apply_update_policy(deps, key, candidates, notify=None):
         return candidates
     approved_refs = {ref for _, ref in groups}
     present = {effective_installation_ref(c) for c in candidates}
-    result, fresh_rows = list(candidates), []
+    result, fresh_rows, probed = list(candidates), [], {}
     for (adapter, stable), bindings in groups.items():
         if stable in present:
             continue
@@ -166,12 +167,12 @@ def apply_update_policy(deps, key, candidates, notify=None):
         origin = _from_build(record, last if last is not None and last['to_version'] else None)
         base_version = origin['version']
         version, decision, reason = None, 'held', why
-        if why is None and policy != 'follow':
-            reason = 'policy_review'
-        elif why is None:
+        if why is None:
+            probe_key = (chosen.executable, chosen.fingerprint)
             try:
-                observed = _probe(chosen)
-                version = observed.version
+                if probe_key not in probed:
+                    probed[probe_key] = _probe(chosen).version
+                version = probed[probe_key]
                 if (type(version) is not str or not 1 <= len(version) <= 160
                         or selected_fingerprint(chosen) != chosen.fingerprint):
                     raise ValueError('probe result')
@@ -185,8 +186,10 @@ def apply_update_policy(deps, key, candidates, notify=None):
                     reason = 'same_version_new_bytes'
                 elif new < old:
                     reason = 'downgrade'
-                else:
+                elif policy == 'follow':
                     decision, reason = 'accepted', 'newer_version'
+                else:
+                    reason = 'policy_review'
         now = deps.clock.now_iso()
         row = _row(key, adapter, stable, decision, reason, policy, source, 'hub', origin,
                    chosen, version, now)

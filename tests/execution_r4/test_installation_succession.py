@@ -11,7 +11,7 @@ from nexus_connector_core.discovery import fingerprint
 from nexus_connector_core.availability import effective_installation_ref
 from okto_nexus.application import execution_local_observations as observations
 from okto_nexus.application.execution_installation_succession import (
-    accept_succession, apply_update_policy, effective_policy, parse_version)
+    accept_succession, apply_update_policy, effective_policy, list_held_successions, parse_version)
 from okto_nexus.application.execution_inventory_revalidation import (
     accepts_binding, same_installation_location)
 from okto_nexus.application.execution_local_launch import ApprovedLocalLaunch
@@ -115,13 +115,31 @@ def test_follow_holds_unsafe_successors(world, reason):
     assert len(world.rows()) == 1 and len(world.notices) == 1
 
 
-def test_review_holds_without_probe_and_notifies_once(admitted_local, monkeypatch):
+def test_review_probes_the_successor_and_notifies_once(admitted_local, monkeypatch):
     world = World(admitted_local, monkeypatch, hub='review')
     candidates = (world.successor(),)
     assert world.run(candidates) == candidates
     world.run(candidates)
-    assert [(r['decision'], r['reason'], r['policy']) for r in world.rows()] == [('held', 'policy_review', 'review')]
-    assert len(world.notices) == 1 and world.probed == []
+    rows = world.rows()
+    assert [(r['decision'], r['reason'], r['policy']) for r in rows] == [('held', 'policy_review', 'review')]
+    assert (rows[0]['from_version'], rows[0]['to_version'], rows[0]['to_fingerprint'], rows[0]['to_executable']) == \
+        ('2.1.309', '2.1.310', candidates[0].fingerprint, candidates[0].executable)
+    assert len(world.notices) == 1 and len(world.probed) == 2
+
+
+@pytest.mark.parametrize('hub', ['review', 'follow'])
+def test_downgrade_is_held_with_its_real_reason_and_cannot_be_accepted(admitted_local, monkeypatch, hub):
+    world = World(admitted_local, monkeypatch, hub=hub)
+    world.probe_version = '2.1.306'
+    candidates = (world.successor(),)
+    assert world.run(candidates) == candidates
+    held = world.rows()[0]
+    assert (held['decision'], held['reason'], held['to_version']) == ('held', 'downgrade', '2.1.306')
+    with world.deps.connection_factory.unit_of_work(write=False) as uow:
+        assert [i['can_accept'] for i in list_held_successions(uow.connection)] == [False]
+    refused = world.client.post(f"/v1/connections/installation-successions/{held['id']}:accept",
+                                headers=world.setup[3]['operator'])
+    assert refused.status_code == 409 and 'downgrade' in refused.text
 
 
 def test_most_restrictive_binding_wins(world):
@@ -137,7 +155,7 @@ def test_most_restrictive_binding_wins(world):
     candidates = (world.successor(),)
     assert world.run(candidates) == candidates
     assert [(r['reason'], r['policy'], r['policy_source']) for r in world.rows()] == [('policy_review', 'review', 'endpoint')]
-    assert world.probed == []
+    assert len(world.probed) == 1
     assert effective_policy([{'runtime_update_policy': None}, {'runtime_update_policy': 'follow'}], 'follow') == ('follow', 'endpoint')
 
 
@@ -151,7 +169,7 @@ def test_operator_accept_relabels_on_next_call_without_probe(admitted_local, mon
     assert accepted['decision'] == 'accepted' and accepted['decided_by'] == 'operator'
     result = world.run(candidates)
     assert [effective_installation_ref(c) for c in result] == [world.stable]
-    assert world.probed == [] and len(world.rows()) == 2
+    assert len(world.probed) == 1 and len(world.rows()) == 2
 
 
 def test_operator_accept_writes_one_warning_log_line(admitted_local, monkeypatch, caplog):
@@ -166,7 +184,7 @@ def test_operator_accept_writes_one_warning_log_line(admitted_local, monkeypatch
     lines = [r for r in caplog.records if r.getMessage().startswith('Runtime installation update:')]
     assert len(lines) == 1 and lines[0].levelname == 'WARNING'
     assert lines[0].getMessage() == ('Runtime installation update: decision=accepted reason=operator_accepted '
-                                     'from=2.1.309 to=None policy=review')
+                                     'from=2.1.309 to=2.1.310 policy=review')
 
 
 def test_held_row_takes_every_from_field_from_the_last_accepted_build(world):

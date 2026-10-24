@@ -96,7 +96,7 @@ def test_review_accept_fills_to_fields_and_the_next_held_row_starts_from_them(ad
     assert (accepted['decision'], accepted['to_version'], accepted['to_build_identity'], accepted['to_fingerprint'],
             accepted['to_executable']) == ('accepted', '2.1.310', held['to_build_identity'], newer.fingerprint,
                                            newer.executable)
-    assert len(world.probed) == 1
+    assert len(world.probed) == 2
     assert any('2.1.310' in notice['body'] and 'accepted' in notice['body'] for notice in operator_notices(world.deps))
     world.run((newer,))
     older = world.successor('codex3.exe')
@@ -105,7 +105,7 @@ def test_review_accept_fills_to_fields_and_the_next_held_row_starts_from_them(ad
     last = world.rows()[-1]
     assert (last['decision'], last['reason'], last['from_version'], last['from_build_identity'],
             last['from_fingerprint'], last['from_executable']) == (
-        'held', 'policy_review', '2.1.310', accepted['to_build_identity'], newer.fingerprint, newer.executable)
+        'held', 'downgrade', '2.1.310', accepted['to_build_identity'], newer.fingerprint, newer.executable)
 
 
 def test_loopback_operator_lists_held_successions_and_an_agent_key_cannot(admitted_local, monkeypatch):
@@ -120,7 +120,19 @@ def test_loopback_operator_lists_held_successions_and_an_agent_key_cannot(admitt
     assert listed.status_code == 200, listed.text
     item = listed.json()['items'][0]
     assert (item['id'], item['reason'], item['to_version'], item['can_accept']) == \
-        (held['id'], 'policy_review', None, True)
+        (held['id'], 'policy_review', '2.1.310', True)
     assert item['agent_ids'] == ['subject']
     assert world.client.post(f"{path}/{held['id']}:accept").status_code == 200
     assert world.client.get(path).json() == {'items': []}
+
+
+def test_loopback_listing_marks_a_downgrade_as_not_acceptable(admitted_local, monkeypatch):
+    world = World(admitted_local, monkeypatch, hub='review')
+    world.probe_version = '2.1.306'
+    world.run((world.successor(),))
+    world.app.state.local_open = True
+    path = '/api/v1/runtime-management/connections/installation-successions'
+    item = world.client.get(path, params={'state': 'held'}).json()['items'][0]
+    assert (item['reason'], item['from_version'], item['to_version'], item['can_accept']) == \
+        ('downgrade', '2.1.309', '2.1.306', False)
+    assert world.client.post(f"{path}/{item['id']}:accept").status_code == 409
