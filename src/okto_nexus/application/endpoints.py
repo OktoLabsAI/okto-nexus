@@ -219,7 +219,7 @@ class EndpointService:
             hub = getattr(self.config, "runtime_update_policy", "review")
             return {"endpoint_id": endpoint_id, "agent_id": endpoint["agent_id"], "revision": endpoint["revision"],
                     "policy": policy, "effective_policy": policy or hub,
-                    "policy_source": "endpoint" if policy else "hub"}
+                    "policy_source": "endpoint" if policy else "hub", "hub_policy": hub}
 
     def conversation_policy(self, context, *, endpoint_id, changes=None):
         """Operator opt-in for canonical conversational delivery; never launch.

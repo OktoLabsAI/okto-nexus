@@ -18,13 +18,12 @@ export function RuntimeUpdatePolicy({endpoint, onUpdated}: {endpoint: string; on
     }).catch(failure => { if (active) setError(failure instanceof Error ? failure.message : String(failure)); });
     return () => { active = false; };
   }, [endpoint, revision]);
-  const hub = policy && policy.policy_source === "hub" ? policy.effective_policy : null;
   return <section aria-label="Runtime update policy" className="space-y-2 border-t pt-3">
     <h5 className="font-semibold">Runtime updates</h5>
     <label className="block">Update policy
       <select aria-label="Update policy" className="block rounded border p-2 bg-white dark:bg-surface-800" value={choice}
         disabled={busy || !policy} onChange={event => { setChoice(event.target.value as Choice); setNotice(""); }}>
-        <option value="">{`Inherit (hub: ${hub ?? "loading"})`}</option>
+        <option value="">{policy ? `Inherit (hub: ${policy.hub_policy})` : "Inherit"}</option>
         <option value="review">review</option>
         <option value="follow">follow</option>
       </select>

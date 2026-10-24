@@ -1018,7 +1018,7 @@ export interface OperatorStatus {
 
 export interface RuntimeUpdatePolicy {
   endpoint_id: string; agent_id: string; revision: number; policy: "review" | "follow" | null;
-  effective_policy: "review" | "follow"; policy_source: "hub" | "endpoint";
+  effective_policy: "review" | "follow"; policy_source: "hub" | "endpoint"; hub_policy: "review" | "follow";
 }
 
 export class ApiError extends Error {

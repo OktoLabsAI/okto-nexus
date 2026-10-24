@@ -45,7 +45,8 @@ def test_setter_keeps_revision_guard_grants_and_boot_and_is_operator_only(connec
     saved = client.put(path, headers=headers["operator"], json=body)
     assert saved.status_code == 200, saved.text
     assert saved.json()["data"] == dict(endpoint_id=binding["endpoint_id"], agent_id=saved.json()["data"]["agent_id"],
-        revision=before["revision"], policy="follow", effective_policy="follow", policy_source="endpoint")
+        revision=before["revision"], policy="follow", effective_policy="follow", policy_source="endpoint",
+        hub_policy="review")
     after = state(setup, binding)
     # Same revision, guard, grants and boot row: a lease renewal sees no change.
     assert after["policy"] == "follow"

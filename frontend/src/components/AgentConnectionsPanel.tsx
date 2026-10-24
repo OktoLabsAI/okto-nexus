@@ -10,6 +10,7 @@ import { harnessSelectionError } from '../harnessConfiguration';
 import { InventoryRefresh } from './InventoryRefresh';
 import { RevalidateBindings } from './RevalidateBindings';
 import { HeldSuccessions } from './HeldSuccessions';
+import { RuntimeUpdatePolicy } from './RuntimeUpdatePolicy';
 import { RemoteConnectorCommand } from './RemoteConnectorCommand';
 import { OneShotSettings, type OneShotSettingsHandle } from './OneShotSettings';
 import { MCPPresetFields, parseMCPPreset } from './MCPPresetFields';
@@ -376,6 +377,8 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
       {selected?.harness_configuration && <HarnessPreferenceFields inheritedGlobalMcps={inheritedMcps} schema={selected.harness_configuration} values={draft.harness_settings} onChange={harness_settings => patch({harness_settings})} />}
       <MCPPresetFields onPendingChange={setMcpEditing} value={mcpText} onChange={text => {setMcpText(text);setTest(null);setRequest(null);setAuthorized(false);setError('');}} />
       <label className="block">Nexus tool access <span className="text-surface-500">Required</span><ConfigurationHelp label="Nexus tool access">Always allow skips approval requests for Nexus tools. Native harness approval settings remain separate.</ConfigurationHelp><select aria-label="Nexus tool access" className={input} value={draft.tool_access} onChange={e => patch({tool_access:e.target.value as 'ask' | 'always_allow'})}><option value="ask">Ask for approval</option><option value="always_allow">Always allow</option></select></label>
+      {draft.execution_location === 'local' && bindingId && selected?.binding &&
+        <RuntimeUpdatePolicy key={'updates:' + selected.binding.binding_id} endpoint={selected.binding.endpoint_id} />}
     </>}
     {(step === 5 || (step === 0 && runtimeEnabled && draft.execution_location === 'remote' && connections.some(c => c.binding_id === bindingId && c.execution_location === 'remote'))) && <>
       <p>Next authorizes the connection test and the execution limits below. The connection is saved only after Finish.</p>

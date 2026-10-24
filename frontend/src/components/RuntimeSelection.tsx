@@ -12,7 +12,6 @@ import { RuntimeSessions } from "./RuntimeSessions";
 import { LocalExecutionPermission } from "./LocalExecutionPermission";
 import { RuntimeConversationPolicy } from "./RuntimeConversationPolicy";
 import { RuntimeToolPermission } from "./RuntimeToolPermission";
-import { RuntimeUpdatePolicy } from "./RuntimeUpdatePolicy";
 import { HarnessConfigurationDiscovery } from "./HarnessConfigurationDiscovery";
 import { RuntimeHarnessSettings } from "./RuntimeHarnessSettings";
 
@@ -244,8 +243,6 @@ export function RuntimeSelection({agentId, contextWorkspaceId = "", configureLoc
         <RuntimeConversationPolicy key={"messages:" + selected.binding.binding_id} binding={selected.binding} onPendingChange={setConversationPending} onSummaryChange={setConversationSummary} onUpdated={() => setRevision(value => value + 1)} />}
       {configureLocal && local && selected.binding &&
         <RuntimeToolPermission key={"tools:" + selected.binding.binding_id} endpoint={selected.binding.endpoint_id} onPendingChange={setToolsPending} onSummaryChange={setToolsSummary} onUpdated={() => setRevision(value => value + 1)} />}
-      {configureLocal && local && selected.binding &&
-        <RuntimeUpdatePolicy key={"updates:" + selected.binding.binding_id} endpoint={selected.binding.endpoint_id} />}
       </div>}
       {configureLocal && local && configurationSaved && selected.binding?.state === "APPROVED" &&
         <div hidden={step !== 5} className="space-y-3">
