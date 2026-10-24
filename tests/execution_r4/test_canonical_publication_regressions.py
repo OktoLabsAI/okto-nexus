@@ -60,7 +60,7 @@ def test_result_publication_is_private_correlated_and_idempotent(runtime):
     again = messages.create_message(**messages._runtime_results.arguments(bound), _runtime_result_id=row["result_id"])
     assert again["message_id"] == row["publication_message_id"]
     with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute("SELECT count(*) FROM messages WHERE subject='Runtime result'").fetchone()[0] == 1
+        assert uow.connection.execute("SELECT count(*) FROM messages WHERE subject='private fixture result'").fetchone()[0] == 1
 
 
 def test_result_obeys_current_sender_permissions_without_erasing_output(runtime):
@@ -73,7 +73,7 @@ def test_result_obeys_current_sender_permissions_without_erasing_output(runtime)
     assert "retained despite denied publication" in row["output_text"]
     assert not row["publication_message_id"]
     with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert uow.connection.execute("SELECT count(*) FROM messages WHERE subject='Runtime result'").fetchone()[0] == 0
+        assert uow.connection.execute("SELECT count(*) FROM messages WHERE subject='retained despite denied publication'").fetchone()[0] == 0
 
 
 def test_profile_disable_retains_late_terminal_without_publishing(runtime):
@@ -93,7 +93,7 @@ def test_profile_disable_retains_late_terminal_without_publishing(runtime):
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute("SELECT COUNT(*) FROM execution_event_ingress WHERE "
             "json_extract(payload_json,'$.payload.delivery_phase')='terminal'").fetchone()[0] == 1
-        assert uow.connection.execute("SELECT COUNT(*) FROM messages WHERE subject='Runtime result'").fetchone()[0] == 0
+        assert uow.connection.execute("SELECT COUNT(*) FROM messages WHERE subject='Captured after profile disabled'").fetchone()[0] == 0
         assert uow.connection.execute('SELECT COUNT(*) FROM delivery_outbox').fetchone()[0] == 1
 
 
@@ -113,7 +113,7 @@ def test_publication_and_canonical_message_commit_together(runtime, monkeypatch)
         # Explicitly exercise the failure barrier rather than a scheduling delay.
         assert failed.wait(5)
         with deps.connection_factory.unit_of_work(write=False) as uow:
-            assert uow.connection.execute("SELECT count(*) FROM messages WHERE subject='Runtime result'").fetchone()[0] == 0
+            assert uow.connection.execute("SELECT count(*) FROM messages WHERE subject='durable publication retry'").fetchone()[0] == 0
     deps.runtime_dispatcher.wake()
     row = result(runtime, source["runtime_operations"][0], "PUBLISHED")
     assert row["publication_message_id"]
@@ -219,7 +219,7 @@ def test_disabled_feature_preserves_pending_result_and_strict_mode_uses_captured
         publish()
         result(runtime, source["runtime_operations"][0], "PENDING_AUTHORIZATION")
         with deps.connection_factory.unit_of_work(write=False) as uow:
-            assert uow.connection.execute("SELECT COUNT(*) FROM messages WHERE subject='Runtime result'").fetchone()[0] == 0
+            assert uow.connection.execute("SELECT COUNT(*) FROM messages WHERE subject='captured authenticated principal'").fetchone()[0] == 0
         deps.config.trust_mode = "strict"
         deps.config.feature_harness_integrations = True
         publish()
