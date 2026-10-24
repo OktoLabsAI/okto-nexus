@@ -255,3 +255,27 @@ def test_in_place_update_sends_one_operator_notice(admitted_local, monkeypatch):
     _refresh(world, monkeypatch, (changed,))
     inbox = _inbox(world)
     assert len(inbox) == 1 and 'Decision: accepted' in inbox[0] and 'to 0.999.0' in inbox[0]
+
+
+def test_accept_route_is_operator_only_and_refuses_trust_rule_holds(admitted_local, monkeypatch):
+    world = World(admitted_local, monkeypatch, hub='review')
+    headers = world.setup[3]
+    candidates = (world.successor(),)
+    world.run(candidates)
+    held = world.rows()[0]
+    path = f"/v1/connections/installation-successions/{held['id']}:accept"
+    assert world.client.post(path, headers=headers['subject']).status_code == 403
+    assert world.client.post('/v1/connections/installation-successions/999:accept',
+                             headers=headers['operator']).status_code == 404
+    accepted = world.client.post(path, headers=headers['operator'])
+    assert accepted.status_code == 200, accepted.text
+    assert (accepted.json()['decision'], accepted.json()['reason']) == ('accepted', 'operator_accepted')
+    assert [effective_installation_ref(c) for c in world.run(candidates)] == [world.stable]
+    assert world.client.post(path, headers=headers['operator']).status_code == 200
+    assert len(world.rows()) == 2
+    other = world.successor('other.exe', directory=world.tmp / 'other', build_identity='other-build')
+    world.run((other,))
+    trust = next(r for r in world.rows() if r['reason'] == 'other_parent')
+    refused = world.client.post(f"/v1/connections/installation-successions/{trust['id']}:accept",
+                                headers=headers['operator'])
+    assert refused.status_code == 409 and 'other_parent' in refused.text

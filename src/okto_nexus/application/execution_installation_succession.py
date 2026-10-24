@@ -22,6 +22,10 @@ from ..errors import ErrorCode, OktoNexusError
 log = logging.getLogger(__name__)
 
 POLICIES = ('review', 'follow')
+# Rules 1-5 decide which binary is the successor. An operator accept cannot
+# override them: the relabel on the next tick would never apply.
+TRUST_RULE_REASONS = frozenset({'architecture_mismatch', 'untrusted', 'launch_script_mismatch',
+                                'other_parent', 'ambiguous_successors'})
 _VERSION = re.compile(r'\d+(?:\.\d+)*')
 _COLUMNS = ('server_id', 'executor_id', 'adapter_id', 'stable_ref', 'decision', 'reason', 'policy',
             'policy_source', 'decided_by', 'from_executable', 'to_executable', 'from_version',
@@ -206,6 +210,9 @@ def accept_succession(conn, succession_id, actor):
     if held is None or held['decision'] != 'held':
         raise OktoNexusError(ErrorCode.NOT_FOUND,
                              'No held installation update with this id.', {})
+    if held['reason'] in TRUST_RULE_REASONS:
+        raise OktoNexusError(ErrorCode.CONFLICT,
+                             'This update failed a successor trust rule (' + held['reason'] + '). Rebind the agent instead.', {})
     row = {name: held[name] for name in _COLUMNS}
     row.update(decision='accepted', reason='operator_accepted', decided_by=actor)
     row['decided_at'] = conn.execute("SELECT strftime('%Y-%m-%dT%H:%M:%fZ','now')").fetchone()[0]
