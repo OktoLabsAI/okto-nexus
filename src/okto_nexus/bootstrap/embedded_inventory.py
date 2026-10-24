@@ -148,6 +148,9 @@ class EmbeddedInventoryOwner:
             adapter_ids=(adapter_id,) if adapter_id is not None else None,
             **(configuration.arguments() if configuration is not None else {}))
         found = tuple(discovery.candidates)
+        from ..application.execution_installation_succession import apply_update_policy
+        found = await asyncio.to_thread(apply_update_policy, self.deps, self.key, found,
+                                        getattr(self, 'notify_installation_update', None))
         self._note_trust_reasons(found, adapter_id)
         return found
 

@@ -1,6 +1,7 @@
 """Revalidate selected installations without changing approved scopes or sessions."""
 import json
 import logging
+from pathlib import Path
 
 log = logging.getLogger(__name__)
 
@@ -13,7 +14,20 @@ def same_installation_location(approved, current):
     """
     changing = {'version', 'fingerprint', 'build_identity', 'trust', 'source', 'reason'}
     keys = (set(approved) | set(current)) - changing
+    if approved.get('executable') != current.get('executable'):
+        # A relabeled successor keeps the approved ref. It must stay in the
+        # same directory as the approved executable.
+        keys -= {'executable', 'installation_ref'}
+        if (_effective_ref(approved) != _effective_ref(current)
+                or Path(approved['executable']).parent != Path(current['executable']).parent):
+            return False
     return all(approved.get(k) == current.get(k) for k in keys)
+
+
+def _effective_ref(candidate):
+    from nexus_connector_core.installation import installation_ref
+    return candidate.get('installation_ref') or installation_ref(
+        candidate['adapter_id'], candidate['executable'], candidate.get('launch_script'))
 
 
 def compatible_selection(baseline, current):
@@ -101,6 +115,22 @@ def binding_consent_preserved(conn, binding, current_revision, server_id, execut
     ).fetchone() is not None
 
 
+def _record_update(conn, server, executor, adapter, stable, baseline, current):
+    """Write an accepted audit row for an update that keeps the approved ref."""
+    from .execution_installation_succession import record_succession
+    old, new = baseline['evidence'], current['evidence']
+    record_succession(conn, dict(
+        server_id=server, executor_id=executor, adapter_id=adapter, stable_ref=stable,
+        decision='accepted', reason='installation_updated', policy='in_place', policy_source='hub',
+        decided_by='hub', from_executable=old.get('executable'), to_executable=new.get('executable'),
+        from_version=old.get('version'), to_version=new.get('version'),
+        from_build_identity=old.get('build_identity'),
+        to_build_identity=new.get('build_identity') or new.get('content_fingerprint') or str(new.get('version')),
+        from_fingerprint=old.get('content_fingerprint'), to_fingerprint=new.get('content_fingerprint'),
+        to_natural_ref=new.get('candidate_ref'),
+        decided_at=conn.execute("SELECT strftime('%Y-%m-%dT%H:%M:%fZ','now')").fetchone()[0]))
+
+
 def revalidate_inventory(conn, snapshot):
     """Called only inside authenticated inventory publication; no provider I/O."""
     from nexus_connector_core import CoreError, InstallationCandidate, build_executor_inventory_snapshot
@@ -160,7 +190,10 @@ def revalidate_inventory(conn, snapshot):
             (*key, revision, json.dumps(baseline, sort_keys=True) if baseline else None, int(compatible), reason))
         if approved != revision and (prior is None or prior['current_revision'] != revision or
                                      prior['compatible'] != int(compatible)):
-            log.info('Runtime inventory revalidation: binding=%s result=%s', binding['binding_id'], reason)
+            level = log.warning if reason in ('installation_updated', 'installation_missing') else log.info
+            level('Runtime inventory revalidation: binding=%s result=%s', binding['binding_id'], reason)
+            if reason == 'installation_updated':
+                _record_update(conn, server, executor, adapter, candidate, baseline, current)
 
 
 def revalidate_all_bindings(factory, *, context, access):
