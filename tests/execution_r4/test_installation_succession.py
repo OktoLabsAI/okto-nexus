@@ -227,3 +227,31 @@ def test_in_place_update_writes_an_audit_row(admitted_local, monkeypatch):
     assert _validation(world) == (('installation_updated', 1), True)
     assert [(r['decision'], r['reason'], r['policy'], r['to_version']) for r in world.rows()] == \
         [('accepted', 'installation_updated', 'in_place', '0.999.0')]
+
+
+def _inbox(world):
+    with world.deps.connection_factory.unit_of_work(write=False) as uow:
+        return [r['body'] for r in uow.connection.execute(
+            "SELECT m.body FROM message_deliveries d JOIN messages m USING(message_id) "
+            "WHERE d.recipient_agent_id='operator' AND m.message_id LIKE 'msg_installation_update_%'")]
+
+
+def test_real_refresh_sends_one_operator_notice_for_follow(admitted_local, monkeypatch):
+    world = World(admitted_local, monkeypatch)
+    with world.deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE agent_endpoints SET runtime_update_policy='follow'")
+    new = world.successor()
+    _refresh(world, monkeypatch, (new,))
+    _refresh(world, monkeypatch, (new,))
+    inbox = _inbox(world)
+    assert len(inbox) == 1 and 'Decision: accepted' in inbox[0] and '2.1.309 to 2.1.310' in inbox[0]
+
+
+def test_in_place_update_sends_one_operator_notice(admitted_local, monkeypatch):
+    world = World(admitted_local, monkeypatch)
+    world.probe_version = '0.999.0'
+    changed = replace(world.candidate, version='0.999.0')
+    _refresh(world, monkeypatch, (changed,))
+    _refresh(world, monkeypatch, (changed,))
+    inbox = _inbox(world)
+    assert len(inbox) == 1 and 'Decision: accepted' in inbox[0] and 'to 0.999.0' in inbox[0]

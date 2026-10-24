@@ -21,6 +21,24 @@ from ..errors import ErrorCode, OktoNexusError
 logger = logging.getLogger(__name__)
 
 
+def send_installation_notices(deps, rows):
+    """Send one operator notice per new succession row (#89).
+
+    The audit row is already committed. A notice failure only logs, so it never
+    stops discovery or publication.
+    """
+    from ..adapters.inbound.mcp.tools.messages import build_service
+    from ..application.execution_release_notifications import InstallationUpdate, notify_installation_update
+    from dataclasses import fields
+    names = [field.name for field in fields(InstallationUpdate)]
+    try:
+        messages = build_service(deps)
+        for row in rows:
+            notify_installation_update(deps, messages, InstallationUpdate(**{name: row.get(name) for name in names}))
+    except Exception as error:  # noqa: BLE001 - a lost notice must not contain sessions.
+        logger.warning('Runtime installation update notice was not sent: %s', type(error).__name__)
+
+
 class EmbeddedInventoryOwner:
     """Retain full local candidates; publish path-free facts without runtime readiness."""
 
@@ -154,6 +172,10 @@ class EmbeddedInventoryOwner:
         self._note_trust_reasons(found, adapter_id)
         return found
 
+    def notify_installation_update(self, row):
+        """Callback of apply_update_policy for one new succession row."""
+        send_installation_notices(self.deps, (row,))
+
     def _note_trust_reasons(self, candidates, adapter_id=None):
         """Log and keep the Core reason of each untrusted candidate; an older Core has none."""
         from nexus_connector_core.availability import effective_installation_ref
@@ -266,7 +288,8 @@ class EmbeddedInventoryOwner:
         return publish_executor_inventory(self.deps.connection_factory,
             principal=self.key, producer_instance_id=self.dispatcher.owner_id,
             snapshot=snapshot, embedded_owner=(self.dispatcher.owner_id, self.dispatcher.epoch, self.generation),
-            refresh_delivery_id=delivery_id)
+            refresh_delivery_id=delivery_id,
+            on_successions=lambda rows: send_installation_notices(self.deps, rows))
 
     async def _run(self):
         if self._stop.is_set():

@@ -20,6 +20,7 @@ from ....application.execution_intents import (
 from ....application.execution_admission import submit_execution_operation
 from ....application.execution_capabilities import ExecutionCapabilityService
 from ....bootstrap.execution_authority import build_execution_access
+from ....bootstrap.embedded_inventory import send_installation_notices
 from ....application.executor_inventory_views import (
     read_executor_inventory,
 )
@@ -485,6 +486,8 @@ def build_router() -> APIRouter:
                 snapshot=snapshot,
                 publication_ticket_id=verified.ticket_id,
                 refresh_delivery_id=refresh_delivery_id,
+                on_successions=lambda rows: send_installation_notices(
+                    request.app.state.deps, rows),
             )
 
         try:

@@ -119,7 +119,7 @@ def _record_update(conn, server, executor, adapter, stable, baseline, current):
     """Write an accepted audit row for an update that keeps the approved ref."""
     from .execution_installation_succession import record_succession
     old, new = baseline['evidence'], current['evidence']
-    record_succession(conn, dict(
+    return record_succession(conn, dict(
         server_id=server, executor_id=executor, adapter_id=adapter, stable_ref=stable,
         decision='accepted', reason='installation_updated', policy='in_place', policy_source='hub',
         decided_by='hub', from_executable=old.get('executable'), to_executable=new.get('executable'),
@@ -132,7 +132,10 @@ def _record_update(conn, server, executor, adapter, stable, baseline, current):
 
 
 def revalidate_inventory(conn, snapshot):
-    """Called only inside authenticated inventory publication; no provider I/O."""
+    """Called only inside authenticated inventory publication; no provider I/O.
+
+    Return the new succession audit rows, so the caller can notify after commit.
+    """
     from nexus_connector_core import CoreError, InstallationCandidate, build_executor_inventory_snapshot
     from .execution_local_realizations import _digest
 
@@ -144,6 +147,7 @@ def revalidate_inventory(conn, snapshot):
         'AND r.realization_ref=b.realization_ref LEFT JOIN execution_local_realizations l '
         'ON l.server_id=r.server_id AND l.executor_id=r.executor_id AND l.realization_ref=r.realization_ref '
         'WHERE b.server_id=? AND b.executor_id=?', (server, executor)).fetchall()
+    successions = []
     for binding in bindings:
         approved, candidate, adapter = (binding[k] for k in ('inventory_revision', 'candidate_ref', 'adapter_id'))
         key = (server, executor, approved, candidate)
@@ -193,7 +197,10 @@ def revalidate_inventory(conn, snapshot):
             level = log.warning if reason in ('installation_updated', 'installation_missing') else log.info
             level('Runtime inventory revalidation: binding=%s result=%s', binding['binding_id'], reason)
             if reason == 'installation_updated':
-                _record_update(conn, server, executor, adapter, candidate, baseline, current)
+                row = _record_update(conn, server, executor, adapter, candidate, baseline, current)
+                if row is not None:
+                    successions.append(row)
+    return successions
 
 
 def revalidate_all_bindings(factory, *, context, access):
