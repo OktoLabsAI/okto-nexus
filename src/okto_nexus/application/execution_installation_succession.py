@@ -26,7 +26,7 @@ POLICIES = ('review', 'follow')
 # override them: the relabel on the next tick would never apply.
 TRUST_RULE_REASONS = frozenset({'architecture_mismatch', 'untrusted', 'launch_script_mismatch',
                                 'other_parent', 'ambiguous_successors', 'downgrade',
-                                'same_version_new_bytes'})
+                                'same_version_new_bytes', 'successor_taken'})
 _VERSION = re.compile(r'\d+(?:\.\d+)*')
 _COLUMNS = ('server_id', 'executor_id', 'adapter_id', 'stable_ref', 'decision', 'reason', 'policy',
             'policy_source', 'decided_by', 'from_executable', 'to_executable', 'from_version',
@@ -142,7 +142,10 @@ def apply_update_policy(deps, key, candidates, notify=None):
     approved_refs = {ref for _, ref in groups}
     present = {effective_installation_ref(c) for c in candidates}
     result, fresh_rows, probed = list(candidates), [], {}
-    for (adapter, stable), bindings in groups.items():
+    # One build can serve one ref only. Refs are decided in stable_ref order: the
+    # first ref adopts the build, every later ref is held with `successor_taken`.
+    taken = set()
+    for (adapter, stable), bindings in sorted(groups.items(), key=lambda item: (item[0][1], item[0][0])):
         if stable in present:
             continue
         record = json.loads(bindings[0]['local_record_json'])
@@ -158,11 +161,15 @@ def apply_update_policy(deps, key, candidates, notify=None):
             chosen, why = failures[0]
         else:
             continue
+        build = (chosen.executable, chosen.fingerprint)
+        if build in taken:
+            why = 'successor_taken'
         policy, source = effective_policy(bindings, hub_policy)
         with factory.unit_of_work(write=False) as uow:
             last = latest_accepted(uow.connection, key.server_id, key.executor_id, stable)
         if last is not None and last['to_build_identity'] == (chosen.build_identity or chosen.fingerprint) and why is None:
-            result[result.index(chosen)] = replace(chosen, installation_ref=stable)
+            result[candidates.index(chosen)] = replace(chosen, installation_ref=stable)
+            taken.add(build)
             continue
         origin = _from_build(record, last if last is not None and last['to_version'] else None)
         base_version = origin['version']
@@ -203,7 +210,8 @@ def apply_update_policy(deps, key, candidates, notify=None):
                     'version=excluded.version,actor_agent_id=excluded.actor_agent_id,observed_at=excluded.observed_at',
                     (key.server_id, key.executor_id, stable, CORE_VERSION, sys.platform,
                      canonical_json(asdict(relabeled)).decode(), version, bindings[0]['agent_id'], now))
-                result[result.index(chosen)] = relabeled
+                result[candidates.index(chosen)] = relabeled
+                taken.add(build)
             new_row = record_succession(uow.connection, row)
         if new_row is not None:
             new_row['workspace_ids'] = sorted({b['workspace_id'] for b in bindings})

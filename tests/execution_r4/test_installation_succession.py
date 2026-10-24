@@ -201,6 +201,52 @@ def test_held_row_takes_every_from_field_from_the_last_accepted_build(world):
     assert held['from_fingerprint'] == first.fingerprint
 
 
+def add_bindings(world, count, candidate_ref=None):
+    """Copy the admitted binding `count` times, on the same ref or on `candidate_ref`."""
+    with world.deps.connection_factory.unit_of_work() as uow:
+        conn = uow.connection
+        binding = dict(conn.execute('SELECT * FROM execution_bindings ORDER BY binding_id').fetchone())
+        endpoint = dict(conn.execute('SELECT * FROM agent_endpoints WHERE endpoint_id=?', (binding['endpoint_id'],)).fetchone())
+        for n in range(count):
+            tag = f"{candidate_ref or 'same'}_{n}"
+            ep = dict(endpoint, endpoint_id='ep_' + tag)
+            b = dict(binding, endpoint_id='ep_' + tag, binding_id='b_' + tag)
+            if candidate_ref:
+                b['candidate_ref'] = candidate_ref
+            for table, values in (('agent_endpoints', ep), ('execution_bindings', b)):
+                conn.execute(f'INSERT INTO {table} (' + ','.join(values) + ') VALUES (' + ','.join('?' for _ in values) + ')',
+                             tuple(values.values()))
+
+
+@pytest.mark.parametrize('extra', [1, 6])
+def test_many_bindings_on_one_ref_make_one_decision(world, extra):
+    add_bindings(world, extra)
+    new = world.successor()
+    result = world.run((new,))
+    assert [effective_installation_ref(c) for c in result] == [world.stable]
+    rows = world.rows()
+    assert [(r['decision'], r['reason']) for r in rows] == [('accepted', 'newer_version')]
+    assert len(world.notices) == 1 and len(world.probed) == 1
+    assert [effective_installation_ref(c) for c in world.run((new,))] == [world.stable]
+    assert len(world.rows()) == 1
+
+
+def test_two_refs_on_one_successor_first_ref_adopts_and_the_other_is_held(world):
+    other = 'zzzz_second_ref'
+    assert other > world.stable
+    add_bindings(world, 1, candidate_ref=other)
+    new = world.successor()
+    for _ in range(2):
+        result = world.run((new,))
+        assert [effective_installation_ref(c) for c in result] == [world.stable]
+    rows = world.rows()
+    assert [(r['stable_ref'], r['decision'], r['reason']) for r in rows] == [
+        (world.stable, 'accepted', 'newer_version'), (other, 'held', 'successor_taken')]
+    assert len(world.notices) == 2 and len(world.probed) == 1
+    with world.deps.connection_factory.unit_of_work(write=False) as uow:
+        assert [i['can_accept'] for i in list_held_successions(uow.connection)] == [False]
+
+
 def test_parse_version():
     assert parse_version('2.1.310') > parse_version('2.1.99') and parse_version('2.1') < parse_version('2.1.1')
     assert parse_version('2.1.x') is None and parse_version(None) is None

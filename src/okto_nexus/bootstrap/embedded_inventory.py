@@ -326,6 +326,7 @@ class EmbeddedInventoryOwner:
                         self._delivery = self._delivery_frontier = None
                     self._observation_changed.set()
             except Exception as error:
+                logger.warning('Inventory observation failed: %s: %s', type(error).__name__, error, exc_info=True)
                 self.failure = error
                 self._publication_failures += 1
                 self.fresh.pop((self.key.server_id, self.key.executor_id), None)
