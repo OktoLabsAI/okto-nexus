@@ -16,7 +16,7 @@ def build_router():
         'workspace_paths_read',
         'retry_runtime_recovery',
         'runtime_recovery_plan', 'confirm_runtime_stopped',
-        'accept_installation_succession',
+        'accept_installation_succession', 'list_installation_successions',
     }
     router = APIRouter()
     for source in (connections(), runtime()):

@@ -106,3 +106,21 @@ def test_review_accept_fills_to_fields_and_the_next_held_row_starts_from_them(ad
     assert (last['decision'], last['reason'], last['from_version'], last['from_build_identity'],
             last['from_fingerprint'], last['from_executable']) == (
         'held', 'policy_review', '2.1.310', accepted['to_build_identity'], newer.fingerprint, newer.executable)
+
+
+def test_loopback_operator_lists_held_successions_and_an_agent_key_cannot(admitted_local, monkeypatch):
+    world = World(admitted_local, monkeypatch, hub='review')
+    world.run((world.successor(),))
+    held = world.rows()[0]
+    world.app.state.local_open = True
+    path = '/api/v1/runtime-management/connections/installation-successions'
+    assert world.client.get(path, headers=world.setup[3]['subject']).status_code == 403
+    assert world.client.get(path, params={'state': 'other'}).status_code == 422
+    listed = world.client.get(path, params={'state': 'held'})
+    assert listed.status_code == 200, listed.text
+    item = listed.json()['items'][0]
+    assert (item['id'], item['reason'], item['to_version'], item['can_accept']) == \
+        (held['id'], 'policy_review', None, True)
+    assert item['agent_ids'] == ['subject']
+    assert world.client.post(f"{path}/{held['id']}:accept").status_code == 200
+    assert world.client.get(path).json() == {'items': []}

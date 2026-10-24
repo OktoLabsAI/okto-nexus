@@ -262,3 +262,24 @@ def accept_succession(conn, succession_id, actor, version=None):
         log.warning('Runtime installation update: decision=%s reason=%s from=%s to=%s policy=%s',
                     'accepted', 'operator_accepted', row['from_version'], row['to_version'], row['policy'])
     return new_row or dict(row, id=None)
+
+
+def list_held_successions(conn):
+    """Return held rows that have no later accept for the same build, oldest first."""
+    rows = conn.execute(
+        "SELECT h.* FROM execution_installation_succession h WHERE h.decision='held' AND NOT EXISTS ("
+        'SELECT 1 FROM execution_installation_succession a WHERE a.decision=\'accepted\' '
+        'AND a.server_id=h.server_id AND a.executor_id=h.executor_id AND a.stable_ref=h.stable_ref '
+        'AND a.to_build_identity=h.to_build_identity) ORDER BY h.id').fetchall()
+    items = []
+    for row in rows:
+        agents = conn.execute(
+            'SELECT DISTINCT e.agent_id FROM execution_bindings b JOIN agent_endpoints e USING(endpoint_id) '
+            'WHERE b.server_id=? AND b.executor_id=? AND b.candidate_ref=? AND e.adapter_id=? ORDER BY e.agent_id',
+            (row['server_id'], row['executor_id'], row['stable_ref'], row['adapter_id'])).fetchall()
+        item = {name: row[name] for name in ('id', 'executor_id', 'adapter_id', 'decision', 'reason', 'policy',
+                                              'from_version', 'to_version', 'decided_at')}
+        item['agent_ids'] = [agent['agent_id'] for agent in agents]
+        item['can_accept'] = row['reason'] not in TRUST_RULE_REASONS
+        items.append(item)
+    return items

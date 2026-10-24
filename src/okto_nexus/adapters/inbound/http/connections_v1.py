@@ -264,6 +264,29 @@ def build_router() -> APIRouter:
             return binding_error(error, 'binding.revalidate')
         return JSONResponse(value, headers={'Cache-Control': 'no-store'})
 
+    @router.get('/connections/installation-successions')
+    async def list_installation_successions(request: Request, state: str = 'held') -> JSONResponse:
+        """Operator lists held successor builds that still wait for an accept."""
+        if get_authenticated_agent() is None:
+            return v1_err(401, 'AUTH_FAILED', 'Authentication is required.')
+        if state != 'held':
+            return v1_err(422, 'VALIDATION_ERROR', 'Only state=held is supported.')
+        from ....application.execution_installation_succession import list_held_successions
+        deps = request.app.state.deps
+        context = runtime_request_context()
+
+        def listing():
+            access = build_execution_access(deps)
+            with deps.connection_factory.unit_of_work() as uow:
+                access.authorize_maintenance(context, uow=uow)
+                return {'items': list_held_successions(uow.connection)}
+
+        try:
+            value = await anyio.to_thread.run_sync(listing)
+        except OktoNexusError as error:
+            return binding_error(error, 'installation.succession.list')
+        return JSONResponse(value, headers={'Cache-Control': 'no-store'})
+
     @router.post('/connections/installation-successions/{succession_id}:accept')
     async def accept_installation_succession(succession_id: str, request: Request) -> JSONResponse:
         """Operator accepts a held successor build. The hub relabels it on the next inventory tick."""

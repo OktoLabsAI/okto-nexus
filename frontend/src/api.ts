@@ -1016,6 +1016,11 @@ export interface OperatorStatus {
   configured: boolean; local: boolean; authenticated: boolean; username: string | null;
 }
 
+export interface RuntimeUpdatePolicy {
+  endpoint_id: string; agent_id: string; revision: number; policy: "review" | "follow" | null;
+  effective_policy: "review" | "follow"; policy_source: "hub" | "endpoint";
+}
+
 export class ApiError extends Error {
   constructor(
     public status: number,
@@ -1203,6 +1208,10 @@ export const api = {
     `/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/tool-permission`),
   saveRuntimeToolPermission: (endpoint: string, body: {expected_revision: number; mode: "ask" | "always_allow"}) =>
     call<{revision: number; mode: "ask" | "always_allow"}>(`/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/tool-permission`, {method: "PUT", body: JSON.stringify(body)}),
+  runtimeUpdatePolicy: (endpoint: string) => call<RuntimeUpdatePolicy>(
+    `/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/update-policy`),
+  saveRuntimeUpdatePolicy: (endpoint: string, body: {expected_revision: number; policy: "review" | "follow" | null}) =>
+    call<RuntimeUpdatePolicy>(`/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/update-policy`, {method: "PUT", body: JSON.stringify(body)}),
   runtimePolicy: (agentId?: string) => call<RuntimePolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/runtime-policy` : '/api/v1/runtime-policy'),
   saveRuntimePolicy: (body: {expected_revision: number; runtime_enabled: boolean | null; session_policy: SessionPolicy | null; automatic_recovery?: boolean; inherit_global_mcps?: boolean | null; broadcast_handoff_auto_claim?: boolean | null}, agentId?: string) => call<RuntimePolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/runtime-policy` : '/api/v1/runtime-policy', {method: 'PUT', body: JSON.stringify(body)}),
   oneShotPolicy: (agentId?: string) => call<OneShotPolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/one-shot-policy` : '/api/v1/one-shot-policy'),
