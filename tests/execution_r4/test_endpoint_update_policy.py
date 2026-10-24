@@ -114,3 +114,25 @@ def test_migration_155_adds_column_and_append_only_table_to_existing_rows(tmp_pa
     for sql in ("UPDATE execution_installation_succession SET reason='x'", "DELETE FROM execution_installation_succession"):
         with factory.unit_of_work() as uow, pytest.raises(Exception, match="append_only"):
             uow.connection.execute(sql)
+
+
+@pytest.mark.parametrize("keep_agents", [True, False])
+def test_database_reset_handles_the_append_only_succession_table(tmp_path, keep_agents):
+    from okto_nexus.application.database_reset import clear_operational_history
+    factory = ConnectionFactory(NexusConfig(home_dir=tmp_path / "home"))
+    MigrationRunner(factory).apply()
+    insert = ("INSERT INTO execution_installation_succession(server_id,executor_id,adapter_id,stable_ref,decision,"
+              "reason,policy,policy_source,decided_by,to_build_identity,decided_at) "
+              "VALUES('s','e','a','ref','accepted','operator_accepted','review','hub','operator','b','2026-01-01T00:00:00Z')")
+    with factory.unit_of_work() as uow:
+        uow.connection.execute(insert)
+    with factory.unit_of_work() as uow:
+        clear_operational_history(uow.connection, keep_agents=keep_agents)
+    with factory.unit_of_work(write=False) as uow:
+        count = uow.connection.execute("SELECT COUNT(*) FROM execution_installation_succession").fetchone()[0]
+    # An operator accept is connection state: it survives a reset that keeps agents.
+    assert count == (1 if keep_agents else 0)
+    with factory.unit_of_work() as uow:
+        uow.connection.execute(insert.replace("'b'", "'c'"))
+    with factory.unit_of_work() as uow, pytest.raises(Exception, match="append_only"):
+        uow.connection.execute("DELETE FROM execution_installation_succession")

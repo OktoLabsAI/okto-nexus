@@ -22,13 +22,21 @@ AGENT_CONFIGURATION_TABLES = frozenset({
     'execution_bindings', 'execution_workspace_bindings', 'execution_realizations',
     'execution_local_realizations', 'execution_local_observations',
     'execution_inventory_snapshots', 'execution_inventory_current',
-    'execution_inventory_revalidation', 'execution_proposals', 'connection_setup_commits',
+    'execution_inventory_revalidation', 'execution_installation_succession',
+    'execution_proposals', 'connection_setup_commits',
     'execution_link_tickets', 'execution_control_lanes', 'execution_connection_resumes',
     'workspaces', 'permission_presets', 'tag_keys', 'tag_values',
     'agent_policy_bindings', 'policies', 'policy_versions', 'governance_policies',
     'agent_comm_binding', 'comm_presets', 'comm_preset_versions',
     'agent_groups', 'agent_group_members', 'guardrails', 'guardrail_versions', 'guardrail_assignments',
 })
+
+
+# Append-only tables whose delete trigger only this reset may suspend.
+_APPEND_ONLY_DELETE_TRIGGERS = (
+    ('runtime_delivery_attempt_no_delete', 'runtime_delivery_attempt_events'),
+    ('execution_installation_succession_no_delete', 'execution_installation_succession'),
+)
 
 
 def preserved_tables(conn, *, keep_agents):
@@ -65,11 +73,13 @@ def clear_operational_history(conn, *, keep_agents):
         # Global defaults survive a reset; removed identities must not leave
         # overrides that could accidentally apply to a newly created agent.
         conn.execute("DELETE FROM one_shot_policy_settings WHERE scope<>'global'")
-    trigger = conn.execute("SELECT sql FROM sqlite_master WHERE type='trigger' "
-        "AND name='runtime_delivery_attempt_no_delete' "
-        "AND tbl_name='runtime_delivery_attempt_events'").fetchone()
-    if trigger is not None:
-        conn.execute('DROP TRIGGER runtime_delivery_attempt_no_delete')
+    triggers = []
+    for name, table in _APPEND_ONLY_DELETE_TRIGGERS:
+        trigger = conn.execute("SELECT sql FROM sqlite_master WHERE type='trigger' "
+            "AND name=? AND tbl_name=?", (name, table)).fetchone()
+        if trigger is not None and table not in preserved:
+            conn.execute(f'DROP TRIGGER "{name}"')
+            triggers.append(trigger[0])
     conn.execute('PRAGMA defer_foreign_keys=ON')
     tables = conn.execute("SELECT name FROM sqlite_master WHERE type='table' "
         "AND name NOT LIKE 'sqlite_%'").fetchall()
@@ -79,8 +89,8 @@ def clear_operational_history(conn, *, keep_agents):
         if table not in preserved:
             escaped = table.replace('"', '""')
             counts[table] = conn.execute(f'DELETE FROM "{escaped}"').rowcount
-    if trigger is not None:
-        conn.execute(trigger[0])
+    for sql in triggers:
+        conn.execute(sql)
     conn.execute('UPDATE runtime_reset_generation SET generation=generation+1 WHERE singleton=1')
     conn.execute("UPDATE handoff_runtime_schedule_scan SET handoff_cursor=0,attempt_cursor=0,notice_cursor='',"
                  'wake_generation=wake_generation+1 WHERE singleton=1')
