@@ -6,6 +6,7 @@ runtime relays. One-shot calls already own a separate error-notification path.
 """
 import hashlib
 import json
+from dataclasses import dataclass
 
 from ..domain.messages import MESSAGE_CREATED_TYPE, MESSAGE_STREAM
 
@@ -124,4 +125,75 @@ def notify_contained_claimant(deps, messages, *, server_id, executor_id, session
         send('operator', '', workspace_id, f'claimant session of {agent_id} contained',
             f"Claimant session contained (reason: {reason}). {affected}"
             f"Claimant: {agent_id}\nSession: {session_id}")
+        return sent
+
+
+@dataclass(frozen=True)
+class InstallationUpdate:
+    """One row of execution_installation_succession, as the notifier needs it."""
+    server_id: str
+    executor_id: str
+    stable_ref: str
+    decision: str
+    reason: str | None = None
+    from_version: str | None = None
+    to_version: str | None = None
+    from_build_identity: str | None = None
+    to_build_identity: str | None = None
+
+
+def notify_installation_update(deps, messages, update):
+    """Tell the operator that a runtime installation was accepted or held.
+
+    The hub sends one inbox message per affected workspace. The message names
+    the agents bound to the installation, both versions, the first 12 hex
+    characters of both build identities, the decision and the held reason.
+    The message id comes from the ref, the new build, the decision and the
+    workspace. A repeated call for the same update sends nothing.
+    These notices are inbox messages. They do not start a runtime turn.
+    """
+    with deps.connection_factory.unit_of_work() as uow:
+        conn = uow.connection
+        rows = conn.execute(
+            "SELECT DISTINCT e.workspace_id,e.agent_id FROM execution_bindings b "
+            "JOIN agent_endpoints e USING(endpoint_id) "
+            "WHERE b.server_id=? AND b.executor_id=? AND b.candidate_ref=? AND e.workspace_id IS NOT NULL "
+            "ORDER BY e.workspace_id,e.agent_id",
+            (update.server_id, update.executor_id, update.stable_ref)).fetchall()
+        agents = {}
+        for row in rows:
+            agents.setdefault(row['workspace_id'], []).append(row['agent_id'])
+        short = lambda value: (value or 'unknown')[:12]
+        now = deps.clock.now_iso()
+        sent = 0
+        for workspace_id, names in agents.items():
+            if deps.repos.agents.get(uow, 'operator') is None:
+                break
+            identity = hashlib.sha256('|'.join(
+                (update.stable_ref, update.to_build_identity or '', update.decision, workspace_id)).encode()).hexdigest()
+            message_id = 'msg_installation_update_' + identity
+            if conn.execute("SELECT 1 FROM messages WHERE message_id=?", (message_id,)).fetchone() is not None:
+                continue
+            target = dict(strategy='direct', agent_id='operator')
+            subject = f'runtime installation update {update.decision}'
+            body = (
+                f"Runtime installation update {update.decision}.\n"
+                f"Agents: {', '.join(names)}\n"
+                f"Version: {update.from_version or 'unknown'} to {update.to_version or 'unknown'}\n"
+                f"Build identity: {short(update.from_build_identity)} to {short(update.to_build_identity)}\n"
+                f"Decision: {update.decision}\n")
+            if update.decision == 'held':
+                body += (f"Held reason: {update.reason or 'unknown'}\n"
+                    "New sessions stay blocked until the operator accepts the update.\n")
+            messages._messages.create(uow, message_id=message_id, workspace_id=workspace_id,
+                from_agent_id='operator', channel_id=None, from_session_id=None, target=json.dumps(target),
+                subject=subject, body=body, artifacts=[], parent_message_id=None, trace_id=None, created_at=now)
+            messages._deliveries.create(uow, delivery_id='del_installation_update_' + identity,
+                message_id=message_id, recipient_agent_id='operator', status='unread', created_at=now)
+            messages._emitter.emit(uow, workspace_id=workspace_id, stream=MESSAGE_STREAM,
+                type=MESSAGE_CREATED_TYPE, payload=dict(message_id=message_id, channel_id=None,
+                    from_agent_id='operator', target=target, subject=subject, created_at=now,
+                    system_notification=True), actor_agent_id=None, visibility='eligible',
+                target=json.dumps(target))
+            sent += 1
         return sent

@@ -49,6 +49,17 @@ def read_execution_log(factory, *, workspace_id=None, severity=None, agent_id=No
       JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id
       WHERE v.approved_revision<>v.current_revision
       UNION ALL
+      SELECT 'succession:'||s.id||':'||coalesce(b.endpoint_id,'') id,s.decided_at timestamp,'installation update' source,
+        CASE WHEN s.decision='held' THEN 'warning' ELSE 'info' END severity,
+        ep.agent_id,ep.workspace_id,s.adapter_id,b.endpoint_id,NULL session_id,NULL operation_id,
+        s.executor_id,'inventory.succession' action,
+        CASE WHEN s.decision='held' THEN 'INSTALLATION_UPDATE_HELD' ELSE 'INSTALLATION_UPDATE_ACCEPTED' END code,
+        json_object('message',s.decision||': '||coalesce(s.from_version,'unknown')||' to '||coalesce(s.to_version,'unknown')
+          ||coalesce(' ('||s.reason||')',''),'decision',s.decision) detail
+      FROM execution_installation_succession s
+      LEFT JOIN execution_bindings b ON b.server_id=s.server_id AND b.executor_id=s.executor_id AND b.candidate_ref=s.stable_ref
+      LEFT JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id
+      UNION ALL
       SELECT 'recovery:'||r.id id,r.created_at timestamp,'runtime recovery' source,
         CASE WHEN r.code IN ('RECOVERY_READY','RECOVERY_AGENT_READY') THEN 'info' ELSE 'warning' END severity,
         r.agent_id,NULL workspace_id,NULL adapter_id,NULL endpoint_id,NULL session_id,NULL operation_id,
