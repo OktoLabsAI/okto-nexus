@@ -16,10 +16,14 @@ def forbid_paths(monkeypatch):
 
 
 def workspace(setup):
-    with setup[0].connection_factory.unit_of_work(write=False) as uow:
-        row = uow.connection.execute("SELECT workspace_id,root_realpath FROM workspaces").fetchone()
-        assert row[1] is None
-        return row[0]
+    """Return the workspace as a logical one. Local realization stores its approved root (#75).
+
+    A logical (digest or remote) workspace has no Server-local path, so clear it.
+    """
+    with setup[0].connection_factory.unit_of_work() as uow:
+        wid = uow.connection.execute("SELECT workspace_id FROM workspaces").fetchone()[0]
+        uow.connection.execute("UPDATE workspaces SET root_realpath=NULL WHERE workspace_id=?", (wid,))
+        return wid
 
 
 def test_logical_handoff_mcp_create_http_claim_mcp_complete(connected_local, monkeypatch):
