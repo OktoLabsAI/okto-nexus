@@ -75,7 +75,7 @@ def lease():
 
 def test_migration_preserves_schema_integrity_and_history_indexes(tmp_path):
     factory = ConnectionFactory(NexusConfig(home_dir=tmp_path))
-    assert MigrationRunner(factory).apply()[-1] == 154
+    assert MigrationRunner(factory).apply()[-1] == 155
     with factory.unit_of_work(write=False) as uow:
         conn = uow.connection
         assert conn.execute('PRAGMA foreign_key_check').fetchone() is None

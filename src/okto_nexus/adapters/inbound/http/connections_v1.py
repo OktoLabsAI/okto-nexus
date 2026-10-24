@@ -264,6 +264,28 @@ def build_router() -> APIRouter:
             return binding_error(error, 'binding.revalidate')
         return JSONResponse(value, headers={'Cache-Control': 'no-store'})
 
+    @router.post('/connections/installation-successions/{succession_id}:accept')
+    async def accept_installation_succession(succession_id: str, request: Request) -> JSONResponse:
+        """Operator accepts a held successor build. The hub relabels it on the next inventory tick."""
+        if get_authenticated_agent() is None:
+            return v1_err(401, 'AUTH_FAILED', 'Authentication is required.')
+        # Lazy import: the module comes from the succession package.
+        from ....application.execution_installation_succession import accept_succession
+        deps = request.app.state.deps
+        context = runtime_request_context()
+
+        def accept():
+            access = build_execution_access(deps)
+            with deps.connection_factory.unit_of_work() as uow:
+                access.authorize_maintenance(context, uow=uow)
+                return accept_succession(uow.connection, succession_id, context.actor_agent_id)
+
+        try:
+            value = await anyio.to_thread.run_sync(accept)
+        except OktoNexusError as error:
+            return binding_error(error, 'installation.succession.accept')
+        return JSONResponse(value, headers={'Cache-Control': 'no-store'})
+
     @router.get('/connections/status')
     async def connections_status(request: Request) -> JSONResponse:
         if get_authenticated_agent() is None:

@@ -68,12 +68,13 @@ def apply_machine_replacement(uow, *, expected, proposal, access, context):
                                   adapter_id=proposal['adapter_id'], configuration=expected['connection_configuration'])
         if source != automatic:
             raise OktoNexusError(ErrorCode.CONFLICT, 'The source execution authorization changed.', {})
-        endpoint = conn.execute('SELECT public_config,response_policy FROM agent_endpoints WHERE endpoint_id=?',
-                                (source['endpoint_id'],)).fetchone()
+        endpoint = conn.execute('SELECT public_config,response_policy,runtime_update_policy FROM agent_endpoints '
+                                'WHERE endpoint_id=?', (source['endpoint_id'],)).fetchone()
         public = json.loads(endpoint['public_config'])
         public['alias'] = expected['alias']
-        conn.execute('UPDATE agent_endpoints SET public_config=?,response_policy=? WHERE endpoint_id=?',
-                     (json.dumps(public), endpoint['response_policy'], proposal['endpoint_id']))
+        conn.execute('UPDATE agent_endpoints SET public_config=?,response_policy=?,runtime_update_policy=? WHERE endpoint_id=?',
+                     (json.dumps(public), endpoint['response_policy'], endpoint['runtime_update_policy'],
+                      proposal['endpoint_id']))
         grant = dict(conn.execute('SELECT * FROM runtime_execution_grants WHERE grant_id=?', (source['grant_id'],)).fetchone())
         grant.update(grant_id=new_id('grant'), endpoint_id=proposal['endpoint_id'],
                      workspace_id=proposal['workspace_id'], revision=1, profile_revision=1 if proposal['profile_id'] else None)

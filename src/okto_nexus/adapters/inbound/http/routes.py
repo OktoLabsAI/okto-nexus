@@ -1129,6 +1129,24 @@ def build_router() -> APIRouter:
         except OktoNexusError as exc:
             return _map_error(exc)
 
+    @router.get("/harness/endpoints/{endpoint_id}/update-policy")
+    async def runtime_update_policy(request: Request, endpoint_id: str) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).update_policy(context, endpoint_id=endpoint_id)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.put("/harness/endpoints/{endpoint_id}/update-policy")
+    async def runtime_update_policy_update(request: Request, endpoint_id: str, body: dict) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).update_policy(context, endpoint_id=endpoint_id, changes=body)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
     @router.get("/harness/endpoints/{endpoint_id}/conversation-policy")
     async def runtime_conversation_policy(request: Request, endpoint_id: str) -> JSONResponse:
         deps = request.app.state.deps

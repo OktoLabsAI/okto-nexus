@@ -186,6 +186,41 @@ class EndpointService:
                     endpoint = self.repo.get(uow, endpoint_id)
             return {"endpoint_id": endpoint_id, "agent_id": endpoint["agent_id"], "revision": endpoint["revision"], "mode": mode}
 
+    def update_policy(self, context, *, endpoint_id, changes=None):
+        """Operator choice of review or follow for newer runtime builds (#89).
+
+        None inherits the hub setting. The edit keeps the revision and revokes no
+        grant, because the column is outside the configuration digest and session guard.
+        """
+        self.authorize(context)
+        if changes is not None and (not isinstance(changes, dict)
+                or set(changes) != {"expected_revision", "policy"}
+                or type(changes["expected_revision"]) is not int
+                or changes["policy"] not in (None, "review", "follow")):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Use expected_revision and a review, follow or null policy.", {})
+        with self.cf.unit_of_work(write=changes is not None) as uow:
+            if self.access:
+                self.access.authorize(context, uow=uow, audit=False)
+            endpoint = self.repo.get(uow, endpoint_id)
+            if not endpoint or endpoint["protocol"] != "nxl-r4":
+                raise OktoNexusError(ErrorCode.NOT_FOUND, "The canonical connection is unavailable.", {})
+            policy = endpoint["runtime_update_policy"]
+            if changes is not None:
+                if changes["expected_revision"] != endpoint["revision"]:
+                    raise OktoNexusError(ErrorCode.CONFLICT, "Connection changed. Reload its update policy.", {})
+                if changes["policy"] != policy:
+                    policy = changes["policy"]
+                    now = self.clock.now_iso()
+                    uow.connection.execute("UPDATE agent_endpoints SET runtime_update_policy=?,updated_at=? WHERE endpoint_id=?",
+                        (policy, now, endpoint_id))
+                    self.repo.audit_configuration(uow, context=context, kind="endpoint", resource_id=endpoint_id,
+                        old_revision=endpoint["revision"], new_revision=endpoint["revision"],
+                        fields=["runtime_update_policy"], now=now)
+            hub = getattr(self.config, "runtime_update_policy", "review")
+            return {"endpoint_id": endpoint_id, "agent_id": endpoint["agent_id"], "revision": endpoint["revision"],
+                    "policy": policy, "effective_policy": policy or hub,
+                    "policy_source": "endpoint" if policy else "hub"}
+
     def conversation_policy(self, context, *, endpoint_id, changes=None):
         """Operator opt-in for canonical conversational delivery; never launch.
 
