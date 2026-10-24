@@ -279,3 +279,19 @@ def test_accept_route_is_operator_only_and_refuses_trust_rule_holds(admitted_loc
     refused = world.client.post(f"/v1/connections/installation-successions/{trust['id']}:accept",
                                 headers=headers['operator'])
     assert refused.status_code == 409 and 'other_parent' in refused.text
+
+
+def test_operator_accept_repairs_review_through_a_real_refresh(admitted_local, monkeypatch):
+    world = World(admitted_local, monkeypatch, hub='review')
+    new = world.successor()
+    _refresh(world, monkeypatch, (new,))
+    assert _validation(world) == (('installation_missing', 0), False)
+    held = world.rows()[0]
+    accepted = world.client.post(f"/v1/connections/installation-successions/{held['id']}:accept",
+                                 headers=world.setup[3]['operator'])
+    assert accepted.status_code == 200, accepted.text
+    _refresh(world, monkeypatch, (new,))
+    assert _validation(world) == (('installation_updated', 1), True)
+    launch = ApprovedLocalLaunch(world.owner, world.sent.scope)
+    assert launch.candidate.executable == new.executable and launch.candidate.version == '2.1.310'
+    launch.check()
