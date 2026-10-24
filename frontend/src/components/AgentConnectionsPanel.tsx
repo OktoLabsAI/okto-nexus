@@ -171,7 +171,8 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
       if (!imported.current) setDraft(old => ({...old,...(setup.folders || {}),
         provider_home:setup.folders?.provider_home ?? choice?.provider_home_suggestion ?? null,
         alias:setup.public_config?.alias || old.alias || `${agentId}-${old.adapter_id}`,
-        harness_settings:setup.public_config?.harness_settings || {},
+        harness_settings:setup.public_config?.harness_settings
+          || (Object.keys(old.harness_settings || {}).length ? old.harness_settings : {}),
         tool_access:setup.public_config?.nexus_tool_permission || 'ask',automatic_reply:true,
         authorization:setup.authorization || old.authorization,
         workspace_label:workspaces.find(w => w.workspace_id === workspace)?.display_name || old.workspace_label}));
@@ -186,7 +187,9 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
     if (step !== 1 || busy || !options || installationBusy) return;
     const choices = options.options.filter(row => row.adapter_id === draft.adapter_id && localInstallationAvailable(row));
     if (!selected) {
-      if (choices.length === 1) void selectInstallation(choices[0].candidate_ref!);
+      // A binding-backed draft already holds the stored settings. Do not reload defaults.
+      const stored = !!bindingId && Object.keys(draft.harness_settings || {}).length > 0;
+      if (choices.length === 1 && !stored) void selectInstallation(choices[0].candidate_ref!);
       return;
     }
     const key = `${executor}:${workspace}:${draft.adapter_id}:${candidateRef}:${reload}`;
