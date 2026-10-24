@@ -270,15 +270,24 @@ def build_router() -> APIRouter:
         if get_authenticated_agent() is None:
             return v1_err(401, 'AUTH_FAILED', 'Authentication is required.')
         # Lazy import: the module comes from the succession package.
-        from ....application.execution_installation_succession import accept_succession
+        from ....application.execution_installation_succession import accept_succession, probe_held_successor
         deps = request.app.state.deps
         context = runtime_request_context()
+        owner = getattr(request.app.state, 'embedded_inventory_owner', None)
 
         def accept():
             access = build_execution_access(deps)
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                access.authorize_maintenance(context, uow=uow)
+                version = probe_held_successor(uow.connection, succession_id,
+                                               getattr(owner, 'raw_candidates', ()))
             with deps.connection_factory.unit_of_work() as uow:
                 access.authorize_maintenance(context, uow=uow)
-                return accept_succession(uow.connection, succession_id, context.actor_agent_id)
+                row = accept_succession(uow.connection, succession_id, context.actor_agent_id, version)
+            if owner is not None and row.get('id') is not None:
+                from ....bootstrap.embedded_inventory import send_installation_notices
+                send_installation_notices(deps, (row,))
+            return row
 
         try:
             value = await anyio.to_thread.run_sync(accept)

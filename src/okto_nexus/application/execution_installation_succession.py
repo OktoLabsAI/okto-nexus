@@ -213,8 +213,37 @@ def apply_update_policy(deps, key, candidates, notify=None):
     return tuple(result)
 
 
-def accept_succession(conn, succession_id, actor):
-    """Operator action: accept a held successor. The relabel follows on the next tick."""
+def probe_held_successor(conn, succession_id, candidates):
+    """Return the probed version of the build behind a held row, or None.
+
+    The probe is bounded and needs no database write. It returns None when the
+    inventory has no matching candidate or the probe fails. The row then keeps
+    to_version NULL, as before.
+    """
+    held = conn.execute('SELECT * FROM execution_installation_succession WHERE id=?',
+                        (succession_id,)).fetchone()
+    if held is None or held['decision'] != 'held' or held['reason'] in TRUST_RULE_REASONS:
+        return None
+    match = [c for c in candidates if c.adapter_id == held['adapter_id']
+             and c.executable == held['to_executable'] and c.fingerprint == held['to_fingerprint']]
+    if not match:
+        return None
+    try:
+        version = _probe(match[0]).version
+        if (type(version) is not str or not 1 <= len(version) <= 160
+                or selected_fingerprint(match[0]) != match[0].fingerprint):
+            return None
+    except (CoreError, OktoNexusError, OSError, ValueError):
+        return None
+    return version
+
+
+def accept_succession(conn, succession_id, actor, version=None):
+    """Operator action: accept a held successor. The relabel follows on the next tick.
+
+    `version` is the probed version of the successor. It fills to_version, so the
+    next held row takes its "from" build from this accepted row.
+    """
     held = conn.execute('SELECT * FROM execution_installation_succession WHERE id=?',
                         (succession_id,)).fetchone()
     if held is None or held['decision'] != 'held':
@@ -225,6 +254,8 @@ def accept_succession(conn, succession_id, actor):
                              'This update failed a successor trust rule (' + held['reason'] + '). Rebind the agent instead.', {})
     row = {name: held[name] for name in _COLUMNS}
     row.update(decision='accepted', reason='operator_accepted', decided_by=actor)
+    if version is not None:
+        row['to_version'] = version
     row['decided_at'] = conn.execute("SELECT strftime('%Y-%m-%dT%H:%M:%fZ','now')").fetchone()[0]
     new_row = record_succession(conn, row)
     if new_row is not None:
