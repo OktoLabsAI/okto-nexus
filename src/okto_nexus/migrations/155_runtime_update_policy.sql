@@ -5,15 +5,17 @@ ALTER TABLE agent_endpoints ADD COLUMN runtime_update_policy TEXT
     CHECK (runtime_update_policy IS NULL OR runtime_update_policy IN ('review','follow'));
 
 -- Append-only audit of every decision about a successor build of an installation.
+-- The integer id orders the rows and is the id of the operator accept route.
+-- 'in_place' marks an update that keeps the approved ref: every policy accepts it.
 CREATE TABLE execution_installation_succession (
-    id TEXT PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     server_id TEXT NOT NULL,
     executor_id TEXT NOT NULL,
     adapter_id TEXT NOT NULL,
     stable_ref TEXT NOT NULL,
     decision TEXT NOT NULL CHECK (decision IN ('accepted','held')),
     reason TEXT NOT NULL,
-    policy TEXT NOT NULL CHECK (policy IN ('review','follow')),
+    policy TEXT NOT NULL CHECK (policy IN ('review','follow','in_place')),
     policy_source TEXT NOT NULL CHECK (policy_source IN ('hub','endpoint')),
     decided_by TEXT NOT NULL,
     from_executable TEXT,

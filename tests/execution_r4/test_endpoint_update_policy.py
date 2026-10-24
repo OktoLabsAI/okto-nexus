@@ -94,20 +94,23 @@ def test_migration_155_adds_column_and_append_only_table_to_existing_rows(tmp_pa
                      "VALUES(?,?,?,?,?,?,?)", ("endpoint", "agent", "workspace", "fixture", "nxl-r4", now, now))
     assert MigrationRunner(factory).apply() == [155]
     assert MigrationRunner(factory).apply() == []
-    row = lambda *v: ("id" + str(v[0]), "s", "e", "a", "ref", v[1], "r", "review", "hub", "hub", "b2", now)
-    insert = ("INSERT INTO execution_installation_succession(id,server_id,executor_id,adapter_id,stable_ref,decision,"
-              "reason,policy,policy_source,decided_by,to_build_identity,decided_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)")
+    row = lambda *v: ("s", "e", "a", "ref", v[1], "r", "review", "hub", "hub", "b2", now)
+    insert = ("INSERT INTO execution_installation_succession(server_id,executor_id,adapter_id,stable_ref,decision,"
+              "reason,policy,policy_source,decided_by,to_build_identity,decided_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)")
     with factory.unit_of_work() as uow:
         conn = uow.connection
         assert conn.execute("SELECT runtime_update_policy FROM agent_endpoints").fetchone()[0] is None
         conn.execute("UPDATE agent_endpoints SET runtime_update_policy='follow'")
         conn.execute(insert, row(1, "held"))
         conn.execute(insert, row(2, "accepted"))
+        assert [r[0] for r in conn.execute("SELECT id FROM execution_installation_succession ORDER BY id")] == [1, 2]
     for statement, args in ((insert, row(3, "held")),):
         with factory.unit_of_work() as uow, pytest.raises(Exception, match="UNIQUE"):
             uow.connection.execute(statement, args)
     with factory.unit_of_work() as uow, pytest.raises(Exception, match="check|CHECK"):
         uow.connection.execute("UPDATE agent_endpoints SET runtime_update_policy='hold'")
+    with factory.unit_of_work() as uow, pytest.raises(Exception, match="check|CHECK"):
+        uow.connection.execute(insert, ("s", "e", "a", "ref", "held", "r", "hold", "hub", "hub", "b3", now))
     for sql in ("UPDATE execution_installation_succession SET reason='x'", "DELETE FROM execution_installation_succession"):
         with factory.unit_of_work() as uow, pytest.raises(Exception, match="append_only"):
             uow.connection.execute(sql)
