@@ -166,7 +166,7 @@ class RuntimeDeliveryPlanner:
         from ..adapters.outbound.sqlite.handoff_notice_retirement import SqliteHandoffNoticeRetirement
         from ..adapters.outbound.sqlite.messages_repo import SqliteMessageDeliveryRepo
         conn = uow.connection
-        cancel, release = SqlitePendingExecutionCancellation().cancel, SqliteMessageDeliveryRepo().release_runtime_reservation
+        cancel, consume = SqlitePendingExecutionCancellation().cancel, SqliteMessageDeliveryRepo().mark_runtime_superseded
         texts = []
         for row in earlier:
             if row["sender_agent_id"] != message.from_agent_id or row["source_key"] != source_key or row["source_result_id"]:
@@ -190,7 +190,8 @@ class RuntimeDeliveryPlanner:
             conn.execute("RELEASE supersede_delivery")
             conn.execute("UPDATE delivery_outbox SET status='CANCELLED',reason=?,updated_at=? WHERE operation_id=?",
                          ("superseded_by:" + message.message_id, now, row["operation_id"]))
-            release(uow, operation_id=row["operation_id"])
+            # The text travels in the newer turn, so the runtime consumes this delivery.
+            consume(uow, operation_id=row["operation_id"], at=now)
             texts.extend((envelope.get("runtime_context") or {}).get("supersedes") or ())
             texts.append({"message_id": row["message_id"], "subject": row["message_subject"], "body": row["message_body"]})
         return texts

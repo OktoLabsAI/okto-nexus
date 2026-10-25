@@ -234,18 +234,22 @@ def project_delivery_receipt(conn, *, server_id, executor_id, operation_id, acti
 
 def project_delivery_refusals(conn, *, server_id, executor_id):
     # A pre-send refusal has no executor receipt and cannot become a success.
+    # A row that is already CANCELLED (for example superseded by a newer
+    # message, #93) keeps its status and reason.
     conn.execute("UPDATE delivery_outbox SET status='REJECTED',reason='canonical_dispatch_refused',"
         "canonical_terminal_operation_id=(SELECT m.operation_id FROM execution_domain_deliveries m "
         "JOIN execution_dispatch_outbox x USING(server_id,executor_id,operation_id) "
         "WHERE m.domain_operation_id=delivery_outbox.operation_id AND x.dispatch_state='RESOLVED_TERMINAL' "
         "AND x.last_receipt_revision IS NULL AND x.last_error IS NOT NULL LIMIT 1) "
-        "WHERE reconciliation_id IS NULL AND canonical_terminal_operation_id IS NULL "
+        "WHERE reconciliation_id IS NULL AND canonical_terminal_operation_id IS NULL AND status<>'CANCELLED' "
         "AND NOT EXISTS (SELECT 1 FROM runtime_handoff_notice_retirements n WHERE n.operation_id=delivery_outbox.operation_id) "
         "AND NOT EXISTS (SELECT 1 FROM execution_capacity_compensations c WHERE c.domain_operation_id=delivery_outbox.operation_id) "
         "AND operation_id IN (SELECT m.domain_operation_id FROM execution_domain_deliveries m "
         "JOIN execution_dispatch_outbox x USING(server_id,executor_id,operation_id) "
         "WHERE m.server_id=? AND m.executor_id=? AND x.dispatch_state='RESOLVED_TERMINAL' "
-        "AND x.last_receipt_revision IS NULL AND x.last_error IS NOT NULL LIMIT 256)", (server_id, executor_id))
+        "AND x.last_receipt_revision IS NULL AND x.last_error IS NOT NULL "
+        "AND (CASE WHEN json_valid(x.last_error) THEN json_extract(x.last_error,'$.code') END) "
+        "IS NOT 'SUPERSEDED_BY_NEWER' LIMIT 256)", (server_id, executor_id))
 
 
 def project_released_deliveries(conn, *, server_id, executor_id, session_id, proof):

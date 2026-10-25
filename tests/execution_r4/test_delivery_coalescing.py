@@ -115,6 +115,20 @@ def test_busy_recipient_coalesces_only_when_enabled(held_turn, monkeypatch, mode
         code = uow.connection.execute(
             "SELECT json_extract(last_error,'$.code') FROM execution_dispatch_outbox WHERE json_extract(last_error,'$.code')='SUPERSEDED_BY_NEWER'").fetchall()
         assert len(code) == 1
+    # The refusal projector runs on every pump pass. It must keep the superseded row (#93).
+    from okto_nexus.application.execution_domain_delivery import project_delivery_refusals
+    with setup[0].connection_factory.unit_of_work() as uow:
+        for scope in uow.connection.execute(
+                "SELECT DISTINCT server_id,executor_id FROM execution_domain_deliveries").fetchall():
+            project_delivery_refusals(uow.connection, server_id=scope[0], executor_id=scope[1])
+    after = operations(setup)
+    assert after[1]['status'] == 'CANCELLED' and after[1]['reason'] == 'superseded_by:' + ops[2]['message_id']
+    # The superseded text travels in the newer turn, so its inbox row is read, not unread.
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        row = uow.connection.execute(
+            "SELECT status,delivered_at,read_at,consumer_kind FROM message_deliveries "
+            "WHERE message_id=? AND recipient_agent_id='subject'", (ops[1]['message_id'],)).fetchone()
+    assert row['status'] == 'read' and row['delivered_at'] and row['read_at'] and row['consumer_kind'] == 'push'
 
 
 def test_operation_with_a_receipt_is_never_cancelled(held_turn, monkeypatch):
