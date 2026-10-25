@@ -4,6 +4,7 @@ This is context, not a principal or an authentication mechanism. Callers must
 authorize the operation before projecting it and revalidate before transport.
 No metadata, credential, private policy, path or native configuration is copied.
 """
+from ..domain.messages import is_lifecycle_notice
 from ..domain.routing import normalize_capabilities
 from ..errors import ErrorCode, OktoNexusError
 import json
@@ -36,7 +37,12 @@ def delivery_prompt(envelope):
     context.pop("trust", None)
     runtime = context.get("runtime_context") or {}
     note = ""
-    if runtime.get("intent") != "handoff_execute" and "relay_results" in runtime:
+    notice = any(isinstance(part, dict) and part.get("type") == "text" and is_lifecycle_notice(part.get("text"))
+                 for part in context.get("content") or ())
+    if notice:
+        # The relay skips a turn that answers a system notice (#92).
+        note = " This is a system notice. " + relay_text(False)
+    elif runtime.get("intent") != "handoff_execute" and "relay_results" in runtime:
         note = " " + relay_text(runtime["relay_results"], (runtime.get("causality") or {}).get("max_depth"))
     if context.get("sent_at"):
         note += (f" This message was sent at {context['sent_at']}. If a newer message from the same sender "

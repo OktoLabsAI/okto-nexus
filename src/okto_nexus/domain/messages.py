@@ -42,6 +42,7 @@ __all__ = [
     "GENERIC_RUNTIME_SUBJECT",
     "MAX_DERIVED_SUBJECT_CHARS",
     "READ_RECEIPT_KIND",
+    "is_lifecycle_notice",
     "derive_subject",
     "require_message_fields",
     "enforce_inline_size",
@@ -86,6 +87,20 @@ MESSAGE_READ_TYPE = "message.read"
 #: ``kind`` that marks a receipt notification. Receipts NEVER generate
 #: receipts (acknowledging one is a terminal act - no ping-pong).
 READ_RECEIPT_KIND = "message.read_receipt"
+
+#: Handoff lifecycle notices carry a JSON body whose ``kind`` starts with this
+#: prefix. The server writes them; no agent wrote the text (#92).
+LIFECYCLE_NOTICE_KIND_PREFIX = "handoff."
+
+
+def is_lifecycle_notice(body: Any) -> bool:
+    """Whether ``body`` is a handoff lifecycle notice written by the server."""
+    try:
+        data = json.loads(body) if isinstance(body, str) else None
+    except ValueError:
+        return False
+    kind = data.get("kind") if isinstance(data, dict) else None
+    return isinstance(kind, str) and kind.startswith(LIFECYCLE_NOTICE_KIND_PREFIX)
 
 #: Subject that the runtime gave to every captured reply. It carries no
 #: information, so a subject derived from the body replaces it.

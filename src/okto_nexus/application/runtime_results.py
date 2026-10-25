@@ -9,7 +9,7 @@ import hashlib
 from ..errors import ErrorCode, OktoNexusError
 from ..domain.runtime_context import RuntimeRequestContext
 from ..domain.inbox import requires_known_recipient
-from ..domain.messages import GENERIC_RUNTIME_SUBJECT, READ_RECEIPT_KIND, derive_subject
+from ..domain.messages import GENERIC_RUNTIME_SUBJECT, READ_RECEIPT_KIND, derive_subject, is_lifecycle_notice
 from ..domain.tag_selector import reachable
 from ..domain.targets import target_strategy
 from .permissions import permission_set_for
@@ -174,6 +174,11 @@ class RuntimeResultService:
         """Return (state, reason) when the relay must not start a new turn, else None."""
         if (row["output_text"] or "").lstrip().startswith(self.NO_REPLY_MARKER):
             return "SKIPPED_NO_REPLY", "The turn output starts with NO_REPLY."
+        # A lifecycle notice names the claimant (or the creator) as its sender, but
+        # the server wrote it. A relay would wake that agent with an answer it never asked for.
+        source = uow.connection.execute("SELECT body FROM messages WHERE message_id=?", (row["parent_id"],)).fetchone()
+        if source and is_lifecycle_notice(source[0]):
+            return "SKIPPED_SYSTEM_NOTICE", "The turn answered a system notice."
         # The agent already answered the sender with message_create during this turn.
         # Receipts and runtime publications never count as a direct answer.
         direct = uow.connection.execute(

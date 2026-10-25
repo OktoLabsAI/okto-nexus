@@ -392,6 +392,26 @@ def test_no_reply_marker_skips_relay_and_keeps_the_message(relay_pair, monkeypat
     assert row['relay_reason']
 
 
+def test_turn_that_answers_a_lifecycle_notice_is_not_relayed(relay_pair, monkeypatch):
+    """The notice names a sender, but the server wrote it. The plain answer is stored only (#92)."""
+    setup, _, _, peers, factory = relay_pair
+    monkeypatch.syspath_prepend(str(Path(__file__).parents[1]))
+    from test_pr34_remediation import tool
+    setup[2].headers['host'] = '127.0.0.1:8000'
+    notice = json.dumps({'kind': 'handoff.claimant_silent', 'handoff_id': 'hof_notice'})
+    out = tool(setup[2], setup[3]['caller']['Authorization'].removeprefix('Bearer '), 'message_create',
+        dict(project_root=str(setup[-1]), from_agent_id='caller', subject='handoff hof_notice claimant silent',
+             body=notice, target=dict(strategy='direct', agent_id='subject')))
+    assert out['ok'], out
+    row = settled(setup, 'SKIPPED_SYSTEM_NOTICE')
+    assert row['relay_reason'] == 'The turn answered a system notice.'
+    assert row['publication_state'] == 'PUBLISHED'
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        # Only the notice delivery exists. No new turn goes to the named sender.
+        assert [r[0] for r in uow.connection.execute('SELECT recipient_agent_id FROM delivery_outbox')] == ['subject']
+        assert uow.connection.execute('SELECT COUNT(*) FROM runtime_relay_decisions').fetchone()[0] == 0
+
+
 def test_explicit_message_create_to_sender_skips_relay(relay_pair, monkeypatch):
     setup, _, _, peers, factory = relay_pair
     monkeypatch.syspath_prepend(str(Path(__file__).parents[1]))
