@@ -66,7 +66,7 @@ class HandoffScheduleProcessor(Protocol):
 
 class HandoffRuntimeScheduler:
     def __init__(self, *, factory, repository: HandoffScheduleRepository,
-                 processor: HandoffScheduleProcessor, notices: HandoffNoticeRetirement | None = None, max_running=8, scan_limit=64,
+                 processor: HandoffScheduleProcessor, notices: HandoffNoticeRetirement | None = None, lease_watch=None, max_running=8, scan_limit=64,
                  lease_seconds=30, sweep_seconds=5, idle_seconds=1, now=time.time, monotonic=time.monotonic):
         if (any(type(n) is not int or not 1 <= n <= 256 for n in (max_running, scan_limit))
                 or any(type(n) not in (int, float) or not math.isfinite(n) or n <= 0
@@ -74,6 +74,8 @@ class HandoffRuntimeScheduler:
             raise ValueError('Invalid handoff scheduler limits.')
         self.factory, self.repository, self.processor = factory, repository, processor
         self.notices = notices
+        # Called as lease_watch(uow) in each sweep: expires due handoff leases.
+        self.lease_watch = lease_watch
         self.max_running, self.scan_limit = max_running, scan_limit
         self.lease_seconds, self.sweep_seconds = lease_seconds, sweep_seconds
         # With no work, no wake and no sweep due, a tick reads the store only
@@ -159,6 +161,8 @@ class HandoffRuntimeScheduler:
             for lease in running:
                 self.repository.renew(uow, lease, now=now, lease_seconds=self.lease_seconds)
             if scan:
+                if self.lease_watch is not None:
+                    self.lease_watch(uow)
                 if self.notices is not None:
                     self.notices.retire_page(uow, now=now, limit=self.scan_limit)
                 self.repository.sweep(uow, now=now, limit=self.scan_limit)

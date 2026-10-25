@@ -99,7 +99,9 @@ def test_cancel_after_expiry_pushes_a_notice_to_the_previous_claimant(env):
         conn.close()
     _ok(tools["handoff_cancel"](project_root=root, handoff_id=hid, agent_id="alpha", reason="stale"))
     rows = pushed(deps, hid)
-    assert [(r["recipient_agent_id"], r["event_type"].split(":")[0]) for r in rows] == [("beta", "handoff.cancelled")]
+    # The cancel runs the expiry first, so beta also gets the lease notice (#92).
+    assert [(r["recipient_agent_id"], r["event_type"].split(":")[0]) for r in rows] == [
+        ("beta", "handoff.cancelled"), ("beta", "handoff.lease_expired")]
 
 
 def make_notice(deps, uow, workspace, hid, kind, sender, recipient, body=None, tag="1"):

@@ -32,10 +32,10 @@ class SettingSpec:
     """One editable knob: type, bounds and the operator-facing description."""
 
     key: str
-    type: str  # "int" | "bool" | "enum"
+    type: str  # "int" | "float" | "bool" | "enum"
     description: str
-    minimum: int | None = None
-    maximum: int | None = None
+    minimum: float | None = None
+    maximum: float | None = None
     choices: tuple[str, ...] | None = None
     requires_restart: bool = False
     group: str = "general"
@@ -100,6 +100,21 @@ SETTING_SPECS: tuple[SettingSpec, ...] = (
         "claim expires and the work returns to the pool for another agent.",
         minimum=30,
         maximum=86400,
+    ),
+    SettingSpec(
+        "handoff_notify_expiry",
+        "bool",
+        "Tell the creator and the previous claimant when a handoff lease "
+        "expires. Both notices start a turn when the agent has a runtime session.",
+    ),
+    SettingSpec(
+        "handoff_silence_warn_fraction",
+        "float",
+        "Fraction of the handoff lease after which the creator gets one "
+        "warning when the claimant sent no message to the creator. "
+        "0 turns the warning off.",
+        minimum=0.0,
+        maximum=1.0,
     ),
     SettingSpec(
         "max_relay_depth",
@@ -390,6 +405,18 @@ def _coerce(spec: SettingSpec, raw: Any) -> Any:
                 {"key": spec.key, "value": raw},
             )
         return value
+    if spec.type == "float":
+        try:
+            fvalue = float(raw)
+        except (TypeError, ValueError):
+            fvalue = float("nan")
+        if isinstance(raw, bool) or not (spec.minimum <= fvalue <= spec.maximum):
+            raise OktoNexusError(
+                ErrorCode.CONFIG_ERROR,
+                f"Setting {spec.key!r} must be a number from {spec.minimum} to {spec.maximum}.",
+                {"key": spec.key, "value": raw},
+            )
+        return fvalue
     # int
     try:
         value = int(raw)

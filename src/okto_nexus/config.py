@@ -154,6 +154,8 @@ class NexusConfig:
     poll_interval_ms: int = 200
     max_wait_timeout_seconds: int = 30
     handoff_lease_ttl_seconds: int = 3600
+    handoff_notify_expiry: bool = True
+    handoff_silence_warn_fraction: float = 0.5
     max_inline_bytes: int = DEFAULT_MAX_INLINE_BYTES
     inbox_lease_ttl_seconds: int = DEFAULT_INBOX_LEASE_TTL_SECONDS
     session_stale_ttl_seconds: int = DEFAULT_SESSION_STALE_TTL_SECONDS
@@ -430,6 +432,11 @@ _STRING_FIELDS: dict[str, tuple[str, str, str]] = {
 # The CLI grammar is value-carrying (``--flag value`` / ``--flag=value``), so
 # boolean flags take an explicit true/false value rather than being bare.
 _BOOL_FIELDS: dict[str, tuple[str, str, bool]] = {
+    "handoff_notify_expiry": (
+        "OKTO_NEXUS_HANDOFF_NOTIFY_EXPIRY",
+        "--handoff-notify-expiry",
+        True,
+    ),
     "runtime_handoff_auto_claim_enabled": (
         "OKTO_NEXUS_RUNTIME_HANDOFF_AUTO_CLAIM_ENABLED",
         "--runtime-handoff-auto-claim-enabled",
@@ -499,6 +506,15 @@ FEATURE_FLAG_FIELDS: tuple[str, ...] = tuple(
     name for name in _BOOL_FIELDS if name.startswith("feature_")
 )
 
+# field: (env var, CLI flag, default, minimum, maximum) - fraction knobs.
+_FLOAT_FIELDS: dict[str, tuple[str, str, float, float, float]] = {
+    "handoff_silence_warn_fraction": (
+        "OKTO_NEXUS_HANDOFF_SILENCE_WARN_FRACTION",
+        "--handoff-silence-warn-fraction",
+        0.5, 0.0, 1.0,
+    ),
+}
+
 _BOOL_TRUE = frozenset({"true", "1", "yes", "on"})
 _BOOL_FALSE = frozenset({"false", "0", "no", "off"})
 
@@ -512,6 +528,7 @@ def _parse_cli(argv: list[str]) -> dict[str, str]:
     known_flags = {flag for _, flag in _PATH_FIELDS.values()}
     known_flags |= {flag for _, flag, _, _ in _INT_FIELDS.values()}
     known_flags |= {flag for _, flag, _, _ in _ENUM_FIELDS.values()}
+    known_flags |= {flag for _, flag, _, _, _ in _FLOAT_FIELDS.values()}
     known_flags |= {flag for _, flag, _ in _STRING_FIELDS.values()}
     known_flags |= {flag for _, flag, _ in _BOOL_FIELDS.values()}
 
@@ -581,6 +598,27 @@ def _resolve_int(
             ErrorCode.CONFIG_ERROR,
             f"Value for {field_name} must be >= {minimum}, got {value}",
             {"field": field_name, "source": source, "value": value, "minimum": minimum},
+        )
+    return value
+
+
+def _resolve_float(field_name, flag, env_var, default, minimum, maximum, env, cli):
+    """Resolve one bounded finite float with CLI > env > default precedence."""
+    if flag in cli:
+        raw, source = cli[flag], flag
+    elif env_var in env:
+        raw, source = env[env_var], env_var
+    else:
+        return default
+    try:
+        value = float(str(raw).strip())
+    except (TypeError, ValueError):
+        value = float("nan")
+    if not minimum <= value <= maximum:  # NaN fails this test too
+        raise OktoNexusError(
+            ErrorCode.CONFIG_ERROR,
+            f"Value for {field_name} must be a number from {minimum} to {maximum}, got {raw!r}",
+            {"field": field_name, "source": source, "value": raw},
         )
     return value
 
@@ -696,6 +734,11 @@ def load_config(env: Mapping[str, str], argv: list[str] | None = None) -> NexusC
     for field_name, (env_var, flag, default, minimum) in _INT_FIELDS.items():
         kwargs[field_name] = _resolve_int(
             field_name, flag, env_var, default, minimum, env, cli
+        )
+
+    for field_name, (env_var, flag, default, low, high) in _FLOAT_FIELDS.items():
+        kwargs[field_name] = _resolve_float(
+            field_name, flag, env_var, default, low, high, env, cli
         )
 
     for field_name, (env_var, flag, default, allowed) in _ENUM_FIELDS.items():
