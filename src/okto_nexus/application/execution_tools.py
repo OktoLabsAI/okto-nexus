@@ -18,6 +18,7 @@ MANAGED_TOOLS = frozenset({
     'event_get', 'event_cursor', 'event_wait',
     'runtime_input_list', 'runtime_input_respond',
     'message_create',
+    'inbox_count', 'inbox_peek', 'inbox_history', 'message_status',
 })
 
 

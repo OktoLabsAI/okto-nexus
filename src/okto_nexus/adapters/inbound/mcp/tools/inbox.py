@@ -27,6 +27,7 @@ from typing import Annotated, Any
 
 from pydantic import Field
 
+from okto_nexus.domain.execution_principal import current_execution_principal
 from okto_nexus.adapters.outbound.sqlite.events_repo import (
     SqliteEventEmitter,
     SqliteEventRepo,
@@ -263,4 +264,6 @@ def register(server: Any, deps: Any) -> None:
         message_id: Annotated[str, Field(description=_P_STATUS_MESSAGE_ID)],
     ) -> dict[str, Any]:
         """Track a message you SENT: per-recipient delivery states {recipient, status, attempts, read_at} (unread/delivered/read/parked). READ-ONLY."""
-        return service.message_status(message_id=message_id)
+        principal = current_execution_principal.get()
+        caller = principal.scope['agent_id'] if principal is not None else None
+        return service.message_status(message_id=message_id, caller_agent_id=caller)

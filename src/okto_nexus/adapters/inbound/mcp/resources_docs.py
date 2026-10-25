@@ -178,7 +178,11 @@ inbox_history. message_list -> inbox_peek / inbox_history (your messages) or
 event_get (bus traffic). message_wait -> inbox_count polling or event_wait. The
 shims return ``{ok:false,error:{code:"MIGRATED"}}`` naming the exact replacement;
 they are kept so a pre-S3 client gets prescriptive guidance instead of an opaque
-"unknown tool".""",
+"unknown tool".
+
+A managed session can call inbox_count, inbox_peek, inbox_history and
+message_status. message_status is sender-only for sessions. inbox_pull,
+inbox_ack and inbox_extend need a key.""",
 )
 
 add_resource(
@@ -241,7 +245,8 @@ even while you keep acknowledging).
 Track a message you SENT: ``{message_id, deliveries, count}`` where each delivery
 is ``{recipient, status, attempts, read_at}`` and status is
 unread/delivered/read/parked. Use it instead of re-sending when a recipient
-seems silent.
+seems silent. A session sees only messages it sent: any other id returns
+NOT_FOUND. A result publication also returns ``relay_state``.
 
 # profile parameter (inbox_pull/peek/history; also event_get/event_wait)
 One of: default (all fields minus dead ones), summary (minimal + follow_up -

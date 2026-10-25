@@ -429,13 +429,19 @@ class InboxService:
     # ------------------------------------------------------------------ #
     # message_status (sender-side)
     # ------------------------------------------------------------------ #
-    def message_status(self, *, message_id: Any) -> dict[str, Any]:
+    def message_status(
+        self, *, message_id: Any, caller_agent_id: str | None = None
+    ) -> dict[str, Any]:
         """Return the per-recipient delivery states of a SENT message.
 
         READ-ONLY sender-side observability (cures the blind sender post-send):
         one entry per recipient with the EFFECTIVE status (``unread`` /
         ``delivered`` / ``read`` / ``parked``; an elapsed in-flight lease reads
         as ``unread``), the claim ``attempts``, and ``read_at``.
+
+        A session caller passes ``caller_agent_id``. Only the sender may read
+        the status. Any other caller gets the same NOT_FOUND as a missing id.
+        A publication also returns ``relay_state`` from its runtime result.
         """
         if not isinstance(message_id, str) or not message_id.strip():
             raise OktoNexusError(
@@ -445,7 +451,11 @@ class InboxService:
             )
         now = self._clock.now_iso()
         with self._cf.unit_of_work(write=False) as uow:
-            if not self._messages.list_by_ids(uow, message_ids=[message_id]):
+            found = self._messages.list_by_ids(uow, message_ids=[message_id])
+            if not found or (
+                caller_agent_id is not None
+                and found[0].from_agent_id != caller_agent_id
+            ):
                 raise OktoNexusError(
                     ErrorCode.NOT_FOUND,
                     "No such message. Pass the message_id returned by message_create.",
@@ -454,6 +464,11 @@ class InboxService:
             rows = self._deliveries.list_for_message(
                 uow, message_id=message_id, now=now
             )
+            relay = uow.connection.execute(
+                "SELECT relay_state FROM runtime_results "
+                "WHERE publication_message_id=? ORDER BY captured_at DESC LIMIT 1",
+                (message_id,),
+            ).fetchone()
         deliveries = [
             {
                 "recipient": r["recipient_agent_id"],
@@ -463,11 +478,14 @@ class InboxService:
             }
             for r in rows
         ]
-        return {
+        result = {
             "message_id": message_id,
             "deliveries": deliveries,
             "count": len(deliveries),
         }
+        if relay is not None:
+            result["relay_state"] = relay["relay_state"]
+        return result
 
     # ------------------------------------------------------------------ #
     # Internal helpers

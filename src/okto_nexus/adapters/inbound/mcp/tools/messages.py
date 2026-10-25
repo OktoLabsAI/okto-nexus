@@ -379,7 +379,9 @@ def register(server: Any, deps: Any) -> None:
             "in-flight, returns bodies; acknowledge with inbox_ack), "
             "inbox_peek(agent_id=<you>) for a non-destructive look, or "
             "inbox_history(agent_id=<you>, cursor=..., limit=...) for "
-            "already-read messages. To fetch bus traffic by event instead, use "
+            "already-read messages. Sessions have inbox_count, inbox_peek, inbox_history "
+            "and message_status (sender-only); inbox_pull and inbox_ack need a key. "
+            "To fetch bus traffic by event instead, use "
             'event_get(project_root=..., agent_id=<you>, stream="workspace", '
             'filters={"type": "message.created"}).',
             ["inbox_pull", "inbox_peek", "inbox_history", "event_get"],
@@ -393,7 +395,8 @@ def register(server: Any, deps: Any) -> None:
             "message_list was replaced in S3. For YOUR messages use "
             "inbox_peek(agent_id=<you>) (pending: unread + in-flight) or "
             "inbox_history(agent_id=<you>, cursor=..., limit=...) (read "
-            "archive, newest-first, paginated). To enumerate the workspace's "
+            "archive, newest-first, paginated). Sessions have inbox_count, inbox_peek, "
+            "inbox_history and message_status (sender-only). To enumerate the workspace's "
             "message traffic use event_get(project_root=..., agent_id=<you>, "
             'stream="workspace", filters={"type": "message.created"}, '
             "cursor=..., limit=...).",
