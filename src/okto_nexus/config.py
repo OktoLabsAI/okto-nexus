@@ -174,6 +174,7 @@ class NexusConfig:
     transport_security: str = "http_https"
     remote_machine_policy: str = "manual"
     runtime_update_policy: str = "review"
+    delivery_coalesce: str = "off"
     retention_events_keep_days: int = DEFAULT_RETENTION_EVENTS_KEEP_DAYS
     retention_read_deliveries_keep_days: int = (
         DEFAULT_RETENTION_READ_DELIVERIES_KEEP_DAYS
@@ -386,6 +387,10 @@ _ENUM_FIELDS: dict[str, tuple[str, str, str, tuple[str, ...]]] = {
     "runtime_update_policy": (
         "OKTO_NEXUS_RUNTIME_UPDATE_POLICY", "--runtime-update-policy",
         "review", ("review", "follow"),
+    ),
+    "delivery_coalesce": (
+        "OKTO_NEXUS_DELIVERY_COALESCE", "--delivery-coalesce",
+        "off", ("off", "same_sender"),
     ),
     "transport_security": (
         "OKTO_NEXUS_TRANSPORT_SECURITY", "--transport-security",

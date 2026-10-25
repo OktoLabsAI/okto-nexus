@@ -54,6 +54,13 @@ SETTING_SPECS: tuple[SettingSpec, ...] = (
         choices=("manual", "deny", "auto_replace"),
     ),
     SettingSpec(
+        "delivery_coalesce", "enum",
+        "When a runtime agent is busy and a sender queues a newer message, off (default) delivers every "
+        "message as its own turn. same_sender cancels the sender's earlier unsent messages with the same "
+        "session affinity and adds their text to the newer turn. A message that reached the runtime is never cancelled.",
+        choices=("off", "same_sender"),
+    ),
+    SettingSpec(
         "transport_security", "enum",
         "Allow HTTP/HTTPS and WS/WSS (default), or require HTTPS/WSS. "
         "Configure TLS before selecting HTTPS only. Applies to new requests and connections; "

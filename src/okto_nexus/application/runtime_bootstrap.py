@@ -38,8 +38,19 @@ def delivery_prompt(envelope):
     note = ""
     if runtime.get("intent") != "handoff_execute" and "relay_results" in runtime:
         note = " " + relay_text(runtime["relay_results"], (runtime.get("causality") or {}).get("max_depth"))
-    return ("NEXUS DELIVERY: respond to the sender's request using your available capabilities." + note + "\n"
+    if context.get("sent_at"):
+        note += (f" This message was sent at {context['sent_at']}. If a newer message from the same sender "
+                 "is in this turn or in your inbox, answer the newest one.")
+    superseded = runtime.get("supersedes")
+    if superseded:
+        # The block carries these texts, so the JSON copy does not repeat them.
+        context["runtime_context"] = {k: v for k, v in runtime.items() if k != "supersedes"}
+    text = ("NEXUS DELIVERY: respond to the sender's request using your available capabilities." + note + "\n"
             + json.dumps(context, ensure_ascii=False, sort_keys=True))
+    if superseded:
+        text += ("\nSUPERSEDES: these earlier messages from the same sender were not delivered. "
+                 "Their text follows, oldest first.\n" + json.dumps(superseded, ensure_ascii=False, sort_keys=True))
+    return text
 
 
 def delivery_context(uow, *, agents, endpoint, profile, intent):
