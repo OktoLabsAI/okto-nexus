@@ -45,6 +45,8 @@ class RuntimeEndpointUpdateBody(RuntimeAdminBody):
     response_policy: str | None = None
     consumption: str | None = None
     profile_id: str | None = None
+    # #94: an edit revokes the endpoint grants; True issues equal grants again in the same call.
+    reissue_grants: bool | None = None
 
 
 class RuntimeProfileUpdateBody(RuntimeAdminBody):

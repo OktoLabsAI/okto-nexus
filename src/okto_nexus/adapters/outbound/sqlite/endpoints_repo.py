@@ -2,6 +2,7 @@
 import json
 import sqlite3
 
+from ....domain.base import new_id
 from ....errors import ErrorCode, OktoNexusError, db_error_from_exception
 
 
@@ -14,11 +15,34 @@ class SqliteEndpointRepo:
              old_revision, new_revision, json.dumps(sorted(fields))))
 
     def invalidate_configuration(self, uow, *, endpoint_ids, now):
+        """Revoke grants and boot approval. Return the revoked grant ids."""
+        revoked = []
         for endpoint_id in endpoint_ids:
+            revoked += [row[0] for row in uow.connection.execute("SELECT grant_id FROM runtime_execution_grants "
+                "WHERE endpoint_id=? AND revoked_at IS NULL ORDER BY grant_id", (endpoint_id,))]
             uow.connection.execute("UPDATE runtime_execution_grants SET revoked_at=?,revision=revision+1 WHERE endpoint_id=? AND revoked_at IS NULL",
                 (now, endpoint_id))
             uow.connection.execute("UPDATE runtime_boot_bindings SET enabled=0,revision=revision+1,updated_at=? WHERE endpoint_id=? AND enabled=1",
                 (now, endpoint_id))
+        return revoked
+
+    def reissue_grants(self, uow, *, grant_ids, issuer_agent_id, now):
+        """Issue a new grant for each revoked one, by explicit operator request (#94).
+
+        Each copy keeps actor, credential binding, actions, expiry and used budget.
+        An expired grant is not revived. Boot approval is not restored.
+        """
+        issued = []
+        for grant_id in grant_ids:
+            grant = dict(uow.connection.execute("SELECT * FROM runtime_execution_grants WHERE grant_id=?", (grant_id,)).fetchone())
+            if not grant["no_expiry"] and grant["expires_at"] <= now:
+                continue
+            grant.update(grant_id=new_id("grant"), issuer_agent_id=issuer_agent_id, revoked_at=None, revision=1, created_at=now)
+            columns = tuple(grant)
+            uow.connection.execute(f"INSERT INTO runtime_execution_grants({','.join(columns)}) VALUES({','.join('?' for _ in columns)})",
+                tuple(grant.values()))
+            issued.append(grant["grant_id"])
+        return issued
 
     def boot_binding(self, uow, endpoint_id):
         row = uow.connection.execute("SELECT * FROM runtime_boot_bindings WHERE endpoint_id=?", (endpoint_id,)).fetchone()

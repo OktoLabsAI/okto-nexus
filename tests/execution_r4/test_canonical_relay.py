@@ -368,6 +368,43 @@ def test_operator_flips_relay_on_existing_endpoint_and_keeps_identity(connected_
     assert after['relay_results'] is True and after['alias'] == json.loads(before['public_config'])['alias']
 
 
+def test_relay_flip_reports_revoked_grants_and_reissue_keeps_open_working(connected_local):
+    """#94: an edit retires consent and says so; reissue_grants re-arms in the same call."""
+    from test_embedded_dispatch import admit, wait_receipt
+    setup, binding, native = connected_local
+    deps, _, client, headers, *_ = setup
+    path = '/api/v1/harness/endpoints/' + binding['endpoint_id']
+    def grants():
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            return [dict(r) for r in uow.connection.execute('SELECT * FROM runtime_execution_grants '
+                'WHERE endpoint_id=? AND revoked_at IS NULL ORDER BY grant_id', (binding['endpoint_id'],))]
+    def revision():
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            return uow.connection.execute('SELECT revision FROM agent_endpoints WHERE endpoint_id=?',
+                (binding['endpoint_id'],)).fetchone()[0]
+    before = grants()
+    assert before
+    reissued = client.patch(path, headers=headers['operator'],
+        json=dict(expected_revision=revision(), public_config=dict(relay_results=False), reissue_grants=True))
+    assert reissued.status_code == 200, reissued.text
+    data = reissued.json()['data']
+    assert data['public_config']['relay_results'] is False
+    assert data['grants_revoked'] == data['grants_reissued'] == len(before)
+    after = grants()
+    keep = ('actor_agent_id', 'credential_binding', 'represented_agent_id', 'workspace_id', 'actions',
+            'expires_at', 'no_expiry', 'max_executions', 'unlimited_actions', 'used_executions', 'profile_revision')
+    assert [{k: g[k] for k in keep} for g in after] == [{k: g[k] for k in keep} for g in before]
+    assert not {g['grant_id'] for g in after} & {g['grant_id'] for g in before}
+    opened = admit(setup, binding, 'relay-reissue-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    assert native.opens == 1
+    plain = client.patch(path, headers=headers['operator'],
+        json=dict(expected_revision=revision(), public_config=dict(relay_results=True)))
+    assert plain.status_code == 200, plain.text
+    assert plain.json()['data']['grants_revoked'] == len(before) and plain.json()['data']['grants_reissued'] == 0
+    assert grants() == []
+
+
 def test_reply_with_relay_on_enqueues_one_operation_for_the_sender(relay_pair, monkeypatch):
     setup, _, _, peers, _ = relay_pair
     setup[0].config.max_relay_depth = 1
