@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 import json
 import logging
 import math
+import random
 import secrets
 import sqlite3
 import time
@@ -30,6 +31,34 @@ from .embedded_events import EmbeddedPublicationDeferred
 _SCOPE = ("server_id", "executor_id", "binding_id", "agent_id", "workspace_id",
           "workspace_binding_id", "session_id", "session_owner_generation",
           "authorization_revision", "configuration_revision", "binding_revision", "credential_epoch")
+
+
+class _WakingSessions(dict):
+    """Session map that sets an event when a session is added or removed."""
+
+    def __init__(self, wake):
+        super().__init__()
+        self._wake = wake
+
+    def __setitem__(self, key, value):
+        super().__setitem__(key, value)
+        self._wake.set()
+
+    def __delitem__(self, key):
+        super().__delitem__(key)
+        self._wake.set()
+
+    def pop(self, *args):
+        self._wake.set()
+        return super().pop(*args)
+
+    def setdefault(self, key, default=None):
+        self._wake.set()
+        return super().setdefault(key, default)
+
+    def clear(self):
+        super().clear()
+        self._wake.set()
 
 
 class SessionAuthorityGate:
@@ -79,7 +108,9 @@ class EmbeddedDispatchOwner:
         self.capacity_authority = SqliteExecutionCapacityAuthority(factory=self.factory, channel=self.channel,
             fresh_publications=inventory.fresh, verify_owner=self.verify,
             now=lambda: datetime.fromisoformat(self.deps.clock.now_iso().replace('Z', '+00:00')))
-        self.sessions = {}
+        # Set when a session is added, renewed or removed, so the lease loop re-reads its deadlines.
+        self._lease_wake = asyncio.Event()
+        self.sessions = _WakingSessions(self._lease_wake)
         self.workers = set()
         self.active_operations = set()
         self.worker_agents = {}
@@ -730,7 +761,10 @@ class EmbeddedDispatchOwner:
         # This changes scheduling only, never the authority's actual deadline.
         elapsed = max(0, now - session['executor'].lease_request_started)
         remaining = max(0, applied.context.lease_deadline_monotonic - now)
-        session['renew_at'] = now + max(0, remaining / 2 - elapsed)
+        margin = max(0, remaining / 2 - elapsed)
+        # Spread renewals of sibling sessions by +-10 percent. Stay inside the lease.
+        session['renew_at'] = now + min(margin * random.uniform(.9, 1.1), max(0, remaining - elapsed))
+        self._lease_wake.set()
 
     async def _renew_owned(self, session_id, session):
         try:
@@ -764,6 +798,7 @@ class EmbeddedDispatchOwner:
                         deadline = session['executor'].context.lease_deadline_monotonic
                         if now < deadline:
                             session['renew_at'] = min(deadline, now + 1)
+                            self._lease_wake.set()
                         else:
                             session.setdefault('recovery_reason', 'LEASE_EXPIRED')
                             self.agents.recover_session(session_id)
@@ -808,17 +843,36 @@ class EmbeddedDispatchOwner:
         """
         try:
             while not self._stopping.is_set():
+                # Clear first: a wake during the scan stays set for the next wait.
+                self._lease_wake.clear()
+                next_due = None
                 for session_id, session in list(self.sessions.items()):
-                    if (not session.get('recovering') and session["scope"]["agent_id"] not in self.agents.blocked and session["renew_at"] is not None and time.monotonic() >= session["renew_at"]
-                            and (session.get("renew_task") is None or session["renew_task"].done())):
+                    if session.get('recovering') or session["renew_at"] is None:
+                        continue
+                    running = session.get("renew_task")
+                    if running is not None and not running.done():
+                        continue  # Its end sets the wake event.
+                    now = time.monotonic()
+                    if session["scope"]["agent_id"] in self.agents.blocked:
+                        due = now + .5  # Recovery ends without a wake event.
+                    elif now >= session["renew_at"]:
                         task = asyncio.create_task(self._renew_owned(session_id, session), name="embedded-renew-" + session_id)
                         session["renew_task"] = task
                         self.renewals.add(task)
                         task.add_done_callback(self.renewals.discard)
+                        task.add_done_callback(lambda done: self._lease_wake.set())
+                        continue
+                    else:
+                        due = session["renew_at"]
+                    next_due = due if next_due is None else min(next_due, due)
+                delay = self.lease_wait_cap if next_due is None else min(
+                    self.lease_wait_cap, max(0, next_due - time.monotonic()))
+                waiters = [asyncio.ensure_future(self._stopping.wait()), asyncio.ensure_future(self._lease_wake.wait())]
                 try:
-                    await asyncio.wait_for(self._stopping.wait(), .05)
-                except asyncio.TimeoutError:
-                    pass
+                    await asyncio.wait(waiters, timeout=delay, return_when=asyncio.FIRST_COMPLETED)
+                finally:
+                    for waiter in waiters:
+                        waiter.cancel()
         except Exception as error:
             if self.failure is None:
                 self.failure = error
@@ -857,6 +911,9 @@ class EmbeddedDispatchOwner:
             if self.failure is None:
                 self.failure = error
             await self.failed()
+
+    # Longest wait of the lease loop. A wake event ends it sooner.
+    lease_wait_cap = 5.0
 
     @property
     def idle_interval(self):

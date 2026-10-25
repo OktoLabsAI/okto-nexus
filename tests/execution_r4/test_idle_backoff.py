@@ -92,7 +92,7 @@ def test_idle_interval_comes_from_the_configuration():
 
 def recovery(**owner_fields):
     owner = SimpleNamespace(workers=set(), sessions={}, _activity=asyncio.Event(), active_operations=set(),
-                            **owner_fields)
+                            worker_agents={}, idle_interval=1.0, **owner_fields)
     agents = EmbeddedAgentRecovery(owner)
     agents.last_active = time.monotonic() - 3600
     agents.unsettled = False
@@ -144,8 +144,9 @@ def test_only_a_publication_or_a_fault_counts_as_work(events, faults, touched):
         async def publications(**kwargs):
             return False
 
-        async def recover(**kwargs):
-            return events
+        async def recover(stats=None, **kwargs):
+            stats["active"] = events  # A lease renewal alone sets it false.
+            return True
 
         owner, agents = recovery(_recover_publications=publications, events=SimpleNamespace(recover=recover),
                                  channel=None)

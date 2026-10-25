@@ -93,7 +93,9 @@ def test_migration_155_adds_column_and_append_only_table_to_existing_rows(tmp_pa
         conn.execute("INSERT INTO agents(agent_id,created_at) VALUES(?,?)", ("agent", now))
         conn.execute("INSERT INTO agent_endpoints(endpoint_id,agent_id,workspace_id,adapter_id,protocol,created_at,updated_at) "
                      "VALUES(?,?,?,?,?,?,?)", ("endpoint", "agent", "workspace", "fixture", "nxl-r4", now, now))
-    assert MigrationRunner(factory).apply() == [155]
+    # WP4 adds migration 156 between 155 and 157.
+    applied = MigrationRunner(factory).apply()
+    assert applied[0] == 155 and applied[-1] == 157
     assert MigrationRunner(factory).apply() == []
     row = lambda *v: ("s", "e", "a", "ref", v[1], "r", "review", "hub", "hub", "b2", now)
     insert = ("INSERT INTO execution_installation_succession(server_id,executor_id,adapter_id,stable_ref,decision,"

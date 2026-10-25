@@ -172,6 +172,9 @@ class ConnectionFactory:
         self._local = threading.local()
         self._pool: "weakref.WeakSet[_PooledConnection]" = weakref.WeakSet()
         self._pool_lock = threading.Lock()
+        # Units of work opened, as [read, write]. The idle host logs the changes.
+        self._count_lock = threading.Lock()
+        self._unit_counts = [0, 0]
         self.ensure_home_dir()
 
     @property
@@ -405,6 +408,11 @@ class ConnectionFactory:
         with self._probe_lock:
             self._close_probe_conn()
 
+    def unit_counts(self) -> tuple:
+        """Return ``(read_units, write_units)`` opened since the factory started."""
+        with self._count_lock:
+            return self._unit_counts[0], self._unit_counts[1]
+
     def unit_of_work(self, write: bool = True) -> SqliteUnitOfWork:
         """Return a fresh :class:`SqliteUnitOfWork` over this thread's connection.
 
@@ -414,6 +422,8 @@ class ConnectionFactory:
         read that does not queue behind writers).
         """
         connection, release = self._checkout()
+        with self._count_lock:
+            self._unit_counts[1 if write else 0] += 1
         return SqliteUnitOfWork(connection, write=write, before_write=self._sync_runtime_writer_mode,
                                writer_gate=self._writer_gate, busy_timeout_ms=self._config.busy_timeout_ms,
                                release=release)
