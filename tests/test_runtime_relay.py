@@ -105,3 +105,32 @@ def test_adapter_outcome_mapping_does_not_promote_errors_or_payload_claims(kind,
         native_event=native, payload=payload, occurred_at="2026-09-23T00:00:00.000Z")
     adapter = PiRpcConnector if kind == "pi" else ClaudeCodeStreamConnector
     assert adapter.delivery_outcome(event) == expected
+
+
+class _Agents:
+    def get(self, uow, agent_id):
+        from types import SimpleNamespace
+        return SimpleNamespace(agent_id=agent_id, role="worker", is_active=True, capabilities=[])
+
+
+@pytest.mark.parametrize("relay", [True, False])
+def test_delivery_text_tells_the_truth_about_the_final_answer(relay):
+    from okto_nexus.application.runtime_bootstrap import delivery_context, delivery_prompt
+    endpoint = {"agent_id": "worker", "workspace_id": "w", "endpoint_id": "e", "public_config": {"relay_results": relay}}
+    context = delivery_context(None, agents=_Agents(), endpoint=endpoint, profile=None, intent="conversation")
+    context["causality"] = {"max_depth": 4}
+    prompt = delivery_prompt({"runtime_context": context})
+    assert "returned to the sender by Nexus" not in prompt
+    if relay:
+        assert "sent to the sender as a new message" in prompt and "NO_REPLY" in prompt and "4 hops" in prompt
+        assert "stored only" not in prompt
+    else:
+        assert "stored only" in prompt and "call message_create" in prompt
+        assert "NO_REPLY" not in prompt
+
+
+def test_missing_relay_key_is_treated_as_relay_off():
+    from okto_nexus.application.runtime_bootstrap import delivery_context
+    endpoint = {"agent_id": "worker", "workspace_id": "w", "endpoint_id": "e", "public_config": {"alias": "x"}}
+    context = delivery_context(None, agents=_Agents(), endpoint=endpoint, profile=None, intent="conversation")
+    assert context["relay_results"] is False and "stored only" in context["instructions"]

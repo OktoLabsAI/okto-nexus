@@ -579,7 +579,7 @@ class SqliteObservabilityQueries:
             if rows:
                 placeholders = ','.join('?' for _ in rows)
                 runtime_results = {r['publication_message_id']: r for r in uow.connection.execute(
-                    f'SELECT publication_message_id,delivery_outcome,output_truncated FROM runtime_results '
+                    f'SELECT publication_message_id,delivery_outcome,output_truncated,relay_state,relay_reason FROM runtime_results '
                     f'WHERE publication_message_id IN ({placeholders})',
                     tuple(row['message_id'] for row in rows)).fetchall()}
             items: list[dict[str, Any]] = []
@@ -615,6 +615,8 @@ class SqliteObservabilityQueries:
                     item['runtime_result'] = {
                         'outcome': result['delivery_outcome'],
                         'partial': result['delivery_outcome'] in ('interrupted', 'failed') or bool(result['output_truncated']),
+                        'relay_state': result['relay_state'],
+                        'relay_reason': result['relay_reason'],
                     }
                 artifacts = _loads(row["artifacts"])
                 if isinstance(artifacts, list) and artifacts:

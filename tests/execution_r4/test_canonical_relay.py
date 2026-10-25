@@ -1,4 +1,5 @@
 """Result relays keep their original actor and durable budgets through Core."""
+import asyncio
 import json
 import time
 from pathlib import Path
@@ -28,16 +29,20 @@ def relay_pair(connected_local):
     peers = []
     class Factory:
         outcome = 'success'
+        output = 'Bounded reply'
+        before_result = None
         async def open(self, prepared, session_id, context, *, stream_epoch):
             factory = self
             class Peer(_Native):
                 async def send(self, verb, payload, operation_id, **kwargs):
                     await super().send(verb, payload, operation_id, **kwargs)
                     if verb == 'send_turn':
+                        if factory.before_result:
+                            await asyncio.to_thread(factory.before_result)
                         await self.queue.put(RuntimeEvent(context.server_id, context.executor_id, session_id,
                             stream_epoch, 0, 'turn_state', 'fixture.relay-result',
                             dict(delivery_phase='terminal', delivery_outcome=factory.outcome,
-                                 output_text='Bounded reply'), operation_id=operation_id))
+                                 output_text=factory.output), operation_id=operation_id))
             peer = Peer()
             peers.append(peer)
             return peer
@@ -322,3 +327,97 @@ def test_relay_waits_for_canonical_human_approval(relay_pair, monkeypatch, decis
         with deps.connection_factory.unit_of_work(write=False) as uow:
             assert uow.connection.execute('SELECT COUNT(*) FROM delivery_outbox').fetchone()[0] == 1
         assert sum(len(peer.sent) for peer in peers) == 1
+
+
+def settled(setup, state, *, timeout=15):
+    """Wait for one result row whose relay decision is final and return it."""
+    from test_agent_recovery_isolation import eventually
+    box = []
+    def done():
+        with setup[0].connection_factory.unit_of_work(write=False) as uow:
+            rows = [dict(r) for r in uow.connection.execute('SELECT * FROM runtime_results')]
+        box[:] = rows
+        return len(rows) == 1 and rows[0]['relay_state'] == state
+    eventually(done, seconds=timeout)
+    return box[0]
+
+
+def test_new_r4_endpoint_stores_relay_results(connected_local):
+    setup, binding, _ = connected_local
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        config = json.loads(uow.connection.execute('SELECT public_config FROM agent_endpoints WHERE endpoint_id=?',
+            (binding['endpoint_id'],)).fetchone()[0])
+    assert config.get('relay_results') is True and config.get('alias')
+
+
+def test_operator_flips_relay_on_existing_endpoint_and_keeps_identity(connected_local):
+    setup, binding, _ = connected_local
+    deps, _, client, headers, *_ = setup
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute('UPDATE agent_endpoints SET public_config=json_remove(public_config,\'$.relay_results\') WHERE endpoint_id=?',
+            (binding['endpoint_id'],))
+        before = dict(uow.connection.execute('SELECT revision,public_config FROM agent_endpoints WHERE endpoint_id=?',
+            (binding['endpoint_id'],)).fetchone())
+    assert 'relay_results' not in json.loads(before['public_config'])
+    changed = client.patch('/api/v1/harness/endpoints/' + binding['endpoint_id'], headers=headers['operator'],
+        json=dict(expected_revision=before['revision'], public_config=dict(relay_results=True)))
+    assert changed.status_code == 200, changed.text
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        after = json.loads(uow.connection.execute('SELECT public_config FROM agent_endpoints WHERE endpoint_id=?',
+            (binding['endpoint_id'],)).fetchone()[0])
+    assert after['relay_results'] is True and after['alias'] == json.loads(before['public_config'])['alias']
+
+
+def test_reply_with_relay_on_enqueues_one_operation_for_the_sender(relay_pair, monkeypatch):
+    setup, _, _, peers, _ = relay_pair
+    setup[0].config.max_relay_depth = 1
+    assert send(setup, monkeypatch)['ok']
+    rows = results(setup, 2)
+    assert rows[0]['relay_state'] == 'ENQUEUED'
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        ops = [r[0] for r in uow.connection.execute('SELECT recipient_agent_id FROM delivery_outbox ORDER BY created_at')]
+    assert ops == ['subject', 'caller']
+
+
+def test_no_reply_marker_skips_relay_and_keeps_the_message(relay_pair, monkeypatch):
+    setup, _, _, peers, factory = relay_pair
+    factory.output = 'NO_REPLY nothing to add'
+    assert send(setup, monkeypatch)['ok']
+    row = settled(setup, 'SKIPPED_NO_REPLY')
+    assert row['publication_state'] == 'PUBLISHED' and row['publication_message_id']
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT COUNT(*) FROM delivery_outbox').fetchone()[0] == 1
+        assert uow.connection.execute('SELECT body FROM messages WHERE message_id=?',
+            (row['publication_message_id'],)).fetchone()[0].startswith('NO_REPLY')
+    assert row['relay_reason']
+
+
+def test_explicit_message_create_to_sender_skips_relay(relay_pair, monkeypatch):
+    setup, _, _, peers, factory = relay_pair
+    monkeypatch.syspath_prepend(str(Path(__file__).parents[1]))
+    from test_pr34_remediation import tool
+    def reply_directly():
+        out = tool(setup[2], setup[3]['subject']['Authorization'].removeprefix('Bearer '), 'message_create',
+            dict(project_root=str(setup[-1]), from_agent_id='subject', subject='Direct answer', body='answer',
+                 no_reply=True, target=dict(strategy='direct', agent_id='caller')))
+        assert out['ok'], out
+    factory.before_result = reply_directly
+    assert send(setup, monkeypatch)['ok']
+    row = settled(setup, 'SKIPPED_EXPLICIT_REPLY')
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT COUNT(*) FROM delivery_outbox').fetchone()[0] == 1
+    assert row['publication_state'] == 'PUBLISHED'
+
+
+def test_blocked_chain_is_visible_in_the_api(relay_pair, monkeypatch):
+    setup, _, _, peers, _ = relay_pair
+    assert send(setup, monkeypatch)['ok']
+    results(setup, 3)
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        ids = [r[0] for r in uow.connection.execute(
+            "SELECT publication_message_id FROM runtime_results WHERE relay_state='BLOCKED'")]
+    response = setup[2].get('/api/v1/messages', headers=setup[3]['operator'], params=dict(page_size=100))
+    assert response.status_code == 200, response.text
+    body = json.dumps(response.json())
+    assert '"relay_state":"BLOCKED"' in body.replace(' ', '')
+    assert all(i in body for i in ids)

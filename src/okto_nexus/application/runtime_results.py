@@ -9,7 +9,7 @@ import hashlib
 from ..errors import ErrorCode, OktoNexusError
 from ..domain.runtime_context import RuntimeRequestContext
 from ..domain.inbox import requires_known_recipient
-from ..domain.messages import GENERIC_RUNTIME_SUBJECT, derive_subject
+from ..domain.messages import GENERIC_RUNTIME_SUBJECT, READ_RECEIPT_KIND, derive_subject
 from ..domain.tag_selector import reachable
 from ..domain.targets import target_strategy
 from .permissions import permission_set_for
@@ -168,10 +168,37 @@ class RuntimeResultService:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Result relay is not authorized or source did not succeed.", {})
         return row
 
+    NO_REPLY_MARKER = "NO_REPLY"
+
+    def _relay_skip(self, uow, row, *, message, delivery, now):
+        """Return (state, reason) when the relay must not start a new turn, else None."""
+        if (row["output_text"] or "").lstrip().startswith(self.NO_REPLY_MARKER):
+            return "SKIPPED_NO_REPLY", "The turn output starts with NO_REPLY."
+        # The agent already answered the sender with message_create during this turn.
+        # Receipts and runtime publications never count as a direct answer.
+        direct = uow.connection.execute(
+            "SELECT 1 FROM messages m JOIN message_deliveries d ON d.message_id=m.message_id "
+            "JOIN delivery_outbox o ON o.operation_id=? "
+            "WHERE instr(COALESCE(m.body,''), ?)=0 AND m.from_agent_id=? AND d.recipient_agent_id=? AND m.message_id<>? "
+            "AND m.created_at>=o.created_at AND m.created_at<=? "
+            "AND NOT EXISTS (SELECT 1 FROM runtime_results r WHERE r.publication_message_id=m.message_id) "
+            "AND NOT EXISTS (SELECT 1 FROM runtime_message_causality c WHERE c.message_id=m.message_id "
+            "AND c.source_result_id IS NOT NULL) LIMIT 1",
+            (row["operation_id"], READ_RECEIPT_KIND, row["recipient_agent_id"], delivery.recipient_agent_id,
+             message.message_id, now)).fetchone()
+        if direct:
+            return "SKIPPED_EXPLICIT_REPLY", "The turn already sent message_create to the sender."
+        return None
+
     def enqueue_relay(self, uow, *, result_id, planner, message, delivery, now, authorization_revision, emitter):
         row = self.row(uow, result_id)
         endpoint = self.endpoints.get(uow, row["endpoint_id"])
         if not endpoint["public_config"].get("relay_results"):
+            return None
+        skip = self._relay_skip(uow, row, message=message, delivery=delivery, now=now)
+        if skip:
+            uow.connection.execute("UPDATE runtime_results SET relay_state=?,relay_reason=? WHERE result_id=?",
+                (skip[0], skip[1], result_id))
             return None
         # Publication and private output survive a blocked relay. Roll back only
         # its admission/budget/transport reservation, within this same transaction.

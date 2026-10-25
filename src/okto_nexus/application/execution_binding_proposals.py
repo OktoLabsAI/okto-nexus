@@ -651,7 +651,7 @@ def apply_execution_binding(
                     "created_at,updated_at,response_policy) VALUES (?,?,?,?,'nxl-r4',?,?,'approved',?,?,?,'conversation')",
                     (proposal["endpoint_id"], subject_agent_id, proposal["workspace_id"],
                      proposal["adapter_id"], profile_id, int(operator_approved),
-                     canonical_json({"alias": expected["alias"]}).decode("utf-8"),
+                     canonical_json({"alias": expected["alias"], "relay_results": True}).decode("utf-8"),
                      now, now),
                 )
             if context is not None:

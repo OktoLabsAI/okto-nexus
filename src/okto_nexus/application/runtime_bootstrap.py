@@ -9,11 +9,36 @@ from ..errors import ErrorCode, OktoNexusError
 import json
 
 
+def relay_enabled(endpoint):
+    config = endpoint.get("public_config") if hasattr(endpoint, "get") else None
+    if isinstance(config, str):
+        try:
+            config = json.loads(config)
+        except ValueError:
+            config = None
+    return bool(isinstance(config, dict) and config.get("relay_results") is True)
+
+
+def relay_text(relay_results, max_depth=None):
+    """Return the true statement about what happens to the final answer."""
+    if relay_results:
+        hops = f"{max_depth} hops" if max_depth else "a fixed number of hops"
+        return ("Your final answer is sent to the sender as a new message. "
+                "Do not also send it with message_create. "
+                "End with NO_REPLY when no answer is needed. "
+                f"A conversation stops relaying after {hops}; then use message_create.")
+    return "Your final answer is stored only. To reach any agent, call message_create."
+
+
 def delivery_prompt(envelope):
     """Render Nexus tool context; retain transport trust metadata in storage only."""
     context = dict(envelope)
     context.pop("trust", None)
-    return ("NEXUS DELIVERY: respond to the sender's request using your available capabilities.\n"
+    runtime = context.get("runtime_context") or {}
+    note = ""
+    if runtime.get("intent") != "handoff_execute" and "relay_results" in runtime:
+        note = " " + relay_text(runtime["relay_results"], (runtime.get("causality") or {}).get("max_depth"))
+    return ("NEXUS DELIVERY: respond to the sender's request using your available capabilities." + note + "\n"
             + json.dumps(context, ensure_ascii=False, sort_keys=True))
 
 
@@ -29,6 +54,7 @@ def delivery_context(uow, *, agents, endpoint, profile, intent):
         "endpoint_id": endpoint["endpoint_id"],
         "execution_profile": {"profile_id": profile["profile_id"], "revision": profile["revision"]} if profile else None,
         "intent": intent,
+        "relay_results": relay_enabled(endpoint),
         "completion": {"automatic_on_turn_end": False,
                        "mode": "authenticated_nexus_call" if intent == "handoff_execute" else "conversation_only"},
         "instructions": (
@@ -41,6 +67,6 @@ def delivery_context(uow, *, agents, endpoint, profile, intent):
                if intent == "handoff_execute" else
                "For handoffs, use the Nexus retrieval, claim and completion tools and the returned claim epoch. "
                "Use the Nexus messaging tools to communicate with other agents when available. "
-               "Your final conversational response is returned to the sender by Nexus.")
+               + relay_text(relay_enabled(endpoint)))
         ),
     }
