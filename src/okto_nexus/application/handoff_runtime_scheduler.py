@@ -5,6 +5,7 @@ or handoff, and a timed-out close never replaces a still-running producer.
 Canonical handoff claims and attempt journals remain the authority for effects.
 """
 import asyncio
+import logging
 from dataclasses import dataclass
 import math
 import threading
@@ -13,6 +14,8 @@ from typing import Protocol
 
 from nexus_connector_core.capacity import CAPACITY_REASONS
 from .handoff_notice_retirement import HandoffNoticeRetirement
+
+_LOG = logging.getLogger(__name__)
 
 
 SCHEDULE_REASONS = CAPACITY_REASONS | {'NO_CANDIDATES', 'MORE_CANDIDATES', 'CLAIM_COMMITTED', 'SETTLED', 'AMBIGUOUS_BINDING'}
@@ -162,12 +165,22 @@ class HandoffRuntimeScheduler:
                 self.repository.renew(uow, lease, now=now, lease_seconds=self.lease_seconds)
             if scan:
                 if self.lease_watch is not None:
-                    self.lease_watch(uow)
+                    self._watch_leases(uow)
                 if self.notices is not None:
                     self.notices.retire_page(uow, now=now, limit=self.scan_limit)
                 self.repository.sweep(uow, now=now, limit=self.scan_limit)
             return self.repository.lease_due(uow, now=now, limit=room,
                                             lease_seconds=self.lease_seconds) if room else ()
+
+    def _watch_leases(self, uow):
+        """Run the lease watch in a savepoint. A failure must not stop the sweep."""
+        uow.connection.execute("SAVEPOINT handoff_lease_watch")
+        try:
+            self.lease_watch(uow)
+        except Exception:
+            uow.connection.execute("ROLLBACK TO SAVEPOINT handoff_lease_watch")
+            _LOG.exception("Handoff lease watch failed; the next sweep tries again.")
+        uow.connection.execute("RELEASE SAVEPOINT handoff_lease_watch")
 
     async def _execute(self, lease):
         try:

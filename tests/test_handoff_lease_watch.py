@@ -246,3 +246,25 @@ def test_settings_defaults_bounds_and_env():
     assert (resolved.handoff_silence_warn_fraction, resolved.handoff_notify_expiry) == (0.75, False)
     with pytest.raises(OktoNexusError):
         load_config({}, ["--handoff-silence-warn-fraction", "2"])
+
+
+def test_expiry_workspace_read_uses_the_partial_index(env):
+    deps, tools, root, workspace = env
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        plan = uow.connection.execute(
+            "EXPLAIN QUERY PLAN SELECT DISTINCT workspace_id FROM handoffs INDEXED BY idx_handoffs_claimed_lease "
+            "WHERE status='CLAIMED' AND lease_expires_at<?", ("2026-01-01T00:00:00Z",)).fetchall()
+    assert any("idx_handoffs_claimed_lease" in str(r[-1]) for r in plan), plan
+
+
+def test_a_failing_lease_watch_rolls_back_and_the_sweep_goes_on(env):
+    deps, tools, root, workspace = env
+
+    def broken(uow):
+        uow.connection.execute("INSERT INTO handoff_silence_notices VALUES('h_broken',1,'2026-01-01T00:00:00Z')")
+        raise RuntimeError("lease watch bug")
+
+    scheduler = HandoffRuntimeScheduler(factory=deps.connection_factory, repository=SqliteHandoffScheduleRepository(),
+        processor=None, lease_watch=broken)
+    assert scheduler._reserve_page(False, True, (), 0) == ()
+    assert rows(deps, "SELECT handoff_id FROM handoff_silence_notices WHERE handoff_id=?", "h_broken") == []
