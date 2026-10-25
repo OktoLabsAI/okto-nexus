@@ -246,7 +246,8 @@ Track a message you SENT: ``{message_id, deliveries, count}`` where each deliver
 is ``{recipient, status, attempts, read_at}`` and status is
 unread/delivered/read/parked. Use it instead of re-sending when a recipient
 seems silent. A session sees only messages it sent: any other id returns
-NOT_FOUND. A result publication also returns ``relay_state``.
+NOT_FOUND. A result publication also returns ``relay_state`` and
+``relay_reason``.
 
 # profile parameter (inbox_pull/peek/history; also event_get/event_wait)
 One of: default (all fields minus dead ones), summary (minimal + follow_up -

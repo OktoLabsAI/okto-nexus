@@ -100,8 +100,8 @@ def test_publication_status_reports_relay_state():
     from contextlib import contextmanager
     db = sqlite3.connect(':memory:')
     db.row_factory = sqlite3.Row
-    db.execute('CREATE TABLE runtime_results(publication_message_id TEXT, relay_state TEXT, captured_at TEXT)')
-    db.execute("INSERT INTO runtime_results VALUES('pub','BLOCKED','2026-10-25')")
+    db.execute('CREATE TABLE runtime_results(publication_message_id TEXT, relay_state TEXT, relay_reason TEXT, captured_at TEXT)')
+    db.execute("INSERT INTO runtime_results VALUES('pub','BLOCKED','depth','2026-10-25')")
     uow = SimpleNamespace(connection=db)
     class Factory:
         @contextmanager
@@ -112,5 +112,6 @@ def test_publication_status_reports_relay_state():
     service = InboxService.__new__(InboxService)
     service._cf, service._messages, service._deliveries = Factory(), messages, deliveries
     service._clock = SimpleNamespace(now_iso=lambda: '2026-10-25')
-    assert service.message_status(message_id='pub', caller_agent_id='subject')['relay_state'] == 'BLOCKED'
+    status = service.message_status(message_id='pub', caller_agent_id='subject')
+    assert (status['relay_state'], status['relay_reason']) == ('BLOCKED', 'depth')
     assert 'relay_state' not in service.message_status(message_id='plain', caller_agent_id='subject')

@@ -441,7 +441,8 @@ class InboxService:
 
         A session caller passes ``caller_agent_id``. Only the sender may read
         the status. Any other caller gets the same NOT_FOUND as a missing id.
-        A publication also returns ``relay_state`` from its runtime result.
+        A publication also returns ``relay_state`` and ``relay_reason`` from
+        its runtime result.
         """
         if not isinstance(message_id, str) or not message_id.strip():
             raise OktoNexusError(
@@ -465,7 +466,7 @@ class InboxService:
                 uow, message_id=message_id, now=now
             )
             relay = uow.connection.execute(
-                "SELECT relay_state FROM runtime_results "
+                "SELECT relay_state,relay_reason FROM runtime_results "
                 "WHERE publication_message_id=? ORDER BY captured_at DESC LIMIT 1",
                 (message_id,),
             ).fetchone()
@@ -485,6 +486,7 @@ class InboxService:
         }
         if relay is not None:
             result["relay_state"] = relay["relay_state"]
+            result["relay_reason"] = relay["relay_reason"]
         return result
 
     # ------------------------------------------------------------------ #
