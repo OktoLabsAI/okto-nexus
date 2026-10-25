@@ -2163,11 +2163,15 @@ class HandoffService:
         fraction = float(getattr(self._config, "handoff_silence_warn_fraction", 0.0))
         conn = uow.connection
         horizon = iso_plus(now, ttl * (1 - fraction)) if fraction > 0 else now
-        if watch.earliest_due(conn, horizon) is None:
+        due = watch.earliest_due(conn, horizon)
+        if due is None:
             return 0
         expired = 0
-        for row in conn.execute("SELECT DISTINCT workspace_id FROM handoffs "
-                                "WHERE status='CLAIMED' AND lease_expires_at<?", (now,)).fetchall():
+        # INDEXED BY keeps this read on the partial index. Without it SQLite
+        # scans every handoff for the DISTINCT.
+        rows = conn.execute("SELECT DISTINCT workspace_id FROM handoffs INDEXED BY idx_handoffs_claimed_lease "
+                            "WHERE status='CLAIMED' AND lease_expires_at<?", (now,)).fetchall() if due < now else ()
+        for row in rows:
             expired += len(self._expire_old_leases(uow, workspace_id=row[0], now_iso=now))
         if fraction > 0:
             self._warn_silent_claimants(uow, now=now, ttl=ttl, fraction=fraction)
