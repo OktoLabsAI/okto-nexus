@@ -8,6 +8,7 @@ import hashlib
 import json
 from dataclasses import dataclass
 
+from ..adapters.outbound.sqlite.handoff_notifications import SqliteHandoffNotificationRepository
 from ..domain.messages import MESSAGE_CREATED_TYPE, MESSAGE_STREAM
 
 
@@ -71,7 +72,8 @@ def notify_contained_claimant(deps, messages, *, server_id, executor_id, session
     operator always gets one notice with the agent, the reason and the session.
     It lists the claimed handoffs when there are any. The reason, the notices and
     the event commit together. A second call for the same session does nothing.
-    These notices are inbox messages. They do not start a runtime turn.
+    The creator notices also start a runtime turn when the creator has a
+    session (``queue_outcome``). The operator notice stays an inbox message.
     """
     with deps.connection_factory.unit_of_work() as uow:
         conn = uow.connection
@@ -90,7 +92,7 @@ def notify_contained_claimant(deps, messages, *, server_id, executor_id, session
             "WHERE status='CLAIMED' AND claimed_by=? ORDER BY created_at,handoff_id", (agent_id,)).fetchall()
         sent = 0
 
-        def send(recipient_id, handoff_id, workspace_id, subject, body):
+        def send(recipient_id, handoff_id, workspace_id, subject, body, push=False):
             nonlocal sent
             if workspace_id is None or deps.repos.agents.get(uow, recipient_id) is None:
                 return
@@ -100,13 +102,20 @@ def notify_contained_claimant(deps, messages, *, server_id, executor_id, session
             messages._messages.create(uow, message_id=message_id, workspace_id=workspace_id,
                 from_agent_id=agent_id, channel_id=None, from_session_id=None, target=json.dumps(target),
                 subject=subject, body=body, artifacts=[], parent_message_id=None, trace_id=None, created_at=now)
-            messages._deliveries.create(uow, delivery_id='del_claimant_contained_' + identity,
+            delivery = messages._deliveries.create(uow, delivery_id='del_claimant_contained_' + identity,
                 message_id=message_id, recipient_agent_id=recipient_id, status='unread', created_at=now)
             messages._emitter.emit(uow, workspace_id=workspace_id, stream=MESSAGE_STREAM,
                 type=MESSAGE_CREATED_TYPE, payload=dict(message_id=message_id, channel_id=None,
                     from_agent_id=agent_id, target=target, subject=subject, created_at=now,
                     system_notification=True), actor_agent_id=None, visibility='eligible',
                 target=json.dumps(target))
+            if push:
+                from .runtime_handoff_notifications import queue_outcome
+                message = messages._messages.get(uow, workspace_id=workspace_id, message_id=message_id)
+                queue_outcome(uow, message=message, delivery=delivery, handoff_id=handoff_id,
+                    kind='handoff.claimant_contained', agents=deps.repos.agents, handoffs=deps.repos.handoffs,
+                    now=now, notifications=SqliteHandoffNotificationRepository(),
+                    runtime_enabled=bool(getattr(deps.config, 'feature_harness_integrations', False)))
             sent += 1
 
         for handoff in handoffs:
@@ -116,7 +125,7 @@ def notify_contained_claimant(deps, messages, *, server_id, executor_id, session
                     f"Claimant session contained (reason: {reason}). "
                     f"Work after {handoff['updated_at']} may be lost. "
                     f"The lease of {agent_id} runs to {handoff['lease_expires_at']}.\n\n"
-                    f"Handoff: {handoff['handoff_id']}\nClaimant: {agent_id}\nSession: {session_id}")
+                    f"Handoff: {handoff['handoff_id']}\nClaimant: {agent_id}\nSession: {session_id}", push=True)
         lines = ''.join(f"\nHandoff: {h['handoff_id']} (lease to {h['lease_expires_at']})" for h in handoffs)
         affected = (f"Work of {agent_id} on {len(handoffs)} claimed handoff(s) may be lost.{lines}\n\n"
             if handoffs else f"{agent_id} holds no claimed handoff.\n\n")

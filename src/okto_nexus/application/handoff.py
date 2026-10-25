@@ -154,6 +154,7 @@ from .tags import TagCatalogService
 DEFAULT_PAGE_LIMIT = 100
 #: Hard upper bound on a single page (defensive; keeps responses bounded).
 MAX_PAGE_LIMIT = 500
+OUTCOME_TEXT_LIMIT = 4000  # characters of an outcome text in a creator notice
 
 #: Strategies that NAME one specific agent (the D1b directed set): ``direct``
 #: requires the agent to be registered NOW; ``direct_with_fallback`` is the
@@ -1802,6 +1803,8 @@ class HandoffService:
             )
             # Opportunistic expiry first: a CLAIMED handoff whose lease already
             # elapsed is logically OPEN again, so its creator may cancel it.
+            before = self._handoffs.get(uow, workspace_id=workspace_id, handoff_id=handoff_id)
+            claimant = before.claimed_by if before is not None and before.status == STATUS_CLAIMED else None
             self._expire_old_leases(uow, workspace_id=workspace_id, now_iso=now)
             handoff = self._load_in_workspace(uow, workspace_id, handoff_id)
             if handoff.from_agent_id != agent_id:
@@ -1869,6 +1872,17 @@ class HandoffService:
                 payload=payload,
             )
             self._fail_dependents(uow, failed=updated, actor_agent_id=agent_id, now=now)
+            # The creator is the actor. The previous claimant, whose lease
+            # this call just expired, learns that the work is void.
+            if _is_nonempty_str(claimant) and claimant != agent_id:
+                self._notify_inbox(
+                    uow, workspace_id=workspace_id, recipient_agent_id=claimant, from_agent_id=agent_id,
+                    subject=f"handoff {handoff_id} cancelled by {agent_id}",
+                    body={"kind": EVENT_CANCELLED, "handoff_id": handoff_id, "status": STATUS_CANCELLED,
+                          "by_agent_id": agent_id, "previous_claimed_by": claimant,
+                          "reason": reason[:OUTCOME_TEXT_LIMIT] if _is_nonempty_str(reason) else None,
+                          "next_step": "stop work on this handoff"},
+                    now=now, trace_id=getattr(updated, "trace_id", None))
         return {"handoff_id": updated.handoff_id, "status": STATUS_CANCELLED}
 
     # ------------------------------------------------------------------ #
@@ -2385,6 +2399,9 @@ class HandoffService:
     ) -> list[str]:
         """Deliver a terminal outcome to the CREATOR's inbox (cross-workspace).
 
+        The notice also pushes a runtime turn when the creator has a session.
+        The outcome text is cut to ``OUTCOME_TEXT_LIMIT`` characters.
+
         The ``handoff.completed``/``handoff.rejected`` event may be invisible
         to the creator (visibility ``eligible``/``private`` with a target the
         creator does not match), and a terminal handoff leaves every listing
@@ -2404,7 +2421,7 @@ class HandoffService:
             "next_step": "handoff_get with this handoff_id for the full outcome",
         }
         if outcome_text is not None:
-            body[outcome_key] = outcome_text
+            body[outcome_key] = outcome_text[:OUTCOME_TEXT_LIMIT]
         if self._notify_inbox(
             uow,
             workspace_id=handoff.workspace_id,
