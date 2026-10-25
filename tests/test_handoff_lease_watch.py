@@ -165,6 +165,38 @@ def test_a_system_notice_from_the_claimant_is_not_progress(env):
     assert [r["event_type"] for r in pushed(deps, hid)] == ["handoff.claimant_silent:1"]
 
 
+def test_a_read_receipt_from_the_claimant_is_not_progress(env):
+    """A receipt is written by the server in the claimant's name. It must not reset the silence clock."""
+    from okto_nexus.application.handoff_lease_watch import last_progress_at
+    from okto_nexus.domain.messages import READ_RECEIPT_KIND
+    deps, tools, root, workspace = env
+    runtime_for(deps, workspace, "alpha", "beta")
+    hid = claim(tools, root)
+    since = deps.clock.now_iso()
+    set_lease(deps, hid, 1000)
+    say(deps, workspace, "beta", "alpha", kind=READ_RECEIPT_KIND, tag="receipt")
+    say(deps, workspace, "beta", "alpha", kind="message.other_system_kind", tag="system")
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert last_progress_at(uow.connection, claimant="beta", creator="alpha", since=since) is None
+    watch(deps)
+    assert [r["event_type"] for r in pushed(deps, hid)] == ["handoff.claimant_silent:1"]
+    say(deps, workspace, "beta", "alpha", kind="agent.status", tag="agent_json")
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert last_progress_at(uow.connection, claimant="beta", creator="alpha", since=since) is not None
+
+
+def test_a_plain_message_after_the_claim_moves_last_progress_at(env):
+    from okto_nexus.application.handoff_lease_watch import last_progress_at
+    deps, tools, root, workspace = env
+    runtime_for(deps, workspace, "alpha", "beta")
+    claim(tools, root)
+    since = deps.clock.now_iso()
+    say(deps, workspace, "beta", "alpha", "still on it", tag="real")
+    created = rows(deps, "SELECT created_at FROM messages WHERE message_id='msg_say_beta_real'")[0]["created_at"]
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert last_progress_at(uow.connection, claimant="beta", creator="alpha", since=since) == created
+
+
 def test_silence_warning_is_skipped_after_a_containment_notice(env):
     deps, tools, root, workspace = env
     runtime_for(deps, workspace, "alpha")

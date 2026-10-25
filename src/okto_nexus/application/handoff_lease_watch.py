@@ -2,7 +2,7 @@
 
 The helpers read the connection of the caller's unit of work. They never write.
 Progress is any message from the claimant to the creator after the lease start.
-System notices do not count as progress.
+System notices and read receipts do not count as progress.
 """
 from __future__ import annotations
 
@@ -12,10 +12,13 @@ from typing import Any
 from ..domain.base import iso_plus, iso_to_epoch
 
 # Silence and expiry notices and containment notices are sent in the name of the
-# claimant. They are not progress.
+# claimant. Read receipts ("message.read_receipt") are also sent in its name. The
+# server writes all of them, so they are not progress. Plain text and agent JSON are.
 _NOT_PROGRESS = ("m.message_id NOT LIKE 'msg\\_claimant\\_contained\\_%' ESCAPE '\\' "
                  "AND COALESCE(CASE WHEN json_valid(m.body) THEN json_extract(m.body,'$.kind') END,'') "
-                 "NOT LIKE 'handoff.%'")
+                 "NOT LIKE 'handoff.%' "
+                 "AND COALESCE(CASE WHEN json_valid(m.body) THEN json_extract(m.body,'$.kind') END,'') "
+                 "NOT LIKE 'message.%'")
 
 
 def lease_start(lease_expires_at: str, ttl_seconds: int) -> str:
