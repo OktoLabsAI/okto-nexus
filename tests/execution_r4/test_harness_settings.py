@@ -1,3 +1,4 @@
+import pytest
 from test_embedded_dispatch import local_setup, connected_local, qualified_contract
 
 
@@ -17,6 +18,35 @@ def test_settings_validate_scope_cas_and_revoke_old_execution_authority(connecte
     assert client.put(path, headers=headers['operator'], json=body).status_code == 409
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute('SELECT revoked_at FROM runtime_execution_grants').fetchone()[0]
+
+
+@pytest.mark.parametrize('local_setup', ['claude_stream'], indirect=True)
+def test_permission_mode_change_reports_revocation_and_model_change_can_reissue(connected_local):
+    """#94: a harness edit revokes grants and says so; reissue_grants re-arms in the same call."""
+    setup, binding, _ = connected_local
+    deps, _, client, headers, *_ = setup
+    path = f"/api/v1/harness/endpoints/{binding['endpoint_id']}/harness-settings"
+    def active():
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            return uow.connection.execute('SELECT count(*) FROM runtime_execution_grants '
+                'WHERE endpoint_id=? AND revoked_at IS NULL', (binding['endpoint_id'],)).fetchone()[0]
+    granted = active()
+    assert granted >= 1
+    current = client.get(path, headers=headers['operator']).json()['data']
+    assert 'grants_revoked' not in current
+    bad = client.put(path, headers=headers['operator'], json=dict(expected_revision=current['revision'],
+        settings={'model': 'sonnet'}, reissue_grants='yes'))
+    assert bad.status_code == 422, bad.text
+    model = client.put(path, headers=headers['operator'], json=dict(expected_revision=current['revision'],
+        settings={'model': 'sonnet', 'effort': 'high'}, reissue_grants=True))
+    assert model.status_code == 200, model.text
+    assert model.json()['data']['grants_revoked'] == model.json()['data']['grants_reissued'] == granted
+    assert active() == granted
+    mode = client.put(path, headers=headers['operator'], json=dict(expected_revision=model.json()['data']['revision'],
+        settings={'model': 'sonnet', 'effort': 'high', 'permission_mode': 'plan'}))
+    assert mode.status_code == 200, mode.text
+    assert mode.json()['data']['grants_revoked'] == granted and mode.json()['data']['grants_reissued'] == 0
+    assert active() == 0
 
 
 def test_native_catalogue_reaches_ui_and_expires_with_account_revision(connected_local):

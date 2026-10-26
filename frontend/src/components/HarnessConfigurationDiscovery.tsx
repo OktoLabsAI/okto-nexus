@@ -15,7 +15,7 @@ export function HarnessConfigurationDiscovery({value}: {value: HarnessConfigurat
       </tr>)}</tbody>
     </table>
     <p className="mt-2">Human questions: {value.human_input.core_bridge === "not_implemented" ? "Bridge not implemented" : "Bridge implemented; installed-version validation required"}.</p>
-    {!value.human_input.recipient_routing_implemented && <p>Routing questions to the conversation participant is not implemented yet.</p>}
+    {!value.human_input.recipient_routing_implemented && <p>Routing questions and permission prompts to the operator is off. Turn on human approvals (feature_hitl) to enable it.</p>}
     <p>Nexus tool auto-approval is separate from harness permissions and human answers.</p>
   </details>;
 }

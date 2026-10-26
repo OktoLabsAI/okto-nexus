@@ -25,6 +25,7 @@ import {
   type NexusEvent,
 } from "../api";
 import type { SSEStatus } from "../useSSE";
+import { formatTime, isoTitle } from "../timeFormat";
 import { AgentSelect } from "../components/AgentSelect";
 import { TypeSelect } from "../components/TypeSelect";
 import { LiveChip } from "../components/LiveChip";
@@ -315,8 +316,8 @@ function EventRow({
             {event.actor_agent_id}
           </span>
         )}
-        <span className="ml-auto text-surface-400 dark:text-surface-500">
-          {event.created_at}
+        <span className="ml-auto text-surface-400 dark:text-surface-500" title={isoTitle(event.created_at)}>
+          {formatTime(event.created_at)}
         </span>
       </div>
       {summary.length > 0 && (

@@ -44,8 +44,13 @@ def build_handoff_runtime_scheduler(deps, *, candidates=None, capacity=None, acq
         admission=build_capacity_admission(deps, capacity=capacity))
     schedule = SqliteHandoffScheduleRepository()
     notices = build_handoff_notice_retirement()
+    idle_ms = getattr(getattr(deps, 'config', None), 'runtime_idle_interval_ms', None)
+    if idle_ms is not None:
+        limits.setdefault('idle_seconds', idle_ms / 1000)
+    from ..adapters.inbound.mcp.tools.handoff import build_service
+    lease_watch = build_service(deps, register_approval_executor=False).watch_leases
     scheduler = HandoffRuntimeScheduler(factory=deps.connection_factory,
-        repository=schedule, notices=notices, processor=processor, **limits)
+        repository=schedule, notices=notices, lease_watch=lease_watch, processor=processor, **limits)
     # The serve-level scheduler owns this coalesced runtime signal. Rebuilding
     # it replaces the previous callback instead of accumulating listeners.
     deps.runtime_availability.wake = scheduler.wake

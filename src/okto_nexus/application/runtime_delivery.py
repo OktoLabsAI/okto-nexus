@@ -130,6 +130,72 @@ class RuntimeDeliveryPlanner:
             candidates.append((endpoint, profile, live[0]["session_id"] if live else None))
         return candidates
 
+    @staticmethod
+    def _earlier_unfinished(conn, *, endpoint, message):
+        """Earlier unfinished conversation deliveries to this endpoint, oldest first, with their sender and session key.
+
+        Uses the unfinished rule of execution_dispatch.py (the pump's turn-order gate).
+        """
+        return [dict(row) for row in conn.execute(
+            "SELECT earlier.*,preceding.from_agent_id AS sender_agent_id,preceding.subject AS message_subject,"
+            "preceding.body AS message_body,COALESCE(origin.source_session_key,'') AS source_key "
+            "FROM delivery_outbox earlier JOIN messages preceding ON preceding.message_id=earlier.message_id "
+            "LEFT JOIN execution_message_origins origin ON origin.message_id=earlier.message_id "
+            "WHERE earlier.endpoint_id=? AND earlier.message_id<>? "
+            "AND earlier.reconciliation_id IS NULL AND earlier.external_completed_at IS NULL "
+            "AND earlier.terminal_event_id IS NULL AND (earlier.canonical_terminal_operation_id IS NULL OR earlier.status='RETRY_WAIT') "
+            "AND NOT EXISTS (SELECT 1 FROM execution_delivery_releases r WHERE r.domain_operation_id=earlier.operation_id) "
+            "AND earlier.status NOT IN ('REJECTED','CANCELLED','FAILED_FINAL') "
+            "ORDER BY earlier.created_at,earlier.operation_id", (endpoint["endpoint_id"], message.message_id))]
+
+    def _queued_before(self, conn, *, endpoint, message, source_key, earlier):
+        """Count earlier unfinished deliveries that share this message's session affinity."""
+        policy = conn.execute(
+            "SELECT COALESCE(o.session_policy,g.session_policy) FROM runtime_policy_defaults g "
+            "LEFT JOIN agent_runtime_overrides o ON o.agent_id=? WHERE g.singleton=1", (endpoint["agent_id"],)).fetchone()
+        policy = policy[0] if policy else None
+        if policy == "one_shot":
+            return 0
+        return sum(1 for row in earlier if policy == "shared"
+                   or (row["sender_agent_id"] == message.from_agent_id
+                       and (policy == "per_sender" or row["source_key"] == source_key)))
+
+    def _supersede(self, uow, *, message, earlier, source_key, now):
+        """Cancel the sender's earlier unsent deliveries; return their texts, oldest first."""
+        from ..adapters.outbound.sqlite.execution_pending_cancellation import SqlitePendingExecutionCancellation
+        from ..adapters.outbound.sqlite.handoff_notice_retirement import SqliteHandoffNoticeRetirement
+        from ..adapters.outbound.sqlite.messages_repo import SqliteMessageDeliveryRepo
+        conn = uow.connection
+        cancel, consume = SqlitePendingExecutionCancellation().cancel, SqliteMessageDeliveryRepo().mark_runtime_superseded
+        texts = []
+        for row in earlier:
+            if row["sender_agent_id"] != message.from_agent_id or row["source_key"] != source_key or row["source_result_id"]:
+                continue
+            envelope = json.loads(row["envelope"])
+            if (envelope.get("intent") != "conversation" or envelope.get("handoff_id")
+                    or conn.execute("SELECT 1 FROM runtime_handoff_notifications WHERE message_id=?", (row["message_id"],)).fetchone()
+                    or conn.execute("SELECT 1 FROM one_shot_calls WHERE call_id=?", (row["operation_id"],)).fetchone()
+                    or not SqliteHandoffNoticeRetirement._unsent(conn, row)):
+                continue
+            conn.execute("SAVEPOINT supersede_delivery")
+            try:
+                # The cancel path refuses any operation that has a receipt or left PENDING/RESERVED.
+                cancel(uow, row["operation_id"], code="SUPERSEDED_BY_NEWER")
+            except OktoNexusError as error:
+                conn.execute("ROLLBACK TO supersede_delivery")
+                conn.execute("RELEASE supersede_delivery")
+                if error.code != ErrorCode.CONFLICT.value:
+                    raise
+                continue
+            conn.execute("RELEASE supersede_delivery")
+            conn.execute("UPDATE delivery_outbox SET status='CANCELLED',reason=?,updated_at=? WHERE operation_id=?",
+                         ("superseded_by:" + message.message_id, now, row["operation_id"]))
+            # The text travels in the newer turn, so the runtime consumes this delivery.
+            consume(uow, operation_id=row["operation_id"], at=now)
+            texts.extend((envelope.get("runtime_context") or {}).get("supersedes") or ())
+            texts.append({"message_id": row["message_id"], "subject": row["message_subject"], "body": row["message_body"]})
+        return texts
+
     def enqueue(self, uow, *, context, message, delivery, now, authorization_revision, result_source=None):
         # Legacy cooperative-trust messages still reach the logical inbox, but
         # cannot acquire execution authority from a sender ID in the payload.
@@ -180,12 +246,20 @@ class RuntimeDeliveryPlanner:
         operation_id = new_id("op")
         bootstrap = delivery_context(uow, agents=self.agents, endpoint=endpoint, profile=profile, intent="conversation")
         bootstrap["causality"] = self.causality.context(cause)
+        source_key = for_message(uow.connection, message.message_id)
+        earlier = self._earlier_unfinished(uow.connection, endpoint=endpoint, message=message)
+        queued_before = self._queued_before(uow.connection, endpoint=endpoint, message=message,
+                                            source_key=source_key, earlier=earlier)
+        if getattr(self.config, "delivery_coalesce", "off") == "same_sender" and not result_source and earlier:
+            superseded = self._supersede(uow, message=message, earlier=earlier, source_key=source_key, now=now)
+            if superseded:
+                bootstrap["supersedes"] = superseded
         envelope = DeliveryEnvelope(operation_id, message.from_agent_id, delivery.recipient_agent_id,
             message.workspace_id, "conversation", ({"type": "text", "text": message.body or ""},), cause["root_operation_id"],
             message_id=message.message_id, delivery_id=delivery.delivery_id, context_id=message.parent_message_id or message.message_id,
             subject=message.subject, causation_id=message.parent_message_id, hop_count=cause["hop_count"], response_requested=True,
             artifact_refs=tuple(message.artifacts or ()),
-            runtime_context=bootstrap)
+            runtime_context=bootstrap, sent_at=now, queued_before=queued_before)
         self.outbox.enqueue(uow, envelope=envelope, context=context, endpoint=endpoint, profile=profile,
                            session_id=None if endpoint["protocol"] == "nxl-r4" else session,
                            now=now, authorization_revision=authorization_revision)

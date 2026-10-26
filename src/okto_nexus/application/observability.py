@@ -25,6 +25,7 @@ from __future__ import annotations
 from typing import Any
 
 from ..config import NexusConfig
+from ..domain.approvals import OPERATOR_AGENT_ID
 from ..domain.base import iso_to_epoch
 from ..domain.trace import TRACE_ID_MAX_LEN
 from .ports import Clock, ObservabilityQueries, UnitOfWork
@@ -227,6 +228,7 @@ class ObservabilityService:
         undelivered_only: bool = False,
         include_body: bool = False,
         message_id: str | None = None,
+        include_receipts: bool = False,
     ) -> dict[str, Any]:
         if lane is not None and lane not in _LANES:
             raise ValueError(f"invalid lane: {lane!r} (one of {', '.join(_LANES)})")
@@ -250,8 +252,33 @@ class ObservabilityService:
             undelivered_only=undelivered_only,
             include_body=include_body,
             message_id=message_id,
+            include_receipts=include_receipts,
         )
         return {"items": items, "page": page, "page_size": page_size, "total": total}
+
+    def operator_unread(
+        self,
+        uow: UnitOfWork,
+        *,
+        since_iso: str | None = None,
+        limit: int = 5,
+    ) -> dict[str, Any]:
+        """Unread messages addressed to the operator (dashboard badge and toast).
+
+        ``count`` is the number of operator deliveries still in the unread
+        state (the same state as the Messages "Unread" lane). ``items`` holds
+        the newest ``limit`` of them. ``since_iso`` keeps only deliveries
+        created after that timestamp. Read-only.
+        """
+        limit = min(MAX_PAGE_SIZE, max(1, int(limit)))
+        items, count = self._q.agent_unread_deliveries(
+            uow, agent_id=OPERATOR_AGENT_ID, since_iso=since_iso, limit=limit
+        )
+        return {
+            "count": count,
+            "latest_created_at": items[0]["created_at"] if items else None,
+            "items": items,
+        }
 
     def conversation_peers(self, uow: UnitOfWork, *, agent_id: str) -> dict[str, Any]:
         """The agent's conversation partners (SQL aggregate; chat peer picker)."""
@@ -289,6 +316,13 @@ class ObservabilityService:
                 if row['handoff_id'] in runtime_facts:
                     row['runtime_progress'] = progress(runtime_facts[row['handoff_id']], automation_enabled=bool(
                         self._config.runtime_handoff_auto_claim_enabled and self._config.feature_harness_integrations))
+            # Claimant containment (#84): updated_at stands in for the claim
+            # time. A contained session cannot renew the lease or update the handoff.
+            claims = {row['handoff_id']: (row['claimed_by'], row['updated_at'] or row['created_at'])
+                      for row in rows if row['status'] == 'CLAIMED' and row['claimed_by']}
+            by_id = {row['handoff_id']: row for row in rows}
+            for handoff_id, lost in self._q.contained_claimant_sessions(uow, claims).items():
+                by_id[handoff_id]['claimant_session_lost'] = lost
             # Dependency exposure (I5/FR7): ONE extra aggregate query for the
             # WHOLE page (never per-row - AC9's anti-N+1). Ids absent from
             # the map have no dependency rows, so a dependency-free handoff

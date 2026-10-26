@@ -1,4 +1,5 @@
 import { handoffLabel } from "../handoffLabel";
+import { formatTime, isoTitle } from "../timeFormat";
 // The agent-mesh graph (spec S2 / FR2-FR3): Sigma.js v3 over graphology
 // with deterministic rows and enough space for fixed-size agent cards.
 //
@@ -1306,7 +1307,7 @@ function SidePanel({
               </>
             )}
           </div>
-          <div className="text-surface-400">{selection.handoff.created_at}</div>
+          <div className="text-surface-400" title={isoTitle(selection.handoff.created_at)}>{formatTime(selection.handoff.created_at)}</div>
           <TargetDescriptor target={selection.handoff.target} testId="graph-handoff-target" />
           <p className="text-[11px] text-surface-400">
             {selection.handoff.status === "OPEN"

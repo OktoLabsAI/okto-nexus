@@ -18,6 +18,7 @@ from ....domain.handoff import (
     EVENT_CREATED,
     EVENT_REJECTED,
 )
+from ....domain.messages import READ_RECEIPT_KIND
 from ....errors import OktoNexusError, db_error_from_exception
 from .handoff_repo import dependency_aggregates_for
 
@@ -26,6 +27,23 @@ MAX_EDGES = 2000
 MAX_HANDOFFS = 1000
 MAX_SESSIONS = 2000
 MAX_CHANNELS = 500
+
+#: Characters of the body that the messages list shows under the subject.
+MESSAGE_PREVIEW_CHARS = 120
+
+
+def _is_receipt_sql(body: str) -> str:
+    """SQL predicate: ``body`` is a read/processing receipt notification.
+
+    The ``instr`` test is a cheap pre-filter. CASE keeps ``json_extract`` safe
+    for a non-JSON body, and COALESCE keeps ``NOT (...)`` true for a NULL body.
+    """
+    return (
+        f"COALESCE(instr({body}, '{READ_RECEIPT_KIND}') > 0 "
+        f"AND json_extract(CASE WHEN json_valid({body}) THEN {body} "
+        f"ELSE '{{}}' END, '$.kind') = '{READ_RECEIPT_KIND}', 0)"
+    )
+
 
 # A recipient can be represented by a direct routing target or by the common
 # payload recipient fields.  CASE keeps SQLite's JSON1 functions safe for
@@ -147,6 +165,13 @@ class SqliteObservabilityQueries:
         sql = (
             "SELECT actor_agent_id, type, created_at, MAX(event_id) AS event_id "
             "FROM events WHERE actor_agent_id IS NOT NULL"
+            # Receipts are not activity: skip events about a receipt message.
+            " AND (type NOT LIKE 'message.%' OR NOT EXISTS ("
+            "SELECT 1 FROM messages rm WHERE rm.message_id = "
+            "json_extract(CASE WHEN json_valid(events.payload) "
+            "THEN events.payload ELSE '{}' END, '$.message_id') AND "
+            + _is_receipt_sql("rm.body")
+            + "))"
         )
         params: list[Any] = []
         if workspace_id is not None:
@@ -238,6 +263,7 @@ class SqliteObservabilityQueries:
             JOIN messages m ON m.message_id = d.message_id
             WHERE m.created_at >= ?
         """
+        sql += " AND NOT " + _is_receipt_sql("m.body")
         params: list[Any] = [since_iso]
         if workspace_id is not None:
             sql += " AND m.workspace_id = ?"
@@ -354,6 +380,38 @@ class SqliteObservabilityQueries:
         from .handoff_runtime_views import SqliteHandoffRuntimeViewRepository
         return SqliteHandoffRuntimeViewRepository().handoffs(uow, handoff_ids)
 
+    def contained_claimant_sessions(self, uow, claims):
+        """Latest execution session per claimant, when the hub contained it.
+
+        ``claims`` maps handoff_id to ``(agent_id, claimed_since)``. A handoff
+        is listed when the newest session of the agent has a containment
+        reason and ``contained_at >= claimed_since``. A newer session means
+        the agent restarted and no longer is in the lost state.
+        """
+        agents = sorted({agent for agent, _ in claims.values()})
+        if not agents:
+            return {}
+        marks = ",".join("?" for _ in agents)
+        try:
+            rows = uow.connection.execute(
+                "SELECT agent_id,session_id,containment_reason,contained_at FROM ("
+                "SELECT ep.agent_id,s.session_id,s.containment_reason,s.contained_at,"
+                "ROW_NUMBER() OVER (PARTITION BY ep.agent_id ORDER BY s.rowid DESC) AS n "
+                "FROM execution_sessions s "
+                "JOIN execution_bindings b ON b.server_id=s.server_id AND b.executor_id=s.executor_id "
+                "AND b.binding_id=s.binding_id JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id "
+                f"WHERE ep.agent_id IN ({marks})) WHERE n=1 AND containment_reason IS NOT NULL",
+                agents).fetchall()
+        except sqlite3.Error as exc:
+            raise _db_error("reading contained claimant sessions", exc) from exc
+        latest = {row["agent_id"]: row for row in rows}
+        return {
+            handoff_id: {"reason": latest[agent]["containment_reason"],
+                         "session_id": latest[agent]["session_id"], "at": latest[agent]["contained_at"]}
+            for handoff_id, (agent, since) in claims.items()
+            if agent in latest and (latest[agent]["contained_at"] or "") >= since
+        }
+
     def handoff_dependency_aggregates(
         self,
         uow: UnitOfWork,
@@ -431,12 +489,15 @@ class SqliteObservabilityQueries:
         undelivered_only: bool = False,
         include_body: bool = False,
         message_id: str | None = None,
+        include_receipts: bool = False,
     ) -> tuple[list[dict[str, Any]], int]:
         where = ["1=1"]
         params: list[Any] = []
         if message_id is not None:
             where.append("m.message_id = ?")
             params.append(message_id)
+        elif not include_receipts:
+            where.append("NOT " + _is_receipt_sql("m.body"))
         if workspace_id is not None:
             where.append("m.workspace_id = ?")
             params.append(workspace_id)
@@ -504,7 +565,7 @@ class SqliteObservabilityQueries:
                 f"""
                 SELECT m.message_id, m.workspace_id, m.channel_id, m.from_agent_id,
                        m.created_at, m.subject, m.body, m.target, m.artifacts,
-                       m.trace_id
+                       m.trace_id, {_is_receipt_sql("m.body")} AS is_receipt
                 FROM messages m WHERE {where_sql}
                 ORDER BY m.created_at DESC, m.message_id
                 LIMIT ? OFFSET ?
@@ -518,7 +579,7 @@ class SqliteObservabilityQueries:
             if rows:
                 placeholders = ','.join('?' for _ in rows)
                 runtime_results = {r['publication_message_id']: r for r in uow.connection.execute(
-                    f'SELECT publication_message_id,delivery_outcome,output_truncated FROM runtime_results '
+                    f'SELECT publication_message_id,delivery_outcome,output_truncated,relay_state,relay_reason FROM runtime_results '
                     f'WHERE publication_message_id IN ({placeholders})',
                     tuple(row['message_id'] for row in rows)).fetchall()}
             items: list[dict[str, Any]] = []
@@ -543,7 +604,8 @@ class SqliteObservabilityQueries:
                     "subject": row["subject"],
                     "target": _loads(row["target"]),
                     "trace_id": row["trace_id"],
-                    "preview": body[:160],
+                    "kind": "receipt" if row["is_receipt"] else "message",
+                    "preview": body[:MESSAGE_PREVIEW_CHARS],
                     "deliveries": [{k:v for k,v in dict(d).items() if k!='runtime_recovery' or v is not None} for d in deliveries],
                 }
                 if include_body:
@@ -553,6 +615,8 @@ class SqliteObservabilityQueries:
                     item['runtime_result'] = {
                         'outcome': result['delivery_outcome'],
                         'partial': result['delivery_outcome'] in ('interrupted', 'failed') or bool(result['output_truncated']),
+                        'relay_state': result['relay_state'],
+                        'relay_reason': result['relay_reason'],
                     }
                 artifacts = _loads(row["artifacts"])
                 if isinstance(artifacts, list) and artifacts:
@@ -561,6 +625,56 @@ class SqliteObservabilityQueries:
         except sqlite3.Error as exc:
             raise _db_error("reading message history", exc) from exc
         return items, total
+
+    def agent_unread_deliveries(
+        self,
+        uow: UnitOfWork,
+        *,
+        agent_id: str,
+        since_iso: str | None,
+        limit: int,
+    ) -> tuple[list[dict[str, Any]], int]:
+        """Unread deliveries addressed to one agent: (newest ``limit`` rows, count).
+
+        Counts only deliveries whose own status is ``unread`` and whose own
+        recipient is ``agent_id``. Read receipt notifications do not count.
+        ``since_iso`` keeps only deliveries created strictly after that
+        timestamp.
+        """
+        # A read receipt is a notification about a message, not a message.
+        # CASE keeps json_extract away from bodies that are not JSON.
+        where = (
+            "d.recipient_agent_id = ? AND d.status = 'unread' "
+            "AND NOT COALESCE(CASE WHEN json_valid(m.body) "
+            "THEN json_extract(m.body, '$.kind') END = 'message.read_receipt', 0)"
+        )
+        params: list[Any] = [agent_id]
+        if since_iso is not None:
+            where += " AND d.created_at > ?"
+            params.append(since_iso)
+        try:
+            total = int(
+                uow.connection.execute(
+                    "SELECT COUNT(*) FROM message_deliveries d "
+                    f"JOIN messages m ON m.message_id = d.message_id WHERE {where}",
+                    tuple(params),
+                ).fetchone()[0]
+            )
+            rows = uow.connection.execute(
+                f"""
+                SELECT m.message_id, m.workspace_id, m.from_agent_id, m.subject,
+                       substr(m.body, 1, 160) AS preview, d.created_at
+                FROM message_deliveries d
+                JOIN messages m ON m.message_id = d.message_id
+                WHERE {where}
+                ORDER BY d.created_at DESC, m.message_id
+                LIMIT ?
+                """,
+                (*params, limit),
+            ).fetchall()
+        except sqlite3.Error as exc:
+            raise _db_error("reading unread deliveries", exc) from exc
+        return [dict(row) for row in rows], total
 
     def conversation_peers(self, uow: UnitOfWork, *, agent_id: str) -> dict[str, Any]:
         """Aggregate conversation partners + failed-send count in SQL.

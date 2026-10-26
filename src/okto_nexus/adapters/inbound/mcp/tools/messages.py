@@ -94,7 +94,7 @@ _MIGRATED_CODE: str = (
 #: optionals marked "(optional)"/"(default: ...)"; cross-refs to sibling tools.
 _P_ROOT = "Absolute path to the project (defines the workspace scope)."
 _P_FROM_AGENT = "Your agent_id (the sender); recorded as the author - recipients reply by targeting it."
-_P_SUBJECT = "Short message subject/title (one line)."
+_P_SUBJECT = "Short message subject/title (one line). Optional: when omitted, the first line of body (max 80 chars) is the subject."
 _P_BODY = "Message body (inline text). For large content, attach an artifact and keep body a short pointer."
 _P_CHANNEL = "Channel_id to post into (optional; omit = no channel). Organizational label only; does NOT decide recipients (the target does)."
 _P_CHANNEL_NAME = "Channel name (REQUIRED; short topic label, max 64 chars, unique per workspace). Idempotent by name (existing -> created=false)."
@@ -118,6 +118,10 @@ _P_TARGET_MSG = (
 )
 _P_ARTIFACTS = "List of artifact_id strings to attach (optional; at most 20, no exact duplicates; reference large content instead of inlining it in body)."
 _P_PARENT = "Message_id this is a reply to, to thread the conversation (optional)."
+_P_NO_REPLY = (
+    "Set true to mark this message as final (optional, default false). It reaches the "
+    "recipient inbox but starts no runtime turn, so no reply is expected."
+)
 _P_TRACE = (
     "Trajectory trace_id to stamp on this message (optional; non-empty string, "
     "max 128 chars). Needs the feature_trace flag ON, else accepted and ignored; "
@@ -292,8 +296,8 @@ def register(server: Any, deps: Any) -> None:
     @tool_envelope
     def message_create(
         from_agent_id: Annotated[str, Field(description=_P_FROM_AGENT)],
-        subject: Annotated[str, Field(description=_P_SUBJECT)],
         body: Annotated[str, Field(description=_P_BODY)],
+        subject: Annotated[str | None, Field(description=_P_SUBJECT)] = None,
         project_root: Annotated[str | None, Field(description="Absolute local project path. Supply exactly one of project_root or existing workspace_id.")] = None,
         workspace_id: Annotated[str | None, Field(description="Existing logical workspace ID. Select this or project_root, never both.")] = None,
         channel_id: Annotated[str | None, Field(description=_P_CHANNEL)] = None,
@@ -307,6 +311,7 @@ def register(server: Any, deps: Any) -> None:
         session_secret: Annotated[
             str | None, Field(description=_P_SESSION_SECRET)
         ] = None,
+        no_reply: Annotated[bool, Field(description=_P_NO_REPLY)] = False,
     ) -> dict[str, Any]:
         """Persist a message and fan it out to recipient inboxes; emit message.created. The response confirms delivery (recipients + delivered_count). Full docs: okto-nexus://reference/tool-docs/messages."""
         require_json_object_param("target", target)
@@ -323,6 +328,7 @@ def register(server: Any, deps: Any) -> None:
             parent_message_id=parent_message_id,
             trace_id=trace_id,
             session_secret=session_secret,
+            no_reply=no_reply,
         )
 
     @server.tool()
@@ -373,7 +379,9 @@ def register(server: Any, deps: Any) -> None:
             "in-flight, returns bodies; acknowledge with inbox_ack), "
             "inbox_peek(agent_id=<you>) for a non-destructive look, or "
             "inbox_history(agent_id=<you>, cursor=..., limit=...) for "
-            "already-read messages. To fetch bus traffic by event instead, use "
+            "already-read messages. Sessions have inbox_count, inbox_peek, inbox_history "
+            "and message_status (sender-only); inbox_pull and inbox_ack need a key. "
+            "To fetch bus traffic by event instead, use "
             'event_get(project_root=..., agent_id=<you>, stream="workspace", '
             'filters={"type": "message.created"}).',
             ["inbox_pull", "inbox_peek", "inbox_history", "event_get"],
@@ -387,7 +395,8 @@ def register(server: Any, deps: Any) -> None:
             "message_list was replaced in S3. For YOUR messages use "
             "inbox_peek(agent_id=<you>) (pending: unread + in-flight) or "
             "inbox_history(agent_id=<you>, cursor=..., limit=...) (read "
-            "archive, newest-first, paginated). To enumerate the workspace's "
+            "archive, newest-first, paginated). Sessions have inbox_count, inbox_peek, "
+            "inbox_history and message_status (sender-only). To enumerate the workspace's "
             "message traffic use event_get(project_root=..., agent_id=<you>, "
             'stream="workspace", filters={"type": "message.created"}, '
             "cursor=..., limit=...).",

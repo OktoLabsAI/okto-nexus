@@ -88,8 +88,22 @@ def test_cancel_before_canonical_send_keeps_native_unstarted(connected_local, mo
     assert native.opens == 1 and app.state.embedded_dispatch_owner.pump.error is None
 
 
+@pytest.fixture
+def hold_retirement(monkeypatch):
+    """Keep local session retirement pending until the test ends.
+
+    Retirement drains the stream, and a drained stream never publishes again.
+    It runs a few milliseconds after the release that moves the outbox row to
+    OUTCOME_UNKNOWN (since the pooled connections of #82 made it fast), so a
+    delayed capture races it. Holding it makes the order the test needs certain.
+    """
+    from okto_nexus.bootstrap.embedded_retirement import EmbeddedRetirement
+    monkeypatch.setattr(EmbeddedRetirement, 'snapshot', lambda self, session_id: None)
+
+
 @pytest.mark.parametrize('release_to_inbox', [False, True])
-def test_late_correlated_output_after_release_is_history_only(connected_local, monkeypatch, release_to_inbox):
+def test_late_correlated_output_after_release_is_history_only(connected_local, monkeypatch, release_to_inbox,
+                                                              hold_retirement):
     from nexus_connector_core import RuntimeEvent
     from test_agent_recovery_isolation import eventually
     from test_canonical_result_publication import current_turn

@@ -43,6 +43,18 @@ export interface BindingView {
   inventory_revision: string; realization_ref: string; realization_revision: number;
 }
 
+export interface RevalidateBindingsResult {
+  revalidated: number; already_current: number; installation_missing: number;
+  installation_not_ready: number; inventory_unavailable: number;
+  bindings: {binding_id: string; endpoint_id: string; adapter_id: string; outcome: string}[];
+}
+
+export interface HeldSuccession {
+  id: number; executor_id: string; adapter_id: string; reason: string; policy: string;
+  from_version: string | null; to_version: string | null; decided_at: string;
+  agent_ids: string[]; can_accept: boolean;
+}
+
 export interface BindingProposal extends Omit<BindingView, "binding_revision" | "state"> {
   proposal_id: string; proposal_revision: number; expires_at: string;
   can_apply: boolean; required_approvals: string[];
@@ -248,6 +260,11 @@ export const runtimeApi = {
   refreshInventory: (executorId: string, clientIntentId: string, signal?: AbortSignal) =>
     read<{client_intent_id: string; refresh_id: string; executor_id: string; state: "PENDING" | "REQUESTED" | "UPDATED" | "OFFLINE"}>(
       `/v1/runtime/executors/${encodeURIComponent(executorId)}/inventory:refresh`, signal, {client_intent_id: clientIntentId}),
+  // Operator recovery after a harness update. Accepts the current installation
+  // for every binding that needs review: /api/v1/runtime-management/connections/bindings:revalidate.
+  revalidateBindings: () => read<RevalidateBindingsResult>("/v1/connections/bindings:revalidate", undefined, {}),
+  heldSuccessions: () => read<{items: HeldSuccession[]}>("/v1/connections/installation-successions?state=held", undefined),
+  acceptSuccession: (id: number) => read<{decision: string}>(`/v1/connections/installation-successions/${id}:accept`, undefined, {}),
   prepareBinding: (body: Record<string, unknown>) => read<BindingProposal>("/v1/connections/bindings:prepare", undefined, body),
   applyBinding: (body: Record<string, unknown>) => read<BindingView>("/v1/connections/bindings:apply", undefined, body),
   binding: (id: string) => read<BindingView>(`/v1/connections/bindings/${encodeURIComponent(id)}`, undefined),

@@ -150,6 +150,33 @@ def test_cli_pinned_setting_is_read_only(tmp_path):
         assert deps.config.session_stale_ttl_seconds == 90
 
 
+def test_runtime_update_policy_is_editable_and_cli_pin_is_read_only(
+    loopback_client, tmp_path
+):
+    deps, client = loopback_client
+    assert deps.config.runtime_update_policy == "review"
+    assert client.patch(
+        "/api/v1/settings", json={"runtime_update_policy": "follow"}
+    ).status_code == 200
+    assert deps.config.runtime_update_policy == "follow"
+    assert client.patch(
+        "/api/v1/settings", json={"runtime_update_policy": "auto"}
+    ).status_code == 422
+    pinned = bootstrap(
+        {}, ["--home", str(tmp_path / "pin"), "--runtime-update-policy", "follow"]
+    )
+    with TestClient(build_app(pinned), client=("127.0.0.1", 50003)) as pc:
+        items = pc.get("/api/v1/settings").json()["data"]["items"]
+        item = next(i for i in items if i["key"] == "runtime_update_policy")
+        assert item["source"] == "cli/env"
+        assert item["editable"] is False
+        assert item["value"] == "follow"
+        assert pc.patch(
+            "/api/v1/settings", json={"runtime_update_policy": "review"}
+        ).status_code == 422
+        assert pinned.config.runtime_update_policy == "follow"
+
+
 def test_settings_reset_restores_defaults(loopback_client):
     deps, client = loopback_client
     client.patch("/api/v1/settings", json={"presence_ttl_seconds": 900})
@@ -169,3 +196,15 @@ def test_remote_machine_policy_defaults_to_manual_and_is_editable(loopback_clien
         assert response.status_code == 200, response.text
         assert deps.config.remote_machine_policy == value
     assert client.patch('/api/v1/settings', json={'remote_machine_policy':'allow_all'}).status_code == 422
+
+
+def test_chain_limits_are_listed_and_editable(loopback_client):
+    deps, client = loopback_client
+    items = client.get("/api/v1/settings").json()["data"]["items"]
+    by_key = {item["key"]: item for item in items}
+    for key in ("max_relay_depth", "max_executions_per_root", "root_deadline_seconds"):
+        assert by_key[key]["value"] == getattr(deps.config, key)
+    response = client.patch("/api/v1/settings", json={"max_executions_per_root": 8})
+    assert response.status_code == 200
+    assert deps.config.max_executions_per_root == 8
+    assert client.patch("/api/v1/settings", json={"root_deadline_seconds": 0}).status_code >= 400

@@ -118,4 +118,5 @@ def read_execution_session(factory, *, server_id, session_id, context, access,
             lifecycle_state=row["lifecycle_state"], process_state="UNKNOWN", ownership="UNKNOWN",
             lease_state="EXPIRED" if expired and row["lease_state"] == "ACTIVE" else row["lease_state"],
             durable_release_pending=bool(closing and row["lifecycle_state"] != "CLOSED"),
-            control_available=available, last_observed_at=observed)
+            control_available=available, last_observed_at=observed,
+            containment_reason=row["containment_reason"], contained_at=row["contained_at"])

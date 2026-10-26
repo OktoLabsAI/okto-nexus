@@ -14,8 +14,9 @@ def migration_target(conn, *, server_id, executor_id, subject_agent_id,
     if row is None or mapping is None:
         raise OktoNexusError(ErrorCode.NOT_FOUND, "The migrated endpoint was not found in this scope.", {})
     ref = json.loads(mapping["canonical_ref"])
-    digest = hashlib.sha256(json.dumps(dict(row),sort_keys=True,separators=(",",":"),
-                                       ensure_ascii=True).encode()).hexdigest()
+    # The update policy was added after the catalog baseline, so it stays out of the digest (#89).
+    digest = hashlib.sha256(json.dumps({k:v for k,v in dict(row).items() if k != "runtime_update_policy"},
+        sort_keys=True,separators=(",",":"),ensure_ascii=True).encode()).hexdigest()
     if (mapping["state"] != "REDISCOVERY_REQUIRED" or mapping["row_digest_before"] != digest
             or ref.get("server_id") != server_id or ref.get("executor_id") != executor_id
             or ref.get("canonical_adapter_id") != adapter_id
@@ -54,7 +55,8 @@ def apply_migration(conn, *, proposal, expected, profile_id, alias, now):
 
 def record_adoption(conn, *, proposal):
     def digest(row):
-        return hashlib.sha256(json.dumps(dict(row),sort_keys=True,separators=(",",":"),
+        row = {k: v for k, v in dict(row).items() if k != "runtime_update_policy"}  # Same rule as migration_target.
+        return hashlib.sha256(json.dumps(row,sort_keys=True,separators=(",",":"),
                                          ensure_ascii=True).encode()).hexdigest()
     endpoint = conn.execute("SELECT * FROM agent_endpoints WHERE endpoint_id=?", (proposal["endpoint_id"],)).fetchone()
     profile = conn.execute("SELECT * FROM runtime_profiles WHERE profile_id=?", (endpoint["profile_id"],)).fetchone()

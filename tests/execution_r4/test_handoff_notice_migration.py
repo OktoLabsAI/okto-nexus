@@ -43,7 +43,7 @@ def test_upgrade_preserves_inbox_and_admitted_history_and_routes_only_proved_wai
                      'PENDING' if name == 'admitted' else 'OUTCOME_UNKNOWN', now, now))
         deliveries = [tuple(r) for r in conn.execute('SELECT * FROM message_deliveries ORDER BY delivery_id')]
         admitted = [tuple(r) for r in conn.execute('SELECT * FROM delivery_outbox ORDER BY operation_id')]
-    assert MigrationRunner(factory).apply() == list(range(134, 153))
+    assert MigrationRunner(factory).apply() == [*range(134, 158)]
     assert MigrationRunner(factory).apply() == []
     with factory.unit_of_work(write=False) as uow:
         conn = uow.connection

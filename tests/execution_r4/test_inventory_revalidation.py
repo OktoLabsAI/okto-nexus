@@ -6,6 +6,7 @@ from types import SimpleNamespace
 import pytest
 from test_local_realization import local_setup
 from test_local_launch import admitted_local
+from test_local_installation_check import checking  # noqa: F401
 from okto_nexus.bootstrap import embedded_inventory
 from okto_nexus.application.execution_local_launch import ApprovedLocalLaunch
 from okto_nexus.application.execution_inventory_revalidation import selection, accepts_binding
@@ -227,3 +228,109 @@ def test_updated_binary_is_observed_without_repeating_operator_setup(admitted_lo
         with deps.connection_factory.unit_of_work(write=False) as uow:
             assert accepts_binding(uow.connection, binding, owner.publication.inventory_revision,
                 owner.key.server_id, owner.key.executor_id)
+
+
+@pytest.fixture
+def stale_binding(checking, monkeypatch):
+    """A binding made on an unchecked installation. A later version check makes it need review."""
+    import nexus_connector_core.availability as availability
+    monkeypatch.setattr(availability, 'qualified_build', lambda *a, **k: True)
+    from test_connection_setup import request_for, finish
+    from okto_nexus.application.execution_local_realizations import directory_identity
+    deps, app, client, headers, body, route, source, _ = checking
+    # Qualify the build, so a checked installation is ready for runtime.
+    source = replace(source, architecture='x86_64')
+    monkeypatch.setattr(embedded_inventory, 'discover_local_candidates', lambda **_: SimpleNamespace(
+        candidates=(source,) if not _.get('adapter_ids') or source.adapter_id in _['adapter_ids'] else ()))
+    owner = app.state.embedded_inventory_owner
+    client.portal.call(owner.refresh)
+    snapshot = client.get(f'/v1/runtime/executors/{owner.key.executor_id}/inventory', headers=headers['operator']).json()['snapshot']
+    body = dict(body, candidate_ref=snapshot['evidence'][0]['candidate_ref'], inventory_revision=snapshot['inventory_revision'])
+    setup = (deps, app, client, headers, body, source, deps.config.home_dir.parent)
+    context, request = request_for(setup)
+    request['configuration']['workspace_root'] = str(setup[6])
+    setup[6].mkdir(exist_ok=True)
+    binding = finish(setup, context, request, verified={
+        'root': directory_identity(request['configuration']['workspace_root']), 'home': None})['binding']
+    assert client.post(route, json=body, headers=headers['operator']).status_code == 200
+    state = lambda: client.get('/v1/connections/bindings/' + binding['binding_id'], headers=headers['operator']).json()['state']
+    assert state() == 'STALE'
+    return setup, binding, state
+
+
+def test_operator_revalidates_all_stale_bindings_in_one_call(stale_binding, monkeypatch):
+    setup, binding, state = stale_binding
+    deps, app, client, headers, *_ = setup
+    path = '/v1/connections/bindings:revalidate'
+    assert client.post(path, headers=headers['subject']).status_code == 403
+    assert client.post(path).status_code == 401
+    assert state() == 'STALE'
+    response = client.post(path, headers=headers['operator'])
+    assert response.status_code == 200, response.text
+    assert response.json()['revalidated'] == 1
+    assert [(item['binding_id'], item['outcome']) for item in response.json()['bindings']] == [(binding['binding_id'], 'revalidated')]
+    assert state() == 'APPROVED'
+    owner = app.state.embedded_inventory_owner
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        row = dict(uow.connection.execute('SELECT * FROM execution_bindings').fetchone())
+        assert accepts_binding(uow.connection, row, owner.publication.inventory_revision,
+                               owner.key.server_id, owner.key.executor_id)
+        assert uow.connection.execute('SELECT reason FROM execution_inventory_revalidation').fetchone()[0] == 'operator_revalidated'
+    # A second call changes nothing, and a later equal publication keeps the acceptance.
+    again = client.post(path, headers=headers['operator']).json()
+    assert again['revalidated'] == 0 and again['already_current'] == 1
+    client.portal.call(owner.refresh)
+    assert state() == 'APPROVED'
+    from okto_nexus.application.execution_log import read_execution_log
+    logs = read_execution_log(deps.connection_factory, limit=200)
+    assert any(item['code'] == 'INVENTORY_REVALIDATED' for item in logs['items'])
+
+
+def test_revalidate_leaves_a_missing_installation_for_review(stale_binding, monkeypatch):
+    setup, binding, state = stale_binding
+    deps, app, client, headers, *_ = setup
+    monkeypatch.setattr(embedded_inventory, 'discover_local_candidates', lambda **_: SimpleNamespace(candidates=()))
+    client.portal.call(app.state.embedded_inventory_owner.refresh)
+    response = client.post('/v1/connections/bindings:revalidate', headers=headers['operator'])
+    assert response.status_code == 200, response.text
+    assert response.json()['revalidated'] == 0 and response.json()['installation_missing'] == 1
+    assert state() == 'STALE'
+
+
+def test_revalidate_is_available_on_the_mcp_admin_path(stale_binding, monkeypatch):
+    monkeypatch.syspath_prepend(str(__import__('pathlib').Path(__file__).parents[1]))
+    from test_pr34_remediation import tool
+    setup, binding, state = stale_binding
+    _, _, client, headers, *_ = setup
+    client.headers['host'] = '127.0.0.1:8000'
+    arguments = dict(view='connections', maintenance=dict(action='revalidate_bindings'))
+    denied = tool(client, headers['subject']['Authorization'].removeprefix('Bearer '), 'harness_list', arguments)
+    assert not denied['ok'] and denied['error']['code'] == 'PERMISSION_DENIED', denied
+    assert state() == 'STALE'
+    result = tool(client, headers['operator']['Authorization'].removeprefix('Bearer '), 'harness_list', arguments)
+    assert result['ok'] and result['data']['revalidated'] == 1, result
+    assert state() == 'APPROVED'
+
+
+def _stored_candidate_without_reason():
+    # Shape stored before core added InstallationCandidate.reason (#67).
+    return {'adapter_id': 'claude', 'executable': '/usr/bin/claude', 'fingerprint': 'f1',
+            'source': 'path', 'trust': 'selected', 'version': '1.0', 'architecture': 'arm64',
+            'launch_script': None, 'build_identity': 'b1', 'installation_ref': 'inst_1'}
+
+
+@pytest.mark.parametrize('reason', [None, 'resolved path is outside trusted roots'])
+def test_same_installation_location_ignores_missing_reason_key(reason):
+    from okto_nexus.application.execution_inventory_revalidation import same_installation_location
+    stored = _stored_candidate_without_reason()
+    assert 'reason' not in stored
+    assert same_installation_location(stored, {**stored, 'reason': reason, 'trust': 'untrusted'})
+
+
+def test_same_installation_location_still_rejects_identity_change():
+    from okto_nexus.application.execution_inventory_revalidation import same_installation_location
+    stored = _stored_candidate_without_reason()
+    for key, value in (('executable', '/other/claude'), ('installation_ref', 'inst_2'),
+                       ('adapter_id', 'codex'), ('architecture', 'x86_64')):
+        assert not same_installation_location(stored, {**stored, 'reason': None, key: value})
+    assert not same_installation_location(stored, {**stored, 'reason': None, 'launch_script': '/x.sh'})

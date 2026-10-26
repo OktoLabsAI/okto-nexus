@@ -21,3 +21,18 @@ def test_runtime_context_describes_nexus_tools_without_limiting_harness():
         assert 'untrusted' not in wire
         assert json.loads(wire.split('\n',1)[1])['content'] == envelope['content']
         assert envelope['trust'] == 'untrusted_content'
+
+
+def test_lifecycle_notice_prompt_says_the_answer_is_stored_only():
+    """A turn that answers a handoff notice is not relayed, and the prompt says so (#92)."""
+    runtime = {'intent': 'conversation', 'relay_results': True, 'causality': {'max_depth': 4}}
+    notice = {'runtime_context': runtime, 'content': [{'type': 'text', 'text': json.dumps(
+        {'kind': 'handoff.claimant_silent', 'handoff_id': 'hof_1'})}]}
+    wire = delivery_prompt(notice)
+    assert ('This is a system notice. Your final answer is stored only. '
+            'To reach any agent, call message_create.') in wire.split('\n', 1)[0]
+    assert 'sent to the sender as a new message' not in wire.split('\n', 1)[0]
+    # Plain text and agent JSON keep the relay-on text.
+    for text in ('hello', json.dumps({'kind': 'agent.status'})):
+        plain = delivery_prompt({'runtime_context': runtime, 'content': [{'type': 'text', 'text': text}]})
+        assert 'system notice' not in plain and 'sent to the sender as a new message' in plain

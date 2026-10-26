@@ -16,7 +16,7 @@
 // (BR11) and the flag is never consulted.
 
 import { useCallback, useEffect, useState } from "react";
-import { Ban, CheckCircle2, ShieldCheck, UserCheck, X } from "lucide-react";
+import { Ban, CheckCircle2, CircleAlert, ShieldCheck, UserCheck, X } from "lucide-react";
 import { api, type AgentRow, type GraphHandoff } from "../api";
 import { useConfirm } from "../components/Confirm";
 import {
@@ -26,6 +26,7 @@ import {
 import { useWorkspaceName } from "../components/WorkspaceNames";
 import { AgentSelect } from "../components/AgentSelect";
 import { handoffLabel } from "../handoffLabel";
+import { formatRemaining, formatTime, isoTitle, msUntil } from "../timeFormat";
 import { HandoffRuntimeProgress } from '../components/HandoffRuntimeProgress';
 
 const CARDS_PER_PAGE = 3;
@@ -148,14 +149,21 @@ function HandoffDetailModal({
           {handoff.runtime_progress && <HandoffRuntimeProgress value={handoff.runtime_progress} details />}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Meta label="workspace" value={workspaceName} />
-            <Meta label="created" value={handoff.created_at} />
-            {handoff.updated_at && <Meta label="updated" value={handoff.updated_at} />}
+            <Meta label="created" value={formatTime(handoff.created_at)} title={isoTitle(handoff.created_at)} />
+            {handoff.updated_at && <Meta label="updated" value={formatTime(handoff.updated_at)} title={isoTitle(handoff.updated_at)} />}
             <Meta label="from" value={handoff.from_agent_id ?? "—"} mono />
             <Meta label="claimed by" value={handoff.claimed_by ?? "—"} mono />
+            {handoff.claimant_session_lost && (
+              <Meta
+                label="claimant session"
+                value={`contained${handoff.claimant_session_lost.reason ? `: ${handoff.claimant_session_lost.reason}` : ""}`}
+              />
+            )}
             <Meta label="visibility" value={handoff.visibility ?? "—"} mono />
             <Meta
               label="lease expires"
-              value={handoff.lease_expires_at ?? "—"}
+              value={formatTime(handoff.lease_expires_at)}
+              title={isoTitle(handoff.lease_expires_at)}
             />
             <Meta label="verifier" value={verifierLabel(handoff) || "—"} mono />
             <Meta
@@ -268,10 +276,12 @@ function Meta({
   label,
   value,
   mono = false,
+  title,
 }: {
   label: string;
   value: string;
   mono?: boolean;
+  title?: string;
 }) {
   return (
     <div>
@@ -279,12 +289,36 @@ function Meta({
         {label}
       </div>
       <div
+        title={title}
         className={`mt-0.5 break-all text-surface-700 dark:text-surface-200 ${
           mono ? "font-mono" : ""
         }`}
       >
         {value}
       </div>
+    </div>
+  );
+}
+
+const LEASE_WARN_MS = 5 * 60 * 1000;
+
+// Remaining lease time on a CLAIMED card. Warning style under 5 minutes.
+function LeaseRemaining({ value, now }: { value: string | null | undefined; now: number }) {
+  const left = msUntil(value, now);
+  if (left === null) return null;
+  const warn = left < LEASE_WARN_MS;
+  return (
+    <div
+      className={`text-[11px] ${
+        warn
+          ? "font-medium text-red-600 dark:text-red-300"
+          : "text-surface-500 dark:text-surface-400"
+      }`}
+      title={isoTitle(value)}
+      data-testid="lease-remaining"
+      data-warning={warn ? "true" : "false"}
+    >
+      lease: {formatRemaining(left)}
     </div>
   );
 }
@@ -301,6 +335,11 @@ export function HandoffsView({
   onChanged: () => void;
 }) {
   const { confirm, dialog } = useConfirm();
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const t = window.setInterval(() => setNow(Date.now()), 15000);
+    return () => window.clearInterval(t);
+  }, []);
   const [items, setItems] = useState<GraphHandoff[]>([]);
   const [error, setError] = useState<string | null>(null);
   // Capabilities announced by the operator agent: the data behind the
@@ -519,6 +558,15 @@ export function HandoffsView({
                         {handoffLabel(h)}
                       </div>
                       {h.runtime_progress && <HandoffRuntimeProgress value={h.runtime_progress} />}
+                      {h.claimant_session_lost && (
+                        <div
+                          className="chip mt-1 bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300"
+                          title={`The session of the claimant was contained${h.claimant_session_lost.reason ? ` (${h.claimant_session_lost.reason})` : ""}. Work after the containment may be lost.`}
+                          data-testid="claimant-session-lost"
+                        >
+                          <CircleAlert size={10} /> claimant session lost
+                        </div>
+                      )}
                       <div className="mt-1 text-xs text-surface-500 dark:text-surface-400 space-y-0.5">
                         <div className="flex items-center gap-1">
                           <span className="text-surface-400">from</span>
@@ -531,8 +579,9 @@ export function HandoffsView({
                           </div>
                         )}
                         <div className="text-[10px] text-surface-400 dark:text-surface-500">
-                          {h.created_at}
+                          <span title={isoTitle(h.created_at)}>{formatTime(h.created_at)}</span>
                         </div>
+                        {status === "CLAIMED" && <LeaseRemaining value={h.lease_expires_at} now={now} />}
                       </div>
 
                       {h.depends_on && h.dependencies && (

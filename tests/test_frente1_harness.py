@@ -124,9 +124,10 @@ def test_s7_ta_direct_message_targetable_from_inline_surface(surface):
         _described(create, required)
     # And they are actually marked required in the published schema.
     schema_required = set((create.inputSchema or {}).get("required", []))
-    assert {"from_agent_id", "subject", "body"} <= schema_required, (
-        "message_create must mark from_agent_id/subject/body required"
+    assert {"from_agent_id", "body"} <= schema_required, (
+        "message_create must mark from_agent_id/body required"
     )
+    assert "subject" not in schema_required
     assert not {"project_root", "workspace_id"} & schema_required
     assert "exactly one" in _described(create, "project_root").lower()
     assert "project_root" in _described(create, "workspace_id")

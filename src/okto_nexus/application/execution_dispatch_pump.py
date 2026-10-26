@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import time
 from functools import partial
 
 from ..adapters.outbound.sqlite.execution_dispatch_ownership import (
@@ -25,12 +26,16 @@ class ExecutionDispatchPump:
 
     def __init__(self, *, factory, channel, access, fresh_publications,
                  send, send_lock, verify_link, close_link, poll_interval=0.1, resolve_native_input=None,
-                 retained_operations=None, wake_deliveries=None):
+                 retained_operations=None, wake_deliveries=None, idle_interval=1.0):
         self.factory, self.channel, self.access = factory, channel, access
         self.fresh_publications = fresh_publications
         self.send, self.send_lock = send, send_lock
         self.verify_link, self.close_link = verify_link, close_link
         self.poll_interval = poll_interval
+        # After an empty scan, the pump scans again only when the store
+        # committed a change, or when this long has passed (time-based work).
+        self.idle_interval = max(idle_interval, poll_interval)
+        self._idle_version = self._idle_since = None
         self.resolve_native_input = resolve_native_input
         self.retained_operations = retained_operations or (lambda: ())
         self.wake_deliveries = wake_deliveries or (lambda: None)
@@ -72,16 +77,40 @@ class ExecutionDispatchPump:
                     pass
                 delay = min(max(delay * 2, 0.01), 1.0)
 
+    def _store_version(self):
+        probe = getattr(self.factory, 'data_version', None)
+        try:
+            return probe() if probe is not None else None
+        except Exception:
+            return None
+
+    def _scan_due(self):
+        """False while the last scan was empty and nothing committed since."""
+        if self._idle_version is None or time.monotonic() - self._idle_since >= self.idle_interval:
+            return True
+        return self._store_version() != self._idle_version
+
     async def _run(self):
         reservation = None
         try:
             await self._database(recover_fenced_reservations, factory=self.factory, channel=self.channel)
             while not self._stopping.is_set():
+                if not self._scan_due():
+                    try:
+                        await asyncio.wait_for(self._stopping.wait(), timeout=self.poll_interval)
+                    except asyncio.TimeoutError:
+                        pass
+                    continue
+                version = self._store_version()
                 await self._database(self.verify_link)
                 reservation = await self._database(reserve_execution_dispatch,
                     factory=self.factory, server_id=self.channel.server_id,
                     executor_id=self.channel.executor_id, remote_ready=True, channel=self.channel,
                     retained_operations=tuple(self.retained_operations()))
+                # An empty scan is idle only when a change probe exists. The
+                # version was read before the scan, so a later commit shows.
+                self._idle_version = version if reservation is None else None
+                self._idle_since = time.monotonic()
                 if reservation is None:
                     try:
                         await asyncio.wait_for(self._stopping.wait(), timeout=self.poll_interval)

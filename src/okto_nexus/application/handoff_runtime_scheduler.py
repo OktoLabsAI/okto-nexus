@@ -5,6 +5,7 @@ or handoff, and a timed-out close never replaces a still-running producer.
 Canonical handoff claims and attempt journals remain the authority for effects.
 """
 import asyncio
+import logging
 from dataclasses import dataclass
 import math
 import threading
@@ -13,6 +14,8 @@ from typing import Protocol
 
 from nexus_connector_core.capacity import CAPACITY_REASONS
 from .handoff_notice_retirement import HandoffNoticeRetirement
+
+_LOG = logging.getLogger(__name__)
 
 
 SCHEDULE_REASONS = CAPACITY_REASONS | {'NO_CANDIDATES', 'MORE_CANDIDATES', 'CLAIM_COMMITTED', 'SETTLED', 'AMBIGUOUS_BINDING'}
@@ -66,16 +69,22 @@ class HandoffScheduleProcessor(Protocol):
 
 class HandoffRuntimeScheduler:
     def __init__(self, *, factory, repository: HandoffScheduleRepository,
-                 processor: HandoffScheduleProcessor, notices: HandoffNoticeRetirement | None = None, max_running=8, scan_limit=64,
-                 lease_seconds=30, sweep_seconds=5, now=time.time, monotonic=time.monotonic):
+                 processor: HandoffScheduleProcessor, notices: HandoffNoticeRetirement | None = None, lease_watch=None, max_running=8, scan_limit=64,
+                 lease_seconds=30, sweep_seconds=5, idle_seconds=1, now=time.time, monotonic=time.monotonic):
         if (any(type(n) is not int or not 1 <= n <= 256 for n in (max_running, scan_limit))
                 or any(type(n) not in (int, float) or not math.isfinite(n) or n <= 0
-                       for n in (lease_seconds, sweep_seconds))):
+                       for n in (lease_seconds, sweep_seconds, idle_seconds))):
             raise ValueError('Invalid handoff scheduler limits.')
         self.factory, self.repository, self.processor = factory, repository, processor
         self.notices = notices
+        # Called as lease_watch(uow) in each sweep: expires due handoff leases.
+        self.lease_watch = lease_watch
         self.max_running, self.scan_limit = max_running, scan_limit
         self.lease_seconds, self.sweep_seconds = lease_seconds, sweep_seconds
+        # With no work, no wake and no sweep due, a tick reads the store only
+        # when it committed a change, or when this long has passed (due times).
+        self.idle_seconds = idle_seconds
+        self._idle_version = self._idle_at = None
         self.now, self.monotonic = now, monotonic
         self._signal_lock, self._notified = threading.Lock(), False
         self._running, self._pump = {}, None
@@ -103,6 +112,13 @@ class HandoffRuntimeScheduler:
         if not task.cancelled():
             task.exception()
 
+    def _store_version(self):
+        probe = getattr(self.factory, 'data_version', None)
+        try:
+            return probe() if probe is not None else None
+        except Exception:
+            return None
+
     def _take_notification(self):
         with self._signal_lock:
             notified, self._notified = self._notified, False
@@ -113,12 +129,19 @@ class HandoffRuntimeScheduler:
         scan = self.monotonic() >= self._next_sweep
         running = tuple(self._running.values())
         room = self.max_running - len(running)
+        version = self._store_version()
+        if (not notified and not scan and not running and version is not None
+                and version == self._idle_version and self.monotonic() - self._idle_at < self.idle_seconds):
+            return
         try:
             leases = await asyncio.to_thread(self._reserve_page, notified, scan, running, room)
         except BaseException:
             if notified:
                 self.wake()  # A failed writer must not swallow the wakeup.
             raise
+        # The version was read before the page, so a later commit shows.
+        self._idle_version = version if not leases and not running else None
+        self._idle_at = self.monotonic()
         if scan:
             self._next_sweep = self.monotonic() + self.sweep_seconds
         # Closing may have started while the planner's writer was still busy.
@@ -141,11 +164,23 @@ class HandoffRuntimeScheduler:
             for lease in running:
                 self.repository.renew(uow, lease, now=now, lease_seconds=self.lease_seconds)
             if scan:
+                if self.lease_watch is not None:
+                    self._watch_leases(uow)
                 if self.notices is not None:
                     self.notices.retire_page(uow, now=now, limit=self.scan_limit)
                 self.repository.sweep(uow, now=now, limit=self.scan_limit)
             return self.repository.lease_due(uow, now=now, limit=room,
                                             lease_seconds=self.lease_seconds) if room else ()
+
+    def _watch_leases(self, uow):
+        """Run the lease watch in a savepoint. A failure must not stop the sweep."""
+        uow.connection.execute("SAVEPOINT handoff_lease_watch")
+        try:
+            self.lease_watch(uow)
+        except Exception:
+            uow.connection.execute("ROLLBACK TO SAVEPOINT handoff_lease_watch")
+            _LOG.exception("Handoff lease watch failed; the next sweep tries again.")
+        uow.connection.execute("RELEASE SAVEPOINT handoff_lease_watch")
 
     async def _execute(self, lease):
         try:

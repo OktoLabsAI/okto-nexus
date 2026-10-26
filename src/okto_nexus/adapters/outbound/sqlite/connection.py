@@ -19,9 +19,11 @@ WAL readers never queue behind writers.
 
 from __future__ import annotations
 
+import os
 import sqlite3
 import threading
 import time
+import weakref
 
 from ....config import NexusConfig
 from ....errors import (
@@ -43,14 +45,16 @@ class SqliteUnitOfWork:
     """Explicit transactional scope over a single SQLite connection.
 
     Use as a context manager. On clean exit the transaction is committed; on
-    exception it is rolled back. The connection is always closed on exit.
+    exception it is rolled back. On exit the connection is closed, or handed
+    back to its owner through ``release`` when the owner reuses connections.
     ``write=True`` (the default) opens with ``BEGIN IMMEDIATE``; ``write=False``
     opens a deferred read snapshot.
     """
 
     def __init__(self, connection: sqlite3.Connection, write: bool = True, before_write=None,
-                 writer_gate=None, busy_timeout_ms=5000) -> None:
+                 writer_gate=None, busy_timeout_ms=5000, release=None) -> None:
         self.connection = connection
+        self._release = release
         self._write = write
         self._active = False
         self._before_write = before_write
@@ -77,7 +81,7 @@ class SqliteUnitOfWork:
         except BaseException as exc:
             # __exit__ never runs when __enter__ raises: close the connection
             # here. Lock/busy contention surfaces as a retryable DB_ERROR.
-            self._close()
+            self._close(reuse=False)
             if isinstance(exc, sqlite3.Error):
                 raise db_error_from_exception("starting a transaction", exc) from exc
             raise
@@ -85,19 +89,26 @@ class SqliteUnitOfWork:
         return self
 
     def __exit__(self, exc_type: object, exc: object, tb: object) -> bool:
+        reuse = False
         try:
             if exc_type is not None:
                 self.rollback()
             else:
                 self.commit()
+                # Only a clean unit of work leaves a connection that the next
+                # one may use. After a failure the connection is closed.
+                reuse = not self.connection.in_transaction
         finally:
-            self._close()
+            self._close(reuse=reuse)
         # Do not suppress exceptions raised inside the with-block.
         return False
 
-    def _close(self):
+    def _close(self, *, reuse):
         try:
-            self.connection.close()
+            if self._release is not None:
+                self._release(self.connection, reuse)
+            else:
+                self.connection.close()
         finally:
             if self._gate_acquired:
                 self._gate_acquired = False
@@ -114,10 +125,36 @@ class SqliteUnitOfWork:
             self._active = False
 
 
+class _PooledConnection:
+    """The reusable connection of one thread, with the state it was opened under."""
+
+    __slots__ = ("conn", "key", "busy", "retire", "__weakref__")
+
+    def __init__(self, conn: sqlite3.Connection, key: tuple) -> None:
+        self.conn, self.key, self.busy, self.retire = conn, key, False, False
+
+    def close(self) -> None:
+        conn, self.conn = self.conn, None
+        if conn is not None:
+            try:
+                conn.close()
+            except sqlite3.Error:  # pragma: no cover - close never matters
+                pass
+
+    def __del__(self) -> None:
+        # A thread that ends drops its holder. Close the handle explicitly.
+        self.close()
+
+
 class ConnectionFactory:
     """Creates configured SQLite connections and units of work.
 
     Ensures ``home_dir`` exists (idempotently) at construction time.
+
+    Each thread reuses ONE connection for its units of work. A fresh connection
+    must parse the whole schema on its first statement, which is far more
+    costly than the work of a typical unit of work. :meth:`get_connection`
+    still returns a new connection that the caller owns and closes.
     """
 
     def __init__(self, config: NexusConfig) -> None:
@@ -129,6 +166,15 @@ class ConnectionFactory:
         self._probe_conn: sqlite3.Connection | None = None
         self._probe_lock = threading.Lock()
         self._writer_gate = WriteGate()
+        # Per-thread reusable connection. The registry lets close() reach the
+        # connections of other threads. It holds no strong reference, so the
+        # connection of a finished thread is closed with its holder.
+        self._local = threading.local()
+        self._pool: "weakref.WeakSet[_PooledConnection]" = weakref.WeakSet()
+        self._pool_lock = threading.Lock()
+        # Units of work opened, as [read, write]. The idle host logs the changes.
+        self._count_lock = threading.Lock()
+        self._unit_counts = [0, 0]
         self.ensure_home_dir()
 
     @property
@@ -140,14 +186,21 @@ class ConnectionFactory:
         self._config.home_dir.mkdir(parents=True, exist_ok=True)
 
     def get_connection(self) -> sqlite3.Connection:
-        """Return a connection with the three mandatory PRAGMAs applied.
+        """Return a NEW connection with the three mandatory PRAGMAs applied.
 
+        The caller owns the connection and closes it.
         Raises ``DB_ERROR`` if the connection cannot be opened/configured.
         """
+        return self._open_connection()
+
+    def _open_connection(self, *, shared: bool = False) -> sqlite3.Connection:
+        # ``shared`` connections may be closed by another thread (see close()).
+        # Only the owner thread uses them to run statements.
         try:
             conn = sqlite3.connect(
                 str(self._config.db_path),
                 isolation_level=None,  # explicit transaction control
+                check_same_thread=not shared,
             )
             conn.row_factory = sqlite3.Row
             # busy_timeout FIRST: on a fresh database the WAL conversion needs
@@ -282,16 +335,98 @@ class ConnectionFactory:
             poll_interval_s=self._config.poll_interval_ms / 1000.0,
         )
 
+    def _pool_key(self) -> tuple:
+        """State a reusable connection depends on. A change opens a new one.
+
+        It holds the identity of the database file, so a replaced or deleted
+        file never keeps serving through a handle to the old file.
+        """
+        try:
+            stat = os.stat(self._config.db_path)
+            identity = (stat.st_dev, stat.st_ino)
+        except OSError:
+            identity = None
+        return (identity, int(self._config.busy_timeout_ms), bool(self._config.feature_harness_integrations))
+
+    def _checkout(self):
+        """Return ``(connection, release)`` for one unit of work.
+
+        The thread reuses its own connection. A nested unit of work on the same
+        thread gets a separate connection, as before pooling, because two
+        transactions cannot share one connection.
+        """
+        key = self._pool_key()
+        holder = getattr(self._local, "holder", None)
+        with self._pool_lock:
+            if holder is not None and holder.busy:
+                nested = True
+            else:
+                nested = False
+                if holder is not None and holder.conn is not None and holder.key == key:
+                    holder.busy = True
+                    return holder.conn, self._releaser(holder)
+        if nested:
+            return self._open_connection(), lambda conn, reuse: conn.close()
+        if holder is not None:
+            holder.close()
+        holder = _PooledConnection(self._open_connection(shared=True), key)
+        holder.busy = True
+        with self._pool_lock:
+            self._pool.add(holder)
+        self._local.holder = holder
+        return holder.conn, self._releaser(holder)
+
+    def _releaser(self, holder: _PooledConnection):
+        def release(conn: sqlite3.Connection, reuse: bool) -> None:
+            if reuse:
+                # A unit of work may set ``query_only`` on its connection. The
+                # next unit of work on this thread must not inherit it. Without
+                # this reset, a later write fails with "readonly database".
+                try:
+                    conn.execute("PRAGMA query_only=OFF")
+                except sqlite3.Error:
+                    reuse = False
+            with self._pool_lock:
+                holder.busy = False
+                if not reuse or holder.retire:
+                    holder.close()
+
+        return release
+
+    def close(self) -> None:
+        """Close the idle reusable connections and the ``data_version`` probe.
+
+        A connection that a unit of work still uses closes when that unit
+        ends. The factory stays usable: the next unit of work opens a new one.
+        """
+        with self._pool_lock:
+            for holder in list(self._pool):
+                if holder.busy:
+                    holder.retire = True
+                else:
+                    holder.close()
+        with self._probe_lock:
+            self._close_probe_conn()
+
+    def unit_counts(self) -> tuple:
+        """Return ``(read_units, write_units)`` opened since the factory started."""
+        with self._count_lock:
+            return self._unit_counts[0], self._unit_counts[1]
+
     def unit_of_work(self, write: bool = True) -> SqliteUnitOfWork:
-        """Return a fresh :class:`SqliteUnitOfWork` over a new connection.
+        """Return a fresh :class:`SqliteUnitOfWork` over this thread's connection.
 
         ``write=True`` (default) opens with ``BEGIN IMMEDIATE`` so the scope is
         safe for read-then-write sequences under concurrency; pass
         ``write=False`` ONLY for scopes that never write (deferred snapshot
         read that does not queue behind writers).
         """
-        return SqliteUnitOfWork(self.get_connection(), write=write, before_write=self._sync_runtime_writer_mode,
-                               writer_gate=self._writer_gate, busy_timeout_ms=self._config.busy_timeout_ms)
+        connection, release = self._checkout()
+        with self._count_lock:
+            self._unit_counts[1 if write else 0] += 1
+        return SqliteUnitOfWork(connection, write=write, before_write=self._sync_runtime_writer_mode,
+                               writer_gate=self._writer_gate, busy_timeout_ms=self._config.busy_timeout_ms,
+                               release=release)
 
     def configure_runtime_owner(self, owner_id, epoch, *, clock=None):
         self._runtime_owner = (owner_id, epoch) if owner_id is not None else None

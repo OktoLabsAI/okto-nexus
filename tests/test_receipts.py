@@ -9,7 +9,9 @@ sender), atomic with the lane transition, mirroring at-least-once truthfully
 from __future__ import annotations
 
 import pytest
+from fastapi.testclient import TestClient
 
+from okto_nexus.adapters.inbound.http.app import build_app
 from okto_nexus.adapters.inbound.mcp.server import bootstrap
 from okto_nexus.adapters.inbound.mcp.tools.events import (
     build_service as build_event_service,
@@ -19,6 +21,9 @@ from okto_nexus.adapters.inbound.mcp.tools.inbox import (
 )
 from okto_nexus.adapters.inbound.mcp.tools.messages import (
     build_service as build_message_service,
+)
+from okto_nexus.adapters.outbound.sqlite.observability_repo import (
+    SqliteObservabilityQueries,
 )
 
 
@@ -256,3 +261,51 @@ def test_opt_out_setting_disables_inbox_receipts(tmp_path):
     # Opted out: nothing lands in the sender's inbox (the message.read EVENT
     # still fires - the event channel is not part of the opt-out).
     assert inbox.count(agent_id="sender")["unread"] == 0
+
+
+def _exchange_with_receipt(bus):
+    _, messages, inbox, _, root = bus
+    sent = messages.create_message(
+        project_root=root,
+        from_agent_id="sender",
+        subject="s",
+        body="b",
+        target={"strategy": "direct", "agent_id": "receiver"},
+    )
+    inbox.pull(agent_id="receiver")
+    inbox.ack(agent_id="receiver", message_ids=[sent["message_id"]])
+    return sent["message_id"]
+
+
+def test_messages_list_hides_receipt_messages_unless_included(bus):
+    deps = bus[0]
+    sent_id = _exchange_with_receipt(bus)
+    with TestClient(build_app(deps), client=("127.0.0.1", 50200)) as client:
+        default = client.get("/api/v1/messages").json()["data"]
+        assert [m["message_id"] for m in default["items"]] == [sent_id]
+        assert default["total"] == 1 and default["items"][0]["kind"] == "message"
+
+        full = client.get("/api/v1/messages?include_receipts=true").json()["data"]
+        assert full["total"] == 2
+        kinds = {m["message_id"]: m["kind"] for m in full["items"]}
+        assert kinds.pop(sent_id) == "message"
+        (receipt_id, receipt_kind), = kinds.items()
+        assert receipt_kind == "receipt"
+
+        # A receipt stays readable by its own id.
+        assert client.get(f"/api/v1/messages/{receipt_id}").status_code == 200
+
+
+def test_graph_activity_ignores_receipt_messages(bus):
+    deps, _, inbox, _, _ = bus
+    _exchange_with_receipt(bus)
+    # The sender pulls and acknowledges the receipt itself.
+    pulled = inbox.pull(agent_id="sender")["messages"]
+    assert len(pulled) == 1
+    inbox.ack(agent_id="sender", message_ids=[pulled[0]["message_id"]])
+    queries = SqliteObservabilityQueries()
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        edges = queries.message_edges(uow, workspace_id=None, since_iso="2000-01-01T00:00:00Z")
+        last = queries.last_actions_by_agent(uow, workspace_id=None)
+    assert [(e["from"], e["to"], e["count"]) for e in edges] == [("sender", "receiver", 1)]
+    assert last["sender"]["type"] == "message.created"

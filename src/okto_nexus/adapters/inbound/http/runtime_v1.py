@@ -20,6 +20,7 @@ from ....application.execution_intents import (
 from ....application.execution_admission import submit_execution_operation
 from ....application.execution_capabilities import ExecutionCapabilityService
 from ....bootstrap.execution_authority import build_execution_access
+from ....bootstrap.embedded_inventory import send_installation_notices
 from ....application.executor_inventory_views import (
     read_executor_inventory,
 )
@@ -187,6 +188,14 @@ class RecoveryConfirmation(BaseModel):
     model_config = ConfigDict(extra='forbid')
     plan: dict
     confirmation: Literal['PREVIOUS_RUNTIME_PROCESSES_STOPPED']
+
+
+def _path_free_trust_detail(reason: str) -> str:
+    """Sentence for the inventory API: the full reason, with its paths, stays in the log (#67)."""
+    code = reason.split(":", 1)[0].strip() if ":" in reason else ""
+    prefix = f"{code}: " if code.isidentifier() and code.isupper() else ""
+    return (prefix + "the binary resolves outside the trusted --harness-root directories; "
+            "see the server log for the resolved path")
 
 
 def build_router() -> APIRouter:
@@ -477,6 +486,8 @@ def build_router() -> APIRouter:
                 snapshot=snapshot,
                 publication_ticket_id=verified.ticket_id,
                 refresh_delivery_id=refresh_delivery_id,
+                on_successions=lambda rows: send_installation_notices(
+                    request.app.state.deps, rows),
             )
 
         try:
@@ -527,6 +538,14 @@ def build_router() -> APIRouter:
             view = await anyio.to_thread.run_sync(_read)
         except OktoNexusError as error:
             return runtime_error(error, 'inventory.read')
+        owner = getattr(request.app.state, "embedded_inventory_owner", None)
+        details = getattr(owner, "trust_details", None)
+        if details and owner.key.executor_id == executor_id:
+            # Additive and optional: the Core reason for an untrusted candidate (#67).
+            for item in view["snapshot"].get("evidence", ()):
+                detail = details.get((item.get("adapter_id"), item.get("candidate_ref")))
+                if detail:
+                    item["trust_detail"] = _path_free_trust_detail(detail)
         return JSONResponse(view, headers={"Cache-Control": "no-store"})
 
     @router.post("/runtime/executors/{executor_id}/realizations")

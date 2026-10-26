@@ -154,6 +154,7 @@ from .tags import TagCatalogService
 DEFAULT_PAGE_LIMIT = 100
 #: Hard upper bound on a single page (defensive; keeps responses bounded).
 MAX_PAGE_LIMIT = 500
+OUTCOME_TEXT_LIMIT = 4000  # characters of an outcome text in a creator notice
 
 #: Strategies that NAME one specific agent (the D1b directed set): ``direct``
 #: requires the agent to be registered NOW; ``direct_with_fallback`` is the
@@ -1802,6 +1803,8 @@ class HandoffService:
             )
             # Opportunistic expiry first: a CLAIMED handoff whose lease already
             # elapsed is logically OPEN again, so its creator may cancel it.
+            before = self._handoffs.get(uow, workspace_id=workspace_id, handoff_id=handoff_id)
+            claimant = before.claimed_by if before is not None and before.status == STATUS_CLAIMED else None
             self._expire_old_leases(uow, workspace_id=workspace_id, now_iso=now)
             handoff = self._load_in_workspace(uow, workspace_id, handoff_id)
             if handoff.from_agent_id != agent_id:
@@ -1869,6 +1872,17 @@ class HandoffService:
                 payload=payload,
             )
             self._fail_dependents(uow, failed=updated, actor_agent_id=agent_id, now=now)
+            # The creator is the actor. The previous claimant, whose lease
+            # this call just expired, learns that the work is void.
+            if _is_nonempty_str(claimant) and claimant != agent_id:
+                self._notify_inbox(
+                    uow, workspace_id=workspace_id, recipient_agent_id=claimant, from_agent_id=agent_id,
+                    subject=f"handoff {handoff_id} cancelled by {agent_id}",
+                    body={"kind": EVENT_CANCELLED, "handoff_id": handoff_id, "status": STATUS_CANCELLED,
+                          "by_agent_id": agent_id, "previous_claimed_by": claimant,
+                          "reason": reason[:OUTCOME_TEXT_LIMIT] if _is_nonempty_str(reason) else None,
+                          "next_step": "stop work on this handoff"},
+                    now=now, trace_id=getattr(updated, "trace_id", None))
         return {"handoff_id": updated.handoff_id, "status": STATUS_CANCELLED}
 
     # ------------------------------------------------------------------ #
@@ -1932,6 +1946,19 @@ class HandoffService:
             managed_lease = self.runtime_work.owns_claim(uow, handoff_id=handoff_id) if self.runtime_work else False
             from ..domain.execution_principal import current_execution_principal
             principal = current_execution_principal.get()
+            watched = None
+            if (handoff.status == STATUS_CLAIMED and _is_nonempty_str(handoff.claimed_by)
+                    and agent_id in (handoff.from_agent_id, handoff.claimed_by) and handoff.lease_expires_at):
+                from . import handoff_lease_watch as watch
+                try:
+                    start = watch.lease_start(handoff.lease_expires_at, int(self._config.handoff_lease_ttl_seconds))
+                except OktoNexusError:
+                    start = None  # a lease time that is not canonical has no derived start
+                if start is not None:
+                    watched = (
+                        watch.last_progress_at(uow.connection, claimant=handoff.claimed_by,
+                            creator=handoff.from_agent_id, since=start) or start,
+                        watch.claimant_session(uow.connection, workspace_id=workspace_id, agent_id=handoff.claimed_by))
             payload_allowed = agent_id == handoff.claimed_by and (principal is None or (
                 self._execution_claims is not None and self._execution_claims.matches(uow,
                     handoff_id=handoff_id, claim_epoch=handoff.claim_epoch, scope=dict(principal.scope))))
@@ -1955,6 +1982,8 @@ class HandoffService:
             response["runtime_execution"] = runtime_execution
         if payload_allowed:
             response["payload"] = handoff.payload
+        if watched is not None:
+            response["last_progress_at"], response["claimant_session"] = watched
         # Verification contract exposure (I4/FR6): the three columns surface
         # top-level ONLY when non-NULL (the trace_id pattern) - a
         # non-verifiable handoff keeps its pre-I4 shape byte-identical.
@@ -2091,7 +2120,115 @@ class HandoffService:
                 },
             )
             expired.append(reopened.handoff_id)
+            if getattr(self._config, "handoff_notify_expiry", True):
+                self._notify_lease_expired(uow, handoff=handoff, reopened=reopened, now=now_iso)
         return expired
+
+    def _notify_lease_expired(self, uow: UnitOfWork, *, handoff: Any, reopened: Any, now: str) -> None:
+        """Tell the creator and the previous claimant that a lease expired.
+
+        The creator notice comes from the claimant. The claimant notice comes
+        from the creator. Both bodies name ``previous_claimed_by`` because the
+        claim is gone. Both notices start a runtime turn when the recipient has
+        a session. ``claim_epoch`` is the epoch of the claim that expired.
+        """
+        claimant, creator = handoff.claimed_by, handoff.from_agent_id
+        if not (_is_nonempty_str(claimant) and _is_nonempty_str(creator)) or claimant == creator:
+            return
+        body = {
+            "kind": "handoff.lease_expired",
+            "handoff_id": handoff.handoff_id,
+            "status": reopened.status,
+            "previous_claimed_by": claimant,
+            "claim_epoch": handoff.claim_epoch,
+            "lease_expired_at": handoff.lease_expires_at,
+            "next_step": "The handoff is OPEN again. Use handoff_get with this handoff_id to see it.",
+        }
+        subject = f"handoff {handoff.handoff_id} lease of {claimant} expired"
+        for recipient, sender in ((creator, claimant), (claimant, creator)):
+            self._notify_inbox(uow, workspace_id=handoff.workspace_id, recipient_agent_id=recipient,
+                from_agent_id=sender, subject=subject, body=body, now=now,
+                trace_id=getattr(handoff, "trace_id", None))
+
+    def watch_leases(self, uow: UnitOfWork, *, now_iso: str | None = None) -> int:
+        """Expire due leases and warn about silent claimants (one scheduler sweep).
+
+        With no CLAIMED handoff due, the cost is one probe of the partial index
+        of migration 156. Only workspaces with a lapsed lease run the expiry.
+        Returns the number of reopened handoffs.
+        """
+        from . import handoff_lease_watch as watch
+        now = now_iso or self._clock.now_iso()
+        ttl = int(self._config.handoff_lease_ttl_seconds)
+        fraction = float(getattr(self._config, "handoff_silence_warn_fraction", 0.0))
+        conn = uow.connection
+        horizon = iso_plus(now, ttl * (1 - fraction)) if fraction > 0 else now
+        due = watch.earliest_due(conn, horizon)
+        if due is None:
+            return 0
+        expired = 0
+        # INDEXED BY keeps this read on the partial index. Without it SQLite
+        # scans every handoff for the DISTINCT.
+        rows = conn.execute("SELECT DISTINCT workspace_id FROM handoffs INDEXED BY idx_handoffs_claimed_lease "
+                            "WHERE status='CLAIMED' AND lease_expires_at<?", (now,)).fetchall() if due < now else ()
+        for row in rows:
+            expired += len(self._expire_old_leases(uow, workspace_id=row[0], now_iso=now))
+        if fraction > 0:
+            self._warn_silent_claimants(uow, now=now, ttl=ttl, fraction=fraction)
+        return expired
+
+    def _warn_silent_claimants(self, uow: UnitOfWork, *, now: str, ttl: int, fraction: float,
+                               limit: int = 50) -> int:
+        """Send one ``handoff.claimant_silent`` notice per claim epoch to the creator.
+
+        A claim is silent when the claimant sent no message to the creator for
+        ``fraction`` of the lease. A containment notice for the same claim
+        replaces the warning. The marker row makes the notice once per epoch.
+        """
+        from . import handoff_lease_watch as watch
+        conn = uow.connection
+        horizon = iso_plus(now, ttl * (1 - fraction))
+        quiet_limit = iso_plus(now, -ttl * fraction)
+        rows = conn.execute(
+            "SELECT handoff_id,workspace_id,from_agent_id,claimed_by,claim_epoch,lease_expires_at,trace_id "
+            "FROM handoffs h WHERE status='CLAIMED' AND lease_expires_at>=? AND lease_expires_at<=? "
+            "AND NOT EXISTS (SELECT 1 FROM handoff_silence_notices s WHERE s.handoff_id=h.handoff_id "
+            "AND s.claim_epoch=h.claim_epoch) ORDER BY lease_expires_at LIMIT ?", (now, horizon, limit)).fetchall()
+        sent = 0
+        for row in rows:
+            claimant, creator = row["claimed_by"], row["from_agent_id"]
+            if not (_is_nonempty_str(claimant) and _is_nonempty_str(creator)) or claimant == creator:
+                continue
+            start = watch.lease_start(row["lease_expires_at"], ttl)
+            last = watch.last_progress_at(conn, claimant=claimant, creator=creator, since=start) or start
+            if last > quiet_limit:
+                continue  # progress inside the window: check again at the next sweep
+            conn.execute("INSERT OR IGNORE INTO handoff_silence_notices VALUES(?,?,?)",
+                         (row["handoff_id"], row["claim_epoch"], now))
+            if watch.contained(conn, claimant=claimant, handoff_id=row["handoff_id"], since=start):
+                continue
+            session = watch.claimant_session(conn, workspace_id=row["workspace_id"], agent_id=claimant)
+            silent = watch.minutes(last, now)
+            body = {
+                "kind": "handoff.claimant_silent",
+                "handoff_id": row["handoff_id"],
+                "claimed_by": claimant,
+                "claim_epoch": row["claim_epoch"],
+                "minutes_silent": silent,
+                "lease_expires_at": row["lease_expires_at"],
+                "claimant_session": session,
+                "options": [
+                    "Wait: the lease runs to " + row["lease_expires_at"] + ". The handoff then returns to the pool.",
+                    f"Ask: send a message to {claimant} and ask for status.",
+                    "Stop: call handoff_cancel with this handoff_id.",
+                ],
+            }
+            if self._notify_inbox(uow, workspace_id=row["workspace_id"], recipient_agent_id=creator,
+                    from_agent_id=claimant,
+                    subject=f"handoff {row['handoff_id']}: {claimant} silent for {silent} min",
+                    body=body, now=now, trace_id=row["trace_id"]):
+                sent += 1
+        return sent
 
     # ------------------------------------------------------------------ #
     # Helpers
@@ -2245,7 +2382,8 @@ class HandoffService:
         if not _is_nonempty_str(project_root):
             raise OktoNexusError(
                 ErrorCode.WORKSPACE_REQUIRED,
-                "project_root (workspace_id) is required for handoff operations.",
+                "project_root or workspace_id is required for handoff operations. "
+                "Use workspace_id (wsr_...) for a workspace created in the dashboard.",
                 {},
             )
         # resolve_workspace_id raises WORKSPACE_UNRESOLVED for irresolvable paths.
@@ -2384,6 +2522,9 @@ class HandoffService:
     ) -> list[str]:
         """Deliver a terminal outcome to the CREATOR's inbox (cross-workspace).
 
+        The notice also pushes a runtime turn when the creator has a session.
+        The outcome text is cut to ``OUTCOME_TEXT_LIMIT`` characters.
+
         The ``handoff.completed``/``handoff.rejected`` event may be invisible
         to the creator (visibility ``eligible``/``private`` with a target the
         creator does not match), and a terminal handoff leaves every listing
@@ -2403,7 +2544,7 @@ class HandoffService:
             "next_step": "handoff_get with this handoff_id for the full outcome",
         }
         if outcome_text is not None:
-            body[outcome_key] = outcome_text
+            body[outcome_key] = outcome_text[:OUTCOME_TEXT_LIMIT]
         if self._notify_inbox(
             uow,
             workspace_id=handoff.workspace_id,
@@ -2527,7 +2668,8 @@ class HandoffService:
         if self._handoffs.exists_any_workspace(uow, handoff_id=handoff_id):
             raise OktoNexusError(
                 ErrorCode.WORKSPACE_MISMATCH,
-                "handoff belongs to a different workspace.",
+                "handoff belongs to a different workspace. A project_root path never "
+                "resolves to a dashboard workspace. Pass workspace_id (wsr_...) instead.",
                 {"handoff_id": handoff_id, "workspace_id": workspace_id},
             )
         raise OktoNexusError(

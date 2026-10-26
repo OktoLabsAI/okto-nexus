@@ -26,6 +26,7 @@ import { LiveChip } from "../components/LiveChip";
 import { MessageDetail } from "../components/MessageDetailModal";
 import { PageContainer } from "../components/PageContainer";
 import { ResizablePanel } from "../components/ResizablePanel";
+import { formatTime, isoTitle } from "../timeFormat";
 
 const PAGE_SIZE = 25;
 
@@ -51,6 +52,15 @@ const inputCls =
 function recipientsKey(m: MessageRow): string {
   const to = m.deliveries.map((d) => d.recipient_agent_id).sort();
   return `${m.from_agent_id} → ${to.length ? to.join(", ") : "(no recipient)"}`;
+}
+
+const PREVIEW_CHARS = 120;
+
+// Body preview line: the preview field when the API sends one, else the
+// first 120 characters of the body.
+function previewText(m: MessageRow): string {
+  const text = m.preview || (m.body ?? "").slice(0, PREVIEW_CHARS);
+  return text.replace(/\s+/g, " ").trim();
 }
 
 function MessageRowItem({
@@ -97,12 +107,20 @@ function MessageRowItem({
           </span>
         )}
         <span className="ml-auto text-surface-400 dark:text-surface-500">
-          {m.created_at}
+          <span title={isoTitle(m.created_at)}>{formatTime(m.created_at)}</span>
         </span>
       </div>
-      <div className="text-surface-600 dark:text-surface-400 mt-1 truncate text-xs">
-        {m.subject ?? m.preview ?? ""}
+      <div className="text-surface-700 dark:text-surface-300 mt-1 truncate text-xs font-medium">
+        {m.subject ?? ""}
       </div>
+      {previewText(m) && (
+        <div
+          className="text-surface-500 dark:text-surface-400 truncate text-xs"
+          data-testid="message-preview"
+        >
+          {previewText(m)}
+        </div>
+      )}
     </button>
   );
 }
@@ -126,6 +144,7 @@ export function MessagesView({
   const [fromAgent, setFromAgent] = useState("");
   const [toAgent, setToAgent] = useState("");
   const [grouped, setGrouped] = useState(false);
+  const [showReceipts, setShowReceipts] = useState(false);
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const [agents, setAgents] = useState<AgentRow[]>([]);
   const [selected, setSelected] = useState<MessageRow | null>(null);
@@ -156,6 +175,8 @@ export function MessagesView({
     if (lane) params.lane = lane;
     if (fromAgent) params.from_agent = fromAgent;
     if (toAgent) params.to_agent = toAgent;
+    // The hub hides receipts by default. The toggle asks it to include them.
+    if (showReceipts) params.include_receipts = "true";
     api
       .messages(params)
       .then((data) => {
@@ -168,7 +189,7 @@ export function MessagesView({
         );
       })
       .catch((exc) => setError((exc as Error).message));
-  }, [workspace, page, lane, fromAgent, toAgent]);
+  }, [workspace, page, lane, fromAgent, toAgent, showReceipts]);
 
   useEffect(() => {
     fetchList();
@@ -217,6 +238,7 @@ export function MessagesView({
   };
 
   const reset = () => {
+    setShowReceipts(false);
     setLane("");
     setFromAgent("");
     setToAgent("");
@@ -346,6 +368,19 @@ export function MessagesView({
           />
         </div>
 
+        <label className="flex items-center gap-2 text-xs text-surface-600 dark:text-surface-300">
+          <input
+            type="checkbox"
+            checked={showReceipts}
+            onChange={(e) => {
+              setShowReceipts(e.target.checked);
+              setPage(1);
+            }}
+            data-testid="show-receipts"
+          />
+          Show receipts
+        </label>
+
         <button className="btn btn-secondary w-full justify-center" onClick={reset}>
           Reset filters
         </button>
@@ -470,7 +505,7 @@ export function MessagesView({
                         {h.score.toFixed(3)}
                       </span>
                       <span className="ml-auto text-surface-400 dark:text-surface-500">
-                        {h.created_at}
+                        <span title={isoTitle(h.created_at)}>{formatTime(h.created_at)}</span>
                       </span>
                     </div>
                     <div className="text-surface-600 dark:text-surface-400 mt-1 truncate pl-7 text-xs">

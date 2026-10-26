@@ -157,7 +157,7 @@ def test_broadcast_charges_one_message_and_bounds_each_child(runtime, budget, st
         assert uow.connection.execute("SELECT generated_messages,admitted_executions FROM runtime_causal_roots").fetchone()[:] == (int(sends > 0), budget)
         decisions = uow.connection.execute("SELECT state FROM runtime_relay_decisions WHERE result_id=?", (row["result_id"],)).fetchall()
         assert len(decisions) == 2 and sum(r[0] == "ENQUEUED" for r in decisions) == sends
-        assert uow.connection.execute("SELECT COUNT(*) FROM messages WHERE subject='Runtime result'").fetchone()[0] == 1
+        assert uow.connection.execute("SELECT COUNT(*) FROM messages WHERE subject='Fanout output'").fetchone()[0] == 1
         assert uow.connection.execute("SELECT COUNT(*) FROM events WHERE type='runtime.relay_blocked'").fetchone()[0] == 2 - sends
         uow.connection.execute("UPDATE message_deliveries SET status='read',read_at='2000-01-01T00:00:00.000Z'")
         runtime.deps.repos.deliveries.prune_read_before(uow, cutoff="2099-01-01T00:00:00.000Z", limit=100)

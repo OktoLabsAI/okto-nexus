@@ -125,7 +125,7 @@ add_resource(
     slug="tool-docs/messages",
     name="Tool docs - messages & channels",
     description="Full reference for message_create / channel_create / channel_list and the migrated message_get/list/wait shims.",
-    version="5",
+    version="6",
     body="""\
 # message_create
 Select either ``project_root`` or ``workspace_id``. An explicit ``workspace_id``
@@ -133,7 +133,9 @@ must already exist; it requires no local path and never creates a workspace.
 Supplying both selectors is rejected. All message permissions, audience rules,
 channel/parent scope checks and approval requirements apply to either selector.
 
-Persist a message and emit ``message.created`` in one transaction. The response
+Persist a message and emit ``message.created`` in one transaction. ``subject``
+is optional: without it (or with the generic ``Runtime result``), the subject is
+the first line of ``body``, cut to 80 characters. The response
 IS your delivery confirmation: ``recipients`` names exactly who received it in
 their inbox (the fan-out commits atomically with the send) and
 ``delivered_count`` totals it. Track what happens next with
@@ -156,6 +158,10 @@ to execute work or produce a deliverable, create a handoff; a message may
 discuss or reference that handoff but must not be the sole delegation record.
 See okto-nexus://reference/communication for the normative decision policy.
 
+Set ``no_reply=true`` on a final message (for example an acknowledgement). The
+message reaches the recipient inbox, but the hub starts no runtime turn for it,
+so no reply is expected. The default is false.
+
 # channel_create
 Create a channel by name (idempotent). Channels are organizational LABELS, not
 ACLs: any agent in the workspace may read/post to any channel; the channel does
@@ -172,7 +178,11 @@ inbox_history. message_list -> inbox_peek / inbox_history (your messages) or
 event_get (bus traffic). message_wait -> inbox_count polling or event_wait. The
 shims return ``{ok:false,error:{code:"MIGRATED"}}`` naming the exact replacement;
 they are kept so a pre-S3 client gets prescriptive guidance instead of an opaque
-"unknown tool".""",
+"unknown tool".
+
+A managed session can call inbox_count, inbox_peek, inbox_history and
+message_status. message_status is sender-only for sessions. inbox_pull,
+inbox_ack and inbox_extend need a key.""",
 )
 
 add_resource(
@@ -235,7 +245,9 @@ even while you keep acknowledging).
 Track a message you SENT: ``{message_id, deliveries, count}`` where each delivery
 is ``{recipient, status, attempts, read_at}`` and status is
 unread/delivered/read/parked. Use it instead of re-sending when a recipient
-seems silent.
+seems silent. A session sees only messages it sent: any other id returns
+NOT_FOUND. A result publication also returns ``relay_state`` and
+``relay_reason``.
 
 # profile parameter (inbox_pull/peek/history; also event_get/event_wait)
 One of: default (all fields minus dead ones), summary (minimal + follow_up -
@@ -285,6 +297,8 @@ add_resource(
     body="""\
 All handoff operations accept exactly one project_root or existing workspace_id.
 Use workspace_id for a logical or remote workspace without a Server-local path.
+A workspace created in the dashboard has an ID that starts with wsr_. A project_root
+path does not resolve to that ID. Always pass workspace_id (wsr_...) for such a workspace.
 Managed sessions must use their bound workspace; the selector does not change
 actor, claim, visibility, approval or execution-grant authorization.
 

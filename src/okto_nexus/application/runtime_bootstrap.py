@@ -4,17 +4,59 @@ This is context, not a principal or an authentication mechanism. Callers must
 authorize the operation before projecting it and revalidate before transport.
 No metadata, credential, private policy, path or native configuration is copied.
 """
+from ..domain.messages import is_lifecycle_notice
 from ..domain.routing import normalize_capabilities
 from ..errors import ErrorCode, OktoNexusError
 import json
+
+
+def relay_enabled(endpoint):
+    config = endpoint.get("public_config") if hasattr(endpoint, "get") else None
+    if isinstance(config, str):
+        try:
+            config = json.loads(config)
+        except ValueError:
+            config = None
+    return bool(isinstance(config, dict) and config.get("relay_results") is True)
+
+
+def relay_text(relay_results, max_depth=None):
+    """Return the true statement about what happens to the final answer."""
+    if relay_results:
+        hops = f"{max_depth} hops" if max_depth else "a fixed number of hops"
+        return ("Your final answer is sent to the sender as a new message. "
+                "Do not also send it with message_create. "
+                "End with NO_REPLY when no answer is needed. "
+                f"A conversation stops relaying after {hops}; then use message_create.")
+    return "Your final answer is stored only. To reach any agent, call message_create."
 
 
 def delivery_prompt(envelope):
     """Render Nexus tool context; retain transport trust metadata in storage only."""
     context = dict(envelope)
     context.pop("trust", None)
-    return ("NEXUS DELIVERY: respond to the sender's request using your available capabilities.\n"
+    runtime = context.get("runtime_context") or {}
+    note = ""
+    notice = any(isinstance(part, dict) and part.get("type") == "text" and is_lifecycle_notice(part.get("text"))
+                 for part in context.get("content") or ())
+    if notice:
+        # The relay skips a turn that answers a system notice (#92).
+        note = " This is a system notice. " + relay_text(False)
+    elif runtime.get("intent") != "handoff_execute" and "relay_results" in runtime:
+        note = " " + relay_text(runtime["relay_results"], (runtime.get("causality") or {}).get("max_depth"))
+    if context.get("sent_at"):
+        note += (f" This message was sent at {context['sent_at']}. If a newer message from the same sender "
+                 "is in this turn or in your inbox, answer the newest one.")
+    superseded = runtime.get("supersedes")
+    if superseded:
+        # The block carries these texts, so the JSON copy does not repeat them.
+        context["runtime_context"] = {k: v for k, v in runtime.items() if k != "supersedes"}
+    text = ("NEXUS DELIVERY: respond to the sender's request using your available capabilities." + note + "\n"
             + json.dumps(context, ensure_ascii=False, sort_keys=True))
+    if superseded:
+        text += ("\nSUPERSEDES: these earlier messages from the same sender were not delivered. "
+                 "Their text follows, oldest first.\n" + json.dumps(superseded, ensure_ascii=False, sort_keys=True))
+    return text
 
 
 def delivery_context(uow, *, agents, endpoint, profile, intent):
@@ -29,6 +71,7 @@ def delivery_context(uow, *, agents, endpoint, profile, intent):
         "endpoint_id": endpoint["endpoint_id"],
         "execution_profile": {"profile_id": profile["profile_id"], "revision": profile["revision"]} if profile else None,
         "intent": intent,
+        "relay_results": relay_enabled(endpoint),
         "completion": {"automatic_on_turn_end": False,
                        "mode": "authenticated_nexus_call" if intent == "handoff_execute" else "conversation_only"},
         "instructions": (
@@ -41,6 +84,6 @@ def delivery_context(uow, *, agents, endpoint, profile, intent):
                if intent == "handoff_execute" else
                "For handoffs, use the Nexus retrieval, claim and completion tools and the returned claim epoch. "
                "Use the Nexus messaging tools to communicate with other agents when available. "
-               "Your final conversational response is returned to the sender by Nexus.")
+               + relay_text(relay_enabled(endpoint)))
         ),
     }

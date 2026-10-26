@@ -1202,6 +1202,12 @@ class ObservabilityQueries(Protocol):
         """
         ...
 
+    def contained_claimant_sessions(
+        self, uow: UnitOfWork, claims: dict[str, tuple[str, str]]
+    ) -> dict[str, dict[str, Any]]:
+        """Handoffs whose claimant's newest session was contained since the claim."""
+        ...
+
     def handoff_runtime_facts(self, uow: UnitOfWork, handoff_ids: list[str]) -> dict[str, dict[str, Any]]:
         """Read execution facts only for the already-authorized page of handoffs."""
         ...
@@ -1258,6 +1264,17 @@ class ObservabilityQueries(Protocol):
         status: str | None = None,
     ) -> list[dict[str, Any]]: ...
 
+    def agent_unread_deliveries(
+        self,
+        uow: UnitOfWork,
+        *,
+        agent_id: str,
+        since_iso: str | None,
+        limit: int,
+    ) -> tuple[list[dict[str, Any]], int]:
+        """Newest unread deliveries for one recipient and their total count."""
+        ...
+
     def messages_page(
         self,
         uow: UnitOfWork,
@@ -1276,8 +1293,13 @@ class ObservabilityQueries(Protocol):
         undelivered_only: bool = False,
         include_body: bool = False,
         message_id: str | None = None,
+        include_receipts: bool = False,
     ) -> tuple[list[dict[str, Any]], int]:
         """Paginated message history with per-recipient deliveries; (items, total).
+
+        Receipt notifications are left out unless ``include_receipts`` is true
+        or ``message_id`` selects one message. Each item carries ``kind``
+        (``message`` or ``receipt``).
 
         ``peer_id`` (with ``agent_id``) narrows to the CONVERSATION between the
         pair, in both directions. ``undelivered_only`` selects the agent's

@@ -136,7 +136,8 @@ def _backfill_catalog_batch(factory, manifest, *, batch_size=100):
 
 
 def _row_digest(row):
-    return hashlib.sha256(json.dumps(dict(row),sort_keys=True,separators=(",",":"),
+    row = {k: v for k, v in dict(row).items() if k != "runtime_update_policy"}  # Added after the baseline (#89).
+    return hashlib.sha256(json.dumps(row,sort_keys=True,separators=(",",":"),
                                     ensure_ascii=True).encode()).hexdigest()
 
 

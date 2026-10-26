@@ -58,3 +58,11 @@ def test_invalid_log_level_fails_closed():
         _split_serve_args(["--log-level", "loud"], {})
     assert ei.value.code == ErrorCode.CONFIG_ERROR.value
     assert ei.value.details["log_level"] == "loud"
+
+
+def test_auto_claim_help_default_matches_config_default():
+    from okto_nexus.adapters.inbound.cli.serve import SERVE_USAGE
+    from okto_nexus.config import NexusConfig
+
+    assert NexusConfig.runtime_handoff_auto_claim_enabled is True
+    assert "Startup rollout gate (default true)" in SERVE_USAGE

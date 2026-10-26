@@ -169,6 +169,31 @@ per participant and copy its `nxs_...` key immediately: Nexus stores only the
 hash and shows plaintext only at creation or regeneration. Capability and tag
 values must first exist in **Registry** before an identity can use them.
 
+### Run harness teams
+
+A worker that runs under a harness needs four things before the hub starts
+its work from a broadcast handoff. Each item below is a separate gate.
+
+1. Discovery roots. Pass them to `serve`:
+   - `--harness-root P` approves one installation root. Repeat the flag for
+     each trusted directory. The hub accepts at most 32 roots.
+   - `--pi-install-root P` and `--pi-node P` set the Pi installation. Use
+     both flags together. Use `--pi-node` only for a Node executable.
+   - Each path must be absolute and must exist. The hub resolves symbolic
+     links and uses the resolved path. A path that does not resolve is
+     refused at startup. The flags do not add directories to PATH.
+2. Execution grant. The agent needs a current grant with the `execute_work`
+   action. Finding an installation does not give authority.
+3. Agent opt-in. Set `broadcast_handoff_auto_claim` for the agent, or for the
+   global default, in the runtime policy. The default is off for each agent.
+4. Startup gate. The hub starts auto-claim only when both
+   `runtime_handoff_auto_claim_enabled` (default true; env
+   `OKTO_NEXUS_RUNTIME_HANDOFF_AUTO_CLAIM_ENABLED`) and
+   `feature_harness_integrations` (default true) are on. If one is off,
+   the hub does not start new work. Recovery of existing work continues.
+
+Details: [R4 operations guide](docs/harness-integrations/r4-operations.md).
+
 ## Connect an MCP client
 
 Configure the selected MCP client to use this streamable-HTTP endpoint:
@@ -618,6 +643,22 @@ Nuances:
 - memory REST supports operator curation independently, but MCP memory tools
   are registered only when the flag is on at startup.
 
+### Chain limits
+
+Each root message has limits for the chain that it starts. A new root copies
+the values when the hub creates it. A change in **Settings** applies to new
+roots only. A cap error returns `QUOTA_EXCEEDED` to the caller.
+
+| Setting | Default | Range | Env var | Flag |
+|---|---|---|---|---|
+| `max_relay_depth` | 4 | 0 to 64 | `OKTO_NEXUS_MAX_RELAY_DEPTH` | `--max-relay-depth` |
+| `max_executions_per_root` | 16 | 1 to 1024 | `OKTO_NEXUS_MAX_EXECUTIONS_PER_ROOT` | `--max-executions-per-root` |
+| `root_deadline_seconds` | 1800 | 1 to 86400 | `OKTO_NEXUS_ROOT_DEADLINE_SECONDS` | `--root-deadline-seconds` |
+
+- `max_relay_depth` stops agents that relay work to each other without end.
+- `max_executions_per_root` limits the work that one root can start.
+- `root_deadline_seconds` closes a chain that runs too long.
+
 ## MCP surface
 
 HTTP MCP publishes the tools enabled by the startup configuration. Use
@@ -797,6 +838,7 @@ an explicit value such as `--feature-trace true`.
 | `OKTO_NEXUS_DB_PATH` | `--db-path` | `{home}/nexus.db` | SQLite database |
 | `OKTO_NEXUS_BUSY_TIMEOUT_MS` | `--busy-timeout-ms` | 5000 | Minimum 0 |
 | `OKTO_NEXUS_POLL_INTERVAL_MS` | `--poll-interval-ms` | 200 | Waiter interval; minimum 1 |
+| `OKTO_NEXUS_RUNTIME_IDLE_INTERVAL_MS` | `--runtime-idle-interval-ms` | 1000 | Longest sleep of the serve runtime loops when no work is pending; 100 to 60000 |
 | `OKTO_NEXUS_MAX_WAIT_TIMEOUT_SECONDS` | `--max-wait-timeout-seconds` | 30 | Server wait ceiling; minimum 0 |
 | `OKTO_NEXUS_HANDOFF_LEASE_TTL_SECONDS` | `--handoff-lease-ttl-seconds` | 300 | Minimum 1 |
 | `OKTO_NEXUS_MAX_INLINE_BYTES` | `--max-inline-bytes` | 65536 | Inline artifact/content limit |

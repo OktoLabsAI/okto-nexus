@@ -108,8 +108,16 @@ def publish_executor_realization(
             executor_id=principal.executor_id, agent_id=principal.agent_id, request=request)
 
 
-def _persist_realization(uow, *, server_id, executor_id, agent_id, request):
-    """Persist a validated realization after the caller authenticates its owner."""
+def _persist_realization(uow, *, server_id, executor_id, agent_id, request,
+                         workspace_root=None):
+    """Persist a validated realization after the caller authenticates its owner.
+
+    ``workspace_root`` is the approved local root of an embedded realization.
+    Remote publications carry only a digest and pass no root.
+    """
+    if workspace_root is not None and not workspace_root.strip():
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                              "A workspace root must not be empty.", {})
     body_hash = "sha256:" + hashlib.sha256(canonical_json(dict(request))).hexdigest()
     conn = uow.connection
     old = conn.execute(
@@ -164,14 +172,21 @@ def _persist_realization(uow, *, server_id, executor_id, agent_id, request):
     if workspace_id is None:
         workspace_id = "wsr_" + secrets.token_hex(16)
         conn.execute(
-            "INSERT INTO workspaces(workspace_id,display_name,created_at) "
-            "VALUES (?,?,strftime('%Y-%m-%dT%H:%M:%fZ','now'))",
-            (workspace_id, request["workspace_label"]),
+            "INSERT INTO workspaces(workspace_id,display_name,root_realpath,"
+            "created_at) VALUES (?,?,?,strftime('%Y-%m-%dT%H:%M:%fZ','now'))",
+            (workspace_id, request["workspace_label"], workspace_root),
         )
     elif conn.execute("SELECT 1 FROM workspaces WHERE workspace_id=?",
                       (workspace_id,)).fetchone() is None:
         raise OktoNexusError(ErrorCode.NOT_FOUND,
                               "The logical workspace was not found.", {})
+    elif workspace_root is not None:
+        # Repair a workspace that has no root. Never replace an existing root.
+        conn.execute(
+            "UPDATE workspaces SET root_realpath=? WHERE workspace_id=? "
+            "AND (root_realpath IS NULL OR trim(root_realpath)='')",
+            (workspace_root, workspace_id),
+        )
     workspace_binding_id = "wxb_" + secrets.token_hex(16)
     realization_ref = "real_" + secrets.token_hex(16)
     handle = "root_" + secrets.token_hex(16)

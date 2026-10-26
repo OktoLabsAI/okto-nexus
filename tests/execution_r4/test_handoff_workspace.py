@@ -16,10 +16,14 @@ def forbid_paths(monkeypatch):
 
 
 def workspace(setup):
-    with setup[0].connection_factory.unit_of_work(write=False) as uow:
-        row = uow.connection.execute("SELECT workspace_id,root_realpath FROM workspaces").fetchone()
-        assert row[1] is None
-        return row[0]
+    """Return the workspace as a logical one. Local realization stores its approved root (#75).
+
+    A logical (digest or remote) workspace has no Server-local path, so clear it.
+    """
+    with setup[0].connection_factory.unit_of_work() as uow:
+        wid = uow.connection.execute("SELECT workspace_id FROM workspaces").fetchone()[0]
+        uow.connection.execute("UPDATE workspaces SET root_realpath=NULL WHERE workspace_id=?", (wid,))
+        return wid
 
 
 def test_logical_handoff_mcp_create_http_claim_mcp_complete(connected_local, monkeypatch):
@@ -91,3 +95,17 @@ def test_logical_handoff_approval_retains_workspace(connected_local, monkeypatch
     assert response.json()["data"]["executed_result"]["workspace_id"] == wid
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute("SELECT workspace_id FROM handoffs").fetchone()[0] == wid
+
+
+def test_project_root_on_dashboard_workspace_names_workspace_id(connected_local, monkeypatch):
+    setup, binding, _ = connected_local
+    wid = workspace(setup)
+    hid, _, _, call = prepare(setup, binding, monkeypatch, workspace_id=wid)
+    from test_pr34_remediation import tool
+    _, _, client, headers, *_, root = setup
+    key = headers["subject"]["Authorization"].removeprefix("Bearer ")
+    wrong = tool(client, key, "handoff_get", dict(project_root=str(root), handoff_id=hid, agent_id="subject"))
+    assert not wrong["ok"] and wrong["error"]["code"] == "WORKSPACE_MISMATCH", wrong
+    assert "workspace_id" in wrong["error"]["message"] and "wsr_" in wrong["error"]["message"]
+    right = call("handoff_get", handoff_id=hid, agent_id="subject")
+    assert right["ok"], right

@@ -67,6 +67,12 @@ class SqliteWorkspaceRepo(_ClockBacked):
         root_realpath: str | None = None,
         last_seen_at: str | None = None,
     ) -> Workspace:
+        if root_realpath is not None and not root_realpath.strip():
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                "A workspace root_realpath must not be empty.",
+                {"workspace_id": workspace_id},
+            )
         now = last_seen_at or self._now()
         try:
             uow.connection.execute(

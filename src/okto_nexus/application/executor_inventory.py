@@ -55,8 +55,12 @@ def publish_executor_inventory(factory, *, principal: ExecutorKey,
                                snapshot: Mapping[str, Any],
                                publication_ticket_id: str | None = None,
                                embedded_owner: tuple[str, int, int] | None = None,
-                               refresh_delivery_id: str | None = None) -> InventoryPublication:
-    """Store one authenticated snapshot; same sequence/content is idempotent."""
+                               refresh_delivery_id: str | None = None,
+                               on_successions=None) -> InventoryPublication:
+    """Store one authenticated snapshot; same sequence/content is idempotent.
+
+    ``on_successions`` receives the new installation succession rows after commit.
+    """
     from nexus_connector_core import CoreError, __version__, verify_executor_inventory_snapshot
     from nexus_connector_core.protocol import canonical_json
 
@@ -169,7 +173,7 @@ def publish_executor_inventory(factory, *, principal: ExecutorKey,
                 server_id=principal.server_id, executor_id=principal.executor_id,
                 producer_instance_id=producer_instance_id, sequence=sequence)
         from .execution_inventory_revalidation import revalidate_inventory
-        revalidate_inventory(conn, snapshot)
+        successions = revalidate_inventory(conn, snapshot)
         # Selected evidence is retained separately before pruning publications.
         conn.execute(
             "DELETE FROM execution_inventory_snapshots WHERE server_id=? AND executor_id=? "
@@ -179,6 +183,8 @@ def publish_executor_inventory(factory, *, principal: ExecutorKey,
             (principal.server_id, principal.executor_id,
              principal.server_id, principal.executor_id),
         )
+    if successions and on_successions is not None:
+        on_successions(successions)
     return InventoryPublication(principal.server_id, principal.executor_id,
                                 sequence, revision, False)
 

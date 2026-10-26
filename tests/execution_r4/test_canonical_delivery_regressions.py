@@ -146,16 +146,22 @@ def test_sqlite_capacity_cannot_acknowledge_message_or_execution(connected_local
     client.headers["host"] = "127.0.0.1:8000"
     with deps.connection_factory.unit_of_work(write=False) as uow:
         pages = uow.connection.execute("PRAGMA page_count").fetchone()[0]
-    connect = deps.connection_factory.get_connection
-    def limited():
-        conn = connect()
+    # Units of work reuse one pooled connection for each thread, and the pool
+    # opens its connections through _open_connection. Patch that method, and
+    # close the idle pool before and after, so no connection opened without
+    # the limit serves the request and no limited connection outlives it.
+    connect = deps.connection_factory._open_connection
+    def limited(**kwargs):
+        conn = connect(**kwargs)
         conn.execute(f"PRAGMA max_page_count={pages}")
         return conn
+    deps.connection_factory.close()
     with monkeypatch.context() as patch:
-        patch.setattr(deps.connection_factory, "get_connection", limited)
+        patch.setattr(deps.connection_factory, "_open_connection", limited)
         response = tool(client, headers["operator"]["Authorization"].removeprefix("Bearer "), "message_create",
             dict(project_root=str(root), from_agent_id="operator", target=dict(strategy="direct", agent_id="subject"),
                 body="x" * 60000, subject="Storage capacity"))
+    deps.connection_factory.close()
     assert not response["ok"] and response["error"]["code"] == "DB_ERROR", response
     with deps.connection_factory.unit_of_work(write=False) as uow:
         for table in ("messages", "message_deliveries", "delivery_outbox", "execution_operations"):
