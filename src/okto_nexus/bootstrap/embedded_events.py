@@ -15,10 +15,29 @@ class EmbeddedPublicationDeferred(Exception):
     """Core history is durable; only its Server transaction needs a retry."""
 
 
+class Published:
+    """Result of a step that published events. It is always true.
+
+    ``active`` is false when the batch holds only lease renewals. Renewals are
+    not work and must not keep the host on its short tick. ``error_seen`` is
+    true when the batch holds an event of category ``error``.
+    """
+    __slots__ = ("active", "error_seen")
+
+    def __init__(self, active, error_seen):
+        self.active = active
+        self.error_seen = error_seen
+
+    def __bool__(self):
+        return True
+
+
 class EmbeddedEventPublisher:
     def __init__(self, owner):
         self.owner = owner
         self.after = 0
+        # Last event sequence this process sent to Core as an ACK, by stream.
+        self._acked = {}
 
     def _page(self, *, after=None, agent_id=None, session_id=None, live_only=False, unretired_only=False):
         predicates = ["l.server_id=?", "l.executor_id=?", "l.rowid>?"]
@@ -59,7 +78,11 @@ class EmbeddedEventPublisher:
             after = await asyncio.to_thread(self._watermark,scope)
             cursor = EventCursor(scope["server_id"],scope["executor_id"],scope["session_id"],scope["stream_epoch"],after)
             # This ACK was committed in Nexus even if a previous Core ACK failed.
-            await journal.acknowledge_events(cursor,after)
+            # Skip it when this process already sent the same value.
+            stream = (scope["session_id"],scope["stream_epoch"])
+            if self._acked.get(stream) != after:
+                await journal.acknowledge_events(cursor,after)
+                self._acked[stream] = after
             iterator = journal.events(cursor)
             events, size = [], 0
             try:
@@ -90,6 +113,8 @@ class EmbeddedEventPublisher:
                 await iterator.aclose()
             if not events:
                 return False
+            active = any(e.get("native_type") != "core.lease_renewed" for e in events)
+            error_seen = any(e.get("category") == "error" for e in events)
             channel = self.owner.channel
             frame = {k:scope[k] for k in ("server_id","executor_id","binding_id","agent_id","session_id","stream_epoch")}
             frame.update(type="event.batch",protocol_major=1,contract_revision=R4_PREVIEW_REVISION,
@@ -109,7 +134,8 @@ class EmbeddedEventPublisher:
             if dispatcher is not None:
                 dispatcher.wake()
             await journal.acknowledge_events(cursor,ack["sequence"])
-            return True
+            self._acked[stream] = ack["sequence"]
+            return Published(active, error_seen)
         return await self.owner.host.with_history(executor_id=scope["executor_id"],
             session_id=scope["session_id"],read=publish)
 
@@ -127,16 +153,22 @@ class EmbeddedEventPublisher:
                 await self.step(scope)
         return bool(rows)
 
-    async def recover(self, *, agent_id=None, session_id=None, live_only=False, progress=None):
+    async def recover(self, *, agent_id=None, session_id=None, live_only=False, progress=None, stats=None):
+        """Publish pending events. ``stats`` collects ``active`` and ``error_seen`` flags."""
         after = 0
+        published = False
         while True:
             rows = await asyncio.to_thread(self._page, after=after, agent_id=agent_id,
                                           session_id=session_id, live_only=live_only, unretired_only=True)
             if not rows:
-                return
+                return published
             for scope in rows:
                 for _ in range(4096):
                     advanced = await self.step(scope)
+                    published = published or bool(advanced)
+                    if stats is not None and advanced:
+                        stats["active"] = stats.get("active", False) or advanced.active
+                        stats["error_seen"] = stats.get("error_seen", False) or advanced.error_seen
                     if progress is not None:
                         progress()
                     # Live streams have no finite tail. Publish a bounded page

@@ -42,6 +42,11 @@ body {
     transition-all duration-200 ease-out text-sm;
 }
 
+.btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .btn:active {
   transform: scale(0.97);
 }

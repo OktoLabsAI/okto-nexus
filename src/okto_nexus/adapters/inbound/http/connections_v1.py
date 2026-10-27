@@ -249,6 +249,75 @@ def build_router() -> APIRouter:
             return binding_error(error, "binding.apply")
         return JSONResponse(view, headers={"Cache-Control": "no-store"})
 
+    @router.post('/connections/bindings:revalidate')
+    async def revalidate_bindings(request: Request) -> JSONResponse:
+        """Operator recovery after a harness update: accept the current installation for all bindings."""
+        if get_authenticated_agent() is None:
+            return v1_err(401, 'AUTH_FAILED', 'Authentication is required.')
+        from ....application.execution_inventory_revalidation import revalidate_all_bindings
+        deps = request.app.state.deps
+        context = runtime_request_context()
+        try:
+            value = await anyio.to_thread.run_sync(lambda: revalidate_all_bindings(
+                deps.connection_factory, context=context, access=build_execution_access(deps)))
+        except OktoNexusError as error:
+            return binding_error(error, 'binding.revalidate')
+        return JSONResponse(value, headers={'Cache-Control': 'no-store'})
+
+    @router.get('/connections/installation-successions')
+    async def list_installation_successions(request: Request, state: str = 'held') -> JSONResponse:
+        """Operator lists held successor builds that still wait for an accept."""
+        if get_authenticated_agent() is None:
+            return v1_err(401, 'AUTH_FAILED', 'Authentication is required.')
+        if state != 'held':
+            return v1_err(422, 'VALIDATION_ERROR', 'Only state=held is supported.')
+        from ....application.execution_installation_succession import list_held_successions
+        deps = request.app.state.deps
+        context = runtime_request_context()
+
+        def listing():
+            access = build_execution_access(deps)
+            with deps.connection_factory.unit_of_work() as uow:
+                access.authorize_maintenance(context, uow=uow)
+                return {'items': list_held_successions(uow.connection)}
+
+        try:
+            value = await anyio.to_thread.run_sync(listing)
+        except OktoNexusError as error:
+            return binding_error(error, 'installation.succession.list')
+        return JSONResponse(value, headers={'Cache-Control': 'no-store'})
+
+    @router.post('/connections/installation-successions/{succession_id}:accept')
+    async def accept_installation_succession(succession_id: str, request: Request) -> JSONResponse:
+        """Operator accepts a held successor build. The hub relabels it on the next inventory tick."""
+        if get_authenticated_agent() is None:
+            return v1_err(401, 'AUTH_FAILED', 'Authentication is required.')
+        # Lazy import: the module comes from the succession package.
+        from ....application.execution_installation_succession import accept_succession, probe_held_successor
+        deps = request.app.state.deps
+        context = runtime_request_context()
+        owner = getattr(request.app.state, 'embedded_inventory_owner', None)
+
+        def accept():
+            access = build_execution_access(deps)
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                access.authorize_maintenance(context, uow=uow)
+                version = probe_held_successor(uow.connection, succession_id,
+                                               getattr(owner, 'raw_candidates', ()))
+            with deps.connection_factory.unit_of_work() as uow:
+                access.authorize_maintenance(context, uow=uow)
+                row = accept_succession(uow.connection, succession_id, context.actor_agent_id, version)
+            if owner is not None and row.get('id') is not None:
+                from ....bootstrap.embedded_inventory import send_installation_notices
+                send_installation_notices(deps, (row,))
+            return row
+
+        try:
+            value = await anyio.to_thread.run_sync(accept)
+        except OktoNexusError as error:
+            return binding_error(error, 'installation.succession.accept')
+        return JSONResponse(value, headers={'Cache-Control': 'no-store'})
+
     @router.get('/connections/status')
     async def connections_status(request: Request) -> JSONResponse:
         if get_authenticated_agent() is None:

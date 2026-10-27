@@ -532,6 +532,18 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
             "status='unread',lease_expires_at=NULL WHERE consumer_kind='push' AND consumer_operation_id=? "
             "AND status IN ('unread','delivered')", (operation_id,)).rowcount == 1
 
+    def mark_runtime_superseded(self, uow, *, operation_id, at):
+        """Consume a superseded push reservation; its text travels in the newer turn (#93).
+
+        The row stays owned by the cancelled operation, as the runtime path keeps it.
+        """
+        return uow.connection.execute("UPDATE message_deliveries SET status='read',"
+            "delivered_at=COALESCE(delivered_at,?),read_at=? "
+            "WHERE status IN ('unread','delivered') AND consumer_kind='push' AND consumer_operation_id=? "
+            "AND delivery_id IN (SELECT o.delivery_id FROM delivery_outbox o WHERE o.operation_id=? "
+            "AND o.status='CANCELLED' AND substr(o.reason,1,14)='superseded_by:')",
+            (at, at, operation_id, operation_id)).rowcount == 1
+
     def mark_external_work_ack(self, uow, *, operation_id, session_id, at):
         """CAS after application authentication; no native terminal is fabricated."""
         return uow.connection.execute("UPDATE message_deliveries SET status='read',read_at=? "

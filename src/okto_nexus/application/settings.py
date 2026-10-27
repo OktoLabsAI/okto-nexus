@@ -32,10 +32,10 @@ class SettingSpec:
     """One editable knob: type, bounds and the operator-facing description."""
 
     key: str
-    type: str  # "int" | "bool" | "enum"
+    type: str  # "int" | "float" | "bool" | "enum"
     description: str
-    minimum: int | None = None
-    maximum: int | None = None
+    minimum: float | None = None
+    maximum: float | None = None
     choices: tuple[str, ...] | None = None
     requires_restart: bool = False
     group: str = "general"
@@ -54,11 +54,25 @@ SETTING_SPECS: tuple[SettingSpec, ...] = (
         choices=("manual", "deny", "auto_replace"),
     ),
     SettingSpec(
+        "delivery_coalesce", "enum",
+        "When a runtime agent is busy and a sender queues a newer message, off (default) delivers every "
+        "message as its own turn. same_sender cancels the sender's earlier unsent messages with the same "
+        "session affinity and adds their text to the newer turn. A message that reached the runtime is never cancelled.",
+        choices=("off", "same_sender"),
+    ),
+    SettingSpec(
         "transport_security", "enum",
         "Allow HTTP/HTTPS and WS/WSS (default), or require HTTPS/WSS. "
         "Configure TLS before selecting HTTPS only. Applies to new requests and connections; "
         "restart to close existing streams. TLS can terminate at a trusted reverse proxy.",
         choices=("http_https", "https_only"),
+    ),
+    SettingSpec(
+        "runtime_update_policy", "enum",
+        "When a runtime installation updates to a newer build: 'review' (default) holds the "
+        "new build for operator review. 'follow' adopts one strictly newer build under the "
+        "approved installation and keeps live sessions.",
+        choices=("review", "follow"),
     ),
     SettingSpec("connection_key_ttl_seconds", "int", "New connection key lifetime in seconds; 86400 = 24 hours, 0 = unlimited. Agents may override this default. Existing keys keep their issued expiry.", minimum=0, maximum=315360000),
     SettingSpec(
@@ -92,6 +106,45 @@ SETTING_SPECS: tuple[SettingSpec, ...] = (
         "Lease (s) of a claimed handoff: without completion within it, the "
         "claim expires and the work returns to the pool for another agent.",
         minimum=30,
+        maximum=86400,
+    ),
+    SettingSpec(
+        "handoff_notify_expiry",
+        "bool",
+        "Tell the creator and the previous claimant when a handoff lease "
+        "expires. Both notices start a turn when the agent has a runtime session.",
+    ),
+    SettingSpec(
+        "handoff_silence_warn_fraction",
+        "float",
+        "Fraction of the handoff lease after which the creator gets one "
+        "warning when the claimant sent no message to the creator. "
+        "0 turns the warning off.",
+        minimum=0.0,
+        maximum=1.0,
+    ),
+    SettingSpec(
+        "max_relay_depth",
+        "int",
+        "Maximum relay depth of one chain. A relay past this depth is "
+        "refused. Applies to new chains only.",
+        minimum=0,
+        maximum=64,
+    ),
+    SettingSpec(
+        "max_executions_per_root",
+        "int",
+        "Maximum executions that one root message can start. Applies to "
+        "new roots only.",
+        minimum=1,
+        maximum=1024,
+    ),
+    SettingSpec(
+        "root_deadline_seconds",
+        "int",
+        "Seconds that a root message chain can run before it closes. "
+        "Applies to new roots only.",
+        minimum=1,
         maximum=86400,
     ),
     SettingSpec(
@@ -359,6 +412,18 @@ def _coerce(spec: SettingSpec, raw: Any) -> Any:
                 {"key": spec.key, "value": raw},
             )
         return value
+    if spec.type == "float":
+        try:
+            fvalue = float(raw)
+        except (TypeError, ValueError):
+            fvalue = float("nan")
+        if isinstance(raw, bool) or not (spec.minimum <= fvalue <= spec.maximum):
+            raise OktoNexusError(
+                ErrorCode.CONFIG_ERROR,
+                f"Setting {spec.key!r} must be a number from {spec.minimum} to {spec.maximum}.",
+                {"key": spec.key, "value": raw},
+            )
+        return fvalue
     # int
     try:
         value = int(raw)

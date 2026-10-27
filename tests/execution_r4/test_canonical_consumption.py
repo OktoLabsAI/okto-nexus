@@ -130,13 +130,15 @@ def test_unsafe_mirror_configuration_is_atomic_and_does_not_disable_delivery(con
         response = (client.post('/api/v1/harness/endpoints', headers=headers['operator'], json=body)
             if action == 'create' else client.patch('/api/v1/harness/endpoints/' + endpoint,
                                                    headers=headers['operator'], json=body))
-        assert response.status_code == 422, response.text
+        # The create route is gone (410); the update route still refuses with 422.
+        assert response.status_code == (410 if action == 'create' else 422), response.text
         refused = response.json()
     else:
         refused = mcp(setup, monkeypatch, headers['operator']['Authorization'].removeprefix('Bearer '),
             'harness_list', dict(view='endpoints', maintenance=dict(**body, action=action,
                 **({} if action == 'create' else {'endpoint_id': endpoint}))))
-    assert not refused['ok'] and refused['error']['code'] == 'VALIDATION_ERROR', refused
+    expected_code = 'GONE' if action == 'create' and surface == 'rest' else 'VALIDATION_ERROR'
+    assert not refused['ok'] and refused['error']['code'] == expected_code, refused
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert dict(uow.connection.execute('SELECT * FROM agent_endpoints WHERE endpoint_id=?',
             (binding['endpoint_id'],)).fetchone()) == before

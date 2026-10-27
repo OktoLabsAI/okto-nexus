@@ -46,6 +46,8 @@ def read_runtime_options(factory, *, server_id, executor_id, agent_id, workspace
         recovering = agent_recovering(conn, server_id, executor_id, agent_id)
         descriptors = {item['adapter_id']: item for item in snapshot['catalog']['runtimes']}
         evidence = {(item['adapter_id'], item['candidate_ref']) for item in snapshot['evidence']}
+        fingerprints = {(item['adapter_id'], item['candidate_ref']): item['content_fingerprint']
+                        for item in snapshot['evidence']}
         options = []
         for technical in snapshot['availability']['availability']:
             adapter, candidate = technical['adapter_id'], technical['candidate_ref']
@@ -96,6 +98,18 @@ def read_runtime_options(factory, *, server_id, executor_id, agent_id, workspace
                     'WHERE b.server_id=? AND b.executor_id=? AND ep.agent_id=? AND ep.workspace_id=? '
                     'AND ep.adapter_id=? AND b.candidate_ref=? LIMIT 2',
                     (server_id, executor_id, agent_id, workspace_id, adapter, candidate)).fetchall()
+                if not bindings and fingerprints.get((adapter, candidate)):
+                    # After a symlink flip the option carries the natural ref of the new
+                    # build. A held or accepted succession row links it to the approved
+                    # (stable) ref, so the wizard keeps the stored harness settings.
+                    bindings = conn.execute(
+                        'SELECT b.binding_id FROM execution_bindings b JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id '
+                        'WHERE b.server_id=? AND b.executor_id=? AND ep.agent_id=? AND ep.workspace_id=? '
+                        'AND ep.adapter_id=? AND b.candidate_ref IN (SELECT s.stable_ref FROM '
+                        'execution_installation_succession s WHERE s.server_id=? AND s.executor_id=? '
+                        "AND s.adapter_id=? AND s.to_fingerprint=? AND s.decision IN ('held','accepted')) LIMIT 2",
+                        (server_id, executor_id, agent_id, workspace_id, adapter,
+                         server_id, executor_id, adapter, fingerprints[(adapter, candidate)])).fetchall()
                 if len(pending) > 1:
                     reasons.append('REALIZATION_SELECTION_REQUIRED')
                 elif pending:
@@ -151,13 +165,17 @@ def read_runtime_options(factory, *, server_id, executor_id, agent_id, workspace
                 policy_reasons=list(dict.fromkeys(reasons))))
             if descriptor and descriptor['support_status'] == 'managed_supported':
                 from nexus_connector_core import discover_harness_configuration
+                from .execution_harness_configuration import approvals_routing_enabled
+                routing = approvals_routing_enabled(access.config)
                 options[-1]['harness_configuration'] = discover_harness_configuration(
-                    adapter, version=technical.get('version'), candidate_ref=candidate or None)
+                    adapter, version=technical.get('version'), candidate_ref=candidate or None,
+                    native_approvals_enabled=routing)
                 if binding_view:
                     from .execution_harness_configuration import read_harness_configuration
                     options[-1]['harness_configuration'] = read_harness_configuration(conn,
                         endpoint_id=binding_view['endpoint_id'], adapter_id=adapter,
-                        version=technical.get('version'), candidate_ref=candidate or None)
+                        version=technical.get('version'), candidate_ref=candidate or None,
+                        native_approvals_enabled=routing)
             if kind == 'embedded' and operator and candidate:
                 from nexus_connector_core import discover_provider_home
                 options[-1]['provider_home_suggestion'] = discover_provider_home(adapter)

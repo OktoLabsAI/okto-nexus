@@ -10,6 +10,7 @@ import type { MessageRow } from "../api";
 import { Markdown } from "./Markdown";
 import { TraceChip } from "./TraceChip";
 import { useWorkspaceName } from "./WorkspaceNames";
+import { formatTime, isoTitle } from "../timeFormat";
 
 const LANE_CHIP: Record<string, string> = {
   unread: "bg-accent-100 text-accent-700 dark:bg-accent-900/40 dark:text-accent-300",
@@ -18,12 +19,12 @@ const LANE_CHIP: Record<string, string> = {
   read: "bg-surface-200 text-surface-600 dark:bg-surface-700 dark:text-surface-300",
 };
 
-function Meta({ label, value }: { label: string; value: string | null | undefined }) {
+function Meta({ label, value, title }: { label: string; value: string | null | undefined; title?: string }) {
   if (!value) return null;
   return (
     <div className="flex gap-2">
       <span className="text-surface-400 dark:text-surface-500 w-24 shrink-0">{label}</span>
-      <span className="font-mono text-surface-700 dark:text-surface-300 break-all">{value}</span>
+      <span title={title} className="font-mono text-surface-700 dark:text-surface-300 break-all">{value}</span>
     </div>
   );
 }
@@ -94,7 +95,7 @@ export function MessageDetail({
             Metadata
           </h3>
           <Meta label="message_id" value={message.message_id} />
-          <Meta label="created_at" value={message.created_at} />
+          <Meta label="created_at" value={formatTime(message.created_at)} title={isoTitle(message.created_at)} />
           <Meta label="workspace" value={workspaceName} />
           <Meta label="channel" value={message.channel_id} />
           <Meta label="trace_id" value={message.trace_id} />
@@ -118,12 +119,15 @@ export function MessageDetail({
                   <span className={`chip ${LANE_CHIP[d.status] ?? LANE_CHIP.read}`}>
                     {d.status}
                   </span>
-                  <span className="ml-auto text-surface-400 dark:text-surface-500 text-[11px]">
+                  <span
+                    className="ml-auto text-surface-400 dark:text-surface-500 text-[11px]"
+                    title={isoTitle(d.read_at ?? d.delivered_at ?? d.created_at)}
+                  >
                     {d.read_at
-                      ? `read ${d.read_at}`
+                      ? `read ${formatTime(d.read_at)}`
                       : d.delivered_at
-                        ? `delivered ${d.delivered_at}`
-                        : `queued ${d.created_at}`}
+                        ? `delivered ${formatTime(d.delivered_at)}`
+                        : `queued ${formatTime(d.created_at)}`}
                   </span>
                 </div>
               ))}

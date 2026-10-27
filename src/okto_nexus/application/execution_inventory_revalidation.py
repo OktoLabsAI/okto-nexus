@@ -1,15 +1,33 @@
 """Revalidate selected installations without changing approved scopes or sessions."""
 import json
 import logging
+from pathlib import Path
 
 log = logging.getLogger(__name__)
 
 
 def same_installation_location(approved, current):
-    """Consent selects an installation location, not an immutable release."""
-    changing = {'version', 'fingerprint', 'build_identity', 'trust', 'source'}
-    return ({k: v for k, v in approved.items() if k not in changing}
-            == {k: v for k, v in current.items() if k not in changing})
+    """Consent selects an installation location, not an immutable release.
+
+    Descriptive fields never take part in the comparison. A key that the
+    stored record lacks (a core field added after approval) counts as None.
+    """
+    changing = {'version', 'fingerprint', 'build_identity', 'trust', 'source', 'reason'}
+    keys = (set(approved) | set(current)) - changing
+    if approved.get('executable') != current.get('executable'):
+        # A relabeled successor keeps the approved ref. It must stay in the
+        # same directory as the approved executable.
+        keys -= {'executable', 'installation_ref'}
+        if (_effective_ref(approved) != _effective_ref(current)
+                or Path(approved['executable']).parent != Path(current['executable']).parent):
+            return False
+    return all(approved.get(k) == current.get(k) for k in keys)
+
+
+def _effective_ref(candidate):
+    from nexus_connector_core.installation import installation_ref
+    return candidate.get('installation_ref') or installation_ref(
+        candidate['adapter_id'], candidate['executable'], candidate.get('launch_script'))
 
 
 def compatible_selection(baseline, current):
@@ -97,8 +115,27 @@ def binding_consent_preserved(conn, binding, current_revision, server_id, execut
     ).fetchone() is not None
 
 
+def _record_update(conn, server, executor, adapter, stable, baseline, current):
+    """Write an accepted audit row for an update that keeps the approved ref."""
+    from .execution_installation_succession import record_succession
+    old, new = baseline['evidence'], current['evidence']
+    return record_succession(conn, dict(
+        server_id=server, executor_id=executor, adapter_id=adapter, stable_ref=stable,
+        decision='accepted', reason='installation_updated', policy='in_place', policy_source='hub',
+        decided_by='hub', from_executable=old.get('executable'), to_executable=new.get('executable'),
+        from_version=old.get('version'), to_version=new.get('version'),
+        from_build_identity=old.get('build_identity'),
+        to_build_identity=new.get('build_identity') or new.get('content_fingerprint') or str(new.get('version')),
+        from_fingerprint=old.get('content_fingerprint'), to_fingerprint=new.get('content_fingerprint'),
+        to_natural_ref=new.get('candidate_ref'),
+        decided_at=conn.execute("SELECT strftime('%Y-%m-%dT%H:%M:%fZ','now')").fetchone()[0]))
+
+
 def revalidate_inventory(conn, snapshot):
-    """Called only inside authenticated inventory publication; no provider I/O."""
+    """Called only inside authenticated inventory publication; no provider I/O.
+
+    Return the new succession audit rows, so the caller can notify after commit.
+    """
     from nexus_connector_core import CoreError, InstallationCandidate, build_executor_inventory_snapshot
     from .execution_local_realizations import _digest
 
@@ -110,6 +147,7 @@ def revalidate_inventory(conn, snapshot):
         'AND r.realization_ref=b.realization_ref LEFT JOIN execution_local_realizations l '
         'ON l.server_id=r.server_id AND l.executor_id=r.executor_id AND l.realization_ref=r.realization_ref '
         'WHERE b.server_id=? AND b.executor_id=?', (server, executor)).fetchall()
+    successions = []
     for binding in bindings:
         approved, candidate, adapter = (binding[k] for k in ('inventory_revision', 'candidate_ref', 'adapter_id'))
         key = (server, executor, approved, candidate)
@@ -156,4 +194,62 @@ def revalidate_inventory(conn, snapshot):
             (*key, revision, json.dumps(baseline, sort_keys=True) if baseline else None, int(compatible), reason))
         if approved != revision and (prior is None or prior['current_revision'] != revision or
                                      prior['compatible'] != int(compatible)):
-            log.info('Runtime inventory revalidation: binding=%s result=%s', binding['binding_id'], reason)
+            level = log.warning if reason in ('installation_updated', 'installation_missing') else log.info
+            level('Runtime inventory revalidation: binding=%s result=%s', binding['binding_id'], reason)
+            if reason == 'installation_updated':
+                row = _record_update(conn, server, executor, adapter, candidate, baseline, current)
+                if row is not None:
+                    successions.append(row)
+    return successions
+
+
+def revalidate_all_bindings(factory, *, context, access):
+    """Operator action: accept the current installation for every binding that needs review.
+
+    A binding is accepted only when its installation is present, selected and
+    ready in the current inventory. The action records the current evidence as
+    the new baseline. It does not change a binding, a grant or a session.
+    """
+
+    with factory.unit_of_work() as uow:
+        access.authorize_maintenance(context, uow=uow)
+        conn = uow.connection
+        rows = conn.execute(
+            'SELECT b.binding_id,b.endpoint_id,b.server_id,b.executor_id,b.inventory_revision,b.candidate_ref,'
+            'ep.adapter_id,c.inventory_revision AS current_revision,s.canonical_projection '
+            'FROM execution_bindings b JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id '
+            'JOIN execution_executors e ON e.server_id=b.server_id AND e.executor_id=b.executor_id '
+            'LEFT JOIN execution_inventory_current c ON c.server_id=b.server_id AND c.executor_id=b.executor_id '
+            'LEFT JOIN execution_inventory_snapshots s ON s.server_id=c.server_id AND s.executor_id=c.executor_id '
+            "AND s.publication_sequence=c.publication_sequence WHERE ep.activation_state='approved' "
+            'AND e.revoked_at IS NULL ORDER BY b.binding_id').fetchall()
+        results = []
+        for row in rows:
+            result = dict(binding_id=row['binding_id'], endpoint_id=row['endpoint_id'], adapter_id=row['adapter_id'])
+            if row['current_revision'] is None:
+                outcome = 'inventory_unavailable'
+            elif accepts_binding(conn, row, row['current_revision'], row['server_id'], row['executor_id']):
+                outcome = 'already_current'
+            else:
+                current = selection(json.loads(row['canonical_projection']), row['adapter_id'], row['candidate_ref'])
+                evidence = (current or {}).get('evidence', {})
+                if current is None:
+                    outcome = 'installation_missing'
+                elif evidence.get('state') != 'READY_FOR_RUNTIME' or evidence.get('trust') != 'selected':
+                    outcome = 'installation_not_ready'
+                else:
+                    conn.execute('INSERT INTO execution_inventory_revalidation VALUES (?,?,?,?,?,?,1,?,'
+                        "strftime('%Y-%m-%dT%H:%M:%fZ','now')) ON CONFLICT(server_id,executor_id,approved_revision,"
+                        'candidate_ref) DO UPDATE SET current_revision=excluded.current_revision,'
+                        'baseline_json=excluded.baseline_json,compatible=1,reason=excluded.reason,'
+                        'checked_at=excluded.checked_at',
+                        (row['server_id'], row['executor_id'], row['inventory_revision'], row['candidate_ref'],
+                         row['current_revision'], json.dumps(current, sort_keys=True), 'operator_revalidated'))
+                    outcome = 'revalidated'
+            results.append({**result, 'outcome': outcome})
+        counts = {name: sum(item['outcome'] == name for item in results)
+                  for name in ('revalidated', 'already_current', 'installation_missing',
+                               'installation_not_ready', 'inventory_unavailable')}
+        log.info('Operator revalidated %d binding(s); %d need another action',
+                 counts['revalidated'], len(results) - counts['revalidated'] - counts['already_current'])
+        return dict(counts, bindings=results)

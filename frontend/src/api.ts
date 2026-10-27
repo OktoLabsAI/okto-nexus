@@ -2,6 +2,8 @@
 // envelope ({ok, data | error}). Human sessions use HttpOnly cookies;
 // issued AGENT keys are never stored by the dashboard.
 
+import type { OperatorUnread } from "./operatorUnread";
+
 export interface Envelope<T> {
   ok: boolean;
   data?: T;
@@ -194,6 +196,13 @@ export interface GraphHandoff {
     pending: number;
     failed: number;
   };
+  // The session of the claimant was contained while it held this handoff.
+  // Present only when the hub reports it; older hubs omit the field.
+  claimant_session_lost?: {
+    reason: string | null;
+    session_id?: string | null;
+    at?: string | null;
+  } | null;
 }
 
 export interface GraphSnapshot {
@@ -682,6 +691,10 @@ export interface AgentRuntimeOverview {
 export type MetaHarnessSession = import('./runtimeApi').RuntimeSession & {
   harness: string; host: string; location: string; is_open: boolean;
   subject: string | null; last_interaction_at: string; interaction_count: number;
+  // Why the hub contained the session and when (migration 154). Both are null
+  // for a session that was never contained.
+  containment_reason?: string | null;
+  contained_at?: string | null;
 }
 export interface MetaHarnessSessions {
   items: MetaHarnessSession[]; total: number; active_count: number; page: number; has_more: boolean;
@@ -1003,6 +1016,11 @@ export interface OperatorStatus {
   configured: boolean; local: boolean; authenticated: boolean; username: string | null;
 }
 
+export interface RuntimeUpdatePolicy {
+  endpoint_id: string; agent_id: string; revision: number; policy: "review" | "follow" | null;
+  effective_policy: "review" | "follow"; policy_source: "hub" | "endpoint"; hub_policy: "review" | "follow";
+}
+
 export class ApiError extends Error {
   constructor(
     public status: number,
@@ -1190,6 +1208,10 @@ export const api = {
     `/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/tool-permission`),
   saveRuntimeToolPermission: (endpoint: string, body: {expected_revision: number; mode: "ask" | "always_allow"}) =>
     call<{revision: number; mode: "ask" | "always_allow"}>(`/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/tool-permission`, {method: "PUT", body: JSON.stringify(body)}),
+  runtimeUpdatePolicy: (endpoint: string) => call<RuntimeUpdatePolicy>(
+    `/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/update-policy`),
+  saveRuntimeUpdatePolicy: (endpoint: string, body: {expected_revision: number; policy: "review" | "follow" | null}) =>
+    call<RuntimeUpdatePolicy>(`/api/v1/harness/endpoints/${encodeURIComponent(endpoint)}/update-policy`, {method: "PUT", body: JSON.stringify(body)}),
   runtimePolicy: (agentId?: string) => call<RuntimePolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/runtime-policy` : '/api/v1/runtime-policy'),
   saveRuntimePolicy: (body: {expected_revision: number; runtime_enabled: boolean | null; session_policy: SessionPolicy | null; automatic_recovery?: boolean; inherit_global_mcps?: boolean | null; broadcast_handoff_auto_claim?: boolean | null}, agentId?: string) => call<RuntimePolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/runtime-policy` : '/api/v1/runtime-policy', {method: 'PUT', body: JSON.stringify(body)}),
   oneShotPolicy: (agentId?: string) => call<OneShotPolicy>(agentId ? `/api/v1/agents/${encodeURIComponent(agentId)}/one-shot-policy` : '/api/v1/one-shot-policy'),
@@ -1227,6 +1249,12 @@ export const api = {
     ),
   message: (messageId: string) =>
     call<MessageRow>(`/api/v1/messages/${encodeURIComponent(messageId)}`),
+  // Unread messages addressed to the operator (badge, toast, divider).
+  // `since` keeps only deliveries created after that timestamp.
+  operatorUnread: (since?: string | null) =>
+    call<OperatorUnread>(
+      `/api/v1/operator/unread-count${since ? `?${new URLSearchParams({ since })}` : ""}`,
+    ),
   conversationPeers: (agent: string) =>
     call<{ items: ConversationPeer[]; failed_count: number }>(
       `/api/v1/conversations/peers?agent=${encodeURIComponent(agent)}`,
@@ -1847,16 +1875,24 @@ export const api = {
 };
 
 // MCP snippets per client format (mirrors the Pulse getMcpConfigJson).
+// The key goes in an Authorization: Bearer header, never in the URL (the
+// query-key form is kept by the server only for migration).
 export function mcpSnippet(format: string, apiKey: string): string {
-  const url = `http://${location.hostname}:${location.port || "8202"}/mcp?api_key=${apiKey}`;
+  const url = `http://${location.hostname}:${location.port || "8202"}/mcp`;
+  const headers = { Authorization: `Bearer ${apiKey}` };
   switch (format) {
     case "claude-cli":
-      return `claude mcp add -t http okto-nexus "${url}"`;
+      return `claude mcp add -t http okto-nexus "${url}" --header "Authorization: Bearer ${apiKey}"`;
     case "codex":
-      return `codex mcp add okto-nexus --url "${url}"`;
+      // codex has no inline header option: it reads the bearer token from an
+      // environment variable that the operator exports first.
+      return [
+        `export OKTO_NEXUS_API_KEY="${apiKey}"`,
+        `codex mcp add okto-nexus --url "${url}" --bearer-token-env-var OKTO_NEXUS_API_KEY`,
+      ].join("\n");
     case "vscode":
       return JSON.stringify(
-        { servers: { "okto-nexus": { type: "http", url } } },
+        { servers: { "okto-nexus": { type: "http", url, headers } } },
         null,
         2,
       );
@@ -1864,7 +1900,7 @@ export function mcpSnippet(format: string, apiKey: string): string {
     case "cursor":
     case "windsurf":
       return JSON.stringify(
-        { mcpServers: { "okto-nexus": { url } } },
+        { mcpServers: { "okto-nexus": { url, headers } } },
         null,
         2,
       );

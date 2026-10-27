@@ -32,6 +32,7 @@ import {
   Tags,
   Users,
   Waypoints,
+  X,
 } from "lucide-react";
 import { AboutModal } from "./components/AboutModal";
 import { HelpModal } from "./components/HelpModal";
@@ -53,6 +54,15 @@ import {
   type NexusEvent,
 } from "./api";
 import { useSSE } from "./useSSE";
+import {
+  newItems,
+  notifyInBackground,
+  OPERATOR_VIEWS,
+  readSeenMarker,
+  toastText,
+  toastTitle,
+  writeSeenMarker,
+} from "./operatorUnread";
 import { useTheme } from "./hooks/useTheme";
 import { GraphView } from "./views/GraphView";
 import { AgentsView } from "./views/AgentsView";
@@ -187,9 +197,18 @@ function Dashboard({
   const settingsPending = useRef(false);
   const onSettingsPending = useCallback((pending: boolean) => {settingsPending.current = pending;}, []);
   const mayLeaveSettings = () => !settingsPending.current || window.confirm('Discard unsaved settings and leave this page?');
+  const viewRef = useRef<View>(view);
+  viewRef.current = view;
+  // Operator notifications (#78). visitBaseline is the "seen" marker from
+  // before the operator opened Messages or Meta-harness. Meta-harness uses it
+  // for the "new since your last visit" divider.
+  const [visitBaseline, setVisitBaseline] = useState<string | null>(null);
   const setView = useCallback((next: View) => {
     if (!settingsPending.current || window.confirm('Discard unsaved settings and leave this page?')) {
       settingsPending.current = false;
+      if (OPERATOR_VIEWS.includes(next) && !OPERATOR_VIEWS.includes(viewRef.current)) {
+        setVisitBaseline(readSeenMarker());
+      }
       setViewState(next);
     }
   }, []);
@@ -198,6 +217,10 @@ function Dashboard({
     () => localStorage.getItem("okto-nexus-sidebar") !== "closed",
   );
   const [workspaces, setWorkspaces] = useState<WorkspaceListItem[]>([]);
+  // True once GET /workspaces answered, so an empty list is not mistaken for
+  // "not loaded yet" when the saved scope is checked.
+  const [workspacesLoaded, setWorkspacesLoaded] = useState(false);
+  const [workspaceNotice, setWorkspaceNotice] = useState<string | null>(null);
   // The workspace SCOPE is the user's choice and survives reloads: the
   // serve's default only applies when nothing was ever picked (otherwise a
   // default pointing at an empty workspace silently hides the whole graph
@@ -227,6 +250,14 @@ function Dashboard({
   // SSE events so the Approvals screen refetches exactly when it matters.
   const [pendingApprovals, setPendingApprovals] = useState(0);
   const [approvalTick, setApprovalTick] = useState(0);
+  // Unread operator messages: server count behind the sidebar badge, a tick
+  // bumped on message.created events, and the toasts shown in every view.
+  const [operatorUnread, setOperatorUnread] = useState(0);
+  const [operatorTick, setOperatorTick] = useState(0);
+  const [toasts, setToasts] = useState<
+    { id: string; title: string; text: string }[]
+  >([]);
+  const reportedRef = useRef<Set<string> | null>(null);
   const [showMenu, setShowMenu] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
@@ -306,9 +337,14 @@ function Dashboard({
   // state at all - otherwise every SSE event rebuilds the whole Sigma scene
   // (layout + camera) for nothing.
   const lastSnapshotRef = useRef<string>("");
+  const workspaceRef = useRef(workspace);
+  workspaceRef.current = workspace;
   const loadGraph = useCallback(async () => {
     try {
       const snapshot = await api.graph(workspace);
+      // A late answer for a scope that is no longer selected must not
+      // replace the graph of the new scope.
+      if (workspaceRef.current !== workspace) return;
       const fingerprint = JSON.stringify({
         n: snapshot.nodes,
         e: snapshot.edges,
@@ -336,6 +372,7 @@ function Dashboard({
         // approval.requested/granted/denied move the pending queue — bump
         // the dedicated tick (badge + Approvals screen refetch on it).
         if (event.type.startsWith("approval.")) setApprovalTick((t) => t + 1);
+        if (event.type === "message.created") setOperatorTick((t) => t + 1);
         window.clearTimeout(refetchTimerRef.current);
         refetchTimerRef.current = window.setTimeout(loadGraph, 400);
       },
@@ -375,6 +412,58 @@ function Dashboard({
     loadApprovalCount();
   }, [loadApprovalCount, approvalTick, refreshTick]);
 
+  // Unread messages for the operator. The first answer only seeds the list of
+  // reported messages, so opening the dashboard does not toast old messages.
+  // While Messages or Meta-harness is open, the messages count as seen.
+  const loadOperatorUnread = useCallback(async () => {
+    try {
+      const data = await api.operatorUnread(readSeenMarker());
+      const watching = OPERATOR_VIEWS.includes(viewRef.current);
+      if (watching && data.latest_created_at) writeSeenMarker(data.latest_created_at);
+      setOperatorUnread(watching ? 0 : data.count);
+      const reported = reportedRef.current;
+      if (reported === null) {
+        reportedRef.current = new Set(data.items.map((item) => item.message_id));
+        return;
+      }
+      const fresh = newItems(data.items, reported).reverse();
+      if (fresh.length === 0) return;
+      fresh.forEach((item) => reported.add(item.message_id));
+      const shown = fresh.slice(-3);
+      shown.forEach((item) =>
+        notifyInBackground(item, () => setView("Meta-harness")),
+      );
+      setToasts((current) =>
+        [
+          ...current,
+          ...shown.map((item) => ({
+            id: item.message_id,
+            title: toastTitle(item),
+            text: toastText(item),
+          })),
+        ].slice(-3),
+      );
+      shown.forEach((item) =>
+        window.setTimeout(
+          () => setToasts((current) => current.filter((t) => t.id !== item.message_id)),
+          8000,
+        ),
+      );
+    } catch {
+      /* the badge is optional: a locked gate just shows none */
+    }
+  }, [setView]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(loadOperatorUnread, 250);
+    return () => window.clearTimeout(timer);
+  }, [loadOperatorUnread, view, refreshTick, operatorTick]);
+
+  useEffect(() => {
+    const timer = window.setInterval(loadOperatorUnread, 10000);
+    return () => window.clearInterval(timer);
+  }, [loadOperatorUnread]);
+
   // The workspace scope picker is fed by the rich /api/v1/workspaces list (not
   // derived from /sessions): every KNOWN workspace shows up, including ones
   // with no live session yet (TR8).
@@ -384,7 +473,10 @@ function Dashboard({
     const reload = () => {
       const version = ++requestVersion;
       api.workspaces().then(({workspaces}) => {
-        if (active && version === requestVersion) setWorkspaces(workspaces);
+        if (active && version === requestVersion) {
+          setWorkspaces(workspaces);
+          setWorkspacesLoaded(true);
+        }
       })
         .catch(() => undefined);
     };
@@ -397,6 +489,42 @@ function Dashboard({
       if (timer !== undefined) window.clearInterval(timer);
     };
   }, [refreshTick, view]);
+
+  // A saved scope can name a workspace that this hub does not have (for
+  // example after the hub starts with a new data directory). Once the list is
+  // known, replace such a scope with the serve default (or the first
+  // workspace) and tell the operator. The check never runs before the list
+  // arrives, and never when the list request failed.
+  useEffect(() => {
+    if (!workspacesLoaded || workspace === "all") return;
+    if (workspaces.some((item) => item.workspace_id === workspace)) return;
+    let active = true;
+    const missing = workspace;
+    const apply = (defaultId: string | null | undefined) => {
+      if (!active) return;
+      const fallback =
+        workspaces.find((item) => item.workspace_id === defaultId) ??
+        workspaces[0];
+      if (fallback) {
+        pickWorkspace(fallback.workspace_id);
+      } else {
+        localStorage.removeItem("okto-nexus-workspace");
+        setWorkspace("all");
+      }
+      setWorkspaceNotice(
+        `The saved workspace (${missing}) does not exist on this hub. ` +
+          (fallback ? "A default workspace is selected." : "All workspaces are selected."),
+      );
+    };
+    loadInfo()
+      .then((next) =>
+        apply((next as { default_workspace_id?: string | null }).default_workspace_id),
+      )
+      .catch(() => apply(null));
+    return () => {
+      active = false;
+    };
+  }, [workspacesLoaded, workspaces, workspace, loadInfo]);
 
   // Default scope = the serve's --project-root workspace (AC1) - applied
   // ONLY when the user never picked a scope on this browser AND the default
@@ -584,6 +712,25 @@ function Dashboard({
         />
       )}
 
+      {workspaceNotice && (
+        <div
+          role="status"
+          data-testid="workspace-notice"
+          className="shrink-0 flex items-center gap-3 px-4 py-2 text-xs
+            bg-amber-50 text-amber-900 dark:bg-amber-900/30 dark:text-amber-100
+            border-b border-amber-200 dark:border-amber-800"
+        >
+          <span className="flex-1">{workspaceNotice}</span>
+          <button
+            className="btn btn-secondary !px-2 !py-0.5"
+            onClick={() => setWorkspaceNotice(null)}
+            aria-label="Dismiss notice"
+          >
+            Dismiss
+          </button>
+        </div>
+      )}
+
       <div className="flex flex-1 overflow-hidden">
       {/* Navigation sidebar (the Pulse Sidebar grammar) */}
       <aside
@@ -612,6 +759,16 @@ function Dashboard({
                   >
                     <Icon size={16} />
                     <span className="truncate">{name}</span>
+                    {(name === "Messages" || name === "Meta-harness") &&
+                      operatorUnread > 0 && (
+                      <span
+                        className="ml-auto min-w-[18px] px-1.5 py-0.5 rounded-full bg-red-500 text-white text-[10px] font-semibold text-center leading-none"
+                        data-testid={`unread-badge-${name}`}
+                        title="Unread messages addressed to the operator"
+                      >
+                        {operatorUnread}
+                      </span>
+                    )}
                     {name === "Approvals" && pendingApprovals > 0 && (
                       <span
                         className="ml-auto min-w-[18px] px-1.5 py-0.5 rounded-full bg-red-500 text-white text-[10px] font-semibold text-center leading-none"
@@ -659,6 +816,7 @@ function Dashboard({
               workspace={workspace}
               workspaces={workspaces}
               liveTick={liveTick}
+              newSince={visitBaseline}
             />
           )}
           {view === "Events" && (
@@ -703,6 +861,47 @@ function Dashboard({
           {view === "Settings" && <SettingsView onSettingsApplied={loadInfo} onPendingChange={onSettingsPending} />}
       </main>
       </div>
+      {toasts.length > 0 && (
+        <div
+          className="fixed bottom-4 right-4 z-50 flex w-80 flex-col gap-2"
+          role="status"
+          aria-live="polite"
+          data-testid="operator-toasts"
+        >
+          {toasts.map((toast) => (
+            <div
+              key={toast.id}
+              className="flex items-start gap-2 rounded-lg border border-accent-300 bg-white p-3 text-xs shadow-xl dark:border-accent-700/60 dark:bg-surface-800"
+              data-testid="operator-toast"
+            >
+              <button
+                className="min-w-0 flex-1 text-left"
+                onClick={() => {
+                  setToasts((current) => current.filter((t) => t.id !== toast.id));
+                  setView("Meta-harness");
+                }}
+                title="Open Meta-harness"
+              >
+                <div className="font-semibold text-surface-800 dark:text-surface-100">
+                  {toast.title}
+                </div>
+                <div className="mt-0.5 truncate text-surface-600 dark:text-surface-300">
+                  {toast.text}
+                </div>
+              </button>
+              <button
+                className="text-surface-400 hover:text-surface-600 dark:hover:text-surface-200"
+                onClick={() =>
+                  setToasts((current) => current.filter((t) => t.id !== toast.id))
+                }
+                aria-label="Dismiss message notice"
+              >
+                <X size={14} />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
     </WorkspaceNamesProvider>
   );

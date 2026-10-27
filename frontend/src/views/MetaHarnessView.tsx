@@ -22,6 +22,7 @@ import {
 import {
   type ChangeEvent,
   type FormEvent,
+  Fragment,
   type ReactNode,
   useCallback,
   useEffect,
@@ -35,6 +36,7 @@ import {
   type ArtifactItem,
   type GraphHandoff,
   type MessageRow,
+  type MetaHarnessSession,
   type MetaHarnessAudience,
   type MetaHarnessKind,
   type WorkspaceListItem,
@@ -47,8 +49,11 @@ import { handoffLabel } from "../handoffLabel";
 import { PageContainer } from "../components/PageContainer";
 import { workspaceDisplayName } from "../components/WorkspaceNames";
 import { agentColor } from "../graph/agentColor";
+import { isNewForOperator } from "../operatorUnread";
+import { placeMarkers, restartMarkers } from "../sessionRestarts";
 
 import { MetaHarnessSessions } from "../components/MetaHarnessSessions";
+import { formatTime, isoTitle } from "../timeFormat";
 
 const OPERATOR = "operator";
 const TIMELINE_PAGE_SIZE = 20;
@@ -71,6 +76,9 @@ type TimelineEntry = {
   structured?: StructuredMessagePayload;
   artifacts: string[];
   deliveries?: MessageRow["deliveries"];
+  // Deliveries addressed to the operator (incoming messages): the source of
+  // the "new since your last visit" divider.
+  operatorDeliveries?: MessageRow["deliveries"];
   status?: string;
   outcome?: "completed" | "rejected";
 };
@@ -265,6 +273,9 @@ function buildTimeline(
       structured: handoffId && parsed ? { ...parsed, title: handoffTitle } : undefined,
       artifacts: artifactIds(message.artifacts),
       deliveries: outgoing ? message.deliveries : undefined,
+      operatorDeliveries: outgoing
+        ? undefined
+        : message.deliveries.filter((delivery) => delivery.recipient_agent_id === OPERATOR),
       status: outgoing
         ? recipients.length
           ? `${recipients.length} recipient${recipients.length === 1 ? "" : "s"}`
@@ -469,9 +480,9 @@ function ReceiptDetailsModal({
                     </span>
                   </div>
                   <dl className="mt-3 grid grid-cols-1 gap-2 border-t border-surface-100 pt-3 text-[11px] sm:grid-cols-3 dark:border-surface-800">
-                    <div><dt className="text-surface-400">Queued</dt><dd className="mt-0.5 text-surface-700 dark:text-surface-200">{fullStamp(delivery.created_at)}</dd></div>
-                    <div><dt className="text-surface-400">Received</dt><dd className="mt-0.5 text-surface-700 dark:text-surface-200">{fullStamp(delivery.delivered_at)}</dd></div>
-                    <div><dt className="text-surface-400">Acknowledged</dt><dd className="mt-0.5 text-surface-700 dark:text-surface-200">{fullStamp(delivery.read_at)}</dd></div>
+                    <div><dt className="text-surface-400">Queued</dt><dd title={isoTitle(delivery.created_at)} className="mt-0.5 text-surface-700 dark:text-surface-200">{fullStamp(delivery.created_at)}</dd></div>
+                    <div><dt className="text-surface-400">Received</dt><dd title={isoTitle(delivery.delivered_at)} className="mt-0.5 text-surface-700 dark:text-surface-200">{fullStamp(delivery.delivered_at)}</dd></div>
+                    <div><dt className="text-surface-400">Acknowledged</dt><dd title={isoTitle(delivery.read_at)} className="mt-0.5 text-surface-700 dark:text-surface-200">{fullStamp(delivery.read_at)}</dd></div>
                   </dl>
                 </div>
               );
@@ -518,17 +529,6 @@ function mergeMessages(current: MessageRow[], incoming: MessageRow[]): MessageRo
 function shortWorkspace(id: string, workspaces: WorkspaceListItem[]): string {
   const index = workspaces.findIndex((workspace) => workspace.workspace_id === id);
   return index >= 0 ? workspaceDisplayName(workspaces[index], index) : id.slice(0, 8);
-}
-
-function stamp(value: string): string {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return value;
-  return new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(date);
 }
 
 function formatBytes(value: number): string {
@@ -631,7 +631,7 @@ function ChatTurn({
           </span>
           <span>{audienceLabel}</span>
           {showWorkspace && <span>· {shortWorkspace(entry.workspaceId, workspaces)}</span>}
-          <span>· {stamp(entry.timestamp)}</span>
+          <span title={isoTitle(entry.timestamp)}>· {formatTime(entry.timestamp)}</span>
           <CopyMessageButton text={formatChatContent(entry.content)} />
         </div>
         <div
@@ -724,10 +724,14 @@ export function MetaHarnessView({
   workspace,
   workspaces,
   liveTick,
+  newSince,
 }: {
   workspace: string;
   workspaces: WorkspaceListItem[];
   liveTick?: number;
+  // "Seen" marker from before this visit: unread operator messages created
+  // after it sit below the "new since your last visit" divider.
+  newSince?: string | null;
 }) {
   const [agents, setAgents] = useState<AgentRow[]>([]);
   const [messages, setMessages] = useState<MessageRow[]>([]);
@@ -747,6 +751,7 @@ export function MetaHarnessView({
   >({});
   const [receiptDisplay, setReceiptDisplay] = useState<ReceiptDisplay>("inline");
   const [sessionsOpen, setSessionsOpen] = useState(false);
+  const [sessionList, setSessionList] = useState<MetaHarnessSession[]>([]);
   const [receiptEntry, setReceiptEntry] = useState<TimelineEntry | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -756,6 +761,8 @@ export function MetaHarnessView({
   const [visibleCount, setVisibleCount] = useState(TIMELINE_PAGE_SIZE);
   const [error, setError] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const newDividerRef = useRef<HTMLDivElement>(null);
+  const newDividerShownRef = useRef(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
@@ -897,6 +904,31 @@ export function MetaHarnessView({
     return () => window.clearTimeout(timer);
   }, [liveTick, loadFeed]);
 
+  // Runtime sessions of this conversation, for the "session restarted"
+  // dividers. A failed read only hides the dividers.
+  useEffect(() => {
+    let active = true;
+    const controller = new AbortController();
+    const timer = window.setTimeout(async () => {
+      try {
+        const all: MetaHarnessSession[] = [];
+        for (let page = 1; page <= 5; page += 1) {
+          const result = await api.metaHarnessSessions(workspace, filterAgent, page, controller.signal);
+          all.push(...result.items);
+          if (!result.has_more) break;
+        }
+        if (active) setSessionList(all);
+      } catch {
+        /* the dividers are optional */
+      }
+    }, 1500);
+    return () => {
+      active = false;
+      controller.abort();
+      window.clearTimeout(timer);
+    };
+  }, [workspace, filterAgent, liveTick]);
+
   const timeline = useMemo(
     () =>
       preserveArrivalOrder(
@@ -921,6 +953,28 @@ export function MetaHarnessView({
   }, [visibleTimeline]);
   const hasOlderMessages =
     visibleCount < timeline.length || messages.length < messageTotal;
+  // Index of the first incoming entry that is still unread and newer than
+  // the marker. The divider goes right above it.
+  const firstNewIndex = useMemo(
+    () =>
+      visibleTimeline.findIndex((entry) =>
+        isNewForOperator(entry.operatorDeliveries ?? [], newSince),
+      ),
+    [visibleTimeline, newSince],
+  );
+  const restartsAt = useMemo(
+    () => placeMarkers(visibleTimeline, restartMarkers(sessionList)),
+    [visibleTimeline, sessionList],
+  );
+  const newCount = useMemo(
+    () =>
+      firstNewIndex < 0
+        ? 0
+        : visibleTimeline
+            .slice(firstNewIndex)
+            .filter((entry) => isNewForOperator(entry.operatorDeliveries ?? [], newSince)).length,
+    [visibleTimeline, firstNewIndex, newSince],
+  );
 
   useEffect(() => {
     setVisibleCount(TIMELINE_PAGE_SIZE);
@@ -929,6 +983,12 @@ export function MetaHarnessView({
   useEffect(() => {
     if (preserveScrollRef.current) {
       preserveScrollRef.current = false;
+      return;
+    }
+    // The first time the divider exists, show it instead of the newest turn.
+    if (newDividerRef.current && !newDividerShownRef.current) {
+      newDividerShownRef.current = true;
+      newDividerRef.current.scrollIntoView({ block: "start" });
       return;
     }
     bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
@@ -1203,9 +1263,38 @@ export function MetaHarnessView({
                     </button>
                   </div>
                 )}
-                {visibleTimeline.map((entry) => (
+                {visibleTimeline.map((entry, index) => (
+                  <Fragment key={entry.id}>
+                  {(restartsAt.get(index) ?? []).map((marker) => (
+                    <div
+                      key={`restart:${marker.id}`}
+                      className="flex items-center gap-3 text-[11px] font-medium text-amber-700 dark:text-amber-400"
+                      role="separator"
+                      data-testid="meta-harness-session-restart"
+                    >
+                      <span className="h-px flex-1 bg-amber-300 dark:bg-amber-700" />
+                      <span>
+                        {marker.agentId}: session restarted
+                        {marker.reason ? ` · ${marker.reason}` : ""}
+                      </span>
+                      <span className="h-px flex-1 bg-amber-300 dark:bg-amber-700" />
+                    </div>
+                  ))}
+                  {index === firstNewIndex && (
+                    <div
+                      ref={newDividerRef}
+                      className="flex items-center gap-3 text-[11px] font-medium text-accent-600 dark:text-accent-400"
+                      role="separator"
+                      data-testid="meta-harness-new-divider"
+                    >
+                      <span className="h-px flex-1 bg-accent-300 dark:bg-accent-700" />
+                      <span>
+                        New since your last visit ({newCount})
+                      </span>
+                      <span className="h-px flex-1 bg-accent-300 dark:bg-accent-700" />
+                    </div>
+                  )}
                   <ChatTurn
-                    key={entry.id}
                     entry={entry}
                     agents={agents}
                     workspaces={workspaces}
@@ -1217,6 +1306,7 @@ export function MetaHarnessView({
                     showReceiptFlags={receiptDisplay === "inline"}
                     onOpenReceipt={setReceiptEntry}
                   />
+                  </Fragment>
                 ))}
               </div>
             )}

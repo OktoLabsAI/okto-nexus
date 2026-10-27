@@ -8,6 +8,9 @@ import { ConfigurationHelp } from './ConfigurationHelp';
 import { HarnessPreferenceFields } from './HarnessPreferenceFields';
 import { harnessSelectionError } from '../harnessConfiguration';
 import { InventoryRefresh } from './InventoryRefresh';
+import { RevalidateBindings } from './RevalidateBindings';
+import { HeldSuccessions } from './HeldSuccessions';
+import { RuntimeUpdatePolicy } from './RuntimeUpdatePolicy';
 import { RemoteConnectorCommand } from './RemoteConnectorCommand';
 import { OneShotSettings, type OneShotSettingsHandle } from './OneShotSettings';
 import { MCPPresetFields, parseMCPPreset } from './MCPPresetFields';
@@ -168,7 +171,8 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
       if (!imported.current) setDraft(old => ({...old,...(setup.folders || {}),
         provider_home:setup.folders?.provider_home ?? choice?.provider_home_suggestion ?? null,
         alias:setup.public_config?.alias || old.alias || `${agentId}-${old.adapter_id}`,
-        harness_settings:setup.public_config?.harness_settings || {},
+        harness_settings:setup.public_config?.harness_settings
+          || (Object.keys(old.harness_settings || {}).length ? old.harness_settings : {}),
         tool_access:setup.public_config?.nexus_tool_permission || 'ask',automatic_reply:true,
         authorization:setup.authorization || old.authorization,
         workspace_label:workspaces.find(w => w.workspace_id === workspace)?.display_name || old.workspace_label}));
@@ -183,7 +187,9 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
     if (step !== 1 || busy || !options || installationBusy) return;
     const choices = options.options.filter(row => row.adapter_id === draft.adapter_id && localInstallationAvailable(row));
     if (!selected) {
-      if (choices.length === 1) void selectInstallation(choices[0].candidate_ref!);
+      // A binding-backed draft already holds the stored settings. Do not reload defaults.
+      const stored = !!bindingId && Object.keys(draft.harness_settings || {}).length > 0;
+      if (choices.length === 1 && !stored) void selectInstallation(choices[0].candidate_ref!);
       return;
     }
     const key = `${executor}:${workspace}:${draft.adapter_id}:${candidateRef}:${reload}`;
@@ -349,6 +355,8 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
         <details><summary>Details</summary><p>{installationError}</p></details>
       </div> : selected?.technical_state === 'READY_FOR_RUNTIME' && <p role="status" className="flex items-center gap-2 text-green-600"><CheckCircle2 size={16} />Installation verified</p>}
       <InventoryRefresh compact executorId={executor} onUpdated={() => {setTest(null);setRequest(null);setReload(v => v+1);}} />
+      <RevalidateBindings onDone={() => setReload(v => v+1)} />
+      <HeldSuccessions onDone={() => setReload(v => v+1)} />
     </fieldset>}
     {step === 2 && <>
       <label className="block">Workspace name <span className="text-surface-500">Required</span><input aria-label="Workspace name" className={input} value={draft.workspace_label} onChange={e => patch({workspace_label:e.target.value})} /></label>
@@ -372,6 +380,8 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
       {selected?.harness_configuration && <HarnessPreferenceFields inheritedGlobalMcps={inheritedMcps} schema={selected.harness_configuration} values={draft.harness_settings} onChange={harness_settings => patch({harness_settings})} />}
       <MCPPresetFields onPendingChange={setMcpEditing} value={mcpText} onChange={text => {setMcpText(text);setTest(null);setRequest(null);setAuthorized(false);setError('');}} />
       <label className="block">Nexus tool access <span className="text-surface-500">Required</span><ConfigurationHelp label="Nexus tool access">Always allow skips approval requests for Nexus tools. Native harness approval settings remain separate.</ConfigurationHelp><select aria-label="Nexus tool access" className={input} value={draft.tool_access} onChange={e => patch({tool_access:e.target.value as 'ask' | 'always_allow'})}><option value="ask">Ask for approval</option><option value="always_allow">Always allow</option></select></label>
+      {draft.execution_location === 'local' && bindingId && selected?.binding &&
+        <RuntimeUpdatePolicy key={'updates:' + selected.binding.binding_id} endpoint={selected.binding.endpoint_id} />}
     </>}
     {(step === 5 || (step === 0 && runtimeEnabled && draft.execution_location === 'remote' && connections.some(c => c.binding_id === bindingId && c.execution_location === 'remote'))) && <>
       <p>Next authorizes the connection test and the execution limits below. The connection is saved only after Finish.</p>

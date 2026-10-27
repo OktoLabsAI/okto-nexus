@@ -6,8 +6,15 @@ from nexus_connector_core import discover_harness_configuration, CoreError
 from nexus_connector_core.protocol import canonical_json
 
 
-def read_harness_configuration(conn, *, endpoint_id, adapter_id, candidate_ref=None, version=None):
-    fallback = discover_harness_configuration(adapter_id, candidate_ref=candidate_ref, version=version)
+def approvals_routing_enabled(config):
+    """True when this hub sends native questions and permission prompts to the operator."""
+    return bool(config.feature_harness_integrations and config.feature_hitl)
+
+
+def read_harness_configuration(conn, *, endpoint_id, adapter_id, candidate_ref=None, version=None,
+                               native_approvals_enabled=False):
+    fallback = discover_harness_configuration(adapter_id, candidate_ref=candidate_ref, version=version,
+                                              native_approvals_enabled=native_approvals_enabled)
     # Never reuse another agent/account's catalogue. A changed configuration,
     # credential epoch, binding or installation requires a new observation.
     rows = conn.execute(
@@ -53,7 +60,8 @@ def read_harness_configuration(conn, *, endpoint_id, adapter_id, candidate_ref=N
                 return discover_harness_configuration(adapter_id, version=value['version'],
                     candidate_ref=value['candidate_ref'], native_parameters=[
                         {k:p[k] for k in ('name','type','values')} for p in value['parameters']
-                        if p['availability'] == 'observed'])
+                        if p['availability'] == 'observed'],
+                    native_approvals_enabled=native_approvals_enabled)
             else:
                 continue
             return discover_harness_configuration(adapter_id, version=value['version'],

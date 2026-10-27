@@ -9,6 +9,7 @@ import nexus_connector_core.availability as availability
 from nexus_connector_core import get_executor_inventory_schema
 import test_binding_operator
 from test_binding_operator import onboarding, prepare_operator
+from nexus_connector_core.discovery import fingerprint as file_fingerprint
 from okto_nexus.domain.base import iso_plus
 
 
@@ -157,6 +158,31 @@ def test_current_policy_or_evidence_changes_disable_start(options_host, change, 
         with deps.connection_factory.unit_of_work(write=False) as uow:
             assert uow.connection.execute('SELECT used_executions FROM runtime_execution_grants').fetchone()[0] == 0
     assert after['availability'] == before['availability']
+
+
+STABLE = 'nexus-install-v1:' + 'a' * 64
+
+
+@pytest.mark.parametrize('decision', ['held', 'accepted'])
+def test_binding_follows_a_succession_row_after_a_flip(options_host, decision, tmp_path):
+    deps, _, _, scope = options_host
+    binding = bind(options_host)
+    _, linked_by_ref = option(options_host)
+    assert linked_by_ref['binding']['binding_id'] == binding['binding_id']
+    fingerprint = file_fingerprint(tmp_path / 'remote-only' / 'codex.exe')
+    with deps.connection_factory.unit_of_work() as uow:
+        conn = uow.connection
+        conn.execute('UPDATE execution_bindings SET candidate_ref=?', (STABLE,))
+    _, unlinked = option(options_host)
+    assert unlinked['binding'] is None
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute(
+            'INSERT INTO execution_installation_succession (server_id,executor_id,adapter_id,stable_ref,decision,'
+            'reason,policy,policy_source,decided_by,from_executable,to_executable,to_build_identity,to_fingerprint,to_natural_ref,decided_at) '
+            "SELECT server_id,executor_id,'codex_app_server',?,?,'r','follow','hub','hub','a','b','bid',?,?,"
+            "'2026-01-01T00:00:00Z' FROM execution_bindings", (STABLE, decision, fingerprint, scope['candidate_ref']))
+    _, linked = option(options_host)
+    assert linked['binding'] is not None and linked['binding']['binding_id'] == binding['binding_id']
 
 
 @pytest.mark.parametrize('query', [

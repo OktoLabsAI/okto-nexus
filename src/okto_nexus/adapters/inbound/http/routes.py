@@ -786,6 +786,7 @@ def build_router() -> APIRouter:
         to_agent: str | None = None,
         undelivered: bool = False,
         include_body: bool = False,
+        include_receipts: bool = False,
     ) -> JSONResponse:
         observability = request.app.state.observability
         try:
@@ -806,10 +807,31 @@ def build_router() -> APIRouter:
                     to_agent_id=to_agent,
                     undelivered_only=undelivered,
                     include_body=include_body,
+                    include_receipts=include_receipts,
                 ),
             )
         except ValueError as exc:
             return _err(422, "INVALID_PARAM", str(exc))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(data)
+
+    @router.get("/operator/unread-count")
+    async def operator_unread_count(
+        request: Request, since: str | None = None, limit: int = 5
+    ) -> JSONResponse:
+        """Unread messages addressed to the operator: count plus newest items.
+
+        ``since`` (ISO timestamp) keeps only deliveries created after it.
+        """
+        observability = request.app.state.observability
+        try:
+            data = await _read(
+                request,
+                lambda uow: observability.operator_unread(
+                    uow, since_iso=since, limit=limit
+                ),
+            )
         except OktoNexusError as exc:
             return _map_error(exc)
         return _ok(data)
@@ -1010,12 +1032,15 @@ def build_router() -> APIRouter:
     async def runtime_endpoint_create(request: Request, body: RuntimeEndpointBody) -> JSONResponse:
         deps = request.app.state.deps
         try:
-            context = _harness_authorize(deps)
-            result = await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).create_endpoint(
-                context, **body.model_dump()))
-            return _ok(result)
+            _harness_authorize(deps)
         except OktoNexusError as exc:
             return _map_error(exc)
+        return _err(
+            410,
+            "GONE",
+            "Legacy connection setup was removed. Use /api/v1/runtime-management/connections/setup.",
+            {"replacement": "/api/v1/runtime-management/connections/setup"},
+        )
 
     @router.get("/harness/endpoints")
     async def runtime_endpoints(request: Request, agent_id: str | None = None) -> JSONResponse:
@@ -1101,6 +1126,24 @@ def build_router() -> APIRouter:
         try:
             context = _harness_authorize(deps)
             return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).tool_permission(context, endpoint_id=endpoint_id, changes=body)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.get("/harness/endpoints/{endpoint_id}/update-policy")
+    async def runtime_update_policy(request: Request, endpoint_id: str) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).update_policy(context, endpoint_id=endpoint_id)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.put("/harness/endpoints/{endpoint_id}/update-policy")
+    async def runtime_update_policy_update(request: Request, endpoint_id: str, body: dict) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).update_policy(context, endpoint_id=endpoint_id, changes=body)))
         except OktoNexusError as exc:
             return _map_error(exc)
 

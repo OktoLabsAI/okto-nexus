@@ -2,6 +2,7 @@
 import asyncio
 from types import SimpleNamespace
 import pytest
+from test_local_realization import local_setup  # noqa: F401
 from okto_nexus.application import connection_test as module
 
 
@@ -44,3 +45,20 @@ def test_probe_requires_output_and_cleanup(tmp_path,monkeypatch,outcome,text,cle
     assert observed['intent'].model=='glm-5.3'
     assert observed['intent'].harness_settings.provider=='zai'
     assert observed['intent'].mcp_preset == tuple(request['mcp_preset']['servers'])
+
+
+@pytest.mark.parametrize('local_setup',['claude_stream','codex_app_server'],indirect=True)
+def test_null_provider_home_fails_fast_only_for_claude(local_setup):
+    from test_connection_setup import request_for
+    context,request=request_for(local_setup)
+    client,headers=local_setup[2:4]
+    path='/api/v1/runtime-management/connections/setup:test'
+    claude=request['configuration']['adapter_id']=='claude_stream'
+    response=client.post(path,headers=headers['operator'],json=request)
+    if claude:
+        assert response.status_code==422,response.text
+        assert 'provider_home' in response.json()['error']['message']
+        assert not local_setup[1].state.connection_tests.tests
+    else:
+        assert response.status_code==200,response.text
+        assert request['configuration']['provider_home'] is None

@@ -16,7 +16,20 @@ from ..adapters.outbound.provider_vault import ProviderVault
 from ..bootstrap.execution_authority import build_execution_access
 from .execution_local_launch import ProviderSecretResolver
 from .execution_local_realizations import _digest, directory_identity, _require_binding_method
+from ..errors import ErrorCode, OktoNexusError
 from .connection_setup import baseline, conflict, require_operator, setup_mcp_preset
+
+
+def require_provider_home(configuration):
+    """Claude Code finds the operator login only through an approved harness home.
+
+    Without provider_home the child process gets no HOME. The draft test never
+    needs the login, so it would pass and every real turn would then fail.
+    """
+    if configuration['adapter_id'] == 'claude_stream' and not configuration['provider_home']:
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+            'provider_home is required for claude_stream. Set provider_home to the Claude Code '
+            'home directory, so the agent can use the operator login.', {'field': 'provider_home'})
 
 
 class ConnectionTests:
@@ -34,6 +47,7 @@ class ConnectionTests:
 
     def start(self, context, owner, request):
         self.authorize(context, request['agent_id'])
+        require_provider_home(request['configuration'])
         build_execution_access(self.deps).require_admission('open')
         if self.closed or owner is None:
             raise conflict('The local runtime service is unavailable.')
@@ -93,9 +107,20 @@ class ConnectionTests:
         batch = owner.published_batch
         if batch is None:
             raise conflict('The selected host has not published current installation evidence.')
-        candidate = resolve_local_installation_selection(batch.candidates, observations=batch.coverage(),
-            adapter_id=request['configuration']['adapter_id'], candidate_ref=request['candidate_ref'],
-            expected_inventory_revision=request['inventory_revision'])
+        try:
+            candidate = resolve_local_installation_selection(batch.candidates, observations=batch.coverage(),
+                adapter_id=request['configuration']['adapter_id'], candidate_ref=request['candidate_ref'],
+                expected_inventory_revision=request['inventory_revision'])
+        except CoreError as error:
+            if error.code != 'STALE_GENERATION':
+                raise
+            raise conflict('The inventory revision is stale. The current revision is %s. '
+                           'Refresh installations and test again.' % owner.publication.inventory_revision) from error
+        if candidate.trust != 'selected':
+            # A later version check selects this installation and publishes a new
+            # revision. A binding made before that check then needs a review.
+            raise conflict('Check the installation version before finishing: call installations:check. '
+                           'The current inventory revision is %s.' % owner.publication.inventory_revision)
         if asdict(candidate) != entry['candidate'] or selected_fingerprint(candidate) != candidate.fingerprint:
             raise conflict('The tested installation changed. Run the connection test again.')
         return entry

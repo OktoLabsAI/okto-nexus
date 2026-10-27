@@ -30,6 +30,7 @@ import {
   type GuardrailVersionMode,
 } from "../api";
 import { AgentSelect } from "../components/AgentSelect";
+import { formatTime, isoTitle } from "../timeFormat";
 import { useConfirm } from "../components/Confirm";
 import { PageContainer } from "../components/PageContainer";
 import { useWorkspaceName } from "../components/WorkspaceNames";
@@ -1684,7 +1685,7 @@ function DenialsPanel({
                 <td className="py-2 pr-3 font-mono">
                   {denial.actor_agent_id ?? "-"}
                 </td>
-                <td className="py-2 pr-3">{denial.created_at}</td>
+                <td className="py-2 pr-3" title={isoTitle(denial.created_at)}>{formatTime(denial.created_at)}</td>
                 <td className="py-2 min-w-[320px]">
                   <JsonCell value={denial.payload} />
                 </td>

@@ -92,6 +92,7 @@ embeddings = [
 ]
 dev = [
     "pytest>=8",
+    "pytest-asyncio>=0.23",
     "fastapi>=0.110,!=0.137.0",
     "uvicorn>=0.29",
     "wsproto>=1.2",

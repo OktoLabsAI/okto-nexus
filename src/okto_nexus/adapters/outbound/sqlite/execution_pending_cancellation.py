@@ -6,7 +6,8 @@ from ....errors import ErrorCode, OktoNexusError
 
 class SqlitePendingExecutionCancellation:
     def cancel(self, uow, operation_id, *, code='OPERATOR_CANCELLED', preserve_started_openings=False):
-        if code not in {'OPERATOR_CANCELLED', 'COMPETITIVE_NOTICE_RETIRED', 'CAPACITY_NOT_CONSUMED'}:
+        if code not in {'OPERATOR_CANCELLED', 'COMPETITIVE_NOTICE_RETIRED', 'CAPACITY_NOT_CONSUMED',
+                    'SUPERSEDED_BY_NEWER'}:
             raise ValueError('Unsupported pending cancellation cause.')
         conn = uow.connection
         rows = conn.execute(

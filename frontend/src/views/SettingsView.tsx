@@ -20,6 +20,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { api, type NexusInfo, type SettingItem } from "../api";
+import { browserNotifyEnabled, setBrowserNotify } from "../operatorUnread";
 import { useConfirm } from "../components/Confirm";
 import { useTheme } from "../hooks/useTheme";
 import { OperatorAccess } from "../components/OperatorAccess";
@@ -282,6 +283,8 @@ export function SettingsView({
           </div>
         </section>
 
+        <OperatorNotifications />
+
         {interfaceItems.length > 0 && (
           <section className="panel p-5 space-y-4" data-testid="interface-settings">
             <div>
@@ -536,6 +539,50 @@ export function SettingsView({
         <button className="btn btn-primary shrink-0" disabled={!dirty || blocked || saving} onClick={() => void save()} data-testid="save-settings"><Save size={14}/>{saving ? 'Saving…' : 'Save changes'}</button>
       </footer>
     </div></SettingsDrafts.Provider>
+  );
+}
+
+// Browser notification for new operator messages (issue #78). The switch is a
+// preference of this browser: it is stored in localStorage and takes effect at
+// once, so it does not join the unsaved-settings drafts.
+function OperatorNotifications() {
+  const supported = typeof Notification !== "undefined";
+  const [enabled, setEnabled] = useState(browserNotifyEnabled);
+  const [note, setNote] = useState<string | null>(null);
+  const toggle = async () => {
+    const next = await setBrowserNotify(!enabled);
+    setEnabled(next);
+    setNote(
+      !enabled && !next
+        ? "The browser did not grant the notification permission."
+        : null,
+    );
+  };
+  return (
+    <section className="panel p-5 space-y-3" data-testid="operator-notifications">
+      <h2 className="font-display font-semibold text-sm">Operator notifications</h2>
+      <div className="flex items-center justify-between gap-3 text-sm">
+        <span
+          className="text-surface-600 dark:text-surface-400"
+          title="Shows a browser notification when a message for the operator arrives and this tab is in the background. The preference is saved in this browser."
+        >
+          Browser notification for new operator messages
+        </span>
+        <button
+          className="btn btn-secondary"
+          onClick={() => void toggle()}
+          disabled={!supported}
+          aria-pressed={enabled}
+          data-testid="operator-notify-toggle"
+        >
+          {enabled ? "On" : "Off"}
+        </button>
+      </div>
+      {!supported && (
+        <p className="text-[11px] text-surface-400">This browser has no Notification support.</p>
+      )}
+      {note && <p role="status" className="text-[11px] text-amber-600">{note}</p>}
+    </section>
   );
 }
 

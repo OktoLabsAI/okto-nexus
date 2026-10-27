@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 import json
 import logging
 import math
+import random
 import secrets
 import sqlite3
 import time
@@ -30,6 +31,34 @@ from .embedded_events import EmbeddedPublicationDeferred
 _SCOPE = ("server_id", "executor_id", "binding_id", "agent_id", "workspace_id",
           "workspace_binding_id", "session_id", "session_owner_generation",
           "authorization_revision", "configuration_revision", "binding_revision", "credential_epoch")
+
+
+class _WakingSessions(dict):
+    """Session map that sets an event when a session is added or removed."""
+
+    def __init__(self, wake):
+        super().__init__()
+        self._wake = wake
+
+    def __setitem__(self, key, value):
+        super().__setitem__(key, value)
+        self._wake.set()
+
+    def __delitem__(self, key):
+        super().__delitem__(key)
+        self._wake.set()
+
+    def pop(self, *args):
+        self._wake.set()
+        return super().pop(*args)
+
+    def setdefault(self, key, default=None):
+        self._wake.set()
+        return super().setdefault(key, default)
+
+    def clear(self):
+        super().clear()
+        self._wake.set()
 
 
 class SessionAuthorityGate:
@@ -79,7 +108,9 @@ class EmbeddedDispatchOwner:
         self.capacity_authority = SqliteExecutionCapacityAuthority(factory=self.factory, channel=self.channel,
             fresh_publications=inventory.fresh, verify_owner=self.verify,
             now=lambda: datetime.fromisoformat(self.deps.clock.now_iso().replace('Z', '+00:00')))
-        self.sessions = {}
+        # Set when a session is added, renewed or removed, so the lease loop re-reads its deadlines.
+        self._lease_wake = asyncio.Event()
+        self.sessions = _WakingSessions(self._lease_wake)
         self.workers = set()
         self.active_operations = set()
         self.worker_agents = {}
@@ -91,6 +122,8 @@ class EmbeddedDispatchOwner:
         self.native_factory = None
         self.failure = None
         self._stopping = asyncio.Event()
+        # Set when work starts, so the maintenance loop leaves its idle sleep.
+        self._activity = asyncio.Event()
         self._close_task = None
         self._shutdown_started = None
         self._shutdown_deadline = None
@@ -207,6 +240,13 @@ class EmbeddedDispatchOwner:
                 code, agent_id)
         (logger.info if code in ('RECOVERY_READY', 'RECOVERY_AGENT_READY') else logger.warning)('Runtime recovery: %s %s',code,message)
 
+    def _notify_contained_claimant(self, session_id, agent_id, reason):
+        from ..adapters.inbound.mcp.tools.messages import build_service
+        from ..application.execution_release_notifications import notify_contained_claimant
+        return notify_contained_claimant(self.deps, build_service(self.deps),
+            server_id=self.channel.server_id, executor_id=self.channel.executor_id,
+            session_id=session_id, agent_id=agent_id, reason=reason)
+
     async def _recover_automatically(self):
         from nexus_connector_core import RuntimeAutomation
         from ..application.runtime_recovery import drain_pending, mark_recovery_attention
@@ -287,7 +327,8 @@ class EmbeddedDispatchOwner:
             verify_link=self.verify, close_link=self.failed,
             retained_operations=lambda: tuple(self.active_operations),
             wake_deliveries=self.deps.runtime_dispatcher.wake,
-            resolve_native_input=self.deps.native_decisions.inputs.resolve)
+            resolve_native_input=self.deps.native_decisions.inputs.resolve,
+            idle_interval=self.idle_interval)
         self.pump.start()
         self.lease_maintenance = asyncio.create_task(self._maintain_leases(), name="embedded-lease-renewals")
         self.maintenance = asyncio.create_task(self._maintain(), name="embedded-publications")
@@ -298,10 +339,11 @@ class EmbeddedDispatchOwner:
         from .embedded_initial_refusal import EmbeddedInitialRefusal
         await EmbeddedInitialRefusal(self).recover(agent_id=agent_id, session_id=session_id)
         after = 0
+        published = False
         while True:
             rows = await asyncio.to_thread(self._page, after=after, agent_id=agent_id, session_id=session_id)
             if not rows:
-                return
+                return published
             for row in rows:
                 # A live producer can still prove no native effect. Its
                 # SUBMISSION_STARTED journal entry is a crash fence, not a
@@ -313,7 +355,9 @@ class EmbeddedDispatchOwner:
                 key = OperationKey(row["server_id"],row["executor_id"],row["operation_id"])
                 receipt = await self.host.historical_receipt(session_id=row["session_id"],key=key)
                 if receipt is not None:
-                    await self._publish(json.loads(row["binding_json"]),receipt)
+                    # An open session keeps a non-terminal receipt for its whole life.
+                    # Only a changed receipt is new work. Else an idle session never goes idle.
+                    published = await self._publish(json.loads(row["binding_json"]),receipt) or published
                 if progress is not None:
                     progress()
             after = rows[-1]["rowid"]
@@ -357,6 +401,8 @@ class EmbeddedDispatchOwner:
         task.add_done_callback(self.workers.discard)
         task.add_done_callback(lambda done: self.worker_agents.pop(done, None))
         task.add_done_callback(lambda done: self.worker_sessions.pop(done, None))
+        task.add_done_callback(lambda done: self.agents.touch())
+        self.agents.touch()
 
     @asynccontextmanager
     async def _gate(self, session, action):
@@ -673,6 +719,7 @@ class EmbeddedDispatchOwner:
                 raise EmbeddedPublicationDeferred() from error
             if changed and self.deps.runtime_dispatcher is not None:
                 self.deps.runtime_dispatcher.wake()
+            return changed
 
     def _page(self, *, after=None, agent_id=None, session_id=None):
         parameters = [self.channel.server_id, self.channel.executor_id,
@@ -714,7 +761,10 @@ class EmbeddedDispatchOwner:
         # This changes scheduling only, never the authority's actual deadline.
         elapsed = max(0, now - session['executor'].lease_request_started)
         remaining = max(0, applied.context.lease_deadline_monotonic - now)
-        session['renew_at'] = now + max(0, remaining / 2 - elapsed)
+        margin = max(0, remaining / 2 - elapsed)
+        # Spread renewals of sibling sessions by +-10 percent. Stay inside the lease.
+        session['renew_at'] = now + min(margin * random.uniform(.9, 1.1), max(0, remaining - elapsed))
+        self._lease_wake.set()
 
     async def _renew_owned(self, session_id, session):
         try:
@@ -748,7 +798,9 @@ class EmbeddedDispatchOwner:
                         deadline = session['executor'].context.lease_deadline_monotonic
                         if now < deadline:
                             session['renew_at'] = min(deadline, now + 1)
+                            self._lease_wake.set()
                         else:
+                            session.setdefault('recovery_reason', 'LEASE_EXPIRED')
                             self.agents.recover_session(session_id)
                         logging.getLogger(__name__).warning(
                             'Runtime lease persistence delayed; retry scoped to session=%s, expired=%s',
@@ -769,6 +821,8 @@ class EmbeddedDispatchOwner:
                         # Retain the scoped cleanup owner even if shutdown or
                         # release proof is delayed. An unavailable stop must
                         # not escalate into containment of healthy siblings.
+                        session.setdefault('recovery_reason', str(getattr(
+                            error.code, 'value', error.code)))
                         self.agents.recover_session(session_id)
                         return
                     except Exception as containment_error:
@@ -789,17 +843,36 @@ class EmbeddedDispatchOwner:
         """
         try:
             while not self._stopping.is_set():
+                # Clear first: a wake during the scan stays set for the next wait.
+                self._lease_wake.clear()
+                next_due = None
                 for session_id, session in list(self.sessions.items()):
-                    if (not session.get('recovering') and session["scope"]["agent_id"] not in self.agents.blocked and session["renew_at"] is not None and time.monotonic() >= session["renew_at"]
-                            and (session.get("renew_task") is None or session["renew_task"].done())):
+                    if session.get('recovering') or session["renew_at"] is None:
+                        continue
+                    running = session.get("renew_task")
+                    if running is not None and not running.done():
+                        continue  # Its end sets the wake event.
+                    now = time.monotonic()
+                    if session["scope"]["agent_id"] in self.agents.blocked:
+                        due = now + .5  # Recovery ends without a wake event.
+                    elif now >= session["renew_at"]:
                         task = asyncio.create_task(self._renew_owned(session_id, session), name="embedded-renew-" + session_id)
                         session["renew_task"] = task
                         self.renewals.add(task)
                         task.add_done_callback(self.renewals.discard)
+                        task.add_done_callback(lambda done: self._lease_wake.set())
+                        continue
+                    else:
+                        due = session["renew_at"]
+                    next_due = due if next_due is None else min(next_due, due)
+                delay = self.lease_wait_cap if next_due is None else min(
+                    self.lease_wait_cap, max(0, next_due - time.monotonic()))
+                waiters = [asyncio.ensure_future(self._stopping.wait()), asyncio.ensure_future(self._lease_wake.wait())]
                 try:
-                    await asyncio.wait_for(self._stopping.wait(), .05)
-                except asyncio.TimeoutError:
-                    pass
+                    await asyncio.wait(waiters, timeout=delay, return_when=asyncio.FIRST_COMPLETED)
+                finally:
+                    for waiter in waiters:
+                        waiter.cancel()
         except Exception as error:
             if self.failure is None:
                 self.failure = error
@@ -810,6 +883,7 @@ class EmbeddedDispatchOwner:
         pending_at=0
         try:
             while not self._stopping.is_set():
+                self._activity.clear()
                 self.capacity_publication.tick()
                 await self.agents.tick()
                 if time.monotonic()>=pending_at:
@@ -826,14 +900,37 @@ class EmbeddedDispatchOwner:
                         logging.getLogger(__name__).warning(
                             'Pending-message admission deferred by transient storage contention; runtime remains active.')
                     pending_at=time.monotonic()+DEFAULT_RUNTIME_AUTOMATION.message_interval
-                try:
-                    await asyncio.wait_for(self._stopping.wait(),.1)
-                except asyncio.TimeoutError:
-                    pass
+                if self.agents.busy():
+                    try:
+                        await asyncio.wait_for(self._stopping.wait(),.1)
+                    except asyncio.TimeoutError:
+                        pass
+                else:
+                    await self._idle_sleep(self.idle_interval)
         except Exception as error:
             if self.failure is None:
                 self.failure = error
             await self.failed()
+
+    # Longest wait of the lease loop. A wake event ends it sooner.
+    lease_wait_cap = 5.0
+
+    @property
+    def idle_interval(self):
+        """Longest sleep of the maintenance loop while no work is pending."""
+        config = getattr(self.deps, 'config', None)
+        return max(.1, getattr(config, 'runtime_idle_interval_ms', 1000) / 1000)
+
+    async def _idle_sleep(self, delay):
+        """Sleep until the delay ends, shutdown starts or new work arrives."""
+        if self._activity.is_set():
+            return
+        waiters = [asyncio.ensure_future(self._stopping.wait()), asyncio.ensure_future(self._activity.wait())]
+        try:
+            await asyncio.wait(waiters, timeout=delay, return_when=asyncio.FIRST_COMPLETED)
+        finally:
+            for waiter in waiters:
+                waiter.cancel()
 
     def _start_close(self):
         if self._close_task is None:

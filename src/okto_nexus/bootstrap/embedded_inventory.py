@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 import time
 import threading
 
@@ -17,6 +18,27 @@ from ..domain.execution.keys import ExecutorKey
 from ..errors import ErrorCode, OktoNexusError
 
 
+logger = logging.getLogger(__name__)
+
+
+def send_installation_notices(deps, rows):
+    """Send one operator notice per new succession row (#89).
+
+    The audit row is already committed. A notice failure only logs, so it never
+    stops discovery or publication.
+    """
+    from ..adapters.inbound.mcp.tools.messages import build_service
+    from ..application.execution_release_notifications import InstallationUpdate, notify_installation_update
+    from dataclasses import fields
+    names = [field.name for field in fields(InstallationUpdate)]
+    try:
+        messages = build_service(deps)
+        for row in rows:
+            notify_installation_update(deps, messages, InstallationUpdate(**{name: row.get(name) for name in names}))
+    except Exception as error:  # noqa: BLE001 - a lost notice must not contain sessions.
+        logger.warning('Runtime installation update notice was not sent: %s', type(error).__name__)
+
+
 class EmbeddedInventoryOwner:
     """Retain full local candidates; publish path-free facts without runtime readiness."""
 
@@ -28,6 +50,8 @@ class EmbeddedInventoryOwner:
         self.key = ExecutorKey(self.identity.server_id, self.identity.embedded_executor_id)
         self.candidates = ()
         self.raw_candidates = ()
+        # (adapter_id, candidate_ref) -> why discovery left a candidate untrusted (#67).
+        self.trust_details = {}
         self.publication = None
         self.published_batch = None
         self.failure = None
@@ -141,7 +165,31 @@ class EmbeddedInventoryOwner:
             cancel_requested=self._discovery_stopped.is_set,
             adapter_ids=(adapter_id,) if adapter_id is not None else None,
             **(configuration.arguments() if configuration is not None else {}))
-        return tuple(discovery.candidates)
+        found = tuple(discovery.candidates)
+        from ..application.execution_installation_succession import apply_update_policy
+        found = await asyncio.to_thread(apply_update_policy, self.deps, self.key, found,
+                                        getattr(self, 'notify_installation_update', None))
+        self._note_trust_reasons(found, adapter_id)
+        return found
+
+    def notify_installation_update(self, row):
+        """Callback of apply_update_policy for one new succession row."""
+        send_installation_notices(self.deps, (row,))
+
+    def _note_trust_reasons(self, candidates, adapter_id=None):
+        """Log and keep the Core reason of each untrusted candidate; an older Core has none."""
+        from nexus_connector_core.availability import effective_installation_ref
+        details = {}
+        for item in candidates:
+            reason = getattr(item, 'reason', None)
+            if item.trust == 'untrusted' and reason:
+                details[(item.adapter_id, effective_installation_ref(item))] = reason
+        previous = self.trust_details
+        for key, reason in details.items():
+            if previous.get(key) != reason:
+                logger.warning('Untrusted %s candidate: %s', key[0], reason)
+        self.trust_details = {**{k: v for k, v in previous.items()
+                                 if adapter_id is not None and k[0] != adapter_id}, **details}
 
     async def _observe(self, adapter_id, cancel_requested):
         from ..application.execution_local_observations import apply_local_observations, refresh_approved_installations
@@ -240,7 +288,8 @@ class EmbeddedInventoryOwner:
         return publish_executor_inventory(self.deps.connection_factory,
             principal=self.key, producer_instance_id=self.dispatcher.owner_id,
             snapshot=snapshot, embedded_owner=(self.dispatcher.owner_id, self.dispatcher.epoch, self.generation),
-            refresh_delivery_id=delivery_id)
+            refresh_delivery_id=delivery_id,
+            on_successions=lambda rows: send_installation_notices(self.deps, rows))
 
     async def _run(self):
         if self._stop.is_set():
@@ -277,6 +326,7 @@ class EmbeddedInventoryOwner:
                         self._delivery = self._delivery_frontier = None
                     self._observation_changed.set()
             except Exception as error:
+                logger.warning('Inventory observation failed: %s: %s', type(error).__name__, error, exc_info=True)
                 self.failure = error
                 self._publication_failures += 1
                 self.fresh.pop((self.key.server_id, self.key.executor_id), None)

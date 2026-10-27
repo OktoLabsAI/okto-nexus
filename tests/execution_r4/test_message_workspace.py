@@ -31,6 +31,8 @@ def test_message_by_logical_workspace_reaches_core(connected_local, monkeypatch)
     with deps.connection_factory.unit_of_work() as uow:
         uow.connection.execute("UPDATE agent_endpoints SET consumption='exclusive',response_policy='conversation' WHERE endpoint_id=?", (binding["endpoint_id"],))
         workspace = uow.connection.execute("SELECT workspace_id FROM agent_endpoints WHERE endpoint_id=?", (binding["endpoint_id"],)).fetchone()[0]
+        # Local realization stores its approved root (#75). A logical workspace has no Server-local path.
+        uow.connection.execute("UPDATE workspaces SET root_realpath=NULL WHERE workspace_id=?", (workspace,))
         assert uow.connection.execute("SELECT root_realpath FROM workspaces WHERE workspace_id=?", (workspace,)).fetchone()[0] is None
     forbid_paths(monkeypatch)
     result = call(setup, monkeypatch, workspace_id=workspace)

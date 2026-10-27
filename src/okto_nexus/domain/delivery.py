@@ -48,6 +48,8 @@ class DeliveryEnvelope:
     schema_version: int = 1
     trust: str = "untrusted_content"
     runtime_context: dict[str, Any] | None = None
+    sent_at: str | None = None
+    queued_before: int | None = None
 
     def __post_init__(self):
         if self.schema_version != 1 or self.intent not in INTENTS or self.hop_count < 0:
@@ -61,7 +63,12 @@ class DeliveryEnvelope:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Use authorized artifact references for non-text content.", {})
 
     def to_dict(self) -> dict[str, Any]:
-        return asdict(self)
+        data = asdict(self)
+        # Unset fields stay out, so old envelopes keep their text and request hash.
+        for key in ("sent_at", "queued_before"):
+            if data[key] is None:
+                del data[key]
+        return data
 
     def canonical_json(self) -> str:
         return json.dumps(self.to_dict(), sort_keys=True, separators=(",", ":"), ensure_ascii=False)

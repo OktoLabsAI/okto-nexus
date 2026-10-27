@@ -20,14 +20,14 @@ def connected_local(local_setup):
     return connect_local(local_setup)
 
 
-def send(setup, monkeypatch, *, target=None):
+def send(setup, monkeypatch, *, target=None, **extra):
     monkeypatch.syspath_prepend(str(Path(__file__).parents[1]))
     from test_pr34_remediation import tool
     _, _, client, headers, *_, root = setup
     client.headers["host"] = "127.0.0.1:8000"
     return tool(client, headers["operator"]["Authorization"].removeprefix("Bearer "), "message_create",
         dict(project_root=str(root), from_agent_id="operator", subject="Canonical conversation",
-             body="Please review this message.", target=target or dict(strategy="direct", agent_id="subject")))
+             body="Please review this message.", target=target or dict(strategy="direct", agent_id="subject"), **extra))
 
 
 def enable(setup, binding):
@@ -199,3 +199,30 @@ def test_sender_revocation_blocks_admitted_delivery(connected_local, monkeypatch
         assert time.monotonic() < deadline, tuple(row)
         time.sleep(.02)
     assert native.opens == 0
+
+
+def test_no_reply_message_is_delivered_and_receipts_start_no_turn(connected_local, monkeypatch):
+    from test_pr34_remediation import tool
+    setup, binding, native = connected_local
+    enable(setup, binding)
+    deps, _, client, headers, *_ = setup
+    def count(table):
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            return uow.connection.execute('SELECT COUNT(*) FROM ' + table).fetchone()[0]
+    final = send(setup, monkeypatch, no_reply=True)
+    assert final['ok'], final
+    assert final['data']['recipients'] == ['subject'] and 'runtime_operations' not in final['data']
+    assert (count('message_deliveries'), count('delivery_outbox'), count('execution_operations')) == (1, 0, 0)
+    # The recipient still reads the message. Reading it sends a receipt to the sender only.
+    token = headers['subject']['Authorization'].removeprefix('Bearer ')
+    pulled = tool(client, token, 'inbox_pull', {'agent_id': 'subject'})['data']['messages']
+    assert [item['message_id'] for item in pulled] == [final['data']['message_id']]
+    acked = tool(client, token, 'inbox_ack', {'agent_id': 'subject', 'message_ids': [pulled[0]['message_id']]})
+    assert acked['ok'], acked
+    assert count('message_deliveries') == 2  # the message and its receipt
+    assert (count('delivery_outbox'), count('execution_operations')) == (0, 0)
+    # The same message without the flag still starts a turn.
+    normal = send(setup, monkeypatch)
+    assert normal['ok'] and len(normal['data']['runtime_operations']) == 1, normal
+    assert count('delivery_outbox') == 1
+

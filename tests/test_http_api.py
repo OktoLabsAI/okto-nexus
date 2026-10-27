@@ -1530,3 +1530,76 @@ def test_sse_open_stream_does_not_wedge_server_shutdown(tmp_path):
     finally:
         server.should_exit = True
         thread.join(timeout=10)
+
+
+def test_operator_unread_count_counts_only_unread_operator_messages(serve_env):
+    deps, client, key = serve_env
+    ws = "u" * 64
+    with deps.connection_factory.unit_of_work() as uow:
+        deps.repos.workspaces.upsert(uow, workspace_id=ws, display_name="unread")
+        for agent in ("lead", "worker"):
+            deps.repos.agents.upsert(uow, agent_id=agent)
+
+        def deliver(message_id, recipient, status, created_at, subject):
+            deps.repos.messages.create(
+                uow,
+                message_id=message_id,
+                workspace_id=ws,
+                from_agent_id="lead",
+                subject=subject,
+                body=f"body of {subject}",
+                created_at=created_at,
+            )
+            deps.repos.deliveries.create(
+                uow,
+                delivery_id=f"d-{message_id}",
+                message_id=message_id,
+                recipient_agent_id=recipient,
+                status=status,
+                created_at=created_at,
+            )
+
+        deliver("m1", "operator", "unread", "2030-01-01T00:00:01+00:00", "first")
+        deliver("m2", "operator", "unread", "2030-01-01T00:00:02+00:00", "second")
+        deliver("m3", "operator", "read", "2030-01-01T00:00:03+00:00", "already read")
+        deliver("m4", "worker", "unread", "2030-01-01T00:00:04+00:00", "other agent")
+        # A read receipt for the operator is a notification, not a message.
+        deps.repos.messages.create(
+            uow,
+            message_id="m5",
+            workspace_id=ws,
+            from_agent_id="lead",
+            subject=None,
+            body='{"kind": "message.read_receipt", "read_by": "lead"}',
+            created_at="2030-01-01T00:00:05+00:00",
+        )
+        deps.repos.deliveries.create(
+            uow,
+            delivery_id="d-m5",
+            message_id="m5",
+            recipient_agent_id="operator",
+            status="unread",
+            created_at="2030-01-01T00:00:05+00:00",
+        )
+
+    data = client.get("/api/v1/operator/unread-count", headers=_h(key)).json()["data"]
+    assert data["count"] == 2
+    assert data["latest_created_at"] == "2030-01-01T00:00:02+00:00"
+    assert [row["subject"] for row in data["items"]] == ["second", "first"]
+    assert data["items"][0]["from_agent_id"] == "lead"
+    assert data["items"][0]["preview"] == "body of second"
+
+    after_first = client.get(
+        "/api/v1/operator/unread-count",
+        params={"since": "2030-01-01T00:00:01+00:00", "limit": 1},
+        headers=_h(key),
+    ).json()["data"]
+    assert after_first["count"] == 1
+    assert [row["subject"] for row in after_first["items"]] == ["second"]
+
+    nothing = client.get(
+        "/api/v1/operator/unread-count",
+        params={"since": "2030-01-01T00:00:02+00:00"},
+        headers=_h(key),
+    ).json()["data"]
+    assert nothing == {"count": 0, "latest_created_at": None, "items": []}

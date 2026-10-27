@@ -204,3 +204,17 @@ def test_claude_consumed_request_id_cannot_authorize_following_turn(connected_lo
     with setup[0].connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute('SELECT COUNT(*) FROM execution_native_requests').fetchone()[0] == 1
     close_peer(setup, binding, turn, 'claude-consumed-close')
+
+
+def test_claude_routing_is_reported_only_when_native_approvals_are_on(connected_local):
+    setup, binding, _ = connected_local
+    deps, _, client, headers, *_ = setup
+    path = f"/api/v1/harness/endpoints/{binding['endpoint_id']}/harness-settings"
+    def reported():
+        response = client.get(path, headers=headers['operator'])
+        assert response.status_code == 200, response.text
+        return response.json()['data']['configuration']['human_input']['recipient_routing_implemented']
+    deps.config.feature_hitl = False
+    assert reported() is False
+    deps.config.feature_hitl = True
+    assert reported() is True

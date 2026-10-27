@@ -43,8 +43,8 @@ def test_renewals_progress_while_maintenance_and_another_renewal_are_held(monkey
         owner = SimpleNamespace(
             _stopping=asyncio.Event(), failure=None, deps=None, renewals=set(),
             sessions={sid: {'scope': {'agent_id': sid}, 'renew_at': 0} for sid in ('slow', 'fast')},
-            agents=SimpleNamespace(blocked=set(), tick=tick),
-            capacity_publication=SimpleNamespace(tick=lambda: None),
+            agents=SimpleNamespace(blocked=set(), tick=tick, busy=lambda: True),
+            capacity_publication=SimpleNamespace(tick=lambda: None), _activity=asyncio.Event(),
             _renew_owned=renew, failed=failed,
         )
         monkeypatch.setattr(runtime_recovery, 'drain_pending', drain)

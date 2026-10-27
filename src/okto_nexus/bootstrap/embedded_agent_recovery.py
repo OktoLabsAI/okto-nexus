@@ -28,8 +28,40 @@ def _diagnostic(error):
             f"at {getattr(error, 'stage', 'agent runtime history')}{suffix}")
 
 
+_REASON = re.compile(r'[A-Za-z][A-Za-z0-9_.-]{0,79}')
+
+
+def _containment_reason(session):
+    """Technical cause of a containment, safe to show to an operator."""
+    error = session.get('recovery_error')
+    reason = session.get('recovery_reason')
+    if reason is None and error is not None:
+        code = getattr(error, 'code', None) or type(error).__name__
+        reason = getattr(code, 'value', code)
+    return reason if isinstance(reason, str) and _REASON.fullmatch(reason) else 'SESSION_CONTAINED'
+
+
+# CROSS JOIN pins the order: the agent's streams first, then the partial index
+# idx_event_ingress_error (error rows only). Without it SQLite starts from the
+# ingress table and reads every row of the executor.
+STREAM_FAULT_SQL = (
+    "SELECT DISTINCT s.session_id FROM execution_local_streams l "
+    "CROSS JOIN execution_sessions s USING(server_id,executor_id,session_id) "
+    "CROSS JOIN execution_event_ingress e USING(server_id,executor_id,session_id,stream_epoch) "
+    "WHERE l.server_id=? AND l.executor_id=? AND l.agent_id=? AND l.drained=0 "
+    "AND s.lifecycle_state NOT IN ('CLOSED','FAILED') AND e.event_type='error' "
+    "AND json_extract(e.payload_json,'$.native_type')='core.event_pump_failed' "
+    "AND json_extract(e.payload_json,'$.payload.code')='EVENT_STREAM_UNAVAILABLE'")
+
+
 class EmbeddedAgentRecovery:
     observation_timeout = 5.0
+    # Seconds the host keeps its short tick after the last sign of work.
+    busy_linger = 5.0
+    # Seconds between safety-net stream health checks of one live agent.
+    health_interval = 60.0
+    # Seconds between two counter log lines.
+    counter_interval = 300.0
 
     def __init__(self, owner):
         self.owner = owner
@@ -38,6 +70,13 @@ class EmbeddedAgentRecovery:
         self.delayed = set()
         self.blocked = set()
         self.retry_at = {}
+        # Idle back-off by agent. It is separate from retry_at, which holds error back-off.
+        self.next_due_at = {}
+        # Next safety-net stream health check by agent. A missing key means: check now.
+        self.health_due_at = {}
+        self.counters = {'busy_ticks': 0, 'idle_ticks': 0, 'stream_checks': 0}
+        self._logged = {}
+        self._counter_log_at = time.monotonic() + self.counter_interval
         self.attempts = {}
         self.errors = {}
         self.current_errors = {}
@@ -47,6 +86,8 @@ class EmbeddedAgentRecovery:
         self.session_tasks = {}
         self.session_retry_at = {}
         self.registry_import_task = None
+        self.last_active = time.monotonic()
+        self.unsettled = True
         self._registry_stop = asyncio.Event()
         from .embedded_retirement_maintenance import EmbeddedRetirementMaintenance
         self.retirement = EmbeddedRetirementMaintenance(self)
@@ -345,15 +386,44 @@ class EmbeddedAgentRecovery:
         await asyncio.to_thread(owner._recovery_event, 'RECOVERY_AGENT_READY',
             'Agent history reconciled. Previous work was not replayed.', agent_id=agent_id)
 
+    def touch(self):
+        """Record work. The host keeps its short tick and wakes at once."""
+        self.last_active = time.monotonic()
+        # New work ends every idle back-off at once.
+        self.next_due_at.clear()
+        self.owner._activity.set()
+
+    def busy(self):
+        """True while work is pending. An idle host may sleep up to its idle interval."""
+        return (time.monotonic() - self.last_active < self.busy_linger
+                or bool(self.blocked or self.session_tasks or self.unsettled or self.owner.workers)
+                or any(session.get('recovering') for session in self.owner.sessions.values()))
+
     async def _publish(self, agent_id):
         def progress():
             self.started[agent_id] = time.monotonic()
             self.delayed.discard(agent_id)
-        await self.owner._recover_publications(agent_id=agent_id, progress=progress)
-        await self.owner.events.recover(agent_id=agent_id, live_only=True, progress=progress)
-        faults = await asyncio.to_thread(self._check_stream_health, agent_id, frozenset(self.owner.active_operations))
+        started = time.monotonic()
+        published = await self.owner._recover_publications(agent_id=agent_id, progress=progress)
+        stats = {}
+        await self.owner.events.recover(agent_id=agent_id, live_only=True, progress=progress, stats=stats)
+        # Check the stream when the agent becomes live, when a batch holds an
+        # error event, and every health_interval seconds as a safety net.
+        faults = []
+        now = time.monotonic()
+        if stats.get('error_seen') or now >= self.health_due_at.get(agent_id, 0):
+            self.health_due_at[agent_id] = now + self.health_interval
+            self.counters['stream_checks'] += 1
+            faults = await asyncio.to_thread(self._check_stream_health, agent_id,
+                                             frozenset(self.owner.active_operations))
         for session_id in faults:
+            self.owner.sessions.get(session_id, {}).setdefault('recovery_reason', 'EVENT_STREAM_UNAVAILABLE')
             self.recover_session(session_id)
+        # Lease renewals are not work: they do not keep the short tick.
+        if published or stats.get('active') or faults:
+            self.touch()
+        elif not any(sid == agent_id for sid in self.owner.worker_agents.values()):
+            self.next_due_at[agent_id] = started + self.owner.idle_interval * .9
 
     def recover_session(self, session_id, *, error=None):
         session = self.owner.sessions.get(session_id)
@@ -362,6 +432,7 @@ class EmbeddedAgentRecovery:
         # Fence only this session. Retain one worker, including during slow
         # containment; healthy siblings continue dispatch and publication.
         session['recovering'] = True
+        self.touch()
         if error is not None:
             session.setdefault('recovery_error', error)
         task = self.session_tasks.get(session_id)
@@ -438,6 +509,9 @@ class EmbeddedAgentRecovery:
             await owner.events.recover(agent_id=agent_id, session_id=session_id)
             await EmbeddedReconciliation(owner).release_stopped_session(session_id)
             await owner.tools.release_session(session_id)
+            # Before the session leaves the owner: a failed write retries with it.
+            await asyncio.to_thread(owner._notify_contained_claimant, session_id, agent_id,
+                _containment_reason(session))
             owner.sessions.pop(session_id, None)
             self.session_retry_at.pop(session_id, None)
             await asyncio.to_thread(owner._recovery_event, 'RECOVERY_SESSION_RELEASED',
@@ -466,14 +540,7 @@ class EmbeddedAgentRecovery:
         owner = self.owner
         with owner.factory.unit_of_work(write=False) as uow:
             owner.verify(uow=uow)
-            faults = uow.connection.execute(
-                "SELECT DISTINCT s.session_id FROM execution_local_streams l "
-                "JOIN execution_sessions s USING(server_id,executor_id,session_id) "
-                "JOIN execution_event_ingress e USING(server_id,executor_id,session_id,stream_epoch) "
-                "WHERE l.server_id=? AND l.executor_id=? AND l.agent_id=? AND l.drained=0 "
-                "AND s.lifecycle_state NOT IN ('CLOSED','FAILED') AND e.event_type='error' "
-                "AND json_extract(e.payload_json,'$.native_type')='core.event_pump_failed' "
-                "AND json_extract(e.payload_json,'$.payload.code')='EVENT_STREAM_UNAVAILABLE'",
+            faults = uow.connection.execute(STREAM_FAULT_SQL,
                 (owner.channel.server_id, owner.channel.executor_id, agent_id)).fetchall()
             pending = []
             for fault in faults:
@@ -487,6 +554,7 @@ class EmbeddedAgentRecovery:
                     # owns containment; let it settle without stopping siblings.
                     # Failure/unknown is still handled by that producer, and an
                     # unresolved stream is checked again after the worker exits.
+                    self.health_due_at.pop(agent_id, None)
                     continue
                 pending.append(fault['session_id'])
             return pending
@@ -608,18 +676,43 @@ class EmbeddedAgentRecovery:
                 await asyncio.to_thread(self.owner._recovery_event, 'RECOVERY_PUBLICATION_DELAYED',
                     'Publication is delayed; native execution and lease renewal remain active.', agent_id=agent_id)
         enabled = manual or await asyncio.to_thread(self.owner._recovery_enabled)
-        subjects = self.blocked | await asyncio.to_thread(self._pending_subjects)
-        subjects |= {s['scope']['agent_id'] for s in self.owner.sessions.values()}
+        pending = await asyncio.to_thread(self._pending_subjects)
+        live = {s['scope']['agent_id'] for s in self.owner.sessions.values()}
+        # An open session keeps its own stream row, so only the other pending
+        # subjects show unfinished work. Live subjects report work when they run.
+        self.unsettled = bool(pending - live)
+        subjects = self.blocked | pending | live
         subjects = subjects if target_agent_id is None else subjects & {target_agent_id}
         self.retirement.tick(subjects)
+        for table in (self.next_due_at, self.health_due_at):
+            for gone in [a for a in table if a not in subjects]:
+                del table[gone]
         for agent_id in subjects:
             recovering = agent_id in self.blocked
             if (agent_id in self.tasks or (recovering and not enabled) or
-                    (not manual and now < self.retry_at.get(agent_id, 0))):
+                    (not manual and now < self.retry_at.get(agent_id, 0)) or
+                    (not manual and not recovering and now < self.next_due_at.get(agent_id, 0))):
                 continue
             self.started[agent_id] = now
             self.tasks[agent_id] = asyncio.create_task(self._run(agent_id, recovering),
                 name='embedded-agent-' + agent_id)
+        self.counters['busy_ticks' if self.busy() else 'idle_ticks'] += 1
+        self._log_counters(now)
+
+    def _log_counters(self, now):
+        """Log the counter changes since the last line. Log at most once per counter_interval."""
+        if now < self._counter_log_at:
+            return
+        self._counter_log_at = now + self.counter_interval
+        read_units, write_units = self.owner.factory.unit_counts()
+        current = dict(self.counters, read_units=read_units, write_units=write_units)
+        delta = {k: v - self._logged.get(k, 0) for k, v in current.items()}
+        self._logged = current
+        if any(delta.values()):
+            logging.getLogger(__name__).info(
+                'runtime idle counters %ds: busy_ticks=%d idle_ticks=%d read_units=%d write_units=%d stream_checks=%d',
+                self.counter_interval, delta['busy_ticks'], delta['idle_ticks'], delta['read_units'],
+                delta['write_units'], delta['stream_checks'])
 
     async def observe(self, *, timeout=1.0):
         if self.tasks:

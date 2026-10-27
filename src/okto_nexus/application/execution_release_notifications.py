@@ -6,7 +6,9 @@ runtime relays. One-shot calls already own a separate error-notification path.
 """
 import hashlib
 import json
+from dataclasses import dataclass
 
+from ..adapters.outbound.sqlite.handoff_notifications import SqliteHandoffNotificationRepository
 from ..domain.messages import MESSAGE_CREATED_TYPE, MESSAGE_STREAM
 
 
@@ -61,3 +63,146 @@ def publish_release_notifications(deps, messages):
             conn.execute("UPDATE execution_release_notifications SET message_id=?,state='PUBLISHED' "
                 "WHERE domain_operation_id=? AND state='PENDING'", (message_id, row['domain_operation_id']))
         return len(rows)
+
+
+def notify_contained_claimant(deps, messages, *, server_id, executor_id, session_id, agent_id, reason):
+    """Record why a session was contained and tell the operator and the waiting creators.
+
+    Each CLAIMED handoff of the agent gets one notice to its creator. The
+    operator always gets one notice with the agent, the reason and the session.
+    It lists the claimed handoffs when there are any. The reason, the notices and
+    the event commit together. A second call for the same session does nothing.
+    The creator notices also start a runtime turn when the creator has a
+    session (``queue_outcome``). The operator notice stays an inbox message.
+    """
+    with deps.connection_factory.unit_of_work() as uow:
+        conn = uow.connection
+        recorded = conn.execute(
+            "SELECT containment_reason,workspace_id FROM execution_sessions WHERE server_id=? AND executor_id=? AND session_id=?",
+            (server_id, executor_id, session_id)).fetchone()
+        if recorded is not None and recorded[0] is not None:
+            return 0
+        now = deps.clock.now_iso()
+        if recorded is not None:
+            conn.execute("UPDATE execution_sessions SET containment_reason=?,contained_at=? "
+                "WHERE server_id=? AND executor_id=? AND session_id=?",
+                (reason, now, server_id, executor_id, session_id))
+        handoffs = conn.execute(
+            "SELECT handoff_id,workspace_id,from_agent_id,lease_expires_at,updated_at FROM handoffs "
+            "WHERE status='CLAIMED' AND claimed_by=? ORDER BY created_at,handoff_id", (agent_id,)).fetchall()
+        sent = 0
+
+        def send(recipient_id, handoff_id, workspace_id, subject, body, push=False):
+            nonlocal sent
+            if workspace_id is None or deps.repos.agents.get(uow, recipient_id) is None:
+                return
+            identity = hashlib.sha256(f'{session_id}|{handoff_id}|{recipient_id}'.encode()).hexdigest()
+            message_id = 'msg_claimant_contained_' + identity
+            target = dict(strategy='direct', agent_id=recipient_id)
+            messages._messages.create(uow, message_id=message_id, workspace_id=workspace_id,
+                from_agent_id=agent_id, channel_id=None, from_session_id=None, target=json.dumps(target),
+                subject=subject, body=body, artifacts=[], parent_message_id=None, trace_id=None, created_at=now)
+            delivery = messages._deliveries.create(uow, delivery_id='del_claimant_contained_' + identity,
+                message_id=message_id, recipient_agent_id=recipient_id, status='unread', created_at=now)
+            messages._emitter.emit(uow, workspace_id=workspace_id, stream=MESSAGE_STREAM,
+                type=MESSAGE_CREATED_TYPE, payload=dict(message_id=message_id, channel_id=None,
+                    from_agent_id=agent_id, target=target, subject=subject, created_at=now,
+                    system_notification=True), actor_agent_id=None, visibility='eligible',
+                target=json.dumps(target))
+            if push:
+                from .runtime_handoff_notifications import queue_outcome
+                message = messages._messages.get(uow, workspace_id=workspace_id, message_id=message_id)
+                queue_outcome(uow, message=message, delivery=delivery, handoff_id=handoff_id,
+                    kind='handoff.claimant_contained', agents=deps.repos.agents, handoffs=deps.repos.handoffs,
+                    now=now, notifications=SqliteHandoffNotificationRepository(),
+                    runtime_enabled=bool(getattr(deps.config, 'feature_harness_integrations', False)))
+            sent += 1
+
+        for handoff in handoffs:
+            creator = handoff['from_agent_id']
+            if creator and creator not in (agent_id, 'operator'):
+                send(creator, handoff['handoff_id'], handoff['workspace_id'], f"handoff {handoff['handoff_id']} claimant session contained",
+                    f"Claimant session contained (reason: {reason}). "
+                    f"Work after {handoff['updated_at']} may be lost. "
+                    f"The lease of {agent_id} runs to {handoff['lease_expires_at']}.\n\n"
+                    f"Handoff: {handoff['handoff_id']}\nClaimant: {agent_id}\nSession: {session_id}", push=True)
+        lines = ''.join(f"\nHandoff: {h['handoff_id']} (lease to {h['lease_expires_at']})" for h in handoffs)
+        affected = (f"Work of {agent_id} on {len(handoffs)} claimed handoff(s) may be lost.{lines}\n\n"
+            if handoffs else f"{agent_id} holds no claimed handoff.\n\n")
+        workspace_id = handoffs[0]['workspace_id'] if handoffs else (
+            recorded['workspace_id'] if recorded is not None else None)
+        send('operator', '', workspace_id, f'claimant session of {agent_id} contained',
+            f"Claimant session contained (reason: {reason}). {affected}"
+            f"Claimant: {agent_id}\nSession: {session_id}")
+        return sent
+
+
+@dataclass(frozen=True)
+class InstallationUpdate:
+    """One row of execution_installation_succession, as the notifier needs it."""
+    server_id: str
+    executor_id: str
+    stable_ref: str
+    decision: str
+    reason: str | None = None
+    from_version: str | None = None
+    to_version: str | None = None
+    from_build_identity: str | None = None
+    to_build_identity: str | None = None
+
+
+def notify_installation_update(deps, messages, update):
+    """Tell the operator that a runtime installation was accepted or held.
+
+    The hub sends one inbox message per affected workspace. The message names
+    the agents bound to the installation, both versions, the first 12 hex
+    characters of both build identities, the decision and the held reason.
+    The message id comes from the ref, the new build, the decision and the
+    workspace. A repeated call for the same update sends nothing.
+    These notices are inbox messages. They do not start a runtime turn.
+    """
+    with deps.connection_factory.unit_of_work() as uow:
+        conn = uow.connection
+        rows = conn.execute(
+            "SELECT DISTINCT e.workspace_id,e.agent_id FROM execution_bindings b "
+            "JOIN agent_endpoints e USING(endpoint_id) "
+            "WHERE b.server_id=? AND b.executor_id=? AND b.candidate_ref=? AND e.workspace_id IS NOT NULL "
+            "ORDER BY e.workspace_id,e.agent_id",
+            (update.server_id, update.executor_id, update.stable_ref)).fetchall()
+        agents = {}
+        for row in rows:
+            agents.setdefault(row['workspace_id'], []).append(row['agent_id'])
+        short = lambda value: (value or 'unknown').removeprefix('sha256:')[:12]
+        now = deps.clock.now_iso()
+        sent = 0
+        for workspace_id, names in agents.items():
+            if deps.repos.agents.get(uow, 'operator') is None:
+                break
+            identity = hashlib.sha256('|'.join(
+                (update.stable_ref, update.to_build_identity or '', update.decision, workspace_id)).encode()).hexdigest()
+            message_id = 'msg_installation_update_' + identity
+            if conn.execute("SELECT 1 FROM messages WHERE message_id=?", (message_id,)).fetchone() is not None:
+                continue
+            target = dict(strategy='direct', agent_id='operator')
+            subject = f'runtime installation update {update.decision}'
+            body = (
+                f"Runtime installation update {update.decision}.\n"
+                f"Agents: {', '.join(names)}\n"
+                f"Version: {update.from_version or 'unknown'} to {update.to_version or 'unknown'}\n"
+                f"Build identity: {short(update.from_build_identity)} to {short(update.to_build_identity)}\n"
+                f"Decision: {update.decision}\n")
+            if update.decision == 'held':
+                body += (f"Held reason: {update.reason or 'unknown'}\n"
+                    "New sessions stay blocked until the operator accepts the update.\n")
+            messages._messages.create(uow, message_id=message_id, workspace_id=workspace_id,
+                from_agent_id='operator', channel_id=None, from_session_id=None, target=json.dumps(target),
+                subject=subject, body=body, artifacts=[], parent_message_id=None, trace_id=None, created_at=now)
+            messages._deliveries.create(uow, delivery_id='del_installation_update_' + identity,
+                message_id=message_id, recipient_agent_id='operator', status='unread', created_at=now)
+            messages._emitter.emit(uow, workspace_id=workspace_id, stream=MESSAGE_STREAM,
+                type=MESSAGE_CREATED_TYPE, payload=dict(message_id=message_id, channel_id=None,
+                    from_agent_id='operator', target=target, subject=subject, created_at=now,
+                    system_notification=True), actor_agent_id=None, visibility='eligible',
+                target=json.dumps(target))
+            sent += 1
+        return sent

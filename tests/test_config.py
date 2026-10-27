@@ -267,3 +267,35 @@ def test_clamp_limit_grammar():
         with pytest.raises(OktoNexusError) as ei:
             clamp_limit(bad, default=50, maximum=200)
         assert ei.value.code == ErrorCode.VALIDATION_ERROR.value
+
+
+def test_handoff_lease_default_is_one_hour(tmp_path):
+    from okto_nexus.config import _INT_FIELDS, NexusConfig
+
+    assert NexusConfig.handoff_lease_ttl_seconds == 3600
+    assert _INT_FIELDS["handoff_lease_ttl_seconds"][2] == 3600
+
+
+# --------------------------------------------------------------------------- #
+# runtime_update_policy (#89)
+# --------------------------------------------------------------------------- #
+def test_runtime_update_policy_defaults_to_review():
+    assert load_config({}).runtime_update_policy == "review"
+    assert NexusConfig().runtime_update_policy == "review"
+
+
+def test_runtime_update_policy_parses_env_and_cli_flag():
+    env = {"OKTO_NEXUS_RUNTIME_UPDATE_POLICY": "follow"}
+    assert load_config(env).runtime_update_policy == "follow"
+    config = load_config(env, ["--runtime-update-policy", "review"])
+    assert config.runtime_update_policy == "review"  # CLI > env
+
+
+@pytest.mark.parametrize("bad", ["auto", "", "latest"])
+def test_runtime_update_policy_bad_value_fails_closed(bad):
+    with pytest.raises(OktoNexusError) as ei:
+        load_config({"OKTO_NEXUS_RUNTIME_UPDATE_POLICY": bad})
+    assert ei.value.code == ErrorCode.CONFIG_ERROR.value
+    assert "runtime_update_policy" in ei.value.message
+    with pytest.raises(OktoNexusError):
+        load_config({}, ["--runtime-update-policy", bad])

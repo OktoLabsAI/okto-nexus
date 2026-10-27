@@ -22,6 +22,17 @@ class EndpointService:
     def authorize(self, context):
         if self.access:
             return self.access.authorize(context)
+
+    def retire_consent(self, uow, *, context, endpoint_id, now, reissue=False):
+        """A configuration edit retires the endpoint's grants (#94 keeps this design).
+
+        The result reports the revocation. With reissue the operator consents
+        again in the same transaction, so the team keeps working.
+        """
+        revoked = self.repo.invalidate_configuration(uow, endpoint_ids=[endpoint_id], now=now)
+        issued = self.repo.reissue_grants(uow, grant_ids=revoked, issuer_agent_id=context.actor_agent_id or "operator",
+                                          now=now) if reissue else []
+        return {"grants_revoked": len(revoked), "grants_reissued": len(issued)}
         authorize_runtime(context, config=self.config, agents=self.agents, connection_factory=self.cf)
 
     @staticmethod
@@ -107,11 +118,12 @@ class EndpointService:
     def harness_settings(self, context, *, endpoint_id, changes=None):
         """Revisioned native launch settings, independent of Nexus tool policy."""
         from nexus_connector_core import validate_harness_configuration, CoreError
-        from .execution_harness_configuration import read_harness_configuration
+        from .execution_harness_configuration import approvals_routing_enabled, read_harness_configuration
         self.authorize(context)
         if changes is not None and (not isinstance(changes, dict) or
-                set(changes) != {'expected_revision', 'settings'} or
-                type(changes['expected_revision']) is not int or not isinstance(changes['settings'], dict)):
+                not {'expected_revision', 'settings'} <= set(changes) <= {'expected_revision', 'settings', 'reissue_grants'} or
+                type(changes['expected_revision']) is not int or not isinstance(changes['settings'], dict)
+                or type(changes.get('reissue_grants', False)) is not bool):
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Expected revision and settings object.', {})
         with self.cf.unit_of_work(write=changes is not None) as uow:
             if self.access:
@@ -122,8 +134,10 @@ class EndpointService:
             config = dict(endpoint['public_config'])
             settings = config.get('harness_settings', {})
             schema = read_harness_configuration(uow.connection, endpoint_id=endpoint_id,
-                                               adapter_id=endpoint['adapter_id'])
+                adapter_id=endpoint['adapter_id'], native_approvals_enabled=approvals_routing_enabled(self.config))
+            consent = {}
             if changes is not None:
+                consent = {'grants_revoked': 0, 'grants_reissued': 0}
                 if changes['expected_revision'] != endpoint['revision']:
                     raise OktoNexusError(ErrorCode.CONFLICT, 'Connection changed. Reload its settings.', {})
                 try:
@@ -140,7 +154,8 @@ class EndpointService:
                     now = self.clock.now_iso()
                     uow.connection.execute('UPDATE agent_endpoints SET public_config=?,revision=revision+1,updated_at=? WHERE endpoint_id=?',
                         (json.dumps(config), now, endpoint_id))
-                    self.repo.invalidate_configuration(uow, endpoint_ids=[endpoint_id], now=now)
+                    consent = self.retire_consent(uow, context=context, endpoint_id=endpoint_id, now=now,
+                                                  reissue=changes.get('reissue_grants', False))
                     self.repo.audit_configuration(uow, context=context, kind='endpoint', resource_id=endpoint_id,
                         old_revision=endpoint['revision'], new_revision=endpoint['revision']+1,
                         fields=['harness_settings'], now=now)
@@ -148,7 +163,8 @@ class EndpointService:
             from .runtime_policy import effective, harness_mcp_settings
             return dict(endpoint_id=endpoint_id, adapter_id=endpoint['adapter_id'], revision=endpoint['revision'], settings=settings,
                         configuration=schema, inherited_global_mcps=effective(uow.connection, endpoint['agent_id'])['inherit_global_mcps'],
-                        effective_settings=harness_mcp_settings(uow.connection, endpoint['agent_id'], endpoint['adapter_id'], settings))
+                        effective_settings=harness_mcp_settings(uow.connection, endpoint['agent_id'], endpoint['adapter_id'], settings),
+                        **consent)
 
     def tool_permission(self, context, *, endpoint_id, changes=None):
         """Operator policy for the generated Nexus client, applied at session start."""
@@ -166,7 +182,9 @@ class EndpointService:
                 raise OktoNexusError(ErrorCode.NOT_FOUND, "The canonical connection is unavailable.", {})
             config = dict(endpoint["public_config"])
             mode = config.get("nexus_tool_permission", "ask")
+            consent = {}
             if changes is not None:
+                consent = {"grants_revoked": 0, "grants_reissued": 0}
                 if changes["expected_revision"] != endpoint["revision"]:
                     raise OktoNexusError(ErrorCode.CONFLICT, "Connection changed. Reload its tool permission.", {})
                 if changes["mode"] != mode:
@@ -179,12 +197,47 @@ class EndpointService:
                     now = self.clock.now_iso()
                     uow.connection.execute("UPDATE agent_endpoints SET public_config=?,revision=revision+1,updated_at=? WHERE endpoint_id=?",
                         (json.dumps(config), now, endpoint_id))
-                    self.repo.invalidate_configuration(uow, endpoint_ids=[endpoint_id], now=now)
+                    consent = self.retire_consent(uow, context=context, endpoint_id=endpoint_id, now=now)
                     self.repo.audit_configuration(uow, context=context, kind="endpoint", resource_id=endpoint_id,
                         old_revision=endpoint["revision"], new_revision=endpoint["revision"]+1,
                         fields=["nexus_tool_permission"], now=now)
                     endpoint = self.repo.get(uow, endpoint_id)
-            return {"endpoint_id": endpoint_id, "agent_id": endpoint["agent_id"], "revision": endpoint["revision"], "mode": mode}
+            return {"endpoint_id": endpoint_id, "agent_id": endpoint["agent_id"], "revision": endpoint["revision"], "mode": mode, **consent}
+
+    def update_policy(self, context, *, endpoint_id, changes=None):
+        """Operator choice of review or follow for newer runtime builds (#89).
+
+        None inherits the hub setting. The edit keeps the revision and revokes no
+        grant, because the column is outside the configuration digest and session guard.
+        """
+        self.authorize(context)
+        if changes is not None and (not isinstance(changes, dict)
+                or set(changes) != {"expected_revision", "policy"}
+                or type(changes["expected_revision"]) is not int
+                or changes["policy"] not in (None, "review", "follow")):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Use expected_revision and a review, follow or null policy.", {})
+        with self.cf.unit_of_work(write=changes is not None) as uow:
+            if self.access:
+                self.access.authorize(context, uow=uow, audit=False)
+            endpoint = self.repo.get(uow, endpoint_id)
+            if not endpoint or endpoint["protocol"] != "nxl-r4":
+                raise OktoNexusError(ErrorCode.NOT_FOUND, "The canonical connection is unavailable.", {})
+            policy = endpoint["runtime_update_policy"]
+            if changes is not None:
+                if changes["expected_revision"] != endpoint["revision"]:
+                    raise OktoNexusError(ErrorCode.CONFLICT, "Connection changed. Reload its update policy.", {})
+                if changes["policy"] != policy:
+                    policy = changes["policy"]
+                    now = self.clock.now_iso()
+                    uow.connection.execute("UPDATE agent_endpoints SET runtime_update_policy=?,updated_at=? WHERE endpoint_id=?",
+                        (policy, now, endpoint_id))
+                    self.repo.audit_configuration(uow, context=context, kind="endpoint", resource_id=endpoint_id,
+                        old_revision=endpoint["revision"], new_revision=endpoint["revision"],
+                        fields=["runtime_update_policy"], now=now)
+            hub = getattr(self.config, "runtime_update_policy", "review")
+            return {"endpoint_id": endpoint_id, "agent_id": endpoint["agent_id"], "revision": endpoint["revision"],
+                    "policy": policy, "effective_policy": policy or hub,
+                    "policy_source": "endpoint" if policy else "hub", "hub_policy": hub}
 
     def conversation_policy(self, context, *, endpoint_id, changes=None):
         """Operator opt-in for canonical conversational delivery; never launch.
@@ -212,7 +265,9 @@ class EndpointService:
                 raise OktoNexusError(ErrorCode.NOT_FOUND, "The canonical connection is unavailable.", {})
             from .runtime_policy import effective, set_legacy_session_override
             endpoint['session_policy'] = effective(uow.connection, endpoint['agent_id'])['session_policy']
+            consent = {}
             if changes is not None:
+                consent = {"grants_revoked": 0, "grants_reissued": 0}
                 if endpoint["revision"] != changes["expected_revision"]:
                     raise OktoNexusError(ErrorCode.CONFLICT, "Connection changed. Reload its message policy.", {})
                 if changes["enabled"]:
@@ -240,7 +295,7 @@ class EndpointService:
                     uow.connection.execute("UPDATE agent_endpoints SET response_policy=?,session_policy=?,consumption='exclusive',"
                         "revision=revision+1,updated_at=? WHERE endpoint_id=? AND revision=?",
                         (response_policy, session_policy, now, endpoint_id, endpoint["revision"]))
-                    self.repo.invalidate_configuration(uow, endpoint_ids=[endpoint_id], now=now)
+                    consent = self.retire_consent(uow, context=context, endpoint_id=endpoint_id, now=now)
                     self.repo.audit_configuration(uow, context=context, kind="endpoint", resource_id=endpoint_id,
                         old_revision=endpoint["revision"], new_revision=endpoint["revision"] + 1,
                         fields=["response_policy", "consumption", "session_policy"], now=now)
@@ -248,11 +303,13 @@ class EndpointService:
             return {"endpoint_id": endpoint_id, "agent_id": endpoint["agent_id"],
                     "workspace_id": endpoint["workspace_id"], "revision": endpoint["revision"],
                     "enabled": endpoint["response_policy"] == "conversation" and endpoint["consumption"] == "exclusive",
-                    "session_policy": effective(uow.connection, endpoint['agent_id'])['session_policy']}
+                    "session_policy": effective(uow.connection, endpoint['agent_id'])['session_policy'], **consent}
 
-    def update_endpoint(self, context, *, endpoint_id, expected_revision, **changes):
+    def update_endpoint(self, context, *, endpoint_id, expected_revision, reissue_grants=None, **changes):
         self.authorize(context)
         allowed = {"public_config", "enabled", "priority", "selection_group", "response_policy", "consumption", "profile_id"}
+        if reissue_grants is not None and type(reissue_grants) is not bool:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "reissue_grants must be a boolean.", {})
         if type(expected_revision) is not int or expected_revision < 1 or not changes or set(changes) - allowed:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Endpoint update requires a positive revision and mutable configuration fields.", {})
         with self.cf.unit_of_work() as uow:
@@ -284,17 +341,18 @@ class EndpointService:
                     'WHERE endpoint_id=? AND endpoint_revision=?', (expected_revision+1, endpoint_id, expected_revision))
                 self.repo.audit_configuration(uow, context=context, kind='endpoint', resource_id=endpoint_id,
                     old_revision=expected_revision, new_revision=expected_revision+1, fields=changes, now=now)
-                return {**endpoint, 'priority': changes['priority'], 'revision': expected_revision+1}
+                return {**endpoint, 'priority': changes['priority'], 'revision': expected_revision+1,
+                        'grants_revoked': 0, 'grants_reissued': 0}
             # Retiring a canonical connection must not look it up in the legacy
             # adapter registry. This does not claim its native process exited.
             if changes == {"enabled": False} and type(changes["enabled"]) is bool:
                 now = self.clock.now_iso()
                 uow.connection.execute('UPDATE agent_endpoints SET enabled=0,revision=revision+1,updated_at=? '
                     'WHERE endpoint_id=? AND revision=?', (now, endpoint_id, expected_revision))
-                self.repo.invalidate_configuration(uow, endpoint_ids=[endpoint_id], now=now)
+                consent = self.retire_consent(uow, context=context, endpoint_id=endpoint_id, now=now)
                 self.repo.audit_configuration(uow, context=context, kind='endpoint', resource_id=endpoint_id,
                     old_revision=expected_revision, new_revision=expected_revision+1, fields=changes, now=now)
-                return {**endpoint, 'enabled': False, 'revision': expected_revision+1}
+                return {**endpoint, 'enabled': False, 'revision': expected_revision+1, **consent}
             updated = endpoint | changes
             if updated['response_policy'] != 'conversation' or updated['consumption'] != 'exclusive':
                 raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
@@ -355,11 +413,13 @@ class EndpointService:
                 "activation_state=?,revision=revision+1,updated_at=? WHERE endpoint_id=? AND revision=?",
                 (json.dumps(config, sort_keys=True), int(updated["enabled"]), updated["priority"], updated["selection_group"], updated["response_policy"],
                  updated["consumption"], updated["profile_id"], "approved" if updated["enabled"] else endpoint["activation_state"], now, endpoint_id, expected_revision))
-            self.repo.invalidate_configuration(uow, endpoint_ids=[endpoint_id], now=now)
+            # A disabled endpoint cannot use grants, so a re-issue applies only while enabled.
+            consent = self.retire_consent(uow, context=context, endpoint_id=endpoint_id, now=now,
+                                          reissue=bool(reissue_grants) and bool(updated["enabled"]))
             self.repo.audit_configuration(uow, context=context, kind="endpoint", resource_id=endpoint_id,
                 old_revision=expected_revision, new_revision=expected_revision + 1, fields=changes, now=now)
         return {"endpoint_id": endpoint_id, "revision": expected_revision + 1, "public_config": config,
-                **{key: updated[key] for key in allowed - {"public_config"}}}
+                **consent, **{key: updated[key] for key in allowed - {"public_config"}}}
 
     def configure_boot(self, context, *, endpoint_id, enabled, expected_revision):
         self.authorize(context)
