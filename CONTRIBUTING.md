@@ -86,10 +86,10 @@ There is no project formatter configuration. Keep edits focused and do not add
 formatter, linter, or type-checker configuration as part of an unrelated
 change.
 
-When the dashboard changes, also run:
+When the dashboard changes, run its tests and build:
 
 ```bash
-cd frontend
+cd frontend && npm test
 npm run build
 ```
 
