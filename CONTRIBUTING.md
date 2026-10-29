@@ -35,7 +35,7 @@ SQLite persistence, and before opening a pull request that affects those paths:
 On Windows PowerShell, use the virtual environment's Windows interpreter:
 
 ```powershell
-.\\.venv\\Scripts\\python.exe scripts\\live_client.py
+.\.venv\Scripts\python.exe scripts\live_client.py
 ```
 
 Unlike the unit suite, this script starts the real stdio MCP server and drives
