@@ -35,7 +35,7 @@ SQLite persistence, and before opening a pull request that affects those paths:
 On Windows PowerShell, use the virtual environment's Windows interpreter:
 
 ```powershell
-.\.venv\Scripts\python.exe scripts\live_client.py
+.\\.venv\\Scripts\\python.exe scripts\\live_client.py
 ```
 
 Unlike the unit suite, this script starts the real stdio MCP server and drives
@@ -86,10 +86,10 @@ There is no project formatter configuration. Keep edits focused and do not add
 formatter, linter, or type-checker configuration as part of an unrelated
 change.
 
-When the dashboard changes, also run:
+When the dashboard changes, run its tests and build:
 
 ```bash
-cd frontend
+cd frontend && npm test
 npm run build
 ```
 
