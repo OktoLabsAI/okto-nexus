@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 from pathlib import Path
 import sys
@@ -17,6 +18,11 @@ CONTEXT_NAME = 'service-context.json'
 ENVIRONMENT_REFERENCES = ('SystemRoot', 'WINDIR', 'USERPROFILE', 'HOMEDRIVE',
     'HOMEPATH', 'APPDATA', 'LOCALAPPDATA', 'PROGRAMDATA', 'TEMP', 'TMP', 'HOME',
     'XDG_CONFIG_HOME', 'XDG_DATA_HOME', 'XDG_RUNTIME_DIR', 'LANG', 'LC_ALL')
+
+
+def document_revision(value: dict) -> str:
+    return hashlib.sha256(json.dumps(value, sort_keys=True, ensure_ascii=False,
+        separators=(',', ':')).encode('utf-8')).hexdigest()
 
 
 def atomic_json(path: Path, value: dict) -> None:

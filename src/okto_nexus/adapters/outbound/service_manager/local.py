@@ -1,7 +1,7 @@
 """Short-lived lifecycle adapter; the foreground Server owns its own lifetime."""
 from __future__ import annotations
 
-from contextlib import contextmanager
+from contextlib import ExitStack, contextmanager
 import os
 import json
 from pathlib import Path
@@ -11,7 +11,7 @@ import time
 from urllib.request import ProxyHandler, Request, build_opener
 
 from ..process_liveness import process_exited
-from .context import CONTEXT_NAME, atomic_json, read_json, validate_context
+from .context import CONTEXT_NAME, atomic_json, document_revision, read_json, validate_context
 from .inspection import NoRedirect, _held, inspect_local_server
 from .locking import ExclusiveFileLock, LockBusy
 from .installation import (INSTALLATION_NAME, SUPERVISOR,
@@ -93,16 +93,75 @@ class LocalServerLifecycle:
             return {**result, 'state': 'unknown', 'reason': 'LAUNCH_RECEIPT_UNAVAILABLE',
                 'next_action': 'Inspect the retained launch receipt before retrying.'}
         if receipt.get('state') == 'pending':
+            result = {**result, 'launch_recovery': {'receipt_revision': document_revision(receipt),
+                'state': 'pending', 'action': 'recover-start'}}
             if process_exited(receipt.get('pid')) is True:
                 return {**result, 'state': 'failed', 'reason': 'STARTUP_EXITED',
                     'next_action': 'Inspect startup diagnostics, then explicitly start again.'}
             return {**result, 'state': 'starting', 'reason': 'STARTUP_PENDING',
-                'next_action': 'Observe this same launch; waiting does not start another process.'}
+                'next_action': 'Observe this launch, or explicitly recover-start with its receipt revision if the launcher was interrupted.'}
+        if receipt.get('state') == 'aborted_before_bootstrap':
+            return {**result, 'reason': 'STARTUP_ABORTED',
+                'launch_recovery': {'receipt_revision': receipt.get('recovered_from'), 'state': receipt['state']},
+                'next_action': 'The pending launch was fenced. Start explicitly when ready; runtime work was not changed.'}
         if receipt.get('state') == 'failed':
             return {**result, 'state': 'failed', 'reason': receipt.get('reason', 'STARTUP_FAILED'),
                 'next_action': 'Inspect startup diagnostics, then explicitly start again.'}
         return result
 
+    def recover_start(self, *, expected_revision):
+        """Fence one reviewed pending selection before its child can bootstrap."""
+        base = inspect_local_server(home=self.home, database=self.database,
+            host=self.host, port=self.port, timeout=.2)
+        def refused(reason, action):
+            state = 'unknown' if base['state'] == 'stopped' and reason in {
+                'RECOVERY_OWNER_UNCONFIRMED', 'LAUNCH_REVISION_CONFLICT'} else base['state']
+            return {**base, 'state': state, 'recovered': False, 'reason': reason, 'next_action': action}
+        if not isinstance(expected_revision, str) or len(expected_revision) != 64 or any(
+                char not in '0123456789abcdef' for char in expected_revision):
+            return refused('INVALID_LAUNCH_REVISION', 'Use the receipt_revision returned by service status --json.')
+        if not (self.home / LAUNCH_NAME).exists():
+            return refused('NO_PENDING_LAUNCH', 'No retained detached launch exists for this instance.')
+        try:
+            with launch_exclusion(self.home, self.database), ExitStack() as owners:
+                if (self.home / INSTALLATION_NAME).exists():
+                    return refused('RECOVERY_REQUIRES_DETACHED', 'Use the selected user-service lifecycle; its task was not changed.')
+                if base['state'] != 'stopped':
+                    return refused('RECOVERY_OWNER_UNCONFIRMED', 'Inspect the current owner; recovery never stops a process.')
+                # Hold lifetime and launch exclusions until the old child token
+                # is fenced. A delayed child checks this receipt before bootstrap.
+                for path in sorted({self.home / 'nexus.serve.guard',
+                        self.database.with_name(self.database.name + '.serve.guard')}):
+                    lock = ExclusiveFileLock(path)
+                    lock.acquire()
+                    owners.callback(lock.release)
+                receipt = read_json(self.home / LAUNCH_NAME)
+                if (receipt.get('revision') != 1 or receipt.get('instance_id') != base['instance_id']
+                        or not isinstance(receipt.get('token'), str) or not receipt['token']):
+                    return refused('INVALID_LAUNCH_RECEIPT', 'Inspect the retained launch receipt; it was preserved.')
+                if receipt.get('state') == 'aborted_before_bootstrap':
+                    original = {key: value for key, value in receipt.items() if key != 'recovered_from'}
+                    original['state'] = 'pending'
+                    confirmed = receipt.get('recovered_from') == expected_revision and document_revision(original) == expected_revision
+                    if not confirmed:
+                        return refused('LAUNCH_REVISION_CONFLICT', 'The retained launch changed; inspect status again.')
+                    changed = False
+                elif receipt.get('state') != 'pending' or 'recovered_from' in receipt:
+                    return refused('RECOVERY_REQUIRES_PENDING', 'This launch already crossed bootstrap or terminated; use canonical lifecycle recovery.')
+                elif document_revision(receipt) != expected_revision:
+                    return refused('LAUNCH_REVISION_CONFLICT', 'The retained launch changed; inspect status again.')
+                else:
+                    atomic_json(self.home / LAUNCH_NAME, {**receipt, 'state': 'aborted_before_bootstrap',
+                        'recovered_from': expected_revision})
+                    changed = True
+                return {**base, 'recovered': True, 'changed': changed, 'reason': 'STARTUP_ABORTED',
+                    'launch_recovery': {'receipt_revision': expected_revision, 'state': 'aborted_before_bootstrap'},
+                    'next_action': 'Start explicitly when ready. No process was started/stopped and runtime state was not changed.'}
+        except LockBusy:
+            return refused('RECOVERY_OWNER_UNCONFIRMED', 'A launch or process owns the instance; observe it before recovery.')
+        except (OSError, ValueError):
+            return {**refused('RECOVERY_UNCONFIRMED', 'Inspect the retained receipt and repeat with the same revision to confirm.'),
+                'state': 'unknown'}
     def start(self):
         self.home.mkdir(parents=True, exist_ok=True)
         self.database.parent.mkdir(parents=True, exist_ok=True)

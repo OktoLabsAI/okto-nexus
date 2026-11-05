@@ -29,6 +29,14 @@ def test_concurrent_detached_start_survives_cli_exit_reuses_and_drains(tmp_path)
         return json.loads(completed.stdout)
     parents = []
     stopped = False
+    from okto_nexus.adapters.outbound.service_manager.context import atomic_json, document_revision
+    from okto_nexus.adapters.outbound.service_manager.identity import server_instance_id
+    home.mkdir()
+    interrupted = {'revision': 1, 'instance_id': server_instance_id(home, home / 'nexus.db'),
+        'token': 'interrupted-token', 'state': 'pending', 'pid': None}
+    atomic_json(home / 'service-launch.json', interrupted)
+    recovered = invoke('recover-start', '--expected-revision', document_revision(interrupted))
+    assert recovered['recovered'] and not (home / 'nexus.db').exists()
     try:
         for _ in range(3):
             parents.append(subprocess.Popen([*base, 'start', *selection, '--timeout', '40', '--json'],
@@ -52,6 +60,11 @@ def test_concurrent_detached_start_survives_cli_exit_reuses_and_drains(tmp_path)
         original = invoke('status')
         assert original['generation'] in generations and original['pid'] in pids
         assert invoke('start')['generation'] == original['generation']
+        late = subprocess.run([sys.executable, '-I', '-m',
+            'okto_nexus.adapters.inbound.cli.service_process', str(home), str(home / 'nexus.db'), interrupted['token']],
+            cwd=tmp_path, env=env, capture_output=True, text=True, timeout=20)
+        assert late.returncode == 2, (late.stdout, late.stderr)
+        assert invoke('status')['generation'] == original['generation']
         reopened = invoke('restart', '--timeout', '40')
         assert reopened['generation'] != original['generation']
         opener = build_opener(ProxyHandler({}))

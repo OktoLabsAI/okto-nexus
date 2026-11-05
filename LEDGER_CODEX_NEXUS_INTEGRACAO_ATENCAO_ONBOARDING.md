@@ -134,3 +134,12 @@ Campanhas reais de provedor, login/logout/reboot, serviço do usuário e Herdr p
 - **77 testes de fonte e 59 testes com wheel em venv limpa passaram**. Incluem CLI real em instância ausente e três starters concorrentes, reuso, restart e drain. Os **111 arquivos Python** do wheel correspondem ao fonte.
 - Commit/push do Connector: `849f295`. Artefato/manifest e evidências coordenados no Nexus; Core permanece sem mudança nesta fatia.
 - [Evidências e limites](plans/agent_ops/evidence/pr02-connector-passive.md). SVC-10/11, PR-02 e o plano integral continuam em progresso. A campanha nativa preparada segue aguardando autorização; nenhuma tarefa foi registrada.
+
+
+## 2026-11-05 — PR-02, oitava fatia: recuperação antes do bootstrap
+
+- Nexus e Connector oferecem `recover-start --expected-revision` para revogar explicitamente um lançamento destacado ainda pendente. O comando compara a revisão completa e a instância sob locks de lançamento e lifetime; não inicia substituto nem sinaliza PID.
+- Filho atrasado revalida o recibo e sai antes do bootstrap. Dono ativo/incerto, tarefa instalada, revisão alterada e lançamento já admitido são preservados. Repetição após resposta perdida confirma o mesmo resultado sem nova gravação.
+- **68 testes do Nexus e 81 do Connector passaram**; após os ajustes finais, **41 do Nexus e 11 de recuperação do Connector passaram**. **124 testes passaram nos wheels finais em venv isolada**, incluindo recuperação, três starters concorrentes, rejeição do filho antigo, reuso, restart e drain dos dois componentes.
+- Os **412/111 arquivos Python** dos wheels Nexus/Connector correspondem aos fontes. Core permanece inalterado. Commit/push do Connector: `496c7e5`.
+- [Evidências, comandos e limites](plans/agent_ops/evidence/pr02-launch-recovery.md). Upgrade controlado e reconciliação geral da definição/contexto continuam abertos; o subescopo não comprova recuperação de trabalho produtivo. A campanha nativa ainda aguarda a autorização solicitada.

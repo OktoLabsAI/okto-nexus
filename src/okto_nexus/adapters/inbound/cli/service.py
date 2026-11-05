@@ -18,7 +18,8 @@ from .serve import _split_serve_args
 def run_service(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(prog='okto-nexus service',
         description='Inspect or explicitly start the configured local Server.')
-    parser.add_argument('action', choices=['status', 'logs', 'start', 'stop', 'restart', 'install', 'uninstall', 'enable', 'disable'])
+    parser.add_argument('action', choices=['status', 'logs', 'start', 'stop', 'restart', 'recover-start', 'install', 'uninstall', 'enable', 'disable'])
+    parser.add_argument('--expected-revision', help='pending launch receipt revision reviewed with status --json')
     parser.add_argument('--follow', action='store_true', help='follow local service logs until Ctrl+C')
     parser.add_argument('--tail', type=int, default=None, help='recent log records, 1..10000 (default 50)')
     parser.add_argument('--user', action='store_true', help='select the effective user service scope')
@@ -27,6 +28,8 @@ def run_service(argv: list[str]) -> int:
     parser.add_argument('--timeout', type=float, default=None,
                         help='observation timeout in seconds; timeout never kills the service')
     args, remaining = parser.parse_known_args(argv)
+    if (args.action == 'recover-start') != bool(args.expected_revision):
+        parser.error('recover-start requires --expected-revision; this option applies only to recover-start')
     if args.action != 'logs' and (args.follow or args.tail is not None):
         parser.error('--follow and --tail apply only to logs')
     if args.tail is not None and not 1 <= args.tail <= 10000:
@@ -54,7 +57,7 @@ def run_service(argv: list[str]) -> int:
         saved = config.home_dir.resolve() / CONTEXT_NAME
         environment = os.environ
         if saved.exists():
-            previous = validate_context(read_json(saved), require_paths=args.action != 'disable')
+            previous = validate_context(read_json(saved), require_paths=args.action not in {'status', 'disable', 'recover-start'})
             environment = previous['environment']
             port, host, project_root, log_level, rest = _split_serve_args(
                 previous['arguments'] + remaining, environment)
@@ -68,8 +71,11 @@ def run_service(argv: list[str]) -> int:
         method = {'status': 'inspect', 'install': 'install_user_service',
                   'enable': 'enable_user_service', 'disable': 'disable_user_service',
                   'uninstall': 'uninstall_user_service'}.get(args.action, args.action)
-        action = getattr(service, method)
-        result = action(timeout=timeout)
+        if args.action == 'recover-start':
+            result = service.recover_start(expected_revision=args.expected_revision)
+        else:
+            action = getattr(service, method)
+            result = action(timeout=timeout)
     except (OktoNexusError, OSError, ValueError) as error:
         result = {'state': 'failed', 'reason': getattr(error, 'code', 'CONFIG_ERROR'),
                   'next_action': 'Review the selected local instance configuration.'}
@@ -89,7 +95,10 @@ def run_service(argv: list[str]) -> int:
             print(result['next_action'])
         if result.get('enablement_confirmed'):
             print('User service enabled.' if result['enabled'] else 'User service disabled.')
+        if result.get('launch_recovery', {}).get('receipt_revision'):
+            print(f"Launch receipt revision: {result['launch_recovery']['receipt_revision']}")
     success = (result.get('installation_state') == 'installed' if args.action == 'install' else
+               result.get('recovered') is True if args.action == 'recover-start' else
                result.get('enablement_confirmed') is True if args.action in {'enable', 'disable'} else
                result.get('installation_state') == 'absent' if args.action == 'uninstall' else
                result['state'] == 'ready' if args.action in {'start', 'restart'} else

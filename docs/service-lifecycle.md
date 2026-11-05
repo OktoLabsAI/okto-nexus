@@ -209,3 +209,29 @@ Python context is broken. Missing logs return `LOG_NOT_FOUND` with exit 0;
 inaccessible/redirected logs return `LOG_UNAVAILABLE` with exit 3. Neither case
 means stopped, idle or free of uncertain work. General operational/runtime
 diagnostics continue to use their existing canonical surfaces.
+
+## Recover an interrupted detached launch
+
+If a launcher exits before its child enters bootstrap, status can retain
+`STARTUP_PENDING`. A wait timeout continues observing that same launch. To revoke
+it explicitly, inspect `service status --json` for `launch_recovery.receipt_revision`
+and run:
+
+```powershell
+okto-nexus service recover-start --home C:\absolute\nexus-home --expected-revision REVIEWED_REVISION --json
+```
+
+This acquires the home/database launch and lifetime locks, checks the exact
+receipt and instance, then marks that pending launch aborted before bootstrap.
+A late child must recheck the receipt under the same launch locks and exits
+without constructing the Server. No PID is killed or adopted. The operation
+does not start a replacement; use `service start` explicitly afterward. A changed
+receipt, installed supervisor, live/uncertain owner or already bootstrapped launch
+is preserved and refused. Runtime claims, grants and uncertain operations are
+not cleared by this command.
+
+After response loss, repeat the same expected revision to confirm the recorded
+result. A mismatched revision remains a conflict. Status and recovery can inspect
+the retained selection even if its saved interpreter disappeared; neither rewrites
+that execution context. Upgrading/rebinding a missing environment remains a
+separate operation.

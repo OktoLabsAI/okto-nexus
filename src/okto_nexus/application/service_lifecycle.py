@@ -12,6 +12,9 @@ class ServiceLifecycle:
     def inspect(self, *, timeout=2.0):
         return self.adapter.inspect(timeout=timeout)
 
+    def recover_start(self, *, expected_revision):
+        return self.adapter.recover_start(expected_revision=expected_revision)
+
     def logs(self, *, tail=50, follow=False):
         cursor = None
         while True:
