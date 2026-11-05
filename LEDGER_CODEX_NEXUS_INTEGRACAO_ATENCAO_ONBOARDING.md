@@ -110,6 +110,11 @@ Relatório: [implementation-report.md](plans/agent_ops/implementation-report.md)
 - **12 testes do Core, 67 do Nexus e 62 do Connector passaram**. **90 testes coordenados passaram em venv limpa fora do checkout**, incluindo os processos destacados reais dos dois consumidores. Os 412/109/130 arquivos Python dos wheels correspondem aos fontes; Core e manifest coordenados.
 - As mutações nativas desta fatia ainda foram testadas com backend simulado. Registro efetivo de tarefas, login/logout e demais aceites continuam pendentes. [Evidência e limites](plans/agent_ops/evidence/pr02-enablement.md).
 - Commit/push dos contratos e do host remoto: Core `0490f88`; Connector `1f2f380`.
+- Commit/push da integração e artefatos Nexus: `0cc52dc2`.
+
+## Campanha nativa preparada
+
+Preparado [roteiro revisável de tarefas temporárias](plans/agent_ops/campaigns/windows-user-service.md), com snapshot dos comandos, nomes, diretórios descartáveis e versões. A consulta nativa confirmou ausência das duas tarefas. **Registro/mutação ainda não executados**; autorização específica solicitada conforme o limite da seção 19. Essa pendência não bloqueia o restante da implementação.
 
 ## Próxima dependência
 

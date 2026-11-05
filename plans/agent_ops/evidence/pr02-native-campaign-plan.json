@@ -1,0 +1,587 @@
+{
+  "revision": 1,
+  "status": "PREPARED_NOT_AUTHORIZED_NOT_RUN",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+  "server_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\nexus",
+  "connector_state": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\connector",
+  "port": 60313,
+  "task_names": {
+    "nexus": "OktoNexus-server-bfb31e8d2f64a2b092ee85e67f6e2e31e006257912fbd4567e47ed5fe3c5e52c",
+    "connector": "OktoNexus-connector-e4ca21bc63aa81fd2b7fd28013915457b0174660ed142532f64010d09dab689f"
+  },
+  "native_absence_verified": true,
+  "versions": {
+    "okto-nexus": "0.3.3",
+    "okto-nexus-connector": "0.0.12",
+    "okto-nexus-connector-core": "0.0.14"
+  },
+  "environment_allowlist": [
+    "SYSTEMROOT",
+    "WINDIR",
+    "COMSPEC",
+    "TEMP",
+    "TMP",
+    "USERPROFILE",
+    "LOCALAPPDATA",
+    "APPDATA",
+    "PATH",
+    "LANG",
+    "LC_ALL",
+    "HOME"
+  ],
+  "scope": "Only these two temporary user tasks and these empty disposable data directories.",
+  "excluded": [
+    "personal Nexus/Connector state",
+    "provider/credential use",
+    "paid inference",
+    "logout",
+    "reboot",
+    "publishing",
+    "merge",
+    "forced task/process termination"
+  ],
+  "steps": [
+    {
+      "component": "nexus",
+      "action": "install",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "service",
+        "install",
+        "--user",
+        "--start-at-login",
+        "--home",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\nexus",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "60313",
+        "--project-root",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju",
+        "--embedding-mode",
+        "off",
+        "--json"
+      ],
+      "expect_returncode": 0
+    },
+    {
+      "component": "nexus",
+      "action": "install",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "service",
+        "install",
+        "--user",
+        "--start-at-login",
+        "--home",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\nexus",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "60313",
+        "--project-root",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju",
+        "--embedding-mode",
+        "off",
+        "--json"
+      ],
+      "expect_returncode": 0
+    },
+    {
+      "component": "nexus",
+      "action": "start",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "service",
+        "start",
+        "--home",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\nexus",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "60313",
+        "--project-root",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju",
+        "--embedding-mode",
+        "off",
+        "--json"
+      ],
+      "expect_returncode": 0
+    },
+    {
+      "component": "nexus",
+      "action": "start",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "service",
+        "start",
+        "--home",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\nexus",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "60313",
+        "--project-root",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju",
+        "--embedding-mode",
+        "off",
+        "--json"
+      ],
+      "expect_returncode": 0
+    },
+    {
+      "component": "nexus",
+      "action": "disable",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "service",
+        "disable",
+        "--user",
+        "--home",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\nexus",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "60313",
+        "--project-root",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju",
+        "--embedding-mode",
+        "off",
+        "--json"
+      ],
+      "expect_returncode": 0
+    },
+    {
+      "component": "nexus",
+      "action": "status",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "service",
+        "status",
+        "--home",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\nexus",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "60313",
+        "--project-root",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju",
+        "--embedding-mode",
+        "off",
+        "--json"
+      ],
+      "expect_returncode": 0
+    },
+    {
+      "component": "nexus",
+      "action": "stop",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "service",
+        "stop",
+        "--home",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\nexus",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "60313",
+        "--project-root",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju",
+        "--embedding-mode",
+        "off",
+        "--json"
+      ],
+      "expect_returncode": 0
+    },
+    {
+      "component": "nexus",
+      "action": "start",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "service",
+        "start",
+        "--home",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\nexus",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "60313",
+        "--project-root",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju",
+        "--embedding-mode",
+        "off",
+        "--json"
+      ],
+      "expect_returncode": "nonzero"
+    },
+    {
+      "component": "nexus",
+      "action": "enable",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "service",
+        "enable",
+        "--user",
+        "--home",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\nexus",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "60313",
+        "--project-root",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju",
+        "--embedding-mode",
+        "off",
+        "--json"
+      ],
+      "expect_returncode": 0
+    },
+    {
+      "component": "nexus",
+      "action": "start",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "service",
+        "start",
+        "--home",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\nexus",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "60313",
+        "--project-root",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju",
+        "--embedding-mode",
+        "off",
+        "--json"
+      ],
+      "expect_returncode": 0
+    },
+    {
+      "component": "nexus",
+      "action": "restart",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "service",
+        "restart",
+        "--home",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\nexus",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "60313",
+        "--project-root",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju",
+        "--embedding-mode",
+        "off",
+        "--json"
+      ],
+      "expect_returncode": 0
+    },
+    {
+      "component": "nexus",
+      "action": "uninstall",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "service",
+        "uninstall",
+        "--user",
+        "--home",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\nexus",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "60313",
+        "--project-root",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju",
+        "--embedding-mode",
+        "off",
+        "--json"
+      ],
+      "expect_returncode": 0
+    },
+    {
+      "component": "nexus",
+      "action": "status",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "service",
+        "status",
+        "--home",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\nexus",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "60313",
+        "--project-root",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju",
+        "--embedding-mode",
+        "off",
+        "--json"
+      ],
+      "expect_returncode": 0
+    },
+    {
+      "component": "connector",
+      "action": "install",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus_connector.cli.main",
+        "--state-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\connector",
+        "--non-interactive",
+        "service",
+        "install",
+        "--json"
+      ],
+      "expect_returncode": 0
+    },
+    {
+      "component": "connector",
+      "action": "install",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus_connector.cli.main",
+        "--state-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\connector",
+        "--non-interactive",
+        "service",
+        "install",
+        "--json"
+      ],
+      "expect_returncode": 0
+    },
+    {
+      "component": "connector",
+      "action": "start",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus_connector.cli.main",
+        "--state-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\connector",
+        "--non-interactive",
+        "daemon",
+        "start",
+        "--json"
+      ],
+      "expect_returncode": 0
+    },
+    {
+      "component": "connector",
+      "action": "start",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus_connector.cli.main",
+        "--state-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\connector",
+        "--non-interactive",
+        "daemon",
+        "start",
+        "--json"
+      ],
+      "expect_returncode": 0
+    },
+    {
+      "component": "connector",
+      "action": "disable",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus_connector.cli.main",
+        "--state-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\connector",
+        "--non-interactive",
+        "service",
+        "disable",
+        "--json"
+      ],
+      "expect_returncode": 0
+    },
+    {
+      "component": "connector",
+      "action": "status",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus_connector.cli.main",
+        "--state-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\connector",
+        "--non-interactive",
+        "daemon",
+        "status",
+        "--json"
+      ],
+      "expect_returncode": 0
+    },
+    {
+      "component": "connector",
+      "action": "stop",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus_connector.cli.main",
+        "--state-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\connector",
+        "--non-interactive",
+        "daemon",
+        "stop",
+        "--json"
+      ],
+      "expect_returncode": 0
+    },
+    {
+      "component": "connector",
+      "action": "start",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus_connector.cli.main",
+        "--state-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\connector",
+        "--non-interactive",
+        "daemon",
+        "start",
+        "--json"
+      ],
+      "expect_returncode": "nonzero"
+    },
+    {
+      "component": "connector",
+      "action": "enable",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus_connector.cli.main",
+        "--state-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\connector",
+        "--non-interactive",
+        "service",
+        "enable",
+        "--json"
+      ],
+      "expect_returncode": 0
+    },
+    {
+      "component": "connector",
+      "action": "start",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus_connector.cli.main",
+        "--state-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\connector",
+        "--non-interactive",
+        "daemon",
+        "start",
+        "--json"
+      ],
+      "expect_returncode": 0
+    },
+    {
+      "component": "connector",
+      "action": "restart",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus_connector.cli.main",
+        "--state-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\connector",
+        "--non-interactive",
+        "daemon",
+        "restart",
+        "--json"
+      ],
+      "expect_returncode": 0
+    },
+    {
+      "component": "connector",
+      "action": "uninstall",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus_connector.cli.main",
+        "--state-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\connector",
+        "--non-interactive",
+        "service",
+        "uninstall",
+        "--json"
+      ],
+      "expect_returncode": 0
+    },
+    {
+      "component": "connector",
+      "action": "status",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-enablement-0_fa0x66\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus_connector.cli.main",
+        "--state-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-53j9slju\\connector",
+        "--non-interactive",
+        "daemon",
+        "status",
+        "--json"
+      ],
+      "expect_returncode": 0
+    }
+  ],
+  "cleanup": "Use canonical stop then owned uninstall for each selected instance; verify both task names absent. Retain explicit uncertainty if cleanup cannot be confirmed."
+}
