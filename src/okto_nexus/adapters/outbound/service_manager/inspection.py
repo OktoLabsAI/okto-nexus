@@ -90,7 +90,7 @@ def inspect_local_server(*, home: Path, database: Path, host: str, port: int,
                 'next_action': 'Review active and installed versions; do not interrupt or upgrade implicitly.'}
     allowed = {'component', 'instance_id', 'generation', 'active_version', 'pid', 'supervisor',
                'state', 'ready_for_queries', 'storage_initialized', 'admission',
-               'reason', 'next_action', 'protocol_revision'}
+               'reason', 'next_action', 'protocol_revision', 'shutdown'}
     if (data.get('state') not in {'starting', 'ready', 'degraded', 'stopping', 'failed'}
             or type(data.get('ready_for_queries')) is not bool):
         return {**result, 'state': 'failed', 'reason': 'INVALID_READINESS',

@@ -45,9 +45,19 @@ Relatório: [implementation-report.md](plans/agent_ops/implementation-report.md)
 - **36 testes passaram**. Um Server real em home descartável confirmou a mesma geração pelo CLI/HTTP e chegou a `DRAINED`; depois, status retornou `stopped`. [Evidência e limites](plans/agent_ops/evidence/pr01-readiness.md).
 - SVC-01/02/04 continuam em progresso no contrato completo; start/reuse, supervisor e Connector permanecem pendentes.
 
+- Commit/push da prontidão: Nexus `b3168f18`.
+
+## 2026-11-05 — PR-01, terceira fatia: start/reuse e controle local
+
+- Fachada de aplicação para inspect/start/ensure_running/stop/restart, com contexto resolvido persistido e recibo de inicialização protegido por locks do SO.
+- Server destacado usa o mesmo `serve`; requisições concorrentes reutilizam a inicialização. Timeout não mata nem relança. Stop/restart usam o shutdown canônico e exigem a geração observada.
+- Teste real com três CLIs concorrentes confirmou um único PID/geração, continuidade após saída dos CLIs, reutilização, restart, recusa de stop obsoleto e parada `DRAINED`.
+- A integração com supervisor instalado, logs, recuperação de lançamento interrompido e Connector continua pendente. Saída do processo CLI não foi confundida com campanha de logout/reboot ou fechamento de terminal real.
+- Evidência: [pr01-start-stop.md](plans/agent_ops/evidence/pr01-start-stop.md).
+
 ## Próxima dependência
 
-PR-01 / SVC-01…04: contrato de lifecycle, exclusão da instância antes do bootstrap, start/reuse e prontidão correlacionada. A pendência de campanha de BASE-06 continua explícita; os critérios de trabalho real local/remoto e decisão pelo terminal de M1 permanecem intactos.
+Concluir as lacunas de PR-01 junto ao supervisor e ao Connector em PR-02 / SVC-05…12. A pendência de campanha de BASE-06 continua explícita; os critérios de trabalho real local/remoto e decisão pelo terminal de M1 permanecem intactos.
 
 ## Aceites externos ainda não executados
 

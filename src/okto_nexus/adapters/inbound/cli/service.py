@@ -4,28 +4,48 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import time
 
+from ....application.service_lifecycle import ServiceLifecycle
+from ....bootstrap.local_discovery import split_discovery_args
 from ....config import load_config
 from ....errors import OktoNexusError
-from ...outbound.service_manager.inspection import inspect_local_server
+from ...outbound.service_manager.context import CONTEXT_NAME, execution_context, read_json, validate_context
+from ...outbound.service_manager.local import LocalServerLifecycle
 from .serve import _split_serve_args
 
 
 def run_service(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(prog='okto-nexus service',
-        description='Inspect the configured local Server without starting it or any harness.')
-    parser.add_argument('action', choices=['status'])
+        description='Inspect or explicitly start the configured local Server.')
+    parser.add_argument('action', choices=['status', 'start', 'stop', 'restart'])
     parser.add_argument('--json', action='store_true')
-    parser.add_argument('--timeout', type=float, default=2.0,
-                        help='readiness observation timeout in seconds (0 < timeout <= 30)')
+    parser.add_argument('--timeout', type=float, default=None,
+                        help='observation timeout in seconds; timeout never kills the service')
     args, remaining = parser.parse_known_args(argv)
-    if not 0 < args.timeout <= 30:
-        parser.error('--timeout must be greater than 0 and at most 30 seconds')
+    timeout = args.timeout if args.timeout is not None else (2.0 if args.action == 'status' else 30.0)
+    if not 0 < timeout <= 300:
+        parser.error('--timeout must be greater than 0 and at most 300 seconds')
     try:
-        port, host, _, _, rest = _split_serve_args(remaining, os.environ)
+        port, host, project_root, log_level, rest = _split_serve_args(remaining, os.environ)
+        discovery, rest = split_discovery_args(rest)
         config = load_config(os.environ, rest)
-        result = inspect_local_server(home=config.home_dir, database=config.db_path,
-                                      host=host, port=port, timeout=args.timeout)
+        saved = config.home_dir.resolve() / CONTEXT_NAME
+        environment = os.environ
+        if saved.exists():
+            previous = validate_context(read_json(saved))
+            environment = previous['environment']
+            port, host, project_root, log_level, rest = _split_serve_args(
+                previous['arguments'] + remaining, environment)
+            discovery, rest = split_discovery_args(rest)
+            config = load_config(environment, rest)
+        context = execution_context(config, host=host, port=port, project_root=project_root,
+                                    log_level=log_level, discovery=discovery, env=environment)
+        adapter = LocalServerLifecycle(home=config.home_dir, database=config.db_path,
+                                       host=host, port=port, context=context)
+        service = ServiceLifecycle(adapter, monotonic=time.monotonic, sleep=time.sleep)
+        action = service.inspect if args.action == 'status' else getattr(service, args.action)
+        result = action(timeout=timeout)
     except (OktoNexusError, OSError, ValueError) as error:
         result = {'state': 'failed', 'reason': getattr(error, 'code', 'CONFIG_ERROR'),
                   'next_action': 'Review the selected local instance configuration.'}
@@ -43,4 +63,7 @@ def run_service(argv: list[str]) -> int:
             print(result['reason'])
         if result.get('next_action'):
             print(result['next_action'])
-    return 0 if result['state'] in {'ready', 'stopped'} else 3
+    success = (result['state'] == 'ready' if args.action in {'start', 'restart'} else
+               result['state'] in {'ready', 'stopped'} if args.action == 'status' else
+               result['state'] == 'stopped' and result.get('shutdown_outcome') != 'unconfirmed')
+    return 0 if success else 3

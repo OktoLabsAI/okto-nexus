@@ -424,7 +424,8 @@ def _warm_embeddings(deps: "object", done_event: "object") -> None:
         done_event.set()
 
 
-def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
+def run_serve(args: list[str], env: Mapping[str, str] | None = None, *,
+              acquired_lock=None, supervisor: str = 'foreground') -> int:
     """Console entry for the ``serve`` subcommand. Returns an exit code."""
     env = dict(env if env is not None else os.environ)
 
@@ -468,9 +469,13 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
         )
         return 1
 
-    lock = ServeLock(config.home_dir, db_path=config.db_path)
+    lock = acquired_lock or ServeLock(config.home_dir, db_path=config.db_path)
     try:
-        lock.acquire()
+        if acquired_lock is None:
+            lock.acquire()
+        elif (not lock.owned or lock.home_dir != config.home_dir.resolve()
+              or lock.db_path != config.db_path.resolve()):
+            raise ValueError('The supplied service owner does not match the configuration')
     except OktoNexusError as exc:
         print(f"[okto-nexus] {exc.message}", file=sys.stderr)
         return 1
@@ -498,6 +503,7 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
         app = build_app(deps, lock=lock, runtime_owner_api_url=f"http://{owner_host}:{port}", bind_host=host, bind_port=port)
         app.state.default_workspace_id = default_workspace
         app.state.project_root = project_root
+        app.state.service_supervisor = supervisor
         # Trust actual loopback peers regardless of the listening address.
         # Remote humans use operator sessions; agent transports keep their keys.
         app.state.local_open = True
@@ -554,6 +560,16 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
                 # the operator expects.
                 print("[okto-nexus] Shutdown complete.", file=sys.stderr)
         finally:
+            shutdown_owner = getattr(app.state, 'runtime_shutdown', None)
+            if shutdown_owner is not None:
+                from ...outbound.service_manager.context import atomic_json
+                try:
+                    atomic_json(lock.home_dir / 'service-shutdown.json', {
+                        'revision': 1, 'generation': lock.generation,
+                        'state': shutdown_owner.status()['state']})
+                except OSError:
+                    print('[okto-nexus] Shutdown receipt could not be persisted; '
+                          'post-exit observation will remain unconfirmed.', file=sys.stderr)
             # EV-OPS-001: reap any harness session still live at this point
             # (server exiting - clean, SIGINT, or SIGTERM - while a session
             # was never explicitly closed) BEFORE the lock is released, so a
@@ -574,4 +590,5 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
             _stop_harness_orphan_watchdog(watchdog)
         return 0
     finally:
-        lock.release()
+        if acquired_lock is None:
+            lock.release()

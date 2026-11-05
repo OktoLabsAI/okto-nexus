@@ -90,3 +90,19 @@ The focused 36-test suite passed and a disposable real foreground process
 confirmed CLI/HTTP generation equality, canonical DRAINED shutdown and subsequent
 stopped status. See `evidence/pr01-readiness.md` for commands and limits. Full
 SVC-01/02/04 acceptance remains open; next is local start/reuse orchestration.
+
+## PR-01 third increment — detached local lifecycle
+
+An application facade now coordinates local inspect/start/ensure-running/stop/
+restart. Resolved execution context and a durable launch receipt serialize
+competing CLIs before the child acquires Server guards and enters `serve`.
+Timeout does not repeat or kill a launch. Remote selection is not silently
+treated as local. Stop is a generation-checked adapter to the canonical shutdown
+coordinator; a correlated durable receipt recovers a lost shutdown response.
+
+Actual Windows subprocesses prove that three concurrent CLIs converge on one
+PID/generation, launcher exit preserves the Server, reopen reuses it, restart
+changes generation, stale stop fails and canonical drain completes. This is
+not qualification of an installed OS service, actual terminal closure or logout.
+See `evidence/pr01-start-stop.md`. The complete facade and all SVC acceptance
+remain open for supervisor, logs, recovery and Connector integration.

@@ -49,7 +49,8 @@
       ],
       "evidence": [
         "plans/agent_ops/evidence/pr01-locks.md",
-        "plans/agent_ops/evidence/pr01-readiness.md"
+        "plans/agent_ops/evidence/pr01-readiness.md",
+        "plans/agent_ops/evidence/pr01-start-stop.md"
       ]
     },
     "PR-02": {
@@ -260,26 +261,34 @@
         "PR-00"
       ],
       "files": [
-        "src/okto_nexus/domain/service_lifecycle.py",
-        "src/okto_nexus/application/service_lifecycle.py",
-        "src/okto_nexus/adapters/inbound/http/service_lifecycle.py",
-        "src/okto_nexus/adapters/outbound/service_manager/inspection.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
+        "src/okto_nexus/adapters/inbound/cli/service_process.py",
+        "src/okto_nexus/adapters/inbound/http/service_lifecycle.py",
+        "src/okto_nexus/adapters/outbound/service_manager/context.py",
+        "src/okto_nexus/adapters/outbound/service_manager/inspection.py",
+        "src/okto_nexus/adapters/outbound/service_manager/local.py",
+        "src/okto_nexus/application/service_lifecycle.py",
+        "src/okto_nexus/domain/service_lifecycle.py",
+        "tests/test_service_inspection.py",
+        "tests/test_service_process.py",
         "tests/test_service_readiness.py",
-        "tests/test_service_inspection.py"
+        "tests/test_service_start.py"
       ],
       "tests": [
+        "plans/agent_ops/evidence/pr01-detached-process.xml",
+        "plans/agent_ops/evidence/pr01-readiness-process.json",
         "plans/agent_ops/evidence/pr01-readiness.xml",
-        "plans/agent_ops/evidence/pr01-readiness-process.json"
+        "plans/agent_ops/evidence/pr01-start-stop.xml"
       ],
-      "result": "Server local-operator readiness and passive CLI status implemented and tested; see scoped evidence.",
+      "result": "Local detached start/reuse and generation-correlated canonical stop/restart implemented; actual concurrent CLI process campaign passed.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Full lifecycle facade, background start/reuse, supervisor and Connector readiness pending."
+        "Installed supervisor, logs, interrupted pre-spawn recovery, Connector and full campaigns pending; see scoped evidence."
       ],
       "subscopes": {
         "server_readiness_projection": "VERIFIED",
-        "server_passive_status": "VERIFIED"
+        "server_passive_status": "VERIFIED",
+        "local_application_facade": "VERIFIED"
       }
     },
     "SVC-02": {
@@ -315,19 +324,36 @@
     },
     "SVC-03": {
       "title": "iniciar ou reutilizar",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "milestones": [
         "PR-01"
       ],
       "dependencies": [
         "PR-00"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "src/okto_nexus/adapters/inbound/cli/service_process.py",
+        "src/okto_nexus/adapters/inbound/http/service_lifecycle.py",
+        "src/okto_nexus/adapters/outbound/service_manager/context.py",
+        "src/okto_nexus/adapters/outbound/service_manager/local.py",
+        "src/okto_nexus/application/service_lifecycle.py",
+        "tests/test_service_process.py",
+        "tests/test_service_start.py"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr01-detached-process.xml",
+        "plans/agent_ops/evidence/pr01-start-stop.xml"
+      ],
+      "result": "Local detached start/reuse and generation-correlated canonical stop/restart implemented; actual concurrent CLI process campaign passed.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "Installed supervisor, logs, interrupted pre-spawn recovery, Connector and full campaigns pending; see scoped evidence."
+      ],
+      "subscopes": {
+        "local_detached_start_reuse": "VERIFIED",
+        "concurrent_launcher_exit": "VERIFIED",
+        "installed_supervisor": "NOT_STARTED"
+      }
     },
     "SVC-04": {
       "title": "prova de prontidão",
@@ -379,35 +405,65 @@
     },
     "SVC-06": {
       "title": "contexto estável de execução",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "milestones": [
         "PR-02"
       ],
       "dependencies": [
         "PR-01"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "src/okto_nexus/adapters/inbound/cli/service_process.py",
+        "src/okto_nexus/adapters/inbound/http/service_lifecycle.py",
+        "src/okto_nexus/adapters/outbound/service_manager/context.py",
+        "src/okto_nexus/adapters/outbound/service_manager/local.py",
+        "src/okto_nexus/application/service_lifecycle.py",
+        "tests/test_service_process.py",
+        "tests/test_service_start.py"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr01-detached-process.xml",
+        "plans/agent_ops/evidence/pr01-start-stop.xml"
+      ],
+      "result": "Local detached start/reuse and generation-correlated canonical stop/restart implemented; actual concurrent CLI process campaign passed.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "Installed supervisor, logs, interrupted pre-spawn recovery, Connector and full campaigns pending; see scoped evidence."
+      ],
+      "subscopes": {
+        "local_saved_context": "VERIFIED"
+      }
     },
     "SVC-07": {
       "title": "parada controlada",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "milestones": [
         "PR-02"
       ],
       "dependencies": [
         "PR-01"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "src/okto_nexus/adapters/inbound/cli/service_process.py",
+        "src/okto_nexus/adapters/inbound/http/service_lifecycle.py",
+        "src/okto_nexus/adapters/outbound/service_manager/context.py",
+        "src/okto_nexus/adapters/outbound/service_manager/local.py",
+        "src/okto_nexus/application/service_lifecycle.py",
+        "tests/test_service_process.py",
+        "tests/test_service_start.py"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr01-detached-process.xml",
+        "plans/agent_ops/evidence/pr01-start-stop.xml"
+      ],
+      "result": "Local detached start/reuse and generation-correlated canonical stop/restart implemented; actual concurrent CLI process campaign passed.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "Installed supervisor, logs, interrupted pre-spawn recovery, Connector and full campaigns pending; see scoped evidence."
+      ],
+      "subscopes": {
+        "local_canonical_shutdown_adapter": "VERIFIED"
+      }
     },
     "SVC-08": {
       "title": "reconciliação sem repetição de efeitos",
@@ -443,19 +499,34 @@
     },
     "SVC-10": {
       "title": "controles simples",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "milestones": [
         "PR-02"
       ],
       "dependencies": [
         "PR-01"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "src/okto_nexus/adapters/inbound/cli/service_process.py",
+        "src/okto_nexus/adapters/inbound/http/service_lifecycle.py",
+        "src/okto_nexus/adapters/outbound/service_manager/context.py",
+        "src/okto_nexus/adapters/outbound/service_manager/local.py",
+        "src/okto_nexus/application/service_lifecycle.py",
+        "tests/test_service_process.py",
+        "tests/test_service_start.py"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr01-detached-process.xml",
+        "plans/agent_ops/evidence/pr01-start-stop.xml"
+      ],
+      "result": "Local detached start/reuse and generation-correlated canonical stop/restart implemented; actual concurrent CLI process campaign passed.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "Installed supervisor, logs, interrupted pre-spawn recovery, Connector and full campaigns pending; see scoped evidence."
+      ],
+      "subscopes": {
+        "server_start_stop_restart": "VERIFIED"
+      }
     },
     "SVC-11": {
       "title": "mesmo lifecycle no Connector",

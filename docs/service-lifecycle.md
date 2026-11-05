@@ -44,5 +44,47 @@ readiness, permission for a task or absence of active work. Queries remain
 available during drain; inspection cannot reopen admission. Installed and active
 package versions are distinct; incompatible versions require explicit action.
 
-Automatic start, background operation, OS service installation and controls
-beyond status remain subsequent R3 lifecycle increments.
+## Start, stop and reopen
+
+```sh
+okto-nexus service start --home /absolute/nexus-home --host 127.0.0.1 --port 8202
+okto-nexus service status --home /absolute/nexus-home --json
+okto-nexus service stop --home /absolute/nexus-home --timeout 30 --json
+okto-nexus service restart --home /absolute/nexus-home --timeout 30 --json
+```
+
+Start saves resolved configuration, interpreter/venv and working-directory
+references in `service-context.json`. Later commands select the same context by
+home without repeating the port or settings. It records only an allowlist of
+environment references and absolute PATH directories. Provider keys and arbitrary
+shell environment are not copied: credentials must be available through the
+existing user login/vault. A deleted interpreter or working directory is an
+explicit configuration failure. Projects still retain their own runtime paths.
+
+A short-lived launch lock and durable receipt serialize concurrent callers.
+The child validates its launch token and takes Server ownership before entering
+the existing foreground implementation. Windows uses detached process/new group
+with job breakaway; POSIX uses a new session. Streams are disconnected from the
+launching terminal. A ready compatible owner is reused. A stopping, incompatible
+or unidentified owner is never replaced. A timeout leaves the launch intact;
+use status to observe it. An interrupted pre-spawn receipt with no confirmed
+child remains unresolved instead of silently creating another launch.
+
+Stop names the observed instance/generation and calls the existing shutdown
+coordinator through the local operator HTTP adapter. It affects every project
+sharing that Server. Participant keys, remote peers and cross-origin requests
+cannot stop it. It never signals a cached PID, kills on timeout or cancels a drain
+to satisfy a concurrent start. A correlated shutdown receipt distinguishes
+confirmed drain from an unconfirmed process disappearance. Restart requires
+confirmed stop; it cannot convert a pending drain into a new process.
+
+Exit 0 means the requested start/restart reached ready or stop was confirmed.
+Exit 3 preserves pending/degraded/uncertain outcomes in JSON, including canonical
+shutdown resources where available. A CLI wait timeout is not task cancellation.
+
+This detached mode has no crash restart policy and does not promise survival of
+logout/reboot. Actual Windows child tests prove survival of launcher exit;
+closing a real terminal and installed user-service campaigns remain separate
+qualification. OS service registration, installed-supervisor routing, logs and
+Connector lifecycle integration are subsequent R3 increments. An installation
+record already present prevents an unauthorized detached fallback.

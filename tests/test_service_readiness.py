@@ -99,3 +99,26 @@ def test_embedded_app_without_service_owner_does_not_fabricate_readiness(tmp_pat
         response = client.get('/api/v1/service')
     assert response.status_code == 503
     assert response.json()['error']['code'] == 'SERVICE_IDENTITY_UNAVAILABLE'
+
+
+def test_stop_requires_local_operator_and_current_generation(running_service):
+    client, app, lock, deps = running_service
+    view = client.get('/api/v1/service').json()['data']
+    body = {key: view[key] for key in ('instance_id', 'generation')}
+    body['timeout_seconds'] = 0.0
+    participant = client.post('/api/v1/agents', json={'agent_id': 'participant'}).json()['data']['api_key']
+    assert client.post('/api/v1/service/stop', json=body,
+        headers={'Authorization': 'Bearer ' + participant}).status_code == 403
+    assert client.post('/api/v1/service/stop', json=body,
+        headers={'Origin': 'https://untrusted.example'}).status_code == 403
+    assert client.post('/api/v1/service/stop', json={**body, 'generation': 'old'}).status_code == 409
+    assert not deps.runtime_admission_fence.closed
+    response = client.post('/api/v1/service/stop', json=body)
+    assert response.status_code in {200, 202}
+    assert response.json()['data']['generation'] == lock.generation
+    assert deps.runtime_admission_fence.closed
+    assert app.state.runtime_shutdown.status()['state'] in {'DRAINED', 'DRAINING_PENDING'}
+    # Retrying this generation reaches the same shutdown task.
+    task = app.state.runtime_shutdown._task
+    assert client.post('/api/v1/service/stop', json=body).status_code in {200, 202}
+    assert app.state.runtime_shutdown._task is task
