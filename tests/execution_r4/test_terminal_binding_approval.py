@@ -190,6 +190,48 @@ def test_connector_resumes_original_intent_after_human_terminal_decision(operato
             assert len(requests) == count
             token = next(iter(r.vault.values.values()))
             assert token not in json.dumps(asdict(state)) and token not in repr(requests)
+            # A subsequent connect reuses current canonical consent and the
+            # imported participant credential, with no new review or grant.
+            import io
+            from nexus_connector_core.connection_configuration import materialize_connection_configuration
+            from okto_nexus_connector.cli.commands import connect, configure_local
+            from okto_nexus_connector.cli.main import build_parser
+            from okto_nexus_connector.cli.output import Output
+            configured = materialize_connection_configuration(connection_preferences(r.prepare),
+                execution_location='remote', workspace_root=local.workspace_root,
+                workspace_label=local.workspace_label)
+            saved = dict(identity='subject', stage='done', configuration=configured,
+                candidate_ref=local.candidate_ref, inventory_revision=local.inventory_revision,
+                workspace_id=local.canonical_workspace_id, replace_binding_id=None, realization_ref=local.realization_ref,
+                result=dict(saved=True, request_id='terminal', connection_name='assistant', runtime_started=False))
+            reopened.update(lambda s: s.preferences.update({f'configure.{local.server_id}.subject.terminal': saved}))
+            monkeypatch.setattr(connect, 'StateStore', lambda _: reopened)
+            monkeypatch.setattr(connect, 'open_vault', lambda *a, **kw: vault)
+            monkeypatch.setattr(connect, 'NexusHTTPClient', factory)
+            monkeypatch.setattr(connect, '_read_key', lambda *a: pytest.fail('credential re-entry'))
+            async def unexpected(*a, **kw):
+                pytest.fail('reconnect discovered or imported again')
+            monkeypatch.setattr(connect, '_choose_harness', unexpected)
+            monkeypatch.setattr(connect, 'import_identity', unexpected)
+            starts = []
+            monkeypatch.setattr(configure_local.manager, 'start', lambda _: starts.append('start'))
+            async def reload(*a, **kw):
+                return {}
+            monkeypatch.setattr(configure_local, 'ipc', reload)
+            before = reopened.path.read_bytes()
+            args = build_parser().parse_args(['connect', '--project', local.workspace_root])
+            count = len(requests)
+            connected = await connect.run_connect(args, Output(json_mode=False, stream=io.StringIO()), tmp_path)
+            assert connected['reused'] and connected['current_binding']['binding_id'] == proposal['binding_id']
+            assert reopened.path.read_bytes() == before and starts == ['start']
+            assert all(request.method == 'GET' for request in requests[count:])
+            with r.deps.connection_factory.unit_of_work() as uow:
+                uow.connection.execute('UPDATE agent_endpoints SET enabled=0 WHERE endpoint_id=?', (proposal['endpoint_id'],))
+                uow.connection.execute("UPDATE runtime_execution_grants SET revoked_at='2026-11-05T00:00:00Z'")
+            with pytest.raises(ConnectorError) as disabled:
+                await connect.run_connect(args, Output(json_mode=False, stream=io.StringIO()), tmp_path)
+            assert disabled.value.code == 'BINDING_NOT_AUTHORIZED'
+            assert starts == ['start'] and reopened.path.read_bytes() == before
     asyncio.run(run())
     with r.deps.connection_factory.unit_of_work(write=False) as uow:
         for table in ('execution_proposals', 'approvals', 'execution_bindings', 'runtime_execution_grants'):

@@ -249,3 +249,13 @@ Campanhas reais de provedor, login/logout/reboot, serviço do usuário e Herdr p
 - **22 testes do Nexus e 37 do Connector passaram nos fontes; 127 do Nexus e 285 do Connector passaram nos wheels instalados.** Rodadas se sobrepõem. Os 431/116/130 arquivos Python correspondem byte a byte aos fontes; pin/hash do Connector atualizados. Core não mudou.
 - Connector commit/push: `143ae449`. Contratos usam HTTP/SQLite reais com transporte, cofre e inventário sintéticos. Nova identidade remota, M1 produtivo, campanha nativa e demais frentes continuam pendentes. Plano fixo preservado.
 - Evidência: [pr03-remote-preset.md](plans/agent_ops/evidence/pr03-remote-preset.md).
+
+## 2026-11-05 — PR-03, décima segunda fatia: reconexão do projeto salvo no Connector
+
+- Recuperadas as três referências `origin/main`: Nexus `c1e78e26`, Connector `a3017d9` e Core `19c99f1`. Todas já estão contidas nas branches de trabalho; nenhuma integração adicional foi necessária.
+- `connect` na pasta configurada recupera Server, identidade e request ID pelo vínculo persistido. `--identity` reutiliza uma identidade importada; ambiguidades exigem seleção. A chave não é pedida nem gravada novamente na retomada normal.
+- Para um pedido concluído, o CLI autentica a credencial atual e consulta a aprovação canônica antes de iniciar/reutilizar o daemon. Divergência de origem, pasta física, identidade, binding ou revisão local impede efeitos; revogação e desabilitação posteriores permanecem.
+- Reconnect não repete probes, Finish, preset ou grants. Pedidos pendentes retomam seus checkpoints originais. A integração real com Nexus comprovou consultas GET, estado local intacto e uma única proposta/aprovação/conexão/grant.
+- **67 testes do Connector e 8 do Nexus passaram nos fontes; 37 focados passaram após os ajustes finais. Nos pacotes instalados, passaram 180 do Connector e 75 do Nexus.** As rodadas se sobrepõem. Os 431/117/130 arquivos Python correspondem aos fontes; pin/hash do Connector atualizados.
+- Connector commit/push: `09eb5f30`. Nexus produção e Core não mudaram. Nova identidade remota, M1 produtivo e demais frentes permanecem pendentes; plano fixo preservado.
+- Evidência: [pr03-connector-reconnect.md](plans/agent_ops/evidence/pr03-connector-reconnect.md).
