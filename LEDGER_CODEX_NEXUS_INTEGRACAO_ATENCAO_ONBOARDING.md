@@ -76,6 +76,14 @@ Relatório: [implementation-report.md](plans/agent_ops/implementation-report.md)
 - Corrigido conflito real de declaração UTF-8 via COM Unicode. Wheel Core atualizado nos dois consumidores; 130 arquivos Python comparados ao fonte, lock e manifest coordenados.
 - Essa fatia verifica o contrato e a sintaxe. Registro efetivo, CAS, controles do supervisor e campanhas de login continuam pendentes. [Evidência](plans/agent_ops/evidence/pr02-core-service-definition.md).
 
+## 2026-11-05 — PR-02, terceira fatia: supervisor Windows do Nexus
+
+- Instalador por instância ligado à fachada/CLI, com proprietário, revisão nativa e contexto persistidos. Start usa a tarefa instalada; outra home não pode instalar supervisor sobre o mesmo banco.
+- Stop registra supressão de recuperação antes do drain. Uninstall exige parada e preserva dados, contexto e credenciais. Definições alteradas e efeitos nativos sem confirmação permanecem explícitos.
+- **159 testes passaram, com 2 skips POSIX**. Após a correção final de contenção de leitura/gravação de recibos no Windows, **56 testes afetados passaram**, incluindo três CLIs concorrentes e shutdown com geração correlacionada.
+- A regressão também corrigiu leitura de metadata durante startup e liberação antecipada do lock pelo encerramento ASGI. O wheel final contém **411 arquivos Python idênticos ao fonte**.
+- Validação nativa usou somente `TASK_VALIDATE_ONLY`; nenhuma tarefa pessoal foi instalada. Campanha efetiva de login/serviço, Connector, logs e os demais aceites continuam abertos. [Evidências e limites](plans/agent_ops/evidence/pr02-nexus-user-service.md).
+
 ## Próxima dependência
 
 Concluir as lacunas de PR-01 junto ao supervisor e ao Connector em PR-02 / SVC-05…12. A pendência de campanha de BASE-06 continua explícita; os critérios de trabalho real local/remoto e decisão pelo terminal de M1 permanecem intactos.

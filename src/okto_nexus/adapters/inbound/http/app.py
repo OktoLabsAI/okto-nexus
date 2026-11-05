@@ -485,7 +485,7 @@ def ensure_operator_key(
         return OPERATOR_AGENT_ID, plaintext
 
 
-def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_url: str | None = None, bind_host: str = "127.0.0.1", bind_port: int | None = None) -> FastAPI:
+def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_url: str | None = None, bind_host: str = "127.0.0.1", bind_port: int | None = None, release_lock: bool = True) -> FastAPI:
     """Assemble the serve application (REST + SSE + MCP mount + static)."""
     deps.runtime_owner_api_url = runtime_owner_api_url
     auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
@@ -698,14 +698,14 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
                 heartbeat_task.cancel()
                 with contextlib.suppress(asyncio.CancelledError):
                     await heartbeat_task
-            if lock is not None:
-                lock.release()
             if deps.native_decisions is not None:
                 deps.native_decisions.inputs.close()
             # Close the reusable connections, so SQLite checkpoints the WAL.
             close_connections = getattr(deps.connection_factory, "close", None)
             if close_connections is not None:
                 close_connections()
+            if lock is not None and release_lock:
+                lock.release()
             if embedded_shutdown_error is not None:
                 raise embedded_shutdown_error
 

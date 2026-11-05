@@ -77,6 +77,25 @@ def inspect_local_server(*, home: Path, database: Path, host: str, port: int,
     except (HTTPError, URLError, TimeoutError, OSError, ValueError, AttributeError):
         return {**result, 'state': 'degraded', 'reason': 'SERVICE_UNREACHABLE',
                 'next_action': 'Inspect startup/transport diagnostics for this instance; no process was started.'}
+    # A child holds the guards before publishing metadata; startup may complete
+    # while this HTTP request is in flight. Re-correlate after the response so
+    # an initial absent/old diagnostic record cannot reject the actual owner.
+    previous = metadata
+    try:
+        metadata = json.loads((home / 'nexus.serve.lock').read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        metadata = {}
+    if not isinstance(metadata, dict):
+        metadata = {}
+    after = [_held(home / 'nexus.serve.guard'),
+             _held(database.with_name(database.name + '.serve.guard'))]
+    if after != [True, True] or not metadata.get('generation'):
+        return {**result, 'reason': 'INSTANCE_OWNERSHIP_UNCONFIRMED',
+            'next_action': 'The owner changed during inspection; observe the same initialization again.'}
+    if (metadata != previous and (data.get('generation') != metadata.get('generation')
+                                 or data.get('pid') != metadata.get('pid'))):
+        return {**result, 'reason': 'INSTANCE_OWNERSHIP_UNCONFIRMED',
+            'next_action': 'The owner changed during inspection; observe the current generation again.'}
     if (data.get('instance_id') != result['instance_id'] or not metadata.get('generation')
             or data.get('generation') != metadata['generation']
             or data.get('pid') != metadata.get('pid')

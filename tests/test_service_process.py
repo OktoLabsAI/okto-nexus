@@ -37,7 +37,9 @@ def test_concurrent_detached_start_survives_cli_exit_reuses_and_drains(tmp_path)
         observations = []
         for parent in parents:
             out, err = parent.communicate(timeout=55)
-            assert parent.returncode == 0, (out, err)
+            if parent.returncode:
+                print(err)
+            assert parent.returncode == 0, (json.loads(out).get('state'), json.loads(out).get('reason'), err)
             observations.append(json.loads(out))
         assert all(view['state'] == 'ready' for view in observations)
         generations = {view['generation'] for view in observations}
@@ -66,6 +68,8 @@ def test_concurrent_detached_start_survives_cli_exit_reuses_and_drains(tmp_path)
         assert invoke('status')['generation'] == reopened['generation']
         result = invoke('stop', '--timeout', '40')
         assert result['state'] == 'stopped' and result['shutdown_outcome'] == 'drained'
+        receipt = json.loads((home / 'service-shutdown.json').read_text(encoding='utf-8'))
+        assert receipt['generation'] == reopened['generation'] and receipt['state'] == 'DRAINED'
         stopped = True
         assert invoke('status')['state'] == 'stopped'
         assert home.joinpath('nexus.db').is_file()

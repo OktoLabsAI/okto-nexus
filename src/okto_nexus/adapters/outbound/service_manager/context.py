@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import sys
 import tempfile
+import time
 
 from ....config import (_BOOL_FIELDS, _ENUM_FIELDS, _FLOAT_FIELDS, _INT_FIELDS,
                        _PATH_FIELDS, _STRING_FIELDS)
@@ -25,7 +26,20 @@ def atomic_json(path: Path, value: dict) -> None:
             json.dump(value, stream, ensure_ascii=False, indent=2)
             stream.flush()
             os.fsync(stream.fileno())
-        os.replace(name, path)
+        deadline = time.monotonic() + 1.0
+        while True:
+            try:
+                os.replace(name, path)
+                break
+            except OSError as error:
+                # Windows CRT readers do not share DELETE. A passive status
+                # read can briefly prevent replacement of an otherwise valid
+                # receipt. Retry only that OS contention, for a bounded time;
+                # the old receipt remains intact until replacement succeeds.
+                if (os.name != 'nt' or getattr(error, 'winerror', None) not in {5, 32}
+                        or time.monotonic() >= deadline):
+                    raise
+                time.sleep(.01)
     finally:
         Path(name).unlink(missing_ok=True)
 

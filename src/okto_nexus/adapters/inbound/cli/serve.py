@@ -469,10 +469,20 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None, *,
         )
         return 1
 
+    from ...outbound.service_manager.local import launch_exclusion
+    from ...outbound.service_manager.locking import LockBusy
     lock = acquired_lock or ServeLock(config.home_dir, db_path=config.db_path)
     try:
         if acquired_lock is None:
-            lock.acquire()
+            config.home_dir.mkdir(parents=True, exist_ok=True)
+            config.db_path.parent.mkdir(parents=True, exist_ok=True)
+            with launch_exclusion(config.home_dir.resolve(), config.db_path.resolve()):
+                if ((config.home_dir / 'service-installation.json').exists()
+                        or config.db_path.with_name(config.db_path.name + '.service-installation.json').exists()):
+                    print('[okto-nexus] This instance has an installed supervisor. Use service start '
+                          'or uninstall the user integration before foreground startup.', file=sys.stderr)
+                    return 1
+                lock.acquire()
         elif (not lock.owned or lock.home_dir != config.home_dir.resolve()
               or lock.db_path != config.db_path.resolve()):
             raise ValueError('The supplied service owner does not match the configuration')
@@ -481,6 +491,9 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None, *,
         return 1
     except OSError as exc:
         print(f"[okto-nexus] Cannot acquire Server instance exclusion: {exc}", file=sys.stderr)
+        return 1
+    except LockBusy:
+        print('[okto-nexus] Another lifecycle operation is selecting this instance; retry after it completes.', file=sys.stderr)
         return 1
 
     try:
@@ -500,7 +513,8 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None, *,
             default_workspace = None  # dashboard falls back to "all workspaces"
 
         owner_host = "[::1]" if ":" in host else "127.0.0.1"
-        app = build_app(deps, lock=lock, runtime_owner_api_url=f"http://{owner_host}:{port}", bind_host=host, bind_port=port)
+        app = build_app(deps, lock=lock, runtime_owner_api_url=f"http://{owner_host}:{port}",
+                        bind_host=host, bind_port=port, release_lock=False)
         app.state.default_workspace_id = default_workspace
         app.state.project_root = project_root
         app.state.service_supervisor = supervisor

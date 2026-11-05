@@ -85,6 +85,67 @@ shutdown resources where available. A CLI wait timeout is not task cancellation.
 This detached mode has no crash restart policy and does not promise survival of
 logout/reboot. Actual Windows child tests prove survival of launcher exit;
 closing a real terminal and installed user-service campaigns remain separate
-qualification. OS service registration, installed-supervisor routing, logs and
-Connector lifecycle integration are subsequent R3 increments. An installation
-record already present prevents an unauthorized detached fallback.
+qualification. Logs and Connector supervisor integration remain R3 work. An
+installation record already present prevents an unauthorized detached fallback.
+
+## Windows user logon integration
+
+The Windows adapter is implemented, with isolated host tests. Actual task
+registration, login/logout, crash recovery and installed-wheel campaigns remain
+unqualified; see the R3 ledger before treating this as a qualified deployment.
+
+```powershell
+okto-nexus service install --user --start-at-login --home C:\absolute\nexus-home
+okto-nexus service start --home C:\absolute\nexus-home --json
+okto-nexus service stop --home C:\absolute\nexus-home --timeout 30 --json
+okto-nexus service uninstall --user --home C:\absolute\nexus-home --json
+```
+
+Install preflights the selected configuration, drains an existing owner through
+the same application lifecycle, then registers an instance-named Task Scheduler
+task for the effective user SID. Install enables the logon trigger; `start`
+requests immediate execution. It uses InteractiveToken and LeastPrivilege, with
+the recorded environment's absolute `pythonw.exe`, isolated Python imports and
+the same foreground Server entry. No second daemon process is launched. This is
+a logon task, not a Windows Service; it does not provide availability before
+login or after logout, or grant access to another user's credentials.
+
+The task definition uses Core's bounded failure recovery (one-minute interval,
+three retries) and disables hard termination. The host compares the OS-exported
+definition fingerprint before each mutation. A missing ownership receipt or
+user-edited definition conflicts; there is no forced overwrite or adoption.
+Home and database launch guards serialize our callers, and a database ownership
+receipt prevents another home from installing a competing task on the same DB.
+Task Scheduler itself has no atomic fingerprint-conditional mutation API, so
+external edits concurrent with a native call are outside that serialization.
+
+Once installed, start routes through Task Scheduler and foreground `serve`
+refuses competing supervision. The scheduled entry checks installation identity,
+saved-context fingerprint and native task ownership before DB bootstrap. Status
+reports native task state separately from application readiness; queued/running
+does not certify that the application is ready. A persisted start intent also
+prevents resubmission after a lost native response.
+
+Stop persists a suppression latch before requesting canonical drain. It never
+calls Task Scheduler's forced stop operation. During that login session, a crash
+retry observes the latch and exits without admitting work. A later login is
+distinguished by the effective token's logon ID and time; explicit `start` can
+also resume the integration. Failure to confirm drain remains unconfirmed even
+if the wrapper exits successfully to suppress retries. Stop during queued startup
+can fence the entry before any Server owner acquires the database. Login behavior
+has isolated contract tests; an actual login campaign is still required.
+
+Uninstall drains first, requires native inactivity and removes only the selected
+task and its ownership/control receipts. Context, database, projects, credentials
+and shutdown evidence remain. A repeated uninstall can recover a lost removal
+response by positively observing task absence. Installation failures preserve an
+`installing` receipt; positive absence permits retry, and a persisted native
+response permits completion without registering again. If the creation response
+was lost before its native fingerprint was saved, the existing task is retained
+for explicit review in Task Scheduler. After removing that reviewed task, repeat
+uninstall to clear the receipt, then install again. Edited definitions can instead
+be compared/restored against `native_xml` in `service-installation.json`.
+
+The wrapper retains only a coded supervisor exit record and the canonical drain
+receipt. General operational log collection, enable/disable/reconciliation UX,
+upgrade workflows and other-platform adapters remain open R3 requirements.

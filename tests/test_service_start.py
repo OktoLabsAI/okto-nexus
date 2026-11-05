@@ -5,11 +5,13 @@ import os
 from pathlib import Path
 import sys
 from unittest.mock import Mock
+import threading
+import time
 
 import pytest
 
 from okto_nexus.adapters.inbound.cli.service import run_service
-from okto_nexus.adapters.outbound.service_manager.context import execution_context, read_json
+from okto_nexus.adapters.outbound.service_manager.context import atomic_json, execution_context, read_json
 from okto_nexus.adapters.outbound.service_manager.local import LocalServerLifecycle, launch_exclusion
 from okto_nexus.application.service_lifecycle import ServiceLifecycle
 from okto_nexus.bootstrap.local_discovery import LocalDiscoveryConfiguration
@@ -82,13 +84,58 @@ def test_concurrent_start_waits_on_exclusion_without_spawn(tmp_path, monkeypatch
     assert not spawn.called
 
 
+def test_status_waits_while_another_cli_prepares_before_launch_receipt(tmp_path):
+    adapter = make_adapter(tmp_path)
+    adapter.home.mkdir()
+    with launch_exclusion(adapter.home, adapter.database):
+        assert not (adapter.home / 'service-launch.json').exists()
+        result = adapter.inspect()
+        assert result['state'] == 'starting' and result['reason'] == 'CONCURRENT_START'
+
+
+@pytest.mark.skipif(os.name != 'nt', reason='Windows CRT read handle denies DELETE sharing')
+def test_receipt_write_survives_a_real_concurrent_windows_reader(tmp_path):
+    path = tmp_path / 'service-launch.json'
+    atomic_json(path, {'state': 'pending'})
+    reader = path.open('r', encoding='utf-8')
+    def close_reader():
+        time.sleep(.05)
+        reader.close()
+    closer = threading.Thread(target=close_reader)
+    closer.start()
+    try:
+        atomic_json(path, {'state': 'owned'})
+    finally:
+        closer.join(timeout=2)
+        reader.close()
+    assert read_json(path)['state'] == 'owned'
+    assert not list(tmp_path.glob('.service-*'))
+
+
+@pytest.mark.skipif(os.name != 'nt', reason='Windows replacement retry budget')
+def test_persistent_receipt_write_failure_is_bounded_and_preserves_previous_state(tmp_path, monkeypatch):
+    path = tmp_path / 'service-launch.json'
+    atomic_json(path, {'state': 'pending'})
+    error = PermissionError('persistent refusal')
+    error.winerror = 5
+    replace = Mock(side_effect=error)
+    ticks = iter([0, 2])
+    monkeypatch.setattr('okto_nexus.adapters.outbound.service_manager.context.os.replace', replace)
+    monkeypatch.setattr('okto_nexus.adapters.outbound.service_manager.context.time.monotonic', lambda: next(ticks))
+    with pytest.raises(PermissionError):
+        atomic_json(path, {'state': 'owned'})
+    replace.assert_called_once()
+    assert read_json(path)['state'] == 'pending'
+    assert not list(tmp_path.glob('.service-*'))
+
+
 def test_installed_supervisor_never_falls_back_to_detached(tmp_path, monkeypatch):
     adapter = make_adapter(tmp_path)
     adapter.home.mkdir()
     (adapter.home / 'service-installation.json').write_text('{}')
     spawn = Mock(side_effect=AssertionError('Detached fallback'))
     monkeypatch.setattr('okto_nexus.adapters.outbound.service_manager.local.subprocess.Popen', spawn)
-    assert adapter.start()['reason'] == 'SUPERVISOR_REQUIRED'
+    assert adapter.start()['reason'] == 'INSTALLATION_RECEIPT_INVALID'
     assert not spawn.called
 
 

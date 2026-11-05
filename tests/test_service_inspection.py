@@ -38,6 +38,8 @@ def endpoint(tmp_path):
     class Handler(BaseHTTPRequestHandler):
         def do_GET(self):
             state['requests'].append(self.path)
+            if state.get('on_request'):
+                state['on_request']()
             if state['redirect']:
                 self.send_response(302)
                 self.send_header('Location', '/trap')
@@ -102,3 +104,23 @@ def test_unreachable_live_owner_is_not_reported_as_stopped(tmp_path):
                                       host='127.0.0.1', port=1, timeout=.1)
     assert result['state'] == 'degraded'
     assert result['reason'] == 'SERVICE_UNREACHABLE'
+
+
+def test_metadata_published_during_request_is_correlated_after_response(endpoint):
+    state, args = endpoint
+    path = args['home'] / 'nexus.serve.lock'
+    metadata = path.read_text(encoding='utf-8')
+    path.unlink()
+    state['on_request'] = lambda: path.write_text(metadata, encoding='utf-8')
+    assert inspect_local_server(**args)['state'] == 'ready'
+
+
+def test_owner_change_during_response_requires_another_observation(endpoint):
+    state, args = endpoint
+    path = args['home'] / 'nexus.serve.lock'
+    metadata = json.loads(path.read_text(encoding='utf-8'))
+    state['on_request'] = lambda: path.write_text(json.dumps({**metadata, 'generation': 'next'}), encoding='utf-8')
+    result = inspect_local_server(**args)
+    assert result['state'] == 'unknown' and result['reason'] == 'INSTANCE_OWNERSHIP_UNCONFIRMED'
+    # Restore the same test owner's metadata for its scoped cleanup.
+    path.write_text(json.dumps(metadata), encoding='utf-8')

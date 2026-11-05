@@ -131,3 +131,22 @@ for the two hosts. The scope excludes OS I/O, Server policy and credentials.
 Core wheels are identical in both consumers and all 130 Python source payloads
 match. See `evidence/pr02-core-service-definition.md`. Registration/CAS, installed
 supervisor controls and actual user-service campaigns remain open.
+
+## PR-02 third increment — Nexus Windows host integration
+
+The Server now installs/removes its own user logon task through the application
+facade, validates ownership/revision/context before native mutations, routes
+installed start through Task Scheduler and fences foreground/detached competition.
+A database ownership receipt also excludes a different home targeting the same
+DB. Stop persists recovery suppression before canonical drain; uninstall retains
+all application data. Pending OS effects are retained for bounded observation
+or explicit reconciliation instead of blind adoption/overwrite.
+
+159 tests passed with 2 POSIX-only skips; after the final Windows atomic-receipt
+fix, 56 affected tests passed, including concurrent real local processes while a
+wheel was built. The regression also corrected metadata/startup observation races
+and premature ASGI lifetime-lock release. All 411 wheel Python files match the
+final source. See `evidence/pr02-nexus-user-service.md` for exact scope, failures,
+commands and evidence. Native task syntax was validated without registration;
+actual service/login/credential campaigns remain open, as do Connector supervisor
+integration, logs and the remaining fixed R3 requirements.

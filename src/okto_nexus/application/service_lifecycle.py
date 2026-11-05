@@ -20,7 +20,7 @@ class ServiceLifecycle:
         result = self.adapter.start()
         while result['state'] in {'starting', 'degraded', 'unknown'}:
             if result.get('reason') not in {'STARTUP_PENDING', 'CONCURRENT_START',
-                    'SERVICE_UNREACHABLE', 'INSTANCE_OWNERSHIP_UNCONFIRMED'}:
+                    'SERVICE_UNREACHABLE', 'INSTANCE_OWNERSHIP_UNCONFIRMED', 'SUPERVISOR_PENDING'}:
                 return result
             remaining = deadline - self.monotonic()
             if remaining <= 0:
@@ -35,10 +35,15 @@ class ServiceLifecycle:
         before = self.adapter.inspect(timeout=min(2, timeout))
         if before['state'] == 'stopped':
             return before
-        if before['state'] not in {'ready', 'stopping'}:
+        pending = before.get('reason') == 'SUPERVISOR_PENDING' and not before.get('generation')
+        if before['state'] not in {'ready', 'stopping'} and not pending:
             return before
-        generation = before['generation']
+        generation = before.get('generation')
+        if not generation and not pending:
+            return before
         result = self.adapter.request_stop(before, timeout=max(.01, deadline - self.monotonic()))
+        if result['state'] not in {'ready', 'stopping'} or result.get('reason') == 'CONCURRENT_LIFECYCLE':
+            return result
         report = result.get('shutdown', {'state': 'UNCONFIRMED'})
         while True:
             remaining = deadline - self.monotonic()
@@ -61,6 +66,26 @@ class ServiceLifecycle:
         if stopped['state'] != 'stopped' or stopped.get('shutdown_outcome') == 'unconfirmed':
             return stopped
         return self.start(timeout=timeout)
+
+    def install_user_service(self, *, timeout=30.0):
+        prepared = self.adapter.prepare_install()
+        if not prepared.get('installation_prepared') or prepared.get('installation_state') == 'installed':
+            return prepared
+        stopped = self.stop(timeout=timeout)
+        if stopped['state'] != 'stopped' or stopped.get('shutdown_outcome') == 'unconfirmed':
+            return stopped
+        return self.adapter.install_user_service()
+
+    def uninstall_user_service(self, *, timeout=30.0):
+        # A retained receipt with a missing native task can be removed only
+        # after the adapter independently verifies there is no process owner.
+        before = self.inspect(timeout=min(timeout, 2))
+        if before.get('reason') in {'SERVICE_DEFINITION_MISSING', 'INSTALLATION_PENDING'}:
+            return self.adapter.uninstall_user_service()
+        stopped = self.stop(timeout=timeout)
+        if stopped['state'] != 'stopped' or stopped.get('shutdown_outcome') == 'unconfirmed':
+            return stopped
+        return self.adapter.uninstall_user_service()
 
 
 def project_server_readiness(*, identity: str, generation: str, version: str,
