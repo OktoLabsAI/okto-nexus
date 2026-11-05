@@ -42,6 +42,7 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
   const [sessionConflict,setSessionConflict] = useState<string[] | null>(null);
   const sessionClosures = useRef(new SessionClosures());
   const [notice,setNotice] = useState('');
+  const [presetOrigin,setPresetOrigin] = useState<{id: string; revision: number} | null>(null);
   const [executor,setExecutor] = useState('');
   const [options,setOptions] = useState<RuntimeOptions | null>(null);
   const [workspaces,setWorkspaces] = useState<WorkspaceListItem[]>([]);
@@ -93,6 +94,7 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
         const runtime = setup.runtime_policy;
         if (controller.signal.aborted) return;
         setConnections(initial.connections);
+        setPresetOrigin(setup.project_preset || null);
         loadMcp(setup.mcp_preset);
         const loaded: ConnectionConfiguration = {...emptyConnection(),execution_location:policy.execution_location,adapter_id:policy.local_adapter_id || '',
           runtime_enabled:runtime.runtime_enabled,session_policy:runtime.session_policy,
@@ -167,6 +169,7 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
       const setup = await runtimeApi.setup(agentId,binding || undefined);
       if (!live.current) return;
       updateBindingBaseline(setup.baseline);setBindingId(binding);
+      setPresetOrigin(setup.project_preset || null);
       loadMcp(setup.mcp_preset);
       if (!imported.current) setDraft(old => ({...old,...(setup.folders || {}),
         provider_home:setup.folders?.provider_home ?? choice?.provider_home_suggestion ?? null,
@@ -291,9 +294,12 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
       const file=e.currentTarget.files?.[0];e.currentTarget.value='';if(!file)return;
       try {if(file.size>65536)throw new Error('The file must be 64 KiB or smaller.');const config=parseConnectionConfiguration(await file.text());
         const setup=await runtimeApi.setup(agentId);updateBindingBaseline(setup.baseline);
-        imported.current=true;patch(config);setCandidateRef('');setBindingId(null);setWorkspace('');setVisited(0);setNotice('Configuration imported. Review the host, installation and folders.');
+        imported.current=true;setPresetOrigin(null);patch(config);setCandidateRef('');setBindingId(null);setWorkspace('');setVisited(0);setNotice('Configuration imported. Review the host, installation and folders.');
       }catch(e){setError(String(e));}
     }} />
+    {presetOrigin && <p role="note" data-testid="connection-preset-origin" className="text-sm text-surface-600 dark:text-surface-300">
+      Started with {presetOrigin.id}, revision {presetOrigin.revision}. Existing saved settings are loaded without reapplying the preset or renewing execution authorization.
+    </p>}
     <div className="connection-layout">
     <ConnectionWorkflow steps={workflowSteps} step={step} summaries={summaries} statuses={statuses} available={visited} locked={mcpEditing || busy || installationBusy || !!testing || (step===0 && capacityPending)}
       onStep={async value => {if (value <= visited && !busy && !testing) {if (step===0 && value!==0 && capacity.current && !await capacity.current.save()) return; go(value);}}} />
@@ -306,6 +312,7 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
         const saved=connections.find(c => c.binding_id===e.target.value);if(!saved)return;
         setBusy(true);setError('');
         try {const setup=await runtimeApi.setup(agentId,saved.binding_id);updateBindingBaseline(setup.baseline);setBindingId(saved.binding_id);
+          setPresetOrigin(setup.project_preset || null);
           loadMcp(setup.mcp_preset);
           setExecutor(saved.executor_id);setWorkspace(saved.workspace_id);setCandidateRef(saved.candidate_ref);imported.current=false;
           patch({...setup.folders,adapter_id:saved.adapter_id,alias:setup.public_config?.alias || '',
@@ -325,7 +332,7 @@ export function AgentConnectionsPanel({agentId,onClose}: {agentId: string; onClo
         {draft.execution_location !== 'remote' && <div role="group" aria-label="Local runtime" className="flex gap-2 flex-wrap">
           {options?.catalog.runtimes.filter(r => r.support_status === 'managed_supported').map(r => <button key={r.adapter_id} className={`btn ${draft.adapter_id === r.adapter_id ? 'btn-primary':'btn-secondary'}`}
             aria-pressed={draft.adapter_id === r.adapter_id} data-testid={`local-runtime-${r.adapter_id}`}
-            onClick={() => {patch({adapter_id:r.adapter_id,harness_settings:{}});loadMcp();setCandidateRef('');setBindingId(null);setVisited(0);}}>{r.display_name}</button>)}
+            onClick={() => {patch({adapter_id:r.adapter_id,harness_settings:{}});setPresetOrigin(null);loadMcp();setCandidateRef('');setBindingId(null);setVisited(0);}}>{r.display_name}</button>)}
         </div>}
         <label>Session context <span className="text-surface-500">Optional</span><ConfigurationHelp label="Session context">Shared keeps all senders together. Per sender shares history across sessions of the same agent. Per sender + source session isolates each verified source session. Messages without a verified session, including the operator UI, share a separate session per sender.</ConfigurationHelp>
           <select aria-label="Session context" className={input} value={draft.session_policy || ''} onChange={e => patch({session_policy:e.target.value as 'shared' | 'per_sender' | 'per_sender_session' | 'one_shot' || null})}>

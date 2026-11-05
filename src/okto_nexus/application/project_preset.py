@@ -37,3 +37,15 @@ def effects():
         'The connection test opens the harness and requests a model response; provider usage may be charged.',
         'Finish saves the connection and execution grant. It does not submit a project task.',
     ]
+
+
+def read_project_preset(deps, context):
+    """Describe the same recommendation used by connect; reading applies nothing."""
+    from .connection_setup import require_operator
+    from ..bootstrap.execution_authority import build_execution_access
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        require_operator(build_execution_access(deps), context, uow)
+    defaults = configuration(adapter_id=CLIENTS['codex'], project='', label='Project')
+    fields = ('runtime_enabled', 'session_policy', 'harness_settings', 'tool_access', 'authorization')
+    return dict(format_version=1, origin=dict(ORIGIN), identity=identity_defaults(),
+                configuration={name: defaults[name] for name in fields}, effects=effects())

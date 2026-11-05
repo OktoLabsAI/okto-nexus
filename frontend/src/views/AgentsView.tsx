@@ -1,4 +1,5 @@
 import { AgentConnectionsPanel } from "../components/AgentConnectionsPanel";
+import { displayName, otherMetadata, identityMetadata } from '../projectIdentity';
 import { AgentRuntimeAdministration } from '../components/AgentRuntimeAdministration';
 import { OneShotActivity } from '../components/OneShotActivity';
 import { AgentActionModal, AgentModalFooter, ModalCancelButton } from '../components/AgentActionModal';
@@ -135,10 +136,12 @@ export function AgentsView({
   // already accepts all three; this is the missing operator affordance.
   const [editOpen, setEditOpen] = useState<string | null>(null);
   const [editDraft, setEditDraft] = useState<{
+    display_name: string;
     role: string;
     capabilities: string[];
     color: string | null;
   }>({
+    display_name: '',
     role: "",
     capabilities: [],
     color: null,
@@ -274,6 +277,7 @@ export function AgentsView({
   const openEdit = (agent: AgentRow) => {
     setEditError(null);
     setEditDraft({
+      display_name: displayName(agent.metadata),
       role: agent.role ?? "",
       // Owned = truthy flag, the same normalisation capability routing uses.
       capabilities: Object.entries(agent.capabilities ?? {})
@@ -282,7 +286,7 @@ export function AgentsView({
       color: agent.color ?? null,
     });
     // Seed the structured editor; it re-reports {value, valid} on mount.
-    setEditMeta({ value: agent.metadata ?? {}, valid: true });
+    setEditMeta({ value: otherMetadata(agent.metadata), valid: true });
     setEditOpen((cur) => (cur === agent.agent_id ? null : agent.agent_id));
   };
 
@@ -300,7 +304,7 @@ export function AgentsView({
       await api.updateAgent(agentId, {
         role: editDraft.role.trim(),
         capabilities: editDraft.capabilities,
-        metadata: editMeta.value,
+        metadata: identityMetadata(editMeta.value, editDraft.display_name),
         // Present-in-payload overwrite: null clears back to auto-by-identity.
         color: editDraft.color,
       });
@@ -694,11 +698,12 @@ export function AgentsView({
                       />
                       <span
                         className="font-medium text-surface-900 dark:text-surface-100 truncate"
-                        title={agent.agent_id}
+                        title={displayName(agent.metadata) || agent.agent_id}
                       >
-                        {agent.agent_id}
+                        {displayName(agent.metadata) || agent.agent_id}
                       </span>
                     </div>
+                    {displayName(agent.metadata) && <div className="text-xs font-mono break-all text-surface-500" data-testid={`agent-id-${agent.agent_id}`}>{agent.agent_id}</div>}
                     <div className="text-xs text-surface-500 dark:text-surface-400 truncate">
                       {agent.role ?? "—"} · {agent.has_key ? "key issued" : "no key"}
                     </div>
@@ -871,7 +876,7 @@ export function AgentsView({
                       title={`${showConnections ? 'Connections' : showKey ? 'API key' : showEdit ? 'Identity' : showPerms ? 'Permissions' : showTags ? 'Tags & audience' : 'Communication'} · ${agent.agent_id}`}
                       wide={showConnections || showTags || showPerms} guardChanges={!showPerms && !showKey}
                       busy={actionBusy}
-                      dirty={showEdit && (editDraft.role !== (agent.role || '') || editDraft.color !== (agent.color || null) || JSON.stringify(editDraft.capabilities) !== JSON.stringify(Object.entries(agent.capabilities || {}).filter(([,flag]) => Boolean(flag)).map(([name]) => name)) || JSON.stringify(editMeta.value) !== JSON.stringify(agent.metadata || {}))}
+                      dirty={showEdit && (editDraft.display_name !== displayName(agent.metadata) || editDraft.role !== (agent.role || '') || editDraft.color !== (agent.color || null) || JSON.stringify(editDraft.capabilities) !== JSON.stringify(Object.entries(agent.capabilities || {}).filter(([,flag]) => Boolean(flag)).map(([name]) => name)) || JSON.stringify(editMeta.value) !== JSON.stringify(otherMetadata(agent.metadata)))}
                       testId={`agent-action-${agent.agent_id}`}
                       onClose={() => {setConnectionsOpen(null);setFreshKey(null);setEditOpen(null);setPermsOpen(null);setTagsOpen(null);setCommOpen(null);}}>
                     <div
@@ -952,6 +957,12 @@ export function AgentsView({
                           </div>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
                             <label className="space-y-1">
+                              <span className="text-surface-500 dark:text-surface-400">Display name</span>
+                              <input className={`${inputCls} w-full`} maxLength={120} value={editDraft.display_name}
+                                onChange={e => setEditDraft({...editDraft, display_name: e.target.value})} />
+                              <span className="block text-surface-500">The agent ID, history and connections stay the same.</span>
+                            </label>
+                            <label className="space-y-1">
                               <span className="text-surface-500 dark:text-surface-400">Role</span>
                               <input
                                 className={`${inputCls} w-full`}
@@ -985,7 +996,7 @@ export function AgentsView({
                               </span>
                               <div className="pt-1">
                                 <MetadataEditor
-                                  initial={agent.metadata ?? {}}
+                                  initial={otherMetadata(agent.metadata)}
                                   resetSignal={agent.agent_id}
                                   onChange={setEditMeta}
                                   idPrefix={`edit-meta-${agent.agent_id}`}

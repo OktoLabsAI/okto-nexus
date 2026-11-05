@@ -269,3 +269,14 @@ Campanhas reais de provedor, login/logout/reboot, serviço do usuário e Herdr p
 - Connector commit/push: `b3167707`. Pin/hash coordenados no Nexus; produção Nexus e Core inalterados. Ruff dos fontes e unitários alterados, whitespace e ledger verificados; os 12 avisos F preexistentes no arquivo de auditoria legado são registrados na evidência.
 - Nova identidade remota continua pendente. Foi solicitada preferência entre pareamento revisado e provisionamento prévio pelo operador; não houve resposta até este registro. M1 produtivo, campanha nativa e demais frentes continuam abertos; plano fixo preservado.
 - Evidência: [pr03-connector-project-review.md](plans/agent_ops/evidence/pr03-connector-project-review.md).
+
+## 2026-11-05 — PR-03, décima quarta fatia: introdução e identidade compartilhada no dashboard
+
+- Recuperadas as três referências origin/main; todas continuam contidas nas branches feature já preparadas.
+- A introdução lê o preset canônico, orienta projeto/harness pelo terminal e mantém a opção de cliente existente. Browser novo com identidade já configurada não reinicia onboarding; somente operator não conta como projeto.
+- Connections mostra a origem e configuração salvas. Nome legível e papel usam a identidade existente; metadata tipada, chave, permissões, histórico, bindings e grants são preservados.
+- **40 testes frontend, 32 integrações de fonte e 76 integrações instaladas passaram**, com sobreposição entre suítes. Build e Ruff passaram. Wheel limpo auditado: 431 arquivos Python e sete estáticos; Connector/Core mantêm 117/130 payloads e pins.
+- Browser real com backend instalado verificou primeira visita, reuso, edição, teclado, temas, tela estreita e retry após 503 injetado. Conferência persistida confirmou uma identidade de projeto, um binding e um grant; retomada não repetiu setup. Harness sintético, sem inferência real.
+- O primeiro teste HTTP revelou a rota de dashboard ausente, corrigida antes das suítes finais. A campanha de histórico foi ajustada para preservar todas as linhas anteriores permitindo notificações novas; produto e wheel permaneceram iguais.
+- DX-12/18/19/21 e DX-T49 permanecem em progresso no aceite completo. RG-10 verificado para esta campanha. M1 produtivo, campanha nativa, participante, evolução do preset, identidade remota inicial, ATN e OBS continuam abertos; plano fixo preservado.
+- Evidência: [pr03-project-dashboard.md](plans/agent_ops/evidence/pr03-project-dashboard.md).

@@ -949,6 +949,16 @@ def build_router() -> APIRouter:
         except OktoNexusError as error:
             return runtime_error(error, 'connection.authorization')
 
+    @router.get('/connections/project-preset')
+    async def project_preset_read(request: Request):
+        from ....application.project_preset import read_project_preset
+        try:
+            result = await anyio.to_thread.run_sync(lambda: read_project_preset(
+                request.app.state.deps, runtime_request_context()))
+            return JSONResponse(result, headers={'Cache-Control': 'no-store'})
+        except OktoNexusError as error:
+            return runtime_error(error, 'connection.project_preset')
+
     @router.get('/connections/setup/{agent_id}')
     async def connection_setup_read(agent_id: str, request: Request, binding_id: str | None = None,
                                     new_agent_draft: bool = False):

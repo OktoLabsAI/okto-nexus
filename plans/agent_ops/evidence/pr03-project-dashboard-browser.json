@@ -1,0 +1,55 @@
+{
+  "identity_preserved": true,
+  "key_and_permissions_preserved": true,
+  "configuration_bindings_grants_preserved": true,
+  "history_preserved": true,
+  "terminal_reopen_no_effect": true,
+  "empty_intro_no_setup_effect": true,
+  "existing_agent_count": 3,
+  "binding_count": 1,
+  "grant_count": 1,
+  "previous_message_count": 1,
+  "current_message_count": 2,
+  "platform": "Windows 11 10.0.26300",
+  "browser": "Chromium via Playwright CLI",
+  "backend": "installed Nexus wheel; real FastAPI/SQLite/uvicorn; synthetic harness checks",
+  "fresh_browser_existing_identity_no_intro": true,
+  "operator_only_first_intro": true,
+  "saved_connection_and_preset_visible": true,
+  "browser_name_and_role_edit": true,
+  "project_and_existing_client_intents": true,
+  "focus_wrap_both_directions": true,
+  "desktop_light_and_mobile_dark_reviewed": true,
+  "injected_503_and_retry": true,
+  "open_agents_does_not_create_identity": true,
+  "dismissed_reload_no_intro": true,
+  "first_state_check": "Failed on appended independent runtime notice; rerun preserves all prior rows without prohibiting new messages",
+  "product_unchanged_between_browser_runs": true,
+  "backends_and_browsers_closed": true,
+  "screenshots": [
+    {
+      "file": "plans/agent_ops/evidence/pr03-project-dashboard-connections.png",
+      "sha256": "01ec3aff6799b4efccb009711ac858fbf12bb7e5728ebb6d3e6ee6dab462d1f0"
+    },
+    {
+      "file": "plans/agent_ops/evidence/pr03-project-dashboard-identity-edited.png",
+      "sha256": "b698a13ecd9fe0782182da5ffed1c22102166daeb9054e74ba86fdb723c2f199"
+    },
+    {
+      "file": "plans/agent_ops/evidence/pr03-project-dashboard-intro-light.png",
+      "sha256": "6a3a1c9bd0a7d770acb49ee6a3046a8a0449d4466c57396b882ece94da70637c"
+    },
+    {
+      "file": "plans/agent_ops/evidence/pr03-project-dashboard-intro-dark-mobile.png",
+      "sha256": "658362d186a711a8a16469b4d15087f1c89f0804cae0106e9f6bd7299c9ec409"
+    },
+    {
+      "file": "plans/agent_ops/evidence/pr03-project-dashboard-existing-client-mobile.png",
+      "sha256": "5e83152d0d2d25dcd7945ea337bde9ead85f8b80779973d0f2546e51c6829f1d"
+    },
+    {
+      "file": "plans/agent_ops/evidence/pr03-project-dashboard-intro-error.png",
+      "sha256": "282c69b4b273a02657253b70c2ea66996ece2eb5e843bb2d292c410ffd844549"
+    }
+  ]
+}

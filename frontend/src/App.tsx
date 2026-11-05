@@ -43,6 +43,7 @@ import {
   isMetricsPromptDismissed,
 } from "./components/metricsConsentStorage";
 import { OnboardingModal } from "./components/onboarding/OnboardingModal";
+import { shouldOfferIntroduction } from './components/onboarding/onboardingStorage';
 import {
   isCompleted as onboardingDone,
   reset as resetOnboarding,
@@ -262,6 +263,7 @@ function Dashboard({
   const [helpOpen, setHelpOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [onboardingOpen, setOnboardingOpen] = useState(false);
+  const [introductionChecked, setIntroductionChecked] = useState(false);
   const [metricsPanel, setMetricsPanel] = useState<"menu" | "prompt" | null>(
     null,
   );
@@ -288,14 +290,18 @@ function Dashboard({
     return () => document.removeEventListener("mousedown", onClick);
   }, []);
 
-  // First-run onboarding: shown once per browser (versioned localStorage),
-  // never nags a returning operator. Re-openable from the header menu.
+  // A browser-local flag alone cannot identify a new Nexus installation.
   useEffect(() => {
-    if (!onboardingDone()) setOnboardingOpen(true);
+    let active = true;
+    if (onboardingDone()) {setIntroductionChecked(true);return;}
+    api.agents().then(result => {
+      if (active && shouldOfferIntroduction(onboardingDone(), result.items)) setOnboardingOpen(true);
+    }).catch(() => undefined).finally(() => {if (active) setIntroductionChecked(true);});
+    return () => {active = false;};
   }, []);
 
   useEffect(() => {
-    if (onboardingOpen || metricsPanel) return;
+    if (!introductionChecked || onboardingOpen || metricsPanel) return;
     if (isMetricsPromptDismissed()) return;
     let active = true;
     api
@@ -312,7 +318,7 @@ function Dashboard({
     return () => {
       active = false;
     };
-  }, [onboardingOpen, metricsPanel]);
+  }, [introductionChecked, onboardingOpen, metricsPanel]);
 
   const closeMetricsPanel = () => {
     if (metricsPanel === "prompt") dismissMetricsPrompt();
@@ -699,7 +705,7 @@ function Dashboard({
       {helpOpen && <HelpModal onClose={() => setHelpOpen(false)} />}
       {aboutOpen && <AboutModal onClose={() => setAboutOpen(false)} />}
       {onboardingOpen && (
-        <OnboardingModal onClose={() => setOnboardingOpen(false)} />
+        <OnboardingModal onClose={() => setOnboardingOpen(false)} onOpenAgents={() => setView('Agents')} />
       )}
       {metricsPanel && !onboardingOpen && (
         <MetricsSettingsPanel

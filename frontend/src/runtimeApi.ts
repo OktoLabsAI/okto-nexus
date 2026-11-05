@@ -1,6 +1,15 @@
 import { ApiError, type ApprovalDetail } from "./api";
 import type { SetupRequest, SetupTest, SetupBaseline } from './connectionConfiguration';
 
+export interface ProjectPresetOverview {
+  format_version: 1;
+  origin: {id: string; revision: number};
+  identity: {role: string; permissions: Record<string, unknown>; defaults_hash: string};
+  configuration: Pick<import('./connectionConfiguration').ConnectionConfiguration,
+    'runtime_enabled' | 'session_policy' | 'harness_settings' | 'tool_access' | 'authorization'>;
+  effects: string[];
+}
+
 export interface ExecutorChoice {
   executor_id: string;
   kind: string;
@@ -211,7 +220,9 @@ export const runtimeApi = {
     {plan, confirmation: 'PREVIOUS_RUNTIME_PROCESSES_STOPPED'}),
   retryRecovery: (agentId: string) => read<{state: string; error_code: string | null; message: string}>(
     `/v1/runtime/recovery/retry?agent_id=${encodeURIComponent(agentId)}`, undefined, {}),
+  projectPreset: (signal?: AbortSignal) => read<ProjectPresetOverview>('/v1/connections/project-preset', signal),
   setup: (agent: string, binding?: string, signal?: AbortSignal) => read<{baseline: SetupBaseline;
+    project_preset?: {id: string; revision: number};
     runtime_policy: import('./api').RuntimePolicy;
     mcp_preset?: import('./api').MCPPreset;
     connections: (Pick<BindingView,'binding_id' | 'candidate_ref' | 'executor_id' | 'workspace_id' | 'adapter_id'> & {execution_location: 'local' | 'remote'})[];
