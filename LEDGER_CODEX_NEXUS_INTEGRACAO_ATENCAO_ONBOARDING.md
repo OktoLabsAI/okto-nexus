@@ -123,3 +123,14 @@ Concluir as lacunas de PR-01 junto ao supervisor e ao Connector em PR-02 / SVC-0
 ## Aceites externos ainda não executados
 
 Campanhas reais de provedor, login/logout/reboot, serviço do usuário e Herdr permanecem pendentes. O plano exige autorização específica para credenciais reais, inferência paga e mudanças na instalação pessoal. Preparar primeiro os percursos e artefatos revisáveis; solicitar apenas a autorização ou o ambiente necessário ao chegar a cada campanha.
+
+
+## 2026-11-05 — PR-02, sétima fatia: diagnósticos passivos do Connector
+
+- Recuperadas novamente as referências remotas de main nos três repos; todas já estão contidas nas respectivas branches feature.
+- Status/logs/doctor padrão observam o diretório selecionado sem criar estado, lock, vault ou daemon. Probes explícitos respeitam a aprovação gravada do cofre.
+- Status preserva starting/unknown/failed/degraded; IPC ou log inacessível não comprova ausência de trabalho. Saídas humana/JSON usam códigos estáveis.
+- Logs possuem limite de leitura, retenção de registros parciais e indicação de rotação/truncamento. Corrigido conflito nativo de substituição de estado durante leitura no Windows com retry limitado, sem fallback destrutivo.
+- **77 testes de fonte e 59 testes com wheel em venv limpa passaram**. Incluem CLI real em instância ausente e três starters concorrentes, reuso, restart e drain. Os **111 arquivos Python** do wheel correspondem ao fonte.
+- Commit/push do Connector: `849f295`. Artefato/manifest e evidências coordenados no Nexus; Core permanece sem mudança nesta fatia.
+- [Evidências e limites](plans/agent_ops/evidence/pr02-connector-passive.md). SVC-10/11, PR-02 e o plano integral continuam em progresso. A campanha nativa preparada segue aguardando autorização; nenhuma tarefa foi registrada.
