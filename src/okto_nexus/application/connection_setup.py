@@ -31,6 +31,28 @@ def require_operator(access, context, uow, *, require_feature=False):
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'An authenticated operator is required.', {})
 
 
+def setup_actor(context):
+    """Use the same canonical audit identity for every Finish/receipt path."""
+    return context.actor_agent_id or 'operator'
+
+
+def read_setup_commit(deps, context, setup_run_id, *, expected_request=None):
+    """Recover the committed result without testing, regranting or reapplying."""
+    if not isinstance(setup_run_id, str) or not 1 <= len(setup_run_id) <= 100:
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Invalid setup run ID.', {})
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        require_operator(build_execution_access(deps), context, uow)
+        row = uow.connection.execute('SELECT * FROM connection_setup_commits '
+            'WHERE actor_agent_id=? AND client_intent_id=?', (setup_actor(context), setup_run_id)).fetchone()
+        if row is None:
+            raise OktoNexusError(ErrorCode.NOT_FOUND,
+                'No committed Finish receipt exists for this setup run. Test or host effects may still be pending.', {})
+        if expected_request is not None and row['request_hash'] != _digest(expected_request):
+            raise conflict('This Finish request has different content.')
+        return {'setup_run_id': setup_run_id, 'request_hash': row['request_hash'],
+                'state': 'committed', 'result': json.loads(row['result_json'])}
+
+
 def baseline(uow, agent_id, binding_id=None):
     execution = agent_execution_policy.policy_view(uow, agent_id)
     runtime = runtime_policy.view(uow.connection, agent_id)
@@ -132,7 +154,7 @@ def finish_setup(deps, context, owner, fresh, request, *, verified):
         access.authorize_maintenance(context, uow=uow)
         # Human dashboard operators have no agent identity. Use the same
         # operator audit identity as execution grants, only after authorization.
-        commit_actor = context.actor_agent_id or 'operator'
+        commit_actor = setup_actor(context)
         prior = uow.connection.execute('SELECT * FROM connection_setup_commits WHERE actor_agent_id=? '
             'AND client_intent_id=?', (commit_actor, request['client_intent_id'])).fetchone()
         if prior:

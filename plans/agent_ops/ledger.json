@@ -72,11 +72,13 @@
       ]
     },
     "PR-03": {
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "dependencies": [
         "PR-02"
       ],
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-setup-recovery.md"
+      ]
     },
     "PR-04": {
       "status": "NOT_STARTED",
@@ -1399,19 +1401,42 @@
     },
     "DX-17": {
       "title": "progresso, retomada e primeira sessÃ£o",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "milestones": [
         "PR-03"
       ],
       "dependencies": [
         "PR-02"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "src/okto_nexus/application/connection_setup.py",
+        "src/okto_nexus/adapters/inbound/http/runtime_v1.py",
+        "src/okto_nexus/adapters/inbound/http/dashboard_runtime.py",
+        "tests/execution_r4/test_connection_setup_recovery.py",
+        "docs/connection-setup.md",
+        "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/connection_config.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/configure.py",
+        "../okto-nexus-connector/tests/unit/test_connection_config.py",
+        "../okto-nexus-connector/docs/connection-configuration.md",
+        "plans/agent_ops/evidence/pr03-setup-recovery.md"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr03-setup-recovery-nexus-final.xml",
+        "plans/agent_ops/evidence/pr03-setup-recovery-connector.xml",
+        "plans/agent_ops/evidence/pr03-setup-recovery-installed.xml"
+      ],
+      "result": "Existing Server-hosted setup recovers a matching canonical Finish receipt without another Test, binding or grant; submitted tests are observed only, and cache loss/older Servers remain unconfirmed. Server-hosted wizard resumes before discovery or configuration questions. 65 installed tests passed.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "Main Nexus connect, project preset, unified identity review/creation and full terminal work/session flow remain open.",
+        "Test cache loss was injected; actual Server restart, durable provider-test outcomes and productive provider campaigns NOT_RUN.",
+        "This increment covers Server-hosted setup; the Connector-hosted proposal workflow is unchanged."
+      ],
+      "subscopes": {
+        "canonical_finish_receipt_recovery": "VERIFIED",
+        "server_hosted_cli_checkpoint_resume": "VERIFIED",
+        "actual_restart_and_productive_session": "NOT_RUN"
+      }
     },
     "DX-05": {
       "title": "init",
@@ -1624,19 +1649,42 @@
     },
     "DX-19": {
       "title": "uma revisÃ£o significativa para aplicar o preset",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "milestones": [
         "PR-03"
       ],
       "dependencies": [
         "PR-02"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "src/okto_nexus/application/connection_setup.py",
+        "src/okto_nexus/adapters/inbound/http/runtime_v1.py",
+        "src/okto_nexus/adapters/inbound/http/dashboard_runtime.py",
+        "tests/execution_r4/test_connection_setup_recovery.py",
+        "docs/connection-setup.md",
+        "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/connection_config.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/configure.py",
+        "../okto-nexus-connector/tests/unit/test_connection_config.py",
+        "../okto-nexus-connector/docs/connection-configuration.md",
+        "plans/agent_ops/evidence/pr03-setup-recovery.md"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr03-setup-recovery-nexus-final.xml",
+        "plans/agent_ops/evidence/pr03-setup-recovery-connector.xml",
+        "plans/agent_ops/evidence/pr03-setup-recovery-installed.xml"
+      ],
+      "result": "Existing Server-hosted setup recovers a matching canonical Finish receipt without another Test, binding or grant; submitted tests are observed only, and cache loss/older Servers remain unconfirmed. Server-hosted wizard resumes before discovery or configuration questions. 65 installed tests passed.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "Main Nexus connect, project preset, unified identity review/creation and full terminal work/session flow remain open.",
+        "Test cache loss was injected; actual Server restart, durable provider-test outcomes and productive provider campaigns NOT_RUN.",
+        "This increment covers Server-hosted setup; the Connector-hosted proposal workflow is unchanged."
+      ],
+      "subscopes": {
+        "canonical_finish_receipt_recovery": "VERIFIED",
+        "server_hosted_cli_checkpoint_resume": "VERIFIED",
+        "actual_restart_and_productive_session": "NOT_RUN"
+      }
     },
     "DX-20": {
       "title": "ciclo cotidiano completo no terminal",
@@ -2351,8 +2399,12 @@
     },
     "DX-T18": {
       "requirement": "Resposta perdida apÃ³s commit e restart recuperam objeto original sem reenvio produtivo.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-setup-recovery.md",
+        "plans/agent_ops/evidence/pr03-setup-recovery-installed.xml"
+      ],
+      "result": "Existing Server-hosted setup receipt and injected cache-loss subset verified; full Nexus connect and actual restart/work campaign remain open."
     },
     "DX-T19": {
       "requirement": "Pending approval repetido mantÃ©m uma aprovaÃ§Ã£o; decisÃ£o posterior preserva correlaÃ§Ã£o.",
@@ -2426,8 +2478,12 @@
     },
     "DX-T33": {
       "requirement": "connect reutilizado apÃ³s resposta perdida retoma o mesmo setup sem novo agente, binding ou grant.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-setup-recovery.md",
+        "plans/agent_ops/evidence/pr03-setup-recovery-installed.xml"
+      ],
+      "result": "Existing Server-hosted setup receipt and injected cache-loss subset verified; full Nexus connect and actual restart/work campaign remain open."
     },
     "DX-T34": {
       "requirement": "Login de provedor ausente produz instruÃ§Ã£o concreta e nÃ£o deixa daemon bloqueado em prompt invisÃ­vel.",
@@ -3133,6 +3189,18 @@
         "plans/agent_ops/evidence/pr02-upgrade-connector-final.xml",
         "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
         "plans/agent_ops/evidence/pr02-upgrade-wheels.json"
+      ]
+    },
+    {
+      "date": "2026-11-05",
+      "scope": "PR-03 Server-hosted setup recovery",
+      "result": "Existing Server-hosted setup recovers a matching canonical Finish receipt without another Test, binding or grant; submitted tests are observed only, and cache loss/older Servers remain unconfirmed. Server-hosted wizard resumes before discovery or configuration questions. 65 installed tests passed. Full R3 and M1 remain in progress.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-setup-recovery.md",
+        "plans/agent_ops/evidence/pr03-setup-recovery-nexus-final.xml",
+        "plans/agent_ops/evidence/pr03-setup-recovery-connector.xml",
+        "plans/agent_ops/evidence/pr03-setup-recovery-installed.xml",
+        "plans/agent_ops/evidence/pr03-setup-recovery-wheels.json"
       ]
     }
   ]

@@ -211,3 +211,25 @@ wheels are identical and the CI manifest is coordinated. See
 `evidence/pr02-enablement.md` for exact scopes, commands and limits. Native
 mutations/login/credential qualification and the remaining fixed-plan work are
 still open. No schema/NXL change, personal task registration or release occurred.
+
+## PR-03 first increment — Server-hosted setup recovery
+
+The existing canonical Finish receipt can now be inspected and matched against
+the normalized saved setup request. Connector records submission checkpoints
+before Test/Finish, recovers committed results without reapplying, and observes
+previously submitted tests without replaying a model turn. Its Server-hosted
+wizard resumes the saved review before discovery or configuration questions.
+Missing test results and older Servers remain explicitly unconfirmed.
+
+Nine focused Nexus tests, 32 Connector tests and 65 coordinated installed tests
+passed. The installed suite includes all 24 existing canonical setup tests and
+three client/HTTP-handler integration cases with injected lost replies. Package
+origins are asserted outside the checkouts, and all 415/114/130 Python wheel
+payloads match source byte-for-byte. Connector commit `e365e9a` is pushed;
+Nexus coordinates its CI wheel/manifest. Core is unchanged. See
+`evidence/pr03-setup-recovery.md` for evidence and limitations.
+
+This increment does not complete M1 or PR-03. The main Nexus connect/preset,
+unified identity creation, terminal work and decisions, actual restart and
+productive provider campaigns remain open. Tests simulated the provider turn
+and cache loss; no real inference, credentials or native task mutation was used.

@@ -33,7 +33,9 @@ inside one database transaction. Failed validation rolls back the complete chang
 Endpoint revisions are handled inside that transaction. An external configuration
 change requires reopening the setup; it is never silently overwritten. Successful
 Finish requests have durable idempotent receipts. Tests expire after one hour and
-must be repeated after a server restart. Closing the panel discards the draft;
+their in-memory results are lost after a server restart. Without a committed
+Finish receipt, another test requires a new explicit review and consent; absence
+of a result does not prove that no model turn ran. Closing the panel discards the draft;
 an already started test completes and closes its temporary session.
 
 Import JSON and Export JSON appear at the top of Host & harness. The Core-owned
@@ -56,3 +58,26 @@ The Connector accepts the same document with `configure --file` for guided local
 provisioning. `configure` also works without JSON. Operator approval and execution
 authorization remain Server-controlled. `connection-config apply` remains the
 explicit Server-local automation path, with folders supplied as separate flags.
+
+## Recover an interrupted Server-hosted setup
+
+The Connector persists the exact request and baseline before testing and records
+the submission checkpoint before each Test or Finish call. Reusing the same
+request ID first asks Nexus for its durable Finish receipt. A matching receipt
+returns the original binding and grant result without retesting or reapplying
+configuration. If Finish has not committed, an already submitted test is only
+observed. A missing test result is reported as `SETUP_TEST_UNCONFIRMED`, including
+after a Server restart; no automatic model turn is sent.
+
+Operators can inspect `GET /v1/connections/setup-commits/{setup_run_id}` or match
+the saved complete request with `POST /v1/connections/setup:recover`. Both are
+read-only and require current operator authorization. Matching uses the same
+configuration normalization and request hash as Finish. A changed request is a
+conflict. A missing receipt is `NOT_FOUND` at stage `connection.setup_commit`;
+it does not assert absence of test or host effects. The dashboard management
+prefix exposes the same handlers for its existing operator authentication.
+
+An older Server without recovery support leaves the attempt unconfirmed; the
+Connector does not silently repeat setup. `saved: true` confirms the configuration
+commit only, not a live harness session or completed work. This recovery path
+does not change the Connector-hosted proposal workflow.

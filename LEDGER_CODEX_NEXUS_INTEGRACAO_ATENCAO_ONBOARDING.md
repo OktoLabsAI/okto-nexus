@@ -154,3 +154,12 @@ Campanhas reais de provedor, login/logout/reboot, serviço do usuário e Herdr p
 - Apply não inicia nem migra o runtime. O start explícito usa o caminho canônico e verifica o ambiente instalado. Rollback binário não é assumido seguro.
 - Connector commit/push: `d82d941`; artefatos coordenados e hashes registrados nas evidências.
 - [Evidências e limites](plans/agent_ops/evidence/pr02-upgrade.md). SVC-09 e PR-02 seguem IN_PROGRESS: atualização nativa real, versões históricas, migrações incompatíveis e trabalho produtivo não foram qualificados. A campanha nativa original continua aguardando a autorização já solicitada.
+
+## 2026-11-05 — PR-03, primeira fatia: retomada do setup existente
+
+- Recuperada novamente `origin/main` nos três repos; todas já estão contidas nas branches `feature/v0.3.3`, `feature/v0.0.12` e `feature/v0.0.14`.
+- Nexus permite recuperar e conferir o recibo canônico de Finish pelo mesmo ID e conteúdo normalizado. Consulta exige autorização atual de operador e não reaplica configuração, vínculo ou grant.
+- Connector registra o envio do Test antes do HTTP. Retomada consulta o recibo e observa o teste existente; cache perdido, Server antigo ou resultado incerto não causam outra chamada ao modelo. O assistente Server-hosted restaura a revisão salva antes de novas perguntas ou descoberta e rejeita argumentos conflitantes.
+- **9 testes focados do Nexus, 32 do Connector e 65 com os wheels instalados fora dos checkouts passaram**, sem skips na rodada instalada. Integração usa cliente HTTP, handlers, autenticação e transação reais, com transporte e turno do harness simulados para injetar perda de resposta. Não houve inferência real.
+- Os 415/114/130 arquivos Python dos wheels Nexus/Connector/Core correspondem byte a byte aos fontes. Wheel CI e manifest atualizados; Core permaneceu inalterado nesta fatia. Commit/push do Connector: `e365e9a`.
+- [Evidências e limites](plans/agent_ops/evidence/pr03-setup-recovery.md). DX-17/19 e PR-03 estão em progresso; o `okto-nexus connect`, preset, criação unificada de identidade, interação de trabalho pelo terminal e campanhas produtivas continuam pendentes. Perda do cache foi injetada; restart real não foi qualificado nesta fatia. O plano R3 e M1 continuam incompletos.

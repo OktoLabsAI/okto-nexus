@@ -962,9 +962,33 @@ def build_router() -> APIRouter:
         except OktoNexusError as error:
             return runtime_error(error, 'connection.test')
 
+    @router.get('/connections/setup-commits/{setup_run_id}')
+    async def connection_setup_commit_read(setup_run_id: str, request: Request):
+        from ....application.connection_setup import read_setup_commit
+        try:
+            result = await anyio.to_thread.run_sync(lambda: read_setup_commit(
+                request.app.state.deps, runtime_request_context(), setup_run_id))
+            return JSONResponse(result, headers={'Cache-Control': 'no-store'})
+        except OktoNexusError as error:
+            return runtime_error(error, 'connection.setup_commit')
+
+    @router.post('/connections/setup:recover')
+    async def connection_setup_recover(body: ConnectionSetupRequest, request: Request):
+        # Read-only matching uses the same normalization as Test and Finish.
+        # Clients need not duplicate the Server's canonical request hashing.
+        from ....application.connection_setup import read_setup_commit
+        try:
+            value = setup_request(body)
+            result = await anyio.to_thread.run_sync(lambda: read_setup_commit(
+                request.app.state.deps, runtime_request_context(), value['client_intent_id'],
+                expected_request=value))
+            return JSONResponse(result, headers={'Cache-Control': 'no-store'})
+        except OktoNexusError as error:
+            return runtime_error(error, 'connection.setup_commit')
+
     @router.post('/connections/setup:finish')
     async def connection_setup_finish(body: ConnectionSetupRequest, request: Request):
-        from ....application.connection_setup import finish_setup, require_operator, runtime_enabled
+        from ....application.connection_setup import finish_setup, require_operator, runtime_enabled, setup_actor
         from nexus_connector_core import CoreError
         try:
             value = setup_request(body)
@@ -974,7 +998,7 @@ def build_router() -> APIRouter:
             with request.app.state.deps.connection_factory.unit_of_work(write=False) as uow:
                 require_operator(build_execution_access(request.app.state.deps), context, uow)
                 prior = uow.connection.execute('SELECT 1 FROM connection_setup_commits WHERE actor_agent_id=? AND client_intent_id=?',
-                    (context.actor_agent_id,value['client_intent_id'])).fetchone()
+                    (setup_actor(context),value['client_intent_id'])).fetchone()
                 active = runtime_enabled(uow.connection, value['configuration'])
             verified = None
             if not prior and active and value['configuration']['execution_location'] != 'remote':
