@@ -21,6 +21,28 @@ Do not run old and new versions concurrently against the same home/database.
 
 The existing shutdown coordinator and runtime reconciliation still determine
 whether native resources, claims and operations are released. Acquiring a lock
-does not authorize replay or clear uncertain work. This change does not yet add
-automatic start, an OS service, or new readiness/control commands; those remain
-the next R3 lifecycle increments.
+does not authorize replay or clear uncertain work.
+
+## Inspect the local instance
+
+`okto-nexus service status --json` accepts the same `--home`, `--db-path`, `--host`
+and `--port` selection as `serve`. Inspection never creates a home, initializes
+storage, starts a process or cancels work. Exit codes are 0 for ready/stopped,
+2 for invalid configuration and 3 for other or unconfirmed service states.
+
+Readiness is served on the existing local operator channel at
+`GET /api/v1/service`. Remote peers and participant identities cannot use it.
+Status correlates the canonical home/database/effective-user identity, OS-held
+guards, process PID, generation and active package/protocol version. A listening
+port or historical metadata alone is insufficient. HTTP liveness remains
+separate. A transport failure while an owner exists is degraded, not stopped;
+the command never retries by launching another process.
+
+The response reports storage initialization and whether canonical admission
+checks are required or closed. It does not promise provider login, harness
+readiness, permission for a task or absence of active work. Queries remain
+available during drain; inspection cannot reopen admission. Installed and active
+package versions are distinct; incompatible versions require explicit action.
+
+Automatic start, background operation, OS service installation and controls
+beyond status remain subsequent R3 lifecycle increments.

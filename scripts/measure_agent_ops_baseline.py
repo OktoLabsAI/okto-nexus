@@ -6,6 +6,7 @@ Only the child created here is stopped; no process is found or killed by PID fil
 from __future__ import annotations
 
 import json
+import argparse
 import os
 from pathlib import Path
 import platform
@@ -18,7 +19,7 @@ from urllib.error import URLError
 from urllib.request import ProxyHandler, Request, build_opener
 
 
-def measure() -> dict:
+def measure(*, inspect_service: bool = False) -> dict:
     with tempfile.TemporaryDirectory(prefix='nexus-agent-ops-baseline-') as directory:
         root = Path(directory)
         with socket.socket() as listener:
@@ -66,6 +67,21 @@ def measure() -> dict:
                     'limitations': ['HTTP liveness is not instance readiness or harness readiness.',
                                     'No clean installed Nexus wheel or paid provider timing measured.'],
                 }
+                if inspect_service:
+                    status_command = [sys.executable, '-m', 'okto_nexus.adapters.inbound.cli.main',
+                                      'service', 'status', '--home', str(root / 'home'),
+                                      '--host', '127.0.0.1', '--port', str(port), '--json']
+                    observed = subprocess.run(status_command, cwd=root, env=env,
+                                              capture_output=True, text=True, timeout=15)
+                    assert observed.returncode == 0, 'Live CLI service inspection failed'
+                    view = json.loads(observed.stdout)
+                    assert view['state'] == 'ready'
+                    with opener.open(base_url + '/api/v1/service', timeout=5) as response:
+                        service = json.load(response)['data']
+                    assert view['generation'] == service['generation']
+                    result['status_cli'] = {'state': view['state'], 'same_generation': True,
+                                            'instance_id': view['instance_id'],
+                                            'active_version': view['active_version']}
                 # This home was created above and never contains a personal identity.
                 # Use the real shutdown contract rather than a PID-based termination.
                 with opener.open(Request(base_url + '/api/v1/agents/operator/regenerate-key',
@@ -78,6 +94,12 @@ def measure() -> dict:
                     result['shutdown_state'] = json.load(response)['state']
                 child.wait(timeout=15)
                 assert result['shutdown_state'] == 'DRAINED'
+                if inspect_service:
+                    stopped = subprocess.run(status_command, cwd=root, env=env,
+                                             capture_output=True, text=True, timeout=15)
+                    assert stopped.returncode == 0
+                    assert json.loads(stopped.stdout)['state'] == 'stopped'
+                    result['status_after_shutdown'] = 'stopped'
                 return result
             finally:
                 if child.poll() is None:
@@ -86,7 +108,14 @@ def measure() -> dict:
 
 
 if __name__ == '__main__':
-    result = measure()
-    target = Path(__file__).resolve().parents[1] / 'plans/agent_ops/evidence/baseline-startup.json'
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--output', type=Path, required=True, help='New evidence file; existing evidence is never overwritten')
+    parser.add_argument('--inspect-service', action='store_true')
+    args = parser.parse_args()
+    target = args.output.resolve()
+    if target.exists():
+        parser.error('The evidence file already exists; choose a new output')
+    result = measure(inspect_service=args.inspect_service)
+    target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
     print(json.dumps(result, indent=2))

@@ -779,6 +779,9 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     # Agent transports never inherit this trust or human session cookies.
     app.state.local_open = True
 
+    from .service_lifecycle import build_router as service_lifecycle_router
+    app.include_router(service_lifecycle_router(lock), prefix='/api/v1')
+
     app.add_middleware(TelemetryMiddleware)
     app.add_middleware(ApiKeyAuthMiddleware)
     app.add_middleware(V1RevisionMiddleware)

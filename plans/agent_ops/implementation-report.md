@@ -77,3 +77,16 @@ work. No new schema, NXL contract or authority was introduced.
 The packaged HTML was regenerated after defining LF newlines at its source;
 this resolves the earlier build artifact's whitespace check failure. Provider,
 service-manager and cross-platform qualification remain pending.
+
+## PR-01 second increment — readiness
+
+Local operator inspection and passive CLI status now correlate OS ownership,
+instance identity, generation, PID and active/installed versions. The projection
+separates query readiness, storage initialization and admission from provider or
+work readiness. It cannot reopen a draining service. No new remote authority or
+schema migration was introduced.
+
+The focused 36-test suite passed and a disposable real foreground process
+confirmed CLI/HTTP generation equality, canonical DRAINED shutdown and subsequent
+stopped status. See `evidence/pr01-readiness.md` for commands and limits. Full
+SVC-01/02/04 acceptance remains open; next is local start/reuse orchestration.

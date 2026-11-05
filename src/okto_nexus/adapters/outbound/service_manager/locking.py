@@ -15,10 +15,10 @@ class ExclusiveFileLock:
         self.path = path
         self._fd: int | None = None
 
-    def acquire(self) -> None:
+    def acquire(self, *, create: bool = True) -> None:
         if self._fd is not None:
             raise RuntimeError('This lock is already held')
-        fd = os.open(self.path, os.O_RDWR | os.O_CREAT | getattr(os, 'O_BINARY', 0)
+        fd = os.open(self.path, os.O_RDWR | (os.O_CREAT if create else 0) | getattr(os, 'O_BINARY', 0)
                      | getattr(os, 'O_NOFOLLOW', 0), 0o600)
         try:
             info = os.fstat(fd)

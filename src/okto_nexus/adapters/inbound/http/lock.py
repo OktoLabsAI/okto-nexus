@@ -34,6 +34,10 @@ class ServeLock:
         self._owned = False
         self.generation: str | None = None
 
+    @property
+    def owned(self) -> bool:
+        return self._owned and bool(self._guards)
+
     def _payload(self) -> dict:
         try:
             value = json.loads(self.path.read_text(encoding='utf-8'))

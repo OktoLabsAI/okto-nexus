@@ -36,6 +36,15 @@ Relatório: [implementation-report.md](plans/agent_ops/implementation-report.md)
 - SVC-02 segue em progresso no contrato completo de instância; a camada de exclusão do Server está implementada/testada. Fachada, start/reuse, prontidão, supervisor e integração Connector continuam pendentes conforme o plano.
 - Corrigida a normalização de newlines da entrada HTML e regenerado o artefato pelo build, após o check de whitespace detectar CRLF duplicado.
 
+- Commit/push da exclusão: Nexus `825ab2f`.
+
+## 2026-11-05 — PR-01, segunda fatia: prontidão e status passivo
+
+- Identidade inclui componente, home/banco canônicos e usuário efetivo do SO. HTTP local de operador informa geração, versão ativa, armazenamento e admissão.
+- `okto-nexus service status --json` correlaciona esses fatos com os locks, sem criar estado nem iniciar processos. Divergência de versão, identidade e transporte permanece explícita.
+- **36 testes passaram**. Um Server real em home descartável confirmou a mesma geração pelo CLI/HTTP e chegou a `DRAINED`; depois, status retornou `stopped`. [Evidência e limites](plans/agent_ops/evidence/pr01-readiness.md).
+- SVC-01/02/04 continuam em progresso no contrato completo; start/reuse, supervisor e Connector permanecem pendentes.
+
 ## Próxima dependência
 
 PR-01 / SVC-01…04: contrato de lifecycle, exclusão da instância antes do bootstrap, start/reuse e prontidão correlacionada. A pendência de campanha de BASE-06 continua explícita; os critérios de trabalho real local/remoto e decisão pelo terminal de M1 permanecem intactos.

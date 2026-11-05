@@ -48,7 +48,8 @@
         "PR-00"
       ],
       "evidence": [
-        "plans/agent_ops/evidence/pr01-locks.md"
+        "plans/agent_ops/evidence/pr01-locks.md",
+        "plans/agent_ops/evidence/pr01-readiness.md"
       ]
     },
     "PR-02": {
@@ -251,19 +252,35 @@
     },
     "SVC-01": {
       "title": "fachada de lifecycle",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "milestones": [
         "PR-01"
       ],
       "dependencies": [
         "PR-00"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "src/okto_nexus/domain/service_lifecycle.py",
+        "src/okto_nexus/application/service_lifecycle.py",
+        "src/okto_nexus/adapters/inbound/http/service_lifecycle.py",
+        "src/okto_nexus/adapters/outbound/service_manager/inspection.py",
+        "src/okto_nexus/adapters/inbound/cli/service.py",
+        "tests/test_service_readiness.py",
+        "tests/test_service_inspection.py"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr01-readiness.xml",
+        "plans/agent_ops/evidence/pr01-readiness-process.json"
+      ],
+      "result": "Server local-operator readiness and passive CLI status implemented and tested; see scoped evidence.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "Full lifecycle facade, background start/reuse, supervisor and Connector readiness pending."
+      ],
+      "subscopes": {
+        "server_readiness_projection": "VERIFIED",
+        "server_passive_status": "VERIFIED"
+      }
     },
     "SVC-02": {
       "title": "propriedade e exclusão mútua",
@@ -292,7 +309,8 @@
       "subscopes": {
         "server_os_exclusion": "VERIFIED",
         "startup_before_migration": "VERIFIED",
-        "full_lifecycle_instance_contract": "NOT_STARTED"
+        "full_lifecycle_instance_contract": "IN_PROGRESS",
+        "server_instance_identity": "VERIFIED"
       }
     },
     "SVC-03": {
@@ -313,19 +331,35 @@
     },
     "SVC-04": {
       "title": "prova de prontidão",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "milestones": [
         "PR-01"
       ],
       "dependencies": [
         "PR-00"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "src/okto_nexus/domain/service_lifecycle.py",
+        "src/okto_nexus/application/service_lifecycle.py",
+        "src/okto_nexus/adapters/inbound/http/service_lifecycle.py",
+        "src/okto_nexus/adapters/outbound/service_manager/inspection.py",
+        "src/okto_nexus/adapters/inbound/cli/service.py",
+        "tests/test_service_readiness.py",
+        "tests/test_service_inspection.py"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr01-readiness.xml",
+        "plans/agent_ops/evidence/pr01-readiness-process.json"
+      ],
+      "result": "Server local-operator readiness and passive CLI status implemented and tested; see scoped evidence.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "Full lifecycle facade, background start/reuse, supervisor and Connector readiness pending."
+      ],
+      "subscopes": {
+        "server_readiness_projection": "VERIFIED",
+        "server_passive_status": "VERIFIED"
+      }
     },
     "SVC-05": {
       "title": "integração com o gerenciador do SO",
