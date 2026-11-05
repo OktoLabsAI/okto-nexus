@@ -54,11 +54,13 @@
       ]
     },
     "PR-02": {
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "dependencies": [
         "PR-01"
       ],
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr02-connector-readiness.md"
+      ]
     },
     "PR-03": {
       "status": "NOT_STARTED",
@@ -530,19 +532,36 @@
     },
     "SVC-11": {
       "title": "mesmo lifecycle no Connector",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "milestones": [
         "PR-02"
       ],
       "dependencies": [
         "PR-01"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "../okto-nexus-connector/src/okto_nexus_connector/daemon/manager.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/daemon/lock.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/platform/service_identity.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/transport/wss_client.py",
+        "plans/agent_ops/evidence/pr02-connector-readiness.md"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr02-connector-readiness.xml",
+        "plans/agent_ops/evidence/pr02-connector-runtime-regression.xml",
+        "plans/agent_ops/evidence/pr02-connector-packaging.xml"
+      ],
+      "result": "Connector local ownership, IPC identity/generation readiness and correlated canonical drain implemented; scoped process and regression tests passed.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "Installed supervisor, saved context, full launch serialization and remote/provider campaign pending."
+      ],
+      "subscopes": {
+        "local_readiness": "VERIFIED",
+        "foreground_state_selection": "VERIFIED",
+        "correlated_drain_receipt": "VERIFIED",
+        "attachment_shutdown_cleanup": "VERIFIED"
+      }
     },
     "SVC-12": {
       "title": "empacotamento, campanha e documentação",

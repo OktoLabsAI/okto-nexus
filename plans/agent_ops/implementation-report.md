@@ -106,3 +106,19 @@ changes generation, stale stop fails and canonical drain completes. This is
 not qualification of an installed OS service, actual terminal closure or logout.
 See `evidence/pr01-start-stop.md`. The complete facade and all SVC acceptance
 remain open for supervisor, logs, recovery and Connector integration.
+
+## PR-02 first increment — Connector readiness and shutdown evidence
+
+Connector OS lock acquisition now closes every refused descriptor. Passive daemon
+status requires held exclusion, process birth and authenticated IPC agreement on
+canonical state/effective-user identity, generation and version. Local readiness
+does not infer an authenticated remote link or work authorization. An unavailable
+IPC owner is not respawned as absent. The foreground module now honors its
+explicit state directory, while stop verifies a generation-correlated receipt.
+
+The affected regression exposed repeated cancellation during attachment HTTP
+cleanup. The transport now joins that cleanup without cancelling it again.
+46 focused tests and 75 daemon/runtime tests passed. Isolated package validation
+and installed lifecycle evidence are in `evidence/pr02-connector-readiness.md`.
+The updated candidate wheel was compared byte-for-byte with all 104 source
+Python files and its Nexus CI manifest updated. SVC-11 remains in progress.

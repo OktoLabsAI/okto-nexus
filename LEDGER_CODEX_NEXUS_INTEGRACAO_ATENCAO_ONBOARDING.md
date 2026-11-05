@@ -55,6 +55,18 @@ Relatório: [implementation-report.md](plans/agent_ops/implementation-report.md)
 - A integração com supervisor instalado, logs, recuperação de lançamento interrompido e Connector continua pendente. Saída do processo CLI não foi confundida com campanha de logout/reboot ou fechamento de terminal real.
 - Evidência: [pr01-start-stop.md](plans/agent_ops/evidence/pr01-start-stop.md).
 
+- Commit/push de start/reuse e controle local: Nexus `333e1381`.
+
+## 2026-11-05 — PR-02, primeira fatia: prontidão e parada do Connector
+
+- Locks recusados fecham seus descritores. Status exige lock do SO, nascimento do processo e resposta IPC correlacionada à instância/geração/versão; IPC indisponível deixa de parecer ausência do daemon.
+- `daemon status` em diretório ausente não cria estado. O entrypoint foreground respeita `--state-dir`; stop do lifecycle inclui a geração e verifica recibo durável do drain.
+- A regressão identificou cancelamento duplo durante fechamento HTTP de uma tarefa de attachment. Corrigido para aguardar a limpeza, sem repetir cancelamento.
+- **46 testes específicos e 75 de regressão passaram**. O wheel candidato do Connector foi reconstruído e seus 104 arquivos Python conferidos contra o fonte; manifest do Nexus atualizado.
+- Evidências, qualificação do pacote e limites: [pr02-connector-readiness.md](plans/agent_ops/evidence/pr02-connector-readiness.md).
+- SVC-11 permanece em progresso: supervisor por instância, contexto persistido, serialização completa de lançamento e campanha remota real continuam pendentes.
+- Pacote isolado: **2 testes passaram**, incluindo start/reuse/stop do wheel instalado fora do checkout. Connector enviado em `97c5e13`, com limpeza de código legado inalcançável em `c4ad79d`.
+
 ## Próxima dependência
 
 Concluir as lacunas de PR-01 junto ao supervisor e ao Connector em PR-02 / SVC-05…12. A pendência de campanha de BASE-06 continua explícita; os critérios de trabalho real local/remoto e decisão pelo terminal de M1 permanecem intactos.
