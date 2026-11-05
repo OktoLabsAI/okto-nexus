@@ -59,6 +59,12 @@ class SetupMCPPreset(BaseModel):
     servers: list[dict]
 
 
+class SetupAgentCreation(BaseModel):
+    model_config = ConfigDict(extra='forbid', strict=True)
+    display_name: Annotated[str, Field(min_length=1, max_length=120)]
+    defaults_hash: Annotated[str, Field(pattern=r'^sha256:[0-9a-f]{64}$')]
+
+
 class ConnectionSetupRequest(BaseModel):
     model_config = ConfigDict(extra='forbid', strict=True)
     client_intent_id: Annotated[str, Field(min_length=1, max_length=100)]
@@ -73,6 +79,7 @@ class ConnectionSetupRequest(BaseModel):
     mcp_preset: SetupMCPPreset | None = None
     broadcast_handoff_auto_claim: bool | None = None
     project_preset: dict | None = None
+    agent_creation: SetupAgentCreation | None = None
 
 
 class LocalInstallationCheckRequest(BaseModel):
@@ -893,11 +900,12 @@ def build_router() -> APIRouter:
         return JSONResponse(view, headers={"Cache-Control": "no-store"})
 
     @router.get('/connections/setup/{agent_id}')
-    async def connection_setup_read(agent_id: str, request: Request, binding_id: str | None = None):
+    async def connection_setup_read(agent_id: str, request: Request, binding_id: str | None = None,
+                                    new_agent_draft: bool = False):
         from ....application.connection_setup import load_setup
         try:
             result = await anyio.to_thread.run_sync(lambda: load_setup(request.app.state.deps,
-                runtime_request_context(), agent_id, binding_id))
+                runtime_request_context(), agent_id, binding_id, new_agent_draft=new_agent_draft))
             return JSONResponse(result, headers={'Cache-Control':'no-store'})
         except OktoNexusError as error:
             return runtime_error(error, 'connection.setup')
@@ -930,6 +938,8 @@ def build_router() -> APIRouter:
         # Omission preserves policy for older clients; explicit null inherits.
         if 'broadcast_handoff_auto_claim' not in body.model_fields_set:
             result.pop('broadcast_handoff_auto_claim', None)
+        if result.get('agent_creation') is None:
+            result.pop('agent_creation', None)
         if result.get('project_preset') is None:
             result.pop('project_preset', None)
         else:

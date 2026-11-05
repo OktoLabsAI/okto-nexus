@@ -255,3 +255,25 @@ coordination permission defaults, login-start review, remote/participant paths,
 terminal productive work/questions/decisions/results and native provider
 qualification remain required. The synthetic setup tests do not establish real
 provider readiness or productive task completion.
+
+## PR-03 third increment — identity in the project review
+
+Local connect proposes a persistent identity/name and explicit generalist
+coordination permissions in its existing review. Canonical Finish creates the
+identity, workspace, binding, policies and grant in one transaction through the
+ordinary agent/key services. Preview/Test do not create an identity. Collision,
+rollback and response-loss handling preserve the same identity/key/grant; later
+name/role/permission edits survive reconnect. No root key is exported to the
+terminal or Finish response. Automatic handoff claiming remains off for the new
+preset even when enabled globally; no administrative authority is granted.
+
+Final source validation passed 14 focused tests. Installed validation
+covers 159 distinct cases: 158 broad passes plus the corrected presence
+assertion passing with `--lf`, with both reports retained and no skipped tests.
+Production source/wheel did not change between runs. The 420 Nexus Python payloads match source bytes;
+unchanged Connector/Core artifacts are recorded in the same evidence. See
+`evidence/pr03-terminal-identity.md`. Real provider/context/coordination and
+productive local/remote acceptance remain open, as do full terminal work,
+questions/decisions/results, login-start review, remote/participant routes,
+operator-session CLI auth, preset evolution and dashboard introduction. M1 and
+the full R3 plan are still incomplete.

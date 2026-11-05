@@ -1746,49 +1746,14 @@ def build_router() -> APIRouter:
         auth = request.app.state.auth
 
         def _create(uow):
-            agents = deps.repos.agents
-            # Reserved operator identity (spec 2948b2a2 BR4, fail-closed, no
-            # flag): checked BEFORE the exists-lookup so every spelling of
-            # the reserved name (case/whitespace variants included) is a 422,
-            # never a 409 or a fresh look-alike row.
-            if is_reserved_agent_id(body.agent_id):
-                raise OktoNexusError(
-                    ErrorCode.VALIDATION_ERROR,
-                    f"agent_id '{body.agent_id}' is reserved for the human "
-                    "operator and cannot be created.",
-                    {"agent_id": body.agent_id, "reserved": OPERATOR_AGENT_ID},
-                )
-            if agents.get(uow, body.agent_id) is not None:
-                raise OktoNexusError(
-                    ErrorCode.VALIDATION_ERROR,
-                    "agent already exists; use PATCH to update or "
-                    "regenerate-key to rotate its key.",
-                    {"agent_id": body.agent_id},
-                )
+            from ....application.agent_creation import create_agent_in_uow, require_available_id
+            # Reserved/existing identity checks still precede preset resolution.
+            require_available_id(deps, uow, body.agent_id)
             flags, preset_id = _resolve_permission_payload(
-                deps, uow, preset_id=body.preset_id, permissions=body.permissions
-            )
-            capabilities = _normalise_capabilities(body.capabilities)
-            # Capability catalog gate (migration 014): fail-closed BEFORE the
-            # upsert so nothing persists on an unregistered name.
-            _ensure_capabilities_registered(deps, uow, capabilities)
-            agent = agents.upsert(
-                uow,
-                agent_id=body.agent_id,
-                role=body.role,
-                capabilities=capabilities,
-                metadata=body.metadata,
-                color=body.color,
-            )
-            if flags is not None or preset_id is not None:
-                agents.set_permissions(
-                    uow,
-                    agent_id=agent.agent_id,
-                    permissions=flags,
-                    preset_id=preset_id,
-                )
-            plaintext = auth.issue_key(uow, agent_id=agent.agent_id)
-            return agents.get(uow, agent.agent_id), plaintext
+                deps, uow, preset_id=body.preset_id, permissions=body.permissions)
+            return create_agent_in_uow(deps, uow, auth, agent_id=body.agent_id,
+                role=body.role, capabilities=body.capabilities, metadata=body.metadata,
+                color=body.color, permissions=flags, preset_id=preset_id)
 
         try:
             _require_operator()

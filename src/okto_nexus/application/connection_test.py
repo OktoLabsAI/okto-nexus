@@ -17,7 +17,7 @@ from ..bootstrap.execution_authority import build_execution_access
 from .execution_local_launch import ProviderSecretResolver
 from .execution_local_realizations import _digest, directory_identity, _require_binding_method
 from ..errors import ErrorCode, OktoNexusError
-from .connection_setup import baseline, conflict, require_operator, setup_mcp_preset
+from .connection_setup import baseline, conflict, require_operator, setup_mcp_preset, setup_actor, validate_agent_creation
 
 
 def require_provider_home(configuration):
@@ -38,15 +38,22 @@ class ConnectionTests:
         self.tests = {}
         self.closed = False
 
-    def authorize(self, context, agent_id):
+    def authorize(self, context, agent_id, *, creation_request=None, allow_committed=False):
         with self.deps.connection_factory.unit_of_work(write=False) as uow:
             access = build_execution_access(self.deps)
             require_operator(access, context, uow, require_feature=True)
-            if access.agents.get(uow, agent_id) is None:
+            if creation_request is not None:
+                committed = uow.connection.execute('SELECT request_hash FROM connection_setup_commits '
+                    'WHERE actor_agent_id=? AND client_intent_id=?',
+                    (setup_actor(context), creation_request['client_intent_id'])).fetchone() if allow_committed else None
+                if committed is None or committed['request_hash'] != _digest(creation_request):
+                    validate_agent_creation(self.deps, uow, creation_request)
+            elif access.agents.get(uow, agent_id) is None:
                 raise conflict('The selected agent is no longer available.')
 
     def start(self, context, owner, request):
-        self.authorize(context, request['agent_id'])
+        creation_request = request if request.get('agent_creation') is not None else None
+        self.authorize(context, request['agent_id'], creation_request=creation_request)
         require_provider_home(request['configuration'])
         build_execution_access(self.deps).require_admission('open')
         if self.closed or owner is None:
@@ -83,6 +90,7 @@ class ConnectionTests:
         if owner.key.executor_id != request['executor_id']:
             raise conflict('The selected host changed.')
         entry = dict(test_id=request['client_intent_id'], digest=digest, actor=context.actor_agent_id,
+            creation_request=creation_request,
             agent=request['agent_id'], stage='Preparing test', details=[], status='running', created=time.monotonic(),
             root=directory_identity(c['workspace_root']), home=directory_identity(c['provider_home']) if c['provider_home'] else None,
             candidate=asdict(candidate))
@@ -97,7 +105,7 @@ class ConnectionTests:
         entry = self.tests.get((context.actor_agent_id, test_id))
         if not entry:
             raise conflict('This test is unavailable. Run a new connection test.')
-        self.authorize(context, entry['agent'])
+        self.authorize(context, entry['agent'], creation_request=entry.get('creation_request'), allow_committed=True)
         return entry
 
     def verified(self, context, request, owner):

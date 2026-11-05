@@ -30,17 +30,24 @@ class TerminalConnection:
         return self.call(method, PREFIX + path, body)
 
     def options(self, request):
-        return self.api('GET', '/agents/' + quote(request['agent_id'], safe='') + '/runtime-options?' +
+        subject = self.api('GET', '/connections/me')['agent_id'] if request.get('agent_creation') else request['agent_id']
+        return self.api('GET', '/agents/' + quote(subject, safe='') + '/runtime-options?' +
             urlencode({'executor_id': request['executor_id'], **({'workspace_id': request['workspace_id']}
                        if request.get('workspace_id') else {})}))
 
-    def current(self, agent, binding=None):
+    def current(self, agent, binding=None, *, new_agent_draft=False):
+        query = dict(binding_id=binding) if binding else {}
+        if new_agent_draft:
+            query['new_agent_draft'] = 'true'
         return self.api('GET', '/connections/setup/' + quote(agent, safe='') +
-                        ('?' + urlencode({'binding_id': binding}) if binding else ''))
+                        ('?' + urlencode(query) if query else ''))
 
     def review(self, selection):
         me = self.api('GET', '/connections/me')
-        current = self.current(selection['agent'])
+        creating = selection.get('create_agent', False)
+        current = self.current(selection['agent'], new_agent_draft=creating)
+        if creating and selection.get('binding_id'):
+            raise ConnectionError('IDENTITY_REVIEW_CONFLICT', 'A new identity cannot adopt an existing binding.')
         binding = selection.get('binding_id')
         if binding:
             match = next((row for row in current['connections'] if row['binding_id'] == binding), None)
@@ -73,7 +80,7 @@ class TerminalConnection:
                 'This agent has no unique matching connection. Select --binding-id from its canonical connection list.')
         hosts, cursor = [], None
         for _ in range(10):
-            page = self.api('GET', '/agents/' + quote(selection['agent'], safe='') + '/executors?' +
+            page = self.api('GET', '/agents/' + quote(me['agent_id'] if creating else selection['agent'], safe='') + '/executors?' +
                 urlencode({'limit': 100, **({'after_executor_id': cursor} if cursor else {})}))
             hosts.extend(row for row in page['items'] if row['kind'] == 'embedded')
             if not page['has_more']:
@@ -88,6 +95,9 @@ class TerminalConnection:
             raise ConnectionError('LOCAL_EXECUTOR_UNAVAILABLE', 'The selected Server has no unique local execution host.')
         request = {'client_intent_id': 'connect_' + uuid.uuid4().hex, 'agent_id': selection['agent'],
             'executor_id': hosts[0]['executor_id'], 'workspace_id': selection.get('workspace_id'), 'binding_id': None}
+        if creating:
+            request['agent_creation'] = {'display_name': '',
+                'defaults_hash': current['agent_creation_defaults']['defaults_hash']}
         available = self.options(request)
         if not selection['client']:
             clients = {name for name, adapter in CLIENTS.items() for row in available['options']
@@ -109,11 +119,21 @@ class TerminalConnection:
         if selection['client'] == 'claude' and not home:
             raise ConnectionError('PROVIDER_HOME_REQUIRED', 'Pass --provider-home for the Claude login on this Server host.')
         selection['provider_home'] = home
+        if creating:
+            selection['display_name'] = selection.get('display_name') or (selection['client'].capitalize() + ' — ' + selection['label'])[:120]
+            request['agent_creation']['display_name'] = selection['display_name']
+            # Automatic work claiming is a separate opt-in, even if this Server
+            # has enabled it globally. The initial review authorizes sessions.
+            request['broadcast_handoff_auto_claim'] = False
         request.update(candidate_ref=selected['candidate_ref'], inventory_revision=available['inventory_revision'],
             baseline=current['baseline'], project_preset=dict(ORIGIN), configuration=configuration(
                 adapter_id=selected['adapter_id'], project=selection['project'], label=selection['label'], provider_home=home))
         review = {'server_id': me['server_id'], 'selection': selection, 'request': request,
                   'version_check_required': selected['technical_state'] != 'READY_FOR_RUNTIME', 'effects': effects()}
+        if creating:
+            review['identity_creation'] = current['agent_creation_defaults'] | {'display_name': selection['display_name']}
+            review['effects'].insert(0, 'Create this project identity at Finish with the reviewed coordination permissions; no global administration is granted.')
+            review['effects'].append('Automatic handoff claiming is disabled for this new identity; work still requires canonical authorization.')
         document = dict(review, review_revision=document_revision(review), review_request=deepcopy(request), state='review', format=1)
         self.save(document)
         return document
@@ -153,6 +173,8 @@ class TerminalConnection:
         if document['state'] == 'done':
             return self.observe(document)
         review = {key: document[key] for key in ('server_id', 'selection', 'version_check_required', 'effects')}
+        if 'identity_creation' in document:
+            review['identity_creation'] = document['identity_creation']
         review['request'] = document['review_request']
         original = document['review_request']
         if (document_revision(review) != document['review_revision'] or
@@ -183,7 +205,8 @@ class TerminalConnection:
                 document['state'] = 'check_submitted'
                 self.save(document)
                 self.api('POST', '/runtime/executors/' + quote(request['executor_id'], safe='') + '/installations:check',
-                    dict(agent_id=request['agent_id'], adapter_id=request['configuration']['adapter_id'],
+                    dict(agent_id=self.api('GET', '/connections/me')['agent_id'] if request.get('agent_creation') else request['agent_id'],
+                         adapter_id=request['configuration']['adapter_id'],
                          candidate_ref=request['candidate_ref'], inventory_revision=request['inventory_revision'], approved=True))
             available = self.options(request)
             selected = next((row for row in available['options'] if row['candidate_ref'] == request['candidate_ref']

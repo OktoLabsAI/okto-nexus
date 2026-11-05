@@ -100,15 +100,44 @@ def setup_mcp_preset(uow, request):
     return servers
 
 
-def load_setup(deps, context, agent_id, binding_id=None):
+def validate_agent_creation(deps, uow, request):
+    draft = request.get('agent_creation')
+    if draft is None:
+        return None
+    from .agent_creation import validate_agent_id
+    from .project_preset import ORIGIN, identity_defaults
+    validate_agent_id(request['agent_id'])
+    defaults = identity_defaults()
+    if (not isinstance(draft, dict) or set(draft) != {'display_name', 'defaults_hash'} or
+            not isinstance(draft['display_name'], str) or not 1 <= len(draft['display_name']) <= 120 or
+            not draft['display_name'].strip() or request.get('project_preset') != ORIGIN or
+            request['configuration']['execution_location'] != 'local' or
+            request['configuration']['runtime_enabled'] is not True or request.get('binding_id')):
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Invalid project identity creation review.', {})
+    if draft['defaults_hash'] != defaults['defaults_hash']:
+        raise conflict('Project identity defaults changed. Review the current role and permissions before creating the agent.')
+    if deps.repos.agents.get(uow, request['agent_id']) is not None:
+        raise conflict('The proposed agent ID now exists. Review another ID; the existing identity was not adopted.')
+    return defaults
+
+
+def load_setup(deps, context, agent_id, binding_id=None, *, new_agent_draft=False):
     access = build_execution_access(deps)
     with deps.connection_factory.unit_of_work(write=False) as uow:
         require_operator(access, context, uow)
-        if access.agents.get(uow, agent_id) is None:
+        if new_agent_draft:
+            from .agent_creation import validate_agent_id
+            validate_agent_id(agent_id)
+            if binding_id or access.agents.get(uow, agent_id) is not None:
+                raise conflict('Select an unused agent ID for the new identity review.')
+        elif access.agents.get(uow, agent_id) is None:
             raise OktoNexusError(ErrorCode.NOT_FOUND, 'Agent does not exist.', {})
         result = {'baseline': baseline(uow, agent_id, binding_id),
                   'runtime_policy': runtime_policy.public_view(deps, runtime_policy.view(uow.connection, agent_id)),
                   'runtime_default': runtime_policy.defaults(uow.connection)['runtime_enabled']}
+        if new_agent_draft:
+            from .project_preset import identity_defaults
+            result['agent_creation_defaults'] = identity_defaults()
         result['connections'] = [dict(row) for row in uow.connection.execute(
             "SELECT b.binding_id,b.candidate_ref,b.executor_id,e.workspace_id,e.adapter_id,"
             "CASE WHEN x.kind='remote' THEN 'remote' ELSE 'local' END execution_location "
@@ -169,6 +198,17 @@ def finish_setup(deps, context, owner, fresh, request, *, verified):
             return json.loads(prior['result_json'])
         if baseline(uow, agent_id, request.get('binding_id')) != request['baseline']:
             raise conflict('The active configuration changed while you were editing. Reopen Connections to review it.')
+        identity = validate_agent_creation(deps, uow, request)
+        if identity is not None:
+            from .agent_creation import create_agent_in_uow
+            from .auth import AgentKeyAuthService
+            # The same creation/key authority as the operator Agents API. Only
+            # a new identity can enter here, so no existing key cache is rotated.
+            # Managed harnesses use scoped capabilities; no permanent key is
+            # exported or persisted in the terminal profile/Finish receipt.
+            create_agent_in_uow(deps, uow, AgentKeyAuthService(deps.repos.agents, deps.clock),
+                agent_id=agent_id, role=identity['role'], permissions=identity['permissions'],
+                metadata={'display_name': request['agent_creation']['display_name']})
         preset = setup_mcp_preset(uow, request)
         active = runtime_enabled(uow.connection, configuration)
         policy_changes = dict(
@@ -182,6 +222,8 @@ def finish_setup(deps, context, owner, fresh, request, *, verified):
                 expected_revision=request['baseline']['execution_revision'],
                 execution_location=configuration['execution_location'], local_adapter_id=configuration['adapter_id'] or None)
         result = {'saved': True, 'agent_id': agent_id}
+        if identity is not None:
+            result['agent_created'] = True
         if request.get('project_preset') is not None:
             from .project_preset import ORIGIN
             if (request['project_preset'] != ORIGIN or

@@ -118,7 +118,7 @@ Preparado [roteiro revisável de tarefas temporárias](plans/agent_ops/campaigns
 
 ## Próxima dependência
 
-Avançar em PR-03/M1 com criação autorizada de identidade na mesma revisão e interação de trabalho, perguntas e decisões pelo terminal. As lacunas de PR-01/02 e a campanha de BASE-06 continuam rastreadas; os critérios de trabalho real local/remoto permanecem intactos.
+Avançar em PR-03/M1 com interação de trabalho, conversa, perguntas, decisões, resultados e reencontro pelo terminal sobre os contratos canônicos. As lacunas de PR-01/02 e a campanha de BASE-06 continuam rastreadas; os critérios de trabalho real local/remoto permanecem intactos.
 
 ## Aceites externos ainda não executados
 
@@ -172,3 +172,13 @@ Campanhas reais de provedor, login/logout/reboot, serviço do usuário e Herdr p
 - **18 testes focados, 58 de serviço, 34 de regressão e 112 nos pacotes finais instalados passaram**. A campanha real do CLI iniciou/reutilizou a mesma geração de Server em home descartável e terminou em `DRAINED` após stop explícito. Setup/versionamento/modelo foram simulados nos testes de integração; não há aceite de provedor produtivo.
 - Wheel Nexus: 419 arquivos Python idênticos aos fontes. Connector e Core permaneceram inalterados; hashes coordenados nas [evidências](plans/agent_ops/evidence/pr03-terminal-connect.md).
 - DX-15…19/21 continuam em progresso. Criação unificada de identidade, preset completo de coordenação, início no login na revisão, participante/remote, trabalho/perguntas/decisões/resultados e campanhas produtivas ainda faltam. O plano integral e M1 não estão concluídos.
+
+## 2026-11-05 — PR-03, terceira fatia: identidade na revisão do projeto
+
+- Recuperadas novamente as três referências `origin/main`; as branches de trabalho já contêm seus commits. Versões/branches permanecem `0.3.3`, `0.0.12` e `0.0.14`.
+- `connect` propõe ID persistente e nome a partir de harness/projeto, com papel generalista e permissões explícitas de coordenação. `--agent` reutiliza uma identidade; `--new-agent`/`--name` personalizam a proposta. Uma única revisão autoriza os efeitos concretos.
+- Preview e Test não criam agente. Finish compartilha a rotina canônica de criação e sua transação com workspace, vínculo, políticas, chave e grant. Falha posterior desfaz os objetos novos; colisão de ID nunca adota outra identidade.
+- O recibo existente recupera o mesmo resultado após perda de resposta/cache, sem outra chave ou grant. Chave permanente não é exportada ao perfil/Finish. Reconnect preserva alterações posteriores de nome, papel e permissões.
+- Coordenação usa flags e limites atuais; nenhum poder administrativo ou de autoaprovação é concedido. Claim automático fica desabilitado para a identidade nova mesmo com default global ligado. Decisões nativas e limites de 60 minutos/20 ações permanecem.
+- **14 testes focados passaram; 159 casos distintos foram validados nos wheels fora dos checkouts**: 158 passaram na rodada ampla e o único teste com comparação incorreta de presença passou no follow-up instalado. Os dois relatórios foram preservados, sem skips; nenhum fonte de produção ou wheel mudou entre as rodadas. Os 420/114/130 arquivos Python Nexus/Connector/Core correspondem byte a byte aos fontes. Connector e Core não mudaram nesta fatia.
+- [Evidências e limites](plans/agent_ops/evidence/pr03-terminal-identity.md). Integração usa HTTP/autorização/transação reais e harness/modelo simulados; a regressão de processo termina em `DRAINED`. Trabalho/conversa/perguntas/decisões/resultados, remoto, login-start na revisão, participante e campanhas produtivas continuam pendentes. O plano integral e M1 seguem incompletos.

@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import re
 import sys
+import uuid
 
 from ....application.terminal_connection import ConnectionError, TerminalConnection
 from ....errors import OktoNexusError
@@ -22,6 +23,13 @@ def _display(value, as_json):
         request = value['request']
         config = request['configuration']
         print(f"Agent: {request['agent_id']} | Harness: {config['adapter_id']}")
+        if value.get('identity_creation'):
+            identity = value['identity_creation']
+            print(f"Create identity: {identity['display_name']} | Role: {identity['role']}")
+            print('Coordination: visible collaborators, direct/channel messages, workspace handoffs, artifacts and events.')
+            print('No broadcasts, channel creation, capability changes, experimental memory or global administration.')
+            limits = identity['permissions']['limits']
+            print(f"Communication limits: {limits['messages_per_minute']} messages/minute; {limits['max_recipients']} recipients.")
         print(f"Project: {config['workspace_root']}")
         print(f"Workspace: {request['workspace_id'] or 'create ' + config['workspace_label']}")
         print(f"Provider home: {config['provider_home'] or 'harness default'}")
@@ -41,7 +49,10 @@ def run_connect(argv):
     parser = argparse.ArgumentParser(prog='okto-nexus connect',
         description='Review and connect this local project using the canonical managed setup.')
     parser.add_argument('--profile', help='saved local project profile name')
-    parser.add_argument('--agent', help='authorized existing canonical agent ID')
+    identity = parser.add_mutually_exclusive_group()
+    identity.add_argument('--agent', help='reuse this authorized existing canonical agent ID')
+    identity.add_argument('--new-agent', help='propose this unused ID instead of generating a new project identity ID')
+    parser.add_argument('--name', help='display name for the new project identity')
     parser.add_argument('--client', choices=['codex', 'claude', 'pi'])
     parser.add_argument('--project', type=Path)
     parser.add_argument('--workspace-id')
@@ -55,6 +66,8 @@ def run_connect(argv):
     args, service_args = parser.parse_known_args(argv)
     if args.plan and args.approve:
         parser.error('--plan and --approve are mutually exclusive')
+    if args.agent and args.name:
+        parser.error('--name is for a new identity; existing names are preserved')
     if not 0 < args.timeout <= 300:
         parser.error('--timeout must be greater than 0 and at most 300 seconds')
     guard = None
@@ -79,19 +92,23 @@ def run_connect(argv):
         if saved:
             selection = saved['selection']
             supplied = {key: getattr(args, key) for key in ('agent', 'client', 'workspace_id', 'binding_id', 'candidate_ref', 'provider_home')}
+            if args.agent is not None and saved['state'] != 'done':
+                supplied['create_agent'] = False
+            if args.new_agent is not None:
+                supplied.update(agent=args.new_agent, create_agent=True)
+            if args.name is not None:
+                supplied['display_name'] = args.name
             if args.project is not None or not args.profile:
                 supplied['project'] = project
             if any(value is not None and value != selection.get(key) for key, value in supplied.items()):
                 raise ConnectionError('PROFILE_CONFLICT', 'Explicit choices conflict with the saved profile. Use its existing choices or a new named profile.')
         else:
-            agent = args.agent
-            if not agent and sys.stdin.isatty() and not args.json:
-                agent = input('Existing canonical agent ID: ').strip()
-            if not agent:
-                raise ConnectionError('AGENT_SELECTION_REQUIRED', 'Pass --agent for an authorized existing identity.')
+            label = Path(project).name or 'Project'
+            slug = re.sub(r'[^a-z0-9]+', '-', label.lower()).strip('-')[:40] or 'project'
+            agent = args.agent or args.new_agent or slug + '-' + uuid.uuid4().hex[:12]
             selection = dict(agent=agent, client=args.client, project=project, label=Path(project).name or 'Project',
                 workspace_id=args.workspace_id, binding_id=args.binding_id, candidate_ref=args.candidate_ref,
-                provider_home=args.provider_home)
+                provider_home=args.provider_home, create_agent=args.agent is None, display_name=args.name)
         flow = TerminalConnection(LocalOperatorHTTP(host=service.adapter.host, port=service.adapter.port),
                                   lambda value: atomic_json(target, value))
         if not saved:

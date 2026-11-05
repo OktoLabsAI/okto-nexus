@@ -78,7 +78,8 @@
       ],
       "evidence": [
         "plans/agent_ops/evidence/pr03-setup-recovery.md",
-        "plans/agent_ops/evidence/pr03-terminal-connect.md"
+        "plans/agent_ops/evidence/pr03-terminal-connect.md",
+        "plans/agent_ops/evidence/pr03-terminal-identity.md"
       ]
     },
     "PR-04": {
@@ -1380,15 +1381,20 @@
       "files": [
         "docs/terminal-connect.md",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
+        "plans/agent_ops/evidence/pr03-terminal-identity.md",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
+        "src/okto_nexus/adapters/inbound/http/routes.py",
         "src/okto_nexus/adapters/inbound/http/runtime_v1.py",
         "src/okto_nexus/adapters/outbound/terminal_http.py",
+        "src/okto_nexus/application/agent_creation.py",
         "src/okto_nexus/application/connection_setup.py",
+        "src/okto_nexus/application/connection_test.py",
         "src/okto_nexus/application/project_preset.py",
         "src/okto_nexus/application/terminal_connection.py",
         "tests/execution_r4/test_terminal_connect.py",
+        "tests/execution_r4/test_terminal_identity.py",
         "tests/test_terminal_connect_process.py",
         "tests/test_terminal_http.py"
       ],
@@ -1397,21 +1403,28 @@
         "plans/agent_ops/evidence/pr03-terminal-connect-nexus.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect-reuse.xml",
-        "plans/agent_ops/evidence/pr03-terminal-connect-service.xml"
+        "plans/agent_ops/evidence/pr03-terminal-connect-service.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-source.xml"
       ],
-      "result": "Initial local Nexus connect facade for an existing authorized agent: canonical SVC start/reuse, persisted exact review, ordinary runtime preset, canonical Finish and receipt recovery, reconnect without reapplying defaults. 112 final installed tests passed, including actual disposable CLI/service/HTTP/drain.",
+      "result": "Local connect now reviews a new persistent project identity with explicit coordination permissions, or reuses a selected identity. Canonical Finish creates the identity, workspace, binding and grant in one transaction using the existing key authority/receipt. Recovery, collision refusal, rollback and customization preservation verified; 159 distinct installed cases validated (158 broad passes plus the corrected authority assertion passing in follow-up).",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Unified new identity creation, complete coordination/role preset, start-at-login review and terminal work/decisions/results remain open.",
-        "Provider/build qualification and model turns were simulated in setup cases; actual productive local/remote acceptance NOT_RUN.",
-        "Participant init, remote topology, operator-session CLI auth, preset evolution and dashboard introduction remain open."
+        "Full terminal work/questions/decisions/results and productive local/remote M1 acceptance remain NOT_RUN.",
+        "Harness qualification/version command/model response were simulated in setup integration; real provider context/coordination acceptance remains open.",
+        "Start-at-login review, remote topology, participant init, operator-session CLI authentication, preset evolution and dashboard introduction remain open."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
         "runtime_defaults_and_receipt_origin": "VERIFIED",
         "reconnect_current_binding_without_reapply": "VERIFIED",
         "real_cli_service_start_reuse_drain": "VERIFIED",
-        "complete_m1_productive_work": "NOT_RUN"
+        "complete_m1_productive_work": "NOT_RUN",
+        "unified_identity_creation_in_canonical_finish": "VERIFIED",
+        "reviewed_coordination_permission_defaults": "VERIFIED",
+        "identity_rollback_collision_and_response_loss": "VERIFIED",
+        "reconnect_preserves_name_role_permissions": "VERIFIED"
       }
     },
     "DX-16": {
@@ -1426,15 +1439,20 @@
       "files": [
         "docs/terminal-connect.md",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
+        "plans/agent_ops/evidence/pr03-terminal-identity.md",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
+        "src/okto_nexus/adapters/inbound/http/routes.py",
         "src/okto_nexus/adapters/inbound/http/runtime_v1.py",
         "src/okto_nexus/adapters/outbound/terminal_http.py",
+        "src/okto_nexus/application/agent_creation.py",
         "src/okto_nexus/application/connection_setup.py",
+        "src/okto_nexus/application/connection_test.py",
         "src/okto_nexus/application/project_preset.py",
         "src/okto_nexus/application/terminal_connection.py",
         "tests/execution_r4/test_terminal_connect.py",
+        "tests/execution_r4/test_terminal_identity.py",
         "tests/test_terminal_connect_process.py",
         "tests/test_terminal_http.py"
       ],
@@ -1443,21 +1461,28 @@
         "plans/agent_ops/evidence/pr03-terminal-connect-nexus.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect-reuse.xml",
-        "plans/agent_ops/evidence/pr03-terminal-connect-service.xml"
+        "plans/agent_ops/evidence/pr03-terminal-connect-service.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-source.xml"
       ],
-      "result": "Initial local Nexus connect facade for an existing authorized agent: canonical SVC start/reuse, persisted exact review, ordinary runtime preset, canonical Finish and receipt recovery, reconnect without reapplying defaults. 112 final installed tests passed, including actual disposable CLI/service/HTTP/drain.",
+      "result": "Local connect now reviews a new persistent project identity with explicit coordination permissions, or reuses a selected identity. Canonical Finish creates the identity, workspace, binding and grant in one transaction using the existing key authority/receipt. Recovery, collision refusal, rollback and customization preservation verified; 159 distinct installed cases validated (158 broad passes plus the corrected authority assertion passing in follow-up).",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Unified new identity creation, complete coordination/role preset, start-at-login review and terminal work/decisions/results remain open.",
-        "Provider/build qualification and model turns were simulated in setup cases; actual productive local/remote acceptance NOT_RUN.",
-        "Participant init, remote topology, operator-session CLI auth, preset evolution and dashboard introduction remain open."
+        "Full terminal work/questions/decisions/results and productive local/remote M1 acceptance remain NOT_RUN.",
+        "Harness qualification/version command/model response were simulated in setup integration; real provider context/coordination acceptance remains open.",
+        "Start-at-login review, remote topology, participant init, operator-session CLI authentication, preset evolution and dashboard introduction remain open."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
         "runtime_defaults_and_receipt_origin": "VERIFIED",
         "reconnect_current_binding_without_reapply": "VERIFIED",
         "real_cli_service_start_reuse_drain": "VERIFIED",
-        "complete_m1_productive_work": "NOT_RUN"
+        "complete_m1_productive_work": "NOT_RUN",
+        "unified_identity_creation_in_canonical_finish": "VERIFIED",
+        "reviewed_coordination_permission_defaults": "VERIFIED",
+        "identity_rollback_collision_and_response_loss": "VERIFIED",
+        "reconnect_preserves_name_role_permissions": "VERIFIED"
       }
     },
     "DX-17": {
@@ -1478,17 +1503,22 @@
         "docs/terminal-connect.md",
         "plans/agent_ops/evidence/pr03-setup-recovery.md",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
+        "plans/agent_ops/evidence/pr03-terminal-identity.md",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
         "src/okto_nexus/adapters/inbound/http/dashboard_runtime.py",
+        "src/okto_nexus/adapters/inbound/http/routes.py",
         "src/okto_nexus/adapters/inbound/http/runtime_v1.py",
         "src/okto_nexus/adapters/outbound/terminal_http.py",
+        "src/okto_nexus/application/agent_creation.py",
         "src/okto_nexus/application/connection_setup.py",
+        "src/okto_nexus/application/connection_test.py",
         "src/okto_nexus/application/project_preset.py",
         "src/okto_nexus/application/terminal_connection.py",
         "tests/execution_r4/test_connection_setup_recovery.py",
         "tests/execution_r4/test_terminal_connect.py",
+        "tests/execution_r4/test_terminal_identity.py",
         "tests/test_terminal_connect_process.py",
         "tests/test_terminal_http.py"
       ],
@@ -1500,14 +1530,17 @@
         "plans/agent_ops/evidence/pr03-terminal-connect-nexus.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect-reuse.xml",
-        "plans/agent_ops/evidence/pr03-terminal-connect-service.xml"
+        "plans/agent_ops/evidence/pr03-terminal-connect-service.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-source.xml"
       ],
-      "result": "Initial local Nexus connect facade for an existing authorized agent: canonical SVC start/reuse, persisted exact review, ordinary runtime preset, canonical Finish and receipt recovery, reconnect without reapplying defaults. 112 final installed tests passed, including actual disposable CLI/service/HTTP/drain.",
+      "result": "Local connect now reviews a new persistent project identity with explicit coordination permissions, or reuses a selected identity. Canonical Finish creates the identity, workspace, binding and grant in one transaction using the existing key authority/receipt. Recovery, collision refusal, rollback and customization preservation verified; 159 distinct installed cases validated (158 broad passes plus the corrected authority assertion passing in follow-up).",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Unified new identity creation, complete coordination/role preset, start-at-login review and terminal work/decisions/results remain open.",
-        "Provider/build qualification and model turns were simulated in setup cases; actual productive local/remote acceptance NOT_RUN.",
-        "Participant init, remote topology, operator-session CLI auth, preset evolution and dashboard introduction remain open."
+        "Full terminal work/questions/decisions/results and productive local/remote M1 acceptance remain NOT_RUN.",
+        "Harness qualification/version command/model response were simulated in setup integration; real provider context/coordination acceptance remains open.",
+        "Start-at-login review, remote topology, participant init, operator-session CLI authentication, preset evolution and dashboard introduction remain open."
       ],
       "subscopes": {
         "canonical_finish_receipt_recovery": "VERIFIED",
@@ -1517,7 +1550,11 @@
         "runtime_defaults_and_receipt_origin": "VERIFIED",
         "reconnect_current_binding_without_reapply": "VERIFIED",
         "real_cli_service_start_reuse_drain": "VERIFIED",
-        "complete_m1_productive_work": "NOT_RUN"
+        "complete_m1_productive_work": "NOT_RUN",
+        "unified_identity_creation_in_canonical_finish": "VERIFIED",
+        "reviewed_coordination_permission_defaults": "VERIFIED",
+        "identity_rollback_collision_and_response_loss": "VERIFIED",
+        "reconnect_preserves_name_role_permissions": "VERIFIED"
       }
     },
     "DX-05": {
@@ -1725,15 +1762,20 @@
       "files": [
         "docs/terminal-connect.md",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
+        "plans/agent_ops/evidence/pr03-terminal-identity.md",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
+        "src/okto_nexus/adapters/inbound/http/routes.py",
         "src/okto_nexus/adapters/inbound/http/runtime_v1.py",
         "src/okto_nexus/adapters/outbound/terminal_http.py",
+        "src/okto_nexus/application/agent_creation.py",
         "src/okto_nexus/application/connection_setup.py",
+        "src/okto_nexus/application/connection_test.py",
         "src/okto_nexus/application/project_preset.py",
         "src/okto_nexus/application/terminal_connection.py",
         "tests/execution_r4/test_terminal_connect.py",
+        "tests/execution_r4/test_terminal_identity.py",
         "tests/test_terminal_connect_process.py",
         "tests/test_terminal_http.py"
       ],
@@ -1742,21 +1784,28 @@
         "plans/agent_ops/evidence/pr03-terminal-connect-nexus.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect-reuse.xml",
-        "plans/agent_ops/evidence/pr03-terminal-connect-service.xml"
+        "plans/agent_ops/evidence/pr03-terminal-connect-service.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-source.xml"
       ],
-      "result": "Initial local Nexus connect facade for an existing authorized agent: canonical SVC start/reuse, persisted exact review, ordinary runtime preset, canonical Finish and receipt recovery, reconnect without reapplying defaults. 112 final installed tests passed, including actual disposable CLI/service/HTTP/drain.",
+      "result": "Local connect now reviews a new persistent project identity with explicit coordination permissions, or reuses a selected identity. Canonical Finish creates the identity, workspace, binding and grant in one transaction using the existing key authority/receipt. Recovery, collision refusal, rollback and customization preservation verified; 159 distinct installed cases validated (158 broad passes plus the corrected authority assertion passing in follow-up).",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Unified new identity creation, complete coordination/role preset, start-at-login review and terminal work/decisions/results remain open.",
-        "Provider/build qualification and model turns were simulated in setup cases; actual productive local/remote acceptance NOT_RUN.",
-        "Participant init, remote topology, operator-session CLI auth, preset evolution and dashboard introduction remain open."
+        "Full terminal work/questions/decisions/results and productive local/remote M1 acceptance remain NOT_RUN.",
+        "Harness qualification/version command/model response were simulated in setup integration; real provider context/coordination acceptance remains open.",
+        "Start-at-login review, remote topology, participant init, operator-session CLI authentication, preset evolution and dashboard introduction remain open."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
         "runtime_defaults_and_receipt_origin": "VERIFIED",
         "reconnect_current_binding_without_reapply": "VERIFIED",
         "real_cli_service_start_reuse_drain": "VERIFIED",
-        "complete_m1_productive_work": "NOT_RUN"
+        "complete_m1_productive_work": "NOT_RUN",
+        "unified_identity_creation_in_canonical_finish": "VERIFIED",
+        "reviewed_coordination_permission_defaults": "VERIFIED",
+        "identity_rollback_collision_and_response_loss": "VERIFIED",
+        "reconnect_preserves_name_role_permissions": "VERIFIED"
       }
     },
     "DX-19": {
@@ -1777,17 +1826,22 @@
         "docs/terminal-connect.md",
         "plans/agent_ops/evidence/pr03-setup-recovery.md",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
+        "plans/agent_ops/evidence/pr03-terminal-identity.md",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
         "src/okto_nexus/adapters/inbound/http/dashboard_runtime.py",
+        "src/okto_nexus/adapters/inbound/http/routes.py",
         "src/okto_nexus/adapters/inbound/http/runtime_v1.py",
         "src/okto_nexus/adapters/outbound/terminal_http.py",
+        "src/okto_nexus/application/agent_creation.py",
         "src/okto_nexus/application/connection_setup.py",
+        "src/okto_nexus/application/connection_test.py",
         "src/okto_nexus/application/project_preset.py",
         "src/okto_nexus/application/terminal_connection.py",
         "tests/execution_r4/test_connection_setup_recovery.py",
         "tests/execution_r4/test_terminal_connect.py",
+        "tests/execution_r4/test_terminal_identity.py",
         "tests/test_terminal_connect_process.py",
         "tests/test_terminal_http.py"
       ],
@@ -1799,14 +1853,17 @@
         "plans/agent_ops/evidence/pr03-terminal-connect-nexus.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect-reuse.xml",
-        "plans/agent_ops/evidence/pr03-terminal-connect-service.xml"
+        "plans/agent_ops/evidence/pr03-terminal-connect-service.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-source.xml"
       ],
-      "result": "Initial local Nexus connect facade for an existing authorized agent: canonical SVC start/reuse, persisted exact review, ordinary runtime preset, canonical Finish and receipt recovery, reconnect without reapplying defaults. 112 final installed tests passed, including actual disposable CLI/service/HTTP/drain.",
+      "result": "Local connect now reviews a new persistent project identity with explicit coordination permissions, or reuses a selected identity. Canonical Finish creates the identity, workspace, binding and grant in one transaction using the existing key authority/receipt. Recovery, collision refusal, rollback and customization preservation verified; 159 distinct installed cases validated (158 broad passes plus the corrected authority assertion passing in follow-up).",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Unified new identity creation, complete coordination/role preset, start-at-login review and terminal work/decisions/results remain open.",
-        "Provider/build qualification and model turns were simulated in setup cases; actual productive local/remote acceptance NOT_RUN.",
-        "Participant init, remote topology, operator-session CLI auth, preset evolution and dashboard introduction remain open."
+        "Full terminal work/questions/decisions/results and productive local/remote M1 acceptance remain NOT_RUN.",
+        "Harness qualification/version command/model response were simulated in setup integration; real provider context/coordination acceptance remains open.",
+        "Start-at-login review, remote topology, participant init, operator-session CLI authentication, preset evolution and dashboard introduction remain open."
       ],
       "subscopes": {
         "canonical_finish_receipt_recovery": "VERIFIED",
@@ -1816,7 +1873,11 @@
         "runtime_defaults_and_receipt_origin": "VERIFIED",
         "reconnect_current_binding_without_reapply": "VERIFIED",
         "real_cli_service_start_reuse_drain": "VERIFIED",
-        "complete_m1_productive_work": "NOT_RUN"
+        "complete_m1_productive_work": "NOT_RUN",
+        "unified_identity_creation_in_canonical_finish": "VERIFIED",
+        "reviewed_coordination_permission_defaults": "VERIFIED",
+        "identity_rollback_collision_and_response_loss": "VERIFIED",
+        "reconnect_preserves_name_role_permissions": "VERIFIED"
       }
     },
     "DX-20": {
@@ -1847,15 +1908,20 @@
       "files": [
         "docs/terminal-connect.md",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
+        "plans/agent_ops/evidence/pr03-terminal-identity.md",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
+        "src/okto_nexus/adapters/inbound/http/routes.py",
         "src/okto_nexus/adapters/inbound/http/runtime_v1.py",
         "src/okto_nexus/adapters/outbound/terminal_http.py",
+        "src/okto_nexus/application/agent_creation.py",
         "src/okto_nexus/application/connection_setup.py",
+        "src/okto_nexus/application/connection_test.py",
         "src/okto_nexus/application/project_preset.py",
         "src/okto_nexus/application/terminal_connection.py",
         "tests/execution_r4/test_terminal_connect.py",
+        "tests/execution_r4/test_terminal_identity.py",
         "tests/test_terminal_connect_process.py",
         "tests/test_terminal_http.py"
       ],
@@ -1864,21 +1930,28 @@
         "plans/agent_ops/evidence/pr03-terminal-connect-nexus.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect-reuse.xml",
-        "plans/agent_ops/evidence/pr03-terminal-connect-service.xml"
+        "plans/agent_ops/evidence/pr03-terminal-connect-service.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-source.xml"
       ],
-      "result": "Initial local Nexus connect facade for an existing authorized agent: canonical SVC start/reuse, persisted exact review, ordinary runtime preset, canonical Finish and receipt recovery, reconnect without reapplying defaults. 112 final installed tests passed, including actual disposable CLI/service/HTTP/drain.",
+      "result": "Local connect now reviews a new persistent project identity with explicit coordination permissions, or reuses a selected identity. Canonical Finish creates the identity, workspace, binding and grant in one transaction using the existing key authority/receipt. Recovery, collision refusal, rollback and customization preservation verified; 159 distinct installed cases validated (158 broad passes plus the corrected authority assertion passing in follow-up).",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Unified new identity creation, complete coordination/role preset, start-at-login review and terminal work/decisions/results remain open.",
-        "Provider/build qualification and model turns were simulated in setup cases; actual productive local/remote acceptance NOT_RUN.",
-        "Participant init, remote topology, operator-session CLI auth, preset evolution and dashboard introduction remain open."
+        "Full terminal work/questions/decisions/results and productive local/remote M1 acceptance remain NOT_RUN.",
+        "Harness qualification/version command/model response were simulated in setup integration; real provider context/coordination acceptance remains open.",
+        "Start-at-login review, remote topology, participant init, operator-session CLI authentication, preset evolution and dashboard introduction remain open."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
         "runtime_defaults_and_receipt_origin": "VERIFIED",
         "reconnect_current_binding_without_reapply": "VERIFIED",
         "real_cli_service_start_reuse_drain": "VERIFIED",
-        "complete_m1_productive_work": "NOT_RUN"
+        "complete_m1_productive_work": "NOT_RUN",
+        "unified_identity_creation_in_canonical_finish": "VERIFIED",
+        "reviewed_coordination_permission_defaults": "VERIFIED",
+        "identity_rollback_collision_and_response_loss": "VERIFIED",
+        "reconnect_preserves_name_role_permissions": "VERIFIED"
       }
     },
     "ATN-01": {
@@ -2606,8 +2679,13 @@
     },
     "DX-T26": {
       "requirement": "Setup gerenciado continua transacional; alteraÃ§Ã£o concorrente nÃ£o amplia grants.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity.md"
+      ],
+      "result": "Local new-identity review/transaction/recovery/permission-copy/customization subset verified; full scenario acceptance, productive harness behavior and dashboard presentation remain open."
     },
     "DX-T27": {
       "requirement": "ConfiguraÃ§Ã£o remota usa diretÃ³rio/credencial do host correto.",
@@ -2624,9 +2702,12 @@
       "status": "IN_PROGRESS",
       "evidence": [
         "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
-        "plans/agent_ops/evidence/pr03-terminal-connect.md"
+        "plans/agent_ops/evidence/pr03-terminal-connect.md",
+        "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity.md"
       ],
-      "result": "Existing-identity local setup subset implemented/tested; native provider qualification and full R3 scenario acceptance remain open."
+      "result": "Local new-identity review/transaction/recovery/permission-copy/customization subset verified; full scenario acceptance, productive harness behavior and dashboard presentation remain open."
     },
     "DX-T30": {
       "requirement": "VÃ¡rios harnesses vÃ¡lidos pedem somente escolha necessÃ¡ria; PATH nÃ£o comprova login ou qualificaÃ§Ã£o.",
@@ -2658,9 +2739,12 @@
         "plans/agent_ops/evidence/pr03-setup-recovery-installed.xml",
         "plans/agent_ops/evidence/pr03-setup-recovery.md",
         "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
-        "plans/agent_ops/evidence/pr03-terminal-connect.md"
+        "plans/agent_ops/evidence/pr03-terminal-connect.md",
+        "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity.md"
       ],
-      "result": "Existing-identity local setup subset implemented/tested; native provider qualification and full R3 scenario acceptance remain open."
+      "result": "Local new-identity review/transaction/recovery/permission-copy/customization subset verified; full scenario acceptance, productive harness behavior and dashboard presentation remain open."
     },
     "DX-T34": {
       "requirement": "Login de provedor ausente produz instruÃ§Ã£o concreta e nÃ£o deixa daemon bloqueado em prompt invisÃ­vel.",
@@ -2692,8 +2776,13 @@
     },
     "DX-T38": {
       "requirement": "InstalaÃ§Ã£o nova com harness/provedor prontos propÃµe identidade, workspace e perfil Ãºteis no mesmo resumo; aceitar os efeitos cria apenas os objetos autorizados e nÃ£o exige definir persona ou visitar o painel.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity.md"
+      ],
+      "result": "Local new-identity review/transaction/recovery/permission-copy/customization subset verified; full scenario acceptance, productive harness behavior and dashboard presentation remain open."
     },
     "DX-T39": {
       "requirement": "Pacote instalado, rota local padrÃ£o: solicitar trabalho real autorizado, acompanhar, responder a pergunta/permissÃ£o, obter resultado correlacionado e continuar pelo terminal, sem dashboard nem ediÃ§Ã£o manual de configuraÃ§Ã£o.",
@@ -2710,14 +2799,22 @@
       "status": "IN_PROGRESS",
       "evidence": [
         "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
-        "plans/agent_ops/evidence/pr03-terminal-connect.md"
+        "plans/agent_ops/evidence/pr03-terminal-connect.md",
+        "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity.md"
       ],
-      "result": "Existing-identity local setup subset implemented/tested; native provider qualification and full R3 scenario acceptance remain open."
+      "result": "Local new-identity review/transaction/recovery/permission-copy/customization subset verified; full scenario acceptance, productive harness behavior and dashboard presentation remain open."
     },
     "DX-T42": {
       "requirement": "Nome de agente/projeto igual nÃ£o associa outra identidade; vÃ­nculos ausentes ou ambÃ­guos exigem resoluÃ§Ã£o autorizada, inclusive quando duas conexÃµes iniciais concorrem.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity.md"
+      ],
+      "result": "Local new-identity review/transaction/recovery/permission-copy/customization subset verified; full scenario acceptance, productive harness behavior and dashboard presentation remain open."
     },
     "DX-T43": {
       "requirement": "O harness iniciado pelo serviÃ§o usa instruÃ§Ãµes, modelo, ferramentas e limites efetivos revisados; configuraÃ§Ã£o disponÃ­vel apenas no shell nÃ£o Ã© presumida nem substituÃ­da silenciosamente.",
@@ -2726,8 +2823,13 @@
     },
     "DX-T44": {
       "requirement": "Direitos padrÃ£o permitem coordenaÃ§Ã£o Ãºtil no workspace autorizado; nÃ£o permitem ler inbox alheia, cruzar escopo nÃ£o concedido, administrar globalmente ou mudar polÃ­ticas.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity.md"
+      ],
+      "result": "Local new-identity review/transaction/recovery/permission-copy/customization subset verified; full scenario acceptance, productive harness behavior and dashboard presentation remain open."
     },
     "DX-T45": {
       "requirement": "DecisÃ£o pelo terminal preserva ator, revisÃ£o, validade e escopo; texto enviado ao modelo, decisÃ£o expirada, recusada ou emitida por ator sem autoridade nÃ£o aprova trabalho.",
@@ -2751,8 +2853,13 @@
     },
     "DX-T49": {
       "requirement": "Abrir o dashboard depois do uso pelo terminal mostra o mesmo agente e configuraÃ§Ã£o; personalizar nome/papel mantÃ©m identidade, histÃ³rico e vÃ­nculos canÃ´nicos.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity.md"
+      ],
+      "result": "Local new-identity review/transaction/recovery/permission-copy/customization subset verified; full scenario acceptance, productive harness behavior and dashboard presentation remain open."
     },
     "DX-T50": {
       "requirement": "Adaptador que sÃ³ inicia o processo, mas exige painel para uma decisÃ£o cotidiana, nÃ£o passa o aceite M1; lacuna fica registrada atÃ© existir rota completa qualificada.",
@@ -3404,6 +3511,18 @@
         "plans/agent_ops/evidence/pr03-terminal-connect-reuse.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect-wheels.json"
+      ]
+    },
+    {
+      "date": "2026-11-05",
+      "scope": "PR-03 reviewed identity creation in project setup",
+      "result": "Local connect now reviews a new persistent project identity with explicit coordination permissions, or reuses a selected identity. Canonical Finish creates the identity, workspace, binding and grant in one transaction using the existing key authority/receipt. Recovery, collision refusal, rollback and customization preservation verified; 159 distinct installed cases validated (158 broad passes plus the corrected authority assertion passing in follow-up). Full R3 and M1 remain incomplete.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-terminal-identity.md",
+        "plans/agent_ops/evidence/pr03-terminal-identity-source.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-wheels.json"
       ]
     }
   ]

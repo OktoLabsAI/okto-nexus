@@ -1,8 +1,24 @@
 """One versioned project preset, resolved into the ordinary setup contract."""
 from nexus_connector_core.connection_configuration import parse_connection_configuration
+from nexus_connector_core.protocol import canonical_json
+import hashlib
+
+from ..domain.permissions import PERMISSION_REGISTRY
 
 ORIGIN = {'id': 'project-generalist', 'revision': 1}
 CLIENTS = {'codex': 'codex_app_server', 'claude': 'claude_stream', 'pi': 'pi_rpc'}
+
+
+def identity_defaults():
+    """Copy explicit coordination permissions; future capabilities default off."""
+    allowed = {'messages.send_direct', 'messages.send_channel', 'handoffs.create', 'handoffs.work',
+               'handoffs.cancel', 'artifacts.put', 'events.read', 'identity.update_profile',
+               'workspaces.list', 'shared_md.render', 'health.read'}
+    flags = {group: {flag: f'{group}.{flag}' in allowed for flag in values}
+             for group, values in PERMISSION_REGISTRY.items() if group != 'limits'}
+    flags['limits'] = dict(PERMISSION_REGISTRY['limits'], messages_per_minute=60, max_recipients=10)
+    result = {'role': 'Project assistant', 'permissions': flags}
+    return result | {'defaults_hash': 'sha256:' + hashlib.sha256(canonical_json(result)).hexdigest()}
 
 
 def configuration(*, adapter_id, project, label, provider_home=None):
