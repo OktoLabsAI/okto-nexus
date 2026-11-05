@@ -62,6 +62,7 @@ def read_json(path: Path) -> dict:
 
 
 def execution_context(config, *, host, port, project_root, log_level, discovery, env) -> dict:
+    from ....application.settings import detect_pinned_fields
     arguments = ['--host', host, '--port', str(port), '--project-root',
                  str(Path(project_root).expanduser().resolve()), '--log-level', log_level]
     for fields in (_PATH_FIELDS, _BOOL_FIELDS, _ENUM_FIELDS, _FLOAT_FIELDS,
@@ -93,7 +94,9 @@ def execution_context(config, *, host, port, project_root, log_level, discovery,
             'executable': str(Path(sys.executable).absolute()),
             'environment_prefix': str(Path(sys.prefix).absolute()),
             'cwd': str(Path(project_root).expanduser().resolve()),
-            'arguments': arguments, 'environment': environment}
+            'arguments': arguments, 'environment': environment,
+            'settings_pinned_fields': sorted(detect_pinned_fields(config)),
+            **({'settings_provenance_legacy': True} if getattr(config, '_legacy_settings_provenance', False) else {})}
 
 
 def validate_context(value: dict, *, require_paths=True) -> dict:
@@ -107,6 +110,14 @@ def validate_context(value: dict, *, require_paths=True) -> dict:
     if require_paths and (not Path(value['executable']).is_file() or not Path(value['cwd']).is_dir()):
         raise ValueError('Service executable or working directory no longer exists')
     arguments, environment = value.get('arguments'), value.get('environment')
+    if 'settings_provenance_legacy' in value and type(value['settings_provenance_legacy']) is not bool:
+        raise ValueError('Invalid saved settings provenance')
+    if 'settings_pinned_fields' in value:
+        from ....application.settings import SETTING_SPECS
+        pins = value['settings_pinned_fields']
+        if (not isinstance(pins, list) or not all(type(key) is str for key in pins) or
+                len(set(pins)) != len(pins) or set(pins) - {spec.key for spec in SETTING_SPECS}):
+            raise ValueError('Invalid saved settings provenance')
     if (not isinstance(arguments, list) or not all(type(x) is str for x in arguments)
             or not isinstance(environment, dict) or not all(type(k) is str and type(v) is str
                 for k, v in environment.items())

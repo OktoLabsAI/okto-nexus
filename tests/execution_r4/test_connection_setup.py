@@ -2,11 +2,14 @@
 import json
 from copy import deepcopy
 import pytest
-from test_local_realization import local_setup
-from test_local_installation_check import checking  # noqa: F401
+import test_local_realization
+import test_local_installation_check
 from okto_nexus.application.connection_setup import finish_setup, load_setup
 from okto_nexus.application.execution_local_realizations import _digest, directory_identity
 from okto_nexus.domain.runtime_context import RuntimeRequestContext
+
+local_setup = test_local_realization.local_setup
+checking = test_local_installation_check.checking
 
 
 def request_for(setup):
@@ -25,7 +28,7 @@ def request_for(setup):
 def finish(setup, context, request, **kwargs):
     deps,app,*_ = setup
     return finish_setup(deps,context,app.state.embedded_inventory_owner,
-        app.state.inventory_fresh_publications,request,**kwargs)
+        app.state.inventory_fresh_publications,request,settings=app.state.settings_service,**kwargs)
 
 
 def count(setup, table):

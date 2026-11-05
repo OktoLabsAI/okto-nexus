@@ -58,6 +58,22 @@ def test_patch_persists_and_applies_to_live_config(tmp_path):
         assert deps2.config.session_stale_ttl_seconds == 120
 
 
+@pytest.mark.parametrize('source', ['env', 'cli'])
+def test_explicit_default_false_remains_pinned_over_stored_true(tmp_path, source):
+    home = tmp_path / 'home'
+    deps = bootstrap({}, ['--home', str(home)])
+    with TestClient(build_app(deps), client=('127.0.0.1', 50000)) as client:
+        assert client.patch('/api/v1/settings', json={'feature_hitl': True}).status_code == 200
+    env = {'OKTO_NEXUS_FEATURE_HITL': 'false'} if source == 'env' else {}
+    args = ['--home', str(home)] + (['--feature-hitl', 'false'] if source == 'cli' else [])
+    pinned = bootstrap(env, args)
+    with TestClient(build_app(pinned), client=('127.0.0.1', 50001)) as client:
+        setting = next(item for item in client.get('/api/v1/settings').json()['data']['items'] if item['key'] == 'feature_hitl')
+        assert setting['value'] is False and setting['source'] == 'cli/env' and not setting['editable']
+        assert client.patch('/api/v1/settings', json={'feature_hitl': True}).status_code == 422
+        assert pinned.config.feature_hitl is False
+
+
 def test_transport_policy_applies_globally_and_persists(tmp_path):
     deps = bootstrap({}, ["--home", str(tmp_path / "home")])
     with TestClient(build_app(deps), client=("127.0.0.1", 50000)) as client:

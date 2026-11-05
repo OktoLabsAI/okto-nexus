@@ -757,4 +757,10 @@ def load_config(env: Mapping[str, str], argv: list[str] | None = None) -> NexusC
     for field_name, (env_var, flag, default) in _BOOL_FIELDS.items():
         kwargs[field_name] = _resolve_bool(field_name, flag, env_var, default, env, cli)
 
-    return NexusConfig(**kwargs)
+    config = NexusConfig(**kwargs)
+    # Presence matters: explicitly choosing the default is still an operator
+    # policy and must not be overwritten by stored settings or onboarding.
+    config._explicit_fields = frozenset(
+        name for fields in (_PATH_FIELDS, _BOOL_FIELDS, _ENUM_FIELDS, _FLOAT_FIELDS, _INT_FIELDS, _STRING_FIELDS)
+        for name, definition in fields.items() if definition[0] in env or definition[1] in cli)
+    return config

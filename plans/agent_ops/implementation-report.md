@@ -305,3 +305,26 @@ renewal are still missing. Remote operator/topology, participant, login-start,
 preset evolution, dashboard introduction, real native service and productive
 local/Connector campaigns remain open. Native-operation recovery does not
 complete generic coordination deduplication. R3 and M1 remain incomplete.
+
+## PR-03 fifth increment — native decision activation in the initial review
+
+The same project review can initialize an unset Server-wide HITL/native-decision
+policy, explicitly naming its global effect. Test and Finish revalidate its
+revision; Finish commits it through SettingsService with the existing setup
+receipt. Live cache refresh follows commit and recovers from the current stored
+value. Explicit disabled policy, concurrent edits and later revocations survive
+reconnect/replay; no participant can initialize the setting or approve itself.
+
+CLI/env values equal to defaults now retain their explicit provenance. Service
+contexts carry the original pins through both bootstrap phases. Legacy contexts
+keep prior stored-override behavior, while ambiguity cannot authorize onboarding
+initialization. Source validation passed 12 focused cases; a broader run passed
+82 and exposed one bootstrap-provenance defect, then the corrected process case
+passed. The final coordinated installed campaign passed 267 tests with no
+skips, including new/legacy process restart and synthetic native delivery. All
+423/114/130 Python payloads match sources. See `evidence/pr03-terminal-policy.md`.
+
+This closes the tested local policy-initialization gap, not M1. Terminal grant
+renewal, remote operator/Connector routes, participant, login-start review,
+preset evolution, dashboard introduction, real native service and productive
+provider campaigns remain open. The full R3 scope is unchanged.

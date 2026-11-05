@@ -128,8 +128,19 @@ class TerminalConnection:
         request.update(candidate_ref=selected['candidate_ref'], inventory_revision=available['inventory_revision'],
             baseline=current['baseline'], project_preset=dict(ORIGIN), configuration=configuration(
                 adapter_id=selected['adapter_id'], project=selection['project'], label=selection['label'], provider_home=home))
+        native_policy = current.get('native_decision_policy')
+        if native_policy is None:
+            raise ConnectionError('NATIVE_POLICY_UNCONFIRMED', 'This Server cannot review native decision policy for project setup.')
+        if native_policy['value'] is not True and not native_policy['can_initialize']:
+            raise ConnectionError('NATIVE_DECISIONS_DISABLED',
+                'Native decisions are disabled by an existing Server policy (' + native_policy['source'] +
+                '). Project setup preserves it; an authorized policy change is required before this route can be used.')
+        request['native_decision_policy'] = dict(expected_revision=native_policy['revision'],
+                                                initialize=native_policy['can_initialize'])
         review = {'server_id': me['server_id'], 'selection': selection, 'request': request,
                   'version_check_required': selected['technical_state'] != 'READY_FOR_RUNTIME', 'effects': effects()}
+        if native_policy['can_initialize']:
+            review['effects'].append('Enable Server-wide human review (feature_hitl) at Finish for native decisions and matching coordination approval rules. Each decision still requires its authorized recipient; no permission is approved automatically.')
         if creating:
             review['identity_creation'] = current['agent_creation_defaults'] | {'display_name': selection['display_name']}
             review['effects'].insert(0, 'Create this project identity at Finish with the reviewed coordination permissions; no global administration is granted.')

@@ -204,12 +204,14 @@ def test_supervised_entry_suppresses_recovery_after_explicit_stop(host, monkeypa
 def test_supervised_entry_is_foreground_fenced_and_uses_saved_context(host, monkeypatch):
     adapter, tasks, receipt = install(host)
     original_cwd, original_environment = os.getcwd(), dict(os.environ)
-    def foreground(arguments, environment, *, acquired_lock, supervisor):
+    def foreground(arguments, environment, *, acquired_lock, supervisor, settings_pinned_fields, settings_provenance_legacy):
         assert acquired_lock.owned and supervisor == SUPERVISOR
         assert os.getcwd() == adapter.context['cwd']
         assert dict(os.environ) == {key.upper(): value for key, value in environment.items()}
         assert environment == adapter.context['environment']
         assert arguments == adapter.context['arguments']
+        assert settings_pinned_fields == adapter.context.get('settings_pinned_fields')
+        assert settings_provenance_legacy == adapter.context.get('settings_provenance_legacy', False)
         adapter.installation.begin_stop(acquired_lock.generation)
         return 1  # even uncertain shutdown must not trigger recovery after stop
     serve = Mock(side_effect=foreground)

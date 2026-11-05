@@ -46,7 +46,8 @@ def terminal(checking, local_setup, monkeypatch):
         value = response.json()
         if response.status_code >= 400:
             error = value['error']
-            raise ConnectionError(error['code'], error['message'], stage=error.get('stage', 'http'))
+            raise ConnectionError(error['code'], error['message'], stage=error.get('stage', 'http'),
+                                  possible_effect=error.get('possible_effect', False))
         if fault.after and path.endswith(fault.after):
             fault.after = None
             raise ConnectionError('OUTCOME_UNKNOWN', 'Injected lost response', possible_effect=True)

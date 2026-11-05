@@ -26,6 +26,17 @@ existing configuration transaction to create the identity, workspace, binding
 and grant together. Review and the connection test do not create an agent. No
 project task is submitted by setup.
 
+When the Server has no explicit native-decision policy, this same review offers
+to enable Server-wide human review (`feature_hitl`) at Finish. This enables
+native questions/permissions and matching coordination approval rules; every
+decision still requires its authorized recipient. Review/Test do not change the
+setting. Its stored value commits with the setup receipt, then becomes effective
+in the running service. A late failure rolls back the setting with the setup.
+An already enabled policy is reused. An explicit disabled policy, whether stored
+or supplied by CLI/environment (including `false` equal to the default), is
+preserved and diagnosed. An operator must resolve that policy before using this
+route; setup does not override it. A concurrent policy change requires review.
+
 Use `--agent reviewer` to reuse an existing authorized identity. Its name, role,
 permissions and automatic handoff policy are preserved. For a new identity,
 `--new-agent unused-id` and `--name "Project helper"` optionally replace the
@@ -75,6 +86,9 @@ The versioned preset origin is retained in the canonical Finish receipt and
 exposed by setup reads. Dashboard and terminal still use the same binding,
 runtime policy and harness configuration. Start-at-login selection, participant
 initialization, remote operator authentication and real provider qualification
-remain in progress. Native questions require the existing `feature_hitl` policy
-to be enabled on the service. That gate is not changed by accepting a project
-review; a recorded decision whose native delivery is refused is shown explicitly.
+remain in progress. Reconnect and repeated Finish do not re-enable a policy
+disabled after setup. A recorded decision whose native delivery is refused is
+shown explicitly. New service contexts retain which configuration values were
+explicit; frozen launch arguments do not pin defaults. Older contexts without
+that provenance keep their previous stored-override behavior, but cannot
+automatically initialize a policy whose original source is unknown.

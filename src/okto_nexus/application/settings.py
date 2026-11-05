@@ -12,6 +12,7 @@ Pure application code: stdlib + config only (import boundary enforced).
 from __future__ import annotations
 
 import json
+import hashlib
 from dataclasses import dataclass, replace
 from typing import Any
 
@@ -452,7 +453,7 @@ class SettingsService:
     """Load, expose and update the stored runtime overrides.
 
     ``pinned`` is the set of config fields fixed by CLI/env for this run
-    (detected at serve bootstrap by diffing against pure defaults): stored
+    (tracked during CLI/env resolution, with a programmatic fallback): stored
     overrides never shadow them, and the UI shows them as read-only.
     """
 
@@ -524,7 +525,7 @@ class SettingsService:
             )
         return items
 
-    def update(self, uow: UnitOfWork, changes: dict[str, Any]) -> dict[str, Any]:
+    def update(self, uow: UnitOfWork, changes: dict[str, Any], *, apply_live: bool = True) -> dict[str, Any]:
         """Validate, persist and apply ``changes``; returns what was applied.
 
         Unknown keys and attempts to change CLI/env-pinned values fail
@@ -556,10 +557,49 @@ class SettingsService:
                 "updated_at = excluded.updated_at",
                 (key, json.dumps(value), now),
             )
-            setattr(self._config, key, value)
+            if apply_live:
+                setattr(self._config, key, value)
             if key == "feature_harness_integrations":
                 self._sync_runtime_writer_mode(uow, value)
         return validated
+
+    def native_decision_review(self, uow: UnitOfWork) -> dict[str, Any]:
+        """The exact global policy a project review may initialize, never reset."""
+        key = 'feature_hitl'
+        row = uow.connection.execute('SELECT value,updated_at FROM settings WHERE key=?', (key,)).fetchone()
+        pinned = key in self._pinned
+        legacy = getattr(self._config, '_legacy_settings_provenance', False)
+        source = 'cli/env' if pinned else 'stored' if row is not None else 'legacy-context' if legacy else 'default'
+        value = self._config.feature_hitl
+        state = dict(value=value, source=source, stored=dict(row) if row is not None else None)
+        revision = hashlib.sha256(json.dumps(state, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
+        return dict(value=value, source=source, editable=not pinned, revision=revision,
+                    can_initialize=not pinned and not legacy and row is None and value is False)
+
+    def validate_native_decisions(self, uow: UnitOfWork, review: dict[str, Any]) -> None:
+        current = self.native_decision_review(uow)
+        if (not isinstance(review, dict) or set(review) != {'expected_revision', 'initialize'} or
+                type(review['initialize']) is not bool):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Invalid native decision policy review.', {})
+        if review['expected_revision'] != current['revision']:
+            raise OktoNexusError(ErrorCode.CONFLICT, 'The Server decision policy changed. Review setup again.', {})
+        if not (current['can_initialize'] if review['initialize'] else current['value'] is True):
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                'Native decisions are disabled by an existing Server policy. Project setup cannot replace that policy.', {})
+
+    def stage_native_decisions(self, uow: UnitOfWork, review: dict[str, Any]) -> None:
+        self.validate_native_decisions(uow, review)
+        if review['initialize']:
+            # Finish owns the transaction. Do not expose a setting that may
+            # still roll back to concurrent runtime workers.
+            self.update(uow, {'feature_hitl': True}, apply_live=False)
+
+    def refresh_native_decisions(self, factory) -> None:
+        # Serialize this cache refresh with ordinary setting writers, and read
+        # their latest committed value rather than replaying the setup's value.
+        with factory.unit_of_work() as uow:
+            if 'feature_hitl' not in self._pinned:
+                self._config.feature_hitl = self.load_overrides(uow).get('feature_hitl', NexusConfig().feature_hitl)
 
     def reset(self, uow: UnitOfWork, keys: list[str] | None = None) -> list[str]:
         """Drop stored overrides (all, or the given keys) and restore defaults."""
@@ -591,21 +631,25 @@ class SettingsService:
 
 
 def detect_pinned_fields(resolved: NexusConfig) -> frozenset[str]:
-    """Fields whose resolved value differs from the pure default.
+    """Preserve explicit CLI/env choices, including choices equal to defaults.
 
-    Heuristic for "set via CLI/env": exact-default CLI values are treated
-    as unpinned (acceptable: the UI then manages a value the operator
-    explicitly typed as the default - same number, no surprise).
+    Programmatic configurations retain the existing nondefault-value fallback.
     """
     defaults = NexusConfig()
     pinned = {
         spec.key
         for spec in SETTING_SPECS
-        if getattr(resolved, spec.key) != getattr(defaults, spec.key)
+        if spec.key in getattr(resolved, '_explicit_fields', ()) or
+            getattr(resolved, spec.key) != getattr(defaults, spec.key)
     }
     return frozenset(pinned)
 
 
 def with_defaults(config: NexusConfig) -> NexusConfig:
     """A defensive copy helper (kept for tests)."""
-    return replace(config)
+    result = replace(config)
+    if hasattr(config, '_explicit_fields'):
+        result._explicit_fields = config._explicit_fields
+    if hasattr(config, '_legacy_settings_provenance'):
+        result._legacy_settings_provenance = config._legacy_settings_provenance
+    return result

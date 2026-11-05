@@ -65,6 +65,12 @@ class SetupAgentCreation(BaseModel):
     defaults_hash: Annotated[str, Field(pattern=r'^sha256:[0-9a-f]{64}$')]
 
 
+class SetupNativeDecisionPolicy(BaseModel):
+    model_config = ConfigDict(extra='forbid', strict=True)
+    expected_revision: Annotated[str, Field(pattern=r'^[0-9a-f]{64}$')]
+    initialize: bool
+
+
 class ConnectionSetupRequest(BaseModel):
     model_config = ConfigDict(extra='forbid', strict=True)
     client_intent_id: Annotated[str, Field(min_length=1, max_length=100)]
@@ -80,6 +86,7 @@ class ConnectionSetupRequest(BaseModel):
     broadcast_handoff_auto_claim: bool | None = None
     project_preset: dict | None = None
     agent_creation: SetupAgentCreation | None = None
+    native_decision_policy: SetupNativeDecisionPolicy | None = None
 
 
 class LocalInstallationCheckRequest(BaseModel):
@@ -600,6 +607,10 @@ def build_router() -> APIRouter:
         )
 
     def runtime_error(error, stage):
+        if (error.details or {}).get('reason') == 'SETUP_ACTIVATION_PENDING':
+            return JSONResponse({'error': {'code': error.code, 'stage': stage, 'message': error.message,
+                'possible_effect': True, 'retry_safe': False, 'operation_id': None, 'action': ''}},
+                status_code=409, headers={'Cache-Control': 'no-store'})
         status = {ErrorCode.NOT_FOUND: 404, ErrorCode.PERMISSION_DENIED: 403,
                   'SCOPE_MISMATCH': 403,
                   ErrorCode.CONFLICT: 409, ErrorCode.VALIDATION_ERROR: 422,
@@ -905,7 +916,8 @@ def build_router() -> APIRouter:
         from ....application.connection_setup import load_setup
         try:
             result = await anyio.to_thread.run_sync(lambda: load_setup(request.app.state.deps,
-                runtime_request_context(), agent_id, binding_id, new_agent_draft=new_agent_draft))
+                runtime_request_context(), agent_id, binding_id, new_agent_draft=new_agent_draft,
+                settings=request.app.state.settings_service))
             return JSONResponse(result, headers={'Cache-Control':'no-store'})
         except OktoNexusError as error:
             return runtime_error(error, 'connection.setup')
@@ -940,6 +952,8 @@ def build_router() -> APIRouter:
             result.pop('broadcast_handoff_auto_claim', None)
         if result.get('agent_creation') is None:
             result.pop('agent_creation', None)
+        if result.get('native_decision_policy') is None:
+            result.pop('native_decision_policy', None)
         if result.get('project_preset') is None:
             result.pop('project_preset', None)
         else:
@@ -964,7 +978,8 @@ def build_router() -> APIRouter:
         from nexus_connector_core import CoreError
         try:
             result = request.app.state.connection_tests.start(runtime_request_context(),
-                getattr(request.app.state,'embedded_inventory_owner',None), setup_request(body))
+                getattr(request.app.state,'embedded_inventory_owner',None), setup_request(body),
+                settings=request.app.state.settings_service)
             return JSONResponse(result, headers={'Cache-Control':'no-store'})
         except CoreError as error:
             return v1_err(409, error.code, 'Refresh installations and review the selected runtime.')
@@ -985,21 +1000,23 @@ def build_router() -> APIRouter:
         from ....application.connection_setup import read_setup_commit
         try:
             result = await anyio.to_thread.run_sync(lambda: read_setup_commit(
-                request.app.state.deps, runtime_request_context(), setup_run_id))
+                request.app.state.deps, runtime_request_context(), setup_run_id,
+                settings=request.app.state.settings_service))
             return JSONResponse(result, headers={'Cache-Control': 'no-store'})
         except OktoNexusError as error:
             return runtime_error(error, 'connection.setup_commit')
 
     @router.post('/connections/setup:recover')
     async def connection_setup_recover(body: ConnectionSetupRequest, request: Request):
-        # Read-only matching uses the same normalization as Test and Finish.
+        # Matching uses the same normalization as Test and Finish. Persistent
+        # state is read-only; a committed policy may refresh its live cache.
         # Clients need not duplicate the Server's canonical request hashing.
         from ....application.connection_setup import read_setup_commit
         try:
             value = setup_request(body)
             result = await anyio.to_thread.run_sync(lambda: read_setup_commit(
                 request.app.state.deps, runtime_request_context(), value['client_intent_id'],
-                expected_request=value))
+                expected_request=value, settings=request.app.state.settings_service))
             return JSONResponse(result, headers={'Cache-Control': 'no-store'})
         except OktoNexusError as error:
             return runtime_error(error, 'connection.setup_commit')
@@ -1022,7 +1039,8 @@ def build_router() -> APIRouter:
             if not prior and active and value['configuration']['execution_location'] != 'remote':
                 verified = request.app.state.connection_tests.verified(context, value, owner)
             result = await anyio.to_thread.run_sync(lambda: finish_setup(request.app.state.deps, context,
-                owner, request.app.state.inventory_fresh_publications, value, verified=verified))
+                owner, request.app.state.inventory_fresh_publications, value, verified=verified,
+                settings=request.app.state.settings_service))
             return JSONResponse(result, headers={'Cache-Control':'no-store'})
         except CoreError as error:
             return v1_err(409, error.code, 'Refresh installations and test the selected runtime again.')

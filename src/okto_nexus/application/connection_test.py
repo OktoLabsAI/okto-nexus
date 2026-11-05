@@ -17,7 +17,7 @@ from ..bootstrap.execution_authority import build_execution_access
 from .execution_local_launch import ProviderSecretResolver
 from .execution_local_realizations import _digest, directory_identity, _require_binding_method
 from ..errors import ErrorCode, OktoNexusError
-from .connection_setup import baseline, conflict, require_operator, setup_mcp_preset, setup_actor, validate_agent_creation
+from .connection_setup import baseline, conflict, require_operator, setup_mcp_preset, setup_actor, validate_agent_creation, validate_native_policy
 
 
 def require_provider_home(configuration):
@@ -51,7 +51,7 @@ class ConnectionTests:
             elif access.agents.get(uow, agent_id) is None:
                 raise conflict('The selected agent is no longer available.')
 
-    def start(self, context, owner, request):
+    def start(self, context, owner, request, *, settings=None):
         creation_request = request if request.get('agent_creation') is not None else None
         self.authorize(context, request['agent_id'], creation_request=creation_request)
         require_provider_home(request['configuration'])
@@ -78,6 +78,7 @@ class ConnectionTests:
         with self.deps.connection_factory.unit_of_work(write=False) as uow:
             if baseline(uow, request['agent_id'], request.get('binding_id')) != request['baseline']:
                 raise conflict('The active configuration changed. Reopen Connections to review it.')
+            validate_native_policy(uow, request, settings)
             _require_binding_method(uow.connection, subject_agent_id=request['agent_id'], adapter_id=c['adapter_id'])
             setup_mcp_preset(uow, request)
         batch = owner.published_batch

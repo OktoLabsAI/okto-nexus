@@ -32,7 +32,9 @@ def run(home: Path, database: Path, token: str) -> int:
     try:
         from .serve import run_serve
         code = run_serve(context['arguments'], context['environment'],
-                         acquired_lock=lock, supervisor='detached')
+                         acquired_lock=lock, supervisor='detached',
+                         settings_pinned_fields=context.get('settings_pinned_fields'),
+                         settings_provenance_legacy=context.get('settings_provenance_legacy', False))
         if code:
             atomic_json(receipt_path, {**receipt, 'state': 'failed', 'reason': 'STARTUP_FAILED'})
         return code

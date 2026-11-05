@@ -96,8 +96,9 @@ state and receipts.
 
 This increment is a local operator facade. Remote operator authentication and
 Connector topology integration remain unfinished. Native decisions require the
-existing service setting `feature_hitl=true`; its default is false. The CLI
-reports native delivery refusal when it is disabled and does not turn it on or
-weaken it. Activation in the unified onboarding review, terminal renewal of
-expired execution authorization, start-at-login review and productive real
+existing service setting `feature_hitl=true`. Initial project setup includes
+reviewed activation when the Server has no explicit policy; it preserves an
+existing disabled policy and any later changes. Work itself does not enable it
+and reports native delivery refusal when disabled. Terminal renewal of expired
+execution authorization, start-at-login review and productive real
 provider/context qualification remain required before M1 is complete.

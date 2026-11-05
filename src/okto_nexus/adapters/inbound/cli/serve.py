@@ -427,7 +427,8 @@ def _warm_embeddings(deps: "object", done_event: "object") -> None:
 
 
 def run_serve(args: list[str], env: Mapping[str, str] | None = None, *,
-              acquired_lock=None, supervisor: str = 'foreground') -> int:
+              acquired_lock=None, supervisor: str = 'foreground', settings_pinned_fields=None,
+              settings_provenance_legacy=False) -> int:
     """Console entry for the ``serve`` subcommand. Returns an exit code."""
     env = dict(env if env is not None else os.environ)
 
@@ -464,6 +465,17 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None, *,
         discovery, rest = split_discovery_args(rest)
         from ....config import load_config
         config = load_config(env, rest)
+        if settings_pinned_fields is not None:
+            # Service arguments freeze every value; only the saved original
+            # choices are pins. Direct foreground CLI/env keeps its provenance.
+            config._explicit_fields = frozenset(settings_pinned_fields)
+        elif supervisor != 'foreground':
+            # Old frozen contexts cannot distinguish default arguments from
+            # explicit choices. Preserve their prior stored-override semantics;
+            # this ambiguity cannot authorize onboarding policy initialization.
+            config._explicit_fields = frozenset()
+            settings_provenance_legacy = True
+        config._legacy_settings_provenance = settings_provenance_legacy
     except OktoNexusError as exc:
         print(
             f"[okto-nexus] serve bootstrap failed: {exc.code}: {exc.message}",
@@ -527,6 +539,8 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None, *,
             print('[okto-nexus] LOG_UNAVAILABLE: service diagnostics could not be opened.', file=sys.stderr)
         try:
             deps = bootstrap(env, rest)
+            deps.config._explicit_fields = config._explicit_fields
+            deps.config._legacy_settings_provenance = config._legacy_settings_provenance
             deps.local_discovery = discovery
         except OktoNexusError as exc:
             if service_log is not None:

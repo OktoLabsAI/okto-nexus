@@ -146,6 +146,7 @@ def resolve_local_service(remaining, *, action="connect"):
     port, host, project_root, log_level, rest = _split_serve_args(remaining, os.environ)
     discovery, rest = split_discovery_args(rest)
     config = load_config(os.environ, rest)
+    explicit_fields = load_config({}, rest)._explicit_fields
     saved = config.home_dir.resolve() / CONTEXT_NAME
     environment = os.environ
     previous = None
@@ -163,6 +164,12 @@ def resolve_local_service(remaining, *, action="connect"):
             previous['arguments'] + remaining, environment)
         discovery, rest = split_discovery_args(rest)
         config = load_config(environment, rest)
+        if 'settings_pinned_fields' in previous:
+            config._explicit_fields = frozenset(previous['settings_pinned_fields']) | explicit_fields
+        else:
+            config._explicit_fields = explicit_fields
+        config._legacy_settings_provenance = previous.get('settings_provenance_legacy',
+                                                          'settings_pinned_fields' not in previous)
     context = execution_context(config, host=host, port=port, project_root=project_root,
                                 log_level=log_level, discovery=discovery, env=environment)
     if previous is not None:

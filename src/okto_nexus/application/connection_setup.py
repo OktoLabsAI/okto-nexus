@@ -36,7 +36,17 @@ def setup_actor(context):
     return context.actor_agent_id or 'operator'
 
 
-def read_setup_commit(deps, context, setup_run_id, *, expected_request=None):
+def refresh_committed_native_policy(deps, result, settings):
+    if settings is not None and result.get('native_decision_policy', {}).get('initialized'):
+        try:
+            settings.refresh_native_decisions(deps.connection_factory)
+        except (OktoNexusError, OSError) as error:
+            raise OktoNexusError(ErrorCode.CONFLICT,
+                'Setup is committed; Server policy refresh is pending. Recover this same setup ID.',
+                {'reason': 'SETUP_ACTIVATION_PENDING'}) from error
+
+
+def read_setup_commit(deps, context, setup_run_id, *, expected_request=None, settings=None):
     """Recover the committed result without testing, regranting or reapplying."""
     if not isinstance(setup_run_id, str) or not 1 <= len(setup_run_id) <= 100:
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Invalid setup run ID.', {})
@@ -49,8 +59,10 @@ def read_setup_commit(deps, context, setup_run_id, *, expected_request=None):
                 'No committed Finish receipt exists for this setup run. Test or host effects may still be pending.', {})
         if expected_request is not None and row['request_hash'] != _digest(expected_request):
             raise conflict('This Finish request has different content.')
-        return {'setup_run_id': setup_run_id, 'request_hash': row['request_hash'],
-                'state': 'committed', 'result': json.loads(row['result_json'])}
+        receipt = {'setup_run_id': setup_run_id, 'request_hash': row['request_hash'],
+                   'state': 'committed', 'result': json.loads(row['result_json'])}
+    refresh_committed_native_policy(deps, receipt['result'], settings)
+    return receipt
 
 
 def baseline(uow, agent_id, binding_id=None):
@@ -121,7 +133,18 @@ def validate_agent_creation(deps, uow, request):
     return defaults
 
 
-def load_setup(deps, context, agent_id, binding_id=None, *, new_agent_draft=False):
+def validate_native_policy(uow, request, settings):
+    review = request.get('native_decision_policy')
+    if review is None:
+        return  # Older clients do not initialize or overwrite Server policy.
+    from .project_preset import ORIGIN
+    if (settings is None or request.get('project_preset') != ORIGIN or
+            request['configuration']['runtime_enabled'] is not True):
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Native decision policy requires a reviewed project setup.', {})
+    settings.validate_native_decisions(uow, review)
+
+
+def load_setup(deps, context, agent_id, binding_id=None, *, new_agent_draft=False, settings=None):
     access = build_execution_access(deps)
     with deps.connection_factory.unit_of_work(write=False) as uow:
         require_operator(access, context, uow)
@@ -135,6 +158,8 @@ def load_setup(deps, context, agent_id, binding_id=None, *, new_agent_draft=Fals
         result = {'baseline': baseline(uow, agent_id, binding_id),
                   'runtime_policy': runtime_policy.public_view(deps, runtime_policy.view(uow.connection, agent_id)),
                   'runtime_default': runtime_policy.defaults(uow.connection)['runtime_enabled']}
+        if settings is not None:
+            result['native_decision_policy'] = settings.native_decision_review(uow)
         if new_agent_draft:
             from .project_preset import identity_defaults
             result['agent_creation_defaults'] = identity_defaults()
@@ -178,7 +203,17 @@ def load_setup(deps, context, agent_id, binding_id=None, *, new_agent_draft=Fals
         return result
 
 
-def finish_setup(deps, context, owner, fresh, request, *, verified):
+def finish_setup(deps, context, owner, fresh, request, *, verified, settings=None):
+    if request.get('native_decision_policy') is not None and settings is None:
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'The Server policy service is required for this review.', {})
+    result = _finish_setup(deps, context, owner, fresh, request, verified=verified, settings=settings)
+    # The receipt and stored policy are committed before runtime consumers
+    # see the setting. Repeated Finish refreshes current policy, not defaults.
+    refresh_committed_native_policy(deps, result, settings)
+    return result
+
+
+def _finish_setup(deps, context, owner, fresh, request, *, verified, settings):
     from .execution_binding_proposals import prepare_execution_binding, apply_execution_binding
     from ..adapters.inbound.mcp.tools.harness import build_endpoint_service
     agent_id, configuration = request['agent_id'], request['configuration']
@@ -198,6 +233,7 @@ def finish_setup(deps, context, owner, fresh, request, *, verified):
             return json.loads(prior['result_json'])
         if baseline(uow, agent_id, request.get('binding_id')) != request['baseline']:
             raise conflict('The active configuration changed while you were editing. Reopen Connections to review it.')
+        validate_native_policy(uow, request, settings)
         identity = validate_agent_creation(deps, uow, request)
         if identity is not None:
             from .agent_creation import create_agent_in_uow
@@ -290,6 +326,10 @@ def finish_setup(deps, context, owner, fresh, request, *, verified):
             access.issue(context, actor_agent_id=agent_id, endpoint_id=endpoint_id,
                 actions=actions, expires_at=expiry, max_executions=limits['actions'])
             result['binding'] = binding
+        if request.get('native_decision_policy') is not None:
+            settings.stage_native_decisions(uow, request['native_decision_policy'])
+            result['native_decision_policy'] = dict(enabled_at_commit=True,
+                initialized=request['native_decision_policy']['initialize'])
         uow.connection.execute('INSERT INTO connection_setup_commits VALUES(?,?,?,?,?)',
             (commit_actor, request['client_intent_id'], digest, json.dumps(result), deps.clock.now_iso()))
         return result

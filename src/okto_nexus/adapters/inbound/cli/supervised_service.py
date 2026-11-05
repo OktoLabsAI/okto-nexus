@@ -66,7 +66,9 @@ def run(home: Path, database: Path, token: str, *, installation=None) -> int:
         os.chdir(context['cwd'])
         from .serve import run_serve
         code = run_serve(context['arguments'], context['environment'],
-                         acquired_lock=lock, supervisor=SUPERVISOR)
+                         acquired_lock=lock, supervisor=SUPERVISOR,
+                         settings_pinned_fields=context.get('settings_pinned_fields'),
+                         settings_provenance_legacy=context.get('settings_provenance_legacy', False))
     except (Exception, SystemExit):
         code = 1
     finally:

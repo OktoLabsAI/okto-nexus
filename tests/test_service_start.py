@@ -61,6 +61,23 @@ def test_pending_launch_is_not_repeated_and_uses_detached_non_shell_entrypoint(t
     assert options['creationflags'] if os.name == 'nt' else options['start_new_session']
 
 
+def test_saved_context_distinguishes_frozen_defaults_from_explicit_policy(tmp_path, monkeypatch):
+    from okto_nexus.adapters.inbound.cli.service import resolve_local_service
+    adapter = make_adapter(tmp_path)
+    adapter.home.mkdir()
+    atomic_json(adapter.home / 'service-context.json', adapter.context)
+    assert 'feature_hitl' not in adapter.context['settings_pinned_fields']
+    assert 'embedding_mode' in adapter.context['settings_pinned_fields']  # Explicit default.
+    monkeypatch.setenv('OKTO_NEXUS_FEATURE_HITL', 'true')
+    reused = resolve_local_service(['--home', str(adapter.home)])
+    assert reused.adapter.context['settings_pinned_fields'] == adapter.context['settings_pinned_fields']
+    args = reused.adapter.context['arguments']
+    assert args[args.index('--feature-hitl') + 1] == 'false'
+    selected = resolve_local_service(['--home', str(adapter.home), '--feature-hitl', 'false'])
+    assert 'feature_hitl' in selected.adapter.context['settings_pinned_fields']
+    assert read_json(adapter.home / 'service-context.json') == adapter.context
+
+
 def test_existing_service_is_reused_without_spawn_or_rewrite(tmp_path, monkeypatch):
     adapter = make_adapter(tmp_path)
     adapter.home.mkdir()
