@@ -167,17 +167,33 @@ def test_facade_never_retries_failed_or_stopping_service(state, reason):
     adapter.inspect.assert_not_called()
 
 
-def test_wait_timeout_leaves_one_launch_intact_and_recovers_by_inspection():
+@pytest.mark.parametrize('initial', [
+    {'state': 'starting', 'reason': 'STARTUP_PENDING'},
+    {'state': 'unknown', 'reason': 'INSTANCE_METADATA_UNAVAILABLE'},
+])
+def test_wait_timeout_leaves_one_launch_intact_and_recovers_by_inspection(initial):
     adapter = Mock()
-    adapter.start.return_value = adapter.inspect.return_value = {'state': 'starting', 'reason': 'STARTUP_PENDING'}
+    adapter.start.return_value = adapter.inspect.return_value = initial
     ticks = iter([0, 0, 2, 2])
     service = ServiceLifecycle(adapter, monotonic=lambda: next(ticks), sleep=Mock())
     result = service.ensure_running(timeout=1)
-    assert result['wait_timed_out'] and result['state'] == 'starting'
+    assert result['wait_timed_out'] and result['state'] == initial['state']
+    assert result['reason'] == initial['reason']
     adapter.start.assert_called_once()
     adapter.stop.assert_not_called()
     adapter.inspect.return_value = {'state': 'ready', 'generation': 'same-launch'}
     assert service.inspect()['generation'] == 'same-launch'
+
+
+def test_transient_metadata_failure_waits_for_current_owner_without_another_start():
+    adapter = Mock()
+    adapter.start.return_value = {'state': 'unknown', 'reason': 'INSTANCE_METADATA_UNAVAILABLE'}
+    adapter.inspect.return_value = {'state': 'ready', 'generation': 'same-launch'}
+    service = ServiceLifecycle(adapter, monotonic=lambda: 0, sleep=Mock())
+    assert service.ensure_running(timeout=1)['generation'] == 'same-launch'
+    adapter.start.assert_called_once()
+    adapter.inspect.assert_called_once()
+    adapter.request_stop.assert_not_called()
 
 
 def test_saved_context_selects_same_endpoint_without_repeating_flags(tmp_path, monkeypatch, capsys):

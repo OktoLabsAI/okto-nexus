@@ -38,8 +38,12 @@ class ServiceLifecycle:
         result = self.adapter.start()
         while result['state'] in {'starting', 'degraded', 'unknown'}:
             if result.get('reason') not in {'STARTUP_PENDING', 'CONCURRENT_START',
-                    'SERVICE_UNREACHABLE', 'INSTANCE_OWNERSHIP_UNCONFIRMED', 'SUPERVISOR_PENDING'}:
+                    'SERVICE_UNREACHABLE', 'INSTANCE_OWNERSHIP_UNCONFIRMED',
+                    'INSTANCE_METADATA_UNAVAILABLE', 'SUPERVISOR_PENDING'}:
                 return result
+            # A concurrent publisher/Windows file-sharing window can prevent
+            # reading owner metadata. Re-inspect within this deadline; never
+            # call start again or infer absence from an unreadable record.
             remaining = deadline - self.monotonic()
             if remaining <= 0:
                 return {**result, 'wait_timed_out': True,

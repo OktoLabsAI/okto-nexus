@@ -223,3 +223,11 @@ Campanhas reais de provedor, login/logout/reboot, serviço do usuário e Herdr p
 - **30 testes do Server e 17 do Connector passaram nos fontes; 153 passaram na campanha instalada e 24 no pacote final após atualização dos metadados do README.** Os relatórios têm sobreposição. Os 429/114/130 arquivos Python correspondem aos fontes. O wheel de CI do Connector e seu hash foram atualizados; Core não mudou.
 - DX-T32 verificado no contrato HTTP/persistência. DX-T40/45/46 seguem parciais; M1 real, novo agente remoto/setup unificado, serviço nativo, participante, ATN e OBS continuam pendentes. Escopo R3 preservado.
 - Evidência: [pr03-terminal-binding.md](plans/agent_ops/evidence/pr03-terminal-binding.md).
+
+## 2026-11-05 — PR-03, nona fatia: início no login na revisão local
+
+- `connect --start-at-login` inclui usuário, instância, contexto e transição controlada no mesmo resumo do projeto. Recusar a opção mantém o uso sob demanda. Projeto existente pode revisar somente o startup.
+- O setup canônico é concluído antes da integração do SO. Um checkpoint separado retoma instalação/prontidão sem repetir teste de modelo, Finish, binding ou grant; alterações de contexto e escolhas conflitantes são recusadas. Reconnect preserva desabilitação posterior.
+- **8 testes novos e 30 regressões passaram nos fontes.** A primeira campanha instalada teve 150 passes e revelou uma recusa prematura durante leitura dos metadados de startup concorrente; corrigida com espera limitada sem novo start e três testes focados. **169 testes passaram no pacote final instalado**, incluindo criação de agente e processos reais. Os 431/114/130 arquivos Python correspondem aos fontes; Connector e Core não mudaram.
+- Verificado o contrato local com SO/processo injetados. DX-T37 permanece parcial até integrar a opção ao wizard do Connector; login/logout/crash reais e M1 produtivo continuam pendentes. Escopo R3 preservado.
+- Evidência: [pr03-login-start.md](plans/agent_ops/evidence/pr03-login-start.md).

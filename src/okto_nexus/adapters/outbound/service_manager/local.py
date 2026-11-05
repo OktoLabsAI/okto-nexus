@@ -49,6 +49,14 @@ class LocalServerLifecycle:
         from .upgrade import for_lifecycle
         return for_lifecycle(self).plan(executable)
 
+    def login_start_review(self):
+        from .login_start import review
+        return review(self)
+
+    def check_login_start_review(self, plan):
+        from .login_start import validate
+        validate(self, plan)
+
     def upgrade_apply(self, *, document, expected_revision):
         from .upgrade import for_lifecycle
         return for_lifecycle(self).apply(document, expected_revision)

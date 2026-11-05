@@ -90,11 +90,54 @@ state; exit 0 means a valid plan, configured connection or declined interactive
 review, 2 is argument grammar error, 3 is a refusal/incomplete observation and
 130 is Ctrl+C. Inspect the JSON state and `possible_effect`, not only the exit code.
 
+## Optional startup at user login
+
+On the local Server host, include `--start-at-login` in the initial command:
+
+```sh
+okto-nexus connect --start-at-login
+```
+
+The same project review names the effective user, Server home, resolved Python
+environment and startup effects. After canonical Finish, the existing lifecycle
+drains and stops the Server, installs its user logon task, and starts it through
+that task. Active work can delay this transition; it does not force termination.
+The connection test and native installation are separate effects covered by the
+displayed review, not a distributed transaction. Provider credentials stay in the
+existing user context and are not copied into the task definition.
+
+Omit this option to retain the current service mode. To remove it from an
+unapproved saved review, use `--no-start-at-login --plan`, then approve the new
+revision. This does not disable an existing integration. After setup has been
+approved, use the explicit `service disable --user` / `service uninstall --user`
+commands for the selected instance. Reconnect does not reinstall or reenable an
+integration changed later by the user.
+
+For an already configured project, `connect --start-at-login` presents a startup
+review alone; its approval does not repeat Finish, a model test or grant issuance.
+`--plan --json` and `--approve REVIEW_REVISION --json` also work for this review.
+An already enabled task is reused; a disabled task requires the reviewed enable
+effect. Host context or native definition changes refuse the old review.
+
+If native installation or readiness is incomplete, JSON reports
+`state: login_start_pending` and `setup_state: configured`. Resume the same
+`connect --profile NAME`; its separate startup checkpoint is recovered before
+ordinary startup, and the committed project receipt remains intact. Unconfirmed
+native registration is diagnosed by the existing installer without creating a
+second task or falling back to a detached Server. `--plan` remains observational.
+
+The current installer supports Windows user logon tasks. This option does not
+promise startup before login, survival after logout or restored work after reboot.
+POSIX native installation remains unqualified; on-demand use is still available.
+An operator profile targeting a remote Server cannot install a task on this client
+as a substitute. Connector-host startup remains controlled by its own service CLI;
+integration into its initial wizard is still pending.
+
 The versioned preset origin is retained in the canonical Finish receipt and
 exposed by setup reads. Dashboard and terminal still use the same binding,
-runtime policy and harness configuration. Start-at-login selection, participant
-initialization, unified remote Connector onboarding and real provider qualification
-remain in progress. Reconnect and repeated Finish do not re-enable a policy
+runtime policy and harness configuration. Connector-host start-at-login review,
+participant initialization, unified remote Connector onboarding and real provider
+qualification remain in progress. Reconnect and repeated Finish do not re-enable a policy
 disabled after setup. A recorded decision whose native delivery is refused is
 shown explicitly. New service contexts retain which configuration values were
 explicit; frozen launch arguments do not pin defaults. Older contexts without

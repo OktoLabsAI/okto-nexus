@@ -84,7 +84,8 @@
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
-        "plans/agent_ops/evidence/pr03-terminal-binding.md"
+        "plans/agent_ops/evidence/pr03-terminal-binding.md",
+        "plans/agent_ops/evidence/pr03-login-start.md"
       ]
     },
     "PR-04": {
@@ -460,8 +461,10 @@
         "plans/agent_ops/evidence/pr02-connector-user-service.md",
         "plans/agent_ops/evidence/pr02-launch-recovery.md",
         "plans/agent_ops/evidence/pr02-nexus-user-service.md",
+        "plans/agent_ops/evidence/pr03-login-start.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
+        "src/okto_nexus/adapters/inbound/cli/connect_login.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/operator.py",
         "src/okto_nexus/adapters/inbound/cli/serve.py",
@@ -479,11 +482,13 @@
         "src/okto_nexus/adapters/outbound/service_manager/inspection.py",
         "src/okto_nexus/adapters/outbound/service_manager/installation.py",
         "src/okto_nexus/adapters/outbound/service_manager/local.py",
+        "src/okto_nexus/adapters/outbound/service_manager/login_start.py",
         "src/okto_nexus/adapters/outbound/service_manager/windows_tasks.py",
         "src/okto_nexus/adapters/outbound/terminal_http.py",
         "src/okto_nexus/application/service_lifecycle.py",
         "src/okto_nexus/application/terminal_connection.py",
         "src/okto_nexus/application/terminal_work.py",
+        "tests/execution_r4/test_connect_login_start.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
         "tests/test_service_inspection.py",
         "tests/test_service_launch_recovery.py",
@@ -507,6 +512,14 @@
         "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service-wheel.json",
         "plans/agent_ops/evidence/pr02-nexus-user-service.xml",
+        "plans/agent_ops/evidence/pr03-login-start-existing.xml",
+        "plans/agent_ops/evidence/pr03-login-start-identity.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed-initial.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed.xml",
+        "plans/agent_ops/evidence/pr03-login-start-metadata.xml",
+        "plans/agent_ops/evidence/pr03-login-start-source.xml",
+        "plans/agent_ops/evidence/pr03-login-start-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-login-start-wheels.json",
         "plans/agent_ops/evidence/pr03-remote-operator-decisions.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
@@ -518,13 +531,14 @@
         "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json",
         "plans/agent_ops/evidence/pr03-terminal-binding.md"
       ],
-      "result": "Human operator login/status/logout reuse existing session authentication and a separate protected-vault namespace. Origin and Server identity are pinned; session-only requests cannot fall back to loopback trust or an agent key. Remote connect reuses an existing approved binding; saved topology is selected before local lifecycle resolution, with no local fallback. Canonical work/receipt recovery, grant renewal and native decisions are verified over human-session HTTP with a synthetic embedded peer. 167 installed regression tests and two focused installed boundary cases passed on the same 427-file Nexus wheel. New remote identity/setup, real OS-vault/TLS accessibility and the two-host productive campaign remain open. The shared operator proposal approval is now verified by pr03-terminal-binding; this task remains incomplete.",
+      "result": "Local connect can include user login startup in the same exact project review. The existing installer and lifecycle perform controlled drain, user-task registration or enablement, and supervised start only after canonical setup is committed. A separate durable host checkpoint recovers partial installation before ordinary startup, preserving the original setup ID, binding, grant and model-test result. Unapproved login choices can be declined; later disable/uninstall is not undone by reconnect. 8 focused source tests and 30 existing connection regressions passed. An initial installed run exposed a concurrent startup metadata wait gap; three focused source checks passed after correction. The final installed campaign passed 169 tests on the 431-file Nexus wheel, including both existing and newly created project identity startup reviews. Native registration/process effects in the new connection tests are injected. Actual login/logout/crash qualification, Connector initial-review integration and complete productive M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Actual user-service/login/logout/crash/credential/provider campaigns NOT_RUN; legacy POSIX installers remain unqualified for the R3 instance contract.",
         "Server doctor qualification, general definition/context reconciliation and controlled upgrades remain open; productive/native lifecycle campaigns retain their separate acceptance.",
         "Native Task Scheduler has no atomic fingerprint-conditional mutation against external editors; unconfirmed existing tasks are not adopted.",
-        "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified."
+        "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
+        "Local connect login startup uses injected native/process effects; actual login/logout/crash and Connector wizard integration remain open."
       ],
       "subscopes": {
         "local_detached_start_reuse": "VERIFIED",
@@ -540,7 +554,13 @@
         "operator_origin_pin_and_isolated_vault_namespace": "VERIFIED",
         "real_os_vault_and_tls_accessibility": "NOT_RUN",
         "remote_connector_productive_work": "NOT_RUN",
-        "remote_operator_proposal_approval": "VERIFIED"
+        "remote_operator_proposal_approval": "VERIFIED",
+        "local_connect_login_review_and_decline": "VERIFIED",
+        "local_connect_host_transition_checkpoint": "VERIFIED",
+        "reconnect_preserves_later_service_disablement": "VERIFIED",
+        "transient_owner_metadata_wait_without_restart": "VERIFIED",
+        "connector_connect_login_review": "NOT_RUN",
+        "actual_login_start_campaign": "NOT_RUN"
       }
     },
     "SVC-04": {
@@ -641,11 +661,15 @@
         "../okto-nexus-connector/tests/unit/test_service_upgrade.py",
         "../okto-nexus-connector/tests/unit/test_user_service_lifecycle.py",
         "docs/service-lifecycle.md",
+        "docs/terminal-connect.md",
         "plans/agent_ops/evidence/pr02-connector-user-service.md",
         "plans/agent_ops/evidence/pr02-core-service-definition.md",
         "plans/agent_ops/evidence/pr02-enablement.md",
         "plans/agent_ops/evidence/pr02-nexus-user-service.md",
         "plans/agent_ops/evidence/pr02-upgrade.md",
+        "plans/agent_ops/evidence/pr03-login-start.md",
+        "src/okto_nexus/adapters/inbound/cli/connect.py",
+        "src/okto_nexus/adapters/inbound/cli/connect_login.py",
         "src/okto_nexus/adapters/inbound/cli/serve.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
         "src/okto_nexus/adapters/inbound/cli/supervised_service.py",
@@ -655,11 +679,13 @@
         "src/okto_nexus/adapters/outbound/service_manager/inspection.py",
         "src/okto_nexus/adapters/outbound/service_manager/installation.py",
         "src/okto_nexus/adapters/outbound/service_manager/local.py",
+        "src/okto_nexus/adapters/outbound/service_manager/login_start.py",
         "src/okto_nexus/adapters/outbound/service_manager/upgrade.py",
         "src/okto_nexus/adapters/outbound/service_manager/windows_tasks.py",
         "src/okto_nexus/application/service_lifecycle.py",
         "src/okto_nexus/service_environment.py",
         "src/okto_nexus/service_upgrade.py",
+        "tests/execution_r4/test_connect_login_start.py",
         "tests/test_service_inspection.py",
         "tests/test_service_process.py",
         "tests/test_service_start.py",
@@ -687,14 +713,23 @@
         "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
         "plans/agent_ops/evidence/pr02-upgrade-nexus-final.xml",
         "plans/agent_ops/evidence/pr02-upgrade-nexus.xml",
-        "plans/agent_ops/evidence/pr02-upgrade-wheels.json"
+        "plans/agent_ops/evidence/pr02-upgrade-wheels.json",
+        "plans/agent_ops/evidence/pr03-login-start-existing.xml",
+        "plans/agent_ops/evidence/pr03-login-start-identity.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed-initial.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed.xml",
+        "plans/agent_ops/evidence/pr03-login-start-metadata.xml",
+        "plans/agent_ops/evidence/pr03-login-start-source.xml",
+        "plans/agent_ops/evidence/pr03-login-start-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-login-start-wheels.json"
       ],
-      "result": "Nexus Windows task host integration implemented; isolated host contracts, native validate-only preflight and concurrent real detached process regression passed. See scoped evidence; no registered service qualification. Connector host/launch subscopes now have scoped validation in pr02-connector-user-service.md; full task acceptance remains open. Selected task enable/disable and retained-intent reconciliation implemented in both hosts; scoped source/installed validation passed. Reviewed installed-environment replacement implemented in both hosts, with retained startup fence, canonical drain, action-only task replacement and explicit target start. Final installed campaign: 200 passed; no runtime migration is performed by apply.",
+      "result": "Local connect can include user login startup in the same exact project review. The existing installer and lifecycle perform controlled drain, user-task registration or enablement, and supervised start only after canonical setup is committed. A separate durable host checkpoint recovers partial installation before ordinary startup, preserving the original setup ID, binding, grant and model-test result. Unapproved login choices can be declined; later disable/uninstall is not undone by reconnect. 8 focused source tests and 30 existing connection regressions passed. An initial installed run exposed a concurrent startup metadata wait gap; three focused source checks passed after correction. The final installed campaign passed 169 tests on the 431-file Nexus wheel, including both existing and newly created project identity startup reviews. Native registration/process effects in the new connection tests are injected. Actual login/logout/crash qualification, Connector initial-review integration and complete productive M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Actual native service update/login/logout/crash/credential/provider campaigns NOT_RUN; POSIX remains unqualified.",
         "General definition reconciliation, Server doctor qualification, historical mixed-version migration failures and productive runtime campaigns remain open.",
-        "Native Task Scheduler has no atomic fingerprint-conditional mutation against external editors; unconfirmed edits remain conflicts. Independently invoked old foreground binaries do not acquire the new protocol fence."
+        "Native Task Scheduler has no atomic fingerprint-conditional mutation against external editors; unconfirmed edits remain conflicts. Independently invoked old foreground binaries do not acquire the new protocol fence.",
+        "Local connect login startup uses injected native/process effects; actual login/logout/crash and Connector wizard integration remain open."
       ],
       "subscopes": {
         "windows_definition_contract": "VERIFIED",
@@ -709,7 +744,13 @@
         "enablement_native_validation": "VERIFIED",
         "reviewed_environment_replacement_hosts": "VERIFIED",
         "interrupted_upgrade_injected_native_effects": "VERIFIED",
-        "actual_native_task_upgrade": "NOT_RUN"
+        "actual_native_task_upgrade": "NOT_RUN",
+        "local_connect_login_review_and_decline": "VERIFIED",
+        "local_connect_host_transition_checkpoint": "VERIFIED",
+        "reconnect_preserves_later_service_disablement": "VERIFIED",
+        "transient_owner_metadata_wait_without_restart": "VERIFIED",
+        "connector_connect_login_review": "NOT_RUN",
+        "actual_login_start_campaign": "NOT_RUN"
       }
     },
     "SVC-06": {
@@ -739,9 +780,13 @@
         "../okto-nexus-connector/tests/unit/test_service_upgrade.py",
         "../okto-nexus-connector/tests/unit/test_user_service_lifecycle.py",
         "docs/service-lifecycle.md",
+        "docs/terminal-connect.md",
         "plans/agent_ops/evidence/pr02-connector-user-service.md",
         "plans/agent_ops/evidence/pr02-nexus-user-service.md",
         "plans/agent_ops/evidence/pr02-upgrade.md",
+        "plans/agent_ops/evidence/pr03-login-start.md",
+        "src/okto_nexus/adapters/inbound/cli/connect.py",
+        "src/okto_nexus/adapters/inbound/cli/connect_login.py",
         "src/okto_nexus/adapters/inbound/cli/serve.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
         "src/okto_nexus/adapters/inbound/cli/service_process.py",
@@ -753,11 +798,13 @@
         "src/okto_nexus/adapters/outbound/service_manager/inspection.py",
         "src/okto_nexus/adapters/outbound/service_manager/installation.py",
         "src/okto_nexus/adapters/outbound/service_manager/local.py",
+        "src/okto_nexus/adapters/outbound/service_manager/login_start.py",
         "src/okto_nexus/adapters/outbound/service_manager/upgrade.py",
         "src/okto_nexus/adapters/outbound/service_manager/windows_tasks.py",
         "src/okto_nexus/application/service_lifecycle.py",
         "src/okto_nexus/service_environment.py",
         "src/okto_nexus/service_upgrade.py",
+        "tests/execution_r4/test_connect_login_start.py",
         "tests/test_service_inspection.py",
         "tests/test_service_process.py",
         "tests/test_service_start.py",
@@ -781,14 +828,23 @@
         "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
         "plans/agent_ops/evidence/pr02-upgrade-nexus-final.xml",
         "plans/agent_ops/evidence/pr02-upgrade-nexus.xml",
-        "plans/agent_ops/evidence/pr02-upgrade-wheels.json"
+        "plans/agent_ops/evidence/pr02-upgrade-wheels.json",
+        "plans/agent_ops/evidence/pr03-login-start-existing.xml",
+        "plans/agent_ops/evidence/pr03-login-start-identity.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed-initial.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed.xml",
+        "plans/agent_ops/evidence/pr03-login-start-metadata.xml",
+        "plans/agent_ops/evidence/pr03-login-start-source.xml",
+        "plans/agent_ops/evidence/pr03-login-start-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-login-start-wheels.json"
       ],
-      "result": "Nexus Windows task host integration implemented; isolated host contracts, native validate-only preflight and concurrent real detached process regression passed. See scoped evidence; no registered service qualification. Connector host/launch subscopes now have scoped validation in pr02-connector-user-service.md; full task acceptance remains open. Reviewed installed-environment replacement implemented in both hosts, with retained startup fence, canonical drain, action-only task replacement and explicit target start. Final installed campaign: 200 passed; no runtime migration is performed by apply.",
+      "result": "Local connect can include user login startup in the same exact project review. The existing installer and lifecycle perform controlled drain, user-task registration or enablement, and supervised start only after canonical setup is committed. A separate durable host checkpoint recovers partial installation before ordinary startup, preserving the original setup ID, binding, grant and model-test result. Unapproved login choices can be declined; later disable/uninstall is not undone by reconnect. 8 focused source tests and 30 existing connection regressions passed. An initial installed run exposed a concurrent startup metadata wait gap; three focused source checks passed after correction. The final installed campaign passed 169 tests on the 431-file Nexus wheel, including both existing and newly created project identity startup reviews. Native registration/process effects in the new connection tests are injected. Actual login/logout/crash qualification, Connector initial-review integration and complete productive M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Actual native service update/login/logout/crash/credential/provider campaigns NOT_RUN; POSIX remains unqualified.",
         "General definition reconciliation, Server doctor qualification, historical mixed-version migration failures and productive runtime campaigns remain open.",
-        "Native Task Scheduler has no atomic fingerprint-conditional mutation against external editors; unconfirmed edits remain conflicts. Independently invoked old foreground binaries do not acquire the new protocol fence."
+        "Native Task Scheduler has no atomic fingerprint-conditional mutation against external editors; unconfirmed edits remain conflicts. Independently invoked old foreground binaries do not acquire the new protocol fence.",
+        "Local connect login startup uses injected native/process effects; actual login/logout/crash and Connector wizard integration remain open."
       ],
       "subscopes": {
         "local_saved_context": "VERIFIED",
@@ -797,7 +853,13 @@
         "connector_proxy_reference_resolution": "VERIFIED",
         "reviewed_environment_replacement_hosts": "VERIFIED",
         "interrupted_upgrade_injected_native_effects": "VERIFIED",
-        "actual_native_task_upgrade": "NOT_RUN"
+        "actual_native_task_upgrade": "NOT_RUN",
+        "local_connect_login_review_and_decline": "VERIFIED",
+        "local_connect_host_transition_checkpoint": "VERIFIED",
+        "reconnect_preserves_later_service_disablement": "VERIFIED",
+        "transient_owner_metadata_wait_without_restart": "VERIFIED",
+        "connector_connect_login_review": "NOT_RUN",
+        "actual_login_start_campaign": "NOT_RUN"
       }
     },
     "SVC-07": {
@@ -1335,10 +1397,14 @@
         "../okto-nexus-connector/tests/integration/test_detached_service_lifecycle.py",
         "../okto-nexus-connector/tests/unit/test_user_service_lifecycle.py",
         "docs/service-lifecycle.md",
+        "docs/terminal-connect.md",
         "plans/agent_ops/evidence/pr02-connector-user-service.md",
         "plans/agent_ops/evidence/pr02-enablement.md",
         "plans/agent_ops/evidence/pr02-nexus-service-logs.md",
         "plans/agent_ops/evidence/pr02-nexus-user-service.md",
+        "plans/agent_ops/evidence/pr03-login-start.md",
+        "src/okto_nexus/adapters/inbound/cli/connect.py",
+        "src/okto_nexus/adapters/inbound/cli/connect_login.py",
         "src/okto_nexus/adapters/inbound/cli/serve.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
         "src/okto_nexus/adapters/inbound/cli/supervised_service.py",
@@ -1348,9 +1414,11 @@
         "src/okto_nexus/adapters/outbound/service_manager/inspection.py",
         "src/okto_nexus/adapters/outbound/service_manager/installation.py",
         "src/okto_nexus/adapters/outbound/service_manager/local.py",
+        "src/okto_nexus/adapters/outbound/service_manager/login_start.py",
         "src/okto_nexus/adapters/outbound/service_manager/logs.py",
         "src/okto_nexus/adapters/outbound/service_manager/windows_tasks.py",
         "src/okto_nexus/application/service_lifecycle.py",
+        "tests/execution_r4/test_connect_login_start.py",
         "tests/test_service_inspection.py",
         "tests/test_service_logs.py",
         "tests/test_service_process.py",
@@ -1373,14 +1441,23 @@
         "plans/agent_ops/evidence/pr02-nexus-service-logs.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service-wheel.json",
-        "plans/agent_ops/evidence/pr02-nexus-user-service.xml"
+        "plans/agent_ops/evidence/pr02-nexus-user-service.xml",
+        "plans/agent_ops/evidence/pr03-login-start-existing.xml",
+        "plans/agent_ops/evidence/pr03-login-start-identity.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed-initial.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed.xml",
+        "plans/agent_ops/evidence/pr03-login-start-metadata.xml",
+        "plans/agent_ops/evidence/pr03-login-start-source.xml",
+        "plans/agent_ops/evidence/pr03-login-start-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-login-start-wheels.json"
       ],
-      "result": "Nexus Windows task host integration implemented; isolated host contracts, native validate-only preflight and concurrent real detached process regression passed. See scoped evidence; no registered service qualification. Connector host/launch subscopes now have scoped validation in pr02-connector-user-service.md; full task acceptance remains open. Passive Server logs and final 412-file wheel now verified by 12 log tests and 13 clean-venv tests outside checkout. Selected task enable/disable and retained-intent reconciliation implemented in both hosts; scoped source/installed validation passed.",
+      "result": "Local connect can include user login startup in the same exact project review. The existing installer and lifecycle perform controlled drain, user-task registration or enablement, and supervised start only after canonical setup is committed. A separate durable host checkpoint recovers partial installation before ordinary startup, preserving the original setup ID, binding, grant and model-test result. Unapproved login choices can be declined; later disable/uninstall is not undone by reconnect. 8 focused source tests and 30 existing connection regressions passed. An initial installed run exposed a concurrent startup metadata wait gap; three focused source checks passed after correction. The final installed campaign passed 169 tests on the 431-file Nexus wheel, including both existing and newly created project identity startup reviews. Native registration/process effects in the new connection tests are injected. Actual login/logout/crash qualification, Connector initial-review integration and complete productive M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Actual user-service/login/logout/crash/credential/provider campaigns NOT_RUN; legacy POSIX installers remain unqualified for the R3 instance contract.",
         "Remaining controls and passive diagnostics beyond service logs, general definition reconciliation UX, detached pre-spawn recovery and controlled upgrades remain open.",
-        "Native Task Scheduler has no atomic fingerprint-conditional mutation against external editors; unconfirmed existing tasks are not adopted."
+        "Native Task Scheduler has no atomic fingerprint-conditional mutation against external editors; unconfirmed existing tasks are not adopted.",
+        "Local connect login startup uses injected native/process effects; actual login/logout/crash and Connector wizard integration remain open."
       ],
       "subscopes": {
         "server_wheel_python_payloads": "VERIFIED",
@@ -1389,7 +1466,13 @@
         "connector_clean_venv_detached_lifecycle": "VERIFIED",
         "connector_installed_service_campaign": "NOT_RUN",
         "server_clean_venv_detached_lifecycle_and_logs": "VERIFIED",
-        "coordinated_enablement_wheels_installed": "VERIFIED"
+        "coordinated_enablement_wheels_installed": "VERIFIED",
+        "local_connect_login_review_and_decline": "VERIFIED",
+        "local_connect_host_transition_checkpoint": "VERIFIED",
+        "reconnect_preserves_later_service_disablement": "VERIFIED",
+        "transient_owner_metadata_wait_without_restart": "VERIFIED",
+        "connector_connect_login_review": "NOT_RUN",
+        "actual_login_start_campaign": "NOT_RUN"
       }
     },
     "DX-01": {
@@ -1477,6 +1560,7 @@
         "docs/terminal-connect.md",
         "docs/terminal-operator.md",
         "docs/terminal-work.md",
+        "plans/agent_ops/evidence/pr03-login-start.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
         "plans/agent_ops/evidence/pr03-terminal-binding.md",
@@ -1485,6 +1569,7 @@
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
         "plans/agent_ops/evidence/pr03-terminal-work.md",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
+        "src/okto_nexus/adapters/inbound/cli/connect_login.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/native_input.py",
         "src/okto_nexus/adapters/inbound/cli/operator.py",
@@ -1502,6 +1587,8 @@
         "src/okto_nexus/adapters/inbound/http/runtime_v1.py",
         "src/okto_nexus/adapters/outbound/operator_client.py",
         "src/okto_nexus/adapters/outbound/service_manager/context.py",
+        "src/okto_nexus/adapters/outbound/service_manager/local.py",
+        "src/okto_nexus/adapters/outbound/service_manager/login_start.py",
         "src/okto_nexus/adapters/outbound/terminal_http.py",
         "src/okto_nexus/application/agent_creation.py",
         "src/okto_nexus/application/approvals.py",
@@ -1512,6 +1599,7 @@
         "src/okto_nexus/application/execution_intents.py",
         "src/okto_nexus/application/project_preset.py",
         "src/okto_nexus/application/runtime_access.py",
+        "src/okto_nexus/application/service_lifecycle.py",
         "src/okto_nexus/application/settings.py",
         "src/okto_nexus/application/terminal_authorization.py",
         "src/okto_nexus/application/terminal_binding_approval.py",
@@ -1520,6 +1608,7 @@
         "src/okto_nexus/bootstrap/dependencies.py",
         "src/okto_nexus/config.py",
         "src/okto_nexus/migrations/158_connection_authorization_receipts.sql",
+        "tests/execution_r4/test_connect_login_start.py",
         "tests/execution_r4/test_handoff_notice_migration.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
         "tests/execution_r4/test_terminal_authorization.py",
@@ -1535,6 +1624,14 @@
         "tests/test_terminal_native_input.py"
       ],
       "tests": [
+        "plans/agent_ops/evidence/pr03-login-start-existing.xml",
+        "plans/agent_ops/evidence/pr03-login-start-identity.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed-initial.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed.xml",
+        "plans/agent_ops/evidence/pr03-login-start-metadata.xml",
+        "plans/agent_ops/evidence/pr03-login-start-source.xml",
+        "plans/agent_ops/evidence/pr03-login-start-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-login-start-wheels.json",
         "plans/agent_ops/evidence/pr03-remote-operator-decisions.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
@@ -1567,7 +1664,7 @@
         "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
       ],
-      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open.",
+      "result": "Local connect can include user login startup in the same exact project review. The existing installer and lifecycle perform controlled drain, user-task registration or enablement, and supervised start only after canonical setup is committed. A separate durable host checkpoint recovers partial installation before ordinary startup, preserving the original setup ID, binding, grant and model-test result. Unapproved login choices can be declined; later disable/uninstall is not undone by reconnect. 8 focused source tests and 30 existing connection regressions passed. An initial installed run exposed a concurrent startup metadata wait gap; three focused source checks passed after correction. The final installed campaign passed 169 tests on the 431-file Nexus wheel, including both existing and newly created project identity startup reviews. Native registration/process effects in the new connection tests are injected. Actual login/logout/crash qualification, Connector initial-review integration and complete productive M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
@@ -1576,7 +1673,8 @@
         "Generic message/handoff creation deduplication and wait are not covered by this native-operation subset; service restart and provider session restoration remain unqualified.",
         "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
         "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
-        "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open."
+        "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open.",
+        "Local connect login startup uses injected native/process effects; actual login/logout/crash and Connector wizard integration remain open."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
@@ -1610,7 +1708,13 @@
         "remote_connector_productive_work": "NOT_RUN",
         "remote_operator_proposal_approval": "VERIFIED",
         "connector_pending_intent_resume_after_human_decision": "VERIFIED",
-        "binding_approval_loss_recovery_without_repost": "VERIFIED"
+        "binding_approval_loss_recovery_without_repost": "VERIFIED",
+        "local_connect_login_review_and_decline": "VERIFIED",
+        "local_connect_host_transition_checkpoint": "VERIFIED",
+        "reconnect_preserves_later_service_disablement": "VERIFIED",
+        "transient_owner_metadata_wait_without_restart": "VERIFIED",
+        "connector_connect_login_review": "NOT_RUN",
+        "actual_login_start_campaign": "NOT_RUN"
       }
     },
     "DX-16": {
@@ -1626,12 +1730,14 @@
         "docs/terminal-connect.md",
         "docs/terminal-operator.md",
         "docs/terminal-work.md",
+        "plans/agent_ops/evidence/pr03-login-start.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
         "plans/agent_ops/evidence/pr03-terminal-identity.md",
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
+        "src/okto_nexus/adapters/inbound/cli/connect_login.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/operator.py",
         "src/okto_nexus/adapters/inbound/cli/serve.py",
@@ -1647,6 +1753,8 @@
         "src/okto_nexus/adapters/inbound/http/runtime_v1.py",
         "src/okto_nexus/adapters/outbound/operator_client.py",
         "src/okto_nexus/adapters/outbound/service_manager/context.py",
+        "src/okto_nexus/adapters/outbound/service_manager/local.py",
+        "src/okto_nexus/adapters/outbound/service_manager/login_start.py",
         "src/okto_nexus/adapters/outbound/terminal_http.py",
         "src/okto_nexus/application/agent_creation.py",
         "src/okto_nexus/application/connection_authorization.py",
@@ -1654,12 +1762,14 @@
         "src/okto_nexus/application/connection_test.py",
         "src/okto_nexus/application/project_preset.py",
         "src/okto_nexus/application/runtime_access.py",
+        "src/okto_nexus/application/service_lifecycle.py",
         "src/okto_nexus/application/settings.py",
         "src/okto_nexus/application/terminal_authorization.py",
         "src/okto_nexus/application/terminal_connection.py",
         "src/okto_nexus/application/terminal_work.py",
         "src/okto_nexus/config.py",
         "src/okto_nexus/migrations/158_connection_authorization_receipts.sql",
+        "tests/execution_r4/test_connect_login_start.py",
         "tests/execution_r4/test_handoff_notice_migration.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
         "tests/execution_r4/test_terminal_authorization.py",
@@ -1672,6 +1782,14 @@
         "tests/test_terminal_http.py"
       ],
       "tests": [
+        "plans/agent_ops/evidence/pr03-login-start-existing.xml",
+        "plans/agent_ops/evidence/pr03-login-start-identity.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed-initial.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed.xml",
+        "plans/agent_ops/evidence/pr03-login-start-metadata.xml",
+        "plans/agent_ops/evidence/pr03-login-start-source.xml",
+        "plans/agent_ops/evidence/pr03-login-start-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-login-start-wheels.json",
         "plans/agent_ops/evidence/pr03-remote-operator-decisions.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
@@ -1700,7 +1818,7 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy-source.xml"
       ],
-      "result": "Human operator login/status/logout reuse existing session authentication and a separate protected-vault namespace. Origin and Server identity are pinned; session-only requests cannot fall back to loopback trust or an agent key. Remote connect reuses an existing approved binding; saved topology is selected before local lifecycle resolution, with no local fallback. Canonical work/receipt recovery, grant renewal and native decisions are verified over human-session HTTP with a synthetic embedded peer. 167 installed regression tests and two focused installed boundary cases passed on the same 427-file Nexus wheel. New remote identity/setup, real OS-vault/TLS accessibility and the two-host productive campaign remain open. The shared operator proposal approval is now verified by pr03-terminal-binding; this task remains incomplete.",
+      "result": "Local connect can include user login startup in the same exact project review. The existing installer and lifecycle perform controlled drain, user-task registration or enablement, and supervised start only after canonical setup is committed. A separate durable host checkpoint recovers partial installation before ordinary startup, preserving the original setup ID, binding, grant and model-test result. Unapproved login choices can be declined; later disable/uninstall is not undone by reconnect. 8 focused source tests and 30 existing connection regressions passed. An initial installed run exposed a concurrent startup metadata wait gap; three focused source checks passed after correction. The final installed campaign passed 169 tests on the 431-file Nexus wheel, including both existing and newly created project identity startup reviews. Native registration/process effects in the new connection tests are injected. Actual login/logout/crash qualification, Connector initial-review integration and complete productive M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Local terminal facade is covered by synthetic integration; productive local/remote M1 acceptance remains NOT_RUN.",
@@ -1709,7 +1827,8 @@
         "Reviewed initialization of previously unset native-decision policy is verified with a synthetic native peer. Explicit disabled policy and ambiguous legacy sources remain preserved; local terminal grant renewal is now verified with synthetic peers; remote renewal and real provider qualification remain open.",
         "Human operator-session CLI authentication and existing-binding reuse are verified with a synthetic peer. Unified remote Connector setup, participant init, start-at-login review, preset evolution and dashboard introduction remain open.",
         "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
-        "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified."
+        "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
+        "Local connect login startup uses injected native/process effects; actual login/logout/crash and Connector wizard integration remain open."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
@@ -1736,7 +1855,13 @@
         "operator_origin_pin_and_isolated_vault_namespace": "VERIFIED",
         "real_os_vault_and_tls_accessibility": "NOT_RUN",
         "remote_connector_productive_work": "NOT_RUN",
-        "remote_operator_proposal_approval": "VERIFIED"
+        "remote_operator_proposal_approval": "VERIFIED",
+        "local_connect_login_review_and_decline": "VERIFIED",
+        "local_connect_host_transition_checkpoint": "VERIFIED",
+        "reconnect_preserves_later_service_disablement": "VERIFIED",
+        "transient_owner_metadata_wait_without_restart": "VERIFIED",
+        "connector_connect_login_review": "NOT_RUN",
+        "actual_login_start_campaign": "NOT_RUN"
       }
     },
     "DX-17": {
@@ -1760,6 +1885,7 @@
         "docs/terminal-connect.md",
         "docs/terminal-operator.md",
         "docs/terminal-work.md",
+        "plans/agent_ops/evidence/pr03-login-start.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
         "plans/agent_ops/evidence/pr03-setup-recovery.md",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
@@ -1769,6 +1895,7 @@
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
         "plans/agent_ops/evidence/pr03-terminal-work.md",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
+        "src/okto_nexus/adapters/inbound/cli/connect_login.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/native_input.py",
         "src/okto_nexus/adapters/inbound/cli/operator.py",
@@ -1786,6 +1913,8 @@
         "src/okto_nexus/adapters/inbound/http/runtime_v1.py",
         "src/okto_nexus/adapters/outbound/operator_client.py",
         "src/okto_nexus/adapters/outbound/service_manager/context.py",
+        "src/okto_nexus/adapters/outbound/service_manager/local.py",
+        "src/okto_nexus/adapters/outbound/service_manager/login_start.py",
         "src/okto_nexus/adapters/outbound/terminal_http.py",
         "src/okto_nexus/application/agent_creation.py",
         "src/okto_nexus/application/approvals.py",
@@ -1796,6 +1925,7 @@
         "src/okto_nexus/application/execution_intents.py",
         "src/okto_nexus/application/project_preset.py",
         "src/okto_nexus/application/runtime_access.py",
+        "src/okto_nexus/application/service_lifecycle.py",
         "src/okto_nexus/application/settings.py",
         "src/okto_nexus/application/terminal_authorization.py",
         "src/okto_nexus/application/terminal_binding_approval.py",
@@ -1804,6 +1934,7 @@
         "src/okto_nexus/bootstrap/dependencies.py",
         "src/okto_nexus/config.py",
         "src/okto_nexus/migrations/158_connection_authorization_receipts.sql",
+        "tests/execution_r4/test_connect_login_start.py",
         "tests/execution_r4/test_connection_setup_recovery.py",
         "tests/execution_r4/test_handoff_notice_migration.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
@@ -1820,6 +1951,14 @@
         "tests/test_terminal_native_input.py"
       ],
       "tests": [
+        "plans/agent_ops/evidence/pr03-login-start-existing.xml",
+        "plans/agent_ops/evidence/pr03-login-start-identity.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed-initial.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed.xml",
+        "plans/agent_ops/evidence/pr03-login-start-metadata.xml",
+        "plans/agent_ops/evidence/pr03-login-start-source.xml",
+        "plans/agent_ops/evidence/pr03-login-start-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-login-start-wheels.json",
         "plans/agent_ops/evidence/pr03-remote-operator-decisions.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
@@ -1855,7 +1994,7 @@
         "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
       ],
-      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open.",
+      "result": "Local connect can include user login startup in the same exact project review. The existing installer and lifecycle perform controlled drain, user-task registration or enablement, and supervised start only after canonical setup is committed. A separate durable host checkpoint recovers partial installation before ordinary startup, preserving the original setup ID, binding, grant and model-test result. Unapproved login choices can be declined; later disable/uninstall is not undone by reconnect. 8 focused source tests and 30 existing connection regressions passed. An initial installed run exposed a concurrent startup metadata wait gap; three focused source checks passed after correction. The final installed campaign passed 169 tests on the 431-file Nexus wheel, including both existing and newly created project identity startup reviews. Native registration/process effects in the new connection tests are injected. Actual login/logout/crash qualification, Connector initial-review integration and complete productive M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
@@ -1864,7 +2003,8 @@
         "Generic message/handoff creation deduplication and wait are not covered by this native-operation subset; service restart and provider session restoration remain unqualified.",
         "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
         "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
-        "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open."
+        "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open.",
+        "Local connect login startup uses injected native/process effects; actual login/logout/crash and Connector wizard integration remain open."
       ],
       "subscopes": {
         "canonical_finish_receipt_recovery": "VERIFIED",
@@ -1901,7 +2041,13 @@
         "remote_connector_productive_work": "NOT_RUN",
         "remote_operator_proposal_approval": "VERIFIED",
         "connector_pending_intent_resume_after_human_decision": "VERIFIED",
-        "binding_approval_loss_recovery_without_repost": "VERIFIED"
+        "binding_approval_loss_recovery_without_repost": "VERIFIED",
+        "local_connect_login_review_and_decline": "VERIFIED",
+        "local_connect_host_transition_checkpoint": "VERIFIED",
+        "reconnect_preserves_later_service_disablement": "VERIFIED",
+        "transient_owner_metadata_wait_without_restart": "VERIFIED",
+        "connector_connect_login_review": "NOT_RUN",
+        "actual_login_start_campaign": "NOT_RUN"
       }
     },
     "DX-05": {
@@ -2539,6 +2685,7 @@
         "docs/terminal-connect.md",
         "docs/terminal-operator.md",
         "docs/terminal-work.md",
+        "plans/agent_ops/evidence/pr03-login-start.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
         "plans/agent_ops/evidence/pr03-setup-recovery.md",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
@@ -2547,6 +2694,7 @@
         "plans/agent_ops/evidence/pr03-terminal-identity.md",
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
+        "src/okto_nexus/adapters/inbound/cli/connect_login.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/operator.py",
         "src/okto_nexus/adapters/inbound/cli/operator_approval.py",
@@ -2563,6 +2711,8 @@
         "src/okto_nexus/adapters/inbound/http/runtime_v1.py",
         "src/okto_nexus/adapters/outbound/operator_client.py",
         "src/okto_nexus/adapters/outbound/service_manager/context.py",
+        "src/okto_nexus/adapters/outbound/service_manager/local.py",
+        "src/okto_nexus/adapters/outbound/service_manager/login_start.py",
         "src/okto_nexus/adapters/outbound/terminal_http.py",
         "src/okto_nexus/application/agent_creation.py",
         "src/okto_nexus/application/approvals.py",
@@ -2572,6 +2722,7 @@
         "src/okto_nexus/application/execution_binding_approvals.py",
         "src/okto_nexus/application/project_preset.py",
         "src/okto_nexus/application/runtime_access.py",
+        "src/okto_nexus/application/service_lifecycle.py",
         "src/okto_nexus/application/settings.py",
         "src/okto_nexus/application/terminal_authorization.py",
         "src/okto_nexus/application/terminal_binding_approval.py",
@@ -2580,6 +2731,7 @@
         "src/okto_nexus/bootstrap/dependencies.py",
         "src/okto_nexus/config.py",
         "src/okto_nexus/migrations/158_connection_authorization_receipts.sql",
+        "tests/execution_r4/test_connect_login_start.py",
         "tests/execution_r4/test_connection_setup_recovery.py",
         "tests/execution_r4/test_handoff_notice_migration.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
@@ -2594,6 +2746,14 @@
         "tests/test_terminal_http.py"
       ],
       "tests": [
+        "plans/agent_ops/evidence/pr03-login-start-existing.xml",
+        "plans/agent_ops/evidence/pr03-login-start-identity.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed-initial.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed.xml",
+        "plans/agent_ops/evidence/pr03-login-start-metadata.xml",
+        "plans/agent_ops/evidence/pr03-login-start-source.xml",
+        "plans/agent_ops/evidence/pr03-login-start-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-login-start-wheels.json",
         "plans/agent_ops/evidence/pr03-remote-operator-decisions.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
@@ -2624,7 +2784,7 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy-source.xml"
       ],
-      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open.",
+      "result": "Local connect can include user login startup in the same exact project review. The existing installer and lifecycle perform controlled drain, user-task registration or enablement, and supervised start only after canonical setup is committed. A separate durable host checkpoint recovers partial installation before ordinary startup, preserving the original setup ID, binding, grant and model-test result. Unapproved login choices can be declined; later disable/uninstall is not undone by reconnect. 8 focused source tests and 30 existing connection regressions passed. An initial installed run exposed a concurrent startup metadata wait gap; three focused source checks passed after correction. The final installed campaign passed 169 tests on the 431-file Nexus wheel, including both existing and newly created project identity startup reviews. Native registration/process effects in the new connection tests are injected. Actual login/logout/crash qualification, Connector initial-review integration and complete productive M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Local terminal facade is covered by synthetic integration; productive local/remote M1 acceptance remains NOT_RUN.",
@@ -2634,7 +2794,8 @@
         "Human operator-session CLI authentication and existing-binding reuse are verified with a synthetic peer. Unified remote Connector setup, participant init, start-at-login review, preset evolution and dashboard introduction remain open.",
         "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
         "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
-        "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open."
+        "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open.",
+        "Local connect login startup uses injected native/process effects; actual login/logout/crash and Connector wizard integration remain open."
       ],
       "subscopes": {
         "canonical_finish_receipt_recovery": "VERIFIED",
@@ -2666,7 +2827,13 @@
         "remote_connector_productive_work": "NOT_RUN",
         "remote_operator_proposal_approval": "VERIFIED",
         "connector_pending_intent_resume_after_human_decision": "VERIFIED",
-        "binding_approval_loss_recovery_without_repost": "VERIFIED"
+        "binding_approval_loss_recovery_without_repost": "VERIFIED",
+        "local_connect_login_review_and_decline": "VERIFIED",
+        "local_connect_host_transition_checkpoint": "VERIFIED",
+        "reconnect_preserves_later_service_disablement": "VERIFIED",
+        "transient_owner_metadata_wait_without_restart": "VERIFIED",
+        "connector_connect_login_review": "NOT_RUN",
+        "actual_login_start_campaign": "NOT_RUN"
       }
     },
     "DX-20": {
@@ -2813,12 +2980,14 @@
         "docs/terminal-connect.md",
         "docs/terminal-operator.md",
         "docs/terminal-work.md",
+        "plans/agent_ops/evidence/pr03-login-start.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
         "plans/agent_ops/evidence/pr03-terminal-identity.md",
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
+        "src/okto_nexus/adapters/inbound/cli/connect_login.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/operator.py",
         "src/okto_nexus/adapters/inbound/cli/serve.py",
@@ -2834,6 +3003,8 @@
         "src/okto_nexus/adapters/inbound/http/runtime_v1.py",
         "src/okto_nexus/adapters/outbound/operator_client.py",
         "src/okto_nexus/adapters/outbound/service_manager/context.py",
+        "src/okto_nexus/adapters/outbound/service_manager/local.py",
+        "src/okto_nexus/adapters/outbound/service_manager/login_start.py",
         "src/okto_nexus/adapters/outbound/terminal_http.py",
         "src/okto_nexus/application/agent_creation.py",
         "src/okto_nexus/application/connection_authorization.py",
@@ -2841,12 +3012,14 @@
         "src/okto_nexus/application/connection_test.py",
         "src/okto_nexus/application/project_preset.py",
         "src/okto_nexus/application/runtime_access.py",
+        "src/okto_nexus/application/service_lifecycle.py",
         "src/okto_nexus/application/settings.py",
         "src/okto_nexus/application/terminal_authorization.py",
         "src/okto_nexus/application/terminal_connection.py",
         "src/okto_nexus/application/terminal_work.py",
         "src/okto_nexus/config.py",
         "src/okto_nexus/migrations/158_connection_authorization_receipts.sql",
+        "tests/execution_r4/test_connect_login_start.py",
         "tests/execution_r4/test_handoff_notice_migration.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
         "tests/execution_r4/test_terminal_authorization.py",
@@ -2859,6 +3032,14 @@
         "tests/test_terminal_http.py"
       ],
       "tests": [
+        "plans/agent_ops/evidence/pr03-login-start-existing.xml",
+        "plans/agent_ops/evidence/pr03-login-start-identity.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed-initial.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed.xml",
+        "plans/agent_ops/evidence/pr03-login-start-metadata.xml",
+        "plans/agent_ops/evidence/pr03-login-start-source.xml",
+        "plans/agent_ops/evidence/pr03-login-start-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-login-start-wheels.json",
         "plans/agent_ops/evidence/pr03-remote-operator-decisions.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
@@ -2887,7 +3068,7 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy-source.xml"
       ],
-      "result": "Human operator login/status/logout reuse existing session authentication and a separate protected-vault namespace. Origin and Server identity are pinned; session-only requests cannot fall back to loopback trust or an agent key. Remote connect reuses an existing approved binding; saved topology is selected before local lifecycle resolution, with no local fallback. Canonical work/receipt recovery, grant renewal and native decisions are verified over human-session HTTP with a synthetic embedded peer. 167 installed regression tests and two focused installed boundary cases passed on the same 427-file Nexus wheel. New remote identity/setup, real OS-vault/TLS accessibility and the two-host productive campaign remain open. The shared operator proposal approval is now verified by pr03-terminal-binding; this task remains incomplete.",
+      "result": "Local connect can include user login startup in the same exact project review. The existing installer and lifecycle perform controlled drain, user-task registration or enablement, and supervised start only after canonical setup is committed. A separate durable host checkpoint recovers partial installation before ordinary startup, preserving the original setup ID, binding, grant and model-test result. Unapproved login choices can be declined; later disable/uninstall is not undone by reconnect. 8 focused source tests and 30 existing connection regressions passed. An initial installed run exposed a concurrent startup metadata wait gap; three focused source checks passed after correction. The final installed campaign passed 169 tests on the 431-file Nexus wheel, including both existing and newly created project identity startup reviews. Native registration/process effects in the new connection tests are injected. Actual login/logout/crash qualification, Connector initial-review integration and complete productive M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Local terminal facade is covered by synthetic integration; productive local/remote M1 acceptance remains NOT_RUN.",
@@ -2896,7 +3077,8 @@
         "Reviewed initialization of previously unset native-decision policy is verified with a synthetic native peer. Explicit disabled policy and ambiguous legacy sources remain preserved; local terminal grant renewal is now verified with synthetic peers; remote renewal and real provider qualification remain open.",
         "Human operator-session CLI authentication and existing-binding reuse are verified with a synthetic peer. Unified remote Connector setup, participant init, start-at-login review, preset evolution and dashboard introduction remain open.",
         "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
-        "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified."
+        "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
+        "Local connect login startup uses injected native/process effects; actual login/logout/crash and Connector wizard integration remain open."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
@@ -2923,7 +3105,13 @@
         "operator_origin_pin_and_isolated_vault_namespace": "VERIFIED",
         "real_os_vault_and_tls_accessibility": "NOT_RUN",
         "remote_connector_productive_work": "NOT_RUN",
-        "remote_operator_proposal_approval": "VERIFIED"
+        "remote_operator_proposal_approval": "VERIFIED",
+        "local_connect_login_review_and_decline": "VERIFIED",
+        "local_connect_host_transition_checkpoint": "VERIFIED",
+        "reconnect_preserves_later_service_disablement": "VERIFIED",
+        "transient_owner_metadata_wait_without_restart": "VERIFIED",
+        "connector_connect_login_review": "NOT_RUN",
+        "actual_login_start_campaign": "NOT_RUN"
       }
     },
     "ATN-01": {
@@ -3280,11 +3468,21 @@
         "plans/agent_ops/evidence/pr02-launch-recovery-nexus-final.xml",
         "plans/agent_ops/evidence/pr02-launch-recovery-nexus.xml",
         "plans/agent_ops/evidence/pr02-launch-recovery-wheels.json",
-        "plans/agent_ops/evidence/pr02-launch-recovery.md"
+        "plans/agent_ops/evidence/pr02-launch-recovery.md",
+        "plans/agent_ops/evidence/pr03-login-start-existing.xml",
+        "plans/agent_ops/evidence/pr03-login-start-identity.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed-initial.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed.xml",
+        "plans/agent_ops/evidence/pr03-login-start-metadata.xml",
+        "plans/agent_ops/evidence/pr03-login-start-source.xml",
+        "plans/agent_ops/evidence/pr03-login-start-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-login-start-wheels.json",
+        "plans/agent_ops/evidence/pr03-login-start.md"
       ],
       "subscopes": {
         "pending_launch_recovery_installed_hosts": "VERIFIED"
-      }
+      },
+      "result": "Local connect can include user login startup in the same exact project review. The existing installer and lifecycle perform controlled drain, user-task registration or enablement, and supervised start only after canonical setup is committed. A separate durable host checkpoint recovers partial installation before ordinary startup, preserving the original setup ID, binding, grant and model-test result. Unapproved login choices can be declined; later disable/uninstall is not undone by reconnect. 8 focused source tests and 30 existing connection regressions passed. An initial installed run exposed a concurrent startup metadata wait gap; three focused source checks passed after correction. The final installed campaign passed 169 tests on the 431-file Nexus wheel, including both existing and newly created project identity startup reviews. Native registration/process effects in the new connection tests are injected. Actual login/logout/crash qualification, Connector initial-review integration and complete productive M1 remain open."
     },
     "SVC-T04": {
       "requirement": "Perfis que apontam ao mesmo diretÃ³rio canÃ´nico compartilham exclusÃ£o mÃºtua; instÃ¢ncias diferentes ficam isoladas.",
@@ -3699,6 +3897,15 @@
       "requirement": "Caminho normal gerenciado termina no terminal, com browser opcional e setup transacional reutilizado.",
       "status": "IN_PROGRESS",
       "evidence": [
+        "plans/agent_ops/evidence/pr03-login-start-existing.xml",
+        "plans/agent_ops/evidence/pr03-login-start-identity.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed-initial.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed.xml",
+        "plans/agent_ops/evidence/pr03-login-start-metadata.xml",
+        "plans/agent_ops/evidence/pr03-login-start-source.xml",
+        "plans/agent_ops/evidence/pr03-login-start-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-login-start-wheels.json",
+        "plans/agent_ops/evidence/pr03-login-start.md",
         "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
@@ -3706,7 +3913,7 @@
         "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-work.md"
       ],
-      "result": "The project review initializes Server-wide native-decision/HITL policy only when unset. Canonical Finish commits the setting with its existing receipt; recovery refreshes current stored policy without regranting or re-enabling later revocations. Explicit CLI/env default values remain pinned; service contexts preserve provenance and legacy stored-override behavior. 267 tests passed on coordinated installed wheels, including new/legacy real service restart and synthetic native decision delivery. Grant renewal and real productive local/Connector M1 acceptance remain open. Full real-provider scenario acceptance is not established."
+      "result": "Local connect can include user login startup in the same exact project review. The existing installer and lifecycle perform controlled drain, user-task registration or enablement, and supervised start only after canonical setup is committed. A separate durable host checkpoint recovers partial installation before ordinary startup, preserving the original setup ID, binding, grant and model-test result. Unapproved login choices can be declined; later disable/uninstall is not undone by reconnect. 8 focused source tests and 30 existing connection regressions passed. An initial installed run exposed a concurrent startup metadata wait gap; three focused source checks passed after correction. The final installed campaign passed 169 tests on the 431-file Nexus wheel, including both existing and newly created project identity startup reviews. Native registration/process effects in the new connection tests are injected. Actual login/logout/crash qualification, Connector initial-review integration and complete productive M1 remain open."
     },
     "DX-T32": {
       "requirement": "AprovaÃ§Ã£o remota pendente preserva ID e identidade do decisor; terminal participante nÃ£o a aprova por assentimento local.",
@@ -3725,6 +3932,15 @@
       "requirement": "connect reutilizado apÃ³s resposta perdida retoma o mesmo setup sem novo agente, binding ou grant.",
       "status": "IN_PROGRESS",
       "evidence": [
+        "plans/agent_ops/evidence/pr03-login-start-existing.xml",
+        "plans/agent_ops/evidence/pr03-login-start-identity.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed-initial.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed.xml",
+        "plans/agent_ops/evidence/pr03-login-start-metadata.xml",
+        "plans/agent_ops/evidence/pr03-login-start-source.xml",
+        "plans/agent_ops/evidence/pr03-login-start-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-login-start-wheels.json",
+        "plans/agent_ops/evidence/pr03-login-start.md",
         "plans/agent_ops/evidence/pr03-setup-recovery-installed.xml",
         "plans/agent_ops/evidence/pr03-setup-recovery.md",
         "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
@@ -3735,7 +3951,7 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy.md"
       ],
-      "result": "The project review initializes Server-wide native-decision/HITL policy only when unset. Canonical Finish commits the setting with its existing receipt; recovery refreshes current stored policy without regranting or re-enabling later revocations. Explicit CLI/env default values remain pinned; service contexts preserve provenance and legacy stored-override behavior. 267 tests passed on coordinated installed wheels, including new/legacy real service restart and synthetic native decision delivery. Grant renewal and real productive local/Connector M1 acceptance remain open. Full real-provider scenario acceptance is not established."
+      "result": "Local connect can include user login startup in the same exact project review. The existing installer and lifecycle perform controlled drain, user-task registration or enablement, and supervised start only after canonical setup is committed. A separate durable host checkpoint recovers partial installation before ordinary startup, preserving the original setup ID, binding, grant and model-test result. Unapproved login choices can be declined; later disable/uninstall is not undone by reconnect. 8 focused source tests and 30 existing connection regressions passed. An initial installed run exposed a concurrent startup metadata wait gap; three focused source checks passed after correction. The final installed campaign passed 169 tests on the 431-file Nexus wheel, including both existing and newly created project identity startup reviews. Native registration/process effects in the new connection tests are injected. Actual login/logout/crash qualification, Connector initial-review integration and complete productive M1 remain open."
     },
     "DX-T34": {
       "requirement": "Login de provedor ausente produz instruÃ§Ã£o concreta e nÃ£o deixa daemon bloqueado em prompt invisÃ­vel.",
@@ -3766,8 +3982,19 @@
     },
     "DX-T37": {
       "requirement": "InÃ­cio no login pode ser escolhido na revisÃ£o inicial; recusar essa opÃ§Ã£o mantÃ©m o uso sob demanda funcional.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-login-start-existing.xml",
+        "plans/agent_ops/evidence/pr03-login-start-identity.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed-initial.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed.xml",
+        "plans/agent_ops/evidence/pr03-login-start-metadata.xml",
+        "plans/agent_ops/evidence/pr03-login-start-source.xml",
+        "plans/agent_ops/evidence/pr03-login-start-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-login-start-wheels.json",
+        "plans/agent_ops/evidence/pr03-login-start.md"
+      ],
+      "result": "Local connect can include user login startup in the same exact project review. The existing installer and lifecycle perform controlled drain, user-task registration or enablement, and supervised start only after canonical setup is committed. A separate durable host checkpoint recovers partial installation before ordinary startup, preserving the original setup ID, binding, grant and model-test result. Unapproved login choices can be declined; later disable/uninstall is not undone by reconnect. 8 focused source tests and 30 existing connection regressions passed. An initial installed run exposed a concurrent startup metadata wait gap; three focused source checks passed after correction. The final installed campaign passed 169 tests on the 431-file Nexus wheel, including both existing and newly created project identity startup reviews. Native registration/process effects in the new connection tests are injected. Actual login/logout/crash qualification, Connector initial-review integration and complete productive M1 remain open."
     },
     "DX-T38": {
       "requirement": "InstalaÃ§Ã£o nova com harness/provedor prontos propÃµe identidade, workspace e perfil Ãºteis no mesmo resumo; aceitar os efeitos cria apenas os objetos autorizados e nÃ£o exige definir persona ou visitar o painel.",
@@ -4671,6 +4898,22 @@
         "plans/agent_ops/evidence/pr03-terminal-binding-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json",
         "plans/agent_ops/evidence/pr03-terminal-binding-wheels-initial.json"
+      ]
+    },
+    {
+      "date": "2026-11-05",
+      "scope": "PR-03 local connect login-start review",
+      "result": "Local connect can include user login startup in the same exact project review. The existing installer and lifecycle perform controlled drain, user-task registration or enablement, and supervised start only after canonical setup is committed. A separate durable host checkpoint recovers partial installation before ordinary startup, preserving the original setup ID, binding, grant and model-test result. Unapproved login choices can be declined; later disable/uninstall is not undone by reconnect. 8 focused source tests and 30 existing connection regressions passed. An initial installed run exposed a concurrent startup metadata wait gap; three focused source checks passed after correction. The final installed campaign passed 169 tests on the 431-file Nexus wheel, including both existing and newly created project identity startup reviews. Native registration/process effects in the new connection tests are injected. Actual login/logout/crash qualification, Connector initial-review integration and complete productive M1 remain open.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-login-start.md",
+        "plans/agent_ops/evidence/pr03-login-start-existing.xml",
+        "plans/agent_ops/evidence/pr03-login-start-source.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed.xml",
+        "plans/agent_ops/evidence/pr03-login-start-installed-initial.xml",
+        "plans/agent_ops/evidence/pr03-login-start-identity.xml",
+        "plans/agent_ops/evidence/pr03-login-start-metadata.xml",
+        "plans/agent_ops/evidence/pr03-login-start-wheels.json",
+        "plans/agent_ops/evidence/pr03-login-start-wheels-initial.json"
       ]
     }
   ]
