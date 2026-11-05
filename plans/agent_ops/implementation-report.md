@@ -38,3 +38,28 @@ Current limitations: baseline map and suites remain incomplete; no new product f
 native provider campaign, service-manager campaign or browser acceptance is
 claimed. Rollback of this preparation is a source-level version revert; there
 has been no production data migration or personal configuration change.
+
+## PR-00 — baseline and contracts delivered
+
+`baseline.md` maps current lifecycle, supervision, authorization, native
+interaction, setup/Finish, message/inbox/outbox, handoff claims and MCP rendering.
+`adr.md` records orthogonal dimensions, canonical truth, observation without
+authority, participant/runtime configuration separation and instance/supervisor
+ownership. Source evolution from all three original SHAs is recorded.
+
+Corrected the missing inventory Core version constant after the wider suite
+exposed it; a runtime/distribution pin test prevents this mismatch. Onboarding
+uses its current origin and Bearer-header guidance. Managed MCP-only policy is
+distinguished from adding a participant. Historical stdio/CI/auth instructions
+were reconciled. Existing frontend tests now have an npm command and CI step.
+
+Validation: 216 baseline tests passed plus production frontend build. See
+`evidence/pr00-validation.md` for exact scopes, prior failures, commands and
+limits. Empty-home foreground HTTP liveness was 7.811s with canonical `DRAINED`
+shutdown; this is not harness readiness. No schema/protocol migration occurred.
+
+BASE-06's real provider first-use timing is pending authorization/environment;
+it is not replaced by HTTP timing. PR-00's implementation map is delivered,
+while its campaign subacceptance remains open. Next dependency is PR-01.
+Rollback: revert the documentation/UI guidance while keeping coordinated
+package/inventory pins; no production database downgrade is involved.

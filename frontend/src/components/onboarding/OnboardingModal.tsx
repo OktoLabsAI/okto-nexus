@@ -31,10 +31,9 @@ function reducer(state: SlideState, event: SlideEvent): SlideState {
 const TITLE_ID = "onboarding-slide-title";
 
 function mcpUrlPlaceholder(): string {
-  const host = typeof location !== "undefined" ? location.hostname : "127.0.0.1";
-  const port =
-    typeof location !== "undefined" && location.port ? location.port : "8202";
-  return `http://${host}:${port}/mcp?api_key=nxs_…`;
+  const origin = typeof location !== "undefined"
+    ? location.origin : "http://127.0.0.1:8202";
+  return new URL("/mcp", origin).toString();
 }
 
 export function OnboardingModal({ onClose }: { onClose: () => void }) {
@@ -299,8 +298,8 @@ function ConnectSlide() {
       <p className="text-[13.5px] leading-snug text-surface-500 dark:text-surface-400 mb-4">
         From the Agents tab, copy the agent's{" "}
         <span className="font-mono text-accent-600 dark:text-accent-400">MCP config</span>{" "}
-        URL and paste it into your assistant. The key in the URL is the agent's
-        identity on every call.
+        settings for your assistant. Use the approved server address and send
+        the agent key in the Authorization: Bearer header, never in the URL.
       </p>
       <div className="font-mono flex items-center gap-3 px-3.5 py-3 mb-4 rounded-xl border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-900">
         <code className="text-[12px] text-accent-600 dark:text-accent-400 truncate min-w-0">

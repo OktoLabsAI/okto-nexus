@@ -13,7 +13,7 @@ def main() -> None:
     ledger = json.loads((ROOT / 'plans/agent_ops/ledger.json').read_text(encoding='utf-8'))
     plan = ROOT / ledger['plan']
     source = plan.read_text(encoding='utf-8')
-    assert hashlib.sha256(plan.read_bytes()).hexdigest() == ledger['plan_sha256'], 'Plan changed; reconcile explicitly'
+    assert hashlib.sha256(source.encode('utf-8')).hexdigest() == ledger['plan_sha256'], 'Plan changed; reconcile explicitly'
     expected = {
         'tasks': set(re.findall(r'^\*\*((?:BASE|SVC|DX|ATN|OBS)-\d+) ', source, re.M)),
         'scenarios': set(re.findall(r'^\| ((?:SVC-T|DX-T|AT-|OB-|RG-)\d+) \|', source, re.M)),

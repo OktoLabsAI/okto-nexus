@@ -12,7 +12,8 @@
       "previous_head": "d881266f34012ae3a31a1c948fea7967ede6ec07",
       "version_before": "0.3.2",
       "version": "0.3.3",
-      "branch": "feature/v0.3.3"
+      "branch": "feature/v0.3.3",
+      "preparation_commit": "ff6ee26"
     },
     "core": {
       "baseline_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
@@ -33,9 +34,13 @@
   },
   "milestones": {
     "PR-00": {
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "dependencies": [],
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/baseline.md",
+        "plans/agent_ops/adr.md",
+        "plans/agent_ops/evidence/pr00-validation.md"
+      ]
     },
     "PR-01": {
       "status": "NOT_STARTED",
@@ -120,57 +125,81 @@
   "tasks": {
     "BASE-01": {
       "title": "registrar baseline",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "milestones": [
         "PR-00"
       ],
       "dependencies": [],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
+      "files": [
+        "plans/agent_ops/baseline.md",
+        "plans/agent_ops/adr.md",
+        "plans/agent_ops/evidence/pr00-validation.md"
+      ],
+      "tests": [
+        "Scope-specific code review and commands recorded in plans/agent_ops/evidence/pr00-validation.md"
+      ],
+      "result": "Inventory, canonical paths and design reconciled with current main; see scoped evidence, no provider qualification claimed.",
+      "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [],
       "subscopes": {}
     },
     "BASE-02": {
       "title": "rastrear caminhos",
-      "status": "NOT_STARTED",
+      "status": "VERIFIED",
       "milestones": [
         "PR-00"
       ],
       "dependencies": [],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
+      "files": [
+        "plans/agent_ops/baseline.md",
+        "plans/agent_ops/adr.md",
+        "plans/agent_ops/evidence/pr00-validation.md"
+      ],
+      "tests": [
+        "Scope-specific code review and commands recorded in plans/agent_ops/evidence/pr00-validation.md"
+      ],
+      "result": "Inventory, canonical paths and design reconciled with current main; see scoped evidence, no provider qualification claimed.",
+      "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [],
       "subscopes": {}
     },
     "BASE-03": {
       "title": "separar documentação vigente e legado",
-      "status": "NOT_STARTED",
+      "status": "VERIFIED",
       "milestones": [
         "PR-00"
       ],
       "dependencies": [],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
+      "files": [
+        "plans/agent_ops/baseline.md",
+        "plans/agent_ops/adr.md",
+        "plans/agent_ops/evidence/pr00-validation.md"
+      ],
+      "tests": [
+        "Scope-specific code review and commands recorded in plans/agent_ops/evidence/pr00-validation.md"
+      ],
+      "result": "Inventory, canonical paths and design reconciled with current main; see scoped evidence, no provider qualification claimed.",
+      "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [],
       "subscopes": {}
     },
     "BASE-04": {
       "title": "criar ADR curto",
-      "status": "NOT_STARTED",
+      "status": "VERIFIED",
       "milestones": [
         "PR-00"
       ],
       "dependencies": [],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
+      "files": [
+        "plans/agent_ops/baseline.md",
+        "plans/agent_ops/adr.md",
+        "plans/agent_ops/evidence/pr00-validation.md"
+      ],
+      "tests": [
+        "Scope-specific code review and commands recorded in plans/agent_ops/evidence/pr00-validation.md"
+      ],
+      "result": "Inventory, canonical paths and design reconciled with current main; see scoped evidence, no provider qualification claimed.",
+      "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [],
       "subscopes": {}
     },
@@ -195,17 +224,28 @@
     },
     "BASE-06": {
       "title": "lifecycle e primeiro uso reais",
-      "status": "NOT_STARTED",
+      "status": "IMPLEMENTED",
       "milestones": [
         "PR-00"
       ],
       "dependencies": [],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "plans/agent_ops/baseline.md",
+        "plans/agent_ops/evidence/baseline-startup.json"
+      ],
+      "tests": [
+        "rtk proxy .venv/Scripts/python.exe scripts/measure_agent_ops_baseline.py"
+      ],
+      "result": "Current lifecycle map, Windows/Codex first target and disposable foreground timing recorded.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "Real first useful provider session/result timing NOT_RUN; needs authorized provider campaign."
+      ],
+      "subscopes": {
+        "inventory": "VERIFIED",
+        "foreground_liveness_measurement": "VERIFIED",
+        "provider_first_use_measurement": "NOT_RUN"
+      }
     },
     "SVC-01": {
       "title": "fachada de lifecycle",
@@ -2020,6 +2060,14 @@
         "plans/agent_ops/evidence/preparation-core.xml",
         "plans/agent_ops/evidence/preparation-connector.xml",
         "plans/agent_ops/evidence/preparation-packaging.xml"
+      ]
+    },
+    {
+      "date": "2026-11-05",
+      "scope": "PR-00",
+      "result": "Baseline/ADR delivered; 216 tests passed; UI guidance and runtime pin corrected. BASE-06 real-provider measurement pending.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr00-validation.md"
       ]
     }
   ]

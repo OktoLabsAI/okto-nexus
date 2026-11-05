@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testcase name="remote policy removes previously selected local binding without losing concurrency guards" time="0.005606" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\connectionConfiguration.test.mjs"/>
+	<testcase name="listing follows all pages and retains uncertain sessions until durable release" time="0.005192" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\connectionSessions.test.mjs"/>
+	<testcase name="lost close response retries the same operation; a released session is not closed again" time="0.012901" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\connectionSessions.test.mjs"/>
+	<testcase name="closing refuses changed scope and rechecks a blocked review only on a later attempt" time="0.001081" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\connectionSessions.test.mjs"/>
+	<testcase name="no format puts the key in the URL" time="0.002478" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\mcpSnippet.test.mjs"/>
+	<testcase name="the claude command sends the key in a Bearer header" time="0.000439" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\mcpSnippet.test.mjs"/>
+	<testcase name="the codex command reads the key from OKTO_NEXUS_API_KEY" time="0.000361" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\mcpSnippet.test.mjs"/>
+	<testcase name="JSON formats carry the Bearer header next to the URL" time="0.002318" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\mcpSnippet.test.mjs"/>
+	<testcase name="newItems skips messages that the toast logic already reported" time="0.024623" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\operatorUnread.test.mjs"/>
+	<testcase name="isNewForOperator needs an unread delivery to the operator" time="0.000590" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\operatorUnread.test.mjs"/>
+	<testcase name="isNewForOperator ignores deliveries at or before the seen marker" time="0.000344" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\operatorUnread.test.mjs"/>
+	<testcase name="toastText prefers the subject, then the preview" time="0.000376" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\operatorUnread.test.mjs"/>
+	<testcase name="tail validates exact cursor, session, executor and epoch before displaying events" time="0.002646" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\runtimeEvents.test.mjs"/>
+	<testcase name="tail retains loaded scrollback and does not duplicate events on refresh" time="0.000761" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\runtimeEvents.test.mjs"/>
+	<testcase name="scrollback merges overlapping earlier pages without losing concurrent live events" time="0.003331" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\runtimeEvents.test.mjs"/>
+	<testcase name="Codex joins streaming text and snapshots and pairs independent tool calls" time="0.009648" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\runtimePresentation.test.mjs"/>
+	<testcase name="Claude renders tool input fragments only once complete and merges assistant snapshots and results" time="0.002163" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\runtimePresentation.test.mjs"/>
+	<testcase name="Pi normalizes user messages, streams, tools, final message and turn echo" time="0.002110" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\runtimePresentation.test.mjs"/>
+	<testcase name="empty events and protocol frames produce no blank activity or JSON" time="0.004116" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\runtimePresentation.test.mjs"/>
+	<testcase name="fallback keeps readable errors, approvals and future harness actions without revealing protected fields" time="0.001357" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\runtimePresentation.test.mjs"/>
+	<testcase name="identical replies in different turns are retained" time="0.000745" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\runtimePresentation.test.mjs"/>
+	<testcase name="partial history pages keep complete text and strip terminal control sequences" time="0.001158" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\runtimePresentation.test.mjs"/>
+	<testcase name="codex_app_server: delivery input separates the request from readable context" time="0.001613" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\runtimePresentation.test.mjs"/>
+	<testcase name="claude_stream: delivery input separates the request from readable context" time="0.000907" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\runtimePresentation.test.mjs"/>
+	<testcase name="pi_rpc: delivery input separates the request from readable context" time="0.001151" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\runtimePresentation.test.mjs"/>
+	<testcase name="long streamed responses retain their final suffix beyond the former 32K limit" time="0.001759" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\runtimePresentation.test.mjs"/>
+	<testcase name="Claude authoritative final replaces streamed text while failed tools retain their inputs" time="0.000799" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\runtimePresentation.test.mjs"/>
+	<testcase name="native input requests, aborted replies and empty status notifications stay distinguishable" time="0.000555" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\runtimePresentation.test.mjs"/>
+	<testcase name="codex_app_server: canonical text and terminal holdback replace masked native fields" time="0.000975" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\runtimePresentation.test.mjs"/>
+	<testcase name="claude_stream: canonical text and terminal holdback replace masked native fields" time="0.000336" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\runtimePresentation.test.mjs"/>
+	<testcase name="pi_rpc: canonical text and terminal holdback replace masked native fields" time="0.000277" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\runtimePresentation.test.mjs"/>
+	<testcase name="canonical snapshots respect empty holdback and never duplicate native Pi final snapshots" time="0.000630" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\runtimePresentation.test.mjs"/>
+	<testcase name="masked-only native fields do not become blank tools or placeholder text" time="0.000352" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\runtimePresentation.test.mjs"/>
+	<testcase name="an ended session with a later session of the same agent is a restart" time="0.003771" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\sessionRestarts.test.mjs"/>
+	<testcase name="the last session, an open session and another agent are not restarts" time="0.000424" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\sessionRestarts.test.mjs"/>
+	<testcase name="the divider goes above the first operator message after the ended session" time="0.000526" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\sessionRestarts.test.mjs"/>
+	<!-- tests 36 -->
+	<!-- suites 0 -->
+	<!-- pass 36 -->
+	<!-- fail 0 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 1979.0169 -->
+</testsuites>

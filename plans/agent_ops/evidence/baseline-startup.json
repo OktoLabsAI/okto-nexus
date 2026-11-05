@@ -1,0 +1,23 @@
+{
+  "platform": "Windows-11-10.0.26300-SP0",
+  "python": "3.13.1",
+  "installation": "editable candidate in repository venv",
+  "component": "server",
+  "topology": "local",
+  "supervisor": "foreground",
+  "cold_empty_home_http_liveness_seconds": 7.811,
+  "provider_invocations": 0,
+  "credential_use": "synthetic operator key in disposable home; memory only",
+  "baseline_dashboard_setup_steps_from_source": 7,
+  "complete_terminal_work_cycle": "NOT_AVAILABLE_AT_BASELINE",
+  "terminal_survival": "NOT_TESTED",
+  "login": "NOT_TESTED",
+  "logout": "NOT_TESTED",
+  "boot": "NOT_TESTED",
+  "cleanup": "canonical shutdown with synthetic disposable operator; child exit awaited",
+  "limitations": [
+    "HTTP liveness is not instance readiness or harness readiness.",
+    "No clean installed Nexus wheel or paid provider timing measured."
+  ],
+  "shutdown_state": "DRAINED"
+}

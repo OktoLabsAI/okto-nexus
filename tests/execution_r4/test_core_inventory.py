@@ -13,6 +13,16 @@ from okto_nexus.adapters.outbound.execution.core_inventory import (
 )
 
 
+def test_runtime_inventory_pin_matches_distribution_dependency():
+    from importlib.metadata import requires
+    import nexus_connector_core as core
+    from okto_nexus.adapters.outbound.execution.core_inventory import CORE_INVENTORY_VERSION
+
+    requirement = f'okto-nexus-connector-core=={CORE_INVENTORY_VERSION}'
+    assert requirement in requires('okto-nexus')
+    assert core.__version__ == CORE_INVENTORY_VERSION
+
+
 def test_local_catalog_and_empty_inventory_need_no_runtime():
     catalog = local_catalog()
     assert catalog["format_version"] == 2

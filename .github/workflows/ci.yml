@@ -38,6 +38,9 @@ jobs:
       - name: Build packaged dashboard
         working-directory: frontend
         run: npm run build
+      - name: Test frontend contracts
+        working-directory: frontend
+        run: npm test
       - name: Build wheel and sdist
         run: |
           python -m pip install build

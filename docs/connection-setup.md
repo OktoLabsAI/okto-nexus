@@ -6,7 +6,10 @@ and Test. Next validates the current step; it does not save configuration.
 Advancing Authorization consents to the test and the selected execution limits.
 
 Active runtime connections automatically receive eligible Nexus messages. There
-is no separate automatic-reply switch. Select MCP only to stop runtime delivery.
+is no separate automatic-reply switch. Selecting MCP only in this managed
+connection editor disables the agent's runtime policy. Adding another external
+MCP client to an existing identity is a separate operation and must not change
+that runtime policy.
 Execution grants, tool approvals and loop protection still apply. Legacy JSON
 `automatic_reply` values are accepted for compatibility and normalized to true.
 Existing canonical connections are upgraded without changing their grant limits.
