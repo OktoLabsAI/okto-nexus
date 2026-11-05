@@ -122,3 +122,12 @@ cleanup. The transport now joins that cleanup without cancelling it again.
 and installed lifecycle evidence are in `evidence/pr02-connector-readiness.md`.
 The updated candidate wheel was compared byte-for-byte with all 104 source
 Python files and its Nexus CI manifest updated. SVC-11 remains in progress.
+
+## PR-02 second increment — shared user-service definition
+
+Core supplies a pure Windows logon-task definition and native-export fingerprint
+for the two hosts. The scope excludes OS I/O, Server policy and credentials.
+13 tests passed, including native XML validation without registration. Candidate
+Core wheels are identical in both consumers and all 130 Python source payloads
+match. See `evidence/pr02-core-service-definition.md`. Registration/CAS, installed
+supervisor controls and actual user-service campaigns remain open.

@@ -59,7 +59,8 @@
         "PR-01"
       ],
       "evidence": [
-        "plans/agent_ops/evidence/pr02-connector-readiness.md"
+        "plans/agent_ops/evidence/pr02-connector-readiness.md",
+        "plans/agent_ops/evidence/pr02-core-service-definition.md"
       ]
     },
     "PR-03": {
@@ -391,19 +392,30 @@
     },
     "SVC-05": {
       "title": "integração com o gerenciador do SO",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "milestones": [
         "PR-02"
       ],
       "dependencies": [
         "PR-01"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "../okto-nexus-connector-core/src/nexus_connector_core/user_service_definition.py",
+        "../okto-nexus-connector-core/tests/test_user_service_definition.py",
+        "plans/agent_ops/evidence/pr02-core-service-definition.md"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr02-core-service-definition.xml"
+      ],
+      "result": "Pure Windows per-instance user-service definition and observed native XML fingerprint tested, including native validation without registration.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "Host registration/CAS, installed supervisor control and actual user-service/login campaigns remain pending."
+      ],
+      "subscopes": {
+        "windows_definition_contract": "VERIFIED",
+        "native_xml_syntax_without_registration": "VERIFIED"
+      }
     },
     "SVC-06": {
       "title": "contexto estável de execução",

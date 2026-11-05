@@ -67,6 +67,15 @@ Relatório: [implementation-report.md](plans/agent_ops/implementation-report.md)
 - SVC-11 permanece em progresso: supervisor por instância, contexto persistido, serialização completa de lançamento e campanha remota real continuam pendentes.
 - Pacote isolado: **2 testes passaram**, incluindo start/reuse/stop do wheel instalado fora do checkout. Connector enviado em `97c5e13`, com limpeza de código legado inalcançável em `c4ad79d`.
 
+- Commit/push da coordenação Nexus: `eb808757`.
+
+## 2026-11-05 — PR-02, segunda fatia: definição compartilhada de serviço
+
+- Core recebeu contrato puro para definição de tarefa de login Windows por instância e fingerprint da definição exportada pelo SO; sem efeitos de instalação no import.
+- **13 testes passaram**, incluindo validação nativa do XML pelo Task Scheduler com `TASK_VALIDATE_ONLY` e ausência da tarefa verificada antes/depois.
+- Corrigido conflito real de declaração UTF-8 via COM Unicode. Wheel Core atualizado nos dois consumidores; 130 arquivos Python comparados ao fonte, lock e manifest coordenados.
+- Essa fatia verifica o contrato e a sintaxe. Registro efetivo, CAS, controles do supervisor e campanhas de login continuam pendentes. [Evidência](plans/agent_ops/evidence/pr02-core-service-definition.md).
+
 ## Próxima dependência
 
 Concluir as lacunas de PR-01 junto ao supervisor e ao Connector em PR-02 / SVC-05…12. A pendência de campanha de BASE-06 continua explícita; os critérios de trabalho real local/remoto e decisão pelo terminal de M1 permanecem intactos.
