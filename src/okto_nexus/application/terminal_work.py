@@ -9,13 +9,14 @@ from urllib.parse import quote, urlencode
 import uuid
 
 from .terminal_connection import ConnectionError, PREFIX, TerminalConnection, document_revision
+from .terminal_authorization import TerminalAuthorization
 
 SUBMISSION = ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')
 SCOPE = ('server_id', 'executor_id', 'binding_id', 'agent_id', 'workspace_id')
 TERMINAL = {'SUCCEEDED', 'FAILED', 'CANCELLED'}
 
 
-class TerminalWork:
+class TerminalWork(TerminalAuthorization):
     def __init__(self, call, save, connection, checkpoint=None):
         self.call, self.save, self.connection = call, save, connection
         self.document = deepcopy(checkpoint) if checkpoint else {'format': 1}

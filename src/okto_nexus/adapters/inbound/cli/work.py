@@ -14,14 +14,33 @@ from ...outbound.terminal_http import LocalOperatorHTTP
 from .native_input import answer, display_text
 from .service import resolve_local_service
 
-ACTIONS = ('chat', 'send', 'steer', 'interrupt', 'close', 'status', 'watch', 'events', 'sessions', 'answer', 'resume')
+ACTIONS = ('chat', 'send', 'steer', 'interrupt', 'close', 'status', 'watch', 'events', 'sessions', 'answer', 'resume', 'authorize')
 
 
 def display(value, as_json=False):
     if as_json:
         print(json.dumps(value, ensure_ascii=False))
         return
-    if 'operations' in value:
+    if value.get('state') == 'authorization_review':
+        print('Project execution authorization: ' + display_text(value['scope']['agent_id']))
+        for grant in value['current_grants']:
+            print(f"{display_text(grant['grant_id'])}: {display_text(grant['state'])}; actions used {grant['used_executions']} / {grant['max_executions']}; permits " + ', '.join(display_text(action) for action in grant['actions']))
+        if value.get('has_more_grants'):
+            print(f"Showing 50 of {value['total_grants']} grants; all grants were checked for this review.")
+        if not value['can_issue']:
+            print('An authorization is already available. No additional grant is needed or issued.')
+            return
+        print(f"New grant: until {display_text(value['request']['expires_at'])}, at most {value['request']['max_executions']} runtime actions.")
+        print('Permitted actions: ' + ', '.join(display_text(action) for action in value['actions']))
+        for effect in value['effects']:
+            print('- ' + display_text(effect))
+        print('Review: ' + display_text(value['review_revision']))
+    elif value.get('state') == 'authorization_committed':
+        grant = value['result']['grant']
+        print('Authorization receipt: ' + display_text(grant['grant_id']))
+        print('Issued until ' + display_text(grant['expires_at']) + f", at most {grant['max_executions']} runtime actions.")
+        print('This is the issuance receipt; current policy, expiry and revocation still apply. No work was resumed.')
+    elif 'operations' in value:
         session = value['session']
         print(f"Work: {display_text(value['state'])} | Session: {display_text(session['scope']['session_id'])} ({display_text(session['lifecycle_state'])})")
         for operation in value['operations']:
@@ -74,6 +93,14 @@ def decide_interactively(flow, approval_id, *, session_id=None):
     return True
 
 
+def authorize_interactively(flow, *, minutes=60, max_executions=20):
+    value = flow.authorization_review(minutes=minutes, max_executions=max_executions)
+    display(value)
+    if value['state'] == 'authorization_review' and value['can_issue']:
+        if input('Issue this reviewed project authorization? [y/N] ').strip().lower() == 'y':
+            display(flow.authorize(approval=value['review_revision']))
+
+
 def watch(flow, *, timeout=300, as_json=False, interactive=False, session_id=None,
           slot_name='work', after_sequence=0, stream_epoch=None):
     deadline, previous = time.monotonic() + timeout, None
@@ -106,7 +133,7 @@ def watch(flow, *, timeout=300, as_json=False, interactive=False, session_id=Non
 
 
 def chat(flow, *, timeout=300):
-    print('Enter project work. Commands: /status, /watch, /resume, /sessions, /answer ID, /interrupt, /close, /new TEXT, /quit.')
+    print('Enter project work. Commands: /status, /watch, /resume, /sessions, /answer ID, /authorize, /interrupt, /close, /new TEXT, /quit.')
     print('Leaving this terminal ends observation; the service retains the session and work.')
     try:
         display(flow.observe())
@@ -128,6 +155,8 @@ def chat(flow, *, timeout=300):
                 watch(flow, timeout=timeout, interactive=True)
             elif text.startswith('/answer '):
                 decide_interactively(flow, text.removeprefix('/answer ').strip())
+            elif text == '/authorize':
+                authorize_interactively(flow)
             elif text in ('/interrupt', '/close'):
                 flow.submit(action=text[1:])
                 watch(flow, timeout=timeout, interactive=True, slot_name='control')
@@ -179,7 +208,9 @@ def run_work(argv):
     parser.add_argument('--target-turn-id')
     parser.add_argument('--approval-id')
     parser.add_argument('--decision', choices=('approve', 'deny'))
-    parser.add_argument('--review', help='hash of the exact displayed native question proposal')
+    parser.add_argument('--review', help='hash of the exact displayed native question or authorization review')
+    parser.add_argument('--minutes', type=int, help='authorize: lifetime from review, 1..1440 minutes (default 60)')
+    parser.add_argument('--actions', type=int, help='authorize: runtime action budget, 1..1000 (default 20)')
     parser.add_argument('--answer-file', type=Path, help='UTF-8 JSON native response object, read only for this submission')
     parser.add_argument('--control', action='store_true', help='observe or resume the saved interrupt/close action')
     parser.add_argument('--after-sequence', type=int, default=0)
@@ -194,8 +225,15 @@ def run_work(argv):
         parser.error('send and steer require --message')
     if args.message is not None and action not in ('send', 'steer', 'interrupt', 'close'):
         parser.error('--message requires send, steer, interrupt or close')
-    if (args.decision or args.answer_file or args.review) and action != 'answer':
+    if (args.decision or args.answer_file) and action != 'answer':
         parser.error('decision options require the answer command')
+    if args.review and action not in ('answer', 'authorize'):
+        parser.error('--review requires answer or authorize')
+    if args.minutes is not None or args.actions is not None:
+        if action != 'authorize' or args.review:
+            parser.error('authorization limits require authorize without --review')
+    if args.minutes is not None and not 1 <= args.minutes <= 1440 or args.actions is not None and not 1 <= args.actions <= 1000:
+        parser.error('authorization limits are 1..1440 minutes and 1..1000 actions')
     if args.answer_file and not args.decision:
         parser.error('--answer-file requires an explicit --decision and --review')
     if args.new_session and action != 'send':
@@ -230,6 +268,14 @@ def run_work(argv):
                 new_session=args.new_session, client_intent_id=args.request_id, target_turn_id=args.target_turn_id)
         elif action == 'resume':
             value = flow.resume(slot)
+        elif action == 'authorize':
+            if args.review:
+                value = flow.authorize(approval=args.review)
+            elif sys.stdin.isatty() and not args.json:
+                authorize_interactively(flow, minutes=args.minutes or 60, max_executions=args.actions or 20)
+                return 0
+            else:
+                value = flow.authorization_review(minutes=args.minutes or 60, max_executions=args.actions or 20)
         elif action == 'sessions':
             value = flow.sessions()
         elif action in ('status', 'watch', 'events'):

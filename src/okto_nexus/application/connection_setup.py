@@ -320,9 +320,8 @@ def _finish_setup(deps, context, owner, fresh, request, *, verified, settings):
             limits = configuration['authorization']
             expiry = None if limits['minutes'] is None else (
                 datetime.now(timezone.utc) + timedelta(minutes=limits['minutes'])).isoformat()
-            actions = ['open','send','steer','interrupt','close']
-            if runtime_policy.effective(uow.connection, agent_id)['broadcast_handoff_auto_claim']:
-                actions.append('execute_work')
+            from .connection_authorization import project_actions
+            actions = project_actions(uow.connection, agent_id)
             access.issue(context, actor_agent_id=agent_id, endpoint_id=endpoint_id,
                 actions=actions, expires_at=expiry, max_executions=limits['actions'])
             result['binding'] = binding

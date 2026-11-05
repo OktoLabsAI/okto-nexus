@@ -71,6 +71,23 @@ class SetupNativeDecisionPolicy(BaseModel):
     initialize: bool
 
 
+class AuthorizationReviewRequest(BaseModel):
+    model_config = ConfigDict(extra='forbid', strict=True)
+    binding_id: _Id
+    client_request_id: _Id
+    minutes: Annotated[int, Field(ge=1, le=1440)] = 60
+    max_executions: Annotated[int, Field(ge=1, le=1000)] = 20
+
+
+class AuthorizationIssueRequest(BaseModel):
+    model_config = ConfigDict(extra='forbid', strict=True)
+    binding_id: _Id
+    client_request_id: _Id
+    expected_revision: _Digest
+    expires_at: Annotated[str, Field(min_length=1, max_length=40)]
+    max_executions: Annotated[int, Field(ge=1, le=1000)]
+
+
 class ConnectionSetupRequest(BaseModel):
     model_config = ConfigDict(extra='forbid', strict=True)
     client_intent_id: Annotated[str, Field(min_length=1, max_length=100)]
@@ -909,6 +926,28 @@ def build_router() -> APIRouter:
         except OktoNexusError as error:
             return runtime_error(error, 'runtime-options.read')
         return JSONResponse(view, headers={"Cache-Control": "no-store"})
+
+    @router.post('/connections/authorizations:review')
+    async def connection_authorization_review(body: AuthorizationReviewRequest, request: Request):
+        from ....application.connection_authorization import review_authorization
+        try:
+            result = await anyio.to_thread.run_sync(lambda: review_authorization(
+                request.app.state.deps, runtime_request_context(), **body.model_dump()))
+            return JSONResponse(result, headers={'Cache-Control': 'no-store'})
+        except OktoNexusError as error:
+            return runtime_error(error, 'connection.authorization')
+
+    @router.post('/connections/authorizations:issue')
+    @router.post('/connections/authorizations:recover')
+    async def connection_authorization_issue(body: AuthorizationIssueRequest, request: Request):
+        from ....application.connection_authorization import issue_authorization
+        try:
+            result = await anyio.to_thread.run_sync(lambda: issue_authorization(
+                request.app.state.deps, runtime_request_context(), body.model_dump(),
+                recover=request.url.path.endswith(':recover')))
+            return JSONResponse(result, headers={'Cache-Control': 'no-store'})
+        except OktoNexusError as error:
+            return runtime_error(error, 'connection.authorization')
 
     @router.get('/connections/setup/{agent_id}')
     async def connection_setup_read(agent_id: str, request: Request, binding_id: str | None = None,

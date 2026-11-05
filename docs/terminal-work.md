@@ -11,6 +11,7 @@ The prompt supports ordinary conversation and these explicit controls:
 - `/resume`: recover the same interrupted submission and its canonical receipt.
 - `/sessions`: list authorized session references for this connection.
 - `/answer ID`: review and answer one canonical native request.
+- `/authorize`: review a new bounded execution grant when the previous authorization is unavailable.
 - `/interrupt`, `/close`: request canonical interruption or session closure.
 - `/new TEXT`: explicitly begin a new session with that work request.
 - `/quit`, EOF or Ctrl+C: leave the observer. The service retains ownership of
@@ -45,6 +46,39 @@ cannot continue, the CLI reports that fact; it does not fabricate restored
 context or silently start over. Use `--new-session` to authorize a fresh session.
 Reused openings correlate the initial turn by the submitting client intent, so
 results of earlier requests are not presented as the new request's answer.
+
+When execution authorization expires, is exhausted or has been revoked, use
+`/authorize` in the prompt or `okto-nexus work authorize`. The review shows the
+project identity, current grant states, permitted actions, expiry and budget.
+An available grant covering the displayed project actions is reused; this command
+does not add another one. A more limited grant remains unchanged when the operator
+explicitly approves the displayed project actions.
+Interactive issuance requires an explicit `y`. For scripts:
+
+```sh
+okto-nexus work authorize --minutes 60 --actions 20 --json
+okto-nexus work authorize --review REVIEW_HASH --json
+```
+
+The lifetime starts at review and the displayed expiry does not move at commit.
+Limits are 1..1440 minutes and 1..1000 runtime actions; the defaults are 60 and 20.
+The new grant uses the canonical issuer and current project policy. It can admit
+eligible authorized Nexus messages as well as explicit project requests; it does
+not approve native questions or override a disabled identity, binding or policy.
+If configuration or authorization changes, obtain a new review before issuance.
+
+After an uncertain issuance, repeat `work authorize` to recover the same request
+and receipt. Recovery does not extend its expiry, replenish its budget or undo
+later revocation, including after a project configuration change. The receipt
+describes the original issuance, not a claim of current execution readiness.
+Reviews show at most 50 grant records and state when more exist; all records
+participate in the current-state check.
+
+Renewal leaves existing grants, sessions and leases unchanged. A session bound
+to an expired or exhausted grant does not acquire the new grant. Inspect it and
+explicitly close it when appropriate, then use `work send --new-session` or
+`/new TEXT` for new work. No request is resumed or submitted by authorization,
+reconnect, observation or service restart.
 
 `status` and `watch` distinguish admission, native stage, session readiness,
 pending questions and canonical results. `watch` in JSON mode prints changed
@@ -99,6 +133,5 @@ Connector topology integration remain unfinished. Native decisions require the
 existing service setting `feature_hitl=true`. Initial project setup includes
 reviewed activation when the Server has no explicit policy; it preserves an
 existing disabled policy and any later changes. Work itself does not enable it
-and reports native delivery refusal when disabled. Terminal renewal of expired
-execution authorization, start-at-login review and productive real
-provider/context qualification remain required before M1 is complete.
+and reports native delivery refusal when disabled. Start-at-login review and
+productive real provider/context qualification remain required before M1 is complete.

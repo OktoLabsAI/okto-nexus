@@ -328,3 +328,9 @@ This closes the tested local policy-initialization gap, not M1. Terminal grant
 renewal, remote operator/Connector routes, participant, login-start review,
 preset evolution, dashboard introduction, real native service and productive
 provider campaigns remain open. The full R3 scope is unchanged.
+
+## PR-03 — sixth increment: reviewed local authorization renewal
+
+Explicit local work authorize reviews exact expiry, budget and project actions, then uses the canonical grant issuer with an atomic actor/request receipt. Concurrent requests, stale reviews, late rollback and unknown replies preserve one issuance; later revocation and project drift do not cause replay. Existing grants and leases stay unchanged; fresh openings prefer productive remaining authority and old sessions are not silently rebound. 247 installed regression tests passed on the initial candidate; 30 focused tests passed on the final wheel after uncertain-error/display refinements. Remote operator/Connector renewal and real productive local/remote M1 acceptance remain open.
+
+Migration 158 adds receipts, not another grant authority. Connector/Core versions and pins remain unchanged. Local review, issuance, rollback, concurrency, receipt recovery, explicit revocation and existing-session preservation are verified with synthetic native peers. Full M1 acceptance and remaining fixed R3 requirements stay open. See [plans/agent_ops/evidence/pr03-terminal-authorization.md](evidence/pr03-terminal-authorization.md).

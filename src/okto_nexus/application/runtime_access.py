@@ -2,7 +2,7 @@
 from contextlib import nullcontext
 from dataclasses import replace
 from datetime import datetime, timezone
-from ..domain.base import iso_to_epoch, iso_plus, new_id
+from ..domain.base import iso_to_epoch, new_id
 from ..domain.permissions import PermissionSet
 from ..domain.tag_selector import reachable
 from ..errors import ErrorCode, OktoNexusError
@@ -148,7 +148,13 @@ class RuntimeAccessService:
             elif (enabled and actor and actor.is_active and (automated or (
                   context.authentication_source == "agent_key" and context.credential_binding
                   and context.credential_binding == actor.api_key_hash))):
-                for grant in self.grants.candidates(uow, actor_id=actor.agent_id, endpoint_id=endpoint_id):
+                candidates = self.grants.candidates(uow, actor_id=actor.agent_id, endpoint_id=endpoint_id)
+                if action == 'open' and not context.execution_grant_id:
+                    # A fresh opening prefers a grant that can carry productive
+                    # work. Existing leases keep their exact source grant.
+                    candidates.sort(key=lambda g: not set(g['actions']) & {'send', 'steer', 'execute_work'} or
+                        not g['unlimited_actions'] and g['used_executions'] >= g['max_executions'])
+                for grant in candidates:
                     if context.execution_grant_id and context.execution_grant_id != grant["grant_id"]:
                         continue
                     if automated and grant['revision'] != context.handoff_automation.grant_revision:

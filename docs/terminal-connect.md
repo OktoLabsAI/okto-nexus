@@ -65,6 +65,10 @@ again. After response loss it recovers the same setup receipt, observes an alrea
 submitted test, and never submits another test when its result is unavailable.
 Interrupted version checks are also observed before any later step. Changed
 explicit choices conflict with the profile rather than silently rewriting it.
+Expired or exhausted execution authorization is reviewed separately with
+`work authorize` (or `/authorize` in the project prompt). Reconnect and service
+restart never renew it automatically. See [terminal work](terminal-work.md)
+for limits, receipt recovery and the effect on existing sessions.
 
 For an explicitly selected existing agent, a unique authorized binding for the
 local project is reused. Ambiguous connections require its canonical

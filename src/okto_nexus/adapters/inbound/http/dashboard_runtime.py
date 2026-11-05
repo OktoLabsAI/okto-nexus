@@ -14,6 +14,7 @@ def build_router():
         'native_input_requests',
         'connection_setup_read', 'connection_setup_test', 'connection_setup_test_read', 'connection_setup_finish',
         'connection_setup_commit_read', 'connection_setup_recover',
+        'connection_authorization_review', 'connection_authorization_issue',
         'workspace_paths_read',
         'retry_runtime_recovery',
         'runtime_recovery_plan', 'confirm_runtime_stopped',
