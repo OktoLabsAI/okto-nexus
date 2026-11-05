@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from urllib.parse import quote, urlencode
 import uuid
 
-from .terminal_connection import ConnectionError, PREFIX, TerminalConnection, document_revision
+from .terminal_connection import ConnectionError, PREFIX, TerminalConnection, RemoteTerminalConnection, document_revision
 from .terminal_authorization import TerminalAuthorization
 
 SUBMISSION = ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')
@@ -35,7 +35,8 @@ class TerminalWork(TerminalAuthorization):
         binding_id = self.connection.get('result', {}).get('binding', {}).get('binding_id')
         if self.connection.get('state') != 'done' or not binding_id:
             raise ConnectionError('CONNECTION_REQUIRED', 'Finish connect before submitting project work.')
-        TerminalConnection(self.call, lambda value: None).observe(self.connection)
+        flow_type = RemoteTerminalConnection if self.connection['selection'].get('operator_profile') else TerminalConnection
+        flow_type(self.call, lambda value: None).observe(self.connection)
         binding = self.api('GET', '/connections/bindings/' + quote(binding_id, safe=''))
         if binding['server_id'] != me['server_id'] or binding['agent_id'] != identity:
             raise ConnectionError('PROFILE_DRIFT', 'The binding no longer belongs to this project identity.')

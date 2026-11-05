@@ -302,6 +302,8 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
                 request.app.state.operator_auth.resolve, request.cookies.get(COOKIE))
             if human and not same_origin_request(request):
                 return err(403, 'CROSS_ORIGIN_BLOCKED', 'Use the Nexus dashboard for operator requests.')
+        if request.headers.get('x-nexus-operator-session-required') == '1' and not human:
+            return err(401, 'AUTH_FAILED', 'An active human operator session is required.')
         if (
             not is_mcp
             and not is_v1

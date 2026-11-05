@@ -116,7 +116,8 @@ class OperatorAuth:
 
 def local_operator_request(request):
     from .app import _LOOPBACK_CLIENTS, _loopback_trust_ok
-    return bool(request.client and request.client.host in _LOOPBACK_CLIENTS
+    return bool(request.headers.get('x-nexus-operator-session-required') != '1'
+                and request.client and request.client.host in _LOOPBACK_CLIENTS
                 and getattr(request.app.state, 'local_open', True)
                 and not any(h in request.headers for h in ('forwarded', 'x-forwarded-for', 'x-forwarded-host'))
                 and _loopback_trust_ok(request))
@@ -156,7 +157,8 @@ def router():
         local = local_operator_request(request)
         username = auth.resolve(request.cookies.get(COOKIE)) if same_origin_request(request) else None
         response = ok(dict(configured=auth.configured(), local=local,
-                           authenticated=bool(local or username), username=username))
+                           authenticated=bool(local or username), username=username,
+                           session_required_header=True))
         response.headers['Cache-Control'] = 'no-store'
         return response
 

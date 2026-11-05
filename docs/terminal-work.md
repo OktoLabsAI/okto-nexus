@@ -128,8 +128,9 @@ a separate answer, native delivery refusal or an observation deadline; 130 for
 Ctrl+C. Admission exit 0 does not prove task completion: inspect the returned
 state and receipts.
 
-This increment is a local operator facade. Remote operator authentication and
-Connector topology integration remain unfinished. Native decisions require the
+The same facade accepts a saved [human operator profile](terminal-operator.md)
+for an already approved binding on a remote Server. Unified Connector onboarding
+and its full productive campaign remain unfinished. Native decisions require the
 existing service setting `feature_hitl=true`. Initial project setup includes
 reviewed activation when the Server has no explicit policy; it preserves an
 existing disabled policy and any later changes. Work itself does not enable it

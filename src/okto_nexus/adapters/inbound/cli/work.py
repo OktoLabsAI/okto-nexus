@@ -184,8 +184,9 @@ def open_work(service, profile, connection=None):
         atomic_json(target, document)
     # Results are bounded to 1 MiB by the Server; JSON escaping can require six
     # times that space. Keep a finite transport bound that fits valid results.
-    return TerminalWork(LocalOperatorHTTP(host=service.adapter.host, port=service.adapter.port,
-        max_response_bytes=8 * 1048576), save, connection, checkpoint)
+    call = service.operator_http if hasattr(service, 'operator_http') else LocalOperatorHTTP(
+        host=service.adapter.host, port=service.adapter.port, max_response_bytes=8 * 1048576)
+    return TerminalWork(call, save, connection, checkpoint)
 
 
 def interactive_work(service, profile, *, timeout=300):
@@ -200,6 +201,7 @@ def run_work(argv):
     args_list = list(argv)
     action = args_list.pop(0) if args_list and args_list[0] in ACTIONS else None
     parser.add_argument('--profile')
+    parser.add_argument('--operator-profile', help='use this saved human operator profile on a remote Server')
     parser.add_argument('--project', type=Path)
     parser.add_argument('--message')
     parser.add_argument('--session-id')
@@ -246,8 +248,9 @@ def run_work(argv):
         parser.error('chat requires an interactive terminal; use send/status/watch/answer with --json')
     guard = None
     try:
-        service = resolve_local_service(service_args)
+        from .terminal_target import resolve_terminal_target
         project, profile = project_profile(args.project, args.profile)
+        service = resolve_terminal_target(service_args, profile, args.operator_profile, resolve_local_service)
         target = service.adapter.home / 'terminal/profiles' / (profile + '.json')
         if not target.exists():
             raise ConnectionError('CONNECTION_REQUIRED', 'Run connect for this project before using work.')

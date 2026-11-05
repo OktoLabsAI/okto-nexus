@@ -76,7 +76,11 @@ local project is reused. Ambiguous connections require its canonical
 folder or connection name. Multiple observed harnesses/installations require
 `--client` / `--candidate-ref`. `--provider-home` names the provider login directory
 on this Server host; this command does not log in for you. Paths are local to the
-selected Server. Continue using the Connector CLI for a Connector-hosted runtime.
+selected Server. Continue using the Connector CLI for host setup. An operator
+can associate an already approved binding on a remote Server using
+`--operator-profile`, `--agent` and `--binding-id`; see
+[remote operator access](terminal-operator.md). The local project folder then
+identifies the operator's shortcut and does not replace the host mapping.
 
 Profiles contain setup IDs, reviewed configuration, baseline revisions and
 binding references, not credentials or conversation history. Ctrl+C ends the
@@ -89,7 +93,7 @@ review, 2 is argument grammar error, 3 is a refusal/incomplete observation and
 The versioned preset origin is retained in the canonical Finish receipt and
 exposed by setup reads. Dashboard and terminal still use the same binding,
 runtime policy and harness configuration. Start-at-login selection, participant
-initialization, remote operator authentication and real provider qualification
+initialization, unified remote Connector onboarding and real provider qualification
 remain in progress. Reconnect and repeated Finish do not re-enable a policy
 disabled after setup. A recorded decision whose native delivery is refused is
 shown explicitly. New service contexts retain which configuration values were

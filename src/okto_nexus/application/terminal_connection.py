@@ -256,3 +256,48 @@ class TerminalConnection:
         document.update(state='done', result=result)
         self.save(document)
         return self.observe(document)
+
+
+class RemoteTerminalConnection(TerminalConnection):
+    """Associate an operator's local shortcut with an already approved binding.
+
+    Project paths in this profile are local shortcuts, never remote launch paths.
+    Connector discovery and setup continue to own the execution host mapping.
+    """
+    SCOPE = ('server_id', 'executor_id', 'binding_id', 'agent_id', 'workspace_id',
+             'workspace_binding_id', 'adapter_id', 'candidate_ref')
+
+    def review(self, selection):
+        selection = deepcopy(selection)
+        if selection.get('create_agent') or not selection.get('binding_id') or selection.get('provider_home'):
+            raise ConnectionError('REMOTE_BINDING_REQUIRED', 'Select an existing agent and binding; remote host setup remains with its Connector.')
+        me = self.api('GET', '/connections/me')
+        binding = self.api('GET', '/connections/bindings/' + quote(selection['binding_id'], safe=''))
+        clients = {adapter: client for client, adapter in CLIENTS.items()}
+        client = clients.get(binding['adapter_id'])
+        if (not client or binding['agent_id'] != selection['agent'] or binding['server_id'] != me['server_id'] or
+                selection.get('client') not in (None, client) or
+                selection.get('workspace_id') not in (None, binding['workspace_id']) or
+                selection.get('candidate_ref') not in (None, binding['candidate_ref'])):
+            raise ConnectionError('PROFILE_CONFLICT', 'The selected binding does not match the requested identity, workspace or harness.')
+        selection['client'] = client
+        document = dict(format=1, state='done', server_id=me['server_id'], selection=selection,
+            remote_scope={key: binding[key] for key in self.SCOPE},
+            result=dict(saved=True, agent_id=selection['agent'], binding=binding))
+        result = self.observe(document)
+        self.save(document)
+        return result
+
+    def observe(self, document):
+        me = self.api('GET', '/connections/me')
+        if me['server_id'] != document['server_id']:
+            raise ConnectionError('SERVER_ID_MISMATCH', 'The saved project belongs to another Server installation.')
+        binding = self.api('GET', '/connections/bindings/' + quote(document['remote_scope']['binding_id'], safe=''))
+        if any(binding[key] != document['remote_scope'][key] for key in self.SCOPE):
+            raise ConnectionError('PROFILE_DRIFT', 'The approved remote binding changed scope. Review its current selection explicitly.')
+        if binding['state'] != 'APPROVED':
+            raise ConnectionError('CONNECTION_UNAVAILABLE', 'The canonical connection is ' + binding['state'] + '; inspect its current authorization.')
+        return dict(state='configured', server_id=me['server_id'], agent_id=binding['agent_id'],
+            binding_id=binding['binding_id'], workspace_id=binding['workspace_id'],
+            configuration=self.current(binding['agent_id'], binding['binding_id']),
+            topology='remote_operator', session_state='not_checked', work_state='not_submitted')

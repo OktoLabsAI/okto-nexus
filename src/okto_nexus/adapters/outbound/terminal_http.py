@@ -9,6 +9,12 @@ from .service_manager.inspection import NoRedirect
 
 
 class LocalOperatorHTTP:
+    def request_headers(self):
+        return {'Content-Type': 'application/json', 'X-Nexus-UI': '1'}
+
+    def receive_headers(self, method, path, response):
+        pass
+
     def __init__(self, *, host, port, timeout=30, max_response_bytes=1048576):
         if host not in ('127.0.0.1', 'localhost', '0.0.0.0', '::', '::1'):
             raise ConnectionError('LOCAL_CONTROL_UNAVAILABLE', 'The selected service has no loopback operator address.')
@@ -25,7 +31,7 @@ class LocalOperatorHTTP:
             raise ConnectionError('INVALID_ROUTE', 'A canonical operator API route is required.')
         request = Request(self.base + path, method=method,
             data=json.dumps(body).encode('utf-8') if body is not None else None,
-            headers={'Content-Type': 'application/json', 'X-Nexus-UI': '1'})
+            headers=self.request_headers())
         failed = False
         try:
             response = self.opener.open(request, timeout=self.timeout)
@@ -38,6 +44,8 @@ class LocalOperatorHTTP:
         try:
             with response:
                 raw = response.read(self.max_response_bytes + 1)
+                if not failed:
+                    self.receive_headers(method, path, response)
         except (HTTPException, TimeoutError, OSError):
             raise ConnectionError('OUTCOME_UNKNOWN' if method != 'GET' else 'SERVER_UNREACHABLE',
                 'The response body was interrupted. Inspect the saved request before any new submission.',

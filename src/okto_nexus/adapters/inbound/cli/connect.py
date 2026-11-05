@@ -7,7 +7,7 @@ import re
 import sys
 import uuid
 
-from ....application.terminal_connection import ConnectionError, TerminalConnection
+from ....application.terminal_connection import ConnectionError, TerminalConnection, RemoteTerminalConnection
 from ....errors import OktoNexusError
 from ...outbound.service_manager.context import atomic_json, read_json
 from ...outbound.service_manager.locking import ExclusiveFileLock, LockBusy
@@ -59,6 +59,7 @@ def run_connect(argv):
     parser = argparse.ArgumentParser(prog='okto-nexus connect',
         description='Review and connect this local project using the canonical managed setup.')
     parser.add_argument('--profile', help='saved local project profile name')
+    parser.add_argument('--operator-profile', help='use this saved human operator profile on a remote Server')
     identity = parser.add_mutually_exclusive_group()
     identity.add_argument('--agent', help='reuse this authorized existing canonical agent ID')
     identity.add_argument('--new-agent', help='propose this unused ID instead of generating a new project identity ID')
@@ -83,12 +84,13 @@ def run_connect(argv):
         parser.error('--timeout must be greater than 0 and at most 300 seconds')
     guard = None
     try:
-        service = resolve_local_service(service_args)
+        from .terminal_target import resolve_terminal_target
+        project, profile = project_profile(args.project, args.profile)
+        service = resolve_terminal_target(service_args, profile, args.operator_profile, resolve_local_service)
         status = service.inspect() if args.plan else service.ensure_running(timeout=min(30, args.timeout))
         if status['state'] != 'ready':
             _display({'state': 'service_not_ready', 'service': status}, args.json)
             return 3
-        project, profile = project_profile(args.project, args.profile)
         directory = service.adapter.home / 'terminal/profiles'
         directory.mkdir(parents=True, exist_ok=True)
         target = directory / (profile + '.json')
@@ -109,14 +111,21 @@ def run_connect(argv):
             if any(value is not None and value != selection.get(key) for key, value in supplied.items()):
                 raise ConnectionError('PROFILE_CONFLICT', 'Explicit choices conflict with the saved profile. Use its existing choices or a new named profile.')
         else:
+            if hasattr(service, 'operator_profile') and (not args.agent or not args.binding_id or args.new_agent):
+                raise ConnectionError('REMOTE_BINDING_REQUIRED', 'Select --agent and --binding-id for an existing approved remote connection. Connector onboarding remains on its execution host.')
             label = Path(project).name or 'Project'
             slug = re.sub(r'[^a-z0-9]+', '-', label.lower()).strip('-')[:40] or 'project'
             agent = args.agent or args.new_agent or slug + '-' + uuid.uuid4().hex[:12]
             selection = dict(agent=agent, client=args.client, project=project, label=Path(project).name or 'Project',
                 workspace_id=args.workspace_id, binding_id=args.binding_id, candidate_ref=args.candidate_ref,
                 provider_home=args.provider_home, create_agent=args.agent is None, display_name=args.name)
-        flow = TerminalConnection(LocalOperatorHTTP(host=service.adapter.host, port=service.adapter.port),
-                                  lambda value: atomic_json(target, value))
+            if hasattr(service, 'operator_profile'):
+                selection['operator_profile'] = service.operator_profile
+        if hasattr(service, 'operator_profile'):
+            flow = RemoteTerminalConnection(service.operator_http, lambda value: atomic_json(target, value))
+        else:
+            flow = TerminalConnection(LocalOperatorHTTP(host=service.adapter.host, port=service.adapter.port),
+                                      lambda value: atomic_json(target, value))
         if not saved:
             saved = flow.review(selection)
             if saved['state'] == 'configured':
