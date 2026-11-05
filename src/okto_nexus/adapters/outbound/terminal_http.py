@@ -9,12 +9,15 @@ from .service_manager.inspection import NoRedirect
 
 
 class LocalOperatorHTTP:
-    def __init__(self, *, host, port, timeout=30):
+    def __init__(self, *, host, port, timeout=30, max_response_bytes=1048576):
         if host not in ('127.0.0.1', 'localhost', '0.0.0.0', '::', '::1'):
             raise ConnectionError('LOCAL_CONTROL_UNAVAILABLE', 'The selected service has no loopback operator address.')
         address = '[::1]' if host in ('::', '::1') else '127.0.0.1'
         self.base = f'http://{address}:{port}'
         self.timeout = timeout
+        if type(max_response_bytes) is not int or not 1 <= max_response_bytes <= 8 * 1048576:
+            raise ConnectionError('RESPONSE_LIMIT_INVALID', 'The operator response bound is invalid.')
+        self.max_response_bytes = max_response_bytes
         self.opener = build_opener(ProxyHandler({}), NoRedirect())
 
     def __call__(self, method, path, body=None):
@@ -30,17 +33,17 @@ class LocalOperatorHTTP:
             response, failed = error, True
         except (URLError, TimeoutError, OSError):
             raise ConnectionError('OUTCOME_UNKNOWN' if method != 'GET' else 'SERVER_UNREACHABLE',
-                'The Server response is unavailable. Resume the saved request; do not create another setup.',
+                'The Server response is unavailable. Inspect or resume the same saved request.',
                 possible_effect=method != 'GET') from None
         try:
             with response:
-                raw = response.read(1048577)
+                raw = response.read(self.max_response_bytes + 1)
         except (HTTPException, TimeoutError, OSError):
             raise ConnectionError('OUTCOME_UNKNOWN' if method != 'GET' else 'SERVER_UNREACHABLE',
-                'The response body was interrupted. Inspect the saved setup before any new submission.',
+                'The response body was interrupted. Inspect the saved request before any new submission.',
                 possible_effect=method != 'GET') from None
         try:
-            if len(raw) > 1048576:
+            if len(raw) > self.max_response_bytes:
                 raise ValueError()
             value = json.loads(raw)
             if not isinstance(value, dict):

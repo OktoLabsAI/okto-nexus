@@ -52,3 +52,12 @@ def test_canonical_missing_receipt_preserves_stage_without_replay():
 def test_remote_address_is_not_treated_as_a_local_operator():
     with pytest.raises(ConnectionError, match='loopback'):
         LocalOperatorHTTP(host='example.test', port=8202)
+
+
+def test_work_transport_fits_the_servers_bounded_output_after_json_escaping():
+    value = {'result': {'output_text': '\x00' * 1048576}}
+    raw = json.dumps(value).encode('utf-8')
+    assert len(raw) > 6 * 1048576
+    http = LocalOperatorHTTP(host='127.0.0.1', port=8202, max_response_bytes=8 * 1048576)
+    http.opener = SimpleNamespace(open=lambda *args, **kwargs: io.BytesIO(raw))
+    assert http('GET', '/api/v1/runtime-management/runtime/operations/operation') == value

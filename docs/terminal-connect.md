@@ -2,8 +2,9 @@
 
 `okto-nexus connect` starts or reuses the selected local Server and uses its
 existing operator setup API. The review proposes a persistent project identity,
-or reuses an explicitly selected existing agent. Terminal work/session controls
-are still under development; `configured` does not mean a live session or completed task.
+or reuses an explicitly selected existing agent. In an interactive terminal,
+successful setup enters the [project work prompt](terminal-work.md). `--no-chat`
+returns after setup. `configured` itself does not mean a live session or completed task.
 
 ```sh
 okto-nexus connect --client codex --project .
@@ -72,6 +73,8 @@ review, 2 is argument grammar error, 3 is a refusal/incomplete observation and
 
 The versioned preset origin is retained in the canonical Finish receipt and
 exposed by setup reads. Dashboard and terminal still use the same binding,
-runtime policy and harness configuration. Start-at-login selection,
-participant initialization and the complete terminal work
-cycle are not yet part of this command.
+runtime policy and harness configuration. Start-at-login selection, participant
+initialization, remote operator authentication and real provider qualification
+remain in progress. Native questions require the existing `feature_hitl` policy
+to be enabled on the service. That gate is not changed by accepting a project
+review; a recorded decision whose native delivery is refused is shown explicitly.

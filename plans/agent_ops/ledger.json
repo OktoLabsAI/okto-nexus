@@ -79,7 +79,8 @@
       "evidence": [
         "plans/agent_ops/evidence/pr03-setup-recovery.md",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
-        "plans/agent_ops/evidence/pr03-terminal-identity.md"
+        "plans/agent_ops/evidence/pr03-terminal-identity.md",
+        "plans/agent_ops/evidence/pr03-terminal-work.md"
       ]
     },
     "PR-04": {
@@ -1380,23 +1381,31 @@
       ],
       "files": [
         "docs/terminal-connect.md",
+        "docs/terminal-work.md",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
         "plans/agent_ops/evidence/pr03-terminal-identity.md",
+        "plans/agent_ops/evidence/pr03-terminal-work.md",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
+        "src/okto_nexus/adapters/inbound/cli/native_input.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
+        "src/okto_nexus/adapters/inbound/cli/work.py",
         "src/okto_nexus/adapters/inbound/http/routes.py",
         "src/okto_nexus/adapters/inbound/http/runtime_v1.py",
         "src/okto_nexus/adapters/outbound/terminal_http.py",
         "src/okto_nexus/application/agent_creation.py",
         "src/okto_nexus/application/connection_setup.py",
         "src/okto_nexus/application/connection_test.py",
+        "src/okto_nexus/application/execution_intents.py",
         "src/okto_nexus/application/project_preset.py",
         "src/okto_nexus/application/terminal_connection.py",
+        "src/okto_nexus/application/terminal_work.py",
         "tests/execution_r4/test_terminal_connect.py",
         "tests/execution_r4/test_terminal_identity.py",
+        "tests/execution_r4/test_terminal_work.py",
         "tests/test_terminal_connect_process.py",
-        "tests/test_terminal_http.py"
+        "tests/test_terminal_http.py",
+        "tests/test_terminal_native_input.py"
       ],
       "tests": [
         "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
@@ -1406,14 +1415,20 @@
         "plans/agent_ops/evidence/pr03-terminal-connect-service.xml",
         "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml",
         "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
-        "plans/agent_ops/evidence/pr03-terminal-identity-source.xml"
+        "plans/agent_ops/evidence/pr03-terminal-identity-source.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-observer-exit.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
       ],
-      "result": "Local connect now reviews a new persistent project identity with explicit coordination permissions, or reuses a selected identity. Canonical Finish creates the identity, workspace, binding and grant in one transaction using the existing key authority/receipt. Recovery, collision refusal, rollback and customization preservation verified; 159 distinct installed cases validated (158 broad passes plus the corrected authority assertion passing in follow-up).",
+      "result": "Local terminal work reuses canonical HTTP intents, admission, sessions, events, native decisions and results. Same-ID recovery, request-specific initial-turn correlation, continued conversation, explicit decisions and observer exit are tested with a synthetic native peer. Installed broad suite: 99 passed and three missing schema-fixture failures; final wheel after EOF correction and copying the schema: 35 passed, including all three failed cases. Full R3 and productive local/remote M1 acceptance remain incomplete.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Full terminal work/questions/decisions/results and productive local/remote M1 acceptance remain NOT_RUN.",
-        "Harness qualification/version command/model response were simulated in setup integration; real provider context/coordination acceptance remains open.",
-        "Start-at-login review, remote topology, participant init, operator-session CLI authentication, preset evolution and dashboard introduction remain open."
+        "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
+        "Default feature_hitl=false prevents native decision delivery. Explicit activation through unified onboarding review and terminal execution-grant renewal remain open; existing gates were not weakened.",
+        "Remote topology, operator-session CLI authentication, participant init, start-at-login review, preset evolution and dashboard introduction remain open.",
+        "Generic message/handoff creation deduplication and wait are not covered by this native-operation subset; service restart and provider session restoration remain unqualified."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
@@ -1424,7 +1439,14 @@
         "unified_identity_creation_in_canonical_finish": "VERIFIED",
         "reviewed_coordination_permission_defaults": "VERIFIED",
         "identity_rollback_collision_and_response_loss": "VERIFIED",
-        "reconnect_preserves_name_role_permissions": "VERIFIED"
+        "reconnect_preserves_name_role_permissions": "VERIFIED",
+        "local_terminal_work_canonical_http_synthetic_peer": "VERIFIED",
+        "native_submission_and_decision_response_loss": "VERIFIED",
+        "request_specific_initial_turn_and_result": "VERIFIED",
+        "interactive_question_result_and_reopen": "VERIFIED",
+        "observer_exit_does_not_answer_cancel_or_close": "VERIFIED",
+        "unified_native_policy_activation": "NOT_RUN",
+        "terminal_grant_renewal": "NOT_RUN"
       }
     },
     "DX-16": {
@@ -1469,9 +1491,11 @@
       "result": "Local connect now reviews a new persistent project identity with explicit coordination permissions, or reuses a selected identity. Canonical Finish creates the identity, workspace, binding and grant in one transaction using the existing key authority/receipt. Recovery, collision refusal, rollback and customization preservation verified; 159 distinct installed cases validated (158 broad passes plus the corrected authority assertion passing in follow-up).",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Full terminal work/questions/decisions/results and productive local/remote M1 acceptance remain NOT_RUN.",
+        "Local terminal facade is covered by synthetic integration; productive local/remote M1 acceptance remains NOT_RUN.",
         "Harness qualification/version command/model response were simulated in setup integration; real provider context/coordination acceptance remains open.",
-        "Start-at-login review, remote topology, participant init, operator-session CLI authentication, preset evolution and dashboard introduction remain open."
+        "Start-at-login review, remote topology, participant init, operator-session CLI authentication, preset evolution and dashboard introduction remain open.",
+        "Default feature_hitl=false prevents native decision delivery. Explicit activation through unified onboarding review and terminal execution-grant renewal remain open; existing gates were not weakened.",
+        "Remote topology, operator-session CLI authentication, participant init, start-at-login review, preset evolution and dashboard introduction remain open."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
@@ -1501,12 +1525,16 @@
         "../okto-nexus-connector/tests/unit/test_connection_config.py",
         "docs/connection-setup.md",
         "docs/terminal-connect.md",
+        "docs/terminal-work.md",
         "plans/agent_ops/evidence/pr03-setup-recovery.md",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
         "plans/agent_ops/evidence/pr03-terminal-identity.md",
+        "plans/agent_ops/evidence/pr03-terminal-work.md",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
+        "src/okto_nexus/adapters/inbound/cli/native_input.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
+        "src/okto_nexus/adapters/inbound/cli/work.py",
         "src/okto_nexus/adapters/inbound/http/dashboard_runtime.py",
         "src/okto_nexus/adapters/inbound/http/routes.py",
         "src/okto_nexus/adapters/inbound/http/runtime_v1.py",
@@ -1514,13 +1542,17 @@
         "src/okto_nexus/application/agent_creation.py",
         "src/okto_nexus/application/connection_setup.py",
         "src/okto_nexus/application/connection_test.py",
+        "src/okto_nexus/application/execution_intents.py",
         "src/okto_nexus/application/project_preset.py",
         "src/okto_nexus/application/terminal_connection.py",
+        "src/okto_nexus/application/terminal_work.py",
         "tests/execution_r4/test_connection_setup_recovery.py",
         "tests/execution_r4/test_terminal_connect.py",
         "tests/execution_r4/test_terminal_identity.py",
+        "tests/execution_r4/test_terminal_work.py",
         "tests/test_terminal_connect_process.py",
-        "tests/test_terminal_http.py"
+        "tests/test_terminal_http.py",
+        "tests/test_terminal_native_input.py"
       ],
       "tests": [
         "plans/agent_ops/evidence/pr03-setup-recovery-connector.xml",
@@ -1533,14 +1565,20 @@
         "plans/agent_ops/evidence/pr03-terminal-connect-service.xml",
         "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml",
         "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
-        "plans/agent_ops/evidence/pr03-terminal-identity-source.xml"
+        "plans/agent_ops/evidence/pr03-terminal-identity-source.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-observer-exit.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
       ],
-      "result": "Local connect now reviews a new persistent project identity with explicit coordination permissions, or reuses a selected identity. Canonical Finish creates the identity, workspace, binding and grant in one transaction using the existing key authority/receipt. Recovery, collision refusal, rollback and customization preservation verified; 159 distinct installed cases validated (158 broad passes plus the corrected authority assertion passing in follow-up).",
+      "result": "Local terminal work reuses canonical HTTP intents, admission, sessions, events, native decisions and results. Same-ID recovery, request-specific initial-turn correlation, continued conversation, explicit decisions and observer exit are tested with a synthetic native peer. Installed broad suite: 99 passed and three missing schema-fixture failures; final wheel after EOF correction and copying the schema: 35 passed, including all three failed cases. Full R3 and productive local/remote M1 acceptance remain incomplete.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Full terminal work/questions/decisions/results and productive local/remote M1 acceptance remain NOT_RUN.",
-        "Harness qualification/version command/model response were simulated in setup integration; real provider context/coordination acceptance remains open.",
-        "Start-at-login review, remote topology, participant init, operator-session CLI authentication, preset evolution and dashboard introduction remain open."
+        "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
+        "Default feature_hitl=false prevents native decision delivery. Explicit activation through unified onboarding review and terminal execution-grant renewal remain open; existing gates were not weakened.",
+        "Remote topology, operator-session CLI authentication, participant init, start-at-login review, preset evolution and dashboard introduction remain open.",
+        "Generic message/handoff creation deduplication and wait are not covered by this native-operation subset; service restart and provider session restoration remain unqualified."
       ],
       "subscopes": {
         "canonical_finish_receipt_recovery": "VERIFIED",
@@ -1554,7 +1592,14 @@
         "unified_identity_creation_in_canonical_finish": "VERIFIED",
         "reviewed_coordination_permission_defaults": "VERIFIED",
         "identity_rollback_collision_and_response_loss": "VERIFIED",
-        "reconnect_preserves_name_role_permissions": "VERIFIED"
+        "reconnect_preserves_name_role_permissions": "VERIFIED",
+        "local_terminal_work_canonical_http_synthetic_peer": "VERIFIED",
+        "native_submission_and_decision_response_loss": "VERIFIED",
+        "request_specific_initial_turn_and_result": "VERIFIED",
+        "interactive_question_result_and_reopen": "VERIFIED",
+        "observer_exit_does_not_answer_cancel_or_close": "VERIFIED",
+        "unified_native_policy_activation": "NOT_RUN",
+        "terminal_grant_renewal": "NOT_RUN"
       }
     },
     "DX-05": {
@@ -1635,7 +1680,7 @@
     },
     "DX-09": {
       "title": "cliente fino, nÃ£o orquestrador",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "milestones": [
         "PR-03",
         "PR-05"
@@ -1646,16 +1691,52 @@
         "PR-03",
         "PR-04"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "docs/terminal-connect.md",
+        "docs/terminal-work.md",
+        "plans/agent_ops/evidence/pr03-terminal-work.md",
+        "src/okto_nexus/adapters/inbound/cli/connect.py",
+        "src/okto_nexus/adapters/inbound/cli/main.py",
+        "src/okto_nexus/adapters/inbound/cli/native_input.py",
+        "src/okto_nexus/adapters/inbound/cli/work.py",
+        "src/okto_nexus/adapters/outbound/terminal_http.py",
+        "src/okto_nexus/application/execution_intents.py",
+        "src/okto_nexus/application/terminal_work.py",
+        "tests/execution_r4/test_terminal_connect.py",
+        "tests/execution_r4/test_terminal_work.py",
+        "tests/test_terminal_connect_process.py",
+        "tests/test_terminal_http.py",
+        "tests/test_terminal_native_input.py"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-observer-exit.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
+      ],
+      "result": "Local terminal work reuses canonical HTTP intents, admission, sessions, events, native decisions and results. Same-ID recovery, request-specific initial-turn correlation, continued conversation, explicit decisions and observer exit are tested with a synthetic native peer. Installed broad suite: 99 passed and three missing schema-fixture failures; final wheel after EOF correction and copying the schema: 35 passed, including all three failed cases. Full R3 and productive local/remote M1 acceptance remain incomplete.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
+        "Default feature_hitl=false prevents native decision delivery. Explicit activation through unified onboarding review and terminal execution-grant renewal remain open; existing gates were not weakened.",
+        "Remote topology, operator-session CLI authentication, participant init, start-at-login review, preset evolution and dashboard introduction remain open.",
+        "Generic message/handoff creation deduplication and wait are not covered by this native-operation subset; service restart and provider session restoration remain unqualified."
+      ],
+      "subscopes": {
+        "local_terminal_work_canonical_http_synthetic_peer": "VERIFIED",
+        "native_submission_and_decision_response_loss": "VERIFIED",
+        "request_specific_initial_turn_and_result": "VERIFIED",
+        "interactive_question_result_and_reopen": "VERIFIED",
+        "observer_exit_does_not_answer_cancel_or_close": "VERIFIED",
+        "complete_m1_productive_work": "NOT_RUN",
+        "unified_native_policy_activation": "NOT_RUN",
+        "terminal_grant_renewal": "NOT_RUN"
+      }
     },
     "DX-10": {
       "title": "verificar e complementar deduplicaÃ§Ã£o",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "milestones": [
         "PR-03",
         "PR-05"
@@ -1666,16 +1747,52 @@
         "PR-03",
         "PR-04"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "docs/terminal-connect.md",
+        "docs/terminal-work.md",
+        "plans/agent_ops/evidence/pr03-terminal-work.md",
+        "src/okto_nexus/adapters/inbound/cli/connect.py",
+        "src/okto_nexus/adapters/inbound/cli/main.py",
+        "src/okto_nexus/adapters/inbound/cli/native_input.py",
+        "src/okto_nexus/adapters/inbound/cli/work.py",
+        "src/okto_nexus/adapters/outbound/terminal_http.py",
+        "src/okto_nexus/application/execution_intents.py",
+        "src/okto_nexus/application/terminal_work.py",
+        "tests/execution_r4/test_terminal_connect.py",
+        "tests/execution_r4/test_terminal_work.py",
+        "tests/test_terminal_connect_process.py",
+        "tests/test_terminal_http.py",
+        "tests/test_terminal_native_input.py"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-observer-exit.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
+      ],
+      "result": "Local terminal work reuses canonical HTTP intents, admission, sessions, events, native decisions and results. Same-ID recovery, request-specific initial-turn correlation, continued conversation, explicit decisions and observer exit are tested with a synthetic native peer. Installed broad suite: 99 passed and three missing schema-fixture failures; final wheel after EOF correction and copying the schema: 35 passed, including all three failed cases. Full R3 and productive local/remote M1 acceptance remain incomplete.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
+        "Default feature_hitl=false prevents native decision delivery. Explicit activation through unified onboarding review and terminal execution-grant renewal remain open; existing gates were not weakened.",
+        "Remote topology, operator-session CLI authentication, participant init, start-at-login review, preset evolution and dashboard introduction remain open.",
+        "Generic message/handoff creation deduplication and wait are not covered by this native-operation subset; service restart and provider session restoration remain unqualified."
+      ],
+      "subscopes": {
+        "local_terminal_work_canonical_http_synthetic_peer": "VERIFIED",
+        "native_submission_and_decision_response_loss": "VERIFIED",
+        "request_specific_initial_turn_and_result": "VERIFIED",
+        "interactive_question_result_and_reopen": "VERIFIED",
+        "observer_exit_does_not_answer_cancel_or_close": "VERIFIED",
+        "complete_m1_productive_work": "NOT_RUN",
+        "unified_native_policy_activation": "NOT_RUN",
+        "terminal_grant_renewal": "NOT_RUN"
+      }
     },
     "DX-11": {
       "title": "espera correlacionada",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "milestones": [
         "PR-03",
         "PR-05"
@@ -1686,12 +1803,48 @@
         "PR-03",
         "PR-04"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "docs/terminal-connect.md",
+        "docs/terminal-work.md",
+        "plans/agent_ops/evidence/pr03-terminal-work.md",
+        "src/okto_nexus/adapters/inbound/cli/connect.py",
+        "src/okto_nexus/adapters/inbound/cli/main.py",
+        "src/okto_nexus/adapters/inbound/cli/native_input.py",
+        "src/okto_nexus/adapters/inbound/cli/work.py",
+        "src/okto_nexus/adapters/outbound/terminal_http.py",
+        "src/okto_nexus/application/execution_intents.py",
+        "src/okto_nexus/application/terminal_work.py",
+        "tests/execution_r4/test_terminal_connect.py",
+        "tests/execution_r4/test_terminal_work.py",
+        "tests/test_terminal_connect_process.py",
+        "tests/test_terminal_http.py",
+        "tests/test_terminal_native_input.py"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-observer-exit.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
+      ],
+      "result": "Local terminal work reuses canonical HTTP intents, admission, sessions, events, native decisions and results. Same-ID recovery, request-specific initial-turn correlation, continued conversation, explicit decisions and observer exit are tested with a synthetic native peer. Installed broad suite: 99 passed and three missing schema-fixture failures; final wheel after EOF correction and copying the schema: 35 passed, including all three failed cases. Full R3 and productive local/remote M1 acceptance remain incomplete.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
+        "Default feature_hitl=false prevents native decision delivery. Explicit activation through unified onboarding review and terminal execution-grant renewal remain open; existing gates were not weakened.",
+        "Remote topology, operator-session CLI authentication, participant init, start-at-login review, preset evolution and dashboard introduction remain open.",
+        "Generic message/handoff creation deduplication and wait are not covered by this native-operation subset; service restart and provider session restoration remain unqualified."
+      ],
+      "subscopes": {
+        "local_terminal_work_canonical_http_synthetic_peer": "VERIFIED",
+        "native_submission_and_decision_response_loss": "VERIFIED",
+        "request_specific_initial_turn_and_result": "VERIFIED",
+        "interactive_question_result_and_reopen": "VERIFIED",
+        "observer_exit_does_not_answer_cancel_or_close": "VERIFIED",
+        "complete_m1_productive_work": "NOT_RUN",
+        "unified_native_policy_activation": "NOT_RUN",
+        "terminal_grant_renewal": "NOT_RUN"
+      }
     },
     "DX-12": {
       "title": "UI orientada Ã  intenÃ§Ã£o",
@@ -1792,9 +1945,11 @@
       "result": "Local connect now reviews a new persistent project identity with explicit coordination permissions, or reuses a selected identity. Canonical Finish creates the identity, workspace, binding and grant in one transaction using the existing key authority/receipt. Recovery, collision refusal, rollback and customization preservation verified; 159 distinct installed cases validated (158 broad passes plus the corrected authority assertion passing in follow-up).",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Full terminal work/questions/decisions/results and productive local/remote M1 acceptance remain NOT_RUN.",
+        "Local terminal facade is covered by synthetic integration; productive local/remote M1 acceptance remains NOT_RUN.",
         "Harness qualification/version command/model response were simulated in setup integration; real provider context/coordination acceptance remains open.",
-        "Start-at-login review, remote topology, participant init, operator-session CLI authentication, preset evolution and dashboard introduction remain open."
+        "Start-at-login review, remote topology, participant init, operator-session CLI authentication, preset evolution and dashboard introduction remain open.",
+        "Default feature_hitl=false prevents native decision delivery. Explicit activation through unified onboarding review and terminal execution-grant renewal remain open; existing gates were not weakened.",
+        "Remote topology, operator-session CLI authentication, participant init, start-at-login review, preset evolution and dashboard introduction remain open."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
@@ -1861,9 +2016,11 @@
       "result": "Local connect now reviews a new persistent project identity with explicit coordination permissions, or reuses a selected identity. Canonical Finish creates the identity, workspace, binding and grant in one transaction using the existing key authority/receipt. Recovery, collision refusal, rollback and customization preservation verified; 159 distinct installed cases validated (158 broad passes plus the corrected authority assertion passing in follow-up).",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Full terminal work/questions/decisions/results and productive local/remote M1 acceptance remain NOT_RUN.",
+        "Local terminal facade is covered by synthetic integration; productive local/remote M1 acceptance remains NOT_RUN.",
         "Harness qualification/version command/model response were simulated in setup integration; real provider context/coordination acceptance remains open.",
-        "Start-at-login review, remote topology, participant init, operator-session CLI authentication, preset evolution and dashboard introduction remain open."
+        "Start-at-login review, remote topology, participant init, operator-session CLI authentication, preset evolution and dashboard introduction remain open.",
+        "Default feature_hitl=false prevents native decision delivery. Explicit activation through unified onboarding review and terminal execution-grant renewal remain open; existing gates were not weakened.",
+        "Remote topology, operator-session CLI authentication, participant init, start-at-login review, preset evolution and dashboard introduction remain open."
       ],
       "subscopes": {
         "canonical_finish_receipt_recovery": "VERIFIED",
@@ -1882,19 +2039,55 @@
     },
     "DX-20": {
       "title": "ciclo cotidiano completo no terminal",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "milestones": [
         "PR-03"
       ],
       "dependencies": [
         "PR-02"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "docs/terminal-connect.md",
+        "docs/terminal-work.md",
+        "plans/agent_ops/evidence/pr03-terminal-work.md",
+        "src/okto_nexus/adapters/inbound/cli/connect.py",
+        "src/okto_nexus/adapters/inbound/cli/main.py",
+        "src/okto_nexus/adapters/inbound/cli/native_input.py",
+        "src/okto_nexus/adapters/inbound/cli/work.py",
+        "src/okto_nexus/adapters/outbound/terminal_http.py",
+        "src/okto_nexus/application/execution_intents.py",
+        "src/okto_nexus/application/terminal_work.py",
+        "tests/execution_r4/test_terminal_connect.py",
+        "tests/execution_r4/test_terminal_work.py",
+        "tests/test_terminal_connect_process.py",
+        "tests/test_terminal_http.py",
+        "tests/test_terminal_native_input.py"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-observer-exit.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
+      ],
+      "result": "Local terminal work reuses canonical HTTP intents, admission, sessions, events, native decisions and results. Same-ID recovery, request-specific initial-turn correlation, continued conversation, explicit decisions and observer exit are tested with a synthetic native peer. Installed broad suite: 99 passed and three missing schema-fixture failures; final wheel after EOF correction and copying the schema: 35 passed, including all three failed cases. Full R3 and productive local/remote M1 acceptance remain incomplete.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
+        "Default feature_hitl=false prevents native decision delivery. Explicit activation through unified onboarding review and terminal execution-grant renewal remain open; existing gates were not weakened.",
+        "Remote topology, operator-session CLI authentication, participant init, start-at-login review, preset evolution and dashboard introduction remain open.",
+        "Generic message/handoff creation deduplication and wait are not covered by this native-operation subset; service restart and provider session restoration remain unqualified."
+      ],
+      "subscopes": {
+        "local_terminal_work_canonical_http_synthetic_peer": "VERIFIED",
+        "native_submission_and_decision_response_loss": "VERIFIED",
+        "request_specific_initial_turn_and_result": "VERIFIED",
+        "interactive_question_result_and_reopen": "VERIFIED",
+        "observer_exit_does_not_answer_cancel_or_close": "VERIFIED",
+        "complete_m1_productive_work": "NOT_RUN",
+        "unified_native_policy_activation": "NOT_RUN",
+        "terminal_grant_renewal": "NOT_RUN"
+      }
     },
     "DX-21": {
       "title": "preservar configuraÃ§Ã£o e permitir evoluÃ§Ã£o opcional",
@@ -1938,9 +2131,11 @@
       "result": "Local connect now reviews a new persistent project identity with explicit coordination permissions, or reuses a selected identity. Canonical Finish creates the identity, workspace, binding and grant in one transaction using the existing key authority/receipt. Recovery, collision refusal, rollback and customization preservation verified; 159 distinct installed cases validated (158 broad passes plus the corrected authority assertion passing in follow-up).",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Full terminal work/questions/decisions/results and productive local/remote M1 acceptance remain NOT_RUN.",
+        "Local terminal facade is covered by synthetic integration; productive local/remote M1 acceptance remains NOT_RUN.",
         "Harness qualification/version command/model response were simulated in setup integration; real provider context/coordination acceptance remains open.",
-        "Start-at-login review, remote topology, participant init, operator-session CLI authentication, preset evolution and dashboard introduction remain open."
+        "Start-at-login review, remote topology, participant init, operator-session CLI authentication, preset evolution and dashboard introduction remain open.",
+        "Default feature_hitl=false prevents native decision delivery. Explicit activation through unified onboarding review and terminal execution-grant renewal remain open; existing gates were not weakened.",
+        "Remote topology, operator-session CLI authentication, participant init, start-at-login review, preset evolution and dashboard introduction remain open."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
@@ -2723,9 +2918,11 @@
       "status": "IN_PROGRESS",
       "evidence": [
         "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
-        "plans/agent_ops/evidence/pr03-terminal-connect.md"
+        "plans/agent_ops/evidence/pr03-terminal-connect.md",
+        "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work.md"
       ],
-      "result": "Existing-identity local setup subset implemented/tested; native provider qualification and full R3 scenario acceptance remain open."
+      "result": "Local terminal work reuses canonical HTTP intents, admission, sessions, events, native decisions and results. Same-ID recovery, request-specific initial-turn correlation, continued conversation, explicit decisions and observer exit are tested with a synthetic native peer. Installed broad suite: 99 passed and three missing schema-fixture failures; final wheel after EOF correction and copying the schema: 35 passed, including all three failed cases. Full R3 and productive local/remote M1 acceptance remain incomplete. Real provider, restart and full scenario acceptance remain open."
     },
     "DX-T32": {
       "requirement": "AprovaÃ§Ã£o remota pendente preserva ID e identidade do decisor; terminal participante nÃ£o a aprova por assentimento local.",
@@ -2756,18 +2953,22 @@
       "status": "IN_PROGRESS",
       "evidence": [
         "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
-        "plans/agent_ops/evidence/pr03-terminal-connect.md"
+        "plans/agent_ops/evidence/pr03-terminal-connect.md",
+        "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work.md"
       ],
-      "result": "Existing-identity local setup subset implemented/tested; native provider qualification and full R3 scenario acceptance remain open."
+      "result": "Local terminal work reuses canonical HTTP intents, admission, sessions, events, native decisions and results. Same-ID recovery, request-specific initial-turn correlation, continued conversation, explicit decisions and observer exit are tested with a synthetic native peer. Installed broad suite: 99 passed and three missing schema-fixture failures; final wheel after EOF correction and copying the schema: 35 passed, including all three failed cases. Full R3 and productive local/remote M1 acceptance remain incomplete. Real provider, restart and full scenario acceptance remain open."
     },
     "DX-T36": {
       "requirement": "ConexÃ£o nÃ£o envia tarefa/smoke pago automaticamente; a tarefa solicitada usa os serviÃ§os canÃ´nicos.",
       "status": "IN_PROGRESS",
       "evidence": [
         "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
-        "plans/agent_ops/evidence/pr03-terminal-connect.md"
+        "plans/agent_ops/evidence/pr03-terminal-connect.md",
+        "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work.md"
       ],
-      "result": "Existing-identity local setup subset implemented/tested; native provider qualification and full R3 scenario acceptance remain open."
+      "result": "Local terminal work reuses canonical HTTP intents, admission, sessions, events, native decisions and results. Same-ID recovery, request-specific initial-turn correlation, continued conversation, explicit decisions and observer exit are tested with a synthetic native peer. Installed broad suite: 99 passed and three missing schema-fixture failures; final wheel after EOF correction and copying the schema: 35 passed, including all three failed cases. Full R3 and productive local/remote M1 acceptance remain incomplete. Real provider, restart and full scenario acceptance remain open."
     },
     "DX-T37": {
       "requirement": "InÃ­cio no login pode ser escolhido na revisÃ£o inicial; recusar essa opÃ§Ã£o mantÃ©m o uso sob demanda funcional.",
@@ -2787,12 +2988,18 @@
     "DX-T39": {
       "requirement": "Pacote instalado, rota local padrÃ£o: solicitar trabalho real autorizado, acompanhar, responder a pergunta/permissÃ£o, obter resultado correlacionado e continuar pelo terminal, sem dashboard nem ediÃ§Ã£o manual de configuraÃ§Ã£o.",
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-terminal-work.md"
+      ],
+      "result": "Real productive campaign not run. Synthetic local facade evidence is supporting development only."
     },
     "DX-T40": {
       "requirement": "A mesma campanha via Connector resolve decisÃµes pelo CLI autenticado do operador, sem credencial administrativa no host remoto e sem aprovaÃ§Ã£o pelo participante.",
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-terminal-work.md"
+      ],
+      "result": "Real productive campaign not run. Synthetic local facade evidence is supporting development only."
     },
     "DX-T41": {
       "requirement": "Reconnect e repetiÃ§Ã£o do setup preservam `agent_id`, modelo, papel, configuraÃ§Ã£o, grants e personalizaÃ§Ãµes; nÃ£o recriam agente nem reaplicam defaults.",
@@ -2833,18 +3040,30 @@
     },
     "DX-T45": {
       "requirement": "DecisÃ£o pelo terminal preserva ator, revisÃ£o, validade e escopo; texto enviado ao modelo, decisÃ£o expirada, recusada ou emitida por ator sem autoridade nÃ£o aprova trabalho.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work.md"
+      ],
+      "result": "Local terminal work reuses canonical HTTP intents, admission, sessions, events, native decisions and results. Same-ID recovery, request-specific initial-turn correlation, continued conversation, explicit decisions and observer exit are tested with a synthetic native peer. Installed broad suite: 99 passed and three missing schema-fixture failures; final wheel after EOF correction and copying the schema: 35 passed, including all three failed cases. Full R3 and productive local/remote M1 acceptance remain incomplete. Real provider, restart and full scenario acceptance remain open."
     },
     "DX-T46": {
       "requirement": "Perda da resposta de submissÃ£o ou decisÃ£o em M1 recupera a mesma requisiÃ§Ã£o/resultado, inclusive apÃ³s restart; nÃ£o cria operaÃ§Ã£o, pedido ou handoff duplicado.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work.md"
+      ],
+      "result": "Local terminal work reuses canonical HTTP intents, admission, sessions, events, native decisions and results. Same-ID recovery, request-specific initial-turn correlation, continued conversation, explicit decisions and observer exit are tested with a synthetic native peer. Installed broad suite: 99 passed and three missing schema-fixture failures; final wheel after EOF correction and copying the schema: 35 passed, including all three failed cases. Full R3 and productive local/remote M1 acceptance remain incomplete. Real provider, restart and full scenario acceptance remain open."
     },
     "DX-T47": {
       "requirement": "Fechar e reabrir o CLI reencontra trabalho e identidade; retoma a conversa somente com suporte comprovado, ou oferece nova sessÃ£o explicitamente, sem replay nem contexto fictÃ­cio.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work.md"
+      ],
+      "result": "Local terminal work reuses canonical HTTP intents, admission, sessions, events, native decisions and results. Same-ID recovery, request-specific initial-turn correlation, continued conversation, explicit decisions and observer exit are tested with a synthetic native peer. Installed broad suite: 99 passed and three missing schema-fixture failures; final wheel after EOF correction and copying the schema: 35 passed, including all three failed cases. Full R3 and productive local/remote M1 acceptance remain incomplete. Real provider, restart and full scenario acceptance remain open."
     },
     "DX-T48": {
       "requirement": "Perfil de execuÃ§Ã£o do resumo admite somente trabalho elegÃ­vel e autorizado pelas regras atuais; daemon online, mensagem recebida ou grant revogado nÃ£o bastam para iniciar sessÃ£o.",
@@ -2863,8 +3082,12 @@
     },
     "DX-T50": {
       "requirement": "Adaptador que sÃ³ inicia o processo, mas exige painel para uma decisÃ£o cotidiana, nÃ£o passa o aceite M1; lacuna fica registrada atÃ© existir rota completa qualificada.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work.md"
+      ],
+      "result": "Local terminal work reuses canonical HTTP intents, admission, sessions, events, native decisions and results. Same-ID recovery, request-specific initial-turn correlation, continued conversation, explicit decisions and observer exit are tested with a synthetic native peer. Installed broad suite: 99 passed and three missing schema-fixture failures; final wheel after EOF correction and copying the schema: 35 passed, including all three failed cases. Full R3 and productive local/remote M1 acceptance remain incomplete. Real provider, restart and full scenario acceptance remain open."
     },
     "DX-T51": {
       "requirement": "Nova revisÃ£o do preset apresenta efeitos por diff e respeita mudanÃ§as concorrentes; upgrade/reconnect nÃ£o amplia permissÃµes ou sobrescreve escolhas existentes.",
@@ -3251,7 +3474,9 @@
     "INV-25": {
       "requirement": "O caminho padrÃ£o de conexÃ£o e uso cotidiano Ã© completo pelo terminal, incluindo decisÃµes com autoridade vÃ¡lida. PolÃ­tica organizacional explicitamente preexistente continua obrigatÃ³ria; a configuraÃ§Ã£o padrÃ£o nova nÃ£o introduz dependÃªncia do dashboard.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-terminal-work.md"
+      ]
     },
     "INV-26": {
       "requirement": "O preset preenche a configuraÃ§Ã£o comum do produto. Generalista Ã© um perfil reutilizÃ¡vel, nÃ£o uma identidade global compartilhada; reconnect nÃ£o recria agente nem reaplica defaults sobre escolhas do usuÃ¡rio.",
@@ -3266,7 +3491,9 @@
     "INV-28": {
       "requirement": "ServiÃ§o ativo ou sessÃ£o pronta nÃ£o encerram M1: solicitar trabalho, decidir pedidos autorizados e recuperar resultados pelo terminal precisam estar demonstrados no caminho escolhido.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-terminal-work.md"
+      ]
     }
   },
   "completion_criteria": {
@@ -3523,6 +3750,21 @@
         "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml",
         "plans/agent_ops/evidence/pr03-terminal-identity-wheels.json"
+      ]
+    },
+    {
+      "date": "2026-11-05",
+      "scope": "PR-03 canonical terminal work and native decisions",
+      "result": "Local terminal work reuses canonical HTTP intents, admission, sessions, events, native decisions and results. Same-ID recovery, request-specific initial-turn correlation, continued conversation, explicit decisions and observer exit are tested with a synthetic native peer. Installed broad suite: 99 passed and three missing schema-fixture failures; final wheel after EOF correction and copying the schema: 35 passed, including all three failed cases. Full R3 and productive local/remote M1 acceptance remain incomplete.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-terminal-work.md",
+        "plans/agent_ops/evidence/pr03-terminal-work-source.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-observer-exit.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-work-wheels.json",
+        "plans/agent_ops/evidence/pr03-terminal-work-initial-wheels.json"
       ]
     }
   ]

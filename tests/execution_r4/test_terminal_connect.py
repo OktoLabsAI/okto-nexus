@@ -191,3 +191,31 @@ def test_reconnect_reads_later_customization_without_reissuing_grants(terminal):
     assert result['configuration']['public_config']['nexus_tool_permission'] == 'always_allow'
     assert result['configuration']['project_preset'] == ORIGIN
     assert snapshot(t.deps) == before and len(t.turns) == 1
+
+
+def test_interactive_connect_enters_work_only_after_configuration(terminal, tmp_path, monkeypatch, capsys):
+    from okto_nexus.adapters.inbound.cli import work
+    from okto_nexus.adapters.outbound.service_manager.context import read_json
+
+    t = terminal
+    service = SimpleNamespace(adapter=SimpleNamespace(home=tmp_path / 'terminal-home', host='127.0.0.1', port=8202),
+        inspect=lambda: {'state': 'ready'}, ensure_running=lambda **kwargs: {'state': 'ready'})
+    monkeypatch.setattr(connect, 'resolve_local_service', lambda args: service)
+    monkeypatch.setattr(connect, 'LocalOperatorHTTP', lambda **kwargs: t.call)
+    monkeypatch.setattr(connect.sys, 'stdin', SimpleNamespace(isatty=lambda: True))
+    entered = []
+    def enter(selected, profile, **kwargs):
+        assert read_json(selected.adapter.home / 'terminal/profiles' / (profile + '.json'))['state'] == 'done'
+        entered.append(profile)
+        return 0
+    monkeypatch.setattr(work, 'interactive_work', enter)
+    args = ['--profile', 'interactive', '--agent', 'subject', '--project', t.selection['project']]
+    assert connect.run_connect(args + ['--plan']) == 0
+    assert entered == []
+    review = read_json(service.adapter.home / 'terminal/profiles/interactive.json')
+    assert connect.run_connect(args + ['--approve', review['review_revision']]) == 0
+    assert entered == ['interactive']
+    assert connect.run_connect(args + ['--no-chat']) == 0
+    assert connect.run_connect(args + ['--json']) == 0
+    assert entered == ['interactive']
+    assert len(t.turns) == 1

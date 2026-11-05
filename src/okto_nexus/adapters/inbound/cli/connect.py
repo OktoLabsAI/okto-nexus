@@ -15,6 +15,16 @@ from ...outbound.terminal_http import LocalOperatorHTTP
 from .service import resolve_local_service
 
 
+def project_profile(project, explicit_profile):
+    project = str((project or Path.cwd()).expanduser().resolve(strict=True))
+    if not Path(project).is_dir():
+        raise ConnectionError('PROJECT_REQUIRED', 'Select an existing local project directory.')
+    profile = explicit_profile or 'project-' + hashlib.sha256(project.encode('utf-8')).hexdigest()[:24]
+    if not re.fullmatch(r'[A-Za-z0-9_-]{1,80}', profile):
+        raise ConnectionError('PROFILE_INVALID', 'Use 1..80 letters, digits, hyphens or underscores for the profile name.')
+    return project, profile
+
+
 def _display(value, as_json):
     if as_json:
         print(json.dumps(value, ensure_ascii=False))
@@ -62,6 +72,7 @@ def run_connect(argv):
     parser.add_argument('--plan', action='store_true', help='save/show the review without starting service, probes or model turns')
     parser.add_argument('--approve', help='apply the exact displayed review revision')
     parser.add_argument('--json', action='store_true')
+    parser.add_argument('--no-chat', action='store_true', help='return after connection setup, without entering interactive project work')
     parser.add_argument('--timeout', type=float, default=300, help='maximum test observation time; does not cancel execution')
     args, service_args = parser.parse_known_args(argv)
     if args.plan and args.approve:
@@ -77,12 +88,7 @@ def run_connect(argv):
         if status['state'] != 'ready':
             _display({'state': 'service_not_ready', 'service': status}, args.json)
             return 3
-        project = str((args.project or Path.cwd()).expanduser().resolve(strict=True))
-        if not Path(project).is_dir():
-            raise ConnectionError('PROJECT_REQUIRED', 'Select an existing local project directory.')
-        profile = args.profile or 'project-' + hashlib.sha256(project.encode('utf-8')).hexdigest()[:24]
-        if not re.fullmatch(r'[A-Za-z0-9_-]{1,80}', profile):
-            raise ConnectionError('PROFILE_INVALID', 'Use 1..80 letters, digits, hyphens or underscores for the profile name.')
+        project, profile = project_profile(args.project, args.profile)
         directory = service.adapter.home / 'terminal/profiles'
         directory.mkdir(parents=True, exist_ok=True)
         target = directory / (profile + '.json')
@@ -115,6 +121,9 @@ def run_connect(argv):
             saved = flow.review(selection)
             if saved['state'] == 'configured':
                 _display(saved, args.json)
+                if not args.plan and not args.json and not args.no_chat and sys.stdin.isatty():
+                    from .work import interactive_work
+                    return interactive_work(service, profile, timeout=args.timeout)
                 return 0
         if saved['state'] == 'done':
             result = flow.observe(saved)
@@ -131,6 +140,9 @@ def run_connect(argv):
                 approval = saved['review_revision']
             result = flow.apply(saved, approval=approval, timeout=args.timeout)
         _display(result, args.json)
+        if result['state'] == 'configured' and not args.plan and not args.json and not args.no_chat and sys.stdin.isatty():
+            from .work import interactive_work
+            return interactive_work(service, profile, timeout=args.timeout)
         return 0 if result['state'] in ('configured', 'review') else 3
     except KeyboardInterrupt:
         return 130  # The service and any submitted test retain ownership.

@@ -25,6 +25,9 @@ def test_connect_starts_reuses_and_leaves_service_owned_until_explicit_stop(tmp_
     process, planned = invoke(['connect', '--plan', '--agent', 'missing', *selection])
     assert process.returncode == 3 and planned['state'] == 'service_not_ready'
     assert not home.exists()
+    process, absent_work = invoke(['work', 'status', *selection])
+    assert process.returncode == 3 and absent_work['code'] == 'CONNECTION_REQUIRED'
+    assert not home.exists()
     try:
         process, result = invoke(['connect', '--agent', 'missing', *selection])
         assert process.returncode == 3 and result['code'] == 'NOT_FOUND', (result, process.stderr)

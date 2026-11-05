@@ -8,7 +8,6 @@ from datetime import datetime, timedelta, timezone
 import hashlib
 import json
 import secrets
-import time
 from typing import Any, Mapping
 
 from nexus_connector_core.protocol import canonical_json
@@ -365,7 +364,7 @@ def read_execution_intent(factory: ConnectionFactory, *, actor_agent_id: str,
     server_id, _, _ = current_agent_revisions(factory, agent_id=actor_agent_id)
     with factory.unit_of_work(write=False) as uow:
         row = uow.connection.execute(
-            "SELECT resolved_json FROM execution_client_intents WHERE "
+            "SELECT resolved_json,initial_turn_json FROM execution_client_intents WHERE "
             "server_id=? AND actor_agent_id=? AND client_intent_id=? "
             "AND intent_id GLOB 'r4intent_*'",
             (server_id, actor_agent_id, client_intent_id),
@@ -375,6 +374,14 @@ def read_execution_intent(factory: ConnectionFactory, *, actor_agent_id: str,
                               "The client intent was not found.", {})
     resolution = json.loads(row["resolved_json"])
     resolution.pop('_session_metadata', None)
+    initial_turn_operation_id = None
+    if row['initial_turn_json'] is not None:
+        child = json.loads(row['initial_turn_json'])
+        if (child['scope'] != resolution['scope'] or
+                child['semantic_intent']['action'] != 'turn.submit' or
+                execution_intent_hash(child['semantic_intent']) != child['intent_hash']):
+            raise OktoNexusError(ErrorCode.DB_ERROR, 'The initial turn does not match its resolved request.', {})
+        initial_turn_operation_id = child['operation_id']
     subject = resolution['scope']['agent_id']
     from .execution_operator_authority import require_operator_request
     with factory.unit_of_work(write=False) as uow:
@@ -398,4 +405,7 @@ def read_execution_intent(factory: ConnectionFactory, *, actor_agent_id: str,
         if exc.code != ErrorCode.NOT_FOUND:
             raise
         operation = None
-    return {"resolution": resolution, "operation": operation}
+    # A reused opening can have children from several different requests. This
+    # reference correlates only the initial turn planned by this client intent.
+    return {"resolution": resolution, "operation": operation,
+            "initial_turn_operation_id": initial_turn_operation_id}

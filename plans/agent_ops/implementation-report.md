@@ -1,6 +1,6 @@
 # Agent operations R3 — implementation report
 
-Status: preparation and baseline implementation delivered; PR-01 in progress.
+Status: preparation and baseline delivered; PR-01, PR-02 and PR-03 in progress.
 BASE-06 provider timing and M1–M4 acceptance remain open.
 
 The immutable scope is the repository-root R3 plan. Progress and limitations are
@@ -277,3 +277,31 @@ productive local/remote acceptance remain open, as do full terminal work,
 questions/decisions/results, login-start review, remote/participant routes,
 operator-session CLI auth, preset evolution and dashboard introduction. M1 and
 the full R3 plan are still incomplete.
+
+## PR-03 fourth increment — terminal work and native decisions
+
+Interactive connect hands off to the project work prompt after setup. The new
+work facade submits through existing HTTP intents/admission and reads canonical
+sessions, events, questions, decisions and results. Local metadata contains IDs,
+scope and hashes only. Same-ID recovery preserves uncertain submissions;
+request-specific initial-turn correlation avoids presenting an older result
+when an opening is reused. Native decisions preserve current actor, recipient,
+scope, revision, validity and schema. EOF/Ctrl+C leave pending questions and
+service-owned sessions intact, including standalone watch/answer commands.
+
+Source checks passed 29 focused, 44 regression and
+2 observer-exit cases. The installed broad campaign passed
+99 and failed three cases because the external test copy lacked
+the schema fixture. After copying the schema and fixing EOF, the final wheel passed
+35 cases including all three failures. These are overlapping campaigns, not
+an additive unique-test count. All 423/114/130 Python payloads match sources;
+Connector/Core are unchanged. See `evidence/pr03-terminal-work.md` for provenance,
+commands, assertions and limitations.
+
+The synthetic native peer verifies the facade and canonical protocol, not actual
+provider productivity or context preservation. Default feature_hitl=false
+correctly refuses native delivery; its reviewed activation and terminal grant
+renewal are still missing. Remote operator/topology, participant, login-start,
+preset evolution, dashboard introduction, real native service and productive
+local/Connector campaigns remain open. Native-operation recovery does not
+complete generic coordination deduplication. R3 and M1 remain incomplete.
