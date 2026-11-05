@@ -90,13 +90,13 @@ def execution_context(config, *, host, port, project_root, log_level, discovery,
             'arguments': arguments, 'environment': environment}
 
 
-def validate_context(value: dict) -> dict:
+def validate_context(value: dict, *, require_paths=True) -> dict:
     if value.get('revision') != 1 or value.get('component') != 'server':
         raise ValueError('Unsupported service context')
     for key in ('executable', 'environment_prefix', 'cwd'):
         if not isinstance(value.get(key), str) or not Path(value[key]).is_absolute():
             raise ValueError('Service paths must be absolute')
-    if not Path(value['executable']).is_file() or not Path(value['cwd']).is_dir():
+    if require_paths and (not Path(value['executable']).is_file() or not Path(value['cwd']).is_dir()):
         raise ValueError('Service executable or working directory no longer exists')
     arguments, environment = value.get('arguments'), value.get('environment')
     if (not isinstance(arguments, list) or not all(type(x) is str for x in arguments)

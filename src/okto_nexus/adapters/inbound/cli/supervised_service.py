@@ -34,7 +34,9 @@ def run(home: Path, database: Path, token: str, *, installation=None) -> int:
                 if control['desired'] == 'draining' and control.get('logon_session') == logon:
                     return 0  # intentional stop, never a failed runtime attempt
                 # Correlate the current native definition before touching DB.
-                installation.observe()
+                _, task = installation.observe(check_context=False)
+                if not task.enabled:
+                    return 0  # a queued login cannot bootstrap after disable
                 context = validate_context(read_json(home / CONTEXT_NAME))
                 if context_digest(context) != receipt['context_digest']:
                     return 2

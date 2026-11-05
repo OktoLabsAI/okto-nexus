@@ -194,3 +194,20 @@ commands, the corrected fault-injection fixture, provenance and limitations.
 The new file is diagnostic only; no schema, protocol, runtime authority or work
 journal changed. Other passive diagnostics, remaining lifecycle controls and
 actual native/user/provider qualification remain open in the fixed R3 ledger.
+
+## PR-02 sixth increment — selected task enablement
+
+Both hosts now expose enable/disable for their owned Windows task, without
+starting/stopping active runtime work. Durable intent and Core's pure
+enablement-only comparison reconcile a lost response without adopting unrelated
+definition edits. Disabled queued workers exit before bootstrap. Disabling can
+still work with an unavailable interpreter; enabling validates its context.
+The Nexus native adapter also balances COM lifetime on each calling thread.
+
+12 Core, 67 Nexus and 62 Connector source tests passed; 90 coordinated tests
+passed in a fresh venv outside checkout with the final wheels. All 412/109/130
+Python payloads match source, Core import boundaries pass, the consumer Core
+wheels are identical and the CI manifest is coordinated. See
+`evidence/pr02-enablement.md` for exact scopes, commands and limits. Native
+mutations/login/credential qualification and the remaining fixed-plan work are
+still open. No schema/NXL change, personal task registration or release occurred.

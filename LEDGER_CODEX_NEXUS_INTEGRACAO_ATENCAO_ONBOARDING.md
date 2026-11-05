@@ -102,6 +102,15 @@ Relatório: [implementation-report.md](plans/agent_ops/implementation-report.md)
 - Os **412 arquivos Python** do wheel correspondem ao fonte. Ausência/falha de logs não comprova serviço parado nem trabalho concluído; Ctrl+C encerra apenas a observação.
 - Os aceites completos de SVC e M1 continuam abertos. [Evidências, comandos e limites](plans/agent_ops/evidence/pr02-nexus-service-logs.md).
 
+## 2026-11-05 — PR-02, sexta fatia: habilitação da tarefa selecionada
+
+- Nexus e Connector expõem enable/disable sem iniciar, drenar ou cancelar a geração ativa. O entrypoint agendado recusa bootstrap quando a tarefa está desabilitada.
+- Intento durável precede a mudança nativa. Repetir o mesmo comando reconcilia resposta perdida apenas se a diferença observada for a habilitação solicitada. Alterações de comando, privilégio, gatilho e outros campos permanecem preservadas para revisão.
+- O Core fornece a comparação pura compartilhada; ambos os hosts mantêm ownership e efeitos do SO. O adapter COM do Nexus passou a inicializar/liberar recursos na thread da chamada.
+- **12 testes do Core, 67 do Nexus e 62 do Connector passaram**. **90 testes coordenados passaram em venv limpa fora do checkout**, incluindo os processos destacados reais dos dois consumidores. Os 412/109/130 arquivos Python dos wheels correspondem aos fontes; Core e manifest coordenados.
+- As mutações nativas desta fatia ainda foram testadas com backend simulado. Registro efetivo de tarefas, login/logout e demais aceites continuam pendentes. [Evidência e limites](plans/agent_ops/evidence/pr02-enablement.md).
+- Commit/push dos contratos e do host remoto: Core `0490f88`; Connector `1f2f380`.
+
 ## Próxima dependência
 
 Concluir as lacunas de PR-01 junto ao supervisor e ao Connector em PR-02 / SVC-05…12. A pendência de campanha de BASE-06 continua explícita; os critérios de trabalho real local/remoto e decisão pelo terminal de M1 permanecem intactos.

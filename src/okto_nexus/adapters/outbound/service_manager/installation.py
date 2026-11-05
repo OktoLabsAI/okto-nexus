@@ -12,7 +12,8 @@ import os
 from pathlib import Path
 import secrets
 
-from nexus_connector_core.user_service_definition import UserServiceDefinition, windows_logon_task
+from nexus_connector_core.user_service_definition import (
+    UserServiceDefinition, windows_logon_task, windows_definition_digest, windows_enablement_matches)
 
 from .context import CONTEXT_NAME, atomic_json, read_json, validate_context
 from .identity import effective_principal, server_instance_id, windows_logon_session
@@ -79,7 +80,7 @@ class ServerInstallation:
                 'Reconcile the retained receipt with the selected user and instance; no task was changed.')
         return value
 
-    def observe(self):
+    def observe(self, *, check_context=True):
         self._platform()
         receipt = self.receipt()
         self._claim(receipt, required=receipt is not None)
@@ -95,9 +96,17 @@ class ServerInstallation:
         if task is None:
             raise InstallationError('SERVICE_DEFINITION_MISSING',
                 'The installed task is missing. Repeat uninstall to clear its receipt, then install explicitly.')
+        if receipt.get('enablement') is not None:
+            raise InstallationError('SERVICE_ENABLEMENT_PENDING',
+                'Repeat the same enable/disable operation to confirm its retained intent before another lifecycle change.')
         if task.digest != receipt.get('native_digest'):
             raise InstallationError('SERVICE_DEFINITION_CHANGED',
                 'Review the edited task in Task Scheduler and restore the recorded definition before retrying. No overwrite was attempted.')
+        if check_context:
+            self._check_context(receipt)
+        return receipt, task
+
+    def _check_context(self, receipt):
         try:
             context = validate_context(read_json(self.home / CONTEXT_NAME))
         except (OSError, ValueError) as error:
@@ -106,7 +115,49 @@ class ServerInstallation:
         if context_digest(context) != receipt.get('context_digest'):
             raise InstallationError('SERVICE_CONTEXT_CHANGED',
                 'The execution context changed. Reconcile it explicitly before starting the installed task.')
-        return receipt, task
+
+    def set_enabled(self, enabled):
+        if type(enabled) is not bool:
+            raise ValueError('Enablement must be boolean')
+        self._platform()
+        receipt = self.receipt()
+        self._claim(receipt, required=receipt is not None)
+        if receipt is None:
+            self.observe()
+            raise InstallationError('USER_SERVICE_NOT_INSTALLED', 'Install the selected user integration before changing enablement.')
+        if receipt['state'] != 'installed':
+            raise InstallationError('INSTALLATION_PENDING', 'Complete the pending installation/removal before changing enablement.')
+        task = self.tasks.read(self.name)
+        if task is None:
+            raise InstallationError('SERVICE_DEFINITION_MISSING', 'Reconcile the missing installed task before changing enablement.')
+        pending = receipt.get('enablement')
+        if pending is not None:
+            if (not isinstance(pending, dict) or type(pending.get('target')) is not bool
+                    or pending.get('from_digest') != receipt.get('native_digest')):
+                raise InstallationError('INSTALLATION_RECEIPT_INVALID', 'Inspect the retained enablement intent; no task was changed.')
+            if pending['target'] != enabled:
+                raise InstallationError('SERVICE_ENABLEMENT_PENDING', 'Complete the retained enable/disable operation before requesting the opposite transition.')
+        else:
+            receipt, task = self.observe(check_context=enabled)
+            if task.enabled == enabled:
+                return {'enabled': enabled, 'changed': False, 'definition_digest': task.digest}
+        if enabled:
+            self._check_context(receipt)
+        if windows_definition_digest(receipt.get('native_xml')) != receipt.get('native_digest'):
+            raise InstallationError('INSTALLATION_RECEIPT_INVALID', 'The retained native export does not match its fingerprint.')
+        if pending is None:
+            receipt = {**receipt, 'enablement': {'target': enabled, 'from_digest': receipt['native_digest']}}
+            atomic_json(self.path, receipt)  # intent precedes the native mutation
+        if task.digest == receipt['native_digest']:
+            self.tasks.set_enabled(self.name, receipt['native_digest'], enabled)
+            task = self.tasks.read(self.name)
+        if (task is None or task.enabled != enabled
+                or not windows_enablement_matches(receipt['native_xml'], task.xml, enabled)):
+            raise InstallationError('SERVICE_ENABLEMENT_UNCONFIRMED', 'The observed task is not the retained enablement-only result. Review it; no overwrite or fallback was attempted.')
+        confirmed = {**receipt, 'native_digest': task.digest, 'native_xml': task.xml}
+        confirmed.pop('enablement', None)
+        atomic_json(self.path, confirmed)
+        return {'enabled': enabled, 'changed': True, 'definition_digest': task.digest}
 
     def prepare(self, context):
         """Read-only preflight before the application is asked to drain."""
@@ -192,7 +243,7 @@ class ServerInstallation:
         if receipt is None:
             return False
         if not task.enabled:
-            raise InstallationError('SERVICE_DISABLED', 'Enable the recorded task explicitly in Task Scheduler and reconcile its definition before starting.')
+            raise InstallationError('SERVICE_DISABLED', 'Use service enable --user for this instance before starting it.')
         if task.active:
             return True
         control = self.control(receipt)
@@ -222,6 +273,8 @@ class ServerInstallation:
             if task is not None:
                 raise InstallationError('FOREIGN_SERVICE_DEFINITION', 'The unowned task was preserved.')
             return
+        if receipt.get('enablement') is not None:
+            raise InstallationError('SERVICE_ENABLEMENT_PENDING', 'Complete the retained enable/disable operation before removing the integration.')
         if task is not None:
             if task.digest != receipt.get('native_digest'):
                 raise InstallationError('SERVICE_DEFINITION_CHANGED', 'The selected task differs from its retained receipt; reconcile it before removing it.')

@@ -96,6 +96,12 @@ class ServiceLifecycle:
             return stopped
         return self.adapter.uninstall_user_service()
 
+    def enable_user_service(self, *, timeout=30.0):
+        return self.adapter.set_user_service_enabled(True)
+
+    def disable_user_service(self, *, timeout=30.0):
+        return self.adapter.set_user_service_enabled(False)
+
 
 def project_server_readiness(*, identity: str, generation: str, version: str,
                              pid: int, owns_instance: bool, startup_complete: bool,

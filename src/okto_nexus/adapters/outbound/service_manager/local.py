@@ -15,7 +15,7 @@ from .context import CONTEXT_NAME, atomic_json, read_json, validate_context
 from .inspection import NoRedirect, _held, inspect_local_server
 from .locking import ExclusiveFileLock, LockBusy
 from .installation import (INSTALLATION_NAME, SUPERVISOR,
-                           ServerInstallation, installation_failure)
+                           ServerInstallation, InstallationError, installation_failure)
 
 LAUNCH_NAME = 'service-launch.json'
 
@@ -61,7 +61,7 @@ class LocalServerLifecycle:
         actual_supervisor = result.get('supervisor')
         result = {**result, 'supervisor': SUPERVISOR, 'user_service': {
             'name': receipt['name'], 'state': task.state, 'enabled': task.enabled,
-            'last_result': task.last_result, 'start_at_login': True,
+            'last_result': task.last_result, 'start_at_login': task.enabled,
             'available_before_login': False, 'available_after_logout': False,
             'definition_digest': receipt['native_digest']}}
         if result['state'] in {'ready', 'stopping'} and result.get('generation'):
@@ -207,6 +207,23 @@ class LocalServerLifecycle:
         except (OSError, ValueError, ImportError) as error:
             return installation_failure(result, error)
         return {**result, 'installation_prepared': True}
+
+    def set_user_service_enabled(self, enabled):
+        result = self._inspect_process(timeout=.2)
+        try:
+            if not self.home.exists():
+                raise InstallationError('USER_SERVICE_NOT_INSTALLED', 'Install the selected integration first.')
+            with launch_exclusion(self.home, self.database):
+                changed = self.installation.set_enabled(enabled)
+                return {**result, **changed, 'enablement_confirmed': True,
+                    'installation_state': 'installed', 'supervisor': SUPERVISOR,
+                    'next_action': ('Use service start for immediate execution.' if enabled else
+                                    'Future task starts are disabled. Use service stop for canonical drain of a running instance.')}
+        except LockBusy:
+            return {**result, 'reason': 'CONCURRENT_LIFECYCLE', 'enablement_confirmed': False,
+                'next_action': 'Repeat this operation after the current lifecycle operation completes.'}
+        except (OSError, ValueError, ImportError) as error:
+            return installation_failure(result, error)
 
     def install_user_service(self):
         self.home.mkdir(parents=True, exist_ok=True)

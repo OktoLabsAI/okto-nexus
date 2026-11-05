@@ -148,8 +148,37 @@ be compared/restored against `native_xml` in `service-installation.json`.
 
 The wrapper retains a coded supervisor exit record and the canonical drain
 receipt. The foreground Server also emits the bounded lifecycle log described
-below. Enable/disable/reconciliation UX, upgrade workflows and other-platform
+below. General definition reconciliation, upgrade workflows and other-platform
 adapters remain open R3 requirements.
+
+## Enable or disable the installed task
+
+```powershell
+okto-nexus service disable --user --home C:\absolute\nexus-home --json
+okto-nexus service enable --user --home C:\absolute\nexus-home --json
+```
+
+These commands only change enablement of the selected owned task. They do not
+start, drain or cancel a running generation. Use `service stop` for canonical
+drain and `service start` for immediate execution. A queued worker checks
+enablement before bootstrap. Status reports the enabled login policy separately
+from any current process. Disabling remains possible when the recorded
+interpreter or working directory is unavailable; enabling requires valid context.
+
+Repeated commands recognize the confirmed state. An intent is persisted before
+the native call. After a lost response, repeat the same command: a matching
+enablement-only native result completes its receipt without another mutation.
+The opposite transition is refused while an intent is pending. Other definition
+edits, including changes to triggers or privileges, cannot be adopted through
+this path. An enablement change made outside the CLI also requires review when
+there is no retained matching intent. This is bounded reconciliation of our own
+operation, not permission to overwrite an edited definition.
+
+The adapter uses the documented
+[RegisteredTask.Enabled property](https://learn.microsoft.com/en-us/windows/win32/taskschd/registeredtask-enabled),
+with a fingerprint check immediately before mutation. Task Scheduler provides
+no atomic fingerprint-conditional write against an external editor. Actual native
+mutation/login qualification is tracked separately from the isolated tests.
 
 ## Passive service logs
 

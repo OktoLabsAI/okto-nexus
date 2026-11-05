@@ -2,11 +2,13 @@
 from __future__ import annotations
 
 from dataclasses import replace
+import asyncio
 import json
 import os
 from unittest.mock import Mock
 
 import pytest
+from nexus_connector_core.user_service_definition import windows_with_enabled
 
 from okto_nexus.adapters.inbound.cli.service import run_service
 from okto_nexus.adapters.inbound.cli.supervised_service import run as run_supervised
@@ -49,6 +51,13 @@ class FakeTasks:
         assert not self.tasks[name].active
         self.calls.append(('delete', name))
         del self.tasks[name]
+
+    def set_enabled(self, name, expected, enabled):
+        assert self.tasks[name].digest == expected
+        self.calls.append(('enabled', name, enabled))
+        self.tasks[name] = replace(self.tasks[name], enabled=enabled,
+            xml=windows_with_enabled(self.tasks[name].xml, enabled))
+        return self.tasks[name]
 
 
 @pytest.fixture
@@ -250,8 +259,7 @@ def test_native_adapter_never_overwrites_and_checks_fingerprint_before_mutation(
     folder.RegisterTask.return_value = registered
     folder.GetTask.return_value = registered
     backend = WindowsTasks()
-    backend._service = Mock()
-    backend._service.GetFolder.return_value = folder
+    monkeypatch.setattr(backend, '_call', lambda operation: operation(folder))
     observation = backend.create('selected', xml)
     folder.RegisterTask.assert_called_once_with('selected', xml, 2, None, None, 3, None)
     registered.Xml = xml.replace('<Settings/>', '<Settings><Hidden>true</Hidden></Settings>')
@@ -259,6 +267,9 @@ def test_native_adapter_never_overwrites_and_checks_fingerprint_before_mutation(
         backend.start('selected', observation.digest)
     with pytest.raises(TaskConflict):
         backend.delete('selected', observation.digest)
+    with pytest.raises(TaskConflict):
+        backend.set_enabled('selected', observation.digest, False)
+    assert registered.Enabled is True
     registered.Run.assert_not_called()
     registered.Stop.assert_not_called()
     folder.DeleteTask.assert_not_called()
@@ -350,4 +361,111 @@ def test_native_host_preflight_validates_without_registering_or_creating_home(tm
     assert installation.tasks.read(installation.name) is None
     assert adapter.prepare_install()['installation_prepared']
     assert installation.tasks.read(installation.name) is None
+    assert not adapter.home.exists()
+
+
+def test_enable_disable_are_scoped_idempotent_and_do_not_start_or_drain(host):
+    adapter, tasks, receipt = install(host)
+    control = (adapter.home / CONTROL_NAME).read_bytes()
+    context = (adapter.home / 'service-context.json').read_bytes()
+    service = ServiceLifecycle(adapter, monotonic=lambda: 0, sleep=Mock())
+    disabled = service.disable_user_service()
+    assert disabled['enablement_confirmed'] and disabled['enabled'] is False
+    assert adapter.inspect()['user_service']['start_at_login'] is False
+    assert service.disable_user_service()['changed'] is False
+    assert adapter.start()['reason'] == 'SERVICE_DISABLED'
+    assert service.enable_user_service()['enabled'] is True
+    assert service.enable_user_service()['changed'] is False
+    assert tasks.calls == [('create', receipt['name']), ('enabled', receipt['name'], False), ('enabled', receipt['name'], True)]
+    assert (adapter.home / CONTROL_NAME).read_bytes() == control
+    assert (adapter.home / 'service-context.json').read_bytes() == context
+    assert read_json(adapter.home / INSTALLATION_NAME)['token'] == receipt['token']
+
+
+def test_disabling_active_task_preserves_existing_generation_and_control(host, monkeypatch):
+    adapter, tasks, receipt = install(host)
+    tasks.tasks[receipt['name']] = replace(tasks.tasks[receipt['name']], state=4)
+    control = (adapter.home / CONTROL_NAME).read_bytes()
+    monkeypatch.setattr(adapter, '_inspect_process', lambda **_: {'state': 'ready', 'generation': 'running'})
+    result = adapter.set_user_service_enabled(False)
+    assert result['state'] == 'ready' and result['generation'] == 'running'
+    assert tasks.read(receipt['name']).state == 4
+    assert (adapter.home / CONTROL_NAME).read_bytes() == control
+
+
+def test_enablement_response_loss_is_reconciled_only_for_the_same_intent(host, monkeypatch):
+    adapter, tasks, receipt = install(host)
+    setter = tasks.set_enabled
+    def lose(name, expected, enabled):
+        assert read_json(adapter.home / INSTALLATION_NAME)['enablement']['target'] is enabled
+        setter(name, expected, enabled)
+        raise OSError('response lost')
+    monkeypatch.setattr(tasks, 'set_enabled', lose)
+    assert adapter.set_user_service_enabled(False)['reason'] == 'SUPERVISOR_UNAVAILABLE'
+    assert adapter.inspect()['reason'] == 'SERVICE_ENABLEMENT_PENDING'
+    assert adapter.set_user_service_enabled(True)['reason'] == 'SERVICE_ENABLEMENT_PENDING'
+    assert adapter.set_user_service_enabled(False)['enablement_confirmed']
+    assert tasks.calls == [('create', receipt['name']), ('enabled', receipt['name'], False)]
+    assert 'enablement' not in read_json(adapter.home / INSTALLATION_NAME)
+
+
+def test_external_edit_during_enablement_stays_pending_without_overwrite(host, monkeypatch):
+    adapter, tasks, receipt = install(host)
+    setter = tasks.set_enabled
+    def edit(name, expected, enabled):
+        setter(name, expected, enabled)
+        tasks.tasks[name] = replace(tasks.tasks[name], xml=tasks.tasks[name].xml.replace('LeastPrivilege', 'HighestAvailable'))
+        raise OSError('response lost')
+    monkeypatch.setattr(tasks, 'set_enabled', edit)
+    adapter.set_user_service_enabled(False)
+    edited = tasks.read(receipt['name'])
+    assert adapter.set_user_service_enabled(False)['reason'] == 'SERVICE_ENABLEMENT_UNCONFIRMED'
+    assert tasks.read(receipt['name']) == edited and len(tasks.calls) == 2
+    assert adapter.uninstall_user_service()['reason'] == 'SERVICE_ENABLEMENT_PENDING'
+
+
+def test_external_enabled_edit_requires_review_without_a_matching_intent(host):
+    adapter, tasks, receipt = install(host)
+    task = tasks.read(receipt['name'])
+    tasks.tasks[receipt['name']] = replace(task, xml=windows_with_enabled(task.xml, False), enabled=False)
+    assert adapter.set_user_service_enabled(False)['reason'] == 'SERVICE_DEFINITION_CHANGED'
+    assert len(tasks.calls) == 1
+
+
+def test_disabled_queued_entry_exits_before_bootstrap(host, monkeypatch):
+    adapter, tasks, receipt = install(host)
+    assert adapter.set_user_service_enabled(False)['enablement_confirmed']
+    serve = Mock(side_effect=AssertionError('Disabled entry started'))
+    monkeypatch.setattr('okto_nexus.adapters.inbound.cli.serve.run_serve', serve)
+    assert run_supervised(adapter.home, adapter.database, receipt['token'], installation=adapter.installation) == 0
+    serve.assert_not_called()
+    assert not adapter.database.exists()
+
+
+def test_disable_can_be_used_with_missing_recorded_interpreter(host, monkeypatch, capsys):
+    adapter, tasks, receipt = install(host)
+    context_path = adapter.home / 'service-context.json'
+    context = read_json(context_path)
+    context['executable'] = str(adapter.home / 'removed-python.exe')
+    atomic_json(context_path, context)
+    monkeypatch.setattr('okto_nexus.adapters.outbound.service_manager.installation.WindowsTasks', lambda: tasks)
+    assert run_service(['disable', '--user', '--home', str(adapter.home), '--json']) == 0
+    assert json.loads(capsys.readouterr().out)['enabled'] is False
+    assert adapter.set_user_service_enabled(True)['reason'] == 'SERVICE_CONTEXT_UNAVAILABLE'
+
+
+def test_enable_absent_instance_does_not_create_state(tmp_path, capsys):
+    home = tmp_path / 'absent'
+    assert run_service(['enable', '--user', '--home', str(home), '--json']) == 3
+    assert json.loads(capsys.readouterr().out)['reason'] == 'USER_SERVICE_NOT_INSTALLED'
+    assert not home.exists()
+
+
+def test_native_preflight_from_worker_releases_com_on_that_thread(tmp_path):
+    adapter = make_adapter(tmp_path)
+    async def preflight():
+        assert await asyncio.to_thread(adapter.installation.tasks.read, adapter.installation.name) is None
+        assert (await asyncio.to_thread(adapter.prepare_install))['installation_prepared']
+        assert await asyncio.to_thread(adapter.installation.tasks.read, adapter.installation.name) is None
+    asyncio.run(preflight())
     assert not adapter.home.exists()
