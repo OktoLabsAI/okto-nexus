@@ -85,7 +85,7 @@ shutdown resources where available. A CLI wait timeout is not task cancellation.
 This detached mode has no crash restart policy and does not promise survival of
 logout/reboot. Actual Windows child tests prove survival of launcher exit;
 closing a real terminal and installed user-service campaigns remain separate
-qualification. Logs and Connector supervisor integration remain R3 work. An
+qualification. Connector supervisor integration has separate scoped evidence. An
 installation record already present prevents an unauthorized detached fallback.
 
 ## Windows user logon integration
@@ -146,6 +146,37 @@ for explicit review in Task Scheduler. After removing that reviewed task, repeat
 uninstall to clear the receipt, then install again. Edited definitions can instead
 be compared/restored against `native_xml` in `service-installation.json`.
 
-The wrapper retains only a coded supervisor exit record and the canonical drain
-receipt. General operational log collection, enable/disable/reconciliation UX,
-upgrade workflows and other-platform adapters remain open R3 requirements.
+The wrapper retains a coded supervisor exit record and the canonical drain
+receipt. The foreground Server also emits the bounded lifecycle log described
+below. Enable/disable/reconciliation UX, upgrade workflows and other-platform
+adapters remain open R3 requirements.
+
+## Passive service logs
+
+```powershell
+okto-nexus service logs --home C:\absolute\nexus-home --tail 50
+okto-nexus service logs --home C:\absolute\nexus-home --follow --json
+```
+
+The foreground, detached and scheduled Server paths share `logs/service.jsonl`
+under the selected home. The runtime opens it only after instance exclusion.
+Records carry timestamp, generation, supervisor, lifecycle code, state and a
+known error code. They cover startup, local query readiness, bootstrap failure,
+reported shutdown and process exit. They contain no provider messages, prompts,
+exception text, credentials or URLs. Existing task/session results and recovery
+records remain canonical; this log cannot establish completion of work.
+
+The active file rotates at 2 MiB with three backups. `--tail` accepts 1..10000
+records within a 256 KiB read budget; truncation is explicit. The view reads the
+active file and withholds malformed/unknown records. `--follow` closes each read
+handle before polling again, resumes after append/rotation, and reports observed
+rotation. A slow reader can miss records moved into backups; this is a bounded
+diagnostic view, not a complete event journal. JSON follow emits one JSON object
+per nonempty/changed observation. Ctrl+C exits 130 and only ends observation.
+
+Logs never bootstrap, start, inspect the transport or ask the native supervisor
+to run. An absent home remains absent. Reading logs still works if the retained
+Python context is broken. Missing logs return `LOG_NOT_FOUND` with exit 0;
+inaccessible/redirected logs return `LOG_UNAVAILABLE` with exit 3. Neither case
+means stopped, idle or free of uncertain work. General operational/runtime
+diagnostics continue to use their existing canonical surfaces.

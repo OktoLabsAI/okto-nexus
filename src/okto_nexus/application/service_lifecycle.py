@@ -1,4 +1,4 @@
-"""Read-only lifecycle projection. Runtime authority remains in existing gates."""
+"""Lifecycle orchestration. Runtime authority remains in existing gates."""
 from __future__ import annotations
 
 from ..domain.service_lifecycle import ServiceReadiness
@@ -11,6 +11,15 @@ class ServiceLifecycle:
 
     def inspect(self, *, timeout=2.0):
         return self.adapter.inspect(timeout=timeout)
+
+    def logs(self, *, tail=50, follow=False):
+        cursor = None
+        while True:
+            result, cursor = self.adapter.logs(tail=tail, cursor=cursor)
+            yield result
+            if not follow or result['state'] == 'unavailable':
+                return
+            self.sleep(.5)
 
     def start(self, *, timeout=30.0):
         return self.ensure_running(timeout=timeout)

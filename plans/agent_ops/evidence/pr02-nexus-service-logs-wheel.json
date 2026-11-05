@@ -1,0 +1,19 @@
+{
+  "version": "0.3.3",
+  "sha256": "824a2f43bb3290f93497b856e92d8562e41bf3e598b57014aec029ce176b8649",
+  "python_payloads": 412,
+  "all_python_payloads_match_source": true,
+  "installed_in_clean_venv": true,
+  "installed_import_outside_checkout": true,
+  "extra": "serve-lite",
+  "dependencies": {
+    "okto-nexus": "0.3.3",
+    "okto-nexus-connector-core": "0.0.14",
+    "fastapi": "0.162.0",
+    "uvicorn": "0.54.0",
+    "mcp": "1.30.0",
+    "pydantic": "2.14.2",
+    "pywin32": "312",
+    "pytest": "9.2.0"
+  }
+}

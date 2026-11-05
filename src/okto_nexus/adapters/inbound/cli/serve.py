@@ -256,7 +256,7 @@ def _configure_logging(level: str) -> None:
 
 
 def _watch_ready(
-    server: "object", host: str, port: int, embeddings_done: "object"
+    server: "object", host: str, port: int, embeddings_done: "object", service_log=None
 ) -> None:
     """Announce readiness ONLY once uvicorn flips ``started`` - which by
     construction means the lifespan completed (the MCP session manager is
@@ -272,6 +272,8 @@ def _watch_ready(
         if getattr(server, "should_exit", False):
             return
         time.sleep(0.1)
+    if service_log is not None:
+        service_log.write('READY_FOR_QUERIES', state='READY')
     print(
         f"[okto-nexus] MCP Server initialized successfully - "
         f"http://{host}:{port}/mcp",
@@ -496,11 +498,21 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None, *,
         print('[okto-nexus] Another lifecycle operation is selecting this instance; retry after it completes.', file=sys.stderr)
         return 1
 
+    service_log = None
+    shutdown_state = 'UNCONFIRMED'
     try:
+        from ...outbound.service_manager.logs import ServiceLog
+        try:
+            service_log = ServiceLog(config.home_dir, generation=lock.generation, supervisor=supervisor)
+            service_log.write('STARTING', state='STARTING')
+        except OSError:
+            print('[okto-nexus] LOG_UNAVAILABLE: service diagnostics could not be opened.', file=sys.stderr)
         try:
             deps = bootstrap(env, rest)
             deps.local_discovery = discovery
         except OktoNexusError as exc:
+            if service_log is not None:
+                service_log.write('BOOTSTRAP_FAILED', error_code=exc.code)
             print(f"[okto-nexus] serve bootstrap failed: {exc.code}: {exc.message}", file=sys.stderr)
             return 1
         maybe_auto_prune(deps)
@@ -556,7 +568,7 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None, *,
         ).start()
         threading.Thread(
             target=_watch_ready,
-            args=(server, host, port, embeddings_done),
+            args=(server, host, port, embeddings_done, service_log),
             daemon=True,
         ).start()
         # Adapters establish ownership at native process birth. The compatibility
@@ -577,10 +589,13 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None, *,
             shutdown_owner = getattr(app.state, 'runtime_shutdown', None)
             if shutdown_owner is not None:
                 from ...outbound.service_manager.context import atomic_json
+                shutdown_state = shutdown_owner.status()['state']
+                if service_log is not None:
+                    service_log.write('SHUTDOWN_REPORTED', state=shutdown_state)
                 try:
                     atomic_json(lock.home_dir / 'service-shutdown.json', {
                         'revision': 1, 'generation': lock.generation,
-                        'state': shutdown_owner.status()['state']})
+                        'state': shutdown_state})
                 except OSError:
                     print('[okto-nexus] Shutdown receipt could not be persisted; '
                           'post-exit observation will remain unconfirmed.', file=sys.stderr)
@@ -603,6 +618,15 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None, *,
             # its own next poll. See `_stop_harness_orphan_watchdog`.
             _stop_harness_orphan_watchdog(watchdog)
         return 0
+    except BaseException as exc:
+        if service_log is not None:
+            service_log.write('EXIT_FAILED', error_code=getattr(exc, 'code', ErrorCode.INTERNAL_ERROR.value))
+        raise
     finally:
+        if service_log is not None:
+            service_log.write('SERVICE_EXIT', state=shutdown_state)
+            service_log.close()
+            if service_log.handler.failed:
+                print('[okto-nexus] LOG_WRITE_UNCONFIRMED: some service diagnostics could not be persisted.', file=sys.stderr)
         if acquired_lock is None:
             lock.release()

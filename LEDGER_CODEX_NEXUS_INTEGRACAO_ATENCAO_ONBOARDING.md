@@ -94,6 +94,14 @@ Relatório: [implementation-report.md](plans/agent_ops/implementation-report.md)
 - SVC-11 e PR-02 continuam em progresso. Controles restantes, recuperação/upgrade, campanhas reais e qualificação POSIX permanecem abertos. [Evidências e limites](plans/agent_ops/evidence/pr02-connector-user-service.md).
 - Commit/push do Connector: `fc90370` em `feature/v0.0.12`.
 
+## 2026-11-05 — PR-02, quinta fatia: logs passivos do Nexus
+
+- Fachada e CLI oferecem `service logs --tail/--follow --json` sem bootstrap, inspeção de transporte ou startup. Home ausente continua ausente; contexto antigo quebrado não bloqueia a leitura.
+- O mesmo foreground usado por execução direta, destacada e tarefa Windows grava códigos de lifecycle por geração após adquirir ownership. Rotação de 2 MiB, três backups e leitura limitada; mensagens de provedor, prompts e segredos não entram nesse formato.
+- **49 testes passaram, com 2 skips POSIX**; **12 testes de logs passaram** após finalizar indicação de rotação e caso de falha de gravação. **13 testes passaram com o wheel instalado em venv limpa fora do checkout**, incluindo concorrência, reuso, restart, drain e logs das gerações reais.
+- Os **412 arquivos Python** do wheel correspondem ao fonte. Ausência/falha de logs não comprova serviço parado nem trabalho concluído; Ctrl+C encerra apenas a observação.
+- Os aceites completos de SVC e M1 continuam abertos. [Evidências, comandos e limites](plans/agent_ops/evidence/pr02-nexus-service-logs.md).
+
 ## Próxima dependência
 
 Concluir as lacunas de PR-01 junto ao supervisor e ao Connector em PR-02 / SVC-05…12. A pendência de campanha de BASE-06 continua explícita; os critérios de trabalho real local/remoto e decisão pelo terminal de M1 permanecem intactos.

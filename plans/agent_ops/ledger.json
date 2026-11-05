@@ -62,7 +62,8 @@
         "plans/agent_ops/evidence/pr02-connector-readiness.md",
         "plans/agent_ops/evidence/pr02-core-service-definition.md",
         "plans/agent_ops/evidence/pr02-nexus-user-service.md",
-        "plans/agent_ops/evidence/pr02-connector-user-service.md"
+        "plans/agent_ops/evidence/pr02-connector-user-service.md",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs.md"
       ]
     },
     "PR-03": {
@@ -278,6 +279,7 @@
         "../okto-nexus-connector/tests/unit/test_user_service_lifecycle.py",
         "docs/service-lifecycle.md",
         "plans/agent_ops/evidence/pr02-connector-user-service.md",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs.md",
         "plans/agent_ops/evidence/pr02-nexus-user-service.md",
         "src/okto_nexus/adapters/inbound/cli/serve.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
@@ -290,10 +292,12 @@
         "src/okto_nexus/adapters/outbound/service_manager/inspection.py",
         "src/okto_nexus/adapters/outbound/service_manager/installation.py",
         "src/okto_nexus/adapters/outbound/service_manager/local.py",
+        "src/okto_nexus/adapters/outbound/service_manager/logs.py",
         "src/okto_nexus/adapters/outbound/service_manager/windows_tasks.py",
         "src/okto_nexus/application/service_lifecycle.py",
         "src/okto_nexus/domain/service_lifecycle.py",
         "tests/test_service_inspection.py",
+        "tests/test_service_logs.py",
         "tests/test_service_process.py",
         "tests/test_service_readiness.py",
         "tests/test_service_start.py",
@@ -308,15 +312,19 @@
         "plans/agent_ops/evidence/pr02-connector-user-service-regression.xml",
         "plans/agent_ops/evidence/pr02-connector-user-service-wheel.json",
         "plans/agent_ops/evidence/pr02-connector-user-service.xml",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs-final.xml",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs-wheel.json",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service-wheel.json",
         "plans/agent_ops/evidence/pr02-nexus-user-service.xml"
       ],
-      "result": "Nexus Windows task host integration implemented; isolated host contracts, native validate-only preflight and concurrent real detached process regression passed. See scoped evidence; no registered service qualification. Connector host/launch subscopes now have scoped validation in pr02-connector-user-service.md; full task acceptance remains open.",
+      "result": "Nexus Windows task host integration implemented; isolated host contracts, native validate-only preflight and concurrent real detached process regression passed. See scoped evidence; no registered service qualification. Connector host/launch subscopes now have scoped validation in pr02-connector-user-service.md; full task acceptance remains open. Passive Server logs and final 412-file wheel now verified by 12 log tests and 13 clean-venv tests outside checkout.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Actual user-service/login/logout/crash/credential/provider campaigns NOT_RUN; legacy POSIX installers remain unqualified for the R3 instance contract.",
-        "Remaining controls/logs/passive diagnostics, enable/disable/reconciliation UX, detached pre-spawn recovery and controlled upgrades remain open.",
+        "Remaining controls and passive diagnostics beyond service logs, enable/disable/reconciliation UX, detached pre-spawn recovery and controlled upgrades remain open.",
         "Native Task Scheduler has no atomic fingerprint-conditional mutation against external editors; unconfirmed existing tasks are not adopted."
       ],
       "subscopes": {
@@ -324,7 +332,8 @@
         "server_passive_status": "VERIFIED",
         "local_application_facade": "VERIFIED",
         "server_install_uninstall_facade_isolated": "VERIFIED",
-        "connector_lifecycle_facade": "IMPLEMENTED"
+        "connector_lifecycle_facade": "IMPLEMENTED",
+        "server_passive_logs_facade": "VERIFIED"
       }
     },
     "SVC-02": {
@@ -834,6 +843,7 @@
         "../okto-nexus-connector/tests/unit/test_user_service_lifecycle.py",
         "docs/service-lifecycle.md",
         "plans/agent_ops/evidence/pr02-connector-user-service.md",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs.md",
         "plans/agent_ops/evidence/pr02-nexus-user-service.md",
         "src/okto_nexus/adapters/inbound/cli/serve.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
@@ -846,9 +856,11 @@
         "src/okto_nexus/adapters/outbound/service_manager/inspection.py",
         "src/okto_nexus/adapters/outbound/service_manager/installation.py",
         "src/okto_nexus/adapters/outbound/service_manager/local.py",
+        "src/okto_nexus/adapters/outbound/service_manager/logs.py",
         "src/okto_nexus/adapters/outbound/service_manager/windows_tasks.py",
         "src/okto_nexus/application/service_lifecycle.py",
         "tests/test_service_inspection.py",
+        "tests/test_service_logs.py",
         "tests/test_service_process.py",
         "tests/test_service_start.py",
         "tests/test_user_service_installation.py"
@@ -860,22 +872,28 @@
         "plans/agent_ops/evidence/pr02-connector-user-service-regression.xml",
         "plans/agent_ops/evidence/pr02-connector-user-service-wheel.json",
         "plans/agent_ops/evidence/pr02-connector-user-service.xml",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs-final.xml",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs-wheel.json",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service-wheel.json",
         "plans/agent_ops/evidence/pr02-nexus-user-service.xml"
       ],
-      "result": "Nexus Windows task host integration implemented; isolated host contracts, native validate-only preflight and concurrent real detached process regression passed. See scoped evidence; no registered service qualification. Connector host/launch subscopes now have scoped validation in pr02-connector-user-service.md; full task acceptance remains open.",
+      "result": "Nexus Windows task host integration implemented; isolated host contracts, native validate-only preflight and concurrent real detached process regression passed. See scoped evidence; no registered service qualification. Connector host/launch subscopes now have scoped validation in pr02-connector-user-service.md; full task acceptance remains open. Passive Server logs and final 412-file wheel now verified by 12 log tests and 13 clean-venv tests outside checkout.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Actual user-service/login/logout/crash/credential/provider campaigns NOT_RUN; legacy POSIX installers remain unqualified for the R3 instance contract.",
-        "Remaining controls/logs/passive diagnostics, enable/disable/reconciliation UX, detached pre-spawn recovery and controlled upgrades remain open.",
+        "Remaining controls and passive diagnostics beyond service logs, enable/disable/reconciliation UX, detached pre-spawn recovery and controlled upgrades remain open.",
         "Native Task Scheduler has no atomic fingerprint-conditional mutation against external editors; unconfirmed existing tasks are not adopted."
       ],
       "subscopes": {
         "server_start_stop_restart": "VERIFIED",
         "server_user_install_uninstall": "IMPLEMENTED",
         "connector_start_stop_restart": "VERIFIED",
-        "connector_user_install_uninstall": "IMPLEMENTED"
+        "connector_user_install_uninstall": "IMPLEMENTED",
+        "server_passive_logs_cli": "VERIFIED",
+        "server_coded_rotating_diagnostics": "VERIFIED"
       }
     },
     "SVC-11": {
@@ -962,6 +980,7 @@
         "../okto-nexus-connector/tests/unit/test_user_service_lifecycle.py",
         "docs/service-lifecycle.md",
         "plans/agent_ops/evidence/pr02-connector-user-service.md",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs.md",
         "plans/agent_ops/evidence/pr02-nexus-user-service.md",
         "src/okto_nexus/adapters/inbound/cli/serve.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
@@ -972,9 +991,11 @@
         "src/okto_nexus/adapters/outbound/service_manager/inspection.py",
         "src/okto_nexus/adapters/outbound/service_manager/installation.py",
         "src/okto_nexus/adapters/outbound/service_manager/local.py",
+        "src/okto_nexus/adapters/outbound/service_manager/logs.py",
         "src/okto_nexus/adapters/outbound/service_manager/windows_tasks.py",
         "src/okto_nexus/application/service_lifecycle.py",
         "tests/test_service_inspection.py",
+        "tests/test_service_logs.py",
         "tests/test_service_process.py",
         "tests/test_service_start.py",
         "tests/test_user_service_installation.py"
@@ -984,15 +1005,19 @@
         "plans/agent_ops/evidence/pr02-connector-user-service-regression.xml",
         "plans/agent_ops/evidence/pr02-connector-user-service-wheel.json",
         "plans/agent_ops/evidence/pr02-connector-user-service.xml",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs-final.xml",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs-wheel.json",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service-wheel.json",
         "plans/agent_ops/evidence/pr02-nexus-user-service.xml"
       ],
-      "result": "Nexus Windows task host integration implemented; isolated host contracts, native validate-only preflight and concurrent real detached process regression passed. See scoped evidence; no registered service qualification. Connector host/launch subscopes now have scoped validation in pr02-connector-user-service.md; full task acceptance remains open.",
+      "result": "Nexus Windows task host integration implemented; isolated host contracts, native validate-only preflight and concurrent real detached process regression passed. See scoped evidence; no registered service qualification. Connector host/launch subscopes now have scoped validation in pr02-connector-user-service.md; full task acceptance remains open. Passive Server logs and final 412-file wheel now verified by 12 log tests and 13 clean-venv tests outside checkout.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Actual user-service/login/logout/crash/credential/provider campaigns NOT_RUN; legacy POSIX installers remain unqualified for the R3 instance contract.",
-        "Remaining controls/logs/passive diagnostics, enable/disable/reconciliation UX, detached pre-spawn recovery and controlled upgrades remain open.",
+        "Remaining controls and passive diagnostics beyond service logs, enable/disable/reconciliation UX, detached pre-spawn recovery and controlled upgrades remain open.",
         "Native Task Scheduler has no atomic fingerprint-conditional mutation against external editors; unconfirmed existing tasks are not adopted."
       ],
       "subscopes": {
@@ -1000,7 +1025,8 @@
         "installed_service_campaign": "NOT_RUN",
         "connector_wheel_python_payloads": "VERIFIED",
         "connector_clean_venv_detached_lifecycle": "VERIFIED",
-        "connector_installed_service_campaign": "NOT_RUN"
+        "connector_installed_service_campaign": "NOT_RUN",
+        "server_clean_venv_detached_lifecycle_and_logs": "VERIFIED"
       }
     },
     "DX-01": {
@@ -1757,8 +1783,18 @@
     },
     "SVC-T10": {
       "requirement": "Consulta status/logs/doctor em instância parada não a inicia e não executa inferência.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr02-nexus-service-logs-final.xml",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs-wheel.json",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs.md",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs.xml"
+      ],
+      "subscopes": {
+        "server_logs_no_bootstrap_or_start": "VERIFIED",
+        "full_doctor_and_consumers": "NOT_RUN"
+      }
     },
     "SVC-T11": {
       "requirement": "Endpoint acessível de instância/versão errada não vira prontidão válida.",
@@ -1787,8 +1823,18 @@
     },
     "SVC-T16": {
       "requirement": "Definições de serviço, argv, logs e saída JSON não expõem segredos nem ampliam bind/permissões.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr02-nexus-service-logs-final.xml",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs-wheel.json",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs.md",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs.xml"
+      ],
+      "subscopes": {
+        "coded_service_log_secret_boundary": "VERIFIED",
+        "full_campaign": "NOT_RUN"
+      }
     },
     "SVC-T17": {
       "requirement": "Instalar/habilitar serviço repetidamente não duplica recursos; alteração externa de definição é preservada.",
@@ -1857,8 +1903,18 @@
     },
     "SVC-T30": {
       "requirement": "Wheel/artefato instalado contém os recursos necessários e funciona sem checkout ou terminal de instalação.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr02-nexus-service-logs-final.xml",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs-wheel.json",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs.md",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs.xml"
+      ],
+      "subscopes": {
+        "server_clean_venv_detached_lifecycle_and_logs": "VERIFIED",
+        "native_installed_service_campaign": "NOT_RUN"
+      }
     },
     "DX-T01": {
       "requirement": "Init usa agente existente e não cria/rotaciona identidade implicitamente.",
@@ -2655,6 +2711,18 @@
         "plans/agent_ops/evidence/pr02-connector-user-service-regression.xml",
         "plans/agent_ops/evidence/pr02-connector-user-service-packaging.xml",
         "plans/agent_ops/evidence/pr02-connector-user-service-wheel.json"
+      ]
+    },
+    {
+      "date": "2026-11-05",
+      "scope": "PR-02/SVC passive Nexus lifecycle logs",
+      "result": "49 passed, 2 POSIX skips; 12 final log tests; 13 clean-venv installed tests outside checkout. All 412 wheel Python files match source. Full SVC/M1/native campaigns remain open.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr02-nexus-service-logs.md",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs.xml",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs-final.xml",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
+        "plans/agent_ops/evidence/pr02-nexus-service-logs-wheel.json"
       ]
     }
   ]

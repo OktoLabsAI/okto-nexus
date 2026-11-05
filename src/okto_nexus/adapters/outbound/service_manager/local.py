@@ -41,6 +41,10 @@ class LocalServerLifecycle:
         self.host, self.port, self.context = host, port, context
         self.installation = installation or ServerInstallation(self.home, self.database)
 
+    def logs(self, *, tail=50, cursor=None):
+        from .logs import read_logs
+        return read_logs(self.home, tail=tail, cursor=cursor)
+
     def inspect(self, *, timeout=2.0, _launch_owned=False):
         result = self._inspect_process(timeout=timeout)
         if result['state'] == 'stopped' and not _launch_owned and any(_held(path) is True for path in (

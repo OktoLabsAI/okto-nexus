@@ -73,6 +73,13 @@ def test_concurrent_detached_start_survives_cli_exit_reuses_and_drains(tmp_path)
         stopped = True
         assert invoke('status')['state'] == 'stopped'
         assert home.joinpath('nexus.db').is_file()
+        log_view = invoke('logs', '--tail', '50')
+        events = log_view['events']
+        assert log_view['service_state'] == 'not_checked'
+        assert {event['generation'] for event in events} == {*generations, reopened['generation']}
+        assert any(event['code'] == 'READY_FOR_QUERIES' for event in events)
+        assert any(event['code'] == 'SERVICE_EXIT' and event['state'] == 'DRAINED'
+                   and event['generation'] == reopened['generation'] for event in events)
     finally:
         for parent in parents:
             if parent.poll() is None:

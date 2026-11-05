@@ -18,13 +18,19 @@ from .serve import _split_serve_args
 def run_service(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(prog='okto-nexus service',
         description='Inspect or explicitly start the configured local Server.')
-    parser.add_argument('action', choices=['status', 'start', 'stop', 'restart', 'install', 'uninstall'])
+    parser.add_argument('action', choices=['status', 'logs', 'start', 'stop', 'restart', 'install', 'uninstall'])
+    parser.add_argument('--follow', action='store_true', help='follow local service logs until Ctrl+C')
+    parser.add_argument('--tail', type=int, default=None, help='recent log records, 1..10000 (default 50)')
     parser.add_argument('--user', action='store_true', help='select the effective user service scope')
     parser.add_argument('--start-at-login', action='store_true', help='explicitly opt into user logon startup')
     parser.add_argument('--json', action='store_true')
     parser.add_argument('--timeout', type=float, default=None,
                         help='observation timeout in seconds; timeout never kills the service')
     args, remaining = parser.parse_known_args(argv)
+    if args.action != 'logs' and (args.follow or args.tail is not None):
+        parser.error('--follow and --tail apply only to logs')
+    if args.tail is not None and not 1 <= args.tail <= 10000:
+        parser.error('--tail must be between 1 and 10000')
     if args.action == 'install' and not (args.user and args.start_at_login):
         parser.error('install requires --user --start-at-login')
     if args.action == 'uninstall' and not args.user:
@@ -38,6 +44,13 @@ def run_service(argv: list[str]) -> int:
         port, host, project_root, log_level, rest = _split_serve_args(remaining, os.environ)
         discovery, rest = split_discovery_args(rest)
         config = load_config(os.environ, rest)
+        if args.action == 'logs':
+            # Diagnostic access remains possible with an unavailable old Python
+            # environment, native supervisor or transport. Do not inspect/start.
+            adapter = LocalServerLifecycle(home=config.home_dir, database=config.db_path,
+                                           host=host, port=port)
+            service = ServiceLifecycle(adapter, monotonic=time.monotonic, sleep=time.sleep)
+            return _show_logs(service, args)
         saved = config.home_dir.resolve() / CONTEXT_NAME
         environment = os.environ
         if saved.exists():
@@ -79,3 +92,29 @@ def run_service(argv: list[str]) -> int:
                result['state'] in {'ready', 'stopped'} if args.action == 'status' else
                result['state'] == 'stopped' and result.get('shutdown_outcome') != 'unconfirmed')
     return 0 if success else 3
+
+
+def _show_logs(service, args):
+    previous = object()
+    try:
+        for result in service.logs(tail=args.tail or 50, follow=args.follow):
+            if previous != result['reason'] or result['events'] or result['rotated'] or result['truncated']:
+                if args.json:
+                    print(json.dumps(result), flush=True)
+                else:
+                    for event in result['events']:
+                        print(f"{event['timestamp']} {event['code']} state={event['state']} "
+                              f"generation={event['generation']} supervisor={event['supervisor']}"
+                              + (f" error={event['error_code']}" if event['error_code'] else ''), flush=True)
+                    if result['reason']:
+                        print(f"{result['reason']}: log availability does not establish service or work state.", flush=True)
+                    if result['truncated']:
+                        print('Older records omitted by the bounded log view.', flush=True)
+                    if result['rotated']:
+                        print('Log rotated; observation resumed from the active file.', flush=True)
+                previous = result['reason']
+            if result['state'] == 'unavailable':
+                return 3
+    except KeyboardInterrupt:
+        return 130  # end observation only; no stop/cancel operation
+    return 0

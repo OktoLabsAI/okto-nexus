@@ -174,3 +174,23 @@ open for the remaining controls/reconciliation/upgrade/diagnostics, native
 service/login/crash/credential campaigns, productive remote work and POSIX
 qualification. There is no schema or NXL migration; rollback preserves existing
 data and must respect the selected supervisor's drain/ownership receipts.
+
+## PR-02 fifth increment — passive Nexus lifecycle logs
+
+The application facade and CLI now expose bounded `service logs` snapshots and
+follow. The same foreground runtime emits coded startup/readiness/shutdown/exit
+records after acquiring ownership, with rotation and retention. Neither writer
+nor reader accepts arbitrary provider/exception text or credentials. Reading
+logs does not bootstrap or inspect/start a service, and Ctrl+C only ends the
+observation. Log availability remains separate from service/work state.
+
+49 tests passed with 2 POSIX skips; 12 final log tests passed, including bounded
+I/O failure and corrupt-record handling. A new clean venv installed the final
+wheel/Core with serve-lite and passed 13 tests outside the checkout, including
+real concurrent start/reuse/restart/drain and generation-correlated logs. All
+412 Python payloads match source. See `evidence/pr02-nexus-service-logs.md` for
+commands, the corrected fault-injection fixture, provenance and limitations.
+
+The new file is diagnostic only; no schema, protocol, runtime authority or work
+journal changed. Other passive diagnostics, remaining lifecycle controls and
+actual native/user/provider qualification remain open in the fixed R3 ledger.
