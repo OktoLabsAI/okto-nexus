@@ -130,13 +130,14 @@ The current installer supports Windows user logon tasks. This option does not
 promise startup before login, survival after logout or restored work after reboot.
 POSIX native installation remains unqualified; on-demand use is still available.
 An operator profile targeting a remote Server cannot install a task on this client
-as a substitute. Connector-host startup remains controlled by its own service CLI;
-integration into its initial wizard is still pending.
+as a substitute. On the Connector host, its `connect`/`configure` wizard offers
+the corresponding local choice in Connector `0.0.12`; its service CLI remains
+available for explicit later changes. Native login qualification remains pending.
 
 The versioned preset origin is retained in the canonical Finish receipt and
 exposed by setup reads. Dashboard and terminal still use the same binding,
-runtime policy and harness configuration. Connector-host start-at-login review,
-participant initialization, unified remote Connector onboarding and real provider
+runtime policy and harness configuration. Participant initialization,
+unified remote Connector onboarding and real provider
 qualification remain in progress. Reconnect and repeated Finish do not re-enable a policy
 disabled after setup. A recorded decision whose native delivery is refused is
 shown explicitly. New service contexts retain which configuration values were

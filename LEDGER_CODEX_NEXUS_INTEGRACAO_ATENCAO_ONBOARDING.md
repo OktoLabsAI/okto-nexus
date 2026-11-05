@@ -231,3 +231,12 @@ Campanhas reais de provedor, login/logout/reboot, serviço do usuário e Herdr p
 - **8 testes novos e 30 regressões passaram nos fontes.** A primeira campanha instalada teve 150 passes e revelou uma recusa prematura durante leitura dos metadados de startup concorrente; corrigida com espera limitada sem novo start e três testes focados. **169 testes passaram no pacote final instalado**, incluindo criação de agente e processos reais. Os 431/114/130 arquivos Python correspondem aos fontes; Connector e Core não mudaram.
 - Verificado o contrato local com SO/processo injetados. DX-T37 permanece parcial até integrar a opção ao wizard do Connector; login/logout/crash reais e M1 produtivo continuam pendentes. Escopo R3 preservado.
 - Evidência: [pr03-login-start.md](plans/agent_ops/evidence/pr03-login-start.md).
+
+## 2026-11-05 — PR-03, décima fatia: início no login no wizard do Connector
+
+- `connect`/`configure` incluem a opção de login na mesma revisão local, com contexto completo e sem segredos. Recusar mantém o uso sob demanda; cancelar antes de Finish não altera tarefas.
+- A intenção é persistida antes do drain/instalação/habilitação. Checkpoints recuperam falhas sem repetir registro/proposta nem criar tarefa duplicada; resposta nativa desconhecida exige inspeção. Retomada recusa escolhas conflitantes e preserva desabilitação posterior.
+- A aprovação do operador no Nexus continua independente da escolha local. Sua conclusão em background preserva o checkpoint do host. A revisão humana não pode ser ocultada por `connect --json`.
+- **74 testes passaram nos fontes; 152 do Connector e 104 do Nexus passaram nos artefatos instalados.** Os relatórios têm sobreposição; os 431/116/130 arquivos Python correspondem aos fontes. Pin e hash do Connector atualizados no Nexus; Core não mudou.
+- **DX-T37 verificado no contrato de revisão/recusa em Windows, com efeitos nativos injetados.** Login/logout/crash/cofre reais, M1 produtivo e o restante do plano continuam abertos. Escopo R3 preservado.
+- Evidência: [pr03-connector-login-start.md](plans/agent_ops/evidence/pr03-connector-login-start.md).
