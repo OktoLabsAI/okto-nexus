@@ -1,5 +1,13 @@
 # Current development dependency
 
+Core 0.0.14 is pinned by Nexus 0.3.3 and Connector 0.0.12 for the agent-operations
+R3 implementation. Both consumers use identical candidate wheel bytes. The
+authoritative SHA-256 is in `../ci/manifest.json`. This preparation only bumps
+package metadata from the refreshed main branches; protocol revisions are
+unchanged. This is an unpublished validation artifact, not provider qualification.
+
+## Historical dependency records
+
 Core 0.0.11 is required by Nexus 0.3.0 and Connector 0.0.9.
 Shared wheel SHA-256: c475bc793605b6f375c4e88140764e90425f43d83b67dc96c86b2d95cc83f6d1.
 Built from feature/v0.0.11 with the local handoff capacity, recovery and

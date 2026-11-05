@@ -1,0 +1,2026 @@
+{
+  "schema_version": 1,
+  "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+  "plan_revision": "R3",
+  "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+  "updated_at": "2026-11-05",
+  "status": "IN_PROGRESS",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "repositories": {
+    "nexus": {
+      "baseline_main": "c1e78e26fb2bd57ace3370417a2cb7529856b603",
+      "previous_head": "d881266f34012ae3a31a1c948fea7967ede6ec07",
+      "version_before": "0.3.2",
+      "version": "0.3.3",
+      "branch": "feature/v0.3.3"
+    },
+    "core": {
+      "baseline_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "previous_head": "2182b36d5f39326e2ca663838394d8a086e46007",
+      "version_before": "0.0.13",
+      "version": "0.0.14",
+      "branch": "feature/v0.0.14",
+      "preparation_commit": "2093863"
+    },
+    "connector": {
+      "baseline_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "previous_head": "1d1ee7371d7261fbc7e02d372b9b9af3c34fa11c",
+      "version_before": "0.0.11",
+      "version": "0.0.12",
+      "branch": "feature/v0.0.12",
+      "preparation_commit": "7fd37c8"
+    }
+  },
+  "milestones": {
+    "PR-00": {
+      "status": "IN_PROGRESS",
+      "dependencies": [],
+      "evidence": []
+    },
+    "PR-01": {
+      "status": "NOT_STARTED",
+      "dependencies": [
+        "PR-00"
+      ],
+      "evidence": []
+    },
+    "PR-02": {
+      "status": "NOT_STARTED",
+      "dependencies": [
+        "PR-01"
+      ],
+      "evidence": []
+    },
+    "PR-03": {
+      "status": "NOT_STARTED",
+      "dependencies": [
+        "PR-02"
+      ],
+      "evidence": []
+    },
+    "PR-04": {
+      "status": "NOT_STARTED",
+      "dependencies": [
+        "PR-00",
+        "PR-03"
+      ],
+      "evidence": []
+    },
+    "PR-05": {
+      "status": "NOT_STARTED",
+      "dependencies": [
+        "PR-00",
+        "PR-03",
+        "PR-04"
+      ],
+      "evidence": []
+    },
+    "PR-06": {
+      "status": "NOT_STARTED",
+      "dependencies": [
+        "PR-00"
+      ],
+      "evidence": []
+    },
+    "PR-07": {
+      "status": "NOT_STARTED",
+      "dependencies": [
+        "PR-06"
+      ],
+      "evidence": []
+    },
+    "PR-08": {
+      "status": "NOT_STARTED",
+      "dependencies": [
+        "PR-00"
+      ],
+      "evidence": []
+    },
+    "PR-09": {
+      "status": "NOT_STARTED",
+      "dependencies": [
+        "PR-08"
+      ],
+      "evidence": []
+    },
+    "PR-10": {
+      "status": "NOT_STARTED",
+      "dependencies": [
+        "PR-03",
+        "PR-04",
+        "PR-05",
+        "PR-06",
+        "PR-07",
+        "PR-08",
+        "PR-09"
+      ],
+      "evidence": []
+    }
+  },
+  "tasks": {
+    "BASE-01": {
+      "title": "registrar baseline",
+      "status": "IN_PROGRESS",
+      "milestones": [
+        "PR-00"
+      ],
+      "dependencies": [],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "BASE-02": {
+      "title": "rastrear caminhos",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-00"
+      ],
+      "dependencies": [],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "BASE-03": {
+      "title": "separar documentação vigente e legado",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-00"
+      ],
+      "dependencies": [],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "BASE-04": {
+      "title": "criar ADR curto",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-00"
+      ],
+      "dependencies": [],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "BASE-05": {
+      "title": "ledger de evidências",
+      "status": "VERIFIED",
+      "milestones": [
+        "PR-00"
+      ],
+      "dependencies": [],
+      "files": [
+        "plans/agent_ops/ledger.json",
+        "LEDGER_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md"
+      ],
+      "tests": [
+        "rtk proxy python -X utf8 scripts/check_agent_ops_ledger.py"
+      ],
+      "result": "Coverage check passed: 59 tasks, 132 scenarios, 28 invariants and 17 completion criteria; no product gate inferred.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [],
+      "subscopes": {}
+    },
+    "BASE-06": {
+      "title": "lifecycle e primeiro uso reais",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-00"
+      ],
+      "dependencies": [],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "SVC-01": {
+      "title": "fachada de lifecycle",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-01"
+      ],
+      "dependencies": [
+        "PR-00"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "SVC-02": {
+      "title": "propriedade e exclusão mútua",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-01"
+      ],
+      "dependencies": [
+        "PR-00"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "SVC-03": {
+      "title": "iniciar ou reutilizar",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-01"
+      ],
+      "dependencies": [
+        "PR-00"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "SVC-04": {
+      "title": "prova de prontidão",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-01"
+      ],
+      "dependencies": [
+        "PR-00"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "SVC-05": {
+      "title": "integração com o gerenciador do SO",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-02"
+      ],
+      "dependencies": [
+        "PR-01"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "SVC-06": {
+      "title": "contexto estável de execução",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-02"
+      ],
+      "dependencies": [
+        "PR-01"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "SVC-07": {
+      "title": "parada controlada",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-02"
+      ],
+      "dependencies": [
+        "PR-01"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "SVC-08": {
+      "title": "reconciliação sem repetição de efeitos",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-02"
+      ],
+      "dependencies": [
+        "PR-01"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "SVC-09": {
+      "title": "versão ativa e upgrade controlado",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-02"
+      ],
+      "dependencies": [
+        "PR-01"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "SVC-10": {
+      "title": "controles simples",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-02"
+      ],
+      "dependencies": [
+        "PR-01"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "SVC-11": {
+      "title": "mesmo lifecycle no Connector",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-02"
+      ],
+      "dependencies": [
+        "PR-01"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "SVC-12": {
+      "title": "empacotamento, campanha e documentação",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-02",
+        "PR-10"
+      ],
+      "dependencies": [
+        "PR-01",
+        "PR-03",
+        "PR-04",
+        "PR-05",
+        "PR-06",
+        "PR-07",
+        "PR-08",
+        "PR-09"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "DX-01": {
+      "title": "modelo declarativo próprio",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-04"
+      ],
+      "dependencies": [
+        "PR-00",
+        "PR-03"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "DX-02": {
+      "title": "matriz de formatos",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-04"
+      ],
+      "dependencies": [
+        "PR-00",
+        "PR-03"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "DX-03": {
+      "title": "plan/apply",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-04"
+      ],
+      "dependencies": [
+        "PR-00",
+        "PR-03"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "DX-04": {
+      "title": "credenciais",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-04"
+      ],
+      "dependencies": [
+        "PR-00",
+        "PR-03"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "DX-15": {
+      "title": "connect como entrada principal",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-03"
+      ],
+      "dependencies": [
+        "PR-02"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "DX-16": {
+      "title": "descoberta e revisão mínima",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-03"
+      ],
+      "dependencies": [
+        "PR-02"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "DX-17": {
+      "title": "progresso, retomada e primeira sessão",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-03"
+      ],
+      "dependencies": [
+        "PR-02"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "DX-05": {
+      "title": "init",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-03",
+        "PR-04"
+      ],
+      "dependencies": [
+        "PR-00",
+        "PR-02",
+        "PR-03"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "DX-06": {
+      "title": "sem transação distribuída fictícia",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-03",
+        "PR-04"
+      ],
+      "dependencies": [
+        "PR-00",
+        "PR-02",
+        "PR-03"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "DX-07": {
+      "title": "doctor estruturado",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-03",
+        "PR-04"
+      ],
+      "dependencies": [
+        "PR-00",
+        "PR-02",
+        "PR-03"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "DX-08": {
+      "title": "smoke de cooperação",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-03",
+        "PR-04"
+      ],
+      "dependencies": [
+        "PR-00",
+        "PR-02",
+        "PR-03"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "DX-09": {
+      "title": "cliente fino, não orquestrador",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-03",
+        "PR-05"
+      ],
+      "dependencies": [
+        "PR-00",
+        "PR-02",
+        "PR-03",
+        "PR-04"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "DX-10": {
+      "title": "verificar e complementar deduplicação",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-03",
+        "PR-05"
+      ],
+      "dependencies": [
+        "PR-00",
+        "PR-02",
+        "PR-03",
+        "PR-04"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "DX-11": {
+      "title": "espera correlacionada",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-03",
+        "PR-05"
+      ],
+      "dependencies": [
+        "PR-00",
+        "PR-02",
+        "PR-03",
+        "PR-04"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "DX-12": {
+      "title": "UI orientada à intenção",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-03",
+        "PR-04"
+      ],
+      "dependencies": [
+        "PR-00",
+        "PR-02",
+        "PR-03"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "DX-13": {
+      "title": "caminho gerenciado",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-03",
+        "PR-04"
+      ],
+      "dependencies": [
+        "PR-00",
+        "PR-02",
+        "PR-03"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "DX-14": {
+      "title": "Connector",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-03",
+        "PR-04"
+      ],
+      "dependencies": [
+        "PR-00",
+        "PR-02",
+        "PR-03"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "DX-18": {
+      "title": "preset generalista de projeto",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-03"
+      ],
+      "dependencies": [
+        "PR-02"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "DX-19": {
+      "title": "uma revisão significativa para aplicar o preset",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-03"
+      ],
+      "dependencies": [
+        "PR-02"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "DX-20": {
+      "title": "ciclo cotidiano completo no terminal",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-03"
+      ],
+      "dependencies": [
+        "PR-02"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "DX-21": {
+      "title": "preservar configuração e permitir evolução opcional",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-03"
+      ],
+      "dependencies": [
+        "PR-02"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "ATN-01": {
+      "title": "serviço de projeção",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-06"
+      ],
+      "dependencies": [
+        "PR-00"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "ATN-02": {
+      "title": "armazenamento auxiliar",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-06"
+      ],
+      "dependencies": [
+        "PR-00"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "ATN-03": {
+      "title": "transações e leitura",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-06"
+      ],
+      "dependencies": [
+        "PR-00"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "ATN-04": {
+      "title": "API",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-06"
+      ],
+      "dependencies": [
+        "PR-00"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "ATN-05": {
+      "title": "SSE e reconciliação da visão",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-06"
+      ],
+      "dependencies": [
+        "PR-00"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "ATN-06": {
+      "title": "UI integrada",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-07"
+      ],
+      "dependencies": [
+        "PR-06"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "ATN-07": {
+      "title": "interação segura",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-07"
+      ],
+      "dependencies": [
+        "PR-06"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "ATN-08": {
+      "title": "acessibilidade",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-07"
+      ],
+      "dependencies": [
+        "PR-06"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "OBS-01": {
+      "title": "vínculo explícito",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-08"
+      ],
+      "dependencies": [
+        "PR-00"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "OBS-02": {
+      "title": "capacidade restrita",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-08"
+      ],
+      "dependencies": [
+        "PR-00"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "OBS-03": {
+      "title": "ordenação e replay",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-08"
+      ],
+      "dependencies": [
+        "PR-00"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "OBS-04": {
+      "title": "freshness",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-08"
+      ],
+      "dependencies": [
+        "PR-00"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "OBS-05": {
+      "title": "empacotamento opcional",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-09"
+      ],
+      "dependencies": [
+        "PR-08"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "OBS-06": {
+      "title": "contrato real instalado",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-09"
+      ],
+      "dependencies": [
+        "PR-08"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "OBS-07": {
+      "title": "identidade do ocupante",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-09"
+      ],
+      "dependencies": [
+        "PR-08"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "OBS-08": {
+      "title": "leitura sem controle",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-09"
+      ],
+      "dependencies": [
+        "PR-08"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "OBS-09": {
+      "title": "semântica de término",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-09"
+      ],
+      "dependencies": [
+        "PR-08"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "OBS-10": {
+      "title": "exemplo mínimo",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-09"
+      ],
+      "dependencies": [
+        "PR-08"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "OBS-11": {
+      "title": "projeção",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-10"
+      ],
+      "dependencies": [
+        "PR-03",
+        "PR-04",
+        "PR-05",
+        "PR-06",
+        "PR-07",
+        "PR-08",
+        "PR-09"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    },
+    "OBS-12": {
+      "title": "fontes concorrentes",
+      "status": "NOT_STARTED",
+      "milestones": [
+        "PR-10"
+      ],
+      "dependencies": [
+        "PR-03",
+        "PR-04",
+        "PR-05",
+        "PR-06",
+        "PR-07",
+        "PR-08",
+        "PR-09"
+      ],
+      "files": [],
+      "tests": [],
+      "result": null,
+      "platform": null,
+      "limitations": [],
+      "subscopes": {}
+    }
+  },
+  "scenarios": {
+    "SVC-T01": {
+      "requirement": "Primeiro connect local inicia o Server em background e aguarda prontidão real.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T02": {
+      "requirement": "Segundo connect reutiliza a mesma instância; projetos distintos não duplicam serviço por acidente.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T03": {
+      "requirement": "Dois connects simultâneos iniciam uma única instância e observam o mesmo resultado.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T04": {
+      "requirement": "Perfis que apontam ao mesmo diretório canônico compartilham exclusão mútua; instâncias diferentes ficam isoladas.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T05": {
+      "requirement": "Lock obsoleto/PID reutilizado não permite matar processo alheio nem comprova serviço ativo.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T06": {
+      "requirement": "Porta ocupada por outro processo produz diagnóstico; não muda endpoint ou base silenciosamente.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T07": {
+      "requirement": "Serviço instalado e parado é iniciado por seu supervisor, sem daemon avulso concorrente.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T08": {
+      "requirement": "Perfil remoto indisponível não inicia Server local substituto.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T09": {
+      "requirement": "Fechar terminal e dashboard mantém Server/Connector e execução conforme o contrato de ownership.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T10": {
+      "requirement": "Consulta status/logs/doctor em instância parada não a inicia e não executa inferência.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T11": {
+      "requirement": "Endpoint acessível de instância/versão errada não vira prontidão válida.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T12": {
+      "requirement": "Falha de migração/configuração/armazenamento impede prontidão ou admissão afetada e informa causa.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T13": {
+      "requirement": "Timeout/Ctrl+C do connect interrompe espera sem matar serviço, repetir setup ou cancelar tarefas.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T14": {
+      "requirement": "Serviço iniciado com cwd/PATH diferentes encontra executável, configuração e projeto corretos.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T15": {
+      "requirement": "Credencial só disponível no terminal ou cofre bloqueado gera diagnóstico no contexto real do serviço.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T16": {
+      "requirement": "Definições de serviço, argv, logs e saída JSON não expõem segredos nem ampliam bind/permissões.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T17": {
+      "requirement": "Instalar/habilitar serviço repetidamente não duplica recursos; alteração externa de definição é preservada.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T18": {
+      "requirement": "Início no login é comprovado em SO real; resultado não é apresentado como prova de boot sem login.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T19": {
+      "requirement": "Crash supervisionado reinicia com backoff/limite; falha persistente fica visível e acionável.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T20": {
+      "requirement": "Stop explícito não aciona autorressurreição; próximo connect segue a política documentada.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T21": {
+      "requirement": "Stop pelo CLI conclui drain antes de acionar supervisor; timeout de espera não força término. Logout/shutdown externo registra interrupção/incerteza honestamente.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T22": {
+      "requirement": "Restart com operação incerta ou filho ainda vivo não repete trabalho nem libera claim/slot indevidamente.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T23": {
+      "requirement": "Restart preserva identidade, bindings e limites; grant expirado/revogado continua inválido.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T24": {
+      "requirement": "Queda/retorno do Server mantém vínculo do Connector sem novo executor ou execução duplicada.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T25": {
+      "requirement": "CLI novo/daemon antigo informa compatibilidade e não atualiza/interrompe trabalho implicitamente.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T26": {
+      "requirement": "Upgrade interrompido permite recuperação documentada sem downgrade destrutivo da base.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T27": {
+      "requirement": "Desinstalação remove só a integração selecionada, preservando dados e execução foreground posterior.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T28": {
+      "requirement": "Container/supervisor externo usa foreground sem dupla supervisão ou dupla daemonização.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T29": {
+      "requirement": "Suspensão/retorno, logout e reboot são campanhas distintas; não há retomada produtiva por inferência de disponibilidade.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "SVC-T30": {
+      "requirement": "Wheel/artefato instalado contém os recursos necessários e funciona sem checkout ou terminal de instalação.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T01": {
+      "requirement": "Init usa agente existente e não cria/rotaciona identidade implicitamente.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T02": {
+      "requirement": "Participante sem permissão não cria agentes, grants ou bindings.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T03": {
+      "requirement": "Adicionar cliente MCP não desativa runtime já existente da identidade.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T04": {
+      "requirement": "Plan não muda configuração; apply só altera entrada revisada.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T05": {
+      "requirement": "Arquivo editado após plan causa conflito, sem sobrescrever mudança concorrente.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T06": {
+      "requirement": "Arquivo com outros MCPs e preferências conserva conteúdo alheio.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T07": {
+      "requirement": "Round-trip JSON/TOML, espaços, Unicode, formatos inválidos e duplicatas.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T08": {
+      "requirement": "Interrupção durante escrita/backup deixa original ou substituto íntegro e recuperação explícita.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T09": {
+      "requirement": "Segredos ausentes de argv, URL, logs, JSON de resultado, arquivos portáveis e browser.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T10": {
+      "requirement": "Variável referenciada mas indisponível ao harness produz diagnóstico, não sucesso.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T11": {
+      "requirement": "Origem trocada/redirect não recebe a credencial da origem aprovada.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T12": {
+      "requirement": "Doctor padrão não inicia turnos/probes nativos nem muda configurações.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T13": {
+      "requirement": "MCP conectado sem chamada de ferramenta não é participação comprovada.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T14": {
+      "requirement": "Teste de conexão nativa não é apresentado como prova de comunicação entre agentes.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T15": {
+      "requirement": "Duas requisições simultâneas com mesmo ID/hash criam um único recurso/recibo.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T16": {
+      "requirement": "Mesmo ID com payload/target/contexto diferente conflita.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T17": {
+      "requirement": "Falha entre evento, inbox/outbox e recibo reverte toda transação nova.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T18": {
+      "requirement": "Resposta perdida após commit e restart recuperam objeto original sem reenvio produtivo.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T19": {
+      "requirement": "Pending approval repetido mantém uma aprovação; decisão posterior preserva correlação.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T20": {
+      "requirement": "Credencial revogada não recupera conteúdo protegido por dedupe.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T21": {
+      "requirement": "Conclusão anterior à assinatura de wait é detectada.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T22": {
+      "requirement": "Timeout/Ctrl+C de wait não cancelam, reexecutam ou concluem o trabalho.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T23": {
+      "requirement": "Entrega/read receipt/idle externo não satisfazem espera de conclusão de handoff.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T24": {
+      "requirement": "Server antigo sem idempotência/capacidade nova apresenta degradação explícita.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T25": {
+      "requirement": "Requisição fora da janela de dedupe não é repetida automaticamente.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T26": {
+      "requirement": "Setup gerenciado continua transacional; alteração concorrente não amplia grants.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T27": {
+      "requirement": "Configuração remota usa diretório/credencial do host correto.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T28": {
+      "requirement": "Saída JSON e códigos de saída possuem testes de contrato.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T29": {
+      "requirement": "Projeto e único harness detectado levam a recomendação concreta sem escolha técnica MCP/runtime inicial.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T30": {
+      "requirement": "Vários harnesses válidos pedem somente escolha necessária; PATH não comprova login ou qualificação.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T31": {
+      "requirement": "Caminho normal gerenciado termina no terminal, com browser opcional e setup transacional reutilizado.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T32": {
+      "requirement": "Aprovação remota pendente preserva ID e identidade do decisor; terminal participante não a aprova por assentimento local.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T33": {
+      "requirement": "connect reutilizado após resposta perdida retoma o mesmo setup sem novo agente, binding ou grant.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T34": {
+      "requirement": "Login de provedor ausente produz instrução concreta e não deixa daemon bloqueado em prompt invisível.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T35": {
+      "requirement": "Serviço pronto, MCP negociado, sessão pronta e handoff concluído aparecem como níveis distintos.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T36": {
+      "requirement": "Conexão não envia tarefa/smoke pago automaticamente; a tarefa solicitada usa os serviços canônicos.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T37": {
+      "requirement": "Início no login pode ser escolhido na revisão inicial; recusar essa opção mantém o uso sob demanda funcional.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T38": {
+      "requirement": "Instalação nova com harness/provedor prontos propõe identidade, workspace e perfil úteis no mesmo resumo; aceitar os efeitos cria apenas os objetos autorizados e não exige definir persona ou visitar o painel.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T39": {
+      "requirement": "Pacote instalado, rota local padrão: solicitar trabalho real autorizado, acompanhar, responder a pergunta/permissão, obter resultado correlacionado e continuar pelo terminal, sem dashboard nem edição manual de configuração.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T40": {
+      "requirement": "A mesma campanha via Connector resolve decisões pelo CLI autenticado do operador, sem credencial administrativa no host remoto e sem aprovação pelo participante.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T41": {
+      "requirement": "Reconnect e repetição do setup preservam `agent_id`, modelo, papel, configuração, grants e personalizações; não recriam agente nem reaplicam defaults.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T42": {
+      "requirement": "Nome de agente/projeto igual não associa outra identidade; vínculos ausentes ou ambíguos exigem resolução autorizada, inclusive quando duas conexões iniciais concorrem.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T43": {
+      "requirement": "O harness iniciado pelo serviço usa instruções, modelo, ferramentas e limites efetivos revisados; configuração disponível apenas no shell não é presumida nem substituída silenciosamente.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T44": {
+      "requirement": "Direitos padrão permitem coordenação útil no workspace autorizado; não permitem ler inbox alheia, cruzar escopo não concedido, administrar globalmente ou mudar políticas.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T45": {
+      "requirement": "Decisão pelo terminal preserva ator, revisão, validade e escopo; texto enviado ao modelo, decisão expirada, recusada ou emitida por ator sem autoridade não aprova trabalho.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T46": {
+      "requirement": "Perda da resposta de submissão ou decisão em M1 recupera a mesma requisição/resultado, inclusive após restart; não cria operação, pedido ou handoff duplicado.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T47": {
+      "requirement": "Fechar e reabrir o CLI reencontra trabalho e identidade; retoma a conversa somente com suporte comprovado, ou oferece nova sessão explicitamente, sem replay nem contexto fictício.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T48": {
+      "requirement": "Perfil de execução do resumo admite somente trabalho elegível e autorizado pelas regras atuais; daemon online, mensagem recebida ou grant revogado não bastam para iniciar sessão.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T49": {
+      "requirement": "Abrir o dashboard depois do uso pelo terminal mostra o mesmo agente e configuração; personalizar nome/papel mantém identidade, histórico e vínculos canônicos.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T50": {
+      "requirement": "Adaptador que só inicia o processo, mas exige painel para uma decisão cotidiana, não passa o aceite M1; lacuna fica registrada até existir rota completa qualificada.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "DX-T51": {
+      "requirement": "Nova revisão do preset apresenta efeitos por diff e respeita mudanças concorrentes; upgrade/reconnect não amplia permissões ou sobrescreve escolhas existentes.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "AT-01": {
+      "requirement": "Aprovação pendente aparece para operador autorizado.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "AT-02": {
+      "requirement": "Aprovação expirada perde ação e preserva referência histórica adequada.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "AT-03": {
+      "requirement": "Pergunta destinada ao agente A não vira pergunta respondível pelo operador como A.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "AT-04": {
+      "requirement": "CLAIMED normal e inferência sem eventos não geram incidente de travamento.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "AT-05": {
+      "requirement": "VERIFYING automático permanece acompanhamento, sem inventar verificador humano.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "AT-06": {
+      "requirement": "Resultado desconhecido não oferece retry automático.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "AT-07": {
+      "requirement": "Marcar visto/adiar não altera aprovação, inbox, handoff ou operação.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "AT-08": {
+      "requirement": "Mesmo episódio resiste a refresh/reconnect; episódio posterior do mesmo objeto volta a aparecer.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "AT-09": {
+      "requirement": "Ação com revisão antiga conflita e recarrega o fato; não decide pedido novo.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "AT-10": {
+      "requirement": "Lista, total e filtros respeitam a mesma autorização e paginação.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "AT-11": {
+      "requirement": "Falha de leitura mostra dado stale; 403/revogação remove conteúdo protegido.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "AT-12": {
+      "requirement": "SSE perdido/gap resulta em resnapshot, sem sumir com pendências ou duplicar toasts.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "AT-13": {
+      "requirement": "Limiares temporais mudam a visão sem exigir novo evento de domínio.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "AT-14": {
+      "requirement": "Sucesso produtivo com limpeza pendente não vira tarefa fracassada.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "AT-15": {
+      "requirement": "UI teclado/foco/leitores de tela/light-dark e textos longos sem execução de HTML.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "AT-16": {
+      "requirement": "Consulta em lote não cresce em N+1 por ocorrência/agente.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "OB-01": {
+      "requirement": "Fonte vinculada somente a agente/workspace autorizado.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "OB-02": {
+      "requirement": "Token de observação rejeitado em mensagens, handoffs, MCP, runtime e emissão de tickets.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "OB-03": {
+      "requirement": "EPT de leitura não ganha permissão de publicar telemetria.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "OB-04": {
+      "requirement": "Agente B não publica estado para A por campo no payload.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "OB-05": {
+      "requirement": "Mesmo seq/hash não duplica evento nem renova validade.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "OB-06": {
+      "requirement": "Mesmo seq com conteúdo diferente conflita; seq antiga não sobrescreve.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "OB-07": {
+      "requirement": "Geração anterior não atualiza instância nova; reset local não remove fencing.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "OB-08": {
+      "requirement": "Relógios atrasado/futuro e backlog após reconnect não tornam dado antigo atual.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "OB-09": {
+      "requirement": "TTL expirado vira observação stale, não idle, offline canônico ou capacidade livre.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "OB-10": {
+      "requirement": "Revogação de fonte/credencial/identidade impede novos reportes/renovação.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "OB-11": {
+      "requirement": "Duas sessões da mesma identidade preservam estados independentes.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "OB-12": {
+      "requirement": "Instâncias Herdr diferentes com mesmo pane-id não colidem.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "OB-13": {
+      "requirement": "Pane renomeado/movido/substituído respeita evidência de ocupante ou exige reassociação.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "OB-14": {
+      "requirement": "Done/idle de startup/switch sem completion_ref não gera conclusão fictícia.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "OB-15": {
+      "requirement": "Término observado não conclui handoff nem libera claim/capacidade/inbox.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "OB-16": {
+      "requirement": "Reporte blocked não gera aprovação canônica nem permite responder via token observador.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "OB-17": {
+      "requirement": "Fonte Herdr desconecta e volta: snapshot reconcilia sem replay produtivo.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "OB-18": {
+      "requirement": "Schema/versionamento incompatível gera indisponibilidade explícita, sem campos adivinhados.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "OB-19": {
+      "requirement": "Estado inferido não sobrescreve evento canônico correlacionado do Core.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "OB-20": {
+      "requirement": "Limites de taxa/tamanho/cardinalidade e falta de disco retornam recusa honesta.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "OB-21": {
+      "requirement": "Fonte maliciosa não injeta HTML, URL executável, prompt, comando ou logs secretos na UI.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "OB-22": {
+      "requirement": "Observador Herdr não chama prompt/start/send-keys/focus/kill.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "OB-23": {
+      "requirement": "Nexus sem Herdr instalado inicia, testa e opera normalmente.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "OB-24": {
+      "requirement": "Desativar OBS mantém MCP-only, Core e Connector funcionais.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "RG-01": {
+      "requirement": "Dois participantes MCP e um runtime gerenciado cooperam no mesmo workspace sem identidades duplicadas.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "RG-02": {
+      "requirement": "Broadcast handoff disputado por MCP/runtime continua com um único vencedor.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "RG-03": {
+      "requirement": "Observação idle não muda prioridade, fairness, elegibilidade ou reservas de claims.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "RG-04": {
+      "requirement": "Isolamento shared/per_sender/per_sender_session/one_shot mantém semântica existente.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "RG-05": {
+      "requirement": "Reinício/queda de rede com operação incerta não dispara replay por nenhum dos novos caminhos.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "RG-06": {
+      "requirement": "Core importado sem sockets/processos/credenciais; dependências entre aplicações continuam proibidas.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "RG-07": {
+      "requirement": "Cliente antigo + Server novo e cliente novo + Server antigo têm comportamento documentado.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "RG-08": {
+      "requirement": "Pacotes finais contêm UI, schemas, migrações e recursos necessários, sem depender de checkout irmão.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "RG-09": {
+      "requirement": "Campanha usa homes/workspaces temporários e não modifica contas/configurações pessoais.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "RG-10": {
+      "requirement": "Validação de browser usa o backend real; snapshot/string test não substitui interação.",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    "RG-11": {
+      "requirement": "Mesmo agente com MCP externo e runtime gerenciado mantém uma entrega lógica exclusiva, sem fan-out involuntário por canal.",
+      "status": "NOT_RUN",
+      "evidence": []
+    }
+  },
+  "invariants": {
+    "INV-01": {
+      "requirement": "A identidade canônica continua sendo `agent_id`. Harness, transporte, pane, host, sessão e observador não criam automaticamente outro agente.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-02": {
+      "requirement": "MCP do Nexus permanece HTTP direto no Server. Não adicionar servidor/proxy/fachada MCP no Connector ou no observador. Não reintroduzir MCP stdio do Nexus.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-03": {
+      "requirement": "Core continua independente das aplicações; não recebe banco de identidades, inbox, HTTP de produto, UI ou autorização canônica.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-04": {
+      "requirement": "Connector continua host/cliente remoto de execução. Não passa a decidir handoffs nem a possuir inbox própria.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-05": {
+      "requirement": "Presença, atividade, capacidade, autorização, término do turno e conclusão do handoff são fatos diferentes.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-06": {
+      "requirement": "`idle`, `done`, timeout, silêncio ou desconexão não autorizam execução, conclusão, liberação de capacidade ou replay.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-07": {
+      "requirement": "Observar/ler/abrir a central não aprova, responde, interrompe, reivindica ou reexecuta trabalho.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-08": {
+      "requirement": "Um observador externo não produz recibos nativos, prova de ownership do Core, heartbeat de sessão MCP ou reserva de capacidade.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-09": {
+      "requirement": "Handoffs preservam claim canônico único. MCP-only continua elegível conforme o contrato existente, sem obrigação de reportar capacidade externa.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-10": {
+      "requirement": "Uma requisição repetida para recuperação mantém a identidade original. Nova tentativa produtiva exige intenção explícita e as regras canônicas.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-11": {
+      "requirement": "Não colocar chaves em URLs, argumentos de processo, logs, screenshots, exemplos executáveis, exportações ou estado do browser.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-12": {
+      "requirement": "Não fabricar qualificação de harness. Suporte ao formato de configuração MCP é distinto de suporte à execução nativa.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-13": {
+      "requirement": "A fonte de verdade de mensagens, handoffs, aprovações e execução permanece nos subsistemas atuais. Novas tabelas são auxiliares, não novas filas de trabalho.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-14": {
+      "requirement": "Não interpretar texto livre de prompt/log como comando Nexus, aprovação, identidade ou conclusão.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-15": {
+      "requirement": "Não aumentar a superfície MCP indiscriminadamente. Priorizar ferramentas existentes e APIs específicas; qualquer parâmetro novo deve ter schema, testes e revisão de superfície.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-16": {
+      "requirement": "O daemon é um modo de operação do Server/Connector existente; não cria outro domínio de execução, fila, scheduler ou identidade de agente.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-17": {
+      "requirement": "Identidade da instância do serviço é distinta de agent_id, workspace e sessão. Perfis que usam a mesma instância não iniciam processos concorrentes sobre seus dados.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-18": {
+      "requirement": "Resolver destino local/remoto antes de iniciar processos. Falha do Server remoto nunca cria um Server local substituto.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-19": {
+      "requirement": "Só existe um supervisor ativo por instância. Serviço instalado é acionado pelo gerenciador correspondente, sem daemon avulso concorrente.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-20": {
+      "requirement": "Iniciar/reiniciar serviço não concede autoridade nova, não renova grants e não repete operações de resultado incerto. Trabalho previamente autorizado segue admissão/reconciliação canônicas.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-21": {
+      "requirement": "Fechar CLI/dashboard não significa parar serviço ou cancelar trabalho. Parada explícita não é tratada como crash para ressuscitar a instância.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-22": {
+      "requirement": "Estado do processo, prontidão do serviço, conexão do harness e sucesso de uma tarefa são provas diferentes.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-23": {
+      "requirement": "Consultas de status, logs e doctor padrão não iniciam o serviço nem inferência. A inicialização automática pertence a comandos de ação documentados.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-24": {
+      "requirement": "Sobreviver ao terminal, reiniciar após falha, iniciar no login e operar sem login exigem evidências separadas; não prometer sobrevivência do processo a reboot.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-25": {
+      "requirement": "O caminho padrão de conexão e uso cotidiano é completo pelo terminal, incluindo decisões com autoridade válida. Política organizacional explicitamente preexistente continua obrigatória; a configuração padrão nova não introduz dependência do dashboard.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-26": {
+      "requirement": "O preset preenche a configuração comum do produto. Generalista é um perfil reutilizável, não uma identidade global compartilhada; reconnect não recria agente nem reaplica defaults sobre escolhas do usuário.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-27": {
+      "requirement": "O preset preserva instruções, modelo, ferramentas e limites efetivos do harness quando suportados e verificáveis. Integração com Nexus não remove sandbox, não desabilita perguntas nativas nem concede administração global.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "INV-28": {
+      "requirement": "Serviço ativo ou sessão pronta não encerram M1: solicitar trabalho, decidir pedidos autorizados e recuperar resultados pelo terminal precisam estar demonstrados no caminho escolhido.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    }
+  },
+  "completion_criteria": {
+    "AC-01": {
+      "requirement": "Cada tarefa obrigatória tem implementação ou reaproveitamento explicitamente demonstrado, com testes correspondentes.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "AC-02": {
+      "requirement": "As frentes SVC, DX, ATN e OBS respeitam suas dependências e funcionam de modo combinado; Herdr continua opcional.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "AC-03": {
+      "requirement": "Dois clientes MCP testados participam sem adaptador nativo novo e sem identidade duplicada.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "AC-04": {
+      "requirement": "A central oferece ações reais e autorizadas, sem virar fonte paralela de lifecycle.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "AC-05": {
+      "requirement": "Repetição/timeout/restart preservam IDs e não duplicam mensagens, aprovações ou handoffs dentro do contrato de idempotência.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "AC-06": {
+      "requirement": "Atividade externa nunca se transforma em autorização, capacidade reservada ou conclusão de trabalho.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "AC-07": {
+      "requirement": "Core e Connector preservam suas fronteiras e o conjunto de dependências é reproduzível.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "AC-08": {
+      "requirement": "Documentação, schemas e ajuda da CLI descrevem o comportamento realmente entregue.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "AC-09": {
+      "requirement": "Testes não executados estão nomeados; nenhuma fixture é apresentada como campanha de provedor ou plataforma real.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "AC-10": {
+      "requirement": "Não há segredo em artefatos, logs, exemplos, URLs ou configurações exportadas.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "AC-11": {
+      "requirement": "O primeiro marco comprova daemon + preset + ciclo completo de trabalho pelo terminal com um harness real, no Server local e via Connector, incluindo decisão e resultado, sem dashboard obrigatório nem terminal exclusivo para manter o serviço.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "AC-12": {
+      "requirement": "Inicialização concorrente reutiliza a instância correta; perfil remoto não cria Server local e não há supervisores concorrentes.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "AC-13": {
+      "requirement": "Serviço do usuário foi instalado, iniciado no login, parado, recuperado de falha e removido nas plataformas declaradas qualificadas, com contexto/credenciais reais de execução validados.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "AC-14": {
+      "requirement": "Restart, suspensão e queda de conexão preservam contratos de autoridade, ownership e incerteza, sem repetição produtiva implícita.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "AC-15": {
+      "requirement": "Controle por status/logs/start/stop/restart e foreground funciona, sem que diagnóstico inicie daemon ou inferência.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "AC-16": {
+      "requirement": "O agente padrão tem identidade persistente, perfil generalista útil e coordenação no escopo aprovado; preserva limites efetivos do harness e não recebe administração global ou poder de aprovar seus próprios pedidos.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    },
+    "AC-17": {
+      "requirement": "Reconnect, atualização e abertura posterior da interface preservam a configuração e a identidade; personalização é opcional e o uso padrão continua completo pelo terminal.",
+      "status": "NOT_VERIFIED",
+      "evidence": []
+    }
+  },
+  "campaigns": {},
+  "history": [
+    {
+      "date": "2026-11-05",
+      "scope": "preparation",
+      "result": "Fetched origin/main for all repositories; clean tracked worktrees; new feature branches based on fetched main; patch bumps and coordinated Core pin. No implementation gate claimed."
+    },
+    {
+      "date": "2026-11-05",
+      "scope": "preparation-validation",
+      "result": "34 passed: Nexus 10, Core 3, Connector 19, clean packaging 2. Candidate wheel source payloads verified. Core commit 2093863 pushed. No provider/service campaign executed.",
+      "evidence": [
+        "plans/agent_ops/evidence/preparation-nexus.xml",
+        "plans/agent_ops/evidence/preparation-core.xml",
+        "plans/agent_ops/evidence/preparation-connector.xml",
+        "plans/agent_ops/evidence/preparation-packaging.xml"
+      ]
+    }
+  ]
+}

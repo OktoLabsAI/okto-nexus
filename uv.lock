@@ -1034,7 +1034,7 @@ wheels = [
 
 [[package]]
 name = "okto-nexus"
-version = "0.3.2"
+version = "0.3.3"
 source = { editable = "." }
 dependencies = [
     { name = "mcp" },
@@ -1080,7 +1080,7 @@ requires-dist = [
     { name = "keyring", marker = "sys_platform != 'win32' and extra == 'serve'" },
     { name = "keyring", marker = "sys_platform != 'win32' and extra == 'serve-lite'" },
     { name = "mcp", specifier = ">=1.0,<2" },
-    { name = "okto-nexus-connector-core", specifier = "==0.0.13" },
+    { name = "okto-nexus-connector-core", specifier = "==0.0.14" },
     { name = "pydantic", specifier = ">=2" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8" },
     { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.23" },
@@ -1100,7 +1100,7 @@ provides-extras = ["serve", "serve-lite", "embeddings", "dev"]
 
 [[package]]
 name = "okto-nexus-connector-core"
-version = "0.0.13"
+version = "0.0.14"
 source = { registry = "vendor/wheels" }
 dependencies = [
     { name = "anyio" },
@@ -1109,7 +1109,7 @@ dependencies = [
     { name = "rfc8785" },
 ]
 wheels = [
-    { path = "okto_nexus_connector_core-0.0.13-py3-none-any.whl" },
+    { path = "okto_nexus_connector_core-0.0.14-py3-none-any.whl" },
 ]
 
 [[package]]
