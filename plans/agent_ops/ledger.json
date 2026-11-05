@@ -83,7 +83,8 @@
         "plans/agent_ops/evidence/pr03-terminal-work.md",
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
-        "plans/agent_ops/evidence/pr03-remote-operator.md"
+        "plans/agent_ops/evidence/pr03-remote-operator.md",
+        "plans/agent_ops/evidence/pr03-terminal-binding.md"
       ]
     },
     "PR-04": {
@@ -509,9 +510,15 @@
         "plans/agent_ops/evidence/pr03-remote-operator-decisions.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
-        "plans/agent_ops/evidence/pr03-remote-operator-source.xml"
+        "plans/agent_ops/evidence/pr03-remote-operator-source.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-source.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json",
+        "plans/agent_ops/evidence/pr03-terminal-binding.md"
       ],
-      "result": "Human operator login/status/logout reuse existing session authentication and a separate protected-vault namespace. Origin and Server identity are pinned; session-only requests cannot fall back to loopback trust or an agent key. Remote connect reuses an existing approved binding; saved topology is selected before local lifecycle resolution, with no local fallback. Canonical work/receipt recovery, grant renewal and native decisions are verified over human-session HTTP with a synthetic embedded peer. 167 installed regression tests and two focused installed boundary cases passed on the same 427-file Nexus wheel. New remote identity/setup, Connector proposal approval, real OS-vault/TLS accessibility and the two-host productive campaign remain open.",
+      "result": "Human operator login/status/logout reuse existing session authentication and a separate protected-vault namespace. Origin and Server identity are pinned; session-only requests cannot fall back to loopback trust or an agent key. Remote connect reuses an existing approved binding; saved topology is selected before local lifecycle resolution, with no local fallback. Canonical work/receipt recovery, grant renewal and native decisions are verified over human-session HTTP with a synthetic embedded peer. 167 installed regression tests and two focused installed boundary cases passed on the same 427-file Nexus wheel. New remote identity/setup, real OS-vault/TLS accessibility and the two-host productive campaign remain open. The shared operator proposal approval is now verified by pr03-terminal-binding; this task remains incomplete.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Actual user-service/login/logout/crash/credential/provider campaigns NOT_RUN; legacy POSIX installers remain unqualified for the R3 instance contract.",
@@ -533,7 +540,7 @@
         "operator_origin_pin_and_isolated_vault_namespace": "VERIFIED",
         "real_os_vault_and_tls_accessibility": "NOT_RUN",
         "remote_connector_productive_work": "NOT_RUN",
-        "remote_operator_proposal_approval": "NOT_RUN"
+        "remote_operator_proposal_approval": "VERIFIED"
       }
     },
     "SVC-04": {
@@ -1141,9 +1148,12 @@
       "files": [
         "../okto-nexus-connector-core/src/nexus_connector_core/user_service_definition.py",
         "../okto-nexus-connector-core/tests/test_user_service_definition.py",
+        "../okto-nexus-connector/README.md",
         "../okto-nexus-connector/docs/cli.md",
+        "../okto-nexus-connector/docs/connection-configuration.md",
         "../okto-nexus-connector/docs/runbook.md",
         "../okto-nexus-connector/docs/service-lifecycle.md",
+        "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/configure_local.py",
         "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/daemon.py",
         "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/diagnostics.py",
         "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/doctor.py",
@@ -1167,6 +1177,7 @@
         "../okto-nexus-connector/tests/integration/test_detached_service_lifecycle.py",
         "../okto-nexus-connector/tests/integration/test_passive_cli.py",
         "../okto-nexus-connector/tests/integration/test_service_upgrade_process.py",
+        "../okto-nexus-connector/tests/unit/test_configure.py",
         "../okto-nexus-connector/tests/unit/test_launch_recovery.py",
         "../okto-nexus-connector/tests/unit/test_log_reader.py",
         "../okto-nexus-connector/tests/unit/test_passive_diagnostics.py",
@@ -1183,9 +1194,11 @@
         "plans/agent_ops/evidence/pr02-launch-recovery.md",
         "plans/agent_ops/evidence/pr02-upgrade.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
+        "plans/agent_ops/evidence/pr03-terminal-binding.md",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/operator.py",
+        "src/okto_nexus/adapters/inbound/cli/operator_approval.py",
         "src/okto_nexus/adapters/inbound/cli/serve.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
         "src/okto_nexus/adapters/inbound/cli/terminal_target.py",
@@ -1199,12 +1212,17 @@
         "src/okto_nexus/adapters/outbound/service_manager/upgrade.py",
         "src/okto_nexus/adapters/outbound/service_manager/windows_tasks.py",
         "src/okto_nexus/adapters/outbound/terminal_http.py",
+        "src/okto_nexus/application/approvals.py",
+        "src/okto_nexus/application/execution_binding_approvals.py",
         "src/okto_nexus/application/service_lifecycle.py",
+        "src/okto_nexus/application/terminal_binding_approval.py",
         "src/okto_nexus/application/terminal_connection.py",
         "src/okto_nexus/application/terminal_work.py",
+        "src/okto_nexus/bootstrap/dependencies.py",
         "src/okto_nexus/service_environment.py",
         "src/okto_nexus/service_upgrade.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
+        "tests/execution_r4/test_terminal_binding_approval.py",
         "tests/test_service_launch_recovery.py",
         "tests/test_service_process.py",
         "tests/test_service_upgrade.py",
@@ -1243,15 +1261,21 @@
         "plans/agent_ops/evidence/pr03-remote-operator-decisions.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
-        "plans/agent_ops/evidence/pr03-remote-operator-source.xml"
+        "plans/agent_ops/evidence/pr03-remote-operator-source.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-source.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json"
       ],
-      "result": "Human operator login/status/logout reuse existing session authentication and a separate protected-vault namespace. Origin and Server identity are pinned; session-only requests cannot fall back to loopback trust or an agent key. Remote connect reuses an existing approved binding; saved topology is selected before local lifecycle resolution, with no local fallback. Canonical work/receipt recovery, grant renewal and native decisions are verified over human-session HTTP with a synthetic embedded peer. 167 installed regression tests and two focused installed boundary cases passed on the same 427-file Nexus wheel. New remote identity/setup, Connector proposal approval, real OS-vault/TLS accessibility and the two-host productive campaign remain open.",
+      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Actual native service update/login/logout/crash/credential/provider campaigns NOT_RUN; POSIX remains unqualified.",
         "General definition reconciliation, Server doctor qualification, historical mixed-version migration failures and productive runtime campaigns remain open.",
         "Native Task Scheduler has no atomic fingerprint-conditional mutation against external editors; unconfirmed edits remain conflicts. Independently invoked old foreground binaries do not acquire the new protocol fence.",
-        "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified."
+        "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
+        "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open."
       ],
       "subscopes": {
         "local_readiness": "VERIFIED",
@@ -1275,7 +1299,9 @@
         "operator_origin_pin_and_isolated_vault_namespace": "VERIFIED",
         "real_os_vault_and_tls_accessibility": "NOT_RUN",
         "remote_connector_productive_work": "NOT_RUN",
-        "remote_operator_proposal_approval": "NOT_RUN"
+        "remote_operator_proposal_approval": "VERIFIED",
+        "connector_pending_intent_resume_after_human_decision": "VERIFIED",
+        "binding_approval_loss_recovery_without_repost": "VERIFIED"
       }
     },
     "SVC-12": {
@@ -1444,11 +1470,16 @@
         "PR-02"
       ],
       "files": [
+        "../okto-nexus-connector/README.md",
+        "../okto-nexus-connector/docs/connection-configuration.md",
+        "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/configure_local.py",
+        "../okto-nexus-connector/tests/unit/test_configure.py",
         "docs/terminal-connect.md",
         "docs/terminal-operator.md",
         "docs/terminal-work.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
+        "plans/agent_ops/evidence/pr03-terminal-binding.md",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
         "plans/agent_ops/evidence/pr03-terminal-identity.md",
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
@@ -1457,6 +1488,7 @@
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/native_input.py",
         "src/okto_nexus/adapters/inbound/cli/operator.py",
+        "src/okto_nexus/adapters/inbound/cli/operator_approval.py",
         "src/okto_nexus/adapters/inbound/cli/serve.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
         "src/okto_nexus/adapters/inbound/cli/service_process.py",
@@ -1472,21 +1504,26 @@
         "src/okto_nexus/adapters/outbound/service_manager/context.py",
         "src/okto_nexus/adapters/outbound/terminal_http.py",
         "src/okto_nexus/application/agent_creation.py",
+        "src/okto_nexus/application/approvals.py",
         "src/okto_nexus/application/connection_authorization.py",
         "src/okto_nexus/application/connection_setup.py",
         "src/okto_nexus/application/connection_test.py",
+        "src/okto_nexus/application/execution_binding_approvals.py",
         "src/okto_nexus/application/execution_intents.py",
         "src/okto_nexus/application/project_preset.py",
         "src/okto_nexus/application/runtime_access.py",
         "src/okto_nexus/application/settings.py",
         "src/okto_nexus/application/terminal_authorization.py",
+        "src/okto_nexus/application/terminal_binding_approval.py",
         "src/okto_nexus/application/terminal_connection.py",
         "src/okto_nexus/application/terminal_work.py",
+        "src/okto_nexus/bootstrap/dependencies.py",
         "src/okto_nexus/config.py",
         "src/okto_nexus/migrations/158_connection_authorization_receipts.sql",
         "tests/execution_r4/test_handoff_notice_migration.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
         "tests/execution_r4/test_terminal_authorization.py",
+        "tests/execution_r4/test_terminal_binding_approval.py",
         "tests/execution_r4/test_terminal_connect.py",
         "tests/execution_r4/test_terminal_identity.py",
         "tests/execution_r4/test_terminal_policy.py",
@@ -1507,6 +1544,11 @@
         "plans/agent_ops/evidence/pr03-terminal-authorization-selection.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-source.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-uncertain.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-source.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json",
         "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect-nexus.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect-regression.xml",
@@ -1525,7 +1567,7 @@
         "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
       ],
-      "result": "Human operator login/status/logout reuse existing session authentication and a separate protected-vault namespace. Origin and Server identity are pinned; session-only requests cannot fall back to loopback trust or an agent key. Remote connect reuses an existing approved binding; saved topology is selected before local lifecycle resolution, with no local fallback. Canonical work/receipt recovery, grant renewal and native decisions are verified over human-session HTTP with a synthetic embedded peer. 167 installed regression tests and two focused installed boundary cases passed on the same 427-file Nexus wheel. New remote identity/setup, Connector proposal approval, real OS-vault/TLS accessibility and the two-host productive campaign remain open.",
+      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
@@ -1533,7 +1575,8 @@
         "Human operator-session CLI authentication and existing-binding reuse are verified with a synthetic peer. Unified remote Connector setup, participant init, start-at-login review, preset evolution and dashboard introduction remain open.",
         "Generic message/handoff creation deduplication and wait are not covered by this native-operation subset; service restart and provider session restoration remain unqualified.",
         "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
-        "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified."
+        "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
+        "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
@@ -1565,7 +1608,9 @@
         "operator_origin_pin_and_isolated_vault_namespace": "VERIFIED",
         "real_os_vault_and_tls_accessibility": "NOT_RUN",
         "remote_connector_productive_work": "NOT_RUN",
-        "remote_operator_proposal_approval": "NOT_RUN"
+        "remote_operator_proposal_approval": "VERIFIED",
+        "connector_pending_intent_resume_after_human_decision": "VERIFIED",
+        "binding_approval_loss_recovery_without_repost": "VERIFIED"
       }
     },
     "DX-16": {
@@ -1636,6 +1681,12 @@
         "plans/agent_ops/evidence/pr03-terminal-authorization-selection.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-source.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-uncertain.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-source.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json",
+        "plans/agent_ops/evidence/pr03-terminal-binding.md",
         "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect-nexus.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect-regression.xml",
@@ -1649,7 +1700,7 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy-source.xml"
       ],
-      "result": "Human operator login/status/logout reuse existing session authentication and a separate protected-vault namespace. Origin and Server identity are pinned; session-only requests cannot fall back to loopback trust or an agent key. Remote connect reuses an existing approved binding; saved topology is selected before local lifecycle resolution, with no local fallback. Canonical work/receipt recovery, grant renewal and native decisions are verified over human-session HTTP with a synthetic embedded peer. 167 installed regression tests and two focused installed boundary cases passed on the same 427-file Nexus wheel. New remote identity/setup, Connector proposal approval, real OS-vault/TLS accessibility and the two-host productive campaign remain open.",
+      "result": "Human operator login/status/logout reuse existing session authentication and a separate protected-vault namespace. Origin and Server identity are pinned; session-only requests cannot fall back to loopback trust or an agent key. Remote connect reuses an existing approved binding; saved topology is selected before local lifecycle resolution, with no local fallback. Canonical work/receipt recovery, grant renewal and native decisions are verified over human-session HTTP with a synthetic embedded peer. 167 installed regression tests and two focused installed boundary cases passed on the same 427-file Nexus wheel. New remote identity/setup, real OS-vault/TLS accessibility and the two-host productive campaign remain open. The shared operator proposal approval is now verified by pr03-terminal-binding; this task remains incomplete.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Local terminal facade is covered by synthetic integration; productive local/remote M1 acceptance remains NOT_RUN.",
@@ -1685,7 +1736,7 @@
         "operator_origin_pin_and_isolated_vault_namespace": "VERIFIED",
         "real_os_vault_and_tls_accessibility": "NOT_RUN",
         "remote_connector_productive_work": "NOT_RUN",
-        "remote_operator_proposal_approval": "NOT_RUN"
+        "remote_operator_proposal_approval": "VERIFIED"
       }
     },
     "DX-17": {
@@ -1698,9 +1749,12 @@
         "PR-02"
       ],
       "files": [
+        "../okto-nexus-connector/README.md",
         "../okto-nexus-connector/docs/connection-configuration.md",
         "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/configure.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/configure_local.py",
         "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/connection_config.py",
+        "../okto-nexus-connector/tests/unit/test_configure.py",
         "../okto-nexus-connector/tests/unit/test_connection_config.py",
         "docs/connection-setup.md",
         "docs/terminal-connect.md",
@@ -1709,6 +1763,7 @@
         "plans/agent_ops/evidence/pr03-remote-operator.md",
         "plans/agent_ops/evidence/pr03-setup-recovery.md",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
+        "plans/agent_ops/evidence/pr03-terminal-binding.md",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
         "plans/agent_ops/evidence/pr03-terminal-identity.md",
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
@@ -1717,6 +1772,7 @@
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/native_input.py",
         "src/okto_nexus/adapters/inbound/cli/operator.py",
+        "src/okto_nexus/adapters/inbound/cli/operator_approval.py",
         "src/okto_nexus/adapters/inbound/cli/serve.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
         "src/okto_nexus/adapters/inbound/cli/service_process.py",
@@ -1732,22 +1788,27 @@
         "src/okto_nexus/adapters/outbound/service_manager/context.py",
         "src/okto_nexus/adapters/outbound/terminal_http.py",
         "src/okto_nexus/application/agent_creation.py",
+        "src/okto_nexus/application/approvals.py",
         "src/okto_nexus/application/connection_authorization.py",
         "src/okto_nexus/application/connection_setup.py",
         "src/okto_nexus/application/connection_test.py",
+        "src/okto_nexus/application/execution_binding_approvals.py",
         "src/okto_nexus/application/execution_intents.py",
         "src/okto_nexus/application/project_preset.py",
         "src/okto_nexus/application/runtime_access.py",
         "src/okto_nexus/application/settings.py",
         "src/okto_nexus/application/terminal_authorization.py",
+        "src/okto_nexus/application/terminal_binding_approval.py",
         "src/okto_nexus/application/terminal_connection.py",
         "src/okto_nexus/application/terminal_work.py",
+        "src/okto_nexus/bootstrap/dependencies.py",
         "src/okto_nexus/config.py",
         "src/okto_nexus/migrations/158_connection_authorization_receipts.sql",
         "tests/execution_r4/test_connection_setup_recovery.py",
         "tests/execution_r4/test_handoff_notice_migration.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
         "tests/execution_r4/test_terminal_authorization.py",
+        "tests/execution_r4/test_terminal_binding_approval.py",
         "tests/execution_r4/test_terminal_connect.py",
         "tests/execution_r4/test_terminal_identity.py",
         "tests/execution_r4/test_terminal_policy.py",
@@ -1771,6 +1832,11 @@
         "plans/agent_ops/evidence/pr03-terminal-authorization-selection.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-source.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-uncertain.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-source.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json",
         "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect-nexus.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect-regression.xml",
@@ -1789,7 +1855,7 @@
         "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
       ],
-      "result": "Human operator login/status/logout reuse existing session authentication and a separate protected-vault namespace. Origin and Server identity are pinned; session-only requests cannot fall back to loopback trust or an agent key. Remote connect reuses an existing approved binding; saved topology is selected before local lifecycle resolution, with no local fallback. Canonical work/receipt recovery, grant renewal and native decisions are verified over human-session HTTP with a synthetic embedded peer. 167 installed regression tests and two focused installed boundary cases passed on the same 427-file Nexus wheel. New remote identity/setup, Connector proposal approval, real OS-vault/TLS accessibility and the two-host productive campaign remain open.",
+      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
@@ -1797,7 +1863,8 @@
         "Human operator-session CLI authentication and existing-binding reuse are verified with a synthetic peer. Unified remote Connector setup, participant init, start-at-login review, preset evolution and dashboard introduction remain open.",
         "Generic message/handoff creation deduplication and wait are not covered by this native-operation subset; service restart and provider session restoration remain unqualified.",
         "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
-        "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified."
+        "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
+        "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open."
       ],
       "subscopes": {
         "canonical_finish_receipt_recovery": "VERIFIED",
@@ -1832,7 +1899,9 @@
         "operator_origin_pin_and_isolated_vault_namespace": "VERIFIED",
         "real_os_vault_and_tls_accessibility": "NOT_RUN",
         "remote_connector_productive_work": "NOT_RUN",
-        "remote_operator_proposal_approval": "NOT_RUN"
+        "remote_operator_proposal_approval": "VERIFIED",
+        "connector_pending_intent_resume_after_human_decision": "VERIFIED",
+        "binding_approval_loss_recovery_without_repost": "VERIFIED"
       }
     },
     "DX-05": {
@@ -1925,17 +1994,23 @@
         "PR-04"
       ],
       "files": [
+        "../okto-nexus-connector/README.md",
+        "../okto-nexus-connector/docs/connection-configuration.md",
+        "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/configure_local.py",
+        "../okto-nexus-connector/tests/unit/test_configure.py",
         "docs/terminal-connect.md",
         "docs/terminal-operator.md",
         "docs/terminal-work.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
+        "plans/agent_ops/evidence/pr03-terminal-binding.md",
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
         "plans/agent_ops/evidence/pr03-terminal-work.md",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/native_input.py",
         "src/okto_nexus/adapters/inbound/cli/operator.py",
+        "src/okto_nexus/adapters/inbound/cli/operator_approval.py",
         "src/okto_nexus/adapters/inbound/cli/terminal_target.py",
         "src/okto_nexus/adapters/inbound/cli/work.py",
         "src/okto_nexus/adapters/inbound/http/app.py",
@@ -1944,17 +2019,22 @@
         "src/okto_nexus/adapters/inbound/http/runtime_v1.py",
         "src/okto_nexus/adapters/outbound/operator_client.py",
         "src/okto_nexus/adapters/outbound/terminal_http.py",
+        "src/okto_nexus/application/approvals.py",
         "src/okto_nexus/application/connection_authorization.py",
         "src/okto_nexus/application/connection_setup.py",
+        "src/okto_nexus/application/execution_binding_approvals.py",
         "src/okto_nexus/application/execution_intents.py",
         "src/okto_nexus/application/runtime_access.py",
         "src/okto_nexus/application/terminal_authorization.py",
+        "src/okto_nexus/application/terminal_binding_approval.py",
         "src/okto_nexus/application/terminal_connection.py",
         "src/okto_nexus/application/terminal_work.py",
+        "src/okto_nexus/bootstrap/dependencies.py",
         "src/okto_nexus/migrations/158_connection_authorization_receipts.sql",
         "tests/execution_r4/test_handoff_notice_migration.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
         "tests/execution_r4/test_terminal_authorization.py",
+        "tests/execution_r4/test_terminal_binding_approval.py",
         "tests/execution_r4/test_terminal_connect.py",
         "tests/execution_r4/test_terminal_work.py",
         "tests/test_terminal_connect_process.py",
@@ -1971,6 +2051,11 @@
         "plans/agent_ops/evidence/pr03-terminal-authorization-selection.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-source.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-uncertain.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-source.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json",
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
@@ -1978,7 +2063,7 @@
         "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
       ],
-      "result": "Human operator login/status/logout reuse existing session authentication and a separate protected-vault namespace. Origin and Server identity are pinned; session-only requests cannot fall back to loopback trust or an agent key. Remote connect reuses an existing approved binding; saved topology is selected before local lifecycle resolution, with no local fallback. Canonical work/receipt recovery, grant renewal and native decisions are verified over human-session HTTP with a synthetic embedded peer. 167 installed regression tests and two focused installed boundary cases passed on the same 427-file Nexus wheel. New remote identity/setup, Connector proposal approval, real OS-vault/TLS accessibility and the two-host productive campaign remain open.",
+      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
@@ -1986,7 +2071,8 @@
         "Human operator-session CLI authentication and existing-binding reuse are verified with a synthetic peer. Unified remote Connector setup, participant init, start-at-login review, preset evolution and dashboard introduction remain open.",
         "Generic message/handoff creation deduplication and wait are not covered by this native-operation subset; service restart and provider session restoration remain unqualified.",
         "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
-        "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified."
+        "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
+        "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open."
       ],
       "subscopes": {
         "local_terminal_work_canonical_http_synthetic_peer": "VERIFIED",
@@ -2007,7 +2093,9 @@
         "operator_origin_pin_and_isolated_vault_namespace": "VERIFIED",
         "real_os_vault_and_tls_accessibility": "NOT_RUN",
         "remote_connector_productive_work": "NOT_RUN",
-        "remote_operator_proposal_approval": "NOT_RUN"
+        "remote_operator_proposal_approval": "VERIFIED",
+        "connector_pending_intent_resume_after_human_decision": "VERIFIED",
+        "binding_approval_loss_recovery_without_repost": "VERIFIED"
       }
     },
     "DX-10": {
@@ -2024,17 +2112,23 @@
         "PR-04"
       ],
       "files": [
+        "../okto-nexus-connector/README.md",
+        "../okto-nexus-connector/docs/connection-configuration.md",
+        "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/configure_local.py",
+        "../okto-nexus-connector/tests/unit/test_configure.py",
         "docs/terminal-connect.md",
         "docs/terminal-operator.md",
         "docs/terminal-work.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
+        "plans/agent_ops/evidence/pr03-terminal-binding.md",
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
         "plans/agent_ops/evidence/pr03-terminal-work.md",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/native_input.py",
         "src/okto_nexus/adapters/inbound/cli/operator.py",
+        "src/okto_nexus/adapters/inbound/cli/operator_approval.py",
         "src/okto_nexus/adapters/inbound/cli/terminal_target.py",
         "src/okto_nexus/adapters/inbound/cli/work.py",
         "src/okto_nexus/adapters/inbound/http/app.py",
@@ -2043,17 +2137,22 @@
         "src/okto_nexus/adapters/inbound/http/runtime_v1.py",
         "src/okto_nexus/adapters/outbound/operator_client.py",
         "src/okto_nexus/adapters/outbound/terminal_http.py",
+        "src/okto_nexus/application/approvals.py",
         "src/okto_nexus/application/connection_authorization.py",
         "src/okto_nexus/application/connection_setup.py",
+        "src/okto_nexus/application/execution_binding_approvals.py",
         "src/okto_nexus/application/execution_intents.py",
         "src/okto_nexus/application/runtime_access.py",
         "src/okto_nexus/application/terminal_authorization.py",
+        "src/okto_nexus/application/terminal_binding_approval.py",
         "src/okto_nexus/application/terminal_connection.py",
         "src/okto_nexus/application/terminal_work.py",
+        "src/okto_nexus/bootstrap/dependencies.py",
         "src/okto_nexus/migrations/158_connection_authorization_receipts.sql",
         "tests/execution_r4/test_handoff_notice_migration.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
         "tests/execution_r4/test_terminal_authorization.py",
+        "tests/execution_r4/test_terminal_binding_approval.py",
         "tests/execution_r4/test_terminal_connect.py",
         "tests/execution_r4/test_terminal_work.py",
         "tests/test_terminal_connect_process.py",
@@ -2070,6 +2169,11 @@
         "plans/agent_ops/evidence/pr03-terminal-authorization-selection.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-source.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-uncertain.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-source.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json",
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
@@ -2077,7 +2181,7 @@
         "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
       ],
-      "result": "Human operator login/status/logout reuse existing session authentication and a separate protected-vault namespace. Origin and Server identity are pinned; session-only requests cannot fall back to loopback trust or an agent key. Remote connect reuses an existing approved binding; saved topology is selected before local lifecycle resolution, with no local fallback. Canonical work/receipt recovery, grant renewal and native decisions are verified over human-session HTTP with a synthetic embedded peer. 167 installed regression tests and two focused installed boundary cases passed on the same 427-file Nexus wheel. New remote identity/setup, Connector proposal approval, real OS-vault/TLS accessibility and the two-host productive campaign remain open.",
+      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
@@ -2085,7 +2189,8 @@
         "Human operator-session CLI authentication and existing-binding reuse are verified with a synthetic peer. Unified remote Connector setup, participant init, start-at-login review, preset evolution and dashboard introduction remain open.",
         "Generic message/handoff creation deduplication and wait are not covered by this native-operation subset; service restart and provider session restoration remain unqualified.",
         "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
-        "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified."
+        "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
+        "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open."
       ],
       "subscopes": {
         "local_terminal_work_canonical_http_synthetic_peer": "VERIFIED",
@@ -2106,7 +2211,9 @@
         "operator_origin_pin_and_isolated_vault_namespace": "VERIFIED",
         "real_os_vault_and_tls_accessibility": "NOT_RUN",
         "remote_connector_productive_work": "NOT_RUN",
-        "remote_operator_proposal_approval": "NOT_RUN"
+        "remote_operator_proposal_approval": "VERIFIED",
+        "connector_pending_intent_resume_after_human_decision": "VERIFIED",
+        "binding_approval_loss_recovery_without_repost": "VERIFIED"
       }
     },
     "DX-11": {
@@ -2123,17 +2230,23 @@
         "PR-04"
       ],
       "files": [
+        "../okto-nexus-connector/README.md",
+        "../okto-nexus-connector/docs/connection-configuration.md",
+        "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/configure_local.py",
+        "../okto-nexus-connector/tests/unit/test_configure.py",
         "docs/terminal-connect.md",
         "docs/terminal-operator.md",
         "docs/terminal-work.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
+        "plans/agent_ops/evidence/pr03-terminal-binding.md",
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
         "plans/agent_ops/evidence/pr03-terminal-work.md",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/native_input.py",
         "src/okto_nexus/adapters/inbound/cli/operator.py",
+        "src/okto_nexus/adapters/inbound/cli/operator_approval.py",
         "src/okto_nexus/adapters/inbound/cli/terminal_target.py",
         "src/okto_nexus/adapters/inbound/cli/work.py",
         "src/okto_nexus/adapters/inbound/http/app.py",
@@ -2142,17 +2255,22 @@
         "src/okto_nexus/adapters/inbound/http/runtime_v1.py",
         "src/okto_nexus/adapters/outbound/operator_client.py",
         "src/okto_nexus/adapters/outbound/terminal_http.py",
+        "src/okto_nexus/application/approvals.py",
         "src/okto_nexus/application/connection_authorization.py",
         "src/okto_nexus/application/connection_setup.py",
+        "src/okto_nexus/application/execution_binding_approvals.py",
         "src/okto_nexus/application/execution_intents.py",
         "src/okto_nexus/application/runtime_access.py",
         "src/okto_nexus/application/terminal_authorization.py",
+        "src/okto_nexus/application/terminal_binding_approval.py",
         "src/okto_nexus/application/terminal_connection.py",
         "src/okto_nexus/application/terminal_work.py",
+        "src/okto_nexus/bootstrap/dependencies.py",
         "src/okto_nexus/migrations/158_connection_authorization_receipts.sql",
         "tests/execution_r4/test_handoff_notice_migration.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
         "tests/execution_r4/test_terminal_authorization.py",
+        "tests/execution_r4/test_terminal_binding_approval.py",
         "tests/execution_r4/test_terminal_connect.py",
         "tests/execution_r4/test_terminal_work.py",
         "tests/test_terminal_connect_process.py",
@@ -2169,6 +2287,11 @@
         "plans/agent_ops/evidence/pr03-terminal-authorization-selection.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-source.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-uncertain.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-source.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json",
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
@@ -2176,7 +2299,7 @@
         "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
       ],
-      "result": "Human operator login/status/logout reuse existing session authentication and a separate protected-vault namespace. Origin and Server identity are pinned; session-only requests cannot fall back to loopback trust or an agent key. Remote connect reuses an existing approved binding; saved topology is selected before local lifecycle resolution, with no local fallback. Canonical work/receipt recovery, grant renewal and native decisions are verified over human-session HTTP with a synthetic embedded peer. 167 installed regression tests and two focused installed boundary cases passed on the same 427-file Nexus wheel. New remote identity/setup, Connector proposal approval, real OS-vault/TLS accessibility and the two-host productive campaign remain open.",
+      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
@@ -2184,7 +2307,8 @@
         "Human operator-session CLI authentication and existing-binding reuse are verified with a synthetic peer. Unified remote Connector setup, participant init, start-at-login review, preset evolution and dashboard introduction remain open.",
         "Generic message/handoff creation deduplication and wait are not covered by this native-operation subset; service restart and provider session restoration remain unqualified.",
         "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
-        "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified."
+        "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
+        "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open."
       ],
       "subscopes": {
         "local_terminal_work_canonical_http_synthetic_peer": "VERIFIED",
@@ -2205,7 +2329,9 @@
         "operator_origin_pin_and_isolated_vault_namespace": "VERIFIED",
         "real_os_vault_and_tls_accessibility": "NOT_RUN",
         "remote_connector_productive_work": "NOT_RUN",
-        "remote_operator_proposal_approval": "NOT_RUN"
+        "remote_operator_proposal_approval": "VERIFIED",
+        "connector_pending_intent_resume_after_human_decision": "VERIFIED",
+        "binding_approval_loss_recovery_without_repost": "VERIFIED"
       }
     },
     "DX-12": {
@@ -2248,7 +2374,7 @@
     },
     "DX-14": {
       "title": "Connector",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "milestones": [
         "PR-03",
         "PR-04"
@@ -2258,12 +2384,39 @@
         "PR-02",
         "PR-03"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "../okto-nexus-connector/README.md",
+        "../okto-nexus-connector/docs/connection-configuration.md",
+        "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/configure_local.py",
+        "../okto-nexus-connector/tests/unit/test_configure.py",
+        "docs/terminal-operator.md",
+        "plans/agent_ops/evidence/pr03-terminal-binding.md",
+        "src/okto_nexus/adapters/inbound/cli/main.py",
+        "src/okto_nexus/adapters/inbound/cli/operator.py",
+        "src/okto_nexus/adapters/inbound/cli/operator_approval.py",
+        "src/okto_nexus/application/approvals.py",
+        "src/okto_nexus/application/execution_binding_approvals.py",
+        "src/okto_nexus/application/terminal_binding_approval.py",
+        "src/okto_nexus/bootstrap/dependencies.py",
+        "tests/execution_r4/test_terminal_binding_approval.py"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr03-terminal-binding-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-source.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json"
+      ],
+      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open."
+      ],
+      "subscopes": {
+        "remote_operator_proposal_approval": "VERIFIED",
+        "connector_pending_intent_resume_after_human_decision": "VERIFIED",
+        "binding_approval_loss_recovery_without_repost": "VERIFIED"
+      }
     },
     "DX-18": {
       "title": "preset generalista de projeto",
@@ -2375,9 +2528,12 @@
         "PR-02"
       ],
       "files": [
+        "../okto-nexus-connector/README.md",
         "../okto-nexus-connector/docs/connection-configuration.md",
         "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/configure.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/configure_local.py",
         "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/connection_config.py",
+        "../okto-nexus-connector/tests/unit/test_configure.py",
         "../okto-nexus-connector/tests/unit/test_connection_config.py",
         "docs/connection-setup.md",
         "docs/terminal-connect.md",
@@ -2386,12 +2542,14 @@
         "plans/agent_ops/evidence/pr03-remote-operator.md",
         "plans/agent_ops/evidence/pr03-setup-recovery.md",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
+        "plans/agent_ops/evidence/pr03-terminal-binding.md",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
         "plans/agent_ops/evidence/pr03-terminal-identity.md",
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/operator.py",
+        "src/okto_nexus/adapters/inbound/cli/operator_approval.py",
         "src/okto_nexus/adapters/inbound/cli/serve.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
         "src/okto_nexus/adapters/inbound/cli/service_process.py",
@@ -2407,21 +2565,26 @@
         "src/okto_nexus/adapters/outbound/service_manager/context.py",
         "src/okto_nexus/adapters/outbound/terminal_http.py",
         "src/okto_nexus/application/agent_creation.py",
+        "src/okto_nexus/application/approvals.py",
         "src/okto_nexus/application/connection_authorization.py",
         "src/okto_nexus/application/connection_setup.py",
         "src/okto_nexus/application/connection_test.py",
+        "src/okto_nexus/application/execution_binding_approvals.py",
         "src/okto_nexus/application/project_preset.py",
         "src/okto_nexus/application/runtime_access.py",
         "src/okto_nexus/application/settings.py",
         "src/okto_nexus/application/terminal_authorization.py",
+        "src/okto_nexus/application/terminal_binding_approval.py",
         "src/okto_nexus/application/terminal_connection.py",
         "src/okto_nexus/application/terminal_work.py",
+        "src/okto_nexus/bootstrap/dependencies.py",
         "src/okto_nexus/config.py",
         "src/okto_nexus/migrations/158_connection_authorization_receipts.sql",
         "tests/execution_r4/test_connection_setup_recovery.py",
         "tests/execution_r4/test_handoff_notice_migration.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
         "tests/execution_r4/test_terminal_authorization.py",
+        "tests/execution_r4/test_terminal_binding_approval.py",
         "tests/execution_r4/test_terminal_connect.py",
         "tests/execution_r4/test_terminal_identity.py",
         "tests/execution_r4/test_terminal_policy.py",
@@ -2443,6 +2606,11 @@
         "plans/agent_ops/evidence/pr03-terminal-authorization-selection.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-source.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-uncertain.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-source.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json",
         "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect-nexus.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect-regression.xml",
@@ -2456,7 +2624,7 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy-source.xml"
       ],
-      "result": "Human operator login/status/logout reuse existing session authentication and a separate protected-vault namespace. Origin and Server identity are pinned; session-only requests cannot fall back to loopback trust or an agent key. Remote connect reuses an existing approved binding; saved topology is selected before local lifecycle resolution, with no local fallback. Canonical work/receipt recovery, grant renewal and native decisions are verified over human-session HTTP with a synthetic embedded peer. 167 installed regression tests and two focused installed boundary cases passed on the same 427-file Nexus wheel. New remote identity/setup, Connector proposal approval, real OS-vault/TLS accessibility and the two-host productive campaign remain open.",
+      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Local terminal facade is covered by synthetic integration; productive local/remote M1 acceptance remains NOT_RUN.",
@@ -2465,7 +2633,8 @@
         "Reviewed initialization of previously unset native-decision policy is verified with a synthetic native peer. Explicit disabled policy and ambiguous legacy sources remain preserved; local terminal grant renewal is now verified with synthetic peers; remote renewal and real provider qualification remain open.",
         "Human operator-session CLI authentication and existing-binding reuse are verified with a synthetic peer. Unified remote Connector setup, participant init, start-at-login review, preset evolution and dashboard introduction remain open.",
         "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
-        "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified."
+        "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
+        "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open."
       ],
       "subscopes": {
         "canonical_finish_receipt_recovery": "VERIFIED",
@@ -2495,7 +2664,9 @@
         "operator_origin_pin_and_isolated_vault_namespace": "VERIFIED",
         "real_os_vault_and_tls_accessibility": "NOT_RUN",
         "remote_connector_productive_work": "NOT_RUN",
-        "remote_operator_proposal_approval": "NOT_RUN"
+        "remote_operator_proposal_approval": "VERIFIED",
+        "connector_pending_intent_resume_after_human_decision": "VERIFIED",
+        "binding_approval_loss_recovery_without_repost": "VERIFIED"
       }
     },
     "DX-20": {
@@ -2508,17 +2679,23 @@
         "PR-02"
       ],
       "files": [
+        "../okto-nexus-connector/README.md",
+        "../okto-nexus-connector/docs/connection-configuration.md",
+        "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/configure_local.py",
+        "../okto-nexus-connector/tests/unit/test_configure.py",
         "docs/terminal-connect.md",
         "docs/terminal-operator.md",
         "docs/terminal-work.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
+        "plans/agent_ops/evidence/pr03-terminal-binding.md",
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
         "plans/agent_ops/evidence/pr03-terminal-work.md",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/native_input.py",
         "src/okto_nexus/adapters/inbound/cli/operator.py",
+        "src/okto_nexus/adapters/inbound/cli/operator_approval.py",
         "src/okto_nexus/adapters/inbound/cli/serve.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
         "src/okto_nexus/adapters/inbound/cli/service_process.py",
@@ -2532,20 +2709,25 @@
         "src/okto_nexus/adapters/outbound/operator_client.py",
         "src/okto_nexus/adapters/outbound/service_manager/context.py",
         "src/okto_nexus/adapters/outbound/terminal_http.py",
+        "src/okto_nexus/application/approvals.py",
         "src/okto_nexus/application/connection_authorization.py",
         "src/okto_nexus/application/connection_setup.py",
         "src/okto_nexus/application/connection_test.py",
+        "src/okto_nexus/application/execution_binding_approvals.py",
         "src/okto_nexus/application/execution_intents.py",
         "src/okto_nexus/application/runtime_access.py",
         "src/okto_nexus/application/settings.py",
         "src/okto_nexus/application/terminal_authorization.py",
+        "src/okto_nexus/application/terminal_binding_approval.py",
         "src/okto_nexus/application/terminal_connection.py",
         "src/okto_nexus/application/terminal_work.py",
+        "src/okto_nexus/bootstrap/dependencies.py",
         "src/okto_nexus/config.py",
         "src/okto_nexus/migrations/158_connection_authorization_receipts.sql",
         "tests/execution_r4/test_handoff_notice_migration.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
         "tests/execution_r4/test_terminal_authorization.py",
+        "tests/execution_r4/test_terminal_binding_approval.py",
         "tests/execution_r4/test_terminal_connect.py",
         "tests/execution_r4/test_terminal_policy.py",
         "tests/execution_r4/test_terminal_work.py",
@@ -2565,6 +2747,11 @@
         "plans/agent_ops/evidence/pr03-terminal-authorization-selection.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-source.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-uncertain.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-source.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json",
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy-process.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy-regression.xml",
@@ -2575,7 +2762,7 @@
         "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
       ],
-      "result": "Human operator login/status/logout reuse existing session authentication and a separate protected-vault namespace. Origin and Server identity are pinned; session-only requests cannot fall back to loopback trust or an agent key. Remote connect reuses an existing approved binding; saved topology is selected before local lifecycle resolution, with no local fallback. Canonical work/receipt recovery, grant renewal and native decisions are verified over human-session HTTP with a synthetic embedded peer. 167 installed regression tests and two focused installed boundary cases passed on the same 427-file Nexus wheel. New remote identity/setup, Connector proposal approval, real OS-vault/TLS accessibility and the two-host productive campaign remain open.",
+      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
@@ -2583,7 +2770,8 @@
         "Human operator-session CLI authentication and existing-binding reuse are verified with a synthetic peer. Unified remote Connector setup, participant init, start-at-login review, preset evolution and dashboard introduction remain open.",
         "Generic message/handoff creation deduplication and wait are not covered by this native-operation subset; service restart and provider session restoration remain unqualified.",
         "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
-        "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified."
+        "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
+        "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open."
       ],
       "subscopes": {
         "local_terminal_work_canonical_http_synthetic_peer": "VERIFIED",
@@ -2607,7 +2795,9 @@
         "operator_origin_pin_and_isolated_vault_namespace": "VERIFIED",
         "real_os_vault_and_tls_accessibility": "NOT_RUN",
         "remote_connector_productive_work": "NOT_RUN",
-        "remote_operator_proposal_approval": "NOT_RUN"
+        "remote_operator_proposal_approval": "VERIFIED",
+        "connector_pending_intent_resume_after_human_decision": "VERIFIED",
+        "binding_approval_loss_recovery_without_repost": "VERIFIED"
       }
     },
     "DX-21": {
@@ -2678,6 +2868,12 @@
         "plans/agent_ops/evidence/pr03-terminal-authorization-selection.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-source.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-uncertain.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-source.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json",
+        "plans/agent_ops/evidence/pr03-terminal-binding.md",
         "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect-nexus.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect-regression.xml",
@@ -2691,7 +2887,7 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy-source.xml"
       ],
-      "result": "Human operator login/status/logout reuse existing session authentication and a separate protected-vault namespace. Origin and Server identity are pinned; session-only requests cannot fall back to loopback trust or an agent key. Remote connect reuses an existing approved binding; saved topology is selected before local lifecycle resolution, with no local fallback. Canonical work/receipt recovery, grant renewal and native decisions are verified over human-session HTTP with a synthetic embedded peer. 167 installed regression tests and two focused installed boundary cases passed on the same 427-file Nexus wheel. New remote identity/setup, Connector proposal approval, real OS-vault/TLS accessibility and the two-host productive campaign remain open.",
+      "result": "Human operator login/status/logout reuse existing session authentication and a separate protected-vault namespace. Origin and Server identity are pinned; session-only requests cannot fall back to loopback trust or an agent key. Remote connect reuses an existing approved binding; saved topology is selected before local lifecycle resolution, with no local fallback. Canonical work/receipt recovery, grant renewal and native decisions are verified over human-session HTTP with a synthetic embedded peer. 167 installed regression tests and two focused installed boundary cases passed on the same 427-file Nexus wheel. New remote identity/setup, real OS-vault/TLS accessibility and the two-host productive campaign remain open. The shared operator proposal approval is now verified by pr03-terminal-binding; this task remains incomplete.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Local terminal facade is covered by synthetic integration; productive local/remote M1 acceptance remains NOT_RUN.",
@@ -2727,7 +2923,7 @@
         "operator_origin_pin_and_isolated_vault_namespace": "VERIFIED",
         "real_os_vault_and_tls_accessibility": "NOT_RUN",
         "remote_connector_productive_work": "NOT_RUN",
-        "remote_operator_proposal_approval": "NOT_RUN"
+        "remote_operator_proposal_approval": "VERIFIED"
       }
     },
     "ATN-01": {
@@ -3514,8 +3710,16 @@
     },
     "DX-T32": {
       "requirement": "AprovaÃ§Ã£o remota pendente preserva ID e identidade do decisor; terminal participante nÃ£o a aprova por assentimento local.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-terminal-binding-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-source.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json",
+        "plans/agent_ops/evidence/pr03-terminal-binding.md"
+      ],
+      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open."
     },
     "DX-T33": {
       "requirement": "connect reutilizado apÃ³s resposta perdida retoma o mesmo setup sem novo agente, binding ou grant.",
@@ -3592,9 +3796,15 @@
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
+        "plans/agent_ops/evidence/pr03-terminal-binding-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-source.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json",
+        "plans/agent_ops/evidence/pr03-terminal-binding.md",
         "plans/agent_ops/evidence/pr03-terminal-work.md"
       ],
-      "result": "Human operator login/status/logout reuse existing session authentication and a separate protected-vault namespace. Origin and Server identity are pinned; session-only requests cannot fall back to loopback trust or an agent key. Remote connect reuses an existing approved binding; saved topology is selected before local lifecycle resolution, with no local fallback. Canonical work/receipt recovery, grant renewal and native decisions are verified over human-session HTTP with a synthetic embedded peer. 167 installed regression tests and two focused installed boundary cases passed on the same 427-file Nexus wheel. New remote identity/setup, Connector proposal approval, real OS-vault/TLS accessibility and the two-host productive campaign remain open. The full real-provider/Connector scenario is not claimed."
+      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open."
     },
     "DX-T41": {
       "requirement": "Reconnect e repetiÃ§Ã£o do setup preservam `agent_id`, modelo, papel, configuraÃ§Ã£o, grants e personalizaÃ§Ãµes; nÃ£o recriam agente nem reaplicam defaults.",
@@ -3648,12 +3858,18 @@
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
+        "plans/agent_ops/evidence/pr03-terminal-binding-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-source.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json",
+        "plans/agent_ops/evidence/pr03-terminal-binding.md",
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
         "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-work.md"
       ],
-      "result": "Human operator login/status/logout reuse existing session authentication and a separate protected-vault namespace. Origin and Server identity are pinned; session-only requests cannot fall back to loopback trust or an agent key. Remote connect reuses an existing approved binding; saved topology is selected before local lifecycle resolution, with no local fallback. Canonical work/receipt recovery, grant renewal and native decisions are verified over human-session HTTP with a synthetic embedded peer. 167 installed regression tests and two focused installed boundary cases passed on the same 427-file Nexus wheel. New remote identity/setup, Connector proposal approval, real OS-vault/TLS accessibility and the two-host productive campaign remain open. The full real-provider/Connector scenario is not claimed."
+      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open."
     },
     "DX-T46": {
       "requirement": "Perda da resposta de submissÃ£o ou decisÃ£o em M1 recupera a mesma requisiÃ§Ã£o/resultado, inclusive apÃ³s restart; nÃ£o cria operaÃ§Ã£o, pedido ou handoff duplicado.",
@@ -3665,12 +3881,18 @@
         "plans/agent_ops/evidence/pr03-terminal-authorization-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
+        "plans/agent_ops/evidence/pr03-terminal-binding-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-source.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json",
+        "plans/agent_ops/evidence/pr03-terminal-binding.md",
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
         "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-work.md"
       ],
-      "result": "Human operator login/status/logout reuse existing session authentication and a separate protected-vault namespace. Origin and Server identity are pinned; session-only requests cannot fall back to loopback trust or an agent key. Remote connect reuses an existing approved binding; saved topology is selected before local lifecycle resolution, with no local fallback. Canonical work/receipt recovery, grant renewal and native decisions are verified over human-session HTTP with a synthetic embedded peer. 167 installed regression tests and two focused installed boundary cases passed on the same 427-file Nexus wheel. New remote identity/setup, Connector proposal approval, real OS-vault/TLS accessibility and the two-host productive campaign remain open. The full real-provider/Connector scenario is not claimed."
+      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open."
     },
     "DX-T47": {
       "requirement": "Fechar e reabrir o CLI reencontra trabalho e identidade; retoma a conversa somente com suporte comprovado, ou oferece nova sessÃ£o explicitamente, sem replay nem contexto fictÃ­cio.",
@@ -4436,6 +4658,19 @@
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-wheels.json"
+      ]
+    },
+    {
+      "date": "2026-11-05",
+      "scope": "PR-03 terminal operator decision and Connector continuation",
+      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-terminal-binding.md",
+        "plans/agent_ops/evidence/pr03-terminal-binding-source.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-final.xml",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json",
+        "plans/agent_ops/evidence/pr03-terminal-binding-wheels-initial.json"
       ]
     }
   ]

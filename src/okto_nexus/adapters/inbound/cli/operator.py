@@ -13,7 +13,11 @@ from ...outbound.service_manager.locking import ExclusiveFileLock, LockBusy
 
 
 def run_operator(argv):
+    if argv and argv[0] == 'approval':
+        from .operator_approval import run_operator_approval
+        return run_operator_approval(argv[1:])
     parser = argparse.ArgumentParser(prog='okto-nexus operator')
+    parser.epilog = 'Review Connector requests: okto-nexus operator approval APPROVAL_ID --profile NAME'
     parser.add_argument('action', choices=('login', 'status', 'logout'))
     parser.add_argument('--profile', required=True)
     parser.add_argument('--home', type=Path)

@@ -1,0 +1,23 @@
+[
+  {
+    "package": "okto_nexus",
+    "artifact": "okto_nexus-0.3.3-py3-none-any.whl",
+    "sha256": "67bb1e498405cd164d00c3acaad2ef1d00005653fe876b2d8ef575714d732b7b",
+    "python_payloads": 429,
+    "raw_bytes_match": true
+  },
+  {
+    "package": "okto_nexus_connector",
+    "artifact": "okto_nexus_connector-0.0.12-py3-none-any.whl",
+    "sha256": "886639ab13ab35adb4edd21cbaa1817e92b4d07553fcf9109c5f2bf8b823f5da",
+    "python_payloads": 114,
+    "raw_bytes_match": true
+  },
+  {
+    "package": "nexus_connector_core",
+    "artifact": "okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+    "sha256": "5d004f7def4fdbe3252fb2a872b333571adab38c6c4b88fdb7cdd9cc2ff95d34",
+    "python_payloads": 130,
+    "raw_bytes_match": true
+  }
+]

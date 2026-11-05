@@ -215,3 +215,11 @@ Campanhas reais de provedor, login/logout/reboot, serviço do usuário e Herdr p
 - Trabalho, recuperação de resposta perdida, renovação de grant e decisão nativa foram exercitados pelo HTTP autenticado humano, com autoridade canônica. Logout offline remove a sessão local e informa revogação remota não confirmada; redirecionamento entre origens não encaminha cookie.
 - **24 testes iniciais e dois de decisão/cofre passaram.** O pacote instalado passou **167 testes**; **dois casos instalados adicionais** verificaram logout offline e o redirecionamento entre origens. Relatórios separados preservam a sobreposição. Os 427/114/130 payloads Python correspondem aos fontes; Connector/Core não mudaram.
 - [Evidências e limites](plans/agent_ops/evidence/pr03-remote-operator.md). HTTP/Server reais com transporte adaptado, cofre em memória e peer nativo sintético. Nova identidade/setup remoto, aprovação de propostas do Connector, campanha real em dois hosts, cofre/TLS reais, login-start e participante continuam pendentes. M1 e o plano integral permanecem incompletos.
+
+## 2026-11-05 — PR-03, oitava fatia: aprovação do Connector pelo terminal
+
+- O operador inspeciona e decide a proposta canônica pelo CLI autenticado, com identidade, host, workspace, instalação, efeitos, revisão e prazo visíveis. A confirmação do participante não concede autoridade.
+- Resposta perdida recupera o mesmo recibo sem outro POST. O serviço real do Connector reabre o estado persistido e aplica a intenção original: uma proposta, aprovação, binding e grant; nenhum cookie humano é transportado ao host.
+- **30 testes do Server e 17 do Connector passaram nos fontes; 153 passaram na campanha instalada e 24 no pacote final após atualização dos metadados do README.** Os relatórios têm sobreposição. Os 429/114/130 arquivos Python correspondem aos fontes. O wheel de CI do Connector e seu hash foram atualizados; Core não mudou.
+- DX-T32 verificado no contrato HTTP/persistência. DX-T40/45/46 seguem parciais; M1 real, novo agente remoto/setup unificado, serviço nativo, participante, ATN e OBS continuam pendentes. Escopo R3 preservado.
+- Evidência: [pr03-terminal-binding.md](plans/agent_ops/evidence/pr03-terminal-binding.md).

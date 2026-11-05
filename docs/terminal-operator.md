@@ -41,9 +41,9 @@ The binding supplies the canonical executor, workspace and harness. The local
 current folder (or `--project`) identifies the operator's shortcut; it is not sent
 as a remote launch path. Existing host configuration is preserved. `--client`,
 `--workspace-id` and `--candidate-ref`, when provided, must match the binding.
-Creating a new remote identity, discovering a remote installation and approving
-Connector onboarding remain pending work in the unified terminal flow; this
-command does not claim to perform those steps.
+Creating a new remote identity and integrating remote installation discovery
+remain pending work in the unified terminal flow. Connector proposal approval
+is available below, using the original Connector onboarding request.
 
 Later `connect` and `work` recover the saved operator topology before resolving
 local service startup. An unavailable Server, expired session, conflicting
@@ -71,3 +71,34 @@ origin/identity metadata is retained for a later login. Status and successful
 login/logout return JSON and exit 0. Invalid grammar exits 2; unavailable or
 unconfirmed states exit 3; interrupted secret input exits 130. These commands
 do not change the operator password or rotate an agent key.
+
+## Decide a Connector connection request
+
+The Connector's `connect`/`configure` flow submits its existing immutable proposal
+and prints its approval ID. Keep that ID; resuming the request does not create a
+new proposal. On the operator's own authenticated client:
+
+```sh
+okto-nexus operator approval APPROVAL_ID --profile team-server
+okto-nexus operator approval APPROVAL_ID --profile team-server --decision approve
+```
+
+The first command only inspects. The second shows the canonical agent, executor,
+workspace, installation, configuration and execution limits, proposal revision
+and expiry, then asks for explicit confirmation. Use `--decision reject` to refuse.
+The Server revalidates authority, expiry and current policy when committing the
+decision. A participant cannot decide by confirming a local prompt.
+
+For automation, inspect with `--json`, then provide the exact `review_revision`
+as `--confirm REVISION` together with `--decision approve|reject`. Noninteractive
+commands without that reviewed revision refuse to decide. Output escapes terminal
+control characters in human-readable proposal text.
+
+If the decision response is lost, inspect the same ID and repeat the same decision
+and revision. A committed matching decision is recovered from its canonical
+receipt without another POST; a different decision or actor produces a conflict.
+Inspection, rejection and approval do not launch work. The Connector's existing
+background continuation applies the approved proposal and its scoped grant using
+its original participant credential and request IDs. Human operator credentials
+remain on the operator client. After binding application, use the existing binding
+ID with `connect --operator-profile` to reach the terminal work flow.

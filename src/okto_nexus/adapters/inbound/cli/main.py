@@ -14,6 +14,7 @@ Usage:
   okto-nexus connect [options] Review and connect a local project
   okto-nexus work [chat|send|status|watch|events|answer|authorize|sessions|resume|steer|interrupt|close] [options]
   okto-nexus operator login|status|logout --profile NAME [options]
+  okto-nexus operator approval APPROVAL_ID --profile NAME [options]
   okto-nexus serve [options]   Start HTTP MCP, REST and dashboard
   okto-nexus service status|logs|start|stop|restart|recover-start|install|uninstall|enable|disable|upgrade-plan|upgrade-apply [options]  Manage the local Server
   okto-nexus tail [options]    Stream the event log as NDJSON

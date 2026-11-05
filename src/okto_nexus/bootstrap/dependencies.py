@@ -250,9 +250,9 @@ def bootstrap(
     from ..application.execution_binding_approvals import (
         BINDING_APPROVAL_ACTION, ExecutionBindingApprovals,
     )
+    binding_decisions = ExecutionBindingApprovals(access=build_execution_access(deps))
     approvals.register_transactional_decision(
-        BINDING_APPROVAL_ACTION,
-        ExecutionBindingApprovals(access=build_execution_access(deps)).decide)
+        BINDING_APPROVAL_ACTION, binding_decisions.decide, detail=binding_decisions.detail)
     from importlib.util import find_spec
     if find_spec("nexus_connector_core") is not None:
         from ..application.execution_native_decisions import ExecutionNativeDecisions

@@ -160,7 +160,7 @@ class ApprovalService:
     def register_decision_listener(self, action, listener):
         self._decision_listeners[action] = listener
 
-    def register_transactional_decision(self, action, handler):
+    def register_transactional_decision(self, action, handler, *, detail=None):
         """Register a database-only decision, committed with its audit event.
 
         The handler authenticates decision_context and must not perform
@@ -168,6 +168,8 @@ class ApprovalService:
         Existing re-execution actions retain their separate transaction flow.
         """
         self._transactional_decisions[action] = handler
+        if detail:
+            self._decision_details[action] = detail
 
     def register_decision_validator(self, action, validator, *, detail=None):
         # Transactional validation/storage only: no external I/O allowed.

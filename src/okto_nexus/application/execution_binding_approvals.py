@@ -13,6 +13,24 @@ class ExecutionBindingApprovals:
     def __init__(self, *, access):
         self.access = access
 
+    def detail(self, uow, approval):
+        """Expose the immutable reviewed scope, never host secrets or proof context."""
+        request = json.loads(approval.request_payload)['kwargs']
+        row = uow.connection.execute(
+            'SELECT * FROM execution_proposals WHERE proposal_id=? AND server_id=? AND subject_agent_id=?',
+            (request['proposal_id'], request['server_id'], approval.agent_id)).fetchone()
+        if row is None:
+            raise OktoNexusError(ErrorCode.CONFLICT, 'The binding proposal is unavailable.', {})
+        proposal = json.loads(row['proposal_json'])
+        expected = json.loads(row['expected_revisions_json'])
+        if (expected.get('operator_approval_id') != approval.approval_id or
+                row['diff_hash'] != request['approved_diff_hash'] or
+                row['proposal_revision'] != request['proposal_revision'] or
+                proposal['workspace_id'] != approval.workspace_id):
+            raise OktoNexusError(ErrorCode.CONFLICT, 'The approval does not match the binding proposal.', {})
+        return dict(proposal=proposal, proposal_state=row['status'],
+            expired=datetime.fromisoformat(row['expires_at'].replace('Z', '+00:00')) <= datetime.now(timezone.utc))
+
     def decide(self, uow, approval, *, approved, response, context, decided_by, replay):
         from nexus_connector_core.protocol import canonical_json
         from .execution_binding_proposals import _agent_guard, _require_binding_method
