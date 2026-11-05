@@ -45,8 +45,27 @@ class LocalServerLifecycle:
         from .logs import read_logs
         return read_logs(self.home, tail=tail, cursor=cursor)
 
+    def upgrade_plan(self, *, executable):
+        from .upgrade import for_lifecycle
+        return for_lifecycle(self).plan(executable)
+
+    def upgrade_apply(self, *, document, expected_revision):
+        from .upgrade import for_lifecycle
+        return for_lifecycle(self).apply(document, expected_revision)
+
     def inspect(self, *, timeout=2.0, _launch_owned=False):
         result = self._inspect_process(timeout=timeout)
+        try:
+            context = read_json(self.home / CONTEXT_NAME)
+        except FileNotFoundError:
+            context = {}
+        except (OSError, ValueError):
+            return {**result, 'state': 'unknown', 'reason': 'SERVICE_CONTEXT_UNAVAILABLE',
+                'next_action': 'Restore the recorded service context before changing lifecycle state.'}
+        if context.get('upgrade_pending'):
+            return {**result, 'state': 'unknown', 'reason': 'SERVICE_UPGRADE_PENDING',
+                'upgrade': {'plan_revision': context['upgrade_pending'], 'state': 'pending'},
+                'next_action': 'Resume upgrade-apply with the retained plan before starting this instance.'}
         if result['state'] == 'stopped' and not _launch_owned and any(_held(path) is True for path in (
                 self.home / 'service-launch.guard', self.database.with_name(self.database.name + '.launch.guard'))):
             return {**result, 'state': 'starting', 'reason': 'CONCURRENT_START',
@@ -124,6 +143,12 @@ class LocalServerLifecycle:
             return refused('NO_PENDING_LAUNCH', 'No retained detached launch exists for this instance.')
         try:
             with launch_exclusion(self.home, self.database), ExitStack() as owners:
+                try:
+                    context = read_json(self.home / CONTEXT_NAME)
+                except FileNotFoundError:
+                    context = {}
+                if context.get('upgrade_pending'):
+                    return refused('SERVICE_UPGRADE_PENDING', 'Resume the retained upgrade before launch recovery.')
                 if (self.home / INSTALLATION_NAME).exists():
                     return refused('RECOVERY_REQUIRES_DETACHED', 'Use the selected user-service lifecycle; its task was not changed.')
                 if base['state'] != 'stopped':

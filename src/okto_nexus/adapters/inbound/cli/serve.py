@@ -500,7 +500,25 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None, *,
 
     service_log = None
     shutdown_state = 'UNCONFIRMED'
+    clean_exit = False
+    run_marker = False
     try:
+        from ...outbound.service_manager.context import CONTEXT_NAME, atomic_json, read_json
+        from ....service_environment import verify_context
+        try:
+            recorded = read_json(config.home_dir / CONTEXT_NAME)
+        except FileNotFoundError:
+            recorded = {}
+        try:
+            verify_context(recorded)
+        except (OSError, ValueError) as error:
+            print(f'[okto-nexus] Service environment is unavailable: {error}', file=sys.stderr)
+            return 1
+        from ...outbound.service_manager.identity import server_instance_id
+        run_document = {'revision': 1, 'instance_id': server_instance_id(config.home_dir, config.db_path),
+            'generation': lock.generation}
+        atomic_json(config.home_dir / 'service-run.json', {**run_document, 'state': 'starting'})
+        run_marker = True
         from ...outbound.service_manager.logs import ServiceLog
         try:
             service_log = ServiceLog(config.home_dir, generation=lock.generation, supervisor=supervisor)
@@ -617,12 +635,19 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None, *,
             # moot; stop it explicitly rather than leaving it to notice on
             # its own next poll. See `_stop_harness_orphan_watchdog`.
             _stop_harness_orphan_watchdog(watchdog)
+        clean_exit = True
         return 0
     except BaseException as exc:
         if service_log is not None:
             service_log.write('EXIT_FAILED', error_code=getattr(exc, 'code', ErrorCode.INTERNAL_ERROR.value))
         raise
     finally:
+        if run_marker:
+            try:
+                atomic_json(config.home_dir / 'service-run.json', {**run_document,
+                    'state': 'drained' if clean_exit and shutdown_state == 'DRAINED' else 'unconfirmed'})
+            except OSError:
+                print('[okto-nexus] Run completion could not be persisted; upgrade remains unconfirmed.', file=sys.stderr)
         if service_log is not None:
             service_log.write('SERVICE_EXIT', state=shutdown_state)
             service_log.close()

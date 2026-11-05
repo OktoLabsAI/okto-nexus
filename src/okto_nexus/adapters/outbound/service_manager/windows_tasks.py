@@ -98,6 +98,15 @@ class WindowsTasks:
             return self._observation(task)
         return self._call(operation)
 
+    def replace(self, name, expected, xml):
+        def operation(folder):
+            task = self._matching(folder, name, expected)
+            if int(task.State) in {0, 2, 4}:
+                raise TaskConflict('The selected task must be stopped before replacing its action')
+            # UPDATE only; retain principal ACL and suppress registration triggers.
+            return self._observation(folder.RegisterTask(name, xml, 4 | 16 | 32, None, None, 3, None))
+        return self._call(operation)
+
     def delete(self, name, expected):
         def operation(folder):
             task = self._matching(folder, name, expected)

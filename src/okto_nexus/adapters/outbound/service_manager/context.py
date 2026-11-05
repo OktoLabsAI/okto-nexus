@@ -97,7 +97,9 @@ def execution_context(config, *, host, port, project_root, log_level, discovery,
 
 
 def validate_context(value: dict, *, require_paths=True) -> dict:
-    if value.get('revision') != 1 or value.get('component') != 'server':
+    if value.get('upgrade_pending'):
+        raise ValueError('SERVICE_UPGRADE_PENDING: resume the retained upgrade plan')
+    if value.get('revision') not in {1, 2} or value.get('component') != 'server':
         raise ValueError('Unsupported service context')
     for key in ('executable', 'environment_prefix', 'cwd'):
         if not isinstance(value.get(key), str) or not Path(value[key]).is_absolute():

@@ -81,6 +81,7 @@ class ServerInstallation:
         return value
 
     def observe(self, *, check_context=True):
+        self._upgrade_fence()
         self._platform()
         receipt = self.receipt()
         self._claim(receipt, required=receipt is not None)
@@ -117,6 +118,7 @@ class ServerInstallation:
                 'The execution context changed. Reconcile it explicitly before starting the installed task.')
 
     def set_enabled(self, enabled):
+        self._upgrade_fence()
         if type(enabled) is not bool:
             raise ValueError('Enablement must be boolean')
         self._platform()
@@ -161,6 +163,7 @@ class ServerInstallation:
 
     def prepare(self, context):
         """Read-only preflight before the application is asked to drain."""
+        self._upgrade_fence()
         self._platform()
         context = validate_context(context)
         receipt = self.receipt()
@@ -265,6 +268,7 @@ class ServerInstallation:
                 'logon_session': control.get('logon_session') or windows_logon_session()})
 
     def uninstall(self):
+        self._upgrade_fence()
         self._platform()
         receipt = self.receipt()
         self._claim(receipt)
@@ -289,6 +293,15 @@ class ServerInstallation:
         self.database_claim.unlink(missing_ok=True)
         self.path.unlink()
         (self.home / CONTROL_NAME).unlink(missing_ok=True)
+
+    def _upgrade_fence(self):
+        try:
+            context = read_json(self.home / CONTEXT_NAME)
+        except FileNotFoundError:
+            return
+        if context.get('upgrade_pending'):
+            raise InstallationError('SERVICE_UPGRADE_PENDING',
+                'Resume upgrade-apply with the retained plan and revision before another lifecycle mutation.')
 
 
 def installation_failure(result, error):

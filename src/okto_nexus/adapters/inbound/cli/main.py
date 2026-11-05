@@ -12,7 +12,7 @@ _HELP = """okto-nexus - local agent coordination bus
 
 Usage:
   okto-nexus serve [options]   Start HTTP MCP, REST and dashboard
-  okto-nexus service status|logs|start|stop|restart|recover-start|install|uninstall|enable|disable [options]  Manage the local Server
+  okto-nexus service status|logs|start|stop|restart|recover-start|install|uninstall|enable|disable|upgrade-plan|upgrade-apply [options]  Manage the local Server
   okto-nexus tail [options]    Stream the event log as NDJSON
   okto-nexus admin <command>   Run maintenance commands
   okto-nexus provider-credentials <set|remove>  Manage provider secrets

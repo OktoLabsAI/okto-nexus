@@ -143,3 +143,14 @@ Campanhas reais de provedor, login/logout/reboot, serviço do usuário e Herdr p
 - **68 testes do Nexus e 81 do Connector passaram**; após os ajustes finais, **41 do Nexus e 11 de recuperação do Connector passaram**. **124 testes passaram nos wheels finais em venv isolada**, incluindo recuperação, três starters concorrentes, rejeição do filho antigo, reuso, restart e drain dos dois componentes.
 - Os **412/111 arquivos Python** dos wheels Nexus/Connector correspondem aos fontes. Core permanece inalterado. Commit/push do Connector: `496c7e5`.
 - [Evidências, comandos e limites](plans/agent_ops/evidence/pr02-launch-recovery.md). Upgrade controlado e reconciliação geral da definição/contexto continuam abertos; o subescopo não comprova recuperação de trabalho produtivo. A campanha nativa ainda aguarda a autorização solicitada.
+
+
+## 2026-11-05 — PR-02, nona fatia: upgrade explícito de ambiente
+
+- Main recuperada novamente nos três repositórios; as branches de trabalho já contêm os três heads remotos.
+- Nexus e Connector oferecem upgrade-plan/upgrade-apply com revisão, preservação do contexto, drain canônico e retomada do mesmo plano após interrupção. O contexto pendente bloqueia novos starts; a ativação do destino ocorre por último.
+- Troca de ação da tarefa preserva principal, gatilhos, políticas e enablement. Recibos, token e claim do banco ficam coordenados pelo fence; edição externa é preservada. Core commit/push: 57fa815.
+- Testes: 17 Core; campanhas iniciais 125 Nexus/94 Connector; finais focadas 51 Nexus/42 Connector; 200 testes passaram nos wheels finais, sem skips. As duas campanhas reais trocam entre venvs descartáveis, preservam bytes do banco/ledger durante apply e terminam em DRAINED.
+- Apply não inicia nem migra o runtime. O start explícito usa o caminho canônico e verifica o ambiente instalado. Rollback binário não é assumido seguro.
+- Connector commit/push: `d82d941`; artefatos coordenados e hashes registrados nas evidências.
+- [Evidências e limites](plans/agent_ops/evidence/pr02-upgrade.md). SVC-09 e PR-02 seguem IN_PROGRESS: atualização nativa real, versões históricas, migrações incompatíveis e trabalho produtivo não foram qualificados. A campanha nativa original continua aguardando a autorização já solicitada.

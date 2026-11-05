@@ -83,6 +83,9 @@ def test_concurrent_detached_start_survives_cli_exit_reuses_and_drains(tmp_path)
         assert result['state'] == 'stopped' and result['shutdown_outcome'] == 'drained'
         receipt = json.loads((home / 'service-shutdown.json').read_text(encoding='utf-8'))
         assert receipt['generation'] == reopened['generation'] and receipt['state'] == 'DRAINED'
+        run_marker = json.loads((home / 'service-run.json').read_text(encoding='utf-8'))
+        assert run_marker['state'] == 'drained' and run_marker['generation'] == reopened['generation']
+        assert run_marker['instance_id'] == reopened['instance_id']
         stopped = True
         assert invoke('status')['state'] == 'stopped'
         assert home.joinpath('nexus.db').is_file()

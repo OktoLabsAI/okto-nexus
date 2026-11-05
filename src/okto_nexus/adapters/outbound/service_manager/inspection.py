@@ -105,6 +105,7 @@ def inspect_local_server(*, home: Path, database: Path, host: str, port: int,
     if (data.get('protocol_revision') != SERVICE_PROTOCOL_REVISION
             or data.get('active_version') != result['installed_version']):
         return {**result, 'state': 'degraded', 'active_version': data.get('active_version'),
+                'generation': data.get('generation'), 'pid': data.get('pid'),
                 'reason': 'VERSION_INCOMPATIBLE',
                 'next_action': 'Review active and installed versions; do not interrupt or upgrade implicitly.'}
     allowed = {'component', 'instance_id', 'generation', 'active_version', 'pid', 'supervisor',

@@ -15,6 +15,12 @@ class ServiceLifecycle:
     def recover_start(self, *, expected_revision):
         return self.adapter.recover_start(expected_revision=expected_revision)
 
+    def upgrade_plan(self, *, executable):
+        return self.adapter.upgrade_plan(executable=executable)
+
+    def upgrade_apply(self, *, document, expected_revision):
+        return self.adapter.upgrade_apply(document=document, expected_revision=expected_revision)
+
     def logs(self, *, tail=50, follow=False):
         cursor = None
         while True:

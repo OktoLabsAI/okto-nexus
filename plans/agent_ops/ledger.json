@@ -67,7 +67,8 @@
         "plans/agent_ops/evidence/pr02-nexus-service-logs.md",
         "plans/agent_ops/evidence/pr02-enablement.md",
         "plans/agent_ops/evidence/pr02-connector-passive.md",
-        "plans/agent_ops/evidence/pr02-launch-recovery.md"
+        "plans/agent_ops/evidence/pr02-launch-recovery.md",
+        "plans/agent_ops/evidence/pr02-upgrade.md"
       ]
     },
     "PR-03": {
@@ -585,15 +586,21 @@
         "../okto-nexus-connector/src/okto_nexus_connector/daemon/service_process.py",
         "../okto-nexus-connector/src/okto_nexus_connector/platform/service_context.py",
         "../okto-nexus-connector/src/okto_nexus_connector/platform/service_install.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/platform/service_upgrade.py",
         "../okto-nexus-connector/src/okto_nexus_connector/platform/user_service.py",
         "../okto-nexus-connector/src/okto_nexus_connector/platform/windows_tasks.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/service_environment.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/service_upgrade.py",
         "../okto-nexus-connector/tests/integration/test_detached_service_lifecycle.py",
+        "../okto-nexus-connector/tests/integration/test_service_upgrade_process.py",
+        "../okto-nexus-connector/tests/unit/test_service_upgrade.py",
         "../okto-nexus-connector/tests/unit/test_user_service_lifecycle.py",
         "docs/service-lifecycle.md",
         "plans/agent_ops/evidence/pr02-connector-user-service.md",
         "plans/agent_ops/evidence/pr02-core-service-definition.md",
         "plans/agent_ops/evidence/pr02-enablement.md",
         "plans/agent_ops/evidence/pr02-nexus-user-service.md",
+        "plans/agent_ops/evidence/pr02-upgrade.md",
         "src/okto_nexus/adapters/inbound/cli/serve.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
         "src/okto_nexus/adapters/inbound/cli/supervised_service.py",
@@ -603,11 +610,16 @@
         "src/okto_nexus/adapters/outbound/service_manager/inspection.py",
         "src/okto_nexus/adapters/outbound/service_manager/installation.py",
         "src/okto_nexus/adapters/outbound/service_manager/local.py",
+        "src/okto_nexus/adapters/outbound/service_manager/upgrade.py",
         "src/okto_nexus/adapters/outbound/service_manager/windows_tasks.py",
         "src/okto_nexus/application/service_lifecycle.py",
+        "src/okto_nexus/service_environment.py",
+        "src/okto_nexus/service_upgrade.py",
         "tests/test_service_inspection.py",
         "tests/test_service_process.py",
         "tests/test_service_start.py",
+        "tests/test_service_upgrade.py",
+        "tests/test_service_upgrade_process.py",
         "tests/test_user_service_installation.py"
       ],
       "tests": [
@@ -623,14 +635,21 @@
         "plans/agent_ops/evidence/pr02-enablement-wheels.json",
         "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service-wheel.json",
-        "plans/agent_ops/evidence/pr02-nexus-user-service.xml"
+        "plans/agent_ops/evidence/pr02-nexus-user-service.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-connector-final.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-connector.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-core.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-nexus-final.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-nexus.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-wheels.json"
       ],
-      "result": "Nexus Windows task host integration implemented; isolated host contracts, native validate-only preflight and concurrent real detached process regression passed. See scoped evidence; no registered service qualification. Connector host/launch subscopes now have scoped validation in pr02-connector-user-service.md; full task acceptance remains open. Selected task enable/disable and retained-intent reconciliation implemented in both hosts; scoped source/installed validation passed.",
+      "result": "Nexus Windows task host integration implemented; isolated host contracts, native validate-only preflight and concurrent real detached process regression passed. See scoped evidence; no registered service qualification. Connector host/launch subscopes now have scoped validation in pr02-connector-user-service.md; full task acceptance remains open. Selected task enable/disable and retained-intent reconciliation implemented in both hosts; scoped source/installed validation passed. Reviewed installed-environment replacement implemented in both hosts, with retained startup fence, canonical drain, action-only task replacement and explicit target start. Final installed campaign: 200 passed; no runtime migration is performed by apply.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Actual user-service/login/logout/crash/credential/provider campaigns NOT_RUN; legacy POSIX installers remain unqualified for the R3 instance contract.",
-        "Remaining controls/logs/passive diagnostics, general definition reconciliation UX, detached pre-spawn recovery and controlled upgrades remain open.",
-        "Native Task Scheduler has no atomic fingerprint-conditional mutation against external editors; unconfirmed existing tasks are not adopted."
+        "Actual native service update/login/logout/crash/credential/provider campaigns NOT_RUN; POSIX remains unqualified.",
+        "General definition reconciliation, Server doctor qualification, historical mixed-version migration failures and productive runtime campaigns remain open.",
+        "Native Task Scheduler has no atomic fingerprint-conditional mutation against external editors; unconfirmed edits remain conflicts. Independently invoked old foreground binaries do not acquire the new protocol fence."
       ],
       "subscopes": {
         "windows_definition_contract": "VERIFIED",
@@ -642,7 +661,10 @@
         "connector_windows_host_integration": "IMPLEMENTED",
         "connector_native_worker_preflight": "VERIFIED",
         "selected_enable_disable_hosts": "IMPLEMENTED",
-        "enablement_native_validation": "VERIFIED"
+        "enablement_native_validation": "VERIFIED",
+        "reviewed_environment_replacement_hosts": "VERIFIED",
+        "interrupted_upgrade_injected_native_effects": "VERIFIED",
+        "actual_native_task_upgrade": "NOT_RUN"
       }
     },
     "SVC-06": {
@@ -655,19 +677,26 @@
         "PR-01"
       ],
       "files": [
+        "../okto-nexus-connector-core/src/nexus_connector_core/user_service_definition.py",
         "../okto-nexus-connector/docs/service-lifecycle.md",
         "../okto-nexus-connector/src/okto_nexus_connector/daemon/lifecycle.py",
         "../okto-nexus-connector/src/okto_nexus_connector/daemon/manager.py",
         "../okto-nexus-connector/src/okto_nexus_connector/daemon/service_process.py",
         "../okto-nexus-connector/src/okto_nexus_connector/platform/service_context.py",
         "../okto-nexus-connector/src/okto_nexus_connector/platform/service_install.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/platform/service_upgrade.py",
         "../okto-nexus-connector/src/okto_nexus_connector/platform/user_service.py",
         "../okto-nexus-connector/src/okto_nexus_connector/platform/windows_tasks.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/service_environment.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/service_upgrade.py",
         "../okto-nexus-connector/tests/integration/test_detached_service_lifecycle.py",
+        "../okto-nexus-connector/tests/integration/test_service_upgrade_process.py",
+        "../okto-nexus-connector/tests/unit/test_service_upgrade.py",
         "../okto-nexus-connector/tests/unit/test_user_service_lifecycle.py",
         "docs/service-lifecycle.md",
         "plans/agent_ops/evidence/pr02-connector-user-service.md",
         "plans/agent_ops/evidence/pr02-nexus-user-service.md",
+        "plans/agent_ops/evidence/pr02-upgrade.md",
         "src/okto_nexus/adapters/inbound/cli/serve.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
         "src/okto_nexus/adapters/inbound/cli/service_process.py",
@@ -679,11 +708,16 @@
         "src/okto_nexus/adapters/outbound/service_manager/inspection.py",
         "src/okto_nexus/adapters/outbound/service_manager/installation.py",
         "src/okto_nexus/adapters/outbound/service_manager/local.py",
+        "src/okto_nexus/adapters/outbound/service_manager/upgrade.py",
         "src/okto_nexus/adapters/outbound/service_manager/windows_tasks.py",
         "src/okto_nexus/application/service_lifecycle.py",
+        "src/okto_nexus/service_environment.py",
+        "src/okto_nexus/service_upgrade.py",
         "tests/test_service_inspection.py",
         "tests/test_service_process.py",
         "tests/test_service_start.py",
+        "tests/test_service_upgrade.py",
+        "tests/test_service_upgrade_process.py",
         "tests/test_user_service_installation.py"
       ],
       "tests": [
@@ -695,20 +729,30 @@
         "plans/agent_ops/evidence/pr02-connector-user-service.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service-wheel.json",
-        "plans/agent_ops/evidence/pr02-nexus-user-service.xml"
+        "plans/agent_ops/evidence/pr02-nexus-user-service.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-connector-final.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-connector.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-core.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-nexus-final.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-nexus.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-wheels.json"
       ],
-      "result": "Nexus Windows task host integration implemented; isolated host contracts, native validate-only preflight and concurrent real detached process regression passed. See scoped evidence; no registered service qualification. Connector host/launch subscopes now have scoped validation in pr02-connector-user-service.md; full task acceptance remains open.",
+      "result": "Nexus Windows task host integration implemented; isolated host contracts, native validate-only preflight and concurrent real detached process regression passed. See scoped evidence; no registered service qualification. Connector host/launch subscopes now have scoped validation in pr02-connector-user-service.md; full task acceptance remains open. Reviewed installed-environment replacement implemented in both hosts, with retained startup fence, canonical drain, action-only task replacement and explicit target start. Final installed campaign: 200 passed; no runtime migration is performed by apply.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Actual user-service/login/logout/crash/credential/provider campaigns NOT_RUN; legacy POSIX installers remain unqualified for the R3 instance contract.",
-        "Remaining controls/logs/passive diagnostics, enable/disable/reconciliation UX, detached pre-spawn recovery and controlled upgrades remain open.",
-        "Native Task Scheduler has no atomic fingerprint-conditional mutation against external editors; unconfirmed existing tasks are not adopted."
+        "Actual native service update/login/logout/crash/credential/provider campaigns NOT_RUN; POSIX remains unqualified.",
+        "General definition reconciliation, Server doctor qualification, historical mixed-version migration failures and productive runtime campaigns remain open.",
+        "Native Task Scheduler has no atomic fingerprint-conditional mutation against external editors; unconfirmed edits remain conflicts. Independently invoked old foreground binaries do not acquire the new protocol fence."
       ],
       "subscopes": {
         "local_saved_context": "VERIFIED",
         "scheduled_context_fencing_isolated": "VERIFIED",
         "connector_saved_context": "VERIFIED",
-        "connector_proxy_reference_resolution": "VERIFIED"
+        "connector_proxy_reference_resolution": "VERIFIED",
+        "reviewed_environment_replacement_hosts": "VERIFIED",
+        "interrupted_upgrade_injected_native_effects": "VERIFIED",
+        "actual_native_task_upgrade": "NOT_RUN"
       }
     },
     "SVC-07": {
@@ -861,19 +905,56 @@
     },
     "SVC-09": {
       "title": "versÃ£o ativa e upgrade controlado",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "milestones": [
         "PR-02"
       ],
       "dependencies": [
         "PR-01"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "../okto-nexus-connector-core/src/nexus_connector_core/user_service_definition.py",
+        "../okto-nexus-connector/docs/service-lifecycle.md",
+        "../okto-nexus-connector/src/okto_nexus_connector/daemon/manager.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/platform/service_upgrade.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/platform/windows_tasks.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/service_environment.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/service_upgrade.py",
+        "../okto-nexus-connector/tests/integration/test_service_upgrade_process.py",
+        "../okto-nexus-connector/tests/unit/test_service_upgrade.py",
+        "docs/service-lifecycle.md",
+        "plans/agent_ops/evidence/pr02-upgrade.md",
+        "src/okto_nexus/adapters/inbound/cli/serve.py",
+        "src/okto_nexus/adapters/inbound/cli/service.py",
+        "src/okto_nexus/adapters/outbound/service_manager/context.py",
+        "src/okto_nexus/adapters/outbound/service_manager/upgrade.py",
+        "src/okto_nexus/adapters/outbound/service_manager/windows_tasks.py",
+        "src/okto_nexus/service_environment.py",
+        "src/okto_nexus/service_upgrade.py",
+        "tests/test_service_upgrade.py",
+        "tests/test_service_upgrade_process.py"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr02-upgrade-connector-final.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-connector.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-core.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-nexus-final.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-nexus.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-wheels.json"
+      ],
+      "result": " Reviewed installed-environment replacement implemented in both hosts, with retained startup fence, canonical drain, action-only task replacement and explicit target start. Final installed campaign: 200 passed; no runtime migration is performed by apply.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "Actual native service update/login/logout/crash/credential/provider campaigns NOT_RUN; POSIX remains unqualified.",
+        "General definition reconciliation, Server doctor qualification, historical mixed-version migration failures and productive runtime campaigns remain open.",
+        "Native Task Scheduler has no atomic fingerprint-conditional mutation against external editors; unconfirmed edits remain conflicts. Independently invoked old foreground binaries do not acquire the new protocol fence."
+      ],
+      "subscopes": {
+        "reviewed_environment_replacement_hosts": "VERIFIED",
+        "interrupted_upgrade_injected_native_effects": "VERIFIED",
+        "actual_native_task_upgrade": "NOT_RUN"
+      }
     },
     "SVC-10": {
       "title": "controles simples",
@@ -899,16 +980,21 @@
         "../okto-nexus-connector/src/okto_nexus_connector/daemon/service_process.py",
         "../okto-nexus-connector/src/okto_nexus_connector/platform/service_context.py",
         "../okto-nexus-connector/src/okto_nexus_connector/platform/service_install.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/platform/service_upgrade.py",
         "../okto-nexus-connector/src/okto_nexus_connector/platform/user_service.py",
         "../okto-nexus-connector/src/okto_nexus_connector/platform/windows_tasks.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/service_environment.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/service_upgrade.py",
         "../okto-nexus-connector/src/okto_nexus_connector/storage/read_only.py",
         "../okto-nexus-connector/src/okto_nexus_connector/storage/state_store.py",
         "../okto-nexus-connector/src/okto_nexus_connector/transport/proxy.py",
         "../okto-nexus-connector/tests/integration/test_detached_service_lifecycle.py",
         "../okto-nexus-connector/tests/integration/test_passive_cli.py",
+        "../okto-nexus-connector/tests/integration/test_service_upgrade_process.py",
         "../okto-nexus-connector/tests/unit/test_launch_recovery.py",
         "../okto-nexus-connector/tests/unit/test_log_reader.py",
         "../okto-nexus-connector/tests/unit/test_passive_diagnostics.py",
+        "../okto-nexus-connector/tests/unit/test_service_upgrade.py",
         "../okto-nexus-connector/tests/unit/test_user_service_lifecycle.py",
         "docs/service-lifecycle.md",
         "plans/agent_ops/evidence/pr02-connector-passive.md",
@@ -917,6 +1003,7 @@
         "plans/agent_ops/evidence/pr02-launch-recovery.md",
         "plans/agent_ops/evidence/pr02-nexus-service-logs.md",
         "plans/agent_ops/evidence/pr02-nexus-user-service.md",
+        "plans/agent_ops/evidence/pr02-upgrade.md",
         "src/okto_nexus/adapters/inbound/cli/serve.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
         "src/okto_nexus/adapters/inbound/cli/service_process.py",
@@ -929,13 +1016,18 @@
         "src/okto_nexus/adapters/outbound/service_manager/installation.py",
         "src/okto_nexus/adapters/outbound/service_manager/local.py",
         "src/okto_nexus/adapters/outbound/service_manager/logs.py",
+        "src/okto_nexus/adapters/outbound/service_manager/upgrade.py",
         "src/okto_nexus/adapters/outbound/service_manager/windows_tasks.py",
         "src/okto_nexus/application/service_lifecycle.py",
+        "src/okto_nexus/service_environment.py",
+        "src/okto_nexus/service_upgrade.py",
         "tests/test_service_inspection.py",
         "tests/test_service_launch_recovery.py",
         "tests/test_service_logs.py",
         "tests/test_service_process.py",
         "tests/test_service_start.py",
+        "tests/test_service_upgrade.py",
+        "tests/test_service_upgrade_process.py",
         "tests/test_user_service_installation.py"
       ],
       "tests": [
@@ -965,14 +1057,21 @@
         "plans/agent_ops/evidence/pr02-nexus-service-logs.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service-wheel.json",
-        "plans/agent_ops/evidence/pr02-nexus-user-service.xml"
+        "plans/agent_ops/evidence/pr02-nexus-user-service.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-connector-final.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-connector.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-core.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-nexus-final.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-nexus.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-wheels.json"
       ],
-      "result": "Nexus Windows task host integration implemented; isolated host contracts, native validate-only preflight and concurrent real detached process regression passed. See scoped evidence; no registered service qualification. Connector host/launch subscopes now have scoped validation in pr02-connector-user-service.md; full task acceptance remains open. Passive Server logs and final 412-file wheel now verified by 12 log tests and 13 clean-venv tests outside checkout. Selected task enable/disable and retained-intent reconciliation implemented in both hosts; scoped source/installed validation passed. Connector standard status/logs/default doctor now observe without creating state, vault or locks; preserve lifecycle uncertainty and vault consent. 77 source and 59 fresh-venv tests passed, including real CLI and detached drain. See pr02-connector-passive.md. Explicit recover-start fences only a reviewed pending detached selection under launch/lifetime locks. Final installed validation: 124 passed, including delayed-child rejection after new concurrent startup and canonical drain in both hosts.",
+      "result": "Nexus Windows task host integration implemented; isolated host contracts, native validate-only preflight and concurrent real detached process regression passed. See scoped evidence; no registered service qualification. Connector host/launch subscopes now have scoped validation in pr02-connector-user-service.md; full task acceptance remains open. Passive Server logs and final 412-file wheel now verified by 12 log tests and 13 clean-venv tests outside checkout. Selected task enable/disable and retained-intent reconciliation implemented in both hosts; scoped source/installed validation passed. Connector standard status/logs/default doctor now observe without creating state, vault or locks; preserve lifecycle uncertainty and vault consent. 77 source and 59 fresh-venv tests passed, including real CLI and detached drain. See pr02-connector-passive.md. Explicit recover-start fences only a reviewed pending detached selection under launch/lifetime locks. Final installed validation: 124 passed, including delayed-child rejection after new concurrent startup and canonical drain in both hosts. Reviewed installed-environment replacement implemented in both hosts, with retained startup fence, canonical drain, action-only task replacement and explicit target start. Final installed campaign: 200 passed; no runtime migration is performed by apply.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Actual user-service/login/logout/crash/credential/provider campaigns NOT_RUN; legacy POSIX installers remain unqualified for the R3 instance contract.",
-        "Server doctor qualification, general definition/context reconciliation and controlled upgrades remain open; productive/native lifecycle campaigns retain their separate acceptance.",
-        "Native Task Scheduler has no atomic fingerprint-conditional mutation against external editors; unconfirmed existing tasks are not adopted."
+        "Actual native service update/login/logout/crash/credential/provider campaigns NOT_RUN; POSIX remains unqualified.",
+        "General definition reconciliation, Server doctor qualification, historical mixed-version migration failures and productive runtime campaigns remain open.",
+        "Native Task Scheduler has no atomic fingerprint-conditional mutation against external editors; unconfirmed edits remain conflicts. Independently invoked old foreground binaries do not acquire the new protocol fence."
       ],
       "subscopes": {
         "server_start_stop_restart": "VERIFIED",
@@ -983,7 +1082,10 @@
         "server_coded_rotating_diagnostics": "VERIFIED",
         "enable_disable_cli_isolated": "VERIFIED",
         "connector_passive_status_logs_doctor": "VERIFIED",
-        "reviewed_pending_detached_launch_recovery": "VERIFIED"
+        "reviewed_pending_detached_launch_recovery": "VERIFIED",
+        "reviewed_environment_replacement_hosts": "VERIFIED",
+        "interrupted_upgrade_injected_native_effects": "VERIFIED",
+        "actual_native_task_upgrade": "NOT_RUN"
       }
     },
     "SVC-11": {
@@ -1012,17 +1114,22 @@
         "../okto-nexus-connector/src/okto_nexus_connector/platform/service_context.py",
         "../okto-nexus-connector/src/okto_nexus_connector/platform/service_identity.py",
         "../okto-nexus-connector/src/okto_nexus_connector/platform/service_install.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/platform/service_upgrade.py",
         "../okto-nexus-connector/src/okto_nexus_connector/platform/user_service.py",
         "../okto-nexus-connector/src/okto_nexus_connector/platform/windows_tasks.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/service_environment.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/service_upgrade.py",
         "../okto-nexus-connector/src/okto_nexus_connector/storage/read_only.py",
         "../okto-nexus-connector/src/okto_nexus_connector/storage/state_store.py",
         "../okto-nexus-connector/src/okto_nexus_connector/transport/proxy.py",
         "../okto-nexus-connector/src/okto_nexus_connector/transport/wss_client.py",
         "../okto-nexus-connector/tests/integration/test_detached_service_lifecycle.py",
         "../okto-nexus-connector/tests/integration/test_passive_cli.py",
+        "../okto-nexus-connector/tests/integration/test_service_upgrade_process.py",
         "../okto-nexus-connector/tests/unit/test_launch_recovery.py",
         "../okto-nexus-connector/tests/unit/test_log_reader.py",
         "../okto-nexus-connector/tests/unit/test_passive_diagnostics.py",
+        "../okto-nexus-connector/tests/unit/test_service_upgrade.py",
         "../okto-nexus-connector/tests/unit/test_user_service_lifecycle.py",
         "docs/service-lifecycle.md",
         "plans/agent_ops/evidence/pr02-connector-passive.md",
@@ -1030,14 +1137,21 @@
         "plans/agent_ops/evidence/pr02-connector-user-service.md",
         "plans/agent_ops/evidence/pr02-enablement.md",
         "plans/agent_ops/evidence/pr02-launch-recovery.md",
+        "plans/agent_ops/evidence/pr02-upgrade.md",
+        "src/okto_nexus/adapters/inbound/cli/serve.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
         "src/okto_nexus/adapters/outbound/service_manager/context.py",
         "src/okto_nexus/adapters/outbound/service_manager/installation.py",
         "src/okto_nexus/adapters/outbound/service_manager/local.py",
+        "src/okto_nexus/adapters/outbound/service_manager/upgrade.py",
         "src/okto_nexus/adapters/outbound/service_manager/windows_tasks.py",
         "src/okto_nexus/application/service_lifecycle.py",
+        "src/okto_nexus/service_environment.py",
+        "src/okto_nexus/service_upgrade.py",
         "tests/test_service_launch_recovery.py",
         "tests/test_service_process.py",
+        "tests/test_service_upgrade.py",
+        "tests/test_service_upgrade_process.py",
         "tests/test_user_service_installation.py"
       ],
       "tests": [
@@ -1061,14 +1175,21 @@
         "plans/agent_ops/evidence/pr02-launch-recovery-installed.xml",
         "plans/agent_ops/evidence/pr02-launch-recovery-nexus-final.xml",
         "plans/agent_ops/evidence/pr02-launch-recovery-nexus.xml",
-        "plans/agent_ops/evidence/pr02-launch-recovery-wheels.json"
+        "plans/agent_ops/evidence/pr02-launch-recovery-wheels.json",
+        "plans/agent_ops/evidence/pr02-upgrade-connector-final.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-connector.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-core.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-nexus-final.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-nexus.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-wheels.json"
       ],
-      "result": "Connector saved context, serialized real detached lifecycle and Windows user-task host implemented; 72 focused, 90 regression and 2 clean-venv tests passed. Full native service and productive remote campaigns remain open. Selected task enable/disable and retained-intent reconciliation implemented in both hosts; scoped source/installed validation passed. Connector standard status/logs/default doctor now observe without creating state, vault or locks; preserve lifecycle uncertainty and vault consent. 77 source and 59 fresh-venv tests passed, including real CLI and detached drain. See pr02-connector-passive.md. Explicit recover-start fences only a reviewed pending detached selection under launch/lifetime locks. Final installed validation: 124 passed, including delayed-child rejection after new concurrent startup and canonical drain in both hosts.",
+      "result": "Connector saved context, serialized real detached lifecycle and Windows user-task host implemented; 72 focused, 90 regression and 2 clean-venv tests passed. Full native service and productive remote campaigns remain open. Selected task enable/disable and retained-intent reconciliation implemented in both hosts; scoped source/installed validation passed. Connector standard status/logs/default doctor now observe without creating state, vault or locks; preserve lifecycle uncertainty and vault consent. 77 source and 59 fresh-venv tests passed, including real CLI and detached drain. See pr02-connector-passive.md. Explicit recover-start fences only a reviewed pending detached selection under launch/lifetime locks. Final installed validation: 124 passed, including delayed-child rejection after new concurrent startup and canonical drain in both hosts. Reviewed installed-environment replacement implemented in both hosts, with retained startup fence, canonical drain, action-only task replacement and explicit target start. Final installed campaign: 200 passed; no runtime migration is performed by apply.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Actual user-service/login/logout/crash/credential/provider campaigns NOT_RUN; legacy POSIX installers remain unqualified for the R3 instance contract.",
-        "Server doctor qualification, general definition/context reconciliation and controlled upgrades remain open; productive/native lifecycle campaigns retain their separate acceptance.",
-        "Native Task Scheduler has no atomic fingerprint-conditional mutation against external editors; unconfirmed existing tasks are not adopted."
+        "Actual native service update/login/logout/crash/credential/provider campaigns NOT_RUN; POSIX remains unqualified.",
+        "General definition reconciliation, Server doctor qualification, historical mixed-version migration failures and productive runtime campaigns remain open.",
+        "Native Task Scheduler has no atomic fingerprint-conditional mutation against external editors; unconfirmed edits remain conflicts. Independently invoked old foreground binaries do not acquire the new protocol fence."
       ],
       "subscopes": {
         "local_readiness": "VERIFIED",
@@ -1082,7 +1203,10 @@
         "native_worker_preflight": "VERIFIED",
         "connector_enable_disable_isolated": "VERIFIED",
         "connector_passive_status_logs_doctor": "VERIFIED",
-        "reviewed_pending_detached_launch_recovery": "VERIFIED"
+        "reviewed_pending_detached_launch_recovery": "VERIFIED",
+        "reviewed_environment_replacement_hosts": "VERIFIED",
+        "interrupted_upgrade_injected_native_effects": "VERIFIED",
+        "actual_native_task_upgrade": "NOT_RUN"
       }
     },
     "SVC-12": {
@@ -2065,13 +2189,37 @@
     },
     "SVC-T25": {
       "requirement": "CLI novo/daemon antigo informa compatibilidade e nÃ£o atualiza/interrompe trabalho implicitamente.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr02-upgrade-connector-final.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-connector.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-core.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-nexus-final.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-nexus.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-wheels.json",
+        "plans/agent_ops/evidence/pr02-upgrade.md"
+      ],
+      "subscopes": {
+        "explicit_host_upgrade_and_recovery": "VERIFIED"
+      }
     },
     "SVC-T26": {
       "requirement": "Upgrade interrompido permite recuperaÃ§Ã£o documentada sem downgrade destrutivo da base.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr02-upgrade-connector-final.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-connector.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-core.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-nexus-final.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-nexus.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-wheels.json",
+        "plans/agent_ops/evidence/pr02-upgrade.md"
+      ],
+      "subscopes": {
+        "explicit_host_upgrade_and_recovery": "VERIFIED"
+      }
     },
     "SVC-T27": {
       "requirement": "DesinstalaÃ§Ã£o remove sÃ³ a integraÃ§Ã£o selecionada, preservando dados e execuÃ§Ã£o foreground posterior.",
@@ -2970,6 +3118,21 @@
         "plans/agent_ops/evidence/pr02-launch-recovery-connector-final.xml",
         "plans/agent_ops/evidence/pr02-launch-recovery-installed.xml",
         "plans/agent_ops/evidence/pr02-launch-recovery-wheels.json"
+      ]
+    },
+    {
+      "date": "2026-11-05",
+      "scope": "PR-02 reviewed environment upgrades",
+      "result": "17 Core, 125 Nexus and 94 Connector initial source tests; final focused 51 Nexus and 42 Connector; 200 tests passed on final coordinated installed wheels. Core 57fa815 and Connector d82d941 pushed. Whole R3, native and productive campaigns remain open.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr02-upgrade.md",
+        "plans/agent_ops/evidence/pr02-upgrade-core.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-nexus.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-connector.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-nexus-final.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-connector-final.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+        "plans/agent_ops/evidence/pr02-upgrade-wheels.json"
       ]
     }
   ]
